@@ -345,7 +345,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "b5aa8412ac63cb309ce3cb8cfb6ed39f503042854427d9864c4fa49e96f78954"
+        "sha256": "2eba8b167afe997e7d795ff928a0fdc8bd24096f92a21b3668da27ff5f52de8e"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/anti-pattern-check.js"

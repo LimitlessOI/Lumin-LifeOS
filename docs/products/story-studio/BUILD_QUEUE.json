@@ -1,0 +1,370 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "story-studio",
+  "planned_at": "2026-07-15T07:37:00.005Z",
+  "backlog_signature": "5610b3659005860f",
+  "corpus_sources": [
+    "docs/products/story-studio/PRODUCT_HOME.md"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "status": "done",
+      "target_file": "services/storyProject.js",
+      "task": "Implement story project and canon data model",
+      "spec": "Create a service that handles story project creation and canon data model persistence",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "createStoryProject",
+        "getStoryProject"
+      ],
+      "route": {
+        "path": "/api/story"
+      },
+      "file_contains": [
+        "A story project can be created and re-opened with persistent canon data"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/storyProject.js",
+          "exports": [
+            "createStoryProject",
+            "getStoryProject"
+          ],
+          "assertion_id": "expected_exports:services/storyProject.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T08:33:05.024Z",
+      "commit_sha": "cf5e9120d33a6f92942aeb7370a86596e04ac11a",
+      "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "1",
+      "mission_id": "PRODUCT-story-studio"
+    },
+    {
+      "id": "2",
+      "status": "done",
+      "target_file": "services/characterProfile.js",
+      "task": "Develop character/world/story bible editor",
+      "spec": "Implement service for character/world/story bible editing and self-profile insertion",
+      "depends_on": [
+        "1"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "editCharacterProfile",
+        "addSelfInsertProfile"
+      ],
+      "route": {
+        "path": "/api/character"
+      },
+      "file_contains": [
+        "A user can add themselves as a character with opt-in likeness controls"
+      ],
+      "commit_sha": "0c794674a632d2a943d402c95fadce9af00a8698",
+      "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "2",
+      "mission_id": "PRODUCT-story-studio"
+    },
+    {
+      "id": "3",
+      "status": "done",
+      "target_file": "services/multiFormatExporter.js",
+      "task": "Add multi-format ladder for export",
+      "spec": "Enable project export to storybook, comic, motion comic formats",
+      "depends_on": [
+        "2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "exportToStorybook",
+        "exportToComic",
+        "exportToMotionComic"
+      ],
+      "route": {
+        "path": "/api/export"
+      },
+      "file_contains": [
+        "One project can export at least storybook + comic from the same story bible"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/multiFormatExporter.js",
+          "exports": [
+            "exportToStorybook",
+            "exportToComic",
+            "exportToMotionComic"
+          ],
+          "assertion_id": "expected_exports:services/multiFormatExporter.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:20:55.525Z",
+      "commit_sha": "daa5f701b0cf35ccaa3c21af223548f0af07741a",
+      "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "3",
+      "mission_id": "PRODUCT-story-studio"
+    },
+    {
+      "id": "4",
+      "status": "skipped",
+      "target_file": "db/migrations/0010-addPrivacyRightsControl.sql",
+      "task": "Create table for rights/privacy/collaboration",
+      "spec": "Add table for storing and querying project rights and privacy settings",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "Rights mode is visible and explicit per project",
+        "Privacy modes (private/shared/public/remix) are enforced"
+      ],
+      "last_attempt_at": "2026-07-15T19:15:25.362Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Rights mode is visible and explicit per project; behavior_assertion: missing_substring:Privacy modes (private/shared/public/remix) are enforced; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 6,
+      "revived_at": "2026-07-15T19:15:11.050Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Rights mode is visible and explicit per project; behavior_assertion: missing_substring:Priv",
+      "demoted_at": "2026-07-15T22:04:07.644Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "4",
+      "mission_id": "PRODUCT-story-studio"
+    },
+    {
+      "id": "5",
+      "status": "pending",
+      "target_file": "services/rightsControl.js",
+      "task": "Implement rights and privacy control logic",
+      "spec": "Service to enforce and manage rights and privacy modes for projects",
+      "depends_on": [
+        "4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "setRights",
+        "enforcePrivacyMode"
+      ],
+      "route": {
+        "path": "/api/rights"
+      },
+      "file_contains": [
+        "Licensed adaptation projects cannot move forward without an explicit rights record"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/rightsControl.js",
+          "exports": [
+            "setRights",
+            "enforcePrivacyMode"
+          ],
+          "assertion_id": "expected_exports:services/rightsControl.js"
+        }
+      ],
+      "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "5",
+      "mission_id": "PRODUCT-story-studio"
+    },
+    {
+      "id": "6",
+      "status": "done",
+      "target_file": "services/franchiseScoring.js",
+      "task": "Develop franchise scoring system with anti-abuse",
+      "spec": "Implement employer score logic and community feedback mechanisms with anti-fraud measures",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "calculateFranchiseScore",
+        "getCommunityFeedback"
+      ],
+      "route": {
+        "path": "/api/franchise"
+      },
+      "file_contains": [
+        "Community scoring abuse model not yet designed"
+      ],
+      "commit_sha": "0ca74fbb5598196a4f1154cca3ad30eed55a2a1e",
+      "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "6",
+      "mission_id": "PRODUCT-story-studio"
+    },
+    {
+      "id": "7",
+      "status": "founder_gated",
+      "target_file": "services/cartoonGeneration.js",
+      "task": "Create cartoon/anime-style short generator",
+      "spec": "Service to generate short animations with high-risk tasks managed",
+      "depends_on": [
+        "5",
+        "6"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "generateCartoon",
+        "generateAnimeStyleShort"
+      ],
+      "route": {
+        "path": "/api/cartoon"
+      },
+      "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "7",
+      "mission_id": "PRODUCT-story-studio"
+    },
+    {
+      "id": "8",
+      "status": "pending",
+      "target_file": "routes/rightsRoutes.js",
+      "task": "register rights routes",
+      "spec": "Expose API for rights and privacy management.",
+      "depends_on": [
+        "7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerRightsRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/story-studio/rights"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/rightsRoutes.js",
+          "exports": [
+            "registerRightsRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/rightsRoutes.js"
+        }
+      ],
+      "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "8",
+      "mission_id": "PRODUCT-story-studio"
+    },
+    {
+      "id": "9",
+      "status": "done",
+      "target_file": "db/migrations/003_create_format_exports_table.sql",
+      "task": "create format exports table",
+      "spec": "Create table to manage multi-format export tracking.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS format_exports"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T08:49:08.357Z",
+      "commit_sha": "7741b9b9db984b1e0907d34d524fcd303325950b",
+      "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "9",
+      "mission_id": "PRODUCT-story-studio"
+    },
+    {
+      "id": "10",
+      "status": "done",
+      "target_file": "services/formatExports.js",
+      "task": "implement format export service",
+      "spec": "Manage export operations for different story formats.",
+      "depends_on": [
+        "9"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "exportStorybook",
+        "exportComic"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/formatExports.js",
+          "exports": [
+            "exportStorybook",
+            "exportComic"
+          ],
+          "assertion_id": "expected_exports:services/formatExports.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T08:53:45.861Z",
+      "commit_sha": "b72e82d2a906962906ba26d1cf00a4f1c5a5a53b",
+      "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "10",
+      "mission_id": "PRODUCT-story-studio"
+    },
+    {
+      "id": "11",
+      "status": "done",
+      "target_file": "routes/formatExportRoutes.js",
+      "task": "register format export routes",
+      "spec": "Expose API for exporting stories to multiple formats.",
+      "depends_on": [
+        "10"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerFormatExportRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/story-studio/exports"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/formatExportRoutes.js",
+          "exports": [
+            "registerFormatExportRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/formatExportRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T09:03:56.134Z",
+      "commit_sha": "a151aa03dede1a6a96f418805e1a2c71c1ec95bc",
+      "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "11",
+      "mission_id": "PRODUCT-story-studio"
+    },
+    {
+      "id": "12",
+      "status": "done",
+      "target_file": "public/overlay/formatExportUI.html",
+      "task": "create format export UI",
+      "spec": "UI for selecting and exporting story formats.",
+      "depends_on": [
+        "11"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "commit_sha": "cad377bc765d8154e7fdfd49cf7164c204a8f0af",
+      "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "12",
+      "mission_id": "PRODUCT-story-studio"
+    }
+  ],
+  "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-story-studio",
+  "twin_kind": "product_build_queue_registered"
+}

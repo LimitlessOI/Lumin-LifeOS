@@ -13,10 +13,16 @@ import { createLifeRERoutes } from "../routes/lifere-os-routes.js";
 import { createBlueprintIntakeRoutes } from "../routes/blueprint-intake-routes.js";
 import { createSiteBuilderRoutes } from "../routes/site-builder-routes.js";
 import createSiteBuilderCheckoutRoutes from "../routes/site-builder-checkout-routes.js";
+import registerSmosPackCheckoutRoutes from "../routes/smos-pack-checkout-routes.js";
+import { createSocialmediaosRoutes } from "../routes/socialmediaos-routes.js";
 import createSiteBuilderEditorRoutes from "../routes/site-builder-editor-routes.js";
 import { createCrmRoutes } from "../routes/crm-routes.js";
 import { createGoVegasOutreachRoutes } from "../routes/go-vegas-outreach-routes.js";
 import { startGoVegasOutreachScheduler } from "../services/go-vegas-outreach-scheduler.js";
+import { createTCRoutes } from "../routes/tc-routes.js";
+import { createTCCoordinator } from "../services/tc-coordinator.js";
+import { createAccountManager } from "../services/account-manager.js";
+import { createClientCareBillingRoutes } from "../routes/clientcare-billing-routes.js";
 import { createCouncilPromptAdapter } from "../services/council-prompt-adapter.js";
 import { createRequireLifeOSUserOrKey } from "../middleware/lifeos-auth-middleware.js";
 import {
@@ -145,6 +151,15 @@ export async function registerFounderRuntimeRoutes(app, deps) {
   createSiteBuilderCheckoutRoutes(app, { pool, baseUrl: siteBaseUrl });
   logger.info("✅ [SITE-BUILDER] Publish checkout mounted at /api/v1/sites/publish/*");
 
+  registerSmosPackCheckoutRoutes(app, { pool, baseUrl: siteBaseUrl, logger, requireUserOrKey });
+  logger.info("✅ [SMOS] Pack checkout + public signup mounted at /api/v1/marketing/pack/*");
+
+  app.use(
+    "/api/v1/socialmediaos",
+    createSocialmediaosRoutes({ pool, requireKey: requireUserOrKey, logger })
+  );
+  logger.info("✅ [SOCIALMEDIAOS] Marketplace routes mounted at /api/v1/socialmediaos");
+
   createSiteBuilderEditorRoutes(app, { callCouncilMember, baseUrl: siteBaseUrl, pool });
   logger.info("✅ [SITE-BUILDER] Live editor mounted at /api/v1/sites/editor");
 
@@ -157,6 +172,69 @@ export async function registerFounderRuntimeRoutes(app, deps) {
     startGoVegasOutreachScheduler({ pool, notificationService, logger });
   } catch (err) {
     logger.warn?.({ err: err.message }, "[GO-VEGAS] outreach scheduler failed to start (non-fatal)");
+  }
+
+  // TC portal + assistant APIs must live on founder lane — production boots founder_builder,
+  // and public/tc/* UIs call /api/v1/tc/* (not the slim /api/tc/* auto-register shims).
+  let tcCoordinator = null;
+  try {
+    const accountManager = createAccountManager({ pool, logger });
+    tcCoordinator = createTCCoordinator({
+      pool,
+      accountManager,
+      notificationService,
+      callCouncilMember,
+      logger,
+    });
+    createTCRoutes(app, {
+      pool,
+      requireKey: requireUserOrKey,
+      coordinator: tcCoordinator,
+      logger,
+      accountManager,
+      notificationService,
+      callCouncilMember,
+      startAlertLoop: false,
+    });
+    logger.info("✅ [TC] Founder-builder routes mounted at /api/v1/tc");
+  } catch (err) {
+    logger.warn?.({ err: err.message }, "[TC] founder-lane mount failed (non-fatal)");
+  }
+
+  // ClientCare billing rescue must live on founder lane — production boots founder_builder.
+  // Overlay at /clientcare-billing was live but /api/v1/clientcare-billing/* 404'd without this.
+  try {
+    app.use(
+      "/api/v1/clientcare-billing",
+      createClientCareBillingRoutes({
+        pool,
+        requireKey: requireUserOrKey,
+        logger,
+        callCouncilMember,
+        callCouncilWithFailover: deps.callCouncilWithFailover || null,
+        notificationService,
+        sendSMS: deps.sendSMS || null,
+      }),
+    );
+    app.get(["/birthbill", "/midwife-billing", "/clientcare-collections"], (_req, res) => {
+      res.redirect(302, "/overlay/clientcare-collections-landing.html");
+    });
+    app.get(["/birthbill/welcome", "/midwife-billing/welcome"], (req, res) => {
+      const qs = req.url.includes("?") ? req.url.slice(req.url.indexOf("?")) : "";
+      res.redirect(302, "/overlay/clientcare-collections-welcome.html" + qs);
+    });
+    app.get(["/birthbill/for-you", "/birthbill/sherry", "/for-sherry"], (_req, res) => {
+      res.redirect(302, "/overlay/clientcare-for-sherry.html");
+    });
+    app.get(["/marketing/for-you", "/socialmediaos", "/socialmediaos/for-you"], (_req, res) => {
+      res.redirect(302, "/overlay/marketing-for-you.html");
+    });
+    app.get(["/tc/for-you", "/transaction-care"], (_req, res) => {
+      res.redirect(302, "/overlay/tc-for-you.html");
+    });
+    logger.info("✅ [CLIENTCARE-BILLING] Founder-builder routes mounted at /api/v1/clientcare-billing + /birthbill");
+  } catch (err) {
+    logger.warn?.({ err: err.message }, "[CLIENTCARE-BILLING] founder-lane mount failed (non-fatal)");
   }
 
   registerFounderMemoryRoutes(app, { pool, requireKey, logger });
@@ -220,8 +298,17 @@ export async function registerFounderRuntimeRoutes(app, deps) {
   });
   app.post("/api/v1/lifeos/never-stop/run-once", requireKey, async (_req, res) => {
     try {
-      const result = await runNeverStopProductFactoryOnce({ logger });
-      res.status(result?.ok === false && result?.halted ? 503 : 200).json({ ok: result?.ok !== false, ...result });
+      // Return immediately — a full cycle often exceeds Railway's ~30s proxy
+      // timeout ("Application failed to respond"), which made the system look
+      // dead while work was still running. Scheduler ticks already run async.
+      const status = getNeverStopProductFactoryStatus({ events: 5 });
+      if (status?.never_stop?.running) {
+        return res.status(202).json({ ok: true, accepted: true, skipped: true, reason: "already_running" });
+      }
+      res.status(202).json({ ok: true, accepted: true, message: "never-stop cycle started in background" });
+      runNeverStopProductFactoryOnce({ logger }).catch((err) => {
+        logger.warn?.({ err: err.message }, "[NEVER-STOP] background run-once failed");
+      });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }
@@ -259,6 +346,7 @@ export async function registerFounderRuntimeRoutes(app, deps) {
       baseUrl: siteBaseUrl,
       commitToGitHub,
       commitManyToGitHub,
+      setRailwayEnvVar,
     }, { logger });
     logger.info(`✅ [AUTO-REGISTER] ${autoResults.filter((r) => r.status === "mounted").length}/${autoResults.length} product module(s) mounted`);
   } catch (autoErr) {
@@ -291,7 +379,7 @@ export async function registerFounderRuntimeRoutes(app, deps) {
   }
 
   return {
-    tcCoordinator: null,
+    tcCoordinator,
     wkIntegrityEngine: null,
     autoResults,
     routeAssert,

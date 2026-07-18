@@ -45,7 +45,10 @@ const PROGRAM_REGISTRY = [
   },
   {
     id: 'lumin_chair',
-    match: /\b(lumin|the chair|founder interface|command.control)\b/i,
+    // Do NOT match bare "Lumin" / "Chair" — those are how users address the
+    // product in ordinary chat. Match only when they ask about the interface/
+    // system itself.
+    match: /\b(founder interface|command[-\s]?control|lumin chair orchestrator|how (?:does|do) (?:lumin|the chair)\b|what (?:is|does) (?:lumin|the chair)\b)\b/i,
     amendment: 'docs/products/lifeos/PRODUCT_HOME.md',
     services: [
       'services/lumin-chair-orchestrator.js',

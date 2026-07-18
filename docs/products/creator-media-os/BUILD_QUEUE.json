@@ -1,0 +1,447 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "creator-media-os",
+  "planned_at": "2026-07-15T07:37:06.028Z",
+  "backlog_signature": "e00edcec38f90a94",
+  "corpus_sources": [
+    "docs/products/creator-media-os/PRODUCT_HOME.md"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "status": "done",
+      "target_file": "services/channelMemory.js",
+      "task": "implement channel memory model",
+      "spec": "Model stores channel memory, brand profile, SEO.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "initializeChannelMemory"
+      ],
+      "file_contains": [
+        "Channel memory profile"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/channelMemory.js",
+          "exports": [
+            "initializeChannelMemory"
+          ],
+          "assertion_id": "expected_exports:services/channelMemory.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T08:33:14.765Z",
+      "commit_sha": "7cd3acc2e1afc20d412a20d9b127631a03d57ca6",
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "1",
+      "mission_id": "PRODUCT-creator-media-os"
+    },
+    {
+      "id": "2",
+      "status": "done",
+      "target_file": "routes/likenessConsent.js",
+      "task": "manage likeness consent",
+      "spec": "Capture and revocation of likeness consent.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerLikenessConsentRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/likeness/consent"
+      },
+      "file_contains": [
+        "Explicit likeness consent recorded"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/likenessConsent.js",
+          "exports": [
+            "registerLikenessConsentRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/likenessConsent.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "4c7c860fa3d7d7fb8bb5c9eea91dcbb6ed177fec",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T08:40:25.401Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T08:40:54.575Z",
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "2",
+      "mission_id": "PRODUCT-creator-media-os"
+    },
+    {
+      "id": "3",
+      "status": "done",
+      "target_file": "services/scriptEngine.js",
+      "task": "implement script/title/hook engine",
+      "spec": "Engine generates scripts with titles/hooks for media content.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generateScriptHooks"
+      ],
+      "file_contains": [
+        "Script for long and short form"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/scriptEngine.js",
+          "exports": [
+            "generateScriptHooks"
+          ],
+          "assertion_id": "expected_exports:services/scriptEngine.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T08:53:56.792Z",
+      "commit_sha": "df2269a4199dcea132a62c31b806c7db1dccc5ff",
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "3",
+      "mission_id": "PRODUCT-creator-media-os"
+    },
+    {
+      "id": "4",
+      "status": "done",
+      "target_file": "services/sceneEngine.js",
+      "task": "assemble scenes",
+      "spec": "Scene engine and edit assembly workflow.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "assembleScenes"
+      ],
+      "file_contains": [
+        "Scene assembly workflow"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/sceneEngine.js",
+          "exports": [
+            "assembleScenes"
+          ],
+          "assertion_id": "expected_exports:services/sceneEngine.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "4464a66ce6d446c3f76d04e737eaf0f692fed815",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T18:27:54.487Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "4",
+      "mission_id": "PRODUCT-creator-media-os"
+    },
+    {
+      "id": "5",
+      "status": "done",
+      "target_file": "services/thumbnailPipeline.js",
+      "task": "manage thumbnail/SEO pipeline",
+      "spec": "Pipeline handles thumbnails and SEO repurposing with shared sources.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "setupThumbnailSEO"
+      ],
+      "file_contains": [
+        "Thumbnail/SEO from source assets"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/thumbnailPipeline.js",
+          "exports": [
+            "setupThumbnailSEO"
+          ],
+          "assertion_id": "expected_exports:services/thumbnailPipeline.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "5d03b10167b061e0cc86825467a1f58221e2bacd",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T09:41:07.620Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "5",
+      "mission_id": "PRODUCT-creator-media-os"
+    },
+    {
+      "id": "6",
+      "status": "done",
+      "target_file": "services/analyticsMemory.js",
+      "task": "establish analytics memory loop",
+      "spec": "Memory loop incorporates publish analytics.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "initializeAnalyticsMemory"
+      ],
+      "file_contains": [
+        "Publish analytics memory loop"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/analyticsMemory.js",
+          "exports": [
+            "initializeAnalyticsMemory"
+          ],
+          "assertion_id": "expected_exports:services/analyticsMemory.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T09:08:51.883Z",
+      "commit_sha": "d645fdd625afe20603113fb489c9351d85eb508f",
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "6",
+      "mission_id": "PRODUCT-creator-media-os"
+    },
+    {
+      "id": "7",
+      "status": "done",
+      "target_file": "db/migrations/20231015_create_channel_profiles.sql",
+      "task": "create channel profiles table",
+      "spec": "SQL migration for channel profiles table with persistence features.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS channel_profiles"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T09:12:31.596Z",
+      "commit_sha": "ed75909c87840ff7786d18f288a17b0e2067a6ec",
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "7",
+      "mission_id": "PRODUCT-creator-media-os"
+    },
+    {
+      "id": "8",
+      "status": "done",
+      "target_file": "services/consentContract.js",
+      "task": "formalize consent contract",
+      "spec": "Formalizes consent and likeness contract model.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "formalizeConsentContract"
+      ],
+      "file_contains": [
+        "Consent contract model"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/consentContract.js",
+          "exports": [
+            "formalizeConsentContract"
+          ],
+          "assertion_id": "expected_exports:services/consentContract.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T09:25:33.392Z",
+      "commit_sha": "e318b97ace6f3404822c546e53c19fc79fedbf3f",
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "8",
+      "mission_id": "PRODUCT-creator-media-os"
+    },
+    {
+      "id": "9",
+      "status": "done",
+      "target_file": "db/migrations/20231015_create_likeness_consent.sql",
+      "task": "create likeness consent table",
+      "spec": "SQL migration for likeness consent tracking.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS likeness_consent"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T09:30:21.829Z",
+      "commit_sha": "028533d21c37d787d4ab45a6a8eb550a12524295",
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "9",
+      "mission_id": "PRODUCT-creator-media-os"
+    },
+    {
+      "id": "10",
+      "status": "done",
+      "target_file": "routes/scriptRoutes.js",
+      "task": "Add script routes",
+      "spec": "Expose script generation operations via HTTP API.",
+      "depends_on": [
+        "9"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerScriptRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/script"
+      },
+      "file_contains": [
+        "app.post"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/scriptRoutes.js",
+          "exports": [
+            "registerScriptRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/scriptRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:46:10.695Z",
+      "commit_sha": "d9438de6ee9a8bc75056de5e61d361ecd61d79c4",
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "10",
+      "mission_id": "PRODUCT-creator-media-os"
+    },
+    {
+      "id": "11",
+      "status": "skipped",
+      "target_file": "services/sceneEngine.js",
+      "task": "Create scene engine",
+      "spec": "Manage scene assembly and editing workflow for content creation.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "assembleScene"
+      ],
+      "file_contains": [
+        "export function assembleScene"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/sceneEngine.js",
+          "exports": [
+            "assembleScene"
+          ],
+          "assertion_id": "expected_exports:services/sceneEngine.js"
+        }
+      ],
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-15T17:38:49.025Z",
+      "last_attempt": null,
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 0b is < 30% of existing 541b",
+      "revive_count": 9,
+      "revived_at": "2026-07-15T17:38:38.316Z",
+      "no_op": null,
+      "pre_existing": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_stub_detected: generated 0b is < 30% of existing 541b",
+      "demoted_at": "2026-07-15T18:27:54.487Z",
+      "park_until": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "11",
+      "mission_id": "PRODUCT-creator-media-os"
+    },
+    {
+      "id": "12",
+      "status": "pending",
+      "target_file": "routes/sceneRoutes.js",
+      "task": "Add scene routes",
+      "spec": "Expose scene assembly operations via HTTP API.",
+      "depends_on": [
+        "11"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerSceneRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/scene"
+      },
+      "file_contains": [
+        "app.post"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/sceneRoutes.js",
+          "exports": [
+            "registerSceneRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/sceneRoutes.js"
+        }
+      ],
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "12",
+      "mission_id": "PRODUCT-creator-media-os"
+    }
+  ],
+  "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-creator-media-os",
+  "twin_kind": "product_build_queue_registered"
+}

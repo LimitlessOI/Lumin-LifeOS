@@ -4,28 +4,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="/overlay/lifeos-theme.js"></script>
+  <script src="/overlay/lifeos-theme.js?v=20260714b"></script>
   <script src="/overlay/lifeos-bootstrap.js"></script>
-  <link rel="stylesheet" href="/overlay/lifeos-ds.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Sora:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/overlay/lifeos-ds.css?v=20260714b">
   <link rel="stylesheet" href="/overlay/lifeos-theme-overrides.css">
-  <meta name="theme-color" content="#0a0a0f">
+  <meta name="theme-color" content="#070b12">
   <title>LifeRE — LifeOS Real Estate Stack</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --lifere-accent: #0ea5e9;
-      --bg: var(--bg-base, #0a0a0f);
-      --card: var(--bg-surface, #111118);
-      --border: var(--border, rgba(255, 255, 255, 0.07));
-      --text: var(--text-primary, #e8e8f0);
-      --muted: var(--text-secondary, #888);
-      --lifere-elevated: var(--bg-surface2, #12121a);
-      --lifere-btn-bg: var(--bg-surface, #17171f);
-      --lifere-body-text: var(--text-primary, #ddd);
+      --lifere-accent: #2ec4b6;
+      --lifere-accent-rgb: 46, 196, 182;
+      --lifere-gold: #e3b23c;
+      --bg: var(--bg-base, #070b12);
+      --card: var(--bg-surface, #141c28);
+      --border: var(--border, rgba(232, 238, 246, 0.10));
+      --text: var(--text-primary, #e8eef6);
+      --muted: var(--text-secondary, #9aabc0);
+      --lifere-elevated: var(--bg-surface2, #1a2433);
+      --lifere-btn-bg: var(--bg-surface, #141c28);
+      --lifere-body-text: var(--text-primary, #e8eef6);
+      --font-display: "Sora", "Avenir Next", sans-serif;
+      --font-body: "DM Sans", "Avenir Next", sans-serif;
     }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: var(--bg);
+      font-family: var(--font-body);
+      background:
+        radial-gradient(circle at top right, rgba(var(--lifere-accent-rgb), 0.12), transparent 34%),
+        radial-gradient(circle at bottom left, rgba(227, 178, 60, 0.08), transparent 30%),
+        var(--bg);
       color: var(--text);
       min-height: 100vh;
     }
@@ -51,13 +61,14 @@
       color: var(--muted);
       background: var(--lifere-elevated);
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: 16px;
       padding: 10px 12px;
       margin-bottom: 16px;
       line-height: 1.45;
     }
     .lifere-shell-hint a { color: var(--lifere-accent); font-weight: 600; }
     .page-header h1 {
+      font-family: var(--font-display);
       font-size: 22px;
       font-weight: 700;
       letter-spacing: -0.02em;
@@ -70,7 +81,7 @@
     .section {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: 16px;
       padding: 18px;
       margin-bottom: 16px;
     }
@@ -88,16 +99,16 @@
       gap: 12px;
       align-items: flex-start;
       padding: 10px 12px;
-      background: rgba(14, 165, 233, 0.06);
-      border-radius: 8px;
-      border: 1px solid rgba(14, 165, 233, 0.15);
+      background: rgba(var(--lifere-accent-rgb), 0.08);
+      border-radius: 12px;
+      border: 1px solid rgba(var(--lifere-accent-rgb), 0.18);
     }
     .priority-rank {
       width: 26px;
       height: 26px;
       border-radius: 50%;
       background: var(--lifere-accent);
-      color: #fff;
+      color: #071016;
       font-size: 12px;
       font-weight: 700;
       display: flex;
@@ -122,29 +133,30 @@
       border: 1px solid var(--border);
       background: var(--lifere-btn-bg);
       color: var(--text);
-      border-radius: 8px;
+      border-radius: 12px;
       padding: 8px 14px;
       font-size: 13px;
       cursor: pointer;
+      font-family: var(--font-body);
     }
     .btn-primary {
       background: var(--lifere-accent);
       border-color: var(--lifere-accent);
-      color: #fff;
+      color: #071016;
     }
     .status-line { font-size: 12px; color: var(--muted); margin-top: 8px; }
     .alpha-ready-banner {
       margin-bottom: 16px;
       padding: 14px 16px;
-      border-radius: 10px;
+      border-radius: 16px;
       border: 1px solid rgba(34, 197, 94, 0.35);
       background: rgba(34, 197, 94, 0.08);
     }
     .alpha-ready-banner.pending {
-      border-color: rgba(251, 191, 36, 0.35);
-      background: rgba(251, 191, 36, 0.08);
+      border-color: rgba(227, 178, 60, 0.35);
+      background: rgba(227, 178, 60, 0.08);
     }
-    .alpha-ready-banner h2 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+    .alpha-ready-banner h2 { font-size: 15px; font-weight: 700; margin-bottom: 6px; font-family: var(--font-display); }
     .alpha-ready-banner p { font-size: 13px; color: var(--lifere-body-text); line-height: 1.45; }
     .alpha-checklist { list-style: none; margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
     .alpha-checklist li { font-size: 12px; color: var(--muted); }
@@ -159,9 +171,9 @@
       align-items: center;
       margin-bottom: 16px;
       padding: 12px 14px;
-      background: rgba(14, 165, 233, 0.08);
-      border: 1px solid rgba(14, 165, 233, 0.2);
-      border-radius: 10px;
+      background: rgba(var(--lifere-accent-rgb), 0.08);
+      border: 1px solid rgba(var(--lifere-accent-rgb), 0.22);
+      border-radius: 16px;
       font-size: 13px;
     }
     .boldtrail-pill {
@@ -172,12 +184,12 @@
       font-size: 12px;
     }
     .boldtrail-pill.ok { background: rgba(34, 197, 94, 0.15); color: #86efac; }
-    .boldtrail-pill.warn { background: rgba(251, 191, 36, 0.12); color: #fcd34d; }
+    .boldtrail-pill.warn { background: rgba(227, 178, 60, 0.12); color: #fcd34d; }
     .boldtrail-link { color: var(--lifere-accent); text-decoration: none; font-weight: 600; }
     .followup-item {
       padding: 12px;
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: 12px;
       margin-bottom: 10px;
       background: var(--lifere-elevated);
     }
@@ -187,7 +199,7 @@
     .approval-item {
       padding: 12px;
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: 12px;
       margin-bottom: 10px;
       background: var(--lifere-elevated);
     }
@@ -196,7 +208,7 @@
     .info-card {
       padding: 12px;
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: 12px;
       margin-bottom: 10px;
       background: var(--lifere-elevated);
     }
@@ -204,18 +216,18 @@
     .info-card-body { font-size: 13px; color: var(--lifere-body-text); line-height: 1.5; }
     .info-card-meta { font-size: 12px; color: var(--muted); margin-top: 6px; }
     .deal-pick { display: inline-block; margin: 0 6px 6px 0; }
-    .deal-pick.active { background: var(--lifere-accent); border-color: var(--lifere-accent); color: #fff; }
+    .deal-pick.active { background: var(--lifere-accent); border-color: var(--lifere-accent); color: #071016; }
     .btn-sm { padding: 6px 10px; font-size: 12px; }
     .btn-success { background: #166534; border-color: #166534; color: #fff; }
     .panel-grid { display: grid; gap: 12px; }
     .panel-row { font-size: 13px; margin-bottom: 8px; color: var(--lifere-body-text); }
     .panel-label { color: var(--lifere-accent); font-weight: 600; margin-right: 6px; }
     .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
-    .tab-btn { font-size: 12px; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--border); background: var(--lifere-btn-bg); color: var(--text); cursor: pointer; }
-    .tab-btn.active { background: var(--lifere-accent); border-color: var(--lifere-accent); color: #fff; }
+    .tab-btn { font-size: 12px; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--border); background: var(--lifere-btn-bg); color: var(--text); cursor: pointer; font-family: var(--font-body); }
+    .tab-btn.active { background: var(--lifere-accent); border-color: var(--lifere-accent); color: #071016; }
     .tab-panel { display: none; }
     .tab-panel.active { display: block; }
-    input, select, textarea { background: var(--lifere-elevated); border: 1px solid var(--border); color: var(--text); border-radius: 6px; padding: 6px 8px; font-size: 13px; width: 100%; margin-bottom: 8px; }
+    input, select, textarea { background: var(--lifere-elevated); border: 1px solid var(--border); color: var(--text); border-radius: 10px; padding: 6px 8px; font-size: 13px; width: 100%; margin-bottom: 8px; font-family: var(--font-body); }
   </style>
 </head>
 <body>
@@ -396,6 +408,20 @@
       <div id="coaching-contacts" class="panel-grid"></div>
       <div class="section-title" style="margin-top:14px">Skill drills</div>
       <div id="coaching-modules" class="panel-grid"></div>
+      <div class="section-title" style="margin-top:14px">Sales simulator</div>
+      <p class="status-line">Practice objection handling with live coaching notes. Requires sign-in (owner_id from JWT).</p>
+      <div class="followup-actions">
+        <select id="sales-sim-scenario" style="min-width:220px"></select>
+        <button type="button" class="btn btn-primary" id="sales-sim-start-btn">Start practice</button>
+        <button type="button" class="btn" id="sales-sim-end-btn" disabled>End + score</button>
+      </div>
+      <div id="sales-sim-thread" class="panel-grid" style="margin-top:10px"></div>
+      <textarea id="sales-sim-input" rows="2" placeholder="Your reply to the client…" disabled></textarea>
+      <div class="followup-actions">
+        <button type="button" class="btn btn-primary" id="sales-sim-send-btn" disabled>Send turn</button>
+        <span class="status-line" id="sales-sim-status"></span>
+      </div>
+      <pre id="sales-sim-debrief" class="status-line" style="white-space:pre-wrap;font-size:12px"></pre>
       <div class="section-title" style="margin-top:14px">Agent voice calibration (#21)</div>
       <textarea id="personality-draft-input" rows="2" placeholder="Paste a draft you wrote or AI generated…"></textarea>
       <div class="followup-actions">
@@ -404,7 +430,15 @@
       </div>
       <p class="status-line" id="personality-calibrate-status"></p>
       <div class="section-title" style="margin-top:14px">RE onboarding curriculum (#26)</div>
+      <p class="status-line">Meet agents where they are — pick your level, then do the next practice (not a random module list).</p>
+      <div class="followup-actions" id="education-level-btns">
+        <button type="button" class="btn btn-sm education-level-btn" data-level="new">I'm new</button>
+        <button type="button" class="btn btn-sm education-level-btn" data-level="building">Building</button>
+        <button type="button" class="btn btn-sm education-level-btn" data-level="scaling">Scaling</button>
+        <button type="button" class="btn btn-sm education-level-btn" data-level="experienced">Experienced</button>
+      </div>
       <div id="education-progress-bar" class="status-line">Loading progress…</div>
+      <div id="education-next-practice" class="info-card" style="margin-bottom:10px"></div>
       <div id="education-curriculum-list" class="panel-grid"></div>
       <button type="button" class="btn" id="education-context-btn">Get contextual education</button>
       <pre id="education-context-output" class="status-line" style="white-space:pre-wrap;font-size:12px"></pre>
@@ -412,6 +446,7 @@
 
     <section class="section tab-panel" id="lifere-marketing-panel" data-tab-panel="marketing" data-lifere="marketing-module">
       <div class="section-title">Marketing Module</div>
+      <p class="status-line">Full SocialMediaOS app (coach → extract → generate → approve → export): <a href="/marketing" style="color:inherit;font-weight:600">Open SocialMediaOS →</a></p>
       <div id="marketing-video-types"></div>
       <button type="button" class="btn" id="marketing-research-hooks">Research hooks</button>
       <div class="section-title" style="margin-top:14px">YouTube strategy (#12–13)</div>
@@ -505,7 +540,20 @@
     </section>
 
     <section class="section tab-panel" data-tab-panel="ops" id="lifere-ops-panel">
-      <div class="section-title">Transaction / TC OS (Am 17)</div>
+      <div class="section-title">Phone &amp; texts</div>
+      <p class="status-line" id="lifere-inbox-status">Unified inbox: AI receptionist calls + LifeOS gateway SMS/calls.</p>
+      <div class="panel-row">SMS: <span id="inbox-sms-count">—</span> · Calls: <span id="inbox-call-count">—</span> · Setup: <span id="inbox-setup-flags">—</span></div>
+      <div class="followup-actions">
+        <button type="button" class="btn btn-primary" id="inbox-refresh-btn">Refresh inbox</button>
+        <button type="button" class="btn" id="phone-status-btn">Check Vapi setup</button>
+        <button type="button" class="btn" id="phone-sync-vapi-btn">Sync Vapi → LifeRE</button>
+        <button type="button" class="btn btn-primary" id="phone-provision-btn">Install screening receptionist</button>
+      </div>
+      <p class="status-line">Forward 702-860 when unanswered → (725) 255-1079 (always-forward blocks put-through). Son/family get LIVE text page. Agent→broker→through. Bypass 777.</p>
+      <pre id="lifere-phone-setup" class="status-line" style="white-space:pre-wrap;font-size:12px;max-height:160px;overflow:auto"></pre>
+      <div id="lifere-inbox-list" class="panel-grid"></div>
+      <div class="section-title" style="margin-top:14px">Transaction / TC OS — daily loop</div>
+      <p class="status-line">Clear blockers → draft client update → open portal. Portals stay the deep TC workspace.</p>
       <div class="panel-row">Active files: <span id="tc-active-count">—</span> · Critical blockers: <span id="tc-critical-count">—</span></div>
       <div class="followup-actions">
         <a class="btn" href="/tc/agent-portal.html" target="_blank" rel="noopener">Agent portal ↗</a>
@@ -562,6 +610,10 @@
         <pre id="buyer-objection-output" class="status-line" style="white-space:pre-wrap"></pre>
       </div>
       <div class="section-title" style="margin-top:12px">Buyer pipeline</div>
+      <div class="followup-actions">
+        <button type="button" class="btn btn-primary" id="buyer-sync-boldtrail-btn">Sync buyers from BoldTrail</button>
+        <span class="status-line" id="buyer-sync-status"></span>
+      </div>
       <div id="buyer-pipeline-list"></div>
       <div class="section-title" style="margin-top:12px">Seller pipeline</div>
       <div id="seller-pipeline-list"></div>
@@ -876,9 +928,26 @@
         out.textContent = JSON.stringify(data.twin || data, null, 2);
       });
 
+      function jumpEducationPractice(practice) {
+        if (!practice) return;
+        if (practice.type === 'tab' && practice.tab) {
+          document.querySelector(`.tab-btn[data-tab="${practice.tab}"]`)?.click();
+          return;
+        }
+        if (practice.type === 'sales_sim' || practice.type === 'drill') {
+          document.querySelector('.tab-btn[data-tab="coaching"]')?.click();
+          if (practice.type === 'sales_sim') {
+            document.getElementById('sales-sim-start-btn')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          } else {
+            document.getElementById('coaching-modules')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        }
+      }
+
       async function loadEducationProgress() {
         const bar = document.getElementById('education-progress-bar');
         const list = document.getElementById('education-curriculum-list');
+        const nextEl = document.getElementById('education-next-practice');
         try {
           const [prog, cur] = await Promise.all([
             apiFetch('/api/v1/lifere/education/progress?user_id=adam'),
@@ -886,16 +955,50 @@
           ]);
           const p = await prog.json();
           const c = await cur.json();
-          if (bar) bar.textContent = `Onboarding: ${p.completed_count}/${p.total} modules (${p.percent}%)`;
+          if (bar) {
+            bar.textContent = `Level: ${p.agent_level || 'new'} · ${p.completed_count}/${p.total} modules (${p.percent}%)`;
+          }
+          document.querySelectorAll('.education-level-btn').forEach((btn) => {
+            btn.classList.toggle('btn-primary', btn.dataset.level === (p.agent_level || 'new'));
+          });
+          if (nextEl) {
+            const n = p.next_step;
+            if (n) {
+              nextEl.innerHTML = `
+                <div class="info-card-title">Next for you: ${escapeHtml(n.title)}</div>
+                <div class="info-card-body">${escapeHtml(n.next_practice?.blurb || 'Continue the track.')}</div>
+                <div class="followup-actions" style="margin-top:8px">
+                  <button type="button" class="btn btn-sm btn-primary" id="education-go-practice">Do this practice</button>
+                  <button type="button" class="btn btn-sm education-complete-btn" data-module="${escapeHtml(n.module_id)}">Mark complete</button>
+                </div>`;
+              nextEl.querySelector('#education-go-practice')?.addEventListener('click', () => jumpEducationPractice(n.next_practice));
+              nextEl.querySelector('.education-complete-btn')?.addEventListener('click', async (e) => {
+                const moduleId = e.currentTarget.dataset.module;
+                await apiFetch('/api/v1/lifere/education/complete', {
+                  method: 'POST',
+                  body: JSON.stringify({ user_id: 'adam', module_id: moduleId, score: 8 }),
+                });
+                await loadEducationProgress();
+              });
+            } else {
+              nextEl.innerHTML = '<div class="info-card-title">Track complete</div><div class="info-card-body">Run daily cycle: Command → Ops inbox → TC blockers → one drill.</div>';
+            }
+          }
           if (list) {
             list.innerHTML = (p.steps || c.track || []).map((step) => `
               <div class="info-card">
                 <div class="info-card-title">${step.completed ? '✓' : '○'} ${escapeHtml(step.title || step.label || step.module_id)}</div>
+                <div class="info-card-meta">${escapeHtml(step.level || '')}${step.next_practice?.blurb ? ` · ${escapeHtml(step.next_practice.blurb)}` : ''}</div>
                 <div class="followup-actions" style="margin-top:6px">
-                  ${step.completed ? '' : `<button type="button" class="btn btn-sm education-complete-btn" data-module="${escapeHtml(step.module_id)}">Mark complete</button>`}
+                  ${step.completed ? '' : `<button type="button" class="btn btn-sm education-practice-btn" data-module="${escapeHtml(step.module_id)}">Practice</button>
+                  <button type="button" class="btn btn-sm education-complete-btn" data-module="${escapeHtml(step.module_id)}">Mark complete</button>`}
                 </div>
               </div>
             `).join('');
+            const byId = Object.fromEntries((p.steps || []).map((s) => [s.module_id, s]));
+            list.querySelectorAll('.education-practice-btn').forEach((btn) => {
+              btn.addEventListener('click', () => jumpEducationPractice(byId[btn.dataset.module]?.next_practice));
+            });
             list.querySelectorAll('.education-complete-btn').forEach((btn) => {
               btn.addEventListener('click', async () => {
                 await apiFetch('/api/v1/lifere/education/complete', {
@@ -910,6 +1013,16 @@
           if (bar) bar.textContent = 'Education progress unavailable.';
         }
       }
+
+      document.querySelectorAll('.education-level-btn').forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          await apiFetch('/api/v1/lifere/education/level', {
+            method: 'POST',
+            body: JSON.stringify({ user_id: 'adam', level: btn.dataset.level }),
+          });
+          await loadEducationProgress();
+        });
+      });
 
       async function loadMotivation() {
         const el = document.getElementById('lifere-milestones');
@@ -1656,6 +1769,121 @@
         await loadCoaching();
       });
 
+      let salesSimSessionId = null;
+      function setSalesSimBusy(busy) {
+        ['sales-sim-start-btn', 'sales-sim-send-btn', 'sales-sim-end-btn'].forEach((id) => {
+          const el = document.getElementById(id);
+          if (!el) return;
+          if (id === 'sales-sim-start-btn') el.disabled = busy;
+          else if (id === 'sales-sim-send-btn') el.disabled = busy || !salesSimSessionId;
+          else el.disabled = busy || !salesSimSessionId;
+        });
+        const input = document.getElementById('sales-sim-input');
+        if (input) input.disabled = busy || !salesSimSessionId;
+      }
+      function appendSalesSimTurn(role, text, note) {
+        const thread = document.getElementById('sales-sim-thread');
+        if (!thread) return;
+        const card = document.createElement('div');
+        card.className = 'info-card';
+        card.innerHTML = `<div class="info-card-title">${escapeHtml(role)}</div><div class="info-card-body">${escapeHtml(text || '')}</div>${note ? `<div class="info-card-meta">Coach: ${escapeHtml(note)}</div>` : ''}`;
+        thread.appendChild(card);
+      }
+      async function loadSalesSimScenarios() {
+        const sel = document.getElementById('sales-sim-scenario');
+        const status = document.getElementById('sales-sim-status');
+        if (!sel) return;
+        try {
+          const res = await apiFetch('/api/v1/lifere/sales-coach/scenarios');
+          const data = await res.json();
+          const scenarios = data.scenarios || [];
+          sel.innerHTML = scenarios.length
+            ? scenarios.map((s) => `<option value="${escapeHtml(s.id || s.scenario_id)}">${escapeHtml(s.label || s.title || s.id || s.scenario_id)}</option>`).join('')
+            : '<option value="">No scenarios</option>';
+          if (status) status.textContent = scenarios.length ? `${scenarios.length} scenarios ready` : (data.error || 'No scenarios');
+        } catch (err) {
+          if (status) status.textContent = err.message;
+        }
+      }
+      document.getElementById('sales-sim-start-btn')?.addEventListener('click', async () => {
+        const status = document.getElementById('sales-sim-status');
+        const scenarioId = document.getElementById('sales-sim-scenario')?.value;
+        if (!scenarioId) {
+          if (status) status.textContent = 'Pick a scenario first.';
+          return;
+        }
+        setSalesSimBusy(true);
+        document.getElementById('sales-sim-thread').innerHTML = '';
+        document.getElementById('sales-sim-debrief').textContent = '';
+        try {
+          const res = await apiFetch('/api/v1/lifere/sales-coach/session/start', {
+            method: 'POST',
+            body: JSON.stringify({ scenario_id: scenarioId, owner_id: 'adam' }),
+          });
+          const data = await res.json();
+          if (!data.ok) throw new Error(data.error || 'Start failed');
+          salesSimSessionId = data.sessionId || data.session_id || data.session?.id;
+          appendSalesSimTurn('Coach', data.opening || data.client_opener || data.opener || 'Start whenever you are ready.');
+          if (status) status.textContent = `Session ${salesSimSessionId || 'active'}`;
+        } catch (err) {
+          if (status) status.textContent = err.message;
+          salesSimSessionId = null;
+        }
+        setSalesSimBusy(false);
+      });
+      document.getElementById('sales-sim-send-btn')?.addEventListener('click', async () => {
+        const status = document.getElementById('sales-sim-status');
+        const input = document.getElementById('sales-sim-input');
+        const message = input?.value?.trim();
+        if (!salesSimSessionId || !message) return;
+        setSalesSimBusy(true);
+        appendSalesSimTurn('You', message);
+        input.value = '';
+        try {
+          const res = await apiFetch(`/api/v1/lifere/sales-coach/session/${encodeURIComponent(salesSimSessionId)}/turn`, {
+            method: 'POST',
+            body: JSON.stringify({ message, owner_id: 'adam' }),
+          });
+          const data = await res.json();
+          if (!data.ok) throw new Error(data.error || 'Turn failed');
+          appendSalesSimTurn(
+            'Client',
+            data.clientResponse || data.client_reply || data.reply || '',
+            data.coachingNote || data.coaching_note || data.coach_note || '',
+          );
+          if (status) status.textContent = (data.detectedQuadrant || data.quadrant)
+            ? `Live · ${data.detectedQuadrant || data.quadrant}`
+            : 'Turn ok';
+        } catch (err) {
+          if (status) status.textContent = err.message;
+        }
+        setSalesSimBusy(false);
+      });
+      document.getElementById('sales-sim-end-btn')?.addEventListener('click', async () => {
+        const status = document.getElementById('sales-sim-status');
+        if (!salesSimSessionId) return;
+        setSalesSimBusy(true);
+        try {
+          const res = await apiFetch(`/api/v1/lifere/sales-coach/session/${encodeURIComponent(salesSimSessionId)}/end`, {
+            method: 'POST',
+            body: JSON.stringify({ owner_id: 'adam' }),
+          });
+          const data = await res.json();
+          document.getElementById('sales-sim-debrief').textContent = JSON.stringify({
+            scores: data.debrief?.scores || data.scores || data.session?.scores,
+            debrief: data.debrief || data.session?.debrief,
+            quadrant: data.quadrant || data.session?.quadrant,
+            turnsCompleted: data.turnsCompleted,
+          }, null, 2);
+          if (status) status.textContent = data.ok ? 'Session scored' : (data.error || 'End failed');
+          salesSimSessionId = null;
+        } catch (err) {
+          if (status) status.textContent = err.message;
+        }
+        setSalesSimBusy(false);
+      });
+      loadSalesSimScenarios();
+
       function renderMarketingOutput(data, title) {
         const el = document.getElementById('marketing-output');
         if (!data) { el.innerHTML = '<p class="empty">No output.</p>'; return; }
@@ -1809,21 +2037,23 @@
           document.getElementById('tc-critical-count').textContent = data.summary?.critical_blockers ?? '0';
           const deals = data.deals || [];
           if (!listEl) return;
-          listEl.innerHTML = deals.length ? deals.map((d) => {
+          const sorted = [...deals].sort((a, b) => (b.blockers?.length || 0) - (a.blockers?.length || 0));
+          listEl.innerHTML = sorted.length ? sorted.map((d) => {
             const blockers = (d.blockers || []).slice(0, 2).map((b) => b.message || b).join('; ');
             const missing = (d.missing_documents || []).length;
             const links = d.portal_links || {};
+            const urgent = (d.blockers || []).length > 0 || missing > 0;
             return `
               <div class="info-card">
-                <div class="info-card-title">${escapeHtml(d.property_address || d.deal_id)}</div>
+                <div class="info-card-title">${urgent ? '⚠ ' : ''}${escapeHtml(d.property_address || d.deal_id)}</div>
                 <div class="info-card-body">Stage: ${escapeHtml(d.stage || '—')} · Close: ${escapeHtml(d.close_date || 'TBD')}</div>
-                ${blockers ? `<div class="info-card-meta">${escapeHtml(blockers)}</div>` : ''}
-                ${missing ? `<div class="info-card-meta">${missing} missing doc(s)</div>` : ''}
+                ${blockers ? `<div class="info-card-meta">Blocker: ${escapeHtml(blockers)}</div>` : ''}
+                ${missing ? `<div class="info-card-meta">${missing} missing doc(s) — open portal</div>` : ''}
                 <div class="followup-actions" style="margin-top:8px">
-                  <a class="btn btn-sm" href="${escapeHtml(links.agent || '/tc/agent-portal.html')}" target="_blank" rel="noopener">Agent</a>
-                  <a class="btn btn-sm" href="${escapeHtml(links.client || '/tc/client-portal.html')}" target="_blank" rel="noopener">Client</a>
+                  <button type="button" class="btn btn-sm ${urgent ? 'btn-primary' : ''} lifere-tc-comms" data-deal-id="${escapeHtml(String(d.deal_id))}">Draft client update</button>
+                  <a class="btn btn-sm" href="${escapeHtml(links.agent || '/tc/agent-portal.html')}" target="_blank" rel="noopener">Clear in portal</a>
+                  <a class="btn btn-sm" href="${escapeHtml(links.client || '/tc/client-portal.html')}" target="_blank" rel="noopener">Client portal</a>
                   <button type="button" class="btn btn-sm lifere-tc-detail" data-deal-id="${escapeHtml(String(d.deal_id))}">Detail</button>
-                  <button type="button" class="btn btn-sm lifere-tc-comms" data-deal-id="${escapeHtml(String(d.deal_id))}">Draft update</button>
                 </div>
               </div>
             `;
@@ -1832,11 +2062,29 @@
             btn.addEventListener('click', () => loadDealDetail(btn.dataset.dealId));
           });
           listEl.querySelectorAll('.lifere-tc-comms').forEach((btn) => {
-            btn.addEventListener('click', () => {
+            btn.addEventListener('click', async () => {
+              const dealId = btn.dataset.dealId;
               switchToClientsTab('buyer', null);
+              const sideEl = document.getElementById('comms-side');
+              if (sideEl) {
+                if (![...sideEl.options].some((o) => o.value === 'tc')) {
+                  sideEl.insertAdjacentHTML('beforeend', '<option value="tc">TC deal</option>');
+                }
+                sideEl.value = 'tc';
+              }
+              const refSelect = document.getElementById('comms-client-ref');
+              if (refSelect && dealId) {
+                if (![...refSelect.options].some((o) => o.value === dealId)) {
+                  refSelect.insertAdjacentHTML('beforeend', `<option value="${escapeHtml(dealId)}">${escapeHtml(dealId)}</option>`);
+                }
+                refSelect.value = dealId;
+              }
               const tpl = document.getElementById('comms-template');
-              if (tpl) tpl.value = 'milestone';
-              fillCommsFromContext();
+              if (tpl) tpl.value = 'status_update';
+              const res = await apiFetch(`/api/v1/lifere/client-comms/suggest-vars?user_id=adam&ref=${encodeURIComponent(dealId)}&side=tc`);
+              const data = await res.json();
+              renderCommsVarFields(data.vars || {});
+              await refreshCommsPreview();
             });
           });
         } catch (err) {
@@ -1844,12 +2092,66 @@
         }
       }
 
+      async function loadPhoneTextInbox() {
+        const listEl = document.getElementById('lifere-inbox-list');
+        const statusElInbox = document.getElementById('lifere-inbox-status');
+        try {
+          const res = await apiFetch('/api/v1/lifere/inbox?user_id=adam&limit=40');
+          const data = await res.json();
+          const counts = data.counts || {};
+          document.getElementById('inbox-sms-count').textContent = counts.sms ?? 0;
+          document.getElementById('inbox-call-count').textContent = counts.calls ?? 0;
+          const setup = data.phone_setup || {};
+          document.getElementById('inbox-setup-flags').textContent = setup.vapi_configured
+            ? 'Vapi ready'
+            : 'Vapi not configured — Twilio gateway still logs SMS/calls';
+          if (statusElInbox) {
+            statusElInbox.textContent = data.items?.length
+              ? `Inbox live (${data.label || 'KNOW'}) — approve follow-ups from Command Center.`
+              : 'No phone/SMS events yet. Point Twilio to LifeOS gateway; Vapi end → LifeRE receptionist.';
+          }
+          if (listEl) {
+            listEl.innerHTML = (data.items || []).slice(0, 12).map((item) => {
+              const channel = item.channel || 'sms';
+              const preview = item.summary || item.body || item.from || '—';
+              const when = item.created_at ? new Date(item.created_at).toLocaleString() : '';
+              const followUp = item.call_id
+                ? `<button type="button" class="btn btn-sm btn-primary lifere-call-followup" data-call-id="${escapeHtml(item.call_id)}">Draft follow-up</button>`
+                : '';
+              return `
+                <div class="info-card">
+                  <div class="info-card-title">${escapeHtml(channel.toUpperCase())} · ${escapeHtml(item.direction || 'inbound')}</div>
+                  <div class="info-card-body">${escapeHtml(String(preview).slice(0, 180))}</div>
+                  <div class="info-card-meta">${escapeHtml(item.from || '')} · ${escapeHtml(when)} · ${escapeHtml(item.source || '')}</div>
+                  ${followUp}
+                </div>`;
+            }).join('') || '<p class="empty">Inbox empty — connect phone/SMS webhooks to start monitoring.</p>';
+            listEl.querySelectorAll('.lifere-call-followup').forEach((btn) => {
+              btn.addEventListener('click', async () => {
+                btn.disabled = true;
+                await apiFetch(`/api/v1/lifere/receptionist/calls/${encodeURIComponent(btn.dataset.callId)}/follow-up-draft`, {
+                  method: 'POST', body: JSON.stringify({ user_id: 'adam' }),
+                });
+                statusEl.textContent = 'Receptionist follow-up queued for approval.';
+                await loadApprovalQueue();
+                await loadCommandCenter();
+              });
+            });
+          }
+          return data;
+        } catch (err) {
+          if (listEl) listEl.innerHTML = `<p class="empty">Inbox error: ${escapeHtml(err.message)}</p>`;
+          return null;
+        }
+      }
+
       async function loadOps() {
-        const [r, f, o, c, tc] = await Promise.all([
+        const [r, f, o, c, inbox, tc] = await Promise.all([
           apiFetch('/api/v1/lifere/recruiting/pipeline?user_id=adam'),
           apiFetch('/api/v1/lifere/finance/forecast?user_id=adam'),
           apiFetch('/api/v1/lifere/opportunity/signals?user_id=adam'),
           apiFetch('/api/v1/lifere/receptionist/calls?user_id=adam'),
+          loadPhoneTextInbox(),
           loadTransactionOps(),
         ]);
         const rj = await r.json(); const fj = await f.json(); const oj = await o.json(); const cj = await c.json();
@@ -1892,8 +2194,70 @@
             await loadCommandCenter();
           });
         });
-        await tc;
       }
+
+      document.getElementById('inbox-refresh-btn')?.addEventListener('click', () => loadPhoneTextInbox());
+
+      async function renderPhoneSetup(data) {
+        const el = document.getElementById('lifere-phone-setup');
+        if (!el) return;
+        const status = data.status || data;
+        const phones = (status.phones || []).map((p) =>
+          `${p.number_masked || '—'} · webhook ${p.webhook_matches_lifere ? '✓ LifeRE' : (p.server_url || 'unset')}`
+        ).join('\n');
+        const env = status.env || {};
+        el.textContent = [
+          `Webhook: ${status.webhook_url || data.webhook_url || '—'}`,
+          `Vapi key: ${env.VAPI_API_KEY ? 'set' : 'missing'} · assistant: ${env.VAPI_ASSISTANT_ID ? 'set' : 'missing'} · Twilio: ${env.TWILIO_ACCOUNT_SID ? 'set' : 'missing'}`,
+          status.assistant ? `Assistant: ${status.assistant.name || status.assistant.id} · ${status.assistant.webhook_matches_lifere ? '✓ LifeRE' : (status.assistant.server_url || 'no server URL')}` : 'Assistant: —',
+          phones ? `Numbers:\n${phones}` : 'Numbers: none returned from Vapi',
+          status.next || data.next || '',
+          (data.actions || []).length ? `Sync actions: ${data.actions.map((a) => `${a.target}:${a.ok ? 'ok' : a.error || 'fail'}`).join(', ')}` : '',
+        ].filter(Boolean).join('\n');
+      }
+
+      document.getElementById('phone-status-btn')?.addEventListener('click', async () => {
+        const res = await apiFetch('/api/v1/lifere/phone/status?user_id=adam');
+        await renderPhoneSetup(await res.json());
+      });
+
+      document.getElementById('phone-sync-vapi-btn')?.addEventListener('click', async () => {
+        const btn = document.getElementById('phone-sync-vapi-btn');
+        if (btn) btn.disabled = true;
+        try {
+          const res = await apiFetch('/api/v1/lifere/phone/sync-vapi', {
+            method: 'POST',
+            body: JSON.stringify({ user_id: 'adam' }),
+          });
+          await renderPhoneSetup(await res.json());
+          statusEl.textContent = 'Vapi webhook sync attempted — check Phone setup panel.';
+        } finally {
+          if (btn) btn.disabled = false;
+        }
+      });
+
+      document.getElementById('phone-provision-btn')?.addEventListener('click', async () => {
+        const btn = document.getElementById('phone-provision-btn');
+        if (btn) btn.disabled = true;
+        try {
+          const res = await apiFetch('/api/v1/lifere/phone/provision-receptionist', {
+            method: 'POST',
+            body: JSON.stringify({ user_id: 'adam' }),
+          });
+          const data = await res.json();
+          await renderPhoneSetup(data);
+          const steps = data.founder_setup
+            ? Object.values(data.founder_setup).join('\n')
+            : '';
+          const el = document.getElementById('lifere-phone-setup');
+          if (el && steps) el.textContent = `${el.textContent}\n\n${steps}`;
+          statusEl.textContent = data.ok
+            ? 'Screening receptionist installed — set Conditional Forward on 702-860 → Vapi inbound.'
+            : `Provision issue: ${data.error || 'see panel'}`;
+        } finally {
+          if (btn) btn.disabled = false;
+        }
+      });
 
       document.getElementById('recruit-add-btn')?.addEventListener('click', async () => {
         const name = document.getElementById('recruit-candidate-name')?.value?.trim();
@@ -1949,6 +2313,7 @@
                   method: 'PUT',
                   body: JSON.stringify({ user_id: 'adam', autonomy_level: Number(btn.dataset.level) }),
                 });
+                await loadPermissionTiers();
                 await loadApprovalQueue();
               });
             });
@@ -2254,6 +2619,29 @@
         const res = await apiFetch('/api/v1/lifere/outreach/process-queue', { method: 'POST', body: JSON.stringify({ user_id: 'adam' }) });
         document.getElementById('deals-output').textContent = JSON.stringify(await res.json(), null, 2);
         await loadDealsPanel();
+      });
+
+      document.getElementById('buyer-sync-boldtrail-btn')?.addEventListener('click', async () => {
+        const status = document.getElementById('buyer-sync-status');
+        const btn = document.getElementById('buyer-sync-boldtrail-btn');
+        if (btn) btn.disabled = true;
+        if (status) status.textContent = 'Syncing…';
+        try {
+          const res = await apiFetch('/api/v1/lifere/deals/buyers/sync-boldtrail', {
+            method: 'POST',
+            body: JSON.stringify({ user_id: 'adam', limit: 25 }),
+          });
+          const data = await res.json();
+          if (status) {
+            status.textContent = data.ok
+              ? `Synced ${data.synced || 0} · ${data.clients || 0} buyers total`
+              : (data.error || 'Sync failed');
+          }
+          if (data.ok) await loadDealsPanel();
+        } catch (err) {
+          if (status) status.textContent = err.message;
+        }
+        if (btn) btn.disabled = false;
       });
 
       document.querySelectorAll('.personality-rate-btn').forEach((btn) => {

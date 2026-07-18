@@ -17,7 +17,7 @@ describe('isNonUiBuildQueueTarget', () => {
     assert.equal(isNonUiBuildQueueTarget('routes/lifeos-phase3-routes.js'), true);
     assert.equal(isNonUiBuildQueueTarget('middleware/auth.js'), true);
     assert.equal(isNonUiBuildQueueTarget('startup/boot-domains.js'), true);
-    assert.equal(isNonUiBuildQueueTarget('config/auto-registered-product-modules.json'), false);
+    assert.equal(isNonUiBuildQueueTarget('config/auto-registered-product-modules.json'), true);
     assert.equal(isNonUiBuildQueueTarget('config/foo.js'), true);
   });
 

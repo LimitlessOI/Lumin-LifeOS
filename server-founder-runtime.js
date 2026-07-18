@@ -205,7 +205,7 @@ app.get("/ready", (_req, res) => {
       callCouncilMember: typeof callCouncilMember === "function",
       pool: Boolean(pool?.query),
     },
-    startup: { ...startupHealthState },
+    startup: { ...startupHealthState, boot_attempt: bootAttempt },
     uptime: Math.floor(process.uptime()),
     timestamp: new Date().toISOString(),
   });
@@ -364,87 +364,146 @@ async function gracefulShutdown(signal = "SIGINT") {
 process.on("SIGINT", () => gracefulShutdown("SIGINT"));
 process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
 
-async function bootFounderRuntime() {
-  _bootLog('bootFounderRuntime_enter');
-  startupHealthState.phase = "initializing";
-  try {
-    _bootLog('pre_db_query');
-    await pool.query("SELECT 1");
-    startupHealthState.db = "ok";
-    logger.info("✅ Founder-builder database reachable");
-    _bootLog('db_ok');
+let bootInFlight = null;
+let bootAttempt = 0;
+let bootRetryTimer = null;
+let founderRoutesRegistered = false;
 
-    _bootLog('pre_migrations');
-    const migrationResult = await initDatabase(pool, logger);
-    _bootLog('migrations_done');
-
-    _bootLog('pre_registerRoutes');
-    const notificationService = new NotificationService({ pool });
-    const routeRegistration = await registerFounderRuntimeRoutes(app, {
-      pool,
-      requireKey,
-      logger,
-      callCouncilMember,
-      lclMonitor,
-      getCachedResponse,
-      cacheResponse,
-      commitToGitHub,
-      commitManyToGitHub,
-      platformKernel,
-      notificationService,
-      getRailwayEnvVars,
-      setRailwayEnvVar,
+function scheduleBootRetry(reason) {
+  if (startupHealthState.ready || bootRetryTimer) return;
+  const attempt = Math.max(1, bootAttempt);
+  const delayMs = Math.min(60_000, Math.round(2500 * Math.pow(1.6, Math.min(attempt, 12))));
+  startupHealthState.phase = "retry_scheduled";
+  startupHealthState.last_error = `${reason} (retry #${attempt + 1} in ${delayMs}ms)`;
+  logger.warn(
+    { attempt, delayMs, reason },
+    "[BOOT] DB/route boot failed — scheduling retry so tip can recover without redeploy",
+  );
+  bootRetryTimer = setTimeout(() => {
+    bootRetryTimer = null;
+    bootFounderRuntime().catch((err) => {
+      logger.warn({ err: err.message }, "[BOOT] scheduled retry threw");
     });
-    _bootLog('registerRoutes_done');
-
-    const startupReport = buildStartupDegradedReport({
-      migrationFailed: migrationResult?.failed || [],
-      moduleHealth: routeRegistration?.moduleHealth || {},
-      routeAssert: routeRegistration?.routeAssert || null,
-      unhandledRejections: _unhandledRejectionCount,
-      lastError: startupHealthState.last_error,
-    });
-    startupHealthState.startup_report = startupReport;
-    startupHealthState.degraded = startupReport.degraded === true;
-    startupHealthState.runtime_routes = startupReport.degraded
-      && (startupReport.routes_missing?.length || routeRegistration?.routeAssert?.ok === false)
-      ? "degraded"
-      : "ok";
-    startupHealthState.deferred_services = "ok";
-    startupHealthState.phase = "ready";
-    startupHealthState.ready = true;
-    if (startupReport.degraded) {
-      logger.error(formatStartupDegradedLog(startupReport), "[STARTUP_DEGRADED] founder-builder boot partial failure");
-    } else {
-      logger.info("✅ Founder-builder runtime routes mounted");
-    }
-
-    // AUTONOMOUS BUILD LOOP: the founder-builder lane is the only runtime that
-    // boots on Railway, and it already mounts the `/build` primitive — so the
-    // never-stop product factory must start here (self-gated on
-    // BUILDEROS_NEVER_STOP / daily budget) or the system never builds on its own.
-    try {
-      startNeverStopProductFactoryScheduler({ logger });
-    } catch (schedErr) {
-      logger.warn("[NEVER-STOP-FACTORY] failed to start in founder runtime", { error: schedErr.message });
-    }
-    // STEP 5g: the governed autonomous shipping loop. Self-gated on
-    // GOVERNED_FACTORY_ONLY — it only owns throughput once the fence is ON, so
-    // starting it here is a no-op until cutover and never double-ships with the
-    // legacy never-stop loop above.
-    try {
-      startGovernedAutonomousShippingLoop({ logger });
-    } catch (govErr) {
-      logger.warn("[GOVERNED-AUTONOMOUS-SHIP] failed to start in founder runtime", { error: govErr.message });
-    }
-    _bootLog('bootFounderRuntime_done');
-  } catch (error) {
-    startupHealthState.phase = "error";
-    startupHealthState.db = startupHealthState.db === "pending" ? "error" : startupHealthState.db;
-    startupHealthState.last_error = error.message;
-    logger.error("❌ Founder-builder boot error:", { error: error.message, stack: error.stack });
-  }
+  }, delayMs);
+  bootRetryTimer.unref?.();
 }
+
+async function bootFounderRuntime() {
+  if (startupHealthState.ready) return { ok: true, already_ready: true };
+  if (bootInFlight) return bootInFlight;
+
+  bootInFlight = (async () => {
+    bootAttempt += 1;
+    _bootLog(`bootFounderRuntime_enter attempt=${bootAttempt}`);
+    startupHealthState.phase = "initializing";
+    try {
+      _bootLog('pre_db_query');
+      await pool.query("SELECT 1");
+      startupHealthState.db = "ok";
+      logger.info("✅ Founder-builder database reachable");
+      _bootLog('db_ok');
+
+      _bootLog('pre_migrations');
+      const migrationResult = await initDatabase(pool, logger);
+      _bootLog('migrations_done');
+
+      let routeRegistration = { moduleHealth: {}, routeAssert: null };
+      if (!founderRoutesRegistered) {
+        _bootLog('pre_registerRoutes');
+        const notificationService = new NotificationService({ pool });
+        routeRegistration = await registerFounderRuntimeRoutes(app, {
+          pool,
+          requireKey,
+          logger,
+          callCouncilMember,
+          lclMonitor,
+          getCachedResponse,
+          cacheResponse,
+          commitToGitHub,
+          commitManyToGitHub,
+          platformKernel,
+          notificationService,
+          getRailwayEnvVars,
+          setRailwayEnvVar,
+        });
+        founderRoutesRegistered = true;
+        _bootLog('registerRoutes_done');
+      } else {
+        _bootLog('registerRoutes_skipped_already_mounted');
+      }
+
+      const startupReport = buildStartupDegradedReport({
+        migrationFailed: migrationResult?.failed || [],
+        moduleHealth: routeRegistration?.moduleHealth || {},
+        routeAssert: routeRegistration?.routeAssert || null,
+        unhandledRejections: _unhandledRejectionCount,
+        lastError: startupHealthState.last_error,
+      });
+      startupHealthState.startup_report = startupReport;
+      startupHealthState.degraded = startupReport.degraded === true;
+      startupHealthState.runtime_routes = startupReport.degraded
+        && (startupReport.routes_missing?.length || routeRegistration?.routeAssert?.ok === false)
+        ? "degraded"
+        : "ok";
+      startupHealthState.deferred_services = "ok";
+      startupHealthState.phase = "ready";
+      startupHealthState.ready = true;
+      startupHealthState.last_error = null;
+      if (startupReport.degraded) {
+        logger.error(formatStartupDegradedLog(startupReport), "[STARTUP_DEGRADED] founder-builder boot partial failure");
+      } else {
+        logger.info("✅ Founder-builder runtime routes mounted");
+      }
+
+      // AUTONOMOUS BUILD LOOP: the founder-builder lane is the only runtime that
+      // boots on Railway, and it already mounts the `/build` primitive — so the
+      // never-stop product factory must start here (self-gated on
+      // BUILDEROS_NEVER_STOP / daily budget) or the system never builds on its own.
+      try {
+        startNeverStopProductFactoryScheduler({ logger });
+      } catch (schedErr) {
+        logger.warn("[NEVER-STOP-FACTORY] failed to start in founder runtime", { error: schedErr.message });
+      }
+      // STEP 5g: the governed autonomous shipping loop. Self-gated on
+      // GOVERNED_FACTORY_ONLY — it only owns throughput once the fence is ON, so
+      // starting it here is a no-op until cutover and never double-ships with the
+      // legacy never-stop loop above.
+      try {
+        startGovernedAutonomousShippingLoop({ logger, pool });
+      } catch (govErr) {
+        logger.warn("[GOVERNED-AUTONOMOUS-SHIP] failed to start in founder runtime", { error: govErr.message });
+      }
+      _bootLog('bootFounderRuntime_done');
+      return { ok: true, attempt: bootAttempt };
+    } catch (error) {
+      startupHealthState.phase = "error";
+      startupHealthState.db = startupHealthState.db === "ok" ? "ok" : "error";
+      startupHealthState.last_error = error.message;
+      logger.error("❌ Founder-builder boot error:", { error: error.message, stack: error.stack, attempt: bootAttempt });
+      scheduleBootRetry(error.message);
+      return { ok: false, attempt: bootAttempt, error: error.message };
+    } finally {
+      bootInFlight = null;
+    }
+  })();
+
+  return bootInFlight;
+}
+
+// Early surface — available even when DB boot failed and runtime routes are pending.
+app.post("/api/v1/lifeos/boot/retry", requireKey, async (_req, res) => {
+  if (startupHealthState.ready) {
+    return res.json({ ok: true, already_ready: true, attempt: bootAttempt });
+  }
+  if (bootRetryTimer) {
+    clearTimeout(bootRetryTimer);
+    bootRetryTimer = null;
+  }
+  res.status(202).json({ ok: true, accepted: true, attempt: bootAttempt, message: "boot retry started" });
+  bootFounderRuntime().catch((err) => {
+    logger.warn({ err: err.message }, "[BOOT] manual retry threw");
+  });
+});
 
 async function start() {
   _bootLog('start_enter');

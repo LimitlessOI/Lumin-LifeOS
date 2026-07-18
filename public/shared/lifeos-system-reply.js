@@ -16,13 +16,21 @@
     ) {
       return formatStructured(data);
     }
+    // Counsel / Chair turns: show only the human words. Receipt theater
+    // (NO_COMMAND_RAN · Command · Channel) is for build/execute, not conversation.
+    const counselOnly = (data.lumin_chair || data.direct_connection)
+      && (data.command_truth === 'NO_COMMAND_RAN' || data.pass_fail === 'NO_COMMAND_RAN' || data.chair_direct_agent)
+      && !(data.pass_fail === 'PASS' && (data.sha || data.commit_sha));
+    if (counselOnly && String(data.human_summary || '').trim()) {
+      return String(data.human_summary).trim();
+    }
     if ((data.lumin_chair || data.direct_connection) && String(data.human_summary || '').trim()) {
       return String(data.human_summary).trim();
     }
     if (data.autopsy && data.pass_fail === 'FAIL') {
       return formatStructured(data);
     }
-    if (data.receipt_truth && data.pass_fail) {
+    if (data.receipt_truth && data.pass_fail && !counselOnly) {
       return formatStructured(data);
     }
     const summary = String(data.human_summary || '').trim();

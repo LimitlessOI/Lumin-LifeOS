@@ -1,6 +1,8 @@
 // SYNOPSIS: MarketingOS Phase 2 UI routes for content calendar and atom library browser.
 // @ssot docs/products/marketingos/PRODUCT_HOME.md
 
+import { sharedMarketingClientAuth } from './marketing-session-ui-routes.js';
+
 const HTML_CT = 'text/html; charset=utf-8';
 
 function escapeHtml(value) {
@@ -274,6 +276,7 @@ function pageShell({ title, body, script }) {
     ${body}
   </div>
   <script>
+${sharedMarketingClientAuth}
 ${script}
   </script>
 </body>
@@ -356,7 +359,7 @@ function calendarPageHtml() {
     setStatus('Loading calendar…');
     gridEl.innerHTML = '';
     try {
-      const res = await fetch('/api/v1/marketing/calendar', { headers: { 'accept': 'application/json' } });
+      const res = await marketingFetch('/api/v1/marketing/calendar', { headers: { 'accept': 'application/json' } });
       if (!res.ok) throw new Error('Failed to load calendar: ' + res.status);
       const data = await res.json();
       const slots = Array.isArray(data?.slots) ? data.slots : (Array.isArray(data) ? data : []);
@@ -397,7 +400,7 @@ function calendarPageHtml() {
 
             const title = item.title || item.content_title || item.content_piece_title || item.content_piece?.title || 'Untitled piece';
             const platform = item.platform || item.content_piece?.platform || 'Unknown platform';
-            const id = item.id || item.content_piece_id || item.content_piece?.id || '';
+            const id = item.content_piece_id || item.content_piece?.id || '';
 
             piece.innerHTML =
               '<div class="piece-title">' + esc(title) + '</div>' +
@@ -421,9 +424,9 @@ function calendarPageHtml() {
           btn.disabled = true;
           setStatus('Saving scheduled date…');
           try {
-            const res = await fetch('/api/v1/marketing/calendar', {
+            const res = await marketingFetch('/api/v1/marketing/calendar', {
               method: 'POST',
-              headers: { 'content-type': 'application/json', 'accept': 'application/json' },
+              headers: { 'accept': 'application/json' },
               body: JSON.stringify({ content_piece_id: pieceId, scheduled_date: scheduledDate })
             });
             if (!res.ok) throw new Error('Save failed: ' + res.status);
@@ -484,7 +487,7 @@ function atomsPageHtml() {
         <form id="atomForm" class="stack">
           <label class="field">
             <span>Atom type</span>
-            <input name="atom_type" placeholder="e.g. hook, CTA, testimonial, objection" required />
+            <input name="atom_type" placeholder="e.g. hook, story, insight, CTA" required />
           </label>
           <label class="field">
             <span>Text</span>
@@ -496,7 +499,7 @@ function atomsPageHtml() {
           </label>
           <label class="field">
             <span>Reuse consent level</span>
-            <input name="reuse_consent_level" placeholder="e.g. internal, approved, public" />
+            <input name="reuse_consent_level" placeholder="e.g. session_only, 90d, perpetual" />
           </label>
           <button class="btn primary" type="submit">Save atom</button>
         </form>
@@ -524,7 +527,7 @@ function atomsPageHtml() {
     setStatus('Loading atoms…');
     listEl.innerHTML = '';
     try {
-      const res = await fetch('/api/v1/marketing/atoms', { headers: { 'accept': 'application/json' } });
+      const res = await marketingFetch('/api/v1/marketing/atoms', { headers: { 'accept': 'application/json' } });
       if (!res.ok) throw new Error('Failed to load atoms: ' + res.status);
       const data = await res.json();
       const atoms = Array.isArray(data?.atoms) ? data.atoms : (Array.isArray(data) ? data : []);
@@ -571,9 +574,9 @@ function atomsPageHtml() {
     submitBtn.disabled = true;
     setStatus('Saving atom…');
     try {
-      const res = await fetch('/api/v1/marketing/atoms', {
+      const res = await marketingFetch('/api/v1/marketing/atoms', {
         method: 'POST',
-        headers: { 'content-type': 'application/json', 'accept': 'application/json' },
+        headers: { 'accept': 'application/json' },
         body: JSON.stringify(payload)
       });
       if (!res.ok) throw new Error('Save failed: ' + res.status);

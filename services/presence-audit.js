@@ -18,6 +18,7 @@
  */
 
 import logger from './logger.js';
+import { DEFAULT_MODEL } from '../config/task-model-routing.js';
 import CompetitorBenchmark from './competitor-benchmark.js';
 
 const CHANNELS = ['website', 'google', 'instagram', 'facebook', 'linkedin'];
@@ -93,7 +94,9 @@ Rate this ${channel} presence 1-10 (10 = best-in-class). Return ONLY JSON:
 {"score": <1-10>, "doesWell": ["s1","s2"], "doesPoorly": ["w1","w2"], "recommendation": "what we'd do to improve it"}`;
 
     try {
-      const response = await this.callCouncil('groq_llama', prompt, { maxOutputTokens: 600, taskType: 'analysis' });
+      // useCache:false: presence scores are per-URL; the semantic cache can return
+      // another channel's score for a similar-looking audit prompt.
+      const response = await this.callCouncil(DEFAULT_MODEL, prompt, { maxOutputTokens: 600, taskType: 'analysis', useCache: false, builderExecution: true });
       const parsed = JSON.parse((response.match(/\{[\s\S]+\}/) || ['{}'])[0]);
       return {
         channel,
@@ -203,7 +206,9 @@ ${digest}
 Give an honest, motivating read. Return ONLY JSON:
 {"summary":"2-3 sentence overview of where they stand vs competitors","biggestOpportunity":"the single highest-leverage channel to win and why","quickWins":["win 1","win 2","win 3"]}`;
     try {
-      const response = await this.callCouncil('groq_llama', prompt, { maxOutputTokens: 700, taskType: 'analysis' });
+      // useCache:false: gap synthesis is per-business; the cache can reuse a different
+      // business's comparison if the prompt is template-heavy.
+      const response = await this.callCouncil(DEFAULT_MODEL, prompt, { maxOutputTokens: 700, taskType: 'analysis', useCache: false, builderExecution: true });
       const parsed = JSON.parse((response.match(/\{[\s\S]+\}/) || ['{}'])[0]);
       const quickWins = Array.isArray(parsed.quickWins) ? parsed.quickWins.slice(0, 5) : [];
       return {

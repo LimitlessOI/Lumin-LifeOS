@@ -268,6 +268,18 @@ export function createLifeOSChatRoutes({ pool, requireKey, callAI, callCouncilMe
     }
   });
 
+  // ── POST /operator/purge-messages — conductor cleanup (never use founder UI for probes) ──
+  router.post('/operator/purge-messages', requireKey, async (req, res) => {
+    try {
+      const userId = await resolveUserId(req.body.user || 'adam');
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const deleted = await lumin.deleteMessagesByIds(userId, req.body.ids || []);
+      res.json({ ok: true, deleted_count: deleted.length, deleted });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
   // ── GET /search?q= ───────────────────────────────────────────────────────────
   router.get('/search', requireKey, async (req, res) => {
     try {

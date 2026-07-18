@@ -32,19 +32,28 @@ import { scoreGeneratedSite, scoreSummary } from './site-builder-quality-scorer.
 import CompetitorBenchmark from './competitor-benchmark.js';
 import PresenceAudit from './presence-audit.js';
 import { createWebSearchService } from './web-search-service.js';
-import { pickDesignSystems, getDesignSystem, renderDesignSystemDirectives, DEFAULT_DESIGN_SYSTEM_ID } from './site-builder-design-systems.js';
+import { pickDesignSystems, getDesignSystem, renderDesignSystemDirectives, DEFAULT_DESIGN_SYSTEM_ID, getDesignSystemCss, getDesignSystemFontLinks } from './site-builder-design-systems.js';
+import { renderDesignSystemLayout } from '../config/design-studio-layouts.js';
+import { getVariantSwitcherHtml } from '../config/site-builder-switcher.js';
+import { ingestAll } from './site-builder-asset-ingestion.js';
 import { SITE_BUILDER_PRICING } from '../config/site-builder-pricing.js';
 import { resolvePreviewsDir } from '../config/site-builder-paths.js';
+import { getModelForTask, getCandidateModelsForTask } from '../config/task-model-routing.js';
+import { renderSalesDoctrineForPrompt } from '../config/site-builder-sales-doctrine.js';
+import { matchIndustrySalesPack } from '../config/site-builder-industry-sales.js';
 
 function createEditToken() {
   return crypto.randomBytes(24).toString('hex');
 }
 
+function safeJson(obj) {
+  return JSON.stringify(obj).replace(/</g, '\\u003c');
+}
+
 function injectPreviewChrome(html, { clientId, baseUrl, editToken }) {
   if (!html || !clientId || !baseUrl) return html;
-  const safeBase = String(baseUrl).replace(/\/$/, '');
-  const publishUrl = `${safeBase}/api/v1/sites/publish/checkout?clientId=${encodeURIComponent(clientId)}`;
-  const editorUrl = `${safeBase}/api/v1/sites/editor?clientId=${encodeURIComponent(clientId)}&token=${encodeURIComponent(editToken || '')}`;
+  const publishUrl = `/api/v1/sites/publish/checkout?clientId=${encodeURIComponent(clientId)}`;
+  const editorUrl = `/api/v1/sites/editor?clientId=${encodeURIComponent(clientId)}&token=${encodeURIComponent(editToken || '')}`;
   const bar = `
 <div id="sb-preview-chrome" style="position:fixed;left:0;right:0;bottom:0;z-index:99999;background:rgba(17,24,39,.96);color:#fff;padding:12px 16px;display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;font-family:system-ui,sans-serif;font-size:14px;box-shadow:0 -8px 30px rgba(0,0,0,.25)">
   <span>Your free preview — customize it or publish when ready.</span>
@@ -63,17 +72,137 @@ const TARGET_QUALITY_SCORE = Number(process.env.SITE_BUILDER_TARGET_SCORE || '88
 const MAX_REPAIR_PASSES = Math.max(0, Number(process.env.SITE_BUILDER_REPAIR_PASSES || '2'));
 const GENERATION_MAX_TOKENS = Number(process.env.SITE_BUILDER_GEN_TOKENS || '14000');
 const REPAIR_MAX_TOKENS = Number(process.env.SITE_BUILDER_REPAIR_TOKENS || '14000');
-// Design quality is driven mostly by the generation model. claude_sonnet (16k output)
-// produces markedly better design. Founder rule (2026-07-06): a PRODUCT never runs on a
-// free-tier model — only strong, paid models are hardwired into what the system ships.
-// Env-overridable; on any provider error we fall back to another STRONG model (gpt-4o),
-// NOT a free tier, so a build never hard-fails but never degrades to free-tier quality.
-const GENERATION_MODEL = process.env.SITE_BUILDER_GEN_MODEL || 'claude_sonnet';
-const GENERATION_FALLBACK_MODEL = process.env.SITE_BUILDER_GEN_FALLBACK_MODEL || 'openai_gpt';
+// Site generation uses the canonical task-model router. Start with a strong,
+// paid, provider-diverse model (claude_sonnet for long-form HTML) and fail over
+// across OpenAI lanes so the build never hard-fails and never sits idle per SO-003.
+const GENERATION_CANDIDATES = [...new Set([
+  getModelForTask('site_builder.generate_site') || 'claude_sonnet',
+  'openai_builder_standard',
+  'deepseek',
+  'openai_builder_escalation',
+  'openai_gpt',
+  'gemini_flash',
+  'openai_builder_mini',
+])].filter(Boolean);
+const REPAIR_CANDIDATES = [...new Set([
+  getModelForTask('site_builder.repair_site') || 'openai_builder_standard',
+  'claude_sonnet',
+  'deepseek',
+  'openai_builder_escalation',
+  'openai_gpt',
+  'gemini_flash',
+  'openai_builder_mini',
+])].filter(Boolean);
+const EXTRACTION_CANDIDATES = [...new Set([
+  getModelForTask('site_builder.extract_business') || 'deepseek',
+  'openai_gpt',
+  'claude_sonnet',
+  'gemini_flash',
+  'openai_builder_mini',
+])].filter(Boolean);
+const GENERATION_MODEL = GENERATION_CANDIDATES[0] || 'claude_sonnet';
+const GENERATION_TIMEOUT_MS = Math.max(15_000, Number(process.env.SITE_BUILDER_GEN_TIMEOUT_MS || '60000'));
+const PUPPETEER_LAUNCH_TIMEOUT_MS = Math.max(5_000, Number(process.env.SITE_BUILDER_PUPPETEER_LAUNCH_TIMEOUT_MS || '25000'));
 // Real-data enrichment: search the business's Google/Yelp/Facebook presence for REAL
 // reviews, ratings, and facts. Fails closed (no data) when no search provider key is set —
 // never fabricates. Disabled entirely with SITE_BUILDER_ENRICH=false.
 const ENRICHMENT_ENABLED = String(process.env.SITE_BUILDER_ENRICH || 'true') !== 'false';
+
+function withTimeout(promise, ms, label) {
+  let timer;
+  const timeout = new Promise((_, reject) => {
+    timer = setTimeout(() => reject(new Error(`${label} timed out after ${ms}ms`)), ms);
+    // Ensure timer can fire even if the event loop is busy with a long AI call.
+    if (typeof timer?.unref === 'function') timer.unref();
+  });
+  return Promise.race([promise, timeout]).finally(() => clearTimeout(timer));
+}
+
+function escapeHtml(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+/** Deterministic lean preview — no AI. Used for first-dollar / hang-bypass probes. */
+export function renderLeanProspectHtml(info = {}, posPartner = null) {
+  const partnerObj = posPartner || { name: 'booking', url: '#book' };
+  const name = escapeHtml(info.businessName || 'Your Business');
+  const tagline = escapeHtml(info.tagline || 'A clearer website for the work you already do');
+  const industry = escapeHtml(info.industry || 'wellness');
+  const location = escapeHtml(info.location || '');
+  const primary = escapeHtml(info.primaryColor || '#0F766E');
+  const accent = escapeHtml(info.accentColor || '#F59E0B');
+  const services = (info.services || ['Consultation', 'Care', 'Follow-up']).slice(0, 6).map(escapeHtml);
+  const pains = (info.painPoints || ['Hard to book online', 'Site feels outdated']).slice(0, 3).map(escapeHtml);
+  const booking = escapeHtml(info.bookingUrl || partnerObj.url || '#book');
+  const partner = escapeHtml(partnerObj.name || 'booking');
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>${name} | ${location || industry}</title>
+<meta name="description" content="${tagline}"/>
+<script src="${TAILWIND_CDN}"></script>
+<style>
+:root{--p:${primary};--a:${accent}}
+:focus-visible{outline:3px solid var(--a);outline-offset:2px}
+.sticky-cta{position:fixed;left:0;right:0;bottom:0;z-index:40}
+</style>
+</head>
+<body class="bg-stone-50 text-stone-900">
+<header class="sticky top-0 bg-white/95 border-b border-stone-200">
+  <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+    <strong>${name}</strong>
+    <a href="${booking}" class="px-4 py-2 rounded-lg text-white font-semibold" style="background:var(--p)">Book free call</a>
+  </div>
+</header>
+<main>
+  <section class="max-w-5xl mx-auto px-4 py-16 md:py-24">
+    <p class="text-sm uppercase tracking-wide text-stone-500">${industry}${location ? ` · ${location}` : ''}</p>
+    <h1 class="mt-3 text-4xl md:text-5xl font-semibold leading-tight">${tagline}</h1>
+    <p class="mt-4 text-lg text-stone-600 max-w-2xl">This is a free preview upgrade for ${name}. No invented claims — just a clearer path to book.</p>
+    <div class="mt-8 flex flex-wrap gap-3">
+      <a href="${booking}" class="px-5 py-3 rounded-lg text-white font-semibold" style="background:var(--p)">Book your free consultation</a>
+      <a href="#services" class="px-5 py-3 rounded-lg border border-stone-300 font-semibold">See services</a>
+    </div>
+  </section>
+  <section class="bg-white border-y border-stone-200 py-16">
+    <div class="max-w-5xl mx-auto px-4">
+      <h2 class="text-2xl font-semibold">Does this sound familiar?</h2>
+      <div class="mt-6 grid md:grid-cols-3 gap-4">
+        ${pains.map((p) => `<div class="p-4 rounded-xl border border-stone-200 bg-stone-50"><p>${p}</p></div>`).join('')}
+      </div>
+    </div>
+  </section>
+  <section id="services" class="max-w-5xl mx-auto px-4 py-16">
+    <h2 class="text-2xl font-semibold">How we help</h2>
+    <div class="mt-6 grid md:grid-cols-3 gap-4">
+      ${services.map((s) => `<div class="p-5 rounded-xl border border-stone-200"><h3 class="font-semibold">${s}</h3><p class="mt-2 text-stone-600">Request details or book a consult — pricing shared when confirmed.</p><a href="${booking}" class="inline-block mt-4 font-semibold" style="color:var(--p)">Book</a></div>`).join('')}
+    </div>
+  </section>
+  <section class="py-16 text-white" style="background:var(--p)">
+    <div class="max-w-5xl mx-auto px-4 text-center">
+      <h2 class="text-3xl font-semibold">Ready to start?</h2>
+      <p class="mt-3 opacity-90">Book through ${partner} when you are ready.</p>
+      <a href="${booking}" class="inline-block mt-6 px-6 py-3 rounded-lg font-semibold bg-white text-stone-900">Book now</a>
+    </div>
+  </section>
+</main>
+<footer class="max-w-5xl mx-auto px-4 py-10 text-sm text-stone-500">
+  <p>${name}${location ? ` · ${location}` : ''}</p>
+  <p class="mt-2">Preview generated by Site Builder. Facts only from provided business profile.</p>
+</footer>
+<div class="sticky-cta md:hidden p-3 bg-white border-t border-stone-200">
+  <a href="${booking}" class="block text-center px-4 py-3 rounded-lg text-white font-semibold" style="background:var(--p)">Book free call</a>
+</div>
+</body>
+</html>`;
+}
 
 // POS partner referral links — set AFFILIATE_*_URL env vars in Railway to activate commission tracking
 export const POS_PARTNERS = {
@@ -123,13 +252,125 @@ function renderVerifiedData(verified) {
   return lines.join('\n') + '\n';
 }
 
+function renderAssetData(asset) {
+  if (!asset) return 'ASSET DATA: NONE FOUND.\n- Use subtle gradient placeholders or CSS shapes for imagery; do not invent image URLs.\n';
+  const lines = ['ASSET DATA (real images, social profiles, videos, testimonials — use these exact URLs):'];
+  if (asset.images?.logo) lines.push(`- Logo URL: ${asset.images.logo}`);
+  if (asset.images?.hero?.length) lines.push(`- Hero image URLs: ${asset.images.hero.join(', ')}`);
+  if (asset.images?.team?.length) lines.push(`- Team/people image URLs: ${asset.images.team.join(', ')}`);
+  if (asset.images?.product?.length) lines.push(`- Service/facility image URLs: ${asset.images.product.join(', ')}`);
+  if (asset.images?.social?.length) lines.push(`- Social/Instagram image URLs: ${asset.images.social.map((i) => i.url).join(', ')}`);
+  if (asset.social?.instagram) {
+    const ig = asset.social.instagram;
+    lines.push(`- Instagram @${ig.username}: ${ig.followers || 0} followers, ${ig.postsCount || 0} posts. Bio: "${String(ig.bio || '').slice(0, 160)}"`);
+    if (ig.posts?.length) {
+      for (const p of ig.posts.slice(0, 4)) {
+        lines.push(`  Instagram post: ${p.displayUrl} — "${String(p.caption || '').slice(0, 120)}"`);
+      }
+    }
+  }
+  if (asset.social?.youtube?.videos?.length) {
+    lines.push(`- YouTube videos: ${asset.social.youtube.videos.length} found.`);
+    for (const v of asset.social.youtube.videos.slice(0, 4)) {
+      lines.push(`  Video: ${v.embedUrl} — thumbnail ${v.thumbnailUrl} — "${v.title}"`);
+    }
+  }
+  if (asset.social?.facebook?.url) lines.push(`- Facebook page: ${asset.social.facebook.url}`);
+  if (asset.testimonials?.length) {
+    lines.push(`- Real testimonials (${asset.testimonials.length} found):`);
+    for (const t of asset.testimonials.slice(0, 4)) {
+      lines.push(`  • "${String(t.text).slice(0, 240)}" — ${t.author}${t.source ? ` (${t.source})` : ''}`);
+    }
+  }
+  if (asset.businessDetails?.address) lines.push(`- Address: ${asset.businessDetails.address}`);
+  if (asset.businessDetails?.phone) lines.push(`- Phone: ${asset.businessDetails.phone}`);
+  if (asset.businessDetails?.hours && Object.keys(asset.businessDetails.hours).length) {
+    lines.push(`- Hours: ${JSON.stringify(asset.businessDetails.hours)}`);
+  }
+  return lines.join('\n') + '\n';
+}
+
+function renderIndustryBenchmarks(benchmarks) {
+  if (!benchmarks?.standards?.length) return 'INDUSTRY BENCHMARKS: NOT AVAILABLE.\n';
+  const lines = ['INDUSTRY BENCHMARKS (use this to build an honest "Digital Presence Score" section):'];
+  lines.push(benchmarks.summary || 'Scores compare this business to typical small-business peers in the industry.');
+  for (const s of benchmarks.standards) {
+    lines.push(`- ${s.area}: client ${s.clientScore ?? '—'}/10 vs industry avg ${s.industryAverage ?? '—'}/10 — ${s.verdict}${s.notes ? ` (${s.notes})` : ''}`);
+  }
+  return lines.join('\n') + '\n';
+}
+
+function renderBlogPostsForPrompt(posts = []) {
+  if (!posts.length) return 'BLOG POSTS: NONE PROVIDED — omit the blog preview section or label it Coming Soon.\n';
+  const lines = ['BLOG POSTS (use these exact titles and excerpts for the "Latest from the Blog" cards; link to /blog/<slug>/):'];
+  for (const p of posts.slice(0, 3)) {
+    lines.push(`- Title: ${p.title || 'Blog post'}\n  Slug: ${p.slug || '#'}\n  Excerpt: ${p.excerpt || ''}`);
+  }
+  return lines.join('\n') + '\n';
+}
+
+function renderFaqForPrompt(faq = []) {
+  if (!faq.length) return 'FAQ ITEMS: NONE PROVIDED — generate 5 useful Q&As from the business profile and common client questions. Each answer must be complete, not empty.\n';
+  const lines = ['FAQ ITEMS (use these exact questions and answers in the FAQ accordion):'];
+  for (const q of faq.slice(0, 8)) {
+    lines.push(`Q: ${q.question || 'Question'}\nA: ${q.answer || ''}`);
+  }
+  return lines.join('\n') + '\n';
+}
+
+function renderVideoListForPrompt(videos = []) {
+  if (!videos.length) return 'REAL VIDEOS: NONE PROVIDED — show an educational teaser or omit the video section.\n';
+  const lines = ['REAL VIDEOS (embed these exact YouTube URLs as iframes in the video section):'];
+  for (const v of videos.slice(0, 3)) {
+    const url = typeof v === 'string' ? v : (v.embedUrl || v.url || `https://www.youtube.com/embed/${v.videoId || ''}`);
+    lines.push(`- ${url}`);
+  }
+  return lines.join('\n') + '\n';
+}
+
+function extractVideoEmbedUrls(info = {}) {
+  const videos = [];
+  if (info.youtubeVideos?.length) videos.push(...info.youtubeVideos);
+  if (info.assetData?.social?.youtube?.videos?.length) {
+    for (const v of info.assetData.social.youtube.videos) {
+      if (!videos.some((x) => (x.videoId || x.id) === (v.videoId || v.id))) {
+        videos.push(v);
+      }
+    }
+  }
+  return videos;
+}
+
 export default class SiteBuilder {
-  constructor({ callCouncil, previewsDir, baseUrl = '' } = {}) {
+  constructor({ callCouncil, previewsDir, baseUrl = '', pool = null } = {}) {
     this.callCouncil = callCouncil;
     const dir = previewsDir || resolvePreviewsDir();
     this.previewsRoot = path.isAbsolute(dir) ? dir : path.join(process.cwd(), dir);
     this.previewsDir = this.previewsRoot;
     this.baseUrl = baseUrl;
+    this.pool = pool;
+  }
+
+  /**
+   * Try a list of council member keys in order; return the first successful response.
+   * Implements SO-003: never sit idle on a provider error; fail over to the next strong model.
+   */
+  async callWithFallback(candidates, prompt, { maxOutputTokens = 4000, taskType = 'site_builder.generate_site', useCache = false, label = 'callWithFallback' } = {}) {
+    let lastErr = null;
+    for (const member of candidates) {
+      try {
+        const response = await withTimeout(
+          this.callCouncil(member, prompt, { maxOutputTokens, allowModelDowngrade: false, useCache, taskType, builderExecution: true }),
+          GENERATION_TIMEOUT_MS,
+          `${label}:${member}`
+        );
+        return response;
+      } catch (err) {
+        lastErr = err;
+        logger.warn('[SITE] model candidate failed, trying next', { member, label, taskType, error: err.message });
+      }
+    }
+    throw new Error(`${label} failed on all candidates: ${lastErr?.message}`);
   }
 
   /**
@@ -137,17 +378,28 @@ export default class SiteBuilder {
    */
   async buildFromUrl(targetUrl, options = {}) {
     const clientId = options.clientId || `prev_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const onProgress = typeof options.onProgress === 'function' ? options.onProgress : null;
+    const progress = async (stage) => {
+      if (!onProgress) return;
+      try { await onProgress(stage); } catch { /* non-fatal */ }
+    };
     logger.info('[SITE] Building site from URL', { clientId, targetUrl });
 
     try {
       // Step 1: Scrape business info
+      await progress('scrape');
       const businessInfo = await this.scrapeBusinessInfo(targetUrl, options);
 
       // Step 1b: Enrich with REAL data from the business's live web presence
       // (Google/Yelp/Facebook reviews, rating, facts). Fails closed — never fabricates.
       if (ENRICHMENT_ENABLED && options.enrich !== false) {
         try {
-          businessInfo.verifiedData = await this.enrichWithRealData(businessInfo, options);
+          await progress('enrich');
+          businessInfo.verifiedData = await withTimeout(
+            this.enrichWithRealData(businessInfo, options),
+            Math.min(60_000, GENERATION_TIMEOUT_MS),
+            'enrichWithRealData'
+          );
           if (businessInfo.verifiedData) {
             logger.info('[SITE] enrichment found real data', {
               clientId,
@@ -169,18 +421,37 @@ export default class SiteBuilder {
       const competitorUrls = options.competitorUrls || businessInfo.competitorUrls || [];
       if (this.callCouncil && competitorUrls.length > 0) {
         try {
+          await progress('benchmark');
           benchmark = await this.benchmarkCompetitors(businessInfo, competitorUrls);
         } catch (err) {
           logger.warn('[SITE] competitor benchmark failed (continuing)', { clientId, error: err.message });
         }
         try {
+          await progress('presence');
           presence = await this.auditPresence(businessInfo, competitorUrls);
         } catch (err) {
           logger.warn('[SITE] presence audit failed (continuing)', { clientId, error: err.message });
         }
       }
 
+      // Step 2c: Generate shared content BEFORE the main site so the homepage can use real blog posts, FAQ, and videos.
+      await progress(options.skipBlogs ? 'skip_blogs' : 'blogs');
+      const blogPosts = options.skipBlogs ? [] : await withTimeout(this.generateBlogPosts(businessInfo, 3), GENERATION_TIMEOUT_MS, 'generateBlogPosts');
+      let faq = [];
+      try {
+        faq = await withTimeout(this.generateFaq(businessInfo, 5), GENERATION_TIMEOUT_MS, 'generateFaq');
+      } catch (err) {
+        logger.warn('[SITE] FAQ generation failed (continuing)', { clientId, error: err.message });
+      }
+      const videos = businessInfo.youtubeVideos?.length
+        ? businessInfo.youtubeVideos
+        : (businessInfo.youtubeChannelId ? await this.fetchYouTubeVideos(businessInfo.youtubeChannelId) : []);
+      businessInfo.blogPosts = blogPosts;
+      businessInfo.faq = faq;
+      businessInfo.youtubeVideos = videos;
+
       // Step 3: Generate main site HTML
+      await progress('generate');
       let siteHtml = await this.generateSiteHtml(businessInfo, { clientId, posPartner, designBrief: benchmark?.designBrief, ...options });
       let qualityReport = this.scoreSiteHtml(siteHtml, businessInfo);
 
@@ -189,13 +460,18 @@ export default class SiteBuilder {
       qualityReport = this.scoreSiteHtml(siteHtml, businessInfo);
 
       // Step 3c: AI repair passes for remaining quality gaps
-      if (this.callCouncil && qualityReport.scorePct < TARGET_QUALITY_SCORE && MAX_REPAIR_PASSES > 0) {
+      if (!options.skipRepair && this.callCouncil && qualityReport.scorePct < TARGET_QUALITY_SCORE && MAX_REPAIR_PASSES > 0) {
         for (let pass = 1; pass <= MAX_REPAIR_PASSES; pass++) {
-          const repairedHtml = await this.improveSiteHtml(siteHtml, businessInfo, qualityReport, {
-            clientId,
-            posPartner,
-            pass,
-          });
+          await progress(`repair_${pass}`);
+          const repairedHtml = await withTimeout(
+            this.improveSiteHtml(siteHtml, businessInfo, qualityReport, {
+              clientId,
+              posPartner,
+              pass,
+            }),
+            GENERATION_TIMEOUT_MS,
+            `improveSiteHtml:pass${pass}`
+          );
           // Patch again after repair (AI may have dropped injected elements)
           const patchedRepair = this.patchSiteHtml(repairedHtml, businessInfo);
           const repairedScore = this.scoreSiteHtml(patchedRepair, businessInfo);
@@ -206,15 +482,7 @@ export default class SiteBuilder {
         }
       }
 
-      // Step 4: Generate 3 SEO blog posts
-      const blogPosts = await this.generateBlogPosts(businessInfo, 3);
-
-      // Step 5: Fetch YouTube videos (RSS, no API key)
-      const videos = businessInfo.youtubeChannelId
-        ? await this.fetchYouTubeVideos(businessInfo.youtubeChannelId)
-        : [];
-
-      // Step 6: Build blog index page
+      // Step 4: Build blog index page from blog posts already generated before the main site HTML
       const blogHtml = this.generateBlogIndex(businessInfo, blogPosts);
 
       // Step 7: Generate SEO files
@@ -229,7 +497,7 @@ export default class SiteBuilder {
 
       // Inject view tracking pixel — when prospect opens preview we auto-mark them as 'viewed'
       if (this.baseUrl) {
-        const pixel = `<img src="${this.baseUrl}/api/v1/sites/preview-view?id=${clientId}" style="position:absolute;opacity:0;pointer-events:none" width="1" height="1" alt="">`;
+        const pixel = `<img src="/api/v1/sites/preview-view?id=${clientId}" style="position:absolute;opacity:0;pointer-events:none" width="1" height="1" alt="">`;
         siteHtml = siteHtml.includes('</body>') ? siteHtml.replace('</body>', `${pixel}\n</body>`) : siteHtml;
         siteHtml = injectPreviewChrome(siteHtml, { clientId, baseUrl: this.baseUrl, editToken });
       }
@@ -238,9 +506,15 @@ export default class SiteBuilder {
       await fs.writeFile(path.join(deployDir, 'sitemap.xml'), sitemap);
       await fs.writeFile(path.join(deployDir, 'robots.txt'), robots);
 
-      // Client-facing competitor scorecard (only when we actually analyzed competitors)
-      if ((benchmark && benchmark.analyzedCount > 0) || presence) {
-        await fs.writeFile(path.join(deployDir, 'scorecard.html'), this.generateScorecardHtml(businessInfo, benchmark, presence));
+      // Client-facing scorecard — before/after, industry benchmarks, competitor/presence.
+      if (businessInfo.existingSiteScore || businessInfo.industryBenchmarks?.standards?.length || (benchmark && benchmark.analyzedCount > 0) || presence) {
+        await fs.writeFile(
+          path.join(deployDir, 'scorecard.html'),
+          this.generateScorecardHtml(businessInfo, benchmark, presence, {
+            before: businessInfo.existingSiteScore,
+            after: qualityReport,
+          }),
+        );
       }
 
       for (const post of blogPosts) {
@@ -256,14 +530,14 @@ export default class SiteBuilder {
         businessInfo,
         posPartner,
         blogPosts: blogPosts.map(p => ({ slug: p.slug, title: p.title })),
-        videos: videos.length,
+        videos: (businessInfo.youtubeVideos || []).length,
         qualityReport,
         benchmark,
         presence,
         editToken,
         createdAt: new Date().toISOString(),
         previewUrl: `${this.baseUrl}/previews/${clientId}`,
-        scorecardUrl: (benchmark && benchmark.analyzedCount > 0) || presence ? `${this.baseUrl}/previews/${clientId}/scorecard.html` : null,
+        scorecardUrl: businessInfo.industryBenchmarks?.standards?.length || (benchmark && benchmark.analyzedCount > 0) || presence ? `${this.baseUrl}/previews/${clientId}/scorecard.html` : null,
         editorUrl: this.baseUrl ? `${this.baseUrl}/api/v1/sites/editor?clientId=${clientId}&token=${editToken}` : null,
         publishCheckoutUrl: this.baseUrl ? `${this.baseUrl}/api/v1/sites/publish/checkout?clientId=${clientId}` : null,
       };
@@ -285,6 +559,7 @@ export default class SiteBuilder {
         qualityReport,
         benchmark,
         presence,
+        siteHtml,
         metadata,
       };
     } catch (err) {
@@ -303,8 +578,8 @@ export default class SiteBuilder {
    * options: { variantCount, styleIds:[], enrich, skipRepair, ...buildFromUrl opts }
    */
   async buildVariants(targetUrl, options = {}) {
-    const clientId = `prev_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
-    const count = Math.max(1, Number(options.variantCount || process.env.SITE_BUILDER_VARIANTS || 3));
+    const clientId = options.clientId || `prev_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const count = Math.max(1, Number(options.variantCount || process.env.SITE_BUILDER_VARIANTS || (SITE_BUILDER_PRICING.templates.freeCount + SITE_BUILDER_PRICING.templates.additional.slotCount) || 10));
     const systems = pickDesignSystems(count, options.styleIds || []);
     logger.info('[SITE] Building variants', { clientId, targetUrl, systems: systems.map((s) => s.id) });
 
@@ -322,25 +597,46 @@ export default class SiteBuilder {
       const posPartner = this.selectPosPartner(businessInfo.industry || businessInfo.keywords || []);
 
       let designBrief = null;
+      let benchmark = null;
+      let presence = null;
       const competitorUrls = options.competitorUrls || businessInfo.competitorUrls || [];
       if (this.callCouncil && competitorUrls.length > 0) {
         try {
-          const benchmark = await this.benchmarkCompetitors(businessInfo, competitorUrls);
+          benchmark = await this.benchmarkCompetitors(businessInfo, competitorUrls);
           designBrief = benchmark?.designBrief || null;
         } catch (err) {
           logger.warn('[SITE] competitor benchmark failed (continuing)', { clientId, error: err.message });
         }
+        try {
+          presence = await this.auditPresence(businessInfo, competitorUrls);
+        } catch (err) {
+          logger.warn('[SITE] presence audit failed (continuing)', { clientId, error: err.message });
+        }
       }
 
       // Shared content (built once, reused across every variant)
-      const blogPosts = await this.generateBlogPosts(businessInfo, 3);
-      const blogHtml = this.generateBlogIndex(businessInfo, blogPosts);
+      const blogPosts = options.skipBlogs ? [] : await this.generateBlogPosts(businessInfo, 3);
+      let faq = [];
+      try {
+        faq = await withTimeout(this.generateFaq(businessInfo, 5), GENERATION_TIMEOUT_MS, 'generateFaq');
+      } catch (err) {
+        logger.warn('[SITE] variant FAQ generation failed (continuing)', { clientId, error: err.message });
+      }
+      const videos = businessInfo.youtubeVideos?.length
+        ? businessInfo.youtubeVideos
+        : (businessInfo.youtubeChannelId ? await this.fetchYouTubeVideos(businessInfo.youtubeChannelId) : []);
+      businessInfo.blogPosts = blogPosts;
+      businessInfo.faq = faq;
+      businessInfo.youtubeVideos = videos;
+      const blogHtml = options.skipBlogs ? '' : this.generateBlogIndex(businessInfo, blogPosts);
       const sitemap = this.generateSitemap(clientId, blogPosts);
       const robots = this.generateRobots();
 
       const deployDir = path.join(this.previewsRoot, clientId);
       await fs.mkdir(path.join(deployDir, 'blog'), { recursive: true });
-      await fs.writeFile(path.join(deployDir, 'blog', 'index.html'), blogHtml);
+      if (!options.skipBlogs) {
+        await fs.writeFile(path.join(deployDir, 'blog', 'index.html'), blogHtml);
+      }
       await fs.writeFile(path.join(deployDir, 'sitemap.xml'), sitemap);
       await fs.writeFile(path.join(deployDir, 'robots.txt'), robots);
       for (const post of blogPosts) {
@@ -350,16 +646,31 @@ export default class SiteBuilder {
       }
 
       const pixel = this.baseUrl
-        ? `<img src="${this.baseUrl}/api/v1/sites/preview-view?id=${clientId}" style="position:absolute;opacity:0;pointer-events:none" width="1" height="1" alt="">`
+        ? `<img src="/api/v1/sites/preview-view?id=${clientId}" style="position:absolute;opacity:0;pointer-events:none" width="1" height="1" alt="">`
         : '';
 
       const variants = [];
+      const variantHtmls = {};
+      // Default: hand-authored layout shells so variants are structurally different.
+      // Opt into the old same-funnel AI HTML path with useAiLayouts: true.
+      const useLayoutShells = options.useAiLayouts !== true && options.useLayoutShells !== false;
       for (const ds of systems) {
         try {
-          let html = await this.generateSiteHtml(businessInfo, { clientId, posPartner, designBrief, designSystem: ds });
+          businessInfo.designSystemId = ds.id;
+          businessInfo.designSystemName = ds.name;
+          let html;
+          let usedShell = false;
+          if (useLayoutShells) {
+            html = renderDesignSystemLayout(ds, businessInfo, posPartner);
+            usedShell = Boolean(html);
+          }
+          if (!html) {
+            html = await this.generateSiteHtml(businessInfo, { clientId, posPartner, designBrief, designSystem: ds, leanTemplate: options.leanTemplate, skipAi: options.skipAi });
+          }
           html = this.patchSiteHtml(html, businessInfo);
           let quality = this.scoreSiteHtml(html, businessInfo);
-          if (!options.skipRepair && this.callCouncil && quality.scorePct < TARGET_QUALITY_SCORE && MAX_REPAIR_PASSES > 0) {
+          // Do not run AI repair on hand shells — repair homogenizes art direction.
+          if (!usedShell && !options.skipRepair && this.callCouncil && quality.scorePct < TARGET_QUALITY_SCORE && MAX_REPAIR_PASSES > 0) {
             const repaired = this.patchSiteHtml(
               await this.improveSiteHtml(html, businessInfo, quality, { clientId, posPartner, pass: 1 }),
               businessInfo,
@@ -371,7 +682,16 @@ export default class SiteBuilder {
           const vDir = path.join(deployDir, 'variants', ds.id);
           await fs.mkdir(vDir, { recursive: true });
           await fs.writeFile(path.join(vDir, 'index.html'), html);
-          variants.push({ id: ds.id, name: ds.name, blurb: ds.blurb, file: `variants/${ds.id}/index.html`, scorePct: quality.scorePct });
+          variantHtmls[ds.id] = html;
+          variants.push({
+            id: ds.id,
+            name: ds.name,
+            blurb: ds.blurb,
+            tier: ds.tier || 'paid',
+            file: `variants/${ds.id}/index.html`,
+            scorePct: quality.scorePct,
+            layoutShell: usedShell,
+          });
         } catch (err) {
           logger.warn('[SITE] variant generation failed (skipping)', { clientId, style: ds.id, error: err.message });
         }
@@ -379,9 +699,36 @@ export default class SiteBuilder {
 
       if (!variants.length) throw new Error('all variant generations failed');
 
+      // Top-level qualityReport = the BEST-scoring variant. Callers (the prospect
+      // pipeline's send-quality gate) need one canonical score to decide whether
+      // this build is ready to email, same contract buildFromUrl provides.
+      const bestVariant = variants.reduce((best, v) => (v.scorePct > (best?.scorePct ?? -1) ? v : best), null);
+      if (bestVariant) {
+        businessInfo.designSystemId = bestVariant.id;
+        businessInfo.designSystemName = bestVariant.name;
+      }
+      let qualityReport = null;
+      try {
+        const bestHtml = variantHtmls[bestVariant.id];
+        qualityReport = this.scoreSiteHtml(bestHtml, businessInfo);
+      } catch (err) {
+        logger.warn('[SITE] Could not re-score best variant (non-fatal)', { clientId, error: err.message });
+        qualityReport = { scorePct: bestVariant.scorePct, readyToSend: bestVariant.scorePct >= MIN_SEND_SCORE, grade: null, issues: [] };
+      }
+
       const editToken = createEditToken();
-      const switcher = this.generateVariantSwitcher(businessInfo, clientId, variants, editToken);
+      const switcher = this.generateVariantSwitcher(businessInfo, clientId, variants, editToken, benchmark, presence);
       await fs.writeFile(path.join(deployDir, 'index.html'), switcher);
+
+      if (businessInfo.existingSiteScore || businessInfo.industryBenchmarks?.standards?.length || (benchmark && benchmark.analyzedCount > 0) || presence) {
+        await fs.writeFile(
+          path.join(deployDir, 'scorecard.html'),
+          this.generateScorecardHtml(businessInfo, benchmark, presence, {
+            before: businessInfo.existingSiteScore,
+            after: qualityReport,
+          }),
+        );
+      }
 
       const metadata = {
         clientId,
@@ -389,25 +736,37 @@ export default class SiteBuilder {
         businessInfo,
         posPartner,
         variants,
+        qualityReport,
         blogPosts: blogPosts.map((p) => ({ slug: p.slug, title: p.title })),
         editToken,
         createdAt: new Date().toISOString(),
         previewUrl: `${this.baseUrl}/previews/${clientId}`,
+        scorecardUrl: businessInfo.industryBenchmarks?.standards?.length || (benchmark && benchmark.analyzedCount > 0) || presence ? `${this.baseUrl}/previews/${clientId}/scorecard.html` : null,
         editorUrl: this.baseUrl ? `${this.baseUrl}/api/v1/sites/editor?clientId=${clientId}&token=${editToken}` : null,
         publishCheckoutUrl: this.baseUrl ? `${this.baseUrl}/api/v1/sites/publish/checkout?clientId=${clientId}` : null,
         mode: 'variants',
       };
-      await fs.writeFile(path.join(deployDir, 'meta.json'), JSON.stringify(metadata, null, 2));
+      // Write a lightweight meta.json to disk; keep the full variant HTMLs in
+      // memory for the DB payload and the runtime variant-file fallback route.
+      const diskMeta = { ...metadata };
+      await fs.writeFile(path.join(deployDir, 'meta.json'), JSON.stringify(diskMeta, null, 2));
 
-      logger.info('[SITE] Variants deployed', { clientId, count: variants.length, previewUrl: metadata.previewUrl });
+      // Durable DB payload: switcher as previewHtml + every variant HTML for
+      // recovery when ephemeral disk is lost on another Railway instance.
+      metadata.previewHtml = switcher;
+      metadata.variantHtmls = variantHtmls;
+
+      logger.info('[SITE] Variants deployed', { clientId, count: variants.length, previewUrl: metadata.previewUrl, bestScore: qualityReport.scorePct });
       return {
         success: true,
         clientId,
         previewUrl: metadata.previewUrl,
         businessName: businessInfo.businessName,
         variants,
+        qualityReport,
         posPartner: posPartner.name,
         metadata,
+        siteHtml: switcher,
       };
     } catch (err) {
       logger.error('[SITE] Variant build failed', { clientId, error: err.message });
@@ -417,81 +776,11 @@ export default class SiteBuilder {
 
   /**
    * Build the variant switcher shell: a top bar of design buttons + an iframe
-   * that swaps between the generated variants, plus a "Use this design" action
-   * that records the client's choice (best-effort beacon).
+   * that swaps between the generated variants, plus a light/dark toggle and
+   * an interactive competitor comparison popup.
    */
-  generateVariantSwitcher(info, clientId, variants, editToken = '') {
-    const name = (info.businessName || 'Your Website').replace(/</g, '&lt;');
-    const selectBase = this.baseUrl ? `${this.baseUrl}/api/v1/sites/select-design` : '';
-    const publishUrl = this.baseUrl ? `${this.baseUrl}/api/v1/sites/publish/checkout?clientId=${encodeURIComponent(clientId)}` : '';
-    const editorUrl = this.baseUrl && editToken
-      ? `${this.baseUrl}/api/v1/sites/editor?clientId=${encodeURIComponent(clientId)}&token=${encodeURIComponent(editToken)}`
-      : '';
-    const data = JSON.stringify(variants.map((v) => ({ id: v.id, name: v.name, blurb: v.blurb, file: v.file })));
-    return `<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>${name} — Choose your design</title>
-<script src="${TAILWIND_CDN}"></script>
-<style>
-  :root { --bar: #0f172a; }
-  body { margin:0; font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
-  .chip { transition: all .15s ease; }
-  .chip[aria-pressed="true"] { background:#fff; color:#0f172a; font-weight:600; }
-  iframe { border:0; width:100%; height:calc(100vh - 116px); display:block; background:#fff; }
-</style>
-</head>
-<body class="bg-slate-900">
-  <div x-data="switcher()" x-init="init()">
-    <header class="bg-slate-900 text-white px-4 pt-3 pb-3 sticky top-0 z-10 shadow-lg">
-      <div class="flex items-center justify-between gap-3 flex-wrap">
-        <div>
-          <p class="text-xs uppercase tracking-widest text-slate-400">Preview for</p>
-          <h1 class="text-lg font-semibold leading-tight">${name}</h1>
-        </div>
-        <div class="text-right flex flex-wrap gap-2 justify-end items-center">
-          ${editorUrl ? `<a href="${editorUrl}" class="bg-slate-700 hover:bg-slate-600 text-white text-sm font-semibold px-3 py-2 rounded-lg">Editor</a>` : ''}
-          ${publishUrl ? `<a href="${publishUrl}" class="bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold px-3 py-2 rounded-lg">Publish ${SITE_BUILDER_PRICING.publish.display}</a>` : ''}
-          <p class="text-xs text-slate-400 mb-1 w-full" x-text="'Design ' + (index+1) + ' of ' + variants.length + ' — ' + current.name"></p>
-          <button @click="choose()" class="bg-emerald-500 hover:bg-emerald-400 text-white text-sm font-semibold px-4 py-2 rounded-lg">✓ Use this design</button>
-        </div>
-      </div>
-      <p class="text-xs text-slate-400 mt-2">Not loving it? Toggle through the designs below — each is a different professionally-designed style.</p>
-      <nav class="mt-2 flex gap-2 overflow-x-auto pb-1">
-        <template x-for="(v,i) in variants" :key="v.id">
-          <button class="chip whitespace-nowrap text-sm px-3 py-1.5 rounded-full border border-slate-600 text-slate-200 hover:border-slate-400"
-            :aria-pressed="i===index" @click="show(i)" x-text="v.name"></button>
-        </template>
-      </nav>
-    </header>
-    <iframe :src="current.file" :title="current.name" x-ref="frame"></iframe>
-    <div x-show="saved" x-transition class="fixed bottom-4 left-1/2 -translate-x-1/2 bg-emerald-600 text-white text-sm px-4 py-2 rounded-lg shadow-xl">
-      Saved — <span x-text="current.name"></span> selected. We'll be in touch.
-    </div>
-  </div>
-<script src="${ALPINE_CDN}" defer></script>
-<script>
-  function switcher(){
-    return {
-      variants: ${data},
-      index: 0,
-      saved: false,
-      get current(){ return this.variants[this.index]; },
-      init(){ const h = parseInt(new URLSearchParams(location.search).get('v')); if(!isNaN(h) && this.variants[h]) this.index = h; },
-      show(i){ this.index = i; this.saved = false; },
-      choose(){
-        this.saved = true;
-        var base = ${JSON.stringify(selectBase)};
-        if(base){ try { navigator.sendBeacon ? navigator.sendBeacon(base + '?id=${clientId}&style=' + this.current.id) : fetch(base + '?id=${clientId}&style=' + this.current.id, {mode:'no-cors'}); } catch(e){} }
-        setTimeout(()=>{ this.saved = false; }, 4000);
-      },
-    };
-  }
-</script>
-</body>
-</html>`;
+  generateVariantSwitcher(info, clientId, variants, editToken = '', benchmark = null, presence = null) {
+    return getVariantSwitcherHtml({ info, clientId, variants, editToken, benchmark, presence, baseUrl: this.baseUrl });
   }
 
   /**
@@ -499,14 +788,23 @@ export default class SiteBuilder {
    * Extracts: name, tagline, services, contact, colors, testimonials, social links.
    */
   async scrapeBusinessInfo(url, options = {}) {
-    // If manual info is provided (no scraping needed), use it directly
-    if (options.businessInfo) return options.businessInfo;
+    // If manual info is provided (no scraping needed), use it directly, but
+    // always attach the source URL so richer ingestion knows what to look up.
+    if (options.businessInfo) {
+      const info = options.businessInfo;
+      if (!info.sourceUrl) info.sourceUrl = url;
+      return info;
+    }
 
     let puppeteer;
     let browser;
     try {
       puppeteer = await import('puppeteer');
-      browser = await puppeteer.default.launch({ headless: 'new', args: ['--no-sandbox', '--disable-setuid-sandbox'] });
+      browser = await withTimeout(
+        puppeteer.default.launch({ headless: 'new', args: ['--no-sandbox', '--disable-setuid-sandbox'] }),
+        PUPPETEER_LAUNCH_TIMEOUT_MS,
+        'puppeteer.launch'
+      );
       const page = await browser.newPage();
       await page.setUserAgent('Mozilla/5.0 (compatible; LuminBot/1.0; +https://lumin.ai)');
       await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 20000 });
@@ -552,11 +850,21 @@ export default class SiteBuilder {
         };
       });
 
+      // Score their existing site with the same objective rubric the new site
+      // is judged by, so the "before" and "after" numbers are directly comparable.
+      let existingSiteScore = null;
+      try {
+        const existingHtml = await page.content();
+        existingSiteScore = this.scoreSiteHtml(existingHtml, {});
+      } catch (err) {
+        logger.warn('[SITE] Existing-site scoring failed (non-fatal)', { url, error: err.message });
+      }
+
       await browser.close();
 
       // Use AI to extract structured business info from the raw scraped text
       const extracted = await this.extractBusinessInfoWithAI(scraped, url);
-      return { ...scraped, ...extracted, sourceUrl: url };
+      return { ...scraped, ...extracted, sourceUrl: url, existingSiteScore };
 
     } catch (err) {
       if (browser) await browser.close().catch(() => {});
@@ -602,8 +910,7 @@ Return ONLY valid JSON with this exact structure:
   "uniqueValue": "what makes them different in 1-2 sentences"
 }`;
 
-    // groq_llama is fine for structured JSON extraction — fast and cheap
-    const response = await this.callCouncil('groq_llama', prompt, { maxOutputTokens: 1000, taskType: 'extraction' });
+    const response = await this.callWithFallback(EXTRACTION_CANDIDATES, prompt, { maxOutputTokens: 1000, taskType: 'extraction', useCache: false, label: 'extractBusinessInfoWithAI' });
     try {
       const jsonMatch = response.match(/\{[\s\S]+\}/);
       return jsonMatch ? JSON.parse(jsonMatch[0]) : {};
@@ -614,29 +921,39 @@ Return ONLY valid JSON with this exact structure:
 
   /**
    * Enrich a business profile with REAL, sourced data from its live web presence
-   * (Google Business, Yelp, Facebook, its own socials): rating, review count, real
-   * review snippets, and verifiable facts. Uses real search providers only — no AI
-   * fabrication fallback (callAI is intentionally omitted). Returns null when no
-   * search provider key is configured or nothing verifiable is found. Fails closed:
-   * it will NEVER invent a rating, review, or fact.
+   * (Google Business, Yelp, Facebook, its own socials, Instagram, YouTube):
+   * rating, review count, real review snippets, images, videos, and industry
+   * benchmarks. Fails closed — never fabricates.
    */
   async enrichWithRealData(info, options = {}) {
+    if (!info.businessName) return null;
+
+    // Primary richer pipeline: discover the real homepage, social profiles,
+    // testimonials, and images. This mutates info with discovered fields.
+    let result = null;
+    try {
+      result = await ingestAll(info, {
+        callCouncil: this.callCouncil,
+        targetUrl: info.sourceUrl || options.targetUrl,
+        timeoutMs: Math.min(65_000, GENERATION_TIMEOUT_MS),
+      });
+    } catch (err) {
+      logger.warn('[SITE] asset ingestion failed (falling back to web search)', { error: err.message });
+    }
+
+    // If richer ingestion produced verified data and updated the profile, use it.
+    if (result?.verifiedData && (result.verifiedData.rating || result.verifiedData.testimonials?.length)) {
+      return result.verifiedData;
+    }
+
+    // Fallback to the original web-search-only path when asset ingestion found nothing.
     const search = createWebSearchService({
       BRAVE_SEARCH_API_KEY: process.env.BRAVE_SEARCH_API_KEY,
       PERPLEXITY_API_KEY: process.env.PERPLEXITY_API_KEY,
-      // No callAI on purpose — factual enrichment must come from real search, not model memory.
     });
-
     const name = info.businessName;
-    if (!name) return null;
     const locale = info.location ? ` ${info.location}` : '';
-    const queries = [
-      `${name}${locale} reviews rating`,
-      `${name}${locale} yelp`,
-      `${name}${locale} google reviews`,
-      `${name}${locale} facebook`,
-    ];
-
+    const queries = [`${name}${locale} reviews rating`, `${name}${locale} yelp`, `${name}${locale} google reviews`, `${name}${locale} facebook`];
     const snippets = [];
     for (const q of queries) {
       try {
@@ -649,12 +966,8 @@ Return ONLY valid JSON with this exact structure:
         logger.warn('[SITE] enrichment query failed', { q, error: err.message });
       }
     }
-
-    // No provider key / no results → fail closed, no fabrication.
     if (!snippets.length || !this.callCouncil) return null;
 
-    // Extract ONLY what is literally present in the real snippets. The extractor is
-    // instructed to leave fields null rather than infer or estimate.
     const corpus = snippets.map((s) => `SOURCE: ${s.url}\nTITLE: ${s.title}\nTEXT: ${s.text}`).join('\n\n').slice(0, 6000);
     const prompt = `Below are REAL web search result snippets about a business named "${name}".
 Extract ONLY facts that are literally stated in the snippets. If a value is not explicitly present, use null. NEVER estimate, infer, round, or invent.
@@ -671,33 +984,23 @@ Return ONLY valid JSON:
   "facts": ["short verifiable fact explicitly stated, e.g. 'Open since 2011'"] (else []),
   "designCues": ["visual/brand style cues actually described in the snippets, e.g. 'earthy green + cream palette', 'minimalist photography', 'calm spa aesthetic'"] (only if described; else [])
 }`;
-    let parsed;
     try {
-      const resp = await this.callCouncil('groq_llama', prompt, { maxOutputTokens: 800, taskType: 'extraction' });
+      const resp = await this.callCouncil('groq_llama', prompt, { maxOutputTokens: 800, taskType: 'extraction', useCache: false, builderExecution: true });
       const m = resp.match(/\{[\s\S]+\}/);
-      parsed = m ? JSON.parse(m[0]) : null;
+      const parsed = m ? JSON.parse(m[0]) : null;
+      if (!parsed) return null;
+      const rating = typeof parsed.rating === 'number' && parsed.rating >= 1 && parsed.rating <= 5 ? parsed.rating : null;
+      const testimonials = Array.isArray(parsed.testimonials)
+        ? parsed.testimonials.filter((t) => t && typeof t.text === 'string' && t.text.trim().length > 12).slice(0, 4)
+        : [];
+      const facts = Array.isArray(parsed.facts) ? parsed.facts.filter((f) => typeof f === 'string' && f.trim()).slice(0, 4) : [];
+      const designCues = Array.isArray(parsed.designCues) ? parsed.designCues.filter((d) => typeof d === 'string' && d.trim()).slice(0, 5) : [];
+      if (!rating && !testimonials.length && !facts.length && !designCues.length) return null;
+      return { rating, reviewCount: Number.isInteger(parsed.reviewCount) ? parsed.reviewCount : null, ratingSource: parsed.ratingSource || null, testimonials, facts, designCues };
     } catch (err) {
       logger.warn('[SITE] enrichment extraction failed', { error: err.message });
       return null;
     }
-    if (!parsed) return null;
-
-    const rating = typeof parsed.rating === 'number' && parsed.rating >= 1 && parsed.rating <= 5 ? parsed.rating : null;
-    const testimonials = Array.isArray(parsed.testimonials)
-      ? parsed.testimonials.filter((t) => t && typeof t.text === 'string' && t.text.trim().length > 12).slice(0, 4)
-      : [];
-    const facts = Array.isArray(parsed.facts) ? parsed.facts.filter((f) => typeof f === 'string' && f.trim()).slice(0, 4) : [];
-    const designCues = Array.isArray(parsed.designCues) ? parsed.designCues.filter((d) => typeof d === 'string' && d.trim()).slice(0, 5) : [];
-
-    if (!rating && !testimonials.length && !facts.length && !designCues.length) return null;
-    return {
-      rating,
-      reviewCount: Number.isInteger(parsed.reviewCount) ? parsed.reviewCount : null,
-      ratingSource: parsed.ratingSource || null,
-      testimonials,
-      facts,
-      designCues,
-    };
   }
 
   /**
@@ -723,43 +1026,70 @@ Return ONLY valid JSON:
    */
   async generateSiteHtml(info, options = {}) {
     const { clientId, posPartner, designBrief } = options;
-    const primary = info.primaryColor || '#7C3AED';
-    const accent = info.accentColor || '#EC4899';
+    const useLean = options.skipAi === true || options.leanTemplate === true;
+    if (useLean) {
+      logger.info('[SITE] lean template (no AI)', { clientId, businessName: info?.businessName });
+      return renderLeanProspectHtml(info, posPartner);
+    }
     const designIntel = await this.loadDesignIntel();
     const competitorBrief = designBrief?.text
       ? `\n\nCOMPETITOR-INFORMED DESIGN BRIEF (beat the market, do not copy):\n${designBrief.text}`
       : '';
-    const designSystemBlock = options.designSystem
-      ? `\n\n${renderDesignSystemDirectives(options.designSystem)}`
+    const designSystem = options.designSystem || pickDesignSystems(1, options.styleIds || [])[0];
+    if (designSystem) {
+      info.designSystemId = designSystem.id;
+      info.designSystemName = designSystem.name;
+    }
+    const designSystemBlock = designSystem
+      ? `\n\n${renderDesignSystemDirectives(designSystem, info)}`
       : '';
+    const primary = designSystem?.tokens?.primary || info.primaryColor || '#7C3AED';
+    const accent = designSystem?.tokens?.accent || info.accentColor || '#EC4899';
+    const blogPosts = info.blogPosts || [];
+    const faq = info.faq || [];
+    const videos = extractVideoEmbedUrls(info);
 
-    const prompt = `You are building a COMPLETE, PRODUCTION-READY website for a small wellness/health business.
+    const salesDoctrine = renderSalesDoctrineForPrompt(info);
+    const salesPack = matchIndustrySalesPack(info);
+    const unanswered = (salesPack?.unansweredClientQuestions || []).slice(0, 8);
+    const prompt = `You are building a COMPLETE, PRODUCTION-READY website for a local business (any industry — not wellness-default).
+
+${salesDoctrine}
+
+${unanswered.length ? `UNANSWERED CLIENT QUESTIONS FOR THIS INDUSTRY (start here — answer these on the page):\n${unanswered.map((q, i) => `${i + 1}. ${q}`).join('\n')}\n` : 'UNANSWERED CLIENT QUESTIONS: Infer the top questions a buyer still has before hiring THIS business — put those on the page as interview/FAQ proof, not vanity copy.\n'}
 
 BUSINESS PROFILE:
-- Name: ${info.businessName || 'The Practice'}
-- Industry: ${info.industry || 'wellness'}
-- Tagline: ${info.tagline || 'Transforming lives through holistic care'}
-- Services: ${(info.services || []).join(', ') || 'wellness services'}
-- Target audience: ${info.targetAudience || 'local community'}
+- Name: ${info.businessName || 'The Business'}
+- Industry: ${info.industry || 'local business'}
+- Tagline: ${info.tagline || 'Clear outcomes with a clear next step'}
+- Services: ${(info.services || []).join(', ') || 'core services'}
+- Target audience: ${info.targetAudience || 'local clients'}
 - Location: ${info.location || ''}
-- Unique value: ${info.uniqueValue || 'expert, compassionate care'}
-- Tone: ${info.tone || 'warm and professional'}
+- Address: ${info.address || ''}
+- Hours: ${JSON.stringify(info.hours || {})}
+- Unique value: ${info.uniqueValue || 'proven results and a clear path to book'}
+- Tone: ${info.tone || 'professional and direct'}
 - Client pain points: ${(info.painPoints || []).join('; ')}
 - SEO keywords: ${(info.keywords || []).join(', ')}
 - Phone: ${info.phone || ''}
 - Email: ${info.email || ''}
 - Booking URL: ${info.bookingUrl || '#book'}
+- Search / IDX URL (if any): ${info.searchUrl || info.idxUrl || info.listingSearchUrl || ''}
 - Brand colors: Primary ${primary}, Accent ${accent}
 - Testimonials: ${(info.testimonials || []).join(' | ')}
 ${renderVerifiedData(info.verifiedData)}
+${renderAssetData(info.assetData)}
+${renderVideoListForPrompt(videos)}
+${renderBlogPostsForPrompt(blogPosts)}
+${renderFaqForPrompt(faq)}
 PAYMENT/BOOKING SYSTEM:
 - We recommend ${posPartner.name} for scheduling + payments
 - Referral link: ${posPartner.url}
-- Include a "Book Now" CTA that links to booking system
+- Include a primary money CTA (Book / Schedule showing / Schedule consultation) that links to booking
 
 TRUTH RULE (HIGHEST PRIORITY — overrides everything below):
-- NEVER invent facts. Do not fabricate prices, dollar amounts, star ratings, review counts, client/family counts, years in business, awards, or named testimonials/quotes.
-- Use ONLY the concrete facts provided in the BUSINESS PROFILE and VERIFIED REAL DATA below. If a fact is not provided, leave it out entirely — do not guess or approximate.
+- NEVER invent facts. Do not fabricate prices, dollar amounts, star ratings, review counts, client counts, years in business, awards, MLS ranks, or named testimonials/quotes.
+- Use ONLY the concrete facts provided in BUSINESS PROFILE, VERIFIED REAL DATA, ASSET DATA, BLOG POSTS, FAQ ITEMS, and REAL VIDEOS. If a fact is not provided, leave it out entirely — do not guess or approximate.
 - A shorter, truthful page ALWAYS beats an impressive-looking page built on invented claims. Empty is better than fake.
 
 HARD REQUIREMENTS:
@@ -771,25 +1101,29 @@ HARD REQUIREMENTS:
 6. After </html> write: BUILD_COMPLETE
 7. Use semantic HTML, accessible buttons/links, and visible focus states
 8. Use CSS custom properties inside ONE small <style> block for theme tokens and any shaped background effects
-9. Do NOT use placeholder lorem ipsum, fake star ratings with no basis, or generic "AI agency" language
+9. Do NOT use placeholder lorem ipsum, fake star ratings with no basis, "Blog Post Title 1", "An excerpt from the blog post goes here", "[framemarker...]", or generic "AI agency" language
 10. If real testimonials are missing, use a clearly labeled section like "What clients often appreciate" instead of fabricated quotes
+11. Use real image/photo URLs from ASSET DATA when provided; otherwise use subtle gradient placeholders or CSS shapes
+12. Embed the real YouTube URLs from REAL VIDEOS as iframes in the VIDEO SECTION when available
+13. Do NOT include a "Digital Presence Score" section in the public page; that lives on the separate scorecard.html and must not appear here
+14. Do NOT default to midwifery/spa/wellness language unless the BUSINESS PROFILE is that industry
 
-CLICK FUNNEL STRUCTURE (in this exact order):
-1. NAVIGATION: Logo + nav links + "Book Free Call" CTA button (sticky)
-2. HERO: Bold headline about transformation/outcome (not features). Subheadline. Two CTAs: primary "Book Your Free Consultation" + secondary "See How It Works". Add a subtle background gradient using primary color.
-3. SOCIAL PROOF BAR: ONLY include real, provided metrics (e.g. a real Google/Yelp rating + review count, or a verified years-in-business figure) from VERIFIED REAL DATA. If no real metrics are provided, OMIT this bar entirely — do NOT invent stats like "200+ served" or "5★ rated".
-4. PROBLEM SECTION: "Does this sound familiar?" — 3 pain points as cards with icons (use emoji)
-5. SOLUTION SECTION: "Here's how we help" — 3-step process with numbered steps
-6. SERVICES SECTION: Service cards with name and description. Include a price ONLY if a real price is provided for that service — otherwise no price. "Learn More" / "Book" CTA.
-7. TESTIMONIALS: Prefer REAL reviews from VERIFIED REAL DATA — quote them verbatim with the source (e.g. "— via Google"). If NO real reviews are provided, you MAY show up to 2 illustrative sample testimonials, but EACH card MUST carry a clearly visible small-print label reading exactly: "AI-generated testimonial sample — not a real client review". Never present a sample as real, never invent a real client's name, and never attach a star rating to a sample.
-8. OFFER/PACKAGES: Show pricing ONLY if a real price/priceRange is provided in the BUSINESS PROFILE or VERIFIED REAL DATA. If real pricing exists, present it accurately. If NO real pricing is provided, do NOT invent tiers or dollar amounts — instead show a single "Request pricing / Book a free consultation" CTA that links to booking.
-9. ABOUT SECTION: Brief about the practitioner, warm and personal
-10. FAQ SECTION: 5 Q&As using Alpine.js accordion (x-data, x-show, @click)
-11. BLOG PREVIEW: "Latest from the Blog" — 3 blog post cards with title/excerpt placeholders (links to /blog/)
-12. VIDEO SECTION: "Watch & Learn" — if videos are unavailable, show a useful educational content teaser instead of an empty embed grid
-13. BOOKING CTA SECTION: Full-width colored section "Ready to start your journey?" with big CTA button
-14. FOOTER: Logo, nav links, contact info, social links, copyright, concise trust note
-15. MOBILE STICKY CTA BAR: a bottom booking bar visible on small screens only
+CLICK FUNNEL STRUCTURE (visitor-state multi-path — adapt labels to THIS industry):
+1. NAVIGATION: Logo + nav links + primary money CTA (sticky)
+2. HERO: Outcome headline. Subheadline. Path doors by visitor state — e.g. Why this provider · How to choose / unanswered questions · Search/IDX or secondary offer when real. Always include schedule consult/showing. Use real logo/hero from ASSET DATA when available.
+3. SOCIAL PROOF BAR: ONLY real provided metrics — else OMIT (never invent)
+4. PROBLEM / UNANSWERED QUESTIONS: what buyers still need answered before they hire
+5. SOLUTION SECTION: clear process / next steps
+6. SERVICES SECTION: real services only; prices only if provided
+7. WHY THIS PROVIDER: proof from real facts + interview questions buyers should ask
+8. TESTIMONIALS: real only, or clearly labeled samples
+9. OFFER/PACKAGES: real pricing only — else request pricing / book CTA
+10. ABOUT SECTION: brief, personal, truthful
+11. FAQ SECTION: 5 Q&As (Alpine accordion) from FAQ ITEMS or inferred unanswered questions
+12. BLOG PREVIEW: from BLOG POSTS or omit
+13. VIDEO SECTION: real YouTube only or omit
+14. BOOKING CTA SECTION: full-width money action
+15. FOOTER + MOBILE STICKY CTA
 
 SEO REQUIREMENTS:
 - <title> tag: [Business Name] | [City] [Industry] | [Tagline]
@@ -798,42 +1132,30 @@ SEO REQUIREMENTS:
 - Open Graph tags (og:title, og:description, og:type=website)
 - Include only truthful schema properties that are supported by the provided business data
 - All H1/H2/H3 hierarchy correct (only ONE h1)
-- Alt text on any images (use gradient placeholders, no external images)
+- Alt text on any images. Use real external image URLs from ASSET DATA when available; otherwise gradient placeholders
 - Internal links between sections
 
 DESIGN INTELLIGENCE:
 ${designIntel}${competitorBrief}${designSystemBlock}
 
 DESIGN REQUIREMENTS:
-- Use Tailwind utility classes for layout and components, plus one concise <style> block for theme tokens and a few intentional visual effects
-- Primary color: ${primary} — use in CTAs, borders, highlights
-- Accent color: ${accent} — use in gradients, hover states, and editorial moments
-- Make the site feel custom to this business, not like a generic wellness template
+- Use Tailwind utility classes for layout and components, plus the MANDATORY CSS <style> block from the DESIGN SYSTEM SPEC above for theme tokens, fonts, and visual effects
+- Primary color: ${primary} and Accent color: ${accent} are used as described in the DESIGN SYSTEM SPEC
+- The DESIGN SYSTEM SPEC is the source of truth for color, typography, layout, motifs, and anti-patterns — follow it exactly
+- Make the site feel custom to this business, not like a generic template
 - Avoid default purple-on-white unless the extracted brand colors actually call for it
 - Use stronger hierarchy, editorial spacing, clear card groupings, and at least one visually distinctive section treatment
 - Use subtle motion only where it improves clarity; avoid heavy animations and anything that hurts performance
 - CTA buttons: large tap targets, high contrast, clear hover/focus states
 - Section padding: py-16 md:py-24
 - Keep the page fast and conversion-focused: concise copy, strong above-the-fold trust, repeated CTA placement, no dead sections
+- Both beauty AND financial activity — a pretty brochure with no path to money is a failed build
 
 Output the ENTIRE HTML file from <!DOCTYPE html> to </html> then BUILD_COMPLETE.`;
 
     if (!this.callCouncil) throw new Error('callCouncil required for site generation');
 
-    // Prefer the higher-quality design model (claude_sonnet, 16k output). Fall back to another
-    // STRONG paid model (gpt-4o) on any provider error — never a free tier (founder rule).
-    // allowModelDowngrade:false prevents selectOptimalModel from overriding to groq_llama (4096 token limit)
-    let response;
-    try {
-      response = await this.callCouncil(GENERATION_MODEL, prompt, { maxOutputTokens: GENERATION_MAX_TOKENS, allowModelDowngrade: false });
-    } catch (err) {
-      if (GENERATION_MODEL !== GENERATION_FALLBACK_MODEL) {
-        logger.warn('[SITE] primary generation model failed, falling back', { model: GENERATION_MODEL, error: err.message });
-        response = await this.callCouncil(GENERATION_FALLBACK_MODEL, prompt, { maxOutputTokens: GENERATION_MAX_TOKENS, allowModelDowngrade: false });
-      } else {
-        throw err;
-      }
-    }
+    const response = await this.callWithFallback(GENERATION_CANDIDATES, prompt, { maxOutputTokens: GENERATION_MAX_TOKENS, taskType: 'site_builder.generate_site', useCache: false, label: 'generateSiteHtml' });
     let clean = response.replace(/BUILD_COMPLETE[\s\S]*$/, '').trim();
     // Strip markdown fences AI models sometimes wrap HTML in (```html...``` or ```...```)
     clean = clean.replace(/^```(?:html)?\s*\n?/, '').replace(/\n?```\s*$/, '').trim();
@@ -885,12 +1207,70 @@ Output the ENTIRE HTML file from <!DOCTYPE html> to </html> then BUILD_COMPLETE.
    */
   patchSiteHtml(html, info = {}) {
     let h = this.sanitizeInlineSvgBackgrounds(String(html || ''));
-    const primary = info.primaryColor || '#7C3AED';
-    const accent = info.accentColor || '#EC4899';
     const phone = info.phone || '';
     const email = info.email || '';
     const bookingUrl = info.bookingUrl || '#book';
     const name = info.businessName || 'the practice';
+
+    // 0. Inject shared design-system tokens, Google Fonts, and body marker so the
+    // AI-generated design system is enforced regardless of which Tailwind classes the model emits.
+    const designSystem = getDesignSystem(info.designSystemId) || getDesignSystem(DEFAULT_DESIGN_SYSTEM_ID);
+    const primary = designSystem?.tokens?.primary || info.primaryColor || '#0F766E';
+    const accent = designSystem?.tokens?.accent || info.accentColor || '#F59E0B';
+    if (designSystem && !h.includes('<!--design-system-tokens-->')) {
+      const fontLinks = getDesignSystemFontLinks(designSystem)
+        .filter((link) => !h.includes(link))
+        .join('\n');
+      const dsCss = `<style>\n${getDesignSystemCss(designSystem, primary, accent)}\n</style>\n<!--design-system-tokens-->`;
+      const dsBlock = fontLinks ? `${fontLinks}\n${dsCss}` : dsCss;
+      h = h.includes('</head>')
+        ? h.replace('</head>', `${dsBlock}\n</head>`)
+        : dsBlock + h;
+    }
+    if (!/<body\b[^>]*data-lumin-ds/i.test(h)) {
+      h = h.replace(/<body\b([^>]*)>/i, '<body data-lumin-ds="1" data-theme="light"$1>');
+    } else if (!/<body\b[^>]*data-theme/i.test(h)) {
+      h = h.replace(/<body\b([^>]*)>/i, '<body data-theme="light"$1>');
+    }
+
+    // 0a. Theme query-param + postMessage support so the preview switcher can toggle light/dark.
+    const themeScript = `<script>
+(function(){ var p = new URLSearchParams(location.search); var t = p.get('theme') === 'dark' ? 'dark' : 'light'; document.body.setAttribute('data-theme', t); window.addEventListener('message', function(e){ if(e && e.data && e.data.type === 'lumin-theme'){ document.body.setAttribute('data-theme', e.data.theme || 'light'); } }, false); })();
+</script>`;
+    if (!h.includes('lumin-theme')) {
+      h = h.includes('</body>') ? h.replace('</body>', `${themeScript}\n</body>`) : h + themeScript;
+    }
+
+    // 0b. Remove any customer-facing Digital Presence Score section if the model emitted one
+    h = h.replace(/<section[^>]*\bdata-section=["']digital-presence-score["'][^>]*>[\s\S]*?<\/section>/gi, '');
+    h = h.replace(/<section[^>]*>[^]*?\bDigital Presence Score\b[^]*?<\/section>/gi, (match) => {
+      return match.length > 0 ? '' : match;
+    });
+
+    // 0c. Replace placeholder blog titles/excerpts with real blog posts if available
+    const blogPosts = info.blogPosts || [];
+    if (blogPosts.length && /Blog Post Title|An excerpt from the blog post goes here/i.test(h)) {
+      let blogIdx = 0;
+      h = h.replace(/Blog Post Title \d+/gi, () => blogPosts[blogIdx]?.title || 'Blog Post');
+      h = h.replace(/An excerpt from the blog post goes here\.?\.?/gi, () => blogPosts[blogIdx]?.excerpt || 'Read more on the blog.');
+    }
+
+    // 0c.1 If no blog posts were generated, remove any "Coming Soon" blog placeholder section.
+    if (!blogPosts.length) {
+      h = h.replace(/<section[^>]*>[\s\S]*?Coming Soon:[\s\S]*?<\/section>/gi, '');
+      h = h.replace(/<p[^>]*>\s*Coming Soon:[\s\S]*?<\/p>/gi, '');
+    }
+
+    // 0d. Replace [framemarker...] placeholders with real YouTube embeds or remove them
+    const videos = extractVideoEmbedUrls(info);
+    h = h.replace(/\[\s*framemarker[^\]]*\]/gi, (match) => {
+      const video = videos.find((v) => !v.used);
+      if (video) {
+        video.used = true;
+        return `<iframe width="560" height="315" src="${video.embedUrl || video.url}" title="${video.title || 'Video'}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="w-full rounded-2xl"></iframe>`;
+      }
+      return '';
+    });
 
     // 1. Schema.org JSON-LD — required for hasSchemaMarkup (8pts)
     if (!/application\/ld\+json/i.test(h)) {
@@ -971,13 +1351,15 @@ button:focus-visible,a:focus-visible{outline:2px solid ${primary};outline-offset
     const designIntel = await this.loadDesignIntel();
     const prompt = `You are revising a generated local-business website that scored below target quality.
 
+${renderSalesDoctrineForPrompt(info)}
+
 BUSINESS PROFILE:
-- Name: ${info.businessName || 'The Practice'}
-- Industry: ${info.industry || 'wellness'}
-- Services: ${(info.services || []).join(', ') || 'wellness services'}
-- Target audience: ${info.targetAudience || 'local community'}
+- Name: ${info.businessName || 'The Business'}
+- Industry: ${info.industry || 'local business'}
+- Services: ${(info.services || []).join(', ') || 'core services'}
+- Target audience: ${info.targetAudience || 'local clients'}
 - Location: ${info.location || ''}
-- Tone: ${info.tone || 'warm and professional'}
+- Tone: ${info.tone || 'professional and direct'}
 - Booking URL: ${info.bookingUrl || '#book'}
 - Recommended scheduling/payments partner: ${posPartner?.name || 'Square'}
 
@@ -1010,8 +1392,7 @@ CURRENT HTML:
 ${existingHtml}
 `;
 
-    // Repair rewrites the actual client-facing site HTML → use the STRONG product model.
-    const response = await this.callCouncil(GENERATION_MODEL, prompt, { maxOutputTokens: REPAIR_MAX_TOKENS, allowModelDowngrade: false });
+    const response = await this.callWithFallback(REPAIR_CANDIDATES, prompt, { maxOutputTokens: REPAIR_MAX_TOKENS, taskType: 'site_builder.repair_site', useCache: false, label: 'improveSiteHtml' });
     const clean = String(response || '').replace(/BUILD_COMPLETE[\s\S]*$/, '').trim();
     if (!clean.includes('<!DOCTYPE html') && !clean.includes('<html')) {
       throw new Error('AI did not return valid repaired HTML');
@@ -1020,42 +1401,41 @@ ${existingHtml}
   }
 
   /**
-   * Generate 3 SEO blog posts for the business's industry.
+   * Generate SEO blog posts for the business's industry.
+   * Generate one post per call so truncation never corrupts the JSON array.
    */
   async generateBlogPosts(info, count = 3) {
     if (!this.callCouncil) return [];
 
-    const prompt = `Generate ${count} SEO-optimized blog post outlines for a ${info.industry || 'wellness'} business called "${info.businessName || 'the practice'}".
+    const posts = [];
+    for (let i = 0; i < count; i++) {
+      const prompt = `Generate 1 SEO-optimized blog post for a ${info.industry || 'wellness'} business called "${info.businessName || 'the practice'}".
 
 Target audience: ${info.targetAudience || 'local clients'}
 Keywords to include: ${(info.keywords || []).join(', ')}
 Location: ${info.location || 'local area'}
 
-Return ONLY valid JSON array:
-[
-  {
-    "title": "SEO-optimized blog title with keyword",
-    "slug": "url-friendly-slug",
-    "metaDescription": "150-160 char meta description with keyword",
-    "excerpt": "2-3 sentence preview of the post",
-    "content": "Full 600-800 word blog post in HTML (use <h2>, <h3>, <p>, <ul>, <li> tags). Include the business name naturally. End with a CTA to book a consultation."
-  }
-]`;
+Return ONLY a valid JSON object:
+{
+  "title": "SEO-optimized blog title with keyword",
+  "slug": "url-friendly-slug",
+  "metaDescription": "150-160 char meta description with keyword",
+  "excerpt": "2-3 sentence preview of the post",
+  "content": "Full 400-500 word blog post in plain HTML (use <h2>, <h3>, <p>, <ul>, <li> tags). Include the business name naturally. End with a CTA to book a consultation."
+}`;
 
-    // Blog posts are client-facing product content → use the STRONG product model
-    // (never a free tier). 3 posts × 600-800 words needs long output; claude_sonnet (16k) fits.
-    const response = await this.callCouncil(GENERATION_MODEL, prompt, { maxOutputTokens: Math.max(4000, GENERATION_MAX_TOKENS), allowModelDowngrade: false });
-    try {
-      const jsonMatch = response.match(/\[[\s\S]+\]/);
-      const posts = jsonMatch ? JSON.parse(jsonMatch[0]) : [];
-
-      return posts.map(post => ({
-        ...post,
-        html: this.wrapBlogPost(post, info),
-      }));
-    } catch {
-      return [];
+      try {
+        const response = await this.callWithFallback(GENERATION_CANDIDATES, prompt, { maxOutputTokens: 4000, taskType: 'site_builder.generate_blogs', useCache: false, label: `generateBlogPosts:${i}` });
+        const jsonMatch = response.match(/\{[\s\S]+\}/);
+        const post = jsonMatch ? JSON.parse(jsonMatch[0]) : null;
+        if (post && post.title && post.content) {
+          posts.push({ ...post, html: this.wrapBlogPost(post, info) });
+        }
+      } catch (err) {
+        logger.warn('[SITE] blog post generation failed (continuing)', { index: i, error: err.message });
+      }
     }
+    return posts;
   }
 
   /**
@@ -1140,6 +1520,36 @@ Return ONLY valid JSON array:
   }
 
   /**
+   * Generate 5 real FAQ questions and answers for the business.
+   */
+  async generateFaq(info, count = 5) {
+    if (!this.callCouncil) return [];
+    const prompt = `Generate ${count} real, useful FAQ questions and answers for a ${info.industry || 'wellness'} business called "${info.businessName || 'the practice'}".
+
+Target audience: ${info.targetAudience || 'local clients'}
+Location: ${info.location || 'local area'}
+Services: ${(info.services || []).join(', ') || 'wellness services'}
+Unique value: ${info.uniqueValue || ''}
+${renderVerifiedData(info.verifiedData)}
+
+Return ONLY a valid JSON array:
+[
+  { "question": "...", "answer": "..." }
+]
+
+Each answer must be a complete, helpful sentence. If a specific fact is unknown, say "This is best discussed during your free consultation." — do not leave an answer empty or use placeholder text.`;
+    try {
+      const response = await this.callWithFallback(GENERATION_CANDIDATES, prompt, { maxOutputTokens: 2500, taskType: 'site_builder.generate_faq', useCache: false, label: 'generateFaq' });
+      const m = response.match(/\[[\s\S]+\]/);
+      const faq = m ? JSON.parse(m[0]) : [];
+      return Array.isArray(faq) ? faq.slice(0, count) : [];
+    } catch (err) {
+      logger.warn('[SITE] FAQ generation failed', { error: err.message });
+      return [];
+    }
+  }
+
+  /**
    * Benchmark competitor sites: returns a client-facing 1-10 scorecard per site
    * (strengths/weaknesses) plus a design brief that grounds generation in the
    * real market instead of a generic template.
@@ -1159,14 +1569,27 @@ Return ONLY valid JSON array:
   }
 
   /**
-   * Render a client-facing competitor scorecard page. Shows each competitor's
-   * 1-10 score with what they do well / poorly, and how the new site beats them.
+   * Render a client-facing scorecard page: before/after, competitor scores,
+   * presence audit, and industry benchmarks.
    */
-  generateScorecardHtml(info, benchmark, presence = null) {
-    const primary = info.primaryColor || '#7C3AED';
-    const accent = info.accentColor || '#EC4899';
+  generateScorecardHtml(info, benchmark, presence = null, beforeAfter = null) {
+    const designSystem = getDesignSystem(info.designSystemId) || getDesignSystem(DEFAULT_DESIGN_SYSTEM_ID);
+    const primary = designSystem?.tokens?.primary || info.primaryColor || '#0F766E';
+    const accent = designSystem?.tokens?.accent || info.accentColor || '#F59E0B';
     const name = info.businessName || 'Your Business';
-    const presenceSection = presence ? this.generatePresenceSectionHtml(presence) : '';
+    const fontLinks = getDesignSystemFontLinks(designSystem).join('\n');
+    const dsCss = getDesignSystemCss(designSystem, primary, accent);
+    const presenceSection = presence ? this.generatePresenceSectionHtml(presence, primary, accent) : '';
+    const beforeAfterSection = beforeAfter && beforeAfter.before && beforeAfter.after
+      ? this.generateBeforeAfterSectionHtml(beforeAfter.before, beforeAfter.after, primary, accent)
+      : '';
+    const industrySection = info.industryBenchmarks?.standards?.length
+      ? this.generateIndustryBenchmarksSectionHtml(info.industryBenchmarks, primary, accent)
+      : '';
+    const siteScore = beforeAfter?.after?.scorePct ?? 0;
+    const benchmarkScores = info.industryBenchmarks?.standards?.map((s) => s.clientScore).filter((s) => typeof s === 'number') || [];
+    const benchmarkAvg = benchmarkScores.length ? Math.round(benchmarkScores.reduce((a, b) => a + b, 0) / benchmarkScores.length) : null;
+    const overall = this.renderOverallRings(siteScore, benchmarkAvg);
     const cards = (benchmark?.scorecards || [])
       .map(c => {
         const scoreLabel = c.score != null ? `${c.score}/10` : 'N/A';
@@ -1190,53 +1613,161 @@ Return ONLY valid JSON array:
     const beat = (brief.beat || []).map(x => `<li>${this.escapeHtml(x)}</li>`).join('');
     return `<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${this.escapeHtml(name)} — Competitor Scorecard</title>
+<title>${this.escapeHtml(name)} — Site Scorecard</title>
+${fontLinks}
 <style>
-  :root{--primary:${primary};--accent:${accent}}
-  *{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#1a1a2e;background:#faf9fc}
-  header{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;padding:48px 24px;text-align:center}
-  header h1{margin:0 0 8px;font-size:28px}header p{margin:0;opacity:.9}
-  main{max-width:960px;margin:0 auto;padding:32px 20px}
-  .card{background:#fff;border:1px solid #eee;border-radius:16px;padding:24px;margin-bottom:20px;box-shadow:0 4px 16px rgba(0,0,0,.04)}
+  ${dsCss}
+  *{box-sizing:border-box}
+  body[data-lumin-ds]{margin:0;background:var(--bg);color:var(--text);font-family:var(--font-body);line-height:1.6}
+  h1,h2,h3,h4{font-family:var(--font-display);margin:0 0 .5rem}
+  header{background:linear-gradient(135deg,var(--primary),var(--accent));color:var(--button-text,#fff);padding:48px 24px;text-align:center}
+  header h1{margin:0 0 8px;font-size:clamp(1.8rem,5vw,2.6rem)}
+  header p{margin:0;opacity:.9}
+  main{max-width:1040px;margin:0 auto;padding:32px 20px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px;margin-bottom:20px;box-shadow:var(--shadow)}
   .card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-  .host{font-weight:700;font-size:18px}
-  .score{font-weight:800;font-size:20px;color:var(--primary);background:rgba(124,58,237,.08);padding:4px 12px;border-radius:999px}
-  .summary{color:#555;margin:.25rem 0 1rem}
+  .host{font-weight:700;font-size:18px;font-family:var(--font-display)}
+  .score{font-weight:800;font-size:20px;color:var(--primary);background:var(--overlay);padding:4px 12px;border-radius:999px}
+  .summary{color:var(--muted);margin:.25rem 0 1rem}
   .cols{display:grid;grid-template-columns:1fr 1fr;gap:20px}
   @media(max-width:640px){.cols{grid-template-columns:1fr}}
-  h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.04em}
+  h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.04em;font-family:var(--font-body)}
   h4.good{color:#16a34a}h4.bad{color:#dc2626}
-  ul{margin:0;padding-left:18px;color:#333;font-size:14px;line-height:1.6}
-  .beat{background:#fff;border:2px solid var(--primary);border-radius:16px;padding:24px;margin-top:8px}
-  .beat h3{margin:0 0 10px;color:var(--primary)}
-  .section-title{font-size:20px;margin:8px 0 16px}
-  table.presence{width:100%;border-collapse:collapse;background:#fff;border:1px solid #eee;border-radius:16px;overflow:hidden}
-  table.presence th,table.presence td{padding:12px 14px;text-align:left;border-bottom:1px solid #f0f0f0;font-size:14px}
-  table.presence th{background:#f7f5fb;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:#555}
+  ul{margin:0;padding-left:18px;color:var(--text);font-size:14px;line-height:1.6}
+  .beat{background:var(--card);border:2px solid var(--primary);border-radius:var(--radius);padding:24px;margin-top:8px;box-shadow:var(--shadow)}
+  .beat h3{margin:0 0 10px;color:var(--primary);font-family:var(--font-display)}
+  .section-title{font-size:clamp(1.3rem,3vw,1.7rem);margin:8px 0 16px;font-family:var(--font-display)}
+  .ring-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:24px;justify-items:center;margin-bottom:24px}
+  .ring-wrap{display:flex;flex-direction:column;align-items:center;gap:8px}
+  .score-ring{width:100px;height:100px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:1.6rem;background:conic-gradient(var(--primary) calc(var(--pct,0) * 1%), var(--line) 0);color:var(--text);position:relative}
+  .score-ring::before{content:'';position:absolute;width:80px;height:80px;border-radius:50%;background:var(--card)}
+  .score-ring span{position:relative;z-index:1;font-family:var(--font-display)}
+  .ring-label{font-size:.8rem;color:var(--muted);text-align:center}
+  .bar-track{width:100%;height:8px;background:var(--line);border-radius:999px;overflow:hidden}
+  .bar-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));width:calc(var(--pct) * 1%)}
+  .metric{display:flex;align-items:center;justify-content:space-between;font-size:.95rem;margin-bottom:4px;color:var(--text)}
+  table.presence,table.ib{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+  table.presence th,table.presence td,table.ib th,table.ib td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line);font-size:14px}
+  table.presence th,table.ib th{background:var(--overlay);font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);font-family:var(--font-body)}
   .badge{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:700}
   .b-ahead{background:#dcfce7;color:#166534}.b-behind{background:#fee2e2;color:#991b1b}
-  .b-even{background:#e5e7eb;color:#374151}.b-open{background:#fef9c3;color:#854d0e}.b-unknown{background:#f3f4f6;color:#6b7280}
-  .gap{background:#fff;border-left:4px solid var(--primary);border-radius:8px;padding:18px 20px;margin:16px 0}
+  .b-even{background:#e5e7eb;color:#374151}.b-open{background:#fef9c3;color:#854d0e}.b-unknown{background:var(--overlay);color:var(--muted)}
+  .gap{background:var(--card);border-left:4px solid var(--primary);border-radius:var(--radius);padding:18px 20px;margin:16px 0;box-shadow:var(--shadow)}
+  .ba-wrap{display:grid;grid-template-columns:1fr auto 1fr;gap:20px;align-items:stretch;margin-bottom:8px}
+  .ba-col{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow)}
+  .ba-col.before{border-top:4px solid #dc2626}
+  .ba-col.after{border-top:4px solid #16a34a}
+  .ba-label{font-size:12px;text-transform:uppercase;letter-spacing:.06em;font-weight:700;color:var(--muted);margin-bottom:6px}
+  .ba-score{font-size:40px;font-weight:800;line-height:1;font-family:var(--font-display)}
+  .ba-col.before .ba-score{color:#dc2626}
+  .ba-col.after .ba-score{color:#16a34a}
+  .ba-grade{font-size:14px;color:var(--muted);margin-bottom:12px}
+  .ba-arrow{display:flex;align-items:center;justify-content:center;font-size:28px;color:var(--primary);font-weight:800}
+  .ba-issues{margin:0;padding-left:18px;font-size:13px;line-height:1.7;color:var(--text)}
+  @media(max-width:640px){.ba-wrap{grid-template-columns:1fr}.ba-arrow{transform:rotate(90deg);padding:4px 0}}
 </style></head>
-<body>
+<body data-lumin-ds="1">
 <header>
-  <h1>Presence & Competitor Scorecard for ${this.escapeHtml(name)}</h1>
-  <p>An honest look at where you stand across every channel — and how we help you win.</p>
+  <h1>Your Site Scorecard for ${this.escapeHtml(name)}</h1>
+  <p>An honest look at where you stand today, what we changed, and how you compare.</p>
 </header>
 <main>
+  ${overall}
+  ${beforeAfterSection}
+  ${industrySection}
   ${presenceSection}
   ${cards ? `<h2 class="section-title">Competitor websites, scored</h2>${cards}` : ''}
   ${beat ? `<div class="beat"><h3>How your new site wins</h3><ul>${beat}</ul></div>` : ''}
-  ${!presenceSection && !cards ? '<p>No sites could be analyzed.</p>' : ''}
+  ${!beforeAfterSection && !industrySection && !presenceSection && !cards ? '<p>No sites could be analyzed.</p>' : ''}
 </main>
 </body></html>`;
+  }
+
+  /**
+   * Render a pair of score rings for the new site and the digital presence benchmark.
+   */
+  renderOverallRings(siteScorePct, benchmarkAvg) {
+    if (!siteScorePct && benchmarkAvg == null) return '';
+    const items = [];
+    if (siteScorePct) {
+      items.push(`<div class="ring-wrap"><div class="score-ring" style="--pct:${Math.min(100, siteScorePct)}"><span>${siteScorePct}%</span></div><div class="ring-label">New site quality</div></div>`);
+    }
+    if (benchmarkAvg != null) {
+      items.push(`<div class="ring-wrap"><div class="score-ring" style="--pct:${Math.min(100, benchmarkAvg * 10)}"><span>${benchmarkAvg}/10</span></div><div class="ring-label">Digital presence score</div></div>`);
+    }
+    return `<div class="ring-grid">${items.join('')}</div>`;
+  }
+
+  /**
+   * Render the industry-benchmark scorecard: where the business leads or
+   * lags against typical small-business peers in each digital area.
+   */
+  generateIndustryBenchmarksSectionHtml(benchmarks, primary, accent) {
+    const standards = benchmarks.standards || [];
+    const rows = standards.map((s) => {
+      const pct = Math.min(100, Math.max(0, ((s.clientScore ?? 0) / 10) * 100));
+      const avgPct = Math.min(100, Math.max(0, ((s.industryAverage ?? 0) / 10) * 100));
+      return `<tr>
+        <td>${this.escapeHtml(s.area)}</td>
+        <td><div class="metric"><span><strong>${s.clientScore ?? '—'}</strong>/10</span></div><div class="bar-track"><div class="bar-fill" style="--pct:${pct}"></div></div></td>
+        <td><div class="metric"><span><strong>${s.industryAverage ?? '—'}</strong>/10</span></div><div class="bar-track"><div class="bar-fill" style="--pct:${avgPct};background:var(--line)"></div></div></td>
+        <td>${this.escapeHtml(s.verdict)}${s.notes ? ` <small style="color:var(--muted)">(${this.escapeHtml(s.notes)})</small>` : ''}</td>
+      </tr>`;
+    }).join('');
+    const scores = standards.map((s) => s.clientScore).filter((s) => typeof s === 'number');
+    const avg = scores.length ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
+    const avgPct = Math.min(100, avg * 10);
+    return `<h2 class="section-title">Your digital presence vs. industry averages</h2>
+  <div class="card">
+    <div class="ring-wrap" style="align-items:flex-start;margin-bottom:18px">
+      <div class="score-ring" style="--pct:${avgPct}"><span>${avg}</span></div>
+      <div class="ring-label">Overall presence score (out of 10)</div>
+    </div>
+    <p style="color:var(--muted);font-size:14px;margin-bottom:16px">${this.escapeHtml(benchmarks.summary || 'Directional scores based on publicly available metrics vs typical peers.')}</p>
+    <table class="ib">
+      <thead><tr><th>Area</th><th>You</th><th>Industry avg</th><th>Verdict</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+  </div>`;
+  }
+
+  /**
+   * Render the before/after site-score comparison — same objective rubric
+   * (scoreSiteHtml) applied to the prospect's existing site and the new one,
+   * so the improvement is a real, comparable number, not a marketing claim.
+   */
+  generateBeforeAfterSectionHtml(before, after, primary, accent) {
+    const beforeIssues = (before.summaryIssues || before.issues || []).slice(0, 5)
+      .map(x => `<li>${this.escapeHtml(x)}</li>`).join('') || '<li>—</li>';
+    const afterFixed = (before.summaryIssues || before.issues || [])
+      .filter(issue => !(after.issues || []).includes(issue))
+      .slice(0, 5)
+      .map(x => `<li>${this.escapeHtml(x)}</li>`).join('') || '<li>Every issue below was resolved.</li>';
+    return `<h2 class="section-title">Before &amp; After — Same Scoring, Real Numbers</h2>
+    <div class="ba-wrap">
+      <div class="ba-col before">
+        <div class="ba-label">Your current site</div>
+        <div class="ba-score">${before.scorePct}%</div>
+        <div class="ba-grade">Grade ${this.escapeHtml(before.grade || '—')}</div>
+        <div class="ba-label">Why it scores this way</div>
+        <ul class="ba-issues">${beforeIssues}</ul>
+      </div>
+      <div class="ba-arrow">&#8594;</div>
+      <div class="ba-col after">
+        <div class="ba-label">Your new site</div>
+        <div class="ba-score">${after.scorePct}%</div>
+        <div class="ba-grade">Grade ${this.escapeHtml(after.grade || '—')}</div>
+        <div class="ba-label">What we fixed</div>
+        <ul class="ba-issues">${afterFixed}</ul>
+      </div>
+    </div>`;
   }
 
   /**
    * Render the head-to-head presence section: per-channel you-vs-competitors
    * table + plain-English gap/opportunity readout.
    */
-  generatePresenceSectionHtml(presence) {
+  generatePresenceSectionHtml(presence, primary, accent) {
     const labels = { website: 'Website', google: 'Google Business', instagram: 'Instagram', facebook: 'Facebook', linkedin: 'LinkedIn' };
     const verdictBadge = v => {
       const map = { ahead: ['b-ahead', 'You lead'], behind: ['b-behind', 'Behind'], even: ['b-even', 'Even'], open_lane: ['b-open', 'Open lane'], unknown: ['b-unknown', '—'] };
@@ -1247,17 +1778,19 @@ Return ONLY valid JSON array:
       .map(c => {
         const you = c.clientScore != null ? `${c.clientScore}/10` : '—';
         const comp = c.competitorAvg != null ? `${c.competitorAvg}/10` : (c.competitorsPresent ? 'present' : '—');
-        return `<tr><td>${labels[c.channel] || c.channel}</td><td>${you}</td><td>${comp} <small>(${c.competitorsPresent}/${c.totalCompetitors})</small></td><td>${verdictBadge(c.verdict)}</td></tr>`;
+        return `<tr><td>${labels[c.channel] || c.channel}</td><td>${you}</td><td>${comp} <small style="color:var(--muted)">(${c.competitorsPresent}/${c.totalCompetitors})</small></td><td>${verdictBadge(c.verdict)}</td></tr>`;
       })
       .join('');
     const gap = presence.gap || {};
     const quickWins = (gap.quickWins || []).map(w => `<li>${this.escapeHtml(w)}</li>`).join('');
     return `<h2 class="section-title">Your online presence vs. competitors</h2>
-  <table class="presence">
-    <thead><tr><th>Channel</th><th>You</th><th>Competitors (avg)</th><th>Verdict</th></tr></thead>
-    <tbody>${rows}</tbody>
-  </table>
-  ${gap.summary ? `<div class="gap"><p>${this.escapeHtml(gap.summary)}</p>${gap.biggestOpportunity ? `<p><strong>Biggest opportunity:</strong> ${this.escapeHtml(gap.biggestOpportunity)}</p>` : ''}${quickWins ? `<p><strong>Quick wins:</strong></p><ul>${quickWins}</ul>` : ''}</div>` : ''}`;
+    <div class="card">
+      <table class="presence">
+        <thead><tr><th>Channel</th><th>You</th><th>Competitors (avg)</th><th>Verdict</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+      ${gap.summary ? `<div class="gap"><p>${this.escapeHtml(gap.summary)}</p>${gap.biggestOpportunity ? `<p><strong>Biggest opportunity:</strong> ${this.escapeHtml(gap.biggestOpportunity)}</p>` : ''}${quickWins ? `<p><strong>Quick wins:</strong></p><ul>${quickWins}</ul>` : ''}</div>` : ''}
+    </div>`;
   }
 
   escapeHtml(s) {
@@ -1352,19 +1885,55 @@ Return ONLY valid JSON array:
   }
 
   /**
-   * List all deployed preview sites.
+   * List all deployed preview sites. Merges disk previews with durable Postgres
+   * metadata so Railway redeploys / ephemeral disk wipes do not hide previews.
    */
   async listPreviews() {
-    const previews = [];
+    const byId = new Map();
     try {
       const dir = this.previewsRoot;
       const entries = await fs.readdir(dir);
       for (const entry of entries) {
         const metaPath = path.join(dir, entry, 'meta.json');
         const meta = await fs.readFile(metaPath, 'utf-8').then(JSON.parse).catch(() => null);
-        if (meta) previews.push(meta);
+        if (meta?.clientId) byId.set(meta.clientId, meta);
       }
     } catch { /* dir may not exist yet */ }
-    return previews.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+    if (this.pool) {
+      try {
+        const result = await this.pool.query(
+          `SELECT client_id, business_name, preview_url, email_sent, status, metadata, created_at, updated_at
+             FROM prospect_sites
+            WHERE status IN ('built', 'qa_hold', 'sent', 'viewed', 'converted')
+              AND metadata->>'previewUrl' IS NOT NULL
+              AND metadata->>'editToken' IS NOT NULL
+            ORDER BY updated_at DESC
+            LIMIT 200`
+        );
+        for (const row of result.rows || []) {
+          const meta = row.metadata && typeof row.metadata === 'object' ? row.metadata : {};
+          const clientId = row.client_id;
+          const preview = byId.get(clientId) || {
+            clientId,
+            businessName: row.business_name || meta.businessName,
+            businessInfo: meta.businessInfo || {},
+            previewUrl: meta.previewUrl || row.preview_url,
+            editToken: meta.editToken,
+            scorecardUrl: meta.scorecardUrl,
+            editorUrl: meta.editorUrl,
+            publishCheckoutUrl: meta.publishCheckoutUrl,
+            status: row.status,
+            createdAt: row.created_at?.toISOString?.() || meta.createdAt,
+            updatedAt: row.updated_at?.toISOString?.() || meta.updatedAt,
+          };
+          byId.set(clientId, preview);
+        }
+      } catch (err) {
+        logger.warn('[SITE] listPreviews DB merge failed', { error: err.message });
+      }
+    }
+
+    return Array.from(byId.values()).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   }
 }

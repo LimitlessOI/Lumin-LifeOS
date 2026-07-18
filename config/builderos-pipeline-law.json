@@ -1,0 +1,102 @@
+{
+  "schema": "builderos_pipeline_law_v1",
+  "updated_at": "2026-07-17",
+  "founder_mandate": "Chair ideation → Architect digital twin → design review (flag, never block) → Factory execute only. No human bottlenecks on design — flag for optional glance, keep building, redesign later.",
+  "pipeline": [
+    {
+      "id": "chair_ideation",
+      "dept": "ChC",
+      "role": "Adam talks ideas with Chair (strong model). Chair asks gap questions. Brainstorm allowed.",
+      "may_invent_imperatives": false
+    },
+    {
+      "id": "council_structural",
+      "dept": "Cncl",
+      "role": "Convened by Chair only for major structural changes.",
+      "trigger": "major_structural_change"
+    },
+    {
+      "id": "architect_twin",
+      "dept": "BPB",
+      "role": "Digital twin / blueprint from Chair+Adam intent. Interpret only. No new product decisions.",
+      "may_invent_imperatives": false
+    },
+    {
+      "id": "design_review",
+      "dept": "SDO",
+      "role": "Creative Engine mockups / leading-edge design. Flag UI for optional founder glance — factory never waits on human design approval.",
+      "gate": "design_review_flagged_non_blocking",
+      "human_bottleneck": false,
+      "design_doctrine": {
+        "modern": true,
+        "research_competitors": true,
+        "good_flow_and_functions": true,
+        "universal_products_shell": true,
+        "learn_founder_taste_over_time": true,
+        "no_hand_holding_required": true
+      }
+    },
+    {
+      "id": "factory_execute",
+      "dept": "CDR",
+      "role": "Factory builds twin steps only. Flags decisions it would have to make → Chair.",
+      "may_redefine_point_a_or_b": false,
+      "decision_flags_return_to": "chair_ideation"
+    }
+  ],
+  "honesty": {
+    "self_grade_required": true,
+    "peer_grade_required": true,
+    "compare_required": true,
+    "trust_earned_by": "trustworthiness_receipts",
+    "truth_earned_by": ["receipts", "reality_scorecard"],
+    "forbidden": ["theater", "self_certify_alone", "redefine_point_a", "redefine_point_b", "queue_as_blueprint_without_twin", "human_design_approval_bottleneck"]
+  },
+  "claims": {
+    "following_blueprint_requires": ["blueprint_id", "blueprint_step_id"],
+    "blueprint_id_must_resolve_on_disk": true,
+    "forbidden_blueprint_id_prefixes": ["governed-autonomous-", "GOVERNED-AUTONOMOUS-"],
+    "accepted_twin_sources": ["mission_blueprint", "product_blueprint", "product_build_queue_twin"],
+    "otherwise": "NOT_ON_BLUEPRINT"
+  },
+  "exact_change_law": {
+    "founder_mandate": "Every program change must be an exact blueprint twin step so any failure can be pinpointed (where/when/step), that aspect alone reversed, and rebuilt quickly by any system.",
+    "entry_requires": [
+      "on_blueprint_twin_step",
+      "target_file",
+      "sandbox_boundary",
+      "rebuildable_contract"
+    ],
+    "rebuildable_contract_means": {
+      "exact_sealed": "exact_inputs.exact_content OR exact_inputs.content_source_path (+ content_sha256)",
+      "exact_authorable_once": "author_then_write allowed only when task+spec+assertion_spec present; ship MUST seal exact bytes into twin before done"
+    },
+    "seal_requires": [
+      "shipped_at",
+      "commit_sha",
+      "content_sha256",
+      "exact_inputs.content_source_path_or_exact_content",
+      "reverse.mode",
+      "reverse.prior_commit_sha_or_delete_file"
+    ],
+    "reverse": {
+      "unit": "single_blueprint_step",
+      "modes": ["restore_prior_commit_path", "delete_file"],
+      "forbidden": ["bulk_revert_unrelated_steps", "rewrite_without_twin_step"]
+    },
+    "pinpoint_fields": [
+      "blueprint_id",
+      "blueprint_step_id",
+      "target_file",
+      "shipped_at",
+      "commit_sha",
+      "content_sha256"
+    ],
+    "otherwise": "NOT_EXACT_BLUEPRINT_STEP"
+  },
+  "constitution_refs": [
+    "docs/constitution/NORTH_STAR_SSOT.md#§2.6",
+    "docs/constitution/POINT_B_DNA.md",
+    "docs/BUILDEROS_VOCABULARY.md#§6"
+  ]
+}

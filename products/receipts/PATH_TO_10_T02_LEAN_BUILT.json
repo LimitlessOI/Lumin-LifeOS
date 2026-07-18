@@ -1,0 +1,25 @@
+{
+  "id": "PATH_TO_10_T02_LEAN_BUILT",
+  "at": "2026-07-10T12:39:40.194Z",
+  "status": "PARTIAL",
+  "fully_machine_ready": false,
+  "proof": {
+    "tip_sha": "b9dd2d2ed7",
+    "clientId": "prev_1783687133026_hns2",
+    "status": "built",
+    "preview_http": [
+      200,
+      200
+    ],
+    "preview_durable_db": true,
+    "preview_url": "https://lumin-web-production-e3a9.up.railway.app/previews/prev_1783687133026_hns2",
+    "stripe_checkout": {
+      "ok": true,
+      "sessionId": "cs_live_a1a5ucPPTl1VHdy8YI7f1lMKLFz9ZLveNWhfZo57rM6qhpztfQG8rNHKLJ",
+      "amountCents": 4900
+    },
+    "email_sent": false,
+    "email_blocker": "SMTP Connection timeout (Railway→Gmail 465/587)",
+    "note": "Lean skipAi build + DB preview durability + live Stripe $49 checkout session. T02 not closed until email send OR paid conversion."
+  }
+}

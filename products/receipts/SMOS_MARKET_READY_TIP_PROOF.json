@@ -1,0 +1,16 @@
+{
+  "proved_at": "2026-07-15T23:30:00Z",
+  "deploy_sha": "07060d891d5d",
+  "pack_session_id": "c6e89888-3d99-4b70-ba20-d22e4bea706b",
+  "pack": {"pieces": 12, "approved": 12, "export_bytes": 6118},
+  "desk": {"sessions_list": true, "approve_all": true, "ui_recent_packs": true},
+  "promo_video": {
+    "mode": "script_compose",
+    "ok": true,
+    "scenes": 4,
+    "estimated_cost_usd": 0.012,
+    "mp4_bytes": 574672,
+    "note": "Generated on tip; public /previews/creative URL is ephemeral multi-instance — need R2 for durable share links"
+  },
+  "not_yet_10": ["durable video CDN/R2", "live social publish", "in-product Stripe checkout"]
+}

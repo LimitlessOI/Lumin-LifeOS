@@ -63,6 +63,33 @@ export function createGoVegasOutreachRoutes(app, deps = {}) {
     }
   });
 
+  app.post('/api/v1/go-vegas/prospects/seed', requireKey, async (req, res) => {
+    try {
+      await outreach.ensureSchema();
+      const body = req.body && typeof req.body === 'object' ? req.body : {};
+      const list = Array.isArray(body.prospects) ? body.prospects : [body];
+      const seeded = [];
+      for (const row of list) {
+        if (!row?.businessName) continue;
+        const id = await outreach.upsertProspect({
+          businessName: row.businessName,
+          businessType: row.businessType || row.type || null,
+          website: row.website || null,
+          address: row.address || null,
+          phone: row.phone || null,
+          contactEmail: row.contactEmail || row.email || null,
+          contactName: row.contactName || null,
+          status: row.status || 'discovered',
+          metadata: { ...(row.metadata || {}), seededAt: new Date().toISOString(), source: 'manual_seed' },
+        });
+        seeded.push({ id, businessName: row.businessName });
+      }
+      res.json({ ok: true, seeded, count: seeded.length });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
   app.post('/api/v1/go-vegas/discover', requireKey, async (req, res) => {
     try {
       const body = req.body || {};

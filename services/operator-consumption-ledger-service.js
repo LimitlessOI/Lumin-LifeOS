@@ -10,10 +10,12 @@ const VALID_SOURCES = new Set([
 
 const MODEL_COST_PER_M = {
   'claude-sonnet-4-6': { input: 3.0, output: 15.0 },
+  'claude-sonnet-4-20250514': { input: 3.0, output: 15.0 },
   'claude-opus-4': { input: 15.0, output: 75.0 },
   'gpt-4o': { input: 2.5, output: 10.0 },
   'gpt-4o-mini': { input: 0.15, output: 0.6 },
   'gemini-2.0-flash': { input: 0.1, output: 0.4 },
+  'deepseek-chat': { input: 0.1, output: 0.3 },
   default: { input: 3.0, output: 10.0 },
 };
 

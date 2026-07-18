@@ -1,0 +1,1556 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "wellness-studio",
+  "verify_script": null,
+  "planned_at": "2026-07-12T03:40:00.000Z",
+  "notes": "Module 4 Therapist Integration beachhead — Clinical Partnership. Consent-gated briefs; therapist account lists linked clients who granted therapist_share. LifeOS consent foundation is a dependency.",
+  "updated_at": "2026-07-12",
+  "steps": [
+    {
+      "id": "ws-therapist-schema",
+      "status": "done",
+      "target_file": "db/migrations/20260712_wellness_therapist_integration.sql",
+      "task": "Create therapist_profiles, therapist_client_links, and session_briefs tables (IF NOT EXISTS) for Wellness Studio Module 4.",
+      "spec": "SQL only. Idempotent CREATE TABLE IF NOT EXISTS for: therapist_profiles(id uuid PK default gen_random_uuid(), user_id bigint NOT NULL UNIQUE, display_name text, approach text, session_frequency text, focus_areas jsonb default '[]'::jsonb, crisis_contact text, created_at timestamptz default now()); therapist_client_links(id uuid PK default gen_random_uuid(), therapist_user_id bigint NOT NULL, client_user_id bigint NOT NULL, status text default 'pending', client_consented_at timestamptz, created_at timestamptz default now(), UNIQUE(therapist_user_id, client_user_id)); session_briefs(id uuid PK default gen_random_uuid(), client_user_id bigint NOT NULL, therapist_user_id bigint, period_start date, period_end date, brief_json jsonb NOT NULL, client_reviewed_at timestamptz, shared_at timestamptz, created_at timestamptz default now()). No DROP. No ALTER that destroys data.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "commit_sha": "f2e510aaf10fc74a7614902568f60c4a458bd3cc",
+      "last_attempt_at": "2026-07-12T03:46:43.785Z",
+      "completed_at": "2026-07-12T03:46:52.110Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ws-therapist-schema",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "ws-therapist-service",
+      "status": "done",
+      "target_file": "services/wellness-therapist.js",
+      "task": "Therapist integration service: upsertTherapistProfile, linkClient, listLinkedClients, createSessionBrief, markBriefReviewed, shareBriefIfConsented.",
+      "spec": "ESM. Export createWellnessTherapistService({ pool, consentRegistry }). shareBriefIfConsented MUST call consentRegistry.hasConsent(clientUserId, 'therapist_share') and refuse without grant. Never return raw chat transcripts — only brief_json. Parameterised SQL only. No browser globals. @ssot docs/products/wellness-studio/PRODUCT_HOME.md",
+      "depends_on": [
+        "ws-therapist-schema"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "createWellnessTherapistService"
+      ],
+      "commit_sha": "94dc057d510417ab9b0a3cde550b2f06fb52a0df",
+      "last_attempt_at": "2026-07-12T03:48:08.972Z",
+      "completed_at": "2026-07-12T03:48:21.700Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ws-therapist-service",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "ws-therapist-routes",
+      "status": "done",
+      "target_file": "routes/wellness-therapist-routes.js",
+      "task": "Express surface for therapist profile, client links, and consent-gated brief share. Export registerWellnessTherapistRoutes(app, deps).",
+      "spec": "ESM export registerWellnessTherapistRoutes(app, deps) with deps={pool, requireAuth, consentRegistry}. Mount under /api/v1/wellness/therapist: POST /profile, GET /profile/me, POST /links, GET /clients (therapist|admin), POST /briefs, POST /briefs/:id/share. Share path uses shareBriefIfConsented. JSON only. No browser globals. @ssot docs/products/wellness-studio/PRODUCT_HOME.md",
+      "depends_on": [
+        "ws-therapist-service"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "registerWellnessTherapistRoutes"
+      ],
+      "commit_sha": "870b5a88199b10bf3e2e828f4b31a14605f3ec19",
+      "last_attempt_at": "2026-07-12T04:23:09.094Z",
+      "last_error": "route module not auto-registered — add {\"path\":\"routes/wellness-therapist-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
+      "revive_count": 1,
+      "completed_at": "2026-07-12T04:23:10.430Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ws-therapist-routes",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "ws-therapist-auto-register",
+      "status": "done",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "Auto-register wellness therapist routes at boot without editing server.js.",
+      "spec": "Add {\"path\":\"routes/wellness-therapist-routes.js\",\"register\":\"registerWellnessTherapistRoutes\",\"enabled\":true} to modules[]. Preserve all existing entries. File must remain valid JSON.",
+      "depends_on": [
+        "ws-therapist-routes"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "wellness-therapist-routes.js",
+        "registerWellnessTherapistRoutes"
+      ],
+      "commit_sha": "aa68f8fb7f7c6d6fa3c5632df0cb6bc527bf2bb4",
+      "last_attempt_at": "2026-07-12T04:21:37.859Z",
+      "completed_at": "2026-07-12T04:21:38.858Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ws-therapist-auto-register",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "step-01",
+      "status": "done",
+      "target_file": "db/migrations/20260713_wellness_studio_core_tables.sql",
+      "task": "Create wellness_studio_sessions and wellness_studio_insights tables",
+      "spec": "CREATE TABLE IF NOT EXISTS wellness_studio_sessions with columns: id uuid PRIMARY KEY DEFAULT gen_random_uuid(), user_id uuid NOT NULL, session_type text NOT NULL, joy_checkin_id uuid REFERENCES joy_checkins(id), integrity_score_log_id uuid REFERENCES integrity_score_log(id), wearable_data_id uuid REFERENCES wearable_data(id), emotional_pattern_id uuid REFERENCES emotional_patterns(id), session_notes text, status text NOT NULL DEFAULT 'active', created_at timestamptz NOT NULL DEFAULT now(), updated_at timestamptz NOT NULL DEFAULT now(). CREATE TABLE IF NOT EXISTS wellness_studio_insights with columns: id uuid PRIMARY KEY DEFAULT gen_random_uuid(), user_id uuid NOT NULL, session_id uuid REFERENCES wellness_studio_sessions(id), insight_type text NOT NULL, content jsonb NOT NULL DEFAULT '{}', confidence_score numeric(4,3), created_at timestamptz NOT NULL DEFAULT now(), updated_at timestamptz NOT NULL DEFAULT now(). All constraints use IF NOT EXISTS guards; zero DROP or ALTER statements.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "commit_sha": "4992492d8324912c7a3d86a71a9743160ad6154b",
+      "last_attempt_at": "2026-07-12T18:49:47.383Z",
+      "completed_at": "2026-07-12T18:50:10.356Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-01",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "step-02",
+      "status": "done",
+      "target_file": "services/wellness-studio-data.js",
+      "task": "Create data-access service for wellness studio sessions and insights",
+      "spec": "Exports getSessionsByUser(userId, db), createSession(payload, db), updateSession(sessionId, patch, db), getInsightsBySession(sessionId, db), createInsight(payload, db). All functions return promises, accept a pg db pool as last arg, query only wellness_studio_sessions and wellness_studio_insights plus read-only joins to joy_checkins, integrity_score_log, wearable_data, emotional_patterns. No top-level browser globals. No AI imports.",
+      "depends_on": [
+        "step-01"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "commit_sha": "5094434114cb90306f98e15c0587213ffd63ddd9",
+      "last_attempt_at": "2026-07-12T18:51:01.892Z",
+      "completed_at": "2026-07-12T18:51:25.864Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-02",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "step-03",
+      "status": "done",
+      "target_file": "services/wellness-studio-ai.js",
+      "task": "Create AI insight generation service using callCouncilMember",
+      "spec": "Exports async generateWellnessInsight(userId, sessionContext, callCouncilMember) which builds a structured prompt from sessionContext fields (joy_score, integrity_score, wearable_summary, emotional_pattern), calls callCouncilMember('wellness-coach', prompt), parses the response into {insight_type, content, confidence_score}, and returns that object. No direct AI SDK imports. No browser globals.",
+      "depends_on": [
+        "step-02"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "commit_sha": "f8f58d4ddfd0a360321e258b14777922c3a1db13",
+      "last_attempt_at": "2026-07-12T19:00:05.740Z",
+      "completed_at": "2026-07-12T19:00:18.375Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-03",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "step-04",
+      "status": "done",
+      "target_file": "services/wellness-studio-orchestrator.js",
+      "task": "Create orchestrator that ties data access, AI insights, and therapist integration",
+      "spec": "Exports async runWellnessSession(userId, sessionType, deps) where deps = {db, callCouncilMember, wellnessTherapist}. Imports wellness-studio-data.js and wellness-studio-ai.js from sibling paths. Calls createSession, then generateWellnessInsight, then createInsight, then optionally calls deps.wellnessTherapist.notifyIfNeeded(userId, insight) if that method exists. Returns {session, insight}. No browser globals.",
+      "depends_on": [
+        "step-02",
+        "step-03"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "commit_sha": "b6e8776789b7466787634df73d76904d3dd0e5c5",
+      "last_attempt_at": "2026-07-12T19:01:39.802Z",
+      "completed_at": "2026-07-12T19:01:50.775Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-04",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "step-05",
+      "status": "done",
+      "target_file": "routes/wellness-studio-routes.js",
+      "task": "Create Express route module for wellness studio API endpoints",
+      "spec": "Exports registerWellnessStudioRoutes(app, deps) where deps = {db, callCouncilMember, wellnessTherapist}. Mounts: GET /api/wellness-studio/sessions (returns sessions for req.user.id), POST /api/wellness-studio/sessions (calls orchestrator.runWellnessSession), GET /api/wellness-studio/sessions/:sessionId/insights (returns insights). Imports wellness-studio-orchestrator.js and wellness-studio-data.js by relative path. All routes require authenticated req.user. Returns JSON. No browser globals. No top-level side effects.",
+      "depends_on": [
+        "step-04"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "last_error": null,
+      "expected_exports": [
+        "registerWellnessStudioRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/wellness-studio/sessions"
+      },
+      "revive_count": 0,
+      "revived_at": "2026-07-14T20:41:32.603Z",
+      "commit_sha": "8936a2b3d49afd458a709b98e64fceb0c6fb5c5c",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt": null,
+      "last_attempt_at": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-14T20:41:48.519Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-05",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "step-05-register",
+      "status": "done",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "Auto-register wellness studio routes at boot without editing server.js",
+      "spec": "Add {\"path\":\"routes/wellness-studio-routes.js\",\"register\":\"registerWellnessStudioRoutes\",\"enabled\":true} to modules[]. Preserve all existing entries. File must remain valid JSON.",
+      "depends_on": [
+        "step-05"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-14T17:42:02.657Z",
+      "commit_sha": "2e45be3d1504a436bac45ab28c1661ab2d7448e5",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-05-register",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "step-07",
+      "status": "done",
+      "target_file": "public/overlay/wellness-studio.html",
+      "task": "Create founder-gated wellness studio dashboard overlay UI",
+      "spec": "Self-contained HTML file with inline CSS and inline JS (no external script tags beyond the page's own asset conventions). Renders a wellness session launcher with session type selector, a start-session button that POSTs to /api/wellness-studio/sessions, and a panel that displays returned insight content and confidence score. Uses fetch inside inline script tags only. No server-side imports. Passes founder design review: uses existing CSS variable palette, branded header 'Wellness Studio', accessible labels.",
+      "depends_on": [
+        "step-05"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "commit_sha": "5fa544ab489026dca0c9557ba3bc8cfadb65c67d",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-07",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "step-08",
+      "status": "done",
+      "target_file": "scripts/wellness-studio-backfill.mjs",
+      "task": "Create one-time backfill script to seed wellness sessions from existing table data",
+      "spec": "ES module script. Imports pg from 'pg', reads DATABASE_URL from process.env, queries users who have joy_checkins or integrity_score_log entries but no wellness_studio_sessions row in the last 30 days, and inserts a seed session of type 'onboarding-backfill' for each via parameterised INSERT. Logs count of rows created to stdout. No AI calls. No browser globals. Designed to be run once via node scripts/wellness-studio-backfill.mjs.",
+      "depends_on": [
+        "step-01"
+      ],
+      "founder_gated": false,
+      "attempts": 3,
+      "last_attempt_at": "2026-07-13T03:51:29.925Z",
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-13T23:36:22.238Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-08",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "1",
+      "status": "skipped",
+      "target_file": "db/migrations/20260720_lifeos_core_phase_1.sql",
+      "task": "deploy LifeOS Core Phase 1",
+      "spec": "Deploy LifeOS Core Phase 1 ensuring no schema conflicts.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:45:57.800Z",
+      "commit_sha": "d24a9d5eed764430a9b38d9ea837db559ad419e7",
+      "no_op": true,
+      "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "1",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "2",
+      "status": "skipped",
+      "target_file": "db/migrations/20260721_lifeos_core_phase_2.sql",
+      "task": "deploy LifeOS Core Phase 2",
+      "spec": "Deploy LifeOS Core Phase 2 ensuring no schema conflicts.",
+      "depends_on": [
+        "1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:47:59.427Z",
+      "commit_sha": "76b8e3140d8c40d1cdefe368e0c9550fc847cdef",
+      "no_op": true,
+      "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "2",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "3",
+      "status": "skipped",
+      "target_file": "db/migrations/20260722_lifeos_core_phase_3.sql",
+      "task": "deploy LifeOS Core Phase 3",
+      "spec": "Deploy LifeOS Core Phase 3 ensuring no schema conflicts.",
+      "depends_on": [
+        "2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:53:58.972Z",
+      "commit_sha": "1705e993bb886fc91a074feb080bb3837f7dd2cd",
+      "no_op": true,
+      "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "3",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "4",
+      "status": "skipped",
+      "target_file": "db/migrations/20260723_lifeos_core_phase_4.sql",
+      "task": "deploy LifeOS Core Phase 4",
+      "spec": "Deploy LifeOS Core Phase 4 ensuring no schema conflicts.",
+      "depends_on": [
+        "3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T18:00:05.889Z",
+      "commit_sha": "010211460b592740857e5f78f76bcd8c47c6804c",
+      "no_op": true,
+      "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "4",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "5",
+      "status": "skipped",
+      "target_file": "db/migrations/20260724_lifeos_core_phase_5.sql",
+      "task": "deploy LifeOS Core Phase 5",
+      "spec": "Deploy LifeOS Core Phase 5 ensuring no schema conflicts.",
+      "depends_on": [
+        "4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T18:05:58.212Z",
+      "commit_sha": "49a5d05ca99855aa84af6255867a663caaf772bb",
+      "no_op": true,
+      "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "5",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "6",
+      "status": "skipped",
+      "target_file": "db/migrations/20260725_lifeos_core_phase_6.sql",
+      "task": "deploy LifeOS Core Phase 6",
+      "spec": "Deploy LifeOS Core Phase 6 ensuring no schema conflicts.",
+      "depends_on": [
+        "5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T18:06:42.033Z",
+      "commit_sha": "9dfedecf9e87ae743f305c1455b058108d7a0d97",
+      "no_op": true,
+      "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "6",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "7",
+      "status": "skipped",
+      "target_file": "db/migrations/20260726_lifeos_core_phase_7.sql",
+      "task": "deploy LifeOS Core Phase 7",
+      "spec": "Deploy LifeOS Core Phase 7 ensuring no schema conflicts.",
+      "depends_on": [
+        "6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T18:08:46.759Z",
+      "commit_sha": "e07e3b3108c0e8044504c6d349ae67befcc2da30",
+      "no_op": true,
+      "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "7",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "8",
+      "status": "skipped",
+      "target_file": "db/migrations/20260727_lifeos_core_phase_8.sql",
+      "task": "deploy LifeOS Core Phase 8",
+      "spec": "Deploy LifeOS Core Phase 8 ensuring no schema conflicts.",
+      "depends_on": [
+        "7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ],
+      "no_op": true,
+      "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "8",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "9",
+      "status": "skipped",
+      "target_file": "db/migrations/20260728_extend_tables.sql",
+      "task": "extend tables",
+      "spec": "Extend tables joy_checkins, integrity_score_log, wearable_data, emotional_patterns without schema conflicts.",
+      "depends_on": [
+        "8"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "ALTER TABLE IF EXISTS"
+      ],
+      "no_op": true,
+      "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "9",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "10",
+      "status": "skipped",
+      "target_file": "services/communication-profile.js",
+      "task": "implement communication profile",
+      "spec": "Implement communication profile wiring with necessary exports and logic.",
+      "depends_on": [
+        "8"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getCommunicationProfile",
+        "updateCommunicationProfile"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/communication-profile.js",
+          "exports": [
+            "getCommunicationProfile",
+            "updateCommunicationProfile"
+          ],
+          "assertion_id": "expected_exports:services/communication-profile.js"
+        }
+      ],
+      "no_op": true,
+      "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "10",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "11",
+      "status": "skipped",
+      "target_file": "services/truth-delivery.js",
+      "task": "implement truth delivery",
+      "spec": "Implement truth delivery wiring with necessary exports and logic.",
+      "depends_on": [
+        "10"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "deliverTruth",
+        "getTruth"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/truth-delivery.js",
+          "exports": [
+            "deliverTruth",
+            "getTruth"
+          ],
+          "assertion_id": "expected_exports:services/truth-delivery.js"
+        }
+      ],
+      "no_op": true,
+      "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "11",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "12",
+      "status": "skipped",
+      "target_file": "services/therapist-integration.js",
+      "task": "finalize therapist integration",
+      "spec": "Finalize therapist integration once communication-profile.js and truth-delivery.js are wired.",
+      "depends_on": [
+        "11"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "integrateTherapist"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/therapist-integration.js",
+          "exports": [
+            "integrateTherapist"
+          ],
+          "assertion_id": "expected_exports:services/therapist-integration.js"
+        }
+      ],
+      "no_op": true,
+      "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "12",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "step1",
+      "status": "done",
+      "target_file": "db/migrations/20260715_lifeos_core_phase_1.sql",
+      "task": "implement phase 1",
+      "spec": "Create DB schema for LifeOS Core Phase 1.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "phase_1_table"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "a9bce7d708cfed7d5e72f010e843b7415fc34d4a",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T21:35:06.903Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T21:35:13.966Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step1",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "step2",
+      "status": "done",
+      "target_file": "db/migrations/20260716_lifeos_core_phase_2.sql",
+      "task": "implement phase 2",
+      "spec": "Create DB schema for LifeOS Core Phase 2.",
+      "depends_on": [
+        "step1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "phase_2_table"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "49f7d6b7ed75995cb118303afdcee3587967e692",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T21:54:03.644Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T21:54:09.987Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step2",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "step3",
+      "status": "done",
+      "target_file": "db/migrations/20260717_lifeos_core_phase_3.sql",
+      "task": "implement phase 3",
+      "spec": "Create DB schema for LifeOS Core Phase 3.",
+      "depends_on": [
+        "step2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "phase_3_table"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "804dd56a2b3e132bd1e16f6e9a647f36253f067c",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T22:14:08.746Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:14:54.850Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step3",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "step4",
+      "status": "done",
+      "target_file": "db/migrations/20260718_lifeos_core_phase_4.sql",
+      "task": "implement phase 4",
+      "spec": "Create DB schema for LifeOS Core Phase 4.",
+      "depends_on": [
+        "step3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "phase_4_table"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "0694ce0af0bdc578184334c0b1db0136663c8152",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T22:35:08.706Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:36:41.367Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step4",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "step5",
+      "status": "done",
+      "target_file": "db/migrations/20260719_lifeos_core_phase_5.sql",
+      "task": "implement phase 5",
+      "spec": "Create DB schema for LifeOS Core Phase 5.",
+      "depends_on": [
+        "step4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "phase_5_table"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "f43ae0b9832480ad4027f08cad573d628c9e030a",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T23:04:25.844Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:07:01.869Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step5",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "step6",
+      "status": "done",
+      "target_file": "db/migrations/20260720_lifeos_core_phase_6.sql",
+      "task": "implement phase 6",
+      "spec": "Create DB schema for LifeOS Core Phase 6.",
+      "depends_on": [
+        "step5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "phase_6_table"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "83758b2f480d91de2bc2bada4e9f60f063459c6b",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T23:31:09.467Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:32:22.667Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step6",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "step7",
+      "status": "done",
+      "target_file": "db/migrations/20260721_lifeos_core_phase_7.sql",
+      "task": "implement phase 7",
+      "spec": "Create DB schema for LifeOS Core Phase 7.",
+      "depends_on": [
+        "step6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "phase_7_table"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "70a3088776f12ba4022fcdffef78c646dfa0aeef",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T23:50:54.341Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:51:20.329Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step7",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "step8",
+      "status": "done",
+      "target_file": "db/migrations/20260722_lifeos_core_phase_8.sql",
+      "task": "implement phase 8",
+      "spec": "Create DB schema for LifeOS Core Phase 8.",
+      "depends_on": [
+        "step7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "phase_8_table"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "3d43452ee1dded60492000eb73cf4edae29d987c",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T00:32:28.371Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T00:33:02.487Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step8",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "step9",
+      "status": "done",
+      "target_file": "services/extended-tables.js",
+      "task": "extend tables",
+      "spec": "Extend existing tables joy_checkins, integrity_score_log, wearable_data, emotional_patterns to ensure no schema conflicts before build.",
+      "depends_on": [
+        "step8"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "extendJoyCheckins",
+        "extendIntegrityScoreLog",
+        "extendWearableData",
+        "extendEmotionalPatterns"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/extended-tables.js",
+          "exports": [
+            "extendJoyCheckins",
+            "extendIntegrityScoreLog",
+            "extendWearableData",
+            "extendEmotionalPatterns"
+          ],
+          "assertion_id": "expected_exports:services/extended-tables.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "8db36d10fa3ee402451ea56f0246a808e54f4409",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T00:42:15.067Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T00:42:54.664Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step9",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "step10",
+      "status": "skipped",
+      "target_file": "services/therapist-communication.js",
+      "task": "wire communication profile",
+      "spec": "Wire communication-profile.js with truth-delivery.js for therapist integration.",
+      "depends_on": [
+        "step9"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "wireCommunicationProfile"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/therapist-communication.js",
+          "exports": [
+            "wireCommunicationProfile"
+          ],
+          "assertion_id": "expected_exports:services/therapist-communication.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-16T01:38:16.082Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: syntax_check_failed:openai_builder_mini: Command failed: /usr/bin/node --check /tmp/factory-codegen-1784165896062.mjs\n/tmp/factory-codegen-1784165896062.mjs:7\nexport { wireCommunication",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 9,
+      "revived_at": "2026-07-16T01:37:56.077Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: syntax_check_failed:openai_builder_mini: Command failed: /usr/bin/node --check /tmp/factory-codegen-1784165896062.mjs\n/",
+      "demoted_at": "2026-07-16T04:14:44.085Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step10",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "wellness-studio-1",
+      "status": "done",
+      "target_file": "services/extended-tables.js",
+      "task": "extendTables",
+      "spec": "Extend existing tables to avoid schema conflicts while respecting module requirements.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "extendTables"
+      ],
+      "file_contains": [
+        "ALTER TABLE",
+        "joy_checkins",
+        "integrity_score_log",
+        "wearable_data",
+        "emotional_patterns",
+        "NO CONFLICT"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/extended-tables.js",
+          "exports": [
+            "extendTables"
+          ],
+          "assertion_id": "expected_exports:services/extended-tables.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "df2ad005d8d3a730e58eaeb96860e04a647787c2",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T04:30:17.723Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:30:37.573Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "wellness-studio-1",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "wellness-studio-2",
+      "status": "done",
+      "target_file": "db/migrations/20260723_lifeos_core_complete.sql",
+      "task": "finalizeLifeOSCore",
+      "spec": "Ensure LifeOS Core Phases 1-8 are stable and deployed.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "id",
+        "created_at",
+        "updated_at"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "c11d7b77006f4e6663fa7415395d9a4ab36244fc",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T04:38:45.531Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:39:23.627Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "wellness-studio-2",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "wellness-studio-3",
+      "status": "done",
+      "target_file": "services/therapist-integration.js",
+      "task": "setupTherapistIntegration",
+      "spec": "Wire communication-profile.js and truth-delivery.js for therapist integration.",
+      "depends_on": [
+        "wellness-studio-2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "setupIntegration"
+      ],
+      "file_contains": [
+        "require('communication-profile')",
+        "require('truth-delivery')"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/therapist-integration.js",
+          "exports": [
+            "setupIntegration"
+          ],
+          "assertion_id": "expected_exports:services/therapist-integration.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "485bd8a5043aba9caa4c738eb967d9e2dddaefdd",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T05:34:49.722Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:35:42.565Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "wellness-studio-3",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "wellness-studio-4",
+      "status": "done",
+      "target_file": "routes/therapist-integration-routes.js",
+      "task": "addTherapistIntegrationRoutes",
+      "spec": "Add HTTP routes for therapist integration using communication-profile.js and truth-delivery.js.",
+      "depends_on": [
+        "wellness-studio-3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerTherapistRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/therapist/integration"
+      },
+      "file_contains": [
+        "POST /api/therapist/integration",
+        "setupIntegration"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/therapist-integration-routes.js",
+          "exports": [
+            "registerTherapistRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/therapist-integration-routes.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "632dc2648a7d16a46fe594cd3cc235788f06743c",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T06:16:24.613Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:17:30.899Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "wellness-studio-4",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "wellness-studio-5",
+      "status": "done",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "registerTherapistRoutes",
+      "spec": "Add therapist-integration-routes.js to auto-registered product modules.",
+      "depends_on": [
+        "wellness-studio-4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "therapist-integration-routes.js"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:21:42.122Z",
+      "commit_sha": "ecb5b04ab07ac91df9c92c38eac1217919f47c30",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "wellness-studio-5",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "wellness-studio-step1",
+      "status": "done",
+      "target_file": "db/migrations/20260724_lifeos_core_stable.sql",
+      "task": "ensure stability of LifeOS Core",
+      "spec": "Ensure all phases of LifeOS Core are deployed and stable by performing final migrations and checks.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "CHECK (stable IS TRUE)"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "47a248087a230d5357181d589d1a1aa38ce3ff3e",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T06:41:02.085Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:41:17.988Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "wellness-studio-step1",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "wellness-studio-step2",
+      "status": "done",
+      "target_file": "db/migrations/20260725_extend_wellness_tables.sql",
+      "task": "extend existing wellness tables",
+      "spec": "Extend tables joy_checkins, integrity_score_log, wearable_data, emotional_patterns with new columns if needed, ensuring no schema conflicts.",
+      "depends_on": [
+        "wellness-studio-step1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "joy_checkins",
+        "integrity_score_log",
+        "wearable_data",
+        "emotional_patterns",
+        "ALTER TABLE"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:45:10.117Z",
+      "commit_sha": "e52273abc1ec3b3424d03596ec9cbae909f71561",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "wellness-studio-step2",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "wellness-studio-step3",
+      "status": "done",
+      "target_file": "services/wellness-table-extensions.js",
+      "task": "provide extended table services",
+      "spec": "Implement services for managing the extended table data without conflicts.",
+      "depends_on": [
+        "wellness-studio-step2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "manageJoyCheckins",
+        "manageIntegrityScore",
+        "manageWearableData",
+        "manageEmotionalPatterns"
+      ],
+      "file_contains": [
+        "extendTableServices"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/wellness-table-extensions.js",
+          "exports": [
+            "manageJoyCheckins",
+            "manageIntegrityScore",
+            "manageWearableData",
+            "manageEmotionalPatterns"
+          ],
+          "assertion_id": "expected_exports:services/wellness-table-extensions.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:49:02.108Z",
+      "commit_sha": "959a480548734f24b4c1a6bb1f040a8636a2bfa8",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "wellness-studio-step3",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "wellness-studio-step4",
+      "status": "done",
+      "target_file": "routes/wellness-table-extensions-routes.js",
+      "task": "create routes for extended table services",
+      "spec": "Expose routes to interact with the extended table services.",
+      "depends_on": [
+        "wellness-studio-step3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerWellnessTableExtensionsRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/wellness/extensions"
+      },
+      "file_contains": [
+        "POST /api/v1/wellness/extensions/joy-checkins",
+        "POST /api/v1/wellness/extensions/integrity-score",
+        "POST /api/v1/wellness/extensions/wearable-data",
+        "POST /api/v1/wellness/extensions/emotional-patterns"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/wellness-table-extensions-routes.js",
+          "exports": [
+            "registerWellnessTableExtensionsRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/wellness-table-extensions-routes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:53:26.802Z",
+      "commit_sha": "ecc351e98f6bcb9072bea7a59d5743aabda4ea1f",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "wellness-studio-step4",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "wellness-studio-step5",
+      "status": "done",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register wellness table extensions routes",
+      "spec": "Ensure wellness table extensions routes are auto-registered in the product modules configuration.",
+      "depends_on": [
+        "wellness-studio-step4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "wellness-table-extensions-routes"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:55:18.166Z",
+      "commit_sha": "f6998df518c39735a2d87433ce9fee7466b8606e",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "wellness-studio-step5",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "wellness-studio-step6",
+      "status": "blocked",
+      "target_file": "db/migrations/20260720_lifeos_core_phase_6.sql",
+      "task": "deploy",
+      "spec": "LifeOS Core Phase 6 deployed and stable",
+      "depends_on": [
+        "wellness-studio-step5"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "route": {
+        "path": "/lifeos/core"
+      },
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ],
+      "last_attempt_at": "2026-07-17T18:34:34.961Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 6,
+      "revived_at": "2026-07-17T18:34:31.756Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "wellness-studio-step6",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "wellness-studio-step7",
+      "status": "pending",
+      "target_file": "db/migrations/20260721_lifeos_core_phase_7.sql",
+      "task": "deploy",
+      "spec": "LifeOS Core Phase 7 deployed and stable",
+      "depends_on": [
+        "wellness-studio-step6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "route": {
+        "path": "/lifeos/core"
+      },
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ],
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "wellness-studio-step7",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "wellness-studio-step8",
+      "status": "pending",
+      "target_file": "db/migrations/20260722_lifeos_core_phase_8.sql",
+      "task": "deploy",
+      "spec": "LifeOS Core Phase 8 deployed and stable",
+      "depends_on": [
+        "wellness-studio-step7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "route": {
+        "path": "/lifeos/core"
+      },
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ],
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "wellness-studio-step8",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "wellness-studio-step9",
+      "status": "pending",
+      "target_file": "db/migrations/20260724_lifeos_core_stable.sql",
+      "task": "verify_stability",
+      "spec": "Verify LifeOS Core deployment is stable after all phases",
+      "depends_on": [
+        "wellness-studio-step8"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "route": {
+        "path": "/lifeos/core/verify"
+      },
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ],
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "wellness-studio-step9",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "wellness-studio-step10",
+      "status": "pending",
+      "target_file": "db/migrations/20260725_extend_wellness_tables.sql",
+      "task": "extend_wellness_tables",
+      "spec": "Extend existing tables without schema conflicts",
+      "depends_on": [
+        "wellness-studio-step9"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "route": {
+        "path": "/db/extend"
+      },
+      "file_contains": [
+        "ALTER TABLE joy_checkins ADD COLUMN",
+        "ALTER TABLE integrity_score_log ADD COLUMN",
+        "ALTER TABLE wearable_data ADD COLUMN",
+        "ALTER TABLE emotional_patterns ADD COLUMN"
+      ],
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "wellness-studio-step10",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "wellness-studio-step11",
+      "status": "pending",
+      "target_file": "services/extended-tables.js",
+      "task": "implement_service",
+      "spec": "Implement service logic for extended wellness tables",
+      "depends_on": [
+        "wellness-studio-step10"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "extendWellnessTables"
+      ],
+      "route": {
+        "path": "/api/v1/extend"
+      },
+      "file_contains": [
+        "extendWellnessTables()"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/extended-tables.js",
+          "exports": [
+            "extendWellnessTables"
+          ],
+          "assertion_id": "expected_exports:services/extended-tables.js"
+        }
+      ],
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "wellness-studio-step11",
+      "mission_id": "PRODUCT-wellness-studio"
+    },
+    {
+      "id": "wellness-studio-step12",
+      "status": "pending",
+      "target_file": "routes/wellness-table-extensions-routes.js",
+      "task": "setup_route",
+      "spec": "Setup routes for wellness table extensions",
+      "depends_on": [
+        "wellness-studio-step11"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerWellnessExtensionsRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/wellness/extend"
+      },
+      "file_contains": [
+        "registerWellnessExtensionsRoutes"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/wellness-table-extensions-routes.js",
+          "exports": [
+            "registerWellnessExtensionsRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/wellness-table-extensions-routes.js"
+        }
+      ],
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "wellness-studio-step12",
+      "mission_id": "PRODUCT-wellness-studio"
+    }
+  ],
+  "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-wellness-studio",
+  "twin_kind": "product_build_queue_registered"
+}

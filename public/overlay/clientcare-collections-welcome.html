@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: BirthBill post-pay wizard — connect ClientCare with clear next steps -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BirthBill — Finish onboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root { --teal:#0f6a6a; --deep:#0a4548; --ink:#142029; --muted:#4d5f6b; --line:rgba(20,32,41,.12); --ok:#1f6b45; --warn:#8a4b2a; }
+    body {
+      margin: 0; min-height: 100vh; font-family: Manrope, system-ui, sans-serif;
+      background: linear-gradient(180deg, #e7f1f2, #f3f7f8); color: var(--ink); padding: 1.5rem;
+    }
+    .wrap { width: min(640px, 100%); margin: 0 auto; }
+    h1 { font-family: Fraunces, Georgia, serif; color: var(--deep); margin: 0 0 .5rem; font-size: 1.9rem; }
+    p { color: var(--muted); line-height: 1.55; }
+    .progress { display: grid; grid-template-columns: repeat(3, 1fr); gap: .5rem; margin: 1.25rem 0 1.5rem; }
+    .pill {
+      text-align: center; font-size: .78rem; font-weight: 700; padding: .55rem .4rem; border-radius: 999px;
+      border: 1px solid var(--line); color: var(--muted); background: #fff;
+    }
+    .pill.done { background: rgba(31,107,69,.12); color: var(--ok); border-color: rgba(31,107,69,.25); }
+    .pill.now { background: rgba(15,106,106,.12); color: var(--deep); border-color: rgba(15,106,106,.3); }
+    .box {
+      background: #fff; border-radius: 24px; padding: 1.5rem 1.6rem;
+      box-shadow: 0 28px 70px rgba(10,40,48,.14); border: 1px solid var(--line);
+    }
+    label { display: grid; gap: .3rem; font-size: .82rem; font-weight: 600; color: var(--muted); margin-bottom: .75rem; }
+    input {
+      font: inherit; padding: .7rem .85rem; border-radius: 12px; border: 1px solid var(--line); background: #fbfeff;
+    }
+    button {
+      appearance: none; border: 0; cursor: pointer; font: inherit; font-weight: 700;
+      background: var(--deep); color: #fff; border-radius: 999px; padding: .85rem 1.2rem; width: 100%;
+    }
+    button:disabled { opacity: .6; cursor: wait; }
+    .status { min-height: 1.2rem; margin-top: .75rem; font-size: .9rem; color: var(--teal); }
+    .status.err { color: var(--warn); }
+    .next-list { margin: 1rem 0 0; padding-left: 1.1rem; color: var(--muted); }
+    .next-list li { margin: .35rem 0; }
+    a { color: var(--teal); font-weight: 600; }
+    .meta { font-size: .82rem; color: var(--muted); margin-bottom: 1rem; }
+    .done-banner {
+      display: none; padding: .85rem 1rem; border-radius: 14px; margin-bottom: 1rem;
+      background: rgba(31,107,69,.1); border: 1px solid rgba(31,107,69,.25); color: var(--ok); font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1 id="title">Finish BirthBill onboard</h1>
+    <p id="lead">Three steps. You are on step 2 after payment.</p>
+    <div class="progress">
+      <div class="pill done" id="p1">1 · Paid</div>
+      <div class="pill now" id="p2">2 · Connect ClientCare</div>
+      <div class="pill" id="p3">3 · System chases</div>
+    </div>
+    <div class="done-banner" id="doneBanner">ClientCare connected. The system seeds forever-chase and keeps working — you do not need to run a board.</div>
+    <div class="box" id="panel">
+      <div class="meta" id="meta"></div>
+      <p><strong>What you enter:</strong> the same ClientCare username and password you use in the browser. We encrypt them for this practice only. We never put them in git or chat.</p>
+      <form id="connectForm">
+        <label>ClientCare base URL
+          <input name="base_url" value="https://clientcarewest.net" required />
+        </label>
+        <label>Username
+          <input name="username" autocomplete="username" required placeholder="your ClientCare login" />
+        </label>
+        <label>Password
+          <input name="password" type="password" autocomplete="current-password" required />
+        </label>
+        <button type="submit" id="btn">Save encrypted credentials</button>
+        <div class="status" id="status" aria-live="polite"></div>
+      </form>
+      <ol class="next-list">
+        <li>We store credentials encrypted under your tenant.</li>
+        <li>BirthBill seeds forever-chase (unpaid / underpaid births stay open).</li>
+        <li>You open the workboard and take the next action on each row.</li>
+      </ol>
+    </div>
+    <p style="margin-top:1.25rem;font-size:.9rem;">
+      <a id="boardLink" href="/clientcare-billing?product=birthbill">Open BirthBill workboard</a>
+      · <a href="/birthbill">Back to BirthBill</a>
+    </p>
+  </div>
+  <script>
+    const API = '/api/v1/clientcare-billing/public';
+    const q = new URLSearchParams(location.search);
+    const tenantId = q.get('tenant_id') || '';
+    const sessionId = q.get('session_id') || '';
+    const paid = q.get('paid') === '1';
+    const statusEl = document.getElementById('status');
+    const btn = document.getElementById('btn');
+    const boardHref = '/clientcare-billing?product=birthbill' + (tenantId ? ('&tenant_id=' + encodeURIComponent(tenantId)) : '');
+    document.getElementById('boardLink').href = boardHref;
+    document.getElementById('meta').textContent = tenantId
+      ? ('Practice tenant #' + tenantId + (paid ? ' · pilot payment confirmed' : ''))
+      : 'Missing tenant_id — reopen from your checkout success link.';
+
+    function setStatus(msg, isErr) {
+      statusEl.textContent = msg || '';
+      statusEl.classList.toggle('err', Boolean(isErr));
+    }
+    function markConnected() {
+      document.getElementById('title').textContent = 'You are connected';
+      document.getElementById('lead').textContent = 'Step 2 is done. Step 3 is the system forever-chasing — you do not work a board.';
+      document.getElementById('p2').classList.add('done');
+      document.getElementById('p2').classList.remove('now');
+      document.getElementById('p3').classList.add('now');
+      document.getElementById('doneBanner').style.display = 'block';
+      document.getElementById('connectForm').style.display = 'none';
+    }
+    async function refresh() {
+      if (!tenantId) return;
+      try {
+        const res = await fetch(API + '/onboarding-status?tenant_id=' + encodeURIComponent(tenantId));
+        const data = await res.json();
+        if (data.credentials?.connected) {
+          markConnected();
+          setStatus('Connected as ' + (data.credentials.username_hint || 'practice user'));
+        } else if (!paid) {
+          document.getElementById('p1').classList.remove('done');
+          setStatus('Pay the pilot first, then connect ClientCare.', true);
+        }
+      } catch (_) {}
+    }
+    document.getElementById('connectForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!tenantId) return setStatus('tenant_id required', true);
+      btn.disabled = true;
+      setStatus('Saving encrypted credentials…');
+      const body = Object.fromEntries(new FormData(e.target).entries());
+      body.tenant_id = tenantId;
+      if (sessionId) body.session_id = sessionId;
+      try {
+        const res = await fetch(API + '/connect-clientcare', {
+          method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body),
+        });
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.error || 'Connect failed');
+        markConnected();
+        setStatus(data.next || 'Connected.');
+      } catch (err) {
+        setStatus(String(err.message || err), true);
+        btn.disabled = false;
+      }
+    });
+    if (paid) setStatus('Payment confirmed. Enter ClientCare login to finish step 2.');
+    refresh();
+  </script>
+</body>
+</html>

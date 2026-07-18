@@ -1,0 +1,1065 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "business-tools",
+  "planned_at": "2026-07-15T07:37:25.768Z",
+  "backlog_signature": "86e0e97c71d7ec1c",
+  "corpus_sources": [
+    "docs/products/business-tools/PRODUCT_HOME.md"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "status": "done",
+      "target_file": "routes/server.features.js",
+      "task": "modularize features routes",
+      "spec": "Extract all sub-feature routes from server.js; file must register extracted routes as modules.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerFeatureRoutes"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/server.features.js",
+          "exports": [
+            "registerFeatureRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/server.features.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "99f90431f73a7e6a3a1b79bcbff500c1e9ea95c0",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T09:25:20.512Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T09:26:02.183Z",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "1",
+      "mission_id": "PRODUCT-business-tools"
+    },
+    {
+      "id": "2",
+      "status": "done",
+      "target_file": "services/makecomGenerator.js",
+      "task": "document Make.com JSON schema",
+      "spec": "Complete Make.com generator output format documentation within the module.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generateMakecomSchema"
+      ],
+      "file_contains": [
+        "JSON schema",
+        "Make.com"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/makecomGenerator.js",
+          "exports": [
+            "generateMakecomSchema"
+          ],
+          "assertion_id": "expected_exports:services/makecomGenerator.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "7117e1f68e4088d6752a0772efa780a47df21feb",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T08:40:25.401Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T08:41:15.857Z",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "2",
+      "mission_id": "PRODUCT-business-tools"
+    },
+    {
+      "id": "3",
+      "status": "done",
+      "target_file": "services/realEstateCurriculum.js",
+      "task": "define virtual real estate curriculum",
+      "spec": "Create structure for virtual real estate class curriculum; define module structure and student DB schema.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "defineCurriculum"
+      ],
+      "file_contains": [
+        "curriculum",
+        "DB schema"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/realEstateCurriculum.js",
+          "exports": [
+            "defineCurriculum"
+          ],
+          "assertion_id": "expected_exports:services/realEstateCurriculum.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T08:54:19.101Z",
+      "commit_sha": "057f8f1950a637cdb67a901220be34cb7abf20d4",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "3",
+      "mission_id": "PRODUCT-business-tools"
+    },
+    {
+      "id": "4",
+      "status": "done",
+      "target_file": "db/migrations/create_user_trials_table.sql",
+      "task": "create user_trials table schema",
+      "spec": "Define schema for user_trials table; includes user_id, trial_start and trial_end timestamps.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS user_trials",
+        "user_id",
+        "trial_start",
+        "trial_end"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T08:59:10.767Z",
+      "commit_sha": "140ae4e01e639060c249be22a658b4a61517595d",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "4",
+      "mission_id": "PRODUCT-business-tools"
+    },
+    {
+      "id": "5",
+      "status": "skipped",
+      "target_file": "services/billingEntitlements.js",
+      "task": "document entitlements gating",
+      "spec": "Specify how entitlements gate features per-request using project_entitlements table.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "checkEntitlement"
+      ],
+      "file_contains": [
+        "entitlements",
+        "feature gating"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/billingEntitlements.js",
+          "exports": [
+            "checkEntitlement"
+          ],
+          "assertion_id": "expected_exports:services/billingEntitlements.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-15T16:30:07.451Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 0b is < 30% of existing 923b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 9,
+      "revived_at": "2026-07-15T16:29:35.931Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_stub_detected: generated 0b is < 30% of existing 923b",
+      "demoted_at": "2026-07-15T16:34:36.019Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "5",
+      "mission_id": "PRODUCT-business-tools"
+    },
+    {
+      "id": "6",
+      "status": "done",
+      "target_file": "routes/server.approvals.js",
+      "task": "implement approvals timeout",
+      "spec": "Add non-negotiable 48-hour approval system timeout and auto-reject for controversies.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerApprovalRoutes"
+      ],
+      "file_contains": [
+        "setTimeout",
+        "48h auto-reject"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/server.approvals.js",
+          "exports": [
+            "registerApprovalRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/server.approvals.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T09:12:43.608Z",
+      "commit_sha": "294657cf37b69eb7b48e55e19ad97fb4dbf77f43",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "6",
+      "mission_id": "PRODUCT-business-tools"
+    },
+    {
+      "id": "step1",
+      "status": "done",
+      "target_file": "services/makeGenerator.js",
+      "task": "Document Make.com JSON schema",
+      "spec": "Generator must output valid and documented Make.com JSON schema for scenario import.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generateMakeSchema"
+      ],
+      "route": {
+        "path": "/api/v1/make/schema"
+      },
+      "file_contains": [
+        "\"type\": \"object\""
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/makeGenerator.js",
+          "exports": [
+            "generateMakeSchema"
+          ],
+          "assertion_id": "expected_exports:services/makeGenerator.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T09:17:33.531Z",
+      "commit_sha": "9aa0a0ed51de931ebdec9d7e3733df4f89451fea",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step1",
+      "mission_id": "PRODUCT-business-tools"
+    },
+    {
+      "id": "step2",
+      "status": "done",
+      "target_file": "db/migrations/create_user_trials_table.sql",
+      "task": "Add user_trials table",
+      "spec": "Create table user_trials if it does not exist.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS user_trials",
+        "id",
+        "created_at",
+        "updated_at"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T09:30:40.739Z",
+      "commit_sha": "7065e62b8281574de07df008cdb08a76c3857ecf",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step2",
+      "mission_id": "PRODUCT-business-tools"
+    },
+    {
+      "id": "step3",
+      "status": "done",
+      "target_file": "services/entitlements.js",
+      "task": "Specify entitlements gating",
+      "spec": "Describe how project_entitlements controls feature access per request.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "checkEntitlements"
+      ],
+      "route": {
+        "path": "/api/v1/entitlements/gate"
+      },
+      "file_contains": [
+        "project_entitlements",
+        "gating strategy"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/entitlements.js",
+          "exports": [
+            "checkEntitlements"
+          ],
+          "assertion_id": "expected_exports:services/entitlements.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T09:36:11.206Z",
+      "commit_sha": "ddcc76d677fda07be390bfc79df89cb87e2e0f3d",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step3",
+      "mission_id": "PRODUCT-business-tools"
+    },
+    {
+      "id": "step4",
+      "status": "skipped",
+      "target_file": "db/migrations/add_cont_approval_timeout.sql",
+      "task": "Implement approval timeout",
+      "spec": "Adds a 48h auto-reject timeout mechanism to controversial approval system.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "ALTER SYSTEM SET approval_timeout = INTERVAL '48 hours'"
+      ],
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-15T23:07:07.312Z",
+      "last_attempt": null,
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER SYSTEM SET approval_timeout = INTERVAL '48 hours'; behavior_assertion_failed; behavior_proof",
+      "revive_count": 6,
+      "revived_at": "2026-07-15T23:04:25.844Z",
+      "no_op": null,
+      "pre_existing": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER SYSTEM SET approval_timeout = INTERVAL '48 hours'; behavior_assertion_failed; behavio",
+      "demoted_at": "2026-07-16T03:06:09.386Z",
+      "park_until": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step4",
+      "mission_id": "PRODUCT-business-tools"
+    },
+    {
+      "id": "step5",
+      "status": "done",
+      "target_file": "routes/issueApprovalRoutes.js",
+      "task": "Create approval routes",
+      "spec": "Implement routes for approval system, including auto-reject functionality.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerApprovalRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/approvals/:id"
+      },
+      "file_contains": [
+        "approval_timeout"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/issueApprovalRoutes.js",
+          "exports": [
+            "registerApprovalRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/issueApprovalRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:46:29.578Z",
+      "commit_sha": "2a6b2fb831e098816994c4e2fcf200399aaca145",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step5",
+      "mission_id": "PRODUCT-business-tools"
+    },
+    {
+      "id": "step6",
+      "status": "done",
+      "target_file": "routes/entitlementRoutes.js",
+      "task": "Create entitlement routes",
+      "spec": "Expose entitlements via endpoint to validate feature accesses.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerEntitlementRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/user/entitlements"
+      },
+      "file_contains": [
+        "checkEntitlements"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/entitlementRoutes.js",
+          "exports": [
+            "registerEntitlementRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/entitlementRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:50:30.222Z",
+      "commit_sha": "c98db53b16bb3cc48bf49dec3dff2bc23d8ab9e3",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step6",
+      "mission_id": "PRODUCT-business-tools"
+    },
+    {
+      "id": "step7",
+      "status": "done",
+      "target_file": "db/migrations/add_virtual_real_estate_curriculum.sql",
+      "task": "Define virtual real estate curriculum",
+      "spec": "Specify curriculum structure and DB schema for students.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS real_estate_curriculum",
+        "module",
+        "student_id"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "ad890ef14222ab4d41f108a635b7570bccafdd8f",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T05:17:43.341Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:19:28.591Z",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step7",
+      "mission_id": "PRODUCT-business-tools"
+    },
+    {
+      "id": "step8",
+      "status": "done",
+      "target_file": "routes/curriculumRoutes.js",
+      "task": "Create curriculum routes",
+      "spec": "Create endpoints for virtual real estate curriculum access.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCurriculumRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/curriculum/:id"
+      },
+      "file_contains": [
+        "real_estate_curriculum"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/curriculumRoutes.js",
+          "exports": [
+            "registerCurriculumRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/curriculumRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:02:43.766Z",
+      "commit_sha": "5b06728a74ad3f83f1a8593b4c0482b14f6a46cd",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step8",
+      "mission_id": "PRODUCT-business-tools"
+    },
+    {
+      "id": "step9",
+      "status": "done",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "Register all new routes",
+      "spec": "Add all newly created routes to the auto-registration config.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "issueApprovalRoutes",
+        "entitlementRoutes",
+        "curriculumRoutes"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:13:55.273Z",
+      "commit_sha": "cccd34bfbed76bbd6b974fb5dd2ac7ad6e36c4ba",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step9",
+      "mission_id": "PRODUCT-business-tools"
+    },
+    {
+      "id": "step10",
+      "status": "done",
+      "target_file": "services/extractRoutes.js",
+      "task": "Extract sub-features from server.js",
+      "spec": "Sub-features must be extracted from server.js to individual route files.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "extractSubRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/migrate/routes"
+      },
+      "file_contains": [
+        "extraction logic"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/extractRoutes.js",
+          "exports": [
+            "extractSubRoutes"
+          ],
+          "assertion_id": "expected_exports:services/extractRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:23:01.128Z",
+      "commit_sha": "96d41e8c394ce7c85b887e93df7c229c067aeddc",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step10",
+      "mission_id": "PRODUCT-business-tools"
+    },
+    {
+      "id": "7",
+      "status": "done",
+      "target_file": "services/entitlementsGatewayService.js",
+      "task": "implement entitlement feature gate logic",
+      "spec": "Implement logic to enforce feature access based on `project_entitlements` entries.",
+      "depends_on": [
+        "6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "checkEntitlements"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/entitlementsGatewayService.js",
+          "exports": [
+            "checkEntitlements"
+          ],
+          "assertion_id": "expected_exports:services/entitlementsGatewayService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T03:06:26.194Z",
+      "commit_sha": "dc5d220658103a6118a51c401cf097155cae75e0",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "7",
+      "mission_id": "PRODUCT-business-tools"
+    },
+    {
+      "id": "8",
+      "status": "done",
+      "target_file": "services/approvalsTimeoutService.js",
+      "task": "implement 48h approval timeout",
+      "spec": "Add logic to automatically reject controversial approvals after 48h timeout.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "applyApprovalTimeout"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/approvalsTimeoutService.js",
+          "exports": [
+            "applyApprovalTimeout"
+          ],
+          "assertion_id": "expected_exports:services/approvalsTimeoutService.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "12ca5d0975400a74cb765c8218557d4b4a07f12a",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T03:23:16.370Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T03:23:32.344Z",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "8",
+      "mission_id": "PRODUCT-business-tools"
+    },
+    {
+      "id": "business-tools-1",
+      "status": "done",
+      "target_file": "services/extractSubFeatures.js",
+      "task": "extract features",
+      "spec": "Sub-features from server.js should be modularized into individual route files.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "extractSubFeatures"
+      ],
+      "file_contains": [
+        "modularized",
+        "features"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/extractSubFeatures.js",
+          "exports": [
+            "extractSubFeatures"
+          ],
+          "assertion_id": "expected_exports:services/extractSubFeatures.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:16:24.889Z",
+      "commit_sha": "0f069e4c9656d54e9b07ad61914d832876ebe1ae",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "business-tools-1",
+      "mission_id": "PRODUCT-business-tools"
+    },
+    {
+      "id": "business-tools-2",
+      "status": "skipped",
+      "target_file": "doc/makecomOutputFormat.md",
+      "task": "document JSON schema",
+      "spec": "Document the JSON schema necessary for Make.com scenario import for clear understanding and usage.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "JSON schema",
+        "Make.com"
+      ],
+      "last_attempt_at": "2026-07-16T06:46:47.926Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:JSON schema; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 6,
+      "revived_at": "2026-07-16T06:44:24.529Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:JSON schema; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T06:48:24.591Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "business-tools-2",
+      "mission_id": "PRODUCT-business-tools"
+    },
+    {
+      "id": "business-tools-3",
+      "status": "done",
+      "target_file": "services/realEstateCurriculumStructure.js",
+      "task": "specify curriculum structure",
+      "spec": "Outline modules and DB schema per student for virtual real estate class.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getCurriculumModules",
+        "getStudentSchema"
+      ],
+      "file_contains": [
+        "modules",
+        "DB schema"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/realEstateCurriculumStructure.js",
+          "exports": [
+            "getCurriculumModules",
+            "getStudentSchema"
+          ],
+          "assertion_id": "expected_exports:services/realEstateCurriculumStructure.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:26:58.499Z",
+      "commit_sha": "e12e1e73609f82a344d313a0cabf4b49ee61cb22",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "business-tools-3",
+      "mission_id": "PRODUCT-business-tools"
+    },
+    {
+      "id": "business-tools-4",
+      "status": "done",
+      "target_file": "db/migrations/update_user_trials_table.sql",
+      "task": "update user_trials table schema",
+      "spec": "Document schema for user_trials table.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "ALTER TABLE user_trials",
+        "ADD COLUMN"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "48c6e81ba2f5686e3ed48a8e1465acd7eba159c3",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T04:56:33.651Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:31:53.453Z",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "business-tools-4",
+      "mission_id": "PRODUCT-business-tools"
+    },
+    {
+      "id": "business-tools-5",
+      "status": "done",
+      "target_file": "services/entitlementsFeatureGating.js",
+      "task": "specify feature gating",
+      "spec": "Define how project entitlements gate features per request.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "checkFeatureAccess"
+      ],
+      "file_contains": [
+        "project_entitlements",
+        "gate features"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/entitlementsFeatureGating.js",
+          "exports": [
+            "checkFeatureAccess"
+          ],
+          "assertion_id": "expected_exports:services/entitlementsFeatureGating.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:36:40.986Z",
+      "commit_sha": "de5e6791ab043f5ee6fb781c6fddb08d41c3c49b",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "business-tools-5",
+      "mission_id": "PRODUCT-business-tools"
+    },
+    {
+      "id": "business-tools-6",
+      "status": "done",
+      "target_file": "services/implementApprovalTimeout.js",
+      "task": "implement approval timeout",
+      "spec": "Add functionality for 48h auto-reject in the approval system.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "setApprovalTimeout"
+      ],
+      "file_contains": [
+        "48h",
+        "auto-reject"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/implementApprovalTimeout.js",
+          "exports": [
+            "setApprovalTimeout"
+          ],
+          "assertion_id": "expected_exports:services/implementApprovalTimeout.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:43:46.176Z",
+      "commit_sha": "e067d20134b534581588c4df49b7aa2afaa17230",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "business-tools-6",
+      "mission_id": "PRODUCT-business-tools"
+    },
+    {
+      "id": "business-tools-7",
+      "status": "blocked",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register new routes",
+      "spec": "Add newly created route files to config/auto-registered-product-modules.json for auto-registration.",
+      "depends_on": [
+        "business-tools-1",
+        "business-tools-6"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "routes/subFeatures.js",
+        "services/controversialApprovalTimeout.js"
+      ],
+      "last_attempt_at": "2026-07-17T18:28:50.820Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:routes/subFeatures.js; behavior_assertion: missing_substring:services/controversialApprovalTimeout.js; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 6,
+      "revived_at": "2026-07-17T18:27:19.036Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "business-tools-7",
+      "mission_id": "PRODUCT-business-tools"
+    },
+    {
+      "id": "business-tools-step1",
+      "status": "done",
+      "target_file": "db/migrations/extract_sub_features.sql",
+      "task": "create migration for sub-feature extraction",
+      "spec": "Extract sub-features from server.js into individual route files as documented.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS extracted_sub_features"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "a5f1c63330eadb338137bc72424edeb7d032d05c",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T07:00:25.490Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T07:01:58.571Z",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "business-tools-step1",
+      "mission_id": "PRODUCT-business-tools"
+    },
+    {
+      "id": "business-tools-step2",
+      "status": "done",
+      "target_file": "documentation/makecom_output_format.md",
+      "task": "document Make.com generator output format",
+      "spec": "Fully document JSON schema for Make.com scenario import.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:50:03.608Z",
+      "commit_sha": "0f78df5ffeb9ce30f138a7ba6298919c17c6bc01",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "business-tools-step2",
+      "mission_id": "PRODUCT-business-tools"
+    },
+    {
+      "id": "business-tools-step3",
+      "status": "done",
+      "target_file": "db/migrations/virtual_real_estate_curriculum_structure.sql",
+      "task": "create curriculum structure",
+      "spec": "Define modules and DB schema per student for virtual real estate class.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS curriculum_modules"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "3260babcccd26d788e054f8e992c578d0277088c",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T07:23:41.480Z",
+      "no_op": null,
+      "pre_existing": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T07:28:50.333Z",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "business-tools-step3",
+      "mission_id": "PRODUCT-business-tools"
+    },
+    {
+      "id": "business-tools-step4",
+      "status": "done",
+      "target_file": "db/migrations/user_trials_table_amendment.sql",
+      "task": "document user_trials schema",
+      "spec": "Document the schema for user_trials table in this amendment.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS user_trials"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "f14879bb8bc13900f56c744b7e7f283e80135250",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T07:27:16.258Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T17:53:36.503Z",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "business-tools-step4",
+      "mission_id": "PRODUCT-business-tools"
+    },
+    {
+      "id": "business-tools-step5",
+      "status": "done",
+      "target_file": "documentation/entitlements_gating.md",
+      "task": "specify entitlements gating",
+      "spec": "Document how entitlements gate features per-request for the project_entitlements table.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T07:18:04.801Z",
+      "commit_sha": "d55080b7022ca6925d8b12a56d38a045ebf8e185",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "business-tools-step5",
+      "mission_id": "PRODUCT-business-tools"
+    },
+    {
+      "id": "business-tools-step6",
+      "status": "done",
+      "target_file": "services/implement_approval_timeout.js",
+      "task": "implement approval timeout",
+      "spec": "Implement controversial 48h auto-reject timeout in approval system.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "setupApprovalTimeout"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/implement_approval_timeout.js",
+          "exports": [
+            "setupApprovalTimeout"
+          ],
+          "assertion_id": "expected_exports:services/implement_approval_timeout.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T07:21:29.064Z",
+      "commit_sha": "3ac4bdf3166befb55f89ffc9ec60434fcfdb654a",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "business-tools-step6",
+      "mission_id": "PRODUCT-business-tools"
+    }
+  ],
+  "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-business-tools",
+  "twin_kind": "product_build_queue_registered"
+}

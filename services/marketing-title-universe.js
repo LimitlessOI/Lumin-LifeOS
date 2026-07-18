@@ -3,21 +3,23 @@
 
 function safeJsonParse(text) {
   if (typeof text !== 'string') return null;
-  const candidates = [];
+  const stripped = text
+    .replace(/^\s*```(?:json|js|javascript|text)?\s*/im, '')
+    .replace(/\s*```\s*$/i, '')
+    .trim();
+  const candidates = [stripped];
 
-  const firstArray = text.indexOf('[');
-  const lastArray = text.lastIndexOf(']');
+  const firstArray = stripped.indexOf('[');
+  const lastArray = stripped.lastIndexOf(']');
   if (firstArray !== -1 && lastArray !== -1 && lastArray > firstArray) {
-    candidates.push(text.slice(firstArray, lastArray + 1));
+    candidates.push(stripped.slice(firstArray, lastArray + 1));
   }
 
-  const firstObj = text.indexOf('{');
-  const lastObj = text.lastIndexOf('}');
+  const firstObj = stripped.indexOf('{');
+  const lastObj = stripped.lastIndexOf('}');
   if (firstObj !== -1 && lastObj !== -1 && lastObj > firstObj) {
-    candidates.push(text.slice(firstObj, lastObj + 1));
+    candidates.push(stripped.slice(firstObj, lastObj + 1));
   }
-
-  candidates.push(text);
 
   for (const candidate of candidates) {
     try {
@@ -93,17 +95,16 @@ export async function generateTitleUniverse({ callCouncilMember, topic, transcri
 
     const prompt = [
       `Create exactly ${safeCount} distinct title variations for the topic below.`,
-      `Score each title from 0 to 100 on curiosity, clarity, and specificity.`,
-      `Return your result as JSON only, preferably an array of objects with keys: text, score, rationale.`,
+      `Return your result as JSON only: an array of objects with keys text (string), score (integer 0-100), and rationale (one short sentence).`,
+      `The score must be a single integer, not an object.`,
       `Each title must be distinct, concise, and relevant.`,
       `Topic: ${normalizedTopic}`,
       normalizedTranscript ? `Transcript context: ${normalizedTranscript}` : '',
-      `If you include an object wrapper, it should contain a titles array.`,
     ]
       .filter(Boolean)
       .join('\n');
 
-    const raw = await callCouncilMember('gemini_flash', prompt);
+    const raw = await callCouncilMember('gemini_flash', prompt, { maxOutputTokens: 2000 });
 
     const parsed = safeJsonParse(raw);
     let titlesSource = null;

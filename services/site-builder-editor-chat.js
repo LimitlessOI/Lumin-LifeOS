@@ -1,6 +1,8 @@
 /**
  * SYNOPSIS: Exports renderChatPanel — services/site-builder-editor-chat.js.
  */
+import { CHAT_WELCOME } from './site-builder-editor-onboarding.js';
+
 function htmlEscape(value) {
   return String(value ?? "").replace(/[&<>"']/g, (character) => {
     switch (character) {
@@ -29,6 +31,14 @@ function escapeForInlineScript(value) {
     .replace(/\u2029/g, "\\u2029");
 }
 
+const QUICK_ACTIONS = [
+  { label: "🎨 Try different colors", instruction: "Try a different color palette that still fits my brand" },
+  { label: "🖼️ Work on my logo", link: "logo-studio" },
+  { label: "✏️ Rewrite my headline", instruction: "Rewrite my homepage headline to be punchier" },
+  { label: "📞 Make my CTA stronger", instruction: "Make my call-to-action buttons stronger and more direct" },
+  { label: "🖊️ Simplify the wording", instruction: "Simplify the wording across the page so it's easier to read" },
+];
+
 function makePanelId({ clientId, editToken, baseUrl }) {
   const source = `${clientId ?? ""}:${editToken ?? ""}:${baseUrl ?? ""}`;
   let hash = 5381;
@@ -48,6 +58,15 @@ export function renderChatPanel({ clientId, editToken, baseUrl } = {}) {
     token: String(editToken ?? ""),
     baseUrl: String(baseUrl ?? ""),
   };
+  const escapedWelcome = htmlEscape(CHAT_WELCOME);
+  const quickActionChips = QUICK_ACTIONS
+    .map((action, i) => {
+      const attr = action.link
+        ? `data-sb-quick-link="${htmlEscape(action.link)}"`
+        : `data-sb-quick-instruction="${htmlEscape(action.instruction)}"`;
+      return `<button type="button" class="sb-chat-quick" ${attr} data-sb-quick-index="${i}">${htmlEscape(action.label)}</button>`;
+    })
+    .join("");
 
   return `
 <section id="${escapedPanelId}" class="sb-chat-panel" data-sb-chat-panel aria-label="AI editor chat and voice panel">
@@ -205,6 +224,36 @@ export function renderChatPanel({ clientId, editToken, baseUrl } = {}) {
     #${escapedPanelId} [hidden] {
       display: none !important;
     }
+
+    #${escapedPanelId} .sb-chat-quick-row {
+      flex: 0 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    #${escapedPanelId} .sb-chat-quick {
+      border: 1px solid #d1d5db;
+      background: #f9fafb;
+      color: #111827;
+      border-radius: 999px;
+      padding: 6px 11px;
+      font: inherit;
+      font-size: 12px;
+      line-height: 1.2;
+      cursor: pointer;
+      transition: border-color 120ms ease, background 120ms ease;
+    }
+
+    #${escapedPanelId} .sb-chat-quick:hover {
+      border-color: #2563eb;
+      background: #eff6ff;
+    }
+
+    #${escapedPanelId} .sb-chat-quick:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
   </style>
 
   <div class="sb-chat-panel__header">
@@ -212,7 +261,9 @@ export function renderChatPanel({ clientId, editToken, baseUrl } = {}) {
     <p class="sb-chat-panel__hint">Type or speak what you want changed, then send it to update the site.</p>
   </div>
 
-  <div class="sb-chat-panel__messages" data-sb-messages role="log" aria-live="polite" aria-relevant="additions"></div>
+  <div class="sb-chat-panel__messages" data-sb-messages role="log" aria-live="polite" aria-relevant="additions"><div class="sb-chat-bubble sb-chat-bubble--assistant">${escapedWelcome}</div></div>
+
+  <div class="sb-chat-quick-row" data-sb-quick-row role="group" aria-label="Quick actions">${quickActionChips}</div>
 
   <form class="sb-chat-panel__composer" data-sb-form autocomplete="off">
     <input
@@ -250,6 +301,7 @@ export function renderChatPanel({ clientId, editToken, baseUrl } = {}) {
     var sendButton = root.querySelector("[data-sb-send]");
     var micButton = root.querySelector("[data-sb-mic]");
     var voiceTip = root.querySelector("[data-sb-voice-tip]");
+    var quickRow = root.querySelector("[data-sb-quick-row]");
 
     if (!messages || !form || !input || !sendButton || !micButton || !voiceTip) {
       return;
@@ -268,6 +320,10 @@ export function renderChatPanel({ clientId, editToken, baseUrl } = {}) {
       input.disabled = isBusy;
       if (!micButton.hidden) {
         micButton.disabled = isBusy;
+      }
+      if (quickRow) {
+        var quickButtons = quickRow.querySelectorAll("button");
+        for (var i = 0; i < quickButtons.length; i += 1) quickButtons[i].disabled = isBusy;
       }
     }
 
@@ -342,6 +398,24 @@ export function renderChatPanel({ clientId, editToken, baseUrl } = {}) {
       event.preventDefault();
       sendInstruction(input.value);
     });
+
+    if (quickRow) {
+      quickRow.addEventListener("click", function (event) {
+        var button = event.target && event.target.closest ? event.target.closest("[data-sb-quick-instruction], [data-sb-quick-link]") : null;
+        if (!button || !quickRow.contains(button)) return;
+
+        var link = button.getAttribute("data-sb-quick-link");
+        if (link === "logo-studio") {
+          try {
+            window.open(String(config.baseUrl || "") + "/api/v1/sites/logo-studio", "_blank", "noopener");
+          } catch (_error) {}
+          return;
+        }
+
+        var instruction = button.getAttribute("data-sb-quick-instruction");
+        if (instruction) sendInstruction(instruction);
+      });
+    }
 
     var Recognition = window.webkitSpeechRecognition || window.SpeechRecognition;
 

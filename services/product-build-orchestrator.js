@@ -8,7 +8,7 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { authorAssertionsFromSpec } from '../factory-staging/factory-core/bpb/author-assertions.js';
 import { runBehaviorAssertions } from '../factory-staging/factory-core/sentry/behavior-assertions.js';
 
@@ -22,6 +22,7 @@ export const STEP_STATUS = Object.freeze({
   BUILDING: 'building',
   DONE: 'done',
   BLOCKED: 'blocked',
+  SKIPPED: 'skipped',
   FOUNDER_GATED: 'founder_gated',
 });
 
@@ -77,7 +78,19 @@ function parkBlockedStep(step, queue, info, blockerClass) {
   return entry;
 }
 
-const TERMINAL = new Set([STEP_STATUS.DONE, STEP_STATUS.BLOCKED, STEP_STATUS.FOUNDER_GATED]);
+const TERMINAL = new Set([
+  STEP_STATUS.DONE,
+  STEP_STATUS.BLOCKED,
+  STEP_STATUS.SKIPPED,
+]);
+
+function isHumanHold(step) {
+  if (!step || typeof step !== 'object') return false;
+  return step.human_hold === true
+    || step.pause_for_founder === true
+    || step.gate === 'human_hold'
+    || step.gate === 'pause_for_founder';
+}
 
 /**
  * Locate a product's BUILD_QUEUE.json from its id. Deterministic, no network.
@@ -105,7 +118,11 @@ export function normalizeQueue(raw, sourcePath = null) {
     if (ids.has(s.id)) throw new Error(`duplicate build-queue step id: ${s.id}`);
     ids.add(s.id);
     if (!s.target_file) throw new Error(`step ${s.id} needs a target_file`);
-    if (!s.task) throw new Error(`step ${s.id} needs a task`);
+    // Done/cancelled/skipped steps are history — do not require a rebuild task
+    // (conductor-completed queues were poisoning never-stop discover with parse errors).
+    const status = String(s.status || STEP_STATUS.PENDING).toLowerCase();
+    const terminal = status === 'done' || status === 'cancelled' || status === 'skipped';
+    if (!s.task && !terminal) throw new Error(`step ${s.id} needs a task`);
     if (!s.status) s.status = STEP_STATUS.PENDING;
     if (typeof s.attempts !== 'number') s.attempts = 0;
   }
@@ -159,19 +176,63 @@ export async function evaluateStepExpectations(step, {
     // dirty workspace that already has a later repair (gv-boot-wire false-done class).
     if (commitSha) {
       const { execFileSync } = await import('node:child_process');
-      return execFileSync('git', ['show', `${commitSha}:${relPath}`], {
-        cwd: root,
-        encoding: 'utf8',
-        maxBuffer: 4 * 1024 * 1024,
-      });
+      try {
+        return execFileSync('git', ['show', `${commitSha}:${relPath}`], {
+          cwd: root,
+          encoding: 'utf8',
+          maxBuffer: 4 * 1024 * 1024,
+        });
+      } catch (gitErr) {
+        // Railway shallow clones often lack the object → every assertion becomes
+        // assertion_threw and the step blocks forever. Prefer GitHub Contents API
+        // for that exact SHA; only then fall back to workspace when HEAD matches.
+        const token = process.env.GITHUB_TOKEN || process.env.GH_TOKEN || '';
+        const repo = (process.env.GITHUB_REPO || process.env.GITHUB_REPOSITORY || 'LimitlessOI/Lumin-LifeOS').trim();
+        if (token && repo) {
+          const url = `https://api.github.com/repos/${repo}/contents/${relPath}?ref=${encodeURIComponent(commitSha)}`;
+          const res = await fetch(url, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: 'application/vnd.github.raw',
+              'User-Agent': 'lumin-artifact-proof',
+            },
+          });
+          if (res.ok) return await res.text();
+        }
+        let head = '';
+        try {
+          head = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim();
+        } catch {
+          head = '';
+        }
+        if (head && (head === commitSha || head.startsWith(commitSha) || commitSha.startsWith(head.slice(0, 12)))) {
+          return fs.readFileSync(path.join(root, relPath), 'utf8');
+        }
+        // Railway containers often have no usable .git and GitHub Contents can
+        // 404 on older SHAs. The deployed workspace IS the served tree — read
+        // disk as last resort so artifact proof is not permanently assertion_threw.
+        const abs = path.join(root, relPath);
+        if (fs.existsSync(abs)) {
+          return fs.readFileSync(abs, 'utf8');
+        }
+        const err = new Error(`git_show_failed:${String(gitErr?.message || gitErr).slice(0, 180)}`);
+        throw err;
+      }
     }
     return fs.readFileSync(path.join(root, relPath), 'utf8');
+  };
+
+  const defaultImportModule = async (rel) => {
+    const relPath = String(rel || target).replace(/\\/g, '/');
+    const abs = path.join(root, relPath);
+    if (!fs.existsSync(abs)) return undefined;
+    return import(pathToFileURL(abs).href);
   };
 
   const runner = {
     readFile: typeof readFile === 'function' ? readFile : defaultRead,
     http: typeof http === 'function' ? http : undefined,
-    ...(typeof importModule === 'function' ? { importModule } : {}),
+    importModule: typeof importModule === 'function' ? importModule : defaultImportModule,
   };
 
   // Only run assertions we can prove here. HTTP/DB need live runners — those stay
@@ -200,32 +261,91 @@ export async function evaluateStepExpectations(step, {
   return { ok: true, applicable: true, reason: 'artifact_proof_pass', results };
 }
 
-function depSatisfiedForSelect(depId, doneIds, queue, consumingStep) {
+export function depSatisfiedForSelect(depId, doneIds, queue, consumingStep) {
   if (doneIds.has(depId)) return true;
   // Chicken-egg break: a route step blocked ONLY for missing auto-registration
   // must not strand the register-config step that unblocks it. Allow the
-  // auto-register config step to run when its dep is blocked with that error.
+  // auto-register config step to run when its dep failed functional proof for
+  // that reason — even while still PENDING (before maxAttempts → BLOCKED).
   if (!isAutoRegisterConfigStep(consumingStep)) return false;
   const dep = (queue.steps || []).find((s) => s.id === depId);
-  if (!dep || dep.status !== STEP_STATUS.BLOCKED) return false;
-  return /auto-registered|not auto-registered|module-health|module_not_mounted/i.test(
+  if (!dep) return false;
+  const autoRegErr = /auto-registered|not auto-registered|module-health|module_not_mounted/i.test(
     String(dep.last_error || ''),
   );
+  if (!autoRegErr) return false;
+  if (dep.status === STEP_STATUS.BLOCKED) return true;
+  // Built file exists (commit_sha) but mount proof failed → let register step run now.
+  if (dep.status === STEP_STATUS.PENDING && dep.commit_sha) return true;
+  return false;
 }
 
 /**
  * The next actionable step: first non-terminal, non-gated step whose declared
  * dependencies are all done. Founder-gated steps are surfaced separately so the
  * loop stops re-building work only Adam can clear (the "attempt 35" waste fix).
+ *
+ * Prefer PENDING over recently-revivable BLOCKED work: blocked thrash must not
+ * starve a later pending blueprint step in the same queue.
+ *
+ * Chicken-egg: if the next candidate is a route that already committed but only
+ * failed functional proof for missing auto-registration, prefer the pending
+ * auto-register config sibling instead of rebuilding the route forever.
  */
 export function selectNextStep(queue) {
   const doneIds = new Set(queue.steps.filter((s) => s.status === STEP_STATUS.DONE).map((s) => s.id));
-  const gated = [];
-  for (const step of queue.steps) {
-    if (TERMINAL.has(step.status)) continue;
-    if (step.founder_gated) { gated.push(step); continue; }
+  const gated = queue.steps.filter((s) => {
+    if (s.status === STEP_STATUS.DONE || s.status === STEP_STATUS.BLOCKED || s.status === STEP_STATUS.SKIPPED) return false;
+    return isHumanHold(s);
+  });
+
+  function consider(step) {
+    if (TERMINAL.has(step.status)) return null;
+    if (step.demoted === true || step.status === STEP_STATUS.SKIPPED) return null;
+    if (isHumanHold(step)) return null;
+    if (step.status === STEP_STATUS.FOUNDER_GATED && !isHumanHold(step)) {
+      step.status = STEP_STATUS.PENDING;
+    }
+    if (step.park_until) {
+      const until = Date.parse(step.park_until);
+      if (Number.isFinite(until) && until > Date.now()) return null;
+    }
     const deps = Array.isArray(step.depends_on) ? step.depends_on : [];
-    if (deps.every((d) => depSatisfiedForSelect(d, doneIds, queue, step))) return { step, gated };
+    if (!deps.every((d) => depSatisfiedForSelect(d, doneIds, queue, step))) return null;
+
+    const autoRegErr = /auto-registered|not auto-registered|module-health|module_not_mounted/i.test(
+      String(step.last_error || ''),
+    );
+    if (
+      autoRegErr
+      && step.commit_sha
+      && /^routes\/.+\.(js|mjs)$/.test(String(step.target_file || '').replace(/\\/g, '/'))
+    ) {
+      const registerSibling = (queue.steps || []).find((s) => {
+        if (!isAutoRegisterConfigStep(s)) return false;
+        if (TERMINAL.has(s.status) || isHumanHold(s)) return false;
+        const rDeps = Array.isArray(s.depends_on) ? s.depends_on : [];
+        if (!rDeps.includes(step.id)) return false;
+        return rDeps.every((d) => depSatisfiedForSelect(d, doneIds, queue, s));
+      });
+      if (registerSibling) return registerSibling;
+    }
+
+    return step;
+  }
+
+  // Pass 1: pending/building only — never promote blocked thrash ahead of real work.
+  for (const step of queue.steps) {
+    if (step.status !== STEP_STATUS.PENDING && step.status !== STEP_STATUS.BUILDING) continue;
+    const picked = consider(step);
+    if (picked) return { step: picked, gated };
+  }
+
+  // Pass 2: anything else non-terminal (should be rare).
+  for (const step of queue.steps) {
+    if (step.status === STEP_STATUS.PENDING || step.status === STEP_STATUS.BUILDING) continue;
+    const picked = consider(step);
+    if (picked) return { step: picked, gated };
   }
   return { step: null, gated };
 }
@@ -252,42 +372,94 @@ export function reviveStaleBlockedSteps(queue, {
   const revived = [];
   for (const step of queue.steps) {
     if (step.status !== STEP_STATUS.BLOCKED) continue;
-    if (step.founder_gated) continue;
+    if (isHumanHold(step)) continue;
+    if (step.demoted === true) continue;
+    if (step.park_until) {
+      const until = Date.parse(step.park_until);
+      if (Number.isFinite(until) && until > now) continue;
+    }
     const reviveCount = typeof step.revive_count === 'number' ? step.revive_count : 0;
     const autoRegBlock = /auto-registered|not auto-registered|module-health|module_not_mounted/i.test(
       String(step.last_error || ''),
     );
-    // Auto-register chicken-egg: once the config step can run (or already did),
-    // allow one more revive past the normal cap so the route can prove mount.
-    // Cap auto-reg chicken-egg revives at maxRevives+3 so we don't spin forever.
-    const effectiveMax = autoRegBlock ? maxRevives + 3 : maxRevives;
-    if (reviveCount >= effectiveMax) continue;
+    const artifactToolingBlock = /artifact_proof_failed:\sassertion_threw|codegen_authoring_failed|codegen_empty|codegen_threw|no_codegen_runner|authoring_requires_blueprint_assertions/i.test(
+      String(step.last_error || ''),
+    );
+    const verifyThrash = /^verify_exit_/i.test(String(step.last_error || ''));
+    // Cap thrash hard. Same error after budget → SKIPPED (terminal), stop burning tokens.
+    const effectiveMax = (autoRegBlock || artifactToolingBlock) ? maxRevives + 3 : maxRevives;
+    if (reviveCount >= effectiveMax || (verifyThrash && reviveCount >= 2)) {
+      step.status = STEP_STATUS.SKIPPED;
+      step.demoted = true;
+      step.demoted_at = new Date(now).toISOString();
+      step.demote_reason = `revive_exhausted:${String(step.last_error || 'unknown').slice(0, 160)}`;
+      continue;
+    }
     const lastAt = Date.parse(step.last_attempt_at || step.completed_at || '');
     const waited = Number.isFinite(lastAt) ? now - lastAt : Infinity;
-    if (waited < cooldownMs && !autoRegBlock) continue;
-    // For auto-reg blocks, still respect a short cooldown unless a sibling
-    // register-config step is pending/done (fix is in flight or landed).
-    if (autoRegBlock && waited < cooldownMs) {
-      const registerSibling = (queue.steps || []).find(
-        (s) => isAutoRegisterConfigStep(s) && s.status !== STEP_STATUS.BLOCKED,
-      );
-      if (!registerSibling) continue;
+    // Auto-reg chicken-egg: ONLY revive when THIS route's register sibling is DONE.
+    // (Bug was: any done register unlocked every auto-reg-blocked route → eternal thrash.)
+    if (autoRegBlock) {
+      const registerDone = (queue.steps || []).find((s) => {
+        if (!isAutoRegisterConfigStep(s) || s.status !== STEP_STATUS.DONE) return false;
+        const rDeps = Array.isArray(s.depends_on) ? s.depends_on : [];
+        return rDeps.includes(step.id);
+      });
+      if (!registerDone) continue;
+    } else if (waited < cooldownMs && !artifactToolingBlock) {
+      continue;
     }
+    if (artifactToolingBlock && waited < Math.min(cooldownMs, 60_000)) continue;
     step.status = STEP_STATUS.PENDING;
     step.attempts = 0;
     step.revive_count = reviveCount + 1;
     step.revived_at = new Date(now).toISOString();
+    // Strip stale runtime evidence (commit/proof timestamps) but preserve the
+    // previous failure message so the codegen retry prompt can see exactly what
+    // SENTRY reported last time.
+    const previousLastError = step.last_error;
+    step.commit_sha = null;
+    step.built_sha = null;
+    step.proof = null;
+    step.last_error = previousLastError;
+    step.last_attempt = null;
+    step.last_attempt_at = null;
+    step.demoted = false;
+    step.demote_reason = null;
+    step.demoted_at = null;
+    step.park_until = null;
+    step.no_op = null;
+    step.pre_existing = null;
+    step.blocker_class = null;
+    step.claim_level = null;
+    step.blocker_type = null;
+    step.blocker_resolution = null;
     revived.push(step.id);
   }
   return revived;
 }
 
 export function queueSummary(queue) {
-  const by = { pending: 0, building: 0, done: 0, blocked: 0, founder_gated: 0 };
+  const by = {
+    pending: 0,
+    building: 0,
+    done: 0,
+    blocked: 0,
+    founder_gated: 0,
+    design_review_flagged: 0,
+    human_hold: 0,
+  };
   for (const s of queue.steps) {
-    const bucket = (s.founder_gated && s.status !== STEP_STATUS.DONE && s.status !== STEP_STATUS.BLOCKED)
-      ? STEP_STATUS.FOUNDER_GATED
-      : s.status;
+    if (isHumanHold(s) && s.status !== STEP_STATUS.DONE && s.status !== STEP_STATUS.BLOCKED) {
+      by.human_hold += 1;
+      by.founder_gated += 1;
+      continue;
+    }
+    if (s.design_review_flagged && s.status !== STEP_STATUS.DONE && s.status !== STEP_STATUS.BLOCKED) {
+      by.design_review_flagged += 1;
+      continue;
+    }
+    const bucket = s.status;
     by[bucket] = (by[bucket] || 0) + 1;
   }
   const total = queue.steps.length;

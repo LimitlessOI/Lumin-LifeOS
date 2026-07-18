@@ -6,7 +6,7 @@
 **Parent platform:** Lumin / LifeOS ecosystem  
 **Constitutional law:** `docs/constitution/NORTH_STAR_SSOT.md`  
 **Machine manifest:** `docs/products/limitlessos/FILE_MANIFEST.json`  
-**Last Updated:** 2026-07-09 — Go Vegas gv-status-route marked done (live `/scheduler`); stop never-stop queue-status thrash.
+**Last Updated:** 2026-07-11 — Go Vegas manual `POST /api/v1/go-vegas/prospects/seed` (no Places key required to enqueue leads).
 
 | Field | Value |
 |-------|-------|
@@ -197,6 +197,7 @@ Together: AI handles repetitive, disconnected, administrative work — humans fo
 
 | Date | What | Why |
 |------|------|-----|
+| 2026-07-11 | **Go Vegas manual seed** — `POST /api/v1/go-vegas/prospects/seed` + export `upsertProspect`. Lets conductor enqueue LV leads without `GOOGLE_PLACES_KEY`. Invites still need Postmark approval for external domains. | Adam: path to money — Places key missing; seed unblocks pipeline fill. |
 | 2026-07-09 | **gv-status-route DONE** — `GET /api/v1/go-vegas/scheduler` is live via founder-runtime `createGoVegasOutreachRoutes` (not auto-register). Cleared false `blocked` so never-stop stops thrashing queue-status commits that race founder builds. | A→Z trust — commit races were failing drawer builds with "Reference cannot be updated". |
 | 2026-07-09 | **Go Vegas verify_script** — `scripts/verify-go-vegas-scheduler.mjs` (exports + useful-work-guard contract + boot wire + live `/scheduler`). | Close false-done on revenue slice; never-stop must re-gate after build. |
 | 2026-07-09 | **Go Vegas revenue loop closed (scheduler + boot + status)** — never-stop authored `services/go-vegas-outreach-scheduler.js` but misused `createUsefulWorkGuard` (no `shouldRun`); conductor GAP-FILL rewrote it to the real guard contract, wired `startGoVegasOutreachScheduler` in founder runtime, and exposed `GET /api/v1/go-vegas/scheduler`. Queue steps gv-scheduler/boot-wire/status marked done. | Adam: do that while it's building — fix self-repair blockers and finish the revenue slice in parallel. |

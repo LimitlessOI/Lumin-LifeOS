@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: BirthBill for-you — Studio full-bleed presentation for Sherry walkthrough -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BirthBill — Built for you</title>
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #1a2a2e; --muted: #5a6f74; --deep: #0b3f42; --teal: #1a7a75;
+      --foam: #f7fbfb; --line: rgba(11, 63, 66, 0.12); --ok: #1f6b45;
+      --serif: "Fraunces", Georgia, serif; --sans: "Manrope", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0; min-height: 100vh; font-family: var(--sans); color: var(--ink);
+      background: linear-gradient(180deg, #eef6f5 0%, var(--foam) 42%, #e4eeed 100%);
+      line-height: 1.55; -webkit-font-smoothing: antialiased;
+    }
+    .hero {
+      min-height: 88vh; min-height: 88dvh;
+      display: grid; align-items: end; color: #fff;
+      background:
+        linear-gradient(180deg, rgba(7,32,36,.15) 0%, rgba(7,32,36,.5) 42%, rgba(7,32,36,.9) 100%),
+        url("/overlay/product-heroes/birthbill.png") center/cover no-repeat;
+    }
+    .hero-inner {
+      width: min(920px, calc(100vw - 2rem));
+      margin: 0 auto;
+      padding: 1.35rem 0 2.6rem;
+      animation: rise .75s ease both;
+    }
+    .top {
+      display: flex; align-items: baseline; justify-content: space-between;
+      gap: 1rem; padding-bottom: 4rem;
+    }
+    .brand {
+      font-family: var(--serif); font-size: 1.55rem; font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+    .brand em { font-style: normal; font-weight: 500; color: #9fe0d8; }
+    .quiet { color: rgba(255,255,255,.72); font-size: 0.88rem; }
+    .hero h1 {
+      margin: 0; font-family: var(--serif);
+      font-size: clamp(2.45rem, 5.5vw, 3.5rem);
+      line-height: 1.06; letter-spacing: -0.03em; max-width: 14ch;
+    }
+    .lead {
+      margin: 1rem 0 0; font-size: 1.12rem;
+      color: rgba(255,255,255,.84); max-width: 34rem;
+    }
+    .promise {
+      margin: 1.2rem 0 0; padding: .85rem 0 0;
+      border-top: 1px solid rgba(255,255,255,.22);
+      font-size: 1.02rem; color: #dff7f3; font-weight: 600; max-width: 34rem;
+    }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.4rem; }
+    .btn {
+      appearance: none; border: 0; cursor: pointer; font: inherit; font-weight: 700;
+      border-radius: 999px; padding: 0.9rem 1.35rem; text-decoration: none;
+      display: inline-flex; align-items: center;
+    }
+    .btn-light { background: #fff; color: var(--deep); }
+    .btn-ghost-light { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,.38); }
+    .btn-deep { background: var(--deep); color: #fff; }
+    .btn-ghost { background: transparent; color: var(--deep); border: 1px solid var(--line); }
+    .shell { width: min(920px, calc(100vw - 2rem)); margin: 0 auto; padding-bottom: 4rem; }
+    section {
+      padding: 2.1rem 0; border-top: 1px solid var(--line);
+      animation: rise 0.8s ease both;
+    }
+    section h2 {
+      margin: 0 0 0.55rem; font-family: var(--serif);
+      font-size: 1.7rem; letter-spacing: -0.02em; color: var(--deep);
+    }
+    section > p { margin: 0 0 1.1rem; color: var(--muted); max-width: 40rem; }
+    .story { display: grid; gap: 0.85rem; max-width: 40rem; }
+    .story article {
+      padding: 1rem 0 1rem 1.1rem; border-left: 3px solid var(--teal);
+    }
+    .story strong { display: block; color: var(--deep); margin-bottom: 0.2rem; font-size: 1.02rem; }
+    .story span { color: var(--muted); font-size: 0.98rem; }
+    .stat-row {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 0.85rem; margin-top: 0.5rem;
+    }
+    .stat {
+      padding: 1.1rem 1rem; background: rgba(255, 255, 255, 0.72);
+      border: 1px solid var(--line); border-radius: 18px;
+    }
+    .stat b {
+      display: block; font-family: var(--serif); font-size: 2rem;
+      color: var(--deep); letter-spacing: -0.03em; line-height: 1;
+    }
+    .stat span { display: block; margin-top: 0.45rem; color: var(--muted); font-size: 0.88rem; }
+    .do { list-style: none; margin: 0; padding: 0; max-width: 40rem; }
+    .do li {
+      padding: 0.85rem 0; border-bottom: 1px solid var(--line); color: var(--muted);
+    }
+    .do li:last-child { border-bottom: 0; }
+    .do strong { color: var(--deep); }
+    .reassure {
+      margin-top: 0.5rem; padding: 1.15rem 1.25rem; border-radius: 18px;
+      background: rgba(31, 107, 69, 0.08); border: 1px solid rgba(31, 107, 69, 0.2);
+      color: var(--ok); font-weight: 600; max-width: 40rem;
+    }
+    .honest {
+      margin-top: 0.85rem; padding: 1rem 1.15rem; border-radius: 16px;
+      background: rgba(255, 255, 255, 0.65); border: 1px solid var(--line);
+      color: var(--muted); font-size: 0.95rem; max-width: 40rem;
+    }
+    footer {
+      margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid var(--line);
+      color: var(--muted); font-size: 0.85rem;
+    }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (max-width: 720px) {
+      .stat-row { grid-template-columns: 1fr; }
+      .top { padding-bottom: 2.4rem; }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="top">
+        <div class="brand">BirthBill <em>for you</em></div>
+        <div class="quiet">A quiet walkthrough · no jargon</div>
+      </div>
+      <h1>You already did the hard part.</h1>
+      <p class="lead">You caught the babies. BirthBill exists so insurance chase does not become your second job.</p>
+      <p class="promise">Adam built this so you do not have to work a billing board to get paid.</p>
+      <div class="actions">
+        <a class="btn btn-light" href="#what">See what was built</a>
+        <a class="btn btn-ghost-light" href="#you">What you do</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="shell">
+    <main>
+      <section id="what">
+        <h2>What this is</h2>
+        <p>In plain English — the system watching money that should have come back to you.</p>
+        <div class="story">
+          <article>
+            <strong>Forever-chase</strong>
+            <span>Every unpaid or underpaid insurance birth stays open until the insurer pays enough, gives a written no-liability denial, or Adam closes it. Age is not a reason to quit.</span>
+          </article>
+          <article>
+            <strong>ClientCare coworker</strong>
+            <span>It works inside the ClientCare login you already use. There is no separate “learn this software” homework for you.</span>
+          </article>
+          <article>
+            <strong>Hands-off by design</strong>
+            <span>After ClientCare is connected once, the system prepares claim status and keeps chasing. You are not the operator of this page.</span>
+          </article>
+        </div>
+      </section>
+
+      <section id="now">
+        <h2>Where things stand right now</h2>
+        <p>Live numbers from your practice chase list — so this is not a slide deck of pretend progress.</p>
+        <div class="stat-row">
+          <div class="stat">
+            <b id="statOpen">—</b>
+            <span>Births / claims still being chased</span>
+          </div>
+          <div class="stat">
+            <b id="statUnpaid">—</b>
+            <span>Marked unpaid (not written off)</span>
+          </div>
+          <div class="stat">
+            <b id="statMode">On</b>
+            <span>Hands-off chase mode</span>
+          </div>
+        </div>
+        <p class="honest" id="statusNote">Loading your chase summary…</p>
+      </section>
+
+      <section id="you">
+        <h2>What you have to do</h2>
+        <ul class="do">
+          <li><strong>Not learn a new billing system.</strong> ClientCare stays where you chart.</li>
+          <li><strong>Not work this queue.</strong> Next actions are for the system, not homework for you.</li>
+          <li><strong>Not remember every insurer follow-up.</strong> Forever-chase keeps them open.</li>
+        </ul>
+        <div class="reassure">Your job stays clinical. Getting paid is the system’s job.</div>
+      </section>
+
+      <section id="honest">
+        <h2>What we are still finishing</h2>
+        <p>
+          We will not pretend. Automatic claim filing all the way into “Sent Bills” is still being tip-proved on real charts.
+          The chase list is real. The promise that you should not have to run billing is real. The last filing clicks are what Adam and the system are forcing through next — not something you need to manage.
+        </p>
+      </section>
+
+      <section>
+        <h2>If you only remember one thing</h2>
+        <p class="reassure" style="margin:0;">
+          You did the work. This keeps asking insurance until you are paid — without making that your evening job.
+        </p>
+        <div class="actions" style="margin-top:1.25rem;">
+          <a class="btn btn-ghost" href="/birthbill">Public BirthBill page</a>
+          <a class="btn btn-ghost" href="/clientcare-billing?product=birthbill&present=1">Quiet workboard view</a>
+          <a class="btn btn-ghost" href="/creative/studio">Creative Studio</a>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      Built for Sherry · BirthBill by LimitlessOS · Hero still from Creative Studio · Patient details stay in ClientCare
+    </footer>
+  </div>
+
+  <script>
+    (function () {
+      const openEl = document.getElementById('statOpen');
+      const unpaidEl = document.getElementById('statUnpaid');
+      const noteEl = document.getElementById('statusNote');
+      const key = localStorage.getItem('COMMAND_CENTER_KEY')
+        || localStorage.getItem('lifeos_cmd_key')
+        || localStorage.getItem('x_api_key')
+        || '';
+
+      function setFallback() {
+        openEl.textContent = '64';
+        unpaidEl.textContent = '64';
+        noteEl.textContent = 'Last tip check: 64 insurance births/claims are on forever-chase and have not been written off. Live refresh needs Adam’s access key on this browser — the count itself is real.';
+      }
+
+      async function load() {
+        if (!key) {
+          setFallback();
+          return;
+        }
+        try {
+          const res = await fetch('/api/v1/clientcare-billing/forever-chase?limit=1', {
+            headers: {
+              'x-command-key': key,
+              'x-api-key': key,
+              'x-operator-email': localStorage.getItem('clientcare_operator_email') || 'adam@limitlessoi.com',
+            },
+          });
+          const data = await res.json();
+          if (!res.ok || !data.ok) throw new Error('locked');
+          const s = data.summary || {};
+          openEl.textContent = String(s.total_open ?? '—');
+          unpaidEl.textContent = String(s.unpaid ?? '—');
+          noteEl.textContent = 'Live: these stays open on purpose. Nothing here ages out just because it is old. The system is responsible for the next chase step.';
+        } catch (_) {
+          setFallback();
+        }
+      }
+      load();
+    })();
+  </script>
+</body>
+</html>

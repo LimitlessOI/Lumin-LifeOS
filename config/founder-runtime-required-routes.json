@@ -12,6 +12,7 @@
     { "method": "GET", "path": "/api/v1/lifeos/commitments", "critical": true, "source": "auto-register", "note": "Dashboard MITs" },
     { "method": "GET", "path": "/api/v1/lifeos/briefing/today", "critical": true, "source": "auto-register", "note": "Dashboard calendar" },
     { "method": "GET", "path": "/api/v1/lifeos/dashboard/scoreboard", "critical": true, "source": "auto-register", "note": "Dashboard scores" },
+    { "method": "GET", "path": "/api/v1/tc/status", "critical": true, "source": "explicit", "note": "TC portal smoke — founder lane must mount createTCRoutes" },
     { "method": "GET", "path": "/api/v1/lifeos/never-stop/status", "critical": true, "source": "explicit" },
     { "method": "GET", "path": "/api/v1/lifeos/provider-key-health", "critical": false, "source": "explicit" }
   ]

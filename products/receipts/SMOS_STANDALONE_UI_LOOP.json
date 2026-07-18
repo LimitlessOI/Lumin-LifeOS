@@ -1,0 +1,15 @@
+{
+  "ok": true,
+  "proved_at": "2026-07-11T20:05:00.000Z",
+  "deploy_commit_sha_at_test": "6872a95cbc543aeb606d09214d79c501a0d8f1da",
+  "surface": "https://…/marketing (standalone, not LifeOS iframe)",
+  "session_id": "498db989-b92b-4256-b9cd-71b21698c1a6",
+  "assertions": [
+    { "name": "standalone_home", "ok": true, "details": "/marketing 200; no in-lifeos-shell; not in iframe" },
+    { "name": "consent_start", "ok": true },
+    { "name": "coach_extract_generate", "ok": true, "details": "landed on /content with draft pieces" },
+    { "name": "approve", "ok": true, "details": "1 approved" },
+    { "name": "export", "ok": true, "details": "Download started." }
+  ],
+  "honesty": "KNOW — driven as top-level /marketing app in browser (inIframe:false, standalone:true)."
+}

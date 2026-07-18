@@ -1,0 +1,633 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "lifere",
+  "planned_at": "2026-07-13T13:41:44.982Z",
+  "backlog_signature": "b887ae416099c233",
+  "corpus_sources": [
+    "docs/products/lifere/PRODUCT_HOME.md",
+    "docs/products/lifere/AGENTS.md",
+    "docs/products/lifere/FOUNDER_USABILITY_CONTRACT.md"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "status": "done",
+      "target_file": "services/quoteService.js",
+      "task": "confirm PASS quote",
+      "spec": "Service that confirms a quote has passed the validation requirements.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "commit_sha": "b6f82d39f12da3e00ffa99f927235034298910f1",
+      "last_attempt_at": "2026-07-13T13:46:49.446Z",
+      "completed_at": "2026-07-13T13:46:58.363Z",
+      "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "1",
+      "mission_id": "PRODUCT-lifere"
+    },
+    {
+      "id": "2",
+      "status": "done",
+      "target_file": "db/migrations/20231010_create_boldtrail_contacts_table.sql",
+      "task": "create BoldTrail contact table",
+      "spec": "SQL migration to create a database table for BoldTrail contacts if it doesn't already exist, incl. columns for contact details.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "commit_sha": "e322035549726463063202acfbffd83ea8f0b536",
+      "last_attempt_at": "2026-07-13T13:47:52.897Z",
+      "completed_at": "2026-07-13T13:48:08.290Z",
+      "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "2",
+      "mission_id": "PRODUCT-lifere"
+    },
+    {
+      "id": "3",
+      "status": "done",
+      "target_file": "services/boldTrailContactCleanupService.js",
+      "task": "optional BoldTrail test contact cleanup",
+      "spec": "Service to check and clean up test contacts from the BoldTrail contact table.",
+      "depends_on": [
+        "2"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "commit_sha": "e9059ced8a838e754e775206ed4fd02b7165eab2",
+      "last_attempt_at": "2026-07-13T13:54:33.270Z",
+      "completed_at": "2026-07-13T13:55:01.129Z",
+      "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "3",
+      "mission_id": "PRODUCT-lifere"
+    },
+    {
+      "id": "4",
+      "status": "done",
+      "target_file": "routes/quoteRoutes.js",
+      "task": "register quote routes",
+      "spec": "Route module that registers API endpoints for confirming PASS quotes.",
+      "depends_on": [
+        "1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "commit_sha": "1021ae1828af89f5e969a019cb0ce9c912866bb2",
+      "last_attempt_at": null,
+      "last_error": null,
+      "expected_exports": [
+        "registerQuoteRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/quotes/pass"
+      },
+      "revive_count": 0,
+      "revived_at": "2026-07-14T20:48:19.718Z",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-14T20:48:23.488Z",
+      "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "4",
+      "mission_id": "PRODUCT-lifere"
+    },
+    {
+      "id": "5",
+      "status": "done",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "add quote routes to auto-registration",
+      "spec": "Entry in JSON config to auto-register the quoteRoutes module.",
+      "depends_on": [
+        "4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-14T17:42:11.190Z",
+      "commit_sha": "671a6a87932c0ffd06c619192c58c1ba0b2cf74d",
+      "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "5",
+      "mission_id": "PRODUCT-lifere"
+    },
+    {
+      "id": "6",
+      "status": "done",
+      "target_file": "services/cleanUpBoldTrailService.js",
+      "task": "implement optional cleanup logic",
+      "spec": "Implement the logic to optionally clean up BoldTrail test contacts. The service should allow for cleaning to be enabled or disabled through a flag.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "cleanUpTestContacts",
+        "setCleanupFlag"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/cleanUpBoldTrailService.js",
+          "exports": [
+            "cleanUpTestContacts",
+            "setCleanupFlag"
+          ],
+          "assertion_id": "expected_exports:services/cleanUpBoldTrailService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:41:23.798Z",
+      "commit_sha": "1e9bed38f179b9f495236ea67cae620abfe9afb2",
+      "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "6",
+      "mission_id": "PRODUCT-lifere"
+    },
+    {
+      "id": "7",
+      "status": "done",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register new product modules",
+      "spec": "Add new service and routes files to auto-registered product modules config.",
+      "depends_on": [
+        "2",
+        "4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:03:56.188Z",
+      "commit_sha": "8087c941e190d29a779ede8695edf79ec37f93d3",
+      "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "7",
+      "mission_id": "PRODUCT-lifere"
+    },
+    {
+      "id": "step1",
+      "status": "done",
+      "target_file": "services/passQuoteService.js",
+      "task": "implement PASS quote confirmation",
+      "spec": "Create a service to confirm PASS quotes by integrating existing quote validation logic and exposing confirmation functionality.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "confirmPASSQuote"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/quote/pass-confirm"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/passQuoteService.js",
+          "exports": [
+            "confirmPASSQuote"
+          ],
+          "assertion_id": "expected_exports:services/passQuoteService.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "5335244ef630f51ea15becdbf08bb351636ce3b0",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T05:11:58.215Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:13:04.885Z",
+      "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step1",
+      "mission_id": "PRODUCT-lifere"
+    },
+    {
+      "id": "step2",
+      "status": "done",
+      "target_file": "routes/passQuoteRoutes.js",
+      "task": "create route for PASS quote confirmation",
+      "spec": "Expose an HTTP POST route for confirming PASS quotes using the service created in step 1.",
+      "depends_on": [
+        "step1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPASSQuoteRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/lifeos/quote/pass-confirm"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/passQuoteRoutes.js",
+          "exports": [
+            "registerPASSQuoteRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/passQuoteRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:18:37.654Z",
+      "commit_sha": "799a4a15ee16014a19b46c88ce7e490874f41b42",
+      "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step2",
+      "mission_id": "PRODUCT-lifere"
+    },
+    {
+      "id": "step3",
+      "status": "done",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register pass quote routes",
+      "spec": "Add the pass quote route module to auto-registered product modules for seamless integration.",
+      "depends_on": [
+        "step2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "route": {
+        "path": "/api/v1/lifeos/quote/pass-confirm"
+      },
+      "file_contains": [
+        "passQuoteRoutes"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:22:21.873Z",
+      "commit_sha": "b35c6386d4867172f804c9337cde97c3f95d6eb8",
+      "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step3",
+      "mission_id": "PRODUCT-lifere"
+    },
+    {
+      "id": "step4",
+      "status": "done",
+      "target_file": "services/optionalBoldTrailContactCleanupService.js",
+      "task": "implement optional BoldTrail test contact cleanup",
+      "spec": "Create a service to optionally clean up BoldTrail test contacts using existing cleanup logic.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "optionalCleanup"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/boldtrail/optional-cleanup"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/optionalBoldTrailContactCleanupService.js",
+          "exports": [
+            "optionalCleanup"
+          ],
+          "assertion_id": "expected_exports:services/optionalBoldTrailContactCleanupService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:21:17.879Z",
+      "commit_sha": "35b6c845b6fbf2e85d55ff366edcbe49c0f03f2b",
+      "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step4",
+      "mission_id": "PRODUCT-lifere"
+    },
+    {
+      "id": "step5",
+      "status": "done",
+      "target_file": "routes/optionalBoldTrailContactCleanupRoutes.js",
+      "task": "create route for optional BoldTrail contact cleanup",
+      "spec": "Expose an HTTP POST route for optionally cleaning up BoldTrail test contacts using the service created in step 4.",
+      "depends_on": [
+        "step4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerOptionalBoldTrailContactCleanupRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/lifeos/boldtrail/optional-cleanup"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/optionalBoldTrailContactCleanupRoutes.js",
+          "exports": [
+            "registerOptionalBoldTrailContactCleanupRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/optionalBoldTrailContactCleanupRoutes.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "c9635c799385879a9e506d62950101d23f2d3f44",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T05:59:01.425Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:01:16.678Z",
+      "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step5",
+      "mission_id": "PRODUCT-lifere"
+    },
+    {
+      "id": "step6",
+      "status": "blocked",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register optional boldtrail contact cleanup routes",
+      "spec": "Add the optional BoldTrail contact cleanup route module to auto-registered product modules for seamless integration.",
+      "depends_on": [
+        "step5"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "route": {
+        "path": "/api/v1/lifeos/boldtrail/optional-cleanup"
+      },
+      "file_contains": [
+        "optionalBoldTrailContactCleanupRoutes"
+      ],
+      "last_attempt_at": "2026-07-17T17:59:18.897Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 6,
+      "revived_at": "2026-07-17T17:58:35.688Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step6",
+      "mission_id": "PRODUCT-lifere"
+    },
+    {
+      "id": "lifere-1",
+      "status": "done",
+      "target_file": "services/adamFounderSessionService.js",
+      "task": "implement Adam founder session",
+      "spec": "Implement a service to handle Adam founder sessions, enabling interaction with the founder through predefined protocols and algorithms.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "startFounderSession"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/adamFounderSessionService.js",
+          "exports": [
+            "startFounderSession"
+          ],
+          "assertion_id": "expected_exports:services/adamFounderSessionService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:13:37.279Z",
+      "commit_sha": "219b424df44837d0b8f6d0a7768f709433c250b6",
+      "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifere-1",
+      "mission_id": "PRODUCT-lifere"
+    },
+    {
+      "id": "lifere-2",
+      "status": "done",
+      "target_file": "routes/adamFounderSessionRoutes.js",
+      "task": "create routes for Adam founder session",
+      "spec": "Define HTTP routes for managing Adam founder sessions, including initiation and termination endpoints, ensuring secure communication.",
+      "depends_on": [
+        "lifere-1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerAdamFounderSessionRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/lifeos/founder/session"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/adamFounderSessionRoutes.js",
+          "exports": [
+            "registerAdamFounderSessionRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/adamFounderSessionRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:17:42.530Z",
+      "commit_sha": "225059e0eda18e7b07839c70e572df792507bbfc",
+      "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifere-2",
+      "mission_id": "PRODUCT-lifere"
+    },
+    {
+      "id": "lifere-3",
+      "status": "done",
+      "target_file": "services/confirmPassQuoteService.js",
+      "task": "implement confirm PASS quote",
+      "spec": "Provide a service to confirm PASS quotes, interacting with the quote service to validate and approve the given quotes.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "confirmPassQuote"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/confirmPassQuoteService.js",
+          "exports": [
+            "confirmPassQuote"
+          ],
+          "assertion_id": "expected_exports:services/confirmPassQuoteService.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "ab92b23de2db50edcd5b2d00cbd9069383ac7c3d",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T07:23:41.480Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T07:28:04.361Z",
+      "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifere-3",
+      "mission_id": "PRODUCT-lifere"
+    },
+    {
+      "id": "lifere-4",
+      "status": "done",
+      "target_file": "routes/confirmPassQuoteRoutes.js",
+      "task": "create routes for confirming PASS quote",
+      "spec": "Define HTTP routes for confirming PASS quotes, including endpoints to handle submission and confirmation logic for PASS quotes securely.",
+      "depends_on": [
+        "lifere-3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerConfirmPassQuoteRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/lifeos/passquote/confirm"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/confirmPassQuoteRoutes.js",
+          "exports": [
+            "registerConfirmPassQuoteRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/confirmPassQuoteRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T07:31:27.422Z",
+      "commit_sha": "414e41d888afcb26d83d1355587946c9b6da352d",
+      "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifere-4",
+      "mission_id": "PRODUCT-lifere"
+    },
+    {
+      "id": "lifere-5",
+      "status": "done",
+      "target_file": "services/optionalBoldTrailTestContactCleanupService.js",
+      "task": "implement optional BoldTrail test contact cleanup",
+      "spec": "Provide a service to optionally clean up test contacts in the BoldTrail context, ensuring no unnecessary data persists within the environment.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "cleanupTestContacts"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/optionalBoldTrailTestContactCleanupService.js",
+          "exports": [
+            "cleanupTestContacts"
+          ],
+          "assertion_id": "expected_exports:services/optionalBoldTrailTestContactCleanupService.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "bd1af59444e2310152f571068e8804c9c8dfa473",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T07:04:23.688Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T07:09:05.765Z",
+      "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifere-5",
+      "mission_id": "PRODUCT-lifere"
+    },
+    {
+      "id": "lifere-6",
+      "status": "done",
+      "target_file": "routes/optionalBoldTrailTestContactCleanupRoutes.js",
+      "task": "create routes for optional BoldTrail test contact cleanup",
+      "spec": "Define HTTP routes for the optional cleanup of BoldTrail test contacts, providing secure and efficient endpoints for executing cleanup operations on test data.",
+      "depends_on": [
+        "lifere-5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerOptionalBoldTrailTestContactCleanupRoutes"
+      ],
+      "route": {
+        "method": "DELETE",
+        "path": "/api/v1/lifeos/boldtrail/testcontacts/cleanup"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/optionalBoldTrailTestContactCleanupRoutes.js",
+          "exports": [
+            "registerOptionalBoldTrailTestContactCleanupRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/optionalBoldTrailTestContactCleanupRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T07:13:23.443Z",
+      "commit_sha": "3a74d15061c3aa62e6d5dbd2db466fc3b5d2bf95",
+      "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifere-6",
+      "mission_id": "PRODUCT-lifere"
+    }
+  ],
+  "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-lifere",
+  "twin_kind": "product_build_queue_registered"
+}

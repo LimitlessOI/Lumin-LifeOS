@@ -1,0 +1,338 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "clientcare-billing-recovery",
+  "planned_at": "2026-07-15T07:23:33.787Z",
+  "backlog_signature": "2dd8e6068b3d1535",
+  "corpus_sources": [
+    "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md",
+    "docs/products/clientcare-billing-recovery/AGENTS.md",
+    "docs/products/clientcare-billing-recovery/BILLING_UI_MAP.md"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "status": "done",
+      "target_file": "services/importPayerList.js",
+      "task": "import payer list",
+      "spec": "Imports the payer list for the 90 claims from external source; confirmed to unblock repo ingestion.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "importPayerList"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/importPayerList.js",
+          "exports": [
+            "importPayerList"
+          ],
+          "assertion_id": "expected_exports:services/importPayerList.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T07:25:40.810Z",
+      "commit_sha": "493bb4ef509d5c7eb73a07d6a7ed95e4aed10d3b",
+      "blueprint_id": "PRODUCT-CLIENTCARE-BILLING-RECOVERY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "1",
+      "mission_id": "PRODUCT-clientcare-billing-recovery"
+    },
+    {
+      "id": "2",
+      "status": "done",
+      "target_file": "services/ingestClaims.js",
+      "task": "ingest claim exports",
+      "spec": "Processes claim exports from ClientCare for validation; prepares them for subsequent operations.",
+      "depends_on": [
+        "1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "ingestClaims"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/ingestClaims.js",
+          "exports": [
+            "ingestClaims"
+          ],
+          "assertion_id": "expected_exports:services/ingestClaims.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T07:26:36.658Z",
+      "commit_sha": "b953f07a6b8795230985796a20fff5bf2b7250f5",
+      "blueprint_id": "PRODUCT-CLIENTCARE-BILLING-RECOVERY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "2",
+      "mission_id": "PRODUCT-clientcare-billing-recovery"
+    },
+    {
+      "id": "3",
+      "status": "done",
+      "target_file": "services/importERAHistory.js",
+      "task": "import ERA/remit history",
+      "spec": "Processes and imports ERA/remit history to boost payout forecasting confidence.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "importERAHistory"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/importERAHistory.js",
+          "exports": [
+            "importERAHistory"
+          ],
+          "assertion_id": "expected_exports:services/importERAHistory.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T07:28:43.247Z",
+      "commit_sha": "7f1339e5db6e89ceb5dd564b74b8592820234a32",
+      "blueprint_id": "PRODUCT-CLIENTCARE-BILLING-RECOVERY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "3",
+      "mission_id": "PRODUCT-clientcare-billing-recovery"
+    },
+    {
+      "id": "4",
+      "status": "done",
+      "target_file": "services/confirmClientCareApiAccess.js",
+      "task": "confirm API access",
+      "spec": "Confirms access to ClientCare API to enable backend service calls.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "confirmClientCareApiAccess"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/confirmClientCareApiAccess.js",
+          "exports": [
+            "confirmClientCareApiAccess"
+          ],
+          "assertion_id": "expected_exports:services/confirmClientCareApiAccess.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T07:29:38.047Z",
+      "commit_sha": "44daf205673d027a121094422094e1a9f90fe693",
+      "blueprint_id": "PRODUCT-CLIENTCARE-BILLING-RECOVERY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "4",
+      "mission_id": "PRODUCT-clientcare-billing-recovery"
+    },
+    {
+      "id": "5",
+      "status": "done",
+      "target_file": "routes/confirmApiAccessRoute.js",
+      "task": "create API access confirmation route",
+      "spec": "Exposes a route to initiate and confirm ClientCare API access.",
+      "depends_on": [
+        "4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerApiAccessRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/clientcare/access-confirmation"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/confirmApiAccessRoute.js",
+          "exports": [
+            "registerApiAccessRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/confirmApiAccessRoute.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T07:30:03.107Z",
+      "commit_sha": "f5137085de94cb7c0147063e788c743331df7ba1",
+      "blueprint_id": "PRODUCT-CLIENTCARE-BILLING-RECOVERY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "5",
+      "mission_id": "PRODUCT-clientcare-billing-recovery"
+    },
+    {
+      "id": "6",
+      "status": "done",
+      "target_file": "services/hardenFieldTargeting.js",
+      "task": "harden field targeting",
+      "spec": "Finalizes field targeting for multi-coverage payer-order changes across ClientCare layouts.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "hardenFieldTargeting"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/hardenFieldTargeting.js",
+          "exports": [
+            "hardenFieldTargeting"
+          ],
+          "assertion_id": "expected_exports:services/hardenFieldTargeting.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T07:30:24.946Z",
+      "commit_sha": "032af609d3283256fc5ee9b6b20e1625f666f8a1",
+      "blueprint_id": "PRODUCT-CLIENTCARE-BILLING-RECOVERY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "6",
+      "mission_id": "PRODUCT-clientcare-billing-recovery"
+    },
+    {
+      "id": "7",
+      "status": "done",
+      "target_file": "routes/getRecentBirths.js",
+      "task": "resolve recent births",
+      "spec": "Fetches and processes recent births using async polling to access billing references.",
+      "depends_on": [
+        "6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerBirthRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/clientcare/recent-births"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/getRecentBirths.js",
+          "exports": [
+            "registerBirthRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/getRecentBirths.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T07:31:09.390Z",
+      "commit_sha": "697afaf4a4480b3705ea28c9eadbfbbb17931ea8",
+      "blueprint_id": "PRODUCT-CLIENTCARE-BILLING-RECOVERY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "7",
+      "mission_id": "PRODUCT-clientcare-billing-recovery"
+    },
+    {
+      "id": "8",
+      "status": "done",
+      "target_file": "routes/prepareClaimStatus.js",
+      "task": "prepare claim status",
+      "spec": "Prepares claim status updates for claims processing after births are resolved.",
+      "depends_on": [
+        "7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerClaimStatusRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/clientcare/claim-status"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/prepareClaimStatus.js",
+          "exports": [
+            "registerClaimStatusRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/prepareClaimStatus.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T07:31:58.695Z",
+      "commit_sha": "64fda67c489882cb97b6aed661d20e34c2b2d93a",
+      "blueprint_id": "PRODUCT-CLIENTCARE-BILLING-RECOVERY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "8",
+      "mission_id": "PRODUCT-clientcare-billing-recovery"
+    },
+    {
+      "id": "9",
+      "status": "done",
+      "target_file": "routes/submitChargeSlip.js",
+      "task": "submit charge slip",
+      "spec": "Submits charge slip through the billing tab for completion when insurance is validated.",
+      "depends_on": [
+        "8"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerChargeSlipRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/clientcare/submit-charge-slip"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/submitChargeSlip.js",
+          "exports": [
+            "registerChargeSlipRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/submitChargeSlip.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T07:32:48.594Z",
+      "commit_sha": "b38edc775326a61a5d5c501c60dc359a53c795ed",
+      "blueprint_id": "PRODUCT-CLIENTCARE-BILLING-RECOVERY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "9",
+      "mission_id": "PRODUCT-clientcare-billing-recovery"
+    },
+    {
+      "id": "10",
+      "status": "done",
+      "target_file": "public/overlay/ReportAging.html",
+      "task": "design report aging overlay",
+      "spec": "Creates a UI overlay for report aging to enhance birth-to-billing path visualization.",
+      "depends_on": [
+        "9"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-CLIENTCARE-BILLING-RECOVERY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "10",
+      "mission_id": "PRODUCT-clientcare-billing-recovery",
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "112d5374507589f2763b520f33ff782c10300132",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-17T22:07:10.573Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T22:08:53.365Z"
+    }
+  ],
+  "blueprint_id": "PRODUCT-CLIENTCARE-BILLING-RECOVERY-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-clientcare-billing-recovery",
+  "twin_kind": "product_build_queue_registered"
+}

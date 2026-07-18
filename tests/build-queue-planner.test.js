@@ -35,14 +35,42 @@ test('extractBacklog pulls only real backlog bullets, skips done + other section
   assert.ok(!items.some((i) => /shipped X/i.test(i)), 'change-receipt bullets excluded (not under backlog heading)');
 });
 
+test('extractBacklog skips [x] checked items and harvests [ ] + Next lines', () => {
+  const text = `# P
+## Build Plan
+- [x] Already shipped router
+- [ ] Wire new memory retrieve route
+## Agent Handoff Notes
+*Next:** Prove tip deploy serves founder-memory inject
+| Field | Value |
+| *Next** | Run acceptance for LifeRE alpha |
+`;
+  const items = extractBacklog(text);
+  assert.ok(items.some((i) => /Wire new memory retrieve route/i.test(i)));
+  assert.ok(items.some((i) => /Prove tip deploy/i.test(i)));
+  assert.ok(items.some((i) => /LifeRE alpha/i.test(i)));
+  assert.ok(!items.some((i) => /Already shipped router/i.test(i)));
+});
+
 test('extractBacklog returns [] with no backlog heading (never fabricates)', () => {
   assert.deepEqual(extractBacklog('# Title\n## Current State\n- just status'), []);
   assert.deepEqual(extractBacklog(''), []);
 });
 
-test('shouldFounderGate flags UI/brand surfaces, not backend files', () => {
+test('loadProductCorpus + extractCorpusBacklog reads conversations', async () => {
+  const { loadProductCorpus, extractCorpusBacklog } = await import('../services/build-queue-planner.js');
+  const corpus = loadProductCorpus('ideavault');
+  assert.ok(corpus.sources.some((s) => s.label === 'product_home'));
+  assert.ok(corpus.sources.some((s) => s.label === 'conversation'), 'ideavault has conversations/');
+  const { items } = extractCorpusBacklog('ideavault');
+  assert.ok(items.length >= 1, 'corpus yields at least one documented item');
+});
+
+test('shouldFounderGate / shouldFlagDesignReview flags UI/brand surfaces, not backend files', async () => {
+  const { shouldFounderGate, shouldFlagDesignReview } = await import('../services/build-queue-planner.js');
+  assert.equal(shouldFlagDesignReview({ target_file: 'public/overlay/customize.html', task: 'panel' }), true);
   assert.equal(shouldFounderGate({ target_file: 'public/overlay/customize.html', task: 'panel' }), true);
-  assert.equal(shouldFounderGate({ target_file: 'services/email.js', task: 'add A/B subject testing' }), false);
+  assert.equal(shouldFlagDesignReview({ target_file: 'services/email.js', task: 'add A/B subject testing' }), false);
 });
 
 test('normalizePlannedStep coerces to pending single-file step; nulls on missing fields', () => {
@@ -53,10 +81,13 @@ test('normalizePlannedStep coerces to pending single-file step; nulls on missing
   assert.equal(s.founder_gated, false);
   assert.equal(normalizePlannedStep({ task: 'no file' }, 'p', 0), null);
   assert.equal(normalizePlannedStep({ target_file: 'x' }, 'p', 0), null);
-  // UI step auto-gated + gated status
   const ui = normalizePlannedStep({ task: 'Build customization panel', target_file: 'public/overlay/x.html' }, 'p', 1);
-  assert.equal(ui.founder_gated, true);
-  assert.equal(ui.status, 'founder_gated');
+  assert.equal(ui.design_review_flagged, true);
+  assert.equal(ui.status, 'pending');
+  assert.equal(ui.founder_gated, false);
+  const hold = normalizePlannedStep({ task: 'Need Adam', target_file: 'docs/x.md', human_hold: true }, 'p', 2);
+  assert.equal(hold.human_hold, true);
+  assert.equal(hold.status, 'founder_gated');
 });
 
 test('validatePlannedQueue enforces schema, ids, deps', () => {
@@ -83,14 +114,16 @@ test('planBuildQueue turns backlog into a validated queue via injected model', a
       { id: 'customize', target_file: 'public/overlay/customize.html', task: 'Client-facing customization panel', spec: 'colors/services/photos' },
     ],
   });
-  const res = await planBuildQueue({ productId: 'site-builder', homeText: HOME, callModel, verifyScript: 'scripts/verify.mjs' });
+  const res = await planBuildQueue({ productId: 'no-such-product-xyz', homeText: HOME, callModel, verifyScript: 'scripts/verify.mjs' });
   assert.ok(res);
   assert.equal(res.queue.schema, 'product_build_queue_v1');
   assert.equal(res.queue.verify_script, 'scripts/verify.mjs');
   assert.equal(res.added.length, 3);
-  // UI step auto-gated
+  // UI step flagged for optional design review — still ships
   const ui = res.queue.steps.find((s) => s.id === 'customize');
-  assert.equal(ui.founder_gated, true);
+  assert.equal(ui.design_review_flagged, true);
+  assert.equal(ui.status, 'pending');
+  assert.equal(ui.founder_gated, false);
   assert.equal(validatePlannedQueue(res.queue).ok, true);
 });
 
@@ -105,8 +138,9 @@ test('planBuildQueue stamps the backlog_signature onto the queue (self-extend ma
   const callModel = async () => JSON.stringify({
     steps: [{ id: 'expiry-sweep', target_file: 'scripts/preview-expiry-cron.mjs', task: 'Nightly preview-expiry sweep', spec: 'cron' }],
   });
-  const res = await planBuildQueue({ productId: 'site-builder', homeText: HOME, callModel });
-  assert.equal(res.queue.backlog_signature, backlogSignature(extractBacklog(HOME)));
+  // Use a non-existent product id so corpus falls back to the injected homeText.
+  const res = await planBuildQueue({ productId: 'no-such-product-xyz', homeText: HOME, callModel });
+  assert.equal(res.queue.backlog_signature, backlogSignature([...extractBacklog(HOME), '__done_count:0__']));
 });
 
 test('planBuildQueue de-duplicates against existing queue steps', async () => {
@@ -121,7 +155,7 @@ test('planBuildQueue de-duplicates against existing queue steps', async () => {
       { id: 'expiry-sweep', target_file: 'scripts/preview-expiry-cron.mjs', task: 'Nightly preview-expiry sweep', spec: 'new' },
     ],
   });
-  const res = await planBuildQueue({ productId: 'site-builder', homeText: HOME, existingQueue, callModel });
+  const res = await planBuildQueue({ productId: 'no-such-product-xyz', homeText: HOME, existingQueue, callModel });
   assert.equal(res.added.length, 1, 'only the genuinely new step is added');
   assert.equal(res.added[0].id, 'expiry-sweep');
   assert.equal(res.queue.steps.length, 2);

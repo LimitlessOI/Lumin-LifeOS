@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/ai-receptionist/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-29 |
+| **Last Updated** | 2026-07-15 — `services/stripePricingService.js` and `routes/environmentRoutes.js` shipped autonomously; added `@ssot` tags and corrected `routes/environmentRoutes.js` to mount at `/api/v1/env` per the blueprint. |
 
 ---
 | Field | Value |
@@ -19,7 +19,7 @@
 | **Lifecycle** | `planning` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `draft` |
-| **Last Updated** | 2026-04-04 (initial draft — sourced from GPT dump 01/02, LifeOS_LimitlessOS dump 002) |
+| **Last Updated** | 2026-07-15 — `services/stripePricingService.js` and `routes/environmentRoutes.js` shipped autonomously; added `@ssot` tags and corrected `routes/environmentRoutes.js` to mount at `/api/v1/env` per the blueprint. |
 | **Verification Command** | `node scripts/verify-project.mjs --project ai_receptionist` |
 | **Manifest** | `docs/products/ai-receptionist/FILE_MANIFEST.json` |
 | **Build Ready** | `NEAR_READY` — Billing routes exist; need Stripe price ID, landing page, and Vapi/Zoom integration |
@@ -183,6 +183,9 @@ CREATE TABLE IF NOT EXISTS call_logs (
 ## Change Receipts
 
 | Date | Change | Author |
+|| 2026-07-15 | Added missing `@ssot` tags to factory-generated `services/stripePricingService.js` and `routes/environmentRoutes.js`, and corrected `routes/environmentRoutes.js` to expose `GET /api/v1/env` and `POST /api/v1/env` (with optional `requireKey` guard) instead of `POST /api/set-environment`. This aligns the shipped route with the `route.path` declared in the BUILD_QUEUE step so `auto-register-modules` can mount it correctly. | Devin |
+|| 2026-07-15 | Rebuilt `docs/products/ai-receptionist/BUILD_QUEUE.json` after the governed loop produced duplicate step IDs and marked `services/stripePricingService.js` done without a successful GitHub commit (file missing in repo). Removed stale `step1`/`step2` skipped/demoted duplicates, reset `stripe-pricing-service` to `pending`, and made `auto-register-modules` depend on the real `vapi-service`, `stripe-pricing-service`, and `environment-routes`. | Devin |
+|| 2026-07-15 | `services/vapiService.js` — shipped by governed BuilderOS; added `@ssot` tag and product-home receipt after merge. | Devin |
 |---|---|---|
 | 2026-06-13 | `core/vapi-integration.js` — call-ended webhook fans out to LifeRE receptionist bridge (`ingestVapiCallEnded`) | Coder |
 | 2026-04-04 | Initial draft — sourced from GPT dump 01/02 and LifeOS_LimitlessOS dump 002; full feature set, revenue model, architecture | Claude |

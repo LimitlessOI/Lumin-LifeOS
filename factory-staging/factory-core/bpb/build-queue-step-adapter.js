@@ -18,7 +18,22 @@
  * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
-import { authorAssertionsFromSpec } from './author-assertions.js';
+import fs from 'node:fs';
+import path from 'node:path';
+import { authorAssertionsFromSpec, normalizeCommonJsToEsm } from './author-assertions.js';
+import { depSatisfiedForSelect, STEP_STATUS } from '../../../services/product-build-orchestrator.js';
+import { authoringTiersForRetry } from '../../../services/builderos-model-escalation-gate.js';
+import { REPO_ROOT } from '../repo-paths.js';
+
+const AUTO_REGISTER_TARGET = 'config/auto-registered-product-modules.json';
+
+function isHumanHold(step) {
+  if (!step || typeof step !== 'object') return false;
+  return step.human_hold === true
+    || step.pause_for_founder === true
+    || step.gate === 'human_hold'
+    || step.gate === 'pause_for_founder';
+}
 
 // Derive the narrowest sandbox boundary the governed pipe should allow for a
 // BUILD_QUEUE target: the immediate top-level directory (e.g. services/x.js ->
@@ -101,47 +116,248 @@ export function assessBuildQueueStepProvability(step) {
   };
 }
 
+// ──────────────────────────────────────────────────────────────────────────────
+// Expected-export inference for server-code BUILD_QUEUE steps
+//
+// The blueprint SHOULD declare expected_exports/route/file_contains. For legacy
+// and incomplete BUILD_QUEUEs we infer a narrow, convention-based expectation
+// from the spec prose or the target_file name, so the planner can still gate the
+// step instead of leaving it stranded. The inference is conservative: route files
+// get register<Name>Routes; explicit export statements in the spec take priority.
+// ──────────────────────────────────────────────────────────────────────────────
+
+function parseModuleExports(text) {
+  const names = [];
+  const match = text.match(/module\.exports\s*=\s*\{/s);
+  if (match) {
+    let depth = 1;
+    let i = match.index + match[0].length;
+    for (; i < text.length; i += 1) {
+      if (text[i] === '{') depth += 1;
+      else if (text[i] === '}') { depth -= 1; if (depth === 0) break; }
+    }
+    const inner = text.slice(match.index + match[0].length, i);
+    const keyRe = /([A-Za-z_$][A-Za-z0-9_$]*)\s*:/g;
+    let m;
+    while ((m = keyRe.exec(inner)) !== null) names.push(m[1]);
+    const shorthandRe = /(?:^|[,;])\s*([A-Za-z_$][A-Za-z0-9_$]*)\s*(?=[,;]|$)/g;
+    while ((m = shorthandRe.exec(inner)) !== null) names.push(m[1]);
+  }
+  return [...new Set(names)];
+}
+
+function parseESMExports(text) {
+  const names = [];
+  // ESM declaration forms: export [async] function/const/let/var/class Name
+  const re = /export\s+(?:async\s+)?(?:function|const|let|var|class)\s+([A-Za-z_$][A-Za-z0-9_$]*)/gi;
+  let m;
+  while ((m = re.exec(text)) !== null) names.push(m[1]);
+  // Named export list: export { Name1, Name2 }
+  const namedRe = /export\s*\{([^}]*)\}/gi;
+  while ((m = namedRe.exec(text)) !== null) {
+    const inner = m[1];
+    const idRe = /([A-Za-z_$][A-Za-z0-9_$]*)/g;
+    let idm;
+    while ((idm = idRe.exec(inner)) !== null) names.push(idm[1]);
+  }
+  // Prose / pseudo-code forms: "Export Name(...)" or "Exports Name(...)"
+  const callFormRe = /(?:export|exports)\s+(?:async\s+)?(?:function\s+)?([A-Za-z_$][A-Za-z0-9_$]*)\s*\(/gi;
+  while ((m = callFormRe.exec(text)) !== null) names.push(m[1]);
+  // Bare register-call fallback: Name( for route-style register functions
+  const bareCallRe = /([A-Za-z_$][A-Za-z0-9_$]Routes)\s*\(/gi;
+  while ((m = bareCallRe.exec(text)) !== null) names.push(m[1]);
+  return [...new Set(names)];
+}
+
+function toPascalCase(str) {
+  return String(str || '')
+    .replace(/[^a-zA-Z0-9]+([a-zA-Z0-9])/g, (_, ch) => (ch ? ch.toUpperCase() : ''))
+    .replace(/^[a-z]/, (ch) => ch.toUpperCase());
+}
+
+function deriveExpectedExportsFromTargetFile(target) {
+  const t = String(target || '').replace(/\\/g, '/');
+  const match = t.match(/^routes\/(.*)-?routes?\.js$/i);
+  if (!match) return [];
+  const base = match[1].replace(/[-_]$/g, '');
+  const name = `register${toPascalCase(base)}Routes`;
+  return [name];
+}
+
+export function deriveExpectedExportsFromSpec(step) {
+  const spec = String(step?.spec || '');
+  const fromSpec = parseESMExports(spec);
+  if (fromSpec.length) return fromSpec;
+  const moduleExports = parseModuleExports(spec);
+  if (moduleExports.length) return moduleExports;
+  return deriveExpectedExportsFromTargetFile(step?.target_file);
+}
+
+// ──────────────────────────────────────────────────────────────────────────────
+// Auto-register config merge
+//
+// config/auto-registered-product-modules.json is shared across products. Every
+// product's auto-register step must append its route entries without dropping the
+// entries already committed by other products. At plan time we read the current
+// file, merge in the route entries implied by this step's depends_on route
+// siblings, and turn the step into a deterministic write_file_exact.
+// ──────────────────────────────────────────────────────────────────────────────
+
+function deriveAutoRegisterEntry(depStep) {
+  const target = String(depStep?.target_file || '');
+  if (!target.startsWith('routes/')) return null;
+  const names = parseESMExports(String(depStep?.spec || ''));
+  const registerName = names.find((n) => n.endsWith('Routes'))
+    || deriveExpectedExportsFromTargetFile(target)[0]
+    || null;
+  if (!registerName) return null;
+  return {
+    path: target,
+    register: registerName,
+    enabled: true,
+    note: `Auto-registered for ${depStep?.id || target}`,
+  };
+}
+
+function buildAutoRegisterMerge(step, queue) {
+  const target = String(step?.target_file || '');
+  if (target !== AUTO_REGISTER_TARGET) return null;
+  if (step?.action_type === 'write_file_exact' && step?.exact_inputs?.exact_content != null) {
+    return null;
+  }
+
+  const configPath = path.join(REPO_ROOT, AUTO_REGISTER_TARGET);
+  let current = { modules: [] };
+  try {
+    const raw = fs.readFileSync(configPath, 'utf8');
+    current = JSON.parse(raw);
+  } catch {
+    current = { modules: [] };
+  }
+  if (!Array.isArray(current.modules)) current.modules = [];
+
+  const seen = new Set(current.modules.map((m) => m.path));
+  const newPaths = [];
+  const deps = Array.isArray(step?.depends_on) ? step.depends_on : [];
+  const steps = Array.isArray(queue?.steps) ? queue.steps : [];
+  for (const depId of deps) {
+    const dep = steps.find((s) => s.id === depId);
+    if (!dep) continue;
+    const entry = deriveAutoRegisterEntry(dep);
+    if (entry && !seen.has(entry.path)) {
+      current.modules.push(entry);
+      seen.add(entry.path);
+      newPaths.push(entry.path);
+    }
+  }
+
+  if (newPaths.length === 0 && current.modules.length === 0) {
+    return null;
+  }
+
+  const newEntries = current.modules.filter((m) => newPaths.includes(m.path));
+  const exactContent = `${JSON.stringify({ modules: newEntries }, null, 2)}\n`;
+  const fileContains = [];
+  for (const entry of newEntries) {
+    fileContains.push(entry.path, entry.register);
+  }
+
+  return {
+    exactContent,
+    merge: true,
+    assertion_spec: fileContains.length > 0 ? { file_contains: fileContains } : {},
+  };
+}
+
 /**
  * Convert a BUILD_QUEUE step into a governed ship-queue step. The governed pipe
  * authors the file from task+spec (author_then_write, codegen = untrusted hands)
  * then SENTRY proves it against the declared assertion_spec.
  * @returns {{ ok:boolean, step?:object, reason?:string }}
  */
-export function toGovernedShipStep(step, { product_id } = {}) {
+export function toGovernedShipStep(step, { product_id, queue } = {}) {
   const target = String(step?.target_file || '');
   if (!target) return { ok: false, reason: 'missing_target_file' };
-  const assessment = assessBuildQueueStepProvability(step);
+
+  // Auto-register config steps are merged deterministically so they never
+  // overwrite each other's entries. The merge supplies exact_content + assertion_spec.
+  let workingStep = step;
+  const autoMerge = buildAutoRegisterMerge(step, queue);
+  if (autoMerge) {
+    workingStep = {
+      ...step,
+      action_type: 'write_file_exact',
+      exact_inputs: { exact_content: autoMerge.exactContent, merge: autoMerge.merge },
+      assertion_spec: autoMerge.assertion_spec,
+    };
+  }
+
+  const assessment = assessBuildQueueStepProvability(workingStep);
   if (!assessment.provable) return { ok: false, reason: assessment.reason };
 
-  return {
-    ok: true,
-    step: {
-      step_id: step?.id || step?.step_id || `bq-${target}`,
-      action_type: 'author_then_write',
-      target_file: target,
-      sandbox_boundary: sandboxBoundaryForTarget(target),
-      authoring: {
-        task: step?.task || `Build ${target}`,
-        spec: step?.spec || step?.task || '',
-        ...(step?.max_output_tokens ? { max_output_tokens: step.max_output_tokens } : {}),
-      },
-      assertion_spec: assessment.assertion_spec,
-      ...(product_id ? { product_id } : {}),
-    },
+  const rawSpec = workingStep?.spec || workingStep?.task || '';
+  const spec = normalizeCommonJsToEsm(rawSpec, target);
+  const stepAuthoring = workingStep?.authoring || {};
+  const explicitTiers = Array.isArray(stepAuthoring.tiers) ? stepAuthoring.tiers : null;
+  const tierOverride = authoringTiersForRetry({
+    last_error: workingStep?.last_error,
+    attempts: workingStep?.attempts,
+    explicit_tiers: explicitTiers,
+  }) || (explicitTiers?.length ? explicitTiers : undefined);
+  const maxOutputTokens = Number(workingStep?.max_output_tokens || stepAuthoring.max_output_tokens) || 8000;
+
+  const stepId = workingStep?.id || workingStep?.step_id || `bq-${target}`;
+  const queueBlueprintId = workingStep?.blueprint_id || queue?.blueprint_id || null;
+  const queueMissionId = workingStep?.mission_id || queue?.mission_id || null;
+  const governedStep = {
+    step_id: stepId,
+    blueprint_step_id: workingStep?.blueprint_step_id || stepId,
+    ...(queueBlueprintId ? { blueprint_id: String(queueBlueprintId).trim() } : {}),
+    ...(queueMissionId ? { mission_id: String(queueMissionId).trim() } : {}),
+    target_file: target,
+    sandbox_boundary: sandboxBoundaryForTarget(target),
+    assertion_spec: assessment.assertion_spec,
+    ...(product_id ? { product_id } : {}),
+    ...(Array.isArray(workingStep?.expected_exports) && workingStep.expected_exports.length ? { expected_exports: workingStep.expected_exports } : {}),
+    ...(Array.isArray(workingStep?.behavior_assertions) && workingStep.behavior_assertions.length ? { behavior_assertions: workingStep.behavior_assertions } : {}),
+    ...(workingStep?.last_error ? { last_error: workingStep.last_error } : {}),
   };
+
+  if (workingStep?.action_type === 'write_file_exact' && workingStep?.exact_inputs?.exact_content != null) {
+    governedStep.action_type = 'write_file_exact';
+    governedStep.exact_inputs = {
+      exact_content: workingStep.exact_inputs.exact_content,
+      ...(workingStep.exact_inputs.merge === true ? { merge: true } : {}),
+    };
+  } else {
+    governedStep.action_type = 'author_then_write';
+    governedStep.authoring = {
+      task: workingStep?.task || `Build ${target}`,
+      spec,
+      max_output_tokens: maxOutputTokens,
+      ...(tierOverride ? { tiers: tierOverride } : {}),
+    };
+  }
+
+  return { ok: true, step: governedStep };
 }
 
 /**
- * Select the next shippable BUILD_QUEUE steps: pending (not done/blocked), not
- * founder_gated, with dependencies satisfied. Preserves queue order.
+ * Select the next shippable BUILD_QUEUE steps: pending (not terminal), not
+ * human_hold / pause_for_founder, with dependencies satisfied. Preserves queue order.
+ * design_review_flagged and legacy founder_gated (without hold) remain shippable.
+ * Uses the same chicken-egg dependency satisfaction as the legacy orchestrator
+ * so auto-register config steps can run while their route sibling is blocked
+ * for missing auto-registration.
  */
 export function selectShippableSteps(queue) {
   const steps = Array.isArray(queue?.steps) ? queue.steps : [];
-  const doneIds = new Set(steps.filter((s) => s.status === 'done').map((s) => s.id));
+  const doneIds = new Set(steps.filter((s) => s.status === STEP_STATUS.DONE).map((s) => s.id));
   return steps.filter((s) => {
-    if (s.status === 'done' || s.status === 'blocked') return false;
-    if (s.founder_gated) return false;
+    if (s.demoted === true) return false;
+    if (s.status === STEP_STATUS.DONE || s.status === STEP_STATUS.BLOCKED || s.status === STEP_STATUS.SKIPPED || s.status === STEP_STATUS.FAILED) return false;
+    if (isHumanHold(s)) return false;
     const deps = Array.isArray(s.depends_on) ? s.depends_on : [];
-    return deps.every((d) => doneIds.has(d));
+    return deps.every((d) => depSatisfiedForSelect(d, doneIds, queue, s));
   });
 }

@@ -1,0 +1,785 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "white-label",
+  "planned_at": "2026-07-16T05:31:10.401Z",
+  "backlog_signature": "03f5887d58b2737b",
+  "corpus_sources": [
+    "docs/products/white-label/PRODUCT_HOME.md"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "status": "done",
+      "target_file": "routes/white-label-routes.js",
+      "task": "extract config endpoints",
+      "spec": "Move config endpoints from server.js (lines 10171–10198) to this module.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerWhiteLabelRoutes"
+      ],
+      "route": {
+        "path": "/white-label"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/white-label-routes.js",
+          "exports": [
+            "registerWhiteLabelRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/white-label-routes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:51:36.163Z",
+      "commit_sha": "99c45c87b34538ebf7844e2405cbab5f8dd2f3dd",
+      "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "1",
+      "mission_id": "PRODUCT-white-label"
+    },
+    {
+      "id": "2",
+      "status": "done",
+      "target_file": "services/response-transformation.js",
+      "task": "build response transformation middleware",
+      "spec": "Create middleware to strip model names and costs from responses.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "transformResponse"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/response-transformation.js",
+          "exports": [
+            "transformResponse"
+          ],
+          "assertion_id": "expected_exports:services/response-transformation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:58:15.439Z",
+      "commit_sha": "19ee8a1138ec1e958b7dd63a7c9dd919cbe952eb",
+      "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "2",
+      "mission_id": "PRODUCT-white-label"
+    },
+    {
+      "id": "3",
+      "status": "done",
+      "target_file": "routes/partner-onboarding.js",
+      "task": "specify partner onboarding flow",
+      "spec": "Create endpoint for creating a new partner config.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPartnerOnboardingRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/partners"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/partner-onboarding.js",
+          "exports": [
+            "registerPartnerOnboardingRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/partner-onboarding.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T18:04:26.009Z",
+      "commit_sha": "da9bc36dda0464fadc76cdeb515ddaf5fcfe9db2",
+      "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "3",
+      "mission_id": "PRODUCT-white-label"
+    },
+    {
+      "id": "4",
+      "status": "done",
+      "target_file": "services/partner-key-generation.js",
+      "task": "design partner API key generation",
+      "spec": "Create schema for partner keys vs platform keys and generate keys accordingly.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generatePartnerKey"
+      ],
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/partner-key-generation.js",
+          "exports": [
+            "generatePartnerKey"
+          ],
+          "assertion_id": "expected_exports:services/partner-key-generation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:13:24.135Z",
+      "commit_sha": "9652946abedb8b06658c4d38cbf2a149604e4893",
+      "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "4",
+      "mission_id": "PRODUCT-white-label"
+    },
+    {
+      "id": "5",
+      "status": "done",
+      "target_file": "services/stripe-billing.js",
+      "task": "design billing for partners",
+      "spec": "Implement billing flow for partners separate from direct clients.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "processPartnerBilling"
+      ],
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/stripe-billing.js",
+          "exports": [
+            "processPartnerBilling"
+          ],
+          "assertion_id": "expected_exports:services/stripe-billing.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:17:31.331Z",
+      "commit_sha": "6aee915f02361025756d46040cd1797823362e9f",
+      "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "5",
+      "mission_id": "PRODUCT-white-label"
+    },
+    {
+      "id": "6",
+      "status": "done",
+      "target_file": "config/railway-config.json",
+      "task": "document Railway config for CNAME support",
+      "spec": "Add necessary configuration for custom domain CNAME support.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CNAME"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:13:45.318Z",
+      "commit_sha": "1a5f0a360e273aa64ffad3c64f632e09df767290",
+      "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "6",
+      "mission_id": "PRODUCT-white-label"
+    },
+    {
+      "id": "step1",
+      "status": "done",
+      "target_file": "routes/config-endpoints.js",
+      "task": "migrate config endpoints",
+      "spec": "Extract config endpoints from server.js lines 10171-10198 and place here.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerConfigEndpoints"
+      ],
+      "route": {
+        "path": "/config-endpoints"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/config-endpoints.js",
+          "exports": [
+            "registerConfigEndpoints"
+          ],
+          "assertion_id": "expected_exports:routes/config-endpoints.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:46:42.449Z",
+      "commit_sha": "1445332e43033e8f18073530086f7dd6634bf42d",
+      "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step1",
+      "mission_id": "PRODUCT-white-label"
+    },
+    {
+      "id": "step3",
+      "status": "done",
+      "target_file": "routes/partner-config-creation.js",
+      "task": "create partner config endpoint",
+      "spec": "Implement POST /partner-config to create new partner configurations.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPartnerConfigRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/partner-config"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/partner-config-creation.js",
+          "exports": [
+            "registerPartnerConfigRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/partner-config-creation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:47:50.647Z",
+      "commit_sha": "515f1956c48596f7c53b502984bb1739ef48f412",
+      "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step3",
+      "mission_id": "PRODUCT-white-label"
+    },
+    {
+      "id": "step4",
+      "status": "done",
+      "target_file": "services/partner-key-scheme.js",
+      "task": "design partner API key generation schema",
+      "spec": "Define schema for partner keys versus platform keys.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generatePartnerKeys",
+        "generatePlatformKeys"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/partner-key-scheme.js",
+          "exports": [
+            "generatePartnerKeys",
+            "generatePlatformKeys"
+          ],
+          "assertion_id": "expected_exports:services/partner-key-scheme.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:10:50.589Z",
+      "commit_sha": "f3f5bac830c40edefcb4050bfe5702ba1c5e17b0",
+      "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step4",
+      "mission_id": "PRODUCT-white-label"
+    },
+    {
+      "id": "step5",
+      "status": "done",
+      "target_file": "services/stripe-billing-separation.js",
+      "task": "separate Stripe billing flow",
+      "spec": "Create separate billing flow for partners and direct clients using Stripe.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "setupPartnerBillingFlow",
+        "setupClientBillingFlow"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/stripe-billing-separation.js",
+          "exports": [
+            "setupPartnerBillingFlow",
+            "setupClientBillingFlow"
+          ],
+          "assertion_id": "expected_exports:services/stripe-billing-separation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:50:32.333Z",
+      "commit_sha": "b8fc232835a789a2c6e9024cb856a7e6eef76510",
+      "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step5",
+      "mission_id": "PRODUCT-white-label"
+    },
+    {
+      "id": "step6",
+      "status": "done",
+      "target_file": "config/railway-cname.json",
+      "task": "document Railway CNAME config",
+      "spec": "Add configuration for custom domain CNAME support in Railway.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CNAME"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "3fcc5a6715040ad2b1616ef656d1db5c89480734",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T00:07:58.074Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T00:08:44.390Z",
+      "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step6",
+      "mission_id": "PRODUCT-white-label"
+    },
+    {
+      "id": "step2",
+      "status": "done",
+      "target_file": "services/response-transformation.js",
+      "task": "build-response-transformation-middleware",
+      "spec": "Create middleware to transform responses by stripping model names and costs.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "responseTransformationMiddleware"
+      ],
+      "file_contains": [
+        "stripModelNames",
+        "stripCosts"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/response-transformation.js",
+          "exports": [
+            "responseTransformationMiddleware"
+          ],
+          "assertion_id": "expected_exports:services/response-transformation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:18:35.617Z",
+      "commit_sha": "b80bf5636ff33cd4c9100c5e456bc61fa42c335e",
+      "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step2",
+      "mission_id": "PRODUCT-white-label"
+    },
+    {
+      "id": "white-label-3",
+      "status": "done",
+      "target_file": "routes/partner-config-creation.js",
+      "task": "specify partner onboarding flow",
+      "spec": "Create an endpoint to handle new partner config creation for onboarding.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPartnerConfigRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/partners/config"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/partner-config-creation.js",
+          "exports": [
+            "registerPartnerConfigRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/partner-config-creation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:23:56.895Z",
+      "commit_sha": "6a72794484b93a5a789f3a576b26dc058ba5538c",
+      "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "white-label-3",
+      "mission_id": "PRODUCT-white-label"
+    },
+    {
+      "id": "white-label-5",
+      "status": "done",
+      "target_file": "services/stripe-billing-separation.js",
+      "task": "design stripe billing separation",
+      "spec": "Implement a separate billing flow for partner clients distinct from direct clients.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "setupPartnerBilling"
+      ],
+      "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "white-label-5",
+      "mission_id": "PRODUCT-white-label",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/stripe-billing-separation.js",
+          "exports": [
+            "setupPartnerBilling"
+          ],
+          "assertion_id": "expected_exports:services/stripe-billing-separation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T22:28:27.434Z",
+      "commit_sha": "5f0423f1edd2eab3a59b8101089287979c63aa12"
+    },
+    {
+      "id": "white-label-6",
+      "status": "done",
+      "target_file": "config/railway-cname.json",
+      "task": "document CNAME support",
+      "spec": "Document the Railway configuration needed for custom domain CNAME support.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CNAME",
+        "custom domain"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "30ccef893a335ee9e4cf16f0c838df0de1971561",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T04:56:33.652Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:59:29.386Z",
+      "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "white-label-6",
+      "mission_id": "PRODUCT-white-label"
+    },
+    {
+      "id": "white-label-2",
+      "status": "done",
+      "target_file": "services/response-transformation.js",
+      "task": "develop response transformation middleware",
+      "spec": "Create middleware to strip model names and costs from responses.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "transformResponse"
+      ],
+      "file_contains": [
+        "module.exports = {",
+        "function transformResponse(req, res, next)"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/response-transformation.js",
+          "exports": [
+            "transformResponse"
+          ],
+          "assertion_id": "expected_exports:services/response-transformation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:52:25.095Z",
+      "commit_sha": "3b23fc8748718ee404cc72c8d1e6879725aeb92a",
+      "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "white-label-2",
+      "mission_id": "PRODUCT-white-label"
+    },
+    {
+      "id": "white-label-4",
+      "status": "done",
+      "target_file": "services/partner-key-generation.js",
+      "task": "define partner API key schema",
+      "spec": "Design key generation differentiating partner keys from platform keys.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "generatePartnerKey"
+      ],
+      "file_contains": [
+        "module.exports = {",
+        "function generatePartnerKey"
+      ],
+      "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "white-label-4",
+      "mission_id": "PRODUCT-white-label",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/partner-key-generation.js",
+          "exports": [
+            "generatePartnerKey"
+          ],
+          "assertion_id": "expected_exports:services/partner-key-generation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T22:53:15.944Z",
+      "commit_sha": "96341445d386aabb8a8b62eab31d810a08659012"
+    },
+    {
+      "id": "white-label-step2",
+      "status": "done",
+      "target_file": "services/response-transformation.js",
+      "task": "build middleware",
+      "spec": "Build response transformation middleware that strips model names and costs.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "transformResponse"
+      ],
+      "file_contains": [
+        "function transformResponse"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/response-transformation.js",
+          "exports": [
+            "transformResponse"
+          ],
+          "assertion_id": "expected_exports:services/response-transformation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:04:23.337Z",
+      "commit_sha": "9cd7235bffd5ca5e8264e9fe3511768dd530c9fc",
+      "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "white-label-step2",
+      "mission_id": "PRODUCT-white-label"
+    },
+    {
+      "id": "white-label-step3",
+      "status": "done",
+      "target_file": "services/partner-key-scheme.js",
+      "task": "design partner API key schema",
+      "spec": "Design and build schema for generating partner API keys distinct from platform keys.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "generatePartnerKey"
+      ],
+      "file_contains": [
+        "schema.define('partnerKey'"
+      ],
+      "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "white-label-step3",
+      "mission_id": "PRODUCT-white-label",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/partner-key-scheme.js",
+          "exports": [
+            "generatePartnerKey"
+          ],
+          "assertion_id": "expected_exports:services/partner-key-scheme.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T23:12:46.340Z",
+      "commit_sha": "0fdc5ada66ff9ad24f29db8774d344ff9289b884"
+    },
+    {
+      "id": "white-label-step4",
+      "status": "done",
+      "target_file": "services/stripe-billing-separation.js",
+      "task": "design separate billing flow",
+      "spec": "Design separate Stripe billing flow for partners distinct from direct clients.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "createPartnerBillingSession"
+      ],
+      "file_contains": [
+        "createPartnerBillingSession"
+      ],
+      "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "white-label-step4",
+      "mission_id": "PRODUCT-white-label",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/stripe-billing-separation.js",
+          "exports": [
+            "createPartnerBillingSession"
+          ],
+          "assertion_id": "expected_exports:services/stripe-billing-separation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T23:22:32.977Z",
+      "commit_sha": "a2a829e04f90302450192964f9e717a8781f569a"
+    },
+    {
+      "id": "white-label-step5",
+      "status": "done",
+      "target_file": "config/railway-cname.json",
+      "task": "document Railway config for CNAME support",
+      "spec": "Add necessary Railway configuration settings to support custom domain CNAME configuration.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CNAME"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:15:15.771Z",
+      "commit_sha": "d6f52c34db9b62b751f50b650fc57aae2ecfa391",
+      "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "white-label-step5",
+      "mission_id": "PRODUCT-white-label"
+    },
+    {
+      "id": "white-label-1",
+      "status": "done",
+      "target_file": "routes/white-label-routes.js",
+      "task": "refactor endpoints",
+      "spec": "Extract config endpoints from server.js into this dedicated route file.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerWhiteLabelRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/white-label/config"
+      },
+      "file_contains": [
+        "app.get('/api/v1/white-label/config',"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/white-label-routes.js",
+          "exports": [
+            "registerWhiteLabelRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/white-label-routes.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "cef9ce4936d36d810967e0f75d609d7dd810764d",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T05:59:01.426Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:03:44.355Z",
+      "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "white-label-1",
+      "mission_id": "PRODUCT-white-label"
+    },
+    {
+      "id": "white-label-step1",
+      "status": "done",
+      "target_file": "routes/white-label-routes.js",
+      "task": "extract endpoints",
+      "spec": "Extract config endpoints from server.js (lines 10171–10198) to this file.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerWhiteLabelRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/white-label/config-endpoints"
+      },
+      "file_contains": [
+        "registerWhiteLabelRoutes"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/white-label-routes.js",
+          "exports": [
+            "registerWhiteLabelRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/white-label-routes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:27:47.381Z",
+      "commit_sha": "271eca977452fccb5a1722ce57f0ad3066355d7b",
+      "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "white-label-step1",
+      "mission_id": "PRODUCT-white-label"
+    },
+    {
+      "id": "white-label-step6",
+      "status": "blocked",
+      "target_file": "config/railway-config.json",
+      "task": "document CNAME support",
+      "spec": "Document required Railway config for CNAME support in this JSON config.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "\"CNAME\"",
+        "\"railway\""
+      ],
+      "last_attempt_at": "2026-07-17T23:46:29.280Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:\"CNAME\"; behavior_assertion: missing_substring:\"railway\"; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 6,
+      "revived_at": "2026-07-17T23:46:04.964Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "white-label-step6",
+      "mission_id": "PRODUCT-white-label"
+    }
+  ],
+  "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-white-label",
+  "twin_kind": "product_build_queue_registered"
+}

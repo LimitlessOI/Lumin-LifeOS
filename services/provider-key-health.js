@@ -83,7 +83,7 @@ export const PROVIDERS = [
       const res = await timedFetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: { 'content-type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01' },
-        body: JSON.stringify({ model: 'claude-3-5-haiku-latest', max_tokens: 1, messages: [{ role: 'user', content: 'ping' }] }),
+        body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1, messages: [{ role: 'user', content: 'ping' }] }),
       });
       return classify(res.status, await res.text());
     },
@@ -93,7 +93,7 @@ export const PROVIDERS = [
     billingUrl: 'https://aistudio.google.com/app/apikey',
     probe: async (key) => {
       const res = await timedFetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${key}`,
         {
           method: 'POST',
           headers: { 'content-type': 'application/json' },
@@ -144,7 +144,7 @@ export const PROVIDERS = [
     probe: openAiCompatibleProbe('https://api.fireworks.ai/inference/v1', 'accounts/fireworks/models/llama-v3p1-8b-instruct'),
   },
   {
-    id: 'replicate', label: 'Replicate', envVars: ['REPLICATE_API_TOKEN'],
+    id: 'replicate', label: 'Replicate', envVars: ['REPLICATE_API_TOKEN', 'REPLICATE_API'],
     billingUrl: 'https://replicate.com/account/billing',
     probe: async (key) => {
       const res = await timedFetch('https://api.replicate.com/v1/account', { headers: { authorization: `Bearer ${key}` } });

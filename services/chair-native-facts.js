@@ -24,6 +24,8 @@ import {
   getLatestFounderInterfaceBuildReceipt,
   summarizeFounderBuildReceipt,
 } from './builderos-command-control-service.js';
+import { getGovernedAutonomousShipStatus } from './governed-autonomous-shipping-loop.js';
+import { getNeverStopProductFactoryStatus } from './never-stop-product-factory-scheduler.js';
 
 function searchBlockIsUseful(searchResult) {
   if (!searchResult?.results?.length) return false;
@@ -104,10 +106,27 @@ export async function gatherChairNativeFacts(input, deps = {}, chairContext = {}
   const text = String(input || '').trim();
   const systemQuestion = needsSystemKnowledge(text);
   const explicitPersonalLifeIntent = isFounderPersonalLifeIntent(text);
+  // Default conversational turns (founder drawer / Chair) are personal unless the
+  // user is clearly asking about product/build/ops. Previously only
+  // personal_life domain or explicit life-admin intents counted — so almost every
+  // drawer message got Point B / strategic briefs injected and felt like an
+  // operator console, not a shippable human OS chat.
+  const productOpsTurn = systemQuestion
+    || hasProductBuildContext(text)
+    || isBuildRequest(text)
+    || /\b(point b|alpha|lifere alpha|progress|status|machine path|readiness|what(?:'s| is) next|queue|deploy|commit|working on|what are you (building|working on)|what is it (doing|working on)|what are we (building|working on)|currently (building|working on)|focused on)\b/i.test(text);
+  const conversationalDefault = chairContext.conversational_mode !== false
+    && (chairContext.domain === 'chair'
+      || chairContext.domain === 'counsel'
+      || chairContext.domain === 'lumin'
+      || chairContext.domain === 'conversation'
+      || chairContext.conversational_mode === true);
   const personalTurn = !chairContext.alpha_probe
-    && !systemQuestion
+    && !productOpsTurn
     && chairContext.personal_search !== false
-    && (explicitPersonalLifeIntent || chairContext.domain === 'personal_life');
+    && (explicitPersonalLifeIntent
+      || chairContext.domain === 'personal_life'
+      || conversationalDefault);
 
   const facts = {
     schema: 'chair_native_facts_v1',
@@ -121,7 +140,7 @@ export async function gatherChairNativeFacts(input, deps = {}, chairContext = {}
     point_b_status: null,
     alpha_readiness: null,
     verified_search: null,
-    memory_context: chairContext.alpha_probe ? null : (deps.memoryContext || null),
+    memory_context: chairContext.alpha_probe ? null : (deps.memoryContext ?? null),
     strategic_brief: deps.strategicBrief || null,
     chair_note: 'Lumin is the operating intelligence — facts from system APIs/files/twin/SSOT, not roleplay. Lumin IS the Chair and can implement via BuilderOS build_async.',
     system_knowledge: null,
@@ -143,7 +162,10 @@ export async function gatherChairNativeFacts(input, deps = {}, chairContext = {}
       facts.program_context = sysKnow.programs;
       facts.chair_note = `${facts.chair_note} Answer using program_context and system_knowledge — do not claim the system lacks this; do not answer a different topic.`;
     }
-    if ((sysKnow.programs?.length || systemQuestion) && !explicitPersonalLifeIntent) {
+    // Only demote personal_turn for real system/ops questions. Matching the
+    // "lumin|chair" program keyword alone used to force ops mode on every drawer
+    // turn that mentioned Lumin — that made chat unshippable.
+    if (systemQuestion && !explicitPersonalLifeIntent) {
       facts.personal_turn = false;
     }
   } catch {
@@ -218,8 +240,30 @@ export async function gatherChairNativeFacts(input, deps = {}, chairContext = {}
     /* non-fatal */
   }
 
+  const runtimeStatusTurn = productOpsTurn && !isFounderIdentityIntent(text)
+    && /\b(status|progress|builder|queue|running|never stop|governed|autonomous|working on|what are you (building|working on)|what is it (doing|working on)|what are we (building|working on)|currently (building|working on)|focused on|shipping|building|doing)\b/i.test(text);
+
+  if (runtimeStatusTurn) {
+    try {
+      const governed = getGovernedAutonomousShipStatus().governed_autonomous_ship;
+      const neverStop = getNeverStopProductFactoryStatus();
+      const summary =
+        `Governed autonomous loop enabled=${governed.enabled}, running=${governed.running}, totalRuns=${governed.totalRuns}, lastRunAt=${governed.lastRunAt || 'never'}, lastShippedInLastTick=${governed.lastShipped}, lastCommitSha=${governed.lastCommitSha || 'none'}, lastCommitError=${governed.lastCommitError || 'none'}, productsWithQueues=${governed.products_with_queues}. ` +
+        `Legacy never-stop enabled=${neverStop?.never_stop?.enabled ?? 'unknown'}, running=${neverStop?.never_stop?.running ?? 'unknown'}.`;
+      facts.live_builder_status = {
+        summary,
+        governed,
+        never_stop: neverStop,
+      };
+      facts.chair_note = `${facts.chair_note} live_builder_status (and its summary field) is the REAL runtime builder/queue status — use it when Adam asks about builder status, progress, queue, or whether the system is running. Do not make up numbers; quote the facts. Note: lastShippedInLastTick is the count of steps shipped in the most recent tick only; a 0 there does NOT mean nothing has ever shipped. lastCommitSha is the SHA of the most recent commit the loop authored.`;
+    } catch {
+      /* non-fatal */
+    }
+  }
+
   if ((!personalTurn || hasProductBuildContext(text)) && !isFounderIdentityIntent(text)
-    && /\b(point b|alpha|lifere alpha|progress|status|machine path|readiness|what(?:'s| is) next)\b/i.test(text)) {
+    && /\b(point b|alpha|lifere alpha|machine path|readiness|what(?:'s| is) next)\b/i.test(text)
+    && !runtimeStatusTurn) {
     try {
       facts.point_b_status = await evaluatePointBNavigator({
         callAI: deps.callAI,
@@ -273,6 +317,19 @@ export async function gatherChairNativeFacts(input, deps = {}, chairContext = {}
   if (needsSystemKnowledge(text)) {
     facts.verified_search = null;
     facts.personal_turn = false;
+  }
+
+  if (runtimeStatusTurn) {
+    facts.system_knowledge = null;
+    facts.program_context = null;
+    facts.builder_capability = null;
+    facts.point_b_target = null;
+    facts.point_b_status = null;
+    facts.point_b_summary = null;
+    facts.strategic_brief = null;
+    facts.memory_context = null;
+    facts.personal_twin = null;
+    facts.chair_note = `${facts.chair_note} Runtime status question — answer ONLY from live_builder_status and last_build_receipt. Do not use system_knowledge, program_context, point_b_target, strategic_brief, memory_context, or personal_twin.`;
   }
 
   return JSON.parse(JSON.stringify(facts));

@@ -11,6 +11,8 @@
  *   POST /api/v1/sites/follow-up          — Send follow-up email to a prospect
  *   GET  /api/v1/sites/pos-partners       — List POS commission partners
  *   GET  /api/v1/sites/launch-readiness   — Revenue readiness check (env vars + blockers)
+ *   POST /api/v1/sites/public-lead        — Public beta lead intake (no key; rate-limited)
+ *   GET  /site-builder                    — Public sales landing redirect
  *
  * Usage (register in server.js):
  *   import { createSiteBuilderRoutes } from './routes/site-builder-routes.js';
@@ -24,16 +26,139 @@ import { promises as fsp } from 'node:fs';
 import SiteBuilder, { POS_PARTNERS } from '../services/site-builder.js';
 import { DESIGN_SYSTEMS } from '../services/site-builder-design-systems.js';
 import { generateLogoStudioPage } from '../services/site-builder-logo-studio.js';
-import ProspectPipeline from '../services/prospect-pipeline.js';
+import ProspectPipeline, { runFollowUpCron } from '../services/prospect-pipeline.js';
 import logger from '../services/logger.js';
 import { resolvePreviewsDir } from '../config/site-builder-paths.js';
 import {
   enqueueProspectJob,
+  enqueueDeferredProspectJob,
+  triggerBuildOnView,
   getProspectJobStatus,
+  failStaleProspectJobs,
   evaluateSiteBuilderEmailReadiness,
-  reconcileStuckProspectJobs,
 } from '../services/site-builder-prospect-runner.js';
 
+function buildingPlaceholderHtml(clientId, businessName = '') {
+  const safeName = String(businessName || 'your site').replace(/[<>&"]/g, '');
+  const safeId = String(clientId || '').replace(/[^\w-]/g, '');
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Building your preview…</title>
+  <style>
+    :root { color-scheme: light; }
+    body { margin:0; min-height:100vh; display:grid; place-items:center; font-family:Georgia, "Times New Roman", serif;
+      background: radial-gradient(circle at top, #ecfeff, #f8fafc 55%); color:#0f172a; }
+    .card { max-width:28rem; padding:2rem; text-align:center; }
+    h1 { font-size:1.75rem; margin:0 0 .75rem; }
+    p { color:#475569; line-height:1.5; }
+    .bar { height:4px; width:100%; background:#e2e8f0; border-radius:999px; overflow:hidden; margin:1.5rem 0; }
+    .bar > span { display:block; height:100%; width:35%; background:#0f766e; animation:slide 1.2s ease-in-out infinite; }
+    @keyframes slide { 0%{transform:translateX(-100%)} 100%{transform:translateX(280%)} }
+    .meta { font-size:.8rem; color:#94a3b8; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Building ${safeName}</h1>
+    <p>Your preview is being prepared. Most lean previews land in under 90 seconds.</p>
+    <div class="bar" aria-hidden="true"><span></span></div>
+    <p class="meta" id="status">Starting…</p>
+  </div>
+  <script>
+    const id = ${JSON.stringify(safeId)};
+    async function poll() {
+      try {
+        const r = await fetch('/api/v1/sites/public-preview-status/' + encodeURIComponent(id), { cache: 'no-store' });
+        const j = await r.json();
+        const el = document.getElementById('status');
+        if (j.ready) {
+          el.textContent = 'Ready — loading…';
+          location.reload();
+          return;
+        }
+        if (j.error) el.textContent = 'Still working…';
+        else el.textContent = j.building ? 'Building now…' : 'Queued…';
+      } catch (_) {}
+      setTimeout(poll, 2500);
+    }
+    poll();
+  </script>
+</body>
+</html>`;
+}
+
+
+/** Honest terminal state shown once repair retries (triggerBuildOnView, capped at 2) are exhausted — no more fake "still building" spinner with no work happening behind it. */
+function previewUnavailableHtml(clientId, businessName = '') {
+  const safeName = String(businessName || 'your site').replace(/[<>&"]/g, '');
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Preview unavailable</title>
+  <style>
+    :root { color-scheme: light; }
+    body { margin:0; min-height:100vh; display:grid; place-items:center; font-family:Georgia, "Times New Roman", serif;
+      background: radial-gradient(circle at top, #fef2f2, #f8fafc 55%); color:#0f172a; }
+    .card { max-width:28rem; padding:2rem; text-align:center; }
+    h1 { font-size:1.5rem; margin:0 0 .75rem; }
+    p { color:#475569; line-height:1.5; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>We couldn't finish building ${safeName}'s preview</h1>
+    <p>Two automatic rebuild attempts didn't produce a viewable page — this needs a human look, not another retry. We've been notified.</p>
+  </div>
+</body>
+</html>`;
+}
+
+/**
+ * /build and /build-variants write only to the responding instance's local disk
+ * (via SiteBuilder's internal fs.writeFile calls) — on Railway's multi-instance /
+ * ephemeral-disk deploys, that means the returned previewUrl 404s the moment a
+ * later request lands on a different instance or the instance recycles. The
+ * prospect-pipeline flow avoids this by also writing metadata.previewHtml to
+ * prospect_sites, which GET /previews/:clientId/index.html checks first. Give
+ * direct /build and /build-variants calls the same durability, best-effort —
+ * a persistence failure here must never fail the build response itself.
+ */
+async function persistDirectBuild(pool, targetUrl, result) {
+  if (!pool || !result?.success || !result.clientId || typeof result.siteHtml !== 'string') return;
+  try {
+    await pool.query(
+      `INSERT INTO prospect_sites
+        (client_id, business_url, business_name, preview_url, status, metadata, created_at, updated_at)
+       VALUES ($1, $2, $3, $4, 'built', $5::jsonb, NOW(), NOW())
+       ON CONFLICT (client_id) DO UPDATE SET
+         preview_url = EXCLUDED.preview_url,
+         metadata = COALESCE(prospect_sites.metadata, '{}'::jsonb) || EXCLUDED.metadata,
+         updated_at = NOW()`,
+      [
+        result.clientId,
+        targetUrl,
+        result.businessName || null,
+        result.previewUrl || null,
+        JSON.stringify({
+          previewHtml: result.siteHtml.slice(0, 400_000),
+          editToken: result.metadata?.editToken || null,
+          qualityReport: result.qualityReport || null,
+          directBuild: true,
+        }),
+      ]
+    );
+  } catch (err) {
+    logger.warn('[SITE] persistDirectBuild failed (preview will only exist on this instance)', {
+      clientId: result.clientId,
+      error: err.message,
+    });
+  }
+}
 
 let _siteBuilder = null;
 let _prospectPipeline = null;
@@ -57,12 +182,13 @@ async function notifySlack(event, businessName, detail = '') {
   } catch { /* Slack notify is best-effort */ }
 }
 
-function getSiteBuilder({ callCouncilMember, baseUrl }) {
+function getSiteBuilder({ callCouncilMember, baseUrl, pool = null }) {
   if (!_siteBuilder) {
     _siteBuilder = new SiteBuilder({
       callCouncil: callCouncilMember,
       previewsDir: resolvePreviewsDir(),
       baseUrl,
+      pool,
     });
   }
   return _siteBuilder;
@@ -70,7 +196,7 @@ function getSiteBuilder({ callCouncilMember, baseUrl }) {
 
 function getProspectPipeline({ callCouncilMember, pool, outreachAutomation, notificationService, baseUrl }) {
   if (!_prospectPipeline) {
-    const builder = getSiteBuilder({ callCouncilMember, baseUrl });
+    const builder = getSiteBuilder({ callCouncilMember, baseUrl, pool });
 
     // Build sendEmail adapter — prefer NotificationService (Postmark + suppression),
     // fall back to outreachAutomation, then log-only.
@@ -123,20 +249,350 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
     legacyHeaders: false,
   });
 
+  const publicLeadLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000,
+    max: 8,
+    message: { ok: false, error: 'Too many preview requests — try again in an hour' },
+    standardHeaders: true,
+    legacyHeaders: false,
+  });
+
+  const publicHealthScoreLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000,
+    max: 15,
+    message: { ok: false, error: 'Too many audits — try again in an hour' },
+    standardHeaders: true,
+    legacyHeaders: false,
+  });
+
+  // Public launch URL — sales front door
+  app.get(['/site-builder', '/sitebuilder', '/sites'], (_req, res) => {
+    res.redirect(302, '/overlay/site-builder-landing.html');
+  });
+
+  /**
+   * POST /api/v1/sites/public-lead
+   * Public beta intake — no command key. Builds a lean preview and emails the lead when possible.
+   * Body: { businessUrl, contactEmail, businessName?, contactName?, referrer?, vertical? }
+   */
+  router.post('/public-lead', publicLeadLimiter, async (req, res) => {
+    try {
+      let businessUrl = String(req.body?.businessUrl || req.body?.url || '').trim();
+      const contactEmail = String(req.body?.contactEmail || req.body?.email || '').trim().toLowerCase();
+      const businessName = String(req.body?.businessName || req.body?.name || '').trim() || undefined;
+      const contactName = String(req.body?.contactName || '').trim() || undefined;
+      const referrer = String(req.body?.referrer || req.body?.referrerClientId || req.body?.ref || '').trim() || undefined;
+      const vertical = String(req.body?.vertical || req.query?.vertical || '').trim() || undefined;
+
+      // Real users type "yourbusiness.com", not "https://yourbusiness.com" — normalize instead of rejecting.
+      if (businessUrl && !/^https?:\/\//i.test(businessUrl)) {
+        businessUrl = `https://${businessUrl.replace(/^\/+/, '')}`;
+      }
+      if (!/^https?:\/\/[^\s]+\.[^\s]+/i.test(businessUrl)) {
+        return res.status(400).json({ ok: false, error: 'Enter a valid business website (e.g. yourbusiness.com)' });
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail)) {
+        return res.status(400).json({ ok: false, error: 'A valid contactEmail is required' });
+      }
+
+      const pipeline = getProspectPipeline({
+        callCouncilMember,
+        pool,
+        outreachAutomation,
+        notificationService,
+        baseUrl,
+      });
+
+      const options = {
+        businessUrl,
+        contactEmail,
+        contactName,
+        businessName,
+        referrer,
+        vertical,
+        enrich: true,
+        skipRepair: false,
+        skipBlogs: true,
+        skipQualify: true,
+      };
+
+      const job = await enqueueProspectJob(pipeline, options);
+      if (!job.ok) {
+        return res.status(job.error?.includes('already running') ? 409 : 400).json(job);
+      }
+
+      const previewUrl = job.clientId ? pipeline.resolvePreviewUrl(job.clientId) : null;
+      const statusUrl = job.clientId ? `/api/v1/sites/public-preview-status/${job.clientId}` : null;
+      const founderNotify = process.env.ADAM_NOTIFY_EMAIL || process.env.WORK_EMAIL || 'adam@hopkinsgroup.org';
+      if (notificationService?.sendEmail) {
+        notificationService
+          .sendEmail({
+            to: founderNotify,
+            subject: `Site Builder lead — ${businessName || businessUrl}`,
+            html: `<p>New public lead from Site Builder launch page (prebuilt preview).</p>
+              <p><b>Business:</b> ${businessName || '(none)'}<br>
+              <b>URL:</b> ${businessUrl}<br>
+              <b>Email:</b> ${contactEmail}<br>
+              <b>clientId:</b> ${job.clientId || ''}<br>
+              <b>Preview:</b> <a href="${previewUrl || ''}">${previewUrl || ''}</a></p>`,
+            text: `Site Builder lead: ${businessUrl} / ${contactEmail}`,
+          })
+          .catch((err) => logger.warn?.('[SITE] founder lead notify failed', { error: err.message }));
+      }
+
+      logger.info('[SITE] Public lead accepted (prebuilt)', { businessUrl, contactEmail, clientId: job.clientId, previewUrl });
+      return res.status(202).json({
+        ok: true,
+        message: 'Preview build started. We will email you when it is ready.',
+        clientId: job.clientId || null,
+        previewUrl,
+        deferred: false,
+        statusUrl,
+      });
+    } catch (err) {
+      logger.error('[SITE] Public lead error', { error: err.message });
+      return res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  /**
+   * GET /api/v1/sites/health-score
+   * Public website health score — no command key. Rate-limited.
+   * Query: { url }
+   */
+  router.get('/health-score', publicHealthScoreLimiter, async (req, res) => {
+    try {
+      let targetUrl = String(req.query.url || '').trim();
+      if (!targetUrl) return res.status(400).json({ ok: false, error: 'url is required' });
+      if (!/^https?:\/\//i.test(targetUrl)) targetUrl = `https://${targetUrl.replace(/^\/+/, '')}`;
+      if (!/^https?:\/\/[^\s]+\.[^\s]+/i.test(targetUrl)) {
+        return res.status(400).json({ ok: false, error: 'Enter a valid website URL' });
+      }
+
+      const { scoreProspectUrl } = await import('../services/site-builder-opportunity-scorer.js');
+      const result = await scoreProspectUrl(targetUrl, { timeout: 6000 });
+
+      // Rough revenue-leak estimate for the lead magnet. Not a real forecast.
+      const leadValue = { dentist: 2500, attorney: 2400, contractor: 1500, advisor: 1800, default: 1200 };
+      const vertical = String(req.query.vertical || '').trim();
+      const baseValue = leadValue[vertical] || leadValue.default;
+      const leakFactor = result.opportunityScore >= 80 ? 0.12
+        : result.opportunityScore >= 60 ? 0.08
+        : result.opportunityScore >= 40 ? 0.05
+        : result.opportunityScore >= 20 ? 0.02
+        : 0;
+      const revenueLeakEstimate = result.opportunityScore ? Math.round(baseValue * leakFactor) : 0;
+
+      return res.json({
+        ok: true,
+        ...result,
+        revenueLeakEstimate,
+        leadValue: baseValue,
+      });
+    } catch (err) {
+      logger.error('[SITE] Health score error', { error: err.message });
+      return res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  /**
+   * GET /api/v1/sites/audit
+   * Public website revenue leak audit — alias for health-score with longer framing.
+   * Query: { url }
+   */
+  router.get('/audit', publicHealthScoreLimiter, async (req, res) => {
+    try {
+      let targetUrl = String(req.query.url || '').trim();
+      if (!targetUrl) return res.status(400).json({ ok: false, error: 'url is required' });
+      if (!/^https?:\/\//i.test(targetUrl)) targetUrl = `https://${targetUrl.replace(/^\/+/, '')}`;
+      if (!/^https?:\/\/[^\s]+\.[^\s]+/i.test(targetUrl)) {
+        return res.status(400).json({ ok: false, error: 'Enter a valid website URL' });
+      }
+
+      const { scoreProspectUrl } = await import('../services/site-builder-opportunity-scorer.js');
+      const result = await scoreProspectUrl(targetUrl, { timeout: 6000 });
+
+      const leadValue = { dentist: 2500, attorney: 2400, contractor: 1500, advisor: 1800, default: 1200 };
+      const vertical = String(req.query.vertical || '').trim();
+      const baseValue = leadValue[vertical] || leadValue.default;
+      const leakFactor = result.opportunityScore >= 80 ? 0.12
+        : result.opportunityScore >= 60 ? 0.08
+        : result.opportunityScore >= 40 ? 0.05
+        : result.opportunityScore >= 20 ? 0.02
+        : 0;
+      const revenueLeakEstimate = result.opportunityScore ? Math.round(baseValue * leakFactor) : 0;
+
+      return res.json({
+        ok: true,
+        audit: true,
+        ...result,
+        revenueLeakEstimate,
+        leadValue: baseValue,
+      });
+    } catch (err) {
+      logger.error('[SITE] Audit error', { error: err.message });
+      return res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // DB fallback FIRST — Railway multi-instance / ephemeral disk often miss files.
+  // Static is secondary so durable previewHtml in Postgres always wins.
+  // Deferred prospects: first click triggers lean build + building placeholder.
+  app.get('/previews/:clientId/index.html', async (req, res, next) => {
+    try {
+      if (!pool) return next();
+      const clientId = String(req.params.clientId || '');
+      if (!clientId || !/^[\w-]+$/.test(clientId)) return next();
+      const result = await pool.query(
+        `SELECT business_name, status, metadata FROM prospect_sites WHERE client_id = $1 LIMIT 1`,
+        [clientId]
+      );
+      const row = result.rows[0];
+      const meta = row?.metadata && typeof row.metadata === 'object' ? { ...row.metadata } : {};
+      const html = meta.previewHtml;
+      if (html && typeof html === 'string') {
+        const deployDir = path.join(process.cwd(), 'public', 'previews', clientId);
+        await fsp.mkdir(deployDir, { recursive: true }).catch(() => null);
+        await fsp.writeFile(path.join(deployDir, 'index.html'), html).catch(() => null);
+
+        // Restore variant HTML files (and a lightweight meta.json) so the
+        // switcher iframe / editor work even after ephemeral disk is wiped.
+        const variantHtmls = meta.variantHtmls && typeof meta.variantHtmls === 'object' ? meta.variantHtmls : {};
+        for (const [variantId, vHtml] of Object.entries(variantHtmls)) {
+          if (typeof vHtml !== 'string') continue;
+          const vDir = path.join(deployDir, 'variants', variantId);
+          await fsp.mkdir(vDir, { recursive: true }).catch(() => null);
+          await fsp.writeFile(path.join(vDir, 'index.html'), vHtml).catch(() => null);
+        }
+        if (meta.editToken) {
+          const diskMeta = { ...meta };
+          delete diskMeta.previewHtml;
+          delete diskMeta.variantHtmls;
+          await fsp.writeFile(
+            path.join(deployDir, 'meta.json'),
+            JSON.stringify(diskMeta, null, 2)
+          ).catch(() => null);
+        }
+        res.set('Content-Type', 'text/html; charset=utf-8');
+        res.set('X-Preview-Source', 'db');
+        return res.send(html);
+      }
+
+      if (row) {
+        const pipeline = getProspectPipeline({
+          callCouncilMember,
+          pool,
+          outreachAutomation,
+          notificationService,
+          baseUrl,
+        });
+        const kick = await triggerBuildOnView(pipeline, clientId).catch((err) => ({
+          ok: false,
+          reason: err.message,
+        }));
+        logger.info('[SITE] Preview click — deferred build', {
+          clientId,
+          started: kick?.started,
+          reason: kick?.reason,
+        });
+        res.set('Content-Type', 'text/html; charset=utf-8');
+        res.set('Cache-Control', 'no-store');
+        // 'not_deferred' with no rebuild started means repair retries are exhausted
+        // (or the row was never buildable at all) — showing the spinner here would
+        // poll forever with no work happening behind it. Say so honestly instead.
+        if (kick?.reason === 'not_deferred' && !kick?.started) {
+          res.set('X-Preview-Source', 'unavailable');
+          return res.status(200).send(previewUnavailableHtml(clientId, row.business_name || ''));
+        }
+        res.set('X-Preview-Source', 'building-placeholder');
+        return res.status(200).send(buildingPlaceholderHtml(clientId, row.business_name || ''));
+      }
+
+      return next();
+    } catch {
+      return next();
+    }
+  });
+
+  /** Public poll for deferred preview placeholder (no PII). */
+  app.get('/api/v1/sites/public-preview-status/:clientId', async (req, res) => {
+    try {
+      const clientId = String(req.params.clientId || '');
+      if (!clientId || !/^[\w-]+$/.test(clientId) || !pool) {
+        return res.status(400).json({ ok: false, error: 'Invalid clientId' });
+      }
+      const result = await pool.query(
+        `SELECT status, metadata FROM prospect_sites WHERE client_id = $1 LIMIT 1`,
+        [clientId]
+      );
+      const row = result.rows[0];
+      if (!row) return res.status(404).json({ ok: false, error: 'not found' });
+      const meta = row.metadata && typeof row.metadata === 'object' ? row.metadata : {};
+      const ready = typeof meta.previewHtml === 'string' && meta.previewHtml.length > 100;
+      return res.json({
+        ok: true,
+        clientId,
+        status: row.status,
+        ready,
+        building: row.status === 'building' || (!ready && ['queued', 'invited'].includes(row.status)),
+        error: ready ? null : (meta.jobError || null),
+      });
+    } catch (err) {
+      return res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
   app.use(
     '/previews',
     express.static(resolvePreviewsDir(), {
       dotfiles: 'ignore',
       index: 'index.html',
+      fallthrough: true,
     })
   );
 
-  // Reconcile prospect jobs orphaned at 'building' by a mid-build redeploy — best-effort, on boot.
+  // Reclaim prospect jobs orphaned at 'building' by a mid-build redeploy — best-effort, on boot.
   if (pool) {
-    reconcileStuckProspectJobs(pool).catch((err) =>
-      logger.warn('[SITE] Stuck-job reconcile failed on boot', { error: err.message })
+    failStaleProspectJobs(pool).catch((err) =>
+      logger.warn('[SITE] Stale-job reclaim failed on boot', { error: err.message })
     );
   }
+
+  // Variant file DB fallback — serves each variant's HTML from Postgres when the
+  // file has been lost due to ephemeral disk. Also writes it back so subsequent
+  // requests hit the static file.
+  app.get('/previews/:clientId/variants/:variantId/index.html', async (req, res, next) => {
+    try {
+      if (!pool) return next();
+      const clientId = String(req.params.clientId || '');
+      const variantId = String(req.params.variantId || '');
+      if (!clientId || !/^[\w-]+$/.test(clientId) || !variantId || !/^[\w-]+$/.test(variantId)) {
+        return next();
+      }
+      const result = await pool.query(
+        `SELECT metadata FROM prospect_sites WHERE client_id = $1 LIMIT 1`,
+        [clientId]
+      );
+      const row = result.rows[0];
+      const meta = row?.metadata && typeof row.metadata === 'object' ? { ...row.metadata } : {};
+      const vHtml = meta.variantHtmls?.[variantId];
+      if (vHtml && typeof vHtml === 'string') {
+        const vDir = path.join(resolvePreviewsDir(), clientId, 'variants', variantId);
+        await fsp.mkdir(vDir, { recursive: true }).catch(() => null);
+        await fsp.writeFile(path.join(vDir, 'index.html'), vHtml).catch(() => null);
+        res.set('Content-Type', 'text/html; charset=utf-8');
+        res.set('X-Preview-Source', 'db-variant');
+        return res.send(vHtml);
+      }
+      return next();
+    } catch {
+      return next();
+    }
+  });
+
+  app.get('/previews/:clientId', (req, res) => {
+    res.redirect(302, `/previews/${encodeURIComponent(req.params.clientId)}/index.html`);
+  });
 
   /**
    * POST /api/v1/sites/build
@@ -150,9 +606,10 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
       if (!targetUrl) return res.status(400).json({ ok: false, error: 'url or businessUrl is required' });
 
       logger.info('[SITE] Build request', { url: targetUrl, competitors: (competitorUrls || []).length });
-      const builder = getSiteBuilder({ callCouncilMember, baseUrl });
+      const builder = getSiteBuilder({ callCouncilMember, baseUrl, pool });
       const result = await builder.buildFromUrl(targetUrl, { businessInfo, competitorUrls });
 
+      await persistDirectBuild(pool, targetUrl, result);
       res.json({ ok: result.success, ...result });
     } catch (err) {
       logger.error('[SITE] Build error', { error: err.message });
@@ -168,14 +625,15 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
    */
   router.post('/build-variants', requireKey, buildLimiter, async (req, res) => {
     try {
-      const { url, businessUrl, businessInfo, competitorUrls, variantCount, styleIds } = req.body;
+      const { url, businessUrl, businessInfo, competitorUrls, variantCount, styleIds, skipRepair, skipBlogs, skipAi, leanTemplate, enrich } = req.body;
       const targetUrl = url || businessUrl;
       if (!targetUrl) return res.status(400).json({ ok: false, error: 'url or businessUrl is required' });
 
       logger.info('[SITE] Build-variants request', { url: targetUrl, variantCount: variantCount || null });
-      const builder = getSiteBuilder({ callCouncilMember, baseUrl });
-      const result = await builder.buildVariants(targetUrl, { businessInfo, competitorUrls, variantCount, styleIds });
+      const builder = getSiteBuilder({ callCouncilMember, baseUrl, pool });
+      const result = await builder.buildVariants(targetUrl, { businessInfo, competitorUrls, variantCount, styleIds, skipRepair, skipBlogs, skipAi, leanTemplate, enrich });
 
+      await persistDirectBuild(pool, targetUrl, result);
       res.json({ ok: result.success, ...result });
     } catch (err) {
       logger.error('[SITE] Build-variants error', { error: err.message });
@@ -228,7 +686,7 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
       if (!Array.isArray(competitorUrls) || competitorUrls.length === 0) {
         return res.status(400).json({ ok: false, error: 'competitorUrls (non-empty array) is required' });
       }
-      const builder = getSiteBuilder({ callCouncilMember, baseUrl });
+      const builder = getSiteBuilder({ callCouncilMember, baseUrl, pool });
       const info = businessInfo || { industry };
       const result = await builder.benchmarkCompetitors(info, competitorUrls);
       res.json({ ok: true, ...result });
@@ -249,7 +707,7 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
       const { businessInfo, url, competitorUrls, industry } = req.body;
       const info = businessInfo || (url ? { sourceUrl: url, website: url, industry } : null);
       if (!info) return res.status(400).json({ ok: false, error: 'businessInfo or url is required' });
-      const builder = getSiteBuilder({ callCouncilMember, baseUrl });
+      const builder = getSiteBuilder({ callCouncilMember, baseUrl, pool });
       const result = await builder.auditPresence(info, Array.isArray(competitorUrls) ? competitorUrls : []);
       res.json({ ok: true, ...result });
     } catch (err) {
@@ -260,25 +718,46 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
 
   /**
    * POST /api/v1/sites/prospect
-   * Async by default: returns 202 immediately, builds + emails in background.
-   * Body: { businessUrl, contactEmail?, contactName?, businessName?, skipEmail?, businessInfo?, sync? }
-   * sync=true waits for full pipeline (may hit Railway HTTP timeout on long builds).
+   * Pre-build by default. The preview is built as soon as the request is accepted,
+   * and the outreach email is sent after the build completes. Set deferred=true to
+   * email the link immediately and build only when the prospect opens it.
+   * Body: { businessUrl, contactEmail?, deferred?, skipEmail?, sync?, leanTemplate?, skipQualify?, ... }
    */
   router.post('/prospect', requireKey, prospectLimiter, async (req, res) => {
     try {
-      const { businessUrl, contactEmail, contactName, businessName, skipEmail, businessInfo, sync } = req.body;
+      const {
+        businessUrl, contactEmail, contactName, businessName, skipEmail, businessInfo, sync,
+        enrich, skipRepair, skipBlogs, skipAi, leanTemplate, deferred, skipQualify,
+      } = req.body;
       if (!businessUrl) return res.status(400).json({ ok: false, error: 'businessUrl is required' });
 
-      logger.info('[SITE] Prospect request', { businessUrl, contactEmail, sync: !!sync });
+      const useDeferred = deferred === true
+        && !!contactEmail
+        && skipEmail !== true
+        && sync !== true
+        && req.query.sync !== '1';
+
+      logger.info('[SITE] Prospect request', {
+        businessUrl, contactEmail, sync: !!sync, deferred: useDeferred, enrich, skipRepair, skipBlogs, skipAi,
+      });
       const pipeline = getProspectPipeline({ callCouncilMember, pool, outreachAutomation, notificationService, baseUrl });
 
       const options = {
         businessUrl, contactEmail, contactName, businessName, skipEmail, businessInfo,
+        enrich, skipRepair, skipBlogs, skipAi, leanTemplate, skipQualify,
       };
 
       if (sync === true || req.query.sync === '1') {
         const result = await pipeline.processProspect(options);
         return res.json({ ok: result.success, async: false, ...result });
+      }
+
+      if (useDeferred) {
+        const job = await enqueueDeferredProspectJob(pipeline, options);
+        if (!job.ok) {
+          return res.status(job.error?.includes('already running') ? 409 : 400).json(job);
+        }
+        return res.status(202).json(job);
       }
 
       const job = await enqueueProspectJob(pipeline, options);
@@ -303,7 +782,8 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
       if (!clientId || !/^[\w-]+$/.test(clientId)) {
         return res.status(400).json({ ok: false, error: 'Invalid clientId' });
       }
-      const status = await getProspectJobStatus(pool, clientId);
+      const pipeline = getProspectPipeline({ callCouncilMember, pool, outreachAutomation, notificationService, baseUrl });
+      const status = await getProspectJobStatus(pool, clientId, { pipeline });
       if (!status.ok) return res.status(404).json(status);
       return res.json(status);
     } catch (err) {
@@ -312,22 +792,51 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
   });
 
   /**
+   * POST /api/v1/sites/prospects/reclaim-stale
+   * Fail orphaned building jobs (no heartbeat / instance recycle).
+   */
+  router.post('/prospects/reclaim-stale', requireKey, async (req, res) => {
+    try {
+      const staleMs = Number(req.body?.staleMs);
+      const result = await failStaleProspectJobs(pool, Number.isFinite(staleMs) && staleMs > 0 ? { staleMs } : {});
+      return res.json(result);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  /**
    * POST /api/v1/sites/bulk-prospect
-   * Process multiple prospects in batch.
-   * Body: { prospects: [{ businessUrl, contactEmail, contactName, businessName }] }
+   * Pre-build each preview by default, then email the link. Set deferred=true to email
+   * the link immediately and build on first click (legacy/lower cost per non-engager).
+   * Body: { prospects: [...], deferred?: boolean }
    */
   router.post('/bulk-prospect', requireKey, prospectLimiter, async (req, res) => {
     try {
-      const { prospects = [] } = req.body;
+      const { prospects = [], deferred } = req.body;
       if (!prospects.length) return res.status(400).json({ ok: false, error: 'prospects array required' });
       if (prospects.length > 20) return res.status(400).json({ ok: false, error: 'Max 20 prospects per batch' });
 
-      logger.info('[SITE] Bulk prospect request', { count: prospects.length });
+      logger.info('[SITE] Bulk prospect request', { count: prospects.length, deferred: deferred === true });
       const pipeline = getProspectPipeline({ callCouncilMember, pool, outreachAutomation, notificationService, baseUrl });
 
       const results = [];
       for (const prospect of prospects) {
-        const job = await enqueueProspectJob(pipeline, prospect);
+        const useDeferred = deferred === true
+          && !!prospect.contactEmail
+          && prospect.skipEmail !== true;
+        const options = {
+          ...prospect,
+          skipAi: prospect.skipAi !== false,
+          leanTemplate: prospect.leanTemplate !== false,
+          skipRepair: prospect.skipRepair !== false,
+          skipBlogs: prospect.skipBlogs !== false,
+          enrich: prospect.enrich === true,
+          skipQualify: prospect.skipQualify !== false,
+        };
+        const job = useDeferred
+          ? await enqueueDeferredProspectJob(pipeline, options)
+          : await enqueueProspectJob(pipeline, options);
         results.push(job);
       }
 
@@ -335,6 +844,7 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
       res.status(202).json({
         ok: true,
         async: true,
+        deferred: deferred === true,
         total: prospects.length,
         accepted,
         failed: prospects.length - accepted,
@@ -347,12 +857,61 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
   });
 
   /**
+   * POST /api/v1/sites/prospects/retry-invites
+   * Re-fire deferred/outreach email for built prospects that never got external delivery.
+   * Body: { limit?: number, onlyExternal?: boolean }
+   * Used the moment Postmark/Resend unblocks so the warm queue converts to sends.
+   */
+  router.post('/prospects/retry-invites', requireKey, async (req, res) => {
+    try {
+      if (!pool) return res.status(503).json({ ok: false, error: 'pool required' });
+      const limit = Math.min(Number(req.body?.limit) || 20, 50);
+      const onlyExternal = req.body?.onlyExternal !== false;
+      const result = await pool.query(
+        `SELECT client_id, business_url, contact_email, contact_name, business_name, preview_url, status, metadata
+           FROM prospect_sites
+          WHERE contact_email IS NOT NULL
+            AND preview_url IS NOT NULL
+            AND status IN ('built', 'queued', 'invited', 'failed', 'sent')
+            AND (
+              email_sent = false
+              OR COALESCE(metadata->>'emailSendError','') <> ''
+            )
+          ORDER BY updated_at DESC
+          LIMIT $1`,
+        [limit]
+      );
+      const pipeline = getProspectPipeline({ callCouncilMember, pool, outreachAutomation, notificationService, baseUrl });
+      const outcomes = [];
+      for (const row of result.rows || []) {
+        const email = String(row.contact_email || '');
+        if (onlyExternal && /(hopkinsgroup|limitlessoi|web-library|adam\+)/i.test(email)) {
+          outcomes.push({ clientId: row.client_id, skipped: true, reason: 'internal_test_inbox' });
+          continue;
+        }
+        const resent = await pipeline.resendOutreachEmail(row.client_id, { contactEmail: email });
+        outcomes.push({
+          clientId: row.client_id,
+          email,
+          ok: resent.success === true,
+          emailSent: resent.emailSent === true,
+          error: resent.error || null,
+        });
+      }
+      const sent = outcomes.filter((o) => o.emailSent).length;
+      return res.json({ ok: true, attempted: outcomes.length, sent, outcomes });
+    } catch (err) {
+      return res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  /**
    * GET /api/v1/sites/previews
    * List all built preview sites.
    */
   router.get('/previews', requireKey, async (req, res) => {
     try {
-      const builder = getSiteBuilder({ callCouncilMember, baseUrl });
+      const builder = getSiteBuilder({ callCouncilMember, baseUrl, pool });
       const previews = await builder.listPreviews();
       res.json({ ok: true, count: previews.length, previews });
     } catch (err) {
@@ -382,13 +941,21 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
   router.patch('/prospects/:clientId/status', requireKey, async (req, res) => {
     try {
       const { clientId } = req.params;
-      const { status, dealValue } = req.body;
+      const { status, dealValue, contactEmail } = req.body;
+      if (!status && !contactEmail && dealValue == null) {
+        return res.status(400).json({ ok: false, error: 'status, contactEmail, or dealValue required' });
+      }
 
       await pool.query(
-        `UPDATE prospect_sites SET status = $1, deal_value = COALESCE($2, deal_value) WHERE client_id = $3`,
-        [status, dealValue || null, clientId]
+        `UPDATE prospect_sites
+            SET status = COALESCE($1, status),
+                deal_value = COALESCE($2, deal_value),
+                contact_email = COALESCE($3, contact_email),
+                updated_at = NOW()
+          WHERE client_id = $4`,
+        [status || null, dealValue ?? null, contactEmail || null, clientId]
       );
-      res.json({ ok: true, clientId, status });
+      res.json({ ok: true, clientId, status: status || undefined, contactEmail: contactEmail || undefined });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }
@@ -419,8 +986,9 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
   router.post('/prospects/:clientId/resend-outreach', requireKey, async (req, res) => {
     try {
       const { clientId } = req.params;
+      const contactEmail = req.body?.contactEmail || req.body?.contact_email || null;
       const pipeline = getProspectPipeline({ callCouncilMember, pool, outreachAutomation, notificationService, baseUrl });
-      const result = await pipeline.resendOutreachEmail(clientId);
+      const result = await pipeline.resendOutreachEmail(clientId, { contactEmail });
       if (!result.success) {
         return res.status(result.error === 'prospect not found' ? 404 : 400).json({ ok: false, ...result });
       }
@@ -644,7 +1212,7 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
       EMAIL_FROM: { required: true, purpose: 'Sender email address for outreach' },
       EMAIL_PROVIDER: { required: true, purpose: 'Email provider: smtp (Gmail) or postmark' },
       SITE_BASE_URL: { required: false, purpose: 'Public preview URL base (falls back to RAILWAY_PUBLIC_DOMAIN)' },
-      STRIPE_SECRET_KEY: { required: true, purpose: 'Entry publish checkout ($49 default)' },
+      STRIPE_SECRET_KEY: { required: true, purpose: 'Entry publish checkout ($45 beta default)' },
       SLACK_WEBHOOK_URL: { required: false, purpose: 'Warm lead notifications (optional)' },
     };
 
@@ -690,7 +1258,35 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
     });
   });
 
+  /**
+   * GET /api/v1/sites/referral/:clientId
+   * Public referral link for a given preview clientId.
+   */
+  router.get('/referral/:clientId', (req, res) => {
+    const { clientId } = req.params;
+    if (!clientId || !/[\w-]+/.test(String(clientId))) {
+      return res.status(400).json({ ok: false, error: 'Invalid clientId' });
+    }
+    const safeBase = String(baseUrl || '').replace(/\/$/, '') || `${req.protocol}://${req.get('host')}`;
+    const referralUrl = `${safeBase}/overlay/site-builder-landing.html?ref=${encodeURIComponent(clientId)}`;
+    return res.json({ ok: true, clientId, referralUrl });
+  });
+
   app.use('/api/v1/sites', router);
 
   logger.info('[SITE] Routes registered at /api/v1/sites/*');
+
+  // Start the 4-step follow-up / nurture cron (1h interval, 1m initial delay).
+  if (pool && notificationService?.sendEmail) {
+    const sendEmail = async (to, subject, html) => {
+      const result = await notificationService.sendEmail({ to, subject, html, text: '' });
+      if (!result.success) logger.warn('[SITE] Follow-up email not sent', { to, reason: result.error });
+      return result;
+    };
+    const tick = () => runFollowUpCron({ pool, sendEmail, baseUrl }).catch((err) => {
+      logger.warn('[SITE] Follow-up cron error', { error: err.message });
+    });
+    setTimeout(tick, 60 * 1000);
+    setInterval(tick, 60 * 60 * 1000);
+  }
 }

@@ -2,10 +2,11 @@
   "schema": "product_build_queue_v1",
   "product_id": "marketingos",
   "verify_script": null,
-  "notes": "MarketingOS autonomous build queue — SocialMediaOS (SMOS) Phase 1, the Founder Story Session MVP (docs/products/marketingos/PRODUCT_HOME.md §5 Phase 1, §6 exact spec). TEXT-MODE ONLY: the audio-upload path (POST /sessions/:id/audio) is intentionally EXCLUDED because it depends on Cloudflare R2 env vars that are UNVERIFIED (§6 readiness gate). RE-QUEUED 2026-07-08 after the self-refinement spine (auto-registration + functional-proof gate + integration context) landed: the loop's original Phase 1 was false-done — the schema migration implemented the WRONG spec (generic ingestion schema), the route/UI modules imported non-existent service exports + a missing ./ai-council.js and were never mounted. The corrected §6 schema ships directly in this re-queue PR (delicate DROP of the empty mis-built tables — non-destructive, zero rows). The route + UI modules are re-queued as SELF-CONTAINED single-file modules (no external service imports) so they COMPOSE and the functional-proof gate can prove them LIVE. Both are pre-registered in config/auto-registered-product-modules.json so the boot auto-mounts them and module-health verifies them before the step can be done.",
-  "updated_at": "2026-07-09",
+  "notes": "MarketingOS autonomous build queue — SocialMediaOS (SMOS) Phase 1, the Founder Story Session MVP (docs/products/marketingos/PRODUCT_HOME.md §5 Phase 1, §6 exact spec). TEXT-MODE ONLY: the audio-upload path (POST /sessions/:id/audio) is intentionally EXCLUDED because it depends on Cloudflare R2 env vars that are UNVERIFIED (§6 readiness gate). RE-QUEUED 2026-07-08 after the self-refinement spine (auto-registration + functional-proof gate + integration context) landed: the loop's original Phase 1 was false-done — the schema migration implemented the WRONG spec (generic ingestion schema), the route/UI modules imported non-existent service exports + a missing ./ai-council.js and were never mounted. The corrected §6 schema ships directly in this re-queue PR (delicate DROP of the empty mis-built tables — non-destructive, zero rows). The route + UI modules are re-queued as SELF-CONTAINED single-file modules (no external service imports) so they COMPOSE and the functional-proof gate can prove them LIVE. Both are pre-registered in config/auto-registered-product-modules.json so the boot auto-mounts them and module-health verifies them before the step can be done. | Adam 2026-07-12: UNGATED Phase 5 social publisher+route for money ASAP; LIVE_SOCIAL_PUBLISH_ENABLED remains off until Railway flip. Seeded community value drafter for Reddit/FB/LinkedIn reply drafts.",
+  "updated_at": "2026-07-12",
   "content_intel_notes": "CONTENT INTELLIGENCE BATCH QUEUED 2026-07-09 (buildable subset of docs/products/marketingos/socialmediaos/PRODUCT_HOME.md Priority Ideas — NO external infra, AI only via injected callCouncilMember, composes with existing content): smos-title-universe (#4 50-title universe), smos-script-scorer (Earned-Attention framework), smos-publish-gate (#19 publish-or-kill), smos-repurpose (#42/#27 multiplier + LinkedIn carousel), and smos-intel-routes exposing all four at /api/v1/marketing/intel/*. The route module is pre-registered in config/auto-registered-product-modules.json so the functional-proof gate proves the endpoints LIVE before done. Chosen because §5 Phases 3-5 are infra-gated (FFmpeg/Whisper, social API keys UNVERIFIED) — these intelligence features ship value now with zero unverified dependencies.",
   "phase2_notes": "PHASE 2 QUEUED 2026-07-09 (docs/products/marketingos/PRODUCT_HOME.md §5 Phase 2 — Social Content Calendar): four composing single-file steps — schema (marketing_content_atoms / marketing_brand_voice_profiles / marketing_calendar_slots, FK to Phase 1 tables), a LOCAL/no-AI brand-voice fingerprint+scorer service, the calendar/atoms JSON API, and the SSR calendar + atom-library UI. Route + UI modules are pre-registered in config/auto-registered-product-modules.json so the boot auto-mounts them and the functional-proof gate proves /api/v1/marketing/calendar + /marketing/calendar are LIVE before each step flips to done. Phase 3 (Video Clip Workflow) is intentionally NOT queued — its §5 spec has a BLOCKED dependency (FFmpeg on Railway + Whisper word-timestamps UNVERIFIED); it enrolls once those are verified.",
+  "phase5_social_publish_notes": "PHASE 5 QUEUED 2026-07-10 — SOCIAL PUBLISHING, REVISED ARCHITECTURE (supersedes the §5 Phase 5 Buffer/Publer-first note; PRODUCT_HOME §5/§7 updated in the same session). Adam directive: Grok is building the per-platform sign-in window (the human login moment); this queue builds everything downstream of a completed login — storing the connection, and actually posting an APPROVED piece. Chosen mechanism: replay-first browser-agent template automation (services/general-browser-agent.js + services/general-browser-agent-live.js — ALREADY PROVEN, Chair receipt LIFERE_COUNCIL_1783455558829, SENTRY PASS + behavioral proofs, currently used for TC-service/eXp/GLVAR and founder-authorized signups) instead of native OAuth publishing APIs or a Buffer/Publer subscription — no new browser-driving logic is authored anywhere in this batch, only goal configs + thin CONDUCTOR-GLUE wiring around the existing proven loop. Explore-once/replay-cheap: the FIRST post to a given platform runs the full AI explore loop and its evidence-verified success is captured as a reusable {site,goal,steps} template (marketing_social_posting_templates); every later post replays that template directly (near-instant, no AI cost) and only falls back to a fresh explore pass — automatically re-capturing an updated template — if replay's independent evidence check fails, i.e. the site changed. Connection storage is session-based (encrypted cookies/storage-state via core/tco-encryption.js in marketing_social_connections), NOT OAuth tokens, because this is UI automation of the founder's own logged-in account, not each platform's developer API. CONTRACT WITH THE GROK SIGN-IN FLOW: whichever process completes a platform login (Grok's window, or this same browser-agent driving the login itself) must call services/marketing-social-connections.js saveConnection({ownerId, platform, sessionState}) — this is the single seam the two efforts share; nothing else needs to be coordinated. HONESTY FLAG for Adam (not an engineering blocker, a business-risk decision he should knowingly accept): automating posting outside a platform's official API can conflict with that platform's Terms of Service around non-API automation — real risk is account friction/suspension on the founder's or a client's own account, not a technical risk. A global kill switch (LIVE_SOCIAL_PUBLISH_ENABLED Railway env var, default unset/off) gates any real platform action until Adam turns it on. The approval gate (marketing_content_pieces.status='approved') stays the ONLY thing that can ever reach a live post — enforced independently in both the publisher service and the route, per §9 Rule 4 / constitutional Principle 6. Six composing steps below: schema, connections service, per-platform goal config, the publisher (replay-first + self-recapture), the route (pre-registered in config/auto-registered-product-modules.json), and a Layer A verifier that proves the gates without ever touching a real platform.",
   "steps": [
     {
       "id": "mos-phase1-schema",
@@ -17,7 +18,10 @@
       "founder_gated": false,
       "attempts": 1,
       "max_output_tokens": 4000,
-      "revive_count": 0
+      "revive_count": 0,
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "mos-phase1-schema",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "mos-session-routes",
@@ -35,7 +39,10 @@
       "last_attempt_at": "2026-07-07T10:49:33.021Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "commit_sha": "e3b0b4a1f15f1d276c944ce7f0ff06fede7c6c55",
-      "completed_at": "2026-07-07T10:49:34.567Z"
+      "completed_at": "2026-07-07T10:49:34.567Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "mos-session-routes",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "mos-session-ui",
@@ -52,7 +59,10 @@
       "revive_count": 0,
       "commit_sha": "518629045be8f5a5b965a9de1df18a000acbbd7e",
       "last_attempt_at": "2026-07-07T10:58:17.573Z",
-      "completed_at": "2026-07-07T10:58:18.286Z"
+      "completed_at": "2026-07-07T10:58:18.286Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "mos-session-ui",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "mos-phase2-schema",
@@ -69,7 +79,10 @@
       "revive_count": 0,
       "commit_sha": "2916504f4a7159601d4154c5e64a112fa9589961",
       "last_attempt_at": "2026-07-07T11:27:38.568Z",
-      "completed_at": "2026-07-07T11:27:39.318Z"
+      "completed_at": "2026-07-07T11:27:39.318Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "mos-phase2-schema",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "mos-brand-voice",
@@ -86,7 +99,10 @@
       "revive_count": 0,
       "commit_sha": "78b0ca59b630a85709212182ce61cb09d431a899",
       "last_attempt_at": "2026-07-07T11:34:57.491Z",
-      "completed_at": "2026-07-07T11:34:58.113Z"
+      "completed_at": "2026-07-07T11:34:58.113Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "mos-brand-voice",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "mos-phase2-routes",
@@ -104,7 +120,10 @@
       "last_attempt_at": "2026-07-07T12:22:32.662Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "commit_sha": "f7875927db4d72036e4ac80fde792c5784711457",
-      "completed_at": "2026-07-07T12:22:33.358Z"
+      "completed_at": "2026-07-07T12:22:33.358Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "mos-phase2-routes",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "mos-phase2-ui",
@@ -122,7 +141,10 @@
       "last_attempt_at": "2026-07-07T12:31:02.238Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "commit_sha": "38fac5148fd2bbf96dc1f4b516084f7c5aa7f0e2",
-      "completed_at": "2026-07-07T12:31:03.395Z"
+      "completed_at": "2026-07-07T12:31:03.395Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "mos-phase2-ui",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "smos-title-universe",
@@ -139,7 +161,10 @@
       "revive_count": 0,
       "commit_sha": "83cf5b5020955300c5e4da63a4279754218960d2",
       "last_attempt_at": "2026-07-07T17:00:03.572Z",
-      "completed_at": "2026-07-07T17:00:04.296Z"
+      "completed_at": "2026-07-07T17:00:04.296Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "smos-title-universe",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "smos-script-scorer",
@@ -156,7 +181,10 @@
       "revive_count": 0,
       "commit_sha": "edea0bdc53da80b625e1db2f9a45af03b4fe7709",
       "last_attempt_at": "2026-07-07T17:10:19.125Z",
-      "completed_at": "2026-07-07T17:10:19.812Z"
+      "completed_at": "2026-07-07T17:10:19.812Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "smos-script-scorer",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "smos-publish-gate",
@@ -173,7 +201,10 @@
       "revive_count": 0,
       "commit_sha": "2f54070e2f9a86e00923ab1e07f222ea13964e8f",
       "last_attempt_at": "2026-07-07T17:29:40.743Z",
-      "completed_at": "2026-07-07T17:29:41.964Z"
+      "completed_at": "2026-07-07T17:29:41.964Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "smos-publish-gate",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "smos-repurpose",
@@ -190,7 +221,10 @@
       "revive_count": 0,
       "commit_sha": "45d40f8dde86897a02337bd6c876de9adeefec01",
       "last_attempt_at": "2026-07-07T17:55:51.069Z",
-      "completed_at": "2026-07-07T17:55:51.778Z"
+      "completed_at": "2026-07-07T17:55:51.778Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "smos-repurpose",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "smos-intel-routes",
@@ -207,7 +241,10 @@
       "revive_count": 0,
       "commit_sha": "0b4b5d968a1de449eeb608f2e2a05f058332434c",
       "last_attempt_at": "2026-07-07T18:03:33.450Z",
-      "completed_at": "2026-07-07T18:03:34.154Z"
+      "completed_at": "2026-07-07T18:03:34.154Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "smos-intel-routes",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "mos-sentry-layer-b",
@@ -233,7 +270,452 @@
         "layer_b": "PASS",
         "receipt": "products/receipts/SENTRY_MARKETINGOS_LAYER_B.json"
       },
-      "last_error": null
+      "last_error": null,
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "mos-sentry-layer-b",
+      "mission_id": "PRODUCT-marketingos"
+    },
+    {
+      "id": "mos-social-schema",
+      "status": "done",
+      "target_file": "db/migrations/20260710_marketing_social_publishing.sql",
+      "task": "MarketingOS Phase 5 (revised architecture, see phase5_social_publish_notes) schema: three additive tables backing session-based social-account connections, reusable browser-agent posting templates, and a publish audit log. Do NOT alter or drop any existing marketing_* table.",
+      "spec": "Idempotent Postgres migration, CREATE TABLE IF NOT EXISTS only. All id/timestamp columns DB-defaulted (id UUID DEFAULT gen_random_uuid() PRIMARY KEY; timestamps DEFAULT NOW()) — the app must never supply them. Tables: (1) marketing_social_connections — owner_id TEXT NOT NULL, platform TEXT NOT NULL CHECK (platform IN ('instagram','linkedin','x','facebook')), auth_mode TEXT NOT NULL DEFAULT 'browser_session' CHECK (auth_mode IN ('browser_session','oauth')), session_state_encrypted TEXT, status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending','connected','expired','revoked','needs_human')), connected_at TIMESTAMPTZ, last_verified_at TIMESTAMPTZ, last_error TEXT, created_at TIMESTAMPTZ DEFAULT NOW(), updated_at TIMESTAMPTZ DEFAULT NOW(), UNIQUE(owner_id, platform); index on (owner_id). (2) marketing_social_posting_templates — platform TEXT NOT NULL, goal_key TEXT NOT NULL, steps_json JSONB NOT NULL, captured_at TIMESTAMPTZ NOT NULL DEFAULT NOW(), last_used_at TIMESTAMPTZ, last_verified_ok_at TIMESTAMPTZ, site_version_hint TEXT, created_at TIMESTAMPTZ DEFAULT NOW(), UNIQUE(platform, goal_key) — one live template per platform+goal; a fresh successful explore REPLACES it rather than accumulating duplicates. (3) marketing_publish_records — piece_id UUID NOT NULL REFERENCES marketing_content_pieces(id), platform TEXT NOT NULL, platform_post_id TEXT, published_at TIMESTAMPTZ, status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending','published','failed','needs_human')), publisher_service TEXT NOT NULL DEFAULT 'browser_agent', error_detail TEXT, created_at TIMESTAMPTZ DEFAULT NOW(); index on (piece_id). Start with `-- SYNOPSIS:` + `-- @ssot docs/products/marketingos/PRODUCT_HOME.md`.",
+      "depends_on": [
+        "mos-sentry-layer-b"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "max_output_tokens": 4000,
+      "commit_sha": "b29018a0169eb2b83245484940f03afcd9fd3fe1",
+      "last_attempt_at": "2026-07-11T00:21:19.434Z",
+      "completed_at": "2026-07-11T00:21:29.951Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "mos-social-schema",
+      "mission_id": "PRODUCT-marketingos"
+    },
+    {
+      "id": "mos-social-connections-service",
+      "status": "done",
+      "target_file": "services/marketing-social-connections.js",
+      "task": "The single seam between any social-account sign-in flow (Grok's login window, or this codebase's own browser agent driving the login) and MarketingOS's publisher: store, read, list, and revoke a per-owner-per-platform connection. SELF-CONTAINED ESM module — no route/UI logic here.",
+      "spec": "Reuse the EXISTING encryption helper — import { encrypt, decrypt } from '../core/tco-encryption.js' (do NOT reimplement AES-256-GCM). Exports (all async, take pool as first arg): saveConnection(pool, { ownerId, platform, sessionState, status = 'connected' }) — JSON.stringify(sessionState) then encrypt() into session_state_encrypted; UPSERT into marketing_social_connections ON CONFLICT (owner_id, platform) DO UPDATE, setting connected_at = NOW() when status is 'connected'; return the row minus the encrypted field. getConnection(pool, { ownerId, platform }) — SELECT the row; if found, decrypt() + JSON.parse() session_state_encrypted into a `sessionState` field on the returned object; return null if no row. Never let a caller outside this module see the raw ciphertext. listConnections(pool, { ownerId }) — SELECT platform, status, connected_at, last_verified_at, last_error for all of this owner's rows WITHOUT decrypting anything (this is the status list the UI shows — it must never touch session material). revokeConnection(pool, { ownerId, platform }) — UPDATE status='revoked', session_state_encrypted=NULL, updated_at=NOW(). Parameterised SQL only ($1,$2…). Guard everything in try/catch, return structured { ok:false, error } rather than throwing raw. Named exports saveConnection, getConnection, listConnections, revokeConnection (+ default object of all four). Start with `// SYNOPSIS:` + `// @ssot docs/products/marketingos/PRODUCT_HOME.md`.",
+      "depends_on": [
+        "mos-social-schema"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "max_output_tokens": 8000,
+      "commit_sha": "47f923ea00d0005059e54ada308ca22c5f86ab1a",
+      "last_attempt_at": "2026-07-11T00:25:07.328Z",
+      "completed_at": "2026-07-11T00:25:20.195Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "mos-social-connections-service",
+      "mission_id": "PRODUCT-marketingos"
+    },
+    {
+      "id": "mos-social-goal-library",
+      "status": "done",
+      "target_file": "services/marketing-social-goals.js",
+      "task": "Pure per-platform goal configuration for the ALREADY-PROVEN browser agent (services/general-browser-agent.js runBrowserGoal + services/general-browser-agent-live.js runGoalOnSession). This module authors ZERO browser-driving logic of its own — it only describes, for each platform, what 'publish this text as a post' means as a goal string + evidence check the existing loop already knows how to execute.",
+      "spec": "NO DB, NO browser calls, NO AI calls, NO network in this file — pure data + one pure function. Export const SOCIAL_PLATFORMS = ['instagram','linkedin','x','facebook'] — this MUST exactly match the existing marketing_content_pieces.platform CHECK values from §6 (do not add youtube/tiktok; those are Phase 6 / out of scope here). Export function buildPublishGoal({ platform, contentText }): throw a clear Error if platform is not in SOCIAL_PLATFORMS (fail closed — never guess a goal for an unknown platform). Otherwise return { goalKey: 'publish_post', goal: <a plain-language instruction string that tells the agent to compose a new post on this platform using contentText EXACTLY as given, quoting it verbatim inside the instruction, and explicitly telling the agent never to alter, shorten, or embellish the wording>, startUrl: <the platform's real compose/home URL>, expectSiteHost: <the platform's real domain, e.g. 'instagram.com' / 'linkedin.com' / 'x.com' / 'facebook.com'>, mustContain: [<one or two phrases that only appear on that platform's page after a post genuinely succeeds, e.g. a confirmation toast string — used by makeEvidenceVerifier in services/general-browser-agent-runtime.js so success is independently evidenced, never self-reported> ] }. Named export buildPublishGoal + SOCIAL_PLATFORMS (+ default). Start with `// SYNOPSIS:` + `// @ssot docs/products/marketingos/PRODUCT_HOME.md`.",
+      "depends_on": [
+        "mos-social-schema"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "max_output_tokens": 6000,
+      "commit_sha": "d0686b9c9518135cfd286306ecec75978903e627",
+      "last_attempt_at": "2026-07-11T00:27:39.017Z",
+      "completed_at": "2026-07-11T00:27:49.942Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "mos-social-goal-library",
+      "mission_id": "PRODUCT-marketingos"
+    },
+    {
+      "id": "mos-social-publisher",
+      "status": "done",
+      "target_file": "services/marketing-publisher.js",
+      "task": "CONDUCTOR-GLUE orchestration: publish one ALREADY-APPROVED marketing_content_pieces row by replaying a saved browser-agent template first, falling back to the proven full explore loop only if no template exists or replay's evidence check fails, and self-recapturing a fresh template on a successful fallback (self-healing when a platform's UI changes). This file adds ZERO new browser-driving logic — it wires together services already proven: services/marketing-social-connections.js, services/marketing-social-goals.js, services/general-browser-agent-live.js (runGoalOnSession), and services/general-browser-agent-runtime.js (executeAction, makeEvidenceVerifier) for the cheap replay path.",
+      "spec": "Export async publishApprovedPiece({ pool, piece, session, callModel }) where `session` is an already-created live browser session object (e.g. from services/browser-agent.js createSession() — accept it as a caller-supplied dependency, do NOT create or manage the browser here) and `callModel` is the same cheapest-tier-first model caller used elsewhere. GLOBAL KILL SWITCH FIRST: if process.env.LIVE_SOCIAL_PUBLISH_ENABLED !== 'true', return { ok:false, reason:'live_publish_disabled', dryRun:true } immediately, before touching pool, session, or the connection — this is the off switch Adam controls in Railway env. APPROVAL GATE SECOND: if piece.status !== 'approved', return { ok:false, reason:'not_approved' } immediately — never proceed on a draft/rejected piece, no exceptions. CONNECTION CHECK THIRD: getConnection(pool, { ownerId: piece.owner_id, platform: piece.platform }) from services/marketing-social-connections.js; if null or status !== 'connected', return { ok:false, reason:'not_connected' } — never attempt a live browser action without a confirmed connection. Build the goal via buildPublishGoal({ platform: piece.platform, contentText: piece.content_text }) from services/marketing-social-goals.js. REPLAY PATH: SELECT any existing row in marketing_social_posting_templates for (platform, goal_key); if found, replay its steps_json by calling executeAction (from services/general-browser-agent-runtime.js) against `session` for each saved step in order, then run makeEvidenceVerifier({ mustContain: goal.mustContain }) against a fresh observePage() to independently confirm success — never self-report success without this check. EXPLORE FALLBACK: if there was no template, or the replay evidence check failed, call runGoalOnSession from services/general-browser-agent-live.js with { session, goal: goal.goal, startUrl: goal.startUrl, callModel, mustContain: goal.mustContain, expectSiteHost: goal.expectSiteHost }; on { ok:true, reached:true }, UPSERT its returned `template` into marketing_social_posting_templates ON CONFLICT (platform, goal_key) DO UPDATE (so the NEXT call for this platform takes the cheap replay path — this is the self-healing behaviour: a changed site fails replay, falls back to a fresh explore, and automatically recaptures an updated template with no code change). ALWAYS INSERT a marketing_publish_records row reflecting the actual outcome (status published/failed/needs_human, platform_post_id if discoverable, error_detail on failure) regardless of which path ran. Never call publishApprovedPiece from anywhere except an explicit, single, named piece_id request — it must never be wired into any scheduler, loop, or auto-trigger in this batch. Parameterised SQL only. Guard everything in try/catch → structured { ok:false, error }. Named export publishApprovedPiece (+ default). Start with `// SYNOPSIS:` + `// @ssot docs/products/marketingos/PRODUCT_HOME.md`.",
+      "depends_on": [
+        "mos-social-connections-service",
+        "mos-social-goal-library"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "max_output_tokens": 16000,
+      "note": "Adam 2026-07-12: ungated — make MarketingOS publish path for paying customers ASAP. LIVE_SOCIAL_PUBLISH_ENABLED still defaults OFF until Adam flips Railway.",
+      "commit_sha": "c93f2a9c865e5660ba85e453f06e9b62d32dda13",
+      "last_attempt_at": "2026-07-12T19:49:44.096Z",
+      "completed_at": "2026-07-12T19:49:58.861Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "mos-social-publisher",
+      "mission_id": "PRODUCT-marketingos"
+    },
+    {
+      "id": "mos-social-publish-route",
+      "status": "done",
+      "target_file": "routes/marketing-publish-routes.js",
+      "task": "Thin Express surface for social-connection status + publishing an approved piece. Pre-registered in config/auto-registered-product-modules.json (path routes/marketing-publish-routes.js, register registerMarketingPublishRoutes) — do NOT edit server.js or any boot file.",
+      "spec": "Export registerMarketingPublishRoutes(app, deps) (+ default). deps = { pool, requireKey, logger, createBrowserSession, callModel } (createBrowserSession is an injected async () => session factory — if absent, /publish must return { ok:false, reason:'browser_session_unavailable' } rather than throwing). GET /api/v1/marketing/social-connections (requireKey; owner_id from req.user?.id else req.query.owner_id, 400 if absent) → calls listConnections from services/marketing-social-connections.js, returns { ok:true, connections }. POST /api/v1/marketing/publish (requireKey; body { piece_id }, 400 if missing) → SELECT the marketing_content_pieces row by id, 404 if not found; if row.status !== 'approved', return 400 { ok:false, error:'not_approved' } (a SECOND, independent check on top of the one inside services/marketing-publisher.js — never rely on only one gate for a live-posting action); else await createBrowserSession(), call publishApprovedPiece({ pool, piece: row, session, callModel }) from services/marketing-publisher.js, return its result as JSON. Never accept or construct raw session_state/credentials/cookies in this route — those only ever flow through services/marketing-social-connections.js. ZERO top-level browser globals (server module). Wrap every handler in try/catch → JSON { ok:false, error } with sensible status, never leak stacks/secrets. Named export registerMarketingPublishRoutes + default. Start with `// SYNOPSIS:` + `// @ssot docs/products/marketingos/PRODUCT_HOME.md`.",
+      "depends_on": [
+        "mos-social-publisher"
+      ],
+      "founder_gated": false,
+      "attempts": 4,
+      "max_output_tokens": 10000,
+      "note": "Adam 2026-07-12 PM: money ASAP — enabled auto-register + fixed listConnections(pool,{ownerId}). Functional proof should pass after tip redeploy.",
+      "commit_sha": "104b4c8ef22af94df77e3d7b646010c521f614c4",
+      "last_attempt_at": "2026-07-12T21:20:59.973Z",
+      "last_error": null,
+      "completed_at": "2026-07-12T21:21:00.276Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "mos-social-publish-route",
+      "mission_id": "PRODUCT-marketingos"
+    },
+    {
+      "id": "mos-social-sentry-layer-a",
+      "status": "done",
+      "target_file": "scripts/run-marketingos-social-publish-verify.mjs",
+      "task": "Structural Layer A verifier proving the new publish surface's GATES are real — WITHOUT ever posting to a real platform. Must run safely with LIVE_SOCIAL_PUBLISH_ENABLED unset (the default).",
+      "spec": "ESM script, same stack/shape as scripts/run-marketingos-layer-a.mjs. Requires PUBLIC_BASE_URL + COMMAND_CENTER_KEY. Assertions, fail-closed: (1) GET /api/v1/marketing/social-connections returns 200 { ok:true }. (2) POST /api/v1/marketing/publish against a piece that is NOT status:approved (create one via the existing Phase 1 API if needed, or use a known draft) returns { ok:false, error:'not_approved' } — proves the approval gate is real, never soft. (3) POST /api/v1/marketing/publish against an approved piece for a platform with no connection returns { ok:false, reason:'not_connected' } — proves it never silently no-ops or fakes success. (4) With LIVE_SOCIAL_PUBLISH_ENABLED unset/false on the target environment, confirm no assertion above ever results in a real platform post (the kill switch inside services/marketing-publisher.js must short-circuit before any browser action). Do NOT attempt to assert a real platform post succeeds — that requires a real connected account from the Grok sign-in flow and is explicitly out of scope; a manual founder test covers that once a real connection exists. Write receipt products/receipts/SENTRY_MARKETINGOS_SOCIAL_PUBLISH_LAYER_A.json (include which named gate was proven for each assertion). Register in builderos-reboot/governance/SENTRY_PRODUCT_REGISTRY.json under marketingos as an additional A-check. @ssot docs/products/marketingos/PRODUCT_HOME.md",
+      "depends_on": [
+        "mos-social-publish-route"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "max_output_tokens": 10000,
+      "commit_sha": "191d0dc1a4802ad4e7f7a16ff81c179007c81606",
+      "last_attempt_at": "2026-07-12T21:22:29.622Z",
+      "completed_at": "2026-07-12T21:22:58.753Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "mos-social-sentry-layer-a",
+      "mission_id": "PRODUCT-marketingos"
+    },
+    {
+      "id": "mos-youtube-oauth-service",
+      "status": "done",
+      "target_file": "services/marketing-youtube.js",
+      "task": "MarketingOS Phase 6 YouTube connection — ONE shared OAuth app, per-client one-time consent (real Google login page, never our own form). SELF-CONTAINED ESM module, modeled DIRECTLY on the existing, working services/google-calendar-service.js (same OAuth2Client pattern, same user_integrations table — do NOT create a new token-storage table; reuse the exact one Calendar already uses).",
+      "spec": "Import google-auth-library's OAuth2Client and googleapis exactly as services/google-calendar-service.js does (both already npm dependencies — do not add new packages). Export createYouTubeService(pool) returning { getAuthUrl, handleCallback, getAuthedClient, getStatus }. Use process.env.GOOGLE_CLIENT_ID / process.env.GOOGLE_CLIENT_SECRET (the SAME shared app credentials Calendar already uses — one Google Cloud project can serve multiple APIs/scopes) but build the redirect URI as `${process.env.RAILWAY_PUBLIC_DOMAIN || 'http://localhost:8080'}/api/v1/marketing/youtube/callback` (a DIFFERENT path from Calendar's callback — each feature has its own callback route under the one shared app). Scopes: ['https://www.googleapis.com/auth/youtube.upload', 'https://www.googleapis.com/auth/youtube.readonly']. Store tokens in the EXISTING user_integrations table with provider = 'youtube_channel' (INSERT ... ON CONFLICT (user_id, provider) DO UPDATE, exactly like google-calendar-service.js's handleCallback) — ownerId is whatever string/UUID the caller passes (do not invent a new identity scheme; the route layer resolves it the same way other marketing-*.js routes already do). getAuthedClient(ownerId): load tokens (already the same unencrypted JSONB shape Calendar uses per existing precedent), auth.setCredentials(tokens), wire the same auth.on('tokens', ...) auto-refresh-and-persist handler as Calendar does. getStatus(ownerId): { connected: boolean, connectedSince }. getAuthUrl must return { error: '...' } (never throw) if GOOGLE_CLIENT_ID is unset, mirroring google-calendar-service.js's existing guard. Named export createYouTubeService (+ default). Start with `// SYNOPSIS:` + `// @ssot docs/products/marketingos/PRODUCT_HOME.md`.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "max_output_tokens": 8000,
+      "commit_sha": "165a9d719d2462f669b888558c09dc40c52ee311",
+      "last_attempt_at": "2026-07-11T00:40:26.447Z",
+      "completed_at": "2026-07-11T00:40:39.927Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "mos-youtube-oauth-service",
+      "mission_id": "PRODUCT-marketingos"
+    },
+    {
+      "id": "mos-youtube-connect-routes",
+      "status": "done",
+      "target_file": "routes/marketing-youtube-routes.js",
+      "task": "Thin Express surface for the per-client YouTube connect flow. Pre-registered in config/auto-registered-product-modules.json (path routes/marketing-youtube-routes.js, register registerMarketingYoutubeRoutes) — do NOT edit server.js or any boot file.",
+      "spec": "Export registerMarketingYoutubeRoutes(app, deps) (+ default). deps = { pool, requireKey, logger }. Import createYouTubeService from services/marketing-youtube.js. GET /api/v1/marketing/youtube/connect (requireKey; resolve ownerId the same way other marketing-*.js routes already do — req.user?.id/req.lifeosUser?.sub else req.query.owner_id, 400 if absent) → call getAuthUrl(ownerId); if it returns { error }, respond 503 with that error (never a silent redirect to nowhere); else 302-redirect the browser to the returned authUrl — THIS is the real Google login page; nothing in this route ever collects a password. GET /api/v1/marketing/youtube/callback (NOT behind requireKey — Google redirects the user's browser here directly with no header control; read `code` and `state` [state carries the ownerId, set by getAuthUrl] from req.query; 400 if code missing) → call handleCallback(code, ownerId-from-state); on success redirect to a friendly `/marketing?youtube=connected` page (reuse the existing SSR landing, do not build a new page); on failure redirect to `/marketing?youtube=error`. GET /api/v1/marketing/youtube/status (requireKey; same ownerId resolution) → calls getStatus(ownerId), returns { ok:true, connected, connectedSince }. Wrap every handler in try/catch → JSON { ok:false, error } (except the two redirect routes, which redirect to an error page instead of raw JSON, since a real browser lands there mid-flow). ZERO top-level browser globals (server module). Named export registerMarketingYoutubeRoutes + default. Start with `// SYNOPSIS:` + `// @ssot docs/products/marketingos/PRODUCT_HOME.md`.",
+      "depends_on": [
+        "mos-youtube-oauth-service"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "max_output_tokens": 10000,
+      "commit_sha": "bac029d82d68dccd6f1dfeb041319cd7cd67d6c2",
+      "last_attempt_at": "2026-07-11T05:56:20.689Z",
+      "completed_at": "2026-07-11T06:06:25.897Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "mos-youtube-connect-routes",
+      "mission_id": "PRODUCT-marketingos"
+    },
+    {
+      "id": "mos-youtube-sentry-layer-a",
+      "status": "done",
+      "target_file": "scripts/run-marketingos-youtube-verify.mjs",
+      "task": "Structural Layer A verifier proving the YouTube connect surface's gates are real, without requiring a real Google login to already exist.",
+      "spec": "ESM script, same stack/shape as scripts/run-marketingos-layer-a.mjs. Requires PUBLIC_BASE_URL + COMMAND_CENTER_KEY. Assertions, fail-closed: (1) GET /api/v1/marketing/youtube/status (for an owner with no connection) returns 200 { ok:true, connected:false }. (2) GET /api/v1/marketing/youtube/connect either 302-redirects to a URL whose host is accounts.google.com (if GOOGLE_CLIENT_ID is set) OR returns a clear 503 named-blocker (if GOOGLE_CLIENT_ID is unset) — NEVER a silent 200/404. (3) GET /api/v1/marketing/youtube/callback with no `code` query param returns 400, never a crash or a fake-success redirect. Named blocker GOOGLE_YOUTUBE_OAUTH_UNVERIFIED must appear in the receipt whenever GOOGLE_CLIENT_ID is unset or the redirect URI has not yet been added in Google Cloud Console — never fake a connected-account PASS. Write receipt products/receipts/SENTRY_MARKETINGOS_YOUTUBE_LAYER_A.json. Register in builderos-reboot/governance/SENTRY_PRODUCT_REGISTRY.json under marketingos as an additional A-check. @ssot docs/products/marketingos/PRODUCT_HOME.md",
+      "depends_on": [
+        "mos-youtube-connect-routes"
+      ],
+      "founder_gated": false,
+      "attempts": 2,
+      "max_output_tokens": 8000,
+      "last_attempt_at": "2026-07-11T06:20:05.876Z",
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
+      "commit_sha": "0f5e4fbcac08e739d8d8e2f5eb92dd9f16f46b63",
+      "completed_at": "2026-07-11T06:20:54.923Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "mos-youtube-sentry-layer-a",
+      "mission_id": "PRODUCT-marketingos"
+    },
+    {
+      "id": "mos-community-value-drafter",
+      "status": "done",
+      "target_file": "services/marketing-community-value.js",
+      "task": "Draft high-value community replies for Reddit / Facebook groups / LinkedIn / X — offer help first, soft CTA last. No live posting in this module.",
+      "spec": "ESM. Export createCommunityValueDrafter({ callCouncilMember }). draftReply({ platform, threadTitle, threadBody, productAngle, tone }) returns { ok:true, reply_text, cta_line, risk_notes:string[] }. Platforms allowed: reddit|facebook_group|linkedin|x|instagram_comment. Rules embedded in prompt: VALUE FIRST — never spam, never drop product links as the first move, answer the person's actual question with concrete usable help, engage like an ideal neighbor in the community, earn attention, THEN optional soft CTA to Site Builder / Limitless / LifeOS only if it naturally fits (prefer CTA URL https://limitlesssites.com or SITE_BASE_URL/site-builder). No fake stats, no hype, never claim paying customers you do not have. If callCouncilMember missing, return deterministic template draft (still ok:true). Named export + default. // SYNOPSIS + @ssot docs/products/marketingos/PRODUCT_HOME.md",
+      "depends_on": [
+        "mos-social-publisher"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "createCommunityValueDrafter"
+      ],
+      "commit_sha": "099b33bdadc6be631680b7b6943855e80c05984d",
+      "last_attempt_at": "2026-07-12T20:16:04.636Z",
+      "completed_at": "2026-07-12T20:16:30.930Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "mos-community-value-drafter",
+      "mission_id": "PRODUCT-marketingos"
+    },
+    {
+      "id": "mos-community-value-routes",
+      "status": "done",
+      "target_file": "routes/marketing-community-value-routes.js",
+      "task": "Thin API: POST /api/v1/marketing/community/draft-reply for value-first community outreach drafts.",
+      "spec": "ESM export registerMarketingCommunityValueRoutes(app, deps={pool, requireKey, callCouncilMember, logger}). POST /api/v1/marketing/community/draft-reply body {platform, threadTitle, threadBody, productAngle?, tone?} → createCommunityValueDrafter. Auth via requireKey. JSON only. No browser globals. Do not edit server.js. @ssot docs/products/marketingos/PRODUCT_HOME.md",
+      "depends_on": [
+        "mos-community-value-drafter"
+      ],
+      "founder_gated": false,
+      "attempts": 2,
+      "expected_exports": [
+        "registerMarketingCommunityValueRoutes"
+      ],
+      "commit_sha": "4fcdd6e1e668c621f35510637e5624a86cef24a3",
+      "last_attempt_at": "2026-07-12T21:28:53.429Z",
+      "last_error": "route module not auto-registered — add {\"path\":\"routes/marketing-community-value-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
+      "completed_at": "2026-07-12T21:28:56.051Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "mos-community-value-routes",
+      "mission_id": "PRODUCT-marketingos"
+    },
+    {
+      "id": "mos-community-value-auto-register",
+      "status": "done",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "Auto-register community value draft routes.",
+      "spec": "Ensure modules[] contains {\"path\":\"routes/marketing-community-value-routes.js\",\"register\":\"registerMarketingCommunityValueRoutes\",\"enabled\":true}. Preserve all existing. Valid JSON only.",
+      "depends_on": [
+        "mos-community-value-routes"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "marketing-community-value-routes.js",
+        "registerMarketingCommunityValueRoutes"
+      ],
+      "commit_sha": "fd2b22e7692d14b98ba2ebc3598fca48cff54d31",
+      "last_attempt_at": "2026-07-12T20:34:02.561Z",
+      "completed_at": "2026-07-12T20:34:09.721Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "mos-community-value-auto-register",
+      "mission_id": "PRODUCT-marketingos"
+    },
+    {
+      "id": "step-01",
+      "status": "done",
+      "target_file": "db/migrations/20260713_marketing_session_export.sql",
+      "task": "Add session export tracking table",
+      "spec": "CREATE TABLE IF NOT EXISTS marketing_session_exports with columns: id uuid PRIMARY KEY DEFAULT gen_random_uuid(), session_id uuid NOT NULL, exported_at timestamptz DEFAULT now(), export_format text NOT NULL, export_url text, created_at timestamptz DEFAULT now(), updated_at timestamptz DEFAULT now(). Enables /marketing/session/:id/export to record export events. No DROP or ALTER on existing tables.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "commit_sha": "335046172b932673994d10c98a2bac1fcc28b629",
+      "last_attempt_at": "2026-07-13T03:57:23.447Z",
+      "completed_at": "2026-07-13T03:58:15.023Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-01",
+      "mission_id": "PRODUCT-marketingos"
+    },
+    {
+      "id": "step-02",
+      "status": "done",
+      "target_file": "db/migrations/20260713_marketing_r2_uploads.sql",
+      "task": "Add R2 audio upload tracking table",
+      "spec": "CREATE TABLE IF NOT EXISTS marketing_audio_uploads with columns: id uuid PRIMARY KEY DEFAULT gen_random_uuid(), session_id uuid NOT NULL, r2_key text NOT NULL, r2_url text, upload_status text NOT NULL DEFAULT 'pending', error_text text, created_at timestamptz DEFAULT now(), updated_at timestamptz DEFAULT now(). Unblocks audio upload once Cloudflare R2 bucket and Railway env vars are set. No DROP or ALTER.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "commit_sha": "be4ab9fbffdcc973c6c616ca7fe5889a1b2025b0",
+      "last_attempt_at": "2026-07-13T04:06:19.375Z",
+      "completed_at": "2026-07-13T04:06:29.432Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-02",
+      "mission_id": "PRODUCT-marketingos"
+    },
+    {
+      "id": "step-03",
+      "status": "done",
+      "target_file": "services/marketing-r2-upload.js",
+      "task": "Implement R2 audio upload service",
+      "spec": "Export async uploadAudioToR2(sessionId, fileBuffer, mimeType, db) using only node builtins and the @aws-sdk/client-s3 package (S3-compatible R2). Reads R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET_NAME from process.env — returns {r2Key, r2Url} on success. If any env var is missing throws a descriptive error beginning 'R2_CONFIG_MISSING:' so callers can surface a friendly blocker. Inserts a row into marketing_audio_uploads via db. No top-level browser globals. No AI SDK import.",
+      "depends_on": [
+        "step-02"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "commit_sha": "fa9803683a81164f5d7200df36385805dd4d63ba",
+      "last_attempt_at": "2026-07-13T04:07:52.650Z",
+      "completed_at": "2026-07-13T04:08:04.952Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-03",
+      "mission_id": "PRODUCT-marketingos"
+    },
+    {
+      "id": "step-04",
+      "status": "done",
+      "target_file": "services/marketing-session-export.js",
+      "task": "Implement session-to-export content assembly service",
+      "spec": "Export async buildSessionExport(sessionId, format, db, callCouncilMember) where format is 'json'|'markdown'. Loads the session, its approved content pieces, and brand voice from DB. Calls callCouncilMember('strategist', prompt) to produce a final export summary string. Inserts a row into marketing_session_exports via db. Returns {exportText, exportFormat, sessionId}. No browser globals. No direct AI SDK import.",
+      "depends_on": [
+        "step-01"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "commit_sha": "10726245627d59c332ecffbf58d5cb0779a834ea",
+      "last_attempt_at": "2026-07-13T04:17:31.379Z",
+      "completed_at": "2026-07-13T04:17:51.646Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-04",
+      "mission_id": "PRODUCT-marketingos"
+    },
+    {
+      "id": "step-05",
+      "status": "done",
+      "target_file": "routes/marketing-session-export-routes.js",
+      "task": "Wire session export and audio upload API endpoints",
+      "spec": "Export registerMarketingSessionExportRoutes(app, deps) where deps={pool, callCouncilMember, requireKey}. Mount POST /marketing/session/:id/export — calls the real buildSessionExport(sessionId, format, db, callCouncilMember) from services/marketing-session-export.js (not a local reimplementation), returns JSON. Mount POST /marketing/session/:id/audio — reads multipart body via busboy, calls the real uploadAudioToR2(sessionId, buffer, mimeType, db) from services/marketing-r2-upload.js (not a fabricated AI-generated URL), returns {r2Key, r2Url}. If R2_CONFIG_MISSING error caught, respond 503 with {error, hint:'Set R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET_NAME, R2_BUCKET_URL in Railway env vars'}. Mount GET /marketing/session/:id/export/status — returns latest export row from marketing_session_exports. All routes require deps.requireKey (this codebase has no express-session anywhere — req.session.userId, the original spec text below the correction, can never succeed).",
+      "depends_on": [
+        "step-03",
+        "step-04"
+      ],
+      "founder_gated": false,
+      "attempts": 6,
+      "commit_sha": "3b377875588b95cb617fb3e5f5c8390f37960163",
+      "last_attempt_at": "2026-07-13T08:32:13.554Z",
+      "last_error": null,
+      "gap_fill_note": "3 prior loop attempts (2026-07-13T04:29-04:34Z) all diagnosed the identical missing-auto-registration error without taking the 1-line config fix and gave up. Founder audit of the loop's commit history (2026-07-13) found and fixed 4 real, distinct bugs, verifying live after each redeploy rather than trusting the fix: (1) never auto-registered; (2) the route reimplemented broken local logic instead of calling the real services built alongside it in the same session — the R2 upload path asked an AI council member to fabricate a URL instead of doing a real S3 PutObject; (3) auth checked req.session.userId, which can never succeed since this codebase has no express-session middleware anywhere; (4) services/marketing-r2-upload.js imported @aws-sdk/client-s3, which was never added to package.json/package-lock.json/yarn.lock, so the module could not load in production since the day it was written. A stale intermediate deploy (commit 5d7bd5bab4a6, before the dependency fix landed) briefly re-blocked this same step with the now-fixed package error — resolved by the dependency-fix commit that followed. CONFIRMED LIVE 2026-07-13T08:32Z via GET /api/v1/lifeos/builder/module-health (status:mounted, error:null) AND a real functional call: GET /marketing/session/<uuid>/export/status returns 200 with real DB-backed JSON when authenticated, 401 when not — not a 404, not a crash.",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-05",
+      "mission_id": "PRODUCT-marketingos"
+    },
+    {
+      "id": "step-06",
+      "status": "done",
+      "target_file": "public/overlay/marketing-session-new.html",
+      "task": "Build /marketing/session/new UI surface",
+      "spec": "Self-contained HTML page served at /marketing/session/new (registered via the route module in step-07). Renders a session intake form: textarea for raw idea/story, optional audio file input, brand voice selector (fetches GET /marketing/brand-voice), and a Submit button. On submit, POSTs multipart form to POST /marketing/session (existing route) and if an audio file is attached also POSTs to POST /marketing/session/:id/audio. Shows inline progress states: 'Uploading audio…', 'Starting session…', 'Ready — view session'. If audio upload returns 503 shows a yellow banner with the hint text. Works inside lifeos-app.html shell (respects ?shell=1 by hiding <html>/<body> wrapper). No server-side browser globals; all JS is inside returned HTML string.",
+      "depends_on": [
+        "step-05"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "commit_sha": "4fad5b5851f539d0494e2de89203a69b258c6b77",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-06",
+      "mission_id": "PRODUCT-marketingos"
+    },
+    {
+      "id": "step-07",
+      "status": "done",
+      "target_file": "routes/marketing-session-new-ui-routes.js",
+      "task": "Serve /marketing/session/new and /marketing/session/:id/export UI routes",
+      "spec": "Export registerMarketingSessionNewUIRoutes(app, deps). Mount GET /marketing/session/new — reads public/overlay/marketing-session-new.html, injects shell param awareness, returns HTML. Mount GET /marketing/session/:id/export — reads public/overlay/marketing-session-export.html (step-08), returns HTML. Both require req.session.userId else redirect to /login. No top-level browser globals.",
+      "depends_on": [
+        "step-06"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "commit_sha": "81e7e91514da0576ad01a779fb26c96b29b6c3bb",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-07",
+      "mission_id": "PRODUCT-marketingos"
+    },
+    {
+      "id": "step-08",
+      "status": "done",
+      "target_file": "public/overlay/marketing-session-export.html",
+      "task": "Build /marketing/session/:id/export UI surface",
+      "spec": "Self-contained HTML page. On load fetches GET /marketing/session/:id/export/status and GET /marketing/session/:id (existing endpoint) to show session title and last export. Provides two buttons: 'Export as Markdown' and 'Export as JSON' — each POSTs to /marketing/session/:id/export with {format}. On success renders a <pre> block with the exportText and a copy-to-clipboard button. Shows YouTube OAuth warning banner if GOOGLE_CLIENT_ID env not detected (detect via GET /marketing/youtube/status existing endpoint). Respects ?shell=1. All JS inside returned HTML string; no server-side browser globals.",
+      "depends_on": [
+        "step-05"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "commit_sha": "1e2a8c30c5456d25c66462aa1e7fd1b044157135",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-08",
+      "mission_id": "PRODUCT-marketingos"
+    },
+    {
+      "id": "step-09",
+      "status": "blocked",
+      "target_file": "scripts/run-marketingos-session-export-verify.mjs",
+      "task": "Preflight script to verify session export and R2 config",
+      "spec": "ESM script runnable as `node scripts/run-marketingos-session-export-verify.mjs`. Checks: (1) all four R2 env vars present — logs WARN if missing with Railway setup instructions; (2) GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET present — logs WARN if missing with Google Cloud Console redirect URI reminder; (3) GETs /marketing/session/new and /marketing/session (list) — asserts 200 or 401 (not 500); (4) logs PASS/FAIL summary. Uses only node:fetch (Node 18+) and node:process. Exit code 0 on all PASS, 1 if any FAIL.",
+      "depends_on": [
+        "step-07"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "last_attempt_at": "2026-07-17T18:27:51.399Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/scripts/.factory-import-check-1784312871353-1.mjs\";\n",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 9,
+      "revived_at": "2026-07-17T18:27:19.035Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-09",
+      "mission_id": "PRODUCT-marketingos"
+    },
+    {
+      "id": "step-10",
+      "status": "founder_gated",
+      "target_file": "scripts/run-lifeos-product-home-verify.mjs",
+      "task": "Implement npm run lifeos:product-home:verify script",
+      "spec": "ESM script. GETs /marketing, /marketing?shell=1, /marketing/calendar, /marketing/atoms, /marketing/session/new — asserts each returns HTTP 200 (or 302 to login, which counts as reachable). Logs each surface PASS/FAIL. Also checks that config/auto-registered-product-modules.json contains entries for all marketing route modules (marketing-session-export-routes, marketing-session-new-ui-routes). Exits 0 all pass, 1 any fail. Maps to documented next priority: run npm run lifeos:product-home:verify post-merge.",
+      "depends_on": [
+        "step-07",
+        "step-09"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-10",
+      "mission_id": "PRODUCT-marketingos"
+    },
+    {
+      "id": "step-12",
+      "status": "done",
+      "target_file": "services/marketing-adam-decisions.js",
+      "task": "Scaffold Adam decision tracking service for §12 open items",
+      "spec": "Export getOpenDecisions() returning a hardcoded array of the 5 documented open Adam decisions: [{id:'pricing-lead',question:'Who is the pricing lead?'},{id:'first-vertical',question:'Which vertical do we target first?'},{id:'creator-media-os-relationship',question:'What is the Creator Media OS relationship to MarketingOS?'},{id:'phase5-publisher',question:'Who is the Phase 5 publisher partner?'},{id:'phase0-intake-form',question:'What is the Phase 0 intake form design?'}]. Export async recordDecision(id, decision, db) that upserts into a marketing_adam_decisions table (CREATE TABLE IF NOT EXISTS marketing_adam_decisions: id text PRIMARY KEY, question text, decision text, decided_at timestamptz DEFAULT now(), created_at timestamptz DEFAULT now()). No AI SDK. No browser globals. Table DDL is embedded as a string and executed on first call via db.query if table does not exist.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "commit_sha": "3bf63fb21882b6aea9261a6ade4708b7dd74f715",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-12",
+      "mission_id": "PRODUCT-marketingos"
     }
-  ]
+  ],
+  "backlog_signature": "marketingos-money-2026071219",
+  "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-marketingos",
+  "twin_kind": "product_build_queue_registered"
 }

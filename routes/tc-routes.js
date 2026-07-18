@@ -43,12 +43,102 @@ import { classifyR4RAttachment } from '../services/tc-r4r-attachment-classify.js
 const upload = multer({ dest: '/tmp/tc-uploads/' });
 const audioUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 25 * 1024 * 1024 } });
 
-/** In-memory status for async TD → SkySlope listing sync (browser automation can exceed HTTP timeouts). */
+/** In-memory cache (fast path); Neon tc_browser_jobs is source of truth across instances. */
 const listingTdSkyslopeJobs = new Map();
 const LISTING_SYNC_JOB_TTL_MS = 2 * 60 * 60 * 1000;
 
 /** Async TD-only workflow jobs (party sync, UI chains). */
 const tdWorkflowJobs = new Map();
+
+let tcBrowserJobsSchemaReady = false;
+async function ensureTcBrowserJobsSchema(pool) {
+  if (tcBrowserJobsSchemaReady || !pool?.query) return;
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS tc_browser_jobs (
+      id UUID PRIMARY KEY,
+      kind TEXT NOT NULL,
+      status TEXT NOT NULL DEFAULT 'queued'
+        CHECK (status IN ('queued', 'running', 'completed', 'failed')),
+      transaction_id INTEGER,
+      request_json JSONB NOT NULL DEFAULT '{}'::jsonb,
+      steps_json JSONB NOT NULL DEFAULT '[]'::jsonb,
+      result_json JSONB NOT NULL DEFAULT '{}'::jsonb,
+      error TEXT,
+      dry_run BOOLEAN NOT NULL DEFAULT true,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      completed_at TIMESTAMPTZ
+    )
+  `);
+  tcBrowserJobsSchemaReady = true;
+}
+
+async function persistBrowserJob(pool, job) {
+  if (!pool?.query || !job?.id) return;
+  try {
+    await ensureTcBrowserJobsSchema(pool);
+    await pool.query(
+      `INSERT INTO tc_browser_jobs
+         (id, kind, status, transaction_id, request_json, steps_json, result_json, error, dry_run, updated_at, completed_at)
+       VALUES ($1,$2,$3,$4,$5::jsonb,$6::jsonb,$7::jsonb,$8,$9,NOW(),$10)
+       ON CONFLICT (id) DO UPDATE SET
+         status = EXCLUDED.status,
+         steps_json = EXCLUDED.steps_json,
+         result_json = EXCLUDED.result_json,
+         error = EXCLUDED.error,
+         updated_at = NOW(),
+         completed_at = EXCLUDED.completed_at`,
+      [
+        job.id,
+        job.kind || 'unknown',
+        job.status || 'queued',
+        job.transaction_id ?? null,
+        JSON.stringify(job.request || {}),
+        JSON.stringify(job.steps || []),
+        JSON.stringify(job.result || {}),
+        job.error || null,
+        job.dry_run !== false,
+        ['completed', 'failed'].includes(job.status) ? new Date().toISOString() : null,
+      ]
+    );
+  } catch (err) {
+    // Non-fatal: memory map still works on single instance
+    console.warn?.('[TC-JOBS] persist failed', err?.message || err);
+  }
+}
+
+async function loadBrowserJob(pool, jobId) {
+  const mem = listingTdSkyslopeJobs.get(jobId) || tdWorkflowJobs.get(jobId);
+  if (mem) return mem;
+  if (!pool?.query) return null;
+  try {
+    await ensureTcBrowserJobsSchema(pool);
+    const { rows } = await pool.query(
+      `SELECT id, kind, status, transaction_id, request_json, steps_json, result_json, error, dry_run, created_at, updated_at, completed_at
+       FROM tc_browser_jobs WHERE id = $1 LIMIT 1`,
+      [jobId]
+    );
+    const row = rows[0];
+    if (!row) return null;
+    return {
+      id: row.id,
+      kind: row.kind,
+      status: row.status,
+      transaction_id: row.transaction_id,
+      request: row.request_json || {},
+      steps: row.steps_json || [],
+      result: row.result_json || null,
+      error: row.error,
+      dry_run: row.dry_run,
+      created_at: row.created_at,
+      updated_at: row.updated_at,
+      completed_at: row.completed_at,
+      from_db: true,
+    };
+  } catch {
+    return null;
+  }
+}
 
 function pruneTdWorkflowJobs() {
   const now = Date.now();
@@ -1509,6 +1599,7 @@ export function createTCRoutes(
       const jobId = crypto.randomUUID();
       const job = {
         id: jobId,
+        kind: 'td_workflow',
         type: 'td_workflow',
         transaction_id: txId,
         workflow,
@@ -1517,8 +1608,10 @@ export function createTCRoutes(
         error: null,
         result: null,
         created_at: new Date().toISOString(),
+        dry_run: true,
       };
       tdWorkflowJobs.set(jobId, job);
+      await persistBrowserJob(pool, job);
 
       res.status(202).json({
         ok: true,
@@ -1530,11 +1623,15 @@ export function createTCRoutes(
       });
 
       (async () => {
-        const j = tdWorkflowJobs.get(jobId);
+        const j = tdWorkflowJobs.get(jobId) || job;
         if (!j) return;
         j.status = 'running';
+        await persistBrowserJob(pool, j);
         try {
-          const result = await tdWorkflowRunner.runWorkflow(txId, workflow, body, (step) => j.steps.push(step));
+          const result = await tdWorkflowRunner.runWorkflow(txId, workflow, body, async (step) => {
+            j.steps.push(step);
+            await persistBrowserJob(pool, j);
+          });
           const failed = result.ok === false;
           j.status = failed ? 'failed' : 'completed';
           j.result = result;
@@ -1545,10 +1642,12 @@ export function createTCRoutes(
               (result.sync && !result.sync.ok && 'party sync failed') ||
               'workflow failed';
           }
+          await persistBrowserJob(pool, j);
         } catch (err) {
           j.status = 'failed';
           j.error = err.message;
           j.steps.push({ at: new Date().toISOString(), label: 'job_failed', error: err.message });
+          await persistBrowserJob(pool, j);
           logger.warn?.({ err: err.message, jobId, workflow }, '[TC-ROUTES] td-workflow job failed');
         }
       })();
@@ -1604,24 +1703,75 @@ export function createTCRoutes(
     }
   });
 
-  // POST /api/v1/tc/intake/email-search — just search, don't upload
+  // POST /api/v1/tc/intake/email-search — search inbox for executed agreements (async by default; await:true for sync)
   router.post('/intake/email-search', requireKey, async (req, res) => {
     try {
-      const { days = 90 } = req.body || {};
+      const { days = 90, await: awaitResult = false } = req.body || {};
       const { createTCDocIntake } = await import('../services/tc-doc-intake.js');
       const { createTCBrowserAgent } = await import('../services/tc-browser-agent.js');
       const accountManager = await getAccountManager();
       const tcBrowser = createTCBrowserAgent({ accountManager, logger });
       const intake = createTCDocIntake({ pool, tcBrowser, accountManager, logger });
-      const emails = await intake.findExecutedAgreements({ days });
-      res.json({
+
+      const runSearch = async () => {
+        const emails = await intake.findExecutedAgreements({ days });
+        return {
+          ok: true,
+          found: emails.length,
+          emails: emails.map((e) => ({
+            subject: e.subject,
+            from: e.from,
+            date: e.date,
+            isRPA: e.isRPA,
+            isListing: e.isListing,
+            files: (e.files || []).map((f) => ({ filename: f.filename, docType: f.docType, size: f.size })),
+          })),
+        };
+      };
+
+      if (awaitResult === true || req.body?.sync === true) {
+        return res.json(await runSearch());
+      }
+
+      const jobId = crypto.randomUUID();
+      const job = {
+        id: jobId,
+        kind: 'email_search',
+        status: 'queued',
+        steps: [],
+        error: null,
+        result: null,
+        request: { days },
+        created_at: new Date().toISOString(),
+        dry_run: true,
+      };
+      listingTdSkyslopeJobs.set(jobId, job);
+      await persistBrowserJob(pool, job);
+      res.status(202).json({
         ok: true,
-        found: emails.length,
-        emails: emails.map(e => ({
-          subject: e.subject, from: e.from, date: e.date,
-          isRPA: e.isRPA, isListing: e.isListing,
-          files: e.files.map(f => ({ filename: f.filename, docType: f.docType, size: f.size })),
-        })),
+        started: true,
+        job_id: jobId,
+        poll_url: `/api/v1/tc/browser-jobs/${jobId}`,
+        message: 'Email search started in background (avoids proxy timeout). Poll poll_url.',
+      });
+
+      setImmediate(() => {
+        (async () => {
+          const j = listingTdSkyslopeJobs.get(jobId) || job;
+          j.status = 'running';
+          await persistBrowserJob(pool, j);
+          try {
+            const result = await runSearch();
+            j.status = 'completed';
+            j.result = result;
+            await persistBrowserJob(pool, j);
+          } catch (err) {
+            j.status = 'failed';
+            j.error = err.message;
+            await persistBrowserJob(pool, j);
+            logger.warn?.({ err: err.message, jobId }, '[TC-ROUTES] email-search job failed');
+          }
+        })();
       });
     } catch (err) {
       logger.warn?.({ err: err.message }, '[TC-ROUTES] email-search error');
@@ -1703,6 +1853,103 @@ export function createTCRoutes(
     }
   });
 
+  // GET /api/v1/tc/browser/operator-catalog — API-shaped map of every browser UI operation (no vendor API keys).
+  router.get('/browser/operator-catalog', requireKey, async (_req, res) => {
+    try {
+      const { createTCBrowserAgent } = await import('../services/tc-browser-agent.js');
+      const { TD_WORKFLOW_CATALOG } = await import('../services/tc-td-workflow-runner.js');
+      const tcBrowser = createTCBrowserAgent({ accountManager: await getAccountManager(), logger });
+      const tdPlans = Object.keys(tcBrowser.TD_UI_PLANS || {}).map((id) => ({
+        id,
+        kind: 'td_ui_plan',
+        method: 'POST',
+        path: '/api/v1/tc/transactions/:id/browser/td-ui-plan',
+        body: { plan: id },
+        summary: `TransactionDesk UI click plan: ${id}`,
+      }));
+      const workflows = (TD_WORKFLOW_CATALOG || []).map((w) => ({
+        id: w.id,
+        kind: 'td_workflow',
+        method: 'POST',
+        path: '/api/v1/tc/transactions/:id/browser/td-workflow',
+        body: { workflow: w.id },
+        summary: w.summary,
+      }));
+      res.json({
+        ok: true,
+        mode: 'browser_ui_as_api',
+        note: 'SkySlope/TransactionDesk/GLVAR have no public filing API here — these operations drive the same UIs a human uses, with screenshots as receipts.',
+        auth: { header: 'x-command-key' },
+        login_probes: [
+          { id: 'test_glvar', method: 'POST', path: '/api/v1/tc/test-glvar-login', body: { dryRun: false }, summary: 'Live GLVAR/Clareity login' },
+          { id: 'test_skyslope', method: 'POST', path: '/api/v1/tc/test-skyslope-login', body: { dryRun: false }, summary: 'Live eXp Okta → SkySlope' },
+          { id: 'test_boldtrail', method: 'POST', path: '/api/v1/tc/test-boldtrail', body: { dryRun: false }, summary: 'Live eXp Okta → BoldTrail tile' },
+          { id: 'debug_portal', method: 'POST', path: '/api/v1/tc/browser/debug-portal', body: {}, summary: 'GLVAR login + dump portal buttons/links' },
+          { id: 'debug_okta', method: 'POST', path: '/api/v1/tc/browser/debug-okta', body: { dryRun: true }, summary: 'Map Okta login fields/selectors without submitting' },
+        ],
+        file_ops: [
+          { id: 'listing_to_skyslope', method: 'POST', path: '/api/v1/tc/transactions/:id/browser/listing-to-skyslope', summary: 'TD executed listing → SkySlope upload' },
+          { id: 'td_sync_parties', method: 'POST', path: '/api/v1/tc/transactions/:id/browser/td-sync-parties', summary: 'Scrape TD parties into LifeOS' },
+        ],
+        td_ui_plans: tdPlans,
+        td_workflows: workflows,
+        portal: {
+          agent: '/tc/agent-portal.html',
+          client: '/tc/client-portal.html',
+          assistant: '/tc/tc-assistant.html',
+        },
+        active_transaction_hint: 'Use GET /api/v1/tc/intake/workspace then substitute :id (e.g. Mahogany Peak = 1)',
+      });
+    } catch (err) {
+      logger.warn?.({ err: err.message }, '[TC-ROUTES] operator-catalog error');
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/browser/debug-okta — map Okta login page fields (default dryRun)
+  router.post('/browser/debug-okta', requireKey, async (req, res) => {
+    let session = null;
+    try {
+      const { createTCBrowserAgent } = await import('../services/tc-browser-agent.js');
+      const tcBrowser = createTCBrowserAgent({ accountManager: await getAccountManager(), logger });
+      const dryRun = req.body?.dryRun !== false;
+      const login = await tcBrowser.loginToExpOkta(dryRun);
+      session = login.session;
+      const url = session?.page ? session.page.url() : null;
+      const observed = login.observed || (session?.page
+        ? await session.page.evaluate(() => ({
+            url: location.href,
+            title: document.title,
+            inputs: Array.from(document.querySelectorAll('input,button')).slice(0, 60).map((el) => ({
+              tag: el.tagName,
+              type: el.getAttribute('type') || '',
+              name: el.getAttribute('name') || '',
+              id: el.id || '',
+              placeholder: el.getAttribute('placeholder') || '',
+            })),
+          }))
+        : null);
+      res.json({
+        ok: !!login.ok,
+        dryRun: !!login.dryRun || dryRun,
+        alreadyAuthenticated: !!login.alreadyAuthenticated,
+        url,
+        screenshots: login.screenshots || [],
+        observed,
+      });
+    } catch (err) {
+      logger.warn?.({ err: err.message }, '[TC-ROUTES] debug-okta error');
+      res.status(500).json({
+        ok: false,
+        error: err.message,
+        observed: err.observed || null,
+        screenshots: err.screenshots || [],
+      });
+    } finally {
+      await session?.close?.().catch(() => {});
+    }
+  });
+
   // POST /api/v1/tc/test-glvar-login — dry-run GLVAR MLS login (screenshots, no form submit)
   router.post('/test-glvar-login', requireKey, async (req, res) => {
     try {
@@ -1717,7 +1964,7 @@ export function createTCRoutes(
       res.json({ ok: true, dryRun: result.dryRun || false, screenshots: result.screenshots });
     } catch (err) {
       logger.warn?.({ err: err.message }, '[TC-ROUTES] test-glvar-login error');
-      res.status(500).json({ ok: false, error: err.message });
+      res.status(500).json({ ok: false, error: err.message, needs_mfa: !!err.needs_mfa });
     }
   });
 
@@ -1733,17 +1980,36 @@ export function createTCRoutes(
 
       if (dryRun || !loginResult.ok) {
         await loginResult.session?.close?.();
-        return res.json({ ok: loginResult.ok, dryRun: true, screenshots: loginResult.screenshots });
+        return res.json({
+          ok: loginResult.ok,
+          dryRun: true,
+          screenshots: loginResult.screenshots,
+          observed: loginResult.observed || null,
+          alreadyAuthenticated: !!loginResult.alreadyAuthenticated,
+        });
       }
 
       // Full: navigate to SkySlope via Okta dashboard
       const navResult = await tcBrowser.navigateToSkySlope(loginResult.session);
       await loginResult.session?.close?.();
 
-      res.json({ ok: true, skySlopeUrl: navResult.url, screenshots: [...loginResult.screenshots, ...navResult.screenshots] });
+      res.json({
+        ok: !!navResult.ok,
+        dryRun: false,
+        skySlopeUrl: navResult.url,
+        via: navResult.via,
+        needs_human: navResult.needs_human,
+        screenshots: [...(loginResult.screenshots || []), ...(navResult.screenshots || [])],
+        alreadyAuthenticated: !!loginResult.alreadyAuthenticated,
+      });
     } catch (err) {
       logger.warn?.({ err: err.message }, '[TC-ROUTES] test-skyslope-login error');
-      res.status(500).json({ ok: false, error: err.message });
+      res.status(500).json({
+        ok: false,
+        error: err.message,
+        observed: err.observed || null,
+        screenshots: err.screenshots || [],
+      });
     }
   });
 
@@ -1769,11 +2035,13 @@ export function createTCRoutes(
       const jobId = crypto.randomUUID();
       const job = {
         id: jobId,
+        kind: 'listing_td_skyslope',
         transaction_id: txId,
         status: 'queued',
         steps: [],
         error: null,
         result: null,
+        request: { address_search: addressSearch, force_upload: forceUpload },
         created_at: new Date().toISOString(),
         dry_run: dryRun,
       };
@@ -1790,10 +2058,13 @@ export function createTCRoutes(
           : 'Live run queued: downloads executed listing agreement and uploads to SkySlope.',
       });
 
+      await persistBrowserJob(pool, job);
+
       (async () => {
         const j = listingTdSkyslopeJobs.get(jobId);
         if (!j) return;
         j.status = 'running';
+        await persistBrowserJob(pool, j);
         const accountManager = await getAccountManager();
         const { createTCListingSkyslopeSync } = await import('../services/tc-listing-skyslope-sync.js');
         const sync = createTCListingSkyslopeSync({ pool, coordinator, accountManager, logger });
@@ -1804,21 +2075,26 @@ export function createTCRoutes(
             filenameHints,
             dryRun,
             forceUpload,
-            onStep: (step) => {
+            onStep: async (step) => {
               j.steps.push(step);
+              await persistBrowserJob(pool, j);
             },
           });
           j.status = 'completed';
           j.result = result;
+          await persistBrowserJob(pool, j);
         } catch (err) {
           j.status = 'failed';
           j.error = err.message;
+          j.needs_mfa = !!err.needs_mfa;
           logger.warn?.({ err: err.message, jobId }, '[TC-ROUTES] listing-to-skyslope job failed');
           j.steps.push({
             at: new Date().toISOString(),
             label: 'job_failed',
             error: err.message,
+            needs_mfa: !!err.needs_mfa,
           });
+          await persistBrowserJob(pool, j);
         }
       })();
     } catch (err) {
@@ -1829,7 +2105,7 @@ export function createTCRoutes(
 
   // GET /api/v1/tc/browser-jobs/:jobId — poll listing TD → SkySlope or TD workflow job
   router.get('/browser-jobs/:jobId', requireKey, async (req, res) => {
-    const job = listingTdSkyslopeJobs.get(req.params.jobId) || tdWorkflowJobs.get(req.params.jobId);
+    const job = await loadBrowserJob(pool, req.params.jobId);
     if (!job) return res.status(404).json({ ok: false, error: 'Job not found or expired' });
     res.json({ ok: true, job });
   });
@@ -2263,13 +2539,84 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/email/scan — trigger inbox scan now
+  // Body: { days?: number, include_seen?: boolean, organize?: boolean,
+  //         max_messages?: number, max_ai?: number, dry_run?: boolean }
   router.post('/email/scan', requireKey, async (req, res) => {
     try {
       const { createEmailTriage } = await import('../services/email-triage.js');
       const accountManager = await getAccountManager();
       const notificationService = await getNotificationService();
       const triage = createEmailTriage({ pool, notificationService, callCouncilMember, accountManager, logger });
-      const result = await triage.scanInbox();
+      const body = req.body || {};
+      const daysRaw = Number(body.days);
+      const result = await triage.scanInbox({
+        days: Number.isFinite(daysRaw) ? daysRaw : undefined,
+        includeSeen: body.include_seen === true || body.organize === true,
+        organize: body.organize === true || (Number.isFinite(daysRaw) && daysRaw >= 7),
+        maxMessages: body.max_messages,
+        maxAi: body.max_ai,
+        dryRun: body.dry_run === true,
+        skipAlerts: body.skip_alerts !== false && (body.organize === true || (Number.isFinite(daysRaw) && daysRaw >= 7)),
+      });
+      res.json(result);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/email/organize — last N days: keep RE/client/paperwork, trash spam
+  // Long IMAP passes exceed Railway proxy timeouts if awaited — start in background.
+  router.post('/email/organize', requireKey, async (req, res) => {
+    try {
+      const { createEmailTriage } = await import('../services/email-triage.js');
+      const accountManager = await getAccountManager();
+      const notificationService = await getNotificationService();
+      const triage = createEmailTriage({ pool, notificationService, callCouncilMember, accountManager, logger });
+      const body = req.body || {};
+      const daysRaw = Number(body.days);
+      const days = Number.isFinite(daysRaw) ? Math.min(60, Math.max(7, daysRaw)) : 40;
+      const dryRun = body.dry_run === true;
+      const maxMessages = body.max_messages;
+      const maxAi = body.max_ai;
+      const awaitResult = body.await === true;
+
+      if (awaitResult || dryRun) {
+        const result = await triage.organizeRecentInbox({ days, dryRun, maxMessages, maxAi });
+        return res.json(result);
+      }
+
+      res.json({
+        ok: true,
+        started: true,
+        days,
+        message: 'TC inbox organize started in background. Spam → Trash; contracts/docs/client kept. Poll GET /api/v1/tc/email/attention.',
+      });
+
+      setImmediate(() => {
+        triage.organizeRecentInbox({ days, dryRun: false, maxMessages, maxAi })
+          .then((result) => {
+            logger?.info?.({ ...result, background: true }, '[TC-EMAIL] background organize complete');
+          })
+          .catch((err) => {
+            logger?.error?.({ err: err.message }, '[TC-EMAIL] background organize failed');
+          });
+      });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/email/purge-spam — reclassify logged marketing/spam + trash UIDs
+  router.post('/email/purge-spam', requireKey, async (req, res) => {
+    try {
+      const { createEmailTriage } = await import('../services/email-triage.js');
+      const accountManager = await getAccountManager();
+      const triage = createEmailTriage({ pool, accountManager, logger });
+      const body = req.body || {};
+      const result = await triage.purgeLoggedSpam({
+        limit: body.limit,
+        dryRun: body.dry_run === true,
+      });
       res.json(result);
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
@@ -3453,7 +3800,7 @@ export function createTCRoutes(
       res.json({ ok: true, url, title, links_count: links.length, links, body_snippet: bodySnippet });
     } catch (err) {
       await session?.close?.().catch(() => {});
-      res.status(500).json({ ok: false, error: err.message });
+      res.status(500).json({ ok: false, error: err.message, needs_mfa: !!err.needs_mfa });
     }
   });
 

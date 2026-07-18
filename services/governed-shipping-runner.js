@@ -22,6 +22,7 @@
  * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import { attachAuthoredAssertions } from '../factory-staging/factory-core/bpb/author-assertions.js';
+import { blueprintFollowClaim, dualHonestyGrade, exactChangeClaim } from './truth-ladder.js';
 
 const noop = () => {};
 
@@ -38,21 +39,89 @@ const noop = () => {};
  */
 export async function runGovernedShippingQueue({
   steps, mission_id, blueprint_id, dispatch, checkpoint = noop, signal = noop, startIndex = 0,
+  claim_following_blueprint = true,
 }) {
   if (!Array.isArray(steps)) throw new Error('runGovernedShippingQueue requires steps[]');
   if (typeof dispatch !== 'function') throw new Error('runGovernedShippingQueue requires an injected dispatch fn');
 
   const shipped = [];
-  const summary = { mission_id, blueprint_id, total: steps.length, shipped: 0, resumed_from: startIndex };
+  const honesty_grades = [];
+  const summary = {
+    mission_id,
+    blueprint_id,
+    total: steps.length,
+    shipped: 0,
+    resumed_from: startIndex,
+    claim_following_blueprint: claim_following_blueprint !== false,
+  };
 
   for (let i = startIndex; i < steps.length; i += 1) {
     const rawStep = steps[i];
     const step_id = rawStep?.step_id || `step-${i}`;
+    const twin = blueprintFollowClaim({
+      blueprint_id: blueprint_id || rawStep?.blueprint_id,
+      blueprint_step_id: rawStep?.blueprint_step_id || step_id,
+      claim_following_blueprint: claim_following_blueprint !== false,
+    });
+    if (!twin.ok) {
+      await signal({
+        kind: 'not_on_blueprint',
+        mission_id,
+        blueprint_id,
+        step_id,
+        index: i,
+        status: twin.status,
+        error: twin.error,
+      });
+      return {
+        ok: false,
+        status: 'NOT_ON_BLUEPRINT',
+        halted: true,
+        reason: twin.error,
+        step_id,
+        index: i,
+        ...summary,
+        shipped,
+        honesty_grades,
+      };
+    }
+
+    const exact = exactChangeClaim({
+      blueprint_id: twin.blueprint_id,
+      blueprint_step_id: twin.blueprint_step_id,
+      claim_following_blueprint: claim_following_blueprint !== false,
+    });
+    if (!exact.ok) {
+      await signal({
+        kind: 'not_exact_blueprint_step',
+        mission_id,
+        blueprint_id: twin.blueprint_id,
+        step_id,
+        blueprint_step_id: twin.blueprint_step_id,
+        index: i,
+        status: exact.status,
+        error: exact.error,
+      });
+      return {
+        ok: false,
+        status: exact.status || 'NOT_EXACT_BLUEPRINT_STEP',
+        halted: true,
+        reason: exact.error,
+        step_id,
+        index: i,
+        ...summary,
+        shipped,
+        honesty_grades,
+      };
+    }
 
     // BPB authors assertions from the spec (provenance-clean). Fail-closed: if the
     // blueprint declared nothing provable for a server-code target, we HALT — we
     // never ship code SENTRY cannot independently prove.
-    const authored = attachAuthoredAssertions(rawStep);
+    const authored = attachAuthoredAssertions({
+      ...rawStep,
+      target_file: exact.target_file || rawStep?.target_file,
+    });
     if (!authored.ok) {
       await signal({ kind: 'halted_unprovable_step', mission_id, blueprint_id, step_id, index: i, reason: authored.reason });
       return { ok: false, halted: true, reason: authored.reason, step_id, index: i, ...summary, shipped };
@@ -73,16 +142,69 @@ export async function runGovernedShippingQueue({
     const passed = result?.httpStatus === 200 && result?.body?.sentry?.implementation_status === 'PASS';
     await checkpoint({ index: i, step_id, phase: passed ? 'shipped' : 'blocked', httpStatus: result?.httpStatus, result });
 
+    // Dual honesty: Factory self-grades; SENTRY is the peer (separation of powers).
+    // Trust is not earned by self-certify alone — compare + receipts.
+    const commitSha = result?.body?.commit_sha || result?.body?.codegen?.commit_sha || null;
+    const honesty = await dualHonestyGrade({
+      actor_id: 'factory_cdr',
+      claim: passed ? `shipped ${step_id} on blueprint` : `failed ${step_id}`,
+      self_grade: passed ? 'KNOW' : 'GUESS',
+      self_rationale: passed ? 'factory_dispatch_ok' : 'factory_blocked',
+      kind: 'deploy',
+      evidence: {
+        test_result: passed ? 'pass' : 'fail',
+        ...(commitSha ? { commit_sha: commitSha } : {}),
+        ...(passed ? { deploy_verified: Boolean(commitSha) } : {}),
+      },
+    }, {
+      peerReviewFn: async () => ({
+        grade: passed ? (commitSha ? 'KNOW' : 'THINK') : 'GUESS',
+        rationale: passed
+          ? (commitSha ? 'sentry_PASS+commit_sha' : 'sentry_PASS_no_sha')
+          : `sentry_${result?.body?.sentry?.implementation_status || 'FAIL'}`,
+        theater_detected: !passed,
+      }),
+    });
+    honesty_grades.push({ step_id, index: i, ...honesty });
+    await signal({
+      kind: 'dual_honesty_grade',
+      mission_id,
+      blueprint_id: twin.blueprint_id,
+      blueprint_step_id: twin.blueprint_step_id,
+      step_id,
+      index: i,
+      honesty,
+    });
+
     if (!passed) {
       // SENTRY/pipe refused it — governed block, surfaced, run stops (fail-closed).
       await signal({ kind: 'step_blocked_by_governance', mission_id, blueprint_id, step_id, index: i, httpStatus: result?.httpStatus, gap_type: result?.body?.gap_type, sentry: result?.body?.sentry?.implementation_status, resume_from: i });
-      return { ok: false, blocked: true, step_id, index: i, httpStatus: result?.httpStatus, resume_from: i, ...summary, shipped };
+      return {
+        ok: false,
+        blocked: true,
+        step_id,
+        index: i,
+        httpStatus: result?.httpStatus,
+        body: result?.body,
+        resume_from: i,
+        ...summary,
+        shipped,
+        honesty_grades,
+      };
     }
 
-    shipped.push({ step_id, index: i, assertion_provenance: authored.provenance, codegen: result?.body?.codegen || null });
+    shipped.push({
+      step_id,
+      blueprint_step_id: twin.blueprint_step_id,
+      index: i,
+      assertion_provenance: authored.provenance,
+      codegen: result?.body?.codegen || null,
+      trust_earned: honesty.trust_earned,
+      honesty: honesty.compare,
+    });
     summary.shipped = shipped.length;
   }
 
   await signal({ kind: 'queue_complete', mission_id, blueprint_id, shipped: summary.shipped, total: summary.total });
-  return { ok: true, complete: true, ...summary, shipped };
+  return { ok: true, complete: true, ...summary, shipped, honesty_grades };
 }

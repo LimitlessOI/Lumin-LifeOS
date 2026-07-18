@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /**
  * SYNOPSIS: Spec/intention → queue generator — PRODUCT_HOME backlog → validated
  * product_build_queue_v1. Wave 0 item 15. Mechanical + fail-closed; imports
@@ -16,7 +15,7 @@ import {
   normalizePlannedStep,
   validatePlannedQueue,
   planBuildQueue,
-  shouldFounderGate,
+  shouldFlagDesignReview,
 } from '../services/build-queue-planner.js';
 import { STEP_STATUS } from '../services/product-build-orchestrator.js';
 
@@ -27,13 +26,19 @@ const MAX_STEPS = 12;
 const PATH_IN_BULLET =
   /(?:^|[\s`"'(])((?:services|routes|scripts|db\/migrations|public\/overlay|config|startup|middleware|factory-staging|docs\/products)\/[\w./-]+\.(?:js|mjs|cjs|ts|tsx|sql|html|json|md))/i;
 
+const UI_BULLET_PATH = /\b(customi[sz]ation panel|client-facing customi[sz]|customi[sz]e\.html)\b/i;
+
 /**
  * @param {string} bullet
  * @returns {string|null}
  */
 export function guessTargetFileFromBullet(bullet) {
   const m = String(bullet || '').match(PATH_IN_BULLET);
-  return m ? m[1] : null;
+  if (m) return m[1];
+  if (UI_BULLET_PATH.test(String(bullet || ''))) {
+    return 'public/overlay/customize.html';
+  }
+  return null;
 }
 
 /**
@@ -56,9 +61,8 @@ function slugify(value, fallback) {
 }
 
 /**
- * Turn documented backlog bullets into pending/founder_gated steps without a model.
- * target_file is taken from the bullet only when a real repo path appears; otherwise
- * a founder_gated placeholder path is used (never invents a code target).
+ * Turn documented backlog bullets into pending steps without a model.
+ * Pathless bullets become human_hold (FOUNDER_GATED); UI paths get design_review_flagged pending.
  *
  * @param {{ productId: string, backlog: string[], existingSteps?: object[], maxSteps?: number, verifyScript?: string|null }} opts
  * @returns {{ queue: object, added: object[] }|null}
@@ -98,16 +102,20 @@ export function deterministicQueueFromBacklog({
       task: item.slice(0, 240),
       spec: item,
       depends_on: [],
-      founder_gated: !guessed,
+      human_hold: !guessed,
     };
     const step = normalizePlannedStep(raw, productId, existing.length + i);
     if (!step) continue;
     if (!guessed) {
+      step.human_hold = true;
       step.founder_gated = true;
       step.status = STEP_STATUS.FOUNDER_GATED;
-    } else if (shouldFounderGate(step)) {
-      step.founder_gated = true;
-      step.status = STEP_STATUS.FOUNDER_GATED;
+      step.design_review_flagged = false;
+    } else if (shouldFlagDesignReview(step)) {
+      step.design_review_flagged = true;
+      step.status = STEP_STATUS.PENDING;
+      step.founder_gated = false;
+      step.human_hold = false;
     }
     const fp = `${step.target_file}::${step.task}`.toLowerCase();
     if (existingIds.has(step.id) || existingFingerprints.has(fp)) continue;
@@ -351,7 +359,7 @@ function printHelp() {
 Wave 0 item 15 — Spec/intention → queue generator.
 
   --product=<id>     Product dir under docs/products/ (required)
-  --deterministic    Default. Backlog bullets → steps; path from bullet or founder_gated placeholder
+  --deterministic    Default. Backlog bullets → steps; pathless → human_hold; UI → design_review_flagged pending
   --with-model       Use planBuildQueue (requires programmatic callModel; CLI fails closed without it)
   --dry-run          Validate only; do not write BUILD_QUEUE.json
 

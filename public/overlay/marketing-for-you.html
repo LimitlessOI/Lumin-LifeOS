@@ -1,0 +1,112 @@
+<!-- @ssot docs/products/marketingos/socialmediaos/PRODUCT_HOME.md -->
+<!DOCTYPE html>
+<!-- SYNOPSIS: SocialMediaOS / MarketingOS — marketplace landing + content-pack checkout entry -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SocialMediaOS — Built to look sharp</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet" />
+  <script src="/overlay/lifeos-bootstrap.js?v=20260717c"></script>
+  <style>
+    :root { --ink:#142029; --muted:#5a6f74; --deep:#0a3d40; --teal:#14716c; --foam:#f4f8f8; --line:rgba(10,61,64,.12); --serif:"Fraunces",Georgia,serif; --sans:"Manrope",system-ui,sans-serif; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family:var(--sans); color:var(--ink); background:linear-gradient(180deg,#e8f2f1,#f4f8f8 40%,#e3eceb); }
+    .hero {
+      min-height: 78vh; display:grid; align-items:end;
+      background:
+        linear-gradient(180deg, rgba(8,30,34,.2), rgba(8,30,34,.82)),
+        url("/overlay/product-heroes/marketing.png") center/cover no-repeat;
+      color:#fff;
+    }
+    .hero-inner { width:min(920px, calc(100vw - 2rem)); margin:0 auto; padding: 3rem 0 2.4rem; animation: rise .7s ease both; }
+    .brand { font-family:var(--serif); font-size:1.35rem; font-weight:700; letter-spacing:-.02em; }
+    .brand span { color:#9fe0d8; font-weight:500; }
+    h1 { margin:.8rem 0 0; font-family:var(--serif); font-size:clamp(2.4rem,5vw,3.5rem); line-height:1.05; letter-spacing:-.03em; max-width:16ch; }
+    .lead { margin:1rem 0 0; max-width:38rem; color:rgba(255,255,255,.82); font-size:1.08rem; }
+    .actions { display:flex; flex-wrap:wrap; gap:.75rem; margin-top:1.4rem; }
+    .btn { appearance:none; border:0; text-decoration:none; font:inherit; font-weight:700; border-radius:999px; padding:.9rem 1.3rem; display:inline-flex; }
+    .btn-primary { background:#fff; color:var(--deep); }
+    .btn-ghost { background:transparent; color:#fff; border:1px solid rgba(255,255,255,.35); }
+    .shell { width:min(920px, calc(100vw - 2rem)); margin:0 auto; padding:2.2rem 0 3.5rem; }
+    section { padding:1.6rem 0; border-top:1px solid var(--line); }
+    h2 { margin:0 0 .5rem; font-family:var(--serif); color:var(--deep); font-size:1.55rem; }
+    p { color:var(--muted); max-width:42rem; }
+    .story { display:grid; gap:.85rem; }
+    .story article { padding:.2rem 0 .2rem 1rem; border-left:3px solid var(--teal); }
+    .story strong { display:block; color:var(--deep); margin-bottom:.15rem; }
+    @keyframes rise { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:none} }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="brand">SocialMediaOS <span>· MarketingOS</span></div>
+      <h1>Content that looks like a brand, not a template dump.</h1>
+      <p class="lead">Consent → coach → extract → generate → approve → export. Studio stills via Ideogram when you need thumbnails that don’t look generic.</p>
+      <div class="actions">
+        <button class="btn btn-primary" id="buyContentPackBtn" type="button">Buy Content Pack — $49</button>
+        <a class="btn btn-ghost" href="/marketing">Open Dashboard</a>
+        <a class="btn btn-ghost" href="/creative/studio">Open Creative Studio</a>
+      </div>
+      <p id="buyStatus" class="lead" style="min-height:1.4em; color:#9fe0d8; font-weight:600;"></p>
+    </div>
+  </header>
+  <main class="shell">
+    <section>
+      <h2>2026 design bar</h2>
+      <div class="story">
+        <article><strong>Full-bleed atmosphere</strong><span>Hero photography from Studio — not a card collage.</span></article>
+        <article><strong>One job per screen</strong><span>Session flow stays progressive: approve before publish.</span></article>
+        <article><strong>Purposeful motion</strong><span>Entrance rise only — no decorative glow chrome.</span></article>
+      </div>
+    </section>
+    <section>
+      <h2>What you do next</h2>
+      <p>Start a marketing session, keep human approval on publish, and use Studio when you need a fresh thumbnail or hero still.</p>
+      <div class="actions" style="margin-top:1rem;">
+        <a class="btn btn-primary" href="/marketing/session/new" style="background:var(--deep);color:#fff;">Start a session</a>
+      </div>
+    </section>
+  </main>
+  <script>
+  (function() {
+    const btn = document.getElementById('buyContentPackBtn');
+    const status = document.getElementById('buyStatus');
+    if (!btn || !window.LifeOSBootstrap) return;
+
+    function setStatus(msg, isError) {
+      if (!status) return;
+      status.textContent = msg;
+      status.style.color = isError ? '#ff9f9f' : '#9fe0d8';
+    }
+
+    btn.addEventListener('click', async function() {
+      setStatus('Creating secure checkout…');
+      btn.disabled = true;
+      try {
+        const ctx = window.LifeOSBootstrap.getLifeOSContext({ promptForKey: false });
+        const res = await ctx.fetchWithAuth('/api/v1/socialmediaos/content-pack/checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({})
+        });
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({ error: 'Checkout failed (' + res.status + ')' }));
+          throw new Error(err.error || 'Checkout failed');
+        }
+        const data = await res.json();
+        if (!data.checkoutUrl) {
+          throw new Error('No checkout URL returned');
+        }
+        setStatus('Redirecting to Stripe…');
+        (window.top || window).location.href = data.checkoutUrl;
+      } catch (e) {
+        setStatus(e.message, true);
+        btn.disabled = false;
+      }
+    });
+  })();
+  </script>
+</body>
+</html>

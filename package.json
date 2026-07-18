@@ -235,6 +235,8 @@
     "env:certify": "node scripts/env-certify.mjs",
     "env:inventory": "node scripts/env-live-inventory.mjs",
     "system:railway:redeploy": "node scripts/system-railway-redeploy.mjs",
+    "system:commit-files": "node scripts/system-commit-files.mjs",
+    "system:cloudflare-railway": "node scripts/setup-cloudflare-railway.mjs",
     "system:fp-v2:production-env": "node scripts/enable-fp-v2-production-env.mjs",
     "system:rotate-command-key": "node scripts/system-rotate-command-key.mjs",
     "system:sync-command-key": "node scripts/system-sync-command-key.mjs",
@@ -317,6 +319,7 @@
   },
   "dependencies": {
     "@anthropic-ai/claude-code": "^2.1.86",
+    "@aws-sdk/client-s3": "^3.1085.0",
     "@capacitor/app": "^7.1.2",
     "@capacitor/core": "^7.6.7",
     "@capacitor/splash-screen": "^7.0.5",

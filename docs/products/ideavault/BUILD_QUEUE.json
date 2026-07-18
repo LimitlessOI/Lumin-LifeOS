@@ -1,0 +1,686 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "ideavault",
+  "planned_at": "2026-07-15T07:36:53.661Z",
+  "backlog_signature": "9dc8948712e877d9",
+  "corpus_sources": [
+    "docs/products/ideavault/PRODUCT_HOME.md",
+    "docs/products/ideavault/conversations/2026-06-29-ecosystem-routing-catalog.md",
+    "docs/products/ideavault/conversations/2026-07-03_twin-evolution-and-integrity-auditor.md",
+    "docs/products/ideavault/AGENTS.md"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "status": "done",
+      "target_file": "services/headingPass.js",
+      "task": "run heading pass",
+      "spec": "Implement heading pass for new exports over 500KB, append or extend Stream subsection/table.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "runHeadingPass"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/headingPass.js",
+          "exports": [
+            "runHeadingPass"
+          ],
+          "assertion_id": "expected_exports:services/headingPass.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "18845b9317c722900ad84352a7c1d9abab2182eb",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T08:40:25.401Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T08:40:39.013Z",
+      "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "1",
+      "mission_id": "PRODUCT-ideavault"
+    },
+    {
+      "id": "2",
+      "status": "done",
+      "target_file": "scripts/runMemoryImport.mjs",
+      "task": "execute run-memory-import",
+      "spec": "Run memory import script for large exports, interfacing with import-dumps-to-twin.js.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "import-dumps-to-twin"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T08:48:58.980Z",
+      "commit_sha": "46160e5050642ef0e72a4e47b8d9be1162e1d050",
+      "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "2",
+      "mission_id": "PRODUCT-ideavault"
+    },
+    {
+      "id": "3",
+      "status": "done",
+      "target_file": "scripts/importDumpsToTwin.js",
+      "task": "execute import-dumps-to-twin",
+      "spec": "Import memory dumps to twin using build-profile.",
+      "depends_on": [
+        "2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "build-profile"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "74589275831ce8081babafa3eae958c2d8e9d0ff",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T18:58:51.835Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "3",
+      "mission_id": "PRODUCT-ideavault"
+    },
+    {
+      "id": "4",
+      "status": "done",
+      "target_file": "scripts/folderCleanup.mjs",
+      "task": "perform folder cleanup",
+      "spec": "Consolidate Lumin-Memory variants, delete 404 stubs, update CONVERSATION_DUMP_IDEAS_INDEX paths.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "Lumin-Memory",
+        "404",
+        "CONVERSATION_DUMP_IDEAS_INDEX"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T08:58:49.603Z",
+      "commit_sha": "a2dbd7adca32f8037e0c4b53fca9cc9a6136ade7",
+      "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "4",
+      "mission_id": "PRODUCT-ideavault"
+    },
+    {
+      "id": "5",
+      "status": "done",
+      "target_file": "scripts/extract-dump-headings.mjs",
+      "task": "extract dump headings",
+      "spec": "Emit IDEA_VAULT_HEADINGS_APPENDIX.md with machine-generated TOC.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T09:03:45.174Z",
+      "commit_sha": "0cbb9ec60bb205631867eba0ca62678be1fd4a92",
+      "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "5",
+      "mission_id": "PRODUCT-ideavault"
+    },
+    {
+      "id": "step4",
+      "status": "skipped",
+      "target_file": "scripts/extractDumpHeadings.mjs",
+      "task": "emit TOC",
+      "spec": "Emit docs/IDEA_VAULT_HEADINGS_APPENDIX.md for machine TOC proposal.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "extractHeadings"
+      ],
+      "route": {
+        "path": "/api/v1/docs/toc"
+      },
+      "last_attempt_at": "2026-07-16T04:57:34.560Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 6,
+      "revived_at": "2026-07-16T04:56:33.651Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T05:01:18.637Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step4",
+      "mission_id": "PRODUCT-ideavault"
+    },
+    {
+      "id": "step1",
+      "status": "done",
+      "target_file": "services/headingPass.js",
+      "task": "append Stream subsection or extend Stream I/portfolio table",
+      "spec": "Ensure heading pass processes new exports over 500KB, appending to Stream subsection or extending Stream I/portfolio table.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "processHeading"
+      ],
+      "route": {
+        "path": "/path"
+      },
+      "file_contains": [
+        "appendToStream",
+        "extendPortfolioTable"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/headingPass.js",
+          "exports": [
+            "processHeading"
+          ],
+          "assertion_id": "expected_exports:services/headingPass.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "3e6799234a0f2e593fa3b0fe86cb07ba6de2dd00",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T04:34:00.601Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:34:54.132Z",
+      "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step1",
+      "mission_id": "PRODUCT-ideavault"
+    },
+    {
+      "id": "step2",
+      "status": "skipped",
+      "target_file": "scripts/importDumpsToTwin.js",
+      "task": "add build profile capability",
+      "spec": "Enable importDumpsToTwin to run with build profile for large exports per dual lane corpus.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "importDumpsToTwin"
+      ],
+      "route": {
+        "path": "/path"
+      },
+      "file_contains": [
+        "--build-profile"
+      ],
+      "last_attempt_at": "2026-07-16T06:08:38.592Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 6,
+      "revived_at": "2026-07-16T06:06:39.594Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T06:12:26.240Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step2",
+      "mission_id": "PRODUCT-ideavault"
+    },
+    {
+      "id": "step3",
+      "status": "skipped",
+      "target_file": "scripts/folderCleanup.mjs",
+      "task": "consolidate Lumin-Memory variants",
+      "spec": "Ensure folderCleanup consolidates Lumin-Memory variants and deletes 404 stubs; update CONVERSATION_DUMP_IDEAS_INDEX paths.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "folderCleanup"
+      ],
+      "route": {
+        "path": "/path"
+      },
+      "file_contains": [
+        "consolidateLuminMemory",
+        "delete404Stubs",
+        "updateIndexPaths"
+      ],
+      "last_attempt_at": "2026-07-16T06:01:56.325Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:updateIndexPaths; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 6,
+      "revived_at": "2026-07-16T05:59:01.425Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:updateIndexPaths; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T06:06:39.594Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step3",
+      "mission_id": "PRODUCT-ideavault"
+    },
+    {
+      "id": "ideavault-1",
+      "status": "done",
+      "target_file": "services/headingPassStream.js",
+      "task": "append Stream subsection",
+      "spec": "Extend Stream I or append a Stream subsection if a new export is > 500KB.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "processStreamExports"
+      ],
+      "route": {
+        "path": "/api/v1/process-streams"
+      },
+      "file_contains": [
+        "Stream I",
+        "subsection"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/headingPassStream.js",
+          "exports": [
+            "processStreamExports"
+          ],
+          "assertion_id": "expected_exports:services/headingPassStream.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "1ae6380f3ee7c4e2a766843c4ae38b67dd71da61",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T05:48:34.784Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:55:58.308Z",
+      "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ideavault-1",
+      "mission_id": "PRODUCT-ideavault"
+    },
+    {
+      "id": "ideavault-2",
+      "status": "skipped",
+      "target_file": "scripts/folderCleanupMemory.js",
+      "task": "consolidate Lumin-Memory variants",
+      "spec": "Consolidate Lumin-Memory variants and delete 404 stubs.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "cleanupMemory"
+      ],
+      "route": {
+        "path": "/api/v1/cleanup-memory"
+      },
+      "file_contains": [
+        "Lumin-Memory",
+        "404 stubs"
+      ],
+      "last_attempt_at": "2026-07-17T18:06:59.903Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 6,
+      "revived_at": "2026-07-17T18:05:33.773Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-17T18:13:50.203Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ideavault-2",
+      "mission_id": "PRODUCT-ideavault"
+    },
+    {
+      "id": "ideavault-3",
+      "status": "skipped",
+      "target_file": "scripts/updateDumpIndexPaths.js",
+      "task": "update CONVERSATION_DUMP_IDEAS_INDEX paths",
+      "spec": "Update the paths for CONVERSATION_DUMP_IDEAS_INDEX in the existing system.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "updateIndexPaths"
+      ],
+      "route": {
+        "path": "/api/v1/update-index-paths"
+      },
+      "file_contains": [
+        "CONVERSATION_DUMP_IDEAS_INDEX"
+      ],
+      "last_attempt_at": "2026-07-17T18:37:45.110Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 6,
+      "revived_at": "2026-07-17T18:36:31.840Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-17T18:45:49.206Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ideavault-3",
+      "mission_id": "PRODUCT-ideavault"
+    },
+    {
+      "id": "ideavault-4",
+      "status": "skipped",
+      "target_file": "scripts/emitHeadingsAppendix.js",
+      "task": "emit machine TOC to appendix",
+      "spec": "Emit a TOC to docs/IDEA_VAULT_HEADINGS_APPENDIX.md via `extract-dump-headings.mjs`. Proposed if the TOC is non-trivial.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "emitHeadingsTOC"
+      ],
+      "route": {
+        "path": "/api/v1/emit-headings-toc"
+      },
+      "file_contains": [
+        "TOC",
+        "IDEA_VAULT_HEADINGS_APPENDIX.md"
+      ],
+      "last_attempt_at": "2026-07-17T18:46:22.534Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 6,
+      "revived_at": "2026-07-17T18:45:49.206Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-17T18:55:35.029Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ideavault-4",
+      "mission_id": "PRODUCT-ideavault"
+    },
+    {
+      "id": "ideavault-5",
+      "status": "done",
+      "target_file": "scripts/extract-dump-headings.mjs",
+      "task": "propose TOC appendix",
+      "spec": "Attempt to generate an enhanced TOC for IDEA_VAULT_HEADINGS_APPENDIX.md if detected as non-trivial.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "extractHeadingsAppendix"
+      ],
+      "file_contains": [
+        "IDEA_VAULT_HEADINGS_APPENDIX.md"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:30:11.008Z",
+      "commit_sha": "0d59d5fea7218c15dedbd7f394a0d31d7a26d5cc",
+      "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ideavault-5",
+      "mission_id": "PRODUCT-ideavault"
+    },
+    {
+      "id": "ideavault-step1",
+      "status": "done",
+      "target_file": "services/headingPassStream.js",
+      "task": "extend heading pass stream",
+      "spec": "Extend the existing heading pass stream to handle any new export over 500KB, appending to the Stream subsection or extending Stream I/portfolio table.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "handleLargeExports"
+      ],
+      "file_contains": [
+        "export",
+        "Stream subsection",
+        "Stream I/portfolio table"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/headingPassStream.js",
+          "exports": [
+            "handleLargeExports"
+          ],
+          "assertion_id": "expected_exports:services/headingPassStream.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "4b73fbeca406d8162f12e1d954c97b1feb5371ed",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T07:04:23.688Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T07:09:44.476Z",
+      "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ideavault-step1",
+      "mission_id": "PRODUCT-ideavault"
+    },
+    {
+      "id": "ideavault-step2",
+      "status": "done",
+      "target_file": "scripts/runMemoryImport.mjs",
+      "task": "append run-memory-import",
+      "spec": "Ensure the script triggers operator-run `run-memory-import.mjs` for handling large exports.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "run-memory-import"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:49:50.819Z",
+      "commit_sha": "6e2fcad745b80adbb2ab090559df963ed779679f",
+      "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ideavault-step2",
+      "mission_id": "PRODUCT-ideavault"
+    },
+    {
+      "id": "ideavault-step3",
+      "status": "done",
+      "target_file": "scripts/importDumpsToTwin.js",
+      "task": "add twin import build profile",
+      "spec": "Add `--build-profile` feature to import dumps to twin script, as referenced in operator corpus — dual lane.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "--build-profile"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "411181327fcefb8e11e2365e6e1a6f3dfd998173",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-17T19:10:18.416Z",
+      "no_op": null,
+      "pre_existing": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T19:11:03.984Z",
+      "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ideavault-step3",
+      "mission_id": "PRODUCT-ideavault"
+    },
+    {
+      "id": "ideavault-step4",
+      "status": "done",
+      "target_file": "scripts/folderCleanup.mjs",
+      "task": "consolidate and cleanup folder",
+      "spec": "Consolidate `Lumin-Memory` variants, delete `404` stubs, and update paths for `CONVERSATION_DUMP_IDEAS_INDEX`.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "Lumin-Memory",
+        "404",
+        "CONVERSATION_DUMP_IDEAS_INDEX"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T19:19:00.964Z",
+      "commit_sha": "f65203ad524bbdd5f7eda62f4174cc6e299129cb",
+      "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ideavault-step4",
+      "mission_id": "PRODUCT-ideavault"
+    },
+    {
+      "id": "ideavault-step5",
+      "status": "blocked",
+      "target_file": "scripts/extract-dump-headings.mjs",
+      "task": "propose non-trivial TOC append",
+      "spec": "Run `scripts/extract-dump-headings.mjs` to emit `docs/IDEA_VAULT_HEADINGS_APPENDIX.md` and propose through builder if content is non-trivial.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "emit `docs/IDEA_VAULT_HEADINGS_APPENDIX.md`",
+        "propose via builder"
+      ],
+      "last_attempt_at": "2026-07-17T23:03:27.622Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:emit `docs/IDEA_VAULT_HEADINGS_APPENDIX.md`; behavior_assertion: missing_substring:propose via builder; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 6,
+      "revived_at": "2026-07-17T23:01:58.529Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ideavault-step5",
+      "mission_id": "PRODUCT-ideavault"
+    }
+  ],
+  "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-ideavault",
+  "twin_kind": "product_build_queue_registered"
+}

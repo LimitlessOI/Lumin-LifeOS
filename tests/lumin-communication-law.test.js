@@ -41,11 +41,25 @@ test('auditLuminCommunicationWiring passes structural checks', () => {
   assert.equal(byId['COMM-WIRE-11']?.ok, true, 'direct agent must carry COMMUNICATION DNA');
 });
 
-test('direct agent finalize path scrubs formula (module wiring)', async () => {
+test('enforceCommunicationLaw does not gut normal sentences containing want', () => {
+  const result = enforceCommunicationLaw('What do you want to move next on LifeOS?');
+  assert.match(result.text, /want to move/i);
+  assert.ok(!/What do to move/i.test(result.text));
+});
+
+test('scrub preserves not-a-go-between as system identity', () => {
+  const result = enforceCommunicationLaw(
+    'I am the system — Lumin. Not a go-between. I see your memory and builds.',
+  );
+  assert.match(result.text, /I am the system/i);
+  assert.ok(!/Not a \./.test(result.text));
+  assert.ok(!/go-between/i.test(result.text) || /system/i.test(result.text));
+});
+
+test('direct agent identity is the system, not a go-between (module wiring)', async () => {
   const src = await import('node:fs').then((fs) =>
     fs.readFileSync(new URL('../services/chair-direct-agent.js', import.meta.url), 'utf8'),
   );
-  assert.match(src, /finalizeHumanReply/);
-  assert.match(src, /enforceCommunicationLaw/);
-  assert.match(src, /COMMUNICATION DNA/);
+  assert.match(src, /You ARE LifeOS\/BuilderOS|THE SYSTEM speaking/i);
+  assert.doesNotMatch(src, /You are the translation layer \+ the hands/);
 });

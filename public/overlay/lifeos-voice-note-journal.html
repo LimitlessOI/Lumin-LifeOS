@@ -1,0 +1,57 @@
+<!-- SYNOPSIS: HTML page: Voice Note Journal -->
+<html>
+<head>
+    <title>Voice Note Journal</title>
+</head>
+<body>
+    <h1>Voice Note Journal</h1>
+    <button id="recordButton">Record</button>
+    <div id="transcript"></div>
+
+    <script>
+        const recordButton = document.getElementById('recordButton');
+        const transcriptDiv = document.getElementById('transcript');
+        let recognition;
+        let isRecording = false;
+
+        if ('webkitSpeechRecognition' in window) {
+            recognition = new webkitSpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = 'en-US';
+
+            recognition.onstart = function() {
+                isRecording = true;
+                recordButton.textContent = 'Stop Recording';
+            };
+
+            recognition.onend = function() {
+                isRecording = false;
+                recordButton.textContent = 'Record';
+            };
+
+            recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript;
+                transcriptDiv.textContent = transcript;
+                fetch('/api/v1/lifeos/journal/voice', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ text: transcript })
+                });
+            };
+
+            recordButton.onclick = function() {
+                if (isRecording) {
+                    recognition.stop();
+                } else {
+                    recognition.start();
+                }
+            };
+        } else {
+            alert('Web Speech API is not supported in this browser.');
+        }
+    </script>
+</body>
+</html>

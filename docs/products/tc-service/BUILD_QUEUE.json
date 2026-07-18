@@ -15,7 +15,10 @@
       "attempts": 1,
       "commit_sha": "6961fad2b4ad03c458b99f44453473a0bb95dd8a",
       "last_attempt_at": "2026-07-10T03:34:45.449Z",
-      "completed_at": "2026-07-10T03:35:00.526Z"
+      "completed_at": "2026-07-10T03:35:00.526Z",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s1",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "s2",
@@ -28,7 +31,10 @@
       "attempts": 1,
       "commit_sha": "de263b32d858a3c5128e819c74357b24a768fbc5",
       "last_attempt_at": "2026-07-10T03:39:45.908Z",
-      "completed_at": "2026-07-10T03:39:58.502Z"
+      "completed_at": "2026-07-10T03:39:58.502Z",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s2",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "s3",
@@ -43,7 +49,10 @@
       "attempts": 1,
       "commit_sha": "1760594166c8b40df3d9a1c4ddfbaf171c8e1d03",
       "last_attempt_at": "2026-07-10T03:41:06.574Z",
-      "completed_at": "2026-07-10T03:41:21.359Z"
+      "completed_at": "2026-07-10T03:41:21.359Z",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s3",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "s4",
@@ -59,7 +68,10 @@
       "last_attempt_at": "2026-07-10T03:46:40.066Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "commit_sha": "69ce3b6b7fbb1861bb84d221b6da1547865de82f",
-      "completed_at": "2026-07-10T03:46:52.524Z"
+      "completed_at": "2026-07-10T03:46:52.524Z",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s4",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "s5",
@@ -72,7 +84,10 @@
       "attempts": 1,
       "commit_sha": "92d02efc47bce0a2d904023a1cb2b8faf8df1620",
       "last_attempt_at": "2026-07-10T03:48:59.924Z",
-      "completed_at": "2026-07-10T03:49:09.692Z"
+      "completed_at": "2026-07-10T03:49:09.692Z",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s5",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "s6",
@@ -85,24 +100,47 @@
       "attempts": 1,
       "commit_sha": "50d78b7a1fa885bba67709713bc97d9e093b085e",
       "last_attempt_at": "2026-07-10T03:50:35.749Z",
-      "completed_at": "2026-07-10T03:50:45.802Z"
+      "completed_at": "2026-07-10T03:50:45.802Z",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s6",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "s7",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/tc-intake-routes.js",
       "task": "Register POST /api/tc/intake/run and GET /api/tc/intake/runs routes for end-to-end intake execution",
       "spec": "Export registerTcIntakeRoutes(app, deps). POST /api/tc/intake/run accepts {transactionId, emailMessageId}, calls tcIntakeRunner.runIntake(deps, ...), returns 200 with intakeRunId and status or 500 on error. GET /api/tc/intake/runs returns last 20 intake_runs ordered by created_at desc from deps.db. Validate req.body fields present. Mount auth middleware from deps.requireAuth. No top-level browser globals.",
+      "expected_exports": [
+        "registerTcIntakeRoutes"
+      ],
+      "file_contains": [
+        "runIntake",
+        "tc-intake-runner.js",
+        "/api/tc/intake/run",
+        "/api/tc/intake/runs"
+      ],
       "depends_on": [
         "s3",
         "s5"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "475109419a10ea549895fb45ef67406a1369b0b7",
+      "last_attempt_at": "2026-07-10T08:56:09.767Z",
+      "revive_count": 5,
+      "revived_at": "2026-07-10T08:53:56.704Z",
+      "artifact_proven": true,
+      "blocker_class": "BLOCKED_EXTERNAL",
+      "claim_level": "BUILT_NOT_LIVE",
+      "completed_at": "2026-07-10T08:56:13.162Z",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s7",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "s8",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/tc-billing-routes.js",
       "task": "Register billing and agent enrollment routes for first paying agent client",
       "spec": "Export registerTcBillingRoutes(app, deps). POST /api/tc/billing/checkout calls stripeBilling.createCheckoutSession and returns {url}. POST /api/tc/billing/enroll accepts {agentRegistryId, stripeSubscriptionId, planTier}, calls stripeBilling.enrollAgent, returns enrolled record. POST /api/tc/billing/webhook validates Stripe webhook signature via deps.validateWebhookSignature, updates stripe_subscriptions status. All routes require deps.requireAuth except webhook. No top-level browser globals.",
@@ -110,11 +148,19 @@
         "s4"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "4bf7a8881124e02d1d45713d5edf2cacc6f287d1",
+      "last_attempt_at": "2026-07-10T08:56:18.988Z",
+      "revive_count": 1,
+      "revived_at": "2026-07-10T08:53:56.704Z",
+      "completed_at": "2026-07-10T08:58:15.617Z",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s8",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "s9",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/tc-imap-routes.js",
       "task": "Register IMAP bootstrap verification and dry-run scan routes",
       "spec": "Export registerTcImapRoutes(app, deps). GET /api/tc/imap/status calls imapRailwayBootstrap.verifyImapAndDryRun(deps) returns {ready, missing?, scannedCount?, sample?}. POST /api/tc/imap/dry-run forces a fresh dry-run scan and returns results. Requires deps.requireAuth. No top-level browser globals.",
@@ -122,11 +168,21 @@
         "s6"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 3,
+      "last_attempt_at": "2026-07-10T09:07:14.222Z",
+      "commit_sha": "f1d8dcffd663eea6c30563e2a213ca61b80bc467",
+      "revive_count": 1,
+      "revived_at": "2026-07-10T08:53:56.704Z",
+      "last_error": "module_not_mounted (routes/tc-imap-routes.js): import_failed: file:///usr/src/app/routes/tc-imap-routes.js:4\nimport { imapRailwayBootstrap } from '../services/imap-railway-bootstrap.js';\n         ^^^^^^^^^^^^^^^^^^^^\nSyntaxError: The requested module '../services/imap-railway-bootstrap.js' does not provide an export named 'imapRailwayBootstrap'\n    at ModuleJob._instantiate (node:internal/modules/esm/module_job:213:21)\n    at async ModuleJob.run (node:internal/modules/esm/module_job:320:5)\n    at async ModuleLoader.import (node:internal/modules/esm/loader:606:24)\n    at async autoRegisterProductModules (file:///usr/src/app/startup/auto-register-product-modules.js:80:13)\n    at async registerFounderRuntimeRoutes (file:///usr/src/app/startup/register-founder-runtime-routes.js:254:19)\n    at async bootFounderRuntime (file:///usr/src/app/server-founder-runtime.js:383:31)\n    at async start (file:///usr/src/app/server-founder-runtime.js:464:3)",
+      "blocker_class": "BLOCKED_TOOLING",
+      "completed_at": "2026-07-10T09:07:16.982Z",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s9",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "s10",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "Register all three new route modules so they mount at boot without editing server.js",
       "spec": "Add entries for 'routes/tc-intake-routes.js' with registerFn 'registerTcIntakeRoutes', 'routes/tc-billing-routes.js' with registerFn 'registerTcBillingRoutes', and 'routes/tc-imap-routes.js' with registerFn 'registerTcImapRoutes' to the existing JSON array. Preserve all pre-existing entries exactly.",
@@ -136,11 +192,25 @@
         "s9"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "07c9d93c648210ef6c6312e15aa0e05a9e9ed1ee",
+      "last_attempt_at": "2026-07-10T08:45:32.776Z",
+      "completed_at": "2026-07-10T08:53:56.704Z",
+      "file_contains": [
+        "routes/tc-intake-routes.js",
+        "registerTcIntakeRoutes",
+        "routes/tc-billing-routes.js",
+        "registerTcBillingRoutes",
+        "routes/tc-imap-routes.js",
+        "registerTcImapRoutes"
+      ],
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s10",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "s11",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "public/overlay/tc-intake-dashboard.html",
       "task": "Build agent-facing real-time file status card and one-tap mobile approval UI for intake runs",
       "spec": "Self-contained HTML page with inline CSS and vanilla JS (no framework imports). Fetches GET /api/tc/intake/runs on load and renders each run as a status card showing transactionId, status badge (completed=green/failed=red/pending=yellow), qaResults summary, and skySlopeFileId. Includes one-tap 'Approve & Continue' button per pending run that POSTs to /api/tc/intake/run with the run's transactionId and emailMessageId then refreshes. Mobile-responsive with viewport meta. All JS inside <script> tags only, no window/document at module top level.",
@@ -148,11 +218,17 @@
         "s7"
       ],
       "founder_gated": true,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T20:36:18.786Z",
+      "commit_sha": "ea8fffea598655035b4dbe57817f09c23380fd52",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s11",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "s12",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "public/overlay/tc-billing-enroll.html",
       "task": "Build founder-gated agent enrollment and Stripe checkout UI for first paying agent client",
       "spec": "Self-contained HTML page with inline CSS and vanilla JS. Shows plan tier selector (starter/pro/enterprise), on submit POSTs to /api/tc/billing/checkout and redirects to returned Stripe checkout URL. After return shows enrollment confirmation by calling /api/tc/billing/enroll with query params stripeSubscriptionId and planTier. Mobile-responsive. All JS inside <script> tags only. No window/document at module top level in any script that could run server-side.",
@@ -160,21 +236,33 @@
         "s8"
       ],
       "founder_gated": true,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T20:54:29.418Z",
+      "commit_sha": "09a459a1a524566da7b560c0688f29066cfdedd4",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s12",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "step-01",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20240601_tc_intake_pipeline.sql",
       "task": "Add missing tables for intake pipeline, billing, and showing feedback",
       "spec": "CREATE TABLE IF NOT EXISTS tc_intake_runs, tc_billing_subscriptions, tc_showing_feedback_requests, tc_offer_prep_runs, tc_mobile_approvals each with uuid pk, agent_id, status, payload jsonb, created_at/updated_at defaulted by DB. No DROP/ALTER. Idempotent.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "edee89e0c3ef126d62415f78a6760f8fec6cf749",
+      "last_attempt_at": "2026-07-10T09:08:50.075Z",
+      "completed_at": "2026-07-10T09:09:09.636Z",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-01",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "step-02",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/tcIntakePipeline.mjs",
       "task": "Implement end-to-end transaction intake orchestrator (item 1, item 32)",
       "spec": "Export async function runIntakePipeline(deps) that: (1) calls deps.imapScan() to fetch unread contract emails, (2) scores each via deps.callCouncilMember('tc-triage', prompt) to extract address/parties/dates, (3) upserts a placeholder transaction row into tc_transactions via deps.db, (4) records a row in tc_intake_runs with status=completed|failed, (5) triggers SkySlope doc upload stub via deps.skySlopeAgent(txId, docs). No browser globals. Returns {processed, errors}.",
@@ -182,23 +270,35 @@
         "step-01"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "b0e850fb859ccbfec8a0d963ea5293759766e6db",
+      "last_attempt_at": "2026-07-10T09:10:12.853Z",
+      "completed_at": "2026-07-10T09:10:53.786Z",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-02",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "step-03",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "services/tcDocumentQA.mjs",
       "task": "Implement missing-signature and missing-field detection for uploaded docs (item 35)",
       "spec": "Export async function runDocumentQA(deps, {transactionId, documentBuffer}) that calls deps.callCouncilMember('doc-qa', prompt) with base64 doc excerpt to return [{field, issue, page}]. Persists results to tc_document_qa_results table (created in step-01 migration — add IF NOT EXISTS block at top of THIS file using deps.db.query for the create). Returns {passed:bool, issues:[]}. Zero browser globals.",
       "depends_on": [
         "step-01"
       ],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 1,
+      "commit_sha": "5ee9a4cfcc83356fcbc3d235cd9e74cf2550134b",
+      "last_attempt_at": "2026-07-10T09:41:14.804Z",
+      "completed_at": "2026-07-10T09:41:25.479Z",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-03",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "step-04",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/tcShowingFeedback.mjs",
       "task": "Implement automated showing-feedback request delivery and ledger tracking (item 7)",
       "spec": "Export async function sendShowingFeedbackRequest(deps, {transactionId, agentEmail, showingDate}) that: builds a feedback-request email body via deps.callCouncilMember('comms-writer', prompt), sends via deps.postmark(to, subject, body), inserts a row into tc_showing_feedback_requests with status=sent. Export async function recordFeedbackWebhook(deps, {requestId, feedbackPayload}) that updates the row to status=received and stores feedbackPayload. No browser globals.",
@@ -206,11 +306,17 @@
         "step-01"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "5de9cf8b10e60866f9bb189c75105cda2107de67",
+      "last_attempt_at": "2026-07-10T09:11:09.768Z",
+      "completed_at": "2026-07-10T09:11:21.173Z",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-04",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "step-05",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/tcOfferPrep.mjs",
       "task": "Wire offer-prep command engine to real client profile + comp set + contingency logic (item 9)",
       "spec": "Export async function runOfferPrep(deps, {agentId, propertyAddress, clientProfileId}) that: fetches client profile from deps.db, fetches recent comps via deps.mlsClient(propertyAddress), calls deps.callCouncilMember('offer-strategist', prompt) with profile+comps to produce contingencyLogic+offerPrice+terms, inserts row into tc_offer_prep_runs with output jsonb. Returns {offerPrice, terms, contingencies, runId}. No browser globals.",
@@ -218,11 +324,17 @@
         "step-01"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "4fe6260c79a327fabbcec6330786408ad4aa254c",
+      "last_attempt_at": "2026-07-10T09:11:29.347Z",
+      "completed_at": "2026-07-10T09:12:02.059Z",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-05",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "step-06",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/tcMobileApproval.mjs",
       "task": "Implement one-tap mobile approval flow backend (item 6)",
       "spec": "Export async function createApprovalRequest(deps, {transactionId, agentId, documentUrl, action}) that inserts a tc_mobile_approvals row with status=pending and returns {approvalId, deepLink}. Export async function processApproval(deps, {approvalId, decision, signatureToken}) that updates status to approved|rejected, logs to TC communication ledger via deps.db insert into tc_comms_ledger, and resumes automation by calling deps.tcIntakePipeline.runIntakePipeline if decision=approved. No browser globals.",
@@ -231,11 +343,17 @@
         "step-02"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "bda64f891487e22fb7d1c2de232b698def0f285b",
+      "last_attempt_at": "2026-07-10T09:12:15.323Z",
+      "completed_at": "2026-07-10T09:12:43.628Z",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-06",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "step-07",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/tcBilling.mjs",
       "task": "Wire Stripe billing to TC plan tiers (item 39, item 2)",
       "spec": "Export async function createSubscription(deps, {agentId, planTier, stripePaymentMethodId}) that calls deps.stripe.subscriptions.create with price mapped from deps.db tc_pricing_tiers, inserts into tc_billing_subscriptions, returns {subscriptionId, status}. Export async function handleStripeWebhook(deps, event) that processes customer.subscription.updated/deleted and syncs status in tc_billing_subscriptions. No browser globals. No direct stripe SDK import — call via deps.stripe passed in.",
@@ -243,11 +361,17 @@
         "step-01"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "c6b45d38a867f3648f56497372638fbbd0b50d0d",
+      "last_attempt_at": "2026-07-10T09:12:57.739Z",
+      "completed_at": "2026-07-10T09:13:23.599Z",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-07",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "step-08",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/tcIntakeRoutes.mjs",
       "task": "Register intake pipeline, document QA, offer-prep, and mobile approval API routes (items 1,6,9,35)",
       "spec": "Export function registerTcIntakeRoutes(app, deps). Mount: POST /api/tc/intake/run → tcIntakePipeline.runIntakePipeline; POST /api/tc/intake/document-qa → tcDocumentQA.runDocumentQA; POST /api/tc/offer-prep → tcOfferPrep.runOfferPrep; POST /api/tc/approvals → tcMobileApproval.createApprovalRequest; PATCH /api/tc/approvals/:id → tcMobileApproval.processApproval; POST /api/tc/showing-feedback → tcShowingFeedback.sendShowingFeedbackRequest; POST /api/tc/showing-feedback/webhook → tcShowingFeedback.recordFeedbackWebhook. All routes return JSON. Validate agentId present else 400. No browser globals.",
@@ -259,11 +383,25 @@
         "step-06"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "expected_exports": [
+        "registerTcIntakeRoutes"
+      ],
+      "file_contains": [
+        "registerTcIntakeRoutes",
+        "/api/tc/intake/run",
+        "/api/tc/approvals"
+      ],
+      "commit_sha": "e0a19c71145958b36f283e89ddd35feabbd36e23",
+      "last_attempt_at": "2026-07-10T10:29:37.119Z",
+      "completed_at": "2026-07-10T10:31:02.576Z",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-08",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "step-09",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/tcBillingRoutes.mjs",
       "task": "Register Stripe billing and agent enrollment API routes (items 2, 38, 39)",
       "spec": "Export function registerTcBillingRoutes(app, deps). Mount: POST /api/tc/billing/subscribe → tcBilling.createSubscription; POST /api/tc/billing/webhook (raw body) → tcBilling.handleStripeWebhook; GET /api/tc/billing/status/:agentId → query tc_billing_subscriptions and return current plan+status. Return 200 JSON on success, 400/500 on error. No browser globals.",
@@ -271,11 +409,24 @@
         "step-07"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "77b52ab91a9bc379aed02cecb4eab1c080df53be",
+      "last_attempt_at": "2026-07-10T10:34:28.390Z",
+      "expected_exports": [
+        "registerTcBillingRoutes"
+      ],
+      "file_contains": [
+        "registerTcBillingRoutes",
+        "/api/tc/billing/subscribe"
+      ],
+      "completed_at": "2026-07-10T10:34:31.462Z",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-09",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "step-10",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "Register new route modules so server boot auto-mounts them",
       "spec": "Add entries for tcIntakeRoutes (registerTcIntakeRoutes, routes/tcIntakeRoutes.mjs) and tcBillingRoutes (registerTcBillingRoutes, routes/tcBillingRoutes.mjs) to the existing array in this JSON file. Preserve all existing entries. No prose, valid JSON only.",
@@ -284,11 +435,17 @@
         "step-09"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "77b52ab91a9bc379aed02cecb4eab1c080df53be",
+      "last_attempt_at": "2026-07-10T10:34:42.300Z",
+      "completed_at": "2026-07-10T10:36:48.237Z",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-10",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "step-11",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "public/overlay/tc-dashboard.html",
       "task": "Build agent-facing real-time file status card and one-tap approval UI (items 4, 6)",
       "spec": "Self-contained HTML page. On load fetch GET /api/tc/intake/run history and render a card per transaction showing address, status badge, deadline countdown. Render pending approvals list from GET /api/tc/approvals?agentId=X with Approve/Reject buttons that PATCH /api/tc/approvals/:id. Poll every 30s via setInterval. Vanilla JS only, no external CDN. Shows spinner while loading. Mobile-first layout with tap-friendly buttons (min 48px). Founder-gated design surface.",
@@ -296,11 +453,17 @@
         "step-08"
       ],
       "founder_gated": true,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T21:26:25.200Z",
+      "commit_sha": "aa25c772ae9aaa3c5b0267769a2c1668be2f2b16",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-11",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "step-12",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "public/overlay/tc-agent-enroll.html",
       "task": "Build first paying agent enrollment UI wired to billing (items 2, 38)",
       "spec": "Self-contained HTML page. Form collects agentName, email, planTier (select: starter/pro/enterprise from pricing), Stripe PaymentMethod token input. On submit POST /api/tc/billing/subscribe and display success card with subscriptionId and next-steps checklist. Shows validation errors inline. Mobile-first. Vanilla JS, no CDN. Founder-gated design surface.",
@@ -308,7 +471,16 @@
         "step-09"
       ],
       "founder_gated": true,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T21:37:32.210Z",
+      "commit_sha": "4cf5d859346a85f8f1a454a0e034bc012b513ba6",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-12",
+      "mission_id": "PRODUCT-tc-service"
     }
-  ]
+  ],
+  "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-tc-service",
+  "twin_kind": "product_build_queue_registered"
 }

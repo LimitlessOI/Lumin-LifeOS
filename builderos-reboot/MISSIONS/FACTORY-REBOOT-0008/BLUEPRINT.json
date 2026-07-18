@@ -17,7 +17,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "1afce341cbc647bb98c79cc335889aecf200931959b91b92b3bfda5767631d55"
+        "sha256": "79761936d20783e106883615ca16121d82b145366c22e2ddc43c6f5e6392a0ab"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0008/CONTENT/verify-step-contract.js"

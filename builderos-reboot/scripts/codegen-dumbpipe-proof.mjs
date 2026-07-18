@@ -20,7 +20,7 @@ const assert = (name, cond, detail = {}) => {
 // A server-code target under the factory scratch sandbox (ephemeral file).
 const TARGET = 'factory-staging/factory-core/_step4_proof_scratch.js';
 const SANDBOX = 'factory-staging/factory-core/**';
-const CONTENT = 'export const authored = true;\n';
+const CONTENT = '/**\n * SYNOPSIS: Factory CI proof scratch file. Auto-generated test artifact.\n */\nexport const authored = true;\n';
 
 const baseStep = {
   step_id: 's4-author',
@@ -71,8 +71,8 @@ const escalatingCodegen = {
   },
 };
 const esc = await runAuthoring(baseStep, escalatingCodegen);
-assert('cheapest tier first (tier[0] attempted first)', DEFAULT_CODEGEN_TIERS[0] === 'cerebras_llama');
-assert('escalates on cheapest failure', esc.ok === true && esc.escalated === true && esc.model_tier === DEFAULT_CODEGEN_TIERS[1], { model_tier: esc.model_tier, escalated: esc.escalated });
+assert('strong tier first (tier[0] attempted first)', DEFAULT_CODEGEN_TIERS[0] === 'openai_builder_standard');
+assert('escalates on first-tier failure', esc.ok === true && esc.escalated === true && esc.model_tier === DEFAULT_CODEGEN_TIERS[1], { model_tier: esc.model_tier, escalated: esc.escalated });
 
 // (6) FULL PIPE: author_then_write flows through write + SENTRY behavior gate to PASS.
 //     Uses a stub assertion runner (file read) + stub codegen. skip_intake to isolate.

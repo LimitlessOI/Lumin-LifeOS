@@ -1,0 +1,22 @@
+{
+  "schema": "creative_engine_v1_proof",
+  "product_id": "creative-engine",
+  "built_at": "2026-07-10T21:35:00.000Z",
+  "modes": {
+    "footage_edit": "implemented",
+    "photo_polish": "implemented",
+    "script_compose": "implemented_gated_replicate",
+    "generative_broll": "scaffold_gated"
+  },
+  "unit_tests": "tests/creative-engine.test.js PASS 4/4",
+  "docker": "ffmpeg added to Dockerfile apt install",
+  "surfaces": [
+    "/api/v1/creative/health",
+    "/api/v1/creative/estimate",
+    "/api/v1/creative/assets",
+    "/api/v1/creative/render",
+    "/api/v1/creative/jobs/:id",
+    "/creative/studio"
+  ],
+  "note": "Live tip proof requires deploy with FFmpeg in image + migration apply on boot. Local ffmpeg may be absent; Docker image is the production path."
+}

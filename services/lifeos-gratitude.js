@@ -1,7 +1,10 @@
 /**
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
+ */
+/**
  * SYNOPSIS: Exports logGratitude — services/lifeos-gratitude.js.
  */
-export async function logGratitude(db, userId, date, entries) {
+export async function logGratitude(db, userId, date, entries, joyScore) {
   if (!db || typeof db.query !== "function") {
     throw new TypeError("logGratitude requires a database client with query()");
   }
@@ -47,16 +50,16 @@ export async function logGratitude(db, userId, date, entries) {
   }
 
   const inserted = await db.query(
-    `INSERT INTO gratitude_logs (user_id, date, entry_1, entry_2, entry_3)
-     VALUES ($1, $2, $3, $4, $5)
+    `INSERT INTO gratitude_logs (user_id, date, entry_1, entry_2, entry_3, joy_score)
+     VALUES ($1, $2, $3, $4, $5, $6)
      RETURNING *`,
-    [userId, date, entry1, entry2, entry3]
+    [userId, date, entry1, entry2, entry3, joyScore]
   );
 
   return inserted.rows[0];
 }
 
-export async function getGratitudeThemes(db, callCouncilMember, userId) {
+export async function analyzePatterns(db, callCouncilMember, userId) {
   if (!db || typeof db.query !== "function") {
     throw new TypeError("getGratitudeThemes requires a database client with query()");
   }

@@ -1,0 +1,16 @@
+{
+  "schema": "creative_engine_v1_footage_edit_proof",
+  "tip": "069f8a4d25db",
+  "proved_at": "2026-07-10T21:38:59.519Z",
+  "health_ffmpeg": true,
+  "upload_key": "uploads/81b8199e-951a-5f51-a9d1-9c9b3e62200e/1783719531136_e9a6cbed_sample-5s.mp4",
+  "job_id": "d4bfa007-d1e1-495c-8103-6f86644172c5",
+  "job_status": "completed",
+  "job_error": null,
+  "publicUrl": "https://lumin-web-production-e3a9.up.railway.app/previews/creative/outputs/81b8199e-951a-5f51-a9d1-9c9b3e62200e/1783719534780_0038a28b_footage_edit_9x16.mp4",
+  "output_bytes": 1310789,
+  "outputs_count": 1,
+  "studio": "/creative/studio",
+  "marketing_link": true,
+  "pass": true
+}

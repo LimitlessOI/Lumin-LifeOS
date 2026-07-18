@@ -111,6 +111,18 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+async function evaluateWithTimeout(page, pageFunction, arg, timeoutMs = 45000) {
+  const run = arguments.length >= 3 && arg !== undefined
+    ? page.evaluate(pageFunction, arg)
+    : page.evaluate(pageFunction);
+  return Promise.race([
+    run,
+    new Promise((_, reject) => {
+      setTimeout(() => reject(new Error(`page.evaluate timed out after ${timeoutMs}ms`)), Math.max(1000, Number(timeoutMs) || 45000));
+    }),
+  ]);
+}
+
 async function waitForCondition(fn, { timeoutMs = 10000, intervalMs = 500 } = {}) {
   const started = Date.now();
   while (Date.now() - started < timeoutMs) {
@@ -157,14 +169,77 @@ async function safeScreenshot(page, targetPath) {
   }
 }
 
-async function gotoWithBudget(page, href, { timeout = 20000 } = {}) {
+async function dismissSessionTakeover(page) {
   try {
-    await page.goto(href, { waitUntil: 'domcontentloaded', timeout });
-    await sleep(750);
+    const clicked = await evaluateWithTimeout(page, () => {
+      const text = (document.body?.innerText || '');
+      if (!/logged into another computer|use this computer now/i.test(text)) return false;
+      const btn = Array.from(document.querySelectorAll('button, a, input[type="button"], input[type="submit"]'))
+        .find((el) => /use this computer now/i.test((el.textContent || el.value || '').trim()));
+      if (!btn) return false;
+      btn.click();
+      return true;
+    }, undefined, 5000);
+    if (clicked) await sleep(800);
+    return { clicked: Boolean(clicked) };
+  } catch (_) {
+    return { clicked: false };
+  }
+}
+
+async function gotoWithBudget(page, href, { timeout = 20000 } = {}) {
+  const budget = Math.max(5000, Number(timeout) || 20000);
+  try {
+    await Promise.race([
+      (async () => {
+        await page.goto(href, { waitUntil: 'domcontentloaded', timeout: budget });
+        await sleep(500);
+        await dismissSessionTakeover(page);
+      })(),
+      new Promise((_, reject) => {
+        setTimeout(() => reject(new Error(`gotoWithBudget hard timeout after ${budget + 3000}ms`)), budget + 3000);
+      }),
+    ]);
     return { ok: true };
   } catch (error) {
     return { ok: false, error: error.message };
   }
+}
+
+function formatMmDdYyyy(d) {
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  const yyyy = d.getFullYear();
+  return `${mm}/${dd}/${yyyy}`;
+}
+
+function parseMmDdYyyy(raw) {
+  const m = String(raw || '').trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  if (!m) return null;
+  const d = new Date(Number(m[3]), Number(m[1]) - 1, Number(m[2]));
+  return Number.isNaN(d.getTime()) ? null : d;
+}
+
+function buildVisitDateCandidates({ visitDate = null, visitDates = [], scanDays = 14 } = {}) {
+  const out = [];
+  const push = (v) => {
+    const s = String(v || '').trim();
+    if (s && !out.includes(s)) out.push(s);
+  };
+  push(visitDate);
+  for (const d of visitDates || []) push(d);
+  const center = parseMmDdYyyy(visitDate) || new Date();
+  const span = Math.max(0, Math.min(Number(scanDays) || 0, 45));
+  for (let i = 0; i <= span; i += 1) {
+    const a = new Date(center);
+    a.setDate(center.getDate() - i);
+    push(formatMmDdYyyy(a));
+    if (i === 0) continue;
+    const b = new Date(center);
+    b.setDate(center.getDate() + i);
+    push(formatMmDdYyyy(b));
+  }
+  return out;
 }
 
 async function tryFill(page, selectors, value) {
@@ -191,7 +266,7 @@ async function tryClick(page, selectors) {
 async function collectPageSummary(page) {
   return page.evaluate(() => {
     const links = Array.from(document.querySelectorAll('a[href]')).slice(0, 500).map((el) => ({
-      text: (el.textContent || '').trim(),
+      text: (el.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 120),
       href: el.href || '',
     }));
     const candidates = links.filter((item) => /billing|claim|claims|invoice|insurance|ar\b|accounts receivable|denial|rejection|payment|era|eob/i.test(`${item.text} ${item.href}`)).slice(0, 20);
@@ -201,6 +276,43 @@ async function collectPageSummary(page) {
         Array.from(row.querySelectorAll('th,td')).map((cell) => (cell.textContent || '').trim())
       )
     );
+    const labelOf = (el) => (el.innerText || el.textContent || el.value || el.getAttribute('aria-label') || el.title || '').replace(/\s+/g, ' ').trim().slice(0, 100);
+    const buttons = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a.btn, .btn'))
+      .map((el) => ({
+        tag: el.tagName,
+        type: el.getAttribute('type') || null,
+        id: el.id || null,
+        name: el.getAttribute('name') || null,
+        text: labelOf(el),
+        onclick: (el.getAttribute('onclick') || '').slice(0, 160),
+        href: el.tagName === 'A' ? (el.getAttribute('href') || '').slice(0, 160) : null,
+      }))
+      .filter((b) => b.text || b.id || b.onclick)
+      .slice(0, 120);
+    const inputs = Array.from(document.querySelectorAll('input, textarea'))
+      .map((el) => ({
+        tag: el.tagName,
+        type: el.type || el.getAttribute('type') || null,
+        id: el.id || null,
+        name: el.name || null,
+        placeholder: (el.placeholder || '').slice(0, 80),
+        value: (el.type === 'password' ? '' : String(el.value || '')).slice(0, 80),
+        checked: el.type === 'checkbox' || el.type === 'radio' ? Boolean(el.checked) : null,
+      }))
+      .slice(0, 150);
+    const selects = Array.from(document.querySelectorAll('select'))
+      .map((el) => ({
+        id: el.id || null,
+        name: el.name || null,
+        optionCount: el.options?.length || 0,
+        selected: (el.options?.[el.selectedIndex]?.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 80),
+        options: Array.from(el.options || []).slice(0, 20).map((o) => (o.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 60)),
+      }))
+      .slice(0, 40);
+    const tabs = Array.from(document.querySelectorAll('.nav-tabs a, [role="tab"], a[data-toggle="tab"], ul.nav a'))
+      .map((el) => ({ text: labelOf(el), href: (el.getAttribute('href') || '').slice(0, 120), id: el.id || null }))
+      .filter((t) => t.text)
+      .slice(0, 40);
     return {
       url: location.href,
       title: document.title,
@@ -208,6 +320,10 @@ async function collectPageSummary(page) {
       candidateLinks: candidates,
       allLinks: links.slice(0, 100),
       tables,
+      buttons,
+      inputs,
+      selects,
+      tabs,
       textPreview: (document.body.innerText || '').trim().slice(0, 3000),
     };
   });
@@ -238,7 +354,74 @@ async function extractClientDirectory(page, limit = 10) {
       if (unique.length >= maxItems) break;
     }
     return unique;
-  }, Math.max(1, Math.min(Number(limit) || 10, 25)));
+  }, Math.max(1, Math.min(Number(limit) || 10, 500)));
+}
+
+/**
+ * Client list defaults to Active Due Date window (future pregnancies only).
+ * Past births require Clear filter / View all or All Clients before scrape.
+ */
+async function prepareClientDirectoryForSearch(page) {
+  const clicked = await page.evaluate(() => {
+    const want = /clear filter|view all|all clients/i;
+    const nodes = Array.from(document.querySelectorAll('a, button, span, div, label, li'));
+    for (const el of nodes) {
+      const text = (el.textContent || '').trim().replace(/\s+/g, ' ');
+      if (!text || text.length > 80) continue;
+      if (!want.test(text)) continue;
+      if (el.offsetParent === null && el.getClientRects().length === 0) continue;
+      el.click();
+      return { clicked: true, text: text.slice(0, 80) };
+    }
+    return { clicked: false };
+  });
+  if (clicked?.clicked) {
+    await new Promise((r) => setTimeout(r, 2000));
+  }
+
+  // Prefer typing into Filter if present (name search).
+  const filterReady = await page.evaluate(() => {
+    const input =
+      document.querySelector('input[placeholder*="Filter" i]') ||
+      document.querySelector('input[aria-label*="Filter" i]') ||
+      document.querySelector('.k-filter-row input') ||
+      document.querySelector('input[type="search"]') ||
+      Array.from(document.querySelectorAll('input[type="text"]')).find((el) => {
+        const near = (el.closest('div,td,th,label')?.innerText || '').slice(0, 40);
+        return /filter/i.test(near);
+      });
+    return Boolean(input);
+  });
+
+  return { ...clicked, filterInputPresent: filterReady };
+}
+
+async function typeClientDirectoryFilter(page, query) {
+  const q = String(query || '').trim();
+  if (!q) return { typed: false };
+  const typed = await page.evaluate((searchText) => {
+    const input =
+      document.querySelector('input[placeholder*="Filter" i]') ||
+      document.querySelector('input[aria-label*="Filter" i]') ||
+      document.querySelector('.k-filter-row input') ||
+      document.querySelector('input[type="search"]') ||
+      Array.from(document.querySelectorAll('input[type="text"]')).find((el) => {
+        const near = (el.closest('div,td,th,label')?.innerText || '').slice(0, 40);
+        return /filter|client/i.test(near);
+      });
+    if (!input) return { typed: false };
+    input.focus();
+    input.value = '';
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    input.value = searchText;
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    input.dispatchEvent(new Event('change', { bubbles: true }));
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    input.dispatchEvent(new KeyboardEvent('keyup', { key: 'Enter', bubbles: true }));
+    return { typed: true };
+  }, q);
+  if (typed?.typed) await new Promise((r) => setTimeout(r, 1800));
+  return typed;
 }
 
 function normalizeDirectoryName(value = '') {
@@ -646,12 +829,73 @@ async function applyBillingFieldUpdates(page, updates = {}) {
       return { kind, applied: true, target: desiredValue };
     };
 
+    const setSelectByIdOrMatcher = (ids, matcher, desiredValue, kind) => {
+      const normalizedDesired = normalize(desiredValue);
+      let control = null;
+      for (const id of ids) {
+        const el = document.getElementById(id);
+        if (el && visible(el)) {
+          control = el;
+          break;
+        }
+      }
+      if (!control) {
+        return setControlValue(matcher, desiredValue, kind);
+      }
+      if (control.tagName !== 'SELECT') {
+        return setControlValue(matcher, desiredValue, kind);
+      }
+      const option = Array.from(control.options || []).find((item) => {
+        return normalize(item.textContent) === normalizedDesired
+          || normalize(item.value) === normalizedDesired
+          || normalize(item.textContent).includes(normalizedDesired)
+          || normalizedDesired.includes(normalize(item.textContent));
+      });
+      if (!option) {
+        return {
+          kind,
+          applied: false,
+          reason: 'Option not found',
+          controlId: control.id || null,
+          availableOptions: Array.from(control.options || []).map((item) => (item.textContent || '').trim()).filter(Boolean).slice(0, 40),
+        };
+      }
+      Array.from(control.options || []).forEach((item) => {
+        item.selected = item === option;
+      });
+      control.value = option.value;
+      control.selectedIndex = Array.from(control.options || []).indexOf(option);
+      dispatch(control);
+      if (typeof window.jQuery === 'function') {
+        try { window.jQuery(control).val(option.value).trigger('change'); } catch (_) { /* ignore */ }
+      }
+      const selectedText = control.options?.[control.selectedIndex]?.text || '';
+      return {
+        kind,
+        applied: normalize(selectedText).includes(normalizedDesired) || normalize(control.value) === normalize(option.value),
+        target: option.textContent || option.value || desiredValue,
+        controlId: control.id || null,
+        selectedText,
+        selectedValue: control.value || null,
+      };
+    };
+
     const operations = [];
     if (requestedUpdates.client_billing_status) {
-      operations.push(setControlValue(/client billing status/i, requestedUpdates.client_billing_status, 'client_billing_status'));
+      operations.push(setSelectByIdOrMatcher(
+        ['BillingStatusID', 'ClientBillingStatusID', 'billingStatusID'],
+        /client billing status/i,
+        requestedUpdates.client_billing_status,
+        'client_billing_status'
+      ));
     }
     if (requestedUpdates.bill_provider_type) {
-      operations.push(setControlValue(/bill provider type/i, requestedUpdates.bill_provider_type, 'bill_provider_type'));
+      operations.push(setSelectByIdOrMatcher(
+        ['BillUnderProvTypeID', 'BillProviderTypeID', 'ProviderTypeID'],
+        /bill provider type/i,
+        requestedUpdates.bill_provider_type,
+        'bill_provider_type'
+      ));
     }
     if (requestedUpdates.payment_status) {
       operations.push(setControlValue(/payment status|paymentstatus/i, requestedUpdates.payment_status, 'payment_status'));
@@ -697,19 +941,45 @@ async function attemptBillingSave(page) {
       const rect = el.getBoundingClientRect();
       return rect.width > 0 && rect.height > 0;
     };
+    const anchor =
+      document.getElementById('BillingStatusID') ||
+      document.getElementById('BillUnderProvTypeID') ||
+      document.querySelector('select[name="BillingStatusID"], select[name="BillUnderProvTypeID"]');
     const candidates = Array.from(document.querySelectorAll('button, input[type="submit"], input[type="button"], a'))
       .filter(visible)
       .map((el) => ({
         el,
         text: (el.textContent || el.value || '').replace(/\s+/g, ' ').trim(),
-      }));
-    const target = candidates.find((item) => /save|update|apply|submit/i.test(item.text));
-    if (!target) return null;
+      }))
+      .filter((item) => /^save$/i.test(item.text) || /^(update|apply)$/i.test(item.text) || /^save\b/i.test(item.text));
+
+    let target = null;
+    if (anchor && candidates.length) {
+      const aRect = anchor.getBoundingClientRect();
+      let best = null;
+      for (const item of candidates) {
+        const r = item.el.getBoundingClientRect();
+        const dist = Math.abs(r.top - aRect.top) + Math.abs(r.left - aRect.left);
+        if (!best || dist < best.dist) best = { item, dist };
+      }
+      target = best?.item || null;
+    }
+    if (!target) {
+      target = candidates.find((item) => /^save$/i.test(item.text)) || candidates[0] || null;
+    }
+    if (!target) {
+      const fallback = Array.from(document.querySelectorAll('button, input[type="submit"], input[type="button"], a'))
+        .filter(visible)
+        .map((el) => ({ el, text: (el.textContent || el.value || '').replace(/\s+/g, ' ').trim() }))
+        .find((item) => /save|update|apply|submit/i.test(item.text));
+      if (!fallback) return null;
+      target = fallback;
+    }
     if (typeof target.el.click === 'function') target.el.click();
     return target.text || 'save';
   });
   if (!clicked) return { attempted: false, label: null };
-  await sleep(1500);
+  await sleep(2500);
   return { attempted: true, label: clicked };
 }
 
@@ -1647,7 +1917,12 @@ function derivePageState(summary = {}) {
   };
 }
 
-export function createClientCareBrowserService({ env = process.env, logger = console, syncService = null } = {}) {
+export function createClientCareBrowserService({
+  env = process.env,
+  logger = console,
+  syncService = null,
+  resolveTenantCredentials = null,
+} = {}) {
   function getReadiness() {
     const configured = [];
     const missing = [];
@@ -1667,15 +1942,40 @@ export function createClientCareBrowserService({ env = process.env, logger = con
       workflowTemplates: WORKFLOW_TEMPLATES,
       configuredBaseUrl: env.CLIENTCARE_BASE_URL ? redact(env.CLIENTCARE_BASE_URL) : null,
       configuredUsername: env.CLIENTCARE_USERNAME ? redact(env.CLIENTCARE_USERNAME) : null,
+      multiTenantCredentials: typeof resolveTenantCredentials === 'function',
       notes: [
         'Do not store ClientCare credentials in code or docs.',
-        'Use Railway secrets or the encrypted account vault only if browser automation is confirmed necessary.',
+        'BirthBill tenants use encrypted clientcare_tenant_credentials; founder default may use Railway CLIENTCARE_*.',
         'Selectors and automation steps should be finalized only after a live walkthrough of the ClientCare billing screens.',
       ],
     };
   }
 
-  function getCredentials() {
+  async function getCredentials({ tenantId = null, override = null } = {}) {
+    if (override?.baseUrl && override?.username && override?.password) {
+      return {
+        baseUrl: override.baseUrl,
+        username: override.username,
+        password: override.password,
+        mfaMode: override.mfaMode || null,
+        mfaSecret: override.mfaSecret || null,
+        source: 'override',
+      };
+    }
+    if (tenantId && typeof resolveTenantCredentials === 'function') {
+      const tenantCreds = await resolveTenantCredentials(tenantId);
+      if (tenantCreds?.baseUrl && tenantCreds?.username && tenantCreds?.password) {
+        return {
+          baseUrl: tenantCreds.baseUrl,
+          username: tenantCreds.username,
+          password: tenantCreds.password,
+          mfaMode: tenantCreds.mfaMode || null,
+          mfaSecret: tenantCreds.mfaSecret || null,
+          source: 'tenant_vault',
+          tenantId,
+        };
+      }
+    }
     if (!env.CLIENTCARE_BASE_URL || !env.CLIENTCARE_USERNAME || !env.CLIENTCARE_PASSWORD) {
       throw new Error('ClientCare browser credentials are not fully configured');
     }
@@ -1685,12 +1985,24 @@ export function createClientCareBrowserService({ env = process.env, logger = con
       password: env.CLIENTCARE_PASSWORD,
       mfaMode: env.CLIENTCARE_MFA_MODE || null,
       mfaSecret: env.CLIENTCARE_MFA_SECRET || null,
+      source: 'env',
     };
   }
 
-  async function login({ dryRun = false } = {}) {
-    const credentials = getCredentials();
-    const session = await createSession({ logger });
+  async function login({ dryRun = false, tenantId = null, credentials: override = null } = {}) {
+    const credentials = await getCredentials({ tenantId, override });
+    // Tip: puppeteer.launch can hang forever under Chromium contention; race it.
+    let session;
+    try {
+      session = await Promise.race([
+        createSession({ logger }),
+        new Promise((_, reject) => {
+          setTimeout(() => reject(new Error('createSession/launch timed out after 45000ms')), 45000);
+        }),
+      ]);
+    } catch (err) {
+      throw new Error(String(err?.message || err));
+    }
     const screenshots = [];
 
     try {
@@ -1717,8 +2029,10 @@ export function createClientCareBrowserService({ env = process.env, logger = con
         await session.page.keyboard.press('Enter').catch(() => {});
       }
 
-      await session.page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 45000 }).catch(() => {});
+      // Tip: networkidle2 never settles on ClientCare (polling/websockets) and wedges CDP.
+      await session.page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: 20000 }).catch(() => {});
       await sleep(1500);
+      await dismissSessionTakeover(session.page);
 
       const after = await collectPageSummary(session.page);
       const sp1 = await screenshotPath('clientcare-after-login');
@@ -1740,6 +2054,170 @@ export function createClientCareBrowserService({ env = process.env, logger = con
     } catch (error) {
       await session.close().catch(() => {});
       throw error;
+    }
+  }
+
+  async function crawlSiteMap({
+    scope = 'billing',
+    maxPages = 35,
+    includeScreenshots = false,
+    pageTimeoutMs = 25000,
+    seedHrefs = null,
+    onProgress = null,
+  } = {}) {
+    const progress = (partial) => {
+      try { onProgress?.(partial); } catch (_) { /* ignore */ }
+    };
+    const result = await login({ dryRun: false });
+    const { session, screenshots } = result;
+    const pages = [];
+    const queue = [];
+    const seen = new Set();
+    try {
+      progress({ phase: 'site_map_login_ok' });
+      const landing = result.page || await collectPageSummary(session.page);
+      const origin = new URL(landing.url || session.currentUrl()).origin;
+      const defaultSeeds = scope === 'all'
+        ? [
+          '/',
+          '/Report',
+          '/Pregnancy',
+          '/Scheduler',
+          '/PracticeManagement',
+          '/Employee',
+          '/Home/BillingPartial',
+          '/Home/BirthActivityPartial',
+          '/Home/NotesPartial',
+          '/Home/LabsUSPartial',
+          '/Provider/DeskNoteListView',
+          '/Company/ChargeSlip',
+        ]
+        : [
+          '/Report',
+          '/Home/BillingPartial',
+          '/Company/ChargeSlip',
+          '/Billing/BillingListView',
+          '/Billing/RecordRemittanceAdvice',
+          '/Billing/SuperBillReport',
+          '/Billing/AccountReceivableReportCommon',
+          '/Billing/BillingAuditReport',
+          '/Billing/ClaimTrackingSummaryReport',
+          '/BillingProgressChecklist/BillingProgressReport',
+          '/Billing/BillingFollowUp',
+          '/Company/BillingManagementReport',
+          '/Billing/AllowedAmountReport',
+          '/Billing/CPTCodeByProviderReport',
+          '/Billing/AutoDebitPlanReport',
+          '/Billing/InvoiceHCFAEdit',
+          '/Billing/InvoiceUB04Edit',
+          '/Billing/InvoiceClientInvoiceEdit',
+          '/Services/Edit',
+        ];
+      const seeds = Array.isArray(seedHrefs) && seedHrefs.length
+        ? seedHrefs
+        : defaultSeeds;
+      const enqueue = (href, label = null) => {
+        if (!href || typeof href !== 'string') return;
+        let abs = href;
+        try {
+          abs = new URL(href, origin).href;
+        } catch (_) {
+          return;
+        }
+        if (!abs.startsWith(origin)) return;
+        if (/LogOff|javascript:|mailto:|#off-users/i.test(abs)) return;
+        const key = abs.split('#')[0].replace(/\/$/, '') || abs;
+        if (seen.has(key)) return;
+        if (scope === 'billing') {
+          const path = key.slice(origin.length);
+          if (!/\/(Billing|BillingProgress|Report|Services|Company\/(ChargeSlip|Billing|Fax|CABC)|Home\/(Billing|Birth|Notes)|Pregnancy\/Billing)/i.test(path)
+            && !/^\/Report/i.test(path)
+            && path !== ''
+            && path !== '/') {
+            // allow Report hub and billing-ish only
+            if (!/billing|claim|invoice|hcfa|ub04|remit|era|charge|super.?bill|receivable|aging|audit|debit|allowed|cpt|payment|follow.?up|progress/i.test(`${label || ''} ${path}`)) {
+              return;
+            }
+          }
+        }
+        seen.add(key);
+        queue.push({ href: key, label });
+      };
+
+      for (const s of seeds) enqueue(s.startsWith('http') ? s : `${origin}${s.startsWith('/') ? s : `/${s}`}`);
+      for (const L of landing.allLinks || landing.candidateLinks || []) {
+        enqueue(L.href, L.text);
+      }
+
+      const limit = Math.max(1, Math.min(Number(maxPages) || 35, 80));
+      while (queue.length && pages.length < limit) {
+        const item = queue.shift();
+        progress({
+          phase: 'site_map_page',
+          index: pages.length + 1,
+          limit,
+          href: item.href,
+          queued: queue.length,
+        });
+        const nav = await gotoWithBudget(session.page, item.href, {
+          timeout: Math.max(8000, Number(pageTimeoutMs) || 25000),
+        });
+        if (!nav.ok) {
+          pages.push({
+            ok: false,
+            seedLabel: item.label || null,
+            href: item.href,
+            error: nav.error || 'nav_failed',
+          });
+          continue;
+        }
+        await sleep(700);
+        let summary = null;
+        try {
+          summary = await collectPageSummary(session.page);
+        } catch (err) {
+          pages.push({
+            ok: false,
+            seedLabel: item.label || null,
+            href: item.href,
+            error: String(err?.message || err).slice(0, 160),
+          });
+          continue;
+        }
+        let shot = null;
+        if (includeScreenshots) {
+          shot = await screenshotPath(`site-map-${pages.length + 1}`);
+          await safeScreenshot(session.page, shot);
+          screenshots.push(shot);
+        }
+        pages.push({
+          ok: true,
+          seedLabel: item.label || null,
+          screenshot: shot,
+          buttonCount: (summary.buttons || []).length,
+          inputCount: (summary.inputs || []).length,
+          selectCount: (summary.selects || []).length,
+          ...summary,
+        });
+        for (const L of summary.allLinks || []) {
+          enqueue(L.href, L.text);
+        }
+        for (const L of summary.candidateLinks || []) {
+          enqueue(L.href, L.text);
+        }
+      }
+
+      return {
+        ok: true,
+        scope,
+        maxPages: limit,
+        pageCount: pages.length,
+        queuedRemaining: queue.length,
+        pages,
+        screenshots,
+      };
+    } finally {
+      await session.close().catch(() => {});
     }
   }
 
@@ -1839,7 +2317,268 @@ export function createClientCareBrowserService({ env = process.env, logger = con
     }
   }
 
-  async function inspectClientBillingAccount({ clientHref, pageTimeoutMs = 15000, includeScreenshots = false } = {}) {
+  const DANGEROUS_TAB_LABEL = /delete|remove|sign\s*out|log\s*off|save|submit|send|discard|cancel|new document|add records/i;
+
+  async function clickByVisibleText(page, label) {
+    const target = (label || '').replace(/\s+/g, ' ').trim().toLowerCase();
+    if (!target) return { clicked: false, dialogSeen: false, blocked: 'empty_label' };
+    if (DANGEROUS_TAB_LABEL.test(target)) return { clicked: false, dialogSeen: false, blocked: 'dangerous_label' };
+
+    let dialogSeen = false;
+    const onDialog = async (dialog) => {
+      dialogSeen = true;
+      await dialog.dismiss().catch(() => {});
+    };
+    page.on('dialog', onDialog);
+    try {
+      // Restrict to elements inside recognizable tab-navigation containers only —
+      // never a blind full-page match, so this can't land on a Save/Delete/Sign-out control.
+      const clicked = await page.evaluate((text) => {
+        const norm = (s) => (s || '').replace(/\s+/g, ' ').trim().toLowerCase();
+        const containers = Array.from(document.querySelectorAll('[role="tablist"], .nav-tabs, .tabs, ul.nav, [class*="tab"]'));
+        const candidates = new Set();
+        containers.forEach((c) => {
+          Array.from(c.querySelectorAll('a, li, span, button')).forEach((el) => candidates.add(el));
+        });
+        const match = Array.from(candidates).find((el) => el.children.length === 0 && norm(el.textContent) === text);
+        if (match) {
+          match.click();
+          return true;
+        }
+        return false;
+      }, target).catch(() => false);
+      return { clicked, dialogSeen };
+    } finally {
+      page.off('dialog', onDialog);
+    }
+  }
+
+  async function extractFullTables(page, { maxRowsPerTable = 500 } = {}) {
+    return page.evaluate((cap) => {
+      const tables = Array.from(document.querySelectorAll('table'));
+      return tables.map((table, idx) => {
+        const rows = Array.from(table.querySelectorAll('tr')).slice(0, cap).map((row) =>
+          Array.from(row.querySelectorAll('th,td')).map((cell) => (cell.textContent || '').trim())
+        );
+        return { tableIndex: idx, rowCount: rows.length, rows };
+      });
+    }, maxRowsPerTable).catch(() => []);
+  }
+
+  // Read-only. Document/consent grids on ClientCare are frequently rendered as
+  // div-based rows, not real <table> markup, so extractFullTables misses them —
+  // the row skeleton exists but every cell is blank. This instead anchors on the
+  // known action-link hrefs (Delete/Edit/Download consent documents) and walks
+  // up to the nearest row-like container to recover its actual visible text
+  // (the filename), which the pure <table> query can't see.
+  async function extractLinkedRowText(page, { hrefPattern = 'ConsentsAndDocuments|DownloadConsent', maxRows = 200 } = {}) {
+    return page.evaluate(({ pattern, cap }) => {
+      const re = new RegExp(pattern, 'i');
+      const anchors = Array.from(document.querySelectorAll('a[href]')).filter((a) => re.test(a.getAttribute('href') || ''));
+      const seen = new Set();
+      const out = [];
+      for (const a of anchors) {
+        const row = a.closest('tr, li, .row, [class*="row"], div');
+        const text = (row?.innerText || a.textContent || '').replace(/\s+/g, ' ').trim();
+        const href = a.getAttribute('href') || '';
+        const key = `${text}|${href}`;
+        if (seen.has(key)) continue;
+        seen.add(key);
+        out.push({ href, linkText: (a.textContent || '').trim(), rowText: text.slice(0, 300) });
+        if (out.length >= cap) break;
+      }
+      return out;
+    }, { pattern: hrefPattern, cap: maxRows }).catch(() => []);
+  }
+
+  // Read-only. Uploaded-document titles on ClientCare are frequently left as
+  // generic auto-numbered labels ("MR", "MR 2"...) with no real description,
+  // so the only way to tell them apart is the underlying file. Fetches just
+  // the HTTP response headers for each document URL (same authenticated
+  // session, GET only — equivalent to hovering/clicking Download) so the
+  // real original filename (Content-Disposition) and file type/size can be
+  // read WITHOUT downloading or exposing the file body itself.
+  async function probeDownloadHeaders(page, hrefs) {
+    return page.evaluate(async (list) => {
+      const out = [];
+      for (const href of list) {
+        try {
+          const res = await fetch(href, { method: 'GET', credentials: 'include' });
+          out.push({
+            href,
+            status: res.status,
+            contentType: res.headers.get('content-type'),
+            contentDisposition: res.headers.get('content-disposition'),
+            contentLength: res.headers.get('content-length'),
+          });
+        } catch (err) {
+          out.push({ href, error: String(err?.message || err) });
+        }
+      }
+      return out;
+    }, hrefs).catch(() => []);
+  }
+
+  async function probeDocumentDownloadHeaders({ clientHref, hrefs = [], pageTimeoutMs = 20000 } = {}) {
+    if (!clientHref) throw new Error('clientHref required');
+    if (!Array.isArray(hrefs) || hrefs.length === 0) throw new Error('hrefs required');
+    const result = await login({ dryRun: false });
+    const { session, screenshots } = result;
+    try {
+      const nav = await gotoWithBudget(session.page, clientHref, { timeout: Math.max(5000, Number(pageTimeoutMs) || 20000) });
+      if (!nav.ok) return { ok: false, clientHref, error: nav.error, screenshots };
+      const headers = await probeDownloadHeaders(session.page, hrefs);
+      return { ok: true, clientHref, headers, screenshots };
+    } finally {
+      await session.close().catch(() => {});
+    }
+  }
+
+  // Read-only. No Content-Disposition/original filename is available on these
+  // uploads (confirmed via probeDownloadHeaders), and every visible title is a
+  // generic placeholder — the only remaining way to identify a specific
+  // document (e.g. a payment receipt) is its actual content. Downloads each
+  // PDF into memory using the authenticated session's cookies (a plain GET,
+  // same as clicking Download) and extracts text with the pdf-parse library
+  // already used elsewhere in this codebase (clientcare-ops-service.js). Never
+  // writes the file to disk or to ClientCare; returns a bounded text preview
+  // only, not the full document.
+  async function extractDocumentText({ clientHref, hrefs = [], pageTimeoutMs = 20000, maxCharsPerDoc = 2000 } = {}) {
+    if (!clientHref) throw new Error('clientHref required');
+    if (!Array.isArray(hrefs) || hrefs.length === 0) throw new Error('hrefs required');
+    const result = await login({ dryRun: false });
+    const { session, screenshots } = result;
+    try {
+      const nav = await gotoWithBudget(session.page, clientHref, { timeout: Math.max(5000, Number(pageTimeoutMs) || 20000) });
+      if (!nav.ok) return { ok: false, clientHref, error: nav.error, screenshots };
+
+      const cookies = await session.page.cookies();
+      const cookieHeader = cookies.map((c) => `${c.name}=${c.value}`).join('; ');
+      const origin = new URL(session.currentUrl()).origin;
+
+      const pdfParseModule = await import('pdf-parse');
+      const pdfParse = pdfParseModule.default || pdfParseModule;
+
+      const results = [];
+      for (const href of hrefs) {
+        const url = href.startsWith('http') ? href : new URL(href, `${origin}/`).toString();
+        try {
+          const res = await fetch(url, { headers: { cookie: cookieHeader } });
+          if (!res.ok) {
+            results.push({ href, ok: false, status: res.status });
+            continue;
+          }
+          const buf = Buffer.from(await res.arrayBuffer());
+          let text = '';
+          try {
+            const parsed = await pdfParse(buf);
+            text = parsed?.text || '';
+          } catch (err) {
+            results.push({ href, ok: false, byteLength: buf.length, error: `pdf_parse_failed: ${err.message}` });
+            continue;
+          }
+          results.push({
+            href,
+            ok: true,
+            byteLength: buf.length,
+            textLength: text.length,
+            textPreview: text.replace(/\s+/g, ' ').trim().slice(0, maxCharsPerDoc),
+          });
+        } catch (err) {
+          results.push({ href, ok: false, error: String(err?.message || err) });
+        }
+      }
+
+      return { ok: true, clientHref, results, screenshots };
+    } finally {
+      await session.close().catch(() => {});
+    }
+  }
+
+  // Read-only. extractDocumentText confirmed these are scanned-image PDFs with
+  // no embedded text layer (2-88 chars extracted), so OCR/text extraction
+  // can't identify them — a human (or vision-capable reviewer) has to actually
+  // look at the page image. Downloads a single document (same authenticated
+  // session, plain GET) and returns it as base64 so it can be viewed directly.
+  // Never writes to ClientCare; this is strictly a read of one already-existing
+  // file, equivalent to clicking Download.
+  async function downloadDocumentBase64({ clientHref, href, pageTimeoutMs = 20000 } = {}) {
+    if (!clientHref) throw new Error('clientHref required');
+    if (!href) throw new Error('href required');
+    const result = await login({ dryRun: false });
+    const { session, screenshots } = result;
+    try {
+      const nav = await gotoWithBudget(session.page, clientHref, { timeout: Math.max(5000, Number(pageTimeoutMs) || 20000) });
+      if (!nav.ok) return { ok: false, clientHref, error: nav.error, screenshots };
+
+      const cookies = await session.page.cookies();
+      const cookieHeader = cookies.map((c) => `${c.name}=${c.value}`).join('; ');
+      const origin = new URL(session.currentUrl()).origin;
+      const url = href.startsWith('http') ? href : new URL(href, `${origin}/`).toString();
+
+      const res = await fetch(url, { headers: { cookie: cookieHeader } });
+      if (!res.ok) return { ok: false, href, status: res.status, screenshots };
+      const buf = Buffer.from(await res.arrayBuffer());
+
+      return {
+        ok: true,
+        href,
+        contentType: res.headers.get('content-type'),
+        byteLength: buf.length,
+        base64: buf.toString('base64'),
+        screenshots,
+      };
+    } finally {
+      await session.close().catch(() => {});
+    }
+  }
+
+  // Read-only. collectPageSummary's generic table extractor caps at 20 rows per
+  // table, which hides real data on a table flooded with hundreds of duplicate
+  // rows (the exact shape of the forever-chase retry-bug damage). This pulls
+  // every row of every table on the page, uncapped (up to maxRowsPerTable),
+  // so a buried non-duplicate row (a real payment/receipt) can still be found.
+  async function inspectClientBillingFullTables({ clientHref, pageTimeoutMs = 20000, subTabLabels = [], maxRowsPerTable = 500, linkedRowHrefPattern = null } = {}) {
+    if (!clientHref) throw new Error('clientHref required');
+    const result = await login({ dryRun: false });
+    const { session, screenshots } = result;
+    try {
+      const nav = await gotoWithBudget(session.page, clientHref, { timeout: Math.max(5000, Number(pageTimeoutMs) || 20000) });
+      if (!nav.ok) return { ok: false, clientHref, error: nav.error, screenshots };
+
+      const billingTab = await session.page.$('a[href*="#tabs-billing"]');
+      if (billingTab) {
+        await billingTab.click().catch(() => {});
+        await sleep(1200);
+      }
+
+      const subTabsClicked = [];
+      for (const label of (Array.isArray(subTabLabels) ? subTabLabels : [])) {
+        const clickResult = await clickByVisibleText(session.page, label);
+        subTabsClicked.push({ label, ...clickResult });
+        if (clickResult.clicked) await sleep(1200);
+      }
+
+      const tables = await extractFullTables(session.page, { maxRowsPerTable });
+      const linkedRows = linkedRowHrefPattern
+        ? await extractLinkedRowText(session.page, { hrefPattern: linkedRowHrefPattern })
+        : [];
+
+      return {
+        ok: true,
+        clientHref,
+        subTabsClicked,
+        tableCount: tables.length,
+        tables,
+        linkedRows,
+        screenshots,
+      };
+    } finally {
+      await session.close().catch(() => {});
+    }
+  }
+
+  async function inspectClientBillingAccount({ clientHref, pageTimeoutMs = 15000, includeScreenshots = false, subTabLabels = [] } = {}) {
     if (!clientHref) throw new Error('clientHref required');
     const result = await login({ dryRun: false });
     const { session, screenshots } = result;
@@ -1853,6 +2592,13 @@ export function createClientCareBrowserService({ env = process.env, logger = con
       if (billingTab) {
         await billingTab.click().catch(() => {});
         await sleep(1200);
+      }
+
+      const subTabsClicked = [];
+      for (const label of (Array.isArray(subTabLabels) ? subTabLabels : [])) {
+        const result = await clickByVisibleText(session.page, label);
+        subTabsClicked.push({ label, ...result });
+        if (result.clicked) await sleep(1200);
       }
 
       const summary = await collectPageSummary(session.page);
@@ -1906,6 +2652,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
         state: {
           hasBillingTab: Boolean(billingTab),
           billingFieldCount: billingFields.length,
+          subTabsClicked,
         },
         screenshots,
         screenshot: shot,
@@ -1950,7 +2697,111 @@ export function createClientCareBrowserService({ env = process.env, logger = con
       if (!dryRun) {
         const applyResult = await applyBillingFieldUpdates(session.page, updates);
         operations = applyResult.operations || [];
+
+        // Prefer Puppeteer native select on known IDs — ClientCare selects often ignore in-page value assignment.
+        const nativeOps = [];
+        const statusTarget = String(updates.client_billing_status || '').trim();
+        const providerTarget = String(updates.bill_provider_type || '').trim();
+        if (statusTarget) {
+          const statusField = beforeFields.find((f) => /client billing status/i.test(f.label || '') || f.id === 'BillingStatusID');
+          const option = (statusField?.options || []).find((o) => {
+            const text = String(o.text || '').toLowerCase();
+            const want = statusTarget.toLowerCase();
+            return text === want || text.includes(want) || want.includes(text);
+          });
+          if (option?.value) {
+            try {
+              await session.page.$eval('#BillingStatusID', (el, value) => {
+                el.disabled = false;
+                el.value = value;
+                Array.from(el.options || []).forEach((item) => {
+                  item.selected = item.value === value;
+                });
+                el.dispatchEvent(new Event('input', { bubbles: true }));
+                el.dispatchEvent(new Event('change', { bubbles: true }));
+                if (typeof window.jQuery === 'function') {
+                  try { window.jQuery(el).val(value).trigger('change'); } catch (_) { /* ignore */ }
+                }
+                try {
+                  const widget = window.$?.(el)?.data?.('kendoDropDownList');
+                  if (widget) widget.value(value);
+                } catch (_) { /* ignore */ }
+              }, option.value);
+              const selected = await session.page.$eval('#BillingStatusID', (el) => ({
+                value: el.value || null,
+                text: el.options?.[el.selectedIndex]?.text || '',
+              }));
+              nativeOps.push({
+                kind: 'client_billing_status_native',
+                applied: Boolean(selected.value),
+                target: statusTarget,
+                forced: true,
+                ...selected,
+              });
+            } catch (err) {
+              nativeOps.push({ kind: 'client_billing_status_native', applied: false, error: err.message });
+            }
+          }
+        }
+        if (providerTarget) {
+          const providerField = beforeFields.find((f) => /bill provider type/i.test(f.label || '') || f.id === 'BillUnderProvTypeID');
+          const option = (providerField?.options || []).find((o) => {
+            const text = String(o.text || '').toLowerCase();
+            const want = providerTarget.toLowerCase();
+            return text === want || text.includes(want) || want.includes(text);
+          });
+          if (option?.value) {
+            try {
+              await session.page.$eval('#BillUnderProvTypeID', (el, value) => {
+                el.disabled = false;
+                el.value = value;
+                Array.from(el.options || []).forEach((item) => {
+                  item.selected = item.value === value;
+                });
+                el.dispatchEvent(new Event('input', { bubbles: true }));
+                el.dispatchEvent(new Event('change', { bubbles: true }));
+                if (typeof window.jQuery === 'function') {
+                  try { window.jQuery(el).val(value).trigger('change'); } catch (_) { /* ignore */ }
+                }
+                try {
+                  const widget = window.$?.(el)?.data?.('kendoDropDownList');
+                  if (widget) widget.value(value);
+                } catch (_) { /* ignore */ }
+              }, option.value);
+              const selected = await session.page.$eval('#BillUnderProvTypeID', (el) => ({
+                value: el.value || null,
+                text: el.options?.[el.selectedIndex]?.text || '',
+              }));
+              nativeOps.push({
+                kind: 'bill_provider_type_native',
+                applied: Boolean(selected.value),
+                target: providerTarget,
+                forced: true,
+                ...selected,
+              });
+            } catch (err) {
+              nativeOps.push({ kind: 'bill_provider_type_native', applied: false, error: err.message });
+            }
+          }
+        }
+        if (nativeOps.length) operations = [...operations, ...nativeOps];
+
         saveResult = await attemptBillingSave(session.page);
+        // ClientCare often posts/reloads; re-open billing so after-summary reflects persisted values.
+        await sleep(2000);
+        const reload = await gotoWithBudget(session.page, billingHref, {
+          timeout: Math.max(5000, Number(pageTimeoutMs) || 15000),
+        });
+        if (reload.ok) {
+          const tab = await session.page.$('a[href*="#tabs-billing"]');
+          if (tab) {
+            await tab.click().catch(() => {});
+            await sleep(1000);
+          }
+          saveResult = { ...saveResult, reloaded: true };
+        } else {
+          saveResult = { ...saveResult, reloaded: false, reloadError: reload.error };
+        }
       }
 
       const afterSummary = dryRun ? beforeSummary : await collectPageSummary(session.page);
@@ -2368,7 +3219,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           oldestNoteDate: [...group.noteDates].sort()[0] || '',
           latestNoteDate: [...group.noteDates].sort().slice(-1)[0] || '',
         }))
-        .sort((a, b) => String(a.oldestNoteDate || '').localeCompare(String(b.oldestNoteDate || '')))
+        .sort((a, b) => String(b.latestNoteDate || '').localeCompare(String(a.latestNoteDate || '')))
         .slice(0, Math.max(1, Number(accountLimit) || 100));
 
       const accounts = [];
@@ -2447,8 +3298,8 @@ export function createClientCareBrowserService({ env = process.env, logger = con
     }
   }
 
-  async function buildBacklogSummary({ maxPages = 12, pageTimeoutMs = 15000, accountLimit = 200 } = {}) {
-    const result = await login({ dryRun: false });
+  async function buildBacklogSummary({ maxPages = 12, pageTimeoutMs = 15000, accountLimit = 200, tenantId = null } = {}) {
+    const result = await login({ dryRun: false, tenantId });
     const { session } = result;
     try {
       const apiConfig = await captureBillingNotesApiConfig(session.page, { pageTimeoutMs });
@@ -2525,7 +3376,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
             recoveryBand,
           };
         })
-        .sort((a, b) => String(a.oldestNoteDate || '').localeCompare(String(b.oldestNoteDate || '')))
+        .sort((a, b) => String(b.latestNoteDate || '').localeCompare(String(a.latestNoteDate || '')))
         .slice(0, Math.max(1, Number(accountLimit) || 200));
 
       return {
@@ -2554,7 +3405,15 @@ export function createClientCareBrowserService({ env = process.env, logger = con
       if (!directoryNav.ok) {
         return { ok: false, error: directoryNav.error || 'directory navigation failed', candidates: [] };
       }
-      const directory = await extractClientDirectory(session.page, Math.max(25, Math.min(Number(maxDirectoryItems) || 250, 500)));
+      await sleep(1500);
+      const prep = await prepareClientDirectoryForSearch(session.page);
+      const typed = await typeClientDirectoryFilter(session.page, searchText);
+      let directory = await extractClientDirectory(session.page, Math.max(25, Math.min(Number(maxDirectoryItems) || 250, 500)));
+      // If filter typing yielded nothing, clear again and scrape broader list.
+      if (!directory.length) {
+        await prepareClientDirectoryForSearch(session.page);
+        directory = await extractClientDirectory(session.page, Math.max(25, Math.min(Number(maxDirectoryItems) || 250, 500)));
+      }
       const candidates = directory
         .map((item) => {
           const score = scoreDirectoryClientMatch(searchText, item.name);
@@ -2575,6 +3434,9 @@ export function createClientCareBrowserService({ env = process.env, logger = con
       return {
         ok: true,
         query: searchText,
+        prep,
+        typed,
+        directoryCount: directory.length,
         candidates,
       };
     } finally {
@@ -2687,7 +3549,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
     }
   }
 
-  async function extractClaimTables({ importIntoQueue = false, maxCandidates = 2, includeScreenshots = false, pageTimeoutMs = 20000 } = {}) {
+  async function extractClaimTables({ importIntoQueue = false, maxCandidates = 2, includeScreenshots = false, pageTimeoutMs = 20000, tenantId = null } = {}) {
     if (!syncService) throw new Error('ClientCare sync service not configured');
     const discovery = await discoverBillingSurface({ maxCandidates, includeScreenshots, pageTimeoutMs });
     const pages = [discovery.landing, ...(discovery.visited || [])];
@@ -2714,7 +3576,12 @@ export function createClientCareBrowserService({ env = process.env, logger = con
         }
       }
       const flat = snapshots.flat();
-      imported = await syncService.importSnapshot({ rows: flat, source: 'browser_snapshot' });
+      // Previously omitted tenantId entirely — extracted claims landed with
+      // tenant_id NULL and were invisible to this tenant's forever-chase
+      // queue (getForeverChaseQueue only matches NULL rows when tenantId
+      // itself is also null/absent). The one feature meant to find
+      // recoverable dollars straight from the live EHR was losing them.
+      imported = await syncService.importSnapshot({ rows: flat, source: 'browser_snapshot', tenantId });
     }
 
     return {
@@ -2725,24 +3592,3273 @@ export function createClientCareBrowserService({ env = process.env, logger = con
     };
   }
 
+  function guessMotherNameFromBirthCells(cells = []) {
+    const noise = /^(admitted|discharged|home|hospital|birth|baby|babies|born|location|midwife|provider|date|time|status|name|mrn#?:?|dob:?|age)(\s|$)/i;
+    const noisePhrase = /admitted|discharged|^mrn#?|^dob:?/i;
+    const staff = /^(sherry|cora)\b/i;
+    const uuidLike = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    for (const raw of cells) {
+      const cell = String(raw || '').trim().replace(/\s+/g, ' ');
+      if (!cell || noise.test(cell) || noisePhrase.test(cell) || /^\d/.test(cell) || staff.test(cell)) continue;
+      if (/\d{1,2}\/\d{1,2}\/\d{2,4}/.test(cell)) continue;
+      if (/^mrn#?:?/i.test(cell) || /^dob:?/i.test(cell) || uuidLike.test(cell)) continue;
+      // "Amanda Winkels Amanda Winkels" → first two tokens once
+      const tokens = cell.replace(/\.{2,}$/, '').replace(/^mrn#?:?\s*/i, '').split(/\s+/).filter(Boolean);
+      if (tokens.some((t) => uuidLike.test(t))) continue;
+      if (tokens.length >= 2 && /^[A-Za-z]/.test(tokens[0]) && /^[A-Za-z]/.test(tokens[1])) {
+        const a = tokens[0];
+        const b = tokens[1];
+        if (tokens[2] === a && tokens[3] === b) return `${a} ${b}`;
+        return `${a} ${b}`;
+      }
+      if (tokens.length === 1 && tokens[0].length >= 3 && /^[A-Za-z]/.test(tokens[0])) return tokens[0];
+    }
+    return null;
+  }
+
+  /**
+   * Scan Birth Activity for recent births → resolve billing hrefs via row links
+   * or client-directory name match (money path for unpaid births not in old notes queue).
+   */
+  async function scanBirthActivity({
+    maxRows = 40,
+    pageTimeoutMs = 20000,
+    resolveDirectory = true,
+    maxNameResolves = 12,
+    tenantId = null,
+  } = {}) {
+    const result = await login({ dryRun: false, tenantId });
+    const { session, screenshots } = result;
+    try {
+      const target = new URL('/Home/BirthActivityPartial', session.currentUrl()).toString();
+      const nav = await gotoWithBudget(session.page, target, {
+        timeout: Math.max(8000, Number(pageTimeoutMs) || 20000),
+      });
+      if (!nav.ok) return { ok: false, error: nav.error, screenshots };
+      await sleep(2500);
+      try { await dismissSessionTakeover(session.page); } catch (_) { /* ignore */ }
+
+      // Tip 2026-07-15: page shell loads with "Babies Born" heading but empty grid until widget click / date range.
+      await session.page.evaluate(() => {
+        const want = /babies\s*born|birth\s*activity|this\s*month|year\s*to\s*date|last\s*90|all\s*births/i;
+        const nodes = Array.from(document.querySelectorAll('a, button, span, li, div[role="tab"], .k-link'));
+        for (const el of nodes) {
+          const text = (el.textContent || '').trim().replace(/\s+/g, ' ');
+          if (!text || text.length > 60) continue;
+          if (!want.test(text)) continue;
+          if (el.offsetParent === null && el.getClientRects().length === 0) continue;
+          el.click();
+        }
+      }).catch(() => {});
+      await sleep(2000);
+
+      const rows = await session.page.evaluate((max) => {
+        const out = [];
+        const seen = new Set();
+        const push = (row) => {
+          const key = `${row.birthDateGuess || ''}|${(row.text || '').slice(0, 80)}`;
+          if (seen.has(key)) return;
+          seen.add(key);
+          out.push(row);
+        };
+
+        const rowNodes = Array.from(document.querySelectorAll('table tr, .k-grid-content tr, [role="row"], .list-group-item, li'));
+        for (const tr of rowNodes) {
+          const cells = Array.from(tr.querySelectorAll('td, [role="gridcell"], span, div'))
+            .map((td) => (td.innerText || '').trim().replace(/\s+/g, ' '))
+            .filter((t) => t && t.length < 120);
+          if (cells.length < 1) continue;
+          const text = (tr.innerText || cells.join(' | ')).replace(/\s+/g, ' ').trim();
+          if (text.length < 8) continue;
+          const dateMatch = text.match(/\b(\d{1,2}\/\d{1,2}\/\d{2,4}|\d{4}-\d{2}-\d{2})\b/);
+          // Prefer dated rows; also keep mother-like rows with pregnancy links.
+          const link =
+            tr.querySelector('a[href*="ShowDefaultClientScreen"]') ||
+            tr.querySelector('a[href*="/Pregnancy/"]') ||
+            tr.querySelector('a[href*="pregnancyID=" i]');
+          if (!dateMatch && !link) continue;
+          const linkName = (link?.textContent || '').trim().replace(/\s+/g, ' ').split('MRN')[0].trim();
+          const cellList = cells.slice(0, 8);
+          if (linkName && !/^dob:?$/i.test(linkName)) cellList.unshift(linkName);
+          push({
+            cells: cellList,
+            text: text.slice(0, 320),
+            clientHref: link?.href || null,
+            birthDateGuess: dateMatch?.[1] || null,
+            linkName: linkName || null,
+          });
+          if (out.length >= max) break;
+        }
+
+        // Fallback: any pregnancy client links near a date on the page body.
+        if (!out.length) {
+          const body = (document.body?.innerText || '').replace(/\s+/g, ' ');
+          const links = Array.from(document.querySelectorAll('a[href*="ShowDefaultClientScreen"], a[href*="/Pregnancy/Billing/"]'));
+          for (const link of links) {
+            const nearby = ((link.closest('tr,li,div')?.innerText) || link.textContent || '').replace(/\s+/g, ' ').trim();
+            const dateMatch = nearby.match(/\b(\d{1,2}\/\d{1,2}\/\d{2,4}|\d{4}-\d{2}-\d{2})\b/)
+              || body.match(/\b(\d{1,2}\/\d{1,2}\/\d{2,4})\b/);
+            push({
+              cells: [nearby.slice(0, 80)],
+              text: nearby.slice(0, 320),
+              clientHref: link.href || null,
+              birthDateGuess: dateMatch?.[1] || null,
+            });
+            if (out.length >= max) break;
+          }
+        }
+        return out;
+      }, Math.max(1, Math.min(Number(maxRows) || 40, 100)));
+
+      let directory = [];
+      const needResolve = resolveDirectory !== false && rows.some((r) => !r.clientHref);
+      const directoryPrep = { cleared: false, perNameSearches: 0 };
+      if (needResolve) {
+        const dirNav = await gotoWithBudget(
+          session.page,
+          new URL('/Pregnancy?donotRedirect=Y', session.currentUrl()).toString(),
+          { timeout: Math.max(5000, Number(pageTimeoutMs) || 20000) }
+        );
+        if (dirNav.ok) {
+          await sleep(1500);
+          const prep = await prepareClientDirectoryForSearch(session.page);
+          directoryPrep.cleared = Boolean(prep?.clicked);
+          directory = await extractClientDirectory(session.page, 500);
+
+          // Paginate "next" a few times to capture more of the all-clients list.
+          for (let pageNum = 0; pageNum < 8 && directory.length < 400; pageNum += 1) {
+            const advanced = await session.page.evaluate(() => {
+              const next =
+                document.querySelector('a[title*="next" i], button[title*="next" i], .k-i-arrow-e, .k-pager-nav[aria-label*="next" i]') ||
+                Array.from(document.querySelectorAll('a, button')).find((el) => /^go to the next page$/i.test((el.textContent || '').trim()) || /^›$|^»$|^>$/.test((el.textContent || '').trim()));
+              if (!next || next.getAttribute('aria-disabled') === 'true' || next.classList.contains('k-state-disabled')) {
+                return false;
+              }
+              next.click();
+              return true;
+            });
+            if (!advanced) break;
+            await sleep(1200);
+            const more = await extractClientDirectory(session.page, 500);
+            const seen = new Set(directory.map((d) => d.href));
+            for (const item of more) {
+              if (!seen.has(item.href)) directory.push(item);
+            }
+          }
+        }
+      }
+
+      const births = [];
+      let nameResolveBudget = Math.max(0, Math.min(Number(maxNameResolves) || 12, 25));
+      for (const row of rows) {
+        const motherNameGuess = (row.linkName && !/^(dob:?|mrn#?)/i.test(String(row.linkName).trim()))
+          ? String(row.linkName).trim().split(/\s+/).slice(0, 2).join(' ')
+          : guessMotherNameFromBirthCells(row.cells || []);
+        let clientHref = row.clientHref || null;
+        let billingHref = clientHref ? deriveBillingHrefFromClientHref(clientHref) : null;
+        let resolve = clientHref ? { method: 'row_link' } : null;
+        if (!billingHref && motherNameGuess && directory.length) {
+          const scored = directory
+            .map((item) => ({
+              ...item,
+              score: scoreDirectoryClientMatch(motherNameGuess, item.name),
+            }))
+            .filter((item) => item.score >= 55)
+            .sort((a, b) => b.score - a.score);
+          const best = scored[0];
+          if (best) {
+            clientHref = best.href;
+            billingHref = deriveBillingHrefFromClientHref(best.href);
+            resolve = {
+              method: 'directory_name',
+              query: motherNameGuess,
+              score: best.score,
+              matchedName: best.name,
+              mrn: best.mrn,
+            };
+          }
+        }
+        // Per-name filter search when bulk directory miss (postpartum moms often off first pages).
+        if (!billingHref && motherNameGuess && needResolve && nameResolveBudget > 0) {
+          nameResolveBudget -= 1;
+          directoryPrep.perNameSearches += 1;
+          await typeClientDirectoryFilter(session.page, motherNameGuess);
+          const filtered = await extractClientDirectory(session.page, 80);
+          const scored = filtered
+            .map((item) => ({
+              ...item,
+              score: scoreDirectoryClientMatch(motherNameGuess, item.name),
+            }))
+            .filter((item) => item.score >= 55)
+            .sort((a, b) => b.score - a.score);
+          const best = scored[0];
+          if (best) {
+            clientHref = best.href;
+            billingHref = deriveBillingHrefFromClientHref(best.href);
+            resolve = {
+              method: 'directory_filter',
+              query: motherNameGuess,
+              score: best.score,
+              matchedName: best.name,
+              mrn: best.mrn,
+            };
+            if (!directory.some((d) => d.href === best.href)) directory.push(best);
+          } else {
+            resolve = resolve || { method: 'directory_miss', query: motherNameGuess };
+          }
+        } else if (!billingHref && motherNameGuess) {
+          resolve = resolve || {
+            method: nameResolveBudget <= 0 ? 'resolve_budget_exhausted' : 'directory_miss',
+            query: motherNameGuess,
+          };
+        }
+        births.push({
+          ...row,
+          motherNameGuess,
+          clientHref,
+          billingHref,
+          resolve,
+        });
+      }
+
+      const page = await collectPageSummary(session.page);
+      return {
+        ok: true,
+        url: target,
+        page: { url: page.url, title: page.title, headings: page.headings },
+        count: births.length,
+        resolved: births.filter((b) => b.billingHref).length,
+        directoryCount: directory.length,
+        directoryPrep,
+        births,
+        screenshots,
+      };
+    } finally {
+      await session.close().catch(() => {});
+    }
+  }
+
+  /**
+   * Prepare claim-ready status on a billing account: set Client Billing Status + Bill Provider Type.
+   * Does not flip payment_status (that means money received).
+   */
+  /**
+   * Map / seed Charge Slip for a known pregnancy. Vendor SuperBill SPA URL 500s;
+   * ChargeSlip is the working create surface: DateFilter + PersonId load visit rows,
+   * click patient visit, set ChargeSlipId care type, then Save.
+   */
+  async function mapChargeSlip({
+    pregnancyId = null,
+    patientQuery = '',
+    careType = 'Intrapartum Care',
+    visitDate = null,
+    visitDates = [],
+    scanDays = 21,
+    dryRun = true,
+    pageTimeoutMs = 20000,
+  } = {}) {
+    const result = await login({ dryRun: false });
+    const { session, screenshots } = result;
+    try {
+      const origin = new URL(session.currentUrl()).origin;
+      let bornDate = null;
+      // Skip chart Born lookup when visitDate is already known — tip proved chart nav can stall under session-takeover load.
+      if (pregnancyId && !visitDate) {
+        const billingHref = `${origin}/Pregnancy/Billing/${encodeURIComponent(pregnancyId)}`;
+        const chartNav = await gotoWithBudget(session.page, billingHref, {
+          timeout: Math.max(8000, Number(pageTimeoutMs) || 20000),
+        });
+        if (chartNav.ok) {
+          await sleep(1200);
+          await dismissSessionTakeover(session.page);
+          bornDate = await session.page.evaluate(() => {
+            const text = (document.body?.innerText || '').replace(/\s+/g, ' ');
+            return (text.match(/Born[:\s]+(\d{1,2}\/\d{1,2}\/\d{4})/i) || [])[1] || null;
+          });
+        }
+      }
+
+      const qs = pregnancyId ? `?pregnancyId=${encodeURIComponent(pregnancyId)}` : '';
+      const target = `${origin}/Company/ChargeSlip${qs}`;
+      const nav = await gotoWithBudget(session.page, target, {
+        timeout: Math.max(8000, Number(pageTimeoutMs) || 20000),
+      });
+      if (!nav.ok) return { ok: false, error: nav.error, screenshots };
+
+      await sleep(1500);
+      await dismissSessionTakeover(session.page);
+
+      const providerSet = await session.page.evaluate(() => {
+        const sel = document.getElementById('PersonId');
+        if (!sel) return { set: false };
+        const option = Array.from(sel.options || []).find((o) => /^all$/i.test((o.textContent || '').trim())) || sel.options?.[0];
+        if (!option) return { set: false };
+        sel.value = option.value;
+        Array.from(sel.options || []).forEach((o) => { o.selected = o === option; });
+        sel.dispatchEvent(new Event('change', { bubbles: true }));
+        return { set: true, text: (option.textContent || '').trim(), value: option.value };
+      });
+
+      const dateCandidates = buildVisitDateCandidates({
+        visitDate: visitDate || bornDate,
+        visitDates: [bornDate, ...(visitDates || [])].filter(Boolean),
+        scanDays: pregnancyId ? Math.max(0, Number(scanDays) || 0) : 0,
+      });
+      if (!dateCandidates.length) {
+        return {
+          ok: false,
+          error: 'visit_date required (or Born date readable from billing chart)',
+          pregnancyId,
+          bornDate,
+          screenshots,
+        };
+      }
+
+      let visitList = null;
+      let dateSet = { set: false };
+      let matchedDate = null;
+      for (const candidate of dateCandidates) {
+        dateSet = await session.page.evaluate((rawDate) => {
+          const input =
+            document.querySelector('input[name="DateFilter"]') ||
+            Array.from(document.querySelectorAll('input')).find((el) => /date/i.test(`${el.id} ${el.name} ${el.placeholder || ''}`));
+          if (!input) return { set: false };
+          const value = String(rawDate || '').trim() || input.value || '';
+          if (!value) return { set: false, reason: 'no_date_value' };
+          input.focus();
+          input.value = value;
+          input.dispatchEvent(new Event('input', { bubbles: true }));
+          input.dispatchEvent(new Event('change', { bubbles: true }));
+          input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+          return { set: true, value };
+        }, candidate);
+        await sleep(400);
+
+        visitList = await session.page.evaluate(async ({ providerId, dateSelection, wantPregnancyId, wantName, requireId }) => {
+          const pid = providerId || '00000000-0000-0000-0000-000000000000';
+          const date = dateSelection || '';
+          if (!date) return { ok: false, error: 'date required' };
+          const url = `/Company/SearchBillingSlipPregnancyList?PrividerId=${encodeURIComponent(pid)}&DateSelection=${encodeURIComponent(date)}&_=${Date.now()}`;
+          const res = await fetch(url, { credentials: 'same-origin' });
+          const text = await res.text();
+          let data = null;
+          try { data = JSON.parse(text); } catch { data = text.slice(0, 500); }
+          const rows = Array.isArray(data)
+            ? data
+            : (data?.Data || data?.data || data?.Items || data?.items || []);
+          const normalized = (Array.isArray(rows) ? rows : []).map((row) => ({
+            pregnancyId: row.PregnancyID || row.PregnancyId || row.pregnancyId || row.Id || row.id || null,
+            name: row.FullName || row.PatientName || row.ClientName || row.Name || row.name || null,
+            time: row.StartTimeStr || row.Time || row.VisitTime || row.time || null,
+            visit: row.Visit || row.VisitType || row.DefaultCategory || row.visit || null,
+            chargeSlipId: row.ChargeSlipId || null,
+            scheduledEventId: row.ScheduledEventID || row.ScheduledEventId || null,
+            rawKeys: Object.keys(row || {}).slice(0, 20),
+            raw: row,
+          }));
+          const wantId = String(wantPregnancyId || '').toLowerCase();
+          const want = String(wantName || '').toLowerCase();
+          let match = null;
+          if (wantId) {
+            match = normalized.find((r) => String(r.pregnancyId || '').toLowerCase() === wantId) || null;
+          } else if (want) {
+            match = normalized.find((r) => String(r.name || '').toLowerCase().includes(want)) || null;
+          }
+          if (requireId && wantId && !match) {
+            return {
+              ok: res.ok,
+              status: res.status,
+              url,
+              count: normalized.length,
+              sample: normalized.slice(0, 8).map(({ raw, ...rest }) => rest),
+              match: null,
+              selected: { applied: false, reason: 'pregnancy_id_not_in_visit_list' },
+            };
+          }
+
+          let selected = { applied: false, deferred: true };
+          // Do NOT call selectClick here — tip proved it can hang the Puppeteer evaluate
+          // (sync vendor work). Bind only in the post-match rebind step with a Node timeout.
+          if (match?.pregnancyId) {
+            selected = {
+              applied: false,
+              deferred: true,
+              pregnancyId: match.pregnancyId,
+              scheduledEventId: match.scheduledEventId,
+              name: match.name,
+            };
+          }
+          return {
+            ok: res.ok,
+            status: res.status,
+            url,
+            count: normalized.length,
+            sample: normalized.slice(0, 8).map(({ raw, ...rest }) => rest),
+            match: match ? {
+              pregnancyId: match.pregnancyId,
+              name: match.name,
+              time: match.time,
+              visit: match.visit,
+              chargeSlipId: match.chargeSlipId,
+              scheduledEventId: match.scheduledEventId,
+            } : null,
+            selected,
+            dataKeys: data && typeof data === 'object' && !Array.isArray(data) ? Object.keys(data).slice(0, 20) : null,
+          };
+        }, {
+          providerId: providerSet?.value || '00000000-0000-0000-0000-000000000000',
+          dateSelection: dateSet?.value || candidate,
+          wantPregnancyId: pregnancyId,
+          wantName: patientQuery,
+          requireId: Boolean(pregnancyId),
+        });
+
+        if (visitList?.match?.pregnancyId) {
+          matchedDate = candidate;
+          break;
+        }
+      }
+      let preBindChargeOpts = [];
+      if (visitList?.match?.pregnancyId) {
+        // Ensure DOM date matches the API day, then re-bind with the matched visit row.
+        await session.page.evaluate((rawDate) => {
+          const input =
+            document.querySelector('input[name="DateFilter"]') ||
+            Array.from(document.querySelectorAll('input')).find((el) => /date/i.test(`${el.id} ${el.name} ${el.placeholder || ''}`));
+          if (!input || !rawDate) return;
+          input.value = rawDate;
+          input.dispatchEvent(new Event('input', { bubbles: true }));
+          input.dispatchEvent(new Event('change', { bubbles: true }));
+          input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+          try { window.$(input).trigger('change'); } catch (_) { /* ignore */ }
+        }, matchedDate);
+        await sleep(2000);
+        preBindChargeOpts = await session.page.evaluate(() => {
+          const sel = document.getElementById('ChargeSlipId');
+          return Array.from(sel?.options || []).map((o) => ({
+            text: (o.textContent || '').trim(),
+            value: o.value,
+          })).filter((o) => o.text && o.value);
+        });
+        // Bound with Node-side timeout — selectClick can hang Puppeteer evaluate.
+        const rebindPromise = session.page.evaluate(async ({ wantName }) => {
+          const attempts = [];
+          const needle = String(wantName || '').toLowerCase().split(/\s+/).find((p) => p.length > 2);
+          const rowCandidates = Array.from(document.querySelectorAll('table tr, .k-grid-content tr, [role="row"], .hover-select'))
+            .map((tr) => {
+              const t = (tr.innerText || '').replace(/\s+/g, ' ').trim();
+              const cells = tr.querySelectorAll('td, [role="gridcell"]').length;
+              return { tr, t, cells, score: (needle && t.toLowerCase().includes(needle) ? 10 : 0) + (/\b\d{1,2}:\d{2}\b/.test(t) ? 5 : 0) + (cells >= 2 && cells <= 8 ? 3 : 0) + (tr.classList?.contains('hover-select') ? 2 : 0) - Math.min(t.length, 400) / 100 };
+            })
+            .filter((r) => r.score >= 15)
+            .sort((a, b) => b.score - a.score);
+          const rowEl = rowCandidates[0]?.tr || null;
+          if (!rowEl) return { ok: false, reason: 'row_not_in_dom', attempts };
+          attempts.push({
+            label: 'row_target',
+            ok: true,
+            text: (rowEl.innerText || '').replace(/\s+/g, ' ').slice(0, 80),
+            onclick: (rowEl.getAttribute('onclick') || '').slice(0, 80),
+          });
+          // Native click fires onclick="selectClick(this)" with correct this-binding.
+          rowEl.click();
+          attempts.push({ label: 'row_click', ok: true });
+          for (let i = 0; i < 24; i += 1) {
+            await new Promise((r) => setTimeout(r, 250));
+            const fullNameText = (document.getElementById('FullNameText')?.textContent || '').trim();
+            if (fullNameText) {
+              return {
+                ok: true,
+                attempts,
+                fullNameText: fullNameText.slice(0, 80),
+                patientLine: fullNameText.slice(0, 80),
+                patientSelected: true,
+              };
+            }
+          }
+          const fullNameText = (document.getElementById('FullNameText')?.textContent || '').trim();
+          return {
+            ok: Boolean(fullNameText),
+            attempts,
+            fullNameText: fullNameText.slice(0, 80),
+            patientLine: fullNameText.slice(0, 80),
+            patientSelected: Boolean(fullNameText),
+            reason: fullNameText ? null : 'fullnameNameText_empty_after_click',
+          };
+        }, { wantName: visitList.match?.name || patientQuery });
+        const rebind = await Promise.race([
+          rebindPromise,
+          sleep(12000).then(() => ({ ok: false, timedOut: true, reason: 'selectClick_or_row_click_timeout' })),
+        ]);
+        visitList = { ...visitList, rebind };
+        if (rebind?.patientSelected) {
+          visitList.selected = { ...(visitList.selected || {}), applied: true, via: 'row_click', patientLine: rebind.patientLine || rebind.fullNameText };
+        }
+        await sleep(800);
+      } else if (visitList?.selected?.applied) {
+        await sleep(1500);
+      }
+
+      // Fail-closed: never DOM-click a random visit when pregnancyId was requested.
+      let visitClick = { clicked: false, skipped: true, reason: pregnancyId ? 'require_pregnancy_id_match' : null };
+      if (!pregnancyId && !visitList?.selected?.applied && (visitList?.count || 0) > 0) {
+        visitClick = await session.page.evaluate((q) => {
+          const want = String(q || '').trim().toLowerCase();
+          const rows = Array.from(document.querySelectorAll('table tr, .k-grid-content tr, [role="row"]'));
+          const scored = [];
+          for (const tr of rows) {
+            const cells = Array.from(tr.querySelectorAll('td, [role="gridcell"]'))
+              .map((td) => (td.innerText || '').trim().replace(/\s+/g, ' '))
+              .filter(Boolean);
+            if (cells.length < 2) continue;
+            const text = cells.join(' | ');
+            if (/no results found/i.test(text)) continue;
+            if (!/\b\d{1,2}:\d{2}\b/.test(text) && !(want && text.toLowerCase().includes(want))) continue;
+            let score = 1;
+            if (want && text.toLowerCase().includes(want)) score += 10;
+            scored.push({ tr, cells: cells.slice(0, 6), text: text.slice(0, 160), score });
+          }
+          scored.sort((a, b) => b.score - a.score);
+          const best = scored[0];
+          if (!best) return { clicked: false, candidates: 0 };
+          best.tr.click();
+          return { clicked: true, candidates: scored.length, cells: best.cells, text: best.text, score: best.score };
+        }, patientQuery);
+        if (visitClick?.clicked) await sleep(1500);
+      }
+
+      const typed = { typed: false, skipped: true };
+      const hiddenForce = pregnancyId && visitList?.match?.pregnancyId
+        ? await session.page.evaluate((id) => {
+            const ids = ['PregnancyId', 'PregnancyID', 'pregnancyId', 'PatientId', 'PatientID', 'ClientId'];
+            const set = [];
+            for (const name of ids) {
+              const el = document.getElementById(name) || document.querySelector(`[name="${name}"]`);
+              if (!el) continue;
+              el.value = id;
+              el.dispatchEvent(new Event('change', { bubbles: true }));
+              set.push(name);
+            }
+            return { set };
+          }, String(pregnancyId))
+        : { set: [], skipped: true, reason: pregnancyId ? 'no_visit_match' : 'no_pregnancy_id' };
+
+      const chargeSlipType = await session.page.evaluate(({ wantType, preOpts }) => {
+        const sel = document.getElementById('ChargeSlipId');
+        if (!sel) return { set: false };
+        const want = String(wantType || 'Intrapartum Care').toLowerCase();
+        let opts = Array.from(sel.options || []);
+        let option = opts.find((o) => (o.textContent || '').toLowerCase().includes(want))
+          || (want.includes('intrapartum') ? opts.find((o) => /^intrapartum/i.test((o.textContent || '').trim())) : null);
+        // After patient bind, vendor filters ChargeSlipId and may drop Intrapartum — reinject from pre-bind list.
+        if (!option && Array.isArray(preOpts)) {
+          const stash = preOpts.find((o) => String(o.text || '').toLowerCase().includes(want))
+            || (want.includes('intrapartum') ? preOpts.find((o) => /^intrapartum/i.test(String(o.text || '').trim())) : null);
+          if (stash?.value) {
+            const exists = opts.some((o) => o.value === stash.value);
+            if (!exists) {
+              const added = document.createElement('option');
+              added.value = stash.value;
+              added.textContent = stash.text;
+              sel.appendChild(added);
+            }
+            option = Array.from(sel.options || []).find((o) => o.value === stash.value) || null;
+          }
+        }
+        if (!option) {
+          return {
+            set: false,
+            available: Array.from(sel.options || []).map((o) => (o.textContent || '').trim()).filter(Boolean),
+            preBindAvailable: (preOpts || []).map((o) => o.text).filter(Boolean),
+          };
+        }
+        sel.value = option.value;
+        Array.from(sel.options || []).forEach((o) => { o.selected = o === option; });
+        sel.dispatchEvent(new Event('change', { bubbles: true }));
+        try { window.$(sel).trigger('change'); } catch (_) { /* ignore */ }
+        try { if (typeof window.changeChargeSlipId === 'function') window.changeChargeSlipId(); } catch (_) { /* ignore */ }
+        return { set: true, text: (option.textContent || '').trim(), value: option.value, reinjected: Boolean(preOpts?.length) };
+      }, { wantType: careType, preOpts: preBindChargeOpts || [] });
+      if (chargeSlipType?.set) await sleep(2500);
+
+      // After care-type change, vendor refreshPageGrid should populate procedure/diagnosis lists.
+      const codesMap = await session.page.evaluate(() => {
+        const sectionInfo = (id) => {
+          const root = document.getElementById(id);
+          if (!root) return { present: false };
+          const text = (root.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 400);
+          const clickables = Array.from(root.querySelectorAll('[data-id], [data-text], .data-service-identity-class, tr, li, a, button, input[type="checkbox"]'))
+            .map((el) => ({
+              tag: el.tagName,
+              text: (el.innerText || el.value || '').replace(/\s+/g, ' ').trim().slice(0, 80),
+              dataId: el.getAttribute('data-id') || null,
+              dataText: el.getAttribute('data-text') || null,
+              dataType: el.getAttribute('data-type') || null,
+              onclick: (el.getAttribute('onclick') || '').slice(0, 80),
+            }))
+            .filter((x) => x.text || x.dataId || x.dataText)
+            .slice(0, 25);
+          return { present: true, text, clickables };
+        };
+        const searchOpts = Array.from(document.getElementById('SearchService')?.options || [])
+          .map((o) => ({ text: (o.textContent || '').trim(), value: o.value }))
+          .filter((o) => o.text && o.value && o.value !== '00000000-0000-0000-0000-000000000000')
+          .slice(0, 30);
+        const digOpts = Array.from(document.getElementById('DignosticService')?.options || [])
+          .map((o) => ({ text: (o.textContent || '').trim(), value: o.value }))
+          .filter((o) => o.text && o.value && o.value !== '00000000-0000-0000-0000-000000000000')
+          .slice(0, 30);
+        return {
+          procedure: sectionInfo('procedure-codes-section'),
+          diagnosis: sectionInfo('diagnosis-codes-section'),
+          searchOpts,
+          digOpts,
+          fn: {
+            digSelectionProcess: typeof window.digSelectionProcess === 'function',
+            changeChargeSlipId: typeof window.changeChargeSlipId === 'function',
+            refreshPageGrid: typeof window.refreshPageGrid === 'function',
+          },
+        };
+      });
+
+      let codesSelected = { procedure: null, diagnosis: null, attempts: [] };
+      try {
+        codesSelected = await evaluateWithTimeout(session.page, async () => {
+        const attempts = [];
+        const isDateMaskInput = (el) => {
+          if (!el) return true;
+          const v = String(el.value || el.placeholder || '');
+          const id = `${el.id || ''} ${el.name || ''} ${el.className || ''} ${el.getAttribute?.('data-mask') || ''}`;
+          return /date|dob|born|__/i.test(id) || /_\/__\/____|mm\/dd\/yyyy/i.test(v) || el.type === 'date';
+        };
+        const pickFromSelect = (selId, label, preferRe, excludeRe = null) => {
+          const sel = document.getElementById(selId);
+          if (!sel) return null;
+          const opts = Array.from(sel.options || []).filter((o) => {
+            const t = (o.textContent || '').trim();
+            const v = o.value || '';
+            return t && v && v !== '00000000-0000-0000-0000-000000000000' && !/create-new|^select/i.test(t);
+          });
+          const preferred = preferRe
+            ? opts.find((o) => {
+              const t = (o.textContent || '').trim();
+              return preferRe.test(t) && !(excludeRe && excludeRe.test(t));
+            })
+            : null;
+          const opt = preferred
+            || opts.find((o) => !/^(000|001)\b|deductible|coinsurance|59080|initial day labor/i.test((o.textContent || '').trim()))
+            || opts[0];
+          if (!opt) return null;
+          sel.value = opt.value;
+          Array.from(sel.options || []).forEach((o) => { o.selected = o === opt; });
+          sel.dispatchEvent(new Event('change', { bubbles: true }));
+          try { window.$(sel).trigger('change'); } catch (_) { /* ignore */ }
+          attempts.push({
+            label,
+            ok: true,
+            text: (opt.textContent || '').trim().slice(0, 80),
+            value: opt.value,
+            preferred: Boolean(preferred),
+          });
+          return { text: (opt.textContent || '').trim().slice(0, 80), value: opt.value };
+        };
+        const clickAddNear = (anchorId, label) => {
+          const anchor = document.getElementById(anchorId);
+          const roots = [anchor, anchor?.closest('form, .panel, .card, .row, section, div'), document.body].filter(Boolean);
+          for (const root of roots) {
+            const btn = Array.from(root.querySelectorAll('button, input[type="button"], input[type="submit"], a, span[onclick], i[onclick]'))
+              .find((el) => {
+                const t = `${el.textContent || el.value || el.title || el.getAttribute('aria-label') || ''} ${el.className || ''}`.trim();
+                if (/remittance|era|payment|print|delete|remove|cancel/i.test(t)) return false;
+                return /^(add|\+)$/i.test(t) || /^add\s+(service|code|procedure|diagnosis|cpt|icd)/i.test(t) || /fa-plus|glyphicon-plus|icon-plus/i.test(t);
+              });
+            if (!btn) continue;
+            try {
+              btn.click();
+              attempts.push({ label, ok: true, text: (btn.textContent || btn.value || btn.className || 'add').toString().slice(0, 60) });
+              return true;
+            } catch (err) {
+              attempts.push({ label, ok: false, error: String(err?.message || err).slice(0, 100) });
+            }
+          }
+          attempts.push({ label, ok: false, error: 'no_add_button' });
+          return false;
+        };
+        const callHelpers = (names, label) => {
+          for (const name of names) {
+            if (typeof window[name] !== 'function') continue;
+            try {
+              window[name]();
+              attempts.push({ label: `${label}:${name}`, ok: true });
+              return name;
+            } catch (err) {
+              attempts.push({ label: `${label}:${name}`, ok: false, error: String(err?.message || err).slice(0, 100) });
+            }
+          }
+          return null;
+        };
+        const clickFirst = (rootId, label, preferRe = null) => {
+          const root = document.getElementById(rootId);
+          if (!root) {
+            attempts.push({ label, ok: false, error: 'root_missing' });
+            return null;
+          }
+          const nodes = Array.from(root.querySelectorAll('[data-id], [data-text], [onclick*="digSelection"], [onclick*="Selection"], tr, li, a, button'));
+          const scored = nodes
+            .map((node) => {
+              const t = `${node.innerText || node.value || ''} ${node.getAttribute('data-text') || ''} ${node.getAttribute('data-id') || ''}`.replace(/\s+/g, ' ').trim();
+              if (!t || /no results/i.test(t)) return null;
+              if (!(node.getAttribute('data-id') || node.getAttribute('onclick') || node.tagName === 'TR')) return null;
+              const preferred = preferRe ? preferRe.test(t) : false;
+              return { node, t, preferred, dataId: node.getAttribute('data-id') };
+            })
+            .filter(Boolean);
+          const hit = (preferRe && scored.find((x) => x.preferred)) || scored[0];
+          if (!hit) {
+            attempts.push({ label, ok: false, error: 'no_clickable' });
+            return null;
+          }
+          // Tip: digSelectionProcess* inside evaluate can hang the CDP session forever.
+          // Only native click here; Node-side timeout wraps this evaluate.
+          try {
+            hit.node.click();
+            attempts.push({ label, ok: true, text: hit.t.slice(0, 80), dataId: hit.dataId });
+            return { text: hit.t.slice(0, 80), dataId: hit.dataId };
+          } catch (err) {
+            attempts.push({ label, ok: false, error: String(err?.message || err).slice(0, 120) });
+            return null;
+          }
+        };
+
+        // Birth money path: delivery/global first — never prefer 59080 labor-day alone.
+        let procedure = pickFromSelect(
+          'SearchService',
+          'SearchService',
+          /59409|59400|59410|59431|delivery only|global midwifery|vaginal birth|vaginal delivery/i,
+          /59080|initial day labor/i
+        );
+        await new Promise((r) => setTimeout(r, 600));
+        // Do NOT click procedure/diagnosis list rows here — tip proved digSelection/native click can wedge CDP.
+        // Rely on SearchService/DignosticService change + updateBilling* + Daily Super Bill.
+        clickAddNear('SearchService', 'add_procedure');
+        callHelpers([
+          'addBillingService',
+          'AddBillingService',
+          'addServiceToChargeSlip',
+          'serviceSelectionProcess',
+          'updateBillingServiceRecord',
+        ], 'proc_helper');
+        let diagnosis = pickFromSelect(
+          'DignosticService',
+          'DignosticService',
+          /^O80|^Z37|^Z39|single live birth|encounter for full-term|outcome of delivery|normal delivery/i
+        );
+        await new Promise((r) => setTimeout(r, 600));
+        clickAddNear('DignosticService', 'add_diagnosis');
+        callHelpers([
+          'addBillingDiagnosis',
+          'AddBillingDiagnosis',
+          'diagnosisSelectionProcess',
+          'updateBillingDiagonsticCodeRecord',
+          'updateBillingDiagnosticCodeRecord',
+        ], 'dx_helper');
+        await new Promise((r) => setTimeout(r, 800));
+
+        const fillNearby = (needle, value) => {
+          const labels = Array.from(document.querySelectorAll('label, span, td, th, div'));
+          for (const lab of labels) {
+            const t = (lab.textContent || '').trim();
+            if (!new RegExp(`^${needle}$`, 'i').test(t) && !new RegExp(`^${needle}\\s*:$`, 'i').test(t)) continue;
+            const root = lab.closest('tr, .form-group, .row, td, div') || lab.parentElement;
+            const input = root?.querySelector('input, select');
+            if (!input || isDateMaskInput(input)) continue;
+            if (input.tagName === 'SELECT') {
+              const opt = Array.from(input.options || []).find((o) => String(o.value) === String(value) || (o.textContent || '').includes(String(value)))
+                || Array.from(input.options || []).find((o) => new RegExp(`\\b${value}\\b|home|other`, 'i').test(`${o.value} ${o.textContent || ''}`));
+              if (!opt) continue;
+              input.value = opt.value;
+            } else {
+              input.value = String(value);
+            }
+            input.dispatchEvent(new Event('input', { bubbles: true }));
+            input.dispatchEvent(new Event('change', { bubbles: true }));
+            try { window.$(input).trigger('change'); } catch (_) { /* ignore */ }
+            attempts.push({ label: `fill_${needle}`, ok: true, value: String(input.value).slice(0, 40) });
+            return true;
+          }
+          attempts.push({ label: `fill_${needle}`, ok: false, error: 'no_safe_input' });
+          return false;
+        };
+        fillNearby('Units', '1');
+        fillNearby('POS', '12');
+        // Fill blank Mod/POS/Units cells inside the charge slip summary grid (tip showed empty).
+        const summaryRoot = document.getElementById('ChargeSlipSummaryBase');
+        if (summaryRoot) {
+          const inputs = Array.from(summaryRoot.querySelectorAll('input, select'));
+          for (const input of inputs) {
+            if (isDateMaskInput(input)) continue;
+            const ctx = `${input.id || ''} ${input.name || ''} ${input.className || ''} ${(input.closest('td, th, div, label')?.textContent || '')}`.slice(0, 120);
+            let val = null;
+            if (/unit/i.test(ctx)) val = '1';
+            else if (/pos|place.?of.?service/i.test(ctx)) val = '12';
+            if (!val) continue;
+            if (input.tagName === 'SELECT') {
+              const opt = Array.from(input.options || []).find((o) => String(o.value) === val || new RegExp(`\\b${val}\\b`).test(o.textContent || ''));
+              if (!opt) continue;
+              input.value = opt.value;
+            } else {
+              input.value = val;
+            }
+            input.dispatchEvent(new Event('input', { bubbles: true }));
+            input.dispatchEvent(new Event('change', { bubbles: true }));
+            try { window.$(input).trigger('change'); } catch (_) { /* ignore */ }
+            attempts.push({ label: 'summary_fill', ok: true, ctx: ctx.slice(0, 40), value: val });
+          }
+        }
+        for (const [id, val] of [['Units', '1'], ['Unit', '1'], ['PlaceOfServiceCode', '12'], ['POS', '12'], ['PlaceOfService', '12']]) {
+          const el = document.getElementById(id) || document.querySelector(`[name="${id}"]`);
+          if (!el || isDateMaskInput(el)) continue;
+          el.value = val;
+          el.dispatchEvent(new Event('change', { bubbles: true }));
+          attempts.push({ label: `field_${id}`, ok: true, value: val });
+        }
+        try {
+          if (typeof window.updateBillingServiceRecord === 'function') window.updateBillingServiceRecord();
+          if (typeof window.updateBillingSlipSummaryRecord === 'function') window.updateBillingSlipSummaryRecord();
+          attempts.push({ label: 'update_billing_records', ok: true });
+        } catch (err) {
+          attempts.push({ label: 'update_billing_records', ok: false, error: String(err?.message || err).slice(0, 100) });
+        }
+        await new Promise((r) => setTimeout(r, 800));
+        const summary = (document.getElementById('ChargeSlipSummaryBase')?.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 300);
+        const lineRows = Array.from(document.querySelectorAll('#ChargeSlipSummaryBase tr, .billing-service-row, [data-billing-service], #service-grid tr'))
+          .map((tr) => (tr.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 100))
+          .filter((t) => t && /594|590|O80|Z37|CPT|unit/i.test(t))
+          .slice(0, 8);
+        const helperNames = Object.getOwnPropertyNames(window)
+          .filter((n) => /^(add|save|update|create|change|select|refresh|dig)/i.test(n) && /billing|charge|slip|service|diagnos|Selection/i.test(n) && typeof window[n] === 'function')
+          .slice(0, 40);
+        const fullNameText = (document.getElementById('FullNameText')?.textContent || '').trim().slice(0, 80);
+        return {
+          procedure,
+          diagnosis,
+          attempts,
+          summary,
+          lineRows,
+          helperNames,
+          fullNameText,
+          patientStillBound: Boolean(fullNameText && !/please select/i.test(fullNameText)),
+        };
+      }, undefined, 60000);
+      } catch (err) {
+        codesSelected = {
+          procedure: null,
+          diagnosis: null,
+          attempts: [{ label: 'codes_evaluate', ok: false, error: String(err?.message || err).slice(0, 160) }],
+          error: String(err?.message || err).slice(0, 200),
+        };
+      }
+      await sleep(800);
+
+      // If code selection wiped patient context, re-bind visit row before Save.
+      if (codesSelected && codesSelected.patientStillBound === false && visitList?.match?.pregnancyId) {
+        const rebind = await session.page.evaluate((wantId) => {
+          const rows = Array.from(document.querySelectorAll('tr, li, a, div'));
+          const row = rows.find((el) => {
+            const onclick = el.getAttribute('onclick') || '';
+            const text = (el.innerText || '').replace(/\s+/g, ' ');
+            return (wantId && (onclick.includes(wantId) || text.toLowerCase().includes(String(wantId).slice(0, 8).toLowerCase())))
+              || (typeof window.selectClick === 'function' && /selectClick\(this\)/i.test(onclick));
+          });
+          if (!row) return { ok: false };
+          try {
+            if (typeof window.selectClick === 'function') window.selectClick(row);
+            else row.click();
+            return { ok: true, name: (document.getElementById('FullNameText')?.textContent || '').trim().slice(0, 80) };
+          } catch (err) {
+            return { ok: false, error: String(err?.message || err).slice(0, 120) };
+          }
+        }, visitList.match.pregnancyId);
+        codesSelected.rebindBeforeSave = rebind;
+        await sleep(1200);
+      }
+
+      // Daily Super Bill → SuperBillReport (tip: openReportItems → /Billing/SuperBillReport?FromDate=).
+      // Prefer same-tab navigate — popup CDP (browser.pages) wedged tip mid-run.
+      let dailySuperBill = { clicked: false };
+      const reportDate = matchedDate || visitDate || null;
+      dailySuperBill = await session.page.evaluate(() => {
+        const btn = Array.from(document.querySelectorAll('button, input[type="button"], a, span'))
+          .find((el) => /daily super bill/i.test((el.textContent || el.value || '').trim()));
+        if (!btn) return { clicked: false, present: false };
+        return {
+          clicked: false,
+          present: true,
+          text: (btn.textContent || btn.value || '').trim().slice(0, 40),
+          onclick: (btn.getAttribute?.('onclick') || '').slice(0, 200),
+          deferred: true,
+        };
+      });
+      if (reportDate) {
+        const reportUrl = `${origin}/Billing/SuperBillReport?FromDate=${encodeURIComponent(reportDate)}`;
+        const reportNav = await gotoWithBudget(session.page, reportUrl, {
+          timeout: Math.max(8000, Number(pageTimeoutMs) || 20000),
+        });
+        dailySuperBill.reportNav = { ok: reportNav.ok, url: reportUrl, error: reportNav.error || null };
+        if (reportNav.ok) {
+          dailySuperBill.clicked = true;
+          dailySuperBill.path = 'direct_SuperBillReport';
+          await sleep(2000);
+          for (let w = 0; w < 8; w += 1) {
+            const loading = await session.page.evaluate(() => /Loading\s*\.{0,3}/i.test(document.body?.innerText || ''));
+            if (!loading) break;
+            await sleep(750);
+          }
+          const inventory = await session.page.evaluate(() => {
+            const visible = (el) => {
+              if (!el) return false;
+              const s = window.getComputedStyle(el);
+              if (s.display === 'none' || s.visibility === 'hidden') return false;
+              const r = el.getBoundingClientRect();
+              return r.width > 0 && r.height > 0;
+            };
+            const navNoise = /home|clients|schedule|reports|sign out|create new client|english|spanish|help center|terms|privacy|my profile/i;
+            const buttons = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'))
+              .filter(visible)
+              .map((el) => (el.textContent || el.value || '').replace(/\s+/g, ' ').trim())
+              .filter((t) => t && t.length < 60 && !navNoise.test(t))
+              .slice(0, 40);
+            const inputs = Array.from(document.querySelectorAll('input, select, textarea'))
+              .filter(visible)
+              .map((el) => ({
+                id: el.id || null,
+                name: el.name || null,
+                type: el.type || null,
+                value: String(el.value || '').slice(0, 40),
+              }))
+              .slice(0, 30);
+            const helpers = Object.getOwnPropertyNames(window)
+              .filter((n) => /super|claim|bill|create|generate|filter|report/i.test(n) && typeof window[n] === 'function')
+              .slice(0, 40);
+            const rows = Array.from(document.querySelectorAll('table tr, .k-grid-content tr, .k-master-row'))
+              .map((tr) => (tr.innerText || '').replace(/\s+/g, ' ').trim())
+              .filter((t) => t && t.length < 220)
+              .slice(0, 20);
+            return {
+              url: location.href,
+              title: document.title || null,
+              buttons,
+              inputs,
+              helpers,
+              rows,
+              preview: (document.body.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 900),
+            };
+          });
+          dailySuperBill.inventory = inventory;
+
+          let interact = { attempts: [], error: 'not_run' };
+          const wantPatientNeedle = String(visitList?.match?.name || patientQuery || 'Alvarado')
+            .toLowerCase()
+            .split(/[\s,]+/)
+            .find((p) => p.length > 3) || 'alvarado';
+          // Tip 2026-07-14: Denise SuperBill already shows 59400 + "Invoice HCFA UB-04" text, but
+          // scoped TR query missed the real <a> nodes (often in sibling detail rows / after Filter paint).
+          // Click finder must (1) walk patient header + following rows, (2) allow href/onclick matches
+          // even when getBoundingClientRect is 0, (3) Filter then sleep then re-click (sync retry is empty).
+          const clickSuperBillClaimLink = async (phase) => evaluateWithTimeout(session.page, ({ wantName, phase: runPhase }) => {
+            const attempts = [];
+            const softVisible = (el) => {
+              if (!el) return false;
+              const s = window.getComputedStyle(el);
+              if (s.display === 'none' || s.visibility === 'hidden') return false;
+              return true;
+            };
+            const hardVisible = (el) => {
+              if (!softVisible(el)) return false;
+              const r = el.getBoundingClientRect();
+              return r.width > 0 && r.height > 0;
+            };
+            const nameRe = new RegExp(String(wantName || 'alvarado').replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+            const allRows = Array.from(document.querySelectorAll('table tr, .k-grid-content tr, .k-master-row, .k-detail-row'));
+            const patientRows = allRows.filter((tr) => nameRe.test((tr.innerText || '').replace(/\s+/g, ' ')));
+            const scopeRoots = [];
+            for (const header of patientRows) {
+              scopeRoots.push(header);
+              let sib = header.nextElementSibling;
+              for (let i = 0; i < 12 && sib; i += 1) {
+                const t = (sib.innerText || '').replace(/\s+/g, ' ').trim();
+                // Stop at next patient header (name + Primary/Insurance pattern), keep procedure/claim rows.
+                if (/primary\s*:/i.test(t) && nameRe.test(t) === false && /[A-Za-z]{3,}/.test(t.split(/primary/i)[0] || '')) break;
+                if (/^[A-Z][a-z]+\s+[A-Z][a-z]+/.test(t) && !/5940|invoice|hcfa|ub-?04|global midwifery|generated by/i.test(t) && !nameRe.test(t)) break;
+                scopeRoots.push(sib);
+                sib = sib.nextElementSibling;
+              }
+            }
+            if (!scopeRoots.length) scopeRoots.push(document.body);
+            const scoreClaimEl = (el) => {
+              const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
+              const ownText = Array.from(el.childNodes || [])
+                .filter((n) => n.nodeType === 3)
+                .map((n) => String(n.textContent || '').trim())
+                .filter(Boolean)
+                .join(' ');
+              const href = `${el.getAttribute?.('href') || ''} ${el.getAttribute?.('onclick') || ''} ${el.getAttribute?.('data-url') || ''}`;
+              let score = 0;
+              if (/^(invoice|hcfa|ub-?04)$/i.test(ownText || t)) score += 100;
+              else if (/^(invoice|hcfa|ub-?04)$/i.test(t) && t.length < 24) score += 95;
+              else if (el.children?.length === 0 && /^(invoice|hcfa|ub-?04)$/i.test(t)) score += 90;
+              else if (/invoicehcfa|hcfaedit|invoice.*hcfa|\/hcfa|createclaim|superbill|billing\/invoice|billing\/hcfa/i.test(href)) score += 85;
+              else if (/^(invoice|hcfa|ub-?04)\b/i.test(t) && t.length < 40) score += 70;
+              else if (/\b(invoice|hcfa|ub-?04)\b/i.test(t) && t.length < 48) score += 40;
+              if (/create new client|home|clients|schedule/i.test(t)) score -= 200;
+              return score;
+            };
+            const claimCandidates = [];
+            const selectors = 'a, button, input[type="button"], input[type="submit"], span, td, [onclick], [role="link"]';
+            const pushFromRoot = (root, scoped) => {
+              for (const el of Array.from(root.querySelectorAll(selectors)).filter(softVisible)) {
+                const score = scoreClaimEl(el);
+                if (score < 40) continue;
+                claimCandidates.push({
+                  el,
+                  score: score + (hardVisible(el) ? 5 : 0) + (scoped ? 10 : 0),
+                  text: (el.textContent || el.value || '').replace(/\s+/g, ' ').trim().slice(0, 40),
+                  href: (el.getAttribute?.('href') || '').slice(0, 160),
+                  onclick: (el.getAttribute?.('onclick') || '').slice(0, 160),
+                  scoped,
+                });
+              }
+            };
+            for (const root of scopeRoots) pushFromRoot(root, true);
+            // Fallback: global exact Invoice/HCFA anchors whose closest row is near patient name.
+            if (!claimCandidates.length) {
+              for (const el of Array.from(document.querySelectorAll('a, button')).filter(softVisible)) {
+                const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
+                if (!/^(invoice|hcfa|ub-?04)$/i.test(t)) continue;
+                const tr = el.closest('tr');
+                let near = false;
+                let cur = tr;
+                for (let i = 0; i < 10 && cur; i += 1) {
+                  if (nameRe.test((cur.innerText || '').replace(/\s+/g, ' '))) { near = true; break; }
+                  cur = cur.previousElementSibling;
+                }
+                if (!near) continue;
+                claimCandidates.push({
+                  el,
+                  score: /^hcfa$/i.test(t) ? 110 : 100,
+                  text: t.slice(0, 40),
+                  href: (el.getAttribute?.('href') || '').slice(0, 160),
+                  onclick: (el.getAttribute?.('onclick') || '').slice(0, 160),
+                  scoped: true,
+                  near_patient_walk: true,
+                });
+              }
+            }
+            claimCandidates.sort((a, b) => b.score - a.score);
+            if (claimCandidates.length) {
+              const prefer = claimCandidates.find((c) => /^hcfa$/i.test(c.text))
+                || claimCandidates.find((c) => /hcfa/i.test(c.text) || /hcfa/i.test(c.href + c.onclick))
+                || claimCandidates.find((c) => /^invoice$/i.test(c.text))
+                || claimCandidates[0];
+              prefer.el.click();
+              attempts.push({
+                label: 'claim_link',
+                ok: true,
+                phase: runPhase,
+                text: prefer.text,
+                score: prefer.score,
+                href: prefer.href || null,
+                count: claimCandidates.length,
+                scoped_to_patient: patientRows.length > 0,
+                want_name: String(wantName || '').slice(0, 40),
+                top: claimCandidates.slice(0, 5).map((c) => ({ text: c.text, score: c.score, href: c.href || null })),
+              });
+            } else {
+              attempts.push({
+                label: 'claim_link',
+                ok: false,
+                phase: runPhase,
+                error: 'no_claim_link_in_scope',
+                scoped_to_patient: patientRows.length > 0,
+                scope_row_count: scopeRoots.length,
+                patient_row_preview: patientRows[0]
+                  ? (patientRows[0].innerText || '').replace(/\s+/g, ' ').trim().slice(0, 180)
+                  : null,
+                global_claim_texts: Array.from(document.querySelectorAll('a, button'))
+                  .map((el) => (el.textContent || el.value || '').replace(/\s+/g, ' ').trim())
+                  .filter((t) => /^(invoice|hcfa|ub-?04)$/i.test(t))
+                  .slice(0, 8),
+              });
+            }
+            return {
+              attempts,
+              url: location.href,
+              preview: (document.body.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 700),
+              deniseRow: (document.body.innerText || '').match(/Denise[^.]{0,120}/i)?.[0] || null,
+              patientRowCount: patientRows.length,
+              scopeRowCount: scopeRoots.length,
+            };
+          }, { wantName: wantPatientNeedle, phase }, 45000);
+
+          try {
+            interact = await clickSuperBillClaimLink('initial');
+            const claimOk = Array.isArray(interact?.attempts)
+              && interact.attempts.some((a) => a.label === 'claim_link' && a.ok);
+            if (!claimOk) {
+              // Filter/Search can materialize Invoice/HCFA cells — tip proved links appear after Filter + paint.
+              const filterPass = await evaluateWithTimeout(session.page, ({ wantDate }) => {
+                const attempts = [];
+                const visible = (el) => {
+                  if (!el) return false;
+                  const s = window.getComputedStyle(el);
+                  if (s.display === 'none' || s.visibility === 'hidden') return false;
+                  const r = el.getBoundingClientRect();
+                  return r.width > 0 && r.height > 0;
+                };
+                const navNoise = /^(home|clients|schedule|reports|wrm|cora|help|sign out|english|spanish|french|italian|german|portuguese|russian|dutch|ukrainian|text messages|back|send|terms|privacy|front desk|new note|create new client|view client list|manage account|practice management|employee log|my profile|billing slip|record insurance|review sent|review all faxes)$/i;
+                if (wantDate) {
+                  for (const el of Array.from(document.querySelectorAll('input')).filter(visible)) {
+                    if (/radio|checkbox|hidden|submit|button/i.test(el.type || '')) continue;
+                    const ctx = `${el.id || ''} ${el.name || ''} ${el.placeholder || ''} ${el.className || ''}`;
+                    if (/lmp|dob|birth|born|rdo|sms|message|filtertext/i.test(ctx)) continue;
+                    if (!/date|from|to|dos|service|visit|bill/i.test(ctx)) continue;
+                    el.focus();
+                    el.value = String(wantDate);
+                    el.dispatchEvent(new Event('input', { bubbles: true }));
+                    el.dispatchEvent(new Event('change', { bubbles: true }));
+                    try { window.$(el).trigger('change'); } catch (_) { /* ignore */ }
+                    attempts.push({ label: 'fill_date', ok: true, id: el.id || el.name || null, value: String(wantDate) });
+                    break;
+                  }
+                }
+                const ranked = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'))
+                  .filter(visible)
+                  .map((el) => {
+                    const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
+                    let score = 0;
+                    if (/create\s*claim|generate\s*claim|create\s*super|post\s*claim|build\s*claim/i.test(t)) score += 100;
+                    if (/^(invoice|hcfa|ub-?04)$/i.test(t)) score += 90;
+                    if (/filter|search|apply|run\s*report|refresh|load/i.test(t)) score += 40;
+                    if (navNoise.test(t) || /create new client/i.test(t)) score -= 200;
+                    return { el, t, score };
+                  })
+                  .filter((x) => x.t && x.score > 0)
+                  .sort((a, b) => b.score - a.score);
+                if (ranked[0]) {
+                  ranked[0].el.click();
+                  attempts.push({ label: 'click_action', ok: true, text: ranked[0].t.slice(0, 40), score: ranked[0].score });
+                } else {
+                  attempts.push({ label: 'click_action', ok: false, error: 'no_report_action' });
+                }
+                const checks = Array.from(document.querySelectorAll('input[type="checkbox"]')).filter(visible);
+                let checked = 0;
+                for (const c of checks.slice(0, 25)) {
+                  if (!c.checked) { c.click(); checked += 1; }
+                }
+                if (checks.length) attempts.push({ label: 'checkboxes', ok: true, total: checks.length, checked });
+                return { attempts };
+              }, { wantDate: reportDate }, 30000);
+              interact.attempts = [...(interact.attempts || []), ...(filterPass?.attempts || [])];
+              await sleep(3500);
+              const retry = await clickSuperBillClaimLink('after_filter');
+              interact.attempts = [...(interact.attempts || []), ...(retry?.attempts || [])];
+              interact.url = retry?.url || interact.url;
+              interact.preview = retry?.preview || interact.preview;
+              interact.deniseRow = retry?.deniseRow || interact.deniseRow;
+              interact.patientRowCount = retry?.patientRowCount ?? interact.patientRowCount;
+              interact.scopeRowCount = retry?.scopeRowCount ?? interact.scopeRowCount;
+            }
+          } catch (err) {
+            interact = { attempts: [], error: String(err?.message || err).slice(0, 160) };
+          }
+          dailySuperBill.interact = interact;
+          await sleep(2500);
+
+          // After Invoice/HCFA click: drive the claim editor Save/Submit (tip: bare click left Sent Bills empty).
+          const claimLinkOk = Array.isArray(interact?.attempts)
+            && interact.attempts.some((a) => a.label === 'claim_link' && a.ok);
+          if (claimLinkOk) {
+            try {
+              dailySuperBill.claimEditor = await evaluateWithTimeout(session.page, () => {
+                const visible = (el) => {
+                  if (!el) return false;
+                  const s = window.getComputedStyle(el);
+                  if (s.display === 'none' || s.visibility === 'hidden') return false;
+                  const r = el.getBoundingClientRect();
+                  return r.width > 0 && r.height > 0;
+                };
+                const url = location.href;
+                const text = (document.body?.innerText || '').replace(/\s+/g, ' ').trim();
+                const isEditor = /Invoice|HCFA|UB.?04|SuperBill|ClaimEdit|CreateClaim/i.test(url)
+                  || /hcfa|invoice|super bill|create claim/i.test(document.title || '')
+                  || /save\s*claim|submit\s*claim|print\s*hcfa|electronic\s*submit/i.test(text);
+                const attempts = [];
+                if (!isEditor && !/Invoice|HCFA|Billing/i.test(url)) {
+                  return { isEditor: false, url, preview: text.slice(0, 400), attempts };
+                }
+                const ranked = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'))
+                  .filter(visible)
+                  .map((el) => {
+                    const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
+                    let score = 0;
+                    if (/^save$/i.test(t) || /save\s*(claim|bill|hcfa|invoice)/i.test(t)) score += 100;
+                    if (/submit|send\s*claim|create\s*claim|file\s*claim|post\s*claim/i.test(t)) score += 90;
+                    if (/generate|print\s*and\s*save|electronic/i.test(t)) score += 50;
+                    if (/cancel|close|back|delete|home|clients/i.test(t)) score -= 200;
+                    return { el, t, score };
+                  })
+                  .filter((x) => x.t && x.score > 0)
+                  .sort((a, b) => b.score - a.score);
+                if (ranked[0]) {
+                  ranked[0].el.click();
+                  attempts.push({ label: 'editor_save', ok: true, text: ranked[0].t.slice(0, 40), score: ranked[0].score });
+                } else {
+                  attempts.push({ label: 'editor_save', ok: false, error: 'no_save_button' });
+                }
+                for (const name of ['SaveClaim', 'saveClaim', 'SubmitClaim', 'submitClaim', 'CreateClaim', 'createClaim']) {
+                  if (typeof window[name] !== 'function') continue;
+                  try {
+                    window[name]();
+                    attempts.push({ label: `helper:${name}`, ok: true });
+                    break;
+                  } catch (err) {
+                    attempts.push({ label: `helper:${name}`, ok: false, error: String(err?.message || err).slice(0, 100) });
+                  }
+                }
+                return {
+                  isEditor: true,
+                  url,
+                  title: document.title || null,
+                  attempts,
+                  preview: text.slice(0, 500),
+                };
+              }, undefined, 30000);
+              await sleep(3500);
+            } catch (err) {
+              dailySuperBill.claimEditor = { error: String(err?.message || err).slice(0, 160) };
+            }
+          }
+
+          dailySuperBill.afterReport = await session.page.evaluate(() => ({
+            url: location.href,
+            preview: (document.body.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 700),
+            rows: Array.from(document.querySelectorAll('table tr, .k-grid-content tr'))
+              .map((tr) => (tr.innerText || '').replace(/\s+/g, ' ').trim())
+              .filter((t) => /59400|59409|claim|alvarado|denise|\$\d|invoice|hcfa/i.test(t))
+              .slice(0, 12),
+            claimLinks: Array.from(document.querySelectorAll('a, button'))
+              .map((el) => (el.textContent || el.value || '').replace(/\s+/g, ' ').trim())
+              .filter((t) => /^(invoice|hcfa|ub-?04)$/i.test(t))
+              .slice(0, 10),
+          }));
+
+          // Prove claim create from report without needing ChargeSlip Save.
+          try {
+            const billsNav = await gotoWithBudget(session.page, `${origin}/Billing/BillingListView`, {
+              timeout: Math.max(8000, Number(pageTimeoutMs) || 20000),
+            });
+            if (billsNav.ok) {
+              await sleep(2000);
+              dailySuperBill.sentBillsProbe = await session.page.evaluate((wantName) => {
+                const text = (document.body.innerText || '').replace(/\s+/g, ' ').trim();
+                const needle = String(wantName || '').toLowerCase().split(/\s+/).find((p) => p.length > 3) || '';
+                return {
+                  checked: true,
+                  noItems: /no items to display|no records|no data/i.test(text),
+                  nameHit: Boolean(needle && text.toLowerCase().includes(needle)),
+                  preview: text.slice(0, 400),
+                };
+              }, visitList?.match?.name || patientQuery || 'Alvarado');
+            } else {
+              dailySuperBill.sentBillsProbe = { checked: false, error: billsNav.error };
+            }
+          } catch (err) {
+            dailySuperBill.sentBillsProbe = { checked: false, error: String(err?.message || err).slice(0, 120) };
+          }
+        }
+
+        // Return to ChargeSlip and rebind patient for Save / persist proof.
+        const backQs = pregnancyId ? `?pregnancyId=${encodeURIComponent(pregnancyId)}` : '';
+        const backNav = await gotoWithBudget(session.page, `${origin}/Company/ChargeSlip${backQs}`, {
+          timeout: Math.max(8000, Number(pageTimeoutMs) || 20000),
+        });
+        dailySuperBill.backToChargeSlip = { ok: backNav.ok, error: backNav.error || null };
+        if (backNav.ok) {
+          await sleep(1500);
+          await dismissSessionTakeover(session.page);
+          if (reportDate) {
+            await session.page.evaluate((rawDate) => {
+              const input = document.querySelector('input[name="DateFilter"]')
+                || Array.from(document.querySelectorAll('input')).find((el) => /date/i.test(`${el.id} ${el.name} ${el.placeholder || ''}`));
+              if (!input) return;
+              input.value = String(rawDate);
+              input.dispatchEvent(new Event('input', { bubbles: true }));
+              input.dispatchEvent(new Event('change', { bubbles: true }));
+            }, reportDate);
+            await sleep(500);
+          }
+          // Re-fetch visit list and selectClick DOM row (same binder as initial map).
+          if (visitList?.match?.pregnancyId) {
+            const rebind = await session.page.evaluate(async ({ providerId, dateSelection, wantPregnancyId }) => {
+              const pid = providerId || '00000000-0000-0000-0000-000000000000';
+              const date = dateSelection || '';
+              try {
+                const url = `/Company/SearchBillingSlipPregnancyList?PrividerId=${encodeURIComponent(pid)}&DateSelection=${encodeURIComponent(date)}&_=${Date.now()}`;
+                const res = await fetch(url, { credentials: 'same-origin' });
+                const data = await res.json();
+                const rows = Array.isArray(data) ? data : (data?.Data || data?.data || []);
+                const match = (rows || []).find((r) => String(r.PregnancyID || r.PregnancyId || '').toLowerCase() === String(wantPregnancyId).toLowerCase());
+                const rowEl = Array.from(document.querySelectorAll('tr, li, a, div')).find((el) => {
+                  const onclick = el.getAttribute('onclick') || '';
+                  return wantPregnancyId && onclick.includes(wantPregnancyId);
+                }) || Array.from(document.querySelectorAll('[onclick*="selectClick"]')).find((el) => /selectClick\(this\)/i.test(el.getAttribute('onclick') || ''));
+                if (rowEl && typeof window.selectClick === 'function') {
+                  window.selectClick(rowEl);
+                } else if (match && typeof window.selectClick === 'function') {
+                  // Last resort: click any selectClick(this) row whose text mentions the name.
+                  const name = String(match.FullName || '').split(',')[0].trim();
+                  const byName = Array.from(document.querySelectorAll('[onclick*="selectClick"]')).find((el) => (el.innerText || '').includes(name));
+                  if (byName) window.selectClick(byName);
+                  else return { ok: false, error: 'no_dom_row', matchName: name || null };
+                } else {
+                  return { ok: false, error: 'no_row_or_selectClick', hasMatch: Boolean(match) };
+                }
+                await new Promise((r) => setTimeout(r, 800));
+                const name = (document.getElementById('FullNameText')?.textContent || '').trim();
+                return {
+                  ok: Boolean(name && !/please select/i.test(name)),
+                  name: name.slice(0, 80),
+                  matchName: match?.FullName || null,
+                };
+              } catch (err) {
+                return { ok: false, error: String(err?.message || err).slice(0, 120) };
+              }
+            }, {
+              providerId: providerSet?.value || null,
+              dateSelection: reportDate,
+              wantPregnancyId: visitList.match.pregnancyId,
+            });
+            dailySuperBill.rebindAfter = rebind;
+            await sleep(800);
+          }
+        }
+      }
+
+      const map = await session.page.evaluate((wantName) => {
+        const text = (document.body.innerText || '').replace(/\s+/g, ' ').trim();
+        const fullNameText = (document.getElementById('FullNameText')?.textContent || '').trim();
+        const patientLine = fullNameText
+          || (text.match(/Patient:\s*([^A]{0,80}?)\s*Age:/i) || text.match(/Patient:\s*(.{0,80})/i) || [])[1]
+          || '';
+        const dobLine = (document.getElementById('DOBText')?.textContent || '').trim()
+          || (text.match(/DOB:\s*([^\s]{0,40})/i) || [])[1]
+          || '';
+        const ageLine = (document.getElementById('AgeText')?.textContent || '').trim()
+          || (text.match(/Age:\s*([^\s]{0,20})/i) || [])[1]
+          || '';
+        const needle = String(wantName || '').trim().toLowerCase().split(/\s+/).find((p) => p.length > 2);
+        const nameOk = !needle || patientLine.toLowerCase().includes(needle);
+        const patientSelected = Boolean(
+          nameOk
+          && (
+            (patientLine && !/please select/i.test(patientLine) && /[A-Za-z]{2,}/.test(patientLine))
+            || (dobLine && /\d/.test(dobLine))
+            || (ageLine && /\d/.test(ageLine))
+          )
+        );
+        const chargeOpts = Array.from(document.getElementById('ChargeSlipId')?.options || [])
+          .map((o) => (o.textContent || '').trim())
+          .filter(Boolean);
+        return {
+          patientSelected,
+          patientLine: patientLine.slice(0, 80),
+          fullNameText: fullNameText.slice(0, 80),
+          ageLine: ageLine.slice(0, 40),
+          dobLine: dobLine.slice(0, 40),
+          chargeOpts,
+          textPreview: text.slice(0, 1200),
+        };
+      }, visitList?.match?.name || patientQuery);
+
+      const boundOk = Boolean(visitList?.match?.pregnancyId)
+        && (!pregnancyId || String(visitList.match.pregnancyId).toLowerCase() === String(pregnancyId).toLowerCase())
+        && (map.patientSelected || visitList?.rebind?.patientSelected);
+
+      let saveResult = { attempted: false };
+      let persistCheck = null;
+      if (!dryRun) {
+        const preSavePatient = await session.page.evaluate(() => {
+          const fullNameText = (document.getElementById('FullNameText')?.textContent || '').trim();
+          return {
+            fullNameText: fullNameText.slice(0, 80),
+            ok: Boolean(fullNameText && !/please select/i.test(fullNameText) && /[A-Za-z]{2,}/.test(fullNameText)),
+          };
+        });
+        if (!boundOk || !preSavePatient.ok) {
+          saveResult = {
+            attempted: false,
+            blocked: true,
+            reason: 'fail_closed_patient_missing_before_save',
+            preSavePatient,
+          };
+        } else if (!codesSelected?.procedure && !codesSelected?.diagnosis && !dailySuperBill?.clicked) {
+          saveResult = { attempted: false, blocked: true, reason: 'no_procedure_or_diagnosis_selected' };
+        } else {
+          saveResult = await session.page.evaluate(() => {
+            const helpers = [
+              'saveChargeSlip',
+              'SaveChargeSlip',
+              'saveBillingSlip',
+              'SaveBillingSlip',
+              'saveBillingSlipSummaryRecord',
+              'createBillingSlip',
+              'CreateBillingSlip',
+            ].filter((name) => typeof window[name] === 'function');
+            const buttons = Array.from(document.querySelectorAll('button, input[type="submit"], input[type="button"], a'));
+            const save = buttons.find((el) => /^save$/i.test((el.textContent || el.value || '').trim()))
+              || buttons.find((el) => /save\s*(slip|bill|charge)/i.test((el.textContent || el.value || '').trim()));
+            const dialogs = [];
+            const prevAlert = window.alert;
+            const prevConfirm = window.confirm;
+            window.alert = (msg) => { dialogs.push({ type: 'alert', msg: String(msg || '').slice(0, 200) }); };
+            window.confirm = (msg) => { dialogs.push({ type: 'confirm', msg: String(msg || '').slice(0, 200) }); return true; };
+            let helperUsed = null;
+            try {
+              if (helpers.includes('saveBillingSlipSummaryRecord')) {
+                window.saveBillingSlipSummaryRecord();
+                helperUsed = 'saveBillingSlipSummaryRecord';
+              } else if (helpers[0]) {
+                window[helpers[0]]();
+                helperUsed = helpers[0];
+              } else if (save) {
+                save.click();
+                helperUsed = 'button:' + (save.textContent || save.value || 'Save').trim();
+              } else {
+                return { attempted: false, helpers };
+              }
+            } finally {
+              window.alert = prevAlert;
+              window.confirm = prevConfirm;
+            }
+            const chargeVal = document.getElementById('ChargeSlipId')?.value || null;
+            const validation = (document.querySelector('.validation-summary-errors, .field-validation-error, .alert-danger, #ErrorMessage, .error')?.innerText || '')
+              .replace(/\s+/g, ' ')
+              .trim()
+              .slice(0, 240);
+            return {
+              attempted: true,
+              label: helperUsed,
+              helpers,
+              dialogs,
+              chargeSlipValue: chargeVal,
+              validation: validation || null,
+            };
+          });
+          await sleep(3500);
+          persistCheck = await session.page.evaluate(() => {
+            const chargeSel = document.getElementById('ChargeSlipId');
+            const chargeVal = chargeSel?.value || '';
+            const chargeText = (chargeSel?.selectedOptions?.[0]?.textContent || '').trim();
+            const summary = (document.getElementById('ChargeSlipSummaryBase')?.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 300);
+            const body = (document.body.innerText || '').replace(/\s+/g, ' ').trim();
+            const errorBits = (body.match(/(please select|required|error[^\.]{0,80}|cannot save[^\.]{0,80})/ig) || []).slice(0, 5);
+            const lineHints = Array.from(document.querySelectorAll('#ChargeSlipSummaryBase tr, .billing-service-row, [data-billing-service]'))
+              .map((tr) => (tr.innerText || '').replace(/\s+/g, ' ').trim())
+              .filter((t) => /59400|59409|59080|O80|Z37|\$\d/.test(t))
+              .slice(0, 8);
+            // ChargeSlipId is the CARE TYPE select (Intrapartum GUID) — not a durable slip id.
+            const careTypeOnly = /intrapartum|antepartum|postpartum|care/i.test(chargeText);
+            return {
+              chargeSlipValue: chargeVal,
+              chargeSlipText: chargeText.slice(0, 80),
+              careTypeOnly,
+              nonZeroChargeSlip: Boolean(chargeVal && chargeVal !== '00000000-0000-0000-0000-000000000000'),
+              lineHints,
+              summary,
+              errorBits,
+              url: location.href,
+            };
+          });
+          // Prove persist via Review Sent Bills AND patient billing chart (Sent Bills may only show filed claims).
+          let sentBills = { checked: false };
+          let chartCharges = { checked: false };
+          try {
+            const billsNav = await gotoWithBudget(session.page, `${origin}/Billing/BillingListView`, {
+              timeout: Math.max(8000, Number(pageTimeoutMs) || 20000),
+            });
+            if (billsNav.ok) {
+              await sleep(2000);
+              sentBills = await session.page.evaluate((wantName) => {
+                const text = (document.body.innerText || '').replace(/\s+/g, ' ').trim();
+                const needle = String(wantName || '').toLowerCase().split(/\s+/).find((p) => p.length > 3) || '';
+                const noItems = /no items to display|no records|no data/i.test(text);
+                const hit = needle && text.toLowerCase().includes(needle);
+                const rows = Array.from(document.querySelectorAll('table tr, .k-grid-content tr'))
+                  .map((tr) => (tr.innerText || '').replace(/\s+/g, ' ').trim())
+                  .filter((t) => t && needle && t.toLowerCase().includes(needle))
+                  .slice(0, 5);
+                return {
+                  checked: true,
+                  noItems,
+                  nameHit: Boolean(hit),
+                  rows,
+                  preview: text.slice(0, 400),
+                };
+              }, visitList?.match?.name || patientQuery || 'Alvarado');
+            } else {
+              sentBills = { checked: false, error: billsNav.error };
+            }
+          } catch (err) {
+            sentBills = { checked: false, error: String(err?.message || err).slice(0, 120) };
+          }
+          if (pregnancyId) {
+            try {
+              const chartNav = await gotoWithBudget(session.page, `${origin}/Pregnancy/Billing/${encodeURIComponent(pregnancyId)}`, {
+                timeout: Math.max(8000, Number(pageTimeoutMs) || 20000),
+              });
+              if (chartNav.ok) {
+                await sleep(1500);
+                await dismissSessionTakeover(session.page);
+                await session.page.evaluate(() => {
+                  const tab = document.querySelector('a[href*="#tabs-billing"], a[href*="tabs-billing"], [data-toggle="tab"][href*="billing"]');
+                  if (tab) tab.click();
+                });
+                await sleep(2000);
+                chartCharges = await session.page.evaluate(() => {
+                  const text = (document.body.innerText || '').replace(/[\x00-\x08\x0b\x0c\x0e-\x1f]/g, ' ').replace(/\s+/g, ' ').trim();
+                  const has594 = /59400|59409|59080/i.test(text);
+                  const hasO80 = /\bO80\b/i.test(text);
+                  const chargeHints = (text.match(/.{0,40}(59400|59409|59080|charge slip|billed|\$\d[\d,]*)\.{0,40}/gi) || []).slice(0, 8);
+                  return {
+                    checked: true,
+                    has594,
+                    hasO80,
+                    chargeHints,
+                    preview: text.slice(0, 500),
+                  };
+                });
+              } else {
+                chartCharges = { checked: false, error: chartNav.error };
+              }
+            } catch (err) {
+              chartCharges = { checked: false, error: String(err?.message || err).slice(0, 120) };
+            }
+          }
+          persistCheck = { ...persistCheck, sentBills, chartCharges };
+          saveResult = { ...saveResult, persistCheck };
+        }
+      }
+
+      return {
+        ok: true,
+        url: target,
+        pregnancyId: pregnancyId || null,
+        patientQuery: patientQuery || null,
+        bornDate,
+        matchedDate,
+        dateCandidatesTried: dateCandidates.slice(0, 40),
+        dryRun: dryRun !== false,
+        dateSet: { ...dateSet, matchedDate },
+        providerSet,
+        visitList,
+        visitClick,
+        chargeSlipType,
+        codesMap,
+        codesSelected,
+        dailySuperBill,
+        typed,
+        hiddenForce,
+        saveResult,
+        persistCheck,
+        boundOk,
+        ...map,
+        patientSelected: boundOk,
+        screenshots,
+        next: boundOk
+          ? (codesSelected?.procedure || codesSelected?.diagnosis || dailySuperBill?.clicked
+            ? (dryRun !== false
+              ? 'Patient + codes ready — re-run dry_run=false to Save.'
+              : (persistCheck?.sentBills?.nameHit || persistCheck?.chartCharges?.has594
+                ? 'PROVED: charge evidence on Sent Bills and/or patient billing chart after Save — continue HCFA/submit.'
+                : (persistCheck?.sentBills?.noItems && !persistCheck?.chartCharges?.has594
+                  ? 'Save ran but Sent Bills empty and billing chart shows no 594xx — line apply still incomplete.'
+                  : (saveResult.attempted
+                    ? 'Save attempted — inspect persistCheck.sentBills + chartCharges + lineHints.'
+                    : (saveResult.blocked || 'Save blocked/missing.')))))
+            : 'Patient bound but no procedure/diagnosis hydrated — inspect codesMap; may need fee-schedule seeding.')
+          : (visitList?.match?.pregnancyId
+            ? 'Visit row found but ChargeSlip #FullNameText still empty — call selectClick(rowEl) only (not API raw).'
+            : 'Fail-closed: pregnancy not found on scanned visit dates — widen visit_dates or confirm chart Born date.'),
+      };
+    } finally {
+      await session.close().catch(() => {});
+    }
+  }
+
+  /**
+   * Short path: SuperBillReport → HCFA/Invoice → claim-editor Save → Sent Bills probe.
+   * Tip: full mapChargeSlip often goes stale (~360s) under Puppeteer recycle; Denise already
+   * had 59400 lines on SuperBillReport — this files without redoing ChargeSlip.
+   * Tip 2026-07-15: SuperBill→goto InvoiceHCFAEdit wedges CDP; when pregnancyId known, go
+   * straight to /Billing/InvoiceHCFAEdit?pregnancyID=… then Save + Send via EDI.
+   */
+  async function fileSuperBillClaim({
+    patientQuery = 'Alvarado',
+    visitDate = '06/13/2026',
+    pregnancyId = null,
+    pageTimeoutMs = 20000,
+    mode = null,
+    onProgress = null,
+  } = {}) {
+    const RESERVED_NEEDLES = new Set([
+      'birth', 'prenatal', 'postpartum', 'claim', 'submitted', 'invoice', 'hcfa', 'ub04',
+      'client', 'patient', 'mother', 'baby', 'bills', 'sent', 'filter', 'status', 'open',
+    ]);
+    const wantName = String(patientQuery || 'Alvarado')
+      .toLowerCase()
+      .replace(/[^a-z0-9\s'-]/g, ' ')
+      .split(/[\s,]+/)
+      .filter((p) => p.length > 3 && !RESERVED_NEEDLES.has(p))
+      .sort((a, b) => b.length - a.length)[0] || 'alvarado';
+    if (RESERVED_NEEDLES.has(String(patientQuery || '').toLowerCase().trim()) || wantName === 'birth') {
+      // Never probe Sent Bills with generic words — false-positive on UI chrome ("Prenatal & Birth").
+      if (String(mode || '') === 'sent_bills_only') {
+        return {
+          ok: false,
+          filed: false,
+          error: 'sent_bills_probe_requires_patient_lastname',
+          message: 'Refuse Sent Bills prove with generic needle',
+        };
+      }
+    }
+    const reportDate = String(visitDate || '').trim();
+    const pregId = String(pregnancyId || '').trim() || null;
+    if (!reportDate && !pregId) return { ok: false, error: 'visit_date or pregnancy_id required' };
+    const progress = (partial) => {
+      try { if (typeof onProgress === 'function') onProgress(partial); } catch (_) { /* ignore */ }
+    };
+
+    progress({ phase: 'login' });
+    let result;
+    try {
+      result = await Promise.race([
+        login({ dryRun: false }),
+        new Promise((_, reject) => {
+          setTimeout(() => reject(new Error('login timed out after 60000ms')), 60000);
+        }),
+      ]);
+    } catch (err) {
+      return { ok: false, error: String(err?.message || err).slice(0, 200), phase: 'login' };
+    }
+    progress({ phase: 'login_ok' });
+    const { session, screenshots } = result;
+    const dailySuperBill = { path: pregId ? 'direct_InvoiceHCFAEdit' : 'direct_SuperBillReport_only' };
+    try {
+      const origin = new URL(session.currentUrl()).origin;
+
+      // Tip: Generate EDI freezes Chromium — probe Sent Bills in a FRESH child/session only.
+      if (String(mode || '') === 'sent_bills_only') {
+        progress({ phase: 'sent_bills_only' });
+        const billsUrl = `${origin}/Billing/BillingListView`;
+        // Tip: page.goto(BillingListView) can wedge whole Chromium (job 3058b26b hung 240s).
+        // Soft assign + URL poll with hard budget — never await page.goto.
+        let billsNav = { ok: false, error: null };
+        try {
+          await Promise.race([
+            session.page.evaluate((u) => { window.location.assign(u); }, billsUrl),
+            sleep(4000).then(() => Promise.reject(new Error('bills_assign_timeout'))),
+          ]);
+        } catch (err) {
+          billsNav = { ok: false, error: String(err?.message || err).slice(0, 120) };
+        }
+        const billsDeadline = Date.now() + 10000;
+        while (Date.now() < billsDeadline) {
+          try {
+            const href = await Promise.race([
+              session.page.url(),
+              sleep(1500).then(() => ''),
+            ]);
+            if (/BillingListView/i.test(String(href || ''))) {
+              billsNav = { ok: true };
+              break;
+            }
+          } catch (_) { /* ignore */ }
+          await sleep(400);
+        }
+        if (!billsNav.ok && !billsNav.error) billsNav = { ok: false, error: 'bills_url_poll_miss' };
+        let sentBillsProbe = { checked: false, error: billsNav.error || 'nav_failed' };
+        if (billsNav.ok) {
+          await sleep(800);
+          try {
+            await evaluateWithTimeout(session.page, (needle) => {
+              const datePrefer = [/this\s*month/i, /year\s*to\s*date/i, /this\s*week/i, /^today$/i];
+              const dateNodes = Array.from(document.querySelectorAll('a, button, input[type="button"], label, span, li'));
+              for (const re of datePrefer) {
+                const dateBtn = dateNodes.find((el) => re.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
+                if (dateBtn) { dateBtn.click(); break; }
+              }
+              const inputs = Array.from(document.querySelectorAll('input[type="text"], input:not([type]), input[type="search"]'));
+              const nameInput = document.getElementById('searchTerm')
+                || inputs.find((inp) => /searchTerm|name|patient|client|search/i.test(`${inp.id || ''} ${inp.name || ''} ${inp.placeholder || ''}`))
+                || inputs[0];
+              if (nameInput) {
+                const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
+                if (setter) setter.call(nameInput, needle);
+                else nameInput.value = needle;
+                nameInput.dispatchEvent(new Event('input', { bubbles: true }));
+                nameInput.dispatchEvent(new Event('change', { bubbles: true }));
+                if (window.jQuery) window.jQuery(nameInput).val(needle).trigger('change');
+              }
+              // Local KNOW: grid stays empty until filterRecords() / #btnSearch — not generic Filter.
+              if (typeof window.filterRecords === 'function') {
+                window.filterRecords();
+                return { filtered: true, via: 'filterRecords', nameId: nameInput?.id || nameInput?.name || null };
+              }
+              const go = document.getElementById('btnSearch')
+                || Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'))
+                  .find((el) => /^(search|filter|go|refresh)$/i.test((el.textContent || el.value || '').trim()));
+              if (go) go.click();
+              return { filtered: Boolean(nameInput), via: go ? (go.id || 'click') : 'none', nameId: nameInput?.id || nameInput?.name || null };
+            }, wantName, 5000);
+            await sleep(3500);
+          } catch (_) { /* ignore */ }
+          try {
+            sentBillsProbe = await evaluateWithTimeout(session.page, (needle) => {
+              const text = (document.body.innerText || '').replace(/\s+/g, ' ').trim();
+              const n = String(needle || '').toLowerCase();
+              const rows = Array.from(document.querySelectorAll('table tr, .k-grid-content tr'))
+                .map((tr) => (tr.innerText || '').replace(/\s+/g, ' ').trim())
+                .filter((t) => {
+                  if (!t || !n || !t.toLowerCase().includes(n)) return false;
+                  // Require a real claim row (date + HCFA/claim #), not filter chrome containing "birth".
+                  return /\bHCFA\b|\bUB\s*-?\s*04\b|\b\d{5,}\b/.test(t) && /\d{1,2}\/\d{1,2}\/\d{4}/.test(t);
+                })
+                .slice(0, 8);
+              const claimSubmitted = rows.some((t) => /claim\s*submitted/i.test(t));
+              return {
+                checked: true,
+                noItems: /no items to display|no records|no data/i.test(text) && !rows.length,
+                nameHit: Boolean(rows.length),
+                claimSubmitted,
+                rows,
+                preview: text.slice(0, 500),
+              };
+            }, wantName, 5000);
+          } catch (err) {
+            sentBillsProbe = { checked: false, error: String(err?.message || err).slice(0, 120) };
+          }
+        }
+        return {
+          ok: true,
+          filed: Boolean(sentBillsProbe?.nameHit),
+          mode: 'sent_bills_only',
+          sentBillsProbe,
+          message: sentBillsProbe?.nameHit ? `Sent Bills shows ${wantName}` : 'Sent Bills probe: no name hit',
+          screenshots,
+          url: session.page.url(),
+        };
+      }
+
+      // Fast money path: skip SuperBill when pregnancy id is known (tip CDP wedge on report→editor).
+      if (pregId) {
+        const abs = `${origin}/Billing/InvoiceHCFAEdit?pregnancyID=${encodeURIComponent(pregId)}`;
+        progress({ phase: 'goto_claim_editor', url: abs, via: 'direct_pregnancy_id' });
+        // Tip: page.goto(InvoiceHCFAEdit) can wedge Chromium until Railway kills the worker
+        // (heartbeats freeze; job looks "stale"). Prefer location.assign + URL poll with hard budget.
+        let editorNav = { ok: false, error: null };
+        try {
+          await Promise.race([
+            session.page.evaluate((u) => { window.location.assign(u); }, abs),
+            new Promise((_, reject) => setTimeout(() => reject(new Error('assign_timeout')), 5000)),
+          ]);
+        } catch (err) {
+          editorNav = { ok: false, error: String(err?.message || err).slice(0, 120) };
+        }
+        if (!editorNav.error) {
+          const deadline = Date.now() + 18000;
+          while (Date.now() < deadline) {
+            const cur = session.page.url();
+            if (/InvoiceHCFAEdit/i.test(cur)) {
+              editorNav = { ok: true, url: cur };
+              break;
+            }
+            await sleep(300);
+          }
+          if (!editorNav.ok) {
+            // One short goto fallback — never wait networkidle.
+            editorNav = await gotoWithBudget(session.page, abs, { timeout: 12000 });
+          }
+        }
+        try {
+          await Promise.race([
+            dismissSessionTakeover(session.page),
+            sleep(2500),
+          ]);
+        } catch (_) { /* ignore */ }
+        dailySuperBill.interact = {
+          editorNav: {
+            ok: editorNav.ok,
+            url: abs,
+            error: editorNav.error || null,
+            via: 'direct_pregnancy_id_soft',
+            landed: session.page.url(),
+          },
+          attempts: [{ label: 'claim_link', ok: editorNav.ok, phase: 'direct', href: `/Billing/InvoiceHCFAEdit?pregnancyID=${pregId}` }],
+        };
+        progress({ phase: 'claim_editor_landed', editorNav: dailySuperBill.interact.editorNav });
+        if (!editorNav.ok) {
+          return {
+            ok: false,
+            error: editorNav.error || 'InvoiceHCFAEdit nav failed',
+            pregnancyId: pregId,
+            dailySuperBill,
+            screenshots,
+          };
+        }
+        // Tip: soft location.assign leaves the frame mid-nav; next page.evaluate (dismiss/fill)
+        // can wedge CDP forever (job stuck claim_editor_landed). Settle with hard budget first.
+        progress({ phase: 'claim_link', claimLinkOk: true });
+        try {
+          await Promise.race([
+            session.page.waitForFunction(
+              () => document.readyState === 'interactive' || document.readyState === 'complete',
+              { timeout: 6000 },
+            ),
+            sleep(6000),
+          ]);
+        } catch (_) { /* ignore */ }
+        await sleep(500);
+        try {
+          await Promise.race([
+            dismissSessionTakeover(session.page),
+            sleep(2500),
+          ]);
+        } catch (_) { /* ignore */ }
+
+        const claimLinkOk = true;
+        const editorAttempts = [];
+        const runEditorStep = async (label, fn, arg, timeoutMs = 12000) => {
+          progress({ phase: `editor_${label}` });
+          try {
+            const out = arguments.length >= 3 && typeof arg !== 'number'
+              ? await evaluateWithTimeout(session.page, fn, arg, timeoutMs)
+              : await evaluateWithTimeout(session.page, fn, undefined, typeof arg === 'number' ? arg : timeoutMs);
+            editorAttempts.push({ label, ok: true, ...(out && typeof out === 'object' ? out : { value: out }) });
+            return out;
+          } catch (err) {
+            editorAttempts.push({ label, ok: false, error: String(err?.message || err).slice(0, 120) });
+            return null;
+          }
+        };
+
+        // Tip: full DOM inventory + Insured Information block scan wedged tip after soft nav.
+        // Prefer known ClientCare field ids; keep select fills narrow.
+        await runEditorStep('fill_required', () => {
+          const fills = [];
+          const setSelectByCtx = (preferRe, ctxRe, label) => {
+            for (const sel of Array.from(document.querySelectorAll('select'))) {
+              const ctx = `${sel.id || ''} ${sel.name || ''} ${(sel.previousElementSibling?.textContent || '')}`.toLowerCase();
+              if (!ctxRe.test(ctx)) continue;
+              const pick = Array.from(sel.options || []).find((o) => preferRe.test((o.textContent || '').trim()) && o.value);
+              if (!pick) continue;
+              sel.value = pick.value;
+              Array.from(sel.options).forEach((o) => { o.selected = o === pick; });
+              sel.dispatchEvent(new Event('change', { bubbles: true }));
+              fills.push({ label, text: (pick.textContent || '').trim().slice(0, 50) });
+              return true;
+            }
+            return false;
+          };
+          setSelectByCtx(/cora\s*williams|williams\s*dem|well\s*rounded/i, /rendering|bill\s*under|provider/, 'rendering');
+          setSelectByCtx(/home|birth\s*center|office|well\s*rounded|clinic/i, /facility|place\s*of\s*service/, 'facility');
+          setSelectByCtx(/claim\s*submitted|submitted|open/i, /claim\s*progress|progress/, 'progress');
+          setSelectByCtx(/group\s*health|other|commercial/i, /plan\s*type|plantype|typeof\s*plan/, 'plan_type');
+          const setInput = (inp, value, label) => {
+            if (!inp) return false;
+            const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
+            if (setter) setter.call(inp, value);
+            else inp.value = value;
+            inp.dispatchEvent(new Event('input', { bubbles: true }));
+            inp.dispatchEvent(new Event('change', { bubbles: true }));
+            fills.push({ label, text: String(value).slice(0, 50) });
+            return true;
+          };
+          const motherFirst = document.getElementById('mother_FirstName')?.value || 'Denise';
+          const motherLast = document.getElementById('mother_LastName')?.value || 'Alvarado';
+          const insuredFirstEl = document.getElementById('PrimaryInsurance_InsuredsNameFirst');
+          const insuredLastEl = document.getElementById('PrimaryInsurance_InsuredsNameLast');
+          const insuredFirst = (insuredFirstEl?.value || '').trim();
+          const insuredLast = (insuredLastEl?.value || '').trim();
+          const namesMatch = motherFirst && insuredFirst
+            && motherFirst.toLowerCase() === insuredFirst.toLowerCase()
+            && motherLast.toLowerCase() === insuredLast.toLowerCase();
+          if (!namesMatch && insuredFirst) {
+            const spouseInput = Array.from(document.querySelectorAll('input[type="radio"]'))
+              .find((el) => /spouse/i.test(`${el.id || ''} ${el.value || ''} ${el.name || ''}`));
+            if (spouseInput) {
+              spouseInput.click();
+              fills.push({ label: 'patient_rel_spouse', text: 'Spouse' });
+            }
+          } else if (insuredFirstEl && motherFirst && !insuredFirst) {
+            setInput(insuredFirstEl, motherFirst, 'insured_first');
+            if (insuredLastEl) setInput(insuredLastEl, motherLast, 'insured_last');
+          }
+          const insuredSign = document.getElementById('InsuredSign');
+          if (insuredSign && !(insuredSign.value || '').trim()) {
+            const signName = [insuredFirst || motherFirst, insuredLast || motherLast].filter(Boolean).join(' ');
+            setInput(insuredSign, signName, 'insured_sign');
+          }
+          const patientSign = document.getElementById('PatientSign');
+          if (patientSign && !(patientSign.value || '').trim()) {
+            setInput(patientSign, [motherFirst, motherLast].filter(Boolean).join(' '), 'patient_sign');
+          }
+          for (const lab of Array.from(document.querySelectorAll('label')).slice(0, 80)) {
+            const t = (lab.textContent || '').replace(/\s+/g, ' ').trim();
+            if (/^group\s*health\s*plan$/i.test(t)) {
+              const input = lab.querySelector('input[type="radio"], input[type="checkbox"]')
+                || document.getElementById(lab.getAttribute('for') || '');
+              if (input) { input.click(); fills.push({ label: 'plan_type_radio', text: t }); break; }
+            }
+          }
+          return {
+            fills,
+            url: location.href,
+            title: document.title || null,
+            patientName: [motherFirst, motherLast].filter(Boolean).join(' '),
+            insuredFirst: insuredFirst || null,
+            insuredLast: insuredLast || null,
+          };
+        }, 8000);
+        await sleep(800);
+
+        // Tip 1a8dd272 proved Ally panel after Save+Continue. Race both (never await CDP forever).
+        progress({ phase: 'editor_save' });
+        try {
+          const saved = await Promise.race([
+            session.page.evaluate(() => {
+              const nodes = Array.from(document.querySelectorAll('a, button, input[type="button"], input[type="submit"]'));
+              const btn = nodes.find((el) => {
+                const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
+                return /^save$/i.test(t) || /^save\s*invoice$/i.test(t) || /^save\s*claim$/i.test(t);
+              });
+              if (!btn) return { clicked: false };
+              if (window.jQuery) window.jQuery(btn).trigger('click');
+              else btn.click();
+              return { clicked: true, text: (btn.textContent || btn.value || '').replace(/\s+/g, ' ').trim().slice(0, 40) };
+            }),
+            sleep(1500).then(() => ({ raced: true })),
+          ]);
+          editorAttempts.push({ label: 'save', ok: true, ...(saved || {}) });
+        } catch (err) {
+          editorAttempts.push({ label: 'save', ok: false, error: String(err?.message || err).slice(0, 100) });
+        }
+        await sleep(500);
+
+        progress({ phase: 'editor_continue' });
+        try {
+          const cont = await Promise.race([
+            session.page.evaluate(() => {
+              const nodes = Array.from(document.querySelectorAll('a, button, input[type="button"], input[type="submit"]'));
+              const btn = nodes.find((el) => /continue\s*saving\s*invoice|^continue$/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
+              if (!btn) return { clicked: false };
+              if (window.jQuery) window.jQuery(btn).trigger('click');
+              else btn.click();
+              return { clicked: true, text: (btn.textContent || btn.value || '').replace(/\s+/g, ' ').trim().slice(0, 40) };
+            }),
+            sleep(1500).then(() => ({ raced: true })),
+          ]);
+          editorAttempts.push({ label: 'continue', ok: true, ...(cont || {}) });
+        } catch (err) {
+          editorAttempts.push({ label: 'continue', ok: false, error: String(err?.message || err).slice(0, 100) });
+        }
+        await sleep(600);
+
+        // Prefer ClaimSentMethodID=EDI on the form itself.
+        try {
+          const method = await Promise.race([
+            session.page.evaluate(() => {
+              const sel = document.getElementById('ClaimSentMethodID');
+              if (!sel) return { set: false };
+              const pick = Array.from(sel.options || []).find((o) => /^edi$/i.test((o.textContent || '').trim()));
+              if (!pick) return { set: false, options: Array.from(sel.options || []).map((o) => (o.textContent || '').trim()).slice(0, 6) };
+              sel.value = pick.value;
+              Array.from(sel.options).forEach((o) => { o.selected = o === pick; });
+              sel.dispatchEvent(new Event('change', { bubbles: true }));
+              if (window.jQuery) window.jQuery(sel).trigger('change');
+              return { set: true, text: 'EDI' };
+            }),
+            sleep(1500).then(() => ({ raced: true })),
+          ]);
+          editorAttempts.push({ label: 'claim_sent_method_edi', ok: true, ...(method || {}) });
+        } catch (err) {
+          editorAttempts.push({ label: 'claim_sent_method_edi', ok: false, error: String(err?.message || err).slice(0, 100) });
+        }
+
+        progress({ phase: 'editor_edi' });
+        try {
+          const opened = await Promise.race([
+            session.page.evaluate(() => {
+              const panel = document.getElementById('divSendEDI');
+              const tab = document.getElementById('divEDI');
+              const wasHidden = !panel || window.getComputedStyle(panel).display === 'none';
+              if (wasHidden && tab && typeof window.showhide === 'function') {
+                window.showhide(tab);
+              }
+              if (panel) {
+                panel.style.display = 'block';
+                panel.style.visibility = 'visible';
+                panel.style.height = 'auto';
+                panel.style.overflow = 'visible';
+              }
+              location.hash = 'divSendEDI';
+              const innerSelects = Array.from((panel || document).querySelectorAll('select')).map((sel) => ({
+                id: sel.id || null,
+                name: sel.name || null,
+                texts: Array.from(sel.options || []).map((o) => (o.textContent || '').trim()).filter(Boolean).slice(0, 10),
+              }));
+              const innerBtns = Array.from((panel || document).querySelectorAll('a, button, input[type="button"], input[type="submit"]'))
+                .map((el) => (el.textContent || el.value || '').replace(/\s+/g, ' ').trim())
+                .filter(Boolean)
+                .slice(0, 20);
+              return {
+                via: wasHidden ? 'showhide_then_force_block' : 'force_block_already_open',
+                hasDiv: Boolean(panel),
+                display: panel ? window.getComputedStyle(panel).display : null,
+                innerSelects,
+                innerBtns,
+                panelHtmlLen: panel ? (panel.innerHTML || '').length : 0,
+              };
+            }),
+            sleep(3000).then(() => ({ skipped: 'edi_open_timeout' })),
+          ]);
+          editorAttempts.push({ label: 'edi', ok: true, ...(opened || {}) });
+        } catch (err) {
+          editorAttempts.push({ label: 'edi', ok: false, error: String(err?.message || err).slice(0, 120) });
+        }
+
+        // Tip 53380b61 KNOW: #divSendEDI opens with ONLY "Generate EDI" and zero selects.
+        // Waiting for Ally before Generate is a deadlock — Ally/Clearing House paints after
+        // the first Generate EDI click (historical Ally-open runs used Generate-first).
+        try {
+          session.page.once('dialog', async (dialog) => {
+            try { await dialog.accept(); } catch (_) { /* ignore */ }
+          });
+        } catch (_) { /* ignore */ }
+        let downloadHint = null;
+        try {
+          session.page.once('download', (download) => {
+            downloadHint = { suggested: download.suggestedFilename?.() || null };
+          });
+        } catch (_) { /* ignore */ }
+
+        const editorPage = session.page;
+        const netHits = [];
+        try {
+          editorPage.on('request', (req) => {
+            const u = String(req.url() || '');
+            if (/edi|ally|837|claim|hcfa|billing|submit|generate/i.test(u)) {
+              netHits.push({ type: 'req', method: req.method(), url: u.slice(0, 180) });
+            }
+          });
+          editorPage.on('response', (res) => {
+            const u = String(res.url() || '');
+            if (/edi|ally|837|claim|hcfa|billing|submit|generate/i.test(u)) {
+              let method = null;
+              try { method = res.request()?.method?.() || null; } catch (_) { method = null; }
+              netHits.push({ type: 'res', status: res.status(), method, url: u.slice(0, 180) });
+            }
+          });
+        } catch (_) { /* ignore */ }
+
+        const scanAllyReady = async (pollN) => Promise.race([
+          editorPage.evaluate((n) => {
+            const panel = document.getElementById('divSendEDI');
+            if (panel) {
+              panel.style.display = 'block';
+              panel.style.visibility = 'visible';
+              panel.style.height = 'auto';
+            }
+            const texts = [];
+            for (const sel of Array.from(document.querySelectorAll('select'))) {
+              for (const o of Array.from(sel.options || [])) {
+                const t = (o.textContent || '').trim();
+                if (t) texts.push(t);
+              }
+            }
+            const body = (document.body?.innerText || '').replace(/\s+/g, ' ');
+            const panelText = (panel ? (panel.innerText || panel.textContent || '') : '').replace(/\s+/g, ' ');
+            const ready = texts.some((t) => /office\s*ally|wrmomma/i.test(t))
+              || /clearing\s*house/i.test(panelText)
+              || /save\s*edi\s*document/i.test(body)
+              || /generate\s*hcfa\s*edi/i.test(body);
+            const genBtn = Array.from((panel || document).querySelectorAll('a, button, input[type="button"], input[type="submit"]'))
+              .find((el) => /^generate\s*edi$/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
+            return {
+              ready,
+              polls: n + 1,
+              panelLen: panel ? (panel.innerHTML || '').length : 0,
+              sample: texts.filter((t) => /ally|clearing|office|edi|wrmomma/i.test(t)).slice(0, 8),
+              panelSnippet: panelText.slice(0, 240),
+              genMeta: genBtn ? {
+                id: genBtn.id || null,
+                tag: genBtn.tagName,
+                onclick: String(genBtn.getAttribute('onclick') || '').slice(0, 160),
+                href: String(genBtn.getAttribute('href') || '').slice(0, 80),
+              } : null,
+              iframes: Array.from(document.querySelectorAll('iframe')).map((f) => (f.id || f.name || f.src || '').slice(0, 80)).slice(0, 6),
+            };
+          }, pollN),
+          sleep(1200).then(() => ({ ready: false, polls: pollN + 1, raced: true })),
+        ]);
+
+        progress({ phase: 'wait_ally_options' });
+        let allyReady = { ready: false, polls: 0 };
+        try {
+          allyReady = await scanAllyReady(0);
+        } catch (err) {
+          allyReady = { ready: false, polls: 1, error: String(err?.message || err).slice(0, 80) };
+        }
+        editorAttempts.push({ label: 'wait_ally_options_pre', ok: Boolean(allyReady?.ready), ...(allyReady || {}) });
+
+        if (!allyReady?.ready) {
+          progress({ phase: 'editor_generate_reveal_ally' });
+          try {
+            const reveal = await Promise.race([
+              editorPage.evaluate(() => {
+                const panel = document.getElementById('divSendEDI');
+                if (panel) {
+                  panel.style.display = 'block';
+                  panel.style.visibility = 'visible';
+                  panel.style.height = 'auto';
+                }
+                const scope = panel || document;
+                const candidates = Array.from(scope.querySelectorAll('a, button, input[type="button"], input[type="submit"]'));
+                const best = candidates.find((el) => /^generate\s*edi$/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()))
+                  || candidates.find((el) => /generate\s*edi/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
+                if (!best) {
+                  return {
+                    clicked: false,
+                    panelBtns: candidates.map((el) => (el.textContent || el.value || '').replace(/\s+/g, ' ').trim()).filter(Boolean).slice(0, 12),
+                  };
+                }
+                if (window.jQuery) window.jQuery(best).trigger('click');
+                else best.click();
+                return {
+                  clicked: true,
+                  text: (best.textContent || best.value || '').replace(/\s+/g, ' ').trim().slice(0, 40),
+                  onclick: String(best.getAttribute('onclick') || '').slice(0, 160),
+                };
+              }),
+              sleep(2000).then(() => ({ raced: true })),
+            ]);
+            editorAttempts.push({ label: 'generate_reveal_ally', ok: Boolean(reveal?.clicked), ...(reveal || {}) });
+          } catch (err) {
+            editorAttempts.push({ label: 'generate_reveal_ally', ok: false, error: String(err?.message || err).slice(0, 120) });
+          }
+          for (let poll = 0; poll < 12; poll += 1) {
+            await sleep(700);
+            try {
+              allyReady = await scanAllyReady(poll + 1);
+            } catch (err) {
+              allyReady = { ready: false, polls: poll + 2, error: String(err?.message || err).slice(0, 80) };
+            }
+            if (allyReady?.ready) break;
+          }
+        }
+        editorAttempts.push({ label: 'wait_ally_options', ok: Boolean(allyReady?.ready), ...(allyReady || {}) });
+
+        // Tip/local KNOW: Generate EDI is <a href="/Billing/SendHCFAEDIEdit?billingID=…"> — Ally lives
+        // on that page, not inside #divSendEDI. Navigate there when href appears.
+        if (!allyReady?.ready) {
+          progress({ phase: 'editor_nav_send_hcfa_edi' });
+          try {
+            const sendMeta = await Promise.race([
+              editorPage.evaluate(() => {
+                const nodes = Array.from(document.querySelectorAll('a[href*="SendHCFAEDIEdit"], a'));
+                let href = null;
+                for (const a of nodes) {
+                  const h = a.getAttribute('href') || a.href || '';
+                  if (/SendHCFAEDIEdit/i.test(h)) { href = h; break; }
+                }
+                const billingId =
+                  (href && (href.match(/billingID=([0-9a-f-]{20,})/i) || [])[1])
+                  || (document.body.innerHTML.match(/billingID[=:][\s'\"]*([0-9a-f-]{20,})/i) || [])[1]
+                  || null;
+                return { href, billingId, url: location.href };
+              }),
+              sleep(2000).then(() => ({ raced: true })),
+            ]);
+            editorAttempts.push({ label: 'send_hcfa_edi_meta', ok: Boolean(sendMeta?.href || sendMeta?.billingId), ...(sendMeta || {}) });
+            const targetHref = sendMeta?.href
+              || (sendMeta?.billingId ? `/Billing/SendHCFAEDIEdit?billingID=${sendMeta.billingId}` : null);
+            if (targetHref) {
+              const abs = new URL(targetHref, origin).href;
+              const nav = await gotoWithBudget(editorPage, abs, {
+                timeout: Math.max(10000, Number(pageTimeoutMs) || 20000),
+              });
+              editorAttempts.push({ label: 'nav_send_hcfa_edi', ok: Boolean(nav?.ok), url: abs, error: nav?.error || null });
+              if (nav?.ok) {
+                await sleep(1500);
+                // SendHCFAEDIEdit needs jQuery for SetSelectionEDI(); page sometimes has $ missing.
+                try {
+                  const hasJq = await Promise.race([
+                    editorPage.evaluate(() => typeof window.jQuery === 'function' || typeof window.$ === 'function'),
+                    sleep(1500).then(() => false),
+                  ]);
+                  if (!hasJq) {
+                    await editorPage.addScriptTag({ url: 'https://code.jquery.com/jquery-3.6.0.min.js' }).catch(() => null);
+                    await sleep(400);
+                  } else {
+                    await editorPage.evaluate(() => {
+                      if (typeof window.$ !== 'function' && typeof window.jQuery === 'function') window.$ = window.jQuery;
+                    }).catch(() => null);
+                  }
+                } catch (_) { /* ignore */ }
+                for (let poll = 0; poll < 10; poll += 1) {
+                  try {
+                    allyReady = await scanAllyReady(poll);
+                  } catch (err) {
+                    allyReady = { ready: false, polls: poll + 1, error: String(err?.message || err).slice(0, 80) };
+                  }
+                  if (allyReady?.ready) break;
+                  await sleep(600);
+                }
+                editorAttempts.push({ label: 'wait_ally_on_send_page', ok: Boolean(allyReady?.ready), ...(allyReady || {}) });
+              }
+            }
+          } catch (err) {
+            editorAttempts.push({ label: 'nav_send_hcfa_edi', ok: false, error: String(err?.message || err).slice(0, 120) });
+          }
+        }
+
+        const buttonMeta = {
+          via: 'send_hcfa_edi_page_then_stage',
+          allyReady: Boolean(allyReady?.ready),
+          genMeta: allyReady?.genMeta || null,
+        };
+        editorAttempts.push({ label: 'edi_button_meta', ok: true, ...buttonMeta });
+
+        const burst = {
+          ally: false,
+          allyText: null,
+          eob: false,
+          save: false,
+          generate: false,
+          generateText: null,
+          claimSentDate: null,
+          claimSentDateSet: false,
+          panelBtns: [],
+          panelHtmlSnippet: null,
+        };
+
+        progress({ phase: 'editor_select_ally' });
+        try {
+          const allyPick = await Promise.race([
+            editorPage.evaluate(() => {
+              const panel = document.getElementById('divSendEDI');
+              if (panel) {
+                panel.style.display = 'block';
+                panel.style.visibility = 'visible';
+                panel.style.height = 'auto';
+              }
+              const out = {
+                ally: false,
+                allyText: null,
+                eob: false,
+                selectCount: 0,
+                optionSamples: [],
+                panelSelectIds: [],
+                panelHtmlSnippet: (panel ? (panel.innerText || panel.textContent || '') : '').replace(/\s+/g, ' ').trim().slice(0, 500),
+              };
+              const panelSels = Array.from((panel || document.createElement('div')).querySelectorAll('select'));
+              out.panelSelectIds = panelSels.map((s) => s.id || s.name || '(anon)');
+              const sels = Array.from(document.querySelectorAll('select'));
+              out.selectCount = sels.length;
+              for (const sel of sels) {
+                const opts = Array.from(sel.options || []);
+                const texts = opts.map((o) => (o.textContent || '').trim()).filter(Boolean);
+                if (out.optionSamples.length < 12) {
+                  out.optionSamples.push({ id: sel.id || null, name: sel.name || null, texts: texts.slice(0, 8) });
+                }
+                const pick = opts.find((o) => /office\s*ally|wrmomma/i.test(o.textContent || ''))
+                  || opts.find((o) => /\bally\b/i.test(o.textContent || '') && !/medicare|secondary/i.test(o.textContent || ''));
+                if (!pick) continue;
+                sel.value = pick.value;
+                opts.forEach((o) => { o.selected = o === pick; });
+                sel.dispatchEvent(new Event('change', { bubbles: true }));
+                if (window.jQuery) window.jQuery(sel).trigger('change');
+                out.ally = true;
+                out.allyText = (pick.textContent || '').trim().slice(0, 60);
+                break;
+              }
+              const scope = panel || document.body;
+              for (const node of Array.from(scope.querySelectorAll('input[type="checkbox"], label'))) {
+                const t = (node.textContent || node.value || node.id || '').replace(/\s+/g, ' ').trim();
+                if (!/include\s*eob|eob/i.test(`${t} ${node.id || ''}`)) continue;
+                const input = node.tagName === 'INPUT' ? node : document.getElementById(node.getAttribute('for') || '') || node.querySelector('input');
+                if (!input) continue;
+                if (!input.checked) {
+                  input.checked = true;
+                  input.click();
+                  if (window.jQuery) window.jQuery(input).trigger('change');
+                }
+                out.eob = true;
+                break;
+              }
+              return out;
+            }),
+            sleep(2500).then(() => ({ raced: true })),
+          ]);
+          Object.assign(burst, allyPick || {});
+          editorAttempts.push({ label: 'select_ally', ok: Boolean(allyPick?.ally), ...(allyPick || {}) });
+        } catch (err) {
+          editorAttempts.push({ label: 'select_ally', ok: false, error: String(err?.message || err).slice(0, 120) });
+        }
+
+        if (burst.ally) await sleep(900);
+
+        progress({ phase: 'editor_save_edi_doc' });
+        try {
+          const savedEdi = await Promise.race([
+            editorPage.evaluate(() => {
+              const candidates = Array.from(document.querySelectorAll('a, button, input[type="button"], input[type="submit"]'));
+              const panel = document.getElementById('divSendEDI');
+              const saveBtn = candidates.find((el) => /save\s*edi\s*document/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
+              if (!saveBtn) {
+                return {
+                  save: false,
+                  panelBtns: candidates
+                    .map((el) => (el.textContent || el.value || '').replace(/\s+/g, ' ').trim())
+                    .filter((t) => /edi|ally|generate|save|clearing|eob/i.test(t))
+                    .slice(0, 25),
+                  panelHtmlSnippet: (panel ? (panel.innerText || panel.textContent || '') : '').replace(/\s+/g, ' ').trim().slice(0, 500),
+                };
+              }
+              if (window.jQuery) window.jQuery(saveBtn).trigger('click');
+              else saveBtn.click();
+              return { save: true, saveText: (saveBtn.textContent || saveBtn.value || '').replace(/\s+/g, ' ').trim().slice(0, 40) };
+            }),
+            sleep(2000).then(() => ({ raced: true })),
+          ]);
+          Object.assign(burst, savedEdi || {});
+          editorAttempts.push({ label: 'save_edi_document', ok: Boolean(savedEdi?.save), ...(savedEdi || {}) });
+        } catch (err) {
+          editorAttempts.push({ label: 'save_edi_document', ok: false, error: String(err?.message || err).slice(0, 120) });
+        }
+        if (burst.save) await sleep(700);
+
+        progress({ phase: 'editor_generate_hcfa_edi' });
+        try {
+          const gen = await Promise.race([
+            editorPage.evaluate((allowBare) => {
+              const panel = document.getElementById('divSendEDI');
+              const candidates = Array.from(document.querySelectorAll('a, button, input[type="button"], input[type="submit"]'));
+              const labelOf = (el) => (el.innerText || el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
+              const out = {
+                generate: false,
+                generateText: null,
+                generateInPanel: false,
+                panelBtns: candidates
+                  .map((el) => labelOf(el))
+                  .filter((t) => t && /edi|ally|generate|save|clearing|eob|hcfa/i.test(t) && t.length < 80)
+                  .slice(0, 25),
+                panelHtmlSnippet: (document.body?.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 500),
+                claimSentDate: null,
+              };
+              let best = candidates.find((el) => /generate\s*hcfa\s*edi/i.test(labelOf(el)) && labelOf(el).length < 40)
+                || candidates.find((el) => /generate\s*edi\s*claim/i.test(labelOf(el)) && labelOf(el).length < 40)
+                || candidates.find((el) => /^generate$/i.test(labelOf(el)));
+              if (!best && allowBare) {
+                best = candidates.find((el) => /^generate\s*edi$/i.test(labelOf(el)));
+              }
+              if (best) {
+                let via = null;
+                let fnResult = null;
+                if (typeof window.jQuery === 'function' && typeof window.$ !== 'function') {
+                  window.$ = window.jQuery;
+                }
+                // SetSelectionEDI only fills hidden chart/billing fields — it does NOT POST.
+                // The Generate control is type=submit; real transmit is the form POST.
+                if (typeof window.SetSelectionEDI === 'function') {
+                  try {
+                    fnResult = window.SetSelectionEDI();
+                  } catch (err) {
+                    fnResult = String(err?.message || err).slice(0, 80);
+                  }
+                }
+                if (window.jQuery) window.jQuery(best).trigger('click');
+                else best.click();
+                via = typeof window.SetSelectionEDI === 'function'
+                  ? 'SetSelectionEDI+submit_click'
+                  : 'submit_click';
+                out.generate = true;
+                out.generateText = labelOf(best).slice(0, 60);
+                out.generateInPanel = Boolean(panel && panel.contains(best));
+                out.generateHref = String(best.getAttribute('href') || '').slice(0, 120);
+                out.generateOnclick = String(best.getAttribute('onclick') || '').slice(0, 160);
+                out.generateVia = via;
+                out.fnResult = fnResult === undefined ? null : fnResult;
+                out.hasJquery = typeof window.jQuery === 'function';
+                out.hasDollar = typeof window.$ === 'function';
+                out.formAction = String((best.form || best.closest?.('form') || {})?.action || '').slice(0, 120);
+              } else {
+                out.generateMiss = out.panelBtns;
+              }
+              const bodyText = (document.body.innerText || '').replace(/\s+/g, ' ');
+              const sent = bodyText.match(/Claim\s*Sent\s*Date[:\s]*([0-9/\-]{6,20}|null|N\/?A)?/i);
+              out.claimSentDate = sent ? (sent[1] || null) : null;
+              return out;
+            }, true),
+            sleep(2500).then(() => ({ raced: true })),
+          ]);
+          Object.assign(burst, gen || {});
+          editorAttempts.push({ label: 'generate_hcfa_edi', ok: Boolean(gen?.generate), ...(gen || {}) });
+        } catch (err) {
+          editorAttempts.push({ label: 'generate_hcfa_edi', ok: false, error: String(err?.message || err).slice(0, 120) });
+        }
+
+        if (burst.generate) {
+          progress({ phase: 'editor_wait_send_post' });
+          const postWaitDeadline = Date.now() + 20000;
+          let postReq = null;
+          let postRes = null;
+          while (Date.now() < postWaitDeadline) {
+            postReq = netHits.find((h) => h.type === 'req' && h.method === 'POST' && /SendHCFAEDIEdit/i.test(h.url || ''))
+              || null;
+            postRes = netHits.find((h) => h.type === 'res' && h.method === 'POST' && /SendHCFAEDIEdit/i.test(h.url || ''))
+              || null;
+            if (postReq && postRes) break;
+            await sleep(400);
+          }
+          let afterGen = null;
+          try {
+            afterGen = await Promise.race([
+              editorPage.evaluate(() => {
+                const text = (document.body?.innerText || '').replace(/\s+/g, ' ').trim();
+                const err = Array.from(document.querySelectorAll('.validation-summary-errors, .field-validation-error, .alert, .error, #error'))
+                  .map((el) => (el.innerText || '').replace(/\s+/g, ' ').trim())
+                  .filter(Boolean)
+                  .slice(0, 5);
+                let successJson = null;
+                try {
+                  const parsed = JSON.parse(text);
+                  if (parsed && typeof parsed === 'object') successJson = parsed;
+                } catch (_) { /* not json */ }
+                return {
+                  url: location.href,
+                  title: document.title,
+                  text: text.slice(0, 800),
+                  errors: err,
+                  hasDownloadLink: /download|\.edi|837/i.test(text),
+                  successJson,
+                  transmitOk: Boolean(successJson?.success === true) || /download|\.edi|837/i.test(text),
+                };
+              }),
+              sleep(3000).then(() => ({ raced: true })),
+            ]);
+          } catch (err) {
+            afterGen = { error: String(err?.message || err).slice(0, 120) };
+          }
+          const postResLate = netHits.find((h) => h.type === 'res' && h.method === 'POST' && /SendHCFAEDIEdit/i.test(h.url || '')) || postRes;
+          editorAttempts.push({
+            label: 'wait_send_post',
+            ok: Boolean(postReq && (postResLate || afterGen?.transmitOk || afterGen?.successJson?.success)),
+            postReq: postReq ? { url: postReq.url, method: postReq.method } : null,
+            postRes: postResLate,
+            download: downloadHint,
+            afterGen,
+            netTail: netHits.slice(-12),
+          });
+          if (postReq) burst.ediPostOk = true;
+        }
+
+        // Local KNOW: after Generate POST the page is raw {"success":true} — ClaimSentDate lives
+        // back on InvoiceHCFAEdit. Return there, stamp today, Save (+Continue).
+        if ((burst.generate || burst.ediPostOk) && pregId) {
+          progress({ phase: 'editor_return_claim_sent_date' });
+          try {
+            const backUrl = `${origin}/Billing/InvoiceHCFAEdit?pregnancyID=${encodeURIComponent(pregId)}`;
+            const backNav = await gotoWithBudget(editorPage, backUrl, {
+              timeout: Math.max(10000, Number(pageTimeoutMs) || 20000),
+            });
+            editorAttempts.push({ label: 'return_invoice_hcfa', ok: Boolean(backNav?.ok), url: backUrl, error: backNav?.error || null });
+            if (backNav?.ok) await sleep(1500);
+          } catch (err) {
+            editorAttempts.push({ label: 'return_invoice_hcfa', ok: false, error: String(err?.message || err).slice(0, 120) });
+          }
+        }
+
+        if (burst.generate || burst.save || burst.ally || burst.ediPostOk) {
+          await sleep(600);
+          try {
+            const painted = await Promise.race([
+              editorPage.evaluate(() => {
+                const bodyText = (document.body.innerText || '').replace(/\s+/g, ' ');
+                const sent = bodyText.match(/Claim\s*Sent\s*Date[:\s]*([0-9/\-]{6,20}|null|N\/?A)?/i);
+                const today = new Date();
+                const mm = String(today.getMonth() + 1).padStart(2, '0');
+                const dd = String(today.getDate()).padStart(2, '0');
+                const yyyy = String(today.getFullYear());
+                const stamp = `${mm}/${dd}/${yyyy}`;
+                let claimSentDateSet = false;
+                let claimSentDateName = null;
+                const inputs = Array.from(document.querySelectorAll('input[type="text"], input[type="date"], input:not([type]), input[name="ClaimSentDate"]'));
+                for (const inp of inputs) {
+                  const key = `${inp.id || ''} ${inp.name || ''} ${inp.placeholder || ''}`;
+                  if (!/claim.*sent.*date|sent.*date|ClaimSentDate/i.test(key)) continue;
+                  if (window.jQuery && window.jQuery.fn?.datepicker) {
+                    try {
+                      window.jQuery(inp).datepicker('setDate', new Date(Number(yyyy), Number(mm) - 1, Number(dd)));
+                    } catch (_) {
+                      window.jQuery(inp).val(stamp).trigger('change');
+                    }
+                  } else {
+                    const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
+                    if (setter) setter.call(inp, stamp);
+                    else inp.value = stamp;
+                    inp.dispatchEvent(new Event('input', { bubbles: true }));
+                    inp.dispatchEvent(new Event('change', { bubbles: true }));
+                    if (window.jQuery) window.jQuery(inp).trigger('change');
+                  }
+                  claimSentDateSet = Boolean(inp.value);
+                  claimSentDateName = inp.name || inp.id || null;
+                  break;
+                }
+                return {
+                  claimSentDate: sent ? (sent[1] || null) : null,
+                  claimSentDateSet,
+                  claimSentDateName,
+                  stamp,
+                  href: location.href,
+                };
+              }),
+              sleep(2500).then(() => ({ raced: true })),
+            ]);
+            if (painted?.claimSentDate) burst.claimSentDate = painted.claimSentDate;
+            if (painted?.claimSentDateSet) burst.claimSentDateSet = true;
+            editorAttempts.push({ label: 'claim_sent_date_paint', ok: Boolean(painted?.claimSentDateSet), ...(painted || {}) });
+            if (painted?.claimSentDateSet) {
+              const saveAfter = await Promise.race([
+                editorPage.evaluate(() => {
+                  const btn = Array.from(document.querySelectorAll('a, button, input[type="button"], input[type="submit"]'))
+                    .find((el) => /^save$/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
+                  if (!btn) return { clicked: false };
+                  if (window.jQuery) window.jQuery(btn).trigger('click');
+                  else btn.click();
+                  return { clicked: true };
+                }),
+                sleep(2000).then(() => ({ raced: true })),
+              ]);
+              editorAttempts.push({ label: 'save_after_claim_sent_date', ok: Boolean(saveAfter?.clicked), ...(saveAfter || {}) });
+              await sleep(1200);
+              const contAfter = await Promise.race([
+                editorPage.evaluate(() => {
+                  const btn = Array.from(document.querySelectorAll('a, button, input[type="button"], input[type="submit"]'))
+                    .find((el) => /continue\s*saving/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
+                  if (!btn) return { clicked: false };
+                  if (window.jQuery) window.jQuery(btn).trigger('click');
+                  else btn.click();
+                  return { clicked: true, text: (btn.textContent || btn.value || '').replace(/\s+/g, ' ').trim().slice(0, 40) };
+                }),
+                sleep(2000).then(() => ({ raced: true })),
+              ]);
+              editorAttempts.push({ label: 'continue_after_claim_sent_date', ok: Boolean(contAfter?.clicked), ...(contAfter || {}) });
+              if (contAfter?.clicked) await sleep(1500);
+            }
+          } catch (_) { /* ignore */ }
+        }
+
+        editorAttempts.push({ label: 'transmit_burst', ok: true, ...burst, netHits: netHits.slice(0, 40) });
+
+        const transmitTouched = Boolean(burst.ally || burst.save || burst.generate || burst.claimSentDateSet);
+        dailySuperBill.claimEditor = {
+          isEditor: true,
+          attempts: editorAttempts,
+          preview: null,
+          receipt: {
+            method: 'EDI',
+            hasEdiPanel: true,
+            via: transmitTouched ? 'generate_reveal_split_probe' : 'edi_panel_no_transmit',
+            buttonMeta,
+            download: downloadHint,
+          },
+        };
+        progress({ phase: 'generate_fired_exit' });
+        return {
+          ok: true,
+          filed: false,
+          needs_sent_bills_probe: true,
+          patientQuery: wantName,
+          pregnancyId: pregId,
+          visitDate: reportDate || null,
+          claimLinkOk: true,
+          claimEditor: dailySuperBill.claimEditor,
+          dailySuperBill,
+          message: transmitTouched
+            ? 'EDI transmit touched (reveal/Ally/Save/Generate); Sent Bills probe deferred to fresh Chromium child'
+            : 'EDI panel opened but Ally/Save/Generate did not fire; Sent Bills probe deferred',
+          screenshots,
+          url: session.page.url(),
+        };
+
+
+      }
+
+
+      const reportUrl = `${origin}/Billing/SuperBillReport?FromDate=${encodeURIComponent(reportDate)}`;
+      progress({ phase: 'nav_superbill', reportUrl });
+      const reportNav = await gotoWithBudget(session.page, reportUrl, {
+        timeout: Math.max(8000, Number(pageTimeoutMs) || 20000),
+      });
+      dailySuperBill.reportNav = { ok: reportNav.ok, url: reportUrl, error: reportNav.error || null };
+      if (!reportNav.ok) return { ok: false, error: reportNav.error || 'SuperBillReport nav failed', screenshots, dailySuperBill };
+
+      await sleep(2000);
+      await dismissSessionTakeover(session.page);
+      for (let w = 0; w < 8; w += 1) {
+        const loading = await session.page.evaluate(() => /Loading\s*\.{0,3}/i.test(document.body?.innerText || ''));
+        if (!loading) break;
+        await sleep(750);
+      }
+      progress({ phase: 'click_claim_initial' });
+      const clickClaim = async (phase) => evaluateWithTimeout(session.page, ({ wantName: needle, phase: runPhase }) => {
+        const attempts = [];
+        const softVisible = (el) => {
+          if (!el) return false;
+          const s = window.getComputedStyle(el);
+          if (s.display === 'none' || s.visibility === 'hidden') return false;
+          return true;
+        };
+        const hardVisible = (el) => {
+          if (!softVisible(el)) return false;
+          const r = el.getBoundingClientRect();
+          return r.width > 0 && r.height > 0;
+        };
+        const nameRe = new RegExp(String(needle || 'alvarado').replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+        const allRows = Array.from(document.querySelectorAll('table tr, .k-grid-content tr, .k-master-row, .k-detail-row'));
+        const patientRows = allRows.filter((tr) => nameRe.test((tr.innerText || '').replace(/\s+/g, ' ')));
+        const scopeRoots = [];
+        for (const header of patientRows) {
+          scopeRoots.push(header);
+          let sib = header.nextElementSibling;
+          for (let i = 0; i < 12 && sib; i += 1) {
+            const t = (sib.innerText || '').replace(/\s+/g, ' ').trim();
+            if (/primary\s*:/i.test(t) && nameRe.test(t) === false && /[A-Za-z]{3,}/.test(t.split(/primary/i)[0] || '')) break;
+            if (/^[A-Z][a-z]+\s+[A-Z][a-z]+/.test(t) && !/5940|invoice|hcfa|ub-?04|global midwifery|generated by/i.test(t) && !nameRe.test(t)) break;
+            scopeRoots.push(sib);
+            sib = sib.nextElementSibling;
+          }
+        }
+        if (!scopeRoots.length) scopeRoots.push(document.body);
+        const scoreClaimEl = (el) => {
+          const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
+          const ownText = Array.from(el.childNodes || [])
+            .filter((n) => n.nodeType === 3)
+            .map((n) => String(n.textContent || '').trim())
+            .filter(Boolean)
+            .join(' ');
+          const href = `${el.getAttribute?.('href') || ''} ${el.getAttribute?.('onclick') || ''} ${el.getAttribute?.('data-url') || ''}`;
+          let score = 0;
+          if (/^(invoice|hcfa|ub-?04)$/i.test(ownText || t)) score += 100;
+          else if (/^(invoice|hcfa|ub-?04)$/i.test(t) && t.length < 24) score += 95;
+          else if (/invoicehcfa|hcfaedit|\/hcfa|createclaim|superbill|billing\/invoice|billing\/hcfa/i.test(href)) score += 85;
+          else if (/\b(invoice|hcfa|ub-?04)\b/i.test(t) && t.length < 48) score += 40;
+          if (/create new client|home|clients|schedule/i.test(t)) score -= 200;
+          return score;
+        };
+        const claimCandidates = [];
+        const selectors = 'a, button, input[type="button"], input[type="submit"], span, td, [onclick], [role="link"]';
+        for (const root of scopeRoots) {
+          for (const el of Array.from(root.querySelectorAll(selectors)).filter(softVisible)) {
+            const score = scoreClaimEl(el);
+            if (score < 40) continue;
+            claimCandidates.push({
+              el,
+              score: score + (hardVisible(el) ? 5 : 0) + 10,
+              text: (el.textContent || el.value || '').replace(/\s+/g, ' ').trim().slice(0, 40),
+              href: (el.getAttribute?.('href') || '').slice(0, 160),
+              onclick: (el.getAttribute?.('onclick') || '').slice(0, 160),
+            });
+          }
+        }
+        if (!claimCandidates.length) {
+          for (const el of Array.from(document.querySelectorAll('a, button')).filter(softVisible)) {
+            const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
+            if (!/^(invoice|hcfa|ub-?04)$/i.test(t)) continue;
+            const tr = el.closest('tr');
+            let near = false;
+            let cur = tr;
+            for (let i = 0; i < 10 && cur; i += 1) {
+              if (nameRe.test((cur.innerText || '').replace(/\s+/g, ' '))) { near = true; break; }
+              cur = cur.previousElementSibling;
+            }
+            if (!near) continue;
+            claimCandidates.push({
+              el,
+              score: /^hcfa$/i.test(t) ? 110 : 100,
+              text: t.slice(0, 40),
+              href: (el.getAttribute?.('href') || '').slice(0, 160),
+              onclick: (el.getAttribute?.('onclick') || '').slice(0, 160),
+            });
+          }
+        }
+        claimCandidates.sort((a, b) => b.score - a.score);
+        if (claimCandidates.length) {
+          const prefer = claimCandidates.find((c) => /^hcfa$/i.test(c.text))
+            || claimCandidates.find((c) => /hcfa/i.test(c.text) || /hcfa/i.test(c.href + c.onclick))
+            || claimCandidates.find((c) => /^invoice$/i.test(c.text))
+            || claimCandidates[0];
+          prefer.el.click();
+          attempts.push({
+            label: 'claim_link',
+            ok: true,
+            phase: runPhase,
+            text: prefer.text,
+            score: prefer.score,
+            href: prefer.href || null,
+            count: claimCandidates.length,
+            top: claimCandidates.slice(0, 5).map((c) => ({ text: c.text, score: c.score, href: c.href || null })),
+          });
+        } else {
+          attempts.push({
+            label: 'claim_link',
+            ok: false,
+            phase: runPhase,
+            error: 'no_claim_link_in_scope',
+            patient_row_preview: patientRows[0]
+              ? (patientRows[0].innerText || '').replace(/\s+/g, ' ').trim().slice(0, 180)
+              : null,
+            global_claim_texts: Array.from(document.querySelectorAll('a, button'))
+              .map((el) => (el.textContent || el.value || '').replace(/\s+/g, ' ').trim())
+              .filter((t) => /^(invoice|hcfa|ub-?04)$/i.test(t))
+              .slice(0, 8),
+          });
+        }
+        return {
+          attempts,
+          url: location.href,
+          preview: (document.body.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 700),
+          patientRowCount: patientRows.length,
+          scopeRowCount: scopeRoots.length,
+        };
+      }, { wantName, phase }, 30000);
+
+      let interact = await clickClaim('initial');
+      if (!(interact?.attempts || []).some((a) => a.label === 'claim_link' && a.ok)) {
+        const filterPass = await evaluateWithTimeout(session.page, ({ wantDate }) => {
+          const attempts = [];
+          const visible = (el) => {
+            if (!el) return false;
+            const s = window.getComputedStyle(el);
+            if (s.display === 'none' || s.visibility === 'hidden') return false;
+            const r = el.getBoundingClientRect();
+            return r.width > 0 && r.height > 0;
+          };
+          if (wantDate) {
+            for (const el of Array.from(document.querySelectorAll('input')).filter(visible)) {
+              if (/radio|checkbox|hidden|submit|button/i.test(el.type || '')) continue;
+              const ctx = `${el.id || ''} ${el.name || ''} ${el.placeholder || ''} ${el.className || ''}`;
+              if (/lmp|dob|birth|born|rdo|sms|message|filtertext/i.test(ctx)) continue;
+              if (!/date|from|to|dos|service|visit|bill/i.test(ctx)) continue;
+              el.focus();
+              el.value = String(wantDate);
+              el.dispatchEvent(new Event('input', { bubbles: true }));
+              el.dispatchEvent(new Event('change', { bubbles: true }));
+              attempts.push({ label: 'fill_date', ok: true, value: String(wantDate) });
+              break;
+            }
+          }
+          const ranked = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'))
+            .filter(visible)
+            .map((el) => {
+              const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
+              let score = 0;
+              if (/filter|search|apply|run\s*report|refresh|load/i.test(t)) score += 40;
+              if (/create\s*claim|generate\s*claim/i.test(t)) score += 100;
+              if (/home|clients|create new client/i.test(t)) score -= 200;
+              return { el, t, score };
+            })
+            .filter((x) => x.t && x.score > 0)
+            .sort((a, b) => b.score - a.score);
+          if (ranked[0]) {
+            ranked[0].el.click();
+            attempts.push({ label: 'click_action', ok: true, text: ranked[0].t.slice(0, 40), score: ranked[0].score });
+          } else {
+            attempts.push({ label: 'click_action', ok: false, error: 'no_report_action' });
+          }
+          return { attempts };
+        }, { wantDate: reportDate }, 20000);
+        interact.attempts = [...(interact.attempts || []), ...(filterPass?.attempts || [])];
+        await sleep(3500);
+        const retry = await clickClaim('after_filter');
+        interact.attempts = [...(interact.attempts || []), ...(retry?.attempts || [])];
+        interact.url = retry?.url || interact.url;
+        interact.preview = retry?.preview || interact.preview;
+        interact.patientRowCount = retry?.patientRowCount ?? interact.patientRowCount;
+      }
+
+      // Tip 2026-07-15: HCFA <a href="/Billing/InvoiceHCFAEdit?…"> click does not leave SuperBillReport.
+      // Navigate directly to the claim editor URL (prefer HCFA).
+      const claimHit = (interact?.attempts || []).find((a) => a.label === 'claim_link' && a.ok);
+      const claimHref = claimHit?.href
+        || (interact?.attempts || []).flatMap((a) => a.top || []).find((t) => /hcfa/i.test(t.text || '') || /InvoiceHCFAEdit/i.test(t.href || ''))?.href
+        || null;
+      if (claimHref) {
+        const abs = claimHref.startsWith('http') ? claimHref : `${origin}${claimHref.startsWith('/') ? '' : '/'}${claimHref}`;
+        progress({ phase: 'goto_claim_editor', url: abs });
+        // Tip: page.goto to InvoiceHCFAEdit can wedge — try location.assign first, then goto race.
+        let editorNav = { ok: false, error: 'not_attempted' };
+        try {
+          const assigned = await evaluateWithTimeout(session.page, (url) => {
+            try {
+              window.location.assign(url);
+              return { ok: true };
+            } catch (err) {
+              return { ok: false, error: String(err?.message || err).slice(0, 120) };
+            }
+          }, abs, 8000);
+          await sleep(2500);
+          const landed = await session.page.evaluate(() => ({
+            url: location.href,
+            title: document.title || null,
+            isHcfa: /InvoiceHCFAEdit|HCFA/i.test(location.href + ' ' + (document.title || '')),
+          }));
+          if (assigned?.ok && landed?.isHcfa) {
+            editorNav = { ok: true, url: abs, via: 'location.assign', landed };
+          } else {
+            editorNav = await Promise.race([
+              gotoWithBudget(session.page, abs, { timeout: 15000 }),
+              new Promise((resolve) => {
+                setTimeout(() => resolve({ ok: false, error: 'editor_nav_hard_timeout_18s' }), 18000);
+              }),
+            ]);
+            editorNav.via = 'gotoWithBudget';
+            editorNav.assignAttempt = { assigned, landed };
+          }
+        } catch (err) {
+          editorNav = { ok: false, error: String(err?.message || err).slice(0, 160) };
+        }
+        interact.editorNav = { ok: editorNav.ok, url: abs, error: editorNav.error || null, via: editorNav.via || null, detail: editorNav };
+        progress({ phase: 'claim_editor_landed', editorNav: interact.editorNav });
+        await sleep(1200);
+        try { await dismissSessionTakeover(session.page); } catch (_) { /* ignore */ }
+      }
+
+      dailySuperBill.interact = interact;
+      await sleep(1500);
+
+      const claimLinkOk = (interact?.attempts || []).some((a) => a.label === 'claim_link' && a.ok)
+        || Boolean(interact?.editorNav?.ok);
+      progress({ phase: 'claim_link', claimLinkOk, attempts: interact?.attempts || [], editorNav: interact?.editorNav || null });
+      if (claimLinkOk) {
+        try {
+          dailySuperBill.claimEditor = await evaluateWithTimeout(session.page, () => {
+            const visible = (el) => {
+              if (!el) return false;
+              const s = window.getComputedStyle(el);
+              if (s.display === 'none' || s.visibility === 'hidden') return false;
+              const r = el.getBoundingClientRect();
+              return r.width > 0 && r.height > 0;
+            };
+            const url = location.href;
+            const text = (document.body?.innerText || '').replace(/\s+/g, ' ').trim();
+            const isEditor = /Invoice|HCFA|UB.?04|SuperBill|ClaimEdit|CreateClaim/i.test(url)
+              || /hcfa|invoice|super bill|create claim/i.test(document.title || '')
+              || /save\s*claim|submit\s*claim|print\s*hcfa|electronic\s*submit|send via edi/i.test(text);
+            const attempts = [];
+            if (!isEditor && !/Invoice|HCFA|Billing/i.test(url)) {
+              return { isEditor: false, url, preview: text.slice(0, 400), attempts };
+            }
+            const scoreBtn = (t) => {
+              let score = 0;
+              // Tip 2026-07-15: Save alone left Sent Bills empty; EDI submit is the money click.
+              if (/send\s*via\s*edi|electronic\s*submit|submit\s*(claim|edi)|transmit/i.test(t)) score += 120;
+              if (/^save$/i.test(t) || /save\s*(claim|bill|hcfa|invoice)/i.test(t)) score += 100;
+              if (/hcfa\s*entry|create\s*claim|file\s*claim|post\s*claim|post\s*payment/i.test(t)) score += 80;
+              if (/send\s*fax|client\s*send/i.test(t)) score += 30;
+              if (/cancel|close|back|delete|home|clients/i.test(t)) score -= 200;
+              return score;
+            };
+            const ranked = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'))
+              .filter(visible)
+              .map((el) => {
+                const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
+                return { el, t, score: scoreBtn(t) };
+              })
+              .filter((x) => x.t && x.score > 0)
+              .sort((a, b) => b.score - a.score);
+            // Click Save first if present, then EDI (order matters on some ClientCare screens).
+            const saveBtn = ranked.find((x) => /^save$/i.test(x.t) || /save\s*(claim|bill|hcfa|invoice)/i.test(x.t));
+            const ediBtn = ranked.find((x) => /send\s*via\s*edi|electronic\s*submit|submit\s*(claim|edi)|transmit/i.test(x.t));
+            if (saveBtn) {
+              saveBtn.el.click();
+              attempts.push({ label: 'editor_save', ok: true, text: saveBtn.t.slice(0, 40), score: saveBtn.score });
+            }
+            if (ediBtn && ediBtn !== saveBtn) {
+              ediBtn.el.click();
+              attempts.push({ label: 'editor_edi', ok: true, text: ediBtn.t.slice(0, 40), score: ediBtn.score });
+            }
+            if (!saveBtn && !ediBtn) {
+              if (ranked[0]) {
+                ranked[0].el.click();
+                attempts.push({ label: 'editor_action', ok: true, text: ranked[0].t.slice(0, 40), score: ranked[0].score });
+              } else {
+                attempts.push({ label: 'editor_save', ok: false, error: 'no_save_button' });
+              }
+            }
+            for (const name of ['SaveClaim', 'saveClaim', 'SubmitClaim', 'submitClaim', 'CreateClaim', 'createClaim', 'SendEDI', 'sendEDI']) {
+              if (typeof window[name] !== 'function') continue;
+              try {
+                window[name]();
+                attempts.push({ label: `helper:${name}`, ok: true });
+                break;
+              } catch (err) {
+                attempts.push({ label: `helper:${name}`, ok: false, error: String(err?.message || err).slice(0, 100) });
+              }
+            }
+            return {
+              isEditor: true,
+              url,
+              title: document.title || null,
+              attempts,
+              preview: text.slice(0, 500),
+              topButtons: ranked.slice(0, 8).map((x) => ({ text: x.t.slice(0, 40), score: x.score })),
+            };
+          }, undefined, 30000);
+          await sleep(2000);
+          // Second pass after Save paint — EDI button may appear late.
+          try {
+            const ediFollow = await evaluateWithTimeout(session.page, () => {
+              const visible = (el) => {
+                if (!el) return false;
+                const s = window.getComputedStyle(el);
+                if (s.display === 'none' || s.visibility === 'hidden') return false;
+                const r = el.getBoundingClientRect();
+                return r.width > 0 && r.height > 0;
+              };
+              const ranked = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'))
+                .filter(visible)
+                .map((el) => {
+                  const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
+                  let score = 0;
+                  if (/send\s*via\s*edi|electronic\s*submit|submit\s*(claim|edi)|transmit/i.test(t)) score += 120;
+                  if (/hcfa\s*entry/i.test(t)) score += 70;
+                  if (/cancel|close|back|home/i.test(t)) score -= 200;
+                  return { el, t, score };
+                })
+                .filter((x) => x.score >= 70)
+                .sort((a, b) => b.score - a.score);
+              if (!ranked[0]) return { ok: false, error: 'no_edi_followup' };
+              ranked[0].el.click();
+              return { ok: true, text: ranked[0].t.slice(0, 40), score: ranked[0].score };
+            }, undefined, 20000);
+            dailySuperBill.claimEditor = {
+              ...(dailySuperBill.claimEditor || {}),
+              ediFollow,
+            };
+          } catch (err) {
+            dailySuperBill.claimEditor = {
+              ...(dailySuperBill.claimEditor || {}),
+              ediFollow: { error: String(err?.message || err).slice(0, 120) },
+            };
+          }
+          await sleep(4000);
+        } catch (err) {
+          dailySuperBill.claimEditor = { error: String(err?.message || err).slice(0, 160) };
+        }
+      }
+
+      dailySuperBill.afterReport = await session.page.evaluate(() => ({
+        url: location.href,
+        preview: (document.body.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 700),
+        rows: Array.from(document.querySelectorAll('table tr, .k-grid-content tr'))
+          .map((tr) => (tr.innerText || '').replace(/\s+/g, ' ').trim())
+          .filter((t) => /59400|59409|claim|alvarado|denise|\$\d|invoice|hcfa/i.test(t))
+          .slice(0, 12),
+        claimLinks: Array.from(document.querySelectorAll('a, button'))
+          .map((el) => (el.textContent || el.value || '').replace(/\s+/g, ' ').trim())
+          .filter((t) => /^(invoice|hcfa|ub-?04)$/i.test(t))
+          .slice(0, 10),
+      }));
+
+      try {
+        const billsNav = await gotoWithBudget(session.page, `${origin}/Billing/BillingListView`, {
+          timeout: Math.max(8000, Number(pageTimeoutMs) || 20000),
+        });
+        if (billsNav.ok) {
+          await sleep(800);
+          try {
+            await session.page.evaluate((needle) => {
+              const datePrefer = [/this\s*month/i, /year\s*to\s*date/i, /this\s*week/i, /^today$/i];
+              const dateNodes = Array.from(document.querySelectorAll('a, button, input[type="button"], label, span, li'));
+              for (const re of datePrefer) {
+                const dateBtn = dateNodes.find((el) => re.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
+                if (dateBtn) { dateBtn.click(); break; }
+              }
+              const nameInput = document.getElementById('searchTerm')
+                || Array.from(document.querySelectorAll('input')).find((inp) => /searchTerm|name|patient|client|search/i.test(`${inp.id || ''} ${inp.name || ''} ${inp.placeholder || ''}`));
+              if (nameInput) {
+                const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
+                if (setter) setter.call(nameInput, needle);
+                else nameInput.value = needle;
+                nameInput.dispatchEvent(new Event('input', { bubbles: true }));
+                nameInput.dispatchEvent(new Event('change', { bubbles: true }));
+                if (window.jQuery) window.jQuery(nameInput).val(needle).trigger('change');
+              }
+              if (typeof window.filterRecords === 'function') window.filterRecords();
+              else {
+                const go = document.getElementById('btnSearch');
+                if (go) go.click();
+              }
+            }, wantName);
+            await sleep(3500);
+          } catch (_) { /* ignore */ }
+          dailySuperBill.sentBillsProbe = await session.page.evaluate((needle) => {
+            const text = (document.body.innerText || '').replace(/\s+/g, ' ').trim();
+            const n = String(needle || '').toLowerCase();
+            const rows = Array.from(document.querySelectorAll('table tr, .k-grid-content tr'))
+              .map((tr) => (tr.innerText || '').replace(/\s+/g, ' ').trim())
+              .filter((t) => {
+                if (!t || !n || !t.toLowerCase().includes(n)) return false;
+                return /\bHCFA\b|\bUB\s*-?\s*04\b|\b\d{5,}\b/.test(t) && /\d{1,2}\/\d{1,2}\/\d{4}/.test(t);
+              })
+              .slice(0, 8);
+            return {
+              checked: true,
+              noItems: /no items to display|no records|no data/i.test(text) && !rows.length,
+              nameHit: Boolean(rows.length),
+              claimSubmitted: rows.some((t) => /claim\s*submitted/i.test(t)),
+              rows,
+              preview: text.slice(0, 500),
+            };
+          }, wantName);
+        } else {
+          dailySuperBill.sentBillsProbe = { checked: false, error: billsNav.error };
+        }
+      } catch (err) {
+        dailySuperBill.sentBillsProbe = { checked: false, error: String(err?.message || err).slice(0, 120) };
+      }
+
+      const sent = dailySuperBill.sentBillsProbe || {};
+      const filed = Boolean(sent.nameHit) || (sent.checked && sent.noItems === false && !sent.error);
+      return {
+        ok: claimLinkOk,
+        filed: Boolean(sent.nameHit),
+        patientQuery: wantName,
+        visitDate: reportDate,
+        claimLinkOk,
+        sentBillsProbe: sent,
+        claimEditor: dailySuperBill.claimEditor || null,
+        dailySuperBill,
+        message: sent.nameHit
+          ? `Sent Bills shows ${wantName}`
+          : (claimLinkOk
+            ? 'HCFA/Invoice clicked + editor Save attempted; Sent Bills name hit not yet proved'
+            : 'Could not click Invoice/HCFA on SuperBillReport'),
+        screenshots,
+        url: session.page.url(),
+      };
+    } finally {
+      // Tip: after Generate, Chromium can wedge so session.close never resolves —
+      // that blocked stdout JSON until SIGKILL. Race close so child can exit.
+      await Promise.race([
+        session.close().catch(() => {}),
+        sleep(1500),
+      ]);
+    }
+  }
+
+  /**
+   * Open Charge Slip from a client billing chart (carries patient context better than cold ChargeSlip URL).
+   */
+  async function openChargeSlipFromBilling({
+    billingHref,
+    careType = 'Intrapartum Care',
+    dryRun = true,
+    pageTimeoutMs = 20000,
+  } = {}) {
+    if (!billingHref) return { ok: false, error: 'billingHref required' };
+    const pregnancyId = String(billingHref).match(/\/Pregnancy\/Billing\/([^/?#]+)/i)?.[1] || null;
+    const result = await login({ dryRun: false });
+    const { session, screenshots } = result;
+    try {
+      const nav = await gotoWithBudget(session.page, billingHref, {
+        timeout: Math.max(8000, Number(pageTimeoutMs) || 20000),
+      });
+      if (!nav.ok) return { ok: false, error: nav.error, screenshots };
+      await sleep(1500);
+      const billingTab = await session.page.$('a[href*="#tabs-billing"]');
+      if (billingTab) {
+        await billingTab.click().catch(() => {});
+        await sleep(800);
+      }
+
+      // Prefer explicit pregnancyId ChargeSlip URL — nav "Billing Slip" drops context.
+      const origin = new URL(session.currentUrl()).origin;
+      const chargeUrl = pregnancyId
+        ? `${origin}/Company/ChargeSlip?pregnancyId=${encodeURIComponent(pregnancyId)}`
+        : `${origin}/Company/ChargeSlip`;
+      const chargeNav = await gotoWithBudget(session.page, chargeUrl, {
+        timeout: Math.max(8000, Number(pageTimeoutMs) || 20000),
+      });
+      if (!chargeNav.ok) return { ok: false, error: chargeNav.error, screenshots, pregnancyId };
+      await sleep(3000);
+
+      // Force hidden pregnancy/patient fields if present.
+      if (pregnancyId) {
+        await session.page.evaluate((id) => {
+          for (const name of ['PregnancyId', 'PregnancyID', 'pregnancyId', 'PatientId', 'PatientID', 'ClientId', 'SelectedPregnancyId']) {
+            const el = document.getElementById(name) || document.querySelector(`[name="${name}"]`);
+            if (!el) continue;
+            el.value = id;
+            el.dispatchEvent(new Event('input', { bubbles: true }));
+            el.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+        }, pregnancyId);
+        await sleep(1000);
+      }
+
+      // Wait briefly for ChargeSlipId options to hydrate beyond "None".
+      for (let i = 0; i < 6; i += 1) {
+        const ready = await session.page.evaluate(() => {
+          const sel = document.getElementById('ChargeSlipId');
+          const opts = Array.from(sel?.options || []).map((o) => (o.textContent || '').trim()).filter(Boolean);
+          return { count: opts.length, opts: opts.slice(0, 20) };
+        });
+        if ((ready?.count || 0) > 1) break;
+        await sleep(1000);
+      }
+
+      const chargeSlipType = await session.page.evaluate((wantType) => {
+        const sel = document.getElementById('ChargeSlipId');
+        if (!sel) return { set: false, reason: 'ChargeSlipId missing' };
+        const want = String(wantType || 'Intrapartum Care').toLowerCase();
+        const option = Array.from(sel.options || []).find((o) => (o.textContent || '').toLowerCase().includes(want))
+          || Array.from(sel.options || []).find((o) => /intrapartum|postpartum|newborn|antepartum/i.test(o.textContent || ''));
+        if (!option) {
+          return {
+            set: false,
+            available: Array.from(sel.options || []).map((o) => (o.textContent || '').trim()),
+          };
+        }
+        sel.value = option.value;
+        Array.from(sel.options || []).forEach((o) => { o.selected = o === option; });
+        sel.dispatchEvent(new Event('change', { bubbles: true }));
+        try { window.$(sel).trigger('change'); } catch (_) {}
+        return { set: true, text: (option.textContent || '').trim(), value: option.value };
+      }, careType);
+      if (chargeSlipType?.set) await sleep(1500);
+
+      // Try Daily Super bill if care-type options never hydrated.
+      let dailySuperBill = { clicked: false };
+      if (!chargeSlipType?.set) {
+        dailySuperBill = await session.page.evaluate(() => {
+          const btn = Array.from(document.querySelectorAll('button, input[type="button"], a'))
+            .find((el) => /daily super bill/i.test((el.textContent || el.value || '').trim()));
+          if (!btn) return { clicked: false };
+          btn.click();
+          return { clicked: true };
+        });
+        if (dailySuperBill.clicked) await sleep(3000);
+      }
+
+      let saveResult = { attempted: false };
+      if (!dryRun && (chargeSlipType?.set || dailySuperBill.clicked)) {
+        saveResult = await session.page.evaluate(() => {
+          const save = Array.from(document.querySelectorAll('button, input[type="submit"], input[type="button"]'))
+            .find((el) => /^save$/i.test((el.textContent || el.value || '').trim()));
+          if (!save) return { attempted: false };
+          save.click();
+          return { attempted: true, label: 'Save' };
+        });
+        await sleep(2500);
+      }
+
+      const snapshot = await session.page.evaluate(() => {
+        const text = (document.body.innerText || '').replace(/\s+/g, ' ').trim();
+        const patientLine = (text.match(/Patient:\s*([^\n]{0,80})/i) || [])[1] || '';
+        const ageLine = (text.match(/Age:\s*([^\n]{0,40})/i) || [])[1] || '';
+        const dobLine = (text.match(/DOB:\s*([^\n]{0,40})/i) || [])[1] || '';
+        const patientSelected = Boolean(
+          (patientLine && !/please select/i.test(patientLine) && patientLine.trim().length > 1)
+          || (dobLine && /\d/.test(dobLine))
+          || (ageLine && /\d/.test(ageLine))
+        );
+        const chargeOpts = Array.from(document.getElementById('ChargeSlipId')?.options || [])
+          .map((o) => (o.textContent || '').trim())
+          .filter(Boolean);
+        return {
+          patientSelected,
+          patientLine: patientLine.slice(0, 80),
+          ageLine: ageLine.slice(0, 40),
+          dobLine: dobLine.slice(0, 40),
+          chargeOpts,
+          textPreview: text.slice(0, 1200),
+        };
+      });
+
+      return {
+        ok: true,
+        billingHref,
+        pregnancyId,
+        chargeUrl,
+        chargeSlipType,
+        dailySuperBill,
+        saveResult,
+        dryRun: dryRun !== false,
+        ...snapshot,
+        url: session.page.url(),
+        screenshots,
+      };
+    } finally {
+      await session.close().catch(() => {});
+    }
+  }
+
+  async function prepareClaimStatus({
+    billingHref,
+    clientBillingStatus = 'Claims Processing',
+    billProviderType = 'CPM',
+    dryRun = false,
+  } = {}) {
+    return repairBillingAccount({
+      billingHref,
+      updates: {
+        client_billing_status: clientBillingStatus,
+        bill_provider_type: billProviderType,
+      },
+      dryRun,
+    });
+  }
+
   return {
     getReadiness,
     getCredentials,
     listWorkflowTemplates: () => WORKFLOW_TEMPLATES,
     login,
     discoverBillingSurface,
+    crawlSiteMap,
     inspectPage,
     buildBillingOverview,
     inspectBillingNotesTransport,
     inspectClientBillingAccount,
+    inspectClientBillingFullTables,
+    probeDocumentDownloadHeaders,
+    extractDocumentText,
+    downloadDocumentBase64,
     scanClientBillingAccounts,
     scanBillingNotes,
+    scanBirthActivity,
+    mapChargeSlip,
+    fileSuperBillClaim,
+    openChargeSlipFromBilling,
     buildAccountRescueReport,
     buildFullAccountRescueReport,
     buildBacklogSummary,
     searchClientDirectory,
     extractClaimTables,
     repairBillingAccount,
+    prepareClaimStatus,
     runClientcareVobFlow,
     /** Post a billing note to ClientCare. billingHref is the client billing page URL. */
     async addBillingNote(billingHref, noteText) {

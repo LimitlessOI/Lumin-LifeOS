@@ -75,47 +75,142 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
   async function loginToExpOkta(dryRun = false) {
     const credentials = await getExpCredentials();
     const session = await createSession();
+    const screenshots = [];
+
+    const USERNAME_SELS = [
+      '#okta-signin-username',
+      'input[name="identifier"]',
+      'input[name="username"]',
+      'input[autocomplete="username"]',
+      'input[type="email"]',
+      'input[data-se="o-form-input-username"]',
+      'input.okta-form-input-field[type="text"]',
+    ].join(', ');
+    const PASSWORD_SELS = [
+      '#okta-signin-password',
+      'input[name="credentials.passcode"]',
+      'input[name="password"]',
+      'input[autocomplete="current-password"]',
+      'input[type="password"]',
+      'input[data-se="o-form-input-password"]',
+    ].join(', ');
+    const SUBMIT_SELS = '#okta-signin-submit, [data-type="save"], button[type="submit"], input[type="submit"]';
+
+    async function observeLoginFields() {
+      return session.page.evaluate(() => {
+        const inputs = Array.from(document.querySelectorAll('input, button, a[href]'))
+          .slice(0, 80)
+          .map((el) => ({
+            tag: el.tagName,
+            type: el.getAttribute('type') || '',
+            name: el.getAttribute('name') || '',
+            id: el.id || '',
+            autocomplete: el.getAttribute('autocomplete') || '',
+            placeholder: el.getAttribute('placeholder') || '',
+            text: (el.textContent || '').trim().slice(0, 60),
+            href: el.getAttribute('href') || '',
+          }));
+        return { url: location.href, title: document.title, inputs };
+      });
+    }
+
+    function looksAuthenticated(url, content) {
+      const u = String(url || '');
+      // Path/host only — ignore query (OAuth authorize embeds .../enduser/callback in redirect_uri).
+      let path = u;
+      try {
+        const parsed = new URL(u);
+        path = `${parsed.origin}${parsed.pathname}`;
+      } catch {
+        path = u.split('?')[0];
+      }
+      if (/\/oauth2\/|\/authorize|\/login\/login\.htm|\/signin/i.test(path)) return false;
+      return /\/app\/UserHome|\/enduser\/|session_hint=AUTHENTICATED|\/dashboard/i.test(u)
+        || (/skyslope\.com\/(dashboard|files|home)/i.test(path));
+    }
 
     try {
-      await session.navigate(getExpOktaCredentialsFromEnv().url || EXP_OKTA_URL);
-      const sp = await screenshotPath('exp-okta-login-page');
+      // Force classic login form when possible (homepage often redirects to OAuth authorize without fields).
+      const loginUrl = getExpOktaCredentialsFromEnv().url || EXP_OKTA_URL;
+      const forcedLogin = String(loginUrl).includes('/login')
+        ? loginUrl
+        : 'https://exprealty.okta.com/login/login.htm';
+      await session.navigate(forcedLogin);
+      await session.page.waitForTimeout(1500);
+      let sp = await screenshotPath('exp-okta-login-page');
       await session.page.screenshot({ path: sp });
-      logger.info?.({ screenshot: sp }, '[TC-BROWSER] eXp Okta login page loaded');
+      screenshots.push(sp);
+      logger.info?.({ screenshot: sp, url: session.page.url() }, '[TC-BROWSER] eXp Okta login page loaded');
 
       if (dryRun) {
-        return { session, ok: true, dryRun: true, screenshots: [sp] };
+        return { session, ok: true, dryRun: true, screenshots, observed: await observeLoginFields() };
       }
 
-      // Okta standard login form
-      await session.fill('#okta-signin-username, input[name="identifier"], input[type="email"]', credentials.username);
+      // Already signed in (cookie/session) — skip form and proceed.
+      if (looksAuthenticated(session.page.url(), await session.page.content().catch(() => ''))) {
+        const successSp = await screenshotPath('exp-okta-already-authenticated');
+        await session.page.screenshot({ path: successSp });
+        screenshots.push(successSp);
+        return { session, ok: true, screenshots, alreadyAuthenticated: true };
+      }
 
-      // Okta may show password on same screen or after clicking Next
-      const nextBtn = await session.page.$('#okta-signin-submit, [data-type="save"]');
+      // Wait briefly for Identity Engine widgets to hydrate.
+      await session.page.waitForSelector(USERNAME_SELS, { timeout: 8000 }).catch(() => null);
+
+      try {
+        await session.fill(USERNAME_SELS, credentials.username);
+      } catch (fillErr) {
+        // If homepage redirect left us authenticated mid-flow, recover.
+        if (looksAuthenticated(session.page.url(), await session.page.content().catch(() => ''))) {
+          const successSp = await screenshotPath('exp-okta-already-authenticated');
+          await session.page.screenshot({ path: successSp });
+          screenshots.push(successSp);
+          return { session, ok: true, screenshots, alreadyAuthenticated: true };
+        }
+        const observed = await observeLoginFields();
+        const failSp = await screenshotPath('exp-okta-no-username-field');
+        await session.page.screenshot({ path: failSp });
+        screenshots.push(failSp);
+        await session.close();
+        const err = new Error(
+          `${fillErr.message}. Observed url=${observed.url} title=${observed.title}. Screenshot: ${failSp}`
+        );
+        err.observed = observed;
+        err.screenshots = screenshots;
+        throw err;
+      }
+
+      const nextBtn = await session.page.$(SUBMIT_SELS);
       if (nextBtn) {
         await nextBtn.click();
         await session.page.waitForTimeout(1500);
       }
 
-      await session.fill('#okta-signin-password, input[name="credentials.passcode"], input[type="password"]', credentials.password);
-      await session.click('#okta-signin-submit, [data-type="save"], button[type="submit"]');
+      await session.page.waitForSelector(PASSWORD_SELS, { timeout: 8000 }).catch(() => null);
+      await session.fill(PASSWORD_SELS, credentials.password);
+      await session.click(SUBMIT_SELS);
 
       await session.page.waitForNavigation({ waitUntil: 'networkidle2', timeout: LOGIN_TIMEOUT_MS }).catch(() => {});
+      await session.page.waitForTimeout(1200);
 
       const url = session.page.url();
       const content = await session.page.content();
 
-      if (/sign.?in|login|error|incorrect/i.test(content) && url.includes('okta.com')) {
+      if (/sign.?in|login|error|incorrect|unable to sign in/i.test(content) && url.includes('okta.com')
+        && !looksAuthenticated(url, content)) {
         const failSp = await screenshotPath('exp-okta-login-failed');
         await session.page.screenshot({ path: failSp });
+        screenshots.push(failSp);
         await session.close();
         throw new Error(`eXp Okta login failed. Screenshot: ${failSp}`);
       }
 
       const successSp = await screenshotPath('exp-okta-login-success');
       await session.page.screenshot({ path: successSp });
+      screenshots.push(successSp);
       logger.info?.({ url, screenshot: successSp }, '[TC-BROWSER] eXp Okta login success');
 
-      return { session, ok: true, screenshots: [sp, successSp] };
+      return { session, ok: true, screenshots };
     } catch (err) {
       await session.close().catch(() => {});
       throw err;
@@ -125,54 +220,128 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
   /**
    * After eXp Okta login, navigate to SkySlope.
    * Must use the same session returned by loginToExpOkta.
+   * Okta tiles often open a new tab — adopt the newest page when that happens.
    */
   async function navigateToSkySlope(session) {
     const screenshots = [];
+    const browser = session.browser;
+    if (!browser) throw new Error('session.browser missing — recreate session via createSession');
 
-    // Try to find SkySlope tile/link on the Okta dashboard
+    const beforePages = new Set((await browser.pages()).map((p) => p));
+
+    async function adoptNewPageIfAny(timeoutMs = 12000) {
+      const deadline = Date.now() + timeoutMs;
+      while (Date.now() < deadline) {
+        const pages = await browser.pages();
+        const fresh = pages.filter((p) => !beforePages.has(p));
+        for (const p of fresh.reverse()) {
+          const u = p.url();
+          if (/skyslope|lonewolf|transaction/i.test(u) || (!u.startsWith('about:') && u !== 'chrome://newtab/')) {
+            if (typeof session.setPage === 'function') await session.setPage(p);
+            else session.page = p;
+            return p;
+          }
+        }
+        // Also prefer any existing SkySlope page even if not "new"
+        for (const p of pages) {
+          if (/skyslope\.com/i.test(p.url()) && !/sign-?in/i.test(p.url())) {
+            if (typeof session.setPage === 'function') await session.setPage(p);
+            else session.page = p;
+            return p;
+          }
+        }
+        await new Promise((r) => setTimeout(r, 400));
+      }
+      return null;
+    }
+
+    // Prefer clicking the Okta tile (SSO) while listening for a new target.
+    const targetPromise = browser.waitForTarget(
+      (t) => t.type() === 'page' && /skyslope/i.test(t.url() || ''),
+      { timeout: 15000 }
+    ).catch(() => null);
+
     const skySlopeSelectors = [
-      'a[href*="skyslope"]',
+      'a[href*="skyslope" i]',
       '[data-se*="skyslope" i]',
-      '.app-name',
+      'a[aria-label*="SkySlope" i]',
+      '.app-button a[href*="skyslope" i]',
     ];
 
     let clicked = false;
     for (const sel of skySlopeSelectors) {
-      const el = await session.page.$(sel);
+      const el = await session.page.$(sel).catch(() => null);
       if (el) {
-        const text = await session.page.evaluate(e => e.textContent, el);
-        if (!sel.includes('app-name') || /skyslope/i.test(text)) {
-          await el.click();
-          clicked = true;
-          break;
-        }
+        await el.click();
+        clicked = true;
+        break;
       }
     }
 
     if (!clicked) {
-      // Text-based search across all links/buttons
       clicked = await session.page.evaluate(() => {
-        const els = Array.from(document.querySelectorAll('a, button, [role="link"]'));
-        const el = els.find(e => /skyslope/i.test(e.textContent));
+        const els = Array.from(document.querySelectorAll('a, button, [role="link"], [role="button"], div[tabindex]'));
+        const el = els.find((e) => /skyslope/i.test(`${e.textContent || ''} ${e.getAttribute?.('aria-label') || ''}`));
         if (el) { el.click(); return true; }
         return false;
       });
     }
 
-    if (!clicked) {
-      // Direct navigation as fallback (SkySlope accepts Okta tokens in cookies)
-      await session.navigate('https://skyslope.com/sign-in');
+    let adopted = null;
+    const target = await targetPromise;
+    if (target) {
+      const p = await target.page().catch(() => null);
+      if (p) {
+        if (typeof session.setPage === 'function') await session.setPage(p);
+        else session.page = p;
+        adopted = p;
+      }
+    }
+    if (!adopted) adopted = await adoptNewPageIfAny(clicked ? 10000 : 2000);
+
+    // If still on Okta dashboard, try known SkySlope entry URLs in this session (cookies).
+    let url = session.page.url();
+    if (!/skyslope\.com/i.test(url) || /sign-?in/i.test(url)) {
+      const candidates = [
+        'https://app.skyslope.com/',
+        'https://www.skyslope.com/',
+        'https://skyslope.com/',
+      ];
+      for (const next of candidates) {
+        try {
+          await session.page.goto(next, { waitUntil: 'domcontentloaded', timeout: NAV_TIMEOUT_MS });
+          await session.page.waitForTimeout(1500);
+          url = session.page.url();
+          if (/skyslope\.com/i.test(url) && !/sign-?in|login/i.test(url)) break;
+          // If we landed on sign-in, try waiting for SSO redirect
+          if (/sign-?in|login/i.test(url)) {
+            await session.page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 8000 }).catch(() => {});
+            url = session.page.url();
+            if (/skyslope\.com/i.test(url) && !/sign-?in|login/i.test(url)) break;
+          }
+        } catch {
+          /* try next */
+        }
+      }
+    } else {
+      await session.page.waitForNavigation({ waitUntil: 'networkidle2', timeout: NAV_TIMEOUT_MS }).catch(() => {});
+      url = session.page.url();
     }
 
-    await session.page.waitForNavigation({ waitUntil: 'networkidle2', timeout: NAV_TIMEOUT_MS }).catch(() => {});
-
-    const url = session.page.url();
     const sp = await screenshotPath('skyslope-loaded');
-    await session.page.screenshot({ path: sp });
+    await session.page.screenshot({ path: sp }).catch(() => {});
     screenshots.push(sp);
 
-    logger.info?.({ url, screenshot: sp }, '[TC-BROWSER] SkySlope loaded');
-    return { ok: true, url, screenshots };
+    const ok = /skyslope\.com/i.test(url) && !/sign-?in|login/i.test(url);
+    logger.info?.({ url, screenshot: sp, clicked, adopted: !!adopted, ok }, '[TC-BROWSER] SkySlope navigation finished');
+    return {
+      ok,
+      url,
+      screenshots,
+      clicked,
+      via: adopted ? 'okta_tile_new_tab' : (clicked ? 'okta_tile_same_tab' : 'direct_goto'),
+      needs_human: !ok ? 'SkySlope still on sign-in — Okta SSO tile may require MFA or app assignment' : undefined,
+    };
   }
 
   /**
@@ -225,6 +394,22 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
       const url = session.page.url();
       const content = await session.page.content();
 
+      // Clareity can require a live 2FA code (email/SMS) after correct credentials.
+      // This is NOT a login failure by the checks below (no /idp/login redirect, no
+      // "invalid" text) — without this check the function fell through to `ok: true`
+      // and handed callers a session stuck on the MFA page, which downstream surfaced
+      // as a misleading "TransactionDesk link not found" instead of the real cause.
+      if (/\/authentication\/mfa/i.test(url) || /verify your identity|send code via (email|sms)/i.test(content)) {
+        const mfaSp = await screenshotPath('glvar-mfa-required');
+        await session.page.screenshot({ path: mfaSp });
+        await session.close();
+        const mfaErr = new Error(
+          `GLVAR/Clareity requires a live 2FA code (email or SMS) before login can complete — this cannot be automated without a human providing the code. Screenshot: ${mfaSp}`
+        );
+        mfaErr.needs_mfa = true;
+        throw mfaErr;
+      }
+
       if (url.includes('/idp/login') || /invalid|authentication failed|incorrect/i.test(content)) {
         const failSp = await screenshotPath('glvar-login-failed');
         await session.page.screenshot({ path: failSp });
@@ -254,49 +439,122 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
   async function navigateToTransactionDesk(session) {
     // Strategy 1: SP-initiated SSO — the canonical Clareity→TransactionDesk entry point for GLVAR.
     // After Clareity login the session cookie authenticates this redirect automatically.
-    const GLVAR_TD_SSO_URL =
-      'https://pr.transactiondesk.com/external/Clareity_SSOSpRequestIssuer.ashx?MLS=GLVAR';
+    // Strategy 2: return to Clareity portal and click the TD tile (SSO often leaves us off-portal).
+    const portalUrlBefore = session.page.url();
+    const ssoCandidates = [
+      'https://pr.transactiondesk.com/external/Clareity_SSOSpRequestIssuer.ashx?MLS=GLVAR',
+      'https://pr.transactiondesk.com/external/Clareity_SSOSpRequestIssuer.aspx?MLS=GLVAR',
+      'https://www.transactiondesk.com/external/Clareity_SSOSpRequestIssuer.ashx?MLS=GLVAR',
+    ];
+    const lastSsoUrls = [];
 
-    logger.info?.('[TC-BROWSER] Attempting direct SSO to TransactionDesk via SP-initiated URL');
-    try {
-      await session.navigate(GLVAR_TD_SSO_URL);
-      await session.page.waitForNavigation({ waitUntil: 'networkidle2', timeout: NAV_TIMEOUT_MS }).catch(() => {});
-      await session.page.waitForTimeout(2000);
-
-      const urlAfterSso = session.page.url();
-      if (_urlLooksLikeTransactionDesk(urlAfterSso)) {
-        const sp = await screenshotPath('transactiondesk-loaded-via-sso');
-        await session.page.screenshot({ path: sp });
-        logger.info?.({ url: urlAfterSso, screenshot: sp }, '[TC-BROWSER] TransactionDesk loaded via direct SSO URL');
-        return { ok: true, url: urlAfterSso, screenshots: [sp], via: 'direct_sso' };
+    async function adoptTdTabIfAny(timeoutMs = 8000) {
+      const browser = session.browser;
+      if (!browser) return null;
+      const before = new Set((await browser.pages()).map((p) => p));
+      const deadline = Date.now() + timeoutMs;
+      while (Date.now() < deadline) {
+        for (const p of await browser.pages()) {
+          const u = p.url();
+          if (_urlLooksLikeTransactionDesk(u)) {
+            if (typeof session.setPage === 'function') await session.setPage(p);
+            return p;
+          }
+        }
+        const fresh = (await browser.pages()).filter((p) => !before.has(p));
+        for (const p of fresh.reverse()) {
+          const u = p.url();
+          if (_urlIsTransactionDeskLogin(u)) continue;
+          if (typeof session.setPage === 'function') await session.setPage(p);
+          return p;
+        }
+        await new Promise((r) => setTimeout(r, 350));
       }
-      // Might have landed on a TD login page — check if we're on pr.transactiondesk.com
-      if (urlAfterSso.includes('transactiondesk.com') || urlAfterSso.includes('lonewolf')) {
-        const sp = await screenshotPath('transactiondesk-loaded-via-sso');
-        await session.page.screenshot({ path: sp });
-        logger.info?.({ url: urlAfterSso, screenshot: sp }, '[TC-BROWSER] TransactionDesk domain reached via direct SSO');
-        return { ok: true, url: urlAfterSso, screenshots: [sp], via: 'direct_sso' };
-      }
-      logger.warn?.({ urlAfterSso }, '[TC-BROWSER] Direct SSO URL did not land on TD — falling back to portal scan');
-    } catch (ssoErr) {
-      logger.warn?.({ err: ssoErr.message }, '[TC-BROWSER] Direct SSO navigation threw — falling back to portal scan');
+      return null;
     }
 
-    // Strategy 2: Scan portal page for TD link/tile
-    // First give the page a moment to fully render any dynamic JS tiles
-    await session.page.waitForTimeout(2500);
+    for (const ssoUrl of ssoCandidates) {
+      logger.info?.({ ssoUrl }, '[TC-BROWSER] Attempting direct SSO to TransactionDesk');
+      try {
+        await session.navigate(ssoUrl);
+        await session.page.waitForNavigation({ waitUntil: 'networkidle2', timeout: NAV_TIMEOUT_MS }).catch(() => {});
+        await session.page.waitForTimeout(1500);
+        await adoptTdTabIfAny(4000);
+
+        const urlAfterSso = session.page.url();
+        lastSsoUrls.push(urlAfterSso);
+        if (_urlLooksLikeTransactionDesk(urlAfterSso)) {
+          const sp = await screenshotPath('transactiondesk-loaded-via-sso');
+          await session.page.screenshot({ path: sp });
+          logger.info?.({ url: urlAfterSso, screenshot: sp }, '[TC-BROWSER] TransactionDesk loaded via direct SSO URL');
+          return { ok: true, url: urlAfterSso, screenshots: [sp], via: 'direct_sso' };
+        }
+        if (_urlIsTransactionDeskLogin(urlAfterSso)) {
+          logger.warn?.({ urlAfterSso, ssoUrl }, '[TC-BROWSER] SSO landed on TD login — trying Clareity/SSO button');
+          const clickedSso = await session.page.evaluate(() => {
+            const els = Array.from(document.querySelectorAll('a, button, [role="button"], input[type="submit"]'));
+            const el = els.find((e) =>
+              /clareity|sso|single\s*sign|mls\s*login|glvar|login\s*with/i.test(
+                `${e.textContent || ''} ${e.value || ''} ${e.getAttribute?.('href') || ''}`
+              )
+            );
+            if (el) {
+              el.click();
+              return true;
+            }
+            return false;
+          });
+          if (clickedSso) {
+            await session.page.waitForNavigation({ waitUntil: 'networkidle2', timeout: NAV_TIMEOUT_MS }).catch(() => {});
+            await session.page.waitForTimeout(2000);
+            await adoptTdTabIfAny(6000);
+            const afterBtn = session.page.url();
+            lastSsoUrls.push(`login-btn→${afterBtn}`);
+            if (_urlLooksLikeTransactionDesk(afterBtn)) {
+              const sp = await screenshotPath('transactiondesk-loaded-via-sso-btn');
+              await session.page.screenshot({ path: sp });
+              return { ok: true, url: afterBtn, screenshots: [sp], via: 'td_login_clareity_button' };
+            }
+          }
+        } else {
+          logger.warn?.({ urlAfterSso, ssoUrl }, '[TC-BROWSER] SSO candidate did not land on TD');
+        }
+      } catch (ssoErr) {
+        lastSsoUrls.push(`ERR:${ssoErr.message}`);
+        logger.warn?.({ err: ssoErr.message, ssoUrl }, '[TC-BROWSER] Direct SSO navigation threw');
+      }
+    }
+
+    // Return to Clareity portal before scanning for tiles (SSO navigates away).
+    const portalCandidates = [
+      portalUrlBefore,
+      'https://glvar.clareityiam.net/idp/profile/SAML2/Redirect/SSO',
+      'https://glvar.clareityiam.net/',
+      GLVAR_LOGIN_URL,
+    ].filter((u, i, arr) => u && arr.indexOf(u) === i && !/transactiondesk/i.test(u));
+
+    for (const portal of portalCandidates) {
+      try {
+        await session.navigate(portal);
+        await session.page.waitForTimeout(2000);
+        if (/clareity|glvar|matrix|flexmls/i.test(session.page.url())) break;
+      } catch {
+        /* try next */
+      }
+    }
+    await session.page.waitForTimeout(1500);
 
     const tdSelectors = [
-      'a[href*="transactiondesk"]',
-      'a[href*="pr.transactiondesk"]',
-      'a[href*="ziplogix"]',
-      'a[href*="tdnavigator"]',
-      'a[href*="lonewolf"]',
+      'a[href*="transactiondesk" i]',
+      'a[href*="pr.transactiondesk" i]',
+      'a[href*="ziplogix" i]',
+      'a[href*="tdnavigator" i]',
+      'a[href*="lonewolf" i]',
     ];
 
     let clicked = false;
     for (const sel of tdSelectors) {
-      const el = await session.page.$(sel);
+      const el = await session.page.$(sel).catch(() => null);
       if (el) {
         await el.click();
         clicked = true;
@@ -305,29 +563,47 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
     }
 
     if (!clicked) {
-      // Text/title-based tile search (Clareity dashboard uses app tiles, not plain <a> tags)
-      const linkFound = await session.page.evaluate(() => {
-        const candidates = Array.from(document.querySelectorAll('a, button, [role="button"], [role="link"], [class*="tile"], [class*="app"], [class*="icon"]'));
-        const td = candidates.find(l =>
-          /transactiondesk|transaction desk|lone\s*wolf\s*transactions/i.test(
-            `${l.textContent || ''} ${l.getAttribute?.('title') || ''} ${l.getAttribute?.('aria-label') || ''}`
+      clicked = await session.page.evaluate(() => {
+        const candidates = Array.from(
+          document.querySelectorAll('a, button, [role="button"], [role="link"], [class*="tile"], [class*="app"], [class*="icon"], img')
+        );
+        const td = candidates.find((l) =>
+          /transactiondesk|transaction desk|lone\s*wolf\s*transactions|zip\s*form|zipform/i.test(
+            `${l.textContent || ''} ${l.getAttribute?.('title') || ''} ${l.getAttribute?.('aria-label') || ''} ${l.getAttribute?.('alt') || ''} ${l.getAttribute?.('href') || ''}`
           )
         );
-        if (td) { td.click(); return true; }
+        if (td) {
+          (td.closest?.('a') || td).click();
+          return true;
+        }
         return false;
       });
-      clicked = linkFound;
+    }
+
+    if (!clicked) {
+      const launch = await clickTransactionLaunchIfPresent(session);
+      clicked = !!launch.clicked;
     }
 
     if (!clicked) {
       const sp = await screenshotPath('glvar-no-td-link');
       await session.page.screenshot({ path: sp, fullPage: true });
-      throw new Error(`TransactionDesk link not found on GLVAR portal. Screenshot: ${sp}`);
+      throw new Error(
+        `TransactionDesk link not found on GLVAR portal (after SSO tries: ${lastSsoUrls.join(' | ')}). Screenshot: ${sp}`
+      );
     }
 
+    await adoptTdTabIfAny(10000);
     await session.page.waitForNavigation({ waitUntil: 'networkidle2', timeout: NAV_TIMEOUT_MS }).catch(() => {});
 
     const url = session.page.url();
+    if (!_urlLooksLikeTransactionDesk(url)) {
+      const sp = await screenshotPath('glvar-td-still-login');
+      await session.page.screenshot({ path: sp, fullPage: true });
+      throw new Error(
+        `Reached TransactionDesk host but not authenticated (url=${url}; SSO tries: ${lastSsoUrls.join(' | ')}). Screenshot: ${sp}`
+      );
+    }
     const sp = await screenshotPath('transactiondesk-loaded');
     await session.page.screenshot({ path: sp });
     logger.info?.({ url, screenshot: sp }, '[TC-BROWSER] Navigated to TransactionDesk via portal link');
@@ -365,7 +641,13 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
   }
 
   function _urlLooksLikeTransactionDesk(url) {
-    return /transactiondesk|ziplogix|zipform|lonewolf|tdnavigator|pr\.transactiondesk/i.test(url || '');
+    const u = String(url || '');
+    if (/\/login|sign-?in|LogOn|auth\/|idp\/login/i.test(u)) return false;
+    return /transactiondesk|ziplogix|zipform|lonewolf|tdnavigator|pr\.transactiondesk/i.test(u);
+  }
+
+  function _urlIsTransactionDeskLogin(url) {
+    return /transactiondesk\.com/i.test(url || '') && /\/login|sign-?in|LogOn/i.test(url || '');
   }
 
   /**
@@ -382,7 +664,17 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
     const nav = await navigateToTransactionDesk(session);
     screenshots.push(...(nav.screenshots || []));
     url = session.page.url();
-    return { ok: true, via: 'portal_link', url, screenshots };
+    if (!_urlLooksLikeTransactionDesk(url)) {
+      return {
+        ok: false,
+        via: nav.via || 'failed',
+        url,
+        screenshots,
+        error: `Not authenticated into TransactionDesk (url=${url})`,
+        needs_human: 'Open GLVAR → TransactionDesk once in a browser to confirm SSO entitlement, then retry',
+      };
+    }
+    return { ok: true, via: nav.via || 'portal_link', url, screenshots };
   }
 
   /**
@@ -394,27 +686,118 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
       raw.split(/[\s,]+/).find((t) => t.length >= 3) || raw || '';
     if (!token) throw new Error('address_search / search text is empty');
 
-    const filled = await session.page.evaluate((text) => {
-      const inputs = Array.from(document.querySelectorAll('input:not([type="hidden"])'));
-      const searchInput =
-        inputs.find((i) => {
-          const ph = (i.placeholder || '').toLowerCase();
-          const nm = (i.name || '').toLowerCase();
-          const id = (i.id || '').toLowerCase();
-          return /search|find|filter|address|property|transaction|listing|file/i.test(ph + nm + id);
-        }) || inputs.find((i) => i.type === 'search');
-      if (!searchInput) return false;
-      searchInput.focus();
-      searchInput.value = text;
-      searchInput.dispatchEvent(new Event('input', { bubbles: true }));
-      searchInput.dispatchEvent(new Event('change', { bubbles: true }));
-      return true;
-    }, token);
+    // ZipForm/TD often lands on a hub; try known list/search entry points first.
+    const cur = session.page.url();
+    if (/transactiondesk\.com/i.test(cur)) {
+      for (const next of [
+        'https://pr.transactiondesk.com/TransactionDesk/Transactions',
+        'https://pr.transactiondesk.com/TransactionDesk/Transaction',
+      ]) {
+        try {
+          await session.page.goto(next, { waitUntil: 'domcontentloaded', timeout: NAV_TIMEOUT_MS });
+          await session.page.waitForTimeout(1200);
+          break;
+        } catch {
+          /* try next */
+        }
+      }
+    }
+
+    async function fillSearchInContext(ctx) {
+      const selectors = [
+        'input[type="search"]',
+        'input[placeholder*="Search" i]',
+        'input[placeholder*="Address" i]',
+        'input[placeholder*="Transaction" i]',
+        'input[name*="search" i]',
+        'input[id*="search" i]',
+        'input[aria-label*="search" i]',
+        '#searchBox',
+        '.search-input input',
+      ];
+      for (const sel of selectors) {
+        const el = await ctx.$(sel).catch(() => null);
+        if (!el) continue;
+        await el.click({ clickCount: 3 }).catch(() => {});
+        try {
+          await el.type(token, { delay: 20 });
+        } catch {
+          await ctx.evaluate((s, t) => {
+            const i = document.querySelector(s);
+            if (!i) return;
+            i.focus();
+            i.value = t;
+            i.dispatchEvent(new Event('input', { bubbles: true }));
+            i.dispatchEvent(new Event('change', { bubbles: true }));
+          }, sel, token).catch(() => {});
+        }
+        return true;
+      }
+
+      return ctx.evaluate((text) => {
+        const tryDoc = (doc) => {
+          const inputs = Array.from(
+            doc.querySelectorAll('input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"])')
+          );
+          const searchInput =
+            inputs.find((i) => {
+              const ph = (i.placeholder || '').toLowerCase();
+              const nm = (i.name || '').toLowerCase();
+              const id = (i.id || '').toLowerCase();
+              const aria = (i.getAttribute('aria-label') || '').toLowerCase();
+              return /search|find|filter|address|property|transaction|listing|file/i.test(ph + nm + id + aria);
+            }) ||
+            inputs.find((i) => i.type === 'search') ||
+            inputs.find((i) => i.offsetParent !== null && (i.type === 'text' || !i.type));
+          if (!searchInput) return false;
+          searchInput.focus();
+          searchInput.value = text;
+          searchInput.dispatchEvent(new Event('input', { bubbles: true }));
+          searchInput.dispatchEvent(new Event('change', { bubbles: true }));
+          return true;
+        };
+        if (tryDoc(document)) return true;
+        for (const frame of Array.from(document.querySelectorAll('iframe'))) {
+          try {
+            const doc = frame.contentDocument;
+            if (doc && tryDoc(doc)) return true;
+          } catch {
+            /* cross-origin */
+          }
+        }
+        return false;
+      }, token);
+    }
+
+    let filled = await fillSearchInContext(session.page);
+    if (!filled) {
+      for (const frame of session.page.frames()) {
+        try {
+          filled = await fillSearchInContext(frame);
+          if (filled) break;
+        } catch {
+          /* cross-origin / detached */
+        }
+      }
+    }
+
+    if (!filled) {
+      await session.page
+        .evaluate(() => {
+          const el = Array.from(document.querySelectorAll('a, button, [role="button"]')).find((e) =>
+            /search|find transaction|file search|advanced search/i.test((e.textContent || '').trim())
+          );
+          el?.click();
+        })
+        .catch(() => {});
+      await session.page.waitForTimeout(1200);
+      filled = await fillSearchInContext(session.page);
+    }
 
     if (!filled) {
       const sp = await screenshotPath('td-search-input-missing');
       await session.page.screenshot({ path: sp, fullPage: true });
-      throw new Error(`TransactionDesk search field not found. Screenshot: ${sp}`);
+      throw new Error(`TransactionDesk search field not found (url=${session.page.url()}). Screenshot: ${sp}`);
     }
 
     await session.page.keyboard.press('Enter');
@@ -423,7 +806,7 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
     const opened = await session.page.evaluate((text) => {
       const needle = text.toLowerCase();
       const rows = Array.from(
-        document.querySelectorAll('tr, [role="row"], li, .ag-row, [class*="result"], [class*="transaction"]')
+        document.querySelectorAll('tr, [role="row"], li, .ag-row, [class*="result"], [class*="transaction"], a')
       );
       for (const row of rows) {
         const t = (row.textContent || '').toLowerCase();
@@ -452,7 +835,7 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
 
     const sp = await screenshotPath('td-transaction-opened');
     await session.page.screenshot({ path: sp, fullPage: true });
-    return { ok: true, token, screenshot: sp };
+    return { ok: true, token, screenshot: sp, url: session.page.url() };
   }
 
   async function configurePuppeteerDownloads(session, dir) {

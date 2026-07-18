@@ -55,6 +55,10 @@ export function parseLuminChairSystemAction(text = '') {
       test: /\b(redeploy|deploy latest|ship to railway|push live)\b/i,
     },
     {
+      action_type: 'setup_account',
+      test: /\b(set\s*up|sign\s*up|create|open|register)\s+(an?\s+)?(account|subscription)\b/i,
+    },
+    {
       action_type: 'point_b_status',
       test: /\b(what(?:'s| is) point b|point b status|status of point b|current (program|mission|priority))\b/i,
     },
@@ -87,6 +91,70 @@ async function triggerManagedRedeploy({ baseUrl, operatorKey, logger }) {
   } catch (err) {
     logger?.warn?.('[LUMIN-CHAIR-ACTION] redeploy failed:', err.message);
     return { ok: false, error: err.message };
+  }
+}
+
+function extractSignupTarget(text = '') {
+  const t = String(text || '');
+  const urlMatch = t.match(/https?:\/\/[^\s<>"']+/i);
+  if (urlMatch) {
+    return { url: urlMatch[0].replace(/[.,;:!?)]+$/, ''), service: null };
+  }
+  const named = t.match(/\b(?:for|on|at|with)\s+([A-Za-z0-9][A-Za-z0-9._-]{1,40})(?:\s|$|[.,!?])/i);
+  if (named) {
+    const service = named[1].toLowerCase().replace(/[^a-z0-9._-]/g, '');
+    const knownHosts = {
+      postmark: 'https://account.postmarkapp.com/sign_up',
+      square: 'https://squareup.com/signup',
+      mindbody: 'https://www.mindbodyonline.com/',
+      jane: 'https://jane.app/signup',
+      jane_app: 'https://jane.app/signup',
+    };
+    if (knownHosts[service]) return { url: knownHosts[service], service };
+    return { url: null, service };
+  }
+  return { url: null, service: null };
+}
+
+async function triggerFounderAuthoritySignup({ baseUrl, operatorKey, text, logger }) {
+  if (!operatorKey) {
+    return { ok: false, error: 'operator_key_missing' };
+  }
+  const target = extractSignupTarget(text);
+  if (!target.url && !target.service) {
+    return {
+      ok: false,
+      error: 'signup_target_missing',
+      message: 'Say which service or paste the signup URL (e.g. “set up an account at https://…”).',
+    };
+  }
+  const endpoint = `${String(baseUrl || '').replace(/\/$/, '')}/api/v1/browser-agent/signup`;
+  const body = {
+    founder_authority: true,
+    url: target.url || undefined,
+    service: target.service || undefined,
+    recipe: target.service || undefined,
+  };
+  try {
+    const res = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-command-key': operatorKey,
+      },
+      body: JSON.stringify(body),
+    });
+    const data = await res.json().catch(() => ({}));
+    return {
+      ok: res.ok && data.ok !== false,
+      status: res.status,
+      data,
+      target,
+      error: data.error || null,
+    };
+  } catch (err) {
+    logger?.warn?.('[LUMIN-CHAIR-ACTION] signup failed:', err.message);
+    return { ok: false, error: err.message, target };
   }
 }
 
@@ -182,6 +250,35 @@ export async function tryLuminChairSystemAction(text, deps = {}) {
             ? 'Redeploy triggered — build-from-latest is running on Railway.'
             : `Redeploy failed: ${redeploy.error || redeploy.data?.error || 'unknown'}`,
           receipt: redeploy.data || redeploy,
+        };
+      }
+      case 'setup_account': {
+        const base = founderBuildBaseUrl || process.env.PUBLIC_BASE_URL || process.env.RAILWAY_PUBLIC_DOMAIN;
+        const baseUrl = base?.startsWith('http') ? base : `https://${base}`;
+        const signup = await triggerFounderAuthoritySignup({
+          baseUrl,
+          operatorKey,
+          text,
+          logger,
+        });
+        const targetLabel = signup.target?.url || signup.target?.service || 'account';
+        const siteUrl = signup.target?.url || null;
+        return {
+          matched: true,
+          executed: signup.ok === true,
+          action_type: parsed.action_type,
+          ok: signup.ok === true,
+          command_truth: signup.ok ? 'COMMAND_RAN' : 'NO_COMMAND_RAN',
+          human_summary: signup.ok
+            ? `Account setup started for ${targetLabel}. Opening Connect in LifeOS — if a captcha or email verify is needed, use the guided Open site / Open email buttons there (secrets stay hidden until you reveal them).`
+            : `Account setup blocked: ${signup.error || signup.data?.error || signup.message || 'unknown'}`,
+          receipt: signup.data || signup,
+          shell_action: {
+            type: 'connect_guide',
+            page: 'lifeos-connect.html',
+            url: siteUrl,
+            inboxUrl: 'https://mail.google.com/mail/u/0/#search/newer_than:1d',
+          },
         };
       }
       case 'point_b_status': {

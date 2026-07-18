@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/memory-system/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-10 — Chair every-turn inject: `loadLuminMemory` prepends FOUNDER MEMORY block on normal chair/lumin turns (not only intake_blueprint). |
+| **Last Updated** | 2026-07-10 — T05: direct Chair agent now receives FOUNDER MEMORY block (was counsel-path only). |
 
 ---
 **Status:** ACTIVE — CAPSULE MEMORY CANONICAL, LEGACY NARRATIVE PARTIALLY ARCHIVED
@@ -192,6 +192,7 @@ While competitors store memories as passive retrievable notes, LifeOS memory is 
 
 ## Change Receipts
 
+| 2026-07-10 | **GAP-FILL T05 direct-agent inject** — front-door `runChairDirectAgent` skipped `loadChairMemoryContext`; counsel path had inject but conversational turns use direct agent. | Live Chair: memory_context null in SYSTEM_FACTS. | ✅ | tip + Chair re-probe |
 | 2026-07-10 | **Chair every-turn founder memory inject** — `loadLuminMemory` in command-control calls `injectProductMemoryIntoContext` (product inferred from message); chair orchestrator passes `messageText` into `loadChairMemoryContext`. Closes scorecard Memory gap (write-live / read-missing on normal turns). | Path-to-10 T05 — memory LIVE every Chair turn | `node --test tests/founder-memory.test.js` |
 
 | 2026-07-08 | **Founder↔AI canonical memory v1** — `founder_memory_entries` migration; `founder-memory-store` + fan-out to governance/ideavault/CONTINUITY_LOG; product auto-inject in chair blueprint intake + `loadProductHomeWithFounderMemory`; receipt-linked claim gate; routes at `/api/v1/founder-memory`; SENTRY proof PASS (`products/receipts/FOUNDER_MEMORY_V1_SENTRY.json`). | One durable memory group per product — conversations in context, not links | `node builderos-reboot/scripts/founder-memory-sentry-proof.mjs` PASS; `node --test tests/founder-memory.test.js` 7/7 |

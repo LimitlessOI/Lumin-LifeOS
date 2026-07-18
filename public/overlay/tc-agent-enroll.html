@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Agent Enrollment -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Enrollment</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            max-width: 600px;
+            margin: auto;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .error {
+            color: red;
+            font-size: 0.9em;
+        }
+        .success-card {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #4CAF50;
+            background-color: #d4edda;
+            color: #155724;
+        }
+    </style>
+</head>
+<body>
+    <h1>Agent Enrollment</h1>
+    <form id="enrollmentForm">
+        <div class="form-group">
+            <label for="agentName">Agent Name</label>
+            <input type="text" id="agentName" name="agentName" required>
+            <div class="error" id="agentNameError"></div>
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+            <div class="error" id="emailError"></div>
+        </div>
+        <div class="form-group">
+            <label for="planTier">Plan Tier</label>
+            <select id="planTier" name="planTier" required>
+                <option value="starter">Starter</option>
+                <option value="pro">Pro</option>
+                <option value="enterprise">Enterprise</option>
+            </select>
+            <div class="error" id="planTierError"></div>
+        </div>
+        <div class="form-group">
+            <label for="paymentMethodToken">Stripe Payment Method Token</label>
+            <input type="text" id="paymentMethodToken" name="paymentMethodToken" required>
+            <div class="error" id="paymentMethodTokenError"></div>
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+    <div class="success-card" id="successCard">
+        <h2>Subscription Successful!</h2>
+        <p id="subscriptionId"></p>
+        <ul>
+            <li>Check your email for confirmation.</li>
+            <li>Complete your profile setup.</li>
+            <li>Start using your new plan features.</li>
+        </ul>
+    </div>
+    <script>
+        document.getElementById('enrollmentForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const data = {
+                agentName: document.getElementById('agentName').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                planTier: document.getElementById('planTier').value,
+                paymentMethodToken: document.getElementById('paymentMethodToken').value.trim()
+            };
+
+            let hasError = false;
+
+            Object.keys(data).forEach(key => {
+                const errorElement = document.getElementById(key + 'Error');
+                if (!data[key]) {
+                    errorElement.textContent = 'This field is required.';
+                    hasError = true;
+                } else {
+                    errorElement.textContent = '';
+                }
+            });
+
+            if (hasError) return;
+
+            fetch('/api/tc/billing/subscribe', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.subscriptionId) {
+                    document.getElementById('subscriptionId').textContent = 'Subscription ID: ' + data.subscriptionId;
+                    document.getElementById('successCard').style.display = 'block';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>

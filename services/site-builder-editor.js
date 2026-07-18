@@ -6,6 +6,7 @@ import { renderSidebar } from './site-builder-editor-sidebar.js';
 import { renderCanvas } from './site-builder-editor-canvas.js';
 import { renderChatPanel } from './site-builder-editor-chat.js';
 import { renderStrategyPanel } from './site-builder-editor-strategy.js';
+import { EDITOR_FIRST_STEPS } from './site-builder-editor-onboarding.js';
 
 function htmlEscape(value) {
   return String(value ?? '')
@@ -14,6 +15,15 @@ function htmlEscape(value) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
+}
+
+function scriptJson(value) {
+  return JSON.stringify(value)
+    .replace(/</g, '\\u003c')
+    .replace(/>/g, '\\u003e')
+    .replace(/&/g, '\\u0026')
+    .replace(/\u2028/g, '\\u2028')
+    .replace(/\u2029/g, '\\u2029');
 }
 
 export function renderEditorShell({
@@ -32,6 +42,9 @@ export function renderEditorShell({
   const canvas = renderCanvas({ siteFile, variants, palettes, clientId, editToken, baseUrl });
   const chat = renderChatPanel({ clientId, editToken, baseUrl });
   const strategyPanel = renderStrategyPanel({ strategy });
+  const onboardingSteps = EDITOR_FIRST_STEPS
+    .map((step, i) => `<span class="sb-onboard-step"><span class="sb-onboard-num">${i + 1}</span>${htmlEscape(step)}</span>`)
+    .join('<span class="sb-onboard-sep">&#8594;</span>');
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -51,6 +64,12 @@ export function renderEditorShell({
     .sb-editor-center { min-height: 0; overflow: hidden; background: #0b1220; }
     .sb-editor-strategy { border-top: 1px solid #334155; max-height: 40vh; overflow: auto; padding: 12px; background: #0f172a; }
     .sb-editor-strategy summary { cursor: pointer; font-weight: 600; margin-bottom: 8px; }
+    .sb-editor-onboard { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; padding: 8px 16px; background: #17203a; border-bottom: 1px solid #334155; font-size: 12px; color: #b8c2d9; }
+    .sb-onboard-step { display: inline-flex; align-items: center; gap: 6px; }
+    .sb-onboard-num { display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; border-radius: 999px; background: #7c3aed; color: #fff; font-size: 10px; font-weight: 700; }
+    .sb-onboard-sep { opacity: .5; margin: 0 2px; }
+    .sb-editor-onboard.is-dismissed { display: none; }
+    .sb-onboard-close { margin-left: auto; background: none; border: 0; color: #b8c2d9; cursor: pointer; font-size: 16px; line-height: 1; padding: 2px 6px; }
     @media (max-width: 1100px) {
       .sb-editor-grid { grid-template-columns: 1fr; grid-template-rows: auto auto auto; }
       .sb-editor-left, .sb-editor-right, .sb-editor-center { min-height: 320px; }
@@ -66,6 +85,10 @@ export function renderEditorShell({
       </div>
       <a href="${htmlEscape(String(baseUrl || '').replace(/\/$/, ''))}/api/v1/sites/publish/checkout?clientId=${htmlEscape(clientId)}" style="background:#7c3aed;color:#fff;padding:8px 14px;border-radius:999px;text-decoration:none;font-weight:600">Publish</a>
     </header>
+    <div class="sb-editor-onboard" id="sb-editor-onboard" data-sb-onboard>
+      ${onboardingSteps}
+      <button type="button" class="sb-onboard-close" data-sb-onboard-close title="Dismiss" aria-label="Dismiss">&times;</button>
+    </div>
     <div class="sb-editor-grid">
       <div class="sb-editor-left">${sidebar}</div>
       <div class="sb-editor-center" id="sb-editor-canvas-host">${canvas}</div>
@@ -81,10 +104,59 @@ export function renderEditorShell({
   <script>
     (function () {
       try {
+        var onboard = document.getElementById('sb-editor-onboard');
+        var closeBtn = onboard && onboard.querySelector('[data-sb-onboard-close]');
+        if (closeBtn) {
+          closeBtn.addEventListener('click', function () {
+            onboard.classList.add('is-dismissed');
+            try { window.sessionStorage.setItem('sb-onboard-dismissed', '1'); } catch (_) {}
+          });
+        }
+        try {
+          if (onboard && window.sessionStorage.getItem('sb-onboard-dismissed') === '1') {
+            onboard.classList.add('is-dismissed');
+          }
+        } catch (_) {}
+      } catch (_) {}
+
+      try {
+        var upsellEditorBase = ${scriptJson(String(baseUrl || ''))};
+        var upsellClientId = ${scriptJson(String(clientId || ''))};
+        var params = new URLSearchParams(window.location.search);
+        var upsellSessionId = params.get('upsell_session_id');
+        var upsellKind = params.get('upsell_kind');
+        if (upsellSessionId) {
+          var verifyUrl = upsellEditorBase.replace(/\\/$/, '') + '/api/v1/sites/upsell/verify?clientId=' + encodeURIComponent(upsellClientId) + '&session_id=' + encodeURIComponent(upsellSessionId) + '&kind=' + encodeURIComponent(upsellKind || '');
+          fetch(verifyUrl).then(function (r) { return r.json(); }).then(function (result) {
+            var msg = result && result.ok ? 'Purchase confirmed — refresh to see it applied.' : 'Could not confirm purchase: ' + ((result && result.error) || 'unknown error');
+            window.alert(msg);
+            var cleanUrl = window.location.pathname + '?clientId=' + encodeURIComponent(upsellClientId);
+            window.history.replaceState({}, '', cleanUrl);
+          }).catch(function () {});
+        }
+      } catch (_) {}
+
+      try {
         window.addEventListener('sb-editor:reload', function () {
           var iframe = document.querySelector('[data-lifeos-canvas-frame], .lifeos-canvas-frame, iframe');
-          if (iframe && iframe.contentWindow) iframe.contentWindow.location.reload();
-          else if (iframe) iframe.src = iframe.src;
+          if (!iframe) return;
+          var host = document.getElementById('sb-editor-canvas-host');
+          function flashUpdated() {
+            if (!host) return;
+            var badge = document.createElement('div');
+            badge.textContent = 'Updated ✓';
+            badge.style.cssText = 'position:absolute;top:12px;right:12px;z-index:9999;background:#16a34a;color:#fff;font-weight:700;font-size:13px;padding:6px 12px;border-radius:999px;box-shadow:0 4px 14px rgba(0,0,0,.2);pointer-events:none;';
+            host.style.position = host.style.position || 'relative';
+            host.appendChild(badge);
+            window.setTimeout(function () { badge.remove(); }, 2200);
+          }
+          function onLoadOnce() {
+            iframe.removeEventListener('load', onLoadOnce);
+            flashUpdated();
+          }
+          iframe.addEventListener('load', onLoadOnce);
+          if (iframe.contentWindow) iframe.contentWindow.location.reload();
+          else iframe.src = iframe.src;
         });
       } catch (_) {}
     }());

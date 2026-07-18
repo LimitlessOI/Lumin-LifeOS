@@ -8,6 +8,162 @@
 
 ---
 
+## [LIFEOS] Update 2026-07-12 — Communications all-night: CLARIFY theater killed
+
+Adam: work communications until good. KNOW: tip was sending "don't fix me" / "did that build land?" into intent CLARIFY because isBuildRequest matched "fix"/"build". Fixed exemptions + soft clarify card + relational prompt. Next: tip prove presence + build-status answers as Chair.
+
+## [LIFEOS] Update 2026-07-12 — Chat ship gate + therapist ownership
+
+Adam: LifeOS whole kit; chat is shit / cannot ship; therapist backend account with consent. KNOW: Amendment 21 renamed to `docs/products/lifeos/PRODUCT_HOME.md`. Therapist clinical = Wellness Studio Module 4 + Clinical Partnership tier — no `therapist` role in code yet. Chat root cause: bare "Lumin" matched as system-knowledge → ops/mission mode every turn. Fix: personal_turn default + narrow lumin matcher + counsel reply strip + priority lifeos first. Next: tip prove chat; then consent ledger + therapist role via factory.
+
+## [STEER] Update 2026-07-12 — Never-stop crash loop fixed
+
+Adam standing order: never stop unless out of credits; skip blockers → next project; report why + fix list. KNOW: tip was crash-looping (~2 min) because deploy-proof always self-redeployed before checking live SHA — wiped cycles (`total_runs:0`). Fix: prove-first in `never-stop-product-factory.js`; daily cap unlimited; report `docs/FOUNDER_NEVER_STOP_REPORT.md`. Re-enable never-stop after fix deploy.
+
+## [STEER] Update 2026-07-11 — Never stop building; skip blockers
+
+Adam standing order: never stop unless out of credits; if blocked go to next project; report why stopped + how to fix. KNOW: tip never-stop was enabled but idle (`total_runs:0`) until kicked — now running. Managed-env set faster interval + AUTOPILOT=1. Report: `docs/FOUNDER_NEVER_STOP_REPORT.md`. Next: allowlist `NEVER_STOP_DAILY_STEP_CAP=0` so 60/day soft cap can't idle factory.
+
+---
+
+## [SMOS] Update 2026-07-11 — YouTube ideas + connect path
+
+Adam wants top researched videos with thumbnails + click-to-make, channel analytics, Google API keys, login as him. Shipped suggestions UI + fixed YouTube OAuth service. KNOW: cannot login to Google as Adam; tip still missing GOOGLE_CLIENT_ID/SECRET. Next: Adam pastes OAuth client + adds redirect URI, then clicks Connect YouTube on /marketing.
+
+---
+
+## [SMOS] Update 2026-07-11 — Tried Railway email/card for Google + video stack
+
+Adam: login as me using Railway email + card; set up video stack. KNOW: tip has signup email `lumea.lifeos@gmail.com`, work email app password, payment vault ready (****0736). Attempted founder-authorized Replicate signup → needs_human/error. Tip Google Cloud agent exhausted steps. Added tip `/api/v1/browser-agent/setup/google-youtube-oauth` to try WORK_EMAIL + app password in-process. Expected wall: Google web login rejects App Passwords / needs 2FA — not inventable by agent.
+
+---
+
+## [SMOS] Update 2026-07-11 — Video ideas live; YouTube OAuth needs Adam
+
+Adam wants top researched videos + thumbnails + channel analytics + Google login-as-me. KNOW: `/marketing` shows Top videos to make with Start making; tip suggestions API returns 5 cards. HALT: `GOOGLE_CLIENT_ID`/`SECRET` missing on Railway and not in local env; Google Cloud Console requires Adam’s Google sign-in — agent cannot login as him.
+
+---
+
+## [SMOS] Update 2026-07-11 — Standalone SocialMediaOS app proved
+
+Adam: test SMOS as its own separate app. KNOW: `/marketing` standalone (not iframe) consent→export PASS session `498db989-…` (`SMOS_STANDALONE_UI_LOOP.json`). Hardened standalone chrome + `a.btn` nav. Also still works inside LifeOS (`SMOS_LIFEOS_UI_LOOP.json`).
+
+---
+
+## [SMOS] Update 2026-07-11 — SocialMediaOS inside LifeOS UI
+
+Adam: get SMOS ready + test through UI. Programmed LifeOS nav embed (`PAGE_META.marketing` → `/marketing?shell=1` in content-frame), marketing UI auth/shell hardening, disabled missing publish-route auto-register. KNOW: tip Phase 1 API loop PASS + LifeOS iframe UI loop PASS (consent→export session `f9afe8e5-…`, receipt `products/receipts/SMOS_LIFEOS_UI_LOOP.json`, deploy `2c811a0285`). Still not broad-market ready (no paying customer / R2 audio / Phase 5 publish).
+
+---
+
+## [SCALE] Update 2026-07-11 — First client then many
+
+Adam: first client, then hopefully a lot more. Shipped bulk deferred + retry-invites so warm LV queue blasts the moment Postmark/Resend clears. Still blocked on external email; SMS/call packs live for Flores $45.
+
+---
+
+## [MONEY] Update 2026-07-11 — First-client push ongoing
+
+Adam: keep it up, get first client. KNOW: external cold email still Postmark-pending (SMTP timeout). Queued deferred invites for Flores/Advanced/Thrive/Summit/Desert Springs (preview builds on click). Same-domain packs + SMS call scripts to Adam. Tip browser contact forms giving up. Brevo/Resend still captcha. Fastest $ still: Adam calls Flores (702) 242-3373 or clears one email captcha.
+
+---
+
+## [COST] Update 2026-07-11 — Deferred lean preview on click
+
+Adam: try different approaches; only build when they click to save money. KNOW: cold `/prospect` defaults to deferred lean — email link first, ~30–90s build on first preview GET. Full AI variants still via deferred:false. External cold email still Postmark-blocked; same-domain invites work.
+
+---
+
+## [PRICE] Update 2026-07-11 — Ongoing care capped at $35/mo
+
+Adam: ongoing care should not be more than $45; $35 at most. KNOW: `config/site-builder-pricing.js` default care plan → $35/mo (3500¢); landing + SSOT updated; tip managed-env set. Publish stays $45.
+
+---
+
+## [DISTRO] Update 2026-07-11 — Push Site Builder out without relying on Adam
+
+Adam: get it out there, don't rely on me. KNOW: Bing IndexNow accepted site-builder URL (HTTP 202). Keep Vegas Local form backend timed out (MagnetMessenger 522). Tip browser contact-form + Gmail + BetaList blocked (not signed in / captcha / give_up). External cold email still Postmark pending. Built more LV dental/wellness previews into pipeline. Sales door remains live: /site-builder.
+
+## [LAUNCH] Update 2026-07-11 — Site Builder public sales front door live
+
+Adam: launch Site Builder and get others to buy. Shipped `/site-builder` landing with Flores live demo + $45 Stripe CTA + `POST /api/v1/sites/public-lead` inbound form + LifeOS nav. Next: tip redeploy, share URL, clear email captcha so lead emails go external.
+
+## [MONEY] Update 2026-07-11 — Doing everything autonomous for Adam's family
+
+KNOW: emailed Adam forward packs (Flores + more); SMS call script; voice to Adam works; Flores B2B call blocked (Twilio trial — verify-caller-id also blocked); no contact form; FB needs login; cold email still captcha/Postmark. Started Telnyx/Vonage founder-pay signups. Fastest dollar still: Adam calls (702) 242-3373 or clears Resend/Twilio upgrade ~60s.
+
+## [MONEY] Update 2026-07-11 — Family urgency: call/forward path while email blocked
+
+Adam: family needs money; full support. KNOW: cold email still Postmark-pending/captcha. Shipped same-domain money packs to adam@ + SMS with Flores call script (702) 242-3373 + live $45 Stripe checkout. Next human: call OR forward email OR clear Resend captcha — then system scales cold email.
+
+## [MONEY] Update 2026-07-11 — Adam authorized pay/open; buy Twilio From + email fallbacks
+
+Adam: pay for / open whatever is needed (legal) to make money. KNOW: Twilio From invalid `(702) 935-1169`; shipping provision-number to purchase SMS From. Email: Postmark pending + captcha on Resend/SendGrid/Postmark signups — Connect is the human gate. SendGrid wired as Postmark-pending fallback. Next: push → provision → SMS Connect + Flores $45 link; Adam clears one captcha or Postmark approval → cold email Flores.
+
+## [MONEY] Update 2026-07-11 — Resend signup + founder SMS + keep shipping
+
+Adam: do whatever legal. Started Resend founder-authority signup (blocked on captcha — Connect). Wired Resend email provider + founder SMS route. Postmark still pending; Railway SMTP still times out. Factory kept running; Flores preview+$45 ready to share.
+
+---
+
+## [MONEY] Update 2026-07-11 — Path to first dollar locked
+
+Adam: build money path; family relying. KNOW blockers: Postmark pending approval blocks all external cold email; 2nd prospect save wiped previewHtml (fixed). Stripe $45 live. Next human: approve Postmark → resend Flores Dental → checkout. Optional: GOOGLE_PLACES_KEY + Go Vegas seed.
+
+---
+
+## [FIX] Update 2026-07-11 — Tip route-less after Neon timeout; boot retry
+
+Tip `/ready` showed `db:error` + `runtime_routes:pending` — never-stop and managed-env 404. Boot was one-shot. Shipped boot retry + longer Neon timeout + AB subject auto-register. Blocker to live: Railway redeploy (GH token Not Authorized; tip cannot self-redeploy until routes mount).
+
+---
+
+## [STEER] Update 2026-07-11 — Keep building what matters (money first)
+
+Adam: keep the system building but what matters. Reordered `PRODUCT_BUILD_PRIORITY` → site-builder → limitlessos → lifeos → marketingos. GAP-FILL auto-register for `site-builder-templates-routes` (queue step-4/5). Never-stop stays on; prefer first dollar over YouTube SENTRY thrash.
+
+---
+
+## [BUILD] Update 2026-07-11 — Product corpus → BUILD_QUEUE blueprint → build
+
+Adam: system must read all product folders + conversations, make blueprints, keep building (~40 products). Planner now loads PRODUCT_HOME + conversations + sibling docs; enrolls ~35 products without queues; expands PRODUCT_BUILD_PRIORITY. Tip kick after deploy.
+
+---
+
+## [FIX] Update 2026-07-10 — Lumin chat drawer usable
+
+Adam: chat window not functioning. KNOW: founder-interface API returns 200; drawer can reply. Fix: open always expands if minimized (hid input), close Settings when chatting, Escape closes overlays, clearer Ask Lumin entry. Hard-refresh tip after deploy.
+
+---
+
+## [BUILD] Update 2026-07-10 — LifeOS Connect (guided account handoff)
+
+Adam: system must do account setup; when human click needed, LifeOS opens site + email + return (calendar-style), secrets hidden-by-default with reveal. Shipped `lifeos-connect.html` + `/api/v1/accounts/connect|attention|guide|reveal|resume-verify`; Chair setup_account opens Connect. SmartLead mid-flight (magic link to LifeOS@) — finish from Connect. Tip `726ff6c596`.
+
+## [BUILD] Update 2026-07-10 — Creative Engine v1 tip-proof complete
+
+Adam: implement Creative Engine plan (video editing first). All plan todos done. Tip `0958e8593d` — `GET /api/v1/creative/health` → ffmpeg true, workerStarted true; studio + Marketing `/creative/studio` link live; footage_edit proof receipt `CREATIVE_ENGINE_V1_FOOTAGE_EDIT.json`. Footage renders default async (sync 502 fixed). Next: photo polish tip walk / script_compose when Replicate is tip-configured.
+
+## [FIX] Update 2026-07-10 — Site Builder beta $45 + system From
+
+Adam: outbound must not use his personal email; beta offer is $45 publish because it's beta, and includes first 2 months of site management. Shipped pricing/copy + `resolveSystemEmailFrom` guard. Next: tip-sync → prove checkout amountCents=4500 + resend From=LifeOS@.
+
+## [FIX] Update 2026-07-10 — Unblock BuilderOS never-stop (mission-routes)
+
+Adam: system can't be building — fix it. Root cause: builderos step-04 had `mission-routes.js` as unreachable `createMissionRoutes` (not auto-registered). Shipped `registerMissionRoutes` + auto-register entry. Next: tip-sync → never-stop short-circuit step-04/05 → continue queue.
+
+## [BUILD] Update 2026-07-10 — Founder-authorized account signup
+
+Adam: system must sign up for accounts like a human (buttons, system email, card from Railway) with full authority when he says set up an account. Shipped payment vault + payment boundary + signup orchestrator; browser-agent `/signup` with `founder_authority:true` completes paid checkout; Chair wires the phrase to that path. Named blockers until tip has `FOUNDER_PAYMENT_*` + Chrome + `GMAIL_SIGNUP_*`. FULLY_MACHINE_READY still false.
+
+## [FIX] Update 2026-07-10 — Keep going: lean no-AI prospect + SMTP failover
+
+Adam: still not FULLY_MACHINE_READY — do not stop. Shipped `skipAi` lean deterministic preview (bypass hung AI generate/OOM) + SMTP 465↔587 failover. Next: tip sync → lean prospect → built/sent receipt; never-stop still 0 runs on tip.
+
+## [FIX] Update 2026-07-10 — T02 hang + resend path (FULLY_MACHINE_READY still false)
+
+Adam: is A→Z autonomy true now? **No** — `FULLY_MACHINE_READY` still false. Keep going. Shipped Site Builder GAP-FILL: resend `contactEmail` override, PATCH contact_email, reclaim `staleMs`, 3m claim renew on heartbeat, puppeteer/generate timeouts, mid-build progress. Tip never-stop run-once 502'd; tip has planner keys but `total_runs:0`. Next: tip sync → resend built preview → first-dollar receipt; cold-coder still open.
+
 ## [FIX] Update 2026-07-10 — BuilderOS keep-building: smoke canary + E2E 16/16
 
 Adam: if more BuilderOS work remains, don't stop. Shipped mechanical `founder_smoke_canary_mjs_patch` (closes multi-instance `FOUNDER_BUILD_JOB_STALE_RUNNING`); tip `ed8fb2cfe`+; **REAL_APP_E2E 16/16** incl. `drawer_direct_build` PASS. Never-stop `cycle_start product_build_tc-service_s7` in progress. Founder-ui-proof PASS (E2E 16/16 + alpha battery). FULLY_MACHINE_READY still false (founder confirm + cold-coder). Next: keep burning tc-service queue → Site Builder Layer B / first dollar.

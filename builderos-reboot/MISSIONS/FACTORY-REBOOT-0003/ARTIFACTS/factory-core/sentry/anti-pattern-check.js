@@ -3,7 +3,7 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
-import { REPO_ROOT } from '../builder/run-step.js';
+import { REPO_ROOT } from '../repo-paths.js';
 
 const FORBIDDEN_IN_FACTORY_JS = [
   /\bskip_sentry\s*=\s*true/i,

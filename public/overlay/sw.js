@@ -26,6 +26,7 @@ const PRECACHE = [
   '/shared/lifeos-local-vault.js',
   '/shared/lifeos-listening-orchestrator.js',
   '/shared/lifeos-native-shell.js',
+  '/shared/smos-film-studio.js',
   '/overlay/manifest.json',
 ];
 

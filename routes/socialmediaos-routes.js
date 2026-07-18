@@ -1,12 +1,23 @@
 /**
- * SYNOPSIS: Exports createSocialmediaosRoutes — routes/socialmediaos-routes.js.
+ * SYNOPSIS: SocialMediaOS API routes — sessions, content packs, and marketplace checkout.
+ * @ssot docs/products/marketingos/socialmediaos/PRODUCT_HOME.md
  */
 import express from 'express';
 import { createMarketingOSFactory } from '../services/socialmediaos-service.js';
+import { resolvePublicBaseUrl } from '../config/public-origin.js';
 
 export function createSocialmediaosRoutes({ pool, requireKey, logger }) {
   const router = express.Router();
   const socialMediaOS = createMarketingOSFactory({ pool, logger });
+
+  function baseUrlFromReq(req) {
+    return resolvePublicBaseUrl(
+      process.env.SMOS_BASE_URL,
+      process.env.PUBLIC_BASE_URL,
+      process.env.BASE_URL,
+      process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` : '',
+    ) || `${req.protocol}://${req.get('host')}`;
+  }
 
   // Middleware to extract ownerId from JWT and enforce authentication
   const getOwnerId = (req, res, next) => {
@@ -149,6 +160,61 @@ export function createSocialmediaosRoutes({ pool, requireKey, logger }) {
     } catch (err) {
       if (err.status === 404) return res.status(404).json({ ok: false, error: err.message });
       if (err.status === 400) return res.status(400).json({ ok: false, error: err.message });
+      next(err);
+    }
+  });
+
+  // --- Content Pack Marketplace Checkout ---
+
+  router.get('/content-pack/pricing', async (_req, res) => {
+    res.json(socialMediaOS.getContentPackPricing());
+  });
+
+  router.post('/content-pack/checkout', requireKey, getOwnerId, async (req, res, next) => {
+    try {
+      const { sessionId, packId } = req.body || {};
+      const result = await socialMediaOS.createContentPackCheckout({
+        ownerId: req.ownerId,
+        baseUrl: baseUrlFromReq(req),
+        sessionId,
+        packId,
+      });
+      res.json(result);
+    } catch (err) {
+      if (err.status === 400) return res.status(400).json({ ok: false, error: err.message });
+      if (err.status === 404) return res.status(404).json({ ok: false, error: err.message });
+      if (err.status === 503) return res.status(503).json({ ok: false, error: err.message });
+      next(err);
+    }
+  });
+
+  // Public post-payment return URLs — Stripe redirects here with no JWT/command key.
+  router.get('/content-pack/success', async (req, res, next) => {
+    try {
+      const contentPackId = String(req.query.contentPackId || '');
+      const checkoutSessionId = String(req.query.session_id || '');
+      if (!contentPackId || !checkoutSessionId) {
+        return res.status(400).send('Missing payment confirmation parameters.');
+      }
+      const result = await socialMediaOS.verifyContentPackCheckout({
+        ownerId: req.lifeosUser?.sub || null,
+        contentPackId,
+        checkoutSessionId,
+      });
+      if (!result.ok) {
+        return res.status(400).send(`Payment verification failed: ${result.paymentStatus}`);
+      }
+      res.redirect(302, `${baseUrlFromReq(req)}/overlay/marketing-for-you.html?paid=1&pack=${encodeURIComponent(contentPackId)}`);
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  router.get('/content-pack/cancel', async (req, res, next) => {
+    try {
+      const contentPackId = String(req.query.contentPackId || '');
+      res.redirect(302, `${baseUrlFromReq(req)}/overlay/marketing-for-you.html?canceled=1&pack=${encodeURIComponent(contentPackId)}`);
+    } catch (err) {
       next(err);
     }
   });

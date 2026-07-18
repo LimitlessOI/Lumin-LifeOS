@@ -24,7 +24,7 @@ function resolvePreviewFile(clientId, relativeFile) {
   return resolved;
 }
 
-async function readMeta(clientId) {
+async function readMetaFromDisk(clientId) {
   const metaPath = path.join(PREVIEWS_ROOT, clientId, 'meta.json');
   try {
     return JSON.parse(await fsp.readFile(metaPath, 'utf8'));
@@ -33,8 +33,33 @@ async function readMeta(clientId) {
   }
 }
 
-async function assertEditToken(clientId, token) {
-  const meta = await readMeta(clientId);
+// Previews live on ephemeral per-instance disk; a client's own preview can be
+// invisible to whichever instance serves this request (multi-instance / after
+// a redeploy). Fall back to prospect_sites.metadata itself — buildFromUrl/
+// buildVariants' full metadata object (editToken, variants, businessInfo, etc.)
+// is already spread directly onto the row's metadata column by recordProspect(),
+// so the row IS the durable equivalent of meta.json. (A nested `previewMeta`
+// copy was also written alongside it, but proved unreliable in practice — likely
+// dropped by JSON.stringify whenever a sibling `previewHtml: undefined` key sits
+// in the same object literal — so read the reliable top-level fields instead.)
+async function readMeta(clientId, pool) {
+  const fromDisk = await readMetaFromDisk(clientId);
+  if (fromDisk && fromDisk.editToken) return fromDisk;
+  if (!pool) return fromDisk;
+  try {
+    const result = await pool.query(
+      `SELECT metadata FROM prospect_sites WHERE client_id = $1 LIMIT 1`,
+      [clientId]
+    );
+    const dbMeta = result.rows[0]?.metadata;
+    return dbMeta && dbMeta.editToken ? dbMeta : fromDisk;
+  } catch {
+    return fromDisk;
+  }
+}
+
+async function assertEditToken(clientId, token, pool) {
+  const meta = await readMeta(clientId, pool);
   if (!meta?.editToken) return { ok: false, status: 403, error: 'Editor token unavailable' };
   if (String(token || '') !== String(meta.editToken)) {
     return { ok: false, status: 403, error: 'Invalid editor token' };
@@ -42,7 +67,7 @@ async function assertEditToken(clientId, token) {
   return { ok: true, meta };
 }
 
-function buildStrategyFromMeta(meta) {
+function buildStrategyFromMeta(meta, previewBase, clientId) {
   const competitors = [];
   const benchmark = meta?.benchmark;
   if (benchmark?.competitors && Array.isArray(benchmark.competitors)) {
@@ -53,6 +78,7 @@ function buildStrategyFromMeta(meta) {
         score: c.score,
         strengths: c.doesWell || c.strengths || [],
         weaknesses: c.doesPoorly || c.weaknesses || [],
+        url: c.url || null,
       });
     }
   }
@@ -61,7 +87,16 @@ function buildStrategyFromMeta(meta) {
     benchmark?.designBrief?.summary ||
     benchmark?.designBrief ||
     '';
-  return { synopsis: typeof synopsis === 'string' ? synopsis : '', competitors };
+  const firstVariantFile = Array.isArray(meta?.variants) && meta.variants[0]?.file
+    ? meta.variants[0].file
+    : 'index.html';
+  const trimmedPreviewBase = String(previewBase || '').replace(/\/+$/, '');
+  return {
+    synopsis: typeof synopsis === 'string' ? synopsis : '',
+    competitors,
+    oldSiteUrl: meta?.businessInfo?.sourceUrl || null,
+    newSiteUrl: trimmedPreviewBase ? `${trimmedPreviewBase}/${firstVariantFile.replace(/^\/+/, '')}` : null,
+  };
 }
 
 function buildEditorContext(meta, clientId, baseUrl) {
@@ -76,12 +111,13 @@ function buildEditorContext(meta, clientId, baseUrl) {
     { name: 'Warm', primary: '#B45309', accent: '#F59E0B' },
     { name: 'Clinical', primary: '#0F766E', accent: '#14B8A6' },
   ];
-  const strategy = buildStrategyFromMeta(meta);
+  const previewBase = `${String(baseUrl || '').replace(/\/+$/, '')}/previews/${clientId}`;
+  const strategy = buildStrategyFromMeta(meta, previewBase, clientId);
   const services = recommendServices(strategy);
   return {
     businessName,
     clientId,
-    siteFile: 'index.html',
+    siteFile: variants[0]?.file || 'index.html',
     variants,
     palettes,
     editToken: meta.editToken,
@@ -129,7 +165,7 @@ export function createSiteBuilderEditorRoutes(app, { callCouncilMember, baseUrl,
         return res.status(400).send('Invalid preview id.');
       }
 
-      const auth = await assertEditToken(clientId, token);
+      const auth = await assertEditToken(clientId, token, pool);
       if (!auth.ok) return res.status(auth.status).send(auth.error);
 
       const ctx = buildEditorContext(auth.meta, clientId, baseUrl);
@@ -147,7 +183,7 @@ export function createSiteBuilderEditorRoutes(app, { callCouncilMember, baseUrl,
       if (!CLIENT_ID_RE.test(String(clientId || ''))) {
         return res.status(400).json({ ok: false, error: 'clientId required' });
       }
-      const auth = await assertEditToken(clientId, token);
+      const auth = await assertEditToken(clientId, token, pool);
       if (!auth.ok) return res.status(auth.status).json({ ok: false, error: auth.error });
 
       const targetFile = file || 'index.html';
@@ -177,6 +213,7 @@ Return ONLY the full modified HTML document.`;
       const modelResponse = await callCouncilMember('gemini_flash', prompt, {
         maxOutputTokens: 14000,
         taskType: 'site_builder_edit',
+        useCache: false,
       });
       const responseText = typeof modelResponse === 'string'
         ? modelResponse
@@ -201,7 +238,7 @@ Return ONLY the full modified HTML document.`;
       if (!CLIENT_ID_RE.test(String(clientId || ''))) {
         return res.status(400).json({ ok: false, error: 'clientId required' });
       }
-      const auth = await assertEditToken(clientId, token);
+      const auth = await assertEditToken(clientId, token, pool);
       if (!auth.ok) return res.status(auth.status).json({ ok: false, error: auth.error });
 
       const targetFile = file || 'index.html';
@@ -226,7 +263,7 @@ Return ONLY the full modified HTML document.`;
       if (!CLIENT_ID_RE.test(String(clientId || ''))) {
         return res.status(400).json({ ok: false, error: 'clientId required' });
       }
-      const auth = await assertEditToken(clientId, token);
+      const auth = await assertEditToken(clientId, token, pool);
       if (!auth.ok) return res.status(auth.status).json({ ok: false, error: auth.error });
 
       const targetFile = file || 'index.html';

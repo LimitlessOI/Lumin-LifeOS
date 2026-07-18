@@ -58,9 +58,15 @@ const TC_CATEGORIES = new Set([CATEGORIES.TC_CONTRACT, CATEGORIES.TC_DEADLINE, C
 // ── Spam patterns ──────────────────────────────────────────────────────────
 // These are high-confidence spam signals — no AI needed.
 const SPAM_SENDER_PATTERNS = [
-  /noreply|no-reply|donotreply|do-not-reply|mailer-daemon/i,
+  /mailer-daemon/i,
   /@.*bulk|@.*mass|@.*blast/i,
   /unsubscribe@|optout@|list-unsubscribe/i,
+  /@shared\d*\.ccsend\.com$/i,
+  /@.*\.ccsend\.com$/i,
+  /@propertyblasthomes\.com$/i,
+  /@fastemail\.email$/i,
+  /@email-homesforheroes\.com$/i,
+  /@movies\.fandango\.com$/i,
 ];
 const SPAM_SUBJECT_PATTERNS = [
   /\b(you('ve| have) won|you are (selected|chosen)|congratulations.*prize|claim your (reward|prize|gift))\b/i,
@@ -68,7 +74,15 @@ const SPAM_SUBJECT_PATTERNS = [
   /\b(quick move.?in|new construction.*deals|builder (incentive|special))\b/i,
   /\b(payday|fast cash|instant approval|bad credit ok|no credit check)\b/i,
   /\b(grow your (business|pipeline|income) fast|double your (income|leads|sales))\b/i,
+  /\b(grow your real estate business|a different way to grow)\b/i,
   /\b(deals.*quick move|contact sasha|contact.*@702|@702.*contact)\b/i,
+  /\b(buyers from one listing|built to sell|list\. sell\. start over)\b/i,
+  /\b(who.?s who under|applications are now open)\b/i,
+  /\b(hours?\s+ce\b|pre.?permit course|continuing education)\b/i,
+  /\b(home inspection discount|uncover \d+ ways to reduce your tax)\b/i,
+  /\b(new listing\s*[•·\-]|must see!|thought you would be interested)\b/i,
+  /\b(super mario|galaxy movie|netflix|streaming now)\b/i,
+  /\b(properties in distress|distress list|expired list|paid study opportunity)\b/i,
 ];
 
 // FYI/auto patterns — safe to auto-mark read, no alert needed
@@ -91,7 +105,14 @@ const CLASSIFICATION_RULES = [
   { category: CATEGORIES.TC_DEADLINE,    re: /contingency|inspection\s+period|due\s+diligence|appraisal|loan\s+approval|earnest\s+money|closing\s+date|extension|hoa.*payment\s+required|action\s+required.*hoa/i },
   { category: CATEGORIES.TC_DOCUMENT,    re: /inspection\s+report|seller\s+disclosure|title\s+report|settlement\s+statement|preliminary.*alta|broker\s+opening|opening\s+package|signing\s+complete|rfr|r4r|repair.*request|response.*repair|binsr/i },
   { category: CATEGORIES.GLVAR,          re: /glvar|mls\s+notice|violation|compliance|association\s+dues|membership\s+dues|code\s+of\s+ethics/i },
-  { category: CATEGORIES.TIME_SENSITIVE, re: /\burgent\b|\basap\b|today\s+only|expires\s+today|deadline\s+today|time\s+sensitive|respond\s+immediately|respond\s+by\s+(today|tonight|\d)/i },
+  {
+    category: CATEGORIES.TIME_SENSITIVE,
+    re: /\b(offer\s+expires|contingency\s+(expires|ends)|response\s+required\s+by|sign\s+by\s+(today|tonight)|wire\s+instructions\s+needed|emd\s+due)\b/i,
+  },
+  {
+    category: CATEGORIES.CLIENT,
+    re: /\b(from my (buyer|seller)|client asked|can we (schedule|meet)|showing (request|feedback)|need you to (call|email|send))\b/i,
+  },
 ];
 
 // ── Helpers ────────────────────────────────────────────────────────────────
@@ -337,17 +358,116 @@ export function createEmailTriage({ pool, notificationService, callCouncilMember
     }
   }
 
-  // ── Main scan ─────────────────────────────────────────────────────────────
+  async function updateExistingAsSpam(uid, from, subject) {
+    await pool.query(
+      `UPDATE email_triage_log
+          SET category='spam', action_required=false, spam_deleted=true,
+              urgency_score=1, brief=$2, why_adam=NULL, negotiation_intel=NULL
+        WHERE uid=$1`,
+      [uid, `Spam from ${from}: ${String(subject || '').slice(0, 120)}`]
+    ).catch(() => {});
+  }
 
-  async function scanInbox() {
+  // Reclassify already-logged triage rows as spam (no full mailbox walk).
+  // Then trash matching UIDs in one IMAP session.
+  async function purgeLoggedSpam({ limit = 200, dryRun = false } = {}) {
+    const { rows } = await pool.query(
+      `SELECT id, uid, from_address, subject
+         FROM email_triage_log
+        WHERE spam_deleted IS NOT TRUE
+          AND actioned_at IS NULL
+        ORDER BY received_at DESC
+        LIMIT $1`,
+      [Math.min(500, Math.max(1, Number(limit) || 200))]
+    ).catch(() => ({ rows: [] }));
+
+    const hits = [];
+    for (const row of rows) {
+      const from = row.from_address || '';
+      const subject = row.subject || '';
+      const blocked = await isSpamBlocked(from);
+      if (blocked || isDefiniteSpam(subject, from)) {
+        hits.push(row);
+      }
+    }
+
+    if (dryRun) {
+      return {
+        ok: true,
+        dry_run: true,
+        scanned: rows.length,
+        would_purge: hits.length,
+        samples: hits.slice(0, 15).map((h) => ({
+          subject: h.subject,
+          from: h.from_address,
+        })),
+      };
+    }
+
+    for (const row of hits) {
+      await updateExistingAsSpam(row.uid, row.from_address, row.subject);
+      await blockSender(row.from_address, 'logged-spam purge');
+    }
+
+    let trashed = 0;
+    if (hits.length && (await isTCImapConfigured({ accountManager, logger }))) {
+      const cfg = await resolveTCImapConfig({ accountManager, logger });
+      const client = new ImapFlow(cfg);
+      try {
+        await client.connect();
+        const trashPath = await resolveTrashPath(client);
+        const lock = await client.getMailboxLock('INBOX');
+        try {
+          for (const row of hits) {
+            try {
+              await moveToTrash(client, String(row.uid), trashPath);
+              trashed++;
+            } catch { /* ignore per-message */ }
+          }
+        } finally {
+          lock.release();
+        }
+        await client.logout();
+      } catch (err) {
+        logger.warn?.({ err: err.message, marked: hits.length }, '[EMAIL-TRIAGE] purgeLoggedSpam IMAP trash partial');
+        return { ok: true, marked: hits.length, trashed, imap_error: err.message };
+      }
+    }
+
+    return { ok: true, scanned: rows.length, marked: hits.length, trashed };
+  }
+
+  let organizeInFlight = null;
+
+  // ── Main scan ─────────────────────────────────────────────────────────────
+  // Default: last 12h, unread only (cron).
+  // Organize pass: { days: 40, includeSeen: true } — last N days, spam→Trash,
+  // keep TC/client/paperwork, mark FYI read. Caps AI spend.
+
+  async function scanInbox(opts = {}) {
     if (!(await isTCImapConfigured({ accountManager, logger }))) {
       logger.warn?.('[EMAIL-TRIAGE] IMAP not configured — skipping scan');
       return { ok: false, reason: 'IMAP not configured' };
     }
 
+    const daysRaw = Number(opts.days);
+    const days = Number.isFinite(daysRaw) ? Math.min(60, Math.max(0.25, daysRaw)) : 0.5;
+    const organizeMode = days >= 7 || opts.includeSeen === true || opts.organize === true;
+    const includeSeen = opts.includeSeen === true || organizeMode;
+    const maxMessages = Math.min(
+      500,
+      Math.max(1, Number(opts.maxMessages) || (organizeMode ? 80 : 80))
+    );
+    const maxAi = Math.min(100, Math.max(0, Number(opts.maxAi) || (organizeMode ? 20 : 25)));
+    const dryRun = opts.dryRun === true;
+    const skipAlerts = organizeMode || opts.skipAlerts === true;
+
     const cfg  = await resolveTCImapConfig({ accountManager, logger });
     const client = new ImapFlow(cfg);
-    const results = { spam: 0, tc: 0, attention: 0, fyi: 0, total: 0 };
+    const results = {
+      spam: 0, tc: 0, attention: 0, fyi: 0, client: 0, skipped: 0, total: 0,
+      ai_used: 0, days, include_seen: includeSeen, dry_run: dryRun, organize: organizeMode,
+    };
     const newItems = [];
 
     try {
@@ -356,13 +476,17 @@ export function createEmailTriage({ pool, notificationService, callCouncilMember
       const lock = await client.getMailboxLock('INBOX');
 
       try {
-        const since = new Date(Date.now() - 12 * 60 * 60 * 1000); // last 12h
+        const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
         const seenUids = new Set();
+        const search = { since };
+        if (!includeSeen) search.seen = false;
 
         for await (const msg of client.fetch(
-          { since, seen: false },
-          { envelope: true, bodyStructure: true, source: true }
+          search,
+          { envelope: true, bodyStructure: true, uid: true }
         )) {
+          if (results.total >= maxMessages) break;
+
           const uid       = String(msg.uid);
           if (seenUids.has(uid)) continue;
           seenUids.add(uid);
@@ -371,71 +495,110 @@ export function createEmailTriage({ pool, notificationService, callCouncilMember
           const from      = msg.envelope?.from?.[0]?.address || '';
           const date      = msg.envelope?.date || new Date();
           const messageId = msg.envelope?.messageId || null;
-          const preview   = extractPreview(msg.source);
           const hasAttach = !!(msg.bodyStructure?.childNodes?.length ||
             msg.bodyStructure?.disposition === 'attachment');
 
           results.total++;
 
-          // Dedup — skip if already processed
           const { rows: existing } = await pool.query(
-            `SELECT id FROM email_triage_log WHERE uid=$1`, [uid]
+            `SELECT id, category, spam_deleted FROM email_triage_log WHERE uid=$1`, [uid]
           ).catch(() => ({ rows: [] }));
-          if (existing.length) continue;
-
-          // ── Classify ──
+          const existingRow = existing[0] || null;
 
           let category, urgency, brief, why_adam, negotiation_intel, spam_deleted = false;
-
-          // Check block list first
           const blocked = await isSpamBlocked(from);
 
           if (blocked || isDefiniteSpam(subject, from)) {
-            // Confirmed spam — delete it
             category = CATEGORIES.SPAM;
             urgency  = 1;
             brief    = `Spam from ${from}`;
             why_adam = null;
             negotiation_intel = null;
             spam_deleted = true;
-            await moveToTrash(client, uid, trashPath);
-            await blockSender(from, blocked ? 'already blocked' : 'auto-detected spam');
+            if (!dryRun) {
+              await moveToTrash(client, uid, trashPath);
+              await blockSender(from, blocked ? 'already blocked' : 'auto-detected spam');
+              if (existingRow) await updateExistingAsSpam(uid, from, subject);
+            }
             results.spam++;
+            if (existingRow) {
+              results.skipped++;
+              continue;
+            }
+
+          } else if (existingRow && !organizeMode) {
+            results.skipped++;
+            continue;
+
+          } else if (existingRow && organizeMode && existingRow.spam_deleted) {
+            results.skipped++;
+            continue;
 
           } else if (isDefinitelyFYI(subject, from)) {
-            // FYI — mark read, low urgency, no alert
             category = CATEGORIES.FYI;
             urgency  = 2;
             brief    = subject;
             why_adam = null;
             negotiation_intel = null;
-            await markRead(client, uid);
+            if (!dryRun) await markRead(client, uid);
             results.fyi++;
+            if (existingRow) {
+              results.skipped++;
+              continue;
+            }
 
           } else {
-            // Rule-based fast path
+            let preview = '';
+            try {
+              const full = await client.fetchOne(uid, { source: true }, { uid: true });
+              preview = extractPreview(full?.source);
+            } catch {
+              preview = '';
+            }
+
             const ruleCategory = classifyByRules(subject, from, preview);
 
             if (ruleCategory && ruleCategory !== CATEGORIES.CLIENT) {
-              // Confident rule match — still get brief + urgency from AI for TC/urgent
               category = ruleCategory;
 
-              if (TC_CATEGORIES.has(category) || category === CATEGORIES.TIME_SENSITIVE || hasAttach) {
-                // Rich AI analysis for anything that matters
+              if (
+                results.ai_used < maxAi
+                && (TC_CATEGORIES.has(category) || category === CATEGORIES.TIME_SENSITIVE || hasAttach)
+              ) {
                 const ai = await classifyWithAI(subject, from, preview, hasAttach);
-                urgency  = ai.urgency;
-                brief    = ai.brief;
-                why_adam = TC_CATEGORIES.has(category) ? null : ai.why_adam;  // TC = system handles
-                negotiation_intel = ai.negotiation_intel;
+                results.ai_used++;
+                if (ai.spam) {
+                  category = CATEGORIES.SPAM;
+                  urgency = 1;
+                  brief = `Possible spam: ${subject}`;
+                  why_adam = null;
+                  negotiation_intel = null;
+                  spam_deleted = true;
+                  if (!dryRun) {
+                    await moveToTrash(client, uid, trashPath);
+                    await blockSender(from, 'AI-detected spam');
+                    if (existingRow) await updateExistingAsSpam(uid, from, subject);
+                  }
+                  results.spam++;
+                  if (existingRow) {
+                    results.skipped++;
+                    continue;
+                  }
+                } else {
+                  urgency  = ai.urgency;
+                  brief    = ai.brief;
+                  why_adam = TC_CATEGORIES.has(category) ? null : ai.why_adam;
+                  negotiation_intel = ai.negotiation_intel;
+                }
               } else {
                 urgency  = category === CATEGORIES.GLVAR ? 6 : 4;
                 brief    = subject;
                 why_adam = category === CATEGORIES.GLVAR ? 'GLVAR notices require your personal response' : null;
                 negotiation_intel = null;
               }
-            } else {
-              // Full AI analysis
+            } else if (results.ai_used < maxAi) {
               const ai = await classifyWithAI(subject, from, preview, hasAttach);
+              results.ai_used++;
               if (ai.spam) {
                 category = CATEGORIES.SPAM;
                 urgency  = 1;
@@ -443,9 +606,16 @@ export function createEmailTriage({ pool, notificationService, callCouncilMember
                 why_adam = null;
                 negotiation_intel = null;
                 spam_deleted = true;
-                await moveToTrash(client, uid, trashPath);
-                await blockSender(from, 'AI-detected spam');
+                if (!dryRun) {
+                  await moveToTrash(client, uid, trashPath);
+                  await blockSender(from, 'AI-detected spam');
+                  if (existingRow) await updateExistingAsSpam(uid, from, subject);
+                }
                 results.spam++;
+                if (existingRow) {
+                  results.skipped++;
+                  continue;
+                }
               } else {
                 category = ruleCategory || ai.category;
                 urgency  = ai.urgency;
@@ -453,10 +623,28 @@ export function createEmailTriage({ pool, notificationService, callCouncilMember
                 why_adam = TC_CATEGORIES.has(category) ? null : ai.why_adam;
                 negotiation_intel = ai.negotiation_intel;
               }
+            } else {
+              category = ruleCategory || (hasAttach ? CATEGORIES.TC_DOCUMENT : CATEGORIES.CLIENT);
+              urgency  = hasAttach ? 6 : 4;
+              brief    = subject;
+              why_adam = category === CATEGORIES.CLIENT ? 'Needs your review' : null;
+              negotiation_intel = null;
+            }
+
+            if (existingRow && !spam_deleted) {
+              results.skipped++;
+              continue;
             }
           }
 
-          // ── Store ──
+          if (dryRun) {
+            if (TC_CATEGORIES.has(category) && !spam_deleted) results.tc++;
+            if (category === CATEGORIES.CLIENT) results.client++;
+            if (ALERT_CATEGORIES.has(category) && !spam_deleted && ADAM_MUST_ACT.has(category)) {
+              results.attention++;
+            }
+            continue;
+          }
 
           const actionRequired = ALERT_CATEGORIES.has(category) && !spam_deleted;
           const auto_tc_queued = TC_CATEGORIES.has(category) && hasAttach && !spam_deleted;
@@ -472,15 +660,14 @@ export function createEmailTriage({ pool, notificationService, callCouncilMember
           newItems.push(row);
 
           if (TC_CATEGORIES.has(category) && !spam_deleted) results.tc++;
+          if (category === CATEGORIES.CLIENT) results.client++;
           if (actionRequired && ADAM_MUST_ACT.has(category)) results.attention++;
 
-          // ── Alert + auto-actions ──
-
-          if (negotiation_intel) {
+          if (!skipAlerts && negotiation_intel) {
             await _sendNegotiationAlert(row, negotiation_intel);
           }
 
-          if (actionRequired && !spam_deleted) {
+          if (!skipAlerts && actionRequired && !spam_deleted) {
             await _sendAttentionAlert(row);
           }
 
@@ -499,7 +686,25 @@ export function createEmailTriage({ pool, notificationService, callCouncilMember
     }
 
     logger.info?.({ ...results }, '[EMAIL-TRIAGE] Scan complete');
-    return { ok: true, ...results, items: newItems };
+    return { ok: true, ...results, items: dryRun ? undefined : newItems, item_count: newItems.length };
+  }
+
+  async function organizeRecentInbox({ days = 40, dryRun = false, maxMessages, maxAi } = {}) {
+    if (organizeInFlight && !dryRun) {
+      return { ok: false, reason: 'organize_in_flight', message: 'A TC inbox organize pass is already running.' };
+    }
+    const run = scanInbox({
+      days,
+      includeSeen: true,
+      organize: true,
+      dryRun,
+      maxMessages,
+      maxAi,
+      skipAlerts: true,
+    });
+    if (dryRun) return run;
+    organizeInFlight = run.finally(() => { organizeInFlight = null; });
+    return organizeInFlight;
   }
 
   // ── Alerts ────────────────────────────────────────────────────────────────
@@ -699,6 +904,8 @@ export function createEmailTriage({ pool, notificationService, callCouncilMember
 
   return {
     scanInbox,
+    organizeRecentInbox,
+    purgeLoggedSpam,
     sendDailyDigest,
     startTriageCron,
     getTriagedEmail,

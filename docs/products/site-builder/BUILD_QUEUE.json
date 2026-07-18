@@ -15,7 +15,10 @@
       "founder_gated": false,
       "attempts": 1,
       "commit_sha": "9cfc4e591748a06b2aa3a083b72645b2be0c068f",
-      "proof": "Built autonomously via /build primitive; verified deterministic FNV-1a assignment, near-uniform distribution (996/995/1009 across 3000 ids), input validation, custom-variant support."
+      "proof": "Built autonomously via /build primitive; verified deterministic FNV-1a assignment, near-uniform distribution (996/995/1009 across 3000 ids), input validation, custom-variant support.",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "sb-ab-subject-testing",
+      "mission_id": "PRODUCT-site-builder"
     },
     {
       "id": "sb-preview-expiry-sweep",
@@ -27,7 +30,10 @@
       "founder_gated": false,
       "attempts": 1,
       "commit_sha": "02f2e809c",
-      "proof": "Built autonomously by the never-stop loop after activation on prod (lumin-web service). 227-line dry-run-safe script: TTL validation/defaults, SWEEP_APPLY gate, path-traversal guard, JSON summary. node --check passes."
+      "proof": "Built autonomously by the never-stop loop after activation on prod (lumin-web service). 227-line dry-run-safe script: TTL validation/defaults, SWEEP_APPLY gate, path-traversal guard, JSON summary. node --check passes.",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "sb-preview-expiry-sweep",
+      "mission_id": "PRODUCT-site-builder"
     },
     {
       "id": "sb-editor-sidebar",
@@ -41,7 +47,10 @@
       "max_output_tokens": 7168,
       "last_attempt_at": "2026-07-07T01:24:08.815Z",
       "last_error": null,
-      "proof": "Built by Cursor agent session 2026-07-07; services/site-builder-editor-sidebar.js committed in repo."
+      "proof": "Built by Cursor agent session 2026-07-07; services/site-builder-editor-sidebar.js committed in repo.",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "sb-editor-sidebar",
+      "mission_id": "PRODUCT-site-builder"
     },
     {
       "id": "sb-editor-canvas",
@@ -55,7 +64,10 @@
       "max_output_tokens": 12288,
       "last_attempt_at": "2026-07-07T01:43:52.822Z",
       "last_error": null,
-      "proof": "Built by Cursor agent session 2026-07-07; services/site-builder-editor-canvas.js committed in repo."
+      "proof": "Built by Cursor agent session 2026-07-07; services/site-builder-editor-canvas.js committed in repo.",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "sb-editor-canvas",
+      "mission_id": "PRODUCT-site-builder"
     },
     {
       "id": "sb-editor-chat",
@@ -69,7 +81,10 @@
       "max_output_tokens": 8192,
       "last_attempt_at": "2026-07-07T02:04:18.424Z",
       "last_error": null,
-      "proof": "Built by Cursor agent session 2026-07-07; services/site-builder-editor-chat.js committed in repo."
+      "proof": "Built by Cursor agent session 2026-07-07; services/site-builder-editor-chat.js committed in repo.",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "sb-editor-chat",
+      "mission_id": "PRODUCT-site-builder"
     },
     {
       "id": "sb-editor-strategy",
@@ -83,7 +98,10 @@
       "max_output_tokens": 7168,
       "last_attempt_at": "2026-07-07T02:19:00.085Z",
       "last_error": null,
-      "proof": "Built by Cursor agent session 2026-07-07; services/site-builder-editor-strategy.js committed in repo."
+      "proof": "Built by Cursor agent session 2026-07-07; services/site-builder-editor-strategy.js committed in repo.",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "sb-editor-strategy",
+      "mission_id": "PRODUCT-site-builder"
     },
     {
       "id": "sb-editor-shell",
@@ -100,7 +118,10 @@
       "founder_gated": false,
       "attempts": 1,
       "max_output_tokens": 8192,
-      "proof": "Built by Cursor agent session 2026-07-07; services/site-builder-editor.js"
+      "proof": "Built by Cursor agent session 2026-07-07; services/site-builder-editor.js",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "sb-editor-shell",
+      "mission_id": "PRODUCT-site-builder"
     },
     {
       "id": "sb-editor-endpoints",
@@ -113,7 +134,10 @@
       ],
       "founder_gated": false,
       "attempts": 1,
-      "proof": "Built by Cursor agent session 2026-07-07; routes/site-builder-editor-routes.js"
+      "proof": "Built by Cursor agent session 2026-07-07; routes/site-builder-editor-routes.js",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "sb-editor-endpoints",
+      "mission_id": "PRODUCT-site-builder"
     },
     {
       "id": "sb-competitor-categories",
@@ -125,7 +149,10 @@
       "founder_gated": false,
       "attempts": 1,
       "commit_sha": "6cce97ef3",
-      "proof": "Built autonomously by the never-stop loop once the prod GitHub token was restored; committed as services/site-builder-competitor-categories.js. node --check passes."
+      "proof": "Built autonomously by the never-stop loop once the prod GitHub token was restored; committed as services/site-builder-competitor-categories.js. node --check passes.",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "sb-competitor-categories",
+      "mission_id": "PRODUCT-site-builder"
     },
     {
       "id": "sb-social-discovery",
@@ -138,7 +165,10 @@
       "attempts": 1,
       "commit_sha": "108ab3ccbfb5f3aed44b1c763653151a3b80aee5",
       "last_attempt_at": "2026-07-07T21:48:07.356Z",
-      "completed_at": "2026-07-07T21:48:09.306Z"
+      "completed_at": "2026-07-07T21:48:09.306Z",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "sb-social-discovery",
+      "mission_id": "PRODUCT-site-builder"
     },
     {
       "id": "sb-service-catalog",
@@ -149,7 +179,10 @@
       "depends_on": [],
       "founder_gated": false,
       "attempts": 1,
-      "proof": "Built by Cursor agent session 2026-07-07; services/site-builder-service-catalog.js prices wired from config/site-builder-pricing.js"
+      "proof": "Built by Cursor agent session 2026-07-07; services/site-builder-service-catalog.js prices wired from config/site-builder-pricing.js",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "sb-service-catalog",
+      "mission_id": "PRODUCT-site-builder"
     },
     {
       "id": "sb-editor-onboarding-copy",
@@ -165,7 +198,505 @@
       "last_attempt_at": "2026-07-08T06:07:09.460Z",
       "last_error": "verify_exit_1",
       "revive_count": 1,
-      "completed_at": "2026-07-08T06:07:18.318Z"
+      "completed_at": "2026-07-08T06:07:18.318Z",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "sb-editor-onboarding-copy",
+      "mission_id": "PRODUCT-site-builder"
+    },
+    {
+      "id": "step-1",
+      "status": "done",
+      "target_file": "db/migrations/20240801_site_builder_templates.sql",
+      "task": "Create starter templates table",
+      "spec": "CREATE TABLE IF NOT EXISTS site_builder_templates with columns id UUID PK default gen_random_uuid(), name TEXT NOT NULL, thumbnail_url TEXT, config JSONB NOT NULL, sort_order INT DEFAULT 0, created_at TIMESTAMPTZ DEFAULT now(), updated_at TIMESTAMPTZ DEFAULT now(). Seed 5 rows for distinct starter templates (e.g. 'Clean Business','Bold Agency','Minimal Portfolio','Warm Local','Tech Startup') using INSERT INTO ... ON CONFLICT DO NOTHING so re-runs are safe. Satisfies ux_friction_1 data layer.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "commit_sha": "5b1c400053580235a6db1e8d97cc2f5feb1f8954",
+      "last_attempt_at": "2026-07-10T21:08:39.413Z",
+      "completed_at": "2026-07-10T21:08:56.342Z",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-1",
+      "mission_id": "PRODUCT-site-builder"
+    },
+    {
+      "id": "step-2",
+      "status": "done",
+      "target_file": "services/site-builder-templates.js",
+      "task": "Implement template listing and selection service",
+      "spec": "Export async functions listTemplates(db) returning all rows from site_builder_templates ordered by sort_order, and getTemplate(db, id) returning one row. No browser globals. No AI calls. Satisfies ux_friction_1 service layer. Import only 'pg' or the injected db dep.",
+      "depends_on": [
+        "step-1"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "commit_sha": "aca57d28d31e28bbd979642a8e8578623159ad12",
+      "last_attempt_at": "2026-07-10T21:12:05.319Z",
+      "completed_at": "2026-07-10T21:12:15.674Z",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-2",
+      "mission_id": "PRODUCT-site-builder"
+    },
+    {
+      "id": "step-3",
+      "status": "done",
+      "target_file": "services/site-builder-save-confirmation.js",
+      "task": "Implement save-confirmation timestamp service",
+      "spec": "Export function buildSaveConfirmation() that returns a plain JS object {savedAt: new Date().toISOString(), label: 'Saved', icon: 'checkmark'}. Export function formatSaveConfirmationHTML(obj) that returns a safe HTML string '<span class=\"sb-save-confirm\">✓ Saved at HH:MM:SS</span>' computed from obj.savedAt. No browser globals, no imports beyond node builtins. Satisfies ux_friction_4 service layer.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "commit_sha": "b6aaf4b796693f4a8ebd75c81fc109b5da75cc8b",
+      "last_attempt_at": "2026-07-10T21:14:50.477Z",
+      "completed_at": "2026-07-10T21:14:59.670Z",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-3",
+      "mission_id": "PRODUCT-site-builder"
+    },
+    {
+      "id": "step-4",
+      "status": "done",
+      "target_file": "routes/site-builder-templates-routes.js",
+      "task": "Register REST routes for template listing and selection",
+      "spec": "Export registerSiteBuilderTemplatesRoutes(app, deps) where deps includes db. Mount GET /api/site-builder/templates → calls listTemplates(deps.db) and returns JSON array. Mount GET /api/site-builder/templates/:id → calls getTemplate(deps.db, req.params.id) and returns JSON object or 404. No mutations. No browser globals. Must be importable without side-effects. Satisfies ux_friction_1 API layer.",
+      "depends_on": [
+        "step-2"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "commit_sha": "aab32f8c41e4cf015c650bd4de1ebd06cbfbb7a0",
+      "proof": "Module already exported registerSiteBuilderTemplatesRoutes + list/get; GAP-FILL closed step-5 mount so tip can serve GET /api/site-builder/templates.",
+      "completed_at": "2026-07-11T08:55:00.000Z",
+      "last_attempt_at": "2026-07-11T08:55:00.000Z",
+      "last_error": null,
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-4",
+      "mission_id": "PRODUCT-site-builder"
+    },
+    {
+      "id": "step-5",
+      "status": "done",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "Register template routes module in auto-registration config",
+      "spec": "Add entry for site-builder-templates-routes to the JSON array so the boot system loads registerSiteBuilderTemplatesRoutes automatically. Preserve all existing entries. No other changes.",
+      "depends_on": [
+        "step-4"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "proof": "GAP-FILL 2026-07-11: added routes/site-builder-templates-routes.js → registerSiteBuilderTemplatesRoutes to auto-registered-product-modules.json (first-dollar unblock).",
+      "completed_at": "2026-07-11T08:55:00.000Z",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-5",
+      "mission_id": "PRODUCT-site-builder"
+    },
+    {
+      "id": "step-6",
+      "status": "done",
+      "target_file": "public/overlay/site-builder-template-picker.html",
+      "task": "Build template picker UI overlay showing 3–5 starter templates",
+      "spec": "Self-contained HTML fragment rendered as an overlay panel. Fetches GET /api/site-builder/templates via client-side fetch and renders a card grid (thumbnail, name, 'Use this template' CTA button) for each template. Cards use CSS grid, minimum 3 columns on desktop. Selecting a card posts the chosen template id back to the editor state and closes the overlay. Includes clear heading 'Choose a starting design' and subtext 'Pick the look that fits your business — you can change everything later.' Satisfies ux_friction_1 UI. All JS inside inline <script> tags. No external CDN dependencies.",
+      "depends_on": [
+        "step-4"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "commit_sha": "948f412500d3e58c0194226e00eac2058347c41d",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-6",
+      "mission_id": "PRODUCT-site-builder"
+    },
+    {
+      "id": "step-7",
+      "status": "done",
+      "target_file": "public/overlay/site-builder-editor-onboarding-prompt.html",
+      "task": "Build first-step onboarding prompt UI for the editor",
+      "spec": "Self-contained HTML fragment shown at editor launch (dismissible). Contains a styled banner with the text 'Start here: choose a template, then edit your text.' and two CTA buttons: 'Pick a template' (opens the template picker overlay) and 'I'll explore on my own' (dismisses the banner and sets localStorage key sb_onboarding_dismissed=1 so it does not reappear). No backend calls required. All JS inline. Satisfies ux_friction_2.",
+      "depends_on": [
+        "step-6"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T20:04:43.913Z",
+      "commit_sha": "6a6b83bf2d598b9b1709e8634b35d5f84b71c9f8",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-7",
+      "mission_id": "PRODUCT-site-builder"
+    },
+    {
+      "id": "step-8",
+      "status": "done",
+      "target_file": "public/overlay/site-builder-chat-prompt.html",
+      "task": "Build chat prompt UI with example questions",
+      "spec": "Self-contained HTML fragment that enhances the chat panel. Renders a 'Not sure what to ask?' section above the chat input with 3 clickable example chips: 'Change my colors', 'Rewrite my homepage headline', 'Add a contact section'. Clicking a chip pre-fills the chat input with that text. Includes a visible heading 'Ask the AI assistant' and brief subtext 'Type a request or tap an example below.' Satisfies ux_friction_3. All JS inline, no external deps.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T20:05:48.867Z",
+      "commit_sha": "652f0c09d1c6abdd2c959bbb7e15077add2fb347",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-8",
+      "mission_id": "PRODUCT-site-builder"
+    },
+    {
+      "id": "step-9",
+      "status": "done",
+      "target_file": "public/overlay/site-builder-save-confirmation.html",
+      "task": "Build save confirmation UI widget with timestamp and checkmark",
+      "spec": "Self-contained HTML fragment that mounts a save-status bar at the top of the editor. Listens for a custom DOM event 'sb:saved' dispatched by the editor on successful save. On event receipt renders '✓ Saved at HH:MM:SS' where time is derived from event.detail.savedAt, displayed for 4 seconds then fades out with CSS transition. Before any save the bar reads 'Unsaved changes' in muted style. Satisfies ux_friction_4 UI. All JS inline.",
+      "depends_on": [
+        "step-3"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T20:09:27.543Z",
+      "commit_sha": "e054c4d1f5e510a08cf6d54fb6031437a7dc6c0d",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-9",
+      "mission_id": "PRODUCT-site-builder"
+    },
+    {
+      "id": "step-10",
+      "status": "done",
+      "target_file": "public/overlay/site-builder-device-toggle.html",
+      "task": "Build plainly-labelled Desktop/Tablet/Mobile device toggle UI",
+      "spec": "Self-contained HTML fragment replacing or augmenting any unlabelled icon-only device toggle. Renders three clearly labelled buttons: 'Desktop', 'Tablet', 'Mobile'. Active button is highlighted. Clicking each dispatches custom DOM event 'sb:deviceChange' with detail {mode:'desktop'|'tablet'|'mobile'} so the canvas can react. Buttons include an accessible aria-label and a small intuitive icon (unicode or inline SVG) alongside the plain text label. Satisfies ux_friction_5. All JS inline.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T20:17:04.918Z",
+      "commit_sha": "aba09128e4a4ba2da57e7d1987969e23d6d054e2",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-10",
+      "mission_id": "PRODUCT-site-builder"
+    },
+    {
+      "id": "step-01",
+      "status": "done",
+      "target_file": "db/migrations/20240915_site_builder_ab_subject.sql",
+      "task": "Create AB subject-line test tables",
+      "spec": "CREATE TABLE IF NOT EXISTS site_builder_ab_subject_tests with columns: id uuid PK default gen_random_uuid(), site_id uuid NOT NULL, variant_a text NOT NULL, variant_b text NOT NULL, winner text, sends_a int default 0, sends_b int default 0, opens_a int default 0, opens_b int default 0, status text default 'active', created_at timestamptz default now(), updated_at timestamptz default now(). CREATE TABLE IF NOT EXISTS site_builder_ab_subject_events with id uuid PK gen_random_uuid(), test_id uuid NOT NULL REFERENCES site_builder_ab_subject_tests(id), variant text NOT NULL, event_type text NOT NULL, occurred_at timestamptz default now(). Both CREATE TABLE IF NOT EXISTS only, no drops or alters.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "commit_sha": "2c3dea34d82f5f0482c4189e9825b68b0583103b",
+      "last_attempt_at": "2026-07-11T09:05:05.742Z",
+      "completed_at": "2026-07-11T09:05:19.931Z",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-01",
+      "mission_id": "PRODUCT-site-builder"
+    },
+    {
+      "id": "step-02",
+      "status": "done",
+      "target_file": "services/site-builder-ab-subject-testing.js",
+      "task": "Implement A/B subject-line testing service",
+      "spec": "Export createTest(db,siteId,variantA,variantB), recordEvent(db,testId,variant,eventType), pickVariant(db,testId) (returns 'a' or 'b' via simple open-rate comparison, defaults to 'a' when tied or insufficient data), concludeTest(db,testId) (sets winner and status='concluded' based on open rate). No AI, no browser globals, uses only pg or the db client passed as argument. All SQL uses parameterised queries. Module must work standalone after step-01 migration is applied.",
+      "depends_on": [
+        "step-01"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "commit_sha": "62ea2eed60790cee8833758c6dc12261a890390a",
+      "last_attempt_at": "2026-07-11T09:07:04.555Z",
+      "completed_at": "2026-07-11T09:07:16.932Z",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-02",
+      "mission_id": "PRODUCT-site-builder"
+    },
+    {
+      "id": "step-03",
+      "status": "done",
+      "target_file": "routes/site-builder-ab-subject-routes.js",
+      "task": "Mount REST routes for A/B subject-line testing",
+      "spec": "Export registerAbSubjectRoutes(app,deps) where deps provides db. Mount POST /api/site-builder/ab-subject/tests (create), POST /api/site-builder/ab-subject/tests/:testId/events (record), GET /api/site-builder/ab-subject/tests/:testId (fetch with stats), POST /api/site-builder/ab-subject/tests/:testId/conclude. All routes validate required fields and return JSON. Import service from step-02 only. Do NOT touch server.js.",
+      "depends_on": [
+        "step-02"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "proof": "GAP-FILL 2026-07-11: routes file already [system-build]; auto-registered registerSiteBuilderAbSubjectRoutes so tip mounts LIVE.",
+      "completed_at": "2026-07-11T12:55:00.000Z",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-03",
+      "mission_id": "PRODUCT-site-builder"
+    },
+    {
+      "id": "step-05",
+      "status": "done",
+      "target_file": "scripts/site-builder-preview-expiry-sweep.mjs",
+      "task": "Implement preview-expiry sweep script",
+      "spec": "ESM script (.mjs). Connects to the database using DATABASE_URL from process.env. Queries for site_builder_previews rows where expires_at < now() and deleted_at IS NULL. Marks them deleted by setting deleted_at=now(). Logs count of swept rows. Accepts optional --dry-run flag that logs but does not write. Imports only node builtins (url, process) and pg (already installed). No browser globals. Exits with code 0 on success, 1 on error. Does NOT conflict with or duplicate services/site-builder-save-confirmation.js or scripts/site-builder-preview-expiry-cron.mjs; the cron file calls this sweep logic.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "proof": "Already satisfied by sb-preview-expiry-sweep → scripts/site-builder-preview-expiry-cron.mjs (done). Planner duplicate closed without second file.",
+      "completed_at": "2026-07-11T12:55:00.000Z",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-05",
+      "mission_id": "PRODUCT-site-builder"
+    },
+    {
+      "id": "step-06",
+      "status": "done",
+      "target_file": "services/site-builder-template-options.js",
+      "task": "Expand template options service to address ux_friction_1",
+      "spec": "Export getTemplateOptions() returning an array of at least 5 distinct template descriptors each with {id, name, description, thumbnailUrl, tags:[]}. Tags must include style keywords (e.g. 'minimal','bold','classic','modern','playful') so the UI can filter. Export getTemplateById(id). No DB required — data is module-level const. No browser globals. This file is new and does not alter the existing services/site-builder-templates.js behaviour.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "getTemplateOptions",
+        "getTemplateById"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/site-builder-template-options.js",
+          "exports": [
+            "getTemplateOptions",
+            "getTemplateById"
+          ],
+          "assertion_id": "expected_exports:services/site-builder-template-options.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T20:18:18.035Z",
+      "commit_sha": "855533e53f1ec5870fe2dc540905afc38d410b6e",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-06",
+      "mission_id": "PRODUCT-site-builder"
+    },
+    {
+      "id": "step-07",
+      "status": "done",
+      "target_file": "services/site-builder-color-palettes.js",
+      "task": "Expand color palette options to address ux_friction_2",
+      "spec": "Export getColorPalettes() returning an array of at least 8 palettes each with {id, label, description, primary, secondary, accent, background, text}. Labels are human-readable brand-style names (e.g. 'Ocean Calm', 'Bold Contrast'). Export getPaletteById(id). No DB, no browser globals, module-level const data only.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "getColorPalettes",
+        "getPaletteById"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/site-builder-color-palettes.js",
+          "exports": [
+            "getColorPalettes",
+            "getPaletteById"
+          ],
+          "assertion_id": "expected_exports:services/site-builder-color-palettes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T20:24:36.655Z",
+      "commit_sha": "b819a9beb7f4ab7448cc4ab51cd75f86e3f0f769",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-07",
+      "mission_id": "PRODUCT-site-builder"
+    },
+    {
+      "id": "step-08",
+      "status": "skipped",
+      "target_file": "routes/site-builder-customization-routes.js",
+      "task": "Mount customization UI routes serving template and palette choices",
+      "spec": "Export registerCustomizationRoutes(app,deps). Mount GET /api/site-builder/customization/templates (returns JSON array from step-06), GET /api/site-builder/customization/templates/:id, GET /api/site-builder/customization/palettes (returns JSON from step-07), GET /api/site-builder/customization/palettes/:id. Mount GET /site-builder/customization which returns a self-contained HTML page (inline in the returned string) with: a template picker grid showing all templates with thumbnails and style tags (addresses ux_friction_1); a colour palette picker showing all palettes with swatches and human-readable labels (addresses ux_friction_2); icon-button tooltips/labels for chat, save, and device-toggle controls (addresses ux_friction_2 label helper-text fix); a getting-started prompt banner 'Choose a template, then pick a colour palette' visible until the user makes both selections (addresses ux_friction_3); a device-view toggle that shows a side-by-side before/after preview panel when switching between mobile and desktop (addresses ux_friction_4). All interactive JS lives inside the returned HTML string. No browser globals at module level. Import services from step-06 and step-07 only.",
+      "depends_on": [
+        "step-06",
+        "step-07"
+      ],
+      "founder_gated": true,
+      "attempts": 1,
+      "expected_exports": [
+        "registerCustomizationRoutes",
+        "onRoutes"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/site-builder-customization-routes.js",
+          "exports": [
+            "registerCustomizationRoutes",
+            "onRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/site-builder-customization-routes.js"
+        }
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/site-builder/customization/templates"
+      },
+      "last_attempt_at": "2026-07-17T21:45:30.505Z",
+      "last_error": "NOT_ON_BLUEPRINT",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 7,
+      "revived_at": "2026-07-17T21:45:27.597Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:NOT_ON_BLUEPRINT",
+      "demoted_at": "2026-07-17T21:51:17.008Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-08",
+      "mission_id": "PRODUCT-site-builder"
+    },
+    {
+      "id": "step-11",
+      "status": "done",
+      "target_file": "services/site-builder-preview-expiry-ui.js",
+      "task": "Add UI-layer helpers for preview-expiry sweep feature",
+      "spec": "Export formatExpirySweepReport(swept) where swept is array of {previewId, expiredAt}; returns HTML string summarising count and listing ids. Export getExpirySweepStatusBadge(lastRanAt) returning a string badge like 'Last ran: 5 min ago' or 'Never run'. Depends only on already-built scripts/site-builder-preview-expiry-sweep.mjs conceptually; imports nothing from it (sweep runs as cron). No browser globals.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "formatExpirySweepReport",
+        "getExpirySweepStatusBadge"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/site-builder-preview-expiry-ui.js",
+          "exports": [
+            "formatExpirySweepReport",
+            "getExpirySweepStatusBadge"
+          ],
+          "assertion_id": "expected_exports:services/site-builder-preview-expiry-ui.js"
+        }
+      ],
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-11",
+      "mission_id": "PRODUCT-site-builder",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T21:51:24.371Z",
+      "commit_sha": "04ce418418c7469d46b4f10a3752820317cae9c4"
+    },
+    {
+      "id": "step-12",
+      "status": "founder_gated",
+      "target_file": "public/overlay/site-builder-editor-hints-overlay.html",
+      "task": "Build founder-gated editor hints overlay embedding onboarding banner, chat hints, control tooltips, and device preview diff UI",
+      "spec": "Self-contained HTML page. On load fetches GET /api/site-builder/ux-hints and renders: (1) onboarding banner at top with step-by-step copy, (2) chat placeholder hint displayed above a mock chat input, (3) tooltip labels for chat/save/deviceToggle controls shown as styled badges, (4) a before/after device preview diff section that lets user paste two HTML snippets and click Compare to POST /api/site-builder/device-preview-diff and display the summary. All controls have visible labels. No server-side code.",
+      "depends_on": [
+        "step-08"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-12",
+      "mission_id": "PRODUCT-site-builder"
+    },
+    {
+      "id": "step-09",
+      "status": "founder_gated",
+      "target_file": "routes/site-builder-customization-ui-routes.js",
+      "task": "Register customization UI API and HTML routes",
+      "spec": "Exports registerCustomizationUiRoutes(app, deps). Mounts GET /site-builder/customization (returns HTML page embedding template/palette pickers populated from getCustomizationOptions); POST /api/site-builder/customization (calls saveCustomizationOptions, returns 200 JSON). HTML is an inline string with client JS that fetches /api/site-builder/colour-palettes and /api/site-builder/templates to populate selectors dynamically. No top-level browser globals. Founder-gated route must check deps.isFounder or equivalent flag before serving. Addresses ux_friction_1 and ux_friction_2.",
+      "depends_on": [
+        "step-08"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCustomizationUiRoutes",
+        "UiRoutes"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/site-builder-customization-ui-routes.js",
+          "exports": [
+            "registerCustomizationUiRoutes",
+            "UiRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/site-builder-customization-ui-routes.js"
+        }
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/site-builder/customization"
+      },
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-09",
+      "mission_id": "PRODUCT-site-builder"
+    },
+    {
+      "id": "step-04",
+      "status": "skipped",
+      "target_file": "routes/site-builder-color-palettes-routes.js",
+      "task": "Register REST routes for color palettes and mount via auto-registration",
+      "spec": "Export registerSiteBuilderColorPalettesRoutes(app, deps) where deps includes db. Mount GET /api/site-builder/color-palettes (returns all palettes) and GET /api/site-builder/color-palettes/:id. Import site-builder-color-palettes.js from step-03. After verifying tests pass, add an entry for this module to config/auto-registered-product-modules.json so the framework mounts it automatically -- do NOT edit server.js.",
+      "depends_on": [
+        "step-03"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "last_error": "SENTRY_FAILED",
+      "expected_exports": [
+        "registerSiteBuilderColorPalettesRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/site-builder/color-palettes"
+      },
+      "revive_count": 6,
+      "revived_at": "2026-07-15T01:55:24.746Z",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt": null,
+      "last_attempt_at": "2026-07-15T01:55:27.679Z",
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED",
+      "demoted_at": "2026-07-17T20:04:27.696Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-04",
+      "mission_id": "PRODUCT-site-builder"
+    },
+    {
+      "id": "step-04-register",
+      "status": "done",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "Auto-register site-builder color palettes routes at boot without editing server.js",
+      "spec": "Add {\"path\":\"routes/site-builder-color-palettes-routes.js\",\"register\":\"registerSiteBuilderColorPalettesRoutes\",\"enabled\":true} to modules[]. Preserve all existing entries. File must remain valid JSON.",
+      "depends_on": [
+        "step-04"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-14T17:41:46.350Z",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-04-register",
+      "mission_id": "PRODUCT-site-builder"
     }
-  ]
+  ],
+  "sentry_signature": "beba57e366c8c9cf",
+  "sentry_unplannable_at": "2026-07-12T18:05:57.513Z",
+  "sentry_unplannable_reason": "planner filtered all steps (already-done); spin-break so LifeOS can build",
+  "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-site-builder",
+  "twin_kind": "product_build_queue_registered"
 }

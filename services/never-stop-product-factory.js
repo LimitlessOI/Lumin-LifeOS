@@ -11,9 +11,9 @@ import { loadPointBTarget } from './point-b-target-lite.js';
 import { executeIntakeBlueprint } from './intake-blueprint-executor.js';
 import { SOCIALMEDIAOS_INTAKE_SESSION } from './lifeos-mission-pipeline-executor.js';
 import { loadBuildQueue, normalizeQueue, selectNextStep, runNextStep, persistQueue, queueSummary, queuePathForProduct, reviveStaleBlockedSteps, evaluateModuleHealthForStep, evaluateStepExpectations, STEP_STATUS } from './product-build-orchestrator.js';
-import { waitForDeploySha } from './deploy-truth.js';
+import { proveDeployServesSha, waitForDeploySha } from './deploy-truth.js';
 import { enforceClaim, toWatchlist } from './truth-ladder.js';
-import { extractBacklog, backlogSignature, planBuildQueue } from './build-queue-planner.js';
+import { extractCorpusBacklog, backlogSignature, planBuildQueue } from './build-queue-planner.js';
 import { buildIntegrationContext } from './build-integration-context.js';
 import { assertUngovernedShippingAllowed } from './governed-factory-guard.js';
 
@@ -35,12 +35,18 @@ export function isNonUiBuildQueueTarget(targetFile) {
   if (!target) return false;
   if (/^public\//.test(target)) return false;
   if (/\.sql$/i.test(target) || /^db\/migrations\//.test(target)) return true;
-  if (/^(services|routes|middleware|startup|factory-staging\/factory-core)\//.test(target)) {
-    return true;
-  }
-  if (/^config\//.test(target) && /\.(js|mjs|cjs|ts)$/i.test(target)) return true;
+  if (/^(services|routes|middleware|startup|factory-staging\/factory-core)\//.test(target)) return true;
+  if (/^config\//.test(target)) return true;
   if (/\.(js|mjs|cjs|ts)$/i.test(target)) return true;
   return false;
+}
+
+function isHumanHoldStep(step) {
+  if (!step || typeof step !== 'object') return false;
+  return step.human_hold === true
+    || step.pause_for_founder === true
+    || step.gate === 'human_hold'
+    || step.gate === 'pause_for_founder';
 }
 
 /**
@@ -138,7 +144,7 @@ async function callGeminiModel(key, model, prompt, maxTokens) {
 export function defaultPlannerCallModel() {
   const candidates = [];
   if (process.env.ANTHROPIC_API_KEY) {
-    const m = process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-6';
+    const m = process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-20250514';
     candidates.push({ name: `anthropic:${m}`, call: (p, t) => callAnthropicModel(process.env.ANTHROPIC_API_KEY, m, p, t) });
   }
   if (process.env.OPENAI_API_KEY) {
@@ -171,6 +177,11 @@ export function defaultPlannerCallModel() {
 }
 
 export function neverStopProductsEnabled() {
+  // Jul-15 FOUNDER_RESUME_AUTONOMY kill-switch retired. Hard stop = PAUSE_AUTONOMY / FOUNDER_STOP.
+  // When GOVERNED_FACTORY_ONLY=1, the scheduler keeps this loop idle — governed ship owns throughput.
+  if (['1', 'true', 'yes', 'on'].includes(String(process.env.PAUSE_AUTONOMY || '').trim().toLowerCase())) {
+    return false;
+  }
   return process.env.BUILDEROS_NEVER_STOP === '1'
     || process.env.NEVER_STOP_PRODUCTS === '1'
     || process.env.BUILDEROS_AUTOPILOT === '1';
@@ -412,7 +423,8 @@ export function discoverBuildQueueWork() {
     if (!fs.existsSync(queuePath)) continue;
     try {
       const queue = loadBuildQueue(productId);
-      reviveStaleBlockedSteps(queue);
+      // Do NOT revive on discover — revive mutates blocked→pending and schedules
+      // thrashers ahead of real pending blueprint steps. Revive only at execute.
       const { step } = selectNextStep(queue);
       if (step) {
         found.push({
@@ -454,7 +466,7 @@ export async function discoverBuildQueueWorkFresh() {
     if (!fs.existsSync(queuePath)) continue;
     try {
       const queue = await loadBuildQueuePreferRemote(productId);
-      reviveStaleBlockedSteps(queue);
+      // Discover must not revive — see discoverBuildQueueWork.
       const { step } = selectNextStep(queue);
       if (step) {
         found.push({
@@ -476,10 +488,10 @@ export async function discoverBuildQueueWorkFresh() {
 }
 
 /**
- * Scale lever: find products that have a PRODUCT_HOME with a documented backlog
- * but NO BUILD_QUEUE.json yet, so the loop can auto-plan a queue for them (via
- * the injected planner model) and pull them into the autonomous build lane.
- * Grounded in real documented work only — never fabricated.
+ * Scale lever: find products that have documented work in their product folder
+ * (PRODUCT_HOME + conversations + sibling docs) but NO BUILD_QUEUE.json yet, so
+ * the loop can auto-plan a queue (blueprint of build steps) and pull them into
+ * the autonomous build lane. Grounded in real documented work only — never fabricated.
  */
 export function discoverPlanWork() {
   const productsDir = path.join(ROOT, 'docs/products');
@@ -497,12 +509,15 @@ export function discoverPlanWork() {
     const homePath = path.join(productsDir, productId, 'PRODUCT_HOME.md');
     if (!fs.existsSync(homePath)) continue;
     let backlog = [];
+    let sources = [];
     try {
-      backlog = extractBacklog(fs.readFileSync(homePath, 'utf8'));
+      const extracted = extractCorpusBacklog(productId);
+      backlog = extracted.items || [];
+      sources = extracted.sources || [];
     } catch { backlog = []; }
     if (backlog.length === 0) continue;
 
-    // NEW-PRODUCT ENROLL: home has documented backlog but no queue yet.
+    // NEW-PRODUCT ENROLL: folder has documented work but no queue yet.
     if (!fs.existsSync(queuePathForProduct(productId))) {
       found.push({
         id: `plan_build_queue_${productId}`,
@@ -511,35 +526,46 @@ export function discoverPlanWork() {
         product: productId,
         product_id: productId,
         home_path: homePath,
-        detail: `${backlog.length} documented backlog item(s), no BUILD_QUEUE yet`,
+        corpus_sources: sources.map((s) => s.path),
+        detail: `${backlog.length} documented item(s) across ${sources.length || 1} source(s), no BUILD_QUEUE yet`,
       });
       continue;
     }
 
-    // SELF-EXTEND: a product whose queue is FULLY DONE re-plans from its own
-    // PRODUCT_HOME when new work has been documented since the last plan — this
-    // is how the loop "adds more to itself" once a phase ships, without a human
-    // hand-authoring the next phase. Gated hard to avoid churn/waste:
-    //   (1) EVERY step must be `done` — never extend on top of a still-building
-    //       or blocked phase (the build path revives/finishes those first);
-    //   (2) the documented backlog signature must have CHANGED since the queue
-    //       was last planned — otherwise re-planning the same backlog burns a
-    //       planner model call every idle cycle for zero new steps.
+    // SELF-EXTEND: a product whose queue is FULLY DONE — or stuck with no pending
+    // non-gated work — re-plans from its corpus when new work has been documented.
     let queue;
     try { queue = loadBuildQueue(productId); } catch { continue; }
     const steps = Array.isArray(queue.steps) ? queue.steps : [];
-    const allDone = steps.length > 0 && steps.every((s) => s.status === STEP_STATUS.DONE);
-    if (!allDone) continue;
-    if (queue.backlog_signature && queue.backlog_signature === backlogSignature(backlog)) continue;
+    if (steps.length === 0) continue;
+    const allDone = steps.every((s) => s.status === STEP_STATUS.DONE);
+    const hasPending = steps.some((s) => {
+      if (isHumanHoldStep(s)) return false;
+      return s.status === STEP_STATUS.PENDING
+        || (s.status === STEP_STATUS.FOUNDER_GATED && !isHumanHoldStep(s));
+    });
+    const stuck = !allDone && !hasPending;
+    if (!allDone && !stuck) continue;
+    const doneCount = steps.filter((s) => s.status === STEP_STATUS.DONE).length;
+    const sig = backlogSignature([...backlog, `__done_count:${doneCount}__`]);
+    if (queue.backlog_signature && queue.backlog_signature === sig) continue;
+    // Founder priority products (top of PRODUCT_BUILD_PRIORITY) must extend
+    // BEFORE lower-priority SENTRY replan noise (was priority 6 → starved by
+    // sentry_fix_plan at ~2.0002 — fake loops while LifeOS sat complete).
+    const listedIdx = priorityList.indexOf(productId);
+    const extendBase = listedIdx >= 0 && listedIdx < 5 ? 2.05 : 6;
     found.push({
       id: `extend_build_queue_${productId}`,
       kind: 'plan_build_queue',
-      priority: 6 + productRankFraction(productId, priorityList, backlog.length),
+      priority: extendBase + productRankFraction(productId, priorityList, backlog.length),
       product: productId,
       product_id: productId,
       home_path: homePath,
       extend: true,
-      detail: `queue complete (${steps.length} done) + ${backlog.length} documented backlog item(s) — re-plan next phase`,
+      corpus_sources: sources.map((s) => s.path),
+      detail: allDone
+        ? `queue complete (${steps.length} done) + ${backlog.length} documented item(s) — re-plan next phase`
+        : `queue stuck (${steps.length} steps, none pending) + ${backlog.length} documented item(s) — re-plan next phase`,
     });
   }
   return found;
@@ -550,7 +576,7 @@ export function discoverPlanWork() {
  * the injected planner model, then persist it so subsequent cycles execute the
  * steps. Fail-closed: writes nothing if planning yields no valid queue.
  */
-async function runPlanBuildQueue(task, { callModel, logger } = {}) {
+export async function runPlanBuildQueue(task, { callModel, logger } = {}) {
   if (typeof callModel !== 'function') {
     return { ok: false, detail: 'plan_skipped_no_model' };
   }
@@ -564,7 +590,7 @@ async function runPlanBuildQueue(task, { callModel, logger } = {}) {
   // appends only genuinely-new documented steps (deduped by id + target_file/
   // task) onto the shipped ones — the loop grows its own backlog in place.
   let existingQueue = null;
-  if (task.extend) {
+  if (task.extend || task.sentry_signature) {
     try { existingQueue = loadBuildQueue(task.product_id); } catch { existingQueue = null; }
   }
   // SENTRY self-fix tasks carry their findings+solutions as extra backlog so the
@@ -608,6 +634,7 @@ async function runPlanBuildQueue(task, { callModel, logger } = {}) {
         } catch (e) {
           stampCommitted = e.message;
         }
+        persistSentryUnplannableStamp(task.product_id, task.sentry_signature, planReason?.msg);
         log({
           event: 'sentry_signature_stamped_unplannable',
           product_id: task.product_id,
@@ -660,6 +687,39 @@ async function runPlanBuildQueue(task, { callModel, logger } = {}) {
 }
 
 const SENTRY_REGISTRY_PATH = path.join(ROOT, 'builderos-reboot/governance/SENTRY_PRODUCT_REGISTRY.json');
+const SENTRY_UNPLANNABLE_STAMP_PATH = path.join(ROOT, 'data/sentry-unplannable-stamps.json');
+
+function readSentryUnplannableStamps() {
+  try {
+    const j = JSON.parse(fs.readFileSync(SENTRY_UNPLANNABLE_STAMP_PATH, 'utf8'));
+    return j && typeof j === 'object' ? j : {};
+  } catch {
+    return {};
+  }
+}
+
+/** Durable spin-break when queue stamp commit fails or redeploy wipes local queue. */
+export function persistSentryUnplannableStamp(productId, signature, reason) {
+  if (!productId || !signature) return;
+  const stamps = readSentryUnplannableStamps();
+  stamps[productId] = {
+    signature: String(signature),
+    reason: reason ? String(reason).slice(0, 400) : null,
+    stamped_at: new Date().toISOString(),
+  };
+  try {
+    fs.mkdirSync(path.dirname(SENTRY_UNPLANNABLE_STAMP_PATH), { recursive: true });
+    fs.writeFileSync(SENTRY_UNPLANNABLE_STAMP_PATH, `${JSON.stringify(stamps, null, 2)}\n`);
+  } catch {
+    // non-fatal — queue stamp still attempted
+  }
+}
+
+export function isSentryUnplannableStamped(productId, signature) {
+  if (!productId || !signature) return false;
+  const row = readSentryUnplannableStamps()[productId];
+  return Boolean(row && row.signature === String(signature));
+}
 
 // Map a SENTRY registry product to the docs/products directory that owns its
 // BUILD_QUEUE, derived from its `ssot` (docs/products/<dir>/PRODUCT_HOME.md).
@@ -681,6 +741,9 @@ function sentryProductQueueDir(ssot) {
  * the system fixes itself. Fail-closed and WASTE-SAFE: emits nothing when a
  * feed is missing/empty, and skips a product whose queue already carries the
  * current findings signature (no re-planning the same findings every cycle).
+ *
+ * Priority is intentionally BELOW product_build_step (2.x) and founder-priority
+ * extend (2.05.x) so unplannable SENTRY replans cannot starve LifeOS.
  */
 export function discoverSentryFixWork() {
   let registry;
@@ -700,16 +763,10 @@ export function discoverSentryFixWork() {
     try {
       feed = JSON.parse(fs.readFileSync(path.join(ROOT, feedRel), 'utf8'));
     } catch (e) {
-      // VISIBILITY: a registry-listed feed that is missing/unreadable must never
-      // be a silent [] — that exact ghost (feed excluded from the Docker image)
-      // starved the loop for cycles with no signal. Emit an ops event so it
-      // surfaces in recent_events instead of vanishing.
       log({ event: 'sentry_feed_unreadable', product_id: product?.id || queueDir, feed: feedRel, error: e.message });
       continue;
     }
     const raw = Array.isArray(feed?.findings) ? feed.findings : [];
-    // Solution-mandatory: a finding is only actionable if it carries a fix, so
-    // the planned step always has a concrete next action to build.
     const backlog = raw
       .filter((f) => f && (f.proposed_solution || f.solution))
       .map((f) => {
@@ -721,17 +778,18 @@ export function discoverSentryFixWork() {
     if (!backlog.length) continue;
 
     const sig = backlogSignature(backlog);
+    if (isSentryUnplannableStamped(queueDir, sig)) continue;
     let existingQueue = null;
     try { existingQueue = loadBuildQueue(queueDir); } catch { existingQueue = null; }
-    // Already planned these exact findings — don't burn a planner call re-doing it.
     if (existingQueue?.sentry_signature && existingQueue.sentry_signature === sig) continue;
+    if (existingQueue?.sentry_unplannable_at && existingQueue?.sentry_signature === sig) continue;
 
     found.push({
       id: `sentry_fix_plan_${queueDir}`,
       kind: 'plan_build_queue',
-      // Gate FAILs are top-tier product work: plan them just under fresh build
-      // steps so the loop localizes+fixes them before lower-priority expansion.
-      priority: 2 + productRankFraction(queueDir, priorityList),
+      // Below concrete builds (2.x) and founder-priority extend (2.05.x).
+      // Fake unplannable loops at priority≈2 were starving LifeOS.
+      priority: 8 + productRankFraction(queueDir, priorityList),
       product: queueDir,
       product_id: queueDir,
       home_path: path.join(ROOT, product.ssot),
@@ -753,6 +811,17 @@ export async function discoverProductExpansionWork(options = {}) {
   items.push(...(await discoverBuildQueueWorkFresh()));
   items.push(...discoverPlanWork());
   items.push(...discoverSentryFixWork());
+
+  // When no concrete build steps are ready, promote plan enrollment so the loop
+  // turns product folders into BUILD_QUEUE blueprints instead of idling.
+  const hasBuildStep = items.some((i) => i?.kind === 'product_build_step');
+  if (!hasBuildStep) {
+    for (const item of items) {
+      if (item?.kind === 'plan_build_queue' && !item.extend) {
+        item.priority = Math.min(item.priority, 2.5 + (item.priority % 1));
+      }
+    }
+  }
 
   const bpIncomplete = loadBpItems().filter((i) => isQueueItemIncomplete(i, { pointBTarget: pointB }));
   if (bpIncomplete.length && !process.env.BUILDEROS_AUTOPILOT) {
@@ -929,8 +998,10 @@ async function postBuilderBuild(baseUrl, commandKey, body) {
 // boot time, so writing it whole reverted every external BUILD_QUEUE edit.
 const QUEUE_RUNTIME_STEP_FIELDS = [
   'status', 'attempts', 'commit_sha', 'built_sha', 'proof',
-  'last_attempt_at', 'last_attempt', 'last_error', 'revive_count',
+  'last_attempt_at', 'last_attempt', 'last_error', 'revive_count', 'revived_at',
   'completed_at', 'no_op', 'pre_existing',
+  'demoted', 'demote_reason', 'demoted_at', 'park_until',
+  'blocker_class', 'claim_level', 'blocker_type', 'blocker_resolution',
 ];
 
 const STATUS_RANK = Object.freeze({
@@ -970,8 +1041,23 @@ export function mergeQueueRuntimeStatus(repoQueue, memQueue) {
     const out = { ...repoStep };
     const repoRank = statusRank(repoStep.status);
     const memRank = statusRank(memStep.status);
+    // REVIVE: a deliberate in-memory revive (blocked -> pending/building) must be
+    // allowed to override the stale repo snapshot, otherwise the loop can never
+    // re-try a step that is currently blocked in the repo copy. It is only safe
+    // when the repo step is itself blocked; a repo done or building step must not
+    // be downgraded by a stale in-memory pending snapshot.
+    const memRevived = (memStep.revive_count || 0) > (repoStep.revive_count || 0);
     // Stale mem pending/building must not clobber a more-advanced repo status.
-    if (repoRank > memRank) {
+    if (repoRank > memRank && !(memRevived && repoStep.status === STEP_STATUS.BLOCKED)) {
+      return out;
+    }
+    // REVERSE: a deliberate repo reset (repo is pending, no runtime evidence,
+    // while mem carries a stale done/blocked/error) must win. The conductor
+    // reset the step by clearing commit_sha/attempts; a stale in-container
+    // snapshot must not re-clobber it.
+    const repoHasRuntimeEvidence = Boolean(repoStep.commit_sha || repoStep.last_error || repoStep.last_attempt_at);
+    const memHasRuntimeEvidence = Boolean(memStep.commit_sha || memStep.last_error || (memStep.attempts > 0));
+    if (repoRank < memRank && repoStep.status === STEP_STATUS.PENDING && !repoHasRuntimeEvidence && memHasRuntimeEvidence) {
       return out;
     }
     for (const f of QUEUE_RUNTIME_STEP_FIELDS) {
@@ -1214,7 +1300,7 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
       //       instead of writing) and the model returned an EMPTY edit array
       //       (`output: "[]"`), which the edit stage rejects as HTTP 422
       //       "edit output is not a non-empty JSON array" — i.e. it found
-      //       nothing to edit *because the file is already correct*.
+      //       nothing to edit because the file is already correct*.
       // Without this, such a step can never finish: every rebuild is a no-op,
       // yields no SHA, exhausts maxAttempts, and re-blocks forever. Complete it
       // honestly using the file's last-touching commit as the built SHA — verify
@@ -1300,7 +1386,6 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
       };
     }
     if (!baseUrl) return { ok: false, reason: 'no_base_url_for_deploy_proof' };
-    await coalescedRedeploy();
     // The /ready endpoint is auth-gated (401 without the command key), so the
     // proof MUST send it — otherwise every proof fails `ready_http_401`, the
     // deploy is never provable, and no step can ever reach `done` (the real
@@ -1310,12 +1395,52 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
       ...opts,
       headers: { ...(opts.headers || {}), 'x-command-key': commandKey },
     });
+    // PROVE FIRST. Unconditional self-redeploy kills this Railway process
+    // mid-cycle (in-memory never-stop state + queue-status commit never land),
+    // which looked like "never-stop idle / total_runs=0" and crash-looped tip
+    // every ~2 min when pre-existing route artifacts short-circuited to deploy
+    // proof. If tip already serves/contains the built SHA, skip redeploy.
+    const already = await proveDeployServesSha({
+      expectedSha: commit_sha,
+      baseUrl,
+      fetchFn: authedFetch,
+      compareFn: githubCompareStatus,
+    });
+    if (already.ok) {
+      log({
+        event: 'deploy_proof_already_live',
+        commit_sha,
+        served_sha: already.served_sha,
+        reason: already.reason,
+      });
+      return {
+        ok: true,
+        reason: already.reason || 'already_live',
+        served_sha: already.served_sha,
+        contains: already.contains || already.matches || false,
+        skipped_redeploy: true,
+      };
+    }
+    // Not live yet — persist intent, then redeploy. Awaiting the full rebuild
+    // in-process is futile (this container dies on redeploy). Return a
+    // retryable miss so the next boot only re-proves instead of rebuilding.
+    log({
+      event: 'deploy_proof_redeploy_needed',
+      commit_sha,
+      prior_reason: already.reason,
+      served_sha: already.served_sha,
+    });
+    try {
+      await coalescedRedeploy();
+    } catch (err) {
+      log({ event: 'deploy_proof_redeploy_error', error: err?.message || String(err) });
+    }
     const proof = await waitForDeploySha({
       expectedSha: commit_sha,
       baseUrl,
       fetchFn: authedFetch,
-      attempts: 40,
-      intervalMs: 15_000,
+      attempts: 8,
+      intervalMs: 10_000,
       compareFn: githubCompareStatus,
     });
     return {
@@ -1323,6 +1448,7 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
       reason: proof.ok ? null : (proof.reason || 'deploy_did_not_serve_sha'),
       served_sha: proof.served_sha,
       contains: proof.contains || false,
+      redeployed: true,
     };
   };
 
@@ -1411,8 +1537,20 @@ export async function runProductExpansionCycle(options = {}) {
   // highest-priority task this runner can actually act on, and only fall back to
   // the deferred item when there is genuinely nothing buildable.
   const DEFER_ONLY_KINDS = new Set(['foundation_pipeline', 'founder_usability_gap']);
-  const actionable = work.find((w) => w && !DEFER_ONLY_KINDS.has(w.kind));
-  const task = actionable || work[0];
+  // Prefer real product builds, then non-SENTRY plans (LifeOS extend), never
+  // let unplannable SENTRY replan win when LifeOS/other builds exist.
+  const ranked = [...work].sort((a, b) => {
+    const score = (w) => {
+      if (!w || DEFER_ONLY_KINDS.has(w.kind)) return 1000 + (w.priority || 0);
+      if (w.kind === 'product_build_step') return w.priority || 0;
+      if (w.kind === 'plan_build_queue' && !w.sentry_signature) return 0.5 + (w.priority || 0);
+      if (w.kind === 'plan_build_queue' && w.sentry_signature) return 50 + (w.priority || 0);
+      return 10 + (w.priority || 0);
+    };
+    return score(a) - score(b);
+  });
+  const actionable = ranked.find((w) => w && !DEFER_ONLY_KINDS.has(w.kind));
+  const task = actionable || ranked[0] || work[0];
   if (!task) {
     log({ event: 'expansion_empty_unexpected' });
     return { ok: false, reason: 'no_work' };
@@ -1424,7 +1562,7 @@ export async function runProductExpansionCycle(options = {}) {
       skipped_kind: work[0].kind,
       selected: actionable.id,
       selected_kind: actionable.kind,
-      note: `skipped ${work[0].id} (defer-only, kind: ${work[0].kind}) — advancing to next buildable ${actionable.id} (kind: ${actionable.kind})`,
+      note: `skipped ${work[0].id} (defer-only or lower-value) — advancing to ${actionable.id}`,
     });
   }
 
@@ -1524,7 +1662,9 @@ export async function runProductExpansionLanes(options = {}) {
   }
 
   const discover = options.discoverFn || discoverBuildQueueWorkFresh;
-  const work = await Promise.resolve(discover());
+  const workRaw = await Promise.resolve(discover());
+  // Financial priority first — never burn all lanes on low-priority thrashers.
+  const work = [...workRaw].sort((a, b) => (a.priority || 99) - (b.priority || 99)).slice(0, Math.max(1, concurrency));
   if (!work.length) {
     log({ event: 'expansion_lanes_empty' });
     return { ok: true, lanes: 0, built: 0, live: 0, detail: 'no_build_queue_work' };
@@ -1533,7 +1673,7 @@ export async function runProductExpansionLanes(options = {}) {
   const laneStepFn = options.laneStepFn
     || ((task) => runProductBuildStep(task, { baseUrl, commandKey, logger }));
 
-  writeState({ status: 'running_lanes', lanes: work.map((w) => w.id), concurrency });
+  writeState({ status: 'running_lanes', lanes: work.map((w) => w.id), concurrency, deferred: workRaw.length - work.length });
   const results = await mapConcurrent(work, concurrency, async (task) => {
     try {
       const r = await laneStepFn(task, { baseUrl, commandKey, logger });
@@ -1545,7 +1685,7 @@ export async function runProductExpansionLanes(options = {}) {
 
   const built = results.filter((r) => r && r.outcome && (r.outcome.commit_sha || (r.outcome.outcome && r.outcome.outcome.commit_sha))).length;
   const live = results.filter((r) => r && r.outcome && r.outcome.deploy_proven).length;
-  log({ event: 'expansion_lanes', lanes: work.length, built, live });
+  log({ event: 'expansion_lanes', lanes: work.length, discovered: workRaw.length, built, live, selected: work.map((w) => w.id) });
   writeState({ status: 'idle', last_lanes: work.map((w) => w.id), lanes_built: built, lanes_live: live });
   return { ok: true, lanes: work.length, built, live, results };
 }

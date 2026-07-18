@@ -8,7 +8,20 @@
   /**
    * **LifeOS / Lumin** = product brand (not this billing wake word).
    * ClientCare billing copilot → `getBillingInvokeLabel()` (default **Tiller** — uncommon speech, STT-friendly, not “Sherry” the human).
+   * BirthBill mode (`?product=birthbill`) uses midwife-facing copy (“You”) instead of founder-only Sherry labels.
    */
+  const urlParams = new URLSearchParams(window.location.search || '');
+  const isBirthBillMode = String(urlParams.get('product') || '').toLowerCase() === 'birthbill'
+    || String(urlParams.get('mode') || '').toLowerCase() === 'birthbill';
+  const isPresentMode = isBirthBillMode && ['1', 'true', 'yes'].includes(String(urlParams.get('present') || '').toLowerCase());
+  const operatorPersonLabel = isBirthBillMode ? 'You' : 'Sherry';
+  const tenantIdFromUrl = urlParams.get('tenant_id') || urlParams.get('tenantId') || '';
+  if (tenantIdFromUrl) {
+    try { localStorage.setItem('clientcare_tenant_id', tenantIdFromUrl); } catch (_) { /* ignore */ }
+  }
+  function getBirthBillTenantId() {
+    return tenantIdFromUrl || localStorage.getItem('clientcare_tenant_id') || '';
+  }
   let lastAccountReport = null;
   let selectedAccountIndex = 0;
   let lastInsurancePreview = null;
@@ -83,7 +96,13 @@
   let fullQueueLoading = false;
   let assistantSessionId = localStorage.getItem('clientcare_assistant_session_id') || '';
   let accountFilter = localStorage.getItem('clientcare_account_filter') || 'operator';
-  let selectedTenantId = localStorage.getItem('clientcare_selected_tenant_id') || '';
+  let selectedTenantId = localStorage.getItem('clientcare_selected_tenant_id')
+    || getBirthBillTenantId()
+    || '';
+  if (getBirthBillTenantId() && !localStorage.getItem('clientcare_selected_tenant_id')) {
+    selectedTenantId = getBirthBillTenantId();
+    try { localStorage.setItem('clientcare_selected_tenant_id', selectedTenantId); } catch (_) { /* ignore */ }
+  }
   let assistantPinned = localStorage.getItem('clientcare_assistant_pinned') !== 'false';
   let assistantOpen = localStorage.getItem('clientcare_assistant_open') !== 'false';
   let assistantVoiceController = null;
@@ -1672,14 +1691,14 @@
     const clientMatch = items.filter((item) => String(item.diagnosis?.status || '') === 'client_match_issue').length;
     return `
       <details class="card cc-assistant-panel">
-        <summary data-tip="This tells Sherry how the system is doing overall without making her read the raw ledger. It separates work she owns from work the system is already tracking.">System status</summary>
+        <summary data-tip="This tells ${escapeHtml(operatorPersonLabel)} how the system is doing overall without making you read the raw ledger. It separates work you own from work the system is already tracking.">System status</summary>
         <div class="grid four" style="margin-top:12px; margin-bottom:0;">
           <div class="card stat"><span>Needs operator</span><strong>${escapeHtml(red)}</strong></div>
           <div class="card stat"><span>System monitoring</span><strong>${escapeHtml(yellow)}</strong></div>
           <div class="card stat"><span>Healthy files</span><strong>${escapeHtml(green)}</strong></div>
           <div class="card stat"><span>Missing/setup blockers</span><strong>${escapeHtml(setupIssues + clientMatch)}</strong></div>
         </div>
-        <div class="small muted" style="margin-top:12px;">Goal: keep operator-owned work low, move monitor-only work to the system, and only surface red when Sherry actually needs to act.</div>
+        <div class="small muted" style="margin-top:12px;">Goal: keep operator-owned work low, move monitor-only work to the system, and only surface red when ${escapeHtml(operatorPersonLabel)} actually needs to act.</div>
       </details>
     `;
   }
@@ -1773,7 +1792,7 @@
           <div class="card">
             <div class="muted">System is doing next</div>
             <strong style="display:block;margin-top:8px;">${escapeHtml(execution.systemNext)}</strong>
-            <div class="small muted" style="margin-top:8px;">The portal should keep this moving without asking Sherry to retype data.</div>
+            <div class="small muted" style="margin-top:8px;">The portal should keep this moving without asking ${escapeHtml(operatorPersonLabel)} to retype data.</div>
           </div>
           <div class="card">
             <div class="muted">You need to do next</div>
@@ -2356,7 +2375,7 @@
 
         <div class="card" id="vob-payer-call-transcript" style="margin-bottom:12px;background:#0f1528;">
           <strong>VOB payer call — transcript to synopsis</strong>
-          <p class="small muted" style="margin:6px 0 10px;"><strong>Sherry’s job is direction</strong> — add what was said (speakerphone + notes today; listen-in when telephony ships). LifeOS builds the synopsis, timestamps it, scrubs raw chatter from the database when checked below, and <strong>files the ClientCare billing note by default</strong> for the selected client (Railway <code>CLIENTCARE_*</code> browser session). Uncheck posting only if you intentionally want local-only.</p>
+          <p class="small muted" style="margin:6px 0 10px;"><strong>${escapeHtml(operatorPersonLabel)}’s job is direction</strong> — add what was said (speakerphone + notes today; listen-in when telephony ships). LifeOS builds the synopsis, timestamps it, scrubs raw chatter from the database when checked below, and <strong>files the ClientCare billing note by default</strong> for the selected client (Railway <code>CLIENTCARE_*</code> browser session). Uncheck posting only if you intentionally want local-only.</p>
           <label class="stack"><span class="muted">Call notes / transcript</span>
             <textarea id="vob-transcript-body" rows="8" style="width:100%;box-sizing:border-box;font-family:inherit;font-size:13px;line-height:1.45;" placeholder="Rep name, call reference #, eligibility, copay/deductible, auth, exclusions…">${escapeHtml(lastVobTranscriptBody)}</textarea>
           </label>
@@ -3601,7 +3620,7 @@
     const messages = session.recent_messages || [];
     const latestAssistantMessage = [...messages].reverse().find((message) => message.role === 'assistant' && message.content);
     historyNode.innerHTML = messages.length ? messages.map((message) => {
-      const who = message.role === 'assistant' ? getBillingInvokeLabel() : 'Sherry';
+      const who = message.role === 'assistant' ? getBillingInvokeLabel() : operatorPersonLabel;
       return `
       <div class="card" style="padding:12px; background:${message.role === 'assistant' ? '#121a31' : '#0f1528'};">
         <div class="account-card-top">
@@ -3610,9 +3629,9 @@
         </div>
         <div style="margin-top:8px; white-space:pre-wrap;">${escapeHtml(message.content || '')}</div>
         ${message.metadata?.intent ? `<div class="muted small" style="margin-top:8px;">Intent: ${escapeHtml(message.metadata.intent)} · Scope: ${escapeHtml(message.metadata.scope || 'unclear')}</div>` : ''}
-        ${message.metadata?.data?.capability_request?.id ? `<div class="small" style="margin-top:8px;color:#7ef0b8;">Capability queue #${escapeHtml(String(message.metadata.data.capability_request.id))}${message.metadata.data.capability_request.status ? ` · ${escapeHtml(message.metadata.data.capability_request.status)}` : ''} — Sherry-directed; picked up when engineering can ship safely.</div>` : ''}
+        ${message.metadata?.data?.capability_request?.id ? `<div class="small" style="margin-top:8px;color:#7ef0b8;">Capability queue #${escapeHtml(String(message.metadata.data.capability_request.id))}${message.metadata.data.capability_request.status ? ` · ${escapeHtml(message.metadata.data.capability_request.status)}` : ''} — ${escapeHtml(operatorPersonLabel)}-directed; picked up when engineering can ship safely.</div>` : ''}
       </div>`;
-    }).join('') : `<p class="muted">Start the thread — Sherry asks; ${escapeHtml(getBillingInvokeLabel())} answers using billing data and the ClientCare front-door rules.</p>`;
+    }).join('') : `<p class="muted">Start the thread — ${escapeHtml(operatorPersonLabel)} asks; ${escapeHtml(getBillingInvokeLabel())} answers using billing data and the ClientCare front-door rules.</p>`;
     const latestAssistantKey = latestAssistantMessage ? `${latestAssistantMessage.timestamp || ''}:${latestAssistantMessage.content || ''}` : '';
     if (latestAssistantKey) {
       if (!assistantVoiceReady) {
@@ -3652,7 +3671,7 @@
     });
   }
 
-  /** One-tap starters for Sherry — fill the chat box or jump to the VOB transcript card (saved rows use the app database on Railway). */
+  /** One-tap starters for the operator — fill the chat box or jump to the VOB transcript card (saved rows use the app database on Railway). */
   function getBillingChatQuickPrompts() {
     return [
       {
@@ -3663,7 +3682,7 @@
       {
         label: 'After the call — what to save',
         action: 'fill',
-        text: 'Call notes will go into the VOB transcript panel and LifeOS should file the ClientCare billing note automatically when a client file is selected. What must appear in the structured synopsis, and what should Sherry verify before trusting the post?',
+        text: 'Call notes will go into the VOB transcript panel and LifeOS should file the ClientCare billing note automatically when a client file is selected. What must appear in the structured synopsis, and what should I verify before trusting the post?',
       },
       {
         label: 'Speakerphone + disclosure script',
@@ -3722,7 +3741,7 @@
         <div class="lifeos-companion-strip-inner">
           <div class="lifeos-companion-row1">
             <strong>${escapeHtml(getBillingInvokeLabel())}</strong>
-            <span class="muted small" style="max-width:min(280px,40vw);">LifeOS · Sherry directs; LifeOS files notes when automation succeeds.</span>
+            <span class="muted small" style="max-width:min(280px,40vw);">LifeOS · ${escapeHtml(operatorPersonLabel)} directs; LifeOS files notes when automation succeeds.</span>
             <div class="lifeos-companion-chips">
               <span class="lifeos-companion-chip">Live accts<strong>${escapeHtml(String(ta))}</strong></span>
               <span class="lifeos-companion-chip">Notes Q<strong>${escapeHtml(String(tq))}</strong></span>
@@ -3816,7 +3835,7 @@
       <div class="card assistant-card${isMain ? ' billing-council-chat-main' : ''}">
         <div class="account-card-top">
           <div>
-            <h2 data-tip="Assistant for billing while you work in ClientCare — not LifeOS / Lumin. Say ${escapeHtml(getBillingInvokeLabel())} when dictating so voice knows this lane.">Sherry &amp; ${escapeHtml(getBillingInvokeLabel())} — assistant</h2>
+            <h2 data-tip="Assistant for billing while you work in ClientCare — not LifeOS / Lumin. Say ${escapeHtml(getBillingInvokeLabel())} when dictating so voice knows this lane.">${escapeHtml(operatorPersonLabel)} &amp; ${escapeHtml(getBillingInvokeLabel())} — assistant</h2>
             <p class="muted">${isMain ? `Type or use voice (<strong>${escapeHtml(getBillingInvokeLabel())}</strong>, then your question). Try quick prompts below. To change the product: <code>QUEUE:</code> / <code>REQUEST:</code> / <code>BUILD:</code>.` : 'Open for the same chat panel when docked in the utility rail.'}</p>
           </div>
           ${isMain ? '' : `<div class="row-actions">
@@ -3951,7 +3970,7 @@
       const data = await sendAssistantPrompt(message);
       const cap = data?.assistant?.data?.capability_request;
       if (cap?.id) {
-        toast(`Capability request #${cap.id} logged — Sherry’s direction is queued for the next safe build.`, 'success');
+        toast(`Capability request #${cap.id} logged — ${operatorPersonLabel}’s direction is queued for the next safe build.`, 'success');
       }
     } catch (error) {
       toast(error.message, "error");
@@ -4758,18 +4777,29 @@
       ${renderSetupStrip()}
       <div class="hero">
         <div>
-          <div class="eyebrow">Sidecar for ClientCare West</div>
-          <h1>Billing assistant</h1>
-          <p class="muted" style="max-width:52ch;line-height:1.55;margin-top:6px;">Keep <strong style="color:#edf2f7">ClientCare</strong> open for real charting and billing. Use this page beside it for the live queue, VOB notes, ${escapeHtml(getBillingInvokeLabel())} (voice/chat), and quick actions — not a separate product, an assistant to what you already use.</p>
-          ${getApiKey().trim() ? '' : '<div class="card" style="margin-top:14px;background:#4a1f28;border-color:#ef476f;"><strong style="color:#ffb4c1">Access needed</strong><p class="muted" style="margin-top:8px;color:#ffd5dd">Save the command key below to unlock live billing data. The overlay now opens safely without crashing when protected endpoints return 401.</p></div>'}
+          <div class="eyebrow">${isPresentMode ? 'For Sherry · quiet view' : (isBirthBillMode ? 'BirthBill · ClientCare midwife collections' : 'Sidecar for ClientCare West')}</div>
+          <h1>${isPresentMode ? 'Your insurance chase' : (isBirthBillMode ? 'Forever-chase workboard' : 'Billing assistant')}</h1>
+          <p class="muted" style="max-width:52ch;line-height:1.55;margin-top:6px;">${isPresentMode
+            ? 'This board is for Adam and the system — not a to-do list for you. It shows births that stay open until insurance pays enough or issues a written denial.'
+            : (isBirthBillMode
+            ? 'Keep <strong style="color:#edf2f7">ClientCare</strong> open for charting. Use this board for the forever-chase queue: unpaid and underpaid insurance births that stay open until paid or written denial. Age is not a write-off.'
+            : `Keep <strong style="color:#edf2f7">ClientCare</strong> open for real charting and billing. Use this page beside it for the live queue, VOB notes, ${escapeHtml(getBillingInvokeLabel())} (voice/chat), and quick actions — not a separate product, an assistant to what you already use.`)}</p>
+          ${isBirthBillMode ? `<div class="card" style="margin-top:14px;background:#16353a;border-color:#2a6b6b;"><strong style="color:#9fe0d8">${isPresentMode ? 'You do not have to run this' : 'Sherry does nothing here'}</strong><p class="muted" style="margin-top:8px;color:#c9e8e4;line-height:1.5"><strong>Forever-chase</strong> = unpaid/underpaid stays open until paid enough or written no-liability denial.<br/><strong>Next action</strong> = what the <em>system</em> is doing (file claim, ask insurer) — not homework for the midwife.<br/><strong>Hands-off</strong> = after ClientCare is connected once, BirthBill prepares status and files ChargeSlip/HCFA on a loop.</p>${getBirthBillTenantId() ? `<p class="muted" style="margin-top:8px;color:#9fe0d8;">Practice tenant #${escapeHtml(getBirthBillTenantId())}</p>` : ''}</div>` : ''}
+          ${(!getApiKey().trim() && !isPresentMode) ? '<div class="card" style="margin-top:14px;background:#4a1f28;border-color:#ef476f;"><strong style="color:#ffb4c1">Access needed</strong><p class="muted" style="margin-top:8px;color:#ffd5dd">Save the command key below to unlock live billing data. The overlay now opens safely without crashing when protected endpoints return 401.</p></div>' : ''}
+          ${isPresentMode ? '<p class="muted" style="margin-top:12px;"><a href="/birthbill/for-you" style="color:#9fe0d8;">← Back to the calm walkthrough</a></p>' : ''}
         </div>
-        <div class="card" style="min-width:320px;">
-          <label for="api-key">Command key</label>
+        ${isPresentMode && getApiKey().trim() ? `
+        <div class="card" style="min-width:280px;background:#16353a;border-color:#2a6b6b;">
+          <strong style="color:#9fe0d8;">Presentation mode</strong>
+          <p class="muted" style="margin-top:8px;color:#c9e8e4;line-height:1.5;">Access is already saved on this browser. Technical keys stay hidden so this view stays calm.</p>
+        </div>` : `
+        <div class="card" style="min-width:320px;${isPresentMode ? 'opacity:.92;' : ''}">
+          <label for="api-key">${isPresentMode ? 'Adam access (hidden from normal midwife use)' : 'Command key'}</label>
           <input id="api-key" type="password" value="${escapeHtml(getApiKey())}" placeholder="x-api-key">
-          <label for="operator-email" style="margin-top:10px">Operator email</label>
-          <input id="operator-email-header" type="email" value="${escapeHtml(getOperatorEmail())}" placeholder="operator@practice.com">
+          <label for="operator-email" style="margin-top:10px">${isPresentMode ? 'Contact email' : 'Your email (operator)'}</label>
+          <input id="operator-email-header" type="email" value="${escapeHtml(getOperatorEmail())}" placeholder="you@practice.com">
           <div style="margin-top:10px"><button id="save-key">Save access</button></div>
-        </div>
+        </div>`}
       </div>
 
       <div class="cc-section-label">At a glance</div>
@@ -5002,8 +5032,9 @@
       </div>
     `;
 
-    document.getElementById('save-key').addEventListener('click', async () => {
-      setApiKey(document.getElementById('api-key').value);
+    document.getElementById('save-key')?.addEventListener('click', async () => {
+      const keyInput = document.getElementById('api-key');
+      if (keyInput) setApiKey(keyInput.value);
       setOperatorEmail(document.getElementById('operator-email-header').value);
       await loadDashboard();
     });

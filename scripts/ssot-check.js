@@ -122,7 +122,9 @@ function ssotExists(ssotPath) {
 function getSsotLastUpdated(ssotPath) {
   try {
     const content = readFileSync(path.join(ROOT, ssotPath), 'utf8');
-    const match = content.match(/\*\*Last Updated:\*\*\s*(.+)/);
+    // Match either table rows: | **Last Updated** | 2026-07-13 ... |
+    // or plain lines: **Last Updated:** 2026-06-29
+    const match = content.match(/\*\*Last Updated:?\*\*\s*(?:\|\s*)?(.+?)(?=[\n\|]|$)/);
     return match ? match[1].trim() : 'unknown';
   } catch {
     return 'missing';

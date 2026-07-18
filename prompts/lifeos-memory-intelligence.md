@@ -5,7 +5,7 @@
 ## What this domain does
 The Memory Intelligence System is the epistemic foundation of the entire platform. It replaces the file-as-fact model with an evidence engine: every stored fact carries its own confidence history, scope, decay rate, and adversarial trial count. The system's behavior is proportional to proof, not assertion.
 
-**Governing design question:** Not "what do we know?" but "what has earned the right to influence action, at what weight, in this context?"
+**Governing design question:** Focus not on "what do we know?" but "what information is actionable, and under what conditions?"
 
 ## The Two Ladders — never confuse them
 - **Evidence Ladder** (this system): CLAIM(0) → HYPOTHESIS(1) → TESTED(2) → RECEIPT(3) → VERIFIED(4) → FACT(5) → INVARIANT(6)

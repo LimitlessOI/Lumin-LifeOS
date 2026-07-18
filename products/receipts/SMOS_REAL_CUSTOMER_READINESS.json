@@ -1,0 +1,20 @@
+{
+  "deploy_commit_sha": "a2472460d3da5986d50451c9aaa01f704821707e",
+  "proved_at": "2026-07-16T00:00:00Z",
+  "ready_for_real_customers": "soft_launch_yes_mass_market_not_yet",
+  "score_know": 9,
+  "tip_proved": {
+    "signup_terms": true,
+    "password_reset_token_flow": true,
+    "password_reset_email_delivery": false,
+    "pack_loop_and_unlock_flag": true,
+    "stripe_checkout_create": true,
+    "stripe_live_card_charge": false
+  },
+  "blockers_for_mass_market": [
+    "RESEND_API_KEY/SMTP not confirmed sending reset emails on tip (token flow works; email_sent false)",
+    "Live card charge → success_url verify not tip-proved with real money (Checkout create + unlock-after-paid proven)"
+  ],
+  "ok_to_sell_early_customers": true,
+  "honest_pitch": "Early customers can sign up, generate a pack, pay $49 via Stripe Checkout, and download. Password recovery works if mail is configured; otherwise email adam@limitlessoi.com."
+}

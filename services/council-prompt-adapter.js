@@ -1,21 +1,40 @@
 /**
  * SYNOPSIS: Council prompt adapter — bridges legacy `callAI(prompt)` and two-argument
- * Council prompt adapter — bridges legacy `callAI(prompt)` and two-argument
  * `(systemLine, userBody)` call sites to `callCouncilMember(member, prompt, options)`.
  *
  * Used by: Lumin chat, weekly review, scorecard, communication-profile summaries,
  * and any other LifeOS surface that historically passed a single concatenated prompt.
  *
  * Env:
- *   LIFEOS_CHAT_COUNCIL_MEMBER / LUMIN_COUNCIL_MEMBER — council member key (default `anthropic`,
- *   which resolves via COUNCIL_ALIAS_MAP in config/council-members.js).
+ *   LIFEOS_CHAT_COUNCIL_MEMBER / LUMIN_COUNCIL_MEMBER — preferred council member key.
+ *   CHAT_COUNCIL_CASCADE — comma-separated fallback member keys (default: openai_gpt,deepseek,gemini_flash,anthropic).
  *
- * @ssot docs/products/lifeos/PRODUCT_HOME.md
+ * @ssot docs/products/ai-council/PRODUCT_HOME.md
  */
+
+function isProviderOutageError(err) {
+  const msg = String(err?.message || err).toLowerCase();
+  return (
+    msg.includes('credit balance is too low') ||
+    msg.includes('insufficient quota') ||
+    msg.includes('rate limit') ||
+    msg.includes('429') ||
+    msg.includes('503') ||
+    msg.includes('timed out') ||
+    msg.includes('econnrefused') ||
+    msg.includes('enotfound') ||
+    msg.includes('fetch failed') ||
+    msg.includes('invalid model') ||
+    msg.includes('api key') ||
+    msg.includes('unauthorized') ||
+    msg.includes('authentication') ||
+    msg.includes('quota')
+  );
+}
 
 /**
  * @param {Function} callCouncilMember
- * @param {{ member?: string, taskType?: string }} [opts]
+ * @param {{ member?: string, cascade?: string[], taskType?: string }} [opts]
  * @returns {null | ((...args: unknown[]) => Promise<string>)}
  */
 export function createCouncilPromptAdapter(callCouncilMember, opts = {}) {
@@ -23,11 +42,21 @@ export function createCouncilPromptAdapter(callCouncilMember, opts = {}) {
     return null;
   }
 
-  const member =
+  const preferred =
     opts.member ||
     process.env.LIFEOS_CHAT_COUNCIL_MEMBER ||
     process.env.LUMIN_COUNCIL_MEMBER ||
-    'anthropic';
+    'openai_gpt';
+  const cascade = Array.isArray(opts.cascade)
+    ? opts.cascade
+    : (process.env.CHAT_COUNCIL_CASCADE || 'openai_gpt,deepseek,gemini_flash,anthropic')
+        .split(',')
+        .map((s) => s.trim())
+        .filter(Boolean);
+  // Ensure preferred member is first, then the rest, deduped.
+  const ordered = [preferred, ...cascade.filter((m) => m !== preferred)].filter(
+    (m, i, arr) => arr.indexOf(m) === i
+  );
   const defaultTaskType = opts.taskType || 'general';
 
   /**
@@ -56,8 +85,27 @@ export function createCouncilPromptAdapter(callCouncilMember, opts = {}) {
       throw new Error('callAI: expected a string prompt (or system string + user string)');
     }
 
-    const options = { taskType: defaultTaskType, ...councilOpts };
-    const r = await callCouncilMember(member, prompt, options);
-    return typeof r === 'string' ? r : (r?.content || r?.text || '');
+    const options = { taskType: defaultTaskType, allowModelDowngrade: false, ...councilOpts };
+
+    let lastErr = null;
+    for (const member of ordered) {
+      try {
+        const r = await callCouncilMember(member, prompt, options);
+        const text = typeof r === 'string' ? r : (r?.content || r?.text || '');
+        if (text && text.trim().length > 0) {
+          return text;
+        }
+        lastErr = new Error(`${member} returned empty response`);
+      } catch (err) {
+        lastErr = err;
+        const msg = String(err?.message || err).toLowerCase();
+        console.log(`[COUNCIL-PROMPT-ADAPTER] ${member} failed: ${msg.slice(0, 160)}`);
+        if (isProviderOutageError(err)) {
+          continue;
+        }
+        throw err;
+      }
+    }
+    throw lastErr || new Error('All chat council cascade members failed');
   };
 }

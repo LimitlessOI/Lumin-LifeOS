@@ -8,6 +8,14 @@
 
 ---
 
+## 2026-07-14 — SkySlope new-tab + durable jobs + async email-search
+
+Closed three open TC gaps on tip `59931f8059`+: (1) SkySlope Okta new-tab PASS (`ok:true` via `okta_tile_new_tab`); (2) `tc_browser_jobs` multi-instance poll works; (3) email-search **202→completed**. Listing dry_run still blocked on GLVAR→TD SSO (lands Clareity/TD login — fail-closed). Next: prove Clareity SSO cookie path or set `transaction_desk_id` after one human TD open.
+
+## 2026-07-14 — Browser-UI-as-API
+
+Okta login hardened; operator-catalog + debug-okta shipped; GLVAR live login PASS on tip; SkySlope re-verify after deploy; Mahogany Peak tx id=1 remains first live file.
+
 ## [BUILD] Update 2026-04-20 #2 — Lane handoff hardening (no runtime code)
 
 ### Files changed

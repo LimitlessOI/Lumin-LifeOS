@@ -25,6 +25,8 @@ npm run mobile:sync
 npm run mobile:ios          # Xcode → Run on your iPhone
 ```
 
+Capacitor loads the same LifeOS shell (`lifeos-app.html`). SocialMediaOS Film Studio lives at `/marketing/session/:id` inside that shell (camera + voice-synced teleprompter — not a separate native SMOS binary).
+
 When your Android arrives:
 
 ```bash

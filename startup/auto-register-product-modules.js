@@ -77,7 +77,13 @@ export async function autoRegisterProductModules(app, deps = {}, { logger = cons
     let mod;
     try {
       if (!fs.existsSync(abs)) throw new Error(`module file does not exist: ${key}`);
-      mod = await import(pathToFileURL(abs).href);
+      // Cache-busting reload path: a module that was absent/failed at boot can be
+      // re-imported at runtime with a unique query so Node ESM does not return the
+      // stale rejected promise.
+      const importUrl = spec.reload
+        ? `${pathToFileURL(abs).href}?import_reload=${Date.now()}`
+        : pathToFileURL(abs).href;
+      mod = await import(importUrl);
     } catch (err) {
       entry.status = 'error';
       entry.error = `import_failed: ${String(err && err.stack ? err.stack : err)}`.slice(0, 1000);

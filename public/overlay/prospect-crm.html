@@ -110,12 +110,20 @@
   </div>
 
   <script>
-    const KEY = localStorage.getItem('lifeos_command_key') || '';
+    const KEY = localStorage.getItem('lifeos_command_key')
+      || localStorage.getItem('command_key')
+      || localStorage.getItem('commandKey')
+      || localStorage.getItem('lifeos_key')
+      || '';
+    const ACCESS = localStorage.getItem('lifeos_access_token') || '';
     const API_BASE = '';
     let allProspects = [];
 
     function apiHeaders() {
-      return { 'Content-Type': 'application/json', 'x-command-key': KEY };
+      const h = { 'Content-Type': 'application/json' };
+      if (ACCESS) h['Authorization'] = `Bearer ${ACCESS}`;
+      else if (KEY) h['x-command-key'] = KEY;
+      return h;
     }
 
     async function loadProspects() {

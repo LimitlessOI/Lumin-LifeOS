@@ -26,10 +26,15 @@ export function createOpportunityScorer(options = {}) {
         });
         clearTimeout(timer);
         responseTimeMs = Date.now() - startedAt;
-        html = await response.text();
+        // The body read itself can hang even after headers return; cap it.
+        const bodyTimeout = new Promise((_, reject) => {
+          const t = setTimeout(() => reject(new Error('Response body timed out')), timeoutMs);
+          if (t?.unref) t.unref();
+        });
+        html = await Promise.race([response.text(), bodyTimeout]);
       } catch (err) {
         clearTimeout(timer);
-        fetchError = err.name === 'AbortError' ? 'Fetch timed out' : err.message;
+        fetchError = err.name === 'AbortError' || /timed? out|abort/i.test(err.message) ? 'Fetch timed out' : err.message;
       }
 
       if (fetchError) {

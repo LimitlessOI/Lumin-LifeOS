@@ -6,10 +6,8 @@
     "lifeos-founder-ui"
   ],
   "planned_at": "2026-07-08T20:57:28.573Z",
-  "backlog_signature": "554bd608226b9a58",
-  "sentry_signature": "86e9fcb246d1e4dc",
-  "sentry_unplannable_at": "2026-07-10T03:20:00.000Z",
-  "sentry_unplannable_reason": "all proposed steps filtered (dedupe/already-done/no target_file) — spin-break stamp so never-stop builds real queues",
+  "backlog_signature": "lifeos-twin-phase-20260712",
+  "sentry_signature": "e13571a50ae90b27",
   "steps": [
     {
       "id": "s01",
@@ -22,7 +20,10 @@
       "attempts": 1,
       "commit_sha": "7cc352149eaf3a3da998aece71ca0882029ccbf8",
       "last_attempt_at": "2026-07-08T21:26:23.423Z",
-      "completed_at": "2026-07-08T21:26:24.472Z"
+      "completed_at": "2026-07-08T21:26:24.472Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s01",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "s02",
@@ -37,7 +38,10 @@
       "attempts": 1,
       "commit_sha": "e2a463986dcbb29e4b50830c019c0f76a704cfdf",
       "last_attempt_at": "2026-07-08T21:32:31.516Z",
-      "completed_at": "2026-07-08T21:32:32.128Z"
+      "completed_at": "2026-07-08T21:32:32.128Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s02",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "s03",
@@ -52,7 +56,10 @@
       "attempts": 1,
       "commit_sha": "6354ce0b044a4aff6691ffef64a192cde822d8da",
       "last_attempt_at": "2026-07-08T21:40:21.515Z",
-      "completed_at": "2026-07-08T21:40:22.914Z"
+      "completed_at": "2026-07-08T21:40:22.914Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s03",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "s04",
@@ -67,7 +74,10 @@
       "attempts": 1,
       "commit_sha": "ba29f26c18e8b20aee9bb23d0e9924f54d1afd84",
       "last_attempt_at": "2026-07-08T21:48:00.151Z",
-      "completed_at": "2026-07-08T21:48:00.804Z"
+      "completed_at": "2026-07-08T21:48:00.804Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s04",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "s05",
@@ -82,7 +92,10 @@
       "attempts": 1,
       "commit_sha": "db19628fa43ec1c4a3131c0df299f61a87611880",
       "last_attempt_at": "2026-07-08T21:55:38.784Z",
-      "completed_at": "2026-07-08T21:55:39.430Z"
+      "completed_at": "2026-07-08T21:55:39.430Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s05",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "s07",
@@ -99,7 +112,10 @@
       "founder_gated": false,
       "attempts": 1,
       "completed_at": "2026-07-09T03:15:00.000Z",
-      "detail": "GAP-FILL: conductor added auto-register entry — s06 was blocked forever because s07 depended on s06 while s06 failed module-health for missing auto-register"
+      "detail": "GAP-FILL: conductor added auto-register entry — s06 was blocked forever because s07 depended on s06 while s06 failed module-health for missing auto-register",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s07",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "s06",
@@ -123,7 +139,10 @@
         "registerLifeosPhase2Routes"
       ],
       "last_attempt_at": "2026-07-09T03:17:48.221Z",
-      "completed_at": "2026-07-09T03:17:50.318Z"
+      "completed_at": "2026-07-09T03:17:50.318Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s06",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "s08",
@@ -139,7 +158,10 @@
       "attempts": 1,
       "commit_sha": "b4af129834b1fbf539e6c3da4d2575c141f9388c",
       "last_attempt_at": "2026-07-08T22:15:09.196Z",
-      "completed_at": "2026-07-08T22:15:09.969Z"
+      "completed_at": "2026-07-08T22:15:09.969Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s08",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "s09",
@@ -154,7 +176,10 @@
       "attempts": 0,
       "note": "Unlocked 2026-07-09: Adam never-idle order — customer UI builds allowed. Conductor never-idle 2026-07-09: UI shipped. Conductor never-idle 2026-07-09: UI shipped.",
       "completed_at": "2026-07-10T00:09:28.739Z",
-      "commit_sha": "pending_push"
+      "commit_sha": "pending_push",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s09",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "s10",
@@ -169,7 +194,10 @@
       "attempts": 0,
       "note": "Unlocked 2026-07-09: Adam never-idle order — customer UI builds allowed. Conductor never-idle 2026-07-09: UI shipped. Conductor never-idle 2026-07-09: UI shipped.",
       "completed_at": "2026-07-10T00:09:28.741Z",
-      "commit_sha": "pending_push"
+      "commit_sha": "pending_push",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s10",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "s11",
@@ -184,7 +212,10 @@
       "attempts": 0,
       "note": "Unlocked 2026-07-09: Adam never-idle order — customer UI builds allowed. Conductor never-idle 2026-07-09: UI shipped. Conductor never-idle 2026-07-09: UI shipped.",
       "completed_at": "2026-07-10T00:09:28.741Z",
-      "commit_sha": "pending_push"
+      "commit_sha": "pending_push",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s11",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "s12",
@@ -199,7 +230,10 @@
       "attempts": 0,
       "note": "Unlocked 2026-07-09: Adam never-idle order — customer UI builds allowed. Conductor never-idle 2026-07-09: UI shipped. Conductor never-idle 2026-07-09: UI shipped.",
       "completed_at": "2026-07-10T00:09:28.741Z",
-      "commit_sha": "pending_push"
+      "commit_sha": "pending_push",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s12",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "s1",
@@ -215,7 +249,10 @@
       "note": "GAP-FILL: verify_exit_1 was product-level sentry UI gate on a DB migration — never-stop now skips UI verify for db/migrations; artifact+deploy still gate.",
       "last_error": "verify_exit_1",
       "completed_at": "2026-07-09T05:34:41.590Z",
-      "revive_count": 1
+      "revive_count": 1,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s1",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "s2",
@@ -233,7 +270,10 @@
       "note": "GAP-FILL: product-level sentry UI gate was stranding service steps on verify_exit_1 — never-stop skips UI verify for services/routes (artifact+deploy still gate).",
       "last_error": "verify_exit_1",
       "revive_count": 4,
-      "completed_at": "2026-07-09T12:34:39.523Z"
+      "completed_at": "2026-07-09T12:34:39.523Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s2",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "s3",
@@ -250,7 +290,10 @@
       "last_attempt_at": "2026-07-09T13:04:02.843Z",
       "note": "GAP-FILL: same UI-verify skip as s2 — service step must not re-run founder-UI E2E.",
       "last_error": "verify_exit_1",
-      "completed_at": "2026-07-09T13:04:04.317Z"
+      "completed_at": "2026-07-09T13:04:04.317Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s3",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "s4",
@@ -266,7 +309,10 @@
       "last_error": null,
       "commit_sha": "566258383cfd4fac7be54c1af6e39ca0038484a1",
       "last_attempt_at": "2026-07-09T13:33:41.732Z",
-      "completed_at": "2026-07-09T13:33:43.989Z"
+      "completed_at": "2026-07-09T13:33:43.989Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s4",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "s5",
@@ -282,7 +328,10 @@
       "last_error": null,
       "commit_sha": "9a13ef795d0b353de0f4a4b1bde06d84eef89ed3",
       "last_attempt_at": "2026-07-09T14:40:21.421Z",
-      "completed_at": "2026-07-09T14:40:21.701Z"
+      "completed_at": "2026-07-09T14:40:21.701Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s5",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "s6",
@@ -298,7 +347,10 @@
       "last_error": null,
       "commit_sha": "62b1bf786c6c1c1ca8899c373113e56d01e6ba6f",
       "last_attempt_at": "2026-07-09T14:41:27.573Z",
-      "completed_at": "2026-07-09T14:41:44.120Z"
+      "completed_at": "2026-07-09T14:41:44.120Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s6",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "s7",
@@ -319,7 +371,10 @@
       "commit_sha": "07c9d93c648210ef6c6312e15aa0e05a9e9ed1ee",
       "last_attempt_at": "2026-07-09T15:01:10.086Z",
       "note": "GAP-FILL: auto-register + rewire imports to real lifeos-* services (builder used nonexistent sN-*-service paths).",
-      "completed_at": "2026-07-09T15:02:12.597Z"
+      "completed_at": "2026-07-09T15:02:12.597Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s7",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "s9",
@@ -333,7 +388,10 @@
       "founder_gated": false,
       "attempts": 0,
       "note": "Unlocked 2026-07-09: Adam never-idle order — customer UI builds allowed. Conductor never-idle: scheduler authored.",
-      "completed_at": "2026-07-10T00:09:58.164Z"
+      "completed_at": "2026-07-10T00:09:58.164Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s9",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "s8",
@@ -348,8 +406,2807 @@
       "attempts": 0,
       "note": "Unlocked 2026-07-09: Adam never-idle order — customer UI builds allowed. Conductor never-idle 2026-07-09: UI shipped. Conductor never-idle 2026-07-09: UI shipped.",
       "completed_at": "2026-07-10T00:09:28.741Z",
-      "commit_sha": "pending_push"
+      "commit_sha": "pending_push",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s8",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lo-therapist-role",
+      "status": "done",
+      "target_file": "services/lifeos-user-service.js",
+      "task": "Allow LifeOS accounts with role=therapist (clinical partner login). Add ROLE allowlist including therapist; reject unknown roles; export listRoles(); JWT still carries role.",
+      "spec": "ESM. Keep existing exports. Add export const LIFEOS_ROLES = ['member','admin','therapist','operator','founder_admin']. In createUser: if role provided and not in LIFEOS_ROLES throw Error('invalid_role'); default remains member. Do not weaken password hashing or session revoke. No new DB migration in this step (role column already exists). No browser globals. @ssot docs/products/lifeos/PRODUCT_HOME.md",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "LIFEOS_ROLES",
+        "therapist"
+      ],
+      "commit_sha": "6b81d93ae2228f72bd18a1f1a1f0651f82343316",
+      "last_attempt_at": "2026-07-12T03:39:28.711Z",
+      "completed_at": "2026-07-12T03:39:44.600Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lo-therapist-role",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lo-consent-therapist-share",
+      "status": "done",
+      "target_file": "services/consent-registry.js",
+      "task": "Add therapist_share and clinical_brief_export to consent FEATURES allowlist so pattern sharing with a therapist is fail-closed without explicit grant.",
+      "spec": "ESM. Extend FEATURES array with 'therapist_share' and 'clinical_brief_export'. Keep append-only grant/revoke. Export getConsentFeatures() returning a copy of FEATURES. hasConsent must refuse unknown features. No schema change. @ssot docs/products/lifeos/PRODUCT_HOME.md",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "therapist_share",
+        "clinical_brief_export"
+      ],
+      "last_attempt_at": "2026-07-12T16:22:14.454Z",
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
+      "commit_sha": "39d54138b923a6cc4f33f1e1d625b12ca9b52fa3",
+      "revive_count": 1,
+      "completed_at": "2026-07-12T16:22:27.190Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lo-consent-therapist-share",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lo-consent-api",
+      "status": "done",
+      "target_file": "routes/lifeos-consent-routes.js",
+      "task": "Thin Express routes for grant/revoke/list consent including therapist_share. Export registerLifeosConsentRoutes(app, deps).",
+      "spec": "ESM export registerLifeosConsentRoutes(app, deps) with deps={pool, requireAuth}. Mount under /api/v1/lifeos/consent: POST /grant {feature,consentText}, POST /revoke {feature,reason}, GET /status?feature=. Use createConsentRegistry({pool}). Auth required. Return JSON only. No browser globals. Do not edit server.js. @ssot docs/products/lifeos/PRODUCT_HOME.md",
+      "depends_on": [
+        "lo-consent-therapist-share"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "registerLifeosConsentRoutes"
+      ],
+      "commit_sha": "94a63274ae27bd696e310162217f0e193a766967",
+      "last_attempt_at": "2026-07-12T16:38:45.780Z",
+      "last_error": "awaiting_redeploy_functional_proof_after_quality_rewrite",
+      "completed_at": "2026-07-12T16:38:49.506Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lo-consent-api",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lo-consent-auto-register",
+      "status": "done",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "Register lifeos-consent-routes so therapist consent API mounts at boot without editing server.js.",
+      "spec": "Ensure modules[] contains {\"path\":\"routes/lifeos-consent-routes.js\",\"register\":\"registerLifeosConsentRoutes\",\"enabled\":true}. Preserve all existing entries. Valid JSON only.",
+      "depends_on": [
+        "lo-consent-api"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "lifeos-consent-routes.js",
+        "registerLifeosConsentRoutes"
+      ],
+      "completed_at": "2026-07-12T16:34:23.506Z",
+      "last_error": null,
+      "note": "GAP-FILL: auto-register entry + quality rewrite of consent routes using services/consent-registry.js",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lo-consent-auto-register",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lo-ui-directives-service",
+      "status": "done",
+      "target_file": "services/lifeos-ui-directives.js",
+      "task": "Digital Twin ui_directives capture service — parse/confirm natural-language layout prefs into flourishing_prefs.ui_directives.",
+      "spec": "ESM. Export createUiDirectivesService({ pool }) with: parseDirectiveText(text) → { pins?:string[], layout?:string, module_order?:string[], tone?:string } (deterministic keyword/heuristic, no AI import required); proposeDirectives({ userId, text }) returns { proposed, needs_confirm:true }; applyDirectives({ userId, directives }) merges into lifeos_users.flourishing_prefs.ui_directives via jsonb || and returns updated prefs; getDirectives(userId) reads current ui_directives object (default {}). Validate userId. Parameterised SQL only. No browser globals. No edit to server.js. @ssot docs/products/lifeos/PRODUCT_HOME.md + docs/architecture/DIGITAL_TWIN_DOCTRINE.md",
+      "depends_on": [
+        "lo-consent-auto-register"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "createUiDirectivesService"
+      ],
+      "commit_sha": "ae31f03480184a67ec07f95d140c8d9af02c2ec7",
+      "last_attempt_at": "2026-07-12T18:06:46.041Z",
+      "completed_at": "2026-07-12T18:07:06.533Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lo-ui-directives-service",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lo-twin-reaction-simulator",
+      "status": "done",
+      "target_file": "services/lifeos-twin-reaction-simulator.js",
+      "task": "Twin reaction simulator — predict likely user response to a UI/product idea from twin prefs + optional callCouncilMember.",
+      "spec": "ESM. Export createTwinReactionSimulator({ pool, callCouncilMember }). simulate({ userId, idea, context }) loads flourishing_prefs (+ ui_directives if present), builds a short prediction: { likely_response, confidence: 'low'|'medium', reasons:string[], sources:['prefs'] }. If callCouncilMember provided, may enrich narrative once; on model failure return heuristic-only prediction (never throw). No browser globals. @ssot docs/products/lifeos/PRODUCT_HOME.md",
+      "depends_on": [
+        "lo-ui-directives-service"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "createTwinReactionSimulator"
+      ],
+      "commit_sha": "24f8d46632d5e0234588493fbe6d8ab89f76a901",
+      "last_attempt_at": "2026-07-12T18:08:54.270Z",
+      "completed_at": "2026-07-12T18:09:21.103Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lo-twin-reaction-simulator",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lo-ui-directives-routes",
+      "status": "done",
+      "target_file": "routes/lifeos-ui-directives-routes.js",
+      "task": "Thin Express routes for ui_directives propose/apply/get + twin reaction simulate.",
+      "spec": "ESM export registerLifeosUiDirectivesRoutes(app, deps) with deps={pool, requireAuth, callCouncilMember?}. Mount under /api/v1/lifeos/twin: POST /ui-directives/propose {text}, POST /ui-directives/apply {directives}, GET /ui-directives, POST /reaction/simulate {idea,context?}. Auth required. Use createUiDirectivesService + createTwinReactionSimulator. JSON only. No browser globals. Do not edit server.js. @ssot docs/products/lifeos/PRODUCT_HOME.md",
+      "depends_on": [
+        "lo-twin-reaction-simulator"
+      ],
+      "founder_gated": false,
+      "attempts": 2,
+      "expected_exports": [
+        "registerLifeosUiDirectivesRoutes"
+      ],
+      "commit_sha": "21786d7d67ac8527bbaff20a480b1e4331bbdc03",
+      "last_attempt_at": "2026-07-12T18:43:21.928Z",
+      "last_error": "route module not auto-registered — add {\"path\":\"routes/lifeos-ui-directives-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
+      "completed_at": "2026-07-12T18:43:34.000Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lo-ui-directives-routes",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lo-ui-directives-auto-register",
+      "status": "done",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "Auto-register lifeos-ui-directives-routes so twin UI directive APIs mount at boot.",
+      "spec": "Ensure modules[] contains {\"path\":\"routes/lifeos-ui-directives-routes.js\",\"register\":\"registerLifeosUiDirectivesRoutes\",\"enabled\":true}. Preserve all existing entries. Valid JSON only.",
+      "depends_on": [
+        "lo-ui-directives-routes"
+      ],
+      "founder_gated": false,
+      "attempts": 3,
+      "file_contains": [
+        "lifeos-ui-directives-routes.js",
+        "registerLifeosUiDirectivesRoutes"
+      ],
+      "commit_sha": "7fb0a3f9eedfa16525fae943cc700e5cb324224e",
+      "last_attempt_at": "2026-07-12T18:38:38.596Z",
+      "completed_at": "2026-07-13T03:40:00.000Z",
+      "note": "Marked done 2026-07-13 — entry already live in config; verify_exit_1 was product UI SENTRY thrash on config JSON (token waste). Never-stop must not revive this.",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lo-ui-directives-auto-register",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "1",
+      "status": "done",
+      "target_file": "db/migrations/20260422_lifeos_biological_age.sql",
+      "task": "create biological-age tables",
+      "spec": "CREATE TABLE IF NOT EXISTS biological_age (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), user_id UUID NOT NULL, pheno_age NUMERIC, vo2_max NUMERIC, created_at TIMESTAMP DEFAULT now(), updated_at TIMESTAMP DEFAULT now()); CREATE TABLE IF NOT EXISTS lab_results (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), user_id UUID NOT NULL, results JSONB, created_at TIMESTAMP DEFAULT now(), updated_at TIMESTAMP DEFAULT now());",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "commit_sha": "f25557b4629653ef8b73202e28ba8bdcefa08706",
+      "last_attempt_at": "2026-07-13T10:43:40.490Z",
+      "completed_at": "2026-07-13T10:43:53.691Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "1",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "2",
+      "status": "done",
+      "target_file": "services/lifeos-biological-age.js",
+      "task": "implement biological age calculation",
+      "spec": "const fetchBiologicalAge = async (userId) => { /* Fetch lab results and calculate PhenoAge and VO2 max */ }; module.exports = { fetchBiologicalAge };",
+      "depends_on": [
+        "1"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "commit_sha": "66a4095f2b17f95f2c09d1dffd10dfe2836e5681",
+      "last_attempt_at": "2026-07-13T23:30:50.691Z",
+      "completed_at": "2026-07-13T23:30:51.153Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "2",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "3",
+      "status": "done",
+      "target_file": "routes/lifeos-biological-age-routes.js",
+      "task": "implement routes for biological age",
+      "spec": "const express = require('express'); const { fetchBiologicalAge } = require('../services/lifeos-biological-age.js'); const router = express.Router(); router.get('/biological-age/:userId', async (req, res) => { const { userId } = req.params; const data = await fetchBiologicalAge(userId); res.json(data); }); module.exports = { registerBiologicalAgeRoutes: (app) => app.use('/api', router) };",
+      "depends_on": [
+        "2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-13T23:34:40.333Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "3",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "5",
+      "status": "done",
+      "target_file": "db/migrations/20260423_lifeos_twin_simulator.sql",
+      "task": "create twin reaction simulator table",
+      "spec": "CREATE TABLE IF NOT EXISTS twin_simulator_feedback (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), user_id UUID NOT NULL, feedback TEXT, created_at TIMESTAMP DEFAULT now(), updated_at TIMESTAMP DEFAULT now());",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "commit_sha": "524e96b895509bdd04f1506a2da1be0c343dfda8",
+      "last_attempt_at": "2026-07-13T10:58:23.653Z",
+      "completed_at": "2026-07-13T10:58:32.129Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "5",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "6",
+      "status": "done",
+      "target_file": "services/lifeos-twin-simulator.js",
+      "task": "simulate twin reactions",
+      "spec": "async function simulateTwinReactions(userId, uiData) { /* Call AI to predict user response */ } module.exports = { simulateTwinReactions };",
+      "depends_on": [
+        "5"
+      ],
+      "founder_gated": false,
+      "attempts": 3,
+      "last_attempt_at": "2026-07-13T12:33:26.287Z",
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-13T23:41:51.329Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "6",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "7",
+      "status": "done",
+      "target_file": "routes/lifeos-twin-simulator-routes.js",
+      "task": "implement routes for twin simulator",
+      "spec": "const express = require('express'); const { simulateTwinReactions } = require('../services/lifeos-twin-simulator.js'); const router = express.Router(); router.post('/twin-simulator/:userId', async (req, res) => { const { userId } = req.params; const uiData = req.body.uiData; const response = await simulateTwinReactions(userId, uiData); res.json(response); }); module.exports = { registerTwinSimulatorRoutes: (app) => app.use('/api', router) };",
+      "depends_on": [
+        "6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-14T00:00:57.056Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "7",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "9",
+      "status": "done",
+      "target_file": "services/lifeos-member-feedback.js",
+      "task": "process member feedback",
+      "spec": "function processFeedback(feedback) { /* Queue for founder review */ } module.exports = { processFeedback };",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 3,
+      "last_attempt_at": "2026-07-13T12:44:37.822Z",
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-14T00:36:50.199Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "9",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "10",
+      "status": "done",
+      "target_file": "routes/lifeos-member-feedback-routes.js",
+      "task": "implement routes for member feedback",
+      "spec": "const express = require('express'); const { processFeedback } = require('../services/lifeos-member-feedback.js'); const router = express.Router(); router.post('/member-feedback', (req, res) => { const feedback = req.body.feedback; processFeedback(feedback); res.status(200).send('Feedback processed'); }); module.exports = { registerMemberFeedbackRoutes: (app) => app.use('/api', router) };",
+      "depends_on": [
+        "9"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "last_attempt_at": "2026-07-14T00:37:27.753Z",
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-14T01:52:57.235Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "10",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "11",
+      "status": "done",
+      "target_file": "services/lifeos-perfect-day.js",
+      "task": "Implement LifeOS Perfect Day planning service with DB-backed schedule, check-in, reminders, and daily rating",
+      "spec": "This is an ES module service file. Export these named functions:\n- export async function planPerfectDay(userId, { wakeTime, schedule }) — upsert a user's perfect-day plan (wake time, ordered activities array with start/end) into a table named `perfect_day` (id, user_id, wake_time, schedule JSONB, created_at, updated_at).\n- export async function getPerfectDay(userId) — return the current plan for the user, or null.\n- export async function checkIn(userId, { currentActivity, distraction, priority }) — record a check-in and return the next recommended activity or a re-prioritization question.\n- export async function getDailyReminders(userId) — return the next 3 upcoming reminders for today based on the plan.\n- export async function rateDay(userId, { rating, note, whatMatteredMore }) — upsert a daily rating into `perfect_day_ratings` (id, user_id, perfect_day_id, rating smallint, note, what_mattered_more, created_at).\nUse createDbPool from '../services/db.js' to create a local pool: const pool = createDbPool({ validatedDatabaseUrl: process.env.DATABASE_URL, DB_SSL_REJECT_UNAUTHORIZED: process.env.DB_SSL_REJECT_UNAUTHORIZED });. Use ON CONFLICT for upserts. SQL: CREATE TABLE IF NOT EXISTS perfect_day (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), user_id uuid NOT NULL, wake_time time, schedule jsonb NOT NULL DEFAULT '[]'::jsonb, created_at timestamptz DEFAULT now(), updated_at timestamptz DEFAULT now(), UNIQUE(user_id)); CREATE TABLE IF NOT EXISTS perfect_day_ratings (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), user_id uuid NOT NULL, perfect_day_id uuid REFERENCES perfect_day(id), rating smallint, note text, what_mattered_more text, created_at timestamptz DEFAULT now());\n",
+      "depends_on": [
+        "10"
+      ],
+      "founder_gated": false,
+      "expected_exports": [
+        "planPerfectDay",
+        "getPerfectDay",
+        "checkIn",
+        "getDailyReminders",
+        "rateDay"
+      ],
+      "attempts": 0,
+      "last_attempt_at": null,
+      "last_error": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-14T10:59:21.218Z",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-14T10:59:27.161Z",
+      "commit_sha": "af9fceacc9442f8ea7fd171a42d6cb0e7b45618a",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "11",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "12",
+      "status": "done",
+      "target_file": "routes/lifeos-perfect-day-routes.js",
+      "task": "Implement LifeOS Perfect Day REST routes with auth and health endpoint",
+      "spec": "This is an ES module route file. Export function registerLifeosPerfectDayRoutes(app, deps). Inside the function, create an express.Router and mount it with app.use('/api/v1/lifeos/perfect-day', router). Use deps.requireKey as auth middleware on every endpoint except /health. Endpoints:\n- GET /health returns { ok: true } and does NOT require auth.\n- POST /plan requires auth, calls planPerfectDay(req.body.user_id, req.body), and returns res.json(result).\n- GET /plan requires auth, calls getPerfectDay(req.body.user_id), and returns res.json(result).\n- POST /check-in requires auth, calls checkIn(req.body.user_id, req.body), and returns res.json(result).\n- GET /reminders requires auth, calls getDailyReminders(req.body.user_id), and returns res.json(result).\n- POST /rate requires auth, calls rateDay(req.body.user_id, req.body), and returns res.json(result).\nUse import { planPerfectDay, getPerfectDay, checkIn, getDailyReminders, rateDay } from '../services/lifeos-perfect-day.js';. Handle errors with res.status(500).json({ error: error.message }).",
+      "depends_on": [
+        "11"
+      ],
+      "founder_gated": false,
+      "expected_exports": [
+        "registerLifeosPerfectDayRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/lifeos/perfect-day/health"
+      },
+      "file_contains": [
+        "await planPerfectDay(req.body.user_id",
+        "deps.requireKey"
+      ],
+      "attempts": 0,
+      "last_attempt_at": null,
+      "last_error": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "park_until": null,
+      "revive_count": 0,
+      "authoring": {
+        "tiers": [
+          "gemini_flash"
+        ],
+        "max_output_tokens": 8000
+      },
+      "revived_at": "2026-07-14T13:46:24.431Z",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-14T13:46:29.062Z",
+      "commit_sha": "25d21fc21673c807426c98a92d7f716758810234",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "12",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "13",
+      "status": "done",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "Register LifeOS Perfect Day route in the auto-register module registry",
+      "spec": "Write the exact auto-register module registry JSON. Preserve every existing module entry and ensure the LifeOS Perfect Day route entry is present.",
+      "depends_on": [
+        "12"
+      ],
+      "founder_gated": false,
+      "file_contains": [
+        "routes/lifeos-perfect-day-routes.js",
+        "registerLifeosPerfectDayRoutes"
+      ],
+      "attempts": 0,
+      "last_attempt_at": null,
+      "last_error": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "park_until": null,
+      "revive_count": 0,
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "exact_content": "{\n  \"modules\": [\n    {\n      \"path\": \"routes/founder-sms-routes.js\",\n      \"register\": \"registerFounderSmsRoutes\",\n      \"enabled\": true,\n      \"note\": \"GAP-FILL money path: tip can SMS ADAM_SMS_NUMBER via Twilio without mounting full phone stack. Used to ping founder with preview/checkout + Connect captcha asks.\"\n    },\n    {\n      \"path\": \"routes/lifeos-finance-routes.js\",\n      \"register\": \"registerLifeOSFinanceRoutes\",\n      \"mount_path\": \"/api/v1/lifeos/finance\",\n      \"enabled\": true,\n      \"note\": \"LifeOS Personal Finance API. The finance router was defined but never mounted in the founder-builder runtime lane, so the dashboard's GET /api/v1/lifeos/finance/goals returned 404 — surfaced by SENTRY lifeos-founder-ui finding no_js_errors (Error loading goals: HTTP 404). Mounted here via auto-register (no composition-root edit) so the dashboard goals/summary/accounts calls resolve. Fixes SENTRY defect #1 (rank 8).\"\n    },\n    {\n      \"path\": \"routes/lifeos-engine-routes.js\",\n      \"register\": \"registerLifeOSEngineRoutes\",\n      \"mount_path\": \"/api/v1/lifeos/engine\",\n      \"enabled\": true,\n      \"note\": \"GAP-FILL: LifeOS Engine (Google Calendar connect/sync, calendar events, outreach) 404'd on tip because Railway boots founder_builder only and never runs the full-runtime mount. Same auto-register pattern as finance/core. Unblocks Connect → Google Calendar for LifeOS, LifeRe scheduling context, and MarketingOS/SocialMediaOS shared Google OAuth app.\"\n    },\n    {\n      \"path\": \"routes/lifeos-core-routes.js\",\n      \"register\": \"registerLifeOSCoreRoutes\",\n      \"mount_path\": \"/api/v1/lifeos\",\n      \"enabled\": true,\n      \"note\": \"LifeOS core APIs (commitments + dashboard/scoreboard). Dashboard loadMITs/loadScores 404'd in founder lane — SENTRY lifeos-founder-ui no_js_errors. Auto-register mounts without composition-root edit.\"\n    },\n    {\n      \"path\": \"routes/lifeos-briefing-routes.js\",\n      \"register\": \"registerLifeOSBriefingRoutes\",\n      \"mount_path\": \"/api/v1/lifeos/briefing\",\n      \"enabled\": true,\n      \"note\": \"Daily briefing API. Dashboard loadCalendar() calls GET /api/v1/lifeos/briefing/today — was 404 in founder lane.\"\n    },\n    {\n      \"path\": \"routes/site-builder-ab-subject-routes.js\",\n      \"register\": \"registerSiteBuilderAbSubjectRoutes\",\n      \"enabled\": true,\n      \"note\": \"GAP-FILL: never-stop authored AB subject routes (step-03) but tip would stay unreachable without auto-register. Mounts /api/site-builder/ab-subject/* for first-dollar subject testing.\"\n    },\n    {\n      \"path\": \"routes/site-builder-templates-routes.js\",\n      \"register\": \"registerSiteBuilderTemplatesRoutes\",\n      \"enabled\": true,\n      \"note\": \"GAP-FILL first-dollar: Site Builder BUILD_QUEUE step-4 was blocked forever (route module not auto-registered). Mounts GET /api/site-builder/templates* so template picker is live on founder lane.\"\n    },\n    {\n      \"path\": \"routes/site-builder-prealpha-routes.js\",\n      \"register\": \"registerSiteBuilderPrealphaRoutes\",\n      \"enabled\": true,\n      \"note\": \"CONDUCTOR-GLUE SENTRY pre-alpha Layer B (human-sim). Mounts POST /api/v1/sites/prealpha/layer-b — drives the live editor with a real browser like a client (loads editor, verifies canvas iframe shows the REAL site not 'Cannot GET', switches a template, types in the AI chat, clicks Save with no edits, checks the publish path), captures screenshots into /previews/<id>/_sentry/, and asks a cheap model to critique the UX + propose improvements. Fails closed. Mounted in the founder lane so it runs on prod where Chrome launches. Pairs with Layer A (scripts/run-site-builder-prealpha.mjs); no feature is 'done' until both pass.\"\n    },\n    {\n      \"path\": \"routes/governed-fence-routes.js\",\n      \"register\": \"registerGovernedFenceRoutes\",\n      \"enabled\": true,\n      \"note\": \"CONDUCTOR-GLUE separation-of-powers switch. Mounts GET /api/v1/factory/governance/fence + POST .../fence/enable so the SYSTEM can turn its own governance fence ON (GOVERNED_FACTORY_ONLY=1) via Railway API + self-redeploy, but is physically unable to turn it OFF (enable-only ratchet — only a human in Railway can). PR #272 added the guard; this mounts the live surface that was missing so the flip can actually happen. Chair receipt LIFERE_COUNCIL_1783462353983.\"\n    },\n    {\n      \"path\": \"routes/general-browser-agent-routes.js\",\n      \"register\": \"registerGeneralBrowserAgentRoutes\",\n      \"enabled\": true,\n      \"note\": \"General browser agent + founder-authorized signup (POST /api/v1/browser-agent/run|signup|signup/sync|signup/approve). founder_authority:true completes paid checkout from FOUNDER_PAYMENT_* Railway vault; without it, stops at consent.\"\n    },\n    {\n      \"path\": \"routes/account-manager-routes.js\",\n      \"register\": \"registerAccountManagerRoutes\",\n      \"mount_path\": \"/api/v1/accounts\",\n      \"enabled\": true,\n      \"note\": \"Managed accounts vault + recipe signups at /api/v1/accounts/* on founder lane.\"\n    },\n    {\n      \"path\": \"routes/marketing-session-routes.js\",\n      \"register\": \"registerMarketingSessionRoutes\",\n      \"enabled\": true,\n      \"note\": \"MarketingOS SocialMediaOS Phase 1 JSON API (§6). The autonomous loop rebuilds this file (re-queued mos-session-routes); once deployed the boot mounts it here and the functional-proof gate verifies /api/v1/marketing/* is LIVE before the step can be done. Records a benign 'module not found' health error until the loop ships the file — fail-open, never blocks boot.\"\n    },\n    {\n      \"path\": \"routes/marketing-session-ui-routes.js\",\n      \"register\": \"registerMarketingSessionUiRoutes\",\n      \"enabled\": true,\n      \"note\": \"MarketingOS SocialMediaOS Phase 1 SSR screens (§5). Rebuilt by the loop (re-queued mos-session-ui); mounted here so module-health proves the /marketing pages load LIVE.\"\n    },\n    {\n      \"path\": \"routes/marketing-calendar-routes.js\",\n      \"register\": \"registerMarketingCalendarRoutes\",\n      \"enabled\": true,\n      \"note\": \"MarketingOS Phase 2 calendar/atoms JSON API (§5 Phase 2). Built by the loop (queued mos-phase2-routes); once deployed the boot mounts it and the functional-proof gate verifies /api/v1/marketing/calendar + /atoms are LIVE before the step can be done. Records a benign 'module not found' health error until the loop ships the file — fail-open, never blocks boot.\"\n    },\n    {\n      \"path\": \"routes/marketing-calendar-ui-routes.js\",\n      \"register\": \"registerMarketingCalendarUiRoutes\",\n      \"enabled\": true,\n      \"note\": \"MarketingOS Phase 2 SSR content-calendar + atom-library screens (§5 Phase 2). Built by the loop (queued mos-phase2-ui); mounted here so module-health proves /marketing/calendar loads LIVE.\"\n    },\n    {\n      \"path\": \"routes/marketing-intel-routes.js\",\n      \"register\": \"registerMarketingIntelRoutes\",\n      \"enabled\": true,\n      \"note\": \"SocialMediaOS Content Intelligence API (Priority Ideas subset). Built by the loop (queued smos-intel-routes); imports the four intel services (title-universe, script-scorer, publish-gate, repurpose) and exposes /api/v1/marketing/intel/*. Mounted here so the functional-proof gate verifies the endpoints are LIVE before the step can be done. Records a benign 'module not found' health error until the loop ships the file — fail-open, never blocks boot.\"\n    },\n    {\n      \"path\": \"routes/lifeos-phase2-routes.js\",\n      \"register\": \"registerLifeosPhase2Routes\",\n      \"enabled\": true,\n      \"note\": \"LifeOS Phase 2 REST surface. Was blocked forever because s07 (auto-register) depended on s06 while s06 failed module-health for missing auto-register — chicken-egg. Mounted here so functional-proof can pass and the loop can finish Phase 2.\"\n    },\n    {\n      \"path\": \"routes/lifeos-phase3-routes.js\",\n      \"register\": \"registerLifeosPhase3Routes\",\n      \"enabled\": true,\n      \"note\": \"LifeOS Phase 3 REST (habits/energy/learning/calendar-protection). s7 blocked on missing auto-register after builder wrote broken sN-*-service imports — conductor GAP-FILL rewired to real lifeos-* services + mounted here.\"\n    },\n    {\n      \"path\": \"routes/tc-intake-routes.js\",\n      \"register\": \"registerTcIntakeRoutes\",\n      \"enabled\": false,\n      \"note\": \"TC Service intake run + runs list. s10 false-done had reused an unrelated LifeOS auto-register commit; conductor GAP-FILL adds the real entries so module-health can pass. Disabled 2026-07-10: superseded by camelCase .mjs queue targets (step-08/09) to avoid double-mount.\"\n    },\n    {\n      \"path\": \"routes/tc-billing-routes.js\",\n      \"register\": \"registerTcBillingRoutes\",\n      \"enabled\": false,\n      \"note\": \"TC Service billing checkout/enroll/webhook. Mounted via auto-register for founder-lane module-health. Disabled 2026-07-10: superseded by camelCase .mjs queue targets (step-08/09) to avoid double-mount.\"\n    },\n    {\n      \"path\": \"routes/tc-imap-routes.js\",\n      \"register\": \"registerTcImapRoutes\",\n      \"enabled\": true,\n      \"note\": \"TC Service IMAP status + dry-run. Mounted via auto-register for founder-lane module-health.\"\n    },\n    {\n      \"path\": \"routes/tcIntakeRoutes.mjs\",\n      \"register\": \"registerTcIntakeRoutes\",\n      \"enabled\": true,\n      \"note\": \"TC Service step-08 intake/document-QA/offer-prep/approvals/showing-feedback. GAP-FILL after builder syntax/default-import failures.\"\n    },\n    {\n      \"path\": \"routes/tcBillingRoutes.mjs\",\n      \"register\": \"registerTcBillingRoutes\",\n      \"enabled\": true,\n      \"note\": \"TC Service step-09 billing subscribe/webhook/status. Auto-register required for module-health (built but unreachable = false done).\"\n    },\n    {\n      \"path\": \"routes/mission-routes.js\",\n      \"register\": \"registerMissionRoutes\",\n      \"enabled\": true,\n      \"note\": \"BuilderOS mission runtime API at /api/missions*. GAP-FILL: step-04 was built but unreachable (createMissionRoutes, never auto-registered) — never-stop spun. Mounted here so module-health can prove LIVE and the queue can advance.\"\n    },\n    {\n      \"path\": \"routes/creative-engine-routes.js\",\n      \"register\": \"registerCreativeEngineRoutes\",\n      \"enabled\": true,\n      \"note\": \"Creative Engine shared render API at /api/v1/creative/* — footage_edit, photo_polish, script_compose, generative_broll. Auto-registered so founder lane mounts without composition-root edit.\"\n    },\n    {\n      \"path\": \"routes/creative-engine-ui-routes.js\",\n      \"register\": \"registerCreativeEngineUiRoutes\",\n      \"enabled\": true,\n      \"note\": \"Creative Engine SSR studio at /creative and /creative/studio.\"\n    },\n    {\n      \"path\": \"routes/creative-engine-graphic-design-routes.js\",\n      \"register\": \"registerCreativeEngineGraphicDesignRoutes\",\n      \"enabled\": true,\n      \"note\": \"Real AI graphic-design generation (Ideogram/Recraft/Flux via Replicate) at /api/v1/creative/graphic-design/{estimate,render} — governed-built 2026-07-14 for SocialMediaOS thumbnails + Site Builder hero/brand imagery. Stateless v1 (no DB job persistence); the shared services/creative-engine/index.js dispatcher is Zone-3 (>150 lines) so this is a dedicated route pair rather than an edit to that file. Gated on REPLICATE_API_TOKEN — NOT YET SET on Railway as of this note (GET /api/v1/creative/health reports replicateConfigured:false); render returns 503 until the founder adds the token.\"\n    },\n    {\n      \"path\": \"routes/marketing-publish-routes.js\",\n      \"register\": \"registerMarketingPublishRoutes\",\n      \"enabled\": true,\n      \"note\": \"Phase 5 social publish API — enabled 2026-07-12 for money path (LIVE_SOCIAL_PUBLISH_ENABLED + approval gate still required for live posts).\"\n    },\n    {\n      \"path\": \"routes/marketing-youtube-routes.js\",\n      \"register\": \"registerMarketingYoutubeRoutes\",\n      \"enabled\": true,\n      \"note\": \"MarketingOS Phase 6 YouTube connect flow — ONE shared Google OAuth app (reuses GOOGLE_CLIENT_ID/SECRET already live for Calendar), per-client one-time consent via Google's own real login page. Exposes GET /api/v1/marketing/youtube/connect (redirect to Google), GET /.../callback (token exchange, stored in the existing user_integrations table under provider 'youtube_channel'), GET /.../status. Built by the loop (queued mos-youtube-connect-routes); mounted here so the functional-proof gate verifies the endpoints are LIVE before the step can be done. Records a benign 'module not found' health error until the loop ships the file — fail-open, never blocks boot.\"\n    },\n    {\n      \"path\": \"routes/wellness-therapist-routes.js\",\n      \"register\": \"registerWellnessTherapistRoutes\",\n      \"enabled\": true\n    },\n    {\n      \"path\": \"routes/lifeos-consent-routes.js\",\n      \"register\": \"registerLifeosConsentRoutes\",\n      \"enabled\": true,\n      \"note\": \"LifeOS consent grant/revoke/status. GAP-FILL: builder route was unreachable without auto-register; chicken-egg with functional-proof gate.\"\n    },\n    {\n      \"path\": \"routes/lifeos-ui-directives-routes.js\",\n      \"register\": \"registerLifeosUiDirectivesRoutes\",\n      \"enabled\": true\n    },\n    {\n      \"path\": \"routes/lifeos-biological-age-routes.js\",\n      \"register\": \"registerBiologicalAgeRoutes\",\n      \"enabled\": true,\n      \"note\": \"LifeOS biological age REST surface. Auto-register entry added so the governed factory can ship the route and module-health can prove it LIVE.\"\n    },\n    {\n      \"path\": \"routes/lifeos-twin-simulator-routes.js\",\n      \"register\": \"registerTwinSimulatorRoutes\",\n      \"enabled\": true,\n      \"note\": \"LifeOS digital-twin simulator REST surface. Auto-register entry added so the governed factory can ship the route and module-health can prove it LIVE.\"\n    },\n    {\n      \"path\": \"routes/lifeos-member-feedback-routes.js\",\n      \"register\": \"registerMemberFeedbackRoutes\",\n      \"enabled\": true,\n      \"note\": \"LifeOS member feedback REST surface. Auto-register entry added so the governed factory can ship the route and module-health can prove it LIVE.\"\n    },\n    {\n      \"path\": \"routes/lifeos-perfect-day-routes.js\",\n      \"register\": \"registerLifeosPerfectDayRoutes\",\n      \"enabled\": true,\n      \"note\": \"LifeOS Perfect Day REST surface: plan, rate, re-prioritize, and ADD-style reminders. Auto-register entry added so the governed factory can ship the route and module-health can prove it LIVE.\"\n    },\n    {\n      \"path\": \"routes/marketing-community-value-routes.js\",\n      \"register\": \"registerMarketingCommunityValueRoutes\",\n      \"enabled\": true\n    },\n    {\n      \"path\": \"routes/marketing-session-export-routes.js\",\n      \"register\": \"registerMarketingSessionExportRoutes\",\n      \"enabled\": true,\n      \"note\": \"GAP-FILL: built (BUILD_QUEUE mos-session-export/mos-r2-upload) but never auto-registered, so it stayed unreachable through 3 verify attempts. Also fixed on the same pass: the route's own local buildSessionExport/uploadAudioToR2 reimplementations never called the real services/marketing-session-export.js and services/marketing-r2-upload.js built alongside them in the same session (the R2 upload path asked an AI council member to fabricate a URL instead of doing a real S3/R2 PutObject), and the auth check used req.session.userId even though this codebase has no express-session middleware anywhere, so it would 401 every request unconditionally. Swapped to deps.requireKey, the pattern every other auto-registered route already uses.\"\n    }\n  ]\n}"
+      },
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-14T13:48:08.140Z",
+      "commit_sha": "fba2d238473d1b32ba38e1aeec14e5a18a1a2320",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "13",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "4",
+      "status": "done",
+      "target_file": "services/lifeos-ai-photo-food-logger.js",
+      "task": "Implement AI photo food logger service with nutrition estimation",
+      "spec": "ESM service module. Exports: async logFoodWithPhoto(db, userId, { imageUrl, imageBase64, description, loggedAt, callCouncilMember }) and async getFoodLogs(db, userId, { limit=50, since }) and async getNutritionSummary(db, userId, days). Behavior: 1) Validate exactly one of imageUrl or imageBase64 or description is provided. 2) If an image is provided and callCouncilMember is supplied, build a vision prompt describing the food and ask callCouncilMember('vision', prompt) for a JSON string { food, calories, protein_g, carbs_g, fat_g, confidence }. 3) If no image/AI available, accept the user's text description and mark confidence 'user_provided'. 4) Insert into food_logs table (id uuid PK default gen_random_uuid(), user_id uuid, logged_at timestamptz default now(), image_url text, description text, calories int, protein_g int, carbs_g int, fat_g int, confidence text, created_at timestamptz default now()). 5) Return the inserted row. 6) getFoodLogs returns rows ordered by logged_at desc. 7) getNutritionSummary aggregates last N days: SUM(calories, protein_g, carbs_g, fat_g) and COUNT. All DB queries parameterized. No top-level browser globals. No direct import of OpenAI SDK; vision inference injected via callCouncilMember. No fs writes. If callCouncilMember is missing or fails, still log with description and confidence 'parse_failed'.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "logFoodWithPhoto",
+        "getFoodLogs",
+        "getNutritionSummary"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "blocker_class": null,
+      "revive_count": 0,
+      "revived_at": null,
+      "commit_sha": "5a6322ceba0a9ea3481b925eeabb6dc26afaea86",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T02:07:19.009Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "4",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "8",
+      "status": "done",
+      "target_file": "services/lifeos-crisis-language-detector.js",
+      "task": "implement crisis language detector",
+      "spec": "Service to detect crisis language from user inputs, integrating with Amendment 28.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "detectCrisisLanguage"
+      ],
+      "commit_sha": "30b2d5fb951ad7b38785d52bc48c4459530e17a9",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": null,
+      "last_attempt": null,
+      "last_error": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T02:18:32.112Z",
+      "no_op": null,
+      "pre_existing": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "8",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-admin-1",
+      "status": "done",
+      "target_file": "db/migrations/20260601_builder_runtime_config.sql",
+      "task": "Create builder_runtime_config table for runtime mode switching",
+      "spec": "CREATE TABLE IF NOT EXISTS builder_runtime_config with columns: id text PRIMARY KEY, mode text NOT NULL DEFAULT 'run', updated_at timestamptz DEFAULT now(), updated_by text; seed with INSERT INTO builder_runtime_config (id, mode, updated_by) VALUES ('builder_runtime_config_singleton', 'run', 'migration') ON CONFLICT (id) DO NOTHING. CREATE TABLE IF NOT EXISTS builder_mode_receipts with columns: id uuid PRIMARY KEY DEFAULT gen_random_uuid(), mode text NOT NULL, triggered_by text, receipt_payload jsonb, created_at timestamptz DEFAULT now(). All CREATE TABLE IF NOT EXISTS and INSERT ON CONFLICT DO NOTHING only. No JS imports. Migration is idempotent.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "commit_sha": "f1a44ac0492cd6b6e539cedc69695c868be86902",
+      "last_attempt_at": "2026-07-10T19:23:49.855Z",
+      "completed_at": "2026-07-10T19:23:59.761Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-admin-1",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-admin-1b",
+      "status": "done",
+      "target_file": "db/migrations/20260715_builder_runtime_config_id_text.sql",
+      "task": "Fix builder_runtime_config.id type from uuid to text and seed sentinel row",
+      "spec": "Idempotent SQL migration: change builder_runtime_config.id to text, and insert the sentinel row builder_runtime_config_singleton with mode 'run' if missing. Uses information_schema to only alter when not already text. Safe to re-run.",
+      "depends_on": [
+        "lifeos-admin-1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [],
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "revive_count": 0,
+      "revived_at": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-admin-1b",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-admin-2",
+      "status": "done",
+      "target_file": "services/builder-runtime-mode-service.js",
+      "task": "Implement runtime mode read/write service backed by builder_runtime_config",
+      "spec": "Export async functions: getCurrentMode(db) returns {mode,updated_at,updated_by}; setMode(db,mode,triggeredBy,receiptPayload) upserts builder_runtime_config (single-row pattern keyed on a fixed sentinel id or ON CONFLICT DO UPDATE) and inserts a builder_mode_receipts row; getReceipts(db,limit) returns recent receipts. Uses only pg pool passed as argument — no top-level imports beyond node builtins. Throws descriptive Error on invalid mode values (allowed: 'run','dry_run','paused').",
+      "depends_on": [
+        "lifeos-admin-1"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "commit_sha": "e1bd898465998ac28ab3d274d279c0bea2ec47fd",
+      "last_attempt_at": "2026-07-10T19:27:22.334Z",
+      "completed_at": "2026-07-10T19:27:33.229Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-admin-2",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-admin-3",
+      "status": "done",
+      "target_file": "routes/command-center-mode-routes.js",
+      "task": "Wire POST /command-center/mode and GET /command-center/mode live using builder-runtime-mode-service",
+      "spec": "Export registerCommandCenterModeRoutes(app,deps) where deps={db,callCouncilMember}. GET /api/v1/lifeos/command-center/mode returns {mode,updated_at,updated_by}. POST /api/v1/lifeos/command-center/mode accepts {mode,triggered_by} body, validates mode enum (allowed values: 'run', 'dry_run', 'paused', matching builder-runtime-mode-service), calls setMode, returns receipt. All errors return {error:string} with appropriate HTTP status. No top-level browser globals. Import only node builtins and ../services/builder-runtime-mode-service.js.",
+      "depends_on": [
+        "lifeos-admin-2",
+        "lifeos-admin-1b"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "commit_sha": "30edb391ecc44845087b4166919812ae4846252b",
+      "last_attempt_at": "2026-07-14T22:55:47.120678+00:00",
+      "last_error": null,
+      "expected_exports": [
+        "registerCommandCenterModeRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/lifeos/command-center/mode"
+      },
+      "revive_count": 1,
+      "revived_at": "2026-07-14T21:26:17.512Z",
+      "built_sha": "30edb391ecc44845087b4166919812ae4846252b",
+      "proof": {
+        "live_status": 200,
+        "mode": "run",
+        "url": "https://lumin-web-production-e3a9.up.railway.app/api/v1/lifeos/command-center/mode",
+        "migration": "20260715_builder_runtime_config_id_text.sql applied",
+        "note": "Route was already built in prior commit and is live on the deployed service after the builder_runtime_config id-type fix."
+      },
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "no_op": null,
+      "pre_existing": "route file existed before this governed run; migration unblocked it",
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "pre_existing_deploy",
+      "shipped_at": "2026-07-15T01:10:00.000Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-admin-3",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-admin-4",
+      "status": "done",
+      "target_file": "services/phase14-cert-service.js",
+      "task": "Implement phase14 cert service reading phase_ledger from findingsJson",
+      "spec": "Export async function getPhase14Cert(db) that queries the findings store (SELECT findings_json FROM builder_findings ORDER BY created_at DESC LIMIT 1 using CREATE TABLE IF NOT EXISTS builder_findings guard at top via a one-time DDL check) and extracts phase_ledger array from findingsJson. Returns {certified:bool, phase_ledger:[], generated_at:isoString, summary:{total,passed,failed}}. If no findings row exists returns {certified:false,phase_ledger:[],generated_at:now,summary:{total:0,passed:0,failed:0}}. No AI SDK imports; no browser globals.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "commit_sha": "8dec86d685662f3c735a15667ab724595ddf05d2",
+      "last_attempt_at": "2026-07-12T03:02:58.542Z",
+      "completed_at": "2026-07-12T03:03:09.140Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-admin-4",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-admin-5",
+      "status": "done",
+      "target_file": "routes/phase14-cert-routes.js",
+      "task": "Expose GET /api/v1/builder/cert/phase14 endpoint",
+      "spec": "Export registerPhase14CertRoutes(app,deps) where deps={db}. GET /api/v1/builder/cert/phase14 calls getPhase14Cert(db) and returns JSON result with Cache-Control no-store. On error returns {error:message} 500. Import only ../services/phase14-cert-service.js. No browser globals.",
+      "depends_on": [
+        "lifeos-admin-4"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "commit_sha": "2c0371cdd92834d69013dd98d4e53fdf31e9d0b2",
+      "last_attempt_at": "2026-07-14T21:26:17.512Z",
+      "last_error": null,
+      "expected_exports": [
+        "registerPhase14CertRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/builder/cert/phase14"
+      },
+      "park_until": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-14T21:26:17.512Z",
+      "built_sha": "2c0371cdd92834d69013dd98d4e53fdf31e9d0b2",
+      "proof": {
+        "sentry": "PASS",
+        "module_mounts": 200
+      },
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-admin-5",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-admin-6",
+      "status": "done",
+      "target_file": "services/pending-adam-service.js",
+      "task": "Implement pending Adam query service with priority sort and type badges",
+      "spec": "Export async function getPendingAdam(db,opts={}) that queries pending_adam table (SELECT id,title,type,priority,status,created_at FROM pending_adam WHERE status NOT IN ('resolved','dismissed') ORDER BY priority ASC, created_at ASC LIMIT coalesce(opts.limit,50)). Export async function resolveAdamItem(db,id,resolvedBy) that UPDATE pending_adam SET status='resolved', resolved_at=now(), resolved_by=$2 WHERE id=$1 RETURNING *. Uses CREATE TABLE IF NOT EXISTS pending_adam guard. No browser globals. No AI imports.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "commit_sha": "164a6da3603d687096fc9ade428523b6d88925d4",
+      "last_attempt_at": "2026-07-12T03:25:33.983Z",
+      "completed_at": "2026-07-12T03:25:45.503Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-admin-6",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-admin-7",
+      "status": "done",
+      "target_file": "routes/pending-adam-routes.js",
+      "task": "Expose pending Adam panel API endpoints",
+      "spec": "Export registerPendingAdamRoutes(app,deps) where deps={db}. GET /api/v1/lifeos/command-center/pending-adam returns {items:[],count,fetched_at}. POST /api/v1/lifeos/command-center/pending-adam/:id/resolve accepts {resolved_by} body, calls resolveAdamItem, returns resolved record. Validates id param is uuid-like (36 chars). Returns {error} on failure. Import only ../services/pending-adam-service.js.",
+      "depends_on": [
+        "lifeos-admin-6"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "commit_sha": "c60bc1347552cc2137318bead2f2a90798f42b3b",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "revive_count": 0,
+      "revived_at": null,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-admin-7",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-admin-8",
+      "status": "done",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "Register command-center mode and phase14 cert route modules so they mount at boot without editing server.js",
+      "spec": "Add entries for routes/command-center-mode-routes.js (registerFn:registerCommandCenterModeRoutes) and routes/phase14-cert-routes.js (registerFn:registerPhase14CertRoutes) to the modules array. Preserve all existing entries. Each entry shape: {path, register, enabled, note}. JSON must be valid and minifiable.",
+      "depends_on": [
+        "lifeos-admin-3",
+        "lifeos-admin-5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-14T17:42:27.159Z",
+      "commit_sha": "42efdc538a0a2fd8bfbf62e0d643ab99606c9818",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-admin-8",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-admin-9",
+      "status": "done",
+      "target_file": "public/overlay/pending-adam-panel.html",
+      "task": "Build Pending Adam panel UI with priority sort, type badges, one-click resolve",
+      "spec": "Self-contained dark HTML panel. Polls GET /api/v1/lifeos/command-center/pending-adam every 15s. Renders items as cards with color-coded type badge (research/yellow, decision/red, approval/blue, review/grey), priority number chip, title, created_at relative time. Each card has Resolve button that calls POST .../resolve with {resolved_by:'operator'} then refreshes list. No external CDN — inline CSS only. Mobile-friendly flex layout. No window.fetch polyfill needed (modern browsers). Served as static file.",
+      "depends_on": [
+        "lifeos-admin-7"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "commit_sha": "f5bf8103868697e46b00fa86d5492303147b5fd8",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "revive_count": 0,
+      "revived_at": null,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-admin-9",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-admin-10",
+      "status": "done",
+      "target_file": "public/overlay/projects-dashboard-drilldown.html",
+      "task": "Build Projects Dashboard panel with hover tooltip and click drawer drill-down",
+      "spec": "Self-contained dark HTML panel. Fetches GET /api/v1/lifeos/command-center/mission-dashboard on load and every 10s. Renders project cards from active_jobs and recent_completed arrays. Hover shows tooltip with {estimate, actual, status}. Click opens slide-in drawer (position:fixed right panel) showing build_plan array, verification_status badge, estimates table. Drawer closes on backdrop click or Esc key. All JS inline. No external CDN. No window globals beyond standard browser API. founder_gated because it is customer-facing UI surface.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "commit_sha": "90c48bdad416b75fee66caa2c2c8420c0b27eafa",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "revive_count": 0,
+      "revived_at": null,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-admin-10",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-admin-11",
+      "status": "done",
+      "target_file": "public/overlay/mode-switcher-panel.html",
+      "task": "Build runtime mode switcher UI panel wired to POST /command-center/mode",
+      "spec": "Self-contained dark HTML panel. On load GETs /api/v1/lifeos/command-center/mode and displays current badge (RUN=green, DRY_RUN=amber, PAUSED=red). Three buttons: Run Now, Dry Run, Pause — each POST {mode:'run'|'dry_run'|'paused', triggered_by:'operator'} then re-fetches status. Shows last receipt payload in collapsible <pre>. Confirms destructive mode changes with window.confirm. Polls every 30s. Inline CSS only dark theme. No external CDN.",
+      "depends_on": [
+        "lifeos-admin-3"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "commit_sha": "fbe54befde1c830ae069d9c7a14dece271f61952",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "revive_count": 0,
+      "revived_at": null,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-admin-11",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-admin-12",
+      "status": "done",
+      "target_file": "scripts/write-phase14-ledger.mjs",
+      "task": "Update cert script to write phase_ledger into builder_findings table",
+      "spec": "ESM script. Imports pg from 'pg' (already installed). Reads FINDINGS_JSON_PATH env (default: ./findings.json) with fs/promises readFile. Parses JSON, extracts or derives phase_ledger array (array of {phase,status:'pass'|'fail',note} objects from top-level phases key or constructs from findings array). Upserts one row into builder_findings: INSERT INTO builder_findings(findings_json) VALUES($1) — table created by phase14-cert-service guard so script does not need DDL. Logs {rows_affected, phase_ledger_length} to stdout. Exits 0 on success, 1 on error. No uuid package — DB generates id. Uses DATABASE_URL env for pg connection.",
+      "depends_on": [
+        "lifeos-admin-4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-13T23:45:24.687Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-admin-12",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-chat-v2-01",
+      "status": "done",
+      "target_file": "public/overlay/lifeos-chat-thoughts.js",
+      "task": "Build the chat thought-stream UI module for lifeos-app.html",
+      "spec": "Classic browser script (NOT an ES module; no top-level import or export statements). Self-initializing on DOMContentLoaded. It must locate the existing chat message container (#lumin-messages) and input/send flow in public/overlay/lifeos-app.html. Intercept fetch calls to the founder chat endpoint (/api/v1/lifeos/builderos/command-control/founder-interface/message) and any legacy /message path; parse the JSON response. For each assistant response, create a thought-stream element above the assistant message bubble. The panel displays concise labels: model routing/provider used, command_ran (yes/no), command_executed, target_file, sha/commit_sha, first_blocker, command_truth, pass_fail, build status, duration_ms. Each label is shown as a collapsible/expandable item with a chevron; default state can be toggled, with a top-level Collapse all / Expand all control. Use existing CSS custom properties from lifeos-theme.js (dark theme, accent, border, text-muted) so it matches the UI. If the response includes a thoughts array (future schema), render those steps verbatim with timestamps. The module must not interfere with sending messages or break if the endpoint changes; if container not found, silently exit. Attach the public API to window.LifeOSChatThoughts only. Do not use top-level `return`. File contains: renderThoughtStream, toggleThought, collapseAllThoughts, expandAllThoughts, thought-stream, command_truth, first_blocker, lumin-messages.",
+      "file_contains": [
+        "renderThoughtStream",
+        "toggleThought",
+        "collapseAllThoughts",
+        "expandAllThoughts",
+        "thought-stream",
+        "command_truth",
+        "first_blocker",
+        "lumin-messages"
+      ],
+      "assertion_spec": {
+        "file_contains": [
+          "renderThoughtStream",
+          "toggleThought",
+          "collapseAllThoughts",
+          "expandAllThoughts",
+          "thought-stream",
+          "command_truth",
+          "first_blocker",
+          "lumin-messages"
+        ]
+      },
+      "max_output_tokens": 12000,
+      "authoring": {
+        "tiers": [
+          "openai_gpt",
+          "gemini_flash",
+          "openai_builder_standard",
+          "openai_builder_escalation"
+        ]
+      },
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "9d459cb55dcb37095d94a1ae1dc3b6e9b4c4f238",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": null,
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-chat-v2-01",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-chat-v2-02",
+      "status": "done",
+      "target_file": "services/lifeos-chat-intent-router.js",
+      "task": "Build the chat intent router so the LifeOS chair replies with real workflow content or a real build receipt instead of counsel text",
+      "spec": "ESM service. Exports classifyFounderIntent(message, context) returning { lane, confidence, payload } where lane is one of counsel, workflow_content, direct_build, ambient, commitment, note, checkin, digital_twin_context. Exports buildSMOSWorkflowReply(intent, context) that returns concrete Social Media OS relocation workflow content (not an apology or essay). Exports buildDirectBuildReply(intent, context, options) that calls POST /api/v1/lifeos/builder/build with the build instruction and x-command-key, waits for the result, and returns a terminal PASS/FAIL receipt with command_truth, pass_fail, command_executed, target_file, commit_sha, duration_ms, and first_blocker. Exports routeByIntent(message, context) that picks the right lane and returns the reply object. No top-level side effects. Use fetch to http://127.0.0.1:$PORT or process.env.PUBLIC_BASE_URL. Handle errors gracefully and return counsel fallback only when no other lane matches.",
+      "file_contains": [
+        "classifyFounderIntent",
+        "buildSMOSWorkflowReply",
+        "buildDirectBuildReply",
+        "routeByIntent",
+        "direct_build",
+        "workflow_content"
+      ],
+      "assertion_spec": {
+        "expected_exports": [
+          "classifyFounderIntent",
+          "buildSMOSWorkflowReply",
+          "buildDirectBuildReply",
+          "routeByIntent"
+        ],
+        "file_contains": [
+          "classifyFounderIntent",
+          "buildSMOSWorkflowReply",
+          "buildDirectBuildReply",
+          "routeByIntent",
+          "direct_build",
+          "workflow_content"
+        ]
+      },
+      "max_output_tokens": 12000,
+      "authoring": {
+        "tiers": [
+          "openai_gpt",
+          "gemini_flash",
+          "openai_builder_standard",
+          "openai_builder_escalation"
+        ]
+      },
+      "depends_on": [
+        "lifeos-chat-v2-01"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "52b7e0475874935bd217be15a059a8e5cb284dc4",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": null,
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T00:06:25.458Z",
+      "expected_exports": [
+        "classifyFounderIntent",
+        "buildSMOSWorkflowReply",
+        "buildDirectBuildReply",
+        "routeByIntent"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-chat-intent-router.js",
+          "exports": [
+            "classifyFounderIntent",
+            "buildSMOSWorkflowReply",
+            "buildDirectBuildReply",
+            "routeByIntent"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-chat-intent-router.js"
+        }
+      ],
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-chat-v2-02",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-chat-v2-03",
+      "status": "done",
+      "target_file": "public/overlay/lifeos-ambient-listener.js",
+      "task": "Build the ambient listening overlay for lifeos-app.html",
+      "spec": "Classic browser script (NOT an ES module; no top-level import/export/require/module.exports; no top-level return). Self-initializing on DOMContentLoaded. Locates the Lumin input area. Adds a microphone toggle button near #lumin-mic-btn. Uses the Web Speech API (SpeechRecognition or webkitSpeechRecognition) with continuous listening when toggled on. On a recognized final transcript, appends it to the Lumin chat input and optionally submits if the user pauses for 2 seconds. Sends interim transcripts to a future POST /api/v1/lifeos/ambient/capture endpoint only if it exists (degrade silently if 404). Displays a visual indicator when listening. Attach public API to window.LifeOSAmbientListener. Do not interfere with normal send. Use existing CSS custom properties.",
+      "module_type": "classic_browser_script",
+      "file_contains": [
+        "SpeechRecognition",
+        "webkitSpeechRecognition",
+        "ambient",
+        "lumin-mic-btn",
+        "LifeOSAmbientListener",
+        "transcript"
+      ],
+      "assertion_spec": {
+        "file_contains": [
+          "SpeechRecognition",
+          "webkitSpeechRecognition",
+          "ambient",
+          "lumin-mic-btn",
+          "LifeOSAmbientListener",
+          "transcript"
+        ]
+      },
+      "max_output_tokens": 12000,
+      "authoring": {
+        "tiers": [
+          "openai_gpt",
+          "gemini_flash",
+          "openai_builder_standard",
+          "openai_builder_escalation"
+        ]
+      },
+      "depends_on": [
+        "lifeos-chat-v2-01"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "3d2df8dc204baaf158d44fc433ed0ed51113deb1",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": null,
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T00:08:14.935Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-chat-v2-03",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-chat-v2-04",
+      "status": "done",
+      "target_file": "services/lifeos-commitment-service.js",
+      "task": "Build the commitment capture and calendar-proposal service",
+      "spec": "ESM service. Exports captureCommitment(text, { userId, timezone }) that parses natural language like \"dentist appointment at 2pm next Tuesday\" into a structured commitment object { title, datetime, durationMinutes, timezone, calendarEventRequested }. Inline the natural-language parser; do NOT import any helper files (e.g. './nlp-parser.js', './database.js') because they do not exist. Accept `db` as the FIRST argument on every exported function (pg pool/client) and use ONLY parameterized pg queries (`await db.query('INSERT INTO commitments ... RETURNING *', [userId, title, ...])`). This service does NOT use knex/objection or any ORM. Exports getCommitments(db, userId, opts), resolveCommitment(db, id, { approved, calendarEventId }), and proposeCalendarEvent(commitment) that returns an object with `vevent` (RFC-5545-ish VEVENT string) and `payload` (POST /api/v1/lifeos/calendar/events body). The VEVENT builder must be pure string concatenation. No external API calls by default; calendar write is a future route. No top-level side effects. No imports other than node built-ins.",
+      "file_contains": [
+        "captureCommitment",
+        "getCommitments",
+        "resolveCommitment",
+        "proposeCalendarEvent",
+        "commitments",
+        "db.query"
+      ],
+      "assertion_spec": {
+        "expected_exports": [
+          "captureCommitment",
+          "getCommitments",
+          "resolveCommitment",
+          "proposeCalendarEvent"
+        ],
+        "file_contains": [
+          "captureCommitment",
+          "getCommitments",
+          "resolveCommitment",
+          "proposeCalendarEvent",
+          "commitments",
+          "db.query"
+        ]
+      },
+      "max_output_tokens": 12000,
+      "authoring": {
+        "tiers": [
+          "openai_gpt",
+          "gemini_flash",
+          "openai_builder_standard",
+          "openai_builder_escalation"
+        ]
+      },
+      "depends_on": [
+        "lifeos-chat-v2-01"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "63a64a54572fc3f12592fa3fdc5aded727a5cdd9",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": null,
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T00:47:36.602Z",
+      "expected_exports": [
+        "captureCommitment",
+        "getCommitments",
+        "resolveCommitment",
+        "proposeCalendarEvent"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-commitment-service.js",
+          "exports": [
+            "captureCommitment",
+            "getCommitments",
+            "resolveCommitment",
+            "proposeCalendarEvent"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-commitment-service.js"
+        }
+      ],
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-chat-v2-04",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-chat-v2-05",
+      "status": "done",
+      "target_file": "services/lifeos-note-capture-service.js",
+      "task": "Build the note capture service from natural language",
+      "spec": "ESM service. Exports captureNote(text, { userId, source, tags }) that extracts the note, suggested tags, and a one-line summary. Exports getNotes(userId, opts), searchNotes(userId, query), and tagNotes(userId, noteIds, tags). Uses a lightweight in-memory or SQL notes table (CREATE TABLE IF NOT EXISTS in a separate migration step). Suggested tags can be comma-separated or inferred from keywords. No top-level side effects.",
+      "file_contains": [
+        "captureNote",
+        "getNotes",
+        "searchNotes",
+        "tagNotes",
+        "notes"
+      ],
+      "assertion_spec": {
+        "expected_exports": [
+          "captureNote",
+          "getNotes",
+          "searchNotes",
+          "tagNotes"
+        ],
+        "file_contains": [
+          "captureNote",
+          "getNotes",
+          "searchNotes",
+          "tagNotes",
+          "notes"
+        ]
+      },
+      "max_output_tokens": 12000,
+      "authoring": {
+        "tiers": [
+          "openai_gpt",
+          "gemini_flash",
+          "openai_builder_standard",
+          "openai_builder_escalation"
+        ]
+      },
+      "depends_on": [
+        "lifeos-chat-v2-01"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "5b9990a1f0cb10f21f5ee918971f2865b81c8622",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": null,
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T00:52:33.093Z",
+      "expected_exports": [
+        "captureNote",
+        "getNotes",
+        "searchNotes",
+        "tagNotes"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-note-capture-service.js",
+          "exports": [
+            "captureNote",
+            "getNotes",
+            "searchNotes",
+            "tagNotes"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-note-capture-service.js"
+        }
+      ],
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-chat-v2-05",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-chat-v2-06",
+      "status": "done",
+      "target_file": "services/lifeos-daily-checkin-service.js",
+      "task": "Build the daily activity check-in service (\"what have you worked on in the last 15 minutes?\")",
+      "spec": "ESM service. Exports startCheckin(db, userId) returning a prompt string by calling getPromptForUser. Exports addCheckinEntry(db, userId, text, { minutesAgo }) that records an activity snippet. Exports getTodaySummary(db, userId) returning a list of entries and a generated summary. Exports getPromptForUser(db, userId) returning the question \"Adam, what have you worked on for the last 15 minutes?\" plus any context. Exports buildReplyFromEntries(entries) that turns entries into concise bullet notes. Accept `db` as the FIRST argument on every exported function that touches the database (pg pool/client) and use ONLY parameterized pg queries (`await db.query('INSERT INTO checkins ... RETURNING *', [userId, text, ...])`). Do NOT import helper files (e.g. './database-connection.js') because they do not exist. No knex/objection ORM. No top-level side effects. No imports other than node built-ins. The `checkins` table is assumed to exist from a separate migration.",
+      "file_contains": [
+        "startCheckin",
+        "addCheckinEntry",
+        "getTodaySummary",
+        "getPromptForUser",
+        "buildReplyFromEntries",
+        "what have you worked on",
+        "db.query"
+      ],
+      "assertion_spec": {
+        "expected_exports": [
+          "startCheckin",
+          "addCheckinEntry",
+          "getTodaySummary",
+          "getPromptForUser",
+          "buildReplyFromEntries"
+        ],
+        "file_contains": [
+          "startCheckin",
+          "addCheckinEntry",
+          "getTodaySummary",
+          "getPromptForUser",
+          "buildReplyFromEntries",
+          "what have you worked on",
+          "db.query"
+        ]
+      },
+      "max_output_tokens": 12000,
+      "authoring": {
+        "tiers": [
+          "openai_gpt",
+          "gemini_flash",
+          "openai_builder_standard",
+          "openai_builder_escalation"
+        ]
+      },
+      "depends_on": [
+        "lifeos-chat-v2-01"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "f3b7316668e37451836aa7b645fbef408aa2665a",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": null,
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T01:04:30.018Z",
+      "expected_exports": [
+        "startCheckin",
+        "addCheckinEntry",
+        "getTodaySummary",
+        "getPromptForUser",
+        "buildReplyFromEntries"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-daily-checkin-service.js",
+          "exports": [
+            "startCheckin",
+            "addCheckinEntry",
+            "getTodaySummary",
+            "getPromptForUser",
+            "buildReplyFromEntries"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-daily-checkin-service.js"
+        }
+      ],
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-chat-v2-06",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-chat-v2-07",
+      "status": "done",
+      "target_file": "services/lifeos-natural-build-router.js",
+      "task": "Build the normal-language build request router that turns founder instructions into governed BuilderOS tasks",
+      "spec": "ESM service. Exports parseBuildRequest(text) that extracts a build instruction (e.g. \"build a commitment calendar route\") and a target file guess. Exports buildBuildPayload(parsed) returning { task, target_file, spec_hint, product_id: \"lifeos\" }. Exports submitToBuilder(payload, { commandKey, baseUrl }) that POSTs to `${baseUrl}/api/v1/lifeos/builder/build` with `x-command-key: ${commandKey}` and `Content-Type: application/json` using global `fetch`, and returns the JSON receipt. Exports replyFromReceipt(receipt) that turns the build result into a concise founder-facing message. Do NOT import helper files (e.g. './api-client.js') because they do not exist; use global `fetch`. No top-level side effects. No imports other than node built-ins.",
+      "file_contains": [
+        "parseBuildRequest",
+        "buildBuildPayload",
+        "submitToBuilder",
+        "replyFromReceipt",
+        "builder/build"
+      ],
+      "assertion_spec": {
+        "expected_exports": [
+          "parseBuildRequest",
+          "buildBuildPayload",
+          "submitToBuilder",
+          "replyFromReceipt"
+        ],
+        "file_contains": [
+          "parseBuildRequest",
+          "buildBuildPayload",
+          "submitToBuilder",
+          "replyFromReceipt",
+          "builder/build"
+        ]
+      },
+      "max_output_tokens": 12000,
+      "authoring": {
+        "tiers": [
+          "openai_gpt",
+          "gemini_flash",
+          "openai_builder_standard",
+          "openai_builder_escalation"
+        ]
+      },
+      "depends_on": [
+        "lifeos-chat-v2-01"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "563e14a44dfcec1ffb1dfc7e91fb6c3a41506c1c",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": null,
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T01:09:09.626Z",
+      "expected_exports": [
+        "parseBuildRequest",
+        "buildBuildPayload",
+        "submitToBuilder",
+        "replyFromReceipt"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-natural-build-router.js",
+          "exports": [
+            "parseBuildRequest",
+            "buildBuildPayload",
+            "submitToBuilder",
+            "replyFromReceipt"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-natural-build-router.js"
+        }
+      ],
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-chat-v2-07",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-chat-v2-08",
+      "status": "done",
+      "target_file": "services/lifeos-digital-twin-context.js",
+      "task": "Build the digital twin context loader for the LifeOS chair",
+      "spec": "ESM service. Exports getTwinContextForUser(db, userId) that uses ONLY parameterized pg queries (`await db.query('SELECT ...', [userId])`) against existing twin tables (users, twin_simulator, flourishing_preferences, ui_directives, lifeos_notes) and returns a compact summary object { identity, recentNotes, openCommitments, emotionalState, uiDirectives, energyLevel }. Exports injectTwinContext(prompt, userId) that appends the twin summary to the prompt string. Exports updateTwinFromInteraction(db, userId, message, reply) that writes a short learned fact to the twin store with a parameterized pg query. Accept `db` as the FIRST argument on every exported function that touches the database. Do NOT import helper files (e.g. './database.js', './twin-store.js') because they do not exist. No knex/objection ORM. No external API calls. No top-level side effects. No imports other than node built-ins.",
+      "file_contains": [
+        "getTwinContextForUser",
+        "injectTwinContext",
+        "updateTwinFromInteraction",
+        "twin",
+        "db.query"
+      ],
+      "assertion_spec": {
+        "expected_exports": [
+          "getTwinContextForUser",
+          "injectTwinContext",
+          "updateTwinFromInteraction"
+        ],
+        "file_contains": [
+          "getTwinContextForUser",
+          "injectTwinContext",
+          "updateTwinFromInteraction",
+          "twin",
+          "db.query"
+        ]
+      },
+      "max_output_tokens": 12000,
+      "authoring": {
+        "tiers": [
+          "openai_gpt",
+          "gemini_flash",
+          "openai_builder_standard",
+          "openai_builder_escalation"
+        ]
+      },
+      "depends_on": [
+        "lifeos-chat-v2-01"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "5ca04d795b9bfbac20303d4f8ef60f638c0f0373",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": null,
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T01:14:08.805Z",
+      "expected_exports": [
+        "getTwinContextForUser",
+        "injectTwinContext",
+        "updateTwinFromInteraction"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-digital-twin-context.js",
+          "exports": [
+            "getTwinContextForUser",
+            "injectTwinContext",
+            "updateTwinFromInteraction"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-digital-twin-context.js"
+        }
+      ],
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-chat-v2-08",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-chat-v2-09",
+      "status": "done",
+      "target_file": "services/lifeos-chat-action-service.js",
+      "task": "Build the LifeOS chat action executor that turns intent-router lanes into real execution",
+      "spec": "ESM service. This file ONLY imports the exact named exports listed below from the three sibling services that already shipped. Sibling API contract (do NOT invent different function names): ./lifeos-commitment-service.js exports captureCommitment(db, text, { userId, timezone }) and getCommitments(db, userId); ./lifeos-note-capture-service.js exports captureNote(text, { userId, source, tags }); ./lifeos-daily-checkin-service.js exports addCheckinEntry(db, userId, text, { minutesAgo }) and getTodaySummary(db, userId). Exports executeCommitment(db, text, { userId, timezone }) that calls `const commitment = await captureCommitment(db, text, { userId, timezone })` and returns a confirmation string including commitment.title and commitment.datetime. Exports executeNote(text, { userId, source, tags }) that calls `const note = captureNote(text, { userId, source, tags })` and returns a confirmation including note.text or note.summary. Exports executeCheckin(db, userId, text, { minutesAgo }) that calls `await addCheckinEntry(db, userId, text, { minutesAgo })`, then `const summary = await getTodaySummary(db, userId)` and returns a bullet list of today's entries. Exports executeBuild(task, { routeToBuilder, operatorKey }) that calls `const receipt = await routeToBuilder(task, operatorKey, { confirmIntent: true })` and returns a plain-English PASS/FAIL message using `receipt.ok`, `receipt.committed`, `receipt.sha`, `receipt.error`, or JSON.stringify(receipt) as fallback. Exports executeAmbient(text) returning a hint to tap the mic icon. Each execute* function MUST wrap in try/catch and return a plain-English failure string, never throw. No top-level side effects. No imports other than the three sibling services and node built-ins.",
+      "file_contains": [
+        "executeCommitment",
+        "executeNote",
+        "executeCheckin",
+        "executeBuild",
+        "executeAmbient"
+      ],
+      "assertion_spec": {
+        "expected_exports": [
+          "executeCommitment",
+          "executeNote",
+          "executeCheckin",
+          "executeBuild",
+          "executeAmbient"
+        ],
+        "file_contains": [
+          "executeCommitment",
+          "executeNote",
+          "executeCheckin",
+          "executeBuild",
+          "executeAmbient"
+        ]
+      },
+      "max_output_tokens": 12000,
+      "authoring": {
+        "tiers": [
+          "openai_gpt",
+          "gemini_flash",
+          "openai_builder_standard",
+          "openai_builder_escalation"
+        ]
+      },
+      "depends_on": [
+        "lifeos-chat-v2-04",
+        "lifeos-chat-v2-05",
+        "lifeos-chat-v2-06",
+        "lifeos-chat-v2-07",
+        "lifeos-chat-v2-08"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "39609ccaf9dbca9fb1284e09ecc2a7be88766553",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T01:21:50.855Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T01:22:00.131Z",
+      "expected_exports": [
+        "executeCommitment",
+        "executeNote",
+        "executeCheckin",
+        "executeBuild",
+        "executeAmbient"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-chat-action-service.js",
+          "exports": [
+            "executeCommitment",
+            "executeNote",
+            "executeCheckin",
+            "executeBuild",
+            "executeAmbient"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-chat-action-service.js"
+        }
+      ],
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-chat-v2-09",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "step1",
+      "status": "done",
+      "target_file": "services/lifeos-menstrual-cycle-tracking.js",
+      "task": "implement menstrual cycle tracking",
+      "spec": "Integrate wearable data to predict cycle phase and feed into energy patterns.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "predictCyclePhase",
+        "updateEnergyPatterns"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/menstrual-cycle-tracking"
+      },
+      "file_contains": [
+        "function predictCyclePhase",
+        "function updateEnergyPatterns"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-menstrual-cycle-tracking.js",
+          "exports": [
+            "predictCyclePhase",
+            "updateEnergyPatterns"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-menstrual-cycle-tracking.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:45:35.031Z",
+      "commit_sha": "4c7e2ab17d6981e9338f355662fdf506de8c1545",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step1",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "step2",
+      "status": "done",
+      "target_file": "services/lifeos-sleep-debt.js",
+      "task": "implement sleep-debt tracking",
+      "spec": "Calculate rolling sleep-debt score and derive chronotype classification from Apple Watch timing.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "calculateSleepDebt",
+        "classifyChronotype"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/sleep-debt"
+      },
+      "file_contains": [
+        "function calculateSleepDebt",
+        "function classifyChronotype"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-sleep-debt.js",
+          "exports": [
+            "calculateSleepDebt",
+            "classifyChronotype"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-sleep-debt.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:47:05.012Z",
+      "commit_sha": "87e69d4f3fe9b080e84e003d31757476f09e5a76",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step2",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "step3",
+      "status": "done",
+      "target_file": "services/lifeos-assessment-battery.js",
+      "task": "build assessment battery",
+      "spec": "Implement user assessments for emotional patterns.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getAssessments",
+        "compareAssessments"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/assessment-battery"
+      },
+      "file_contains": [
+        "function getAssessments",
+        "function compareAssessments"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-assessment-battery.js",
+          "exports": [
+            "getAssessments",
+            "compareAssessments"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-assessment-battery.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:49:06.940Z",
+      "commit_sha": "da80dbb0bb9bf4c2c5ba70cf2e9f34e4747157dd",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step3",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "step4",
+      "status": "skipped",
+      "target_file": "services/lifeos-crisis-language-detector.js",
+      "task": "link crisis-language detector",
+      "spec": "Implement crisis detection reading from lumin_messages and joy_checkins.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "detectCrisisLanguage"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/crisis-language"
+      },
+      "file_contains": [
+        "function detectCrisisLanguage"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-crisis-language-detector.js",
+          "exports": [
+            "detectCrisisLanguage"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-crisis-language-detector.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-16T01:48:47.361Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/services/.factory-import-check",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 9,
+      "revived_at": "2026-07-16T01:48:34.288Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home",
+      "demoted_at": "2026-07-16T01:51:01.786Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step4",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "step5",
+      "status": "done",
+      "target_file": "routes/lifeos-psychometric-battery-routes.js",
+      "task": "route psychometric battery",
+      "spec": "Expose psychometric battery API through dedicated routes.",
+      "depends_on": [
+        "step3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPsychometricRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/psychometric-battery"
+      },
+      "file_contains": [
+        "/psychometric-battery"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/lifeos-psychometric-battery-routes.js",
+          "exports": [
+            "registerPsychometricRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/lifeos-psychometric-battery-routes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:58:41.324Z",
+      "commit_sha": "59f66a1d1a8da6e5454143f9d5761e96abce1607",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step5",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "step6",
+      "status": "done",
+      "target_file": "services/lifeos-habit-tracker.js",
+      "task": "create habit tracker",
+      "spec": "Track habits with identity framing and streak recovery.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "trackHabit",
+        "recoverStreak"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/habit-tracker"
+      },
+      "file_contains": [
+        "function trackHabit",
+        "function recoverStreak"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-habit-tracker.js",
+          "exports": [
+            "trackHabit",
+            "recoverStreak"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-habit-tracker.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T01:51:10.509Z",
+      "commit_sha": "fa41a32b54ffefa6408d278a77dff8815fea6784",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step6",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "step7",
+      "status": "done",
+      "target_file": "db/migrations/20261101_habit_tables.sql",
+      "task": "add habit tables",
+      "spec": "Habits and habit_completions tables already exist from 20260422_lifeos_habits.sql; this step is a no-op migration that avoids CREATE TABLE collision.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "SELECT 1"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T01:53:28.289Z",
+      "commit_sha": "b4565fbea607398d5bf3fc59805f02640f5dcf33",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step7",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "step8",
+      "status": "done",
+      "target_file": "routes/lifeos-habit-tracker-routes.js",
+      "task": "route habit tracker",
+      "spec": "Provide API routes for the habit tracker.",
+      "depends_on": [
+        "step6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerHabitTrackerRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/habit-tracker"
+      },
+      "file_contains": [
+        "/habit-tracker"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/lifeos-habit-tracker-routes.js",
+          "exports": [
+            "registerHabitTrackerRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/lifeos-habit-tracker-routes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T01:58:45.462Z",
+      "commit_sha": "2c8458fb6c1a2c7b1d7193b09013febbac0f2e56",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step8",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "step9",
+      "status": "done",
+      "target_file": "services/lifeos-ask-your-life.js",
+      "task": "enable natural-language queries",
+      "spec": "Implement natural-language querying over user data.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "queryLife"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/ask-your-life"
+      },
+      "file_contains": [
+        "function queryLife"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-ask-your-life.js",
+          "exports": [
+            "queryLife"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-ask-your-life.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:22:31.394Z",
+      "commit_sha": "77ad612efab6146e91c8de1e1cd86018c2aa3e09",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step9",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "step10",
+      "status": "done",
+      "target_file": "routes/lifeos-ask-your-life-routes.js",
+      "task": "route life query",
+      "spec": "Expose natural-language query service via API routes.",
+      "depends_on": [
+        "step9"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerAskYourLifeRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/ask-your-life"
+      },
+      "file_contains": [
+        "/ask-your-life"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/lifeos-ask-your-life-routes.js",
+          "exports": [
+            "registerAskYourLifeRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/lifeos-ask-your-life-routes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:27:09.304Z",
+      "commit_sha": "47ed1094dccc0b2968bb96b90afb6210afd25a36",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step10",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "step11",
+      "status": "done",
+      "target_file": "public/overlay/lifeos-voice-note-journal.html",
+      "task": "create voice-note journaling UI",
+      "spec": "Design the UI for mobile-first voice-note journaling with local transcription.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "<div class='voice-note-journaling'>"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "d6bc1443c80b726c1e177228ecd979f6c8e685d0",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T02:47:13.735Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:47:19.892Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step11",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "step12",
+      "status": "done",
+      "target_file": "services/lifeos-trusted-contact.js",
+      "task": "Enhance legacy with trusted contacts",
+      "spec": "Implement trusted-contact table interactions and checks for legacy features.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "manageTrustedContacts",
+        "scheduleLegacyDeliveries"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/legacy-trusted-contact"
+      },
+      "file_contains": [
+        "function manageTrustedContacts",
+        "function scheduleLegacyDeliveries"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-trusted-contact.js",
+          "exports": [
+            "manageTrustedContacts",
+            "scheduleLegacyDeliveries"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-trusted-contact.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:00:24.116Z",
+      "commit_sha": "9c31a51339aaa19c48b4b0a570a36091f0b498a1",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step12",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-1",
+      "status": "done",
+      "target_file": "routes/lifeos-builderos-command-control-routes.js",
+      "task": "Add executeChatIntent helper",
+      "spec": "Add an executeChatIntent helper that uses classifyIntent for specific intents and handles them directly, preserving existing logic for other intents.",
+      "depends_on": [
+        "lifeos-3"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "executeChatIntent"
+      ],
+      "file_contains": [
+        "runLuminChairTurn"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/lifeos-builderos-command-control-routes.js",
+          "exports": [
+            "executeChatIntent"
+          ],
+          "assertion_id": "expected_exports:routes/lifeos-builderos-command-control-routes.js"
+        }
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/jobs"
+      },
+      "last_attempt_at": "2026-07-16T04:20:59.413Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 978b is < 30% of existing 62069b",
+      "commit_sha": "manual",
+      "built_sha": null,
+      "proof": null,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-1",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-2",
+      "status": "done",
+      "target_file": "services/lumin-chair-orchestrator.js",
+      "task": "Patch runLuminChairTurn for life_admin channel",
+      "spec": "Modify runLuminChairTurn to call executeIntent when chair_channel is 'life_admin', skipping council counsel if intent is executable.",
+      "depends_on": [
+        "lifeos-3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "runLuminChairTurn"
+      ],
+      "file_contains": [
+        "life_admin"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lumin-chair-orchestrator.js",
+          "exports": [
+            "runLuminChairTurn"
+          ],
+          "assertion_id": "expected_exports:services/lumin-chair-orchestrator.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:25:31.303Z",
+      "commit_sha": "37746bf2f792a94a598127a9dd835cf6f34dfd26",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-2",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-3",
+      "status": "done",
+      "target_file": "services/lifeos-chat-intent-executor.js",
+      "task": "Create module for chat intents",
+      "spec": "Implement classifyIntent, executeIntent, and formatReply. Handle intents: commitment, note, check_in, build_request. Return card or summary.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "classifyIntent",
+        "executeIntent",
+        "formatReply"
+      ],
+      "file_contains": [
+        "captureCommitment",
+        "captureNote"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-chat-intent-executor.js",
+          "exports": [
+            "classifyIntent",
+            "executeIntent",
+            "formatReply"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-chat-intent-executor.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:14:52.960Z",
+      "commit_sha": "5400b407b0b06743b64888482dc1a6b2701bea27",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-3",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-4",
+      "status": "skipped",
+      "target_file": "public/overlay/lifeos-app.html",
+      "task": "Activate overlay lifeos-ambient-listener.js",
+      "spec": "Replace legacy script tag with the overlay version and ensure thought-stream container is created, calling renderThoughtStream when needed.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 1,
+      "file_contains": [
+        "lifeos-ambient-listener.js"
+      ],
+      "last_attempt_at": "2026-07-17T20:28:05.016Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 1002b is < 30% of existing 185633b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 9,
+      "revived_at": "2026-07-17T20:28:01.756Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_stub_detected: generated 1002b is < 30% of existing 185633b",
+      "demoted_at": "2026-07-17T20:30:38.228Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-4",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-5",
+      "status": "done",
+      "target_file": "public/overlay/lifeos-ambient-listener.js",
+      "task": "Patch DOM and transcript dispatch",
+      "spec": "Ensure voice-transcribed text inserts into #lumin-input and can auto-send after user confirmation.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "#lumin-input"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "4dfea69e877253c917a1058fa4de4170818a50e6",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-17T21:11:55.471Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T21:12:13.568Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-5",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-6",
+      "status": "done",
+      "target_file": "services/lifeos-commitment-service.js",
+      "task": "Extend parseNaturalLanguage",
+      "spec": "Recognize phrases for query mode, call getCommitments and format results into a reply card.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "parseNaturalLanguage",
+        "getCommitments"
+      ],
+      "file_contains": [
+        "query mode",
+        "getCommitments"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-commitment-service.js",
+          "exports": [
+            "parseNaturalLanguage",
+            "getCommitments"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-commitment-service.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "c4079b0d4ce59fac0a6026c34ee275dac9da0e7c",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T04:56:33.648Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:56:45.117Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-6",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-7",
+      "status": "done",
+      "target_file": "public/overlay/lifeos-voice-note-journal.html",
+      "task": "Implement UI for voice journaling",
+      "spec": "Add interface for voice recording, transcription via Web Speech API, and submission to the designated endpoint for AI processing.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "Web Speech API",
+        "/api/v1/lifeos/journal/voice"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "aa91f93141e6db9eec47d00deabb3c744903cf7d",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-17T21:31:16.576Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T21:31:26.324Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-7",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-8",
+      "status": "done",
+      "target_file": "scripts/lifeos-scheduler.mjs",
+      "task": "Add scheduler for relationship reminders",
+      "spec": "Add a weekly schedule to check relationship contacts and queue notifications for unconnected contacts.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "relationship_contacts",
+        "scheduler"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "075e8def16f73febfb992dce421cbd78381d0e11",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T04:49:08.222Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:01:54.414Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-8",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-9",
+      "status": "done",
+      "target_file": "services/lifeos-psychometric-battery.js",
+      "task": "Add distortion spotting in journaling",
+      "spec": "Spot cognitive distortions in journal entries or messages when opted-in, using AI for analysis.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "cognitive_distortion_mode"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "8fb0fe336bfbf49c9592710d4c99e08e6ab96cdc",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T06:36:24.576Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:37:07.366Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-9",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-10",
+      "status": "skipped",
+      "target_file": "services/lifeos-finance.js",
+      "task": "Implement net worth tracking",
+      "spec": "Add logic for calculating and storing net worth snapshots from total assets and liabilities.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "calculateNetWorth"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/finance/net-worth"
+      },
+      "file_contains": [
+        "net_worth_snapshots"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-finance.js",
+          "exports": [
+            "calculateNetWorth"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-finance.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-16T06:07:28.748Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 2408b is < 30% of existing 13445b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 9,
+      "revived_at": "2026-07-16T06:05:59.150Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_stub_detected: generated 2408b is < 30% of existing 13445b",
+      "demoted_at": "2026-07-16T06:12:26.239Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-10",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-11",
+      "status": "done",
+      "target_file": "services/lifeos-gratitude.js",
+      "task": "Expand gratitude practice logging",
+      "spec": "Implement daily gratitude logs with pattern analysis and joy score integration.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "logGratitude",
+        "analyzePatterns"
+      ],
+      "file_contains": [
+        "gratitude_logs"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-gratitude.js",
+          "exports": [
+            "logGratitude",
+            "analyzePatterns"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-gratitude.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:43:37.189Z",
+      "commit_sha": "012c59812923e1a0997b08c710956c4770474212",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-11",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-12",
+      "status": "skipped",
+      "target_file": "db/migrations/20261001_create_lifeos_product_tables.sql",
+      "task": "Create energy map table",
+      "spec": "Add energy_map_logs table to track energy levels and notes. Use CREATE TABLE IF NOT EXISTS.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "energy_logs"
+      ],
+      "last_attempt_at": "2026-07-16T07:04:48.930Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:energy_logs; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 6,
+      "revived_at": "2026-07-16T07:04:23.687Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:energy_logs; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T07:08:23.635Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-12",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-step1",
+      "status": "done",
+      "target_file": "services/lifeos-chat-intent-executor.js",
+      "task": "create new module",
+      "spec": "Export classifyIntent, executeIntent, and formatReply functions. Implement commitment, note, check_in, build_request intents handling.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "classifyIntent",
+        "executeIntent",
+        "formatReply"
+      ],
+      "file_contains": [
+        "services/lifeos-commitment-service.js",
+        "services/lifeos-note-capture-service.js"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-chat-intent-executor.js",
+          "exports": [
+            "classifyIntent",
+            "executeIntent",
+            "formatReply"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-chat-intent-executor.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "c16286b6e3433864d080beb06ecaedd4bfc30d26",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T06:16:24.613Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:25:28.698Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-step1",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-step3",
+      "status": "done",
+      "target_file": "services/lumin-chair-orchestrator.js",
+      "task": "patch runLuminChairTurn",
+      "spec": "Modify runLuminChairTurn to call executeIntent for 'life_admin' chair_channel and return formatted reply when an intent is executed, otherwise proceed normally.",
+      "depends_on": [
+        "lifeos-step1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "executeIntent",
+        "chair_channel"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "17d173dd267205491bb7b7a28209c0b63152151d",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T07:11:23.392Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T07:12:03.702Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-step3",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-step4",
+      "status": "skipped",
+      "target_file": "public/overlay/lifeos-app.html",
+      "task": "replace legacy ambient listener script",
+      "spec": "Replace /shared/lifeos-ambient-listener.js with /overlay/lifeos-ambient-listener.js and ensure thought-stream container creation and renderThoughtStream is called when necessary.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 1,
+      "file_contains": [
+        "lifeos-ambient-listener.js",
+        "thought-stream"
+      ],
+      "last_attempt_at": "2026-07-17T21:04:55.735Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 1465b is < 30% of existing 185633b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 9,
+      "revived_at": "2026-07-17T21:04:52.413Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_stub_detected: generated 1465b is < 30% of existing 185633b",
+      "demoted_at": "2026-07-17T21:06:57.536Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-step4",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-step5",
+      "status": "done",
+      "target_file": "public/overlay/lifeos-ambient-listener.js",
+      "task": "patch voice transcript handling",
+      "spec": "Ensure voice-transcribed text inserts into #lumin-input and asks for send confirmation for command/note/commitment-like input before simulating click on send button.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "#lumin-input",
+        "lumin-send"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "58e1321f3ed892027a637a2d8666b9b8a835714c",
+      "built_sha": null,
+      "proof": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T21:15:59.923Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-step5",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-step6",
+      "status": "done",
+      "target_file": "services/lifeos-commitment-service.js",
+      "task": "patch parseNaturalLanguage",
+      "spec": "Enhance parseNaturalLanguage to recognize phrases related to scheduling and enable query mode for commitments. Format results into a reply card.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "parseNaturalLanguage",
+        "getCommitments"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T07:13:08.880Z",
+      "commit_sha": "18f5c0aafca7b4a801bf705d99dc76b9b3cbc3ba",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-step6",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-step7",
+      "status": "done",
+      "target_file": "services/lifeos-communication-profile.js",
+      "task": "create communication profile UI",
+      "spec": "Create overlay card in lifeos-coach.html that displays user communication styles and effectiveness based on existing data in communication_profiles table.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "communication_profiles",
+        "lifeos-coach.html"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "aae5a09d823b89846963c71d3619b9c870fd2c6e",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-17T21:35:40.613Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T21:36:04.456Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-step7",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-step8",
+      "status": "done",
+      "target_file": "public/overlay/lifeos-voice-note-journal.html",
+      "task": "implement voice journaling feature",
+      "spec": "UI for voice journaling with a record button using Web Speech API. Transcribed text posted to /api/v1/lifeos/journal/voice and processed for AI extraction.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "Web Speech API",
+        "/api/v1/lifeos/journal/voice"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T21:20:20.595Z",
+      "commit_sha": "3afef6b726a37c8b32dd978c63bb2b5c0d2ecb0c",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-step8",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-step9",
+      "status": "blocked",
+      "target_file": "scripts/lifeos-scheduler.mjs",
+      "task": "add relationship maintenance reminders",
+      "spec": "Weekly scheduler check for contacts not connected with within 30 days and trigger overlay notifications using relationship_contacts data.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 1,
+      "file_contains": [
+        "relationship_contacts",
+        "overlay notification"
+      ],
+      "last_attempt_at": "2026-07-17T23:21:36.357Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 0b is < 30% of existing 5782b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 9,
+      "revived_at": "2026-07-17T23:20:21.917Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-step9",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-step10",
+      "status": "done",
+      "target_file": "services/lifeos-daily-checkin-service.js",
+      "task": "implement gratitude practice",
+      "spec": "Structured daily gratitude log. Store in gratitude_logs table, analyze pattern for joy score influence when gratitude is logged.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "gratitude_logs",
+        "joy score"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T07:17:08.367Z",
+      "commit_sha": "c13577f20ca8b59ab72b6825a49513be6b3923cb",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-step10",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-step11",
+      "status": "done",
+      "target_file": "db/migrations/20260424_create_sleep_tracking_tables.sql",
+      "task": "create sleep tracking tables",
+      "spec": "Create sleep_logs table with columns for bedtime, wake time, quality, dreams, and HRV. Extend health-intelligence connections.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS sleep_logs"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "a8ab3594deeece9c30197d15d423f122326906b6",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-17T17:34:42.808Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T17:34:51.711Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-step11",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-step12",
+      "status": "done",
+      "target_file": "services/lifeos-sleep.js",
+      "task": "implement sleep tracking module",
+      "spec": "Extend health-intelligence.js with functionality for bedtime, wake time, quality, dreams, and HRV correlation. Connect sleep data to daily scorecard.",
+      "depends_on": [
+        "lifeos-step11"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerSleepTracking"
+      ],
+      "file_contains": [
+        "bedtime",
+        "wake time",
+        "HRV"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-sleep.js",
+          "exports": [
+            "registerSleepTracking"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-sleep.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T17:38:11.199Z",
+      "commit_sha": "d93cea4b96b39cc44d83654f39e04d569bb43323",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-step12",
+      "mission_id": "PRODUCT-lifeos"
     }
   ],
-  "sentry_signature": "e13571a50ae90b27"
+  "updated_at": "2026-07-16",
+  "notes": "Adam 2026-07-14: LifeOS Perfect Day added to queue — plan, rate, flexible re-prioritization, ADD-style reminders. The factory must ship s11 (service) then s12 (route) then s13 (auto-register entry). s12 file_contains changed to a stable symbol check; s13 makes the route persist across deploys. | 2026-07-14: Adam — Command Center is not a separate product; its admin surface (builder runtime mode, phase14 cert, pending Adam) is folded into lifeos as lifeos-admin-* steps. The standalone command-center BUILD_QUEUE is deprecated and emptied. | 2026-07-15: lifeos-admin-1b migration deployed and builder_runtime_config.id is now text with sentinel row; lifeos-admin-3 (routes/command-center-mode-routes.js) is live and returning mode=run. GOVERNED_AUTONOMOUS_SHIP=1 is set on the live lumin-web service; the governed loop is expected to resume on the next deploy and continue the remaining BP_PRIORITY product queues.",
+  "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-lifeos",
+  "twin_kind": "product_build_queue_registered"
 }

@@ -7,7 +7,18 @@
 **Product id:** `socialmediaos` (module under MarketingOS)  
 **Constitutional law:** `docs/constitution/NORTH_STAR_SSOT.md`  
 **Machine manifest:** `docs/products/marketingos/socialmediaos/FILE_MANIFEST.json`  
-**Last Updated:** 2026-06-30 — session MVP machine path reached TECHNICAL_PASS; coaching/content generation hardened for low-cost execution
+**Last Updated:** 2026-07-17 — Content-pack checkout now mounts on the founder-builder runtime at `/api/v1/socialmediaos/*`; `owner_id` widened to `TEXT`; `platform` and `name` defaults added to schema writes; Stripe errors mapped to 503 so a missing/invalid key no longer causes 500.
+
+---
+
+## Platform creative doctrine
+
+| Platform | Status | Rule |
+|----------|--------|------|
+| **YouTube** | Implemented (intelligence path) | Niche playbook → search shelf → velocity/gap → researched title → face+title thumb → lead CTA. Outcome = reach-outs, not vanity views. Offer refresh/A-B/sequel on old uploads. |
+| **Instagram** | Next surface | Format-native best practices required — no YouTube paste. Carousel / mute-first / save-worthy. |
+| **TikTok** | Next surface | Format-native — hook in 1s, native audio, pattern interrupt. No YouTube paste. |
+| **LinkedIn** | Partial (session generate + carousel repurpose) | Format-native — professional insight density, carousel machine; no YouTube paste. |
 
 ---
 
@@ -17,6 +28,8 @@ SocialMediaOS is the **first shipped module** inside MarketingOS.
 
 Core loop: founder coaching session → transcript → story extraction → content pack → approval → export.
 
+**Market-ready gate (2026-07-15):** Priority A loop tip-proved — consent → coach → extract → generate (Gemini failover) → approve → download export. Live surface: `/marketing`.
+
 Platform phases (YouTubeOS, PodcastOS, CampaignOS) live in the parent [MarketingOS product home](../PRODUCT_HOME.md).
 
 ## Owned runtime (this module)
@@ -24,12 +37,11 @@ Platform phases (YouTubeOS, PodcastOS, CampaignOS) live in the parent [Marketing
 See `FILE_MANIFEST.json` in this folder.
 
 High-signal surfaces:
-- `/api/v1/socialmediaos/*` — intake scaffold (sessions, content packs)
-- `/api/v1/socialmediaos/coaching/*` — guided coaching session + content-pack generation loop
-- `/api/v1/lifere/marketing/socialmediaos/*` — LifeRE adapter bridge
-- `public/overlay/lifeos-lifere.html` — founder panel
-- `lifeos-app.html?stack=socialmediaos` — stack launcher
-- `public/overlay/socialmediaos-session.html` — session MVP overlay
+- **Live founder surface:** `/marketing` (dashboard + recent packs + YouTube talk cards)
+- **Session loop:** `/marketing/session/new` → `/marketing/session/:id` → `/content` → `/export`
+- **API:** `/api/v1/marketing/consent|sessions|…` plus public marketplace checkout at `/api/v1/socialmediaos/content-pack/{pricing,checkout,success,cancel}`
+- `public/overlay/marketing-*.html` — presentation overlays
+- `lifeos-app.html?stack=socialmediaos` — stack launcher (optional)
 
 ## Verification
 
@@ -147,6 +159,13 @@ Adjacent professionals (title, escrow, lenders, inspectors, interior designers) 
 
 | Date | Change | Why | State |
 |------|--------|-----|-------|
+| 2026-07-17 | **Market-ready home redesign** — Competitor research → one Start-session CTA, quiet Sign in/Tour/Calendar/Atoms/Studio, pack status cards, YouTube/film in Advanced. Tip `e9ead710f978`. Phase 1 text loop verify `ok:true` (consent→coach→extract→generate→approve→export). Named blockers: R2 audio, YT OAuth. | Adam: SMOS priority-1 market-ready; cutting-edge UX from Buffer/Later/Predis bar | ✅ tip home + Phase 1 text |
+| 2026-07-16 | **YouTube SMOS Intelligence (plan ship)** — Playbook → YouTube shelf velocity/gap → lead-ranked talk cards → face+title thumbs (compose first) → channel_ops (refresh/A-B/sequel for leads). Doctrine: YT implemented; IG/TikTok/LinkedIn format-native stubs. | Founder: relocation-first realtor intel, leads not views, beat shelf, improve old videos | ⚠️ tip eye-test |
+| 2026-07-15 | **Public client signup** — `/marketing/signup` + `registerPublicSmos`; paid export gate; ownership-scoped sessions | Strangers must be able to sign up and buy packs | ⚠️ tip prove |
 | 2026-06-29 | **Product vision brainstorm** — 45 platform feature ideas, earned attention framework, recording architecture, referral partner engine, EXP recruiting strategy, client terminology established | Session capture for BP writing | ✅ doc-only |
 | 2026-06-30 | **Session MVP machine path PASS** — coaching session start/answer/generate/export loop now reaches `TECHNICAL_PASS`; route mounted in runtime and acceptance artifacts synced | Proves the lower-cost BuilderOS lane can build this slice end-to-end | ✅ runtime |
 | 2026-06-30 | **Low-cost hardening** — provider fallback in route layer, deterministic content-pack fallback in generator layer, acceptance finalizer updated to current artifact contract | Prevents mission failure when live AI provider or spend gate is unavailable | ✅ runtime |
+|| 2026-07-17 | **Market-ready checkout on `main`** — `services/socialmediaos-service.js` adds `createContentPackCheckout`, `verifyContentPackCheckout`, `getContentPackPricing`; `routes/socialmediaos-routes.js` exposes public `GET /content-pack/pricing`, `POST /content-pack/checkout`, `GET /content-pack/success|cancel`; `public/overlay/marketing-for-you.html` becomes marketplace landing with **Buy Content Pack — $49** top-level Stripe redirect. | Founder: get SMOS marketplace-ready ASAP; `main` cannot merge `builderos-autonomous`, so port the surface directly. | ✅ tip after deploy |
+||| 2026-07-17 | **Founder-lane mount + anonymous owner support.** `startup/register-founder-runtime-routes.js` mounts `createSocialmediaosRoutes` at `/api/v1/socialmediaos` so the buy button works on Railway `founder_builder` profile. `db/migrations/20260717_socialmediaos_owner_id_text.sql` widens `socialmediaos_sessions.owner_id` and `socialmediaos_content_packs.owner_id` to `TEXT` so command-key fallback users can purchase without a UUID `sub`. `services/socialmediaos-service.js` validates pricing and Stripe config before writing session/pack rows. | Founder: `POST /api/v1/socialmediaos/content-pack/checkout` 500'd because `owner_id` was typed `UUID` and the command-key fallback passed the string `'emergency-key'`. | ✅ tip after deploy |
+||| 2026-07-17 | **Stripe checkout error handling.** `services/socialmediaos-service.js` wraps `stripe.checkout.sessions.create` and `retrieve` in try/catch and throws `stripe_checkout_failed` with status 503, so a misconfigured/invalid Stripe secret returns an honest structured error instead of a generic 500. | `POST /api/v1/socialmediaos/content-pack/checkout` returned 500 in production; the route needs to surface Stripe failures cleanly and a valid `STRIPE_SECRET_KEY` is required for `ok:true`. | ✅ after deploy |
+||| 2026-07-17 | **DB schema alignment for `createSession`/`createContentPack`.** `services/socialmediaos-service.js` now inserts the `platform` column for `socialmediaos_sessions` and the `name` column for `socialmediaos_content_packs`, supplying defaults (`web` and the SMOS pricing name) so the checkout flow no longer hits `null value in column "platform"` / `name` NOT-NULL errors. | `POST /api/v1/socialmediaos/content-pack/checkout` returned 500 with a Postgres NOT-NULL violation on `platform` after the Stripe/owner_id fixes; the code had drifted from the deployed schema. | ✅ after deploy |

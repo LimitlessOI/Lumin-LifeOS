@@ -56,10 +56,20 @@ export function createTCListingSkyslopeSync({ pool, coordinator, accountManager,
 
       push('transactiondesk_nav', { screenshots: gl.screenshots?.slice(-1) });
       const ensure = await tcBrowser.ensureOnTransactionDesk(tdSession);
-      push('transactiondesk_ready', { via: ensure.via, url: ensure.url });
+      push('transactiondesk_ready', { via: ensure.via, url: ensure.url, ok: ensure.ok !== false });
+      if (ensure.ok === false) {
+        throw new Error(ensure.error || `Not on TransactionDesk (${ensure.url})`);
+      }
 
-      push('transactiondesk_search', { token: search });
-      await tcBrowser.transactionDeskSearchAndOpenTransaction(tdSession, search);
+      push('transactiondesk_search', { token: search, transaction_desk_id: tx.transaction_desk_id || null });
+      if (tx.transaction_desk_id || search) {
+        await tcBrowser.openTransactionDeskFile(tdSession, {
+          transactionDeskId: tx.transaction_desk_id || null,
+          addressSearch: search || tx.address || null,
+        });
+      } else {
+        await tcBrowser.transactionDeskSearchAndOpenTransaction(tdSession, search);
+      }
       push('transactiondesk_file_open');
 
       if (dryRun) {

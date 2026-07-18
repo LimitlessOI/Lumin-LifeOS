@@ -1,0 +1,318 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "project-governance",
+  "planned_at": "2026-07-15T07:24:26.657Z",
+  "backlog_signature": "88efaf48f08d206a",
+  "corpus_sources": [
+    "docs/products/project-governance/PRODUCT_HOME.md",
+    "docs/products/project-governance/PRODUCT_HOME_TEMPLATE.md",
+    "docs/products/project-governance/READINESS_CHECKLIST.md"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "status": "done",
+      "target_file": "services/decisionDebt.js",
+      "task": "implement decision debt surface",
+      "spec": "This service provides an API to surface decision debt details for projects.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getDecisionDebt"
+      ],
+      "file_contains": [
+        "function getDecisionDebt(){",
+        "return {}"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/decisionDebt.js",
+          "exports": [
+            "getDecisionDebt"
+          ],
+          "assertion_id": "expected_exports:services/decisionDebt.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T07:31:21.494Z",
+      "commit_sha": "770d6a59dc4eb69c01a7aeefd42e127d0fddcd16",
+      "blueprint_id": "PRODUCT-PROJECT-GOVERNANCE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "1",
+      "mission_id": "PRODUCT-project-governance"
+    },
+    {
+      "id": "2",
+      "status": "done",
+      "target_file": "routes/projectDrawerDetail.js",
+      "task": "fix project drawer details",
+      "spec": "Correct the nested 'project' object handling in project drawer endpoint.",
+      "depends_on": [
+        "1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerProjectDrawerRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/project/drawer"
+      },
+      "file_contains": [
+        "project: {}"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/projectDrawerDetail.js",
+          "exports": [
+            "registerProjectDrawerRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/projectDrawerDetail.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T07:32:12.120Z",
+      "commit_sha": "7327899f11ec9689d49af1df270bd5b8619fa54f",
+      "blueprint_id": "PRODUCT-PROJECT-GOVERNANCE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "2",
+      "mission_id": "PRODUCT-project-governance"
+    },
+    {
+      "id": "3",
+      "status": "done",
+      "target_file": "db/migrations/20231025_add_competitors.sql",
+      "task": "add competitors table",
+      "spec": "Create table for storing competitor analysis details.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS competitors",
+        "id UUID DEFAULT gen_random_uuid() PRIMARY KEY"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "9a10b163b0d8f25576f59201ca80cc97bb3be0c6",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T09:41:07.620Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T09:41:31.296Z",
+      "blueprint_id": "PRODUCT-PROJECT-GOVERNANCE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "3",
+      "mission_id": "PRODUCT-project-governance"
+    },
+    {
+      "id": "4",
+      "status": "done",
+      "target_file": "services/competitorAnalysis.js",
+      "task": "implement competitor analysis service",
+      "spec": "This service handles analysis of competitors' data and provides insights.",
+      "depends_on": [
+        "3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "analyzeCompetitors"
+      ],
+      "file_contains": [
+        "function analyzeCompetitors(){",
+        "return []"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/competitorAnalysis.js",
+          "exports": [
+            "analyzeCompetitors"
+          ],
+          "assertion_id": "expected_exports:services/competitorAnalysis.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T09:46:13.059Z",
+      "commit_sha": "e08a218d4631f94a70040a24fd540a410749945a",
+      "blueprint_id": "PRODUCT-PROJECT-GOVERNANCE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "4",
+      "mission_id": "PRODUCT-project-governance"
+    },
+    {
+      "id": "5",
+      "status": "done",
+      "target_file": "routes/competitorInfo.js",
+      "task": "create competitor info route",
+      "spec": "API endpoint to fetch and display competitor information.",
+      "depends_on": [
+        "4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCompetitorRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/competitors"
+      },
+      "file_contains": [
+        "competitor: {}"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/competitorInfo.js",
+          "exports": [
+            "registerCompetitorRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/competitorInfo.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T09:51:00.001Z",
+      "commit_sha": "465094c3c96ffb6de402a445ba1e238e888ca3d6",
+      "blueprint_id": "PRODUCT-PROJECT-GOVERNANCE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "5",
+      "mission_id": "PRODUCT-project-governance"
+    },
+    {
+      "id": "6",
+      "status": "done",
+      "target_file": "services/innovationListener.js",
+      "task": "add innovation response mechanism",
+      "spec": "Listen and react to potential competitor innovations.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "checkCompetitorInnovation"
+      ],
+      "file_contains": [
+        "function checkCompetitorInnovation(){",
+        "return 'adapt'"
+      ],
+      "blueprint_id": "PRODUCT-PROJECT-GOVERNANCE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "6",
+      "mission_id": "PRODUCT-project-governance",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/innovationListener.js",
+          "exports": [
+            "checkCompetitorInnovation"
+          ],
+          "assertion_id": "expected_exports:services/innovationListener.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "b58c2580901ab900440855bae49455b881116d89",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-17T22:18:01.288Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T22:19:36.563Z"
+    },
+    {
+      "id": "7",
+      "status": "skipped",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register new routes",
+      "spec": "Ensure new route modules are auto-registered with the server app config.",
+      "depends_on": [
+        "2",
+        "5"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "\"projectDrawerDetail.js\"",
+        "\"competitorInfo.js\""
+      ],
+      "last_attempt_at": "2026-07-17T19:44:11.643Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:\"projectDrawerDetail.js\"; behavior_assertion: missing_substring:\"competitorInfo.js\"; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 6,
+      "revived_at": "2026-07-17T19:44:11.565Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:\"projectDrawerDetail.js\"; behavior_assertion: missing_substring:\"competitorInfo.js\"; behavi",
+      "demoted_at": "2026-07-17T21:45:27.598Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-PROJECT-GOVERNANCE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "7",
+      "mission_id": "PRODUCT-project-governance"
+    },
+    {
+      "id": "8",
+      "status": "done",
+      "target_file": "services/riskAssessment.js",
+      "task": "implement risk assessment",
+      "spec": "This module assesses and categorizes risks related to project-governance.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "assessRisk"
+      ],
+      "file_contains": [
+        "function assessRisk(){",
+        "return 'monitor'"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/riskAssessment.js",
+          "exports": [
+            "assessRisk"
+          ],
+          "assertion_id": "expected_exports:services/riskAssessment.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T07:33:52.722Z",
+      "commit_sha": "71411dd53f005e12debd0918d63330d01dc3084e",
+      "blueprint_id": "PRODUCT-PROJECT-GOVERNANCE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "8",
+      "mission_id": "PRODUCT-project-governance"
+    }
+  ],
+  "blueprint_id": "PRODUCT-PROJECT-GOVERNANCE-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-project-governance",
+  "twin_kind": "product_build_queue_registered"
+}

@@ -31,7 +31,8 @@ const SOURCE_EXT = /\.(js|mjs|ts)$/;
 export const DEBT_KINDS = new Set(['missing-ssot', 'amendment-first-ssot']);
 
 export function extractSsotTag(content) {
-  const match = String(content).match(/@ssot\s+([^\s*\n]+)/);
+  // Match @ssot tags inside JSDoc-style comment lines to avoid catching prose like "for @ssot tags".
+  const match = String(content).match(/^\s*\*\s*@ssot\s+([^\s*\n]+)/m);
   return match ? match[1].trim() : null;
 }
 

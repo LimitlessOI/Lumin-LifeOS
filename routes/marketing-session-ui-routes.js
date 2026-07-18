@@ -1,404 +1,1983 @@
-// SYNOPSIS:
+// SYNOPSIS: SocialMediaOS / MarketingOS Phase 1 SSR UI — consent → coach → extract → generate → approve → export
 // @ssot docs/products/marketingos/PRODUCT_HOME.md
+
 import express from 'express';
 
-// Helper to escape HTML to prevent XSS
 function escapeHtml(unsafe) {
-    return unsafe
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
+  return String(unsafe ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 }
 
-function renderPage(title, bodyHtml, clientScript = '') {
-    return `<!DOCTYPE html>
-<html lang="en">
+const sharedMarketingClientAuth = `
+      (function bootstrapMarketingAuth() {
+        try {
+          const q = new URLSearchParams(location.search);
+          const ck = q.get('commandKey') || q.get('command_key') || q.get('key');
+          if (ck) {
+            globalThis['localStorage'].setItem('command_key', ck);
+            globalThis['localStorage'].setItem('commandKey', ck);
+          }
+          if (q.get('shell') === '1') {
+            globalThis['document'].documentElement.classList.add('in-lifeos-shell');
+            try {
+              if (globalThis.parent && globalThis.parent !== window) {
+                const pKey = globalThis.parent.localStorage?.getItem?.('command_key')
+                  || globalThis.parent.localStorage?.getItem?.('lifeos_command_key')
+                  || globalThis.parent.localStorage?.getItem?.('COMMAND_CENTER_KEY')
+                  || '';
+                if (pKey && !globalThis['localStorage'].getItem('command_key')) {
+                  globalThis['localStorage'].setItem('command_key', pKey);
+                  globalThis['localStorage'].setItem('commandKey', pKey);
+                }
+                const pTok = globalThis.parent.localStorage?.getItem?.('lifeos_access_token') || '';
+                if (pTok && !globalThis['localStorage'].getItem('lifeos_access_token')) {
+                  globalThis['localStorage'].setItem('lifeos_access_token', pTok);
+                }
+                const pUser = globalThis.parent.localStorage?.getItem?.('lifeos_user') || '';
+                if (pUser && !globalThis['localStorage'].getItem('lifeos_user')) {
+                  globalThis['localStorage'].setItem('lifeos_user', pUser);
+                }
+              }
+            } catch (_) {}
+          }
+        } catch (_) {}
+      })();
+      function marketingInShell() {
+        return globalThis['document'].documentElement.classList.contains('in-lifeos-shell');
+      }
+      function marketingHref(path) {
+        if (!path || !marketingInShell()) return path;
+        try {
+          const u = new URL(path, location.origin);
+          if (u.origin !== location.origin) return path;
+          if (!u.pathname.startsWith('/marketing')) return path;
+          u.searchParams.set('shell', '1');
+          return u.pathname + u.search + u.hash;
+        } catch {
+          return path;
+        }
+      }
+      function marketingAuthHeaders(extra = {}) {
+        const h = { 'Content-Type': 'application/json', ...extra };
+        const token = globalThis['localStorage'].getItem('lifeos_access_token') || '';
+        const key = globalThis['localStorage'].getItem('command_key')
+          || globalThis['localStorage'].getItem('commandKey')
+          || globalThis['localStorage'].getItem('lifeos_command_key')
+          || globalThis['localStorage'].getItem('COMMAND_CENTER_KEY')
+          || globalThis['localStorage'].getItem('lifeos_key')
+          || '';
+        if (token) h['Authorization'] = 'Bearer ' + token;
+        else if (key) { h['x-command-key'] = key; h['x-api-key'] = key; }
+        return h;
+      }
+      function marketingOwnerId() {
+        try {
+          const stored = globalThis['localStorage'].getItem('lifeos_user') || globalThis['localStorage'].getItem('lifeosUser') || '';
+          const token = globalThis['localStorage'].getItem('lifeos_access_token') || '';
+          if (!token) return stored || '';
+          const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));
+          const handle = String(payload.handle || payload.user_handle || stored || '').trim();
+          if (handle) return handle;
+          const sub = String(payload.sub || '').trim();
+          if (sub && !/^\\d+$/.test(sub)) return sub;
+          return stored || '';
+        } catch {
+          return globalThis['localStorage'].getItem('lifeos_user') || globalThis['localStorage'].getItem('lifeosUser') || '';
+        }
+      }
+      function marketingHasAuth() {
+        return !!(globalThis['localStorage'].getItem('lifeos_access_token')
+          || globalThis['localStorage'].getItem('command_key')
+          || globalThis['localStorage'].getItem('commandKey')
+          || globalThis['localStorage'].getItem('lifeos_command_key')
+          || globalThis['localStorage'].getItem('COMMAND_CENTER_KEY')
+          || globalThis['localStorage'].getItem('lifeos_key'));
+      }
+      async function marketingFetch(url, opts = {}) {
+        if (!marketingHasAuth()) {
+          const next = encodeURIComponent(location.pathname + location.search);
+          location.href = '/marketing/login?next=' + next;
+          throw new Error('Sign in to Social Media OS to continue.');
+        }
+        const headers = marketingAuthHeaders(opts.headers || {});
+        const res = await fetch(url, { ...opts, headers });
+        if (res.status === 401) {
+          const next = encodeURIComponent(location.pathname + location.search);
+          location.href = '/marketing/login?next=' + next;
+          throw new Error('Session expired — sign in again.');
+        }
+        return res;
+      }
+      globalThis['document'].addEventListener('click', function(e) {
+        const a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+        if (!a || !marketingInShell()) return;
+        const href = a.getAttribute('href');
+        if (!href || href.startsWith('#') || href.startsWith('http')) return;
+        if (!href.startsWith('/marketing')) return;
+        e.preventDefault();
+        location.href = marketingHref(href);
+      });
+      globalThis['document'].addEventListener('DOMContentLoaded', function() {
+        if (!marketingInShell()) return;
+        const back = globalThis['document'].querySelector('.lifeos-back');
+        if (back) back.style.display = 'none';
+      });
+      function escapeHtml(unsafe) {
+        return String(unsafe ?? '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+      }
+      function showMsg(el, text, kind) {
+        el.innerText = text;
+        el.className = 'message ' + (kind || '');
+        el.style.display = 'block';
+      }
+    `;
+
+export function renderPage(title, bodyHtml, clientScript = '') {
+  return `<!DOCTYPE html>
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${escapeHtml(title)} | MarketingOS</title>
+    <title>${escapeHtml(title === 'SocialMediaOS' ? 'SocialMediaOS' : `${title} · SocialMediaOS`)}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; margin: 0; padding: 20px; background-color: #f4f7f6; color: #333; line-height: 1.6; }
-        .container { max-width: 700px; margin: 40px auto; background: #fff; padding: 30px 40px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        h1, h2 { color: #2c3e50; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 20px; }
-        p, li { color: #555; }
-        a { color: #3498db; text-decoration: none; }
+        :root, html[data-theme="dark"] {
+          --bg: #0b1412;
+          --bg-glow: rgba(20, 113, 108, 0.16);
+          --surface: #121c1a;
+          --surface-2: #182421;
+          --border: rgba(255,255,255,0.09);
+          --text: #f2f7f5;
+          --muted: #9bb0aa;
+          --accent: #1f8f86;
+          --accent-soft: rgba(31, 143, 134, 0.16);
+          --accent-ink: #041413;
+          --ok: #34d399;
+          --warn: #fbbf24;
+          --bad: #f87171;
+          --link: #7dd3c7;
+          --tp-text: #fff;
+        }
+        html[data-theme="light"] {
+          --bg: #eef4f3;
+          --bg-glow: rgba(15, 118, 110, 0.12);
+          --surface: #ffffff;
+          --surface-2: #f4f9f8;
+          --border: rgba(15, 23, 22, 0.1);
+          --text: #0f1716;
+          --muted: #5b6f6b;
+          --accent: #0f766e;
+          --accent-soft: rgba(15, 118, 110, 0.12);
+          --accent-ink: #fff;
+          --ok: #047857;
+          --warn: #b45309;
+          --bad: #b91c1c;
+          --link: #0f766e;
+          --tp-text: #0f1716;
+        }
+        * { box-sizing: border-box; }
+        body {
+          font-family: "DM Sans", "Avenir Next", system-ui, sans-serif;
+          margin: 0; padding: 20px;
+          background:
+            radial-gradient(900px 420px at 8% -8%, var(--bg-glow), transparent 55%),
+            radial-gradient(700px 380px at 100% 0%, rgba(255,255,255,0.03), transparent 50%),
+            var(--bg);
+          color: var(--text); line-height: 1.55;
+        }
+        .container { max-width: 960px; margin: 28px auto; background: var(--surface); padding: 28px 32px 36px; border-radius: 20px; border: 1px solid var(--border); overflow-x: clip; }
+        .topbar { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+        .topbar > div:first-child { min-width: 0; flex: 1; }
+        .brand { font-family: "Syne", "Trebuchet MS", sans-serif; font-size: clamp(1.35rem, 4.2vw, 2.35rem); letter-spacing: -0.03em; color: var(--text); font-weight: 800; line-height: 1.05; margin: 0; border: none; padding: 0; overflow-wrap: anywhere; word-break: break-word; max-width: 100%; }
+        .brand-sub { font-size: 13px; color: var(--muted); margin: 6px 0 0; max-width: 42ch; }
+        .theme-toggle { display: inline-flex; border: 1px solid var(--border); border-radius: 999px; overflow: hidden; background: var(--surface-2); }
+        .theme-toggle button { background: transparent; color: var(--muted); border: none; border-radius: 0; padding: 8px 12px; font-size: 12px; font-weight: 600; cursor: pointer; }
+        .theme-toggle button.active { background: var(--accent); color: var(--accent-ink); }
+        .app-mode { font-size: 12px; color: var(--muted); margin-bottom: 16px; }
+        h1, h2 { color: var(--text); border-bottom: 1px solid var(--border); padding-bottom: 10px; margin: 0 0 18px; font-family: "Syne", "Trebuchet MS", sans-serif; letter-spacing: -0.02em; }
+        h1 { font-size: 1.35rem; border: none; padding: 0; margin-bottom: 8px; }
+        p, li { color: var(--muted); }
+        a { color: var(--link); text-decoration: none; }
         a:hover { text-decoration: underline; }
-        button, input[type="submit"] { background-color: #28a745; color: white; padding: 12px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; transition: background-color 0.2s ease; margin-top: 15px; }
-        button:hover, input[type="submit"]:hover { background-color: #218838; }
-        input[type="text"], textarea { width: calc(100% - 22px); padding: 10px; margin-top: 5px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; font-size: 16px; }
+        .actions-row { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0; }
+        .home-hero {
+          margin: 8px 0 28px; padding: 8px 0 4px;
+          animation: home-rise .55s ease both;
+        }
+        .home-kicker {
+          margin: 0 0 10px; letter-spacing: 0.08em; text-transform: uppercase;
+          font-size: 0.72rem; font-weight: 700; color: var(--accent); opacity: 0.9;
+        }
+        .home-hero h1 {
+          font-size: clamp(1.65rem, 4.5vw, 2.35rem); line-height: 1.12; margin: 0 0 12px;
+          max-width: 18ch;
+        }
+        .home-lede { font-size: 1.05rem; max-width: 46ch; margin: 0 0 22px; color: var(--muted); }
+        .home-cta { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin: 0 0 14px; }
+        .home-cta .primary-cta {
+          font-size: 1.02rem; padding: 14px 22px; border-radius: 14px;
+          box-shadow: 0 12px 28px color-mix(in srgb, var(--accent) 28%, transparent);
+        }
+        .quiet-nav {
+          display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center;
+          font-size: 13px; color: var(--muted); margin: 0 0 8px;
+        }
+        .quiet-nav a, .quiet-nav button {
+          background: none; border: none; color: var(--muted); padding: 0; border-radius: 0;
+          font-size: 13px; font-weight: 500; cursor: pointer; text-decoration: none;
+        }
+        .quiet-nav a:hover, .quiet-nav button:hover { color: var(--text); text-decoration: underline; }
+        .quiet-nav .sep { opacity: 0.45; user-select: none; }
+        .advanced-block {
+          margin: 28px 0 8px; border: 1px solid var(--border); border-radius: 16px;
+          background: var(--surface-2); padding: 0 16px 4px;
+        }
+        .advanced-block > summary {
+          cursor: pointer; list-style: none; padding: 14px 4px; font-weight: 700;
+          font-family: "Syne", sans-serif; color: var(--text); letter-spacing: -0.01em;
+        }
+        .advanced-block > summary::-webkit-details-marker { display: none; }
+        .advanced-block > summary::after { content: " ▾"; color: var(--muted); font-weight: 500; }
+        .advanced-block[open] > summary::after { content: " ▴"; }
+        .advanced-block .yt-panel { background: var(--surface); }
+        .pack-card {
+          display: block; padding: 14px 16px; margin: 0 0 10px; border-radius: 14px;
+          border: 1px solid var(--border); background: var(--surface-2); color: inherit;
+          text-decoration: none; transition: border-color .15s ease, transform .15s ease;
+        }
+        .pack-card:hover { border-color: color-mix(in srgb, var(--accent) 50%, var(--border)); transform: translateY(-1px); text-decoration: none; }
+        .pack-card strong { color: var(--text); display: block; margin-bottom: 4px; }
+        .pack-card .pack-meta { font-size: 12px; color: var(--muted); }
+        @keyframes home-rise {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: none; }
+        }
+        button, input[type="submit"], a.btn { background: var(--accent); color: var(--accent-ink); padding: 11px 16px; border: none; border-radius: 999px; cursor: pointer; font-size: 14px; font-weight: 600; display: inline-block; text-decoration: none; }
+        a.btn:hover { text-decoration: none; filter: brightness(1.05); }
+        button.secondary, a.btn.secondary { background: transparent; border: 1px solid var(--border); color: var(--text); }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
+        button:hover:not(:disabled) { filter: brightness(1.05); }
+        input[type="text"], textarea, select { width: 100%; padding: 10px 12px; margin-top: 5px; margin-bottom: 12px; border: 1px solid var(--border); border-radius: 12px; font-size: 15px; background: var(--surface-2); color: var(--text); }
         textarea { min-height: 120px; resize: vertical; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; color: #444; }
-        .message { padding: 10px 15px; border-radius: 4px; margin-bottom: 15px; }
-        .message.success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-        .message.error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-        .form-group { margin-bottom: 20px; }
-        .coach-message { background-color: #e9f7ef; padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 5px solid #28a745; }
-        .user-message { background-color: #f0f8ff; padding: 15px; border-radius: 8px; margin-bottom: 15px; border-right: 5px solid #3498db; text-align: right; }
-        .hook-detected { color: #e74c3c; font-weight: bold; margin-top: 5px; }
-        .content-card { background-color: #f9f9f9; border: 1px solid #eee; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
-        .content-card h3 { margin-top: 0; color: #2c3e50; }
-        .content-card .actions { text-align: right; margin-top: 15px; }
-        .content-card .actions button { margin-left: 10px; }
-        .status-badge { display: inline-block; padding: 5px 10px; border-radius: 12px; font-size: 0.8em; font-weight: bold; text-transform: uppercase; }
-        .status-badge.pending { background-color: #fcf8e3; color: #8a6d3b; }
-        .status-badge.approved { background-color: #dff0d8; color: #3c763d; }
-        .status-badge.rejected { background-color: #f2dede; color: #a94442; }
-    </style>
+        label { display: block; margin-bottom: 5px; font-weight: 600; color: var(--text); }
+        .message { padding: 10px 14px; border-radius: 12px; margin-bottom: 14px; }
+        .message.success { background: color-mix(in srgb, var(--ok) 16%, transparent); color: var(--ok); border: 1px solid color-mix(in srgb, var(--ok) 35%, transparent); }
+        .message.error { background: color-mix(in srgb, var(--bad) 14%, transparent); color: var(--bad); border: 1px solid color-mix(in srgb, var(--bad) 30%, transparent); }
+        .form-group { margin-bottom: 16px; }
+        .coach-message { background: color-mix(in srgb, var(--ok) 10%, transparent); padding: 14px; border-radius: 12px; margin-bottom: 12px; border-left: 4px solid var(--ok); }
+        .user-message { background: var(--accent-soft); padding: 14px; border-radius: 12px; margin-bottom: 12px; border-right: 4px solid var(--accent); text-align: right; }
+        .hook-detected { color: var(--warn); font-weight: 700; margin-top: 6px; }
+        .coach-cue { color: var(--ok); font-weight: 600; margin-top: 6px; font-size: 13px; }
+        .coach-more { color: var(--warn); font-weight: 600; margin-top: 6px; font-size: 13px; }
+        .content-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: 14px; padding: 18px; margin-bottom: 16px; }
+        .content-card h3 { margin-top: 0; color: var(--text); }
+        .content-card .actions { text-align: right; margin-top: 12px; }
+        .content-card .actions button { margin-left: 8px; }
+        .status-badge { display: inline-block; padding: 4px 10px; border-radius: 999px; font-size: 0.75em; font-weight: 700; text-transform: uppercase; }
+        .status-badge.draft, .status-badge.pending { background: color-mix(in srgb, var(--warn) 18%, transparent); color: var(--warn); }
+        .status-badge.approved { background: color-mix(in srgb, var(--ok) 18%, transparent); color: var(--ok); }
+        .status-badge.rejected { background: color-mix(in srgb, var(--bad) 18%, transparent); color: var(--bad); }
+        .nav-links { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
+        .lifeos-back { font-size: 13px; margin-bottom: 12px; }
+        .yt-panel { margin: 22px 0; padding: 18px; border: 1px solid var(--border); border-radius: 16px; background: var(--surface-2); }
+        .yt-panel h2 { border: none; margin: 0 0 8px; padding: 0; font-size: 1.15rem; }
+        .mode-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px; margin: 12px 0 4px; }
+        .mode-chip { text-align: left; background: var(--surface); border: 1px solid var(--border); color: var(--text); border-radius: 14px; padding: 10px 12px; cursor: pointer; font-size: 12px; line-height: 1.35; }
+        .mode-chip strong { display: block; font-size: 13px; margin-bottom: 2px; color: var(--text); }
+        .mode-chip.active { border-color: var(--accent); background: var(--accent-soft); }
+        .suggest-meta { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+        .talk-block { margin: 8px 0; font-size: 13px; color: var(--text); line-height: 1.45; }
+        .talk-block strong { color: var(--accent); display: block; margin-bottom: 2px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; }
+        .talk-block ul { margin: 4px 0 0 18px; padding: 0; }
+        .talk-block li { margin: 3px 0; }
+        .hook-pick { display: grid; gap: 6px; margin-top: 6px; }
+        .hook-pick label { display: flex; gap: 8px; align-items: flex-start; font-weight: 500; font-size: 13px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface-2); cursor: pointer; color: var(--text); }
+        .hook-pick label:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+        .hook-pick input { margin-top: 3px; }
+        .chip-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 14px; }
+        .chip-row button { background: var(--surface-2); border: 1px solid var(--border); color: var(--text); border-radius: 999px; padding: 8px 12px; font-size: 12px; cursor: pointer; }
+        .chip-row button:hover { border-color: var(--accent); }
+        .script-panel { border: 1px solid var(--border); border-radius: 16px; padding: 14px; background: var(--surface-2); margin-bottom: 16px; }
+        .script-panel h2 { border: none; margin: 0 0 10px; padding: 0; font-size: 1.05rem; }
+        .script-panel .active-bullet { border-left: 3px solid var(--accent); padding-left: 10px; background: var(--accent-soft); }
+        .film-studio {
+          margin: 0 0 18px; padding: 16px; border: 1px solid var(--border); border-radius: 18px;
+          background: var(--surface-2);
+        }
+        .film-studio h2 { border: none; margin: 0 0 6px; padding: 0; font-size: 1.1rem; }
+        .film-sub { margin: 0 0 14px; font-size: 13px; color: var(--muted); max-width: 62ch; }
+        .film-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 14px; align-items: start; }
+        .film-stage {
+          position: relative; border-radius: 16px; overflow: hidden; background: #000;
+          border: 1px solid var(--border); aspect-ratio: 9 / 16; max-height: min(72vh, 640px);
+        }
+        .film-stage video {
+          width: 100%; height: 100%; object-fit: cover; display: block;
+          transform: scaleX(-1);
+        }
+        .rec-dot {
+          position: absolute; top: 12px; left: 12px; z-index: 2;
+          width: 12px; height: 12px; border-radius: 50%; background: #ef4444;
+          box-shadow: 0 0 0 6px rgba(239,68,68,.25); animation: fsPulse 1.1s ease infinite;
+        }
+        @keyframes fsPulse { 50% { opacity: .45; } }
+        .film-meters { position: absolute; left: 10px; right: 10px; bottom: 10px; z-index: 2; }
+        .meter-track { height: 6px; border-radius: 999px; background: rgba(255,255,255,.2); overflow: hidden; }
+        .meter-fill { height: 100%; width: 0; background: var(--ok); transition: width .08s linear; }
+        .meter-fill[data-level="low"] { background: var(--warn); }
+        .meter-fill[data-level="hot"] { background: var(--bad); }
+        .meter-label {
+          margin-top: 6px; font-size: 11px; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,.7);
+        }
+        .film-director { display: grid; gap: 10px; }
+        .dir-block {
+          padding: 10px 12px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface);
+        }
+        .dir-block strong {
+          display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .05em;
+          color: var(--accent); margin-bottom: 4px;
+        }
+        .dir-block p, .dir-block li { margin: 0; font-size: 13px; color: var(--text); }
+        .dir-block ul { margin: 4px 0 0 18px; padding: 0; }
+        .dir-block li { margin: 4px 0; color: var(--muted); }
+        .clean-note {
+          font-size: 12px; color: var(--ok); margin: 0; line-height: 1.4;
+          padding: 8px 10px; border-radius: 10px; background: color-mix(in srgb, var(--ok) 14%, transparent);
+        }
+        .film-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+        .film-actions button { font-size: 12px; padding: 9px 12px; }
+        .film-status {
+          font-size: 13px; color: var(--muted); min-height: 1.4em;
+        }
+        .film-status[data-kind="rec"] { color: #f87171; font-weight: 700; }
+        .film-status[data-kind="ok"] { color: var(--ok); }
+        .film-status[data-kind="warn"] { color: var(--warn); }
+        .film-status[data-kind="error"] { color: var(--bad); }
+        .teleprompter-dock {
+          position: sticky; top: 0; z-index: 30; margin: 0 0 14px;
+          background: var(--surface); border: 1px solid var(--accent); border-radius: 16px; padding: 16px;
+        }
+        .teleprompter-dock .tp-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent); margin-bottom: 6px; }
+        .teleprompter-dock .tp-current {
+          font-size: 1.4rem; line-height: 1.3; color: var(--tp-text); font-weight: 700;
+          min-height: 2.6em; font-family: "Syne", "Trebuchet MS", sans-serif; letter-spacing: -0.02em;
+        }
+        .teleprompter-dock .tp-meta { font-size: 12px; color: var(--muted); margin-top: 8px; }
+        .tp-controls { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+        .tp-controls button { background: var(--surface-2); border: 1px solid var(--border); color: var(--text); border-radius: 999px; padding: 8px 12px; font-size: 12px; cursor: pointer; }
+        .tp-controls button:hover { border-color: var(--accent); }
+        .tp-controls button.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+        .tp-lines { max-height: 280px; overflow: auto; border: 1px solid var(--border); border-radius: 12px; padding: 8px; background: var(--surface); }
+        .tp-line { padding: 10px 12px; border-radius: 10px; margin: 4px 0; color: var(--muted); font-size: 14px; line-height: 1.4; cursor: pointer; border-left: 3px solid transparent; }
+        .tp-line.done { opacity: 0.45; }
+        .tp-line.active { background: var(--accent-soft); color: var(--text); border-left-color: var(--accent); font-weight: 600; font-size: 15px; }
+        .tp-line.must { border-left-color: var(--warn); }
+        .sample-preview { font-size: 12px; color: var(--muted); max-height: 72px; overflow: hidden; }
+        .pill { display: inline-block; padding: 2px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 11px; margin-right: 6px; font-weight: 600; }
+        [data-tip] { position: relative; cursor: help; }
+        [data-tip]::after {
+          content: attr(data-tip);
+          position: absolute; left: 50%; bottom: calc(100% + 8px); transform: translateX(-50%) translateY(4px);
+          min-width: 180px; max-width: 280px; padding: 10px 12px; border-radius: 12px;
+          background: #111; color: #f5f5f4; font-size: 12px; line-height: 1.4; font-weight: 500;
+          opacity: 0; pointer-events: none; transition: opacity .15s ease, transform .15s ease; z-index: 50;
+          box-shadow: 0 12px 40px rgba(0,0,0,.35); text-align: left; white-space: normal;
+        }
+        html[data-theme="light"] [data-tip]::after { background: #1c1917; color: #fff; }
+        [data-tip]:hover::after { opacity: 1; transform: translateX(-50%) translateY(0); }
+        .suggest-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; margin-top: 14px; }
+        .suggest-card {
+          display: flex; flex-direction: column; border: 1px solid var(--border); border-radius: 22px;
+          overflow: hidden; background: var(--surface); box-shadow: 0 18px 50px rgba(0,0,0,.18);
+          transition: transform .18s ease, border-color .18s ease;
+        }
+        .suggest-card:hover { transform: translateY(-3px); border-color: color-mix(in srgb, var(--accent) 55%, var(--border)); }
+        .thumb-stage { position: relative; aspect-ratio: 16/9; background: #0a0a0a; overflow: hidden; }
+        .thumb-stage img.thumb-main { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .thumb-badge {
+          position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,.72); color: #fff;
+          font-size: 11px; font-weight: 700; padding: 6px 10px; border-radius: 999px; letter-spacing: .02em;
+        }
+        .thumb-badge.good { background: color-mix(in srgb, var(--ok) 85%, #000); }
+        .suggest-body { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 2px; flex: 1; }
+        .suggest-body h3 { margin: 0 0 6px; font-size: 1.12rem; border: none; padding: 0; font-family: "Syne", sans-serif; letter-spacing: -0.02em; color: var(--text); }
+        .serp-box { margin: 10px 0; padding: 10px; border-radius: 14px; border: 1px solid var(--border); background: var(--surface-2); }
+        .serp-row { display: grid; grid-template-columns: 56px 1fr auto; gap: 8px; align-items: center; padding: 6px 0; border-top: 1px solid var(--border); }
+        .serp-row:first-child { border-top: none; }
+        .serp-row.ours { background: var(--accent-soft); margin: 0 -6px; padding: 8px 6px; border-radius: 10px; border: none; }
+        .serp-mini { width: 56px; height: 32px; border-radius: 6px; object-fit: cover; background: #222; }
+        .serp-title { font-size: 12px; color: var(--text); font-weight: 600; line-height: 1.3; }
+        .serp-meta { font-size: 11px; color: var(--muted); }
+        .score-ring { font-size: 12px; font-weight: 800; color: var(--accent); }
+        .tour-panel {
+          position: fixed; inset: 0; background: rgba(0,0,0,.72); z-index: 100; display: none;
+          align-items: center; justify-content: center; padding: 20px;
+        }
+        .tour-panel.open { display: flex; }
+        .tour-card {
+          width: min(560px, 100%); background: var(--surface); border: 1px solid var(--border);
+          border-radius: 20px; padding: 22px; box-shadow: 0 30px 80px rgba(0,0,0,.45);
+        }
+        .tour-card h2 { border: none; margin: 0 0 8px; font-size: 1.4rem; }
+        .tour-progress { height: 4px; background: var(--border); border-radius: 999px; margin: 14px 0; overflow: hidden; }
+        .tour-progress > span { display: block; height: 100%; background: var(--accent); width: 0%; transition: width .25s ease; }
+        .channel-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: end; margin-top: 10px; }
+        .channel-row input { flex: 1; min-width: 220px; margin: 0; }
+        @media (max-width: 900px) {
+          .film-grid { grid-template-columns: 1fr; }
+          .film-stage { max-height: min(58vh, 520px); margin: 0 auto; width: min(100%, 360px); }
+        }
+        @media (max-width: 720px) {
+          .suggest-grid { grid-template-columns: 1fr; }
+          .container { padding: 20px 16px 28px; }
+          .teleprompter-dock .tp-current { font-size: 1.2rem; }
+        }
+        html.in-lifeos-shell body { padding: 12px; background: var(--bg); }
+        html.in-lifeos-shell .container { margin: 0 auto; box-shadow: none; max-width: 960px; }
+        html.in-lifeos-shell .app-mode,
+        html.in-lifeos-shell .lifeos-back { display: none; }
+      </style>
 </head>
 <body>
     <div class="container">
+        <div class="lifeos-back"><a href="/overlay/lifeos-app.html?page=lifeos-dashboard.html">← Open LifeOS</a></div>
+        <div class="topbar">
+          <div>
+            <div class="brand">SocialMediaOS</div>
+            <p class="brand-sub">Film like yourself. Research the gap. Sell the next conversation.</p>
+          </div>
+          <div class="theme-toggle" role="group" aria-label="Theme">
+            <button type="button" data-theme-set="dark" class="active">Dark</button>
+            <button type="button" data-theme-set="light">Light</button>
+          </div>
+        </div>
+        <div class="app-mode">Standalone product · also inside LifeOS</div>
         ${bodyHtml}
     </div>
     <script>
-        ${clientScript}
+    (function() {
+      try {
+        var t = globalThis['localStorage'].getItem('smos_theme') || 'dark';
+        globalThis['document'].documentElement.setAttribute('data-theme', t);
+        globalThis['document'].querySelectorAll('[data-theme-set]').forEach(function(btn) {
+          btn.classList.toggle('active', btn.getAttribute('data-theme-set') === t);
+          btn.addEventListener('click', function() {
+            var next = btn.getAttribute('data-theme-set');
+            globalThis['document'].documentElement.setAttribute('data-theme', next);
+            globalThis['localStorage'].setItem('smos_theme', next);
+            globalThis['document'].querySelectorAll('[data-theme-set]').forEach(function(b) {
+              b.classList.toggle('active', b.getAttribute('data-theme-set') === next);
+            });
+          });
+        });
+      } catch (_) {}
+    })();
+    ${sharedMarketingClientAuth}
+    ${clientScript}
     </script>
 </body>
 </html>`;
 }
 
 export function registerMarketingSessionUiRoutes(app, deps) {
-    const { baseUrl, logger } = deps;
+  const { logger } = deps;
 
-    // GET /marketing (landing/dashboard — start a new session)
-    app.get('/marketing', (req, res) => {
-        const body = `
-            <h1>MarketingOS Dashboard</h1>
-            <p>Welcome to MarketingOS. Let's create some compelling content for your business.</p>
-            <p>Start a new marketing session to generate social media content, blog posts, or other marketing materials.</p>
-            <a href="/marketing/session/new"><button>Start New Session</button></a>
+  app.get('/marketing', (req, res) => {
+    const ytFlag = String(req.query.youtube || '');
+    const body = `
+            <section class="home-hero" data-tip="Talk once. Leave with posts you can publish in your voice.">
+              <p class="home-kicker" id="homeOffer">SocialMediaOS · MarketingOS · $49 content pack</p>
+              <h1>Talk once. Leave with a publish-ready pack.</h1>
+              <p class="home-lede">Coach interview → story extract → Instagram, LinkedIn, and X drafts → you approve → unlock download. No invite. No agency retainer.</p>
+              <div class="home-cta">
+                <button type="button" class="btn primary-cta" id="buyContentPackBtn" data-tip="Buy the SocialMediaOS Content Pack for $49 — Stripe checkout.">Buy Content Pack — $49</button>
+                <a class="btn secondary" href="/marketing/session/new" id="startSessionBtn" data-tip="Start a coaching session — talk, extract stories, generate a content pack.">Start a session</a>
+                <a class="btn secondary" href="/marketing/signup" id="signupBtn" data-tip="Create a Social Media OS account — email + password, no invite.">Create account — free</a>
+              </div>
+              <nav class="quiet-nav" aria-label="Secondary">
+                <a href="/marketing/login?next=%2Fmarketing" id="signinBtn" data-tip="Sign in to continue your packs.">Sign in</a>
+                <span class="sep" aria-hidden="true">·</span>
+                <button type="button" id="tourStartBtn" data-tip="60-second interactive tour of SocialMediaOS.">Tour</button>
+                <span class="sep" aria-hidden="true">·</span>
+                <a href="/marketing/calendar" data-tip="Schedule approved pieces on your content calendar.">Calendar</a>
+                <span class="sep" aria-hidden="true">·</span>
+                <a href="/marketing/atoms" data-tip="Reusable hooks, stories, and CTAs from past sessions.">Atoms</a>
+                <span class="sep" aria-hidden="true">·</span>
+                <a href="/creative/studio" data-tip="Edit footage, captions, and brand kits in Creative Engine.">Studio</a>
+              </nav>
+            </section>
+
+            <div class="yt-panel" id="recentPacksPanel" data-tip="Continue a pack you already started.">
+              <h2>Your packs</h2>
+              <p class="suggest-meta" id="recentPacksMeta">Loading recent sessions…</p>
+              <div id="recentPacksList"></div>
+            </div>
+            <div id="ytBanner" class="message" style="display:none;"></div>
+            <div id="apiBanner" class="message" style="display:none;"></div>
+
+            <details class="advanced-block">
+              <summary data-tip="Film modes, YouTube research, and talk cards — useful after your first pack.">Advanced · film modes &amp; YouTube intelligence</summary>
+
+            <div class="yt-panel" data-tour="modes">
+              <h2 data-tip="Different creators film differently. Modes change coaching style and which cards bubble up.">How do you want to film?</h2>
+              <p class="suggest-meta">Hover any mode for what it means. Click to filter talk cards.</p>
+              <div class="mode-grid" id="modeGrid"></div>
+              <p class="suggest-meta" id="modeBlurb">Select a mode to filter recommended talk cards.</p>
+            </div>
+
+            <div class="yt-panel" data-tour="channel">
+              <h2 data-tip="Niche playbook first (realtor = relocation → buyer intel). Then researched titles, velocity, face+title thumbs optimized for leads — not vanity views.">YouTube intelligence</h2>
+              <p id="ytStatus">Checking connection…</p>
+              <p class="suggest-meta" id="playbookMeta">Resolving niche playbook…</p>
+              <div class="actions-row">
+                <a class="btn" id="ytConnectBtn" href="#" data-tip="Sign in with Google on Google's page — we never see your password.">Connect YouTube</a>
+                <button type="button" class="secondary" id="ytRefreshBtn" data-tip="Research YouTube shelf + rebuild lead-intent talk cards and face+title thumbnails.">Refresh ideas</button>
+              </div>
+              <label for="channelUrlInput" data-tip="If YouTube Data API is blocked, paste your public channel URL (@handle) so we can still pull your face via RSS.">Public channel URL (face fallback)</label>
+              <div class="channel-row">
+                <input type="text" id="channelUrlInput" placeholder="https://www.youtube.com/@yourhandle">
+                <button type="button" class="secondary" id="channelUrlSave">Save &amp; pull assets</button>
+              </div>
+              <p class="suggest-meta" id="visualMeta">Waiting for channel visuals…</p>
+            </div>
+
+            <div class="yt-panel" data-tour="ops">
+              <h2 data-tip="Improve what you already filmed: refresh metadata, A/B titles, sequel/update older uploads for leads.">Channel improvement offers</h2>
+              <p class="suggest-meta" id="opsMeta">Will appear when we can see your uploads.</p>
+              <div class="suggest-grid" id="opsGrid"></div>
+            </div>
+
+            <div class="yt-panel" data-tour="cards">
+              <h2 data-tip="Each card: researched title, real competitor shelf + velocity, face+title thumb, 3 hooks, must-says — ranked for reach-outs.">Talk cards</h2>
+              <p id="suggestMeta">Loading researched talk cards…</p>
+              <div class="suggest-grid" id="suggestGrid"></div>
+            </div>
+            </details>
+
+            <div class="tour-panel" id="tourPanel" aria-hidden="true">
+              <div class="tour-card">
+                <h2 id="tourTitle">Product tour</h2>
+                <p id="tourBody" class="suggest-meta"></p>
+                <div class="tour-progress"><span id="tourBar"></span></div>
+                <div class="actions-row">
+                  <button type="button" class="secondary" id="tourSkip">Skip</button>
+                  <button type="button" class="btn" id="tourNext">Next</button>
+                </div>
+              </div>
+            </div>
         `;
-        res.send(renderPage('MarketingOS Dashboard', body));
-    });
+    const clientScript = `
+            const banner = globalThis['document'].getElementById('ytBanner');
+            const ytFlag = ${JSON.stringify(ytFlag)};
+            if (ytFlag === 'connected') showMsg(banner, 'YouTube connected. Pulling channel ideas…', 'success');
+            if (ytFlag === 'error') showMsg(banner, 'YouTube connect failed. Check Google OAuth keys + redirect URI, then retry.', 'error');
+            let selectedMode = (function(){ try { return globalThis['localStorage'].getItem('smos_film_mode') || ''; } catch(_) { return ''; } })();
+            let allSuggestions = [];
+            let filmModes = [];
 
-    // GET /marketing/session/new (consent + session setup)
-    app.get('/marketing/session/new', (req, res) => {
-        const body = `
-            <h1>New Marketing Session Setup</h1>
-            <p>Before we begin, we need your consent to process your business information and generate content.</p>
+            function encodePack(pack) {
+              const json = JSON.stringify(pack);
+              const bytes = new TextEncoder().encode(json);
+              let bin = '';
+              bytes.forEach(function(b) { bin += String.fromCharCode(b); });
+              return btoa(bin).replace(/\\+/g, '-').replace(/\\//g, '_').replace(/=+$/g, '');
+            }
+
+            function renderModes() {
+              const grid = globalThis['document'].getElementById('modeGrid');
+              if (!filmModes.length) {
+                filmModes = [
+                  { id: 'teleprompter', label: 'Teleprompter', blurb: 'Full script · sticky line' },
+                  { id: 'bullets', label: 'Bullet coach', blurb: 'Talk the bullets' },
+                  { id: 'bookends', label: 'Scripted bookends', blurb: 'Hook + exit locked' },
+                  { id: 'read_riff', label: 'Read & riff', blurb: 'Glance then say it' },
+                  { id: 'story', label: 'Story-first', blurb: 'Lived story then teach' },
+                  { id: 'interview', label: 'Hot-seat', blurb: 'Coach asks, you answer' },
+                  { id: 'analytics', label: 'Analytics reverse', blurb: 'Film what retained' },
+                  { id: 'shorts', label: 'Shorts-first', blurb: 'Hook · punch · CTA' }
+                ];
+              }
+              grid.innerHTML = filmModes.map(function(m) {
+                return '<button type="button" class="mode-chip' + (selectedMode === m.id ? ' active' : '') + '" data-mode="' + escapeHtml(m.id) + '" data-tip="' + escapeHtml(m.blurb || m.label) + '"><strong>' + escapeHtml(m.label) + '</strong>' + escapeHtml(m.blurb || '') + '</button>';
+              }).join('');
+              const active = filmModes.find(function(m) { return m.id === selectedMode; });
+              globalThis['document'].getElementById('modeBlurb').textContent = active ? (active.label + ' — ' + (active.blurb || '')) : 'Showing all modes. Pick one to focus.';
+            }
+
+            globalThis['document'].getElementById('modeGrid').addEventListener('click', function(e) {
+              const btn = e.target.closest('[data-mode]');
+              if (!btn) return;
+              const id = btn.getAttribute('data-mode');
+              selectedMode = selectedMode === id ? '' : id;
+              try { globalThis['localStorage'].setItem('smos_film_mode', selectedMode); } catch(_) {}
+              renderModes();
+              renderSuggestionCards();
+            });
+
+            function buildStartUrl(s, hook) {
+              const pack = Object.assign({}, s, { hook: hook || s.hook, selected_hook: hook || s.hook, film_mode: selectedMode || s.film_mode });
+              delete pack.thumbnailUrl;
+              delete pack.thumbnailOverlay;
+              delete pack.thumbnailFaceUrl;
+              delete pack.thumbnailBgUrl;
+              delete pack.thumbnailComposed;
+              delete pack.competition;
+              delete pack.serpPreview;
+              delete pack.startUrl;
+              delete pack.studioUrl;
+              const seed = encodePack(pack);
+              return '/marketing/session/new?seed_title=' + encodeURIComponent(s.title || '') + '&seed_angle=' + encodeURIComponent(s.angle || '') + '&seed_pack=' + encodeURIComponent(seed);
+            }
+
+            function renderChannelOps(ops) {
+              const grid = globalThis['document'].getElementById('opsGrid');
+              const meta = globalThis['document'].getElementById('opsMeta');
+              if (!grid || !meta) return;
+              grid.innerHTML = '';
+              const list = ops || [];
+              if (!list.length) {
+                meta.textContent = 'Connect YouTube (or pull uploads) to get refresh / A/B / sequel offers on older videos.';
+                return;
+              }
+              meta.textContent = list.length + ' ways to improve existing videos for leads — not just film new.';
+              list.forEach(function(op) {
+                const card = globalThis['document'].createElement('article');
+                card.className = 'suggest-card';
+                const actions = (op.actions || []).map(function(a) { return '<li>' + escapeHtml(a) + '</li>'; }).join('');
+                card.innerHTML =
+                  '<div class="suggest-body">' +
+                  '<div class="suggest-meta"><span class="pill">' + escapeHtml(op.type || 'ops') + '</span></div>' +
+                  '<h3>' + escapeHtml(op.proposedTitle || 'Improve upload') + '</h3>' +
+                  '<div class="talk-block"><strong>Current</strong> ' + escapeHtml(op.currentTitle || '—') + '</div>' +
+                  '<div class="talk-block">' + escapeHtml(op.why || '') + '</div>' +
+                  '<div class="talk-block"><strong>Do this</strong><ul>' + (actions || '<li>—</li>') + '</ul></div>' +
+                  '</div>';
+                grid.appendChild(card);
+              });
+            }
+
+            function renderSuggestionCards() {
+              const meta = globalThis['document'].getElementById('suggestMeta');
+              const grid = globalThis['document'].getElementById('suggestGrid');
+              grid.innerHTML = '';
+              const list = allSuggestions.filter(function(s) {
+                if (!selectedMode) return true;
+                return String(s.film_mode || '') === selectedMode;
+              });
+              if (!list.length) {
+                meta.textContent = selectedMode ? 'No talk cards for that mode yet — clear the mode or refresh ideas.' : 'No suggestions returned.';
+                return;
+              }
+              meta.textContent = list.length + ' lead-ranked talk card' + (list.length === 1 ? '' : 's') + (selectedMode ? ' · mode filtered' : '');
+              list.forEach(function(s, cardIdx) {
+                  const card = globalThis['document'].createElement('article');
+                  card.className = 'suggest-card';
+                  const bullets = (s.talking_points || []).map(function(b) { return '<li>' + escapeHtml(b) + '</li>'; }).join('');
+                  const musts = (s.must_say || []).map(function(m) { return '<li>' + escapeHtml(m) + '</li>'; }).join('');
+                  const hooks = (s.hooks && s.hooks.length ? s.hooks : [s.hook]).filter(Boolean).slice(0, 3);
+                  const hookHtml = hooks.map(function(h, i) {
+                    return '<label data-tip="Spoken open line — pick the one that feels most like you."><input type="radio" name="hook-' + cardIdx + '" value="' + escapeHtml(h) + '"' + (i === 0 ? ' checked' : '') + '> <span>' + escapeHtml(h) + '</span></label>';
+                  }).join('');
+                  const comp = s.competition || {};
+                  const grade = escapeHtml(comp.grade || '—');
+                  const ctr = escapeHtml(comp.predictedCtr || '—');
+                  const serp = s.serpPreview || {};
+                  const serpRows = [];
+                  const oursRank = Number(serp.ourRank) || 3;
+                  const compsArr = serp.competitors || [];
+                  let cIdx = 0;
+                  for (let r = 1; r <= 4; r++) {
+                    if (r === oursRank) {
+                      serpRows.push('<div class="serp-row ours"><img class="serp-mini" alt="" src="' + escapeHtml(s.thumbnailUrl) + '"/><div><div class="serp-title">' + escapeHtml(s.title) + '</div><div class="serp-meta">YOU · lead intent ' + escapeHtml(String(s.lead_intent_score || '—')) + ' · est. CTR ' + ctr + '</div></div><div class="score-ring">' + grade + '</div></div>');
+                    } else if (cIdx < compsArr.length) {
+                      const c = compsArr[cIdx++];
+                      const thumb = c.thumbnailUrl
+                        ? '<img class="serp-mini" alt="" src="' + escapeHtml(c.thumbnailUrl) + '"/>'
+                        : '<div class="serp-mini" style="background:linear-gradient(135deg,#333,#111)"></div>';
+                      const vel = (c.viewsPerSub != null)
+                        ? (Number(c.viewsPerSub).toFixed(2) + 'x views/sub')
+                        : ('score ' + String(c.score || '—'));
+                      const views = c.views != null ? (Number(c.views).toLocaleString() + ' views') : 'Competitor';
+                      serpRows.push('<div class="serp-row">' + thumb + '<div><div class="serp-title">' + escapeHtml(c.title || c.name) + '</div><div class="serp-meta">' + escapeHtml(c.name || '') + ' · ' + escapeHtml(views) + ' · ' + escapeHtml(vel) + (c.outlier ? ' · outlier' : '') + '</div></div><div class="score-ring">' + escapeHtml(String(c.score || '')) + '</div></div>');
+                    }
+                  }
+                  const checks = (comp.checks || []).map(function(ch) {
+                    return '<li data-tip="' + escapeHtml(ch.tip || '') + '">' + (ch.pass ? '✓ ' : '○ ') + escapeHtml(ch.name || '') + '</li>';
+                  }).join('');
+                  const basis = s.research_basis || {};
+                  const basisHtml = basis.gap_reason
+                    ? ('<div class="talk-block" data-tip="Why this title exists: gap vs real YouTube shelf."><strong>Research basis</strong> ' + escapeHtml(basis.gap_reason) + (basis.query ? (' <span class="pill">' + escapeHtml(basis.query) + '</span>') : '') + '</div>')
+                    : '';
+                  const clickHtml = s.click_psychology
+                    ? ('<div class="talk-block" data-tip="Sales/click principle for this card."><strong>Why they click</strong> ' + escapeHtml(s.click_psychology) + '</div>')
+                    : '';
+                  const beats = (s.retention_beats || []).map(function(b) {
+                    const rawLines = Array.isArray(b.lines) ? b.lines : (typeof b.lines === 'string' ? [b.lines] : []);
+                    const lines = rawLines.map(function(l) { return '<li>' + escapeHtml(l) + '</li>'; }).join('');
+                    return '<div class="talk-block" data-tip="' + escapeHtml(b.job || 'Earn the next block of attention.') + '"><strong>' + escapeHtml(b.range || '') + '</strong> — ' + escapeHtml(b.job || '') + '<ul>' + lines + '</ul></div>';
+                  }).join('');
+                  card.innerHTML =
+                    '<div class="thumb-stage" data-tip="Distinct layout + click-trigger text. Face hero. No cloned templates.">' +
+                    '<img class="thumb-main" alt="competitive thumbnail" src="' + escapeHtml(s.thumbnailUrl) + '"/>' +
+                    '<div class="thumb-badge' + ((comp.score || 0) >= 72 ? ' good' : '') + '">Thumb ' + grade + (s.thumbnailOverlay ? (' · ' + escapeHtml(s.thumbnailOverlay)) : '') + (s.thumbnail_layout ? (' · ' + escapeHtml(s.thumbnail_layout)) : '') + '</div>' +
+                    '</div>' +
+                    '<div class="suggest-body">' +
+                    '<div class="suggest-meta"><span class="pill">#' + escapeHtml(String(s.rank)) + '</span>' +
+                    '<span class="pill" data-tip="Optimized for reach-outs / booked conversations.">leads ' + escapeHtml(String(s.lead_intent_score || '—')) + '</span>' +
+                    (s.playbook_id ? '<span class="pill" data-tip="Niche playbook driving seeds + ranking.">' + escapeHtml(s.playbook_id) + '</span>' : '') +
+                    (s.researched ? '<span class="pill">researched</span>' : '<span class="pill">playbook</span>') +
+                    (s.copy_model ? '<span class="pill">' + escapeHtml(s.copy_model) + '</span>' : '') +
+                    (s.film_mode ? '<span class="pill">' + escapeHtml(s.film_mode) + '</span>' : '') +
+                    (s.thumbnailComposed ? '<span class="pill">composed</span>' : '') +
+                    (s.thumbnailSource ? '<span class="pill">' + escapeHtml(s.thumbnailSource) + '</span>' : '') +
+                    '</div>' +
+                    '<h3>' + escapeHtml(s.title) + '</h3>' +
+                    clickHtml +
+                    basisHtml +
+                    '<div class="serp-box" data-tip="Real competitor shelf when API research succeeds — velocity = views vs subs."><div class="suggest-meta"><strong>YouTube shelf</strong> — ' + escapeHtml(serp.label || 'Researched placement') + '</div>' + serpRows.join('') + '</div>' +
+                    '<div class="talk-block"><strong>Pick your hook (best 3)</strong><div class="hook-pick">' + hookHtml + '</div></div>' +
+                    '<div class="talk-block" data-tip="What competing videos do well — match or beat this."><strong>Competitors are strong on</strong> ' + escapeHtml(s.competitor_strong || '—') + '</div>' +
+                    '<div class="talk-block" data-tip="The gap we must fill so relocators / buyers reach out."><strong>They fail to give</strong> ' + escapeHtml(s.competitor_fail || s.competitor_gap || '') + '</div>' +
+                    '<div class="talk-block" data-tip="Non-negotiable lines. Skip these and the video underperforms."><strong>Must say</strong><ul>' + (musts || '<li>—</li>') + '</ul></div>' +
+                    '<div class="talk-block"><strong>Talk through</strong><ul>' + (bullets || '<li>—</li>') + '</ul></div>' +
+                    (beats ? ('<div class="talk-block"><strong>Earned attention (every block earns the next)</strong></div>' + beats) : '') +
+                    '<div class="talk-block" data-tip="Thumbnail quality checklist — face, click trigger, research, distinct layout."><strong>Thumb checklist</strong><ul>' + (checks || '<li>—</li>') + '</ul></div>' +
+                    '<div class="actions-row">' +
+                    '<a class="btn film-btn" href="#" data-tip="Open coaching with this talk card + chosen hook.">Film this talk card</a>' +
+                    '<a class="btn secondary" href="' + escapeHtml(s.studioUrl) + '">Studio</a>' +
+                    '</div></div>';
+                  card.querySelector('.film-btn').addEventListener('click', function(ev) {
+                    ev.preventDefault();
+                    const checked = card.querySelector('input[type=radio]:checked');
+                    const hook = checked ? checked.value : (hooks[0] || s.hook);
+                    globalThis.location.href = marketingHref(buildStartUrl(s, hook));
+                  });
+                  grid.appendChild(card);
+              });
+            }
+
+            async function loadYoutubeStatus() {
+              const el = globalThis['document'].getElementById('ytStatus');
+              if (!marketingHasAuth()) {
+                el.innerHTML = 'Sign in to connect YouTube. <a href="/marketing/signup">Create account</a>';
+                return;
+              }
+              try {
+                const res = await fetch('/api/v1/marketing/youtube/status?owner_id=' + encodeURIComponent(marketingOwnerId()), { headers: marketingAuthHeaders() });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'status failed');
+                if (!data.oauthConfigured) {
+                  el.innerHTML = 'Google OAuth is <strong>not configured</strong> on tip yet.';
+                } else if (data.connected) {
+                  el.textContent = 'Connected' + (data.connectedSince ? (' since ' + new Date(data.connectedSince).toLocaleString()) : '') + '.';
+                } else {
+                  el.textContent = 'Not connected yet. Click Connect YouTube and sign in as yourself on Google.';
+                }
+              } catch (err) {
+                el.textContent = 'Status error: ' + err.message;
+              }
+            }
+
+            async function applySuggestionsPayload(data, meta, apiBanner) {
+              filmModes = data.filmModes || filmModes;
+              allSuggestions = data.suggestions || [];
+              if (data.youtubeApiNext) showMsg(apiBanner, data.youtubeApiNext, 'error');
+              else apiBanner.style.display = 'none';
+              const pb = data.playbook || {};
+              const playbookMeta = globalThis['document'].getElementById('playbookMeta');
+              if (playbookMeta) {
+                playbookMeta.textContent = (pb.id ? ('[' + pb.id + '] ') : '') + (pb.label || 'Playbook') + ' · outcome: ' + (pb.primary_outcome || 'leads') + (pb.market ? (' · market: ' + pb.market) : '') + ' · researched ' + String(data.researchedCount || 0) + '/' + String((pb.seed_topics || []).length || 0) + ' · channel ops ' + String((data.channel_ops || []).length);
+              }
+              const vis = data.channelVisuals || {};
+              const visualMeta = globalThis['document'].getElementById('visualMeta');
+              if (visualMeta) {
+                visualMeta.textContent = 'Visuals: ' + (vis.faceUrl ? 'face ✓' : 'face missing') + ' · ' + (vis.videoCount || 0) + ' uploads · source ' + (vis.assetSource || 'none');
+              }
+              const urlInput = globalThis['document'].getElementById('channelUrlInput');
+              if (urlInput && vis.publicUrl) urlInput.value = vis.publicUrl;
+              renderChannelOps(data.channel_ops || []);
+              renderModes();
+              renderSuggestionCards();
+              const modeNote = data.mode === 'fast' || data.timed_out ? ' · fast pack' : (data.mode === 'full' ? ' · full research' : '');
+              meta.textContent = (data.connected ? 'Channel linked · ' : '') + 'source: ' + (data.source || 'unknown') + (data.copyModel ? (' · copy: ' + data.copyModel) : '') + modeNote + (data.hint ? (' · ' + data.hint) : '');
+            }
+
+            async function loadSuggestions(opts) {
+              const deep = !!(opts && opts.deep);
+              const meta = globalThis['document'].getElementById('suggestMeta');
+              const apiBanner = globalThis['document'].getElementById('apiBanner');
+              if (!marketingHasAuth()) {
+                meta.innerHTML = 'Create an account to unlock researched talk cards. <a href="/marketing/signup">Sign up free</a>';
+                return;
+              }
+              meta.textContent = deep
+                ? 'Researching YouTube shelf + composing face/title thumbs…'
+                : 'Loading fast talk cards…';
+              try {
+                const q = '/api/v1/marketing/youtube/suggestions?owner_id=' + encodeURIComponent(marketingOwnerId())
+                  + (deep ? '' : '&mode=fast');
+                const res = await fetch(q, { headers: marketingAuthHeaders() });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'suggestions failed');
+                await applySuggestionsPayload(data, meta, apiBanner);
+              } catch (err) {
+                meta.textContent = 'Could not load ideas: ' + err.message;
+              }
+            }
+
+            const channelSave = globalThis['document'].getElementById('channelUrlSave');
+            if (channelSave) channelSave.addEventListener('click', async function() {
+              const url = (globalThis['document'].getElementById('channelUrlInput').value || '').trim();
+              if (!url) { showMsg(banner, 'Paste your YouTube channel URL first.', 'error'); return; }
+              try {
+                const res = await marketingFetch('/api/v1/marketing/youtube/channel-url', {
+                  method: 'POST', headers: marketingAuthHeaders(),
+                  body: JSON.stringify({ owner_id: marketingOwnerId(), channel_url: url })
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'save failed');
+                showMsg(banner, 'Channel URL saved. Rebuilding thumbnails…', 'success');
+                await loadSuggestions();
+              } catch (err) {
+                showMsg(banner, 'Save error: ' + err.message, 'error');
+              }
+            });
+
+            const tourSteps = [
+              { title: 'Welcome to SocialMediaOS', body: 'Niche playbook first. For a realtor: relocation → buyer intel. Outcome = leads, not vanity views.' },
+              { title: 'Research before you film', body: 'We search the real YouTube shelf, score velocity (views vs subs), and pick titles that fill a gap.' },
+              { title: 'Thumbnails that compete', body: 'Your face + 3–5 word TITLE text. No random B-roll frames. Shelf shows real competitor thumbs.' },
+              { title: 'Improve old videos too', body: 'Refresh metadata, A/B titles, sequel/update offers — reuse what you already filmed.' },
+              { title: 'Talk cards + producer', body: '3 hooks, must-says, teleprompter. Film when the research says this angle can earn reach-outs.' },
+              { title: 'You’re ready', body: 'Refresh ideas, pick a relocation card, film. Hover anything for tips.' }
+            ];
+            let tourIndex = 0;
+            function openTour(i) {
+              tourIndex = i || 0;
+              const panel = globalThis['document'].getElementById('tourPanel');
+              if (!panel) return;
+              panel.classList.add('open');
+              globalThis['document'].getElementById('tourTitle').textContent = tourSteps[tourIndex].title;
+              globalThis['document'].getElementById('tourBody').textContent = tourSteps[tourIndex].body;
+              globalThis['document'].getElementById('tourBar').style.width = (((tourIndex + 1) / tourSteps.length) * 100) + '%';
+              globalThis['document'].getElementById('tourNext').textContent = tourIndex === tourSteps.length - 1 ? 'Finish' : 'Next';
+            }
+            function closeTour() {
+              const panel = globalThis['document'].getElementById('tourPanel');
+              if (!panel) return;
+              panel.classList.remove('open');
+              try { globalThis['localStorage'].setItem('smos_tour_seen', '1'); } catch(_) {}
+            }
+            const tourBtn = globalThis['document'].getElementById('tourStartBtn');
+            if (tourBtn) tourBtn.addEventListener('click', function() { openTour(0); });
+            const tourSkip = globalThis['document'].getElementById('tourSkip');
+            if (tourSkip) tourSkip.addEventListener('click', closeTour);
+            const tourNext = globalThis['document'].getElementById('tourNext');
+            if (tourNext) tourNext.addEventListener('click', function() {
+              if (tourIndex >= tourSteps.length - 1) closeTour();
+              else openTour(tourIndex + 1);
+            });
+            // Tour is manual-only via #tourStartBtn so the primary CTA is never blocked on first visit.
+
+            globalThis['document'].getElementById('ytConnectBtn').addEventListener('click', async function(e) {
+              e.preventDefault();
+              try {
+                const res = await marketingFetch('/api/v1/marketing/youtube/connect?format=json&owner_id=' + encodeURIComponent(marketingOwnerId()), {
+                  headers: marketingAuthHeaders({ 'Accept': 'application/json' })
+                });
+                const data = await res.json();
+                if (!res.ok) {
+                  showMsg(banner, (data.error || 'Connect failed') + (data.next ? (' — ' + data.next) : '') + (data.redirectUri ? (' Redirect URI: ' + data.redirectUri) : ''), 'error');
+                  return;
+                }
+                if (!data.authUrl) throw new Error('No Google auth URL returned');
+                location.href = data.authUrl;
+              } catch (err) {
+                showMsg(banner, 'Connect error: ' + err.message, 'error');
+              }
+            });
+            globalThis['document'].getElementById('ytRefreshBtn').addEventListener('click', function() { loadSuggestions({ deep: true }); });
+            renderModes();
+            (function authChrome() {
+              const signedIn = marketingHasAuth();
+              const signup = globalThis['document'].getElementById('signupBtn');
+              const signin = globalThis['document'].getElementById('signinBtn');
+              const start = globalThis['document'].getElementById('startSessionBtn');
+              if (signedIn) {
+                if (signup) signup.style.display = 'none';
+                if (signin) {
+                  signin.textContent = 'Signed in';
+                  signin.removeAttribute('href');
+                  signin.setAttribute('aria-current', 'true');
+                }
+                if (start) start.textContent = 'Start a session';
+              } else if (start) {
+                start.textContent = 'Start a session';
+              }
+              if (start) {
+                start.addEventListener('click', function(e) {
+                  if (!marketingHasAuth()) {
+                    e.preventDefault();
+                    location.href = '/marketing/signup?next=' + encodeURIComponent('/marketing/session/new');
+                  }
+                });
+              }
+              const buyBtn = globalThis['document'].getElementById('buyContentPackBtn');
+              if (buyBtn) {
+                buyBtn.addEventListener('click', async function() {
+                  const apiBanner = globalThis['document'].getElementById('apiBanner');
+                  const banner = apiBanner || globalThis['document'].getElementById('ytBanner');
+                  if (!marketingHasAuth()) {
+                    location.href = '/marketing/signup?next=' + encodeURIComponent('/marketing');
+                    return;
+                  }
+                  try {
+                    const res = await fetch('/api/v1/socialmediaos/content-pack/checkout', {
+                      method: 'POST',
+                      headers: marketingAuthHeaders(),
+                      body: JSON.stringify({})
+                    });
+                    const data = await res.json().catch(function(){ return {}; });
+                    if (!res.ok) throw new Error(data.error || 'Checkout failed');
+                    if (data.ok && data.checkoutUrl) {
+                      globalThis.location.href = data.checkoutUrl;
+                    } else {
+                      throw new Error(data.error || 'No checkout URL returned');
+                    }
+                  } catch (err) {
+                    showMsg(banner, 'Buy error: ' + err.message, 'error');
+                  }
+                });
+              }
+            })();
+            loadYoutubeStatus();
+            loadSuggestions().catch(function(){});
+            (async function loadRecentPacks() {
+              const meta = globalThis['document'].getElementById('recentPacksMeta');
+              const list = globalThis['document'].getElementById('recentPacksList');
+              if (!meta || !list) return;
+              if (!marketingHasAuth()) {
+                meta.innerHTML = 'Sign up free to save packs here. <a href="/marketing/signup">Create account</a>';
+                return;
+              }
+              try {
+                const res = await fetch('/api/v1/marketing/sessions?limit=8', { headers: marketingAuthHeaders() });
+                const data = await res.json().catch(function(){ return {}; });
+                if (!res.ok) throw new Error(data.error || 'Failed to load sessions');
+                const sessions = data.sessions || [];
+                if (!sessions.length) {
+                  meta.textContent = 'No packs yet — start a new session and talk for 2 minutes.';
+                  return;
+                }
+                meta.textContent = sessions.length + ' recent session' + (sessions.length === 1 ? '' : 's');
+                list.innerHTML = sessions.map(function(s) {
+                  const approved = Number(s.approved_count || 0);
+                  const pieces = Number(s.piece_count || 0);
+                  const status = String(s.status || 'draft');
+                  const label = (pieces ? (pieces + ' pieces') : 'no pieces yet') + (approved ? (' · ' + approved + ' approved') : '');
+                  const href = pieces
+                    ? '/marketing/session/' + encodeURIComponent(s.id) + '/content'
+                    : '/marketing/session/' + encodeURIComponent(s.id);
+                  return '<a class="pack-card" href="' + href + '">' +
+                    '<strong>Pack ' + escapeHtml(String(s.id).slice(0, 8)) + '</strong>' +
+                    '<div class="pack-meta"><span class="status-badge ' + escapeHtml(status) + '">' + escapeHtml(status) + '</span> · ' + escapeHtml(label) +
+                    (pieces ? ' · open to approve / export' : ' · continue coaching') + '</div></a>';
+                }).join('');
+              } catch (err) {
+                meta.textContent = 'Could not load recent packs: ' + err.message;
+              }
+            })();
+        `;
+    res.send(renderPage('SocialMediaOS', body, clientScript));
+  });
+
+  app.get('/marketing/signup', (req, res) => {
+    const next = String(req.query.next || '/marketing');
+    const body = `
+            <h1>Create your Social Media OS account</h1>
+            <p>Email + password. No invite code. Then start a session, generate your pack, and unlock download for <strong>$49</strong>.</p>
+            <form id="signupForm" class="stack" style="max-width:420px;margin:1.5rem 0;display:flex;flex-direction:column;gap:0.75rem;">
+              <label>Email <input required type="email" id="email" name="email" autocomplete="email"></label>
+              <label>Handle <input required type="text" id="handle" name="handle" minlength="3" pattern="[A-Za-z0-9_-]+" placeholder="yourbrand" autocomplete="username"></label>
+              <label>Display name <input type="text" id="displayName" name="displayName" autocomplete="name"></label>
+              <label>Password <input required type="password" id="password" name="password" minlength="8" autocomplete="new-password"></label>
+              <label style="display:flex;gap:0.6rem;align-items:flex-start;font-weight:500;">
+                <input required type="checkbox" id="acceptTerms" style="margin-top:0.25rem;">
+                <span>I agree to the <a href="/marketing/terms" target="_blank" rel="noopener">Terms</a> and <a href="/marketing/privacy" target="_blank" rel="noopener">Privacy</a> notice. Pack downloads unlock after a one-time <strong>$49</strong> payment.</span>
+              </label>
+              <button type="submit" class="btn">Create account</button>
+            </form>
+            <div id="message" class="message" style="display:none;"></div>
+            <div class="nav-links">
+              <a href="/marketing/login?next=${encodeURIComponent(next)}">Already have an account? Sign in</a>
+              <a href="/marketing">Back</a>
+            </div>
+        `;
+    const clientScript = `
+            const nextPath = ${JSON.stringify(next)};
+            const messageDiv = globalThis['document'].getElementById('message');
+            globalThis['document'].getElementById('signupForm').addEventListener('submit', async function(e) {
+              e.preventDefault();
+              messageDiv.style.display = 'none';
+              try {
+                if (!globalThis['document'].getElementById('acceptTerms').checked) {
+                  throw new Error('Please accept the Terms and Privacy notice.');
+                }
+                const payload = {
+                  email: globalThis['document'].getElementById('email').value.trim(),
+                  handle: globalThis['document'].getElementById('handle').value.trim(),
+                  display_name: globalThis['document'].getElementById('displayName').value.trim(),
+                  password: globalThis['document'].getElementById('password').value,
+                  accepted_terms: true
+                };
+                const res = await fetch('/api/v1/marketing/public/signup', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(payload)
+                });
+                const data = await res.json().catch(function(){ return {}; });
+                if (!res.ok || !data.accessToken) throw new Error(data.error || ('Signup failed (' + res.status + ')'));
+                globalThis['localStorage'].setItem('lifeos_access_token', data.accessToken);
+                if (data.refreshToken) globalThis['localStorage'].setItem('lifeos_refresh_token', data.refreshToken);
+                const handle = (data.user && (data.user.user_handle || data.user.handle)) || payload.handle;
+                globalThis['localStorage'].setItem('lifeos_user', handle);
+                showMsg(messageDiv, 'Account created. Opening Social Media OS…', 'success');
+                setTimeout(function(){ location.href = nextPath || '/marketing'; }, 400);
+              } catch (err) {
+                showMsg(messageDiv, err.message, 'error');
+              }
+            });
+        `;
+    res.send(renderPage('Create account', body, clientScript));
+  });
+
+  app.get('/marketing/terms', (_req, res) => {
+    const body = `
+            <h1>Social Media OS — Terms</h1>
+            <p>These terms cover the $49 Social Media OS content pack sold at /marketing.</p>
+            <ol>
+              <li><strong>What you buy.</strong> One coached session that produces draft social posts. You review and approve before download.</li>
+              <li><strong>Your responsibility.</strong> You are responsible for what you publish. Outputs are drafts, not legal, medical, or financial advice.</li>
+              <li><strong>Payment.</strong> Download unlocks after successful $49 Stripe payment (or an operator-granted unlock). Taxes may apply via Stripe.</li>
+              <li><strong>Refunds.</strong> If the product fails to generate an exportable pack after payment, email adam@limitlessoi.com within 7 days for a refund review. Chargebacks for delivered packs may result in account suspension.</li>
+              <li><strong>Accounts.</strong> Keep your password private. Do not share login credentials.</li>
+              <li><strong>Availability.</strong> Features can change; YouTube connect and Creative Studio are optional extras, not required for the $49 text pack.</li>
+            </ol>
+            <div class="nav-links"><a href="/marketing/signup">Back to signup</a> · <a href="/marketing/privacy">Privacy</a></div>
+        `;
+    res.send(renderPage('Terms', body));
+  });
+
+  app.get('/marketing/privacy', (_req, res) => {
+    const body = `
+            <h1>Social Media OS — Privacy</h1>
+            <p>Plain-English notice for Social Media OS clients.</p>
+            <ul>
+              <li>We store your email, handle, password hash, session transcripts, generated drafts, and payment references needed to run the product.</li>
+              <li>Payment card data is handled by Stripe — we do not store full card numbers.</li>
+              <li>AI providers process session text to coach and generate drafts.</li>
+              <li>We do not sell your content packs to other customers.</li>
+              <li>To request deletion, email adam@limitlessoi.com with your account email/handle.</li>
+            </ul>
+            <div class="nav-links"><a href="/marketing/signup">Back to signup</a> · <a href="/marketing/terms">Terms</a></div>
+        `;
+    res.send(renderPage('Privacy', body));
+  });
+
+  app.get('/marketing/login', (req, res) => {
+    const next = String(req.query.next || '/marketing');
+    const body = `
+            <h1>Sign in to Social Media OS</h1>
+            <p>Use the email and password from your account.</p>
+            <form id="loginForm" class="stack" style="max-width:420px;margin:1.5rem 0;display:flex;flex-direction:column;gap:0.75rem;">
+              <label>Email <input required type="email" id="email" name="email" autocomplete="email"></label>
+              <label>Password <input required type="password" id="password" name="password" autocomplete="current-password"></label>
+              <button type="submit" class="btn">Sign in</button>
+            </form>
+            <p class="suggest-meta">Forgot password? <a href="/marketing/forgot-password">Reset it here</a>. If email delivery is not configured on the server, email <a href="mailto:adam@limitlessoi.com">adam@limitlessoi.com</a> from your account address.</p>
+            <div id="message" class="message" style="display:none;"></div>
+            <div class="nav-links">
+              <a href="/marketing/signup?next=${encodeURIComponent(next)}">Need an account? Create one</a>
+              <a href="/marketing">Back</a>
+            </div>
+        `;
+    const clientScript = `
+            const nextPath = ${JSON.stringify(next)};
+            const messageDiv = globalThis['document'].getElementById('message');
+            globalThis['document'].getElementById('loginForm').addEventListener('submit', async function(e) {
+              e.preventDefault();
+              messageDiv.style.display = 'none';
+              try {
+                const res = await fetch('/api/v1/lifeos/auth/login', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    email: globalThis['document'].getElementById('email').value.trim(),
+                    password: globalThis['document'].getElementById('password').value
+                  })
+                });
+                const data = await res.json().catch(function(){ return {}; });
+                const access = data.accessToken || data.access_token;
+                if (!res.ok || !access) throw new Error(data.error || ('Sign in failed (' + res.status + ')'));
+                globalThis['localStorage'].setItem('lifeos_access_token', access);
+                const refresh = data.refreshToken || data.refresh_token;
+                if (refresh) globalThis['localStorage'].setItem('lifeos_refresh_token', refresh);
+                const user = data.user || {};
+                const handle = user.user_handle || user.handle || '';
+                if (handle) globalThis['localStorage'].setItem('lifeos_user', handle);
+                showMsg(messageDiv, 'Signed in. Opening Social Media OS…', 'success');
+                setTimeout(function(){ location.href = nextPath || '/marketing'; }, 300);
+              } catch (err) {
+                showMsg(messageDiv, err.message, 'error');
+              }
+            });
+        `;
+    res.send(renderPage('Sign in', body, clientScript));
+  });
+
+  app.get('/marketing/forgot-password', (_req, res) => {
+    const body = `
+            <h1>Reset your password</h1>
+            <p>Enter the email on your Social Media OS account. If mail is configured, we send a one-time link (60 minutes).</p>
+            <form id="forgotForm" class="stack" style="max-width:420px;margin:1.5rem 0;display:flex;flex-direction:column;gap:0.75rem;">
+              <label>Email <input required type="email" id="email" name="email" autocomplete="email"></label>
+              <button type="submit" class="btn">Send reset link</button>
+            </form>
+            <div id="message" class="message" style="display:none;"></div>
+            <div class="nav-links">
+              <a href="/marketing/login">Back to sign in</a>
+              <a href="/marketing">Home</a>
+            </div>
+        `;
+    const clientScript = `
+            const messageDiv = globalThis['document'].getElementById('message');
+            globalThis['document'].getElementById('forgotForm').addEventListener('submit', async function(e) {
+              e.preventDefault();
+              messageDiv.style.display = 'none';
+              try {
+                const res = await fetch('/api/v1/lifeos/auth/forgot-password', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ email: globalThis['document'].getElementById('email').value.trim() })
+                });
+                const data = await res.json().catch(function(){ return {}; });
+                if (!res.ok) throw new Error(data.error || ('Request failed (' + res.status + ')'));
+                var extra = data.email_sent ? ' Check your inbox (and spam).' : ' If nothing arrives, email adam@limitlessoi.com — mail may not be configured on this server yet.';
+                showMsg(messageDiv, (data.message || 'Request received.') + extra, 'success');
+              } catch (err) {
+                showMsg(messageDiv, err.message, 'error');
+              }
+            });
+        `;
+    res.send(renderPage('Forgot password', body, clientScript));
+  });
+
+  app.get('/marketing/reset-password', (req, res) => {
+    const token = String(req.query.token || '');
+    const body = `
+            <h1>Choose a new password</h1>
+            <p>Paste the token from your email link if it is not already filled in.</p>
+            <form id="resetForm" class="stack" style="max-width:420px;margin:1.5rem 0;display:flex;flex-direction:column;gap:0.75rem;">
+              <label>Reset token <input required type="text" id="token" name="token" value="${escapeHtml(token)}" autocomplete="off"></label>
+              <label>New password <input required type="password" id="password" name="password" minlength="8" autocomplete="new-password"></label>
+              <button type="submit" class="btn">Update password</button>
+            </form>
+            <div id="message" class="message" style="display:none;"></div>
+            <div class="nav-links">
+              <a href="/marketing/login">Sign in</a>
+              <a href="/marketing">Home</a>
+            </div>
+        `;
+    const clientScript = `
+            const messageDiv = globalThis['document'].getElementById('message');
+            globalThis['document'].getElementById('resetForm').addEventListener('submit', async function(e) {
+              e.preventDefault();
+              messageDiv.style.display = 'none';
+              try {
+                const res = await fetch('/api/v1/lifeos/auth/reset-password', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    token: globalThis['document'].getElementById('token').value.trim(),
+                    newPassword: globalThis['document'].getElementById('password').value
+                  })
+                });
+                const data = await res.json().catch(function(){ return {}; });
+                if (!res.ok || !data.ok) throw new Error(data.error || ('Reset failed (' + res.status + ')'));
+                showMsg(messageDiv, 'Password updated. You can sign in now.', 'success');
+                setTimeout(function(){ location.href = '/marketing/login'; }, 700);
+              } catch (err) {
+                showMsg(messageDiv, err.message, 'error');
+              }
+            });
+        `;
+    res.send(renderPage('Reset password', body, clientScript));
+  });
+
+  app.get('/marketing/session/new', (req, res) => {
+    const seedTitle = String(req.query.seed_title || '');
+    const seedAngle = String(req.query.seed_angle || '');
+    const seedPack = String(req.query.seed_pack || '');
+    const body = `
+            <h1>New Session</h1>
+            <p>Consent is required before coaching starts. You review and approve every piece before export.</p>
+            ${seedTitle ? `<div class="message success" style="display:block;">Starting from talk card: <strong>${escapeHtml(seedTitle)}</strong> — coach will walk you through hook, intro, bullets, and exit.</div>` : ''}
             <form id="consentForm">
                 <div class="form-group">
-                    <label for="consentText">I agree to allow MarketingOS to process my input and generate marketing content based on the provided information. I understand that I am responsible for reviewing and approving all generated content before publication.</label>
+                    <label for="consentAccepted">I agree to let SocialMediaOS process my input and generate marketing content. I am responsible for reviewing and approving all content before publication.</label>
                     <input type="checkbox" id="consentAccepted" name="consentAccepted" required>
                     <span>I understand and agree</span>
                 </div>
                 <div class="form-group">
-                    <label for="sessionType">Session Type:</label>
+                    <label for="sessionType">Session focus</label>
                     <select id="sessionType" name="sessionType" required>
                         <option value="social_media">Social Media Content</option>
                         <option value="blog_post">Blog Post</option>
                         <option value="email_campaign">Email Campaign</option>
                     </select>
                 </div>
-                <button type="submit">Proceed to Session</button>
+                <button type="submit">Start Coaching</button>
             </form>
             <div id="message" class="message" style="display:none;"></div>
         `;
-        const clientScript = `
-            document.getElementById('consentForm').addEventListener('submit', async function(event) {
+    const clientScript = `
+            const seedTitle = ${JSON.stringify(seedTitle)};
+            const seedAngle = ${JSON.stringify(seedAngle)};
+            const seedPack = ${JSON.stringify(seedPack)};
+            if (seedTitle || seedPack) {
+              try {
+                sessionStorage.setItem('smos_seed_title', seedTitle);
+                sessionStorage.setItem('smos_seed_angle', seedAngle || '');
+                if (seedPack) sessionStorage.setItem('smos_seed_pack', seedPack);
+              } catch (_) {}
+            }
+            globalThis['document'].getElementById('consentForm').addEventListener('submit', async function(event) {
                 event.preventDefault();
-                const messageDiv = document.getElementById('message');
+                const messageDiv = globalThis['document'].getElementById('message');
                 messageDiv.style.display = 'none';
-                messageDiv.className = 'message';
 
-                const consentAccepted = document.getElementById('consentAccepted').checked;
-                const sessionType = document.getElementById('sessionType').value;
-
+                const consentAccepted = globalThis['document'].getElementById('consentAccepted').checked;
+                const sessionType = globalThis['document'].getElementById('sessionType').value;
                 if (!consentAccepted) {
-                    messageDiv.innerText = 'You must agree to the terms to proceed.';
-                    messageDiv.className = 'message error';
-                    messageDiv.style.display = 'block';
+                    showMsg(messageDiv, 'You must agree to the terms to proceed.', 'error');
                     return;
                 }
 
                 try {
-                    // Step 1: Post consent
-                    const consentResponse = await fetch('/api/v1/marketing/consent', {
+                    const consentResponse = await marketingFetch('/api/v1/marketing/consent', {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: marketingAuthHeaders(),
                         body: JSON.stringify({
+                            owner_id: marketingOwnerId(),
                             consent_type: 'session_recording',
-                            consent_text: 'I agree to allow MarketingOS to process my input and generate marketing content based on the provided information. I understand that I am responsible for reviewing and approving all generated content before publication.',
+                            consent_text: 'I agree to allow SocialMediaOS to process my input and generate marketing content. I am responsible for reviewing and approving all generated content before publication.',
                             consented_at: new Date().toISOString(),
-                            data: { session_type: sessionType }
+                            data: { session_type: sessionType, seed_title: seedTitle || null }
                         })
                     });
                     const consentData = await consentResponse.json();
+                    if (!consentResponse.ok) throw new Error(consentData.error || 'Failed to record consent.');
 
-                    if (!consentResponse.ok) {
-                        throw new Error(consentData.error || 'Failed to record consent.');
-                    }
-
-                    // Step 2: Create session
-                    const sessionResponse = await fetch('/api/v1/marketing/sessions', {
+                    const sessionResponse = await marketingFetch('/api/v1/marketing/sessions', {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: marketingAuthHeaders(),
                         body: JSON.stringify({
-                            consent_record_id: consentData.id,
+                            owner_id: marketingOwnerId(),
+                            consent_record_id: consentData.id || consentData.consent?.id,
                             session_type: sessionType,
-                            input_mode: 'text', // Assuming text input for now
+                            input_mode: 'text',
                             status: 'initialized'
                         })
                     });
                     const sessionData = await sessionResponse.json();
+                    if (!sessionResponse.ok) throw new Error(sessionData.error || 'Failed to start session.');
 
-                    if (!sessionResponse.ok) {
-                        throw new Error(sessionData.error || 'Failed to start session.');
-                    }
-
-                    window.location.href = \`/marketing/session/\${sessionData.id}\`;
-
+                    const sid = sessionData.id || sessionData.session?.id;
+                    let next = '/marketing/session/' + sid + '?';
+                    const q = [];
+                    if (seedTitle) q.push('seed_title=' + encodeURIComponent(seedTitle));
+                    if (seedAngle) q.push('seed_angle=' + encodeURIComponent(seedAngle));
+                    if (seedPack) q.push('seed_pack=' + encodeURIComponent(seedPack));
+                    next += q.join('&');
+                    globalThis.location.href = marketingHref(next);
                 } catch (error) {
-                    logger.error('Error in new session setup:', error);
-                    messageDiv.innerText = 'Error: ' + error.message;
-                    messageDiv.className = 'message error';
-                    messageDiv.style.display = 'block';
+                    console.error('Error in new session setup:', error);
+                    showMsg(messageDiv, 'Error: ' + (error && error.message ? error.message : String(error)), 'error');
                 }
             });
         `;
-        res.send(renderPage('Start New Marketing Session', body, clientScript));
-    });
+    res.send(renderPage('Start New Session', body, clientScript));
+  });
 
-    // GET /marketing/session/:id (coaching conversation, text input)
-    app.get('/marketing/session/:id', (req, res) => {
-        const sessionId = req.params.id;
-        const body = `
-            <h1>Marketing Coaching Session: ${escapeHtml(sessionId)}</h1>
-            <p>Tell me about your business, your goals, and what kind of content you'd like to create.</p>
-            <div id="conversation">
-                <!-- Coach and user messages will be appended here -->
+  app.get('/marketing/session/:id', (req, res) => {
+    const sessionId = req.params.id;
+    const seedTitle = String(req.query.seed_title || '');
+    const seedPack = String(req.query.seed_pack || '');
+    const body = `
+            <h1>Film + talk-card coaching</h1>
+            <p>Arm the camera, get directed on sound/background/B-roll for this video type, then record. The teleprompter moves as you talk and <strong>never appears in the take</strong> — we only capture the camera stream (Descript-style clean recording). Coach still catches “sounds like reading.”</p>
+            <div id="filmStudioMount"></div>
+            <div class="teleprompter-dock" id="tpDock" style="display:none;">
+              <div class="tp-label">Teleprompter · current line · for your eyes only</div>
+              <div class="tp-current" id="tpCurrent">—</div>
+              <div class="tp-meta" id="tpMeta">Line 0 / 0</div>
+              <div class="tp-controls" id="tpControls">
+                <button type="button" data-tp="prev">Prev</button>
+                <button type="button" class="primary" data-tp="next">Next line</button>
+                <button type="button" data-tp="pause">Pause / hold</button>
+                <button type="button" data-tp="pickup">Pick up here</button>
+                <button type="button" data-tp="must">Jump to must-say</button>
+              </div>
             </div>
+            <div class="script-panel" id="scriptPanel">
+              <h2>Your talk card</h2>
+              <p class="suggest-meta" id="scriptTitle">Loading…</p>
+              <div id="scriptBody"></div>
+            </div>
+            <div class="chip-row" id="coachChips">
+              <button type="button" data-chip="I'm reading the current teleprompter line out loud: ">Read current line</button>
+              <button type="button" data-chip="I went off topic — pick me up at the highlighted line.">Went off topic</button>
+              <button type="button" data-chip="Full take done — review me like a producer.">After full read</button>
+              <button type="button" data-chip="I sounded like I was reading — help me freestyle this beat.">Sounds like reading</button>
+              <button type="button" data-chip="Freestyle this part using a real story from another video: ">Freestyle this</button>
+              <button type="button" data-chip="Did I hit the must-say / competitor gap? ">Check must-say</button>
+              <button type="button" data-chip="Give me more on that — who specifically / what number / what scar?">Ask: give me more</button>
+              <button type="button" data-chip="I liked when I said: ">Flag what landed</button>
+            </div>
+            <div id="conversation"></div>
             <form id="coachForm">
                 <div class="form-group">
-                    <label for="userInput">Your Message:</label>
-                    <textarea id="userInput" name="userInput" placeholder="E.g., 'I sell handmade jewelry and want to promote my new summer collection on Instagram.'" required></textarea>
+                    <label for="userInput">Talk it out (live transcript lands here after a take — or paste)</label>
+                    <textarea id="userInput" name="userInput" placeholder="Record a take, or paste what you said…" required></textarea>
                 </div>
-                <button type="submit">Send to Coach</button>
+                <div class="actions-row">
+                  <button type="submit">Send to Coach</button>
+                  <button type="button" class="secondary" id="extractBtn">Extract Stories</button>
+                  <button type="button" id="generateBtn">Generate Content Pack</button>
+                </div>
             </form>
             <div id="message" class="message" style="display:none;"></div>
-            <p><a href="/marketing/session/${escapeHtml(sessionId)}/content">Review & Approve Content</a></p>
-            <p><a href="/marketing/session/${escapeHtml(sessionId)}/export">Export Content Pack</a></p>
+            <div class="nav-links">
+              <a href="/marketing/session/${escapeHtml(sessionId)}/content">Review &amp; Approve</a>
+              <a href="/marketing/session/${escapeHtml(sessionId)}/export">Export</a>
+              <a href="/marketing">Dashboard</a>
+            </div>
+            <script src="/shared/smos-film-studio.js"></script>
         `;
-        const clientScript = `
-            const sessionId = "${escapeHtml(sessionId)}";
-            const conversationDiv = document.getElementById('conversation');
-            const messageDiv = document.getElementById('message');
+    const clientScript = `
+            const sessionId = ${JSON.stringify(sessionId)};
+            const seedTitleFromQuery = ${JSON.stringify(seedTitle)};
+            const seedPackFromQuery = ${JSON.stringify(seedPack)};
+            const conversationDiv = globalThis['document'].getElementById('conversation');
+            const messageDiv = globalThis['document'].getElementById('message');
+            let talkPack = null;
+            let bulletIndex = 0;
+            let lineIndex = 0;
+            let scriptLines = [];
+            let paused = false;
+            let coachMode = 'live';
+            let liveTranscript = '';
+            let filmStudio = null;
 
-            async function fetchSessionDetails() {
-                try {
-                    const response = await fetch(\`/api/v1/marketing/sessions/\${sessionId}\`);
-                    const session = await response.json();
-                    if (!response.ok) {
-                        throw new Error(session.error || 'Failed to fetch session details.');
+            function decodeSeedPack(raw) {
+              if (!raw) return null;
+              try {
+                const bin = atob(raw.replace(/-/g, '+').replace(/_/g, '/'));
+                const bytes = Uint8Array.from(bin, function(c) { return c.charCodeAt(0); });
+                return JSON.parse(new TextDecoder().decode(bytes));
+              } catch (_) {
+                try { return JSON.parse(decodeURIComponent(raw)); } catch (e2) { return null; }
+              }
+            }
+
+            function currentLineText() {
+              return scriptLines[lineIndex] || '';
+            }
+
+            function setLine(i, opts) {
+              if (!scriptLines.length) return;
+              const hold = opts && opts.hold;
+              if (paused && !hold && !(opts && opts.force)) return;
+              lineIndex = Math.max(0, Math.min(scriptLines.length - 1, Number(i) || 0));
+              const dock = globalThis['document'].getElementById('tpDock');
+              const cur = globalThis['document'].getElementById('tpCurrent');
+              const meta = globalThis['document'].getElementById('tpMeta');
+              if (dock) dock.style.display = 'block';
+              if (cur) cur.textContent = currentLineText();
+              if (meta) meta.textContent = 'Line ' + (lineIndex + 1) + ' / ' + scriptLines.length + (paused ? ' · held' : '') + ' · not in video';
+              globalThis['document'].querySelectorAll('.tp-line').forEach(function(el) {
+                const idx = Number(el.getAttribute('data-li'));
+                el.classList.toggle('active', idx === lineIndex);
+                el.classList.toggle('done', idx < lineIndex);
+              });
+              const active = globalThis['document'].querySelector('.tp-line.active');
+              if (active && active.scrollIntoView) active.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+              try { sessionStorage.setItem('smos_tp_line_' + sessionId, String(lineIndex)); } catch(_) {}
+            }
+
+            function isMustLine(text) {
+              const must = (talkPack && talkPack.must_say) || [];
+              const t = String(text || '').toLowerCase();
+              return must.some(function(m) { return t.indexOf(String(m).toLowerCase().slice(0, 18)) !== -1; })
+                || /don't leave without|what the other channels|must say|competitor/i.test(text || '');
+            }
+
+            function renderTeleprompter() {
+              scriptLines = (talkPack && Array.isArray(talkPack.sample_script)) ? talkPack.sample_script.filter(Boolean) : [];
+              const body = globalThis['document'].getElementById('scriptBody');
+              if (!scriptLines.length) {
+                globalThis['document'].getElementById('tpDock').style.display = 'none';
+                return;
+              }
+              let saved = 0;
+              try { saved = Number(sessionStorage.getItem('smos_tp_line_' + sessionId) || 0) || 0; } catch(_) {}
+              const linesHtml = scriptLines.map(function(line, i) {
+                const cls = ['tp-line'];
+                if (isMustLine(line)) cls.push('must');
+                return '<div class="' + cls.join(' ') + '" data-li="' + i + '">' + escapeHtml(line) + '</div>';
+              }).join('');
+              const musts = ((talkPack && talkPack.must_say) || []).map(function(m) { return '<li>' + escapeHtml(m) + '</li>'; }).join('');
+              const bullets = ((talkPack && talkPack.talking_points) || []).map(function(b, i) {
+                return '<li class="' + (i === 0 ? 'active-bullet' : '') + '" data-bi="' + i + '">' + escapeHtml(b) + '</li>';
+              }).join('');
+              body.innerHTML =
+                '<div class="talk-block"><strong>Full sample script</strong><div class="tp-lines" id="tpLines">' + linesHtml + '</div></div>' +
+                '<div class="talk-block"><strong>Must say</strong><ul>' + (musts || '<li>—</li>') + '</ul></div>' +
+                '<div class="talk-block"><strong>Bullets</strong><ul id="bulletList">' + bullets + '</ul></div>' +
+                '<div class="talk-block"><strong>Competitor gap</strong>' + escapeHtml((talkPack && (talkPack.competitor_gap || talkPack.why)) || '') + '</div>' +
+                '<div class="talk-block"><strong>Film mode</strong>' + escapeHtml((talkPack && talkPack.film_mode) || 'teleprompter') + '</div>';
+              globalThis['document'].getElementById('tpLines').addEventListener('click', function(e) {
+                const line = e.target.closest('.tp-line');
+                if (!line) return;
+                paused = true;
+                setLine(Number(line.getAttribute('data-li')), { force: true, hold: true });
+              });
+              setLine(saved, { force: true });
+              if (filmStudio && filmStudio.refreshDirector) filmStudio.refreshDirector();
+            }
+
+            function loadTalkPack() {
+              let raw = seedPackFromQuery;
+              try { if (!raw) raw = sessionStorage.getItem('smos_seed_pack') || ''; } catch(_) {}
+              talkPack = decodeSeedPack(raw);
+              const title = (talkPack && talkPack.title) || seedTitleFromQuery || (function(){ try { return sessionStorage.getItem('smos_seed_title') || ''; } catch(_) { return ''; } })();
+              globalThis['document'].getElementById('scriptTitle').textContent = title || 'Freeform session';
+              const body = globalThis['document'].getElementById('scriptBody');
+              if (!talkPack) {
+                body.innerHTML = '<p class="suggest-meta">No talk card attached — coach will still help you find a hook and outline. Arm the film studio anytime.</p>';
+                return;
+              }
+              renderTeleprompter();
+              try {
+                sessionStorage.removeItem('smos_seed_title');
+                sessionStorage.removeItem('smos_seed_angle');
+                sessionStorage.removeItem('smos_seed_pack');
+              } catch(_) {}
+            }
+
+            function highlightBullet(i) {
+              bulletIndex = i;
+              globalThis['document'].querySelectorAll('#bulletList li').forEach(function(li) {
+                li.classList.toggle('active-bullet', Number(li.getAttribute('data-bi')) === i);
+              });
+            }
+
+            function applyCoachNav(data) {
+              if (!data) return;
+              if (Number.isFinite(Number(data.currentBullet))) highlightBullet(Number(data.currentBullet));
+              if (Number.isFinite(Number(data.redoFromLine))) {
+                paused = true;
+                setLine(Number(data.redoFromLine), { force: true, hold: true });
+                return;
+              }
+              if (data.pickUpLine && scriptLines.length) {
+                const idx = scriptLines.findIndex(function(l) { return l === data.pickUpLine || l.indexOf(data.pickUpLine) !== -1 || data.pickUpLine.indexOf(l) !== -1; });
+                if (idx >= 0) { paused = true; setLine(idx, { force: true, hold: true }); return; }
+              }
+              if (!paused && Number.isFinite(Number(data.lineIndex))) {
+                setLine(Number(data.lineIndex), { force: true });
+              }
+            }
+
+            function blobToBase64(blob) {
+              return new Promise(function(resolve, reject) {
+                const reader = new FileReader();
+                reader.onload = function() {
+                  const s = String(reader.result || '');
+                  const i = s.indexOf(',');
+                  resolve(i >= 0 ? s.slice(i + 1) : s);
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(blob);
+              });
+            }
+
+            function mountFilmStudio() {
+              const mount = globalThis['document'].getElementById('filmStudioMount');
+              if (!mount || !window.SmosFilmStudio) {
+                if (mount) mount.innerHTML = '<p class="suggest-meta">Film studio script failed to load. Hard-refresh and retry.</p>';
+                return;
+              }
+              mount.innerHTML = window.SmosFilmStudio.markup();
+              filmStudio = window.SmosFilmStudio.create({
+                root: mount.querySelector('#filmStudio'),
+                getLines: function() { return scriptLines; },
+                getLineIndex: function() { return lineIndex; },
+                setLine: function(i, opts) {
+                  paused = false;
+                  setLine(i, Object.assign({ force: true }, opts || {}));
+                },
+                getFilmMode: function() { return (talkPack && talkPack.film_mode) || 'teleprompter'; },
+                onTranscript: function(text, meta) {
+                  if (!text) return;
+                  liveTranscript = (liveTranscript + ' ' + text).trim();
+                  if (meta && meta.final) {
+                    const input = globalThis['document'].getElementById('userInput');
+                    if (input && (!input.value || input.value.indexOf('Reading from teleprompter') === 0 || input.dataset.fromTake === '1')) {
+                      input.value = liveTranscript.slice(-4000);
+                      input.dataset.fromTake = '1';
                     }
-                    renderConversation(session.coach_messages_json || []);
-                } catch (error) {
-                    logger.error('Error fetching session details:', error);
-                    messageDiv.innerText = 'Error loading conversation: ' + error.message;
-                    messageDiv.className = 'message error';
-                    messageDiv.style.display = 'block';
+                  }
+                },
+                onStatus: function(text, kind) {
+                  if (kind === 'error') showMsg(messageDiv, text, 'error');
+                },
+                onSoundsLikeReading: function(info) {
+                  coachMode = 'freestyle';
+                  showMsg(messageDiv, (info && info.hint) || "Producer: you sound like you're reading — freestyle this beat.", 'success');
+                  const input = globalThis['document'].getElementById('userInput');
+                  if (input && !input.value) {
+                    input.value = 'I sounded like I was reading on line ' + ((info && info.lineIndex) + 1) + ': "' + currentLineText() + '". Help me freestyle.';
+                  }
+                },
+                uploadTake: async function(blob) {
+                  const b64 = await blobToBase64(blob);
+                  const filename = 'smos-session-' + sessionId + '-' + Date.now() + ((blob.type || '').includes('mp4') ? '.mp4' : '.webm');
+                  const response = await marketingFetch('/api/v1/creative/assets', {
+                    method: 'POST',
+                    headers: marketingAuthHeaders(),
+                    body: JSON.stringify({
+                      owner_id: marketingOwnerId(),
+                      ownerId: marketingOwnerId(),
+                      filename: filename,
+                      kind: 'upload',
+                      content_base64: b64
+                    })
+                  });
+                  const data = await response.json();
+                  if (!response.ok) throw new Error(data.error || 'Upload failed');
+                  showMsg(messageDiv, 'Take uploaded. Open Creative Studio to crop/caption, or send transcript to coach.', 'success');
+                  return data;
                 }
+              });
+            }
+
+            globalThis['document'].getElementById('tpControls').addEventListener('click', function(e) {
+              const btn = e.target.closest('button[data-tp]');
+              if (!btn) return;
+              const act = btn.getAttribute('data-tp');
+              if (act === 'prev') { paused = false; setLine(lineIndex - 1, { force: true }); }
+              if (act === 'next') { paused = false; setLine(lineIndex + 1, { force: true }); }
+              if (act === 'pause') {
+                paused = !paused;
+                setLine(lineIndex, { force: true, hold: true });
+                showMsg(messageDiv, paused ? 'Held on this line — go off topic if you want; pick up here anytime.' : 'Teleprompter unpaused.', 'success');
+              }
+              if (act === 'pickup') {
+                paused = true;
+                setLine(lineIndex, { force: true, hold: true });
+                globalThis['document'].getElementById('userInput').value = 'Pick me up at the highlighted line: "' + currentLineText() + '". I went off topic.';
+                coachMode = 'live';
+              }
+              if (act === 'must') {
+                const idx = scriptLines.findIndex(function(l) { return isMustLine(l); });
+                if (idx >= 0) { paused = true; setLine(idx, { force: true, hold: true }); }
+              }
+            });
+
+            globalThis['document'].getElementById('coachChips').addEventListener('click', function(e) {
+              const btn = e.target.closest('button[data-chip]');
+              if (!btn) return;
+              const input = globalThis['document'].getElementById('userInput');
+              let prefix = btn.getAttribute('data-chip') || '';
+              if (prefix.indexOf('Reading from') === 0 || prefix.indexOf("I'm reading") === 0) {
+                prefix = 'I\\'m reading the current teleprompter line out loud: "' + currentLineText() + '". ';
+                coachMode = 'live';
+              }
+              if (prefix.indexOf('Full take') === 0) coachMode = 'after_read';
+              if (prefix.indexOf('Freestyle') === 0 || prefix.indexOf('I sounded') === 0) coachMode = 'freestyle';
+              if (prefix.indexOf('I went off topic') === 0) {
+                prefix = 'I went off topic — pick me up at the highlighted line: "' + currentLineText() + '".';
+                coachMode = 'live';
+              }
+              input.value = prefix + (input.value || '');
+              input.focus();
+            });
+
+            mountFilmStudio();
+            loadTalkPack();
+
+            async function loadSession() {
+                const response = await marketingFetch('/api/v1/marketing/sessions/' + sessionId, { headers: marketingAuthHeaders() });
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || 'Failed to fetch session.');
+                const session = data.session || data;
+                renderConversation(session.coach_messages_json || []);
+                return session;
             }
 
             function renderConversation(messages) {
-                conversationDiv.innerHTML = ''; // Clear existing messages
-                messages.forEach(msg => {
-                    const msgElement = document.createElement('div');
+                conversationDiv.innerHTML = '';
+                let lastCoachMeta = null;
+                (messages || []).forEach(msg => {
+                    const msgElement = globalThis['document'].createElement('div');
                     if (msg.role === 'user') {
                         msgElement.className = 'user-message';
-                        msgElement.innerHTML = \`<p><strong>You:</strong> \${escapeHtml(msg.content)}</p>\`;
-                    } else if (msg.role === 'assistant') {
+                        msgElement.innerHTML = '<p><strong>You:</strong> ' + escapeHtml(msg.content) + '</p>';
+                    } else {
                         msgElement.className = 'coach-message';
-                        let contentHtml = \`<p><strong>Coach:</strong> \${escapeHtml(msg.content)}</p>\`;
-                        if (msg.metadata && msg.metadata.hooks_detected && msg.metadata.hooks_detected.length > 0) {
-                            contentHtml += \`<div class="hook-detected">HOOK DETECTED: \${escapeHtml(msg.metadata.hooks_detected.join(', '))}</div>\`;
+                        let contentHtml = '<p><strong>Coach:</strong> ' + escapeHtml(msg.content) + '</p>';
+                        const meta = msg.metadata || {};
+                        lastCoachMeta = meta;
+                        if (meta.hooks_detected && meta.hooks_detected.length) {
+                            contentHtml += '<div class="hook-detected">HOOK DETECTED: ' + escapeHtml(meta.hooks_detected.join(', ')) + '</div>';
+                        }
+                        if (msg.hookDetected || msg.hookText || meta.hookDetected || meta.hookText) {
+                            contentHtml += '<div class="hook-detected">HOOK DETECTED: ' + escapeHtml(msg.hookText || meta.hookText || 'yes') + '</div>';
+                        }
+                        if (meta.quotedMoment) {
+                            contentHtml += '<div class="coach-cue">I liked when you said: “' + escapeHtml(meta.quotedMoment) + '”</div>';
+                        }
+                        if (meta.askMore) {
+                            contentHtml += '<div class="coach-more">Producer nudge: give me more — who / what number / what scar?</div>';
+                        }
+                        if (meta.soundsLikeReading) {
+                            contentHtml += '<div class="coach-more">Sounds like reading — freestyle this beat.</div>';
+                        }
+                        if (meta.freestyleCue) {
+                            contentHtml += '<div class="coach-cue">Freestyle: ' + escapeHtml(meta.freestyleCue) + '</div>';
+                        }
+                        if (meta.missedMustSay) {
+                            contentHtml += '<div class="coach-more">Must-say miss: ' + escapeHtml(meta.missedMustSay) + '</div>';
+                        }
+                        if (meta.pickUpLine) {
+                            contentHtml += '<div class="coach-cue">Pick up here: “' + escapeHtml(meta.pickUpLine) + '”</div>';
                         }
                         msgElement.innerHTML = contentHtml;
                     }
                     conversationDiv.appendChild(msgElement);
                 });
-                conversationDiv.scrollTop = conversationDiv.scrollHeight; // Scroll to bottom
+                if (lastCoachMeta) {
+                  applyCoachNav({
+                    currentBullet: lastCoachMeta.currentBullet,
+                    lineIndex: lastCoachMeta.lineIndex,
+                    redoFromLine: lastCoachMeta.redoFromLine,
+                    pickUpLine: lastCoachMeta.pickUpLine
+                  });
+                }
             }
 
-            document.getElementById('coachForm').addEventListener('submit', async function(event) {
+            globalThis['document'].getElementById('coachForm').addEventListener('submit', async function(event) {
                 event.preventDefault();
                 messageDiv.style.display = 'none';
-                messageDiv.className = 'message';
-
-                const userInput = document.getElementById('userInput').value;
+                const userInput = globalThis['document'].getElementById('userInput').value;
                 if (!userInput.trim()) {
-                    messageDiv.innerText = 'Please enter a message.';
-                    messageDiv.className = 'message error';
-                    messageDiv.style.display = 'block';
+                    showMsg(messageDiv, 'Please enter a message.', 'error');
                     return;
                 }
-
-                // Add user message to UI immediately
-                renderConversation([...(await fetch(\`/api/v1/marketing/sessions/\${sessionId}\`).then(r => r.json())).coach_messages_json || [], { role: 'user', content: userInput }]);
-                document.getElementById('userInput').value = ''; // Clear input
-
+                globalThis['document'].getElementById('userInput').value = '';
+                liveTranscript = '';
                 try {
-                    const response = await fetch(\`/api/v1/marketing/sessions/\${sessionId}/coach\`, {
+                    const response = await marketingFetch('/api/v1/marketing/sessions/' + sessionId + '/coach', {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ message: userInput })
+                        headers: marketingAuthHeaders(),
+                        body: JSON.stringify({
+                          message: userInput,
+                          owner_id: marketingOwnerId(),
+                          talk_pack: talkPack,
+                          bullet_index: bulletIndex,
+                          line_index: lineIndex,
+                          mode: coachMode
+                        })
                     });
                     const data = await response.json();
-
-                    if (!response.ok) {
-                        throw new Error(data.error || 'Failed to get coach reply.');
-                    }
-
-                    // Re-fetch full conversation to ensure all messages and metadata are up-to-date
-                    fetchSessionDetails();
-
+                    if (!response.ok) throw new Error(data.error || 'Failed to get coach reply.');
+                    applyCoachNav(data);
+                    if (data.soundsLikeReading) showMsg(messageDiv, "Producer: you sound like you're reading — freestyle that beat.", 'success');
+                    else if (data.missedMustSay) showMsg(messageDiv, 'Must-say miss: ' + data.missedMustSay, 'success');
+                    else if (data.freestyleCue) showMsg(messageDiv, 'Freestyle: ' + data.freestyleCue, 'success');
+                    else if (data.quotedMoment) showMsg(messageDiv, 'I liked when you said: "' + data.quotedMoment + '"', 'success');
+                    else if (data.askMore) showMsg(messageDiv, 'Give me more — who / what number / what scar?', 'success');
+                    else if (data.hookDetected) showMsg(messageDiv, 'Hook detected: ' + (data.hookText || 'yes'), 'success');
+                    coachMode = 'live';
+                    await loadSession();
                 } catch (error) {
-                    logger.error('Error in coaching session:', error);
-                    messageDiv.innerText = 'Error: ' + error.message;
-                    messageDiv.className = 'message error';
-                    messageDiv.style.display = 'block';
+                    console.error('Error in coaching session:', error);
+                    showMsg(messageDiv, 'Error: ' + error.message, 'error');
                 }
             });
 
-            fetchSessionDetails(); // Load conversation on page load
-        `;
-        res.send(renderPage(`Marketing Session ${sessionId}`, body, clientScript));
-    });
+            globalThis['document'].getElementById('extractBtn').addEventListener('click', async function() {
+                messageDiv.style.display = 'none';
+                this.disabled = true;
+                try {
+                    const response = await marketingFetch('/api/v1/marketing/sessions/' + sessionId + '/extract', {
+                        method: 'POST',
+                        headers: marketingAuthHeaders(),
+                        body: JSON.stringify({ owner_id: marketingOwnerId() })
+                    });
+                    const data = await response.json();
+                    if (!response.ok) throw new Error(data.error || 'Extract failed.');
+                    const n = (data.extractions || data.items || []).length;
+                    showMsg(messageDiv, 'Extracted ' + n + ' story items. Next: Generate Content Pack.', 'success');
+                } catch (error) {
+                    console.error('Extract error:', error);
+                    showMsg(messageDiv, 'Error: ' + error.message, 'error');
+                } finally {
+                    this.disabled = false;
+                }
+            });
 
-    // GET /marketing/session/:id/content (review + approve generated pieces)
-    app.get('/marketing/session/:id/content', (req, res) => {
-        const sessionId = req.params.id;
-        const body = `
-            <h1>Review & Approve Content for Session: ${escapeHtml(sessionId)}</h1>
-            <p>Review the generated content pieces below. Approve the ones you want to keep, or reject those that need refinement.</p>
-            <div id="contentList">
-                <p>Loading content...</p>
-            </div>
-            <div id="message" class="message" style="display:none;"></div>
-            <p><a href="/marketing/session/${escapeHtml(sessionId)}">Back to Coaching Session</a></p>
-            <p><a href="/marketing/session/${escapeHtml(sessionId)}/export"><button>Proceed to Export</button></a></p>
+            globalThis['document'].getElementById('generateBtn').addEventListener('click', async function() {
+                messageDiv.style.display = 'none';
+                this.disabled = true;
+                try {
+                    const response = await marketingFetch('/api/v1/marketing/sessions/' + sessionId + '/generate', {
+                        method: 'POST',
+                        headers: marketingAuthHeaders(),
+                        body: JSON.stringify({ owner_id: marketingOwnerId() })
+                    });
+                    const data = await response.json();
+                    if (!response.ok) throw new Error(data.error || 'Generate failed.');
+                    const n = (data.pieces || data.content || []).length;
+                    showMsg(messageDiv, 'Generated ' + n + ' pieces. Opening review…', 'success');
+                    setTimeout(function() { globalThis.location.href = marketingHref('/marketing/session/' + sessionId + '/content'); }, 600);
+                } catch (error) {
+                    console.error('Generate error:', error);
+                    showMsg(messageDiv, 'Error: ' + error.message, 'error');
+                } finally {
+                    this.disabled = false;
+                }
+            });
+
+            loadSession().catch(function(error) {
+                console.error('Error fetching session details:', error);
+                showMsg(messageDiv, 'Error loading conversation: ' + error.message, 'error');
+            });
         `;
-        const clientScript = `
-            const sessionId = "${escapeHtml(sessionId)}";
-            const contentListDiv = document.getElementById('contentList');
-            const messageDiv = document.getElementById('message');
+    res.send(renderPage('Marketing Session', body, clientScript));
+  });
+
+  app.get('/marketing/session/:id/content', (req, res) => {
+    const sessionId = req.params.id;
+    const body = `
+            <h1>Review &amp; Approve</h1>
+            <p>Approve pieces you want in the export pack. Reject anything that needs another pass.</p>
+            <div class="actions-row" style="margin-bottom:12px;">
+              <button type="button" class="btn" id="approveAllBtn">Approve all drafts</button>
+              <a class="btn secondary" href="/marketing/session/${escapeHtml(sessionId)}/export">Proceed to Export</a>
+            </div>
+            <div id="contentList"><p>Loading content…</p></div>
+            <div id="message" class="message" style="display:none;"></div>
+            <div class="actions-row">
+              <a class="btn" href="/marketing/session/${escapeHtml(sessionId)}/export">Proceed to Export</a>
+              <a class="btn secondary" href="/marketing/session/${escapeHtml(sessionId)}">Back to Coaching</a>
+            </div>
+        `;
+    const clientScript = `
+            const sessionId = ${JSON.stringify(sessionId)};
+            const contentListDiv = globalThis['document'].getElementById('contentList');
+            const messageDiv = globalThis['document'].getElementById('message');
 
             async function fetchContentPieces() {
                 try {
-                    const response = await fetch(\`/api/v1/marketing/sessions/\${sessionId}/content\`);
-                    const contentPieces = await response.json();
-
-                    if (!response.ok) {
-                        throw new Error(contentPieces.error || 'Failed to fetch content pieces.');
-                    }
-
-                    if (contentPieces.length === 0) {
-                        contentListDiv.innerHTML = '<p>No content pieces generated yet. Please continue your coaching session.</p>';
+                    const response = await marketingFetch('/api/v1/marketing/sessions/' + sessionId + '/content', { headers: marketingAuthHeaders() });
+                    const data = await response.json();
+                    if (!response.ok) throw new Error(data.error || 'Failed to fetch content pieces.');
+                    const contentPieces = Array.isArray(data) ? data : (data.pieces || data.content || []);
+                    if (!contentPieces.length) {
+                        contentListDiv.innerHTML = '<p>No content pieces yet. Go back to the session and run Extract → Generate.</p>';
                         return;
                     }
-
-                    contentListDiv.innerHTML = contentPieces.map(piece => \`
-                        <div class="content-card" id="content-piece-\${escapeHtml(piece.id)}">
-                            <h3>\${escapeHtml(piece.title || 'Untitled Content')}</h3>
-                            <p><strong>Platform:</strong> \${escapeHtml(piece.platform || 'N/A')}</p>
-                            <p><strong>Format:</strong> \${escapeHtml(piece.format || 'N/A')}</p>
-                            <p><strong>Status:</strong> <span class="status-badge \${escapeHtml(piece.status.toLowerCase())}">\${escapeHtml(piece.status)}</span></p>
-                            <p>\${escapeHtml(piece.content_text || piece.body || 'No content text available.')}</p>
-                            \${piece.url ? \`<p><a href="\${escapeHtml(piece.url)}" target="_blank">View Source/Draft</a></p>\` : ''}
-                            <div class="actions">
-                                <button onclick="updateContentStatus('\${escapeHtml(piece.id)}', 'approved')" \${piece.status === 'approved' ? 'disabled' : ''}>Approve</button>
-                                <button onclick="updateContentStatus('\${escapeHtml(piece.id)}', 'rejected')" \${piece.status === 'rejected' ? 'disabled' : ''}>Reject</button>
-                            </div>
-                        </div>
-                    \`).join('');
-
+                    contentListDiv.innerHTML = contentPieces.map(function(piece) {
+                        const status = String(piece.status || 'draft').toLowerCase();
+                        return '<div class="content-card" id="content-piece-' + escapeHtml(piece.id) + '">' +
+                          '<h3>' + escapeHtml(piece.title || piece.platform || 'Untitled') + '</h3>' +
+                          '<p><strong>Platform:</strong> ' + escapeHtml(piece.platform || 'N/A') +
+                          ' · <strong>Format:</strong> ' + escapeHtml(piece.format || 'N/A') +
+                          ' · <span class="status-badge ' + escapeHtml(status) + '">' + escapeHtml(status) + '</span></p>' +
+                          '<p>' + escapeHtml(piece.content_text || piece.body || 'No content text available.') + '</p>' +
+                          '<div class="actions">' +
+                          '<button data-action="approve" data-id="' + escapeHtml(piece.id) + '"' + (status === 'approved' ? ' disabled' : '') + '>Approve</button>' +
+                          '<button class="secondary" data-action="reject" data-id="' + escapeHtml(piece.id) + '"' + (status === 'rejected' ? ' disabled' : '') + '>Reject</button>' +
+                          '</div></div>';
+                    }).join('');
+                    contentListDiv.querySelectorAll('button[data-action]').forEach(function(btn) {
+                      btn.addEventListener('click', function() {
+                        updateContentStatus(btn.getAttribute('data-id'), btn.getAttribute('data-action'));
+                      });
+                    });
                 } catch (error) {
-                    logger.error('Error fetching content pieces:', error);
+                    console.error('Error fetching content pieces:', error);
                     contentListDiv.innerHTML = '<p class="message error">Error loading content: ' + escapeHtml(error.message) + '</p>';
                 }
             }
 
-            async function updateContentStatus(contentId, newStatus) {
+            async function updateContentStatus(contentId, action) {
                 messageDiv.style.display = 'none';
-                messageDiv.className = 'message';
                 try {
-                    const response = await fetch(\`/api/v1/marketing/content/\${contentId}\`, {
+                    const response = await marketingFetch('/api/v1/marketing/content/' + contentId, {
                         method: 'PATCH',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ status: newStatus })
+                        headers: marketingAuthHeaders(),
+                        body: JSON.stringify({ action: action, owner_id: marketingOwnerId() })
                     });
                     const data = await response.json();
-
-                    if (!response.ok) {
-                        throw new Error(data.error || 'Failed to update content status.');
-                    }
-
-                    messageDiv.innerText = \`Content \${escapeHtml(contentId)} status updated to \${escapeHtml(newStatus)}.\`;
-                    messageDiv.className = 'message success';
-                    messageDiv.style.display = 'block';
-
-                    // Update the UI for the specific content piece
-                    const contentCard = document.getElementById(\`content-piece-\${escapeHtml(contentId)}\`);
-                    if (contentCard) {
-                        const statusBadge = contentCard.querySelector('.status-badge');
-                        statusBadge.className = \`status-badge \${escapeHtml(newStatus.toLowerCase())}\`;
-                        statusBadge.innerText = escapeHtml(newStatus);
-                        contentCard.querySelector('button:nth-child(1)').disabled = (newStatus === 'approved');
-                        contentCard.querySelector('button:nth-child(2)').disabled = (newStatus === 'rejected');
-                    }
-
+                    if (!response.ok) throw new Error(data.error || 'Failed to update content status.');
+                    showMsg(messageDiv, 'Content ' + action + 'd.', 'success');
+                    fetchContentPieces();
                 } catch (error) {
-                    logger.error('Error updating content status:', error);
-                    messageDiv.innerText = 'Error: ' + error.message;
-                    messageDiv.className = 'message error';
-                    messageDiv.style.display = 'block';
+                    console.error('Error updating content status:', error);
+                    showMsg(messageDiv, 'Error: ' + error.message, 'error');
                 }
             }
 
+            const approveAllBtn = globalThis['document'].getElementById('approveAllBtn');
+            if (approveAllBtn) approveAllBtn.addEventListener('click', async function() {
+              this.disabled = true;
+              try {
+                const response = await marketingFetch('/api/v1/marketing/sessions/' + sessionId + '/approve-all', {
+                  method: 'POST',
+                  headers: marketingAuthHeaders(),
+                  body: JSON.stringify({ owner_id: marketingOwnerId() })
+                });
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || 'Approve-all failed');
+                showMsg(messageDiv, 'Approved ' + (data.approved_count || 0) + ' drafts. Ready to export.', 'success');
+                fetchContentPieces();
+              } catch (error) {
+                showMsg(messageDiv, 'Error: ' + error.message, 'error');
+              } finally {
+                this.disabled = false;
+              }
+            });
+
             fetchContentPieces();
         `;
-        res.send(renderPage('Review & Approve Content', body, clientScript));
-    });
+    res.send(renderPage('Review & Approve Content', body, clientScript));
+  });
 
-    // GET /marketing/session/:id/export (download the content pack)
-    app.get('/marketing/session/:id/export', (req, res) => {
-        const sessionId = req.params.id;
-        const body = `
-            <h1>Export Content Pack for Session: ${escapeHtml(sessionId)}</h1>
-            <p>Your content is ready to be exported. Click the button below to download your content pack.</p>
-            <button id="downloadButton">Download Content Pack</button>
+  app.get('/marketing/session/:id/export', (req, res) => {
+    const sessionId = req.params.id;
+    const body = `
+            <h1>Export Content Pack</h1>
+            <p>Downloads approved pieces only. Approve at least one piece first.</p>
+            <p class="lede" id="packOffer">Social Media OS pack — coach, approve, export, post like yourself.</p>
+            <div class="actions" style="display:flex;flex-wrap:wrap;gap:0.75rem;margin:1.25rem 0;">
+              <button id="downloadButton" type="button">Download Content Pack</button>
+              <button id="buyPackButton" type="button" class="secondary">Unlock download — $49</button>
+            </div>
             <div id="message" class="message" style="display:none;"></div>
-            <p><a href="/marketing/session/${escapeHtml(sessionId)}/content">Back to Content Review</a></p>
+            <div class="nav-links">
+              <a href="/marketing/session/${escapeHtml(sessionId)}/content">Back to Review</a>
+              <a href="/marketing">Dashboard</a>
+            </div>
         `;
-        const clientScript = `
-            const sessionId = "${escapeHtml(sessionId)}";
-            const messageDiv = document.getElementById('message');
-
-            document.getElementById('downloadButton').addEventListener('click', async function() {
+    const clientScript = `
+            const sessionId = ${JSON.stringify(sessionId)};
+            const messageDiv = globalThis['document'].getElementById('message');
+            const params = new URLSearchParams(location.search);
+            const checkoutId = params.get('checkout_session_id') || '';
+            if (params.get('cancelled') === '1') {
+              showMsg(messageDiv, 'Checkout cancelled — your pack is still here when you are ready.', 'error');
+            }
+            if (params.get('paid') === '1' && checkoutId) {
+              showMsg(messageDiv, 'Confirming payment…', 'success');
+              fetch('/api/v1/marketing/pack/verify?checkout_session_id=' + encodeURIComponent(checkoutId) + '&marketing_session_id=' + encodeURIComponent(sessionId))
+                .then(function(r){ return r.json().then(function(data){ return { status: r.status, data: data }; }); })
+                .then(function(res){
+                  var data = res.data || {};
+                  if (data.ok && data.paid) showMsg(messageDiv, 'Payment confirmed. Download your pack below.', 'success');
+                  else showMsg(messageDiv, 'Payment not confirmed yet: ' + (data.error || ('HTTP ' + res.status)), 'error');
+                })
+                .catch(function(err){ showMsg(messageDiv, 'Verify error: ' + err.message, 'error'); });
+            }
+            fetch('/api/v1/marketing/pack/pricing')
+              .then(function(r){ return r.json(); })
+              .then(function(data){
+                if (data && data.offer) {
+                  var el = globalThis['document'].getElementById('packOffer');
+                  if (el) el.textContent = data.offer;
+                  var buy = globalThis['document'].getElementById('buyPackButton');
+                  if (buy && data.pack && data.pack.display) buy.textContent = 'Unlock download — ' + data.pack.display;
+                }
+              })
+              .catch(function(){});
+            globalThis['document'].getElementById('buyPackButton').addEventListener('click', async function() {
                 messageDiv.style.display = 'none';
-                messageDiv.className = 'message';
                 try {
-                    // Redirect directly to the API endpoint, which should trigger a file download
-                    window.location.href = \`/api/v1/marketing/sessions/\${sessionId}/export\`;
-                    // Note: The download might not show a direct success message here
-                    // as the browser handles the file download.
-                    messageDiv.innerText = 'Download initiated. Please check your downloads folder.';
-                    messageDiv.className = 'message success';
-                    messageDiv.style.display = 'block';
+                  if (!marketingHasAuth()) {
+                    location.href = '/marketing/signup?next=' + encodeURIComponent(location.pathname + location.search);
+                    return;
+                  }
+                  const headers = marketingAuthHeaders();
+                  const response = await fetch('/api/v1/marketing/pack/checkout', {
+                    method: 'POST',
+                    headers: headers,
+                    body: JSON.stringify({ session_id: sessionId, owner_id: marketingOwnerId() })
+                  });
+                  const data = await response.json().catch(function(){ return {}; });
+                  if (!response.ok || !data.url) throw new Error(data.error || ('Checkout failed (' + response.status + ')'));
+                  location.href = data.url;
                 } catch (error) {
-                    logger.error('Error initiating download:', error);
-                    messageDiv.innerText = 'Error initiating download: ' + error.message;
-                    messageDiv.className = 'message error';
-                    messageDiv.style.display = 'block';
+                  showMsg(messageDiv, 'Checkout error: ' + error.message, 'error');
+                }
+            });
+            globalThis['document'].getElementById('downloadButton').addEventListener('click', async function() {
+                messageDiv.style.display = 'none';
+                try {
+                    const response = await marketingFetch('/api/v1/marketing/sessions/' + sessionId + '/export', { headers: marketingAuthHeaders() });
+                    if (response.status === 402) {
+                      showMsg(messageDiv, 'Payment required — buy the $49 pack to unlock download.', 'error');
+                      return;
+                    }
+                    if (!response.ok) {
+                      const data = await response.json().catch(function(){ return {}; });
+                      throw new Error(data.error || ('Export failed (' + response.status + ')'));
+                    }
+                    const blob = await response.blob();
+                    const url = URL.createObjectURL(blob);
+                    const a = globalThis['document'].createElement('a');
+                    a.href = url;
+                    a.download = 'socialmediaos-session-' + sessionId + '.txt';
+                    globalThis['document'].body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    URL.revokeObjectURL(url);
+                    showMsg(messageDiv, 'Download started.', 'success');
+                } catch (error) {
+                    console.error('Error initiating download:', error);
+                    showMsg(messageDiv, 'Error: ' + error.message, 'error');
                 }
             });
         `;
-        res.send(renderPage('Export Content Pack', body, clientScript));
-    });
+    res.send(renderPage('Export Content Pack', body, clientScript));
+  });
+}
 
-    logger.info('Marketing session UI routes registered.');
+export { sharedMarketingClientAuth };
+export function createMarketingSessionUiRoutes(app, deps) {
+  return registerMarketingSessionUiRoutes(app, deps);
 }
 
 export default registerMarketingSessionUiRoutes;

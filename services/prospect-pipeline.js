@@ -35,9 +35,19 @@ import { scoreProspectUrl } from './site-builder-opportunity-scorer.js';
 import { createProspectClientId } from './site-builder-prospect-runner.js';
 
 // Entry-product pricing (foot-in-door → care plan + add-ons)
+import { SITE_BUILDER_PRICING, getBetaPublishOfferSummary, getBetaDealReasonWhy } from '../config/site-builder-pricing.js';
+
 const PRICING = {
-  publish: { name: 'Publish', price: '$49', description: 'Go live with your upgraded site' },
-  care: { name: 'Care plan', price: '$97/mo', description: 'Site + SEO + content maintenance' },
+  publish: {
+    name: 'Beta publish',
+    price: SITE_BUILDER_PRICING.publish.display,
+    description: SITE_BUILDER_PRICING.publish.description,
+  },
+  care: {
+    name: 'Care plan',
+    price: SITE_BUILDER_PRICING.carePlan.display,
+    description: SITE_BUILDER_PRICING.carePlan.description,
+  },
   pos: { name: 'POS referral', price: 'Commission', description: 'Jane / Mindbody / Square setup' },
 };
 
@@ -61,6 +71,11 @@ export default class ProspectPipeline {
     return createProspectClientId();
   }
 
+  resolvePreviewUrl(clientId) {
+    const base = String(this.baseUrl || process.env.SITE_BASE_URL || '').replace(/\/+$/, '');
+    return base ? `${base}/previews/${clientId}` : `/previews/${clientId}`;
+  }
+
   async reserveProspectJob(options = {}) {
     const {
       businessUrl,
@@ -68,15 +83,20 @@ export default class ProspectPipeline {
       contactName = '',
       businessName = '',
       clientId = this.generateClientId(),
+      deferredBuild = false,
     } = options;
 
     if (!businessUrl) return { ok: false, error: 'businessUrl required' };
+
+    const status = deferredBuild ? 'queued' : 'building';
+    const previewUrl = deferredBuild ? this.resolvePreviewUrl(clientId) : null;
 
     if (!this.pool) {
       return {
         ok: true,
         clientId,
-        status: 'building',
+        status,
+        previewUrl,
         reserved: false,
         warning: 'No database pool — job tracking in-memory only',
       };
@@ -86,29 +106,147 @@ export default class ProspectPipeline {
       await this.pool.query(
         `INSERT INTO prospect_sites
           (client_id, business_url, contact_email, contact_name, business_name, preview_url, email_sent, status, metadata, created_at, updated_at)
-         VALUES ($1, $2, $3, $4, $5, NULL, false, 'building', $6::jsonb, NOW(), NOW())`,
+         VALUES ($1, $2, $3, $4, $5, $6, false, $7, $8::jsonb, NOW(), NOW())`,
         [
           clientId,
           businessUrl,
           contactEmail || null,
           contactName || null,
           businessName || null,
-          JSON.stringify({ jobStartedAt: new Date().toISOString(), async: true }),
+          previewUrl,
+          status,
+          JSON.stringify({
+            jobStartedAt: new Date().toISOString(),
+            async: true,
+            deferredBuild: deferredBuild === true,
+            skipEmail: options.skipEmail === true,
+            enrich: options.enrich,
+            skipRepair: options.skipRepair === true,
+            skipBlogs: options.skipBlogs === true,
+            skipAi: options.skipAi === true,
+            leanTemplate: options.leanTemplate === true,
+            skipQualify: options.skipQualify === true,
+            businessInfo: options.businessInfo || null,
+            referrer: options.referrer || null,
+            vertical: options.vertical || null,
+          }),
         ]
       );
-      return { ok: true, clientId, status: 'building', reserved: true };
+      return { ok: true, clientId, status, previewUrl, reserved: true };
     } catch (err) {
       logger.error('[PROSPECT] reserveProspectJob failed', { clientId, error: err.message });
       return { ok: false, error: err.message };
     }
   }
 
+  /**
+   * Email first, build later — saves AI spend until the prospect clicks the preview link.
+   */
+  async sendDeferredInvite({
+    clientId,
+    contactEmail,
+    contactName = '',
+    businessName = '',
+    businessUrl = '',
+    previewUrl = null,
+  } = {}) {
+    if (!contactEmail) return { success: false, error: 'contactEmail required' };
+    const url = previewUrl || this.resolvePreviewUrl(clientId);
+    const name = contactName || 'there';
+    const biz = businessName || 'your business';
+    const emailContent = {
+      subject: `${biz} — beta preview (tester rate)`,
+      html: this.deferredInviteEmailHtml(name, biz, url, businessUrl),
+    };
+
+    let emailSent = false;
+    let emailSendError = null;
+    try {
+      const delivery = await Promise.race([
+        this.sendEmail(contactEmail, emailContent.subject, emailContent.html),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('sendEmail timed out after 25000ms')), 25_000)),
+      ]);
+      emailSent = delivery?.success !== false;
+      if (!emailSent) emailSendError = delivery?.error || 'unknown';
+    } catch (err) {
+      emailSendError = err.message;
+    }
+
+    if (this.pool && clientId) {
+      try {
+        await this.pool.query(
+          `UPDATE prospect_sites
+              SET email_sent = $2,
+                  status = CASE WHEN $2 THEN 'invited' ELSE status END,
+                  metadata = COALESCE(metadata, '{}'::jsonb) || $3::jsonb,
+                  updated_at = NOW()
+            WHERE client_id = $1`,
+          [
+            clientId,
+            emailSent,
+            JSON.stringify({
+              deferredInviteAt: new Date().toISOString(),
+              ...(emailSendError ? { emailSendError, emailSendAttemptAt: new Date().toISOString() } : {}),
+            }),
+          ]
+        );
+      } catch (err) {
+        logger.warn('[PROSPECT] deferred invite status update failed', { clientId, error: err.message });
+      }
+    }
+
+    return {
+      success: emailSent,
+      clientId,
+      previewUrl: url,
+      emailSent,
+      emailSubject: emailContent.subject,
+      error: emailSent ? null : emailSendError,
+    };
+  }
+
+  deferredInviteEmailHtml(contactName, businessName, previewUrl, businessUrl = '') {
+    const offer = getBetaPublishOfferSummary();
+    const reasonWhy = getBetaDealReasonWhy();
+    const months = SITE_BUILDER_PRICING.carePlan.includedMonthsOnPublish || 2;
+    const source = businessUrl
+      ? `<p>We looked at <a href="${businessUrl}" style="color:#0F766E;">${businessUrl}</a> and started a free upgrade preview for <strong>${businessName || 'your business'}</strong>.</p>`
+      : `<p>We started a free website upgrade preview for <strong>${businessName || 'your business'}</strong>.</p>`;
+    return `<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="font-family: Georgia, 'Times New Roman', serif; max-width: 600px; margin: 0 auto; padding: 24px; color: #1a1a1a; line-height: 1.55;">
+  <p>Hi ${contactName || 'there'},</p>
+  ${source}
+  <p>Click the link — the preview finishes for you in about a minute. Looking is free. No call. No card.</p>
+  <p style="margin: 28px 0;">
+    <a href="${previewUrl}" style="background: #0F766E; color: white; padding: 14px 26px; border-radius: 4px; text-decoration: none; font-weight: bold; display: inline-block; font-family: Arial, sans-serif;">
+      Open my free beta preview
+    </a>
+  </p>
+  <p><strong>Why the price is this low:</strong> ${reasonWhy}</p>
+  <p>If you like what you see and want it live: <strong>${SITE_BUILDER_PRICING.publish.display}</strong> to publish, includes the first ${months} months of care, then ${SITE_BUILDER_PRICING.carePlan.display}. After beta, this rate goes away.</p>
+  <p>Ignore it, use it, or tell us what’s off — all welcome. We need real feedback more than we need a hard close.</p>
+  <p>Best,<br>The Lumin team</p>
+  <hr style="margin-top: 36px; border: none; border-top: 1px solid #e5e5e5;">
+  <p style="font-size: 12px; color: #777; font-family: Arial, sans-serif;">
+    Beta-tester offer: ${offer}<br>
+    <a href="${previewUrl}" style="color: #0F766E;">${previewUrl}</a>
+  </p>
+</body>
+</html>`;
+  }
+
   async failProspectJob(clientId, errorMessage) {
     if (!this.pool || !clientId) return;
     try {
+      // Do not clobber a persisted preview with failed — email-stage errors keep status built.
       await this.pool.query(
         `UPDATE prospect_sites
-            SET status = 'failed',
+            SET status = CASE
+                  WHEN preview_url IS NOT NULL AND status IN ('built', 'sent', 'qa_hold') THEN status
+                  ELSE 'failed'
+                END,
                 metadata = COALESCE(metadata, '{}'::jsonb) || $2::jsonb,
                 updated_at = NOW()
           WHERE client_id = $1`,
@@ -125,6 +263,58 @@ export default class ProspectPipeline {
     }
   }
 
+  async touchProspectJob(clientId, stage = 'running') {
+    if (!this.pool || !clientId) return;
+    try {
+      const claimExpires = new Date(Date.now() + 3 * 60 * 1000).toISOString();
+      await this.pool.query(
+        `UPDATE prospect_sites
+            SET metadata = COALESCE(metadata, '{}'::jsonb) || $2::jsonb,
+                updated_at = NOW()
+          WHERE client_id = $1 AND status IN ('building', 'queued', 'invited')`,
+        [
+          clientId,
+          JSON.stringify({
+            jobStage: String(stage || 'running').slice(0, 80),
+            jobHeartbeatAt: new Date().toISOString(),
+            jobClaimExpiresAt: claimExpires,
+          }),
+        ]
+      );
+    } catch (err) {
+      logger.warn('[PROSPECT] touchProspectJob failed', { clientId, error: err.message });
+    }
+  }
+
+  async markProspectBuilding(clientId, extraMeta = {}) {
+    if (!this.pool || !clientId) return { ok: false };
+    try {
+      const result = await this.pool.query(
+        `UPDATE prospect_sites
+            SET status = 'building',
+                metadata = COALESCE(metadata, '{}'::jsonb) || $2::jsonb,
+                updated_at = NOW()
+          WHERE client_id = $1
+            AND status IN ('queued', 'invited', 'sent', 'failed', 'built', 'qa_hold')
+            AND (metadata->>'previewHtml' IS NULL OR metadata->>'previewHtml' = '')
+            AND COALESCE((metadata->>'repairRebuildAttempts')::int, 0) < 2
+          RETURNING client_id, business_url, contact_email, contact_name, business_name, preview_url, metadata`,
+        [
+          clientId,
+          JSON.stringify({
+            deferredBuildStartedAt: new Date().toISOString(),
+            jobStage: 'build_on_view',
+            jobHeartbeatAt: new Date().toISOString(),
+            ...extraMeta,
+          }),
+        ]
+      );
+      return { ok: (result.rows || []).length > 0, row: result.rows?.[0] || null };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  }
+
   /**
    * Full prospect pipeline: build mock site + send outreach email.
    */
@@ -135,16 +325,27 @@ export default class ProspectPipeline {
       contactName = '',
       businessName = '',
       skipEmail = false,
+      referrer = null,
+      vertical = null,
     } = options;
 
     if (!businessUrl) return { success: false, error: 'businessUrl required' };
 
-    logger.info('[PROSPECT] Processing prospect', { businessUrl, contactEmail });
+    const clientIdEarly = options.clientId || null;
+    logger.info('[PROSPECT] Processing prospect', { businessUrl, contactEmail, clientId: clientIdEarly });
+    await this.touchProspectJob(clientIdEarly, 'score');
 
-    // Step 0: Score their existing site — pain points personalize the outreach email
+    // Step 0: Score their existing site — pain points personalize the outreach email,
+    // AND gate whether we build at all. High opportunityScore = bad site = good prospect;
+    // a site that already scores well can't support a compelling before/after story, so
+    // we skip the expensive AI build entirely rather than spend generation cost on a
+    // business we can't dramatically improve.
     let opportunityAnalysis = null;
     try {
-      opportunityAnalysis = await scoreProspectUrl(businessUrl, { timeout: 6000 });
+      opportunityAnalysis = await Promise.race([
+        scoreProspectUrl(businessUrl, { timeout: 6000 }),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('scoreProspectUrl hard timeout')), 10_000)),
+      ]);
       logger.info('[PROSPECT] Opportunity score', {
         businessUrl,
         score: opportunityAnalysis.opportunityScore,
@@ -155,11 +356,86 @@ export default class ProspectPipeline {
       logger.warn('[PROSPECT] Opportunity score failed (non-fatal)', { error: err.message });
     }
 
-    // Step 1: Build their mock site
-    const buildResult = await this.siteBuilder.buildFromUrl(businessUrl, {
-      businessInfo: options.businessInfo || null,
-      clientId: options.clientId || null,
-    });
+    const MIN_OPPORTUNITY_SCORE = Number(process.env.SITE_BUILDER_MIN_OPPORTUNITY_SCORE || 40);
+    if (!options.skipQualify && opportunityAnalysis && opportunityAnalysis.opportunityScore < MIN_OPPORTUNITY_SCORE) {
+      logger.info('[PROSPECT] Skipping — existing site already too strong to build a compelling before/after', {
+        businessUrl,
+        opportunityScore: opportunityAnalysis.opportunityScore,
+        grade: opportunityAnalysis.grade,
+        minRequired: MIN_OPPORTUNITY_SCORE,
+      });
+
+      // Score any supplied competitors the same cheap way — a competitor with a
+      // much worse site than this target is a better prospect for the same niche.
+      let competitorOpportunities = [];
+      const competitorUrls = Array.isArray(options.competitorUrls) ? options.competitorUrls : [];
+      if (competitorUrls.length) {
+        const scored = await Promise.all(
+          competitorUrls.map(async (url) => {
+            try {
+              const analysis = await Promise.race([
+                scoreProspectUrl(url, { timeout: 6000 }),
+                new Promise((_, reject) => setTimeout(() => reject(new Error('scoreProspectUrl hard timeout')), 10_000)),
+              ]);
+              return { url, opportunityScore: analysis.opportunityScore, grade: analysis.grade, painPoints: analysis.painPoints };
+            } catch (err) {
+              return { url, opportunityScore: null, grade: null, error: err.message };
+            }
+          }),
+        );
+        competitorOpportunities = scored
+          .filter((c) => c.opportunityScore != null)
+          .sort((a, b) => b.opportunityScore - a.opportunityScore);
+      }
+
+      return {
+        success: false,
+        skipped: true,
+        error: 'existing site already strong enough',
+        reason: 'existing_site_already_strong',
+        opportunityScore: opportunityAnalysis.opportunityScore,
+        grade: opportunityAnalysis.grade,
+        minRequired: MIN_OPPORTUNITY_SCORE,
+        competitorOpportunities,
+        recommendation: competitorOpportunities.length && competitorOpportunities[0].opportunityScore >= MIN_OPPORTUNITY_SCORE
+          ? `Pursue ${competitorOpportunities[0].url} instead — opportunity score ${competitorOpportunities[0].opportunityScore} vs. ${opportunityAnalysis.opportunityScore} for the original target.`
+          : 'No qualifying competitor supplied — find contact info for a weaker competitor site, or move to the next prospect.',
+      };
+    }
+
+    // If the caller gave a businessName but no structured businessInfo, use it
+    // as the profile. This prevents parked/placeholder sites (e.g. HugeDomains)
+    // from poisoning the generated site with the parking page's brand.
+    if (!options.businessInfo && options.businessName) {
+      options.businessInfo = {
+        businessName: options.businessName,
+        industry: options.vertical || 'wellness',
+      };
+    }
+
+    await this.touchProspectJob(clientIdEarly, 'build');
+    const heartbeat = setInterval(() => {
+      this.touchProspectJob(clientIdEarly, 'build_heartbeat').catch(() => null);
+    }, 20_000);
+    let buildResult;
+    try {
+      // Build variants so the client can choose between multiple designs in the
+      // preview switcher and editor. The switcher and all variant HTMLs are
+      // durably stored in metadata (previewHtml + variantHtmls) for DB fallback.
+      buildResult = await this.siteBuilder.buildVariants(businessUrl, {
+        businessInfo: options.businessInfo || null,
+        clientId: options.clientId || null,
+        enrich: options.enrich,
+        skipRepair: options.skipRepair,
+        skipBlogs: options.skipBlogs,
+        skipAi: options.skipAi,
+        leanTemplate: options.leanTemplate,
+        competitorUrls: options.competitorUrls || [],
+        onProgress: (stage) => this.touchProspectJob(clientIdEarly, stage || 'build'),
+      });
+    } finally {
+      clearInterval(heartbeat);
+    }
 
     if (!buildResult.success) {
       return { success: false, error: `Site build failed: ${buildResult.error}` };
@@ -170,34 +446,80 @@ export default class ProspectPipeline {
     const biz = buildResult.businessName || businessName || 'your business';
     const qualityReport = buildResult.qualityReport || buildResult.metadata?.qualityReport || null;
     const qaHold = qualityReport ? qualityReport.readyToSend === false : false;
+    const clientId = options.clientId || buildResult.clientId;
 
-    // Step 2: Generate personalized email copy (pain points from Step 0 make it specific)
-    const emailContent = await this.generateOutreachEmail({
+    // Persist preview BEFORE email so SMTP hangs / resume cannot lose the build.
+    await this.recordProspect({
+      businessUrl,
+      contactEmail,
       contactName: name,
       businessName: biz,
+      clientId,
       previewUrl,
-      industry: buildResult.metadata?.businessInfo?.industry,
-      posPartnerName: buildResult.posPartner,
-      painPoints: opportunityAnalysis?.painPoints?.slice(0, 3) || [],
+      emailSent: false,
+      status: qaHold ? 'qa_hold' : 'built',
+      metadata: {
+        ...(buildResult.metadata || {}),
+        qualityReport,
+        buildCompletedAt: new Date().toISOString(),
+        referrer: referrer || undefined,
+        vertical: vertical || undefined,
+        opportunityScore: opportunityAnalysis?.opportunityScore ?? null,
+        opportunityGrade: opportunityAnalysis?.grade ?? null,
+        referralCode: clientId,
+        // Survive multi-instance / redeploy ephemeral disk wipe
+        previewHtml: typeof buildResult.siteHtml === 'string'
+          ? buildResult.siteHtml.slice(0, 400_000)
+          : null,
+      },
     });
 
-    // Step 3: Send email (if contact email provided and not skipped)
+    const emailHeartbeat = setInterval(() => {
+      this.touchProspectJob(clientId, 'email_heartbeat').catch(() => null);
+    }, 15_000);
     let emailSent = false;
     let emailSendError = null;
-    if (contactEmail && !skipEmail && !qaHold) {
+    let emailContent = { subject: '', html: '' };
+    try {
+      await this.touchProspectJob(clientId, 'email_copy');
       try {
-        const delivery = await this.sendEmail(contactEmail, emailContent.subject, emailContent.html);
-        emailSent = delivery?.success !== false;
-        if (emailSent) {
-          logger.info('[PROSPECT] Outreach email sent', { contactEmail, previewUrl });
-        } else {
-          emailSendError = delivery?.error || 'unknown';
-          logger.warn('[PROSPECT] Outreach email not sent', { contactEmail, previewUrl, error: emailSendError });
-        }
+        emailContent = await this.generateOutreachEmail({
+          contactName: name,
+          businessName: biz,
+          previewUrl,
+          industry: buildResult.metadata?.businessInfo?.industry,
+          posPartnerName: buildResult.posPartner,
+          painPoints: opportunityAnalysis?.painPoints?.slice(0, 3) || [],
+        });
       } catch (err) {
-        emailSendError = err.message;
-        logger.warn('[PROSPECT] Email send failed', { error: err.message });
+        emailSendError = `email_copy_failed: ${err.message}`;
+        emailContent = {
+          subject: `${biz} — free website upgrade preview`,
+          html: this.fallbackEmailHtml(name, biz, previewUrl, opportunityAnalysis?.painPoints?.slice(0, 3) || []),
+        };
       }
+
+      await this.touchProspectJob(clientId, skipEmail ? 'skip_email' : 'send_email');
+      if (contactEmail && !skipEmail && !qaHold) {
+        try {
+          const delivery = await Promise.race([
+            this.sendEmail(contactEmail, emailContent.subject, emailContent.html),
+            new Promise((_, reject) => setTimeout(() => reject(new Error('sendEmail timed out after 25000ms')), 25_000)),
+          ]);
+          emailSent = delivery?.success !== false;
+          if (emailSent) {
+            logger.info('[PROSPECT] Outreach email sent', { contactEmail, previewUrl });
+          } else {
+            emailSendError = delivery?.error || emailSendError || 'unknown';
+            logger.warn('[PROSPECT] Outreach email not sent', { contactEmail, previewUrl, error: emailSendError });
+          }
+        } catch (err) {
+          emailSendError = err.message;
+          logger.warn('[PROSPECT] Email send failed', { error: err.message });
+        }
+      }
+    } finally {
+      clearInterval(emailHeartbeat);
     }
     if (qaHold) {
       logger.warn('[PROSPECT] Prospect held by quality gate', {
@@ -208,8 +530,6 @@ export default class ProspectPipeline {
       });
     }
 
-    // Step 4: Record in DB
-    const clientId = options.clientId || buildResult.clientId;
     await this.recordProspect({
       businessUrl,
       contactEmail,
@@ -222,6 +542,16 @@ export default class ProspectPipeline {
       metadata: {
         ...(buildResult.metadata || {}),
         qualityReport,
+        referrer: referrer || undefined,
+        vertical: vertical || undefined,
+        opportunityScore: opportunityAnalysis?.opportunityScore ?? null,
+        opportunityGrade: opportunityAnalysis?.grade ?? null,
+        referralCode: clientId,
+        // Keep durable preview HTML across the post-email write (was wiped by
+        // metadata = EXCLUDED.metadata before merge fix).
+        previewHtml: typeof buildResult.siteHtml === 'string'
+          ? buildResult.siteHtml.slice(0, 400_000)
+          : undefined,
         ...(emailSendError ? { emailSendError, emailSendAttemptAt: new Date().toISOString() } : {}),
       },
     });
@@ -243,7 +573,7 @@ export default class ProspectPipeline {
   /**
    * Resend initial outreach email for an existing prospect (no rebuild).
    */
-  async resendOutreachEmail(clientId) {
+  async resendOutreachEmail(clientId, { contactEmail = null } = {}) {
     if (!this.pool || !this.sendEmail) return { success: false, error: 'pool and sendEmail are required' };
 
     let row;
@@ -255,6 +585,18 @@ export default class ProspectPipeline {
     }
 
     if (!row) return { success: false, error: 'prospect not found' };
+    const overrideEmail = String(contactEmail || '').trim();
+    if (overrideEmail && overrideEmail !== row.contact_email) {
+      try {
+        await this.pool.query(
+          `UPDATE prospect_sites SET contact_email = $2, updated_at = NOW() WHERE client_id = $1`,
+          [clientId, overrideEmail]
+        );
+        row.contact_email = overrideEmail;
+      } catch (err) {
+        return { success: false, error: `contact email update failed: ${err.message}` };
+      }
+    }
     if (!row.contact_email) return { success: false, error: 'contact email missing' };
     if (!row.preview_url) return { success: false, error: 'preview not built yet' };
     if (String(row.status || '').toLowerCase() === 'qa_hold') {
@@ -262,10 +604,20 @@ export default class ProspectPipeline {
     }
 
     const metadata = row.metadata && typeof row.metadata === 'object' ? row.metadata : {};
-    const emailContent = {
-      subject: `${row.business_name || 'Your business'} — free website upgrade preview`,
-      html: this.fallbackEmailHtml(row.contact_name, row.business_name, row.preview_url, []),
-    };
+    const emailContent = metadata.deferredBuild === true
+      ? {
+          subject: `${row.business_name || 'Your business'} — beta preview (tester rate)`,
+          html: this.deferredInviteEmailHtml(
+            row.contact_name,
+            row.business_name,
+            row.preview_url,
+            row.business_url
+          ),
+        }
+      : {
+          subject: `${row.business_name || 'Your business'} — beta preview (tester rate)`,
+          html: this.fallbackEmailHtml(row.contact_name, row.business_name, row.preview_url, []),
+        };
 
     const delivery = await this.sendEmail(row.contact_email, emailContent.subject, emailContent.html);
     const emailSent = delivery?.success !== false;
@@ -305,26 +657,38 @@ export default class ProspectPipeline {
         ? `\n- SPECIFIC ISSUES WE FOUND on their current site (mention 1-2 naturally in the email body):\n${painPoints.map(p => `  • ${p}`).join('\n')}`
         : '';
 
-      const prompt = `Write a cold outreach email for a web agency that built a FREE mock website upgrade for a prospect.
+      const painPointLead = painPoints[0]
+        ? `Open with this specific, concrete observation about their current site (rephrase naturally, don't quote it): "${painPoints[0]}".`
+        : `Open with a specific, plausible observation about what's dated or underperforming on a typical ${industry || 'medical/professional'} practice site (booking friction, no mobile optimization, thin SEO, unclear services) — infer, don't fabricate specifics you don't have.`;
+
+      const prompt = `Write a cold outreach email using classic direct-response print sales craft (Claude Hopkins reason-why, Ogilvy clarity, risk reversal).
+
+We are in BETA TESTING. That is the honest reason the price is unusually good — we need real feedback from real practices, so beta testers get ${SITE_BUILDER_PRICING.publish.display} to publish (includes first ${SITE_BUILDER_PRICING.carePlan.includedMonthsOnPublish || 2} months of care), then ${SITE_BUILDER_PRICING.carePlan.display}. After beta, this rate goes away. Do NOT invent fake scarcity ("only 3 left today"). Do say it is a beta-tester rate in exchange for their honest reaction.
+
+We built (or started) a FREE preview for this business — unsolicited. Looking is free. No call required.
 
 CONTEXT:
 - Their business: ${businessName}
-- Industry: ${industry || 'wellness/health'}
+- Industry: ${industry || 'medical/professional practice'} (credible, professional tone — not spa-breezy)
 - Contact name: ${contactName}
 - Preview URL: ${previewUrl}
-- We built them a free upgraded site with: SEO optimization, click funnel, blog posts, booking system, ${posPartnerName} integration${painPointSection}
+- Included in the preview story: SEO-ready homepage, booking path, content support, design options${posPartnerName ? `, ${posPartnerName} ready` : ''}${painPointSection}
+
+PRINT / DIRECT-RESPONSE RULES:
+- 60–140 words. Short paragraphs. One idea per sentence.
+- ${painPointLead}
+- Lead with the free proof (the preview), not a pitch.
+- Include a clear reason-why for the deal: beta testing → low price for feedback.
+- Risk reversal: look free; publish only if they want it; ignore is fine.
+- One CTA only: open the preview. Interest-based ("worth a look?"), never "book a call."
+- Specific numbers beat adjectives. Name ${SITE_BUILDER_PRICING.publish.display} and ${SITE_BUILDER_PRICING.carePlan.display}.
+- Tone: peer, warm, confident — a letter, not a brochure.
+- NO: "I hope this finds you well", synergies, guaranteed #1, fake urgency, emoji spam.
 
 EMAIL RULES:
-- Subject: Under 8 words, personalized with business name, no clickbait
-- Body: 3-4 short paragraphs maximum
-- Paragraph 1: Lead with the specific value — mention 1 real issue we found on their site, then say we built them a free upgrade that fixes it
-- Paragraph 2: What's included (1-2 sentences, bullet points ok)
-- Paragraph 3: Single clear CTA — view the preview at [URL]
-- Paragraph 4: No-pressure close — "No obligation, just wanted to share"
-- Tone: warm, direct, professional — NOT salesy, NOT generic
-- NO: "I hope this email finds you well", "synergies", corporate jargon
-- If pain points provided: reference 1-2 specific ones (not all of them)
-- Include actual preview URL as a clickable link
+- Subject: under 8 words, business name + curiosity or beta preview, no clickbait
+- Body HTML with the real preview URL as a clickable link
+- End with invitation for honest feedback (good or bad)
 
 Return ONLY valid JSON:
 {
@@ -335,7 +699,8 @@ Return ONLY valid JSON:
 
       try {
         // groq_llama: fast JSON extraction — cold email body is ~300-500 tokens, well within groq's limit
-        const response = await this.callCouncil('groq_llama', prompt, { maxOutputTokens: 900, taskType: 'extraction' });
+        // useCache:false: outreach emails are customized to a specific business + preview URL.
+        const response = await this.callCouncil('groq_llama', prompt, { maxOutputTokens: 900, taskType: 'extraction', useCache: false });
         const jsonMatch = response.match(/\{[\s\S]+\}/);
         if (jsonMatch) {
           const parsed = JSON.parse(jsonMatch[0]);
@@ -359,33 +724,100 @@ Return ONLY valid JSON:
    */
   fallbackEmailHtml(contactName, businessName, previewUrl, painPoints = []) {
     const leadingPainPoint = painPoints[0]
-      ? `I noticed ${painPoints[0].toLowerCase()} — so I built a free upgraded version to show you what's possible.`
-      : `I took a look at ${businessName || 'your website'} and built a free upgraded version to show you what's possible.`;
+      ? `I noticed ${painPoints[0].toLowerCase()} — so we built a cleaner version to show you, no ask attached.`
+      : `We looked at ${businessName || 'your site'} and built an upgraded preview — showing beats explaining.`;
+    const offer = getBetaPublishOfferSummary();
+    const reasonWhy = getBetaDealReasonWhy();
+    const months = SITE_BUILDER_PRICING.carePlan.includedMonthsOnPublish || 2;
     return `<!DOCTYPE html>
 <html>
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #333;">
+<body style="font-family: Georgia, 'Times New Roman', serif; max-width: 600px; margin: 0 auto; padding: 24px; color: #1a1a1a; line-height: 1.55;">
   <p>Hi ${contactName || 'there'},</p>
-  <p>${leadingPainPoint} Fully optimized for SEO, with a modern booking flow and automated blog content for your industry.</p>
-  <p>Here's what's included in the free preview:</p>
-  <ul>
-    <li>✅ Modern click-funnel design (built to convert visitors to bookings)</li>
-    <li>✅ SEO-optimized pages + 3 industry blog posts</li>
-    <li>✅ Integrated booking system setup</li>
-    <li>✅ Mobile responsive + fast-loading</li>
-    <li>✅ YouTube video sync (your videos auto-appear on the site)</li>
+  <p>${leadingPainPoint}</p>
+  <ul style="padding-left: 1.2rem;">
+    <li>Free preview first — judge the work before anything is paid</li>
+    <li>SEO-ready pages, booking path, and content support included</li>
+    <li>Beta-tester publish: ${SITE_BUILDER_PRICING.publish.display} + ${months} months care, then ${SITE_BUILDER_PRICING.carePlan.display}</li>
   </ul>
-  <p style="margin: 24px 0;">
-    <a href="${previewUrl}" style="background: #7C3AED; color: white; padding: 12px 24px; border-radius: 24px; text-decoration: none; font-weight: bold; display: inline-block;">
-      👀 View Your Free Preview
+  <p style="margin: 28px 0;">
+    <a href="${previewUrl}" style="background: #0F766E; color: white; padding: 14px 26px; border-radius: 4px; text-decoration: none; font-weight: bold; display: inline-block; font-family: Arial, sans-serif;">
+      Worth 60 seconds to look?
     </a>
   </p>
-  <p>No obligation at all — I just wanted to show you what's possible. If you like it and want to go live with it, we can talk. If not, keep the preview as inspiration.</p>
-  <p>Best,<br>The Lumin AI Team</p>
-  <hr style="margin-top: 40px; border: none; border-top: 1px solid #eee;">
-  <p style="font-size: 11px; color: #999;">
-    Publish your preview from $49 | Care plan from $97/mo<br>
-    <a href="${previewUrl}" style="color: #7C3AED;">${previewUrl}</a>
+  <p><strong>Why such a good deal:</strong> ${reasonWhy}</p>
+  <p>Ignore it, use it, or tell us it’s not for you — all fine. We need honest beta feedback more than a hard close.</p>
+  <p>Best,<br>The Lumin team</p>
+  <hr style="margin-top: 36px; border: none; border-top: 1px solid #e5e5e5;">
+  <p style="font-size: 12px; color: #777; font-family: Arial, sans-serif;">
+    Beta-tester offer: ${offer}<br>
+    <a href="${previewUrl}" style="color: #0F766E;">${previewUrl}</a>
+  </p>
+</body>
+</html>`;
+  }
+
+  /**
+   * Nurture email template (1–4 step sequence). Category-agnostic.
+   */
+  nurtureEmailHtml(contactName, businessName, previewUrl, followUpNumber = 2, referralCode = null) {
+    const name = contactName || 'there';
+    const biz = businessName || 'your business';
+    const offer = getBetaPublishOfferSummary();
+    const months = SITE_BUILDER_PRICING.carePlan.includedMonthsOnPublish || 2;
+    const referralLink = referralCode && this.baseUrl
+      ? `${String(this.baseUrl).replace(/\/$/, '')}/overlay/site-builder-landing.html?ref=${encodeURIComponent(referralCode)}`
+      : null;
+    const referralBlock = referralLink
+      ? `<p>Know another business owner who could use this? Forward them your referral link: <a href="${referralLink}" style="color:#0F766E;">${referralLink}</a>. If they publish, you get one free month of care.</p>`
+      : '';
+
+    const steps = {
+      1: {
+        subject: `${biz} — your preview should be in your inbox`,
+        body: `<p>Hi ${name},</p>
+<p>Your free preview for ${biz} is built and ready. If you missed it, here is the link again.</p>
+<p style="margin:28px 0;"><a href="${previewUrl}" style="background:#0F766E;color:white;padding:14px 26px;border-radius:4px;text-decoration:none;font-weight:bold;display:inline-block;font-family:Arial,sans-serif;">Open my free preview</a></p>
+<p>It is a beta-tester rate: ${SITE_BUILDER_PRICING.publish.display} to publish, includes ${months} months of care, then ${SITE_BUILDER_PRICING.carePlan.display}. No obligation.</p>
+${referralBlock}`,
+      },
+      2: {
+        subject: `Quick question about ${biz}`,
+        body: `<p>Hi ${name},</p>
+<p>Just checking in — did you get a chance to look at the preview for ${biz}? The feedback so far is that the site loads faster and makes the booking path clearer.</p>
+<p style="margin:28px 0;"><a href="${previewUrl}" style="background:#0F766E;color:white;padding:14px 26px;border-radius:4px;text-decoration:none;font-weight:bold;display:inline-block;font-family:Arial,sans-serif;">Review the preview</a></p>
+<p>Happy to tweak anything before you publish. Reply with what you would change.</p>
+${referralBlock}`,
+      },
+      3: {
+        subject: `Last follow-up — ${biz}`,
+        body: `<p>Hi ${name},</p>
+<p>This is my last follow-up. I completely understand if the timing is not right. If you do want the preview to go live, the beta-tester rate (${SITE_BUILDER_PRICING.publish.display}) is still open for now.</p>
+<p style="margin:28px 0;"><a href="${previewUrl}" style="background:#0F766E;color:white;padding:14px 26px;border-radius:4px;text-decoration:none;font-weight:bold;display:inline-block;font-family:Arial,sans-serif;">Publish ${biz} for ${SITE_BUILDER_PRICING.publish.display}</a></p>
+<p>Either way, no hard feelings. I will close the loop after this.</p>
+${referralBlock}`,
+      },
+      4: {
+        subject: `One month later — still want the ${biz} preview?`,
+        body: `<p>Hi ${name},</p>
+<p>Your preview for ${biz} has been live for a month. If you have questions or want to move forward, just reply. If not, I will leave you alone.</p>
+<p style="margin:28px 0;"><a href="${previewUrl}" style="background:#0F766E;color:white;padding:14px 26px;border-radius:4px;text-decoration:none;font-weight:bold;display:inline-block;font-family:Arial,sans-serif;">Open my preview</a></p>
+<p>The beta-tester rate is still on the table.</p>
+${referralBlock}`,
+      },
+    };
+
+    const step = steps[followUpNumber] || steps[2];
+    return `<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${step.subject}</title></head>
+<body style="font-family:Georgia,'Times New Roman',serif;max-width:600px;margin:0 auto;padding:24px;color:#1a1a1a;line-height:1.55;">
+  ${step.body}
+  <p>Best,<br>The Lumin team</p>
+  <hr style="margin-top:36px;border:none;border-top:1px solid #e5e5e5;">
+  <p style="font-size:12px;color:#777;font-family:Arial,sans-serif;">
+    Beta-tester offer: ${offer}<br>
+    <a href="${previewUrl}" style="color:#0F766E;">${previewUrl}</a>
   </p>
 </body>
 </html>`;
@@ -409,7 +841,7 @@ Return ONLY valid JSON:
            preview_url = EXCLUDED.preview_url,
            email_sent = EXCLUDED.email_sent,
            status = EXCLUDED.status,
-           metadata = EXCLUDED.metadata,
+           metadata = COALESCE(prospect_sites.metadata, '{}'::jsonb) || EXCLUDED.metadata,
            updated_at = NOW(),
            last_contacted_at = CASE WHEN EXCLUDED.email_sent THEN NOW() ELSE prospect_sites.last_contacted_at END`,
         [
@@ -440,15 +872,25 @@ Return ONLY valid JSON:
         `SELECT * FROM prospect_sites ORDER BY created_at DESC LIMIT $1`,
         [limit]
       );
-      return result.rows;
+      return result.rows.map((row) => {
+        const metadata = row.metadata && typeof row.metadata === 'object'
+          ? { ...row.metadata }
+          : row.metadata;
+        if (metadata && typeof metadata.previewHtml === 'string') {
+          metadata.hasPreviewHtml = true;
+          metadata.previewHtmlBytes = metadata.previewHtml.length;
+          delete metadata.previewHtml;
+        }
+        return { ...row, metadata };
+      });
     } catch {
       return [];
     }
   }
 
   /**
-   * Send follow-up sequence to a prospect (3 emails over 7 days).
-   * Call this on day 3 and day 7 after initial outreach.
+   * Send follow-up sequence to a prospect (4 emails over 14 days).
+   * followUpNumber: 1 (day 1), 2 (day 3), 3 (day 7), 4 (day 14)
    */
   async sendFollowUp(prospectId, followUpNumber = 2) {
     if (!this.pool || !this.sendEmail) return { success: false, error: 'pool and sendEmail are required' };
@@ -469,49 +911,49 @@ Return ONLY valid JSON:
       return { success: false, error: `prospect status ${row.status} is not follow-up eligible` };
     }
 
-    const subjects = {
-      2: `Quick question about ${row.business_name || 'your site preview'}`,
-      3: `Last follow-up — ${row.business_name || 'your free preview'}`,
-    };
-
-    const bodies = {
-      2: this.fallbackEmailHtml(row.contact_name, row.business_name, row.preview_url)
-        .replace('I just wanted to show you', 'Just following up — did you get a chance to see the preview?'),
-      3: this.fallbackEmailHtml(row.contact_name, row.business_name, row.preview_url)
-        .replace('No obligation at all', 'This is my last follow-up — completely understand if the timing isn\'t right'),
-    };
-
-    if (subjects[followUpNumber]) {
-      const delivery = await this.sendEmail(row.contact_email, subjects[followUpNumber], bodies[followUpNumber]);
-      if (delivery?.success === false) {
-        logger.warn('[PROSPECT] Follow-up email not sent', {
-          prospectId,
-          followUpNumber,
-          recipient: row.contact_email,
-          error: delivery.error || 'unknown',
-        });
-        return { success: false, error: delivery.error || 'follow-up send failed' };
-      }
-
-      await this.pool.query(
-        `UPDATE prospect_sites
-            SET follow_up_count = COALESCE(follow_up_count, 0) + 1,
-                last_follow_up_at = NOW(),
-                last_contacted_at = NOW(),
-                updated_at = NOW()
-          WHERE client_id = $1`,
-        [prospectId]
-      ).catch(() => {});
-
-      logger.info('[PROSPECT] Follow-up sent', { prospectId, followUpNumber, recipient: row.contact_email });
-      return { success: true, prospectId, followUpNumber, recipient: row.contact_email };
+    if (![1, 2, 3, 4].includes(Number(followUpNumber))) {
+      return { success: false, error: `unsupported followUpNumber ${followUpNumber}` };
     }
 
-    return { success: false, error: `unsupported followUpNumber ${followUpNumber}` };
+    const html = this.nurtureEmailHtml(
+      row.contact_name,
+      row.business_name,
+      row.preview_url,
+      Number(followUpNumber),
+      prospectId
+    );
+    const subjectMatch = html.match(/<title>([^<]*)<\/title>/);
+    const subject = subjectMatch?.[1]?.trim()
+      ? subjectMatch[1].trim()
+      : `Quick question about ${row.business_name || 'your free preview'}`;
+
+    const delivery = await this.sendEmail(row.contact_email, subject, html);
+    if (delivery?.success === false) {
+      logger.warn('[PROSPECT] Follow-up email not sent', {
+        prospectId,
+        followUpNumber,
+        recipient: row.contact_email,
+        error: delivery.error || 'unknown',
+      });
+      return { success: false, error: delivery.error || 'follow-up send failed' };
+    }
+
+    await this.pool.query(
+      `UPDATE prospect_sites
+          SET follow_up_count = COALESCE(follow_up_count, 0) + 1,
+              last_follow_up_at = NOW(),
+              last_contacted_at = NOW(),
+              updated_at = NOW()
+        WHERE client_id = $1`,
+      [prospectId]
+    ).catch(() => {});
+
+    logger.info('[PROSPECT] Follow-up sent', { prospectId, followUpNumber, recipient: row.contact_email });
+    return { success: true, prospectId, followUpNumber, recipient: row.contact_email };
   }
 }
 
-export async function runFollowUpCron({ pool, sendEmail } = {}) {
+export async function runFollowUpCron({ pool, sendEmail, baseUrl = '' } = {}) {
   if (!pool) {
     logger.warn('[PROSPECT] Follow-up cron disabled — no DB pool');
     return { success: false, error: 'pool required', processed: 0, sent: 0 };
@@ -520,6 +962,7 @@ export async function runFollowUpCron({ pool, sendEmail } = {}) {
   const pipeline = new ProspectPipeline({
     pool,
     sendEmail: sendEmail || createNoopEmailAdapter(),
+    baseUrl,
   });
 
   logger.info('[PROSPECT] Running follow-up cron');
@@ -537,10 +980,15 @@ export async function runFollowUpCron({ pool, sendEmail } = {}) {
        WHERE email_sent = TRUE
          AND contact_email IS NOT NULL
          AND status NOT IN ('converted', 'lost', 'expired')
+         AND COALESCE(follow_up_count, 0) < 4
          AND (
-           (COALESCE(follow_up_count, 0) = 0 AND created_at <= NOW() - INTERVAL '3 days')
+           (COALESCE(follow_up_count, 0) = 0 AND created_at <= NOW() - INTERVAL '1 day')
            OR
-           (COALESCE(follow_up_count, 0) = 1 AND created_at <= NOW() - INTERVAL '7 days')
+           (COALESCE(follow_up_count, 0) = 1 AND created_at <= NOW() - INTERVAL '3 days')
+           OR
+           (COALESCE(follow_up_count, 0) = 2 AND created_at <= NOW() - INTERVAL '7 days')
+           OR
+           (COALESCE(follow_up_count, 0) = 3 AND created_at <= NOW() - INTERVAL '14 days')
          )
        ORDER BY created_at ASC
     `);
@@ -549,7 +997,7 @@ export async function runFollowUpCron({ pool, sendEmail } = {}) {
     const errors = [];
 
     for (const row of result.rows) {
-      const followUpNumber = Number(row.follow_up_count || 0) === 0 ? 2 : 3;
+      const followUpNumber = Number(row.follow_up_count || 0) + 1;
       const outcome = await pipeline.sendFollowUp(row.client_id, followUpNumber);
       if (outcome?.success) sent += 1;
       else if (outcome?.error) errors.push({ clientId: row.client_id, error: outcome.error });

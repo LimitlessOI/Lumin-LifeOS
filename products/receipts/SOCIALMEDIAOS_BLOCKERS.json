@@ -1,40 +1,19 @@
 {
   "schema": "socialmediaos_blockers_v1",
-  "at": "2026-07-10T02:06:30.000Z",
+  "at": "2026-07-13T09:09:46.704Z",
   "ok": false,
   "note": "Named blockers — system must not fake PASS or stop silently",
   "runnable_verify_ok": true,
-  "sentry_layer_a": "PASS",
-  "sentry_layer_a_receipt": "products/receipts/SENTRY_MARKETINGOS_LAYER_A.json",
   "blockers": [
     {
       "code": "STORAGE_R2_UNVERIFIED",
-      "why_cant_fix_now": "STORAGE_* not in managed-env allowlist; audio upload intentionally excluded from Phase 1 queue",
-      "next_unblocking_action": "Add verified STORAGE_PROVIDER=r2 + STORAGE_ENDPOINT/BUCKET/ACCESS_KEY_ID/SECRET_ACCESS_KEY/PUBLIC_URL to Railway, then enqueue audio upload"
+      "why_cant_fix_now": "Cloudflare R2 credentials not yet set in Railway; audio upload intentionally excluded from Phase 1 text-mode verification",
+      "next_unblocking_action": "Add verified STORAGE_PROVIDER=r2 + STORAGE_ENDPOINT/BUCKET/ACCESS_KEY_ID/SECRET_ACCESS_KEY/PUBLIC_URL to Railway, then test audio upload end-to-end"
     },
     {
-      "code": "SENTRY_LAYER_B_NOT_RUN",
-      "why_cant_fix_now": "MarketingOS registered for Layer A only; browser walkthrough of /marketing/session/new not yet a SENTRY Layer B script",
-      "next_unblocking_action": "Author scripts/run-marketingos-layer-b.mjs (Puppeteer) and register in SENTRY_PRODUCT_REGISTRY.json"
-    },
-    {
-      "code": "SITE_BUILDER_EMAIL_ENV",
-      "why_cant_fix_now": "EMAIL_FROM, SITE_BASE_URL, EMAIL_PROVIDER not in managed-env allowlist (POSTMARK_SERVER_TOKEN is present)",
-      "next_unblocking_action": "Add missing email/site vars to Railway allowlist+vault, then prove first Site Builder send"
-    }
-  ],
-  "cleared": [
-    {
-      "code": "LEGACY_SOCIALMEDIAOS_404",
-      "cleared_how": "Canonical surface documented as /api/v1/marketing/*; legacy named as expected non-mount"
-    },
-    {
-      "code": "STALE_VERIFY_MARKETING_PHASE1_MJS",
-      "cleared_how": "scripts/verify-marketing-phase1.mjs is now a shim to verify-marketing-phase1-live.mjs"
-    },
-    {
-      "code": "SENTRY_LAYER_A_NOT_RUN",
-      "cleared_how": "scripts/run-marketingos-layer-a.mjs + registry entry marketingos PASS 2026-07-10"
+      "code": "GOOGLE_YOUTUBE_OAUTH_UNVERIFIED",
+      "why_cant_fix_now": "GOOGLE_CLIENT_ID/GOOGLE_CLIENT_SECRET not set in Railway; YouTube connect cannot exchange tokens",
+      "next_unblocking_action": "Add GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET to Railway, then add redirect URI https://robust-magic-production.up.railway.app/api/v1/marketing/youtube/callback in Google Cloud Console and test /marketing/youtube/connect"
     }
   ]
 }

@@ -1,0 +1,521 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "token-accounting-os",
+  "planned_at": "2026-07-15T07:38:54.540Z",
+  "backlog_signature": "5df9afa0154a24a2",
+  "corpus_sources": [
+    "docs/products/token-accounting-os/PRODUCT_HOME.md"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "status": "done",
+      "target_file": "services/freeTier.js",
+      "task": "implement freeTierService",
+      "spec": "Provide an API to upsert free-tier records.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "upsertFreeTier"
+      ],
+      "route": {
+        "path": "/api/v1/free-tier/upsert"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/freeTier.js",
+          "exports": [
+            "upsertFreeTier"
+          ],
+          "assertion_id": "expected_exports:services/freeTier.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "424e860e31978494bae7ed1c2a2ee6e6ce405a0b",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T09:35:05.346Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T09:36:43.085Z",
+      "blueprint_id": "PRODUCT-TOKEN-ACCOUNTING-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "1",
+      "mission_id": "PRODUCT-token-accounting-os"
+    },
+    {
+      "id": "2",
+      "status": "done",
+      "target_file": "db/migrations/20231012_create_token_receipts.sql",
+      "task": "create token_receipts table",
+      "spec": "Create token_receipts table with id, created_at, updated_at defaulted.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS token_receipts"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "70e7510a8d69dc5b23fd4a4975c76d8af16bd054",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T08:48:44.366Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T08:50:00.234Z",
+      "blueprint_id": "PRODUCT-TOKEN-ACCOUNTING-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "2",
+      "mission_id": "PRODUCT-token-accounting-os"
+    },
+    {
+      "id": "3",
+      "status": "done",
+      "target_file": "services/tokenReceipt.js",
+      "task": "implement tokenReceiptService",
+      "spec": "Service to handle token receipt on build completion.",
+      "depends_on": [
+        "2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "recordTokenReceipt"
+      ],
+      "route": {
+        "path": "/api/v1/token-receipt/record"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/tokenReceipt.js",
+          "exports": [
+            "recordTokenReceipt"
+          ],
+          "assertion_id": "expected_exports:services/tokenReceipt.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T08:59:29.527Z",
+      "commit_sha": "114681659ac48638ee3063aec1a4e302c07c9fcc",
+      "blueprint_id": "PRODUCT-TOKEN-ACCOUNTING-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "3",
+      "mission_id": "PRODUCT-token-accounting-os"
+    },
+    {
+      "id": "4",
+      "status": "done",
+      "target_file": "routes/tokenReceipt.js",
+      "task": "implement token receipt route",
+      "spec": "Expose API route for recording token receipts.",
+      "depends_on": [
+        "3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerTokenReceiptRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/token-receipt/record"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/tokenReceipt.js",
+          "exports": [
+            "registerTokenReceiptRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/tokenReceipt.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T09:04:38.599Z",
+      "commit_sha": "0920d983340a9dac2f8a606dd8979b5c15fd0e47",
+      "blueprint_id": "PRODUCT-TOKEN-ACCOUNTING-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "4",
+      "mission_id": "PRODUCT-token-accounting-os"
+    },
+    {
+      "id": "5",
+      "status": "done",
+      "target_file": "db/migrations/20231012_create_ci_guard.sql",
+      "task": "create ci_guard table",
+      "spec": "Create ci_guard table with id, created_at, updated_at defaulted.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS ci_guard"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T08:41:54.397Z",
+      "commit_sha": "eba7767240c6cdfa71df791422d25f8902805c0e",
+      "blueprint_id": "PRODUCT-TOKEN-ACCOUNTING-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "5",
+      "mission_id": "PRODUCT-token-accounting-os"
+    },
+    {
+      "id": "6",
+      "status": "done",
+      "target_file": "services/ciGuard.js",
+      "task": "implement ciGuardService",
+      "spec": "Service to apply guard against bypassing council metered path.",
+      "depends_on": [
+        "5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "checkCiGuard"
+      ],
+      "route": {
+        "path": "/api/v1/ci-guard/check"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/ciGuard.js",
+          "exports": [
+            "checkCiGuard"
+          ],
+          "assertion_id": "expected_exports:services/ciGuard.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T09:09:29.928Z",
+      "commit_sha": "00addcf00c856cd7501dde29af8678825ebe1813",
+      "blueprint_id": "PRODUCT-TOKEN-ACCOUNTING-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "6",
+      "mission_id": "PRODUCT-token-accounting-os"
+    },
+    {
+      "id": "7",
+      "status": "done",
+      "target_file": "routes/ciGuard.js",
+      "task": "implement ci guard route",
+      "spec": "Expose API route for checking CI guard.",
+      "depends_on": [
+        "6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCiGuardRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/ci-guard/check"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/ciGuard.js",
+          "exports": [
+            "registerCiGuardRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/ciGuard.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T09:17:53.274Z",
+      "commit_sha": "c7869a4536e6403796edfebdd72f6eb333b99088",
+      "blueprint_id": "PRODUCT-TOKEN-ACCOUNTING-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "7",
+      "mission_id": "PRODUCT-token-accounting-os"
+    },
+    {
+      "id": "8",
+      "status": "skipped",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "update auto registration",
+      "spec": "Add new route modules to auto-registration configuration.",
+      "depends_on": [
+        "4",
+        "7"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "\"./routes/tokenReceipt.js\"",
+        "\"./routes/ciGuard.js\""
+      ],
+      "last_attempt_at": "2026-07-15T20:03:41.320Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:\"./routes/tokenReceipt.js\"; behavior_assertion: missing_substring:\"./routes/ciGuard.js\"; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 6,
+      "revived_at": "2026-07-15T20:03:41.254Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:\"./routes/tokenReceipt.js\"; behavior_assertion: missing_substring:\"./routes/ciGuard.js\"; be",
+      "demoted_at": "2026-07-16T03:11:56.535Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-TOKEN-ACCOUNTING-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "8",
+      "mission_id": "PRODUCT-token-accounting-os"
+    },
+    {
+      "id": "step1",
+      "status": "done",
+      "target_file": "services/builderOSTokenReceipt.js",
+      "task": "implement builderOS token receipt service",
+      "spec": "The service handles token receipt generation upon build completion. It shall interface with the database to store token information generated on a build complete event.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generateTokenReceipt"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/builderOSTokenReceipt.js",
+          "exports": [
+            "generateTokenReceipt"
+          ],
+          "assertion_id": "expected_exports:services/builderOSTokenReceipt.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "8411d35f2a7e445d1c882432f8e292f83f88bd80",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T03:44:44.197Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T03:45:08.267Z",
+      "blueprint_id": "PRODUCT-TOKEN-ACCOUNTING-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step1",
+      "mission_id": "PRODUCT-token-accounting-os"
+    },
+    {
+      "id": "step2",
+      "status": "done",
+      "target_file": "routes/builderOSTokenReceipt.js",
+      "task": "implement builderOS token receipt route",
+      "spec": "Create a POST route that triggers token receipt generation on build complete. It should rely on the builderOSTokenReceipt service and respond with success or error status.",
+      "depends_on": [
+        "step1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerBuilderOSTokenReceiptRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/builderOS/token-receipt"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/builderOSTokenReceipt.js",
+          "exports": [
+            "registerBuilderOSTokenReceiptRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/builderOSTokenReceipt.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "50c4c7b7e6dc4a3cf6c634a71828b277e06c7caf",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T07:27:16.259Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T07:29:20.884Z",
+      "blueprint_id": "PRODUCT-TOKEN-ACCOUNTING-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step2",
+      "mission_id": "PRODUCT-token-accounting-os"
+    },
+    {
+      "id": "step3",
+      "status": "blocked",
+      "target_file": "services/freeTierAPI.js",
+      "task": "implement free-tier upsert API",
+      "spec": "Build an API service that supports upserting free-tier user data. The service should handle necessary validations and perform the required database operations.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "upsertFreeTierUser"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/freeTierAPI.js",
+          "exports": [
+            "upsertFreeTierUser"
+          ],
+          "assertion_id": "expected_exports:services/freeTierAPI.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-17T18:46:44.790Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/services/.factory-import-check-1784314004755-1.mjs\";",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 9,
+      "revived_at": "2026-07-17T18:45:49.207Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-TOKEN-ACCOUNTING-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step3",
+      "mission_id": "PRODUCT-token-accounting-os"
+    },
+    {
+      "id": "step4",
+      "status": "pending",
+      "target_file": "routes/freeTierAPI.js",
+      "task": "implement route for free-tier upsert API",
+      "spec": "Provide an HTTP endpoint that allows clients to upsert user data for the free-tier service. It should interact with the freeTierAPI service to perform upsert operations.",
+      "depends_on": [
+        "step3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerFreeTierAPIRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/freeTier/upsert"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/freeTierAPI.js",
+          "exports": [
+            "registerFreeTierAPIRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/freeTierAPI.js"
+        }
+      ],
+      "blueprint_id": "PRODUCT-TOKEN-ACCOUNTING-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step4",
+      "mission_id": "PRODUCT-token-accounting-os"
+    },
+    {
+      "id": "step5",
+      "status": "done",
+      "target_file": "db/migrations/20231013_create_free_tier_upsert.sql",
+      "task": "create migration for free-tier upsert",
+      "spec": "Create a new table or modify existing ones required for free-tier upsert operations, ensuring a CREATE TABLE with the necessary fields.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "upsert"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T03:18:39.187Z",
+      "commit_sha": "b0555b050db53a68f3fa39dc2c85e64d160f8146",
+      "blueprint_id": "PRODUCT-TOKEN-ACCOUNTING-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step5",
+      "mission_id": "PRODUCT-token-accounting-os"
+    },
+    {
+      "id": "step6",
+      "status": "done",
+      "target_file": "routes/ciGuardBypass.js",
+      "task": "implement CI guard against bypassing route",
+      "spec": "Introduce an endpoint that interfaces with ciGuard service to ensure builds are monitored and unauthorised paths are not pursued. Ensure to include a CI guard mechanism.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCIGuardBypassRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/ci-guard/bypass"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/ciGuardBypass.js",
+          "exports": [
+            "registerCIGuardBypassRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/ciGuardBypass.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T03:23:51.644Z",
+      "commit_sha": "511ce2fa2ccb10c38a0339de0b674e6cfda3100e",
+      "blueprint_id": "PRODUCT-TOKEN-ACCOUNTING-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step6",
+      "mission_id": "PRODUCT-token-accounting-os"
+    }
+  ],
+  "blueprint_id": "PRODUCT-TOKEN-ACCOUNTING-OS-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-token-accounting-os",
+  "twin_kind": "product_build_queue_registered"
+}

@@ -1,5 +1,7 @@
 /**
  * SYNOPSIS: Exports createCouncilMembers — config/council-members.js.
+ *
+ * @ssot docs/products/ai-council/PRODUCT_HOME.md
  */
 export const COUNCIL_ALIAS_MAP = {
   claude: "claude_sonnet",    // direct Anthropic only — OpenRouter retired (Adam 2026-05-24)
@@ -10,6 +12,7 @@ export const COUNCIL_ALIAS_MAP = {
   gemini: "gemini_flash",
   grok: "groq_llama",
   deepseek: "deepseek",
+  century: "century",
   // Founder directive (2026-06-30): hard-retire Ollama names to cloud/runtime-safe lanes.
   ollama_deepseek: "deepseek",
   ollama_llama: "groq_llama",
@@ -57,7 +60,7 @@ export function createCouncilMembers({ DEEPSEEK_BRIDGE_ENABLED }) {
     },
     openai_builder_mini: {
       name: "OpenAI Builder Mini",
-      model: process.env.BUILDEROS_MODEL_DEFAULT || process.env.OPENAI_MODEL || "gpt-5.4-mini",
+      model: process.env.BUILDEROS_MODEL_DEFAULT || process.env.OPENAI_MODEL || "gpt-4o-mini",
       provider: "openai",
       role: "Cheapest-capable BuilderOS executor",
       focus: "frozen blueprint execution, bounded code edits, low-cost repair attempts",
@@ -71,7 +74,7 @@ export function createCouncilMembers({ DEEPSEEK_BRIDGE_ENABLED }) {
     },
     openai_builder_standard: {
       name: "OpenAI Builder Standard",
-      model: process.env.BUILDEROS_MODEL_STANDARD || process.env.OPENAI_CHAT_MODEL || "gpt-5.4",
+      model: process.env.BUILDEROS_MODEL_STANDARD || process.env.OPENAI_CHAT_MODEL || "gpt-4o",
       provider: "openai",
       role: "BuilderOS standard reasoning lane",
       focus: "planning, reviews, harder multi-file bounded repairs, governance-safe coding",
@@ -85,7 +88,7 @@ export function createCouncilMembers({ DEEPSEEK_BRIDGE_ENABLED }) {
     },
     openai_builder_escalation: {
       name: "OpenAI Builder Escalation",
-      model: process.env.BUILDEROS_MODEL_ESCALATION || "gpt-5.5",
+      model: process.env.BUILDEROS_MODEL_ESCALATION || "gpt-4o",
       provider: "openai",
       role: "BuilderOS escalation lane",
       focus: "high-risk repairs, conflict resolution, harder blueprint implementation edge cases",
@@ -97,9 +100,23 @@ export function createCouncilMembers({ DEEPSEEK_BRIDGE_ENABLED }) {
       isLocal: false,
       priority: "highest",
     },
+    century: {
+      name: "Century (long-horizon strategy)",
+      model: process.env.CENTURY_MODEL || "o1",
+      provider: "openai",
+      role: "Long-horizon strategy and architect-level reasoning",
+      focus: "high-level planning, conflict resolution, multi-week blueprint sequencing",
+      maxTokens: 16384,
+      tier: "tier1",
+      costPer1M: 5.0,
+      specialties: ["reasoning", "architecture", "strategy", "governance", "planning"],
+      isFree: false,
+      isLocal: false,
+      priority: "highest",
+    },
     deepseek: {
       name: "DeepSeek Cloud",
-      model: process.env.DEEPSEEK_MODEL || "deepseek-v4-flash",
+      model: process.env.DEEPSEEK_MODEL || "deepseek-chat",
       provider: "deepseek",
       role: "Primary Developer & Infrastructure (Cloud Fallback)",
       focus: "optimization, performance, safe testing, development",

@@ -7,11 +7,16 @@
  * (factory-staging/startup/register-routes.js) exposes, WITHOUT re-registering the
  * staging GET /health (which would collide with the production /health).
  *
- * @ssot docs/products/lifeos/PRODUCT_HOME.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import express from 'express';
 import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import { execFileSync } from 'node:child_process';
+import { pathToFileURL, fileURLToPath } from 'node:url';
 import { dispatchExecuteStep, resolveRepoPath } from '../factory-staging/factory-core/builder/run-step.js';
+import { autoRegisterProductModules } from '../startup/auto-register-product-modules.js';
 import { dispatchExecuteMission } from '../factory-staging/factory-core/builder/run-mission.js';
 import { runBpbIntakeGate } from '../factory-staging/factory-core/bpb/intake-gate.js';
 import { summarizeHistorian, appendHistorianRecord } from '../factory-staging/factory-core/historian/append-record.js';
@@ -20,15 +25,28 @@ import { summarizeTsosMetrics } from '../factory-staging/factory-core/tsos/tsos-
 import { reconcileRemoteTruth } from '../factory-staging/factory-core/readiness/remote-truth-reconciler.js';
 import { extractContent } from '../factory-staging/factory-core/builder/authoring.js';
 import { runGovernedShippingQueue } from '../services/governed-shipping-runner.js';
+import {
+  blueprintFollowClaim,
+  exactChangeClaim,
+  getTwinStep,
+  reverseExactChange,
+  sealExactChangeIntoTwin,
+} from '../services/truth-ladder.js';
 
-export function createFactoryMountRoutes({ requireKey, logger, pool, baseUrl, callCouncilMember } = {}) {
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const REPO_ROOT = path.resolve(__dirname, '..');
+
+export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncilMember } = {}) {
   const router = express.Router();
   const guard = typeof requireKey === 'function' ? requireKey : (_req, _res, next) => next();
 
   // SENTRY behavioral-proof runner, injected at the route boundary so
   // factory-core stays pure. Fail-closed: if a required assertion cannot run
   // (no runner), SENTRY returns FAIL rather than passing on omission.
-  const httpBase = (baseUrl || process.env.SITE_BASE_URL || `http://127.0.0.1:${process.env.PORT || 8080}`).replace(/\/$/, '');
+  // SENTRY must re-probe the local container after a runtime reload; a public
+  // baseUrl would hit a different Railway container and 404.
+  const httpBase = `http://127.0.0.1:${process.env.PORT || 8080}`.replace(/\/$/, '');
   const assertionRunner = {
     db: pool
       ? async (sql, params) => {
@@ -41,37 +59,146 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, baseUrl, ca
       return { status: res.status };
     },
     readFile: async (relPath) => fs.readFileSync(resolveRepoPath(relPath), 'utf8'),
+    importModule: async (relPath) => {
+      const target = resolveRepoPath(relPath);
+      if (!fs.existsSync(target)) return undefined;
+      const mod = await import(pathToFileURL(target).href);
+      return mod;
+    },
+    reload: async (target) => {
+      if (!target) throw new Error('reload target required');
+      const results = await autoRegisterProductModules(router, { requireKey, pool }, { modules: [{ path: target, reload: true }], logger });
+      const key = String(target).replace(/\\/g, '/');
+      const entry = results.find((r) => r.module === key);
+      if (!entry || entry.status !== 'mounted') {
+        throw new Error(entry?.error || `reload did not mount ${target}`);
+      }
+      return entry;
+    },
   };
 
   // STEP 4 codegen runner (the "hands"), injected at the route boundary so
   // factory-core stays pure. It returns CANDIDATE CONTENT ONLY — never assertions
-  // (assertion-provenance lock). Cheapest capable tier first; escalate only on
-  // failure/empty output. The authored content is untrusted input that SENTRY
+  // (assertion-provenance lock). Strong-first, provider-diverse tier order; escalate
+  // only on failure/empty output. The authored content is untrusted input that SENTRY
   // proves independently via the Step-3 behavior gate.
   const codegenRunner = callCouncilMember
     ? {
-        generate: async ({ task, target_file, spec, tiers }) => {
-          const prompt = [
-            'You are a code-authoring hand for a governed build factory.',
+        generate: async ({
+          task, target_file, spec, tiers, max_output_tokens: stepMaxTokens,
+          last_error, expected_exports, failure_context, expected_exports_context,
+        }) => {
+          const targetExt = path.extname(target_file || '').toLowerCase();
+          const isJs = ['.js', '.mjs', '.cjs', '.jsx', '.ts', '.tsx'].includes(targetExt);
+          const isSql = targetExt === '.sql';
+          const isHtml = targetExt === '.html';
+          const isCss = targetExt === '.css';
+          const isJson = targetExt === '.json';
+          const formatLines = [
             'Output ONLY the exact, complete file content for the target file.',
             'No explanation, no commentary, no markdown fences — just the file body.',
+            ...(isJs ? [
+              'REPO CONSTRAINT: This repository is "type": "module" (ES modules).',
+              'Use ES module syntax with named exports (e.g. export function name, export const name, export { name }).',
+              'CRITICAL: do NOT duplicate any export. If you declare `export function name` or `export const name`, do NOT also add `export { name }` for the same identifier.',
+              'CRITICAL: if the EXISTING FILE CONTENT is provided below, preserve ALL existing code, routes, handlers, and exports. Output the COMPLETE updated file — do NOT return a stub or minimal example.',
+              'Do NOT use CommonJS require or module.exports.',
+            ] : []),
+            ...(isSql ? [
+              'REPO CONSTRAINT: This is a PostgreSQL migration file.',
+              'Use valid, idempotent SQL (CREATE TABLE IF NOT EXISTS, ALTER ... IF EXISTS, etc.).',
+              'Do NOT wrap the SQL in markdown code fences or JavaScript.',
+            ] : []),
+            ...(isHtml ? [
+              'Output a valid HTML document/fragment only.',
+              'Inline styles/scripts are allowed if the spec requires them.',
+            ] : []),
+            ...(isCss ? [
+              'Output valid CSS rules only.',
+            ] : []),
+            ...(isJson ? [
+              'Output valid, compact JSON only.',
+            ] : []),
+          ];
+          const absTarget = target_file ? (path.isAbsolute(target_file) ? target_file : path.join(REPO_ROOT, target_file)) : null;
+          const existingContentLines = [];
+          if (absTarget) {
+            try {
+              if (fs.existsSync(absTarget) && fs.statSync(absTarget).isFile() && fs.statSync(absTarget).size <= 20000) {
+                existingContentLines.push('EXISTING FILE CONTENT (preserve all existing code; output the complete updated file):\n' + fs.readFileSync(absTarget, 'utf8'));
+              }
+            } catch { /* ignore read errors */ }
+          }
+          const prompt = [
+            'You are a code-authoring hand for a governed build factory.',
+            ...formatLines,
             `TARGET FILE: ${target_file}`,
             task ? `TASK: ${task}` : '',
             spec ? `SPEC:\n${typeof spec === 'string' ? spec : JSON.stringify(spec, null, 2)}` : '',
+            ...existingContentLines,
+            expected_exports_context || (Array.isArray(expected_exports) && expected_exports.length ? `REQUIRED NAMED EXPORTS: ${expected_exports.join(', ')}\nYou MUST export each of these names from the file.` : ''),
+            failure_context || (last_error ? `PREVIOUS ATTEMPT FAILED WITH: ${last_error}\nMake sure you fix that exact issue.` : ''),
           ].filter(Boolean).join('\n\n');
+          const maxOutputTokens = Number(stepMaxTokens) || 8000;
           let lastError = null;
+          let member = null;
           for (let i = 0; i < tiers.length; i += 1) {
-            const member = tiers[i];
+            member = tiers[i];
             try {
-              const raw = await callCouncilMember(member, prompt, { taskType: 'builder_lane' });
+              const raw = await callCouncilMember(member, prompt, {
+                taskType: 'codegen',
+                product_lane: 'builderos',
+                useCache: false,
+                maxOutputTokens,
+                allowModelDowngrade: false,
+                returnObject: true,
+                critical: true,
+              });
               const content = extractContent(typeof raw === 'string' ? raw : raw?.content || raw?.text || '');
               if (content && content.trim()) {
+                // Fail-fast: reject syntax-broken JS/ESM codegen before it reaches SENTRY.
+                // node --check parses only; it does not load modules, so missing deps
+                // do not fail the check. We use .mjs to force ESM parsing. Skip for
+                // non-JS targets (e.g. .sql migrations, .html overlays) so the loop
+                // does not falsely reject valid non-JavaScript artifacts.
+                const targetExt = path.extname(target_file || '').toLowerCase();
+                const needsJsCheck = ['.js', '.mjs', '.cjs', '.jsx', '.ts', '.tsx'].includes(targetExt);
+                if (needsJsCheck) {
+                  const syntaxCheckFile = path.join(os.tmpdir(), `factory-codegen-${Date.now()}.mjs`);
+                  try {
+                    fs.writeFileSync(syntaxCheckFile, content);
+                    execFileSync(process.execPath, ['--check', syntaxCheckFile]);
+                  } catch (err) {
+                    lastError = `syntax_check_failed:${member}: ${String(err?.message || err)}`;
+                    try { fs.unlinkSync(syntaxCheckFile); } catch {}
+                    continue;
+                  }
+                  try { fs.unlinkSync(syntaxCheckFile); } catch {}
+
+                  // Import-resolution check: actually load the module from the target
+                  // directory so missing top-level relative imports (e.g. a generated
+                  // route importing a non-existent sibling module) are caught before the
+                  // file is written and poisons the routes/services spine preflight.
+                  const importCheckFile = absTarget
+                    ? path.join(path.dirname(absTarget), `.factory-import-check-${Date.now()}-${process.pid}.mjs`)
+                    : null;
+                  if (importCheckFile) {
+                    try {
+                      fs.writeFileSync(importCheckFile, content);
+                      execFileSync(process.execPath, ['--input-type=module', '-e', `import ${JSON.stringify(pathToFileURL(importCheckFile).href)};`]);
+                    } catch (err) {
+                      lastError = `import_resolution_failed:${member}: ${String(err?.message || err)}`;
+                      try { fs.unlinkSync(importCheckFile); } catch {}
+                      continue;
+                    }
+                    try { fs.unlinkSync(importCheckFile); } catch {}
+                  }
+                }
                 // Prefer real usage when council returns an object; otherwise estimate from text length.
                 const usage = (raw && typeof raw === 'object' && raw.usage) ? raw.usage : null;
                 const promptTokens = Number(usage?.prompt_tokens) || Math.ceil(prompt.length / 4);
                 const completionTokens = Number(usage?.completion_tokens) || Math.ceil(content.length / 4);
                 const totalTokens = Number(usage?.total_tokens) || (promptTokens + completionTokens);
-                // Conservative USD estimate when provider usage lacks cost (free tiers → 0).
                 const estimatedUsd = Number(usage?.estimated_usd) || 0;
                 return {
                   content,
@@ -91,10 +218,10 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, baseUrl, ca
               }
               lastError = `empty_output_from:${member}`;
             } catch (err) {
-              lastError = String(err?.message || err);
+              lastError = `${member}: ${String(err?.message || err)}`;
             }
           }
-          return { content: null, error: lastError || 'all_tiers_failed' };
+          return { content: null, error: lastError || 'all_tiers_failed', model_tier: member || null };
         },
       }
     : null;
@@ -148,23 +275,169 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, baseUrl, ca
   // resume_from, so a mid-queue failure is loud + resumable, never a silent skip.
   router.post('/factory/ship-queue', guard, async (req, res) => {
     try {
-      const { mission_id, blueprint_id, steps, start_index, skip_intake_gate } = req.body || {};
+      const {
+        mission_id,
+        blueprint_id,
+        steps,
+        start_index,
+        skip_intake_gate,
+        claim_following_blueprint,
+      } = req.body || {};
       if (!Array.isArray(steps) || steps.length === 0) {
         return res.status(400).json({ ok: false, error: 'steps[] required' });
       }
+      // Fail-closed twin + exact-change proof before any dispatch.
+      const firstStep = steps[0] || {};
+      const stepKey = firstStep.blueprint_step_id || firstStep.step_id || firstStep.id;
+      const twinProbe = blueprintFollowClaim({
+        blueprint_id,
+        blueprint_step_id: stepKey,
+        claim_following_blueprint: claim_following_blueprint !== false,
+      });
+      if (!twinProbe.ok) {
+        return res.status(422).json({
+          ok: false,
+          status: 'NOT_ON_BLUEPRINT',
+          error: twinProbe.error,
+          twin_probe: twinProbe,
+        });
+      }
+      const exactProbe = exactChangeClaim({
+        blueprint_id,
+        blueprint_step_id: stepKey,
+        claim_following_blueprint: claim_following_blueprint !== false,
+      });
+      if (!exactProbe.ok) {
+        return res.status(422).json({
+          ok: false,
+          status: exactProbe.status || 'NOT_EXACT_BLUEPRINT_STEP',
+          error: exactProbe.error,
+          exact_probe: exactProbe,
+          twin_probe: twinProbe,
+        });
+      }
+      // Twin disk is authority for target_file — request body cannot redefine the aspect.
+      const boundSteps = steps.map((s) => {
+        const sid = s.blueprint_step_id || s.step_id || s.id;
+        const loaded = getTwinStep(blueprint_id, sid);
+        if (!loaded.ok) return s;
+        const twin = loaded.step;
+        return {
+          ...s,
+          step_id: s.step_id || sid,
+          blueprint_step_id: sid,
+          blueprint_id,
+          target_file: twin.target_file || s.target_file,
+          task: twin.task || s.task,
+          spec: twin.spec || s.spec,
+          assertion_spec: twin.assertion_spec || s.assertion_spec,
+          expected_exports: twin.expected_exports || s.expected_exports,
+          action_type: twin.action_type || s.action_type,
+          exact_inputs: twin.exact_inputs || s.exact_inputs,
+          sandbox_boundary: s.sandbox_boundary || (twin.target_file
+            ? `${String(twin.target_file).split('/')[0]}/**`
+            : s.sandbox_boundary),
+        };
+      });
+      let prior_commit_sha = null;
+      try {
+        prior_commit_sha = execFileSync('git', ['rev-parse', 'HEAD'], {
+          cwd: REPO_ROOT,
+          encoding: 'utf8',
+        }).trim();
+      } catch { /* reverse falls back to delete_file */ }
+      // Mission pack twins must pass BPB intake. Registered product queue twins
+      // are already proven on disk by blueprintFollowClaim — intake pack N/A.
+      const productTwin = twinProbe.twin_source === 'product_build_queue_twin'
+        || twinProbe.twin_source === 'product_blueprint';
+      const allowSkip = productTwin === true;
       const dispatch = async ({ mission_id: m, blueprint_id: b, step }) => dispatchExecuteStep(
-        { mission_id: m, blueprint_id: b, step, skip_intake_gate: skip_intake_gate === true },
+        { mission_id: m, blueprint_id: b, step, skip_intake_gate: allowSkip },
         dispatchOptions,
       );
       const signal = async (sig) => {
-        appendHistorianRecord({ type: 'governed_shipping_signal', mission_id, blueprint_id, ...sig, trust_level: 'outcome-linked' });
+        appendHistorianRecord({
+          type: 'governed_shipping_signal',
+          mission_id,
+          blueprint_id,
+          ...sig,
+          trust_level: 'outcome-linked',
+        });
       };
       const outcome = await runGovernedShippingQueue({
-        steps, mission_id, blueprint_id, dispatch, signal, startIndex: Number(start_index) || 0,
+        steps: boundSteps,
+        mission_id: mission_id || twinProbe.mission_id,
+        blueprint_id: blueprint_id || twinProbe.blueprint_id,
+        dispatch,
+        signal,
+        startIndex: Number(start_index) || 0,
+        claim_following_blueprint: claim_following_blueprint !== false,
       });
-      res.status(outcome.ok ? 200 : 422).json(outcome);
+      const seals = [];
+      if (Array.isArray(outcome.shipped)) {
+        for (const shipped of outcome.shipped) {
+          const sid = shipped.blueprint_step_id || shipped.step_id;
+          const commit_sha = shipped?.codegen?.commit_sha
+            || outcome.commit_sha
+            || null;
+          const seal = sealExactChangeIntoTwin({
+            blueprint_id: blueprint_id || twinProbe.blueprint_id,
+            blueprint_step_id: sid,
+            commit_sha,
+            prior_commit_sha,
+          });
+          seals.push(seal);
+          appendHistorianRecord({
+            type: 'exact_change_sealed',
+            mission_id: mission_id || twinProbe.mission_id,
+            blueprint_id: blueprint_id || twinProbe.blueprint_id,
+            step_id: sid,
+            ...seal,
+            trust_level: 'outcome-linked',
+          });
+        }
+      }
+      res.status(outcome.ok ? 200 : 422).json({
+        ...outcome,
+        exact_probe: {
+          status: exactProbe.status,
+          target_file: exactProbe.target_file,
+          sealed: exactProbe.sealed,
+        },
+        exact_seals: seals,
+      });
     } catch (err) {
       res.status(500).json({ ok: false, status: 'FACTORY_SHIP_QUEUE_ERROR', error: err?.message || String(err) });
+    }
+  });
+
+  // Reverse exactly one sealed twin step (pinpoint aspect rollback).
+  router.post('/factory/reverse-step', guard, async (req, res) => {
+    try {
+      const { blueprint_id, blueprint_step_id, apply = false } = req.body || {};
+      const exact = exactChangeClaim({
+        blueprint_id,
+        blueprint_step_id,
+        claim_following_blueprint: true,
+      });
+      if (!exact.ok && exact.status === 'NOT_ON_BLUEPRINT') {
+        return res.status(422).json({ ok: false, status: exact.status, error: exact.error });
+      }
+      const result = reverseExactChange({
+        blueprint_id,
+        blueprint_step_id,
+        apply: apply === true,
+      });
+      appendHistorianRecord({
+        type: apply === true ? 'exact_change_reversed' : 'exact_change_reverse_plan',
+        blueprint_id,
+        step_id: blueprint_step_id,
+        ...result,
+        trust_level: 'outcome-linked',
+      });
+      res.status(result.ok ? 200 : 422).json(result);
+    } catch (err) {
+      res.status(500).json({ ok: false, status: 'FACTORY_REVERSE_STEP_ERROR', error: err?.message || String(err) });
     }
   });
 
@@ -177,6 +450,8 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, baseUrl, ca
     }
   });
 
-  if (logger?.info) logger.info('✅ [FACTORY-MOUNT] Governed factory mounted at /factory/{execute-step,ship-queue,execute-mission,gates/intake,readiness,historian/summary,tsos/summary}');
+  if (logger?.info) {
+    logger.info('✅ [FACTORY-MOUNT] Governed factory mounted at /factory/{execute-step,ship-queue,reverse-step,execute-mission,gates/intake,readiness,historian/summary,tsos/summary}');
+  }
   return router;
 }

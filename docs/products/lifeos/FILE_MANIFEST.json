@@ -33,8 +33,9 @@
     ]
   },
   "owned_files": [
+    "config/taloa-brand.js",
+    "config/cloudflare-railway.js",
     "config/gate-change-presets.js",
-    "config/task-model-routing.js",
     "config/voice-rail-departments.js",
     "config/voice-rail-founder-routing.js",
     "config/voice-rail-providers.js",
@@ -187,7 +188,6 @@
     "services/consent-registry.js",
     "services/constitutional-lock.js",
     "services/contradiction-engine.js",
-    "services/council-prompt-adapter.js",
     "services/data-sovereignty.js",
     "services/decision-intelligence.js",
     "services/deployment-service.js",

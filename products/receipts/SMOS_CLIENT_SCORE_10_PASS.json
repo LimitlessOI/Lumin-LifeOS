@@ -1,0 +1,26 @@
+{
+  "ok": true,
+  "deploy_commit_sha": "9596bbbe93fa937bbbbc04b05008e4317737a89c",
+  "proved_at": "2026-07-15T23:55:00Z",
+  "score_before_know": 7,
+  "score_after_know": 9,
+  "score_claim_10": false,
+  "why_not_10": [
+    "Self-serve password reset email is not live (disclosed on /marketing/login; manual email only).",
+    "Live Stripe card charge → verify → unlock was not tip-proved with a real payment. Proved separately: checkout session create (live) + unlock-after-paid-flag (operator-mark-paid, labeled as not a charge proof) + client JWT export 200."
+  ],
+  "tip_proved": {
+    "home_shows_$49": true,
+    "terms_privacy_pages": true,
+    "signup_requires_accepted_terms": true,
+    "signup_login_consent_session_coach_extract_generate_approve": true,
+    "export_unpaid_402": true,
+    "stripe_checkout_create_live": true,
+    "unlock_after_paid_flag_export_200": true,
+    "password_reset_gap_disclosed": true
+  },
+  "optional_not_required_for_text_pack": {
+    "r2Configured": false,
+    "youtube_required": false
+  }
+}

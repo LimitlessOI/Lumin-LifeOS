@@ -55,9 +55,20 @@ export async function runSingleAssertion(assertion, runner = {}) {
       }
       case 'module_mounts': {
         if (typeof runner.http !== 'function') return { ...base, ok: false, reason: 'no_http_runner' };
-        const res = await runner.http({ method: assertion.method || 'GET', path: assertion.path, headers: assertion.headers });
-        // "mounted" = anything but 404 (auth-gated 401/403 still proves the route exists)
         const expect = Array.isArray(assertion.expect_status) ? assertion.expect_status : [200, 401, 403];
+        let res = await runner.http({ method: assertion.method || 'GET', path: assertion.path, headers: assertion.headers });
+        // A 404 can mean a new route module has been shipped but not yet mounted at
+        // runtime. If the assertion carries the target module and the runner can
+        // reload it, mount the module and re-prove before failing.
+        if (res.status === 404 && typeof runner.reload === 'function' && assertion.target) {
+          try {
+            await runner.reload(assertion.target);
+          } catch (err) {
+            return { ...base, ok: false, reason: 'reload_failed', observed_status: 404, error: String(err?.message || err) };
+          }
+          res = await runner.http({ method: assertion.method || 'GET', path: assertion.path, headers: assertion.headers });
+        }
+        // "mounted" = anything but 404 (auth-gated 401/403 still proves the route exists)
         return { ...base, ok: res.status !== 404 && expect.includes(res.status), observed_status: res.status, expected_status: expect };
       }
       case 'file_contains': {

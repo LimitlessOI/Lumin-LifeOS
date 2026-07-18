@@ -1,41 +1,64 @@
 /**
  * SYNOPSIS: Browser-side Studio shell packet — founder-facing LifeOS shell tokens and cues.
+ * Visual direction: Limitless dusk — cool ink surfaces, teal primary, desert-gold secondary.
+ * Not cream/terracotta atelier; not purple SaaS default.
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 (function () {
+  const SHARED = {
+    accent: '#2ec4b6',
+    accentTwo: '#e3b23c',
+    accentRgb: '46, 196, 182',
+    accentTwoRgb: '227, 178, 60',
+    accentSoft: 'rgba(46, 196, 182, 0.14)',
+    heroGradient: 'linear-gradient(135deg, #2ec4b6 0%, #1a6f8a 55%, #e3b23c 130%)',
+    displayFont: '"Sora", "Avenir Next", sans-serif',
+    bodyFont: '"DM Sans", "Avenir Next", sans-serif',
+    codeFont: '"IBM Plex Mono", ui-monospace, monospace',
+    shellGap: '14px',
+    contentPad: '14px',
+    panelRadius: '18px',
+    stageRadius: '24px',
+    drawerWidth: '440px',
+    composerRadius: '18px',
+    sidebarWidth: '248px',
+    sidebarMiniWidth: '72px',
+    topbarHeight: '64px',
+  };
+
   const PACKET = {
-    schema: 'studio_shell_packet_v2',
+    schema: 'studio_shell_packet_v3',
     surface: 'founder_command_center',
-    mood: 'atelier_operator',
+    mood: 'limitless_dusk',
     title: 'Lumin Chair',
     subtitle: 'Direct action, visible proof, no theater',
-    tokens: {
-      bg: '#f4f1ea',
-      bgRaised: '#fcfaf6',
-      bgSurface: '#fffdfa',
-      bgSurface2: '#f1ece3',
-      bgOverlay: '#ebe4d8',
-      text: '#172033',
-      textSecondary: '#4f5d75',
-      textMuted: '#6f7b8f',
-      border: 'rgba(23,32,51,0.10)',
-      borderFocus: 'rgba(28,124,84,0.32)',
-      accent: '#1c7c54',
-      accentTwo: '#d96c06',
-      accentSoft: 'rgba(28,124,84,0.12)',
-      heroGradient: 'linear-gradient(135deg, rgba(28,124,84,0.96) 0%, rgba(217,108,6,0.88) 100%)',
-      displayFont: '"Space Grotesk", "Trebuchet MS", sans-serif',
-      bodyFont: '"Manrope", "Avenir Next", sans-serif',
-      codeFont: '"IBM Plex Mono", monospace',
-      shadow: '0 24px 80px rgba(38, 45, 61, 0.16)',
-      shellGap: '14px',
-      contentPad: '14px',
-      panelRadius: '22px',
-      stageRadius: '28px',
-      drawerWidth: '440px',
-      composerRadius: '22px',
-      sidebarWidth: '248px',
-      sidebarMiniWidth: '72px',
-      topbarHeight: '64px',
+    tokensDark: {
+      ...SHARED,
+      bg: '#070b12',
+      bgRaised: '#0e1520',
+      bgSurface: '#141c28',
+      bgSurface2: '#1a2433',
+      bgOverlay: '#223044',
+      text: '#e8eef6',
+      textSecondary: '#9aabc0',
+      textMuted: '#6b7c93',
+      border: 'rgba(232, 238, 246, 0.10)',
+      borderFocus: 'rgba(46, 196, 182, 0.42)',
+      shadow: '0 28px 90px rgba(0, 8, 20, 0.55)',
+    },
+    tokensLight: {
+      ...SHARED,
+      bg: '#e8eef4',
+      bgRaised: '#f7fafc',
+      bgSurface: '#ffffff',
+      bgSurface2: '#eef3f8',
+      bgOverlay: '#e2e9f1',
+      text: '#0f1724',
+      textSecondary: '#4a5d73',
+      textMuted: '#6b7f95',
+      border: 'rgba(15, 23, 36, 0.10)',
+      borderFocus: 'rgba(46, 196, 182, 0.38)',
+      shadow: '0 24px 70px rgba(15, 40, 60, 0.12)',
     },
     copy: {
       topbarEyebrow: 'Founder command rail',
@@ -66,38 +89,47 @@
     },
   };
 
+  PACKET.tokens = PACKET.tokensDark;
+
+  function resolveThemeTokens(packet) {
+    const isLight = document.documentElement.dataset.theme === 'light';
+    return isLight ? (packet.tokensLight || packet.tokens) : (packet.tokensDark || packet.tokens);
+  }
+
   function applyTokens(packet) {
     const root = document.documentElement;
-    const t = packet.tokens || {};
-    root.style.setProperty('--studio-bg', t.bg || '#f4f1ea');
-    root.style.setProperty('--studio-bg-raised', t.bgRaised || '#fcfaf6');
-    root.style.setProperty('--studio-bg-surface', t.bgSurface || '#fffdfa');
-    root.style.setProperty('--studio-bg-surface2', t.bgSurface2 || '#f1ece3');
-    root.style.setProperty('--studio-bg-overlay', t.bgOverlay || '#ebe4d8');
-    root.style.setProperty('--studio-text', t.text || '#172033');
-    root.style.setProperty('--studio-text-secondary', t.textSecondary || '#4f5d75');
-    root.style.setProperty('--studio-text-muted', t.textMuted || '#6f7b8f');
-    root.style.setProperty('--studio-border', t.border || 'rgba(23,32,51,0.10)');
-    root.style.setProperty('--studio-border-focus', t.borderFocus || 'rgba(28,124,84,0.32)');
-    root.style.setProperty('--studio-accent', t.accent || '#1c7c54');
-    root.style.setProperty('--studio-accent-two', t.accentTwo || '#d96c06');
-    root.style.setProperty('--studio-accent-soft', t.accentSoft || 'rgba(28,124,84,0.12)');
-    root.style.setProperty('--studio-hero-gradient', t.heroGradient || 'linear-gradient(135deg, rgba(28,124,84,0.96) 0%, rgba(217,108,6,0.88) 100%)');
-    root.style.setProperty('--studio-font-display', t.displayFont || '"Space Grotesk", "Trebuchet MS", sans-serif');
-    root.style.setProperty('--studio-font-body', t.bodyFont || '"Manrope", "Avenir Next", sans-serif');
-    root.style.setProperty('--studio-font-code', t.codeFont || '"IBM Plex Mono", monospace');
-    root.style.setProperty('--studio-shadow', t.shadow || '0 24px 80px rgba(38,45,61,0.16)');
+    const t = resolveThemeTokens(packet) || {};
+    root.style.setProperty('--studio-bg', t.bg || '#070b12');
+    root.style.setProperty('--studio-bg-raised', t.bgRaised || '#0e1520');
+    root.style.setProperty('--studio-bg-surface', t.bgSurface || '#141c28');
+    root.style.setProperty('--studio-bg-surface2', t.bgSurface2 || '#1a2433');
+    root.style.setProperty('--studio-bg-overlay', t.bgOverlay || '#223044');
+    root.style.setProperty('--studio-text', t.text || '#e8eef6');
+    root.style.setProperty('--studio-text-secondary', t.textSecondary || '#9aabc0');
+    root.style.setProperty('--studio-text-muted', t.textMuted || '#6b7c93');
+    root.style.setProperty('--studio-border', t.border || 'rgba(232,238,246,0.10)');
+    root.style.setProperty('--studio-border-focus', t.borderFocus || 'rgba(46,196,182,0.42)');
+    root.style.setProperty('--studio-accent', t.accent || '#2ec4b6');
+    root.style.setProperty('--studio-accent-two', t.accentTwo || '#e3b23c');
+    root.style.setProperty('--studio-accent-rgb', t.accentRgb || '46, 196, 182');
+    root.style.setProperty('--studio-accent-two-rgb', t.accentTwoRgb || '227, 178, 60');
+    root.style.setProperty('--studio-accent-soft', t.accentSoft || 'rgba(46,196,182,0.14)');
+    root.style.setProperty('--studio-hero-gradient', t.heroGradient || SHARED.heroGradient);
+    root.style.setProperty('--studio-font-display', t.displayFont || SHARED.displayFont);
+    root.style.setProperty('--studio-font-body', t.bodyFont || SHARED.bodyFont);
+    root.style.setProperty('--studio-font-code', t.codeFont || SHARED.codeFont);
+    root.style.setProperty('--studio-shadow', t.shadow || '0 28px 90px rgba(0,8,20,0.55)');
     root.style.setProperty('--studio-shell-gap', t.shellGap || '14px');
     root.style.setProperty('--studio-content-pad', t.contentPad || '14px');
-    root.style.setProperty('--studio-panel-radius', t.panelRadius || '22px');
-    root.style.setProperty('--studio-stage-radius', t.stageRadius || '28px');
+    root.style.setProperty('--studio-panel-radius', t.panelRadius || '18px');
+    root.style.setProperty('--studio-stage-radius', t.stageRadius || '24px');
     root.style.setProperty('--studio-drawer-width', t.drawerWidth || '440px');
-    root.style.setProperty('--studio-composer-radius', t.composerRadius || '22px');
+    root.style.setProperty('--studio-composer-radius', t.composerRadius || '18px');
     root.style.setProperty('--studio-sidebar-width', t.sidebarWidth || '248px');
     root.style.setProperty('--studio-sidebar-mini-width', t.sidebarMiniWidth || '72px');
     root.style.setProperty('--studio-topbar-height', t.topbarHeight || '64px');
     root.dataset.studioSurface = packet.surface || 'voice_command_surface';
-    root.dataset.studioMood = packet.mood || 'mission_control';
+    root.dataset.studioMood = packet.mood || 'limitless_dusk';
   }
 
   function applyCopy(packet) {
@@ -183,5 +215,12 @@
   window.LifeOSStudioShell = {
     packet: PACKET,
     apply: applyStudioShellPacket,
+    reapplyTheme: function reapplyTheme() {
+      applyTokens(PACKET);
+    },
   };
+
+  document.addEventListener('lifeos-theme-changed', () => {
+    if (window.LifeOSStudioShell?.packet) applyTokens(PACKET);
+  });
 })();

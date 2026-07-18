@@ -1,54 +1,532 @@
-<!DOCTYPE html>
 <!-- SYNOPSIS: HTML page: Site Builder Command Center -->
-<html lang="en">
+<!-- @ssot docs/products/site-builder/PRODUCT_HOME.md -->
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Site Builder Command Center</title>
-  <style>*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/*! tailwindcss v3.4.19 | MIT License | https://tailwindcss.com*/*,:after,:before{box-sizing:border-box;border:0 solid #e5e7eb}:after,:before{--tw-content:""}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:ui-sans-serif,system-ui,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0}fieldset,legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::-moz-placeholder,textarea::-moz-placeholder{opacity:1;color:#9ca3af}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.fixed{position:fixed}.sticky{position:sticky}.inset-0{inset:0}.top-0{top:0}.z-40{z-index:40}.z-50{z-index:50}.mb-1{margin-bottom:.25rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mt-3{margin-top:.75rem}.flex{display:flex}.h-2{height:.5rem}.min-h-screen{min-height:100vh}.w-2{width:.5rem}.w-full{width:100%}.max-w-md{max-width:28rem}@keyframes pulse{50%{opacity:.5}}.animate-pulse{animation:pulse 2s cubic-bezier(.4,0,.6,1) infinite}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-3{gap:.75rem}.gap-4{gap:1rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:.5rem}.rounded-xl{border-radius:.75rem}.border{border-width:1px}.border-b{border-bottom-width:1px}.border-gray-600{--tw-border-opacity:1;border-color:rgb(75 85 99/var(--tw-border-opacity,1))}.border-gray-700{--tw-border-opacity:1;border-color:rgb(55 65 81/var(--tw-border-opacity,1))}.border-gray-800{--tw-border-opacity:1;border-color:rgb(31 41 55/var(--tw-border-opacity,1))}.bg-black\/80{background-color:rgba(0,0,0,.8)}.bg-gray-800{--tw-bg-opacity:1;background-color:rgb(31 41 55/var(--tw-bg-opacity,1))}.bg-gray-900{--tw-bg-opacity:1;background-color:rgb(17 24 39/var(--tw-bg-opacity,1))}.bg-gray-950{--tw-bg-opacity:1;background-color:rgb(3 7 18/var(--tw-bg-opacity,1))}.bg-green-400{--tw-bg-opacity:1;background-color:rgb(74 222 128/var(--tw-bg-opacity,1))}.bg-green-900{--tw-bg-opacity:1;background-color:rgb(20 83 45/var(--tw-bg-opacity,1))}.bg-purple-600{--tw-bg-opacity:1;background-color:rgb(147 51 234/var(--tw-bg-opacity,1))}.bg-red-900{--tw-bg-opacity:1;background-color:rgb(127 29 29/var(--tw-bg-opacity,1))}.p-8{padding:2rem}.px-4{padding-left:1rem;padding-right:1rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-3{padding-top:.75rem;padding-bottom:.75rem}.py-4{padding-top:1rem;padding-bottom:1rem}.text-center{text-align:center}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.tracking-tight{letter-spacing:-.025em}.text-gray-100{--tw-text-opacity:1;color:rgb(243 244 246/var(--tw-text-opacity,1))}.text-gray-400{--tw-text-opacity:1;color:rgb(156 163 175/var(--tw-text-opacity,1))}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128/var(--tw-text-opacity,1))}.text-green-200{--tw-text-opacity:1;color:rgb(187 247 208/var(--tw-text-opacity,1))}.text-red-200{--tw-text-opacity:1;color:rgb(254 202 202/var(--tw-text-opacity,1))}.text-red-400{--tw-text-opacity:1;color:rgb(248 113 113/var(--tw-text-opacity,1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity,1))}.placeholder-gray-500::-moz-placeholder{--tw-placeholder-opacity:1;color:rgb(107 114 128/var(--tw-placeholder-opacity,1))}.placeholder-gray-500::placeholder{--tw-placeholder-opacity:1;color:rgb(107 114 128/var(--tw-placeholder-opacity,1))}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgba(0,0,0,.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.transition{transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,-webkit-backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter,-webkit-backdrop-filter;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.hover\:bg-purple-700:hover{--tw-bg-opacity:1;background-color:rgb(126 34 206/var(--tw-bg-opacity,1))}.hover\:text-red-400:hover{--tw-text-opacity:1;color:rgb(248 113 113/var(--tw-text-opacity,1))}.hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity,1))}.focus\:border-purple-500:focus{--tw-border-opacity:1;border-color:rgb(168 85 247/var(--tw-border-opacity,1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.disabled\:opacity-50:disabled{opacity:.5}</style>
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-  <style>[x-cloak]{display:none!important}</style>
+  <script src="/overlay/lifeos-theme.js"></script>
+  <style>
+    :root {
+      --bg: #0f1117; --surface: #1a1d27; --surface2: #1f2230;
+      --accent: #6C63FF; --text: #e0e0e0; --text2: #a0a0a0;
+      --border: #2e3045; --success: #22c55e; --warn: #f59e0b; --danger: #ef4444;
+      --row-alt: #181c29;
+    }
+    html[data-theme="light"] {
+      --bg: #f4f4f8; --surface: #fff; --surface2: #f0f0f6;
+      --text: #1a1d27; --text2: #555; --border: #dde; --row-alt: #f8f8fc;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: system-ui, sans-serif; font-size: 14px; min-height: 100vh; }
+    .page { max-width: 1200px; margin: 0 auto; padding: 20px; }
+    h1 { font-size: 1.4rem; font-weight: 700; margin-bottom: 4px; }
+    .subtitle { color: var(--text2); font-size: 0.85rem; margin-bottom: 20px; }
+
+    .auth-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+      display: flex; align-items: center; justify-content: center; z-index: 100;
+    }
+    .auth-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+      padding: 28px; width: 100%; max-width: 400px; box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+    .auth-card h2 { margin-bottom: 6px; }
+    .auth-card p { color: var(--text2); margin-bottom: 18px; }
+    .auth-card input {
+      width: 100%; background: var(--surface2); border: 1px solid var(--border);
+      color: var(--text); padding: 12px; border-radius: 8px; margin-bottom: 12px;
+    }
+    .auth-card button {
+      width: 100%; background: var(--accent); color: #fff; border: 0; padding: 12px;
+      border-radius: 8px; font-weight: 600; cursor: pointer;
+    }
+
+    .header {
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 12px; margin-bottom: 16px;
+    }
+    .header-actions { display: flex; gap: 10px; align-items: center; }
+    .header button, .header a {
+      background: transparent; border: 1px solid var(--border); color: var(--text2);
+      padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 0.85rem;
+      text-decoration: none;
+    }
+    .header button:hover, .header a:hover { border-color: var(--accent); color: var(--text); }
+
+    .banner {
+      border-radius: 8px; padding: 12px 16px; margin-bottom: 16px;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+    }
+    .banner.ready { background: #22c55e22; color: var(--success); border: 1px solid #22c55e44; }
+    .banner.not-ready { background: #ef444422; color: var(--danger); border: 1px solid #ef444444; }
+    .banner ul { margin: 0; padding-left: 18px; }
+    .banner li { margin: 3px 0; }
+
+    .stats {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px;
+      margin-bottom: 20px;
+    }
+    .stat {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+      padding: 14px 16px;
+    }
+    .stat-num { font-size: 1.8rem; font-weight: 700; color: var(--accent); }
+    .stat-label { font-size: 0.8rem; color: var(--text2); }
+
+    .card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+      padding: 16px; margin-bottom: 16px;
+    }
+    .card h3 { font-size: 1rem; margin-bottom: 12px; }
+    .form-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;
+      margin-bottom: 12px;
+    }
+    .form-grid label { display: block; color: var(--text2); font-size: 0.85rem; margin-bottom: 4px; }
+    .form-grid input, .form-grid select {
+      width: 100%; background: var(--surface2); border: 1px solid var(--border); color: var(--text);
+      padding: 8px 10px; border-radius: 6px;
+    }
+    .check-wrap { display: flex; align-items: center; gap: 6px; color: var(--text2); font-size: 0.85rem; cursor: pointer; margin-bottom: 12px; }
+    .check-wrap input { accent-color: var(--accent); width: 15px; height: 15px; }
+    .btn {
+      background: var(--accent); color: #fff; border: 0; padding: 8px 14px; border-radius: 6px;
+      cursor: pointer; font-size: 0.85rem; font-weight: 600;
+    }
+    .btn:hover { opacity: 0.9; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-secondary { background: transparent; border: 1px solid var(--border); color: var(--text2); }
+    .btn-secondary:hover { border-color: var(--accent); color: var(--text); }
+
+    .filters { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+    .filters label { color: var(--text2); font-size: 0.85rem; }
+    .filters select { background: var(--surface2); border: 1px solid var(--border); color: var(--text); padding: 6px 10px; border-radius: 6px; font-size: 0.85rem; }
+
+    .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    table { width: 100%; border-collapse: collapse; }
+    th { background: var(--surface2); text-align: left; padding: 10px 14px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text2); border-bottom: 1px solid var(--border); }
+    td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:nth-child(even) td { background: var(--row-alt); }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; }
+    .badge-queued { background: #6b728022; color: var(--text2); }
+    .badge-building { background: #f59e0b22; color: var(--warn); }
+    .badge-built { background: #3b82f622; color: #60a5fa; }
+    .badge-sent { background: #22c55e22; color: var(--success); }
+    .badge-viewed { background: #22c55e22; color: var(--success); }
+    .badge-replied { background: #a855f722; color: #c084fc; }
+    .badge-converted { background: #22c55e22; color: var(--success); }
+    .badge-invited { background: #3b82f622; color: #60a5fa; }
+    .badge-failed, .badge-qa_hold { background: #ef444422; color: var(--danger); }
+    .score { font-weight: 700; }
+    .score-a { color: var(--success); }
+    .score-b { color: #86efac; }
+    .score-c { color: var(--warn); }
+    .score-d, .score-f { color: var(--danger); }
+    .actions { display: flex; gap: 6px; flex-wrap: wrap; }
+    .actions a, .actions button {
+      padding: 4px 10px; border-radius: 5px; font-size: 0.75rem; border: 1px solid var(--border);
+      cursor: pointer; text-decoration: none; display: inline-block; background: transparent; color: var(--text2);
+    }
+    .actions a:hover, .actions button:hover { border-color: var(--accent); color: var(--accent); }
+    .actions button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .empty { padding: 40px; text-align: center; color: var(--text2); }
+    .loading { padding: 40px; text-align: center; color: var(--text2); }
+    .error-msg { background: #ef444411; border: 1px solid #ef444433; color: var(--danger); padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; font-size: 0.85rem; display: none; }
+
+    .hidden { display: none !important; }
+  </style>
 </head>
-<body class="bg-gray-950 text-gray-100 min-h-screen" x-data="dashboard()" x-init="init()">
-  <!-- AUTH MODAL -->
-  <div x-show="!commandKey" x-cloak class="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
-    <div class="bg-gray-800 rounded-xl p-8 w-full max-w-md shadow-2xl border border-gray-700">
-      <h2 class="text-xl font-bold mb-1 text-white">Site Builder Command Center</h2>
-      <p class="text-sm text-gray-400 mb-6">Enter your command key to continue</p>
-      <input x-model="keyInput" type="password" placeholder="Command key..."
-        class="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 mb-4"
-        @keydown.enter="connect()">
-      <button @click="connect()"
-        class="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 rounded-lg transition">
-        Connect
-      </button>
-      <p x-show="authError" class="mt-3 text-red-400 text-sm text-center" x-text="authError"></p>
+<body>
+  <div class="auth-overlay hidden" id="auth-overlay">
+    <div class="auth-card">
+      <h2>Site Builder Command Center</h2>
+      <p>Enter your command key to continue.</p>
+      <input id="key-input" type="password" placeholder="Command key…" autocomplete="off">
+      <button onclick="connect()">Connect</button>
+      <p id="auth-error" style="color:var(--danger);margin-top:10px;font-size:0.85rem;min-height:1.2em"></p>
     </div>
   </div>
 
-  <!-- MAIN APP -->
-  <div x-show="commandKey" x-cloak>
-    <!-- HEADER -->
-    <header class="bg-gray-900 border-b border-gray-800 px-6 py-4 flex items-center justify-between sticky top-0 z-40">
-      <div class="flex items-center gap-3">
-        <div class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
-        <h1 class="text-lg font-bold tracking-tight">Site Builder Command Center</h1>
+  <div class="page hidden" id="app">
+    <div class="header">
+      <div>
+        <h1>Site Builder Command Center</h1>
+        <p class="subtitle">Analyze prospects, build previews, and manage the pipeline</p>
       </div>
-      <div class="flex items-center gap-4">
-        <button @click="loadData()" :disabled="loading" class="text-sm text-gray-400 hover:text-white transition disabled:opacity-50">
-          ↻ Refresh
-        </button>
-        <button @click="logout()" class="text-sm text-gray-500 hover:text-red-400 transition">
-          Logout
-        </button>
+      <div class="header-actions">
+        <button onclick="loadAll()">Refresh</button>
+        <button onclick="logout()">Logout</button>
       </div>
-    </header>
+    </div>
 
-    <!-- LAUNCH BANNER -->
-    <div x-show="envStatus" id="launch-banner" class="px-6 py-3 text-sm font-medium"
-         :class="envReady ? 'bg-green-900 text-green-200' : 'bg-red-900 text-red-200'">
-      <template x-if="envReady">
-        <span>✅ All required environment variables are set. Ready for launch!</span>
-      </template>
-      <template x-if="!envReady">
-        <span>⚠️ Missing required environment variables: <span
+    <div id="error-msg" class="error-msg"></div>
+
+    <div id="launch-banner" class="banner hidden"></div>
+
+    <div class="stats">
+      <div class="stat"><div class="stat-num" id="stat-total">—</div><div class="stat-label">Total Prospects</div></div>
+      <div class="stat"><div class="stat-num" id="stat-built">—</div><div class="stat-label">Built</div></div>
+      <div class="stat"><div class="stat-num" id="stat-sent">—</div><div class="stat-label">Sent</div></div>
+      <div class="stat"><div class="stat-num" id="stat-viewed">—</div><div class="stat-label">Viewed</div></div>
+      <div class="stat"><div class="stat-num" id="stat-replied">—</div><div class="stat-label">Replied</div></div>
+      <div class="stat"><div class="stat-num" id="stat-converted">—</div><div class="stat-label">Converted</div></div>
+    </div>
+
+    <div class="card">
+      <h3>Quick Build</h3>
+      <div class="form-grid">
+        <div>
+          <label>Business URL</label>
+          <input id="build-url" type="text" placeholder="yourbusiness.com">
+        </div>
+        <div>
+          <label>Contact email</label>
+          <input id="build-email" type="email" placeholder="owner@business.com">
+        </div>
+        <div>
+          <label>Business name</label>
+          <input id="build-name" type="text" placeholder="Your Business">
+        </div>
+      </div>
+      <label class="check-wrap">
+        <input type="checkbox" id="build-skip-email" checked>
+        <span>Skip outreach email</span>
+      </label>
+      <button class="btn" id="build-btn" onclick="buildSingle()">Build preview</button>
+      <p id="build-status" style="margin-top:10px;color:var(--text2);font-size:0.85rem;min-height:1.2em"></p>
+    </div>
+
+    <div class="card">
+      <h3>Prospects</h3>
+      <div class="filters">
+        <label>Status:</label>
+        <select id="filter-status" onchange="renderTable()">
+          <option value="all">All</option>
+          <option value="queued">Queued</option>
+          <option value="building">Building</option>
+          <option value="built">Built</option>
+          <option value="sent">Sent</option>
+          <option value="viewed">Viewed</option>
+          <option value="replied">Replied</option>
+          <option value="converted">Converted</option>
+          <option value="qa_hold">QA Hold</option>
+          <option value="failed">Failed</option>
+        </select>
+        <label class="check-wrap">
+          <input type="checkbox" id="filter-ready" onchange="renderTable()">
+          <span>Quality ≥60 only</span>
+        </label>
+      </div>
+      <div class="table-wrap">
+        <div id="table-loading" class="loading">Loading prospects…</div>
+        <table id="prospect-table" class="hidden">
+          <thead>
+            <tr>
+              <th>Business</th>
+              <th>Status</th>
+              <th>Quality</th>
+              <th>Preview</th>
+              <th>Created</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="table-body"></tbody>
+        </table>
+        <div id="table-empty" class="empty hidden">No prospects match the current filters.</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const KEY = localStorage.getItem('commandKey') || localStorage.getItem('lifeos_command_key') || '';
+    const API_BASE = '';
+    let allProspects = [];
+    let pipeline = {};
+
+    const elAuth = document.getElementById('auth-overlay');
+    const elApp = document.getElementById('app');
+    const elError = document.getElementById('error-msg');
+
+    function apiHeaders() {
+      const h = { 'Content-Type': 'application/json' };
+      if (KEY) h['x-command-key'] = KEY;
+      return h;
+    }
+
+    function showAuth() {
+      elAuth.classList.remove('hidden');
+      elApp.classList.add('hidden');
+      document.getElementById('key-input').focus();
+    }
+
+    function showApp() {
+      elAuth.classList.add('hidden');
+      elApp.classList.remove('hidden');
+    }
+
+    function connect() {
+      const input = document.getElementById('key-input');
+      const key = input.value.trim();
+      if (!key) {
+        document.getElementById('auth-error').textContent = 'A command key is required.';
+        return;
+      }
+      localStorage.setItem('commandKey', key);
+      location.reload();
+    }
+
+    function logout() {
+      localStorage.removeItem('commandKey');
+      localStorage.removeItem('lifeos_command_key');
+      location.reload();
+    }
+
+    function showError(msg) {
+      elError.textContent = msg;
+      elError.style.display = 'block';
+      setTimeout(() => { elError.style.display = 'none'; }, 8000);
+    }
+
+    function setBuildStatus(msg, isError) {
+      const el = document.getElementById('build-status');
+      el.textContent = msg;
+      el.style.color = isError ? 'var(--danger)' : 'var(--text2)';
+    }
+
+    async function api(path, opts = {}) {
+      const url = `${API_BASE}${path}`;
+      const res = await fetch(url, { ...opts, headers: { ...apiHeaders(), ...(opts.headers || {}) } });
+      if (res.status === 401 || res.status === 403) {
+        showError('Invalid command key. Please log out and reconnect.');
+        throw new Error('Unauthorized');
+      }
+      return res;
+    }
+
+    async function loadLaunchReadiness() {
+      try {
+        const res = await api('/api/v1/sites/launch-readiness');
+        const data = await res.json();
+        const el = document.getElementById('launch-banner');
+        el.classList.remove('hidden', 'ready', 'not-ready');
+        if (data.ready) {
+          el.classList.add('ready');
+          el.innerHTML = '<span>All required environment variables are set. Ready for launch.</span>';
+        } else {
+          el.classList.add('not-ready');
+          const blockers = (data.revenue_blockers || []).map(b => `<li>${esc(b.name)} — ${esc(b.purpose)}</li>`).join('');
+          el.innerHTML = `<span>Missing required environment variables:</span><ul>${blockers || '<li>Unknown blocker</li>'}</ul>`;
+        }
+      } catch (e) {
+        showError('Launch readiness failed: ' + e.message);
+      }
+    }
+
+    async function loadDashboard() {
+      try {
+        const res = await api('/api/v1/sites/dashboard');
+        const data = await res.json();
+        pipeline = data.pipeline || {};
+        document.getElementById('stat-total').textContent = pipeline.total || '0';
+        document.getElementById('stat-built').textContent = pipeline.built || '0';
+        document.getElementById('stat-sent').textContent = pipeline.sent || '0';
+        document.getElementById('stat-viewed').textContent = pipeline.viewed || '0';
+        document.getElementById('stat-replied').textContent = pipeline.replied || '0';
+        document.getElementById('stat-converted').textContent = pipeline.converted || '0';
+      } catch (e) {
+        showError('Dashboard failed: ' + e.message);
+      }
+    }
+
+    async function loadProspects() {
+      document.getElementById('table-loading').classList.remove('hidden');
+      document.getElementById('prospect-table').classList.add('hidden');
+      document.getElementById('table-empty').classList.add('hidden');
+      try {
+        const res = await api('/api/v1/sites/prospects');
+        const data = await res.json();
+        allProspects = data.prospects || data.data || [];
+        renderTable();
+      } catch (e) {
+        showError('Failed to load prospects: ' + e.message);
+      } finally {
+        document.getElementById('table-loading').classList.add('hidden');
+      }
+    }
+
+    function loadAll() {
+      loadLaunchReadiness();
+      loadDashboard();
+      loadProspects();
+    }
+
+    function gradeClass(score) {
+      if (score >= 90) return 'a';
+      if (score >= 75) return 'b';
+      if (score >= 60) return 'c';
+      if (score >= 45) return 'd';
+      return 'f';
+    }
+
+    function badgeClass(status) {
+      return 'badge-' + (status || 'queued');
+    }
+
+    function renderTable() {
+      const statusFilter = document.getElementById('filter-status').value;
+      const readyOnly = document.getElementById('filter-ready').checked;
+      let rows = allProspects;
+      if (statusFilter !== 'all') rows = rows.filter(p => (p.status || 'queued') === statusFilter);
+      if (readyOnly) rows = rows.filter(p => (p.quality_score || 0) >= 60);
+
+      const tbody = document.getElementById('table-body');
+      if (!rows.length) {
+        document.getElementById('prospect-table').classList.add('hidden');
+        document.getElementById('table-empty').classList.remove('hidden');
+        return;
+      }
+      document.getElementById('table-empty').classList.add('hidden');
+      document.getElementById('prospect-table').classList.remove('hidden');
+
+      tbody.innerHTML = rows.map(p => {
+        const score = p.quality_score || p.metadata?.qualityReport?.scorePct || p.qualityReport?.scorePct || 0;
+        const grade = gradeClass(score);
+        const status = p.status || 'queued';
+        const date = p.created_at ? new Date(p.created_at).toLocaleDateString() : '—';
+        const clientId = p.client_id || p.clientId;
+        const meta = p.metadata || {};
+        const token = meta.editToken || p.edit_token || '';
+        const preview = p.preview_url || meta.previewUrl || `/previews/${clientId}`;
+        const editor = token ? `/api/v1/sites/editor?clientId=${encodeURIComponent(clientId)}&token=${encodeURIComponent(token)}` : '';
+        const publish = `/api/v1/sites/publish/checkout?clientId=${encodeURIComponent(clientId)}`;
+        return `<tr>
+          <td><strong>${esc(p.business_name || p.businessName || '—')}</strong><br><small style="color:var(--text2)">${esc(p.business_url || p.businessUrl || '')}</small></td>
+          <td><span class="badge ${badgeClass(status)}">${esc(status)}</span></td>
+          <td class="score score-${grade}">${score}/100 (${grade.toUpperCase()})</td>
+          <td>${preview ? `<a href="${esc(preview)}" target="_blank" style="color:var(--accent);font-size:0.8rem">View ↗</a>` : '—'}</td>
+          <td style="color:var(--text2)">${date}</td>
+          <td class="actions">
+            ${preview ? `<a href="${esc(preview)}" target="_blank">Preview</a>` : ''}
+            ${editor ? `<a href="${esc(editor)}" target="_blank">Editor</a>` : ''}
+            <a href="${esc(publish)}" target="_blank">Publish</a>
+            <button onclick="resendOutreach('${esc(clientId)}', this)" ${['sent','replied','converted'].includes(status) ? 'disabled' : ''}>Resend</button>
+            <button onclick="followUp('${esc(clientId)}', this)">Follow up</button>
+          </td>
+        </tr>`;
+      }).join('');
+    }
+
+    async function buildSingle() {
+      const urlInput = document.getElementById('build-url');
+      const emailInput = document.getElementById('build-email');
+      const nameInput = document.getElementById('build-name');
+      const skipEmail = document.getElementById('build-skip-email').checked;
+      const btn = document.getElementById('build-btn');
+
+      let businessUrl = urlInput.value.trim();
+      if (businessUrl && !/^https?:\/\//i.test(businessUrl)) businessUrl = 'https://' + businessUrl.replace(/^\/+/, '');
+      const contactEmail = emailInput.value.trim().toLowerCase();
+      const businessName = nameInput.value.trim();
+
+      if (!/^https?:\/\/[^\s]+\.[^\s]+/i.test(businessUrl)) {
+        setBuildStatus('Enter a valid business website (e.g. yourbusiness.com)', true);
+        return;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail)) {
+        setBuildStatus('A valid contact email is required.', true);
+        return;
+      }
+
+      btn.disabled = true;
+      setBuildStatus('Submitting build…');
+      try {
+        const res = await api('/api/v1/sites/prospect', {
+          method: 'POST',
+          body: JSON.stringify({
+            businessUrl,
+            contactEmail,
+            businessName,
+            skipEmail,
+            leanTemplate: true,
+            skipAi: true,
+            skipBlogs: true,
+            skipRepair: true,
+            enrich: false,
+            skipQualify: true,
+          })
+        });
+        const data = await res.json();
+        if (!res.ok || !data.ok) throw new Error(data.error || 'Build failed');
+        setBuildStatus(`Preview build started: ${data.clientId || ''}`);
+        urlInput.value = '';
+        emailInput.value = '';
+        nameInput.value = '';
+        setTimeout(() => { loadAll(); }, 1000);
+      } catch (e) {
+        setBuildStatus('Build failed: ' + e.message, true);
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    async function resendOutreach(clientId, btn) {
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+      try {
+        const res = await api(`/api/v1/sites/prospects/${encodeURIComponent(clientId)}/resend-outreach`, {
+          method: 'POST',
+          body: JSON.stringify({})
+        });
+        const data = await res.json();
+        if (!res.ok || !data.ok) throw new Error(data.error || 'Send failed');
+        btn.textContent = 'Sent ✓';
+        btn.style.background = '#22c55e22';
+        btn.style.color = 'var(--success)';
+      } catch (e) {
+        btn.disabled = false;
+        btn.textContent = 'Resend';
+        showError('Resend failed: ' + e.message);
+      }
+    }
+
+    async function followUp(clientId, btn) {
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+      try {
+        const res = await api('/api/v1/sites/follow-up', {
+          method: 'POST',
+          body: JSON.stringify({ clientId, followUpNumber: 2 })
+        });
+        const data = await res.json();
+        if (!res.ok || !data.ok) throw new Error(data.error || 'Follow-up failed');
+        btn.textContent = 'Sent ✓';
+        btn.style.background = '#22c55e22';
+        btn.style.color = 'var(--success)';
+      } catch (e) {
+        btn.disabled = false;
+        btn.textContent = 'Follow up';
+        showError('Follow-up failed: ' + e.message);
+      }
+    }
+
+    function esc(s) {
+      return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    if (!KEY) {
+      showAuth();
+    } else {
+      showApp();
+      loadAll();
+    }
+
+    document.getElementById('key-input').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') connect();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1144 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "universal-overlay",
+  "planned_at": "2026-07-15T17:43:24.594Z",
+  "backlog_signature": "a09c507a37163e86",
+  "corpus_sources": [
+    "docs/products/universal-overlay/PRODUCT_HOME.md"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "status": "done",
+      "target_file": "services/struggleDetection.js",
+      "task": "integrate struggle detection",
+      "spec": "Implement struggle detection engine based on dwell timer, click repeat, and edit cycle counter.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "detectStruggles"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/struggle-detection"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/struggleDetection.js",
+          "exports": [
+            "detectStruggles"
+          ],
+          "assertion_id": "expected_exports:services/struggleDetection.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:50:56.528Z",
+      "commit_sha": "a07d7fe29cc38d47107f18c0e3479841a9939735",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "1",
+      "mission_id": "PRODUCT-universal-overlay"
+    },
+    {
+      "id": "2",
+      "status": "done",
+      "target_file": "services/formFieldInference.js",
+      "task": "implement form field schema inference",
+      "spec": "Use label association, ARIA, and placeholder as fallback to infer form field schema.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "inferFormSchema"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/form-field-inference"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/formFieldInference.js",
+          "exports": [
+            "inferFormSchema"
+          ],
+          "assertion_id": "expected_exports:services/formFieldInference.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:58:06.261Z",
+      "commit_sha": "ac3ec840059d7988fa58461927a5fce50e92f936",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "2",
+      "mission_id": "PRODUCT-universal-overlay"
+    },
+    {
+      "id": "3",
+      "status": "done",
+      "target_file": "db/migrations/addInsuranceProfilesTable.sql",
+      "task": "create insurance_profiles table",
+      "spec": "Create a table for insurance profiles with member IDs, group numbers, payer names per user.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS insurance_profiles"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T18:04:14.461Z",
+      "commit_sha": "7c06278e434327d8e096280ac4185c5f075970df",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "3",
+      "mission_id": "PRODUCT-universal-overlay"
+    },
+    {
+      "id": "4",
+      "status": "skipped",
+      "target_file": "services/insuranceFormMapping.js",
+      "task": "develop insurance form fill mapping",
+      "spec": "Map member ID, group number, DOB, name from `lifeos_users` and `insurance_profiles` for form fill.",
+      "depends_on": [
+        "3"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "mapInsuranceFormFields"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/insurance-form-mapping"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/insuranceFormMapping.js",
+          "exports": [
+            "mapInsuranceFormFields"
+          ],
+          "assertion_id": "expected_exports:services/insuranceFormMapping.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-15T20:18:44.035Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/services/.factory-import-check",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 9,
+      "revived_at": "2026-07-15T20:17:27.131Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home",
+      "demoted_at": "2026-07-15T20:19:17.007Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "4",
+      "mission_id": "PRODUCT-universal-overlay"
+    },
+    {
+      "id": "5",
+      "status": "done",
+      "target_file": "public/overlay/moduleRouter.js",
+      "task": "build fluid UI context router",
+      "spec": "Route UI context based on URL patterns for assembled view logic.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "routeUIContext"
+      ],
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:13:12.909Z",
+      "commit_sha": "608fbbcaf99ae3346c33853b18618d86aae56691",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "5",
+      "mission_id": "PRODUCT-universal-overlay"
+    },
+    {
+      "id": "6",
+      "status": "done",
+      "target_file": "routes/voiceDictation.js",
+      "task": "implement voice dictation bridge",
+      "spec": "Enable voice dictation into any form field using the LuminVoice bridge.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerVoiceDictationRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/lifeos/voice-dictation"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/voiceDictation.js",
+          "exports": [
+            "registerVoiceDictationRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/voiceDictation.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "508b170780b39e83089778da2f7b15315ffeae14",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T19:23:10.879Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T20:14:43.641Z",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "6",
+      "mission_id": "PRODUCT-universal-overlay"
+    },
+    {
+      "id": "7",
+      "status": "done",
+      "target_file": "public/overlay/adaptiveLayout.js",
+      "task": "adapt layout preferences",
+      "spec": "Save user layout preferences to `flourishing_prefs`.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "adaptLayoutPreferences"
+      ],
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:17:14.890Z",
+      "commit_sha": "414cbd0e2809e51e88efe93321c6180bb142c4a9",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "7",
+      "mission_id": "PRODUCT-universal-overlay"
+    },
+    {
+      "id": "8",
+      "status": "done",
+      "target_file": "db/migrations/addAdaptiveLayoutColumn.sql",
+      "task": "add adaptive layout column",
+      "spec": "Add column for adaptive layout preferences in `flourishing_prefs`.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS flourishing_prefs"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "1e0bed7a4bf70a31e0f665f577cb974ba8dcd772",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T20:35:55.057Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T20:36:39.360Z",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "8",
+      "mission_id": "PRODUCT-universal-overlay"
+    },
+    {
+      "id": "9",
+      "status": "done",
+      "target_file": "services/sessionReplay.js",
+      "task": "enable session replay",
+      "spec": "Implement opt-in session replay for admins to observe user struggles.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "captureSessionReplay"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/session-replay"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/sessionReplay.js",
+          "exports": [
+            "captureSessionReplay"
+          ],
+          "assertion_id": "expected_exports:services/sessionReplay.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T20:24:41.991Z",
+      "commit_sha": "dc3ff8de552129706d7241fa05d665261d250723",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "9",
+      "mission_id": "PRODUCT-universal-overlay"
+    },
+    {
+      "id": "10",
+      "status": "done",
+      "target_file": "routes/pageSummarization.js",
+      "task": "create page summarization feature",
+      "spec": "Provide a summary of the page content via AI assistance.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPageSummarizationRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/lifeos/page-summarization"
+      },
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/pageSummarization.js",
+          "exports": [
+            "registerPageSummarizationRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/pageSummarization.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "d1cd2ca334a12482cc6ad4460666c2772a2ff071",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T22:24:08.763Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:26:59.237Z",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "10",
+      "mission_id": "PRODUCT-universal-overlay"
+    },
+    {
+      "id": "11",
+      "status": "done",
+      "target_file": "public/overlay/uiExtensions.js",
+      "task": "develop extension icons",
+      "spec": "Add LifeOS branded extension icons for different sizes (16/32/48/128px).",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "16px",
+        "32px",
+        "48px",
+        "128px"
+      ],
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:23:49.799Z",
+      "commit_sha": "0d57bed25e4c2f43dfd3f34c3f39fd2ad3dadbbe",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "11",
+      "mission_id": "PRODUCT-universal-overlay"
+    },
+    {
+      "id": "12",
+      "status": "done",
+      "target_file": "scripts/iosAppBuild.mjs",
+      "task": "build iOS app",
+      "spec": "Build and sign LifeOS iOS app via Xcode using Apple Developer secrets and config.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:30:12.087Z",
+      "commit_sha": "2250a6752e7c3c01d6cb88b96754223aaaf0425a",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "12",
+      "mission_id": "PRODUCT-universal-overlay"
+    },
+    {
+      "id": "universal-overlay-1",
+      "status": "done",
+      "target_file": "services/proactiveToastSystem.js",
+      "task": "implement proactive toast system",
+      "spec": "Create a proactive toast system with dismissible, preference-learned features.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerProactiveToast"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/proactiveToastSystem.js",
+          "exports": [
+            "registerProactiveToast"
+          ],
+          "assertion_id": "expected_exports:services/proactiveToastSystem.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:18:26.201Z",
+      "commit_sha": "f3dbf1798e4598ee6fb397f3253387d9eeac399a",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-1",
+      "mission_id": "PRODUCT-universal-overlay"
+    },
+    {
+      "id": "universal-overlay-2",
+      "status": "done",
+      "target_file": "services/formFieldInference.js",
+      "task": "enhance form field schema inference",
+      "spec": "Add ARIA and placeholder fallback features to form field inference.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "inferFormFieldSchema"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/formFieldInference.js",
+          "exports": [
+            "inferFormFieldSchema"
+          ],
+          "assertion_id": "expected_exports:services/formFieldInference.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "2a43737be1e941f7b2232c7f5e21e38be0488945",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T05:01:18.639Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:04:12.944Z",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-2",
+      "mission_id": "PRODUCT-universal-overlay"
+    },
+    {
+      "id": "universal-overlay-3",
+      "status": "done",
+      "target_file": "services/insuranceFormFill.js",
+      "task": "map insurance form fill",
+      "spec": "Map member ID, group number, DOB, name from lifeos_users and insurance_profiles table.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "mapInsuranceFormFill"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/insuranceFormFill.js",
+          "exports": [
+            "mapInsuranceFormFill"
+          ],
+          "assertion_id": "expected_exports:services/insuranceFormFill.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "9c88cfcd74255163e0eb43cc454d3d4fe6565768",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T05:30:52.846Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:34:11.070Z",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-3",
+      "mission_id": "PRODUCT-universal-overlay"
+    },
+    {
+      "id": "universal-overlay-4",
+      "status": "done",
+      "target_file": "public/overlay/fluidUIContextRouter.js",
+      "task": "integrate fluid UI context router",
+      "spec": "Route assembled view logic based on URL pattern.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "resolveViewByUrlPattern"
+      ],
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-4",
+      "mission_id": "PRODUCT-universal-overlay",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T22:28:16.704Z",
+      "commit_sha": "e81ecc31d53a2170382b62a513240506f14cc5bb"
+    },
+    {
+      "id": "universal-overlay-5",
+      "status": "done",
+      "target_file": "public/icons/lifeosIcons.html",
+      "task": "add extension icons",
+      "spec": "Integrate LifeOS branded icons in 16/32/48/128px sizes.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "<link rel='icon' href='/icons/lifeos-16.png' sizes='16x16'"
+      ],
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-5",
+      "mission_id": "PRODUCT-universal-overlay",
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "320faee724cb2b621d66a606a2bb83965b893231",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-18T00:22:08.306Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-18T00:22:21.315Z"
+    },
+    {
+      "id": "universal-overlay-6",
+      "status": "done",
+      "target_file": "public/overlay/pinnedModules.js",
+      "task": "implement pinned modules in overlay",
+      "spec": "Enable user-configurable split view for pinned modules.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPinnedModules"
+      ],
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-6",
+      "mission_id": "PRODUCT-universal-overlay",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T23:04:05.760Z",
+      "commit_sha": "9afe29863ede6b5adf1e6b3ef989a6d9b944235c"
+    },
+    {
+      "id": "universal-overlay-7",
+      "status": "done",
+      "target_file": "public/overlay/multiProgramView.js",
+      "task": "implement multi-program simultaneous view",
+      "spec": "Display two LifeOS modules side by side in overlay.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerMultiProgramView"
+      ],
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-7",
+      "mission_id": "PRODUCT-universal-overlay",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T23:22:21.534Z",
+      "commit_sha": "cbb86fd345662db703933efa05683c2eb00241d9"
+    },
+    {
+      "id": "universal-overlay-8",
+      "status": "done",
+      "target_file": "public/overlay/adaptiveLayout.js",
+      "task": "save adaptive layout preferences",
+      "spec": "Persist adaptive layout preferences to flourishing_prefs.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "getAdaptiveLayoutSettings",
+        "saveAdaptiveLayoutSettings"
+      ],
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-8",
+      "mission_id": "PRODUCT-universal-overlay",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T23:25:39.163Z",
+      "commit_sha": "610db38aa31607e5d40b0203c28eb0077e5a84dc"
+    },
+    {
+      "id": "universal-overlay-9",
+      "status": "blocked",
+      "target_file": "public/overlay/iPhonePWA.md",
+      "task": "document iPhone PWA installation",
+      "spec": "Document PWA installation process on iPhone. Signed IPA involves Apple Dev secrets.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 1,
+      "file_contains": [
+        "/install",
+        "Add to Home Screen"
+      ],
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-9",
+      "mission_id": "PRODUCT-universal-overlay",
+      "last_attempt_at": "2026-07-18T00:25:20.335Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:/install; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 2,
+      "revived_at": "2026-07-18T00:25:16.067Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "universal-overlay-10",
+      "status": "done",
+      "target_file": "scripts/safariExtensionBuild.mjs",
+      "task": "implement Safari extension build",
+      "spec": "Create Safari extension build workflow with Xcode build step.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "buildSafariExtension"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:20:58.538Z",
+      "commit_sha": "b8c888455e387770520d92eb77b3bcaac766b3cd",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-10",
+      "mission_id": "PRODUCT-universal-overlay"
+    },
+    {
+      "id": "universal-overlay-11",
+      "status": "done",
+      "target_file": "routes/sessionReplay.js",
+      "task": "add admin session replay",
+      "spec": "Implement opt-in session replay for admins to review client flow struggles.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerSessionReplayRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/session-replay"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/sessionReplay.js",
+          "exports": [
+            "registerSessionReplayRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/sessionReplay.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:24:40.972Z",
+      "commit_sha": "a8bf34384b34b1563f1605d743dbf0658ea8024d",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-11",
+      "mission_id": "PRODUCT-universal-overlay"
+    },
+    {
+      "id": "universal-overlay-12",
+      "status": "done",
+      "target_file": "routes/firefoxExtension.js",
+      "task": "add Firefox support with MV2",
+      "spec": "Support Firefox with MV2 manifest.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerFirefoxExtensionRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/firefox-extension"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/firefoxExtension.js",
+          "exports": [
+            "registerFirefoxExtensionRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/firefoxExtension.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:38:25.369Z",
+      "commit_sha": "d34428c432e8e23d5cb647e9d97e8a66fc21427b",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-12",
+      "mission_id": "PRODUCT-universal-overlay"
+    },
+    {
+      "id": "universal-overlay-step1",
+      "status": "done",
+      "target_file": "services/struggleDetection.js",
+      "task": "add dwell timer",
+      "spec": "Implement a dwell timer that tracks user engagement time on elements.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "dwellTimer"
+      ],
+      "route": {
+        "path": "/api/v1/engagement/dwell"
+      },
+      "file_contains": [
+        "function dwellTimer"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/struggleDetection.js",
+          "exports": [
+            "dwellTimer"
+          ],
+          "assertion_id": "expected_exports:services/struggleDetection.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "8f141c158f758919ff119aa52e44eb7afe1ddbfc",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-17T18:55:35.030Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T18:57:22.756Z",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-step1",
+      "mission_id": "PRODUCT-universal-overlay"
+    },
+    {
+      "id": "universal-overlay-step2",
+      "status": "done",
+      "target_file": "services/struggleDetection.js",
+      "task": "add click repeat detection",
+      "spec": "Add functionality to detect repeated user clicks within a short period.",
+      "depends_on": [
+        "universal-overlay-step1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "detectClickRepeat"
+      ],
+      "route": {
+        "path": "/api/v1/engagement/click-repeat"
+      },
+      "file_contains": [
+        "function detectClickRepeat"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/struggleDetection.js",
+          "exports": [
+            "detectClickRepeat"
+          ],
+          "assertion_id": "expected_exports:services/struggleDetection.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T19:11:46.122Z",
+      "commit_sha": "bbdf8e1f91695121c96ed322a86c07ed97265d03",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-step2",
+      "mission_id": "PRODUCT-universal-overlay"
+    },
+    {
+      "id": "universal-overlay-step3",
+      "status": "done",
+      "target_file": "services/struggleDetection.js",
+      "task": "add edit cycle counter",
+      "spec": "Add a counter to track the number of times a user edits an input before submitting.",
+      "depends_on": [
+        "universal-overlay-step2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "editCycleCounter"
+      ],
+      "route": {
+        "path": "/api/v1/engagement/edit-cycle"
+      },
+      "file_contains": [
+        "function editCycleCounter"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/struggleDetection.js",
+          "exports": [
+            "editCycleCounter"
+          ],
+          "assertion_id": "expected_exports:services/struggleDetection.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T19:47:31.307Z",
+      "commit_sha": "32dfdec791c09f9e864f735285750094f7e68615",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-step3",
+      "mission_id": "PRODUCT-universal-overlay"
+    },
+    {
+      "id": "universal-overlay-step4",
+      "status": "done",
+      "target_file": "services/proactiveToastSystem.js",
+      "task": "enhance toast system",
+      "spec": "Make toasts non-blocking, dismissible, and capable of learning user preferences.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "ProactiveToastSystem"
+      ],
+      "route": {
+        "path": "/notifications/toast"
+      },
+      "file_contains": [
+        "dismissibleToast"
+      ],
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-step4",
+      "mission_id": "PRODUCT-universal-overlay",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/proactiveToastSystem.js",
+          "exports": [
+            "ProactiveToastSystem"
+          ],
+          "assertion_id": "expected_exports:services/proactiveToastSystem.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T23:58:24.943Z",
+      "commit_sha": "90cab2e7a630483b1e562c247351980cfb1e69c4"
+    },
+    {
+      "id": "universal-overlay-step5",
+      "status": "done",
+      "target_file": "services/insuranceFormFill.js",
+      "task": "extend form fill mapping",
+      "spec": "Map insurance-related fields including member ID, group number, and DOB from `insurance_profiles`.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "mapInsuranceData"
+      ],
+      "route": {
+        "path": "/api/v1/insurance/form-fill"
+      },
+      "file_contains": [
+        "member ID",
+        "group number",
+        "DOB"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/insuranceFormFill.js",
+          "exports": [
+            "mapInsuranceData"
+          ],
+          "assertion_id": "expected_exports:services/insuranceFormFill.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:35:16.124Z",
+      "commit_sha": "11c461877fc45d0fb15c1b56ac1a2760815b99b5",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-step5",
+      "mission_id": "PRODUCT-universal-overlay"
+    },
+    {
+      "id": "universal-overlay-step6",
+      "status": "done",
+      "target_file": "services/sessionReplay.js",
+      "task": "implement session replay opt-in",
+      "spec": "Create a session replay feature for opt-in user flow tracking.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "startSessionReplay"
+      ],
+      "route": {
+        "path": "/session/replay/start"
+      },
+      "file_contains": [
+        "opt-in session replay"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/sessionReplay.js",
+          "exports": [
+            "startSessionReplay"
+          ],
+          "assertion_id": "expected_exports:services/sessionReplay.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:38:32.888Z",
+      "commit_sha": "cf1943fd81a677852d52a42657b71926941afeed",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-step6",
+      "mission_id": "PRODUCT-universal-overlay"
+    },
+    {
+      "id": "universal-overlay-step7",
+      "status": "blocked",
+      "target_file": "public/overlay/moduleRouter.js",
+      "task": "implement fluid UI context router",
+      "spec": "Route based on URL patterns to assemble and display view logic.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 1,
+      "expected_exports": [
+        "fluidRouter"
+      ],
+      "route": {
+        "path": "/ui/context/route"
+      },
+      "file_contains": [
+        "URL pattern"
+      ],
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-step7",
+      "mission_id": "PRODUCT-universal-overlay",
+      "last_attempt_at": "2026-07-18T00:14:11.868Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:URL pattern; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
+    },
+    {
+      "id": "universal-overlay-step8",
+      "status": "blocked",
+      "target_file": "public/overlay/uiExtensions.js",
+      "task": "support overlay pinned modules",
+      "spec": "Enable user-configurable split view with pinned modules.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 1,
+      "expected_exports": [
+        "initPinnedModules"
+      ],
+      "route": {
+        "path": "/ui/extensions/pinned-modules"
+      },
+      "file_contains": [
+        "user-configurable split view"
+      ],
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-step8",
+      "mission_id": "PRODUCT-universal-overlay",
+      "last_attempt_at": "2026-07-18T00:14:51.330Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:user-configurable split view; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
+    },
+    {
+      "id": "universal-overlay-step9",
+      "status": "done",
+      "target_file": "routes/sessionReplay.js",
+      "task": "register session replay routes",
+      "spec": "Register the routes needed to start and manage session replays.",
+      "depends_on": [
+        "universal-overlay-step6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerSessionReplayRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/session/replay"
+      },
+      "file_contains": [
+        "registerSessionReplayRoutes"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/sessionReplay.js",
+          "exports": [
+            "registerSessionReplayRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/sessionReplay.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:42:34.496Z",
+      "commit_sha": "ad3c885b0e801b6e833a17aaa3200609dc310d84",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-step9",
+      "mission_id": "PRODUCT-universal-overlay"
+    },
+    {
+      "id": "universal-overlay-step10",
+      "status": "done",
+      "target_file": "routes/firefoxExtension.js",
+      "task": "support Firefox MV2 manifest",
+      "spec": "Register a route for handling Firefox MV2 extension variants.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerFirefoxRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/extensions/firefox/mv2"
+      },
+      "file_contains": [
+        "firefox MV2"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/firefoxExtension.js",
+          "exports": [
+            "registerFirefoxRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/firefoxExtension.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:47:20.012Z",
+      "commit_sha": "4e881e1e69e069fb7440c87b82691be3a00904f7",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-step10",
+      "mission_id": "PRODUCT-universal-overlay"
+    },
+    {
+      "id": "universal-overlay-step11",
+      "status": "done",
+      "target_file": "scripts/safariExtensionBuild.mjs",
+      "task": "update Safari extension build",
+      "spec": "Ensure Safari extension is macOS only with a dedicated Xcode build step.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "Xcode build"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:58:16.692Z",
+      "commit_sha": "8057841a4808773fc1e4de7804eb97833e46d8b6",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-step11",
+      "mission_id": "PRODUCT-universal-overlay"
+    },
+    {
+      "id": "universal-overlay-step12",
+      "status": "founder_gated",
+      "target_file": "scripts/iosAppBuild.mjs",
+      "task": "complete iOS PWA and IPA build",
+      "spec": "Finalize the PWA and IPA package for iOS, integrating struggle detection and form fill.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "iOS IPA",
+        "PWA /install"
+      ],
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-step12",
+      "mission_id": "PRODUCT-universal-overlay"
+    }
+  ],
+  "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-universal-overlay",
+  "twin_kind": "product_build_queue_registered"
+}

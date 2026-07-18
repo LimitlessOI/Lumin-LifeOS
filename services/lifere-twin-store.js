@@ -79,7 +79,46 @@ export function createLifeRETwinStore({ pool = null, logger = console } = {}) {
     return fs.readdirSync(dir).filter((f) => f.endsWith('.json')).map((f) => f.replace(/\.json$/, ''));
   }
 
-  return { readTwin, writeTwin, listModuleTwins, twinPath };
+  function listTwinsSummary({ tenantId = 'default', userId }) {
+    const twins = [];
+    const baseDir = path.join(ROOT, 'data/twins', tenantId, userId);
+    if (fs.existsSync(baseDir)) {
+      for (const name of fs.readdirSync(baseDir)) {
+        if (!name.endsWith('.json')) continue;
+        const twinKey = name.replace(/\.json$/, '');
+        const fp = path.join(baseDir, name);
+        let updated_at = null;
+        try {
+          const raw = JSON.parse(fs.readFileSync(fp, 'utf8'));
+          updated_at = raw?.updated_at || null;
+        } catch {
+          updated_at = null;
+        }
+        try {
+          const st = fs.statSync(fp);
+          if (!updated_at) updated_at = st.mtime.toISOString();
+        } catch {
+          /* ignore */
+        }
+        twins.push({ kind: 'user', twin_key: twinKey, updated_at });
+      }
+    }
+    for (const moduleKey of listModuleTwins({ tenantId, userId })) {
+      const fp = path.join(ROOT, 'data/twins', tenantId, userId, 'modules', `${moduleKey}.json`);
+      let updated_at = null;
+      try {
+        const raw = JSON.parse(fs.readFileSync(fp, 'utf8'));
+        updated_at = raw?.updated_at || fs.statSync(fp).mtime.toISOString();
+      } catch {
+        updated_at = null;
+      }
+      twins.push({ kind: 'module', twin_key: moduleKey, updated_at });
+    }
+    twins.sort((a, b) => String(b.updated_at || '').localeCompare(String(a.updated_at || '')));
+    return { ok: true, twins, count: twins.length, tenant_id: tenantId, user_id: userId };
+  }
+
+  return { readTwin, writeTwin, listModuleTwins, listTwinsSummary, twinPath };
 }
 
 export const { readTwin, writeTwin, listModuleTwins } = createLifeRETwinStore();

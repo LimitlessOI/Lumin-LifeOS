@@ -20,29 +20,39 @@
       "rank": 1,
       "title": "Keep never-stop shipping",
       "status": "in_progress",
-      "scorecard_areas": ["Never-stop autonomy", "Deploy / Railway"],
+      "scorecard_areas": [
+        "Never-stop autonomy",
+        "Deploy / Railway"
+      ],
       "done_when": "Scheduler burns pending BUILD_QUEUE steps; tip tracks main; no spin receipts",
-      "next_action": "Tip tracking main; never-stop cycle_start product_build_tc-service_s7 in progress — poll until s7 done then s8+",
-      "blocker": "run-once often 502s at proxy while long builds run — scheduler still enabled; trust last_receipt/events not total_runs after redeploy"
+      "next_action": "tc-service machine 20/24 done; T05 PASS; tip sync after ships; plan lane needs provider keys in local shell",
+      "blocker": "Local never-stop plan lane: plan_skipped_no_model (no ANTHROPIC/OPENAI/GEMINI in local shell). Railway scheduler may still plan if keys present on tip."
     },
     {
       "id": "T02",
       "rank": 2,
       "title": "First dollar",
-      "status": "open",
-      "scorecard_areas": ["Revenue / pilots", "Site Builder", "LimitlessOS / business"],
+      "status": "in_progress",
+      "scorecard_areas": [
+        "Revenue / pilots",
+        "Site Builder",
+        "LimitlessOS / business"
+      ],
       "done_when": "Validated dollar receipt (Site Builder send or Go Vegas conversion)",
-      "next_action": "Site Builder EMAIL/Postmark PRESENT on tip — run real prospect send for first dollar. OR set Railway var GOOGLE_PLACES_KEY (live probe 2026-07-10: ABSENT)",
-      "blocker": "GOOGLE_PLACES_KEY and GOOGLE_PLACES_API_KEY both ABSENT on live tip (npm run env:inventory). Not the same as GEMINI_API_KEY."
+      "next_action": "Tip has Workspace SMTP fallback when Postmark pending. After deploy: resend Flores Dental + batch built prospects. Still prefer Postmark approval for reputation. Optional GOOGLE_PLACES_KEY.",
+      "blocker": "Postmark account PENDING APPROVAL (external domains). SMTP fallback shipping — may still hit Railway→Gmail timeout historically."
     },
     {
       "id": "T03",
       "rank": 3,
       "title": "Point B / founder usability",
-      "status": "open",
-      "scorecard_areas": ["LifeOS consumer", "Founder UX (lifeos-app)"],
+      "status": "in_progress",
+      "scorecard_areas": [
+        "LifeOS consumer",
+        "Founder UX (lifeos-app)"
+      ],
       "done_when": "FOUNDER_USABILITY_PASS true on Point B mission",
-      "next_action": "Run lifeos:user-auth:v1-acceptance; founder confirm-usability on lifeos-app",
+      "next_action": "lifeos:user-auth:v1-acceptance PASS (11/11). Remaining: founder confirm-usability on lifeos-app (human).",
       "blocker": "Human usability confirm required for full close"
     },
     {
@@ -50,7 +60,10 @@
       "rank": 4,
       "title": "SENTRY Layer B core surfaces",
       "status": "in_progress",
-      "scorecard_areas": ["SENTRY / pre-alpha", "MarketingOS / SMOS"],
+      "scorecard_areas": [
+        "SENTRY / pre-alpha",
+        "MarketingOS / SMOS"
+      ],
       "done_when": "Marketing + LifeOS founder-ui + Site Builder Layer A+B PASS receipts",
       "next_action": "REAL_APP_E2E 16/16 PASS on tip; finish founder-chat alpha B3 (git FF race) + Site Builder Layer B",
       "blocker": null
@@ -59,18 +72,24 @@
       "id": "T05",
       "rank": 5,
       "title": "Founder memory every Chair turn",
-      "status": "in_progress",
-      "scorecard_areas": ["Memory / Lumin"],
+      "status": "done",
+      "scorecard_areas": [
+        "Memory / Lumin"
+      ],
       "done_when": "loadChairMemoryContext injects FOUNDER MEMORY block on normal chair/lumin turns",
-      "next_action": "Code on tip efce3a048c; prove live Chair turn includes FOUNDER MEMORY header",
-      "blocker": null
+      "next_action": "PROVED live tip 1b59d7c9: Chair direct-agent replied MEMORY_LOADED fmrcpt_1783680245935_9f9fefa2 after GAP-FILL inject",
+      "blocker": null,
+      "done_at": "2026-07-10T10:45:00Z",
+      "proof": "products/receipts or live Chair MEMORY_LOADED on tip 1b59d7c9c08c"
     },
     {
       "id": "T06",
       "rank": 6,
       "title": "Factory FULLY_MACHINE_READY",
       "status": "in_progress",
-      "scorecard_areas": ["BuilderOS / factory mechanical"],
+      "scorecard_areas": [
+        "BuilderOS / factory mechanical"
+      ],
       "done_when": "bp-priority-coverage-audit gaps=0; SAME_TIER determinism; FULLY_MACHINE_READY true; then GOVERNED_FACTORY_ONLY",
       "next_action": "Coverage gaps=0 DONE; run factory:certify + same-tier determinism; then flip GOVERNED_FACTORY_ONLY",
       "blocker": "Do not flip GOVERNED_FACTORY_ONLY until SAME_TIER + governed ship proven"
@@ -80,9 +99,12 @@
       "rank": 7,
       "title": "Buildable backlog only",
       "status": "in_progress",
-      "scorecard_areas": ["Product vision & registry", "Never-stop autonomy"],
+      "scorecard_areas": [
+        "Product vision & registry",
+        "Never-stop autonomy"
+      ],
       "done_when": "Priority products have shippable BUILD_QUEUE steps or stamped unplannable SENTRY",
-      "next_action": "tc-service queue live (6 done / 18 pending); keep documenting next phases as backlog",
+      "next_action": "tc-service 20/24 machine-done; remaining 4 are founder_gated overlays — document next phases as backlog only",
       "blocker": null
     },
     {
@@ -90,9 +112,12 @@
       "rank": 8,
       "title": "Deploy truth",
       "status": "in_progress",
-      "scorecard_areas": ["Deploy / Railway", "Honesty / truth / overclaim"],
+      "scorecard_areas": [
+        "Deploy / Railway",
+        "Honesty / truth / overclaim"
+      ],
       "done_when": "Step done only when running tip serves built SHA; tip always = main",
-      "next_action": "Tip currently matches main (efce3a048c); keep managed-env build-from-latest after ships",
+      "next_action": "Keep managed-env build-from-latest after ships; tip was 1b59d7c9 for T05 proof",
       "blocker": null
     },
     {
@@ -100,7 +125,10 @@
       "rank": 9,
       "title": "Honesty fence",
       "status": "open",
-      "scorecard_areas": ["Honesty / truth / overclaim", "Security / secrets"],
+      "scorecard_areas": [
+        "Honesty / truth / overclaim",
+        "Security / secrets"
+      ],
       "done_when": "Zero overclaim; every blocker named; money-path security review receipt",
       "next_action": "Keep truth-enforcement audit green; no PASS without receipt",
       "blocker": null
@@ -110,7 +138,10 @@
       "rank": 10,
       "title": "One paying segment loop",
       "status": "open",
-      "scorecard_areas": ["Competitive moat realized", "LimitlessOS / business"],
+      "scorecard_areas": [
+        "Competitive moat realized",
+        "LimitlessOS / business"
+      ],
       "done_when": "Repeatable Go Vegas or Site Builder paying loop with receipt",
       "next_action": "After first dollar, schedule recurring under caps",
       "blocker": "Depends on T02"

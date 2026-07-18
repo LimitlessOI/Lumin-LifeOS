@@ -24,6 +24,9 @@
  *   POST /api/v1/lifeos/auth/operator/provision-member — create member account + optional household link
  *   POST /api/v1/lifeos/auth/operator/provision-alpha-auditor — founder-level test account from Railway vault creds
  *   POST /api/v1/lifeos/auth/operator/sync-founder-login — sync adam founder email+password from LIFEOS_FOUNDER_LOGIN_* vault
+ *   POST /api/v1/lifeos/auth/operator/mint-browser-session — vault login → access/refresh tokens for UI walks (never returns password)
+ *   POST /api/v1/lifeos/auth/operator/credentialed-prealpha-proof — vault JWT + Chair chat proof
+ *   POST /api/v1/lifeos/auth/operator/credentialed-ui-login-proof — vault Puppeteer form-login proof
  *
  * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
@@ -158,6 +161,56 @@ export function createLifeOSAuthRoutes({ pool, logger, requireKey }) {
         return res.status(400).json({ ok: false, error: 'handle and newPassword required' });
       }
       const result = await auth.setAdminPassword({ handle, newPassword, currentPassword: currentPassword || null });
+      res.json(result);
+    } catch (e) {
+      res.status(e.status || 500).json({ ok: false, error: e.message });
+    }
+  });
+
+  // ── Forgot password (public) ────────────────────────────────────────────────
+  router.post('/forgot-password', async (req, res) => {
+    try {
+      const email = String(req.body?.email || '').trim();
+      const created = await auth.createPasswordResetToken({ email, ip: req.ip });
+      let emailDelivery = { sent: false, error: 'skipped_unknown_or_inactive' };
+      if (created.created && created.token && created.user?.email) {
+        const origin = publicWebOrigin(req) || 'https://lumin-web-production-e3a9.up.railway.app';
+        const resetUrl = `${origin}/marketing/reset-password?token=${encodeURIComponent(created.token)}`;
+        const { sendPasswordResetEmail } = await import('../services/password-reset-email.js');
+        emailDelivery = await sendPasswordResetEmail({
+          to: created.user.email,
+          resetUrl,
+          logger: log,
+        });
+      }
+
+      const isOperator = Boolean(req.headers['x-command-key'] || req.headers['x-api-key']);
+      const body = {
+        ok: true,
+        message:
+          'If that email has an account and mail is configured, a reset link was sent. Check spam. Link expires in 60 minutes.',
+        email_configured: emailDelivery.provider != null || emailDelivery.error !== 'email_provider_not_configured',
+        email_sent: Boolean(emailDelivery.sent),
+      };
+      // Tip/operator only — never return raw tokens to browsers.
+      if (isOperator && req.body?.return_token === true && created.token) {
+        body.tip_reset_token = created.token;
+        body.tip_note = 'Operator tip-proof only. Do not expose to clients.';
+      }
+      if (isOperator && !emailDelivery.sent) {
+        body.email_error = emailDelivery.error || null;
+      }
+      res.json(body);
+    } catch (e) {
+      res.status(e.status || 500).json({ ok: false, error: e.message });
+    }
+  });
+
+  router.post('/reset-password', async (req, res) => {
+    try {
+      const token = req.body?.token;
+      const newPassword = req.body?.newPassword || req.body?.password || req.body?.new_password;
+      const result = await auth.resetPasswordWithToken({ token, newPassword });
       res.json(result);
     } catch (e) {
       res.status(e.status || 500).json({ ok: false, error: e.message });
@@ -412,6 +465,48 @@ export function createLifeOSAuthRoutes({ pool, logger, requireKey }) {
         report.error = e.message;
         report.duration_ms = Date.now() - started;
         return res.status(500).json(report);
+      }
+    });
+
+    // Mint a short-lived founder browser session from Railway vault (never returns password).
+    // Used by Cursor/operator UI walks when local LIFEOS_FOUNDER_LOGIN_* is absent.
+    router.post('/operator/mint-browser-session', requireKey, async (req, res) => {
+      try {
+        const creds = resolveFounderLoginCreds();
+        if (!creds) {
+          return res.status(503).json({
+            ok: false,
+            blocker: 'FOUNDER_CREDS_MISSING_ON_SERVER',
+            cred_diagnosis: diagnoseFounderLoginCreds(),
+          });
+        }
+        const loginResult = await auth.login({
+          email: creds.email,
+          password: creds.password,
+          userAgent: 'operator-mint-browser-session',
+          ip: req.ip,
+        });
+        const accessToken = loginResult.accessToken || loginResult.access_token || loginResult.token;
+        const refreshToken = loginResult.refreshToken || loginResult.refresh_token || null;
+        if (!accessToken) {
+          return res.status(500).json({ ok: false, blocker: 'NO_ACCESS_TOKEN' });
+        }
+        setAccessCookie(res, accessToken);
+        return res.json({
+          ok: true,
+          access_token: accessToken,
+          refresh_token: refreshToken,
+          user: {
+            handle: loginResult.user?.user_handle,
+            email: loginResult.user?.email,
+            role: loginResult.user?.role,
+            tier: loginResult.user?.tier,
+          },
+          cred_source: creds.source,
+          note: 'Inject access_token into localStorage lifeos_access_token for overlay UI walks. Password never returned.',
+        });
+      } catch (e) {
+        return res.status(401).json({ ok: false, error: e.message, blocker: 'LOGIN_FAILED' });
       }
     });
 

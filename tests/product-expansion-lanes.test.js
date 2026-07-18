@@ -106,10 +106,11 @@ test('productRankFraction: unlisted always sort after listed, more mature first'
   assert.ok(unlistedRich >= 0.01, 'never crosses into the listed range');
 });
 
-test('loadProductPriority reads the founder-owned list and includes site-builder', () => {
+test('loadProductPriority reads the founder-owned list and includes lifeos first', () => {
   const list = loadProductPriority();
   assert.ok(Array.isArray(list));
-  assert.equal(list[0], 'site-builder');
+  assert.equal(list[0], 'lifeos');
+  assert.ok(list.includes('site-builder'));
 });
 
 test('dailyBuildBudget: cap=0 disables the guardrail (unlimited)', () => {

@@ -95,6 +95,12 @@ function inferStatus(row = {}) {
   ].filter(Boolean).join(' ').toLowerCase();
   if (/reject/.test(raw)) return 'rejected';
   if (/deny|denied/.test(raw)) return 'denied';
+  // Must check under/over-paid BEFORE the generic /paid|closed/ substring
+  // match below, or a raw export status like "Underpaid" collapses straight
+  // to 'paid' on import and the shortfall is lost before it ever reaches
+  // classification.
+  if (/under[\s-]?paid/.test(raw)) return 'underpaid';
+  if (/over[\s-]?paid/.test(raw)) return 'overpaid';
   if (/paid|closed/.test(raw)) return 'paid';
   if (/submitted|accepted|in process|processing/.test(raw)) return 'submitted';
   if (/unbilled|pending|draft/.test(raw)) return 'unbilled';
@@ -160,7 +166,7 @@ export function createClientCareSyncService({ billingService, logger = console }
 
   async function importSnapshot(payload = {}) {
     const claims = parseSnapshot(payload).filter((item) => item.date_of_service && item.payer_name);
-    const results = await billingService.importClaims(claims, { source: payload.source || 'snapshot_import' });
+    const results = await billingService.importClaims(claims, { source: payload.source || 'snapshot_import', tenantId: payload.tenantId ?? payload.tenant_id ?? null });
     return {
       parsed: claims.length,
       imported: results.filter((item) => !item.error).length,
@@ -178,6 +184,7 @@ export function createClientCareSyncService({ billingService, logger = console }
       rejected: 0,
       denied: 0,
       paid: 0,
+      underpaid: 0,
       missing_submission_date: 0,
       high_priority: 0,
     };
@@ -187,6 +194,9 @@ export function createClientCareSyncService({ billingService, logger = console }
       else if (/submitted/.test(status)) summary.submitted += 1;
       else if (/reject/.test(status)) summary.rejected += 1;
       else if (/deny/.test(status)) summary.denied += 1;
+      // underpaid/overpaid must be checked before the /paid|closed/ substring
+      // match, or short-paid claims silently count as fully paid here.
+      else if (status === 'underpaid' || status === 'overpaid') summary.underpaid += 1;
       else if (/paid|closed/.test(status)) summary.paid += 1;
       if (!claim.original_submitted_at && !claim.latest_submitted_at) summary.missing_submission_date += 1;
       if (Number(claim.priority_score || 0) >= 200) summary.high_priority += 1;

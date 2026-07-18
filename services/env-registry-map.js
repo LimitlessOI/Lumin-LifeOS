@@ -43,7 +43,8 @@ export const ENV_REGISTRY = [
   { name: "OPENROUTER_MODEL",    status: "RETIRED",    category: "ai",       purpose: "OpenRouter model override — unused" },
   { name: "PERPLEXITY_API_KEY",  status: "OPTIONAL",   category: "ai",       purpose: "Perplexity — web-search-grounded answers" },
   { name: "BRAVE_SEARCH_API_KEY",status: "OPTIONAL",   category: "ai",       purpose: "Brave Search — web intelligence" },
-  { name: "REPLICATE_API_TOKEN", status: "SET",        category: "ai",       purpose: "Replicate — Kling/Wan video generation" },
+  { name: "REPLICATE_API_TOKEN", status: "NEEDED",     category: "ai",       purpose: "Replicate — Ideogram/Recraft/Flux graphics + Kling/Wan video (alias: REPLICATE_API)" },
+  { name: "REPLICATE_API",       status: "DEPRECATED", category: "ai",       purpose: "Founder short-name — aliased to REPLICATE_API_TOKEN at boot" },
   { name: "GEMINI_MODEL",        status: "OPTIONAL",   category: "ai",       purpose: "Override Gemini model name" },
 
   // ── Database ─────────────────────────────────────────────────────────────────
@@ -198,6 +199,11 @@ export const ENV_REGISTRY = [
   // ── Signup Agent ──────────────────────────────────────────────────────────────
   { name: "GMAIL_SIGNUP_EMAIL",       status: "SET",      category: "signup",   purpose: "System signup email — lumea.lifeos@gmail.com (not founder UI login)" },
   { name: "GMAIL_SIGNUP_APP_PASSWORD",status: "NEEDED",   category: "signup",   purpose: "Gmail App Password for IMAP email verification reads" },
+  { name: "FOUNDER_PAYMENT_CARD_NUMBER", status: "NEEDED", category: "signup", purpose: "Founder card number for autonomous paid signups (Railway vault only — never log)" },
+  { name: "FOUNDER_PAYMENT_CARD_EXP", status: "NEEDED", category: "signup", purpose: "Card expiry MM/YY for founder payment vault" },
+  { name: "FOUNDER_PAYMENT_CARD_CVC", status: "NEEDED", category: "signup", purpose: "Card CVC for founder payment vault" },
+  { name: "FOUNDER_PAYMENT_CARD_NAME", status: "NEEDED", category: "signup", purpose: "Name on card for founder payment vault" },
+  { name: "FOUNDER_PAYMENT_BILLING_ZIP", status: "OPTIONAL", category: "signup", purpose: "Billing ZIP when checkout requires postal code" },
   { name: "LIFEOS_FOUNDER_LOGIN_EMAIL", status: "NEEDED", category: "auth",     purpose: "Founder LifeOS sign-in email (e.g. adam@hopkinsgroup.org) — sync via operator/sync-founder-login" },
   { name: "LIFEOS_FOUNDER_LOGIN_PASSWORD", status: "NEEDED", category: "auth", purpose: "Founder LifeOS sign-in password — never commit; Railway vault only" },
   { name: "TWOCAPTCHA_API_KEY",       status: "OPTIONAL", category: "signup",   purpose: "2captcha key for captcha solving during signups ($1/1000)" },
@@ -209,9 +215,21 @@ export const ENV_REGISTRY = [
  * Compares registry expected status against what's actually in process.env.
  * No Railway API call needed — Railway injects all vars at boot time.
  */
+const ENV_PRESENT_ALIASES = {
+  REPLICATE_API_TOKEN: ['REPLICATE_API'],
+};
+
+function isEnvPresent(name) {
+  if (String(process.env[name] || '').trim()) return true;
+  for (const alias of ENV_PRESENT_ALIASES[name] || []) {
+    if (String(process.env[alias] || '').trim()) return true;
+  }
+  return false;
+}
+
 export function getRegistryHealth() {
   const results = ENV_REGISTRY.map((entry) => {
-    const present = Boolean(process.env[entry.name]);
+    const present = isEnvPresent(entry.name);
     let healthStatus;
 
     if (entry.status === "DEPRECATED") {

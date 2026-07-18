@@ -1,10 +1,10 @@
 /**
  * SYNOPSIS: Registers TcIntakeRoutes routes/handlers (routes/tc-intake-routes.js).
  */
-import { runIntake } from '../services/tcIntakeRunner.js';
+import { runIntake } from '../services/tc-intake-runner.js';
 
-export function registerTcIntakeRoutes(app, deps) {
-  const authMiddleware = deps?.requireAuth || deps?.requireKey;
+export function registerTcIntakeRoutes(app, deps = {}) {
+  const authMiddleware = deps.requireAuth || deps.requireKey;
 
   app.post('/api/tc/intake/run', authMiddleware, async (req, res) => {
     try {
@@ -26,7 +26,7 @@ export function registerTcIntakeRoutes(app, deps) {
         status: result?.status ?? null,
       });
     } catch (error) {
-      deps?.logger?.error?.({ err: error }, 'tc intake run failed');
+      deps.logger?.error?.({ err: error }, 'tc intake run failed');
       return res.status(500).json({
         error: 'Failed to run intake',
       });
@@ -35,7 +35,7 @@ export function registerTcIntakeRoutes(app, deps) {
 
   app.get('/api/tc/intake/runs', authMiddleware, async (req, res) => {
     try {
-      const db = deps?.db || deps?.pool;
+      const db = deps.db || deps.pool;
       if (!db?.query) {
         return res.status(500).json({ error: 'Database unavailable' });
       }
@@ -51,7 +51,7 @@ export function registerTcIntakeRoutes(app, deps) {
 
       return res.status(200).json({ runs: rows });
     } catch (error) {
-      deps?.logger?.error?.({ err: error }, 'tc intake runs fetch failed');
+      deps.logger?.error?.({ err: error }, 'tc intake runs fetch failed');
       return res.status(500).json({
         error: 'Failed to load intake runs',
       });

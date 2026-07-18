@@ -1,24 +1,24 @@
 /**
  * SYNOPSIS: config/task-model-routing.js
- * config/task-model-routing.js
  *
  * Maps task type strings to council member keys.
- * This file defines static preferences only. Runtime task authority from
- * the memory-intelligence layer may reorder or block these choices.
+ * Static preferences only. Runtime task authority may reorder or block.
  *
- * Rule: use the CHEAPEST model that can do the job CORRECTLY.
- * Use the dedicated BuilderOS OpenAI mini lane for frozen/bounded build work first.
- * Escalate only when the cheaper lane fails for reasoning-quality reasons.
+ * Rule: start with a STRONG, PAID, provider-diverse model for high-stakes
+ * reasoning/code; never start with the cheapest/free tier (SO-003). Fail over
+ * to another provider, never sit idle. The model mapping is the first line of
+ * the conductor's one-pathway track — the AI cats are not allowed to downgrade
+ * themselves unless the caller explicitly opts in.
  *
  * Usage:
  *   import { getModelForTask } from './config/task-model-routing.js';
- *   const member = getModelForTask('lifeos.lumin.chat');  // → 'gemini_flash'
+ *   const member = getModelForTask('lifeos.lumin.chat');  // → 'claude_sonnet'
  *   const result = await callCouncilMember(member, prompt, { maxOutputTokens: 500 });
  *
  * IMPORTANT: Use `maxOutputTokens` (NOT `maxTokens`) to override output length.
  * council-service reads `options.maxOutputTokens`; `options.maxTokens` is silently ignored.
  *
- * @ssot docs/products/lifeos/PRODUCT_HOME.md
+ * @ssot docs/products/ai-council/PRODUCT_HOME.md
  */
 
 /**
@@ -26,92 +26,94 @@
  *
  * Keys must match entries in config/council-members.js COUNCIL_MEMBERS object.
  *
- * Tier guide:
- *   groq_llama    — fast, cheap, great for classification + structured extraction
- *   gemini_flash  — good for conversational and narrative work
- *   openai_builder_mini — cheapest-capable bounded BuilderOS execution lane
+ * Tier guide (strong-first, paid-first, provider-diverse):
+ *   claude_sonnet — chair, primary code author, complex reasoning, long-form output
+ *   openai_gpt    — general conversation, reasoning, analysis, openai direct
  *   openai_builder_standard — standard BuilderOS reasoning/review lane
  *   openai_builder_escalation — stronger BuilderOS escalation lane
- *   gemini_flash  — default fallback for non-builder general tasks
+ *   openai_builder_mini — cheapest-capable bounded BuilderOS execution lane
+ *   century       — long-horizon strategy / architect-level reasoning
+ *   deepseek      — structured extraction, fast JSON, code-review fallback
+ *   gemini_flash  — fast summaries and lightweight tasks (free)
+ *   groq_llama    — fast routing and classification (free)
  */
 export const TASK_MODEL_MAP = {
   // ── LifeOS: Lumin AI ──────────────────────────────────────────────────────
-  'lifeos.lumin.chat':               'gemini_flash',   // user-facing conversation
-  'lifeos.lumin.context_snapshot':   'groq_llama',     // pure DB, but if AI needed
-  'lifeos.lumin.program_plan':       'gemini_flash',   // Lumin build: structured plan for repo changes
+  'lifeos.lumin.chat':               'claude_sonnet',       // Chair — user-facing conversation
+  'lifeos.lumin.context_snapshot':   'openai_gpt',          // context summary / status
+  'lifeos.lumin.program_plan':       'openai_builder_standard', // structured plan for repo changes
 
   // ── LifeOS: Emotional ─────────────────────────────────────────────────────
-  'lifeos.emotional.analyze_patterns':     'gemini_flash',
-  'lifeos.emotional.early_warning':        'groq_llama',   // classification
-  'lifeos.emotional.detect_sabotage':      'gemini_flash',
+  'lifeos.emotional.analyze_patterns': 'claude_sonnet',     // high-stakes pattern analysis
+  'lifeos.emotional.early_warning':    'openai_gpt',        // classification
+  'lifeos.emotional.detect_sabotage':  'claude_sonnet',     // chair-level detection
 
   // ── LifeOS: Truth Delivery ────────────────────────────────────────────────
-  'lifeos.truth.generate':           'gemini_flash',   // calibrated truth statement
-  'lifeos.truth.calibration':        null,             // pure SQL, no AI needed
+  'lifeos.truth.generate':           'claude_sonnet',       // calibrated truth statement
+  'lifeos.truth.calibration':        null,                  // pure SQL, no AI needed
 
   // ── LifeOS: Weekly Review ─────────────────────────────────────────────────
-  'lifeos.weekly.generate_letter':   'gemini_flash',   // 4-6 paragraph narrative
-  'lifeos.weekly.conversation':      'gemini_flash',   // interactive session
-  'lifeos.weekly.extract_actions':   'groq_llama',     // JSON extraction from text
+  'lifeos.weekly.generate_letter':   'claude_sonnet',       // 4-6 paragraph narrative
+  'lifeos.weekly.conversation':      'claude_sonnet',       // interactive session
+  'lifeos.weekly.extract_actions':   'deepseek',            // structured JSON extraction
 
   // ── LifeOS: Daily Scorecard ───────────────────────────────────────────────
-  'lifeos.scorecard.narrative':      'groq_llama',     // short AI narrative
-  'lifeos.scorecard.compute':        null,             // pure math, no AI
+  'lifeos.scorecard.narrative':      'openai_gpt',          // short AI narrative
+  'lifeos.scorecard.compute':        null,                  // pure math, no AI
 
   // ── LifeOS: Conflict ──────────────────────────────────────────────────────
-  'lifeos.conflict.detect_escalation': 'groq_llama',  // keyword + classify
-  'lifeos.conflict.mediation':         'gemini_flash', // impartial facilitation
-  'lifeos.conflict.pattern_learn':     null,           // pure SQL
+  'lifeos.conflict.detect_escalation': 'openai_gpt',        // keyword + classify
+  'lifeos.conflict.mediation':         'claude_sonnet',     // chair-level facilitation
+  'lifeos.conflict.pattern_learn':     null,                // pure SQL
 
-  // ── LifeOS: Decision Intelligence ────────────────────────────────────────
-  'lifeos.decisions.second_opinion':   'gemini_flash',
-  'lifeos.decisions.bias_detect':      'groq_llama',
-  'lifeos.decisions.outcome_convo':    'gemini_flash',
+  // ── LifeOS: Decision Intelligence ────────────────────────────────────────────
+  'lifeos.decisions.second_opinion':   'claude_sonnet',
+  'lifeos.decisions.bias_detect':      'openai_gpt',
+  'lifeos.decisions.outcome_convo':    'claude_sonnet',
 
-  // ── LifeOS: Purpose / Monetization ───────────────────────────────────────
-  'lifeos.purpose.synthesize':         'gemini_flash',
-  'lifeos.monetization.draft_outreach': 'groq_llama',
+  // ── LifeOS: Purpose / Monetization ───────────────────────────────────────────
+  'lifeos.purpose.synthesize':         'century',           // long-horizon strategy
+  'lifeos.monetization.draft_outreach': 'openai_gpt',
 
   // ── LifeOS: Health ───────────────────────────────────────────────────────
-  'lifeos.health.pattern_analysis':    'gemini_flash',
+  'lifeos.health.pattern_analysis':    'openai_gpt',
 
   // ── Council / Builder ────────────────────────────────────────────────────
-  'council.builder.task':             'openai_builder_mini',
-  'council.builder.code':             'openai_builder_mini',
+  'council.builder.task':             'openai_builder_standard',
+  'council.builder.code':             'claude_sonnet',       // primary code author
   'council.builder.code_execute':     'openai_builder_mini',
-  'council.builder.plan':             'openai_builder_standard',
-  'council.builder.review':           'openai_builder_standard',
-  'council.builder.code_review':      'openai_builder_standard',
-  'council.gate_change.debate':       'openai_builder_standard',
+  'council.builder.plan':             'century',             // architect-level planning
+  'council.builder.review':           'claude_sonnet',       // high-stakes review
+  'council.builder.code_review':      'claude_sonnet',       // high-stakes review
+  'council.gate_change.debate':       'century',             // governance / strategy
 
   // ── Site Builder ─────────────────────────────────────────────────────────
-  // gemini_flash: free, 8192+ output tokens — necessary for full 15-section HTML
-  // groq_llama: fast JSON extraction — capped at 4096 tokens (fine for structured extraction)
-  'site_builder.generate_site':       'gemini_flash',   // full HTML generation (needs >4k tokens)
-  'site_builder.repair_site':         'gemini_flash',   // HTML repair pass (needs >4k tokens)
-  'site_builder.extract_business':    'groq_llama',     // structured JSON extraction (< 1k tokens)
-  'site_builder.generate_blogs':      'gemini_flash',   // 3x blog posts (> 4k tokens)
-  'site_builder.draft_cold_email':    'groq_llama',     // cold outreach email (< 500 tokens)
+  'site_builder.generate_site':       'claude_sonnet',       // full HTML generation (needs >4k tokens)
+  'site_builder.repair_site':         'openai_builder_standard', // HTML repair pass
+  'site_builder.extract_business':    'deepseek',            // structured JSON extraction
+  'site_builder.generate_blogs':      'claude_sonnet',       // 3x blog posts (> 4k tokens)
+  'site_builder.draft_cold_email':    'openai_gpt',
 
   // ── Email / Outreach ─────────────────────────────────────────────────────
-  'outreach.email.draft':             'groq_llama',
-  'outreach.crm.classify':            'groq_llama',
+  'outreach.email.draft':             'openai_gpt',
+  'outreach.crm.classify':            'openai_gpt',
 
   // ── Autonomy / Self-improvement ───────────────────────────────────────────
-  'autonomy.self_improve':            'gemini_flash',
-  'autonomy.event_ingest':            'groq_llama',    // classify conversation events
+  'autonomy.self_improve':            'century',             // long-horizon improvement
+  'autonomy.event_ingest':            'openai_gpt',          // classify conversation events
 };
 
 /** Default model when task type is unknown */
-export const DEFAULT_MODEL = 'gemini_flash';
+export const DEFAULT_MODEL = 'openai_gpt';
 export const TRUSTED_FALLBACK_MODELS = [
-  'openai_builder_mini',
   'openai_builder_standard',
+  'openai_gpt',
+  'deepseek',
+  'claude_sonnet',
   'openai_builder_escalation',
   'gemini_flash',
   'groq_llama',
-  'deepseek',
-  'ollama_deepseek_v3',
+  'openai_builder_mini',
 ];
 
 /**

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: BirthBill public landing — Studio full-bleed hero + pilot signup -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BirthBill — Insurance forever-chase for ClientCare midwives</title>
+  <meta name="description" content="BirthBill keeps unpaid insurance births open until paid or written denial. Pilot for ClientCare midwifery practices." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #142029; --muted: #4d5f6b; --paper: #f3f7f8; --foam: #fff;
+      --line: rgba(20,32,41,.12); --teal: #0f6a6a; --deep: #0a4548; --warn: #8a4b2a;
+      --shadow: 0 28px 70px rgba(10,40,48,.16);
+      --serif: "Fraunces", Georgia, serif; --sans: "Manrope", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0; font-family: var(--sans); color: var(--ink);
+      background: linear-gradient(180deg, #e7f1f2 0%, var(--paper) 45%, #dfe9eb 100%);
+      min-height: 100vh; line-height: 1.55; -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; }
+    .hero {
+      min-height: 92vh; min-height: 92dvh;
+      display: grid; align-items: end;
+      color: #fff;
+      background:
+        linear-gradient(180deg, rgba(6,28,32,.18) 0%, rgba(6,28,32,.55) 45%, rgba(6,28,32,.88) 100%),
+        url("/overlay/product-heroes/birthbill.png") center/cover no-repeat;
+    }
+    .hero-inner {
+      width: min(1080px, calc(100vw - 2rem));
+      margin: 0 auto;
+      padding: 1.25rem 0 2.8rem;
+      animation: rise .75s ease both;
+    }
+    .top {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1rem; padding-bottom: 4.5rem;
+    }
+    .brand {
+      font-family: var(--serif); font-size: 1.55rem; font-weight: 700;
+      letter-spacing: -.02em;
+    }
+    .brand span { color: #9fe0d8; font-weight: 500; }
+    .badge {
+      display: inline-flex; align-items: center;
+      font-size: .78rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+      color: #dff7f3; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.28);
+      padding: .35rem .7rem; border-radius: 999px;
+    }
+    .hero h1 {
+      margin: 0; font-family: var(--serif);
+      font-size: clamp(2.45rem, 5.6vw, 3.7rem);
+      line-height: 1.05; letter-spacing: -.03em; max-width: 15ch;
+    }
+    .lead {
+      margin: 1rem 0 0; font-size: 1.12rem; color: rgba(255,255,255,.84);
+      max-width: 36rem;
+    }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.35rem; }
+    .btn {
+      appearance: none; border: 0; cursor: pointer; font: inherit; font-weight: 700;
+      border-radius: 999px; padding: .9rem 1.35rem; text-decoration: none;
+      display: inline-flex; align-items: center;
+    }
+    .btn-primary { background: #fff; color: var(--deep); box-shadow: var(--shadow); }
+    .btn-ghost { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,.38); }
+    .btn-deep { background: var(--deep); color: #fff; box-shadow: var(--shadow); }
+    .btn-line { background: transparent; color: var(--deep); border: 1px solid var(--line); }
+    .price-line { margin: 1rem 0 0; font-size: .95rem; color: rgba(255,255,255,.78); }
+    .price-line strong { color: #fff; font-size: 1.15rem; }
+    .shell { width: min(1080px, calc(100vw - 2rem)); margin: 0 auto; }
+    .readiness {
+      margin: 1.6rem 0 0; padding: .85rem 1rem; border-radius: 14px; max-width: 40rem;
+      background: rgba(138,75,42,.08); border: 1px solid rgba(138,75,42,.22);
+      color: var(--warn); font-size: .92rem;
+    }
+    section { padding: 2.4rem 0; border-top: 1px solid var(--line); }
+    section h2 {
+      margin: 0 0 .75rem; font-family: var(--serif); font-size: 1.8rem;
+      letter-spacing: -.02em; color: var(--deep);
+    }
+    section > p { margin: 0 0 1rem; color: var(--muted); max-width: 42rem; }
+    .steps { display: grid; gap: .85rem; counter-reset: step; max-width: 44rem; }
+    .step {
+      display: grid; grid-template-columns: auto 1fr; gap: .85rem; align-items: start;
+      padding: 1rem 1.1rem; background: var(--foam); border: 1px solid var(--line); border-radius: 16px;
+    }
+    .step .n {
+      width: 2rem; height: 2rem; border-radius: 999px; display: grid; place-items: center;
+      background: var(--teal); color: #fff; font-weight: 800; font-size: .9rem;
+    }
+    .step h3 { margin: 0 0 .2rem; font-size: 1.05rem; color: var(--deep); }
+    .step p { margin: 0; color: var(--muted); font-size: .95rem; }
+    .defs { display: grid; gap: .75rem; max-width: 44rem; }
+    .def {
+      padding: .95rem 1.1rem; border-left: 3px solid var(--teal);
+      background: rgba(255,255,255,.7); border-radius: 0 14px 14px 0;
+    }
+    .def strong { display: block; color: var(--deep); margin-bottom: .2rem; }
+    .def span { color: var(--muted); font-size: .95rem; }
+    .list { margin: 0; padding: 0; list-style: none; display: grid; gap: .55rem; max-width: 42rem; }
+    .list li { padding-left: 1.15rem; position: relative; }
+    .list li::before {
+      content: ""; width: .42rem; height: .42rem; border-radius: 50%; background: var(--teal);
+      position: absolute; left: 0; top: .55rem;
+    }
+    .list.out li::before { background: var(--warn); }
+    .signup {
+      background: var(--foam); border: 1px solid var(--line); border-radius: 24px;
+      padding: 1.5rem; box-shadow: var(--shadow); max-width: 540px;
+    }
+    .signup h3 { margin: 0 0 .35rem; font-family: var(--serif); font-size: 1.45rem; color: var(--deep); }
+    label { display: grid; gap: .3rem; font-size: .82rem; font-weight: 600; color: var(--muted); margin-bottom: .75rem; }
+    input, textarea {
+      font: inherit; padding: .7rem .85rem; border-radius: 12px;
+      border: 1px solid var(--line); background: #fbfeff; color: var(--ink);
+    }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
+    .status { min-height: 1.25rem; font-size: .9rem; color: var(--deep); margin-top: .75rem; }
+    .status.err { color: var(--warn); }
+    footer { padding: 2rem 0 3rem; color: var(--muted); font-size: .85rem; border-top: 1px solid var(--line); }
+    @keyframes rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+    @media (max-width: 720px) {
+      .row { grid-template-columns: 1fr; }
+      .top { padding-bottom: 2.5rem; }
+      .hero { min-height: 86vh; }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="top">
+        <div class="brand">BirthBill <span>for midwives</span></div>
+        <span class="badge" id="readinessBadge">Pilot</span>
+      </div>
+      <h1>Every unpaid insurance birth stays open until it’s paid.</h1>
+      <p class="lead">Your forever-chase coworker for ClientCare practices. Unknown status means we ask the insurer — and keep asking.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#start">Start the pilot</a>
+        <a class="btn btn-ghost" href="#how">How it works</a>
+        <a class="btn btn-ghost" href="/creative/studio">Creative Studio</a>
+      </div>
+      <p class="price-line" id="priceLine"><strong>$297</strong> pilot · first month included · + 5% of dollars recovered</p>
+    </div>
+  </header>
+
+  <div class="shell">
+    <p class="readiness" id="readinessNote">Pilot readiness: after you connect ClientCare once, the system files and forever-chases. You do not work a billing board to get paid.</p>
+
+    <main>
+      <section id="how">
+        <h2>How it works</h2>
+        <p>Four clear steps. Nothing happens in the dark.</p>
+        <div class="steps" id="steps"></div>
+      </section>
+
+      <section id="words">
+        <h2>What the words mean</h2>
+        <p>If a term appears on this page, it is defined here in plain English.</p>
+        <div class="defs" id="defs"></div>
+      </section>
+
+      <section id="includes">
+        <h2>Included in the pilot</h2>
+        <ul class="list" id="includesList"></ul>
+      </section>
+
+      <section>
+        <h2>Not included (on purpose)</h2>
+        <p>Clear boundaries so you are not sold a finished factory we have not tip-proved yet.</p>
+        <ul class="list out" id="excludesList"></ul>
+      </section>
+
+      <section id="start">
+        <div class="signup">
+          <h3>Start BirthBill pilot</h3>
+          <p id="reasonWhy">Pay → connect ClientCare once → the system seeds forever-chase and keeps working. You do not run a billing board.</p>
+          <form id="signupForm">
+            <label>Practice name
+              <input name="practice_name" required placeholder="River Midwifery" autocomplete="organization" />
+            </label>
+            <div class="row">
+              <label>Your name
+                <input name="contact_name" required placeholder="Jordan Lee" autocomplete="name" />
+              </label>
+              <label>Email
+                <input name="contact_email" type="email" required placeholder="you@practice.com" autocomplete="email" />
+              </label>
+            </div>
+            <div class="row">
+              <label>Phone
+                <input name="contact_phone" type="tel" placeholder="optional" autocomplete="tel" />
+              </label>
+              <label>ClientCare region
+                <input name="region" placeholder="West / other" />
+              </label>
+            </div>
+            <label>What are you chasing?
+              <textarea name="notes" rows="3" placeholder="e.g. ~20 unpaid 2025–26 births, mostly BCBS / Medicaid"></textarea>
+            </label>
+            <button class="btn btn-deep" type="submit" id="submitBtn" style="width:100%;justify-content:center;">Continue to secure checkout</button>
+            <div class="status" id="status" aria-live="polite"></div>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      BirthBill by LimitlessOS · Hero still from Creative Studio (Flux) · ClientCare is a separate EHR vendor · Credentials encrypted per practice
+    </footer>
+  </div>
+
+  <script>
+    const API = '/api/v1/clientcare-billing/public';
+    const statusEl = document.getElementById('status');
+    const submitBtn = document.getElementById('submitBtn');
+    function setStatus(msg, isErr) {
+      statusEl.textContent = msg || '';
+      statusEl.classList.toggle('err', Boolean(isErr));
+    }
+    function fillList(id, items) {
+      document.getElementById(id).innerHTML = (items || []).map((t) => '<li>' + t + '</li>').join('');
+    }
+    async function loadOffer() {
+      try {
+        const res = await fetch(API + '/offer');
+        const data = await res.json();
+        if (!data.ok) return;
+        const pilot = data.pricing?.pilot?.display || '$297';
+        const share = data.pricing?.recoveryShare?.display || '5% of insurance dollars recovered';
+        document.getElementById('priceLine').innerHTML =
+          '<strong>' + pilot + '</strong> pilot · first month included · + ' + share;
+        if (data.reason_why) document.getElementById('reasonWhy').textContent = data.reason_why;
+        if (data.readiness_label) {
+          document.getElementById('readinessBadge').textContent = data.readiness === 'pilot' ? 'Pilot' : data.readiness;
+          document.getElementById('readinessNote').textContent = data.readiness_label;
+        }
+        fillList('includesList', data.includes);
+        fillList('excludesList', data.excludes);
+        document.getElementById('steps').innerHTML = (data.steps || []).map((s) =>
+          '<div class="step"><div class="n">' + s.n + '</div><div><h3>' + s.title + '</h3><p>' + s.detail + '</p></div></div>'
+        ).join('');
+        document.getElementById('defs').innerHTML = (data.definitions || []).map((d) =>
+          '<div class="def"><strong>' + d.term + '</strong><span>' + d.meaning + '</span></div>'
+        ).join('');
+        if (data.pricing?.pilot?.display) submitBtn.textContent = 'Continue to checkout — ' + data.pricing.pilot.display;
+      } catch (_) {}
+    }
+    document.getElementById('signupForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      setStatus('Creating your practice…');
+      submitBtn.disabled = true;
+      const body = Object.fromEntries(new FormData(e.target).entries());
+      try {
+        const signupRes = await fetch(API + '/signup', {
+          method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body),
+        });
+        const signup = await signupRes.json();
+        if (!signup.ok) throw new Error(signup.error || 'Signup failed');
+        setStatus('Opening Stripe checkout…');
+        const checkoutRes = await fetch(API + '/checkout', {
+          method: 'POST', headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({
+            tenant_id: signup.tenant?.id,
+            practice_name: body.practice_name,
+            contact_email: body.contact_email,
+          }),
+        });
+        const checkout = await checkoutRes.json();
+        if (!checkout.ok || !checkout.checkout_url) throw new Error(checkout.error || 'Checkout unavailable');
+        window.location.href = checkout.checkout_url;
+      } catch (err) {
+        setStatus(String(err.message || err), true);
+        submitBtn.disabled = false;
+      }
+    });
+    if (new URLSearchParams(location.search).get('cancelled') === '1') {
+      setStatus('Checkout cancelled — you can try again whenever ready.', true);
+    }
+    loadOffer();
+  </script>
+</body>
+</html>

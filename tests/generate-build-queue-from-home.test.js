@@ -63,7 +63,7 @@ test('guessTargetFileFromBullet extracts real paths only', () => {
   assert.equal(guessTargetFileFromBullet('edit /etc/passwd somehow'), null);
 });
 
-test('deterministicQueueFromBacklog: path bullets pending; pathless founder_gated', () => {
+test('deterministicQueueFromBacklog: path bullets pending; pathless human_hold; UI design_review_flagged', () => {
   const backlog = extractBacklog(HOME);
   const res = deterministicQueueFromBacklog({
     productId: 'fixture-product',
@@ -83,12 +83,15 @@ test('deterministicQueueFromBacklog: path bullets pending; pathless founder_gate
   const pathless = res.queue.steps.find((s) => /preview-expiry/.test(s.task));
   assert.ok(pathless);
   assert.equal(pathless.target_file, founderGatedPlaceholderPath('fixture-product'));
-  assert.equal(pathless.founder_gated, true);
+  assert.equal(pathless.human_hold, true);
   assert.equal(pathless.status, 'founder_gated');
 
   const ui = res.queue.steps.find((s) => /customization panel/i.test(s.task));
   assert.ok(ui);
-  assert.equal(ui.founder_gated, true);
+  assert.equal(ui.target_file, 'public/overlay/customize.html');
+  assert.equal(ui.design_review_flagged, true);
+  assert.equal(ui.status, 'pending');
+  assert.equal(ui.founder_gated, false);
 });
 
 test('deterministicQueueFromBacklog fails closed on empty backlog', () => {

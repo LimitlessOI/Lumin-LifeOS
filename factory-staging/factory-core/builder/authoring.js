@@ -13,16 +13,21 @@
  * structurally no channel for it to supply assertions, and a server-code authoring
  * step that declares no blueprint assertions fails closed BEFORE any model is called.
  *
- * @ssot docs/products/lifeos/PRODUCT_HOME.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import crypto from 'node:crypto';
+import fs from 'node:fs';
 import { stepRequiresBehaviorProof } from '../sentry/behavior-assertions.js';
+import { normalizeCommonJsToEsm } from '../bpb/author-assertions.js';
+import { resolveRepoPath } from '../repo-paths.js';
+import { TRUSTED_FALLBACK_MODELS } from '../../../config/task-model-routing.js';
 
 export const AUTHORING_ACTION_TYPE = 'author_then_write';
 
-// Cheapest capable hands first, escalate only on failure (Adam: "cheapest hands,
-// highest quality"). Overridable per step via step.authoring.tiers.
-export const DEFAULT_CODEGEN_TIERS = ['cerebras_llama', 'openai', 'claude_sonnet'];
+// Strong-first, provider-diverse failover chain (SO-003). Never start with the cheapest
+// free tier on a load-bearing codegen step. Fail over across providers, never sit
+// idle. Overridable per step via step.authoring.tiers.
+export const DEFAULT_CODEGEN_TIERS = TRUSTED_FALLBACK_MODELS;
 
 export function stepRequiresAuthoring(step) {
   if (!step) return false;
@@ -64,19 +69,58 @@ export async function runAuthoring(step, codegenRunner) {
   const authoring = step.authoring || {};
   let result;
   try {
+    const failureContext = step.last_error
+      ? `PREVIOUS ATTEMPT FAILED WITH: ${step.last_error}\nMake sure you fix that exact issue.\n`
+      : '';
+    const expectedExports = Array.isArray(step.expected_exports) && step.expected_exports.length
+      ? `REQUIRED NAMED EXPORTS: ${step.expected_exports.join(', ')}\nYou MUST export each of these names from the file.\n`
+      : '';
     result = await codegenRunner.generate({
       task: authoring.task || step.task || '',
       target_file,
       spec: authoring.spec || step.spec || '',
       tiers: Array.isArray(authoring.tiers) && authoring.tiers.length ? authoring.tiers : DEFAULT_CODEGEN_TIERS,
+      max_output_tokens: Number(authoring.max_output_tokens || step.max_output_tokens) || 8000,
+      last_error: step.last_error || null,
+      expected_exports: step.expected_exports || null,
+      failure_context: failureContext,
+      expected_exports_context: expectedExports,
     });
   } catch (err) {
-    return { ...base, ok: false, reason: 'codegen_threw', error: String(err?.message || err) };
+    const errMsg = String(err?.message || err);
+    return { ...base, ok: false, reason: `codegen_threw: ${errMsg.slice(0, 500)}`, error: errMsg };
   }
 
-  const content = extractContent(result?.content);
+  const rawContent = extractContent(result?.content);
+  const content = normalizeCommonJsToEsm(rawContent, target_file);
+
+  // Fail-closed regression guard: do not let a model replace an existing, larger
+  // file with a minimal stub that only satisfies the export assertion.
+  let existingSize = 0;
+  try {
+    existingSize = fs.statSync(resolveRepoPath(target_file)).size;
+  } catch {
+    existingSize = 0;
+  }
+  if (existingSize > 0 && content.length < existingSize * 0.3) {
+    return {
+      ...base,
+      ok: false,
+      reason: `codegen_stub_detected: generated ${content.length}b is < 30% of existing ${existingSize}b`,
+      error: `generated content appears to be a stub (existing ${existingSize}b, generated ${content.length}b)`,
+      model_tier: result?.model_tier || null,
+    };
+  }
+
   if (!content || !content.trim()) {
-    return { ...base, ok: false, reason: 'codegen_empty', model_tier: result?.model_tier || null };
+    const errMsg = result?.error || null;
+    return {
+      ...base,
+      ok: false,
+      reason: errMsg ? `codegen_empty: ${String(errMsg).slice(0, 500)}` : 'codegen_empty',
+      model_tier: result?.model_tier || null,
+      error: errMsg,
+    };
   }
 
   const usage = result?.usage && typeof result.usage === 'object' ? result.usage : null;

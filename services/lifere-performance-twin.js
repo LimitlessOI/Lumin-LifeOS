@@ -2,6 +2,7 @@
  * SYNOPSIS: LifeRE Performance Twin — funnel math, bottleneck, goal reverse calculator.
  * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
+import { fetchBoldTrailPipeline } from './lifere-boldtrail-bridge.js';
 
 const FUNNEL_STAGES = [
   'conversations',
@@ -163,7 +164,52 @@ export function createLifeREPerformanceTwin({ pool = null } = {}) {
     return sumActivities(rows);
   }
 
-  async function buildSnapshot({ tenantId = 'default', userId, windowDays = 30, goalGci = 30000 }) {
+  async function ingestFromBoldTrail({ tenantId = 'default', userId, date } = {}) {
+    const pipeline = await fetchBoldTrailPipeline({ limit: 50 });
+    if (!pipeline.ok) {
+      return {
+        ok: false,
+        error: pipeline.reason || 'boldtrail_unavailable',
+        persisted: false,
+        label: 'THINK',
+      };
+    }
+    const summary = pipeline.summary || {};
+    const contacts = pipeline.contacts || [];
+    const counts = {
+      conversations: Math.max(summary.total || contacts.length, 0),
+      calls: Math.max(summary.new || 0, Math.round((summary.total || 0) * 0.4)),
+      appointments_set: Math.max(summary.prospect || 0, 0),
+      appointments_held: Math.max(summary.active || 0, 0),
+      signed_clients: Math.max(summary.client || contacts.filter((c) => c.status_label === 'client').length, 0),
+      closings: Math.max(summary.closed || contacts.filter((c) => c.status_label === 'closed').length, 0),
+    };
+    const recorded = await recordActivity({
+      tenantId,
+      userId,
+      date: date || new Date().toISOString().slice(0, 10),
+      counts,
+    });
+    return {
+      ok: true,
+      counts,
+      boldtrail_summary: summary,
+      persisted: recorded.persisted,
+      source: 'boldtrail_auto_ingest',
+      label: 'THINK',
+      note: 'Stage counts mapped heuristically from CRM statuses until activity logging is native.',
+    };
+  }
+
+  async function buildSnapshot({ tenantId = 'default', userId, windowDays = 30, goalGci = 30000, autoIngest = true } = {}) {
+    let ingest = null;
+    if (autoIngest) {
+      try {
+        ingest = await ingestFromBoldTrail({ tenantId, userId });
+      } catch {
+        ingest = null;
+      }
+    }
     const funnel = await computeFunnel({ tenantId, userId, windowDays });
     const conversion_rates = computeConversionRates(funnel);
     const bottleneck = findBottleneck(conversion_rates, funnel);
@@ -177,16 +223,21 @@ export function createLifeREPerformanceTwin({ pool = null } = {}) {
       income_goal_monthly: goalGci,
       activities_to_goal: goal,
       next_hour_recommendation: next_hour,
-      label: 'THINK',
+      boldtrail_ingest: ingest,
+      label: ingest?.ok ? 'THINK' : 'THINK',
     };
 
     if (pool) {
-      await pool.query(
-        `INSERT INTO lifere_performance_snapshot
-         (tenant_id, user_id, funnel, conversion_rates, bottleneck_stage, income_goal_monthly, activities_to_goal, next_hour_recommendation, label)
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
-        [tenantId, userId, funnel, conversion_rates, bottleneck.stage, goalGci, goal, next_hour, 'THINK']
-      );
+      try {
+        await pool.query(
+          `INSERT INTO lifere_performance_snapshot
+           (tenant_id, user_id, funnel, conversion_rates, bottleneck_stage, income_goal_monthly, activities_to_goal, next_hour_recommendation, label)
+           VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
+          [tenantId, userId, funnel, conversion_rates, bottleneck.stage, goalGci, goal, next_hour, 'THINK']
+        );
+      } catch {
+        /* optional */
+      }
     }
 
     return snapshot;
@@ -194,6 +245,7 @@ export function createLifeREPerformanceTwin({ pool = null } = {}) {
 
   return {
     recordActivity,
+    ingestFromBoldTrail,
     computeFunnel,
     computeConversionRates,
     findBottleneck,

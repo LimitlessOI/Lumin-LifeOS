@@ -1,46 +1,68 @@
 {
-  "schema": "auto_registered_product_modules_v1",
-  "notes": "Opt-in registry: the autonomous loop makes a NEW route/UI module LIVE by adding an entry here (path + exported register fn name) alongside the module file \u2014 no boot-file edit. Only listed modules are imported+mounted; each reports load/mount health at startup/auto-register-product-modules.js. Legacy/broken files are never touched. Set enabled:false to disable without removing.",
-  "updated_at": "2026-07-09T00:00:00.000Z",
   "modules": [
+    {
+      "path": "routes/founder-sms-routes.js",
+      "register": "registerFounderSmsRoutes",
+      "enabled": true,
+      "note": "GAP-FILL money path: tip can SMS ADAM_SMS_NUMBER via Twilio without mounting full phone stack. Used to ping founder with preview/checkout + Connect captcha asks."
+    },
     {
       "path": "routes/lifeos-finance-routes.js",
       "register": "registerLifeOSFinanceRoutes",
       "mount_path": "/api/v1/lifeos/finance",
       "enabled": true,
-      "note": "LifeOS Personal Finance API. The finance router was defined but never mounted in the founder-builder runtime lane, so the dashboard's GET /api/v1/lifeos/finance/goals returned 404 \u2014 surfaced by SENTRY lifeos-founder-ui finding no_js_errors (Error loading goals: HTTP 404). Mounted here via auto-register (no composition-root edit) so the dashboard goals/summary/accounts calls resolve. Fixes SENTRY defect #1 (rank 8)."
+      "note": "LifeOS Personal Finance API. The finance router was defined but never mounted in the founder-builder runtime lane, so the dashboard's GET /api/v1/lifeos/finance/goals returned 404 — surfaced by SENTRY lifeos-founder-ui finding no_js_errors (Error loading goals: HTTP 404). Mounted here via auto-register (no composition-root edit) so the dashboard goals/summary/accounts calls resolve. Fixes SENTRY defect #1 (rank 8)."
+    },
+    {
+      "path": "routes/lifeos-engine-routes.js",
+      "register": "registerLifeOSEngineRoutes",
+      "mount_path": "/api/v1/lifeos/engine",
+      "enabled": true,
+      "note": "GAP-FILL: LifeOS Engine (Google Calendar connect/sync, calendar events, outreach) 404'd on tip because Railway boots founder_builder only and never runs the full-runtime mount. Same auto-register pattern as finance/core. Unblocks Connect → Google Calendar for LifeOS, LifeRe scheduling context, and MarketingOS/SocialMediaOS shared Google OAuth app."
     },
     {
       "path": "routes/lifeos-core-routes.js",
       "register": "registerLifeOSCoreRoutes",
       "mount_path": "/api/v1/lifeos",
       "enabled": true,
-      "note": "LifeOS core APIs (commitments + dashboard/scoreboard). Dashboard loadMITs/loadScores 404'd in founder lane \u2014 SENTRY lifeos-founder-ui no_js_errors. Auto-register mounts without composition-root edit."
+      "note": "LifeOS core APIs (commitments + dashboard/scoreboard). Dashboard loadMITs/loadScores 404'd in founder lane — SENTRY lifeos-founder-ui no_js_errors. Auto-register mounts without composition-root edit."
     },
     {
       "path": "routes/lifeos-briefing-routes.js",
       "register": "registerLifeOSBriefingRoutes",
       "mount_path": "/api/v1/lifeos/briefing",
       "enabled": true,
-      "note": "Daily briefing API. Dashboard loadCalendar() calls GET /api/v1/lifeos/briefing/today \u2014 was 404 in founder lane."
+      "note": "Daily briefing API. Dashboard loadCalendar() calls GET /api/v1/lifeos/briefing/today — was 404 in founder lane."
+    },
+    {
+      "path": "routes/site-builder-ab-subject-routes.js",
+      "register": "registerSiteBuilderAbSubjectRoutes",
+      "enabled": true,
+      "note": "GAP-FILL: never-stop authored AB subject routes (step-03) but tip would stay unreachable without auto-register. Mounts /api/site-builder/ab-subject/* for first-dollar subject testing."
+    },
+    {
+      "path": "routes/site-builder-templates-routes.js",
+      "register": "registerSiteBuilderTemplatesRoutes",
+      "enabled": true,
+      "note": "GAP-FILL first-dollar: Site Builder BUILD_QUEUE step-4 was blocked forever (route module not auto-registered). Mounts GET /api/site-builder/templates* so template picker is live on founder lane."
     },
     {
       "path": "routes/site-builder-prealpha-routes.js",
       "register": "registerSiteBuilderPrealphaRoutes",
       "enabled": true,
-      "note": "CONDUCTOR-GLUE SENTRY pre-alpha Layer B (human-sim). Mounts POST /api/v1/sites/prealpha/layer-b \u2014 drives the live editor with a real browser like a client (loads editor, verifies canvas iframe shows the REAL site not 'Cannot GET', switches a template, types in the AI chat, clicks Save with no edits, checks the publish path), captures screenshots into /previews/<id>/_sentry/, and asks a cheap model to critique the UX + propose improvements. Fails closed. Mounted in the founder lane so it runs on prod where Chrome launches. Pairs with Layer A (scripts/run-site-builder-prealpha.mjs); no feature is 'done' until both pass."
+      "note": "CONDUCTOR-GLUE SENTRY pre-alpha Layer B (human-sim). Mounts POST /api/v1/sites/prealpha/layer-b — drives the live editor with a real browser like a client (loads editor, verifies canvas iframe shows the REAL site not 'Cannot GET', switches a template, types in the AI chat, clicks Save with no edits, checks the publish path), captures screenshots into /previews/<id>/_sentry/, and asks a cheap model to critique the UX + propose improvements. Fails closed. Mounted in the founder lane so it runs on prod where Chrome launches. Pairs with Layer A (scripts/run-site-builder-prealpha.mjs); no feature is 'done' until both pass."
     },
     {
       "path": "routes/governed-fence-routes.js",
       "register": "registerGovernedFenceRoutes",
       "enabled": true,
-      "note": "CONDUCTOR-GLUE separation-of-powers switch. Mounts GET /api/v1/factory/governance/fence + POST .../fence/enable so the SYSTEM can turn its own governance fence ON (GOVERNED_FACTORY_ONLY=1) via Railway API + self-redeploy, but is physically unable to turn it OFF (enable-only ratchet \u2014 only a human in Railway can). PR #272 added the guard; this mounts the live surface that was missing so the flip can actually happen. Chair receipt LIFERE_COUNCIL_1783462353983."
+      "note": "CONDUCTOR-GLUE separation-of-powers switch. Mounts GET /api/v1/factory/governance/fence + POST .../fence/enable so the SYSTEM can turn its own governance fence ON (GOVERNED_FACTORY_ONLY=1) via Railway API + self-redeploy, but is physically unable to turn it OFF (enable-only ratchet — only a human in Railway can). PR #272 added the guard; this mounts the live surface that was missing so the flip can actually happen. Chair receipt LIFERE_COUNCIL_1783462353983."
     },
     {
       "path": "routes/general-browser-agent-routes.js",
       "register": "registerGeneralBrowserAgentRoutes",
       "enabled": true,
-      "note": "General browser agent + consent-gated signup (POST /api/v1/browser-agent/run|signup|signup/approve). Paid checkout requires founder approved:true + consentToken; card from FOUNDER_PAYMENT_* env vault."
+      "note": "General browser agent + founder-authorized signup (POST /api/v1/browser-agent/run|signup|signup/sync|signup/approve). founder_authority:true completes paid checkout from FOUNDER_PAYMENT_* Railway vault; without it, stops at consent."
     },
     {
       "path": "routes/account-manager-routes.js",
@@ -53,43 +75,414 @@
       "path": "routes/marketing-session-routes.js",
       "register": "registerMarketingSessionRoutes",
       "enabled": true,
-      "note": "MarketingOS SocialMediaOS Phase 1 JSON API (\u00a76). The autonomous loop rebuilds this file (re-queued mos-session-routes); once deployed the boot mounts it here and the functional-proof gate verifies /api/v1/marketing/* is LIVE before the step can be done. Records a benign 'module not found' health error until the loop ships the file \u2014 fail-open, never blocks boot."
+      "note": "MarketingOS SocialMediaOS Phase 1 JSON API (§6). The autonomous loop rebuilds this file (re-queued mos-session-routes); once deployed the boot mounts it here and the functional-proof gate verifies /api/v1/marketing/* is LIVE before the step can be done. Records a benign 'module not found' health error until the loop ships the file — fail-open, never blocks boot."
     },
     {
       "path": "routes/marketing-session-ui-routes.js",
       "register": "registerMarketingSessionUiRoutes",
       "enabled": true,
-      "note": "MarketingOS SocialMediaOS Phase 1 SSR screens (\u00a75). Rebuilt by the loop (re-queued mos-session-ui); mounted here so module-health proves the /marketing pages load LIVE."
+      "note": "MarketingOS SocialMediaOS Phase 1 SSR screens (§5). Rebuilt by the loop (re-queued mos-session-ui); mounted here so module-health proves the /marketing pages load LIVE."
     },
     {
       "path": "routes/marketing-calendar-routes.js",
       "register": "registerMarketingCalendarRoutes",
       "enabled": true,
-      "note": "MarketingOS Phase 2 calendar/atoms JSON API (\u00a75 Phase 2). Built by the loop (queued mos-phase2-routes); once deployed the boot mounts it and the functional-proof gate verifies /api/v1/marketing/calendar + /atoms are LIVE before the step can be done. Records a benign 'module not found' health error until the loop ships the file \u2014 fail-open, never blocks boot."
+      "note": "MarketingOS Phase 2 calendar/atoms JSON API (§5 Phase 2). Built by the loop (queued mos-phase2-routes); once deployed the boot mounts it and the functional-proof gate verifies /api/v1/marketing/calendar + /atoms are LIVE before the step can be done. Records a benign 'module not found' health error until the loop ships the file — fail-open, never blocks boot."
     },
     {
       "path": "routes/marketing-calendar-ui-routes.js",
       "register": "registerMarketingCalendarUiRoutes",
       "enabled": true,
-      "note": "MarketingOS Phase 2 SSR content-calendar + atom-library screens (\u00a75 Phase 2). Built by the loop (queued mos-phase2-ui); mounted here so module-health proves /marketing/calendar loads LIVE."
+      "note": "MarketingOS Phase 2 SSR content-calendar + atom-library screens (§5 Phase 2). Built by the loop (queued mos-phase2-ui); mounted here so module-health proves /marketing/calendar loads LIVE."
     },
     {
       "path": "routes/marketing-intel-routes.js",
       "register": "registerMarketingIntelRoutes",
       "enabled": true,
-      "note": "SocialMediaOS Content Intelligence API (Priority Ideas subset). Built by the loop (queued smos-intel-routes); imports the four intel services (title-universe, script-scorer, publish-gate, repurpose) and exposes /api/v1/marketing/intel/*. Mounted here so the functional-proof gate verifies the endpoints are LIVE before the step can be done. Records a benign 'module not found' health error until the loop ships the file \u2014 fail-open, never blocks boot."
+      "note": "SocialMediaOS Content Intelligence API (Priority Ideas subset). Built by the loop (queued smos-intel-routes); imports the four intel services (title-universe, script-scorer, publish-gate, repurpose) and exposes /api/v1/marketing/intel/*. Mounted here so the functional-proof gate verifies the endpoints are LIVE before the step can be done. Records a benign 'module not found' health error until the loop ships the file — fail-open, never blocks boot."
     },
     {
       "path": "routes/lifeos-phase2-routes.js",
       "register": "registerLifeosPhase2Routes",
       "enabled": true,
-      "note": "LifeOS Phase 2 REST surface. Was blocked forever because s07 (auto-register) depended on s06 while s06 failed module-health for missing auto-register \u2014 chicken-egg. Mounted here so functional-proof can pass and the loop can finish Phase 2."
+      "note": "LifeOS Phase 2 REST surface. Was blocked forever because s07 (auto-register) depended on s06 while s06 failed module-health for missing auto-register — chicken-egg. Mounted here so functional-proof can pass and the loop can finish Phase 2."
     },
     {
       "path": "routes/lifeos-phase3-routes.js",
       "register": "registerLifeosPhase3Routes",
       "enabled": true,
-      "note": "LifeOS Phase 3 REST (habits/energy/learning/calendar-protection). s7 blocked on missing auto-register after builder wrote broken sN-*-service imports \u2014 conductor GAP-FILL rewired to real lifeos-* services + mounted here."
+      "note": "LifeOS Phase 3 REST (habits/energy/learning/calendar-protection). s7 blocked on missing auto-register after builder wrote broken sN-*-service imports — conductor GAP-FILL rewired to real lifeos-* services + mounted here."
+    },
+    {
+      "path": "routes/tc-intake-routes.js",
+      "register": "registerTcIntakeRoutes",
+      "enabled": false,
+      "note": "TC Service intake run + runs list. s10 false-done had reused an unrelated LifeOS auto-register commit; conductor GAP-FILL adds the real entries so module-health can pass. Disabled 2026-07-10: superseded by camelCase .mjs queue targets (step-08/09) to avoid double-mount."
+    },
+    {
+      "path": "routes/tc-billing-routes.js",
+      "register": "registerTcBillingRoutes",
+      "enabled": false,
+      "note": "TC Service billing checkout/enroll/webhook. Mounted via auto-register for founder-lane module-health. Disabled 2026-07-10: superseded by camelCase .mjs queue targets (step-08/09) to avoid double-mount."
+    },
+    {
+      "path": "routes/tc-imap-routes.js",
+      "register": "registerTcImapRoutes",
+      "enabled": true,
+      "note": "TC Service IMAP status + dry-run. Mounted via auto-register for founder-lane module-health."
+    },
+    {
+      "path": "routes/tcIntakeRoutes.mjs",
+      "register": "registerTcIntakeRoutes",
+      "enabled": true,
+      "note": "TC Service step-08 intake/document-QA/offer-prep/approvals/showing-feedback. GAP-FILL after builder syntax/default-import failures."
+    },
+    {
+      "path": "routes/tcBillingRoutes.mjs",
+      "register": "registerTcBillingRoutes",
+      "enabled": true,
+      "note": "TC Service step-09 billing subscribe/webhook/status. Auto-register required for module-health (built but unreachable = false done)."
+    },
+    {
+      "path": "routes/mission-routes.js",
+      "register": "registerMissionRoutes",
+      "enabled": true,
+      "note": "BuilderOS mission runtime API at /api/missions*. GAP-FILL: step-04 was built but unreachable (createMissionRoutes, never auto-registered) — never-stop spun. Mounted here so module-health can prove LIVE and the queue can advance."
+    },
+    {
+      "path": "routes/creative-engine-routes.js",
+      "register": "registerCreativeEngineRoutes",
+      "enabled": true,
+      "note": "Creative Engine shared render API at /api/v1/creative/* — footage_edit, photo_polish, script_compose, generative_broll. Auto-registered so founder lane mounts without composition-root edit."
+    },
+    {
+      "path": "routes/creative-engine-ui-routes.js",
+      "register": "registerCreativeEngineUiRoutes",
+      "enabled": true,
+      "note": "Creative Engine SSR studio at /creative and /creative/studio."
+    },
+    {
+      "path": "routes/creative-engine-graphic-design-routes.js",
+      "register": "registerCreativeEngineGraphicDesignRoutes",
+      "enabled": true,
+      "note": "Real AI graphic-design generation (Ideogram/Recraft/Flux via Replicate) at /api/v1/creative/graphic-design/{estimate,render} — governed-built 2026-07-14 for SocialMediaOS thumbnails + Site Builder hero/brand imagery. Stateless v1 (no DB job persistence); the shared services/creative-engine/index.js dispatcher is Zone-3 (>150 lines) so this is a dedicated route pair rather than an edit to that file. Gated on REPLICATE_API_TOKEN — NOT YET SET on Railway as of this note (GET /api/v1/creative/health reports replicateConfigured:false); render returns 503 until the founder adds the token."
+    },
+    {
+      "path": "routes/marketing-publish-routes.js",
+      "register": "registerMarketingPublishRoutes",
+      "enabled": true,
+      "note": "Phase 5 social publish API — enabled 2026-07-12 for money path (LIVE_SOCIAL_PUBLISH_ENABLED + approval gate still required for live posts)."
+    },
+    {
+      "path": "routes/marketing-youtube-routes.js",
+      "register": "registerMarketingYoutubeRoutes",
+      "enabled": true,
+      "note": "MarketingOS Phase 6 YouTube connect flow — ONE shared Google OAuth app (reuses GOOGLE_CLIENT_ID/SECRET already live for Calendar), per-client one-time consent via Google's own real login page. Exposes GET /api/v1/marketing/youtube/connect (redirect to Google), GET /.../callback (token exchange, stored in the existing user_integrations table under provider 'youtube_channel'), GET /.../status. Built by the loop (queued mos-youtube-connect-routes); mounted here so the functional-proof gate verifies the endpoints are LIVE before the step can be done. Records a benign 'module not found' health error until the loop ships the file — fail-open, never blocks boot."
+    },
+    {
+      "path": "routes/wellness-therapist-routes.js",
+      "register": "registerWellnessTherapistRoutes",
+      "enabled": true
+    },
+    {
+      "path": "routes/lifeos-consent-routes.js",
+      "register": "registerLifeosConsentRoutes",
+      "enabled": true,
+      "note": "LifeOS consent grant/revoke/status. GAP-FILL: builder route was unreachable without auto-register; chicken-egg with functional-proof gate."
+    },
+    {
+      "path": "routes/lifeos-ui-directives-routes.js",
+      "register": "registerLifeosUiDirectivesRoutes",
+      "enabled": true
+    },
+    {
+      "path": "routes/lifeos-biological-age-routes.js",
+      "register": "registerBiologicalAgeRoutes",
+      "enabled": true,
+      "note": "LifeOS biological age REST surface. Auto-register entry added so the governed factory can ship the route and module-health can prove it LIVE."
+    },
+    {
+      "path": "routes/lifeos-twin-simulator-routes.js",
+      "register": "registerTwinSimulatorRoutes",
+      "enabled": true,
+      "note": "LifeOS digital-twin simulator REST surface. Auto-register entry added so the governed factory can ship the route and module-health can prove it LIVE."
+    },
+    {
+      "path": "routes/lifeos-member-feedback-routes.js",
+      "register": "registerMemberFeedbackRoutes",
+      "enabled": true,
+      "note": "LifeOS member feedback REST surface. Auto-register entry added so the governed factory can ship the route and module-health can prove it LIVE."
+    },
+    {
+      "path": "routes/lifeos-perfect-day-routes.js",
+      "register": "registerLifeosPerfectDayRoutes",
+      "enabled": true,
+      "note": "LifeOS Perfect Day REST surface: plan, rate, re-prioritize, and ADD-style reminders. Auto-register entry added so the governed factory can ship the route and module-health can prove it LIVE."
+    },
+    {
+      "path": "routes/marketing-community-value-routes.js",
+      "register": "registerMarketingCommunityValueRoutes",
+      "enabled": true
+    },
+    {
+      "path": "routes/marketing-session-export-routes.js",
+      "register": "registerMarketingSessionExportRoutes",
+      "enabled": true,
+      "note": "GAP-FILL: built (BUILD_QUEUE mos-session-export/mos-r2-upload) but never auto-registered, so it stayed unreachable through 3 verify attempts. Also fixed on the same pass: the route's own local buildSessionExport/uploadAudioToR2 reimplementations never called the real services/marketing-session-export.js and services/marketing-r2-upload.js built alongside them in the same session (the R2 upload path asked an AI council member to fabricate a URL instead of doing a real S3/R2 PutObject), and the auth check used req.session.userId even though this codebase has no express-session middleware anywhere, so it would 401 every request unconditionally. Swapped to deps.requireKey, the pattern every other auto-registered route already uses."
+    },
+    {
+      "path": "routes/site-builder-color-palettes-routes.js",
+      "register": "registerSiteBuilderColorPalettesRoutes",
+      "enabled": true,
+      "note": "Auto-registered for step-04"
+    },
+    {
+      "path": "routes/audit-intake-flow-routes.js",
+      "register": "registerAuditIntakeFlowRoutes",
+      "enabled": true,
+      "note": "Auto-registered for 3"
+    },
+    {
+      "path": "routes/marketingos-sku-routes.js",
+      "register": "registerMarketingOSSkuRoutes",
+      "enabled": true,
+      "note": "Auto-registered for 6"
+    },
+    {
+      "path": "routes/wellness-studio-routes.js",
+      "register": "registerWellnessStudioRoutes",
+      "enabled": true,
+      "note": "Auto-registered for step-05"
+    },
+    {
+      "path": "routes/quoteRoutes.js",
+      "register": "registerQuoteRoutes",
+      "enabled": true,
+      "note": "Auto-registered for 4"
+    },
+    {
+      "path": "routes/memory_routes.js",
+      "register": "registerMemoryRoutes",
+      "enabled": true,
+      "note": "Auto-registered for 8"
+    },
+    {
+      "path": "routes/command-center-mode-routes.js",
+      "register": "registerCommandCenterModeRoutes",
+      "enabled": true,
+      "note": "Auto-registered for s3"
+    },
+    {
+      "path": "routes/phase14-cert-routes.js",
+      "register": "registerPhase14CertRoutes",
+      "enabled": true,
+      "note": "Auto-registered for s5"
+    },
+    {
+      "path": "routes/environmentRoutes.js",
+      "register": "registerEnvironmentRoutes",
+      "enabled": true,
+      "note": "Auto-registered for environment-routes"
+    },
+    {
+      "path": "routes/boldtrail-routes.js",
+      "register": "registerBoldtrailRoutes",
+      "enabled": true,
+      "note": "Auto-registered for step1"
+    },
+    {
+      "path": "routes/billing-routes.js",
+      "register": "registerBillingRoutes",
+      "enabled": false,
+      "note": "Auto-registered for 6"
+    },
+    {
+      "path": "routes/issueApprovalRoutes.js",
+      "register": "registerApprovalRoutes",
+      "enabled": true,
+      "note": "Auto-registered for business-tools step5"
+    },
+    {
+      "path": "routes/entitlementRoutes.js",
+      "register": "registerEntitlementRoutes",
+      "enabled": true,
+      "note": "Auto-registered for business-tools step6"
+    },
+    {
+      "path": "routes/curriculumRoutes.js",
+      "register": "registerCurriculumRoutes",
+      "enabled": true,
+      "note": "Auto-registered for business-tools step8"
+    },
+    {
+      "path": "routes/pending-adam-routes.js",
+      "register": "registerPendingAdamRoutes",
+      "enabled": false,
+      "note": "Auto-registered for lifeos-admin-7 pending Adam command-center API"
+    },
+    {
+      "path": "routes/musicTeachersRoutes.js",
+      "register": "registerMusicTeachersRoutes",
+      "enabled": false,
+      "note": "Auto-registered for step5"
+    },
+    {
+      "path": "routes/studentsRoutes.js",
+      "register": "registerStudentsRoutes",
+      "enabled": false,
+      "note": "Auto-registered for step8"
+    },
+    {
+      "path": "routes/credentialVerificationRoutes.js",
+      "register": "registerCredentialVerificationRoutes",
+      "enabled": false,
+      "note": "Auto-registered for 5"
+    },
+    {
+      "path": "routes/accreditationRoutes.js",
+      "register": "registerAccreditationRoutes",
+      "enabled": false,
+      "note": "Auto-registered for 8"
+    },
+    {
+      "path": "routes/salesPageRoutes.js",
+      "register": "registerSalesPageRoutes",
+      "enabled": false,
+      "note": "Auto-registered for 1"
+    },
+    {
+      "path": "routes/sprintQueueRoutes.js",
+      "register": "registerSprintQueueRoutes",
+      "enabled": false,
+      "note": "Auto-registered for 5"
+    },
+    {
+      "path": "routes/capabilityMapRoutes.js",
+      "register": "registerCapabilityMapRoutes",
+      "enabled": false,
+      "note": "Auto-registered for 2"
+    },
+    {
+      "path": "routes/transcriptPurgeRoutes.js",
+      "register": "registerTranscriptPurgeRoutes",
+      "enabled": false,
+      "note": "Auto-registered for 4"
+    },
+    {
+      "path": "routes/vapiRoutes.js",
+      "register": "registerVapiRoutes",
+      "enabled": false,
+      "note": "Auto-registered for ai-receptionist-4"
+    },
+    {
+      "path": "routes/googleCalendarRoutes.js",
+      "register": "registerGoogleCalendarRoutes",
+      "enabled": false,
+      "note": "Auto-registered for word-keeper-step1"
+    },
+    {
+      "path": "routes/studentsInterviewRoutes.js",
+      "register": "registerStudentsInterviewRoutes",
+      "enabled": false,
+      "note": "Auto-registered for 8"
+    },
+    {
+      "path": "routes/userInterviewRoutes.js",
+      "register": "registerUserInterviewRoutes",
+      "enabled": true,
+      "note": "Auto-registered for teacher-os-4"
+    },
+    {
+      "path": "routes/uxRoutes.js",
+      "register": "registerUxRoutes",
+      "enabled": true,
+      "note": "Auto-registered for teacher-os-5"
+    },
+    {
+      "path": "routes/cronVerificationRoutes.js",
+      "register": "registerCronVerificationRoutes",
+      "enabled": false,
+      "note": "Auto-registered for word-keeper-step4"
+    },
+    {
+      "path": "routes/passQuoteRoutes.js",
+      "register": "registerPassQuoteRoutes",
+      "enabled": true,
+      "note": "Auto-registered for step2"
+    },
+    {
+      "path": "routes/googleCalendarIntegrationRoutes.js",
+      "register": "registerGoogleCalendarIntegrationRoutes",
+      "enabled": true,
+      "note": "Auto-registered for word-keeper-2"
+    },
+    {
+      "path": "routes/optionalBoldTrailContactCleanupRoutes.js",
+      "register": "registerOptionalBoldTrailContactCleanupRoutes",
+      "enabled": true,
+      "note": "Auto-registered for step5"
+    },
+    {
+      "path": "routes/therapist-integration-routes.js",
+      "register": "registerTherapistIntegrationRoutes",
+      "enabled": true,
+      "note": "Auto-registered for wellness-studio-4"
+    },
+    {
+      "path": "routes/wellness-table-extensions-routes.js",
+      "register": "registerWellnessTableExtensionsRoutes",
+      "enabled": true,
+      "note": "Auto-registered for wellness-studio-step4"
+    },
+    {
+      "path": "routes/wireframesRoutes.js",
+      "register": "registerWireframesRoutes",
+      "enabled": true,
+      "note": "Auto-registered for teacher-os-step2"
+    },
+    {
+      "path": "routes/competitiveLandscapeRoutes.js",
+      "register": "registerCompetitiveLandscapeRoutes",
+      "enabled": true,
+      "note": "Auto-registered for teacher-os-step5"
+    },
+    {
+      "path": "routes/ferpaRoutes.js",
+      "register": "registerFerpaRoutes",
+      "enabled": true,
+      "note": "Auto-registered for teacher-os-step8"
+    },
+    {
+      "path": "routes/transcriptVerificationRoutes.js",
+      "register": "registerTranscriptVerificationRoutes",
+      "enabled": true,
+      "note": "Auto-registered for word-keeper-6"
+    },
+    {
+      "path": "routes/studentInterviewRoutes.js",
+      "register": "registerStudentInterviewRoutes",
+      "enabled": true,
+      "note": "Auto-registered for music-talent-studio-7"
+    },
+    {
+      "path": "routes/musicIndustryConsultationRoutes.js",
+      "register": "registerMusicIndustryConsultationRoutes",
+      "enabled": true,
+      "note": "Auto-registered for music-talent-studio-10"
+    },
+    {
+      "path": "routes/lifeos-emotional-routes.js",
+      "register": "registerLifeosEmotionalRoutes",
+      "mount_path": "/api/v1/lifeos/emotional",
+      "enabled": true,
+      "note": "GAP-FILL therapy back: founder_builder stripped emotional APIs; mount via auto-register so Coach/Mirror check-ins work on tip."
+    },
+    {
+      "path": "routes/lifeos-conflict-routes.js",
+      "register": "registerLifeosConflictRoutes",
+      "mount_path": "/api/v1/lifeos/conflict",
+      "enabled": true,
+      "note": "GAP-FILL therapy back: Communication Coach + clarity sessions on tip founder lane."
     }
   ]
 }

@@ -1,8 +1,8 @@
 {
   "schema": "receipt_truth_validation_v1",
-  "at": "2026-07-02T11:03:21.621Z",
+  "at": "2026-07-15T07:30:57.135Z",
   "ok": true,
-  "checked": 27,
+  "checked": 28,
   "failures": [],
   "results": [
     {
@@ -121,6 +121,12 @@
     },
     {
       "file": "LUMIN_TERMINAL_CONNECTION_PROOF.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false
+    },
+    {
+      "file": "MARKETING_PHASE1_VERIFY.json",
       "ok": true,
       "violations": [],
       "claims_pass": false

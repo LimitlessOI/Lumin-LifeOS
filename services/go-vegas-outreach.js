@@ -579,6 +579,7 @@ export function createGoVegasOutreach({ pool, sendEmail, logger: log = logger } 
 
   return {
     ensureSchema,
+    upsertProspect,
     discoverBusinesses,
     enrichProspects,
     sendInvite,

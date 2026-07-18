@@ -2,2509 +2,937 @@
 <!-- SYNOPSIS: HTML page: TC Agent Portal -->
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>TC Agent Portal</title>
-  <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif;
-      margin: 0;
-      background:#0b1020;
-      color:#edf2f7;
-    }
-    .header-bar {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: #0b1020;
-      padding: 16px 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 20px;
-      border-bottom: 1px solid #27304a;
-      box-shadow: 0 2px 8px rgba(0,0,0,.15); /* Polished: Softer shadow */
-    }
-    .header-bar h1 {
-      margin: 0;
-      font-size: 24px;
-      color: #e8eeff;
-    }
-    .header-search-input {
-      flex-grow: 1;
-      max-width: 400px;
-      background: #131a2e;
-      border: 1px solid #27304a;
-      color: #edf2f7;
-      border-radius: 10px;
-      padding: 10px 12px;
-      font: inherit;
-    }
-    .header-key-control {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .header-key-control label {
-      margin-bottom: 0;
-      white-space: nowrap;
-    }
-    .header-key-control input {
-      width: 120px;
-      padding: 8px 10px;
-      font-size: 13px;
-    }
-    .header-key-control button {
-      padding: 8px 10px;
-      font-size: 13px;
-    }
-    .wrap {
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 24px;
-    }
-    .hero {
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
-      margin-bottom:20px;
-    }
-    .eyebrow {
-      color:#8aa4ff;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-      font-size:12px;
-    }
-    h1,h2 {
-      margin:0 0 10px;
-    }
-    .grid {
-      display:grid;
-      gap:16px;
-      margin-bottom:16px;
-    }
-    .grid.two {
-      grid-template-columns: repeat(auto-fit, minmax(320px,1fr));
-    }
-    .grid.four {
-      grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
-    }
-    .card {
-      background:#131a2e;
-      border:1px solid #27304a;
-      border-radius:14px;
-      padding:16px;
-      box-shadow:0 8px 24px rgba(0,0,0,.15); /* Polished: Softer shadow */
-    }
-    .card.error {
-      border-color:#8b2c2c;
-    }
-    .stat span {
-      display:block;
-      color:#98a5c3;
-      font-size:12px;
-      margin-bottom:8px;
-    }
-    .stat strong {
-      display:block;
-      font-size:18px;
-    }
-    .badge {
-      display:inline-block;
-      padding:6px 10px;
-      border-radius:999px;
-      font-size:12px;
-      text-transform:uppercase;
-      letter-spacing:.04em;
-      margin-left:8px;
-    }
-    .badge.ok {
-      background:#113b2d;
-      color:#7ef0b8;
-    }
-    .badge.warn {
-      background:#4a3a12;
-      color:#ffd666;
-    }
-    .badge.bad {
-      background:#4a1f28;
-      color:#ff9db0;
-    }
-    table {
-      width:100%;
-      border-collapse:collapse;
-      font-size:14px;
-    }
-    th, td {
-      text-align:left;
-      padding:10px 8px;
-      border-bottom:1px solid #27304a;
-      vertical-align:top;
-    }
-    th {
-      color:#98a5c3;
-      font-weight:600;
-    }
-    .meta {
-      display:grid;
-      gap:10px;
-    }
-    .meta div {
-      display:flex;
-      justify-content:space-between;
-      gap:16px;
-    }
-    .meta dt {
-      color:#98a5c3;
-    }
-    .meta dd {
-      margin:0;
-      text-align:right;
-    }
-    .report-card {
-      border:1px solid #27304a;
-      border-radius:12px;
-      padding:12px;
-      margin-bottom:10px;
-    }
-    .report-head {
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      margin-bottom:8px;
-    }
-    .mini-grid {
-      display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:10px;
-    }
-    .mini-grid span {
-      display:block;
-      color:#98a5c3;
-      font-size:12px;
-    }
-    .mini-grid strong {
-      display:block;
-      margin-top:4px;
-    }
-    .tx-board {
-      display:grid;
-      grid-template-columns:repeat(auto-fit, minmax(300px,1fr));
-      gap:18px;
-    }
-    .tx-card {
-      position:relative;
-      background:#101726;
-      border-radius:18px;
-      padding:16px 16px 14px 20px;
-      box-shadow:0 10px 28px rgba(0,0,0,.18); /* Polished: Softer shadow */
-      cursor:pointer;
-      overflow:hidden;
-      transition:transform .16s ease, border-color .16s ease, box-shadow .16s ease;
-      border:2px solid #27304a;
-    }
-    .tx-card[data-state="green"] {
-      border-color:rgba(30,167,108,.85);
-      box-shadow:0 10px 28px rgba(0,0,0,.18), 0 0 0 1px rgba(30,167,108,.2);
-    }
-    .tx-card[data-state="yellow"] {
-      border-color:rgba(226,168,47,.9);
-      box-shadow:0 10px 28px rgba(0,0,0,.18), 0 0 0 1px rgba(226,168,47,.18);
-    }
-    .tx-card[data-state="red"] {
-      border-color:rgba(218,68,83,.95);
-      box-shadow:0 10px 28px rgba(0,0,0,.18), 0 0 0 1px rgba(218,68,83,.2);
-    }
-    .tx-card:hover {
-      transform:translateY(-2px);
-      box-shadow:0 16px 32px rgba(0,0,0,.22); /* Polished: Softer shadow */
-    }
-    .tx-card[data-state="green"]:hover {
-      border-color:#3ecf8e;
-    }
-    .tx-card[data-state="yellow"]:hover {
-      border-color:#f0c14d;
-    }
-    .tx-card[data-state="red"]:hover {
-      border-color:#f06b78;
-    }
-    .tx-card::before {
-      content:'';
-      position:absolute;
-      inset:0 auto 0 0;
-      width:6px;
-      background:#2d6cdf;
-    }
-    .tx-card[data-state="green"]::before {
-      background:#1ea76c;
-    }
-    .tx-card[data-state="yellow"]::before {
-      background:#e2a82f;
-    }
-    .tx-card[data-state="red"]::before {
-      background:#da4453;
-    }
-    .tx-card-ribbon {
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      margin-bottom:10px;
-      flex-wrap:wrap;
-    }
-    .tx-health-ico {
-      font-size:18px;
-      line-height:1;
-    }
-    .tx-role-pill {
-      font-size:11px;
-      font-weight:700;
-      text-transform:uppercase;
-      letter-spacing:.06em;
-      padding:4px 10px;
-      border-radius:999px;
-      background:#151d33;
-      border:1px solid #2d3b5f;
-      color:#b8c9f0;
-    }
-    .tx-milestones {
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      margin-top:10px;
-      align-items:center;
-    }
-    .tx-ms {
-      display:inline-flex;
-      align-items:center;
-      gap:5px;
-      padding:5px 10px 5px 8px;
-      border-radius:999px;
-      background:#141c31;
-      border:1px solid #2d3b5f;
-      font-size:12px;
-      color:#e8eeff;
-      font-weight:600;
-    }
-    .tx-ms.urgent {
-      border-color:#8a6a24;
-      color:#ffd666;
-      background:#241c0a;
-    }
-    .tx-ms-close.urgent {
-      border-color:#8b3140;
-      color:#ff9db0;
-      background:#240f14;
-    }
-    .tx-ms-emoji {
-      font-size:15px;
-      line-height:1;
-    }
-    .tx-ms-lab {
-      opacity:.92;
-      font-size:11px;
-      text-transform:uppercase;
-      letter-spacing:.04em;
-      color:#98a5c3;
-      font-weight:700;
-    }
-    .tx-ms-d {
-      font-variant-numeric:tabular-nums;
-      color:#cbd5ff;
-      font-weight:800;
-    }
-    .tx-ms-empty {
-      font-size:12px;
-      color:#5a698f;
-      font-style:italic;
-    }
-    .tx-fee-strip {
-      margin-top:10px;
-      padding:8px 11px;
-      border-radius:10px;
-      background:#0d1428;
-      border:1px solid #243152;
-      font-size:13px;
-      color:#c8d4f0;
-      line-height:1.35;
-    }
-    .tx-fee-strip strong {
-      color:#7ef0b8;
-      font-weight:700;
-    }
-    .tx-card-head {
-      display:flex;
-      justify-content:space-between;
-      gap:12px;
-      align-items:flex-start;
-    }
-    .tx-address {
-      margin:0;
-      font-size:20px;
-      line-height:1.2;
-    }
-    .tx-address-block {
-      margin:0;
-    }
-    .tx-address-row {
-      display:flex;
-      align-items:baseline;
-      gap:12px;
-      flex-wrap:wrap;
-      margin:0;
-    }
-    .tx-street-num {
-      font-size:30px;
-      font-weight:800;
-      color:#e8eeff;
-      letter-spacing:-0.03em;
-      line-height:1;
-      font-variant-numeric: tabular-nums;
-    }
-    .tx-street-name {
-      font-size:19px;
-      font-weight:650;
-      line-height:1.25;
-      color:#f1f5ff;
-      max-width: min(100%, 14em);
-    }
-    .tx-city-line {
-      color:#98a5c3;
-      font-size:13px;
-      margin-top:6px;
-      line-height:1.35;
-    }
-    .tx-subline {
-      color:#98a5c3;
-      font-size:13px;
-      margin-top:6px;
-    }
-    .tx-chips {
-      display:flex;
-      gap:6px;
-      flex-wrap:wrap;
-      margin-top:10px;
-    }
-    .tx-chip {
-      font-size:11px;
-      font-weight:600;
-      padding:4px 9px;
-      border-radius:999px;
-      background:#151d33;
-      border:1px solid #2d3b5f;
-      color:#c8d4f0;
-      text-transform:uppercase;
-      letter-spacing:.04em;
-    }
-    .tx-chip.warn {
-      border-color:#8a6a24;
-      color:#ffd666;
-      background:#241c0a;
-    }
-    .tx-chip.bad {
-      border-color:#8b3140;
-      color:#ff9db0;
-      background:#240f14;
-    }
-    .tx-contact-line {
-      display:flex;
-      align-items:baseline;
-      gap:8px;
-      flex-wrap:wrap;
-    }
-    .tx-contact-sep {
-      color:#5a698f;
-      font-weight:500;
-    }
-    .hero-addr {
-      margin:0;
-      font-size:26px;
-      font-weight:700;
-      line-height:1.2;
-    }
-    .hero-addr-row {
-      display:flex;
-      align-items:baseline;
-      gap:12px;
-      flex-wrap:wrap;
-    }
-    .hero-addr-num {
-      font-size:32px;
-      font-weight:800;
-      letter-spacing:-0.03em;
-      color:#e8eeff;
-      font-variant-numeric: tabular-nums;
-    }
-    .hero-addr-street {
-      font-size:22px;
-      font-weight:650;
-      color:#f1f5ff;
-    }
-    .hero-addr-city {
-      color:#98a5c3;
-      font-size:14px;
-      margin-top:6px;
-      font-weight:500;
-    }
-    .tx-ring {
-      flex:0 0 auto;
-      width:54px;
-      height:54px;
-      border-radius:50%;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:11px;
-      font-weight:700;
-      text-transform:uppercase;
-      letter-spacing:.06em;
-      text-align:center;
-      padding:6px;
-      background:#0b1020;
-      border:4px solid #2d6cdf;
-      color:#cbd5ff;
-    }
-    .tx-ring.green {
-      border-color:#1ea76c;
-      color:#7ef0b8;
-    }
-    .tx-ring.yellow {
-      border-color:#e2a82f;
-      color:#ffd666;
-    }
-    .tx-ring.red {
-      border-color:#da4453;
-      color:#ff9db0;
-    }
-    .tx-contact {
-      margin:14px 0 0;
-      display:flex;
-      justify-content:space-between;
-      gap:12px;
-      align-items:flex-start;
-    }
-    .tx-contact-name {
-      font-size:16px;
-      font-weight:600;
-    }
-    .tx-contact-phone {
-      color:#cbd5ff;
-      font-size:14px;
-      text-decoration:none;
-    }
-    .tx-contact-phone.dim {
-      color:#5a698f;
-      cursor:default;
-      pointer-events:none;
-    }
-    .tx-meta-grid {
-      display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:12px;
-      margin-top:14px;
-    }
-    .tx-meta-item span {
-      display:block;
-      color:#98a5c3;
-      font-size:12px;
-      margin-bottom:4px;
-    }
-    .tx-meta-item strong {
-      display:block;
-      font-size:14px;
-      line-height:1.35;
-    }
-    .tx-summary {
-      margin-top:14px;
-      padding:12px;
-      border-radius:12px;
-      background:#141c31;
-      border:1px solid #2d3b5f;
-    }
-    .tx-summary span {
-      display:block;
-      color:#98a5c3;
-      font-size:12px;
-      margin-bottom:6px;
-    }
-    .tx-summary strong {
-      display:block;
-      font-size:14px;
-      line-height:1.4;
-    }
-    .tx-hover {
-      display:none;
-      margin-top:12px;
-      padding-top:12px;
-      border-top:1px dashed #2d3b5f;
-      color:#c8d4f0;
-      font-size:13px;
-      line-height:1.55;
-    }
-    .tx-hover dl {
-      margin:0;
-      display:grid;
-      gap:8px;
-    }
-    .tx-hover dt {
-      color:#6b7aab;
-      font-size:11px;
-      text-transform:uppercase;
-      letter-spacing:.05em;
-      margin:0;
-    }
-    .tx-hover dd {
-      margin:2px 0 0;
-    }
-    .tx-card:hover .tx-hover, .tx-card:focus .tx-hover, .tx-card:focus-within .tx-hover {
-      display:block;
-    }
-    .tx-actions {
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      align-items:center;
-      margin-top:14px;
-    }
-    .tx-open {
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      color:#cbd5ff;
-      font-size:13px;
-    }
-    .action-board {
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-      gap:14px;
-      margin-bottom:16px;
-    }
-    .action-card {
-      background:#101726;
-      border:1px solid #27304a;
-      border-radius:14px;
-      padding:14px;
-    }
-    .action-card p {
-      margin:8px 0 12px;
-      color:#c8d4f0;
-    }
-    .todo-list {
-      display:grid;
-      gap:12px;
-    }
-    .todo-item {
-      background:#101726;
-      border:1px solid #27304a;
-      border-radius:14px;
-      padding:14px;
-    }
-    .todo-item[data-urgency="red"] {
-      border-color:#6b2430;
-    }
-    .todo-item[data-urgency="yellow"] {
-      border-color:#6b5420;
-    }
-    .todo-item[data-urgency="green"] {
-      border-color:#21543d;
-    }
-    .todo-head {
-      display:flex;
-      justify-content:space-between;
-      gap:12px;
-      align-items:flex-start;
-      margin-bottom:8px;
-    }
-    .todo-meta {
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      align-items:center;
-    }
-    .todo-owner {
-      color:#cbd5ff;
-      font-size:12px;
-      text-transform:uppercase;
-      letter-spacing:.05em;
-    }
-    .countdown-banner {
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-      gap:14px;
-      margin-bottom:16px;
-    }
-    .countdown-card {
-      background:#101726;
-      border:1px solid #27304a;
-      border-radius:14px;
-      padding:14px;
-    }
-    .countdown-card.red {
-      border-color:#6b2430;
-    }
-    .countdown-card.yellow {
-      border-color:#6b5420;
-    }
-    .countdown-card.green {
-      border-color:#21543d;
-    }
-    .countdown-card span {
-      display:block;
-      color:#98a5c3;
-      font-size:12px;
-      margin-bottom:6px;
-    }
-    .countdown-card strong {
-      display:block;
-      font-size:26px;
-      margin-bottom:6px;
-    }
-    .row-actions {
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-    }
-    button {
-      background:#3559d8;
-      color:#fff;
-      border:0;
-      border-radius:10px;
-      padding:8px 10px;
-      cursor:pointer;
-    }
-    button.ghost {
-      background:#27304a;
-    }
-    button:disabled {
-      opacity:.6;
-      cursor:wait;
-    }
-    label {
-      display:block;
-      color:#98a5c3;
-      font-size:12px;
-      margin-bottom:6px;
-    }
-    input, select, textarea {
-      width:100%;
-      box-sizing:border-box;
-      background:#0b1020;
-      border:1px solid #27304a;
-      color:#edf2f7;
-      border-radius:10px;
-      padding:10px 12px;
-      font:inherit;
-    }
-    code {
-      color:#cbd5ff;
-    }
-    .approval-expand td {
-      background:#0d1428;
-      vertical-align:top;
-    }
-    .approval-expand textarea {
-      min-height:100px;
-      font-family: ui-monospace, monospace;
-      font-size:13px;
-    }
-    .approval-expand details {
-      margin-top:8px;
-    }
-    .approval-expand summary {
-      cursor:pointer;
-      color:#8aa4ff;
-      font-weight:600;
-      margin-bottom:8px;
-    }
-    .approval-expand summary::-webkit-details-marker {
-      display: none;
-    }
-    .approval-expand summary::before {
-      content: '▶';
-      margin-right: 8px;
-      transition: transform 0.2s;
-      display: inline-block;
-    }
-    .approval-expand[open] summary::before {
-      transform: rotate(90deg);
-    }
-    .tx-pipeline-card {
-      border-color:#3559d8;
-      box-shadow:0 8px 26px rgba(53,89,216,.10); /* Polished: Softer shadow */
-    }
-    /* New styles for banners */
-    .banner-card {
-      background:#131a2e;
-      border:1px solid #27304a;
-      border-radius:14px;
-      padding:16px;
-      /* Adjust margin to align with wrap */
-      max-width: 1280px;
-      margin-left: auto;
-      margin-right: auto;
-      box-shadow:0 8px 24px rgba(0,0,0,.15); /* Polished: Softer shadow */
-      margin-bottom: 16px; /* Added for spacing */
-    }
-    .banner-card.red {
-      border-color:#8b2c2c;
-    }
-    .banner-card.yellow {
-      border-color:#8a6a24;
-    }
-    .banner-card summary {
-      cursor: pointer;
-      font-weight: 600;
-      color: #e8eeff;
-      padding: 4px 0;
-      outline: none;
-      display: flex; /* Added for summary layout */
-      justify-content: space-between; /* Added for summary layout */
-      align-items: center; /* Added for summary layout */
-    }
-    .banner-card summary::-webkit-details-marker {
-      display: none;
-    }
-    .banner-card summary::before {
-      content: '▶';
-      margin-right: 8px;
-      transition: transform 0.2s;
-      display: inline-block;
-    }
-    .banner-card[open] summary::before {
-      transform: rotate(90deg);
-    }
-    .banner-content {
-      margin-top: 12px;
-      padding-top: 12px;
-      border-top: 1px dashed #2d3b5f;
-    }
-    .banner-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .banner-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 8px 0;
-      border-bottom: 1px solid #1a223a;
-    }
-    .banner-item:last-child {
-      border-bottom: none;
-    }
-    .banner-item-title {
-      font-weight: 500;
-      color: #c8d4f0;
-      flex-grow: 1;
-    }
-    .banner-item-actions {
-      display: flex;
-      gap: 8px;
-      flex-shrink: 0;
-    }
-    .next-action-pill {
-      display: inline-block;
-      padding: 4px 10px;
-      border-radius: 999px;
-      font-size: 11px;
-      font-weight: 600;
-      background: #2d6cdf;
-      color: #e8eeff;
-      margin-top: 8px;
-      text-transform: uppercase;
-      letter-spacing: .04em;
-    }
-    .next-action-pill.red {
-      background: #da4453;
-    }
-    .next-action-pill.yellow {
-      background: #e2a82f;
-    }
-    .next-action-pill.green {
-      background: #1ea76c;
-    }
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TC Agent Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+        body {
+            font-family: Manrope, system-ui, sans-serif;
+            margin: 0;
+            background:#0b1418;
+            color:#edf2f7;
+        }
+        .header-bar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(11,20,24,.92);
+            backdrop-filter: blur(10px);
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            border-bottom: 1px solid rgba(159,224,216,.12);
+            box-shadow: 0 2px 10px rgba(0,0,0,.2);
+        }
+        .header-bar h1 {
+            margin: 0;
+            font-family: Fraunces, Georgia, serif;
+            font-size: 24px;
+            color: #e8f6f4;
+            letter-spacing: -.02em;
+        }
+        .header-search-input {
+            flex-grow: 1;
+            max-width: 400px;
+            background: #131a2e;
+            border: 1px solid #27304a;
+            color: #edf2f7;
+            border-radius: 10px;
+            padding: 10px 12px;
+            font: inherit;
+        }
+        .header-key-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .header-key-control label {
+            margin-bottom: 0;
+            white-space: nowrap;
+        }
+        .header-key-control input {
+            width: 120px;
+            padding: 8px 10px;
+            font-size: 13px;
+        }
+        .header-key-control button {
+            padding: 8px 10px;
+            font-size: 13px;
+        }
+        .wrap {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+        .hero {
+            display:flex;
+            justify-content:space-between;
+            gap:16px;
+            align-items:flex-start;
+            margin-bottom:20px;
+        }
+        .eyebrow {
+            color:#8aa4ff;
+            text-transform:uppercase;
+            letter-spacing:.08em;
+            font-size:12px;
+        }
+        h1,h2 {
+            margin:0 0 10px;
+        }
+        .grid {
+            display:grid;
+            gap:16px;
+            margin-bottom:16px;
+        }
+        .grid.two {
+            grid-template-columns: repeat(auto-fit, minmax(320px,1fr));
+        }
+        .grid.four {
+            grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+        }
+        .card {
+            background:#131a2e;
+            border:1px solid #27304a;
+            border-radius:14px;
+            padding:16px;
+            box-shadow:0 10px 30px rgba(0,0,0,.18);
+        }
+        .card.error {
+            border-color:#8b2c2c;
+        }
+        .stat span {
+            display:block;
+            color:#98a5c3;
+            font-size:12px;
+            margin-bottom:8px;
+        }
+        .stat strong {
+            display:block;
+            font-size:18px;
+        }
+        .badge {
+            display:inline-block;
+            padding:6px 10px;
+            border-radius:999px;
+            font-size:12px;
+            text-transform:uppercase;
+            letter-spacing:.04em;
+            margin-left:8px;
+        }
+        .badge.ok {
+            background:#113b2d;
+            color:#7ef0b8;
+        }
+        .badge.warn {
+            background:#4a3a12;
+            color:#ffd666;
+        }
+        .badge.bad {
+            background:#4a1f28;
+            color:#ff9db0;
+        }
+        table {
+            width:100%;
+            border-collapse:collapse;
+            font-size:14px;
+        }
+        th, td {
+            text-align:left;
+            padding:10px 8px;
+            border-bottom:1px solid #27304a;
+            vertical-align:top;
+        }
+        th {
+            color:#98a5c3;
+            font-weight:600;
+        }
+        .meta {
+            display:grid;
+            gap:10px;
+        }
+        .meta div {
+            display:flex;
+            justify-content:space-between;
+            gap:16px;
+        }
+        .meta dt {
+            color:#98a5c3;
+        }
+        .meta dd {
+            margin:0;
+            text-align:right;
+        }
+        .report-card {
+            border:1px solid #27304a;
+            border-radius:12px;
+            padding:12px;
+            margin-bottom:10px;
+        }
+        .report-head {
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:8px;
+        }
+        .mini-grid {
+            display:grid;
+            grid-template-columns:repeat(4,1fr);
+            gap:10px;
+        }
+        .mini-grid span {
+            display:block;
+            color:#98a5c3;
+            font-size:12px;
+        }
+        .mini-grid strong {
+            display:block;
+            margin-top:4px;
+        }
+        .tx-board {
+            display:grid;
+            grid-template-columns:repeat(auto-fit, minmax(300px,1fr));
+            gap:18px;
+        }
+        .tx-card {
+            position:relative;
+            background:#101726;
+            border-radius:18px;
+            padding:16px 16px 14px 20px;
+            box-shadow:0 14px 34px rgba(0,0,0,.22);
+            cursor:pointer;
+            overflow:hidden;
+            transition:transform .16s ease, border-color .16s ease, box-shadow .16s ease;
+            border:2px solid #27304a;
+        }
+        .tx-card[data-state="green"] {
+            border-color:rgba(30,167,108,.85);
+            box-shadow:0 14px 34px rgba(0,0,0,.22), 0 0 0 1px rgba(30,167,108,.2);
+        }
+        .tx-card[data-state="yellow"] {
+            border-color:rgba(226,168,47,.9);
+            box-shadow:0 14px 34px rgba(0,0,0,.22), 0 0 0 1px rgba(226,168,47,.18);
+        }
+        .tx-card[data-state="red"] {
+            border-color:rgba(218,68,83,.95);
+            box-shadow:0 14px 34px rgba(0,0,0,.22), 0 0 0 1px rgba(218,68,83,.2);
+        }
+        .tx-card:hover {
+            transform:translateY(-2px);
+            box-shadow:0 20px 40px rgba(0,0,0,.28);
+        }
+        .tx-card[data-state="green"]:hover {
+            border-color:#3ecf8e;
+        }
+        .tx-card[data-state="yellow"]:hover {
+            border-color:#f0c14d;
+        }
+        .tx-card[data-state="red"]:hover {
+            border-color:#f06b78;
+        }
+        .tx-card::before {
+            content:'';
+            position:absolute;
+            inset:0 auto 0 0;
+            width:6px;
+            background:#2d6cdf;
+        }
+        .tx-card[data-state="green"]::before {
+            background:#1ea76c;
+        }
+        .tx-card[data-state="yellow"]::before {
+            background:#e2a82f;
+        }
+        .tx-card[data-state="red"]::before {
+            background:#da4453;
+        }
+        .tx-card-ribbon {
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:10px;
+            margin-bottom:10px;
+            flex-wrap:wrap;
+        }
+        .tx-health-ico {
+            font-size:18px;
+            line-height:1;
+        }
+        .tx-role-pill {
+            font-size:11px;
+            font-weight:700;
+            text-transform:uppercase;
+            letter-spacing:.06em;
+            padding:4px 10px;
+            border-radius:999px;
+            background:#151d33;
+            border:1px solid #2d3b5f;
+            color:#b8c9f0;
+        }
+        .tx-milestones {
+            display:flex;
+            flex-wrap:wrap;
+            gap:8px;
+            margin-top:10px;
+            align-items:center;
+        }
+        .tx-ms {
+            display:inline-flex;
+            align-items:center;
+            gap:5px;
+            padding:5px 10px 5px 8px;
+            border-radius:999px;
+            background:#141c31;
+            border:1px solid #2d3b5f;
+            font-size:12px;
+            color:#e8eeff;
+            font-weight:600;
+        }
+        .tx-ms.urgent {
+            border-color:#8a6a24;
+            color:#ffd666;
+            background:#241c0a;
+        }
+        .tx-ms-close.urgent {
+            border-color:#8b3140;
+            color:#ff9db0;
+            background:#240f14;
+        }
+        .tx-ms-emoji {
+            font-size:15px;
+            line-height:1;
+        }
+        .tx-ms-lab {
+            opacity:.92;
+            font-size:11px;
+            text-transform:uppercase;
+            letter-spacing:.04em;
+            color:#98a5c3;
+            font-weight:700;
+        }
+        .tx-ms-d {
+            font-variant-numeric:tabular-nums;
+            color:#cbd5ff;
+            font-weight:800;
+        }
+        .tx-ms-empty {
+            font-size:12px;
+            color:#5a698f;
+            font-style:italic;
+        }
+        .tx-fee-strip {
+            margin-top:10px;
+            padding:8px 11px;
+            border-radius:10px;
+            background:#0d1428;
+            border:1px solid #243152;
+            font-size:13px;
+            color:#c8d4f0;
+            line-height:1.35;
+        }
+        .tx-fee-strip strong {
+            color:#7ef0b8;
+            font-weight:700;
+        }
+        .tx-card-head {
+            display:flex;
+            justify-content:space-between;
+            gap:12px;
+            align-items:flex-start;
+        }
+        .tx-address {
+            margin:0;
+            font-size:20px;
+            line-height:1.2;
+        }
+        .tx-address-block {
+            margin:0;
+        }
+        .tx-address-row {
+            display:flex;
+            align-items:baseline;
+            gap:12px;
+            flex-wrap:wrap;
+            margin:0;
+        }
+        .tx-street-num {
+            font-size:30px;
+            font-weight:800;
+            color:#e8eeff;
+            letter-spacing:-0.03em;
+            line-height:1;
+            font-variant-numeric: tabular-nums;
+        }
+        .tx-street-name {
+            font-size:19px;
+            font-weight:650;
+            line-height:1.25;
+            color:#f1f5ff;
+            max-width: min(100%, 14em);
+        }
+        .tx-city-line {
+            color:#98a5c3;
+            font-size:13px;
+            margin-top:6px;
+            line-height:1.35;
+        }
+        .tx-subline {
+            color:#98a5c3;
+            font-size:13px;
+            margin-top:6px;
+        }
+        .tx-chips {
+            display:flex;
+            gap:6px;
+            flex-wrap:wrap;
+            margin-top:10px;
+        }
+        .tx-chip {
+            font-size:11px;
+            font-weight:600;
+            padding:4px 9px;
+            border-radius:999px;
+            background:#151d33;
+            border:1px solid #2d3b5f;
+            color:#c8d4f0;
+            text-transform:uppercase;
+            letter-spacing:.04em;
+        }
+        .tx-chip.warn {
+            border-color:#8a6a24;
+            color:#ffd666;
+            background:#241c0a;
+        }
+        .tx-chip.bad {
+            border-color:#8b3140;
+            color:#ff9db0;
+            background:#240f14;
+        }
+        .tx-contact-line {
+            display:flex;
+            align-items:baseline;
+            gap:8px;
+            flex-wrap:wrap;
+        }
+        .tx-contact-sep {
+            color:#5a698f;
+            font-weight:500;
+        }
+        .hero-addr {
+            margin:0;
+            font-size:26px;
+            font-weight:700;
+            line-height:1.2;
+        }
+        .hero-addr-row {
+            display:flex;
+            align-items:baseline;
+            gap:12px;
+            flex-wrap:wrap;
+        }
+        .hero-addr-num {
+            font-size:32px;
+            font-weight:800;
+            letter-spacing:-0.03em;
+            color:#e8eeff;
+            font-variant-numeric: tabular-nums;
+        }
+        .hero-addr-street {
+            font-size:22px;
+            font-weight:650;
+            color:#f1f5ff;
+        }
+        .hero-addr-city {
+            color:#98a5c3;
+            font-size:14px;
+            margin-top:6px;
+            font-weight:500;
+        }
+        .tx-ring {
+            flex:0 0 auto;
+            width:54px;
+            height:54px;
+            border-radius:50%;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:11px;
+            font-weight:700;
+            text-transform:uppercase;
+            letter-spacing:.06em;
+            text-align:center;
+            padding:6px;
+            background:#0b1020;
+            border:4px solid #2d6cdf;
+            color:#cbd5ff;
+        }
+        .tx-ring.green {
+            border-color:#1ea76c;
+            color:#7ef0b8;
+        }
+        .tx-ring.yellow {
+            border-color:#e2a82f;
+            color:#ffd666;
+        }
+        .tx-ring.red {
+            border-color:#da4453;
+            color:#ff9db0;
+        }
+        .tx-contact {
+            margin:14px 0 0;
+            display:flex;
+            justify-content:space-between;
+            gap:12px;
+            align-items:flex-start;
+        }
+        .tx-contact-name {
+            font-size:16px;
+            font-weight:600;
+        }
+        .tx-contact-phone {
+            color:#cbd5ff;
+            font-size:14px;
+            text-decoration:none;
+        }
+        .tx-contact-phone.dim {
+            color:#5a698f;
+            cursor:default;
+            pointer-events:none;
+        }
+        .tx-meta-grid {
+            display:grid;
+            grid-template-columns:repeat(2,minmax(0,1fr));
+            gap:12px;
+            margin-top:14px;
+        }
+        .tx-meta-item span {
+            display:block;
+            color:#98a5c3;
+            font-size:12px;
+            margin-bottom:4px;
+        }
+        .tx-meta-item strong {
+            display:block;
+            font-size:14px;
+            line-height:1.35;
+        }
+        .tx-summary {
+            margin-top:14px;
+            padding:12px;
+            border-radius:12px;
+            background:#141c31;
+            border:1px solid #2d3b5f;
+        }
+        .tx-summary span {
+            display:block;
+            color:#98a5c3;
+            font-size:12px;
+            margin-bottom:6px;
+        }
+        .tx-summary strong {
+            display:block;
+            font-size:14px;
+            line-height:1.4;
+        }
+        .tx-hover {
+            display:none;
+            margin-top:12px;
+            padding-top:12px;
+            border-top:1px dashed #2d3b5f;
+            color:#c8d4f0;
+            font-size:13px;
+            line-height:1.55;
+        }
+        .tx-hover dl {
+            margin:0;
+            display:grid;
+            gap:8px;
+        }
+        .tx-hover dt {
+            color:#6b7aab;
+            font-size:11px;
+            text-transform:uppercase;
+            letter-spacing:.05em;
+            margin:0;
+        }
+        .tx-hover dd {
+            margin:2px 0 0;
+        }
+        .tx-card:hover .tx-hover, .tx-card:focus .tx-hover, .tx-card:focus-within .tx-hover {
+            display:block;
+        }
+        .tx-actions {
+            display:flex;
+            justify-content:space-between;
+            gap:10px;
+            align-items:center;
+            margin-top:14px;
+        }
+        .tx-open {
+            display:inline-flex;
+            align-items:center;
+            gap:8px;
+            color:#cbd5ff;
+            font-size:13px;
+        }
+        .action-board {
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+            gap:14px;
+            margin-bottom:16px;
+        }
+        .action-card {
+            background:#101726;
+            border:1px solid #27304a;
+            border-radius:14px;
+            padding:14px;
+        }
+        .action-card p {
+            margin:8px 0 12px;
+            color:#c8d4f0;
+        }
+        .todo-list {
+            display:grid;
+            gap:12px;
+        }
+        .todo-item {
+            background:#101726;
+            border:1px solid #27304a;
+            border-radius:14px;
+            padding:14px;
+        }
+        .todo-item[data-urgency="red"] {
+            border-color:#6b2430;
+        }
+        .todo-item[data-urgency="yellow"] {
+            border-color:#6b5420;
+        }
+        .todo-head {
+            display:flex;
+            justify-content:space-between;
+            gap:12px;
+            align-items:flex-start;
+            margin-bottom:8px;
+        }
+        .todo-meta {
+            display:flex;
+            gap:8px;
+            flex-wrap:wrap;
+            align-items:center;
+        }
+        .todo-owner {
+            color:#cbd5ff;
+            font-size:12px;
+            text-transform:uppercase;
+            letter-spacing:.05em;
+        }
+        .countdown-banner {
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+            gap:14px;
+            margin-bottom:16px;
+        }
+        .countdown-card {
+            background:#101726;
+            border:1px solid #27304a;
+            border-radius:14px;
+            padding:14px;
+        }
+        .countdown-card.red {
+            border-color:#6b2430;
+        }
+        .countdown-card.yellow {
+            border-color:#6b5420;
+        }
+        .countdown-card.green {
+            border-color:#21543d;
+        }
+        .countdown-card span {
+            display:block;
+            color:#98a5c3;
+            font-size:12px;
+            margin-bottom:6px;
+        }
+        .countdown-card strong {
+            display:block;
+            font-size:26px;
+            margin-bottom:6px;
+        }
+        .row-actions {
+            display:flex;
+            gap:8px;
+            flex-wrap:wrap;
+        }
+        button {
+            background:#3559d8;
+            color:#fff;
+            border:0;
+            border-radius:10px;
+            padding:8px 10px;
+            cursor:pointer;
+        }
+        button.ghost {
+            background:#27304a;
+        }
+        button:disabled {
+            opacity:.6;
+            cursor:wait;
+        }
+        label {
+            display:block;
+            color:#98a5c3;
+            font-size:12px;
+            margin-bottom:6px;
+        }
+        input, select, textarea {
+            width:100%;
+            box-sizing:border-box;
+            background:#0b1020;
+            border:1px solid #27304a;
+            color:#edf2f7;
+            border-radius:10px;
+            padding:10px 12px;
+            font:inherit;
+        }
+        code {
+            color:#cbd5ff;
+        }
+        .approval-expand td {
+            background:#0d1428;
+            vertical-align:top;
+        }
+        .approval-expand textarea {
+            min-height:100px;
+            font-family: ui-monospace, monospace;
+            font-size:13px;
+        }
+        .approval-expand details {
+            margin-top:8px;
+        }
+        .approval-expand summary {
+            cursor:pointer;
+            color:#8aa4ff;
+            font-weight:600;
+            margin-bottom:8px;
+        }
+        .tx-pipeline-card {
+            border-color:#3559d8;
+            box-shadow:0 10px 32px rgba(53,89,216,.14);
+        }
+        /* New styles for banners */
+        .banner-card {
+            background:#131a2e;
+            border:1px solid #27304a;
+            border-radius:14px;
+            padding:16px;
+            margin: 16px 24px 0; /* Adjust margin to align with wrap */
+            max-width: 1280px;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow:0 10px 30px rgba(0,0,0,.18);
+        }
+        .banner-card.red {
+            border-color:#8b2c2c;
+        }
+        .banner-card.yellow {
+            border-color:#8a6a24;
+        }
+        .banner-card summary {
+            cursor: pointer;
+            font-weight: 600;
+            color: #e8eeff;
+            padding: 4px 0;
+            outline: none;
+        }
+        .banner-card summary::-webkit-details-marker {
+            display: none;
+        }
+        .banner-card summary::before {
+            content: '▶';
+            margin-right: 8px;
+            transition: transform 0.2s;
+            display: inline-block;
+        }
+        .banner-card[open] summary::before {
+            transform: rotate(90deg);
+        }
+        .banner-content {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px dashed #2d3b5f;
+        }
+        .banner-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #1a223a;
+        }
+        .banner-item:last-child {
+            border-bottom: none;
+        }
+        .banner-item-title {
+            font-weight: 500;
+            color: #c8d4f0;
+        }
+        .banner-item-actions {
+            display: flex;
+            gap: 8px;
+        }
+        .next-action-pill {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 600;
+            background: #2d6cdf;
+            color: #e8eeff;
+            margin-top: 8px;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+        }
+        .next-action-pill.red { background: #da4453; }
+        .next-action-pill.yellow { background: #e2a82f; }
+        .next-action-pill.green { background: #1ea76c; }
 
-    /* Mobile responsiveness */
-    @media (max-width: 768px) {
-      .header-bar {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-        padding: 12px 16px;
-      }
-      .header-bar h1 {
-        font-size: 20px;
-      }
-      .header-search-input {
-        max-width: 100%;
-      }
-      .header-key-control {
-        width: 100%;
-        justify-content: space-between;
-      }
-      .header-key-control input {
-        flex-grow: 1;
-      }
-      .wrap, .banner-card {
-        padding: 16px;
-        margin-left: 16px;
-        margin-right: 16px;
-      }
-      .grid.two, .grid.four {
-        grid-template-columns: 1fr;
-      }
-      .tx-board {
-        grid-template-columns: 1fr;
-      }
-      .hero {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      .hero-actions {
-        width: 100%;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-top: 12px;
-      }
-      .hero-actions .badge {
-        margin-left: 0;
-      }
-      .tx-card {
-        padding: 14px 14px 12px 18px;
-      }
-      .tx-card-ribbon {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 6px;
-      }
-      .tx-card-ribbon > div { /* Target the div containing health ico and ring */
-        margin-left: 0 !important; /* Override existing margin-left:auto */
-        width: 100%;
-        justify-content: space-between;
-      }
-      .tx-card-head {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-      }
-      .tx-address-row {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 4px;
-      }
-      .tx-street-num {
-        font-size: 26px;
-      }
-      .tx-street-name {
-        font-size: 17px;
-      }
-      .tx-city-line {
-        margin-top: 4px;
-      }
-      .tx-contact {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-      }
-      .tx-meta-grid {
-        grid-template-columns: 1fr;
-      }
-      .row-actions {
-        flex-direction: column;
-        gap: 10px;
-      }
-      .row-actions button, .row-actions select {
-        width: 100%;
-      }
-      .banner-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-      }
-      .banner-item-actions {
-        width: 100%;
-        justify-content: flex-start;
-      }
-      .next-action-pill {
-        width: 100%;
-        text-align: center;
-      }
-    }
-  </style>
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .header-bar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+                padding: 12px 16px;
+            }
+            .header-bar h1 {
+                font-size: 20px;
+            }
+            .header-search-input {
+                max-width: 100%;
+            }
+            .header-key-control {
+                width: 100%;
+                justify-content: space-between;
+            }
+            .header-key-control input {
+                flex-grow: 1;
+            }
+            .wrap, .banner-card {
+                padding: 16px;
+                margin-left: 16px;
+                margin-right: 16px;
+            }
+            .grid.two, .grid.four {
+                grid-template-columns: 1fr;
+            }
+            .tx-board {
+                grid-template-columns: 1fr;
+            }
+            .hero {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .hero-actions {
+                width: 100%;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-top: 12px;
+            }
+            .hero-actions .badge {
+                margin-left: 0;
+            }
+            .tx-card {
+                padding: 14px 14px 12px 18px;
+            }
+            .tx-card-ribbon {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 6px;
+            }
+            .tx-card-ribbon > div {
+                margin-left: 0 !important;
+                width: 100%;
+                justify-content: space-between;
+            }
+            .tx-card-head {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            .tx-address-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+            }
+            .tx-street-num {
+                font-size: 26px;
+            }
+            .tx-street-name {
+                font-size: 17px;
+            }
+            .tx-contact {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            .tx-meta-grid {
+                grid-template-columns: 1fr;
+            }
+            .row-actions {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .row-actions button, .row-actions select {
+                width: 100%;
+            }
+            .banner-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            .banner-item-actions {
+                width: 100%;
+                justify-content: flex-start;
+            }
+        }
+    </style>
 </head>
 <body data-view="agent">
-  <div class="header-bar">
-    <h1>TC Agent Portal</h1>
-    <input type="search" id="global-search" placeholder="Search transactions..." class="header-search-input">
-    <div class="header-key-control">
-      <label for="api-key-header">Command key</label>
-      <input id="api-key-header" type="password" placeholder="x-api-key">
-      <button id="save-api-key-header">Save</button>
-    </div>
-  </div>
-
-  <details id="alerts-banner" class="banner-card red" style="display:none;">
-    <summary>
-      <span id="alerts-banner-summary-text">Critical Alerts</span>
-      <span id="alerts-banner-count" class="badge bad" style="margin-left: 10px;">0</span>
-    </summary>
-    <div class="banner-content" id="alerts-banner-content">
-      <!-- Alerts will be rendered here by JS -->
-    </div>
-  </details>
-
-  <details id="approval-queue" class="banner-card yellow" style="display:none;">
-    <summary>
-      <span id="approval-queue-summary-text">Pending Approvals</span>
-      <span id="approval-queue-count" class="badge warn" style="margin-left: 10px;">0</span>
-    </summary>
-    <div class="banner-content" id="approval-queue-content">
-      <!-- Approvals will be rendered here by JS -->
-    </div>
-  </details>
-
-  <div class="wrap" id="app"><div class="card"><p>Loading agent portal…</p></div></div>
-
-  <script>
-    (function () {
-      let lastWorkspaceTests = null;
-      let lastWorkspaceValidation = null;
-      let lastWorkspaceIntakeRun = null;
-      let lastPhotoPackageSend = null;
-
-      function getApiKey() {
-        return (
-          localStorage.getItem('COMMAND_CENTER_KEY') ||
-          localStorage.getItem('lifeos_cmd_key') ||
-          localStorage.getItem('x_api_key') ||
-          ''
-        );
-      }
-
-      function setApiKey(value) {
-        localStorage.setItem('COMMAND_CENTER_KEY', value);
-        localStorage.setItem('lifeos_cmd_key', value);
-        localStorage.setItem('x_api_key', value);
-      }
-
-      function qs(name) {
-        return new URLSearchParams(window.location.search).get(name);
-      }
-
-      function escapeHtml(value) {
-        return String(value == null ? '' : value)
-          .replace(/&/g, '&amp;')
-          .replace(/</g, '&lt;')
-          .replace(/>/g, '&gt;')
-          .replace(/"/g, '&quot;')
-          .replace(/'/g, '&#39;');
-      }
-
-      function badgeClass(value) {
-        const v = String(value || '').toLowerCase();
-        if (v === 'green' || v === 'healthy' || v === 'pass' || v === 'sent' || v === 'resolved') return 'ok';
-        if (v === 'yellow' || v === 'watch' || v === 'review' || v === 'prepared') return 'warn';
-        return 'bad';
-      }
-
-      async function api(url, options) {
-        const res = await fetch(url, {
-          ...options,
-          headers: {
-            'content-type': 'application/json',
-            'x-api-key': getApiKey(),
-            ...(options && options.headers ? options.headers : {}),
-          },
-        });
-        const data = await res.json().catch(() => ({}));
-        if (!res.ok || data.ok === false) {
-          const err = new Error(data.error || `Request failed (${res.status})`);
-          err.status = res.status;
-          err.body = data;
-          throw err;
-        }
-        return data;
-      }
-
-      async function pingTcService() {
-        try {
-          const res = await fetch('/api/v1/tc/status');
-          const data = await res.json().catch(() => ({}));
-          return { ok: res.ok && data.ok === true, status: res.status, data };
-        } catch {
-          return { ok: false, status: 0, data: null };
-        }
-      }
-
-      function renderWorkspaceLoadFailure(err, ping) {
-        const is401 = err?.status === 401 || /unauthorized/i.test(err?.message || '');
-        const dbBad = ping?.data?.db === 'error';
-        return `
-          <div class="wrap">
-            <div class="card error">
-              <h2>Workspace load failed</h2>
-              <p>${escapeHtml(err?.message || 'Unknown error')}</p>
-              ${dbBad ? '<p><strong>Database</strong> check failed on <code>/api/v1/tc/status</code>. Confirm <code>DATABASE_URL</code> on Railway and redeploy.</p>' : ''}
-              ${is401 ? `
-                <div style="margin-top:14px;padding:14px;background:#141c31;border-radius:12px;border:1px solid #2d3b5f">
-                  <p><strong>Unauthorized</strong> usually means the command key in this browser does not match Railway.</p>
-                  <ol style="margin:8px 0 0 18px;line-height:1.5">
-                    <li>Open <a href="https://docs.railway.app/develop/variables" target="_blank" rel="noopener">Railway → your service → Variables</a>.</li>
-                    <li>Copy <code>COMMAND_CENTER_KEY</code> (or <code>API_KEY</code> / <code>LIFEOS_KEY</code> if that is what you set).</li>
-                    <li>Paste into <strong>Command key</strong> at the top of this page (after reload) and click Save.</li>
-                  </ol>
-                </div>` : ''}
-              <p style="margin-top:16px"><a href="/tc/agent-portal.html">Reload portal</a>
-                · <a href="/api/v1/tc/status" target="_blank" rel="noopener">Open TC status JSON</a> (no key required)</p>
-            </div>
-          </div>`;
-      }
-
-      async function multipartApi(url, formData) {
-        const res = await fetch(url, {
-          method: 'POST',
-          body: formData,
-          headers: {
-            'x-api-key': getApiKey(),
-          },
-        });
-        const data = await res.json().catch(() => ({}));
-        if (!res.ok || data.ok === false) {
-          throw new Error(data.error || `Request failed (${res.status})`);
-        }
-        return data;
-      }
-
-      async function loadWorkspaceBanners() {
-        const alertsBanner = document.getElementById('alerts-banner');
-        const alertsContent = document.getElementById('alerts-banner-content');
-        const alertsCountBadge = document.getElementById('alerts-banner-count');
-        const alertsSummaryText = document.getElementById('alerts-banner-summary-text');
-
-        const approvalQueue = document.getElementById('approval-queue');
-        const approvalContent = document.getElementById('approval-queue-content');
-        const approvalCountBadge = document.getElementById('approval-queue-count');
-        const approvalSummaryText = document.getElementById('approval-queue-summary-text');
-
-        try {
-          // Fetch alerts
-          const alertsData = await api('/api/v1/tc/alerts?status=open&severity=urgent,critical');
-          const alerts = alertsData.items || [];
-          if (alerts.length > 0) {
-            alertsContent.innerHTML = renderAlertsBannerContent(alerts);
-            alertsCountBadge.textContent = alerts.length;
-            alertsSummaryText.textContent = `Critical Alerts (${alerts.length})`;
-            alertsBanner.style.display = 'block';
-            alertsBanner.setAttribute('open', ''); // Ensure it's open by default if there are alerts
-
-            // Add event listeners for alerts
-            alertsContent.querySelectorAll('[data-alert]').forEach((button) => {
-              button.addEventListener('click', async () => {
-                button.disabled = true;
-                try {
-                  const extra = {};
-                  if (button.dataset.snoozeMode === 'morning') {
-                    extra.snooze_until = nextMorningIso();
-                    extra.notes = 'Agent chose to handle this in the morning.';
-                  }
-                  await runAlertAction(button.dataset.alert, button.dataset.action, extra);
-                  await loadWorkspaceBanners(); // Reload banners after action
-                } catch (err) {
-                  alert(err.message);
-                  button.disabled = false;
-                }
-              });
-            });
-          } else {
-            alertsBanner.style.display = 'none';
-            alertsBanner.removeAttribute('open');
-          }
-
-          // Fetch approvals
-          const approvalsData = await api('/api/v1/tc/approvals?status=pending');
-          const approvals = approvalsData.items || [];
-          if (approvals.length > 0) {
-            approvalContent.innerHTML = renderApprovalsBannerContent(approvals);
-            approvalCountBadge.textContent = approvals.length;
-            approvalSummaryText.textContent = `Pending Approvals (${approvals.length})`;
-            approvalQueue.style.display = 'block';
-            approvalQueue.setAttribute('open', ''); // Ensure it's open by default if there are approvals
-
-            // Add event listeners for approvals
-            approvalContent.querySelectorAll('[data-approval]').forEach((button) => {
-              button.addEventListener('click', async () => {
-                button.disabled = true;
-                try {
-                  await runApprovalAction(button.dataset.approval, button.dataset.action);
-                  await loadWorkspaceBanners(); // Reload banners after action
-                } catch (err) {
-                  alert(err.message);
-                  button.disabled = false;
-                }
-              });
-            });
-          } else {
-            approvalQueue.style.display = 'none';
-            approvalQueue.removeAttribute('open');
-          }
-        } catch (err) {
-          console.error('Failed to load banners:', err);
-          alertsBanner.style.display = 'none';
-          approvalQueue.style.display = 'none';
-        }
-      }
-
-      function renderAlertsBannerContent(alerts) {
-        return `<div class="banner-list">${alerts.map(item => `
-          <div class="banner-item">
-            <div class="banner-item-title">
-              <strong>${escapeHtml(item.title)}</strong>
-              <div style="font-size:12px;color:#98a5c3;margin-top:4px">${escapeHtml(item.summary || '')}</div>
-            </div>
-            <div class="banner-item-actions">
-              <button data-alert="${item.id}" data-action="acknowledge">Ack</button>
-              <button data-alert="${item.id}" data-action="resolve" class="ghost">Resolve</button>
-              <button data-alert="${item.id}" data-action="snooze" data-snooze-mode="morning" class="ghost">Snooze</button>
-            </div>
-          </div>
-        `).join('')}</div>`;
-      }
-
-      function renderApprovalsBannerContent(approvals) {
-        return `<div class="banner-list">${approvals.map(item => `
-          <div class="banner-item">
-            <div class="banner-item-title">
-              <strong>${escapeHtml(item.title)}</strong>
-              <div style="font-size:12px;color:#98a5c3;margin-top:4px">${escapeHtml(item.summary || '')}</div>
-            </div>
-            <div class="banner-item-actions">
-              <button data-approval="${item.id}" data-action="approve">Approve</button>
-              <button data-approval="${item.id}" data-action="reject" class="ghost">Reject</button>
-              <button data-approval="${item.id}" data-action="snooze" class="ghost">Snooze</button>
-            </div>
-          </div>
-        `).join('')}</div>`;
-      }
-
-      async function load() {
-        const txId = qs('tx');
-        const view = document.body.dataset.view || 'agent';
-        if (!txId) {
-          if (view === 'agent') {
-            const ping = await pingTcService();
-            try {
-              const workspace = await api('/api/v1/tc/intake/workspace');
-              renderWorkspace(workspace.workspace || workspace, ping);
-              loadWorkspaceBanners(); // ADDED THIS LINE
-            } catch (err) {
-              document.getElementById('app').innerHTML = renderWorkspaceLoadFailure(err, ping);
-            }
-            return;
-          }
-          document.getElementById('app').innerHTML = '<div class="card"><h2>Missing transaction id</h2><p>Add <code>?tx=123</code> to the URL.</p></div>';
-          return;
-        }
-        try {
-          const requests = [
-            api(`/api/v1/tc/transactions/${txId}/overview?view=${view}`),
-            api(`/api/v1/tc/transactions/${txId}/reports`),
-          ];
-          if (view === 'agent') requests.push(api(`/api/v1/tc/transactions/${txId}/approvals?limit=25`));
-          if (view === 'agent') requests.push(api(`/api/v1/tc/transactions/${txId}/interactions?limit=20`));
-          if (view === 'agent') requests.push(api(`/api/v1/tc/transactions/${txId}/inspection`));
-          const [overview, reports, approvals, interactions, inspection] = await Promise.all(requests);
-          renderOverview(overview, reports.items || [], approvals?.items || [], interactions?.items || [], inspection || null);
-          loadWorkspaceBanners(); // ADDED THIS LINE
-        } catch (err) {
-          document.getElementById('app').innerHTML = `<div class="card error"><h2>Load failed</h2><p>${escapeHtml(err.message)}</p></div>`;
-        }
-      }
-
-      async function runApprovalAction(id, action) {
-        await api(`/api/v1/tc/approvals/${id}`, {
-          method: 'PATCH',
-          body: JSON.stringify({ action, actor: 'agent_portal' }),
-        });
-        await load();
-      }
-
-      async function runAlertAction(id, action, extra = {}) {
-        await api(`/api/v1/tc/alerts/${id}`, {
-          method: 'PATCH',
-          body: JSON.stringify({ action, actor: 'agent_portal', ...extra }),
-        });
-        await load();
-      }
-
-      async function createMobileLink(kind, id, action) {
-        const data = await api(`/api/v1/tc/mobile-links/${kind}/${id}`, {
-          method: 'POST',
-          body: JSON.stringify({ action }),
-        });
-        const url = data.execute_url || data.review_url || '';
-        if (url && navigator.clipboard?.writeText) {
-          await navigator.clipboard.writeText(url);
-          alert(`Copied link: ${url}`);
-          return;
-        }
-        alert(url || 'Link generated');
-      }
-
-      async function bootstrapAccessFromForm() {
-        const payload = {
-          work_email: document.getElementById('work-email')?.value || '',
-          tc_imap_user: document.getElementById('tc-imap-user')?.value || '',
-          tc_agent_name: document.getElementById('tc-agent-name')?.value || '',
-          tc_agent_phone: document.getElementById('tc-agent-phone')?.value || '',
-          tc_email_from: document.getElementById('tc-email-from')?.value || '',
-          imap_password: document.getElementById('imap-password')?.value || '',
-          glvar_username: document.getElementById('glvar-username')?.value || '',
-          glvar_password: document.getElementById('glvar-password')?.value || '',
-          exp_okta_username: document.getElementById('exp-okta-username')?.value || '',
-          exp_okta_password: document.getElementById('exp-okta-password')?.value || '',
-        };
-        await api('/api/v1/tc/access/bootstrap', {
-          method: 'POST',
-          body: JSON.stringify(payload),
-        });
-        ['imap-password', 'glvar-password', 'exp-okta-password'].forEach((id) => {
-          const input = document.getElementById(id);
-          if (input) input.value = '';
-        });
-        await load();
-      }
-
-      async function seedKnownEnvDefaultsFromForm() {
-        const payload = {
-          work_email: document.getElementById('work-email')?.value || '',
-          tc_imap_user: document.getElementById('tc-imap-user')?.value || '',
-          tc_agent_name: document.getElementById('tc-agent-name')?.value || '',
-          tc_agent_phone: document.getElementById('tc-agent-phone')?.value || '',
-          tc_email_from: document.getElementById('tc-email-from')?.value || '',
-        };
-        await api('/api/v1/tc/access/seed-defaults', {
-          method: 'POST',
-          body: JSON.stringify(payload),
-        });
-        await load();
-      }
-
-      async function runInboxScan() {
-        await api('/api/v1/tc/email/scan', { method: 'POST', body: JSON.stringify({}) });
-        await load();
-      }
-
-      async function runExecutedAgreementSearch() {
-        const result = await api('/api/v1/tc/intake/email-search', { method: 'POST', body: JSON.stringify({ days: 90 }) });
-        alert(`Found ${result.found || 0} relevant email(s) in the inbox search.`);
-        await load();
-      }
-
-      async function runAccessTest(kind) {
-        const path = kind === 'glvar'
-          ? '/api/v1/tc/test-glvar-login'
-          : '/api/v1/tc/test-skyslope-login';
-        const result = await api(path, {
-          method: 'POST',
-          body: JSON.stringify({ dryRun: true }),
-        });
-        lastWorkspaceTests = {
-          ...(lastWorkspaceTests || {}),
-          [kind]: {
-            checked_at: new Date().toISOString(),
-            ok: Boolean(result.ok),
-            screenshots: result.screenshots || [],
-          },
-        };
-        const node = document.getElementById('access-test-results');
-        if (node) node.innerHTML = renderWorkspaceTests(lastWorkspaceTests);
-      }
-
-      async function markTriageHandled(id) {
-        await api(`/api/v1/tc/email/triage/${id}/action`, {
-          method: 'POST',
-          body: JSON.stringify({ notes: 'Handled from TC intake workspace' }),
-        });
-        await load();
-      }
-
-      async function createTransactionFromTriage(id) {
-        await api(`/api/v1/tc/email/triage/${id}/create-transaction`, {
-          method: 'POST',
-          body: JSON.stringify({}),
-        });
-        await load();
-      }
-
-      async function linkTransactionFromTriage(id, transactionId) {
-        if (!transactionId) throw new Error('Select a transaction first');
-        await api(`/api/v1/tc/email/triage/${id}/link-transaction`, {
-          method: 'POST',
-          body: JSON.stringify({ transaction_id: Number(transactionId), actor: 'agent_portal' }),
-        });
-        await load();
-      }
-
-      async function runWorkspaceDocumentAction(mode) {
-        const fileInput = document.getElementById('workspace-document');
-        const file = fileInput?.files?.[0];
-        if (!file) throw new Error('Choose a document first');
-
-        const form = new FormData();
-        form.append('document', file);
-        form.append('doc_type', document.getElementById('workspace-doc-type')?.value || 'Transaction Document');
-        form.append('address', document.getElementById('workspace-doc-address')?.value || '');
-        if (mode === 'upload') form.append('dry_run', 'true');
-
-        const path = mode === 'upload' ? '/api/v1/tc/intake/upload' : '/api/v1/tc/intake/validate';
-        const result = await multipartApi(path, form);
-
-        lastWorkspaceValidation = {
-          mode,
-          file_name: file.name,
-          checked_at: new Date().toISOString(),
-          result,
-        };
-        const node = document.getElementById('workspace-validation-results');
-        if (node) node.innerHTML = renderWorkspaceValidation(lastWorkspaceValidation);
-      }
-
-      async function runWorkspaceIntake() {
-        const payload = {
-          address: document.getElementById('workspace-intake-address')?.value || '',
-          days: Number(document.getElementById('workspace-intake-days')?.value || 90),
-          dry_run: true,
-        };
-        const result = await api('/api/v1/tc/intake/run', {
-          method: 'POST',
-          body: JSON.stringify(payload),
-        });
-        lastWorkspaceIntakeRun = {
-          checked_at: new Date().toISOString(),
-          payload,
-          result,
-        };
-        const node = document.getElementById('workspace-intake-results');
-        if (node) node.innerHTML = renderWorkspaceIntakeRun(lastWorkspaceIntakeRun);
-      }
-
-      async function runPhotoPackageSend(dryRun) {
-        const payload = {
-          transaction_id: document.getElementById('workspace-photo-transaction')?.value || '',
-          recipient_email: document.getElementById('workspace-photo-recipient-email')?.value || '',
-          recipient_name: document.getElementById('workspace-photo-recipient-name')?.value || '',
-          subject: document.getElementById('workspace-photo-subject')?.value || '',
-          body: document.getElementById('workspace-photo-body')?.value || '',
-          search: {
-            subject_contains: document.getElementById('workspace-photo-subject-search')?.value || '',
-            from_contains: document.getElementById('workspace-photo-from-search')?.value || '',
-            filename_contains: document.getElementById('workspace-photo-filename-search')?.value || '',
-            days: Number(document.getElementById('workspace-photo-days')?.value || 14),
-          },
-          combine_photos: true,
-          attach_originals: Boolean(document.getElementById('workspace-photo-attach-originals')?.checked),
-          dry_run: dryRun,
-        };
-        const result = await api('/api/v1/tc/email/send-attachment-package', {
-          method: 'POST',
-          body: JSON.stringify(payload),
-        });
-        lastPhotoPackageSend = {
-          checked_at: new Date().toISOString(),
-          dry_run: dryRun,
-          result,
-        };
-        const node = document.getElementById('workspace-photo-results');
-        if (node) node.innerHTML = renderPhotoPackageResult(lastPhotoPackageSend);
-      }
-
-      let listingSyncPollTimer = null;
-      function formatListingSyncStepLine(s) {
-        const bits = [s.at, s.label];
-        if (s.message) bits.push(s.message);
-        if (s.url) bits.push(s.url);
-        if (s.via) bits.push(`via:${s.via}`);
-        if (s.error) bits.push(`ERROR:${s.error}`);
-        if (s.path) bits.push(s.path);
-        return bits.filter(Boolean).join(' | ');
-      }
-
-      async function pollListingSyncJob(jobId, preEl) {
-        const data = await api(`/api/v1/tc/browser-jobs/${jobId}`);
-        const job = data.job;
-        const text = (job.steps || []).map(formatListingSyncStepLine).join('\n');
-        preEl.textContent = `${text}\n--- ${job.status} ---${job.error ? `\n${job.error}` : ''}`;
-        if (job.status === 'completed' || job.status === 'failed') {
-          if (listingSyncPollTimer) {
-            clearInterval(listingSyncPollTimer);
-            listingSyncPollTimer = null;
-          }
-        }
-        return job;
-      }
-
-      async function startListingSyncJob(live) {
-        const txId = document.getElementById('listing-sync-transaction')?.value || '';
-        const search = document.getElementById('listing-sync-search')?.value?.trim() || '';
-        const pre = document.getElementById('listing-sync-log');
-        if (!txId) throw new Error('Select a transaction');
-        if (!pre) return;
-        pre.textContent = 'Starting…';
-
-        const res = await api(`/api/v1/tc/transactions/${encodeURIComponent(txId)}/browser/listing-to-skyslope`, {
-          method: 'POST',
-          body: JSON.stringify({
-            address_search: search,
-            dry_run: !live,
-            force_upload: false,
-          }),
-        });
-        const jobId = res.job_id;
-
-        if (listingSyncPollTimer) {
-          clearInterval(listingSyncPollTimer);
-          listingSyncPollTimer = null;
-        }
-        listingSyncPollTimer = setInterval(() => {
-          pollListingSyncJob(jobId, pre).catch((e) => {
-            pre.textContent += `\n${e.message}`;
-          });
-        }, 2000);
-        await pollListingSyncJob(jobId, pre);
-      }
-
-      async function createDocRequestsFromValidation(transactionId) {
-        if (!transactionId) throw new Error('Select a transaction first');
-        const validation = lastWorkspaceValidation?.result?.validation;
-        if (!validation) throw new Error('Run document validation first');
-        const missingItems = validation.missing_items || [];
-        if (!missingItems.length) throw new Error('No missing items to request');
-
-        for (const item of missingItems) {
-          await api(`/api/v1/tc/transactions/${transactionId}/document-requests`, {
-            method: 'POST',
-            body: JSON.stringify({
-              title: `${validation.doc_type || 'Document'}: ${item}`,
-              description: `Requested from workspace QA after validating ${validation.file_name || lastWorkspaceValidation?.file_name || 'document'}.`,
-              requested_from: 'client',
-              metadata: {
-                source: 'workspace_validation',
-                file_name: validation.file_name || lastWorkspaceValidation?.file_name || null,
-                doc_type: validation.doc_type || null,
-                missing_item: item,
-              },
-            }),
-          });
-        }
-        await load();
-      }
-
-      function renderWorkspaceTests(results) {
-        const entries = Object.entries(results || {});
-        if (!entries.length) return '<p>No access tests run yet.</p>';
-        return `
-          <table>
-            <thead><tr><th>Check</th><th>Status</th><th>Checked</th><th>Screenshots</th></tr></thead>
-            <tbody>
-              ${entries.map(([key, value]) => `
-                <tr>
-                  <td>${escapeHtml(key)}</td>
-                  <td><span class="badge ${badgeClass(value.ok ? 'healthy' : 'red')}">${escapeHtml(value.ok ? 'pass' : 'failed')}</span></td>
-                  <td>${escapeHtml(value.checked_at || '')}</td>
-                  <td>${escapeHtml(String((value.screenshots || []).length))}</td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
-        `;
-      }
-
-      function renderWorkspaceValidation(state) {
-        if (!state?.result) return '<p>No validation run yet.</p>';
-        const validation = state.result.validation || {};
-        const checks = validation.checks || [];
-        return `
-          <div style="margin-bottom:10px">
-            <strong>${escapeHtml(state.file_name || '')}</strong>
-            <span class="badge ${badgeClass(validation.blocks_upload ? 'bad' : 'healthy')}">${escapeHtml(validation.blocks_upload ? 'blocked' : 'pass')}</span>
-            <span style="margin-left:8px;color:#98a5c3">${escapeHtml(state.mode === 'upload' ? 'dry-run upload' : 'validate only')} · ${escapeHtml(state.checked_at || '')}</span>
-          </div>
-          <p>${escapeHtml(validation.recommendation || '')}</p>
-          <table>
-            <thead><tr><th>Check</th><th>Status</th><th>Why</th></tr></thead>
-            <tbody>
-              ${checks.map((item) => `
-                <tr>
-                  <td>${escapeHtml(item.label || item.id || '')}</td>
-                  <td><span class="badge ${badgeClass(item.passed ? 'healthy' : 'red')}">${escapeHtml(item.passed ? 'pass' : 'missing')}</span></td>
-                  <td>${escapeHtml(item.reason || '')}</td>
-                </tr>
-              `).join('') || '<tr><td colspan="3">No validation checks returned.</td></tr>'}
-            </tbody>
-          </table>
-        `;
-      }
-
-      function renderWorkspaceIntakeRun(state) {
-        if (!state?.result) return '<p>No intake run yet.</p>';
-        const result = state.result || {};
-        const matches = result.matches || result.emails || [];
-        return `
-          <div style="margin-bottom:10px">
-            <strong>Dry-run intake</strong>
-            <span class="badge ${badgeClass(result.ok ? 'healthy' : 'red')}">${escapeHtml(result.ok ? 'ok' : 'failed')}</span>
-            <span style="margin-left:8px;color:#98a5c3">${escapeHtml(state.checked_at || '')}</span>
-          </div>
-          <div class="mini-grid" style="margin-bottom:12px">
-            <div><span>Address</span><strong>${escapeHtml(state.payload?.address || 'any')}</strong></div>
-            <div><span>Days</span><strong>${escapeHtml(String(state.payload?.days || 90))}</strong></div>
-            <div><span>Matches</span><strong>${escapeHtml(String(matches.length || 0))}</strong></div>
-            <div><span>Blocked</span><strong>${escapeHtml(String(Boolean(result.blocked)))}</strong></div>
-          </div>
-          <table>
-            <thead><tr><th>Subject / File</th><th>From / Type</th><th>Status</th></tr></thead>
-            <tbody>
-              ${matches.slice(0, 10).map((item) => `
-                <tr>
-                  <td>${escapeHtml(item.subject || item.filename || item.address || '')}</td>
-                  <td>${escapeHtml(item.from || item.docType || '')}</td>
-                  <td>${escapeHtml(item.message || item.status || (item.files ? `${item.files.length} file(s)` : 'matched'))}</td>
-                </tr>
-              `).join('') || '<tr><td colspan="3">No intake matches returned.</td></tr>'}
-            </tbody>
-          </table>
-        `;
-      }
-
-      function renderPhotoPackageResult(state) {
-        if (!state?.result) return '<p>No photo package run yet.</p>';
-        const result = state.result || {};
-        const sourceEmail = result.sourceEmail || {};
-        const attachments = result.downloadedAttachments || [];
-        return `
-          <div style="margin-bottom:10px">
-            <strong>${escapeHtml(state.dry_run ? 'Photo package dry run' : 'Photo package send')}</strong>
-            <span class="badge ${badgeClass(result.ok ? 'healthy' : 'red')}">${escapeHtml(result.ok ? 'ok' : 'failed')}</span>
-            <span style="margin-left:8px;color:#98a5c3">${escapeHtml(state.checked_at || '')}</span>
-          </div>
-          <div class="mini-grid" style="margin-bottom:12px">
-            <div><span>Source email</span><strong>${escapeHtml(sourceEmail.subject || '—')}</strong></div>
-            <div><span>From</span><strong>${escapeHtml(sourceEmail.from || '—')}</strong></div>
-            <div><span>Attachments</span><strong>${escapeHtml(String(attachments.length))}</strong></div>
-            <div><span>Combined PDF</span><strong>${escapeHtml(result.combinedAttachment?.filename || 'none')}</strong></div>
-          </div>
-          <table>
-            <thead><tr><th>Attachment</th><th>Type</th><th>Bytes</th></tr></thead>
-            <tbody>
-              ${attachments.map((item) => `
-                <tr>
-                  <td>${escapeHtml(item.filename || '')}</td>
-                  <td>${escapeHtml(item.contentType || '')}</td>
-                  <td>${escapeHtml(String(item.size || ''))}</td>
-                </tr>
-              `).join('') || '<tr><td colspan="3">No attachments downloaded.</td></tr>'}
-            </tbody>
-          </table>
-          ${result.delivery ? `<p style="margin-top:12px">Delivery: <span class="badge ${badgeClass(result.delivery.success ? 'sent' : 'red')}">${escapeHtml(result.delivery.success ? 'sent' : (result.delivery.error || 'failed'))}</span></p>` : ''}
-        `;
-      }
-
-      function normalizeParty(value) {
-        if (!value) return null;
-        if (typeof value === 'string') return { name: value, email: null, phone: null };
-        if (Array.isArray(value)) {
-          for (const item of value) {
-            const normalized = normalizeParty(item);
-            if (normalized?.name || normalized?.email || normalized?.phone) return normalized;
-          }
-          return null;
-        }
-        return {
-          name: value.name || value.full_name || null,
-          email: value.email || value.client_email || null,
-          phone: value.phone || value.mobile || value.cell || null,
-        };
-      }
-
-      function getCounterpartyAgent(transaction) {
-        const parties = transaction?.parties || {};
-        const role = String(transaction?.agent_role || '').toLowerCase();
-        if (role === 'listing') return normalizeParty(parties.buyer_agent || parties.agent);
-        return normalizeParty(parties.listing_agent || parties.agent);
-      }
-
-      function getPrimaryClient(transaction) {
-        const parties = transaction?.parties || {};
-        const role = String(transaction?.agent_role || '').toLowerCase();
-        if (role === 'listing') return normalizeParty(parties.seller || parties.client || parties.owner);
-        return normalizeParty(parties.buyer || parties.client);
-      }
-
-      function formatPhone(value) {
-        const digits = String(value || '').replace(/\D/g, '');
-        if (digits.length === 10) return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
-        return value || 'No phone on file';
-      }
-
-      function formatStageLabel(value) {
-        const text = String(value || '').replace(/_/g, ' ').trim();
-        if (!text) return 'Not set';
-        return text.replace(/\b\w/g, (match) => match.toUpperCase());
-      }
-
-      function formatDaysRemaining(value) {
-        if (value == null || value === '') return 'No deadline';
-        const days = Number(value);
-        if (Number.isNaN(days)) return String(value);
-        if (days < 0) return `${Math.abs(days)} day${Math.abs(days) === 1 ? '' : 's'} overdue`;
-        if (days === 0) return 'Due today';
-        if (days === 1) return '1 day left';
-        return `${days} days left`;
-      }
-
-      function formatMoneyAmt(value) {
-        if (value == null || value === '') return '';
-        const n = Number(value);
-        if (Number.isNaN(n)) return '';
-        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(n);
-      }
-
-      function formatDateShort(iso) {
-        if (!iso) return '';
-        const raw = String(iso);
-        const d = raw.length <= 10 ? new Date(`${raw}T12:00:00`) : new Date(raw);
-        if (Number.isNaN(d.getTime())) return raw;
-        return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-      }
-
-      function transactionRolePill(role) {
-        const r = String(role || '').toLowerCase();
-        if (r === 'listing') return 'Listing';
-        if (r === 'dual') return 'Dual';
-        return 'Buyer';
-      }
-
-      function milestonePresentation(contingency) {
-        const key = String(contingency.name || '').toLowerCase();
-        const labelHay = String(contingency.label || '').toLowerCase();
-        const rows = [
-          { test: (k, h) => /inspection|due_diligence|^dd$|due diligence/.test(k) || /inspection|due diligence/.test(h), emoji: '🔍', short: 'DD' },
-          { test: (k, h) => /appraisal/.test(k) || /appraisal/.test(h), emoji: '📋', short: 'Appr' },
-          { test: (k, h) => /loan|financ/.test(k) || /loan|financ/.test(h), emoji: '🏦', short: 'Loan' },
-          { test: (k, h) => /^coe$/.test(k) || /close of escrow|escrow close/.test(h), emoji: '🔑', short: 'COE' },
-          { test: (k, h) => /title/.test(k), emoji: '📑', short: 'Title' },
-          { test: (k, h) => /insurance|hazard/.test(k) || /insurance/.test(h), emoji: '🛡️', short: 'Ins' },
-        ];
-        for (const row of rows) {
-          if (row.test(key, labelHay)) return { emoji: row.emoji, short: row.short };
-        }
-        const words = formatStageLabel(contingency.label || contingency.name || 'Milestone');
-        const short = words.length > 12 ? `${words.slice(0, 11)}…` : words;
-        return { emoji: '📌', short };
-      }
-
-      function buildMilestoneStrip(item) {
-        const hasClose = Boolean(item.close_date);
-        const upcoming = (item.contingencies || []).filter((c) => {
-          if (c.daysRemaining == null || c.status === 'unknown') return false;
-          if (c.daysRemaining < 0) return false;
-          if (hasClose && String(c.name || '').toLowerCase() === 'coe') return false;
-          return true;
-        });
-        const sorted = [...upcoming].sort((a, b) => (a.daysRemaining || 0) - (b.daysRemaining || 0));
-        const chips = [];
-        for (const c of sorted) {
-          const { emoji, short } = milestonePresentation(c);
-          const days = c.daysRemaining;
-          const urgent = days <= 2 ? ' urgent' : '';
-          const dayText = days === 0 ? 'today' : `${days}d`;
-          const tip = `${formatStageLabel(c.label || c.name)} — ${formatDaysRemaining(days)} (${formatDateShort(c.date)})`;
-          chips.push(
-            `<span class="tx-ms${urgent}" title="${escapeHtml(tip)}"><span class="tx-ms-emoji" aria-hidden="true">${emoji}</span><span class="tx-ms-lab">${escapeHtml(short)}</span><span class="tx-ms-d">${escapeHtml(dayText)}</span></span>`
-          );
-        }
-        if (item.close_date) {
-          const dtc = item.days_to_close;
-          const n = dtc != null ? Number(dtc) : NaN;
-          const closeText = !Number.isNaN(n) && n === 0 ? 'today' : !Number.isNaN(n) && n > 0 ? `${n}d` : '';
-          const urgent = !Number.isNaN(n) && n >= 0 && n <= 3 ? ' urgent' : '';
-          const tip = `Close ${formatDateShort(item.close_date)}` + (!Number.isNaN(n) ? ` · ${formatDaysRemaining(n)}` : '');
-          chips.push(
-            `<span class="tx-ms tx-ms-close${urgent}" title="${escapeHtml(tip)}"><span class="tx-ms-emoji" aria-hidden="true">📅</span><span class="tx-ms-lab">Close</span>${closeText ? `<span class="tx-ms-d">${escapeHtml(closeText)}</span>` : ''}</span>`
-          );
-        }
-        if (!chips.length) {
-          return '<div class="tx-milestones"><span class="tx-ms-empty">Add key dates on the file to see DD, appraisal, loan, and close countdowns.</span></div>';
-        }
-        return `<div class="tx-milestones">${chips.join('')}</div>`;
-      }
-
-      function feeSummaryParts(item, { html = true } = {}) {
-        const parts = [];
-        const strong = (s) => (html ? `<strong>${s}</strong>` : s);
-        if (item.purchase_price != null && String(item.purchase_price).trim() !== '') {
-          const m = formatMoneyAmt(item.purchase_price);
-          if (m) parts.push(`Contract ${strong(m)}`);
-        }
-        const fee = item.closing_fee != null ? Number(item.closing_fee) : null;
-        if (fee != null && !Number.isNaN(fee) && fee > 0) {
-          if (item.fee_collected) {
-            const got =
-              item.fee_collected_amt != null && String(item.fee_collected_amt).trim() !== ''
-                ? formatMoneyAmt(item.fee_collected_amt)
-                : formatMoneyAmt(fee);
-            parts.push(`TC closing fee ${strong(formatMoneyAmt(fee))} · collected ${got}`);
-          } else {
-            parts.push(`TC closing fee ${strong(formatMoneyAmt(fee))} (not collected)`);
-          }
-        }
-        const setup = item.setup_fee != null ? Number(item.setup_fee) : null;
-        if (setup != null && !Number.isNaN(setup) && setup > 0 && !item.fee_collected) {
-          parts.push(`Setup ${strong(formatMoneyAmt(setup))}`);
-        }
-        if (item.closing_fee_note && String(item.closing_fee_note).trim()) {
-          const note = String(item.closing_fee_note).trim();
-          parts.push(html ? escapeHtml(note) : note);
-        }
-        return parts;
-      }
-
-      function renderFeeAtAGlance(item) {
-        const parts = feeSummaryParts(item, { html: true });
-        if (!parts.length) {
-          return '<div class="tx-fee-strip">No price or fee on file yet — set purchase and TC fee when you know them.</div>';
-        }
-        return `<div class="tx-fee-strip">${parts.join(' · ')}</div>`;
-      }
-
-      function healthEmojiForState(state) {
-        if (state === 'red') return '🔴';
-        if (state === 'yellow') return '🟡';
-        return '🟢';
-      }
-
-      function onTrackSummary(state) {
-        if (state.state === 'red') return 'Not fully on track — TC action required before the file is green.';
-        if (state.state === 'yellow') return 'Watch — waiting on others or time-sensitive items; review milestones.';
-        return 'On track from the TC desk — no immediate operator action.';
-      }
-
-      function nextMorningIso() {
-        const next = new Date();
-        next.setDate(next.getDate() + 1);
-        next.setHours(7, 0, 0, 0);
-        return next.toISOString();
-      }
-
-      function parseAddressDisplay(raw) {
-        const text = String(raw || '').trim();
-        if (!text) {
-          return { number: '', street: '', cityLine: '', hasParts: false };
-        }
-        const segments = text.split(',').map((s) => s.trim()).filter(Boolean);
-        const firstSegment = segments[0] || '';
-        const cityLine = segments.slice(1).join(', ');
-        const m = firstSegment.match(/^(\d+[A-Za-z\-]*)\s+(.+)$/);
-        if (m) {
-          return { number: m[1], street: m[2], cityLine, hasParts: true };
-        }
-        return { number: '', street: firstSegment || text, cityLine, hasParts: false };
-      }
-
-      function renderAddressBlock(address) {
-        const p = parseAddressDisplay(address);
-        if (p.hasParts && p.number) {
-          return `
-            <div class="tx-address-block">
-              <div class="tx-address-row">
-                <span class="tx-street-num">${escapeHtml(p.number)}</span>
-                <span class="tx-street-name">${escapeHtml(p.street)}</span>
-              </div>
-              ${p.cityLine ? `<div class="tx-city-line">${escapeHtml(p.cityLine)}</div>` : ''}
-            </div>`;
-        }
-        const head = p.street || 'Address pending';
-        return `
-          <div class="tx-address-block">
-            <h3 class="tx-address">${escapeHtml(head)}</h3>
-            ${p.cityLine ? `<div class="tx-city-line">${escapeHtml(p.cityLine)}</div>` : ''}
-          </div>`;
-      }
-
-      function renderHeroAddress(address) {
-        const p = parseAddressDisplay(address);
-        if (p.hasParts && p.number) {
-          return `
-            <h1 class="hero-addr">
-              <span class="hero-addr-row">
-                <span class="hero-addr-num">${escapeHtml(p.number)}</span>
-                <span class="hero-addr-street">${escapeHtml(p.street)}</span>
-              </span>
-              ${p.cityLine ? `<div class="hero-addr-city">${escapeHtml(p.cityLine)}</div>` : ''}
-            </h1>`;
-        }
-        const head = p.street || address || 'Transaction';
-        return `
-          <h1 class="hero-addr">
-            ${escapeHtml(head)}
-            ${p.cityLine ? `<div class="hero-addr-city">${escapeHtml(p.cityLine)}</div>` : ''}
-          </h1>`;
-      }
-
-      function renderWorkspaceCardChips(item, state) {
-        const chips = [];
-        const pa = Number(item.pending_approvals || 0);
-        const oa = Number(item.open_operator_alerts || 0);
-        const md = Number(item.missing_doc_count || 0);
-        if (pa > 0) chips.push(`<span class="tx-chip bad">${pa} sign-off</span>`);
-        if (oa > 0) chips.push(`<span class="tx-chip bad">${oa} alert${oa === 1 ? '' : 's'}</span>`);
-        if (md > 0) chips.push(`<span class="tx-chip warn">${md} missing doc${md === 1 ? '' : 's'}</span>`);
-        if (state.state === 'yellow' && !chips.length) {
-          chips.push('<span class="tx-chip warn">Watch</span>');
-        }
-        if (!chips.length) return '';
-        return `<div class="tx-chips">${chips.join('')}</div>`;
-      }
-
-      function deriveWorkspaceCardState(transaction) {
-        const pendingApprovals = Number(transaction.pending_approvals || 0);
-        const opAlerts = Number(transaction.open_operator_alerts || 0);
-        const owner = String(transaction?.next_action_owner || '').toLowerCase();
-        const youMustAct =
-          owner === 'internal' ||
-          pendingApprovals > 0 ||
-          opAlerts > 0;
-        if (youMustAct) {
-          const parts = [];
-          if (pendingApprovals > 0) parts.push(`${pendingApprovals} item(s) need your review or sign-off.`);
-          if (opAlerts > 0) parts.push(`${opAlerts} open alert(s) need TC attention.`);
-          if (owner === 'internal' && transaction?.next_action) parts.push(transaction.next_action);
-          return {
-            state: 'red',
-            ringLabel: 'You',
-            hoverSummary: parts.join(' ') || 'You (TC) need to take the next step on this file.',
-          };
-        }
-        const waitingOn = String(transaction?.waiting_on || '').toLowerCase();
-        const waitingOutsideTeam =
-          waitingOn &&
-          waitingOn !== 'none' &&
-          waitingOn !== 'tc_team';
-        if (
-          (transaction?.blocker_count || 0) > 0 ||
-          String(transaction?.health_status || '').toLowerCase() === 'red' ||
-          String(transaction?.health_status || '').toLowerCase() === 'yellow' ||
-          (transaction?.missing_doc_count || 0) > 0 ||
-          waitingOutsideTeam
-        ) {
-          return {
-            state: 'yellow',
-            ringLabel: 'Watch',
-            hoverSummary:
-              transaction?.risk_flags?.[0] ||
-              transaction?.next_action ||
-              (waitingOutsideTeam
-                ? `Waiting on ${formatStageLabel(waitingOn)} — no TC action until they move or you escalate.`
-                : 'The system or another party is driving the next step — check in, but you may not need to act yet.'),
-          };
-        }
-        return {
-          state: 'green',
-          ringLabel: 'OK',
-          hoverSummary: 'No TC action needed right now. Open for routine status.',
-        };
-      }
-
-      function deriveWorkspaceJumpSection(transaction, state) {
-        if (Number(transaction.pending_approvals || 0) > 0) return 'approvals';
-        if (Number(transaction.open_operator_alerts || 0) > 0) return 'alerts';
-        if (state.state === 'yellow') return 'status';
-        return '';
-      }
-
-      function buildTransactionActionLabel(transaction, state) {
-        if (state.state === 'red') return 'Open — your action';
-        if (state.state === 'yellow') return 'Open — review status';
-        return 'Open file';
-      }
-
-      function renderTransactionCards(transactions) {
-        if (!transactions.length) {
-          return '<div class="card"><p>No active transactions yet.</p></div>';
-        }
-        return `<div class="tx-board">${transactions.map((item) => {
-            const client = getPrimaryClient(item);
-            const counterparty = getCounterpartyAgent(item);
-            const state = deriveWorkspaceCardState(item);
-            const hoverSummary = state.hoverSummary;
-            const stage = formatStageLabel(item.stage || item.status);
-            const nextAction = item.next_action || (state.state === 'green' ? 'No immediate action needed.' : 'Review this file.');
-            const syncStatus = item.portal_sync_status?.transactionDesk || (item.transaction_desk_id ? 'linked' : 'pending');
-            const primaryPhone = client?.phone || counterparty?.phone || '';
-            const phoneMarkup = primaryPhone
-              ? `<a class="tx-contact-phone" href="tel:${escapeHtml(String(primaryPhone).replace(/[^\d+]/g, ''))}">${escapeHtml(formatPhone(primaryPhone))}</a>`
-              : `<span class="tx-contact-phone dim">${escapeHtml(formatPhone(primaryPhone))}</span>`;
-            const waitingLabel = item.waiting_on ? formatStageLabel(item.waiting_on) : '—';
-            const closeDateText = item.close_date ? formatDateShort(item.close_date) : '—';
-            const closeCount =
-              item.days_to_close != null && !Number.isNaN(Number(item.days_to_close))
-                ? formatDaysRemaining(Number(item.days_to_close))
-                : '';
-            const feeHover = feeSummaryParts(item, { html: false }).join(' · ') || 'Not set on file.';
-            const healthIco = healthEmojiForState(state.state);
-            const track = onTrackSummary(state);
-            return `
-        <div
-          class="tx-card"
-          data-open-tx="${escapeHtml(item.id)}"
-          data-open-section="${escapeHtml(deriveWorkspaceJumpSection(item, state))}"
-          data-state="${escapeHtml(state.state)}"
-          tabindex="0"
-          role="button"
-          aria-label="${escapeHtml(`Open ${item.address || `transaction ${item.id}`}: ${hoverSummary}`)}"
-        >
-          <div class="tx-card-ribbon">
-            <span class="tx-role-pill">${escapeHtml(transactionRolePill(item.agent_role))}</span>
-            <div style="display:flex;align-items:center;gap:10px;margin-left:auto">
-              <span class="tx-health-ico" title="${escapeHtml(track)}" aria-hidden="true">${healthIco}</span>
-              <div class="tx-ring ${escapeHtml(state.state)}">${escapeHtml(state.ringLabel)}</div>
-            </div>
-          </div>
-          <div class="tx-card-head">
-            <div style="flex:1;min-width:0">
-              ${renderAddressBlock(item.address)}
-              ${renderWorkspaceCardChips(item, state)}
-              <span class="next-action-pill ${escapeHtml(state.state)}">${escapeHtml(nextAction)}</span>
-            </div>
-          </div>
-          ${buildMilestoneStrip(item)}
-          ${renderFeeAtAGlance(item)}
-          <div class="tx-contact">
-            <div style="flex:1;min-width:0">
-              <div class="tx-contact-line">
-                <span class="tx-contact-name">${escapeHtml(client?.name || 'Client name missing')}</span>
-                <span class="tx-contact-sep" aria-hidden="true">·</span>
-                ${phoneMarkup}
-              </div>
-              <div class="tx-subline">${escapeHtml(counterparty?.name ? `Other side: ${counterparty.name}` : 'Counterparty not on file')}</div>
-            </div>
-          </div>
-          <div class="tx-meta-grid">
-            <div class="tx-meta-item"><span>Stage</span><strong>${escapeHtml(stage)}</strong></div>
-            <div class="tx-meta-item"><span>Waiting on</span><strong>${escapeHtml(waitingLabel)}</strong></div>
-            <div class="tx-meta-item"><span>File in TD</span><strong>${escapeHtml(formatStageLabel(syncStatus))}</strong></div>
-            <div class="tx-meta-item"><span>COE date</span><strong>${escapeHtml(closeDateText)}</strong>${closeCount ? `<span style="display:block;font-size:12px;color:#98a5c3;margin-top:4px">${escapeHtml(closeCount)}</span>` : ''}</div>
-          </div>
-          <div class="tx-summary">
-            <span>What is happening now</span>
-            <strong>${escapeHtml(nextAction)}</strong>
-          </div>
-          <div class="tx-hover">
-            <dl>
-              <dt>On track?</dt>
-              <dd>${escapeHtml(track)}</dd>
-              <dt>Waiting on</dt>
-              <dd>${escapeHtml(waitingLabel)}</dd>
-              <dt>Situation</dt>
-              <dd>${escapeHtml(hoverSummary)}</dd>
-              <dt>Close of escrow</dt>
-              <dd>${escapeHtml(closeDateText)}${closeCount ? ` · ${escapeHtml(closeCount)}` : ''}</dd>
-              <dt>Next TC step</dt>
-              <dd>${escapeHtml(nextAction)}</dd>
-              <dt>Your economics</dt>
-              <dd>${escapeHtml(feeHover)}</dd>
-            </dl>
-          </div>
-          <div class="tx-actions">
-            <span class="tx-open">${escapeHtml(buildTransactionActionLabel(item, state))}</span>
-            <span class="badge ${badgeClass(state.state)}">${escapeHtml(state.state)}</span>
-          </div>
+    <div class="header-bar">
+        <h1>TC Agent Portal</h1>
+        <input type="search" id="global-search" placeholder="Search transactions..." class="header-search-input">
+        <div class="header-key-control">
+            <label for="api-key-header">Command key</label>
+            <input id="api-key-header" type="password" placeholder="x-api-key">
+            <button id="save-api-key-header">Save</button>
         </div>
-      `; }).join('')}</div>`;
-      }
+    </div>
 
-      function getSetupFieldConfig(name) {
-        const map = {
-          TC_IMAP_USER: {
-            fieldId: 'tc-imap-user',
-            title: 'TC mailbox',
-            guidance: 'Use the inbox where transaction emails actually arrive. For you, that should usually be adam@hopkinsgroup.org, not the system mailbox.',
-          },
-          TC_IMAP_APP_PASSWORD: {
-            fieldId: 'imap-password',
-            title: 'TC IMAP app password',
-            guidance: 'For Google Workspace/Gmail, create an App Password on the mailbox account after 2-Step Verification is enabled, then paste it here.',
-          },
-          TC_AGENT_NAME: {
-            fieldId: 'tc-agent-name',
-            title: 'Agent display name',
-            guidance: 'This is the human name the TC emails should show. Usually Adam Hopkins.',
-          },
-          TC_AGENT_PHONE: {
-            fieldId: 'tc-agent-phone',
-            title: 'Outbound phone',
-            guidance: 'Use the phone number you want shown in TC communications.',
-          },
-          EMAIL_WEBHOOK_SECRET: {
-            fieldId: null,
-            title: 'Email webhook secret',
-            guidance: 'Optional. Only needed if you want inbound Postmark webhook validation. Safe to skip for now.',
-          },
-          TWILIO_WEBHOOK_SECRET: {
-            fieldId: null,
-            title: 'Twilio webhook secret',
-            guidance: 'Optional. Only needed for inbound Twilio callback validation. Safe to skip for now.',
-          },
-          ASANA_ACCESS_TOKEN: {
-            fieldId: null,
-            title: 'Asana token',
-            guidance: 'Optional. Only needed if you want Asana sync. Safe to skip for now.',
-          },
-          ASANA_TC_PROJECT_GID: {
-            fieldId: null,
-            title: 'Asana project',
-            guidance: 'Optional. Only needed if you want Asana sync. Safe to skip for now.',
-          },
-          glvar_mls: {
-            fieldId: 'glvar-username',
-            title: 'GLVAR / TransactionDesk login',
-            guidance: 'Use your Clareity/GLVAR login. Username goes in GLVAR username, password goes in GLVAR password.',
-          },
-          exp_okta: {
-            fieldId: 'exp-okta-username',
-            title: 'eXp Okta login',
-            guidance: 'Use your eXp Okta username/password. This is what unlocks SkySlope and BoldTrail through SSO.',
-          },
-        };
-        return map[name] || {
-          fieldId: null,
-          title: name,
-          guidance: 'Review this setup item and enter the missing value if it is required for your workflow.',
-        };
-      }
+    <details id="alerts-banner" class="banner-card" style="display:none;">
+        <summary>
+            <span id="alerts-banner-summary-text">Critical Alerts</span>
+            <span id="alerts-banner-count" class="badge bad" style="margin-left: 10px;">0</span>
+        </summary>
+        <div class="banner-content" id="alerts-banner-content">
+            <!-- Alerts will be rendered here by JS -->
+        </div>
+    </details>
 
-      function buildMissingSetupItems(readiness, envTemplate, vault) {
-        const requiredEnvNames = ['TC_IMAP_USER', 'TC_IMAP_APP_PASSWORD', 'TC_AGENT_NAME', 'TC_AGENT_PHONE'];
-        const optionalEnvNames = ['EMAIL_WEBHOOK_SECRET', 'TWILIO_WEBHOOK_SECRET', 'ASANA_ACCESS_TOKEN', 'ASANA_TC_PROJECT_GID'];
-        const items = [];
-        const seen = new Set();
-        envTemplate.forEach((item) => {
-          if (seen.has(item.name)) return;
-          if (item.known) return;
-          if (![...requiredEnvNames, ...optionalEnvNames].includes(item.name)) return;
-          const config = getSetupFieldConfig(item.name);
-          items.push({
-            name: item.name,
-            label: config.title,
-            required: requiredEnvNames.includes(item.name),
-            fieldId: config.fieldId,
-            guidance: config.guidance,
-          });
-          seen.add(item.name);
-        });
-        (vault || []).forEach((item) => {
-          if (item.present || seen.has(item.service)) return;
-          const config = getSetupFieldConfig(item.service);
-          items.push({
-            name: item.service,
-            label: config.title,
-            required: true,
-            fieldId: config.fieldId,
-            guidance: config.guidance,
-          });
-          seen.add(item.service);
-        });
-        return items;
-      }
+    <details id="approval-queue" class="banner-card" style="display:none;">
+        <summary>
+            <span id="approval-queue-summary-text">Pending Approvals</span>
+            <span id="approval-queue-count" class="badge warn" style="margin-left: 10px;">0</span>
+        </summary>
+        <div class="banner-content" id="approval-queue-content">
+            <!-- Approvals will be rendered here by JS -->
+        </div>
+    </details>
 
-      function renderEnvHelpLinks(help) {
-        if (!help?.links?.length) return '—';
-        return help.links
-          .map(
-            (l) =>
-              `<a href="${escapeHtml(l.href)}" target="_blank" rel="noopener noreferrer">${escapeHtml(l.label)}</a>`
-          )
-          .join(' · ');
-      }
+    <div class="wrap" id="app"><div class="card"><p>Loading agent portal…</p></div></div>
 
-      function renderSetupPlaybook(playbook) {
-        const steps = Array.isArray(playbook) ? playbook : [];
-        if (!steps.length) return '';
-        return `
-          <div class="card" style="margin-bottom:16px">
-            <h2>Setup checklist (step-by-step + links)</h2>
-            <p style="color:#98a5c3;font-size:14px;margin:0 0 12px">From the API <code>readiness.setup_playbook</code>. If you saw a <strong>Provider Error</strong> in Cursor, that is Cursor’s connection to the AI service—not a problem with LifeOS or Railway.</p>
-            <ol style="margin:0;padding-left:20px;color:#c8d4f0;line-height:1.55">
-              ${steps
-                .map(
-                  (p) => `
-            <li style="margin-bottom:12px">
-              <strong>${escapeHtml(p.title || '')}</strong>
-              <div style="font-size:13px;color:#98a5c3;margin-top:4px">${escapeHtml(p.detail || '')}</div>
-              <div style="margin-top:6px">
-                ${(p.links || [])
-                  .map(
-                    (l) =>
-                      `<a href="${escapeHtml(l.href)}" target="_blank" rel="noopener noreferrer" style="margin-right:12px">${escapeHtml(l.label)}</a>`
-                  )
-                  .join('')}
-              </div>
-            </li>`
-                )
-                .join('')}
-            </ol>
-          </div>`;
-      }
-
-      function renderMissingSetupItems(items) {
-        if (!items.length) {
-          return '<p>No required setup items are missing. Raw env/vault details stay hidden unless you ask for them.</p>';
-        }
-        return `
-          <div style="display:flex;flex-direction:column;gap:10px">
-            ${items.map((item, idx) => `
-              <button
-                type="button"
-                class="ghost"
-                data-missing-setup="${escapeHtml(item.name)}"
-                style="text-align:left;padding:14px;border-radius:12px"
-              >
-                <div style="display:flex;justify-content:space-between;gap:16px;align-items:center">
-                  <strong>${escapeHtml(item.label)}</strong>
-                  <span class="badge ${badgeClass(item.required ? 'red' : 'review')}">${escapeHtml(item.required ? 'missing' : 'optional')}</span>
-                </div>
-                <div style="margin-top:6px;color:#98a5c3">${escapeHtml(item.guidance)}</div>
-              </button>
-              <div id="missing-setup-help-${idx}" style="display:none;margin:-2px 0 6px 0;padding:12px 14px;background:#141c31;border:1px solid #2d3b5f;border-radius:10px;color:#c8d4f0">
-                ${escapeHtml(item.guidance)}
-                ${item.fieldId ? `<div style="margin-top:8px"><button type="button" class="ghost" data-focus-field="${escapeHtml(item.fieldId)}">Open input</button></div>` : ''}
-              </div>
-            `).join('')}
-          </div>
-        `;
-      }
-
-      function renderWorkspace(data, ping = null) {
-        const root = document.getElementById('app');
-        const readiness = data.readiness || {};
-        const apiBanner =
-          ping?.ok === false
-            ? '<p class="badge bad" style="margin:0 0 10px">API status unreachable — open the site from the same host as the API (or check deploy).</p>'
-            : ping?.data?.db === 'error'
-              ? '<p class="badge bad" style="margin:0 0 10px">Database check failed — verify DATABASE_URL on Railway.</p>'
-              : ping?.ok
-                ? `<p class="badge ok" style="margin:0 0 10px">API up · DB ${escapeHtml(ping.data?.db || '—')}${ping.data?.auth?.required ? ' · auth required' : ' · auth open'}</p>`
-                : '';
-        const readinessSummary = readiness.readiness || {};
-        const envTemplate = readiness.env_template || [];
-        const managedEnvPlan = readiness.managed_env?.plan || [];
-        const vault = readiness.vault || [];
-        const intakeQueue = data.intake_queue || [];
-        const transactions = data.active_transactions || [];
-        const recentActivity = data.recent_activity || [];
-        const missingSetupItems = buildMissingSetupItems(readiness, envTemplate, vault);
-        const transactionMap = Object.fromEntries(transactions.map((item) => [String(item.id), item]));
-        const txOptions = transactions.map((item) => ({
-          id: item.id,
-          label: `${item.address || `Transaction #${item.id}`} (${item.stage || item.status || 'pending'})`,
-        }));
-        const readinessCards = [
-          { label: 'IMAP', value: readinessSummary.imap_ready ? 'Ready' : 'Missing', status: readinessSummary.imap_ready ? 'ok' : 'bad' },
-          { label: 'GLVAR / TransactionDesk', value: readinessSummary.glvar_ready ? 'Ready' : 'Missing', status: readinessSummary.glvar_ready ? 'ok' : 'bad' },
-          { label: 'SkySlope', value: readinessSummary.skyslope_ready ? 'Ready' : 'Missing', status: readinessSummary.skyslope_ready ? 'ok' : 'bad' },
-          { label: 'Actionable emails', value: data.summary?.actionable_emails || 0, status: (data.summary?.actionable_emails || 0) > 0 ? 'warn' : 'ok' },
-        ];
-        const envRows = (readiness.env || []).map((item) => `
-          <tr>
-            <td>${escapeHtml(item.name)}</td>
-            <td>${escapeHtml(item.description)}</td>
-            <td><span class="badge ${badgeClass(item.present ? 'healthy' : 'red')}">${escapeHtml(item.present ? 'set' : 'missing')}</span></td>
-          </tr>
-        `).join('') || '<tr><td colspan="3">No env info available.</td></tr>';
-        const vaultRows = vault.map((item) => `
-          <tr>
-            <td>${escapeHtml(item.service)}</td>
-            <td>${escapeHtml(item.key || '')}</td>
-            <td><span class="badge ${badgeClass(item.present ? 'healthy' : 'red')}">${escapeHtml(item.present ? 'stored' : 'missing')}</span></td>
-          </tr>
-        `).join('') || '<tr><td colspan="3">No vault credentials tracked yet.</td></tr>';
-        const templateRows =
-          envTemplate
-            .map((item) => {
-              const help = item.help;
-              const helpText = help?.summary
-                ? `<div style="font-size:12px;color:#98a5c3;margin-top:4px">${escapeHtml(help.summary)}</div>`
-                : '';
-              const helpLinks = `<div style="margin-top:6px">${renderEnvHelpLinks(help)}</div>`;
-              return `
-                <tr>
-                  <td>${escapeHtml(item.name)}</td>
-                  <td>${escapeHtml(item.description || '')}${helpText}</td>
-                  <td>${item.secret ? (item.known ? '<em>already set in environment</em>' : '<em>leave blank in exports—paste only in Railway or the form below</em>') : escapeHtml(item.value || '')}</td>
-                  <td>${helpLinks}</td>
-                  <td><span class="badge ${badgeClass(item.known ? 'healthy' : 'review')}">${escapeHtml(item.known ? 'known' : item.secret ? 'needs secret' : 'needs value')}</span></td>
-                </tr>`;
-            })
-            .join('') || '<tr><td colspan="5">No env template available.</td></tr>';
-        const managedEnvRows = managedEnvPlan.map((item) => `
-          <tr>
-            <td>${escapeHtml(item.envName)}</td>
-            <td>${escapeHtml(item.currentPresent ? 'present' : 'missing')}</td>
-            <td>${escapeHtml(item.same ? 'in sync' : item.action || 'review')}</td>
-            <td>${escapeHtml(item.maskedCurrent || item.maskedDesired || '')}</td>
-          </tr>
-        `).join('') || '<tr><td colspan="4">No managed env snapshot available.</td></tr>';
-        const queueRows = intakeQueue.map((item) => {
-          const matchCandidates = item.match_candidates || [];
-          const defaultTransactionId = item.suggested_transaction?.transaction_id || '';
-          const selectOptions = [
-            { id: '', label: 'Select transaction' },
-            ...txOptions,
-          ];
-          const candidateSummary = matchCandidates.length > 1
-            ? `<div style="margin-top:6px;color:#98a5c3;font-size:12px">Also matches: ${matchCandidates.slice(1).map((candidate) => `${escapeHtml(candidate.address)} (${escapeHtml(candidate.confidence)})`).join(', ')}</div>`
-            : '';
-          return `
-            <tr>
-              <td>${escapeHtml(item.received_at || '')}</td>
-              <td>${escapeHtml(item.subject || '')}</td>
-              <td><span class="badge ${badgeClass(item.category)}">${escapeHtml(item.category || '')}</span></td>
-              <td>${item.suggested_transaction ? `<a href="/tc/agent-portal.html?tx=${encodeURIComponent(item.suggested_transaction.transaction_id)}">${escapeHtml(item.suggested_transaction.address)}</a> <span class="badge ${badgeClass(item.suggested_transaction.confidence)}">${escapeHtml(item.suggested_transaction.confidence)}</span>${candidateSummary}` : '—'}</td>
-              <td>${escapeHtml(item.next_step || '')}${item.preview_text ? `<div style="margin-top:6px;color:#98a5c3;font-size:12px">${escapeHtml(item.preview_text)}</div>` : ''}</td>
-              <td>
-                <div class="row-actions">
-                  <select data-triage-select="${item.id}">
-                    ${selectOptions.map((option) => `<option value="${escapeHtml(option.id)}" ${String(option.id) === String(defaultTransactionId) ? 'selected' : ''}>${escapeHtml(option.label)}</option>`).join('')}
-                  </select>
-                  <button data-triage-link="${item.id}" class="ghost">Link selected</button>
-                  ${item.category === 'tc_contract' && !item.suggested_transaction ? `<button data-triage-create="${item.id}">Create transaction</button>` : ''}
-                  <button data-triage-handle="${item.id}" class="ghost">${item.actioned_at ? 'Handled' : 'Mark handled'}</button>
-                </div>
-              </td>
-            </tr>
-          `;
-        }).join('') || '<tr><td colspan="6">No actionable triage items.</td></tr>';
-        const activityRows = recentActivity.map((item) => `
-          <tr>
-            <td>${escapeHtml(item.created_at || '')}</td>
-            <td>${escapeHtml(item.event_type || '')}</td>
-            <td><a href="/tc/agent-portal.html?tx=${encodeURIComponent(item.transaction_id)}">${escapeHtml(item.address || '')}</a></td>
-            <td>${escapeHtml(item.payload?.subject || item.payload?.transactionDeskId || item.payload?.error || '')}</td>
-          </tr>
-        `).join('') || '<tr><td colspan="4">No intake activity yet.</td></tr>';
-
-        root.innerHTML = `
-          <div class="hero">
-            <div>
-              <div class="eyebrow">TC Intake Workspace</div>
-              <h1>Transaction Intake Control</h1>
-              <p>Readiness, inbox triage, and first-file routing before live filing runs.</p>
-            </div>
-            <div class="card">
-              <label>Command key</label>
-              <input id="api-key" type="password" value="${escapeHtml(getApiKey())}" placeholder="x-api-key">
-              <div class="row-actions" style="margin-top:10px">
-                <button id="save-api-key">Save key</button>
-                <button id="scan-inbox" class="ghost">Run inbox scan</button>
-                <button id="search-agreements" class="ghost">Search agreements</button>
-                <a class="ghost" href="/api/v1/tc/status" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;padding:8px 10px;border-radius:10px;text-decoration:none;color:#cbd5ff;border:1px solid #27304a">TC status</a>
-                <a class="ghost" href="/tc/assistant" style="display:inline-flex;align-items:center;padding:8px 10px;border-radius:10px;text-decoration:none;color:#cbd5ff;border:1px solid #27304a">Voice assistant</a>
-              </div>
-              ${apiBanner}
-            </div>
-          </div>
-          <div class="grid four">
-            ${readinessCards.map((item) => `<div class="card stat"><span>${escapeHtml(item.label)}</span><strong>${escapeHtml(item.value)}</strong><span class="badge ${badgeClass(item.status)}">${escapeHtml(item.status)}</span></div>`).join('')}
-          </div>
-          <div class="card tx-pipeline-card">
-            <h2>Active transactions — at a glance</h2>
-            <p><strong>Border</strong> = green / yellow / red health. <strong>Emoji row</strong> = upcoming milestones (DD 🔍, appraisal 📋, loan 🏦) with days left — expired items drop off. <strong>📅 Close</strong> is COE from the file. Fee strip = purchase + your TC fee. Hover any card for waiting-on, on-track, and next step. Click to open.</p>
-            ${renderTransactionCards(transactions)}
-          </div>
-          ${renderSetupPlaybook(readiness.setup_playbook)}
-          <div class="grid two">
-            <div class="card">
-              <h2>Access Setup</h2>
-              <div class="grid two">
-                <div>
-                  <label>Work email</label>
-                  <input id="work-email" value="${escapeHtml(readiness.bootstrap_defaults?.WORK_EMAIL || '')}" placeholder="adam@hopkinsgroup.org">
-                </div>
-                <div>
-                  <label>TC IMAP user</label>
-                  <input id="tc-imap-user" value="${escapeHtml(readiness.bootstrap_defaults?.TC_IMAP_USER || '')}" placeholder="adam@hopkinsgroup.org">
-                </div>
-                <div>
-                  <label>TC agent name</label>
-                  <input id="tc-agent-name" value="${escapeHtml(readiness.bootstrap_defaults?.TC_AGENT_NAME || '')}" placeholder="Adam Hopkins">
-                </div>
-                <div>
-                  <label>TC agent phone</label>
-                  <input id="tc-agent-phone" value="${escapeHtml(readiness.bootstrap_defaults?.TC_AGENT_PHONE || '')}" placeholder="702-555-1212">
-                </div>
-                <div>
-                  <label>TC email from</label>
-                  <input id="tc-email-from" value="${escapeHtml(readiness.bootstrap_defaults?.TC_EMAIL_FROM || '')}" placeholder="adam@hopkinsgroup.org">
-                </div>
-                <div>
-                  <label>IMAP app password</label>
-                  <input id="imap-password" type="password" placeholder="App password">
-                </div>
-                <div>
-                  <label>GLVAR username</label>
-                  <input id="glvar-username" placeholder="GLVAR login">
-                </div>
-                <div>
-                  <label>GLVAR password</label>
-                  <input id="glvar-password" type="password" placeholder="GLVAR password">
-                </div>
-                <div>
-                  <label>eXp Okta username</label>
-                  <input id="exp-okta-username" placeholder="adam.hopkins@exprealty.com">
-                </div>
-                <div>
-                  <label>eXp Okta password</label>
-                  <input id="exp-okta-password" type="password" placeholder="Okta password">
-                </div>
-              </div>
-              <div class="row-actions" style="margin-top:12px">
-                <button id="seed-known-envs" class="ghost">Seed known envs</button>
-                <button id="bootstrap-access">Save access</button>
-              </div>
-              <p><strong>Next actions:</strong> ${(data.next_actions || []).map((item) => escapeHtml(item)).join(' | ') || 'None'}</p>
-            </div>
-            <div class="card">
-              <h2>Fix What Is Missing</h2>
-              <p>Only missing or optional setup items show here. Raw env details stay hidden unless you open Advanced details.</p>
-              <div class="row-actions" style="margin-bottom:12px">
-                <button id="test-glvar" class="ghost">Test GLVAR</button>
-                <button id="test-skyslope" class="ghost">Test SkySlope</button>
-              </div>
-              <div id="access-test-results">${renderWorkspaceTests(lastWorkspaceTests)}</div>
-              <div id="missing-setup-items">${renderMissingSetupItems(missingSetupItems)}</div>
-              <details style="margin-top:16px">
-                <summary style="cursor:pointer;color:#98a5c3">Advanced details</summary>
-                <div style="margin-top:12px">
-                  <table><thead><tr><th>Env</th><th>Purpose</th><th>Status</th></tr></thead><tbody>${envRows}</tbody></table>
-                  <h2 style="margin-top:16px">Env Template</h2>
-                  <table><thead><tr><th>Name</th><th>Purpose</th><th>Value to seed</th><th>Where / links</th><th>Status</th></tr></thead><tbody>${templateRows}</tbody></table>
-                  <h2 style="margin-top:16px">Managed Env Snapshot</h2>
-                  <table><thead><tr><th>Name</th><th>Runtime</th><th>Sync</th><th>Masked value</th></tr></thead><tbody>${managedEnvRows}</tbody></table>
-                  <h2 style="margin-top:16px">Vault Credentials</h2>
-                  <table><thead><tr><th>Service</th><th>Key</th><th>Status</th></tr></thead><tbody>${vaultRows}</tbody></table>
-                </div>
-              </details>
-            </div>
-          </div>
-          <div class="card">
-            <h2>Manual Document QA</h2>
-            <div class="grid two">
-              <div>
-                <label>Document</label>
-                <input id="workspace-document" type="file" />
-              </div>
-              <div>
-                <label>Document type</label>
-                <input id="workspace-doc-type" value="Executed RPA" placeholder="Executed RPA">
-              </div>
-              <div>
-                <label>Expected property address</label>
-                <input id="workspace-doc-address" placeholder="6453 Mahogany Peak Ave, Las Vegas, NV" />
-              </div>
-            </div>
-            <div class="row-actions" style="margin-top:12px">
-              <button id="workspace-validate-doc">Validate document</button>
-              <button id="workspace-dry-upload" class="ghost">Dry-run upload</button>
-              <select id="workspace-validation-transaction">
-                <option value="">Select transaction for doc requests</option>
-                ${txOptions.map((option) => `<option value="${escapeHtml(option.id)}">${escapeHtml(option.label)}</option>`).join('')}
-              </select>
-              <button id="workspace-create-doc-requests" class="ghost">Create doc requests</button>
-            </div>
-            <div id="workspace-validation-results">${renderWorkspaceValidation(lastWorkspaceValidation)}</div>
-          </div>
-          <div class="card">
-            <h2>Dry-Run Intake</h2>
-            <div class="grid two">
-              <div>
-                <label>Target property address</label>
-                <input id="workspace-intake-address" placeholder="6453 Mahogany Peak Ave, Las Vegas, NV" />
-              </div>
-              <div>
-                <label>Lookback days</label>
-                <input id="workspace-intake-days" type="number" min="1" max="365" value="90" />
-              </div>
-            </div>
-            <div class="row-actions" style="margin-top:12px">
-              <button id="workspace-run-intake">Run dry intake</button>
-            </div>
-            <div id="workspace-intake-results">${renderWorkspaceIntakeRun(lastWorkspaceIntakeRun)}</div>
-          </div>
-          <div class="card">
-            <h2>Photo Package Email</h2>
-            <p>Find a matching email, combine photo attachments into one PDF, and send it to the buyer's agent.</p>
-            <div class="grid two">
-              <div>
-                <label>Transaction</label>
-                <select id="workspace-photo-transaction">
-                  <option value="">Optional transaction for logging</option>
-                  ${txOptions.map((option) => `<option value="${escapeHtml(option.id)}">${escapeHtml(option.label)}</option>`).join('')}
-                </select>
-              </div>
-              <div>
-                <label>Lookback days</label>
-                <input id="workspace-photo-days" type="number" min="1" max="365" value="14" />
-              </div>
-              <div>
-                <label>Email subject contains</label>
-                <input id="workspace-photo-subject-search" placeholder="6453 Mahogany Peak or SRPD" />
-              </div>
-              <div>
-                <label>Email from contains</label>
-                <input id="workspace-photo-from-search" placeholder="inspector, listing agent, escrow" />
-              </div>
-              <div>
-                <label>Attachment filename contains</label>
-                <input id="workspace-photo-filename-search" placeholder="photo, srpd, inspection" />
-              </div>
-              <div>
-                <label>Buyer agent email</label>
-                <input id="workspace-photo-recipient-email" placeholder="buyeragent@example.com" />
-              </div>
-              <div>
-                <label>Buyer agent name</label>
-                <input id="workspace-photo-recipient-name" placeholder="Buyer Agent" />
-              </div>
-              <div>
-                <label>Email subject</label>
-                <input id="workspace-photo-subject" value="SRPD photo package" />
-              </div>
-            </div>
-            <div style="margin-top:12px">
-              <label>Email body</label>
-              <textarea id="workspace-photo-body" rows="5">Attached is the combined photo package for the SRPDs. Please confirm receipt.</textarea>
-            </div>
-            <div class="row-actions" style="margin-top:12px">
-              <label style="display:flex;align-items:center;gap:8px"><input id="workspace-photo-attach-originals" type="checkbox"> Attach original files too</label>
-              <button id="workspace-photo-srpd-preset" class="ghost">Use SRPD preset</button>
-              <button id="workspace-photo-dry-run" class="ghost">Find and preview</button>
-              <button id="workspace-photo-send">Combine and send</button>
-            </div>
-            <div id="workspace-photo-results">${renderPhotoPackageResult(lastPhotoPackageSend)}</div>
-          </div>
-          <div class="card">
-            <h2>Listing agreement → SkySlope (via TransactionDesk)</h2>
-            <p>Logs into <strong>GLVAR</strong>, opens <strong>TransactionDesk</strong> (Transaction Launch or portal link), searches for your property, opens the file, downloads the executed listing agreement, then <strong>eXp Okta → SkySlope</strong> to upload. Progress is logged here and on the transaction’s <strong>Recent Events</strong> as <code>listing_td_skyslope_sync</code>. Default run is <strong>rehearsal only</strong>—no download or SkySlope until you use the live button.</p>
-            <div class="grid two">
-              <div>
-                <label>Transaction</label>
-                <select id="listing-sync-transaction">
-                  <option value="">Select transaction</option>
-                  ${txOptions.map((option) => `<option value="${escapeHtml(option.id)}">${escapeHtml(option.label)}</option>`).join('')}
-                </select>
-              </div>
-              <div>
-                <label>Search in TransactionDesk (e.g. Mahogany, street number)</label>
-                <input id="listing-sync-search" placeholder="Mahogany Peak, 6453
+    <script src="/tc/tc-portal.js?v=20260710a"></script>
+</body>
+</html>

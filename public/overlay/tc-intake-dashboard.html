@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: TC Intake Dashboard -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TC Intake Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+        .card {
+            background-color: #fff;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 3px;
+            color: #fff;
+            font-size: 0.9em;
+        }
+        .completed {
+            background-color: green;
+        }
+        .failed {
+            background-color: red;
+        }
+        .pending {
+            background-color: yellow;
+            color: #000;
+        }
+        .button {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: blue;
+            color: #fff;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        @media (max-width: 600px) {
+            .card {
+                padding: 10px;
+            }
+            .button {
+                padding: 8px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="dashboard"></div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('/api/tc/intake/runs')
+                .then(response => response.json())
+                .then(data => {
+                    const dashboard = document.getElementById('dashboard');
+                    data.forEach(run => {
+                        const card = document.createElement('div');
+                        card.className = 'card';
+                        const statusBadge = document.createElement('span');
+                        statusBadge.className = 'status-badge ' + run.status;
+                        statusBadge.textContent = run.status.charAt(0).toUpperCase() + run.status.slice(1);
+                        card.innerHTML = `
+                            <div><strong>Transaction ID:</strong> ${run.transactionId}</div>
+                            <div><strong>Status:</strong> ${statusBadge.outerHTML}</div>
+                            <div><strong>QA Results:</strong> ${run.qaResults}</div>
+                            <div><strong>SkySlope File ID:</strong> ${run.skySlopeFileId}</div>
+                        `;
+                        if (run.status === 'pending') {
+                            const approveButton = document.createElement('div');
+                            approveButton.className = 'button';
+                            approveButton.textContent = 'Approve & Continue';
+                            approveButton.onclick = function() {
+                                fetch('/api/tc/intake/run', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({
+                                        transactionId: run.transactionId,
+                                        emailMessageId: run.emailMessageId
+                                    })
+                                }).then(() => {
+                                    location.reload();
+                                });
+                            };
+                            card.appendChild(approveButton);
+                        }
+                        dashboard.appendChild(card);
+                    });
+                });
+        });
+    </script>
+</body>
+</html>

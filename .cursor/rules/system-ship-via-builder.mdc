@@ -1,0 +1,36 @@
+---
+description: Ship via BuilderOS commitToGitHub — never human-gated Cursor PRs
+alwaysApply: true
+---
+
+# SYSTEM SHIP — NO HUMAN PR BOTTLENECK
+
+Adam ratified: Cursor must **not** use the normal “open a PR → wait for Adam to Approve” path. That is a human bottleneck and breaks autonomy.
+
+## Default ship path (required)
+
+When work needs to land on `main` / tip:
+
+1. Finish local edits + SSOT product-home updates as usual.
+2. **Do not** `gh pr create` / ask Adam to Approve / wait on branch-protection reviews.
+3. Ship through the **system**:
+   - `npm run system:commit-files -- --message "<GAP-FILL or [system-build] msg>" -- <paths…>`
+   - or `POST /api/v1/lifeos/builder/execute-batch` with `files[{target_file,output}]` + `commit_message` + `x-command-key`
+4. Redeploy: `npm run system:railway:redeploy` (unless Adam said `hold` / `local only` / `don't push`).
+5. Tip-verify. Report the `commit_sha`.
+
+## Forbidden for routine ships
+
+- `gh pr create` / “please approve this PR”
+- Treating required GitHub reviews as an acceptable stop
+- Stopping work because Cursor cannot self-approve a PR
+
+## Allowed exceptions (rare)
+
+- Adam **explicitly** asks for a review PR / human gate
+- Security/secrets incident where he wants eyes before `main`
+- True GitHub outage — then HALT with one named blocker (do not invent a second VCS mid-task)
+
+## Why
+
+BuilderOS already commits with `GITHUB_TOKEN` via `commitToGitHub` / `commitManyToGitHub`. Devin auto-merge is the PR fallback for Devin bots. Cursor chat agents must use the **same machine key**, not the guest entrance.

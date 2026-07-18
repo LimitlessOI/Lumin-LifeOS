@@ -4,7 +4,7 @@
     "step_id": "S2901",
     "type": "file_sha256_matches",
     "target": "factory-staging/factory-core/tsos/tsos-guardrails.js",
-    "expected_sha256": "bd478eeea2286f1f4514f8b8b01ed7c56322b7f53acb9584ebdc12d49ba92494"
+    "expected_sha256": "d0d78c76cf8a816f70e9793c09cc46ef928abbcd8fd81310be50cf086300b0d7"
   },
   {
     "test_id": "AT-S2902-1",

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Agent Enrollment -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Enrollment</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 600px;
+            margin: auto;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        select, button {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+        }
+        #confirmation {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e0ffe0;
+            border: 1px solid #b2ffb2;
+            color: #006600;
+        }
+    </style>
+</head>
+<body>
+    <h1>Enroll as a Paying Agent</h1>
+    <form id="enrollmentForm">
+        <div class="form-group">
+            <label for="planTier">Select Plan Tier:</label>
+            <select id="planTier" name="planTier" required>
+                <option value="starter">Starter</option>
+                <option value="pro">Pro</option>
+                <option value="enterprise">Enterprise</option>
+            </select>
+        </div>
+        <button type="submit">Proceed to Checkout</button>
+    </form>
+    <div id="confirmation">
+        Enrollment successful! Thank you for joining us.
+    </div>
+    <script>
+        document.getElementById('enrollmentForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const planTier = document.getElementById('planTier').value;
+            fetch('/api/tc/billing/checkout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ planTier })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.checkoutUrl) {
+                    window.location.href = data.checkoutUrl;
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const stripeSubscriptionId = urlParams.get('stripeSubscriptionId');
+        const planTier = urlParams.get('planTier');
+
+        if (stripeSubscriptionId && planTier) {
+            fetch(`/api/tc/billing/enroll?stripeSubscriptionId=${stripeSubscriptionId}&planTier=${planTier}`)
+            .then(response => response.ok && document.getElementById('confirmation').style.display = 'block')
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>

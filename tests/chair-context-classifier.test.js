@@ -93,4 +93,11 @@ test('do: run pre-build gate routes to build_async', () => {
   assert.equal(result.domain, 'product_build');
 });
 
+test('pipeline governance counsel stays on chair — not intake_blueprint', () => {
+  const msg = 'Counsel only: ratify governance — Chair ideation, Architect digital twin, Creative Engine design approval, Factory execute only. Dual-judge honesty. Separation of powers. Never redefine Point A/B.';
+  const ctx = resolveChairContext(msg, {});
+  assert.equal(ctx.channel, 'chair');
+  assert.equal(ctx.domain, 'governance');
+});
+
 console.log('✅ chair-context-classifier.test.js passed');

@@ -1,0 +1,784 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "kids-os",
+  "planned_at": "2026-07-15T17:43:47.479Z",
+  "backlog_signature": "fc60b0e466680887",
+  "corpus_sources": [
+    "docs/products/kids-os/PRODUCT_HOME.md"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "status": "skipped",
+      "target_file": "public/overlay/kids-api-spec.html",
+      "task": "Create API spec UI",
+      "spec": "Render detailed API specification for developers to download.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "route": {
+        "path": "/api/v1/kids-api-spec"
+      },
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "last_attempt_at": "2026-07-16T00:33:07.667Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 6,
+      "revived_at": "2026-07-16T00:32:28.371Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T00:37:30.065Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "1",
+      "mission_id": "PRODUCT-kids-os"
+    },
+    {
+      "id": "2",
+      "status": "done",
+      "target_file": "public/overlay/age-appropriate-ux-4-7.html",
+      "task": "Set up age-appropriate UX 4-7",
+      "spec": "Implement UX flows specifically for children ages 4-7.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "route": {
+        "path": "/"
+      },
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:16:43.159Z",
+      "commit_sha": "dbfa9c07032d20c96dd97fb75b8c6c3db22db600",
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "2",
+      "mission_id": "PRODUCT-kids-os"
+    },
+    {
+      "id": "3",
+      "status": "done",
+      "target_file": "public/overlay/age-appropriate-ux-8-12.html",
+      "task": "Set up age-appropriate UX 8-12",
+      "spec": "Implement UX flows specifically for children ages 8-12.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "route": {
+        "path": "/"
+      },
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:20:21.509Z",
+      "commit_sha": "c27cc2e3ea5c9d444075f89168001c2902faa797",
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "3",
+      "mission_id": "PRODUCT-kids-os"
+    },
+    {
+      "id": "4",
+      "status": "done",
+      "target_file": "public/overlay/age-appropriate-ux-13-17.html",
+      "task": "Set up age-appropriate UX 13-17",
+      "spec": "Implement UX flows specifically for children ages 13-17.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "route": {
+        "path": "/"
+      },
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:23:20.577Z",
+      "commit_sha": "8dd80381711333b787e50e2524223c271de3444e",
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "4",
+      "mission_id": "PRODUCT-kids-os"
+    },
+    {
+      "id": "5",
+      "status": "done",
+      "target_file": "public/overlay/irlen-screening-tool-ux.html",
+      "task": "Specify UX for Irlen screening tool",
+      "spec": "Design UX for Irlen Syndrome screening tool.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "route": {
+        "path": "/"
+      },
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:26:28.743Z",
+      "commit_sha": "6b72957a174b17149fd9c935b391d768b8057fca",
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "5",
+      "mission_id": "PRODUCT-kids-os"
+    },
+    {
+      "id": "6",
+      "status": "done",
+      "target_file": "scripts/interview-summary.mjs",
+      "task": "Summarize parent interviews",
+      "spec": "Compile and summarize insights from interviews with 10 parents (homeschool and traditional).",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "route": {
+        "path": "/"
+      },
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:49:58.501Z",
+      "commit_sha": "2d40f2402fe544b0a22589d6b0ffae1dc903fc84",
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "6",
+      "mission_id": "PRODUCT-kids-os"
+    },
+    {
+      "id": "7",
+      "status": "done",
+      "target_file": "scripts/teacher-insights.mjs",
+      "task": "Summarize teacher interviews",
+      "spec": "Compile and summarize insights from interviews with 5 teachers regarding student-facing platforms.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "route": {
+        "path": "/"
+      },
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:56:32.182Z",
+      "commit_sha": "a3927889f01ffc595bf09c9b413ea877181fbf28",
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "7",
+      "mission_id": "PRODUCT-kids-os"
+    },
+    {
+      "id": "8",
+      "status": "done",
+      "target_file": "db/migrations/20231011_create_irlen_consultation.sql",
+      "task": "Record Irlen Syndrome community consultation",
+      "spec": "Create table to store feedback from Irlen Syndrome community consultation.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "route": {
+        "path": "/"
+      },
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS irlen_consultation"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T18:03:04.659Z",
+      "commit_sha": "7324fa151cb2162b90160e0ffe5ecfb8ae2fc509",
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "8",
+      "mission_id": "PRODUCT-kids-os"
+    },
+    {
+      "id": "9",
+      "status": "done",
+      "target_file": "public/overlay/pricing-validation.html",
+      "task": "Validate pricing UI",
+      "spec": "Create UI to validate and collect feedback on product pricing with target users.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "route": {
+        "path": "/"
+      },
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:32:28.392Z",
+      "commit_sha": "13507656cb16ab3d93d8c7c28bfce5e440014c8b",
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "9",
+      "mission_id": "PRODUCT-kids-os"
+    },
+    {
+      "id": "10",
+      "status": "done",
+      "target_file": "scripts/coppa-compliance-review.mjs",
+      "task": "Conduct COPPA compliance review",
+      "spec": "Conduct and document the COPPA compliance review.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "route": {
+        "path": "/"
+      },
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T18:11:27.229Z",
+      "commit_sha": "8c58fe143547aa612970083d8a303f30bbf6a2ba",
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "10",
+      "mission_id": "PRODUCT-kids-os"
+    },
+    {
+      "id": "step1",
+      "status": "done",
+      "target_file": "services/apiSpec.js",
+      "task": "Create API specification",
+      "spec": "Implement a detailed API specification module for kids-os.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getApiSpec"
+      ],
+      "route": {
+        "path": "/api/v1/kidsos/apiSpec"
+      },
+      "file_contains": [
+        "/** API specification for kids-os */"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/apiSpec.js",
+          "exports": [
+            "getApiSpec"
+          ],
+          "assertion_id": "expected_exports:services/apiSpec.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:46:12.063Z",
+      "commit_sha": "4404620258bcb028d7e5899286506c08cfbe2bc0",
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step1",
+      "mission_id": "PRODUCT-kids-os"
+    },
+    {
+      "id": "step2",
+      "status": "skipped",
+      "target_file": "scripts/parent-interviews.js",
+      "task": "Summarize parent interviews",
+      "spec": "Compile insights from 10 parent interviews into structured data.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "getParentInsights"
+      ],
+      "file_contains": [
+        "/** Insights from parent interviews */"
+      ],
+      "last_attempt_at": "2026-07-16T01:53:35.243Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:/** Insights from parent interviews */; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 6,
+      "revived_at": "2026-07-16T01:53:22.090Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:/** Insights from parent interviews */; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T02:04:58.027Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step2",
+      "mission_id": "PRODUCT-kids-os"
+    },
+    {
+      "id": "step3",
+      "status": "skipped",
+      "target_file": "scripts/teacher-interviews.js",
+      "task": "Summarize teacher interviews",
+      "spec": "Compile insights from 5 teacher interviews focusing on student-facing platform needs.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "getTeacherInsights"
+      ],
+      "file_contains": [
+        "/** Insights from teacher interviews */"
+      ],
+      "last_attempt_at": "2026-07-16T02:05:01.585Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:/** Insights from teacher interviews */; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 6,
+      "revived_at": "2026-07-16T02:04:58.027Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:/** Insights from teacher interviews */; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T04:13:11.740Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step3",
+      "mission_id": "PRODUCT-kids-os"
+    },
+    {
+      "id": "step4",
+      "status": "done",
+      "target_file": "services/irlenConsultation.js",
+      "task": "Document Irlen consultation insights",
+      "spec": "Create a module to document insights from the Irlen Syndrome community consultation.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getIrlenConsultationInsights"
+      ],
+      "file_contains": [
+        "/** Irlen Syndrome community insights */"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/irlenConsultation.js",
+          "exports": [
+            "getIrlenConsultationInsights"
+          ],
+          "assertion_id": "expected_exports:services/irlenConsultation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:59:01.505Z",
+      "commit_sha": "607e2d6b4edbd6ed738d07a9b5d849ea3b436021",
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step4",
+      "mission_id": "PRODUCT-kids-os"
+    },
+    {
+      "id": "step5",
+      "status": "done",
+      "target_file": "routes/irlenInsights.js",
+      "task": "Expose Irlen insights API",
+      "spec": "Provide an API endpoint to fetch Irlen consultation insights.",
+      "depends_on": [
+        "step4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerIrlenInsightsRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/kidsos/irlen/insights"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/irlenInsights.js",
+          "exports": [
+            "registerIrlenInsightsRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/irlenInsights.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T00:00:56.728Z",
+      "commit_sha": "c85d747c733d89f258bd1e6898ec449416391d9d",
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step5",
+      "mission_id": "PRODUCT-kids-os"
+    },
+    {
+      "id": "step6",
+      "status": "done",
+      "target_file": "routes/pricingValidation.js",
+      "task": "Expose pricing validation API",
+      "spec": "Provide an API endpoint to validate pricing with users.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPricingValidationRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/kidsos/pricing/validation"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/pricingValidation.js",
+          "exports": [
+            "registerPricingValidationRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/pricingValidation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T00:48:01.425Z",
+      "commit_sha": "5b760d246343400433bce4b05cbd593b6d44b0a2",
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step6",
+      "mission_id": "PRODUCT-kids-os"
+    },
+    {
+      "id": "step7",
+      "status": "done",
+      "target_file": "db/migrations/20231012_coppa_compliance.sql",
+      "task": "Add COPPA compliance migration",
+      "spec": "Ensure database schema provides necessary structures for COPPA compliance review.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS coppa_compliance"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T00:52:59.948Z",
+      "commit_sha": "18d501763ce2fdd4807ac1b819eda788eb7c6d55",
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step7",
+      "mission_id": "PRODUCT-kids-os"
+    },
+    {
+      "id": "step8",
+      "status": "done",
+      "target_file": "services/coppaReview.js",
+      "task": "Summarize COPPA review",
+      "spec": "Document results of the COPPA compliance review for the kids-os platform.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getCoppaReview"
+      ],
+      "file_contains": [
+        "/** COPPA compliance review results */"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/coppaReview.js",
+          "exports": [
+            "getCoppaReview"
+          ],
+          "assertion_id": "expected_exports:services/coppaReview.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T01:14:28.348Z",
+      "commit_sha": "af0e282e81ad6540cdd99a2eddf28335f2e55d27",
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step8",
+      "mission_id": "PRODUCT-kids-os"
+    },
+    {
+      "id": "step9",
+      "status": "skipped",
+      "target_file": "scripts/irlenSyndromeConsultation.js",
+      "task": "document Irlen Syndrome community consultation",
+      "spec": "Automate the documentation of consultation with the Irlen Syndrome community.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "documentIrlenConsultation"
+      ],
+      "route": {
+        "path": "/api/v1/irlenSyndrome/consultation"
+      },
+      "last_attempt_at": "2026-07-17T19:44:18.836Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 6,
+      "revived_at": "2026-07-17T19:44:11.567Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-17T22:07:10.574Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step9",
+      "mission_id": "PRODUCT-kids-os"
+    },
+    {
+      "id": "step10",
+      "status": "done",
+      "target_file": "services/pricingValidation.js",
+      "task": "validate pricing with target users service",
+      "spec": "Create a service to validate product pricing with target user groups, ensuring competitiveness and market fit.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "validatePricing"
+      ],
+      "route": {
+        "path": "/api/v1/pricingValidation"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/pricingValidation.js",
+          "exports": [
+            "validatePricing"
+          ],
+          "assertion_id": "expected_exports:services/pricingValidation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:22:59.257Z",
+      "commit_sha": "654b4285157c12731f0e12afd4d9614ec9b18a12",
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step10",
+      "mission_id": "PRODUCT-kids-os"
+    },
+    {
+      "id": "step11",
+      "status": "done",
+      "target_file": "routes/pricingValidation.js",
+      "task": "expose pricing validation route",
+      "spec": "Expose an API endpoint for the pricing validation with users.",
+      "depends_on": [
+        "step10"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPricingValidationRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/pricingValidation"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/pricingValidation.js",
+          "exports": [
+            "registerPricingValidationRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/pricingValidation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:40:53.281Z",
+      "commit_sha": "18912d725978c9e9bb8963b7ca901997099ba953",
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step11",
+      "mission_id": "PRODUCT-kids-os"
+    },
+    {
+      "id": "step12",
+      "status": "skipped",
+      "target_file": "scripts/coppaCompliance.js",
+      "task": "audit COPPA compliance",
+      "spec": "Script to perform a comprehensive audit of COPPA compliance within the application context.",
+      "depends_on": [
+        "step8"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "auditCoppaCompliance"
+      ],
+      "route": {
+        "path": "/api/v1/coppa/compliance/audit"
+      },
+      "last_attempt_at": "2026-07-16T06:56:56.403Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 6,
+      "revived_at": "2026-07-16T06:54:38.671Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T07:27:16.259Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step12",
+      "mission_id": "PRODUCT-kids-os"
+    },
+    {
+      "id": "kids-os-1",
+      "status": "done",
+      "target_file": "services/apiSpec.js",
+      "task": "complete API specification",
+      "spec": "Add detailed API specification relevant to the 'kids-os' requirements, ensuring all endpoints are defined.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getAPIEndpoints"
+      ],
+      "route": {
+        "path": "/api/spec"
+      },
+      "file_contains": [
+        "/api/spec"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/apiSpec.js",
+          "exports": [
+            "getAPIEndpoints"
+          ],
+          "assertion_id": "expected_exports:services/apiSpec.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "de44af2737d40cb5ef83450d41115c072b7d31ae",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T05:30:52.845Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:37:27.468Z",
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "kids-os-1",
+      "mission_id": "PRODUCT-kids-os"
+    },
+    {
+      "id": "kids-os-4",
+      "status": "done",
+      "target_file": "services/irlenConsultation.js",
+      "task": "update Irlen consultation",
+      "spec": "Incorporate insights from the Irlen Syndrome community consultation into the service.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getIrlenConsultations"
+      ],
+      "route": {
+        "path": "/consultations/irlen"
+      },
+      "file_contains": [
+        "Irlen Syndrome insights"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/irlenConsultation.js",
+          "exports": [
+            "getIrlenConsultations"
+          ],
+          "assertion_id": "expected_exports:services/irlenConsultation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:02:30.329Z",
+      "commit_sha": "dfc05fe980248c7447f836c27efdc8d38a02c5f1",
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "kids-os-4",
+      "mission_id": "PRODUCT-kids-os"
+    },
+    {
+      "id": "kids-os-5",
+      "status": "blocked",
+      "target_file": "public/overlay/pricing-validation.html",
+      "task": "validate pricing with users",
+      "spec": "Ensure the pricing validation process is documented and analyzed with target users.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 1,
+      "file_contains": [
+        "target user feedback"
+      ],
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "kids-os-5",
+      "mission_id": "PRODUCT-kids-os",
+      "last_attempt_at": "2026-07-18T00:08:20.162Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:target user feedback; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 6,
+      "revived_at": "2026-07-18T00:08:13.921Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "kids-os-6",
+      "status": "pending",
+      "target_file": "routes/pricingValidation.js",
+      "task": "add pricing consultation route",
+      "spec": "Implement route to handle pricing validation feedback.",
+      "depends_on": [
+        "kids-os-5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPricingValidationRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/pricing/validate"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/pricingValidation.js",
+          "exports": [
+            "registerPricingValidationRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/pricingValidation.js"
+        }
+      ],
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "kids-os-6",
+      "mission_id": "PRODUCT-kids-os"
+    }
+  ],
+  "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-kids-os",
+  "twin_kind": "product_build_queue_registered"
+}

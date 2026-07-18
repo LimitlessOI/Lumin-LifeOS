@@ -46,8 +46,26 @@ export function refreshBuilderOsEnvFallback() {
   return applyBuilderOsEnv(raw, { override: false });
 }
 
+/**
+ * Founder sometimes names Railway secrets short (e.g. REPLICATE_API).
+ * Canonical code reads REPLICATE_API_TOKEN — copy aliases here once at boot.
+ */
+export function applyEnvAliases() {
+  const aliases = [
+    ['REPLICATE_API_TOKEN', 'REPLICATE_API'],
+  ];
+  for (const [canonical, alias] of aliases) {
+    const haveCanonical = String(process.env[canonical] || '').trim();
+    const haveAlias = String(process.env[alias] || '').trim();
+    if (!haveCanonical && haveAlias) {
+      process.env[canonical] = haveAlias;
+    }
+  }
+}
+
 export function loadRuntimeEnv() {
   loadBuilderOsEnvFallback();
+  applyEnvAliases();
   const {
     DATABASE_URL,
     DATABASE_URL_SANDBOX,
@@ -74,10 +92,13 @@ export function loadRuntimeEnv() {
     ALLOWED_ORIGINS = "",
     HOST = "::",
     PORT = 8080,
-    // Spend cap (can be overridden in Railway env). Default: $0/day - NO SPENDING
-    MAX_DAILY_SPEND: RAW_MAX_DAILY_SPEND = "0",
-    // Cost shutdown threshold - if spending exceeds this, only use free models
-    COST_SHUTDOWN_THRESHOLD: RAW_COST_SHUTDOWN = "0",
+    // Spend cap (can be overridden in Railway env). Default: $20/day - enough to
+    // run strong paid models while still protecting against runaway spend. The
+    // only hard stop is the daily cap; token-budget exhaustion is the real stop.
+    MAX_DAILY_SPEND: RAW_MAX_DAILY_SPEND = "20",
+    // Cost shutdown threshold - if spending exceeds this, only use free models.
+    // Defaults to MAX_DAILY_SPEND so paid models run until the daily cap is hit.
+    COST_SHUTDOWN_THRESHOLD: RAW_COST_SHUTDOWN = "",
     NODE_ENV = "production",
     RAILWAY_PUBLIC_DOMAIN = "",
     RAILWAY_ENVIRONMENT,
@@ -99,12 +120,12 @@ export function loadRuntimeEnv() {
   // Ensure spend cap is numeric
   const MAX_DAILY_SPEND = Number.isFinite(parseFloat(RAW_MAX_DAILY_SPEND))
     ? parseFloat(RAW_MAX_DAILY_SPEND)
-    : 0; // Default $0/day - NO SPENDING
+    : 20; // Default $20/day - strong paid models run until the cap is hit
 
   // Cost shutdown threshold - if exceeded, only free models allowed
   const COST_SHUTDOWN_THRESHOLD = Number.isFinite(parseFloat(RAW_COST_SHUTDOWN))
     ? parseFloat(RAW_COST_SHUTDOWN)
-    : 0; // Default $0/day - BLOCK ALL PAID MODELS
+    : MAX_DAILY_SPEND; // Default to daily cap; falls back to 0 only if MAX_DAILY_SPEND is 0
 
   const CURRENT_DEEPSEEK_ENDPOINT = (process.env.DEEPSEEK_LOCAL_ENDPOINT || "")
     .trim() || null;

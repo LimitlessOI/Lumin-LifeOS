@@ -91,10 +91,41 @@ export function isCounselOnlyBypass(text = '') {
     || /\?\s$/.test(t);
 }
 
+/** Status question about a prior build — counsel/receipt recall, NOT a new build order. */
+export function isBuildStatusQuestion(text = '') {
+  const t = String(text || '').trim();
+  if (!t) return false;
+  if (/\b(did|has|have|was)\b[\s\S]{0,60}\bbuild\b[\s\S]{0,60}\b(land|commit|ship|deploy|finish|done|succeed|work)\b/i.test(t)) {
+    return true;
+  }
+  if (/\b(what(?:'s| is)|show me|give me)\b[\s\S]{0,40}\b(the )?(sha|commit)\b/i.test(t)) return true;
+  if (/\blast (build|commit)\b[\s\S]{0,40}\b(land|sha|status|commit)\b/i.test(t)) return true;
+  return false;
+}
+
+/**
+ * Emotional / presence counsel — "don't fix me", "be with me".
+ * Must never trip the build verb matcher on the word "fix".
+ */
+export function isCounselPresenceIntent(text = '') {
+  const t = String(text || '').trim();
+  if (!t) return false;
+  if (/\b(don'?t|do not|never)\s+(try to\s+)?fix(\s+me)?\b/i.test(t)) return true;
+  if (/\b(just )?be with me\b/i.test(t)) return true;
+  if (/\b(not asking you to fix|don'?t try to solve)\b/i.test(t)) return true;
+  if (/\bnobody gets\b/i.test(t) || /\bhow hard this is\b/i.test(t)) return true;
+  if (/\bi feel (like|so|alone|lost|scared|tired|heavy)\b/i.test(t) && !isProductBuildChangeVerb(t)) {
+    return true;
+  }
+  return false;
+}
+
 export function isBuildRequest(text) {
   const stripped = stripChairDoPrefix(text);
   const t = String(stripped.text || '');
   if (isFounderPersonalLifeIntent(t)) return false;
+  if (isBuildStatusQuestion(t)) return false;
+  if (isCounselPresenceIntent(t)) return false;
   if (isBlueprintExecuteIntent(t)) return false;
   if (isCounselOnlyBypass(t)) return false;
   if (/\b(intake blueprint|intake_blueprint|mos-p1)\b/i.test(t)) return false;

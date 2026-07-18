@@ -1,0 +1,29 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "oil-security-divisions",
+  "planned_at": "2026-07-16T06:15:00.000Z",
+  "backlog_signature": "0000000000000000",
+  "corpus_sources": [
+    "docs/products/oil-security-divisions/PRODUCT_HOME.md"
+  ],
+  "steps": [
+    {
+      "task_id": "security-audit",
+      "description": "Conduct comprehensive security audit",
+      "dependencies": ["initial-setup"],
+      "status": "pending"
+    },
+    {
+      "task_id": "initial-setup",
+      "description": "Complete initial security setup",
+      "dependencies": [],
+      "status": "completed"
+    },
+    {
+      "task_id": "vulnerability-fix",
+      "description": "Patch identified vulnerabilities",
+      "dependencies": ["security-audit"],
+      "status": "pending"
+    }
+  ]
+}

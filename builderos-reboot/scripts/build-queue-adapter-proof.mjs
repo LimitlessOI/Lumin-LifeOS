@@ -53,17 +53,18 @@ assert('provable step converts to author_then_write', goodConv.ok === true
 const doc = { id: 's3', target_file: 'docs/products/x/NOTES.md', task: 'write notes', spec: 'notes' };
 assert('non-server-code needs no declaration', assessBuildQueueStepProvability(doc).provable === true);
 
-// shippable selection: skip done/blocked/founder_gated, honour depends_on
+// shippable selection: skip done/blocked/human_hold, honour depends_on; design_review_flagged ships
 const shippable = selectShippableSteps({
   steps: [
     { id: 'a', status: 'done', target_file: 'services/a.js' },
-    { id: 'b', status: 'pending', founder_gated: true, target_file: 'services/b.js' },
+    { id: 'b', status: 'pending', design_review_flagged: true, target_file: 'services/b.js' },
     { id: 'c', status: 'pending', depends_on: ['a'], target_file: 'services/c.js' },
     { id: 'd', status: 'pending', depends_on: ['z'], target_file: 'services/d.js' },
     { id: 'e', status: 'blocked', target_file: 'services/e.js' },
+    { id: 'h', status: 'founder_gated', human_hold: true, target_file: 'docs/h.md' },
   ],
 });
-assert('selectShippableSteps honours status/gate/deps', shippable.length === 1 && shippable[0].id === 'c', { shippable: shippable.map((s) => s.id) });
+assert('selectShippableSteps honours status/gate/deps', shippable.length === 2 && shippable.map((s) => s.id).sort().join(',') === 'b,c', { shippable: shippable.map((s) => s.id) });
 
 // LIVE census over real BUILD_QUEUEs
 console.log('\n=== LIVE BUILD_QUEUE ADAPTER CENSUS ===');

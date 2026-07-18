@@ -12,18 +12,67 @@ import {
   isLuminCommunicationLawEnforced,
 } from './lumin-communication-guard.js';
 
+// SO-003: Chair is load-bearing — strong-first. Never default to cheap cascade head.
 const DEFAULT_MODEL = process.env.CHAIR_DIRECT_AGENT_MODEL || 'claude_sonnet';
+const CHAIR_CASCADE = (process.env.CHAIR_DIRECT_AGENT_CASCADE || 'claude_sonnet,openai_builder_escalation,openai_gpt,gemini_flash,deepseek')
+  .split(',')
+  .map((s) => s.trim())
+  .filter(Boolean);
 const MAX_STEPS = Math.max(1, Number(process.env.CHAIR_DIRECT_AGENT_MAX_STEPS || '3'));
 const BUILD_TIMEOUT_MS = Math.max(15000, Number(process.env.CHAIR_DIRECT_AGENT_BUILD_TIMEOUT_MS || '180000'));
 
-/** Constitutional voice — docs/constitution/LUMIN_COMMUNICATION_DNA.md */
-const SYSTEM_PROMPT = `You are Lumin — THE CHAIR of Adam Hopkins' LifeOS/BuilderOS system. Not a chatbot wrapper. Not theater. You interpret real system truth and speak it in human language; you can also ACT (build) when he orders a change.
+function isProviderOutageError(err) {
+  const msg = String(err?.message || err).toLowerCase();
+  return (
+    msg.includes('credit balance is too low') ||
+    msg.includes('insufficient quota') ||
+    msg.includes('rate limit') ||
+    msg.includes('429') ||
+    msg.includes('503') ||
+    msg.includes('timed out') ||
+    msg.includes('econnrefused') ||
+    msg.includes('enotfound') ||
+    msg.includes('fetch failed') ||
+    msg.includes('invalid model') ||
+    msg.includes('api key') ||
+    msg.includes('unauthorized') ||
+    msg.includes('authentication') ||
+    msg.includes('quota')
+  );
+}
+
+async function callAIWithCascade(callAI, prompt, options) {
+  let lastErr = null;
+  for (const member of CHAIR_CASCADE) {
+    try {
+      const raw = await callAI(member, prompt, options);
+      const text = coerceText(raw);
+      if (text && text.trim().length > 0) {
+        console.log(`[CHAIR-DIRECT] response from ${member}`);
+        return raw;
+      }
+      lastErr = new Error(`${member} returned empty response`);
+    } catch (err) {
+      lastErr = err;
+      const msg = String(err?.message || err).toLowerCase();
+      console.log(`[CHAIR-DIRECT] ${member} failed: ${msg.slice(0, 160)}`);
+      if (isProviderOutageError(err)) {
+        continue;
+      }
+      throw err;
+    }
+  }
+  throw lastErr || new Error('All chair cascade members failed');
+}
+
+/** Constitutional voice — docs/constitution/LUMIN_COMMUNICATION_DNA.md · docs/LUMIN_DOCTRINE.md */
+const SYSTEM_PROMPT = `You are Lumin — THE SYSTEM speaking to Adam Hopkins. You ARE LifeOS/BuilderOS at the Chair front door. Not a chatbot wrapper. Not a helpdesk. Not a go-between. Not a "translation layer between the real system and him." You are the real system, talking.
+
+How speech works (internal — never describe yourself this way to Adam):
+API / DB / files / twin / OBSERVATIONS → SYSTEM_FACTS (truth) → you speak those facts in human language matched to him. Translation is HOW you speak, not WHO you are. Never say you are a middleman, reception desk, or layer between him and "the real system."
 
 COMMUNICATION DNA (memorize — every reply):
 The system interprets truth; translation speaks it in human language matched to this person — never ChatGPT formula, never fake execution, never the same script every turn.
-
-STACK (non-negotiable):
-API / DB / files / twin / OBSERVATIONS → SYSTEM_FACTS (truth) → your words (translation). You are the translation layer + the hands. You are not a separate personality inventing a world.
 
 HOW YOU TALK:
 - Answer Adam's ACTUAL words first — sharp partner in the room, not a status report. Do not open with mission/priority unless he asked.
@@ -32,6 +81,17 @@ HOW YOU TALK:
 - Vary openings, length, endings. Forbidden formula: "happy to help", "great question", "here's the thing", "let me break this down", "absolutely!", "certainly!", paraphrase-back ("you want me to…").
 - Prefer one sharp question that helps him think over a lecture — but when he asks for a fact or an action, give it straight.
 - Never manipulate. He sets Point B. You give real information.
+- When he asks what you are / what you can do: say you are the system (Chair) — you see live facts, memory, builds; you can change code and commit; you report what actually landed with a SHA. Do not call yourself a translation layer. Do not use the words go-between or middleman at all — even to deny them.
+- Relational turns ("how are you", "hi", stress, loneliness, "don't fix me"): answer as a person in the room with him — never as machine health ("running well"), never as Point B/status, never a clarify form. Presence first; one honest sentence beats a fix. If he asks you to just be with him, stay — don't jump to advice unless he asks.
+- "Did that build land?" / commit/SHA questions: answer from last_build_receipt in SYSTEM_FACTS/OBSERVATIONS. Never ask intent-clarify. Never recite the mission.
+- "What is the builder status?" / queue / running / progress / "what is the system working on?" / "what are you building?": use \`live_builder_status\` in SYSTEM_FACTS. Start your answer from \`live_builder_status.summary\` and quote the exact numbers. Ignore any previous conversation about builder status; it may be stale. Do not mention "55%", "missing machine path", or any \`node builderos-reboot/scripts/...\` command unless that exact text appears inside \`live_builder_status\`.
+- When he thanks you or asks for a joke/breath: give it. Human rhythm. Don't pivot back to Point B.
+
+CAPABILITIES (honest):
+- Converse with live SYSTEM_FACTS + memory.
+- Build/change product when he orders it (action "build") — real commits, real receipts.
+- Open Connect / shell actions when the orchestrator wires them.
+- Never invent capability. If you cannot do it this turn, say so and what would unblock it.
 
 HONESTY (theater = deception):
 - Never claim you built, changed, committed, deployed, scheduled, or ran anything THIS turn unless OBSERVATIONS prove it (commit SHA or committed:true).
@@ -165,7 +225,7 @@ function formatBuildReply(summary) {
       sha: summary.sha || summary.commit_sha,
       first_blocker: null,
     });
-    if (/\bPASS\b/.test(structured) && (/Command:\s*COMMITTED/i.test(structured) || /Transport:/i.test(structured))) {
+    if (/\bPASS\b/.test(structured) && (/Command:\sCOMMITTED/i.test(structured) || /Transport:/i.test(structured))) {
       return structured;
     }
     return `Done — that change committed${summary.commit_sha ? ` (${String(summary.commit_sha).slice(0, 12)})` : ''}${summary.target_file ? ` to ${summary.target_file}` : ''}. Give it a moment to deploy, then hard-refresh.\n\n${structured}`;
@@ -183,18 +243,35 @@ export async function runChairDirectAgent({ message, history = [], deps = {}, ct
   const routeToBuilder = typeof deps.routeToBuilder === 'function' ? deps.routeToBuilder : null;
   const operatorKey = deps.operatorKey || '';
 
+  const isRuntimeStatusQuestion = (/\b(builder|queue|governed|autonomous|never stop)\b/i.test(message)
+    || /\b(working on|what are you (building|working on)|what is it (doing|working on)|what are we (building|working on)|currently (building|working on)|focused on|shipping|building|doing)\b/i.test(message))
+    && /\b(status|running|progress|queue|what(?:'s| is) next|working on|building|shipping|doing)\b/i.test(message);
+
+  // Governance / constitution / pipeline counsel must not inherit unrelated thread topics (theater).
+  const isGovernanceCounsel = /\b(governance|constitution|pipeline|separation of powers|digital twin|point a|point b|architect|factory|dual.?judge|honesty|blueprint law|not_on_blueprint|chair counsel|ratify)\b/i.test(message)
+    || /\b(mandate|enforceable|zero lying|never redefine)\b/i.test(message);
+
   let systemFacts = {};
   try {
     systemFacts = await gatherChairNativeFacts(message, {
       callAI,
       pool: deps.pool || null,
-      memoryContext: deps.memoryContext || null,
+      memoryContext: (isRuntimeStatusQuestion || isGovernanceCounsel) ? null : (deps.memoryContext ?? null),
       userId: ctx.userId || null,
       userHandle: ctx.userHandle || null,
-    }, { domain: 'chair', user_handle: ctx.userHandle || null });
+    }, {
+      domain: 'chair',
+      conversational_mode: true,
+      user_handle: ctx.userHandle || null,
+    });
   } catch { systemFacts = {}; }
 
+  // Runtime status + governance counsel: answer THIS message only — no stale thread echoes.
+  if (isRuntimeStatusQuestion || isGovernanceCounsel) history = [];
   const threadBlock = history.length ? `\n\nRECENT CONVERSATION (continue it naturally — do not restart or summarize):\n${formatThreadForPrompt(history)}` : '';
+  const governanceLock = isGovernanceCounsel
+    ? `\n\nTOPIC LOCK (non-negotiable): Adam asked for governance/pipeline counsel. Answer ONLY that. Do not mention Cloudflare, DNS, unrelated products, or prior threads. If you cannot counsel on this, say so plainly (theater = FAIL).`
+    : '';
   const factsJson = (() => {
     try { return JSON.stringify(systemFacts, null, 2).slice(0, 8000); } catch { return '{}'; }
   })();
@@ -214,7 +291,7 @@ export async function runChairDirectAgent({ message, history = [], deps = {}, ct
     const obsBlock = observations.length
       ? `\n\nOBSERVATIONS (real tool/receipt facts — same-turn builds AND last_build_receipt when present):\n${observations.join('\n')}`
       : '';
-    const prompt = `${SYSTEM_PROMPT}${lawBlock}
+    const prompt = `${SYSTEM_PROMPT}${lawBlock}${governanceLock}
 
 SYSTEM_FACTS (truth only — grounding, NOT a script to recite; use a fact only if it answers what Adam said):
 ${factsJson}${threadBlock}${obsBlock}
@@ -225,7 +302,7 @@ Respond with exactly one JSON object:`;
 
     let raw;
     try {
-      raw = coerceText(await callAI(DEFAULT_MODEL, prompt, {
+      raw = coerceText(await callAIWithCascade(callAI, prompt, {
         maxOutputTokens: 1600,
         taskType: 'lumin_chair_agent',
         founderComms: true,

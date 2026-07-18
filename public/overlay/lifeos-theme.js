@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: LifeOS overlay UI — Lifeos Theme.
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 (function () {
   const STORAGE_KEY = 'lifeos_theme';
@@ -21,8 +22,12 @@
 
     const themeColor = document.querySelector('meta[name="theme-color"]');
     if (themeColor) {
-      themeColor.setAttribute('content', nextTheme === 'light' ? '#f6f7fb' : '#0a0a0f');
+      themeColor.setAttribute('content', nextTheme === 'light' ? '#e8eef4' : '#070b12');
     }
+
+    window.LifeOSStudioShell?.reapplyTheme?.();
+    window.dispatchEvent(new CustomEvent('lifeos-theme-changed', { detail: { theme: nextTheme } }));
+
     return nextTheme;
   }
 

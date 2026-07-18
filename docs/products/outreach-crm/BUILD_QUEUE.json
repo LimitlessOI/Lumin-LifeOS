@@ -1,0 +1,151 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "outreach-crm",
+  "planned_at": "2026-07-15T07:37:30.438Z",
+  "backlog_signature": "6ca2a4bac23adfa8",
+  "corpus_sources": [
+    "docs/products/outreach-crm/PRODUCT_HOME.md"
+  ],
+  "steps": [
+    {
+      "id": "step1",
+      "status": "done",
+      "target_file": "routes/boldtrail-routes.js",
+      "task": "Extract BoldTrail endpoints",
+      "spec": "The BoldTrail endpoints from server.js lines 6155–6572 must be extracted to this file as separate routes, each route being registered via a dedicated function.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerBoldTrailRoutes"
+      ],
+      "route": {
+        "path": "/boldtrail"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/boldtrail-routes.js",
+          "exports": [
+            "registerBoldTrailRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/boldtrail-routes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T08:33:44.842Z",
+      "commit_sha": "7d406247c237eaea40ef0f1277131e9bb5b5e3c1",
+      "blueprint_id": "PRODUCT-OUTREACH-CRM-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step1",
+      "mission_id": "PRODUCT-outreach-crm"
+    },
+    {
+      "id": "step2",
+      "status": "done",
+      "target_file": "services/email-service.js",
+      "task": "Add email service startup check",
+      "spec": "The service must ensure that the server correctly checks for an email provider on startup, throwing an error if none is configured.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "ensureEmailProviderConfigured"
+      ],
+      "route": {
+        "path": "/api/v1/email/startup-check"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/email-service.js",
+          "exports": [
+            "ensureEmailProviderConfigured"
+          ],
+          "assertion_id": "expected_exports:services/email-service.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "f56699b75238ddda8eb010ad0bd23c20e1b6020c",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T08:40:25.402Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T08:41:24.945Z",
+      "blueprint_id": "PRODUCT-OUTREACH-CRM-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step2",
+      "mission_id": "PRODUCT-outreach-crm"
+    },
+    {
+      "id": "step3",
+      "status": "done",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "Add BoldTrail routes to auto-register config",
+      "spec": "Ensure the BoldTrail routes are included for auto-registration within the server context by adding an entry for the newly created route module.",
+      "depends_on": [
+        "step1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "{\"path\":\"routes/boldtrail-routes.js\",\"module\":\"registerBoldTrailRoutes\"}"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T08:49:38.908Z",
+      "commit_sha": "4fa2ee7610d13cfd54f0a01de6174e057334e814",
+      "blueprint_id": "PRODUCT-OUTREACH-CRM-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step3",
+      "mission_id": "PRODUCT-outreach-crm"
+    },
+    {
+      "id": "step4",
+      "status": "blocked",
+      "target_file": "scripts/cron/day-3-7-followup.mjs",
+      "task": "Implement day-3 and day-7 auto follow-up cron",
+      "spec": "Script must handle scheduling and execution of follow-up tasks on day 3 and day 7 for the Site Builder feature.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "scheduleDay3FollowUp",
+        "scheduleDay7FollowUp"
+      ],
+      "last_attempt_at": "2026-07-17T18:15:35.206Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: ENOENT: no such file or directory, open '/usr/src/app/scripts/cron/.factory-import-check-1784312135204-1.mjs'",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 9,
+      "revived_at": "2026-07-17T18:13:50.204Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-OUTREACH-CRM-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step4",
+      "mission_id": "PRODUCT-outreach-crm"
+    }
+  ],
+  "blueprint_id": "PRODUCT-OUTREACH-CRM-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-outreach-crm",
+  "twin_kind": "product_build_queue_registered"
+}

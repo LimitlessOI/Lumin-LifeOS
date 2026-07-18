@@ -4,7 +4,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
-import { REPO_ROOT } from '../builder/run-step.js';
+import { REPO_ROOT } from '../repo-paths.js';
 
 function sha256File(absPath) {
   return crypto.createHash('sha256').update(fs.readFileSync(absPath)).digest('hex');

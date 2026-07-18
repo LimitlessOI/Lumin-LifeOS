@@ -7,6 +7,7 @@ WORKDIR /usr/src/app
 # of downloading Puppeteer's bundled Chromium — smaller, and matches the Debian libs.
 RUN apt-get update && apt-get install -y --no-install-recommends \
       chromium \
+      ffmpeg \
       ca-certificates \
       dbus \
       fonts-liberation \

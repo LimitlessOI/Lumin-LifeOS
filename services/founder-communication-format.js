@@ -96,6 +96,18 @@ export function wrapChairHumanSummary(truth, technicalReply) {
       || truth.action === 'lumin'
       || truth.action === 'chair');
 
+  // Soften intent_clarify for the drawer: never dump receipt theater when the
+  // user was trying to talk. Prefer the technical clarify body alone if short,
+  // else one plain ask.
+  if (truth.chair_channel === 'intent_clarify' || truth.action === 'intent_clarify') {
+    const scrubbed = scrubCounselTheater(technicalReply || '', commandTruth);
+    const body = String(scrubbed || technicalReply || '').trim();
+    if (body && !/\bCLARIFY\b/.test(body.slice(0, 40))) return body;
+    const qMatch = body.match(/Questions for you:[\s\S]{0,400}/i);
+    if (qMatch) return qMatch[0].replace(/^Questions for you:\s*/i, '').trim() || body;
+    return body || 'Say that again one notch clearer — what do you want me to answer or do?';
+  }
+
   if (shouldUsePersonalLuminCard(truth)) {
     const scrubbed = scrubCounselTheater(technicalReply || truth.human_summary || '', commandTruth);
     if (isCounsel) {

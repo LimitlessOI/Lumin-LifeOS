@@ -14,7 +14,7 @@
  *   GET  /api/v1/lifeos/builder/domains         list available domain prompt files
  *   GET  /api/v1/lifeos/builder/domain/:name    read a specific domain prompt file
  *   GET  /api/v1/lifeos/builder/next-task      cold-start packet excerpts + read order
- *   POST /api/v1/lifeos/builder/task            dispatch a task to the council (body `files[]` = repo-relative paths → **server reads and injects file contents** into prompt; optional `target_file` improves HTML full-file hints; code mode passes scaled `maxOutputTokens` to the council; optional **`max_output_tokens`** or **`maxOutputTokens`** clamps completion budget on code mode — **same auth as `/build`; use sparingly when estimator lags deploy**)
+ *   POST /api/v1/lifeos/builder/task            dispatch a task to the council (body `files[]` = repo-relative paths → *server reads and injects file contents** into prompt; optional `target_file` improves HTML full-file hints; code mode passes scaled `maxOutputTokens` to the council; optional **`max_output_tokens`** or **`maxOutputTokens`** clamps completion budget on code mode — *same auth as `/build`; use sparingly when estimator lags deploy**)
  *   POST /api/v1/lifeos/builder/review          ask the council to review code/diff
  *   GET  /api/v1/lifeos/builder/model-map       show task-to-model routing table
  *   GET  /api/v1/lifeos/builder/history         recent builder audit trail
@@ -28,6 +28,8 @@
  *
  * @authority Legacy production spine — see routes/AGENTS.md. Not canonical factory runtime (factory-staging/).
  * @ssot docs/products/lifeos/PRODUCT_HOME.md
+ *
+ * Mounted on the parent express app via createLifeOsCouncilBuilderRoutes(app, …).
  */
 
 import { readdir, readFile, writeFile, unlink, mkdtemp, mkdir } from 'fs/promises';
@@ -138,7 +140,7 @@ function spliceAdditiveSnippet(absTargetPath, rawSnippet) {
     const mLines = merged.split('\n');
     let lastImport = -1;
     for (let i = 0; i < mLines.length; i += 1) {
-      if (/^\s*import\b/.test(mLines[i])) lastImport = i;
+      if (/^\simport\b/.test(mLines[i])) lastImport = i;
     }
     mLines.splice(lastImport >= 0 ? lastImport + 1 : 0, 0, ...dedupImports);
     merged = mLines.join('\n');
@@ -156,7 +158,7 @@ export function parseTargetedEditsJson(raw) {
   let s = String(raw || '').trim();
   const sepIdx = s.indexOf('---METADATA---');
   if (sepIdx !== -1) s = s.slice(0, sepIdx).trim();
-  s = s.replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/, '').trim();
+  s = s.replace(/^```(?:json)?\s*/i, '').replace(/```\s$/, '').trim();
   const start = s.indexOf('[');
   const end = s.lastIndexOf(']');
   if (start === -1 || end === -1 || end < start) {
@@ -625,7 +627,7 @@ function extractJavaScriptFromOutput(rawText) {
     s = stripLeadingMarkdownFenceBeforeMetadata(s).trim();
     if (!s) break;
 
-    const wholeFence = /^```(?:js|javascript|mjs|cjs)?\s*\r?\n([\s\S]*?)\r?\n```\s*$/im;
+    const wholeFence = /^```(?:js|javascript|mjs|cjs)?\s*\r?\n([\s\S]*?)\r?\n```\s$/im;
     const wf = s.match(wholeFence);
     if (wf && wf[1].trim().length > 40) return wf[1].trim();
 
@@ -700,7 +702,15 @@ function extractJavaScriptFromOutput(rawText) {
     }
   }
 
-  const looksHtml = /<!DOCTYPE\s+html/i.test(s) || /<html[\s>]/i.test(s);
+  // Models sometimes wrap pure HTML in a JS target by mistake. Extract the largest
+  // inline <script> only when the payload is HTML-shaped AND not already a JS module.
+  // SSR route files (e.g. marketing-session-ui-routes.js) embed <!DOCTYPE>/<script>
+  // inside template literals — treating those as HTML was stripping the module down
+  // to a theme IIFE and failing looksLikeBuilderProseRefusal on execute-batch.
+  const trimmedHead = s.trimStart().slice(0, 240);
+  const looksLikeJsModule =
+    /^(?:\/\/|\/\*+|import\s|export\s|const\s|let\s|var\s|(?:async\s+)?function\s|class\s|#!)/.test(trimmedHead);
+  const looksHtml = !looksLikeJsModule && (/<!DOCTYPE\s+html/i.test(s) || /<html[\s>]/i.test(s));
   if (looksHtml) {
     const blocks = [];
     const re = /<script(?![^>]*\bsrc\s*=)[^>]*>([\s\S]*?)<\/script>/gi;
@@ -719,13 +729,13 @@ function extractJavaScriptFromOutput(rawText) {
 }
 
 /**
- * groq_llama hallucinates asterisk-prefixed shorthand like `const *rk = requireKey;`
+ * groq_llama hallucinates asterisk-prefixed shorthand like `const rk = requireKey;`
  * which is not valid JS. Strip the * prefix unless it follows `function` (generator syntax).
  */
 function fixAsteriskShorthandParams(s) {
   return s.replace(/\*([A-Za-z_$][\w$]*)/g, (match, name, offset) => {
     const before = s.slice(Math.max(0, offset - 9), offset);
-    if (/function\s*$/.test(before)) return match;
+    if (/function\s$/.test(before)) return match;
     return name;
   });
 }
@@ -884,7 +894,7 @@ async function verifyGeneratedJavaScriptWithNodeCheck(content, resolvedTarget) {
 function extractCssFromOutput(rawText) {
   let s = String(rawText || '');
   // Strip whole ```css ... ``` fence
-  const wholeFence = /^```(?:css|scss|sass|less)?\s*\r?\n([\s\S]*?)\r?\n```\s*$/im;
+  const wholeFence = /^```(?:css|scss|sass|less)?\s*\r?\n([\s\S]*?)\r?\n```\s$/im;
   const wf = s.match(wholeFence);
   if (wf && wf[1].trim().length > 10) return wf[1].trim();
   // Strip opening fence if no closing fence (truncated)
@@ -943,7 +953,7 @@ function validateOverlayNotShrunk(targetFile, output) {
   return null;
 }
 
-// Truncation gate for HTML *fragments/partials* (a <section>/<div> component with
+// Truncation gate for HTML fragments/partials* (a <section>/<div> component with
 // no document wrapper). A full-page overlay uses a length floor + document-structure
 // check, but a legitimate partial is often far under that floor and has no
 // <html>/<head>/<body> — so it needs a structure-based completeness check instead
@@ -1257,7 +1267,7 @@ export function createLifeOSCouncilBuilderRoutes({
         'docs/CONTINUITY_INDEX.md',
         'docs/AI_COLD_START.md',
         'docs/CONTINUITY_LOG*.md (lane)',
-        'docs/projects/*manifest.json',
+        'docs/projects/manifest.json',
         'prompts/<domain>.md',
       ],
       snippets,
@@ -2491,7 +2501,7 @@ function isProductRoutesFile(routeFilePath) {
 
 function buildRouteMountCall(exportName, routeFileContent, mountPath) {
   const returnsRouter = /return\s+router\s*;/.test(routeFileContent);
-  const usesAppCtx = /export\s+(?:async\s+)?function\s+\w+\s*\(\s*app\s*,\s*ctx\s*\)/.test(routeFileContent);
+  const usesAppCtx = /export\s+(?:async\s+)?function\s+\w+\s*\(\sapp\s*,\sctx\s*\)/.test(routeFileContent);
   const isMountStyle = exportName.startsWith('mount');
   const label = mountPath.split('/').filter(Boolean).pop()?.replace(/-/g, '_').toUpperCase() || 'ROUTES';
 

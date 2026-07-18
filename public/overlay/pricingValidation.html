@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Pricing Validation Results -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing Validation Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .validation-result {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .valid {
+            background-color: #e0ffe0;
+            border-color: #00b300;
+        }
+        .invalid {
+            background-color: #ffe0e0;
+            border-color: #b30000;
+        }
+        .result-title {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Pricing Validation Results</h1>
+    <div id="validationContainer">
+        <div class="validation-result valid">
+            <p class="result-title">Validation #1: Valid</p>
+            <p>Price: $100.00</p>
+            <p>Status: Validated successfully.</p>
+        </div>
+        <div class="validation-result invalid">
+            <p class="result-title">Validation #2: Invalid</p>
+            <p>Price: $-50.00</p>
+            <p>Status: Error - Price cannot be negative.</p>
+        </div>
+    </div>
+</body>
+</html>

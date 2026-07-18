@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Exports createTcEmailScanAndUpload — services/tc-doc-intake.js.
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
  */
 import { ImapFlow } from 'imapflow';
 import fs from 'fs/promises';
@@ -8,6 +9,34 @@ import { resolveTCImapConfig } from './tc-imap-config.js';
 import { createTCDocumentValidator } from './tc-document-validator.js';
 
 const DOWNLOAD_DIR = '/tmp/tc-doc-intake';
+const ATTACHMENT_DOWNLOAD_TIMEOUT_MS = 30_000;
+
+// client.download() + reading its stream had no timeout — a single stalled
+// attachment (slow server response, dropped connection mid-stream) hung the
+// entire scan forever with no recovery, since the surrounding for-await loop
+// is sequential across every matched message. Racing against a timeout lets
+// the existing catch-and-continue in findAndProcessEmails skip a bad
+// attachment instead of blocking every message after it indefinitely.
+async function downloadAttachmentWithTimeout(client, seq, partNum, timeoutMs = ATTACHMENT_DOWNLOAD_TIMEOUT_MS) {
+  const readPromise = (async () => {
+    const partData = await client.download(seq, partNum);
+    const chunks = [];
+    for await (const chunk of partData.content) chunks.push(chunk);
+    return Buffer.concat(chunks);
+  })();
+  let timer;
+  const timeoutPromise = new Promise((_, reject) => {
+    timer = setTimeout(
+      () => reject(new Error(`attachment_download_timeout_${timeoutMs}ms`)),
+      timeoutMs
+    );
+  });
+  try {
+    return await Promise.race([readPromise, timeoutPromise]);
+  } finally {
+    clearTimeout(timer);
+  }
+}
 
 const EXECUTED_RPA_PATTERNS = [
   /fully\s+executed/i,
@@ -17,7 +46,7 @@ const EXECUTED_RPA_PATTERNS = [
   /counter\s+offer.accepted/i,
   /accepted.offer/i,
   /binding\s+agreement/i,
-  /RPA.ALTER TABLEtached/i,
+  /RPA.*attached/i,
 ];
 
 const LISTING_AGREEMENT_PATTERNS = [
@@ -85,7 +114,13 @@ export function createTcEmailScanAndUpload({ pool, tcBrowser, accountManager, lo
 
       logger.info?.({ since, host: cfg.host, userId }, '[TC-EMAIL-SCAN] Searching inbox for relevant documents');
 
-      for await (const msg of client.fetch({ since }, { envelope: true, bodyStructure: true, source: true })) {
+      // `source: true` was previously fetched here but never read anywhere in this
+      // function — it forced ImapFlow to download the full raw MIME body (headers +
+      // every attachment byte) for every message in the date range just to check the
+      // subject line, which is what made wide date ranges (60-180 days) hang or 502.
+      // Attachment bytes for matched messages are downloaded separately below via
+      // client.download(), scoped to only the relevant part.
+      for await (const msg of client.fetch({ since }, { envelope: true, bodyStructure: true })) {
         const subject = msg.envelope?.subject || '';
         const from    = msg.envelope?.from?.[0]?.address || '';
         const date    = msg.envelope?.date || new Date();
@@ -107,15 +142,13 @@ export function createTcEmailScanAndUpload({ pool, tcBrowser, accountManager, lo
           try {
             const safeName = part.filename.replace(/[^a-zA-Z0-9._-]/g, '_');
             const filePath = path.join(DOWNLOAD_DIR, `${msg.uid}_${safeName}`);
-            const partData = await client.download(msg.seq, part.part);
-            const chunks = [];
-            for await (const chunk of partData.content) chunks.push(chunk);
-            await fs.writeFile(filePath, Buffer.concat(chunks));
+            const fileBuffer = await downloadAttachmentWithTimeout(client, msg.seq, part.part);
+            await fs.writeFile(filePath, fileBuffer);
             downloadedFiles.push({
               filePath,
               filename: part.filename,
               docType: classifyDoc(subject, part.filename),
-              size: Buffer.concat(chunks).length,
+              size: fileBuffer.length,
             });
             logger.info?.({ filePath, docType: classifyDoc(subject, part.filename) }, '[TC-EMAIL-SCAN] Attachment saved');
           } catch (err) {
@@ -344,5 +377,53 @@ export function createTcEmailScanAndUpload({ pool, tcBrowser, accountManager, lo
   return {
     findAndProcessEmails,
     uploadFilesToSkySlope,
+    async findExecutedAgreements({ days = 90, userId = 'adam' } = {}) {
+      const result = await findAndProcessEmails({ userId, days, dryRun: true, searchAll: false });
+      if (Array.isArray(result)) return result;
+      return Array.isArray(result?.emails) ? result.emails : [];
+    },
+    async runFullIntake({ days = 90, address, dryRun = true, userId = 'adam' } = {}) {
+      const result = await findAndProcessEmails({
+        userId,
+        days,
+        dryRun: true,
+        searchAll: false,
+      });
+      const emails = Array.isArray(result) ? result : (Array.isArray(result?.emails) ? result.emails : []);
+      const filtered = address
+        ? emails.filter((e) => {
+            const hay = `${e.subject || ''} ${e.from || ''}`.toLowerCase();
+            return hay.includes(String(address).toLowerCase());
+          })
+        : emails;
+      if (dryRun) {
+        return {
+          ok: true,
+          dryRun: true,
+          found: filtered.length,
+          emails: filtered.map((e) => ({
+            subject: e.subject,
+            from: e.from,
+            date: e.date,
+            isRPA: e.isRPA,
+            isListing: e.isListing,
+            files: (e.files || []).map((f) => ({
+              filename: f.filename,
+              docType: f.docType,
+              size: f.size,
+            })),
+          })),
+        };
+      }
+      const files = filtered.flatMap((e) => e.files || []);
+      const upload = await uploadFilesToSkySlope(userId, files, {
+        address,
+        validateBeforeUpload: true,
+      });
+      return { ok: true, dryRun: false, found: filtered.length, upload };
+    },
   };
 }
+
+export const createTCDocIntake = createTcEmailScanAndUpload;
+export default createTcEmailScanAndUpload;

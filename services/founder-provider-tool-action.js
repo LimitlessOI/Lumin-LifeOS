@@ -46,7 +46,7 @@ function modelFor(provider) {
     return process.env.OPENAI_MODEL || process.env.OPENAI_CHAT_MODEL || 'gpt-4o';
   }
   if (provider === 'anthropic') {
-    return process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-6';
+    return process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-20250514';
   }
   return process.env.GEMINI_MODEL || 'gemini-2.5-flash';
 }

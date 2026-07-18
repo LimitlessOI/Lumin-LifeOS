@@ -1,0 +1,1322 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "lumin-university",
+  "planned_at": "2026-07-15T17:43:55.508Z",
+  "backlog_signature": "4afe5fa73d5c46eb",
+  "corpus_sources": [
+    "docs/products/lumin-university/PRODUCT_HOME.md"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "status": "done",
+      "target_file": "db/migrations/001_create_competency_standards.sql",
+      "task": "create competency standards table",
+      "spec": "Table for storing detailed competency standards.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS competency_standards",
+        "domain TEXT",
+        "standards TEXT"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "557f21223d3b5d21c79f7ea324482ce8968363ab",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T18:08:39.528Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T18:11:43.230Z",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "1",
+      "mission_id": "PRODUCT-lumin-university"
+    },
+    {
+      "id": "2",
+      "status": "done",
+      "target_file": "db/migrations/002_create_mentor_criteria.sql",
+      "task": "create mentor qualification criteria table",
+      "spec": "Table to store evaluator/mentor qualification criteria.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS mentor_criteria",
+        "criteria TEXT"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "09e46d2b94d584da04d90a7b316da8fc3ccaee22",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T19:48:10.802Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:49:48.674Z",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "2",
+      "mission_id": "PRODUCT-lumin-university"
+    },
+    {
+      "id": "3",
+      "status": "done",
+      "target_file": "db/migrations/003_create_credential_verification.sql",
+      "task": "create credential verification table",
+      "spec": "Table to store credential verification data.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS credential_verification",
+        "method TEXT"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "7a47ff9fa4fc445670ea94369011fe79a1dda75b",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T19:11:20.879Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:17:30.384Z",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "3",
+      "mission_id": "PRODUCT-lumin-university"
+    },
+    {
+      "id": "4",
+      "status": "done",
+      "target_file": "services/credentialVerification.js",
+      "task": "implement credential verification service",
+      "spec": "Service implements credential verification methods.",
+      "depends_on": [
+        "3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "verifyCredential"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/credentialVerification.js",
+          "exports": [
+            "verifyCredential"
+          ],
+          "assertion_id": "expected_exports:services/credentialVerification.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:21:13.877Z",
+      "commit_sha": "edab2f98740fccc51d2ac5775084dc628fb25bd4",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "4",
+      "mission_id": "PRODUCT-lumin-university"
+    },
+    {
+      "id": "5",
+      "status": "done",
+      "target_file": "routes/credentialVerificationRoutes.js",
+      "task": "add credential verification route",
+      "spec": "Route for credential verification API.",
+      "depends_on": [
+        "4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCredentialVerificationRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/credentials/verify"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/credentialVerificationRoutes.js",
+          "exports": [
+            "registerCredentialVerificationRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/credentialVerificationRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:24:55.985Z",
+      "commit_sha": "9062cd89bcff828ba1e2b14d10429fb4c81e8540",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "5",
+      "mission_id": "PRODUCT-lumin-university"
+    },
+    {
+      "id": "6",
+      "status": "done",
+      "target_file": "db/migrations/004_create_accreditation_legal.sql",
+      "task": "create accreditation legal structure table",
+      "spec": "Table to store legal structure for accreditation-seeking institution.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS accreditation_legal_structure",
+        "structure TEXT"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "4cac677a121bd643ebf579df044d473895de3e55",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T19:59:50.965Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T20:01:07.031Z",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "6",
+      "mission_id": "PRODUCT-lumin-university"
+    },
+    {
+      "id": "7",
+      "status": "done",
+      "target_file": "services/accreditationService.js",
+      "task": "implement accreditation service",
+      "spec": "Service handles accreditation legal structures.",
+      "depends_on": [
+        "6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getAccreditationStructure"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/accreditationService.js",
+          "exports": [
+            "getAccreditationStructure"
+          ],
+          "assertion_id": "expected_exports:services/accreditationService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T20:12:20.990Z",
+      "commit_sha": "6ac0a4cbcab484cf3cea4cbfc0a56254556089a6",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "7",
+      "mission_id": "PRODUCT-lumin-university"
+    },
+    {
+      "id": "8",
+      "status": "done",
+      "target_file": "routes/accreditationRoutes.js",
+      "task": "add accreditation route",
+      "spec": "Route for accreditation structure API.",
+      "depends_on": [
+        "7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerAccreditationRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/accreditation/structure"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/accreditationRoutes.js",
+          "exports": [
+            "registerAccreditationRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/accreditationRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T20:14:31.474Z",
+      "commit_sha": "058dc246ed91e5fac61bc01062cc832d1f1c2196",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "8",
+      "mission_id": "PRODUCT-lumin-university"
+    },
+    {
+      "id": "9",
+      "status": "done",
+      "target_file": "services/studentInterviews.js",
+      "task": "implement student interview recording",
+      "spec": "Service records interviews with prospective students.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "recordStudentInterview"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/studentInterviews.js",
+          "exports": [
+            "recordStudentInterview"
+          ],
+          "assertion_id": "expected_exports:services/studentInterviews.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:39:36.002Z",
+      "commit_sha": "8719320c0929070ab04b35b91df89747c5dbeb72",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "9",
+      "mission_id": "PRODUCT-lumin-university"
+    },
+    {
+      "id": "10",
+      "status": "done",
+      "target_file": "services/employerInterviews.js",
+      "task": "implement employer interview recording",
+      "spec": "Service records interviews with employers regarding credentials.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "recordEmployerInterview"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/employerInterviews.js",
+          "exports": [
+            "recordEmployerInterview"
+          ],
+          "assertion_id": "expected_exports:services/employerInterviews.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:46:11.867Z",
+      "commit_sha": "1373bfdf1bd9b17d732e2938ccb7229c92084c55",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "10",
+      "mission_id": "PRODUCT-lumin-university"
+    },
+    {
+      "id": "11",
+      "status": "done",
+      "target_file": "services/pricingValidation.js",
+      "task": "implement pricing validation",
+      "spec": "Service validates pricing with target users.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "validatePricing"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/pricingValidation.js",
+          "exports": [
+            "validatePricing"
+          ],
+          "assertion_id": "expected_exports:services/pricingValidation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T20:18:29.441Z",
+      "commit_sha": "984c8bd98e90ff81903f528bb535099d1fe01d3e",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "11",
+      "mission_id": "PRODUCT-lumin-university"
+    },
+    {
+      "id": "12",
+      "status": "skipped",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register new product routes",
+      "spec": "Add all new routes to auto-registration config.",
+      "depends_on": [
+        "5",
+        "8"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "\"./routes/credentialVerificationRoutes.js\"",
+        "\"./routes/accreditationRoutes.js\""
+      ],
+      "last_attempt_at": "2026-07-15T23:07:36.520Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:\"./routes/credentialVerificationRoutes.js\"; behavior_assertion: missing_substring:\"./routes/accreditationRoutes.js\"; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 6,
+      "revived_at": "2026-07-15T23:04:25.845Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:\"./routes/credentialVerificationRoutes.js\"; behavior_assertion: missing_substring:\"./routes",
+      "demoted_at": "2026-07-16T03:27:47.588Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "12",
+      "mission_id": "PRODUCT-lumin-university"
+    },
+    {
+      "id": "step1",
+      "status": "done",
+      "target_file": "db/migrations/005_create_evaluator_mentor_qualification.sql",
+      "task": "create SQL table",
+      "spec": "Create a table for evaluator and mentor qualifications.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS evaluator_mentor_qualifications"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "9ccf7af90050ed0fdecbbc9e8d3e084404665f24",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T03:44:44.197Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T03:45:19.133Z",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step1",
+      "mission_id": "PRODUCT-lumin-university"
+    },
+    {
+      "id": "step2",
+      "status": "done",
+      "target_file": "services/evaluatorMentorQualification.js",
+      "task": "create service module",
+      "spec": "Service to manage evaluator and mentor qualifications.",
+      "depends_on": [
+        "step1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getQualifications",
+        "setQualification"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/evaluatorMentorQualification.js",
+          "exports": [
+            "getQualifications",
+            "setQualification"
+          ],
+          "assertion_id": "expected_exports:services/evaluatorMentorQualification.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T03:48:52.069Z",
+      "commit_sha": "adf767f4c7d6cc6aca8975950a3313a56911ba97",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step2",
+      "mission_id": "PRODUCT-lumin-university"
+    },
+    {
+      "id": "step3",
+      "status": "done",
+      "target_file": "routes/evaluatorMentorRoutes.js",
+      "task": "create route module",
+      "spec": "Routes for evaluator and mentor qualifications management.",
+      "depends_on": [
+        "step2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerEvaluatorMentorRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/evaluator-mentor"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/evaluatorMentorRoutes.js",
+          "exports": [
+            "registerEvaluatorMentorRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/evaluatorMentorRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T03:53:45.057Z",
+      "commit_sha": "75805c8c1e971ca003be79db1efa2d4e0fb3924d",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step3",
+      "mission_id": "PRODUCT-lumin-university"
+    },
+    {
+      "id": "step4",
+      "status": "done",
+      "target_file": "public/overlay/credentialVerification.html",
+      "task": "create UI for credential verification",
+      "spec": "UI for credential verification display.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step4",
+      "mission_id": "PRODUCT-lumin-university",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T22:27:43.269Z",
+      "commit_sha": "4169445071652376aad15087cc13c0bbeb0ce5bf"
+    },
+    {
+      "id": "step5",
+      "status": "done",
+      "target_file": "services/accreditationConsultation.js",
+      "task": "create service module",
+      "spec": "Service for accreditation body preliminary consultation.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "scheduleConsultation",
+        "getConsultationDetails"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/accreditationConsultation.js",
+          "exports": [
+            "scheduleConsultation",
+            "getConsultationDetails"
+          ],
+          "assertion_id": "expected_exports:services/accreditationConsultation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T03:30:58.094Z",
+      "commit_sha": "750ffa44bae219992a96fca1391d52c79d084365",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step5",
+      "mission_id": "PRODUCT-lumin-university"
+    },
+    {
+      "id": "step6",
+      "status": "done",
+      "target_file": "routes/accreditationConsultationRoutes.js",
+      "task": "create route module",
+      "spec": "Routes for accreditation body consultation management.",
+      "depends_on": [
+        "step5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerAccreditationConsultationRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/accreditation-consultation"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/accreditationConsultationRoutes.js",
+          "exports": [
+            "registerAccreditationConsultationRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/accreditationConsultationRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T03:35:29.914Z",
+      "commit_sha": "15eab3251e641f17467d4a1f9ca4d9d072ce3fad",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step6",
+      "mission_id": "PRODUCT-lumin-university"
+    },
+    {
+      "id": "step7",
+      "status": "done",
+      "target_file": "services/studentInterviewAnalytics.js",
+      "task": "create service module",
+      "spec": "Service to analyze student interview data.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getInterviewAnalysis"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/studentInterviewAnalytics.js",
+          "exports": [
+            "getInterviewAnalysis"
+          ],
+          "assertion_id": "expected_exports:services/studentInterviewAnalytics.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T03:40:07.209Z",
+      "commit_sha": "8ec265e58b45e6da813b187f861a8f2864cf697d",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step7",
+      "mission_id": "PRODUCT-lumin-university"
+    },
+    {
+      "id": "step8",
+      "status": "done",
+      "target_file": "routes/studentInterviewAnalyticsRoutes.js",
+      "task": "create route module",
+      "spec": "Routes for accessing student interview analytics.",
+      "depends_on": [
+        "step7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerStudentInterviewAnalyticsRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/student-interview-analytics"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/studentInterviewAnalyticsRoutes.js",
+          "exports": [
+            "registerStudentInterviewAnalyticsRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/studentInterviewAnalyticsRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T03:56:53.091Z",
+      "commit_sha": "0c5b133c65b4d1dbebec8ec1a8ee262987e92934",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step8",
+      "mission_id": "PRODUCT-lumin-university"
+    },
+    {
+      "id": "001",
+      "status": "done",
+      "target_file": "services/competencyStandards.js",
+      "task": "implement detailed competency standards",
+      "spec": "Create a service to handle detailed competency standards per domain.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getCompetencyStandards",
+        "updateCompetencyStandards"
+      ],
+      "route": {
+        "path": "/api/v1/competency/standards"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/competencyStandards.js",
+          "exports": [
+            "getCompetencyStandards",
+            "updateCompetencyStandards"
+          ],
+          "assertion_id": "expected_exports:services/competencyStandards.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:04:52.898Z",
+      "commit_sha": "95ace414c53b0bac139436b5734365af31783f2c",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "001",
+      "mission_id": "PRODUCT-lumin-university"
+    },
+    {
+      "id": "002",
+      "status": "done",
+      "target_file": "services/mentorQualification.js",
+      "task": "implement evaluator/mentor qualification criteria",
+      "spec": "Create a service for handling evaluator and mentor qualification criteria.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getMentorQualificationCriteria",
+        "updateMentorQualificationCriteria"
+      ],
+      "route": {
+        "path": "/api/v1/mentor/qualification"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/mentorQualification.js",
+          "exports": [
+            "getMentorQualificationCriteria",
+            "updateMentorQualificationCriteria"
+          ],
+          "assertion_id": "expected_exports:services/mentorQualification.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:07:59.491Z",
+      "commit_sha": "1157107a8f882b1d185252c182b1b2e86a30e8dd",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "002",
+      "mission_id": "PRODUCT-lumin-university"
+    },
+    {
+      "id": "003",
+      "status": "done",
+      "target_file": "scripts/credentialVerificationScoping.mjs",
+      "task": "scope credential verification technology",
+      "spec": "Outline the credential verification technology, assessing options like blockchain and cryptographic hash.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "evaluateBlockchainSolution",
+        "evaluateHashSolution"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:17:36.048Z",
+      "commit_sha": "e2ed2f5d29e8fd4fb338a72fbd3e34f6832b094f",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "003",
+      "mission_id": "PRODUCT-lumin-university"
+    },
+    {
+      "id": "004",
+      "status": "done",
+      "target_file": "services/accreditationBodyConsultation.js",
+      "task": "consult accreditation body",
+      "spec": "Service for accreditation body preliminary consultation steps and tracking.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "initiateConsultation",
+        "getConsultationStatus"
+      ],
+      "route": {
+        "path": "/api/v1/accreditation/consultation"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/accreditationBodyConsultation.js",
+          "exports": [
+            "initiateConsultation",
+            "getConsultationStatus"
+          ],
+          "assertion_id": "expected_exports:services/accreditationBodyConsultation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:23:09.688Z",
+      "commit_sha": "25b74d75eae9d731feb4e0d2488d7fa00b2282c3",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "004",
+      "mission_id": "PRODUCT-lumin-university"
+    },
+    {
+      "id": "005",
+      "status": "done",
+      "target_file": "services/studentInterviewProcess.js",
+      "task": "interview prospective adult students",
+      "spec": "Conduct and process interviews with 10 prospective adult students.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "conductStudentInterview",
+        "getInterviewResults"
+      ],
+      "route": {
+        "path": "/api/v1/student/interviews"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/studentInterviewProcess.js",
+          "exports": [
+            "conductStudentInterview",
+            "getInterviewResults"
+          ],
+          "assertion_id": "expected_exports:services/studentInterviewProcess.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:36:17.987Z",
+      "commit_sha": "d2c99df5bbbbff43ace75ca84cbb0e54c5941638",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "005",
+      "mission_id": "PRODUCT-lumin-university"
+    },
+    {
+      "id": "006",
+      "status": "done",
+      "target_file": "services/employerInterviewProcess.js",
+      "task": "interview employers for competency credentials",
+      "spec": "Conduct interviews with 5 employers to determine recognized competency credentials.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "conductEmployerInterview",
+        "getEmployerFeedback"
+      ],
+      "route": {
+        "path": "/api/v1/employer/interviews"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/employerInterviewProcess.js",
+          "exports": [
+            "conductEmployerInterview",
+            "getEmployerFeedback"
+          ],
+          "assertion_id": "expected_exports:services/employerInterviewProcess.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:41:03.402Z",
+      "commit_sha": "58585b20a7ba10a6f788b0b8ab0e60ff7b92b959",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "006",
+      "mission_id": "PRODUCT-lumin-university"
+    },
+    {
+      "id": "007",
+      "status": "done",
+      "target_file": "services/pricingValidationProcess.js",
+      "task": "validate pricing with target users",
+      "spec": "Validate pricing options with target users and adjust based on feedback.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "validatePricing",
+        "updatePricingStrategy"
+      ],
+      "route": {
+        "path": "/api/v1/pricing/validation"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/pricingValidationProcess.js",
+          "exports": [
+            "validatePricing",
+            "updatePricingStrategy"
+          ],
+          "assertion_id": "expected_exports:services/pricingValidationProcess.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:51:34.734Z",
+      "commit_sha": "0db2b11807a3359e74d5394d6cdf97fdeaf3d467",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "007",
+      "mission_id": "PRODUCT-lumin-university"
+    },
+    {
+      "id": "008",
+      "status": "done",
+      "target_file": "public/overlay/accreditationLegalStructure.html",
+      "task": "document legal structure for accreditation-seeking",
+      "spec": "Provide user interface for displaying the legal structure for an accreditation-seeking institution.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "008",
+      "mission_id": "PRODUCT-lumin-university",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T22:42:17.272Z",
+      "commit_sha": "b57b634d095a6fefc0072cb60097f5dd3d6c83d9"
+    },
+    {
+      "id": "lumin-university-1",
+      "status": "done",
+      "target_file": "services/competencyStandards.js",
+      "task": "implement competency standards service",
+      "spec": "Implement service logic to handle detailed competency standards per domain.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getCompetencyStandards"
+      ],
+      "route": {
+        "path": "/api/v1/competency/standards"
+      },
+      "file_contains": [
+        "function getCompetencyStandards()"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/competencyStandards.js",
+          "exports": [
+            "getCompetencyStandards"
+          ],
+          "assertion_id": "expected_exports:services/competencyStandards.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:58:42.947Z",
+      "commit_sha": "aaa65c735fc2dc9a909ae24e62bec72d841ff36a",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lumin-university-1",
+      "mission_id": "PRODUCT-lumin-university"
+    },
+    {
+      "id": "lumin-university-2",
+      "status": "done",
+      "target_file": "services/credentialVerificationScoping.js",
+      "task": "implement credential verification scoping service",
+      "spec": "Determine technology options for credential verification, such as blockchain or cryptographic hashing.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "scopeCredentialVerification"
+      ],
+      "route": {
+        "path": "/api/v1/credential/verify/scope"
+      },
+      "file_contains": [
+        "blockchain",
+        "cryptographic hash"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/credentialVerificationScoping.js",
+          "exports": [
+            "scopeCredentialVerification"
+          ],
+          "assertion_id": "expected_exports:services/credentialVerificationScoping.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:03:34.540Z",
+      "commit_sha": "768945e3c987f199da9f15222ac88c7129fce99d",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lumin-university-2",
+      "mission_id": "PRODUCT-lumin-university"
+    },
+    {
+      "id": "lumin-university-3",
+      "status": "done",
+      "target_file": "services/evaluatorMentorQualification.js",
+      "task": "implement evaluator mentor qualification service",
+      "spec": "Service to handle evaluator and mentor qualification criteria.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getEvaluatorMentorCriteria"
+      ],
+      "route": {
+        "path": "/api/v1/evaluator/mentor/criteria"
+      },
+      "file_contains": [
+        "function getEvaluatorMentorCriteria()"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/evaluatorMentorQualification.js",
+          "exports": [
+            "getEvaluatorMentorCriteria"
+          ],
+          "assertion_id": "expected_exports:services/evaluatorMentorQualification.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:14:28.427Z",
+      "commit_sha": "08c58dbccfbc4d43b00687c9ba3a7922a40f3c51",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lumin-university-3",
+      "mission_id": "PRODUCT-lumin-university"
+    },
+    {
+      "id": "lumin-university-4",
+      "status": "done",
+      "target_file": "services/accreditationService.js",
+      "task": "implement legal structure consultation service",
+      "spec": "Provide preliminary consultation for creating the legal structure of an accreditation-seeking institution.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "consultLegalStructure"
+      ],
+      "route": {
+        "path": "/api/v1/accreditation/legal/structure"
+      },
+      "file_contains": [
+        "legal structure",
+        "accreditation"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/accreditationService.js",
+          "exports": [
+            "consultLegalStructure"
+          ],
+          "assertion_id": "expected_exports:services/accreditationService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:20:30.168Z",
+      "commit_sha": "ebf083d020983eb5d2e11b26aa635750cd7bee08",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lumin-university-4",
+      "mission_id": "PRODUCT-lumin-university"
+    },
+    {
+      "id": "lumin-university-5",
+      "status": "done",
+      "target_file": "services/studentInterviewProcess.js",
+      "task": "conduct student interviews",
+      "spec": "Conduct interviews with 10 prospective adult students to gather requirements.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "interviewProspectiveStudents"
+      ],
+      "route": {
+        "path": "/api/v1/student/interviews"
+      },
+      "file_contains": [
+        "10 prospective adult students"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/studentInterviewProcess.js",
+          "exports": [
+            "interviewProspectiveStudents"
+          ],
+          "assertion_id": "expected_exports:services/studentInterviewProcess.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:23:53.941Z",
+      "commit_sha": "96a23af084543c7d65e915c991c9ca17de669bea",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lumin-university-5",
+      "mission_id": "PRODUCT-lumin-university"
+    },
+    {
+      "id": "lumin-university-6",
+      "status": "done",
+      "target_file": "services/employerInterviewProcess.js",
+      "task": "conduct employer interviews",
+      "spec": "Conduct interviews with 5 employers to understand recognized competency credentials.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "interviewEmployers"
+      ],
+      "route": {
+        "path": "/api/v1/employer/interviews"
+      },
+      "file_contains": [
+        "5 employers",
+        "competency credentials"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/employerInterviewProcess.js",
+          "exports": [
+            "interviewEmployers"
+          ],
+          "assertion_id": "expected_exports:services/employerInterviewProcess.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:32:57.270Z",
+      "commit_sha": "67b886f82800f770bd18ad782de9042d7137294d",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lumin-university-6",
+      "mission_id": "PRODUCT-lumin-university"
+    },
+    {
+      "id": "lumin-university-7",
+      "status": "done",
+      "target_file": "services/pricingValidationProcess.js",
+      "task": "validate pricing",
+      "spec": "Validate pricing model with the target users.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "validatePricing"
+      ],
+      "route": {
+        "path": "/api/v1/pricing/validation"
+      },
+      "file_contains": [
+        "pricing validation"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/pricingValidationProcess.js",
+          "exports": [
+            "validatePricing"
+          ],
+          "assertion_id": "expected_exports:services/pricingValidationProcess.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:37:40.037Z",
+      "commit_sha": "1a90dad61f57469743fc9054ecef7de46ce3bb97",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lumin-university-7",
+      "mission_id": "PRODUCT-lumin-university"
+    },
+    {
+      "id": "lumin-university-8",
+      "status": "done",
+      "target_file": "services/accreditationConsultationService.js",
+      "task": "update service",
+      "spec": "Conduct preliminary consultation with an accreditation body and generate a report.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "consultAccreditationBody"
+      ],
+      "file_contains": [
+        "function consultAccreditationBody"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/accreditationConsultationService.js",
+          "exports": [
+            "consultAccreditationBody"
+          ],
+          "assertion_id": "expected_exports:services/accreditationConsultationService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:45:39.821Z",
+      "commit_sha": "5548bbe599327d75738485b7cdeb25e850bae7e4",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lumin-university-8",
+      "mission_id": "PRODUCT-lumin-university"
+    },
+    {
+      "id": "lumin-university-9",
+      "status": "done",
+      "target_file": "services/pricingValidationService.js",
+      "task": "update service",
+      "spec": "Implement pricing validation with target users, analyzing feedback.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "validatePricing"
+      ],
+      "file_contains": [
+        "function validatePricing"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/pricingValidationService.js",
+          "exports": [
+            "validatePricing"
+          ],
+          "assertion_id": "expected_exports:services/pricingValidationService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:51:54.066Z",
+      "commit_sha": "bf37f79fe175ae925554473778bcc6dc33168572",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lumin-university-9",
+      "mission_id": "PRODUCT-lumin-university"
+    },
+    {
+      "id": "lumin-university-10",
+      "status": "done",
+      "target_file": "services/accreditationBodyConsultation.js",
+      "task": "implement service",
+      "spec": "Manage preliminary consultations with accreditation bodies.",
+      "depends_on": [
+        "lumin-university-9"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "recordConsultation",
+        "getConsultationDetails"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/accreditationBodyConsultation.js",
+          "exports": [
+            "recordConsultation",
+            "getConsultationDetails"
+          ],
+          "assertion_id": "expected_exports:services/accreditationBodyConsultation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:09:40.342Z",
+      "commit_sha": "dcdedcfd27e7f2f38827507e4b476938aa1d016b",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lumin-university-10",
+      "mission_id": "PRODUCT-lumin-university"
+    },
+    {
+      "id": "lumin-university-11",
+      "status": "done",
+      "target_file": "routes/detailedCompetencyStandardsRoutes.js",
+      "task": "create routes",
+      "spec": "Expose routes for managing detailed competency standards.",
+      "depends_on": [
+        "lumin-university-2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCompetencyRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/competency-standards"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/detailedCompetencyStandardsRoutes.js",
+          "exports": [
+            "registerCompetencyRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/detailedCompetencyStandardsRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:14:52.836Z",
+      "commit_sha": "2a74ba12199b47b52bd4f0c17d7ecae2c7658365",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lumin-university-11",
+      "mission_id": "PRODUCT-lumin-university"
+    },
+    {
+      "id": "lumin-university-12",
+      "status": "done",
+      "target_file": "routes/prospectiveStudentInterviewRoutes.js",
+      "task": "create routes",
+      "spec": "Expose routes for recording and analyzing prospective student interviews.",
+      "depends_on": [
+        "lumin-university-6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerStudentInterviewRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/student-interviews"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/prospectiveStudentInterviewRoutes.js",
+          "exports": [
+            "registerStudentInterviewRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/prospectiveStudentInterviewRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:18:26.507Z",
+      "commit_sha": "9de80350215fca73381914967c1239c2f9290937",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lumin-university-12",
+      "mission_id": "PRODUCT-lumin-university"
+    }
+  ],
+  "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-lumin-university",
+  "twin_kind": "product_build_queue_registered"
+}

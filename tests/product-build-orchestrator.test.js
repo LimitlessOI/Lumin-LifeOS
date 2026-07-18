@@ -28,18 +28,25 @@ test('normalizeQueue rejects bad schema and missing fields', () => {
   ] }), /duplicate/);
 });
 
-test('selectNextStep skips founder-gated and respects depends_on', () => {
+test('selectNextStep skips human_hold only; ships design_review_flagged and legacy founder_gated', () => {
   const q = makeQueue([
-    { id: 'gated', target_file: 'f', task: 't', founder_gated: true },
-    { id: 'b', target_file: 'f2', task: 't2', depends_on: ['a'] },
     { id: 'a', target_file: 'f1', task: 't1' },
+    { id: 'b', target_file: 'f2', task: 't2', depends_on: ['a'] },
+    { id: 'ui', target_file: 'public/overlay/x.html', task: 'panel', design_review_flagged: true },
+    { id: 'hold', target_file: 'f', task: 't', human_hold: true, status: STEP_STATUS.FOUNDER_GATED, founder_gated: true },
   ]);
   const first = selectNextStep(q);
   assert.equal(first.step.id, 'a', 'a has no deps, comes before b which depends on a');
-  assert.deepEqual(first.gated.map((g) => g.id), ['gated']);
+  assert.deepEqual(first.gated.map((g) => g.id), ['hold']);
 
   q.steps.find((s) => s.id === 'a').status = STEP_STATUS.DONE;
-  assert.equal(selectNextStep(q).step.id, 'b', 'b unblocks once a is done');
+  const second = selectNextStep(q);
+  assert.equal(second.step.id, 'b', 'b unblocks once a is done');
+  assert.deepEqual(second.gated.map((g) => g.id), ['hold']);
+
+  q.steps.find((s) => s.id === 'b').status = STEP_STATUS.DONE;
+  const third = selectNextStep(q);
+  assert.equal(third.step.id, 'ui', 'design_review_flagged UI ships without human hold');
 });
 
 test('runNextStep marks done only when build has SHA AND verify passes AND deploy-truth passes', async () => {
@@ -116,49 +123,91 @@ test('verify failure keeps step retryable then blocks after maxAttempts (no spin
   assert.equal(q.steps[0].status, STEP_STATUS.BLOCKED, 'blocked after 2 attempts — loop moves on');
 });
 
-test('done queue surfaces founder-gated ids as awaiting_founder', async () => {
+test('done queue surfaces human_hold ids as awaiting_founder', async () => {
   const q = makeQueue([
     { id: 'a', target_file: 'f', task: 't', status: STEP_STATUS.DONE },
-    { id: 'g', target_file: 'f2', task: 't2', founder_gated: true },
+    { id: 'g', target_file: 'f2', task: 't2', human_hold: true, status: STEP_STATUS.FOUNDER_GATED, founder_gated: true },
   ]);
   const r = await runNextStep(q, { buildFn: async () => ({ ok: true, commit_sha: 'x' }) });
   assert.equal(r.done, true);
   assert.deepEqual(r.awaiting_founder, ['g']);
 });
 
-test('queueSummary counts by status', () => {
+test('queueSummary counts by status including design_review_flagged and human_hold', () => {
   const q = makeQueue([
     { id: 'a', target_file: 'f', task: 't', status: STEP_STATUS.DONE },
     { id: 'b', target_file: 'f', task: 't' },
-    { id: 'c', target_file: 'f', task: 't', founder_gated: true },
+    { id: 'ui', target_file: 'public/overlay/x.html', task: 'panel', design_review_flagged: true },
+    { id: 'c', target_file: 'f', task: 't', human_hold: true, status: STEP_STATUS.FOUNDER_GATED, founder_gated: true },
   ]);
   const s = queueSummary(q);
-  assert.equal(s.total, 3);
+  assert.equal(s.total, 4);
   assert.equal(s.done, 1);
   assert.equal(s.pending, 1);
+  assert.equal(s.design_review_flagged, 1);
+  assert.equal(s.human_hold, 1);
   assert.equal(s.founder_gated, 1);
   assert.equal(s.complete, false);
 });
 
-test('reviveStaleBlockedSteps revives blocked steps past cooldown, bounded, never founder-gated', () => {
+test('reviveStaleBlockedSteps revives blocked steps past cooldown, bounded, never human_hold', () => {
   const old = new Date(Date.now() - 60 * 60 * 1000).toISOString();
   const fresh = new Date().toISOString();
   const q = makeQueue([
     { id: 'stale', target_file: 'f1', task: 't', status: STEP_STATUS.BLOCKED, attempts: 3, last_attempt_at: old },
     { id: 'recent', target_file: 'f2', task: 't', status: STEP_STATUS.BLOCKED, attempts: 3, last_attempt_at: fresh },
-    { id: 'gated', target_file: 'f3', task: 't', status: STEP_STATUS.BLOCKED, attempts: 3, last_attempt_at: old, founder_gated: true },
+    { id: 'hold', target_file: 'f3', task: 't', status: STEP_STATUS.BLOCKED, attempts: 3, last_attempt_at: old, human_hold: true, founder_gated: true },
     { id: 'exhausted', target_file: 'f4', task: 't', status: STEP_STATUS.BLOCKED, attempts: 3, last_attempt_at: old, revive_count: 6 },
     { id: 'done', target_file: 'f5', task: 't', status: STEP_STATUS.DONE },
   ]);
   const revived = reviveStaleBlockedSteps(q);
-  assert.deepEqual(revived, ['stale'], 'only the stale, non-gated, non-exhausted blocked step revives');
+  assert.deepEqual(revived, ['stale'], 'only the stale, non-hold, non-exhausted blocked step revives');
   const stale = q.steps.find((s) => s.id === 'stale');
   assert.equal(stale.status, STEP_STATUS.PENDING);
   assert.equal(stale.attempts, 0, 'attempts reset so it gets a fresh maxAttempts window');
   assert.equal(stale.revive_count, 1);
   assert.equal(q.steps.find((s) => s.id === 'recent').status, STEP_STATUS.BLOCKED, 'within cooldown stays blocked');
-  assert.equal(q.steps.find((s) => s.id === 'gated').status, STEP_STATUS.BLOCKED, 'founder-gated never auto-revives');
-  assert.equal(q.steps.find((s) => s.id === 'exhausted').status, STEP_STATUS.BLOCKED, 'revive cap respected');
+  assert.equal(q.steps.find((s) => s.id === 'hold').status, STEP_STATUS.BLOCKED, 'human_hold never auto-revives');
+  assert.equal(q.steps.find((s) => s.id === 'exhausted').status, STEP_STATUS.SKIPPED, 'revive cap demotes to skipped');
+  assert.equal(q.steps.find((s) => s.id === 'exhausted').demoted, true);
+});
+
+test('reviveStaleBlockedSteps does not unlock auto-reg route via unrelated register DONE', () => {
+  const q = makeQueue([
+    {
+      id: 'route-a',
+      target_file: 'routes/a.js',
+      task: 't',
+      status: STEP_STATUS.BLOCKED,
+      last_error: 'route module not auto-registered',
+      revive_count: 0,
+      last_attempt_at: new Date(Date.now() - 60 * 60 * 1000).toISOString(),
+    },
+    {
+      id: 'reg-other',
+      target_file: 'config/auto-registered-product-modules.json',
+      task: 'register other',
+      depends_on: ['route-other'],
+      status: STEP_STATUS.DONE,
+    },
+  ]);
+  const revived = reviveStaleBlockedSteps(q);
+  assert.deepEqual(revived, []);
+  assert.equal(q.steps.find((s) => s.id === 'route-a').status, STEP_STATUS.BLOCKED);
+});
+
+test('selectNextStep prefers pending blueprint step over earlier blocked thrash', () => {
+  const q = makeQueue([
+    {
+      id: 'blocked-route',
+      target_file: 'routes/x.js',
+      task: 't',
+      status: STEP_STATUS.BLOCKED,
+      last_error: 'route module not auto-registered',
+    },
+    { id: 'pending-script', target_file: 'scripts/y.mjs', task: 't2', status: STEP_STATUS.PENDING },
+  ]);
+  assert.equal(selectNextStep(q).step.id, 'pending-script');
 });
 
 test('reviveStaleBlockedSteps makes a blocked step selectable again', () => {
@@ -190,6 +239,27 @@ test('auto-register config step can run when route dep is blocked only for missi
     },
   ]);
   assert.equal(selectNextStep(q).step.id, 'reg', 'register step unblocks despite blocked route dep');
+});
+
+test('auto-register config step can run when route dep is PENDING with commit_sha + auto-reg error', () => {
+  const q = makeQueue([
+    {
+      id: 'route',
+      target_file: 'routes/lifeos-consent-routes.js',
+      task: 't',
+      status: STEP_STATUS.PENDING,
+      commit_sha: 'abc123',
+      last_error: 'route module not auto-registered — add to config/auto-registered-product-modules.json',
+      attempts: 1,
+    },
+    {
+      id: 'reg',
+      target_file: 'config/auto-registered-product-modules.json',
+      task: 'register',
+      depends_on: ['route'],
+    },
+  ]);
+  assert.equal(selectNextStep(q).step.id, 'reg', 'register step unblocks before maxAttempts BLOCKED');
 });
 
 test('artifact proof blocks DONE when file_contains missing despite valid SHA + deploy (gv-boot-wire class)', async () => {

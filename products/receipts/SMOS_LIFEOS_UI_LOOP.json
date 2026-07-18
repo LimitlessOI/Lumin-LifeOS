@@ -1,0 +1,17 @@
+{
+  "ok": true,
+  "proved_at": "2026-07-11T19:58:00.000Z",
+  "deploy_commit_sha": "2c811a0285f0a89ef9414aee91c5ec86032f9d0f",
+  "surface": "public/overlay/lifeos-app.html → content-frame /marketing?shell=1",
+  "session_id": "f9afe8e5-c690-4d4b-9989-183979cc5618",
+  "steps": [
+    { "name": "lifeos_nav_embed", "ok": true, "details": "PAGE_META.marketing loads SocialMediaOS title + iframe /marketing?shell=1" },
+    { "name": "consent_new_session", "ok": true },
+    { "name": "coach", "ok": true },
+    { "name": "extract", "ok": true, "details": "Extracted 4 story items" },
+    { "name": "generate", "ok": true, "details": "4 content cards" },
+    { "name": "approve", "ok": true },
+    { "name": "export", "ok": true, "details": "Download started." }
+  ],
+  "honesty": "KNOW — driven through LifeOS shell iframe via same-origin CDP; tip deploy SHA matched commit 2c811a0285."
+}

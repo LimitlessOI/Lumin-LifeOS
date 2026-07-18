@@ -19,7 +19,7 @@ import { resolvePreviewsDir } from '../config/site-builder-paths.js';
 const PREVIEWS_ROOT = resolvePreviewsDir();
 const CLIENT_ID_RE = /^[\w-]+$/;
 
-function readMeta(clientId) {
+function readMetaFromDisk(clientId) {
   try {
     return JSON.parse(fs.readFileSync(path.join(PREVIEWS_ROOT, clientId, 'meta.json'), 'utf8'));
   } catch {
@@ -27,18 +27,56 @@ function readMeta(clientId) {
   }
 }
 
-function newestPreviewWithToken() {
+// Previews live on ephemeral per-instance disk; a fixture built (or rehydrated)
+// on one Railway instance is invisible to a request landing on another. Fall
+// back to prospect_sites.metadata itself — recordProspect() already spreads the
+// full build metadata (editToken, variants, businessInfo, etc.) directly onto
+// the row's metadata column, so the row IS the durable equivalent of meta.json.
+// (A nested `previewMeta` copy is also written alongside it, but proved
+// unreliable in practice — likely dropped by JSON.stringify whenever a sibling
+// `previewHtml: undefined` key sits in the same object literal — so read the
+// reliable top-level fields instead.)
+async function readMeta(clientId, pool) {
+  const fromDisk = readMetaFromDisk(clientId);
+  if (fromDisk && fromDisk.editToken) return fromDisk;
+  if (!pool) return fromDisk;
+  try {
+    const result = await pool.query(
+      `SELECT metadata FROM prospect_sites WHERE client_id = $1 LIMIT 1`,
+      [clientId]
+    );
+    const dbMeta = result.rows[0]?.metadata;
+    return dbMeta && dbMeta.editToken ? dbMeta : fromDisk;
+  } catch {
+    return fromDisk;
+  }
+}
+
+async function newestPreviewWithToken(pool) {
   let entries = [];
   try {
     entries = fs.readdirSync(PREVIEWS_ROOT);
   } catch {
-    return null;
+    entries = [];
   }
   const metas = entries
-    .map((clientId) => ({ clientId, meta: readMeta(clientId) }))
+    .map((clientId) => ({ clientId, meta: readMetaFromDisk(clientId) }))
     .filter((x) => x.meta && x.meta.editToken)
     .sort((a, b) => new Date(b.meta.createdAt || 0) - new Date(a.meta.createdAt || 0));
-  return metas[0] || null;
+  if (metas[0]) return metas[0];
+  if (!pool) return null;
+  try {
+    const result = await pool.query(
+      `SELECT client_id, metadata FROM prospect_sites
+       WHERE metadata->>'editToken' IS NOT NULL
+       ORDER BY updated_at DESC LIMIT 1`
+    );
+    const row = result.rows[0];
+    if (!row) return null;
+    return { clientId: row.client_id, meta: row.metadata };
+  } catch {
+    return null;
+  }
 }
 
 export function registerSiteBuilderPrealphaRoutes(app, deps = {}) {
@@ -46,6 +84,7 @@ export function registerSiteBuilderPrealphaRoutes(app, deps = {}) {
   const callCouncilMember = deps.callCouncilMember;
   const baseUrl = String(deps.baseUrl || '').replace(/\/+$/, '');
   const logger = deps.logger ?? console;
+  const pool = deps.pool;
 
   if (typeof requireKey !== 'function') {
     throw new Error('registerSiteBuilderPrealphaRoutes requires deps.requireKey');
@@ -67,9 +106,9 @@ export function registerSiteBuilderPrealphaRoutes(app, deps = {}) {
     let clientId = String(bodyClientId || '').trim();
     let meta = null;
     if (clientId && CLIENT_ID_RE.test(clientId)) {
-      meta = readMeta(clientId);
+      meta = await readMeta(clientId, pool);
     } else {
-      const newest = newestPreviewWithToken();
+      const newest = await newestPreviewWithToken(pool);
       if (newest) { clientId = newest.clientId; meta = newest.meta; }
     }
     if (!meta || !meta.editToken) {

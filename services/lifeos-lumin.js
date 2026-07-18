@@ -529,6 +529,24 @@ export function createLifeOSLumin({ pool, callAI, logger }) {
     return createThread(userId, { mode: 'general', title: 'Lumin' });
   }
 
+  /**
+   * Operator cleanup — delete specific message ids belonging to a user
+   * (e.g. conductor UI probes that polluted the founder thread).
+   */
+  async function deleteMessagesByIds(userId, ids = []) {
+    const list = [...new Set((Array.isArray(ids) ? ids : [])
+      .map((n) => parseInt(n, 10))
+      .filter((n) => Number.isFinite(n) && n > 0))];
+    if (!list.length) return [];
+    const { rows } = await pool.query(
+      `DELETE FROM lumin_messages
+        WHERE user_id = $1 AND id = ANY($2::bigint[])
+        RETURNING id, role, left(content, 80) AS preview`,
+      [userId, list],
+    );
+    return rows;
+  }
+
   return {
     createThread,
     listThreads,
@@ -545,5 +563,6 @@ export function createLifeOSLumin({ pool, callAI, logger }) {
     appendAssistantMessage,
     getOrCreateDefaultThread,
     buildContextSnapshot,
+    deleteMessagesByIds,
   };
 }

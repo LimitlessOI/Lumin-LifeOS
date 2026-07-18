@@ -2,8 +2,16 @@
  * SYNOPSIS: clientcare-sellable-service.js
  * @ssot docs/products/clientcare-billing-recovery/PRODUCT_HOME.md
  * clientcare-sellable-service.js
- * Multi-tenant packaging, onboarding, and audit helpers for ClientCare billing recovery.
+ * Multi-tenant packaging, onboarding, audit, and BirthBill public signup/checkout helpers.
  */
+
+import { getStripeClient } from './stripe-client.js';
+import { encrypt, decrypt } from '../core/tco-encryption.js';
+import {
+  CLIENTCARE_BILLING_PRICING,
+  getBirthBillPilotOfferSummary,
+  getBirthBillDealReasonWhy,
+} from '../config/clientcare-billing-pricing.js';
 
 function isMissingRelation(error) {
   return /does not exist|relation .* does not exist/i.test(String(error?.message || ''));
@@ -195,9 +203,16 @@ export function createClientCareSellableService({ pool, logger = console }) {
   }
 
   async function listOperatorAccess(tenantId = null) {
-    if (!tenantId) return [];
     try {
-      const { rows } = await pool.query(`SELECT * FROM clientcare_operator_access WHERE tenant_id = $1 ORDER BY created_at ASC`, [tenantId]);
+      // `tenant_id = $1` with $1 = null never matches in Postgres (NULL
+      // comparison), so a null tenantId (Sherry's original single-tenant
+      // "Default Practice", DEFAULT_TENANT.id = null) always returned []
+      // here even if operator rows existed for it. NULL-safe comparison so
+      // the default tenant can actually be locked down later if desired.
+      const { rows } = await pool.query(
+        `SELECT * FROM clientcare_operator_access WHERE tenant_id IS NOT DISTINCT FROM $1 ORDER BY created_at ASC`,
+        [tenantId]
+      );
       return rows;
     } catch (error) {
       if (isMissingRelation(error)) return [];
@@ -250,9 +265,29 @@ export function createClientCareSellableService({ pool, logger = console }) {
   }
 
 
+  // SECURITY (2026-07-15, corrected same day): the original bug was that
+  // `tenantId ? await listOperatorAccess(tenantId) : []` never even queried
+  // for a falsy tenantId, so omitting the tenant header bypassed enforcement
+  // outright. A first fix made "no tenantId" and "zero operators for this
+  // tenant" both fail closed — but Sherry's own practice (DEFAULT_TENANT,
+  // id: null) has zero operator rows configured today, so that version
+  // locked HER out of her own dashboard, which is unacceptable.
+  // Corrected behavior: tenantId now ALWAYS resolves through
+  // listOperatorAccess (including null — see the NULL-safe fix there), and
+  // "zero operators configured for the resolved tenant" is unconditionally
+  // open (matches original, pre-audit behavior — this is the "onboarding
+  // not finished yet" bootstrap state, symmetric for every tenant, not a
+  // hole specific to omitting the header). The real fix that matters is
+  // downstream: every billing query is now tenant-scoped (see
+  // clientcare-billing-service.js), so a caller who can't produce a real
+  // operator_email for a tenant that DOES have operators configured still
+  // cannot read/write that tenant's data — which is the actual cross-tenant
+  // leak this audit was about. An unconfigured tenant (today: only the
+  // default/null one) remains as open as it always was until Adam adds a
+  // real operator row for it.
   async function resolveOperatorAccess({ tenantId = null, operatorEmail = '' } = {}) {
     const normalizedEmail = String(operatorEmail || '').trim().toLowerCase();
-    const operators = tenantId ? await listOperatorAccess(tenantId) : [];
+    const operators = await listOperatorAccess(tenantId);
     if (!operators.length) {
       return { enforced: false, allowed: true, operator: null, operators: [] };
     }
@@ -409,12 +444,376 @@ export function createClientCareSellableService({ pool, logger = console }) {
     };
   }
 
+  function slugifyPractice(name = '') {
+    const base = String(name || '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .slice(0, 40);
+    return base || `practice-${Date.now().toString(36)}`;
+  }
+
+  function getPublicOffer() {
+    const pricing = CLIENTCARE_BILLING_PRICING;
+    return {
+      product: pricing.product,
+      pricing: {
+        pilot: pricing.pilot,
+        carePlan: pricing.carePlan,
+        recoveryShare: pricing.recoveryShare,
+      },
+      includes: pricing.includes,
+      excludes: pricing.excludes,
+      definitions: pricing.definitions,
+      steps: pricing.steps,
+      offer_summary: getBirthBillPilotOfferSummary(pricing),
+      reason_why: getBirthBillDealReasonWhy(pricing),
+      beta: Boolean(pricing.beta),
+      readiness: pricing.product?.readiness || 'pilot',
+      readiness_label: pricing.product?.readiness_label || null,
+      workboard_url: '/clientcare-billing?product=birthbill',
+      connect_hint: 'After Stripe pay you land on /birthbill/welcome to connect ClientCare.',
+    };
+  }
+
+  async function signupPracticeLead({
+    practiceName = '',
+    contactName = '',
+    contactEmail = '',
+    contactPhone = '',
+    region = '',
+    notes = '',
+  } = {}) {
+    const name = String(practiceName || '').trim();
+    const email = String(contactEmail || '').trim().toLowerCase();
+    if (!name || name.length < 2) return { ok: false, error: 'practice_name required' };
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return { ok: false, error: 'valid contact_email required' };
+
+    let slug = slugifyPractice(name);
+    const existing = await listTenants();
+    if ((existing || []).some((t) => t.slug === slug)) {
+      slug = `${slug}-${Date.now().toString(36).slice(-4)}`;
+    }
+
+    const tenant = await saveTenant({
+      slug,
+      name,
+      status: 'pilot_lead',
+      collections_fee_pct: Number(CLIENTCARE_BILLING_PRICING.recoveryShare.pct || 5),
+      contact_name: String(contactName || '').trim() || name,
+      contact_email: email,
+    });
+
+    await saveOnboarding(tenant.id, {
+      ...DEFAULT_ONBOARDING,
+      notes: [
+        'BirthBill public signup',
+        contactPhone ? `phone:${contactPhone}` : null,
+        region ? `region:${region}` : null,
+        notes ? String(notes).slice(0, 500) : null,
+      ].filter(Boolean).join(' | '),
+    });
+
+    await saveOperatorAccess(tenant.id, {
+      operator_email: email,
+      role: 'manager',
+      active: true,
+    });
+
+    await logAudit({
+      tenantId: tenant.id,
+      actor: email,
+      action_type: 'birthbill_signup_lead',
+      entity_type: 'tenant',
+      entity_id: String(tenant.id),
+      details: { practiceName: name, contactEmail: email, region: region || null },
+    });
+
+    return {
+      ok: true,
+      tenant,
+      offer: getPublicOffer(),
+      next: 'checkout',
+    };
+  }
+
+  async function createPilotCheckoutSession({
+    tenantId = null,
+    practiceName = '',
+    contactEmail = '',
+    baseUrl = '',
+  } = {}) {
+    if (!tenantId) return { ok: false, error: 'tenant_id required' };
+    const stripe = await getStripeClient();
+    if (!stripe) return { ok: false, error: 'Stripe not configured (STRIPE_SECRET_KEY missing)' };
+
+    const amountCents = CLIENTCARE_BILLING_PRICING.pilot.oneTimeCents;
+    if (!Number.isFinite(amountCents) || amountCents <= 0) {
+      return { ok: false, error: 'Invalid BirthBill pilot price configuration' };
+    }
+
+    const safeBase = String(baseUrl || '').replace(/\/$/, '');
+    const months = CLIENTCARE_BILLING_PRICING.carePlan.includedMonthsOnPilot || 1;
+    const label = practiceName
+      ? `BirthBill pilot — ${practiceName}`
+      : 'BirthBill pilot onboard';
+    const description = `${CLIENTCARE_BILLING_PRICING.pilot.description} (${getBirthBillPilotOfferSummary()})`;
+
+    const session = await stripe.checkout.sessions.create({
+      mode: 'payment',
+      customer_email: contactEmail || undefined,
+      line_items: [
+        {
+          price_data: {
+            currency: 'usd',
+            product_data: {
+              name: label,
+              description,
+            },
+            unit_amount: Math.round(amountCents),
+          },
+          quantity: 1,
+        },
+      ],
+      success_url: `${safeBase}/api/v1/clientcare-billing/public/checkout/success?tenant_id=${encodeURIComponent(tenantId)}&session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${safeBase}/birthbill?cancelled=1`,
+      metadata: {
+        product: 'birthbill-pilot',
+        tenantId: String(tenantId),
+        beta: 'true',
+        careIncludedMonths: String(months),
+        offerSummary: getBirthBillPilotOfferSummary(),
+        recoveryFeePct: String(CLIENTCARE_BILLING_PRICING.recoveryShare.pct || 5),
+      },
+    });
+
+    await logAudit({
+      tenantId,
+      actor: contactEmail || 'public',
+      action_type: 'birthbill_checkout_started',
+      entity_type: 'checkout',
+      entity_id: session.id,
+      details: { amountCents, practiceName: practiceName || null },
+    });
+
+    return {
+      ok: true,
+      checkout_url: session.url,
+      session_id: session.id,
+      amount_cents: amountCents,
+      offer_summary: getBirthBillPilotOfferSummary(),
+    };
+  }
+
+  async function verifyPilotCheckoutSession({ tenantId = null, sessionId = null } = {}) {
+    if (!sessionId) return { ok: false, error: 'session_id required' };
+    const stripe = await getStripeClient();
+    if (!stripe) return { ok: false, error: 'Stripe not configured' };
+
+    const session = await stripe.checkout.sessions.retrieve(String(sessionId));
+    const paid = session.payment_status === 'paid' || session.status === 'complete';
+    const metaTenant = session.metadata?.tenantId || null;
+    if (tenantId && metaTenant && String(tenantId) !== String(metaTenant)) {
+      return { ok: false, error: 'tenant_id mismatch for checkout session' };
+    }
+    const resolvedTenantId = tenantId || metaTenant;
+    if (paid && resolvedTenantId) {
+      try {
+        const { rows } = await pool.query(`SELECT * FROM clientcare_tenants WHERE id = $1 LIMIT 1`, [resolvedTenantId]);
+        const current = rows[0];
+        if (current) {
+          await saveTenant({
+            slug: current.slug,
+            name: current.name,
+            status: 'pilot_paid',
+            collections_fee_pct: current.collections_fee_pct,
+            contact_name: current.contact_name,
+            contact_email: current.contact_email,
+          });
+          const prior = await getOnboarding(resolvedTenantId);
+          await saveOnboarding(resolvedTenantId, {
+            ...prior,
+            notes: `${prior.notes || ''} | BirthBill pilot paid ${new Date().toISOString()} session=${sessionId}`.trim(),
+          });
+        }
+      } catch (err) {
+        logger.warn?.({ err: err.message }, '[CLIENTCARE-SELLABLE] pilot paid tenant update failed');
+      }
+      await logAudit({
+        tenantId: resolvedTenantId,
+        actor: session.customer_email || 'stripe',
+        action_type: 'birthbill_checkout_paid',
+        entity_type: 'checkout',
+        entity_id: String(sessionId),
+        details: {
+          amount_total: session.amount_total,
+          payment_status: session.payment_status,
+        },
+      });
+    }
+    return {
+      ok: paid,
+      paid,
+      tenant_id: resolvedTenantId,
+      session_id: session.id,
+      payment_status: session.payment_status,
+      next: paid
+        ? 'Connect ClientCare credentials with your onboarding specialist — forever-chase seed is next.'
+        : 'Checkout not paid yet',
+    };
+  }
+
+  function maskUsername(value) {
+    const s = String(value || '');
+    if (!s) return '';
+    if (s.length <= 4) return `${s.slice(0, 1)}***`;
+    return `${s.slice(0, 2)}***${s.slice(-2)}`;
+  }
+
+  async function getTenantCredentialStatus(tenantId) {
+    if (!tenantId) return { connected: false };
+    try {
+      const { rows } = await pool.query(
+        `SELECT tenant_id, base_url, username_hint, status, last_verified_at, last_error, updated_at
+         FROM clientcare_tenant_credentials WHERE tenant_id = $1 LIMIT 1`,
+        [tenantId]
+      );
+      const row = rows[0];
+      if (!row) return { connected: false, tenant_id: tenantId };
+      return {
+        connected: true,
+        tenant_id: row.tenant_id,
+        base_url: row.base_url,
+        username_hint: row.username_hint,
+        status: row.status,
+        last_verified_at: row.last_verified_at,
+        last_error: row.last_error,
+        updated_at: row.updated_at,
+      };
+    } catch (error) {
+      if (isMissingRelation(error)) return { connected: false, tenant_id: tenantId, error: 'credentials_table_missing' };
+      throw error;
+    }
+  }
+
+  async function getTenantCredentials(tenantId) {
+    if (!tenantId) return null;
+    const { rows } = await pool.query(
+      `SELECT * FROM clientcare_tenant_credentials WHERE tenant_id = $1 LIMIT 1`,
+      [tenantId]
+    );
+    const row = rows[0];
+    if (!row) return null;
+    return {
+      tenantId: row.tenant_id,
+      baseUrl: row.base_url,
+      username: row.username,
+      password: decrypt(row.encrypted_password),
+      mfaMode: row.mfa_mode || null,
+      mfaSecret: row.encrypted_mfa_secret ? decrypt(row.encrypted_mfa_secret) : null,
+      status: row.status,
+    };
+  }
+
+  async function saveTenantCredentials(tenantId, {
+    baseUrl = 'https://clientcarewest.net',
+    username = '',
+    password = '',
+    mfaMode = null,
+    mfaSecret = null,
+  } = {}) {
+    if (!tenantId) return { ok: false, error: 'tenant_id required' };
+    const user = String(username || '').trim();
+    const pass = String(password || '');
+    if (!user || !pass) return { ok: false, error: 'username and password required' };
+    const encPass = encrypt(pass);
+    if (!encPass) return { ok: false, error: 'encryption_failed — set TCO_ENCRYPTION_KEY' };
+    const encMfa = mfaSecret ? encrypt(String(mfaSecret)) : null;
+    const url = String(baseUrl || 'https://clientcarewest.net').trim().replace(/\/$/, '') || 'https://clientcarewest.net';
+    try {
+      const { rows } = await pool.query(
+        `INSERT INTO clientcare_tenant_credentials (
+           tenant_id, base_url, username, encrypted_password, mfa_mode, encrypted_mfa_secret,
+           username_hint, status, last_error, updated_at
+         ) VALUES ($1,$2,$3,$4,$5,$6,$7,'stored',NULL,NOW())
+         ON CONFLICT (tenant_id) DO UPDATE SET
+           base_url=EXCLUDED.base_url,
+           username=EXCLUDED.username,
+           encrypted_password=EXCLUDED.encrypted_password,
+           mfa_mode=EXCLUDED.mfa_mode,
+           encrypted_mfa_secret=COALESCE(EXCLUDED.encrypted_mfa_secret, clientcare_tenant_credentials.encrypted_mfa_secret),
+           username_hint=EXCLUDED.username_hint,
+           status='stored',
+           last_error=NULL,
+           updated_at=NOW()
+         RETURNING tenant_id, base_url, username_hint, status, updated_at`,
+        [tenantId, url, user, encPass, mfaMode || null, encMfa, maskUsername(user)]
+      );
+      const prior = await getOnboarding(tenantId);
+      await saveOnboarding(tenantId, { ...prior, browser_ready: true });
+      await logAudit({
+        tenantId,
+        actor: user,
+        action_type: 'birthbill_clientcare_connected',
+        entity_type: 'credentials',
+        entity_id: String(tenantId),
+        details: { base_url: url, username_hint: maskUsername(user) },
+      });
+      return { ok: true, credentials: rows[0], onboarding: await getOnboarding(tenantId) };
+    } catch (error) {
+      if (isMissingRelation(error)) return { ok: false, error: 'credentials_table_missing — redeploy migration' };
+      throw error;
+    }
+  }
+
+  async function connectClientCareAfterPay({
+    tenantId = null,
+    sessionId = null,
+    baseUrl = '',
+    username = '',
+    password = '',
+    mfaMode = null,
+    mfaSecret = null,
+  } = {}) {
+    if (!tenantId) return { ok: false, error: 'tenant_id required' };
+    const { rows } = await pool.query(`SELECT * FROM clientcare_tenants WHERE id = $1 LIMIT 1`, [tenantId]);
+    const tenant = rows[0];
+    if (!tenant) return { ok: false, error: 'tenant_not_found' };
+    const paidStatuses = new Set(['pilot_paid', 'active', 'live']);
+    let paid = paidStatuses.has(String(tenant.status || ''));
+    if (!paid && sessionId) {
+      const verified = await verifyPilotCheckoutSession({ tenantId, sessionId });
+      paid = Boolean(verified.paid);
+    }
+    if (!paid) return { ok: false, error: 'pilot_payment_required_before_connect' };
+    const saved = await saveTenantCredentials(tenantId, {
+      baseUrl: baseUrl || 'https://clientcarewest.net',
+      username,
+      password,
+      mfaMode,
+      mfaSecret,
+    });
+    if (!saved.ok) return saved;
+    return {
+      ok: true,
+      tenant_id: tenantId,
+      status: saved.credentials?.status || 'stored',
+      username_hint: saved.credentials?.username_hint,
+      next: 'Credentials stored encrypted. Run forever-chase seed with this tenant_id next.',
+    };
+  }
+
   return {
     assertOperatorAccess,
     buildLiveValidation,
+    connectClientCareAfterPay,
+    createPilotCheckoutSession,
     exportAuditLogCsv,
     getPackagingOverview,
+    getPublicOffer,
     getReadinessReport,
+    getTenantCredentials,
+    getTenantCredentialStatus,
     getValidationHistory,
     listAuditLog,
     getOnboarding,
@@ -425,5 +824,8 @@ export function createClientCareSellableService({ pool, logger = console }) {
     saveOnboarding,
     saveOperatorAccess,
     saveTenant,
+    saveTenantCredentials,
+    signupPracticeLead,
+    verifyPilotCheckoutSession,
   };
 }

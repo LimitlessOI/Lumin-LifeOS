@@ -10,7 +10,7 @@
     ]
   },
   "schema": "product_registry_v1",
-  "updated_at": "2026-06-29",
+  "updated_at": "2026-07-13",
   "registry_rules": {
     "canonical_folder_rule": "Each product has one canonical folder under docs/products/<product-id>/.",
     "completeness_gate_rule": "A product must not advance to founder-packet or blueprint generation until blocking gaps in vision, intent, tradeoffs, and scope are surfaced.",

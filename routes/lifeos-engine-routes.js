@@ -275,7 +275,7 @@ export function createLifeOSEngineRoutes({ pool, requireKey, notificationService
       if (!code) return res.status(400).send('Missing Google OAuth code.');
       await calendar.handleGoogleCallback(code, user);
       const base = String(process.env.RAILWAY_PUBLIC_DOMAIN || process.env.PUBLIC_BASE_URL || '').trim().replace(/\/$/, '');
-      const path = `/lifeos?page=lifeos-engine.html&calendar=connected&user=${encodeURIComponent(user)}`;
+      const path = `/overlay/lifeos-app.html?page=lifeos-connect.html&google=calendar_connected&user=${encodeURIComponent(user)}`;
       if (/^https?:\/\//i.test(base)) return res.redirect(`${base}${path}`);
       return res.redirect(path);
     } catch (err) {
@@ -297,6 +297,34 @@ export function createLifeOSEngineRoutes({ pool, requireKey, notificationService
   });
 
   return router;
+}
+
+/**
+ * Auto-register entry point. Mounts engine (calendar + Google OAuth + outreach)
+ * on the founder-builder lane without editing the protected composition root.
+ * Tip boots founder_builder only — full-runtime mount never runs on Railway.
+ */
+export function registerLifeOSEngineRoutes(app, deps = {}) {
+  const {
+    pool,
+    requireKey,
+    logger,
+    callCouncilMember = null,
+    notificationService = null,
+    sendSMS = null,
+  } = deps;
+  app.use(
+    '/api/v1/lifeos/engine',
+    createLifeOSEngineRoutes({
+      pool,
+      requireKey,
+      notificationService,
+      sendSMS,
+      callCouncilMember,
+      logger,
+    })
+  );
+  logger?.info?.('✅ [LIFEOS-ENGINE] Founder-builder routes mounted at /api/v1/lifeos/engine');
 }
 
 export function createLifeOSGatewayRoutes({ pool, sendSMS, callCouncilMember, logger }) {

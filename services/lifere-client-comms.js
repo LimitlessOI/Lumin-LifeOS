@@ -170,13 +170,44 @@ export function createLifeREClientComms({ pool = null, outreach = null, logger =
     return { ok: true, entries: rows };
   }
 
-  async function suggestVarsFromDeal({ dealSide, tenantId = 'default', userId, ref, side = 'buyer' }) {
+  async function suggestVarsFromDeal({
+    dealSide,
+    transaction = null,
+    tenantId = 'default',
+    userId,
+    ref,
+    side = 'buyer',
+  }) {
     if (!ref) return { ok: false, error: 'ref required' };
+
+    if (String(side).toLowerCase() === 'transaction' || String(side).toLowerCase() === 'tc') {
+      if (!transaction?.getDealStatus) return { ok: false, error: 'transaction_surface_required' };
+      const status = await transaction.getDealStatus({ dealId: ref });
+      const blocker = (status.blockers || [])[0];
+      const blockerText = blocker?.message || blocker || null;
+      return {
+        ok: true,
+        source: 'tc_transaction',
+        vars: {
+          client_name: status.client_name || status.buyer_name || 'there',
+          address: status.property_address || ref,
+          status: status.stage || 'in progress',
+          next_step: blockerText || (status.next_actions?.[0]) || 'Confirm next milestone',
+          milestone: status.stage || 'Transaction update',
+          doc_name: (status.missing_documents || [])[0] || 'required document',
+          summary: blockerText
+            ? `Open item: ${blockerText}`
+            : `File at ${status.stage || 'current stage'}; close ${status.close_date || 'TBD'}.`,
+        },
+      };
+    }
+
     if (String(side).toLowerCase() === 'seller') {
       const ws = await dealSide.getSellerWorkspace({ tenantId, userId, listingRef: ref });
       if (!ws.ok) return ws;
       return {
         ok: true,
+        source: 'seller_workspace',
         vars: {
           client_name: ref.replace(/_/g, ' '),
           address: ws.address || ref,
@@ -190,6 +221,7 @@ export function createLifeREClientComms({ pool = null, outreach = null, logger =
     if (!ws.ok) return ws;
     return {
       ok: true,
+      source: 'buyer_workspace',
       vars: {
         client_name: ref.replace(/_/g, ' '),
         status: ws.stage,

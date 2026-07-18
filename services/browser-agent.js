@@ -118,7 +118,7 @@ export async function probeLaunchConfigs() {
 export async function createSession({ headless = true, logger = console } = {}) {
   const browser = await puppeteer.launch(getChromiumLaunchOptions({ headless }));
 
-  const page = await browser.newPage();
+  let page = await browser.newPage();
 
   await page.setUserAgent(
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 " +
@@ -126,12 +126,21 @@ export async function createSession({ headless = true, logger = console } = {}) 
   );
   await page.setViewport({ width: 1280, height: 800 });
 
-  if (typeof page.waitForTimeout !== "function") {
-    page.waitForTimeout = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  function wirePageDefaults(p) {
+    if (typeof p.waitForTimeout !== "function") {
+      p.waitForTimeout = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+    }
+    p.setDefaultTimeout(DEFAULT_TIMEOUT);
+    p.setDefaultNavigationTimeout(DEFAULT_NAV_TIMEOUT);
   }
+  wirePageDefaults(page);
 
-  page.setDefaultTimeout(DEFAULT_TIMEOUT);
-  page.setDefaultNavigationTimeout(DEFAULT_NAV_TIMEOUT);
+  async function setPage(nextPage) {
+    if (!nextPage) throw new Error('setPage requires a page');
+    page = nextPage;
+    wirePageDefaults(page);
+    return page;
+  }
 
   async function screenshot(label = "screenshot") {
     const filename = `${Date.now()}-${label.replace(/[^a-z0-9-]/gi, "_")}.png`;
@@ -164,30 +173,62 @@ export async function createSession({ headless = true, logger = console } = {}) 
    * Fill a form field. Tries CSS selector, then placeholder attr matching via evaluate.
    */
   async function fill(selector, value) {
-    // Try direct selector
-    const el = await page.$(selector);
-    if (el) {
-      await el.click({ clickCount: 3 }); // select all existing text
-      await el.type(value, { delay: 30 });
-      return;
+    const candidates = String(selector || '')
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean);
+    for (const sel of candidates.length ? candidates : [selector]) {
+      try {
+        await page.waitForSelector(sel, { timeout: 2500 });
+      } catch {
+        /* try next */
+      }
+      const el = await page.$(sel);
+      if (el) {
+        await el.click({ clickCount: 3 });
+        await el.type(value, { delay: 30 });
+        return;
+      }
     }
-    // Try placeholder match
-    const filled = await page.evaluate((sel, val) => {
-      // selector might be a placeholder hint — try to find by placeholder
-      const inputs = Array.from(document.querySelectorAll("input, textarea"));
-      const match = inputs.find(
-        (i) => i.placeholder?.toLowerCase().includes(sel.toLowerCase()) ||
-               i.name?.toLowerCase().includes(sel.replace(/[^a-z]/gi, "").toLowerCase())
-      );
-      if (match) {
-        match.focus();
-        match.value = val;
-        match.dispatchEvent(new Event("input", { bubbles: true }));
-        match.dispatchEvent(new Event("change", { bubbles: true }));
-        return true;
+    // Try placeholder / name match across main document + same-origin iframes
+    const filled = await page.evaluate((sels, val) => {
+      const tryDoc = (doc) => {
+        for (const sel of sels) {
+          const direct = doc.querySelector(sel);
+          if (direct) {
+            direct.focus();
+            direct.value = val;
+            direct.dispatchEvent(new Event('input', { bubbles: true }));
+            direct.dispatchEvent(new Event('change', { bubbles: true }));
+            return true;
+          }
+        }
+        const inputs = Array.from(doc.querySelectorAll('input, textarea'));
+        const match = inputs.find(
+          (i) =>
+            i.placeholder?.toLowerCase().includes(String(sels[0] || '').toLowerCase()) ||
+            sels.some((sel) => i.name && sel.toLowerCase().includes(String(i.name).toLowerCase()))
+        );
+        if (match) {
+          match.focus();
+          match.value = val;
+          match.dispatchEvent(new Event('input', { bubbles: true }));
+          match.dispatchEvent(new Event('change', { bubbles: true }));
+          return true;
+        }
+        return false;
+      };
+      if (tryDoc(document)) return true;
+      for (const frame of Array.from(document.querySelectorAll('iframe'))) {
+        try {
+          const doc = frame.contentDocument;
+          if (doc && tryDoc(doc)) return true;
+        } catch {
+          /* cross-origin */
+        }
       }
       return false;
-    }, selector, value);
+    }, candidates, value);
 
     if (!filled) {
       throw new Error(`Could not find field: ${selector}`);
@@ -237,7 +278,11 @@ export async function createSession({ headless = true, logger = console } = {}) 
   }
 
   return {
-    page,
+    browser,
+    get page() {
+      return page;
+    },
+    setPage,
     navigate,
     fill,
     click,
@@ -251,4 +296,160 @@ export async function createSession({ headless = true, logger = console } = {}) 
   };
 }
 
-export default { createSession };
+/**
+ * Deterministic Cloudflare dashboard login + DNS upsert via dash /api/v4 (cookie session).
+ * Prefer this over the AI browser loop for Railway custom-domain records.
+ */
+export async function applyCloudflareDnsViaDashSession({
+  session,
+  email,
+  password,
+  records = [],
+  zoneName = "taloaos.com",
+  logger = console,
+} = {}) {
+  if (!session?.page) throw new Error("session.page required");
+  if (!email || !password) throw new Error("email + password required");
+  if (!records.length) throw new Error("records required");
+
+  const page = session.page;
+  const sleep = (ms) => page.waitForTimeout(ms);
+
+  async function dashFetch(apiPath, { method = "GET", body } = {}) {
+    return page.evaluate(async (apiPath, method, body) => {
+      const res = await fetch(`https://dash.cloudflare.com/api/v4${apiPath}`, {
+        method,
+        credentials: "include",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "x-cross-site-security": "dash",
+        },
+        body: body ? JSON.stringify(body) : undefined,
+      });
+      let json = null;
+      try { json = await res.json(); } catch { json = null; }
+      return { status: res.status, ok: res.ok, json };
+    }, apiPath, method, body || null);
+  }
+
+  await session.navigate("https://dash.cloudflare.com/login");
+  await sleep(1200);
+  if (await session.detectCaptcha()) {
+    return { ok: false, reason: "captcha", needs_human: true, stage: "pre_login" };
+  }
+
+  // Cloudflare login is often email → continue → password
+  try {
+    await session.fill(
+      'input[name="email"], input#email, input[type="email"], input[autocomplete="username"]',
+      email,
+    );
+  } catch (err) {
+    return { ok: false, reason: `email_field: ${err.message}`, needs_human: true };
+  }
+
+  try {
+    await session.click('button[type="submit"], button[data-testid="login-submit"]');
+  } catch {
+    /* password may already be on same page */
+  }
+  await sleep(1500);
+
+  try {
+    await session.fill(
+      'input[name="password"], input#password, input[type="password"], input[autocomplete="current-password"]',
+      password,
+    );
+  } catch (err) {
+    return { ok: false, reason: `password_field: ${err.message}`, needs_human: true, url: session.currentUrl() };
+  }
+
+  try {
+    await session.click('button[type="submit"], button[data-testid="login-submit"]');
+  } catch (err) {
+    return { ok: false, reason: `submit: ${err.message}`, needs_human: true };
+  }
+
+  await sleep(4500);
+  if (await session.detectCaptcha()) {
+    return { ok: false, reason: "captcha", needs_human: true, stage: "post_login", url: session.currentUrl() };
+  }
+
+  const afterLoginUrl = session.currentUrl();
+  if (/\/login|challenge|turnstile/i.test(afterLoginUrl)) {
+    return {
+      ok: false,
+      reason: "login_not_completed",
+      needs_human: true,
+      url: afterLoginUrl,
+    };
+  }
+
+  await session.navigate("https://dash.cloudflare.com/");
+  await sleep(2000);
+
+  const zones = await dashFetch(`/zones?name=${encodeURIComponent(zoneName)}&status=active`);
+  const zoneId = zones?.json?.result?.[0]?.id || null;
+  if (!zoneId) {
+    return {
+      ok: false,
+      reason: "zone_not_found_or_unauthorized",
+      needs_human: true,
+      zone_http: zones?.status,
+      zone_errors: zones?.json?.errors || null,
+      url: session.currentUrl(),
+      note: "Vault account may not own taloaos.com — need token from the owning Cloudflare account",
+    };
+  }
+
+  const results = [];
+  for (const rec of records) {
+    const type = String(rec.type || "").toUpperCase();
+    const name = String(rec.name || "").toLowerCase();
+    const content = String(rec.content || "");
+    const list = await dashFetch(
+      `/zones/${zoneId}/dns_records?type=${encodeURIComponent(type)}&name=${encodeURIComponent(name)}`,
+    );
+    const existing = list?.json?.result?.[0];
+    const payload = {
+      type,
+      name,
+      content,
+      proxied: type === "CNAME" ? Boolean(rec.proxied) : false,
+      ttl: rec.ttl || 1,
+    };
+    let written;
+    if (existing?.id) {
+      written = await dashFetch(`/zones/${zoneId}/dns_records/${existing.id}`, {
+        method: "PUT",
+        body: payload,
+      });
+      results.push({
+        action: "updated",
+        ok: Boolean(written?.json?.success),
+        status: written?.status,
+        record: payload,
+        errors: written?.json?.errors || null,
+      });
+    } else {
+      written = await dashFetch(`/zones/${zoneId}/dns_records`, {
+        method: "POST",
+        body: payload,
+      });
+      results.push({
+        action: "created",
+        ok: Boolean(written?.json?.success),
+        status: written?.status,
+        record: payload,
+        errors: written?.json?.errors || null,
+      });
+    }
+  }
+
+  const ok = results.length > 0 && results.every((r) => r.ok);
+  logger.log?.(`[BROWSER] Cloudflare DNS via dash: ok=${ok} zone=${zoneId} n=${results.length}`);
+  return { ok, path: "dash_session_api", zoneId, zoneName, results };
+}
+
+export default { createSession, applyCloudflareDnsViaDashSession };

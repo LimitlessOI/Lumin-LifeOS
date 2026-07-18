@@ -2,6 +2,8 @@
  * SYNOPSIS: Exports renderCanvas — services/site-builder-editor-canvas.js.
  * @ssot docs/products/site-builder/PRODUCT_HOME.md
  */
+import { SITE_BUILDER_PRICING } from '../config/site-builder-pricing.js';
+
 function htmlEscape(value) {
   return String(value ?? "")
     .replaceAll("&", "&amp;")
@@ -30,6 +32,10 @@ export function renderCanvas({
 } = {}) {
   const safeVariants = Array.isArray(variants) ? variants : [];
   const safePalettes = Array.isArray(palettes) ? palettes : [];
+  const upsellBase = `${String(baseUrl ?? "").replace(/\/+$/, "")}/api/v1/sites/upsell/checkout?clientId=${encodeURIComponent(String(clientId ?? ""))}`;
+  const additionalDisplay = htmlEscape(SITE_BUILDER_PRICING.templates?.additional?.display || "$10");
+  const customDisplay = htmlEscape(SITE_BUILDER_PRICING.templates?.custom?.display || "$35");
+  const colorCustomDisplay = htmlEscape(SITE_BUILDER_PRICING.colors?.custom?.display || "$5");
   const initialFile = String(siteFile ?? "");
   // Preview files are served at ${baseUrl}/previews/${clientId}/<file>. The
   // editor shell itself is served from /api/v1/sites/editor, so a relative
@@ -160,6 +166,15 @@ export function renderCanvas({
       text-overflow: ellipsis;
       white-space: nowrap;
     }
+    .lifeos-canvas-upsell {
+      border: 1px dashed rgba(124, 58, 237, 0.5);
+      background: rgba(124, 58, 237, 0.06);
+      color: #6d28d9;
+      font-weight: 700;
+    }
+    .lifeos-canvas-upsell:hover {
+      background: rgba(124, 58, 237, 0.12);
+    }
     .lifeos-canvas-status {
       width: 100%;
       min-height: 18px;
@@ -233,20 +248,23 @@ export function renderCanvas({
   </style>
 
   <div class="lifeos-canvas-toolbar">
-    <div class="lifeos-canvas-group" aria-label="Templates">
+    <div class="lifeos-canvas-group" aria-label="Templates" title="Click a look to swap your site's design instantly">
       <span class="lifeos-canvas-label">Template</span>
       ${variantChips}
+      <a class="lifeos-canvas-chip lifeos-canvas-upsell" href="${upsellBase}&kind=template-additional" title="Unlock 10 more design options beyond your free templates">+10 more (${additionalDisplay})</a>
+      <a class="lifeos-canvas-chip lifeos-canvas-upsell" href="${upsellBase}&kind=template-custom" title="A fully bespoke design, unique to your business only">✨ Custom design (${customDisplay})</a>
     </div>
-    <div class="lifeos-canvas-group" aria-label="Palettes">
+    <div class="lifeos-canvas-group" aria-label="Palettes" title="Click a color set to recolor your site">
       <span class="lifeos-canvas-label">Palette</span>
       ${paletteSwatches}
+      <a class="lifeos-canvas-swatch lifeos-canvas-upsell" href="${upsellBase}&kind=color-custom" title="Match your exact brand colors">Custom colors (${colorCustomDisplay})</a>
     </div>
-    <div class="lifeos-canvas-group" aria-label="Device">
+    <div class="lifeos-canvas-group" aria-label="Device" title="Preview how your site looks on desktop vs. phone">
       <span class="lifeos-canvas-label">Device</span>
-      <button type="button" class="lifeos-canvas-device is-active" data-lifeos-device="desktop">Desktop</button>
-      <button type="button" class="lifeos-canvas-device" data-lifeos-device="mobile">Mobile</button>
+      <button type="button" class="lifeos-canvas-device is-active" data-lifeos-device="desktop" title="Preview on desktop">Desktop</button>
+      <button type="button" class="lifeos-canvas-device" data-lifeos-device="mobile" title="Preview on a phone screen">Mobile</button>
     </div>
-    <button type="button" class="lifeos-canvas-save" data-lifeos-save>Save</button>
+    <button type="button" class="lifeos-canvas-save" data-lifeos-save title="Save your text and layout edits">Save</button>
     <div class="lifeos-canvas-status" data-lifeos-status aria-live="polite"></div>
   </div>
 
@@ -572,6 +590,7 @@ export function renderCanvas({
 
       const saveButton = root.querySelector("[data-lifeos-save]");
       if (saveButton) {
+        const saveButtonDefaultText = saveButton.textContent;
         saveButton.addEventListener("click", async function () {
           setStatus("Saving…", "");
           try {
@@ -588,6 +607,14 @@ export function renderCanvas({
               html: html
             });
             setStatus("Saved.", "ok");
+            saveButton.textContent = "Saved ✓";
+            saveButton.style.background = "#16a34a";
+            saveButton.style.borderColor = "#16a34a";
+            window.setTimeout(function () {
+              saveButton.textContent = saveButtonDefaultText;
+              saveButton.style.background = "";
+              saveButton.style.borderColor = "";
+            }, 2200);
           } catch (error) {
             setStatus("Save failed: " + error.message, "error");
           }

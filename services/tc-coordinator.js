@@ -1,74 +1,307 @@
 /**
- * SYNOPSIS: Records a new transaction in the database. * @param {object} transactionData - The transaction details. * @param {string} transactionData.userId - The ID of the user initiating the transaction. * @param {number} transactionData.amount - The
+ * SYNOPSIS: tc-coordinator.js
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
+ * tc-coordinator.js
+ * Main Transaction Coordinator orchestrator — from contract email to close of escrow.
+ *
+ * Deps: services/tc-browser-agent.js, services/tc-email-monitor.js, pool (Neon)
+ * Exports: createTCCoordinator(deps), startTCDeadlineCron(pool, coordinator)
  */
-export function createTransactionService({ pool, logger }) {
 
-  /**
-   * Records a new transaction in the database. * @param {object} transactionData - The transaction details. * @param {string} transactionData.userId - The ID of the user initiating the transaction. * @param {number} transactionData.amount - The transaction amount. * @param {string} transactionData.currency - The currency code (e.g., 'USD'). * @param {string} transactionData.type - The type of transaction (e.g., 'deposit', 'purchase'). * @param {string} [transactionData.status='pending'] - The initial status of the transaction. * @returns {Promise<object>} The newly created transaction record. * @param {string} transactionId - The ID of the transaction. * @param {string} userId - The ID of the user who owns the transaction. * @returns {Promise<object|null>} The transaction record, or null if not found/unauthorized. */
-  async function getTransaction(transactionId, userId) {
+import { createTCBrowserAgent } from './tc-browser-agent.js';
+import { createTCEmailMonitor } from './tc-email-monitor.js';
+import { createTCStatusEngine } from './tc-status-engine.js';
+
+const REMINDER_DAYS = [3, 1]; // Send reminders at 3 days and 1 day before deadline
+const CRON_INTERVAL_MS = 15 * 60 * 1000; // 15 minutes
+
+export function createTCCoordinator({ pool, accountManager, notificationService, callCouncilMember, logger = console }) {
+  const browserAgent = createTCBrowserAgent({ accountManager, logger });
+  const emailMonitor = createTCEmailMonitor({ notificationService, callCouncilMember, accountManager, logger });
+  const statusEngine = createTCStatusEngine();
+
+  // ── DB helpers ─────────────────────────────────────────────────────────────
+
+  async function insertTransaction(tx) {
     const { rows } = await pool.query(
-      `SELECT * FROM transactions WHERE id = $1 AND user_id = $2 LIMIT 1`,
-      [transactionId, userId]
+      `INSERT INTO tc_transactions
+         (mls_number, address, purchase_price, status, agent_role, key_dates, close_date, parties, notes, source_email_id)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
+       ON CONFLICT (mls_number) DO UPDATE SET
+         address = EXCLUDED.address,
+         key_dates = EXCLUDED.key_dates,
+         parties = EXCLUDED.parties,
+         updated_at = NOW()
+       RETURNING *`,
+      [
+        tx.mls_number || `MANUAL-${Date.now()}`,
+        tx.address || 'Address pending',
+        tx.purchase_price || null,
+        tx.status || 'active',
+        tx.agent_role || 'buyers',
+        JSON.stringify(tx.key_dates || {}),
+        tx.close_date || tx.key_dates?.coe || null,
+        JSON.stringify(tx.parties || {}),
+        tx.notes || null,
+        tx.source_email_id || null,
+      ]
     );
-    if (!rows[0]) {
-      const err = new Error('transaction_not_found_or_unauthorized');
-      err.status = 404;
-      throw err;
-    }
     return rows[0];
   }
 
+  async function logEvent(transactionId, eventType, payload = {}) {
+    await pool.query(
+      `INSERT INTO tc_transaction_events (transaction_id, event_type, payload) VALUES ($1,$2,$3)`,
+      [transactionId, eventType, JSON.stringify(payload)]
+    ).catch(err => logger.warn?.({ err: err.message }, '[TC] Event log failed'));
+  }
+
+  async function getTransaction(id) {
+    const { rows } = await pool.query('SELECT * FROM tc_transactions WHERE id=$1', [id]);
+    return rows[0] || null;
+  }
+
   /**
-   * Lists transactions for a specific user, with optional filtering by status. * @param {string} userId - The ID of the user. * @param {object} [options] - Filtering options. * @param {string} [options.status] - Filter by transaction status (e.g., 'completed', 'pending'). * @param {number} [options.limit=50] - Maximum number of transactions to return. * @returns {Promise<Array<object>>} A list of transaction records. */
-  async function listTransactions(userId, { status, limit = 50 } = {}) {
-    const conditions = ['user_id = $1'];
-    const params = [userId];
-    let paramIndex = 1;
-
-    if (status) {
-      paramIndex++;
-      conditions.push(`status = $${paramIndex}`);
-      params.push(status);
+   * Shallow-merge known party keys onto tc_transactions.parties (JSONB).
+   * Fills missing email/name unless overwrite=true.
+   */
+  async function mergeTransactionParties(transactionId, patch = {}, { overwrite = false, source = 'merge' } = {}) {
+    const tx = await getTransaction(transactionId);
+    if (!tx) return null;
+    const cur = typeof tx.parties === 'object' && tx.parties && !Array.isArray(tx.parties) ? { ...tx.parties } : {};
+    const roles = ['seller', 'buyer', 'listing_agent', 'buyer_agent', 'escrow', 'lender', 'title'];
+    for (const role of roles) {
+      if (patch[role] == null || typeof patch[role] !== 'object') continue;
+      const incoming = patch[role];
+      const base = typeof cur[role] === 'object' && cur[role] ? { ...cur[role] } : {};
+      for (const k of ['email', 'name', 'full_name', 'display_name', 'phone', 'company']) {
+        const v = incoming[k];
+        if (v == null || String(v).trim() === '') continue;
+        if (overwrite || base[k] == null || String(base[k]).trim() === '') {
+          base[k] = String(v).trim();
+        }
+      }
+      cur[role] = base;
     }
+    await pool.query(`UPDATE tc_transactions SET parties=$1, updated_at=NOW() WHERE id=$2`, [
+      JSON.stringify(cur),
+      transactionId,
+    ]);
+    await logEvent(transactionId, 'parties_merged', { source, overwrite: !!overwrite });
+    return getTransaction(transactionId);
+  }
 
-    paramIndex++;
-    const lim = Math.min(Math.max(parseInt(limit, 10) || 50, 1), 200);
-    params.push(lim);
-
+  async function getActiveTransactions() {
     const { rows } = await pool.query(
-      `SELECT * FROM transactions WHERE ${conditions.join(' AND ')} ORDER BY created_at DESC LIMIT $${paramIndex}`,
-      params
+      `SELECT * FROM tc_transactions WHERE status IN ('active','pending') ORDER BY close_date ASC`
     );
     return rows;
   }
 
+  async function wasReminderSent(transactionId, deadlineName) {
+    const { rows } = await pool.query(
+      `SELECT id FROM tc_transaction_events
+       WHERE transaction_id=$1 AND event_type='deadline_reminder_sent'
+         AND payload->>'deadline' = $2
+         AND created_at > NOW() - INTERVAL '23 hours'`,
+      [transactionId, deadlineName]
+    );
+    return rows.length > 0;
+  }
+
+  // ── Core flows ─────────────────────────────────────────────────────────────
+
   /**
-   * Updates the status of an existing transaction. * @param {string} transactionId - The ID of the transaction to update. * @param {string} userId - The ID of the user who owns the transaction. * @param {string} newStatus - The new status for the transaction (e.g., 'completed', 'failed'). * @returns {Promise<object>} The updated transaction record. */
-  async function updateTransactionStatus(transactionId, userId, newStatus) {
-    const validStatuses = new Set(['pending', 'completed', 'failed', 'refunded', 'cancelled']);
-    if (!validStatuses.has(newStatus)) {
-      const err = new Error('invalid_transaction_status');
-      err.status = 400;
-      throw err;
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
+   * Full new-contract flow: parse email → DB → TransactionDesk → party intro.
+   * TransactionDesk failures are non-blocking.
+   */
+  async function processNewContract(emailText, sourceEmailId = null) {
+    logger.info?.('[TC] Processing new contract from email');
+
+    // 1. Parse transaction details
+    const parsed = await emailMonitor.parseTransactionFromEmail(emailText);
+    const keyDates = emailMonitor.computeKeyDates(parsed.acceptance_date, parsed.close_date);
+
+    const txData = {
+      ...parsed,
+      key_dates: keyDates,
+      close_date: keyDates.coe || null,
+      source_email_id: sourceEmailId,
+    };
+
+    // 2. Store in DB
+    const row = await insertTransaction(txData);
+    await logEvent(row.id, 'created', { source: 'email', parsed });
+    logger.info?.({ id: row.id, address: row.address }, '[TC] Transaction created in DB');
+
+    // 3. Create in TransactionDesk (non-blocking)
+    let tdResult = { ok: false, skipped: true };
+    try {
+      const { session, ok } = await browserAgent.loginToGLVAR();
+      if (ok) {
+        await browserAgent.navigateToTransactionDesk(session);
+        tdResult = await browserAgent.createTransaction(session, txData);
+        await session.close?.();
+      }
+
+      if (tdResult.transactionDeskId) {
+        await pool.query(
+          'UPDATE tc_transactions SET transaction_desk_id=$1 WHERE id=$2',
+          [tdResult.transactionDeskId, row.id]
+        );
+        await logEvent(row.id, 'td_created', { transactionDeskId: tdResult.transactionDeskId });
+      }
+    } catch (err) {
+      logger.warn?.({ error: err.message }, '[TC] TransactionDesk creation failed (non-blocking)');
+      await logEvent(row.id, 'td_create_failed', { error: err.message });
     }
 
-    const { rows } = await pool.query(
-      `UPDATE transactions SET status = $1, updated_at = NOW() WHERE id = $2 AND user_id = $3 RETURNING *`,
-      [newStatus, transactionId, userId]
-    );
-    if (!rows[0]) {
-      const err = new Error('transaction_not_found_or_unauthorized');
-      err.status = 404;
-      throw err;
+    // 4. Send party intro emails
+    let introResult = [];
+    try {
+      if (notificationService) {
+        const tx = await getTransaction(row.id);
+        introResult = await emailMonitor.sendPartyIntro(tx);
+        await logEvent(row.id, 'party_intro_sent', { recipients: introResult });
+      }
+    } catch (err) {
+      logger.warn?.({ error: err.message }, '[TC] Party intro email failed');
+      await logEvent(row.id, 'party_intro_failed', { error: err.message });
     }
-    logger.info?.({ transactionId, userId, newStatus }, '[TC-SERVICE] Transaction status updated');
-    return rows[0];
+
+    return { ok: true, transactionId: row.id, address: row.address, tdResult, introResult };
+  }
+
+  /**
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
+   * Check all active transactions for upcoming deadlines and send reminders.
+   * Runs on cron every 15 minutes.
+   */
+  async function checkDeadlines({ transactionId = null } = {}) {
+    const transactions = transactionId
+      ? [await getTransaction(transactionId)].filter(Boolean)
+      : await getActiveTransactions();
+    let remindersSet = 0;
+
+    for (const tx of transactions) {
+      const keyDates = tx.key_dates || {};
+
+      for (const [deadlineName, deadlineDateStr] of Object.entries(keyDates)) {
+        if (!deadlineDateStr || deadlineName === 'acceptance') continue;
+
+        const deadlineDate = new Date(deadlineDateStr);
+        const now = new Date();
+        const daysRemaining = Math.ceil((deadlineDate - now) / (1000 * 60 * 60 * 24));
+
+        if (REMINDER_DAYS.includes(daysRemaining)) {
+          const alreadySent = await wasReminderSent(tx.id, deadlineName);
+          if (!alreadySent) {
+            try {
+              await emailMonitor.sendDeadlineReminder(tx, deadlineName, deadlineDateStr, daysRemaining);
+              await logEvent(tx.id, 'deadline_reminder_sent', { deadline: deadlineName, daysRemaining });
+              remindersSet++;
+            } catch (err) {
+              logger.warn?.({ error: err.message, txId: tx.id, deadlineName }, '[TC] Reminder failed');
+            }
+          }
+        }
+      }
+    }
+
+    logger.info?.({ checked: transactions.length, remindersSet, transactionId }, '[TC] Deadline check complete');
+    return { checked: transactions.length, remindersSet, transactionId };
+  }
+
+  /**
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
+   * Generate a full status report for a transaction.
+   */
+  async function getTransactionEvents(transactionId, limit = 20) {
+    const { rows } = await pool.query(
+      `SELECT * FROM tc_transaction_events WHERE transaction_id=$1 ORDER BY created_at DESC LIMIT $2`,
+      [transactionId, limit]
+    );
+    return rows;
+  }
+
+  async function generateStatusReport(transactionId) {
+    const tx = await getTransaction(transactionId);
+    if (!tx) return null;
+
+    const events = await getTransactionEvents(transactionId, 50);
+    const derived = statusEngine.deriveTransactionState({ transaction: tx, events });
+
+    return {
+      transaction: tx,
+      recentEvents: events.slice(0, 20),
+      ...derived,
+    };
+  }
+
+  /**
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
+   * Dashboard summary stats.
+   */
+  async function getDashboard() {
+    const { rows } = await pool.query(`
+      SELECT
+        COUNT(*) FILTER (WHERE status = 'active')  AS active,
+        COUNT(*) FILTER (WHERE status = 'pending') AS pending,
+        COUNT(*) FILTER (WHERE status = 'closed')  AS closed_total,
+        COUNT(*) FILTER (WHERE close_date BETWEEN NOW() AND NOW() + INTERVAL '7 days' AND status IN ('active','pending')) AS closing_this_week
+      FROM tc_transactions
+    `);
+
+    const { rows: recent } = await pool.query(
+      `SELECT e.*, t.address FROM tc_transaction_events e
+       JOIN tc_transactions t ON t.id = e.transaction_id
+       ORDER BY e.created_at DESC LIMIT 5`
+    );
+
+    return { stats: rows[0], recentEvents: recent };
   }
 
   return {
-    recordTransaction,
+    processNewContract,
+    checkDeadlines,
+    generateStatusReport,
+    getDashboard,
+    getTransactionEvents,
+    insertTransaction,
     getTransaction,
-    listTransactions,
-    updateTransactionStatus,
+    mergeTransactionParties,
+    logEvent,
   };
 }
+
+/**
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
+ * Start the TC deadline cron — runs checkDeadlines() every 15 minutes.
+ */
+export function startTCDeadlineCron(poolOrDeps, coordinatorArg) {
+  const coordinator =
+    poolOrDeps && typeof poolOrDeps === 'object' && 'coordinator' in poolOrDeps
+      ? poolOrDeps.coordinator
+      : coordinatorArg;
+
+  if (!coordinator?.checkDeadlines) {
+    throw new Error('startTCDeadlineCron requires a coordinator with checkDeadlines()');
+  }
+
+  const tick = async () => {
+    try {
+      await coordinator.checkDeadlines();
+    } catch (err) {
+      console.warn('[TC-CRON] checkDeadlines error:', err.message);
+    }
+  };
+
+  // Run once at startup, then on interval
+  tick();
+  const handle = setInterval(tick, CRON_INTERVAL_MS);
+  console.log('✅ [TC-CRON] Deadline monitor started (15min interval)');
+  return handle;
+}
+
+export default createTCCoordinator;

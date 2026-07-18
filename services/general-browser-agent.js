@@ -84,8 +84,9 @@ export function isLiveAction(type) {
  * @param {Function} opts.verifyGoal              async ({ goal, observation }) -> { reached:boolean, evidence }
  * @param {Function} [opts.confirmContext]        async ({ observation, expectedContext }) -> { ok, reason }
  * @param {Function} [opts.onStep]                async (stepRecord) -> void  (Historian sink)
+ * @param {Function} [opts.onAfterStep]           async ({ observation, step }) -> { stop?, reason?, ok?, handoff? }
  * @param {number}   [opts.maxSteps]              hard cap (cost/safety), default 25
- * @returns {Promise<{ ok, reached, reason, steps, evidence, template }>}
+ * @returns {Promise<{ ok, reached, reason, steps, evidence, template, handoff? }>}
  */
 export async function runBrowserGoal(opts = {}) {
   const {
@@ -98,6 +99,7 @@ export async function runBrowserGoal(opts = {}) {
     verifyGoal,
     confirmContext = null,
     onStep = null,
+    onAfterStep = null,
     maxSteps = 25,
   } = opts;
 
@@ -141,6 +143,27 @@ export async function runBrowserGoal(opts = {}) {
 
   for (let i = 1; i <= maxSteps; i += 1) {
     const observation = await observe();
+
+    if (typeof onAfterStep === 'function') {
+      const after = await onAfterStep({ observation, step: i, history: steps });
+      if (after?.stop) {
+        await record({
+          step: i,
+          action: { type: 'done', reason: after.reason || 'onAfterStep_stop' },
+          handoff: after.handoff || null,
+        });
+        return {
+          ok: after.ok !== false,
+          reached: false,
+          reason: after.reason || 'onAfterStep_stop',
+          steps,
+          evidence: null,
+          template: null,
+          handoff: after.handoff || null,
+        };
+      }
+    }
+
     const raw = await decideAction({ goal, observation, history: steps });
     const norm = normalizeAction(raw);
 

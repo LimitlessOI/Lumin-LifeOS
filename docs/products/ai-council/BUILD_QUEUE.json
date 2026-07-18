@@ -1,0 +1,1112 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "ai-council",
+  "planned_at": "2026-07-15T07:23:26.686Z",
+  "backlog_signature": "aaae86d7758da9c3",
+  "corpus_sources": [
+    "docs/products/ai-council/PRODUCT_HOME.md"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "status": "done",
+      "target_file": "services/generalTaskOptimizer.js",
+      "task": "Improve general task type savings",
+      "spec": "Increase general task type savings from 4% to at least 15% through tuning.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "optimizeGeneralTaskSavings"
+      ],
+      "route": {
+        "path": "/"
+      },
+      "file_contains": [
+        "optimizeGeneralTaskSavings"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/generalTaskOptimizer.js",
+          "exports": [
+            "optimizeGeneralTaskSavings"
+          ],
+          "assertion_id": "expected_exports:services/generalTaskOptimizer.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T07:24:43.487Z",
+      "commit_sha": "98d1431975cf139b6f18ff5d452b61425dbf3f53",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "1",
+      "mission_id": "PRODUCT-ai-council"
+    },
+    {
+      "id": "2",
+      "status": "done",
+      "target_file": "services/ollamaInvestigator.js",
+      "task": "Investigate bloated system prompts",
+      "spec": "Investigate and report why Ollama average tokens per call is 7,327; ensure system prompts are optimized.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "investigateOllamaSystemPrompts"
+      ],
+      "route": {
+        "path": "/"
+      },
+      "file_contains": [
+        "investigateOllamaSystemPrompts"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/ollamaInvestigator.js",
+          "exports": [
+            "investigateOllamaSystemPrompts"
+          ],
+          "assertion_id": "expected_exports:services/ollamaInvestigator.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T07:25:30.156Z",
+      "commit_sha": "e7c0983c499a285883673f914cceffd03e5fccd3",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "2",
+      "mission_id": "PRODUCT-ai-council"
+    },
+    {
+      "id": "3",
+      "status": "blocked",
+      "target_file": "db/migrations/persist_provider_cooldowns.sql",
+      "task": "Persist provider cooldowns",
+      "spec": "Persist provider cooldowns to the database to survive restarts.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "route": {
+        "path": "/"
+      },
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS free_tier_usage"
+      ],
+      "last_attempt_at": "2026-07-15T07:26:25.419Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 6,
+      "revived_at": "2026-07-15T07:47:50.472Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-15T07:49:40.395Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "3",
+      "mission_id": "PRODUCT-ai-council"
+    },
+    {
+      "id": "4",
+      "status": "blocked",
+      "target_file": "routes/api/chatRoutes.js",
+      "task": "/api/v1/chat uses Groq first",
+      "spec": "Ensure /api/v1/chat route uses Groq by default and falls back to Gemini when exhausted.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "registerChatRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/chat"
+      },
+      "file_contains": [
+        "registerChatRoutes"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/api/chatRoutes.js",
+          "exports": [
+            "registerChatRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/api/chatRoutes.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-15T07:27:28.343Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: assertion_threw; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 6,
+      "revived_at": "2026-07-15T07:50:10.907Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: assertion_threw; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-15T07:50:37.036Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "4",
+      "mission_id": "PRODUCT-ai-council"
+    },
+    {
+      "id": "5",
+      "status": "done",
+      "target_file": "services/codegenSaver.js",
+      "task": "Improve codegen task savings",
+      "spec": "Ensure codegen task type shows savings above 10% with TOON enabled.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "optimizeCodegenTaskSavings"
+      ],
+      "route": {
+        "path": "/"
+      },
+      "file_contains": [
+        "optimizeCodegenTaskSavings"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/codegenSaver.js",
+          "exports": [
+            "optimizeCodegenTaskSavings"
+          ],
+          "assertion_id": "expected_exports:services/codegenSaver.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T07:28:30.480Z",
+      "commit_sha": "ccd55b2e1781cc26c0bb5152b656420c99dc1429",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "5",
+      "mission_id": "PRODUCT-ai-council"
+    },
+    {
+      "id": "6",
+      "status": "done",
+      "target_file": "routes/api/lifeosRoutes.js",
+      "task": "Disable autonomous scheduler in directed mode",
+      "spec": "Ensure autonomous scheduler does not fire when LIFEOS_DIRECTED_MODE is true.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerLifeosRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/lifeos/task"
+      },
+      "file_contains": [
+        "registerLifeosRoutes"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/api/lifeosRoutes.js",
+          "exports": [
+            "registerLifeosRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/api/lifeosRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T07:29:25.713Z",
+      "commit_sha": "bef16fc7811fa7069367bd4416b49d90a11ee665",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "6",
+      "mission_id": "PRODUCT-ai-council"
+    },
+    {
+      "id": "7",
+      "status": "done",
+      "target_file": "services/usageLogger.js",
+      "task": "Ensure positive savings_pct",
+      "spec": "Ensure 'savings_pct' is greater than 0 for most entries in the token_usage_log.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "logUsageWithSavings"
+      ],
+      "route": {
+        "path": "/"
+      },
+      "file_contains": [
+        "logUsageWithSavings"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/usageLogger.js",
+          "exports": [
+            "logUsageWithSavings"
+          ],
+          "assertion_id": "expected_exports:services/usageLogger.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "6ee77f603b0136e357e1bdfdca8045d0becf5573",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T07:50:10.907Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T07:50:46.236Z",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "7",
+      "mission_id": "PRODUCT-ai-council"
+    },
+    {
+      "id": "8",
+      "status": "blocked",
+      "target_file": "scripts/habLimiter.mjs",
+      "task": "Implement HAB limit",
+      "spec": "Limit HAB to 100 calls per day per key.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "enforceHABLimit"
+      ],
+      "route": {
+        "path": "/"
+      },
+      "file_contains": [
+        "enforceHABLimit"
+      ],
+      "last_attempt_at": "2026-07-15T07:30:14.495Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 6,
+      "revived_at": "2026-07-15T07:54:48.173Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: assertion_threw; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-15T07:55:36.817Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "8",
+      "mission_id": "PRODUCT-ai-council"
+    },
+    {
+      "id": "step1",
+      "status": "done",
+      "target_file": "services/taskSavings.js",
+      "task": "improve general task savings",
+      "spec": "Increase the `general` task type savings from 4% to at least 15%.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "calculateSavings"
+      ],
+      "route": {
+        "path": "/api/v1/task-savings/calculate"
+      },
+      "file_contains": [
+        "calculateSavings"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/taskSavings.js",
+          "exports": [
+            "calculateSavings"
+          ],
+          "assertion_id": "expected_exports:services/taskSavings.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T07:30:58.130Z",
+      "commit_sha": "9e091043975d3ae4bc422397c332557ef6786317",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step1",
+      "mission_id": "PRODUCT-ai-council"
+    },
+    {
+      "id": "step2",
+      "status": "done",
+      "target_file": "services/ollamaInvestigation.js",
+      "task": "investigate ollama token usage",
+      "spec": "Identify the cause of high average tokens per call for Ollama, likely due to bloated system prompts.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "investigateTokenUsage"
+      ],
+      "route": {
+        "path": "/api/v1/ollama/tokens"
+      },
+      "file_contains": [
+        "investigateTokenUsage"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/ollamaInvestigation.js",
+          "exports": [
+            "investigateTokenUsage"
+          ],
+          "assertion_id": "expected_exports:services/ollamaInvestigation.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "794760c076a0dbef5186c31a107eaa38ebeb9bb7",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T07:47:50.472Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T07:51:41.485Z",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step2",
+      "mission_id": "PRODUCT-ai-council"
+    },
+    {
+      "id": "step3",
+      "status": "skipped",
+      "target_file": "db/migrations/20231012_add_provider_cooldowns.sql",
+      "task": "persist provider cooldowns",
+      "spec": "Persist provider cooldowns to `free_tier_usage` table in the database to survive restarts.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS free_tier_usage"
+      ],
+      "last_attempt_at": "2026-07-15T09:25:21.173Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS free_tier_usage; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 6,
+      "revived_at": "2026-07-15T09:25:20.511Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS free_tier_usage; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-15T09:35:05.345Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step3",
+      "mission_id": "PRODUCT-ai-council"
+    },
+    {
+      "id": "step4",
+      "status": "skipped",
+      "target_file": "routes/chat.js",
+      "task": "integrate groq with fallback",
+      "spec": "Update `/api/v1/chat` to use Groq first and fall back to Gemini automatically when Groq is exhausted.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "registerChatRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/chat"
+      },
+      "file_contains": [
+        "registerChatRoutes",
+        "/api/v1/chat"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/chat.js",
+          "exports": [
+            "registerChatRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/chat.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-15T09:50:51.055Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS/routes/.factory-import-check-1784109051",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 9,
+      "revived_at": "2026-07-15T09:50:32.790Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home",
+      "demoted_at": "2026-07-16T04:03:51.409Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step4",
+      "mission_id": "PRODUCT-ai-council"
+    },
+    {
+      "id": "step5",
+      "status": "done",
+      "target_file": "services/tokenUsageLog.js",
+      "task": "ensure savings pct for calls",
+      "spec": "Ensure `savings_pct` is greater than 0 for most calls in the token usage log.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "logTokenUsage"
+      ],
+      "route": {
+        "path": "/api/v1/token-usage/log"
+      },
+      "file_contains": [
+        "logTokenUsage"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/tokenUsageLog.js",
+          "exports": [
+            "logTokenUsage"
+          ],
+          "assertion_id": "expected_exports:services/tokenUsageLog.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T07:33:41.346Z",
+      "commit_sha": "bba66ba66ba6e8f7a56dbd8c904775c3da88cb3c",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step5",
+      "mission_id": "PRODUCT-ai-council"
+    },
+    {
+      "id": "step6",
+      "status": "done",
+      "target_file": "services/codegenSavings.js",
+      "task": "improve codegen savings",
+      "spec": "Ensure codegen task type shows over 10% savings with TOON enabled.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "calculateCodegenSavings"
+      ],
+      "route": {
+        "path": "/api/v1/codegen/savings"
+      },
+      "file_contains": [
+        "calculateCodegenSavings"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/codegenSavings.js",
+          "exports": [
+            "calculateCodegenSavings"
+          ],
+          "assertion_id": "expected_exports:services/codegenSavings.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T07:34:32.675Z",
+      "commit_sha": "1f3c3afdd0d01813802a94a7e869aec3b58e506c",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step6",
+      "mission_id": "PRODUCT-ai-council"
+    },
+    {
+      "id": "step7",
+      "status": "done",
+      "target_file": "routes/lifeOSMode.js",
+      "task": "disable autonomous scheduler",
+      "spec": "Set LIFEOS_DIRECTED_MODE=true to ensure no autonomous scheduler fires.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerLifeOSModeRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/lifeos/mode"
+      },
+      "file_contains": [
+        "registerLifeOSModeRoutes",
+        "LIFEOS_DIRECTED_MODE"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/lifeOSMode.js",
+          "exports": [
+            "registerLifeOSModeRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/lifeOSMode.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T07:35:14.284Z",
+      "commit_sha": "920a7b07fe55fe096daa42d79746ef5654a8b6d3",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step7",
+      "mission_id": "PRODUCT-ai-council"
+    },
+    {
+      "id": "step8",
+      "status": "done",
+      "target_file": "services/habLimit.js",
+      "task": "set hab limit on api keys",
+      "spec": "Implement a limit of 100 calls per day per key for HAB.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "enforceHABLimit"
+      ],
+      "route": {
+        "path": "/api/v1/hab/limit"
+      },
+      "file_contains": [
+        "enforceHABLimit"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/habLimit.js",
+          "exports": [
+            "enforceHABLimit"
+          ],
+          "assertion_id": "expected_exports:services/habLimit.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T07:35:56.622Z",
+      "commit_sha": "0692fe88524997f212a903114f7980ee6703c632",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step8",
+      "mission_id": "PRODUCT-ai-council"
+    },
+    {
+      "id": "9",
+      "status": "done",
+      "target_file": "routes/habLimitRoutes.js",
+      "task": "add HAB limit route",
+      "spec": "Add route to ensure HAB limit blocks at 100 calls/day per key.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerHABLimitRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/hab-limits"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/habLimitRoutes.js",
+          "exports": [
+            "registerHABLimitRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/habLimitRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:04:07.704Z",
+      "commit_sha": "110194e1a64455f399f6ef619bff6e5d6059837c",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "9",
+      "mission_id": "PRODUCT-ai-council"
+    },
+    {
+      "id": "10",
+      "status": "done",
+      "target_file": "services/usageLogger.js",
+      "task": "verify token usage logging",
+      "spec": "Ensure consistent logging for token usage particularly provider usage column.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "logUsage"
+      ],
+      "file_contains": [
+        "logUsage"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/usageLogger.js",
+          "exports": [
+            "logUsage"
+          ],
+          "assertion_id": "expected_exports:services/usageLogger.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:07:44.776Z",
+      "commit_sha": "4e8c02edd1378f394766614e3caaedd3841109f3",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "10",
+      "mission_id": "PRODUCT-ai-council"
+    },
+    {
+      "id": "11",
+      "status": "done",
+      "target_file": "routes/api/tokenRoutes.js",
+      "task": "expose token usage",
+      "spec": "Expose a new API route for token usage logging and management.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerTokenRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/token/usage"
+      },
+      "file_contains": [
+        "registerTokenRoutes"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/api/tokenRoutes.js",
+          "exports": [
+            "registerTokenRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/api/tokenRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:15:57.721Z",
+      "commit_sha": "0911b9039c7b108058314bf9d1aef679c9525e0b",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "11",
+      "mission_id": "PRODUCT-ai-council"
+    },
+    {
+      "id": "ai-council-1",
+      "status": "done",
+      "target_file": "services/generalTaskOptimizer.js",
+      "task": "improve task savings",
+      "spec": "Enhance the general task optimizer to increase savings from 4% to at least 15%.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "optimizeGeneralTask"
+      ],
+      "route": {
+        "path": "/"
+      },
+      "file_contains": [
+        "increase savings to 15%"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/generalTaskOptimizer.js",
+          "exports": [
+            "optimizeGeneralTask"
+          ],
+          "assertion_id": "expected_exports:services/generalTaskOptimizer.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:21:50.524Z",
+      "commit_sha": "46a7eab78503409637049ae6771fb9371ffd7c55",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ai-council-1",
+      "mission_id": "PRODUCT-ai-council"
+    },
+    {
+      "id": "ai-council-3",
+      "status": "done",
+      "target_file": "db/migrations/20231005_add_provider_cooldowns.sql",
+      "task": "persist provider cooldowns",
+      "spec": "Create a table to persist provider cooldowns that survive restarts.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "route": {
+        "path": "/"
+      },
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS provider_cooldowns"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:26:32.295Z",
+      "commit_sha": "68e35db6d0d90165e2249284e687b1bdad554239",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ai-council-3",
+      "mission_id": "PRODUCT-ai-council"
+    },
+    {
+      "id": "ai-council-4",
+      "status": "done",
+      "target_file": "services/providerCooldownManager.js",
+      "task": "manage provider cooldowns",
+      "spec": "Implement logic to manage and persist provider cooldowns using the database.",
+      "depends_on": [
+        "ai-council-3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "persistCooldowns",
+        "getCooldowns"
+      ],
+      "route": {
+        "path": "/"
+      },
+      "file_contains": [
+        "persist cooldowns to DB"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/providerCooldownManager.js",
+          "exports": [
+            "persistCooldowns",
+            "getCooldowns"
+          ],
+          "assertion_id": "expected_exports:services/providerCooldownManager.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "62ca01aac29103b6903c09566739c80042975bdc",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T05:11:58.215Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:13:43.205Z",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ai-council-4",
+      "mission_id": "PRODUCT-ai-council"
+    },
+    {
+      "id": "ai-council-2",
+      "status": "done",
+      "target_file": "services/ollamaInvestigation.js",
+      "task": "investigate system prompt bloat",
+      "spec": "Investigate and document the cause of the high average token usage in Ollama due to potential bloated system prompts.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "investigateOllamaPrompts"
+      ],
+      "file_contains": [
+        "investigateOllamaPrompts"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/ollamaInvestigation.js",
+          "exports": [
+            "investigateOllamaPrompts"
+          ],
+          "assertion_id": "expected_exports:services/ollamaInvestigation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:34:44.533Z",
+      "commit_sha": "f6ff47cd4401f006abca617421569e5757c05fc6",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ai-council-2",
+      "mission_id": "PRODUCT-ai-council"
+    },
+    {
+      "id": "ai-council-5",
+      "status": "done",
+      "target_file": "routes/api/cooldownRoutes.js",
+      "task": "expose cooldown management API",
+      "spec": "Create an API route that allows querying and managing provider cooldowns on the server.",
+      "depends_on": [
+        "ai-council-4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCooldownRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/cooldowns"
+      },
+      "file_contains": [
+        "registerCooldownRoutes"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/api/cooldownRoutes.js",
+          "exports": [
+            "registerCooldownRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/api/cooldownRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:18:55.740Z",
+      "commit_sha": "653ee75edfa1be35e5b01269190f193d807b9c80",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ai-council-5",
+      "mission_id": "PRODUCT-ai-council"
+    },
+    {
+      "id": "ai-council-step1",
+      "status": "done",
+      "target_file": "services/taskSavings.js",
+      "task": "increase general task type savings",
+      "spec": "Refactor and optimize the savings calculation logic to achieve a 15% or higher savings from general task types.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "calculateGeneralTaskSavings"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/taskSavings.js",
+          "exports": [
+            "calculateGeneralTaskSavings"
+          ],
+          "assertion_id": "expected_exports:services/taskSavings.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:01:48.705Z",
+      "commit_sha": "cc03b8e0c92b05a92e5509282880fdc38046e41a",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ai-council-step1",
+      "mission_id": "PRODUCT-ai-council"
+    },
+    {
+      "id": "ai-council-step2",
+      "status": "done",
+      "target_file": "services/ollamaInvestigate.js",
+      "task": "investigate token usage",
+      "spec": "Analyze the average tokens per call and identify potential bloat in system prompts for Ollama. Present findings in a structured report.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "analyzeTokenUsage"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/ollamaInvestigate.js",
+          "exports": [
+            "analyzeTokenUsage"
+          ],
+          "assertion_id": "expected_exports:services/ollamaInvestigate.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:08:22.782Z",
+      "commit_sha": "1e6cbee644403cc0a676456e1ebea956c424b5fe",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ai-council-step2",
+      "mission_id": "PRODUCT-ai-council"
+    },
+    {
+      "id": "ai-council-step3",
+      "status": "done",
+      "target_file": "db/migrations/20231020_add_cooldown_persistence.sql",
+      "task": "persist provider cooldowns",
+      "spec": "Create a SQL table to store provider cooldowns, ensuring cooldown data survives service restarts.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS provider_cooldowns"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "b55e1299f6da800b6f09ab89837a11520da5750c",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T06:29:01.830Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:29:58.556Z",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ai-council-step3",
+      "mission_id": "PRODUCT-ai-council"
+    },
+    {
+      "id": "ai-council-step4",
+      "status": "done",
+      "target_file": "services/providerCooldownManager.js",
+      "task": "implement cooldown persistence",
+      "spec": "Enhance the provider cooldown manager to read/write cooldowns from/to the database.",
+      "depends_on": [
+        "ai-council-step3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "persistCooldowns",
+        "retrieveCooldowns"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/providerCooldownManager.js",
+          "exports": [
+            "persistCooldowns",
+            "retrieveCooldowns"
+          ],
+          "assertion_id": "expected_exports:services/providerCooldownManager.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "a7ddb2624e67e2a43fc05d39c77392cf77275b0a",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T06:54:38.670Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:56:13.842Z",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ai-council-step4",
+      "mission_id": "PRODUCT-ai-council"
+    },
+    {
+      "id": "ai-council-step5",
+      "status": "done",
+      "target_file": "routes/api/cooldownRoutes.js",
+      "task": "expose cooldown API",
+      "spec": "Provide an API endpoint to interact with provider cooldown data, allowing retrieval and updates.",
+      "depends_on": [
+        "ai-council-step4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCooldownRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/cooldowns"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/api/cooldownRoutes.js",
+          "exports": [
+            "registerCooldownRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/api/cooldownRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T07:01:41.508Z",
+      "commit_sha": "4b712d254bb52135294d9e6f76b400c9641fb005",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ai-council-step5",
+      "mission_id": "PRODUCT-ai-council"
+    }
+  ],
+  "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-ai-council",
+  "twin_kind": "product_build_queue_registered"
+}

@@ -1,0 +1,18 @@
+{
+  "ok": true,
+  "proved_at": "2026-07-15T23:43:30Z",
+  "deploy_commit_sha": "8778bc40e8c3e818362c272f0989f5b3fffa7c44",
+  "base": "https://lumin-web-production-e3a9.up.railway.app",
+  "checks": {
+    "pack_pricing": { "ok": true, "public_signup": true, "amountCents": 4900 },
+    "signup_page": { "http": 200 },
+    "public_signup": { "ok": true, "accessToken": true },
+    "consent": { "ok": true },
+    "session_create": { "ok": true, "session_id": "7b8f7ed3-88be-4703-b511-732d246d4c7a" },
+    "export_unpaid": { "http": 402, "error": "payment_required" },
+    "pack_checkout": { "ok": true, "stripe_live_url": true, "amountCents": 4900 },
+    "marketing_guest": { "http": 200, "create_account_cta": true }
+  },
+  "client_path": "signup → consent → session → 402 export → Stripe $49 checkout",
+  "note": "Did not complete real card charge in this probe; Stripe Checkout session created live."
+}
