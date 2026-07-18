@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T00:18:22.173Z",
+  "generated_at": "2026-07-18T00:22:18.014Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11886,
+  "file_count": 11887,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -64525,6 +64525,13 @@
       "bytes": 898,
       "mtime": "2026-06-21T21:39:00.768Z",
       "indexed_at": "2026-07-17T23:06:25.553Z"
+    },
+    {
+      "path": "public/icons/lifeosIcons.html",
+      "synopsis": "HTML page — LifeosIcons.",
+      "bytes": 288,
+      "mtime": "2026-07-18T00:22:18.014Z",
+      "indexed_at": "2026-07-18T00:22:18.014Z"
     },
     {
       "path": "public/index.html",
