@@ -3661,6 +3661,162 @@
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null
+    },
+    {
+      "id": "lifeos-p1-ask-your-life-service",
+      "target_file": "services/lifeos-ask-your-life.js",
+      "task": "Real ask-your-life query over DB moments (closes false-done step9)",
+      "spec": "ESM export queryLife(queryText, userId, {pool}) and createAskYourLifeService. Search sleep_logs, joy_checkins, decision_logs, commitments with keyword routing. Never invent rows.",
+      "expected_exports": [
+        "queryLife",
+        "createAskYourLifeService"
+      ],
+      "file_contains": [
+        "function queryLife",
+        "createAskYourLifeService"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-ask-your-life-service",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-ask-your-life-routes",
+      "target_file": "routes/lifeos-ask-your-life-routes.js",
+      "task": "Mount ask-your-life routes",
+      "spec": "ESM registerAskYourLifeRoutes(app,{pool}). GET+POST /api/v1/lifeos/ask-your-life.",
+      "expected_exports": [
+        "registerAskYourLifeRoutes"
+      ],
+      "file_contains": [
+        "registerAskYourLifeRoutes",
+        "/ask-your-life"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-ask-your-life-routes",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-ask-your-life-autoreg",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "Auto-register ask-your-life routes",
+      "spec": "Add registerAskYourLifeRoutes for routes/lifeos-ask-your-life-routes.js enabled true.",
+      "file_contains": [
+        "lifeos-ask-your-life-routes.js",
+        "registerAskYourLifeRoutes"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-ask-your-life-autoreg",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-ask-your-life-ui",
+      "target_file": "public/overlay/lifeos-ask-your-life.html",
+      "task": "Ask your life Mirror UI",
+      "spec": "HTML page with search form calling GET /api/v1/lifeos/ask-your-life and listing real moments.",
+      "file_contains": [
+        "Ask your life",
+        "/api/v1/lifeos/ask-your-life"
+      ],
+      "design_review_flagged": true,
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-ask-your-life-ui",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-decision-review-routes",
+      "target_file": "routes/lifeos-decision-review-routes.js",
+      "task": "Mount 30/90 decision review routes",
+      "spec": "ESM registerLifeosDecisionReviewRoutes under /api/v1/lifeos/decision-reviews with pending/complete/skip/history/schedule.",
+      "expected_exports": [
+        "registerLifeosDecisionReviewRoutes"
+      ],
+      "file_contains": [
+        "registerLifeosDecisionReviewRoutes",
+        "/pending"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-decision-review-routes",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-decision-review-autoreg",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "Auto-register decision review routes",
+      "spec": "Add registerLifeosDecisionReviewRoutes entry enabled true.",
+      "file_contains": [
+        "lifeos-decision-review-routes.js",
+        "registerLifeosDecisionReviewRoutes"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-decision-review-autoreg",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-voice-journal-ui-proof",
+      "target_file": "public/overlay/lifeos-voice-note-journal.html",
+      "task": "Voice journal UI with required voice-note-journaling root",
+      "spec": "Ensure public/overlay/lifeos-voice-note-journal.html contains div.voice-note-journaling and browser speech capture.",
+      "file_contains": [
+        "voice-note-journaling",
+        "Voice Note Journal"
+      ],
+      "design_review_flagged": true,
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-voice-journal-ui-proof",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-ask-voice-nav",
+      "target_file": "public/overlay/lifeos-app.html",
+      "task": "Wire Ask your life + Voice Journal into nav",
+      "spec": "Add PAGE_META + nav for lifeos-ask-your-life.html and lifeos-voice-note-journal.html.",
+      "file_contains": [
+        "lifeos-ask-your-life.html",
+        "lifeos-voice-note-journal.html"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-ask-voice-nav",
+      "mission_id": "PRODUCT-lifeos"
     }
   ],
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",

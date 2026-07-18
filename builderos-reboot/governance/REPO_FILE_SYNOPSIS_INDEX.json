@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T01:49:01.475Z",
+  "generated_at": "2026-07-18T01:54:14.479Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11893,
+  "file_count": 11897,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -30401,9 +30401,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 24092,
-      "mtime": "2026-07-18T01:49:01.475Z",
-      "indexed_at": "2026-07-18T01:49:01.475Z",
+      "bytes": 24657,
+      "mtime": "2026-07-18T01:54:14.479Z",
+      "indexed_at": "2026-07-18T01:54:14.479Z",
       "synopsis_index_only": true
     },
     {
@@ -37366,9 +37366,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 55479,
-      "mtime": "2026-07-18T01:49:01.475Z",
-      "indexed_at": "2026-07-18T01:49:01.475Z"
+      "bytes": 55751,
+      "mtime": "2026-07-18T01:54:14.479Z",
+      "indexed_at": "2026-07-18T01:54:14.479Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40141,9 +40141,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 632235,
-      "mtime": "2026-07-18T01:49:01.475Z",
-      "indexed_at": "2026-07-18T01:49:01.475Z"
+      "bytes": 632621,
+      "mtime": "2026-07-18T01:54:14.479Z",
+      "indexed_at": "2026-07-18T01:54:14.479Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -64928,9 +64928,16 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 187561,
-      "mtime": "2026-07-18T01:49:01.475Z",
-      "indexed_at": "2026-07-18T01:49:01.475Z"
+      "bytes": 188249,
+      "mtime": "2026-07-18T01:54:14.479Z",
+      "indexed_at": "2026-07-18T01:54:14.479Z"
+    },
+    {
+      "path": "public/overlay/lifeos-ask-your-life.html",
+      "synopsis": "HTML page: Ask your life — LifeOS Mirror query",
+      "bytes": 2735,
+      "mtime": "2026-07-18T01:54:14.479Z",
+      "indexed_at": "2026-07-18T01:54:14.479Z"
     },
     {
       "path": "public/overlay/lifeos-balance-wheel.html",
@@ -65331,10 +65338,10 @@
     },
     {
       "path": "public/overlay/lifeos-voice-note-journal.html",
-      "synopsis": "HTML page: Voice Note Journal",
-      "bytes": 1819,
-      "mtime": "2026-07-17T21:42:16.097Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z"
+      "synopsis": "HTML page: Voice Note Journal — LifeOS",
+      "bytes": 3190,
+      "mtime": "2026-07-18T01:54:14.479Z",
+      "indexed_at": "2026-07-18T01:54:14.479Z"
     },
     {
       "path": "public/overlay/lifeos-voice.js",
@@ -66976,6 +66983,16 @@
       ]
     },
     {
+      "path": "routes/lifeos-ask-your-life-routes.js",
+      "synopsis": "Ask-your-life HTTP routes — natural language over captured LifeOS facts.",
+      "bytes": 1223,
+      "mtime": "2026-07-18T01:54:14.479Z",
+      "indexed_at": "2026-07-18T01:54:14.479Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "routes/lifeos-assessment-battery-routes.js",
       "synopsis": "Provides REST endpoints for managing assessment battery results,",
       "bytes": 4314,
@@ -67138,6 +67155,16 @@
       "bytes": 4540,
       "mtime": "2026-06-29T17:21:08.527Z",
       "indexed_at": "2026-07-17T23:06:25.553Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "routes/lifeos-decision-review-routes.js",
+      "synopsis": "30/90-day decision review HTTP routes.",
+      "bytes": 2446,
+      "mtime": "2026-07-18T01:54:14.479Z",
+      "indexed_at": "2026-07-18T01:54:14.479Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -86340,6 +86367,16 @@
       "bytes": 3443,
       "mtime": "2026-06-29T17:21:08.899Z",
       "indexed_at": "2026-07-17T23:06:25.553Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/lifeos-ask-your-life.js",
+      "synopsis": "Natural-language query over LifeOS twin memory (commitments, check-ins, decisions, sleep).",
+      "bytes": 4331,
+      "mtime": "2026-07-18T01:54:14.479Z",
+      "indexed_at": "2026-07-18T01:54:14.479Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

@@ -22,6 +22,20 @@
       "note": "Chronotype + wind-down + sleep debt HTTP surface for LifeOS sleep P1."
     },
     {
+      "path": "routes/lifeos-ask-your-life-routes.js",
+      "register": "registerAskYourLifeRoutes",
+      "mount_path": "/api/v1/lifeos",
+      "enabled": true,
+      "note": "Ask-your-life natural language over captured twin facts. Closes false-done step9/10 gap."
+    },
+    {
+      "path": "routes/lifeos-decision-review-routes.js",
+      "register": "registerLifeosDecisionReviewRoutes",
+      "mount_path": "/api/v1/lifeos/decision-reviews",
+      "enabled": true,
+      "note": "30/90-day decision review queue HTTP surface (PRODUCT_HOME P1)."
+    },
+    {
       "path": "routes/founder-sms-routes.js",
       "register": "registerFounderSmsRoutes",
       "enabled": true,

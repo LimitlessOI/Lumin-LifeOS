@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-17 — False-done ask-your-life rebuilt
+
+Adam: keep going. Found step9/10 done with missing ask-your-life files — rebuilt real query + routes + UI; decision-review + voice journal nav/proof; tip still has large open PRODUCT_HOME P1 set beyond queue theater.
+
 ## 2026-07-17 — LifeOS keep-building (extract + claim durability)
 
 Adam: keep at it. Two root causes: backlog regex still required trailing whitespace (0 P1 extract); founder claims wrote container disk only and vanished. Fixed both; shipped food logger + sleep-insights surfaces and queued twin steps. Not done — PRODUCT_HOME still has a large open P1 set.
