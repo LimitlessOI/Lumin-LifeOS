@@ -1532,7 +1532,33 @@
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:createSignedIPA; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/05.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-18T14:49:18.930Z",
+        "shipped_at": "2026-07-18T14:49:18.930Z",
+        "commit_sha": null,
+        "content_sha256": "d5a6d45ffc7aa0a2bf6cadcf542c9941917175901c00288dba54bfb20d449d43",
+        "target_file": "scripts/iosBuildWorkflow.mjs",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "scripts/iosBuildWorkflow.mjs",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/universal-overlay/twins/steps/05.exact",
+          "content_sha256": "d5a6d45ffc7aa0a2bf6cadcf542c9941917175901c00288dba54bfb20d449d43"
+        }
+      },
+      "shipped_at": "2026-07-18T14:49:18.930Z",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "05"
     },
     {
       "id": "06",
