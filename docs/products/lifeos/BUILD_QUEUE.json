@@ -4925,38 +4925,14 @@
         "registerLifeOSVictoryVaultRoutes",
         "/victories"
       ],
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
       "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-victory-register",
-      "mission_id": "PRODUCT-lifeos",
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "routes/lifeos-victory-vault-routes.js",
-          "exports": [
-            "registerLifeOSVictoryVaultRoutes",
-            "createLifeOSVictoryVaultRoutes"
-          ],
-          "assertion_id": "expected_exports:routes/lifeos-victory-vault-routes.js"
-        }
-      ],
-      "route": {
-        "method": "POST",
-        "path": "/victories"
-      },
-      "last_attempt_at": "2026-07-18T02:25:38.545Z",
-      "last_error": null,
-      "commit_sha": null,
-      "built_sha": null,
-      "proof": null,
-      "pre_existing": true,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-p1-victory-autoreg",
@@ -4967,19 +4943,14 @@
         "lifeos-victory-vault-routes.js",
         "registerLifeOSVictoryVaultRoutes"
       ],
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
       "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-victory-autoreg",
-      "mission_id": "PRODUCT-lifeos",
-      "last_error": null,
-      "pre_existing": true,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-p1-purpose-register",
@@ -4994,34 +4965,14 @@
         "registerLifeOSPurposeRoutes",
         "/synthesize"
       ],
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
       "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-purpose-register",
-      "mission_id": "PRODUCT-lifeos",
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "routes/lifeos-purpose-routes.js",
-          "exports": [
-            "registerLifeOSPurposeRoutes",
-            "createLifeOSPurposeRoutes"
-          ],
-          "assertion_id": "expected_exports:routes/lifeos-purpose-routes.js"
-        }
-      ],
-      "route": {
-        "method": "GET",
-        "path": "/profile"
-      },
-      "last_error": null,
-      "pre_existing": true,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-p1-purpose-autoreg",
@@ -5032,19 +4983,14 @@
         "lifeos-purpose-routes.js",
         "registerLifeOSPurposeRoutes"
       ],
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
       "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-purpose-autoreg",
-      "mission_id": "PRODUCT-lifeos",
-      "last_error": null,
-      "pre_existing": true,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-p1-market-demand-signal",
@@ -5059,30 +5005,14 @@
         "estimateMarketDemandSignal",
         "market_demand_signal"
       ],
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
       "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-market-demand-signal",
-      "mission_id": "PRODUCT-lifeos",
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/monetization-map.js",
-          "exports": [
-            "createMonetizationMap",
-            "estimateMarketDemandSignal"
-          ],
-          "assertion_id": "expected_exports:services/monetization-map.js"
-        }
-      ],
-      "last_error": null,
-      "pre_existing": true,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-p1-date-night-service",
@@ -5096,29 +5026,14 @@
         "createDateNightPlanner",
         "planWeek"
       ],
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
       "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-date-night-service",
-      "mission_id": "PRODUCT-lifeos",
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/lifeos-date-night.js",
-          "exports": [
-            "createDateNightPlanner"
-          ],
-          "assertion_id": "expected_exports:services/lifeos-date-night.js"
-        }
-      ],
-      "last_error": null,
-      "pre_existing": true,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-p1-date-night-routes",
@@ -5132,29 +5047,14 @@
         "registerLifeosDateNightRoutes",
         "/week"
       ],
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
       "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-date-night-routes",
-      "mission_id": "PRODUCT-lifeos",
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "routes/lifeos-date-night-routes.js",
-          "exports": [
-            "registerLifeosDateNightRoutes"
-          ],
-          "assertion_id": "expected_exports:routes/lifeos-date-night-routes.js"
-        }
-      ],
-      "last_error": null,
-      "pre_existing": true,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-p1-date-night-autoreg",
@@ -5165,19 +5065,14 @@
         "lifeos-date-night-routes.js",
         "registerLifeosDateNightRoutes"
       ],
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
       "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-date-night-autoreg",
-      "mission_id": "PRODUCT-lifeos",
-      "last_error": null,
-      "pre_existing": true,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-p1-date-night-ui",
@@ -5189,19 +5084,14 @@
         "/api/v1/lifeos/date-night"
       ],
       "design_review_flagged": true,
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
       "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-date-night-ui",
-      "mission_id": "PRODUCT-lifeos",
-      "last_error": null,
-      "pre_existing": true,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-p1-parent-mode-ui",
@@ -5213,19 +5103,14 @@
         "/api/v1/lifeos/parenting-scripts/parent-mode"
       ],
       "design_review_flagged": true,
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
       "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-parent-mode-ui",
-      "mission_id": "PRODUCT-lifeos",
-      "last_error": null,
-      "pre_existing": true,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-p1-date-parent-nav",
@@ -5236,19 +5121,94 @@
         "lifeos-date-night.html",
         "lifeos-parent-mode.html"
       ],
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
       "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-date-parent-nav",
-      "mission_id": "PRODUCT-lifeos",
-      "last_error": null,
-      "pre_existing": true,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-ui-directives-rewire",
+      "target_file": "routes/lifeos-ui-directives-routes.js",
+      "task": "Wire ui_directives routes to real service",
+      "spec": "Import createUiDirectivesService; propose/apply/get persist flourishing_prefs.ui_directives; confirm before apply.",
+      "expected_exports": [
+        "registerLifeosUiDirectivesRoutes"
+      ],
+      "file_contains": [
+        "createUiDirectivesService",
+        "needs_confirm",
+        "confirm_required"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-ui-directives-rewire",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-twin-reaction-rewire",
+      "target_file": "routes/lifeos-ui-directives-routes.js",
+      "task": "Wire twin reaction simulate to real simulator",
+      "spec": "POST /reaction/simulate uses createTwinReactionSimulator with flourishing_prefs.",
+      "expected_exports": [
+        "registerLifeosUiDirectivesRoutes"
+      ],
+      "file_contains": [
+        "createTwinReactionSimulator",
+        "reaction/simulate"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-twin-reaction-rewire",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-twin-directives-ui",
+      "target_file": "public/overlay/lifeos-twin-directives.html",
+      "task": "Twin directives + reaction UI",
+      "spec": "HTML propose/confirm/apply + simulate against twin.",
+      "file_contains": [
+        "ui-directives/propose",
+        "reaction/simulate",
+        "Confirm"
+      ],
+      "design_review_flagged": true,
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-twin-directives-ui",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-twin-directives-nav",
+      "target_file": "public/overlay/lifeos-app.html",
+      "task": "Nav Twin Directives",
+      "spec": "PAGE_META + nav for lifeos-twin-directives.html.",
+      "file_contains": [
+        "lifeos-twin-directives.html"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-twin-directives-nav",
+      "mission_id": "PRODUCT-lifeos"
     }
   ],
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",

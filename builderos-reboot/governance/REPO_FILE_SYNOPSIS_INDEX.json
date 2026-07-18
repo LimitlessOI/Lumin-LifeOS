@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T02:29:29.832Z",
+  "generated_at": "2026-07-18T02:30:10.901Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11917,
+  "file_count": 11918,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -37373,9 +37373,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 56582,
-      "mtime": "2026-07-18T02:25:17.750Z",
-      "indexed_at": "2026-07-18T02:25:17.750Z"
+      "bytes": 56879,
+      "mtime": "2026-07-18T02:30:10.901Z",
+      "indexed_at": "2026-07-18T02:30:10.901Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40148,9 +40148,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 634337,
-      "mtime": "2026-07-18T02:25:17.750Z",
-      "indexed_at": "2026-07-18T02:25:17.750Z"
+      "bytes": 634595,
+      "mtime": "2026-07-18T02:30:10.901Z",
+      "indexed_at": "2026-07-18T02:30:10.901Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -64935,9 +64935,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 190848,
-      "mtime": "2026-07-18T02:25:17.750Z",
-      "indexed_at": "2026-07-18T02:25:17.750Z"
+      "bytes": 191204,
+      "mtime": "2026-07-18T02:30:10.901Z",
+      "indexed_at": "2026-07-18T02:30:10.901Z"
     },
     {
       "path": "public/overlay/lifeos-ask-your-life.html",
@@ -65370,6 +65370,13 @@
       "bytes": 77814,
       "mtime": "2026-06-24T22:39:39.251Z",
       "indexed_at": "2026-07-17T23:06:25.553Z"
+    },
+    {
+      "path": "public/overlay/lifeos-twin-directives.html",
+      "synopsis": "HTML page: Twin UI directives + reaction simulator",
+      "bytes": 5219,
+      "mtime": "2026-07-18T02:30:10.901Z",
+      "indexed_at": "2026-07-18T02:30:10.901Z"
     },
     {
       "path": "public/overlay/lifeos-victory-vault.html",
@@ -67571,10 +67578,13 @@
     },
     {
       "path": "routes/lifeos-ui-directives-routes.js",
-      "synopsis": "Registers LifeosUiDirectivesRoutes routes/handlers (routes/lifeos-ui-directives-routes.js).",
-      "bytes": 6048,
-      "mtime": "2026-07-12T19:48:36.309Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z"
+      "synopsis": "Twin ui_directives + reaction simulate — wired to real services.",
+      "bytes": 4904,
+      "mtime": "2026-07-18T02:30:10.901Z",
+      "indexed_at": "2026-07-18T02:30:10.901Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/lifeos-victory-vault-routes.js",

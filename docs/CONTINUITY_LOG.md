@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-17 — Twin directives rewire + keep building
+
+Adam: keep going. Victory/purpose/date-night proved live (200). Rewired stub ui_directives + twin reaction to real services + overlay. Founder claim 502’d — retry after tip stabilizes. Next: member-feedback intake, ethics lock mount.
+
 ## 2026-07-17 — Keep building all LifeOS features
 
 Adam: keep going. Mounted Victory Vault + Purpose APIs; date-night rituals; parent-mode UI; monetization market-demand signal. Tip advancing past 153 twin steps. Still open: Kids OS deferred, ui_directives, twin simulator, constitutional multi-party lock.
