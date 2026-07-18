@@ -3496,14 +3496,29 @@
         "/summary"
       ],
       "route": "GET /api/v1/lifeos/food/summary",
-      "status": "pending",
+      "status": "blocked",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
-      "attempts": 0,
+      "attempts": 1,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-food-logger-routes",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/lifeos-food-logger-routes.js",
+          "exports": [
+            "registerLifeosFoodLoggerRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/lifeos-food-logger-routes.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-18T01:49:35.110Z",
+      "last_error": "NOT_ON_BLUEPRINT",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lifeos-p1-food-logger-autoreg",
@@ -3580,7 +3595,21 @@
       "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-sleep-insights-routes",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/lifeos-sleep-chronotype-routes.js",
+          "exports": [
+            "registerLifeosSleepChronotypeRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/lifeos-sleep-chronotype-routes.js"
+        }
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/chronotype,"
+      }
     },
     {
       "id": "lifeos-p1-sleep-insights-autoreg",
