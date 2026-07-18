@@ -2,7 +2,8 @@
  * SYNOPSIS: Exports logFoodWithPhoto — services/lifeos-ai-photo-food-logger.js.
  */
 export async function logFoodWithPhoto(db, userId, { imageUrl, imageBase64, description, loggedAt, callCouncilMember }) {
-  if (![imageUrl, imageBase64, description].filter(Boolean).length === 1) {
+  const provided = [imageUrl, imageBase64, description].filter(Boolean).length;
+  if (provided !== 1) {
     throw new Error('Exactly one of imageUrl, imageBase64, or description must be provided');
   }
 

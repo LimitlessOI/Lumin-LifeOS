@@ -1,57 +1,63 @@
-<!-- SYNOPSIS: HTML page: Voice Note Journal -->
-<html>
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Voice Note Journal — LifeOS -->
+<html lang="en">
 <head>
-    <title>Voice Note Journal</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Voice Note Journal — LifeOS</title>
+  <script src="/overlay/lifeos-theme.js"></script>
+  <script src="/overlay/lifeos-bootstrap.js"></script>
+  <style>
+    body { margin: 0; font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, serif; background: #121018; color: #efeaf5; }
+    .voice-note-journaling { max-width: 640px; margin: 0 auto; padding: 28px 18px 80px; }
+    h1 { font-size: 1.6rem; margin: 0 0 8px; }
+    .sub { color: #9a90a8; margin-bottom: 18px; }
+    button { background: #6b4f9a; color: #fff; border: 0; border-radius: 10px; padding: 12px 18px; font: inherit; cursor: pointer; }
+    #transcript { margin-top: 16px; min-height: 80px; padding: 12px; border: 1px solid #2a2433; border-radius: 10px; background: #1a1622; }
+    #status { margin-top: 10px; color: #9a90a8; font-size: 0.9rem; }
+  </style>
 </head>
 <body>
+  <div class="voice-note-journaling">
     <h1>Voice Note Journal</h1>
-    <button id="recordButton">Record</button>
-    <div id="transcript"></div>
-
-    <script>
-        const recordButton = document.getElementById('recordButton');
-        const transcriptDiv = document.getElementById('transcript');
-        let recognition;
-        let isRecording = false;
-
-        if ('webkitSpeechRecognition' in window) {
-            recognition = new webkitSpeechRecognition();
-            recognition.continuous = false;
-            recognition.interimResults = false;
-            recognition.lang = 'en-US';
-
-            recognition.onstart = function() {
-                isRecording = true;
-                recordButton.textContent = 'Stop Recording';
-            };
-
-            recognition.onend = function() {
-                isRecording = false;
-                recordButton.textContent = 'Record';
-            };
-
-            recognition.onresult = function(event) {
-                const transcript = event.results[0][0].transcript;
-                transcriptDiv.textContent = transcript;
-                fetch('/api/v1/lifeos/journal/voice', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ text: transcript })
-                });
-            };
-
-            recordButton.onclick = function() {
-                if (isRecording) {
-                    recognition.stop();
-                } else {
-                    recognition.start();
-                }
-            };
-        } else {
-            alert('Web Speech API is not supported in this browser.');
+    <p class="sub">Mobile-first emotional capture. Transcription stays in the browser when possible.</p>
+    <button id="recordButton" type="button">Record</button>
+    <div id="transcript" aria-live="polite"></div>
+    <div id="status">Ready.</div>
+  </div>
+  <script>
+    const recordButton = document.getElementById('recordButton');
+    const transcriptDiv = document.getElementById('transcript');
+    const status = document.getElementById('status');
+    let recognition;
+    let isRecording = false;
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      recognition = new SpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = true;
+      recognition.lang = 'en-US';
+      recognition.onstart = () => { isRecording = true; recordButton.textContent = 'Stop'; status.textContent = 'Listening…'; };
+      recognition.onend = () => { isRecording = false; recordButton.textContent = 'Record'; status.textContent = 'Ready.'; };
+      recognition.onresult = (event) => {
+        let text = '';
+        for (let i = 0; i < event.results.length; i++) text += event.results[i][0].transcript + ' ';
+        transcriptDiv.textContent = text.trim();
+        if (event.results[event.results.length - 1].isFinal) {
+          fetch('/api/v1/lifeos/journal/voice', {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text: text.trim() }),
+          }).then((r) => { status.textContent = r.ok ? 'Saved.' : 'Saved locally only (HTTP ' + r.status + ').'; })
+            .catch(() => { status.textContent = 'Kept in browser — save endpoint unavailable.'; });
         }
-    </script>
+      };
+      recordButton.onclick = () => { if (isRecording) recognition.stop(); else recognition.start(); };
+    } else {
+      status.textContent = 'Speech recognition not supported here — type below instead.';
+      transcriptDiv.contentEditable = 'true';
+    }
+  </script>
 </body>
 </html>

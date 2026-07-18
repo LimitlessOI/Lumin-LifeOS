@@ -8,6 +8,48 @@
       "note": "LifeOS assessment battery (attachment/love language/conflict/values). Twin step lifeos-p1-assessment-autoreg."
     },
     {
+      "path": "routes/lifeos-food-logger-routes.js",
+      "register": "registerLifeosFoodLoggerRoutes",
+      "mount_path": "/api/v1/lifeos/food",
+      "enabled": true,
+      "note": "LifeOS AI photo/text food logger. Twin step lifeos-p1-food-logger-routes."
+    },
+    {
+      "path": "routes/lifeos-sleep-chronotype-routes.js",
+      "register": "registerLifeosSleepChronotypeRoutes",
+      "mount_path": "/api/v1/lifeos/sleep-insights",
+      "enabled": true,
+      "note": "Chronotype + wind-down + sleep debt HTTP surface for LifeOS sleep P1."
+    },
+    {
+      "path": "routes/lifeos-ask-your-life-routes.js",
+      "register": "registerAskYourLifeRoutes",
+      "mount_path": "/api/v1/lifeos",
+      "enabled": true,
+      "note": "Ask-your-life natural language over captured twin facts. Closes false-done step9/10 gap."
+    },
+    {
+      "path": "routes/lifeos-decision-review-routes.js",
+      "register": "registerLifeosDecisionReviewRoutes",
+      "mount_path": "/api/v1/lifeos/decision-reviews",
+      "enabled": true,
+      "note": "30/90-day decision review queue HTTP surface (PRODUCT_HOME P1)."
+    },
+    {
+      "path": "routes/lifeos-cycle-routes.js",
+      "register": "registerLifeOSCycleRoutes",
+      "mount_path": "/api/v1/lifeos/cycle",
+      "enabled": true,
+      "note": "Cycle tracking API was built but not mounted on founder_builder — UI returned 404s. Auto-register closes P1 phase overlay."
+    },
+    {
+      "path": "routes/lifeos-deep-talk-decks-routes.js",
+      "register": "registerLifeosDeepTalkDeckRoutes",
+      "mount_path": "/api/v1/lifeos/deep-talk",
+      "enabled": true,
+      "note": "Curated weekly deep-talk decks from couple/user signal."
+    },
+    {
       "path": "routes/founder-sms-routes.js",
       "register": "registerFounderSmsRoutes",
       "enabled": true,

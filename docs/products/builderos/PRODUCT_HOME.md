@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/builderos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-17 — LifeOS backlog extract fixed; next P1 twin steps queued. |
+| **Last Updated** | 2026-07-17 — Backlog `\s*$` + Next: harvest; claim→git via commitQueueStatusToRepo. |
 ### Related docs (this product)
 
 | Doc | Path |
@@ -300,6 +300,7 @@ One model may fill more than one role only when no safer alternative exists, and
 
 ## Change Receipts
 
+| 2026-07-17 | **Backlog extract actually optional-trailing + claim durability.** `BULLET`/`OPEN_CHECKBOX` → `\s*$` (prior “fix” left `\s$` + only a comment). Flexible `NEXT_LINE` for `Next:**` / `**Next:**`. Exported `commitQueueStatusToRepo`; founder `lifeos_queue_ship` commits after pre-existing claims so done status survives redeploy. Regression test for LifeOS checkbox shape. | LifeOS PRODUCT_HOME open P1s extracted as 0; claims evaporated on tip disk. | `node --test tests/build-queue-planner.test.js` 19/19 | tip ship |
 | 2026-07-17 | **Design review non-blocking (no human bottleneck).** `config/builderos-pipeline-law.json`: `design_approval` → `design_review` with `design_review_flagged_non_blocking`, `design_doctrine`, forbidden `human_design_approval_bottleneck`. Planner/orchestrator/scheduler/adapter: UI steps get `design_review_flagged` + stay `pending`; only `human_hold`/`pause_for_founder` blocks. Legacy `founder_gated` without hold ships. `generate-build-queue-from-home.mjs`: pathless → `human_hold`; UI → `public/overlay/customize.html` + flagged. Tests 46/46. | Adam mandate: design approval must not block the factory — flag for optional glance, keep building, modern/competitor doctrine. | ✅ local 46/46 | tip ship + redeploy |
 | 2026-07-17 | **Never-stop restored + grade→model escalate.** Retired Jul-15 `FOUNDER_RESUME_AUTONOMY` hard-off (Adam mandate: continuous build). Governed ship enables on `GOVERNED_AUTONOMOUS_SHIP=1` (halt still via `PAUSE_AUTONOMY`/`FOUNDER_STOP`). `authoringTiersForRetry` bumps to `GRADE_ESCALATION_TIERS` after SENTRY/codegen reasoning failures. Allowlist adds `FOUNDER_RESUME_AUTONOMY`/`PAUSE_AUTONOMY`. | Adam: auto-build was off; models not escalating on grade fail | ✅ local | tip redeploy → env `GOVERNED_*=1` → prove `never-stop/status` enabled |
 | 2026-07-16 | **Cloudflare DNS apply on tip.** `routes/railway-managed-env-routes.js` `POST /custom-domains/apply-cloudflare-dns` reads Railway custom domains and upserts CNAME+TXT via Cloudflare API (`config/cloudflare-railway.js`). | System must own DNS for taloaos.com without founder paste. | tip call after token | tip prove |

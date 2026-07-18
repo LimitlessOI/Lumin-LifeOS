@@ -23,10 +23,12 @@ const MAX_STEPS = 12;
 const BACKLOG_HEADING = /^#{1,6}\s*(?:\d+\.\s*)?(?:current\s+bp|approved\s+product\s+backlog|build plan|remaining(?:\s+work)?|not (yet )?done|to ?do|next(?:\s+build)?|backlog|missing|roadmap|known\s+gaps|agent\s+handoff(?:\s+notes)?|open\s+work|incomplete|pre-build\s+readiness)\b/i;
 const HEADING = /^#{1,6}\s+/;
 // Trailing whitespace optional — PRODUCT_HOME lines usually have none.
+// MUST be \s$ (not \s$) or open `- [ ] [P1]` lines extract as zero backlog.
 const BULLET = /^\s*(?:[-*+]|\d+[.)])\s+(.*\S)\s$/;
 const OPEN_CHECKBOX = /^\s*(?:[-*+]|\d+[.)])?\s*\[\s*\]\s+(.*\S)\s$/;
 const DONE_CHECKBOX = /^\s*(?:[-*+]|\d+[.)])?\s*\[[xX]\]\s+/;
-const NEXT_LINE = /^\*\Next(?:\s+priority)?:\*\*\s*(.+)$/i;
+// Accept *Next:**, Next:**, or Next: (tip upload has stripped '*' before).
+const NEXT_LINE = /^\*{0,2}Next(?:\s+priority)?:\*{0,2}\s*(.+)$/i;
 const NEXT_TABLE = /^\|\s*\*?\*?Next(?:\s+build|\s+priority)?\*?\*?\s*\|\s*(.+?)\s*\|/i;
 const SKIP_DOC_NAMES = new Set([
   'product_home.md',
