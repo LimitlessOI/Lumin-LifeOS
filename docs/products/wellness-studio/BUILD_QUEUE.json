@@ -1356,7 +1356,7 @@
     },
     {
       "id": "wellness-studio-step6",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "db/migrations/20260720_lifeos_core_phase_6.sql",
       "task": "deploy",
       "spec": "LifeOS Core Phase 6 deployed and stable",
@@ -1379,9 +1379,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-17T18:34:31.756Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-18T01:10:20.174Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -1437,7 +1437,7 @@
     },
     {
       "id": "wellness-studio-step9",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20260724_lifeos_core_stable.sql",
       "task": "verify_stability",
       "spec": "Verify LifeOS Core deployment is stable after all phases",
@@ -1454,11 +1454,18 @@
       ],
       "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "wellness-studio-step9",
-      "mission_id": "PRODUCT-wellness-studio"
+      "mission_id": "PRODUCT-wellness-studio",
+      "pre_existing": true,
+      "shipped_via": "pre_existing_artifact_proof",
+      "shipped_at": "2026-07-18T01:10:20.242Z",
+      "last_error": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null
     },
     {
       "id": "wellness-studio-step10",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/20260725_extend_wellness_tables.sql",
       "task": "extend_wellness_tables",
       "spec": "Extend existing tables without schema conflicts",
@@ -1466,7 +1473,7 @@
         "wellness-studio-step9"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "route": {
         "path": "/db/extend"
       },
@@ -1478,7 +1485,12 @@
       ],
       "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "wellness-studio-step10",
-      "mission_id": "PRODUCT-wellness-studio"
+      "mission_id": "PRODUCT-wellness-studio",
+      "last_attempt_at": "2026-07-18T01:10:22.552Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER TABLE joy_checkins ADD COLUMN; behavior_assertion: missing_substring:ALTER TABLE integrity_score_log ADD COLUMN; behavior_assertion: missing_substring:ALTER TABLE wearable_data ADD COLUMN; behavior_assertion: missing_substring:ALTER TABLE emotional_patterns ADD COLUMN; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "wellness-studio-step11",
