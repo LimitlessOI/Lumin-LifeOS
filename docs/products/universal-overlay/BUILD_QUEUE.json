@@ -1853,7 +1853,33 @@
           ],
           "assertion_id": "expected_exports:services/pwaInstallTracker.js"
         }
-      ]
+      ],
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/s2.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-18T20:05:51.434Z",
+        "shipped_at": "2026-07-18T20:05:51.434Z",
+        "commit_sha": null,
+        "content_sha256": "510a4306c8fd6d5c5d816905fb1ab0b10e7d745e4ff8579d725bb713097aae3f",
+        "target_file": "services/pwaInstallTracker.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/pwaInstallTracker.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/universal-overlay/twins/steps/s2.exact",
+          "content_sha256": "510a4306c8fd6d5c5d816905fb1ab0b10e7d745e4ff8579d725bb713097aae3f"
+        }
+      },
+      "shipped_at": "2026-07-18T20:05:51.434Z",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s2"
     },
     {
       "id": "s3",
