@@ -973,13 +973,13 @@
     },
     {
       "id": "universal-overlay-step7",
-      "status": "founder_gated",
+      "status": "blocked",
       "target_file": "public/overlay/moduleRouter.js",
       "task": "implement fluid UI context router",
       "spec": "Route based on URL patterns to assemble and display view logic.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "fluidRouter"
       ],
@@ -991,7 +991,12 @@
       ],
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "universal-overlay-step7",
-      "mission_id": "PRODUCT-universal-overlay"
+      "mission_id": "PRODUCT-universal-overlay",
+      "last_attempt_at": "2026-07-18T00:14:11.868Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:URL pattern; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "universal-overlay-step8",
