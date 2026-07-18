@@ -51,24 +51,38 @@ export async function logFoodWithPhoto(db, userId, { imageUrl, imageBase64, desc
   return rows[0];
 }
 
-export async function getFoodLogs(db, userId, { limit = 50, since }) {
-  const query = `SELECT * FROM food_logs 
-                 WHERE user_id = $1 AND (logged_at >= $2 OR $2 IS NULL) 
-                 ORDER BY logged_at DESC 
-                 LIMIT $3`;
-  const values = [userId, since, limit];
-
-  const { rows } = await db.query(query, values);
-  return rows;
+export async function getFoodLogs(db, userId, { limit = 50, since } = {}) {
+  try {
+    const query = since
+      ? `SELECT * FROM food_logs
+         WHERE user_id = $1 AND logged_at >= $2
+         ORDER BY logged_at DESC
+         LIMIT $3`
+      : `SELECT * FROM food_logs
+         WHERE user_id = $1
+         ORDER BY logged_at DESC
+         LIMIT $2`;
+    const values = since ? [userId, since, limit] : [userId, limit];
+    const { rows } = await db.query(query, values);
+    return rows;
+  } catch (err) {
+    if (/food_logs|does not exist/i.test(String(err.message || err))) return [];
+    throw err;
+  }
 }
 
 export async function getNutritionSummary(db, userId, days) {
-  const query = `SELECT SUM(calories) AS total_calories, SUM(protein_g) AS total_protein, 
-                        SUM(carbs_g) AS total_carbs, SUM(fat_g) AS total_fat, COUNT(*) AS log_count 
-                 FROM food_logs 
-                 WHERE user_id = $1 AND logged_at >= (CURRENT_DATE - $2::interval)`;
-  const values = [userId, `${days} days`];
-
-  const { rows } = await db.query(query, values);
-  return rows[0];
+  try {
+    const query = `SELECT SUM(calories) AS total_calories, SUM(protein_g) AS total_protein,
+                          SUM(carbs_g) AS total_carbs, SUM(fat_g) AS total_fat, COUNT(*) AS log_count
+                   FROM food_logs
+                   WHERE user_id = $1 AND logged_at >= (CURRENT_DATE - ($2::text || ' days')::interval)`;
+    const { rows } = await db.query(query, [userId, String(Number(days) || 7)]);
+    return rows[0] || { total_calories: 0, total_protein: 0, total_carbs: 0, total_fat: 0, log_count: 0 };
+  } catch (err) {
+    if (/food_logs|does not exist/i.test(String(err.message || err))) {
+      return { total_calories: 0, total_protein: 0, total_carbs: 0, total_fat: 0, log_count: 0 };
+    }
+    throw err;
+  }
 }

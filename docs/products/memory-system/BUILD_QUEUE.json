@@ -981,6 +981,102 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-18T04:39:13.274Z"
+    },
+    {
+      "id": "step3",
+      "status": "skipped",
+      "target_file": "scripts/deploy_phase7_railway_probe.mjs",
+      "task": "deploy phase7 branch",
+      "spec": "Deploy 'phase7-railway-probe' to Railway for live mode of 'scripts/memory-pressure-test.mjs' and verify 20/20 result.",
+      "depends_on": [
+        "step2"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "deployPhase7Railway",
+        "verifyMemoryPressureTest",
+        "20/20 result"
+      ],
+      "last_attempt_at": "2026-07-18T07:44:07.130Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:verifyMemoryPressureTest; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 6,
+      "revived_at": "2026-07-18T07:44:04.927Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:verifyMemoryPressureTest; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-18T09:59:51.687Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "01",
+      "status": "blocked",
+      "target_file": "pull_requests/final_pr_review.js",
+      "task": "merge branch",
+      "spec": "Merge 'phase7-railway-probe' branch to main with formal PR review and notes.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "mergePhase7Branch",
+        "prNote"
+      ],
+      "file_contains": [
+        "formal PR review"
+      ],
+      "last_attempt_at": "2026-07-18T09:59:51.743Z",
+      "last_error": "NOT_ON_BLUEPRINT",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
+    },
+    {
+      "id": "02",
+      "status": "pending",
+      "target_file": "scripts/deploy_railway.js",
+      "task": "deploy to Railway",
+      "spec": "Deploy 'phase7-railway-probe' branch to Railway for live mode operation.",
+      "depends_on": [
+        "01"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "deployToRailway"
+      ],
+      "file_contains": [
+        "deploy",
+        "phase7-railway-probe"
+      ]
+    },
+    {
+      "id": "03",
+      "status": "pending",
+      "target_file": "scripts/verify_railway_deploy.js",
+      "task": "verify deploy",
+      "spec": "Verify live mode of 'scripts/memory-pressure-test.mjs' against real Neon state for 20/20 result.",
+      "depends_on": [
+        "02"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "verifyLiveMode"
+      ],
+      "file_contains": [
+        "verify",
+        "20/20",
+        "Neon state"
+      ]
     }
   ],
   "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",

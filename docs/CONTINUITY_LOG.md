@@ -6,6 +6,9 @@ Adam: "failures don't stop the system, it just redoes it correctly." Root cause 
 
 **Detected preexisting debt (NOT mine, on main):** `verify` (system-maturity → migration:preflight) is red on main for 8 pre-existing migration findings (missing IF NOT EXISTS + CREATE TABLE collisions across old SQL). Untouched by this work; flagged for a governed migration-hygiene pass. Main is not gated on PR CI (loop pushes directly), so this red is tolerated but blocks clean PR merges.
 
+## 2026-07-18 — Fix LifeOS UI auth failures
+
+Adam: keep fixing issues found. Tip HTML was 200 while food/sleep/ask/habits returned Login required / unauthorized, and cycle/legacy crashed on `user_id=adam` as bigint. Fixed route auth to accept command-key+JWT, resolve handles, and wire overlays to bootstrap fetchWithAuth.
 
 ## 2026-07-17 — Member feedback + ethics + twin directives
 
