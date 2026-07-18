@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T04:09:12.194Z",
+  "generated_at": "2026-07-18T04:21:00.414Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11926,
+  "file_count": 11927,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -70510,6 +70510,13 @@
       "ssot": [
         "docs/SYSTEM_SCORECARD_PATH_TO_10.md"
       ]
+    },
+    {
+      "path": "scripts/phase7_deploy.js",
+      "synopsis": "Exports deployToRailway — scripts/phase7_deploy.js.",
+      "bytes": 732,
+      "mtime": "2026-07-18T04:21:00.414Z",
+      "indexed_at": "2026-07-18T04:21:00.414Z"
     },
     {
       "path": "scripts/pm2-setup.sh",
