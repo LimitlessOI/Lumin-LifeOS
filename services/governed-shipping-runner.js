@@ -22,7 +22,7 @@
  * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import { attachAuthoredAssertions } from '../factory-staging/factory-core/bpb/author-assertions.js';
-import { blueprintFollowClaim, dualHonestyGrade } from './truth-ladder.js';
+import { blueprintFollowClaim, dualHonestyGrade, exactChangeClaim } from './truth-ladder.js';
 
 const noop = () => {};
 
@@ -86,10 +86,42 @@ export async function runGovernedShippingQueue({
       };
     }
 
+    const exact = exactChangeClaim({
+      blueprint_id: twin.blueprint_id,
+      blueprint_step_id: twin.blueprint_step_id,
+      claim_following_blueprint: claim_following_blueprint !== false,
+    });
+    if (!exact.ok) {
+      await signal({
+        kind: 'not_exact_blueprint_step',
+        mission_id,
+        blueprint_id: twin.blueprint_id,
+        step_id,
+        blueprint_step_id: twin.blueprint_step_id,
+        index: i,
+        status: exact.status,
+        error: exact.error,
+      });
+      return {
+        ok: false,
+        status: exact.status || 'NOT_EXACT_BLUEPRINT_STEP',
+        halted: true,
+        reason: exact.error,
+        step_id,
+        index: i,
+        ...summary,
+        shipped,
+        honesty_grades,
+      };
+    }
+
     // BPB authors assertions from the spec (provenance-clean). Fail-closed: if the
     // blueprint declared nothing provable for a server-code target, we HALT — we
     // never ship code SENTRY cannot independently prove.
-    const authored = attachAuthoredAssertions(rawStep);
+    const authored = attachAuthoredAssertions({
+      ...rawStep,
+      target_file: exact.target_file || rawStep?.target_file,
+    });
     if (!authored.ok) {
       await signal({ kind: 'halted_unprovable_step', mission_id, blueprint_id, step_id, index: i, reason: authored.reason });
       return { ok: false, halted: true, reason: authored.reason, step_id, index: i, ...summary, shipped };

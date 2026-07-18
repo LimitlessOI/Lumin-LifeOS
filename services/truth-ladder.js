@@ -5,12 +5,15 @@
  * re-confirmation watchlist for everything below KNOW so assumptions get checked
  * against reality later. Grading judgment is delegated to a second AI via an
  * injected reviewFn (separation of powers); the enforcement + watchlist logic is
- * deterministic and unit-tested.
+ * deterministic and unit-tested. Also enforces exact-change law: twin step
+ * resolve + rebuildable exactness + seal/reverse pinpoint.
  * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
+import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { execFileSync } from 'node:child_process';
 
 const _TRUTH_DIR = path.dirname(fileURLToPath(import.meta.url));
 const _REPO_ROOT = path.resolve(_TRUTH_DIR, '..');
@@ -316,7 +319,12 @@ export function resolveTwinBlueprint(blueprint_id, { repoRoot = _REPO_ROOT } = {
  * Factory may claim "following blueprint" only when ids resolve to a real on-disk twin
  * AND the step exists on that twin. Synthetic governed-autonomous-* → NOT_ON_BLUEPRINT.
  */
-export function blueprintFollowClaim({ blueprint_id = null, blueprint_step_id = null, claim_following_blueprint = false } = {}) {
+export function blueprintFollowClaim({
+  blueprint_id = null,
+  blueprint_step_id = null,
+  claim_following_blueprint = false,
+  repoRoot = _REPO_ROOT,
+} = {}) {
   const bid = String(blueprint_id || '').trim();
   const bsid = String(blueprint_step_id || '').trim();
   const hasTwin = Boolean(bid && bsid);
@@ -344,7 +352,7 @@ export function blueprintFollowClaim({ blueprint_id = null, blueprint_step_id = 
       trust_earned: false,
     };
   }
-  const resolved = resolveTwinBlueprint(bid);
+  const resolved = resolveTwinBlueprint(bid, { repoRoot });
   if (!resolved.ok) {
     return {
       ok: false,
@@ -372,5 +380,334 @@ export function blueprintFollowClaim({ blueprint_id = null, blueprint_step_id = 
     twin_source: resolved.source,
     twin_path: resolved.path,
     trust_earned: null,
+  };
+}
+
+function stepIdentity(step) {
+  return String(step?.blueprint_step_id || step?.step_id || step?.id || '').trim();
+}
+
+function hasExactRebuildBytes(step) {
+  if (typeof step?.exact_content === 'string' && step.exact_content.length > 0) return true;
+  if (typeof step?.exact_inputs?.exact_content === 'string' && step.exact_inputs.exact_content.length > 0) return true;
+  const src = step?.exact_inputs?.content_source_path || step?.content_source_path;
+  return typeof src === 'string' && src.trim().length > 0;
+}
+
+function hasAuthorableContract(step) {
+  // First ship may author from twin task+spec; sealExactChangeIntoTwin then
+  // writes exact bytes so any later rebuild is deterministic.
+  const task = String(step?.task || step?.authoring?.task || '').trim();
+  const spec = String(step?.spec || step?.authoring?.spec || '').trim();
+  return Boolean(task && spec);
+}
+
+/**
+ * Load the exact twin step object from on-disk blueprint / BUILD_QUEUE.
+ */
+export function getTwinStep(blueprint_id, blueprint_step_id, { repoRoot = _REPO_ROOT } = {}) {
+  const follow = blueprintFollowClaim({
+    blueprint_id,
+    blueprint_step_id,
+    claim_following_blueprint: true,
+    repoRoot,
+  });
+  if (!follow.ok) {
+    return { ok: false, status: follow.status, error: follow.error };
+  }
+  const resolved = resolveTwinBlueprint(blueprint_id, { repoRoot });
+  if (!resolved.ok) {
+    return { ok: false, status: 'NOT_ON_BLUEPRINT', error: resolved.reason };
+  }
+  const steps = Array.isArray(resolved.blueprint?.steps) ? resolved.blueprint.steps : [];
+  const step = steps.find((s) => stepIdentity(s) === String(blueprint_step_id || '').trim());
+  if (!step) {
+    return {
+      ok: false,
+      status: 'NOT_ON_BLUEPRINT',
+      error: `blueprint_step_id_not_on_twin:${blueprint_step_id}`,
+    };
+  }
+  return {
+    ok: true,
+    status: 'ON_BLUEPRINT',
+    step,
+    twin: follow,
+    twin_source: resolved.source,
+    twin_path: resolved.path,
+    blueprint: resolved.blueprint,
+  };
+}
+
+/**
+ * Exact-change law entry gate. Twin step must exist and be rebuildable
+ * (sealed exact bytes, or one-shot authorable contract that must seal after ship).
+ */
+export function exactChangeClaim({
+  blueprint_id = null,
+  blueprint_step_id = null,
+  claim_following_blueprint = true,
+  require_sealed = false,
+  repoRoot = _REPO_ROOT,
+} = {}) {
+  const follow = blueprintFollowClaim({
+    blueprint_id,
+    blueprint_step_id,
+    claim_following_blueprint,
+    repoRoot,
+  });
+  if (!follow.ok) {
+    return {
+      ok: false,
+      status: follow.status || 'NOT_ON_BLUEPRINT',
+      error: follow.error,
+      trust_earned: false,
+    };
+  }
+  const loaded = getTwinStep(blueprint_id, blueprint_step_id, { repoRoot });
+  if (!loaded.ok) {
+    return {
+      ok: false,
+      status: loaded.status || 'NOT_ON_BLUEPRINT',
+      error: loaded.error,
+      trust_earned: false,
+    };
+  }
+  const step = loaded.step;
+  const target_file = String(step.target_file || '').trim();
+  if (!target_file) {
+    return {
+      ok: false,
+      status: 'NOT_EXACT_BLUEPRINT_STEP',
+      error: 'twin_step_missing_target_file',
+      trust_earned: false,
+      twin: follow,
+    };
+  }
+  const sealed = hasExactRebuildBytes(step)
+    && Boolean(step?.exactness?.content_sha256)
+    && Boolean(step?.exactness?.shipped_at || step?.shipped_at);
+  const authorable = hasAuthorableContract(step);
+  if (require_sealed && !sealed) {
+    return {
+      ok: false,
+      status: 'NOT_EXACT_BLUEPRINT_STEP',
+      error: 'twin_step_not_sealed_exact',
+      trust_earned: false,
+      twin: follow,
+      target_file,
+    };
+  }
+  if (!sealed && !authorable && !hasExactRebuildBytes(step)) {
+    return {
+      ok: false,
+      status: 'NOT_EXACT_BLUEPRINT_STEP',
+      error: 'twin_step_not_rebuildable — need exact_content/content_source_path OR task+spec+assertion_spec',
+      trust_earned: false,
+      twin: follow,
+      target_file,
+    };
+  }
+  return {
+    ok: true,
+    status: sealed ? 'EXACT_SEALED' : (hasExactRebuildBytes(step) ? 'EXACT_BYTES' : 'EXACT_AUTHORABLE'),
+    blueprint_id: follow.blueprint_id,
+    blueprint_step_id: follow.blueprint_step_id,
+    mission_id: follow.mission_id,
+    twin_source: follow.twin_source,
+    twin_path: follow.twin_path,
+    target_file,
+    step,
+    sealed,
+    reverse: step?.exactness?.reverse || step?.reverse || null,
+    trust_earned: null,
+  };
+}
+
+function sha256Text(text) {
+  return crypto.createHash('sha256').update(String(text), 'utf8').digest('hex');
+}
+
+function productIdFromTwinPath(twinPath) {
+  const parts = String(twinPath || '').split(path.sep);
+  const idx = parts.lastIndexOf('products');
+  if (idx >= 0 && parts[idx + 1]) return parts[idx + 1];
+  return null;
+}
+
+/**
+ * After a successful ship: seal exact bytes into the twin so any system can
+ * rebuild this aspect, and record reverse pinpoint (where/when/sha).
+ */
+export function sealExactChangeIntoTwin({
+  blueprint_id,
+  blueprint_step_id,
+  content,
+  commit_sha = null,
+  prior_commit_sha = null,
+  repoRoot = _REPO_ROOT,
+} = {}) {
+  const loaded = getTwinStep(blueprint_id, blueprint_step_id, { repoRoot });
+  if (!loaded.ok) {
+    return { ok: false, status: loaded.status, error: loaded.error };
+  }
+  const step = loaded.step;
+  const target_file = String(step.target_file || '').trim();
+  if (!target_file) {
+    return { ok: false, status: 'NOT_EXACT_BLUEPRINT_STEP', error: 'twin_step_missing_target_file' };
+  }
+  let bytes = content;
+  if (bytes == null) {
+    const absTarget = path.join(repoRoot, target_file);
+    if (!fs.existsSync(absTarget)) {
+      return { ok: false, status: 'NOT_EXACT_BLUEPRINT_STEP', error: `shipped_target_missing:${target_file}` };
+    }
+    bytes = fs.readFileSync(absTarget, 'utf8');
+  }
+  const text = String(bytes);
+  const content_sha256 = sha256Text(text);
+  const productId = productIdFromTwinPath(loaded.twin_path);
+  const artifactRel = productId
+    ? path.join('docs', 'products', productId, 'twins', 'steps', `${blueprint_step_id}.exact`)
+    : path.join('docs', 'products', '_unscoped', 'twins', 'steps', `${blueprint_id}__${blueprint_step_id}.exact`);
+  const artifactAbs = path.join(repoRoot, artifactRel);
+  fs.mkdirSync(path.dirname(artifactAbs), { recursive: true });
+  fs.writeFileSync(artifactAbs, text, 'utf8');
+
+  const fileExistedBefore = Boolean(prior_commit_sha);
+  const reverse = {
+    mode: fileExistedBefore ? 'restore_prior_commit_path' : 'delete_file',
+    target_file,
+    prior_commit_sha: prior_commit_sha || null,
+    prior_content_sha256: null,
+  };
+  if (prior_commit_sha) {
+    try {
+      const prior = execFileSync('git', ['show', `${prior_commit_sha}:${target_file}`], {
+        cwd: repoRoot,
+        encoding: 'utf8',
+        maxBuffer: 8 * 1024 * 1024,
+      });
+      reverse.prior_content_sha256 = sha256Text(prior);
+    } catch {
+      reverse.mode = 'delete_file';
+      reverse.prior_commit_sha = null;
+    }
+  }
+
+  const now = new Date().toISOString();
+  step.action_type = 'write_file_exact';
+  step.exact_inputs = {
+    content_source_path: artifactRel.replace(/\\/g, '/'),
+  };
+  step.exactness = {
+    sealed: true,
+    sealed_at: now,
+    shipped_at: now,
+    commit_sha: commit_sha || step.commit_sha || null,
+    content_sha256,
+    target_file,
+    reverse,
+    rebuild: {
+      action_type: 'write_file_exact',
+      content_source_path: artifactRel.replace(/\\/g, '/'),
+      content_sha256,
+    },
+  };
+  step.shipped_at = now;
+  if (commit_sha) step.commit_sha = commit_sha;
+  step.blueprint_id = step.blueprint_id || blueprint_id;
+  step.blueprint_step_id = step.blueprint_step_id || blueprint_step_id;
+
+  const twinPath = loaded.twin_path;
+  const bp = loaded.blueprint;
+  const idx = (bp.steps || []).findIndex((s) => stepIdentity(s) === String(blueprint_step_id).trim());
+  if (idx >= 0) bp.steps[idx] = step;
+  fs.writeFileSync(twinPath, `${JSON.stringify(bp, null, 2)}\n`, 'utf8');
+
+  return {
+    ok: true,
+    status: 'EXACT_SEALED',
+    blueprint_id,
+    blueprint_step_id,
+    target_file,
+    content_sha256,
+    artifact_path: artifactRel.replace(/\\/g, '/'),
+    reverse,
+    shipped_at: now,
+    commit_sha: commit_sha || null,
+    twin_path: twinPath,
+  };
+}
+
+/**
+ * Plan (and optionally apply) reverse of one sealed twin step — only that aspect.
+ */
+export function reverseExactChange({
+  blueprint_id,
+  blueprint_step_id,
+  apply = false,
+  repoRoot = _REPO_ROOT,
+} = {}) {
+  const loaded = getTwinStep(blueprint_id, blueprint_step_id, { repoRoot });
+  if (!loaded.ok) {
+    return { ok: false, status: loaded.status, error: loaded.error };
+  }
+  const step = loaded.step;
+  const reverse = step?.exactness?.reverse || step?.reverse;
+  const target_file = String(reverse?.target_file || step?.target_file || '').trim();
+  if (!target_file) {
+    return { ok: false, status: 'NOT_EXACT_BLUEPRINT_STEP', error: 'reverse_missing_target_file' };
+  }
+  if (!reverse?.mode) {
+    return {
+      ok: false,
+      status: 'NOT_EXACT_BLUEPRINT_STEP',
+      error: 'twin_step_has_no_reverse_contract — seal after ship first',
+      target_file,
+    };
+  }
+  const abs = path.join(repoRoot, target_file);
+  const plan = {
+    ok: true,
+    status: 'REVERSE_PLAN',
+    blueprint_id,
+    blueprint_step_id,
+    target_file,
+    mode: reverse.mode,
+    prior_commit_sha: reverse.prior_commit_sha || null,
+    pinpoint: {
+      shipped_at: step?.exactness?.shipped_at || step?.shipped_at || null,
+      commit_sha: step?.exactness?.commit_sha || step?.commit_sha || null,
+      content_sha256: step?.exactness?.content_sha256 || null,
+    },
+    applied: false,
+  };
+  if (!apply) return plan;
+
+  if (reverse.mode === 'delete_file') {
+    if (fs.existsSync(abs)) fs.unlinkSync(abs);
+    plan.applied = true;
+    plan.status = 'REVERSED';
+    return plan;
+  }
+  if (reverse.mode === 'restore_prior_commit_path' && reverse.prior_commit_sha) {
+    const prior = execFileSync('git', ['show', `${reverse.prior_commit_sha}:${target_file}`], {
+      cwd: repoRoot,
+      encoding: 'utf8',
+      maxBuffer: 8 * 1024 * 1024,
+    });
+    fs.mkdirSync(path.dirname(abs), { recursive: true });
+    fs.writeFileSync(abs, prior, 'utf8');
+    plan.applied = true;
+    plan.status = 'REVERSED';
+    plan.restored_sha256 = sha256Text(prior);
+    return plan;
+  }
+  return {
+    ok: false,
+    status: 'NOT_EXACT_BLUEPRINT_STEP',
+    error: `unsupported_reverse_mode:${reverse.mode}`,
+    target_file,
   };
 }

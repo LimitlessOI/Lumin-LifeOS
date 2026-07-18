@@ -59,6 +59,41 @@
     "accepted_twin_sources": ["mission_blueprint", "product_blueprint", "product_build_queue_twin"],
     "otherwise": "NOT_ON_BLUEPRINT"
   },
+  "exact_change_law": {
+    "founder_mandate": "Every program change must be an exact blueprint twin step so any failure can be pinpointed (where/when/step), that aspect alone reversed, and rebuilt quickly by any system.",
+    "entry_requires": [
+      "on_blueprint_twin_step",
+      "target_file",
+      "sandbox_boundary",
+      "rebuildable_contract"
+    ],
+    "rebuildable_contract_means": {
+      "exact_sealed": "exact_inputs.exact_content OR exact_inputs.content_source_path (+ content_sha256)",
+      "exact_authorable_once": "author_then_write allowed only when task+spec+assertion_spec present; ship MUST seal exact bytes into twin before done"
+    },
+    "seal_requires": [
+      "shipped_at",
+      "commit_sha",
+      "content_sha256",
+      "exact_inputs.content_source_path_or_exact_content",
+      "reverse.mode",
+      "reverse.prior_commit_sha_or_delete_file"
+    ],
+    "reverse": {
+      "unit": "single_blueprint_step",
+      "modes": ["restore_prior_commit_path", "delete_file"],
+      "forbidden": ["bulk_revert_unrelated_steps", "rewrite_without_twin_step"]
+    },
+    "pinpoint_fields": [
+      "blueprint_id",
+      "blueprint_step_id",
+      "target_file",
+      "shipped_at",
+      "commit_sha",
+      "content_sha256"
+    ],
+    "otherwise": "NOT_EXACT_BLUEPRINT_STEP"
+  },
   "constitution_refs": [
     "docs/constitution/NORTH_STAR_SSOT.md#§2.6",
     "docs/constitution/POINT_B_DNA.md",

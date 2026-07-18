@@ -25,7 +25,13 @@ import { summarizeTsosMetrics } from '../factory-staging/factory-core/tsos/tsos-
 import { reconcileRemoteTruth } from '../factory-staging/factory-core/readiness/remote-truth-reconciler.js';
 import { extractContent } from '../factory-staging/factory-core/builder/authoring.js';
 import { runGovernedShippingQueue } from '../services/governed-shipping-runner.js';
-import { blueprintFollowClaim } from '../services/truth-ladder.js';
+import {
+  blueprintFollowClaim,
+  exactChangeClaim,
+  getTwinStep,
+  reverseExactChange,
+  sealExactChangeIntoTwin,
+} from '../services/truth-ladder.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -280,11 +286,12 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
       if (!Array.isArray(steps) || steps.length === 0) {
         return res.status(400).json({ ok: false, error: 'steps[] required' });
       }
-      // Fail-closed twin proof before any dispatch. Synthetic ids → 422.
+      // Fail-closed twin + exact-change proof before any dispatch.
       const firstStep = steps[0] || {};
+      const stepKey = firstStep.blueprint_step_id || firstStep.step_id || firstStep.id;
       const twinProbe = blueprintFollowClaim({
         blueprint_id,
-        blueprint_step_id: firstStep.blueprint_step_id || firstStep.step_id,
+        blueprint_step_id: stepKey,
         claim_following_blueprint: claim_following_blueprint !== false,
       });
       if (!twinProbe.ok) {
@@ -295,6 +302,50 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
           twin_probe: twinProbe,
         });
       }
+      const exactProbe = exactChangeClaim({
+        blueprint_id,
+        blueprint_step_id: stepKey,
+        claim_following_blueprint: claim_following_blueprint !== false,
+      });
+      if (!exactProbe.ok) {
+        return res.status(422).json({
+          ok: false,
+          status: exactProbe.status || 'NOT_EXACT_BLUEPRINT_STEP',
+          error: exactProbe.error,
+          exact_probe: exactProbe,
+          twin_probe: twinProbe,
+        });
+      }
+      // Twin disk is authority for target_file — request body cannot redefine the aspect.
+      const boundSteps = steps.map((s) => {
+        const sid = s.blueprint_step_id || s.step_id || s.id;
+        const loaded = getTwinStep(blueprint_id, sid);
+        if (!loaded.ok) return s;
+        const twin = loaded.step;
+        return {
+          ...s,
+          step_id: s.step_id || sid,
+          blueprint_step_id: sid,
+          blueprint_id,
+          target_file: twin.target_file || s.target_file,
+          task: twin.task || s.task,
+          spec: twin.spec || s.spec,
+          assertion_spec: twin.assertion_spec || s.assertion_spec,
+          expected_exports: twin.expected_exports || s.expected_exports,
+          action_type: twin.action_type || s.action_type,
+          exact_inputs: twin.exact_inputs || s.exact_inputs,
+          sandbox_boundary: s.sandbox_boundary || (twin.target_file
+            ? `${String(twin.target_file).split('/')[0]}/**`
+            : s.sandbox_boundary),
+        };
+      });
+      let prior_commit_sha = null;
+      try {
+        prior_commit_sha = execFileSync('git', ['rev-parse', 'HEAD'], {
+          cwd: REPO_ROOT,
+          encoding: 'utf8',
+        }).trim();
+      } catch { /* reverse falls back to delete_file */ }
       // Mission pack twins must pass BPB intake. Registered product queue twins
       // are already proven on disk by blueprintFollowClaim — intake pack N/A.
       const productTwin = twinProbe.twin_source === 'product_build_queue_twin'
@@ -305,20 +356,88 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
         dispatchOptions,
       );
       const signal = async (sig) => {
-        appendHistorianRecord({ type: 'governed_shipping_signal', mission_id, blueprint_id, ...sig, trust_level: 'outcome-linked' });
+        appendHistorianRecord({
+          type: 'governed_shipping_signal',
+          mission_id,
+          blueprint_id,
+          ...sig,
+          trust_level: 'outcome-linked',
+        });
       };
       const outcome = await runGovernedShippingQueue({
-        steps,
-        mission_id,
-        blueprint_id,
+        steps: boundSteps,
+        mission_id: mission_id || twinProbe.mission_id,
+        blueprint_id: blueprint_id || twinProbe.blueprint_id,
         dispatch,
         signal,
         startIndex: Number(start_index) || 0,
         claim_following_blueprint: claim_following_blueprint !== false,
       });
-      res.status(outcome.ok ? 200 : 422).json(outcome);
+      const seals = [];
+      if (Array.isArray(outcome.shipped)) {
+        for (const shipped of outcome.shipped) {
+          const sid = shipped.blueprint_step_id || shipped.step_id;
+          const commit_sha = shipped?.codegen?.commit_sha
+            || outcome.commit_sha
+            || null;
+          const seal = sealExactChangeIntoTwin({
+            blueprint_id: blueprint_id || twinProbe.blueprint_id,
+            blueprint_step_id: sid,
+            commit_sha,
+            prior_commit_sha,
+          });
+          seals.push(seal);
+          appendHistorianRecord({
+            type: 'exact_change_sealed',
+            mission_id: mission_id || twinProbe.mission_id,
+            blueprint_id: blueprint_id || twinProbe.blueprint_id,
+            step_id: sid,
+            ...seal,
+            trust_level: 'outcome-linked',
+          });
+        }
+      }
+      res.status(outcome.ok ? 200 : 422).json({
+        ...outcome,
+        exact_probe: {
+          status: exactProbe.status,
+          target_file: exactProbe.target_file,
+          sealed: exactProbe.sealed,
+        },
+        exact_seals: seals,
+      });
     } catch (err) {
       res.status(500).json({ ok: false, status: 'FACTORY_SHIP_QUEUE_ERROR', error: err?.message || String(err) });
+    }
+  });
+
+  // Reverse exactly one sealed twin step (pinpoint aspect rollback).
+  router.post('/factory/reverse-step', guard, async (req, res) => {
+    try {
+      const { blueprint_id, blueprint_step_id, apply = false } = req.body || {};
+      const exact = exactChangeClaim({
+        blueprint_id,
+        blueprint_step_id,
+        claim_following_blueprint: true,
+      });
+      if (!exact.ok && exact.status === 'NOT_ON_BLUEPRINT') {
+        return res.status(422).json({ ok: false, status: exact.status, error: exact.error });
+      }
+      const result = reverseExactChange({
+        blueprint_id,
+        blueprint_step_id,
+        apply: apply === true,
+      });
+      appendHistorianRecord({
+        type: apply === true ? 'exact_change_reversed' : 'exact_change_reverse_plan',
+        blueprint_id,
+        step_id: blueprint_step_id,
+        ...result,
+        trust_level: 'outcome-linked',
+      });
+      res.status(result.ok ? 200 : 422).json(result);
+    } catch (err) {
+      res.status(500).json({ ok: false, status: 'FACTORY_REVERSE_STEP_ERROR', error: err?.message || String(err) });
     }
   });
 
@@ -331,6 +450,8 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
     }
   });
 
-  if (logger?.info) logger.info('✅ [FACTORY-MOUNT] Governed factory mounted at /factory/{execute-step,ship-queue,execute-mission,gates/intake,readiness,historian/summary,tsos/summary}');
+  if (logger?.info) {
+    logger.info('✅ [FACTORY-MOUNT] Governed factory mounted at /factory/{execute-step,ship-queue,reverse-step,execute-mission,gates/intake,readiness,historian/summary,tsos/summary}');
+  }
   return router;
 }

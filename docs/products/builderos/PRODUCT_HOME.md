@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/builderos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-17 — True twin follow: reject synthetic blueprint ids; ON_BLUEPRINT only if on-disk twin step exists. |
+| **Last Updated** | 2026-07-17 — Exact-change law: every ship is a twin step with seal + reverse pinpoint. |
 ### Related docs (this product)
 
 | Doc | Path |
@@ -440,6 +440,7 @@ One model may fill more than one role only when no safer alternative exists, and
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-07-17 | **Exact-change law (pinpoint / reverse / rebuild).** Pipeline law `exact_change_law`: every program change must be an on-disk twin step with rebuildable contract. `exactChangeClaim` → `NOT_EXACT_BLUEPRINT_STEP` if vague. Ship-queue binds target from twin, seals exact bytes to `docs/products/<id>/twins/steps/<step>.exact` + reverse contract, Historian `exact_change_sealed`. `POST /factory/reverse-step` plans/applies one-aspect rollback. | Adam: every change in blueprint, exact, pinpoint where/when, reverse just that aspect, rebuild by any system. | `node --test tests/truth-ladder.test.js` (21) | tip prove NOT_EXACT + reverse-step plan |
 | 2026-07-17 | **True blueprint follow — close synthetic loophole.** `blueprintFollowClaim` resolves on-disk mission/product twins; `governed-autonomous-*` → NOT_ON_BLUEPRINT. Ship-queue probes twin before dispatch. Governed loop no longer invents blueprint ids / skip_intake for fakes. All product `BUILD_QUEUE.json` stamped `PRODUCT-*-BUILD-QUEUE-TWIN-V1` + per-step twin ids (registered executable twin until Architect ARC supersedes). | Adam: make sure nothing can claim following blueprint without a real twin — prior gate was theater. | `node --test tests/truth-ladder.test.js` | tip prove synthetic 422 + lifeos twin ship |
 | 2026-04-01 | Added the required self-programming loop (proposal, execution, verification, review, repair, scoring) plus explicit separation-of-duties rules | The builder now has a documented operating contract for how autonomous code work must be evaluated instead of acting like a single black-box coder | ✅ | pending | pending |
 | 2026-05-25 | **`services/autonomy-scheduler.js` — LEGACY PRODUCT-LEVEL classification:** Added `@legacy PRODUCT-LEVEL` header. Changed gate from confusing `LIFEOS_DIRECTED_MODE !== 'false'` to explicit `LEGACY_SCHEDULER_ENABLED=true` opt-in (backward compat preserved via OR condition). 12 ungoverned AI calls (BoldTrail, Digital Twin, Pipeline, Self-Improvement) now require explicit opt-in. Railway gate confirmed absent (LEGACY_SCHEDULER_ENABLED not in Railway vault as of 2026-05-25 audit). | Ungoverned AI calls without useful-work-guard are a Zero-Waste + PB governance violation. BuilderOS governed runtime must not start these automatically. | ✅ `node --check` PASS | n/a | `LEGACY_SCHEDULER_ENABLED` absent from Railway — schedulers do not fire |

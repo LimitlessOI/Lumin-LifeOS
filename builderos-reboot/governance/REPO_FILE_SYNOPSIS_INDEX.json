@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T00:16:35.154Z",
+  "generated_at": "2026-07-18T00:18:22.173Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11886,
   "files": [
@@ -30436,9 +30436,9 @@
     {
       "path": "config/builderos-pipeline-law.json",
       "synopsis": "Configuration — Builderos Pipeline Law.",
-      "bytes": 2652,
-      "mtime": "2026-07-17T21:43:44.964Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z",
+      "bytes": 3957,
+      "mtime": "2026-07-18T00:18:22.173Z",
+      "indexed_at": "2026-07-18T00:18:22.173Z",
       "synopsis_index_only": true
     },
     {
@@ -37366,9 +37366,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 53490,
-      "mtime": "2026-07-17T22:18:24.318Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z"
+      "bytes": 53913,
+      "mtime": "2026-07-18T00:18:22.173Z",
+      "indexed_at": "2026-07-18T00:18:22.173Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39466,9 +39466,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 219573,
-      "mtime": "2026-07-17T21:43:44.966Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z"
+      "bytes": 220211,
+      "mtime": "2026-07-18T00:18:22.173Z",
+      "indexed_at": "2026-07-18T00:18:22.173Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -66655,9 +66655,9 @@
     {
       "path": "routes/factory-mount-routes.js",
       "synopsis": "Mounts the governed factory hot path (BPB → Builder → SENTRY → TSOS → Historian)",
-      "bytes": 17225,
-      "mtime": "2026-07-17T21:43:44.973Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z",
+      "bytes": 21441,
+      "mtime": "2026-07-18T00:18:22.173Z",
+      "indexed_at": "2026-07-18T00:18:22.173Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -85760,9 +85760,9 @@
     {
       "path": "services/governed-shipping-runner.js",
       "synopsis": "STEP 5b — the governed shipping runner. Walks a build queue and ships",
-      "bytes": 7599,
-      "mtime": "2026-07-17T19:19:29.720Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z",
+      "bytes": 8456,
+      "mtime": "2026-07-18T00:18:22.173Z",
+      "indexed_at": "2026-07-18T00:18:22.173Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -90343,9 +90343,9 @@
     {
       "path": "services/truth-ladder.js",
       "synopsis": "Truth-ladder enforcement — grades load-bearing CLAIMS (not code",
-      "bytes": 14479,
-      "mtime": "2026-07-17T21:43:44.974Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z",
+      "bytes": 25115,
+      "mtime": "2026-07-18T00:18:22.173Z",
+      "indexed_at": "2026-07-18T00:18:22.173Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -92696,9 +92696,9 @@
     {
       "path": "tests/truth-ladder.test.js",
       "synopsis": "js — tests/truth-ladder.test.js.",
-      "bytes": 7431,
-      "mtime": "2026-07-17T21:43:44.974Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z",
+      "bytes": 11184,
+      "mtime": "2026-07-18T00:18:22.173Z",
+      "indexed_at": "2026-07-18T00:18:22.173Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
