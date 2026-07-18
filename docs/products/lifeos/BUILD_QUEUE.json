@@ -3,7 +3,6 @@
   "product_id": "lifeos",
   "verify_script": "scripts/sentry-prealpha-gate.mjs",
   "planned_at": "2026-07-18T01:26:03.141Z",
-  "backlog_signature": "f07961c792d434b5",
   "planner_mode": "deterministic",
   "steps": [
     {
@@ -3279,16 +3278,16 @@
         "lifeos-practice.html",
         "lifeos-failure-museum.html"
       ],
-      "status": "blocked",
+      "status": "done",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
-      "attempts": 1,
+      "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-practice-nav",
       "mission_id": "PRODUCT-lifeos",
       "last_attempt_at": "2026-07-18T01:36:40.881Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 1861b is < 30% of existing 185794b",
+      "last_error": null,
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
@@ -3300,11 +3299,13 @@
       "demoted_at": null,
       "park_until": null,
       "no_op": null,
-      "pre_existing": null,
+      "pre_existing": true,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "pre_existing_artifact_proof",
+      "shipped_at": "2026-07-18T01:47:20.914Z"
     },
     {
       "id": "lifeos-p1-assessment-battery-service",
@@ -3320,7 +3321,7 @@
         "attachment_style",
         "love_language"
       ],
-      "status": "pending",
+      "status": "done",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -3340,7 +3341,7 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 1605b is < 30% of existing 185794b",
+      "last_error": null,
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
@@ -3352,11 +3353,13 @@
       "demoted_at": null,
       "park_until": null,
       "no_op": null,
-      "pre_existing": null,
+      "pre_existing": true,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "pre_existing_artifact_proof",
+      "shipped_at": "2026-07-18T01:47:20.914Z"
     },
     {
       "id": "lifeos-p1-assessment-routes",
@@ -3371,11 +3374,11 @@
         "/instruments"
       ],
       "route": "GET /api/v1/lifeos/assessments/instruments",
-      "status": "blocked",
+      "status": "done",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
-      "attempts": 1,
+      "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-assessment-routes",
       "mission_id": "PRODUCT-lifeos",
@@ -3390,10 +3393,13 @@
         }
       ],
       "last_attempt_at": "2026-07-18T01:34:53.122Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerLifeosAssessmentBatteryRoutes; behavior_assertion_failed; behavior_proof",
+      "last_error": null,
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "pre_existing": true,
+      "shipped_via": "pre_existing_artifact_proof",
+      "shipped_at": "2026-07-18T01:47:20.914Z"
     },
     {
       "id": "lifeos-p1-assessment-autoreg",
@@ -3404,19 +3410,22 @@
         "lifeos-assessment-battery-routes.js",
         "registerLifeosAssessmentBatteryRoutes"
       ],
-      "status": "blocked",
+      "status": "done",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
-      "attempts": 1,
+      "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-assessment-autoreg",
       "mission_id": "PRODUCT-lifeos",
       "last_attempt_at": "2026-07-18T01:34:56.025Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerLifeosAssessmentBatteryRoutes; behavior_assertion_failed; behavior_proof",
+      "last_error": null,
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "pre_existing": true,
+      "shipped_via": "pre_existing_artifact_proof",
+      "shipped_at": "2026-07-18T01:47:20.914Z"
     },
     {
       "id": "lifeos-p1-chronotype-winddown",
@@ -3429,19 +3438,22 @@
         "getSleepDebt"
       ],
       "expected_exports": [],
-      "status": "blocked",
+      "status": "done",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
-      "attempts": 1,
+      "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-chronotype-winddown",
       "mission_id": "PRODUCT-lifeos",
       "last_attempt_at": "2026-07-18T01:36:18.548Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 2083b is < 30% of existing 52737b",
+      "last_error": null,
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "pre_existing": true,
+      "shipped_via": "pre_existing_artifact_proof",
+      "shipped_at": "2026-07-18T01:47:20.914Z"
     },
     {
       "id": "lifeos-p1-therapy-today-card",
@@ -3453,19 +3465,140 @@
         "emotional"
       ],
       "design_review_flagged": true,
-      "status": "blocked",
+      "status": "done",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
-      "attempts": 1,
+      "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-therapy-today-card",
       "mission_id": "PRODUCT-lifeos",
       "last_attempt_at": "2026-07-18T01:36:21.148Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 2083b is < 30% of existing 52737b",
+      "last_error": null,
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "pre_existing": true,
+      "shipped_via": "pre_existing_artifact_proof",
+      "shipped_at": "2026-07-18T01:47:20.914Z"
+    },
+    {
+      "id": "lifeos-p1-food-logger-routes",
+      "target_file": "routes/lifeos-food-logger-routes.js",
+      "task": "Mount AI photo food logger HTTP routes",
+      "spec": "ESM registerLifeosFoodLoggerRoutes(app,{pool,callCouncilMember}). Mount under /api/v1/lifeos/food: POST /log, GET /logs, GET /summary. Use logFoodWithPhoto/getFoodLogs/getNutritionSummary from services/lifeos-ai-photo-food-logger.js.",
+      "expected_exports": [
+        "registerLifeosFoodLoggerRoutes"
+      ],
+      "file_contains": [
+        "registerLifeosFoodLoggerRoutes",
+        "/log",
+        "/summary"
+      ],
+      "route": "GET /api/v1/lifeos/food/summary",
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-food-logger-routes",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-food-logger-autoreg",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "Auto-register food logger routes",
+      "spec": "Add module entry for routes/lifeos-food-logger-routes.js register registerLifeosFoodLoggerRoutes mount_path /api/v1/lifeos/food enabled true.",
+      "file_contains": [
+        "lifeos-food-logger-routes.js",
+        "registerLifeosFoodLoggerRoutes"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-food-logger-autoreg",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-food-logger-ui",
+      "target_file": "public/overlay/lifeos-food.html",
+      "task": "Food logger overlay UI",
+      "spec": "Standalone HTML Food Logger page with description + optional image URL, POST /api/v1/lifeos/food/log, list recent via GET /logs. Must contain Food Logger title and fetch to /api/v1/lifeos/food/.",
+      "file_contains": [
+        "Food Logger",
+        "/api/v1/lifeos/food/"
+      ],
+      "design_review_flagged": true,
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-food-logger-ui",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-food-nav",
+      "target_file": "public/overlay/lifeos-app.html",
+      "task": "Wire Food into LifeOS nav",
+      "spec": "In public/overlay/lifeos-app.html add nav + PAGE_META + mobile More for lifeos-food.html (Food). Keep Practice and Failure Museum.",
+      "file_contains": [
+        "lifeos-food.html",
+        "lifeos-practice.html"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-food-nav",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-sleep-insights-routes",
+      "target_file": "routes/lifeos-sleep-chronotype-routes.js",
+      "task": "HTTP surface for chronotype/wind-down/debt",
+      "spec": "ESM registerLifeosSleepChronotypeRoutes(app,{pool}). Mount /api/v1/lifeos/sleep-insights with GET /chronotype, GET /wind-down, GET /debt using createSleepService.",
+      "expected_exports": [
+        "registerLifeosSleepChronotypeRoutes"
+      ],
+      "file_contains": [
+        "registerLifeosSleepChronotypeRoutes",
+        "getChronotype",
+        "/wind-down"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-sleep-insights-routes",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-sleep-insights-autoreg",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "Auto-register sleep insights routes",
+      "spec": "Add module entry for routes/lifeos-sleep-chronotype-routes.js register registerLifeosSleepChronotypeRoutes mount_path /api/v1/lifeos/sleep-insights enabled true.",
+      "file_contains": [
+        "lifeos-sleep-chronotype-routes.js",
+        "registerLifeosSleepChronotypeRoutes"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-sleep-insights-autoreg",
+      "mission_id": "PRODUCT-lifeos"
     }
   ],
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",

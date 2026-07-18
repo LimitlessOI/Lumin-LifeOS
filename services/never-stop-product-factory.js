@@ -1113,7 +1113,8 @@ export async function loadBuildQueuePreferRemote(productId) {
   return loadBuildQueue(productId);
 }
 
-async function commitQueueStatusToRepo(queue, stepId) {
+/** Persist BUILD_QUEUE status to GitHub so claims/done survive redeploy. */
+export async function commitQueueStatusToRepo(queue, stepId) {
   const token = (process.env.GITHUB_TOKEN || '').trim();
   const repo = (process.env.GITHUB_REPO || '').trim();
   const branch = process.env.GITHUB_DEPLOY_BRANCH || 'main';

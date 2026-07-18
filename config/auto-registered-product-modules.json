@@ -8,6 +8,20 @@
       "note": "LifeOS assessment battery (attachment/love language/conflict/values). Twin step lifeos-p1-assessment-autoreg."
     },
     {
+      "path": "routes/lifeos-food-logger-routes.js",
+      "register": "registerLifeosFoodLoggerRoutes",
+      "mount_path": "/api/v1/lifeos/food",
+      "enabled": true,
+      "note": "LifeOS AI photo/text food logger. Twin step lifeos-p1-food-logger-routes."
+    },
+    {
+      "path": "routes/lifeos-sleep-chronotype-routes.js",
+      "register": "registerLifeosSleepChronotypeRoutes",
+      "mount_path": "/api/v1/lifeos/sleep-insights",
+      "enabled": true,
+      "note": "Chronotype + wind-down + sleep debt HTTP surface for LifeOS sleep P1."
+    },
+    {
       "path": "routes/founder-sms-routes.js",
       "register": "registerFounderSmsRoutes",
       "enabled": true,

@@ -79,6 +79,7 @@ import {
   persistQueue,
   STEP_STATUS,
 } from '../services/product-build-orchestrator.js';
+import { commitQueueStatusToRepo } from '../services/never-stop-product-factory.js';
 
 const FOUNDER_BUILD_JOB_TIMEOUT_MS = Number(process.env.FOUNDER_BUILD_JOB_TIMEOUT_MS || '480000');
 
@@ -1327,7 +1328,15 @@ HOW TO RESPOND:
         try {
           const queue = loadBuildQueue('lifeos');
           const claimed = queue ? await claimPreExistingSatisfiedSteps(queue) : [];
-          if (claimed.length && queue) persistQueue(queue);
+          if (claimed.length && queue) {
+            persistQueue(queue);
+            // Container-local persist alone evaporates on redeploy — commit status.
+            try {
+              await commitQueueStatusToRepo(queue, `pre_existing:${claimed.join(',')}`);
+            } catch (commitErr) {
+              _log(`lifeos_queue_claim_commit_error=${commitErr.message}`);
+            }
+          }
           const tick = await runGovernedAutonomousShipOnce({ logger: console, maxStepsPerProduct: 2 });
           const status = getGovernedAutonomousShipStatus()?.governed_autonomous_ship || {};
           const q2 = loadBuildQueue('lifeos');

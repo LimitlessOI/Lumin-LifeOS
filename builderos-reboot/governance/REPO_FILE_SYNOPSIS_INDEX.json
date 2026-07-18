@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T01:39:24.477Z",
+  "generated_at": "2026-07-18T01:49:01.475Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11890,
+  "file_count": 11893,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -30401,9 +30401,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 23528,
-      "mtime": "2026-07-18T01:39:24.477Z",
-      "indexed_at": "2026-07-18T01:39:24.477Z",
+      "bytes": 24092,
+      "mtime": "2026-07-18T01:49:01.475Z",
+      "indexed_at": "2026-07-18T01:49:01.475Z",
       "synopsis_index_only": true
     },
     {
@@ -37366,9 +37366,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 55116,
-      "mtime": "2026-07-18T01:39:24.477Z",
-      "indexed_at": "2026-07-18T01:39:24.477Z"
+      "bytes": 55479,
+      "mtime": "2026-07-18T01:49:01.475Z",
+      "indexed_at": "2026-07-18T01:49:01.475Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39466,9 +39466,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 220967,
-      "mtime": "2026-07-18T01:31:22.557Z",
-      "indexed_at": "2026-07-18T01:31:22.557Z"
+      "bytes": 221520,
+      "mtime": "2026-07-18T01:49:01.475Z",
+      "indexed_at": "2026-07-18T01:49:01.475Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -40141,9 +40141,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 631758,
-      "mtime": "2026-07-18T01:39:24.477Z",
-      "indexed_at": "2026-07-18T01:39:24.477Z"
+      "bytes": 632235,
+      "mtime": "2026-07-18T01:49:01.475Z",
+      "indexed_at": "2026-07-18T01:49:01.475Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -64928,9 +64928,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 187018,
-      "mtime": "2026-07-18T01:39:24.477Z",
-      "indexed_at": "2026-07-18T01:39:24.477Z"
+      "bytes": 187561,
+      "mtime": "2026-07-18T01:49:01.475Z",
+      "indexed_at": "2026-07-18T01:49:01.475Z"
     },
     {
       "path": "public/overlay/lifeos-balance-wheel.html",
@@ -65105,6 +65105,13 @@
       "bytes": 44846,
       "mtime": "2026-07-10T00:07:49.439Z",
       "indexed_at": "2026-07-17T23:06:25.553Z"
+    },
+    {
+      "path": "public/overlay/lifeos-food.html",
+      "synopsis": "HTML page: LifeOS Food Logger",
+      "bytes": 3711,
+      "mtime": "2026-07-18T01:49:01.475Z",
+      "indexed_at": "2026-07-18T01:49:01.475Z"
     },
     {
       "path": "public/overlay/lifeos-founder-interface.js",
@@ -67018,9 +67025,9 @@
     {
       "path": "routes/lifeos-builderos-command-control-routes.js",
       "synopsis": "Founder-facing LifeOS BuilderOS command-control routes for direct chat, build orchestration, and governed execution receipts.",
-      "bytes": 66003,
-      "mtime": "2026-07-18T01:15:57.136Z",
-      "indexed_at": "2026-07-18T01:15:57.136Z",
+      "bytes": 66432,
+      "mtime": "2026-07-18T01:49:01.475Z",
+      "indexed_at": "2026-07-18T01:49:01.475Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -67216,6 +67223,16 @@
       ]
     },
     {
+      "path": "routes/lifeos-food-logger-routes.js",
+      "synopsis": "LifeOS AI photo food logger HTTP routes.",
+      "bytes": 2083,
+      "mtime": "2026-07-18T01:49:01.475Z",
+      "indexed_at": "2026-07-18T01:49:01.475Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "routes/lifeos-founder-runtime-routes.js",
       "synopsis": "Minimal founder-builder routes required by the canonical /lifeos shell.",
       "bytes": 4694,
@@ -67378,6 +67395,16 @@
       "bytes": 8660,
       "mtime": "2026-06-29T17:21:08.538Z",
       "indexed_at": "2026-07-17T23:06:25.553Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "routes/lifeos-sleep-chronotype-routes.js",
+      "synopsis": "Chronotype + wind-down helpers over LifeOS sleep service.",
+      "bytes": 1284,
+      "mtime": "2026-07-18T01:49:01.475Z",
+      "indexed_at": "2026-07-18T01:49:01.475Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -83308,9 +83335,9 @@
     {
       "path": "services/build-queue-planner.js",
       "synopsis": "Build-queue planner — turns a product's PRODUCT_HOME backlog into a",
-      "bytes": 26599,
-      "mtime": "2026-07-18T01:31:22.557Z",
-      "indexed_at": "2026-07-18T01:31:22.557Z",
+      "bytes": 26759,
+      "mtime": "2026-07-18T01:49:01.475Z",
+      "indexed_at": "2026-07-18T01:49:01.475Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -86293,9 +86320,9 @@
     {
       "path": "services/lifeos-ai-photo-food-logger.js",
       "synopsis": "Exports logFoodWithPhoto — services/lifeos-ai-photo-food-logger.js.",
-      "bytes": 2640,
-      "mtime": "2026-07-15T02:13:25.674Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z"
+      "bytes": 2668,
+      "mtime": "2026-07-18T01:49:01.475Z",
+      "indexed_at": "2026-07-18T01:49:01.475Z"
     },
     {
       "path": "services/lifeos-ambient-context.js",
@@ -88182,9 +88209,9 @@
     {
       "path": "services/never-stop-product-factory.js",
       "synopsis": "Permanent product expansion lane — work exists even when BP_PRIORITY queue reads complete.",
-      "bytes": 81109,
-      "mtime": "2026-07-17T21:42:16.103Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z",
+      "bytes": 81193,
+      "mtime": "2026-07-18T01:49:01.475Z",
+      "indexed_at": "2026-07-18T01:49:01.475Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -91494,9 +91521,9 @@
     {
       "path": "tests/build-queue-planner.test.js",
       "synopsis": "js — tests/build-queue-planner.test.js.",
-      "bytes": 14499,
-      "mtime": "2026-07-18T01:31:22.557Z",
-      "indexed_at": "2026-07-18T01:31:22.557Z"
+      "bytes": 14971,
+      "mtime": "2026-07-18T01:49:01.475Z",
+      "indexed_at": "2026-07-18T01:49:01.475Z"
     },
     {
       "path": "tests/builder-agents.test.js",

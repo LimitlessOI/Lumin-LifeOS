@@ -57,6 +57,17 @@ test('extractBacklog returns [] with no backlog heading (never fabricates)', () 
   assert.deepEqual(extractBacklog(''), []);
 });
 
+test('extractBacklog harvests open checkboxes without trailing whitespace (LifeOS PRODUCT_HOME shape)', () => {
+  const text = `# P
+## Approved Product Backlog
+- [ ] [P1] *AI photo food logger** — photo to nutrients
+- [ ] [P1] Habit tracker with identity framing
+`;
+  const items = extractBacklog(text);
+  assert.ok(items.some((i) => /AI photo food logger/i.test(i)), items.join(' | '));
+  assert.ok(items.some((i) => /Habit tracker/i.test(i)), items.join(' | '));
+});
+
 test('loadProductCorpus + extractCorpusBacklog reads conversations', async () => {
   const { loadProductCorpus, extractCorpusBacklog } = await import('../services/build-queue-planner.js');
   const corpus = loadProductCorpus('ideavault');
