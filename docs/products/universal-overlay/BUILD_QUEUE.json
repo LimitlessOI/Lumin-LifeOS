@@ -1964,18 +1964,23 @@
     },
     {
       "id": "s8",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "public/overlay/struggleDetectionUI.html",
       "task": "create struggle detection UI",
       "spec": "Implement the UI for showing struggle detection in the overlay.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "Struggle Detection",
         "Log Event"
       ],
-      "design_review_flagged": true
+      "design_review_flagged": true,
+      "last_attempt_at": "2026-07-18T19:50:20.241Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Log Event; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
