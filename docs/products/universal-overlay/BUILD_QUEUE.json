@@ -1183,13 +1183,13 @@
     },
     {
       "id": "step1",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/lifeOSiOSIPA.js",
       "task": "create signed ipa workflow",
       "spec": "Implement the workflow for building LifeOS iOS IPA, incorporating Apple Dev secrets.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "buildLifeOSiOSIPA"
       ],
@@ -1206,53 +1206,55 @@
           "assertion_id": "expected_exports:services/lifeOSiOSIPA.js"
         }
       ],
-      "last_attempt_at": "2026-07-18T02:12:23.249Z",
-      "last_error": "NOT_ON_BLUEPRINT",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "d9e3d2a6af1405425f8ab722594ddd8331818666",
       "built_sha": null,
       "proof": null,
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/universal-overlay/twins/steps/step1.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-18T02:29:27.930Z",
-        "shipped_at": "2026-07-18T02:29:27.930Z",
-        "commit_sha": null,
-        "content_sha256": "e5ef702c87024ddc69f3baad920a605cf8b7b03d1ebd9a5dc124a37461823718",
-        "target_file": "services/lifeOSiOSIPA.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/lifeOSiOSIPA.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/universal-overlay/twins/steps/step1.exact",
-          "content_sha256": "e5ef702c87024ddc69f3baad920a605cf8b7b03d1ebd9a5dc124a37461823718"
-        }
-      },
-      "shipped_at": "2026-07-18T02:29:27.930Z",
-      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
-      "blueprint_step_id": "step1"
+      "revive_count": 0,
+      "revived_at": "2026-07-18T02:29:10.196Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-18T02:29:33.267Z"
     },
     {
       "id": "step2",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "public/overlay/install.html",
       "task": "add iphone pwa installation page",
       "spec": "Create UI for Add to Home Screen for iPhone PWA.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "design_review_flagged": true,
-      "last_attempt_at": "2026-07-18T02:12:25.741Z",
+      "last_attempt_at": null,
       "last_error": "NOT_ON_BLUEPRINT",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-18T02:29:10.196Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "step3",
