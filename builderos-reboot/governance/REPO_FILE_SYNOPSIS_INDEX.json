@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T04:16:46.001Z",
+  "generated_at": "2026-07-18T04:27:50.483Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11934,
+  "file_count": 11935,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21634,9 +21634,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3600711,
-      "mtime": "2026-07-18T04:16:39.954Z",
-      "indexed_at": "2026-07-18T04:16:46.001Z"
+      "bytes": 3600951,
+      "mtime": "2026-07-18T04:27:50.074Z",
+      "indexed_at": "2026-07-18T04:27:50.483Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -40457,57 +40457,57 @@
       "path": "docs/products/productized-sprint/launch-kit/DELIVERY_SOP.md",
       "synopsis": "Delivery runbook — produce a content pack via the live MarketingOS engine",
       "bytes": 4933,
-      "mtime": "2026-07-18T04:16:33.106Z",
-      "indexed_at": "2026-07-18T04:16:39.924Z"
+      "mtime": "2026-07-18T04:27:47.370Z",
+      "indexed_at": "2026-07-18T04:27:50.049Z"
     },
     {
       "path": "docs/products/productized-sprint/launch-kit/FINDINGS.md",
       "synopsis": "Live delivery findings + solution-mandatory fixes for the MarketingOS generate path",
       "bytes": 3586,
-      "mtime": "2026-07-18T04:16:33.106Z",
-      "indexed_at": "2026-07-18T04:16:39.924Z"
+      "mtime": "2026-07-18T04:27:47.370Z",
+      "indexed_at": "2026-07-18T04:27:50.049Z"
     },
     {
       "path": "docs/products/productized-sprint/launch-kit/intake-form.html",
       "synopsis": "Standalone intake page for the Founder Voice Content Pack.",
       "bytes": 4297,
-      "mtime": "2026-07-18T04:16:33.110Z",
-      "indexed_at": "2026-07-18T04:16:39.924Z"
+      "mtime": "2026-07-18T04:27:47.370Z",
+      "indexed_at": "2026-07-18T04:27:50.049Z"
     },
     {
       "path": "docs/products/productized-sprint/launch-kit/INTAKE.md",
       "synopsis": "Intake brief — questions + hosting options for the Content Pack service",
       "bytes": 2316,
-      "mtime": "2026-07-18T04:16:33.106Z",
-      "indexed_at": "2026-07-18T04:16:39.924Z"
+      "mtime": "2026-07-18T04:27:47.370Z",
+      "indexed_at": "2026-07-18T04:27:50.049Z"
     },
     {
       "path": "docs/products/productized-sprint/launch-kit/OUTREACH_TEMPLATES.md",
       "synopsis": "Consent-first outreach + delivery templates for the Content Pack service",
       "bytes": 3974,
-      "mtime": "2026-07-18T04:16:33.106Z",
-      "indexed_at": "2026-07-18T04:16:39.924Z"
+      "mtime": "2026-07-18T04:27:47.370Z",
+      "indexed_at": "2026-07-18T04:27:50.049Z"
     },
     {
       "path": "docs/products/productized-sprint/launch-kit/README.md",
       "synopsis": "Service-first launch kit — Founder Voice Content Pack (MarketingOS-powered)",
       "bytes": 6306,
-      "mtime": "2026-07-18T04:16:33.106Z",
-      "indexed_at": "2026-07-18T04:16:39.924Z"
+      "mtime": "2026-07-18T04:27:47.370Z",
+      "indexed_at": "2026-07-18T04:27:50.049Z"
     },
     {
       "path": "docs/products/productized-sprint/launch-kit/STRIPE_PAYMENT_LINKS.md",
       "synopsis": "Founder runbook — create Stripe payment links for the Content Pack (no code)",
       "bytes": 2886,
-      "mtime": "2026-07-18T04:16:33.110Z",
-      "indexed_at": "2026-07-18T04:16:39.924Z"
+      "mtime": "2026-07-18T04:27:47.370Z",
+      "indexed_at": "2026-07-18T04:27:50.049Z"
     },
     {
       "path": "docs/products/productized-sprint/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Productized Sprint",
       "bytes": 10154,
-      "mtime": "2026-07-18T04:16:33.106Z",
-      "indexed_at": "2026-07-18T04:16:39.924Z"
+      "mtime": "2026-07-18T04:27:47.366Z",
+      "indexed_at": "2026-07-18T04:27:50.049Z"
     },
     {
       "path": "docs/products/PRODUCTIZEDSPRINT.md",
@@ -66193,8 +66193,8 @@
       "path": "routes/accountFormFill.js",
       "synopsis": "Mock function to simulate fetching user data",
       "bytes": 800,
-      "mtime": "2026-07-18T04:16:33.218Z",
-      "indexed_at": "2026-07-18T04:16:46.001Z"
+      "mtime": "2026-07-18T04:09:12.194Z",
+      "indexed_at": "2026-07-18T04:09:12.194Z"
     },
     {
       "path": "routes/action-inbox-routes.js",
@@ -67677,8 +67677,8 @@
       "path": "routes/lifeos-victory-vault-routes.js",
       "synopsis": "Exports createLifeOSVictoryVaultRoutes — routes/lifeos-victory-vault-routes.js.",
       "bytes": 5315,
-      "mtime": "2026-07-18T04:16:33.110Z",
-      "indexed_at": "2026-07-18T04:16:39.924Z",
+      "mtime": "2026-07-18T04:27:47.370Z",
+      "indexed_at": "2026-07-18T04:27:50.049Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -69666,8 +69666,8 @@
       "path": "scripts/deliver-content-pack.mjs",
       "synopsis": "Founder Voice Content Pack delivery helper — drives the LIVE MarketingOS loop",
       "bytes": 9994,
-      "mtime": "2026-07-18T04:16:33.110Z",
-      "indexed_at": "2026-07-18T04:16:39.924Z",
+      "mtime": "2026-07-18T04:27:47.370Z",
+      "indexed_at": "2026-07-18T04:27:50.049Z",
       "ssot": [
         "docs/products/productized-sprint/PRODUCT_HOME.md"
       ]
@@ -70572,6 +70572,13 @@
       "ssot": [
         "docs/SYSTEM_SCORECARD_PATH_TO_10.md"
       ]
+    },
+    {
+      "path": "scripts/phase7_deploy.js",
+      "synopsis": "Exports deployToRailway — scripts/phase7_deploy.js.",
+      "bytes": 732,
+      "mtime": "2026-07-18T04:27:47.486Z",
+      "indexed_at": "2026-07-18T04:27:50.483Z"
     },
     {
       "path": "scripts/pm2-setup.sh",
