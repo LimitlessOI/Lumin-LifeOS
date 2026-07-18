@@ -540,7 +540,7 @@
     },
     {
       "id": "smart-jump-cut-mistake-removal-engine-detect-sil",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/creatorJumpCut.js",
       "task": "Smart jump-cut / mistake-removal engine — detect silences, filler words, false starts and retakes, then stitch clean jump-cuts (optional punch-in) via local FFmpeg. Target `services/creatorJumpCut.js` (export `buildJumpCutPlan`).",
       "spec": "Smart jump-cut / mistake-removal engine — detect silences, filler words, false starts and retakes, then stitch clean jump-cuts (optional punch-in) via local FFmpeg. Target `services/creatorJumpCut.js` (export `buildJumpCutPlan`).",
@@ -586,11 +586,17 @@
           "content_sha256": "045011bb85057a6d7d1f916f47cd577c6e2f681c71294535a9a2c30ad1597aca"
         }
       },
-      "shipped_at": "2026-07-18T11:01:10.661Z"
+      "shipped_at": "2026-07-18T11:07:14.857Z",
+      "pre_existing": true,
+      "shipped_via": "pre_existing_artifact_proof",
+      "last_error": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null
     },
     {
       "id": "text-based-overdub-editor-edit-the-transcript-to",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/creatorOverdubEditor.js",
       "task": "Text-based / overdub editor — edit the transcript to delete or replace words; delete = cut, replace = regenerate the span in the creator's cloned voice. Target `services/creatorOverdubEditor.js` (export `applyTranscriptEdits`). Requires `EL",
       "spec": "Text-based / overdub editor — edit the transcript to delete or replace words; delete = cut, replace = regenerate the span in the creator's cloned voice. Target `services/creatorOverdubEditor.js` (export `applyTranscriptEdits`). Requires `ELEVENLABS_API_KEY` + consent for replacement.",
@@ -612,11 +618,18 @@
       ],
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "text-based-overdub-editor-edit-the-transcript-to",
-      "mission_id": "PRODUCT-creator-media-os"
+      "mission_id": "PRODUCT-creator-media-os",
+      "pre_existing": true,
+      "shipped_via": "pre_existing_artifact_proof",
+      "shipped_at": "2026-07-18T11:07:14.865Z",
+      "last_error": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null
     },
     {
       "id": "voice-clone-service-train-a-revocable-voice-prof",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/creatorVoiceClone.js",
       "task": "Voice clone service — train a revocable voice profile from consented samples and synthesize narration in the creator's voice. Target `services/creatorVoiceClone.js` (export `trainVoiceProfile`). Requires `ELEVENLABS_API_KEY` + likeness cons",
       "spec": "Voice clone service — train a revocable voice profile from consented samples and synthesize narration in the creator's voice. Target `services/creatorVoiceClone.js` (export `trainVoiceProfile`). Requires `ELEVENLABS_API_KEY` + likeness consent.",
@@ -662,7 +675,13 @@
           "content_sha256": "d8d11edd4a914a0c551e8f552f53310d07a336be16cfd2c0a2bdf5adbaa44677"
         }
       },
-      "shipped_at": "2026-07-18T11:03:04.763Z"
+      "shipped_at": "2026-07-18T11:07:14.866Z",
+      "pre_existing": true,
+      "shipped_via": "pre_existing_artifact_proof",
+      "last_error": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null
     },
     {
       "id": "avatar-talking-head-clone-generate-on-camera-vid",
@@ -688,7 +707,31 @@
       ],
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "avatar-talking-head-clone-generate-on-camera-vid",
-      "mission_id": "PRODUCT-creator-media-os"
+      "mission_id": "PRODUCT-creator-media-os",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/creator-media-os/twins/steps/avatar-talking-head-clone-generate-on-camera-vid.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-18T11:07:20.013Z",
+        "shipped_at": "2026-07-18T11:07:20.013Z",
+        "commit_sha": null,
+        "content_sha256": "27f8467da9f71cb67cf92ad6e9b321ca4571bf9bbfccd661d82d9d6c85e2b1e7",
+        "target_file": "services/creatorAvatarClone.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/creatorAvatarClone.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/creator-media-os/twins/steps/avatar-talking-head-clone-generate-on-camera-vid.exact",
+          "content_sha256": "27f8467da9f71cb67cf92ad6e9b321ca4571bf9bbfccd661d82d9d6c85e2b1e7"
+        }
+      },
+      "shipped_at": "2026-07-18T11:07:20.013Z"
     },
     {
       "id": "lip-sync-patcher-re-sync-mouth-to-replaced-words",
