@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T17:53:33.729Z",
+  "generated_at": "2026-07-18T18:44:12.020Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11970,
   "files": [
@@ -21781,9 +21781,9 @@
     {
       "path": "builderos-reboot/LOOP_ESCALATION_CONTRACT.json",
       "synopsis": "BuilderOS artifact — LOOP ESCALATION CONTRACT.",
-      "bytes": 1798,
-      "mtime": "2026-06-11T08:17:13.847Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z",
+      "bytes": 5439,
+      "mtime": "2026-07-18T18:27:26.017Z",
+      "indexed_at": "2026-07-18T18:44:12.020Z",
       "synopsis_index_only": true
     },
     {
@@ -39509,9 +39509,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 224918,
-      "mtime": "2026-07-18T17:29:29.621Z",
-      "indexed_at": "2026-07-18T17:29:29.621Z"
+      "bytes": 227079,
+      "mtime": "2026-07-18T18:43:59.112Z",
+      "indexed_at": "2026-07-18T18:44:12.020Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -86294,9 +86294,9 @@
     {
       "path": "services/governed-autonomous-shipping-loop.js",
       "synopsis": "STEP 5g — the governed AUTONOMOUS shipping loop. When the STEP 5a",
-      "bytes": 38078,
-      "mtime": "2026-07-18T17:29:29.621Z",
-      "indexed_at": "2026-07-18T17:29:29.621Z",
+      "bytes": 47179,
+      "mtime": "2026-07-18T18:09:36.554Z",
+      "indexed_at": "2026-07-18T18:44:12.020Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

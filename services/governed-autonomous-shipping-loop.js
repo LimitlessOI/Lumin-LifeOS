@@ -24,7 +24,8 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+import { execFileSync } from 'node:child_process';
 import { createUsefulWorkGuard } from './useful-work-guard.js';
 import { governedFactoryOnly } from './governed-factory-guard.js';
 import { hasTokenCapacity, dailyBuildBudget, recordDailyBuildAttempts, mergeQueueRuntimeStatus, defaultPlannerCallModel, discoverPlanWork, discoverSentryFixWork, runPlanBuildQueue } from './never-stop-product-factory.js';
@@ -46,6 +47,7 @@ const STATE_FILE = path.join(REPO_ROOT, 'data/governed-autonomous-ship-state.jso
 
 const state = {
   running: false,
+  lastFounderAlert: null,
   lastRunAt: null,
   totalRuns: 0,
   lastShipped: 0,
@@ -139,9 +141,27 @@ function loadProductPriorityOrder() {
   } catch { return new Map(); }
 }
 
+// Founder-owned income-lane focus. Products listed in PRODUCT_BUILD_PRIORITY.json
+// `paused` (or the GOVERNED_AUTONOMOUS_PAUSED_PRODUCTS env, comma-separated) are
+// skipped by the autonomous loop so tokens/commits go only to the active revenue
+// lane. Default is empty — pausing a product is a founder business decision.
+export function loadPausedProducts() {
+  const out = new Set();
+  const env = String(process.env.GOVERNED_AUTONOMOUS_PAUSED_PRODUCTS || '').trim();
+  if (env) for (const p of env.split(',')) { const t = p.trim(); if (t) out.add(t); }
+  try {
+    const raw = fs.readFileSync(path.join(PRODUCTS_DIR, 'PRODUCT_BUILD_PRIORITY.json'), 'utf8');
+    const parsed = JSON.parse(raw);
+    const paused = Array.isArray(parsed?.paused) ? parsed.paused : [];
+    for (const p of paused) if (typeof p === 'string' && p.trim()) out.add(p.trim());
+  } catch { /* no priority file — nothing paused */ }
+  return out;
+}
+
 export function listProductsWithQueues() {
   try {
     const order = loadProductPriorityOrder();
+    const paused = loadPausedProducts();
     const ids = fs.readdirSync(PRODUCTS_DIR, { withFileTypes: true })
       .filter((d) => d.isDirectory())
       .map((d) => d.name)
@@ -228,6 +248,13 @@ async function shipViaGovernedQueue({ product_id, ship_steps }) {
         steps: auth.steps,
         skip_intake_gate: false,
         claim_following_blueprint: true,
+        // LOOP_ESCALATION_CONTRACT: on repeated same-signature failure the loop
+        // requests a strategy change — build this step with a stronger model tier
+        // instead of re-trying the same one. 0 = default cheapest-tier-first.
+        model_escalation: Math.max(
+          0,
+          ...(Array.isArray(ship_steps) ? ship_steps.map((s) => Number(s?.model_rotation) || 0) : [0]),
+        ),
       }),
       signal: AbortSignal.timeout(120_000),
     });
@@ -295,6 +322,111 @@ function isPowerOfTwo(n) {
   return Number.isInteger(n) && n > 0 && (n & (n - 1)) === 0;
 }
 
+// --- Blueprint reconciliation: LOOP_ESCALATION_CONTRACT enforcement ----------
+// The signed contract (builderos-reboot/LOOP_ESCALATION_CONTRACT.json) requires
+// counting failure SIGNATURES (not raw attempts) and, when the same signature
+// repeats past the hard-stop threshold, raising a FOUNDER ALERT + demanding a
+// strategy change instead of silently re-queuing forever. This loop is the
+// factory's own bootstrap rail (it cannot be shipped by the factory), so the
+// enforcement is wired here directly.
+const ESCALATION_CONTRACT_PATH = path.join(REPO_ROOT, 'builderos-reboot/LOOP_ESCALATION_CONTRACT.json');
+const FOUNDER_ALERTS_PATH = path.join(REPO_ROOT, 'data/founder-alerts.jsonl');
+let escalationContractCache = null;
+
+function loadEscalationContract() {
+  if (escalationContractCache) return escalationContractCache;
+  try {
+    escalationContractCache = JSON.parse(fs.readFileSync(ESCALATION_CONTRACT_PATH, 'utf8'));
+  } catch {
+    escalationContractCache = {
+      default_ladder_same_signature: { notice: 3, escalate: 5, hard_stop: 8 },
+      class_overrides: {},
+      recovery_mission_ref: 'AUTONOMOUS-RECOVERY-0001',
+      founder_alert_on_incomplete_recovery: true,
+    };
+  }
+  return escalationContractCache;
+}
+
+function failureSignature(err) {
+  return String(err || 'unknown')
+    .replace(/[0-9a-f]{7,}/gi, '#')
+    .replace(/\d+/g, 'N')
+    .slice(0, 180);
+}
+
+function classifyFailure(err) {
+  const e = String(err || '').toLowerCase();
+  if (e.includes('module_resolution_failed') || e.includes('artifact_missing_after_ship')) return 'fake_green_attempt';
+  if (e.includes('not_on_blueprint') || e.includes('synthetic_blueprint') || e.includes('governed_blocked') || e.includes('governance')) return 'governance_block';
+  if (e.includes('sentry_failed') || e.includes('evidence')) return 'evidence_gap';
+  if (e.includes('authority')) return 'authority_violation';
+  return 'same_signature_repeat';
+}
+
+function escalationThresholds(cls) {
+  const c = loadEscalationContract();
+  return (c.class_overrides && c.class_overrides[cls]) || c.default_ladder_same_signature || { notice: 3, escalate: 5, hard_stop: 8 };
+}
+
+function emitFounderAlert(record, logger) {
+  const payload = { ts: new Date().toISOString(), source: 'GOVERNED-AUTONOMOUS-SHIP', ...record };
+  try {
+    fs.appendFileSync(FOUNDER_ALERTS_PATH, `${JSON.stringify(payload)}\n`);
+  } catch { /* alert file best-effort; state + log still carry it */ }
+  state.lastFounderAlert = payload;
+  persistState().catch(() => {});
+  logger?.error?.(payload, '[GOVERNED-AUTONOMOUS-SHIP] FOUNDER ALERT (last resort) — automatic model-rotation recovery exhausted; step marked UNSOLVED');
+}
+
+// Blueprint ship-verify (SO-002): import-resolution proof in a child process so
+// a shipped route/service that imports a missing module or export (boot-crash
+// risk, e.g. a route importing a service that does not exist) is caught here
+// instead of shipping red. Matches tests/spine-import-resolution semantics.
+function verifyModuleResolves(absFile) {
+  try {
+    const url = pathToFileURL(absFile).href;
+    execFileSync(
+      process.execPath,
+      ['--input-type=module', '-e', `import(${JSON.stringify(url)}).then(()=>process.exit(0)).catch((e)=>{console.error(e&&e.message?e.message:e);process.exit(1)})`],
+      {
+        stdio: 'pipe',
+        timeout: 30_000,
+        env: {
+          ...process.env,
+          DATABASE_URL: process.env.DATABASE_URL || 'postgres://u:p@127.0.0.1:5432/dummy',
+          NODE_ENV: process.env.NODE_ENV || 'production',
+        },
+      },
+    );
+    return { ok: true };
+  } catch (err) {
+    const stderr = err?.stderr ? err.stderr.toString() : '';
+    const line = stderr.split('\n').find((l) => /Error|Cannot find|does not provide/.test(l));
+    return { ok: false, reason: `module_resolution_failed: ${(line || stderr || err.message || 'import_failed').slice(0, 200)}` };
+  }
+}
+
+function verifyShippedModulesResolve(shipSteps, shippedIds) {
+  const proven = [];
+  const unproven = [];
+  for (const id of shippedIds) {
+    const step = (Array.isArray(shipSteps) ? shipSteps : []).find((s) => (s.step_id || s.id) === id);
+    const target = step?.target_file;
+    const rel = target ? target.replace(/\\/g, '/') : '';
+    // Only guard the CI-enforced server surface; docs/config/data steps are exempt.
+    if (!rel || !/\.(mjs|js)$/.test(rel) || !/^(routes|services|middleware)\//.test(rel)) {
+      proven.push(id);
+      continue;
+    }
+    const abs = path.isAbsolute(target) ? target : path.join(REPO_ROOT, target);
+    if (!fs.existsSync(abs)) { unproven.push({ id, reason: `module_resolution_failed: target missing ${rel}` }); continue; }
+    const res = verifyModuleResolves(abs);
+    if (res.ok) proven.push(id); else unproven.push({ id, reason: res.reason });
+  }
+  return { proven, unproven };
+}
+
 async function markFailedStep(queue, stepId, body, productId, logger) {
   if (!queue || !Array.isArray(queue.steps)) return;
   const step = queue.steps.find((s) => s.id === stepId || s.step_id === stepId);
@@ -307,6 +439,50 @@ async function markFailedStep(queue, stepId, body, productId, logger) {
   step.commit_sha = null;
   step.built_sha = null;
   step.proof = null;
+
+  // LOOP_ESCALATION_CONTRACT: count same-signature failures and escalate by class.
+  const signature = failureSignature(step.last_error);
+  if (step.failure_signature === signature) {
+    step.same_signature_count = (typeof step.same_signature_count === 'number' ? step.same_signature_count : 0) + 1;
+  } else {
+    step.failure_signature = signature;
+    step.same_signature_count = 1;
+  }
+  const failureClass = classifyFailure(step.last_error);
+  step.escalation_class = failureClass;
+  const ladder = escalationThresholds(failureClass);
+
+  // Recovery ladder (contract). The FOUNDER is the last resort, never the router:
+  // repeated same-signature failures first trigger an automatic STRATEGY CHANGE
+  // — rotate to a different/stronger model on the next attempt(s). Only when that
+  // is exhausted (hard-stop) is the step marked UNSOLVED and a last-resort alert
+  // recorded (a log/record the founder can glance at — it never gates the loop).
+  if (step.same_signature_count >= (ladder.escalate || 5)) {
+    step.model_rotation = (typeof step.model_rotation === 'number' ? step.model_rotation : 0) + 1;
+    step.force_model_rotation = true;
+    logger?.warn?.(
+      { product_id: productId, step_id: stepId, failure_class: failureClass, same_signature_count: step.same_signature_count, model_rotation: step.model_rotation },
+      '[GOVERNED-AUTONOMOUS-SHIP] escalation — rotating to a different/stronger model (alternative strategy) before hard-stop',
+    );
+  }
+  if (step.same_signature_count >= (ladder.hard_stop || 8) && step.founder_alerted_signature !== signature) {
+    step.founder_alerted_signature = signature;
+    step.hard_stopped = true;
+    step.unsolved = true;
+    emitFounderAlert({
+      product_id: productId,
+      step_id: stepId,
+      failure_class: failureClass,
+      failure_signature: signature,
+      attempts: step.attempts,
+      same_signature_count: step.same_signature_count,
+      models_rotated: step.model_rotation || 0,
+      last_error: step.last_error,
+      disposition: 'UNSOLVED',
+      recovery_ref: loadEscalationContract().recovery_mission_ref || 'AUTONOMOUS-RECOVERY-0001',
+    }, logger);
+  }
+
   persistQueue(queue);
   // Avoid pushing a GitHub commit + deploy for every identical repeat failure.
   // Only commit when the error changes, on the first failure, or at exponential
@@ -706,13 +882,22 @@ export async function runGovernedAutonomousShipOnce({ logger, maxStepsPerProduct
           // artifact actually re-proves against the committed tree.
           const { proven, unproven } = await partitionShippedByArtifactProof(queue, shippedIds);
           for (const u of unproven) {
-            logger?.warn?.({ product_id: entry.product_id, step_id: u.id, reason: u.reason }, '[GOVERNED-AUTONOMOUS-SHIP] step reported shipped but artifact failed re-proof — kept OUT of done, routed to rework');
-            await markFailedStep(queue, u.id, { error: `artifact_missing_after_ship: ${u.reason}` }, entry.product_id, logger);
+            u.reason = `artifact_missing_after_ship: ${u.reason}`;
           }
-          shippedIds = proven;
-          if (proven.length) {
-            markShippedStepsDone(queue, proven, commitSha);
-            await commitQueueStatus(entry.product_id, proven, queue, commitSha, logger);
+          // Blueprint ship-verify (SO-002): a step can pass artifact-existence yet
+          // import a missing module/export and boot-crash (the exact class that
+          // shipped broken route stubs red). Re-run the import-resolution CI
+          // enforces before marking SHIP done.
+          const modProof = verifyShippedModulesResolve(entry.ship_steps, proven);
+          const unprovenAll = [...unproven, ...modProof.unproven];
+          for (const u of unprovenAll) {
+            logger?.warn?.({ product_id: entry.product_id, step_id: u.id, reason: u.reason }, '[GOVERNED-AUTONOMOUS-SHIP] step reported shipped but failed re-proof — kept OUT of done, routed to rework');
+            await markFailedStep(queue, u.id, { error: u.reason }, entry.product_id, logger);
+          }
+          shippedIds = modProof.proven;
+          if (shippedIds.length) {
+            markShippedStepsDone(queue, shippedIds, commitSha);
+            await commitQueueStatus(entry.product_id, shippedIds, queue, commitSha, logger);
             queueCommitted.add(entry.product_id);
           }
         } else {
@@ -759,6 +944,8 @@ export function getGovernedAutonomousShipStatus() {
       fence_on: governedFactoryOnly(),
       enabled: governedAutonomousShippingEnabled(),
       products_with_queues: listProductsWithQueues().length,
+      paused_products: [...loadPausedProducts()],
+      last_founder_alert: state.lastFounderAlert,
     },
   };
 }

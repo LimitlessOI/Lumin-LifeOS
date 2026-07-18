@@ -46,10 +46,70 @@
     "deliver_or_UNSOLVED"
   ],
   "founder_alert_on_incomplete_recovery": true,
+  "founder_is_last_resort_never_router": true,
   "escalation_api": "POST /api/v1/lifeos/gate-change/run-preset",
   "default_escalation_hats": {
     "ai_1": ["BPB", "Hist", "BuilderOS_REP"],
     "ai_2": ["SNT", "CFO", "Founder_REP"],
     "ai_3_optional": ["SDO", "LifeOS_REP"]
+  },
+  "founder_amendment_2026_07_10": {
+    "by": "Adam",
+    "directive": "Every recovery must self-heal without the founder as router. Web-research each stuck problem, then escalate through MORE and HIGHER-POWERED models that collaborate on shared failure history (never repeat), culminating in a multi-model consensus that must be UNANIMOUS. This governance is HARD-GATED, never a suggestion.",
+    "enforcement": "HARD",
+    "fail_closed": true
+  },
+  "recovery_ladder_v2": {
+    "enforcement": "HARD",
+    "fail_closed": true,
+    "terminal_stop_forbidden": true,
+    "loop_until_fixed": true,
+    "web_research": {
+      "enforcement": "HARD",
+      "enabled_from_attempt": 2,
+      "repeat_every_nth_attempt": 3,
+      "purpose": "Search how others solved this exact error/root-cause; brainstorm alternative causes; inject findings into the retry context so models learn, not repeat.",
+      "provider": "brave_search",
+      "requires_secret": "BRAVE_SEARCH_API_KEY",
+      "fail_closed_if_missing": true,
+      "impl_ref": "services/builder-council-review.js:webSearch"
+    },
+    "model_escalation_ladder": [
+      { "stage": 1, "models": 1, "power": "cheapest_capable", "note": "single model attempt" },
+      { "stage": 2, "models": 2, "power": "add_higher_powered", "note": "second, higher-powered model joins; receives full failure history (what stage-1 tried, every error, web findings) and MUST NOT repeat prior attempts; the two collaborate toward a fix" },
+      { "stage": 3, "models": "3+", "power": "highest_available", "note": "third model joins; all models run the consensus protocol below" }
+    ],
+    "consensus_protocol": {
+      "enforcement": "HARD",
+      "required_when": "stage>=3 or before shipping any recovery fix",
+      "threshold": "unanimous_100_percent",
+      "partial_consensus_forbidden": true,
+      "soft_consensus_forbidden": true,
+      "dissent_required": false,
+      "dissent_encouraged": true,
+      "fabricated_dissent_forbidden": true,
+      "dissent_note": "Dissent is ENCOURAGED, never mandated. A model should argue the other side / try to break the proposed fix when it genuinely sees a flaw — but must NOT invent objections just to satisfy a quota (that is a bottleneck and a token cost). Genuine agreement after honest scrutiny IS valid consensus; most cases resolve in 1-2 rounds.",
+      "dissent_incentive": {
+        "note": "Reward-based, not gate-based. When a model raises dissent that CATCHES A REAL FLAW (the fix is changed as a result), record a credit for that model. Track catch-rate to bias future high-stakes reviews toward models that find real problems. No reward for empty/fabricated dissent.",
+        "ledger_ref": "data/consensus-dissent-credits.jsonl"
+      },
+      "fail_closed": true,
+      "no_fix_ships_without_unanimous_consensus": true,
+      "impl_refs": [
+        "services/council-service.js:createCouncilService (requireConsensus, consensusThreshold=model_count)",
+        "services/builder-council-review.js:reviewSegment (devilsAdvocate=true only when a model has a genuine objection \u2014 encouraged, not forced)"
+      ]
+    },
+    "founder_alert": {
+      "when": "only after the ladder above is fully exhausted for a signature (recovery incomplete)",
+      "is_a_record_not_a_gate": true,
+      "disposition": "UNSOLVED",
+      "never_blocks_loop": true
+    },
+    "orchestration_build": {
+      "status": "SPEC \u2014 must be built through the governed factory (SO-001), not hand-authored",
+      "target": "services/autonomous-recovery-council.js",
+      "sentry_proof_required": true
+    }
   }
 }
