@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T05:00:18.234Z",
+  "generated_at": "2026-07-18T05:09:53.459Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11928,
+  "file_count": 11930,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -106,8 +106,8 @@
       "path": ".github/workflows/smoke-test.yml",
       "synopsis": "yml — .github/workflows/smoke-test.yml.",
       "bytes": 2510,
-      "mtime": "2026-07-18T04:41:49.646Z",
-      "indexed_at": "2026-07-18T04:59:50.207Z"
+      "mtime": "2026-07-18T05:00:38.114Z",
+      "indexed_at": "2026-07-18T05:09:50.139Z"
     },
     {
       "path": ".github/workflows/ssot-compliance.yml",
@@ -21634,9 +21634,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3598513,
-      "mtime": "2026-07-18T04:59:50.234Z",
-      "indexed_at": "2026-07-18T05:00:18.234Z"
+      "bytes": 3599024,
+      "mtime": "2026-07-18T05:09:50.166Z",
+      "indexed_at": "2026-07-18T05:09:53.459Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -32221,8 +32221,8 @@
       "path": "data/false-done-baseline.json",
       "synopsis": "JSON data/config — data/false-done-baseline.json.",
       "bytes": 14426,
-      "mtime": "2026-07-18T04:41:49.654Z",
-      "indexed_at": "2026-07-18T04:59:50.207Z",
+      "mtime": "2026-07-18T05:00:38.122Z",
+      "indexed_at": "2026-07-18T05:09:50.139Z",
       "synopsis_index_only": true
     },
     {
@@ -36064,6 +36064,13 @@
       "indexed_at": "2026-07-17T23:06:25.553Z"
     },
     {
+      "path": "db/migrations/addStruggleDetectionFormFill.sql",
+      "synopsis": "Database migration — addStruggleDetectionFormFill.sql.",
+      "bytes": 466,
+      "mtime": "2026-07-18T05:09:50.054Z",
+      "indexed_at": "2026-07-18T05:09:53.459Z"
+    },
+    {
       "path": "db/migrations/amendment_21_layer_12.sql",
       "synopsis": "Database migration — amendment_21_layer_12.sql.",
       "bytes": 416,
@@ -37389,8 +37396,8 @@
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
       "bytes": 58940,
-      "mtime": "2026-07-18T04:41:49.654Z",
-      "indexed_at": "2026-07-18T04:59:50.207Z"
+      "mtime": "2026-07-18T05:00:38.122Z",
+      "indexed_at": "2026-07-18T05:09:50.139Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39489,8 +39496,8 @@
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
       "bytes": 223258,
-      "mtime": "2026-07-18T04:41:49.658Z",
-      "indexed_at": "2026-07-18T04:59:50.207Z"
+      "mtime": "2026-07-18T05:00:38.126Z",
+      "indexed_at": "2026-07-18T05:09:50.139Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -40646,8 +40653,8 @@
       "path": "docs/products/token-accounting-os/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Token Accounting OS",
       "bytes": 6469,
-      "mtime": "2026-07-18T04:41:49.658Z",
-      "indexed_at": "2026-07-18T04:59:50.207Z"
+      "mtime": "2026-07-18T05:00:38.126Z",
+      "indexed_at": "2026-07-18T05:09:50.139Z"
     },
     {
       "path": "docs/products/TOKENACCOUNTINGOS.md",
@@ -40756,8 +40763,8 @@
       "path": "docs/products/word-keeper/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Word Keeper",
       "bytes": 18232,
-      "mtime": "2026-07-18T04:41:49.658Z",
-      "indexed_at": "2026-07-18T04:59:50.207Z"
+      "mtime": "2026-07-18T05:00:38.126Z",
+      "indexed_at": "2026-07-18T05:09:50.139Z"
     },
     {
       "path": "docs/products/WORDKEEPER.md",
@@ -62969,8 +62976,8 @@
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
       "bytes": 31879,
-      "mtime": "2026-07-18T04:41:49.658Z",
-      "indexed_at": "2026-07-18T04:59:50.207Z",
+      "mtime": "2026-07-18T05:00:38.126Z",
+      "indexed_at": "2026-07-18T05:09:50.139Z",
       "synopsis_index_only": true
     },
     {
@@ -68354,6 +68361,13 @@
       "indexed_at": "2026-07-18T02:16:38.071Z"
     },
     {
+      "path": "routes/struggleDetectionFormFill.js",
+      "synopsis": "HTTP route module — StruggleDetectionFormFill.",
+      "bytes": 629,
+      "mtime": "2026-07-18T05:09:50.054Z",
+      "indexed_at": "2026-07-18T05:09:53.459Z"
+    },
+    {
       "path": "routes/studentInterviewRoutes.js",
       "synopsis": "routes/studentInterviewRoutes.js",
       "bytes": 1011,
@@ -68855,8 +68869,8 @@
       "path": "scripts/audit-false-done-steps.mjs",
       "synopsis": "Detective for false-DONE BUILD_QUEUE steps — re-audits every `done`",
       "bytes": 8780,
-      "mtime": "2026-07-18T04:41:49.658Z",
-      "indexed_at": "2026-07-18T04:59:50.207Z",
+      "mtime": "2026-07-18T05:00:38.126Z",
+      "indexed_at": "2026-07-18T05:09:50.139Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -84044,8 +84058,8 @@
       "path": "services/buildLifeOSiOSIPA.js",
       "synopsis": "Service module — BuildLifeOSiOSIPA.",
       "bytes": 1305,
-      "mtime": "2026-07-18T04:59:50.122Z",
-      "indexed_at": "2026-07-18T05:00:18.234Z"
+      "mtime": "2026-07-18T04:58:02.788Z",
+      "indexed_at": "2026-07-18T04:58:02.788Z"
     },
     {
       "path": "services/bullmq-video-queue.js",
@@ -86007,8 +86021,8 @@
       "path": "services/governed-autonomous-shipping-loop.js",
       "synopsis": "STEP 5g — the governed AUTONOMOUS shipping loop. When the STEP 5a",
       "bytes": 34206,
-      "mtime": "2026-07-18T04:41:49.658Z",
-      "indexed_at": "2026-07-18T04:59:50.207Z",
+      "mtime": "2026-07-18T05:00:38.126Z",
+      "indexed_at": "2026-07-18T05:09:50.139Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
