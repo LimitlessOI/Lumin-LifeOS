@@ -540,7 +540,7 @@
     },
     {
       "id": "smart-jump-cut-mistake-removal-engine-detect-sil",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/creatorJumpCut.js",
       "task": "Smart jump-cut / mistake-removal engine — detect silences, filler words, false starts and retakes, then stitch clean jump-cuts (optional punch-in) via local FFmpeg. Target `services/creatorJumpCut.js` (export `buildJumpCutPlan`).",
       "spec": "Smart jump-cut / mistake-removal engine — detect silences, filler words, false starts and retakes, then stitch clean jump-cuts (optional punch-in) via local FFmpeg. Target `services/creatorJumpCut.js` (export `buildJumpCutPlan`).",
@@ -563,13 +563,34 @@
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "smart-jump-cut-mistake-removal-engine-detect-sil",
       "mission_id": "PRODUCT-creator-media-os",
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-18T11:01:16.293Z",
-      "commit_sha": "4fde12bc1c953bd4a1eea55f432188e7156f4121"
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/creator-media-os/twins/steps/smart-jump-cut-mistake-removal-engine-detect-sil.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-18T11:01:10.661Z",
+        "shipped_at": "2026-07-18T11:01:10.661Z",
+        "commit_sha": null,
+        "content_sha256": "045011bb85057a6d7d1f916f47cd577c6e2f681c71294535a9a2c30ad1597aca",
+        "target_file": "services/creatorJumpCut.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/creatorJumpCut.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/creator-media-os/twins/steps/smart-jump-cut-mistake-removal-engine-detect-sil.exact",
+          "content_sha256": "045011bb85057a6d7d1f916f47cd577c6e2f681c71294535a9a2c30ad1597aca"
+        }
+      },
+      "shipped_at": "2026-07-18T11:01:10.661Z"
     },
     {
       "id": "text-based-overdub-editor-edit-the-transcript-to",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/creatorOverdubEditor.js",
       "task": "Text-based / overdub editor — edit the transcript to delete or replace words; delete = cut, replace = regenerate the span in the creator's cloned voice. Target `services/creatorOverdubEditor.js` (export `applyTranscriptEdits`). Requires `EL",
       "spec": "Text-based / overdub editor — edit the transcript to delete or replace words; delete = cut, replace = regenerate the span in the creator's cloned voice. Target `services/creatorOverdubEditor.js` (export `applyTranscriptEdits`). Requires `ELEVENLABS_API_KEY` + consent for replacement.",
@@ -591,10 +612,7 @@
       ],
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "text-based-overdub-editor-edit-the-transcript-to",
-      "mission_id": "PRODUCT-creator-media-os",
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-18T11:02:18.387Z",
-      "commit_sha": "4de0ca324107fdb9a0a1ed3a89712990e91c4e8a"
+      "mission_id": "PRODUCT-creator-media-os"
     },
     {
       "id": "voice-clone-service-train-a-revocable-voice-prof",
@@ -620,7 +638,31 @@
       ],
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "voice-clone-service-train-a-revocable-voice-prof",
-      "mission_id": "PRODUCT-creator-media-os"
+      "mission_id": "PRODUCT-creator-media-os",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/creator-media-os/twins/steps/voice-clone-service-train-a-revocable-voice-prof.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-18T11:03:04.763Z",
+        "shipped_at": "2026-07-18T11:03:04.763Z",
+        "commit_sha": null,
+        "content_sha256": "d8d11edd4a914a0c551e8f552f53310d07a336be16cfd2c0a2bdf5adbaa44677",
+        "target_file": "services/creatorVoiceClone.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/creatorVoiceClone.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/creator-media-os/twins/steps/voice-clone-service-train-a-revocable-voice-prof.exact",
+          "content_sha256": "d8d11edd4a914a0c551e8f552f53310d07a336be16cfd2c0a2bdf5adbaa44677"
+        }
+      },
+      "shipped_at": "2026-07-18T11:03:04.763Z"
     },
     {
       "id": "avatar-talking-head-clone-generate-on-camera-vid",
