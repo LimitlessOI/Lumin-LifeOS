@@ -1016,6 +1016,62 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "01",
+      "status": "pending",
+      "target_file": "pull_requests/final_pr_review.js",
+      "task": "merge branch",
+      "spec": "Merge 'phase7-railway-probe' branch to main with formal PR review and notes.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "mergePhase7Branch",
+        "prNote"
+      ],
+      "file_contains": [
+        "formal PR review"
+      ]
+    },
+    {
+      "id": "02",
+      "status": "pending",
+      "target_file": "scripts/deploy_railway.js",
+      "task": "deploy to Railway",
+      "spec": "Deploy 'phase7-railway-probe' branch to Railway for live mode operation.",
+      "depends_on": [
+        "01"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "deployToRailway"
+      ],
+      "file_contains": [
+        "deploy",
+        "phase7-railway-probe"
+      ]
+    },
+    {
+      "id": "03",
+      "status": "pending",
+      "target_file": "scripts/verify_railway_deploy.js",
+      "task": "verify deploy",
+      "spec": "Verify live mode of 'scripts/memory-pressure-test.mjs' against real Neon state for 20/20 result.",
+      "depends_on": [
+        "02"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "verifyLiveMode"
+      ],
+      "file_contains": [
+        "verify",
+        "20/20",
+        "Neon state"
+      ]
     }
   ],
   "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
