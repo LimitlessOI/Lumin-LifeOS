@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T11:20:40.191Z",
+  "generated_at": "2026-07-18T11:24:08.708Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11952,
+  "file_count": 11953,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -85033,6 +85033,13 @@
       "bytes": 641,
       "mtime": "2026-07-18T10:58:31.933Z",
       "indexed_at": "2026-07-18T10:58:31.933Z"
+    },
+    {
+      "path": "services/creatorShortsClipper.js",
+      "synopsis": "Analyze video data to find high-retention moments.",
+      "bytes": 1696,
+      "mtime": "2026-07-18T11:24:08.708Z",
+      "indexed_at": "2026-07-18T11:24:08.708Z"
     },
     {
       "path": "services/creatorTextToVideo.js",

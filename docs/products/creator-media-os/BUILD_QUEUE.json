@@ -868,7 +868,31 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/creator-media-os/twins/steps/long-form-to-shorts-auto-clipper-detect-high-ret.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-18T11:24:07.055Z",
+        "shipped_at": "2026-07-18T11:24:07.055Z",
+        "commit_sha": null,
+        "content_sha256": "eaad8c7434695a6538ed9918a3f427626584b81bd890eb7dc8740fcee195e9af",
+        "target_file": "services/creatorShortsClipper.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/creatorShortsClipper.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/creator-media-os/twins/steps/long-form-to-shorts-auto-clipper-detect-high-ret.exact",
+          "content_sha256": "eaad8c7434695a6538ed9918a3f427626584b81bd890eb7dc8740fcee195e9af"
+        }
+      },
+      "shipped_at": "2026-07-18T11:24:07.055Z"
     },
     {
       "id": "keyword-matched-b-roll-inserter-insert-b-roll-ma",
