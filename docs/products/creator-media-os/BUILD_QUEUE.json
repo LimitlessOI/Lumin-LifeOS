@@ -1,11 +1,9 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "creator-media-os",
-  "planned_at": "2026-07-15T07:37:06.028Z",
-  "backlog_signature": "e00edcec38f90a94",
-  "corpus_sources": [
-    "docs/products/creator-media-os/PRODUCT_HOME.md"
-  ],
+  "planned_at": "2026-07-18T04:04:02.791Z",
+  "backlog_signature": "251e5fce8fd585ca",
+  "planner_mode": "deterministic",
   "steps": [
     {
       "id": "1",
@@ -439,9 +437,556 @@
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "12",
       "mission_id": "PRODUCT-creator-media-os"
+    },
+    {
+      "id": "back-catalog-ingestion-ingest-a-creator-s-existi",
+      "status": "blocked",
+      "target_file": "services/creatorBackCatalogIngest.js",
+      "task": "Back-catalog ingestion — ingest a creator's existing videos to auto-extract a clean voice sample, build the persona-twin training corpus (transcripts of their whole library), and index assets into the media vault. Target `services/creatorBa",
+      "spec": "Back-catalog ingestion — ingest a creator's existing videos to auto-extract a clean voice sample, build the persona-twin training corpus (transcripts of their whole library), and index assets into the media vault. Target `services/creatorBackCatalogIngest.js` (export `ingestBackCatalog`). Requires likeness/voice consent + rights + storage.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "ingestBackCatalog"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/creatorBackCatalogIngest.js",
+          "exports": [
+            "ingestBackCatalog"
+          ],
+          "assertion_id": "expected_exports:services/creatorBackCatalogIngest.js"
+        }
+      ],
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "back-catalog-ingestion-ingest-a-creator-s-existi",
+      "mission_id": "PRODUCT-creator-media-os",
+      "last_attempt_at": "2026-07-18T10:19:22.739Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/services/.factory-import-check-1784369962706-1.mjs\";",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-18T10:18:42.771Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "persona-twin-train-a-style-voice-of-writing-mode",
+      "status": "pending",
+      "target_file": "services/creatorPersonaTwin.js",
+      "task": "Persona twin — train a style/voice-of-writing model on the ingested back-catalog so drafts match the creator's phrasing, hooks, and opinions. Target `services/creatorPersonaTwin.js` (export `trainPersonaTwin`). Requires ingested corpus + co",
+      "spec": "Persona twin — train a style/voice-of-writing model on the ingested back-catalog so drafts match the creator's phrasing, hooks, and opinions. Target `services/creatorPersonaTwin.js` (export `trainPersonaTwin`). Requires ingested corpus + consent.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "trainPersonaTwin"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/creatorPersonaTwin.js",
+          "exports": [
+            "trainPersonaTwin"
+          ],
+          "assertion_id": "expected_exports:services/creatorPersonaTwin.js"
+        }
+      ],
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "persona-twin-train-a-style-voice-of-writing-mode",
+      "mission_id": "PRODUCT-creator-media-os"
+    },
+    {
+      "id": "smart-jump-cut-mistake-removal-engine-detect-sil",
+      "status": "pending",
+      "target_file": "services/creatorJumpCut.js",
+      "task": "Smart jump-cut / mistake-removal engine — detect silences, filler words, false starts and retakes, then stitch clean jump-cuts (optional punch-in) via local FFmpeg. Target `services/creatorJumpCut.js` (export `buildJumpCutPlan`).",
+      "spec": "Smart jump-cut / mistake-removal engine — detect silences, filler words, false starts and retakes, then stitch clean jump-cuts (optional punch-in) via local FFmpeg. Target `services/creatorJumpCut.js` (export `buildJumpCutPlan`).",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "buildJumpCutPlan"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/creatorJumpCut.js",
+          "exports": [
+            "buildJumpCutPlan"
+          ],
+          "assertion_id": "expected_exports:services/creatorJumpCut.js"
+        }
+      ],
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "smart-jump-cut-mistake-removal-engine-detect-sil",
+      "mission_id": "PRODUCT-creator-media-os"
+    },
+    {
+      "id": "text-based-overdub-editor-edit-the-transcript-to",
+      "status": "pending",
+      "target_file": "services/creatorOverdubEditor.js",
+      "task": "Text-based / overdub editor — edit the transcript to delete or replace words; delete = cut, replace = regenerate the span in the creator's cloned voice. Target `services/creatorOverdubEditor.js` (export `applyTranscriptEdits`). Requires `EL",
+      "spec": "Text-based / overdub editor — edit the transcript to delete or replace words; delete = cut, replace = regenerate the span in the creator's cloned voice. Target `services/creatorOverdubEditor.js` (export `applyTranscriptEdits`). Requires `ELEVENLABS_API_KEY` + consent for replacement.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "applyTranscriptEdits"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/creatorOverdubEditor.js",
+          "exports": [
+            "applyTranscriptEdits"
+          ],
+          "assertion_id": "expected_exports:services/creatorOverdubEditor.js"
+        }
+      ],
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "text-based-overdub-editor-edit-the-transcript-to",
+      "mission_id": "PRODUCT-creator-media-os"
+    },
+    {
+      "id": "voice-clone-service-train-a-revocable-voice-prof",
+      "status": "pending",
+      "target_file": "services/creatorVoiceClone.js",
+      "task": "Voice clone service — train a revocable voice profile from consented samples and synthesize narration in the creator's voice. Target `services/creatorVoiceClone.js` (export `trainVoiceProfile`). Requires `ELEVENLABS_API_KEY` + likeness cons",
+      "spec": "Voice clone service — train a revocable voice profile from consented samples and synthesize narration in the creator's voice. Target `services/creatorVoiceClone.js` (export `trainVoiceProfile`). Requires `ELEVENLABS_API_KEY` + likeness consent.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "trainVoiceProfile"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/creatorVoiceClone.js",
+          "exports": [
+            "trainVoiceProfile"
+          ],
+          "assertion_id": "expected_exports:services/creatorVoiceClone.js"
+        }
+      ],
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "voice-clone-service-train-a-revocable-voice-prof",
+      "mission_id": "PRODUCT-creator-media-os"
+    },
+    {
+      "id": "avatar-talking-head-clone-generate-on-camera-vid",
+      "status": "pending",
+      "target_file": "services/creatorAvatarClone.js",
+      "task": "Avatar / talking-head clone — generate on-camera video of the creator from a typed script. Target `services/creatorAvatarClone.js` (export `renderAvatarVideo`). Requires `HEYGEN_API_KEY` (or `DID_API_KEY`) + likeness consent.",
+      "spec": "Avatar / talking-head clone — generate on-camera video of the creator from a typed script. Target `services/creatorAvatarClone.js` (export `renderAvatarVideo`). Requires `HEYGEN_API_KEY` (or `DID_API_KEY`) + likeness consent.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "renderAvatarVideo"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/creatorAvatarClone.js",
+          "exports": [
+            "renderAvatarVideo"
+          ],
+          "assertion_id": "expected_exports:services/creatorAvatarClone.js"
+        }
+      ],
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "avatar-talking-head-clone-generate-on-camera-vid",
+      "mission_id": "PRODUCT-creator-media-os"
+    },
+    {
+      "id": "lip-sync-patcher-re-sync-mouth-to-replaced-words",
+      "status": "pending",
+      "target_file": "services/creatorLipSync.js",
+      "task": "Lip-sync patcher — re-sync mouth to replaced words for on-camera overdub. Target `services/creatorLipSync.js` (export `resyncLips`). Requires lip-sync provider key + likeness consent.",
+      "spec": "Lip-sync patcher — re-sync mouth to replaced words for on-camera overdub. Target `services/creatorLipSync.js` (export `resyncLips`). Requires lip-sync provider key + likeness consent.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "resyncLips"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/creatorLipSync.js",
+          "exports": [
+            "resyncLips"
+          ],
+          "assertion_id": "expected_exports:services/creatorLipSync.js"
+        }
+      ],
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lip-sync-patcher-re-sync-mouth-to-replaced-words",
+      "mission_id": "PRODUCT-creator-media-os"
+    },
+    {
+      "id": "text-to-video-generation-enable-real-motion-b-ro",
+      "status": "pending",
+      "target_file": "services/creatorTextToVideo.js",
+      "task": "Text-to-video generation — enable real motion b-roll from a prompt (Wan/Kling via Replicate). Target `services/creatorTextToVideo.js` (export `generateMotionVideo`). Requires `REPLICATE_API_TOKEN`.",
+      "spec": "Text-to-video generation — enable real motion b-roll from a prompt (Wan/Kling via Replicate). Target `services/creatorTextToVideo.js` (export `generateMotionVideo`). Requires `REPLICATE_API_TOKEN`.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generateMotionVideo"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/creatorTextToVideo.js",
+          "exports": [
+            "generateMotionVideo"
+          ],
+          "assertion_id": "expected_exports:services/creatorTextToVideo.js"
+        }
+      ],
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "text-to-video-generation-enable-real-motion-b-ro",
+      "mission_id": "PRODUCT-creator-media-os"
+    },
+    {
+      "id": "multi-language-dubbing-translate-and-dub-audio-i",
+      "status": "pending",
+      "target_file": "services/creatorDubbing.js",
+      "task": "Multi-language dubbing — translate and dub audio in the cloned voice with lip-sync. Target `services/creatorDubbing.js` (export `dubToLanguages`). Requires `ELEVENLABS_API_KEY`.",
+      "spec": "Multi-language dubbing — translate and dub audio in the cloned voice with lip-sync. Target `services/creatorDubbing.js` (export `dubToLanguages`). Requires `ELEVENLABS_API_KEY`.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "dubToLanguages"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/creatorDubbing.js",
+          "exports": [
+            "dubToLanguages"
+          ],
+          "assertion_id": "expected_exports:services/creatorDubbing.js"
+        }
+      ],
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "multi-language-dubbing-translate-and-dub-audio-i",
+      "mission_id": "PRODUCT-creator-media-os"
+    },
+    {
+      "id": "long-form-to-shorts-auto-clipper-detect-high-ret",
+      "status": "pending",
+      "target_file": "services/creatorShortsClipper.js",
+      "task": "Long-form to shorts auto-clipper — detect high-retention moments and cut vertical clips. Target `services/creatorShortsClipper.js` (export `extractShorts`).",
+      "spec": "Long-form to shorts auto-clipper — detect high-retention moments and cut vertical clips. Target `services/creatorShortsClipper.js` (export `extractShorts`).",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "extractShorts"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/creatorShortsClipper.js",
+          "exports": [
+            "extractShorts"
+          ],
+          "assertion_id": "expected_exports:services/creatorShortsClipper.js"
+        }
+      ],
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "long-form-to-shorts-auto-clipper-detect-high-ret",
+      "mission_id": "PRODUCT-creator-media-os"
+    },
+    {
+      "id": "keyword-matched-b-roll-inserter-insert-b-roll-ma",
+      "status": "pending",
+      "target_file": "services/creatorBrollMatcher.js",
+      "task": "Keyword-matched b-roll inserter — insert b-roll matched to script keywords. Target `services/creatorBrollMatcher.js` (export `matchBroll`).",
+      "spec": "Keyword-matched b-roll inserter — insert b-roll matched to script keywords. Target `services/creatorBrollMatcher.js` (export `matchBroll`).",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "matchBroll"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/creatorBrollMatcher.js",
+          "exports": [
+            "matchBroll"
+          ],
+          "assertion_id": "expected_exports:services/creatorBrollMatcher.js"
+        }
+      ],
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "keyword-matched-b-roll-inserter-insert-b-roll-ma",
+      "mission_id": "PRODUCT-creator-media-os"
+    },
+    {
+      "id": "brand-kit-auto-apply-fonts-colors-logo-lower-thi",
+      "status": "pending",
+      "target_file": "services/creatorBrandKit.js",
+      "task": "Brand kit auto-apply — fonts, colors, logo, lower-thirds on every render. Target `services/creatorBrandKit.js` (export `applyBrandKit`).",
+      "spec": "Brand kit auto-apply — fonts, colors, logo, lower-thirds on every render. Target `services/creatorBrandKit.js` (export `applyBrandKit`).",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "design_review_flagged": true,
+      "human_hold": false,
+      "expected_exports": [
+        "applyBrandKit"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/creatorBrandKit.js",
+          "exports": [
+            "applyBrandKit"
+          ],
+          "assertion_id": "expected_exports:services/creatorBrandKit.js"
+        }
+      ],
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "brand-kit-auto-apply-fonts-colors-logo-lower-thi",
+      "mission_id": "PRODUCT-creator-media-os"
+    },
+    {
+      "id": "media-vault-searchable-tagged-versioned-asset-st",
+      "status": "pending",
+      "target_file": "services/creatorMediaVault.js",
+      "task": "Media vault — searchable, tagged, versioned asset store on durable storage. Target `services/creatorMediaVault.js` (export `indexAsset`). Requires R2 (`STORAGE_R2_*`) config.",
+      "spec": "Media vault — searchable, tagged, versioned asset store on durable storage. Target `services/creatorMediaVault.js` (export `indexAsset`). Requires R2 (`STORAGE_R2_*`) config.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "indexAsset"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/creatorMediaVault.js",
+          "exports": [
+            "indexAsset"
+          ],
+          "assertion_id": "expected_exports:services/creatorMediaVault.js"
+        }
+      ],
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "media-vault-searchable-tagged-versioned-asset-st",
+      "mission_id": "PRODUCT-creator-media-os"
+    },
+    {
+      "id": "repurpose-fan-out-turn-one-source-video-into-n-p",
+      "status": "pending",
+      "target_file": "services/creatorRepurposeFanout.js",
+      "task": "Repurpose fan-out — turn one source video into N platform-native posts (fixes the single-yield defect F1). Target `services/creatorRepurposeFanout.js` (export `fanOutRepurpose`).",
+      "spec": "Repurpose fan-out — turn one source video into N platform-native posts (fixes the single-yield defect F1). Target `services/creatorRepurposeFanout.js` (export `fanOutRepurpose`).",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "fanOutRepurpose"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/creatorRepurposeFanout.js",
+          "exports": [
+            "fanOutRepurpose"
+          ],
+          "assertion_id": "expected_exports:services/creatorRepurposeFanout.js"
+        }
+      ],
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "repurpose-fan-out-turn-one-source-video-into-n-p",
+      "mission_id": "PRODUCT-creator-media-os"
+    },
+    {
+      "id": "creator-partner-program-rev-share-ledger-exp-sty",
+      "status": "pending",
+      "target_file": "services/creatorPartnerProgram.js",
+      "task": "Creator Partner Program rev-share ledger — eXp-style 5-level, paid-from-margin, unlock-by-frontline, active-only, capped; percentages tunable via config. Target `services/creatorPartnerProgram.js` (export `computeRevShare`).",
+      "spec": "Creator Partner Program rev-share ledger — eXp-style 5-level, paid-from-margin, unlock-by-frontline, active-only, capped; percentages tunable via config. Target `services/creatorPartnerProgram.js` (export `computeRevShare`).",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "computeRevShare"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/creatorPartnerProgram.js",
+          "exports": [
+            "computeRevShare"
+          ],
+          "assertion_id": "expected_exports:services/creatorPartnerProgram.js"
+        }
+      ],
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "creator-partner-program-rev-share-ledger-exp-sty",
+      "mission_id": "PRODUCT-creator-media-os"
+    },
+    {
+      "id": "partner-dashboard-api-downline-tree-active-seats",
+      "status": "pending",
+      "target_file": "routes/creatorPartnerRoutes.js",
+      "task": "Partner dashboard API — downline tree, active seats, earnings, payout status. Target `routes/creatorPartnerRoutes.js` (export `registerCreatorPartnerRoutes`, route `POST /api/v1/creator-partner/ledger`).",
+      "spec": "Partner dashboard API — downline tree, active seats, earnings, payout status. Target `routes/creatorPartnerRoutes.js` (export `registerCreatorPartnerRoutes`, route `POST /api/v1/creator-partner/ledger`).",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCreatorPartnerRoutes"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/creatorPartnerRoutes.js",
+          "exports": [
+            "registerCreatorPartnerRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/creatorPartnerRoutes.js"
+        }
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/creator-partner/ledger"
+      },
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "partner-dashboard-api-downline-tree-active-seats",
+      "mission_id": "PRODUCT-creator-media-os"
+    },
+    {
+      "id": "performance-analytics-learning-loop-ingest-per-p",
+      "status": "pending",
+      "target_file": "services/creatorAnalyticsDashboard.js",
+      "task": "Performance analytics + learning loop — ingest per-post metrics and surface winning hooks/CTAs by platform. Target `services/creatorAnalyticsDashboard.js` (export `ingestPerformance`).",
+      "spec": "Performance analytics + learning loop — ingest per-post metrics and surface winning hooks/CTAs by platform. Target `services/creatorAnalyticsDashboard.js` (export `ingestPerformance`).",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "ingestPerformance"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/creatorAnalyticsDashboard.js",
+          "exports": [
+            "ingestPerformance"
+          ],
+          "assertion_id": "expected_exports:services/creatorAnalyticsDashboard.js"
+        }
+      ],
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "performance-analytics-learning-loop-ingest-per-p",
+      "mission_id": "PRODUCT-creator-media-os"
+    },
+    {
+      "id": "team-seats-roles-editor-manager-va-access-on-a-c",
+      "status": "pending",
+      "target_file": "services/creatorTeamSeats.js",
+      "task": "Team seats + roles — editor / manager / VA access on a channel. Target `services/creatorTeamSeats.js` (export `assignSeat`). Requires self-serve auth.",
+      "spec": "Team seats + roles — editor / manager / VA access on a channel. Target `services/creatorTeamSeats.js` (export `assignSeat`). Requires self-serve auth.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "assignSeat"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/creatorTeamSeats.js",
+          "exports": [
+            "assignSeat"
+          ],
+          "assertion_id": "expected_exports:services/creatorTeamSeats.js"
+        }
+      ],
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "team-seats-roles-editor-manager-va-access-on-a-c",
+      "mission_id": "PRODUCT-creator-media-os"
+    },
+    {
+      "id": "video-templates-with-swappable-segments-build-a",
+      "status": "pending",
+      "target_file": "services/creatorVideoTemplates.js",
+      "task": "Video templates with swappable segments — build a template once (intro/branding/outro/music/caption-style) and swap only the detail segment (e.g. a realtor's new listing/address/B-roll) per render; everything else stays fixed. Target `servi",
+      "spec": "Video templates with swappable segments — build a template once (intro/branding/outro/music/caption-style) and swap only the detail segment (e.g. a realtor's new listing/address/B-roll) per render; everything else stays fixed. Target `services/creatorVideoTemplates.js` (export `renderFromTemplate`).",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "renderFromTemplate"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/creatorVideoTemplates.js",
+          "exports": [
+            "renderFromTemplate"
+          ],
+          "assertion_id": "expected_exports:services/creatorVideoTemplates.js"
+        }
+      ],
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "video-templates-with-swappable-segments-build-a",
+      "mission_id": "PRODUCT-creator-media-os"
+    },
+    {
+      "id": "catalog-clip-search-remix-compiler-search-the-in",
+      "status": "pending",
+      "target_file": "services/creatorClipRemix.js",
+      "task": "Catalog clip search + remix compiler — search the indexed back-catalog by topic/keyword/transcript, pull evergreen segments/clips from old videos, and recombine them with fresh footage into a new video or short. Target `services/creatorClip",
+      "spec": "Catalog clip search + remix compiler — search the indexed back-catalog by topic/keyword/transcript, pull evergreen segments/clips from old videos, and recombine them with fresh footage into a new video or short. Target `services/creatorClipRemix.js` (export `remixFromCatalog`). Requires media vault index.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "remixFromCatalog"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/creatorClipRemix.js",
+          "exports": [
+            "remixFromCatalog"
+          ],
+          "assertion_id": "expected_exports:services/creatorClipRemix.js"
+        }
+      ],
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "catalog-clip-search-remix-compiler-search-the-in",
+      "mission_id": "PRODUCT-creator-media-os"
     }
   ],
   "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-creator-media-os",
-  "twin_kind": "product_build_queue_registered"
+  "twin_kind": "product_build_queue_registered",
+  "corpus_sources": [
+    "docs/products/creator-media-os/PRODUCT_HOME.md"
+  ]
 }

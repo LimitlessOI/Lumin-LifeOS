@@ -289,13 +289,13 @@
     },
     {
       "id": "step1",
-      "status": "done",
+      "status": "blocked",
       "target_file": "services/builderOSTokenReceipt.js",
       "task": "implement builderOS token receipt service",
       "spec": "The service handles token receipt generation upon build completion. It shall interface with the database to store token information generated on a build complete event.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "generateTokenReceipt"
       ],
@@ -309,9 +309,9 @@
           "assertion_id": "expected_exports:services/builderOSTokenReceipt.js"
         }
       ],
-      "last_attempt_at": null,
-      "last_error": null,
-      "commit_sha": "8411d35f2a7e445d1c882432f8e292f83f88bd80",
+      "last_attempt_at": "2026-07-18T10:19:38.034Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/services/.factory-import-check-1784369977997-1.mjs\";",
+      "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -322,20 +322,21 @@
       "demoted_at": null,
       "park_until": null,
       "no_op": null,
-      "pre_existing": null,
+      "pre_existing": false,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T03:45:08.267Z",
       "blueprint_id": "PRODUCT-TOKEN-ACCOUNTING-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step1",
-      "mission_id": "PRODUCT-token-accounting-os"
+      "mission_id": "PRODUCT-token-accounting-os",
+      "reaudit_reset_at": "2026-07-18T04:18:24.779Z"
     },
     {
       "id": "step2",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/builderOSTokenReceipt.js",
       "task": "implement builderOS token receipt route",
       "spec": "Create a POST route that triggers token receipt generation on build complete. It should rely on the builderOSTokenReceipt service and respond with success or error status.",
@@ -362,7 +363,7 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "false_done_reaudit: artifact never landed (services/builderOSTokenReceipt.js missing; premature route removed) — rebuild service then route",
       "commit_sha": "50c4c7b7e6dc4a3cf6c634a71828b277e06c7caf",
       "built_sha": null,
       "proof": null,
@@ -374,16 +375,17 @@
       "demoted_at": null,
       "park_until": null,
       "no_op": null,
-      "pre_existing": null,
+      "pre_existing": false,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T07:29:20.884Z",
       "blueprint_id": "PRODUCT-TOKEN-ACCOUNTING-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step2",
-      "mission_id": "PRODUCT-token-accounting-os"
+      "mission_id": "PRODUCT-token-accounting-os",
+      "reaudit_reset_at": "2026-07-18T04:18:24.779Z"
     },
     {
       "id": "step3",

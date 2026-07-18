@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/creator-media-os/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-29 |
+| **Last Updated** | 2026-07-18 |
 
 ---
 > **Y-STATEMENT:** In the context of creators, businesses, and personal brands needing steady video output without filming and editing every asset manually, facing fragmented tools for scripting, scene generation, editing, likeness, and SEO, we decided to define Creator Media OS as a record-once, generate-many content system to achieve channel-scale video production, accepting that consent, likeness rights, and publishing controls must be explicit from day one.
@@ -21,7 +21,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-03-29 |
+| **Last Updated** | 2026-07-18 |
 | **Verification Command** | `node scripts/verify-project.mjs --project creator_media_os` |
 | **Manifest** | `docs/products/creator-media-os/FILE_MANIFEST.json` |
 
@@ -45,6 +45,14 @@ Automate the work people should not have to do by hand, while preserving their c
 - Long-form + short-form repackaging
 - Thumbnail, bumper, captions, metadata, and SEO outputs
 - Channel memory / brand memory / performance memory
+- **Creator Digital Twin** — consented voice clone + avatar/likeness clone + persona (writes/talks like the creator)
+- **Smart jump-cuts** — silence/filler/false-start/retake removal ("make it look like the mess-up never happened")
+- **Text-based / overdub editor** — edit the transcript to delete or replace words; replaced spans regenerated in the creator's cloned voice (on-camera via lip-sync)
+- **True text-to-video** — real motion b-roll from a prompt (Wan/Kling via Replicate)
+- **Multi-language dubbing + lip-sync**
+- **Media vault** — searchable, tagged, versioned durable asset store
+- **Reusable video templates + catalog remix** — template once and swap only the detail segment per render (e.g. realtor new-listing videos); search the indexed back-catalog to remix old clips into new videos/shorts
+- **Creator Partner Program** — eXp-style multi-level creator revenue-share (paid from margin, consent + FTC compliant)
 
 **Out of scope — explicitly NOT this project's job:**
 - General story/franchise publishing (belongs to Story Studio)
@@ -127,7 +135,13 @@ This is not "AI video." It is a content operating system: script, scene, edit, r
 |---|---|---|---|
 | Shared video pipeline | multiple | Yes | Lower-format export only |
 | Shared SEO/web intelligence | existing stack | Later | Manual metadata entry |
-| Storage/CDN | TBD | Yes | Local/dev storage during prototyping |
+| Storage/CDN | `STORAGE_R2_*` / `R2_*` | Yes | Local/dev storage during prototyping (outputs ephemeral) |
+| Text-to-video + stills | `REPLICATE_API_TOKEN` | For generative modes | Footage-edit + image-slideshow only |
+| Voice clone / TTS | `ELEVENLABS_API_KEY` | For voice clone + overdub + dubbing | Scripts/captions only (no synthetic voice) |
+| Avatar / talking-head + lip-sync | `HEYGEN_API_KEY` (or `DID_API_KEY`) | For avatar clone + on-camera overdub | Footage-edit of supplied on-camera video only |
+| Self-serve billing | `STRIPE_SECRET_KEY` | For subscriptions + partner payouts | Managed/manual invoicing |
+
+> **Consent + rights gate (foundational):** No voice clone, avatar clone, overdub, or lip-sync output may be produced without an explicit, revocable likeness/voice consent record (`routes/likenessConsent.js` + `services/consentContract.js`). Synthetic outputs must be labeled. This is non-negotiable per the North Star Anchor.
 
 ---
 
@@ -140,6 +154,57 @@ This is not "AI video." It is a content operating system: script, scene, edit, r
 - [ ] **Step 6** — Publish + analytics memory loop *(est: 12h)* `[needs-review]`
 
 **Progress:** 0/6 steps complete | Est. remaining: ~60h
+
+---
+
+## Roadmap — Prime-Time Creator Platform (Wave 2)
+
+> Founder directive (2026-07-18): "add every one of those features … ready for prime time." Each bullet below carries a concrete `target_file` so the governed factory (`build-queue:from-home` → never-stop factory) authors it under SO-001 — the conductor specs, the factory builds, SENTRY proves. Credential-gated modules fail-closed (gated) at runtime until the founder provisions the key. **Nothing here is "done" until SO-002 SENTRY Layer A + Layer B both pass with receipts.**
+
+### Digital Twin + video generation
+- [ ] Back-catalog ingestion — ingest a creator's existing videos to auto-extract a clean voice sample, build the persona-twin training corpus (transcripts of their whole library), and index assets into the media vault. Target `services/creatorBackCatalogIngest.js` (export `ingestBackCatalog`). Requires likeness/voice consent + rights + storage.
+- [ ] Persona twin — train a style/voice-of-writing model on the ingested back-catalog so drafts match the creator's phrasing, hooks, and opinions. Target `services/creatorPersonaTwin.js` (export `trainPersonaTwin`). Requires ingested corpus + consent.
+- [ ] Smart jump-cut / mistake-removal engine — detect silences, filler words, false starts and retakes, then stitch clean jump-cuts (optional punch-in) via local FFmpeg. Target `services/creatorJumpCut.js` (export `buildJumpCutPlan`).
+- [ ] Text-based / overdub editor — edit the transcript to delete or replace words; delete = cut, replace = regenerate the span in the creator's cloned voice. Target `services/creatorOverdubEditor.js` (export `applyTranscriptEdits`). Requires `ELEVENLABS_API_KEY` + consent for replacement.
+- [ ] Voice clone service — train a revocable voice profile from consented samples and synthesize narration in the creator's voice. Target `services/creatorVoiceClone.js` (export `trainVoiceProfile`). Requires `ELEVENLABS_API_KEY` + likeness consent.
+- [ ] Avatar / talking-head clone — generate on-camera video of the creator from a typed script. Target `services/creatorAvatarClone.js` (export `renderAvatarVideo`). Requires `HEYGEN_API_KEY` (or `DID_API_KEY`) + likeness consent.
+- [ ] Lip-sync patcher — re-sync mouth to replaced words for on-camera overdub. Target `services/creatorLipSync.js` (export `resyncLips`). Requires lip-sync provider key + likeness consent.
+- [ ] Text-to-video generation — enable real motion b-roll from a prompt (Wan/Kling via Replicate). Target `services/creatorTextToVideo.js` (export `generateMotionVideo`). Requires `REPLICATE_API_TOKEN`.
+- [ ] Multi-language dubbing — translate and dub audio in the cloned voice with lip-sync. Target `services/creatorDubbing.js` (export `dubToLanguages`). Requires `ELEVENLABS_API_KEY`.
+- [ ] Video templates with swappable segments — build a template once (intro/branding/outro/music/caption-style) and swap only the detail segment (e.g. a realtor's new listing/address/B-roll) per render; everything else stays fixed. Target `services/creatorVideoTemplates.js` (export `renderFromTemplate`).
+- [ ] Catalog clip search + remix compiler — search the indexed back-catalog by topic/keyword/transcript, pull evergreen segments/clips from old videos, and recombine them with fresh footage into a new video or short. Target `services/creatorClipRemix.js` (export `remixFromCatalog`). Requires media vault index.
+- [ ] Long-form to shorts auto-clipper — detect high-retention moments and cut vertical clips. Target `services/creatorShortsClipper.js` (export `extractShorts`).
+- [ ] Keyword-matched b-roll inserter — insert b-roll matched to script keywords. Target `services/creatorBrollMatcher.js` (export `matchBroll`).
+- [ ] Brand kit auto-apply — fonts, colors, logo, lower-thirds on every render. Target `services/creatorBrandKit.js` (export `applyBrandKit`).
+- [ ] Media vault — searchable, tagged, versioned asset store on durable storage. Target `services/creatorMediaVault.js` (export `indexAsset`). Requires R2 (`STORAGE_R2_*`) config.
+- [ ] Repurpose fan-out — turn one source video into N platform-native posts (fixes the single-yield defect F1). Target `services/creatorRepurposeFanout.js` (export `fanOutRepurpose`).
+
+### Growth + monetization (Creator Partner Program)
+- [ ] Creator Partner Program rev-share ledger — eXp-style 5-level, paid-from-margin, unlock-by-frontline, active-only, capped; percentages tunable via config. Target `services/creatorPartnerProgram.js` (export `computeRevShare`).
+- [ ] Partner dashboard API — downline tree, active seats, earnings, payout status. Target `routes/creatorPartnerRoutes.js` (export `registerCreatorPartnerRoutes`, route `POST /api/v1/creator-partner/ledger`).
+- [ ] Performance analytics + learning loop — ingest per-post metrics and surface winning hooks/CTAs by platform. Target `services/creatorAnalyticsDashboard.js` (export `ingestPerformance`).
+- [ ] Team seats + roles — editor / manager / VA access on a channel. Target `services/creatorTeamSeats.js` (export `assignSeat`). Requires self-serve auth.
+
+---
+
+## Creator Partner Program (eXp-style rev-share)
+
+**Model:** paid out of LimitlessOS subscription margin (never out of the downline creator's earnings), 5 levels deep, deeper levels unlocked by number of *directly sponsored active* creators (frontline). Percentages are **tunable config**, not hard-coded.
+
+| Level | % of downline sub revenue | Unlock requirement |
+|---|---|---|
+| L1 (direct) | 20% | 1 active frontline |
+| L2 | 7% | 5 active frontline |
+| L3 | 5% | 10 active frontline |
+| L4 | 4% | 15 active frontline |
+| L5 | 4% | 20+ active frontline |
+
+- "Active" = paying + used the product in the last 30 days.
+- Annual cap per downline seat (tunable) protects unit economics.
+- Pays monthly, only while both earner and downline stay subscribed.
+- Stacks on top of the one-time 30–40% affiliate on first sale.
+
+**⚠️ Compliance gate (KNOW — not legal advice; requires counsel review before launch):** compensation MUST be tied to real product subscriptions/usage, never to recruitment fees or a pay-to-join buy-in. Free to join the partner tree; earnings only on actual paid, active creators. This is the line between a lawful affiliate/rev-share program and an FTC pyramid scheme. Full GTM spec: `docs/products/productized-sprint/launch-kit/CREATOR_PARTNER_PROGRAM.md`.
 
 ---
 
@@ -181,13 +246,17 @@ This is not "AI video." It is a content operating system: script, scene, edit, r
 - [ ] One script can produce long-form plus short-form outputs
 - [ ] SEO package is generated from the same source asset set
 - [ ] No video can be produced from a likeness profile without consent state recorded
+- [ ] No voice clone / avatar / overdub / lip-sync output is produced without a recorded, revocable consent state
+- [ ] Smart jump-cut removes silences/filler and produces a seamless cut
+- [ ] Overdub editor replaces a transcript word and re-renders the span in the cloned voice
+- [ ] Rev-share ledger pays from margin, respects unlock-by-frontline + active-only + annual cap, and never reduces the downline's earnings
 
 ---
 
 ## Handoff (Fresh AI Context)
-**Current blocker:** Concept has just been promoted into SSOT; no implementation exists yet.
+**Current blocker:** Wave 2 (prime-time) features are specced into the Build Plan roadmap and the governed BUILD_QUEUE; most are credential-gated (voice clone, avatar/lip-sync, R2, Stripe) and will build-then-gate until the founder provisions keys. Next: founder provisions API keys → never-stop factory authors each module → SENTRY Layer A/B proves each before "done."
 
-**Last decision made:** Creator Media OS is a separate product from Story Studio, even though both may share generation infrastructure.
+**Last decision made:** Founder approved (2026-07-18) building the full creator feature set + eXp-style 5-level Creator Partner Program, ready for prime time. Digital-twin/clone features are consent-gated and synthetic outputs must be labeled.
 
 **Do NOT change without explicit instruction:**
 - Consent-first likeness policy
@@ -217,6 +286,8 @@ No production runbook yet. This project is concept-stage only.
 | Date | What Changed | Why | Amendment Updated | Manifest Updated | Verified |
 |---|---|---|---|---|---|
 | 2026-03-29 | Created Creator Media OS amendment and manifest from conversation history | Promote the AI YouTube/business video system concept into proper SSOT ownership | ✅ | ✅ | pending |
+| 2026-07-18 | Added Wave 2 prime-time roadmap (digital twin, jump-cuts, overdub, text-to-video, dubbing, media vault, fan-out) + Creator Partner Program rev-share; specced each as governed factory step with concrete target_file + credential gates | Founder approved full creator feature set ready for prime time; specs drive the governed factory per SO-001 (no hand-authored modules) | ✅ | pending | specs-only (SENTRY gates pending per feature) |
+| 2026-07-18 | Added reusable video templates with swappable segments + catalog clip-search/remix compiler (realtor "same 10 videos, new details" + remix old→new use case) | Founder ask: repeatable template videos, swap only the changing segment, remix indexed back-catalog clips into new videos/shorts | ✅ | pending | specs-only |
 
 ---
 
