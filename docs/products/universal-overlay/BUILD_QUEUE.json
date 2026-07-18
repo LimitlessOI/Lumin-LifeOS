@@ -1854,38 +1854,8 @@
           "assertion_id": "expected_exports:services/pwaInstallTracker.js"
         }
       ],
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/universal-overlay/twins/steps/s2.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-18T20:05:51.434Z",
-        "shipped_at": "2026-07-18T20:05:51.434Z",
-        "commit_sha": null,
-        "content_sha256": "510a4306c8fd6d5c5d816905fb1ab0b10e7d745e4ff8579d725bb713097aae3f",
-        "target_file": "services/pwaInstallTracker.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/pwaInstallTracker.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/universal-overlay/twins/steps/s2.exact",
-          "content_sha256": "510a4306c8fd6d5c5d816905fb1ab0b10e7d745e4ff8579d725bb713097aae3f"
-        }
-      },
-      "shipped_at": "2026-07-18T20:09:14.955Z",
-      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
-      "blueprint_step_id": "s2",
-      "pre_existing": true,
-      "shipped_via": "pre_existing_artifact_proof",
-      "last_error": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-18T20:05:56.457Z",
       "commit_sha": "06ac85c70884f0b36470dd8e5cc896ce6d58fe61"
     },
     {
@@ -1917,7 +1887,7 @@
         }
       ],
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-18T20:09:22.091Z",
+      "shipped_at": "2026-07-18T20:06:07.549Z",
       "commit_sha": "4519d425c8fd51fb198e5af6ebad395290ab4572"
     },
     {
@@ -1953,7 +1923,7 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-18T20:10:16.833Z"
+      "shipped_at": "2026-07-18T20:06:22.407Z"
     },
     {
       "id": "s5",
@@ -1970,7 +1940,7 @@
       ],
       "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": "f584abed65087a057ae9514d00e4a55115461147",
+      "commit_sha": "f3b429a0f4dd3081db115fc34fe10a2fff69c12f",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -1987,7 +1957,7 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-18T20:11:09.035Z"
+      "shipped_at": "2026-07-18T20:06:33.583Z"
     },
     {
       "id": "s6",
@@ -2014,12 +1984,12 @@
         }
       ],
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-18T20:11:20.732Z",
-      "commit_sha": "e23bd0ca6b59a396fab3178356c7420a98e7f239"
+      "shipped_at": "2026-07-18T20:06:44.698Z",
+      "commit_sha": "6575707a8692d2086d05deaf1c08fdc0819e623f"
     },
     {
       "id": "s7",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/struggleLogger.js",
       "task": "add struggle log route",
       "spec": "Create route to log struggle detection events via POST.",
@@ -2045,9 +2015,32 @@
           "assertion_id": "expected_exports:routes/struggleLogger.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-18T20:12:12.702Z",
-      "commit_sha": "3d29447c7ed1b747d0def5a8945e184c5b673caa"
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/s7.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-18T20:06:51.200Z",
+        "shipped_at": "2026-07-18T20:06:51.200Z",
+        "commit_sha": null,
+        "content_sha256": "40f3beccc571442eb7ffec3b8223f64b4c77dd0c27fa5396808a99383f7f416a",
+        "target_file": "routes/struggleLogger.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "routes/struggleLogger.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/universal-overlay/twins/steps/s7.exact",
+          "content_sha256": "40f3beccc571442eb7ffec3b8223f64b4c77dd0c27fa5396808a99383f7f416a"
+        }
+      },
+      "shipped_at": "2026-07-18T20:06:51.200Z",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s7"
     },
     {
       "id": "s8",
@@ -2087,10 +2080,10 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-07-18T20:08:26.280Z",
-        "shipped_at": "2026-07-18T20:08:26.280Z",
+        "sealed_at": "2026-07-18T20:13:48.156Z",
+        "shipped_at": "2026-07-18T20:13:48.156Z",
         "commit_sha": null,
-        "content_sha256": "4befb0d8ec2fa9329399c98d070a6abc460dc53836b7cd10ca1a53ca0ffe5630",
+        "content_sha256": "c777578e8337a599d802de20179f73e89b4ae02b0149a764921ab67d132c81ae",
         "target_file": "public/overlay/struggleDetectionUI.html",
         "reverse": {
           "mode": "delete_file",
@@ -2101,10 +2094,10 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/universal-overlay/twins/steps/s8.exact",
-          "content_sha256": "4befb0d8ec2fa9329399c98d070a6abc460dc53836b7cd10ca1a53ca0ffe5630"
+          "content_sha256": "c777578e8337a599d802de20179f73e89b4ae02b0149a764921ab67d132c81ae"
         }
       },
-      "shipped_at": "2026-07-18T20:08:26.280Z",
+      "shipped_at": "2026-07-18T20:13:48.156Z",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "s8"
     }

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T20:12:09.177Z",
+  "generated_at": "2026-07-18T20:13:49.504Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11978,
   "files": [
@@ -65769,10 +65769,10 @@
     },
     {
       "path": "public/overlay/struggleDetectionUI.html",
-      "synopsis": "HTML page: Struggle Detection UI",
-      "bytes": 1123,
-      "mtime": "2026-07-18T20:08:28.155Z",
-      "indexed_at": "2026-07-18T20:08:28.155Z"
+      "synopsis": "HTML page: Struggle Detection Overlay",
+      "bytes": 1640,
+      "mtime": "2026-07-18T20:13:49.504Z",
+      "indexed_at": "2026-07-18T20:13:49.504Z"
     },
     {
       "path": "public/overlay/student-dashboard.html",

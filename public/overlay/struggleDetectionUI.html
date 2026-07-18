@@ -1,40 +1,59 @@
 <!DOCTYPE html>
-<!-- SYNOPSIS: HTML page: Struggle Detection UI -->
+<!-- SYNOPSIS: HTML page: Struggle Detection Overlay -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Struggle Detection UI</title>
+    <title>Struggle Detection Overlay</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
             margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
         }
-        .overlay {
-            background-color: rgba(0, 0, 0, 0.7);
-            color: #fff;
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            z-index: 1000;
+        }
+        #struggleMessage {
+            background: #333;
             padding: 20px;
             border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
             text-align: center;
         }
-        .log-event {
+        #logEventButton {
             margin-top: 20px;
-            font-size: 14px;
-            color: #ffcc00;
+            padding: 10px 20px;
+            background-color: #008CBA;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <div class="overlay">
-        <h1>Struggle Detected</h1>
-        <p>We're here to help! Please check the resources below or contact support.</p>
-        <div class="log-event">Log Event: Struggle detected at [timestamp]</div>
+    <div id="overlay">
+        <div id="struggleMessage">
+            <h2>Struggle Detected</h2>
+            <p>It seems like you're having trouble. Would you like to log this event?</p>
+            <button id="logEventButton" onclick="logEvent()">Log Event</button>
+        </div>
     </div>
+    <script>
+        function logEvent() {
+            console.log('Log Event');
+            alert('Event has been logged.');
+        }
+    </script>
 </body>
 </html>
