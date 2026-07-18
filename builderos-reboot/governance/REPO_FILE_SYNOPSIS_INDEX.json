@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T05:00:27.362Z",
+  "generated_at": "2026-07-18T05:09:59.255Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11930,
+  "file_count": 11932,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21634,9 +21634,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3599317,
-      "mtime": "2026-07-18T05:00:26.242Z",
-      "indexed_at": "2026-07-18T05:00:27.362Z"
+      "bytes": 3599828,
+      "mtime": "2026-07-18T05:09:55.946Z",
+      "indexed_at": "2026-07-18T05:09:59.255Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -36056,6 +36056,13 @@
       "indexed_at": "2026-07-17T23:06:25.553Z"
     },
     {
+      "path": "db/migrations/addStruggleDetectionFormFill.sql",
+      "synopsis": "Database migration — addStruggleDetectionFormFill.sql.",
+      "bytes": 466,
+      "mtime": "2026-07-18T05:09:55.842Z",
+      "indexed_at": "2026-07-18T05:09:59.255Z"
+    },
+    {
       "path": "db/migrations/amendment_21_layer_12.sql",
       "synopsis": "Database migration — amendment_21_layer_12.sql.",
       "bytes": 416,
@@ -39873,8 +39880,8 @@
       "path": "docs/products/creator-media-os/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Creator Media OS",
       "bytes": 20554,
-      "mtime": "2026-07-18T05:00:25.958Z",
-      "indexed_at": "2026-07-18T05:00:26.209Z"
+      "mtime": "2026-07-18T05:09:55.726Z",
+      "indexed_at": "2026-07-18T05:09:55.924Z"
     },
     {
       "path": "docs/products/CREATORMEDIAOS.md",
@@ -40457,8 +40464,8 @@
       "path": "docs/products/productized-sprint/launch-kit/CREATOR_PARTNER_PROGRAM.md",
       "synopsis": "Creator Partner Program — eXp-style 5-level creator revenue-share spec (GTM + billing requirements). @ssot docs/products/productized-sprint/PRODUCT_HOME.md",
       "bytes": 4027,
-      "mtime": "2026-07-18T05:00:25.962Z",
-      "indexed_at": "2026-07-18T05:00:26.209Z"
+      "mtime": "2026-07-18T05:09:55.726Z",
+      "indexed_at": "2026-07-18T05:09:55.924Z"
     },
     {
       "path": "docs/products/productized-sprint/PRODUCT_HOME.md",
@@ -68373,6 +68380,13 @@
       "indexed_at": "2026-07-18T02:16:38.071Z"
     },
     {
+      "path": "routes/struggleDetectionFormFill.js",
+      "synopsis": "HTTP route module — StruggleDetectionFormFill.",
+      "bytes": 629,
+      "mtime": "2026-07-18T05:09:55.842Z",
+      "indexed_at": "2026-07-18T05:09:59.255Z"
+    },
+    {
       "path": "routes/studentInterviewRoutes.js",
       "synopsis": "routes/studentInterviewRoutes.js",
       "bytes": 1011,
@@ -84053,8 +84067,8 @@
       "path": "services/buildLifeOSiOSIPA.js",
       "synopsis": "Service module — BuildLifeOSiOSIPA.",
       "bytes": 1305,
-      "mtime": "2026-07-18T05:00:26.102Z",
-      "indexed_at": "2026-07-18T05:00:27.362Z"
+      "mtime": "2026-07-18T04:58:02.788Z",
+      "indexed_at": "2026-07-18T04:58:02.788Z"
     },
     {
       "path": "services/bullmq-video-queue.js",
