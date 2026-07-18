@@ -87,7 +87,7 @@ import { commitQueueStatusToRepo } from '../services/never-stop-product-factory.
 const FOUNDER_BUILD_JOB_TIMEOUT_MS = Number(process.env.FOUNDER_BUILD_JOB_TIMEOUT_MS || '480000');
 
 /** Deploy-truth canary — stamped on every founder-interface response so tip SHA lies are visible. */
-export const FI_ROUTE_MARKER = 'fi-route-marker-v3';
+export const FI_ROUTE_MARKER = 'fi-route-marker-v4';
 const FI_ROUTE_FILE = fileURLToPath(import.meta.url);
 let FI_DISK_HAS_NAV = false;
 try {
@@ -1346,6 +1346,10 @@ HOW TO RESPOND:
             return parsed?.matched && parsed.shell_action ? parsed : null;
           })();
         if (shellNav?.matched && shellNav.shell_action) {
+          const human = `Opening ${shellNav.shell_action.page} now.`;
+          const persistWarning = req.body?.alpha_probe === true
+            ? 'ALPHA_PROBE_SKIP_PERSIST'
+            : await persistFounderTurn(req, originalText, human);
           clearTimeout(handlerDeadline);
           _log(`route_nav_fastpath type=${shellNav.action_type} page=${shellNav.shell_action.page}`);
           res.setHeader('Cache-Control', 'private, no-store, max-age=0');
@@ -1361,10 +1365,11 @@ HOW TO RESPOND:
             pass_fail: 'PASS',
             execution_kind: 'SYSTEM_EXECUTE',
             shell_action: shellNav.shell_action,
-            human_summary: `Opening ${shellNav.shell_action.page} now.`,
+            human_summary: human,
             done_synopsis: `Navigated to ${shellNav.shell_action.page}`,
             route_nav_fastpath: true,
             nav_canary: 'fi-nav-v1',
+            ...(persistWarning ? { persist_warning: persistWarning } : {}),
             ...fiRouteStamp(),
           }, 'system_action'));
         }
@@ -1385,6 +1390,10 @@ HOW TO RESPOND:
               userId: req.lifeosUser?.sub || null,
             });
             if (actResult?.matched) {
+              const human = actResult.human_summary || actResult.error || 'System action finished.';
+              const persistWarning = req.body?.alpha_probe === true
+                ? 'ALPHA_PROBE_SKIP_PERSIST'
+                : await persistFounderTurn(req, originalText, human);
               clearTimeout(handlerDeadline);
               _log(`route_act_fastpath type=${actResult.action_type} ok=${actResult.ok}`);
               res.setHeader('Cache-Control', 'private, no-store, max-age=0');
@@ -1402,9 +1411,10 @@ HOW TO RESPOND:
                 execution_kind: 'SYSTEM_EXECUTE',
                 shell_action: actResult.shell_action || null,
                 execution_receipt: actResult.receipt || null,
-                human_summary: actResult.human_summary || actResult.error || 'System action finished.',
+                human_summary: human,
                 done_synopsis: actResult.done_synopsis || actResult.human_summary || null,
                 route_act_fastpath: true,
+                ...(persistWarning ? { persist_warning: persistWarning } : {}),
                 ...fiRouteStamp(),
               }, 'system_action'));
             }

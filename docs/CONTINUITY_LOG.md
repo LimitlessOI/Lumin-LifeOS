@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-18 — Act fastpath must persist to thread history
+
+Adam: UI-test every communication aspect and see it in thread history. Root gap: nav/act HTTP fastpaths executed but skipped `persistFounderTurn`, so turns were live in the drawer but not durable in `lumin_messages`. Fix: persist before return (`fi-route-marker-v4`). Also: local agent branch ≠ tip `main` caused a false “code missing” scare.
+
 ## 2026-07-18 — Chair real LifeOS writes (not theater)
 
 Adam: keep building real. Wired food/sleep/commit/victory/habit into `lifeos-direct-action` + HTTP `route_act_fastpath` so Chair executes DB writes with receipts before counsel. Prove tip: `log food: …` / `commit: …` → COMMAND_RAN + ids.

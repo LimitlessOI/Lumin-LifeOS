@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-18 — Chair real writes: food/sleep/commit/victory/habit + act HTTP fastpath. |
+| **Last Updated** | 2026-07-18 — Act/nav fastpath persists to lumin thread history (`fi-route-marker-v4`). |
 ---
 
 ## Founder conversations (2026-06-29)
