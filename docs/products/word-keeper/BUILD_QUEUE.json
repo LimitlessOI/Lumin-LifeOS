@@ -273,7 +273,7 @@
     },
     {
       "id": "word-keeper-step3",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/cronVerificationService.js",
       "task": "verify 24h transcript auto-purge cron",
       "spec": "Implement a service to verify if the 24-hour transcript auto-purge cron is set up correctly.",
@@ -312,9 +312,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-18T12:03:56.690Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:verifyTranscriptPurgeCron; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-18T12:09:44.944Z",
       "park_until": null,
       "no_op": null,
       "blocker_class": null,
@@ -534,13 +534,13 @@
           "assertion_id": "expected_exports:services/cronVerificationService.js"
         }
       ],
-      "last_attempt_at": "2026-07-18T11:54:38.059Z",
+      "last_attempt_at": "2026-07-18T12:09:52.801Z",
       "last_error": "artifact_missing_after_ship: artifact_proof_failed: function verifyTranscriptPurge",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-18T11:54:09.027Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-18T12:09:44.944Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -553,34 +553,11 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": null,
-      "shipped_at": "2026-07-18T12:09:47.889Z",
+      "shipped_at": "2026-07-16T07:06:55.985Z",
       "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "word-keeper-5",
       "mission_id": "PRODUCT-word-keeper",
-      "reaudit_reset_at": "2026-07-18T04:29:52.120Z",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/word-keeper/twins/steps/word-keeper-5.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-18T12:09:47.889Z",
-        "shipped_at": "2026-07-18T12:09:47.889Z",
-        "commit_sha": null,
-        "content_sha256": "f016eef4723dd9920ee526c543e2d123e0ec7170dd097d11e13e36a3030844e7",
-        "target_file": "services/cronVerificationService.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/cronVerificationService.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/word-keeper/twins/steps/word-keeper-5.exact",
-          "content_sha256": "f016eef4723dd9920ee526c543e2d123e0ec7170dd097d11e13e36a3030844e7"
-        }
-      }
+      "reaudit_reset_at": "2026-07-18T04:29:52.120Z"
     },
     {
       "id": "word-keeper-001",
