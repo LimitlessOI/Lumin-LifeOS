@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T04:37:58.030Z",
+  "generated_at": "2026-07-18T04:41:13.061Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11928,
+  "file_count": 11927,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -107,7 +107,7 @@
       "synopsis": "yml — .github/workflows/smoke-test.yml.",
       "bytes": 2510,
       "mtime": "2026-07-18T04:37:44.802Z",
-      "indexed_at": "2026-07-18T04:37:58.030Z"
+      "indexed_at": "2026-07-18T04:41:12.644Z"
     },
     {
       "path": ".github/workflows/ssot-compliance.yml",
@@ -21634,9 +21634,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3598697,
-      "mtime": "2026-07-18T04:27:31.642Z",
-      "indexed_at": "2026-07-18T04:27:32.018Z"
+      "bytes": 3598283,
+      "mtime": "2026-07-18T04:41:12.674Z",
+      "indexed_at": "2026-07-18T04:41:13.061Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -32222,7 +32222,7 @@
       "synopsis": "JSON data/config — data/false-done-baseline.json.",
       "bytes": 14426,
       "mtime": "2026-07-18T04:37:52.514Z",
-      "indexed_at": "2026-07-18T04:37:58.030Z",
+      "indexed_at": "2026-07-18T04:41:12.644Z",
       "synopsis_index_only": true
     },
     {
@@ -37390,7 +37390,7 @@
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
       "bytes": 58940,
       "mtime": "2026-07-18T04:32:47.866Z",
-      "indexed_at": "2026-07-18T04:32:51.154Z"
+      "indexed_at": "2026-07-18T04:41:12.644Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39489,8 +39489,8 @@
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
       "bytes": 223258,
-      "mtime": "2026-07-18T04:20:05.154Z",
-      "indexed_at": "2026-07-18T04:27:31.615Z"
+      "mtime": "2026-07-18T04:29:32.382Z",
+      "indexed_at": "2026-07-18T04:41:12.644Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -40646,8 +40646,8 @@
       "path": "docs/products/token-accounting-os/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Token Accounting OS",
       "bytes": 6469,
-      "mtime": "2026-07-18T04:20:15.446Z",
-      "indexed_at": "2026-07-18T04:27:31.615Z"
+      "mtime": "2026-07-18T04:29:32.382Z",
+      "indexed_at": "2026-07-18T04:41:12.644Z"
     },
     {
       "path": "docs/products/TOKENACCOUNTINGOS.md",
@@ -40757,7 +40757,7 @@
       "synopsis": "Canonical product home — Word Keeper",
       "bytes": 18232,
       "mtime": "2026-07-18T04:30:10.146Z",
-      "indexed_at": "2026-07-18T04:30:18.194Z"
+      "indexed_at": "2026-07-18T04:41:12.644Z"
     },
     {
       "path": "docs/products/WORDKEEPER.md",
@@ -62969,8 +62969,8 @@
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
       "bytes": 31879,
-      "mtime": "2026-07-18T04:19:30.954Z",
-      "indexed_at": "2026-07-18T04:27:31.615Z",
+      "mtime": "2026-07-18T04:29:32.382Z",
+      "indexed_at": "2026-07-18T04:41:12.644Z",
       "synopsis_index_only": true
     },
     {
@@ -66703,16 +66703,6 @@
       ]
     },
     {
-      "path": "routes/cronVerificationRoutes.js",
-      "synopsis": "Registers CronVerificationRoutes routes/handlers (routes/cronVerificationRoutes.js).",
-      "bytes": 698,
-      "mtime": "2026-07-16T19:42:53.597Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z",
-      "ssot": [
-        "docs/products/word-keeper/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "routes/curriculumRoutes.js",
       "synopsis": "Handler to get all curriculum",
       "bytes": 1519,
@@ -68865,8 +68855,8 @@
       "path": "scripts/audit-false-done-steps.mjs",
       "synopsis": "Detective for false-DONE BUILD_QUEUE steps — re-audits every `done`",
       "bytes": 8780,
-      "mtime": "2026-07-18T04:17:21.694Z",
-      "indexed_at": "2026-07-18T04:27:31.615Z",
+      "mtime": "2026-07-18T04:29:32.382Z",
+      "indexed_at": "2026-07-18T04:41:12.644Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -70523,8 +70513,8 @@
       "path": "scripts/phase7_deploy.js",
       "synopsis": "Exports deployToRailway — scripts/phase7_deploy.js.",
       "bytes": 732,
-      "mtime": "2026-07-18T04:27:28.714Z",
-      "indexed_at": "2026-07-18T04:27:32.018Z"
+      "mtime": "2026-07-18T04:21:00.414Z",
+      "indexed_at": "2026-07-18T04:21:00.414Z"
     },
     {
       "path": "scripts/pm2-setup.sh",
@@ -71794,6 +71784,13 @@
       "ssot": [
         "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "scripts/verification_script.js",
+      "synopsis": "Exports verifyDeployment — scripts/verification_script.js.",
+      "bytes": 772,
+      "mtime": "2026-07-18T04:41:02.374Z",
+      "indexed_at": "2026-07-18T04:41:13.061Z"
     },
     {
       "path": "scripts/verify-agent-alpha-gate.mjs",
@@ -84912,16 +84909,6 @@
       ]
     },
     {
-      "path": "services/cronVerificationService.js",
-      "synopsis": "services/cronVerificationService.js",
-      "bytes": 1112,
-      "mtime": "2026-07-16T19:42:53.609Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z",
-      "ssot": [
-        "docs/products/word-keeper/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "services/data-sovereignty.js",
       "synopsis": "services/data-sovereignty.js",
       "bytes": 6212,
@@ -86013,8 +86000,8 @@
       "path": "services/governed-autonomous-shipping-loop.js",
       "synopsis": "STEP 5g — the governed AUTONOMOUS shipping loop. When the STEP 5a",
       "bytes": 34206,
-      "mtime": "2026-07-18T04:19:12.382Z",
-      "indexed_at": "2026-07-18T04:27:31.615Z",
+      "mtime": "2026-07-18T04:29:32.382Z",
+      "indexed_at": "2026-07-18T04:41:12.644Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
