@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T20:05:52.864Z",
+  "generated_at": "2026-07-18T20:06:04.118Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11972,
+  "file_count": 11973,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -68193,6 +68193,13 @@
       "ssot": [
         "docs/products/faith-studio/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "routes/pwaInstall.js",
+      "synopsis": "Registers PwaInstallRoutes routes/handlers (routes/pwaInstall.js).",
+      "bytes": 424,
+      "mtime": "2026-07-18T20:06:04.118Z",
+      "indexed_at": "2026-07-18T20:06:04.118Z"
     },
     {
       "path": "routes/pwaTrack.js",
