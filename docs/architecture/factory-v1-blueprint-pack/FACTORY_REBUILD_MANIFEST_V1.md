@@ -364,6 +364,7 @@ npm run system:railway:redeploy   # requires COMMAND_CENTER_KEY + PUBLIC_BASE_UR
 | 46 product missions | Salvage stub only | **When ready for first product** |
 | Live council on SENTRY hot path | Structural checks only on factory path | **Future enhancement** |
 | BPB compiler service | Mission format IS blueprint | **N/A for rebuild** |
+| `build-queue-planner.js`'s `planBuildQueue` has no Architect-escalation path on ambiguity | Violates D6 (§16): the planner uses an AI model to interpret backlog bullets into steps today, with no defined "this is ambiguous, escalate to Architect" exit — it either produces a step or fails closed, but doesn't distinguish "genuinely no work" from "work exists but is under-specified" | **Named gap, not yet wired** — surfaced 2026-07-18 |
 
 ---
 
@@ -392,13 +393,31 @@ npm run system:railway:redeploy   # requires COMMAND_CENTER_KEY + PUBLIC_BASE_UR
 
 ---
 
+## 16. Doctrine additions (self-observed, ratified 2026-07-18)
+
+These are validated by evidence — code that already exists and runs, or a
+defect hit live during work on this exact manifest — not proposals. Ratifying
+here per the standing rule: the queue takes only from the blueprint, so a
+validated improvement has to land in the blueprint (here) before it's
+doctrine, not just live in a scattered PRODUCT_HOME receipt line.
+
+| # | Doctrine | Evidence | Where it lives |
+|---|----------|----------|-----------------|
+| D1 | **Power-of-two commit anti-thrash.** Repeated identical failures only commit a queue-status update on error-change, the first two attempts, or power-of-two attempt counts — not every single retry. | `isPowerOfTwo()` + `shouldCommit` gate, already shipping. | `services/governed-autonomous-shipping-loop.js` |
+| D2 | **Railway `watchPatterns` redeploy skip.** Non-runtime commits (docs, `BUILD_QUEUE.json` status) skip the Docker redeploy. ~85% of governed commits were queue-status JSON triggering full 2-3min rebuilds for zero code change. | Commit `a90ad102bb`, already shipping. | Railway service config |
+| D3 | **Repeat-regression memory.** A BUILD_QUEUE step reset to `pending` after a manual/GAP-FILL fix now carries forward the failure signature that was already fixed once; a plain status reset does not clear it. If the factory reproduces the identical signature, skip the escalation ladder and rotate model immediately. | Hit live, twice, on this exact branch: the same broken-stub defect was fixed, reset-to-rebuild, and reproduced identically both times before this existed. | `services/governed-autonomous-shipping-loop.js` (`isKnownBadSignature`), `scripts/mark-step-known-bad-signature.mjs` |
+| D4 | **Handoff branch-reachability preflight.** Before any agent writes "already done, just verify" about work on another branch/commit, run the preflight and paste its real output (SHA, ahead/behind, file list) — never a prose claim alone. | Hit live on this exact branch: a handoff claimed uncommitted work "already exists," true only on the authoring session's own disk, never pushed to origin. | `scripts/verify-branch-pushed.mjs`, wired into `docs/products/builderos/DEVIN_HANDOFF.md` |
+| D5 | **Generated-artifact merge doctrine.** A structured/generated file (JSON/YAML index) with volatile header fields (timestamp, count) gets regenerate-on-conflict on merge, never a blind line-based `merge=union` — union keeps both conflicting header values as duplicate JSON keys, corrupting the file. | Caught before shipping: `builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json` has exactly this shape (`generated_at` + `file_count`). | `scripts/resolve-file-synopsis-index-conflict.sh` |
+| D6 | **Queue = blueprint-sequence-only; a queue that needs to decide means the blueprint failed.** The queue takes only from the blueprint and makes zero product/scope decisions — its only judgment call is sequencing (where in the blueprint we are, continue from there). A founder request ("I want X done, change this and this") enters via Chair → Architect review → added to the BP, and only then — unless the founder says otherwise — goes to the top of the queue as the next thing worked on. **If a queue step is ever ambiguous enough that executing it requires a judgment call, that is not the queue's call to make — it is proof the blueprint under-specified the step. Escalate to Architect to fix the BP; do not let the queue/planner improvise a decision to fill the gap.** | Founder-ratified directive, 2026-07-18 (two-part: rule + separation-of-powers escalation). Existing partial statement ("Blueprint authority outranks chat") made explicit. Names a real tension: `services/build-queue-planner.js`'s `planBuildQueue` uses an AI model to turn backlog bullets into steps — exactly the kind of interpretation that must escalate to Architect on ambiguity, not silently resolve itself. | `docs/products/builderos/DEVIN_HANDOFF.md` non-negotiables; `services/build-queue-planner.js` (escalation path not yet wired — named gap, see §12) |
+
 ## 14. Change log
 
 | Date | Change |
 |------|--------|
+| 2026-07-18 | §16 added: doctrine ratification of D1–D6 (blueprint reconciliation branch `devin/1784397434-builderos-blueprint-reconciliation`) |
 | 2026-05-24 | Initial manifest: missions 0001–0030, full runtime map, 0030 tools |
 | 2026-05-24 | TSOS 0029 documented on hot path |
 | 2026-05-24 | Blueprint pack addenda synced (tool inventory, readiness, A-to-Z, goldmine, founder packet audit) |
 | 2026-05-24 | Cold-coder 3-session deferred for hand-built BP; token spend section in CURRENT_BP_GAPS |
 
-**Next agent:** When adding mission 0031+, append a row to §4, §6, §14 and update `BLUEPRINT_PACK_INDEX_V1.md`.
+**Next agent:** When adding mission 0031+, append a row to §4, §6, §14 and update `BLUEPRINT_PACK_INDEX_V1.md`. When ratifying a new self-observed doctrine pattern, append a row to §16 with real evidence (a commit SHA or a live-observed failure), not a proposal.

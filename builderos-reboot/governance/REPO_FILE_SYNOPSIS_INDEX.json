@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T20:46:28.675Z",
+  "generated_at": "2026-07-18T20:58:44.494Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11974,
   "files": [
@@ -36536,8 +36536,8 @@
       "path": "docs/AGENT_RULES.compact.md",
       "synopsis": "AGENT RULES — COMPACT ENFORCEMENT",
       "bytes": 1592,
-      "mtime": "2026-06-29T20:11:31.492Z",
-      "indexed_at": "2026-07-18T19:00:28.378Z"
+      "mtime": "2026-07-18T20:57:40.135Z",
+      "indexed_at": "2026-07-18T20:58:44.494Z"
     },
     {
       "path": "docs/AI_COLD_START.md",
@@ -36787,9 +36787,9 @@
     {
       "path": "docs/architecture/factory-v1-blueprint-pack/FACTORY_REBUILD_MANIFEST_V1.md",
       "synopsis": "Factory Rebuild Manifest v1",
-      "bytes": 19177,
-      "mtime": "2026-06-21T21:37:57.444Z",
-      "indexed_at": "2026-07-18T19:00:28.378Z"
+      "bytes": 24024,
+      "mtime": "2026-07-18T20:56:56.085Z",
+      "indexed_at": "2026-07-18T20:58:44.494Z"
     },
     {
       "path": "docs/architecture/factory-v1-blueprint-pack/FACTORY-0001-v1/ACCEPTANCE_TESTS.json",
@@ -39487,9 +39487,9 @@
     {
       "path": "docs/products/builderos/DEVIN_HANDOFF.md",
       "synopsis": "Devin execution host handoff for BuilderOS",
-      "bytes": 6281,
-      "mtime": "2026-07-18T20:45:37.733Z",
-      "indexed_at": "2026-07-18T20:46:28.675Z"
+      "bytes": 6614,
+      "mtime": "2026-07-18T20:57:23.637Z",
+      "indexed_at": "2026-07-18T20:58:44.494Z"
     },
     {
       "path": "docs/products/builderos/FILE_MANIFEST.json",
@@ -39509,9 +39509,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 229815,
-      "mtime": "2026-07-18T20:46:02.035Z",
-      "indexed_at": "2026-07-18T20:46:28.675Z"
+      "bytes": 230617,
+      "mtime": "2026-07-18T20:58:08.318Z",
+      "indexed_at": "2026-07-18T20:58:44.494Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -69904,8 +69904,8 @@
       "path": "scripts/generate-agent-rules.mjs",
       "synopsis": "generate-agent-rules.mjs",
       "bytes": 4203,
-      "mtime": "2026-06-29T20:06:07.884Z",
-      "indexed_at": "2026-07-18T19:00:28.378Z",
+      "mtime": "2026-07-18T20:54:53.140Z",
+      "indexed_at": "2026-07-18T20:58:44.494Z",
       "ssot": [
         "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md"
       ]
