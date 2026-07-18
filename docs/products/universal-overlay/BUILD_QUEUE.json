@@ -1630,7 +1630,7 @@
     },
     {
       "id": "step8",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/pwaTracker.js",
       "task": "implement PWA tracking service",
       "spec": "Service to log PWA installation events to the database",
@@ -1638,7 +1638,7 @@
         "step7"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "trackPWAInstall"
       ],
@@ -1652,13 +1652,13 @@
           "assertion_id": "expected_exports:services/pwaTracker.js"
         }
       ],
-      "last_attempt_at": "2026-07-18T16:07:52.939Z",
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/services/.factory-import-check-1784390872911-1.mjs\";",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "a8fcb78e2704e0df6cea30c0c303d02c86a62674",
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-18T16:07:41.326Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-18T16:10:23.629Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1670,36 +1670,12 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/universal-overlay/twins/steps/step8.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-18T16:10:32.153Z",
-        "shipped_at": "2026-07-18T16:10:32.153Z",
-        "commit_sha": null,
-        "content_sha256": "e5a181579da0aee82a84fe23f962c0b478b2f71a38cd2d1d07988ca1f6344ad0",
-        "target_file": "services/pwaTracker.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/pwaTracker.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/universal-overlay/twins/steps/step8.exact",
-          "content_sha256": "e5a181579da0aee82a84fe23f962c0b478b2f71a38cd2d1d07988ca1f6344ad0"
-        }
-      },
-      "shipped_at": "2026-07-18T16:10:32.153Z",
-      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
-      "blueprint_step_id": "step8"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-18T16:10:38.272Z"
     },
     {
       "id": "step9",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/pwaTrack.js",
       "task": "create PWA track route",
       "spec": "Route for logging PWA installation via POST /api/v1/pwaTrack",
@@ -1725,32 +1701,9 @@
           "assertion_id": "expected_exports:routes/pwaTrack.js"
         }
       ],
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/universal-overlay/twins/steps/step9.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-18T16:12:26.580Z",
-        "shipped_at": "2026-07-18T16:12:26.580Z",
-        "commit_sha": null,
-        "content_sha256": "a7110877cfb56f9c93831756b63c4f78dea5e7423600816147957374b81a846c",
-        "target_file": "routes/pwaTrack.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "routes/pwaTrack.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/universal-overlay/twins/steps/step9.exact",
-          "content_sha256": "a7110877cfb56f9c93831756b63c4f78dea5e7423600816147957374b81a846c"
-        }
-      },
-      "shipped_at": "2026-07-18T16:12:26.580Z",
-      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
-      "blueprint_step_id": "step9"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-18T16:12:31.743Z",
+      "commit_sha": "45f677f5135d4f363dd2830e38fcf44866ba9492"
     },
     {
       "id": "step10",
