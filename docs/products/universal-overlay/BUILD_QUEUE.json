@@ -1562,6 +1562,18 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-18T14:17:34.680Z",
       "commit_sha": "18ec4048cf729c8711ce237986db0c79b0130b70"
+    },
+    {
+      "id": "step6",
+      "status": "pending",
+      "target_file": "scripts/signedIPAWorkflow.mjs",
+      "task": "create signed IPA build script",
+      "spec": "Implement a build script that coordinates the steps to produce a signed IPA, leveraging the signed IPA automation service.",
+      "depends_on": [
+        "step5"
+      ],
+      "founder_gated": false,
+      "attempts": 0
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
