@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T18:44:12.020Z",
+  "generated_at": "2026-07-18T18:50:43.498Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11970,
   "files": [
@@ -40722,9 +40722,9 @@
     {
       "path": "docs/products/token-accounting-os/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Token Accounting OS",
-      "bytes": 6469,
-      "mtime": "2026-07-18T10:15:03.536Z",
-      "indexed_at": "2026-07-18T10:15:03.536Z"
+      "bytes": 7212,
+      "mtime": "2026-07-18T18:49:26.519Z",
+      "indexed_at": "2026-07-18T18:50:43.498Z"
     },
     {
       "path": "docs/products/TOKENACCOUNTINGOS.md",
@@ -40832,9 +40832,9 @@
     {
       "path": "docs/products/word-keeper/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Word Keeper",
-      "bytes": 18232,
-      "mtime": "2026-07-18T10:15:03.536Z",
-      "indexed_at": "2026-07-18T10:15:03.536Z"
+      "bytes": 18902,
+      "mtime": "2026-07-18T18:49:39.335Z",
+      "indexed_at": "2026-07-18T18:50:43.498Z"
     },
     {
       "path": "docs/products/WORDKEEPER.md",
