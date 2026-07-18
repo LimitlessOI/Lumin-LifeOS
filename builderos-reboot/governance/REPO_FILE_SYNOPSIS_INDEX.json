@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T23:58:21.336Z",
+  "generated_at": "2026-07-18T00:08:45.195Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11884,
+  "file_count": 11885,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -64746,6 +64746,13 @@
       "bytes": 1393,
       "mtime": "2026-07-17T22:00:13.233Z",
       "indexed_at": "2026-07-17T23:06:25.553Z"
+    },
+    {
+      "path": "public/overlay/completionEmailTemplate.html",
+      "synopsis": "HTML page: Completion Email",
+      "bytes": 1422,
+      "mtime": "2026-07-18T00:08:45.195Z",
+      "indexed_at": "2026-07-18T00:08:45.195Z"
     },
     {
       "path": "public/overlay/compliance-dashboard.html",
