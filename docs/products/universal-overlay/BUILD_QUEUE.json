@@ -1148,13 +1148,13 @@
     },
     {
       "id": "universal-overlay-step12",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/iosAppBuild.mjs",
       "task": "complete iOS PWA and IPA build",
       "spec": "Finalize the PWA and IPA package for iOS, integrating struggle detection and form fill.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "iOS IPA",
         "PWA /install"
@@ -1162,8 +1162,8 @@
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "universal-overlay-step12",
       "mission_id": "PRODUCT-universal-overlay",
-      "last_attempt_at": null,
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/scripts/.factory-import-check-1784334494830-1.mjs\";\n",
+      "last_attempt_at": "2026-07-18T00:43:46.940Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/scripts/.factory-import-check-1784335426863-1.mjs\";\n",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
