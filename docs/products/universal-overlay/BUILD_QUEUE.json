@@ -1921,7 +1921,33 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/s4.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-18T20:06:17.399Z",
+        "shipped_at": "2026-07-18T20:06:17.399Z",
+        "commit_sha": null,
+        "content_sha256": "344d84ef6ac96aab996291e898f94bdae7b70ff2eaf5fb12b0c6e0e060f4ecb6",
+        "target_file": "public/overlay/pwaInstall.html",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "public/overlay/pwaInstall.html",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/universal-overlay/twins/steps/s4.exact",
+          "content_sha256": "344d84ef6ac96aab996291e898f94bdae7b70ff2eaf5fb12b0c6e0e060f4ecb6"
+        }
+      },
+      "shipped_at": "2026-07-18T20:06:17.399Z",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s4"
     },
     {
       "id": "s5",

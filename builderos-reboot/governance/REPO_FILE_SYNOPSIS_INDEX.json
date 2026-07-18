@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T20:06:04.118Z",
+  "generated_at": "2026-07-18T20:06:18.842Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11973,
+  "file_count": 11974,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -65640,6 +65640,13 @@
       "bytes": 11859,
       "mtime": "2026-07-10T17:49:00.895Z",
       "indexed_at": "2026-07-17T23:06:25.553Z"
+    },
+    {
+      "path": "public/overlay/pwaInstall.html",
+      "synopsis": "HTML page: PWA Install",
+      "bytes": 2297,
+      "mtime": "2026-07-18T20:06:18.842Z",
+      "indexed_at": "2026-07-18T20:06:18.842Z"
     },
     {
       "path": "public/overlay/recovery_support.html",
