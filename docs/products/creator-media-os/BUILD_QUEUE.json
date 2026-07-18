@@ -1058,7 +1058,31 @@
       ],
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "creator-partner-program-rev-share-ledger-exp-sty",
-      "mission_id": "PRODUCT-creator-media-os"
+      "mission_id": "PRODUCT-creator-media-os",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/creator-media-os/twins/steps/creator-partner-program-rev-share-ledger-exp-sty.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-18T11:39:15.353Z",
+        "shipped_at": "2026-07-18T11:39:15.353Z",
+        "commit_sha": null,
+        "content_sha256": "984463e8efb47791bdf8f1947f320dac4aeaceb7aa5ac826838533fa1266fc15",
+        "target_file": "services/creatorPartnerProgram.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/creatorPartnerProgram.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/creator-media-os/twins/steps/creator-partner-program-rev-share-ledger-exp-sty.exact",
+          "content_sha256": "984463e8efb47791bdf8f1947f320dac4aeaceb7aa5ac826838533fa1266fc15"
+        }
+      },
+      "shipped_at": "2026-07-18T11:39:15.353Z"
     },
     {
       "id": "partner-dashboard-api-downline-tree-active-seats",
