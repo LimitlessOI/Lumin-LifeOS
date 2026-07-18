@@ -674,6 +674,17 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "9",
+      "status": "pending",
+      "target_file": "public/overlay/lifereDepthOverlay.html",
+      "task": "create UI for depth display",
+      "spec": "Design an HTML overlay to visually represent the remaining depth levels A-Z for users.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "design_review_flagged": true
     }
   ],
   "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
