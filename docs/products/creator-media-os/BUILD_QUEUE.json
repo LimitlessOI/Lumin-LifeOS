@@ -934,13 +934,13 @@
     },
     {
       "id": "media-vault-searchable-tagged-versioned-asset-st",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/creatorMediaVault.js",
       "task": "Media vault — searchable, tagged, versioned asset store on durable storage. Target `services/creatorMediaVault.js` (export `indexAsset`). Requires R2 (`STORAGE_R2_*`) config.",
       "spec": "Media vault — searchable, tagged, versioned asset store on durable storage. Target `services/creatorMediaVault.js` (export `indexAsset`). Requires R2 (`STORAGE_R2_*`) config.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "indexAsset"
       ],
@@ -956,7 +956,12 @@
       ],
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "media-vault-searchable-tagged-versioned-asset-st",
-      "mission_id": "PRODUCT-creator-media-os"
+      "mission_id": "PRODUCT-creator-media-os",
+      "last_attempt_at": "2026-07-18T11:29:41.508Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/services/.factory-import-check-1784374181473-1.mjs\";",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "repurpose-fan-out-turn-one-source-video-into-n-p",
