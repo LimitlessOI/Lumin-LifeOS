@@ -36,6 +36,20 @@
       "note": "30/90-day decision review queue HTTP surface (PRODUCT_HOME P1)."
     },
     {
+      "path": "routes/lifeos-cycle-routes.js",
+      "register": "registerLifeOSCycleRoutes",
+      "mount_path": "/api/v1/lifeos/cycle",
+      "enabled": true,
+      "note": "Cycle tracking API was built but not mounted on founder_builder — UI returned 404s. Auto-register closes P1 phase overlay."
+    },
+    {
+      "path": "routes/lifeos-deep-talk-decks-routes.js",
+      "register": "registerLifeosDeepTalkDeckRoutes",
+      "mount_path": "/api/v1/lifeos/deep-talk",
+      "enabled": true,
+      "note": "Curated weekly deep-talk decks from couple/user signal."
+    },
+    {
       "path": "routes/founder-sms-routes.js",
       "register": "registerFounderSmsRoutes",
       "enabled": true,

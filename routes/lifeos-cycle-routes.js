@@ -109,14 +109,23 @@ export function createLifeOSCycleRoutes({ pool, requireKey, logger }) {
     }
   }
 
+  const guard = typeof requireKey === 'function' ? requireKey : (_req, _res, next) => next();
+
   return function mount(app) {
     const base = '/api/v1/lifeos/cycle';
-    app.post(`${base}/entry`,    requireKey, logEntry);
-    app.get(`${base}/phase`,     requireKey, getPhase);
-    app.get(`${base}/context`,   requireKey, getContext);
-    app.get(`${base}/history`,   requireKey, getHistory);
-    app.get(`${base}/settings`,  requireKey, getSettings);
-    app.put(`${base}/settings`,  requireKey, updateSettings);
+    app.post(`${base}/entry`,    guard, logEntry);
+    app.get(`${base}/phase`,     guard, getPhase);
+    app.get(`${base}/context`,   guard, getContext);
+    app.get(`${base}/history`,   guard, getHistory);
+    app.get(`${base}/settings`,  guard, getSettings);
+    app.put(`${base}/settings`,  guard, updateSettings);
     log.info('✅ [LIFEOS-CYCLE] Routes mounted at /api/v1/lifeos/cycle');
   };
+}
+
+/** Auto-register entrypoint for founder-builder lane. */
+export function registerLifeOSCycleRoutes(app, deps = {}) {
+  const mount = createLifeOSCycleRoutes(deps);
+  mount(app);
+  return app;
 }

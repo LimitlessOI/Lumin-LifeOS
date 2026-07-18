@@ -3904,6 +3904,143 @@
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null
+    },
+    {
+      "id": "lifeos-p1-cycle-autoreg",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "Auto-register cycle tracking routes on founder lane",
+      "spec": "Add routes/lifeos-cycle-routes.js registerLifeOSCycleRoutes mount /api/v1/lifeos/cycle enabled true.",
+      "file_contains": [
+        "lifeos-cycle-routes.js",
+        "registerLifeOSCycleRoutes"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-cycle-autoreg",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-cycle-register-export",
+      "target_file": "routes/lifeos-cycle-routes.js",
+      "task": "Export registerLifeOSCycleRoutes for auto-register",
+      "spec": "Export registerLifeOSCycleRoutes(app, deps) that mounts createLifeOSCycleRoutes. Guard requireKey when missing.",
+      "expected_exports": [
+        "registerLifeOSCycleRoutes",
+        "createLifeOSCycleRoutes"
+      ],
+      "file_contains": [
+        "registerLifeOSCycleRoutes",
+        "/api/v1/lifeos/cycle"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-cycle-register-export",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-deep-talk-service",
+      "target_file": "services/lifeos-deep-talk-decks.js",
+      "task": "Deep-talk deck service from couple/user signal",
+      "spec": "ESM createDeepTalkDeckService({pool}).buildWeeklyDeck(userId) pulls emotional_patterns/conflict_debriefs/assessment_results with FALLBACK_DECK.",
+      "expected_exports": [
+        "createDeepTalkDeckService"
+      ],
+      "file_contains": [
+        "createDeepTalkDeckService",
+        "buildWeeklyDeck",
+        "FALLBACK_DECK"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-deep-talk-service",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-deep-talk-routes",
+      "target_file": "routes/lifeos-deep-talk-decks-routes.js",
+      "task": "Mount deep-talk weekly deck routes",
+      "spec": "registerLifeosDeepTalkDeckRoutes under /api/v1/lifeos/deep-talk GET /weekly.",
+      "expected_exports": [
+        "registerLifeosDeepTalkDeckRoutes"
+      ],
+      "file_contains": [
+        "registerLifeosDeepTalkDeckRoutes",
+        "/weekly"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-deep-talk-routes",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-deep-talk-autoreg",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "Auto-register deep-talk routes",
+      "spec": "Add lifeos-deep-talk-decks-routes.js registerLifeosDeepTalkDeckRoutes enabled true.",
+      "file_contains": [
+        "lifeos-deep-talk-decks-routes.js",
+        "registerLifeosDeepTalkDeckRoutes"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-deep-talk-autoreg",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-deep-talk-ui",
+      "target_file": "public/overlay/lifeos-deep-talk.html",
+      "task": "Deep Talk overlay UI",
+      "spec": "HTML page listing weekly deck from GET /api/v1/lifeos/deep-talk/weekly.",
+      "file_contains": [
+        "Deep Talk",
+        "/api/v1/lifeos/deep-talk/weekly"
+      ],
+      "design_review_flagged": true,
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-deep-talk-ui",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-deep-talk-nav",
+      "target_file": "public/overlay/lifeos-app.html",
+      "task": "Wire Deep Talk into LifeOS nav",
+      "spec": "Add nav + PAGE_META for lifeos-deep-talk.html.",
+      "file_contains": [
+        "lifeos-deep-talk.html"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-deep-talk-nav",
+      "mission_id": "PRODUCT-lifeos"
     }
   ],
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",

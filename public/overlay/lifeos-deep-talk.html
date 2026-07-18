@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Deep Talk decks — LifeOS -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deep Talk — LifeOS</title>
+  <script src="/overlay/lifeos-theme.js"></script>
+  <script src="/overlay/lifeos-bootstrap.js"></script>
+  <style>
+    body { margin: 0; font-family: 'Avenir Next', 'Segoe UI', sans-serif; background: linear-gradient(165deg, #1b1424, #0e1016 60%); color: #f3eef8; min-height: 100vh; }
+    .root { max-width: 720px; margin: 0 auto; padding: 28px 18px 80px; }
+    h1 { margin: 0 0 6px; font-size: 1.7rem; }
+    .sub { color: #a89bb8; margin-bottom: 18px; }
+    .card { background: rgba(28,22,38,0.9); border: 1px solid #342844; border-radius: 14px; padding: 16px; margin-bottom: 12px; }
+    .meta { font-size: 0.8rem; color: #a89bb8; margin-bottom: 8px; }
+    button { background: #7a4ea8; color: #fff; border: 0; border-radius: 10px; padding: 10px 14px; font: inherit; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="root">
+    <h1>Deep Talk</h1>
+    <p class="sub">Weekly questions pulled from your patterns, debriefs, and values — not a generic card pack.</p>
+    <button id="reload" type="button">Refresh this week’s deck</button>
+    <div id="out" style="margin-top:16px" class="sub">Loading…</div>
+  </div>
+  <script>
+    async function load() {
+      const out = document.getElementById('out');
+      out.textContent = 'Loading…';
+      try {
+        const r = await fetch('/api/v1/lifeos/deep-talk/weekly', { credentials: 'include' });
+        const j = await r.json();
+        if (!r.ok) throw new Error(j.error || ('HTTP ' + r.status));
+        const qs = j.questions || [];
+        out.innerHTML = '<div class="meta">' + (j.personalized ? 'Personalized from your signal' : 'Starter deck — more personal as you log') + ' · ' + (j.week_of || '') + '</div>'
+          + qs.map((q, i) => '<div class="card"><div class="meta">Q' + (i + 1) + '</div>' + q + '</div>').join('');
+      } catch (e) {
+        out.textContent = 'Could not load deck: ' + e.message + ' (sign in if needed)';
+      }
+    }
+    document.getElementById('reload').onclick = load;
+    load();
+  </script>
+</body>
+</html>

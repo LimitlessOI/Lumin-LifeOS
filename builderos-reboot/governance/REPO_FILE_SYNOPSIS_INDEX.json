@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T01:54:14.479Z",
+  "generated_at": "2026-07-18T02:00:47.145Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11897,
+  "file_count": 11900,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -30401,9 +30401,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 24657,
-      "mtime": "2026-07-18T01:54:14.479Z",
-      "indexed_at": "2026-07-18T01:54:14.479Z",
+      "bytes": 25239,
+      "mtime": "2026-07-18T02:00:47.145Z",
+      "indexed_at": "2026-07-18T02:00:47.145Z",
       "synopsis_index_only": true
     },
     {
@@ -37366,9 +37366,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 55751,
-      "mtime": "2026-07-18T01:54:14.479Z",
-      "indexed_at": "2026-07-18T01:54:14.479Z"
+      "bytes": 56002,
+      "mtime": "2026-07-18T02:00:47.145Z",
+      "indexed_at": "2026-07-18T02:00:47.145Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40141,9 +40141,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 632621,
-      "mtime": "2026-07-18T01:54:14.479Z",
-      "indexed_at": "2026-07-18T01:54:14.479Z"
+      "bytes": 632980,
+      "mtime": "2026-07-18T02:00:47.145Z",
+      "indexed_at": "2026-07-18T02:00:47.145Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -64928,9 +64928,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 188249,
-      "mtime": "2026-07-18T01:54:14.479Z",
-      "indexed_at": "2026-07-18T01:54:14.479Z"
+      "bytes": 188563,
+      "mtime": "2026-07-18T02:00:47.145Z",
+      "indexed_at": "2026-07-18T02:00:47.145Z"
     },
     {
       "path": "public/overlay/lifeos-ask-your-life.html",
@@ -65049,6 +65049,13 @@
       "bytes": 37288,
       "mtime": "2026-06-24T22:39:39.253Z",
       "indexed_at": "2026-07-17T23:06:25.553Z"
+    },
+    {
+      "path": "public/overlay/lifeos-deep-talk.html",
+      "synopsis": "HTML page: Deep Talk decks — LifeOS",
+      "bytes": 2251,
+      "mtime": "2026-07-18T02:00:47.145Z",
+      "indexed_at": "2026-07-18T02:00:47.145Z"
     },
     {
       "path": "public/overlay/lifeos-ds.css",
@@ -67152,9 +67159,9 @@
     {
       "path": "routes/lifeos-cycle-routes.js",
       "synopsis": "routes/lifeos-cycle-routes.js",
-      "bytes": 4540,
-      "mtime": "2026-06-29T17:21:08.527Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z",
+      "bytes": 4800,
+      "mtime": "2026-07-18T02:00:47.145Z",
+      "indexed_at": "2026-07-18T02:00:47.145Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -67175,6 +67182,16 @@
       "bytes": 11764,
       "mtime": "2026-06-29T17:21:08.528Z",
       "indexed_at": "2026-07-17T23:06:25.553Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "routes/lifeos-deep-talk-decks-routes.js",
+      "synopsis": "Weekly deep-talk question deck HTTP routes.",
+      "bytes": 973,
+      "mtime": "2026-07-18T02:00:47.145Z",
+      "indexed_at": "2026-07-18T02:00:47.145Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -86588,6 +86605,16 @@
       "bytes": 4138,
       "mtime": "2026-06-29T17:21:08.904Z",
       "indexed_at": "2026-07-17T23:06:25.553Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/lifeos-deep-talk-decks.js",
+      "synopsis": "Curated deep-talk question decks from couple signal (debriefs, patterns, values).",
+      "bytes": 4533,
+      "mtime": "2026-07-18T02:00:47.145Z",
+      "indexed_at": "2026-07-18T02:00:47.145Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

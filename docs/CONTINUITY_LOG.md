@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-17 — Cycle API mount + deep-talk decks
+
+Adam: keep going. Cycle UI was live but founder lane 404’d the API — auto-register + register export. Built deep-talk weekly decks (signal-aware + fallback) with UI/nav. LifeOS still not done.
+
 ## 2026-07-17 — False-done ask-your-life rebuilt
 
 Adam: keep going. Found step9/10 done with missing ask-your-life files — rebuilt real query + routes + UI; decision-review + voice journal nav/proof; tip still has large open PRODUCT_HOME P1 set beyond queue theater.
