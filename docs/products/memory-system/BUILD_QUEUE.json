@@ -965,7 +965,33 @@
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:20/20 result; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/memory-system/twins/steps/step5.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-18T04:39:07.976Z",
+        "shipped_at": "2026-07-18T04:39:07.976Z",
+        "commit_sha": null,
+        "content_sha256": "49c40b4ca7d05fc9ce78ccdad182f705afa389d2b67c4171c7f1776ceb2744bf",
+        "target_file": "scripts/verification_script.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "scripts/verification_script.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/memory-system/twins/steps/step5.exact",
+          "content_sha256": "49c40b4ca7d05fc9ce78ccdad182f705afa389d2b67c4171c7f1776ceb2744bf"
+        }
+      },
+      "shipped_at": "2026-07-18T04:39:07.976Z",
+      "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step5"
     }
   ],
   "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",

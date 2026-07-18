@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T04:21:00.414Z",
+  "generated_at": "2026-07-18T04:39:09.350Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11927,
+  "file_count": 11928,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -71786,6 +71786,13 @@
       "ssot": [
         "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "scripts/verification_script.js",
+      "synopsis": "Exports verifyDeployment — scripts/verification_script.js.",
+      "bytes": 772,
+      "mtime": "2026-07-18T04:39:09.350Z",
+      "indexed_at": "2026-07-18T04:39:09.350Z"
     },
     {
       "path": "scripts/verify-agent-alpha-gate.mjs",
