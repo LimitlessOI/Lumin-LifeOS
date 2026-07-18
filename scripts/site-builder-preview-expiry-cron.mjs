@@ -196,8 +196,21 @@ async function applyExpiredPreviews(root, expired, summary) {
   }
 }
 
+function resolvePreviewsRoot() {
+  const explicit = process.env.SITE_PREVIEWS_DIR;
+  if (explicit && explicit.trim()) {
+    const trimmed = explicit.trim();
+    return path.isAbsolute(trimmed) ? trimmed : path.resolve(process.cwd(), trimmed);
+  }
+  const volume = process.env.RAILWAY_VOLUME_MOUNT_PATH;
+  if (volume && volume.trim()) {
+    return path.join(volume.trim(), 'previews');
+  }
+  return path.resolve(process.cwd(), 'public/previews');
+}
+
 async function main() {
-  const root = path.resolve(process.cwd(), 'public/previews');
+  const root = resolvePreviewsRoot();
   const ttlDays = getPreviewTtlDays();
   const apply = isApplyMode();
 

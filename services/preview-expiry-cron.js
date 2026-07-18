@@ -7,8 +7,9 @@
 import { promises as fs } from 'fs';
 import path from 'path';
 import logger from './logger.js';
+import { resolvePreviewsDir } from '../config/site-builder-paths.js';
 
-export async function runPreviewExpiry(pool, previewsDir = 'public/previews') {
+export async function runPreviewExpiry(pool, previewsDir = resolvePreviewsDir()) {
   logger.info('[EXPIRY] Running preview site expiry check');
 
   try {

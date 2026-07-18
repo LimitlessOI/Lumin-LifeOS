@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/site-builder/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-17 — Landing brand LimitlessOS→Taloa; color-palettes route fail-soft (no phantom step-03 import). |
+| **Last Updated** | 2026-07-17 — Landing brand LimitlessOS→Taloa; color-palettes route fail-soft. Plus (2026-07-10) preview-dir now resolvable to a persistent volume via `config/site-builder-paths.js` + per-build timeout (belt-and-suspenders on top of the DB-fallback persistence). |
 
 ---
 
@@ -35,6 +35,8 @@ Done-for-you website builder for **any local business with a weak site** (dentis
 
 Verified live 2026-07-10 via the real SENTRY pre-alpha gate (`node scripts/sentry-prealpha-gate.mjs site-builder`) on deploy `991df22238`, fresh fixture, not a stale note: **Layer A 7/7 PASS, Layer B 8/8 PASS, UX verdict "good", 0 findings** — preview build, editor (10-template toggle, upsell chips, chat quick-actions, comparison carousel all present), and **live Stripe checkout** (`cs_live_...`, not test mode) all resolve on production. Email sending (Postmark + Gmail SMTP fallback) has real fixes landed 2026-07-07. The env vars below are **historical** — they blocked this product from March through early July and are kept here only as a record; do not treat them as a current blocker without re-checking Railway directly.
 
+**Preview durability (2026-07-10):** ephemerality is handled two ways — (1) the DB-fallback that serves `metadata.previewHtml`/variant HTML from `prospect_sites` when the file is gone, and (2) `config/site-builder-paths.js#resolvePreviewsDir()` which lets the previews dir point at a Railway persistent volume (`SITE_PREVIEWS_DIR` / `RAILWAY_VOLUME_MOUNT_PATH`+`/previews`, else `public/previews`). Attaching a volume in prod is optional hardening, not a blocker. Async prospect builds are now also capped by `PROSPECT_JOB_TIMEOUT_MS` (default 4m) with `failStaleProspectJobs()` reclaiming orphaned `building` rows on boot. Still open: a **real `$49` conversion receipt** and `GOOGLE_PLACES_KEY` (absent) for automated therapist/psychiatry discovery.
+
 **Known real gap (not env vars):** no receipt anywhere of an actual prospect email converting to a paying customer. The pipeline is mechanically proven end-to-end; commercial proof is the next real milestone, not more code.
 
 **Historical hard blocker (resolved — kept for record only):** Railway env vars once unset:
@@ -42,6 +44,7 @@ Verified live 2026-07-10 via the real SENTRY pre-alpha gate (`node scripts/sentr
 - `EMAIL_FROM` — sender address / `SITE_BASE_URL` — preview URL base
 - `EMAIL_PROVIDER` — provider selector
 - (Optional) `AFFILIATE_JANE_APP_URL`, `AFFILIATE_MINDBODY_URL`, `AFFILIATE_SQUARE_URL`
+- (Needed for therapist discovery) `GOOGLE_PLACES_KEY` — absent per inventory.
 
 ## Owned runtime files
 
@@ -163,10 +166,11 @@ The migration was run via Neon SQL Editor against the **production** branch. All
 - **Status:** Code complete — needs `POSTMARK_SERVER_TOKEN` + `EMAIL_FROM` set in Railway
 
 ### Deployed Static Files
-- Preview sites: `/public/previews/{clientId}/index.html`
-- Served at: `https://yourdomain.com/previews/{clientId}/`
-- Blog posts: `/public/previews/{clientId}/blog/{slug}/index.html`
-- SEO: `/public/previews/{clientId}/sitemap.xml` + `robots.txt`
+- Preview dir resolved by `config/site-builder-paths.js` (`SITE_PREVIEWS_DIR` / `RAILWAY_VOLUME_MOUNT_PATH`+`/previews` / `public/previews`).
+- Preview sites: `{previewsDir}/{clientId}/index.html`
+- Served at: `{SITE_BASE_URL}/previews/{clientId}/` (static mount points at the resolved dir)
+- Blog posts: `{previewsDir}/{clientId}/blog/{slug}/index.html`
+- SEO: `{previewsDir}/{clientId}/sitemap.xml` + `robots.txt`
 
 ### API Endpoints
 | Method | Path | Purpose |
@@ -310,6 +314,7 @@ Failed sends do **not** increment follow-up counters.
 
 | Date | What Changed | Why | Verified | Next |
 |---|---|---|---|---|
+| 2026-07-10 | **Preview-dir persistence option + async-build timeout.** New `config/site-builder-paths.js#resolvePreviewsDir()` = single source of truth for the previews dir (`SITE_PREVIEWS_DIR` → `RAILWAY_VOLUME_MOUNT_PATH`+`/previews` → `public/previews`); repointed `services/site-builder.js` (absolute `previewsRoot`), `routes/site-builder-routes.js` (SiteBuilder init, `/previews` static mount, variant DB-fallback, logo-studio meta), `routes/site-builder-checkout-routes.js` (`loadPreviewMeta`), `routes/site-builder-editor-routes.js` + `routes/site-builder-prealpha-routes.js` (`PREVIEWS_ROOT`), `services/preview-expiry-cron.js` + expiry/quality scripts. `services/site-builder-prospect-runner.js`: `withTimeout()` caps each build (`PROSPECT_JOB_TIMEOUT_MS`, default 4m); boot calls `failStaleProspectJobs(pool)` from `createSiteBuilderRoutes`. Complements (does not replace) the DB-fallback preview persistence already on main. | Audit 2026-07-10 found previews 404'ing on redeploy (ephemeral FS) + jobs stuck `building`. Backward-compatible: no behavior change until a volume/`SITE_PREVIEWS_DIR` is present. | `node --check` all touched files PASS; local unit tests (prospect-runner/routes-security/postmark) PASS. Volume path not exercised in prod (optional hardening). | Attach a Railway volume (optional) + capture a real `$49` conversion receipt. |
 | 2026-07-17 | **Market-ready front door + palette mount.** Landing `site-builder-landing.html` brand **Taloa** (was LimitlessOS). `routes/site-builder-color-palettes-routes.js` drops broken `step-03/` import; list/get fail-soft when table missing. | Adam: after SMOS, Site Builder market-ready; no phantom module crash. | tip after ship | real conversion receipt + host DNS (other owner) |
 | 2026-07-16 | **Cloudflare↔Railway wired for Site Builder host.** Railway custom-domain bootstrap + CF CNAME plan for **`sitebuilder.taloaos.com`** → `lumin-web-production-e3a9.up.railway.app` (proxied). Zone already Cloudflare-registered. | Adam: Cloudflare integrated with Railway. | ✅ code | tip bootstrap + DNS prove |
 | 2026-07-16 | **taloaos.com owned + Lumin→Taloa brand.** Founder has **taloaos.com**. Public Site Builder URL target: **`https://sitebuilder.taloaos.com`**. Brand config `config/taloa-brand.js`. Companion/Chair display name renamed Lumin/Lumen → **Taloa** across active UI + chair services (CSS class tokens `lumin-*` kept for stability). Cloudflare still front-door for DNS/TLS/WAF → Railway. | Adam: got taloaos.com; sitebuilder.taloaos.com; change all Lumin references to Taloa. | ✅ brand rename local | Cloudflare DNS: sitebuilder CNAME → Railway; set SITE_BASE_URL |

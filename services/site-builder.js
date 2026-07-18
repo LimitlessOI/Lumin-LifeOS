@@ -37,6 +37,7 @@ import { renderDesignSystemLayout } from '../config/design-studio-layouts.js';
 import { getVariantSwitcherHtml } from '../config/site-builder-switcher.js';
 import { ingestAll } from './site-builder-asset-ingestion.js';
 import { SITE_BUILDER_PRICING } from '../config/site-builder-pricing.js';
+import { resolvePreviewsDir } from '../config/site-builder-paths.js';
 import { getModelForTask, getCandidateModelsForTask } from '../config/task-model-routing.js';
 import { renderSalesDoctrineForPrompt } from '../config/site-builder-sales-doctrine.js';
 import { matchIndustrySalesPack } from '../config/site-builder-industry-sales.js';
@@ -341,9 +342,11 @@ function extractVideoEmbedUrls(info = {}) {
 }
 
 export default class SiteBuilder {
-  constructor({ callCouncil, previewsDir = 'public/previews', baseUrl = '', pool = null } = {}) {
+  constructor({ callCouncil, previewsDir, baseUrl = '', pool = null } = {}) {
     this.callCouncil = callCouncil;
-    this.previewsDir = previewsDir;
+    const dir = previewsDir || resolvePreviewsDir();
+    this.previewsRoot = path.isAbsolute(dir) ? dir : path.join(process.cwd(), dir);
+    this.previewsDir = this.previewsRoot;
     this.baseUrl = baseUrl;
     this.pool = pool;
   }
@@ -487,7 +490,7 @@ export default class SiteBuilder {
       const robots = this.generateRobots();
 
       // Step 8: Deploy all files
-      const deployDir = path.join(process.cwd(), this.previewsDir, clientId);
+      const deployDir = path.join(this.previewsRoot, clientId);
       await fs.mkdir(deployDir, { recursive: true });
       await fs.mkdir(path.join(deployDir, 'blog'), { recursive: true });
       const editToken = createEditToken();
@@ -629,7 +632,7 @@ export default class SiteBuilder {
       const sitemap = this.generateSitemap(clientId, blogPosts);
       const robots = this.generateRobots();
 
-      const deployDir = path.join(process.cwd(), this.previewsDir, clientId);
+      const deployDir = path.join(this.previewsRoot, clientId);
       await fs.mkdir(path.join(deployDir, 'blog'), { recursive: true });
       if (!options.skipBlogs) {
         await fs.writeFile(path.join(deployDir, 'blog', 'index.html'), blogHtml);
@@ -1888,7 +1891,7 @@ ${fontLinks}
   async listPreviews() {
     const byId = new Map();
     try {
-      const dir = path.join(process.cwd(), this.previewsDir);
+      const dir = this.previewsRoot;
       const entries = await fs.readdir(dir);
       for (const entry of entries) {
         const metaPath = path.join(dir, entry, 'meta.json');

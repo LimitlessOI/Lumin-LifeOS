@@ -15,8 +15,9 @@ import 'dotenv/config';
 import { promises as fs } from 'fs';
 import path from 'path';
 import { scoreGeneratedSite, scoreSummary } from '../services/site-builder-quality-scorer.js';
+import { resolvePreviewsDir } from '../config/site-builder-paths.js';
 
-const PREVIEWS_DIR = path.join(process.cwd(), 'public/previews');
+const PREVIEWS_DIR = resolvePreviewsDir();
 const PUBLIC_BASE_URL = process.env.PUBLIC_BASE_URL || '';
 const KEY = process.env.COMMAND_CENTER_KEY || '';
 const HEADERS = { 'x-command-key': KEY, 'Content-Type': 'application/json' };

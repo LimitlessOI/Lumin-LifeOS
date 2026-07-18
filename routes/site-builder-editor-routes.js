@@ -8,8 +8,9 @@ import path from 'node:path';
 import logger from '../services/logger.js';
 import { renderEditorShell } from '../services/site-builder-editor.js';
 import { recommendServices } from '../services/site-builder-service-catalog.js';
+import { resolvePreviewsDir } from '../config/site-builder-paths.js';
 
-const PREVIEWS_ROOT = path.resolve(process.cwd(), 'public/previews');
+const PREVIEWS_ROOT = resolvePreviewsDir();
 const CLIENT_ID_RE = /^[\w-]+$/;
 
 function resolvePreviewFile(clientId, relativeFile) {

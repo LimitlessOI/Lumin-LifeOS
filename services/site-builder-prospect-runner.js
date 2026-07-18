@@ -7,6 +7,24 @@ import logger from './logger.js';
 const activeJobs = new Set();
 export const PROSPECT_STALE_MS = Number(process.env.SITE_BUILDER_PROSPECT_STALE_MS || 12 * 60 * 1000);
 
+// A build that never resolves (hung scrape/AI call) leaves the DB row stuck at
+// 'building' forever. Cap every job with a wall-clock timeout.
+const PROSPECT_JOB_TIMEOUT_MS = Math.max(
+  60_000,
+  Number(process.env.PROSPECT_JOB_TIMEOUT_MS || 4 * 60_000)
+);
+
+function withTimeout(promise, ms, clientId) {
+  let timer;
+  const timeout = new Promise((_, reject) => {
+    timer = setTimeout(
+      () => reject(new Error(`Prospect build timed out after ${ms}ms`)),
+      ms
+    );
+  });
+  return Promise.race([promise, timeout]).finally(() => clearTimeout(timer));
+}
+
 export function createProspectClientId() {
   return `prev_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
 }
@@ -258,8 +276,11 @@ export async function enqueueProspectJob(pipeline, options = {}) {
   activeJobs.add(clientId);
 
   setImmediate(() => {
-    pipeline
-      .processProspect({ ...options, clientId })
+    withTimeout(
+      pipeline.processProspect({ ...options, clientId }),
+      PROSPECT_JOB_TIMEOUT_MS,
+      clientId
+    )
       .then(async (result) => {
         if (!result.success) {
           await pipeline.failProspectJob(clientId, result.error || 'Prospect pipeline failed');

@@ -28,6 +28,7 @@ import { DESIGN_SYSTEMS } from '../services/site-builder-design-systems.js';
 import { generateLogoStudioPage } from '../services/site-builder-logo-studio.js';
 import ProspectPipeline, { runFollowUpCron } from '../services/prospect-pipeline.js';
 import logger from '../services/logger.js';
+import { resolvePreviewsDir } from '../config/site-builder-paths.js';
 import {
   enqueueProspectJob,
   enqueueDeferredProspectJob,
@@ -185,7 +186,7 @@ function getSiteBuilder({ callCouncilMember, baseUrl, pool = null }) {
   if (!_siteBuilder) {
     _siteBuilder = new SiteBuilder({
       callCouncil: callCouncilMember,
-      previewsDir: 'public/previews',
+      previewsDir: resolvePreviewsDir(),
       baseUrl,
       pool,
     });
@@ -543,12 +544,19 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
 
   app.use(
     '/previews',
-    express.static(path.join(process.cwd(), 'public', 'previews'), {
+    express.static(resolvePreviewsDir(), {
       dotfiles: 'ignore',
       index: 'index.html',
       fallthrough: true,
     })
   );
+
+  // Reclaim prospect jobs orphaned at 'building' by a mid-build redeploy — best-effort, on boot.
+  if (pool) {
+    failStaleProspectJobs(pool).catch((err) =>
+      logger.warn('[SITE] Stale-job reclaim failed on boot', { error: err.message })
+    );
+  }
 
   // Variant file DB fallback — serves each variant's HTML from Postgres when the
   // file has been lost due to ephemeral disk. Also writes it back so subsequent
@@ -569,7 +577,7 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
       const meta = row?.metadata && typeof row.metadata === 'object' ? { ...row.metadata } : {};
       const vHtml = meta.variantHtmls?.[variantId];
       if (vHtml && typeof vHtml === 'string') {
-        const vDir = path.join(process.cwd(), 'public', 'previews', clientId, 'variants', variantId);
+        const vDir = path.join(resolvePreviewsDir(), clientId, 'variants', variantId);
         await fsp.mkdir(vDir, { recursive: true }).catch(() => null);
         await fsp.writeFile(path.join(vDir, 'index.html'), vHtml).catch(() => null);
         res.set('Content-Type', 'text/html; charset=utf-8');
@@ -653,7 +661,7 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
       let info = { businessName: name, primaryColor: primary, accentColor: accent, tagline };
       if (clientId && /^[\w-]+$/.test(String(clientId))) {
         try {
-          const metaPath = path.join(process.cwd(), 'public/previews', String(clientId), 'meta.json');
+          const metaPath = path.join(resolvePreviewsDir(), String(clientId), 'meta.json');
           const meta = JSON.parse(await fsp.readFile(metaPath, 'utf8'));
           if (meta.businessInfo) info = { ...meta.businessInfo, ...info, businessName: name || meta.businessInfo.businessName };
         } catch { /* fall back to query params */ }
