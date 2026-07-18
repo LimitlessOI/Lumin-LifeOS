@@ -1000,13 +1000,13 @@
     },
     {
       "id": "universal-overlay-step8",
-      "status": "founder_gated",
+      "status": "blocked",
       "target_file": "public/overlay/uiExtensions.js",
       "task": "support overlay pinned modules",
       "spec": "Enable user-configurable split view with pinned modules.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "initPinnedModules"
       ],
@@ -1018,7 +1018,12 @@
       ],
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "universal-overlay-step8",
-      "mission_id": "PRODUCT-universal-overlay"
+      "mission_id": "PRODUCT-universal-overlay",
+      "last_attempt_at": "2026-07-18T00:14:51.330Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:user-configurable split view; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "universal-overlay-step9",
