@@ -13,6 +13,7 @@ import {
   escalationThresholds,
   verifyModuleResolves,
   verifyShippedModulesResolve,
+  isKnownBadSignature,
 } from '../services/governed-autonomous-shipping-loop.js';
 
 test('failureSignature normalizes hex ids and numbers so repeat failures share one signature', () => {
@@ -108,4 +109,37 @@ test('verifyShippedModulesResolve treats a non-server-surface target (docs/data)
   const { proven, unproven } = verifyShippedModulesResolve(shipSteps, ['step-docs']);
   assert.deepEqual(unproven, []);
   assert.deepEqual(proven, ['step-docs']);
+});
+
+// Repeat-regression memory: a plain status reset to `pending` restarts
+// same_signature_count at 1, discarding escalation history — observed live
+// twice on 2026-07-18 (the same broken-stub defect reshipped after a reset).
+// known_bad_signatures is the separate, append-only record that survives a
+// reset, stamped via scripts/mark-step-known-bad-signature.mjs.
+test('isKnownBadSignature is false for a step with no known_bad_signatures at all', () => {
+  const step = { id: 'x', last_error: 'module_resolution_failed: whatever' };
+  assert.equal(isKnownBadSignature(step, failureSignature(step.last_error)), false);
+});
+
+test('isKnownBadSignature is false when the current signature does not match any recorded one', () => {
+  const step = {
+    id: 'x',
+    known_bad_signatures: [{ signature: failureSignature('sentry_failed: unrelated evidence gap'), note: 'old' }],
+  };
+  const currentSignature = failureSignature('module_resolution_failed: cannot find module foo');
+  assert.equal(isKnownBadSignature(step, currentSignature), false);
+});
+
+test('isKnownBadSignature is true when the factory reproduces an already-fixed signature after a reset', () => {
+  const originalError = 'module_resolution_failed: cannot find module ../services/builderOSTokenReceipt123.js at commit a1b2c3d4e5f';
+  const step = {
+    id: 'x',
+    status: 'pending', // reset already happened
+    known_bad_signatures: [{ signature: failureSignature(originalError), note: 'fixed once already; reset reproduced it' }],
+  };
+  // The factory reproduces the identical defect on a fresh attempt — a different
+  // commit hash and a different numeric suffix on the same filename, which is
+  // exactly the volatility failureSignature is designed to normalize away.
+  const reproducedError = 'module_resolution_failed: cannot find module ../services/builderOSTokenReceipt987.js at commit ff00ee11aa2';
+  assert.equal(isKnownBadSignature(step, failureSignature(reproducedError)), true);
 });

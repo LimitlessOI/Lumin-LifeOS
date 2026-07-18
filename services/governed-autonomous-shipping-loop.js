@@ -427,7 +427,16 @@ export function verifyShippedModulesResolve(shipSteps, shippedIds) {
   return { proven, unproven };
 }
 
-async function markFailedStep(queue, stepId, body, productId, logger) {
+// Pure, side-effect-free so it's directly unit-testable without exercising
+// markFailedStep's real GitHub-commit path (commitQueueStatus calls the live
+// GitHub API via GITHUB_TOKEN/GITHUB_REPO — not something a test should risk
+// triggering just to check this branch of logic).
+export function isKnownBadSignature(step, signature) {
+  const knownBad = Array.isArray(step?.known_bad_signatures) ? step.known_bad_signatures : [];
+  return knownBad.some((k) => k?.signature === signature);
+}
+
+export async function markFailedStep(queue, stepId, body, productId, logger) {
   if (!queue || !Array.isArray(queue.steps)) return;
   const step = queue.steps.find((s) => s.id === stepId || s.step_id === stepId);
   if (!step) return;
@@ -451,6 +460,29 @@ async function markFailedStep(queue, stepId, body, productId, logger) {
   const failureClass = classifyFailure(step.last_error);
   step.escalation_class = failureClass;
   const ladder = escalationThresholds(failureClass);
+
+  // Repeat-regression memory: a step reset to `pending` after a manual/GAP-FILL
+  // fix normally restarts same_signature_count at 1 — discarding the escalation
+  // history entirely. Observed live (2026-07-18, blueprint reconciliation
+  // Section A): the SAME broken-stub defect was fixed once, the step was reset
+  // to pending "so the factory rebuilds it properly," and the factory
+  // reproduced the identical bug — twice, on two different products
+  // (token-accounting-os, word-keeper) — with zero early warning either time,
+  // because the reset wiped the counters. known_bad_signatures is a separate,
+  // append-only field a human/GAP-FILL fix stamps via
+  // `scripts/mark-step-known-bad-signature.mjs` when resetting a step to
+  // pending; a plain status reset does not clear it. If the factory reproduces
+  // a signature already recorded here, skip the ladder and go straight to
+  // model rotation instead of re-earning it from attempt 1.
+  const isKnownRepeat = isKnownBadSignature(step, signature);
+  if (isKnownRepeat && !step.force_model_rotation) {
+    step.model_rotation = (typeof step.model_rotation === 'number' ? step.model_rotation : 0) + 1;
+    step.force_model_rotation = true;
+    logger?.warn?.(
+      { product_id: productId, step_id: stepId, failure_signature: signature, known_bad_note: knownBad.find((k) => k?.signature === signature)?.note },
+      '[GOVERNED-AUTONOMOUS-SHIP] REPEAT REGRESSION — this exact failure signature was already fixed once and is recorded known-bad; skipping the escalation ladder and rotating model immediately instead of re-shipping it a third time',
+    );
+  }
 
   // Recovery ladder (contract). The FOUNDER is the last resort, never the router:
   // repeated same-signature failures first trigger an automatic STRATEGY CHANGE

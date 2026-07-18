@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T19:02:03.277Z",
+  "generated_at": "2026-07-18T20:43:53.902Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11972,
+  "file_count": 11973,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -39509,9 +39509,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 228775,
-      "mtime": "2026-07-18T18:57:34.457Z",
-      "indexed_at": "2026-07-18T19:00:28.378Z"
+      "bytes": 229334,
+      "mtime": "2026-07-18T20:43:24.221Z",
+      "indexed_at": "2026-07-18T20:43:53.902Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -70431,6 +70431,16 @@
       ]
     },
     {
+      "path": "scripts/mark-step-known-bad-signature.mjs",
+      "synopsis": "Stamp a BUILD_QUEUE.json step with a known-bad failure signature",
+      "bytes": 3453,
+      "mtime": "2026-07-18T20:37:24.163Z",
+      "indexed_at": "2026-07-18T20:43:53.902Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "scripts/memory-auto-complete.mjs",
       "synopsis": "scripts/memory-auto-complete.mjs",
       "bytes": 430,
@@ -86301,9 +86311,9 @@
     {
       "path": "services/governed-autonomous-shipping-loop.js",
       "synopsis": "STEP 5g — the governed AUTONOMOUS shipping loop. When the STEP 5a",
-      "bytes": 47214,
-      "mtime": "2026-07-18T18:52:26.977Z",
-      "indexed_at": "2026-07-18T19:00:28.378Z",
+      "bytes": 49358,
+      "mtime": "2026-07-18T20:40:00.429Z",
+      "indexed_at": "2026-07-18T20:43:53.902Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -92800,9 +92810,9 @@
     {
       "path": "tests/governed-autonomous-shipping-loop-escalation.test.js",
       "synopsis": "js — tests/governed-autonomous-shipping-loop-escalation.test.js.",
-      "bytes": 5422,
-      "mtime": "2026-07-18T18:55:24.996Z",
-      "indexed_at": "2026-07-18T19:00:28.378Z",
+      "bytes": 7418,
+      "mtime": "2026-07-18T20:42:15.713Z",
+      "indexed_at": "2026-07-18T20:43:53.902Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
