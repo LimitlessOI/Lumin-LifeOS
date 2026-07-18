@@ -821,7 +821,31 @@
       ],
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "multi-language-dubbing-translate-and-dub-audio-i",
-      "mission_id": "PRODUCT-creator-media-os"
+      "mission_id": "PRODUCT-creator-media-os",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/creator-media-os/twins/steps/multi-language-dubbing-translate-and-dub-audio-i.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-18T11:13:10.648Z",
+        "shipped_at": "2026-07-18T11:13:10.648Z",
+        "commit_sha": null,
+        "content_sha256": "61936b435c55a7ebc78e81ef871f821482a3414a0467a89858b97b44e0baa345",
+        "target_file": "services/creatorDubbing.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/creatorDubbing.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/creator-media-os/twins/steps/multi-language-dubbing-translate-and-dub-audio-i.exact",
+          "content_sha256": "61936b435c55a7ebc78e81ef871f821482a3414a0467a89858b97b44e0baa345"
+        }
+      },
+      "shipped_at": "2026-07-18T11:13:10.648Z"
     },
     {
       "id": "long-form-to-shorts-auto-clipper-detect-high-ret",
