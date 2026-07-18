@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T01:33:13.657Z",
+  "generated_at": "2026-07-18T01:39:24.477Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11890,
   "files": [
@@ -30401,9 +30401,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 23197,
-      "mtime": "2026-07-17T21:42:46.167Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z",
+      "bytes": 23528,
+      "mtime": "2026-07-18T01:39:24.477Z",
+      "indexed_at": "2026-07-18T01:39:24.477Z",
       "synopsis_index_only": true
     },
     {
@@ -37366,9 +37366,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 54725,
-      "mtime": "2026-07-18T01:31:22.557Z",
-      "indexed_at": "2026-07-18T01:31:22.557Z"
+      "bytes": 55116,
+      "mtime": "2026-07-18T01:39:24.477Z",
+      "indexed_at": "2026-07-18T01:39:24.477Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40141,9 +40141,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 631286,
-      "mtime": "2026-07-18T01:31:22.557Z",
-      "indexed_at": "2026-07-18T01:31:22.557Z"
+      "bytes": 631758,
+      "mtime": "2026-07-18T01:39:24.477Z",
+      "indexed_at": "2026-07-18T01:39:24.477Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -64928,9 +64928,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 185794,
-      "mtime": "2026-07-18T01:08:38.498Z",
-      "indexed_at": "2026-07-18T01:08:38.498Z"
+      "bytes": 187018,
+      "mtime": "2026-07-18T01:39:24.477Z",
+      "indexed_at": "2026-07-18T01:39:24.477Z"
     },
     {
       "path": "public/overlay/lifeos-balance-wheel.html",
@@ -64973,9 +64973,9 @@
     {
       "path": "public/overlay/lifeos-coach.html",
       "synopsis": "HTML page: Communication Coach — LifeOS",
-      "bytes": 52737,
-      "mtime": "2026-06-24T22:39:39.227Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z"
+      "bytes": 53888,
+      "mtime": "2026-07-18T01:39:24.477Z",
+      "indexed_at": "2026-07-18T01:39:24.477Z"
     },
     {
       "path": "public/overlay/lifeos-command-center.html",
@@ -65256,9 +65256,9 @@
     {
       "path": "public/overlay/lifeos-practice.html",
       "synopsis": "HTML page: LifeOS Practice Library",
-      "bytes": 3770,
-      "mtime": "2026-07-18T01:33:13.657Z",
-      "indexed_at": "2026-07-18T01:33:13.657Z"
+      "bytes": 3779,
+      "mtime": "2026-07-18T01:39:24.477Z",
+      "indexed_at": "2026-07-18T01:39:24.477Z"
     },
     {
       "path": "public/overlay/lifeos-purpose.html",
@@ -66971,9 +66971,9 @@
     {
       "path": "routes/lifeos-assessment-battery-routes.js",
       "synopsis": "Provides REST endpoints for managing assessment battery results,",
-      "bytes": 2993,
-      "mtime": "2026-06-29T17:21:08.511Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z",
+      "bytes": 4314,
+      "mtime": "2026-07-18T01:39:24.477Z",
+      "indexed_at": "2026-07-18T01:39:24.477Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -86320,9 +86320,9 @@
     {
       "path": "services/lifeos-assessment-battery.js",
       "synopsis": "Manages storage and retrieval of user assessment results including",
-      "bytes": 3936,
-      "mtime": "2026-06-29T17:21:08.899Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z",
+      "bytes": 5336,
+      "mtime": "2026-07-18T01:39:24.477Z",
+      "indexed_at": "2026-07-18T01:39:24.477Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -86846,9 +86846,9 @@
     {
       "path": "services/lifeos-sleep-service.js",
       "synopsis": "Exports createSleepService — services/lifeos-sleep-service.js.",
-      "bytes": 3108,
-      "mtime": "2026-06-29T17:21:08.917Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z",
+      "bytes": 5043,
+      "mtime": "2026-07-18T01:39:24.477Z",
+      "indexed_at": "2026-07-18T01:39:24.477Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

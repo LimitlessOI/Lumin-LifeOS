@@ -9,8 +9,23 @@
 
 import { safeInt } from "./lifeos-request-helpers.js";
 
+const INSTRUMENTS = [
+  'attachment_style',
+  'love_language',
+  'conflict_style',
+  'communication_style',
+  'core_values',
+  'stress_profile',
+];
+
+export function listInstruments() {
+  return INSTRUMENTS.slice();
+}
+
 export function createAssessmentBatteryService({ pool }) {
+  const memory = new Map();
   return {
+    listInstruments,
     /**
      * Save or update an assessment result
      * @param {Object} params
@@ -106,6 +121,10 @@ export function createAssessmentBatteryService({ pool }) {
      * @returns {Promise<boolean>}
      */
     async hasCompletedBattery(userId) {
+      if (!pool) {
+        const row = memory.get(String(userId));
+        return Boolean(row && INSTRUMENTS.every((k) => row[k]));
+      }
       const result = await pool.query(
         `SELECT COUNT(DISTINCT assessment_type) as count
          FROM assessment_results
@@ -114,6 +133,38 @@ export function createAssessmentBatteryService({ pool }) {
         [safeInt(userId)]
       );
       return result.rows[0]?.count === 3;
-    }
+    },
+
+    async saveResponse(userId, instrument, answers) {
+      if (!INSTRUMENTS.includes(instrument)) {
+        throw new Error(`unknown_instrument:${instrument}`);
+      }
+      if (!pool) {
+        const key = String(userId);
+        const row = memory.get(key) || {};
+        row[instrument] = { answers, takenAt: new Date().toISOString() };
+        memory.set(key, row);
+        return row[instrument];
+      }
+      return this.saveResult({
+        userId,
+        assessmentType: instrument,
+        resultKey: instrument,
+        resultLabel: instrument,
+        score: null,
+        rawAnswers: answers,
+      });
+    },
+
+    async getProfile(userId) {
+      if (!pool) return memory.get(String(userId)) || {};
+      return this.getCompatibilityProfile(userId);
+    },
+
+    async comparePair(userIdA, userIdB) {
+      const a = await this.getProfile(userIdA);
+      const b = await this.getProfile(userIdB);
+      return { user_a: a, user_b: b, instruments: listInstruments() };
+    },
   };
 }
