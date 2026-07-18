@@ -3429,14 +3429,19 @@
         "getSleepDebt"
       ],
       "expected_exports": [],
-      "status": "pending",
+      "status": "blocked",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
-      "attempts": 0,
+      "attempts": 1,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-chronotype-winddown",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "last_attempt_at": "2026-07-18T01:36:18.548Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 2083b is < 30% of existing 52737b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lifeos-p1-therapy-today-card",
