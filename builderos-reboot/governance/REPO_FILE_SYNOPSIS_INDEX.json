@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T10:11:54.483Z",
+  "generated_at": "2026-07-18T10:22:50.307Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11931,
+  "file_count": 11940,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -106,8 +106,8 @@
       "path": ".github/workflows/smoke-test.yml",
       "synopsis": "yml — .github/workflows/smoke-test.yml.",
       "bytes": 2510,
-      "mtime": "2026-07-18T10:11:21.087Z",
-      "indexed_at": "2026-07-18T10:11:50.230Z"
+      "mtime": "2026-07-18T10:14:31.107Z",
+      "indexed_at": "2026-07-18T10:22:41.349Z"
     },
     {
       "path": ".github/workflows/ssot-compliance.yml",
@@ -21634,9 +21634,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3599271,
-      "mtime": "2026-07-18T10:11:50.271Z",
-      "indexed_at": "2026-07-18T10:11:54.483Z"
+      "bytes": 3602170,
+      "mtime": "2026-07-18T10:22:41.379Z",
+      "indexed_at": "2026-07-18T10:22:50.307Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -32221,8 +32221,8 @@
       "path": "data/false-done-baseline.json",
       "synopsis": "JSON data/config — data/false-done-baseline.json.",
       "bytes": 14426,
-      "mtime": "2026-07-18T10:11:21.095Z",
-      "indexed_at": "2026-07-18T10:11:50.230Z",
+      "mtime": "2026-07-18T10:14:31.115Z",
+      "indexed_at": "2026-07-18T10:22:41.349Z",
       "synopsis_index_only": true
     },
     {
@@ -36032,8 +36032,8 @@
       "path": "db/migrations/20260718_lifeos_food_logs.sql",
       "synopsis": "food_logs for LifeOS AI/text food logger.",
       "bytes": 500,
-      "mtime": "2026-07-18T10:11:21.195Z",
-      "indexed_at": "2026-07-18T10:11:54.483Z"
+      "mtime": "2026-07-18T10:08:23.928Z",
+      "indexed_at": "2026-07-18T10:08:23.928Z"
     },
     {
       "path": "db/migrations/20260718_lifeos_labs_psychometrics.sql",
@@ -37403,8 +37403,8 @@
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
       "bytes": 59265,
-      "mtime": "2026-07-18T10:11:45.911Z",
-      "indexed_at": "2026-07-18T10:11:54.483Z"
+      "mtime": "2026-07-18T10:14:31.115Z",
+      "indexed_at": "2026-07-18T10:22:41.349Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39503,8 +39503,8 @@
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
       "bytes": 223258,
-      "mtime": "2026-07-18T10:11:21.095Z",
-      "indexed_at": "2026-07-18T10:11:50.230Z"
+      "mtime": "2026-07-18T10:14:31.119Z",
+      "indexed_at": "2026-07-18T10:22:41.349Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -39894,9 +39894,9 @@
     {
       "path": "docs/products/creator-media-os/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Creator Media OS",
-      "bytes": 10751,
-      "mtime": "2026-06-29T17:35:43.022Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z"
+      "bytes": 20554,
+      "mtime": "2026-07-18T10:22:32.515Z",
+      "indexed_at": "2026-07-18T10:22:50.307Z"
     },
     {
       "path": "docs/products/CREATORMEDIAOS.md",
@@ -40178,8 +40178,8 @@
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
       "bytes": 635331,
-      "mtime": "2026-07-18T10:11:21.199Z",
-      "indexed_at": "2026-07-18T10:11:54.483Z"
+      "mtime": "2026-07-18T10:08:23.928Z",
+      "indexed_at": "2026-07-18T10:08:23.928Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -40476,11 +40476,67 @@
       "synopsis_index_only": true
     },
     {
+      "path": "docs/products/productized-sprint/launch-kit/CREATOR_PARTNER_PROGRAM.md",
+      "synopsis": "Creator Partner Program — eXp-style 5-level creator revenue-share spec (GTM + billing requirements). @ssot docs/products/productized-sprint/PRODUCT_HOME.md",
+      "bytes": 4027,
+      "mtime": "2026-07-18T10:22:32.515Z",
+      "indexed_at": "2026-07-18T10:22:50.307Z"
+    },
+    {
+      "path": "docs/products/productized-sprint/launch-kit/DELIVERY_SOP.md",
+      "synopsis": "Delivery runbook — produce a content pack via the live MarketingOS engine",
+      "bytes": 4933,
+      "mtime": "2026-07-18T10:22:32.515Z",
+      "indexed_at": "2026-07-18T10:22:50.307Z"
+    },
+    {
+      "path": "docs/products/productized-sprint/launch-kit/FINDINGS.md",
+      "synopsis": "Live delivery findings + solution-mandatory fixes for the MarketingOS generate path",
+      "bytes": 3586,
+      "mtime": "2026-07-18T10:22:32.515Z",
+      "indexed_at": "2026-07-18T10:22:50.307Z"
+    },
+    {
+      "path": "docs/products/productized-sprint/launch-kit/intake-form.html",
+      "synopsis": "Standalone intake page for the Founder Voice Content Pack.",
+      "bytes": 4296,
+      "mtime": "2026-07-18T10:22:32.515Z",
+      "indexed_at": "2026-07-18T10:22:50.307Z"
+    },
+    {
+      "path": "docs/products/productized-sprint/launch-kit/INTAKE.md",
+      "synopsis": "Intake brief — questions + hosting options for the Content Pack service",
+      "bytes": 2316,
+      "mtime": "2026-07-18T10:22:32.515Z",
+      "indexed_at": "2026-07-18T10:22:50.307Z"
+    },
+    {
+      "path": "docs/products/productized-sprint/launch-kit/OUTREACH_TEMPLATES.md",
+      "synopsis": "Consent-first outreach + delivery templates for the Content Pack service",
+      "bytes": 3974,
+      "mtime": "2026-07-18T10:22:32.515Z",
+      "indexed_at": "2026-07-18T10:22:50.307Z"
+    },
+    {
+      "path": "docs/products/productized-sprint/launch-kit/README.md",
+      "synopsis": "Service-first launch kit — Founder Voice Content Pack (MarketingOS-powered)",
+      "bytes": 6306,
+      "mtime": "2026-07-18T10:22:32.515Z",
+      "indexed_at": "2026-07-18T10:22:50.307Z"
+    },
+    {
+      "path": "docs/products/productized-sprint/launch-kit/STRIPE_PAYMENT_LINKS.md",
+      "synopsis": "Founder runbook — create Stripe payment links for the Content Pack (no code)",
+      "bytes": 2886,
+      "mtime": "2026-07-18T10:22:32.515Z",
+      "indexed_at": "2026-07-18T10:22:50.307Z"
+    },
+    {
       "path": "docs/products/productized-sprint/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Productized Sprint",
-      "bytes": 9138,
-      "mtime": "2026-06-29T17:35:43.038Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z"
+      "bytes": 10154,
+      "mtime": "2026-07-18T10:22:32.515Z",
+      "indexed_at": "2026-07-18T10:22:50.307Z"
     },
     {
       "path": "docs/products/PRODUCTIZEDSPRINT.md",
@@ -40660,8 +40716,8 @@
       "path": "docs/products/token-accounting-os/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Token Accounting OS",
       "bytes": 6469,
-      "mtime": "2026-07-18T10:11:21.099Z",
-      "indexed_at": "2026-07-18T10:11:50.230Z"
+      "mtime": "2026-07-18T10:14:31.119Z",
+      "indexed_at": "2026-07-18T10:22:41.349Z"
     },
     {
       "path": "docs/products/TOKENACCOUNTINGOS.md",
@@ -40770,8 +40826,8 @@
       "path": "docs/products/word-keeper/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Word Keeper",
       "bytes": 18232,
-      "mtime": "2026-07-18T10:11:21.099Z",
-      "indexed_at": "2026-07-18T10:11:50.230Z"
+      "mtime": "2026-07-18T10:14:31.119Z",
+      "indexed_at": "2026-07-18T10:22:41.349Z"
     },
     {
       "path": "docs/products/WORDKEEPER.md",
@@ -62983,8 +63039,8 @@
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
       "bytes": 31879,
-      "mtime": "2026-07-18T10:11:21.099Z",
-      "indexed_at": "2026-07-18T10:11:50.230Z",
+      "mtime": "2026-07-18T10:14:31.119Z",
+      "indexed_at": "2026-07-18T10:22:41.349Z",
       "synopsis_index_only": true
     },
     {
@@ -64979,8 +65035,8 @@
       "path": "public/overlay/lifeos-ask-your-life.html",
       "synopsis": "HTML page: Ask your life — LifeOS Mirror query",
       "bytes": 3006,
-      "mtime": "2026-07-18T10:11:21.199Z",
-      "indexed_at": "2026-07-18T10:11:54.483Z"
+      "mtime": "2026-07-18T10:06:21.165Z",
+      "indexed_at": "2026-07-18T10:06:21.165Z"
     },
     {
       "path": "public/overlay/lifeos-balance-wheel.html",
@@ -65090,8 +65146,8 @@
       "path": "public/overlay/lifeos-date-night.html",
       "synopsis": "HTML page: Date night / shared rituals — LifeOS",
       "bytes": 3074,
-      "mtime": "2026-07-18T10:11:21.199Z",
-      "indexed_at": "2026-07-18T10:11:54.483Z"
+      "mtime": "2026-07-18T10:06:21.165Z",
+      "indexed_at": "2026-07-18T10:06:21.165Z"
     },
     {
       "path": "public/overlay/lifeos-decisions.html",
@@ -65174,8 +65230,8 @@
       "path": "public/overlay/lifeos-food.html",
       "synopsis": "HTML page: LifeOS Food Logger",
       "bytes": 3974,
-      "mtime": "2026-07-18T10:11:21.199Z",
-      "indexed_at": "2026-07-18T10:11:54.483Z"
+      "mtime": "2026-07-18T10:06:21.165Z",
+      "indexed_at": "2026-07-18T10:06:21.165Z"
     },
     {
       "path": "public/overlay/lifeos-founder-interface.js",
@@ -65418,8 +65474,8 @@
       "path": "public/overlay/lifeos-twin-directives.html",
       "synopsis": "HTML page: Twin UI directives + reaction simulator",
       "bytes": 5435,
-      "mtime": "2026-07-18T10:11:21.199Z",
-      "indexed_at": "2026-07-18T10:11:54.483Z"
+      "mtime": "2026-07-18T10:06:21.165Z",
+      "indexed_at": "2026-07-18T10:06:21.165Z"
     },
     {
       "path": "public/overlay/lifeos-victory-vault.html",
@@ -67086,8 +67142,8 @@
       "path": "routes/lifeos-ask-your-life-routes.js",
       "synopsis": "Ask-your-life HTTP routes — natural language over captured LifeOS facts.",
       "bytes": 1887,
-      "mtime": "2026-07-18T10:11:21.199Z",
-      "indexed_at": "2026-07-18T10:11:54.483Z",
+      "mtime": "2026-07-18T10:06:21.165Z",
+      "indexed_at": "2026-07-18T10:06:21.165Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -67253,8 +67309,8 @@
       "path": "routes/lifeos-cycle-routes.js",
       "synopsis": "routes/lifeos-cycle-routes.js",
       "bytes": 5186,
-      "mtime": "2026-07-18T10:11:21.199Z",
-      "indexed_at": "2026-07-18T10:11:54.483Z",
+      "mtime": "2026-07-18T10:06:21.165Z",
+      "indexed_at": "2026-07-18T10:06:21.165Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -67263,8 +67319,8 @@
       "path": "routes/lifeos-date-night-routes.js",
       "synopsis": "Date-night / shared ritual planner routes.",
       "bytes": 1693,
-      "mtime": "2026-07-18T10:11:21.199Z",
-      "indexed_at": "2026-07-18T10:11:54.483Z",
+      "mtime": "2026-07-18T10:06:21.165Z",
+      "indexed_at": "2026-07-18T10:06:21.165Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -67273,8 +67329,8 @@
       "path": "routes/lifeos-decision-review-routes.js",
       "synopsis": "30/90-day decision review HTTP routes.",
       "bytes": 3454,
-      "mtime": "2026-07-18T10:11:21.199Z",
-      "indexed_at": "2026-07-18T10:11:54.483Z",
+      "mtime": "2026-07-18T10:06:21.165Z",
+      "indexed_at": "2026-07-18T10:06:21.165Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -67373,8 +67429,8 @@
       "path": "routes/lifeos-food-logger-routes.js",
       "synopsis": "LifeOS AI photo food logger HTTP routes.",
       "bytes": 2838,
-      "mtime": "2026-07-18T10:11:21.199Z",
-      "indexed_at": "2026-07-18T10:11:54.483Z",
+      "mtime": "2026-07-18T10:06:21.165Z",
+      "indexed_at": "2026-07-18T10:06:21.165Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -67473,8 +67529,8 @@
       "path": "routes/lifeos-legacy-routes.js",
       "synopsis": "routes/lifeos-legacy-routes.js",
       "bytes": 20335,
-      "mtime": "2026-07-18T10:11:21.199Z",
-      "indexed_at": "2026-07-18T10:11:54.483Z",
+      "mtime": "2026-07-18T10:06:21.165Z",
+      "indexed_at": "2026-07-18T10:06:21.165Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -67533,8 +67589,8 @@
       "path": "routes/lifeos-phase2-routes.js",
       "synopsis": "Registers LifeosPhase2Routes routes/handlers (routes/lifeos-phase2-routes.js).",
       "bytes": 12574,
-      "mtime": "2026-07-18T10:11:21.199Z",
-      "indexed_at": "2026-07-18T10:11:54.483Z",
+      "mtime": "2026-07-18T10:08:23.928Z",
+      "indexed_at": "2026-07-18T10:08:23.928Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -67543,8 +67599,8 @@
       "path": "routes/lifeos-phase3-routes.js",
       "synopsis": "LifeOS Phase 3 REST — habits / energy / learning / calendar-protection.",
       "bytes": 9436,
-      "mtime": "2026-07-18T10:11:21.199Z",
-      "indexed_at": "2026-07-18T10:11:54.483Z",
+      "mtime": "2026-07-18T10:06:21.165Z",
+      "indexed_at": "2026-07-18T10:06:21.165Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -67593,8 +67649,8 @@
       "path": "routes/lifeos-sleep-chronotype-routes.js",
       "synopsis": "Chronotype + wind-down helpers over LifeOS sleep service.",
       "bytes": 2068,
-      "mtime": "2026-07-18T10:11:21.199Z",
-      "indexed_at": "2026-07-18T10:11:54.483Z",
+      "mtime": "2026-07-18T10:06:21.165Z",
+      "indexed_at": "2026-07-18T10:06:21.165Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -67629,9 +67685,12 @@
     {
       "path": "routes/lifeos-victory-vault-routes.js",
       "synopsis": "Exports createLifeOSVictoryVaultRoutes — routes/lifeos-victory-vault-routes.js.",
-      "bytes": 5269,
-      "mtime": "2026-07-18T02:25:17.750Z",
-      "indexed_at": "2026-07-18T02:25:17.750Z"
+      "bytes": 5315,
+      "mtime": "2026-07-18T10:22:32.515Z",
+      "indexed_at": "2026-07-18T10:22:50.307Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/lifeos-vision-routes.js",
@@ -68875,9 +68934,9 @@
     {
       "path": "scripts/audit-false-done-steps.mjs",
       "synopsis": "Detective for false-DONE BUILD_QUEUE steps — re-audits every `done`",
-      "bytes": 8780,
-      "mtime": "2026-07-18T10:11:21.099Z",
-      "indexed_at": "2026-07-18T10:11:50.230Z",
+      "bytes": 8759,
+      "mtime": "2026-07-18T10:22:41.263Z",
+      "indexed_at": "2026-07-18T10:22:50.307Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -69627,6 +69686,16 @@
       "indexed_at": "2026-07-17T23:06:25.553Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/deliver-content-pack.mjs",
+      "synopsis": "Founder Voice Content Pack delivery helper — drives the LIVE MarketingOS loop",
+      "bytes": 9973,
+      "mtime": "2026-07-18T10:22:32.515Z",
+      "indexed_at": "2026-07-18T10:22:50.307Z",
+      "ssot": [
+        "docs/products/productized-sprint/PRODUCT_HOME.md"
       ]
     },
     {
@@ -86028,8 +86097,8 @@
       "path": "services/governed-autonomous-shipping-loop.js",
       "synopsis": "STEP 5g — the governed AUTONOMOUS shipping loop. When the STEP 5a",
       "bytes": 34206,
-      "mtime": "2026-07-18T10:11:21.099Z",
-      "indexed_at": "2026-07-18T10:11:50.230Z",
+      "mtime": "2026-07-18T10:14:31.119Z",
+      "indexed_at": "2026-07-18T10:22:41.349Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -86570,8 +86639,8 @@
       "path": "services/lifeos-ai-photo-food-logger.js",
       "synopsis": "Exports logFoodWithPhoto — services/lifeos-ai-photo-food-logger.js.",
       "bytes": 3237,
-      "mtime": "2026-07-18T10:11:21.199Z",
-      "indexed_at": "2026-07-18T10:11:54.483Z"
+      "mtime": "2026-07-18T10:08:23.928Z",
+      "indexed_at": "2026-07-18T10:08:23.928Z"
     },
     {
       "path": "services/lifeos-ambient-context.js",

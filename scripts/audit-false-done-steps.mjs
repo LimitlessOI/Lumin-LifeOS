@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /**
  * SYNOPSIS: Detective for false-DONE BUILD_QUEUE steps — re-audits every `done`
  * step's declared artifact against the live tree and classifies failures.
