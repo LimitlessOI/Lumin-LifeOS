@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T14:17:31.431Z",
+  "generated_at": "2026-07-18T14:31:29.176Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11962,
+  "file_count": 11963,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -89743,6 +89743,13 @@
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/signedIPA.js",
+      "synopsis": "Service module — SignedIPA.",
+      "bytes": 1324,
+      "mtime": "2026-07-18T14:31:29.176Z",
+      "indexed_at": "2026-07-18T14:31:29.176Z"
     },
     {
       "path": "services/site-builder-ab-subject-testing.js",

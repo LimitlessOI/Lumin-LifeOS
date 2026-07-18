@@ -1497,7 +1497,33 @@
       "last_error": "NOT_ON_BLUEPRINT",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/04.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-18T14:31:27.590Z",
+        "shipped_at": "2026-07-18T14:31:27.590Z",
+        "commit_sha": null,
+        "content_sha256": "760a4e094126d076ee72e80686e8c6dc66038f2aa244c497e475f5a20973d8bc",
+        "target_file": "services/signedIPA.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/signedIPA.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/universal-overlay/twins/steps/04.exact",
+          "content_sha256": "760a4e094126d076ee72e80686e8c6dc66038f2aa244c497e475f5a20973d8bc"
+        }
+      },
+      "shipped_at": "2026-07-18T14:31:27.590Z",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "04"
     },
     {
       "id": "05",
