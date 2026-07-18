@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T20:10:13.150Z",
+  "generated_at": "2026-07-18T20:11:05.507Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11978,
   "files": [
@@ -36094,9 +36094,9 @@
     {
       "path": "db/migrations/addStruggleDetectionLogTable.sql",
       "synopsis": "Database migration — addStruggleDetectionLogTable.sql.",
-      "bytes": 342,
-      "mtime": "2026-07-18T20:06:29.874Z",
-      "indexed_at": "2026-07-18T20:06:29.874Z"
+      "bytes": 345,
+      "mtime": "2026-07-18T20:11:05.507Z",
+      "indexed_at": "2026-07-18T20:11:05.507Z"
     },
     {
       "path": "db/migrations/amendment_21_layer_12.sql",
