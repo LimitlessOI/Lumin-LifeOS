@@ -654,13 +654,13 @@
           "assertion_id": "expected_exports:routes/opsTcBlockerCardsRoutes.js"
         }
       ],
-      "last_attempt_at": "2026-07-18T01:04:24.578Z",
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/routes/.factory-import-check-1784336664543-1.mjs\";\nn",
+      "last_attempt_at": "2026-07-18T01:08:52.724Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/routes/.factory-import-check-1784336932691-1.mjs\";\nn",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 6,
-      "revived_at": "2026-07-18T01:04:02.599Z",
+      "revive_count": 7,
+      "revived_at": "2026-07-18T01:08:28.467Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
