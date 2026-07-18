@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T05:00:46.614Z",
+  "generated_at": "2026-07-18T05:02:41.986Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11930,
+  "file_count": 11931,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -68371,6 +68371,13 @@
       "bytes": 951,
       "mtime": "2026-07-18T02:16:38.071Z",
       "indexed_at": "2026-07-18T02:16:38.071Z"
+    },
+    {
+      "path": "routes/struggleDetectionFormFill.js",
+      "synopsis": "HTTP route module — StruggleDetectionFormFill.",
+      "bytes": 629,
+      "mtime": "2026-07-18T05:02:41.986Z",
+      "indexed_at": "2026-07-18T05:02:41.986Z"
     },
     {
       "path": "routes/studentInterviewRoutes.js",
