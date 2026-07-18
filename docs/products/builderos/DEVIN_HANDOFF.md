@@ -8,7 +8,7 @@
 | **Purpose** | External execution-host handoff for BuilderOS |
 | **Machine packet** | `builderos-reboot/governance/DEVIN_EXECUTION_PACKET.json` |
 | **Primary authority** | `docs/products/builderos/OB_EXECUTION_LADDER.md` |
-| **Last Updated** | 2026-07-01 |
+| **Last Updated** | 2026-07-18 — added branch-reachability preflight requirement (`scripts/verify-branch-pushed.mjs`) and made the queue's blueprint-only-sequencing rule explicit, both founder-ratified after a live handoff gap on this exact branch. |
 
 ## What this is
 
@@ -156,7 +156,9 @@ If you want to decide quickly whether Devin is worth keeping on this repo, use t
 ## Non-negotiables
 
 - Blueprint authority outranks chat.
+- **The queue takes ONLY from the blueprint. It makes zero product/scope decisions — its only judgment call is sequencing (where in the blueprint we are, continue from there).** A founder request ("I want X done, change this and this") does not enter a queue directly: it goes through Chair → Architect review → gets added to the BP, and only then — unless the founder says otherwise — goes to the top of the queue as the next thing worked on. (Founder-ratified 2026-07-18.)
 - Builder must not make strategic decisions.
+- **Before writing "already done, just verify" (or any claim that work exists on a branch/commit another session must reach), run `node scripts/verify-branch-pushed.mjs --branch <name>` and paste its exact output.** Observed live 2026-07-18: a handoff claimed a branch "already exists and has uncommitted work" — true on the authoring session's own disk, but never pushed to origin, so the receiving agent (different machine) couldn't reach it and spent multiple rounds discovering that before the branch was actually pushed. Prose claims about what's "already done" are not verifiable across sessions; a pasted commit SHA is.
 - No false green.
 - No soft “working on it” if the queue is still stuck.
 - If a blocker is infrastructure, say infrastructure.

@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T20:43:53.902Z",
+  "generated_at": "2026-07-18T20:46:28.675Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11973,
+  "file_count": 11974,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -39487,9 +39487,9 @@
     {
       "path": "docs/products/builderos/DEVIN_HANDOFF.md",
       "synopsis": "Devin execution host handoff for BuilderOS",
-      "bytes": 4947,
-      "mtime": "2026-07-03T00:17:45.055Z",
-      "indexed_at": "2026-07-18T19:00:28.378Z"
+      "bytes": 6281,
+      "mtime": "2026-07-18T20:45:37.733Z",
+      "indexed_at": "2026-07-18T20:46:28.675Z"
     },
     {
       "path": "docs/products/builderos/FILE_MANIFEST.json",
@@ -39509,9 +39509,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 229334,
-      "mtime": "2026-07-18T20:43:24.221Z",
-      "indexed_at": "2026-07-18T20:43:53.902Z"
+      "bytes": 229815,
+      "mtime": "2026-07-18T20:46:02.035Z",
+      "indexed_at": "2026-07-18T20:46:28.675Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -72046,6 +72046,16 @@
       "indexed_at": "2026-07-18T19:00:28.378Z",
       "ssot": [
         "docs/architecture/HIST_LEGACY_SYSTEM_REGISTRY.md"
+      ]
+    },
+    {
+      "path": "scripts/verify-branch-pushed.mjs",
+      "synopsis": "Prove a branch is actually reachable from `origin` — with a real",
+      "bytes": 3518,
+      "mtime": "2026-07-18T20:44:21.713Z",
+      "indexed_at": "2026-07-18T20:46:28.675Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
