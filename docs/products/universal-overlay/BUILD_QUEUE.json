@@ -1777,13 +1777,13 @@
       "file_contains": [
         "struggleFormFill.js"
       ],
-      "last_attempt_at": "2026-07-18T16:13:20.189Z",
+      "last_attempt_at": "2026-07-18T16:28:49.828Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:struggleFormFill.js; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-18T16:01:33.914Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-18T16:28:49.529Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
