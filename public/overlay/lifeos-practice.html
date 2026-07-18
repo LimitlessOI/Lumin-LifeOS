@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: LifeOS Practice Library -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeOS Practice Library</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .practice { margin-bottom: 20px; }
+        .instructions { margin-top: 10px; }
+        .timer { font-size: 20px; margin-top: 5px; }
+        button { margin-top: 10px; }
+    </style>
+    <script src="lifeos-bootstrap.js"></script>
+</head>
+<body>
+    <h1>Inner Work Practice Library</h1>
+
+    <div id="auth-status"></div>
+
+    <div class="practice" id="box-breathing">
+        <h2>Box Breathing</h2>
+        <div class="instructions">
+            Inhale for 4 seconds, hold for 4 seconds, exhale for 4 seconds, hold for 4 seconds. Repeat.
+        </div>
+        <div class="timer" id="box-timer">00:00</div>
+        <button onclick="startPractice('box-breathing', 4, 4, 4, 4)">Start Box Breathing</button>
+    </div>
+
+    <div class="practice" id="4-7-8">
+        <h2>4-7-8 Breathing</h2>
+        <div class="instructions">
+            Inhale for 4 seconds, hold for 7 seconds, exhale for 8 seconds. Repeat.
+        </div>
+        <div class="timer" id="478-timer">00:00</div>
+        <button onclick="startPractice('4-7-8', 4, 7, 8, 0)">Start 4-7-8 Breathing</button>
+    </div>
+
+    <div class="practice" id="body-scan">
+        <h2>Body Scan</h2>
+        <div class="instructions">
+            Slowly bring attention to each part of your body, from head to toe.
+        </div>
+        <button onclick="startPractice('body-scan', 300, 0, 0, 0)">Start Body Scan (5 mins)</button>
+    </div>
+
+    <div class="practice" id="loving-kindness">
+        <h2>Loving-Kindness</h2>
+        <div class="instructions">
+            Send kind thoughts to yourself and others. Repeat phrases like "May I be happy."
+        </div>
+        <button onclick="startPractice('loving-kindness', 300, 0, 0, 0)">Start Loving-Kindness (5 mins)</button>
+    </div>
+
+    <div class="practice" id="5-min-mindfulness">
+        <h2>5-Minute Mindfulness</h2>
+        <div class="instructions">
+            Focus on your breath and bring your mind back when it wanders.
+        </div>
+        <button onclick="startPractice('5-min-mindfulness', 300, 0, 0, 0)">Start 5-Min Mindfulness</button>
+    </div>
+
+    <script>
+        function auth() {
+            // Mock function for authentication
+            document.getElementById('auth-status').innerText = 'Authenticated via lifeos-bootstrap.js';
+        }
+
+        function startPractice(practiceName, inhale, hold, exhale, repeat) {
+            let timerElement = document.getElementById(practiceName + '-timer');
+            let totalSeconds = (inhale + hold + exhale + repeat) * 60;
+            let interval = setInterval(() => {
+                if (totalSeconds <= 0) {
+                    clearInterval(interval);
+                    logCompletion(practiceName);
+                    timerElement.innerText = 'Completed';
+                    return;
+                }
+                let minutes = Math.floor(totalSeconds / 60);
+                let seconds = totalSeconds % 60;
+                timerElement.innerText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                totalSeconds--;
+            }, 1000);
+        }
+
+        function logCompletion(practiceName) {
+            let logs = JSON.parse(localStorage.getItem('lifeos_practice_logs')) || [];
+            logs.push({ practice: practiceName, completedAt: new Date().toISOString() });
+            localStorage.setItem('lifeos_practice_logs', JSON.stringify(logs));
+        }
+
+        auth();
+    </script>
+</body>
+</html>

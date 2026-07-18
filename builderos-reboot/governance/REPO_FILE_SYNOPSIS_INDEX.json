@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T01:31:22.557Z",
+  "generated_at": "2026-07-18T01:33:13.657Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11888,
+  "file_count": 11890,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -65065,6 +65065,13 @@
       "indexed_at": "2026-07-17T23:06:25.553Z"
     },
     {
+      "path": "public/overlay/lifeos-failure-museum.html",
+      "synopsis": "HTML page: Failure Museum",
+      "bytes": 3737,
+      "mtime": "2026-07-18T01:33:13.657Z",
+      "indexed_at": "2026-07-18T01:33:13.657Z"
+    },
+    {
       "path": "public/overlay/lifeos-family.html",
       "synopsis": "HTML page: Family OS — LifeOS",
       "bytes": 25548,
@@ -65245,6 +65252,13 @@
       "bytes": 28256,
       "mtime": "2026-06-24T22:39:39.225Z",
       "indexed_at": "2026-07-17T23:06:25.553Z"
+    },
+    {
+      "path": "public/overlay/lifeos-practice.html",
+      "synopsis": "HTML page: LifeOS Practice Library",
+      "bytes": 3770,
+      "mtime": "2026-07-18T01:33:13.657Z",
+      "indexed_at": "2026-07-18T01:33:13.657Z"
     },
     {
       "path": "public/overlay/lifeos-purpose.html",
