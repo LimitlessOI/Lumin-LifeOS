@@ -198,11 +198,32 @@ async function triggerFounderAuthoritySignup({ baseUrl, operatorKey, text, logge
 export async function tryLuminChairSystemAction(text, deps = {}) {
   const { pool, logger = console, operatorKey, founderBuildBaseUrl, userId } = deps;
 
+  // Navigate / keyword actions first — never blocked by proof-action pool work.
+  const parsed = parseLuminChairSystemAction(text);
+  if (parsed.matched && parsed.shell_action) {
+    const label = parsed.action_type === 'open_lifere'
+      ? 'LifeRE'
+      : (parsed.shell_action.page || parsed.action_type || 'page');
+    return {
+      matched: true,
+      executed: true,
+      action_type: parsed.action_type,
+      ok: true,
+      command_truth: 'COMMAND_RAN',
+      shell_action: parsed.shell_action,
+      human_summary: `Opening ${label} now — navigation is executing in your shell.`,
+      done_synopsis: `Navigated to ${parsed.shell_action.page}`,
+    };
+  }
+
   const direct = userId
     ? await executeLifeOSDirectAction(pool, {
       userId,
       text,
       baseUrl: founderBuildBaseUrl,
+    }).catch((err) => {
+      logger?.warn?.('[LUMIN-CHAIR-ACTION] direct action failed:', err.message);
+      return { matched: false };
     })
     : { matched: false };
 
@@ -218,23 +239,8 @@ export async function tryLuminChairSystemAction(text, deps = {}) {
     };
   }
 
-  const parsed = parseLuminChairSystemAction(text);
   if (!parsed.matched) {
     return { matched: false, executed: false, action_type: null };
-  }
-
-  if (parsed.shell_action) {
-    const label = parsed.action_type === 'open_lifere' ? 'LifeRE' : parsed.shell_action.page;
-    return {
-      matched: true,
-      executed: true,
-      action_type: parsed.action_type,
-      ok: true,
-      command_truth: 'COMMAND_RAN',
-      shell_action: parsed.shell_action,
-      human_summary: `Opening ${label} now — navigation is executing in your shell.`,
-      done_synopsis: `Navigated to ${parsed.shell_action.page}`,
-    };
   }
 
   try {

@@ -66,7 +66,7 @@ import {
   isFounderUiBehaviorChangeRequest,
   stripChairDoPrefix,
 } from './chair-intent-signals.js';
-import { tryLuminChairSystemAction } from './lumin-chair-system-actions.js';
+import { parseLuminChairSystemAction, tryLuminChairSystemAction } from './lumin-chair-system-actions.js';
 import {
   assessFounderUtteranceWisdom,
   formatWisdomClarifySummary,
@@ -465,21 +465,42 @@ export async function runLuminChairTurn(ctx, deps) {
 
   // ── SYSTEM ACTIONS FIRST (direct execution, then personality wraps) ──
   // Open/redeploy/alpha must not be eaten by a conversational reply.
-  const actionSource = ctx.originalText || cleanedInput;
-  if (!shouldDisplayOnly && explicitAction !== 'display') {
-    const earlySystemAction = await tryLuminChairSystemAction(actionSource, {
-      pool: deps.pool,
-      logger: deps.logger || console,
-      operatorKey: deps.operatorKey,
-      founderBuildBaseUrl: deps.founderBuildBaseUrl,
-      userId: resolvedUserId || ctx.userId,
-    });
-    if (earlySystemAction.matched) {
-      _clog(`system_action_first type=${earlySystemAction.action_type}`);
-      return systemActionChairResponse(
-        { intakeNormalized, sourceMode, auth_mode, user_role },
-        earlySystemAction,
-      );
+  const actionSource = String(ctx.originalText || cleanedInput || normalizedText || '').trim();
+  if (explicitAction !== 'display') {
+    try {
+      const parsedNav = parseLuminChairSystemAction(actionSource);
+      if (parsedNav.matched && parsedNav.shell_action) {
+        _clog(`system_action_nav type=${parsedNav.action_type} page=${parsedNav.shell_action.page}`);
+        return systemActionChairResponse(
+          { intakeNormalized, sourceMode, auth_mode, user_role },
+          {
+            matched: true,
+            executed: true,
+            ok: true,
+            action_type: parsedNav.action_type,
+            command_truth: 'COMMAND_RAN',
+            shell_action: parsedNav.shell_action,
+            human_summary: `Opening ${parsedNav.shell_action.page} now.`,
+            done_synopsis: `Navigated to ${parsedNav.shell_action.page}`,
+          },
+        );
+      }
+      const earlySystemAction = await tryLuminChairSystemAction(actionSource, {
+        pool: deps.pool,
+        logger: deps.logger || console,
+        operatorKey: deps.operatorKey,
+        founderBuildBaseUrl: deps.founderBuildBaseUrl,
+        userId: resolvedUserId || ctx.userId,
+      });
+      if (earlySystemAction.matched) {
+        _clog(`system_action_first type=${earlySystemAction.action_type}`);
+        return systemActionChairResponse(
+          { intakeNormalized, sourceMode, auth_mode, user_role },
+          earlySystemAction,
+        );
+      }
+    } catch (sysErr) {
+      _clog(`system_action_first_error: ${sysErr.message}`);
     }
   }
 

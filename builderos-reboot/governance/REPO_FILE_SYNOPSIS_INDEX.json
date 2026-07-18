@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T17:53:33.729Z",
+  "generated_at": "2026-07-18T17:57:27.548Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11970,
   "files": [
@@ -37410,8 +37410,8 @@
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
       "bytes": 57876,
-      "mtime": "2026-07-18T17:53:33.729Z",
-      "indexed_at": "2026-07-18T17:53:33.729Z"
+      "mtime": "2026-07-18T17:57:27.548Z",
+      "indexed_at": "2026-07-18T17:57:27.548Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40185,8 +40185,8 @@
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
       "bytes": 635736,
-      "mtime": "2026-07-18T17:53:33.729Z",
-      "indexed_at": "2026-07-18T17:53:33.729Z"
+      "mtime": "2026-07-18T17:57:27.548Z",
+      "indexed_at": "2026-07-18T17:57:27.548Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -88021,9 +88021,9 @@
     {
       "path": "services/lumin-chair-orchestrator.js",
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
-      "bytes": 65696,
-      "mtime": "2026-07-18T17:53:33.729Z",
-      "indexed_at": "2026-07-18T17:53:33.729Z",
+      "bytes": 66613,
+      "mtime": "2026-07-18T17:57:27.548Z",
+      "indexed_at": "2026-07-18T17:57:27.548Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -88031,9 +88031,9 @@
     {
       "path": "services/lumin-chair-system-actions.js",
       "synopsis": "Lumin Chair system actions — real execution before counsel theater.",
-      "bytes": 14095,
-      "mtime": "2026-07-18T17:53:33.729Z",
-      "indexed_at": "2026-07-18T17:53:33.729Z",
+      "bytes": 14380,
+      "mtime": "2026-07-18T17:57:27.548Z",
+      "indexed_at": "2026-07-18T17:57:27.548Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
