@@ -46,10 +46,11 @@
   </div>
   <script>
     let pending = null;
-    const headers = { 'content-type': 'application/json' };
-
+    const CTX = window.LifeOSBootstrap.getLifeOSContext({ defaultUser: 'adam' });
     async function api(path, opts) {
-      const r = await fetch(path, { credentials: 'include', ...opts, headers: { ...headers, ...(opts && opts.headers) } });
+      const r = await (CTX.fetchWithAuth
+        ? CTX.fetchWithAuth(path, { ...opts, headers: { 'content-type': 'application/json', ...(opts && opts.headers) } })
+        : fetch(path, { credentials: 'include', ...opts, headers: { 'content-type': 'application/json', ...CTX.headers(), ...(opts && opts.headers) } }));
       const j = await r.json().catch(() => ({}));
       if (!r.ok) throw new Error(j.error || j.message || ('HTTP ' + r.status));
       return j;

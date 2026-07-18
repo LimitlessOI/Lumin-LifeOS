@@ -3,22 +3,34 @@
  * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import express from 'express';
-import { requireLifeOSUser } from '../middleware/lifeos-auth-middleware.js';
+import { createRequireLifeOSUserOrKey } from '../middleware/lifeos-auth-middleware.js';
+import { makeLifeOSUserResolver } from '../services/lifeos-user-resolver.js';
 import { createDateNightPlanner } from '../services/lifeos-date-night.js';
 
-export function createDateNightRoutes({ pool } = {}) {
+function userHint(req) {
+  const hint = req.query?.user || req.body?.user || req.lifeosUser?.handle || req.lifeosUser?.sub || 'adam';
+  return hint === 'emergency-key' ? 'adam' : hint;
+}
+
+export function createDateNightRoutes({ pool, requireKey } = {}) {
   const router = express.Router();
   const svc = createDateNightPlanner({ pool });
+  const auth = createRequireLifeOSUserOrKey(requireKey);
+  const resolveUserId = makeLifeOSUserResolver(pool);
 
   router.get('/ideas', (_req, res) => {
     res.json({ ok: true, ideas: svc.listIdeas() });
   });
 
-  router.get('/week', requireLifeOSUser, async (req, res, next) => {
+  router.get('/week', auth, async (req, res, next) => {
     try {
-      const plan = await svc.planWeek(req.lifeosUser.sub, {
+      const userId = await resolveUserId(userHint(req));
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const partnerHint = req.query.partner_user_id || req.query.partner || null;
+      const partnerUserId = partnerHint ? await resolveUserId(partnerHint) : null;
+      const plan = await svc.planWeek(userId, {
         energy: req.query.energy || 'medium',
-        partnerUserId: req.query.partner_user_id || null,
+        partnerUserId,
       });
       res.json(plan);
     } catch (err) {
@@ -29,6 +41,6 @@ export function createDateNightRoutes({ pool } = {}) {
   return router;
 }
 
-export function registerLifeosDateNightRoutes(app, { pool } = {}) {
-  app.use('/api/v1/lifeos/date-night', createDateNightRoutes({ pool }));
+export function registerLifeosDateNightRoutes(app, { pool, requireKey } = {}) {
+  app.use('/api/v1/lifeos/date-night', createDateNightRoutes({ pool, requireKey }));
 }

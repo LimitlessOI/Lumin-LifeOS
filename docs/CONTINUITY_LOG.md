@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-18 — Fix LifeOS UI auth failures
+
+Adam: keep fixing issues found. Tip HTML was 200 while food/sleep/ask/habits returned Login required / unauthorized, and cycle/legacy crashed on `user_id=adam` as bigint. Fixed route auth to accept command-key+JWT, resolve handles, and wire overlays to bootstrap fetchWithAuth.
+
 ## 2026-07-17 — Member feedback + ethics + twin directives
 
 Adam: keep going. Twin rewire proved live (`confirm_required`, prefs persist, reaction uses prefs) after autoloop stub thrash. Shipping member-feedback DB intake + ethics auto-reg. Queue claimed done to stop factory rewriting stubs.
