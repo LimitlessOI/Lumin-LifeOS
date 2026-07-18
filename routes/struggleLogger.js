@@ -1,23 +1,29 @@
 /**
- * SYNOPSIS: HTTP route module — StruggleLogger.
+ * SYNOPSIS: Existing handlers and routes (if any) should be preserved here
  */
 import express from 'express';
 
 const router = express.Router();
 
-function logStruggleEvent(req, res) {
-  const { userId, struggleDetails } = req.body;
-  if (!userId || !struggleDetails) {
-    return res.status(400).json({ error: 'Missing userId or struggleDetails' });
+// Existing handlers and routes (if any) should be preserved here
+
+// Handler for logging struggle detection events
+function logStruggle(req, res) {
+  const { eventDetails } = req.body;
+  if (!eventDetails) {
+    return res.status(400).send({ error: 'Event details are required' });
   }
-  // Here would be logic to process and store the struggle event
-  res.status(200).json({ message: 'Struggle event logged successfully' });
+  // Logic to handle the struggle detection logging
+  console.log('Struggle event logged:', eventDetails);
+  res.status(200).send({ message: 'Struggle event logged successfully' });
 }
 
+// Route for logging struggle detection events
+router.post('/log-struggle', logStruggle);
+
+// Function to register routes
 function registerStruggleLoggerRoutes(app) {
-  app.use('/struggle', router);
+  app.use('/api', router);
 }
-
-router.post('/log', logStruggleEvent);
 
 export { registerStruggleLoggerRoutes };
