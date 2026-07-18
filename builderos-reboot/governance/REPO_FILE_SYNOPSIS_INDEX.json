@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T02:14:28.280Z",
+  "generated_at": "2026-07-18T02:16:27.456Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11910,
+  "file_count": 11911,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -65401,6 +65401,13 @@
       "bytes": 5839,
       "mtime": "2026-06-21T21:39:02.108Z",
       "indexed_at": "2026-07-17T23:06:25.553Z"
+    },
+    {
+      "path": "public/overlay/lifereDepthOverlay.html",
+      "synopsis": "HTML page: Depth Overlay",
+      "bytes": 1723,
+      "mtime": "2026-07-18T02:16:27.456Z",
+      "indexed_at": "2026-07-18T02:16:27.456Z"
     },
     {
       "path": "public/overlay/marketing-content.html",

@@ -689,7 +689,33 @@
       "last_error": "NOT_ON_BLUEPRINT",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/lifere/twins/steps/9.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-18T02:16:26.174Z",
+        "shipped_at": "2026-07-18T02:16:26.174Z",
+        "commit_sha": null,
+        "content_sha256": "c365932ed0050b6af942b3c70a0f3289a95e5ee56dac24f62d4109997e931b87",
+        "target_file": "public/overlay/lifereDepthOverlay.html",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "public/overlay/lifereDepthOverlay.html",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/lifere/twins/steps/9.exact",
+          "content_sha256": "c365932ed0050b6af942b3c70a0f3289a95e5ee56dac24f62d4109997e931b87"
+        }
+      },
+      "shipped_at": "2026-07-18T02:16:26.174Z",
+      "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "9"
     }
   ],
   "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
