@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T02:25:17.750Z",
+  "generated_at": "2026-07-18T02:29:29.832Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11916,
+  "file_count": 11917,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -87157,6 +87157,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/lifeOSiOSIPA.js",
+      "synopsis": "Service module — LifeOSiOSIPA.",
+      "bytes": 1007,
+      "mtime": "2026-07-18T02:29:29.832Z",
+      "indexed_at": "2026-07-18T02:29:29.832Z"
     },
     {
       "path": "services/lifere-alpha-daily-cycle.js",
