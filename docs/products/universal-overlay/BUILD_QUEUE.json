@@ -1982,7 +1982,33 @@
           ],
           "assertion_id": "expected_exports:services/struggleDetectionLogger.js"
         }
-      ]
+      ],
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/s6.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-18T20:06:39.707Z",
+        "shipped_at": "2026-07-18T20:06:39.707Z",
+        "commit_sha": null,
+        "content_sha256": "5fda1ad80714ee2d59a0cf807232dc07cdf66f9cfa98c93071aa15363691a4f2",
+        "target_file": "services/struggleDetectionLogger.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/struggleDetectionLogger.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/universal-overlay/twins/steps/s6.exact",
+          "content_sha256": "5fda1ad80714ee2d59a0cf807232dc07cdf66f9cfa98c93071aa15363691a4f2"
+        }
+      },
+      "shipped_at": "2026-07-18T20:06:39.707Z",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s6"
     },
     {
       "id": "s7",
