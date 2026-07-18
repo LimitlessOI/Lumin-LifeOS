@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Date night / shared rituals — LifeOS -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Date Night — LifeOS</title>
+  <script src="/overlay/lifeos-theme.js"></script>
+  <script src="/overlay/lifeos-bootstrap.js"></script>
+  <style>
+    body { margin:0; font-family:'Avenir Next','Segoe UI',sans-serif; background:linear-gradient(160deg,#1a1220,#0e1016 55%); color:#f3eef8; min-height:100vh; }
+    .root { max-width:720px; margin:0 auto; padding:28px 18px 80px; }
+    h1 { margin:0 0 6px; } .sub { color:#a89bb8; margin-bottom:16px; }
+    .card { border:1px solid #342844; border-radius:14px; padding:14px; margin-bottom:12px; background:rgba(28,22,38,.92); }
+    .meta { font-size:.8rem; color:#a89bb8; }
+    button, select { padding:10px 12px; border-radius:8px; border:0; background:#7a4ea8; color:#fff; font:inherit; cursor:pointer; }
+    select { background:#1c1815; border:1px solid #342844; }
+  </style>
+</head>
+<body>
+  <div class="root">
+    <h1>Date night</h1>
+    <p class="sub">Shared rituals — small and kept. Not a generic date generator.</p>
+    <div style="display:flex;gap:8px;margin-bottom:14px">
+      <select id="energy">
+        <option value="low">Low energy</option>
+        <option value="medium" selected>Medium</option>
+        <option value="high">High</option>
+      </select>
+      <button id="go" type="button">Plan this week</button>
+    </div>
+    <div id="out" class="sub">Loading ideas…</div>
+  </div>
+  <script>
+    async function loadIdeas() {
+      const r = await fetch('/api/v1/lifeos/date-night/ideas');
+      const j = await r.json();
+      document.getElementById('out').innerHTML = (j.ideas || []).map((i) =>
+        '<div class="card"><strong>' + i.title + '</strong><div class="meta">' + i.minutes + ' min · ' + i.energy + ' energy</div></div>'
+      ).join('');
+    }
+    document.getElementById('go').onclick = async () => {
+      const out = document.getElementById('out');
+      out.textContent = 'Planning…';
+      try {
+        const energy = document.getElementById('energy').value;
+        const r = await fetch('/api/v1/lifeos/date-night/week?energy=' + encodeURIComponent(energy), { credentials: 'include' });
+        const j = await r.json();
+        if (!r.ok) throw new Error(j.error || ('HTTP ' + r.status));
+        out.innerHTML = '<p class="meta">' + (j.guidance || '') + '</p>' +
+          (j.suggestions || []).map((i) => '<div class="card"><strong>' + i.title + '</strong><div class="meta">' + i.minutes + ' min · ' + i.energy + '</div></div>').join('');
+      } catch (e) { out.textContent = 'Could not plan: ' + e.message + ' (sign in if needed)'; }
+    };
+    loadIdeas();
+  </script>
+</body>
+</html>

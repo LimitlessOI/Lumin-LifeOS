@@ -4911,6 +4911,224 @@
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null
+    },
+    {
+      "id": "lifeos-p1-victory-register",
+      "target_file": "routes/lifeos-victory-vault-routes.js",
+      "task": "Export registerLifeOSVictoryVaultRoutes",
+      "spec": "Export registerLifeOSVictoryVaultRoutes mounting /api/v1/lifeos victories.",
+      "expected_exports": [
+        "registerLifeOSVictoryVaultRoutes",
+        "createLifeOSVictoryVaultRoutes"
+      ],
+      "file_contains": [
+        "registerLifeOSVictoryVaultRoutes",
+        "/victories"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-victory-register",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-victory-autoreg",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "Auto-register victory vault",
+      "spec": "Add lifeos-victory-vault-routes.js registerLifeOSVictoryVaultRoutes.",
+      "file_contains": [
+        "lifeos-victory-vault-routes.js",
+        "registerLifeOSVictoryVaultRoutes"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-victory-autoreg",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-purpose-register",
+      "target_file": "routes/lifeos-purpose-routes.js",
+      "task": "Export registerLifeOSPurposeRoutes",
+      "spec": "Export registerLifeOSPurposeRoutes under /api/v1/lifeos/purpose.",
+      "expected_exports": [
+        "registerLifeOSPurposeRoutes",
+        "createLifeOSPurposeRoutes"
+      ],
+      "file_contains": [
+        "registerLifeOSPurposeRoutes",
+        "/synthesize"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-purpose-register",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-purpose-autoreg",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "Auto-register purpose routes",
+      "spec": "Add lifeos-purpose-routes.js registerLifeOSPurposeRoutes.",
+      "file_contains": [
+        "lifeos-purpose-routes.js",
+        "registerLifeOSPurposeRoutes"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-purpose-autoreg",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-market-demand-signal",
+      "target_file": "services/monetization-map.js",
+      "task": "Market demand signal on monetization paths",
+      "spec": "estimateMarketDemandSignal + market_demand_signal on listEconomicPaths.",
+      "expected_exports": [
+        "createMonetizationMap",
+        "estimateMarketDemandSignal"
+      ],
+      "file_contains": [
+        "estimateMarketDemandSignal",
+        "market_demand_signal"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-market-demand-signal",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-date-night-service",
+      "target_file": "services/lifeos-date-night.js",
+      "task": "Date night shared ritual planner",
+      "spec": "createDateNightPlanner planWeek + listIdeas.",
+      "expected_exports": [
+        "createDateNightPlanner"
+      ],
+      "file_contains": [
+        "createDateNightPlanner",
+        "planWeek"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-date-night-service",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-date-night-routes",
+      "target_file": "routes/lifeos-date-night-routes.js",
+      "task": "Date night routes",
+      "spec": "registerLifeosDateNightRoutes /api/v1/lifeos/date-night.",
+      "expected_exports": [
+        "registerLifeosDateNightRoutes"
+      ],
+      "file_contains": [
+        "registerLifeosDateNightRoutes",
+        "/week"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-date-night-routes",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-date-night-autoreg",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "Auto-register date night",
+      "spec": "Add date-night-routes auto-register.",
+      "file_contains": [
+        "lifeos-date-night-routes.js",
+        "registerLifeosDateNightRoutes"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-date-night-autoreg",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-date-night-ui",
+      "target_file": "public/overlay/lifeos-date-night.html",
+      "task": "Date night UI",
+      "spec": "HTML date night planner page.",
+      "file_contains": [
+        "Date night",
+        "/api/v1/lifeos/date-night"
+      ],
+      "design_review_flagged": true,
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-date-night-ui",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-parent-mode-ui",
+      "target_file": "public/overlay/lifeos-parent-mode.html",
+      "task": "Parent mode meltdown UI",
+      "spec": "Ask Taloa parent mode HTML calling POST parent-mode.",
+      "file_contains": [
+        "parent mode",
+        "/api/v1/lifeos/parenting-scripts/parent-mode"
+      ],
+      "design_review_flagged": true,
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-parent-mode-ui",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-date-parent-nav",
+      "target_file": "public/overlay/lifeos-app.html",
+      "task": "Nav Date Night + Parent Mode",
+      "spec": "PAGE_META + nav for lifeos-date-night.html and lifeos-parent-mode.html.",
+      "file_contains": [
+        "lifeos-date-night.html",
+        "lifeos-parent-mode.html"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-date-parent-nav",
+      "mission_id": "PRODUCT-lifeos"
     }
   ],
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",

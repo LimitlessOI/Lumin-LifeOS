@@ -20,6 +20,22 @@
  * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
+/** Lightweight demand label when synthesis omitted market_demand (education, not market research). */
+export function estimateMarketDemandSignal(path = {}) {
+  const text = `${path.title || ''} ${path.description || ''} ${path.revenue_potential || ''}`.toLowerCase();
+  if (!text.trim()) return { level: 'unknown', score: 0, note: 'No path text yet' };
+  let score = 1;
+  if (/\b(ai|automation|coach|course|saas|subscription|therapy|health|finance)\b/.test(text)) score += 2;
+  if (/\b(local|niche|hobby|side)\b/.test(text)) score += 1;
+  if (/\b(crowded|commodity|race to bottom)\b/.test(text)) score -= 1;
+  const level = score >= 4 ? 'high' : score >= 2 ? 'moderate' : 'emerging';
+  return {
+    level,
+    score,
+    note: `Heuristic ${level} demand from path language — verify before betting money.`,
+  };
+}
+
 export function createMonetizationMap({ pool, callAI = null }) {
   if (!pool) throw new Error('[monetization-map] pool is required');
 
@@ -70,11 +86,17 @@ export function createMonetizationMap({ pool, callAI = null }) {
 
     const decorated = paths.map((p, idx) => {
       const opt = optByIndex.get(idx);
+      const market_demand_signal = p.market_demand
+        ? (typeof p.market_demand === 'object'
+          ? p.market_demand
+          : { level: String(p.market_demand), score: null, note: 'From purpose synthesis' })
+        : estimateMarketDemandSignal(p);
       return {
         path_index:         idx,
         title:              p.title             || '(untitled)',
         description:        p.description       || '',
-        market_demand:      p.market_demand     || null,
+        market_demand:      market_demand_signal.level || p.market_demand || null,
+        market_demand_signal,
         effort:             p.effort            || null,
         revenue_potential:  p.revenue_potential || null,
         opt_in:             Boolean(opt),

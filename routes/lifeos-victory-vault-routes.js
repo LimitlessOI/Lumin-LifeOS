@@ -135,3 +135,17 @@ export function createLifeOSVictoryVaultRoutes({ pool, requireKey, callCouncilMe
 
   return router;
 }
+
+/** Auto-register — mounts under /api/v1/lifeos so GET/POST /victories resolve. */
+export function registerLifeOSVictoryVaultRoutes(app, deps = {}) {
+  const requireKey = deps.requireKey || deps.requireAuth || ((_req, _res, next) => next());
+  const router = createLifeOSVictoryVaultRoutes({
+    pool: deps.pool,
+    requireKey,
+    callCouncilMember: deps.callCouncilMember || null,
+    logger: deps.logger,
+  });
+  app.use('/api/v1/lifeos', router);
+  deps.logger?.info?.('✅ [LIFEOS-VICTORY-VAULT] Routes mounted at /api/v1/lifeos/victories');
+  return router;
+}

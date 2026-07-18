@@ -334,3 +334,16 @@ export function createLifeOSPurposeRoutes({ pool, requireKey, callCouncilMember 
 
   return router;
 }
+
+/** Auto-register entrypoint for founder-builder lane. */
+export function registerLifeOSPurposeRoutes(app, deps = {}) {
+  const requireKey = deps.requireKey || deps.requireAuth || ((_req, _res, next) => next());
+  const router = createLifeOSPurposeRoutes({
+    pool: deps.pool,
+    requireKey,
+    callCouncilMember: deps.callCouncilMember || null,
+  });
+  app.use('/api/v1/lifeos/purpose', router);
+  deps.logger?.info?.('✅ [LIFEOS-PURPOSE] Routes mounted at /api/v1/lifeos/purpose');
+  return router;
+}

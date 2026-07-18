@@ -2,7 +2,11 @@
 
 ## 2026-07-17 — Keep building all LifeOS features
 
-Adam: all features working. Shipped emotional GET `/daily` for therapy card, legacy auto-register, psychometric battery, parenting scripts, labs/bio-age (+ migration). Continuing open PRODUCT_HOME P1s after tip claim — not done until surfaces work end-to-end.
+Adam: keep going. Mounted Victory Vault + Purpose APIs; date-night rituals; parent-mode UI; monetization market-demand signal. Tip advancing past 153 twin steps. Still open: Kids OS deferred, ui_directives, twin simulator, constitutional multi-party lock.
+
+## 2026-07-17 — Keep building (prior)
+
+Adam: all features working. Shipped emotional GET `/daily`, legacy, psychometrics, parenting scripts, labs/bio-age, household board, family/auth mounts, parent-mode triage, year/household nav. Tip queue ~153 twin steps claimed.
 
 ## 2026-07-17 — Cycle API mount + deep-talk decks
 

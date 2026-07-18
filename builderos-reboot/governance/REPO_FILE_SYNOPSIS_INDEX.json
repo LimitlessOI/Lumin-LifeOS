@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T02:20:34.580Z",
+  "generated_at": "2026-07-18T02:25:17.750Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11912,
+  "file_count": 11916,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -30401,9 +30401,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 27145,
-      "mtime": "2026-07-18T02:14:28.280Z",
-      "indexed_at": "2026-07-18T02:14:28.280Z",
+      "bytes": 27951,
+      "mtime": "2026-07-18T02:25:17.750Z",
+      "indexed_at": "2026-07-18T02:25:17.750Z",
       "synopsis_index_only": true
     },
     {
@@ -37373,9 +37373,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 56318,
-      "mtime": "2026-07-18T02:10:41.482Z",
-      "indexed_at": "2026-07-18T02:10:41.482Z"
+      "bytes": 56582,
+      "mtime": "2026-07-18T02:25:17.750Z",
+      "indexed_at": "2026-07-18T02:25:17.750Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40148,9 +40148,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 633964,
-      "mtime": "2026-07-18T02:14:28.280Z",
-      "indexed_at": "2026-07-18T02:14:28.280Z"
+      "bytes": 634337,
+      "mtime": "2026-07-18T02:25:17.750Z",
+      "indexed_at": "2026-07-18T02:25:17.750Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -64935,9 +64935,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 190196,
-      "mtime": "2026-07-18T02:14:28.280Z",
-      "indexed_at": "2026-07-18T02:14:28.280Z"
+      "bytes": 190848,
+      "mtime": "2026-07-18T02:25:17.750Z",
+      "indexed_at": "2026-07-18T02:25:17.750Z"
     },
     {
       "path": "public/overlay/lifeos-ask-your-life.html",
@@ -65049,6 +65049,13 @@
       "bytes": 47872,
       "mtime": "2026-07-16T19:42:53.440Z",
       "indexed_at": "2026-07-17T23:06:25.553Z"
+    },
+    {
+      "path": "public/overlay/lifeos-date-night.html",
+      "synopsis": "HTML page: Date night / shared rituals — LifeOS",
+      "bytes": 2805,
+      "mtime": "2026-07-18T02:25:17.750Z",
+      "indexed_at": "2026-07-18T02:25:17.750Z"
     },
     {
       "path": "public/overlay/lifeos-decisions.html",
@@ -65280,6 +65287,13 @@
       "bytes": 31211,
       "mtime": "2026-07-16T19:42:53.443Z",
       "indexed_at": "2026-07-17T23:06:25.553Z"
+    },
+    {
+      "path": "public/overlay/lifeos-parent-mode.html",
+      "synopsis": "HTML page: Ask Taloa parent mode — meltdown triage",
+      "bytes": 2962,
+      "mtime": "2026-07-18T02:25:17.750Z",
+      "indexed_at": "2026-07-18T02:25:17.750Z"
     },
     {
       "path": "public/overlay/lifeos-parent-view.html",
@@ -67202,6 +67216,16 @@
       ]
     },
     {
+      "path": "routes/lifeos-date-night-routes.js",
+      "synopsis": "Date-night / shared ritual planner routes.",
+      "bytes": 1019,
+      "mtime": "2026-07-18T02:25:17.750Z",
+      "indexed_at": "2026-07-18T02:25:17.750Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "routes/lifeos-decision-review-routes.js",
       "synopsis": "30/90-day decision review HTTP routes.",
       "bytes": 2446,
@@ -67491,9 +67515,9 @@
     {
       "path": "routes/lifeos-purpose-routes.js",
       "synopsis": "routes/lifeos-purpose-routes.js",
-      "bytes": 13793,
-      "mtime": "2026-06-29T17:21:08.537Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z",
+      "bytes": 14300,
+      "mtime": "2026-07-18T02:25:17.750Z",
+      "indexed_at": "2026-07-18T02:25:17.750Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -67555,9 +67579,9 @@
     {
       "path": "routes/lifeos-victory-vault-routes.js",
       "synopsis": "Exports createLifeOSVictoryVaultRoutes — routes/lifeos-victory-vault-routes.js.",
-      "bytes": 4699,
-      "mtime": "2026-06-28T18:17:45.428Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z"
+      "bytes": 5269,
+      "mtime": "2026-07-18T02:25:17.750Z",
+      "indexed_at": "2026-07-18T02:25:17.750Z"
     },
     {
       "path": "routes/lifeos-vision-routes.js",
@@ -86682,6 +86706,16 @@
       ]
     },
     {
+      "path": "services/lifeos-date-night.js",
+      "synopsis": "Lightweight shared-ritual / date-night planner from couple signal.",
+      "bytes": 2365,
+      "mtime": "2026-07-18T02:25:17.750Z",
+      "indexed_at": "2026-07-18T02:25:17.750Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/lifeos-decision-review.js",
       "synopsis": "Manages scheduled reviews of decisions at 30-day and 90-day intervals.",
       "bytes": 4138,
@@ -88301,9 +88335,9 @@
     {
       "path": "services/monetization-map.js",
       "synopsis": "services/monetization-map.js",
-      "bytes": 12249,
-      "mtime": "2026-06-29T17:21:08.947Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z",
+      "bytes": 13381,
+      "mtime": "2026-07-18T02:25:17.750Z",
+      "indexed_at": "2026-07-18T02:25:17.750Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

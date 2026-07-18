@@ -99,6 +99,27 @@
       "note": "Family OS link/debrief/tone/pulse APIs on founder lane."
     },
     {
+      "path": "routes/lifeos-victory-vault-routes.js",
+      "register": "registerLifeOSVictoryVaultRoutes",
+      "mount_path": "/api/v1/lifeos",
+      "enabled": true,
+      "note": "Victory Vault API — UI was live, /victories 404'd on founder_builder."
+    },
+    {
+      "path": "routes/lifeos-purpose-routes.js",
+      "register": "registerLifeOSPurposeRoutes",
+      "mount_path": "/api/v1/lifeos/purpose",
+      "enabled": true,
+      "note": "Purpose/dreams/fulfillment/monetization APIs for purpose overlay."
+    },
+    {
+      "path": "routes/lifeos-date-night-routes.js",
+      "register": "registerLifeosDateNightRoutes",
+      "mount_path": "/api/v1/lifeos/date-night",
+      "enabled": true,
+      "note": "Shared ritual / date-night planner P2→shipped as concrete surface."
+    },
+    {
       "path": "routes/founder-sms-routes.js",
       "register": "registerFounderSmsRoutes",
       "enabled": true,
