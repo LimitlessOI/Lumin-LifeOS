@@ -506,7 +506,31 @@
       ],
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "persona-twin-train-a-style-voice-of-writing-mode",
-      "mission_id": "PRODUCT-creator-media-os"
+      "mission_id": "PRODUCT-creator-media-os",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/creator-media-os/twins/steps/persona-twin-train-a-style-voice-of-writing-mode.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-18T10:58:30.428Z",
+        "shipped_at": "2026-07-18T10:58:30.428Z",
+        "commit_sha": null,
+        "content_sha256": "42fd431bf9183e486f14fea0324450fe13b3f00cc3ce2bf1f61d6a735f41ce34",
+        "target_file": "services/creatorPersonaTwin.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/creatorPersonaTwin.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/creator-media-os/twins/steps/persona-twin-train-a-style-voice-of-writing-mode.exact",
+          "content_sha256": "42fd431bf9183e486f14fea0324450fe13b3f00cc3ce2bf1f61d6a735f41ce34"
+        }
+      },
+      "shipped_at": "2026-07-18T10:58:30.428Z"
     },
     {
       "id": "smart-jump-cut-mistake-removal-engine-detect-sil",
