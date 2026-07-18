@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/token-accounting-os/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-29 |
+| **Last Updated** | 2026-07-18 — repeat-regression hotfix applied directly to `main` (see Change Receipts) |
 
 ---
 **Status:** IN_BUILD — schema + services + routes on disk; production row proof requires deploy + `npm run tokens:verify`
@@ -159,6 +159,7 @@ Infrastructure on disk. Council uses `recordMetered`. Deploy migrations then `np
 
 | Date | Change | Why |
 |------|--------|-----|
+| 2026-07-18 | **Repeat-regression hotfix applied to `main` directly: re-deleted `routes/builderOSTokenReceipt.js`.** The 2026-07-18 fix below had landed on a feature branch (`devin/1784397434-builderos-blueprint-reconciliation`, commit `0247c5fe5b`) but was never merged to `main`; the autonomous loop kept committing to `main` with the original orphaned stub still present, so `Smoke Test` CI stayed red on every `main` push. Verified still zero references anywhere, re-ran `tests/spine-import-resolution.test.js` clean (332/332) before deleting. Not resetting BUILD_QUEUE steps again — same repeat-regression reasoning as the branch fix. | Live CI break on `main` found by walking the actual failing-run log (`gh run view --log-failed`) per D7 repair-pipeline doctrine; SO-002 solution-mandatory — fix applied, not just flagged. |
 | 2026-07-18 | **Heal false-DONE: removed dead broken `routes/builderOSTokenReceipt.js`; reset BUILD_QUEUE step1/step2 → pending.** The route was marked `done` and imported `services/builderOSTokenReceipt.js`, which was ALSO marked `done` but never committed (not in git history) — breaking `tests/spine-import-resolution.test.js` on every PR. The route was unmounted (no registrar call anywhere), so removed it and reset both steps to `pending` so the governed factory rebuilds the service first, then the route, with real artifact proof. | New false-DONE re-audit ratchet (`npm run factory:false-done:ci`) flagged both as HARD; founder mandate to fix why the system marked done without the artifact. |
 | 2026-06-28 | **`services/system-operation-ledger.js` + `db/migrations/20260628_system_operation_timeline.sql`** — `system_operation_log` + `system_timeline_report` view joins tokens, builds, ops by `task_id` with `duration_ms`. | Adam: timestamp every system action; align token spend to same clock. | ✅ | deploy |
 | 2026-05-24 | **`services/voice-rail-usage-receipt.js`** — `fetchVoiceRailUsageReceipt()` reads latest `token_usage_log` row for `voice_rail_department` after founder reply; wired to Voice Rail `reply_source.usage_receipt` + UI cost footer (v2.13) | Adam: visible per-message cost on Voice Rail replies |
