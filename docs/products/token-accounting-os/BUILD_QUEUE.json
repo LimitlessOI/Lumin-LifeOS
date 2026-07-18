@@ -309,13 +309,13 @@
           "assertion_id": "expected_exports:services/builderOSTokenReceipt.js"
         }
       ],
-      "last_attempt_at": "2026-07-18T10:24:36.830Z",
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/services/.factory-import-check-1784370276801-1.mjs\";",
+      "last_attempt_at": "2026-07-18T10:29:55.497Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/services/.factory-import-check-1784370595461-1.mjs\";",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-18T10:23:48.373Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-18T10:29:07.803Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
