@@ -1,5 +1,12 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-18 — Execution Truth: false-DONE self-heal + creator/service launch supervision
+
+Adam: "failures don't stop the system, it just redoes it correctly." Root cause found: governed loop marked BUILD_QUEUE steps `done` from `body.shipped` **without artifact proof**, and never re-audited terminal `done` steps → false-DONEs persisted on main (e.g. a route importing a service that was never committed → red `spine-import-resolution`). Fix (PR #359): (1) runtime `partitionShippedByArtifactProof` re-proves each shipped step's declared artifact post-commit; unproven → routed to `markFailedStep` (retryable w/ backoff), never faked `done`, loop keeps running. (2) `scripts/audit-false-done-steps.mjs` re-audits every `done` step across all 38 queues (HARD=MISSING_FILE/IMPORT_BROKE, SOFT=drift). (3) CI ratchet `factory:false-done:ci` (baseline `data/false-done-baseline.json`, 209 grandfathered) fails only on NEW hard false-DONEs. Healed two real false-DONEs by deleting dead/unmounted broken files + resetting queues to pending (governed rebuild): token-accounting-os (`builderOSTokenReceipt` route/service) and word-keeper (`cronVerification` route/service). PRs #357 (service-first launch kit) + #358 (Creator Media OS prime-time blueprint, 32 steps) conflict-resolved against fast-churning main (governed loop commits synopsis index every ~2min).
+
+**Detected preexisting debt (NOT mine, on main):** `verify` (system-maturity → migration:preflight) is red on main for 8 pre-existing migration findings (missing IF NOT EXISTS + CREATE TABLE collisions across old SQL). Untouched by this work; flagged for a governed migration-hygiene pass. Main is not gated on PR CI (loop pushes directly), so this red is tolerated but blocks clean PR merges.
+
+
 ## 2026-07-17 — Member feedback + ethics + twin directives
 
 Adam: keep going. Twin rewire proved live (`confirm_required`, prefs persist, reaction uses prefs) after autoloop stub thrash. Shipping member-feedback DB intake + ethics auto-reg. Queue claimed done to stop factory rewriting stubs.
