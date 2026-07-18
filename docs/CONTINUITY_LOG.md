@@ -2,7 +2,7 @@
 
 ## 2026-07-18 — Governed queue empty-commit and exact-change durability repair
 
-Deep recent-commit audit found 13 byte-identical queue commits in a 30-commit window, each capable of triggering a pointless Railway redeploy. It also proved the successful SHIP→QUEUE transition overwrote freshly sealed `exactness` / reverse / rebuild metadata, and the SHIP commit omitted the referenced `.exact` file entirely. Fixed `services/governed-autonomous-shipping-loop.js` to skip unchanged queue commits, collect sealed exact artifacts into SHIP commits, and merge sealed metadata into the runtime queue before DONE persistence. Added focused regression coverage. Validation and branch push follow; production deploy is intentionally deferred until the feature branch lands.
+Deep recent-commit audit found 13 byte-identical queue commits in a 30-commit window, each capable of triggering a pointless Railway redeploy. It also proved the successful SHIP→QUEUE transition overwrote freshly sealed `exactness` / reverse / rebuild metadata, and the SHIP commit omitted the referenced `.exact` file entirely. Fixed `services/governed-autonomous-shipping-loop.js` to skip unchanged queue commits, collect sealed exact artifacts into SHIP commits, merge sealed metadata into the runtime queue before DONE persistence, and bind the real SHIP SHA into the seal. Targeted regression 3/3, syntax, SSOT, truth-ladder, and false-DONE ratchet pass. Full preflight reaches 378 tests but remains red on two pre-existing generated route import failures (`builderOSTokenReceipt`, `cronVerificationRoutes`). Branch pushed; production deploy is intentionally deferred until the feature branch lands.
 
 ## 2026-07-18 — Execution Truth: false-DONE self-heal + creator/service launch supervision
 
