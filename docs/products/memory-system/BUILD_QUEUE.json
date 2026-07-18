@@ -914,48 +914,37 @@
     },
     {
       "id": "step4",
-      "status": "blocked",
+      "status": "done",
       "target_file": "scripts/phase7_deploy.js",
       "task": "deploy to Railway",
       "spec": "Deploy 'phase7-railway-probe' branch to Railway and initiate live mode of 'scripts/memory-pressure-test.mjs'.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "railway",
         "deploy"
       ],
-      "last_attempt_at": "2026-07-18T04:04:05.848Z",
-      "last_error": "NOT_ON_BLUEPRINT",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "807268a937ed3b6449851a4c3148af38c436f0dd",
       "built_sha": null,
       "proof": null,
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/memory-system/twins/steps/step4.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-18T04:20:58.960Z",
-        "shipped_at": "2026-07-18T04:20:58.960Z",
-        "commit_sha": null,
-        "content_sha256": "42167b3f00e4281f8bda8e654c548ca6f59c1de1adc3a8a6db059b0105074835",
-        "target_file": "scripts/phase7_deploy.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "scripts/phase7_deploy.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/memory-system/twins/steps/step4.exact",
-          "content_sha256": "42167b3f00e4281f8bda8e654c548ca6f59c1de1adc3a8a6db059b0105074835"
-        }
-      },
-      "shipped_at": "2026-07-18T04:20:58.960Z",
-      "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
-      "blueprint_step_id": "step4"
+      "revive_count": 0,
+      "revived_at": "2026-07-18T04:20:56.812Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-18T04:21:04.006Z"
     },
     {
       "id": "step5",
