@@ -4649,14 +4649,36 @@
         "registerLifeOSAuthRoutes",
         "/login"
       ],
-      "status": "pending",
+      "status": "done",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
       "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-auth-register-export",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/lifeos-auth-routes.js",
+          "exports": [
+            "registerLifeOSAuthRoutes",
+            "createLifeOSAuthRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/lifeos-auth-routes.js"
+        }
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/register"
+      },
+      "pre_existing": true,
+      "shipped_via": "pre_existing_artifact_proof",
+      "shipped_at": "2026-07-18T02:16:19.463Z",
+      "last_error": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null
     },
     {
       "id": "lifeos-p1-auth-autoreg",
@@ -4667,14 +4689,21 @@
         "lifeos-auth-routes.js",
         "registerLifeOSAuthRoutes"
       ],
-      "status": "pending",
+      "status": "done",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
       "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-auth-autoreg",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "pre_existing": true,
+      "shipped_via": "pre_existing_artifact_proof",
+      "shipped_at": "2026-07-18T02:16:19.464Z",
+      "last_error": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null
     },
     {
       "id": "lifeos-p1-household-board",
@@ -4689,14 +4718,35 @@
         "/board",
         "sherry_tasks"
       ],
-      "status": "pending",
+      "status": "done",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
       "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-household-board",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/lifeos-household-board-routes.js",
+          "exports": [
+            "registerLifeosHouseholdBoardRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/lifeos-household-board-routes.js"
+        }
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/board"
+      },
+      "pre_existing": true,
+      "shipped_via": "pre_existing_artifact_proof",
+      "shipped_at": "2026-07-18T02:16:19.464Z",
+      "last_error": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null
     },
     {
       "id": "lifeos-p1-household-autoreg",
@@ -4707,14 +4757,21 @@
         "lifeos-household-board-routes.js",
         "registerLifeosHouseholdBoardRoutes"
       ],
-      "status": "pending",
+      "status": "done",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
       "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-household-autoreg",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "pre_existing": true,
+      "shipped_via": "pre_existing_artifact_proof",
+      "shipped_at": "2026-07-18T02:16:19.464Z",
+      "last_error": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null
     },
     {
       "id": "lifeos-p1-family-register",
@@ -4728,14 +4785,36 @@
       "file_contains": [
         "registerLifeOSFamilyRoutes"
       ],
-      "status": "pending",
+      "status": "done",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
       "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-family-register",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/lifeos-family-routes.js",
+          "exports": [
+            "registerLifeOSFamilyRoutes",
+            "createLifeOSFamilyRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/lifeos-family-routes.js"
+        }
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/link"
+      },
+      "pre_existing": true,
+      "shipped_via": "pre_existing_artifact_proof",
+      "shipped_at": "2026-07-18T02:16:19.464Z",
+      "last_error": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null
     },
     {
       "id": "lifeos-p1-family-autoreg",
@@ -4746,14 +4825,21 @@
         "lifeos-family-routes.js",
         "registerLifeOSFamilyRoutes"
       ],
-      "status": "pending",
+      "status": "done",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
       "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-family-autoreg",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "pre_existing": true,
+      "shipped_via": "pre_existing_artifact_proof",
+      "shipped_at": "2026-07-18T02:16:19.465Z",
+      "last_error": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null
     },
     {
       "id": "lifeos-p1-parent-mode-endpoint",
@@ -4764,14 +4850,36 @@
         "/parent-mode",
         "mode: 'parent'"
       ],
-      "status": "pending",
+      "status": "blocked",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
-      "attempts": 0,
+      "attempts": 1,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-parent-mode-endpoint",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "expected_exports": [
+        "registerLifeosParentingScriptsRoutes"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/lifeos-parenting-scripts-routes.js",
+          "exports": [
+            "registerLifeosParentingScriptsRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/lifeos-parenting-scripts-routes.js"
+        }
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/parent-mode"
+      },
+      "last_attempt_at": "2026-07-18T02:16:19.558Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerLifeosParentingScriptsRoutes; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lifeos-p1-year-household-nav",
@@ -4782,14 +4890,21 @@
         "lifeos-year-in-pixels.html",
         "lifeos-household.html"
       ],
-      "status": "pending",
+      "status": "done",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
       "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-year-household-nav",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "pre_existing": true,
+      "shipped_via": "pre_existing_artifact_proof",
+      "shipped_at": "2026-07-18T02:16:19.466Z",
+      "last_error": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null
     }
   ],
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
