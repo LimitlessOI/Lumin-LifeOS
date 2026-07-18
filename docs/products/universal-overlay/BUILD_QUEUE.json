@@ -1595,16 +1595,21 @@
     },
     {
       "id": "step7",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/addPwaTrackingTable.sql",
       "task": "create PWA tracking migration",
       "spec": "Create table to track PWA installations, including user_id and timestamp",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS"
-      ]
+      ],
+      "last_attempt_at": "2026-07-18T15:37:57.282Z",
+      "last_error": "NOT_ON_BLUEPRINT",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "step8",
@@ -1619,6 +1624,16 @@
       "attempts": 0,
       "expected_exports": [
         "trackPWAInstall"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/pwaTracker.js",
+          "exports": [
+            "trackPWAInstall"
+          ],
+          "assertion_id": "expected_exports:services/pwaTracker.js"
+        }
       ]
     },
     {
@@ -1638,7 +1653,17 @@
       "route": {
         "method": "POST",
         "path": "/api/v1/pwaTrack"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/pwaTrack.js",
+          "exports": [
+            "registerPwaTrackRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/pwaTrack.js"
+        }
+      ]
     },
     {
       "id": "step10",
@@ -1651,6 +1676,16 @@
       "attempts": 0,
       "expected_exports": [
         "executeStruggleFormFill"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/struggleFormFill.js",
+          "exports": [
+            "executeStruggleFormFill"
+          ],
+          "assertion_id": "expected_exports:services/struggleFormFill.js"
+        }
       ]
     },
     {
@@ -1670,7 +1705,17 @@
       "route": {
         "method": "POST",
         "path": "/api/v1/struggleFormFill"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/struggleFormFill.js",
+          "exports": [
+            "registerStruggleFormFillRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/struggleFormFill.js"
+        }
+      ]
     },
     {
       "id": "step12",
