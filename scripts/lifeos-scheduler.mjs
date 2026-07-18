@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /**
  * @ssot docs/products/lifeos/PRODUCT_HOME.md
  * SYNOPSIS: LifeOS relationship reminder scheduler — scripts/lifeos-scheduler.mjs.
@@ -83,6 +82,7 @@ export async function queueUnconnectedContactReminders(pool, userId = DEFAULT_US
   const reminders = [];
   for (const c of contacts) {
     const dueAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // queue for tomorrow
+    const message = `Reach out to ${c.name}${c.relationship ? ` (${c.relationship})` : ''} — it's been ${c.frequency_days} days.`;
     const { rows } = await pool.query(
       `INSERT INTO relationship_reminders (user_id, contact_id, contact_name, message, due_at)
        VALUES ($1, $2, $3, $4, $5)
@@ -91,11 +91,25 @@ export async function queueUnconnectedContactReminders(pool, userId = DEFAULT_US
         userId,
         c.id,
         c.name,
-        `Reach out to ${c.name}${c.relationship ? ` (${c.relationship})` : ''} — it's been ${c.frequency_days} days.`,
+        message,
         dueAt,
       ],
     );
     reminders.push(rows[0]);
+    // Trigger overlay notification so the LifeOS shell surfaces the reminder.
+    await pool.query(
+      `INSERT INTO overlay_notifications (user_id, type, payload, created_at)
+       VALUES ($1, 'relationship_reminder', $2, NOW())`,
+      [
+        String(userId),
+        JSON.stringify({
+          contact_id: c.id,
+          contact_name: c.name,
+          message,
+          channel: 'overlay notification',
+        }),
+      ],
+    ).catch(() => {});
   }
 
   // Push the next reminder window forward so the same contact isn't re-queued immediately.

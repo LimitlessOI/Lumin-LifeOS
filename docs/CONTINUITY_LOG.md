@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-17 — Direct LifeOS build via founder UI (governed queue)
+
+Adam: use BuilderOS as hands through the UI; no theater; all LifeOS BP features; intervene only after 6 self-fix fails. Shipped: founder `lifeos_queue_ship` path, stub-heal/pre-existing claim, closed LifeOS revive-exhausted gaps (crisis detector, relationship overlay notification, ambient/net-worth/energy claims).
+
 ## 2026-07-17 — Exact-change law (pinpoint / reverse / rebuild)
 
 Adam: every program change must be in the blueprint going forward — exact step-by-step so failures pinpoint where/when, reverse only that aspect, rebuild quickly by any system. Shipped: `exact_change_law` in pipeline law; `exactChangeClaim` / `sealExactChangeIntoTwin` / `reverseExactChange`; ship-queue exact gate + seal; `POST /factory/reverse-step`.

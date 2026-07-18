@@ -173,6 +173,23 @@ export function resolveChairContext(text = '', ctx = {}) {
     };
   }
 
+  // "Build LifeOS features / queue / remaining" is governed BUILD_QUEUE ship,
+  // not blueprint intake (intake theater burned founder trust).
+  if (/\blife\sos\b/i.test(t)
+    && !/\b(create|generate|make|draft)\s+(a\s+)?(new\s+)?blueprint\b/i.test(t)
+    && /\b(build|ship|continue|finish|complete|resume)\b/i.test(t)
+    && /\b(feature|features|queue|build_queue|blueprint|twin|all|remaining|blocked|stuck)\b/i.test(t)) {
+    return {
+      channel: 'chair',
+      domain: 'product_build',
+      confidence: 0.98,
+      requires_execute_clarify: false,
+      personal_search: false,
+      scores: computeContextScores(t),
+      lifeos_queue_ship: true,
+    };
+  }
+
   if (isIntakeBlueprintIntent(t) && !isPipelineGovernanceCounsel(t)) {
     return {
       channel: 'intake_blueprint',
@@ -223,6 +240,21 @@ export function resolveChairContext(text = '', ctx = {}) {
       requires_execute_clarify: false,
       personal_search: false,
       scores,
+    };
+  }
+
+  if (/\blife\sos\b/i.test(t)
+    && !/\b(create|generate|make|draft)\s+(a\s+)?(new\s+)?blueprint\b/i.test(t)
+    && /\b(build|ship|continue|finish|complete|resume)\b/i.test(t)
+    && /\b(feature|features|queue|build_queue|blueprint|twin|all|remaining|blocked|stuck)\b/i.test(t)) {
+    return {
+      channel: 'chair',
+      domain: 'product_build',
+      confidence: 0.98,
+      requires_execute_clarify: false,
+      personal_search: false,
+      scores,
+      lifeos_queue_ship: true,
     };
   }
 

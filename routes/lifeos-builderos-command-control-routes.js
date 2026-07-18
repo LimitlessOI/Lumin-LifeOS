@@ -72,8 +72,30 @@ import {
   parseFounderUsabilityVerdict,
   loadFounderGatedMissions,
 } from '../services/founder-usability-verdict.js';
+import { runGovernedAutonomousShipOnce, getGovernedAutonomousShipStatus } from '../services/governed-autonomous-shipping-loop.js';
+import {
+  loadBuildQueue,
+  claimPreExistingSatisfiedSteps,
+  persistQueue,
+  STEP_STATUS,
+} from '../services/product-build-orchestrator.js';
 
 const FOUNDER_BUILD_JOB_TIMEOUT_MS = Number(process.env.FOUNDER_BUILD_JOB_TIMEOUT_MS || '480000');
+
+/** Direct LifeOS BUILD_QUEUE ship via founder UI — not blueprint intake theater. */
+function isLifeosQueueBuildIntent(text = '') {
+  const t = String(text || '');
+  // Match "LifeOS", "Life OS", "life-os".
+  if (!/\blife[\s-]os\b|\blifeos\b/i.test(t)) return false;
+  // Only reject real "create blueprint / start intake" asks — not "do not create intake".
+  if (/\b(create|generate|make|draft)\s+(a\s+)?(new\s+)?blueprint\b/i.test(t)
+    && !/\b(do not|don't|dont|never|not)\b.{0,24}\b(create|generate|make|draft)\b/i.test(t)) {
+    return false;
+  }
+  if (/\b(start|kick\soff|begin)\s+(an?\s+)?(intake|blueprint\s+intake)\b/i.test(t)) return false;
+  return /\b(build|ship|continue|finish|complete|resume)\b/i.test(t)
+    && /\b(feature|features|queue|build_queue|blueprint|twin|all|remaining|blocked|stuck)\b/i.test(t);
+}
 
 function founderBuildJobAgeMs(job) {
   const raw = job?.created_at;
@@ -1295,6 +1317,63 @@ HOW TO RESPOND:
           }
         } catch (verdictErr) {
           _log(`usability_verdict_error=${verdictErr.message}`);
+        }
+      }
+
+      // LifeOS feature build via governed BUILD_QUEUE (founder UI = conductor).
+      // Never route this to intake_blueprint theater.
+      if (originalText && isLifeosQueueBuildIntent(originalText)) {
+        _log('lifeos_queue_build_intent');
+        try {
+          const queue = loadBuildQueue('lifeos');
+          const claimed = queue ? await claimPreExistingSatisfiedSteps(queue) : [];
+          if (claimed.length && queue) persistQueue(queue);
+          const tick = await runGovernedAutonomousShipOnce({ logger: console, maxStepsPerProduct: 2 });
+          const status = getGovernedAutonomousShipStatus()?.governed_autonomous_ship || {};
+          const q2 = loadBuildQueue('lifeos');
+          const by = {};
+          for (const s of q2?.steps || []) by[s.status] = (by[s.status] || 0) + 1;
+          const open = (q2?.steps || [])
+            .filter((s) => s.status !== STEP_STATUS.DONE && s.status !== 'skipped')
+            .slice(0, 8)
+            .map((s) => `${s.id}:${s.status}:${String(s.last_error || '').slice(0, 80)}`);
+          clearTimeout(handlerDeadline);
+          return res.status(200).json({
+            ok: true,
+            interface: 'Lumin',
+            action: 'lifeos_queue_ship',
+            chair_direct_agent: true,
+            command_truth: 'COMMAND_RAN',
+            pass_fail: tick?.ok ? 'PASS' : 'FAIL',
+            execution_kind: 'command',
+            lifeos_queue: { counts: by, pre_existing_claimed: claimed, open },
+            governed_tick: {
+              ok: tick?.ok,
+              shipped: tick?.shipped,
+              reason: tick?.reason || tick?.error,
+              products: tick?.products,
+            },
+            human_summary: [
+              'Directed LifeOS through the governed BUILD_QUEUE (not blueprint intake).',
+              claimed.length ? `Closed ${claimed.length} already-built step(s): ${claimed.join(', ')}.` : '',
+              `This tick shipped ${tick?.shipped ?? 0} step(s).`,
+              tick?.reason ? `Planner note: ${tick.reason}.` : '',
+              `Queue now: ${JSON.stringify(by)}.`,
+              open.length ? `Still open: ${open.join(' | ')}` : 'No open LifeOS steps.',
+              `Governed loop totalRuns=${status.totalRuns ?? '?'} lastShipped=${status.lastShipped ?? '?'}.`,
+            ].filter(Boolean).join(' '),
+          });
+        } catch (lifeosErr) {
+          _log(`lifeos_queue_build_error=${lifeosErr.message}`);
+          clearTimeout(handlerDeadline);
+          return res.status(200).json({
+            ok: false,
+            interface: 'Lumin',
+            action: 'lifeos_queue_ship',
+            command_truth: 'COMMAND_RAN',
+            pass_fail: 'FAIL',
+            human_summary: `Tried to ship LifeOS BUILD_QUEUE via governed loop; failed: ${lifeosErr.message}`,
+          });
         }
       }
 

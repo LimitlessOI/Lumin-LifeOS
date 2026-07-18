@@ -1162,7 +1162,7 @@
     },
     {
       "id": "faith-studio-3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/scriptureSceneBuilder.js",
       "task": "add private witness mode to scripture scene builder",
       "spec": "Enhance scriptureSceneBuilder to support private witness mode feature.",
@@ -1189,11 +1189,18 @@
       ],
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "faith-studio-3",
-      "mission_id": "PRODUCT-faith-studio"
+      "mission_id": "PRODUCT-faith-studio",
+      "pre_existing": true,
+      "shipped_via": "pre_existing_artifact_proof",
+      "shipped_at": "2026-07-18T01:14:09.191Z",
+      "last_error": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null
     },
     {
       "id": "faith-studio-4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/safeOutputService.js",
       "task": "implement family/church/classroom-safe outputs",
       "spec": "Develop outputs that ensure content is safe for family/church/classroom environments.",
@@ -1220,7 +1227,10 @@
       ],
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "faith-studio-4",
-      "mission_id": "PRODUCT-faith-studio"
+      "mission_id": "PRODUCT-faith-studio",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-18T01:14:39.335Z",
+      "commit_sha": "388d716a6fa116472179484e5eecda28527705b7"
     },
     {
       "id": "faith-studio-5",

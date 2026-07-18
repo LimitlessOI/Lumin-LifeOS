@@ -29,7 +29,13 @@ import { createUsefulWorkGuard } from './useful-work-guard.js';
 import { governedFactoryOnly } from './governed-factory-guard.js';
 import { hasTokenCapacity, dailyBuildBudget, recordDailyBuildAttempts, mergeQueueRuntimeStatus, defaultPlannerCallModel, discoverPlanWork, discoverSentryFixWork, runPlanBuildQueue } from './never-stop-product-factory.js';
 import { planGovernedBuildQueueRun } from './governed-build-queue-scheduler.js';
-import { loadBuildQueue, persistQueue, normalizeQueue, STEP_STATUS } from './product-build-orchestrator.js';
+import {
+  loadBuildQueue,
+  persistQueue,
+  normalizeQueue,
+  STEP_STATUS,
+  claimPreExistingSatisfiedSteps,
+} from './product-build-orchestrator.js';
 import { createDeploymentService } from './deployment-service.js';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -593,6 +599,21 @@ export async function runGovernedAutonomousShipOnce({ logger, maxStepsPerProduct
         } catch (err) {
           logger?.warn?.(`[GOVERNED-AUTONOMOUS-SHIP] could not load queue for ${pid}: ${err.message}`);
         }
+      }
+    }
+
+    // Close already-built twin steps before planning (stop stub-codegen thrash).
+    for (const pid of products) {
+      const queue = queueCache[pid];
+      if (!queue) continue;
+      try {
+        const claimed = await claimPreExistingSatisfiedSteps(queue);
+        if (claimed.length) {
+          persistQueue(queue);
+          logger?.info?.(`[GOVERNED-AUTONOMOUS-SHIP] claimed pre-existing ${pid}: ${claimed.join(', ')}`);
+        }
+      } catch (err) {
+        logger?.warn?.(`[GOVERNED-AUTONOMOUS-SHIP] pre-existing claim ${pid} failed: ${err.message}`);
       }
     }
 

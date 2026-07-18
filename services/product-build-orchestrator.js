@@ -354,6 +354,46 @@ export const DEFAULT_REVIVE_COOLDOWN_MS = 15 * 60 * 1000;
 export const DEFAULT_MAX_REVIVES = 6;
 
 /**
+ * If a non-done step's declared file_contains / exports already hold on disk,
+ * mark it DONE (pre_existing) instead of thrashing codegen. Used after ≥6
+ * revive failures and for already-built targets the queue never closed.
+ * Mutates queue.steps; returns claimed step ids.
+ */
+export async function claimPreExistingSatisfiedSteps(queue, {
+  root = ROOT,
+  now = () => new Date().toISOString(),
+} = {}) {
+  const claimed = [];
+  if (!queue || !Array.isArray(queue.steps)) return claimed;
+  for (const step of queue.steps) {
+    if (step.status === STEP_STATUS.DONE) continue;
+    if (isHumanHold(step)) continue;
+    const hasDeclared =
+      (Array.isArray(step?.file_contains) && step.file_contains.length > 0)
+      || (Array.isArray(step?.expected_exports) && step.expected_exports.length > 0);
+    if (!hasDeclared) continue;
+    let proof;
+    try {
+      proof = await evaluateStepExpectations(step, { root });
+    } catch {
+      continue;
+    }
+    if (!proof?.ok || proof.applicable === false) continue;
+    step.status = STEP_STATUS.DONE;
+    step.pre_existing = true;
+    step.shipped_via = 'pre_existing_artifact_proof';
+    step.shipped_at = typeof now === 'function' ? now() : now;
+    step.last_error = null;
+    step.demoted = false;
+    step.demote_reason = null;
+    step.demoted_at = null;
+    step.attempts = 0;
+    claimed.push(step.id);
+  }
+  return claimed;
+}
+
+/**
  * Self-healing: a step that failed maxAttempts is marked BLOCKED, which is
  * TERMINAL, so selectNextStep skips it forever. That is correct for a genuinely
  * broken step, but it also permanently strands a step that was blocked by a
