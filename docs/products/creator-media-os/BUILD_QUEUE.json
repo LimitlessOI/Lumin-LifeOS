@@ -440,7 +440,7 @@
     },
     {
       "id": "back-catalog-ingestion-ingest-a-creator-s-existi",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/creatorBackCatalogIngest.js",
       "task": "Back-catalog ingestion — ingest a creator's existing videos to auto-extract a clean voice sample, build the persona-twin training corpus (transcripts of their whole library), and index assets into the media vault. Target `services/creatorBa",
       "spec": "Back-catalog ingestion — ingest a creator's existing videos to auto-extract a clean voice sample, build the persona-twin training corpus (transcripts of their whole library), and index assets into the media vault. Target `services/creatorBackCatalogIngest.js` (export `ingestBackCatalog`). Requires likeness/voice consent + rights + storage.",
@@ -471,9 +471,9 @@
       "revive_count": 9,
       "revived_at": "2026-07-18T10:56:25.067Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:/",
+      "demoted_at": "2026-07-18T11:00:55.466Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -484,7 +484,7 @@
     },
     {
       "id": "persona-twin-train-a-style-voice-of-writing-mode",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/creatorPersonaTwin.js",
       "task": "Persona twin — train a style/voice-of-writing model on the ingested back-catalog so drafts match the creator's phrasing, hooks, and opinions. Target `services/creatorPersonaTwin.js` (export `trainPersonaTwin`). Requires ingested corpus + co",
       "spec": "Persona twin — train a style/voice-of-writing model on the ingested back-catalog so drafts match the creator's phrasing, hooks, and opinions. Target `services/creatorPersonaTwin.js` (export `trainPersonaTwin`). Requires ingested corpus + consent.",
@@ -530,7 +530,13 @@
           "content_sha256": "42fd431bf9183e486f14fea0324450fe13b3f00cc3ce2bf1f61d6a735f41ce34"
         }
       },
-      "shipped_at": "2026-07-18T10:58:30.428Z"
+      "shipped_at": "2026-07-18T11:00:55.731Z",
+      "pre_existing": true,
+      "shipped_via": "pre_existing_artifact_proof",
+      "last_error": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null
     },
     {
       "id": "smart-jump-cut-mistake-removal-engine-detect-sil",
@@ -556,7 +562,31 @@
       ],
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "smart-jump-cut-mistake-removal-engine-detect-sil",
-      "mission_id": "PRODUCT-creator-media-os"
+      "mission_id": "PRODUCT-creator-media-os",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/creator-media-os/twins/steps/smart-jump-cut-mistake-removal-engine-detect-sil.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-18T11:01:10.661Z",
+        "shipped_at": "2026-07-18T11:01:10.661Z",
+        "commit_sha": null,
+        "content_sha256": "045011bb85057a6d7d1f916f47cd577c6e2f681c71294535a9a2c30ad1597aca",
+        "target_file": "services/creatorJumpCut.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/creatorJumpCut.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/creator-media-os/twins/steps/smart-jump-cut-mistake-removal-engine-detect-sil.exact",
+          "content_sha256": "045011bb85057a6d7d1f916f47cd577c6e2f681c71294535a9a2c30ad1597aca"
+        }
+      },
+      "shipped_at": "2026-07-18T11:01:10.661Z"
     },
     {
       "id": "text-based-overdub-editor-edit-the-transcript-to",

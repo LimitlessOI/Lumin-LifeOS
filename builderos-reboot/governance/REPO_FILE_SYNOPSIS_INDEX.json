@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T10:58:31.933Z",
+  "generated_at": "2026-07-18T11:01:12.794Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11944,
+  "file_count": 11945,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -84984,6 +84984,13 @@
       "bytes": 10613,
       "mtime": "2026-07-05T19:10:02.200Z",
       "indexed_at": "2026-07-17T23:06:25.553Z"
+    },
+    {
+      "path": "services/creatorJumpCut.js",
+      "synopsis": "Exports buildJumpCutPlan — services/creatorJumpCut.js.",
+      "bytes": 1920,
+      "mtime": "2026-07-18T11:01:12.794Z",
+      "indexed_at": "2026-07-18T11:01:12.794Z"
     },
     {
       "path": "services/creatorPersonaTwin.js",
