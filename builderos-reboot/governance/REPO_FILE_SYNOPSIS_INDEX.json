@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T02:43:16.573Z",
+  "generated_at": "2026-07-18T02:45:33.975Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11919,
+  "file_count": 11921,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -30401,9 +30401,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 27951,
-      "mtime": "2026-07-18T02:25:17.750Z",
-      "indexed_at": "2026-07-18T02:25:17.750Z",
+      "bytes": 28209,
+      "mtime": "2026-07-18T02:45:33.975Z",
+      "indexed_at": "2026-07-18T02:45:33.975Z",
       "synopsis_index_only": true
     },
     {
@@ -36028,6 +36028,13 @@
       "indexed_at": "2026-07-18T02:10:41.482Z"
     },
     {
+      "path": "db/migrations/20260718_lifeos_member_feedback.sql",
+      "synopsis": "Founder intake queue for member product feedback (never builder execute).",
+      "bytes": 694,
+      "mtime": "2026-07-18T02:45:33.975Z",
+      "indexed_at": "2026-07-18T02:45:33.975Z"
+    },
+    {
       "path": "db/migrations/20260724_lifeos_core_stable.sql",
       "synopsis": "Database migration — 20260724_lifeos_core_stable.sql.",
       "bytes": 1617,
@@ -37373,9 +37380,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 56879,
-      "mtime": "2026-07-18T02:43:16.573Z",
-      "indexed_at": "2026-07-18T02:43:16.573Z"
+      "bytes": 57175,
+      "mtime": "2026-07-18T02:45:33.975Z",
+      "indexed_at": "2026-07-18T02:45:33.975Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40148,9 +40155,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 634595,
-      "mtime": "2026-07-18T02:43:16.573Z",
-      "indexed_at": "2026-07-18T02:43:16.573Z"
+      "bytes": 634950,
+      "mtime": "2026-07-18T02:45:33.975Z",
+      "indexed_at": "2026-07-18T02:45:33.975Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -64942,9 +64949,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 191204,
-      "mtime": "2026-07-18T02:30:10.901Z",
-      "indexed_at": "2026-07-18T02:30:10.901Z"
+      "bytes": 191554,
+      "mtime": "2026-07-18T02:45:33.975Z",
+      "indexed_at": "2026-07-18T02:45:33.975Z"
     },
     {
       "path": "public/overlay/lifeos-ask-your-life.html",
@@ -65266,6 +65273,13 @@
       "bytes": 38774,
       "mtime": "2026-06-21T21:39:01.815Z",
       "indexed_at": "2026-07-17T23:06:25.553Z"
+    },
+    {
+      "path": "public/overlay/lifeos-member-feedback.html",
+      "synopsis": "HTML page: Member feedback → founder intake queue",
+      "bytes": 3548,
+      "mtime": "2026-07-18T02:45:33.975Z",
+      "indexed_at": "2026-07-18T02:45:33.975Z"
     },
     {
       "path": "public/overlay/lifeos-mic-handler.mjs",
@@ -67302,9 +67316,9 @@
     {
       "path": "routes/lifeos-ethics-routes.js",
       "synopsis": "routes/lifeos-ethics-routes.js",
-      "bytes": 9513,
-      "mtime": "2026-06-29T17:21:08.530Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z",
+      "bytes": 9644,
+      "mtime": "2026-07-18T02:45:33.975Z",
+      "indexed_at": "2026-07-18T02:45:33.975Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -67471,10 +67485,13 @@
     },
     {
       "path": "routes/lifeos-member-feedback-routes.js",
-      "synopsis": "HTTP route module — Lifeos Member Feedback Routes.",
-      "bytes": 456,
-      "mtime": "2026-07-14T04:07:15.504Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z"
+      "synopsis": "Member feedback intake routes — founder queue only, never builder execute.",
+      "bytes": 2368,
+      "mtime": "2026-07-18T02:45:33.975Z",
+      "indexed_at": "2026-07-18T02:45:33.975Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/lifeos-parenting-scripts-routes.js",
@@ -86972,10 +86989,13 @@
     },
     {
       "path": "services/lifeos-member-feedback.js",
-      "synopsis": "Exports processFeedback — services/lifeos-member-feedback.js.",
-      "bytes": 193,
-      "mtime": "2026-07-14T04:07:15.505Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z"
+      "synopsis": "Member feedback → founder intake queue (never builder execute).",
+      "bytes": 2790,
+      "mtime": "2026-07-18T02:45:33.975Z",
+      "indexed_at": "2026-07-18T02:45:33.975Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/lifeos-mission-pipeline-executor.js",

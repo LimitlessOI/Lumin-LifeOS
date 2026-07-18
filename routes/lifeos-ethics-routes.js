@@ -197,3 +197,7 @@ export function createLifeOSEthicsRoutes({ pool, requireKey, callCouncilMember, 
 
   return router;
 }
+
+export function registerLifeOSEthicsRoutes(app, deps = {}) {
+  app.use('/api/v1/lifeos/ethics', createLifeOSEthicsRoutes(deps));
+}
