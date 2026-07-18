@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Exports createLifeOSVictoryVaultRoutes — routes/lifeos-victory-vault-routes.js.
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import express from 'express';
 import { createVictoryVault } from '../services/victory-vault.js';
