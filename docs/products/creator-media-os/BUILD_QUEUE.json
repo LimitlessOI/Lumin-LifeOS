@@ -736,7 +736,31 @@
       ],
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lip-sync-patcher-re-sync-mouth-to-replaced-words",
-      "mission_id": "PRODUCT-creator-media-os"
+      "mission_id": "PRODUCT-creator-media-os",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/creator-media-os/twins/steps/lip-sync-patcher-re-sync-mouth-to-replaced-words.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-18T11:08:32.708Z",
+        "shipped_at": "2026-07-18T11:08:32.708Z",
+        "commit_sha": null,
+        "content_sha256": "adf5bb160221d5c6aab7aca3e194128c515dd12fe18bdac01e2c9b04c90d1696",
+        "target_file": "services/creatorLipSync.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/creatorLipSync.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/creator-media-os/twins/steps/lip-sync-patcher-re-sync-mouth-to-replaced-words.exact",
+          "content_sha256": "adf5bb160221d5c6aab7aca3e194128c515dd12fe18bdac01e2c9b04c90d1696"
+        }
+      },
+      "shipped_at": "2026-07-18T11:08:32.708Z"
     },
     {
       "id": "text-to-video-generation-enable-real-motion-b-ro",

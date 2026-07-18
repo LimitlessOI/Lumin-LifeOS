@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T11:07:21.873Z",
+  "generated_at": "2026-07-18T11:08:34.462Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11948,
+  "file_count": 11949,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -84998,6 +84998,13 @@
       "bytes": 1920,
       "mtime": "2026-07-18T11:01:12.794Z",
       "indexed_at": "2026-07-18T11:01:12.794Z"
+    },
+    {
+      "path": "services/creatorLipSync.js",
+      "synopsis": "services/creatorLipSync.js",
+      "bytes": 1229,
+      "mtime": "2026-07-18T11:08:34.462Z",
+      "indexed_at": "2026-07-18T11:08:34.462Z"
     },
     {
       "path": "services/creatorOverdubEditor.js",
