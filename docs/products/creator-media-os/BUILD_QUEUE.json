@@ -1154,7 +1154,7 @@
     },
     {
       "id": "team-seats-roles-editor-manager-va-access-on-a-c",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/creatorTeamSeats.js",
       "task": "Team seats + roles — editor / manager / VA access on a channel. Target `services/creatorTeamSeats.js` (export `assignSeat`). Requires self-serve auth.",
       "spec": "Team seats + roles — editor / manager / VA access on a channel. Target `services/creatorTeamSeats.js` (export `assignSeat`). Requires self-serve auth.",
@@ -1183,10 +1183,10 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-07-18T11:47:32.009Z",
-        "shipped_at": "2026-07-18T11:47:32.009Z",
+        "sealed_at": "2026-07-18T11:46:32.502Z",
+        "shipped_at": "2026-07-18T11:46:32.502Z",
         "commit_sha": null,
-        "content_sha256": "dacc040a77fb49b037a0efee1d9d4d0c68fc85ea7cd2c27be42cbf5a025ebb5b",
+        "content_sha256": "ac94731ec466953aa80c6996d0b0442031899b40a7f18d54b6a6d7455bfcc65a",
         "target_file": "services/creatorTeamSeats.js",
         "reverse": {
           "mode": "delete_file",
@@ -1197,10 +1197,12 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/creator-media-os/twins/steps/team-seats-roles-editor-manager-va-access-on-a-c.exact",
-          "content_sha256": "dacc040a77fb49b037a0efee1d9d4d0c68fc85ea7cd2c27be42cbf5a025ebb5b"
+          "content_sha256": "ac94731ec466953aa80c6996d0b0442031899b40a7f18d54b6a6d7455bfcc65a"
         }
       },
-      "shipped_at": "2026-07-18T11:47:32.009Z"
+      "shipped_at": "2026-07-18T11:47:37.512Z",
+      "shipped_via": "governed_ship_queue",
+      "commit_sha": "7d471bab9bd93cd1bca01ecb8769e79e82d70c9e"
     },
     {
       "id": "video-templates-with-swappable-segments-build-a",
