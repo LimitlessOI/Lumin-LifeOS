@@ -591,7 +591,31 @@
       ],
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "text-based-overdub-editor-edit-the-transcript-to",
-      "mission_id": "PRODUCT-creator-media-os"
+      "mission_id": "PRODUCT-creator-media-os",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/creator-media-os/twins/steps/text-based-overdub-editor-edit-the-transcript-to.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-18T11:02:13.432Z",
+        "shipped_at": "2026-07-18T11:02:13.432Z",
+        "commit_sha": null,
+        "content_sha256": "2281b6123c5c7d149731ce6fdcdeee8f353b96f9406cb1e71e688f26b652b72e",
+        "target_file": "services/creatorOverdubEditor.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/creatorOverdubEditor.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/creator-media-os/twins/steps/text-based-overdub-editor-edit-the-transcript-to.exact",
+          "content_sha256": "2281b6123c5c7d149731ce6fdcdeee8f353b96f9406cb1e71e688f26b652b72e"
+        }
+      },
+      "shipped_at": "2026-07-18T11:02:13.432Z"
     },
     {
       "id": "voice-clone-service-train-a-revocable-voice-prof",
