@@ -50,13 +50,19 @@ const NAV_PAGES = [
 ];
 
 function parseNavigateAction(text = '') {
-  const t = String(text || '').trim();
-  const m = t.match(/\b(?:open|go to|show|launch|switch to|take me to|navigate to)\s+(?:the\s+)?(.+?)\s$/i);
-  if (!m) return null;
-  const target = String(m[1] || '').toLowerCase().replace(/[?.!]+$/g, '').trim();
+  const t = String(text || '').trim().toLowerCase().replace(/[?.!]+$/g, '');
+  if (!t) return null;
+  const verbs = ['open ', 'go to ', 'show ', 'launch ', 'switch to ', 'take me to ', 'navigate to '];
+  let target = null;
+  for (const verb of verbs) {
+    if (t.startsWith(verb)) {
+      target = t.slice(verb.length).replace(/^the\s+/, '').trim();
+      break;
+    }
+  }
   if (!target) return null;
   for (const entry of NAV_PAGES) {
-    if (entry.keys.some((k) => target === k || target.includes(k))) {
+    if (entry.keys.some((k) => target === k || target.includes(k) || k.includes(target))) {
       return {
         matched: true,
         action_type: entry.action_type || 'navigate',

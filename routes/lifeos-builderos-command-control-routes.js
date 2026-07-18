@@ -124,13 +124,19 @@ const INLINE_NAV_PAGES = [
 ];
 
 function parseShellNavigateInline(text = '') {
-  const t = String(text || '').trim();
-  const m = t.match(/\b(?:open|go to|show|launch|switch to|take me to|navigate to)\s+(?:the\s+)?(.+?)\s$/i);
-  if (!m) return null;
-  const target = String(m[1] || '').toLowerCase().replace(/[?.!]+$/g, '').trim();
+  const t = String(text || '').trim().toLowerCase().replace(/[?.!]+$/g, '');
+  if (!t) return null;
+  const verbs = ['open ', 'go to ', 'show ', 'launch ', 'switch to ', 'take me to ', 'navigate to '];
+  let target = null;
+  for (const verb of verbs) {
+    if (t.startsWith(verb)) {
+      target = t.slice(verb.length).replace(/^the\s+/, '').trim();
+      break;
+    }
+  }
   if (!target) return null;
   for (const entry of INLINE_NAV_PAGES) {
-    if (entry.keys.some((k) => target === k || target.includes(k))) {
+    if (entry.keys.some((k) => target === k || target.includes(k) || k.includes(target))) {
       return {
         matched: true,
         action_type: entry.action_type || 'navigate',
@@ -1702,7 +1708,9 @@ HOW TO RESPOND:
   });
 
   router.get('/founder-interface/source-proof', requireFounderInterfaceAuth, (_req, res) => {
+    const probeText = ['open', 'food'].join(' ');
     let diskSnippet = null;
+    let parseProbe = null;
     try {
       const src = fs.readFileSync(FI_ROUTE_FILE, 'utf8');
       diskSnippet = {
@@ -1710,10 +1718,22 @@ HOW TO RESPOND:
         has_nav_canary: src.includes("nav_canary: 'fi-nav-v1'"),
         has_inline_nav: src.includes('parseShellNavigateInline'),
         has_marker: src.includes(FI_ROUTE_MARKER),
-        open_food_inline: Boolean(parseShellNavigateInline('open food')?.shell_action),
+        has_food_page_literal: src.includes('lifeos-food.html'),
+      };
+      const inline = parseShellNavigateInline(probeText);
+      const imported = parseLuminChairSystemAction(probeText);
+      const foodEntry = INLINE_NAV_PAGES.find((e) => e.page === 'lifeos-food.html') || null;
+      parseProbe = {
+        probeText,
+        inline,
+        imported,
+        inline_pages: INLINE_NAV_PAGES.length,
+        food_entry: foodEntry,
+        regex_match: probeText.match(/\b(?:open|go to|show|launch|switch to|take me to|navigate to)\s+(?:the\s+)?(.+?)\s$/i)?.[1] || null,
       };
     } catch (err) {
       diskSnippet = { error: err.message };
+      parseProbe = { error: err.message };
     }
     res.setHeader('Cache-Control', 'private, no-store, max-age=0');
     return res.status(200).json({
@@ -1721,6 +1741,7 @@ HOW TO RESPOND:
       ...fiRouteStamp(),
       deploy_commit_sha: process.env.RAILWAY_GIT_COMMIT_SHA || process.env.GITHUB_SHA || null,
       disk: diskSnippet,
+      parse_probe: parseProbe,
     });
   });
 
