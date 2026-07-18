@@ -654,11 +654,24 @@
           "assertion_id": "expected_exports:routes/opsTcBlockerCardsRoutes.js"
         }
       ],
-      "last_attempt_at": "2026-07-18T00:29:03.187Z",
-      "last_error": "NOT_ON_BLUEPRINT",
+      "last_attempt_at": "2026-07-18T00:44:40.434Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/routes/.factory-import-check-1784335480372-1.mjs\";\nn",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-18T00:44:19.229Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     }
   ],
   "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
