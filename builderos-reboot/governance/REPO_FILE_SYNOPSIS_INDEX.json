@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T10:06:21.165Z",
+  "generated_at": "2026-07-18T10:08:23.928Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11931,
+  "file_count": 11932,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -36021,6 +36021,13 @@
       "indexed_at": "2026-07-17T23:06:25.553Z"
     },
     {
+      "path": "db/migrations/20260718_lifeos_food_logs.sql",
+      "synopsis": "food_logs for LifeOS AI/text food logger.",
+      "bytes": 500,
+      "mtime": "2026-07-18T10:08:23.928Z",
+      "indexed_at": "2026-07-18T10:08:23.928Z"
+    },
+    {
       "path": "db/migrations/20260718_lifeos_labs_psychometrics.sql",
       "synopsis": "lab_results + psychometric_results for LifeOS longevity/psychometric P1s.",
       "bytes": 874,
@@ -37388,8 +37395,8 @@
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
       "bytes": 57501,
-      "mtime": "2026-07-18T10:06:21.165Z",
-      "indexed_at": "2026-07-18T10:06:21.165Z"
+      "mtime": "2026-07-18T10:08:23.928Z",
+      "indexed_at": "2026-07-18T10:08:23.928Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40163,8 +40170,8 @@
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
       "bytes": 635331,
-      "mtime": "2026-07-18T10:06:21.165Z",
-      "indexed_at": "2026-07-18T10:06:21.165Z"
+      "mtime": "2026-07-18T10:08:23.928Z",
+      "indexed_at": "2026-07-18T10:08:23.928Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -67537,9 +67544,9 @@
     {
       "path": "routes/lifeos-phase2-routes.js",
       "synopsis": "Registers LifeosPhase2Routes routes/handlers (routes/lifeos-phase2-routes.js).",
-      "bytes": 11998,
-      "mtime": "2026-07-18T10:06:21.165Z",
-      "indexed_at": "2026-07-18T10:06:21.165Z",
+      "bytes": 12574,
+      "mtime": "2026-07-18T10:08:23.928Z",
+      "indexed_at": "2026-07-18T10:08:23.928Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -86574,9 +86581,9 @@
     {
       "path": "services/lifeos-ai-photo-food-logger.js",
       "synopsis": "Exports logFoodWithPhoto — services/lifeos-ai-photo-food-logger.js.",
-      "bytes": 2668,
-      "mtime": "2026-07-18T01:49:01.475Z",
-      "indexed_at": "2026-07-18T01:49:01.475Z"
+      "bytes": 3237,
+      "mtime": "2026-07-18T10:08:23.928Z",
+      "indexed_at": "2026-07-18T10:08:23.928Z"
     },
     {
       "path": "services/lifeos-ambient-context.js",
