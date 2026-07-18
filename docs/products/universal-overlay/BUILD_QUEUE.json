@@ -1765,7 +1765,7 @@
     },
     {
       "id": "step12",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register struggle form fill route",
       "spec": "Ensure struggleFormFill.js route is registered",
@@ -1773,11 +1773,11 @@
         "step11"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "struggleFormFill.js"
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-18T16:13:20.189Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:struggleFormFill.js; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
