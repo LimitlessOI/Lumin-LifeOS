@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T04:16:25.726Z",
+  "generated_at": "2026-07-18T04:27:42.701Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11928,
   "files": [
@@ -21634,9 +21634,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3598871,
-      "mtime": "2026-07-18T04:16:17.046Z",
-      "indexed_at": "2026-07-18T04:16:25.726Z"
+      "bytes": 3598834,
+      "mtime": "2026-07-18T04:27:42.326Z",
+      "indexed_at": "2026-07-18T04:27:42.701Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -39862,14 +39862,6 @@
       "indexed_at": "2026-07-17T23:06:25.553Z"
     },
     {
-      "path": "docs/products/creator-media-os/BUILD_QUEUE.json",
-      "synopsis": "Documentation — BUILD QUEUE.",
-      "bytes": 38936,
-      "mtime": "2026-07-18T04:10:27.890Z",
-      "indexed_at": "2026-07-18T04:16:17.021Z",
-      "synopsis_index_only": true
-    },
-    {
       "path": "docs/products/creator-media-os/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 1050,
@@ -39881,8 +39873,8 @@
       "path": "docs/products/creator-media-os/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Creator Media OS",
       "bytes": 20554,
-      "mtime": "2026-07-18T04:10:27.890Z",
-      "indexed_at": "2026-07-18T04:16:17.021Z"
+      "mtime": "2026-07-18T04:27:39.222Z",
+      "indexed_at": "2026-07-18T04:27:42.300Z"
     },
     {
       "path": "docs/products/CREATORMEDIAOS.md",
@@ -40465,8 +40457,8 @@
       "path": "docs/products/productized-sprint/launch-kit/CREATOR_PARTNER_PROGRAM.md",
       "synopsis": "Creator Partner Program — eXp-style 5-level creator revenue-share spec (GTM + billing requirements). @ssot docs/products/productized-sprint/PRODUCT_HOME.md",
       "bytes": 4027,
-      "mtime": "2026-07-18T04:10:27.890Z",
-      "indexed_at": "2026-07-18T04:16:17.021Z"
+      "mtime": "2026-07-18T04:27:39.222Z",
+      "indexed_at": "2026-07-18T04:27:42.300Z"
     },
     {
       "path": "docs/products/productized-sprint/PRODUCT_HOME.md",
@@ -66159,8 +66151,8 @@
       "path": "routes/accountFormFill.js",
       "synopsis": "Mock function to simulate fetching user data",
       "bytes": 800,
-      "mtime": "2026-07-18T04:15:52.382Z",
-      "indexed_at": "2026-07-18T04:16:25.726Z"
+      "mtime": "2026-07-18T04:09:12.194Z",
+      "indexed_at": "2026-07-18T04:09:12.194Z"
     },
     {
       "path": "routes/action-inbox-routes.js",
@@ -70525,6 +70517,13 @@
       "ssot": [
         "docs/SYSTEM_SCORECARD_PATH_TO_10.md"
       ]
+    },
+    {
+      "path": "scripts/phase7_deploy.js",
+      "synopsis": "Exports deployToRailway — scripts/phase7_deploy.js.",
+      "bytes": 732,
+      "mtime": "2026-07-18T04:27:39.334Z",
+      "indexed_at": "2026-07-18T04:27:42.701Z"
     },
     {
       "path": "scripts/pm2-setup.sh",
