@@ -934,13 +934,13 @@
     },
     {
       "id": "media-vault-searchable-tagged-versioned-asset-st",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/creatorMediaVault.js",
       "task": "Media vault — searchable, tagged, versioned asset store on durable storage. Target `services/creatorMediaVault.js` (export `indexAsset`). Requires R2 (`STORAGE_R2_*`) config.",
       "spec": "Media vault — searchable, tagged, versioned asset store on durable storage. Target `services/creatorMediaVault.js` (export `indexAsset`). Requires R2 (`STORAGE_R2_*`) config.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "indexAsset"
       ],
@@ -957,13 +957,13 @@
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "media-vault-searchable-tagged-versioned-asset-st",
       "mission_id": "PRODUCT-creator-media-os",
-      "last_attempt_at": "2026-07-18T11:33:36.198Z",
+      "last_attempt_at": null,
       "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/services/.factory-import-check-1784374416146-1.mjs\";",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-18T11:33:17.392Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-18T11:36:23.611Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -974,11 +974,35 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/creator-media-os/twins/steps/media-vault-searchable-tagged-versioned-asset-st.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-18T11:36:41.399Z",
+        "shipped_at": "2026-07-18T11:36:41.399Z",
+        "commit_sha": null,
+        "content_sha256": "9393ee94c25da9aa5730341a74766accba3f8dd73df3b3bfa40af355f9abf972",
+        "target_file": "services/creatorMediaVault.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/creatorMediaVault.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/creator-media-os/twins/steps/media-vault-searchable-tagged-versioned-asset-st.exact",
+          "content_sha256": "9393ee94c25da9aa5730341a74766accba3f8dd73df3b3bfa40af355f9abf972"
+        }
+      },
+      "shipped_at": "2026-07-18T11:36:41.399Z"
     },
     {
       "id": "repurpose-fan-out-turn-one-source-video-into-n-p",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/creatorRepurposeFanout.js",
       "task": "Repurpose fan-out — turn one source video into N platform-native posts (fixes the single-yield defect F1). Target `services/creatorRepurposeFanout.js` (export `fanOutRepurpose`).",
       "spec": "Repurpose fan-out — turn one source video into N platform-native posts (fixes the single-yield defect F1). Target `services/creatorRepurposeFanout.js` (export `fanOutRepurpose`).",
@@ -1024,7 +1048,13 @@
           "content_sha256": "a2e200162a551395d9f8e416500597fda48d2f447a72ee13bbf612053d3fc4c4"
         }
       },
-      "shipped_at": "2026-07-18T11:34:34.422Z"
+      "shipped_at": "2026-07-18T11:36:23.827Z",
+      "pre_existing": true,
+      "shipped_via": "pre_existing_artifact_proof",
+      "last_error": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null
     },
     {
       "id": "creator-partner-program-rev-share-ledger-exp-sty",

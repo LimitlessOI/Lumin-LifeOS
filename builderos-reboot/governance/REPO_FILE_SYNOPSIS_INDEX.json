@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T11:34:35.916Z",
+  "generated_at": "2026-07-18T11:36:43.060Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11955,
+  "file_count": 11956,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -85026,6 +85026,13 @@
       "bytes": 1229,
       "mtime": "2026-07-18T11:08:34.462Z",
       "indexed_at": "2026-07-18T11:08:34.462Z"
+    },
+    {
+      "path": "services/creatorMediaVault.js",
+      "synopsis": "Exports indexAsset — services/creatorMediaVault.js.",
+      "bytes": 996,
+      "mtime": "2026-07-18T11:36:43.060Z",
+      "indexed_at": "2026-07-18T11:36:43.060Z"
     },
     {
       "path": "services/creatorOverdubEditor.js",
