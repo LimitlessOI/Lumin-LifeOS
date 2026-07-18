@@ -1813,7 +1813,33 @@
       "last_error": "NOT_ON_BLUEPRINT",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/s1.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-18T20:05:40.106Z",
+        "shipped_at": "2026-07-18T20:05:40.106Z",
+        "commit_sha": null,
+        "content_sha256": "58b4758e65cbb41426cdb71ad8755fb93f55553535bfeb51921b80d01d1dd99c",
+        "target_file": "db/migrations/addPwaInstallTrackingTable.sql",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "db/migrations/addPwaInstallTrackingTable.sql",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/universal-overlay/twins/steps/s1.exact",
+          "content_sha256": "58b4758e65cbb41426cdb71ad8755fb93f55553535bfeb51921b80d01d1dd99c"
+        }
+      },
+      "shipped_at": "2026-07-18T20:05:40.106Z",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s1"
     },
     {
       "id": "s2",
