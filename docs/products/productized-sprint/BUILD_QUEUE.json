@@ -1342,7 +1342,7 @@
     },
     {
       "id": "productized-sprint-10",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "public/overlay/salesPage.html",
       "task": "create sales page for offers",
       "spec": "Single or multiple sections sales page for each offer tier.",
@@ -1351,7 +1351,10 @@
       "attempts": 0,
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "productized-sprint-10",
-      "mission_id": "PRODUCT-productized-sprint"
+      "mission_id": "PRODUCT-productized-sprint",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-18T00:16:38.730Z",
+      "commit_sha": "aa85874cea722a2a05906758c92b5e6ed13879f1"
     },
     {
       "id": "productized-sprint-11",
