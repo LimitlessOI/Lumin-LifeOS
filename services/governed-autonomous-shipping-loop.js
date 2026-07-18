@@ -36,6 +36,7 @@ import {
   STEP_STATUS,
   claimPreExistingSatisfiedSteps,
   evaluateStepExpectations,
+  reviveStaleBlockedSteps,
 } from './product-build-orchestrator.js';
 import { createDeploymentService } from './deployment-service.js';
 
@@ -647,6 +648,25 @@ export async function runGovernedAutonomousShipOnce({ logger, maxStepsPerProduct
       }
     }
 
+    // "Skip to the next tab, go back and fix what failed": revive BLOCKED steps
+    // whose cooldown has elapsed back to PENDING so this same tick re-attempts
+    // them. Anti-thrash is preserved — reviveStaleBlockedSteps bounds revive_count
+    // and demotes a step that keeps failing the same way to SKIPPED (terminal),
+    // and founder-gated steps are never auto-revived.
+    for (const pid of products) {
+      const queue = queueCache[pid];
+      if (!queue || !Array.isArray(queue.steps)) continue;
+      try {
+        const revived = reviveStaleBlockedSteps(queue);
+        if (revived.length) {
+          persistQueue(queue);
+          logger?.info?.(`[GOVERNED-AUTONOMOUS-SHIP] revived blocked ${pid}: ${revived.join(', ')}`);
+        }
+      } catch (err) {
+        logger?.warn?.(`[GOVERNED-AUTONOMOUS-SHIP] revive ${pid} failed: ${err.message}`);
+      }
+    }
+
     const queueSnapshots = snapshotQueues(queueCache);
     let queueCommitted = new Set();
 
@@ -766,11 +786,23 @@ export function startGovernedAutonomousShippingLoop({ logger, pool } = {}) {
     }
   }).catch(() => {});
 
-  const intervalMs = Number(
+  // IDLE poll interval: only used when there is genuinely nothing to build
+  // (empty/deduped queues, resource halt). It is NOT a per-cycle cooldown.
+  const idleIntervalMs = Number(
     process.env.GOVERNED_AUTONOMOUS_SHIP_INTERVAL_MS
     || process.env.NEVER_STOP_INTERVAL_MS
     || process.env.BUILDEROS_NEVER_STOP_INTERVAL_MS
     || 5 * 60 * 1000,
+  );
+  // ACTIVE cadence: when a step just shipped or a shippable step was attempted,
+  // chain the next cycle almost immediately. Founder standing order: go-go-go —
+  // we save tokens by being smarter, not by idling. The only throttle on a step
+  // that keeps failing the same way is the per-step exponential backoff in
+  // markFailedStep (BLOCKED) + reviveStaleBlockedSteps cooldown, so we never
+  // busy-spin one broken build.
+  const activeDelayMs = Number(
+    process.env.GOVERNED_AUTONOMOUS_SHIP_ACTIVE_DELAY_MS
+    || 1500,
   );
   const bootDelayMs = Number(
     process.env.GOVERNED_AUTONOMOUS_SHIP_BOOT_DELAY_MS
@@ -824,15 +856,63 @@ export function startGovernedAutonomousShippingLoop({ logger, pool } = {}) {
     logger,
   });
 
-  logger?.info?.({ intervalMs }, '[GOVERNED-AUTONOMOUS-SHIP] starting — governed throughput active');
+  logger?.info?.({ activeDelayMs, idleIntervalMs }, '[GOVERNED-AUTONOMOUS-SHIP] starting — event-driven governed throughput (go-go-go)');
 
-  setTimeout(() => {
-    guardedTick().catch((err) => logger?.warn?.({ err: err.message }, '[GOVERNED-AUTONOMOUS-SHIP] boot tick failed'));
-  }, bootDelayMs);
+  // Event-driven cadence. The next cycle is scheduled based on the OUTCOME of
+  // the previous one, not a fixed clock:
+  //   - shipped >= 1, or a shippable step was attempted (incl. a failed attempt
+  //     that should retry) -> chain immediately (activeDelayMs).
+  //   - genuinely nothing to build, or a hard resource halt (token/budget)
+  //     -> poll slowly (idleIntervalMs) so we don't busy-spin.
+  // A step that keeps failing the same way is throttled by its own BLOCKED
+  // backoff + reviveStaleBlockedSteps cooldown, so immediate retry is safe.
+  function delayForOutcome(outcome) {
+    if (!outcome) return idleIntervalMs;
+    // createUsefulWorkGuard returns { skipped, result } or { skipped, error }.
+    // A guard skip (no work / prereqs / guard error) is always an idle poll so
+    // we never busy-spin when there is nothing buildable.
+    if (outcome.skipped) return idleIntervalMs;
+    const result = outcome.result || outcome;
+    if (!result) return idleIntervalMs;
+    if (result.halted || result.reason === 'token_capacity' || result.reason === 'daily_budget') {
+      return idleIntervalMs;
+    }
+    // Productive cycle, or a shippable step was actually attempted (incl. a
+    // failed attempt that should retry) -> chain immediately.
+    if (Number(result.shipped) > 0) return activeDelayMs;
+    if (Array.isArray(result.products) && result.products.length > 0) return activeDelayMs;
+    if (result.error || outcome.error) return activeDelayMs;
+    // Executed but nothing shippable (no_shippable_steps / plan-only / all
+    // remaining steps blocked awaiting revive): calm poll, not a hot loop.
+    return idleIntervalMs;
+  }
 
-  return setInterval(() => {
-    guardedTick().catch((err) => logger?.warn?.({ err: err.message }, '[GOVERNED-AUTONOMOUS-SHIP] interval tick failed'));
-  }, intervalMs);
+  const controller = { stopped: false, handle: null };
+
+  async function loopTick() {
+    if (controller.stopped) return;
+    let result;
+    try {
+      result = await guardedTick();
+    } catch (err) {
+      logger?.warn?.({ err: err.message }, '[GOVERNED-AUTONOMOUS-SHIP] tick failed');
+      result = { ok: false, error: err.message };
+    }
+    if (controller.stopped) return;
+    const delay = delayForOutcome(result);
+    controller.handle = setTimeout(loopTick, delay);
+  }
+
+  controller.handle = setTimeout(loopTick, bootDelayMs);
+
+  // Preserve the previous contract (callers may clearInterval/clearTimeout the
+  // return value) while exposing an explicit stop for the self-rescheduler.
+  controller.unref = () => controller.handle?.unref?.();
+  controller.stop = () => {
+    controller.stopped = true;
+    if (controller.handle) clearTimeout(controller.handle);
+  };
+  return controller;
 }
 
 export default startGovernedAutonomousShippingLoop;
