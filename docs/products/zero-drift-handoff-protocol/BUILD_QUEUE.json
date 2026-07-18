@@ -1,0 +1,26 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "zero-drift-handoff-protocol",
+  "planned_at": "2026-07-18T00:28:50.858Z",
+  "backlog_signature": "8a9308dea7e1d781",
+  "corpus_sources": [
+    "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "status": "pending",
+      "target_file": ".github/workflows/branch-protection.yml",
+      "task": "enable Branch Protection",
+      "spec": "Configure GitHub branch protection to require 'File Synopsis Law' CI job for 'main' branch.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "required_status_checks",
+        "File Synopsis Law",
+        "main"
+      ]
+    }
+  ]
+}
