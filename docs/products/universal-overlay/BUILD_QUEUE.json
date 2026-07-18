@@ -1871,18 +1871,23 @@
     },
     {
       "id": "s4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "public/overlay/pwaInstall.html",
       "task": "create PWA install UI",
       "spec": "Implement the UI for PWA installation tracking.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "Add to Home Screen",
         "PWA Install"
       ],
-      "design_review_flagged": true
+      "design_review_flagged": true,
+      "last_attempt_at": "2026-07-18T19:50:00.689Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Add to Home Screen; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "s5",
