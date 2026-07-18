@@ -2,23 +2,32 @@
  * SYNOPSIS: Registers LifeosPhase2Routes routes/handlers (routes/lifeos-phase2-routes.js).
  * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
+import { makeLifeOSUserResolver } from '../services/lifeos-user-resolver.js';
+
 export function registerLifeosPhase2Routes(app, deps = {}) {
   const pool = deps.pool || deps.db;
   const requireKey = deps.requireKey;
   const callCouncilMember = deps.callCouncilMember;
   const logger = deps.logger || console;
+  const resolveUserId = makeLifeOSUserResolver(pool);
 
   const json = (res, status, payload) => res.status(status).json(payload);
 
-  const getUserId = (req) =>
-    req.user?.id ??
-    req.user?.user_id ??
-    req.user?.sub ??
-    req.user?.owner_id ??
-    null;
+  const getUserHint = (req) => {
+    const hint =
+      req.query?.user ??
+      req.body?.user ??
+      req.lifeosUser?.handle ??
+      req.lifeosUser?.sub ??
+      req.user?.id ??
+      req.user?.user_id ??
+      req.user?.sub ??
+      'adam';
+    return hint === 'emergency-key' ? 'adam' : hint;
+  };
 
-  const ensureUser = (req, res) => {
-    const userId = getUserId(req);
+  const ensureUser = async (req, res) => {
+    const userId = await resolveUserId(getUserHint(req));
     if (!userId) {
       json(res, 401, { error: 'unauthorized' });
       return null;
@@ -49,8 +58,8 @@ export function registerLifeosPhase2Routes(app, deps = {}) {
   const patchProtected = (path, ...handlers) => app.patch(path, requireKey, ...handlers);
 
   const sleepTable = 'lifeos_sleep_logs';
-  const habitsTable = 'lifeos_habits';
-  const habitLogsTable = 'lifeos_habit_logs';
+  const habitsTable = 'habits';
+  const habitCompletionsTable = 'habit_completions';
   const gratitudeTable = 'lifeos_gratitude_logs';
   const netWorthTable = 'lifeos_net_worth_snapshots';
   const futureLettersTable = 'lifeos_future_self_letters';
@@ -58,8 +67,8 @@ export function registerLifeosPhase2Routes(app, deps = {}) {
   const importantDatesTable = 'lifeos_important_dates';
   const learningQueueTable = 'lifeos_learning_queue';
 
-  app.post('/api/v1/lifeos/sleep', wrap(async (req, res) => {
-    const userId = ensureUser(req, res);
+  app.post('/api/v1/lifeos/sleep', requireKey, wrap(async (req, res) => {
+    const userId = await ensureUser(req, res);
     if (!userId) return;
 
     const { slept_at, woke_at, hours_slept, quality, notes } = req.body || {};
@@ -72,8 +81,8 @@ export function registerLifeosPhase2Routes(app, deps = {}) {
     return json(res, 201, { sleep: result.rows[0] });
   }));
 
-  app.get('/api/v1/lifeos/sleep/summary', wrap(async (req, res) => {
-    const userId = ensureUser(req, res);
+  app.get('/api/v1/lifeos/sleep/summary', requireKey, wrap(async (req, res) => {
+    const userId = await ensureUser(req, res);
     if (!userId) return;
 
     const result = await pool.query(
@@ -89,56 +98,61 @@ export function registerLifeosPhase2Routes(app, deps = {}) {
   }));
 
   postProtected('/api/v1/lifeos/habits', wrap(async (req, res) => {
-    const userId = ensureUser(req, res);
+    const userId = await ensureUser(req, res);
     if (!userId) return;
 
-    const { name, description, target_frequency, active } = req.body || {};
+    const body = req.body || {};
+    const title = body.title || body.name || null;
+    const identity = body.identity_statement ?? body.identity ?? body.description ?? null;
+    const frequency = body.frequency || body.target_frequency || 'daily';
+    if (!title) return json(res, 400, { ok: false, error: 'title required' });
     const result = await pool.query(
-      `insert into ${habitsTable} (user_id, name, description, target_frequency, active)
+      `insert into ${habitsTable} (user_id, title, identity_statement, frequency, active)
        values ($1, $2, $3, $4, coalesce($5, true))
        returning *`,
-      [userId, name ?? null, description ?? null, target_frequency ?? null, active]
+      [userId, title, identity, frequency === 'weekly' ? 'weekly' : 'daily', body.active]
     );
-    return json(res, 201, { habit: result.rows[0] });
+    return json(res, 201, { ok: true, habit: result.rows[0], data: result.rows[0] });
   }));
 
   postProtected('/api/v1/lifeos/habits/:id/log', wrap(async (req, res) => {
-    const userId = ensureUser(req, res);
+    const userId = await ensureUser(req, res);
     if (!userId) return;
 
     const habitId = req.params.id;
-    const { completed, notes } = req.body || {};
+    const { completed, notes, note, date } = req.body || {};
+    const day = (date || new Date().toISOString()).slice(0, 10);
+    const own = await pool.query(
+      `select id from ${habitsTable} where id = $1 and user_id = $2`,
+      [habitId, userId]
+    );
+    if (!own.rows.length) return json(res, 404, { ok: false, error: 'Habit not found' });
     const logResult = await pool.query(
-      `insert into ${habitLogsTable} (user_id, habit_id, completed, notes)
+      `insert into ${habitCompletionsTable} (habit_id, completion_date, completed, note)
        values ($1, $2, coalesce($3, true), $4)
+       on conflict (habit_id, completion_date) do update
+         set completed = excluded.completed,
+             note = excluded.note
        returning *`,
-      [userId, habitId, completed, notes ?? null]
+      [habitId, day, completed, note ?? notes ?? null]
     );
 
-    await pool.query(
-      `update ${habitsTable}
-       set streak = coalesce(streak, 0) + case when coalesce($2, true) then 1 else 0 end,
-           updated_at = now()
-       where id = $1 and user_id = $3`,
-      [habitId, completed, userId]
-    );
-
-    return json(res, 201, { log: logResult.rows[0] });
+    return json(res, 201, { ok: true, log: logResult.rows[0], data: logResult.rows[0] });
   }));
 
-  app.get('/api/v1/lifeos/habits', wrap(async (req, res) => {
-    const userId = ensureUser(req, res);
+  app.get('/api/v1/lifeos/habits', requireKey, wrap(async (req, res) => {
+    const userId = await ensureUser(req, res);
     if (!userId) return;
 
     const result = await pool.query(
-      `select * from ${habitsTable} where user_id = $1 order by created_at desc`,
+      `select * from ${habitsTable} where user_id = $1 and active = true order by created_at desc`,
       [userId]
     );
-    return json(res, 200, { habits: result.rows });
+    return json(res, 200, { ok: true, habits: result.rows, data: result.rows });
   }));
 
   postProtected('/api/v1/lifeos/journal/voice', wrap(async (req, res) => {
-    const userId = ensureUser(req, res);
+    const userId = await ensureUser(req, res);
     if (!userId) return;
 
     const transcript = String(req.body?.transcript || '').trim();
@@ -157,7 +171,7 @@ export function registerLifeosPhase2Routes(app, deps = {}) {
   }));
 
   postProtected('/api/v1/lifeos/gratitude', wrap(async (req, res) => {
-    const userId = ensureUser(req, res);
+    const userId = await ensureUser(req, res);
     if (!userId) return;
 
     const { text, theme } = req.body || {};
@@ -170,8 +184,8 @@ export function registerLifeosPhase2Routes(app, deps = {}) {
     return json(res, 201, { gratitude: result.rows[0] });
   }));
 
-  app.get('/api/v1/lifeos/gratitude/themes', wrap(async (req, res) => {
-    const userId = ensureUser(req, res);
+  app.get('/api/v1/lifeos/gratitude/themes', requireKey, wrap(async (req, res) => {
+    const userId = await ensureUser(req, res);
     if (!userId) return;
 
     const result = await pool.query(
@@ -189,7 +203,7 @@ export function registerLifeosPhase2Routes(app, deps = {}) {
   // (phase2 phantom lifeos_net_worth_snapshots removed — use net_worth_snapshots via finance service).
 
   postProtected('/api/v1/lifeos/future-self/letter', wrap(async (req, res) => {
-    const userId = ensureUser(req, res);
+    const userId = await ensureUser(req, res);
     if (!userId) return;
 
     const { title, body, tone } = req.body || {};
@@ -202,8 +216,8 @@ export function registerLifeosPhase2Routes(app, deps = {}) {
     return json(res, 201, { letter: result.rows[0] });
   }));
 
-  app.get('/api/v1/lifeos/future-self/letter', wrap(async (req, res) => {
-    const userId = ensureUser(req, res);
+  app.get('/api/v1/lifeos/future-self/letter', requireKey, wrap(async (req, res) => {
+    const userId = await ensureUser(req, res);
     if (!userId) return;
 
     const result = await pool.query(
@@ -214,7 +228,7 @@ export function registerLifeosPhase2Routes(app, deps = {}) {
   }));
 
   postProtected('/api/v1/lifeos/energy', wrap(async (req, res) => {
-    const userId = ensureUser(req, res);
+    const userId = await ensureUser(req, res);
     if (!userId) return;
 
     const { energy_level, mood, focus_level, notes, recorded_at } = req.body || {};
@@ -227,8 +241,8 @@ export function registerLifeosPhase2Routes(app, deps = {}) {
     return json(res, 201, { energy: result.rows[0] });
   }));
 
-  app.get('/api/v1/lifeos/energy/curve', wrap(async (req, res) => {
-    const userId = ensureUser(req, res);
+  app.get('/api/v1/lifeos/energy/curve', requireKey, wrap(async (req, res) => {
+    const userId = await ensureUser(req, res);
     if (!userId) return;
 
     const rows = await pool.query(
@@ -249,7 +263,7 @@ export function registerLifeosPhase2Routes(app, deps = {}) {
   }));
 
   postProtected('/api/v1/lifeos/important-dates', wrap(async (req, res) => {
-    const userId = ensureUser(req, res);
+    const userId = await ensureUser(req, res);
     if (!userId) return;
 
     const { label, date, notes, category } = req.body || {};
@@ -262,8 +276,8 @@ export function registerLifeosPhase2Routes(app, deps = {}) {
     return json(res, 201, { importantDate: result.rows[0] });
   }));
 
-  app.get('/api/v1/lifeos/important-dates', wrap(async (req, res) => {
-    const userId = ensureUser(req, res);
+  app.get('/api/v1/lifeos/important-dates', requireKey, wrap(async (req, res) => {
+    const userId = await ensureUser(req, res);
     if (!userId) return;
 
     const result = await pool.query(
@@ -274,7 +288,7 @@ export function registerLifeosPhase2Routes(app, deps = {}) {
   }));
 
   postProtected('/api/v1/lifeos/learning-queue', wrap(async (req, res) => {
-    const userId = ensureUser(req, res);
+    const userId = await ensureUser(req, res);
     if (!userId) return;
 
     const { title, source, status, key_insight, notes, priority } = req.body || {};
@@ -287,8 +301,8 @@ export function registerLifeosPhase2Routes(app, deps = {}) {
     return json(res, 201, { item: result.rows[0] });
   }));
 
-  app.get('/api/v1/lifeos/learning-queue', wrap(async (req, res) => {
-    const userId = ensureUser(req, res);
+  app.get('/api/v1/lifeos/learning-queue', requireKey, wrap(async (req, res) => {
+    const userId = await ensureUser(req, res);
     if (!userId) return;
 
     const result = await pool.query(
@@ -299,7 +313,7 @@ export function registerLifeosPhase2Routes(app, deps = {}) {
   }));
 
   patchProtected('/api/v1/lifeos/learning-queue/:id', wrap(async (req, res) => {
-    const userId = ensureUser(req, res);
+    const userId = await ensureUser(req, res);
     if (!userId) return;
 
     const { id } = req.params;

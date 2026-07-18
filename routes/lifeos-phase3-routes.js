@@ -2,6 +2,7 @@
  * SYNOPSIS: LifeOS Phase 3 REST — habits / energy / learning / calendar-protection.
  * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
+import { makeLifeOSUserResolver } from '../services/lifeos-user-resolver.js';
 import { createLifeOSHabits } from '../services/lifeos-habits.js';
 import {
   logEnergy,
@@ -21,24 +22,53 @@ import {
   scanConflicts,
 } from '../services/lifeos-calendar-protection.js';
 
-function resolveUserId(req) {
-  return req?.user?.id || req?.user?.user_id || req?.auth?.user_id || null;
+
+async function resolveAuthUserId(req, deps) {
+  const resolve = makeLifeOSUserResolver(deps?.db || deps?.pool);
+  const hint =
+    req?.query?.user ||
+    req?.body?.user ||
+    req?.lifeosUser?.handle ||
+    req?.lifeosUser?.sub ||
+    req?.user?.id ||
+    req?.user?.user_id ||
+    req?.auth?.user_id ||
+    'adam';
+  return resolve(hint === 'emergency-key' ? 'adam' : hint);
 }
 
-function authFail(req, res, deps) {
-  if (typeof deps?.requireAuth === 'function') {
-    const out = deps.requireAuth(req);
-    if (out) {
-      res.status(out.status || 401).json(out.body || { error: 'Unauthorized' });
+async function authFail(req, res, deps) {
+  const guard = deps?.requireKey || deps?.requireAuth;
+  if (typeof guard === 'function') {
+    let passed = false;
+    await new Promise((resolve) => {
+      try {
+        guard(req, res, (err) => {
+          if (!err && !res.headersSent) passed = true;
+          resolve();
+        });
+      } catch {
+        resolve();
+      }
+    });
+    if (res.headersSent) return true;
+    if (!passed) {
+      res.status(401).json({ error: 'Unauthorized' });
+      return true;
+    }
+    req.__lifeosUid = await resolveAuthUserId(req, deps);
+    if (!req.__lifeosUid) {
+      res.status(404).json({ ok: false, error: 'User not found' });
       return true;
     }
     return false;
   }
-  if (!resolveUserId(req)) {
-    res.status(401).json({ error: 'Unauthorized' });
-    return true;
-  }
-  return false;
+  res.status(401).json({ error: 'Unauthorized' });
+  return true;
+}
+
+function resolveUserId(req) {
+  return req.__lifeosUid || req?.user?.id || req?.user?.user_id || req?.auth?.user_id || null;
 }
 
 function dbOf(deps) {
@@ -54,7 +84,7 @@ export async function registerLifeosPhase3Routes(app, deps = {}) {
   const habitsApi = createLifeOSHabits({ pool: db });
 
   app.get('/api/v1/lifeos/habits', async (req, res) => {
-    if (authFail(req, res, deps)) return;
+    if (await authFail(req, res, deps)) return;
     try {
       const rows = await habitsApi.listHabits(resolveUserId(req));
       return res.json({ ok: true, data: rows, habits: rows });
@@ -65,7 +95,7 @@ export async function registerLifeosPhase3Routes(app, deps = {}) {
   });
 
   app.get('/api/v1/lifeos/habits/summary', async (req, res) => {
-    if (authFail(req, res, deps)) return;
+    if (await authFail(req, res, deps)) return;
     try {
       const days = Number(req.query?.days) || 7;
       const summary = await habitsApi.getHabitSummary(resolveUserId(req), days);
@@ -77,7 +107,7 @@ export async function registerLifeosPhase3Routes(app, deps = {}) {
   });
 
   app.post('/api/v1/lifeos/habits', async (req, res) => {
-    if (authFail(req, res, deps)) return;
+    if (await authFail(req, res, deps)) return;
     try {
       const body = req.body || {};
       const row = await habitsApi.createHabit(resolveUserId(req), {
@@ -93,7 +123,7 @@ export async function registerLifeosPhase3Routes(app, deps = {}) {
   });
 
   async function habitCheckIn(req, res) {
-    if (authFail(req, res, deps)) return;
+    if (await authFail(req, res, deps)) return;
     try {
       const row = await habitsApi.checkInHabit(resolveUserId(req), req.params.id, req.body || {});
       return res.json({ ok: true, data: row });
@@ -107,7 +137,7 @@ export async function registerLifeosPhase3Routes(app, deps = {}) {
   app.post('/api/v1/lifeos/habits/:id/checkin', habitCheckIn);
 
   app.get('/api/v1/lifeos/energy', async (req, res) => {
-    if (authFail(req, res, deps)) return;
+    if (await authFail(req, res, deps)) return;
     try {
       const rows = await getEnergyLogs(db, resolveUserId(req), {
         from: req.query?.from,
@@ -121,7 +151,7 @@ export async function registerLifeosPhase3Routes(app, deps = {}) {
   });
 
   app.post('/api/v1/lifeos/energy', async (req, res) => {
-    if (authFail(req, res, deps)) return;
+    if (await authFail(req, res, deps)) return;
     try {
       const body = req.body || {};
       const row = await logEnergy(
@@ -139,7 +169,7 @@ export async function registerLifeosPhase3Routes(app, deps = {}) {
   });
 
   app.get('/api/v1/lifeos/energy/curve', async (req, res) => {
-    if (authFail(req, res, deps)) return;
+    if (await authFail(req, res, deps)) return;
     try {
       const data = await analyzeEnergyCurve(db, resolveUserId(req), deps.callCouncilMember);
       return res.json({ ok: true, data });
@@ -150,7 +180,7 @@ export async function registerLifeosPhase3Routes(app, deps = {}) {
   });
 
   app.get('/api/v1/lifeos/learning', async (req, res) => {
-    if (authFail(req, res, deps)) return;
+    if (await authFail(req, res, deps)) return;
     try {
       const rows = await listItems(db, resolveUserId(req), { status: req.query?.status });
       return res.json({ ok: true, data: rows });
@@ -161,7 +191,7 @@ export async function registerLifeosPhase3Routes(app, deps = {}) {
   });
 
   app.post('/api/v1/lifeos/learning', async (req, res) => {
-    if (authFail(req, res, deps)) return;
+    if (await authFail(req, res, deps)) return;
     try {
       const row = await addItem(db, resolveUserId(req), req.body || {});
       return res.status(201).json({ ok: true, data: row });
@@ -172,7 +202,7 @@ export async function registerLifeosPhase3Routes(app, deps = {}) {
   });
 
   app.patch('/api/v1/lifeos/learning/:id', async (req, res) => {
-    if (authFail(req, res, deps)) return;
+    if (await authFail(req, res, deps)) return;
     try {
       const row = await updateItem(db, resolveUserId(req), req.params.id, req.body || {});
       return res.json({ ok: true, data: row });
@@ -183,7 +213,7 @@ export async function registerLifeosPhase3Routes(app, deps = {}) {
   });
 
   app.delete('/api/v1/lifeos/learning/:id', async (req, res) => {
-    if (authFail(req, res, deps)) return;
+    if (await authFail(req, res, deps)) return;
     try {
       const ok = await deleteItem(db, resolveUserId(req), req.params.id);
       return res.json({ ok: true, deleted: ok });
@@ -194,7 +224,7 @@ export async function registerLifeosPhase3Routes(app, deps = {}) {
   });
 
   app.get('/api/v1/lifeos/calendar-protection/rules', async (req, res) => {
-    if (authFail(req, res, deps)) return;
+    if (await authFail(req, res, deps)) return;
     try {
       const rows = await listRules(db, resolveUserId(req));
       return res.json({ ok: true, data: rows });
@@ -205,7 +235,7 @@ export async function registerLifeosPhase3Routes(app, deps = {}) {
   });
 
   app.post('/api/v1/lifeos/calendar-protection/rules', async (req, res) => {
-    if (authFail(req, res, deps)) return;
+    if (await authFail(req, res, deps)) return;
     try {
       const row = await upsertRule(db, resolveUserId(req), req.body || {});
       return res.status(201).json({ ok: true, data: row });
@@ -216,7 +246,7 @@ export async function registerLifeosPhase3Routes(app, deps = {}) {
   });
 
   app.delete('/api/v1/lifeos/calendar-protection/rules/:id', async (req, res) => {
-    if (authFail(req, res, deps)) return;
+    if (await authFail(req, res, deps)) return;
     try {
       const ok = await deleteRule(db, resolveUserId(req), req.params.id);
       return res.json({ ok: true, deleted: ok });
@@ -227,7 +257,7 @@ export async function registerLifeosPhase3Routes(app, deps = {}) {
   });
 
   app.post('/api/v1/lifeos/calendar-protection/scan', async (req, res) => {
-    if (authFail(req, res, deps)) return;
+    if (await authFail(req, res, deps)) return;
     try {
       const events = Array.isArray(req.body?.events) ? req.body.events : req.body?.calendarEvents || [];
       const conflicts = await scanConflicts(db, resolveUserId(req), events);
