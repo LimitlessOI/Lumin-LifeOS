@@ -1667,7 +1667,7 @@
     },
     {
       "id": "step10",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/struggleFormFill.js",
       "task": "implement struggle-driven form fill",
       "spec": "Service for form fill based on struggle detection logic",
@@ -1687,32 +1687,9 @@
           "assertion_id": "expected_exports:services/struggleFormFill.js"
         }
       ],
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/universal-overlay/twins/steps/step10.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-18T15:42:17.616Z",
-        "shipped_at": "2026-07-18T15:42:17.616Z",
-        "commit_sha": null,
-        "content_sha256": "82efbce8190b06ce5aefc99012ccacdf39e7d9bd4f2aa3fe3e75b10c676b5592",
-        "target_file": "services/struggleFormFill.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/struggleFormFill.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/universal-overlay/twins/steps/step10.exact",
-          "content_sha256": "82efbce8190b06ce5aefc99012ccacdf39e7d9bd4f2aa3fe3e75b10c676b5592"
-        }
-      },
-      "shipped_at": "2026-07-18T15:42:17.616Z",
-      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
-      "blueprint_step_id": "step10"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-18T15:42:22.634Z",
+      "commit_sha": "c7477fd9efc5cfdab1fe9e6fd813ee457da92dbf"
     },
     {
       "id": "step11",
