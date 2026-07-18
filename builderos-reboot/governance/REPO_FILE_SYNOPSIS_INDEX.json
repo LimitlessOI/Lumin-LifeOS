@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T18:56:42.641Z",
+  "generated_at": "2026-07-18T18:59:55.819Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11970,
   "files": [
@@ -37409,9 +37409,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 59237,
-      "mtime": "2026-07-18T18:56:42.641Z",
-      "indexed_at": "2026-07-18T18:56:42.641Z"
+      "bytes": 59614,
+      "mtime": "2026-07-18T18:59:55.819Z",
+      "indexed_at": "2026-07-18T18:59:55.819Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40184,9 +40184,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 637067,
-      "mtime": "2026-07-18T18:56:42.641Z",
-      "indexed_at": "2026-07-18T18:56:42.641Z"
+      "bytes": 637783,
+      "mtime": "2026-07-18T18:59:55.819Z",
+      "indexed_at": "2026-07-18T18:59:55.819Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -67239,9 +67239,9 @@
     {
       "path": "routes/lifeos-builderos-command-control-routes.js",
       "synopsis": "Founder-facing LifeOS BuilderOS command-control routes for direct chat, build orchestration, and governed execution receipts.",
-      "bytes": 76150,
-      "mtime": "2026-07-18T18:56:42.641Z",
-      "indexed_at": "2026-07-18T18:56:42.641Z",
+      "bytes": 76560,
+      "mtime": "2026-07-18T18:59:55.819Z",
+      "indexed_at": "2026-07-18T18:59:55.819Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -87312,9 +87312,9 @@
     {
       "path": "services/lifeos-lumin.js",
       "synopsis": "Lumin Chair — governed operating mind of LifeOS (not a side chatbot or reception desk).",
-      "bytes": 24413,
-      "mtime": "2026-07-16T19:42:53.457Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z",
+      "bytes": 24484,
+      "mtime": "2026-07-18T18:59:55.819Z",
+      "indexed_at": "2026-07-18T18:59:55.819Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

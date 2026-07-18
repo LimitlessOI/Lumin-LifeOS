@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-18 — Thread history: persist + don’t scrub real acts
+
+Adam: see UI communication tests in history. Two gaps: (1) act/nav fastpath skipped persist; (2) persisted nav text was scrubbed as theater because `recordExchange` hard-coded `NO_COMMAND_RAN`. Fixed both — marker v5. Tip prove: `open food` has no `HISTORY_NOT_SAVED` and appears in chat thread messages.
+
 ## 2026-07-18 — Act fastpath must persist to thread history
 
 Adam: UI-test every communication aspect and see it in thread history. Root gap: nav/act HTTP fastpaths executed but skipped `persistFounderTurn`, so turns were live in the drawer but not durable in `lumin_messages`. Fix: persist before return (`fi-route-marker-v4`). Also: local agent branch ≠ tip `main` caused a false “code missing” scare.

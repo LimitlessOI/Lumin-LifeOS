@@ -87,7 +87,7 @@ import { commitQueueStatusToRepo } from '../services/never-stop-product-factory.
 const FOUNDER_BUILD_JOB_TIMEOUT_MS = Number(process.env.FOUNDER_BUILD_JOB_TIMEOUT_MS || '480000');
 
 /** Deploy-truth canary — stamped on every founder-interface response so tip SHA lies are visible. */
-export const FI_ROUTE_MARKER = 'fi-route-marker-v4';
+export const FI_ROUTE_MARKER = 'fi-route-marker-v5';
 const FI_ROUTE_FILE = fileURLToPath(import.meta.url);
 let FI_DISK_HAS_NAV = false;
 try {
@@ -204,7 +204,7 @@ export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey, ca
 
   const EXECUTE_ALLOWED_ROLES = new Set(['founder_admin', 'operator', 'admin']);
 
-  async function persistFounderTurn(req, userMessage, replyText) {
+  async function persistFounderTurn(req, userMessage, replyText, opts = {}) {
     const reply = String(replyText || '').trim();
     if (!reply) return null;
     if (!luminPersist) return 'HISTORY_NOT_SAVED';
@@ -220,7 +220,10 @@ export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey, ca
       }
       if (!userId) return 'HISTORY_NOT_SAVED';
       const thread = await luminPersist.getOrCreateDefaultThread(userId);
-      await luminPersist.recordExchange(thread.id, userId, userMessage, reply);
+      const commandTruth = opts.command_truth || 'NO_COMMAND_RAN';
+      await luminPersist.recordExchange(thread.id, userId, userMessage, reply, {
+        command_truth: commandTruth,
+      });
       if (pool) {
         try {
           const { createFounderMemoryStore } = await import('../services/founder-memory-store.js');
@@ -1349,7 +1352,7 @@ HOW TO RESPOND:
           const human = `Opening ${shellNav.shell_action.page} now.`;
           const persistWarning = req.body?.alpha_probe === true
             ? 'ALPHA_PROBE_SKIP_PERSIST'
-            : await persistFounderTurn(req, originalText, human);
+            : await persistFounderTurn(req, originalText, human, { command_truth: 'COMMAND_RAN' });
           clearTimeout(handlerDeadline);
           _log(`route_nav_fastpath type=${shellNav.action_type} page=${shellNav.shell_action.page}`);
           res.setHeader('Cache-Control', 'private, no-store, max-age=0');
@@ -1391,9 +1394,11 @@ HOW TO RESPOND:
             });
             if (actResult?.matched) {
               const human = actResult.human_summary || actResult.error || 'System action finished.';
+              const actTruth = actResult.command_truth
+                || (actResult.executed ? 'COMMAND_RAN' : 'NO_COMMAND_RAN');
               const persistWarning = req.body?.alpha_probe === true
                 ? 'ALPHA_PROBE_SKIP_PERSIST'
-                : await persistFounderTurn(req, originalText, human);
+                : await persistFounderTurn(req, originalText, human, { command_truth: actTruth });
               clearTimeout(handlerDeadline);
               _log(`route_act_fastpath type=${actResult.action_type} ok=${actResult.ok}`);
               res.setHeader('Cache-Control', 'private, no-store, max-age=0');
@@ -1745,7 +1750,9 @@ HOW TO RESPOND:
 
       const persistWarning = req.body?.alpha_probe === true
         ? 'ALPHA_PROBE_SKIP_PERSIST'
-        : await persistFounderTurn(req, cleanedInput, chairResult.body.human_summary);
+        : await persistFounderTurn(req, cleanedInput, chairResult.body.human_summary, {
+          command_truth: chairResult.body.command_truth || 'NO_COMMAND_RAN',
+        });
       clearTimeout(handlerDeadline);
       if (res.headersSent) return;
       const locked = lockFounderResponse(chairResult.body, chairResult.body.chair_channel || 'founder_interface');

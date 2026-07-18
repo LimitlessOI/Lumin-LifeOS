@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-18 — Act/nav fastpath persists to lumin thread history (`fi-route-marker-v4`). |
+| **Last Updated** | 2026-07-18 — Persist COMMAND_RAN turns without theater scrub (`fi-route-marker-v5`). |
 ---
 
 ## Founder conversations (2026-06-29)
@@ -1720,6 +1720,8 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
+| 2026-07-18 | **Persist COMMAND_RAN without scrubbing.** `recordExchange` accepts `command_truth`; nav/act persist with `COMMAND_RAN` so "Opening …" is not wiped as theater. Marker `fi-route-marker-v5`. | Adam: UI tests must appear in thread history after reload. | tip prove open food persist null warning + history row | calendar acts |
+| 2026-07-18 | **Act/nav fastpath persists history.** `persistFounderTurn` before `route_nav_fastpath` / `route_act_fastpath` returns so UI battery turns land in `lumin_messages` (drawer reload / thread history). Marker `fi-route-marker-v4`. | Adam: see every UI communication test in thread history. | tip prove open food + log food without persist_warning | calendar acts |
 | 2026-07-18 | **Chair LifeOS writes + act HTTP fastpath.** `lifeos-direct-action` executes food/sleep/commitment/victory/habit with DB receipts; founder-interface calls `tryLuminChairSystemAction` for non-nav acts before counsel (`route_act_fastpath`, marker v3). | Adam: keep building real, not theater. | tip prove log food / commit / redeploy | calendar + habit name list UX |
 | 2026-07-18 | **Navigate fastpath v2 + deploy canary.** Inline `parseShellNavigateInline` in founder-interface (no stale import); stamp `fi_route_marker` / `fi_disk_has_nav` on every reply; `GET …/founder-interface/source-proof`. Tip reported SHA with v1 fastpath but still counselled `open food` (no canary) — need disk proof. | Adam: Chair direct doer; tip SHA≠behavior. | tip `source-proof` + `open food` COMMAND_RAN | expand act tools |
 | 2026-07-18 | **Founder-interface navigate fastpath.** `routes/lifeos-builderos-command-control-routes.js` returns `shell_action` + `COMMAND_RAN` for open/go-to *before* Chair counsel (`route_nav_fastpath` / `nav_canary: fi-nav-v1`). Tip on prior SHA still answered counsel for `open food` despite orchestrator-local PASS. | Adam: Chair must do, not facade — UI needs direct navigate execution. | tip prove `open food` → COMMAND_RAN + lifeos-food.html | expand tool registry (env/SMS) |
