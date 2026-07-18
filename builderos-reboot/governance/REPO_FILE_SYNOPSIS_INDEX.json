@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T11:24:08.708Z",
+  "generated_at": "2026-07-18T11:26:53.078Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11953,
+  "file_count": 11954,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -84991,6 +84991,13 @@
       "bytes": 1056,
       "mtime": "2026-07-18T11:07:21.873Z",
       "indexed_at": "2026-07-18T11:07:21.873Z"
+    },
+    {
+      "path": "services/creatorBrandKit.js",
+      "synopsis": "Existing code in services/creatorBrandKit.js",
+      "bytes": 834,
+      "mtime": "2026-07-18T11:26:53.078Z",
+      "indexed_at": "2026-07-18T11:26:53.078Z"
     },
     {
       "path": "services/creatorBrollMatcher.js",
