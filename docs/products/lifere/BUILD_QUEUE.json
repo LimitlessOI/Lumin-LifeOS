@@ -712,9 +712,8 @@
       "target_file": "services/livePhoneService.js",
       "task": "implement live phone service",
       "spec": "Create a service for live phone answering functionality utilizing Vapi/Twilio.",
-      "depends_on": [
-        "8"
-      ],
+      "depends_on": [],
+      "depends_on_note": "Was depends_on:['8'] (ops TC blocker-card routes) — removed 2026-07-18. Step 8 (TC blocker-card UI, routes/opsTcBlockerCardsRoutes.js) has no functional relationship to this step (a Vapi/Twilio live-phone service): different target files, different route namespace, nothing shared. Sibling steps 9/11 have no dependency at all, so this link looks like a blueprint-authoring defect, not an intentional prerequisite. Step 8 is separately demoted (9 failed revives, codegen_empty) and was blocking real, wanted work (the live-phone/receptionist service) for no functional reason. GAP-FILL correction, not a new-scope decision.",
       "founder_gated": false,
       "attempts": 0,
       "expected_exports": [

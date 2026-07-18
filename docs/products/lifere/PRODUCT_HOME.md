@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifere/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-16 — Pre-transfer SMS brief now unconditional (25-idea build item #1); live-confirmed transfer-loop risk still active, blocked on Adam's phone-forwarding decision. |
+| **Last Updated** | 2026-07-18 — BUILD_QUEUE.json step 10 ("implement live phone service" — Vapi/Twilio, `services/livePhoneService.js`) had a spurious `depends_on:["8"]` blocking it behind a demoted, unrelated step (TC blocker-card UI routes, 9 failed revives). No functional relationship between the two — removed the dependency (GAP-FILL correction of a blueprint-authoring defect, not a scope decision) so the governed autonomous loop can actually pick up the live-phone service next cycle. Found via a direct system audit (D6 doctrine applied: an ambiguous/broken blueprint link, not queue improvisation). Prior: 2026-07-16 — Pre-transfer SMS brief now unconditional (25-idea build item #1); live-confirmed transfer-loop risk still active, blocked on Adam's phone-forwarding decision. |
 
 ---
 
