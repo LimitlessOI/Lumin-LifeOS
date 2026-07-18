@@ -78,6 +78,27 @@
       "note": "Lab biomarker import + biological age + VO2 trend P1."
     },
     {
+      "path": "routes/lifeos-auth-routes.js",
+      "register": "registerLifeOSAuthRoutes",
+      "mount_path": "/api/v1/lifeos/auth",
+      "enabled": true,
+      "note": "Belt-and-suspenders: member/Sherry login must stay mounted if founder-runtime mount drifts."
+    },
+    {
+      "path": "routes/lifeos-household-board-routes.js",
+      "register": "registerLifeosHouseholdBoardRoutes",
+      "mount_path": "/api/v1/lifeos/household",
+      "enabled": true,
+      "note": "Household board for Adam/Sherry shared commitments UI."
+    },
+    {
+      "path": "routes/lifeos-family-routes.js",
+      "register": "registerLifeOSFamilyRoutes",
+      "mount_path": "/api/v1/lifeos/family",
+      "enabled": true,
+      "note": "Family OS link/debrief/tone/pulse APIs on founder lane."
+    },
+    {
       "path": "routes/founder-sms-routes.js",
       "register": "registerFounderSmsRoutes",
       "enabled": true,

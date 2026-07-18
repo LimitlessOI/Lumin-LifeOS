@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T02:10:41.482Z",
+  "generated_at": "2026-07-18T02:14:28.280Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11909,
+  "file_count": 11910,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -30401,9 +30401,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 26349,
-      "mtime": "2026-07-18T02:10:41.482Z",
-      "indexed_at": "2026-07-18T02:10:41.482Z",
+      "bytes": 27145,
+      "mtime": "2026-07-18T02:14:28.280Z",
+      "indexed_at": "2026-07-18T02:14:28.280Z",
       "synopsis_index_only": true
     },
     {
@@ -40148,9 +40148,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 633589,
-      "mtime": "2026-07-18T02:10:41.482Z",
-      "indexed_at": "2026-07-18T02:10:41.482Z"
+      "bytes": 633964,
+      "mtime": "2026-07-18T02:14:28.280Z",
+      "indexed_at": "2026-07-18T02:14:28.280Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -64935,9 +64935,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 189540,
-      "mtime": "2026-07-18T02:10:41.482Z",
-      "indexed_at": "2026-07-18T02:10:41.482Z"
+      "bytes": 190196,
+      "mtime": "2026-07-18T02:14:28.280Z",
+      "indexed_at": "2026-07-18T02:14:28.280Z"
     },
     {
       "path": "public/overlay/lifeos-ask-your-life.html",
@@ -67040,9 +67040,9 @@
     {
       "path": "routes/lifeos-auth-routes.js",
       "synopsis": "routes/lifeos-auth-routes.js",
-      "bytes": 37839,
-      "mtime": "2026-07-17T17:23:25.625Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z",
+      "bytes": 38282,
+      "mtime": "2026-07-18T02:14:28.280Z",
+      "indexed_at": "2026-07-18T02:14:28.280Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -67277,9 +67277,9 @@
     {
       "path": "routes/lifeos-family-routes.js",
       "synopsis": "routes/lifeos-family-routes.js",
-      "bytes": 10728,
-      "mtime": "2026-06-29T17:21:08.531Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z",
+      "bytes": 11230,
+      "mtime": "2026-07-18T02:14:28.280Z",
+      "indexed_at": "2026-07-18T02:14:28.280Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -67365,6 +67365,16 @@
       ]
     },
     {
+      "path": "routes/lifeos-household-board-routes.js",
+      "synopsis": "Household board API for Adam/Sherry shared commitment surface.",
+      "bytes": 2640,
+      "mtime": "2026-07-18T02:14:28.280Z",
+      "indexed_at": "2026-07-18T02:14:28.280Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "routes/lifeos-identity-routes.js",
       "synopsis": "routes/lifeos-identity-routes.js",
       "bytes": 9840,
@@ -67424,9 +67434,9 @@
     {
       "path": "routes/lifeos-parenting-scripts-routes.js",
       "synopsis": "Age-specific parenting script library HTTP routes.",
-      "bytes": 1128,
-      "mtime": "2026-07-18T02:10:41.482Z",
-      "indexed_at": "2026-07-18T02:10:41.482Z",
+      "bytes": 1641,
+      "mtime": "2026-07-18T02:14:28.280Z",
+      "indexed_at": "2026-07-18T02:14:28.280Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

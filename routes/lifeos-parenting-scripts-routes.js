@@ -25,6 +25,20 @@ export function createParentingScriptRoutes() {
     res.json(svc.oneLiner({ childAge, situation }));
   });
 
+  /** 24/7 meltdown-triage: ≤1 sentence script + developmental read. */
+  router.post('/parent-mode', (req, res) => {
+    const childAge = req.body?.child_age != null ? Number(req.body.child_age) : null;
+    const situation = req.body?.situation || req.body?.topic || 'meltdown';
+    const one = svc.oneLiner({ childAge, situation });
+    res.json({
+      ok: true,
+      mode: 'parent',
+      answer: one.script,
+      developmental_read: one.developmental_read,
+      situation: one.situation,
+    });
+  });
+
   return router;
 }
 

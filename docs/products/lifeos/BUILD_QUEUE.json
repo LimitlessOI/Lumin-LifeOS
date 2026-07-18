@@ -4635,6 +4635,161 @@
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null
+    },
+    {
+      "id": "lifeos-p1-auth-register-export",
+      "target_file": "routes/lifeos-auth-routes.js",
+      "task": "Export registerLifeOSAuthRoutes",
+      "spec": "Export registerLifeOSAuthRoutes for auto-register backup mount.",
+      "expected_exports": [
+        "registerLifeOSAuthRoutes",
+        "createLifeOSAuthRoutes"
+      ],
+      "file_contains": [
+        "registerLifeOSAuthRoutes",
+        "/login"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-auth-register-export",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-auth-autoreg",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "Auto-register auth routes",
+      "spec": "Add lifeos-auth-routes.js registerLifeOSAuthRoutes enabled true.",
+      "file_contains": [
+        "lifeos-auth-routes.js",
+        "registerLifeOSAuthRoutes"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-auth-autoreg",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-household-board",
+      "target_file": "routes/lifeos-household-board-routes.js",
+      "task": "Household board API",
+      "spec": "registerLifeosHouseholdBoardRoutes GET /board with today/overdue/adam/sherry sections.",
+      "expected_exports": [
+        "registerLifeosHouseholdBoardRoutes"
+      ],
+      "file_contains": [
+        "registerLifeosHouseholdBoardRoutes",
+        "/board",
+        "sherry_tasks"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-household-board",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-household-autoreg",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "Auto-register household board",
+      "spec": "Add household-board-routes auto-register.",
+      "file_contains": [
+        "lifeos-household-board-routes.js",
+        "registerLifeosHouseholdBoardRoutes"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-household-autoreg",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-family-register",
+      "target_file": "routes/lifeos-family-routes.js",
+      "task": "Export registerLifeOSFamilyRoutes",
+      "spec": "Export registerLifeOSFamilyRoutes mounting /api/v1/lifeos/family.",
+      "expected_exports": [
+        "registerLifeOSFamilyRoutes",
+        "createLifeOSFamilyRoutes"
+      ],
+      "file_contains": [
+        "registerLifeOSFamilyRoutes"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-family-register",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-family-autoreg",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "Auto-register family routes",
+      "spec": "Add lifeos-family-routes.js registerLifeOSFamilyRoutes.",
+      "file_contains": [
+        "lifeos-family-routes.js",
+        "registerLifeOSFamilyRoutes"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-family-autoreg",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-parent-mode-endpoint",
+      "target_file": "routes/lifeos-parenting-scripts-routes.js",
+      "task": "Parent-mode meltdown triage endpoint",
+      "spec": "POST /parent-mode returns one-sentence script + developmental_read.",
+      "file_contains": [
+        "/parent-mode",
+        "mode: 'parent'"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-parent-mode-endpoint",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-year-household-nav",
+      "target_file": "public/overlay/lifeos-app.html",
+      "task": "Nav Year in Pixels + Household",
+      "spec": "PAGE_META + nav for lifeos-year-in-pixels.html and lifeos-household.html.",
+      "file_contains": [
+        "lifeos-year-in-pixels.html",
+        "lifeos-household.html"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-year-household-nav",
+      "mission_id": "PRODUCT-lifeos"
     }
   ],
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",

@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-17 — Emotional /daily + legacy mount + psychometrics + parenting scripts + labs. |
+| **Last Updated** | 2026-07-17 — Household board + family/auth mounts + year/household nav + parent-mode. |
 ---
 
 ## Founder conversations (2026-06-29)
@@ -1720,6 +1720,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
+| 2026-07-17 | **Household board + family/auth + parent-mode + year/household nav.** `registerLifeosHouseholdBoardRoutes` for Adam/Sherry board UI; family + auth auto-register; POST parenting `/parent-mode` meltdown triage; nav for Year in Pixels + Household. | Household HTML 404'd `/household/board`; Family OS APIs not on founder lane. | tip claim | continue remaining P1s |
 | 2026-07-17 | **Working-features slice: emotional daily + legacy + psychometrics + parenting scripts + labs.** Added GET `/api/v1/lifeos/emotional/daily` (therapy-today-card was 404 on wrong path); `registerLifeOSLegacyRoutes` + auto-register; psychometric battery service/routes/UI; parenting script library; labs/biological-age/VO2 routes + UI + migration `20260718_lifeos_labs_psychometrics.sql`; nav wired. | Tip showed emotional mounted but Coach hit missing GET `/daily`; legacy/psychometrics/labs/parent scripts were open P1s without tip mounts. | local unit smoke | tip claim after redeploy |
 | 2026-07-17 | **Cycle mount + deep-talk decks.** Exported `registerLifeOSCycleRoutes` + auto-register (cycle HTML was 200 while `/api/v1/lifeos/cycle/*` 404). Added `lifeos-deep-talk-decks` service/routes/UI/nav from patterns/debriefs/values with fallback deck. | Cycle P1 looked shipped but API never mounted on founder_builder; deep-talk P1 had no target files. | tip claim after redeploy | continue open P1s |
 | 2026-07-17 | **False-done ask-your-life closed + decision-review/voice surfaces.** Rebuilt `services/lifeos-ask-your-life.js` (`queryLife` over sleep/feelings/decisions/commitments), routes + auto-register + Mirror UI; `routes/lifeos-decision-review-routes.js` for 30/90 reviews; voice journal HTML now has `voice-note-journaling` root + nav. | Queue marked step9/10 done while artifacts missing — honesty gap. | local exports smoke | tip claim + founder ship |
