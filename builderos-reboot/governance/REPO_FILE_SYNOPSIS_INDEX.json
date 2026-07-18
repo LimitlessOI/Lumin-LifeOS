@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T17:29:29.621Z",
+  "generated_at": "2026-07-18T17:35:53.462Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11970,
   "files": [
@@ -66179,9 +66179,9 @@
     {
       "path": "railway.json",
       "synopsis": "JSON data/config — railway.json.",
-      "bytes": 157,
-      "mtime": "2025-12-22T18:15:07.170Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z",
+      "bytes": 408,
+      "mtime": "2026-07-18T17:35:53.462Z",
+      "indexed_at": "2026-07-18T17:35:53.462Z",
       "synopsis_index_only": true
     },
     {
