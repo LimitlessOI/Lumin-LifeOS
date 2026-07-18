@@ -1065,7 +1065,7 @@
     },
     {
       "id": "partner-dashboard-api-downline-tree-active-seats",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/creatorPartnerRoutes.js",
       "task": "Partner dashboard API — downline tree, active seats, earnings, payout status. Target `routes/creatorPartnerRoutes.js` (export `registerCreatorPartnerRoutes`, route `POST /api/v1/creator-partner/ledger`).",
       "spec": "Partner dashboard API — downline tree, active seats, earnings, payout status. Target `routes/creatorPartnerRoutes.js` (export `registerCreatorPartnerRoutes`, route `POST /api/v1/creator-partner/ledger`).",
@@ -1092,30 +1092,9 @@
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "partner-dashboard-api-downline-tree-active-seats",
       "mission_id": "PRODUCT-creator-media-os",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/creator-media-os/twins/steps/partner-dashboard-api-downline-tree-active-seats.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-18T11:41:57.485Z",
-        "shipped_at": "2026-07-18T11:41:57.485Z",
-        "commit_sha": null,
-        "content_sha256": "2b008d78ac592c6a5bd5c7c97807a380243027e3f0b440e0a9cca2fbcef7147a",
-        "target_file": "routes/creatorPartnerRoutes.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "routes/creatorPartnerRoutes.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/creator-media-os/twins/steps/partner-dashboard-api-downline-tree-active-seats.exact",
-          "content_sha256": "2b008d78ac592c6a5bd5c7c97807a380243027e3f0b440e0a9cca2fbcef7147a"
-        }
-      },
-      "shipped_at": "2026-07-18T11:41:57.485Z"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-18T11:42:03.180Z",
+      "commit_sha": "12e73db8f793fc3a21f6b9533d961865fd0da2d2"
     },
     {
       "id": "performance-analytics-learning-loop-ingest-per-p",
