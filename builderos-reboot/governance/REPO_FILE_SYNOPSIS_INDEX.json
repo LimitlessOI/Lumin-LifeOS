@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T04:41:29.532Z",
+  "generated_at": "2026-07-18T05:00:27.362Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11929,
+  "file_count": 11930,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21634,9 +21634,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3599087,
-      "mtime": "2026-07-18T04:41:29.158Z",
-      "indexed_at": "2026-07-18T04:41:29.532Z"
+      "bytes": 3599317,
+      "mtime": "2026-07-18T05:00:26.242Z",
+      "indexed_at": "2026-07-18T05:00:27.362Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -39873,8 +39873,8 @@
       "path": "docs/products/creator-media-os/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Creator Media OS",
       "bytes": 20554,
-      "mtime": "2026-07-18T04:41:21.946Z",
-      "indexed_at": "2026-07-18T04:41:29.133Z"
+      "mtime": "2026-07-18T05:00:25.958Z",
+      "indexed_at": "2026-07-18T05:00:26.209Z"
     },
     {
       "path": "docs/products/CREATORMEDIAOS.md",
@@ -40457,8 +40457,8 @@
       "path": "docs/products/productized-sprint/launch-kit/CREATOR_PARTNER_PROGRAM.md",
       "synopsis": "Creator Partner Program — eXp-style 5-level creator revenue-share spec (GTM + billing requirements). @ssot docs/products/productized-sprint/PRODUCT_HOME.md",
       "bytes": 4027,
-      "mtime": "2026-07-18T04:41:21.946Z",
-      "indexed_at": "2026-07-18T04:41:29.133Z"
+      "mtime": "2026-07-18T05:00:25.962Z",
+      "indexed_at": "2026-07-18T05:00:26.209Z"
     },
     {
       "path": "docs/products/productized-sprint/PRODUCT_HOME.md",
@@ -71798,8 +71798,8 @@
       "path": "scripts/verification_script.js",
       "synopsis": "Exports verifyDeployment — scripts/verification_script.js.",
       "bytes": 772,
-      "mtime": "2026-07-18T04:41:22.058Z",
-      "indexed_at": "2026-07-18T04:41:29.532Z"
+      "mtime": "2026-07-18T04:39:09.350Z",
+      "indexed_at": "2026-07-18T04:39:09.350Z"
     },
     {
       "path": "scripts/verify-agent-alpha-gate.mjs",
@@ -84048,6 +84048,13 @@
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/buildLifeOSiOSIPA.js",
+      "synopsis": "Service module — BuildLifeOSiOSIPA.",
+      "bytes": 1305,
+      "mtime": "2026-07-18T05:00:26.102Z",
+      "indexed_at": "2026-07-18T05:00:27.362Z"
     },
     {
       "path": "services/bullmq-video-queue.js",
