@@ -755,10 +755,10 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-07-18T03:07:13.535Z",
-        "shipped_at": "2026-07-18T03:07:13.535Z",
+        "sealed_at": "2026-07-18T03:09:11.029Z",
+        "shipped_at": "2026-07-18T03:09:11.029Z",
         "commit_sha": null,
-        "content_sha256": "d446826e8b3684e837da451dbb3d53fb76fcc3cbd541e125b5d73d81b65fa7a1",
+        "content_sha256": "10adfd88997158cb738e904897cd4e4dbec212369f338d114d85a46e3155f1ea",
         "target_file": "public/overlay/lifereRemainingDepthOverlay.html",
         "reverse": {
           "mode": "delete_file",
@@ -769,10 +769,10 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/lifere/twins/steps/11.exact",
-          "content_sha256": "d446826e8b3684e837da451dbb3d53fb76fcc3cbd541e125b5d73d81b65fa7a1"
+          "content_sha256": "10adfd88997158cb738e904897cd4e4dbec212369f338d114d85a46e3155f1ea"
         }
       },
-      "shipped_at": "2026-07-18T03:07:13.535Z",
+      "shipped_at": "2026-07-18T03:09:11.029Z",
       "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "11"
     }
