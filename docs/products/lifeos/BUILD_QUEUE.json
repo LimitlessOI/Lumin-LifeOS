@@ -3234,7 +3234,12 @@
       "mission_id": "PRODUCT-lifeos",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-18T01:33:17.581Z",
-      "commit_sha": "29e768ec97393d4a2d1cff5f1921643043cf4408"
+      "commit_sha": "29e768ec97393d4a2d1cff5f1921643043cf4408",
+      "last_error": null,
+      "pre_existing": true,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null
     },
     {
       "id": "lifeos-p1-practice-library-ui",
@@ -3258,7 +3263,12 @@
       "mission_id": "PRODUCT-lifeos",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-18T01:33:17.581Z",
-      "commit_sha": "29e768ec97393d4a2d1cff5f1921643043cf4408"
+      "commit_sha": "29e768ec97393d4a2d1cff5f1921643043cf4408",
+      "last_error": null,
+      "pre_existing": true,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null
     },
     {
       "id": "lifeos-p1-practice-nav",
@@ -3335,11 +3345,11 @@
         "/instruments"
       ],
       "route": "GET /api/v1/lifeos/assessments/instruments",
-      "status": "pending",
+      "status": "blocked",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
-      "attempts": 0,
+      "attempts": 1,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-assessment-routes",
       "mission_id": "PRODUCT-lifeos",
@@ -3352,7 +3362,12 @@
           ],
           "assertion_id": "expected_exports:routes/lifeos-assessment-battery-routes.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-18T01:34:53.122Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerLifeosAssessmentBatteryRoutes; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lifeos-p1-assessment-autoreg",
