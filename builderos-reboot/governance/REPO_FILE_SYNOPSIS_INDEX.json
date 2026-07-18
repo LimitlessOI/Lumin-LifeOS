@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T04:06:40.757Z",
+  "generated_at": "2026-07-18T04:09:12.194Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11925,
+  "file_count": 11926,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -66139,6 +66139,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "routes/accountFormFill.js",
+      "synopsis": "Mock function to simulate fetching user data",
+      "bytes": 800,
+      "mtime": "2026-07-18T04:09:12.194Z",
+      "indexed_at": "2026-07-18T04:09:12.194Z"
     },
     {
       "path": "routes/action-inbox-routes.js",

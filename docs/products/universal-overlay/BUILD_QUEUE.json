@@ -1358,7 +1358,33 @@
           ],
           "assertion_id": "expected_exports:routes/accountFormFill.js"
         }
-      ]
+      ],
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/step5.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-18T04:09:10.729Z",
+        "shipped_at": "2026-07-18T04:09:10.729Z",
+        "commit_sha": null,
+        "content_sha256": "4026133af588f3583a59aaa5ce63e4e01d2b4403106c6f610a498e3e8e96063d",
+        "target_file": "routes/accountFormFill.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "routes/accountFormFill.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/universal-overlay/twins/steps/step5.exact",
+          "content_sha256": "4026133af588f3583a59aaa5ce63e4e01d2b4403106c6f610a498e3e8e96063d"
+        }
+      },
+      "shipped_at": "2026-07-18T04:09:10.729Z",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step5"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
