@@ -3224,7 +3224,7 @@
         "failure"
       ],
       "design_review_flagged": true,
-      "status": "pending",
+      "status": "done",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -3232,30 +3232,9 @@
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-failure-museum-ui",
       "mission_id": "PRODUCT-lifeos",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/lifeos/twins/steps/lifeos-p1-failure-museum-ui.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-18T01:33:11.472Z",
-        "shipped_at": "2026-07-18T01:33:11.472Z",
-        "commit_sha": null,
-        "content_sha256": "a6553a367fe5f1d3f29a30dd39285606aa26ff4eff1167adbf9486d8f0953686",
-        "target_file": "public/overlay/lifeos-failure-museum.html",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "public/overlay/lifeos-failure-museum.html",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/lifeos/twins/steps/lifeos-p1-failure-museum-ui.exact",
-          "content_sha256": "a6553a367fe5f1d3f29a30dd39285606aa26ff4eff1167adbf9486d8f0953686"
-        }
-      },
-      "shipped_at": "2026-07-18T01:33:11.472Z"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-18T01:33:17.581Z",
+      "commit_sha": "29e768ec97393d4a2d1cff5f1921643043cf4408"
     },
     {
       "id": "lifeos-p1-practice-library-ui",
@@ -3269,7 +3248,7 @@
         "lifeos-bootstrap"
       ],
       "design_review_flagged": true,
-      "status": "pending",
+      "status": "done",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -3277,30 +3256,9 @@
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-practice-library-ui",
       "mission_id": "PRODUCT-lifeos",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/lifeos/twins/steps/lifeos-p1-practice-library-ui.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-18T01:33:11.483Z",
-        "shipped_at": "2026-07-18T01:33:11.483Z",
-        "commit_sha": null,
-        "content_sha256": "9fd67d13793a78209a70758ed09c21aa27e75eaed8d7a7a95742e36b93b96915",
-        "target_file": "public/overlay/lifeos-practice.html",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "public/overlay/lifeos-practice.html",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/lifeos/twins/steps/lifeos-p1-practice-library-ui.exact",
-          "content_sha256": "9fd67d13793a78209a70758ed09c21aa27e75eaed8d7a7a95742e36b93b96915"
-        }
-      },
-      "shipped_at": "2026-07-18T01:33:11.483Z"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-18T01:33:17.581Z",
+      "commit_sha": "29e768ec97393d4a2d1cff5f1921643043cf4408"
     },
     {
       "id": "lifeos-p1-practice-nav",
@@ -3341,7 +3299,18 @@
       "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-assessment-battery-service",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-assessment-battery.js",
+          "exports": [
+            "createAssessmentBatteryService",
+            "listInstruments"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-assessment-battery.js"
+        }
+      ]
     },
     {
       "id": "lifeos-p1-assessment-routes",
@@ -3363,7 +3332,17 @@
       "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-assessment-routes",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/lifeos-assessment-battery-routes.js",
+          "exports": [
+            "registerLifeosAssessmentBatteryRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/lifeos-assessment-battery-routes.js"
+        }
+      ]
     },
     {
       "id": "lifeos-p1-assessment-autoreg",
