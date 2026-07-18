@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T11:41:59.088Z",
+  "generated_at": "2026-07-18T11:44:45.174Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11958,
+  "file_count": 11959,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -84991,6 +84991,13 @@
       "bytes": 10613,
       "mtime": "2026-07-05T19:10:02.200Z",
       "indexed_at": "2026-07-17T23:06:25.553Z"
+    },
+    {
+      "path": "services/creatorAnalyticsDashboard.js",
+      "synopsis": "Existing code and exports",
+      "bytes": 1894,
+      "mtime": "2026-07-18T11:44:45.174Z",
+      "indexed_at": "2026-07-18T11:44:45.174Z"
     },
     {
       "path": "services/creatorAvatarClone.js",
