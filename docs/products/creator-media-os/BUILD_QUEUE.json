@@ -440,13 +440,13 @@
     },
     {
       "id": "back-catalog-ingestion-ingest-a-creator-s-existi",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/creatorBackCatalogIngest.js",
       "task": "Back-catalog ingestion — ingest a creator's existing videos to auto-extract a clean voice sample, build the persona-twin training corpus (transcripts of their whole library), and index assets into the media vault. Target `services/creatorBa",
       "spec": "Back-catalog ingestion — ingest a creator's existing videos to auto-extract a clean voice sample, build the persona-twin training corpus (transcripts of their whole library), and index assets into the media vault. Target `services/creatorBackCatalogIngest.js` (export `ingestBackCatalog`). Requires likeness/voice consent + rights + storage.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "ingestBackCatalog"
       ],
@@ -462,7 +462,12 @@
       ],
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "back-catalog-ingestion-ingest-a-creator-s-existi",
-      "mission_id": "PRODUCT-creator-media-os"
+      "mission_id": "PRODUCT-creator-media-os",
+      "last_attempt_at": "2026-07-18T10:17:08.464Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/services/.factory-import-check-1784369828429-1.mjs\";",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "persona-twin-train-a-style-voice-of-writing-mode",
