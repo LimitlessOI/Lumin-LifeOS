@@ -1036,7 +1036,7 @@
     },
     {
       "id": "creator-partner-program-rev-share-ledger-exp-sty",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/creatorPartnerProgram.js",
       "task": "Creator Partner Program rev-share ledger — eXp-style 5-level, paid-from-margin, unlock-by-frontline, active-only, capped; percentages tunable via config. Target `services/creatorPartnerProgram.js` (export `computeRevShare`).",
       "spec": "Creator Partner Program rev-share ledger — eXp-style 5-level, paid-from-margin, unlock-by-frontline, active-only, capped; percentages tunable via config. Target `services/creatorPartnerProgram.js` (export `computeRevShare`).",
@@ -1059,30 +1059,9 @@
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "creator-partner-program-rev-share-ledger-exp-sty",
       "mission_id": "PRODUCT-creator-media-os",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/creator-media-os/twins/steps/creator-partner-program-rev-share-ledger-exp-sty.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-18T11:39:15.353Z",
-        "shipped_at": "2026-07-18T11:39:15.353Z",
-        "commit_sha": null,
-        "content_sha256": "984463e8efb47791bdf8f1947f320dac4aeaceb7aa5ac826838533fa1266fc15",
-        "target_file": "services/creatorPartnerProgram.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/creatorPartnerProgram.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/creator-media-os/twins/steps/creator-partner-program-rev-share-ledger-exp-sty.exact",
-          "content_sha256": "984463e8efb47791bdf8f1947f320dac4aeaceb7aa5ac826838533fa1266fc15"
-        }
-      },
-      "shipped_at": "2026-07-18T11:39:15.353Z"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-18T11:39:20.634Z",
+      "commit_sha": "9cbc1c424858b6f0ccbe291ac7cd185ba2cd9275"
     },
     {
       "id": "partner-dashboard-api-downline-tree-active-seats",
