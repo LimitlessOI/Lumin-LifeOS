@@ -38,7 +38,7 @@ Master verbatim: `docs/conversation_dumps/2026-06-29-limitlessos-ecosystem-found
 | **Lifecycle** | `planning` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `draft` |
-| **Last Updated** | 2026-07-17 — SMOS `/marketing` home has a clickable "Buy Content Pack — $49" button, product tour no longer auto-opens, SENTRY Layer A + Layer B pass on production. |
+| **Last Updated** | 2026-07-18 — Platform affiliate + eXp-style downline revenue-share foundation authored (spec `AFFILIATE_REVSHARE_SPEC.md` + `db/migrations/20260710_create_affiliate_revshare.sql` + `config/affiliate-revshare.js`); open to all accounts, no fee to join, commission only on real paid deals. Service/route/middleware modules pending governed-factory build + founder subscription/payout decision. |
 | **Owner** | adam |
 | **Parent System** | [LimitlessOS](../limitlessos/PRODUCT_HOME.md) |
 | **First Module** | SocialMediaOS |
@@ -1357,6 +1357,7 @@ config/council-members.js           — shared AI config
 
 | Date | What Changed | Why | Amendment Updated | Manifest Updated | Verified |
 |---|---|---|---|---|---|
+| 2026-07-18 | **Platform affiliate/revshare foundation** — Added design spec `docs/products/marketingos/AFFILIATE_REVSHARE_SPEC.md`, schema migration `db/migrations/20260710_create_affiliate_revshare.sql` (affiliates, referral_codes, attribution_events, commission_ledger), and `config/affiliate-revshare.js` (30/5/3 bps tiers, refund window, product map, subscription toggle). eXp-style: direct commission + multi-tier downline revshare, open to all accounts, no fee to join, commission only on real paid/non-refunded deals. Tables are inert until the governed-factory service/route/middleware modules land. | Founder: put the affiliate/downline model across ALL products, open to everyone, recurring-first; "we all win together." | ✅ | — | `node --check` + config math (30% of $49=$14.70, 5% of $29=$1.45, 3%=$0.87); migration idempotent (CREATE TABLE IF NOT EXISTS). Downline payouts pending founder subscription decision + Stripe Connect confirm. |
 | 2026-07-17 | **SMOS market-ready home** — `/marketing` Buffer-style one primary CTA (Start a session), quiet secondary nav, packs as status cards, YouTube/film modes in `<details>` advanced block; light theme off cream. Research: `docs/research/SMOS_COMPETITOR_DESIGN_2026_07.md`. Ship unblocked by execute-batch JS-module HTML-extract fix. | Adam: cutting-edge, competitor-informed, blueprint Phase 1 features, every function works | ✅ | — | tip prove home-hero + Phase 1 loop |
 | 2026-07-16 | **Thumb compose tip-fix** — Prefetch face + sequential compose + face-embedded SVG fallback so tip always returns composed face+title (not empty svg_fallback). | Tip honesty: thumbnailComposed + overlay words | ✅ | — | eye-test |
 | 2026-07-16 | **YouTube research path tip-fix** — Default Refresh = parallel shelf research + compose (no per-card AI); `?ai=1` for rewrite. Stops 18s budget falling back to SVG with researchedCount=0. | Tip prove: playbook + real competitor thumbs/velocity under edge budget | ✅ | — | eye-test /
