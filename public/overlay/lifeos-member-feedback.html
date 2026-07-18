@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Member feedback → founder intake queue -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Member Feedback — LifeOS</title>
+  <script src="/overlay/lifeos-theme.js"></script>
+  <script src="/overlay/lifeos-bootstrap.js"></script>
+  <style>
+    body { margin:0; font-family:'Avenir Next','Segoe UI',sans-serif; background:linear-gradient(160deg,#142018,#0e1210 55%); color:#eef6f0; min-height:100vh; }
+    .root { max-width:720px; margin:0 auto; padding:28px 18px 80px; }
+    h1 { margin:0 0 6px; }
+    .sub { color:#9bb0a4; margin-bottom:16px; }
+    textarea, select { width:100%; box-sizing:border-box; padding:12px; border-radius:10px; border:1px solid #2a3a32; background:#121a16; color:#eef6f0; font:inherit; }
+    textarea { min-height:110px; }
+    button { margin-top:10px; padding:10px 14px; border:0; border-radius:8px; background:#3d8f6a; color:#fff; font:inherit; cursor:pointer; }
+    button.secondary { background:#2a3a32; margin-left:8px; }
+    pre { white-space:pre-wrap; background:rgba(18,26,22,.92); border:1px solid #2a3a32; border-radius:12px; padding:12px; margin-top:14px; font-size:.85rem; }
+    .note { font-size:.85rem; color:#9bb0a4; margin-top:8px; }
+  </style>
+</head>
+<body>
+  <div class="root">
+    <h1>Member feedback</h1>
+    <p class="sub">Goes to the founder intake queue. Never starts a builder job.</p>
+    <label for="category">Category</label>
+    <select id="category">
+      <option value="general">General</option>
+      <option value="ux">UX friction</option>
+      <option value="bug">Bug</option>
+      <option value="idea">Product idea</option>
+    </select>
+    <label for="body" style="display:block;margin-top:10px">Feedback</label>
+    <textarea id="body" placeholder="What should LifeOS do better for you?"></textarea>
+    <div>
+      <button id="send" type="button">Queue for founder</button>
+      <button id="list" type="button" class="secondary">Operator list</button>
+    </div>
+    <p class="note">Operator list requires founder/admin. Submissions persist to <code>lifeos_member_feedback</code>.</p>
+    <pre id="out">Ready.</pre>
+  </div>
+  <script>
+    async function api(path, opts) {
+      const r = await fetch(path, {
+        credentials: 'include',
+        ...opts,
+        headers: { 'content-type': 'application/json', ...(opts && opts.headers) },
+      });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(j.error || j.message || ('HTTP ' + r.status));
+      return j;
+    }
+    document.getElementById('send').onclick = async () => {
+      const out = document.getElementById('out');
+      out.textContent = 'Sending…';
+      try {
+        const j = await api('/api/v1/lifeos/member-feedback', {
+          method: 'POST',
+          body: JSON.stringify({
+            user: 'adam',
+            category: document.getElementById('category').value,
+            body: document.getElementById('body').value,
+          }),
+        });
+        out.textContent = JSON.stringify(j, null, 2);
+      } catch (e) { out.textContent = e.message; }
+    };
+    document.getElementById('list').onclick = async () => {
+      const out = document.getElementById('out');
+      out.textContent = 'Loading…';
+      try {
+        const j = await api('/api/v1/lifeos/member-feedback?status=queued');
+        out.textContent = JSON.stringify(j, null, 2);
+      } catch (e) { out.textContent = e.message; }
+    };
+  </script>
+</body>
+</html>

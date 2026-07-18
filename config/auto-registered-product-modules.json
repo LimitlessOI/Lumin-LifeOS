@@ -329,8 +329,16 @@
     {
       "path": "routes/lifeos-member-feedback-routes.js",
       "register": "registerMemberFeedbackRoutes",
+      "mount_path": "/api/v1/lifeos/member-feedback",
       "enabled": true,
-      "note": "LifeOS member feedback REST surface. Auto-register entry added so the governed factory can ship the route and module-health can prove it LIVE."
+      "note": "Member feedback → founder intake queue (persisted). Never builder execute."
+    },
+    {
+      "path": "routes/lifeos-ethics-routes.js",
+      "register": "registerLifeOSEthicsRoutes",
+      "mount_path": "/api/v1/lifeos/ethics",
+      "enabled": true,
+      "note": "Ethics + constitutional lock-status on founder_builder lane (was tip-blind)."
     },
     {
       "path": "routes/lifeos-perfect-day-routes.js",

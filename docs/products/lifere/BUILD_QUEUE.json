@@ -705,6 +705,50 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-18T02:16:31.309Z"
+    },
+    {
+      "id": "10",
+      "status": "pending",
+      "target_file": "services/livePhoneService.js",
+      "task": "implement live phone service",
+      "spec": "Create a service for live phone answering functionality utilizing Vapi/Twilio.",
+      "depends_on": [
+        "8"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "answerLivePhone"
+      ],
+      "route": {
+        "path": "/api/v1/lifere/live-phone"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/livePhoneService.js",
+          "exports": [
+            "answerLivePhone"
+          ],
+          "assertion_id": "expected_exports:services/livePhoneService.js"
+        }
+      ]
+    },
+    {
+      "id": "11",
+      "status": "blocked",
+      "target_file": "public/overlay/lifereRemainingDepthOverlay.html",
+      "task": "implement remaining depth overlay",
+      "spec": "Provide a UI overlay documenting the A–Z depth information.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "design_review_flagged": true,
+      "last_attempt_at": "2026-07-18T02:50:56.961Z",
+      "last_error": "NOT_ON_BLUEPRINT",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ],
   "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
