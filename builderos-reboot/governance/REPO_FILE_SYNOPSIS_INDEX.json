@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T21:57:14.394Z",
+  "generated_at": "2026-07-18T22:07:30.524Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11974,
   "files": [
@@ -36787,9 +36787,9 @@
     {
       "path": "docs/architecture/factory-v1-blueprint-pack/FACTORY_REBUILD_MANIFEST_V1.md",
       "synopsis": "Factory Rebuild Manifest v1",
-      "bytes": 28987,
-      "mtime": "2026-07-18T21:56:08.302Z",
-      "indexed_at": "2026-07-18T21:57:14.394Z"
+      "bytes": 30519,
+      "mtime": "2026-07-18T22:06:20.251Z",
+      "indexed_at": "2026-07-18T22:07:30.524Z"
     },
     {
       "path": "docs/architecture/factory-v1-blueprint-pack/FACTORY-0001-v1/ACCEPTANCE_TESTS.json",
@@ -39509,9 +39509,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 231576,
-      "mtime": "2026-07-18T21:56:39.186Z",
-      "indexed_at": "2026-07-18T21:57:14.394Z"
+      "bytes": 232672,
+      "mtime": "2026-07-18T22:06:52.676Z",
+      "indexed_at": "2026-07-18T22:07:30.524Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
