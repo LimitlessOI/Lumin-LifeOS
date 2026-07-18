@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T00:08:45.195Z",
+  "generated_at": "2026-07-18T00:13:47.234Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11885,
+  "file_count": 11886,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -69999,6 +69999,13 @@
       "mtime": "2026-06-14T01:09:04.481Z",
       "indexed_at": "2026-07-17T23:06:25.553Z",
       "synopsis_index_only": true
+    },
+    {
+      "path": "scripts/lockdown.js",
+      "synopsis": "Checks security configurations to determine if a P2 item should halt builder processes.",
+      "bytes": 1311,
+      "mtime": "2026-07-18T00:13:47.234Z",
+      "indexed_at": "2026-07-18T00:13:47.234Z"
     },
     {
       "path": "scripts/lumin-build-smoke.mjs",
