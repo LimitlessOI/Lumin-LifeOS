@@ -5202,7 +5202,7 @@
         "needs_confirm",
         "confirm_required"
       ],
-      "status": "pending",
+      "status": "done",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -5226,10 +5226,10 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-07-18T02:33:22.480Z",
-        "shipped_at": "2026-07-18T02:33:22.480Z",
+        "sealed_at": "2026-07-18T02:31:27.642Z",
+        "shipped_at": "2026-07-18T02:31:27.642Z",
         "commit_sha": null,
-        "content_sha256": "85682a9f24f7951654fbb82395c7b2dc2da6f852acabdd2ba1c90592da980ae2",
+        "content_sha256": "40056053b68a7e51ecda580c83379550cfb3040d5998d09478a001fba66409d5",
         "target_file": "routes/lifeos-ui-directives-routes.js",
         "reverse": {
           "mode": "delete_file",
@@ -5240,10 +5240,12 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/lifeos/twins/steps/lifeos-p1-ui-directives-rewire.exact",
-          "content_sha256": "85682a9f24f7951654fbb82395c7b2dc2da6f852acabdd2ba1c90592da980ae2"
+          "content_sha256": "40056053b68a7e51ecda580c83379550cfb3040d5998d09478a001fba66409d5"
         }
       },
-      "shipped_at": "2026-07-18T02:33:22.480Z"
+      "shipped_at": "2026-07-18T02:33:27.790Z",
+      "shipped_via": "governed_ship_queue",
+      "commit_sha": "0bd978403b7d8904c246f6c6dcbf8bc56fefee4d"
     },
     {
       "id": "lifeos-p1-twin-reaction-rewire",
