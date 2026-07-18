@@ -183,6 +183,29 @@
 
 <div class="root" id="app" style="display:none">
   <h1>Communication Coach</h1>
+  <div id="therapy-today-card" class="card" style="margin-bottom:20px">
+    <div class="card-header">
+      <span class="title">Today</span>
+      <span class="meta" id="therapy-today-meta">loading…</span>
+    </div>
+    <div class="card-body" id="therapy-today-body">Checking your emotional check-in…</div>
+  </div>
+  <script>
+  (async function loadTherapyTodayCard() {
+    const meta = document.getElementById('therapy-today-meta');
+    const body = document.getElementById('therapy-today-body');
+    try {
+      const r = await fetch('/api/v1/lifeos/emotional/daily', { credentials: 'include' });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const j = await r.json();
+      meta.textContent = 'ready';
+      body.textContent = (j.next_action || j.summary || j.message || 'Open Coach & Therapy when you are ready.').toString().slice(0, 280);
+    } catch (e) {
+      meta.textContent = 'soft';
+      body.innerHTML = 'Start today with a short emotional check-in when you are ready. <a href="#" onclick="document.querySelector(\'.tab\')?.click();return false;" style="color:#a0aaff">Continue in Coach</a>';
+    }
+  })();
+  </script>
   <p class="sub">Get what you need. Without hurting the people you love.</p>
 
   <!-- Tabs -->

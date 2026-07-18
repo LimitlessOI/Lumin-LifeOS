@@ -62,7 +62,9 @@ function slugify(value, fallback) {
 
 /**
  * Turn documented backlog bullets into pending steps without a model.
- * Pathless bullets become human_hold (FOUNDER_GATED); UI paths get design_review_flagged pending.
+ * Pathless bullets are SKIPPED (model planner / conductor must assign a real
+ * target_file) — never park FOUNDER_GATED_INTENTION.md placeholders that starve
+ * the factory. UI paths get design_review_flagged pending.
  *
  * @param {{ productId: string, backlog: string[], existingSteps?: object[], maxSteps?: number, verifyScript?: string|null }} opts
  * @returns {{ queue: object, added: object[] }|null}
@@ -95,23 +97,20 @@ export function deterministicQueueFromBacklog({
   for (let i = 0; i < items.length && added.length < maxSteps; i++) {
     const item = items[i];
     const guessed = guessTargetFileFromBullet(item);
-    const target_file = guessed || founderGatedPlaceholderPath(productId);
+    // Skip pathless — placeholders look like work but never ship.
+    if (!guessed) continue;
+    const target_file = guessed;
     const raw = {
       id: slugify(item, `${productId}-step-${existing.length + i + 1}`),
       target_file,
       task: item.slice(0, 240),
       spec: item,
       depends_on: [],
-      human_hold: !guessed,
+      human_hold: false,
     };
     const step = normalizePlannedStep(raw, productId, existing.length + i);
     if (!step) continue;
-    if (!guessed) {
-      step.human_hold = true;
-      step.founder_gated = true;
-      step.status = STEP_STATUS.FOUNDER_GATED;
-      step.design_review_flagged = false;
-    } else if (shouldFlagDesignReview(step)) {
+    if (shouldFlagDesignReview(step)) {
       step.design_review_flagged = true;
       step.status = STEP_STATUS.PENDING;
       step.founder_gated = false;

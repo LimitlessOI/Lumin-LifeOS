@@ -1234,7 +1234,7 @@
     },
     {
       "id": "faith-studio-5",
-      "status": "founder_gated",
+      "status": "blocked",
       "target_file": "routes/publicPublishingReview.js",
       "task": "implement public publishing review workflow",
       "spec": "Implement a workflow for reviewing and approving public publishing of content.",
@@ -1242,7 +1242,7 @@
         "faith-studio-4"
       ],
       "founder_gated": true,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerPublishingReviewRoutes"
       ],
@@ -1265,7 +1265,12 @@
           ],
           "assertion_id": "expected_exports:routes/publicPublishingReview.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-18T01:24:33.375Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerPublishingReviewRoutes; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ],
   "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",

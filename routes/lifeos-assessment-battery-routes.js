@@ -101,5 +101,45 @@ export function createAssessmentBatteryRoutes({ pool }) {
     }
   });
 
+  router.get("/instruments", async (_req, res) => {
+    res.json({ ok: true, instruments: svc.listInstruments() });
+  });
+
+  router.get("/me", requireLifeOSUser, async (req, res, next) => {
+    try {
+      res.json({ ok: true, profile: await svc.getProfile(req.lifeosUser.sub) });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  router.post("/me", requireLifeOSUser, async (req, res, next) => {
+    try {
+      const { instrument, answers } = req.body || {};
+      const saved = await svc.saveResponse(req.lifeosUser.sub, instrument, answers || {});
+      res.status(201).json({ ok: true, saved });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  router.get("/compare", requireLifeOSUser, async (req, res, next) => {
+    try {
+      const other = req.query.other_user_id;
+      if (!other) return res.status(400).json({ ok: false, error: 'other_user_id required' });
+      const comparison = await svc.comparePair(req.lifeosUser.sub, other);
+      res.json({ ok: true, comparison });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  return router;
+}
+
+/** Auto-register entrypoint — mounts under /api/v1/lifeos/assessments */
+export function registerLifeosAssessmentBatteryRoutes(app, { pool } = {}) {
+  const router = createAssessmentBatteryRoutes({ pool });
+  app.use('/api/v1/lifeos/assessments', router);
   return router;
 }

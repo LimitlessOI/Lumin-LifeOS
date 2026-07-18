@@ -41,9 +41,9 @@ test('extractBacklog skips [x] checked items and harvests [ ] + Next lines', () 
 - [x] Already shipped router
 - [ ] Wire new memory retrieve route
 ## Agent Handoff Notes
-*Next:** Prove tip deploy serves founder-memory inject
+Next:** Prove tip deploy serves founder-memory inject
 | Field | Value |
-| *Next** | Run acceptance for LifeRE alpha |
+| Next** | Run acceptance for LifeRE alpha |
 `;
   const items = extractBacklog(text);
   assert.ok(items.some((i) => /Wire new memory retrieve route/i.test(i)));

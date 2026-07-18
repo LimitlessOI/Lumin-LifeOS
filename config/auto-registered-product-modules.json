@@ -1,6 +1,13 @@
 {
   "modules": [
     {
+      "path": "routes/lifeos-assessment-battery-routes.js",
+      "register": "registerLifeosAssessmentBatteryRoutes",
+      "mount_path": "/api/v1/lifeos/assessments",
+      "enabled": true,
+      "note": "LifeOS assessment battery (attachment/love language/conflict/values). Twin step lifeos-p1-assessment-autoreg."
+    },
+    {
       "path": "routes/founder-sms-routes.js",
       "register": "registerFounderSmsRoutes",
       "enabled": true,

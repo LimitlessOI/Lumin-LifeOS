@@ -63,7 +63,7 @@ test('guessTargetFileFromBullet extracts real paths only', () => {
   assert.equal(guessTargetFileFromBullet('edit /etc/passwd somehow'), null);
 });
 
-test('deterministicQueueFromBacklog: path bullets pending; pathless human_hold; UI design_review_flagged', () => {
+test('deterministicQueueFromBacklog: path bullets pending; pathless skipped; UI design_review_flagged', () => {
   const backlog = extractBacklog(HOME);
   const res = deterministicQueueFromBacklog({
     productId: 'fixture-product',
@@ -80,11 +80,15 @@ test('deterministicQueueFromBacklog: path bullets pending; pathless human_hold; 
   assert.equal(withPath.status, 'pending');
   assert.equal(withPath.founder_gated, false);
 
-  const pathless = res.queue.steps.find((s) => /preview-expiry/.test(s.task));
-  assert.ok(pathless);
-  assert.equal(pathless.target_file, founderGatedPlaceholderPath('fixture-product'));
-  assert.equal(pathless.human_hold, true);
-  assert.equal(pathless.status, 'founder_gated');
+  // Pathless bullets must not become FOUNDER_GATED_INTENTION.md theater.
+  assert.equal(
+    res.queue.steps.some((s) => /preview-expiry/.test(s.task)),
+    false,
+  );
+  assert.equal(
+    res.queue.steps.some((s) => /FOUNDER_GATED_INTENTION/.test(s.target_file || '')),
+    false,
+  );
 
   const ui = res.queue.steps.find((s) => /customization panel/i.test(s.task));
   assert.ok(ui);
