@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T04:09:43.943Z",
+  "generated_at": "2026-07-18T04:16:25.726Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11926,
+  "file_count": 11928,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21634,9 +21634,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3598362,
-      "mtime": "2026-07-18T04:09:39.014Z",
-      "indexed_at": "2026-07-18T04:09:43.943Z"
+      "bytes": 3598871,
+      "mtime": "2026-07-18T04:16:17.046Z",
+      "indexed_at": "2026-07-18T04:16:25.726Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -39862,6 +39862,14 @@
       "indexed_at": "2026-07-17T23:06:25.553Z"
     },
     {
+      "path": "docs/products/creator-media-os/BUILD_QUEUE.json",
+      "synopsis": "Documentation — BUILD QUEUE.",
+      "bytes": 38936,
+      "mtime": "2026-07-18T04:10:27.890Z",
+      "indexed_at": "2026-07-18T04:16:17.021Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "docs/products/creator-media-os/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 1050,
@@ -39873,8 +39881,8 @@
       "path": "docs/products/creator-media-os/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Creator Media OS",
       "bytes": 20554,
-      "mtime": "2026-07-18T04:04:07.802Z",
-      "indexed_at": "2026-07-18T04:09:24.936Z"
+      "mtime": "2026-07-18T04:10:27.890Z",
+      "indexed_at": "2026-07-18T04:16:17.021Z"
     },
     {
       "path": "docs/products/CREATORMEDIAOS.md",
@@ -40457,8 +40465,8 @@
       "path": "docs/products/productized-sprint/launch-kit/CREATOR_PARTNER_PROGRAM.md",
       "synopsis": "Creator Partner Program — eXp-style 5-level creator revenue-share spec (GTM + billing requirements). @ssot docs/products/productized-sprint/PRODUCT_HOME.md",
       "bytes": 4027,
-      "mtime": "2026-07-18T03:59:22.854Z",
-      "indexed_at": "2026-07-18T04:09:24.936Z"
+      "mtime": "2026-07-18T04:10:27.890Z",
+      "indexed_at": "2026-07-18T04:16:17.021Z"
     },
     {
       "path": "docs/products/productized-sprint/PRODUCT_HOME.md",
@@ -66148,6 +66156,13 @@
       ]
     },
     {
+      "path": "routes/accountFormFill.js",
+      "synopsis": "Mock function to simulate fetching user data",
+      "bytes": 800,
+      "mtime": "2026-07-18T04:15:52.382Z",
+      "indexed_at": "2026-07-18T04:16:25.726Z"
+    },
+    {
       "path": "routes/action-inbox-routes.js",
       "synopsis": "Action Inbox v1 API routes — capture, classify, stage, approve, route, receipt.",
       "bytes": 5375,
@@ -83056,8 +83071,8 @@
       "path": "services/accountFormFill.js",
       "synopsis": "services/accountFormFill.js",
       "bytes": 657,
-      "mtime": "2026-07-18T04:09:18.322Z",
-      "indexed_at": "2026-07-18T04:09:43.943Z"
+      "mtime": "2026-07-18T04:06:40.757Z",
+      "indexed_at": "2026-07-18T04:06:40.757Z"
     },
     {
       "path": "services/accreditationBodyConsultation.js",
