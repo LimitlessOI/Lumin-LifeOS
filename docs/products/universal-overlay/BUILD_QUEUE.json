@@ -1362,6 +1362,51 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-18T04:09:15.734Z",
       "commit_sha": "33617c0f1db03d3af44a756364814d27e20b2e92"
+    },
+    {
+      "id": "01",
+      "status": "pending",
+      "target_file": "services/buildLifeOSiOSIPA.js",
+      "task": "implement build workflow service",
+      "spec": "Implement the build workflow for generating a signed IPA using Apple Dev secrets.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generateSignedIPA"
+      ]
+    },
+    {
+      "id": "02",
+      "status": "pending",
+      "target_file": "db/migrations/addStruggleDetectionFormFill.sql",
+      "task": "create struggle detection form fill table",
+      "spec": "Create a table to support struggle detection and form fill data.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ]
+    },
+    {
+      "id": "03",
+      "status": "pending",
+      "target_file": "routes/struggleDetectionFormFill.js",
+      "task": "implement struggle detection form fill route",
+      "spec": "Provide a route for handling struggle detection and auto form fill submissions.",
+      "depends_on": [
+        "02"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerStruggleDetectionFormFillRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/struggle-detection/form-fill"
+      }
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
