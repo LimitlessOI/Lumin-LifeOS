@@ -3914,19 +3914,23 @@
         "lifeos-cycle-routes.js",
         "registerLifeOSCycleRoutes"
       ],
-      "status": "blocked",
+      "status": "done",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
-      "attempts": 1,
+      "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-cycle-autoreg",
       "mission_id": "PRODUCT-lifeos",
       "last_attempt_at": "2026-07-18T02:03:09.600Z",
-      "last_error": "NOT_ON_BLUEPRINT",
+      "last_error": null,
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "pre_existing": true,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null
     },
     {
       "id": "lifeos-p1-cycle-register-export",
@@ -3941,7 +3945,7 @@
         "registerLifeOSCycleRoutes",
         "/api/v1/lifeos/cycle"
       ],
-      "status": "pending",
+      "status": "done",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -3959,7 +3963,12 @@
           ],
           "assertion_id": "expected_exports:routes/lifeos-cycle-routes.js"
         }
-      ]
+      ],
+      "last_error": null,
+      "pre_existing": true,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null
     },
     {
       "id": "lifeos-p1-deep-talk-service",
@@ -3974,7 +3983,7 @@
         "buildWeeklyDeck",
         "FALLBACK_DECK"
       ],
-      "status": "pending",
+      "status": "done",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -3991,7 +4000,12 @@
           ],
           "assertion_id": "expected_exports:services/lifeos-deep-talk-decks.js"
         }
-      ]
+      ],
+      "last_error": null,
+      "pre_existing": true,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null
     },
     {
       "id": "lifeos-p1-deep-talk-routes",
@@ -4005,7 +4019,7 @@
         "registerLifeosDeepTalkDeckRoutes",
         "/weekly"
       ],
-      "status": "pending",
+      "status": "done",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -4026,7 +4040,12 @@
       "route": {
         "method": "GET",
         "path": "/weekly."
-      }
+      },
+      "last_error": null,
+      "pre_existing": true,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null
     },
     {
       "id": "lifeos-p1-deep-talk-autoreg",
@@ -4037,14 +4056,19 @@
         "lifeos-deep-talk-decks-routes.js",
         "registerLifeosDeepTalkDeckRoutes"
       ],
-      "status": "pending",
+      "status": "done",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
       "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-deep-talk-autoreg",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "last_error": null,
+      "pre_existing": true,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null
     },
     {
       "id": "lifeos-p1-deep-talk-ui",
@@ -4056,14 +4080,19 @@
         "/api/v1/lifeos/deep-talk/weekly"
       ],
       "design_review_flagged": true,
-      "status": "pending",
+      "status": "done",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
       "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-deep-talk-ui",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "last_error": null,
+      "pre_existing": true,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null
     },
     {
       "id": "lifeos-p1-deep-talk-nav",
@@ -4073,14 +4102,19 @@
       "file_contains": [
         "lifeos-deep-talk.html"
       ],
-      "status": "pending",
+      "status": "done",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
       "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-deep-talk-nav",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "last_error": null,
+      "pre_existing": true,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null
     }
   ],
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
