@@ -827,13 +827,13 @@
     },
     {
       "id": "step1",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/final_pr_review.js",
       "task": "merge branch",
       "spec": "Conduct a formal review of the phase7-railway-probe branch. Prepare a PR note and officially merge the branch to main. Ensure all standard procedures have been followed and include a note in the merge history document.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "reviewBranch"
       ],
@@ -854,15 +854,30 @@
           "assertion_id": "expected_exports:services/final_pr_review.js"
         }
       ],
-      "last_attempt_at": "2026-07-18T03:04:39.445Z",
-      "last_error": "NOT_ON_BLUEPRINT",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "5323733f8f390198f35d82614dcfe4e9738cabbd",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-18T03:21:14.615Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-18T03:21:27.577Z"
     },
     {
       "id": "step2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/railway_verification.mjs",
       "task": "deploy phase7",
       "spec": "Deploy the phase7-railway-probe branch to Railway. Run live mode of scripts/memory-pressure-test.mjs and verify a 20/20 result against real Neon state and mounted routes.",
@@ -870,12 +885,30 @@
         "step1"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "deploy",
         "verify",
         "20/20 result"
-      ]
+      ],
+      "last_attempt_at": "2026-07-18T03:26:50.117Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/scripts/.factory-import-check-1784345210078-1.mjs\";\n",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-18T03:26:33.823Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     }
   ],
   "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
