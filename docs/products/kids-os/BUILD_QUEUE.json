@@ -736,7 +736,7 @@
       "last_attempt": null,
       "demoted": true,
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:target user feedback; behavior_assertion_failed; behavior_proof",
-      "demoted_at": "2026-07-18T01:22:34.388Z",
+      "demoted_at": "2026-07-18T01:24:28.689Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
