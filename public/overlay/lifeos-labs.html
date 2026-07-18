@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Labs & longevity — LifeOS -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Labs & Longevity — LifeOS</title>
+  <script src="/overlay/lifeos-theme.js"></script>
+  <script src="/overlay/lifeos-bootstrap.js"></script>
+  <style>
+    body { margin:0; font-family:'Avenir Next','Segoe UI',sans-serif; background:#0f1412; color:#e7f0ea; }
+    .root { max-width:720px; margin:0 auto; padding:28px 18px 80px; }
+    h1 { margin:0 0 6px; } .sub { color:#8fa89a; margin-bottom:16px; }
+    .card { border:1px solid #24352e; border-radius:12px; padding:14px; margin-bottom:12px; background:#141c18; }
+    label { display:block; font-size:.8rem; color:#8fa89a; margin:8px 0 4px; }
+    input { width:100%; box-sizing:border-box; padding:10px; border-radius:8px; border:1px solid #24352e; background:#0b1210; color:#e7f0ea; }
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    button { margin-top:12px; background:#2f6b52; color:#fff; border:0; border-radius:8px; padding:10px 14px; cursor:pointer; }
+  </style>
+</head>
+<body>
+  <div class="root">
+    <h1>Labs & longevity</h1>
+    <p class="sub">Import biomarkers, see a rough biological-age estimate, and VO2 trend when wearable data exists. Education only.</p>
+    <div class="card">
+      <div class="grid">
+        <div><label>Chronological age</label><input id="age" type="number" min="18" max="100" placeholder="42"></div>
+        <div><label>Glucose</label><input id="glucose" type="number" placeholder="90"></div>
+        <div><label>CRP</label><input id="crp" type="number" step="0.1" placeholder="1.0"></div>
+        <div><label>Albumin</label><input id="albumin" type="number" step="0.1" placeholder="4.2"></div>
+      </div>
+      <button id="estimate" type="button">Estimate biological age</button>
+      <button id="import" type="button" style="background:#3d6ea8">Save labs to my account</button>
+      <div id="out" class="sub" style="margin-top:10px">Ready.</div>
+    </div>
+  </div>
+  <script>
+    function biomarkers() {
+      return {
+        glucose: num('glucose'), crp: num('crp'), albumin: num('albumin'),
+      };
+    }
+    function num(id) {
+      const v = document.getElementById(id).value;
+      return v === '' ? null : Number(v);
+    }
+    document.getElementById('estimate').onclick = async () => {
+      const out = document.getElementById('out');
+      const body = { chronologicalAge: num('age'), ...biomarkers() };
+      const r = await fetch('/api/v1/lifeos/labs/estimate', { method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify(body) });
+      const j = await r.json();
+      out.textContent = j.ok
+        ? ('Biological age ~' + j.biological_age + ' (delta ' + j.delta_years + '). ' + j.disclaimer)
+        : (j.error || 'Estimate failed');
+    };
+    document.getElementById('import').onclick = async () => {
+      const out = document.getElementById('out');
+      try {
+        const r = await fetch('/api/v1/lifeos/labs/import', {
+          method:'POST', credentials:'include', headers:{'content-type':'application/json'},
+          body: JSON.stringify({ chronological_age: num('age'), biomarkers: biomarkers() }),
+        });
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        out.textContent = 'Labs saved.';
+      } catch (e) { out.textContent = 'Save failed: ' + e.message + ' (sign in required)'; }
+    };
+  </script>
+</body>
+</html>

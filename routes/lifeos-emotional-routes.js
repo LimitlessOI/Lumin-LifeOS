@@ -313,6 +313,40 @@ export function createLifeOSEmotionalRoutes({ pool, requireKey, callCouncilMembe
     }
   });
 
+  // ── GET /daily ────────────────────────────────────────────────────────────
+  // Alias for Coach therapy-today-card. Soft next_action; no hard auth wall.
+  router.get('/daily', async (req, res) => {
+    try {
+      let userId = null;
+      if (req.lifeosUser?.sub != null) userId = safeInt(req.lifeosUser.sub);
+      else if (req.query.user) userId = await resolveUserId(req.query.user);
+      if (!userId) {
+        return res.json({
+          ok: true,
+          checkin: null,
+          next_action: 'Open Coach & Therapy for a short emotional check-in when you are ready.',
+        });
+      }
+      const checkin = await emotionalEngine.getTodayCheckin(userId);
+      const next_action = checkin
+        ? `Today you logged "${checkin.weather || 'a check-in'}". Open Coach if you want to unpack it.`
+        : 'Start today with a short emotional check-in — weather + intensity is enough.';
+      res.json({
+        ok: true,
+        checkin,
+        next_action,
+        summary: checkin?.note || checkin?.weather || null,
+      });
+    } catch (err) {
+      res.json({
+        ok: true,
+        checkin: null,
+        next_action: 'Emotional check-in is available in Coach & Therapy when you are ready.',
+        soft_error: err.message,
+      });
+    }
+  });
+
   // ── GET /daily/recent ─────────────────────────────────────────────────────
   // Returns the last N daily check-ins (default 14, max 90) over the last
   // ?days (default 30, max 365).

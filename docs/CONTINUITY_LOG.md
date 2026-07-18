@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-17 — Keep building all LifeOS features
+
+Adam: all features working. Shipped emotional GET `/daily` for therapy card, legacy auto-register, psychometric battery, parenting scripts, labs/bio-age (+ migration). Continuing open PRODUCT_HOME P1s after tip claim — not done until surfaces work end-to-end.
+
 ## 2026-07-17 — Cycle API mount + deep-talk decks
 
 Adam: keep going. Cycle UI was live but founder lane 404’d the API — auto-register + register export. Built deep-talk weekly decks (signal-aware + fallback) with UI/nav. LifeOS still not done.

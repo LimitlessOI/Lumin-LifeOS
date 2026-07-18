@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T02:00:47.145Z",
+  "generated_at": "2026-07-18T02:10:41.482Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11900,
+  "file_count": 11909,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -30401,9 +30401,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 25239,
-      "mtime": "2026-07-18T02:00:47.145Z",
-      "indexed_at": "2026-07-18T02:00:47.145Z",
+      "bytes": 26349,
+      "mtime": "2026-07-18T02:10:41.482Z",
+      "indexed_at": "2026-07-18T02:10:41.482Z",
       "synopsis_index_only": true
     },
     {
@@ -36021,6 +36021,13 @@
       "indexed_at": "2026-07-17T23:06:25.553Z"
     },
     {
+      "path": "db/migrations/20260718_lifeos_labs_psychometrics.sql",
+      "synopsis": "lab_results + psychometric_results for LifeOS longevity/psychometric P1s.",
+      "bytes": 874,
+      "mtime": "2026-07-18T02:10:41.482Z",
+      "indexed_at": "2026-07-18T02:10:41.482Z"
+    },
+    {
       "path": "db/migrations/20260724_lifeos_core_stable.sql",
       "synopsis": "Database migration — 20260724_lifeos_core_stable.sql.",
       "bytes": 1617,
@@ -37366,9 +37373,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 56002,
-      "mtime": "2026-07-18T02:00:47.145Z",
-      "indexed_at": "2026-07-18T02:00:47.145Z"
+      "bytes": 56318,
+      "mtime": "2026-07-18T02:10:41.482Z",
+      "indexed_at": "2026-07-18T02:10:41.482Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40141,9 +40148,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 632980,
-      "mtime": "2026-07-18T02:00:47.145Z",
-      "indexed_at": "2026-07-18T02:00:47.145Z"
+      "bytes": 633589,
+      "mtime": "2026-07-18T02:10:41.482Z",
+      "indexed_at": "2026-07-18T02:10:41.482Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -64928,9 +64935,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 188563,
-      "mtime": "2026-07-18T02:00:47.145Z",
-      "indexed_at": "2026-07-18T02:00:47.145Z"
+      "bytes": 189540,
+      "mtime": "2026-07-18T02:10:41.482Z",
+      "indexed_at": "2026-07-18T02:10:41.482Z"
     },
     {
       "path": "public/overlay/lifeos-ask-your-life.html",
@@ -65198,6 +65205,13 @@
       "indexed_at": "2026-07-17T23:06:25.553Z"
     },
     {
+      "path": "public/overlay/lifeos-labs.html",
+      "synopsis": "HTML page: Labs & longevity — LifeOS",
+      "bytes": 3512,
+      "mtime": "2026-07-18T02:10:41.482Z",
+      "indexed_at": "2026-07-18T02:10:41.482Z"
+    },
+    {
       "path": "public/overlay/lifeos-learning-queue.html",
       "synopsis": "Learning queue overlay — LifeOS",
       "bytes": 7480,
@@ -65275,11 +65289,25 @@
       "indexed_at": "2026-07-17T23:06:25.553Z"
     },
     {
+      "path": "public/overlay/lifeos-parenting-scripts.html",
+      "synopsis": "HTML page: Parenting script library — LifeOS",
+      "bytes": 2745,
+      "mtime": "2026-07-18T02:10:41.482Z",
+      "indexed_at": "2026-07-18T02:10:41.482Z"
+    },
+    {
       "path": "public/overlay/lifeos-practice.html",
       "synopsis": "HTML page: LifeOS Practice Library",
       "bytes": 3779,
       "mtime": "2026-07-18T01:39:24.477Z",
       "indexed_at": "2026-07-18T01:39:24.477Z"
+    },
+    {
+      "path": "public/overlay/lifeos-psychometrics.html",
+      "synopsis": "HTML page: Psychometric battery — LifeOS",
+      "bytes": 3731,
+      "mtime": "2026-07-18T02:10:41.482Z",
+      "indexed_at": "2026-07-18T02:10:41.482Z"
     },
     {
       "path": "public/overlay/lifeos-purpose.html",
@@ -67209,9 +67237,9 @@
     {
       "path": "routes/lifeos-emotional-routes.js",
       "synopsis": "routes/lifeos-emotional-routes.js",
-      "bytes": 18825,
-      "mtime": "2026-07-17T21:42:16.099Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z",
+      "bytes": 20222,
+      "mtime": "2026-07-18T02:10:41.482Z",
+      "indexed_at": "2026-07-18T02:10:41.482Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -67347,11 +67375,21 @@
       ]
     },
     {
+      "path": "routes/lifeos-labs-longevity-routes.js",
+      "synopsis": "Labs import + biological age + VO2 trend routes.",
+      "bytes": 1727,
+      "mtime": "2026-07-18T02:10:41.482Z",
+      "indexed_at": "2026-07-18T02:10:41.482Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "routes/lifeos-legacy-routes.js",
       "synopsis": "routes/lifeos-legacy-routes.js",
-      "bytes": 19483,
-      "mtime": "2026-06-29T17:21:08.536Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z",
+      "bytes": 20010,
+      "mtime": "2026-07-18T02:10:41.482Z",
+      "indexed_at": "2026-07-18T02:10:41.482Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -67384,6 +67422,16 @@
       "indexed_at": "2026-07-17T23:06:25.553Z"
     },
     {
+      "path": "routes/lifeos-parenting-scripts-routes.js",
+      "synopsis": "Age-specific parenting script library HTTP routes.",
+      "bytes": 1128,
+      "mtime": "2026-07-18T02:10:41.482Z",
+      "indexed_at": "2026-07-18T02:10:41.482Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "routes/lifeos-perfect-day-routes.js",
       "synopsis": "LifeOS Perfect Day API — plan, reminders, check-in, rate.",
       "bytes": 3179,
@@ -67409,6 +67457,16 @@
       "bytes": 8469,
       "mtime": "2026-07-10T00:44:49.151Z",
       "indexed_at": "2026-07-17T23:06:25.553Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "routes/lifeos-psychometric-battery-routes.js",
+      "synopsis": "Psychometric battery HTTP routes for purpose-discovery priors.",
+      "bytes": 1607,
+      "mtime": "2026-07-18T02:10:41.482Z",
+      "indexed_at": "2026-07-18T02:10:41.482Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -86781,6 +86839,16 @@
       "indexed_at": "2026-07-17T23:06:25.553Z"
     },
     {
+      "path": "services/lifeos-labs-longevity.js",
+      "synopsis": "Lab biomarker import + simple PhenoAge-style biological age + VO2 trend stub.",
+      "bytes": 4509,
+      "mtime": "2026-07-18T02:10:41.482Z",
+      "indexed_at": "2026-07-18T02:10:41.482Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/lifeos-learning.js",
       "synopsis": "Exports addItem — services/lifeos-learning.js.",
       "bytes": 3096,
@@ -86875,6 +86943,16 @@
       ]
     },
     {
+      "path": "services/lifeos-parenting-scripts.js",
+      "synopsis": "Age-specific parenting script library for common ruptures.",
+      "bytes": 3260,
+      "mtime": "2026-07-18T02:10:41.482Z",
+      "indexed_at": "2026-07-18T02:10:41.482Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/lifeos-perfect-day.js",
       "synopsis": "LifeOS Perfect Day — morning rituals, work blocks, closeout, husband + self care.",
       "bytes": 9648,
@@ -86886,10 +86964,10 @@
     },
     {
       "path": "services/lifeos-psychometric-battery.js",
-      "synopsis": "Service module — Lifeos Psychometric Battery.",
-      "bytes": 1725,
-      "mtime": "2026-07-16T19:42:53.612Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z",
+      "synopsis": "Psychometric battery (Big Five + VIA strengths + values/interests/skills) for purpose priors.",
+      "bytes": 4043,
+      "mtime": "2026-07-18T02:10:41.482Z",
+      "indexed_at": "2026-07-18T02:10:41.482Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

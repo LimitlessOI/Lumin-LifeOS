@@ -4115,6 +4115,346 @@
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null
+    },
+    {
+      "id": "lifeos-p1-emotional-daily-alias",
+      "target_file": "routes/lifeos-emotional-routes.js",
+      "task": "GET /emotional/daily for therapy today card",
+      "spec": "Add GET /daily returning next_action + today check-in soft path for Coach therapy-today-card.",
+      "file_contains": [
+        "router.get('/daily'",
+        "next_action"
+      ],
+      "expected_exports": [
+        "registerLifeosEmotionalRoutes"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-emotional-daily-alias",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-legacy-register",
+      "target_file": "routes/lifeos-legacy-routes.js",
+      "task": "Export registerLifeOSLegacyRoutes",
+      "spec": "Export registerLifeOSLegacyRoutes(app,deps) mounting /api/v1/lifeos/legacy.",
+      "expected_exports": [
+        "registerLifeOSLegacyRoutes",
+        "createLifeOSLegacyRoutes"
+      ],
+      "file_contains": [
+        "registerLifeOSLegacyRoutes",
+        "/api/v1/lifeos/legacy"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-legacy-register",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-legacy-autoreg",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "Auto-register legacy routes",
+      "spec": "Add lifeos-legacy-routes.js registerLifeOSLegacyRoutes enabled true.",
+      "file_contains": [
+        "lifeos-legacy-routes.js",
+        "registerLifeOSLegacyRoutes"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-legacy-autoreg",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-psychometric-service",
+      "target_file": "services/lifeos-psychometric-battery.js",
+      "task": "Psychometric battery service",
+      "spec": "createPsychometricBatteryService with big_five via_strengths values interests skills.",
+      "expected_exports": [
+        "createPsychometricBatteryService",
+        "listPsychometricInstruments"
+      ],
+      "file_contains": [
+        "big_five",
+        "via_strengths",
+        "createPsychometricBatteryService"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-psychometric-service",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-psychometric-routes",
+      "target_file": "routes/lifeos-psychometric-battery-routes.js",
+      "task": "Psychometric HTTP routes",
+      "spec": "registerLifeosPsychometricBatteryRoutes under /api/v1/lifeos/psychometrics.",
+      "expected_exports": [
+        "registerLifeosPsychometricBatteryRoutes"
+      ],
+      "file_contains": [
+        "registerLifeosPsychometricBatteryRoutes",
+        "/instruments"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-psychometric-routes",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-psychometric-autoreg",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "Auto-register psychometrics",
+      "spec": "Add psychometric battery routes auto-register entry.",
+      "file_contains": [
+        "lifeos-psychometric-battery-routes.js",
+        "registerLifeosPsychometricBatteryRoutes"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-psychometric-autoreg",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-psychometric-ui",
+      "target_file": "public/overlay/lifeos-psychometrics.html",
+      "task": "Psychometrics overlay UI",
+      "spec": "HTML page for psychometric instruments + profile.",
+      "file_contains": [
+        "Psychometric",
+        "/api/v1/lifeos/psychometrics"
+      ],
+      "design_review_flagged": true,
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-psychometric-ui",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-parenting-scripts-service",
+      "target_file": "services/lifeos-parenting-scripts.js",
+      "task": "Parenting script library service",
+      "spec": "createParentingScriptService with age/situation scripts.",
+      "expected_exports": [
+        "createParentingScriptService"
+      ],
+      "file_contains": [
+        "createParentingScriptService",
+        "tantrum",
+        "bedtime"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-parenting-scripts-service",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-parenting-scripts-routes",
+      "target_file": "routes/lifeos-parenting-scripts-routes.js",
+      "task": "Parenting scripts routes",
+      "spec": "registerLifeosParentingScriptRoutes /api/v1/lifeos/parenting-scripts.",
+      "expected_exports": [
+        "registerLifeosParentingScriptRoutes"
+      ],
+      "file_contains": [
+        "registerLifeosParentingScriptRoutes",
+        "/one-liner"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-parenting-scripts-routes",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-parenting-scripts-autoreg",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "Auto-register parenting scripts",
+      "spec": "Add parenting-scripts routes auto-register.",
+      "file_contains": [
+        "lifeos-parenting-scripts-routes.js",
+        "registerLifeosParentingScriptRoutes"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-parenting-scripts-autoreg",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-parenting-scripts-ui",
+      "target_file": "public/overlay/lifeos-parenting-scripts.html",
+      "task": "Parenting scripts UI",
+      "spec": "HTML page listing age-specific scripts.",
+      "file_contains": [
+        "Parenting scripts",
+        "/api/v1/lifeos/parenting-scripts"
+      ],
+      "design_review_flagged": true,
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-parenting-scripts-ui",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-labs-service",
+      "target_file": "services/lifeos-labs-longevity.js",
+      "task": "Labs + biological age service",
+      "spec": "createLabsLongevityService + estimateBiologicalAge + vo2Trend.",
+      "expected_exports": [
+        "createLabsLongevityService",
+        "estimateBiologicalAge"
+      ],
+      "file_contains": [
+        "estimateBiologicalAge",
+        "vo2Trend",
+        "lab_results"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-labs-service",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-labs-routes",
+      "target_file": "routes/lifeos-labs-longevity-routes.js",
+      "task": "Labs longevity routes",
+      "spec": "registerLifeosLabsLongevityRoutes under /api/v1/lifeos/labs.",
+      "expected_exports": [
+        "registerLifeosLabsLongevityRoutes"
+      ],
+      "file_contains": [
+        "registerLifeosLabsLongevityRoutes",
+        "/estimate"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-labs-routes",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-labs-autoreg",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "Auto-register labs routes",
+      "spec": "Add labs-longevity routes auto-register.",
+      "file_contains": [
+        "lifeos-labs-longevity-routes.js",
+        "registerLifeosLabsLongevityRoutes"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-labs-autoreg",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-labs-ui",
+      "target_file": "public/overlay/lifeos-labs.html",
+      "task": "Labs longevity UI",
+      "spec": "HTML labs import + biological age estimate page.",
+      "file_contains": [
+        "Labs & longevity",
+        "/api/v1/lifeos/labs"
+      ],
+      "design_review_flagged": true,
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-labs-ui",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-labs-psychometrics-migration",
+      "target_file": "db/migrations/20260718_lifeos_labs_psychometrics.sql",
+      "task": "Migration for lab_results + psychometric_results",
+      "spec": "CREATE TABLE IF NOT EXISTS lab_results and psychometric_results.",
+      "file_contains": [
+        "lab_results",
+        "psychometric_results"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-labs-psychometrics-migration",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-feature-nav-batch",
+      "target_file": "public/overlay/lifeos-app.html",
+      "task": "Nav for psychometrics/parent scripts/labs",
+      "spec": "PAGE_META + nav for lifeos-psychometrics.html lifeos-parenting-scripts.html lifeos-labs.html.",
+      "file_contains": [
+        "lifeos-psychometrics.html",
+        "lifeos-parenting-scripts.html",
+        "lifeos-labs.html"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-feature-nav-batch",
+      "mission_id": "PRODUCT-lifeos"
     }
   ],
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",

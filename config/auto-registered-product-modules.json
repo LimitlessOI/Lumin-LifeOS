@@ -50,6 +50,34 @@
       "note": "Curated weekly deep-talk decks from couple/user signal."
     },
     {
+      "path": "routes/lifeos-legacy-routes.js",
+      "register": "registerLifeOSLegacyRoutes",
+      "mount_path": "/api/v1/lifeos/legacy",
+      "enabled": true,
+      "note": "Legacy/community API was built but not mounted on founder_builder — UI shell needs live endpoints."
+    },
+    {
+      "path": "routes/lifeos-psychometric-battery-routes.js",
+      "register": "registerLifeosPsychometricBatteryRoutes",
+      "mount_path": "/api/v1/lifeos/psychometrics",
+      "enabled": true,
+      "note": "Psychometric battery (Big Five/VIA/values) for purpose priors."
+    },
+    {
+      "path": "routes/lifeos-parenting-scripts-routes.js",
+      "register": "registerLifeosParentingScriptRoutes",
+      "mount_path": "/api/v1/lifeos/parenting-scripts",
+      "enabled": true,
+      "note": "Age-specific parenting script library P1."
+    },
+    {
+      "path": "routes/lifeos-labs-longevity-routes.js",
+      "register": "registerLifeosLabsLongevityRoutes",
+      "mount_path": "/api/v1/lifeos/labs",
+      "enabled": true,
+      "note": "Lab biomarker import + biological age + VO2 trend P1."
+    },
+    {
       "path": "routes/founder-sms-routes.js",
       "register": "registerFounderSmsRoutes",
       "enabled": true,
