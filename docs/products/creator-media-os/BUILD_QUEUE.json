@@ -770,7 +770,7 @@
     },
     {
       "id": "text-to-video-generation-enable-real-motion-b-ro",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/creatorTextToVideo.js",
       "task": "Text-to-video generation — enable real motion b-roll from a prompt (Wan/Kling via Replicate). Target `services/creatorTextToVideo.js` (export `generateMotionVideo`). Requires `REPLICATE_API_TOKEN`.",
       "spec": "Text-to-video generation — enable real motion b-roll from a prompt (Wan/Kling via Replicate). Target `services/creatorTextToVideo.js` (export `generateMotionVideo`). Requires `REPLICATE_API_TOKEN`.",
@@ -793,30 +793,9 @@
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "text-to-video-generation-enable-real-motion-b-ro",
       "mission_id": "PRODUCT-creator-media-os",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/creator-media-os/twins/steps/text-to-video-generation-enable-real-motion-b-ro.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-18T11:10:27.001Z",
-        "shipped_at": "2026-07-18T11:10:27.001Z",
-        "commit_sha": null,
-        "content_sha256": "b980e719186939f23c02935a2218560b14686361d3cd04068b14828584da617f",
-        "target_file": "services/creatorTextToVideo.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/creatorTextToVideo.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/creator-media-os/twins/steps/text-to-video-generation-enable-real-motion-b-ro.exact",
-          "content_sha256": "b980e719186939f23c02935a2218560b14686361d3cd04068b14828584da617f"
-        }
-      },
-      "shipped_at": "2026-07-18T11:10:27.001Z"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-18T11:10:32.999Z",
+      "commit_sha": "de82f18c612342e40823f4256a472f89e9a561f9"
     },
     {
       "id": "multi-language-dubbing-translate-and-dub-audio-i",
