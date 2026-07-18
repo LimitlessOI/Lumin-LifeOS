@@ -1287,6 +1287,63 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-18T02:16:42.201Z",
       "commit_sha": "8a6f60476811b05cae0ce5e16b1de1bfec02281b"
+    },
+    {
+      "id": "step4",
+      "status": "blocked",
+      "target_file": "services/accountFormFill.js",
+      "task": "develop account form fill service",
+      "spec": "Automatically fills user account forms using existing profile data to simplify user interaction during onboarding or updates.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "fillAccountForms"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/accountFormFill.js",
+          "exports": [
+            "fillAccountForms"
+          ],
+          "assertion_id": "expected_exports:services/accountFormFill.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-18T03:50:15.194Z",
+      "last_error": "NOT_ON_BLUEPRINT",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
+    },
+    {
+      "id": "step5",
+      "status": "pending",
+      "target_file": "routes/accountFormFill.js",
+      "task": "create account form fill route",
+      "spec": "This route provides an endpoint for form filling functionality, autofilling account-related forms for authenticated users.",
+      "depends_on": [
+        "step4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerAccountFormFillRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/account/formfill"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/accountFormFill.js",
+          "exports": [
+            "registerAccountFormFillRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/accountFormFill.js"
+        }
+      ]
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
