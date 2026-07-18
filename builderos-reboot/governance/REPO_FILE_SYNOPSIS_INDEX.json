@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T01:10:11.346Z",
+  "generated_at": "2026-07-18T01:12:45.600Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11888,
   "files": [
@@ -39330,8 +39330,8 @@
       "path": "docs/products/ai-council/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — AI Council",
       "bytes": 55593,
-      "mtime": "2026-07-15T02:27:24.002Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z"
+      "mtime": "2026-07-18T01:12:45.600Z",
+      "indexed_at": "2026-07-18T01:12:45.600Z"
     },
     {
       "path": "docs/products/ai-receptionist/FILE_MANIFEST.json",
@@ -40142,8 +40142,8 @@
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
       "bytes": 630798,
-      "mtime": "2026-07-18T01:10:11.346Z",
-      "indexed_at": "2026-07-18T01:10:11.346Z"
+      "mtime": "2026-07-18T01:12:45.600Z",
+      "indexed_at": "2026-07-18T01:12:45.600Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -67004,9 +67004,9 @@
     {
       "path": "routes/lifeos-builderos-command-control-routes.js",
       "synopsis": "Founder-facing LifeOS BuilderOS command-control routes for direct chat, build orchestration, and governed execution receipts.",
-      "bytes": 65946,
-      "mtime": "2026-07-18T01:10:11.346Z",
-      "indexed_at": "2026-07-18T01:10:11.346Z",
+      "bytes": 66003,
+      "mtime": "2026-07-18T01:12:45.600Z",
+      "indexed_at": "2026-07-18T01:12:45.600Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -83830,8 +83830,8 @@
       "path": "services/chair-context-classifier.js",
       "synopsis": "Chair context classifier — life vs code vs command (default help, not builder theater).",
       "bytes": 13191,
-      "mtime": "2026-07-18T01:08:38.498Z",
-      "indexed_at": "2026-07-18T01:08:38.498Z",
+      "mtime": "2026-07-18T01:12:45.600Z",
+      "indexed_at": "2026-07-18T01:12:45.600Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

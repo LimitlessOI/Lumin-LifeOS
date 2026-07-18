@@ -85,7 +85,8 @@ const FOUNDER_BUILD_JOB_TIMEOUT_MS = Number(process.env.FOUNDER_BUILD_JOB_TIMEOU
 /** Direct LifeOS BUILD_QUEUE ship via founder UI — not blueprint intake theater. */
 function isLifeosQueueBuildIntent(text = '') {
   const t = String(text || '');
-  if (!/\blife\sos\b/i.test(t)) return false;
+  // Match "LifeOS", "Life OS", "life-os".
+  if (!/\blife[\s-]os\b|\blifeos\b/i.test(t)) return false;
   // Only reject real "create blueprint / start intake" asks — not "do not create intake".
   if (/\b(create|generate|make|draft)\s+(a\s+)?(new\s+)?blueprint\b/i.test(t)
     && !/\b(do not|don't|dont|never|not)\b.{0,24}\b(create|generate|make|draft)\b/i.test(t)) {
