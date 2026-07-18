@@ -1365,13 +1365,13 @@
     },
     {
       "id": "01",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/buildLifeOSiOSIPA.js",
       "task": "implement build workflow service",
       "spec": "Implement the build workflow for generating a signed IPA using Apple Dev secrets.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "generateSignedIPA"
       ],
@@ -1385,55 +1385,57 @@
           "assertion_id": "expected_exports:services/buildLifeOSiOSIPA.js"
         }
       ],
-      "last_attempt_at": "2026-07-18T04:41:11.270Z",
-      "last_error": "NOT_ON_BLUEPRINT",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "677773d0039ab9fa82b16d84379744ba98b49f66",
       "built_sha": null,
       "proof": null,
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/universal-overlay/twins/steps/01.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-18T04:58:01.415Z",
-        "shipped_at": "2026-07-18T04:58:01.415Z",
-        "commit_sha": null,
-        "content_sha256": "97a556d02feea828ca20db49fd8b5587b83cc5f8b490da32ea725c174f75cd08",
-        "target_file": "services/buildLifeOSiOSIPA.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/buildLifeOSiOSIPA.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/universal-overlay/twins/steps/01.exact",
-          "content_sha256": "97a556d02feea828ca20db49fd8b5587b83cc5f8b490da32ea725c174f75cd08"
-        }
-      },
-      "shipped_at": "2026-07-18T04:58:01.415Z",
-      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
-      "blueprint_step_id": "01"
+      "revive_count": 0,
+      "revived_at": "2026-07-18T04:57:58.301Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-18T04:58:06.673Z"
     },
     {
       "id": "02",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "db/migrations/addStruggleDetectionFormFill.sql",
       "task": "create struggle detection form fill table",
       "spec": "Create a table to support struggle detection and form fill data.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS"
       ],
-      "last_attempt_at": "2026-07-18T04:42:01.906Z",
+      "last_attempt_at": null,
       "last_error": "NOT_ON_BLUEPRINT",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-18T04:57:58.301Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "03",
