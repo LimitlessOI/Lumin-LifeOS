@@ -3297,11 +3297,11 @@
         "attachment_style",
         "love_language"
       ],
-      "status": "pending",
+      "status": "blocked",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
-      "attempts": 0,
+      "attempts": 1,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-assessment-battery-service",
       "mission_id": "PRODUCT-lifeos",
@@ -3315,7 +3315,12 @@
           ],
           "assertion_id": "expected_exports:services/lifeos-assessment-battery.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-18T01:33:51.127Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 2727b is < 30% of existing 185794b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lifeos-p1-assessment-routes",
