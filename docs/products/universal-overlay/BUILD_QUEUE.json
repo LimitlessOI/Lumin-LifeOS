@@ -1229,7 +1229,7 @@
     },
     {
       "id": "step2",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/install.html",
       "task": "add iphone pwa installation page",
       "spec": "Create UI for Add to Home Screen for iPhone PWA.",
@@ -1238,11 +1238,11 @@
       "attempts": 0,
       "design_review_flagged": true,
       "last_attempt_at": null,
-      "last_error": "NOT_ON_BLUEPRINT",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "592e690eb23112a26601b88bb74a59f1ebce3599",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
+      "revive_count": 0,
       "revived_at": "2026-07-18T02:29:10.196Z",
       "last_attempt": null,
       "demoted": false,
@@ -1254,7 +1254,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-18T02:33:39.048Z"
     },
     {
       "id": "step3",
