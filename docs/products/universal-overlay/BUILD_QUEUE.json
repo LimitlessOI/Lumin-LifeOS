@@ -1180,6 +1180,50 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "step1",
+      "status": "pending",
+      "target_file": "services/lifeOSiOSIPA.js",
+      "task": "create signed ipa workflow",
+      "spec": "Implement the workflow for building LifeOS iOS IPA, incorporating Apple Dev secrets.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "buildLifeOSiOSIPA"
+      ],
+      "route": {
+        "path": "/install/lifeos/ios-ipa"
+      }
+    },
+    {
+      "id": "step2",
+      "status": "pending",
+      "target_file": "public/overlay/install.html",
+      "task": "add iphone pwa installation page",
+      "spec": "Create UI for Add to Home Screen for iPhone PWA.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "design_review_flagged": true
+    },
+    {
+      "id": "step3",
+      "status": "pending",
+      "target_file": "routes/struggleDetection.js",
+      "task": "implement struggle detection route",
+      "spec": "Integrate struggle detection with form fill capability, exposing an API route.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerStruggleDetectionRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/lifeos/struggledetection"
+      }
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
