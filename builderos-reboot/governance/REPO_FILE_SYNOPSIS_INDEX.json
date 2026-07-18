@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T20:09:18.167Z",
+  "generated_at": "2026-07-18T20:10:13.150Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11978,
   "files": [
@@ -65651,9 +65651,9 @@
     {
       "path": "public/overlay/pwaInstall.html",
       "synopsis": "HTML page: PWA Install",
-      "bytes": 2297,
-      "mtime": "2026-07-18T20:06:18.842Z",
-      "indexed_at": "2026-07-18T20:06:18.842Z"
+      "bytes": 2268,
+      "mtime": "2026-07-18T20:10:13.150Z",
+      "indexed_at": "2026-07-18T20:10:13.150Z"
     },
     {
       "path": "public/overlay/recovery_support.html",
