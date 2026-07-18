@@ -1314,7 +1314,33 @@
       "last_error": "NOT_ON_BLUEPRINT",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/step4.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-18T04:06:39.021Z",
+        "shipped_at": "2026-07-18T04:06:39.021Z",
+        "commit_sha": null,
+        "content_sha256": "10fe73a9acf6d69e140263a2ef5b0e6f420af9bfc174f1dccd645430d992574f",
+        "target_file": "services/accountFormFill.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/accountFormFill.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/universal-overlay/twins/steps/step4.exact",
+          "content_sha256": "10fe73a9acf6d69e140263a2ef5b0e6f420af9bfc174f1dccd645430d992574f"
+        }
+      },
+      "shipped_at": "2026-07-18T04:06:39.021Z",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step4"
     },
     {
       "id": "step5",

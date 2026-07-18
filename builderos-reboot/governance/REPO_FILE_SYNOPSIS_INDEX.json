@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T03:32:13.368Z",
+  "generated_at": "2026-07-18T04:06:40.757Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11924,
+  "file_count": 11925,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -83044,6 +83044,13 @@
       "bytes": 7419,
       "mtime": "2026-06-21T21:39:11.149Z",
       "indexed_at": "2026-07-17T23:06:25.553Z"
+    },
+    {
+      "path": "services/accountFormFill.js",
+      "synopsis": "services/accountFormFill.js",
+      "bytes": 657,
+      "mtime": "2026-07-18T04:06:40.757Z",
+      "indexed_at": "2026-07-18T04:06:40.757Z"
     },
     {
       "path": "services/accreditationBodyConsultation.js",
