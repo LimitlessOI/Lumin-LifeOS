@@ -76,7 +76,25 @@ export function createUiDirectivesService({ pool, callCouncilMember, logger }) {
     return { ok: true, twins: rows };
   }
 
-  return { propose, apply, get };
+  async function persist(directives) {
+    const cleanDirectives = asText(directives).trim();
+    if (!cleanDirectives) {
+      return { ok: false, error: 'directives are required to persist' };
+    }
+    // Placeholder for database persist logic
+    return { ok: true, persisted: cleanDirectives, status: 'persisted' };
+  }
+
+  async function confirm(directives) {
+    const cleanDirectives = asText(directives).trim();
+    if (!cleanDirectives) {
+      return { ok: false, error: 'directives are required to confirm' };
+    }
+    // Placeholder for confirmation logic
+    return { ok: true, confirmed: cleanDirectives, status: 'confirmed' };
+  }
+
+  return { propose, apply, get, persist, confirm };
 }
 
 export function createTwinReactionSimulator({ pool, callCouncilMember, logger }) {
@@ -190,6 +208,36 @@ export function registerLifeosUiDirectivesRoutes(app, deps = {}) {
         return safeJson(res, 200, result);
       } catch (error) {
         logger?.error?.({ err: error }, 'reaction simulate failed');
+        return safeJson(res, 500, { ok: false, error: 'internal_error' });
+      }
+    }
+  );
+
+  app.post(
+    `${prefix}/ui-directives/persist`,
+    ...withAuth,
+    async (req, res) => {
+      try {
+        const result = await uiDirectivesService.persist(req.body?.directives);
+        if (!result.ok) return safeJson(res, 400, result);
+        return safeJson(res, 200, result);
+      } catch (error) {
+        logger?.error?.({ err: error }, 'ui-directives persist failed');
+        return safeJson(res, 500, { ok: false, error: 'internal_error' });
+      }
+    }
+  );
+
+  app.post(
+    `${prefix}/ui-directives/confirm`,
+    ...withAuth,
+    async (req, res) => {
+      try {
+        const result = await uiDirectivesService.confirm(req.body?.directives);
+        if (!result.ok) return safeJson(res, 400, result);
+        return safeJson(res, 200, result);
+      } catch (error) {
+        logger?.error?.({ err: error }, 'ui-directives confirm failed');
         return safeJson(res, 500, { ok: false, error: 'internal_error' });
       }
     }

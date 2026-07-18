@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T02:31:29.344Z",
+  "generated_at": "2026-07-18T02:33:24.261Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11918,
   "files": [
@@ -67579,9 +67579,9 @@
     {
       "path": "routes/lifeos-ui-directives-routes.js",
       "synopsis": "Registers LifeosUiDirectivesRoutes routes/handlers (routes/lifeos-ui-directives-routes.js).",
-      "bytes": 6048,
-      "mtime": "2026-07-18T02:31:29.344Z",
-      "indexed_at": "2026-07-18T02:31:29.344Z"
+      "bytes": 7674,
+      "mtime": "2026-07-18T02:33:24.261Z",
+      "indexed_at": "2026-07-18T02:33:24.261Z"
     },
     {
       "path": "routes/lifeos-victory-vault-routes.js",
