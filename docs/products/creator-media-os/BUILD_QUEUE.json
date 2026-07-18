@@ -828,13 +828,13 @@
     },
     {
       "id": "long-form-to-shorts-auto-clipper-detect-high-ret",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/creatorShortsClipper.js",
       "task": "Long-form to shorts auto-clipper — detect high-retention moments and cut vertical clips. Target `services/creatorShortsClipper.js` (export `extractShorts`).",
       "spec": "Long-form to shorts auto-clipper — detect high-retention moments and cut vertical clips. Target `services/creatorShortsClipper.js` (export `extractShorts`).",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "extractShorts"
       ],
@@ -851,13 +851,13 @@
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "long-form-to-shorts-auto-clipper-detect-high-ret",
       "mission_id": "PRODUCT-creator-media-os",
-      "last_attempt_at": "2026-07-18T11:20:33.676Z",
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/services/.factory-import-check-1784373633628-1.mjs\";",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "0b3715d68a595afea20c842dd368279c81a80f73",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-18T11:20:19.133Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-18T11:24:00.741Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -869,30 +869,8 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/creator-media-os/twins/steps/long-form-to-shorts-auto-clipper-detect-high-ret.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-18T11:24:07.055Z",
-        "shipped_at": "2026-07-18T11:24:07.055Z",
-        "commit_sha": null,
-        "content_sha256": "eaad8c7434695a6538ed9918a3f427626584b81bd890eb7dc8740fcee195e9af",
-        "target_file": "services/creatorShortsClipper.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/creatorShortsClipper.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/creator-media-os/twins/steps/long-form-to-shorts-auto-clipper-detect-high-ret.exact",
-          "content_sha256": "eaad8c7434695a6538ed9918a3f427626584b81bd890eb7dc8740fcee195e9af"
-        }
-      },
-      "shipped_at": "2026-07-18T11:24:07.055Z"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-18T11:24:12.495Z"
     },
     {
       "id": "keyword-matched-b-roll-inserter-insert-b-roll-ma",
