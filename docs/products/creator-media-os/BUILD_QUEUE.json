@@ -903,7 +903,7 @@
     },
     {
       "id": "brand-kit-auto-apply-fonts-colors-logo-lower-thi",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/creatorBrandKit.js",
       "task": "Brand kit auto-apply — fonts, colors, logo, lower-thirds on every render. Target `services/creatorBrandKit.js` (export `applyBrandKit`).",
       "spec": "Brand kit auto-apply — fonts, colors, logo, lower-thirds on every render. Target `services/creatorBrandKit.js` (export `applyBrandKit`).",
@@ -928,30 +928,9 @@
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "brand-kit-auto-apply-fonts-colors-logo-lower-thi",
       "mission_id": "PRODUCT-creator-media-os",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/creator-media-os/twins/steps/brand-kit-auto-apply-fonts-colors-logo-lower-thi.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-18T11:26:51.821Z",
-        "shipped_at": "2026-07-18T11:26:51.821Z",
-        "commit_sha": null,
-        "content_sha256": "7a3966757a06595a21e038c36035c7d7ed8db6a3e6fb10aad3769b48d9d7d5d4",
-        "target_file": "services/creatorBrandKit.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/creatorBrandKit.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/creator-media-os/twins/steps/brand-kit-auto-apply-fonts-colors-logo-lower-thi.exact",
-          "content_sha256": "7a3966757a06595a21e038c36035c7d7ed8db6a3e6fb10aad3769b48d9d7d5d4"
-        }
-      },
-      "shipped_at": "2026-07-18T11:26:51.821Z"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-18T11:26:56.531Z",
+      "commit_sha": "a06a85665658d2200f5c55df7fdd3b8f93e824e2"
     },
     {
       "id": "media-vault-searchable-tagged-versioned-asset-st",
