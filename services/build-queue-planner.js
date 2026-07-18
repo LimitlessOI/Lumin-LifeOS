@@ -22,6 +22,7 @@ const MAX_STEPS = 12;
 // no model call — we only feed the model REAL documented work, never invent it.
 const BACKLOG_HEADING = /^#{1,6}\s*(?:\d+\.\s*)?(?:current\s+bp|approved\s+product\s+backlog|build plan|remaining(?:\s+work)?|not (yet )?done|to ?do|next(?:\s+build)?|backlog|missing|roadmap|known\s+gaps|agent\s+handoff(?:\s+notes)?|open\s+work|incomplete|pre-build\s+readiness)\b/i;
 const HEADING = /^#{1,6}\s+/;
+// Trailing whitespace optional — PRODUCT_HOME lines usually have none.
 const BULLET = /^\s*(?:[-*+]|\d+[.)])\s+(.*\S)\s$/;
 const OPEN_CHECKBOX = /^\s*(?:[-*+]|\d+[.)])?\s*\[\s*\]\s+(.*\S)\s$/;
 const DONE_CHECKBOX = /^\s*(?:[-*+]|\d+[.)])?\s*\[[xX]\]\s+/;
@@ -63,13 +64,13 @@ function isDoneItem(text) {
   if (/^\[x\]/i.test(t)) return true;
   if (/^(done|shipped|complete|✅|~~)/i.test(t)) return true;
   if (/^\[[xX]\]/.test(t)) return true;
-  // Common PRODUCT_HOME checklist form: "[x] *Thing** …"
+  // Common PRODUCT_HOME checklist form: "[x] Thing** …"
   if (/^\[[xX]\]\s+/.test(t)) return true;
   return false;
 }
 
 function pushUnique(out, seen, text) {
-  const cleaned = String(text || '').replace(/^\**|\*$/g, '').trim();
+  const cleaned = String(text || '').replace(/^\**|\$/g, '').trim();
   if (cleaned.length < 6 || isDoneItem(cleaned)) return;
   const key = cleaned.toLowerCase();
   if (seen.has(key)) return;
@@ -92,7 +93,7 @@ export function extractBacklog(homeText) {
     if (HEADING.test(line)) {
       inBacklog = BACKLOG_HEADING.test(line);
       inChangeReceipts = /^#{1,6}\schange\s+receipts\b/i.test(line);
-      // Always harvest *Next:** lines even outside backlog headings.
+      // Always harvest Next:** lines even outside backlog headings.
       continue;
     }
     const next = line.match(NEXT_LINE) || line.match(NEXT_TABLE);

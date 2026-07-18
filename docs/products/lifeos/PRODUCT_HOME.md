@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-17 — Founder UI → LifeOS BUILD_QUEUE ship path; close revive-exhausted gaps. |
+| **Last Updated** | 2026-07-17 — LifeOS backlog extract fixed; next P1 twin steps queued. |
 ---
 
 ## Founder conversations (2026-06-29)
@@ -156,6 +156,7 @@ This contract tightens the **human–agent truth channel**; it does not relax No
 
 | Field | Value |
 |---|---|
+| 2026-07-17 | **Keep building LifeOS — backlog extract + next P1 twin steps.** Fixed `extractBacklog` trailing-whitespace bug (LifeOS `- [ ] [P1]` was invisible → 0 extend). Queued concrete pending twin steps: Failure Museum UI, Practice library UI+nav, assessment battery service/routes/autoreg, chronotype/wind-down, therapy today card. Deterministic planner skips pathless placeholders. | Adam: not done — keep building via system. | planner tests 18/18 | tip ship + founder lifeos_queue_ship |
 | 2026-07-17 | **Founder UI directs LifeOS queue (no intake theater) + close revive-exhausted gaps.** `isLifeosQueueBuildIntent` on founder-interface → `claimPreExisting` + `runGovernedAutonomousShipOnce`. Authoring: skip/heal stub when file_contains already on disk. Closed skipped/blocked LifeOS steps (ambient, net worth, energy_logs retarget, crisis detector, relationship overlay notification). | Adam: use system as hands via UI; fix after 6 tries + root cause. | local artifact proof + syntax | tip redeploy + founder message prove |
 | **Lifecycle** | `founding-document` |
 | **Reversibility** | `one-way-door` |

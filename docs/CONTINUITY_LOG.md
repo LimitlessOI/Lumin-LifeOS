@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-17 — Keep building LifeOS (backlog was invisible)
+
+Adam: not done. Found LifeOS BUILD_QUEUE 99/99 done while PRODUCT_HOME still had dozens of open P1s — `extractBacklog` required trailing whitespace so `- [ ] [P1]` never extracted. Fixed; queued concrete next twin steps (Failure Museum, Practice library, assessment battery, chronotype/wind-down, therapy today card); founder path continues to drive ships.
+
 ## 2026-07-17 — Direct LifeOS build via founder UI (governed queue)
 
 Adam: use BuilderOS as hands through the UI; no theater; all LifeOS BP features; intervene only after 6 self-fix fails. Shipped: founder `lifeos_queue_ship` path, stub-heal/pre-existing claim, closed LifeOS revive-exhausted gaps (crisis detector, relationship overlay notification, ambient/net-worth/energy claims).

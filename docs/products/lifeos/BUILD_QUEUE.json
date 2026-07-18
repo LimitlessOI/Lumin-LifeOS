@@ -2,12 +2,9 @@
   "schema": "product_build_queue_v1",
   "product_id": "lifeos",
   "verify_script": "scripts/sentry-prealpha-gate.mjs",
-  "verify_args": [
-    "lifeos-founder-ui"
-  ],
-  "planned_at": "2026-07-08T20:57:28.573Z",
-  "backlog_signature": "lifeos-twin-phase-20260712",
-  "sentry_signature": "e13571a50ae90b27",
+  "planned_at": "2026-07-18T01:26:03.141Z",
+  "backlog_signature": "f07961c792d434b5",
+  "planner_mode": "deterministic",
   "steps": [
     {
       "id": "s01",
@@ -3215,10 +3212,169 @@
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-step12",
       "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-failure-museum-ui",
+      "target_file": "public/overlay/lifeos-failure-museum.html",
+      "task": "Ship Failure Museum overlay UI",
+      "spec": "Create public/overlay/lifeos-failure-museum.html — dark LifeOS shell page listing user-owned failure lessons (title, date, lesson learned, what changed). Load from GET /api/v1/lifeos/growth/failures or graceful empty state. Include add form POST same family. Auth via lifeos-bootstrap.js. No fake sample data presented as real. Export nothing — HTML only.",
+      "file_contains": [
+        "Failure Museum",
+        "lifeos-bootstrap",
+        "failure"
+      ],
+      "design_review_flagged": true,
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-failure-museum-ui",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-practice-library-ui",
+      "target_file": "public/overlay/lifeos-practice.html",
+      "task": "Ship Inner Work practice library UI",
+      "spec": "Create public/overlay/lifeos-practice.html with locally playable timed practices: box-breathing, 4-7-8, body scan, loving-kindness, 5-min mindfulness. No cloud audio dependency — use simple on-screen timers + instructions. Auth via lifeos-bootstrap.js. Log completion optionally to localStorage key lifeos_practice_logs.",
+      "file_contains": [
+        "box-breathing",
+        "4-7-8",
+        "mindfulness",
+        "lifeos-bootstrap"
+      ],
+      "design_review_flagged": true,
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-practice-library-ui",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-practice-nav",
+      "target_file": "public/overlay/lifeos-app.html",
+      "task": "Wire Practice + Failure Museum into LifeOS nav",
+      "spec": "In public/overlay/lifeos-app.html add nav items + PAGE_META + mobile More entries for lifeos-practice.html (Practice) and lifeos-failure-museum.html (Failure Museum). Keep Coach & Therapy and Victory Vault. Do not remove existing nav.",
+      "file_contains": [
+        "lifeos-practice.html",
+        "lifeos-failure-museum.html"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-practice-nav",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-assessment-battery-service",
+      "target_file": "services/lifeos-assessment-battery.js",
+      "task": "Assessment battery service (attachment/love language/conflict/values)",
+      "spec": "ESM module createAssessmentBatteryService({ pool }). Export functions: listInstruments() returning attachment_style, love_language, conflict_style, communication_style, core_values, stress_profile; saveResponse(userId, instrument, answers); getProfile(userId); comparePair(userIdA, userIdB). Persist to table lifeos_assessment_responses if present, else in-memory Map fallback with clear comment. Export named: createAssessmentBatteryService, listInstruments.",
+      "expected_exports": [
+        "createAssessmentBatteryService",
+        "listInstruments"
+      ],
+      "file_contains": [
+        "createAssessmentBatteryService",
+        "attachment_style",
+        "love_language"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-assessment-battery-service",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-assessment-routes",
+      "target_file": "routes/lifeos-assessment-battery-routes.js",
+      "task": "Mount assessment battery HTTP routes",
+      "spec": "ESM registerLifeosAssessmentBatteryRoutes(router, { pool, requireAuth }). Routes under /api/v1/lifeos/assessments: GET /instruments, GET /me, POST /me (body instrument+answers), GET /compare?other_user_id=. Use createAssessmentBatteryService. module.exports or export function registerLifeosAssessmentBatteryRoutes.",
+      "expected_exports": [
+        "registerLifeosAssessmentBatteryRoutes"
+      ],
+      "file_contains": [
+        "registerLifeosAssessmentBatteryRoutes",
+        "/instruments"
+      ],
+      "route": "GET /api/v1/lifeos/assessments/instruments",
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-assessment-routes",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-assessment-autoreg",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "Auto-register assessment battery routes",
+      "spec": "Add module entry for routes/lifeos-assessment-battery-routes.js register registerLifeosAssessmentBatteryRoutes mount_path /api/v1/lifeos/assessments enabled true.",
+      "file_contains": [
+        "lifeos-assessment-battery-routes.js",
+        "registerLifeosAssessmentBatteryRoutes"
+      ],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-assessment-autoreg",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-chronotype-winddown",
+      "target_file": "services/lifeos-sleep-service.js",
+      "task": "Add chronotype + wind-down protocol helpers to sleep service",
+      "spec": "Extend services/lifeos-sleep-service.js with getChronotype(userId) classifying from recent sleep_start median (early/intermediate/late) and getWindDownSuggestion(userId, opts) returning suggested_wind_down_local time from flourishing_prefs.wind_down_start or chronotype default. Keep existing getSleepDebt. Export both new methods on the service object.",
+      "file_contains": [
+        "getChronotype",
+        "getWindDownSuggestion",
+        "getSleepDebt"
+      ],
+      "expected_exports": [],
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-chronotype-winddown",
+      "mission_id": "PRODUCT-lifeos"
+    },
+    {
+      "id": "lifeos-p1-therapy-today-card",
+      "target_file": "public/overlay/lifeos-coach.html",
+      "task": "Today card on Coach & Therapy linking emotional daily check-in",
+      "spec": "In public/overlay/lifeos-coach.html add a visible Today card that fetches GET /api/v1/lifeos/emotional/daily (or /coaching/today) and shows one next action + link into therapy/coach flow. Fail soft if 404. Must contain substring therapy-today-card.",
+      "file_contains": [
+        "therapy-today-card",
+        "emotional"
+      ],
+      "design_review_flagged": true,
+      "status": "pending",
+      "depends_on": [],
+      "founder_gated": false,
+      "human_hold": false,
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-p1-therapy-today-card",
+      "mission_id": "PRODUCT-lifeos"
     }
   ],
-  "updated_at": "2026-07-16",
-  "notes": "Adam 2026-07-14: LifeOS Perfect Day added to queue — plan, rate, flexible re-prioritization, ADD-style reminders. The factory must ship s11 (service) then s12 (route) then s13 (auto-register entry). s12 file_contains changed to a stable symbol check; s13 makes the route persist across deploys. | 2026-07-14: Adam — Command Center is not a separate product; its admin surface (builder runtime mode, phase14 cert, pending Adam) is folded into lifeos as lifeos-admin-* steps. The standalone command-center BUILD_QUEUE is deprecated and emptied. | 2026-07-15: lifeos-admin-1b migration deployed and builder_runtime_config.id is now text with sentinel row; lifeos-admin-3 (routes/command-center-mode-routes.js) is live and returning mode=run. GOVERNED_AUTONOMOUS_SHIP=1 is set on the live lumin-web service; the governed loop is expected to resume on the next deploy and continue the remaining BP_PRIORITY product queues.",
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-lifeos",
   "twin_kind": "product_build_queue_registered"

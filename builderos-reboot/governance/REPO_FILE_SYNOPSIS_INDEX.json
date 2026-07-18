@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T01:15:57.136Z",
+  "generated_at": "2026-07-18T01:31:22.557Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11888,
   "files": [
@@ -37366,9 +37366,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 54301,
-      "mtime": "2026-07-18T01:08:38.498Z",
-      "indexed_at": "2026-07-18T01:08:38.498Z"
+      "bytes": 54725,
+      "mtime": "2026-07-18T01:31:22.557Z",
+      "indexed_at": "2026-07-18T01:31:22.557Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39466,9 +39466,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 220560,
-      "mtime": "2026-07-18T01:08:38.498Z",
-      "indexed_at": "2026-07-18T01:08:38.498Z"
+      "bytes": 220967,
+      "mtime": "2026-07-18T01:31:22.557Z",
+      "indexed_at": "2026-07-18T01:31:22.557Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -40141,9 +40141,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 630798,
-      "mtime": "2026-07-18T01:15:57.136Z",
-      "indexed_at": "2026-07-18T01:15:57.136Z"
+      "bytes": 631286,
+      "mtime": "2026-07-18T01:31:22.557Z",
+      "indexed_at": "2026-07-18T01:31:22.557Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -69531,9 +69531,9 @@
     {
       "path": "scripts/generate-build-queue-from-home.mjs",
       "synopsis": "Spec/intention → queue generator — PRODUCT_HOME backlog → validated",
-      "bytes": 13088,
-      "mtime": "2026-07-17T21:42:16.102Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z",
+      "bytes": 13083,
+      "mtime": "2026-07-18T01:31:22.557Z",
+      "indexed_at": "2026-07-18T01:31:22.557Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -83294,9 +83294,9 @@
     {
       "path": "services/build-queue-planner.js",
       "synopsis": "Build-queue planner — turns a product's PRODUCT_HOME backlog into a",
-      "bytes": 26528,
-      "mtime": "2026-07-17T21:42:16.102Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z",
+      "bytes": 26599,
+      "mtime": "2026-07-18T01:31:22.557Z",
+      "indexed_at": "2026-07-18T01:31:22.557Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -91480,9 +91480,9 @@
     {
       "path": "tests/build-queue-planner.test.js",
       "synopsis": "js — tests/build-queue-planner.test.js.",
-      "bytes": 14501,
-      "mtime": "2026-07-17T21:42:16.108Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z"
+      "bytes": 14499,
+      "mtime": "2026-07-18T01:31:22.557Z",
+      "indexed_at": "2026-07-18T01:31:22.557Z"
     },
     {
       "path": "tests/builder-agents.test.js",
@@ -92138,9 +92138,9 @@
     {
       "path": "tests/generate-build-queue-from-home.test.js",
       "synopsis": "Fixture tests for Spec/intention → queue generator (Wave 0 item 15).",
-      "bytes": 8803,
-      "mtime": "2026-07-17T21:42:16.108Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z",
+      "bytes": 8807,
+      "mtime": "2026-07-18T01:31:22.557Z",
+      "indexed_at": "2026-07-18T01:31:22.557Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
