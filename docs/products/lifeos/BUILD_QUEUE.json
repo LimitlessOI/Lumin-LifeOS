@@ -4848,17 +4848,18 @@
       "spec": "POST /parent-mode returns one-sentence script + developmental_read.",
       "file_contains": [
         "/parent-mode",
-        "mode: 'parent'"
+        "registerLifeosParentingScriptRoutes"
       ],
-      "status": "blocked",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
-      "attempts": 1,
+      "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-parent-mode-endpoint",
       "mission_id": "PRODUCT-lifeos",
       "expected_exports": [
+        "registerLifeosParentingScriptRoutes",
         "registerLifeosParentingScriptsRoutes"
       ],
       "behavior_assertions": [
@@ -4866,6 +4867,7 @@
           "type": "exports_smoke",
           "path": "routes/lifeos-parenting-scripts-routes.js",
           "exports": [
+            "registerLifeosParentingScriptRoutes",
             "registerLifeosParentingScriptsRoutes"
           ],
           "assertion_id": "expected_exports:routes/lifeos-parenting-scripts-routes.js"
@@ -4876,7 +4878,7 @@
         "path": "/parent-mode"
       },
       "last_attempt_at": "2026-07-18T02:16:19.558Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerLifeosParentingScriptsRoutes; behavior_assertion_failed; behavior_proof",
+      "last_error": null,
       "commit_sha": null,
       "built_sha": null,
       "proof": null

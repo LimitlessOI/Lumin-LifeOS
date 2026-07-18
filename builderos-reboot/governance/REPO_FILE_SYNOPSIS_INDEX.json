@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T02:16:38.071Z",
+  "generated_at": "2026-07-18T02:20:34.580Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11912,
   "files": [
@@ -67441,9 +67441,9 @@
     {
       "path": "routes/lifeos-parenting-scripts-routes.js",
       "synopsis": "Age-specific parenting script library HTTP routes.",
-      "bytes": 1641,
-      "mtime": "2026-07-18T02:14:28.280Z",
-      "indexed_at": "2026-07-18T02:14:28.280Z",
+      "bytes": 1805,
+      "mtime": "2026-07-18T02:20:34.580Z",
+      "indexed_at": "2026-07-18T02:20:34.580Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

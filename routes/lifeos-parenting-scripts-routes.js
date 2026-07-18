@@ -45,3 +45,6 @@ export function createParentingScriptRoutes() {
 export function registerLifeosParentingScriptRoutes(app) {
   app.use('/api/v1/lifeos/parenting-scripts', createParentingScriptRoutes());
 }
+
+/** Alias — factory twin once expected plural "Scripts" export name. */
+export const registerLifeosParentingScriptsRoutes = registerLifeosParentingScriptRoutes;
