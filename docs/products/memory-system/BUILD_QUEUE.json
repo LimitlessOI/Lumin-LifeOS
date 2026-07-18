@@ -827,13 +827,13 @@
     },
     {
       "id": "step1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/final_pr_review.js",
       "task": "merge branch",
       "spec": "Conduct a formal review of the phase7-railway-probe branch. Prepare a PR note and officially merge the branch to main. Ensure all standard procedures have been followed and include a note in the merge history document.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "reviewBranch"
       ],
@@ -843,7 +843,22 @@
       "file_contains": [
         "merge",
         "PR note"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/final_pr_review.js",
+          "exports": [
+            "reviewBranch"
+          ],
+          "assertion_id": "expected_exports:services/final_pr_review.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-18T03:04:39.445Z",
+      "last_error": "NOT_ON_BLUEPRINT",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "step2",
