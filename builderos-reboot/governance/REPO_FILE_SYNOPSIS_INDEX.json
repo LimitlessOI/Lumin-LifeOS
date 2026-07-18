@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T00:22:18.014Z",
+  "generated_at": "2026-07-18T01:08:38.498Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11887,
+  "file_count": 11888,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -37366,9 +37366,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 53913,
-      "mtime": "2026-07-18T00:18:22.173Z",
-      "indexed_at": "2026-07-18T00:18:22.173Z"
+      "bytes": 54301,
+      "mtime": "2026-07-18T01:08:38.498Z",
+      "indexed_at": "2026-07-18T01:08:38.498Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39466,9 +39466,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 220211,
-      "mtime": "2026-07-18T00:18:22.173Z",
-      "indexed_at": "2026-07-18T00:18:22.173Z"
+      "bytes": 220560,
+      "mtime": "2026-07-18T01:08:38.498Z",
+      "indexed_at": "2026-07-18T01:08:38.498Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -40141,9 +40141,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 630299,
-      "mtime": "2026-07-17T21:42:46.168Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z"
+      "bytes": 630798,
+      "mtime": "2026-07-18T01:08:38.498Z",
+      "indexed_at": "2026-07-18T01:08:38.498Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -60664,9 +60664,9 @@
     {
       "path": "factory-staging/factory-core/builder/authoring.js",
       "synopsis": "STEP 4 — codegen as an UNTRUSTED authoring sub-step (the \"dumb pipe\").",
-      "bytes": 6755,
-      "mtime": "2026-07-15T08:53:26.089Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z",
+      "bytes": 9035,
+      "mtime": "2026-07-18T01:08:38.498Z",
+      "indexed_at": "2026-07-18T01:08:38.498Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -64928,9 +64928,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 185683,
-      "mtime": "2026-07-17T21:42:16.096Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z"
+      "bytes": 185794,
+      "mtime": "2026-07-18T01:08:38.498Z",
+      "indexed_at": "2026-07-18T01:08:38.498Z"
     },
     {
       "path": "public/overlay/lifeos-balance-wheel.html",
@@ -67004,9 +67004,9 @@
     {
       "path": "routes/lifeos-builderos-command-control-routes.js",
       "synopsis": "Founder-facing LifeOS BuilderOS command-control routes for direct chat, build orchestration, and governed execution receipts.",
-      "bytes": 62069,
-      "mtime": "2026-07-16T19:42:53.448Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z",
+      "bytes": 65769,
+      "mtime": "2026-07-18T01:08:38.498Z",
+      "indexed_at": "2026-07-18T01:08:38.498Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -69955,9 +69955,9 @@
     {
       "path": "scripts/lifeos-scheduler.mjs",
       "synopsis": "LifeOS relationship reminder scheduler — scripts/lifeos-scheduler.mjs.",
-      "bytes": 5782,
-      "mtime": "2026-07-16T19:42:53.604Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z",
+      "bytes": 6249,
+      "mtime": "2026-07-18T01:08:38.498Z",
+      "indexed_at": "2026-07-18T01:08:38.498Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -83829,9 +83829,9 @@
     {
       "path": "services/chair-context-classifier.js",
       "synopsis": "Chair context classifier — life vs code vs command (default help, not builder theater).",
-      "bytes": 12022,
-      "mtime": "2026-07-17T19:19:29.720Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z",
+      "bytes": 13191,
+      "mtime": "2026-07-18T01:08:38.498Z",
+      "indexed_at": "2026-07-18T01:08:38.498Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -85737,9 +85737,9 @@
     {
       "path": "services/governed-autonomous-shipping-loop.js",
       "synopsis": "STEP 5g — the governed AUTONOMOUS shipping loop. When the STEP 5a",
-      "bytes": 31495,
-      "mtime": "2026-07-17T21:43:44.974Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z",
+      "bytes": 32118,
+      "mtime": "2026-07-18T01:08:38.498Z",
+      "indexed_at": "2026-07-18T01:08:38.498Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -86450,6 +86450,16 @@
       "bytes": 4973,
       "mtime": "2026-06-27T20:14:16.867Z",
       "indexed_at": "2026-07-17T23:06:25.553Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/lifeos-crisis-language-detector.js",
+      "synopsis": "Detect crisis-language phrases for LifeOS safety routing.",
+      "bytes": 951,
+      "mtime": "2026-07-18T01:08:38.498Z",
+      "indexed_at": "2026-07-18T01:08:38.498Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -88579,9 +88589,9 @@
     {
       "path": "services/product-build-orchestrator.js",
       "synopsis": "General product-build orchestrator — turns a product's structured",
-      "bytes": 28278,
-      "mtime": "2026-07-17T21:42:16.103Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z",
+      "bytes": 29672,
+      "mtime": "2026-07-18T01:08:38.498Z",
+      "indexed_at": "2026-07-18T01:08:38.498Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

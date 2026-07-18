@@ -50,6 +50,21 @@ export function extractContent(raw) {
  * @param {object} step
  * @param {{ generate?: Function } | null} codegenRunner injected at route boundary
  */
+function existingFileSatisfiesContains(target_file, needles) {
+  if (!Array.isArray(needles) || needles.length === 0) return null;
+  let existing = '';
+  try {
+    existing = fs.readFileSync(resolveRepoPath(target_file), 'utf8');
+  } catch {
+    return null;
+  }
+  if (!existing) return null;
+  for (const n of needles) {
+    if (!String(n || '').trim() || !existing.includes(String(n))) return null;
+  }
+  return existing;
+}
+
 export async function runAuthoring(step, codegenRunner) {
   const target_file = String(step?.target_file || '');
   const base = { action: 'author_then_write', target_file, checked_at: new Date().toISOString() };
@@ -62,11 +77,42 @@ export async function runAuthoring(step, codegenRunner) {
     return { ...base, ok: false, reason: 'authoring_requires_blueprint_assertions' };
   }
 
+  // If the twin's file_contains is already true on disk, do not burn tokens
+  // rewriting a large file (root cause of codegen_stub_detected thrash).
+  const needles = [
+    ...(Array.isArray(step?.file_contains) ? step.file_contains : []),
+    ...(Array.isArray(step?.assertion_spec?.file_contains) ? step.assertion_spec.file_contains : []),
+  ];
+  const preSatisfied = existingFileSatisfiesContains(target_file, needles);
+  if (preSatisfied) {
+    return {
+      ...base,
+      ok: true,
+      content: preSatisfied,
+      content_sha256: crypto.createHash('sha256').update(Buffer.from(preSatisfied, 'utf8')).digest('hex'),
+      model_tier: 'pre_existing_disk',
+      escalated: false,
+      token_cost: 0,
+      assertion_provenance: 'blueprint',
+      pre_existing: true,
+    };
+  }
+
   if (!codegenRunner || typeof codegenRunner.generate !== 'function') {
     return { ...base, ok: false, reason: 'no_codegen_runner' };
   }
 
   const authoring = step.authoring || {};
+  let existingSize = 0;
+  let existingText = '';
+  try {
+    const abs = resolveRepoPath(target_file);
+    existingSize = fs.statSync(abs).size;
+    if (existingSize > 0) existingText = fs.readFileSync(abs, 'utf8');
+  } catch {
+    existingSize = 0;
+  }
+
   let result;
   try {
     const failureContext = step.last_error
@@ -75,10 +121,13 @@ export async function runAuthoring(step, codegenRunner) {
     const expectedExports = Array.isArray(step.expected_exports) && step.expected_exports.length
       ? `REQUIRED NAMED EXPORTS: ${step.expected_exports.join(', ')}\nYou MUST export each of these names from the file.\n`
       : '';
+    const additiveHint = existingSize > 0
+      ? `EXISTING FILE IS ${existingSize} bytes. Return the COMPLETE updated file (not a stub). Preserve all existing behavior; only add/change what the task requires. Output length must stay ≥ 30% of the existing file.\n`
+      : '';
     result = await codegenRunner.generate({
       task: authoring.task || step.task || '',
       target_file,
-      spec: authoring.spec || step.spec || '',
+      spec: `${additiveHint}${authoring.spec || step.spec || ''}`,
       tiers: Array.isArray(authoring.tiers) && authoring.tiers.length ? authoring.tiers : DEFAULT_CODEGEN_TIERS,
       max_output_tokens: Number(authoring.max_output_tokens || step.max_output_tokens) || 8000,
       last_error: step.last_error || null,
@@ -96,13 +145,22 @@ export async function runAuthoring(step, codegenRunner) {
 
   // Fail-closed regression guard: do not let a model replace an existing, larger
   // file with a minimal stub that only satisfies the export assertion.
-  let existingSize = 0;
-  try {
-    existingSize = fs.statSync(resolveRepoPath(target_file)).size;
-  } catch {
-    existingSize = 0;
-  }
+  // If stub detected but disk already meets file_contains, keep disk (heal).
   if (existingSize > 0 && content.length < existingSize * 0.3) {
+    if (existingText && needles.length && needles.every((n) => !String(n || '').trim() || existingText.includes(String(n)))) {
+      return {
+        ...base,
+        ok: true,
+        content: existingText,
+        content_sha256: crypto.createHash('sha256').update(Buffer.from(existingText, 'utf8')).digest('hex'),
+        model_tier: result?.model_tier || 'pre_existing_after_stub',
+        escalated: Boolean(result?.escalated),
+        token_cost: 0,
+        assertion_provenance: 'blueprint',
+        pre_existing: true,
+        stub_healed: true,
+      };
+    }
     return {
       ...base,
       ok: false,

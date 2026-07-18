@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/builderos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-17 — Exact-change law: every ship is a twin step with seal + reverse pinpoint. |
+| **Last Updated** | 2026-07-17 — Pre-existing claim + stub-heal; founder LifeOS queue ship. |
 ### Related docs (this product)
 
 | Doc | Path |
@@ -440,6 +440,7 @@ One model may fill more than one role only when no safer alternative exists, and
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-07-17 | **Stub thrash root cause + founder LifeOS queue path.** `runAuthoring` pre-satisfies/heals when disk already matches `file_contains`; `claimPreExistingSatisfiedSteps` before governed plan; founder-interface `lifeos_queue_ship` bypasses intake_blueprint. | Adam: BuilderOS as hands via UI; intervene after 6 tries and fix why. | syntax | tip prove |
 | 2026-07-17 | **Exact-change law (pinpoint / reverse / rebuild).** Pipeline law `exact_change_law`: every program change must be an on-disk twin step with rebuildable contract. `exactChangeClaim` → `NOT_EXACT_BLUEPRINT_STEP` if vague. Ship-queue binds target from twin, seals exact bytes to `docs/products/<id>/twins/steps/<step>.exact` + reverse contract, Historian `exact_change_sealed`. `POST /factory/reverse-step` plans/applies one-aspect rollback. | Adam: every change in blueprint, exact, pinpoint where/when, reverse just that aspect, rebuild by any system. | `node --test tests/truth-ladder.test.js` (21) | tip prove NOT_EXACT + reverse-step plan |
 | 2026-07-17 | **True blueprint follow — close synthetic loophole.** `blueprintFollowClaim` resolves on-disk mission/product twins; `governed-autonomous-*` → NOT_ON_BLUEPRINT. Ship-queue probes twin before dispatch. Governed loop no longer invents blueprint ids / skip_intake for fakes. All product `BUILD_QUEUE.json` stamped `PRODUCT-*-BUILD-QUEUE-TWIN-V1` + per-step twin ids (registered executable twin until Architect ARC supersedes). | Adam: make sure nothing can claim following blueprint without a real twin — prior gate was theater. | `node --test tests/truth-ladder.test.js` | tip prove synthetic 422 + lifeos twin ship |
 | 2026-04-01 | Added the required self-programming loop (proposal, execution, verification, review, repair, scoring) plus explicit separation-of-duties rules | The builder now has a documented operating contract for how autonomous code work must be evaluated instead of acting like a single black-box coder | ✅ | pending | pending |
