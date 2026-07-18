@@ -981,6 +981,23 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-18T04:39:13.274Z"
+    },
+    {
+      "id": "step3",
+      "status": "pending",
+      "target_file": "scripts/deploy_phase7_railway_probe.mjs",
+      "task": "deploy phase7 branch",
+      "spec": "Deploy 'phase7-railway-probe' to Railway for live mode of 'scripts/memory-pressure-test.mjs' and verify 20/20 result.",
+      "depends_on": [
+        "step2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "deployPhase7Railway",
+        "verifyMemoryPressureTest",
+        "20/20 result"
+      ]
     }
   ],
   "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
