@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T04:58:02.788Z",
+  "generated_at": "2026-07-18T05:00:46.614Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11929,
+  "file_count": 11930,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -36054,6 +36054,13 @@
       "bytes": 1949,
       "mtime": "2026-07-16T19:42:53.572Z",
       "indexed_at": "2026-07-17T23:06:25.553Z"
+    },
+    {
+      "path": "db/migrations/addStruggleDetectionFormFill.sql",
+      "synopsis": "Database migration — addStruggleDetectionFormFill.sql.",
+      "bytes": 466,
+      "mtime": "2026-07-18T05:00:46.614Z",
+      "indexed_at": "2026-07-18T05:00:46.614Z"
     },
     {
       "path": "db/migrations/amendment_21_layer_12.sql",
