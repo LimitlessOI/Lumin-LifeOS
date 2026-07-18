@@ -827,13 +827,13 @@
     },
     {
       "id": "step1",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/final_pr_review.js",
       "task": "merge branch",
       "spec": "Conduct a formal review of the phase7-railway-probe branch. Prepare a PR note and officially merge the branch to main. Ensure all standard procedures have been followed and include a note in the merge history document.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "reviewBranch"
       ],
@@ -854,37 +854,26 @@
           "assertion_id": "expected_exports:services/final_pr_review.js"
         }
       ],
-      "last_attempt_at": "2026-07-18T03:04:39.445Z",
-      "last_error": "NOT_ON_BLUEPRINT",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "5323733f8f390198f35d82614dcfe4e9738cabbd",
       "built_sha": null,
       "proof": null,
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/memory-system/twins/steps/step1.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-18T03:21:21.768Z",
-        "shipped_at": "2026-07-18T03:21:21.768Z",
-        "commit_sha": null,
-        "content_sha256": "f27985c211af1292572d45010eca69359fd72a6bb37768c73d4bed86a596a069",
-        "target_file": "services/final_pr_review.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/final_pr_review.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/memory-system/twins/steps/step1.exact",
-          "content_sha256": "f27985c211af1292572d45010eca69359fd72a6bb37768c73d4bed86a596a069"
-        }
-      },
-      "shipped_at": "2026-07-18T03:21:21.768Z",
-      "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
-      "blueprint_step_id": "step1"
+      "revive_count": 0,
+      "revived_at": "2026-07-18T03:21:14.615Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-18T03:21:27.577Z"
     },
     {
       "id": "step2",
