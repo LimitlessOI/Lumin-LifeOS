@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T02:33:24.261Z",
+  "generated_at": "2026-07-18T02:33:35.359Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11918,
+  "file_count": 11919,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -64893,6 +64893,13 @@
       "bytes": 20409,
       "mtime": "2026-07-05T19:10:02.187Z",
       "indexed_at": "2026-07-17T23:06:25.553Z"
+    },
+    {
+      "path": "public/overlay/install.html",
+      "synopsis": "HTML page: Install PWA on iPhone",
+      "bytes": 1547,
+      "mtime": "2026-07-18T02:33:35.359Z",
+      "indexed_at": "2026-07-18T02:33:35.359Z"
     },
     {
       "path": "public/overlay/kingsman.html",
