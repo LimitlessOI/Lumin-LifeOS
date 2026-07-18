@@ -553,11 +553,34 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": null,
-      "shipped_at": "2026-07-16T07:06:55.985Z",
+      "shipped_at": "2026-07-18T11:36:54.655Z",
       "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "word-keeper-5",
       "mission_id": "PRODUCT-word-keeper",
-      "reaudit_reset_at": "2026-07-18T04:29:52.120Z"
+      "reaudit_reset_at": "2026-07-18T04:29:52.120Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/word-keeper/twins/steps/word-keeper-5.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-18T11:36:54.655Z",
+        "shipped_at": "2026-07-18T11:36:54.655Z",
+        "commit_sha": null,
+        "content_sha256": "f016eef4723dd9920ee526c543e2d123e0ec7170dd097d11e13e36a3030844e7",
+        "target_file": "services/cronVerificationService.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/cronVerificationService.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/word-keeper/twins/steps/word-keeper-5.exact",
+          "content_sha256": "f016eef4723dd9920ee526c543e2d123e0ec7170dd097d11e13e36a3030844e7"
+        }
+      }
     },
     {
       "id": "word-keeper-001",
