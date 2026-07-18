@@ -86,8 +86,12 @@ const FOUNDER_BUILD_JOB_TIMEOUT_MS = Number(process.env.FOUNDER_BUILD_JOB_TIMEOU
 function isLifeosQueueBuildIntent(text = '') {
   const t = String(text || '');
   if (!/\blife\sos\b/i.test(t)) return false;
-  if (/\b(create|generate|make|draft)\s+(a\s+)?(new\s+)?blueprint\b/i.test(t)) return false;
-  if (/\b(intake|founder.?packet|mission.?pack)\b/i.test(t) && /\b(create|generate|start)\b/i.test(t)) return false;
+  // Only reject real "create blueprint / start intake" asks — not "do not create intake".
+  if (/\b(create|generate|make|draft)\s+(a\s+)?(new\s+)?blueprint\b/i.test(t)
+    && !/\b(do not|don't|dont|never|not)\b.{0,24}\b(create|generate|make|draft)\b/i.test(t)) {
+    return false;
+  }
+  if (/\b(start|kick\soff|begin)\s+(an?\s+)?(intake|blueprint\s+intake)\b/i.test(t)) return false;
   return /\b(build|ship|continue|finish|complete|resume)\b/i.test(t)
     && /\b(feature|features|queue|build_queue|blueprint|twin|all|remaining|blocked|stuck)\b/i.test(t);
 }
