@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T11:39:16.688Z",
+  "generated_at": "2026-07-18T11:41:59.088Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11957,
+  "file_count": 11958,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -66771,6 +66771,13 @@
       "ssot": [
         "docs/products/creative-engine/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "routes/creatorPartnerRoutes.js",
+      "synopsis": "Registers CreatorPartnerRoutes routes/handlers (routes/creatorPartnerRoutes.js).",
+      "bytes": 1127,
+      "mtime": "2026-07-18T11:41:59.088Z",
+      "indexed_at": "2026-07-18T11:41:59.088Z"
     },
     {
       "path": "routes/crm-routes.js",
