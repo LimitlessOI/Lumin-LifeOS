@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-18 — Chair real LifeOS writes (not theater)
+
+Adam: keep building real. Wired food/sleep/commit/victory/habit into `lifeos-direct-action` + HTTP `route_act_fastpath` so Chair executes DB writes with receipts before counsel. Prove tip: `log food: …` / `commit: …` → COMMAND_RAN + ids.
+
 ## 2026-07-18 — Chair navigate fastpath v2 (deploy canary)
 
 Adam: Chair must do. Tip claimed SHA with v1 fastpath but returned counsel (no canary) — SHA≠running code or path bypass. Shipped inline navigate parse + `fi_route_marker` on every reply + `GET …/source-proof`. Prove marker + `open food` → COMMAND_RAN.

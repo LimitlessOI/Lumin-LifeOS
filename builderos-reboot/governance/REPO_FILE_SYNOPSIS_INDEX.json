@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T18:17:31.964Z",
+  "generated_at": "2026-07-18T18:22:52.596Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11970,
   "files": [
@@ -37409,9 +37409,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 58521,
-      "mtime": "2026-07-18T18:17:31.964Z",
-      "indexed_at": "2026-07-18T18:17:31.964Z"
+      "bytes": 58824,
+      "mtime": "2026-07-18T18:22:52.596Z",
+      "indexed_at": "2026-07-18T18:22:52.596Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40184,9 +40184,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 636690,
-      "mtime": "2026-07-18T18:17:31.964Z",
-      "indexed_at": "2026-07-18T18:17:31.964Z"
+      "bytes": 637065,
+      "mtime": "2026-07-18T18:22:52.596Z",
+      "indexed_at": "2026-07-18T18:22:52.596Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -67239,9 +67239,9 @@
     {
       "path": "routes/lifeos-builderos-command-control-routes.js",
       "synopsis": "Founder-facing LifeOS BuilderOS command-control routes for direct chat, build orchestration, and governed execution receipts.",
-      "bytes": 73419,
-      "mtime": "2026-07-18T18:17:31.964Z",
-      "indexed_at": "2026-07-18T18:17:31.964Z",
+      "bytes": 75574,
+      "mtime": "2026-07-18T18:22:52.596Z",
+      "indexed_at": "2026-07-18T18:22:52.596Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -84270,9 +84270,9 @@
     {
       "path": "services/chair-direct-agent.js",
       "synopsis": "Direct Chair agent — talks + acts; human prose obeys Lumin Communication DNA (not theater).",
-      "bytes": 22480,
-      "mtime": "2026-07-18T17:53:33.729Z",
-      "indexed_at": "2026-07-18T17:53:33.729Z",
+      "bytes": 22603,
+      "mtime": "2026-07-18T18:22:52.596Z",
+      "indexed_at": "2026-07-18T18:22:52.596Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -87103,10 +87103,10 @@
     },
     {
       "path": "services/lifeos-direct-action.js",
-      "synopsis": "Founder -> LifeOS direct action bridge.",
-      "bytes": 6456,
-      "mtime": "2026-06-29T17:21:08.904Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z",
+      "synopsis": "Founder -> LifeOS direct action bridge — real writes + proofs, no counsel theater.",
+      "bytes": 14312,
+      "mtime": "2026-07-18T18:22:52.596Z",
+      "indexed_at": "2026-07-18T18:22:52.596Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -88031,9 +88031,9 @@
     {
       "path": "services/lumin-chair-system-actions.js",
       "synopsis": "Lumin Chair system actions — real execution before counsel theater.",
-      "bytes": 14522,
-      "mtime": "2026-07-18T18:17:31.964Z",
-      "indexed_at": "2026-07-18T18:17:31.964Z",
+      "bytes": 15065,
+      "mtime": "2026-07-18T18:22:52.596Z",
+      "indexed_at": "2026-07-18T18:22:52.596Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

@@ -55,7 +55,8 @@ import {
 } from '../services/lumin-chair-orchestrator.js';
 import { isIntakeBlueprintIntent } from '../services/lifeos-mission-pipeline-executor.js';
 import { needsSystemKnowledge } from '../services/chair-system-knowledge.js';
-import { parseLuminChairSystemAction, shouldSkipInputNormalize } from '../services/lumin-chair-system-actions.js';
+import { parseLuminChairSystemAction, shouldSkipInputNormalize, tryLuminChairSystemAction } from '../services/lumin-chair-system-actions.js';
+import { parseLifeOSDirectAction } from '../services/lifeos-direct-action.js';
 import { stripChairDoPrefix } from '../services/chair-intent-signals.js';
 import { isFounderPersonalLifeIntent } from '../services/founder-life-admin-intent.js';
 import { isExplicitDisplayOnlyRequest } from '../services/lumin-conversation-routing.js';
@@ -86,7 +87,7 @@ import { commitQueueStatusToRepo } from '../services/never-stop-product-factory.
 const FOUNDER_BUILD_JOB_TIMEOUT_MS = Number(process.env.FOUNDER_BUILD_JOB_TIMEOUT_MS || '480000');
 
 /** Deploy-truth canary — stamped on every founder-interface response so tip SHA lies are visible. */
-export const FI_ROUTE_MARKER = 'fi-route-marker-v2';
+export const FI_ROUTE_MARKER = 'fi-route-marker-v3';
 const FI_ROUTE_FILE = fileURLToPath(import.meta.url);
 let FI_DISK_HAS_NAV = false;
 try {
@@ -1337,8 +1338,7 @@ HOW TO RESPOND:
         });
       }
 
-      // HTTP-boundary navigate: open/go-to must execute before any counsel turn.
-      // Inline parse (not imported) so a stale system-actions module cannot block shell_action.
+      // HTTP-boundary act: navigate + LifeOS writes + redeploy/alpha BEFORE counsel.
       if (originalText && action !== 'display') {
         const shellNav = parseShellNavigateInline(originalText)
           || (() => {
@@ -1367,6 +1367,50 @@ HOW TO RESPOND:
             nav_canary: 'fi-nav-v1',
             ...fiRouteStamp(),
           }, 'system_action'));
+        }
+
+        const sysParsed = parseLuminChairSystemAction(originalText);
+        const lifeParsed = parseLifeOSDirectAction(originalText);
+        if ((sysParsed.matched && !sysParsed.shell_action) || lifeParsed.matched) {
+          const boundaryKey = getForwardedOperatorKey(req)
+            || process.env.COMMAND_CENTER_KEY
+            || process.env.LIFEOS_KEY
+            || process.env.API_KEY;
+          try {
+            const actResult = await tryLuminChairSystemAction(originalText, {
+              pool,
+              logger: console,
+              operatorKey: boundaryKey,
+              founderBuildBaseUrl: resolveFounderBuildBaseUrl(),
+              userId: req.lifeosUser?.sub || null,
+            });
+            if (actResult?.matched) {
+              clearTimeout(handlerDeadline);
+              _log(`route_act_fastpath type=${actResult.action_type} ok=${actResult.ok}`);
+              res.setHeader('Cache-Control', 'private, no-store, max-age=0');
+              return res.status(200).json(lockFounderResponse({
+                ok: actResult.ok === true,
+                interface: 'Lumin',
+                lumin_chair: true,
+                lumin: true,
+                direct_connection: true,
+                action: actResult.action_type || 'system_action',
+                chair_channel: 'system_action',
+                command_truth: actResult.command_truth
+                  || (actResult.executed ? 'COMMAND_RAN' : 'NO_COMMAND_RAN'),
+                pass_fail: actResult.ok === true ? 'PASS' : 'FAIL',
+                execution_kind: 'SYSTEM_EXECUTE',
+                shell_action: actResult.shell_action || null,
+                execution_receipt: actResult.receipt || null,
+                human_summary: actResult.human_summary || actResult.error || 'System action finished.',
+                done_synopsis: actResult.done_synopsis || actResult.human_summary || null,
+                route_act_fastpath: true,
+                ...fiRouteStamp(),
+              }, 'system_action'));
+            }
+          } catch (actErr) {
+            _log(`route_act_fastpath_error=${actErr.message}`);
+          }
         }
       }
 

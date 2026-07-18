@@ -5,10 +5,11 @@
 import { loadPointBTarget } from './point-b-target-lite.js';
 import { createLifeREAlphaDailyCycle } from './lifere-alpha-daily-cycle.js';
 import { getLifeREAlphaReadinessSurface } from './lifere-alpha-readiness-surface.js';
-import { executeLifeOSDirectAction } from './lifeos-direct-action.js';
+import { executeLifeOSDirectAction, parseLifeOSDirectAction } from './lifeos-direct-action.js';
 import { isFounderPersonalLifeIntent } from './founder-life-admin-intent.js';
 import { isExplicitDisplayOnlyRequest } from './lumin-conversation-routing.js';
 import { isCounselOnlyBypass } from './chair-intent-signals.js';
+import { resolveLifeOSUserId } from './lifeos-user-resolver.js';
 
 const DO_PREFIX = /^\s*(do|execute|run)\s*:\s*/i;
 
@@ -19,6 +20,7 @@ export function shouldSkipInputNormalize(text = '', action = 'auto') {
   if (isFounderPersonalLifeIntent(t)) return true;
   if (isExplicitDisplayOnlyRequest(t, action)) return true;
   if (isCounselOnlyBypass(t)) return true;
+  if (parseLifeOSDirectAction(t).matched) return true;
   return parseLuminChairSystemAction(t).matched;
 }
 
@@ -222,9 +224,17 @@ export async function tryLuminChairSystemAction(text, deps = {}) {
     };
   }
 
-  const direct = userId
+  // LifeOS writes (food/sleep/commit/victory/habit) — resolve adam when auth only has a key.
+  let resolvedUserId = userId;
+  if (pool && parseLifeOSDirectAction(text).matched) {
+    if (!Number.isInteger(resolvedUserId) && !/^\d+$/.test(String(resolvedUserId || '').trim())) {
+      resolvedUserId = await resolveLifeOSUserId(pool, 'adam').catch(() => null);
+    }
+  }
+
+  const direct = pool
     ? await executeLifeOSDirectAction(pool, {
-      userId,
+      userId: resolvedUserId || userId,
       text,
       baseUrl: founderBuildBaseUrl,
     }).catch((err) => {
