@@ -4128,14 +4128,33 @@
       "expected_exports": [
         "registerLifeosEmotionalRoutes"
       ],
-      "status": "pending",
+      "status": "blocked",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
-      "attempts": 0,
+      "attempts": 1,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-emotional-daily-alias",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/lifeos-emotional-routes.js",
+          "exports": [
+            "registerLifeosEmotionalRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/lifeos-emotional-routes.js"
+        }
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/daily"
+      },
+      "last_attempt_at": "2026-07-18T02:11:00.836Z",
+      "last_error": "NOT_ON_BLUEPRINT",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lifeos-p1-legacy-register",
@@ -4157,7 +4176,22 @@
       "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-legacy-register",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/lifeos-legacy-routes.js",
+          "exports": [
+            "registerLifeOSLegacyRoutes",
+            "createLifeOSLegacyRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/lifeos-legacy-routes.js"
+        }
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/trusted-contacts"
+      }
     },
     {
       "id": "lifeos-p1-legacy-autoreg",
@@ -4198,7 +4232,18 @@
       "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-psychometric-service",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-psychometric-battery.js",
+          "exports": [
+            "createPsychometricBatteryService",
+            "listPsychometricInstruments"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-psychometric-battery.js"
+        }
+      ]
     },
     {
       "id": "lifeos-p1-psychometric-routes",
@@ -4219,7 +4264,17 @@
       "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-psychometric-routes",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/lifeos-psychometric-battery-routes.js",
+          "exports": [
+            "registerLifeosPsychometricBatteryRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/lifeos-psychometric-battery-routes.js"
+        }
+      ]
     },
     {
       "id": "lifeos-p1-psychometric-autoreg",
@@ -4278,7 +4333,17 @@
       "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-parenting-scripts-service",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-parenting-scripts.js",
+          "exports": [
+            "createParentingScriptService"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-parenting-scripts.js"
+        }
+      ]
     },
     {
       "id": "lifeos-p1-parenting-scripts-routes",
@@ -4299,7 +4364,17 @@
       "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-parenting-scripts-routes",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/lifeos-parenting-scripts-routes.js",
+          "exports": [
+            "registerLifeosParentingScriptRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/lifeos-parenting-scripts-routes.js"
+        }
+      ]
     },
     {
       "id": "lifeos-p1-parenting-scripts-autoreg",
@@ -4359,7 +4434,18 @@
       "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-labs-service",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-labs-longevity.js",
+          "exports": [
+            "createLabsLongevityService",
+            "estimateBiologicalAge"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-labs-longevity.js"
+        }
+      ]
     },
     {
       "id": "lifeos-p1-labs-routes",
@@ -4380,7 +4466,17 @@
       "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-labs-routes",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/lifeos-labs-longevity-routes.js",
+          "exports": [
+            "registerLifeosLabsLongevityRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/lifeos-labs-longevity-routes.js"
+        }
+      ]
     },
     {
       "id": "lifeos-p1-labs-autoreg",
