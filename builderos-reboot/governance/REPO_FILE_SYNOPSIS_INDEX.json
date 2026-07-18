@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T06:28:55.706Z",
+  "generated_at": "2026-07-18T00:24:56.076Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11397,
+  "file_count": 11399,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -30737,6 +30737,16 @@
       ]
     },
     {
+      "path": "config/site-builder-paths.js",
+      "synopsis": "Single source of truth for where Site Builder preview sites live on disk.",
+      "bytes": 1317,
+      "mtime": "2026-07-18T00:21:25.801Z",
+      "indexed_at": "2026-07-18T00:24:56.076Z",
+      "ssot": [
+        "docs/products/site-builder/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "config/site-builder-pricing.js",
       "synopsis": "Site Builder entry + upsell pricing (founder-approved entry product model).",
       "bytes": 1441,
@@ -39662,11 +39672,18 @@
       "indexed_at": "2026-07-10T06:28:55.706Z"
     },
     {
+      "path": "docs/products/site-builder/MARKETING_PLAN_THERAPY_PSYCH.md",
+      "synopsis": "Site Builder go-to-market plan — therapists & psychiatry, via MarketingOS. Cold, not warm-network.",
+      "bytes": 14911,
+      "mtime": "2026-07-18T00:20:31.341Z",
+      "indexed_at": "2026-07-18T00:24:56.076Z"
+    },
+    {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 77412,
-      "mtime": "2026-07-09T03:33:13.972Z",
-      "indexed_at": "2026-07-10T06:28:55.706Z"
+      "bytes": 80442,
+      "mtime": "2026-07-18T00:23:55.857Z",
+      "indexed_at": "2026-07-18T00:24:56.076Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -66090,9 +66107,9 @@
     {
       "path": "routes/site-builder-checkout-routes.js",
       "synopsis": "Site Builder publish checkout routes ($49 entry product).",
-      "bytes": 4634,
-      "mtime": "2026-07-07T21:41:41.300Z",
-      "indexed_at": "2026-07-10T06:28:55.706Z",
+      "bytes": 4692,
+      "mtime": "2026-07-18T00:22:10.981Z",
+      "indexed_at": "2026-07-18T00:24:56.076Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -66107,9 +66124,9 @@
     {
       "path": "routes/site-builder-editor-routes.js",
       "synopsis": "Site Builder live preview editor API (edit / save / revert / shell).",
-      "bytes": 10606,
-      "mtime": "2026-07-07T21:41:49.825Z",
-      "indexed_at": "2026-07-10T06:28:55.706Z",
+      "bytes": 10650,
+      "mtime": "2026-07-18T00:22:05.017Z",
+      "indexed_at": "2026-07-18T00:24:56.076Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -66138,9 +66155,9 @@
     {
       "path": "routes/site-builder-prealpha-routes.js",
       "synopsis": "CONDUCTOR-GLUE SENTRY pre-alpha Layer B (human-sim) route for Site",
-      "bytes": 13803,
-      "mtime": "2026-07-09T01:03:41.530Z",
-      "indexed_at": "2026-07-10T06:28:55.706Z",
+      "bytes": 13847,
+      "mtime": "2026-07-18T00:22:07.997Z",
+      "indexed_at": "2026-07-18T00:24:56.076Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -66148,9 +66165,9 @@
     {
       "path": "routes/site-builder-routes.js",
       "synopsis": "Site Builder Routes — Done-for-you website pipeline",
-      "bytes": 27100,
-      "mtime": "2026-07-09T03:33:13.985Z",
-      "indexed_at": "2026-07-10T06:28:55.706Z",
+      "bytes": 27432,
+      "mtime": "2026-07-18T00:23:01.721Z",
+      "indexed_at": "2026-07-18T00:24:56.076Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -68862,9 +68879,9 @@
     {
       "path": "scripts/site-builder-preview-expiry-cron.mjs",
       "synopsis": "Script — Site Builder Preview Expiry Cron.",
-      "bytes": 4957,
-      "mtime": "2026-07-06T21:30:51.614Z",
-      "indexed_at": "2026-07-10T06:28:55.706Z"
+      "bytes": 5381,
+      "mtime": "2026-07-18T00:22:27.277Z",
+      "indexed_at": "2026-07-18T00:24:56.076Z"
     },
     {
       "path": "scripts/site-builder-prospect-discovery.mjs",
@@ -68879,9 +68896,9 @@
     {
       "path": "scripts/site-builder-quality-audit.mjs",
       "synopsis": "Quality audit for generated preview sites.",
-      "bytes": 6896,
-      "mtime": "2026-06-29T17:21:08.664Z",
-      "indexed_at": "2026-07-10T06:28:55.706Z",
+      "bytes": 6943,
+      "mtime": "2026-07-18T00:22:22.673Z",
+      "indexed_at": "2026-07-18T00:24:56.076Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -85007,9 +85024,9 @@
     {
       "path": "services/preview-expiry-cron.js",
       "synopsis": "Preview Site Expiry Cron",
-      "bytes": 1789,
-      "mtime": "2026-06-21T21:39:17.138Z",
-      "indexed_at": "2026-07-10T06:28:55.706Z"
+      "bytes": 1862,
+      "mtime": "2026-07-18T00:22:14.421Z",
+      "indexed_at": "2026-07-18T00:24:56.076Z"
     },
     {
       "path": "services/product-build-orchestrator.js",
@@ -85587,9 +85604,9 @@
     {
       "path": "services/site-builder-prospect-runner.js",
       "synopsis": "Async Site Builder prospect jobs — accept fast, build+email in background.",
-      "bytes": 5154,
-      "mtime": "2026-07-09T03:33:13.919Z",
-      "indexed_at": "2026-07-10T06:28:55.706Z",
+      "bytes": 7445,
+      "mtime": "2026-07-18T00:22:56.197Z",
+      "indexed_at": "2026-07-18T00:24:56.076Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -85631,9 +85648,9 @@
     {
       "path": "services/site-builder.js",
       "synopsis": "Site Builder — Scrape existing site → AI-generates complete click-funnel website",
-      "bytes": 67838,
-      "mtime": "2026-07-07T21:53:23.738Z",
-      "indexed_at": "2026-07-10T06:28:55.706Z",
+      "bytes": 67978,
+      "mtime": "2026-07-18T00:21:44.425Z",
+      "indexed_at": "2026-07-18T00:24:56.076Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]

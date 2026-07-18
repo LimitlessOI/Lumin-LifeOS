@@ -11,6 +11,7 @@ import {
   verifyPublishCheckoutSession,
 } from '../services/site-builder-entry-checkout.js';
 import { SITE_BUILDER_PRICING } from '../config/site-builder-pricing.js';
+import { resolvePreviewsDir } from '../config/site-builder-paths.js';
 
 async function loadProspectContext(pool, clientId) {
   if (!pool) return { businessName: null };
@@ -22,7 +23,7 @@ async function loadProspectContext(pool, clientId) {
 }
 
 async function loadPreviewMeta(clientId) {
-  const metaPath = path.join(process.cwd(), 'public/previews', String(clientId), 'meta.json');
+  const metaPath = path.join(resolvePreviewsDir(), String(clientId), 'meta.json');
   try {
     return JSON.parse(await fsp.readFile(metaPath, 'utf8'));
   } catch {

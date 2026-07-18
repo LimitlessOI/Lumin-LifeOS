@@ -26,10 +26,12 @@ import { DESIGN_SYSTEMS } from '../services/site-builder-design-systems.js';
 import { generateLogoStudioPage } from '../services/site-builder-logo-studio.js';
 import ProspectPipeline from '../services/prospect-pipeline.js';
 import logger from '../services/logger.js';
+import { resolvePreviewsDir } from '../config/site-builder-paths.js';
 import {
   enqueueProspectJob,
   getProspectJobStatus,
   evaluateSiteBuilderEmailReadiness,
+  reconcileStuckProspectJobs,
 } from '../services/site-builder-prospect-runner.js';
 
 
@@ -59,7 +61,7 @@ function getSiteBuilder({ callCouncilMember, baseUrl }) {
   if (!_siteBuilder) {
     _siteBuilder = new SiteBuilder({
       callCouncil: callCouncilMember,
-      previewsDir: 'public/previews',
+      previewsDir: resolvePreviewsDir(),
       baseUrl,
     });
   }
@@ -123,11 +125,18 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
 
   app.use(
     '/previews',
-    express.static(path.join(process.cwd(), 'public', 'previews'), {
+    express.static(resolvePreviewsDir(), {
       dotfiles: 'ignore',
       index: 'index.html',
     })
   );
+
+  // Reconcile prospect jobs orphaned at 'building' by a mid-build redeploy — best-effort, on boot.
+  if (pool) {
+    reconcileStuckProspectJobs(pool).catch((err) =>
+      logger.warn('[SITE] Stuck-job reconcile failed on boot', { error: err.message })
+    );
+  }
 
   /**
    * POST /api/v1/sites/build
@@ -194,7 +203,7 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
       let info = { businessName: name, primaryColor: primary, accentColor: accent, tagline };
       if (clientId && /^[\w-]+$/.test(String(clientId))) {
         try {
-          const metaPath = path.join(process.cwd(), 'public/previews', String(clientId), 'meta.json');
+          const metaPath = path.join(resolvePreviewsDir(), String(clientId), 'meta.json');
           const meta = JSON.parse(await fsp.readFile(metaPath, 'utf8'));
           if (meta.businessInfo) info = { ...meta.businessInfo, ...info, businessName: name || meta.businessInfo.businessName };
         } catch { /* fall back to query params */ }

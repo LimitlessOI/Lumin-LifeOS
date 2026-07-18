@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/site-builder/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-08 — Stripe client extracted to `services/stripe-client.js` (tracked) so spine import-smoke / Railway boot cannot miss the checkout import. |
+| **Last Updated** | 2026-07-10 — Preview persistence: previews dir is now resolved via `config/site-builder-paths.js` (`SITE_PREVIEWS_DIR` / `RAILWAY_VOLUME_MOUNT_PATH` → persistent volume, else `public/previews`); async prospect jobs now time out and stale `building` rows are reconciled on boot. Corrected stale env-var "hard blocker" (those vars are set in Railway per `docs/ENV_LIVE_INVENTORY.json`). |
 
 ---
 
@@ -25,15 +25,20 @@ Done-for-you website builder for wellness/health businesses. Scrapes a prospect'
 
 ## Readiness state
 
-`PARTIAL_CODE_PRESENT`
+`PARTIAL_CODE_PRESENT` — **NOT sellable via the autonomous funnel until the P0s below close.**
 
-Code is complete. DB tables confirmed live in Neon production. Blocked only on 4 Railway env var values. No BuilderOS mission pack exists yet; one is needed before this can re-enter the autonomous queue.
+Code is deployed and the previously-cited email/Stripe env vars ARE set in Railway (`docs/ENV_LIVE_INVENTORY.json`, 2026-07-10) — the old "4 missing env vars" hard blocker is **stale/false**. Real blockers to taking money (audit 2026-07-10):
 
-**Hard blocker:** Railway env vars not set:
-- `POSTMARK_SERVER_TOKEN` — email sending
-- `EMAIL_FROM` — sender address / `SITE_BASE_URL` — preview URL base
-- `EMAIL_PROVIDER` — provider selector
+**P0 — preview persistence (fix landed in code; needs a Railway volume attached).** Previews wrote to the ephemeral container FS (`public/previews`); every redeploy wiped them → emailed links + checkout 404. Now the previews dir is resolved by `config/site-builder-paths.js`: set `SITE_PREVIEWS_DIR`, or attach a Railway volume (auto-sets `RAILWAY_VOLUME_MOUNT_PATH` → `<mount>/previews`), else it falls back to `public/previews` (dev only). **Action needed: attach a persistent volume to the app service in Railway production.**
+
+**P0 — async build hang (fixed in code).** Prospect jobs could stick at `building` forever (hung build, or redeploy mid-build orphaning the DB row). `services/site-builder-prospect-runner.js` now caps each job with `PROSPECT_JOB_TIMEOUT_MS` (default 4m) and `reconcileStuckProspectJobs()` marks orphaned `building` rows (> `PROSPECT_JOB_STALE_MS`, default 15m) as `failed` on boot.
+
+**P0 — no proven end-to-end Stripe sale.** `$0` revenue; the `$49 → checkout → success → converted` path has never run with a real card against a persisted preview.
+
+**P1 — no green SENTRY Layer A+B receipt** against a persisted preview; **post-$49 delivery undefined** (success page says "we'll handle domain setup next").
+
 - (Optional) `AFFILIATE_JANE_APP_URL`, `AFFILIATE_MINDBODY_URL`, `AFFILIATE_SQUARE_URL`
+- (Needed for therapist discovery) `GOOGLE_PLACES_KEY` — absent per inventory.
 
 ## Owned runtime files
 
@@ -151,10 +156,11 @@ The migration was run via Neon SQL Editor against the **production** branch. All
 - **Status:** Code complete — needs `POSTMARK_SERVER_TOKEN` + `EMAIL_FROM` set in Railway
 
 ### Deployed Static Files
-- Preview sites: `/public/previews/{clientId}/index.html`
-- Served at: `https://yourdomain.com/previews/{clientId}/`
-- Blog posts: `/public/previews/{clientId}/blog/{slug}/index.html`
-- SEO: `/public/previews/{clientId}/sitemap.xml` + `robots.txt`
+- Preview dir resolved by `config/site-builder-paths.js` (`SITE_PREVIEWS_DIR` / `RAILWAY_VOLUME_MOUNT_PATH`+`/previews` / `public/previews`).
+- Preview sites: `{previewsDir}/{clientId}/index.html`
+- Served at: `{SITE_BASE_URL}/previews/{clientId}/` (static mount points at the resolved dir)
+- Blog posts: `{previewsDir}/{clientId}/blog/{slug}/index.html`
+- SEO: `{previewsDir}/{clientId}/sitemap.xml` + `robots.txt`
 
 ### API Endpoints
 | Method | Path | Purpose |
@@ -297,6 +303,7 @@ Failed sends do **not** increment follow-up counters.
 
 | Date | What Changed | Why | Verified |
 |---|---|---|---|
+| 2026-07-10 | **Preview persistence + async-build resiliency (P0 fixes).** New `config/site-builder-paths.js#resolvePreviewsDir()` is the single source of truth for the previews dir (`SITE_PREVIEWS_DIR` → `RAILWAY_VOLUME_MOUNT_PATH`+`/previews` → `public/previews`); repointed `services/site-builder.js` (absolute `previewsRoot`), `routes/site-builder-routes.js` (SiteBuilder init, `/previews` static mount, logo-studio meta), `routes/site-builder-checkout-routes.js` (`loadPreviewMeta`), `routes/site-builder-editor-routes.js` + `routes/site-builder-prealpha-routes.js` (`PREVIEWS_ROOT`), `services/preview-expiry-cron.js` + expiry/quality scripts. `services/site-builder-prospect-runner.js`: `withTimeout()` caps builds (`PROSPECT_JOB_TIMEOUT_MS`, default 4m) and `reconcileStuckProspectJobs()` fails orphaned `building` rows on boot (called from `createSiteBuilderRoutes`). Also corrected the stale "4 missing env vars" readiness claim. | Audit 2026-07-10: previews wiped on every redeploy (ephemeral FS, no volume) → emailed links + checkout 404; 4 prospects stuck `building` 2h+. Backward-compatible: no behavior change until a volume/`SITE_PREVIEWS_DIR` is present. | `node --check` all touched files PASS. **Not yet verified in prod** — needs a Railway volume attached to the app service + one build re-run + SENTRY Layer A/B against a persisted preview. |
 | 2026-07-08 | **`services/stripe-client.js` tracked** — checkout imports Stripe via dedicated helper; closes ERR_MODULE_NOT_FOUND class for publish checkout on Railway. | Wave 0 import-smoke caught untracked import from `site-builder-entry-checkout.js`. | ✅ spine import verify PASS |
 | 2026-07-08 | **Self-fix wiring: gate runner now pipes both layers' results through `services/sentry-findings-to-improvement-feed.js` (system-authored via governed builder, commit `e66621ba6`) and writes `products/receipts/SENTRY_FINDINGS_FEED.json`.** Each SENTRY finding is normalized to `{ code, detail, proposed_solution, severity, source }` (solution-mandatory: never empty — synthesizes the smallest next step) and to the `{ blockers, warnings }` shape `services/builderos-improvement-loop.js` already consumes — so a failed/"rough" gate automatically produces governed improvement proposals. No secondary queue. | SO-002 solution-mandatory amendment (#286) + founder: "get the system to do your job, fix itself." Closes flag→propose→build→re-verify without a human. | Module `node --check` + PROVEN on the real Layer B result for `onlinewellroundedmama.com`: 4 findings, **0 without a solution**, correct improvement-loop shape, guards `null`/`{}`. Gate runner `node --check` + ran live (feed emits; 0 findings when no preview exists — fail-safe). |
 | 2026-07-08 | **`scripts/sentry-site-builder-prealpha-gate.mjs` + `npm run sentry:site-builder:gate` + `BUILD_QUEUE.json` `verify_script` — wire the two-layer gate into the completion check.** The Site Builder queue's `verify_script` now points at the combined SENTRY gate: it runs **Layer A** (structural, always) and **Layer B** (human-sim real browser + UX critique, whenever `PUBLIC_BASE_URL`+`COMMAND_CENTER_KEY` are present — i.e. on prod) and **fails closed**. In local/CI (no prod creds) Layer B is loudly deferred, never faked. So the autonomous never-stop factory's `verifyFn` (which runs the queue `verify_script`) now enforces SO-002: no Site Builder step is marked "done" until SENTRY passes as a real client. Prior lane check still available via `npm run verify:site-builder`. | Founder doctrine SO-002: the gate must actually gate completion, not just exist. This makes "no feature done until both layers pass" true inside the build loop, not just by hand. | `node --check`; ran live vs prod — gate executes both layers and **fails closed** when no preview exists (previews were wiped by a redeploy — the tracked ephemeral-storage issue), proving fail-closed behavior. Layer A (6/7 incl. parked-guard) and Layer B (7/7 + UX critique) each proven live separately. |

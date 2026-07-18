@@ -14,8 +14,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { createSession } from '../services/browser-agent.js';
+import { resolvePreviewsDir } from '../config/site-builder-paths.js';
 
-const PREVIEWS_ROOT = path.resolve(process.cwd(), 'public/previews');
+const PREVIEWS_ROOT = resolvePreviewsDir();
 const CLIENT_ID_RE = /^[\w-]+$/;
 
 function readMeta(clientId) {

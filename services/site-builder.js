@@ -34,6 +34,7 @@ import PresenceAudit from './presence-audit.js';
 import { createWebSearchService } from './web-search-service.js';
 import { pickDesignSystems, getDesignSystem, renderDesignSystemDirectives, DEFAULT_DESIGN_SYSTEM_ID } from './site-builder-design-systems.js';
 import { SITE_BUILDER_PRICING } from '../config/site-builder-pricing.js';
+import { resolvePreviewsDir } from '../config/site-builder-paths.js';
 
 function createEditToken() {
   return crypto.randomBytes(24).toString('hex');
@@ -123,9 +124,11 @@ function renderVerifiedData(verified) {
 }
 
 export default class SiteBuilder {
-  constructor({ callCouncil, previewsDir = 'public/previews', baseUrl = '' } = {}) {
+  constructor({ callCouncil, previewsDir, baseUrl = '' } = {}) {
     this.callCouncil = callCouncil;
-    this.previewsDir = previewsDir;
+    const dir = previewsDir || resolvePreviewsDir();
+    this.previewsRoot = path.isAbsolute(dir) ? dir : path.join(process.cwd(), dir);
+    this.previewsDir = this.previewsRoot;
     this.baseUrl = baseUrl;
   }
 
@@ -219,7 +222,7 @@ export default class SiteBuilder {
       const robots = this.generateRobots();
 
       // Step 8: Deploy all files
-      const deployDir = path.join(process.cwd(), this.previewsDir, clientId);
+      const deployDir = path.join(this.previewsRoot, clientId);
       await fs.mkdir(deployDir, { recursive: true });
       await fs.mkdir(path.join(deployDir, 'blog'), { recursive: true });
       const editToken = createEditToken();
@@ -335,7 +338,7 @@ export default class SiteBuilder {
       const sitemap = this.generateSitemap(clientId, blogPosts);
       const robots = this.generateRobots();
 
-      const deployDir = path.join(process.cwd(), this.previewsDir, clientId);
+      const deployDir = path.join(this.previewsRoot, clientId);
       await fs.mkdir(path.join(deployDir, 'blog'), { recursive: true });
       await fs.writeFile(path.join(deployDir, 'blog', 'index.html'), blogHtml);
       await fs.writeFile(path.join(deployDir, 'sitemap.xml'), sitemap);
@@ -1354,7 +1357,7 @@ Return ONLY valid JSON array:
   async listPreviews() {
     const previews = [];
     try {
-      const dir = path.join(process.cwd(), this.previewsDir);
+      const dir = this.previewsRoot;
       const entries = await fs.readdir(dir);
       for (const entry of entries) {
         const metaPath = path.join(dir, entry, 'meta.json');

@@ -6,6 +6,63 @@ import logger from './logger.js';
 
 const activeJobs = new Set();
 
+// A build that never resolves (hung scrape/AI call) leaves the DB row stuck at
+// 'building' forever. Cap every job with a wall-clock timeout.
+const PROSPECT_JOB_TIMEOUT_MS = Math.max(
+  60_000,
+  Number(process.env.PROSPECT_JOB_TIMEOUT_MS || 4 * 60_000)
+);
+
+// On Railway the process redeploys constantly; a job in flight at redeploy time
+// is lost from memory and orphans its DB row at 'building'. Reconcile on boot.
+const PROSPECT_JOB_STALE_MS = Math.max(
+  PROSPECT_JOB_TIMEOUT_MS,
+  Number(process.env.PROSPECT_JOB_STALE_MS || 15 * 60_000)
+);
+
+function withTimeout(promise, ms, clientId) {
+  let timer;
+  const timeout = new Promise((_, reject) => {
+    timer = setTimeout(
+      () => reject(new Error(`Prospect build timed out after ${ms}ms`)),
+      ms
+    );
+  });
+  return Promise.race([promise, timeout]).finally(() => clearTimeout(timer));
+}
+
+/**
+ * Mark prospect rows orphaned at 'building' (older than PROSPECT_JOB_STALE_MS and
+ * not currently running in this process) as 'failed'. Best-effort; safe to call on boot.
+ */
+export async function reconcileStuckProspectJobs(pool, maxAgeMs = PROSPECT_JOB_STALE_MS) {
+  if (!pool) return { ok: false, error: 'pool required' };
+  try {
+    const cutoffSeconds = Math.round(Math.max(60_000, maxAgeMs) / 1000);
+    const result = await pool.query(
+      `UPDATE prospect_sites
+          SET status = 'failed',
+              metadata = COALESCE(metadata, '{}'::jsonb)
+                         || jsonb_build_object('jobError', 'stale_building_reconciled', 'reconciledAt', NOW()::text),
+              updated_at = NOW()
+        WHERE status = 'building'
+          AND updated_at < NOW() - ($1 || ' seconds')::interval
+        RETURNING client_id`,
+      [String(cutoffSeconds)]
+    );
+    const reconciled = result.rows
+      .map((r) => r.client_id)
+      .filter((id) => !activeJobs.has(String(id)));
+    if (reconciled.length) {
+      logger.warn('[PROSPECT-JOB] Reconciled stale building jobs', { count: reconciled.length });
+    }
+    return { ok: true, reconciled: reconciled.length };
+  } catch (err) {
+    logger.error('[PROSPECT-JOB] Reconcile failed', { error: err.message });
+    return { ok: false, error: err.message };
+  }
+}
+
 export function createProspectClientId() {
   return `prev_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
 }
@@ -44,8 +101,11 @@ export async function enqueueProspectJob(pipeline, options = {}) {
   activeJobs.add(clientId);
 
   setImmediate(() => {
-    pipeline
-      .processProspect({ ...options, clientId })
+    withTimeout(
+      pipeline.processProspect({ ...options, clientId }),
+      PROSPECT_JOB_TIMEOUT_MS,
+      clientId
+    )
       .then(async (result) => {
         if (!result.success) {
           await pipeline.failProspectJob(clientId, result.error || 'Prospect pipeline failed');
@@ -171,4 +231,5 @@ export default {
   evaluateSiteBuilderEmailReadiness,
   isProspectJobActive,
   getActiveProspectJobCount,
+  reconcileStuckProspectJobs,
 };
