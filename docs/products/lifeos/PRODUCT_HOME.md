@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-18 — UI auth fixes: command-key+JWT on food/sleep/ask/habits/cycle/legacy. |
+| **Last Updated** | 2026-07-18 — Chair direct-execution: system actions before speak + act tool. |
 ---
 
 ## Founder conversations (2026-06-29)
@@ -1720,6 +1720,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
+| 2026-07-18 | **Chair = direct doer, not facade.** Orchestrator runs system actions (open pages / redeploy / alpha / Point B) *before* conversational reply; direct agent gains `act` tool + broader LifeOS navigate map; `shell_action` flows through agent responses. | Personality was answering before execution — theater vs hands. | tip founder-interface prove open/redeploy | expand tool registry (env/SMS) |
 | 2026-07-18 | **UI auth + user-id gap-fill.** Food/sleep/ask/decision-review/date-night accept JWT or command key; phase2/3 habits resolve `adam` via user resolver; cycle+legacy stop passing handle as bigint; food/ask/date-night/twin UIs use bootstrap `fetchWithAuth`. | Tip UI pages 200 but APIs 401/500 under founder key. | tip prove after redeploy | continue UI walk |
 | 2026-07-17 | **Member-feedback intake + ethics mount.** Persisted `lifeos_member_feedback` queue (submit/list/patch; never builder execute); ethics `registerLifeOSEthicsRoutes` auto-reg for lock-status on founder lane; nav + UI. | Feedback was in-memory stub; ethics tip-blind. | tip prove | crypto multi-sig lock depth |
 | 2026-07-17 | **Twin ui_directives + reaction rewire + UI.** Routes now call real `createUiDirectivesService` / `createTwinReactionSimulator` (persist prefs, confirm-before-apply); `lifeos-twin-directives.html` + nav. Autoloop stub thrash restored + queue claimed done. | Mounted twin routes were stub no-ops — false-done vs PRODUCT_HOME P1s. | tip prove `confirm_required` + prefs persist | member-feedback real intake |

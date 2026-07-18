@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T17:35:53.462Z",
+  "generated_at": "2026-07-18T17:53:33.729Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11970,
   "files": [
@@ -37409,9 +37409,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 59265,
-      "mtime": "2026-07-18T10:15:03.536Z",
-      "indexed_at": "2026-07-18T10:15:03.536Z"
+      "bytes": 57876,
+      "mtime": "2026-07-18T17:53:33.729Z",
+      "indexed_at": "2026-07-18T17:53:33.729Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40184,9 +40184,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 635331,
-      "mtime": "2026-07-18T10:08:23.928Z",
-      "indexed_at": "2026-07-18T10:08:23.928Z"
+      "bytes": 635736,
+      "mtime": "2026-07-18T17:53:33.729Z",
+      "indexed_at": "2026-07-18T17:53:33.729Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -84270,9 +84270,9 @@
     {
       "path": "services/chair-direct-agent.js",
       "synopsis": "Direct Chair agent — talks + acts; human prose obeys Lumin Communication DNA (not theater).",
-      "bytes": 19300,
-      "mtime": "2026-07-17T19:19:29.720Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z",
+      "bytes": 22480,
+      "mtime": "2026-07-18T17:53:33.729Z",
+      "indexed_at": "2026-07-18T17:53:33.729Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -88021,9 +88021,9 @@
     {
       "path": "services/lumin-chair-orchestrator.js",
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
-      "bytes": 64650,
-      "mtime": "2026-07-17T19:19:29.725Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z",
+      "bytes": 65696,
+      "mtime": "2026-07-18T17:53:33.729Z",
+      "indexed_at": "2026-07-18T17:53:33.729Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -88031,9 +88031,9 @@
     {
       "path": "services/lumin-chair-system-actions.js",
       "synopsis": "Lumin Chair system actions — real execution before counsel theater.",
-      "bytes": 11612,
-      "mtime": "2026-07-16T19:42:53.459Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z",
+      "bytes": 14095,
+      "mtime": "2026-07-18T17:53:33.729Z",
+      "indexed_at": "2026-07-18T17:53:33.729Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

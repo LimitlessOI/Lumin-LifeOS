@@ -22,26 +22,63 @@ export function shouldSkipInputNormalize(text = '', action = 'auto') {
   return parseLuminChairSystemAction(t).matched;
 }
 
+const NAV_PAGES = [
+  { keys: ['lifere', 'life re', 'life-re'], page: 'lifeos-lifere.html', stack: 'lifere', action_type: 'open_lifere' },
+  { keys: ['dashboard', 'home'], page: 'lifeos-dashboard.html', action_type: 'open_dashboard' },
+  { keys: ['today'], page: 'lifeos-today.html', action_type: 'open_today' },
+  { keys: ['mirror'], page: 'lifeos-mirror.html', action_type: 'open_mirror' },
+  { keys: ['purpose'], page: 'lifeos-purpose.html', action_type: 'open_purpose' },
+  { keys: ['food', 'food logger', 'nutrition'], page: 'lifeos-food.html', action_type: 'open_food' },
+  { keys: ['habits', 'habit tracker'], page: 'lifeos-habits.html', action_type: 'open_habits' },
+  { keys: ['cycle'], page: 'lifeos-cycle.html', action_type: 'open_cycle' },
+  { keys: ['coach', 'therapy'], page: 'lifeos-coach.html', action_type: 'open_coach' },
+  { keys: ['family'], page: 'lifeos-family.html', action_type: 'open_family' },
+  { keys: ['household'], page: 'lifeos-household.html', action_type: 'open_household' },
+  { keys: ['date night', 'datenight'], page: 'lifeos-date-night.html', action_type: 'open_date_night' },
+  { keys: ['parent mode', 'meltdown'], page: 'lifeos-parent-mode.html', action_type: 'open_parent_mode' },
+  { keys: ['twin directives', 'ui directives', 'twin'], page: 'lifeos-twin-directives.html', action_type: 'open_twin_directives' },
+  { keys: ['member feedback', 'feedback'], page: 'lifeos-member-feedback.html', action_type: 'open_member_feedback' },
+  { keys: ['victory vault', 'victories'], page: 'lifeos-victory-vault.html', action_type: 'open_victory' },
+  { keys: ['ask your life', 'ask life'], page: 'lifeos-ask-your-life.html', action_type: 'open_ask_life' },
+  { keys: ['decisions'], page: 'lifeos-decisions.html', action_type: 'open_decisions' },
+  { keys: ['legacy'], page: 'lifeos-legacy.html', action_type: 'open_legacy' },
+  { keys: ['ethics', 'privacy'], page: 'lifeos-ethics.html', action_type: 'open_ethics' },
+  { keys: ['connect'], page: 'lifeos-connect.html', action_type: 'open_connect' },
+  { keys: ['finance'], page: 'lifeos-finance.html', action_type: 'open_finance' },
+  { keys: ['health'], page: 'lifeos-health.html', action_type: 'open_health' },
+  { keys: ['chat', 'history'], page: 'lifeos-chat.html', action_type: 'open_chat' },
+];
+
+function parseNavigateAction(text = '') {
+  const t = String(text || '').trim();
+  const m = t.match(/\b(?:open|go to|show|launch|switch to|take me to|navigate to)\s+(?:the\s+)?(.+?)\s$/i);
+  if (!m) return null;
+  const target = String(m[1] || '').toLowerCase().replace(/[?.!]+$/g, '').trim();
+  if (!target) return null;
+  for (const entry of NAV_PAGES) {
+    if (entry.keys.some((k) => target === k || target.includes(k))) {
+      return {
+        matched: true,
+        action_type: entry.action_type || 'navigate',
+        shell_action: {
+          type: 'navigate',
+          page: entry.page,
+          ...(entry.stack ? { stack: entry.stack } : {}),
+        },
+      };
+    }
+  }
+  return null;
+}
+
 export function parseLuminChairSystemAction(text = '') {
   const t = String(text || '').trim();
   if (!t) return { matched: false, action_type: null };
 
+  const nav = parseNavigateAction(t);
+  if (nav) return nav;
+
   const rules = [
-    {
-      action_type: 'open_lifere',
-      test: /\b(open|go to|show|launch|switch to)\s+(lifere|life\s*re)\b/i,
-      shell_action: { type: 'navigate', page: 'lifeos-lifere.html', stack: 'lifere' },
-    },
-    {
-      action_type: 'open_dashboard',
-      test: /\b(open|go to|show)\s+(the\s+)?dashboard\b/i,
-      shell_action: { type: 'navigate', page: 'lifeos-dashboard.html' },
-    },
-    {
-      action_type: 'open_chat',
-      test: /\b(open|go to)\s+(full\s+)?(chat|history)\b/i,
-      shell_action: { type: 'navigate', page: 'lifeos-chat.html' },
-    },
     {
       action_type: 'run_lifere_alpha_cycle',
       test: /\b(run|start|do)\s+(the\s+)?(alpha|lifere)\s+(daily\s+)?cycle\b/i,
@@ -56,7 +93,7 @@ export function parseLuminChairSystemAction(text = '') {
     },
     {
       action_type: 'setup_account',
-      test: /\b(set\s*up|sign\s*up|create|open|register)\s+(an?\s+)?(account|subscription)\b/i,
+      test: /\b(set\sup|sign\sup|create|open|register)\s+(an?\s+)?(account|subscription)\b/i,
     },
     {
       action_type: 'point_b_status',

@@ -88,13 +88,13 @@ HOW YOU TALK:
 - When he thanks you or asks for a joke/breath: give it. Human rhythm. Don't pivot back to Point B.
 
 CAPABILITIES (honest):
-- Converse with live SYSTEM_FACTS + memory.
+- Converse with live SYSTEM_FACTS + memory — with personality. You are still the system acting, not a facade.
 - Build/change product when he orders it (action "build") — real commits, real receipts.
-- Open Connect / shell actions when the orchestrator wires them.
-- Never invent capability. If you cannot do it this turn, say so and what would unblock it.
+- DO things in the running system (action "act"): open pages, redeploy, alpha cycle, Point B status, account setup — real shell/API execution.
+- Never invent capability. If no tool can do it this turn, say so and the smallest unblock (template/file/API). Do not pretend.
 
 HONESTY (theater = deception):
-- Never claim you built, changed, committed, deployed, scheduled, or ran anything THIS turn unless OBSERVATIONS prove it (commit SHA or committed:true).
+- Never claim you built, changed, committed, deployed, opened, or ran anything THIS turn unless OBSERVATIONS prove it (commit SHA, committed:true, or ACTION RESULT).
 - EXCEPTION — recall: if SYSTEM_FACTS.last_build_receipt has commit_sha (or committed:true), cite that SHA when he asks if it landed. Do NOT deny a receipt that is present.
 - If a tool failed, say so plainly. If you don't know: "I'm not certain." Label guesses "Prediction:".
 
@@ -106,11 +106,16 @@ WHAT YOU CAN DO — respond with EXACTLY ONE JSON object and nothing else. No ma
 2) Build or change the product (code / UI / behavior). Use this the moment Adam clearly asks to change something in the system:
 {"action":"build","instruction":"<concrete, specific change to make>","target_file":"<repo path if you know it, else null>"}
 
+3) Execute a real system action NOW (open a LifeOS page, redeploy, alpha cycle, Point B status, account setup):
+{"action":"act","text":"<the directive to execute, e.g. open food logger / redeploy / run alpha cycle>"}
+
 Rules for choosing:
 - Question / thinking out loud / counsel → "reply".
 - "Did it land?" / "what's the sha?" → "reply" using last_build_receipt when present. Do not start a new build just to answer that.
+- Clear "open/go to/show/launch" a LifeOS surface, redeploy, alpha, Point B status → "act" FIRST. Do not only reply.
 - Clear build/change/fix order → "build". Do not ask permission for a clear directive; only clarify if you cannot tell what to change.
-- After a build runs, OBSERVATIONS has the real result — then "reply" with the commit or the honest failure.`;
+- After build/act runs, OBSERVATIONS has the real result — then "reply" with what actually happened (or honest failure).
+- Prefer act/build over polite theater when he asked you to do something.`;
 
 function communicationLawBlock() {
   if (!isLuminCommunicationLawEnforced()) return '';
@@ -241,6 +246,7 @@ export async function runChairDirectAgent({ message, history = [], deps = {}, ct
   const callAI = deps.callAI;
   if (typeof callAI !== 'function') return null;
   const routeToBuilder = typeof deps.routeToBuilder === 'function' ? deps.routeToBuilder : null;
+  const trySystemAction = typeof deps.trySystemAction === 'function' ? deps.trySystemAction : null;
   const operatorKey = deps.operatorKey || '';
 
   const isRuntimeStatusQuestion = (/\b(builder|queue|governed|autonomous|never stop)\b/i.test(message)
@@ -279,6 +285,9 @@ export async function runChairDirectAgent({ message, history = [], deps = {}, ct
   const observations = [];
   let lastBuild = null;
   let commandRan = false;
+  let shellAction = null;
+  let actionReceipt = null;
+  let actionType = null;
 
   const priorReceipt = systemFacts?.last_build_receipt;
   if (priorReceipt?.commit_sha || priorReceipt?.pass_fail) {
@@ -348,9 +357,44 @@ Respond with exactly one JSON object:`;
         command_ran: commandRan,
         ok: true,
         build: lastBuild,
+        shell_action: shellAction,
+        action_receipt: actionReceipt,
+        action_type: actionType,
+        lane: shellAction ? 'system_action' : (commandRan && lastBuild ? 'direct_build' : 'chair'),
         steps: step + 1,
         communication_law: finalized.communication_law,
       };
+    }
+
+    if (decision.action === 'act' || decision.action === 'navigate' || decision.action === 'system') {
+      if (!trySystemAction) {
+        observations.push('act tool unavailable — cannot run system actions in this context.');
+        continue;
+      }
+      const directive = String(decision.text || decision.instruction || decision.page || message || '').trim();
+      const actionResult = await Promise.resolve(trySystemAction(directive)).catch((e) => ({
+        matched: false,
+        ok: false,
+        error: e.message,
+      }));
+      if (!actionResult?.matched) {
+        observations.push(`ACTION RESULT: no matching system action for "${directive}". Reply honestly with what would unblock it.`);
+        continue;
+      }
+      commandRan = actionResult.executed === true || actionResult.ok === true;
+      shellAction = actionResult.shell_action || shellAction;
+      actionReceipt = actionResult.receipt || actionResult;
+      actionType = actionResult.action_type || 'system_action';
+      observations.push(`ACTION RESULT: ${JSON.stringify({
+        action_type: actionResult.action_type,
+        ok: actionResult.ok,
+        executed: actionResult.executed,
+        command_truth: actionResult.command_truth,
+        human_summary: actionResult.human_summary,
+        shell_action: actionResult.shell_action || null,
+        error: actionResult.error || null,
+      })}`);
+      continue;
     }
 
     if (decision.action === 'build') {
@@ -396,8 +440,29 @@ Respond with exactly one JSON object:`;
       command_ran: lastBuild.committed === true,
       ok: lastBuild.committed === true,
       build: lastBuild,
+      shell_action: shellAction,
+      action_receipt: actionReceipt,
+      action_type: actionType,
+      lane: 'direct_build',
       steps: MAX_STEPS,
       communication_law: { skipped: true, reason: 'structured_build_receipt' },
+    };
+  }
+  if (shellAction || actionReceipt) {
+    const summary = actionReceipt?.human_summary
+      || (shellAction ? `Opening ${shellAction.page} now.` : 'Action ran.');
+    const finalized = finalizeHumanReply(summary, { commandRan: true });
+    return {
+      reply: finalized.reply,
+      command_ran: true,
+      ok: true,
+      build: null,
+      shell_action: shellAction,
+      action_receipt: actionReceipt,
+      action_type: actionType || 'system_action',
+      lane: 'system_action',
+      steps: MAX_STEPS,
+      communication_law: finalized.communication_law,
     };
   }
   const exhausted = finalizeHumanReply(
@@ -408,6 +473,8 @@ Respond with exactly one JSON object:`;
     command_ran: false,
     ok: false,
     build: null,
+    shell_action: null,
+    action_receipt: null,
     steps: MAX_STEPS,
     communication_law: exhausted.communication_law,
   };

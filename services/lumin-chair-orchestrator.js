@@ -345,20 +345,22 @@ function chairDirectAgentResponse(ctx, agentRes) {
     ok: agentRes.ok !== false,
     pass_fail: committed ? 'PASS' : 'NO_COMMAND_RAN',
     command_truth: commandTruth,
-    action,
+    action: agentRes.action_type || action,
     chair_direct_agent: true,
     direct_connection: true,
     build_receipt: build,
     target_file: build?.target_file || null,
     sha: build?.sha || build?.commit_sha || null,
     transport_status: build?.transport_status || null,
+    shell_action: agentRes.shell_action || null,
+    execution_receipt: agentRes.action_receipt || null,
     human_summary_technical: summary,
     conversational_mode: ctx.conversationalMode,
     communication_law: agentRes.communication_law || null,
-  }, channel);
+  }, agentRes.shell_action ? 'system_action' : channel);
   return {
     statusCode: 200,
-    body: chairEnvelope(channel, {
+    body: chairEnvelope(agentRes.shell_action ? 'system_action' : channel, {
       ...truth,
       chair_direct_agent: true,
       direct_connection: true,
@@ -367,6 +369,7 @@ function chairDirectAgentResponse(ctx, agentRes) {
       source_mode: ctx.sourceMode,
       auth_mode: ctx.auth_mode,
       user_role: ctx.user_role,
+      shell_action: agentRes.shell_action || null,
       communication_law: agentRes.communication_law || null,
     }),
   };
@@ -460,8 +463,28 @@ export async function runLuminChairTurn(ctx, deps) {
     || (isExplicitExecuteCommand(cleanedInput) && !isFastSurgicalPatch)
     || (/^\s*(do|execute|run)\s*:/i.test(ctx.originalText || cleanedInput) && !isFastSurgicalPatch);
 
+  // ── SYSTEM ACTIONS FIRST (direct execution, then personality wraps) ──
+  // Open/redeploy/alpha must not be eaten by a conversational reply.
+  const actionSource = ctx.originalText || cleanedInput;
+  if (!shouldDisplayOnly && explicitAction !== 'display') {
+    const earlySystemAction = await tryLuminChairSystemAction(actionSource, {
+      pool: deps.pool,
+      logger: deps.logger || console,
+      operatorKey: deps.operatorKey,
+      founderBuildBaseUrl: deps.founderBuildBaseUrl,
+      userId: resolvedUserId || ctx.userId,
+    });
+    if (earlySystemAction.matched) {
+      _clog(`system_action_first type=${earlySystemAction.action_type}`);
+      return systemActionChairResponse(
+        { intakeNormalized, sourceMode, auth_mode, user_role },
+        earlySystemAction,
+      );
+    }
+  }
+
   // ── DIRECT CHAIR AGENT (front door) ──
-  // Adam talks straight to the Chair (the AI): it answers AND acts (real build tool), no keyword-router middle layer.
+  // Adam talks straight to the Chair: it answers AND acts. Tools: reply, build, act.
   const directAgentOn = process.env.CHAIR_DIRECT_AGENT !== '0';
   if (
     directAgentOn
@@ -473,9 +496,6 @@ export async function runLuminChairTurn(ctx, deps) {
   ) {
     try {
       _clog('direct_agent_start');
-      // T05: direct-agent front door must inject FOUNDER MEMORY into SYSTEM_FACTS.
-      // Legacy counsel path already called loadChairMemoryContext; this path skipped it,
-      // so memory_context stayed null even when /api/v1/founder-memory had entries.
       let directMemoryContext = null;
       if (typeof deps.loadChairMemoryContext === 'function') {
         directMemoryContext = await deps.loadChairMemoryContext({
@@ -494,6 +514,13 @@ export async function runLuminChairTurn(ctx, deps) {
           operatorKey: deps.operatorKey,
           pool: deps.pool,
           memoryContext: directMemoryContext,
+          trySystemAction: (text) => tryLuminChairSystemAction(text, {
+            pool: deps.pool,
+            logger: deps.logger || console,
+            operatorKey: deps.operatorKey,
+            founderBuildBaseUrl: deps.founderBuildBaseUrl,
+            userId: resolvedUserId || ctx.userId,
+          }),
         },
         ctx: {
           userId: resolvedUserId,
@@ -512,7 +539,6 @@ export async function runLuminChairTurn(ctx, deps) {
       _clog(`direct_agent_error: ${agentErr.message} — falling back to legacy routing`);
     }
   }
-  const actionSource = ctx.originalText || cleanedInput;
   let effectiveInput = bindContinuationUtterance(doPrefix.text || cleanedInput, mergedHistory);
   let forceExecute = doPrefix.forcedExecute || confirmIntent || isFounderFrustrationContinuation(cleanedInput);
   const uiBehavior = isFounderUiBehaviorChangeRequest(effectiveInput);
