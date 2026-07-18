@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T00:13:47.234Z",
+  "generated_at": "2026-07-18T00:13:58.140Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11886,
   "files": [
@@ -65441,8 +65441,8 @@
       "path": "public/overlay/salesPage.html",
       "synopsis": "HTML page: Sales Page",
       "bytes": 1330,
-      "mtime": "2026-07-17T23:22:02.478Z",
-      "indexed_at": "2026-07-17T23:22:02.478Z"
+      "mtime": "2026-07-18T00:13:58.140Z",
+      "indexed_at": "2026-07-18T00:13:58.140Z"
     },
     {
       "path": "public/overlay/security_receipt.html",
