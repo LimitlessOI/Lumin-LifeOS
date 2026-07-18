@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T01:14:35.960Z",
+  "generated_at": "2026-07-18T01:15:57.136Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11888,
   "files": [
@@ -40142,8 +40142,8 @@
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
       "bytes": 630798,
-      "mtime": "2026-07-18T01:12:45.600Z",
-      "indexed_at": "2026-07-18T01:12:45.600Z"
+      "mtime": "2026-07-18T01:15:57.136Z",
+      "indexed_at": "2026-07-18T01:15:57.136Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -67005,8 +67005,8 @@
       "path": "routes/lifeos-builderos-command-control-routes.js",
       "synopsis": "Founder-facing LifeOS BuilderOS command-control routes for direct chat, build orchestration, and governed execution receipts.",
       "bytes": 66003,
-      "mtime": "2026-07-18T01:12:45.600Z",
-      "indexed_at": "2026-07-18T01:12:45.600Z",
+      "mtime": "2026-07-18T01:15:57.136Z",
+      "indexed_at": "2026-07-18T01:15:57.136Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -83830,8 +83830,8 @@
       "path": "services/chair-context-classifier.js",
       "synopsis": "Chair context classifier — life vs code vs command (default help, not builder theater).",
       "bytes": 13191,
-      "mtime": "2026-07-18T01:12:45.600Z",
-      "indexed_at": "2026-07-18T01:12:45.600Z",
+      "mtime": "2026-07-18T01:15:57.136Z",
+      "indexed_at": "2026-07-18T01:15:57.136Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
