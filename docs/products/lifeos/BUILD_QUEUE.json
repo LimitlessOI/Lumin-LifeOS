@@ -4925,14 +4925,34 @@
         "registerLifeOSVictoryVaultRoutes",
         "/victories"
       ],
-      "status": "pending",
+      "status": "blocked",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
-      "attempts": 0,
+      "attempts": 1,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-victory-register",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/lifeos-victory-vault-routes.js",
+          "exports": [
+            "registerLifeOSVictoryVaultRoutes",
+            "createLifeOSVictoryVaultRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/lifeos-victory-vault-routes.js"
+        }
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/victories"
+      },
+      "last_attempt_at": "2026-07-18T02:25:38.545Z",
+      "last_error": "NOT_ON_BLUEPRINT",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lifeos-p1-victory-autoreg",
@@ -4972,7 +4992,22 @@
       "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-purpose-register",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/lifeos-purpose-routes.js",
+          "exports": [
+            "registerLifeOSPurposeRoutes",
+            "createLifeOSPurposeRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/lifeos-purpose-routes.js"
+        }
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/profile"
+      }
     },
     {
       "id": "lifeos-p1-purpose-autoreg",
@@ -5012,7 +5047,18 @@
       "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-market-demand-signal",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/monetization-map.js",
+          "exports": [
+            "createMonetizationMap",
+            "estimateMarketDemandSignal"
+          ],
+          "assertion_id": "expected_exports:services/monetization-map.js"
+        }
+      ]
     },
     {
       "id": "lifeos-p1-date-night-service",
@@ -5033,7 +5079,17 @@
       "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-date-night-service",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-date-night.js",
+          "exports": [
+            "createDateNightPlanner"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-date-night.js"
+        }
+      ]
     },
     {
       "id": "lifeos-p1-date-night-routes",
@@ -5054,7 +5110,17 @@
       "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-date-night-routes",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/lifeos-date-night-routes.js",
+          "exports": [
+            "registerLifeosDateNightRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/lifeos-date-night-routes.js"
+        }
+      ]
     },
     {
       "id": "lifeos-p1-date-night-autoreg",
