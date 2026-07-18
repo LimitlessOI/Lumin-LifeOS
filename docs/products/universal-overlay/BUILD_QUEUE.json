@@ -1473,16 +1473,31 @@
     },
     {
       "id": "04",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/signedIPA.js",
       "task": "create signed IPA",
       "spec": "Implement service to handle creation of signed IPA files using Apple Dev secrets.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "createSignedIPA"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/signedIPA.js",
+          "exports": [
+            "createSignedIPA"
+          ],
+          "assertion_id": "expected_exports:services/signedIPA.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-18T14:14:31.210Z",
+      "last_error": "NOT_ON_BLUEPRINT",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "05",
