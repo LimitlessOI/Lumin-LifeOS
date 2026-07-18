@@ -984,7 +984,7 @@
     },
     {
       "id": "step3",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "scripts/deploy_phase7_railway_probe.mjs",
       "task": "deploy phase7 branch",
       "spec": "Deploy 'phase7-railway-probe' to Railway for live mode of 'scripts/memory-pressure-test.mjs' and verify 20/20 result.",
@@ -1006,9 +1006,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-18T07:44:04.927Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:verifyMemoryPressureTest; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-18T09:59:51.687Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -1019,20 +1019,25 @@
     },
     {
       "id": "01",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "pull_requests/final_pr_review.js",
       "task": "merge branch",
       "spec": "Merge 'phase7-railway-probe' branch to main with formal PR review and notes.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "mergePhase7Branch",
         "prNote"
       ],
       "file_contains": [
         "formal PR review"
-      ]
+      ],
+      "last_attempt_at": "2026-07-18T09:59:51.743Z",
+      "last_error": "NOT_ON_BLUEPRINT",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "02",
