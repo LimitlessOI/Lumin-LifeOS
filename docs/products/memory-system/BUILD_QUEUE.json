@@ -948,7 +948,7 @@
     },
     {
       "id": "step5",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/verification_script.js",
       "task": "verify Railway deploy",
       "spec": "Verify the Railway deployment of 'phase7-railway-probe' branch to ensure it achieves a 20/20 result against real Neon state and mounted routes.",
@@ -956,11 +956,16 @@
         "step4"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "verify",
         "20/20 result"
-      ]
+      ],
+      "last_attempt_at": "2026-07-18T04:23:38.566Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:20/20 result; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ],
   "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
