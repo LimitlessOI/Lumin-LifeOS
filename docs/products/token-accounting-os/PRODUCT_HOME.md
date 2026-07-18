@@ -159,6 +159,7 @@ Infrastructure on disk. Council uses `recordMetered`. Deploy migrations then `np
 
 | Date | Change | Why |
 |------|--------|-----|
+| 2026-07-18 | **Heal false-DONE: removed dead broken `routes/builderOSTokenReceipt.js`; reset BUILD_QUEUE step1/step2 → pending.** The route was marked `done` and imported `services/builderOSTokenReceipt.js`, which was ALSO marked `done` but never committed (not in git history) — breaking `tests/spine-import-resolution.test.js` on every PR. The route was unmounted (no registrar call anywhere), so removed it and reset both steps to `pending` so the governed factory rebuilds the service first, then the route, with real artifact proof. | New false-DONE re-audit ratchet (`npm run factory:false-done:ci`) flagged both as HARD; founder mandate to fix why the system marked done without the artifact. |
 | 2026-06-28 | **`services/system-operation-ledger.js` + `db/migrations/20260628_system_operation_timeline.sql`** — `system_operation_log` + `system_timeline_report` view joins tokens, builds, ops by `task_id` with `duration_ms`. | Adam: timestamp every system action; align token spend to same clock. | ✅ | deploy |
 | 2026-05-24 | **`services/voice-rail-usage-receipt.js`** — `fetchVoiceRailUsageReceipt()` reads latest `token_usage_log` row for `voice_rail_department` after founder reply; wired to Voice Rail `reply_source.usage_receipt` + UI cost footer (v2.13) | Adam: visible per-message cost on Voice Rail replies |
 | 2026-05-24 | Amendment 44 + migrations + services + routes + scripts | Token Accounting OS mission |
