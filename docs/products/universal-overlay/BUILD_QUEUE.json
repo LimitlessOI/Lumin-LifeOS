@@ -1765,7 +1765,7 @@
     },
     {
       "id": "step12",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register struggle form fill route",
       "spec": "Ensure struggleFormFill.js route is registered",
@@ -1785,9 +1785,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-18T17:31:24.705Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:struggleFormFill.js; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-18T19:49:48.991Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -1798,17 +1798,22 @@
     },
     {
       "id": "s1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/addPwaInstallTrackingTable.sql",
       "task": "create table",
       "spec": "Create a table to track PWA installations with default IDs and timestamps.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS",
         "pwa_install_tracking"
-      ]
+      ],
+      "last_attempt_at": "2026-07-18T19:49:49.037Z",
+      "last_error": "NOT_ON_BLUEPRINT",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "s2",
@@ -1823,6 +1828,16 @@
       "attempts": 0,
       "expected_exports": [
         "trackPwaInstall"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/pwaInstallTracker.js",
+          "exports": [
+            "trackPwaInstall"
+          ],
+          "assertion_id": "expected_exports:services/pwaInstallTracker.js"
+        }
       ]
     },
     {
@@ -1842,7 +1857,17 @@
       "route": {
         "method": "POST",
         "path": "/api/v1/pwa/install"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/pwaInstall.js",
+          "exports": [
+            "registerPwaInstallRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/pwaInstall.js"
+        }
+      ]
     },
     {
       "id": "s4",
@@ -1886,6 +1911,16 @@
       "attempts": 0,
       "expected_exports": [
         "logStruggleDetectionEvent"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/struggleDetectionLogger.js",
+          "exports": [
+            "logStruggleDetectionEvent"
+          ],
+          "assertion_id": "expected_exports:services/struggleDetectionLogger.js"
+        }
       ]
     },
     {
@@ -1905,7 +1940,17 @@
       "route": {
         "method": "POST",
         "path": "/api/v1/struggle/log"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/struggleLogger.js",
+          "exports": [
+            "registerStruggleLoggerRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/struggleLogger.js"
+        }
+      ]
     },
     {
       "id": "s8",
