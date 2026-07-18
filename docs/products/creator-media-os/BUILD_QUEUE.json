@@ -881,7 +881,31 @@
       ],
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "keyword-matched-b-roll-inserter-insert-b-roll-ma",
-      "mission_id": "PRODUCT-creator-media-os"
+      "mission_id": "PRODUCT-creator-media-os",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/creator-media-os/twins/steps/keyword-matched-b-roll-inserter-insert-b-roll-ma.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-18T11:17:45.309Z",
+        "shipped_at": "2026-07-18T11:17:45.309Z",
+        "commit_sha": null,
+        "content_sha256": "f4f3fd165ec6216270b0d2373beec74b6b216ce3467b80f7e130b1b404099ec6",
+        "target_file": "services/creatorBrollMatcher.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/creatorBrollMatcher.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/creator-media-os/twins/steps/keyword-matched-b-roll-inserter-insert-b-roll-ma.exact",
+          "content_sha256": "f4f3fd165ec6216270b0d2373beec74b6b216ce3467b80f7e130b1b404099ec6"
+        }
+      },
+      "shipped_at": "2026-07-18T11:17:45.309Z"
     },
     {
       "id": "brand-kit-auto-apply-fonts-colors-logo-lower-thi",

@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T11:13:12.236Z",
+  "generated_at": "2026-07-18T11:17:47.224Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11951,
+  "file_count": 11952,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -84991,6 +84991,13 @@
       "bytes": 1056,
       "mtime": "2026-07-18T11:07:21.873Z",
       "indexed_at": "2026-07-18T11:07:21.873Z"
+    },
+    {
+      "path": "services/creatorBrollMatcher.js",
+      "synopsis": "Existing code: Please ensure all existing code and exports are preserved.",
+      "bytes": 428,
+      "mtime": "2026-07-18T11:17:47.224Z",
+      "indexed_at": "2026-07-18T11:17:47.224Z"
     },
     {
       "path": "services/creatorDubbing.js",
