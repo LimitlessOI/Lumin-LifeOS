@@ -3496,11 +3496,11 @@
         "/summary"
       ],
       "route": "GET /api/v1/lifeos/food/summary",
-      "status": "blocked",
+      "status": "done",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
-      "attempts": 1,
+      "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-food-logger-routes",
       "mission_id": "PRODUCT-lifeos",
@@ -3515,10 +3515,14 @@
         }
       ],
       "last_attempt_at": "2026-07-18T01:49:35.110Z",
-      "last_error": "NOT_ON_BLUEPRINT",
+      "last_error": null,
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "pre_existing": true,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null
     },
     {
       "id": "lifeos-p1-food-logger-autoreg",
@@ -3529,19 +3533,23 @@
         "lifeos-food-logger-routes.js",
         "registerLifeosFoodLoggerRoutes"
       ],
-      "status": "blocked",
+      "status": "done",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
-      "attempts": 1,
+      "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-food-logger-autoreg",
       "mission_id": "PRODUCT-lifeos",
       "last_attempt_at": "2026-07-18T01:50:56.953Z",
-      "last_error": "NOT_ON_BLUEPRINT",
+      "last_error": null,
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "pre_existing": true,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null
     },
     {
       "id": "lifeos-p1-food-logger-ui",
@@ -3553,14 +3561,19 @@
         "/api/v1/lifeos/food/"
       ],
       "design_review_flagged": true,
-      "status": "pending",
+      "status": "done",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
       "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-food-logger-ui",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "last_error": null,
+      "pre_existing": true,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null
     },
     {
       "id": "lifeos-p1-food-nav",
@@ -3571,14 +3584,19 @@
         "lifeos-food.html",
         "lifeos-practice.html"
       ],
-      "status": "pending",
+      "status": "done",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
       "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-food-nav",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "last_error": null,
+      "pre_existing": true,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null
     },
     {
       "id": "lifeos-p1-sleep-insights-routes",
@@ -3593,7 +3611,7 @@
         "getChronotype",
         "/wind-down"
       ],
-      "status": "pending",
+      "status": "done",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -3614,7 +3632,12 @@
       "route": {
         "method": "GET",
         "path": "/chronotype,"
-      }
+      },
+      "last_error": null,
+      "pre_existing": true,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null
     },
     {
       "id": "lifeos-p1-sleep-insights-autoreg",
@@ -3625,14 +3648,19 @@
         "lifeos-sleep-chronotype-routes.js",
         "registerLifeosSleepChronotypeRoutes"
       ],
-      "status": "pending",
+      "status": "done",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
       "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-sleep-insights-autoreg",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "last_error": null,
+      "pre_existing": true,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null
     }
   ],
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
