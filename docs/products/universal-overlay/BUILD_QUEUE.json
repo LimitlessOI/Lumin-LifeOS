@@ -1795,6 +1795,132 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "s1",
+      "status": "pending",
+      "target_file": "db/migrations/addPwaInstallTrackingTable.sql",
+      "task": "create table",
+      "spec": "Create a table to track PWA installations with default IDs and timestamps.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "pwa_install_tracking"
+      ]
+    },
+    {
+      "id": "s2",
+      "status": "pending",
+      "target_file": "services/pwaInstallTracker.js",
+      "task": "implement tracker service",
+      "spec": "Implement service for tracking PWA installations and exporting the tracker functions.",
+      "depends_on": [
+        "s1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "trackPwaInstall"
+      ]
+    },
+    {
+      "id": "s3",
+      "status": "pending",
+      "target_file": "routes/pwaInstall.js",
+      "task": "add PWA install route",
+      "spec": "Create route to track PWA installations via a POST request.",
+      "depends_on": [
+        "s2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPwaInstallRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/pwa/install"
+      }
+    },
+    {
+      "id": "s4",
+      "status": "pending",
+      "target_file": "public/overlay/pwaInstall.html",
+      "task": "create PWA install UI",
+      "spec": "Implement the UI for PWA installation tracking.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "Add to Home Screen",
+        "PWA Install"
+      ],
+      "design_review_flagged": true
+    },
+    {
+      "id": "s5",
+      "status": "pending",
+      "target_file": "db/migrations/addStruggleDetectionLogTable.sql",
+      "task": "create log table",
+      "spec": "Create a table to log struggle detection events.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "struggle_detection_log"
+      ]
+    },
+    {
+      "id": "s6",
+      "status": "pending",
+      "target_file": "services/struggleDetectionLogger.js",
+      "task": "implement logging service",
+      "spec": "Implement service to log struggle detection events.",
+      "depends_on": [
+        "s5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "logStruggleDetectionEvent"
+      ]
+    },
+    {
+      "id": "s7",
+      "status": "pending",
+      "target_file": "routes/struggleLogger.js",
+      "task": "add struggle log route",
+      "spec": "Create route to log struggle detection events via POST.",
+      "depends_on": [
+        "s6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerStruggleLoggerRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/struggle/log"
+      }
+    },
+    {
+      "id": "s8",
+      "status": "pending",
+      "target_file": "public/overlay/struggleDetectionUI.html",
+      "task": "create struggle detection UI",
+      "spec": "Implement the UI for showing struggle detection in the overlay.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "Struggle Detection",
+        "Log Event"
+      ],
+      "design_review_flagged": true
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
