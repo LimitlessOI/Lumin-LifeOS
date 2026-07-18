@@ -9,18 +9,23 @@
   "steps": [
     {
       "id": "1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": ".github/workflows/branch-protection.yml",
       "task": "enable Branch Protection",
       "spec": "Configure GitHub branch protection to require 'File Synopsis Law' CI job for 'main' branch.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "required_status_checks",
         "File Synopsis Law",
         "main"
-      ]
+      ],
+      "last_attempt_at": "2026-07-18T00:32:37.074Z",
+      "last_error": "NOT_ON_BLUEPRINT",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }
