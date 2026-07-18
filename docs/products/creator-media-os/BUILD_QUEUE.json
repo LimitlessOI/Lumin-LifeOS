@@ -1098,7 +1098,7 @@
     },
     {
       "id": "performance-analytics-learning-loop-ingest-per-p",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/creatorAnalyticsDashboard.js",
       "task": "Performance analytics + learning loop — ingest per-post metrics and surface winning hooks/CTAs by platform. Target `services/creatorAnalyticsDashboard.js` (export `ingestPerformance`).",
       "spec": "Performance analytics + learning loop — ingest per-post metrics and surface winning hooks/CTAs by platform. Target `services/creatorAnalyticsDashboard.js` (export `ingestPerformance`).",
@@ -1121,9 +1121,30 @@
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "performance-analytics-learning-loop-ingest-per-p",
       "mission_id": "PRODUCT-creator-media-os",
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-18T11:44:49.712Z",
-      "commit_sha": "da7dd7a53610454c0d9280b8e4941e7fdd9a83bc"
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/creator-media-os/twins/steps/performance-analytics-learning-loop-ingest-per-p.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-18T11:44:43.804Z",
+        "shipped_at": "2026-07-18T11:44:43.804Z",
+        "commit_sha": null,
+        "content_sha256": "d1614b412f28aa7c373090df70679249fa36d15948339752e6aa16609d7d6aa7",
+        "target_file": "services/creatorAnalyticsDashboard.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/creatorAnalyticsDashboard.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/creator-media-os/twins/steps/performance-analytics-learning-loop-ingest-per-p.exact",
+          "content_sha256": "d1614b412f28aa7c373090df70679249fa36d15948339752e6aa16609d7d6aa7"
+        }
+      },
+      "shipped_at": "2026-07-18T11:44:43.804Z"
     },
     {
       "id": "team-seats-roles-editor-manager-va-access-on-a-c",
@@ -1149,7 +1170,31 @@
       ],
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "team-seats-roles-editor-manager-va-access-on-a-c",
-      "mission_id": "PRODUCT-creator-media-os"
+      "mission_id": "PRODUCT-creator-media-os",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/creator-media-os/twins/steps/team-seats-roles-editor-manager-va-access-on-a-c.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-18T11:46:32.502Z",
+        "shipped_at": "2026-07-18T11:46:32.502Z",
+        "commit_sha": null,
+        "content_sha256": "ac94731ec466953aa80c6996d0b0442031899b40a7f18d54b6a6d7455bfcc65a",
+        "target_file": "services/creatorTeamSeats.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/creatorTeamSeats.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/creator-media-os/twins/steps/team-seats-roles-editor-manager-va-access-on-a-c.exact",
+          "content_sha256": "ac94731ec466953aa80c6996d0b0442031899b40a7f18d54b6a6d7455bfcc65a"
+        }
+      },
+      "shipped_at": "2026-07-18T11:46:32.502Z"
     },
     {
       "id": "video-templates-with-swappable-segments-build-a",

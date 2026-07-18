@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T11:44:45.174Z",
+  "generated_at": "2026-07-18T11:46:34.075Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11959,
+  "file_count": 11960,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -85082,6 +85082,13 @@
       "bytes": 1696,
       "mtime": "2026-07-18T11:24:08.708Z",
       "indexed_at": "2026-07-18T11:24:08.708Z"
+    },
+    {
+      "path": "services/creatorTeamSeats.js",
+      "synopsis": "Existing functionality",
+      "bytes": 1059,
+      "mtime": "2026-07-18T11:46:34.075Z",
+      "indexed_at": "2026-07-18T11:46:34.075Z"
     },
     {
       "path": "services/creatorTextToVideo.js",
