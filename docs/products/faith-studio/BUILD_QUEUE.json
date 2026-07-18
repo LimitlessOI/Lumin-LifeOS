@@ -1162,7 +1162,7 @@
     },
     {
       "id": "faith-studio-3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/scriptureSceneBuilder.js",
       "task": "add private witness mode to scripture scene builder",
       "spec": "Enhance scriptureSceneBuilder to support private witness mode feature.",
@@ -1189,7 +1189,14 @@
       ],
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "faith-studio-3",
-      "mission_id": "PRODUCT-faith-studio"
+      "mission_id": "PRODUCT-faith-studio",
+      "pre_existing": true,
+      "shipped_via": "pre_existing_artifact_proof",
+      "shipped_at": "2026-07-18T01:14:09.191Z",
+      "last_error": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null
     },
     {
       "id": "faith-studio-4",
@@ -1220,7 +1227,31 @@
       ],
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "faith-studio-4",
-      "mission_id": "PRODUCT-faith-studio"
+      "mission_id": "PRODUCT-faith-studio",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/faith-studio/twins/steps/faith-studio-4.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-18T01:14:34.722Z",
+        "shipped_at": "2026-07-18T01:14:34.722Z",
+        "commit_sha": null,
+        "content_sha256": "661222a9ae045d0f8d0b7607bf146468674204194b02f5733665fb5b30232b5b",
+        "target_file": "services/safeOutputService.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/safeOutputService.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/faith-studio/twins/steps/faith-studio-4.exact",
+          "content_sha256": "661222a9ae045d0f8d0b7607bf146468674204194b02f5733665fb5b30232b5b"
+        }
+      },
+      "shipped_at": "2026-07-18T01:14:34.722Z"
     },
     {
       "id": "faith-studio-5",

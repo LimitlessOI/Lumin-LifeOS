@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T01:12:45.600Z",
+  "generated_at": "2026-07-18T01:14:35.960Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11888,
   "files": [
@@ -88916,9 +88916,9 @@
     {
       "path": "services/safeOutputService.js",
       "synopsis": "Existing code",
-      "bytes": 657,
-      "mtime": "2026-07-16T19:42:53.615Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z",
+      "bytes": 1142,
+      "mtime": "2026-07-18T01:14:35.960Z",
+      "indexed_at": "2026-07-18T01:14:35.960Z",
       "ssot": [
         "docs/products/faith-studio/PRODUCT_HOME.md"
       ]
