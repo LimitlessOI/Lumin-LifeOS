@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T10:08:23.928Z",
+  "generated_at": "2026-07-18T10:13:43.164Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11932,
+  "file_count": 11933,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -39886,9 +39886,9 @@
     {
       "path": "docs/products/creator-media-os/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Creator Media OS",
-      "bytes": 10751,
-      "mtime": "2026-06-29T17:35:43.022Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z"
+      "bytes": 20554,
+      "mtime": "2026-07-18T10:13:43.164Z",
+      "indexed_at": "2026-07-18T10:13:43.164Z"
     },
     {
       "path": "docs/products/CREATORMEDIAOS.md",
@@ -40466,6 +40466,13 @@
       "mtime": "2026-06-29T17:21:08.010Z",
       "indexed_at": "2026-07-17T23:06:25.553Z",
       "synopsis_index_only": true
+    },
+    {
+      "path": "docs/products/productized-sprint/launch-kit/CREATOR_PARTNER_PROGRAM.md",
+      "synopsis": "Creator Partner Program — eXp-style 5-level creator revenue-share spec (GTM + billing requirements). @ssot docs/products/productized-sprint/PRODUCT_HOME.md",
+      "bytes": 4027,
+      "mtime": "2026-07-18T10:13:43.164Z",
+      "indexed_at": "2026-07-18T10:13:43.164Z"
     },
     {
       "path": "docs/products/productized-sprint/PRODUCT_HOME.md",
