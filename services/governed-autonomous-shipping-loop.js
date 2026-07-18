@@ -322,7 +322,7 @@ async function markFailedStep(queue, stepId, body, productId, logger) {
   }
 }
 
-function markShippedStepsDone(queueOrProductId, shippedStepIds, commit_sha) {
+export function markShippedStepsDone(queueOrProductId, shippedStepIds, commit_sha) {
   if (!shippedStepIds.length) return;
   const queue = typeof queueOrProductId === 'string'
     ? loadBuildQueue(queueOrProductId)
@@ -371,6 +371,10 @@ function markShippedStepsDone(queueOrProductId, shippedStepIds, commit_sha) {
         step.commit_sha = commit_sha;
         changed = true;
       }
+      if (commit_sha && step.exactness?.sealed && step.exactness.commit_sha !== commit_sha) {
+        step.exactness.commit_sha = commit_sha;
+        changed = true;
+      }
     }
   }
   if (changed) persistQueue(queue);
@@ -409,15 +413,65 @@ function queuePathForProduct(productId) {
   return path.join(PRODUCTS_DIR, productId, 'BUILD_QUEUE.json');
 }
 
-async function fetchRemoteBuildQueue(productId) {
+export function queueCommitContent(queue) {
+  const { _sourcePath, ...clean } = queue || {};
+  return `${JSON.stringify(clean, null, 2)}\n`;
+}
+
+export function mergeShippedStepMetadata(runtimeQueue, sealedQueue, shippedStepIds) {
+  if (!runtimeQueue || !Array.isArray(runtimeQueue.steps) || !Array.isArray(sealedQueue?.steps)) {
+    return runtimeQueue;
+  }
+  const shipped = new Set(shippedStepIds || []);
+  const sealedById = new Map(sealedQueue.steps.map((step) => [step.id || step.step_id, step]));
+  for (const runtimeStep of runtimeQueue.steps) {
+    const id = runtimeStep.id || runtimeStep.step_id;
+    if (!shipped.has(id)) continue;
+    const sealedStep = sealedById.get(id);
+    if (!sealedStep) continue;
+    for (const field of ['action_type', 'exact_inputs', 'exactness']) {
+      if (Object.prototype.hasOwnProperty.call(sealedStep, field)) {
+        runtimeStep[field] = structuredClone(sealedStep[field]);
+      }
+    }
+  }
+  return runtimeQueue;
+}
+
+export function collectExactArtifactEntries(queue, shippedStepIds, { repoRoot = REPO_ROOT } = {}) {
+  if (!Array.isArray(queue?.steps)) return [];
+  const shipped = new Set(shippedStepIds || []);
+  const root = path.resolve(repoRoot);
+  const entries = [];
+  const seen = new Set();
+  for (const step of queue.steps) {
+    const id = step.id || step.step_id;
+    if (!shipped.has(id)) continue;
+    const source = String(
+      step.exact_inputs?.content_source_path
+      || step.exactness?.rebuild?.content_source_path
+      || '',
+    ).trim();
+    if (!source || path.isAbsolute(source)) continue;
+    const abs = path.resolve(root, source);
+    if (abs !== root && !abs.startsWith(`${root}${path.sep}`)) continue;
+    const rel = path.relative(root, abs).replace(/\\/g, '/');
+    if (!rel || rel.startsWith('../') || seen.has(rel) || !fs.existsSync(abs)) continue;
+    seen.add(rel);
+    entries.push({ path: rel, content: fs.readFileSync(abs, 'utf8') });
+  }
+  return entries;
+}
+
+async function fetchRemoteBuildQueue(productId, { remoteOnly = false } = {}) {
   const localPath = queuePathForProduct(productId);
   const relPath = path.relative(REPO_ROOT, localPath).replace(/\\/g, '/');
   const token = process.env.GITHUB_TOKEN?.trim();
   const repo = process.env.GITHUB_REPO?.trim();
   const branch = process.env.GITHUB_DEPLOY_BRANCH || 'main';
-  if (!token || !repo) return loadBuildQueue(productId);
+  if (!token || !repo) return remoteOnly ? null : loadBuildQueue(productId);
   const [owner, repoName] = repo.split('/');
-  if (!owner || !repoName) return loadBuildQueue(productId);
+  if (!owner || !repoName) return remoteOnly ? null : loadBuildQueue(productId);
   try {
     const res = await fetch(`https://api.github.com/repos/${owner}/${repoName}/contents/${relPath}?ref=${branch}`, {
       headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' },
@@ -435,27 +489,33 @@ async function fetchRemoteBuildQueue(productId) {
     // Remote unavailable — fall back to local queue; local is the durable source
     // of truth for runtime fields and the loop will keep working.
   }
-  return loadBuildQueue(productId);
+  return remoteOnly ? null : loadBuildQueue(productId);
 }
 
 async function commitQueueStatus(product_id, stepIds, queue, commitSha, logger) {
-  const { _sourcePath, ...clean } = queue;
   const queuePath = queue._sourcePath || queuePathForProduct(product_id);
   const relPath = path.relative(REPO_ROOT, queuePath).replace(/\\/g, '/');
-  const content = `${JSON.stringify(clean, null, 2)}\n`;
+  const content = queueCommitContent(queue);
   const branch = process.env.GITHUB_DEPLOY_BRANCH || 'main';
   const failed = commitSha === 'failed';
   const statusTag = failed ? 'FAILED' : 'QUEUE';
   const shaTag = failed ? '0000000' : commitSha.slice(0, 7);
   try {
+    const current = await fetchRemoteBuildQueue(product_id, { remoteOnly: true });
+    if (current && queueCommitContent(current) === content) {
+      logger?.info?.(`[GOVERNED-AUTONOMOUS-QUEUE] ${product_id} unchanged; skipping no-op commit`);
+      return { ok: false, error: 'no_change' };
+    }
     const result = await commitManyToGitHub([{ path: relPath, content }], `GOVERNED-AUTONOMOUS-${statusTag}: ${product_id} ${stepIds.join(', ')} ${shaTag}`, branch);
     if (result?.ok && result.sha) {
       logger?.info?.(`[GOVERNED-AUTONOMOUS-QUEUE] ${product_id} BUILD_QUEUE.json updated with ${shaTag}`);
     } else {
       logger?.warn?.(`[GOVERNED-AUTONOMOUS-QUEUE] ${product_id} commit returned !ok: ${result?.error || 'unknown'}`);
     }
+    return result;
   } catch (err) {
     logger?.warn?.(`[GOVERNED-AUTONOMOUS-QUEUE] ${product_id} commit failed: ${err.message}`);
+    return { ok: false, error: err.message };
   }
 }
 
@@ -474,8 +534,11 @@ async function commitShippedFiles(product_id, shippedStepIds, ship_steps, logger
   const steps = ship_steps.filter((s) => shipped.has(s.step_id));
   const fileEntries = [];
   const queuePath = queuePathForProduct(product_id);
+  let sealedQueue = null;
   if (fs.existsSync(queuePath)) {
+    sealedQueue = loadBuildQueue(product_id);
     fileEntries.push({ path: path.relative(REPO_ROOT, queuePath).replace(/\\/g, '/'), content: fs.readFileSync(queuePath, 'utf8') });
+    fileEntries.push(...collectExactArtifactEntries(sealedQueue, shippedStepIds));
   }
   for (const step of steps) {
     const target = step.target_file;
@@ -682,6 +745,11 @@ export async function runGovernedAutonomousShipOnce({ logger, maxStepsPerProduct
       if (shippedIds.length && queue) {
         const commitSha = await commitShippedFiles(entry.product_id, shippedIds, entry.ship_steps, logger);
         if (commitSha) {
+          try {
+            mergeShippedStepMetadata(queue, loadBuildQueue(entry.product_id), shippedIds);
+          } catch (err) {
+            logger?.warn?.({ product_id: entry.product_id, error: err.message }, '[GOVERNED-AUTONOMOUS-SHIP] could not merge sealed twin metadata');
+          }
           // Fail-closed on false-DONE: a step is only marked done if its declared
           // artifact actually re-proves against the committed tree.
           const { proven, unproven } = await partitionShippedByArtifactProof(queue, shippedIds);
