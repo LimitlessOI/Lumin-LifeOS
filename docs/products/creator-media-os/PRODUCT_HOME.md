@@ -51,6 +51,7 @@ Automate the work people should not have to do by hand, while preserving their c
 - **True text-to-video** — real motion b-roll from a prompt (Wan/Kling via Replicate)
 - **Multi-language dubbing + lip-sync**
 - **Media vault** — searchable, tagged, versioned durable asset store
+- **Reusable video templates + catalog remix** — template once and swap only the detail segment per render (e.g. realtor new-listing videos); search the indexed back-catalog to remix old clips into new videos/shorts
 - **Creator Partner Program** — eXp-style multi-level creator revenue-share (paid from margin, consent + FTC compliant)
 
 **Out of scope — explicitly NOT this project's job:**
@@ -170,6 +171,8 @@ This is not "AI video." It is a content operating system: script, scene, edit, r
 - [ ] Lip-sync patcher — re-sync mouth to replaced words for on-camera overdub. Target `services/creatorLipSync.js` (export `resyncLips`). Requires lip-sync provider key + likeness consent.
 - [ ] Text-to-video generation — enable real motion b-roll from a prompt (Wan/Kling via Replicate). Target `services/creatorTextToVideo.js` (export `generateMotionVideo`). Requires `REPLICATE_API_TOKEN`.
 - [ ] Multi-language dubbing — translate and dub audio in the cloned voice with lip-sync. Target `services/creatorDubbing.js` (export `dubToLanguages`). Requires `ELEVENLABS_API_KEY`.
+- [ ] Video templates with swappable segments — build a template once (intro/branding/outro/music/caption-style) and swap only the detail segment (e.g. a realtor's new listing/address/B-roll) per render; everything else stays fixed. Target `services/creatorVideoTemplates.js` (export `renderFromTemplate`).
+- [ ] Catalog clip search + remix compiler — search the indexed back-catalog by topic/keyword/transcript, pull evergreen segments/clips from old videos, and recombine them with fresh footage into a new video or short. Target `services/creatorClipRemix.js` (export `remixFromCatalog`). Requires media vault index.
 - [ ] Long-form to shorts auto-clipper — detect high-retention moments and cut vertical clips. Target `services/creatorShortsClipper.js` (export `extractShorts`).
 - [ ] Keyword-matched b-roll inserter — insert b-roll matched to script keywords. Target `services/creatorBrollMatcher.js` (export `matchBroll`).
 - [ ] Brand kit auto-apply — fonts, colors, logo, lower-thirds on every render. Target `services/creatorBrandKit.js` (export `applyBrandKit`).
@@ -284,6 +287,7 @@ No production runbook yet. This project is concept-stage only.
 |---|---|---|---|---|---|
 | 2026-03-29 | Created Creator Media OS amendment and manifest from conversation history | Promote the AI YouTube/business video system concept into proper SSOT ownership | ✅ | ✅ | pending |
 | 2026-07-18 | Added Wave 2 prime-time roadmap (digital twin, jump-cuts, overdub, text-to-video, dubbing, media vault, fan-out) + Creator Partner Program rev-share; specced each as governed factory step with concrete target_file + credential gates | Founder approved full creator feature set ready for prime time; specs drive the governed factory per SO-001 (no hand-authored modules) | ✅ | pending | specs-only (SENTRY gates pending per feature) |
+| 2026-07-18 | Added reusable video templates with swappable segments + catalog clip-search/remix compiler (realtor "same 10 videos, new details" + remix old→new use case) | Founder ask: repeatable template videos, swap only the changing segment, remix indexed back-catalog clips into new videos/shorts | ✅ | pending | specs-only |
 
 ---
 

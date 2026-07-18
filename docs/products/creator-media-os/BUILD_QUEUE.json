@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "creator-media-os",
-  "planned_at": "2026-07-18T04:00:50.839Z",
-  "backlog_signature": "52cd039a9ab704b7",
+  "planned_at": "2026-07-18T04:04:02.791Z",
+  "backlog_signature": "251e5fce8fd585ca",
   "planner_mode": "deterministic",
   "steps": [
     {
@@ -910,6 +910,58 @@
       ],
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "team-seats-roles-editor-manager-va-access-on-a-c",
+      "mission_id": "PRODUCT-creator-media-os"
+    },
+    {
+      "id": "video-templates-with-swappable-segments-build-a",
+      "status": "pending",
+      "target_file": "services/creatorVideoTemplates.js",
+      "task": "Video templates with swappable segments — build a template once (intro/branding/outro/music/caption-style) and swap only the detail segment (e.g. a realtor's new listing/address/B-roll) per render; everything else stays fixed. Target `servi",
+      "spec": "Video templates with swappable segments — build a template once (intro/branding/outro/music/caption-style) and swap only the detail segment (e.g. a realtor's new listing/address/B-roll) per render; everything else stays fixed. Target `services/creatorVideoTemplates.js` (export `renderFromTemplate`).",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "renderFromTemplate"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/creatorVideoTemplates.js",
+          "exports": [
+            "renderFromTemplate"
+          ],
+          "assertion_id": "expected_exports:services/creatorVideoTemplates.js"
+        }
+      ],
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "video-templates-with-swappable-segments-build-a",
+      "mission_id": "PRODUCT-creator-media-os"
+    },
+    {
+      "id": "catalog-clip-search-remix-compiler-search-the-in",
+      "status": "pending",
+      "target_file": "services/creatorClipRemix.js",
+      "task": "Catalog clip search + remix compiler — search the indexed back-catalog by topic/keyword/transcript, pull evergreen segments/clips from old videos, and recombine them with fresh footage into a new video or short. Target `services/creatorClip",
+      "spec": "Catalog clip search + remix compiler — search the indexed back-catalog by topic/keyword/transcript, pull evergreen segments/clips from old videos, and recombine them with fresh footage into a new video or short. Target `services/creatorClipRemix.js` (export `remixFromCatalog`). Requires media vault index.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "remixFromCatalog"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/creatorClipRemix.js",
+          "exports": [
+            "remixFromCatalog"
+          ],
+          "assertion_id": "expected_exports:services/creatorClipRemix.js"
+        }
+      ],
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "catalog-clip-search-remix-compiler-search-the-in",
       "mission_id": "PRODUCT-creator-media-os"
     }
   ],
