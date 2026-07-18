@@ -1183,19 +1183,34 @@
     },
     {
       "id": "step1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/lifeOSiOSIPA.js",
       "task": "create signed ipa workflow",
       "spec": "Implement the workflow for building LifeOS iOS IPA, incorporating Apple Dev secrets.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "buildLifeOSiOSIPA"
       ],
       "route": {
         "path": "/install/lifeos/ios-ipa"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeOSiOSIPA.js",
+          "exports": [
+            "buildLifeOSiOSIPA"
+          ],
+          "assertion_id": "expected_exports:services/lifeOSiOSIPA.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-18T02:12:23.249Z",
+      "last_error": "NOT_ON_BLUEPRINT",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "step2",
@@ -1223,7 +1238,17 @@
       "route": {
         "method": "POST",
         "path": "/api/v1/lifeos/struggledetection"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/struggleDetection.js",
+          "exports": [
+            "registerStruggleDetectionRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/struggleDetection.js"
+        }
+      ]
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
