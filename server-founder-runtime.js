@@ -53,6 +53,7 @@ import { registerFounderRuntimeRoutes } from "./startup/register-founder-runtime
 import { registerFounderServerRoutes } from "./startup/routes/founder-server-routes.js";
 import { startNeverStopProductFactoryScheduler } from "./services/never-stop-product-factory-scheduler.js";
 import { startGovernedAutonomousShippingLoop } from "./services/governed-autonomous-shipping-loop.js";
+import { startCiHealthWatchdogScheduler } from "./scripts/ci-health-watchdog.mjs";
 import { initDatabase } from "./startup/database.js";
 import { requireKey } from "./src/server/auth/requireKey.js";
 import { NotificationService } from "./core/notification-service.js";
@@ -472,6 +473,15 @@ async function bootFounderRuntime() {
         startGovernedAutonomousShippingLoop({ logger, pool });
       } catch (govErr) {
         logger.warn("[GOVERNED-AUTONOMOUS-SHIP] failed to start in founder runtime", { error: govErr.message });
+      }
+      // CI health watchdog: nothing in the system previously watched GitHub
+      // Actions/CI status at all (confirmed by repo-wide audit, 2026-07-19) —
+      // this is the first thing that does, and it's the trigger for the
+      // founder SMS/call escalation (routes/founder-sms-routes.js).
+      try {
+        startCiHealthWatchdogScheduler({ logger });
+      } catch (ciWatchdogErr) {
+        logger.warn("[CI-WATCHDOG] failed to start in founder runtime", { error: ciWatchdogErr.message });
       }
       _bootLog('bootFounderRuntime_done');
       return { ok: true, attempt: bootAttempt };

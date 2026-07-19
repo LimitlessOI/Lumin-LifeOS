@@ -123,7 +123,7 @@
       "path": "routes/founder-sms-routes.js",
       "register": "registerFounderSmsRoutes",
       "enabled": true,
-      "note": "GAP-FILL money path: tip can SMS ADAM_SMS_NUMBER via Twilio without mounting full phone stack. Used to ping founder with preview/checkout + Connect captcha asks."
+      "note": "GAP-FILL money path: tip can SMS ADAM_SMS_NUMBER via Twilio without mounting full phone stack. Used to ping founder with preview/checkout + Connect captcha asks. Also now backs scripts/ci-health-watchdog.mjs's SMS+call escalation for CI breaks (2026-07-19) — confirmed via a real HTTP round-trip test (tests/founder-alert-routes-mounted.test.js) that this route is genuinely mounted and reachable, not just present in the file tree."
     },
     {
       "path": "routes/lifeos-finance-routes.js",
