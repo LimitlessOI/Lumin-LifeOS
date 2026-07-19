@@ -1020,10 +1020,10 @@ Trust is the product. Commerce is the byproduct of trust.
 >
 > **Historical default (when no explicit LifeOS-first directive applies):** The North Star revenue priority chain was documented as: Amendment 18 (ClientCare) → Amendment 17 (TC Service) → Amendment 10 (API Cost Savings) → Amendment 11 (BoldTrail). Under that default, LifeOS features were queued for parallel build only when revenue lanes were unblocked or waiting.
 >
-> **Pre-authorized for parallel work while revenue lanes are active (low AI cost, large user cohort impact, no regulatory risk):**
-> 1. **Habit Tracker** — `habits` + `habit_completions` tables; identity-first framing; streak recovery. No scheduled AI; pure user-driven. Safe to build in parallel.
-> 2. **Legacy Core** — `legacy_messages`, `trusted_contacts`, `check_in_cadence`, digital-will completeness score. No AI required for the surface; only for optional time-capsule drafting. Safe to build in parallel.
-> 3. **Cycle Tracking** — extend `wearable_data`; cycle phase → energy/mood/decision context. Critical for ~50% of users; feeds existing systems with no new AI cost.
+> **Pre-authorized for parallel work while revenue lanes are active (low AI cost, large user cohort impact, no regulatory risk) — STATUS 2026-07-19: all 3 confirmed BUILT (verified on disk, not assumed — `routes/lifeos-habits-routes.js` + `services/lifeos-habits*.js` + 2 migrations; `services/lifeos-legacy-core.js`; `services/wearable-integration/` + cycle-tracking wiring). Left here as historical record, not live backlog — do not re-attempt.**
+> 1. ~~**Habit Tracker** — `habits` + `habit_completions` tables; identity-first framing; streak recovery. No scheduled AI; pure user-driven. Safe to build in parallel.~~ DONE.
+> 2. ~~**Legacy Core** — `legacy_messages`, `trusted_contacts`, `check_in_cadence`, digital-will completeness score. No AI required for the surface; only for optional time-capsule drafting. Safe to build in parallel.~~ DONE.
+> 3. ~~**Cycle Tracking** — extend `wearable_data`; cycle phase → energy/mood/decision context. Critical for ~50% of users; feeds existing systems with no new AI cost.~~ DONE.
 >
 > **All other LifeOS signature features (the 20 "Be The Best" items) are queued.** ~~Do not build them until ClientCare generates $X/month or Adam explicitly re-prioritizes.~~ **Superseded by operator directive above (2026-05-03):** LifeOS-first is authorized; still avoid scope creep **outside** approved Amendment 21 backlog without Adam or **§2.12** council for load-bearing forks.
 >
