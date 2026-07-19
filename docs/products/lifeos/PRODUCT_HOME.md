@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-18 — Persist COMMAND_RAN turns without theater scrub (`fi-route-marker-v5`). |
+| **Last Updated** | 2026-07-19 — Added `GET /api/v1/lifeos/founder/github-token-scopes` (read-only diagnostic, `routes/founder-sms-routes.js`) to check whether `GITHUB_TOKEN` has the `workflow` OAuth scope — working hypothesis for why the governed loop's migrate.yml self-repair built locally but failed to commit (`github_commit_failed_after_local_ship`). Prior: 2026-07-18 — Persist COMMAND_RAN turns without theater scrub (`fi-route-marker-v5`). |
 ---
 
 ## Founder conversations (2026-06-29)

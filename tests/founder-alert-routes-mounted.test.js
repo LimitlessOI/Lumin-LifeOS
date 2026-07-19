@@ -105,3 +105,30 @@ test('POST /api/v1/lifeos/founder/voice/call is actually reachable (not 404) onc
     assert.match(json.error, /Twilio/i);
   });
 });
+
+test('GET /api/v1/lifeos/founder/github-token-scopes is reachable and reports missing-token cleanly without a real GITHUB_TOKEN', async () => {
+  const app = express();
+  app.use(express.json());
+  const passthroughRequireKey = (_req, _res, next) => next();
+
+  const originalToken = process.env.GITHUB_TOKEN;
+  delete process.env.GITHUB_TOKEN;
+
+  await autoRegisterProductModules(
+    app,
+    { requireKey: passthroughRequireKey, logger: { info() {}, warn() {} } },
+    { logger: { info() {}, warn() {} }, modules: loadAutoRegisterRegistry().filter((m) => m.path === 'routes/founder-sms-routes.js') }
+  );
+
+  try {
+    await withEphemeralServer(app, async (baseUrl) => {
+      const resp = await fetch(`${baseUrl}/api/v1/lifeos/founder/github-token-scopes`);
+      assert.notEqual(resp.status, 404, 'route must be mounted, not 404');
+      const json = await resp.json();
+      assert.equal(json.ok, false);
+      assert.match(json.error, /GITHUB_TOKEN/);
+    });
+  } finally {
+    if (originalToken !== undefined) process.env.GITHUB_TOKEN = originalToken;
+  }
+});
