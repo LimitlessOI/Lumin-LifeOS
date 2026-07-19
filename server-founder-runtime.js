@@ -54,6 +54,7 @@ import { registerFounderServerRoutes } from "./startup/routes/founder-server-rou
 import { startNeverStopProductFactoryScheduler } from "./services/never-stop-product-factory-scheduler.js";
 import { startGovernedAutonomousShippingLoop } from "./services/governed-autonomous-shipping-loop.js";
 import { startCiHealthWatchdogScheduler } from "./scripts/ci-health-watchdog.mjs";
+import { startSentryChairGovernanceScheduler } from "./scripts/sentry-chair-governance-audit.mjs";
 import { initDatabase } from "./startup/database.js";
 import { requireKey } from "./src/server/auth/requireKey.js";
 import { NotificationService } from "./core/notification-service.js";
@@ -482,6 +483,17 @@ async function bootFounderRuntime() {
         startCiHealthWatchdogScheduler({ logger });
       } catch (ciWatchdogErr) {
         logger.warn("[CI-WATCHDOG] failed to start in founder runtime", { error: ciWatchdogErr.message });
+      }
+      // SENTRY (finds + proposes a solution) -> Chair (reviews, routes
+      // technical findings to auto-approved / product-scope findings to
+      // founder escalation) -> persisted findings queue. This is the D7
+      // repair pipeline (FACTORY_REBUILD_MANIFEST_V1.md §16) as real running
+      // code — a narrow, honest slice of the full multi-model-debate vision,
+      // not the whole thing, but genuinely running instead of only documented.
+      try {
+        startSentryChairGovernanceScheduler({ logger });
+      } catch (sentryChairErr) {
+        logger.warn("[SENTRY-CHAIR] failed to start in founder runtime", { error: sentryChairErr.message });
       }
       _bootLog('bootFounderRuntime_done');
       return { ok: true, attempt: bootAttempt };
