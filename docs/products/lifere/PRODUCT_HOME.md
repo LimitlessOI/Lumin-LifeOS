@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifere/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-16 — Pre-transfer SMS brief now unconditional (25-idea build item #1); live-confirmed transfer-loop risk still active, blocked on Adam's phone-forwarding decision. |
+| **Last Updated** | 2026-07-18 — BUILD_QUEUE.json step 10 ("implement live phone service" — Vapi/Twilio, `services/livePhoneService.js`) had a spurious `depends_on:["8"]` blocking it behind a demoted, unrelated step (TC blocker-card UI routes, 9 failed revives). No functional relationship between the two — removed the dependency (GAP-FILL correction of a blueprint-authoring defect, not a scope decision) so the governed autonomous loop can actually pick up the live-phone service next cycle. Found via a direct system audit (D6 doctrine applied: an ambiguous/broken blueprint link, not queue improvisation). Prior: 2026-07-16 — Pre-transfer SMS brief now unconditional (25-idea build item #1); live-confirmed transfer-loop risk still active, blocked on Adam's phone-forwarding decision. |
 
 ---
 
@@ -307,6 +307,18 @@ System classifies the real driver and changes the entire response strategy accor
 Same engine adapts to any sales vertical. Only the objection library, close scripts, and compliance rules change. Real estate is vertical one. Insurance, financial advisory, SaaS sales follow the same architecture. Every vertical contributes back to cross-industry pattern learning.
 
 ---
+
+## Chair/Architect Competitive Review (2026-07-19)
+
+Founder directive: review every revenue blueprint for gaps against real competitors, propose additions/removals, ship what's safe now. Real web research (not invented), cited.
+
+**Market context:** the closest real competitors to LifeRE's full-stack vision (TC, receptionist, contract writing, search automation, coaching, team management — all in one) are the "all-in-one" real estate platforms: Brivity and CINC/Lofty (both **$299/mo**, bundling CRM + lead gen + marketing + transaction management + coaching), Real Geeks (IDX + CRM + marketing + paid ads + coaching), and Follow Up Boss (CRM + accountability/reporting for teams). This validates the bundled-full-stack model directly — it's a proven, established pricing tier ($299/mo), not an unproven bet.
+
+**Real differentiator confirmed, not found in any competitor researched:** none of Brivity, CINC, Real Geeks, or Follow Up Boss integrate an **AI receptionist that answers and qualifies calls** or **AI-native contract-to-timeline automation** as first-class parts of the same platform — they're CRM/lead-gen/coaching stacks, not full transaction-and-communication stacks. LifeRE's combination (per this doc's OWNED FILES/RELATIONSHIP TO SIBLING AMENDMENTS) already spans TC + receptionist + outreach + training in one product — that combination is the real moat, genuinely not matched by the researched competition.
+
+**Real gap found:** Curaytor (a more content/marketing-focused real-estate competitor, researched under SocialMediaOS below) runs "Curaytor Brain" — cross-client pattern analysis that recommends high-performing content/subject lines by learning from ALL their clients' results, not just one agent's own history. LifeRE, sitting on top of LifeOS's memory-capsule system across every agent it serves, is structurally positioned to do the same thing for coaching/scripts/outreach performance — recommend what's working across the whole LifeRE agent base, not just one agent's own data. Not currently in this blueprint; worth founder consideration given the infrastructure (capsule memory, now with real semantic search) already exists to support it.
+
+**Chair status:** all of the above are `escalate_to_founder` — full-stack scope, pricing tier, and cross-agent-learning are product-direction and business-model decisions.
 
 ## HISTORY (condensed)
 

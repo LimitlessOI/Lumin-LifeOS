@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-19 — Added `GET /api/v1/lifeos/founder/github-token-scopes` (read-only diagnostic, `routes/founder-sms-routes.js`) to check whether `GITHUB_TOKEN` has the `workflow` OAuth scope — working hypothesis for why the governed loop's migrate.yml self-repair built locally but failed to commit (`github_commit_failed_after_local_ship`). Prior: 2026-07-18 — Persist COMMAND_RAN turns without theater scrub (`fi-route-marker-v5`). |
+| **Last Updated** | 2026-07-18 — Persist COMMAND_RAN turns without theater scrub (`fi-route-marker-v5`). |
 ---
 
 ## Founder conversations (2026-06-29)
@@ -1010,6 +1010,16 @@ Trust is the product. Commerce is the byproduct of trust.
 - [x] `GET /api/v1/lifeos/status` — table probes + finance migration probe + scheduler env flag
 
 ---
+
+## Chair/Architect Competitive Review (2026-07-19)
+
+Founder directive: review every revenue blueprint for gaps against real competitors, propose additions/removals, ship what's safe now. Real web research (not invented), cited. This answers the empty-backlog finding SENTRY raised for this product (175/175 BUILD_QUEUE steps done, previously zero fresh direction) — with real research behind it, not guessed content.
+
+**Market context:** the "Life OS" category is real and growing (runlifeos.com, getlifeosapp.com, TaskCoach.AI, plus thousands of Notion "Life OS" templates) but every competitor found is a **passive organizer** — tasks, calendar, habits, journal wired together for the user to look at and act on themselves. This product's own stated edge (in this file's TECHNICAL SPEC/Gate 5) is exactly the right one and is validated by the research, not undercut by it: **active AI action inside a real operating system, not another dashboard of linked notes.** None of the researched competitors integrate real business/revenue systems (a receptionist, a transaction coordinator, a site builder) into the same product the user lives in day-to-day — that's a genuine structural moat this research did not find any competitor closing.
+
+**Real gap found:** every dedicated Life OS competitor researched (TaskCoach.AI at $7.41–$14.99/mo, runlifeos.com free-tier-first) competes hard on **price and zero-setup simplicity** ("no templates, no setup, works out of the box"). This product's own Gate 1 readiness checklist (elsewhere in this file) still shows real infra gaps — no vector embeddings live at the time of writing, memory category taxonomy incomplete — which are invisible to a user but directly determine how fast "works out of the box" actually feels. Closing those infra gaps is arguably higher-leverage for competitive positioning than new user-facing features right now.
+
+**Chair status:** this section identifies direction, not new BUILD_QUEUE steps — LifeOS-specific feature/priority decisions are `escalate_to_founder` per D8 (Chair proactively interviews the founder for full blueprint coverage), consistent with the founder's own instruction that this product's backlog needs his direct input, not fabricated content.
 
 ## Approved Product Backlog — Next Agent Pick Up Here
 *(2026-04-19 session — Adam approved all of these. Build in order. Each item gets its own DB migration + service + routes + overlay + SSOT receipt.)*

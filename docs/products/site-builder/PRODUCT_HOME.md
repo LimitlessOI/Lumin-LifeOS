@@ -306,6 +306,22 @@ Failed sends do **not** increment follow-up counters.
 - Generated sites must optimize for mobile readability, clear CTA flow, accessibility, and Core Web Vitals rather than visual novelty alone
 - Prospect outreach must fail closed when `qualityReport.readyToSend === false`; weak previews go to `qa_hold`
 
+## Chair/Architect Competitive Review (2026-07-19)
+
+Founder directive: review every revenue blueprint for gaps against real competitors, propose additions/removals, ship what's safe now. Real web research (not invented), cited.
+
+**Market context:** the self-serve AI-website-builder space (Wix AI, Kleap, Olitt, Hostinger) is crowded and commoditized — that is NOT this product's lane. Site Builder's actual competitive set is done-for-you cold-outreach agencies (OutreachBloom, doneforyou.com) that build first, then prospect with a free preview. That combination (build unprompted → free preview → cold outreach → convert) is the differentiator; lead with it, don't compete on "AI builds sites fast," which is now table stakes everywhere.
+
+**Real gap found, not previously in this blueprint:** every DFY cold-email competitor researched treats **domain/inbox warming and deliverability** as foundational — branded sending domain setup, gradual inbox warm-up, reply-rate monitoring — before any real outreach volume. This blueprint's NEXT ACTIONS jump straight from "set Railway env vars" to "send first 5 real prospects" with no deliverability step at all. Cold-sending from a cold domain risks landing in spam and poisoning sender reputation before the funnel ever gets a fair test. **Recommended addition, high priority:** an inbox-warming/deliverability check gate before Step 4 (send first real prospects) — verify SPF/DKIM/DMARC configured on the sending domain, and hold outreach volume low (single digits/day) for the first 1-2 weeks.
+
+**Already-planned items in REFACTOR PLAN confirmed still worth building, now backed by research, not just intuition:**
+- Live edit mode (client edits their own preview) — matches the market direction across every AI builder reviewed; increasingly expected, not a nice-to-have.
+- Prospect scoring (worst existing websites first) — directly supported: outreach agencies researched all lead with quality/opportunity scoring to prioritize target lists, not spray-and-pray.
+
+**New idea from research, not currently in this blueprint:** competitors bundle a **before/after comparison** directly into the outreach email/preview ("here's your site now vs. what we built") — concrete, visual, higher-converting than describing the offer in prose. Worth testing as a template variant.
+
+**Chair status:** the deliverability gap is `approved` (infrastructure/config, no founder judgment needed) — Architect should queue it. The REFACTOR PLAN items and before/after idea are `escalate_to_founder` (product-direction calls, not purely technical).
+
 ## Change Receipts
 
 | Date | What Changed | Why | Verified | Next |

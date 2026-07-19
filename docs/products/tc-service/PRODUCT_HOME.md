@@ -974,6 +974,18 @@ grep "createTCRoutes" startup/register-runtime-routes.js
 
 ---
 
+## Chair/Architect Competitive Review (2026-07-19)
+
+Founder directive: review every revenue blueprint for gaps against real competitors, propose additions/removals, ship what's safe now. Real web research (not invented), cited.
+
+**Market context:** the established players (Dotloop, SkySlope, Paperless Pipeline) are document-storage-and-checklist tools sold mostly to brokerages tracking many agents. A newer wave (DocJacket, Nekst, ListedKit) is AI-native and sold directly to the person closing the deal — they **read the contract and auto-generate the timeline**, instead of a human re-keying dates into a checklist. That's the exact model this product should be racing toward, not "another Dotloop."
+
+**Real gap found against that newer competitive set:** this blueprint's readiness checklist has real infrastructure gaps (SkySlope Puppeteer/Chromium on Railway unconfirmed, Stripe not wired, Nevada form-specific QA incomplete) but nothing about **automatic timeline generation from the contract itself** — the single feature the AI-native competitors lead with. If TC service already reads/extracts contract data (worth confirming against the real codebase before treating this as new work), the gap may already be partially closed; if not, this is the highest-leverage single feature to close the gap with the newest, fastest-growing competitors.
+
+**Pricing anchor from research, for founder pricing decisions:** Paperless Pipeline (closest peer, per-brokerage, unlimited users) starts at $65/mo for 5 transactions/month, scaling to $675/mo for 450/month, no per-user fees. SkySlope is enterprise-priced (~$250/mo+, custom contracts). This product's current pricing isn't itself in this doc to compare against — founder call on where to position.
+
+**Chair status:** infrastructure readiness items (Puppeteer/Chromium, Stripe wiring, credential rotation) are `approved` — Architect should queue the concrete ones with clear target files. Auto-timeline-from-contract and pricing positioning are `escalate_to_founder` (product-direction and pricing calls).
+
 ## Change Receipts
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
