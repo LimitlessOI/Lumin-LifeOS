@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-19 — CI watchdog failed-delivery retry fix
+
+Critical sweep found the new main-CI watchdog wrote `smsAt`/`calledAt` before confirming the founder alert route succeeded. A transient Twilio/auth/network failure therefore suppressed future retries while logs/state implied delivery. Fixed state ordering so only confirmed alerts advance or clear state; regressions for failed red-CI delivery retry and failed recovery-SMS retention pass with route coverage (22/22), and full BuilderOS preflight passes. Next: deploy and tip verification.
+
 ## 2026-07-18 — Thread history: persist + don’t scrub real acts
 
 Adam: see UI communication tests in history. Two gaps: (1) act/nav fastpath skipped persist; (2) persisted nav text was scrubbed as theater because `recordExchange` hard-coded `NO_COMMAND_RAN`. Fixed both — marker v5. Tip prove: `open food` has no `HISTORY_NOT_SAVED` and appears in chat thread messages.

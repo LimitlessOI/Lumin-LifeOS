@@ -143,7 +143,6 @@ export async function runCiHealthWatchdogCycle({
   const run = await fetchLatestMainRun({ token, repo, workflowFile });
   const state = loadState();
   const { action, newState } = evaluateCIHealth({ run, state });
-  saveState(newState);
 
   if (action === 'none') return { action, run };
 
@@ -153,19 +152,27 @@ export async function runCiHealthWatchdogCycle({
   }
 
   if (action === 'recovered') {
-    await sendFounderSms({ baseUrl, commandKey, message: `BuilderOS: main branch CI (${workflowFile}) is back to GREEN.` });
+    const delivery = await sendFounderSms({ baseUrl, commandKey, message: `BuilderOS: main branch CI (${workflowFile}) is back to GREEN.` });
+    if (!delivery.ok) {
+      logger.warn?.({ status: delivery.status }, '[CI-WATCHDOG] recovery SMS failed — retaining state for retry');
+      return { action, run, alerted: false, reason: 'alert_delivery_failed', status: delivery.status };
+    }
+    saveState(newState);
     logger.info?.('[CI-WATCHDOG] recovery SMS sent');
     return { action, run, alerted: true };
   }
 
   const message = `BuilderOS ALERT: main branch CI (${workflowFile}) is FAILING. SHA ${run.sha.slice(0, 7)}. ${run.htmlUrl}`;
 
-  if (action === 'sms') {
-    await sendFounderSms({ baseUrl, commandKey, message });
-  } else if (action === 'call') {
-    await sendFounderCall({ baseUrl, commandKey, to: alertPhone, message });
+  const delivery = action === 'sms'
+    ? await sendFounderSms({ baseUrl, commandKey, message })
+    : await sendFounderCall({ baseUrl, commandKey, to: alertPhone, message });
+  if (!delivery.ok) {
+    logger.warn?.({ action, status: delivery.status }, '[CI-WATCHDOG] alert delivery failed — retaining state for retry');
+    return { action, run, alerted: false, reason: 'alert_delivery_failed', status: delivery.status };
   }
 
+  saveState(newState);
   logger.warn?.(`[CI-WATCHDOG] ${action} alert sent for main@${run.sha}`);
   return { action, run, alerted: true };
 }

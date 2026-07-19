@@ -199,6 +199,89 @@ test('runCiHealthWatchdogCycle: end-to-end sms path with fully injected deps + i
   }
 });
 
+test('runCiHealthWatchdogCycle: failed alert delivery retains state so the next cycle retries', async () => {
+  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'ci-watchdog-retry-'));
+  const originalCwd = process.cwd();
+  const realFetch = global.fetch;
+  process.chdir(tmpDir);
+  try {
+    let smsAttempts = 0;
+    global.fetch = async (url) => {
+      if (String(url).includes('api.github.com')) {
+        return {
+          ok: true,
+          json: async () => ({
+            workflow_runs: [{ head_sha: 'retrysha', conclusion: 'failure', status: 'completed', html_url: 'https://x', created_at: 'now' }],
+          }),
+        };
+      }
+      smsAttempts += 1;
+      return smsAttempts === 1
+        ? { ok: false, status: 503, json: async () => ({ ok: false }) }
+        : { ok: true, status: 200, json: async () => ({ ok: true }) };
+    };
+
+    const options = {
+      token: 't',
+      repo: 'owner/repo',
+      baseUrl: 'https://x',
+      commandKey: 'k',
+      alertPhone: '+15551234567',
+      logger: { warn() {}, info() {} },
+    };
+    const failed = await runCiHealthWatchdogCycle(options);
+    assert.equal(failed.alerted, false);
+    assert.equal(failed.reason, 'alert_delivery_failed');
+    assert.deepEqual(loadState(), { alertedShas: {} });
+
+    const retried = await runCiHealthWatchdogCycle(options);
+    assert.equal(retried.alerted, true);
+    assert.equal(smsAttempts, 2);
+    assert.ok(loadState().alertedShas.retrysha);
+  } finally {
+    global.fetch = realFetch;
+    process.chdir(originalCwd);
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+  }
+});
+
+test('runCiHealthWatchdogCycle: failed recovery SMS keeps prior alert state', async () => {
+  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'ci-watchdog-recovery-'));
+  const originalCwd = process.cwd();
+  const realFetch = global.fetch;
+  process.chdir(tmpDir);
+  try {
+    saveState({ alertedShas: { oldsha: { smsAt: 1, calledAt: null } } });
+    global.fetch = async (url) => {
+      if (String(url).includes('api.github.com')) {
+        return {
+          ok: true,
+          json: async () => ({
+            workflow_runs: [{ head_sha: 'greensha', conclusion: 'success', status: 'completed', html_url: 'https://x', created_at: 'now' }],
+          }),
+        };
+      }
+      return { ok: false, status: 503, json: async () => ({ ok: false }) };
+    };
+
+    const result = await runCiHealthWatchdogCycle({
+      token: 't',
+      repo: 'owner/repo',
+      baseUrl: 'https://x',
+      commandKey: 'k',
+      alertPhone: '+15551234567',
+      logger: { warn() {}, info() {} },
+    });
+    assert.equal(result.action, 'recovered');
+    assert.equal(result.alerted, false);
+    assert.deepEqual(loadState(), { alertedShas: { oldsha: { smsAt: 1, calledAt: null } } });
+  } finally {
+    global.fetch = realFetch;
+    process.chdir(originalCwd);
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+  }
+});
+
 test('loadState/saveState: round-trips through an isolated data dir', () => {
   const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'ci-watchdog-state-'));
   const originalCwd = process.cwd();
