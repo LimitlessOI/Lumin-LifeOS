@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-19 — Cognitive Core Era-1 audit (Claude)
+
+Adam: "do an audit of what was done fix what you find or gaps then report and a prompt for opus to finish all the plan all the way." Verified the Cognitive Core Era-1 work (built by the parallel Devin/Cursor-Opus session, see entries below) independently: commits real, resilience-fix diff sound, route genuinely mounted + reachable locally and in live production, production running the exact latest commit. Found and fixed one real gap: `tests/cognitive-core-judgment.test.js` (7/7 passing) was never wired into `package.json`'s CI test list — fixed, Smoke Test green, deployed (`db2eb9a7c1`, SHA parity confirmed). Chased an apparent second gap (local DB query found zero `judgment_*` tables) to ground: false alarm — live `/api/v1/cognitive-core/scoreboard` returns real data matching the values already recorded below (auth acc 0.6/Brier 0.28), proving the tables and feature are real in production. Root cause: this session's local `.env` `DATABASE_URL` doesn't point at the same database Railway production uses — a real, separate, unresolved drift (can't currently be checked from a live route either; `routes/railway-managed-env-routes.js` is only wired into `server-full-runtime.js`, which never boots in production). Needs Adam or direct Railway dashboard access to reconcile. Handoff prompt for Opus to continue Era 2+ delivered directly to Adam in-session (not filed as a separate doc).
+
 ## 2026-07-19 — Conversation archived (SMOS + Cognitive Core → Opus)
 
 Founder asked to park the full arc in **both** Claude project memory and repo conversation dumps. Written:
