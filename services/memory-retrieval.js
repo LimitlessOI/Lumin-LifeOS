@@ -4,6 +4,7 @@
 // services/memory-retrieval.js
 /** @ssot docs/products/memory-system/PRODUCT_HOME.md */
 import { buildProvenanceChain } from './memory-provenance.js';
+import { generateEmbedding, toPgVectorLiteral } from './memory-embeddings.js';
 
 const TRUST_TO_PERMISSION = {
   UNTRUSTED: 'blocked',
@@ -113,11 +114,66 @@ async function fetchCandidateCapsules(query, pool) {
   return result.rows;
 }
 
+/**
+ * Real semantic search (2026-07-19), on top of the full-text fix above: only
+ * among capsules that already have an embedding (memory_capsules.embedding,
+ * vector(1536) — schema existed but was never populated until
+ * scripts/memory-embeddings-backfill.mjs). Returns null (never throws) if a
+ * query embedding can't be generated — no API key, network error, etc. —
+ * since callers must always have a safe path back to full-text search rather
+ * than failing retrieval entirely over an embedding-provider hiccup.
+ */
+async function fetchCandidateCapsulesSemantic(query, pool, { embedFn = generateEmbedding, limit = RETRIEVAL_ROW_LIMIT } = {}) {
+  const trimmed = typeof query === 'string' ? query.trim() : '';
+  if (!trimmed) return null;
+
+  let vector;
+  try {
+    vector = await embedFn(trimmed);
+  } catch {
+    return null; // no embedding available this call — caller falls back to full-text
+  }
+
+  const result = await pool.query(
+    `SELECT mc.*, (mc.embedding <=> $1::vector) AS distance
+     FROM memory_capsules mc
+     WHERE mc.embedding IS NOT NULL
+     ORDER BY mc.embedding <=> $1::vector ASC
+     LIMIT $2`,
+    [toPgVectorLiteral(vector), limit],
+  );
+  return result.rows;
+}
+
+/**
+ * Combines semantic + full-text: semantic results first (genuinely embedded,
+ * ranked by real similarity), topped up with full-text matches for capsules
+ * that don't have an embedding yet (gradual backfill means both kinds
+ * coexist for a while), de-duplicated, bounded by the same overall limit.
+ * Falls back to pure full-text if semantic search returns nothing at all
+ * (no embeddings populated yet, or the embedding call failed) — this can
+ * never retrieve LESS than the full-text-only path already proven to work.
+ */
+async function fetchCandidateCapsulesHybrid(query, pool, opts = {}) {
+  const limit = opts.limit || RETRIEVAL_ROW_LIMIT;
+  const semantic = await fetchCandidateCapsulesSemantic(query, pool, opts);
+  if (!semantic || !semantic.length) {
+    return fetchCandidateCapsules(query, pool);
+  }
+  if (semantic.length >= limit) {
+    return semantic;
+  }
+  const seen = new Set(semantic.map((c) => c.capsule_id));
+  const textResults = await fetchCandidateCapsules(query, pool);
+  const topUp = textResults.filter((c) => !seen.has(c.capsule_id)).slice(0, limit - semantic.length);
+  return [...semantic, ...topUp];
+}
+
 async function retrieveCapsules(query, lane, taskScope, whyRetrieved, allowedUse, pool) {
   if (!lane) {
     throw { halt_code: 'MEMORY_RETRIEVAL_PERMISSION_UNKNOWN' };
   }
-  const capsules = await fetchCandidateCapsules(query, pool);
+  const capsules = await fetchCandidateCapsulesHybrid(query, pool);
   const includedCapsules = [];
   let abstentionCount = 0;
   for (const capsule of capsules) {
@@ -156,5 +212,7 @@ export {
   retrieveCapsules,
   checkZombieLane,
   fetchCandidateCapsules,
+  fetchCandidateCapsulesSemantic,
+  fetchCandidateCapsulesHybrid,
   RETRIEVAL_ROW_LIMIT,
 };

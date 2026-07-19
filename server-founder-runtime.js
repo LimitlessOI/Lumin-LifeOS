@@ -55,6 +55,7 @@ import { startNeverStopProductFactoryScheduler } from "./services/never-stop-pro
 import { startGovernedAutonomousShippingLoop } from "./services/governed-autonomous-shipping-loop.js";
 import { startCiHealthWatchdogScheduler } from "./scripts/ci-health-watchdog.mjs";
 import { startSentryChairGovernanceScheduler } from "./scripts/sentry-chair-governance-audit.mjs";
+import { startMemoryEmbeddingsBackfillScheduler } from "./scripts/memory-embeddings-backfill.mjs";
 import { initDatabase } from "./startup/database.js";
 import { requireKey } from "./src/server/auth/requireKey.js";
 import { NotificationService } from "./core/notification-service.js";
@@ -494,6 +495,16 @@ async function bootFounderRuntime() {
         startSentryChairGovernanceScheduler({ logger });
       } catch (sentryChairErr) {
         logger.warn("[SENTRY-CHAIR] failed to start in founder runtime", { error: sentryChairErr.message });
+      }
+      // Memory embeddings backfill: memory_capsules.embedding (vector(1536))
+      // existed in the schema but nothing ever wrote to it (confirmed live,
+      // 21 capsules, 0 embedded). Guarded by createUsefulWorkGuard (Zero
+      // Waste AI Call Rule) — real prerequisite + real work check before any
+      // OpenAI spend.
+      try {
+        startMemoryEmbeddingsBackfillScheduler({ pool, logger });
+      } catch (embeddingsErr) {
+        logger.warn("[MEMORY-EMBEDDINGS] backfill scheduler failed to start in founder runtime", { error: embeddingsErr.message });
       }
       _bootLog('bootFounderRuntime_done');
       return { ok: true, attempt: bootAttempt };
