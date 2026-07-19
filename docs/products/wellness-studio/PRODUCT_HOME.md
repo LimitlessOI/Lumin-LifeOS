@@ -181,6 +181,12 @@ For couples who want to do the work together, with shared visibility where chose
 
 ---
 
+## Chair/Architect Competitive Review (2026-07-19)
+
+Founder directive: every blueprint reviewed against real competitors. Real web research (cited), not invented.
+
+**Market context:** this product's actual competitive set is narrower than generic "wellness apps" (Headspace, Calm, Noom compete on meditation/fitness habit-building, a different market). The closer comparisons are relationship/emotional-health platforms (BetterHelp, Talkspace) and data-driven personal coaching (Whoop's AI Coach, which analyzes recovery/strain/sleep patterns over weeks to give specific guidance, not generic tips). **Real gap found:** none of the mainstream wellness competitors researched combine relationship-specific modules (Conflict Repair, Boundary Mastery, Partner Sync) with therapist integration the way this blueprint already plans — that combination, if built, is not something the major players offer. **Idea worth considering, from the Whoop pattern:** where this product has real behavioral data (from LifeOS's own habit/mood tracking), longitudinal pattern-based coaching ("your conflict-repair sessions work better on days X") is a stronger, more defensible feature than one-off content, matching what differentiates the strongest competitor found. Chair status: `escalate_to_founder` — build-priority and module-scope calls.
+
 ## Change Receipts
 
 | Date | Change | Author |
