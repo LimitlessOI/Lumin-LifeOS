@@ -936,6 +936,27 @@
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-step12",
       "mission_id": "PRODUCT-builderos"
+    },
+    {
+      "id": "sentry-broken_workflow:.github/workflows/migrate.yml",
+      "status": "blocked",
+      "target_file": ".github/workflows/migrate.yml",
+      "task": ".github/workflows/migrate.yml has failed in under 5s on its last 3 runs — almost certainly a config/syntax error, not a content failure.",
+      "spec": "Read .github/workflows/migrate.yml directly for invalid YAML (stray markdown code-fences are a known real cause) or a broken action reference; fix or remove if superseded by a newer mechanism.",
+      "depends_on": [],
+      "founder_gated": false,
+      "priority": "urgent",
+      "source": "sentry_chair_architect",
+      "finding_id": "broken_workflow:.github/workflows/migrate.yml",
+      "attempts": 1,
+      "last_attempt_at": "2026-07-19T19:07:11.482Z",
+      "last_error": "github_commit_failed_after_local_ship",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "failure_signature": "github_commit_failed_after_local_ship",
+      "same_signature_count": 1,
+      "escalation_class": "same_signature_repeat"
     }
   ],
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
