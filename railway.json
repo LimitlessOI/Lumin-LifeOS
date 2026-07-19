@@ -17,6 +17,8 @@
     "dockerfilePath": "./Dockerfile",
     "buildArgs": {
       "NODE_ENV": "production"
-    }
+    },
+    "restartPolicyType": "ON_FAILURE",
+    "restartPolicyMaxRetries": 10
   }
 }
