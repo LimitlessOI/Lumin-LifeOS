@@ -199,41 +199,58 @@ Return ONLY JSON:
 
 confidence must be calibrated humility (not fake 0.99).`;
 
+  const cascade = (process.env.COGNITIVE_CORE_CASCADE
+    || process.env.CHAIR_DIRECT_AGENT_CASCADE
+    || 'claude_sonnet,openai_gpt,gemini_flash')
+    .split(',').map((s) => s.trim()).filter(Boolean);
+
   let parsed = null;
   let rawText = '';
-  try {
-    rawText = coerceText(await args.callAI(
-      process.env.CHAIR_DIRECT_AGENT_MODEL || 'claude_sonnet',
-      prompt,
-      {
+  let callError = null;
+  for (const member of cascade) {
+    try {
+      const out = coerceText(await args.callAI(member, prompt, {
         maxOutputTokens: 1800,
         taskType: 'cognitive_core_judgment',
         founderComms: true,
         useCache: false,
-      },
-    ));
-    parsed = parseJsonObject(rawText);
-  } catch (err) {
-    return {
-      matched: true,
-      ok: false,
-      error: err.message,
-      worn_capsule_ids: capsules.map((c) => c.id),
-    };
+      }));
+      if (out && out.trim()) {
+        rawText = out;
+        parsed = parseJsonObject(out);
+        break;
+      }
+      callError = `${member}_empty`;
+    } catch (err) {
+      callError = err.message;
+    }
   }
 
+  let degraded = false;
+  let degradeReason = null;
   if (!parsed) {
-    return {
-      matched: true,
-      ok: false,
-      error: 'judgment_parse_failed',
-      raw: rawText.slice(0, 500),
-      worn_capsule_ids: capsules.map((c) => c.id),
+    // Never fall through silently: salvage raw text as the answer, still journal.
+    degraded = true;
+    degradeReason = rawText ? 'judgment_parse_failed' : (callError || 'judgment_no_text');
+    parsed = {
+      reply_to_adam: rawText.trim() || '',
+      synthesis: rawText.trim() || '',
+      tension_ledger: [],
+      predicted_option: null,
+      predicted_reasons: [],
+      activated_programs: [],
+      confidence: 0.35,
+      situation: { stakes: args.stakes || 'medium', notes: degradeReason },
     };
   }
 
   const tension = Array.isArray(parsed.tension_ledger) ? parsed.tension_ledger : [];
-  const reply = String(parsed.reply_to_adam || parsed.synthesis || '').trim();
+  let reply = String(parsed.reply_to_adam || parsed.synthesis || '').trim();
+  if (!reply) {
+    reply = 'I tried to think this through as your worn perspectives but could not complete the pass. Say it again, or change which capsules you are wearing.';
+    degraded = true;
+    degradeReason = degradeReason || 'empty_reply';
+  }
   const confidence = Math.max(0, Math.min(1, Number(parsed.confidence) || 0.5));
   const predictedOption = String(parsed.predicted_option || '').trim() || null;
   const predictedReasons = Array.isArray(parsed.predicted_reasons) ? parsed.predicted_reasons : [];
@@ -284,6 +301,8 @@ confidence must be calibrated humility (not fake 0.99).`;
   return {
     matched: true,
     ok: true,
+    degraded,
+    degrade_reason: degradeReason,
     reply,
     tension_ledger: tension,
     synthesis: parsed.synthesis || null,

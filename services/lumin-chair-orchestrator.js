@@ -421,6 +421,8 @@ function chairJudgmentResponse(ctx, judgment) {
       chair_channel: 'cognitive_core',
       cognitive_core: true,
       judgment_compiler: true,
+      judgment_degraded: judgment.degraded === true,
+      judgment_degrade_reason: judgment.degrade_reason || null,
       worn_capsules: judgment.worn_capsule_ids || [],
       tension_ledger: judgment.tension_ledger || [],
       prediction: judgment.prediction || null,

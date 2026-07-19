@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-19T21:32:24.093Z",
+  "generated_at": "2026-07-19T21:40:59.428Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12008,
   "files": [
@@ -84799,9 +84799,9 @@
     {
       "path": "services/cognitive-core-perspective.js",
       "synopsis": "Cognitive Core Era-1 — perspective-before-retrieval, multi-wear tension, scarce WM.",
-      "bytes": 10579,
-      "mtime": "2026-07-19T21:32:24.093Z",
-      "indexed_at": "2026-07-19T21:32:24.093Z",
+      "bytes": 11475,
+      "mtime": "2026-07-19T21:40:59.428Z",
+      "indexed_at": "2026-07-19T21:40:59.428Z",
       "ssot": [
         "docs/products/memory-intelligence/PRODUCT_HOME.md"
       ]
@@ -88210,9 +88210,9 @@
     {
       "path": "services/lumin-chair-orchestrator.js",
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
-      "bytes": 69409,
-      "mtime": "2026-07-19T21:32:24.093Z",
-      "indexed_at": "2026-07-19T21:32:24.093Z",
+      "bytes": 69526,
+      "mtime": "2026-07-19T21:40:59.428Z",
+      "indexed_at": "2026-07-19T21:40:59.428Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
