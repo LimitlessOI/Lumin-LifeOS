@@ -31,7 +31,10 @@ const AUTO_APPROVABLE_CHECKS = new Set(['ci_health', 'workflow_health']);
 // Finding "check" types that touch product SCOPE/priority — what a product
 // should build next is a business call, not a technical one (D8: Chair
 // proactively interviews the founder for full blueprint coverage).
-const FOUNDER_ESCALATION_CHECKS = new Set(['product_backlog']);
+// competitive_gap (2026-07-19): real web-research findings about what
+// competitors do — always a product-direction call, same as product_backlog,
+// never auto-approved regardless of how the research reads.
+const FOUNDER_ESCALATION_CHECKS = new Set(['product_backlog', 'competitive_gap']);
 
 /**
  * Reviews ONE finding. Pure — no I/O, fully unit-testable.

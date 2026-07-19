@@ -20,6 +20,7 @@ import { runSentrySystemAudit } from '../services/sentry-system-audit.js';
 import { reviewFindings, reviewFindingsWithAI } from '../services/chair-findings-review.js';
 import { defaultPlannerCallModel } from '../services/never-stop-product-factory.js';
 import { runArchitectPass } from '../services/architect-blueprint-writer.js';
+import { runCompetitiveResearchCycle } from '../services/chair-competitive-research.js';
 
 const CALL_ESCALATION_DELAY_MS = 10 * 60 * 1000;
 
@@ -156,6 +157,68 @@ export async function runGovernanceAuditCycle({
  * Starts the recurring audit interval. Mirrors
  * startCiHealthWatchdogScheduler / startNeverStopProductFactoryScheduler.
  */
+/**
+ * Runs ONE product's real competitive-research cycle and routes the result
+ * through the same Chair review + persisted findings queue as everything
+ * else. Deliberately its own function on its own (much longer) schedule,
+ * not folded into runGovernanceAuditCycle's 30-min loop -- competitive
+ * research is a real API call with real cost, and this is a slow, ongoing
+ * sweep (one product per cycle), not a time-sensitive health check.
+ */
+export async function runCompetitiveResearchAuditCycle({
+  callModel = defaultPlannerCallModel(),
+  productsDir = undefined,
+  cursorPath = undefined,
+  webSearchService = undefined,
+  logger = console,
+} = {}) {
+  const result = await runCompetitiveResearchCycle({
+    logger,
+    ...(productsDir ? { productsDir } : {}),
+    ...(cursorPath ? { cursorPath } : {}),
+    ...(webSearchService ? { webSearchService } : {}),
+  });
+  if (!result.finding) {
+    return { productId: result.productId || null, reviewed: false, reason: result.skipped || result.reason };
+  }
+
+  const reviewed = callModel
+    ? await reviewFindingsWithAI([result.finding], { callModel, logger })
+    : reviewFindings([result.finding]);
+
+  const existingQueue = loadFindingsQueue();
+  const { queue, newlyAdded } = mergeFindingsIntoQueue(reviewed, existingQueue);
+  saveFindingsQueue(queue);
+
+  if (newlyAdded.length) {
+    logger?.info?.({ product_id: result.productId }, '[CHAIR-COMPETITIVE-RESEARCH] new competitive finding recorded');
+  }
+
+  return { productId: result.productId, reviewed: true, added: newlyAdded.length > 0 };
+}
+
+export function startCompetitiveResearchScheduler({ logger = console } = {}) {
+  // Default: once per day. At ~46 products, one lap of the full portfolio
+  // takes about 6-7 weeks -- deliberately slow and cheap, not a cost spike,
+  // per the founder's own "seen all the way through" ask meaning sustained,
+  // not a one-time rush.
+  const intervalMs = Number(process.env.COMPETITIVE_RESEARCH_INTERVAL_MS || 24 * 60 * 60 * 1000);
+  const bootDelayMs = Number(process.env.COMPETITIVE_RESEARCH_BOOT_DELAY_MS || 5 * 60 * 1000);
+
+  const tick = async () => {
+    try {
+      await runCompetitiveResearchAuditCycle({ logger });
+    } catch (err) {
+      logger?.warn?.({ err: err.message }, '[CHAIR-COMPETITIVE-RESEARCH] cycle failed');
+    }
+  };
+
+  logger?.info?.({ intervalMs, bootDelayMs }, '[CHAIR-COMPETITIVE-RESEARCH] starting the ongoing portfolio-wide competitive review sweep, one product per cycle');
+
+  setTimeout(() => { tick(); }, bootDelayMs);
+  return setInterval(() => { tick(); }, intervalMs);
+}
+
 export function startSentryChairGovernanceScheduler({ logger = console } = {}) {
   const intervalMs = Number(process.env.SENTRY_CHAIR_AUDIT_INTERVAL_MS || 30 * 60 * 1000);
   const bootDelayMs = Number(process.env.SENTRY_CHAIR_AUDIT_BOOT_DELAY_MS || 90_000);

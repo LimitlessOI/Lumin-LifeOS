@@ -12,6 +12,7 @@ import {
   loadFindingsQueue,
   saveFindingsQueue,
   runGovernanceAuditCycle,
+  runCompetitiveResearchAuditCycle,
 } from '../scripts/sentry-chair-governance-audit.mjs';
 
 test('mergeFindingsIntoQueue: a genuinely new finding is appended with queue_status open', () => {
@@ -126,6 +127,58 @@ test('runGovernanceAuditCycle: an injected callModel is actually used to enrich 
     const persisted = loadFindingsQueue();
     assert.match(persisted.findings[0].chair_reasoning, /Chair \(AI\)/);
     assert.equal(persisted.findings[0].chair_reasoning_source, 'ai_model');
+  } finally {
+    process.chdir(originalCwd);
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+  }
+});
+
+test('runCompetitiveResearchAuditCycle: routes a real competitive finding through the same Chair review + persisted queue as everything else', async () => {
+  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'competitive-audit-cycle-'));
+  const originalCwd = process.cwd();
+  process.chdir(tmpDir);
+  try {
+    const productsDir = path.join(tmpDir, 'docs/products');
+    fs.mkdirSync(path.join(productsDir, 'demo-product'), { recursive: true });
+    fs.writeFileSync(path.join(productsDir, 'demo-product/PRODUCT_HOME.md'), '# Demo Product\n');
+
+    const fakeService = { searchCompetitors: async () => 'Competitor Q leads with feature R.' };
+
+    const result = await runCompetitiveResearchAuditCycle({
+      productsDir,
+      cursorPath: path.join(tmpDir, 'cursor.json'),
+      webSearchService: fakeService,
+      callModel: null, // rule-based path, deterministic
+      logger: { info() {}, warn() {} },
+    });
+
+    assert.equal(result.productId, 'demo-product');
+    assert.equal(result.reviewed, true);
+    assert.equal(result.added, true);
+
+    const persisted = loadFindingsQueue();
+    assert.equal(persisted.findings.length, 1);
+    assert.equal(persisted.findings[0].check, 'competitive_gap');
+    assert.equal(persisted.findings[0].chair_status, 'escalate_to_founder', 'competitive findings must always route to the founder, never auto-approve');
+  } finally {
+    process.chdir(originalCwd);
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+  }
+});
+
+test('runCompetitiveResearchAuditCycle: no products found is reported honestly, does not throw', async () => {
+  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'competitive-audit-cycle-empty-'));
+  const originalCwd = process.cwd();
+  process.chdir(tmpDir);
+  try {
+    const result = await runCompetitiveResearchAuditCycle({
+      productsDir: path.join(tmpDir, 'docs/products'),
+      cursorPath: path.join(tmpDir, 'cursor.json'),
+      callModel: null,
+      logger: { info() {}, warn() {} },
+    });
+    assert.equal(result.reviewed, false);
+    assert.equal(result.reason, 'no_products_found');
   } finally {
     process.chdir(originalCwd);
     fs.rmSync(tmpDir, { recursive: true, force: true });

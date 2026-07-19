@@ -54,7 +54,7 @@ import { registerFounderServerRoutes } from "./startup/routes/founder-server-rou
 import { startNeverStopProductFactoryScheduler } from "./services/never-stop-product-factory-scheduler.js";
 import { startGovernedAutonomousShippingLoop } from "./services/governed-autonomous-shipping-loop.js";
 import { startCiHealthWatchdogScheduler } from "./scripts/ci-health-watchdog.mjs";
-import { startSentryChairGovernanceScheduler } from "./scripts/sentry-chair-governance-audit.mjs";
+import { startSentryChairGovernanceScheduler, startCompetitiveResearchScheduler } from "./scripts/sentry-chair-governance-audit.mjs";
 import { startMemoryEmbeddingsBackfillScheduler } from "./scripts/memory-embeddings-backfill.mjs";
 import { initDatabase } from "./startup/database.js";
 import { requireKey } from "./src/server/auth/requireKey.js";
@@ -495,6 +495,18 @@ async function bootFounderRuntime() {
         startSentryChairGovernanceScheduler({ logger });
       } catch (sentryChairErr) {
         logger.warn("[SENTRY-CHAIR] failed to start in founder runtime", { error: sentryChairErr.message });
+      }
+      // Ongoing portfolio-wide competitive review: founder directive
+      // (2026-07-19) — "every single blueprint... looking online to see what
+      // competitors are doing." One product per day, real web research (Brave/
+      // Perplexity, graceful AI-knowledge fallback), routed through the same
+      // Chair review + founder-escalation queue as every other finding.
+      // Deliberately its own slow schedule, separate from the 30-min SENTRY
+      // health cycle, to control cost on real API calls.
+      try {
+        startCompetitiveResearchScheduler({ logger });
+      } catch (competitiveResearchErr) {
+        logger.warn("[CHAIR-COMPETITIVE-RESEARCH] scheduler failed to start in founder runtime", { error: competitiveResearchErr.message });
       }
       // Memory embeddings backfill: memory_capsules.embedding (vector(1536))
       // existed in the schema but nothing ever wrote to it (confirmed live,
