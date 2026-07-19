@@ -1,10 +1,18 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-19 — Conversation archived (SMOS + Cognitive Core → Opus)
+
+Founder asked to park the full arc in **both** Claude project memory and repo conversation dumps. Written:
+- Claude: `project_smos_cognitive_core_handoff_2026_07_19.md` (+ MEMORY.md index)
+- Repo: `docs/conversation_dumps/2026-07-19-smos-cognitive-core-opus-handoff.md`
+- LifeOS pointer: `docs/products/lifeos/conversations/2026-07-19-smos-cognitive-core-opus-handoff.md`
+Continue Cognitive Core integration on **Opus 4.8 High**; first check: wire `memoryContext` for `runCognitiveCoreJudgmentTurn` to semantic+FTS retrieval.
+
 ## 2026-07-19 — Cognitive Core Era-1 (judgment compiler)
 
 Adam ratified: Decision Journal + Prediction Scoreboard as engine; Capsules as Chair steering wheel; meta-learning compiler (not static twin). Shipped laws (`COGNITIVE_CORE_LAWS.md`), judgment schema/API, multi-wear tension path in orchestrator, wear chips in `lifeos-app.html`. Decision “should I X or make Y” no longer misroutes to build. Routes auto-registered (startup/ protected) via `config/auto-registered-product-modules.json`.
 
-**Tip proof (SHA `ddbdec25e8ff`):** Layer A `/api/v1/cognitive-core/{health,capsules,detect}` live. Founder-interface decision turn → `chair_channel: cognitive_core`, tension ledger (3), calibrated prediction (0.7), journaled `decision_id`, not degraded. Wear-only (non-decision) message triggers compiler; no-wear factual stays on normal chair. Scoreboard smoke: 6 decisions/predictions/outcomes → auth acc 0.6 / Brier 0.28 / tier `refuse` (Law 2 — delegation unearned); one causal miss report filed (`activated_underweighted`) on the real founder-interface miss. First judgment turn fell through on strict-JSON; hardened with model cascade + raw-text salvage + `judgment_degrade_reason` (SHA `ddbdec25e8ff`). Next: outcome-capture UX in drawer; Era-2 program hypotheses.
+**Production prove (SHA `ddbdec25e8ff`):** Layer A `/api/v1/cognitive-core/{health,capsules,detect}` live. Founder-interface decision turn → `chair_channel: cognitive_core`, tension ledger (3), calibrated prediction (0.7), journaled `decision_id`, not degraded. Wear-only (non-decision) message triggers compiler; no-wear factual stays on normal chair. Scoreboard smoke: 6 decisions/predictions/outcomes → auth acc 0.6 / Brier 0.28 / tier `refuse` (Law 2 — delegation unearned); one causal miss report filed (`activated_underweighted`) on the real founder-interface miss. First judgment turn fell through on strict-JSON; hardened with model cascade + raw-text salvage + `judgment_degrade_reason` (SHA `ddbdec25e8ff`). Next: outcome-capture UX in drawer; Era-2 program hypotheses.
 
 ## 2026-07-18 — Thread history: persist + don’t scrub real acts
 

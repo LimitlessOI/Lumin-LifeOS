@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-19T21:44:52.395Z",
+  "generated_at": "2026-07-19T21:51:06.207Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12008,
+  "file_count": 12010,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -37463,9 +37463,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 60895,
-      "mtime": "2026-07-19T21:44:52.395Z",
-      "indexed_at": "2026-07-19T21:44:52.395Z"
+      "bytes": 61503,
+      "mtime": "2026-07-19T21:51:06.207Z",
+      "indexed_at": "2026-07-19T21:51:06.207Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -37550,6 +37550,13 @@
       "bytes": 2666,
       "mtime": "2026-07-19T21:03:55.646Z",
       "indexed_at": "2026-07-19T21:04:54.410Z"
+    },
+    {
+      "path": "docs/conversation_dumps/2026-07-19-smos-cognitive-core-opus-handoff.md",
+      "synopsis": "Session archive — SMOS market-ready (Cursor) + Cognitive Core Era-1 / Opus handoff (2026-07-17→19). NOT AUTHORITATIVE.",
+      "bytes": 5013,
+      "mtime": "2026-07-19T21:51:06.207Z",
+      "indexed_at": "2026-07-19T21:51:06.207Z"
     },
     {
       "path": "docs/conversation_dumps/by-product/sessions/2a4739f2/BUILDEROS-AUTONOMOUS.md",
@@ -40235,6 +40242,13 @@
       "indexed_at": "2026-07-19T21:04:54.410Z"
     },
     {
+      "path": "docs/products/lifeos/conversations/2026-07-19-smos-cognitive-core-opus-handoff.md",
+      "synopsis": "Founder conversation pointer — SMOS market-ready + Cognitive Core Era-1 / Opus 4.8 handoff. Full archive in conversation_dumps.",
+      "bytes": 1061,
+      "mtime": "2026-07-19T21:51:06.207Z",
+      "indexed_at": "2026-07-19T21:51:06.207Z"
+    },
+    {
       "path": "docs/products/lifeos/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 30729,
@@ -40245,9 +40259,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 640783,
-      "mtime": "2026-07-19T21:32:24.093Z",
-      "indexed_at": "2026-07-19T21:32:24.093Z"
+      "bytes": 641385,
+      "mtime": "2026-07-19T21:51:06.207Z",
+      "indexed_at": "2026-07-19T21:51:06.207Z"
     },
     {
       "path": "docs/products/LIFERE.md",

@@ -11,17 +11,19 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-19 — Cognitive Core Era-1: Chair judgment path + wear chips in lifeos-app. |
+| **Last Updated** | 2026-07-19 — Archived SMOS + Cognitive Core Opus handoff in conversation dumps + Claude memory. |
 ---
 
 ## Founder conversations (2026-06-29)
 
 | Topic | File |
 |-------|------|
+| SMOS market-ready + Cognitive Core Opus handoff (2026-07-17→19) | [`conversations/2026-07-19-smos-cognitive-core-opus-handoff.md`](conversations/2026-07-19-smos-cognitive-core-opus-handoff.md) |
 | Human synergy, Limitless Principle, employee digital twin | [`conversations/2026-06-29-human-synergy-limitless-principle.md`](conversations/2026-06-29-human-synergy-limitless-principle.md) |
 | LimitlessOS business umbrella | [`../limitlessos/PRODUCT_HOME.md`](../limitlessos/PRODUCT_HOME.md) |
 
-Master verbatim: `docs/conversation_dumps/2026-06-29-limitlessos-ecosystem-founder-vision.md`
+Master verbatim: `docs/conversation_dumps/2026-06-29-limitlessos-ecosystem-founder-vision.md`  
+Handoff dump: `docs/conversation_dumps/2026-07-19-smos-cognitive-core-opus-handoff.md`
 
 ---
 
@@ -1730,7 +1732,8 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
-| 2026-07-19 | **Cognitive Core Era-1 in Chair UI.** `lifeos-app` wear chips → `ui_context.worn_capsules`; orchestrator runs judgment compiler (tension + prediction + journal) before build/counsel; `should I … or …` no longer routes to build. | Adam: judgment compiler — perspective AI + evolutionary calibration. | tip prove decision turn + scoreboard | outcomes + miss reports in UI |
+| 2026-07-19 | **Conversation archive — SMOS + Cognitive Core Opus handoff.** Dump + LifeOS pointer + Claude memory twin so Cursor/Claude/Opus share one handoff. | Adam: put the entire arc in memory and conversation dumps. | files written | Opus: wire `memoryContext` to semantic retrieval |
+| 2026-07-19 | **Cognitive Core Era-1 in Chair UI.** `lifeos-app` wear chips → `ui_context.worn_capsules`; orchestrator runs judgment compiler (tension + prediction + journal) before build/counsel; `should I … or …` no longer routes to build. | Adam: judgment compiler — perspective AI + evolutionary calibration. | production prove decision turn + scoreboard | outcomes + miss reports in UI |
 | 2026-07-18 | **Persist COMMAND_RAN without scrubbing.** `recordExchange` accepts `command_truth`; nav/act persist with `COMMAND_RAN` so "Opening …" is not wiped as theater. Marker `fi-route-marker-v5`. | Adam: UI tests must appear in thread history after reload. | tip prove open food persist null warning + history row | calendar acts |
 | 2026-07-18 | **Act/nav fastpath persists history.** `persistFounderTurn` before `route_nav_fastpath` / `route_act_fastpath` returns so UI battery turns land in `lumin_messages` (drawer reload / thread history). Marker `fi-route-marker-v4`. | Adam: see every UI communication test in thread history. | tip prove open food + log food without persist_warning | calendar acts |
 | 2026-07-18 | **Chair LifeOS writes + act HTTP fastpath.** `lifeos-direct-action` executes food/sleep/commitment/victory/habit with DB receipts; founder-interface calls `tryLuminChairSystemAction` for non-nav acts before counsel (`route_act_fastpath`, marker v3). | Adam: keep building real, not theater. | tip prove log food / commit / redeploy | calendar + habit name list UX |
