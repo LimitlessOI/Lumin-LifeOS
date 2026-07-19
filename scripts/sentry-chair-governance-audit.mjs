@@ -1,9 +1,12 @@
 #!/usr/bin/env node
 /**
- * SYNOPSIS: Orchestrates SENTRY (finds + proposes) -> Chair (reviews) ->
- * persisted findings queue -> founder escalation for whatever Chair routes
- * to founder review. This is the D7 repair pipeline (FACTORY_REBUILD_
- * MANIFEST_V1.md §16) as real running code instead of doctrine.
+ * SYNOPSIS: Orchestrates SENTRY (finds + proposes) -> Chair (reviews, real AI
+ * judgment) -> Architect (writes approved findings into a real buildable
+ * BUILD_QUEUE step) -> persisted findings queue -> founder escalation for
+ * whatever stays open. This is the full D7 repair pipeline (FACTORY_REBUILD_
+ * MANIFEST_V1.md §16) as real running code instead of doctrine — SENTRY,
+ * Chair, and Architect are each real modules now, not one role standing in
+ * for all three.
  * @ssot docs/products/builderos/PRODUCT_HOME.md
  *
  * Runs on the same boot-sequence pattern as scripts/ci-health-watchdog.mjs
@@ -14,7 +17,9 @@
 import fs from 'fs';
 import path from 'path';
 import { runSentrySystemAudit } from '../services/sentry-system-audit.js';
-import { reviewFindings } from '../services/chair-findings-review.js';
+import { reviewFindings, reviewFindingsWithAI } from '../services/chair-findings-review.js';
+import { defaultPlannerCallModel } from '../services/never-stop-product-factory.js';
+import { runArchitectPass } from '../services/architect-blueprint-writer.js';
 
 const CALL_ESCALATION_DELAY_MS = 10 * 60 * 1000;
 
@@ -87,21 +92,40 @@ export async function runGovernanceAuditCycle({
   commandKey = process.env.COMMAND_CENTER_KEY,
   alertPhone = process.env.ALERT_PHONE || process.env.ADAM_SMS_NUMBER,
   productsDir = undefined,
+  // Real AI judgment (SO-003: Chair may not run on a canned/templated
+  // answer). Defaults to the existing auto-failover multi-provider caller
+  // (services/never-stop-product-factory.js) so this reuses the same
+  // already-proven "never idle, switch providers on error" mechanism rather
+  // than inventing a second one. Pass null explicitly to force the pure
+  // rule-based path (e.g. in tests).
+  callModel = defaultPlannerCallModel(),
+  // Injectable so tests can point Architect at an isolated fixture BUILD_QUEUE
+  // instead of the real builderos/ one. Left undefined in production so
+  // services/architect-blueprint-writer.js uses the real repo root.
+  architectRoot = undefined,
   logger = console,
 } = {}) {
   const rawFindings = await runSentrySystemAudit({ token, repo, ...(productsDir ? { productsDir } : {}) });
-  const reviewed = reviewFindings(rawFindings);
+  const reviewed = callModel
+    ? await reviewFindingsWithAI(rawFindings, { callModel, logger })
+    : reviewFindings(rawFindings);
+
+  // Architect: turn every Chair-approved finding into a real BUILD_QUEUE step
+  // where the fix location is unambiguous; label the rest honestly rather
+  // than guess or silently skip them.
+  const withArchitectStatus = runArchitectPass(reviewed, architectRoot ? { root: architectRoot } : {});
 
   const existingQueue = loadFindingsQueue();
-  const { queue, newlyAdded } = mergeFindingsIntoQueue(reviewed, existingQueue);
+  const { queue, newlyAdded } = mergeFindingsIntoQueue(withArchitectStatus, existingQueue);
   saveFindingsQueue(queue);
 
   const newEscalations = newlyAdded.filter((f) => f.chair_status === 'escalate_to_founder');
   const newApproved = newlyAdded.filter((f) => f.chair_status === 'approved');
+  const newQueuedToBlueprint = newlyAdded.filter((f) => f.architect_status === 'queued_to_blueprint');
 
   if (newlyAdded.length) {
     logger?.info?.(
-      { new_findings: newlyAdded.length, escalations: newEscalations.length, approved: newApproved.length },
+      { new_findings: newlyAdded.length, escalations: newEscalations.length, approved: newApproved.length, queued_to_blueprint: newQueuedToBlueprint.length },
       '[SENTRY-CHAIR] governance audit cycle found new findings',
     );
   }
@@ -119,7 +143,13 @@ export async function runGovernanceAuditCycle({
     // checked by the NEXT cycle's read of queue_status, not a timer here.
   }
 
-  return { raw_findings: rawFindings.length, newly_added: newlyAdded.length, escalations: newEscalations.length, approved: newApproved.length };
+  return {
+    raw_findings: rawFindings.length,
+    newly_added: newlyAdded.length,
+    escalations: newEscalations.length,
+    approved: newApproved.length,
+    queued_to_blueprint: newQueuedToBlueprint.length,
+  };
 }
 
 /**

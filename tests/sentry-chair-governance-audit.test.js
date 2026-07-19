@@ -75,16 +75,57 @@ test('runGovernanceAuditCycle: runs end-to-end in an isolated cwd with no GitHub
       commandKey: null,
       alertPhone: null,
       productsDir,
+      callModel: null, // force the deterministic rule-based path — explicit, not env-dependent
+      architectRoot: tmpDir, // must never default to the real repo root in a test
       logger: { info() {}, warn() {} },
     });
 
     assert.equal(result.raw_findings, 1);
     assert.equal(result.newly_added, 1);
     assert.equal(result.escalations, 1);
+    assert.equal(result.queued_to_blueprint, 0, 'product_backlog findings are never approved, so Architect must not act on them');
 
     const persisted = loadFindingsQueue();
     assert.equal(persisted.findings.length, 1);
     assert.equal(persisted.findings[0].id, 'empty_backlog:idle-product');
+  } finally {
+    process.chdir(originalCwd);
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+  }
+});
+
+test('runGovernanceAuditCycle: an injected callModel is actually used to enrich chair_reasoning (SO-003 — real judgment, not just the rule)', async () => {
+  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'sentry-cycle-ai-'));
+  const originalCwd = process.cwd();
+  process.chdir(tmpDir);
+  try {
+    const productsDir = path.join(tmpDir, 'docs/products');
+    fs.mkdirSync(path.join(productsDir, 'idle-product'), { recursive: true });
+    fs.writeFileSync(path.join(productsDir, 'idle-product/BUILD_QUEUE.json'), JSON.stringify({ steps: [{ id: '1', status: 'done' }] }));
+    fs.writeFileSync(path.join(productsDir, 'idle-product/PRODUCT_HOME.md'), '# Idle\n');
+
+    let callCount = 0;
+    const fakeCallModel = async () => {
+      callCount += 1;
+      return 'This has sat idle for a while — worth prioritizing over lower-severity items.';
+    };
+
+    await runGovernanceAuditCycle({
+      token: null,
+      repo: null,
+      baseUrl: null,
+      commandKey: null,
+      alertPhone: null,
+      productsDir,
+      callModel: fakeCallModel,
+      architectRoot: tmpDir, // must never default to the real repo root in a test
+      logger: { info() {}, warn() {} },
+    });
+
+    assert.equal(callCount, 1, 'the injected model must actually be invoked, not silently bypassed');
+    const persisted = loadFindingsQueue();
+    assert.match(persisted.findings[0].chair_reasoning, /Chair \(AI\)/);
+    assert.equal(persisted.findings[0].chair_reasoning_source, 'ai_model');
   } finally {
     process.chdir(originalCwd);
     fs.rmSync(tmpDir, { recursive: true, force: true });

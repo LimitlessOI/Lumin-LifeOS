@@ -3,15 +3,23 @@
  * D7 repair pipeline, built as real running code instead of doctrine.
  * @ssot docs/products/builderos/PRODUCT_HOME.md
  *
- * Scope, stated honestly: the full D7-D10 vision has Chair as a real AI
- * reviewer that can brief-discuss with SENTRY and score priority via a
- * multi-model debate. This is a real, narrow, RULE-BASED first slice —
- * deterministic classification, not an AI call — because a deterministic
- * gate that correctly routes "needs founder judgment" vs "safe to auto-track"
- * is genuinely useful on its own and doesn't require standing up model-debate
- * infrastructure to ship. Upgrading specific check types to real AI review
- * (e.g. judging whether a proposed_solution is actually sound, not just
- * present) is a named next step, not done here.
+ * Two review paths, deliberately layered:
+ *   - reviewFinding / reviewFindings: deterministic rule-based classification
+ *     (kept as the fail-closed FLOOR — SO-003's "auto-failover, never idle"
+ *     means Chair must still function with zero reasoning, not stop dead, if
+ *     no model is available).
+ *   - reviewFindingWithAI / reviewFindingsWithAI (2026-07-19): real AI
+ *     judgment on top of that floor. Added because SO-003 explicitly names
+ *     "the Chair debate/counsel channel" as a high-stakes reasoning path that
+ *     "must never be served a canned/templated non-model answer in place of
+ *     real reasoning" — and the rule-based-only version was exactly that: a
+ *     canned template for every single finding, including the ones the
+ *     founder most needs real judgment on. The AI layer can only ENRICH
+ *     chair_reasoning with genuine analysis; it can never override
+ *     chair_status for a FOUNDER_ESCALATION_CHECKS finding or an SO-002
+ *     rejection — those are hard safety boundaries, not judgment calls, and
+ *     letting a model response silently loosen them would be worse than not
+ *     having AI review at all.
  */
 
 // Finding "check" types that are pure infrastructure/config — Chair can wave
@@ -74,6 +82,82 @@ export function reviewFinding(finding) {
  */
 export function reviewFindings(findings) {
   const reviewed = (Array.isArray(findings) ? findings : []).map(reviewFinding);
+  const severityRank = { P0: 0, P1: 1, P2: 2 };
+  const statusRank = { escalate_to_founder: 0, approved: 1, rejected: 2 };
+  return reviewed.sort((a, b) => {
+    const statusDelta = (statusRank[a.chair_status] ?? 3) - (statusRank[b.chair_status] ?? 3);
+    if (statusDelta !== 0) return statusDelta;
+    return (severityRank[a.severity] ?? 9) - (severityRank[b.severity] ?? 9);
+  });
+}
+
+function buildChairAIPrompt(finding, ruleBased) {
+  return [
+    'You are Chair, reviewing one system-health finding for a founder who runs this codebase alone.',
+    'Give genuine judgment, not a restatement of the rule. Be specific and brief (under 120 words).',
+    '',
+    `Finding check type: ${finding.check}`,
+    `Severity: ${finding.severity}`,
+    `Summary: ${finding.summary}`,
+    `Proposed solution: ${finding.proposed_solution}`,
+    `Deterministic classification already applied (DO NOT contradict this — it is a fixed safety boundary, not your call): ${ruleBased.chair_status}`,
+    `Rule reasoning: ${ruleBased.chair_reasoning}`,
+    '',
+    'Answer with genuine analysis: Is the proposed_solution actually sound, or does it miss something? Is there context the founder needs that the raw finding does not surface? Is this more urgent or less urgent than its stated severity suggests, and why? If you have nothing to add beyond the rule, say so plainly instead of padding.',
+  ].join('\n');
+}
+
+/**
+ * AI-enriched review of ONE finding. Falls back to the pure rule-based result
+ * (with a labeled source) if no callModel is provided or the call fails —
+ * SO-003 auto-failover: this must never leave a finding un-reviewed just
+ * because a model call didn't work.
+ */
+export async function reviewFindingWithAI(finding, { callModel, model = 'claude_sonnet', logger = console } = {}) {
+  const ruleBased = reviewFinding(finding);
+
+  // SO-002 rejections are a factual check (is proposed_solution present?),
+  // not a judgment call — no AI reasoning adds anything real here.
+  if (ruleBased.chair_status === 'rejected') {
+    return { ...ruleBased, chair_reasoning_source: 'rule_based' };
+  }
+
+  if (typeof callModel !== 'function') {
+    logger?.warn?.({ finding_id: finding.id }, '[CHAIR-AI] no callModel available — using rule-based reasoning only (SO-003 fail-closed floor, not a canned override)');
+    return { ...ruleBased, chair_reasoning_source: 'rule_based_no_model' };
+  }
+
+  try {
+    const raw = await callModel(model, buildChairAIPrompt(finding, ruleBased), { maxOutputTokens: 300, taskType: 'chair_review' });
+    const aiText = String(raw || '').trim();
+    if (!aiText) {
+      return { ...ruleBased, chair_reasoning_source: 'rule_based_empty_model_response' };
+    }
+    return {
+      ...ruleBased,
+      // chair_status is intentionally NOT overwritten from ruleBased — the AI
+      // enriches reasoning, it does not get to loosen a safety boundary.
+      chair_reasoning: `${ruleBased.chair_reasoning} | Chair (AI): ${aiText}`,
+      chair_reasoning_source: 'ai_model',
+    };
+  } catch (err) {
+    logger?.warn?.({ finding_id: finding.id, err: err.message }, '[CHAIR-AI] model call failed — falling back to rule-based reasoning');
+    return { ...ruleBased, chair_reasoning_source: 'rule_based_model_error' };
+  }
+}
+
+/**
+ * AI-enriched review of a findings list, same sort order as reviewFindings.
+ * Reviews sequentially (findings volume per audit cycle is small — a handful
+ * at most — so there's no real cost pressure to parallelize and risk burst
+ * rate-limits against the model provider).
+ */
+export async function reviewFindingsWithAI(findings, opts = {}) {
+  const list = Array.isArray(findings) ? findings : [];
+  const reviewed = [];
+  for (const finding of list) {
+    reviewed.push(await reviewFindingWithAI(finding, opts));
+  }
   const severityRank = { P0: 0, P1: 1, P2: 2 };
   const statusRank = { escalate_to_founder: 0, approved: 1, rejected: 2 };
   return reviewed.sort((a, b) => {
