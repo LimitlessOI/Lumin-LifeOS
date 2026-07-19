@@ -2,7 +2,7 @@
 
 ## 2026-07-19 — CI watchdog failed-delivery retry fix
 
-Critical sweep found the new main-CI watchdog wrote `smsAt`/`calledAt` before confirming the founder alert route succeeded. A transient Twilio/auth/network failure therefore suppressed future retries while logs/state implied delivery. Fixed state ordering so only confirmed alerts advance or clear state; added regressions for failed red-CI delivery retry and failed recovery-SMS retention. Next: focused/full gates, push, deploy, and tip verification.
+Critical sweep found the new main-CI watchdog wrote `smsAt`/`calledAt` before confirming the founder alert route succeeded. A transient Twilio/auth/network failure therefore suppressed future retries while logs/state implied delivery. Fixed state ordering so only confirmed alerts advance or clear state; regressions for failed red-CI delivery retry and failed recovery-SMS retention pass with route coverage (22/22), and full BuilderOS preflight passes. Next: deploy and tip verification.
 
 ## 2026-07-18 — Thread history: persist + don’t scrub real acts
 
