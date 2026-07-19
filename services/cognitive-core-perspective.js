@@ -14,6 +14,7 @@ import {
   suppressTextForCapsule,
 } from '../config/judgment-capsule-contracts.js';
 import { createCognitiveCoreJudgment } from './cognitive-core-judgment.js';
+import { createCognitiveCorePrograms } from './cognitive-core-programs.js';
 
 function coerceText(raw) {
   if (typeof raw === 'string') return raw;
@@ -164,7 +165,21 @@ export async function runCognitiveCoreJudgmentTurn(args = {}) {
     success_metric: c.success_metric,
     retrieval_bias: c.retrieval_bias,
     suppressed_fact_keys: c.deny_system_fact_keys,
+    simulation_note: c.simulation_note || undefined,
   }));
+
+  // Layer 2 (Era-2): inject active program hypotheses so the compiler reasons about the
+  // deep patterns that may drive Adam — and links predictions to concrete program ids.
+  let programBriefs = [];
+  let programsSvc = null;
+  if (args.pool && args.userId != null) {
+    try {
+      programsSvc = createCognitiveCorePrograms({ pool: args.pool, logger: args.logger });
+      programBriefs = await programsSvc.activeProgramBriefs(args.userId, domain, 6);
+    } catch (err) {
+      args.logger?.warn?.(`[cognitive-core] program load failed: ${err.message}`);
+    }
+  }
 
   const prompt = `You are the LifeOS Cognitive Core judgment compiler (Era-1).
 Laws: models are hypotheses; perspective precedes retrieval; CONFLICT before synthesis (never average); predict with calibrated confidence.
@@ -183,6 +198,9 @@ ${JSON.stringify(options)}
 
 Domain: ${domain}
 
+Known program hypotheses (deep patterns that may drive Adam — treat as hypotheses, cite by label if one activates):
+${JSON.stringify(programBriefs)}
+
 Return ONLY JSON:
 {
   "tension_ledger": [
@@ -192,7 +210,7 @@ Return ONLY JSON:
   "reply_to_adam": "human voice answer — value first, then at most one sharp question. No status theater. No mission queue dump unless a worn capsule is founder AND he asked ops.",
   "predicted_option": "which option you predict Adam will actually choose",
   "predicted_reasons": ["why you think he will choose that"],
-  "activated_programs": ["hypothesis ids or short labels of deep patterns that may drive him"],
+  "activated_programs": ["labels of the program hypotheses above that may be driving this — [] if none apply"],
   "confidence": 0.0,
   "situation": {"stakes":"medium","notes":"..."}
 }
@@ -258,6 +276,7 @@ confidence must be calibrated humility (not fake 0.99).`;
 
   let decisionRow = null;
   let predictionRow = null;
+  let activatedProgramBriefs = [];
   if (args.pool && args.userId != null) {
     try {
       const journal = createCognitiveCoreJudgment({ pool: args.pool, logger: args.logger });
@@ -282,6 +301,22 @@ confidence must be calibrated humility (not fake 0.99).`;
         synthesisSummary: String(parsed.synthesis || '').slice(0, 4000),
         compilerVersion: COMPILER_VERSION,
       });
+      // Link the prediction to the concrete program hypotheses the compiler activated.
+      if (programsSvc && programs.length) {
+        const matched = await programsSvc.matchProgramsByRefs(args.userId, programs).catch(() => []);
+        for (const p of matched) {
+          await programsSvc.recordActivation({
+            programId: p.program_id,
+            decisionId: decisionRow.decision_id,
+            userId: args.userId,
+            weight: 0.5,
+            source: 'prediction',
+          }).catch(() => null);
+        }
+        activatedProgramBriefs = matched.map((p) => ({
+          program_id: p.program_id, label: p.label, confidence: Number(p.confidence),
+        }));
+      }
     } catch (err) {
       args.logger?.warn?.(`[cognitive-core] journal write failed: ${err.message}`);
     }
@@ -293,6 +328,7 @@ confidence must be calibrated humility (not fake 0.99).`;
     tension_count: tension.length,
     predicted_option: predictedOption,
     confidence,
+    activated_programs: activatedProgramBriefs.map((p) => p.label),
     decision_id: decisionRow?.decision_id || null,
     prediction_id: predictionRow?.prediction_id || null,
     compiler_version: COMPILER_VERSION,
@@ -312,6 +348,7 @@ confidence must be calibrated humility (not fake 0.99).`;
       confidence,
       activated_programs: programs,
     },
+    activated_program_briefs: activatedProgramBriefs,
     working_memory: workingMemory,
     worn_capsule_ids: capsules.map((c) => c.id),
     domain,

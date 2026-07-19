@@ -88,6 +88,9 @@ import {
   detectJudgmentTurn,
   runCognitiveCoreJudgmentTurn,
 } from './cognitive-core-perspective.js';
+import { detectOutcomeTurn } from '../config/judgment-capsule-contracts.js';
+import { createCognitiveCoreJudgment } from './cognitive-core-judgment.js';
+import { createCognitiveCoreImprove } from './cognitive-core-improve.js';
 
 export {
   isBlueprintExecuteIntent,
@@ -426,10 +429,45 @@ function chairJudgmentResponse(ctx, judgment) {
       worn_capsules: judgment.worn_capsule_ids || [],
       tension_ledger: judgment.tension_ledger || [],
       prediction: judgment.prediction || null,
+      activated_programs: judgment.activated_program_briefs || [],
       decision_id: judgment.decision_id || null,
       prediction_id: judgment.prediction_id || null,
       stack_summary: judgment.stack_summary || null,
       domain: judgment.domain || null,
+      intake_normalized: ctx.intakeNormalized,
+      source_mode: ctx.sourceMode,
+      auth_mode: ctx.auth_mode,
+      user_role: ctx.user_role,
+      conversational_mode: ctx.conversationalMode,
+      direct_connection: true,
+    }),
+  };
+}
+
+function chairOutcomeResponse(ctx, capture) {
+  const reply = String(capture.reply || '').trim() || 'Logged your actual choice.';
+  const truth = finalizeTruth({
+    ok: true,
+    pass_fail: 'NO_COMMAND_RAN',
+    command_truth: 'NO_COMMAND_RAN',
+    action: 'outcome_capture',
+    human_summary_technical: reply,
+    conversational_mode: ctx.conversationalMode,
+  }, 'chair');
+  return {
+    statusCode: 200,
+    body: chairEnvelope('chair', {
+      ...truth,
+      chair_channel: 'cognitive_core',
+      cognitive_core: true,
+      judgment_compiler: true,
+      outcome_capture: true,
+      decision_id: capture.decision_id || null,
+      predicted_option: capture.predicted_option || null,
+      actual_option: capture.actual_option || null,
+      prediction_hit: capture.prediction_hit,
+      miss: capture.miss || null,
+      calibration: capture.calibration || null,
       intake_normalized: ctx.intakeNormalized,
       source_mode: ctx.sourceMode,
       auth_mode: ctx.auth_mode,
@@ -530,6 +568,81 @@ export async function runLuminChairTurn(ctx, deps) {
         { intakeNormalized, sourceMode, auth_mode, user_role },
         earlySystemAction,
       );
+    }
+  }
+
+  // ── COGNITIVE CORE OUTCOME CAPTURE (Law 5: every miss improves the engine) ──
+  // Adam reporting the choice he ACTUALLY made ("I went with X") closes the loop:
+  // record the real outcome against the most-recent open decision, then, on a miss,
+  // auto-classify it and move program confidence. Never infers — explicit self-report only.
+  if (
+    conversationalMode
+    && !shouldDisplayOnly
+    && !ctx.alphaProbe
+    && explicitAction !== 'display'
+    && deps.pool
+    && process.env.COGNITIVE_CORE_JUDGMENT !== '0'
+  ) {
+    try {
+      const outcomeDetect = detectOutcomeTurn(ctx.originalText || cleanedInput);
+      if (outcomeDetect.is_outcome_turn) {
+        const journal = createCognitiveCoreJudgment({ pool: deps.pool, logger: deps.logger || console });
+        const uidForOutcome = String(resolvedUserId || ctx.userId || ctx.userHandle || '1');
+        const openDecisions = await journal.listOpenDecisions(uidForOutcome, 5);
+        if (openDecisions.length) {
+          const target = openDecisions[0];
+          const actual = outcomeDetect.chosen_option || (ctx.originalText || cleanedInput).slice(0, 200);
+          await journal.recordOutcome({
+            decisionId: target.decision_id,
+            actualOption: actual,
+            statedReasons: [String(ctx.originalText || cleanedInput).slice(0, 500)],
+            capturedHow: 'chair_confirm',
+          });
+          const predicted = target.predicted_option || null;
+          const hit = predicted
+            && String(predicted).trim().toLowerCase() === String(actual).trim().toLowerCase();
+          let missSummary = null;
+          if (!hit) {
+            const improve = createCognitiveCoreImprove({
+              pool: deps.pool,
+              logger: deps.logger || console,
+              callAI: deps.callCouncilMember,
+            });
+            missSummary = await improve.classifyMissAndCorrect({ decisionId: target.decision_id })
+              .catch((e) => ({ ok: false, reason: e.message }));
+          }
+          const board = await journal.getScoreboard(uidForOutcome).catch(() => null);
+          const domainRow = board?.by_domain?.find((d) => d.domain === target.domain) || null;
+          const reply = hit
+            ? `Logged — I predicted "${predicted}" and that's what you chose. Calibration updated for ${target.domain}.`
+            : `Logged your actual choice: "${actual}"${predicted ? ` (I had predicted "${predicted}")` : ''}. ${missSummary?.miss && missSummary?.failure_class ? `Miss classified as ${missSummary.failure_class} — I updated the model, not just the note.` : 'I recorded the miss to improve the model.'}`;
+          _clog(`cognitive_core_outcome_capture decision=${target.decision_id} hit=${hit}`);
+          return chairOutcomeResponse(
+            { intakeNormalized, sourceMode, auth_mode, user_role, conversationalMode },
+            {
+              reply,
+              decision_id: target.decision_id,
+              predicted_option: predicted,
+              actual_option: actual,
+              prediction_hit: Boolean(hit),
+              miss: missSummary && missSummary.miss ? {
+                failure_class: missSummary.failure_class,
+                correction_hypothesis: missSummary.correction_hypothesis,
+                miss_id: missSummary.miss_id,
+              } : null,
+              calibration: domainRow ? {
+                domain: target.domain,
+                accuracy: domainRow.accuracy,
+                brier_score: domainRow.brier_score,
+                delegation_tier: domainRow.delegation_tier,
+                n: domainRow.n,
+              } : null,
+            },
+          );
+        }
+      }
+    } catch (outcomeErr) {
+      _clog(`cognitive_core_outcome_capture_error: ${outcomeErr.message}`);
     }
   }
 

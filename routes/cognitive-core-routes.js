@@ -5,11 +5,14 @@
 
 import { Router } from 'express';
 import { createCognitiveCoreJudgment } from '../services/cognitive-core-judgment.js';
+import { createCognitiveCorePrograms } from '../services/cognitive-core-programs.js';
+import { createCognitiveCoreImprove } from '../services/cognitive-core-improve.js';
 import {
   listWearableCapsules,
   detectJudgmentTurn,
   COMPILER_VERSION,
 } from '../services/cognitive-core-perspective.js';
+import { listAdvisors } from '../config/cognitive-core-advisors.js';
 
 /**
  * @param {{ pool: import('pg').Pool, logger?: Console, requireKey?: Function }} deps
@@ -36,6 +39,8 @@ export function createCognitiveCoreRoutes(deps = {}) {
   const logger = deps.logger || console;
   const requireKey = deps.requireKey;
   const core = createCognitiveCoreJudgment({ pool, logger });
+  const programs = createCognitiveCorePrograms({ pool, logger });
+  const improve = createCognitiveCoreImprove({ pool, logger });
 
   if (typeof requireKey === 'function') {
     router.use(requireKey);
@@ -45,14 +50,23 @@ export function createCognitiveCoreRoutes(deps = {}) {
     res.json({
       ok: true,
       product: 'cognitive-core',
-      era: 1,
+      era: 2,
       compiler_version: COMPILER_VERSION,
+      era2: [
+        'programs', 'program_activations', 'miss_loop', 'decision_replay',
+        'counterfactual', 'relationship_twins', 'learning_style',
+        'external_mind_advisors', 'future_self',
+      ],
       laws: 'docs/constitution/COGNITIVE_CORE_LAWS.md',
     });
   });
 
   router.get('/capsules', (_req, res) => {
     res.json({ ok: true, capsules: listWearableCapsules() });
+  });
+
+  router.get('/advisors', (_req, res) => {
+    res.json({ ok: true, advisors: listAdvisors() });
   });
 
   router.post('/detect', (req, res) => {
@@ -140,7 +154,153 @@ export function createCognitiveCoreRoutes(deps = {}) {
         statedReasons: b.stated_reasons,
         capturedHow: b.captured_how || 'explicit',
       });
-      res.status(201).json({ ok: true, outcome });
+      // Law 5: on a miss, classify + correct the compiler unless the caller opts out.
+      let miss = null;
+      if (b.auto_miss !== false) {
+        miss = await improve.classifyMissAndCorrect({ decisionId: req.params.id })
+          .catch((e) => ({ ok: false, reason: e.message }));
+      }
+      res.status(201).json({ ok: true, outcome, miss });
+    } catch (err) {
+      res.status(400).json({ ok: false, error: err.message });
+    }
+  });
+
+  // ── Era-2: Programs layer ──
+  router.get('/programs', async (req, res) => {
+    try {
+      const userId = String(req.query.user_id || req.user?.id || '1');
+      const rows = await programs.listPrograms(userId, {
+        status: req.query.status || 'active',
+        domain: req.query.domain || null,
+        limit: Number(req.query.limit) || 100,
+      });
+      res.json({ ok: true, programs: rows });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/programs', async (req, res) => {
+    try {
+      const b = req.body || {};
+      const row = await programs.createProgram({
+        userId: b.user_id || req.user?.id || '1',
+        label: b.label,
+        hypothesis: b.hypothesis,
+        origin: b.origin,
+        triggers: b.triggers,
+        typicalBehavior: b.typical_behavior,
+        protectivePurpose: b.protective_purpose,
+        currentCost: b.current_cost,
+        confidence: b.confidence,
+        evidenceFor: b.evidence_for,
+        evidenceAgainst: b.evidence_against,
+        changeTrajectory: b.change_trajectory,
+        domain: b.domain,
+      });
+      res.status(201).json({ ok: true, program: row });
+    } catch (err) {
+      res.status(400).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.patch('/programs/:id', async (req, res) => {
+    try {
+      const b = req.body || {};
+      const row = await programs.adjustConfidence({
+        programId: req.params.id,
+        delta: b.delta,
+        evidenceNote: b.evidence_note,
+        supports: b.supports !== false,
+        retire: b.retire === true,
+      });
+      res.json({ ok: true, program: row });
+    } catch (err) {
+      res.status(400).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/programs/induce', async (req, res) => {
+    try {
+      const b = req.body || {};
+      const out = await improve.induceProgramsFromHistory({
+        userId: b.user_id || req.user?.id || '1',
+        lookback: b.lookback,
+      });
+      res.json(out);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // ── Era-2: Replay + Counterfactual ──
+  router.post('/decisions/:id/replay', async (req, res) => {
+    try {
+      const out = await improve.replayDecision({ decisionId: req.params.id });
+      res.status(out.ok ? 200 : 422).json(out);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/decisions/:id/counterfactual', async (req, res) => {
+    try {
+      const out = await improve.counterfactual({
+        decisionId: req.params.id,
+        alternativeOption: (req.body || {}).alternative_option,
+      });
+      res.status(out.ok ? 200 : 422).json(out);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // ── Era-2: Relationship twins ──
+  router.get('/relationships', async (req, res) => {
+    try {
+      const userId = String(req.query.user_id || req.user?.id || '1');
+      const rows = await improve.getRelationshipTwins(userId);
+      res.json({ ok: true, relationships: rows });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/relationships', async (req, res) => {
+    try {
+      const b = req.body || {};
+      const out = await improve.inferRelationshipTwin({
+        userId: b.user_id || req.user?.id || '1',
+        personLabel: b.person_label,
+        relationship: b.relationship,
+        observations: b.observations,
+      });
+      res.status(out.ok ? 201 : 422).json(out);
+    } catch (err) {
+      res.status(400).json({ ok: false, error: err.message });
+    }
+  });
+
+  // ── Era-2: Learning-style model ──
+  router.get('/learning-style', async (req, res) => {
+    try {
+      const userId = String(req.query.user_id || req.user?.id || '1');
+      const row = await improve.getLearningStyle(userId);
+      res.json({ ok: true, learning_style: row });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.put('/learning-style', async (req, res) => {
+    try {
+      const b = req.body || {};
+      const out = await improve.inferLearningStyle({
+        userId: b.user_id || req.user?.id || '1',
+        signals: b.signals,
+      });
+      res.status(out.ok ? 200 : 422).json(out);
     } catch (err) {
       res.status(400).json({ ok: false, error: err.message });
     }

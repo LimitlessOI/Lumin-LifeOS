@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/memory-intelligence/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-19 — Cognitive Core Era-1 (judgment compiler + capsule wear + scoreboard) |
+| **Last Updated** | 2026-07-19 — Cognitive Core Era-2 (Improve Me: programs, miss loop, replay, counterfactual, external minds, relationship/learning) |
 
 ---
 **Status:** Active — Phase 1 Complete + Governance Hardening + Builder Integration  
@@ -110,6 +110,23 @@ Important facts carry a `disproof_recipe` — the fastest known way to try to br
 
 Am 39 `agent_performance` is fed on outcome scoring (`cognitive_core_compiler`). Domain trust tiers: refuse / ask / suggest / allow.
 
+## Cognitive Core Era-2 (Improve Me)
+
+**Thesis:** the system stops merely recording and starts improving Adam's thinking. Every miss now updates the *compiler* (Law 5), not just a note. Layer 2 (Programs) is live: deep recurring patterns modeled as **evolving hypotheses** (confidence + evidence + change trajectory — never truth, Law 1).
+
+| Capability (idea #) | Surface | Behaviour |
+|---|---|---|
+| Programs layer (#3 as hypotheses) | `services/cognitive-core-programs.js`, `GET/POST /programs`, `PATCH /programs/:id` | Deep patterns w/ triggers, protective purpose, cost, confidence, evidence for/against, trajectory. Injected into every judgment prompt; predictions link to concrete program ids via activations. |
+| Causal miss loop (Law 5) | `services/cognitive-core-improve.js` → `classifyMissAndCorrect`; auto-runs on outcome | On a miss: classify across the 5 failure classes, propose correction, **move program confidence on that evidence**, induce a new program hypothesis when `missing_program`. |
+| Outcome capture | orchestrator `detectOutcomeTurn` → record outcome (`chair_confirm`) → miss loop → calibration reply | "I went with X" closes the loop from chat — explicit self-report only, never inferred. |
+| Decision replay (#4) | `POST /decisions/:id/replay` | Re-run a past decision with today's programs; would_change + what_changed. |
+| Counterfactual engine (#7) | `POST /decisions/:id/counterfactual` | 2nd/3rd-order effects of the road not taken (hedged hypotheses). |
+| External minds + Future Self (#8, #10) | `config/cognitive-core-advisors.js`, `GET /advisors`, wear chips | Munger/Bezos/Jobs/Buffett/Feynman/Therapist/Operator/Future-You reasoning-style lenses. Each carries an explicit `simulation_note` — NOT the real person. |
+| Relationship twins (#11) | `services/cognitive-core-improve.js`, `GET/POST /relationships` | Hypotheses about people Adam works with (comms style, values, triggers, what works). |
+| Learning-style model (#12) | `GET/PUT /learning-style` | Modality hypotheses (visual/narrative/examples/debate…) with modest confidence. |
+
+Model calls use the strong-model failover chain (`defaultPlannerCallModel`, SO-003 — never idle). All AI output is hypothesis; confidence is clamped and never fabricated.
+
 ## Owned Files
 
 | File | Purpose |
@@ -118,12 +135,18 @@ Am 39 `agent_performance` is fed on outcome scoring (`cognitive_core_compiler`).
 | `db/migrations/20260426_memory_intelligence_hardening.sql` | Source-count + future-lookback hardening |
 | `db/migrations/20260426_memory_protocol_enforcement.sql` | Protocol violations + task authority |
 | `db/migrations/20260719_cognitive_core_judgment.sql` | Judgment journal, predictions, outcomes, miss reports, domain trust |
+| `db/migrations/20260719_cognitive_core_era2.sql` | Era-2: programs, program_activations, replays, counterfactuals, relationship_twins, learning_style |
 | `services/memory-intelligence-service.js` | Core evidence engine logic |
 | `services/cognitive-core-judgment.js` | Decision journal + scoreboard |
-| `services/cognitive-core-perspective.js` | Multi-wear tension + judgment turn |
-| `config/judgment-capsule-contracts.js` | Perspective lens contracts (allow/deny) |
+| `services/cognitive-core-perspective.js` | Multi-wear tension + judgment turn (+ Era-2 program injection) |
+| `services/cognitive-core-programs.js` | Era-2 Programs layer (hypotheses, confidence/evidence, activations) |
+| `services/cognitive-core-improve.js` | Era-2 Improve engine: miss loop, induction, replay, counterfactual, relationship/learning |
+| `config/judgment-capsule-contracts.js` | Perspective lens contracts (allow/deny) + outcome-turn detection |
+| `config/cognitive-core-advisors.js` | Era-2 external-mind + future-self wearable lenses |
 | `routes/memory-intelligence-routes.js` | API surface |
-| `routes/cognitive-core-routes.js` | Cognitive Core API |
+| `routes/cognitive-core-routes.js` | Cognitive Core API (Era-1 + Era-2) |
+| `tests/cognitive-core-judgment.test.js` | Era-1 unit tests |
+| `tests/cognitive-core-era2.test.js` | Era-2 unit tests (outcome detect, advisors, program invariants) |
 | `docs/MEMORY_FRAMEWORK_DESIGN_BRIEF.md` | Full design brief (cross-model reviewed) |
 | `docs/constitution/COGNITIVE_CORE_LAWS.md` | Five laws + meta-learning constitution |
 
@@ -341,6 +364,7 @@ Phase 1 fully built + extended. Phase 2 adoption (S2) now seeded:
 
 | Date | File | What | Why |
 |---|---|---|---|
+| 2026-07-19 | Cognitive Core Era-2 | Programs layer (hypotheses) + `program_activations`; causal miss loop auto-runs on outcome (classify→correct→move program confidence→induce); outcome capture from chat (`detectOutcomeTurn`); decision replay + counterfactual engine; external-mind + future-self advisor lenses; relationship twins; learning-style model. Migration `20260719_cognitive_core_era2.sql`; services `cognitive-core-programs.js` + `cognitive-core-improve.js`; routes extended; `cognitive-core-era2.test.js` wired to CI. | Adam: "finish all of Era 2 before we audit it with CC" — Improve Me era: system improves the compiler on every miss, wears external minds, models people + learning style. Direct-author + independent-audit path (Adam-ratified for this thread). |
 | 2026-07-19 | Cognitive Core Era-1 | Laws doc + judgment schema/services/routes; Chair perspective→conflict→predict→journal; lifeos-app wear chips; decision turns no longer misroute to build via `should I … or …` | Adam: judgment compiler moat — Decision Journal engine + Capsule UI; meta-learning over twin cosplay |
 | 2026-06-28 | `services/self-repair-memory.js` + `services/reality-ledger.js` | Repair memory append path now mirrors each event into the append-only Reality Ledger (owner + expected/actual outcomes). | V1-00 Five Recorders: unrecoverable history must start before the loop is fully closed. |
 | 2026-06-28 | `services/self-repair-memory.js` | Self-repair memory events now persist `attempt_stages[]` and `context_requirements_seen[]` derived from executed repair steps, so memory records whether lessons/research/consensus were actually required in the run that produced the lesson. | BuilderOS closure work needed memory to track not just that a repair happened, but what escalation/carry-forward context shaped that lesson. |

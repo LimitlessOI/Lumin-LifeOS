@@ -616,7 +616,7 @@
       "register": "registerCognitiveCoreRoutes",
       "mount_path": "/api/v1/cognitive-core",
       "enabled": true,
-      "note": "Cognitive Core Era-1 \u2014 judgment journal, scoreboard, capsule wear API (auto-register; startup/ protected)."
+      "note": "Cognitive Core Era-1+Era-2 \u2014 judgment journal, scoreboard, capsule wear, programs (hypotheses), miss loop, decision replay, counterfactual, external-mind/future-self advisors, relationship twins, learning-style (auto-register; startup/ protected)."
     }
   ]
 }

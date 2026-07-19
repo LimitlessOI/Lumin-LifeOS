@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-19T22:11:27.481Z",
+  "generated_at": "2026-07-19T23:31:20.836Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12010,
+  "file_count": 12015,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -30409,9 +30409,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 28602,
-      "mtime": "2026-07-19T21:32:24.093Z",
-      "indexed_at": "2026-07-19T21:32:24.093Z",
+      "bytes": 28743,
+      "mtime": "2026-07-19T23:31:20.836Z",
+      "indexed_at": "2026-07-19T23:31:20.836Z",
       "synopsis_index_only": true
     },
     {
@@ -30515,6 +30515,16 @@
       "indexed_at": "2026-07-19T21:04:54.410Z",
       "ssot": [
         "docs/products/ai-council/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "config/cognitive-core-advisors.js",
+      "synopsis": "Cognitive Core Era-2 — External Minds + Future Self wearable lenses (idea #8, #10).",
+      "bytes": 5389,
+      "mtime": "2026-07-19T23:31:20.836Z",
+      "indexed_at": "2026-07-19T23:31:20.836Z",
+      "ssot": [
+        "docs/products/memory-intelligence/PRODUCT_HOME.md"
       ]
     },
     {
@@ -30695,9 +30705,9 @@
     {
       "path": "config/judgment-capsule-contracts.js",
       "synopsis": "Era-1 perspective capsule contracts — attention lenses with allow/deny.",
-      "bytes": 4403,
-      "mtime": "2026-07-19T21:32:24.093Z",
-      "indexed_at": "2026-07-19T21:32:24.093Z",
+      "bytes": 6011,
+      "mtime": "2026-07-19T23:31:20.836Z",
+      "indexed_at": "2026-07-19T23:31:20.836Z",
       "ssot": [
         "docs/products/memory-intelligence/PRODUCT_HOME.md"
       ]
@@ -36076,6 +36086,13 @@
       "indexed_at": "2026-07-19T21:04:54.410Z"
     },
     {
+      "path": "db/migrations/20260719_cognitive_core_era2.sql",
+      "synopsis": "Cognitive Core Era-2 (\"Improve Me\") — programs (deep patterns as hypotheses),",
+      "bytes": 5006,
+      "mtime": "2026-07-19T23:31:20.836Z",
+      "indexed_at": "2026-07-19T23:31:20.836Z"
+    },
+    {
       "path": "db/migrations/20260719_cognitive_core_judgment.sql",
       "synopsis": "Cognitive Core Era-1 — decision journal, predictions, outcomes, miss reports, domain trust.",
       "bytes": 3358,
@@ -37463,9 +37480,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 62965,
-      "mtime": "2026-07-19T22:11:10.699Z",
-      "indexed_at": "2026-07-19T22:11:27.481Z"
+      "bytes": 63316,
+      "mtime": "2026-07-19T23:31:20.836Z",
+      "indexed_at": "2026-07-19T23:31:20.836Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40397,17 +40414,17 @@
     {
       "path": "docs/products/memory-intelligence/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
-      "bytes": 1677,
-      "mtime": "2026-07-19T21:32:24.093Z",
-      "indexed_at": "2026-07-19T21:32:24.093Z",
+      "bytes": 1898,
+      "mtime": "2026-07-19T23:31:20.836Z",
+      "indexed_at": "2026-07-19T23:31:20.836Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/products/memory-intelligence/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Memory Intelligence",
-      "bytes": 24785,
-      "mtime": "2026-07-19T21:32:24.093Z",
-      "indexed_at": "2026-07-19T21:32:24.093Z"
+      "bytes": 28620,
+      "mtime": "2026-07-19T23:31:20.836Z",
+      "indexed_at": "2026-07-19T23:31:20.836Z"
     },
     {
       "path": "docs/products/memory-system/FILE_MANIFEST.json",
@@ -63120,9 +63137,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 32453,
-      "mtime": "2026-07-19T22:06:27.660Z",
-      "indexed_at": "2026-07-19T22:06:45.717Z",
+      "bytes": 32487,
+      "mtime": "2026-07-19T23:31:20.836Z",
+      "indexed_at": "2026-07-19T23:31:20.836Z",
       "synopsis_index_only": true
     },
     {
@@ -65116,9 +65133,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 195856,
-      "mtime": "2026-07-19T21:32:24.093Z",
-      "indexed_at": "2026-07-19T21:32:24.093Z"
+      "bytes": 198048,
+      "mtime": "2026-07-19T23:31:20.836Z",
+      "indexed_at": "2026-07-19T23:31:20.836Z"
     },
     {
       "path": "public/overlay/lifeos-ask-your-life.html",
@@ -66738,9 +66755,9 @@
     {
       "path": "routes/cognitive-core-routes.js",
       "synopsis": "Cognitive Core Era-1 API — journal, outcomes, miss reports, scoreboard, capsules.",
-      "bytes": 6524,
-      "mtime": "2026-07-19T21:32:24.093Z",
-      "indexed_at": "2026-07-19T21:32:24.093Z",
+      "bytes": 11999,
+      "mtime": "2026-07-19T23:31:20.836Z",
+      "indexed_at": "2026-07-19T23:31:20.836Z",
       "ssot": [
         "docs/products/memory-intelligence/PRODUCT_HOME.md"
       ]
@@ -84801,6 +84818,16 @@
       "indexed_at": "2026-07-19T21:04:54.410Z"
     },
     {
+      "path": "services/cognitive-core-improve.js",
+      "synopsis": "Cognitive Core Era-2 \"Improve Me\" engine — the meta-learning loop made real.",
+      "bytes": 19655,
+      "mtime": "2026-07-19T23:31:20.836Z",
+      "indexed_at": "2026-07-19T23:31:20.836Z",
+      "ssot": [
+        "docs/products/memory-intelligence/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/cognitive-core-judgment.js",
       "synopsis": "Cognitive Core Era-1 — decision journal, predictions, outcomes, miss reports, scoreboard.",
       "bytes": 12071,
@@ -84813,9 +84840,19 @@
     {
       "path": "services/cognitive-core-perspective.js",
       "synopsis": "Cognitive Core Era-1 — perspective-before-retrieval, multi-wear tension, scarce WM.",
-      "bytes": 11475,
-      "mtime": "2026-07-19T21:40:59.428Z",
-      "indexed_at": "2026-07-19T21:40:59.428Z",
+      "bytes": 13202,
+      "mtime": "2026-07-19T23:31:20.836Z",
+      "indexed_at": "2026-07-19T23:31:20.836Z",
+      "ssot": [
+        "docs/products/memory-intelligence/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/cognitive-core-programs.js",
+      "synopsis": "Cognitive Core Era-2 Layer 2 — Programs (deep recurring mechanisms as hypotheses).",
+      "bytes": 7315,
+      "mtime": "2026-07-19T23:31:20.836Z",
+      "indexed_at": "2026-07-19T23:31:20.836Z",
       "ssot": [
         "docs/products/memory-intelligence/PRODUCT_HOME.md"
       ]
@@ -88224,9 +88261,9 @@
     {
       "path": "services/lumin-chair-orchestrator.js",
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
-      "bytes": 69526,
-      "mtime": "2026-07-19T21:40:59.428Z",
-      "indexed_at": "2026-07-19T21:40:59.428Z",
+      "bytes": 74728,
+      "mtime": "2026-07-19T23:31:20.836Z",
+      "indexed_at": "2026-07-19T23:31:20.836Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -92738,6 +92775,13 @@
       "ssot": [
         "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "tests/cognitive-core-era2.test.js",
+      "synopsis": "Cognitive Core Era-2 unit tests — outcome detection, advisor lenses,",
+      "bytes": 4740,
+      "mtime": "2026-07-19T23:31:20.836Z",
+      "indexed_at": "2026-07-19T23:31:20.836Z"
     },
     {
       "path": "tests/cognitive-core-judgment.test.js",

@@ -3491,6 +3491,14 @@ const LUMIN_WEARABLE = [
   { id: 'engineer', label: 'Engineer' },
   { id: 'competitor', label: 'Competitor' },
   { id: 'anti_you', label: 'Anti-you' },
+  { id: 'munger', label: 'Munger', group: 'minds' },
+  { id: 'bezos', label: 'Bezos', group: 'minds' },
+  { id: 'jobs', label: 'Jobs', group: 'minds' },
+  { id: 'buffett', label: 'Buffett', group: 'minds' },
+  { id: 'feynman', label: 'Feynman', group: 'minds' },
+  { id: 'therapist', label: 'Therapist', group: 'minds' },
+  { id: 'operator', label: 'Operator', group: 'minds' },
+  { id: 'future_self', label: 'Future You', group: 'minds' },
 ];
 const luminState = {
   open: false,
@@ -3539,17 +3547,44 @@ function initLuminWearChips() {
 initLuminWearChips();
 
 function appendLuminJudgmentMeta(data) {
-  if (!data?.cognitive_core && !data?.judgment_compiler && !data?.tension_ledger) return;
+  if (!data?.cognitive_core && !data?.judgment_compiler && !data?.tension_ledger && !data?.outcome_capture) return;
   const container = document.getElementById('lumin-messages');
   if (!container) return;
+  const lines = [];
+
+  // Era-2 outcome capture: prediction vs reality + calibration movement.
+  if (data.outcome_capture) {
+    if (data.actual_option) {
+      lines.push(`<div><strong>You chose</strong> ${ _escHtml(String(data.actual_option)) }${data.prediction_hit ? ' ✓ predicted' : (data.predicted_option ? ` (predicted ${ _escHtml(String(data.predicted_option)) })` : '')}</div>`);
+    }
+    if (data.miss && data.miss.failure_class) {
+      lines.push(`<div><strong>Miss</strong> ${ _escHtml(String(data.miss.failure_class)) } — model updated, not just noted</div>`);
+    }
+    if (data.calibration) {
+      const acc = data.calibration.accuracy != null ? Math.round(Number(data.calibration.accuracy) * 100) : null;
+      lines.push(`<div><strong>Calibration</strong> ${ _escHtml(String(data.calibration.domain)) }: ${acc != null ? acc + '% acc' : '—'} · tier ${ _escHtml(String(data.calibration.delegation_tier || 'refuse')) } (n=${data.calibration.n || 0})</div>`);
+    }
+    if (data.decision_id) lines.push(`<div><strong>Journal</strong> ${ _escHtml(String(data.decision_id).slice(0, 8)) }…</div>`);
+    if (lines.length) _renderJudgmentMeta(container, lines);
+    return;
+  }
+
   const worn = Array.isArray(data.worn_capsules) ? data.worn_capsules.join(' + ') : '';
   const pred = data.prediction || {};
   const conf = pred.confidence != null ? Math.round(Number(pred.confidence) * 100) : null;
   const tension = Array.isArray(data.tension_ledger) ? data.tension_ledger : [];
-  const lines = [];
+  const programs = Array.isArray(data.activated_programs) ? data.activated_programs : [];
   if (worn) lines.push(`<div><strong>Worn</strong> ${ _escHtml(worn) }</div>`);
   if (pred.option) {
     lines.push(`<div><strong>Prediction</strong> ${ _escHtml(String(pred.option)) }${conf != null ? ` (${conf}%)` : ''} — hypothesis, not identity</div>`);
+  }
+  if (programs.length) {
+    const bits = programs.slice(0, 4).map((p) => {
+      const label = p.label || p;
+      const pc = p.confidence != null ? ` ${Math.round(Number(p.confidence) * 100)}%` : '';
+      return `${label}${pc}`;
+    }).join(' · ');
+    lines.push(`<div><strong>Programs</strong> ${ _escHtml(bits) } — deep patterns (hypotheses)</div>`);
   }
   if (tension.length) {
     const bits = tension.slice(0, 5).map((t) => {
@@ -3563,6 +3598,10 @@ function appendLuminJudgmentMeta(data) {
     lines.push(`<div><strong>Journal</strong> ${ _escHtml(String(data.decision_id).slice(0, 8)) }…</div>`);
   }
   if (!lines.length) return;
+  _renderJudgmentMeta(container, lines);
+}
+
+function _renderJudgmentMeta(container, lines) {
   const div = document.createElement('div');
   div.className = 'lumin-msg assistant';
   div.innerHTML = `<div class="lumin-judgment-meta">${lines.join('')}</div>`;
