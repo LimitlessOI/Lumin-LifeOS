@@ -603,10 +603,11 @@ export async function runLuminChairTurn(ctx, deps) {
             && String(predicted).trim().toLowerCase() === String(actual).trim().toLowerCase();
           let missSummary = null;
           if (!hit) {
+            // Use the improve engine's own strong-model failover chain (defaultPlannerCallModel,
+            // SO-003) — the council 'planner' member name is not a valid council route.
             const improve = createCognitiveCoreImprove({
               pool: deps.pool,
               logger: deps.logger || console,
-              callAI: deps.callCouncilMember,
             });
             missSummary = await improve.classifyMissAndCorrect({ decisionId: target.decision_id })
               .catch((e) => ({ ok: false, reason: e.message }));
