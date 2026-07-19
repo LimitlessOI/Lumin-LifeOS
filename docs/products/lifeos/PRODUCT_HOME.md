@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-18 — Persist COMMAND_RAN turns without theater scrub (`fi-route-marker-v5`). |
+| **Last Updated** | 2026-07-19 — Cognitive Core Era-1: Chair judgment path + wear chips in lifeos-app. |
 ---
 
 ## Founder conversations (2026-06-29)
@@ -1730,6 +1730,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
+| 2026-07-19 | **Cognitive Core Era-1 in Chair UI.** `lifeos-app` wear chips → `ui_context.worn_capsules`; orchestrator runs judgment compiler (tension + prediction + journal) before build/counsel; `should I … or …` no longer routes to build. | Adam: judgment compiler — perspective AI + evolutionary calibration. | tip prove decision turn + scoreboard | outcomes + miss reports in UI |
 | 2026-07-18 | **Persist COMMAND_RAN without scrubbing.** `recordExchange` accepts `command_truth`; nav/act persist with `COMMAND_RAN` so "Opening …" is not wiped as theater. Marker `fi-route-marker-v5`. | Adam: UI tests must appear in thread history after reload. | tip prove open food persist null warning + history row | calendar acts |
 | 2026-07-18 | **Act/nav fastpath persists history.** `persistFounderTurn` before `route_nav_fastpath` / `route_act_fastpath` returns so UI battery turns land in `lumin_messages` (drawer reload / thread history). Marker `fi-route-marker-v4`. | Adam: see every UI communication test in thread history. | tip prove open food + log food without persist_warning | calendar acts |
 | 2026-07-18 | **Chair LifeOS writes + act HTTP fastpath.** `lifeos-direct-action` executes food/sleep/commitment/victory/habit with DB receipts; founder-interface calls `tryLuminChairSystemAction` for non-nav acts before counsel (`route_act_fastpath`, marker v3). | Adam: keep building real, not theater. | tip prove log food / commit / redeploy | calendar + habit name list UX |

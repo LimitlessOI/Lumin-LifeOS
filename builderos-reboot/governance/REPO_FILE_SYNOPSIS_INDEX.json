@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-19T21:05:12.077Z",
+  "generated_at": "2026-07-19T21:32:24.093Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12001,
+  "file_count": 12008,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -30409,9 +30409,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 28482,
-      "mtime": "2026-07-19T21:03:55.491Z",
-      "indexed_at": "2026-07-19T21:04:54.410Z",
+      "bytes": 28602,
+      "mtime": "2026-07-19T21:32:24.093Z",
+      "indexed_at": "2026-07-19T21:32:24.093Z",
       "synopsis_index_only": true
     },
     {
@@ -30691,6 +30691,16 @@
       "mtime": "2026-07-19T21:03:55.495Z",
       "indexed_at": "2026-07-19T21:04:54.410Z",
       "synopsis_index_only": true
+    },
+    {
+      "path": "config/judgment-capsule-contracts.js",
+      "synopsis": "Era-1 perspective capsule contracts — attention lenses with allow/deny.",
+      "bytes": 4403,
+      "mtime": "2026-07-19T21:32:24.093Z",
+      "indexed_at": "2026-07-19T21:32:24.093Z",
+      "ssot": [
+        "docs/products/memory-intelligence/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "config/lifeos-personal-twin-schema.json",
@@ -36066,6 +36076,13 @@
       "indexed_at": "2026-07-19T21:04:54.410Z"
     },
     {
+      "path": "db/migrations/20260719_cognitive_core_judgment.sql",
+      "synopsis": "Cognitive Core Era-1 — decision journal, predictions, outcomes, miss reports, domain trust.",
+      "bytes": 3358,
+      "mtime": "2026-07-19T21:32:24.093Z",
+      "indexed_at": "2026-07-19T21:32:24.093Z"
+    },
+    {
       "path": "db/migrations/20260724_lifeos_core_stable.sql",
       "synopsis": "Database migration — 20260724_lifeos_core_stable.sql.",
       "bytes": 1617,
@@ -37283,6 +37300,13 @@
       "indexed_at": "2026-07-19T21:04:54.410Z"
     },
     {
+      "path": "docs/constitution/COGNITIVE_CORE_LAWS.md",
+      "synopsis": "Cognitive Core laws — judgment compiler constitution (subordinate to North Star SSOT)",
+      "bytes": 2798,
+      "mtime": "2026-07-19T21:32:24.093Z",
+      "indexed_at": "2026-07-19T21:32:24.093Z"
+    },
+    {
       "path": "docs/constitution/CONSTITUTION_CONFLICTS.md",
       "synopsis": "Redirect — conflicts log archived",
       "bytes": 409,
@@ -37439,9 +37463,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 59614,
-      "mtime": "2026-07-19T21:03:55.609Z",
-      "indexed_at": "2026-07-19T21:04:54.410Z"
+      "bytes": 60095,
+      "mtime": "2026-07-19T21:32:24.093Z",
+      "indexed_at": "2026-07-19T21:32:24.093Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40221,9 +40245,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 640390,
-      "mtime": "2026-07-19T21:03:55.959Z",
-      "indexed_at": "2026-07-19T21:04:54.410Z"
+      "bytes": 640783,
+      "mtime": "2026-07-19T21:32:24.093Z",
+      "indexed_at": "2026-07-19T21:32:24.093Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -40359,17 +40383,17 @@
     {
       "path": "docs/products/memory-intelligence/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
-      "bytes": 1354,
-      "mtime": "2026-07-19T21:03:55.970Z",
-      "indexed_at": "2026-07-19T21:04:54.410Z",
+      "bytes": 1677,
+      "mtime": "2026-07-19T21:32:24.093Z",
+      "indexed_at": "2026-07-19T21:32:24.093Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/products/memory-intelligence/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Memory Intelligence",
-      "bytes": 23042,
-      "mtime": "2026-07-19T21:03:55.970Z",
-      "indexed_at": "2026-07-19T21:04:54.410Z"
+      "bytes": 24785,
+      "mtime": "2026-07-19T21:32:24.093Z",
+      "indexed_at": "2026-07-19T21:32:24.093Z"
     },
     {
       "path": "docs/products/memory-system/FILE_MANIFEST.json",
@@ -65078,9 +65102,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 191554,
-      "mtime": "2026-07-19T21:03:56.437Z",
-      "indexed_at": "2026-07-19T21:04:54.410Z"
+      "bytes": 195856,
+      "mtime": "2026-07-19T21:32:24.093Z",
+      "indexed_at": "2026-07-19T21:32:24.093Z"
     },
     {
       "path": "public/overlay/lifeos-ask-your-life.html",
@@ -66696,6 +66720,16 @@
       "bytes": 3223,
       "mtime": "2026-07-19T21:03:56.491Z",
       "indexed_at": "2026-07-19T21:04:54.410Z"
+    },
+    {
+      "path": "routes/cognitive-core-routes.js",
+      "synopsis": "Cognitive Core Era-1 API — journal, outcomes, miss reports, scoreboard, capsules.",
+      "bytes": 6524,
+      "mtime": "2026-07-19T21:32:24.093Z",
+      "indexed_at": "2026-07-19T21:32:24.093Z",
+      "ssot": [
+        "docs/products/memory-intelligence/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/command-center-mode-routes.js",
@@ -84395,9 +84429,9 @@
     {
       "path": "services/chair-direct-agent.js",
       "synopsis": "Direct Chair agent — talks + acts; human prose obeys Lumin Communication DNA (not theater).",
-      "bytes": 22603,
-      "mtime": "2026-07-19T21:03:56.662Z",
-      "indexed_at": "2026-07-19T21:04:54.410Z",
+      "bytes": 22622,
+      "mtime": "2026-07-19T21:32:24.093Z",
+      "indexed_at": "2026-07-19T21:32:24.093Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -84445,9 +84479,9 @@
     {
       "path": "services/chair-intent-signals.js",
       "synopsis": "Chair intent signal helpers — shared by orchestrator and context classifier.",
-      "bytes": 7218,
-      "mtime": "2026-07-19T21:03:56.663Z",
-      "indexed_at": "2026-07-19T21:04:54.410Z",
+      "bytes": 7482,
+      "mtime": "2026-07-19T21:32:24.093Z",
+      "indexed_at": "2026-07-19T21:32:24.093Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -84751,6 +84785,26 @@
       "bytes": 544,
       "mtime": "2026-07-19T21:03:56.675Z",
       "indexed_at": "2026-07-19T21:04:54.410Z"
+    },
+    {
+      "path": "services/cognitive-core-judgment.js",
+      "synopsis": "Cognitive Core Era-1 — decision journal, predictions, outcomes, miss reports, scoreboard.",
+      "bytes": 12071,
+      "mtime": "2026-07-19T21:32:24.093Z",
+      "indexed_at": "2026-07-19T21:32:24.093Z",
+      "ssot": [
+        "docs/products/memory-intelligence/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/cognitive-core-perspective.js",
+      "synopsis": "Cognitive Core Era-1 — perspective-before-retrieval, multi-wear tension, scarce WM.",
+      "bytes": 10579,
+      "mtime": "2026-07-19T21:32:24.093Z",
+      "indexed_at": "2026-07-19T21:32:24.093Z",
+      "ssot": [
+        "docs/products/memory-intelligence/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/cognitive-mesh/database/schema.sql",
@@ -88156,9 +88210,9 @@
     {
       "path": "services/lumin-chair-orchestrator.js",
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
-      "bytes": 66613,
-      "mtime": "2026-07-19T21:03:56.720Z",
-      "indexed_at": "2026-07-19T21:04:54.410Z",
+      "bytes": 69409,
+      "mtime": "2026-07-19T21:32:24.093Z",
+      "indexed_at": "2026-07-19T21:32:24.093Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -92670,6 +92724,13 @@
       "ssot": [
         "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "tests/cognitive-core-judgment.test.js",
+      "synopsis": "Cognitive Core Era-1 unit tests — detection, working memory, contracts.",
+      "bytes": 2827,
+      "mtime": "2026-07-19T21:32:24.093Z",
+      "indexed_at": "2026-07-19T21:32:24.093Z"
     },
     {
       "path": "tests/completion-overclaim-guard.test.js",

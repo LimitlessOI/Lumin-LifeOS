@@ -1858,10 +1858,55 @@
     }
 
     /* Input bar */
+    .lumin-wear-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      padding: 0 4px 6px;
+      width: 100%;
+    }
+    .lumin-wear-label {
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      opacity: 0.55;
+      flex-shrink: 0;
+    }
+    .lumin-wear-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .lumin-wear-chip {
+      border: 1px solid rgba(255,255,255,0.14);
+      background: transparent;
+      color: inherit;
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      cursor: pointer;
+      opacity: 0.7;
+    }
+    .lumin-wear-chip.on {
+      opacity: 1;
+      border-color: rgba(212, 175, 120, 0.65);
+      background: rgba(212, 175, 120, 0.12);
+    }
+    .lumin-judgment-meta {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      font-size: 12px;
+      opacity: 0.85;
+      line-height: 1.45;
+    }
+    .lumin-judgment-meta strong { opacity: 1; }
     .lumin-input-bar {
       padding: 14px 18px;
       border-top: 1px solid var(--studio-border);
       display: flex;
+      flex-wrap: wrap;
       align-items: flex-end;
       gap: 8px;
       flex-shrink: 0;
@@ -2632,6 +2677,10 @@
   </div>
 
   <div class="lumin-input-bar">
+    <div class="lumin-wear-bar" id="lumin-wear-bar" title="Cognitive Core — wear perspective capsules before you ask">
+      <span class="lumin-wear-label">Think with</span>
+      <div class="lumin-wear-chips" id="lumin-wear-chips"></div>
+    </div>
     <div id="lumin-attach-chips"></div>
     <div class="lumin-input-wrap">
       <textarea
@@ -3435,6 +3484,14 @@ function toast(msg) {
 const CHAT_BASE = '/api/v1/lifeos/chat';
 const DIRECT_SYSTEM_ENDPOINT = '/api/v1/lifeos/builderos/command-control/founder-interface/message';
 const USE_DIRECT_SYSTEM_CHAT = true;
+const LUMIN_WEAR_KEY = 'lifeos_worn_capsules';
+const LUMIN_WEARABLE = [
+  { id: 'founder', label: 'Founder' },
+  { id: 'customer', label: 'Customer' },
+  { id: 'engineer', label: 'Engineer' },
+  { id: 'competitor', label: 'Competitor' },
+  { id: 'anti_you', label: 'Anti-you' },
+];
 const luminState = {
   open: false,
   threadId: null,
@@ -3449,7 +3506,69 @@ const luminState = {
   readAloud: { enabled: false, rate: 1.0 },
   attachments: [],
   thinkTimers: {},
+  wornCapsules: (() => {
+    try {
+      const raw = JSON.parse(localStorage.getItem(LUMIN_WEAR_KEY) || '[]');
+      return Array.isArray(raw) ? raw.filter((id) => LUMIN_WEARABLE.some((c) => c.id === id)) : [];
+    } catch {
+      return [];
+    }
+  })(),
 };
+
+function initLuminWearChips() {
+  const host = document.getElementById('lumin-wear-chips');
+  if (!host) return;
+  host.innerHTML = '';
+  for (const c of LUMIN_WEARABLE) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'lumin-wear-chip' + (luminState.wornCapsules.includes(c.id) ? ' on' : '');
+    btn.textContent = c.label;
+    btn.dataset.capsule = c.id;
+    btn.onclick = () => {
+      const i = luminState.wornCapsules.indexOf(c.id);
+      if (i >= 0) luminState.wornCapsules.splice(i, 1);
+      else luminState.wornCapsules.push(c.id);
+      localStorage.setItem(LUMIN_WEAR_KEY, JSON.stringify(luminState.wornCapsules));
+      initLuminWearChips();
+    };
+    host.appendChild(btn);
+  }
+}
+initLuminWearChips();
+
+function appendLuminJudgmentMeta(data) {
+  if (!data?.cognitive_core && !data?.judgment_compiler && !data?.tension_ledger) return;
+  const container = document.getElementById('lumin-messages');
+  if (!container) return;
+  const worn = Array.isArray(data.worn_capsules) ? data.worn_capsules.join(' + ') : '';
+  const pred = data.prediction || {};
+  const conf = pred.confidence != null ? Math.round(Number(pred.confidence) * 100) : null;
+  const tension = Array.isArray(data.tension_ledger) ? data.tension_ledger : [];
+  const lines = [];
+  if (worn) lines.push(`<div><strong>Worn</strong> ${ _escHtml(worn) }</div>`);
+  if (pred.option) {
+    lines.push(`<div><strong>Prediction</strong> ${ _escHtml(String(pred.option)) }${conf != null ? ` (${conf}%)` : ''} — hypothesis, not identity</div>`);
+  }
+  if (tension.length) {
+    const bits = tension.slice(0, 5).map((t) => {
+      const id = t.capsule_id || t.id || '?';
+      const stance = t.stance || t.wants || t.objects_to || '';
+      return `${id}: ${stance}`;
+    }).join(' · ');
+    lines.push(`<div><strong>Tension</strong> ${ _escHtml(bits) }</div>`);
+  }
+  if (data.decision_id) {
+    lines.push(`<div><strong>Journal</strong> ${ _escHtml(String(data.decision_id).slice(0, 8)) }…</div>`);
+  }
+  if (!lines.length) return;
+  const div = document.createElement('div');
+  div.className = 'lumin-msg assistant';
+  div.innerHTML = `<div class="lumin-judgment-meta">${lines.join('')}</div>`;
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
 
 const LUMIN_DOCK_KEY = 'lifeos_lumin_dock_position';
 const LUMIN_PIN_KEY = 'lifeos_lumin_dock_pinned';
@@ -3822,8 +3941,9 @@ async function luminSend(opts = {}) {
             surface: 'lifeos-app',
             focused_element: '#lumin-input',
             page: location.pathname + location.search,
+            worn_capsules: Array.isArray(luminState.wornCapsules) ? [...luminState.wornCapsules] : [],
           },
-          client_version: '20260709-display-dna',
+          client_version: '20260719-cognitive-core',
         }
       : { user: USER || 'adam', message: outboundMsg };
     const endpoint = USE_DIRECT_SYSTEM_CHAT
@@ -3893,6 +4013,7 @@ async function luminSend(opts = {}) {
       reply = appendClientBubbleProof(reply, data);
       luminState.lastReply = reply;
       luminDeliverReply(reply, voiceTurn);
+      appendLuminJudgmentMeta(data);
       applyLuminShellAction(data);
       if (!luminState.open) {
         document.getElementById('lumin-fab-badge').classList.add('show');

@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/memory-intelligence/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-29 |
+| **Last Updated** | 2026-07-19 — Cognitive Core Era-1 (judgment compiler + capsule wear + scoreboard) |
 
 ---
 **Status:** Active — Phase 1 Complete + Governance Hardening + Builder Integration  
@@ -96,6 +96,20 @@ Important facts carry a `disproof_recipe` — the fastest known way to try to br
 
 ---
 
+## Cognitive Core Era-1 (Judgment Compiler)
+
+**Laws:** `docs/constitution/COGNITIVE_CORE_LAWS.md`  
+**Thesis:** Optimize the compiler that models the user (predict → miss → causal correction), not a static twin. Capsules are attention lenses; Decision Journal + Prediction Scoreboard are the engine; Chair wear UI is the steering wheel.
+
+| Surface | Path |
+|---|---|
+| Health / capsules / scoreboard / journal | `/api/v1/cognitive-core/*` |
+| Chair cutover | `services/lumin-chair-orchestrator.js` → `runCognitiveCoreJudgmentTurn` before build/counsel |
+| Capsule contracts | `config/judgment-capsule-contracts.js` |
+| Schema | `db/migrations/20260719_cognitive_core_judgment.sql` |
+
+Am 39 `agent_performance` is fed on outcome scoring (`cognitive_core_compiler`). Domain trust tiers: refuse / ask / suggest / allow.
+
 ## Owned Files
 
 | File | Purpose |
@@ -103,9 +117,15 @@ Important facts carry a `disproof_recipe` — the fastest known way to try to br
 | `db/migrations/20260426_memory_intelligence.sql` | Schema: all 7 tables + 2 views |
 | `db/migrations/20260426_memory_intelligence_hardening.sql` | Source-count + future-lookback hardening |
 | `db/migrations/20260426_memory_protocol_enforcement.sql` | Protocol violations + task authority |
+| `db/migrations/20260719_cognitive_core_judgment.sql` | Judgment journal, predictions, outcomes, miss reports, domain trust |
 | `services/memory-intelligence-service.js` | Core evidence engine logic |
+| `services/cognitive-core-judgment.js` | Decision journal + scoreboard |
+| `services/cognitive-core-perspective.js` | Multi-wear tension + judgment turn |
+| `config/judgment-capsule-contracts.js` | Perspective lens contracts (allow/deny) |
 | `routes/memory-intelligence-routes.js` | API surface |
+| `routes/cognitive-core-routes.js` | Cognitive Core API |
 | `docs/MEMORY_FRAMEWORK_DESIGN_BRIEF.md` | Full design brief (cross-model reviewed) |
+| `docs/constitution/COGNITIVE_CORE_LAWS.md` | Five laws + meta-learning constitution |
 
 ---
 
@@ -321,6 +341,7 @@ Phase 1 fully built + extended. Phase 2 adoption (S2) now seeded:
 
 | Date | File | What | Why |
 |---|---|---|---|
+| 2026-07-19 | Cognitive Core Era-1 | Laws doc + judgment schema/services/routes; Chair perspective→conflict→predict→journal; lifeos-app wear chips; decision turns no longer misroute to build via `should I … or …` | Adam: judgment compiler moat — Decision Journal engine + Capsule UI; meta-learning over twin cosplay |
 | 2026-06-28 | `services/self-repair-memory.js` + `services/reality-ledger.js` | Repair memory append path now mirrors each event into the append-only Reality Ledger (owner + expected/actual outcomes). | V1-00 Five Recorders: unrecoverable history must start before the loop is fully closed. |
 | 2026-06-28 | `services/self-repair-memory.js` | Self-repair memory events now persist `attempt_stages[]` and `context_requirements_seen[]` derived from executed repair steps, so memory records whether lessons/research/consensus were actually required in the run that produced the lesson. | BuilderOS closure work needed memory to track not just that a repair happened, but what escalation/carry-forward context shaped that lesson. |
 | 2026-06-24 | `services/truth-scoreboard-worker.js` + `config/truth-governance-hypotheses.json` | Closed-loop scoreboard: parity/verify receipts → `addEvidence` → promote/demote `epistemic_facts`; twin drift ingest; scheduled tick on boot | Adam: truth level from results not fancy — GUESS watched until reality promotes |

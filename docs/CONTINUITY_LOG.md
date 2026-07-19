@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-19 — Cognitive Core Era-1 (judgment compiler)
+
+Adam ratified: Decision Journal + Prediction Scoreboard as engine; Capsules as Chair steering wheel; meta-learning compiler (not static twin). Shipped laws (`COGNITIVE_CORE_LAWS.md`), judgment schema/API, multi-wear tension path in orchestrator, wear chips in `lifeos-app.html`. Decision “should I X or make Y” no longer misroutes to build. Next: tip prove scoreboard + outcome capture UX; Era-2 program hypotheses.
+
 ## 2026-07-18 — Thread history: persist + don’t scrub real acts
 
 Adam: see UI communication tests in history. Two gaps: (1) act/nav fastpath skipped persist; (2) persisted nav text was scrubbed as theater because `recordExchange` hard-coded `NO_COMMAND_RAN`. Fixed both — marker v5. Tip prove: `open food` has no `HISTORY_NOT_SAVED` and appears in chat thread messages.

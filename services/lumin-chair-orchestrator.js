@@ -66,7 +66,7 @@ import {
   isFounderUiBehaviorChangeRequest,
   stripChairDoPrefix,
 } from './chair-intent-signals.js';
-import { parseLuminChairSystemAction, tryLuminChairSystemAction } from './lumin-chair-system-actions.js';
+import { tryLuminChairSystemAction } from './lumin-chair-system-actions.js';
 import {
   assessFounderUtteranceWisdom,
   formatWisdomClarifySummary,
@@ -84,6 +84,10 @@ import {
   mergeConversationHistory,
 } from './lumin-thread-context.js';
 import { runChairDirectAgent } from './chair-direct-agent.js';
+import {
+  detectJudgmentTurn,
+  runCognitiveCoreJudgmentTurn,
+} from './cognitive-core-perspective.js';
 
 export {
   isBlueprintExecuteIntent,
@@ -399,6 +403,41 @@ function systemActionChairResponse(ctx, result) {
   };
 }
 
+function chairJudgmentResponse(ctx, judgment) {
+  const reply = String(judgment.reply || '').trim()
+    || 'I could not complete the judgment pass. Ask again, or wear different capsules.';
+  const truth = finalizeTruth({
+    ok: judgment.ok !== false,
+    pass_fail: 'NO_COMMAND_RAN',
+    command_truth: 'NO_COMMAND_RAN',
+    action: 'judgment',
+    human_summary_technical: reply,
+    conversational_mode: ctx.conversationalMode,
+  }, 'chair');
+  return {
+    statusCode: 200,
+    body: chairEnvelope('chair', {
+      ...truth,
+      chair_channel: 'cognitive_core',
+      cognitive_core: true,
+      judgment_compiler: true,
+      worn_capsules: judgment.worn_capsule_ids || [],
+      tension_ledger: judgment.tension_ledger || [],
+      prediction: judgment.prediction || null,
+      decision_id: judgment.decision_id || null,
+      prediction_id: judgment.prediction_id || null,
+      stack_summary: judgment.stack_summary || null,
+      domain: judgment.domain || null,
+      intake_normalized: ctx.intakeNormalized,
+      source_mode: ctx.sourceMode,
+      auth_mode: ctx.auth_mode,
+      user_role: ctx.user_role,
+      conversational_mode: ctx.conversationalMode,
+      direct_connection: true,
+    }),
+  };
+}
+
 export async function runLuminChairTurn(ctx, deps) {
   const _ct0 = Date.now();
   const _clog = (label) => console.log(`[CHAIR-TURN] ${label} +${Date.now() - _ct0}ms`);
@@ -448,12 +487,20 @@ export async function runLuminChairTurn(ctx, deps) {
   _clog('loadHistory');
 
   const doPrefix = stripChairDoPrefix(cleanedInput);
+  const wornFromUi = Array.isArray(uiContext?.worn_capsules)
+    ? uiContext.worn_capsules
+    : (Array.isArray(uiContext?.worn) ? uiContext.worn : []);
+  const judgmentDetect = detectJudgmentTurn(ctx.originalText || cleanedInput, {
+    worn: wornFromUi,
+    stakes: uiContext?.stakes || null,
+  });
   // Build/execute orders must use build_async (202 + job poll). The direct agent
   // runs a sync builder inside the HTTP turn and hits Railway/proxy 502 + the
   // 92s handler deadline — which is exactly how drawer_direct_build got
   // "No response from system." Skip the front-door agent for those turns.
   const isFastSurgicalPatch = isSmokeCanaryMjsCommentPatch(doPrefix.text || cleanedInput);
-  const skipDirectAgentForBuild = (!isFastSurgicalPatch && doPrefix.forcedExecute)
+  const skipDirectAgentForBuild = !judgmentDetect.is_judgment_turn && (
+    (!isFastSurgicalPatch && doPrefix.forcedExecute)
     || (
       isBuildRequest(doPrefix.text || cleanedInput)
       && !isBuildStatusQuestion(doPrefix.text || cleanedInput)
@@ -461,46 +508,75 @@ export async function runLuminChairTurn(ctx, deps) {
       && !isFastSurgicalPatch
     )
     || (isExplicitExecuteCommand(cleanedInput) && !isFastSurgicalPatch)
-    || (/^\s*(do|execute|run)\s*:/i.test(ctx.originalText || cleanedInput) && !isFastSurgicalPatch);
+    || (/^\s*(do|execute|run)\s*:/i.test(ctx.originalText || cleanedInput) && !isFastSurgicalPatch)
+  );
 
   // ── SYSTEM ACTIONS FIRST (direct execution, then personality wraps) ──
   // Open/redeploy/alpha must not be eaten by a conversational reply.
-  const actionSource = String(ctx.originalText || cleanedInput || normalizedText || '').trim();
-  if (explicitAction !== 'display') {
+  const actionSource = ctx.originalText || cleanedInput;
+  if (!shouldDisplayOnly && explicitAction !== 'display') {
+    const earlySystemAction = await tryLuminChairSystemAction(actionSource, {
+      pool: deps.pool,
+      logger: deps.logger || console,
+      operatorKey: deps.operatorKey,
+      founderBuildBaseUrl: deps.founderBuildBaseUrl,
+      userId: resolvedUserId || ctx.userId,
+    });
+    if (earlySystemAction.matched) {
+      _clog(`system_action_first type=${earlySystemAction.action_type}`);
+      return systemActionChairResponse(
+        { intakeNormalized, sourceMode, auth_mode, user_role },
+        earlySystemAction,
+      );
+    }
+  }
+
+  // ── COGNITIVE CORE (perspective → conflict → predict → log) ──
+  // Decision turns / worn capsules: judgment compiler before build or counsel.
+  if (
+    judgmentDetect.is_judgment_turn
+    && conversationalMode
+    && !shouldDisplayOnly
+    && !ctx.alphaProbe
+    && explicitAction !== 'display'
+    && typeof deps.callCouncilMember === 'function'
+    && process.env.COGNITIVE_CORE_JUDGMENT !== '0'
+  ) {
     try {
-      const parsedNav = parseLuminChairSystemAction(actionSource);
-      if (parsedNav.matched && parsedNav.shell_action) {
-        _clog(`system_action_nav type=${parsedNav.action_type} page=${parsedNav.shell_action.page}`);
-        return systemActionChairResponse(
-          { intakeNormalized, sourceMode, auth_mode, user_role },
-          {
-            matched: true,
-            executed: true,
-            ok: true,
-            action_type: parsedNav.action_type,
-            command_truth: 'COMMAND_RAN',
-            shell_action: parsedNav.shell_action,
-            human_summary: `Opening ${parsedNav.shell_action.page} now.`,
-            done_synopsis: `Navigated to ${parsedNav.shell_action.page}`,
-          },
-        );
+      _clog('cognitive_core_judgment_start');
+      let memoryContext = null;
+      if (typeof deps.loadChairMemoryContext === 'function') {
+        memoryContext = await deps.loadChairMemoryContext({
+          userId: resolvedUserId,
+          userHandle: ctx.userHandle || userHandle || null,
+          messageText: ctx.originalText || cleanedInput,
+          productId: ctx.productId || null,
+        }).catch(() => null);
       }
-      const earlySystemAction = await tryLuminChairSystemAction(actionSource, {
+      const judgment = await runCognitiveCoreJudgmentTurn({
+        message: ctx.originalText || cleanedInput,
+        worn: judgmentDetect.default_wear,
+        memoryContext: typeof memoryContext === 'string'
+          ? memoryContext
+          : (memoryContext?.prompt_block || memoryContext?.text || null),
+        history: mergedHistory,
+        callAI: deps.callCouncilMember,
         pool: deps.pool,
+        userId: resolvedUserId || ctx.userId || ctx.userHandle || '1',
+        sourceSurface: uiContext?.surface || 'founder-interface',
+        stakes: uiContext?.stakes || 'medium',
         logger: deps.logger || console,
-        operatorKey: deps.operatorKey,
-        founderBuildBaseUrl: deps.founderBuildBaseUrl,
-        userId: resolvedUserId || ctx.userId,
       });
-      if (earlySystemAction.matched) {
-        _clog(`system_action_first type=${earlySystemAction.action_type}`);
-        return systemActionChairResponse(
-          { intakeNormalized, sourceMode, auth_mode, user_role },
-          earlySystemAction,
+      if (judgment?.matched && judgment?.ok && judgment?.reply) {
+        _clog(`cognitive_core_judgment_done decision=${judgment.decision_id || 'n/a'}`);
+        return chairJudgmentResponse(
+          { intakeNormalized, sourceMode, auth_mode, user_role, conversationalMode },
+          judgment,
         );
       }
-    } catch (sysErr) {
-      _clog(`system_action_first_error: ${sysErr.message}`);
+      _clog(`cognitive_core_judgment_fallback reason=${judgment?.error || judgment?.reason || 'empty'}`);
+    } catch (judgmentErr) {
+      _clog(`cognitive_core_judgment_error: ${judgmentErr.message}`);
     }
   }
 
