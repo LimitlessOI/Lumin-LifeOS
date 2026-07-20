@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T19:07:57.937Z",
+  "generated_at": "2026-07-20T19:11:27.324Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12070,
+  "file_count": 12066,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -39389,20 +39389,6 @@
       "bytes": 16434,
       "mtime": "2026-07-20T07:22:45.394Z",
       "indexed_at": "2026-07-20T07:28:47.516Z"
-    },
-    {
-      "path": "docs/marketing/NO_BUDGET_MARKETING_PLAN.md",
-      "synopsis": "No-budget marketing plan — 25 organic tactics for each of the 6 most market-ready products",
-      "bytes": 22394,
-      "mtime": "2026-07-20T19:03:15.444Z",
-      "indexed_at": "2026-07-20T19:03:15.444Z"
-    },
-    {
-      "path": "docs/marketing/PATH_TO_FIRST_DOLLAR.md",
-      "synopsis": "Per-product path to first dollar — every concrete step from today to money collected",
-      "bytes": 13429,
-      "mtime": "2026-07-20T19:05:54.339Z",
-      "indexed_at": "2026-07-20T19:05:54.339Z"
     },
     {
       "path": "docs/marketing/video-scripts.md",
@@ -90291,25 +90277,11 @@
       ]
     },
     {
-      "path": "services/self-repair-provenance-ledger.js",
-      "synopsis": "Exports recordProvenanceClaim — services/self-repair-provenance-ledger.js.",
-      "bytes": 2038,
-      "mtime": "2026-07-20T19:07:57.937Z",
-      "indexed_at": "2026-07-20T19:07:57.937Z"
-    },
-    {
       "path": "services/self-repair-root-cause-chains.js",
       "synopsis": "Exports recordRootCauseChain — services/self-repair-root-cause-chains.js.",
       "bytes": 1401,
       "mtime": "2026-07-20T18:51:34.847Z",
       "indexed_at": "2026-07-20T18:51:34.847Z"
-    },
-    {
-      "path": "services/self-repair-sentry-canary.js",
-      "synopsis": "Exports runSentryCanary — services/self-repair-sentry-canary.js.",
-      "bytes": 1110,
-      "mtime": "2026-07-20T18:57:21.156Z",
-      "indexed_at": "2026-07-20T18:57:21.156Z"
     },
     {
       "path": "services/self-repair-target-reputation.js",
