@@ -117,7 +117,16 @@ export function registerSiteBuilderPrealphaRoutes(app, deps = {}) {
     }
     step('SBPB-B00_preview_available', true, `clientId=${clientId}`);
 
-    const editorUrl = `${baseUrl}/api/v1/sites/editor?clientId=${encodeURIComponent(clientId)}&token=${encodeURIComponent(meta.editToken)}`;
+    // Drive the server-side browser against a host that ACTUALLY resolves. The injected
+    // `baseUrl` derives from RAILWAY_PUBLIC_DOMAIN, which can be an unprovisioned Railway
+    // custom domain (e.g. sitebuilder.taloaos.com) the browser cannot reach — page.goto
+    // then fails and every downstream step fails (4/8). Prefer the origin the caller hit
+    // us on (x-forwarded-*), which is reachable and serves previews same-origin.
+    const fwdProto = String(req.headers['x-forwarded-proto'] || '').split(',')[0].trim() || req.protocol || 'https';
+    const fwdHost = String(req.headers['x-forwarded-host'] || req.headers.host || '').split(',')[0].trim();
+    const effectiveBase = fwdHost ? `${fwdProto}://${fwdHost}` : baseUrl;
+
+    const editorUrl = `${effectiveBase}/api/v1/sites/editor?clientId=${encodeURIComponent(clientId)}&token=${encodeURIComponent(meta.editToken)}`;
     const shotDir = path.join(PREVIEWS_ROOT, clientId, '_sentry');
     try { fs.mkdirSync(shotDir, { recursive: true }); } catch { /* ignore */ }
 
@@ -131,7 +140,7 @@ export function registerSiteBuilderPrealphaRoutes(app, deps = {}) {
         try {
           const file = path.join(shotDir, `${label}.png`);
           await page.screenshot({ path: file, fullPage: false });
-          const url = `${baseUrl}/previews/${clientId}/_sentry/${label}.png`;
+          const url = `${effectiveBase}/previews/${clientId}/_sentry/${label}.png`;
           shots.push({ label, url });
           return url;
         } catch (err) {

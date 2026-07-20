@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T08:45:36.666Z",
+  "generated_at": "2026-07-20T08:49:07.616Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12056,
   "files": [
@@ -40789,9 +40789,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 137194,
-      "mtime": "2026-07-20T08:45:36.666Z",
-      "indexed_at": "2026-07-20T08:45:36.666Z"
+      "bytes": 137492,
+      "mtime": "2026-07-20T08:49:07.616Z",
+      "indexed_at": "2026-07-20T08:49:07.616Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -68606,9 +68606,9 @@
     {
       "path": "routes/site-builder-prealpha-routes.js",
       "synopsis": "CONDUCTOR-GLUE SENTRY pre-alpha Layer B (human-sim) route for Site",
-      "bytes": 15394,
-      "mtime": "2026-07-20T07:22:46.117Z",
-      "indexed_at": "2026-07-20T07:28:47.516Z",
+      "bytes": 16148,
+      "mtime": "2026-07-20T08:49:07.616Z",
+      "indexed_at": "2026-07-20T08:49:07.616Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
