@@ -1386,7 +1386,7 @@
     },
     {
       "id": "self-repair-tier2-1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/self-repair-contract-gate.js",
       "task": "Tier 2 narrow hard gate: shared-contract co-sign + versioning detector. Per Gate Charter Part 1, a gate may BLOCK only irreversible/high-blast-radius actions -- this module DETECTS and RECORDS only (it is not itself wired into any live deploy/ship path in this step; wiring a detector into an actual blocking gate is a separate, larger integration decision left undone here, same scoping discipline as Tier 0/1).",
       "spec": "Self-bootstrap `CREATE TABLE IF NOT EXISTS self_repair_contract_versions (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), contract_id TEXT NOT NULL, target_file TEXT NOT NULL, exports_signature_hash TEXT NOT NULL, recorded_at TIMESTAMPTZ NOT NULL DEFAULT now())`. Export pure function computeExportsSignatureHash(exportNames) that takes an array of export-name strings, sorts them, joins with ',', and returns a hash via node:crypto createHash('sha256').update(joined).digest('hex') (import crypto, do not implement a custom hash). Export pure function detectSharedContractChange({ target_file, knownConsumers = [] }) -- knownConsumers is a plain array of other file paths explicitly known to import target_file (must be passed in, never guessed or inferred by this function). Returns { requires_cosign: boolean, consumers: string[], reason: string }: requires_cosign = knownConsumers.length > 0 (any known external consumer at all makes a signature change worth flagging -- keep this conservative and simple, no heuristic scoring). reason is a short human-readable string. Export async function recordContractVersion(pool, { contract_id, target_file, exports_signature_hash }) that inserts a row (append-only, no upsert -- this is a version history). Export async function checkContractCompatibility(pool, { contract_id, new_exports_signature_hash }) that selects the single most recent row for contract_id (ORDER BY recorded_at DESC LIMIT 1), and returns { breaking: boolean, previous_hash: string|null, new_hash: string }: breaking = previous_hash !== null && previous_hash !== new_exports_signature_hash (any change in the recorded hash is flagged breaking -- deliberately conservative/simple, not attempting to diff which specific export changed). If no previous row exists, breaking=false (first version, nothing to compare against). CRITICAL, learned from Era 1 (Tier 0): EVERY exported function that touches a table must independently run `await pool.query('CREATE TABLE IF NOT EXISTS ... (...)')` as its own, separate, no-parameters pool.query() call before any parameterized query in that same function -- do not assume another function already created the table, and do not combine the CREATE TABLE with a parameterized query in one pool.query(text, values) call (PostgreSQL's prepared-statement protocol rejects multiple statements in one call with params). Three Era-1 steps shipped broken this exact way despite passing SENTRY's exports_smoke (which only checks export names exist, never that the code runs) -- do not repeat it.",
@@ -1441,7 +1441,13 @@
           "content_sha256": "e897548e66b97524d5fc857432d9d9928c4bc541e1761718ae911d8641bbf716"
         }
       },
-      "shipped_at": "2026-07-20T20:34:14.757Z"
+      "shipped_at": "2026-07-20T20:38:02.526Z",
+      "pre_existing": true,
+      "shipped_via": "pre_existing_artifact_proof",
+      "last_error": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null
     },
     {
       "id": "self-repair-tier2-2",
@@ -1474,7 +1480,31 @@
       ],
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "self-repair-tier2-2",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/builderos/twins/steps/self-repair-tier2-2.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-20T20:38:10.637Z",
+        "shipped_at": "2026-07-20T20:38:10.637Z",
+        "commit_sha": null,
+        "content_sha256": "a0bb712b6525ca3e0026753c70ab3d4132cd54075a5d950cd94f86b3734fff2e",
+        "target_file": "services/self-repair-secret-deploy-gate.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/self-repair-secret-deploy-gate.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/builderos/twins/steps/self-repair-tier2-2.exact",
+          "content_sha256": "a0bb712b6525ca3e0026753c70ab3d4132cd54075a5d950cd94f86b3734fff2e"
+        }
+      },
+      "shipped_at": "2026-07-20T20:38:10.637Z"
     },
     {
       "id": "self-repair-tier3-1",

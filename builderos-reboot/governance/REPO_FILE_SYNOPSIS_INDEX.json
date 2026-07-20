@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T20:34:17.268Z",
+  "generated_at": "2026-07-20T20:38:13.774Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12071,
+  "file_count": 12072,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -90318,6 +90318,13 @@
       "bytes": 1401,
       "mtime": "2026-07-20T18:51:34.847Z",
       "indexed_at": "2026-07-20T18:51:34.847Z"
+    },
+    {
+      "path": "services/self-repair-secret-deploy-gate.js",
+      "synopsis": "Exports detectSecretOrDeployChange — services/self-repair-secret-deploy-gate.js.",
+      "bytes": 2360,
+      "mtime": "2026-07-20T20:38:13.774Z",
+      "indexed_at": "2026-07-20T20:38:13.774Z"
     },
     {
       "path": "services/self-repair-target-reputation.js",
