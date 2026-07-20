@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T21:05:28.320Z",
+  "generated_at": "2026-07-20T21:05:46.976Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12075,
   "files": [
@@ -90163,9 +90163,9 @@
     {
       "path": "services/self-repair-calibration-sampling.js",
       "synopsis": "Exports sampleClaimsForCalibration — services/self-repair-calibration-sampling.js.",
-      "bytes": 2933,
-      "mtime": "2026-07-20T20:39:26.132Z",
-      "indexed_at": "2026-07-20T20:39:26.132Z"
+      "bytes": 3018,
+      "mtime": "2026-07-20T21:05:46.976Z",
+      "indexed_at": "2026-07-20T21:05:46.976Z"
     },
     {
       "path": "services/self-repair-contract-gate.js",

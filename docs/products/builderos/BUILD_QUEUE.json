@@ -1555,7 +1555,31 @@
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "self-repair-tier3-2",
       "mission_id": "PRODUCT-builderos",
-      "revive_note": "2026-07-20: independent re-read of the shipped file found a hallucinated, schema-incompatible CREATE TABLE for self_repair_provenance_ledger (missing commit_sha/epistemic_grade, phantom source_ids column) instead of the real DDL -- same bug class as tier3-1, cross-file consistency, not catchable by any single-file SENTRY check. Reset to pending with the exact DDL pasted verbatim plus a file_contains guard on the distinguishing epistemic_grade column; cleared the exact_inputs/exactness seal to force fresh regeneration rather than replay of the broken sealed content."
+      "revive_note": "2026-07-20: independent re-read of the shipped file found a hallucinated, schema-incompatible CREATE TABLE for self_repair_provenance_ledger (missing commit_sha/epistemic_grade, phantom source_ids column) instead of the real DDL -- same bug class as tier3-1, cross-file consistency, not catchable by any single-file SENTRY check. Reset to pending with the exact DDL pasted verbatim plus a file_contains guard on the distinguishing epistemic_grade column; cleared the exact_inputs/exactness seal to force fresh regeneration rather than replay of the broken sealed content.",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/builderos/twins/steps/self-repair-tier3-2.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-20T21:05:44.368Z",
+        "shipped_at": "2026-07-20T21:05:44.368Z",
+        "commit_sha": null,
+        "content_sha256": "820a29100dee442e3773439d2f9fd56c3e5d005afc13796f38b6effc578eff39",
+        "target_file": "services/self-repair-calibration-sampling.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/self-repair-calibration-sampling.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/builderos/twins/steps/self-repair-tier3-2.exact",
+          "content_sha256": "820a29100dee442e3773439d2f9fd56c3e5d005afc13796f38b6effc578eff39"
+        }
+      },
+      "shipped_at": "2026-07-20T21:05:44.368Z"
     }
   ],
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",

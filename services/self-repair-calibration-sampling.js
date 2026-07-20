@@ -19,10 +19,12 @@ export async function sampleClaimsForCalibration(pool, { sampleSize = 5, sinceHo
     CREATE TABLE IF NOT EXISTS self_repair_provenance_ledger (
       id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
       claim TEXT NOT NULL,
-      source_ids TEXT[],
-      created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+      commit_sha TEXT,
+      is_ancestor_of_tip BOOLEAN,
+      verified_at TIMESTAMPTZ,
+      epistemic_grade TEXT NOT NULL DEFAULT 'GUESS',
       result TEXT,
-      verified_at TIMESTAMPTZ
+      created_at TIMESTAMPTZ NOT NULL DEFAULT now()
     )
   `);
 
