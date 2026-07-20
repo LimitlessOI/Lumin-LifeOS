@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T19:15:47.398Z",
+  "generated_at": "2026-07-20T19:16:02.465Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12067,
+  "file_count": 12066,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -90282,13 +90282,6 @@
       "bytes": 1401,
       "mtime": "2026-07-20T18:51:34.847Z",
       "indexed_at": "2026-07-20T18:51:34.847Z"
-    },
-    {
-      "path": "services/self-repair-sentry-canary.js",
-      "synopsis": "Exports runSentryCanary — services/self-repair-sentry-canary.js.",
-      "bytes": 1153,
-      "mtime": "2026-07-20T19:15:47.398Z",
-      "indexed_at": "2026-07-20T19:15:47.398Z"
     },
     {
       "path": "services/self-repair-target-reputation.js",
