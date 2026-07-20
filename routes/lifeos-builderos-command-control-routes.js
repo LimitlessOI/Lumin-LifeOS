@@ -58,6 +58,7 @@ import { needsSystemKnowledge } from '../services/chair-system-knowledge.js';
 import { parseLuminChairSystemAction, shouldSkipInputNormalize, tryLuminChairSystemAction } from '../services/lumin-chair-system-actions.js';
 import { parseLifeOSDirectAction } from '../services/lifeos-direct-action.js';
 import { stripChairDoPrefix } from '../services/chair-intent-signals.js';
+import { createCognitiveCoreCapture } from '../services/cognitive-core-capture.js';
 import { isFounderPersonalLifeIntent } from '../services/founder-life-admin-intent.js';
 import { isExplicitDisplayOnlyRequest } from '../services/lumin-conversation-routing.js';
 import { translateChairPersonality } from '../services/chair-personality-translate.js';
@@ -1754,6 +1755,49 @@ HOW TO RESPOND:
           command_truth: chairResult.body.command_truth || 'NO_COMMAND_RAN',
         });
       clearTimeout(handlerDeadline);
+
+      // ── Cognitive Core: auto-capture the founder's real ship/build DECISION ──
+      // Every real build turn becomes a journaled decision carrying a falsifiable
+      // prediction at a confidence inferred from Adam's OWN words (never the builder's).
+      // Fire-and-forget: this must never affect the reply or add latency. The async
+      // sweep (same process → same in-memory job store) resolves prior builds whose
+      // jobs have since finished, deterministically keyed by job_id (no mis-attribution).
+      try {
+        const cb = chairResult?.body || {};
+        const isBuildTurn = /^(build|execute)$/i.test(String(cb.action || ''))
+          || ['build_async', 'build_terminal', 'execute', 'blueprint_execute'].includes(String(cb.chair_channel || ''))
+          || /BUILD_ATTEMPTED|BUILD_/i.test(String(cb.command_truth || ''))
+          || cb.job_id != null;
+        if (isBuildTurn && pool && process.env.COGNITIVE_CORE_CAPTURE !== '0') {
+          const capUserId = String(userId || userHandle || '1');
+          const capText = originalText || cleanedInput || '';
+          const capThread = req.body?.thread_id || req.body?.conversation_id || null;
+          const capStakes = (req.body?.ui_context && req.body.ui_context.stakes) || 'medium';
+          Promise.resolve().then(async () => {
+            const capture = createCognitiveCoreCapture({ pool, logger: console });
+            const rec = await capture.captureBuildDecision({
+              userId: capUserId,
+              text: capText,
+              threadId: capThread,
+              stakes: capStakes,
+              jobId: cb.job_id || null,
+              commitSha: cb.commit_sha || null,
+              channel: cb.chair_channel || cb.action || null,
+            });
+            if (rec?.ok && rec.decision_id && !rec.deduped
+              && cb.commit_sha && /^(PASS|FAIL)$/.test(String(cb.pass_fail || '').toUpperCase())) {
+              await capture.resolveCaptured({
+                userId: capUserId,
+                decisionId: rec.decision_id,
+                commitSha: cb.commit_sha,
+                passFail: String(cb.pass_fail).toUpperCase(),
+              });
+            }
+            await capture.sweepOpenBuildDecisions({ userId: capUserId }).catch(() => {});
+          }).catch((e) => console.warn('[cognitive-core-capture] boundary capture failed:', e?.message));
+        }
+      } catch (_) { /* capture must never break the reply */ }
+
       if (res.headersSent) return;
       const locked = lockFounderResponse(chairResult.body, chairResult.body.chair_channel || 'founder_interface');
       res.setHeader('Cache-Control', 'private, no-store, max-age=0');

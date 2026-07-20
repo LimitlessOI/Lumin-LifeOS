@@ -38,6 +38,7 @@
     "services/cognitive-core-govern.js",
     "services/cognitive-core-multiply.js",
     "services/cognitive-core-oracle.js",
+    "services/cognitive-core-capture.js",
     "config/judgment-capsule-contracts.js",
     "config/cognitive-core-advisors.js",
     "routes/memory-intelligence-routes.js",
@@ -60,7 +61,8 @@
     "tests/cognitive-core-era8.test.js",
     "tests/cognitive-core-era9.test.js",
     "tests/cognitive-core-era10.test.js",
-    "tests/cognitive-core-oracle.test.js"
+    "tests/cognitive-core-oracle.test.js",
+    "tests/cognitive-core-capture.test.js"
   ],
   "shared_dependencies": [],
   "history_anchors": [],

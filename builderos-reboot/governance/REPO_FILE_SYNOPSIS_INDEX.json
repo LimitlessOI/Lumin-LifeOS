@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T04:32:48.447Z",
+  "generated_at": "2026-07-20T04:36:17.235Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12048,
+  "file_count": 12050,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -37389,9 +37389,9 @@
     {
       "path": "docs/constitution/COGNITIVE_CORE_LAWS.md",
       "synopsis": "Cognitive Core laws — judgment compiler constitution (subordinate to North Star SSOT)",
-      "bytes": 5557,
-      "mtime": "2026-07-20T04:07:04.341Z",
-      "indexed_at": "2026-07-20T04:07:04.341Z"
+      "bytes": 6415,
+      "mtime": "2026-07-20T04:36:17.235Z",
+      "indexed_at": "2026-07-20T04:36:17.235Z"
     },
     {
       "path": "docs/constitution/CONSTITUTION_CONFLICTS.md",
@@ -37550,9 +37550,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 68793,
-      "mtime": "2026-07-20T04:07:04.341Z",
-      "indexed_at": "2026-07-20T04:07:04.341Z"
+      "bytes": 70965,
+      "mtime": "2026-07-20T04:36:17.235Z",
+      "indexed_at": "2026-07-20T04:36:17.235Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40346,9 +40346,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 643651,
-      "mtime": "2026-07-20T01:29:29.388Z",
-      "indexed_at": "2026-07-20T01:29:30.532Z"
+      "bytes": 644407,
+      "mtime": "2026-07-20T04:36:17.235Z",
+      "indexed_at": "2026-07-20T04:36:17.235Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -40484,17 +40484,17 @@
     {
       "path": "docs/products/memory-intelligence/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
-      "bytes": 3227,
-      "mtime": "2026-07-20T04:07:04.341Z",
-      "indexed_at": "2026-07-20T04:07:04.341Z",
+      "bytes": 3313,
+      "mtime": "2026-07-20T04:36:17.235Z",
+      "indexed_at": "2026-07-20T04:36:17.235Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/products/memory-intelligence/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Memory Intelligence",
-      "bytes": 43518,
-      "mtime": "2026-07-20T04:32:48.447Z",
-      "indexed_at": "2026-07-20T04:32:48.447Z"
+      "bytes": 46841,
+      "mtime": "2026-07-20T04:36:17.235Z",
+      "indexed_at": "2026-07-20T04:36:17.235Z"
     },
     {
       "path": "docs/products/memory-system/FILE_MANIFEST.json",
@@ -63207,9 +63207,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 32796,
-      "mtime": "2026-07-20T04:07:04.341Z",
-      "indexed_at": "2026-07-20T04:07:04.341Z",
+      "bytes": 32833,
+      "mtime": "2026-07-20T04:36:17.235Z",
+      "indexed_at": "2026-07-20T04:36:17.235Z",
       "synopsis_index_only": true
     },
     {
@@ -66849,9 +66849,9 @@
     {
       "path": "routes/cognitive-core-routes.js",
       "synopsis": "Cognitive Core Era-1–10 API — journal through Govern Me + Multiply Me.",
-      "bytes": 53678,
-      "mtime": "2026-07-20T04:07:04.341Z",
-      "indexed_at": "2026-07-20T04:07:04.341Z",
+      "bytes": 57049,
+      "mtime": "2026-07-20T04:36:17.235Z",
+      "indexed_at": "2026-07-20T04:36:17.235Z",
       "ssot": [
         "docs/products/memory-intelligence/PRODUCT_HOME.md"
       ]
@@ -67449,9 +67449,9 @@
     {
       "path": "routes/lifeos-builderos-command-control-routes.js",
       "synopsis": "Founder-facing LifeOS BuilderOS command-control routes for direct chat, build orchestration, and governed execution receipts.",
-      "bytes": 76560,
-      "mtime": "2026-07-19T21:03:56.499Z",
-      "indexed_at": "2026-07-19T21:04:54.410Z",
+      "bytes": 79101,
+      "mtime": "2026-07-20T04:36:17.235Z",
+      "indexed_at": "2026-07-20T04:36:17.235Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -84922,6 +84922,16 @@
       ]
     },
     {
+      "path": "services/cognitive-core-capture.js",
+      "synopsis": "Cognitive Core — prediction auto-capture + auto-resolve sweep.",
+      "bytes": 12365,
+      "mtime": "2026-07-20T04:36:17.235Z",
+      "indexed_at": "2026-07-20T04:36:17.235Z",
+      "ssot": [
+        "docs/products/memory-intelligence/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/cognitive-core-compound.js",
       "synopsis": "Cognitive Core Era-8 \"Compound Me\" — cross-product can_act + continuous compound.",
       "bytes": 13579,
@@ -92979,6 +92989,13 @@
       "ssot": [
         "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "tests/cognitive-core-capture.test.js",
+      "synopsis": "Cognitive Core auto-capture — deterministic proof of the prediction half.",
+      "bytes": 4890,
+      "mtime": "2026-07-20T04:36:17.235Z",
+      "indexed_at": "2026-07-20T04:36:17.235Z"
     },
     {
       "path": "tests/cognitive-core-era10.test.js",

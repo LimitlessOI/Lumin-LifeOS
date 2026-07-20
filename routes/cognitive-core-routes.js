@@ -18,6 +18,7 @@ import { createCognitiveCoreCompound } from '../services/cognitive-core-compound
 import { createCognitiveCoreGovern } from '../services/cognitive-core-govern.js';
 import { createCognitiveCoreMultiply } from '../services/cognitive-core-multiply.js';
 import { createCognitiveCoreOracle } from '../services/cognitive-core-oracle.js';
+import { createCognitiveCoreCapture } from '../services/cognitive-core-capture.js';
 import {
   listWearableCapsules,
   detectJudgmentTurn,
@@ -63,6 +64,7 @@ export function createCognitiveCoreRoutes(deps = {}) {
   const govern = createCognitiveCoreGovern({ pool, logger });
   const multiply = createCognitiveCoreMultiply({ pool, logger });
   const oracle = createCognitiveCoreOracle({ pool, logger });
+  const capture = createCognitiveCoreCapture({ pool, logger, oracle });
 
   if (typeof requireKey === 'function') {
     router.use(requireKey);
@@ -114,6 +116,10 @@ export function createCognitiveCoreRoutes(deps = {}) {
       closed_loop: [
         'outcome_oracle_from_receipts', 'murphy_decomposition', 'calibration_e_value',
         'platt_recalibration', 'chow_decide_gate', 'receipt_provenance',
+      ],
+      auto_capture: [
+        'founder_build_decision_capture', 'language_implied_prior',
+        'deterministic_job_resolve', 'auto_resolve_sweep',
       ],
       loop_subject: 'principal_judgment',
       laws: 'docs/constitution/COGNITIVE_CORE_LAWS.md',
@@ -1551,6 +1557,77 @@ export function createCognitiveCoreRoutes(deps = {}) {
       const userId = String(req.query.user_id || req.user?.id || '1');
       const log = await oracle.listDecideLog(userId, { limit: Number(req.query.limit) || 50 });
       res.json({ ok: true, decide_log: log });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // ── Auto-capture: real founder ship/build decisions → prediction, then auto-resolve ──
+  // Journal a decision with a prior inferred from the founder's own language.
+  router.post('/oracle/capture', async (req, res) => {
+    try {
+      const b = req.body || {};
+      const text = b.text || b.message || b.question;
+      const kind = capture.detectShipDecision(text);
+      if (!kind && b.force !== true) {
+        return res.status(422).json({ ok: false, reason: 'not_a_ship_build_decision', hint: 'pass force:true to capture anyway' });
+      }
+      const out = await capture.captureBuildDecision({
+        userId: b.user_id || req.user?.id || '1',
+        text,
+        threadId: b.thread_id || null,
+        stakes: b.stakes || 'medium',
+        jobId: b.job_id || null,
+        commitSha: b.commit_sha || null,
+        channel: b.channel || null,
+      });
+      // If a terminal build result was supplied inline, resolve deterministically now.
+      if (out?.ok && out.decision_id && !out.deduped && b.pass_fail) {
+        out.resolution = await capture.resolveCaptured({
+          userId: b.user_id || req.user?.id || '1',
+          decisionId: out.decision_id,
+          commitSha: b.commit_sha || null,
+          jobId: b.job_id || null,
+          passFail: String(b.pass_fail).toUpperCase(),
+        }).catch((e) => ({ ok: false, reason: e.message }));
+      }
+      res.status(out?.ok ? 201 : 422).json({ ship_kind: kind, ...out });
+    } catch (err) {
+      res.status(400).json({ ok: false, error: err.message });
+    }
+  });
+
+  // Reconcile open founder_build decisions against the in-process build job store.
+  router.post('/oracle/sweep', async (req, res) => {
+    try {
+      const out = await capture.sweepOpenBuildDecisions({
+        userId: (req.body || {}).user_id || req.query.user_id || req.user?.id || '1',
+        limit: Number((req.body || {}).limit || req.query.limit) || 100,
+      });
+      res.json(out);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // Visibility: open founder ship/build decisions awaiting a receipt.
+  router.get('/oracle/build-decisions', async (req, res) => {
+    try {
+      const userId = String(req.query.user_id || req.user?.id || '1');
+      const rows = await core.listOpenDecisions(userId, Number(req.query.limit) || 50);
+      const decisions = rows
+        .filter((d) => d.source_surface === capture.SOURCE_SURFACE)
+        .map((d) => ({
+          decision_id: d.decision_id,
+          question: d.question,
+          predicted_option: d.predicted_option,
+          prior_confidence: d.confidence,
+          prior_source: d.situation_snapshot?.prior_source || null,
+          job_id: d.situation_snapshot?.job_id || null,
+          commit_sha: d.situation_snapshot?.commit_sha || null,
+          created_at: d.created_at,
+        }));
+      res.json({ ok: true, subject: 'principal_judgment', open_build_decisions: decisions });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }

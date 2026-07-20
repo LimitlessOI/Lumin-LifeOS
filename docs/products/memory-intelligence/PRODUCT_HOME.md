@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/memory-intelligence/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-19 — Closed the loop: Outcome Oracle + calibration engine + decide gate (depth on Era-1, not a new era) |
+| **Last Updated** | 2026-07-20 — Prediction auto-capture + auto-resolve sweep: the loop now fills from REAL founder ship/build activity, not manual probes |
 
 ---
 **Status:** Active — Phase 1 Complete + Governance Hardening + Builder Integration  
@@ -234,8 +234,13 @@ Model calls use the strong-model failover chain (`defaultPlannerCallModel`, SO-0
 | Decide gate (load-bearing) | `POST /oracle/decide` | Chow's reject rule: correct stated prob by track record, threshold by stake → **proceed / verify / abstain**; every call logged. |
 | Receipt provenance | `GET /oracle/receipts` | What real receipt closed each loop. |
 | Decide-gate audit | `GET /oracle/decide-log` | Every gate decision, auditable. |
+| **Prediction auto-capture** | founder-interface boundary + `POST /oracle/capture` | Every real founder ship/build turn is journaled as a `shipping` decision (`source_surface='founder_build'`) carrying a falsifiable prediction (`predicted_option='pass'`) at a confidence **inferred from Adam's own decision-time language** — high ("should just work") / low ("let's try") / hedged / neutral-default. Fire-and-forget; never affects the reply. Subject stays the principal, not the builder. |
+| **Auto-resolve sweep** | per build turn + `POST /oracle/sweep` | Reconciles open `founder_build` decisions against the in-process founder build job store, **deterministically keyed by `job_id`** (terminal `pass_fail` + `commit_sha` → `ci` receipt via the oracle). Zero mis-attribution; fail-closed while a job is running / pruned / unknown. |
+| Capture visibility | `GET /oracle/build-decisions` | Open founder ship/build decisions awaiting a receipt, with their implied prior + source. |
 
-**Honest v1 boundaries:** recalibration stays the identity until a correction is *earned* (n≥6 AND e-value≥3) — it will not correct on noise. The oracle needs a decision journaled with a prediction *before* the receipt exists; automatic capture of the principal's decision-time prior from chat is the next tap (still open). Subject = `principal_judgment`; builder self-confidence is deliberately excluded and would need its own board.
+**Why auto-capture is the keystone:** a mechanism that works ≠ a mechanism with real data flowing. Pre-capture, the scoreboard filled only from manual probes. Now the *prediction half* (Claude's correction: capture a falsifiable prediction, not a row-count) is automatic on the correct subject, and the *outcome half* resolves from receipts — so Eras 1–8 stop being theoretical and fill from lived activity.
+
+**Honest v1 boundaries:** recalibration stays the identity until a correction is *earned* (n≥6 AND e-value≥3) — it will not correct on noise. The language-implied prior is a cheap GUESS-grade read of Adam's confidence (clearly labelled `prior_source`); the e-value refuses to trust it until density earns a correction (Law 2). Async resolve depends on the in-process job store (30-min TTL) — jobs lost to a restart stay open (honest unknown). Deeper gap left open: SO-002 **Layer B** "green build but wrong thing" — a `pass_fail=PASS` commit resolves as `pass`; a human "that passed but was the wrong thing" override channel is the next tap. Subject = `principal_judgment`; builder self-confidence is deliberately excluded and would need its own board.
 
 ## Owned Files
 
@@ -271,6 +276,7 @@ Model calls use the strong-model failover chain (`defaultPlannerCallModel`, SO-0
 | `services/cognitive-core-govern.js` | Era-9 Govern Me engine (self-audit) |
 | `services/cognitive-core-multiply.js` | Era-10 Multiply Me engine (network + self-fix loop) |
 | `services/cognitive-core-oracle.js` | Closed loop: outcome oracle + proper-scoring calibration engine + Chow decide gate |
+| `services/cognitive-core-capture.js` | Prediction auto-capture: founder-language prior + deterministic auto-resolve sweep (fills the loop from real activity) |
 | `config/judgment-capsule-contracts.js` | Perspective lens contracts (allow/deny) + outcome-turn detection |
 | `config/cognitive-core-advisors.js` | Era-2 external-mind + future-self wearable lenses |
 | `routes/memory-intelligence-routes.js` | API surface |
@@ -286,6 +292,7 @@ Model calls use the strong-model failover chain (`defaultPlannerCallModel`, SO-0
 | `tests/cognitive-core-era9.test.js` | Era-9 conformance/audit/decay |
 | `tests/cognitive-core-era10.test.js` | Era-10 council/benchmark/replay/bridge |
 | `tests/cognitive-core-oracle.test.js` | Closed-loop math: Murphy identity, Brier, e-value, recalibration, decide gate, receipt mapping |
+| `tests/cognitive-core-capture.test.js` | Auto-capture: language-implied prior, ship detection, terminal-job verdict, deterministic sweep (fail-closed) |
 | `docs/MEMORY_FRAMEWORK_DESIGN_BRIEF.md` | Full design brief (cross-model reviewed) |
 | `docs/constitution/COGNITIVE_CORE_LAWS.md` | Five laws + meta-learning constitution |
 
@@ -504,6 +511,7 @@ Phase 1 fully built + extended. Phase 2 adoption (S2) now seeded:
 | Date | File | What | Why |
 |---|---|---|---|
 | 2026-07-19 | `cognitive-core-perspective.js` + `lumin-chair-orchestrator.js` | Era-3 surfacing last-mile: judgment turn now returns `missing_info` + `consequences` in its payload/stack, `chairJudgmentResponse` forwards them into the founder-interface envelope (UI already read them but the orchestrator never emitted them — proactive missing-info + consequence sketch were journaled but invisible in chat), and the value-drift monitor now runs on **live-chat** outcome capture (not just the explicit `/outcomes` route), emitting `{drift:[]}` to match the UI + route shape. Verified live on `777d78ea2065`: judgment surfaces missing-info+consequences; a seeded principle + diverging outcome fired a medium-severity drift event with a Law-1 "value may be shifting" note. | Adam: "lets build v3" while CC audited Era-2 (clean pass, `0ec279cabf`). Era-3 core was already shipped; these were the invisible-in-chat gaps. |
+| 2026-07-20 | Prediction auto-capture + auto-resolve sweep: `services/cognitive-core-capture.js` + boundary wiring in `routes/lifeos-builderos-command-control-routes.js` + `/oracle/capture` `/oracle/sweep` `/oracle/build-decisions` in `routes/cognitive-core-routes.js` + `tests/cognitive-core-capture.test.js`. Every real founder ship/build turn is journaled as a `shipping` decision with a falsifiable `pass` prediction at a confidence **inferred from Adam's own language** (never the builder's); the resulting build job auto-resolves it via the oracle, deterministically keyed by `job_id` (terminal `pass_fail`+`commit_sha` → `ci` receipt), fail-closed while running. Fire-and-forget at the boundary — never affects the reply. Health adds `auto_capture[]`. 10/10 new capture tests; 29/29 oracle+capture; `node --check` clean on all 3 edited files. | Adam: chose **A** — "everything else is downstream of this one." The oracle worked but every row came from manual probes; real automatic capture of real ship/build decisions hadn't happened. This is the prediction half (Claude's correction: capture a falsifiable prediction, not a row count) on the correct subject. Let it fill from lived activity before B (Chair defers to gate) or C (temporal-KG). |
 | 2026-07-19 | Closed loop: `cognitive-core-oracle.js` + `20260719_cognitive_core_outcome_oracle.sql` + `/oracle/*` routes + `cognitive-core-oracle.test.js` | Outcome Oracle resolves decisions from REAL receipts (deploy/SENTRY/revert/CI) with provenance, fail-closed. Proper scoring: Murphy exact decomposition, anytime-valid e-value, Platt recalibration (identity until earned), Chow decide gate (proceed/verify/abstain, stake-aware, logged). `receipt_verified` outcome source. Health `loop_closed: true`, subject `principal_judgment`. 11/11 new tests; 68/68 cognitive-core suite. Depth on Era-1, NOT a new era. | Adam: "bring this to a ten" after external audit scored execution/evidence 3.5 (loop never closed). Convergent w/ POLARIS + Anamnesis: prove value by closing ONE loop with real math on the correct subject, not by adding surface. |
 | 2026-07-19 | Cognitive Core Era-9 + Era-10 (capstone) | Govern Me (#41–45): integrity auditor, constitutional conformance, calibration decay, drift ledger, self-audit findings (solution-mandatory). Multiply Me (#46–50): advisor council consensus, cohort benchmark, judgment replay, compound ROI, ship-queue bridge (findings → governed factory, not hand-shipped). Migrations era9/era10, govern+multiply services, routes, tests 10/10, health `era: 10`. Completes 50-idea roadmap. | Adam: "after this go to the next 2." |
 | 2026-07-19 | Cognitive Core Era-7 + Era-8 | Calibrate Me (#31–35): heuristics, calibration dashboard, trust transfer, high-stakes auto-tree, rituals. Compound Me (#36–40): product consumers, cross-product can_act, debt→improvements, compound log, role sync, autonomy ladder. Migrations era7/era8, calibrate+compound services, routes, tests, health `era: 8`. | Adam: "do the next 2" after Era-5/6 tip prove. |
