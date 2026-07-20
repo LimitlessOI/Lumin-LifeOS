@@ -327,6 +327,7 @@ export function createCognitiveCoreOracle(deps = {}) {
       actualOption,
       statedReasons: [`receipt:${kind}:${receiptRef || 'n/a'} → ${resolvedVerdict}`],
       capturedHow: 'receipt_verified',
+      receiptLinkId: linkRows[0]?.link_id || null,
     });
 
     return { ok: true, receipt_link: linkRows[0], outcome, verdict: resolvedVerdict };

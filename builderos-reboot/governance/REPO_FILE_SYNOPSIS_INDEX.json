@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T04:49:31.275Z",
+  "generated_at": "2026-07-20T04:52:38.597Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12050,
+  "file_count": 12051,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -40492,9 +40492,9 @@
     {
       "path": "docs/products/memory-intelligence/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Memory Intelligence",
-      "bytes": 46841,
-      "mtime": "2026-07-20T04:36:17.235Z",
-      "indexed_at": "2026-07-20T04:36:17.235Z"
+      "bytes": 47629,
+      "mtime": "2026-07-20T04:52:26.601Z",
+      "indexed_at": "2026-07-20T04:52:38.597Z"
     },
     {
       "path": "docs/products/memory-system/FILE_MANIFEST.json",
@@ -63207,9 +63207,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 32833,
-      "mtime": "2026-07-20T04:36:17.235Z",
-      "indexed_at": "2026-07-20T04:36:17.235Z",
+      "bytes": 32880,
+      "mtime": "2026-07-20T04:50:40.545Z",
+      "indexed_at": "2026-07-20T04:52:38.597Z",
       "synopsis_index_only": true
     },
     {
@@ -84925,8 +84925,8 @@
       "path": "services/cognitive-core-capture.js",
       "synopsis": "Cognitive Core — prediction auto-capture + auto-resolve sweep.",
       "bytes": 12568,
-      "mtime": "2026-07-20T04:49:31.275Z",
-      "indexed_at": "2026-07-20T04:49:31.275Z",
+      "mtime": "2026-07-20T04:41:25.781Z",
+      "indexed_at": "2026-07-20T04:41:25.781Z",
       "ssot": [
         "docs/products/memory-intelligence/PRODUCT_HOME.md"
       ]
@@ -84984,9 +84984,9 @@
     {
       "path": "services/cognitive-core-judgment.js",
       "synopsis": "Cognitive Core Era-1 — decision journal, predictions, outcomes, miss reports, scoreboard.",
-      "bytes": 12091,
-      "mtime": "2026-07-20T04:07:04.341Z",
-      "indexed_at": "2026-07-20T04:07:04.341Z",
+      "bytes": 12925,
+      "mtime": "2026-07-20T04:49:15.455Z",
+      "indexed_at": "2026-07-20T04:52:38.597Z",
       "ssot": [
         "docs/products/memory-intelligence/PRODUCT_HOME.md"
       ]
@@ -85004,9 +85004,9 @@
     {
       "path": "services/cognitive-core-oracle.js",
       "synopsis": "Cognitive Core — Outcome Oracle + calibration engine that CLOSES the loop.",
-      "bytes": 16207,
-      "mtime": "2026-07-20T04:07:04.341Z",
-      "indexed_at": "2026-07-20T04:07:04.341Z",
+      "bytes": 16258,
+      "mtime": "2026-07-20T04:49:26.582Z",
+      "indexed_at": "2026-07-20T04:52:38.597Z",
       "ssot": [
         "docs/products/memory-intelligence/PRODUCT_HOME.md"
       ]
@@ -93073,6 +93073,13 @@
       "bytes": 4987,
       "mtime": "2026-07-20T04:07:04.341Z",
       "indexed_at": "2026-07-20T04:07:04.341Z"
+    },
+    {
+      "path": "tests/cognitive-core-outcome-integrity.test.js",
+      "synopsis": "recordOutcome must never accept a bare 'receipt_verified' claim —",
+      "bytes": 2410,
+      "mtime": "2026-07-20T04:50:22.075Z",
+      "indexed_at": "2026-07-20T04:52:38.597Z"
     },
     {
       "path": "tests/completion-overclaim-guard.test.js",

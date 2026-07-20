@@ -101,14 +101,31 @@ export function createCognitiveCoreJudgment(deps = {}) {
     actualOption,
     statedReasons = [],
     capturedHow = 'explicit',
+    receiptLinkId = null,
   }) {
     if (!pool) throw new Error('cognitive_core_requires_pool');
     if (capturedHow === 'inferred_forbidden') {
       throw new Error('outcomes_must_not_be_inferred');
     }
-    const how = ['explicit', 'deferred_review', 'chair_confirm', 'receipt_verified'].includes(capturedHow)
+    let how = ['explicit', 'deferred_review', 'chair_confirm', 'receipt_verified'].includes(capturedHow)
       ? capturedHow
       : 'explicit';
+    // 'receipt_verified' is a claim about real, external proof — never trust it
+    // as a bare string from a caller. Require a matching row in
+    // judgment_receipt_links for this exact decision; otherwise downgrade to
+    // 'explicit' rather than let an unproven claim inflate the evidence count.
+    if (how === 'receipt_verified') {
+      const { rows: linkCheck } = receiptLinkId
+        ? await pool.query(
+            `SELECT 1 FROM judgment_receipt_links WHERE decision_id = $1 AND link_id = $2 LIMIT 1`,
+            [decisionId, receiptLinkId],
+          )
+        : { rows: [] };
+      if (linkCheck.length === 0) {
+        logger.warn?.(`[cognitive-core] rejected unproven receipt_verified claim on decision ${decisionId} — downgraded to explicit`);
+        how = 'explicit';
+      }
+    }
     const { rows } = await pool.query(
       `INSERT INTO judgment_outcomes (decision_id, actual_option, stated_reasons, captured_how)
        VALUES ($1,$2,$3::jsonb,$4)

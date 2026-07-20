@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/memory-intelligence/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-20 — Prediction auto-capture + auto-resolve sweep: the loop now fills from REAL founder ship/build activity, not manual probes |
+| **Last Updated** | 2026-07-20 — Closed a real outcome-provenance forgery hole: `receipt_verified` can no longer be claimed without a matching real receipt row |
 
 ---
 **Status:** Active — Phase 1 Complete + Governance Hardening + Builder Integration  
@@ -237,6 +237,8 @@ Model calls use the strong-model failover chain (`defaultPlannerCallModel`, SO-0
 | **Prediction auto-capture** | founder-interface boundary + `POST /oracle/capture` | Every real founder ship/build turn is journaled as a `shipping` decision (`source_surface='founder_build'`) carrying a falsifiable prediction (`predicted_option='pass'`) at a confidence **inferred from Adam's own decision-time language** — high ("should just work") / low ("let's try") / hedged / neutral-default. Fire-and-forget; never affects the reply. Subject stays the principal, not the builder. |
 | **Auto-resolve sweep** | per build turn + `POST /oracle/sweep` | Reconciles open `founder_build` decisions against the in-process founder build job store, **deterministically keyed by `job_id`** (terminal `pass_fail` + `commit_sha` → `ci` receipt via the oracle). Zero mis-attribution; fail-closed while a job is running / pruned / unknown. |
 | Capture visibility | `GET /oracle/build-decisions` | Open founder ship/build decisions awaiting a receipt, with their implied prior + source. |
+
+**2026-07-20 integrity fix (Claude audit):** `POST /decisions/:id/outcomes` let any caller holding the shared command-key set `captured_how:'receipt_verified'` directly in the request body — no real receipt required. Empirically confirmed exploitable against production (a real forged claim was accepted and persisted with zero backing rows in `judgment_receipt_links`). `recordOutcome` now requires a `receiptLinkId` that must match a real row for that exact decision before honoring `receipt_verified`; an unproven claim is downgraded to `explicit` and logged, never silently trusted. The oracle's own internal resolve path (the only legitimate caller) already had the real link at hand and now passes it through. 3 new tests (`tests/cognitive-core-outcome-integrity.test.js`).
 
 **Why auto-capture is the keystone:** a mechanism that works ≠ a mechanism with real data flowing. Pre-capture, the scoreboard filled only from manual probes. Now the *prediction half* (Claude's correction: capture a falsifiable prediction, not a row-count) is automatic on the correct subject, and the *outcome half* resolves from receipts — so Eras 1–8 stop being theoretical and fill from lived activity.
 
