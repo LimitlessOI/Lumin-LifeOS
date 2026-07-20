@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T01:42:00.485Z",
+  "generated_at": "2026-07-20T01:45:15.778Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12033,
   "files": [
@@ -40449,9 +40449,9 @@
     {
       "path": "docs/products/memory-intelligence/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
-      "bytes": 2250,
-      "mtime": "2026-07-20T00:41:50.835Z",
-      "indexed_at": "2026-07-20T00:41:55.829Z",
+      "bytes": 2526,
+      "mtime": "2026-07-20T01:45:14.609Z",
+      "indexed_at": "2026-07-20T01:45:15.778Z",
       "synopsis_index_only": true
     },
     {
