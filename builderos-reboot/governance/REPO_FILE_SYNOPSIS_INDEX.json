@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T19:21:41.296Z",
+  "generated_at": "2026-07-20T19:21:59.250Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12067,
   "files": [
@@ -90155,9 +90155,9 @@
     {
       "path": "services/self-repair-decision-log.js",
       "synopsis": "Exports recordFactoryDecision — services/self-repair-decision-log.js.",
-      "bytes": 1100,
-      "mtime": "2026-07-20T18:56:46.694Z",
-      "indexed_at": "2026-07-20T18:56:46.694Z"
+      "bytes": 1166,
+      "mtime": "2026-07-20T19:21:59.250Z",
+      "indexed_at": "2026-07-20T19:21:59.250Z"
     },
     {
       "path": "services/self-repair-deploy-scheduler.js",

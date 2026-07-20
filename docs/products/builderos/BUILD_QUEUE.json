@@ -1206,7 +1206,31 @@
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "self-repair-era1-6",
       "mission_id": "PRODUCT-builderos",
-      "revive_note": "2026-07-20: reset after independent verification found a real Postgres protocol bug (multiple statements in one parameterized pool.query call) that would throw at runtime despite passing exports_smoke. Strengthened spec with the exact mechanism; added file_contains as a second check. Next attempt was falsely marked done via pre_existing_artifact_proof -- the SAME unfixed file (still combining CREATE TABLE + parameterized INSERT in one call) satisfied the shallow file_contains substring check and got shipped through without codegen ever running. Stale file deleted (commit 8e40b6dd6d) to force real regeneration."
+      "revive_note": "2026-07-20: reset after independent verification found a real Postgres protocol bug (multiple statements in one parameterized pool.query call) that would throw at runtime despite passing exports_smoke. Strengthened spec with the exact mechanism; added file_contains as a second check. Next attempt was falsely marked done via pre_existing_artifact_proof -- the SAME unfixed file (still combining CREATE TABLE + parameterized INSERT in one call) satisfied the shallow file_contains substring check and got shipped through without codegen ever running. Stale file deleted (commit 8e40b6dd6d) to force real regeneration.",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/builderos/twins/steps/self-repair-era1-6.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-20T19:21:56.393Z",
+        "shipped_at": "2026-07-20T19:21:56.393Z",
+        "commit_sha": null,
+        "content_sha256": "c0e3d87dd07290a7374d514ad06182906931b2b3eb9660c7603a7ec9fb0f8437",
+        "target_file": "services/self-repair-decision-log.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/self-repair-decision-log.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/builderos/twins/steps/self-repair-era1-6.exact",
+          "content_sha256": "c0e3d87dd07290a7374d514ad06182906931b2b3eb9660c7603a7ec9fb0f8437"
+        }
+      },
+      "shipped_at": "2026-07-20T19:21:56.393Z"
     },
     {
       "id": "self-repair-era1-7",
