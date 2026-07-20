@@ -431,6 +431,8 @@ function chairJudgmentResponse(ctx, judgment) {
       tension_ledger: judgment.tension_ledger || [],
       prediction: judgment.prediction || null,
       activated_programs: judgment.activated_program_briefs || [],
+      missing_info: judgment.missing_info || null,
+      consequences: judgment.consequences || null,
       decision_id: judgment.decision_id || null,
       prediction_id: judgment.prediction_id || null,
       stack_summary: judgment.stack_summary || null,
