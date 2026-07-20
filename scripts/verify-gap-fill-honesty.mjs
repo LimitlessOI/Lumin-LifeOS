@@ -55,8 +55,71 @@ function listBuildQueues() {
   return results;
 }
 
+// Files the pre-commit hook itself auto-generates/touches on every commit —
+// never evidence of a real functional change, so they're excluded when
+// deciding whether a "[system-build]"/fix claim has any real diff behind it.
+export const GENERATED_FILE_PATTERNS = [
+  /^builderos-reboot\/governance\/REPO_FILE_SYNOPSIS_INDEX\.json$/,
+];
+
+/** Pure — sums real (non-generated) line changes from `git diff --numstat` output. */
+export function sumRealChanges(numstatOutput) {
+  const statLines = String(numstatOutput || '').split('\n').map((l) => l.trim()).filter(Boolean);
+  let realChanges = 0;
+  const realFiles = [];
+  for (const line of statLines) {
+    const parts = line.split('\t');
+    if (parts.length < 3) continue;
+    const [add, del, file] = parts;
+    if (GENERATED_FILE_PATTERNS.some((re) => re.test(file))) continue;
+    const a = Number(add) || 0;
+    const d = Number(del) || 0;
+    realChanges += a + d;
+    if (a + d > 0) realFiles.push(file);
+  }
+  return { realChanges, realFiles };
+}
+
+/**
+ * The precise, real gap the earlier §2.11 checks never covered: a commit
+ * can claim "[system-build]" (the builder ran and verified this) or a
+ * specific fix ("regex X -> Y", "N/N tests pass") while its actual staged
+ * diff touches zero real files — a claim with nothing behind it. Confirmed
+ * live 2026-07-19: commit 3fa6594f0b claimed a specific regex fix with a
+ * specific test-pass count; its only changed file was the generated
+ * synopsis index. Unfakeable because it reads the real staged diff, not
+ * the agent's self-report of what it did.
+ */
+export function checkEmptyDiffClaim(message, { execFn = execSync, cwd = ROOT } = {}) {
+  const claimsSystemBuild = /\[system-build\]/.test(message);
+  if (!claimsSystemBuild) return true; // only [system-build] asserts "verified" — GAP-FILL alone doesn't
+
+  let numstatOutput;
+  try {
+    numstatOutput = execFn('git diff --cached --numstat', { cwd, encoding: 'utf8' });
+  } catch {
+    return true; // can't verify — fail open rather than block on tooling error
+  }
+
+  const { realChanges } = sumRealChanges(numstatOutput);
+
+  if (realChanges === 0) {
+    process.stderr.write('\n');
+    process.stderr.write('❌ EMPTY-DIFF [system-build] CLAIM — COMMIT BLOCKED\n\n');
+    process.stderr.write('   This commit is tagged [system-build] (a claim the builder ran and\n');
+    process.stderr.write('   verified a real change) but the staged diff touches zero real files —\n');
+    process.stderr.write('   only the auto-generated synopsis index changed, if anything.\n\n');
+    process.stderr.write('   If nothing real changed, this should not be tagged [system-build] at\n');
+    process.stderr.write('   all. If something real DID change, stage it.\n\n');
+    process.exit(1);
+  }
+  return true;
+}
+
 function main() {
   const message = readCommitMessage();
+  checkEmptyDiffClaim(message);
+
   const claimsNoBlueprint = FALSE_JUSTIFICATION_PATTERNS.some((re) => re.test(message));
   if (!claimsNoBlueprint) {
     process.exit(0); // no such claim made — nothing to verify
@@ -94,4 +157,6 @@ function main() {
   process.exit(0);
 }
 
-main();
+if (import.meta.url === `file://${process.argv[1]}`) {
+  main();
+}
