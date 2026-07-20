@@ -1274,7 +1274,31 @@
       ],
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "self-repair-era1-8",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/builderos/twins/steps/self-repair-era1-8.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-20T18:57:18.279Z",
+        "shipped_at": "2026-07-20T18:57:18.279Z",
+        "commit_sha": null,
+        "content_sha256": "6b3e29622a47f9a4742673311ce18cf7cdf636bc61e806822ec9469decc0eb90",
+        "target_file": "services/self-repair-sentry-canary.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/self-repair-sentry-canary.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/builderos/twins/steps/self-repair-era1-8.exact",
+          "content_sha256": "6b3e29622a47f9a4742673311ce18cf7cdf636bc61e806822ec9469decc0eb90"
+        }
+      },
+      "shipped_at": "2026-07-20T18:57:18.279Z"
     }
   ],
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
