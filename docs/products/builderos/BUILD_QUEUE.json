@@ -1108,7 +1108,7 @@
     },
     {
       "id": "self-repair-era1-4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/self-repair-target-reputation.js",
       "task": "Implement per-target reputation tracking (flaky-codegen detection): which files/targets are historically hard to codegen correctly.",
       "spec": "Self-bootstrap: `CREATE TABLE IF NOT EXISTS self_repair_target_reputation (target_path TEXT PRIMARY KEY, attempts INTEGER NOT NULL DEFAULT 0, failures INTEGER NOT NULL DEFAULT 0, models_tried JSONB NOT NULL DEFAULT '[]', hardness_score NUMERIC NOT NULL DEFAULT 0, updated_at TIMESTAMPTZ NOT NULL DEFAULT now())`. Export async function recordAttempt(pool, { target_path, model_tier, ok }) that upserts (INSERT ... ON CONFLICT (target_path) DO UPDATE): increments attempts always, increments failures when ok=false, appends model_tier to models_tried if not already present (dedupe), and recomputes hardness_score = failures::numeric / GREATEST(attempts, 1). Export async function getTargetReputation(pool, { target_path }) returning the row for that target, or null if never attempted. Fail closed: hardness_score must never divide by zero (use GREATEST(attempts,1) as specified). CRITICAL: the previous attempt correctly self-bootstrapped the table inside recordAttempt, but getTargetReputation queried the table directly with no CREATE TABLE IF NOT EXISTS guard first -- so calling getTargetReputation before any recordAttempt has ever run (a normal fresh-deploy or fresh-target scenario) throws 'relation self_repair_target_reputation does not exist' instead of returning null. EVERY exported function that touches this table, including getTargetReputation, must independently run `await pool.query('CREATE TABLE IF NOT EXISTS self_repair_target_reputation (...)')` as its own no-parameters call before its SELECT -- do not assume recordAttempt already ran first.",
@@ -1137,30 +1137,9 @@
       "blueprint_step_id": "self-repair-era1-4",
       "mission_id": "PRODUCT-builderos",
       "revive_note": "2026-07-20: independently reading the shipped file (commit 6ac78b58949b9b3c74aeac131f2f7549d9088762) found recordAttempt bootstraps correctly but getTargetReputation does not -- a real bug (throws on a fresh target/deploy) even though SENTRY's exports_smoke assertion passed. Reset to pending with a strengthened spec + file_contains guard. Next attempt was falsely marked done via pre_existing_artifact_proof (same unfixed file, shallow file_contains substring match, no codegen run). Stale file deleted (commit 8e40b6dd6d) to force real regeneration.",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/builderos/twins/steps/self-repair-era1-4.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-20T19:21:38.098Z",
-        "shipped_at": "2026-07-20T19:21:38.098Z",
-        "commit_sha": null,
-        "content_sha256": "73be24b508aee942b1023d3a0c3016c11c53500ea73b33d2935bc0ff426b297b",
-        "target_file": "services/self-repair-target-reputation.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/self-repair-target-reputation.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/builderos/twins/steps/self-repair-era1-4.exact",
-          "content_sha256": "73be24b508aee942b1023d3a0c3016c11c53500ea73b33d2935bc0ff426b297b"
-        }
-      },
-      "shipped_at": "2026-07-20T19:21:38.098Z"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-20T19:21:47.434Z",
+      "commit_sha": "de802bbdb3bad5971d573477d8a49260c2cd339d"
     },
     {
       "id": "self-repair-era1-5",
