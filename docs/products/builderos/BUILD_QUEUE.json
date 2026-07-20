@@ -1309,7 +1309,31 @@
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "self-repair-tier1-1",
       "mission_id": "PRODUCT-builderos",
-      "revive_note": "2026-07-20: reset a third time after independently reading the shipped file (commit 8dbd1a535798e1c49d4a7763eb00ce05d1945816) and finding evaluateQuarantine derives recentFailureCount from a nonexistent reputation.recent_failure_count field (always undefined), silently making that half of shouldQuarantineTarget's OR-condition permanently unreachable through the only exposed orchestration path -- a real logic gap caused by my own spec never saying where evaluateQuarantine's recentFailureCount should come from, not a codegen hallucination. Spec now requires it as an explicit parameter with a default."
+      "revive_note": "2026-07-20: reset a third time after independently reading the shipped file (commit 8dbd1a535798e1c49d4a7763eb00ce05d1945816) and finding evaluateQuarantine derives recentFailureCount from a nonexistent reputation.recent_failure_count field (always undefined), silently making that half of shouldQuarantineTarget's OR-condition permanently unreachable through the only exposed orchestration path -- a real logic gap caused by my own spec never saying where evaluateQuarantine's recentFailureCount should come from, not a codegen hallucination. Spec now requires it as an explicit parameter with a default.",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/builderos/twins/steps/self-repair-tier1-1.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-20T21:15:55.172Z",
+        "shipped_at": "2026-07-20T21:15:55.172Z",
+        "commit_sha": null,
+        "content_sha256": "99144ebdcc1619c302305fd49c1e0bce3e474c5ca6f98d2432260e63c09929f6",
+        "target_file": "services/self-repair-quarantine.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/self-repair-quarantine.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/builderos/twins/steps/self-repair-tier1-1.exact",
+          "content_sha256": "99144ebdcc1619c302305fd49c1e0bce3e474c5ca6f98d2432260e63c09929f6"
+        }
+      },
+      "shipped_at": "2026-07-20T21:15:55.172Z"
     },
     {
       "id": "self-repair-tier1-2",
