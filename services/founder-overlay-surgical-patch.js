@@ -12,7 +12,7 @@ import {
 const COMMENT_RE = /<!--\s*([^>]+?)\s*-->/;
 
 const SMOKE_CANARY_FILE = 'scripts/lifeos-direct-build-smoke-test.mjs';
-const SMOKE_PROOF_RE = /\/\/\s*ui-e2e-build-proof:\s*(\S+)/i;
+const SMOKE_PROOF_RE = /\/\/\sui-e2e-build-proof:\s*(\S+)/i;
 
 export function isSurgicalHtmlCommentPatch(task = '') {
   const t = String(task || '');
@@ -154,12 +154,24 @@ export async function commitSurgicalPatchViaBuilder({ baseUrl, commandKey, patch
       signal: controller.signal,
     });
     const json = await res.json();
+    // Idempotent surgical patch: a no-op means the EXACT requested content is already
+    // on main (execute-batch verified content == HEAD and returns the HEAD sha in
+    // `sha`). That is a satisfied end-state, not a build failure. Normalize it to a
+    // committed-equivalent success so callers (which gate on json.committed) report
+    // PASS with the sha that already contains the change — restoring the pre-no-op-
+    // guard behavior for these patches WITHOUT landing a phantom commit. The
+    // `already_satisfied` flag keeps the "no new commit this call" nuance honest.
+    if (json && json.ok === true && json.no_op === true) {
+      json.committed = true;
+      json.already_satisfied = true;
+    }
     if (!res.ok || !json.ok || !json.committed) {
       return { status: res.status, json, failed_file: json.failed_file || json.target_file || null };
     }
     return {
       status: res.status,
       json,
+      already_satisfied: json.already_satisfied === true,
       committed_files: json.committed_files || files.map((f) => f.target_file),
     };
   } finally {

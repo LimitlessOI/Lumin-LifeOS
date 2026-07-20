@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T08:28:41.447Z",
+  "generated_at": "2026-07-20T08:32:35.128Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12056,
   "files": [
@@ -39671,9 +39671,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 243014,
-      "mtime": "2026-07-20T08:27:15.626Z",
-      "indexed_at": "2026-07-20T08:28:14.205Z"
+      "bytes": 239772,
+      "mtime": "2026-07-20T08:32:35.128Z",
+      "indexed_at": "2026-07-20T08:32:35.128Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -40353,9 +40353,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 650349,
-      "mtime": "2026-07-20T08:11:01.478Z",
-      "indexed_at": "2026-07-20T08:11:01.478Z"
+      "bytes": 652390,
+      "mtime": "2026-07-20T08:32:35.128Z",
+      "indexed_at": "2026-07-20T08:32:35.128Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -67556,9 +67556,9 @@
     {
       "path": "routes/lifeos-council-builder-routes.js",
       "synopsis": "routes/lifeos-council-builder-routes.js",
-      "bytes": 162041,
-      "mtime": "2026-07-20T08:11:01.478Z",
-      "indexed_at": "2026-07-20T08:11:01.478Z",
+      "bytes": 162449,
+      "mtime": "2026-07-20T08:32:35.128Z",
+      "indexed_at": "2026-07-20T08:32:35.128Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -86461,9 +86461,9 @@
     {
       "path": "services/founder-overlay-surgical-patch.js",
       "synopsis": "Mechanical overlay HTML patches — insert comments/markers without LLM whole-file rewrite.",
-      "bytes": 6259,
-      "mtime": "2026-07-20T07:22:46.276Z",
-      "indexed_at": "2026-07-20T07:28:47.516Z",
+      "bytes": 7034,
+      "mtime": "2026-07-20T08:32:35.128Z",
+      "indexed_at": "2026-07-20T08:32:35.128Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

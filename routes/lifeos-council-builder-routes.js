@@ -2462,7 +2462,12 @@ export function createLifeOSCouncilBuilderRoutes({
         branch,
       );
       const noOp = commitResult?.no_op === true || commitResult?.committed === false;
-      const commitSha = noOp ? null : (commitResult?.sha || null);
+      // commit_sha = the NEW commit THIS call created (null on a no-op — honest).
+      // sha (state) = where the requested content currently lives on main (HEAD) —
+      // surfaced even on a no-op so an idempotent caller can cite proof the change
+      // is present without implying a new commit was made this call.
+      const newCommitSha = noOp ? null : (commitResult?.commit_sha || commitResult?.sha || null);
+      const stateSha = commitResult?.sha || null;
       const committed_files = cleaned.map((f) => f.target_file);
       for (const file of cleaned) {
         await insertBuilderAudit({
@@ -2493,8 +2498,8 @@ export function createLifeOSCouncilBuilderRoutes({
         changed_files: commitResult?.changed_files ?? null,
         unchanged_files: commitResult?.unchanged_files ?? null,
         commit_message: msg,
-        sha: commitSha,
-        commit_sha: commitSha,
+        sha: stateSha,
+        commit_sha: newCommitSha,
         commit_mode: commitResult?.commit_mode || 'github',
         local_only: commitResult?.local_only === true,
         reason: commitResult?.reason || (noOp ? 'NO_OP_NOTHING_TO_COMMIT' : null),
