@@ -1432,15 +1432,19 @@ export function createLifeOSCouncilBuilderRoutes({
         const unchanged = changedNorm
           ? requested.filter((p) => !changedNorm.includes(norm(p)))
           : null;
+        const noOp = commitResult?.no_op === true;
         return {
           ok: true,
+          committed: commitResult?.committed !== false,
+          no_op: noOp,
           sha: commitResult?.sha || null,
-          commit_sha: commitResult?.sha || null,
+          commit_sha: noOp ? null : (commitResult?.commit_sha || commitResult?.sha || null),
           committed_files: requested,
-          changed_files: changed,
-          unchanged_files: unchanged,
+          changed_files: noOp ? [] : changed,
+          unchanged_files: noOp ? requested : unchanged,
           commit_mode: 'github',
           local_only: false,
+          reason: commitResult?.reason || null,
         };
       } catch (err) {
         if (IS_RAILWAY_RUNTIME || !isMissingGitHubCommitCapability(err)) {
@@ -2457,7 +2461,8 @@ export function createLifeOSCouncilBuilderRoutes({
         msg,
         branch,
       );
-      const commitSha = commitResult?.sha || null;
+      const noOp = commitResult?.no_op === true || commitResult?.committed === false;
+      const commitSha = noOp ? null : (commitResult?.sha || null);
       const committed_files = cleaned.map((f) => f.target_file);
       for (const file of cleaned) {
         await insertBuilderAudit({
@@ -2467,15 +2472,19 @@ export function createLifeOSCouncilBuilderRoutes({
           rawOutput: file.output,
           cache_hit: false,
           placement: { target_file: file.target_file },
-          status: 'committed',
-          committed: true,
+          status: noOp ? 'no_op' : 'committed',
+          committed: !noOp,
           routingKey: 'council.builder.execute_batch',
           mode: 'execute',
         });
       }
       return res.json({
         ok: true,
-        committed: true,
+        // Honest: a no-op batch (every requested file identical to HEAD) lands NO
+        // commit, so it must not report committed:true. changed_files:[] +
+        // unchanged_files:all + no_op:true tell the caller nothing shipped.
+        committed: !noOp,
+        no_op: noOp,
         batch: true,
         target_file: committed_files.join(', '),
         committed_files,
@@ -2488,6 +2497,7 @@ export function createLifeOSCouncilBuilderRoutes({
         commit_sha: commitSha,
         commit_mode: commitResult?.commit_mode || 'github',
         local_only: commitResult?.local_only === true,
+        reason: commitResult?.reason || (noOp ? 'NO_OP_NOTHING_TO_COMMIT' : null),
         warning: commitResult?.warning || null,
       });
     } catch (err) {

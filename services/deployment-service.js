@@ -497,6 +497,64 @@ export function createDeploymentService(deps) {
       committedForIndex.push({ path: normalizedPath, content });
     }
 
+    // ── Base ref / commit / tree (needed for the no-op guard AND the commit) ──
+    const refRes = await fetch(
+      `https://api.github.com/repos/${owner}/${repo}/git/refs/heads/${targetBranch}`,
+      { headers: authHeaders },
+    );
+    if (!refRes.ok) {
+      const err = await refRes.json().catch(() => ({}));
+      throw new Error(err.message || `Could not read ref heads/${targetBranch}`);
+    }
+    const refData = await refRes.json();
+    const baseCommitSha = refData?.object?.sha;
+    if (!baseCommitSha) throw new Error('Missing base commit SHA for batch commit');
+
+    const baseCommitRes = await fetch(
+      `https://api.github.com/repos/${owner}/${repo}/git/commits/${baseCommitSha}`,
+      { headers: authHeaders },
+    );
+    if (!baseCommitRes.ok) throw new Error('Could not read base commit for batch commit');
+    const baseCommit = await baseCommitRes.json();
+    const baseTreeSha = baseCommit?.tree?.sha;
+    if (!baseTreeSha) throw new Error('Missing base tree SHA for batch commit');
+
+    // ── No-op guard (fail-open) ───────────────────────────────────────────────
+    // If every REQUESTED file's blob is byte-identical to HEAD, applying those
+    // blobs onto the base tree yields the base tree unchanged. That means there is
+    // nothing real to ship — do NOT land a commit. Without this, the synopsis-index
+    // co-commit below would still change the tree and land an index-only "phantom"
+    // commit — the exact churn an audit flagged: the tool blocked the false CLAIM,
+    // but the empty commit still landed on main. Any error in this probe → fall
+    // through and commit normally, so a legitimate ship can never be broken by it.
+    try {
+      const probeRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/trees`, {
+        method: 'POST',
+        headers: authHeaders,
+        body: JSON.stringify({ base_tree: baseTreeSha, tree }),
+      });
+      if (probeRes.ok) {
+        const probeTree = await probeRes.json();
+        if (probeTree?.sha && probeTree.sha === baseTreeSha) {
+          console.log(
+            `↩️ [DEPLOY] No-op batch — all ${paths.length} requested file(s) identical to HEAD; skipping commit (no phantom commit landed).`,
+          );
+          return {
+            ok: true,
+            committed: false,
+            no_op: true,
+            sha: baseCommitSha,
+            commit_sha: null,
+            paths,
+            changed_files: [],
+            reason: 'NO_OP_NOTHING_TO_COMMIT',
+          };
+        }
+      }
+    } catch (e) {
+      console.warn(`⚠️ [DEPLOY] no-op detection skipped (committing normally): ${e.message}`);
+    }
+
     // ── Atomic File Synopsis Law index co-commit ──────────────────────────────
     // Fold a fresh index row for every indexable file into the SAME commit, so a
     // builder commit can never land governance-noncompliant (INDEX_MISSING /
@@ -524,27 +582,6 @@ export function createDeploymentService(deps) {
         console.warn(`⚠️ [DEPLOY] synopsis index co-commit skipped: ${e.message}`);
       }
     }
-
-    const refRes = await fetch(
-      `https://api.github.com/repos/${owner}/${repo}/git/refs/heads/${targetBranch}`,
-      { headers: authHeaders },
-    );
-    if (!refRes.ok) {
-      const err = await refRes.json().catch(() => ({}));
-      throw new Error(err.message || `Could not read ref heads/${targetBranch}`);
-    }
-    const refData = await refRes.json();
-    const baseCommitSha = refData?.object?.sha;
-    if (!baseCommitSha) throw new Error('Missing base commit SHA for batch commit');
-
-    const baseCommitRes = await fetch(
-      `https://api.github.com/repos/${owner}/${repo}/git/commits/${baseCommitSha}`,
-      { headers: authHeaders },
-    );
-    if (!baseCommitRes.ok) throw new Error('Could not read base commit for batch commit');
-    const baseCommit = await baseCommitRes.json();
-    const baseTreeSha = baseCommit?.tree?.sha;
-    if (!baseTreeSha) throw new Error('Missing base tree SHA for batch commit');
 
     const treeRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/trees`, {
       method: 'POST',
@@ -610,7 +647,7 @@ export function createDeploymentService(deps) {
         console.warn(`⚠️ [DEPLOY] post-commit change-detection skipped: ${e.message}`);
       }
     }
-    return { ok: true, sha: commitSha, paths, changed_files: changedFiles };
+    return { ok: true, committed: true, sha: commitSha, commit_sha: commitSha, paths, changed_files: changedFiles };
   }
 
   // ── Synopsis index helpers (File Synopsis Law, governance-by-construction) ──
