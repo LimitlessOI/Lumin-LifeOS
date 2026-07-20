@@ -145,7 +145,7 @@ function communicationLawBlock() {
 }
 
 /** Strip coach/fix closers that models still emit on presence turns. */
-function stripPresenceCoachClosers(text = '') {
+export function stripPresenceCoachClosers(text = '') {
   let out = String(text || '').trim();
   if (!out) return out;
   const closer = /(?:\s*(?:If you want|Let me know|I'?m here to help|happy to help|ready to support|if there(?:'?s| is) anything|whatever you need|talk through what(?:'s| is) stuck|specific area|focus on|next steps)[\s\S]*)$/i;

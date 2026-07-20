@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T00:41:55.829Z",
+  "generated_at": "2026-07-20T00:50:09.408Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12024,
+  "file_count": 12026,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -36114,6 +36114,13 @@
       "indexed_at": "2026-07-19T21:32:24.093Z"
     },
     {
+      "path": "db/migrations/20260719b_lifeos_lab_results_repair.sql",
+      "synopsis": "Repair lab_results schema mismatch + create psychometric_results.",
+      "bytes": 2611,
+      "mtime": "2026-07-20T00:50:07.966Z",
+      "indexed_at": "2026-07-20T00:50:09.408Z"
+    },
+    {
       "path": "db/migrations/20260724_lifeos_core_stable.sql",
       "synopsis": "Database migration — 20260724_lifeos_core_stable.sql.",
       "bytes": 641,
@@ -40290,9 +40297,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 642843,
-      "mtime": "2026-07-20T00:41:50.839Z",
-      "indexed_at": "2026-07-20T00:41:55.829Z"
+      "bytes": 643299,
+      "mtime": "2026-07-20T00:50:07.979Z",
+      "indexed_at": "2026-07-20T00:50:09.408Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -63380,6 +63387,14 @@
       "synopsis_index_only": true
     },
     {
+      "path": "products/receipts/COGNITIVE_CORE_ERA34_TIP_AUDIT.json",
+      "synopsis": "Product receipt — COGNITIVE CORE ERA34 TIP AUDIT.",
+      "bytes": 1344,
+      "mtime": "2026-07-20T00:50:07.975Z",
+      "indexed_at": "2026-07-20T00:50:09.408Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "products/receipts/COMMITMENT_ROUTE_V2_ACCEPTANCE.json",
       "synopsis": "Product receipt — COMMITMENT ROUTE V2 ACCEPTANCE.",
       "bytes": 807,
@@ -84482,9 +84497,9 @@
     {
       "path": "services/chair-direct-agent.js",
       "synopsis": "Direct Chair agent — talks + acts; human prose obeys Lumin Communication DNA (not theater).",
-      "bytes": 24576,
-      "mtime": "2026-07-20T00:21:00.520Z",
-      "indexed_at": "2026-07-20T00:21:01.557Z",
+      "bytes": 24583,
+      "mtime": "2026-07-20T00:50:07.969Z",
+      "indexed_at": "2026-07-20T00:50:09.408Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -92734,9 +92749,9 @@
     {
       "path": "tests/chair-comms-routing.test.js",
       "synopsis": "Chair communication routing — build/status/presence must not hit CLARIFY theater.",
-      "bytes": 1648,
-      "mtime": "2026-07-20T00:18:33.197Z",
-      "indexed_at": "2026-07-20T00:18:34.468Z"
+      "bytes": 2470,
+      "mtime": "2026-07-20T00:50:07.972Z",
+      "indexed_at": "2026-07-20T00:50:09.408Z"
     },
     {
       "path": "tests/chair-competitive-research.test.js",

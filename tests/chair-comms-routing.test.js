@@ -8,6 +8,7 @@ import {
   isBuildStatusQuestion,
   isCounselPresenceIntent,
 } from '../services/chair-intent-signals.js';
+import { stripPresenceCoachClosers } from '../services/chair-direct-agent.js';
 
 test('did that build land is status, not a build order', () => {
   const t = 'Did that last build land? Don\'t recite the mission.';
@@ -39,4 +40,18 @@ test('anger / stuck vent is presence, not a build order', () => {
 
 test('don\'t pitch next steps is presence', () => {
   assert.equal(isCounselPresenceIntent("ha — thanks. that joke actually landed. don't pitch next steps."), true);
+});
+
+test('stripPresenceCoachClosers removes ready-to-support coach close', () => {
+  const raw = "I hear you, Adam. It's okay to express that frustration. You're not alone in this, and you don't have to pretend here. I'm here with you, ready to support or just share the moment.";
+  const out = stripPresenceCoachClosers(raw);
+  assert.equal(/ready to support/i.test(out), false);
+  assert.match(out, /I hear you, Adam/);
+});
+
+test('stripPresenceCoachClosers removes let-me-know closer', () => {
+  const raw = "I'm right here with you. Let me know if there's anything specific you want to talk about.";
+  const out = stripPresenceCoachClosers(raw);
+  assert.equal(/let me know/i.test(out), false);
+  assert.match(out, /right here with you/);
 });
