@@ -1487,7 +1487,7 @@
     },
     {
       "id": "self-repair-tier3-1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/self-repair-trust-dashboard.js",
       "task": "Tier 3 trust dashboard: a PULL view only (per doctrine Part 2, Tier 3 is 'never approval-based') -- aggregates existing Tier 0/1 data into one read-only snapshot for a human or auditor to pull on demand. Never gates, never requires anyone to review it.",
       "spec": "No new table for storage -- this module only reads existing tables directly with raw SQL plus reuses existing Tier-0/1 exported read functions where they already exist. Export async function getTopHardestTargets(pool, { limit = 10 } = {}) that runs `SELECT target_path, attempts, failures, hardness_score FROM self_repair_target_reputation ORDER BY hardness_score DESC, attempts DESC LIMIT $1` (self-bootstrap the table first with the exact same CREATE TABLE IF NOT EXISTS self_repair_target_reputation DDL already used in services/self-repair-target-reputation.js, since this module may run before that module's functions have ever been called) and returns the rows (empty array if table has no rows yet). Export async function getTrustDashboardSnapshot(pool, { limit = 20 } = {}) that calls, in parallel via Promise.all: getProvenanceLedger(pool, { limit }) from services/self-repair-provenance-ledger.js, getTopHardestTargets(pool, { limit }) (the function defined above, in this same file), getDecisionLog(pool, { limit }) from services/self-repair-decision-log.js, getPendingPropagationCandidates(pool, { limit }) from services/self-repair-pattern-propagation.js -- import and reuse all of these, do not reimplement any of their queries. Wrap each call in its own try/catch so one failing store (e.g. table not yet created because nothing has called it in production) does not break the whole snapshot -- on error for any one source, its field is an empty array, not a thrown error. Returns { recent_claims, hardest_targets, recent_decisions, pending_propagation_candidates, generated_at: new Date().toISOString() }. CRITICAL, learned from Era 1 (Tier 0): EVERY exported function that touches a table must independently run `await pool.query('CREATE TABLE IF NOT EXISTS ... (...)')` as its own, separate, no-parameters pool.query() call before any parameterized query in that same function -- do not assume another function already created the table, and do not combine the CREATE TABLE with a parameterized query in one pool.query(text, values) call (PostgreSQL's prepared-statement protocol rejects multiple statements in one call with params). Three Era-1 steps shipped broken this exact way despite passing SENTRY's exports_smoke (which only checks export names exist, never that the code runs) -- do not repeat it.",
@@ -1515,30 +1515,9 @@
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "self-repair-tier3-1",
       "mission_id": "PRODUCT-builderos",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/builderos/twins/steps/self-repair-tier3-1.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-20T20:38:44.379Z",
-        "shipped_at": "2026-07-20T20:38:44.379Z",
-        "commit_sha": null,
-        "content_sha256": "af7897e6daca327db90f56c707ea0299d0d01379c5d1dd80f115b4279df56709",
-        "target_file": "services/self-repair-trust-dashboard.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/self-repair-trust-dashboard.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/builderos/twins/steps/self-repair-tier3-1.exact",
-          "content_sha256": "af7897e6daca327db90f56c707ea0299d0d01379c5d1dd80f115b4279df56709"
-        }
-      },
-      "shipped_at": "2026-07-20T20:38:44.379Z"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-20T20:38:50.989Z",
+      "commit_sha": "419d957352c1c0ebe5b941671aeaac0b83d48190"
     },
     {
       "id": "self-repair-tier3-2",
