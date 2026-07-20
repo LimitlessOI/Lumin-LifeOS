@@ -2111,7 +2111,7 @@
     },
     {
       "id": "07",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/struggleDetectionFormFillData.js",
       "task": "create route for struggle detection form fill data",
       "spec": "Expose an HTTP route to store and analyze struggle detection form fill data using the corresponding service.",
@@ -2119,14 +2119,32 @@
         "06"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerStruggleDetectionFormFillDataRoutes"
       ],
       "route": {
         "method": "POST",
         "path": "/api/v1/struggle/form-fill-data"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/struggleDetectionFormFillData.js",
+          "exports": [
+            "registerStruggleDetectionFormFillDataRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/struggleDetectionFormFillData.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-20T02:33:43.055Z",
+      "last_error": "NOT_ON_BLUEPRINT",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "failure_signature": "NOT_ON_BLUEPRINT",
+      "same_signature_count": 1,
+      "escalation_class": "governance_block"
     },
     {
       "id": "08",
