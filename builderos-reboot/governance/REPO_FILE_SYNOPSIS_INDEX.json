@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T14:50:39.581Z",
+  "generated_at": "2026-07-20T15:06:19.911Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12058,
   "files": [
@@ -68824,9 +68824,9 @@
     {
       "path": "routes/testing-response.js",
       "synopsis": "Registers TestingResponse routes/handlers (routes/testing-response.js).",
-      "bytes": 431,
-      "mtime": "2026-07-20T14:50:39.581Z",
-      "indexed_at": "2026-07-20T14:50:39.581Z"
+      "bytes": 590,
+      "mtime": "2026-07-20T15:06:19.911Z",
+      "indexed_at": "2026-07-20T15:06:19.911Z"
     },
     {
       "path": "routes/therapist-integration-routes.js",

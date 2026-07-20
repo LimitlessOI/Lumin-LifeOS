@@ -13,6 +13,12 @@ export function registerTestingResponse(app) {
   app.use('/testing-response', router);
 }
 
-router.get('/', verifyApiReadiness);
+router.get('/', (req, res) => {
+  try {
+    verifyApiReadiness(req, res);
+  } catch (error) {
+    res.status(500).json({ message: 'Error verifying API readiness.', error: error.message });
+  }
+});
 
 export { verifyApiReadiness };
