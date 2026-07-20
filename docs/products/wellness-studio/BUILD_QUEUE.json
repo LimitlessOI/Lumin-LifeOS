@@ -1474,7 +1474,7 @@
     },
     {
       "id": "wellness-studio-step10",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/20260725_extend_wellness_tables.sql",
       "task": "extend_wellness_tables",
       "spec": "Extend existing tables without schema conflicts. IMPORTANT: this migration file will be verified by checking it CONTAINS the 4 required ALTER TABLE statements (see file_contains) -- there is no live route to check, do not add one.",
@@ -1482,7 +1482,7 @@
         "wellness-studio-step9"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "ALTER TABLE joy_checkins ADD COLUMN",
         "ALTER TABLE integrity_score_log ADD COLUMN",
@@ -1492,8 +1492,8 @@
       "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "wellness-studio-step10",
       "mission_id": "PRODUCT-wellness-studio",
-      "last_attempt_at": null,
-      "last_error": null,
+      "last_attempt_at": "2026-07-20T11:54:22.586Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER TABLE joy_checkins ADD COLUMN; behavior_assertion: missing_substring:ALTER TABLE integrity_score_log ADD COLUMN; behavior_assertion: missing_substring:ALTER TABLE wearable_data ADD COLUMN; behavior_assertion: missing_substring:ALTER TABLE emotional_patterns ADD COLUMN; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
@@ -1510,7 +1510,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "failure_signature": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER TABLE joy_checkins ADD COLUMN; behavior_assertion: missing_substring:ALTER TABLE integrity_score_log ADD ",
+      "same_signature_count": 1,
+      "escalation_class": "evidence_gap"
     },
     {
       "id": "wellness-studio-step11",
