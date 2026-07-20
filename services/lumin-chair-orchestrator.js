@@ -91,6 +91,7 @@ import {
 import { detectOutcomeTurn } from '../config/judgment-capsule-contracts.js';
 import { createCognitiveCoreJudgment } from './cognitive-core-judgment.js';
 import { createCognitiveCoreImprove } from './cognitive-core-improve.js';
+import { createCognitiveCoreExtend } from './cognitive-core-extend.js';
 
 export {
   isBlueprintExecuteIntent,
@@ -468,6 +469,7 @@ function chairOutcomeResponse(ctx, capture) {
       prediction_hit: capture.prediction_hit,
       miss: capture.miss || null,
       calibration: capture.calibration || null,
+      value_drift: capture.value_drift || null,
       intake_normalized: ctx.intakeNormalized,
       source_mode: ctx.sourceMode,
       auth_mode: ctx.auth_mode,
@@ -614,9 +616,21 @@ export async function runLuminChairTurn(ctx, deps) {
           }
           const board = await journal.getScoreboard(uidForOutcome).catch(() => null);
           const domainRow = board?.by_domain?.find((d) => d.domain === target.domain) || null;
-          const reply = hit
+          // Era-3 #14: check the ACTUAL choice against stated principles (surfaced, never punished).
+          let driftEvents = [];
+          try {
+            const extend = createCognitiveCoreExtend({ pool: deps.pool, logger: deps.logger || console });
+            const driftRes = await extend.checkValueDrift({ decisionId: target.decision_id });
+            if (driftRes?.ok && Array.isArray(driftRes.drift)) driftEvents = driftRes.drift;
+          } catch (e) {
+            (deps.logger || console).warn?.(`[cognitive-core] value-drift check failed: ${e.message}`);
+          }
+          const driftNote = driftEvents.length
+            ? ` Heads up — this choice diverges from ${driftEvents.length === 1 ? 'a stated principle' : `${driftEvents.length} stated principles`}: ${driftEvents.map((d) => d.principle).filter(Boolean).slice(0, 2).join('; ')}. Worth a look (could just mean the value is shifting).`
+            : '';
+          const reply = (hit
             ? `Logged — I predicted "${predicted}" and that's what you chose. Calibration updated for ${target.domain}.`
-            : `Logged your actual choice: "${actual}"${predicted ? ` (I had predicted "${predicted}")` : ''}. ${missSummary?.miss && missSummary?.failure_class ? `Miss classified as ${missSummary.failure_class} — I updated the model, not just the note.` : 'I recorded the miss to improve the model.'}`;
+            : `Logged your actual choice: "${actual}"${predicted ? ` (I had predicted "${predicted}")` : ''}. ${missSummary?.miss && missSummary?.failure_class ? `Miss classified as ${missSummary.failure_class} — I updated the model, not just the note.` : 'I recorded the miss to improve the model.'}`) + driftNote;
           _clog(`cognitive_core_outcome_capture decision=${target.decision_id} hit=${hit}`);
           return chairOutcomeResponse(
             { intakeNormalized, sourceMode, auth_mode, user_role, conversationalMode },
@@ -638,6 +652,7 @@ export async function runLuminChairTurn(ctx, deps) {
                 delegation_tier: domainRow.delegation_tier,
                 n: domainRow.n,
               } : null,
+              value_drift: driftEvents.length ? { drift: driftEvents } : null,
             },
           );
         }
