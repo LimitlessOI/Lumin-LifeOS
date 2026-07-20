@@ -1142,6 +1142,32 @@ export function startGovernedAutonomousShippingLoop({ logger, pool } = {}) {
           logger?.warn?.(`[GOVERNED-AUTONOMOUS-SHIP] workCheck could not load queue for ${pid}: ${err.message}`);
         }
       }));
+      // BLOCKED-step blindness fix (2026-07-20): selectShippableSteps (used
+      // below by planGovernedBuildQueueRun) excludes any step with
+      // status===BLOCKED, even one whose revive cooldown has fully elapsed --
+      // reviving BLOCKED->PENDING only happened inside execute(), which
+      // createUsefulWorkGuard only calls when this workCheck reports count>=1.
+      // Net effect, confirmed live: a BLOCKED step with no OTHER genuinely-
+      // PENDING step existing anywhere across all products at the same moment
+      // was invisible to this gate forever -- the loop reported "0 shippable"
+      // and never called execute(), so revival never ran, so it stayed
+      // invisible, indefinitely. Observed directly: sb-deliverability-gate
+      // (site-builder) sat BLOCKED and un-retried for 1.5+ hours despite being
+      // ~1h15m past its 15-minute cooldown, while workCheck logged "0
+      // shippable...0 active products" every single tick in between. Revive
+      // here too (mutates the same object reused as execute()'s
+      // sharedQueueCache below, so this is not wasted work) so a cooled-down
+      // BLOCKED step is counted -- and therefore actually re-attempted --
+      // without needing an unrelated coincidental PENDING step elsewhere.
+      for (const pid of products) {
+        const queue = cache[pid];
+        if (!queue || !Array.isArray(queue.steps)) continue;
+        try {
+          reviveStaleBlockedSteps(queue);
+        } catch (err) {
+          logger?.warn?.(`[GOVERNED-AUTONOMOUS-SHIP] workCheck revive ${pid} failed: ${err.message}`);
+        }
+      }
       sharedQueueCache = cache;
       const plan = planGovernedBuildQueueRun({
         products,
