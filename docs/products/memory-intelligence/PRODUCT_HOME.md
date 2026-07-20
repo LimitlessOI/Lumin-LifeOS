@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/memory-intelligence/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-19 — Cognitive Core Era-5 Preserve Me + Era-6 Transmit Me |
+| **Last Updated** | 2026-07-19 — Cognitive Core Era-7 Calibrate Me + Era-8 Compound Me |
 
 ---
 **Status:** Active — Phase 1 Complete + Governance Hardening + Builder Integration  
@@ -174,6 +174,31 @@ Model calls use the strong-model failover chain (`defaultPlannerCallModel`, SO-0
 | Consequence Trees (#29) | `GET/POST /transmit/trees` | Multi-order prospective tree (rule + AI) |
 | Portable Handshake (#30) | `POST /transmit/imports/accept` | Import sealed transmission with provenance |
 
+## Cognitive Core Era-7 (Calibrate Me)
+
+**Thesis:** Compress judgment into named heuristics; measure over/underconfidence; propose cautious cross-domain trust transfer; auto-fire deep trees on high stakes; ritualize recalibration.
+
+| Capability (idea #) | Surface | Behaviour |
+|---|---|---|
+| Decision Compression (#31) | `GET/POST /calibrate/heuristics*` | Named heuristics + seed pack + activate/hit |
+| Calibration Dashboard (#32) | `GET /calibrate/dashboard` | Accuracy/Brier + overconfidence proxies by domain |
+| Trust Transfer (#33) | `GET/POST /calibrate/transfers*` | Strong→weak domain proposals (still Law-2 local) |
+| High-stakes Auto-Tree (#34) | `POST /calibrate/auto-tree` | Depth 8 on high / 5 on medium; skip low |
+| Recalibration Rituals (#35) | `POST /calibrate/ritual` | Findings + adjustments from scoreboard |
+
+## Cognitive Core Era-8 (Compound Me)
+
+**Thesis:** Wire products into `can_act`, turn debt into improvement proposals, append compound evidence, sync sealed packages to roles, review autonomy ladder.
+
+| Capability (idea #) | Surface | Behaviour |
+|---|---|---|
+| Product Consumers (#36) | `GET/POST /compound/consumers*` | Seed site-builder / wellness / marketing / lifeos |
+| Cross-product can_act (#36) | `POST /compound/can-act` | Product-scoped Law-2 gate + call log |
+| Improvement Proposals (#37) | `GET/POST /compound/improvements*` | Debt → proposed changes |
+| Compound Log (#38) | `GET /compound/log` | Append-only cognitive compound events |
+| Role Sync (#39) | `POST /compound/role-sync` | Sealed package ↔ role provenance |
+| Autonomy Ladder (#40) | `POST /compound/ladder/review` | Promote/demote/hold suggestions from scoreboard |
+
 ## Owned Files
 
 | File | Purpose |
@@ -187,6 +212,8 @@ Model calls use the strong-model failover chain (`defaultPlannerCallModel`, SO-0
 | `db/migrations/20260719_cognitive_core_era4.sql` | Era-4: debates, mental_models, legacy, apprenticeship, delegation_scopes, autonomous_actions |
 | `db/migrations/20260719_cognitive_core_era5.sql` | Era-5: judgment_packages, judgment_transmissions |
 | `db/migrations/20260719_cognitive_core_era6.sql` | Era-6: marketplace, interrupts, debt, trees, imports |
+| `db/migrations/20260719_cognitive_core_era7.sql` | Era-7: heuristics, calibration, transfers, auto-tree, rituals |
+| `db/migrations/20260719_cognitive_core_era8.sql` | Era-8: consumers, can_act calls, improvements, compound log, ladder |
 | `services/memory-intelligence-service.js` | Core evidence engine logic |
 | `services/cognitive-core-judgment.js` | Decision journal + scoreboard |
 | `services/cognitive-core-perspective.js` | Multi-wear tension + judgment turn (+ Era-2/3 proactivity) |
@@ -198,16 +225,20 @@ Model calls use the strong-model failover chain (`defaultPlannerCallModel`, SO-0
 | `services/cognitive-core-trust.js` | Era-4 Trust Me engine |
 | `services/cognitive-core-preserve.js` | Era-5 Preserve Me engine |
 | `services/cognitive-core-transmit.js` | Era-6 Transmit Me engine |
+| `services/cognitive-core-calibrate.js` | Era-7 Calibrate Me engine |
+| `services/cognitive-core-compound.js` | Era-8 Compound Me engine |
 | `config/judgment-capsule-contracts.js` | Perspective lens contracts (allow/deny) + outcome-turn detection |
 | `config/cognitive-core-advisors.js` | Era-2 external-mind + future-self wearable lenses |
 | `routes/memory-intelligence-routes.js` | API surface |
-| `routes/cognitive-core-routes.js` | Cognitive Core API (Era-1–6) |
+| `routes/cognitive-core-routes.js` | Cognitive Core API (Era-1–8) |
 | `tests/cognitive-core-judgment.test.js` | Era-1 unit tests |
 | `tests/cognitive-core-era2.test.js` | Era-2 unit tests |
 | `tests/cognitive-core-era3.test.js` | Era-3 unit tests |
 | `tests/cognitive-core-era4.test.js` | Era-4 Law-2 / trust unit tests |
 | `tests/cognitive-core-era5.test.js` | Era-5 preserve/transmit consent gates |
 | `tests/cognitive-core-era6.test.js` | Era-6 marketplace/debt/trees/import |
+| `tests/cognitive-core-era7.test.js` | Era-7 heuristics/auto-tree/transfer |
+| `tests/cognitive-core-era8.test.js` | Era-8 consumers/can_act/ladder |
 | `docs/MEMORY_FRAMEWORK_DESIGN_BRIEF.md` | Full design brief (cross-model reviewed) |
 | `docs/constitution/COGNITIVE_CORE_LAWS.md` | Five laws + meta-learning constitution |
 
@@ -425,6 +456,7 @@ Phase 1 fully built + extended. Phase 2 adoption (S2) now seeded:
 
 | Date | File | What | Why |
 |---|---|---|---|
+| 2026-07-19 | Cognitive Core Era-7 + Era-8 | Calibrate Me (#31–35): heuristics, calibration dashboard, trust transfer, high-stakes auto-tree, rituals. Compound Me (#36–40): product consumers, cross-product can_act, debt→improvements, compound log, role sync, autonomy ladder. Migrations era7/era8, calibrate+compound services, routes, tests, health `era: 8`. | Adam: "do the next 2" after Era-5/6 tip prove. |
 | 2026-07-19 | Cognitive Core Era-5 + Era-6 | Preserve Me (#25): sealed judgment packages + consent transmission (no immortality framing). Transmit Me (#26–30): marketplace, interrupts, cognitive debt, consequence trees, portable import. Migrations era5/era6, preserve+transmit services, routes, tests, health `era: 6`. | Adam: "era 5 is that done if not do both 5 and 6" — tip was still era 4; Era-6 defined as orphaned-ideas band. |
 | 2026-07-19 | Cognitive Core Era-3 + Era-4 | Extend Me (#13–18) + Trust Me (#19–24): migrations era3/era4, `cognitive-core-extend/values/ideas/trust.js`, routes + Law-2 can-act/scopes/actions/debate/legacy/apprentice, tests era3+era4, health `era: 4`, Chair meta lines. | Adam: "go to ev4" — finish Extend Me gate then Trust Me band (earned delegation, inform + override). |
 | 2026-07-19 | Cognitive Core Era-2 | Programs layer (hypotheses) + `program_activations`; causal miss loop auto-runs on outcome (classify→correct→move program confidence→induce); outcome capture from chat (`detectOutcomeTurn`); decision replay + counterfactual engine; external-mind + future-self advisor lenses; relationship twins; learning-style model. Migration `20260719_cognitive_core_era2.sql`; services `cognitive-core-programs.js` + `cognitive-core-improve.js`; routes extended; `cognitive-core-era2.test.js` wired to CI. | Adam: "finish all of Era 2 before we audit it with CC" — Improve Me era: system improves the compiler on every miss, wears external minds, models people + learning style. Direct-author + independent-audit path (Adam-ratified for this thread). |

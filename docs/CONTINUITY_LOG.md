@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-19 — Cognitive Core Era-7 + Era-8 (Calibrate + Compound)
+
+Adam: "do the next 2." Built Era-7 Calibrate Me (#31–35): decision heuristics compression, calibration dashboard, trust-transfer proposals, high-stakes auto-tree, recalibration rituals. Era-8 Compound Me (#36–40): product consumers + cross-product `can_act`, debt→improvement proposals, compound log, role sync, autonomy ladder review. Migrations `20260719_cognitive_core_era7/8.sql`, `services/cognitive-core-calibrate.js` + `compound.js`, routes `/calibrate/*` + `/compound/*`, tests 10/10, health `era: 8`. NEXT: tip redeploy + prove seed heuristics + can-act refuse-default.
+
 ## 2026-07-19 — Cognitive Core Era-5 + Era-6 (Preserve + Transmit)
 
 Adam: "era 5 is that done if not do both 5 and 6." Tip health was still `era: 4`. Era-5 Preserve Me (#25): sealed `judgment_packages` with confidence maps + consent-gated `judgment_transmissions` (framing forbids “digital immortality”). Era-6 Transmit Me (#26–30, defined here — original map stopped at 5): capsule marketplace, subconscious interrupts, cognitive debt dashboard, deep consequence trees, portable handshake import. Files: migrations `20260719_cognitive_core_era5/6.sql`, `services/cognitive-core-preserve.js` + `transmit.js`, routes `/preserve/*` + `/transmit/*`, tests era5+era6, health `era: 6`. NEXT: tip redeploy + prove health/packages/debt.

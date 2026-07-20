@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: Cognitive Core Era-1–6 API — journal through Preserve Me + Transmit Me.
+ * SYNOPSIS: Cognitive Core Era-1–8 API — journal through Calibrate Me + Compound Me.
  * @ssot docs/products/memory-intelligence/PRODUCT_HOME.md
  */
 
@@ -13,6 +13,8 @@ import { createCognitiveCoreIdeas } from '../services/cognitive-core-ideas.js';
 import { createCognitiveCoreTrust } from '../services/cognitive-core-trust.js';
 import { createCognitiveCorePreserve } from '../services/cognitive-core-preserve.js';
 import { createCognitiveCoreTransmit } from '../services/cognitive-core-transmit.js';
+import { createCognitiveCoreCalibrate } from '../services/cognitive-core-calibrate.js';
+import { createCognitiveCoreCompound } from '../services/cognitive-core-compound.js';
 import {
   listWearableCapsules,
   detectJudgmentTurn,
@@ -53,6 +55,8 @@ export function createCognitiveCoreRoutes(deps = {}) {
   const trust = createCognitiveCoreTrust({ pool, logger });
   const preserve = createCognitiveCorePreserve({ pool, logger });
   const transmit = createCognitiveCoreTransmit({ pool, logger });
+  const calibrate = createCognitiveCoreCalibrate({ pool, logger });
+  const compound = createCognitiveCoreCompound({ pool, logger });
 
   if (typeof requireKey === 'function') {
     router.use(requireKey);
@@ -62,7 +66,7 @@ export function createCognitiveCoreRoutes(deps = {}) {
     res.json({
       ok: true,
       product: 'cognitive-core',
-      era: 6,
+      era: 8,
       compiler_version: COMPILER_VERSION,
       era2: [
         'programs', 'program_activations', 'miss_loop', 'decision_replay',
@@ -83,6 +87,14 @@ export function createCognitiveCoreRoutes(deps = {}) {
       era6: [
         'capsule_marketplace', 'subconscious_interrupts', 'cognitive_debt',
         'consequence_trees', 'portable_handshake',
+      ],
+      era7: [
+        'decision_heuristics', 'calibration_dashboard', 'trust_transfer',
+        'high_stakes_auto_tree', 'recalibration_rituals',
+      ],
+      era8: [
+        'product_consumers', 'cross_product_can_act', 'improvement_proposals',
+        'compound_log', 'role_sync', 'autonomy_ladder_review',
       ],
       laws: 'docs/constitution/COGNITIVE_CORE_LAWS.md',
     });
@@ -936,6 +948,310 @@ export function createCognitiveCoreRoutes(deps = {}) {
         transmissionId: b.transmission_id,
       });
       res.status(out.ok ? 201 : 422).json(out);
+    } catch (err) {
+      res.status(400).json({ ok: false, error: err.message });
+    }
+  });
+
+  // ── Era-7 Calibrate Me ───────────────────────────────────────────────
+  router.get('/calibrate/heuristics', async (req, res) => {
+    try {
+      const userId = String(req.query.user_id || req.user?.id || '1');
+      const heuristics = await calibrate.listHeuristics(userId, {
+        status: req.query.status || 'active',
+        limit: Number(req.query.limit) || 50,
+      });
+      res.json({ ok: true, heuristics });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/calibrate/heuristics/seed', async (req, res) => {
+    try {
+      const userId = (req.body || {}).user_id || req.user?.id || '1';
+      const out = await calibrate.seedHeuristics(userId);
+      res.status(201).json(out);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/calibrate/heuristics', async (req, res) => {
+    try {
+      const b = req.body || {};
+      const out = await calibrate.createHeuristic({
+        userId: b.user_id || req.user?.id || '1',
+        name: b.name,
+        rule: b.rule,
+        whenToUse: b.when_to_use,
+        whenNotToUse: b.when_not_to_use,
+        domain: b.domain,
+        confidence: b.confidence,
+      });
+      res.status(201).json(out);
+    } catch (err) {
+      res.status(400).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/calibrate/heuristics/:id/activate', async (req, res) => {
+    try {
+      const row = await calibrate.activateHeuristic({
+        heuristicId: req.params.id,
+        hit: (req.body || {}).hit === true,
+      });
+      if (!row) return res.status(404).json({ ok: false, error: 'not_found' });
+      res.json({ ok: true, heuristic: row });
+    } catch (err) {
+      res.status(400).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/calibrate/dashboard', async (req, res) => {
+    try {
+      const userId = String(req.query.user_id || req.user?.id || '1');
+      const out = await calibrate.getCalibrationDashboard(userId);
+      res.json(out);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/calibrate/transfers', async (req, res) => {
+    try {
+      const userId = String(req.query.user_id || req.user?.id || '1');
+      const proposals = await calibrate.listTrustTransfers(userId, {
+        status: req.query.status || 'proposed',
+      });
+      res.json({ ok: true, proposals });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/calibrate/transfers/propose', async (req, res) => {
+    try {
+      const userId = (req.body || {}).user_id || req.user?.id || '1';
+      const out = await calibrate.proposeTrustTransfers(userId);
+      res.status(201).json(out);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/calibrate/transfers/:id/resolve', async (req, res) => {
+    try {
+      const row = await calibrate.resolveTrustTransfer({
+        transferId: req.params.id,
+        status: (req.body || {}).status || 'accepted',
+      });
+      if (!row) return res.status(404).json({ ok: false, error: 'not_found' });
+      res.json({ ok: true, transfer: row });
+    } catch (err) {
+      res.status(400).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/calibrate/auto-tree', async (req, res) => {
+    try {
+      const b = req.body || {};
+      const out = await calibrate.maybeAutoTree({
+        userId: b.user_id || req.user?.id || '1',
+        question: b.question,
+        stakes: b.stakes || 'high',
+        decisionId: b.decision_id,
+      });
+      res.status(out.ok ? 201 : 422).json(out);
+    } catch (err) {
+      res.status(400).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/calibrate/auto-tree', async (req, res) => {
+    try {
+      const userId = String(req.query.user_id || req.user?.id || '1');
+      const triggers = await calibrate.listAutoTreeTriggers(userId);
+      res.json({ ok: true, triggers });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/calibrate/ritual', async (req, res) => {
+    try {
+      const b = req.body || {};
+      const out = await calibrate.runRecalibrationRitual({
+        userId: b.user_id || req.user?.id || '1',
+        triggerKind: b.trigger_kind || 'manual',
+        domain: b.domain || null,
+      });
+      res.status(201).json(out);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/calibrate/rituals', async (req, res) => {
+    try {
+      const userId = String(req.query.user_id || req.user?.id || '1');
+      const rituals = await calibrate.listRituals(userId);
+      res.json({ ok: true, rituals });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // ── Era-8 Compound Me ────────────────────────────────────────────────
+  router.get('/compound/consumers', async (_req, res) => {
+    try {
+      const consumers = await compound.listConsumers();
+      res.json({ ok: true, consumers });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/compound/consumers/seed', async (_req, res) => {
+    try {
+      const out = await compound.registerDefaultConsumers();
+      res.status(201).json(out);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/compound/can-act', async (req, res) => {
+    try {
+      const b = req.body || {};
+      const out = await compound.canActForProduct({
+        userId: b.user_id || req.user?.id || '1',
+        productId: b.product_id || b.product,
+        domain: b.domain,
+        stakes: b.stakes || 'low',
+        actionHint: b.action,
+      });
+      res.status(out.ok ? 200 : 422).json(out);
+    } catch (err) {
+      res.status(400).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/compound/can-act/calls', async (req, res) => {
+    try {
+      const userId = String(req.query.user_id || req.user?.id || '1');
+      const calls = await compound.listCanActCalls(userId, {
+        productId: req.query.product_id || null,
+        limit: Number(req.query.limit) || 50,
+      });
+      res.json({ ok: true, calls });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/compound/log', async (req, res) => {
+    try {
+      const userId = String(req.query.user_id || req.user?.id || '1');
+      const entries = await compound.listCompoundLog(userId, {
+        limit: Number(req.query.limit) || 50,
+      });
+      res.json({ ok: true, entries });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/compound/improvements', async (req, res) => {
+    try {
+      const userId = String(req.query.user_id || req.user?.id || '1');
+      const proposals = await compound.listImprovementProposals(userId, {
+        status: req.query.status || 'proposed',
+      });
+      res.json({ ok: true, proposals });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/compound/improvements/from-debt', async (req, res) => {
+    try {
+      const userId = (req.body || {}).user_id || req.user?.id || '1';
+      const out = await compound.proposeImprovementsFromDebt(userId);
+      res.status(201).json(out);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/compound/improvements/:id', async (req, res) => {
+    try {
+      const row = await compound.updateImprovementProposal({
+        proposalId: req.params.id,
+        status: (req.body || {}).status || 'queued',
+      });
+      if (!row) return res.status(404).json({ ok: false, error: 'not_found' });
+      res.json({ ok: true, proposal: row });
+    } catch (err) {
+      res.status(400).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/compound/role-sync', async (req, res) => {
+    try {
+      const b = req.body || {};
+      const out = await compound.syncRolePackage({
+        userId: b.user_id || req.user?.id || '1',
+        packageId: b.package_id,
+        roleLabel: b.role_label || b.role,
+        direction: b.direction || 'export',
+      });
+      res.status(out.ok ? 201 : 422).json(out);
+    } catch (err) {
+      res.status(400).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/compound/role-syncs', async (req, res) => {
+    try {
+      const userId = String(req.query.user_id || req.user?.id || '1');
+      const syncs = await compound.listRoleSyncs(userId);
+      res.json({ ok: true, syncs });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/compound/ladder/review', async (req, res) => {
+    try {
+      const userId = (req.body || {}).user_id || req.user?.id || '1';
+      const out = await compound.reviewAutonomyLadder(userId);
+      res.status(201).json(out);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/compound/ladder', async (req, res) => {
+    try {
+      const userId = String(req.query.user_id || req.user?.id || '1');
+      const reviews = await compound.listLadderReviews(userId, {
+        status: req.query.status || 'suggested',
+      });
+      res.json({ ok: true, reviews });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/compound/ladder/:id/resolve', async (req, res) => {
+    try {
+      const row = await compound.resolveLadderReview({
+        reviewId: req.params.id,
+        status: (req.body || {}).status || 'applied',
+      });
+      if (!row) return res.status(404).json({ ok: false, error: 'not_found' });
+      res.json({ ok: true, review: row });
     } catch (err) {
       res.status(400).json({ ok: false, error: err.message });
     }

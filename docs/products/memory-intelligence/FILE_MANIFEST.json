@@ -17,6 +17,8 @@
     "db/migrations/20260719_cognitive_core_era4.sql",
     "db/migrations/20260719_cognitive_core_era5.sql",
     "db/migrations/20260719_cognitive_core_era6.sql",
+    "db/migrations/20260719_cognitive_core_era7.sql",
+    "db/migrations/20260719_cognitive_core_era8.sql",
     "services/memory-intelligence-service.js",
     "services/cognitive-core-judgment.js",
     "services/cognitive-core-perspective.js",
@@ -28,6 +30,8 @@
     "services/cognitive-core-trust.js",
     "services/cognitive-core-preserve.js",
     "services/cognitive-core-transmit.js",
+    "services/cognitive-core-calibrate.js",
+    "services/cognitive-core-compound.js",
     "config/judgment-capsule-contracts.js",
     "config/cognitive-core-advisors.js",
     "routes/memory-intelligence-routes.js",
@@ -45,7 +49,9 @@
     "tests/cognitive-core-era3.test.js",
     "tests/cognitive-core-era4.test.js",
     "tests/cognitive-core-era5.test.js",
-    "tests/cognitive-core-era6.test.js"
+    "tests/cognitive-core-era6.test.js",
+    "tests/cognitive-core-era7.test.js",
+    "tests/cognitive-core-era8.test.js"
   ],
   "shared_dependencies": [],
   "history_anchors": [],

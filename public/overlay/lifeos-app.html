@@ -3630,6 +3630,15 @@ function appendLuminJudgmentMeta(data) {
   if (interrupt?.message) {
     lines.push(`<div><strong>Interrupt</strong> ${ _escHtml(String(interrupt.message).slice(0, 120)) }</div>`);
   }
+  const cal = data.calibration || data.cognitive_core?.calibration;
+  if (cal?.overall?.accuracy != null || cal?.domains?.length) {
+    const acc = cal.overall?.accuracy != null ? Number(cal.overall.accuracy).toFixed(2) : '?';
+    lines.push(`<div><strong>Calibration</strong> acc ${ _escHtml(acc) } — hypothesis metrics</div>`);
+  }
+  const ladder = data.ladder || data.autonomy_ladder || data.cognitive_core?.ladder;
+  if (ladder?.direction || ladder?.suggested_tier) {
+    lines.push(`<div><strong>Ladder</strong> ${ _escHtml(String(ladder.direction || 'hold'))} → ${ _escHtml(String(ladder.suggested_tier || '')) }</div>`);
+  }
   if (!lines.length) return;
   _renderJudgmentMeta(container, lines);
 }

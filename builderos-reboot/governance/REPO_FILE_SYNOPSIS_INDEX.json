@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T02:09:21.043Z",
+  "generated_at": "2026-07-20T02:10:29.654Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12033,
+  "file_count": 12039,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -36121,6 +36121,20 @@
       "indexed_at": "2026-07-20T01:42:00.485Z"
     },
     {
+      "path": "db/migrations/20260719_cognitive_core_era7.sql",
+      "synopsis": "Cognitive Core Era-7 (\"Calibrate Me\") — compression + calibration loops.",
+      "bytes": 3602,
+      "mtime": "2026-07-20T02:10:22.902Z",
+      "indexed_at": "2026-07-20T02:10:29.654Z"
+    },
+    {
+      "path": "db/migrations/20260719_cognitive_core_era8.sql",
+      "synopsis": "Cognitive Core Era-8 (\"Compound Me\") — cross-product + continuous compound.",
+      "bytes": 3790,
+      "mtime": "2026-07-20T02:10:22.903Z",
+      "indexed_at": "2026-07-20T02:10:29.654Z"
+    },
+    {
       "path": "db/migrations/20260719_cognitive_core_judgment.sql",
       "synopsis": "Cognitive Core Era-1 — decision journal, predictions, outcomes, miss reports, domain trust.",
       "bytes": 3358,
@@ -37354,9 +37368,9 @@
     {
       "path": "docs/constitution/COGNITIVE_CORE_LAWS.md",
       "synopsis": "Cognitive Core laws — judgment compiler constitution (subordinate to North Star SSOT)",
-      "bytes": 3315,
-      "mtime": "2026-07-20T01:41:55.732Z",
-      "indexed_at": "2026-07-20T01:42:00.485Z"
+      "bytes": 3518,
+      "mtime": "2026-07-20T02:10:22.914Z",
+      "indexed_at": "2026-07-20T02:10:29.654Z"
     },
     {
       "path": "docs/constitution/CONSTITUTION_CONFLICTS.md",
@@ -37515,9 +37529,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 65210,
-      "mtime": "2026-07-20T01:41:55.735Z",
-      "indexed_at": "2026-07-20T01:42:00.485Z"
+      "bytes": 65867,
+      "mtime": "2026-07-20T02:10:22.915Z",
+      "indexed_at": "2026-07-20T02:10:29.654Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40449,17 +40463,17 @@
     {
       "path": "docs/products/memory-intelligence/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
-      "bytes": 2526,
-      "mtime": "2026-07-20T01:45:14.609Z",
-      "indexed_at": "2026-07-20T01:45:15.778Z",
+      "bytes": 2803,
+      "mtime": "2026-07-20T02:10:22.913Z",
+      "indexed_at": "2026-07-20T02:10:29.654Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/products/memory-intelligence/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Memory Intelligence",
-      "bytes": 33996,
-      "mtime": "2026-07-20T01:41:55.690Z",
-      "indexed_at": "2026-07-20T01:42:00.485Z"
+      "bytes": 36632,
+      "mtime": "2026-07-20T02:10:22.912Z",
+      "indexed_at": "2026-07-20T02:10:29.654Z"
     },
     {
       "path": "docs/products/memory-system/FILE_MANIFEST.json",
@@ -63172,9 +63186,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 32623,
-      "mtime": "2026-07-20T01:41:55.667Z",
-      "indexed_at": "2026-07-20T01:42:00.485Z",
+      "bytes": 32691,
+      "mtime": "2026-07-20T02:10:22.909Z",
+      "indexed_at": "2026-07-20T02:10:29.654Z",
       "synopsis_index_only": true
     },
     {
@@ -65192,9 +65206,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 200452,
-      "mtime": "2026-07-20T01:41:55.675Z",
-      "indexed_at": "2026-07-20T01:42:00.485Z"
+      "bytes": 201088,
+      "mtime": "2026-07-20T02:10:22.911Z",
+      "indexed_at": "2026-07-20T02:10:29.654Z"
     },
     {
       "path": "public/overlay/lifeos-ask-your-life.html",
@@ -66813,10 +66827,10 @@
     },
     {
       "path": "routes/cognitive-core-routes.js",
-      "synopsis": "Cognitive Core Era-1–6 API — journal through Preserve Me + Transmit Me.",
-      "bytes": 31937,
-      "mtime": "2026-07-20T01:41:55.647Z",
-      "indexed_at": "2026-07-20T01:42:00.485Z",
+      "synopsis": "Cognitive Core Era-1–8 API — journal through Calibrate Me + Compound Me.",
+      "bytes": 42813,
+      "mtime": "2026-07-20T02:10:22.906Z",
+      "indexed_at": "2026-07-20T02:10:29.654Z",
       "ssot": [
         "docs/products/memory-intelligence/PRODUCT_HOME.md"
       ]
@@ -84877,6 +84891,26 @@
       "indexed_at": "2026-07-19T21:04:54.410Z"
     },
     {
+      "path": "services/cognitive-core-calibrate.js",
+      "synopsis": "Cognitive Core Era-7 \"Calibrate Me\" — heuristics, calibration, trust transfer, rituals.",
+      "bytes": 13075,
+      "mtime": "2026-07-20T02:10:22.904Z",
+      "indexed_at": "2026-07-20T02:10:29.654Z",
+      "ssot": [
+        "docs/products/memory-intelligence/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/cognitive-core-compound.js",
+      "synopsis": "Cognitive Core Era-8 \"Compound Me\" — cross-product can_act + continuous compound.",
+      "bytes": 13579,
+      "mtime": "2026-07-20T02:10:22.905Z",
+      "indexed_at": "2026-07-20T02:10:29.654Z",
+      "ssot": [
+        "docs/products/memory-intelligence/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/cognitive-core-extend.js",
       "synopsis": "Cognitive Core Era-3 \"Extend Me\" engine — proactive partner.",
       "bytes": 13045,
@@ -92929,6 +92963,20 @@
       "bytes": 7103,
       "mtime": "2026-07-20T01:41:55.660Z",
       "indexed_at": "2026-07-20T01:42:00.485Z"
+    },
+    {
+      "path": "tests/cognitive-core-era7.test.js",
+      "synopsis": "Cognitive Core Era-7 unit tests — Calibrate Me (fake-pool).",
+      "bytes": 5962,
+      "mtime": "2026-07-20T02:10:22.907Z",
+      "indexed_at": "2026-07-20T02:10:29.654Z"
+    },
+    {
+      "path": "tests/cognitive-core-era8.test.js",
+      "synopsis": "Cognitive Core Era-8 unit tests — Compound Me (fake-pool).",
+      "bytes": 6679,
+      "mtime": "2026-07-20T02:10:22.908Z",
+      "indexed_at": "2026-07-20T02:10:29.654Z"
     },
     {
       "path": "tests/cognitive-core-judgment.test.js",

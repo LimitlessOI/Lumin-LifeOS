@@ -98,5 +98,7 @@ Do not market “digital immortality.” Frame as preserving hard-earned judgmen
 | 4 | Trust Me | #19–24 | Shipped |
 | 5 | Preserve Me | #25 | Shipped — sealed packages + consent transmission |
 | 6 | Transmit Me | #26–30 | Shipped — marketplace, interrupts, debt, trees, import |
+| 7 | Calibrate Me | #31–35 | Shipped — heuristics, calibration, transfer, auto-tree, rituals |
+| 8 | Compound Me | #36–40 | Shipped — product can_act bridge, improvements, ladder |
 
-Era-6 was not in the original five-era brainstorm; it absorbs orphaned scale/transmit ideas after Preserve Me.
+Era-6+ were not in the original five-era brainstorm; they absorb orphaned scale/calibrate/compound ideas after Preserve Me.
