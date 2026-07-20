@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T04:07:04.341Z",
+  "generated_at": "2026-07-20T04:15:32.286Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12048,
   "files": [
@@ -39664,9 +39664,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 230140,
-      "mtime": "2026-07-20T03:01:56.696Z",
-      "indexed_at": "2026-07-20T03:02:08.912Z"
+      "bytes": 231968,
+      "mtime": "2026-07-20T04:15:20.972Z",
+      "indexed_at": "2026-07-20T04:15:32.286Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
