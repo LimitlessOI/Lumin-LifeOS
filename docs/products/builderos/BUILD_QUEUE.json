@@ -1252,7 +1252,7 @@
     },
     {
       "id": "self-repair-era1-8",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/self-repair-sentry-canary.js",
       "task": "Implement the SENTRY chaos-canary: verify-the-factory by directly testing SENTRY's own assertion-checking logic against a deliberately broken input, and asserting it correctly reports failure. This is the 'observe the observer' step from docs/SELF_REPAIR_DOCTRINE.md Part 0 gap #1.",
       "spec": "Import runSingleAssertion from factory-staging/factory-core/sentry/behavior-assertions.js (already exported, do not modify that file). Export async function runSentryCanary({ readFileRunner } = {}) that constructs a deliberately-broken synthetic case: an exports_smoke assertion declaring an export name that is guaranteed absent (e.g. '__self_repair_canary_should_never_exist__') against a real, small, in-memory-only fake module content, using an injected importModule runner that returns a plain object without that key (do not touch any real file on disk -- this must be fully self-contained and side-effect-free). Call runSingleAssertion with that assertion and runner, and assert the result has ok:false and a 'missing_exports' reason. Return { ok: boolean, canary_passed: boolean, detail: object } where canary_passed is true only if SENTRY correctly rejected the deliberately-broken case (ok:false as expected) -- if SENTRY incorrectly returns ok:true for the broken case, canary_passed must be false and this is the five-alarm signal the whole step exists to catch. Also run a second, mirror case with a genuinely-present export (using an importModule runner that DOES include the expected key) and assert ok:true, so the canary also proves SENTRY doesn't fail-closed on everything (a gate that rejects real success is as broken as one that accepts real failure). runSentryCanary must not require a live server, database, or network call -- it exercises the pure assertion-checking function directly.",
@@ -1275,30 +1275,9 @@
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "self-repair-era1-8",
       "mission_id": "PRODUCT-builderos",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/builderos/twins/steps/self-repair-era1-8.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-20T18:57:18.279Z",
-        "shipped_at": "2026-07-20T18:57:18.279Z",
-        "commit_sha": null,
-        "content_sha256": "6b3e29622a47f9a4742673311ce18cf7cdf636bc61e806822ec9469decc0eb90",
-        "target_file": "services/self-repair-sentry-canary.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/self-repair-sentry-canary.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/builderos/twins/steps/self-repair-era1-8.exact",
-          "content_sha256": "6b3e29622a47f9a4742673311ce18cf7cdf636bc61e806822ec9469decc0eb90"
-        }
-      },
-      "shipped_at": "2026-07-20T18:57:18.279Z"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-20T18:57:25.325Z",
+      "commit_sha": "24f9b02be3857877bf0e15da804e9cdfb6e6a2c9"
     }
   ],
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
