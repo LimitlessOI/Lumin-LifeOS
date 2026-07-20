@@ -89,7 +89,9 @@ export function inferPriorConfidence(text = '') {
   return { prior: 0.55, band: 'neutral', source: 'default_neutral', cues };
 }
 
-const BUILD_VERB = /\b(fix|update|add|remove|delete|create|make|build|improve|edit|modify|resize|increase|decrease|enable|disable|install|configure|rename|move|replace|set|reset|adjust|implement|wire|connect|upgrade|rewrite|refactor|ship|deploy|redeploy|push)\b/i;
+// Base verbs + common inflections (-s / -ed / -ing, incl. doubled consonant like
+// "shipping"/"wiring") so gerunds ("refactoring", "building") are caught too.
+const BUILD_VERB = /\b(fix|update|add|remove|delete|create|make|build|improve|edit|modify|resize|increase|decrease|enable|disable|install|configure|rename|move|replace|set|reset|adjust|implement|wire|connect|upgrade|rewrite|refactor|ship|deploy|redeploy|push)(?:e?s|ed|d|ping|ning|ging|ling|ting|ing)?\b/i;
 const EXPLICIT_SHIP = /\b(ship it|make it happen|do it now|just do it|get it done|execute (it|this|that)|run it now|push (it|this)|go ahead)\b/i;
 
 /**

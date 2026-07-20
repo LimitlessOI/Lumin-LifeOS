@@ -52,6 +52,8 @@ test('detectShipDecision classifies ship vs build vs neither', () => {
   assert.equal(detectShipDecision('ship it'), 'ship');
   assert.equal(detectShipDecision('make it happen'), 'ship');
   assert.equal(detectShipDecision('fix the header spacing'), 'build');
+  assert.equal(detectShipDecision('refactoring the auth flow'), 'build'); // gerund
+  assert.equal(detectShipDecision('shipping the new pricing page'), 'build'); // doubled consonant
   assert.equal(detectShipDecision('what did the last build do?'), null);
   assert.equal(detectShipDecision(''), null);
 });

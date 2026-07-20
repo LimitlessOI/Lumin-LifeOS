@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T04:36:17.235Z",
+  "generated_at": "2026-07-20T04:41:25.781Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12050,
   "files": [
@@ -84924,9 +84924,9 @@
     {
       "path": "services/cognitive-core-capture.js",
       "synopsis": "Cognitive Core — prediction auto-capture + auto-resolve sweep.",
-      "bytes": 12365,
-      "mtime": "2026-07-20T04:36:17.235Z",
-      "indexed_at": "2026-07-20T04:36:17.235Z",
+      "bytes": 12568,
+      "mtime": "2026-07-20T04:41:25.781Z",
+      "indexed_at": "2026-07-20T04:41:25.781Z",
       "ssot": [
         "docs/products/memory-intelligence/PRODUCT_HOME.md"
       ]
@@ -92993,9 +92993,9 @@
     {
       "path": "tests/cognitive-core-capture.test.js",
       "synopsis": "Cognitive Core auto-capture — deterministic proof of the prediction half.",
-      "bytes": 4890,
-      "mtime": "2026-07-20T04:36:17.235Z",
-      "indexed_at": "2026-07-20T04:36:17.235Z"
+      "bytes": 5073,
+      "mtime": "2026-07-20T04:41:25.781Z",
+      "indexed_at": "2026-07-20T04:41:25.781Z"
     },
     {
       "path": "tests/cognitive-core-era10.test.js",
