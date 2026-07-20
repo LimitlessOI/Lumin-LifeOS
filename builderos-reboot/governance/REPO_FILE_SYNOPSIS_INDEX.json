@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T19:03:15.444Z",
+  "generated_at": "2026-07-20T19:05:54.339Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12068,
+  "file_count": 12069,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -39396,6 +39396,13 @@
       "bytes": 22394,
       "mtime": "2026-07-20T19:03:15.444Z",
       "indexed_at": "2026-07-20T19:03:15.444Z"
+    },
+    {
+      "path": "docs/marketing/PATH_TO_FIRST_DOLLAR.md",
+      "synopsis": "Per-product path to first dollar — every concrete step from today to money collected",
+      "bytes": 13429,
+      "mtime": "2026-07-20T19:05:54.339Z",
+      "indexed_at": "2026-07-20T19:05:54.339Z"
     },
     {
       "path": "docs/marketing/video-scripts.md",
