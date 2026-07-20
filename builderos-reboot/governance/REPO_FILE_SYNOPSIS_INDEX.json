@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T00:50:09.408Z",
+  "generated_at": "2026-07-20T00:52:58.998Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12026,
   "files": [
@@ -63158,9 +63158,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 32555,
-      "mtime": "2026-07-20T00:41:50.829Z",
-      "indexed_at": "2026-07-20T00:41:55.829Z",
+      "bytes": 32589,
+      "mtime": "2026-07-20T00:52:48.978Z",
+      "indexed_at": "2026-07-20T00:52:58.998Z",
       "synopsis_index_only": true
     },
     {
