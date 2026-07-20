@@ -483,6 +483,8 @@ Current truth:
 
 ## Agent Handoff Notes
 
+**2026-07-20 security gate:** Cognitive Core is founder-only today. `routes/cognitive-core-routes.js` now denies ordinary account JWT roles before any Era-1–10 handler runs while preserving founder/admin/operator JWTs and command-key automation. Focused authorization tests pass 3/3; full `npm test`, BuilderOS preflight, product-home verification, and SSOT checks pass.
+
 **Current state (2026-05-14, S2 complete):**
 Phase 1 fully built + extended. Phase 2 adoption (S2) now seeded:
 - All 7 tables + 2 views auto-apply on deploy
