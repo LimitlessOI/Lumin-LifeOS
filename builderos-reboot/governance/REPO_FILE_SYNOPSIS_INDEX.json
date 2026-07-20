@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T05:39:01.560Z",
+  "generated_at": "2026-07-20T06:03:36.374Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12052,
+  "file_count": 12053,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -40353,9 +40353,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 644407,
-      "mtime": "2026-07-20T04:36:17.235Z",
-      "indexed_at": "2026-07-20T04:36:17.235Z"
+      "bytes": 645256,
+      "mtime": "2026-07-20T06:03:18.046Z",
+      "indexed_at": "2026-07-20T06:03:36.374Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -63214,9 +63214,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 32880,
-      "mtime": "2026-07-20T04:50:40.545Z",
-      "indexed_at": "2026-07-20T04:52:38.597Z",
+      "bytes": 32920,
+      "mtime": "2026-07-20T06:01:58.981Z",
+      "indexed_at": "2026-07-20T06:03:36.374Z",
       "synopsis_index_only": true
     },
     {
@@ -84641,9 +84641,9 @@
     {
       "path": "services/chair-lumin-unified.js",
       "synopsis": "Chair native turn — Lumin IS the Chair; personality translates real facts only.",
-      "bytes": 4167,
-      "mtime": "2026-07-19T21:03:56.663Z",
-      "indexed_at": "2026-07-19T21:04:54.410Z",
+      "bytes": 5108,
+      "mtime": "2026-07-20T06:01:40.841Z",
+      "indexed_at": "2026-07-20T06:03:36.374Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -84661,9 +84661,9 @@
     {
       "path": "services/chair-personality-translate.js",
       "synopsis": "Lumin personality translate — human-language layer on SYSTEM_FACTS only (not theater).",
-      "bytes": 8308,
-      "mtime": "2026-07-19T21:03:56.663Z",
-      "indexed_at": "2026-07-19T21:04:54.410Z",
+      "bytes": 8394,
+      "mtime": "2026-07-20T06:01:40.841Z",
+      "indexed_at": "2026-07-20T06:03:36.374Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -92948,6 +92948,13 @@
       "bytes": 1543,
       "mtime": "2026-07-19T21:03:56.784Z",
       "indexed_at": "2026-07-19T21:04:54.410Z"
+    },
+    {
+      "path": "tests/chair-lumin-unified-so003.test.js",
+      "synopsis": "SO-003 regression guard — the Chair must never return a",
+      "bytes": 2082,
+      "mtime": "2026-07-20T06:01:08.570Z",
+      "indexed_at": "2026-07-20T06:03:36.374Z"
     },
     {
       "path": "tests/chair-native-facts-search-fallback.test.js",

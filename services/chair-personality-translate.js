@@ -186,6 +186,7 @@ Lumin:`;
 
 export function formatFactsFallback(facts = {}) {
   const lines = [];
+  if (facts.grounded_direct_answer) lines.push(String(facts.grounded_direct_answer));
   if (facts.point_b_summary) lines.push(facts.point_b_summary);
   if (facts.alpha_readiness?.ready_for_alpha_testing != null) {
     lines.push(facts.alpha_readiness.ready_for_alpha_testing

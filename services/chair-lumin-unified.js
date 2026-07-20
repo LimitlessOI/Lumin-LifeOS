@@ -47,17 +47,29 @@ export async function runChairNativeTurn(cleanedInput, deps = {}, chairContext =
     systemFacts.chair_note = `${systemFacts.chair_note} Continue the thread naturally — do not paraphrase Adam's request back; do not ask obvious confirm questions.`;
   }
 
+  // SO-003: the Chair channel must never be served a canned/templated
+  // non-model answer in place of real reasoning. These direct-answer
+  // helpers used to BE the final voice — zero model call, a hardcoded
+  // string returned as-is. They now only ground the real model call: the
+  // deterministic fact they'd have returned is injected into systemFacts,
+  // and translatePersonality (a real, strong-model call) always runs and
+  // produces the actual reply. Founder-flagged gap, fixed 2026-07-20.
   let voice;
+  let directAnswerHint = null;
   if (needsSystemKnowledge(cleanedInput)) {
-    voice = formatDirectProgramAnswer(cleanedInput, systemFacts);
+    directAnswerHint = formatDirectProgramAnswer(cleanedInput, systemFacts);
   }
-  if (!voice && shouldUseDirectProgramAnswer(cleanedInput, systemFacts)) {
-    voice = formatDirectProgramAnswer(cleanedInput, systemFacts);
+  if (!directAnswerHint && shouldUseDirectProgramAnswer(cleanedInput, systemFacts)) {
+    directAnswerHint = formatDirectProgramAnswer(cleanedInput, systemFacts);
   }
-  if (!voice && shouldUseDirectFactualAnswer(cleanedInput, systemFacts)) {
-    voice = formatDirectFactualAnswer(cleanedInput, systemFacts);
+  if (!directAnswerHint && shouldUseDirectFactualAnswer(cleanedInput, systemFacts)) {
+    directAnswerHint = formatDirectFactualAnswer(cleanedInput, systemFacts);
   }
-  if (!voice) {
+  if (directAnswerHint) {
+    systemFacts.grounded_direct_answer = directAnswerHint;
+    systemFacts.chair_note = `${systemFacts.chair_note || ''} A verified direct answer is available in grounded_direct_answer — use it as the factual basis for your reply, in your own voice; do not invent beyond it, but do not just repeat it verbatim either.`.trim();
+  }
+  {
     voice = await translatePersonality({
       callAI,
       userMessage: cleanedInput,
