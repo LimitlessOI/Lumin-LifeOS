@@ -1340,7 +1340,31 @@
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "self-repair-tier1-2",
       "mission_id": "PRODUCT-builderos",
-      "revive_note": "2026-07-20: first reset caught the malformed CREATE TABLE bug, but I forgot to delete the stale broken file before resetting the queue status -- claimPreExistingSatisfiedSteps found the SAME unfixed file (empty file_contains meant nothing blocked the shortcut) and shipped it through again via pre_existing_artifact_proof without codegen ever running a second time. File deleted this round (commit companion to this one) to force real regeneration -- same lesson as Era 1's era1-1/4/6, now confirmed to apply just as much when reverting a step after its FIRST bad attempt, not just after multiple attempts."
+      "revive_note": "2026-07-20: first reset caught the malformed CREATE TABLE bug, but I forgot to delete the stale broken file before resetting the queue status -- claimPreExistingSatisfiedSteps found the SAME unfixed file (empty file_contains meant nothing blocked the shortcut) and shipped it through again via pre_existing_artifact_proof without codegen ever running a second time. File deleted this round (commit companion to this one) to force real regeneration -- same lesson as Era 1's era1-1/4/6, now confirmed to apply just as much when reverting a step after its FIRST bad attempt, not just after multiple attempts.",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/builderos/twins/steps/self-repair-tier1-2.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-20T21:11:09.824Z",
+        "shipped_at": "2026-07-20T21:11:09.824Z",
+        "commit_sha": null,
+        "content_sha256": "633fd86df9a22b47913d721d5e2781ce0c614f32e8807a4478030ebb37465bd6",
+        "target_file": "services/self-repair-failure-router.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/self-repair-failure-router.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/builderos/twins/steps/self-repair-tier1-2.exact",
+          "content_sha256": "633fd86df9a22b47913d721d5e2781ce0c614f32e8807a4478030ebb37465bd6"
+        }
+      },
+      "shipped_at": "2026-07-20T21:11:09.824Z"
     },
     {
       "id": "self-repair-tier1-3",

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T21:07:17.578Z",
+  "generated_at": "2026-07-20T21:11:12.842Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12075,
   "files": [
@@ -90226,9 +90226,9 @@
     {
       "path": "services/self-repair-failure-router.js",
       "synopsis": "Exports routeFailure — services/self-repair-failure-router.js.",
-      "bytes": 1152,
-      "mtime": "2026-07-20T20:32:56.070Z",
-      "indexed_at": "2026-07-20T20:32:56.070Z"
+      "bytes": 1099,
+      "mtime": "2026-07-20T21:11:12.842Z",
+      "indexed_at": "2026-07-20T21:11:12.842Z"
     },
     {
       "path": "services/self-repair-fix-durability.js",
