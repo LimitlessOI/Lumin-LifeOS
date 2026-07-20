@@ -1003,7 +1003,7 @@
     },
     {
       "id": "self-repair-era1-1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/self-repair-provenance-ledger.js",
       "task": "Implement the provenance ledger: an append-only, real-git-verified record of every 'done'/commit claim the factory makes.",
       "spec": "Self-bootstrap its own table on first use with `CREATE TABLE IF NOT EXISTS self_repair_provenance_ledger (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), claim TEXT NOT NULL, commit_sha TEXT, is_ancestor_of_tip BOOLEAN, verified_at TIMESTAMPTZ, epistemic_grade TEXT NOT NULL DEFAULT 'GUESS', result TEXT, created_at TIMESTAMPTZ NOT NULL DEFAULT now())` (pattern: see services/account-manager.js for the self-bootstrap-on-first-query style, do not require a separate migration file). Export async function recordProvenanceClaim(pool, { claim, commit_sha }) that inserts a row with epistemic_grade='GUESS' and result=null (the claim is unverified at record time). Export async function verifyProvenanceClaim(pool, { claim_id, repoRoot }) that shells out to `git merge-base --is-ancestor <commit_sha> HEAD` (use node:child_process execFileSync, cwd: repoRoot, matching the pattern in services/truth-ladder.js's execFileSync('git', ...) calls) to determine is_ancestor_of_tip, then UPDATEs the row with is_ancestor_of_tip, verified_at=now(), epistemic_grade='KNOW', and result='verified' or 'FALSE_CLAIM' accordingly, and returns the updated row. Export async function getProvenanceLedger(pool, { limit = 50 } = {}) that returns the most recent rows ordered by created_at DESC. Fail closed: if the git command errors (bad sha, not found), verifyProvenanceClaim must set result='FALSE_CLAIM', never silently treat an error as verified. EVERY exported function that touches this table must run `await pool.query('CREATE TABLE IF NOT EXISTS self_repair_provenance_ledger (...)')` as its own, separate, no-parameters pool.query() call before any parameterized query in that same function -- do not combine the CREATE TABLE and a parameterized query into one query string (PostgreSQL's prepared-statement protocol, which pg's pool.query(text, values) uses whenever values are passed, rejects multiple statements in one call). CRITICAL: the previous attempt (commit e054c97b60e200a699c88337822f2980e155a591) got this right in recordProvenanceClaim, but verifyProvenanceClaim and getProvenanceLedger both query the table directly with NO CREATE TABLE guard -- so calling either before recordProvenanceClaim has ever run (a fresh deploy, or a getProvenanceLedger audit call before any claim exists) throws 'relation does not exist' instead of failing gracefully. ALL THREE functions -- not just recordProvenanceClaim -- must independently run the CREATE TABLE IF NOT EXISTS guard as their own first statement.",
@@ -1033,7 +1033,14 @@
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "self-repair-era1-1",
       "mission_id": "PRODUCT-builderos",
-      "revive_note": "2026-07-20: first attempt hit NOT_ON_BLUEPRINT (transient race). Second attempt (commit e054c97b60e200a699c88337822f2980e155a591) shipped and was read directly -- recordProvenanceClaim self-bootstraps correctly, but verifyProvenanceClaim and getProvenanceLedger do not, a real bug (same class as era1-4's getTargetReputation gap). Reset to pending again with the gap named explicitly in-spec."
+      "revive_note": "2026-07-20: first attempt hit NOT_ON_BLUEPRINT (transient race). Second attempt (commit e054c97b60e200a699c88337822f2980e155a591) shipped and was read directly -- recordProvenanceClaim self-bootstraps correctly, but verifyProvenanceClaim and getProvenanceLedger do not, a real bug (same class as era1-4's getTargetReputation gap). Reset to pending again with the gap named explicitly in-spec.",
+      "pre_existing": true,
+      "shipped_via": "pre_existing_artifact_proof",
+      "shipped_at": "2026-07-20T19:12:37.829Z",
+      "last_error": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null
     },
     {
       "id": "self-repair-era1-2",
@@ -1068,7 +1075,7 @@
     },
     {
       "id": "self-repair-era1-3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/self-repair-fix-durability.js",
       "task": "Implement the fix-durability clock: track whether a shipped fix later re-breaks, to detect illusory fixes.",
       "spec": "Self-bootstrap: `CREATE TABLE IF NOT EXISTS self_repair_fix_durability (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), fix_id TEXT NOT NULL, target TEXT NOT NULL, shipped_at TIMESTAMPTZ NOT NULL, rebroke_at TIMESTAMPTZ, rebreak_count INTEGER NOT NULL DEFAULT 0, created_at TIMESTAMPTZ NOT NULL DEFAULT now())`. Export async function recordFixShipped(pool, { fix_id, target, shipped_at }) that inserts a new row (shipped_at defaults to now() if omitted). Export async function recordRebreak(pool, { fix_id, target }) that finds the most recent row for that fix_id+target with rebroke_at IS NULL, sets rebroke_at=now(), increments rebreak_count, and returns the computed half_life in milliseconds (rebroke_at - shipped_at); if no matching un-rebroken row exists, insert a fresh row with rebroke_at already set and rebreak_count=1. Export async function getFixDurability(pool, { target, limit = 20 }) returning rows for a target ordered by shipped_at DESC, each with a computed half_life_ms field (rebroke_at - shipped_at in ms, or null if never rebroken). CRITICAL: the previous attempt exported the required functions but never actually ran the CREATE TABLE statement anywhere -- it went straight to INSERT/SELECT against a table that never gets created, which throws 'relation does not exist' on the very first real call. EVERY exported function that touches this table must run `await pool.query('CREATE TABLE IF NOT EXISTS self_repair_fix_durability (...)')` as its own, separate, no-parameters pool.query() call BEFORE any parameterized query in that same function -- do not combine the CREATE TABLE and a parameterized INSERT/SELECT into one query string, because PostgreSQL's prepared-statement protocol (which pg's pool.query(text, values) uses whenever a values array is passed) rejects multiple SQL statements in a single call with 'cannot insert multiple commands into a prepared statement'.",
@@ -1098,11 +1105,14 @@
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "self-repair-era1-3",
       "mission_id": "PRODUCT-builderos",
-      "revive_note": "2026-07-20: reset after independent verification (reading the actual shipped file, not trusting SENTRY-pass alone) found it missing the CREATE TABLE statement entirely -- exports_smoke only checks the function names exist, it does not run the code, so a function that would throw on its first real call still passed. This is exactly gap #1 from docs/SELF_REPAIR_DOCTRINE.md Part 0 in action. Added file_contains as a second, independent check SENTRY can enforce automatically on rebuild, and strengthened the spec with the exact failure mode so it isn't repeated."
+      "revive_note": "2026-07-20: reset after independent verification (reading the actual shipped file, not trusting SENTRY-pass alone) found it missing the CREATE TABLE statement entirely -- exports_smoke only checks the function names exist, it does not run the code, so a function that would throw on its first real call still passed. This is exactly gap #1 from docs/SELF_REPAIR_DOCTRINE.md Part 0 in action. Added file_contains as a second, independent check SENTRY can enforce automatically on rebuild, and strengthened the spec with the exact failure mode so it isn't repeated.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-20T19:12:51.938Z",
+      "commit_sha": "1d7634b3c5a4ce983eb0369d25792898adb361be"
     },
     {
       "id": "self-repair-era1-4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/self-repair-target-reputation.js",
       "task": "Implement per-target reputation tracking (flaky-codegen detection): which files/targets are historically hard to codegen correctly.",
       "spec": "Self-bootstrap: `CREATE TABLE IF NOT EXISTS self_repair_target_reputation (target_path TEXT PRIMARY KEY, attempts INTEGER NOT NULL DEFAULT 0, failures INTEGER NOT NULL DEFAULT 0, models_tried JSONB NOT NULL DEFAULT '[]', hardness_score NUMERIC NOT NULL DEFAULT 0, updated_at TIMESTAMPTZ NOT NULL DEFAULT now())`. Export async function recordAttempt(pool, { target_path, model_tier, ok }) that upserts (INSERT ... ON CONFLICT (target_path) DO UPDATE): increments attempts always, increments failures when ok=false, appends model_tier to models_tried if not already present (dedupe), and recomputes hardness_score = failures::numeric / GREATEST(attempts, 1). Export async function getTargetReputation(pool, { target_path }) returning the row for that target, or null if never attempted. Fail closed: hardness_score must never divide by zero (use GREATEST(attempts,1) as specified). CRITICAL: the previous attempt correctly self-bootstrapped the table inside recordAttempt, but getTargetReputation queried the table directly with no CREATE TABLE IF NOT EXISTS guard first -- so calling getTargetReputation before any recordAttempt has ever run (a normal fresh-deploy or fresh-target scenario) throws 'relation self_repair_target_reputation does not exist' instead of returning null. EVERY exported function that touches this table, including getTargetReputation, must independently run `await pool.query('CREATE TABLE IF NOT EXISTS self_repair_target_reputation (...)')` as its own no-parameters call before its SELECT -- do not assume recordAttempt already ran first.",
@@ -1130,11 +1140,18 @@
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "self-repair-era1-4",
       "mission_id": "PRODUCT-builderos",
-      "revive_note": "2026-07-20: independently reading the shipped file (commit 6ac78b58949b9b3c74aeac131f2f7549d9088762) found recordAttempt bootstraps correctly but getTargetReputation does not -- a real bug (throws on a fresh target/deploy) even though SENTRY's exports_smoke assertion passed. Reset to pending with a strengthened spec + file_contains guard so the regenerated version is checked, not just export-name presence."
+      "revive_note": "2026-07-20: independently reading the shipped file (commit 6ac78b58949b9b3c74aeac131f2f7549d9088762) found recordAttempt bootstraps correctly but getTargetReputation does not -- a real bug (throws on a fresh target/deploy) even though SENTRY's exports_smoke assertion passed. Reset to pending with a strengthened spec + file_contains guard so the regenerated version is checked, not just export-name presence.",
+      "pre_existing": true,
+      "shipped_via": "pre_existing_artifact_proof",
+      "shipped_at": "2026-07-20T19:12:37.830Z",
+      "last_error": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null
     },
     {
       "id": "self-repair-era1-5",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/self-repair-negative-knowledge.js",
       "task": "Implement the negative knowledge base: never blindly retry an approach already proven to fail for a given target.",
       "spec": "Self-bootstrap: `CREATE TABLE IF NOT EXISTS self_repair_negative_knowledge (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), target TEXT NOT NULL, approach_signature TEXT NOT NULL, failed_because TEXT NOT NULL, first_seen TIMESTAMPTZ NOT NULL DEFAULT now(), times_seen INTEGER NOT NULL DEFAULT 1, UNIQUE(target, approach_signature))`. Export async function recordFailedApproach(pool, { target, approach_signature, failed_because }) that upserts (INSERT ... ON CONFLICT (target, approach_signature) DO UPDATE SET times_seen = self_repair_negative_knowledge.times_seen + 1) -- first time records first_seen=now() and times_seen=1, repeat occurrences only bump times_seen. Export async function hasFailedApproach(pool, { target, approach_signature }) returning the existing row (with times_seen) if this exact target+approach has failed before, or null if it's genuinely new. This mirrors (do not duplicate; this is the persistent-store companion to) the in-memory known-bad-signature logic already in services/governed-autonomous-shipping-loop.js -- keep this module focused purely on the negative-knowledge table, no changes to that other file. CRITICAL: the previous attempt exported the required functions but never ran the CREATE TABLE statement anywhere, so it throws 'relation does not exist' on the very first real call. EVERY exported function that touches this table must run `await pool.query('CREATE TABLE IF NOT EXISTS self_repair_negative_knowledge (...)')` as its own, separate, no-parameters pool.query() call before any parameterized query in that same function.",
@@ -1163,34 +1180,13 @@
       "blueprint_step_id": "self-repair-era1-5",
       "mission_id": "PRODUCT-builderos",
       "revive_note": "2026-07-20: reset after independent verification found it missing the CREATE TABLE statement entirely -- exports_smoke only checks function names exist, not that the code runs. Added file_contains as a second, independent, SENTRY-enforceable check.",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/builderos/twins/steps/self-repair-era1-5.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-20T19:13:45.643Z",
-        "shipped_at": "2026-07-20T19:13:45.643Z",
-        "commit_sha": null,
-        "content_sha256": "870e9e962d805563578bc1731395ccf6ac20a3dcdb967bab32c18fa04c29c4d4",
-        "target_file": "services/self-repair-negative-knowledge.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/self-repair-negative-knowledge.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/builderos/twins/steps/self-repair-era1-5.exact",
-          "content_sha256": "870e9e962d805563578bc1731395ccf6ac20a3dcdb967bab32c18fa04c29c4d4"
-        }
-      },
-      "shipped_at": "2026-07-20T19:13:45.643Z"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-20T19:13:53.107Z",
+      "commit_sha": "c82d3b3b8178b31dd057cdec1ef959ea6adcb6cc"
     },
     {
       "id": "self-repair-era1-6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/self-repair-decision-log.js",
       "task": "Implement the factory decision log: an honest record of what tier/model actually ran versus what was claimed, to verify escalation claims against reality.",
       "spec": "Self-bootstrap: `CREATE TABLE IF NOT EXISTS self_repair_decision_log (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), decision TEXT NOT NULL, escalation_claim TEXT, tier_actually_run TEXT, cost_tokens INTEGER, cost_ms INTEGER, created_at TIMESTAMPTZ NOT NULL DEFAULT now())`. Export async function recordFactoryDecision(pool, { decision, escalation_claim, tier_actually_run, cost_tokens, cost_ms }) that inserts a row as-is (all fields except decision are optional/nullable). Export async function getDecisionLog(pool, { limit = 50 } = {}) returning the most recent rows ordered by created_at DESC. No derived logic in this step -- this is a pure recorder; a later step can add the reconciliation query that flags escalation_claim != tier_actually_run mismatches. CRITICAL: the previous attempt correctly tried to create the table, but combined `CREATE TABLE IF NOT EXISTS ...; INSERT INTO ...;` into ONE query string passed to pool.query(text, values) with $1-style params in the same call -- PostgreSQL's prepared-statement protocol (which pg's pool.query uses whenever a values array is passed) rejects multiple SQL statements in a single call with the real runtime error 'cannot insert multiple commands into a prepared statement'. The CREATE TABLE must be its OWN separate pool.query() call with NO parameters, executed before the parameterized INSERT, not combined into one query string.",
@@ -1218,7 +1214,14 @@
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "self-repair-era1-6",
       "mission_id": "PRODUCT-builderos",
-      "revive_note": "2026-07-20: reset after independent verification found a real Postgres protocol bug (multiple statements in one parameterized pool.query call) that would throw at runtime despite passing exports_smoke. Strengthened spec with the exact mechanism; added file_contains as a second check."
+      "revive_note": "2026-07-20: reset after independent verification found a real Postgres protocol bug (multiple statements in one parameterized pool.query call) that would throw at runtime despite passing exports_smoke. Strengthened spec with the exact mechanism; added file_contains as a second check.",
+      "pre_existing": true,
+      "shipped_via": "pre_existing_artifact_proof",
+      "shipped_at": "2026-07-20T19:12:37.831Z",
+      "last_error": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null
     },
     {
       "id": "self-repair-era1-7",
@@ -1253,7 +1256,7 @@
     },
     {
       "id": "self-repair-era1-8",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/self-repair-sentry-canary.js",
       "task": "Implement the SENTRY chaos-canary: verify-the-factory by directly testing SENTRY's own assertion-checking logic against a deliberately broken input, and asserting it correctly reports failure. This is the 'observe the observer' step from docs/SELF_REPAIR_DOCTRINE.md Part 0 gap #1.",
       "spec": "Import runSingleAssertion from factory-staging/factory-core/sentry/behavior-assertions.js (already exported, do not modify that file). Export async function runSentryCanary({ readFileRunner } = {}) that constructs a deliberately-broken synthetic case: an exports_smoke assertion declaring an export name that is guaranteed absent (e.g. '__self_repair_canary_should_never_exist__') against a real, small, in-memory-only fake module content, using an injected importModule runner that returns a plain object without that key (do not touch any real file on disk -- this must be fully self-contained and side-effect-free). Call runSingleAssertion with that assertion and runner, and assert the result has ok:false and a 'missing_exports' reason. Return { ok: boolean, canary_passed: boolean, detail: object } where canary_passed is true only if SENTRY correctly rejected the deliberately-broken case (ok:false as expected) -- if SENTRY incorrectly returns ok:true for the broken case, canary_passed must be false and this is the five-alarm signal the whole step exists to catch. Also run a second, mirror case with a genuinely-present export (using an importModule runner that DOES include the expected key) and assert ok:true, so the canary also proves SENTRY doesn't fail-closed on everything (a gate that rejects real success is as broken as one that accepts real failure). runSentryCanary must not require a live server, database, or network call -- it exercises the pure assertion-checking function directly. CRITICAL, read exactly: runSingleAssertion(assertion, runner) reads `runner.importModule` (a PROPERTY on an object), NOT a bare function -- the previous attempt (commit 24f9b02be3857877bf0e15da804e9cdfb6e6a2c9) called `runSingleAssertion(brokenAssertion, injectBrokenModule)` passing the mock function directly as the runner, so `runner.importModule` was undefined on both the broken and working cases, both fell through to the `no_import_or_file_runner` branch, and `canary_passed` was permanently false regardless of whether SENTRY actually works -- the exact silent-failure-mode this canary exists to catch, present in the canary itself. The correct call is `runSingleAssertion(brokenAssertion, { importModule: injectBrokenModule })` (wrap the mock in an object under the `importModule` key), same for the working case. Also, per behavior-assertions.js's real implementation, the exports_smoke ok:false reason string is `missing_exports:<names>` (colon-joined, not the bare literal 'missing_exports') -- check `brokenResult.reason.startsWith('missing_exports')`, not strict equality.",
@@ -1280,30 +1283,9 @@
       "blueprint_step_id": "self-repair-era1-8",
       "mission_id": "PRODUCT-builderos",
       "revive_note": "2026-07-20: independently executed the shipped canary against the real runSingleAssertion (not trusting exports_smoke/SENTRY-pass alone) and found it always reports canary_passed:false because the mock runner functions were passed bare instead of wrapped as { importModule: fn } -- the canary meant to catch SENTRY silently passing broken code was itself silently broken. Reset to pending with the exact required call shape spelled out plus a file_contains guard.",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/builderos/twins/steps/self-repair-era1-8.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-20T19:15:44.694Z",
-        "shipped_at": "2026-07-20T19:15:44.694Z",
-        "commit_sha": null,
-        "content_sha256": "6900fc92fe7b89e4d922254eee214f4801f92fc8b57bb1dbe2d8d630c034b3ab",
-        "target_file": "services/self-repair-sentry-canary.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/self-repair-sentry-canary.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/builderos/twins/steps/self-repair-era1-8.exact",
-          "content_sha256": "6900fc92fe7b89e4d922254eee214f4801f92fc8b57bb1dbe2d8d630c034b3ab"
-        }
-      },
-      "shipped_at": "2026-07-20T19:15:44.694Z"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-20T19:15:51.158Z",
+      "commit_sha": "8037caf725ebaa941ed9aba596acf9cc6a1d15c0"
     }
   ],
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
