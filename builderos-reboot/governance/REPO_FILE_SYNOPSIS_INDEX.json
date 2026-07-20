@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T00:08:28.544Z",
+  "generated_at": "2026-07-20T00:18:34.468Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12015,
   "files": [
@@ -37480,9 +37480,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 63316,
-      "mtime": "2026-07-19T23:31:20.836Z",
-      "indexed_at": "2026-07-19T23:31:20.836Z"
+      "bytes": 63853,
+      "mtime": "2026-07-20T00:18:33.203Z",
+      "indexed_at": "2026-07-20T00:18:34.468Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40276,9 +40276,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 641385,
-      "mtime": "2026-07-19T21:51:06.207Z",
-      "indexed_at": "2026-07-19T21:51:06.207Z"
+      "bytes": 642185,
+      "mtime": "2026-07-20T00:18:33.200Z",
+      "indexed_at": "2026-07-20T00:18:34.468Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -84460,9 +84460,9 @@
     {
       "path": "services/chair-direct-agent.js",
       "synopsis": "Direct Chair agent — talks + acts; human prose obeys Lumin Communication DNA (not theater).",
-      "bytes": 22622,
-      "mtime": "2026-07-19T21:32:24.093Z",
-      "indexed_at": "2026-07-19T21:32:24.093Z",
+      "bytes": 24498,
+      "mtime": "2026-07-20T00:18:33.192Z",
+      "indexed_at": "2026-07-20T00:18:34.468Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -84510,9 +84510,9 @@
     {
       "path": "services/chair-intent-signals.js",
       "synopsis": "Chair intent signal helpers — shared by orchestrator and context classifier.",
-      "bytes": 7482,
-      "mtime": "2026-07-19T21:32:24.093Z",
-      "indexed_at": "2026-07-19T21:32:24.093Z",
+      "bytes": 7725,
+      "mtime": "2026-07-20T00:18:33.194Z",
+      "indexed_at": "2026-07-20T00:18:34.468Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -92672,9 +92672,9 @@
     {
       "path": "tests/chair-comms-routing.test.js",
       "synopsis": "Chair communication routing — build/status/presence must not hit CLARIFY theater.",
-      "bytes": 1224,
-      "mtime": "2026-07-19T21:03:56.783Z",
-      "indexed_at": "2026-07-19T21:04:54.410Z"
+      "bytes": 1648,
+      "mtime": "2026-07-20T00:18:33.197Z",
+      "indexed_at": "2026-07-20T00:18:34.468Z"
     },
     {
       "path": "tests/chair-competitive-research.test.js",

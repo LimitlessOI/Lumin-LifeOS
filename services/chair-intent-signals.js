@@ -104,7 +104,7 @@ export function isBuildStatusQuestion(text = '') {
 }
 
 /**
- * Emotional / presence counsel — "don't fix me", "be with me".
+ * Emotional / presence counsel — "don't fix me", "be with me", anger/vent.
  * Must never trip the build verb matcher on the word "fix".
  */
 export function isCounselPresenceIntent(text = '') {
@@ -112,8 +112,10 @@ export function isCounselPresenceIntent(text = '') {
   if (!t) return false;
   if (/\b(don'?t|do not|never)\s+(try to\s+)?fix(\s+me)?\b/i.test(t)) return true;
   if (/\b(just )?be with me\b/i.test(t)) return true;
-  if (/\b(not asking you to fix|don'?t try to solve)\b/i.test(t)) return true;
+  if (/\b(not asking you to fix|don'?t try to solve|don'?t pitch|no next steps)\b/i.test(t)) return true;
   if (/\bnobody gets\b/i.test(t) || /\bhow hard this is\b/i.test(t)) return true;
+  if (/\bi('m| am) (pissed|angry|furious|exhausted|burned out|burnt out)\b/i.test(t)) return true;
+  if (/\b(everything feels stuck|tired of pretending|i'?m tired of pretending)\b/i.test(t)) return true;
   if (/\bi feel (like|so|alone|lost|scared|tired|heavy)\b/i.test(t) && !isProductBuildChangeVerb(t)) {
     return true;
   }

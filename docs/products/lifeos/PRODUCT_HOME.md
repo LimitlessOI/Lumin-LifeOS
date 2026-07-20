@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-19 — Archived SMOS + Cognitive Core Opus handoff in conversation dumps + Claude memory. |
+| **Last Updated** | 2026-07-19 — Chair presence lock: anger/vent turns stay present (no coach closers). |
 ---
 
 ## Founder conversations (2026-06-29)
@@ -1101,6 +1101,7 @@ These are **expectations**, not fixed deadlines. LifeOS still does **not** have 
 
 | Field | Value |
 |-------|--------|
+| **Comms overnight (2026-07-19)** | Presence/anger tip still coach-closed → **PRESENCE LOCK** shipped in `chair-direct-agent` + intent expand. Tip re-prove after redeploy. Governed ship enabled (legacy never-stop fence off). Therapist role + consent API done; wellness therapist profile routes live (no `/health`). Next: twin voice depth + wellness Mod-4 queue. |
 | **Chair TDZ + taloaos DNS** | **FIXED locally → ship.** Tip Chair crashed on counsel (`channel` TDZ). Next: redeploy → Chair consensus on Cloudflare DNS for `sitebuilder`/`app`. Railway domains already attached; CF DNS still missing. |
 | **Chat provider failover** | **LIVE** — Chair direct agent now cascades `openai_gpt` → `deepseek` → `gemini_flash` → `claude_sonnet` (Anthropic last, not first) on credit/quota/auth/timeout errors, so one empty provider account cannot silently kill the founder interface. `CHAIR_DIRECT_AGENT_CASCADE` / `CHAT_COUNCIL_CASCADE` env vars can override the default order. Verified: `POST /api/v1/lifeos/builderos/command-control/founder-interface/message` returns a non-error human_summary. |
 || **Chat honest builder status** | `services/chair-native-facts.js` sets `runtimeStatusTurn`, puts `live_builder_status.summary` first, and clears `point_b_status`, `system_knowledge`, `program_context`, `point_b_target`, `strategic_brief`, and `memory_context`. `services/chair-direct-agent.js` zeroes `history` for runtime status questions and forces the answer from `live_builder_status.summary`.\n| **Trust ramp + review model** | **`docs/BUILDER_AUTONOMY_TRUST_AND_REVIEW_MODEL.md`** — priorities = **`tasks[]` order**, ~**7 h** bounded daemon, **`BUILDER_QUEUE_COMMIT_BRANCH`** / task **`branch`**, optional **`BUILDER_QUEUE_REQUIRE_COMMIT_BRANCH`**, **know vs today** gaps (no silent council queue refill yet) · **`docs/BUILDER_IDEA_FILTERS_REFINEMENT.md`** — refine constraints, don’t discard intent |
@@ -1732,6 +1733,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
+| 2026-07-19 | **Chair presence lock (comms overnight continue).** Expanded `isCounselPresenceIntent` (anger/stuck/no-pitch); `chair-direct-agent` PRESENCE LOCK + slim facts + strip coach closers ("let me know if…", "talk through what's stuck"). Routing tests cover vent turns. | Adam: keep communications work overnight — tip still offered coach closes on presence. | tip re-prove presence/anger after redeploy | twin-matched voice depth |
 | 2026-07-19 | **Conversation archive — SMOS + Cognitive Core Opus handoff.** Dump + LifeOS pointer + Claude memory twin so Cursor/Claude/Opus share one handoff. | Adam: put the entire arc in memory and conversation dumps. | files written | Opus: wire `memoryContext` to semantic retrieval |
 | 2026-07-19 | **Cognitive Core Era-1 in Chair UI.** `lifeos-app` wear chips → `ui_context.worn_capsules`; orchestrator runs judgment compiler (tension + prediction + journal) before build/counsel; `should I … or …` no longer routes to build. | Adam: judgment compiler — perspective AI + evolutionary calibration. | production prove decision turn + scoreboard | outcomes + miss reports in UI |
 | 2026-07-18 | **Persist COMMAND_RAN without scrubbing.** `recordExchange` accepts `command_truth`; nav/act persist with `COMMAND_RAN` so "Opening …" is not wiped as theater. Marker `fi-route-marker-v5`. | Adam: UI tests must appear in thread history after reload. | tip prove open food persist null warning + history row | calendar acts |

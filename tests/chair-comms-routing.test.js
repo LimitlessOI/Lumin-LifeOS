@@ -30,3 +30,13 @@ test('hi / how are you are not builds', () => {
   assert.equal(isBuildRequest('Just say hi.'), false);
   assert.equal(isBuildRequest('Hey — how are you tonight?'), false);
 });
+
+test('anger / stuck vent is presence, not a build order', () => {
+  const t = "I'm pissed. Everything feels stuck and I'm tired of pretending I'm fine.";
+  assert.equal(isCounselPresenceIntent(t), true);
+  assert.equal(isBuildRequest(t), false);
+});
+
+test('don\'t pitch next steps is presence', () => {
+  assert.equal(isCounselPresenceIntent("ha — thanks. that joke actually landed. don't pitch next steps."), true);
+});

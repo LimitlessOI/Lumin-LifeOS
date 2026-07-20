@@ -6,6 +6,7 @@
 import { gatherChairNativeFacts } from './chair-native-facts.js';
 import { formatThreadForPrompt } from './lumin-thread-context.js';
 import { formatExecutionTruthReply } from './lifeos-execution-truth.js';
+import { isCounselPresenceIntent } from './chair-intent-signals.js';
 import {
   enforceCommunicationLaw,
   loadLuminCommunicationLaw,
@@ -82,7 +83,8 @@ HOW YOU TALK:
 - Prefer one sharp question that helps him think over a lecture — but when he asks for a fact or an action, give it straight.
 - Never manipulate. He sets Point B. You give real information.
 - When he asks what you are / what you can do: say you are the system (Chair) — you see live facts, memory, builds; you can change code and commit; you report what actually landed with a SHA. Do not call yourself a translation layer. Do not use the words go-between or middleman at all — even to deny them.
-- Relational turns ("how are you", "hi", stress, loneliness, "don't fix me"): answer as a person in the room with him — never as machine health ("running well"), never as Point B/status, never a clarify form. Presence first; one honest sentence beats a fix. If he asks you to just be with him, stay — don't jump to advice unless he asks.
+- Relational turns ("how are you", "hi", stress, loneliness, anger, "don't fix me"): answer as a person in the room with him — never as machine health ("running well"), never as Point B/status, never a clarify form. Presence first; one honest sentence beats a fix. If he asks you to just be with him, stay — don't jump to advice unless he asks.
+- Presence / vent turns (HARD): do NOT offer to help, brainstorm, focus, "talk through what's stuck", next steps, or "let me know if…". No coach close. Sit with him. Two short sentences max unless he asks a question.
 - "Did that build land?" / commit/SHA questions: answer from last_build_receipt in SYSTEM_FACTS/OBSERVATIONS. Never ask intent-clarify. Never recite the mission.
 - "What is the builder status?" / queue / running / progress / "what is the system working on?" / "what are you building?": use \`live_builder_status\` in SYSTEM_FACTS. Start your answer from \`live_builder_status.summary\` and quote the exact numbers. Ignore any previous conversation about builder status; it may be stale. Do not mention "55%", "missing machine path", or any \`node builderos-reboot/scripts/...\` command unless that exact text appears inside \`live_builder_status\`.
 - When he thanks you or asks for a joke/breath: give it. Human rhythm. Don't pivot back to Point B.
@@ -142,14 +144,28 @@ function communicationLawBlock() {
   }
 }
 
-function finalizeHumanReply(text, { commandRan = false, lastBuild = null } = {}) {
+/** Strip coach/fix closers that models still emit on presence turns. */
+function stripPresenceCoachClosers(text = '') {
+  let out = String(text || '').trim();
+  if (!out) return out;
+  const closer = /(?:\s*(?:If you want|Let me know|I'?m here to help|happy to help|if there(?:'?s| is) anything|whatever you need|talk through what(?:'s| is) stuck|specific area|focus on|next steps)[\s\S]*)$/i;
+  for (let i = 0; i < 3; i += 1) {
+    const next = out.replace(closer, '').trim();
+    if (next === out) break;
+    out = next;
+  }
+  return out || String(text || '').trim();
+}
+
+function finalizeHumanReply(text, { commandRan = false, lastBuild = null, presenceMode = false } = {}) {
   if (commandRan && lastBuild?.committed) {
     return {
       reply: formatBuildReply(lastBuild),
       communication_law: { skipped: true, reason: 'structured_build_receipt' },
     };
   }
-  const prose = String(text || '').trim() || 'What do you need?';
+  let prose = String(text || '').trim() || 'What do you need?';
+  if (presenceMode) prose = stripPresenceCoachClosers(prose);
   const enforced = enforceCommunicationLaw(prose);
   const body = enforced.text && enforced.text.trim().length >= 8
     ? enforced.text.trim()
@@ -257,13 +273,15 @@ export async function runChairDirectAgent({ message, history = [], deps = {}, ct
   // Governance / constitution / pipeline counsel must not inherit unrelated thread topics (theater).
   const isGovernanceCounsel = /\b(governance|constitution|pipeline|separation of powers|digital twin|point a|point b|architect|factory|dual.?judge|honesty|blueprint law|not_on_blueprint|chair counsel|ratify)\b/i.test(message)
     || /\b(mandate|enforceable|zero lying|never redefine)\b/i.test(message);
+  const isPresenceTurn = isCounselPresenceIntent(message)
+    || /\b(how are you|just say hi|^hi[.!]?\s*$|^hey[.!]?\s*$)\b/i.test(String(message || '').trim());
 
   let systemFacts = {};
   try {
     systemFacts = await gatherChairNativeFacts(message, {
       callAI,
       pool: deps.pool || null,
-      memoryContext: (isRuntimeStatusQuestion || isGovernanceCounsel) ? null : (deps.memoryContext ?? null),
+      memoryContext: (isRuntimeStatusQuestion || isGovernanceCounsel || isPresenceTurn) ? null : (deps.memoryContext ?? null),
       userId: ctx.userId || null,
       userHandle: ctx.userHandle || null,
     }, {
@@ -279,8 +297,16 @@ export async function runChairDirectAgent({ message, history = [], deps = {}, ct
   const governanceLock = isGovernanceCounsel
     ? `\n\nTOPIC LOCK (non-negotiable): Adam asked for governance/pipeline counsel. Answer ONLY that. Do not mention Cloudflare, DNS, unrelated products, or prior threads. If you cannot counsel on this, say so plainly (theater = FAIL).`
     : '';
+  const presenceLock = isPresenceTurn
+    ? `\n\nPRESENCE LOCK (non-negotiable): This is a relational/vent turn. Be with him. Two short human sentences max. Forbidden: advice, next steps, "let me know if", "I'm here to help", "talk through what's stuck", mission/Point B, machine health, clarify forms. Stay. Do not coach unless he asks a direct question.`
+    : '';
   const factsJson = (() => {
-    try { return JSON.stringify(systemFacts, null, 2).slice(0, 8000); } catch { return '{}'; }
+    try {
+      const facts = isPresenceTurn
+        ? { personal_twin: systemFacts?.personal_twin || null, lumin_context: systemFacts?.lumin_context || null }
+        : systemFacts;
+      return JSON.stringify(facts, null, 2).slice(0, isPresenceTurn ? 2500 : 8000);
+    } catch { return '{}'; }
   })();
 
   const observations = [];
@@ -301,7 +327,7 @@ export async function runChairDirectAgent({ message, history = [], deps = {}, ct
     const obsBlock = observations.length
       ? `\n\nOBSERVATIONS (real tool/receipt facts — same-turn builds AND last_build_receipt when present):\n${observations.join('\n')}`
       : '';
-    const prompt = `${SYSTEM_PROMPT}${lawBlock}${governanceLock}
+    const prompt = `${SYSTEM_PROMPT}${lawBlock}${governanceLock}${presenceLock}
 
 SYSTEM_FACTS (truth only — grounding, NOT a script to recite; use a fact only if it answers what Adam said):
 ${factsJson}${threadBlock}${obsBlock}
@@ -313,7 +339,7 @@ Respond with exactly one JSON object:`;
     let raw;
     try {
       raw = coerceText(await callAIWithCascade(callAI, prompt, {
-        maxOutputTokens: 1600,
+        maxOutputTokens: isPresenceTurn ? 700 : 1600,
         taskType: 'lumin_chair_agent',
         founderComms: true,
         useCache: false,
@@ -321,6 +347,7 @@ Respond with exactly one JSON object:`;
     } catch (err) {
       const failed = finalizeHumanReply(
         `I hit an error reaching my own model (${err.message}). Nothing ran. Say it again and I'll retry.`,
+        { presenceMode: isPresenceTurn },
       );
       return {
         reply: failed.reply,
@@ -337,7 +364,7 @@ Respond with exactly one JSON object:`;
     if (!decision) {
       const fallback = String(raw || '').trim();
       if (fallback) {
-        const finalized = finalizeHumanReply(fallback, { commandRan, lastBuild });
+        const finalized = finalizeHumanReply(fallback, { commandRan, lastBuild, presenceMode: isPresenceTurn });
         return {
           reply: finalized.reply,
           command_ran: commandRan,
@@ -352,7 +379,7 @@ Respond with exactly one JSON object:`;
 
     if (decision.action === 'reply') {
       const prose = String(decision.message || '').trim() || 'What do you need?';
-      const finalized = finalizeHumanReply(prose, { commandRan, lastBuild });
+      const finalized = finalizeHumanReply(prose, { commandRan, lastBuild, presenceMode: isPresenceTurn });
       return {
         reply: finalized.reply,
         command_ran: commandRan,
@@ -468,6 +495,7 @@ Respond with exactly one JSON object:`;
   }
   const exhausted = finalizeHumanReply(
     'I could not settle on a clear response. Say that again more directly and I will answer or act.',
+    { presenceMode: isPresenceTurn },
   );
   return {
     reply: exhausted.reply,
