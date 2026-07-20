@@ -1041,7 +1041,7 @@
     },
     {
       "id": "self-repair-era1-2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/self-repair-root-cause-chains.js",
       "task": "Implement queryable root-cause-chain storage: symptom -> investigation -> cause -> fix -> verification, searchable by a bug-shape signature so 'have we seen this shape before?' is answerable.",
       "spec": "Self-bootstrap its own table: `CREATE TABLE IF NOT EXISTS self_repair_root_cause_chains (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), symptom TEXT NOT NULL, investigation JSONB NOT NULL DEFAULT '[]', cause TEXT, fix TEXT, verification TEXT, bug_shape_signature TEXT NOT NULL, created_at TIMESTAMPTZ NOT NULL DEFAULT now())` (self-bootstrap pattern, see services/account-manager.js). Export async function recordRootCauseChain(pool, { symptom, investigation, cause, fix, verification, bug_shape_signature }) that inserts a row (investigation is an array of strings, stored as JSONB). Export async function queryRootCauseChains(pool, { bug_shape_signature, limit = 10 }) that returns prior chains matching the same bug_shape_signature, most recent first -- this is the 'have we seen this before' query. bug_shape_signature must be normalized the same way services/governed-autonomous-shipping-loop.js's failureSignature() normalizes error signatures (strip hex ids and numbers so similar shapes match) -- import and reuse failureSignature from services/governed-autonomous-shipping-loop.js rather than reimplementing it.",
@@ -1066,30 +1066,9 @@
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "self-repair-era1-2",
       "mission_id": "PRODUCT-builderos",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/builderos/twins/steps/self-repair-era1-2.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-20T18:51:32.180Z",
-        "shipped_at": "2026-07-20T18:51:32.180Z",
-        "commit_sha": null,
-        "content_sha256": "d207080cc261237811316c56fb696e95d7c9e3c66df1bc4eb429b1690ea01d99",
-        "target_file": "services/self-repair-root-cause-chains.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/self-repair-root-cause-chains.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/builderos/twins/steps/self-repair-era1-2.exact",
-          "content_sha256": "d207080cc261237811316c56fb696e95d7c9e3c66df1bc4eb429b1690ea01d99"
-        }
-      },
-      "shipped_at": "2026-07-20T18:51:32.180Z"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-20T18:51:39.102Z",
+      "commit_sha": "bbde5fbf94cd5a37a0349b8f587ab71d1cc18adc"
     },
     {
       "id": "self-repair-era1-3",
