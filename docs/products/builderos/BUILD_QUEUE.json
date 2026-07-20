@@ -1136,7 +1136,31 @@
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "self-repair-era1-4",
       "mission_id": "PRODUCT-builderos",
-      "revive_note": "2026-07-20: independently reading the shipped file (commit 6ac78b58949b9b3c74aeac131f2f7549d9088762) found recordAttempt bootstraps correctly but getTargetReputation does not -- a real bug (throws on a fresh target/deploy) even though SENTRY's exports_smoke assertion passed. Reset to pending with a strengthened spec + file_contains guard. Next attempt was falsely marked done via pre_existing_artifact_proof (same unfixed file, shallow file_contains substring match, no codegen run). Stale file deleted (commit 8e40b6dd6d) to force real regeneration."
+      "revive_note": "2026-07-20: independently reading the shipped file (commit 6ac78b58949b9b3c74aeac131f2f7549d9088762) found recordAttempt bootstraps correctly but getTargetReputation does not -- a real bug (throws on a fresh target/deploy) even though SENTRY's exports_smoke assertion passed. Reset to pending with a strengthened spec + file_contains guard. Next attempt was falsely marked done via pre_existing_artifact_proof (same unfixed file, shallow file_contains substring match, no codegen run). Stale file deleted (commit 8e40b6dd6d) to force real regeneration.",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/builderos/twins/steps/self-repair-era1-4.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-20T19:21:38.098Z",
+        "shipped_at": "2026-07-20T19:21:38.098Z",
+        "commit_sha": null,
+        "content_sha256": "73be24b508aee942b1023d3a0c3016c11c53500ea73b33d2935bc0ff426b297b",
+        "target_file": "services/self-repair-target-reputation.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/self-repair-target-reputation.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/builderos/twins/steps/self-repair-era1-4.exact",
+          "content_sha256": "73be24b508aee942b1023d3a0c3016c11c53500ea73b33d2935bc0ff426b297b"
+        }
+      },
+      "shipped_at": "2026-07-20T19:21:38.098Z"
     },
     {
       "id": "self-repair-era1-5",

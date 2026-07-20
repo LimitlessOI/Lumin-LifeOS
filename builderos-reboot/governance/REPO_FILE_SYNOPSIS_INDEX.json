@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T19:21:21.317Z",
+  "generated_at": "2026-07-20T19:21:41.296Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12067,
   "files": [
@@ -90293,9 +90293,9 @@
     {
       "path": "services/self-repair-target-reputation.js",
       "synopsis": "Exports recordAttempt — services/self-repair-target-reputation.js.",
-      "bytes": 1871,
-      "mtime": "2026-07-20T18:56:17.178Z",
-      "indexed_at": "2026-07-20T18:56:17.178Z"
+      "bytes": 2005,
+      "mtime": "2026-07-20T19:21:41.296Z",
+      "indexed_at": "2026-07-20T19:21:41.296Z"
     },
     {
       "path": "services/self-sabotage-monitor.js",
