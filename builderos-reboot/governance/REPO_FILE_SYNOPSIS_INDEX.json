@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T20:38:13.774Z",
+  "generated_at": "2026-07-20T20:38:47.327Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12072,
+  "file_count": 12073,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -90332,6 +90332,13 @@
       "bytes": 2005,
       "mtime": "2026-07-20T19:21:41.296Z",
       "indexed_at": "2026-07-20T19:21:41.296Z"
+    },
+    {
+      "path": "services/self-repair-trust-dashboard.js",
+      "synopsis": "Exports getTopHardestTargets — services/self-repair-trust-dashboard.js.",
+      "bytes": 2200,
+      "mtime": "2026-07-20T20:38:47.327Z",
+      "indexed_at": "2026-07-20T20:38:47.327Z"
     },
     {
       "path": "services/self-sabotage-monitor.js",
