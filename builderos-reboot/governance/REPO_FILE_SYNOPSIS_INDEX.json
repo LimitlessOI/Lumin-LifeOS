@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T07:00:15.336Z",
+  "generated_at": "2026-07-20T07:02:30.489Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12054,
   "files": [
@@ -71961,9 +71961,9 @@
     {
       "path": "scripts/system-commit-files.mjs",
       "synopsis": "Commit local files to GitHub main via tip BuilderOS execute-batch (no human PR).",
-      "bytes": 3616,
-      "mtime": "2026-07-19T21:03:56.561Z",
-      "indexed_at": "2026-07-19T21:04:54.410Z",
+      "bytes": 5627,
+      "mtime": "2026-07-20T07:02:30.489Z",
+      "indexed_at": "2026-07-20T07:02:30.489Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
