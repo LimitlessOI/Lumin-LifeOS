@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: Cognitive Core Era-1 API — journal, outcomes, miss reports, scoreboard, capsules.
+ * SYNOPSIS: Cognitive Core Era-1–4 API — journal through Trust Me (earned delegation).
  * @ssot docs/products/memory-intelligence/PRODUCT_HOME.md
  */
 
@@ -7,6 +7,10 @@ import { Router } from 'express';
 import { createCognitiveCoreJudgment } from '../services/cognitive-core-judgment.js';
 import { createCognitiveCorePrograms } from '../services/cognitive-core-programs.js';
 import { createCognitiveCoreImprove } from '../services/cognitive-core-improve.js';
+import { createCognitiveCoreExtend } from '../services/cognitive-core-extend.js';
+import { createCognitiveCoreValues } from '../services/cognitive-core-values.js';
+import { createCognitiveCoreIdeas } from '../services/cognitive-core-ideas.js';
+import { createCognitiveCoreTrust } from '../services/cognitive-core-trust.js';
 import {
   listWearableCapsules,
   detectJudgmentTurn,
@@ -41,6 +45,10 @@ export function createCognitiveCoreRoutes(deps = {}) {
   const core = createCognitiveCoreJudgment({ pool, logger });
   const programs = createCognitiveCorePrograms({ pool, logger });
   const improve = createCognitiveCoreImprove({ pool, logger });
+  const extend = createCognitiveCoreExtend({ pool, logger });
+  const values = createCognitiveCoreValues({ pool, logger });
+  const ideas = createCognitiveCoreIdeas({ pool, logger });
+  const trust = createCognitiveCoreTrust({ pool, logger });
 
   if (typeof requireKey === 'function') {
     router.use(requireKey);
@@ -50,12 +58,20 @@ export function createCognitiveCoreRoutes(deps = {}) {
     res.json({
       ok: true,
       product: 'cognitive-core',
-      era: 2,
+      era: 4,
       compiler_version: COMPILER_VERSION,
       era2: [
         'programs', 'program_activations', 'miss_loop', 'decision_replay',
         'counterfactual', 'relationship_twins', 'learning_style',
         'external_mind_advisors', 'future_self',
+      ],
+      era3: [
+        'energy', 'value_drift', 'consequence_simulator', 'missing_info',
+        'idea_graph', 'curiosity',
+      ],
+      era4: [
+        'expert_collaboration', 'memory_compression', 'legacy_recorder',
+        'apprenticeship', 'delegation_confidence', 'autonomous_advisor',
       ],
       laws: 'docs/constitution/COGNITIVE_CORE_LAWS.md',
     });
@@ -160,7 +176,9 @@ export function createCognitiveCoreRoutes(deps = {}) {
         miss = await improve.classifyMissAndCorrect({ decisionId: req.params.id })
           .catch((e) => ({ ok: false, reason: e.message }));
       }
-      res.status(201).json({ ok: true, outcome, miss });
+      const value_drift = await extend.checkValueDrift({ decisionId: req.params.id })
+        .catch((e) => ({ ok: false, reason: e.message }));
+      res.status(201).json({ ok: true, outcome, miss, value_drift });
     } catch (err) {
       res.status(400).json({ ok: false, error: err.message });
     }
@@ -323,29 +341,341 @@ export function createCognitiveCoreRoutes(deps = {}) {
     }
   });
 
+  // ── Era-3: Values + drift ──
+  router.get('/values', async (req, res) => {
+    try {
+      const userId = String(req.query.user_id || req.user?.id || '1');
+      const rows = await values.listValues(userId, { status: req.query.status || 'active' });
+      res.json({ ok: true, values: rows });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/values', async (req, res) => {
+    try {
+      const b = req.body || {};
+      const row = await values.createValue({
+        userId: b.user_id || req.user?.id || '1',
+        principle: b.principle,
+        hypothesis: b.hypothesis,
+        confidence: b.confidence,
+        source: b.source,
+        evidence: b.evidence,
+      });
+      res.status(201).json({ ok: true, value: row });
+    } catch (err) {
+      res.status(400).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/values/drift', async (req, res) => {
+    try {
+      const userId = String(req.query.user_id || req.user?.id || '1');
+      const resolved = req.query.resolved === 'true' || req.query.resolved === true;
+      const rows = await values.listDriftEvents(userId, {
+        resolved,
+        limit: Number(req.query.limit) || 50,
+      });
+      res.json({ ok: true, drift_events: rows });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/values/drift/:id/resolve', async (req, res) => {
+    try {
+      const row = await values.resolveDrift(req.params.id);
+      if (!row) return res.status(404).json({ ok: false, error: 'not_found' });
+      res.json({ ok: true, drift: row });
+    } catch (err) {
+      res.status(400).json({ ok: false, error: err.message });
+    }
+  });
+
+  // ── Era-3: Missing info + consequences ──
+  router.post('/decisions/:id/missing-info', async (req, res) => {
+    try {
+      const out = await extend.detectMissingInfo({ decisionId: req.params.id });
+      res.status(out.ok ? 201 : 422).json(out);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/decisions/:id/consequences', async (req, res) => {
+    try {
+      const out = await extend.simulateConsequences({
+        decisionId: req.params.id,
+        option: (req.body || {}).option,
+      });
+      res.status(out.ok ? 201 : 422).json(out);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // ── Era-3: Idea graph ──
+  router.get('/ideas', async (req, res) => {
+    try {
+      const userId = String(req.query.user_id || req.user?.id || '1');
+      const graph = await ideas.getGraph(userId, { limit: Number(req.query.limit) || 200 });
+      res.json({ ok: true, ...graph });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/ideas', async (req, res) => {
+    try {
+      const b = req.body || {};
+      const row = await ideas.addIdea({
+        userId: b.user_id || req.user?.id || '1',
+        label: b.label,
+        description: b.description,
+        origin: b.origin,
+        status: b.status,
+      });
+      res.status(201).json({ ok: true, idea: row });
+    } catch (err) {
+      res.status(400).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/ideas/link', async (req, res) => {
+    try {
+      const b = req.body || {};
+      const row = await ideas.linkIdeas({
+        userId: b.user_id || req.user?.id || '1',
+        fromIdea: b.from_idea || b.fromIdea,
+        toIdea: b.to_idea || b.toIdea,
+        relation: b.relation,
+        note: b.note,
+      });
+      res.status(201).json({ ok: true, edge: row });
+    } catch (err) {
+      res.status(400).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.patch('/ideas/:id/status', async (req, res) => {
+    try {
+      const row = await ideas.setIdeaStatus({
+        ideaId: req.params.id,
+        status: (req.body || {}).status,
+      });
+      if (!row) return res.status(404).json({ ok: false, error: 'not_found' });
+      res.json({ ok: true, idea: row });
+    } catch (err) {
+      res.status(400).json({ ok: false, error: err.message });
+    }
+  });
+
+  // ── Era-3: Curiosity + energy ──
+  router.get('/curiosity', async (req, res) => {
+    try {
+      const userId = String(req.query.user_id || req.user?.id || '1');
+      const rows = await extend.listCuriosity(userId, { status: req.query.status || 'open' });
+      res.json({ ok: true, prompts: rows });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/curiosity', async (req, res) => {
+    try {
+      const b = req.body || {};
+      const out = await extend.suggestCuriosity({
+        userId: b.user_id || req.user?.id || '1',
+        limit: b.limit,
+      });
+      res.status(out.ok ? 201 : 422).json(out);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/energy', async (req, res) => {
+    try {
+      const userId = String(req.query.user_id || req.user?.id || '1');
+      const out = await extend.energyAdvisory({ userId });
+      res.status(out.ok ? 200 : 422).json(out);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // ── Era-4: Trust Me ──
   router.get('/trust/can-act', async (req, res) => {
     try {
-      const userId = String(req.query.user_id || '1');
-      const domain = String(req.query.domain || 'general');
-      const board = await core.getScoreboard(userId);
-      const row = (board.by_domain || []).find((d) => d.domain === domain);
-      const tier = row?.delegation_tier || 'refuse';
-      const stakes = String(req.query.stakes || 'medium');
-      let allow = false;
-      if (tier === 'allow') allow = true;
-      else if (tier === 'suggest' && stakes === 'low') allow = true;
-      else if (tier === 'ask') allow = false;
-      res.json({
-        ok: true,
-        domain,
-        stakes,
-        delegation_tier: tier,
-        can_act: allow,
-        action: allow ? 'allow' : (tier === 'suggest' ? 'suggest' : tier === 'ask' ? 'ask' : 'refuse'),
-        accuracy: row?.accuracy ?? null,
-        brier_score: row?.brier_score ?? null,
-        n: row?.n ?? 0,
+      const out = await trust.canAct({
+        userId: String(req.query.user_id || req.user?.id || '1'),
+        domain: String(req.query.domain || 'general'),
+        stakes: String(req.query.stakes || 'medium'),
+        action: req.query.action || null,
       });
+      res.status(out.ok ? 200 : 422).json(out);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/trust/scopes', async (req, res) => {
+    try {
+      const userId = String(req.query.user_id || req.user?.id || '1');
+      const scopes = await trust.listDelegationScopes(userId);
+      res.json({ ok: true, scopes });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/trust/scopes/sync', async (req, res) => {
+    try {
+      const userId = String((req.body || {}).user_id || req.user?.id || '1');
+      const out = await trust.syncDelegationScopes(userId);
+      res.status(out.ok ? 200 : 422).json(out);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/trust/scopes/approve', async (req, res) => {
+    try {
+      const b = req.body || {};
+      const out = await trust.approveDelegationScope({
+        userId: b.user_id || req.user?.id || '1',
+        domain: b.domain,
+        stakesMax: b.stakes_max,
+        approvedActions: b.approved_actions,
+        notes: b.notes,
+      });
+      res.status(out.ok ? 200 : 422).json(out);
+    } catch (err) {
+      res.status(400).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/trust/actions', async (req, res) => {
+    try {
+      const userId = String(req.query.user_id || req.user?.id || '1');
+      const rows = await trust.listAutonomousActions(userId, {
+        status: req.query.status || null,
+        limit: Number(req.query.limit) || 50,
+      });
+      res.json({ ok: true, actions: rows });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/trust/actions', async (req, res) => {
+    try {
+      const b = req.body || {};
+      const out = await trust.proposeAutonomousAction({
+        userId: b.user_id || req.user?.id || '1',
+        domain: b.domain,
+        proposedAction: b.proposed_action || b.action,
+        reasoning: b.reasoning,
+        stakes: b.stakes,
+        decisionId: b.decision_id,
+        executeIfAllowed: b.execute_if_allowed === true,
+      });
+      res.status(201).json(out);
+    } catch (err) {
+      res.status(400).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/trust/actions/:id/override', async (req, res) => {
+    try {
+      const b = req.body || {};
+      const row = await trust.overrideAutonomousAction({
+        actionId: req.params.id,
+        overrideNote: b.override_note || b.note,
+        status: b.status || 'overridden',
+      });
+      if (!row) return res.status(404).json({ ok: false, error: 'not_found' });
+      res.json({ ok: true, action: row });
+    } catch (err) {
+      res.status(400).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/trust/debate', async (req, res) => {
+    try {
+      const b = req.body || {};
+      const out = await trust.runExpertDebate({
+        userId: b.user_id || req.user?.id || '1',
+        question: b.question,
+        advisorIds: b.advisor_ids || b.advisors,
+        decisionId: b.decision_id,
+        options: b.options,
+      });
+      res.status(out.ok ? 201 : 422).json(out);
+    } catch (err) {
+      res.status(400).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/trust/models', async (req, res) => {
+    try {
+      const userId = String(req.query.user_id || req.user?.id || '1');
+      const models = await trust.listMentalModels(userId);
+      res.json({ ok: true, models });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/trust/models/compress', async (req, res) => {
+    try {
+      const b = req.body || {};
+      const out = await trust.compressMemory({
+        userId: b.user_id || req.user?.id || '1',
+        lookback: b.lookback,
+      });
+      res.status(out.ok ? 201 : 422).json(out);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/trust/legacy', async (req, res) => {
+    try {
+      const userId = String(req.query.user_id || req.user?.id || '1');
+      const entries = await trust.listLegacy(userId, { kind: req.query.kind || null });
+      res.json({ ok: true, entries });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/trust/legacy', async (req, res) => {
+    try {
+      const b = req.body || {};
+      const row = await trust.recordLegacy({
+        userId: b.user_id || req.user?.id || '1',
+        kind: b.kind,
+        title: b.title,
+        content: b.content,
+        domain: b.domain,
+        confidence: b.confidence,
+        evidence: b.evidence,
+      });
+      res.status(201).json({ ok: true, entry: row });
+    } catch (err) {
+      res.status(400).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/trust/apprentice/:decisionId', async (req, res) => {
+    try {
+      const out = await trust.teachApprenticeship({
+        userId: (req.body || {}).user_id || req.user?.id || '1',
+        decisionId: req.params.decisionId,
+      });
+      res.status(out.ok ? 201 : 422).json(out);
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }

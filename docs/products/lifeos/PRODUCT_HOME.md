@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-19 — Chair presence lock v2: strip "ready to support" coach closes. |
+| **Last Updated** | 2026-07-19 — Cognitive Core Era-3/4 meta lines in Chair drawer (missing/consequences/trust). |
 ---
 
 ## Founder conversations (2026-06-29)
@@ -1733,6 +1733,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
+| 2026-07-19 | **Chair UI — Era-3/4 judgment meta.** `lifeos-app` drawer shows missing-info, consequence watch signals, value drift, and Trust Me can_act tier when present on judgment replies. | Adam: go to EV4 — founder must *see* Extend/Trust signals. | tip prove meta on decision turn | wear + trust chips |
 | 2026-07-19 | **Chair presence lock v2.** Tip anger reply still said "ready to support" after v1 — expanded strip + PRESENCE LOCK forbid list. Receipt `products/receipts/LIFEOS_COMMS_PRESENCE_LOCK_PROOF.json`. | Adam: continue overnight — presence must not coach. | tip re-prove anger after redeploy | twin-matched voice depth |
 | 2026-07-19 | **Chair presence lock (comms overnight continue).** Expanded `isCounselPresenceIntent` (anger/stuck/no-pitch); `chair-direct-agent` PRESENCE LOCK + slim facts + strip coach closers ("let me know if…", "talk through what's stuck"). Routing tests cover vent turns. | Adam: keep communications work overnight — tip still offered coach closes on presence. | tip re-prove presence/anger after redeploy | twin-matched voice depth |
 | 2026-07-19 | **Conversation archive — SMOS + Cognitive Core Opus handoff.** Dump + LifeOS pointer + Claude memory twin so Cursor/Claude/Opus share one handoff. | Adam: put the entire arc in memory and conversation dumps. | files written | Opus: wire `memoryContext` to semantic retrieval |

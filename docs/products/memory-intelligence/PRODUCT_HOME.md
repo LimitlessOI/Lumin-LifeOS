@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/memory-intelligence/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-19 — Cognitive Core Era-2 (Improve Me: programs, miss loop, replay, counterfactual, external minds, relationship/learning) |
+| **Last Updated** | 2026-07-19 — Cognitive Core Era-4 Trust Me (+ Era-3 Extend Me ship) |
 
 ---
 **Status:** Active — Phase 1 Complete + Governance Hardening + Builder Integration  
@@ -127,6 +127,32 @@ Am 39 `agent_performance` is fed on outcome scoring (`cognitive_core_compiler`).
 
 Model calls use the strong-model failover chain (`defaultPlannerCallModel`, SO-003 — never idle). All AI output is hypothesis; confidence is clamped and never fabricated.
 
+## Cognitive Core Era-3 (Extend Me)
+
+**Thesis:** proactive partner — notices patterns, predicts consequences, fills knowledge gaps before asked.
+
+| Capability (idea #) | Surface | Behaviour |
+|---|---|---|
+| Energy & Performance (#13) | `GET /energy` | Decision-quality by part-of-day from journal hit rates; honest low confidence until n is real |
+| Value Drift (#14) | `GET/POST /values`, `GET /values/drift` | Principles as hypotheses; drift events on outcome (not auto-punish) |
+| Consequence Simulator (#15) | judgment turn + `POST /decisions/:id/consequences` | Prospective 2nd/3rd-order effects + watch signals |
+| Missing Info (#16) | judgment turn + `POST /decisions/:id/missing-info` | Most valuable missing fact + cheapest way to learn |
+| Idea Evolution Graph (#17) | `GET/POST /ideas`, `POST /ideas/link` | Nodes/edges (mutation/combination/contradiction/breakthrough) |
+| Curiosity Engine (#18) | `GET/POST /curiosity` | Learning targets from misses + weak programs |
+
+## Cognitive Core Era-4 (Trust Me)
+
+**Thesis:** AI has earned enough evidence to handle **narrowly defined** decisions on Adam's behalf, keep him informed, allow override. Law 2 is non-negotiable — no autonomy from a flipped flag.
+
+| Capability (idea #) | Surface | Behaviour |
+|---|---|---|
+| Expert Collaboration (#19) | `POST /trust/debate` | Structured multi-advisor debate; tension first, then synthesis |
+| Memory Compression (#20) | `GET /trust/models`, `POST /trust/models/compress` | Distill decisions into high-level mental-model hypotheses |
+| Legacy Recorder (#21) | `GET/POST /trust/legacy` | Principles / heuristics / stories / failures / lessons |
+| Apprenticeship (#22) | `POST /trust/apprentice/:decisionId` | Teach the reasoning *process*, not just the conclusion |
+| Delegation Confidence (#23) | `GET /trust/can-act`, `GET/POST /trust/scopes*` | Scoreboard → scopes; founder approve only when n≥5 and not refuse |
+| Autonomous Advisor (#24) | `GET/POST /trust/actions`, override | Bounded proposals logged; refuse/ask/suggest/allow; always overridable |
+
 ## Owned Files
 
 | File | Purpose |
@@ -136,17 +162,25 @@ Model calls use the strong-model failover chain (`defaultPlannerCallModel`, SO-0
 | `db/migrations/20260426_memory_protocol_enforcement.sql` | Protocol violations + task authority |
 | `db/migrations/20260719_cognitive_core_judgment.sql` | Judgment journal, predictions, outcomes, miss reports, domain trust |
 | `db/migrations/20260719_cognitive_core_era2.sql` | Era-2: programs, program_activations, replays, counterfactuals, relationship_twins, learning_style |
+| `db/migrations/20260719_cognitive_core_era3.sql` | Era-3: values, drift, consequences, missing_info, ideas, curiosity, energy |
+| `db/migrations/20260719_cognitive_core_era4.sql` | Era-4: debates, mental_models, legacy, apprenticeship, delegation_scopes, autonomous_actions |
 | `services/memory-intelligence-service.js` | Core evidence engine logic |
 | `services/cognitive-core-judgment.js` | Decision journal + scoreboard |
-| `services/cognitive-core-perspective.js` | Multi-wear tension + judgment turn (+ Era-2 program injection) |
+| `services/cognitive-core-perspective.js` | Multi-wear tension + judgment turn (+ Era-2/3 proactivity) |
 | `services/cognitive-core-programs.js` | Era-2 Programs layer (hypotheses, confidence/evidence, activations) |
 | `services/cognitive-core-improve.js` | Era-2 Improve engine: miss loop, induction, replay, counterfactual, relationship/learning |
+| `services/cognitive-core-extend.js` | Era-3 Extend engine |
+| `services/cognitive-core-values.js` | Era-3 value drift store |
+| `services/cognitive-core-ideas.js` | Era-3 idea evolution graph |
+| `services/cognitive-core-trust.js` | Era-4 Trust Me engine |
 | `config/judgment-capsule-contracts.js` | Perspective lens contracts (allow/deny) + outcome-turn detection |
 | `config/cognitive-core-advisors.js` | Era-2 external-mind + future-self wearable lenses |
 | `routes/memory-intelligence-routes.js` | API surface |
-| `routes/cognitive-core-routes.js` | Cognitive Core API (Era-1 + Era-2) |
+| `routes/cognitive-core-routes.js` | Cognitive Core API (Era-1–4) |
 | `tests/cognitive-core-judgment.test.js` | Era-1 unit tests |
-| `tests/cognitive-core-era2.test.js` | Era-2 unit tests (outcome detect, advisors, program invariants) |
+| `tests/cognitive-core-era2.test.js` | Era-2 unit tests |
+| `tests/cognitive-core-era3.test.js` | Era-3 unit tests |
+| `tests/cognitive-core-era4.test.js` | Era-4 Law-2 / trust unit tests |
 | `docs/MEMORY_FRAMEWORK_DESIGN_BRIEF.md` | Full design brief (cross-model reviewed) |
 | `docs/constitution/COGNITIVE_CORE_LAWS.md` | Five laws + meta-learning constitution |
 
@@ -364,6 +398,7 @@ Phase 1 fully built + extended. Phase 2 adoption (S2) now seeded:
 
 | Date | File | What | Why |
 |---|---|---|---|
+| 2026-07-19 | Cognitive Core Era-3 + Era-4 | Extend Me (#13–18) + Trust Me (#19–24): migrations era3/era4, `cognitive-core-extend/values/ideas/trust.js`, routes + Law-2 can-act/scopes/actions/debate/legacy/apprentice, tests era3+era4, health `era: 4`, Chair meta lines. | Adam: "go to ev4" — finish Extend Me gate then Trust Me band (earned delegation, inform + override). |
 | 2026-07-19 | Cognitive Core Era-2 | Programs layer (hypotheses) + `program_activations`; causal miss loop auto-runs on outcome (classify→correct→move program confidence→induce); outcome capture from chat (`detectOutcomeTurn`); decision replay + counterfactual engine; external-mind + future-self advisor lenses; relationship twins; learning-style model. Migration `20260719_cognitive_core_era2.sql`; services `cognitive-core-programs.js` + `cognitive-core-improve.js`; routes extended; `cognitive-core-era2.test.js` wired to CI. | Adam: "finish all of Era 2 before we audit it with CC" — Improve Me era: system improves the compiler on every miss, wears external minds, models people + learning style. Direct-author + independent-audit path (Adam-ratified for this thread). |
 | 2026-07-19 | Cognitive Core Era-1 | Laws doc + judgment schema/services/routes; Chair perspective→conflict→predict→journal; lifeos-app wear chips; decision turns no longer misroute to build via `should I … or …` | Adam: judgment compiler moat — Decision Journal engine + Capsule UI; meta-learning over twin cosplay |
 | 2026-06-28 | `services/self-repair-memory.js` + `services/reality-ledger.js` | Repair memory append path now mirrors each event into the append-only Reality Ledger (owner + expected/actual outcomes). | V1-00 Five Recorders: unrecoverable history must start before the loop is fully closed. |

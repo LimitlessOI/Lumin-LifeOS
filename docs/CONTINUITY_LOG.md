@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-19 — Cognitive Core Era-3 + Era-4 (Trust Me)
+
+Adam: "great job now go to ev4." Tip was still `era: 2`; Era-3 Extend Me (#13–18) existed as local WIP. Shipped Era-3 (energy, value drift, consequences, missing-info, idea graph, curiosity) then Era-4 Trust Me (#19–24): expert debate, memory compression, legacy recorder, apprenticeship, delegation scopes, autonomous advisor — all Law-2 gated via `GET /trust/can-act` (refuse until evidence). Migration `20260719_cognitive_core_era4.sql` + `services/cognitive-core-trust.js`. NEXT: tip prove health `era: 4`, can-act refuse-default, then CC audit.
+
 ## 2026-07-19 — Chair communications overnight continue (presence lock)
 
 Adam: continue. Tip Chair no longer hits CLARIFY theater, but anger/presence turns still coach-closed ("let me know if…", "talk through what's stuck"). Shipped PRESENCE LOCK + expanded presence intent + closer strip in `chair-direct-agent` / `chair-intent-signals`. Governed autonomous ship is the live builder (legacy never-stop status `enabled:false` is expected under fence). Next: tip redeploy + re-prove presence/anger; keep wellness Mod-4 queue moving.

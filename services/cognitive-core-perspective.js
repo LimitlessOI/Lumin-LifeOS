@@ -212,10 +212,12 @@ Return ONLY JSON:
   "predicted_reasons": ["why you think he will choose that"],
   "activated_programs": ["labels of the program hypotheses above that may be driving this — [] if none apply"],
   "confidence": 0.0,
-  "situation": {"stakes":"medium","notes":"..."}
+  "situation": {"stakes":"medium","notes":"..."},
+  "missing_info": {"most_valuable":"the single fact worth getting before deciding (or empty if none)","facts":["other useful missing facts"],"cheapest_way_to_learn":"smallest experiment/lookup"},
+  "consequences": {"second_order":["plausible 2nd-order effects of your predicted option"],"third_order":["3rd-order effects"],"watch_signals":["early signals to instrument now"]}
 }
 
-confidence must be calibrated humility (not fake 0.99).`;
+confidence must be calibrated humility (not fake 0.99). Era-3: proactively surface the most valuable MISSING fact and the downstream CONSEQUENCES of your predicted option — these are hypotheses, hedge them.`;
 
   const cascade = (process.env.COGNITIVE_CORE_CASCADE
     || process.env.CHAIR_DIRECT_AGENT_CASCADE
@@ -259,6 +261,8 @@ confidence must be calibrated humility (not fake 0.99).`;
       activated_programs: [],
       confidence: 0.35,
       situation: { stakes: args.stakes || 'medium', notes: degradeReason },
+      missing_info: null,
+      consequences: null,
     };
   }
 
@@ -273,6 +277,24 @@ confidence must be calibrated humility (not fake 0.99).`;
   const predictedOption = String(parsed.predicted_option || '').trim() || null;
   const predictedReasons = Array.isArray(parsed.predicted_reasons) ? parsed.predicted_reasons : [];
   const programs = Array.isArray(parsed.activated_programs) ? parsed.activated_programs.map(String) : [];
+
+  // Era-3 proactivity (same AI pass, zero extra calls): most-valuable missing fact + consequence sketch.
+  const mi = parsed.missing_info && typeof parsed.missing_info === 'object' ? parsed.missing_info : null;
+  const missingInfo = mi && (mi.most_valuable || (Array.isArray(mi.facts) && mi.facts.length))
+    ? {
+        most_valuable: String(mi.most_valuable || '').slice(0, 1000),
+        facts: (Array.isArray(mi.facts) ? mi.facts : []).map((f) => String(f).slice(0, 400)).slice(0, 6),
+        cheapest_way_to_learn: String(mi.cheapest_way_to_learn || '').slice(0, 1000),
+      }
+    : null;
+  const cs = parsed.consequences && typeof parsed.consequences === 'object' ? parsed.consequences : null;
+  const consequences = cs && (Array.isArray(cs.second_order) ? cs.second_order.length : 0)
+    ? {
+        second_order: (cs.second_order || []).map((x) => String(x).slice(0, 400)).slice(0, 6),
+        third_order: (Array.isArray(cs.third_order) ? cs.third_order : []).map((x) => String(x).slice(0, 400)).slice(0, 6),
+        watch_signals: (Array.isArray(cs.watch_signals) ? cs.watch_signals : []).map((x) => String(x).slice(0, 400)).slice(0, 6),
+      }
+    : null;
 
   let decisionRow = null;
   let predictionRow = null;
@@ -316,6 +338,24 @@ confidence must be calibrated humility (not fake 0.99).`;
         activatedProgramBriefs = matched.map((p) => ({
           program_id: p.program_id, label: p.label, confidence: Number(p.confidence),
         }));
+      }
+      // Era-3: persist the proactive missing-info + consequence hypotheses against this decision.
+      if (missingInfo) {
+        await args.pool.query(
+          `INSERT INTO missing_info_findings (decision_id, user_id, missing_facts, most_valuable, cheapest_way_to_learn, confidence)
+           VALUES ($1,$2,$3::jsonb,$4,$5,$6)`,
+          [decisionRow.decision_id, String(args.userId), JSON.stringify(missingInfo.facts),
+            missingInfo.most_valuable, missingInfo.cheapest_way_to_learn, 0.5],
+        ).catch((e) => args.logger?.warn?.(`[cognitive-core] missing_info write failed: ${e.message}`));
+      }
+      if (consequences && predictedOption) {
+        await args.pool.query(
+          `INSERT INTO consequence_maps (decision_id, user_id, option, second_order, third_order, watch_signals, confidence, source)
+           VALUES ($1,$2,$3,$4::jsonb,$5::jsonb,$6::jsonb,$7,'judgment_turn')`,
+          [decisionRow.decision_id, String(args.userId), predictedOption.slice(0, 500),
+            JSON.stringify(consequences.second_order), JSON.stringify(consequences.third_order),
+            JSON.stringify(consequences.watch_signals), confidence],
+        ).catch((e) => args.logger?.warn?.(`[cognitive-core] consequence write failed: ${e.message}`));
       }
     } catch (err) {
       args.logger?.warn?.(`[cognitive-core] journal write failed: ${err.message}`);

@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T00:40:31.808Z",
+  "generated_at": "2026-07-20T00:41:55.829Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12016,
+  "file_count": 12024,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -36093,6 +36093,20 @@
       "indexed_at": "2026-07-19T23:31:20.836Z"
     },
     {
+      "path": "db/migrations/20260719_cognitive_core_era3.sql",
+      "synopsis": "Cognitive Core Era-3 (\"Extend Me\") — proactive partner surfaces.",
+      "bytes": 5499,
+      "mtime": "2026-07-20T00:41:50.796Z",
+      "indexed_at": "2026-07-20T00:41:55.829Z"
+    },
+    {
+      "path": "db/migrations/20260719_cognitive_core_era4.sql",
+      "synopsis": "Cognitive Core Era-4 (\"Trust Me\") — earned delegation + inform/override.",
+      "bytes": 5165,
+      "mtime": "2026-07-20T00:41:50.799Z",
+      "indexed_at": "2026-07-20T00:41:55.829Z"
+    },
+    {
       "path": "db/migrations/20260719_cognitive_core_judgment.sql",
       "synopsis": "Cognitive Core Era-1 — decision journal, predictions, outcomes, miss reports, domain trust.",
       "bytes": 3358,
@@ -37480,9 +37494,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 63853,
-      "mtime": "2026-07-20T00:18:33.203Z",
-      "indexed_at": "2026-07-20T00:18:34.468Z"
+      "bytes": 64469,
+      "mtime": "2026-07-20T00:41:50.843Z",
+      "indexed_at": "2026-07-20T00:41:55.829Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40276,9 +40290,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 642511,
-      "mtime": "2026-07-20T00:21:00.533Z",
-      "indexed_at": "2026-07-20T00:21:01.557Z"
+      "bytes": 642843,
+      "mtime": "2026-07-20T00:41:50.839Z",
+      "indexed_at": "2026-07-20T00:41:55.829Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -40414,17 +40428,17 @@
     {
       "path": "docs/products/memory-intelligence/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
-      "bytes": 1898,
-      "mtime": "2026-07-19T23:31:20.836Z",
-      "indexed_at": "2026-07-19T23:31:20.836Z",
+      "bytes": 2250,
+      "mtime": "2026-07-20T00:41:50.835Z",
+      "indexed_at": "2026-07-20T00:41:55.829Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/products/memory-intelligence/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Memory Intelligence",
-      "bytes": 28620,
-      "mtime": "2026-07-19T23:31:20.836Z",
-      "indexed_at": "2026-07-19T23:31:20.836Z"
+      "bytes": 31619,
+      "mtime": "2026-07-20T00:41:50.832Z",
+      "indexed_at": "2026-07-20T00:41:55.829Z"
     },
     {
       "path": "docs/products/memory-system/FILE_MANIFEST.json",
@@ -63137,9 +63151,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 32487,
-      "mtime": "2026-07-19T23:31:20.836Z",
-      "indexed_at": "2026-07-19T23:31:20.836Z",
+      "bytes": 32555,
+      "mtime": "2026-07-20T00:41:50.829Z",
+      "indexed_at": "2026-07-20T00:41:55.829Z",
       "synopsis_index_only": true
     },
     {
@@ -65141,9 +65155,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 198048,
-      "mtime": "2026-07-19T23:31:20.836Z",
-      "indexed_at": "2026-07-19T23:31:20.836Z"
+      "bytes": 199445,
+      "mtime": "2026-07-20T00:41:50.845Z",
+      "indexed_at": "2026-07-20T00:41:55.829Z"
     },
     {
       "path": "public/overlay/lifeos-ask-your-life.html",
@@ -66762,10 +66776,10 @@
     },
     {
       "path": "routes/cognitive-core-routes.js",
-      "synopsis": "Cognitive Core Era-1 API — journal, outcomes, miss reports, scoreboard, capsules.",
-      "bytes": 11999,
-      "mtime": "2026-07-19T23:31:20.836Z",
-      "indexed_at": "2026-07-19T23:31:20.836Z",
+      "synopsis": "Cognitive Core Era-1–4 API — journal through Trust Me (earned delegation).",
+      "bytes": 22957,
+      "mtime": "2026-07-20T00:41:50.819Z",
+      "indexed_at": "2026-07-20T00:41:55.829Z",
       "ssot": [
         "docs/products/memory-intelligence/PRODUCT_HOME.md"
       ]
@@ -84826,6 +84840,26 @@
       "indexed_at": "2026-07-19T21:04:54.410Z"
     },
     {
+      "path": "services/cognitive-core-extend.js",
+      "synopsis": "Cognitive Core Era-3 \"Extend Me\" engine — proactive partner.",
+      "bytes": 13045,
+      "mtime": "2026-07-20T00:41:50.803Z",
+      "indexed_at": "2026-07-20T00:41:55.829Z",
+      "ssot": [
+        "docs/products/memory-intelligence/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/cognitive-core-ideas.js",
+      "synopsis": "Cognitive Core Era-3 #17 — Idea Evolution Graph (pool-only).",
+      "bytes": 3151,
+      "mtime": "2026-07-20T00:41:50.809Z",
+      "indexed_at": "2026-07-20T00:41:55.829Z",
+      "ssot": [
+        "docs/products/memory-intelligence/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/cognitive-core-improve.js",
       "synopsis": "Cognitive Core Era-2 \"Improve Me\" engine — the meta-learning loop made real.",
       "bytes": 19655,
@@ -84848,9 +84882,9 @@
     {
       "path": "services/cognitive-core-perspective.js",
       "synopsis": "Cognitive Core Era-1 — perspective-before-retrieval, multi-wear tension, scarce WM.",
-      "bytes": 13202,
-      "mtime": "2026-07-19T23:31:20.836Z",
-      "indexed_at": "2026-07-19T23:31:20.836Z",
+      "bytes": 16232,
+      "mtime": "2026-07-20T00:41:50.816Z",
+      "indexed_at": "2026-07-20T00:41:55.829Z",
       "ssot": [
         "docs/products/memory-intelligence/PRODUCT_HOME.md"
       ]
@@ -84861,6 +84895,26 @@
       "bytes": 7315,
       "mtime": "2026-07-19T23:31:20.836Z",
       "indexed_at": "2026-07-19T23:31:20.836Z",
+      "ssot": [
+        "docs/products/memory-intelligence/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/cognitive-core-trust.js",
+      "synopsis": "Cognitive Core Era-4 \"Trust Me\" — earned delegation + inform/override.",
+      "bytes": 18040,
+      "mtime": "2026-07-20T00:41:50.812Z",
+      "indexed_at": "2026-07-20T00:41:55.829Z",
+      "ssot": [
+        "docs/products/memory-intelligence/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/cognitive-core-values.js",
+      "synopsis": "Cognitive Core Era-3 #14 — Value Drift Monitor (pool-only).",
+      "bytes": 3397,
+      "mtime": "2026-07-20T00:41:50.806Z",
+      "indexed_at": "2026-07-20T00:41:55.829Z",
       "ssot": [
         "docs/products/memory-intelligence/PRODUCT_HOME.md"
       ]
@@ -92790,6 +92844,20 @@
       "bytes": 4740,
       "mtime": "2026-07-19T23:31:20.836Z",
       "indexed_at": "2026-07-19T23:31:20.836Z"
+    },
+    {
+      "path": "tests/cognitive-core-era3.test.js",
+      "synopsis": "Cognitive Core Era-3 unit tests — values, ideas, energy advisory invariants.",
+      "bytes": 4938,
+      "mtime": "2026-07-20T00:41:50.822Z",
+      "indexed_at": "2026-07-20T00:41:55.829Z"
+    },
+    {
+      "path": "tests/cognitive-core-era4.test.js",
+      "synopsis": "Cognitive Core Era-4 unit tests — Trust Me Law-2 gates (fake-pool only).",
+      "bytes": 5599,
+      "mtime": "2026-07-20T00:41:50.826Z",
+      "indexed_at": "2026-07-20T00:41:55.829Z"
     },
     {
       "path": "tests/cognitive-core-judgment.test.js",

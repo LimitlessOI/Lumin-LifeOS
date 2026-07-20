@@ -3597,9 +3597,30 @@ function appendLuminJudgmentMeta(data) {
   if (data.decision_id) {
     lines.push(`<div><strong>Journal</strong> ${ _escHtml(String(data.decision_id).slice(0, 8)) }…</div>`);
   }
+  // Era-3 Extend Me — proactive missing-info + consequence sketch (hypothesis).
+  const mi = data.missing_info || data.cognitive_core?.missing_info;
+  if (mi?.most_valuable) {
+    lines.push(`<div><strong>Missing</strong> ${ _escHtml(String(mi.most_valuable)) }${mi.cheapest_way_to_learn ? ` · learn: ${ _escHtml(String(mi.cheapest_way_to_learn)) }` : ''}</div>`);
+  }
+  const cs = data.consequences || data.cognitive_core?.consequences;
+  if (cs && (arrLen(cs.second_order) || arrLen(cs.watch_signals))) {
+    const watch = Array.isArray(cs.watch_signals) ? cs.watch_signals.slice(0, 2).join('; ') : '';
+    lines.push(`<div><strong>Consequences</strong> ${watch ? _escHtml(watch) : '2nd/3rd-order sketched'} — hypothesis</div>`);
+  }
+  if (data.value_drift?.drift?.length) {
+    const d0 = data.value_drift.drift[0];
+    lines.push(`<div><strong>Value drift</strong> ${ _escHtml(String(d0.principle || d0.drift_description || 'divergence noted')) }</div>`);
+  }
+  // Era-4 Trust Me — delegation disposition when present.
+  const trust = data.trust || data.can_act_gate || data.cognitive_core?.trust;
+  if (trust?.delegation_tier || trust?.action) {
+    lines.push(`<div><strong>Trust</strong> tier ${ _escHtml(String(trust.delegation_tier || trust.action))} · can_act=${trust.can_act ? 'yes' : 'no'} (earned)</div>`);
+  }
   if (!lines.length) return;
   _renderJudgmentMeta(container, lines);
 }
+
+function arrLen(v) { return Array.isArray(v) ? v.length : 0; }
 
 function _renderJudgmentMeta(container, lines) {
   const div = document.createElement('div');
