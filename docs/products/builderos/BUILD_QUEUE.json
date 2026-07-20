@@ -1309,14 +1309,27 @@
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "self-repair-tier1-1",
       "mission_id": "PRODUCT-builderos",
-      "last_attempt_at": "2026-07-20T20:32:40.865Z",
-      "last_error": "NOT_ON_BLUEPRINT",
+      "last_attempt_at": "2026-07-20T20:49:04.715Z",
+      "last_error": "github_commit_failed_after_local_ship",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "failure_signature": "NOT_ON_BLUEPRINT",
+      "failure_signature": "github_commit_failed_after_local_ship",
       "same_signature_count": 1,
-      "escalation_class": "governance_block"
+      "escalation_class": "same_signature_repeat",
+      "revive_count": 1,
+      "revived_at": "2026-07-20T20:48:29.942Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "self-repair-tier1-2",
@@ -1521,7 +1534,7 @@
     },
     {
       "id": "self-repair-tier3-2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/self-repair-calibration-sampling.js",
       "task": "Tier 3 calibration sampling: randomly samples a small set of recent verified claims for a human (or an independent AI auditor, e.g. Opus) to spot-check against reality. Sampling only -- never blocks, never requires review before anything proceeds (per doctrine Part 2, Tier 3 is 'never approval-based').",
       "spec": "Self-bootstrap `CREATE TABLE IF NOT EXISTS self_repair_calibration_samples (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), source_claim_id UUID, source_claim TEXT, sampled_at TIMESTAMPTZ NOT NULL DEFAULT now(), reviewed BOOLEAN NOT NULL DEFAULT false, review_result TEXT, review_note TEXT, reviewed_at TIMESTAMPTZ)`. Export async function sampleClaimsForCalibration(pool, { sampleSize = 5, sinceHours = 24 } = {}) that self-bootstraps this table AND separately self-bootstraps self_repair_provenance_ledger with the exact same CREATE TABLE IF NOT EXISTS DDL already used in services/self-repair-provenance-ledger.js (this module may run before that one has ever been called), then runs `SELECT id, claim FROM self_repair_provenance_ledger WHERE result = 'verified' AND verified_at >= now() - ($1 || ' hours')::interval ORDER BY random() LIMIT $2` with params [String(sinceHours), sampleSize], inserts one row per result into self_repair_calibration_samples (source_claim_id=id, source_claim=claim), and returns the inserted rows. If zero eligible claims exist, returns an empty array without error. Export async function recordCalibrationReview(pool, { sample_id, review_result, review_note = null }) that updates the row: reviewed=true, review_result, review_note, reviewed_at=now(), WHERE id = sample_id, returns the updated row or null if sample_id not found. Export async function getPendingCalibrationSamples(pool, { limit = 50 } = {}) returning rows where reviewed=false, most recent first. CRITICAL, learned from Era 1 (Tier 0): EVERY exported function that touches a table must independently run `await pool.query('CREATE TABLE IF NOT EXISTS ... (...)')` as its own, separate, no-parameters pool.query() call before any parameterized query in that same function -- do not assume another function already created the table, and do not combine the CREATE TABLE with a parameterized query in one pool.query(text, values) call (PostgreSQL's prepared-statement protocol rejects multiple statements in one call with params). Three Era-1 steps shipped broken this exact way despite passing SENTRY's exports_smoke (which only checks export names exist, never that the code runs) -- do not repeat it.",
@@ -1574,7 +1587,12 @@
           "content_sha256": "64153d78e2360a1455aa00b38fd8b7bc6307b66f322565bb39cf08ae678586d1"
         }
       },
-      "shipped_at": "2026-07-20T20:39:22.859Z"
+      "shipped_at": "2026-07-20T20:39:22.859Z",
+      "last_error": null,
+      "pre_existing": true,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null
     }
   ],
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
