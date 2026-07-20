@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T19:11:27.324Z",
+  "generated_at": "2026-07-20T19:12:46.540Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12066,
   "files": [
@@ -90204,9 +90204,9 @@
     {
       "path": "services/self-repair-fix-durability.js",
       "synopsis": "Exports recordFixShipped — services/self-repair-fix-durability.js.",
-      "bytes": 2545,
-      "mtime": "2026-07-20T18:53:24.855Z",
-      "indexed_at": "2026-07-20T18:53:24.855Z"
+      "bytes": 3700,
+      "mtime": "2026-07-20T19:12:46.540Z",
+      "indexed_at": "2026-07-20T19:12:46.540Z"
     },
     {
       "path": "services/self-repair-lesson-classifier.js",

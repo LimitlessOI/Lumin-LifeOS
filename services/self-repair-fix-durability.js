@@ -4,6 +4,17 @@
 import { Pool } from 'pg';
 
 export async function recordFixShipped(pool, { fix_id, target, shipped_at = new Date() }) {
+  await pool.query(
+    `CREATE TABLE IF NOT EXISTS self_repair_fix_durability (
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(), 
+      fix_id TEXT NOT NULL, 
+      target TEXT NOT NULL, 
+      shipped_at TIMESTAMPTZ NOT NULL, 
+      rebroke_at TIMESTAMPTZ, 
+      rebreak_count INTEGER NOT NULL DEFAULT 0, 
+      created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    )`
+  );
   const query = `
     INSERT INTO self_repair_fix_durability (fix_id, target, shipped_at)
     VALUES ($1, $2, $3)
@@ -18,6 +29,17 @@ export async function recordRebreak(pool, { fix_id, target }) {
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
+    await client.query(
+      `CREATE TABLE IF NOT EXISTS self_repair_fix_durability (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(), 
+        fix_id TEXT NOT NULL, 
+        target TEXT NOT NULL, 
+        shipped_at TIMESTAMPTZ NOT NULL, 
+        rebroke_at TIMESTAMPTZ, 
+        rebreak_count INTEGER NOT NULL DEFAULT 0, 
+        created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+      )`
+    );
     const selectQuery = `
       SELECT id, shipped_at 
       FROM self_repair_fix_durability 
@@ -62,6 +84,17 @@ export async function recordRebreak(pool, { fix_id, target }) {
 }
 
 export async function getFixDurability(pool, { target, limit = 20 }) {
+  await pool.query(
+    `CREATE TABLE IF NOT EXISTS self_repair_fix_durability (
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(), 
+      fix_id TEXT NOT NULL, 
+      target TEXT NOT NULL, 
+      shipped_at TIMESTAMPTZ NOT NULL, 
+      rebroke_at TIMESTAMPTZ, 
+      rebreak_count INTEGER NOT NULL DEFAULT 0, 
+      created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    )`
+  );
   const query = `
     SELECT *, 
     CASE 
