@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T01:28:40.886Z",
+  "generated_at": "2026-07-20T01:29:30.532Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12026,
+  "file_count": 12027,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -40297,9 +40297,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 643777,
-      "mtime": "2026-07-20T01:27:43.514Z",
-      "indexed_at": "2026-07-20T01:27:48.176Z"
+      "bytes": 643651,
+      "mtime": "2026-07-20T01:29:29.388Z",
+      "indexed_at": "2026-07-20T01:29:30.532Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -63624,6 +63624,14 @@
       "bytes": 1749,
       "mtime": "2026-07-19T21:03:56.372Z",
       "indexed_at": "2026-07-19T21:04:54.410Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/LIFEOS_LABS_PERSIST_PROOF.json",
+      "synopsis": "Product receipt — LIFEOS LABS PERSIST PROOF.",
+      "bytes": 620,
+      "mtime": "2026-07-20T01:29:29.387Z",
+      "indexed_at": "2026-07-20T01:29:30.532Z",
       "synopsis_index_only": true
     },
     {
