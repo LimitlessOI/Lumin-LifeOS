@@ -2108,6 +2108,38 @@
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "s8",
       "shipped_via": "governed_ship_queue"
+    },
+    {
+      "id": "07",
+      "status": "pending",
+      "target_file": "routes/struggleDetectionFormFillData.js",
+      "task": "create route for struggle detection form fill data",
+      "spec": "Expose an HTTP route to store and analyze struggle detection form fill data using the corresponding service.",
+      "depends_on": [
+        "06"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerStruggleDetectionFormFillDataRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/struggle/form-fill-data"
+      }
+    },
+    {
+      "id": "08",
+      "status": "pending",
+      "target_file": "public/overlay/struggleDetectionFormFillUI.html",
+      "task": "build UI for struggle detection form fill data",
+      "spec": "Design a UI component to display struggle detection form fill data and analytics. The page should provide meaningful visual insights.",
+      "depends_on": [
+        "07"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "design_review_flagged": true
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
