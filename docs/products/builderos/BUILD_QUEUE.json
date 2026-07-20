@@ -958,7 +958,31 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "model_rotation": 1,
-      "force_model_rotation": true
+      "force_model_rotation": true,
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/builderos/twins/steps/builderos-step12.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-20T15:21:59.910Z",
+        "shipped_at": "2026-07-20T15:21:59.910Z",
+        "commit_sha": null,
+        "content_sha256": "7d53ef1225dd77c813973d15cc57a29c2d5596a33d1daf8dfd541fe09d12800e",
+        "target_file": "routes/testing-response.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "routes/testing-response.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/builderos/twins/steps/builderos-step12.exact",
+          "content_sha256": "7d53ef1225dd77c813973d15cc57a29c2d5596a33d1daf8dfd541fe09d12800e"
+        }
+      },
+      "shipped_at": "2026-07-20T15:21:59.910Z"
     },
     {
       "id": "sentry-broken_workflow:.github/workflows/migrate.yml",
