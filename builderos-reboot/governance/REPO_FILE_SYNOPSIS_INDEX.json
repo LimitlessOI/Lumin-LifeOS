@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T07:26:26.033Z",
+  "generated_at": "2026-07-20T07:26:26.744Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12055,
   "files": [
@@ -30797,9 +30797,9 @@
     {
       "path": "config/migration-preflight-collision-allowlist.json",
       "synopsis": "Configuration — Migration Preflight Collision Allowlist.",
-      "bytes": 19341,
-      "mtime": "2026-07-20T07:16:50.918Z",
-      "indexed_at": "2026-07-20T07:16:52.556Z",
+      "bytes": 20931,
+      "mtime": "2026-07-20T07:24:07.768Z",
+      "indexed_at": "2026-07-20T07:26:26.744Z",
       "synopsis_index_only": true
     },
     {
@@ -39671,9 +39671,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 238476,
-      "mtime": "2026-07-20T07:26:26.033Z",
-      "indexed_at": "2026-07-20T07:26:26.033Z"
+      "bytes": 238268,
+      "mtime": "2026-07-20T07:26:09.101Z",
+      "indexed_at": "2026-07-20T07:26:26.744Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -71730,9 +71730,9 @@
     {
       "path": "scripts/sentry-prealpha-gate.mjs",
       "synopsis": "Product-agnostic SENTRY pre-alpha completion gate — the generalized",
-      "bytes": 15563,
-      "mtime": "2026-07-20T07:26:26.033Z",
-      "indexed_at": "2026-07-20T07:26:26.033Z",
+      "bytes": 13872,
+      "mtime": "2026-07-20T07:16:51.898Z",
+      "indexed_at": "2026-07-20T07:16:52.556Z",
       "ssot": [
         "builderos-reboot/governance/SENTRY_PRODUCT_REGISTRY.json"
       ]
@@ -73028,9 +73028,9 @@
     {
       "path": "scripts/verify-migration-preflight.mjs",
       "synopsis": "Fail-closed static pre-flight for db/migrations/*.sql (idempotency + collision risk).",
-      "bytes": 8710,
-      "mtime": "2026-07-20T07:16:51.915Z",
-      "indexed_at": "2026-07-20T07:16:52.556Z",
+      "bytes": 10462,
+      "mtime": "2026-07-20T07:23:30.093Z",
+      "indexed_at": "2026-07-20T07:26:26.744Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -93654,9 +93654,9 @@
     {
       "path": "tests/migration-preflight.test.js",
       "synopsis": "Unit/fixture tests for migration pre-flight validator (no DB).",
-      "bytes": 6127,
-      "mtime": "2026-07-20T07:16:52.130Z",
-      "indexed_at": "2026-07-20T07:16:52.556Z",
+      "bytes": 7738,
+      "mtime": "2026-07-20T07:25:08.944Z",
+      "indexed_at": "2026-07-20T07:26:26.744Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
