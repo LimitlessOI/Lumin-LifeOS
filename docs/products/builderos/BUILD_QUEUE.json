@@ -1033,7 +1033,31 @@
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "self-repair-era1-1",
       "mission_id": "PRODUCT-builderos",
-      "revive_note": "2026-07-20: first attempt hit NOT_ON_BLUEPRINT (transient race). Second attempt (commit e054c97b60e200a699c88337822f2980e155a591) shipped and was read directly -- recordProvenanceClaim self-bootstraps correctly, but verifyProvenanceClaim and getProvenanceLedger do not, a real bug (same class as era1-4's getTargetReputation gap). Third attempt was falsely marked done via pre_existing_artifact_proof -- claimPreExistingSatisfiedSteps found the SAME unfixed file still on disk and shipped_via'd it through on a shallow file_contains substring match, without codegen ever running. The stale file has now been deleted (commit 8e40b6dd6d) so this dispatch is forced through real codegen against the strengthened spec above."
+      "revive_note": "2026-07-20: first attempt hit NOT_ON_BLUEPRINT (transient race). Second attempt (commit e054c97b60e200a699c88337822f2980e155a591) shipped and was read directly -- recordProvenanceClaim self-bootstraps correctly, but verifyProvenanceClaim and getProvenanceLedger do not, a real bug (same class as era1-4's getTargetReputation gap). Third attempt was falsely marked done via pre_existing_artifact_proof -- claimPreExistingSatisfiedSteps found the SAME unfixed file still on disk and shipped_via'd it through on a shallow file_contains substring match, without codegen ever running. The stale file has now been deleted (commit 8e40b6dd6d) so this dispatch is forced through real codegen against the strengthened spec above.",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/builderos/twins/steps/self-repair-era1-1.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-20T19:21:18.047Z",
+        "shipped_at": "2026-07-20T19:21:18.047Z",
+        "commit_sha": null,
+        "content_sha256": "32ccd4e9437af94d29295e5797d0a0a8e6d81e081eabf17dce9e988562ef34b2",
+        "target_file": "services/self-repair-provenance-ledger.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/self-repair-provenance-ledger.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/builderos/twins/steps/self-repair-era1-1.exact",
+          "content_sha256": "32ccd4e9437af94d29295e5797d0a0a8e6d81e081eabf17dce9e988562ef34b2"
+        }
+      },
+      "shipped_at": "2026-07-20T19:21:18.047Z"
     },
     {
       "id": "self-repair-era1-2",
