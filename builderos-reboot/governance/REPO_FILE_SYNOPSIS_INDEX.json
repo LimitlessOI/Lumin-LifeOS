@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T17:04:28.328Z",
+  "generated_at": "2026-07-20T17:36:51.962Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12059,
   "files": [
@@ -40869,9 +40869,9 @@
     {
       "path": "docs/products/teacher-os/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Teacher OS",
-      "bytes": 22126,
-      "mtime": "2026-07-20T17:04:05.339Z",
-      "indexed_at": "2026-07-20T17:04:28.328Z"
+      "bytes": 23588,
+      "mtime": "2026-07-20T17:36:29.718Z",
+      "indexed_at": "2026-07-20T17:36:51.962Z"
     },
     {
       "path": "docs/products/TEACHEROS.md",
