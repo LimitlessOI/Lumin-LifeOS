@@ -1245,7 +1245,31 @@
       ],
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "self-repair-era1-7",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/builderos/twins/steps/self-repair-era1-7.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-20T18:57:00.107Z",
+        "shipped_at": "2026-07-20T18:57:00.107Z",
+        "commit_sha": null,
+        "content_sha256": "549c1af5897e009609bf139c1d8a86f8bc1d30964ffeb13e1a0859f650f20689",
+        "target_file": "services/self-repair-predisk-gate.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/self-repair-predisk-gate.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/builderos/twins/steps/self-repair-era1-7.exact",
+          "content_sha256": "549c1af5897e009609bf139c1d8a86f8bc1d30964ffeb13e1a0859f650f20689"
+        }
+      },
+      "shipped_at": "2026-07-20T18:57:00.107Z"
     },
     {
       "id": "self-repair-era1-8",

@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T18:56:46.694Z",
+  "generated_at": "2026-07-20T18:57:02.602Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12065,
+  "file_count": 12066,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -90236,6 +90236,13 @@
       "bytes": 889,
       "mtime": "2026-07-20T18:56:32.017Z",
       "indexed_at": "2026-07-20T18:56:32.017Z"
+    },
+    {
+      "path": "services/self-repair-predisk-gate.js",
+      "synopsis": "Exports checkImportResolution — services/self-repair-predisk-gate.js.",
+      "bytes": 1286,
+      "mtime": "2026-07-20T18:57:02.602Z",
+      "indexed_at": "2026-07-20T18:57:02.602Z"
     },
     {
       "path": "services/self-repair-prevention-hook-log.js",
