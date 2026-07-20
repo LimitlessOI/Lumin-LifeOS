@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T04:53:52.064Z",
+  "generated_at": "2026-07-20T05:16:16.387Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12051,
   "files": [
@@ -39664,9 +39664,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 231968,
-      "mtime": "2026-07-20T04:15:20.972Z",
-      "indexed_at": "2026-07-20T04:15:32.286Z"
+      "bytes": 233394,
+      "mtime": "2026-07-20T05:15:55.213Z",
+      "indexed_at": "2026-07-20T05:16:16.387Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -71713,9 +71713,9 @@
     {
       "path": "scripts/sentry-chair-governance-audit.mjs",
       "synopsis": "Orchestrates SENTRY (finds + proposes) -> Chair (reviews, real AI",
-      "bytes": 10745,
-      "mtime": "2026-07-19T21:04:06.589Z",
-      "indexed_at": "2026-07-19T21:05:12.077Z",
+      "bytes": 10965,
+      "mtime": "2026-07-20T05:13:59.618Z",
+      "indexed_at": "2026-07-20T05:16:16.387Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -83407,9 +83407,9 @@
     {
       "path": "server-founder-runtime.js",
       "synopsis": "Founder-builder minimal runtime entrypoint.",
-      "bytes": 21493,
-      "mtime": "2026-07-19T21:04:06.584Z",
-      "indexed_at": "2026-07-19T21:05:12.077Z",
+      "bytes": 21499,
+      "mtime": "2026-07-20T05:14:27.362Z",
+      "indexed_at": "2026-07-20T05:16:16.387Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -90243,9 +90243,9 @@
     {
       "path": "services/sentry-system-audit.js",
       "synopsis": "SENTRY periodic system audit — the \"SENTRY finds, proposes a",
-      "bytes": 9558,
-      "mtime": "2026-07-19T21:03:56.746Z",
-      "indexed_at": "2026-07-19T21:04:54.410Z",
+      "bytes": 13338,
+      "mtime": "2026-07-20T05:13:16.853Z",
+      "indexed_at": "2026-07-20T05:16:16.387Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -93901,9 +93901,9 @@
     {
       "path": "tests/sentry-system-audit.test.js",
       "synopsis": "js — tests/sentry-system-audit.test.js.",
-      "bytes": 8525,
-      "mtime": "2026-07-19T21:03:56.798Z",
-      "indexed_at": "2026-07-19T21:04:54.410Z"
+      "bytes": 11195,
+      "mtime": "2026-07-20T05:15:13.444Z",
+      "indexed_at": "2026-07-20T05:16:16.387Z"
     },
     {
       "path": "tests/site-builder-postmark-helper.test.js",

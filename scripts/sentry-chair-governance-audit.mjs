@@ -105,8 +105,11 @@ export async function runGovernanceAuditCycle({
   // services/architect-blueprint-writer.js uses the real repo root.
   architectRoot = undefined,
   logger = console,
+  // Optional DB pool — enables checkReceiptReproducibility (judgment_receipt_links
+  // integrity). Undefined in contexts with no DB access; that check simply no-ops.
+  pool = undefined,
 } = {}) {
-  const rawFindings = await runSentrySystemAudit({ token, repo, ...(productsDir ? { productsDir } : {}) });
+  const rawFindings = await runSentrySystemAudit({ token, repo, pool, ...(productsDir ? { productsDir } : {}) });
   const reviewed = callModel
     ? await reviewFindingsWithAI(rawFindings, { callModel, logger })
     : reviewFindings(rawFindings);
@@ -219,13 +222,13 @@ export function startCompetitiveResearchScheduler({ logger = console } = {}) {
   return setInterval(() => { tick(); }, intervalMs);
 }
 
-export function startSentryChairGovernanceScheduler({ logger = console } = {}) {
+export function startSentryChairGovernanceScheduler({ logger = console, pool = undefined } = {}) {
   const intervalMs = Number(process.env.SENTRY_CHAIR_AUDIT_INTERVAL_MS || 30 * 60 * 1000);
   const bootDelayMs = Number(process.env.SENTRY_CHAIR_AUDIT_BOOT_DELAY_MS || 90_000);
 
   const tick = async () => {
     try {
-      await runGovernanceAuditCycle({ logger });
+      await runGovernanceAuditCycle({ logger, pool });
     } catch (err) {
       logger?.warn?.({ err: err.message }, '[SENTRY-CHAIR] audit cycle failed');
     }

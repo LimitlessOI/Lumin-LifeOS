@@ -7,7 +7,7 @@ import fs from 'fs';
 import os from 'os';
 import path from 'path';
 
-import { checkCiHealth, checkProductBacklogs, checkWorkflowHealth, runSentrySystemAudit } from '../services/sentry-system-audit.js';
+import { checkCiHealth, checkProductBacklogs, checkWorkflowHealth, checkReceiptReproducibility, runSentrySystemAudit } from '../services/sentry-system-audit.js';
 
 test('checkCiHealth: no token/repo skips cleanly (this is why it silently no-ops in a local dev shell with no GITHUB_TOKEN)', async () => {
   const findings = await checkCiHealth({ token: null, repo: null });
@@ -167,6 +167,62 @@ test('checkWorkflowHealth: a workflow that fails but takes real time (a genuine 
   };
 
   const findings = await checkWorkflowHealth({ token: 't', repo: 'owner/repo', fetchFn: fakeFetch });
+  assert.deepEqual(findings, []);
+});
+
+test('checkReceiptReproducibility: no pool/token/repo skips cleanly', async () => {
+  const findings = await checkReceiptReproducibility({ pool: null, token: null, repo: null });
+  assert.deepEqual(findings, []);
+});
+
+test('checkReceiptReproducibility: a receipt naming a commit that genuinely exists produces no finding', async () => {
+  const fakePool = {
+    query: async () => ({
+      rows: [{ link_id: 'l1', decision_id: 'd1', receipt_kind: 'deploy', receipt_ref: 'abc123' }],
+    }),
+  };
+  const fakeFetch = async (url) => {
+    assert.match(String(url), /\/commits\/abc123$/);
+    return { status: 200, ok: true, json: async () => ({ sha: 'abc123' }) };
+  };
+  const findings = await checkReceiptReproducibility({ pool: fakePool, token: 't', repo: 'owner/repo', fetchFn: fakeFetch });
+  assert.deepEqual(findings, []);
+});
+
+test('checkReceiptReproducibility: a receipt naming a commit that does NOT exist is flagged P0 (the forgery case)', async () => {
+  const fakePool = {
+    query: async () => ({
+      rows: [{ link_id: 'l2', decision_id: 'd2', receipt_kind: 'deploy', receipt_ref: 'fake-sha-999' }],
+    }),
+  };
+  const fakeFetch = async () => ({ status: 404, ok: false, json: async () => ({ message: 'Not Found' }) });
+  const findings = await checkReceiptReproducibility({ pool: fakePool, token: 't', repo: 'owner/repo', fetchFn: fakeFetch });
+  assert.equal(findings.length, 1);
+  assert.equal(findings[0].check, 'receipt_integrity');
+  assert.equal(findings[0].severity, 'P0');
+  assert.match(findings[0].summary, /fake-sha-999/);
+  assert.match(findings[0].proposed_solution, /d2/);
+});
+
+test('checkReceiptReproducibility: a receipt with no receipt_ref is flagged (nothing to verify against)', async () => {
+  const fakePool = {
+    query: async () => ({
+      rows: [{ link_id: 'l3', decision_id: 'd3', receipt_kind: 'ci', receipt_ref: null }],
+    }),
+  };
+  const findings = await checkReceiptReproducibility({ pool: fakePool, token: 't', repo: 'owner/repo', fetchFn: async () => { throw new Error('should not fetch'); } });
+  assert.equal(findings.length, 1);
+  assert.equal(findings[0].severity, 'P1');
+});
+
+test('checkReceiptReproducibility: a transient network error fails OPEN, never accuses on a timeout', async () => {
+  const fakePool = {
+    query: async () => ({
+      rows: [{ link_id: 'l4', decision_id: 'd4', receipt_kind: 'deploy', receipt_ref: 'abc123' }],
+    }),
+  };
+  const fakeFetch = async () => { throw new Error('ETIMEDOUT'); };
+  const findings = await checkReceiptReproducibility({ pool: fakePool, token: 't', repo: 'owner/repo', fetchFn: fakeFetch });
   assert.deepEqual(findings, []);
 });
 
