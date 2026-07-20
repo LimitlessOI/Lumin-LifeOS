@@ -26,6 +26,15 @@ import {
 } from '../services/cognitive-core-perspective.js';
 import { listAdvisors } from '../config/cognitive-core-advisors.js';
 
+const COGNITIVE_CORE_ACCOUNT_ROLES = new Set(['founder_admin', 'admin', 'operator']);
+
+export function requireCognitiveCorePrincipal(req, res, next) {
+  if (!req.lifeosUser) return next();
+  const role = String(req.lifeosUser.role || '').toLowerCase();
+  if (COGNITIVE_CORE_ACCOUNT_ROLES.has(role)) return next();
+  return res.status(403).json({ ok: false, error: 'Founder access required' });
+}
+
 /**
  * @param {{ pool: import('pg').Pool, logger?: Console, requireKey?: Function }} deps
  */
@@ -69,6 +78,7 @@ export function createCognitiveCoreRoutes(deps = {}) {
   if (typeof requireKey === 'function') {
     router.use(requireKey);
   }
+  router.use(requireCognitiveCorePrincipal);
 
   router.get('/health', (_req, res) => {
     res.json({
