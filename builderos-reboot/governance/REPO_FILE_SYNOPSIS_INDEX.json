@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T18:09:49.487Z",
+  "generated_at": "2026-07-20T18:28:50.888Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12059,
+  "file_count": 12060,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -60122,6 +60122,13 @@
       "bytes": 22651,
       "mtime": "2026-07-20T07:22:45.399Z",
       "indexed_at": "2026-07-20T07:28:47.516Z"
+    },
+    {
+      "path": "docs/SELF_REPAIR_DOCTRINE.md",
+      "synopsis": "Self-Repair Doctrine — gate charter, friction-tiered build order, Tier-0 data-capture spec.",
+      "bytes": 5727,
+      "mtime": "2026-07-20T18:28:50.888Z",
+      "indexed_at": "2026-07-20T18:28:50.888Z"
     },
     {
       "path": "docs/SENTRY_PREALPHA_DOCTRINE.md",
