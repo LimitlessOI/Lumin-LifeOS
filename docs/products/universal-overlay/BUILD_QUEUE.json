@@ -2137,14 +2137,27 @@
           "assertion_id": "expected_exports:routes/struggleDetectionFormFillData.js"
         }
       ],
-      "last_attempt_at": "2026-07-20T02:33:43.055Z",
-      "last_error": "NOT_ON_BLUEPRINT",
+      "last_attempt_at": "2026-07-20T02:50:53.078Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/routes/.factory-import-check-1784515853044-1.mjs\";\nn",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "failure_signature": "NOT_ON_BLUEPRINT",
+      "failure_signature": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/routes",
       "same_signature_count": 1,
-      "escalation_class": "governance_block"
+      "escalation_class": "same_signature_repeat",
+      "revive_count": 1,
+      "revived_at": "2026-07-20T02:50:39.580Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "08",
