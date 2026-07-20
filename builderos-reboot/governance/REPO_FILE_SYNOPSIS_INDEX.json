@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T07:31:53.753Z",
+  "generated_at": "2026-07-20T07:36:10.056Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12055,
   "files": [
@@ -33799,9 +33799,9 @@
     {
       "path": "db/migrations/202311_capsule_id_format_update.sql",
       "synopsis": "Database migration — 202311_capsule_id_format_update.sql.",
-      "bytes": 469,
-      "mtime": "2026-07-20T07:22:45.350Z",
-      "indexed_at": "2026-07-20T07:28:47.516Z"
+      "bytes": 910,
+      "mtime": "2026-07-20T07:34:19.879Z",
+      "indexed_at": "2026-07-20T07:36:10.056Z"
     },
     {
       "path": "db/migrations/202311_capsule_id_format.sql",
@@ -36060,9 +36060,9 @@
     {
       "path": "db/migrations/20260717_socialmediaos_owner_id_text.sql",
       "synopsis": "Allow anonymous/command-key purchasers to buy the SMOS content pack.",
-      "bytes": 551,
-      "mtime": "2026-07-20T07:22:45.376Z",
-      "indexed_at": "2026-07-20T07:28:47.516Z"
+      "bytes": 593,
+      "mtime": "2026-07-20T07:34:47.106Z",
+      "indexed_at": "2026-07-20T07:36:10.056Z"
     },
     {
       "path": "db/migrations/20260718_lifeos_food_logs.sql",
@@ -39671,9 +39671,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 239712,
-      "mtime": "2026-07-20T07:27:40.986Z",
-      "indexed_at": "2026-07-20T07:28:47.516Z"
+      "bytes": 241061,
+      "mtime": "2026-07-20T07:35:53.662Z",
+      "indexed_at": "2026-07-20T07:36:10.056Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",

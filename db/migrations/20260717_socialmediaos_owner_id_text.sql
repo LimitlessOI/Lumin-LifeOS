@@ -5,7 +5,7 @@
 -- @ssot docs/products/marketingos/socialmediaos/PRODUCT_HOME.md
 
 ALTER TABLE IF EXISTS socialmediaos_sessions
-  ALTER COLUMN owner_id TYPE TEXT;
+  ALTER COLUMN owner_id TYPE TEXT USING owner_id::text;
 
 ALTER TABLE IF EXISTS socialmediaos_content_packs
-  ALTER COLUMN owner_id TYPE TEXT;
+  ALTER COLUMN owner_id TYPE TEXT USING owner_id::text;
