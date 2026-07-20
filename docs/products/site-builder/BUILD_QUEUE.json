@@ -33,16 +33,16 @@
           "assertion_id": "expected_exports:services/site-builder-prospect-runner.js"
         }
       ],
-      "last_attempt_at": "2026-07-20T04:49:08.891Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 1570b is < 30% of existing 21306b",
+      "last_attempt_at": "2026-07-20T04:51:30.133Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 1673b is < 30% of existing 21306b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "failure_signature": "codegen_authoring_failed: codegen_stub_detected: generated Nb is < N% of existing Nb",
-      "same_signature_count": 3,
+      "same_signature_count": 4,
       "escalation_class": "same_signature_repeat",
-      "revive_count": 2,
-      "revived_at": "2026-07-20T04:49:05.601Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-20T04:51:27.160Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -54,7 +54,7 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "model_rotation": 1,
+      "model_rotation": 2,
       "force_model_rotation": true
     },
     {
