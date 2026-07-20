@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T18:51:34.847Z",
+  "generated_at": "2026-07-20T18:51:52.362Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12061,
+  "file_count": 12062,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -90193,6 +90193,13 @@
         "docs/products/command-center/PRODUCT_HOME.md",
         "docs/constitution/NORTH_STAR_SSOT.md Article II §2.16"
       ]
+    },
+    {
+      "path": "services/self-repair-fix-durability.js",
+      "synopsis": "Exports recordFixShipped — services/self-repair-fix-durability.js.",
+      "bytes": 2255,
+      "mtime": "2026-07-20T18:51:52.362Z",
+      "indexed_at": "2026-07-20T18:51:52.362Z"
     },
     {
       "path": "services/self-repair-lesson-classifier.js",
