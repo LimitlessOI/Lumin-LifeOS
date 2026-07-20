@@ -935,7 +935,31 @@
       ],
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-step12",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/builderos/twins/steps/builderos-step12.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-20T14:50:36.583Z",
+        "shipped_at": "2026-07-20T14:50:36.583Z",
+        "commit_sha": null,
+        "content_sha256": "7d13f48cee0d1622d5953ab62ef9e0f2272f853f2a63b1ef4a554373e53bfa21",
+        "target_file": "routes/testing-response.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "routes/testing-response.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/builderos/twins/steps/builderos-step12.exact",
+          "content_sha256": "7d13f48cee0d1622d5953ab62ef9e0f2272f853f2a63b1ef4a554373e53bfa21"
+        }
+      },
+      "shipped_at": "2026-07-20T14:50:36.583Z"
     },
     {
       "id": "sentry-broken_workflow:.github/workflows/migrate.yml",
