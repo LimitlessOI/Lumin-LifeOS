@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T06:13:02.023Z",
+  "generated_at": "2026-07-20T06:54:26.559Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12054,
   "files": [
@@ -39671,9 +39671,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 234745,
-      "mtime": "2026-07-20T06:12:36.949Z",
-      "indexed_at": "2026-07-20T06:13:02.023Z"
+      "bytes": 235731,
+      "mtime": "2026-07-20T06:54:08.260Z",
+      "indexed_at": "2026-07-20T06:54:26.559Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -72811,9 +72811,9 @@
     {
       "path": "scripts/verify-gap-fill-honesty.mjs",
       "synopsis": "Blocks a GAP-FILL commit that claims \"no blueprint/mission pack exists\"",
-      "bytes": 7164,
-      "mtime": "2026-07-20T06:11:20.956Z",
-      "indexed_at": "2026-07-20T06:13:02.023Z",
+      "bytes": 7592,
+      "mtime": "2026-07-20T06:52:54.201Z",
+      "indexed_at": "2026-07-20T06:54:26.559Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -94085,9 +94085,9 @@
     {
       "path": "tests/verify-gap-fill-honesty.test.js",
       "synopsis": "the empty-diff [system-build] claim gate — a commit tagged",
-      "bytes": 2708,
-      "mtime": "2026-07-20T06:10:29.561Z",
-      "indexed_at": "2026-07-20T06:13:02.023Z"
+      "bytes": 3611,
+      "mtime": "2026-07-20T06:53:27.127Z",
+      "indexed_at": "2026-07-20T06:54:26.559Z"
     },
     {
       "path": "tests/vr-integration.test.js",

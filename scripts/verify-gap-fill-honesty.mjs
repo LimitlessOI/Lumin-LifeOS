@@ -82,17 +82,23 @@ export function sumRealChanges(numstatOutput) {
 
 /**
  * The precise, real gap the earlier §2.11 checks never covered: a commit
- * can claim "[system-build]" (the builder ran and verified this) or a
- * specific fix ("regex X -> Y", "N/N tests pass") while its actual staged
- * diff touches zero real files — a claim with nothing behind it. Confirmed
- * live 2026-07-19: commit 3fa6594f0b claimed a specific regex fix with a
+ * can claim "[system-build]" (the builder ran and verified this) or
+ * "GAP-FILL:" (a self-declared factory bypass, which is ITS OWN claim that
+ * something real was hand-authored for a real reason) — or a specific fix
+ * ("regex X -> Y", "N/N tests pass") — while its actual staged diff touches
+ * zero real files. A claim with nothing behind it. Confirmed live
+ * 2026-07-19: commit 3fa6594f0b claimed a specific regex fix with a
  * specific test-pass count; its only changed file was the generated
- * synopsis index. Unfakeable because it reads the real staged diff, not
- * the agent's self-report of what it did.
+ * synopsis index. Originally scoped to [system-build] only; broadened to
+ * GAP-FILL too on the same audit pass — GAP-FILL is, if anything, MORE
+ * exposed to this exact failure mode, since it is the explicit
+ * self-declared factory-bypass tag with no independent verifier at all.
+ * Unfakeable because it reads the real staged diff, not the agent's
+ * self-report of what it did.
  */
 export function checkEmptyDiffClaim(message, { execFn = execSync, cwd = ROOT } = {}) {
-  const claimsSystemBuild = /\[system-build\]/.test(message);
-  if (!claimsSystemBuild) return true; // only [system-build] asserts "verified" — GAP-FILL alone doesn't
+  const claimsRealWork = /\[system-build\]/.test(message) || /GAP-FILL:/.test(message);
+  if (!claimsRealWork) return true;
 
   let numstatOutput;
   try {
@@ -104,13 +110,14 @@ export function checkEmptyDiffClaim(message, { execFn = execSync, cwd = ROOT } =
   const { realChanges } = sumRealChanges(numstatOutput);
 
   if (realChanges === 0) {
+    const tag = /\[system-build\]/.test(message) ? '[system-build]' : 'GAP-FILL:';
     process.stderr.write('\n');
-    process.stderr.write('❌ EMPTY-DIFF [system-build] CLAIM — COMMIT BLOCKED\n\n');
-    process.stderr.write('   This commit is tagged [system-build] (a claim the builder ran and\n');
-    process.stderr.write('   verified a real change) but the staged diff touches zero real files —\n');
+    process.stderr.write(`❌ EMPTY-DIFF ${tag} CLAIM — COMMIT BLOCKED\n\n`);
+    process.stderr.write(`   This commit is tagged ${tag} (a claim that something real was built,\n`);
+    process.stderr.write('   fixed, or verified) but the staged diff touches zero real files —\n');
     process.stderr.write('   only the auto-generated synopsis index changed, if anything.\n\n');
-    process.stderr.write('   If nothing real changed, this should not be tagged [system-build] at\n');
-    process.stderr.write('   all. If something real DID change, stage it.\n\n');
+    process.stderr.write(`   If nothing real changed, this should not be tagged ${tag} at all.\n`);
+    process.stderr.write('   If something real DID change, stage it.\n\n');
     process.exit(1);
   }
   return true;

@@ -48,9 +48,30 @@ test('checkEmptyDiffClaim: a [system-build] commit with real changes passes clea
   assert.equal(result, true);
 });
 
-test('checkEmptyDiffClaim: a plain GAP-FILL commit (no [system-build] tag) is not subject to this check at all', () => {
+test('checkEmptyDiffClaim: a GAP-FILL commit with only the generated index changed is ALSO blocked (broadened 2026-07-20 — GAP-FILL is its own unverified claim, not exempt)', () => {
+  const fakeExec = () => '3\t3\tbuilderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json\n';
+  const originalExit = process.exit;
+  let exitCode = null;
+  process.exit = (code) => { exitCode = code; throw new Error('__exit__'); };
+  try {
+    assert.throws(() => {
+      checkEmptyDiffClaim('GAP-FILL: hand-authored fix, no builder claim made', { execFn: fakeExec });
+    }, /__exit__/);
+    assert.equal(exitCode, 1);
+  } finally {
+    process.exit = originalExit;
+  }
+});
+
+test('checkEmptyDiffClaim: a GAP-FILL commit with real changes passes cleanly', () => {
+  const fakeExec = () => '5\t1\tservices/cognitive-core-oracle.js\n';
+  const result = checkEmptyDiffClaim('GAP-FILL: real hand-authored fix', { execFn: fakeExec });
+  assert.equal(result, true);
+});
+
+test('checkEmptyDiffClaim: a commit with neither tag is not subject to this check at all', () => {
   const fakeExec = () => { throw new Error('should not be called'); };
-  const result = checkEmptyDiffClaim('GAP-FILL: hand-authored fix, no builder claim made', { execFn: fakeExec });
+  const result = checkEmptyDiffClaim('just a normal docs update', { execFn: fakeExec });
   assert.equal(result, true);
 });
 
