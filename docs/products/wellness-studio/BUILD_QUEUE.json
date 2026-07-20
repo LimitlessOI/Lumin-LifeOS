@@ -1356,7 +1356,7 @@
     },
     {
       "id": "wellness-studio-step6",
-      "status": "skipped",
+      "status": "done",
       "target_file": "db/migrations/20260720_lifeos_core_phase_6.sql",
       "task": "deploy",
       "spec": "LifeOS Core Phase 6 deployed and stable",
@@ -1383,19 +1383,20 @@
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "demoted_at": "2026-07-18T01:10:20.174Z",
       "park_until": null,
-      "no_op": null,
-      "pre_existing": null,
+      "no_op": true,
+      "pre_existing": true,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null,
+      "blocker_resolution": "manually_verified_duplicate_and_precondition_true",
       "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "wellness-studio-step6",
-      "mission_id": "PRODUCT-wellness-studio"
+      "mission_id": "PRODUCT-wellness-studio",
+      "resolution_note": "2026-07-20: marked done manually, not by codegen. This step (and step7/step8 below) is a planner defect: PRODUCT_HOME.md Gate 2 says 'LifeOS Core Phase 1-8 must be deployed and stable' as a PRECONDITION check, but a planner pass literalized it into 8 fake sequential 'deploy Phase N' build steps targeting nonexistent placeholder migration files (dated today/tomorrow/etc, never real), each checking a module_mounts assertion against route /lifeos/core -- a route that was never meant to exist, since the target is a .sql file, not an Express module. That assertion can never pass (confirmed: reload_failed is runner.reload() throwing on an attempt to import() a SQL file as a route module). This exact step is also a byte-identical duplicate of unprefixed queue entry '6' (same target_file db/migrations/20260720_lifeos_core_phase_6.sql), already status:done, and of the real completed step 'step6' (target db/migrations/20260715_lifeos_core_phase_1.sql lineage), all done. Independently verified the actual real-world precondition this was meant to check IS true: live-queried production and confirmed all 4 tables PRODUCT_HOME.md's Gate 2 names (joy_checkins, integrity_score_log, wearable_data, emotional_patterns) exist. No real missing work here -- marking done rather than leaving a real, already-satisfied condition to churn forever on an unpassable assertion."
     },
     {
       "id": "wellness-studio-step7",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20260721_lifeos_core_phase_7.sql",
       "task": "deploy",
       "spec": "LifeOS Core Phase 7 deployed and stable",
@@ -1410,13 +1411,17 @@
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS"
       ],
+      "no_op": true,
+      "pre_existing": true,
+      "blocker_resolution": "manually_verified_duplicate_and_precondition_true",
       "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "wellness-studio-step7",
-      "mission_id": "PRODUCT-wellness-studio"
+      "mission_id": "PRODUCT-wellness-studio",
+      "resolution_note": "2026-07-20: same planner defect and same fix as wellness-studio-step6 (see its resolution_note) -- duplicate of already-done unprefixed queue entry '7', unpassable route assertion, real precondition independently verified true."
     },
     {
       "id": "wellness-studio-step8",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20260722_lifeos_core_phase_8.sql",
       "task": "deploy",
       "spec": "LifeOS Core Phase 8 deployed and stable",
@@ -1431,9 +1436,13 @@
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS"
       ],
+      "no_op": true,
+      "pre_existing": true,
+      "blocker_resolution": "manually_verified_duplicate_and_precondition_true",
       "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "wellness-studio-step8",
-      "mission_id": "PRODUCT-wellness-studio"
+      "mission_id": "PRODUCT-wellness-studio",
+      "resolution_note": "2026-07-20: same planner defect and same fix as wellness-studio-step6 (see its resolution_note) -- duplicate of already-done unprefixed queue entry '8', unpassable route assertion, real precondition independently verified true."
     },
     {
       "id": "wellness-studio-step9",

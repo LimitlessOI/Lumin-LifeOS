@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/wellness-studio/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-13 — Demoted thrashing step-05 (auto-reg without sibling); never-stop must build pending blueprint steps instead. |
+| **Last Updated** | 2026-07-20 — Root-caused why `wellness-studio-step6/7/8` were permanently unbuildable: a planner defect literalized Gate 2's precondition checklist ("LifeOS Core Phase 1-8 must be deployed and stable") into 3 fake sequential "deploy Phase N" steps with a `module_mounts` assertion against `/lifeos/core` — a route that was never meant to exist for a `.sql` migration target, so `reload_failed` every time. Confirmed these are byte-identical duplicates of the unprefixed `6`/`7`/`8` queue entries, already `done`. Independently verified the real precondition IS true (live DB query: `joy_checkins`, `integrity_score_log`, `wearable_data`, `emotional_patterns` all exist in production). Marked `done` with a documented `resolution_note` rather than leaving a satisfied condition to churn forever on an unpassable assertion. This correctly cascaded to reveal the real next blocker: `wellness-studio-step10` ("extend_wellness_tables") is genuinely `blocked` on a distinct, unrelated issue — left untouched, not forced. (Prior: 2026-07-13 — Demoted thrashing step-05 (auto-reg without sibling); never-stop must build pending blueprint steps instead.) |
 
 ---
 | Field | Value |
