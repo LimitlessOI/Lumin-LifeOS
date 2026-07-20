@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T15:54:48.133Z",
+  "generated_at": "2026-07-20T16:31:39.994Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12058,
   "files": [
@@ -40411,9 +40411,9 @@
     {
       "path": "docs/products/limitlessos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LimitlessOS business stack",
-      "bytes": 10107,
-      "mtime": "2026-07-20T07:22:45.657Z",
-      "indexed_at": "2026-07-20T07:28:47.516Z"
+      "bytes": 11208,
+      "mtime": "2026-07-20T16:31:17.219Z",
+      "indexed_at": "2026-07-20T16:31:39.994Z"
     },
     {
       "path": "docs/products/lumin-university/FILE_MANIFEST.json",
