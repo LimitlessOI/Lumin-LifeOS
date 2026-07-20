@@ -167,7 +167,18 @@ export function createSiteBuilderEditorRoutes(app, { callCouncilMember, baseUrl,
       const auth = await assertEditToken(clientId, token, pool);
       if (!auth.ok) return res.status(auth.status).send(auth.error);
 
-      const ctx = buildEditorContext(auth.meta, clientId, baseUrl);
+      // Serve the preview iframe + links from the SAME origin the client actually used
+      // to reach this editor — that host is guaranteed to resolve. The injected
+      // `baseUrl` derives from RAILWAY_PUBLIC_DOMAIN, which can be a Railway custom
+      // domain whose Cloudflare DNS was never provisioned (e.g. sitebuilder.taloaos.com):
+      // that renders an unreachable editor iframe (SENTRY A05 = HTTP 0) even though the
+      // identical preview serves 200 on the *.up.railway.app origin. Fall back to the
+      // injected baseUrl only when no request host is present.
+      const fwdProto = String(req.headers['x-forwarded-proto'] || '').split(',')[0].trim() || req.protocol || 'https';
+      const fwdHost = String(req.headers['x-forwarded-host'] || req.headers.host || '').split(',')[0].trim();
+      const effectiveBase = fwdHost ? `${fwdProto}://${fwdHost}` : baseUrl;
+
+      const ctx = buildEditorContext(auth.meta, clientId, effectiveBase);
       res.set('Content-Type', 'text/html; charset=utf-8');
       res.send(renderEditorShell(ctx));
     } catch (err) {
