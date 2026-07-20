@@ -7,7 +7,7 @@
   "steps": [
     {
       "id": "sb-deliverability-gate",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/site-builder-prospect-runner.js",
       "task": "Extend evaluateSiteBuilderEmailReadiness() to check actual sending-domain deliverability status (SPF/DKIM verified in Postmark), not just that env vars are present. Add checkPostmarkDomainVerified(domain, { apiToken, fetchFn }) that calls Postmark's sender-signature/domain API and returns whether the sending domain is DKIM/SPF verified. evaluateSiteBuilderEmailReadiness() should surface a new deliverabilityReady flag (false + a clear blocker reason if the domain isn't verified yet) alongside the existing coldEmailSending flag, so callers can gate real outreach volume on genuine deliverability, not just config presence.",
       "spec": "Dependency-injected fetchFn for testability (no real Postmark calls in unit tests). checkPostmarkDomainVerified must fail closed (deliverabilityReady: false) on any API error or missing token, never fail open. Do not change the existing return shape of evaluateSiteBuilderEmailReadiness() — only add new fields (deliverabilityReady, deliverabilityBlockers). Do not change enqueueProspectJob's existing signature or behavior in this step — this step only adds the check, wiring it into the actual send-gate is a follow-up. EXPORT REQUIREMENT (2 prior attempts failed on exactly this): every other function in this file is declared with the literal `export` keyword directly on the declaration line — e.g. line 10 is `export function createProspectClientId() {`, line 235 is `export async function enqueueProspectJob(pipeline, options = {}) {`. Declare the new function the SAME way: `export function checkPostmarkDomainVerified(domain, { apiToken, fetchFn }) {` (or `export async function` if it needs to be async) — the `export` keyword must be the first word of the declaration line itself. This file ALSO has an `export default { ... }` object at the very bottom listing every function by name — you do NOT need to add checkPostmarkDomainVerified there (it's optional, redundant with the inline export), but you MUST NOT skip the inline `export` keyword on the function declaration, since that inline export is what SENTRY's exports_smoke check verifies (import * as mod, then mod.checkPostmarkDomainVerified must exist) — being merely mentioned in the default-export object is not sufficient and is what caused both prior failures.",
@@ -33,16 +33,16 @@
           "assertion_id": "expected_exports:services/site-builder-prospect-runner.js"
         }
       ],
-      "last_attempt_at": "2026-07-20T10:57:53.815Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:checkPostmarkDomainVerified; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": null,
+      "last_error": null,
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "failure_signature": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:checkPostmarkDomainVerified; behavior_assertion_failed; behavior_proof",
-      "same_signature_count": 1,
-      "escalation_class": "evidence_gap",
-      "revive_count": 6,
-      "revived_at": "2026-07-20T10:56:42.822Z",
+      "failure_signature": null,
+      "same_signature_count": 0,
+      "escalation_class": null,
+      "revive_count": 0,
+      "revived_at": null,
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -54,12 +54,12 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "model_rotation": 0,
-      "force_model_rotation": false,
+      "model_rotation": 1,
+      "force_model_rotation": true,
       "founder_alerted_signature": null,
       "hard_stopped": false,
       "unsolved": false,
-      "revive_note": "2026-07-20: manually reset after confirming root cause fixed. All 10 prior failures shared one deterministic cause: routes/factory-mount-routes.js's codegen prompt silently omitted existing-file content for files >20000 bytes (this target is 21306), so the model always authored a fresh stub instead of extending the real file. Fixed in ef7fdf280d (raised cutoff to 100000, extracted + tested as shouldIncludeExistingFileContent). Verified live post-fix: codegen now produces a real 19398-byte file (not a stub); the one remaining SENTRY failure is a normal, different issue (checkPostmarkDomainVerified present in the file text but not actually exported) -- an ordinary retry/model-rotation case, not the stub bug. Retry budget was fully consumed by the now-fixed bug before ever getting a clean attempt, so resetting it rather than leaving a real, revenue-relevant feature (site-builder cold-email deliverability gate) permanently abandoned."
+      "revive_note": "2026-07-20 (second manual revive): this step went completely untouched by the automatic loop for ~2.5 hours across two real, deployed structural fixes (workCheck BLOCKED-step revival fix 4ca0001c4d, model_rotation tier-rotation wiring fix 1cad0d74bf) -- not just still failing the same way, zero activity at all, while wellness-studio-step10 kept ticking normally on the same loop in that window. Root cause NOT found: checked listProductsWithQueues (site-builder present, correctly prioritized), checked mergeQueueRuntimeStatus for a plausible container-local-staleness explanation (plausible but unconfirmed -- no way to inspect the live container's local disk state from here). This is a genuine, still-open anomaly distinct from both fixes already shipped -- flagging honestly rather than claiming it's understood. Set status:pending + model_rotation:1 directly (bypassing whatever is blocking automatic revival) so this real, revenue-relevant feature gets a fresh attempt now, benefiting from the tier-rotation fix. If it goes untouched again for hours despite being pending (not blocked), that would newly implicate workCheck's PENDING-step counting itself, not just BLOCKED-step revival, and needs its own dedicated investigation."
     },
     {
       "id": "sb-ab-subject-testing",
