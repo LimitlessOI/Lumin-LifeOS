@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T04:41:53.694Z",
+  "generated_at": "2026-07-20T04:49:31.275Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12050,
   "files": [
@@ -84925,8 +84925,8 @@
       "path": "services/cognitive-core-capture.js",
       "synopsis": "Cognitive Core — prediction auto-capture + auto-resolve sweep.",
       "bytes": 12568,
-      "mtime": "2026-07-20T04:41:25.781Z",
-      "indexed_at": "2026-07-20T04:41:25.781Z",
+      "mtime": "2026-07-20T04:49:31.275Z",
+      "indexed_at": "2026-07-20T04:49:31.275Z",
       "ssot": [
         "docs/products/memory-intelligence/PRODUCT_HOME.md"
       ]
