@@ -11,13 +11,21 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/teacher-os/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-29 |
+| **Last Updated** | 2026-06-29 — see 2026-07-20 entry below for the most recent change (`teacher-os-9` registration-step fixes). |
 
 ---
 **Status:** In Progress — Foundation Built
 **Last Updated:** 2026-04-05
 **Priority:** High (mission-aligned, recurring SaaS)
 **Category:** Education / Vertical SaaS
+
+---
+
+## Change Receipts
+
+| Date | Change | Why | Proof |
+|---|---|---|---|
+| 2026-07-20 | **Fixed two real bugs blocking `teacher-os-9` (register new build modules).** (1) Removed `teacher-os-8` from `depends_on`: it shares its `target_file` (`routes/uxRoutes.js`) with already-`done` `teacher-os-5`, but is genuinely different, real, `founder_gated:true` work (wireframes route vs. step5's UX flow CRUD) that collided on the same filename during queue generation. Did NOT touch, override, or resolve that founder-gated feature/collision — left `teacher-os-8` completely untouched; only removed an unnecessary ordering link that had nothing to do with registering the other 6 already-complete files. (2) Fixed `file_contains`: replaced the malformed entry `routes/ferpaDpaTemplate.js` (a directory-prefix/basename mashup matching neither real file) with the two real, already-`done` FERPA files it was presumably meant to represent — `services/ferpaDpaTemplate.js` (`teacher-os-step7`) and `routes/ferpaRoutes.js` (`teacher-os-step8`, note: different id namespace than the colliding `teacher-os-8` above) — confirmed both exist on disk. | Loop instruction: pick a fresh pending item and dispatch/fix it through real investigation, not assumption. | Confirmed all referenced files exist on disk (`ls`) before editing; confirmed the two "done" steps behind them have real state; did not fabricate or guess at the founder-gated feature's scope |
 
 ---
 
