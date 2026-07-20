@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /**
  * SYNOPSIS: Product-agnostic SENTRY pre-alpha completion gate — the generalized
  * form of Standing Order SO-002. Reads builderos-reboot/governance/
@@ -29,8 +28,8 @@ import { normalizeSentryFindings, toReadinessFindings } from '../services/sentry
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const REGISTRY_PATH = path.join(ROOT, 'builderos-reboot/governance/SENTRY_PRODUCT_REGISTRY.json');
-const BASE = (process.env.PUBLIC_BASE_URL || process.env.SITE_BASE_URL || '').replace(/\/+$/, '');
-const KEY = process.env.COMMAND_CENTER_KEY || '';
+let BASE = (process.env.PUBLIC_BASE_URL || process.env.SITE_BASE_URL || '').replace(/\/+$/, '');
+let KEY = process.env.COMMAND_CENTER_KEY || '';
 const ENFORCE_CREDS = process.argv.includes('--enforce-creds');
 
 function readJson(absOrRel) {
@@ -240,8 +239,39 @@ async function runProduct(product) {
   return { id: product.id, ok: gateOk, fullySatisfied, findings_count: feed.findings_count, layers: layerResults.map((r) => ({ name: r.name, ok: r.ok, ran: r.ran, deferred: r.deferred })) };
 }
 
+// Scoped self-provision (SO-002 amendment, founder-ratified 2026-07-20):
+// on the FOUNDER-FACING path only (--enforce-creds), a credentialed layer must
+// not fail just because a cred was gettable-but-not-yet-synced. If RAILWAY_TOKEN
+// is present we pull the live COMMAND_CENTER_KEY from Railway (the system writing
+// its own env) BEFORE deciding to enforce. This is A's benefit scoped to where it
+// belongs — NOT applied to bare local/CI runs, which legitimately should not hold
+// production secrets. Fail-open: any error leaves the existing defer/enforce logic
+// exactly as it was, never fabricates a credential.
+async function selfProvisionCredsIfFounderFacing() {
+  if (!ENFORCE_CREDS) return;
+  const railwayToken = String(process.env.RAILWAY_TOKEN || '').trim();
+  if (!railwayToken || !BASE || KEY) return; // nothing to do / cannot reach / already have it
+  try {
+    const res = await fetch(`${BASE}/api/v1/railway/managed-env/sync-command-key`, {
+      method: 'POST',
+      headers: { 'x-railway-token': railwayToken },
+    });
+    const body = await res.json().catch(() => ({}));
+    if (res.ok && body?.ok && body.command_center_key) {
+      KEY = body.command_center_key;
+      process.env.COMMAND_CENTER_KEY = KEY;
+      console.log('  ↻ self-provisioned COMMAND_CENTER_KEY from Railway (enforce-creds path; value hidden)');
+    } else {
+      console.warn(`  ⚠️ self-provision skipped: sync-command-key returned ${res.status} (falling back to existing enforce logic)`);
+    }
+  } catch (err) {
+    console.warn(`  ⚠️ self-provision skipped: ${String(err.message || err).slice(0, 120)} (falling back to existing enforce logic)`);
+  }
+}
+
 async function main() {
   const registry = loadRegistry();
+  await selfProvisionCredsIfFounderFacing();
   const arg = process.argv[2];
 
   if (arg === '--list') {

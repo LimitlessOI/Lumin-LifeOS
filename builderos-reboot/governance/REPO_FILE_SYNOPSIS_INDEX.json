@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T07:20:34.236Z",
+  "generated_at": "2026-07-20T07:26:26.033Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12055,
   "files": [
@@ -39671,9 +39671,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 237032,
-      "mtime": "2026-07-20T07:16:51.334Z",
-      "indexed_at": "2026-07-20T07:16:52.556Z"
+      "bytes": 238476,
+      "mtime": "2026-07-20T07:26:26.033Z",
+      "indexed_at": "2026-07-20T07:26:26.033Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -71730,9 +71730,9 @@
     {
       "path": "scripts/sentry-prealpha-gate.mjs",
       "synopsis": "Product-agnostic SENTRY pre-alpha completion gate — the generalized",
-      "bytes": 13872,
-      "mtime": "2026-07-20T07:16:51.898Z",
-      "indexed_at": "2026-07-20T07:16:52.556Z",
+      "bytes": 15563,
+      "mtime": "2026-07-20T07:26:26.033Z",
+      "indexed_at": "2026-07-20T07:26:26.033Z",
       "ssot": [
         "builderos-reboot/governance/SENTRY_PRODUCT_REGISTRY.json"
       ]
