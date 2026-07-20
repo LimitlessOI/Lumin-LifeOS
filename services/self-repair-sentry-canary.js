@@ -22,10 +22,10 @@ export async function runSentryCanary({ readFileRunner } = {}) {
         return { existingExport: true };
     };
 
-    const brokenResult = await runSingleAssertion(brokenAssertion, injectBrokenModule);
-    const workingResult = await runSingleAssertion(workingAssertion, injectWorkingModule);
+    const brokenResult = await runSingleAssertion(brokenAssertion, { importModule: injectBrokenModule });
+    const workingResult = await runSingleAssertion(workingAssertion, { importModule: injectWorkingModule });
 
-    const canary_passed = brokenResult.ok === false && brokenResult.reason === 'missing_exports' && workingResult.ok === true;
+    const canary_passed = brokenResult.ok === false && brokenResult.reason.startsWith('missing_exports') && workingResult.ok === true;
 
     return {
         ok: true,
