@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T18:38:20.436Z",
+  "generated_at": "2026-07-20T18:43:05.731Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12060,
   "files": [
@@ -60126,9 +60126,9 @@
     {
       "path": "docs/SELF_REPAIR_DOCTRINE.md",
       "synopsis": "Self-Repair Doctrine — gate charter, friction-tiered build order, Tier-0 data-capture spec.",
-      "bytes": 8782,
-      "mtime": "2026-07-20T18:38:20.436Z",
-      "indexed_at": "2026-07-20T18:38:20.436Z"
+      "bytes": 9765,
+      "mtime": "2026-07-20T18:42:30.744Z",
+      "indexed_at": "2026-07-20T18:43:05.731Z"
     },
     {
       "path": "docs/SENTRY_PREALPHA_DOCTRINE.md",

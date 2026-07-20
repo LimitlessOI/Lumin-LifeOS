@@ -18,7 +18,7 @@ Cross-checked against the 2026 industry (VibeRepair = spec-repair, FailureMem = 
 
 **Separation of powers → checks and balances.** The system already separates roles (the good, rare part): the builder never tests its own output (SO-002); SENTRY tests but never builds; "no self-certify alone" wires an adversarial peer-grade into the ship path. But *separation assumes each power is honest within its lane.* The Observer Principle demands the harder property — **each power, including the observers, is falsifiable by an independent power.** Four gaps this exposes (all seen on 2026-07-20):
 
-1. **The judiciary is unwatched.** Nothing audits SENTRY; a gate that silently starts passing everything is worse than no gate. → chaos-canary: observe the observer (Era 6).
+1. **The judiciary is unwatched.** Verified 2026-07-20 by reading the actual mechanism (`services/governed-shipping-runner.js:160`): the existing "peer" grade in the dual-honesty check is a deterministic function that re-derives its verdict from *the same SENTRY result* the self-grade already used (SENTRY pass/fail + commit-sha presence). That reliably catches "claimed shipped, nothing committed" — it caught exactly that for `builderos-step12` this session — but it structurally cannot catch SENTRY's own verdict being wrong, because both sides treat that verdict as ground truth. So: the gap isn't "nothing audits SENTRY" in the abstract, it's "the existing separation verifies commit *honesty*, not verdict *correctness*." → chaos-canary: observe the observer. Needs no historical data, so it's pulled into **Era 1**, not deferred.
 2. **The conductor's reasoning is unwatched.** Code artifacts are audited; claims/citations are not, except by luck (the dropped "Kode"/"ReasonCritic-7B" citations were caught only because a peer checked). → the provenance ledger covers reasoning-claims, not just commit-SHAs.
 3. **Independence may be nominal, not real.** If builder, peer-grader, and verifier share a model family, "independent" verification has correlated blind spots (rubber-stamping). → require uncorrelated failure modes: deterministic checks where possible (git ancestry, schema, mount-resolution — unrationalizable by any model), cross-model/cross-context where not.
 4. **The override is unwatched.** The charter's bounded override becomes the leak if the overrider isn't observed. → whoever passes a gate is observed by a *different* power; overrides are logged and sampled.
@@ -61,6 +61,8 @@ Six append-only stores. Each row epistemically stamped (KNOW/THINK/GUESS + confi
 | **Factory decision log** | Verify escalation/claim honesty | `decision`, `escalation_claim`, `tier_actually_run`, `cost_tokens`, `cost_ms` |
 
 Plus one Tier-0/1 **deterministic pre-disk resolution gate** (non-LLM, cheap): import/dependency/**founder-lane mount** resolution checked before a change is trusted — catches exactly the 2026-07-20 bug class (LifeRE sales-coach 404, phantom deps) with no model call. Detector-first; blocks only on the irreversible set per Part 1.
+
+Plus one **SENTRY chaos-canary step** (closes gap #1 above): submit a deliberately broken diff through the real ship path on a schedule and assert SENTRY rejects it. Needs no historical data — pulled into Era 1 alongside the six stores and the pre-disk gate, seven steps total, each independently SENTRY-proven.
 
 ## Part 4 — What is genuinely ours vs. the industry
 
