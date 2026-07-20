@@ -1003,7 +1003,7 @@
     },
     {
       "id": "self-repair-era1-1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/self-repair-provenance-ledger.js",
       "task": "Implement the provenance ledger: an append-only, real-git-verified record of every 'done'/commit claim the factory makes.",
       "spec": "Self-bootstrap its own table on first use with `CREATE TABLE IF NOT EXISTS self_repair_provenance_ledger (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), claim TEXT NOT NULL, commit_sha TEXT, is_ancestor_of_tip BOOLEAN, verified_at TIMESTAMPTZ, epistemic_grade TEXT NOT NULL DEFAULT 'GUESS', result TEXT, created_at TIMESTAMPTZ NOT NULL DEFAULT now())` (pattern: see services/account-manager.js for the self-bootstrap-on-first-query style, do not require a separate migration file). Export async function recordProvenanceClaim(pool, { claim, commit_sha }) that inserts a row with epistemic_grade='GUESS' and result=null (the claim is unverified at record time). Export async function verifyProvenanceClaim(pool, { claim_id, repoRoot }) that shells out to `git merge-base --is-ancestor <commit_sha> HEAD` (use node:child_process execFileSync, cwd: repoRoot, matching the pattern in services/truth-ladder.js's execFileSync('git', ...) calls) to determine is_ancestor_of_tip, then UPDATEs the row with is_ancestor_of_tip, verified_at=now(), epistemic_grade='KNOW', and result='verified' or 'FALSE_CLAIM' accordingly, and returns the updated row. Export async function getProvenanceLedger(pool, { limit = 50 } = {}) that returns the most recent rows ordered by created_at DESC. Fail closed: if the git command errors (bad sha, not found), verifyProvenanceClaim must set result='FALSE_CLAIM', never silently treat an error as verified. EVERY exported function that touches this table must run `await pool.query('CREATE TABLE IF NOT EXISTS self_repair_provenance_ledger (...)')` as its own, separate, no-parameters pool.query() call before any parameterized query in that same function -- do not combine the CREATE TABLE and a parameterized query into one query string (PostgreSQL's prepared-statement protocol, which pg's pool.query(text, values) uses whenever values are passed, rejects multiple statements in one call). CRITICAL: the previous attempt (commit e054c97b60e200a699c88337822f2980e155a591) got this right in recordProvenanceClaim, but verifyProvenanceClaim and getProvenanceLedger both query the table directly with NO CREATE TABLE guard -- so calling either before recordProvenanceClaim has ever run (a fresh deploy, or a getProvenanceLedger audit call before any claim exists) throws 'relation does not exist' instead of failing gracefully. ALL THREE functions -- not just recordProvenanceClaim -- must independently run the CREATE TABLE IF NOT EXISTS guard as their own first statement.",
@@ -1034,30 +1034,9 @@
       "blueprint_step_id": "self-repair-era1-1",
       "mission_id": "PRODUCT-builderos",
       "revive_note": "2026-07-20: first attempt hit NOT_ON_BLUEPRINT (transient race). Second attempt (commit e054c97b60e200a699c88337822f2980e155a591) shipped and was read directly -- recordProvenanceClaim self-bootstraps correctly, but verifyProvenanceClaim and getProvenanceLedger do not, a real bug (same class as era1-4's getTargetReputation gap). Third attempt was falsely marked done via pre_existing_artifact_proof -- claimPreExistingSatisfiedSteps found the SAME unfixed file still on disk and shipped_via'd it through on a shallow file_contains substring match, without codegen ever running. The stale file has now been deleted (commit 8e40b6dd6d) so this dispatch is forced through real codegen against the strengthened spec above.",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/builderos/twins/steps/self-repair-era1-1.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-20T19:21:18.047Z",
-        "shipped_at": "2026-07-20T19:21:18.047Z",
-        "commit_sha": null,
-        "content_sha256": "32ccd4e9437af94d29295e5797d0a0a8e6d81e081eabf17dce9e988562ef34b2",
-        "target_file": "services/self-repair-provenance-ledger.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/self-repair-provenance-ledger.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/builderos/twins/steps/self-repair-era1-1.exact",
-          "content_sha256": "32ccd4e9437af94d29295e5797d0a0a8e6d81e081eabf17dce9e988562ef34b2"
-        }
-      },
-      "shipped_at": "2026-07-20T19:21:18.047Z"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-20T19:21:28.194Z",
+      "commit_sha": "44ab44bbeb7fc2b6b6b9a76079a4b761739e8abe"
     },
     {
       "id": "self-repair-era1-2",
