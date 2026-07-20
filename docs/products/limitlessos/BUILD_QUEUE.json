@@ -822,7 +822,7 @@
     },
     {
       "id": "step11",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/dialogue-bundle-skus-routes.js",
       "task": "route bundle SKUs access",
       "spec": "API to provide bundle SKUs.",
@@ -851,30 +851,9 @@
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step11",
       "mission_id": "PRODUCT-limitlessos",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/limitlessos/twins/steps/step11.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-20T16:34:08.329Z",
-        "shipped_at": "2026-07-20T16:34:08.329Z",
-        "commit_sha": null,
-        "content_sha256": "9718e890a41b68f12b878ab8d4362d54c5e7bf654f2d8d622408068e64e39111",
-        "target_file": "routes/dialogue-bundle-skus-routes.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "routes/dialogue-bundle-skus-routes.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/limitlessos/twins/steps/step11.exact",
-          "content_sha256": "9718e890a41b68f12b878ab8d4362d54c5e7bf654f2d8d622408068e64e39111"
-        }
-      },
-      "shipped_at": "2026-07-20T16:34:08.329Z"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-20T16:34:15.869Z",
+      "commit_sha": "8017535eef5a4dc33802cb297688f0db25e78d51"
     },
     {
       "id": "step12",
