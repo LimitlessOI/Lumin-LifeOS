@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T01:29:30.532Z",
+  "generated_at": "2026-07-20T01:42:00.485Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12027,
+  "file_count": 12033,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -36107,6 +36107,20 @@
       "indexed_at": "2026-07-20T00:41:55.829Z"
     },
     {
+      "path": "db/migrations/20260719_cognitive_core_era5.sql",
+      "synopsis": "Cognitive Core Era-5 (\"Preserve Me\") — judgment package + transmission.",
+      "bytes": 1925,
+      "mtime": "2026-07-20T01:41:55.624Z",
+      "indexed_at": "2026-07-20T01:42:00.485Z"
+    },
+    {
+      "path": "db/migrations/20260719_cognitive_core_era6.sql",
+      "synopsis": "Cognitive Core Era-6 (\"Transmit Me\") — scale preserved judgment.",
+      "bytes": 4100,
+      "mtime": "2026-07-20T01:41:55.628Z",
+      "indexed_at": "2026-07-20T01:42:00.485Z"
+    },
+    {
       "path": "db/migrations/20260719_cognitive_core_judgment.sql",
       "synopsis": "Cognitive Core Era-1 — decision journal, predictions, outcomes, miss reports, domain trust.",
       "bytes": 3358,
@@ -37340,9 +37354,9 @@
     {
       "path": "docs/constitution/COGNITIVE_CORE_LAWS.md",
       "synopsis": "Cognitive Core laws — judgment compiler constitution (subordinate to North Star SSOT)",
-      "bytes": 2798,
-      "mtime": "2026-07-19T21:32:24.093Z",
-      "indexed_at": "2026-07-19T21:32:24.093Z"
+      "bytes": 3315,
+      "mtime": "2026-07-20T01:41:55.732Z",
+      "indexed_at": "2026-07-20T01:42:00.485Z"
     },
     {
       "path": "docs/constitution/CONSTITUTION_CONFLICTS.md",
@@ -37501,9 +37515,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 64469,
-      "mtime": "2026-07-20T00:41:50.843Z",
-      "indexed_at": "2026-07-20T00:41:55.829Z"
+      "bytes": 65210,
+      "mtime": "2026-07-20T01:41:55.735Z",
+      "indexed_at": "2026-07-20T01:42:00.485Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40443,9 +40457,9 @@
     {
       "path": "docs/products/memory-intelligence/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Memory Intelligence",
-      "bytes": 31619,
-      "mtime": "2026-07-20T00:41:50.832Z",
-      "indexed_at": "2026-07-20T00:41:55.829Z"
+      "bytes": 33996,
+      "mtime": "2026-07-20T01:41:55.690Z",
+      "indexed_at": "2026-07-20T01:42:00.485Z"
     },
     {
       "path": "docs/products/memory-system/FILE_MANIFEST.json",
@@ -63158,9 +63172,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 32589,
-      "mtime": "2026-07-20T00:52:48.978Z",
-      "indexed_at": "2026-07-20T00:52:58.998Z",
+      "bytes": 32623,
+      "mtime": "2026-07-20T01:41:55.667Z",
+      "indexed_at": "2026-07-20T01:42:00.485Z",
       "synopsis_index_only": true
     },
     {
@@ -65178,9 +65192,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 199445,
-      "mtime": "2026-07-20T00:41:50.845Z",
-      "indexed_at": "2026-07-20T00:41:55.829Z"
+      "bytes": 200452,
+      "mtime": "2026-07-20T01:41:55.675Z",
+      "indexed_at": "2026-07-20T01:42:00.485Z"
     },
     {
       "path": "public/overlay/lifeos-ask-your-life.html",
@@ -66799,10 +66813,10 @@
     },
     {
       "path": "routes/cognitive-core-routes.js",
-      "synopsis": "Cognitive Core Era-1–4 API — journal through Trust Me (earned delegation).",
-      "bytes": 22957,
-      "mtime": "2026-07-20T00:41:50.819Z",
-      "indexed_at": "2026-07-20T00:41:55.829Z",
+      "synopsis": "Cognitive Core Era-1–6 API — journal through Preserve Me + Transmit Me.",
+      "bytes": 31937,
+      "mtime": "2026-07-20T01:41:55.647Z",
+      "indexed_at": "2026-07-20T01:42:00.485Z",
       "ssot": [
         "docs/products/memory-intelligence/PRODUCT_HOME.md"
       ]
@@ -84913,11 +84927,31 @@
       ]
     },
     {
+      "path": "services/cognitive-core-preserve.js",
+      "synopsis": "Cognitive Core Era-5 \"Preserve Me\" — sealed judgment packages + transmission.",
+      "bytes": 9684,
+      "mtime": "2026-07-20T01:41:55.634Z",
+      "indexed_at": "2026-07-20T01:42:00.485Z",
+      "ssot": [
+        "docs/products/memory-intelligence/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/cognitive-core-programs.js",
       "synopsis": "Cognitive Core Era-2 Layer 2 — Programs (deep recurring mechanisms as hypotheses).",
       "bytes": 7315,
       "mtime": "2026-07-19T23:31:20.836Z",
       "indexed_at": "2026-07-19T23:31:20.836Z",
+      "ssot": [
+        "docs/products/memory-intelligence/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/cognitive-core-transmit.js",
+      "synopsis": "Cognitive Core Era-6 \"Transmit Me\" — marketplace, interrupts, debt, trees, import.",
+      "bytes": 17459,
+      "mtime": "2026-07-20T01:41:55.641Z",
+      "indexed_at": "2026-07-20T01:42:00.485Z",
       "ssot": [
         "docs/products/memory-intelligence/PRODUCT_HOME.md"
       ]
@@ -92881,6 +92915,20 @@
       "bytes": 5599,
       "mtime": "2026-07-20T00:41:50.826Z",
       "indexed_at": "2026-07-20T00:41:55.829Z"
+    },
+    {
+      "path": "tests/cognitive-core-era5.test.js",
+      "synopsis": "Cognitive Core Era-5 unit tests — Preserve Me packages/transmission (fake-pool).",
+      "bytes": 4665,
+      "mtime": "2026-07-20T01:41:55.654Z",
+      "indexed_at": "2026-07-20T01:42:00.485Z"
+    },
+    {
+      "path": "tests/cognitive-core-era6.test.js",
+      "synopsis": "Cognitive Core Era-6 unit tests — Transmit Me marketplace/debt/trees (fake-pool).",
+      "bytes": 7103,
+      "mtime": "2026-07-20T01:41:55.660Z",
+      "indexed_at": "2026-07-20T01:42:00.485Z"
     },
     {
       "path": "tests/cognitive-core-judgment.test.js",

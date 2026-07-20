@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-19 — Cognitive Core Era-5 + Era-6 (Preserve + Transmit)
+
+Adam: "era 5 is that done if not do both 5 and 6." Tip health was still `era: 4`. Era-5 Preserve Me (#25): sealed `judgment_packages` with confidence maps + consent-gated `judgment_transmissions` (framing forbids “digital immortality”). Era-6 Transmit Me (#26–30, defined here — original map stopped at 5): capsule marketplace, subconscious interrupts, cognitive debt dashboard, deep consequence trees, portable handshake import. Files: migrations `20260719_cognitive_core_era5/6.sql`, `services/cognitive-core-preserve.js` + `transmit.js`, routes `/preserve/*` + `/transmit/*`, tests era5+era6, health `era: 6`. NEXT: tip redeploy + prove health/packages/debt.
+
 ## 2026-07-19 — Cognitive Core Era-3 + Era-4 (Trust Me)
 
 Adam: "great job now go to ev4." Tip was still `era: 2`; Era-3 Extend Me (#13–18) existed as local WIP. Shipped Era-3 (energy, value drift, consequences, missing-info, idea graph, curiosity) then Era-4 Trust Me (#19–24): expert debate, memory compression, legacy recorder, apprenticeship, delegation scopes, autonomous advisor — all Law-2 gated via `GET /trust/can-act` (refuse until evidence). Migration `20260719_cognitive_core_era4.sql` + `services/cognitive-core-trust.js`. NEXT: tip prove health `era: 4`, can-act refuse-default, then CC audit.

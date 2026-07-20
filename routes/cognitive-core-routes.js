@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: Cognitive Core Era-1–4 API — journal through Trust Me (earned delegation).
+ * SYNOPSIS: Cognitive Core Era-1–6 API — journal through Preserve Me + Transmit Me.
  * @ssot docs/products/memory-intelligence/PRODUCT_HOME.md
  */
 
@@ -11,6 +11,8 @@ import { createCognitiveCoreExtend } from '../services/cognitive-core-extend.js'
 import { createCognitiveCoreValues } from '../services/cognitive-core-values.js';
 import { createCognitiveCoreIdeas } from '../services/cognitive-core-ideas.js';
 import { createCognitiveCoreTrust } from '../services/cognitive-core-trust.js';
+import { createCognitiveCorePreserve } from '../services/cognitive-core-preserve.js';
+import { createCognitiveCoreTransmit } from '../services/cognitive-core-transmit.js';
 import {
   listWearableCapsules,
   detectJudgmentTurn,
@@ -49,6 +51,8 @@ export function createCognitiveCoreRoutes(deps = {}) {
   const values = createCognitiveCoreValues({ pool, logger });
   const ideas = createCognitiveCoreIdeas({ pool, logger });
   const trust = createCognitiveCoreTrust({ pool, logger });
+  const preserve = createCognitiveCorePreserve({ pool, logger });
+  const transmit = createCognitiveCoreTransmit({ pool, logger });
 
   if (typeof requireKey === 'function') {
     router.use(requireKey);
@@ -58,7 +62,7 @@ export function createCognitiveCoreRoutes(deps = {}) {
     res.json({
       ok: true,
       product: 'cognitive-core',
-      era: 4,
+      era: 6,
       compiler_version: COMPILER_VERSION,
       era2: [
         'programs', 'program_activations', 'miss_loop', 'decision_replay',
@@ -72,6 +76,13 @@ export function createCognitiveCoreRoutes(deps = {}) {
       era4: [
         'expert_collaboration', 'memory_compression', 'legacy_recorder',
         'apprenticeship', 'delegation_confidence', 'autonomous_advisor',
+      ],
+      era5: [
+        'judgment_packages', 'legacy_transmission', 'confidence_map',
+      ],
+      era6: [
+        'capsule_marketplace', 'subconscious_interrupts', 'cognitive_debt',
+        'consequence_trees', 'portable_handshake',
       ],
       laws: 'docs/constitution/COGNITIVE_CORE_LAWS.md',
     });
@@ -678,6 +689,255 @@ export function createCognitiveCoreRoutes(deps = {}) {
       res.status(out.ok ? 201 : 422).json(out);
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // ── Era-5 Preserve Me ────────────────────────────────────────────────
+  router.get('/preserve/packages', async (req, res) => {
+    try {
+      const userId = String(req.query.user_id || req.user?.id || '1');
+      const packages = await preserve.listPackages(userId, {
+        status: req.query.status || null,
+        limit: Number(req.query.limit) || 50,
+      });
+      res.json({ ok: true, packages, framing_note: preserve.FRAMING });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/preserve/packages/:id', async (req, res) => {
+    try {
+      const pkg = await preserve.getPackage(req.params.id);
+      if (!pkg) return res.status(404).json({ ok: false, error: 'not_found' });
+      res.json({ ok: true, package: pkg, framing_note: preserve.FRAMING });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/preserve/packages', async (req, res) => {
+    try {
+      const b = req.body || {};
+      const out = await preserve.createPackage({
+        userId: b.user_id || req.user?.id || '1',
+        label: b.label,
+        seal: b.seal === true,
+      });
+      res.status(201).json(out);
+    } catch (err) {
+      res.status(400).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/preserve/packages/:id/seal', async (req, res) => {
+    try {
+      const out = await preserve.sealPackage({
+        packageId: req.params.id,
+        userId: (req.body || {}).user_id || req.user?.id || '1',
+      });
+      res.status(out.ok ? 200 : 422).json(out);
+    } catch (err) {
+      res.status(400).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/preserve/transmissions', async (req, res) => {
+    try {
+      const userId = String(req.query.user_id || req.user?.id || '1');
+      const transmissions = await preserve.listTransmissions(userId, {
+        limit: Number(req.query.limit) || 50,
+      });
+      res.json({ ok: true, transmissions });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/preserve/transmit', async (req, res) => {
+    try {
+      const b = req.body || {};
+      const out = await preserve.transmitPackage({
+        packageId: b.package_id,
+        userId: b.user_id || req.user?.id || '1',
+        recipientLabel: b.recipient_label || b.recipient,
+        purpose: b.purpose,
+        consentAttested: b.consent_attested === true || b.consent === true,
+      });
+      res.status(out.ok ? 201 : 422).json(out);
+    } catch (err) {
+      res.status(400).json({ ok: false, error: err.message });
+    }
+  });
+
+  // ── Era-6 Transmit Me ────────────────────────────────────────────────
+  router.get('/transmit/marketplace', async (req, res) => {
+    try {
+      const listings = await transmit.listMarketplace({
+        visibility: req.query.visibility || null,
+        status: req.query.status || 'published',
+        limit: Number(req.query.limit) || 50,
+      });
+      res.json({ ok: true, listings });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/transmit/marketplace', async (req, res) => {
+    try {
+      const b = req.body || {};
+      const out = await transmit.publishListing({
+        userId: b.user_id || req.user?.id || '1',
+        packageId: b.package_id,
+        title: b.title,
+        description: b.description,
+        visibility: b.visibility,
+      });
+      res.status(out.ok ? 201 : 422).json(out);
+    } catch (err) {
+      res.status(400).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/transmit/marketplace/:id/install', async (req, res) => {
+    try {
+      const b = req.body || {};
+      const out = await transmit.installListing({
+        userId: b.user_id || req.user?.id || '1',
+        listingId: req.params.id,
+        worn: b.worn === true,
+      });
+      res.status(out.ok ? 201 : 422).json(out);
+    } catch (err) {
+      res.status(400).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/transmit/debt', async (req, res) => {
+    try {
+      const userId = String(req.query.user_id || req.user?.id || '1');
+      if (req.query.refresh === '1' || req.query.refresh === 'true') {
+        await transmit.refreshDebt(userId);
+      }
+      const items = await transmit.listDebt(userId, {
+        status: req.query.status || 'open',
+        limit: Number(req.query.limit) || 50,
+      });
+      res.json({ ok: true, debt: items });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/transmit/debt/refresh', async (req, res) => {
+    try {
+      const userId = (req.body || {}).user_id || req.user?.id || '1';
+      const out = await transmit.refreshDebt(userId);
+      res.json(out);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/transmit/debt/:id/resolve', async (req, res) => {
+    try {
+      const row = await transmit.resolveDebt({
+        debtId: req.params.id,
+        status: (req.body || {}).status || 'resolved',
+      });
+      if (!row) return res.status(404).json({ ok: false, error: 'not_found' });
+      res.json({ ok: true, debt: row });
+    } catch (err) {
+      res.status(400).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/transmit/interrupts', async (req, res) => {
+    try {
+      const userId = String(req.query.user_id || req.user?.id || '1');
+      const interrupts = await transmit.listInterrupts(userId, {
+        status: req.query.status || 'pending',
+        limit: Number(req.query.limit) || 30,
+      });
+      res.json({ ok: true, interrupts });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/transmit/interrupts/generate', async (req, res) => {
+    try {
+      const userId = (req.body || {}).user_id || req.user?.id || '1';
+      const out = await transmit.generateInterrupts(userId);
+      res.status(201).json(out);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/transmit/interrupts/:id/dismiss', async (req, res) => {
+    try {
+      const row = await transmit.dismissInterrupt({
+        interruptId: req.params.id,
+        status: (req.body || {}).status || 'dismissed',
+      });
+      if (!row) return res.status(404).json({ ok: false, error: 'not_found' });
+      res.json({ ok: true, interrupt: row });
+    } catch (err) {
+      res.status(400).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/transmit/trees', async (req, res) => {
+    try {
+      const userId = String(req.query.user_id || req.user?.id || '1');
+      const trees = await transmit.listConsequenceTrees(userId, {
+        limit: Number(req.query.limit) || 20,
+      });
+      res.json({ ok: true, trees });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/transmit/trees', async (req, res) => {
+    try {
+      const b = req.body || {};
+      const out = await transmit.buildConsequenceTree({
+        userId: b.user_id || req.user?.id || '1',
+        question: b.question,
+        depth: b.depth,
+        decisionId: b.decision_id,
+      });
+      res.status(out.ok ? 201 : 422).json(out);
+    } catch (err) {
+      res.status(400).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/transmit/imports', async (req, res) => {
+    try {
+      const userId = String(req.query.user_id || req.user?.id || '1');
+      const imports = await transmit.listImports(userId, {
+        limit: Number(req.query.limit) || 30,
+      });
+      res.json({ ok: true, imports });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/transmit/imports/accept', async (req, res) => {
+    try {
+      const b = req.body || {};
+      const out = await transmit.acceptTransmission({
+        userId: b.user_id || req.user?.id || '1',
+        transmissionId: b.transmission_id,
+      });
+      res.status(out.ok ? 201 : 422).json(out);
+    } catch (err) {
+      res.status(400).json({ ok: false, error: err.message });
     }
   });
 

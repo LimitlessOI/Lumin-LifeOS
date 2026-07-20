@@ -85,3 +85,18 @@ Apps consult the core. They must not dump domain junk into the cognitive model.
 Primary asset: a continuously improving **judgment compiler** that learns, with measurable evidence, how to think *with* the user before it ever thinks *for* them.
 
 Do not market “digital immortality.” Frame as preserving hard-earned judgment with transparent confidence and recalibration.
+
+---
+
+## Era map (product bands)
+
+| Era | Name | Ideas | Status |
+|---|---|---|---|
+| 1 | Learn Me | #1–6 | Shipped |
+| 2 | Improve Me | #7–12 | Shipped |
+| 3 | Extend Me | #13–18 | Shipped |
+| 4 | Trust Me | #19–24 | Shipped |
+| 5 | Preserve Me | #25 | Shipped — sealed packages + consent transmission |
+| 6 | Transmit Me | #26–30 | Shipped — marketplace, interrupts, debt, trees, import |
+
+Era-6 was not in the original five-era brainstorm; it absorbs orphaned scale/transmit ideas after Preserve Me.

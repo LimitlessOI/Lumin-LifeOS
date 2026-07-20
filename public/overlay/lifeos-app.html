@@ -3616,6 +3616,20 @@ function appendLuminJudgmentMeta(data) {
   if (trust?.delegation_tier || trust?.action) {
     lines.push(`<div><strong>Trust</strong> tier ${ _escHtml(String(trust.delegation_tier || trust.action))} · can_act=${trust.can_act ? 'yes' : 'no'} (earned)</div>`);
   }
+  // Era-5/6 Preserve + Transmit — package / debt / interrupt signals when present.
+  const preserve = data.preserve || data.judgment_package || data.cognitive_core?.preserve;
+  if (preserve?.label || preserve?.package_id) {
+    const confN = Array.isArray(preserve.confidence_map?.confident) ? preserve.confidence_map.confident.length : null;
+    lines.push(`<div><strong>Preserve</strong> ${ _escHtml(String(preserve.label || 'package'))}${confN != null ? ` · ${confN} confident` : ''} — not immortality</div>`);
+  }
+  const debt = data.cognitive_debt || data.debt || data.cognitive_core?.debt;
+  if (Array.isArray(debt) && debt.length) {
+    lines.push(`<div><strong>Cognitive debt</strong> ${debt.length} open — recalibrate before acting</div>`);
+  }
+  const interrupt = data.interrupt || data.subconscious_interrupt || data.cognitive_core?.interrupt;
+  if (interrupt?.message) {
+    lines.push(`<div><strong>Interrupt</strong> ${ _escHtml(String(interrupt.message).slice(0, 120)) }</div>`);
+  }
   if (!lines.length) return;
   _renderJudgmentMeta(container, lines);
 }
