@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T00:21:01.557Z",
+  "generated_at": "2026-07-20T00:28:21.403Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12016,
   "files": [
@@ -21634,9 +21634,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3617952,
-      "mtime": "2026-07-19T21:04:55.340Z",
-      "indexed_at": "2026-07-19T21:05:12.077Z"
+      "bytes": 3623577,
+      "mtime": "2026-07-20T00:27:25.098Z",
+      "indexed_at": "2026-07-20T00:28:21.403Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -30797,9 +30797,9 @@
     {
       "path": "config/migration-preflight-collision-allowlist.json",
       "synopsis": "Configuration — Migration Preflight Collision Allowlist.",
-      "bytes": 17389,
-      "mtime": "2026-07-19T21:03:55.496Z",
-      "indexed_at": "2026-07-19T21:04:54.410Z",
+      "bytes": 19341,
+      "mtime": "2026-07-20T00:25:23.810Z",
+      "indexed_at": "2026-07-20T00:28:21.403Z",
       "synopsis_index_only": true
     },
     {
@@ -33778,9 +33778,9 @@
     {
       "path": "db/migrations/20231020_add_cooldown_persistence.sql",
       "synopsis": "Database migration — 20231020_add_cooldown_persistence.sql.",
-      "bytes": 515,
-      "mtime": "2026-07-19T21:03:55.574Z",
-      "indexed_at": "2026-07-19T21:04:54.410Z"
+      "bytes": 529,
+      "mtime": "2026-07-20T00:22:39.828Z",
+      "indexed_at": "2026-07-20T00:28:21.403Z"
     },
     {
       "path": "db/migrations/20231025_add_competitors.sql",
@@ -36102,16 +36102,16 @@
     {
       "path": "db/migrations/20260724_lifeos_core_stable.sql",
       "synopsis": "Database migration — 20260724_lifeos_core_stable.sql.",
-      "bytes": 1617,
-      "mtime": "2026-07-19T21:03:55.600Z",
-      "indexed_at": "2026-07-19T21:04:54.410Z"
+      "bytes": 641,
+      "mtime": "2026-07-20T00:22:49.011Z",
+      "indexed_at": "2026-07-20T00:28:21.403Z"
     },
     {
       "path": "db/migrations/20260725_extend_wellness_tables.sql",
       "synopsis": "Database migration — 20260725_extend_wellness_tables.sql.",
-      "bytes": 797,
-      "mtime": "2026-07-19T21:03:55.600Z",
-      "indexed_at": "2026-07-19T21:04:54.410Z"
+      "bytes": 927,
+      "mtime": "2026-07-20T00:23:20.813Z",
+      "indexed_at": "2026-07-20T00:28:21.403Z"
     },
     {
       "path": "db/migrations/add_virtual_real_estate_curriculum.sql",

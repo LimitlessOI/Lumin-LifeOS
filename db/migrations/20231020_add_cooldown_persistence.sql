@@ -9,4 +9,4 @@ CREATE TABLE IF NOT EXISTS provider_cooldowns (
 );
 
 -- Add an index on provider_id for faster lookups
-CREATE INDEX idx_provider_id ON provider_cooldowns(provider_id);
+CREATE INDEX IF NOT EXISTS idx_provider_id ON provider_cooldowns(provider_id);
