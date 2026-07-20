@@ -1277,7 +1277,7 @@
     },
     {
       "id": "self-repair-tier1-1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/self-repair-quarantine.js",
       "task": "Tier 1 self-quarantine: machine-only detector (no human, never blocks by itself -- Gate Charter Part 1 detect-and-route default) that decides whether a target has earned quarantine from repeated failure.",
       "spec": "Self-bootstrap `CREATE TABLE IF NOT EXISTS self_repair_quarantine_state (target_path TEXT PRIMARY KEY, quarantined BOOLEAN NOT NULL DEFAULT false, reason TEXT, quarantined_at TIMESTAMPTZ, released_at TIMESTAMPTZ, updated_at TIMESTAMPTZ NOT NULL DEFAULT now())`. Export pure function shouldQuarantineTarget({ reputation, recentFailureCount }) -- reputation is the row shape returned by getTargetReputation from services/self-repair-target-reputation.js (import and reuse that function, do not reimplement reputation lookup), recentFailureCount is a plain number. Returns { quarantine: boolean, reason: string|null }: quarantine=true if (reputation && reputation.hardness_score >= 0.75 && reputation.attempts >= 3) OR recentFailureCount >= 3; else quarantine=false, reason=null. Export async function evaluateQuarantine(pool, { target_path, recentFailureCount = 0 }) that calls getTargetReputation(pool, {target_path}) (imported, reused), calls shouldQuarantineTarget({ reputation, recentFailureCount }) using the recentFailureCount parameter passed into evaluateQuarantine itself (NOT derived from the reputation row -- self_repair_target_reputation has no such column), upserts the decision into self_repair_quarantine_state (INSERT ... ON CONFLICT (target_path) DO UPDATE, setting quarantined/reason/updated_at, and quarantined_at=now() only when transitioning from not-quarantined to quarantined), and returns the decision. Export async function isTargetQuarantined(pool, { target_path }) returning the current row or null if never evaluated. Export async function releaseQuarantine(pool, { target_path, reason }) that sets quarantined=false, released_at=now(), reason=the given release reason, on the existing row (no-op / returns null if no row exists for that target -- do not insert a fresh row on release). This module is a pure detector: it must not call any dispatch/ship function, must not modify any BUILD_QUEUE.json, must not import governed-autonomous-shipping-loop.js or product-build-orchestrator.js -- it only reads Tier-0 data and records its own decision for a future caller to consult. CRITICAL #1, from this module's own second attempt (commit d2f691... class of regression): the SECOND attempt correctly fixed recentFailureCount but then DROPPED the table-bootstrap call from isTargetQuarantined and releaseQuarantine -- only evaluateQuarantine had it. ALL FOUR touches of the table across the three async functions (evaluateQuarantine, isTargetQuarantined, releaseQuarantine) must EACH independently run the exact `CREATE TABLE IF NOT EXISTS self_repair_quarantine_state (...)` DDL above as their own, separate, no-parameters pool.query() call before their own SELECT/INSERT/UPDATE -- do not assume any other function in this same file already created the table. CRITICAL #2, from this module's first attempt: do not derive recentFailureCount from `reputation.recent_failure_count` or any other invented reputation field -- it must come only from evaluateQuarantine's own parameter, default 0.",
@@ -1310,30 +1310,9 @@
       "blueprint_step_id": "self-repair-tier1-1",
       "mission_id": "PRODUCT-builderos",
       "revive_note": "2026-07-20: reset a fourth time. Third attempt (commit deb85cde601df72e5cd500b30a67142e78b1e2b1) correctly fixed recentFailureCount but, in the same regeneration, dropped the table-bootstrap call from isTargetQuarantined and releaseQuarantine (only evaluateQuarantine still had it) -- a regression my own edited spec caused by dropping the prior CRITICAL bootstrap-every-function requirement while fixing the recentFailureCount issue. Both requirements now stated explicitly and simultaneously in one spec, not sequentially across edits.",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/builderos/twins/steps/self-repair-tier1-1.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-20T21:20:23.047Z",
-        "shipped_at": "2026-07-20T21:20:23.047Z",
-        "commit_sha": null,
-        "content_sha256": "490b90c9c98cd403f2cf4864b528529b8e6c9946f5120d3dae18360bbbfe8ba7",
-        "target_file": "services/self-repair-quarantine.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/self-repair-quarantine.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/builderos/twins/steps/self-repair-tier1-1.exact",
-          "content_sha256": "490b90c9c98cd403f2cf4864b528529b8e6c9946f5120d3dae18360bbbfe8ba7"
-        }
-      },
-      "shipped_at": "2026-07-20T21:20:23.047Z"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-20T21:20:29.678Z",
+      "commit_sha": "283b95b419ef3132d4fabf2cce5483e422add570"
     },
     {
       "id": "self-repair-tier1-2",
