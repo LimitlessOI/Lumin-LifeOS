@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/site-builder/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-17 — Landing brand LimitlessOS→Taloa; color-palettes route fail-soft (no phantom step-03 import). |
+| **Last Updated** | 2026-07-20 — Reset `sb-deliverability-gate`'s exhausted retry budget in `BUILD_QUEUE.json` after confirming the real root cause (a codegen prompt bug in `routes/factory-mount-routes.js`, now fixed) was the entire reason for all 10 prior identical failures. Verified live post-fix: codegen now produces a real, full-sized file; one ordinary SENTRY export-naming failure remains (not the stub bug) — normal territory for the autonomous loop's own retry/model-rotation to resolve. See `docs/products/builderos/PRODUCT_HOME.md` Change Receipts for the fix itself. (Prior: 2026-07-17 — Landing brand LimitlessOS→Taloa; color-palettes route fail-soft (no phantom step-03 import).) |
 
 ---
 
