@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T09:08:27.393Z",
+  "generated_at": "2026-07-20T09:20:19.418Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12056,
   "files": [
@@ -39635,9 +39635,9 @@
     {
       "path": "docs/products/boldtrail/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BoldTrail",
-      "bytes": 12394,
-      "mtime": "2026-07-20T07:22:45.643Z",
-      "indexed_at": "2026-07-20T07:28:47.516Z"
+      "bytes": 13695,
+      "mtime": "2026-07-20T09:20:19.418Z",
+      "indexed_at": "2026-07-20T09:20:19.418Z"
     },
     {
       "path": "docs/products/BUILDEROS.md",
@@ -40847,9 +40847,9 @@
     {
       "path": "docs/products/tc-service/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — TC Service",
-      "bytes": 120751,
-      "mtime": "2026-07-20T07:22:45.675Z",
-      "indexed_at": "2026-07-20T07:28:47.516Z"
+      "bytes": 122376,
+      "mtime": "2026-07-20T09:20:19.418Z",
+      "indexed_at": "2026-07-20T09:20:19.418Z"
     },
     {
       "path": "docs/products/TCSERVICE.md",
@@ -66646,9 +66646,9 @@
     {
       "path": "routes/boldtrail-routes.js",
       "synopsis": "BoldTrail Real Estate CRM Routes",
-      "bytes": 13766,
-      "mtime": "2026-07-20T07:22:46.089Z",
-      "indexed_at": "2026-07-20T07:28:47.516Z",
+      "bytes": 17086,
+      "mtime": "2026-07-20T09:20:19.418Z",
+      "indexed_at": "2026-07-20T09:20:19.418Z",
       "ssot": [
         "docs/products/boldtrail/PRODUCT_HOME.md"
       ]
@@ -68779,10 +68779,10 @@
     },
     {
       "path": "routes/tcBillingRoutes.mjs",
-      "synopsis": "Registers TcBillingRoutes routes/handlers (routes/tcBillingRoutes.mjs).",
-      "bytes": 5632,
-      "mtime": "2026-07-20T07:22:46.118Z",
-      "indexed_at": "2026-07-20T07:28:47.516Z",
+      "synopsis": "TC Service agent billing — REAL Stripe subscription checkout + fail-closed",
+      "bytes": 9063,
+      "mtime": "2026-07-20T09:20:19.418Z",
+      "indexed_at": "2026-07-20T09:20:19.418Z",
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]
