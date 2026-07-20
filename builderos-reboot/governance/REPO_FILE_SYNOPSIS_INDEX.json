@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T08:51:39.894Z",
+  "generated_at": "2026-07-20T08:53:18.611Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12056,
   "files": [
@@ -39671,9 +39671,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 239772,
-      "mtime": "2026-07-20T08:32:35.128Z",
-      "indexed_at": "2026-07-20T08:32:35.128Z"
+      "bytes": 239741,
+      "mtime": "2026-07-20T08:53:18.611Z",
+      "indexed_at": "2026-07-20T08:53:18.611Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -40353,9 +40353,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 652390,
-      "mtime": "2026-07-20T08:32:35.128Z",
-      "indexed_at": "2026-07-20T08:32:35.128Z"
+      "bytes": 652511,
+      "mtime": "2026-07-20T08:53:18.611Z",
+      "indexed_at": "2026-07-20T08:53:18.611Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -40789,9 +40789,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 137492,
-      "mtime": "2026-07-20T08:49:07.616Z",
-      "indexed_at": "2026-07-20T08:49:07.616Z"
+      "bytes": 137720,
+      "mtime": "2026-07-20T08:53:18.611Z",
+      "indexed_at": "2026-07-20T08:53:18.611Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
