@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T02:19:39.314Z",
+  "generated_at": "2026-07-20T02:37:31.553Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12039,
+  "file_count": 12045,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -36086,6 +36086,13 @@
       "indexed_at": "2026-07-19T21:04:54.410Z"
     },
     {
+      "path": "db/migrations/20260719_cognitive_core_era10.sql",
+      "synopsis": "Cognitive Core Era-10 (\"Multiply Me\") — network, consensus, self-fix loop.",
+      "bytes": 3265,
+      "mtime": "2026-07-20T02:37:09.110Z",
+      "indexed_at": "2026-07-20T02:37:31.553Z"
+    },
+    {
       "path": "db/migrations/20260719_cognitive_core_era2.sql",
       "synopsis": "Cognitive Core Era-2 (\"Improve Me\") — programs (deep patterns as hypotheses),",
       "bytes": 5006,
@@ -36133,6 +36140,13 @@
       "bytes": 3790,
       "mtime": "2026-07-20T02:10:22.903Z",
       "indexed_at": "2026-07-20T02:10:29.654Z"
+    },
+    {
+      "path": "db/migrations/20260719_cognitive_core_era9.sql",
+      "synopsis": "Cognitive Core Era-9 (\"Govern Me\") — self-governance + integrity audit.",
+      "bytes": 3326,
+      "mtime": "2026-07-20T02:37:09.106Z",
+      "indexed_at": "2026-07-20T02:37:31.553Z"
     },
     {
       "path": "db/migrations/20260719_cognitive_core_judgment.sql",
@@ -37368,9 +37382,9 @@
     {
       "path": "docs/constitution/COGNITIVE_CORE_LAWS.md",
       "synopsis": "Cognitive Core laws — judgment compiler constitution (subordinate to North Star SSOT)",
-      "bytes": 3518,
-      "mtime": "2026-07-20T02:10:22.914Z",
-      "indexed_at": "2026-07-20T02:10:29.654Z"
+      "bytes": 3825,
+      "mtime": "2026-07-20T02:37:09.138Z",
+      "indexed_at": "2026-07-20T02:37:31.553Z"
     },
     {
       "path": "docs/constitution/CONSTITUTION_CONFLICTS.md",
@@ -37529,9 +37543,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 65867,
-      "mtime": "2026-07-20T02:10:22.915Z",
-      "indexed_at": "2026-07-20T02:10:29.654Z"
+      "bytes": 66909,
+      "mtime": "2026-07-20T02:37:09.141Z",
+      "indexed_at": "2026-07-20T02:37:31.553Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40463,17 +40477,17 @@
     {
       "path": "docs/products/memory-intelligence/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
-      "bytes": 2803,
-      "mtime": "2026-07-20T02:10:22.913Z",
-      "indexed_at": "2026-07-20T02:10:29.654Z",
+      "bytes": 3079,
+      "mtime": "2026-07-20T02:37:09.135Z",
+      "indexed_at": "2026-07-20T02:37:31.553Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/products/memory-intelligence/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Memory Intelligence",
-      "bytes": 36632,
-      "mtime": "2026-07-20T02:10:22.912Z",
-      "indexed_at": "2026-07-20T02:10:29.654Z"
+      "bytes": 39449,
+      "mtime": "2026-07-20T02:37:09.133Z",
+      "indexed_at": "2026-07-20T02:37:31.553Z"
     },
     {
       "path": "docs/products/memory-system/FILE_MANIFEST.json",
@@ -63186,9 +63200,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 32691,
-      "mtime": "2026-07-20T02:10:22.909Z",
-      "indexed_at": "2026-07-20T02:10:29.654Z",
+      "bytes": 32760,
+      "mtime": "2026-07-20T02:37:09.127Z",
+      "indexed_at": "2026-07-20T02:37:31.553Z",
       "synopsis_index_only": true
     },
     {
@@ -65206,9 +65220,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 201088,
-      "mtime": "2026-07-20T02:10:22.911Z",
-      "indexed_at": "2026-07-20T02:10:29.654Z"
+      "bytes": 201656,
+      "mtime": "2026-07-20T02:37:09.130Z",
+      "indexed_at": "2026-07-20T02:37:31.553Z"
     },
     {
       "path": "public/overlay/lifeos-ask-your-life.html",
@@ -66827,10 +66841,10 @@
     },
     {
       "path": "routes/cognitive-core-routes.js",
-      "synopsis": "Cognitive Core Era-1–8 API — journal through Calibrate Me + Compound Me.",
-      "bytes": 42813,
-      "mtime": "2026-07-20T02:10:22.906Z",
-      "indexed_at": "2026-07-20T02:10:29.654Z",
+      "synopsis": "Cognitive Core Era-1–10 API — journal through Govern Me + Multiply Me.",
+      "bytes": 50644,
+      "mtime": "2026-07-20T02:37:09.118Z",
+      "indexed_at": "2026-07-20T02:37:31.553Z",
       "ssot": [
         "docs/products/memory-intelligence/PRODUCT_HOME.md"
       ]
@@ -84921,6 +84935,16 @@
       ]
     },
     {
+      "path": "services/cognitive-core-govern.js",
+      "synopsis": "Cognitive Core Era-9 \"Govern Me\" — self-governance + integrity audit.",
+      "bytes": 11110,
+      "mtime": "2026-07-20T02:37:09.112Z",
+      "indexed_at": "2026-07-20T02:37:31.553Z",
+      "ssot": [
+        "docs/products/memory-intelligence/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/cognitive-core-ideas.js",
       "synopsis": "Cognitive Core Era-3 #17 — Idea Evolution Graph (pool-only).",
       "bytes": 3151,
@@ -84946,6 +84970,16 @@
       "bytes": 12071,
       "mtime": "2026-07-19T21:32:24.093Z",
       "indexed_at": "2026-07-19T21:32:24.093Z",
+      "ssot": [
+        "docs/products/memory-intelligence/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/cognitive-core-multiply.js",
+      "synopsis": "Cognitive Core Era-10 \"Multiply Me\" — network, consensus, self-fix loop.",
+      "bytes": 13227,
+      "mtime": "2026-07-20T02:37:09.115Z",
+      "indexed_at": "2026-07-20T02:37:31.553Z",
       "ssot": [
         "docs/products/memory-intelligence/PRODUCT_HOME.md"
       ]
@@ -92930,6 +92964,13 @@
       ]
     },
     {
+      "path": "tests/cognitive-core-era10.test.js",
+      "synopsis": "Cognitive Core Era-10 unit tests — Multiply Me (fake-pool).",
+      "bytes": 6011,
+      "mtime": "2026-07-20T02:37:09.123Z",
+      "indexed_at": "2026-07-20T02:37:31.553Z"
+    },
+    {
       "path": "tests/cognitive-core-era2.test.js",
       "synopsis": "Cognitive Core Era-2 unit tests — outcome detection, advisor lenses,",
       "bytes": 4740,
@@ -92977,6 +93018,13 @@
       "bytes": 6679,
       "mtime": "2026-07-20T02:10:22.908Z",
       "indexed_at": "2026-07-20T02:10:29.654Z"
+    },
+    {
+      "path": "tests/cognitive-core-era9.test.js",
+      "synopsis": "Cognitive Core Era-9 unit tests — Govern Me (fake-pool).",
+      "bytes": 5732,
+      "mtime": "2026-07-20T02:37:09.121Z",
+      "indexed_at": "2026-07-20T02:37:31.553Z"
     },
     {
       "path": "tests/cognitive-core-judgment.test.js",

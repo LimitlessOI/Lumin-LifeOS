@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: Cognitive Core Era-1–8 API — journal through Calibrate Me + Compound Me.
+ * SYNOPSIS: Cognitive Core Era-1–10 API — journal through Govern Me + Multiply Me.
  * @ssot docs/products/memory-intelligence/PRODUCT_HOME.md
  */
 
@@ -15,6 +15,8 @@ import { createCognitiveCorePreserve } from '../services/cognitive-core-preserve
 import { createCognitiveCoreTransmit } from '../services/cognitive-core-transmit.js';
 import { createCognitiveCoreCalibrate } from '../services/cognitive-core-calibrate.js';
 import { createCognitiveCoreCompound } from '../services/cognitive-core-compound.js';
+import { createCognitiveCoreGovern } from '../services/cognitive-core-govern.js';
+import { createCognitiveCoreMultiply } from '../services/cognitive-core-multiply.js';
 import {
   listWearableCapsules,
   detectJudgmentTurn,
@@ -57,6 +59,8 @@ export function createCognitiveCoreRoutes(deps = {}) {
   const transmit = createCognitiveCoreTransmit({ pool, logger });
   const calibrate = createCognitiveCoreCalibrate({ pool, logger });
   const compound = createCognitiveCoreCompound({ pool, logger });
+  const govern = createCognitiveCoreGovern({ pool, logger });
+  const multiply = createCognitiveCoreMultiply({ pool, logger });
 
   if (typeof requireKey === 'function') {
     router.use(requireKey);
@@ -66,7 +70,7 @@ export function createCognitiveCoreRoutes(deps = {}) {
     res.json({
       ok: true,
       product: 'cognitive-core',
-      era: 8,
+      era: 10,
       compiler_version: COMPILER_VERSION,
       era2: [
         'programs', 'program_activations', 'miss_loop', 'decision_replay',
@@ -95,6 +99,14 @@ export function createCognitiveCoreRoutes(deps = {}) {
       era8: [
         'product_consumers', 'cross_product_can_act', 'improvement_proposals',
         'compound_log', 'role_sync', 'autonomy_ladder_review',
+      ],
+      era9: [
+        'integrity_auditor', 'constitutional_conformance', 'calibration_decay',
+        'compiler_drift_ledger', 'self_audit_findings',
+      ],
+      era10: [
+        'advisor_council_consensus', 'cohort_benchmark', 'judgment_replay_sim',
+        'compound_roi_ledger', 'ship_queue_bridge',
       ],
       laws: 'docs/constitution/COGNITIVE_CORE_LAWS.md',
     });
@@ -1252,6 +1264,212 @@ export function createCognitiveCoreRoutes(deps = {}) {
       });
       if (!row) return res.status(404).json({ ok: false, error: 'not_found' });
       res.json({ ok: true, review: row });
+    } catch (err) {
+      res.status(400).json({ ok: false, error: err.message });
+    }
+  });
+
+  // ── Era-9 Govern Me ──────────────────────────────────────────────────
+  router.post('/govern/audit', async (req, res) => {
+    try {
+      const b = req.body || {};
+      const out = await govern.runIntegrityAudit({
+        userId: b.user_id || req.user?.id || '1',
+        scope: b.scope || 'full',
+      });
+      res.status(201).json(out);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/govern/audits', async (req, res) => {
+    try {
+      const userId = String(req.query.user_id || req.user?.id || '1');
+      const audits = await govern.listAudits(userId, { limit: Number(req.query.limit) || 20 });
+      res.json({ ok: true, audits });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/govern/findings', async (req, res) => {
+    try {
+      const userId = String(req.query.user_id || req.user?.id || '1');
+      const findings = await govern.listFindings(userId, {
+        status: req.query.status || 'open',
+        limit: Number(req.query.limit) || 50,
+      });
+      res.json({ ok: true, findings });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/govern/findings/:id', async (req, res) => {
+    try {
+      const row = await govern.updateFinding({
+        findingId: req.params.id,
+        status: (req.body || {}).status || 'queued',
+      });
+      if (!row) return res.status(404).json({ ok: false, error: 'not_found' });
+      res.json({ ok: true, finding: row });
+    } catch (err) {
+      res.status(400).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/govern/drift', async (req, res) => {
+    try {
+      const userId = String(req.query.user_id || req.user?.id || '1');
+      const drift = await govern.listDrift(userId, {
+        resolved: req.query.resolved === '1' || req.query.resolved === 'true',
+        limit: Number(req.query.limit) || 50,
+      });
+      res.json({ ok: true, drift });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/govern/drift/:id/resolve', async (req, res) => {
+    try {
+      const row = await govern.resolveDrift({ driftId: req.params.id });
+      if (!row) return res.status(404).json({ ok: false, error: 'not_found' });
+      res.json({ ok: true, drift: row });
+    } catch (err) {
+      res.status(400).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/govern/conformance', async (req, res) => {
+    try {
+      const userId = String(req.query.user_id || req.user?.id || '1');
+      const checks = await govern.checkConstitution(userId);
+      res.json({ ok: true, checks });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // ── Era-10 Multiply Me ───────────────────────────────────────────────
+  router.post('/multiply/council', async (req, res) => {
+    try {
+      const b = req.body || {};
+      const out = await multiply.runCouncil({
+        userId: b.user_id || req.user?.id || '1',
+        question: b.question,
+        advisorIds: b.advisor_ids || b.advisors || [],
+      });
+      res.status(out.ok ? 201 : 422).json(out);
+    } catch (err) {
+      res.status(400).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/multiply/council', async (req, res) => {
+    try {
+      const userId = String(req.query.user_id || req.user?.id || '1');
+      const sessions = await multiply.listCouncilSessions(userId, { limit: Number(req.query.limit) || 20 });
+      res.json({ ok: true, sessions });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/multiply/benchmark', async (req, res) => {
+    try {
+      const userId = (req.body || {}).user_id || req.user?.id || '1';
+      const out = await multiply.benchmarkCohort(userId);
+      res.status(201).json(out);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/multiply/benchmarks', async (req, res) => {
+    try {
+      const userId = String(req.query.user_id || req.user?.id || '1');
+      const benchmarks = await multiply.listBenchmarks(userId, { limit: Number(req.query.limit) || 30 });
+      res.json({ ok: true, benchmarks });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/multiply/replay', async (req, res) => {
+    try {
+      const userId = (req.body || {}).user_id || req.user?.id || '1';
+      const out = await multiply.replayJudgment(userId);
+      res.status(201).json(out);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/multiply/replays', async (req, res) => {
+    try {
+      const userId = String(req.query.user_id || req.user?.id || '1');
+      const runs = await multiply.listReplays(userId, { limit: Number(req.query.limit) || 20 });
+      res.json({ ok: true, runs });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/multiply/roi', async (req, res) => {
+    try {
+      const b = req.body || {};
+      const out = await multiply.recordRoi(b.user_id || req.user?.id || '1', {
+        windowDays: b.window_days,
+      });
+      res.status(201).json(out);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/multiply/roi', async (req, res) => {
+    try {
+      const userId = String(req.query.user_id || req.user?.id || '1');
+      const roi = await multiply.listRoi(userId, { limit: Number(req.query.limit) || 30 });
+      res.json({ ok: true, roi });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/multiply/bridge', async (req, res) => {
+    try {
+      const userId = (req.body || {}).user_id || req.user?.id || '1';
+      const out = await multiply.bridgeFindingsToQueue(userId);
+      res.status(201).json(out);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/multiply/bridge', async (req, res) => {
+    try {
+      const userId = String(req.query.user_id || req.user?.id || '1');
+      const items = await multiply.listBridgeItems(userId, {
+        status: req.query.status || 'staged',
+        limit: Number(req.query.limit) || 50,
+      });
+      res.json({ ok: true, items });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/multiply/bridge/:id', async (req, res) => {
+    try {
+      const row = await multiply.updateBridgeItem({
+        bridgeId: req.params.id,
+        status: (req.body || {}).status || 'submitted',
+      });
+      if (!row) return res.status(404).json({ ok: false, error: 'not_found' });
+      res.json({ ok: true, item: row });
     } catch (err) {
       res.status(400).json({ ok: false, error: err.message });
     }

@@ -3639,6 +3639,14 @@ function appendLuminJudgmentMeta(data) {
   if (ladder?.direction || ladder?.suggested_tier) {
     lines.push(`<div><strong>Ladder</strong> ${ _escHtml(String(ladder.direction || 'hold'))} → ${ _escHtml(String(ladder.suggested_tier || '')) }</div>`);
   }
+  const audit = data.integrity_audit || data.cognitive_core?.audit;
+  if (audit && (audit.passed != null || audit.findings_n != null)) {
+    lines.push(`<div><strong>Integrity</strong> ${audit.passed ? 'clean' : `${audit.findings_n ?? '?'} finding(s)`} — each carries a fix</div>`);
+  }
+  const council = data.council || data.cognitive_core?.council;
+  if (council?.consensus || (Array.isArray(council?.dissent) && council.dissent.length)) {
+    lines.push(`<div><strong>Council</strong> consensus + ${ (council.dissent || []).length } dissent (lenses)</div>`);
+  }
   if (!lines.length) return;
   _renderJudgmentMeta(container, lines);
 }

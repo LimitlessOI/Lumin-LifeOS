@@ -100,5 +100,7 @@ Do not market “digital immortality.” Frame as preserving hard-earned judgmen
 | 6 | Transmit Me | #26–30 | Shipped — marketplace, interrupts, debt, trees, import |
 | 7 | Calibrate Me | #31–35 | Shipped — heuristics, calibration, transfer, auto-tree, rituals |
 | 8 | Compound Me | #36–40 | Shipped — product can_act bridge, improvements, ladder |
+| 9 | Govern Me | #41–45 | Shipped — integrity audit, conformance, decay, drift, findings |
+| 10 | Multiply Me | #46–50 | Shipped — council consensus, benchmark, replay, ROI, ship-queue bridge |
 
-Era-6+ were not in the original five-era brainstorm; they absorb orphaned scale/calibrate/compound ideas after Preserve Me.
+Era-6+ were not in the original five-era brainstorm; they absorb orphaned scale/calibrate/compound/govern ideas after Preserve Me. Era-10 closes the 50-idea roadmap and the self-fix loop back into the governed factory (SO-001).

@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-19 — Cognitive Core Era-9 + Era-10 (Govern + Multiply, capstone)
+
+Adam: "after this go to the next 2." Built Era-9 Govern Me (#41–45): integrity auditor that checks the five laws against live scoreboard/programs, constitutional conformance, calibration-decay detection, compiler drift ledger, self-audit findings (every finding solution-mandatory with `proposed_fix`). Era-10 Multiply Me (#46–50): advisor council consensus (dissent preserved, no forced unanimity), cohort benchmark (reference band = hypothesis, not leaderboard), judgment replay simulation (confidence-reweight proxy, labeled GUESS), compound ROI ledger, and the ship-queue bridge that stages findings into the GOVERNED factory queue (SO-001) rather than hand-shipping. Migrations `20260719_cognitive_core_era9/10.sql`, `services/cognitive-core-govern.js` + `multiply.js`, routes `/govern/*` + `/multiply/*`, tests 10/10, health `era: 10`. This completes the 50-idea roadmap. NEXT: tip redeploy + prove audit/conformance/council/bridge; independent audit.
+
 ## 2026-07-19 — Cognitive Core Era-7 + Era-8 (Calibrate + Compound)
 
 Adam: "do the next 2." Built Era-7 Calibrate Me (#31–35): decision heuristics compression, calibration dashboard, trust-transfer proposals, high-stakes auto-tree, recalibration rituals. Era-8 Compound Me (#36–40): product consumers + cross-product `can_act`, debt→improvement proposals, compound log, role sync, autonomy ladder review. Migrations `20260719_cognitive_core_era7/8.sql`, `services/cognitive-core-calibrate.js` + `compound.js`, routes `/calibrate/*` + `/compound/*`, tests 10/10, health `era: 8`. NEXT: tip redeploy + prove seed heuristics + can-act refuse-default.
