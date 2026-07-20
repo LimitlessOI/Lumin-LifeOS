@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T21:05:10.896Z",
+  "generated_at": "2026-07-20T21:05:28.320Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12075,
   "files": [
@@ -90350,9 +90350,9 @@
     {
       "path": "services/self-repair-trust-dashboard.js",
       "synopsis": "Exports getTopHardestTargets — services/self-repair-trust-dashboard.js.",
-      "bytes": 2200,
-      "mtime": "2026-07-20T20:38:47.327Z",
-      "indexed_at": "2026-07-20T20:38:47.327Z"
+      "bytes": 2259,
+      "mtime": "2026-07-20T21:05:28.320Z",
+      "indexed_at": "2026-07-20T21:05:28.320Z"
     },
     {
       "path": "services/self-sabotage-monitor.js",

@@ -9,10 +9,11 @@ export async function getTopHardestTargets(pool, { limit = 10 } = {}) {
   await pool.query(`
     CREATE TABLE IF NOT EXISTS self_repair_target_reputation (
       target_path TEXT PRIMARY KEY,
-      attempts INTEGER DEFAULT 0,
-      failures INTEGER DEFAULT 0,
-      hardness_score REAL DEFAULT 0.0,
-      last_updated TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      attempts INTEGER NOT NULL DEFAULT 0,
+      failures INTEGER NOT NULL DEFAULT 0,
+      models_tried JSONB NOT NULL DEFAULT '[]',
+      hardness_score NUMERIC NOT NULL DEFAULT 0,
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
     );
   `);
   const { rows } = await pool.query(
