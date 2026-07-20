@@ -1550,7 +1550,31 @@
       ],
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "self-repair-tier3-2",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/builderos/twins/steps/self-repair-tier3-2.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-20T20:39:22.859Z",
+        "shipped_at": "2026-07-20T20:39:22.859Z",
+        "commit_sha": null,
+        "content_sha256": "64153d78e2360a1455aa00b38fd8b7bc6307b66f322565bb39cf08ae678586d1",
+        "target_file": "services/self-repair-calibration-sampling.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/self-repair-calibration-sampling.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/builderos/twins/steps/self-repair-tier3-2.exact",
+          "content_sha256": "64153d78e2360a1455aa00b38fd8b7bc6307b66f322565bb39cf08ae678586d1"
+        }
+      },
+      "shipped_at": "2026-07-20T20:39:22.859Z"
     }
   ],
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",

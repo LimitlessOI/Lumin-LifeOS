@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T20:38:47.327Z",
+  "generated_at": "2026-07-20T20:39:26.132Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12073,
+  "file_count": 12074,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -90159,6 +90159,13 @@
       "ssot": [
         "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/BLUEPRINT.json"
       ]
+    },
+    {
+      "path": "services/self-repair-calibration-sampling.js",
+      "synopsis": "Exports sampleClaimsForCalibration — services/self-repair-calibration-sampling.js.",
+      "bytes": 2933,
+      "mtime": "2026-07-20T20:39:26.132Z",
+      "indexed_at": "2026-07-20T20:39:26.132Z"
     },
     {
       "path": "services/self-repair-contract-gate.js",
