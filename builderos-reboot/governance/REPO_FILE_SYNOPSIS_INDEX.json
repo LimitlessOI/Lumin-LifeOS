@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T18:56:17.178Z",
+  "generated_at": "2026-07-20T18:56:32.017Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12063,
+  "file_count": 12064,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -90222,6 +90222,13 @@
         "docs/products/memory-intelligence/PRODUCT_HOME.md",
         "docs/products/command-center/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/self-repair-negative-knowledge.js",
+      "synopsis": "Exports recordFailedApproach — services/self-repair-negative-knowledge.js.",
+      "bytes": 889,
+      "mtime": "2026-07-20T18:56:32.017Z",
+      "indexed_at": "2026-07-20T18:56:32.017Z"
     },
     {
       "path": "services/self-repair-prevention-hook-log.js",
