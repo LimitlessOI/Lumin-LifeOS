@@ -1309,7 +1309,31 @@
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "self-repair-tier1-1",
       "mission_id": "PRODUCT-builderos",
-      "revive_note": "2026-07-20: reset a fourth time. Third attempt (commit deb85cde601df72e5cd500b30a67142e78b1e2b1) correctly fixed recentFailureCount but, in the same regeneration, dropped the table-bootstrap call from isTargetQuarantined and releaseQuarantine (only evaluateQuarantine still had it) -- a regression my own edited spec caused by dropping the prior CRITICAL bootstrap-every-function requirement while fixing the recentFailureCount issue. Both requirements now stated explicitly and simultaneously in one spec, not sequentially across edits."
+      "revive_note": "2026-07-20: reset a fourth time. Third attempt (commit deb85cde601df72e5cd500b30a67142e78b1e2b1) correctly fixed recentFailureCount but, in the same regeneration, dropped the table-bootstrap call from isTargetQuarantined and releaseQuarantine (only evaluateQuarantine still had it) -- a regression my own edited spec caused by dropping the prior CRITICAL bootstrap-every-function requirement while fixing the recentFailureCount issue. Both requirements now stated explicitly and simultaneously in one spec, not sequentially across edits.",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/builderos/twins/steps/self-repair-tier1-1.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-20T21:20:23.047Z",
+        "shipped_at": "2026-07-20T21:20:23.047Z",
+        "commit_sha": null,
+        "content_sha256": "490b90c9c98cd403f2cf4864b528529b8e6c9946f5120d3dae18360bbbfe8ba7",
+        "target_file": "services/self-repair-quarantine.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/self-repair-quarantine.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/builderos/twins/steps/self-repair-tier1-1.exact",
+          "content_sha256": "490b90c9c98cd403f2cf4864b528529b8e6c9946f5120d3dae18360bbbfe8ba7"
+        }
+      },
+      "shipped_at": "2026-07-20T21:20:23.047Z"
     },
     {
       "id": "self-repair-tier1-2",

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T21:17:56.544Z",
+  "generated_at": "2026-07-20T21:20:25.708Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12075,
   "files": [
@@ -90322,9 +90322,9 @@
     {
       "path": "services/self-repair-quarantine.js",
       "synopsis": "Exports shouldQuarantineTarget — services/self-repair-quarantine.js.",
-      "bytes": 2461,
-      "mtime": "2026-07-20T21:15:58.073Z",
-      "indexed_at": "2026-07-20T21:15:58.073Z"
+      "bytes": 3236,
+      "mtime": "2026-07-20T21:20:25.708Z",
+      "indexed_at": "2026-07-20T21:20:25.708Z"
     },
     {
       "path": "services/self-repair-root-cause-chains.js",
