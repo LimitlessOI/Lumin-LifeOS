@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T21:20:25.708Z",
+  "generated_at": "2026-07-20T21:55:01.294Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12075,
+  "file_count": 12076,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -37513,6 +37513,13 @@
       "indexed_at": "2026-07-20T07:28:47.516Z"
     },
     {
+      "path": "docs/constitution/UNIFIED_DOCTRINE_MAP.md",
+      "synopsis": "Unified Doctrine Map — traces every operating doctrine back to North Star §2.0 and to its enforcement mechanism. Subordinate index, NOT a new authority.",
+      "bytes": 6023,
+      "mtime": "2026-07-20T21:55:01.294Z",
+      "indexed_at": "2026-07-20T21:55:01.294Z"
+    },
+    {
       "path": "docs/CONTINUITY_INDEX.md",
       "synopsis": "Continuity Index",
       "bytes": 1733,
@@ -37557,9 +37564,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 72698,
-      "mtime": "2026-07-20T07:22:45.387Z",
-      "indexed_at": "2026-07-20T07:28:47.516Z"
+      "bytes": 74303,
+      "mtime": "2026-07-20T21:55:01.294Z",
+      "indexed_at": "2026-07-20T21:55:01.294Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -60126,9 +60133,9 @@
     {
       "path": "docs/SELF_REPAIR_DOCTRINE.md",
       "synopsis": "Self-Repair Doctrine — gate charter, friction-tiered build order, Tier-0 data-capture spec.",
-      "bytes": 10554,
-      "mtime": "2026-07-20T19:49:14.760Z",
-      "indexed_at": "2026-07-20T19:49:31.333Z"
+      "bytes": 9029,
+      "mtime": "2026-07-20T21:55:01.294Z",
+      "indexed_at": "2026-07-20T21:55:01.294Z"
     },
     {
       "path": "docs/SENTRY_PREALPHA_DOCTRINE.md",
