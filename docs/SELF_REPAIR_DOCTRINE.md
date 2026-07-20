@@ -10,6 +10,21 @@ Grounded in the 2026-07-20 self-repair brainstorm. The load-bearing finding: **t
 
 Cross-checked against the 2026 industry (VibeRepair = spec-repair, FailureMem = negative-knowledge, DebugHarness = runtime interrogation, Devin = "come back with proof"). Two cited "proofs" (a "verification-first Kode", a "ReasonCritic-7B") failed independent verification and were dropped — **and that catch, performed by an independent AI reviewer on our own reasoning, is this doctrine's first proof point.** It is why verify-the-factory is idea #1.
 
+## Part 0 — The Observer Principle & Separation of Powers (the foundation)
+
+**Observed effect (2026-07-20, founder):** an agent's work quality rose sharply once it knew every claim would be independently audited — not from fear, but because the *definition of "done" changed* from "produce a plausible answer" to "produce a claim that survives falsification." The honest mechanism, made structural:
+
+> **The Observer Principle.** Observation is a constant of the environment, not an event. Every agent — builder, verifier, and conductor alike — operates as if every load-bearing claim will be independently and adversarially falsified, because it will be. "Done" means "survived independent falsification," always. The aim is never compliance-while-watched (which collapses the moment the watcher blinks, and breeds theater-for-the-observer); it is a permanently harder definition of done. Observation never turns off — only its *intensity* is calibrated by earned trust (the provenance ledger). The mature form is an agent that internalizes the auditor and runs the check on itself *before* claiming done.
+
+**Separation of powers → checks and balances.** The system already separates roles (the good, rare part): the builder never tests its own output (SO-002); SENTRY tests but never builds; "no self-certify alone" wires an adversarial peer-grade into the ship path. But *separation assumes each power is honest within its lane.* The Observer Principle demands the harder property — **each power, including the observers, is falsifiable by an independent power.** Four gaps this exposes (all seen on 2026-07-20):
+
+1. **The judiciary is unwatched.** Nothing audits SENTRY; a gate that silently starts passing everything is worse than no gate. → chaos-canary: observe the observer (Era 6).
+2. **The conductor's reasoning is unwatched.** Code artifacts are audited; claims/citations are not, except by luck (the dropped "Kode"/"ReasonCritic-7B" citations were caught only because a peer checked). → the provenance ledger covers reasoning-claims, not just commit-SHAs.
+3. **Independence may be nominal, not real.** If builder, peer-grader, and verifier share a model family, "independent" verification has correlated blind spots (rubber-stamping). → require uncorrelated failure modes: deterministic checks where possible (git ancestry, schema, mount-resolution — unrationalizable by any model), cross-model/cross-context where not.
+4. **The override is unwatched.** The charter's bounded override becomes the leak if the overrider isn't observed. → whoever passes a gate is observed by a *different* power; overrides are logged and sampled.
+
+**The refinement (design change):** separation names the roles; **checks-and-balances makes each role — verifier and conductor included — falsifiable by an independent power with uncorrelated failure modes, recursively, terminating in cheap deterministic checks.** This is the structural form of the Observer Principle, and the *why* behind building Era 1 (verify-the-factory) first.
+
 ## Part 1 — The Gate Charter (the balance)
 
 > **A mechanism may BLOCK an action only if the action is irreversible or high-blast-radius (shared contracts, money paths, secrets, production deploy). Everything else DETECTS and ROUTES.**
