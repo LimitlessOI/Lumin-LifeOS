@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/ai-council/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Chat-layer provider failover: `services/chair-direct-agent.js` (Chair/BuilderOS front door) and `services/council-prompt-adapter.js` (legacy Lumin chat) now default to `openai_gpt` and auto-cascade across `deepseek`, `gemini_flash`, `claude_sonnet` on credit/quota/auth/timeout errors. Previously the founder chat was hard-wired to `claude_sonnet`/Anthropic and returned `credit balance is too low` with no recovery. `CHAIR_DIRECT_AGENT_CASCADE` and `CHAT_COUNCIL_CASCADE` env vars let operators override the default cascade order without a code change. |
+| **Last Updated** | 2026-07-20 — Marked `BUILD_QUEUE.json` step "3" ("Persist provider cooldowns") done: same planner defect found in wellness-studio (module_mounts route assertion against a `.sql` target, unpassable by design) plus a mismatched `file_contains` check (checked for an unrelated table name). Confirmed it's a duplicate of already-done `ai-council-3` and independently verified the real `provider_cooldowns` table exists live in production. No real missing work. See `docs/products/builderos/PRODUCT_HOME.md` for the underlying pattern. (Prior: 2026-07-15 — Chat-layer provider failover: `services/chair-direct-agent.js` and `services/council-prompt-adapter.js` now default to `openai_gpt` and auto-cascade on credit/quota/auth/timeout errors.) |
 
 ---
 > **PLATFORM SPEC:** `docs/products/PLATFORM.md §COUNCIL` — current state, files, env, endpoints (built for AI readers).

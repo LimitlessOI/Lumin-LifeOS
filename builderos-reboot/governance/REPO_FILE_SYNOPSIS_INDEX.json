@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T11:16:51.029Z",
+  "generated_at": "2026-07-20T11:53:33.977Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12056,
   "files": [
@@ -39534,9 +39534,9 @@
     {
       "path": "docs/products/ai-council/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — AI Council",
-      "bytes": 55593,
-      "mtime": "2026-07-20T07:22:45.641Z",
-      "indexed_at": "2026-07-20T07:28:47.516Z"
+      "bytes": 55767,
+      "mtime": "2026-07-20T11:52:19.134Z",
+      "indexed_at": "2026-07-20T11:53:33.977Z"
     },
     {
       "path": "docs/products/ai-receptionist/FILE_MANIFEST.json",
@@ -40957,9 +40957,9 @@
     {
       "path": "docs/products/wellness-studio/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Wellness Studio",
-      "bytes": 17144,
-      "mtime": "2026-07-20T10:14:18.423Z",
-      "indexed_at": "2026-07-20T10:15:07.884Z"
+      "bytes": 17494,
+      "mtime": "2026-07-20T11:53:10.470Z",
+      "indexed_at": "2026-07-20T11:53:33.977Z"
     },
     {
       "path": "docs/products/WELLNESSSTUDIO.md",

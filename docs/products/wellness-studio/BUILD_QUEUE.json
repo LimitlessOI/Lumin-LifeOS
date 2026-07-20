@@ -1474,18 +1474,15 @@
     },
     {
       "id": "wellness-studio-step10",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "db/migrations/20260725_extend_wellness_tables.sql",
       "task": "extend_wellness_tables",
-      "spec": "Extend existing tables without schema conflicts",
+      "spec": "Extend existing tables without schema conflicts. IMPORTANT: this migration file will be verified by checking it CONTAINS the 4 required ALTER TABLE statements (see file_contains) -- there is no live route to check, do not add one.",
       "depends_on": [
         "wellness-studio-step9"
       ],
       "founder_gated": false,
-      "attempts": 1,
-      "route": {
-        "path": "/db/extend"
-      },
+      "attempts": 0,
       "file_contains": [
         "ALTER TABLE joy_checkins ADD COLUMN",
         "ALTER TABLE integrity_score_log ADD COLUMN",
@@ -1495,13 +1492,13 @@
       "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "wellness-studio-step10",
       "mission_id": "PRODUCT-wellness-studio",
-      "last_attempt_at": "2026-07-18T02:36:48.654Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER TABLE joy_checkins ADD COLUMN; behavior_assertion: missing_substring:ALTER TABLE integrity_score_log ADD COLUMN; behavior_assertion: missing_substring:ALTER TABLE wearable_data ADD COLUMN; behavior_assertion: missing_substring:ALTER TABLE emotional_patterns ADD COLUMN; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": null,
+      "last_error": null,
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 6,
-      "revived_at": "2026-07-18T02:36:46.525Z",
+      "revive_count": 0,
+      "revived_at": null,
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1509,6 +1506,7 @@
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
+      "resolution_note": "2026-07-20: removed the route:{path:'/db/extend'} field, which triggered a module_mounts behavior assertion against a .sql migration target -- same broken-assertion pattern found and fixed in wellness-studio-step6/7/8 and ai-council step '3' (a route check can never pass for a non-route file). This step is DIFFERENT from those, though: the real file_contains checks (4 required ALTER TABLE statements) are genuine, specified, still-unmet work -- not a duplicate of anything already done. Verified live: none of joy_checkins/integrity_score_log/wearable_data/emotional_patterns currently have columns beyond their existing schema, so this is real, still-open work, NOT marked done. Only fixed the half that was definitely broken (the impossible route check) and reset the exhausted revive_count (was 6, effectively already at its cap for this error class) so the content-generation side gets a genuine clean attempt. NOT verified that the content-generation failure itself has a root cause fix -- if missing_substring repeats, that needs real investigation (unlike the route-assertion half, which is now provably fixed).",
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
