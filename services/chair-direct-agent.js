@@ -148,7 +148,7 @@ function communicationLawBlock() {
 function stripPresenceCoachClosers(text = '') {
   let out = String(text || '').trim();
   if (!out) return out;
-  const closer = /(?:\s*(?:If you want|Let me know|I'?m here to help|happy to help|if there(?:'?s| is) anything|whatever you need|talk through what(?:'s| is) stuck|specific area|focus on|next steps)[\s\S]*)$/i;
+  const closer = /(?:\s*(?:If you want|Let me know|I'?m here to help|happy to help|ready to support|if there(?:'?s| is) anything|whatever you need|talk through what(?:'s| is) stuck|specific area|focus on|next steps)[\s\S]*)$/i;
   for (let i = 0; i < 3; i += 1) {
     const next = out.replace(closer, '').trim();
     if (next === out) break;
@@ -298,7 +298,7 @@ export async function runChairDirectAgent({ message, history = [], deps = {}, ct
     ? `\n\nTOPIC LOCK (non-negotiable): Adam asked for governance/pipeline counsel. Answer ONLY that. Do not mention Cloudflare, DNS, unrelated products, or prior threads. If you cannot counsel on this, say so plainly (theater = FAIL).`
     : '';
   const presenceLock = isPresenceTurn
-    ? `\n\nPRESENCE LOCK (non-negotiable): This is a relational/vent turn. Be with him. Two short human sentences max. Forbidden: advice, next steps, "let me know if", "I'm here to help", "talk through what's stuck", mission/Point B, machine health, clarify forms. Stay. Do not coach unless he asks a direct question.`
+    ? `\n\nPRESENCE LOCK (non-negotiable): This is a relational/vent turn. Be with him. Two short human sentences max. Forbidden: advice, next steps, "let me know if", "I'm here to help", "ready to support", "talk through what's stuck", mission/Point B, machine health, clarify forms. End after presence — no offer to help. Stay. Do not coach unless he asks a direct question.`
     : '';
   const factsJson = (() => {
     try {

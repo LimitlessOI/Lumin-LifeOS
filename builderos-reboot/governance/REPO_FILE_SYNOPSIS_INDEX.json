@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T00:18:34.468Z",
+  "generated_at": "2026-07-20T00:21:01.557Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12015,
+  "file_count": 12016,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -40276,9 +40276,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 642185,
-      "mtime": "2026-07-20T00:18:33.200Z",
-      "indexed_at": "2026-07-20T00:18:34.468Z"
+      "bytes": 642511,
+      "mtime": "2026-07-20T00:21:00.533Z",
+      "indexed_at": "2026-07-20T00:21:01.557Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -63574,6 +63574,14 @@
       "synopsis_index_only": true
     },
     {
+      "path": "products/receipts/LIFEOS_COMMS_PRESENCE_LOCK_PROOF.json",
+      "synopsis": "Product receipt — LIFEOS COMMS PRESENCE LOCK PROOF.",
+      "bytes": 733,
+      "mtime": "2026-07-20T00:21:00.535Z",
+      "indexed_at": "2026-07-20T00:21:01.557Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "products/receipts/LIFEOS_DIRECT_ACTION_V1_ACCEPTANCE.json",
       "synopsis": "Product receipt — LIFEOS DIRECT ACTION V1 ACCEPTANCE.",
       "bytes": 2374,
@@ -84460,9 +84468,9 @@
     {
       "path": "services/chair-direct-agent.js",
       "synopsis": "Direct Chair agent — talks + acts; human prose obeys Lumin Communication DNA (not theater).",
-      "bytes": 24498,
-      "mtime": "2026-07-20T00:18:33.192Z",
-      "indexed_at": "2026-07-20T00:18:34.468Z",
+      "bytes": 24576,
+      "mtime": "2026-07-20T00:21:00.520Z",
+      "indexed_at": "2026-07-20T00:21:01.557Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
