@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/memory-intelligence/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-20 — Outcomes can no longer be silently corrected: every overwrite is archived to `judgment_outcome_history` (`GET /decisions/:id/outcome-history`) before it happens |
+| **Last Updated** | 2026-07-20 — Cognitive Core account access is restricted to founder/operator roles; ordinary member JWTs can no longer read or mutate the founder's judgment data |
 
 ---
 **Status:** Active — Phase 1 Complete + Governance Hardening + Builder Integration  
@@ -483,6 +483,8 @@ Current truth:
 
 ## Agent Handoff Notes
 
+**2026-07-20 security gate:** Cognitive Core is founder-only today. `routes/cognitive-core-routes.js` now denies ordinary account JWT roles before any Era-1–10 handler runs while preserving founder/admin/operator JWTs and command-key automation. Focused authorization tests pass 3/3; full `npm test`, BuilderOS preflight, product-home verification, and SSOT checks pass.
+
 **Current state (2026-05-14, S2 complete):**
 Phase 1 fully built + extended. Phase 2 adoption (S2) now seeded:
 - All 7 tables + 2 views auto-apply on deploy
@@ -514,6 +516,7 @@ Phase 1 fully built + extended. Phase 2 adoption (S2) now seeded:
 
 | Date | File | What | Why |
 |---|---|---|---|
+| 2026-07-20 | `routes/cognitive-core-routes.js` + `tests/cognitive-core-routes-security.test.js` | Added a route-wide principal authorization gate after the existing JWT-or-command-key middleware. Account JWTs now require `founder_admin`, `admin`, or `operator`; command-key automation remains supported. | The founder-runtime auth middleware stores identity in `req.lifeosUser`, but Cognitive Core handlers read `req.user` and defaulted to user `1`. Any ordinary member JWT could therefore read or mutate Adam's private journal, outcomes, calibration, and sealed judgment packages. |
 | 2026-07-19 | `cognitive-core-perspective.js` + `lumin-chair-orchestrator.js` | Era-3 surfacing last-mile: judgment turn now returns `missing_info` + `consequences` in its payload/stack, `chairJudgmentResponse` forwards them into the founder-interface envelope (UI already read them but the orchestrator never emitted them — proactive missing-info + consequence sketch were journaled but invisible in chat), and the value-drift monitor now runs on **live-chat** outcome capture (not just the explicit `/outcomes` route), emitting `{drift:[]}` to match the UI + route shape. Verified live on `777d78ea2065`: judgment surfaces missing-info+consequences; a seeded principle + diverging outcome fired a medium-severity drift event with a Law-1 "value may be shifting" note. | Adam: "lets build v3" while CC audited Era-2 (clean pass, `0ec279cabf`). Era-3 core was already shipped; these were the invisible-in-chat gaps. |
 | 2026-07-20 | Prediction auto-capture + auto-resolve sweep: `services/cognitive-core-capture.js` + boundary wiring in `routes/lifeos-builderos-command-control-routes.js` + `/oracle/capture` `/oracle/sweep` `/oracle/build-decisions` in `routes/cognitive-core-routes.js` + `tests/cognitive-core-capture.test.js`. Every real founder ship/build turn is journaled as a `shipping` decision with a falsifiable `pass` prediction at a confidence **inferred from Adam's own language** (never the builder's); the resulting build job auto-resolves it via the oracle, deterministically keyed by `job_id` (terminal `pass_fail`+`commit_sha` → `ci` receipt), fail-closed while running. Fire-and-forget at the boundary — never affects the reply. Health adds `auto_capture[]`. 10/10 new capture tests; 29/29 oracle+capture; `node --check` clean on all 3 edited files. | Adam: chose **A** — "everything else is downstream of this one." The oracle worked but every row came from manual probes; real automatic capture of real ship/build decisions hadn't happened. This is the prediction half (Claude's correction: capture a falsifiable prediction, not a row count) on the correct subject. Let it fill from lived activity before B (Chair defers to gate) or C (temporal-KG). |
 | 2026-07-19 | Closed loop: `cognitive-core-oracle.js` + `20260719_cognitive_core_outcome_oracle.sql` + `/oracle/*` routes + `cognitive-core-oracle.test.js` | Outcome Oracle resolves decisions from REAL receipts (deploy/SENTRY/revert/CI) with provenance, fail-closed. Proper scoring: Murphy exact decomposition, anytime-valid e-value, Platt recalibration (identity until earned), Chow decide gate (proceed/verify/abstain, stake-aware, logged). `receipt_verified` outcome source. Health `loop_closed: true`, subject `principal_judgment`. 11/11 new tests; 68/68 cognitive-core suite. Depth on Era-1, NOT a new era. | Adam: "bring this to a ten" after external audit scored execution/evidence 3.5 (loop never closed). Convergent w/ POLARIS + Anamnesis: prove value by closing ONE loop with real math on the correct subject, not by adding surface. |
