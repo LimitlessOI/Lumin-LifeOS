@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T00:56:16.035Z",
+  "generated_at": "2026-07-20T01:27:48.176Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12026,
   "files": [
@@ -40297,9 +40297,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 643299,
-      "mtime": "2026-07-20T00:50:07.979Z",
-      "indexed_at": "2026-07-20T00:50:09.408Z"
+      "bytes": 643777,
+      "mtime": "2026-07-20T01:27:43.514Z",
+      "indexed_at": "2026-07-20T01:27:48.176Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -67712,9 +67712,9 @@
     {
       "path": "routes/lifeos-labs-longevity-routes.js",
       "synopsis": "Labs import + biological age + VO2 trend routes.",
-      "bytes": 1727,
-      "mtime": "2026-07-19T21:03:56.503Z",
-      "indexed_at": "2026-07-19T21:04:54.410Z",
+      "bytes": 2829,
+      "mtime": "2026-07-20T01:27:43.512Z",
+      "indexed_at": "2026-07-20T01:27:48.176Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -87582,9 +87582,9 @@
     {
       "path": "services/lifeos-labs-longevity.js",
       "synopsis": "Lab biomarker import + simple PhenoAge-style biological age + VO2 trend stub.",
-      "bytes": 4509,
-      "mtime": "2026-07-19T21:03:56.711Z",
-      "indexed_at": "2026-07-19T21:04:54.410Z",
+      "bytes": 4744,
+      "mtime": "2026-07-20T01:27:43.513Z",
+      "indexed_at": "2026-07-20T01:27:48.176Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

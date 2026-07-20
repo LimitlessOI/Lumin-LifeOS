@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-19 — GAP-FILL lab_results schema repair + presence-strip CI test. |
+| **Last Updated** | 2026-07-19 — Labs tip prove: command-key auth + surface memory_fallback db_error. |
 ---
 
 ## Founder conversations (2026-06-29)
@@ -1733,6 +1733,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
+| 2026-07-19 | **Labs tip-prove path.** `lifeos-labs-longevity-routes` now accepts JWT or command key (`createRequireLifeOSUserOrKey`) and resolves `adam`/numeric ids via user resolver; import returns `persisted: db|memory_fallback` + `db_error` so silent theater is gone. | Claude audit: labs prove needs JWT neither session had; tip still 401'd. | tip POST `/labs/import` with command key → `persisted:db` + GET `/me` | remove memory_fallback after N clean proves |
 | 2026-07-19 | **GAP-FILL lab_results schema repair + presence CI.** Migration `20260719b_lifeos_lab_results_repair.sql` (UUID→BIGINT when empty + biomarkers/drawn_at + psychometric_results). Exported `stripPresenceCoachClosers` + unit tests for ready-to-support. Era-3/4 tip audit receipt. | Parallel Claude audit: labs silently memory-fallback since 2026-07-18; presence strip uncovered by CI. | tip prove labs import persists after redeploy | ungate factory step done |
 | 2026-07-19 | **Chair UI — Era-3/4 judgment meta.** `lifeos-app` drawer shows missing-info, consequence watch signals, value drift, and Trust Me can_act tier when present on judgment replies. | Adam: go to EV4 — founder must *see* Extend/Trust signals. | tip prove meta on decision turn | wear + trust chips |
 | 2026-07-19 | **Chair presence lock v2.** Tip anger reply still said "ready to support" after v1 — expanded strip + PRESENCE LOCK forbid list. Receipt `products/receipts/LIFEOS_COMMS_PRESENCE_LOCK_PROOF.json`. | Adam: continue overnight — presence must not coach. | tip re-prove anger after redeploy | twin-matched voice depth |

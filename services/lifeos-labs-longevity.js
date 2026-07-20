@@ -53,19 +53,26 @@ export function createLabsLongevityService({ pool } = {}) {
         memory.set(String(uid), list.slice(0, 50));
         return row;
       }
+      if (uid == null) {
+        return { ...row, persisted: 'memory_fallback', db_error: 'invalid_user_id' };
+      }
       try {
         const r = await pool.query(
           `INSERT INTO lab_results (user_id, drawn_at, biomarkers, chronological_age)
            VALUES ($1, $2, $3::jsonb, $4) RETURNING *`,
           [uid, row.drawn_at, JSON.stringify(biomarkers), chronologicalAge],
         );
-        return r.rows[0];
-      } catch {
-        // No table yet — durable enough in-memory for session until migration lands.
+        return { ...r.rows[0], persisted: 'db' };
+      } catch (err) {
+        // Schema/FK miss — keep session usable but never pretend it persisted.
         const list = memory.get(String(uid)) || [];
         list.unshift(row);
         memory.set(String(uid), list.slice(0, 50));
-        return { ...row, persisted: 'memory_fallback' };
+        return {
+          ...row,
+          persisted: 'memory_fallback',
+          db_error: String(err?.message || err).slice(0, 240),
+        };
       }
     },
 
