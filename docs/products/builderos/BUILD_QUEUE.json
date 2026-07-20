@@ -1524,7 +1524,7 @@
     },
     {
       "id": "self-repair-tier3-2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/self-repair-calibration-sampling.js",
       "task": "Tier 3 calibration sampling: randomly samples a small set of recent verified claims for a human (or an independent AI auditor, e.g. Opus) to spot-check against reality. Sampling only -- never blocks, never requires review before anything proceeds (per doctrine Part 2, Tier 3 is 'never approval-based').",
       "spec": "Self-bootstrap `CREATE TABLE IF NOT EXISTS self_repair_calibration_samples (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), source_claim_id UUID, source_claim TEXT, sampled_at TIMESTAMPTZ NOT NULL DEFAULT now(), reviewed BOOLEAN NOT NULL DEFAULT false, review_result TEXT, review_note TEXT, reviewed_at TIMESTAMPTZ)`. Export async function sampleClaimsForCalibration(pool, { sampleSize = 5, sinceHours = 24 } = {}) that self-bootstraps this table AND separately self-bootstraps self_repair_provenance_ledger with EXACTLY this DDL, verbatim, no changes: `CREATE TABLE IF NOT EXISTS self_repair_provenance_ledger (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), claim TEXT NOT NULL, commit_sha TEXT, is_ancestor_of_tip BOOLEAN, verified_at TIMESTAMPTZ, epistemic_grade TEXT NOT NULL DEFAULT 'GUESS', result TEXT, created_at TIMESTAMPTZ NOT NULL DEFAULT now())` (this module may run before services/self-repair-provenance-ledger.js's own functions have ever been called). CRITICAL: the previous attempt (sealed content, content_sha256 64153d78e2360a1455aa00b38fd8b7bc6307b66f322565bb39cf08ae678586d1) invented a DIFFERENT, incompatible schema from memory instead of copying the real one verbatim (missing commit_sha and epistemic_grade entirely, added a nonexistent source_ids column) -- since this is CREATE TABLE IF NOT EXISTS, whichever module's version runs first against a fresh database wins, so a wrong schema here would silently corrupt the real table and break services/self-repair-provenance-ledger.js's own recordProvenanceClaim (which needs the epistemic_grade column) the moment this sampler happens to run first. Copy the DDL string above character-for-character, do not paraphrase or reconstruct it from memory. Then runs `SELECT id, claim FROM self_repair_provenance_ledger WHERE result = 'verified' AND verified_at >= now() - ($1 || ' hours')::interval ORDER BY random() LIMIT $2` with params [String(sinceHours), sampleSize], inserts one row per result into self_repair_calibration_samples (source_claim_id=id, source_claim=claim), and returns the inserted rows. If zero eligible claims exist, returns an empty array without error. Export async function recordCalibrationReview(pool, { sample_id, review_result, review_note = null }) that updates the row: reviewed=true, review_result, review_note, reviewed_at=now(), WHERE id = sample_id, returns the updated row or null if sample_id not found. Export async function getPendingCalibrationSamples(pool, { limit = 50 } = {}) returning rows where reviewed=false, most recent first.",
@@ -1556,30 +1556,9 @@
       "blueprint_step_id": "self-repair-tier3-2",
       "mission_id": "PRODUCT-builderos",
       "revive_note": "2026-07-20: independent re-read of the shipped file found a hallucinated, schema-incompatible CREATE TABLE for self_repair_provenance_ledger (missing commit_sha/epistemic_grade, phantom source_ids column) instead of the real DDL -- same bug class as tier3-1, cross-file consistency, not catchable by any single-file SENTRY check. Reset to pending with the exact DDL pasted verbatim plus a file_contains guard on the distinguishing epistemic_grade column; cleared the exact_inputs/exactness seal to force fresh regeneration rather than replay of the broken sealed content.",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/builderos/twins/steps/self-repair-tier3-2.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-20T21:05:44.368Z",
-        "shipped_at": "2026-07-20T21:05:44.368Z",
-        "commit_sha": null,
-        "content_sha256": "820a29100dee442e3773439d2f9fd56c3e5d005afc13796f38b6effc578eff39",
-        "target_file": "services/self-repair-calibration-sampling.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/self-repair-calibration-sampling.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/builderos/twins/steps/self-repair-tier3-2.exact",
-          "content_sha256": "820a29100dee442e3773439d2f9fd56c3e5d005afc13796f38b6effc578eff39"
-        }
-      },
-      "shipped_at": "2026-07-20T21:05:44.368Z"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-20T21:05:51.035Z",
+      "commit_sha": "3bb6cf5e58d1d524a4f7ed77e003d1e58b0347b7"
     }
   ],
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
