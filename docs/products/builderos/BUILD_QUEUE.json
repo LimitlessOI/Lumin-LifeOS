@@ -1343,7 +1343,31 @@
       ],
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "self-repair-tier1-2",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/builderos/twins/steps/self-repair-tier1-2.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-20T20:32:53.018Z",
+        "shipped_at": "2026-07-20T20:32:53.018Z",
+        "commit_sha": null,
+        "content_sha256": "da301bc21845971f937171257c2c5f80d3c20080eb0fe7fa4c4892ae601e59a2",
+        "target_file": "services/self-repair-failure-router.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/self-repair-failure-router.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/builderos/twins/steps/self-repair-tier1-2.exact",
+          "content_sha256": "da301bc21845971f937171257c2c5f80d3c20080eb0fe7fa4c4892ae601e59a2"
+        }
+      },
+      "shipped_at": "2026-07-20T20:32:53.018Z"
     },
     {
       "id": "self-repair-tier1-3",
