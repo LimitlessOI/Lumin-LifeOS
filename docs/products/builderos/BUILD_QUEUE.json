@@ -908,9 +908,9 @@
       "task": "verify API readiness",
       "spec": "Ensure HTTP 200 and expected responses; verify readiness for API endpoints adjustments.",
       "depends_on": [
-        "builderos-step1",
         "builderos-step7"
       ],
+      "dependency_note": "2026-07-20: removed builderos-step1 from depends_on -- spurious link, not a real ordering requirement. step1's target is services/mission-ledger.js (createCommitment columns), completely unrelated to this step's target (routes/testing-response.js, a standalone readiness-check route). step1 is permanently demoted (revive_exhausted after repeated codegen_stub_detected failures) and will never become done, so the stale dependency was silently making this step permanently unshippable through the real governed loop -- confirmed live: POST /factory/ship-queue succeeds for this step directly (SENTRY passes), but runGovernedAutonomousShipOnce (which respects depends_on) reported no_shippable_steps because of exactly this link.",
       "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
