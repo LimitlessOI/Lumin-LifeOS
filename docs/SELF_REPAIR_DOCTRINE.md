@@ -62,7 +62,9 @@ Six append-only stores. Each row epistemically stamped (KNOW/THINK/GUESS + confi
 
 Plus one Tier-0/1 **deterministic pre-disk resolution gate** (non-LLM, cheap): import/dependency/**founder-lane mount** resolution checked before a change is trusted — catches exactly the 2026-07-20 bug class (LifeRE sales-coach 404, phantom deps) with no model call. Detector-first; blocks only on the irreversible set per Part 1.
 
-Plus one **SENTRY chaos-canary step** (closes gap #1 above): submit a deliberately broken diff through the real ship path on a schedule and assert SENTRY rejects it. Needs no historical data — pulled into Era 1 alongside the six stores and the pre-disk gate, seven steps total, each independently SENTRY-proven.
+Plus one **SENTRY chaos-canary step** (closes gap #1 above): submit a deliberately broken diff through the real ship path on a schedule and assert SENTRY rejects it. Needs no historical data — pulled into Era 1 alongside the six stores and the pre-disk gate, eight steps total, each independently SENTRY-proven.
+
+**Status (2026-07-20):** all eight Era-1 steps (`self-repair-era1-1` through `-8`, `docs/products/builderos/BUILD_QUEUE.json`) shipped and independently verified — real content read directly from `origin/main`, not accepted on SENTRY-pass alone. Six real runtime bugs were found this way (missing table-bootstrap, a Postgres multi-statement protocol violation, and the chaos-canary itself silently always failing its own check) and fixed. Full writeup: `docs/products/builderos/PRODUCT_HOME.md` Change Receipts, 2026-07-20. Tiers 1-3 remain intentionally unbuilt per this Part's counter-warning — Chair consensus (`products/receipts/CHAIR_JUDGMENT_SELF_REPAIR_TIER1_SCOPE_*.json`) confirmed holding until Tier 0 has accumulated real production data, rather than building ahead of it.
 
 ## Part 4 — What is genuinely ours vs. the industry
 
