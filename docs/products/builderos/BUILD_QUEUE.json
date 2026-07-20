@@ -1451,7 +1451,7 @@
     },
     {
       "id": "self-repair-tier2-2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/self-repair-secret-deploy-gate.js",
       "task": "Tier 2 narrow hard gate: secret/deploy-change detector. Non-LLM, cheap, deterministic pattern match (per doctrine Part 0 gap #3 -- deterministic checks are unrationalizable by any model, a genuinely uncorrelated failure mode from an AI reviewer). Detects and logs only -- not wired into any live blocking path in this step, same scoping discipline as the rest of this build.",
       "spec": "Self-bootstrap `CREATE TABLE IF NOT EXISTS self_repair_secret_deploy_log (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), target_file TEXT NOT NULL, matched_patterns JSONB NOT NULL, actor TEXT, authorized BOOLEAN NOT NULL DEFAULT false, override_reason TEXT, created_at TIMESTAMPTZ NOT NULL DEFAULT now())`. Export pure function detectSecretOrDeployChange({ target_file, diff_text = '' }) that checks target_file and diff_text against a fixed, explicit list of sensitive patterns: target_file matching any of ['.env', 'railway.json', 'Dockerfile', 'package.json'] (exact basename match, use node:path basename) OR target_file starting with 'config/' and containing 'secret' or 'key' (case-insensitive) in its filename, OR diff_text containing the literal substring 'process.env.' followed by a variable name that looks like a secret (matches /process\\.env\\.[A-Z0-9_]*(KEY|SECRET|TOKEN|PASSWORD)[A-Z0-9_]*/i). Returns { sensitive: boolean, matched_patterns: string[] } listing which specific pattern(s) matched (e.g. 'target_file:railway.json', 'diff:process.env.SECRET_PATTERN'). Export async function recordSecretDeployEvent(pool, { target_file, matched_patterns, actor = null, authorized = false, override_reason = null }) that inserts one row (matched_patterns stored as JSONB array). Export async function getRecentSecretDeployEvents(pool, { limit = 50 } = {}) returning the most recent rows ordered by created_at DESC. CRITICAL, learned from Era 1 (Tier 0): EVERY exported function that touches a table must independently run `await pool.query('CREATE TABLE IF NOT EXISTS ... (...)')` as its own, separate, no-parameters pool.query() call before any parameterized query in that same function -- do not assume another function already created the table, and do not combine the CREATE TABLE with a parameterized query in one pool.query(text, values) call (PostgreSQL's prepared-statement protocol rejects multiple statements in one call with params). Three Era-1 steps shipped broken this exact way despite passing SENTRY's exports_smoke (which only checks export names exist, never that the code runs) -- do not repeat it.",
@@ -1481,30 +1481,9 @@
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "self-repair-tier2-2",
       "mission_id": "PRODUCT-builderos",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/builderos/twins/steps/self-repair-tier2-2.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-20T20:38:10.637Z",
-        "shipped_at": "2026-07-20T20:38:10.637Z",
-        "commit_sha": null,
-        "content_sha256": "a0bb712b6525ca3e0026753c70ab3d4132cd54075a5d950cd94f86b3734fff2e",
-        "target_file": "services/self-repair-secret-deploy-gate.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/self-repair-secret-deploy-gate.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/builderos/twins/steps/self-repair-tier2-2.exact",
-          "content_sha256": "a0bb712b6525ca3e0026753c70ab3d4132cd54075a5d950cd94f86b3734fff2e"
-        }
-      },
-      "shipped_at": "2026-07-20T20:38:10.637Z"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-20T20:38:18.249Z",
+      "commit_sha": "b460c4ac490e638167e08335d7387d0e8013bbde"
     },
     {
       "id": "self-repair-tier3-1",
