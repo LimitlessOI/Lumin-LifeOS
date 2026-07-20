@@ -1277,13 +1277,13 @@
     },
     {
       "id": "self-repair-tier1-1",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/self-repair-quarantine.js",
       "task": "Tier 1 self-quarantine: machine-only detector (no human, never blocks by itself -- Gate Charter Part 1 detect-and-route default) that decides whether a target has earned quarantine from repeated failure.",
       "spec": "Self-bootstrap `CREATE TABLE IF NOT EXISTS self_repair_quarantine_state (target_path TEXT PRIMARY KEY, quarantined BOOLEAN NOT NULL DEFAULT false, reason TEXT, quarantined_at TIMESTAMPTZ, released_at TIMESTAMPTZ, updated_at TIMESTAMPTZ NOT NULL DEFAULT now())`. Export pure function shouldQuarantineTarget({ reputation, recentFailureCount }) -- reputation is the row shape returned by getTargetReputation from services/self-repair-target-reputation.js (import and reuse that function, do not reimplement reputation lookup), recentFailureCount is a plain number. Returns { quarantine: boolean, reason: string|null }: quarantine=true if (reputation && reputation.hardness_score >= 0.75 && reputation.attempts >= 3) OR recentFailureCount >= 3; else quarantine=false, reason=null. Export async function evaluateQuarantine(pool, { target_path }) that calls getTargetReputation(pool, {target_path}) (imported, reused), calls shouldQuarantineTarget with the result, upserts the decision into self_repair_quarantine_state (INSERT ... ON CONFLICT (target_path) DO UPDATE, setting quarantined/reason/updated_at, and quarantined_at=now() only when transitioning from not-quarantined to quarantined), and returns the decision. Export async function isTargetQuarantined(pool, { target_path }) returning the current row or null if never evaluated. Export async function releaseQuarantine(pool, { target_path, reason }) that sets quarantined=false, released_at=now(), reason=the given release reason, on the existing row (no-op / returns null if no row exists for that target -- do not insert a fresh row on release). This module is a pure detector: it must not call any dispatch/ship function, must not modify any BUILD_QUEUE.json, must not import governed-autonomous-shipping-loop.js or product-build-orchestrator.js -- it only reads Tier-0 data and records its own decision for a future caller to consult. CRITICAL, learned from Era 1 (Tier 0): EVERY exported function that touches a table must independently run `await pool.query('CREATE TABLE IF NOT EXISTS ... (...)')` as its own, separate, no-parameters pool.query() call before any parameterized query in that same function -- do not assume another function already created the table, and do not combine the CREATE TABLE with a parameterized query in one pool.query(text, values) call (PostgreSQL's prepared-statement protocol rejects multiple statements in one call with params). Three Era-1 steps shipped broken this exact way despite passing SENTRY's exports_smoke (which only checks export names exist, never that the code runs) -- do not repeat it.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "shouldQuarantineTarget",
         "evaluateQuarantine",
@@ -1308,19 +1308,11 @@
       ],
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "self-repair-tier1-1",
-      "mission_id": "PRODUCT-builderos",
-      "last_attempt_at": "2026-07-20T20:32:40.865Z",
-      "last_error": "NOT_ON_BLUEPRINT",
-      "commit_sha": null,
-      "built_sha": null,
-      "proof": null,
-      "failure_signature": "NOT_ON_BLUEPRINT",
-      "same_signature_count": 1,
-      "escalation_class": "governance_block"
+      "mission_id": "PRODUCT-builderos"
     },
     {
       "id": "self-repair-tier1-2",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/self-repair-failure-router.js",
       "task": "Tier 1 failure-signature router: machine-only detector that routes a new failure to matching prior root-cause chains and negative-knowledge entries, so the same shape of bug isn't re-investigated from scratch.",
       "spec": "No new table -- this module is read-only against Tier-0 stores. Export async function routeFailure(pool, { failure_signature, target_path, approach_signature }) that calls queryRootCauseChains(pool, { bug_shape_signature: failure_signature }) from services/self-repair-root-cause-chains.js (import and reuse, do not reimplement the query) and hasFailedApproach(pool, { target: target_path, approach_signature }) from services/self-repair-negative-knowledge.js (import and reuse). Returns { action: 'AVOID_KNOWN_BAD'|'RETRY_KNOWN_FIX'|'NOVEL_INVESTIGATE', matched_negative_knowledge: object|null, matched_chains: array, confidence: number }. Decision logic: if hasFailedApproach returns a non-null row, action='AVOID_KNOWN_BAD', confidence = Math.min(0.95, 0.5 + row.times_seen * 0.1). Else if queryRootCauseChains returns 1 or more prior chains for the same bug_shape_signature, action='RETRY_KNOWN_FIX', confidence=0.6 (there's a known chain, but this specific approach hasn't failed before, worth trying the documented fix). Else action='NOVEL_INVESTIGATE', confidence=0, matched_chains=[]. Pure read-and-decide -- must not write to any table, must not call any dispatch/ship function. CRITICAL, learned from Era 1 (Tier 0): EVERY exported function that touches a table must independently run `await pool.query('CREATE TABLE IF NOT EXISTS ... (...)')` as its own, separate, no-parameters pool.query() call before any parameterized query in that same function -- do not assume another function already created the table, and do not combine the CREATE TABLE with a parameterized query in one pool.query(text, values) call (PostgreSQL's prepared-statement protocol rejects multiple statements in one call with params). Three Era-1 steps shipped broken this exact way despite passing SENTRY's exports_smoke (which only checks export names exist, never that the code runs) -- do not repeat it.",
@@ -1343,10 +1335,7 @@
       ],
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "self-repair-tier1-2",
-      "mission_id": "PRODUCT-builderos",
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-20T20:33:00.569Z",
-      "commit_sha": "d2f691ee5e358a58f7b481454566db59b5d1d953"
+      "mission_id": "PRODUCT-builderos"
     },
     {
       "id": "self-repair-tier1-3",
@@ -1379,7 +1368,31 @@
       ],
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "self-repair-tier1-3",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/builderos/twins/steps/self-repair-tier1-3.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-20T20:33:58.001Z",
+        "shipped_at": "2026-07-20T20:33:58.001Z",
+        "commit_sha": null,
+        "content_sha256": "4cdd23f657539d851189f22a744f2d7d510cbc5669485285ddf0b4d3fb95ea2e",
+        "target_file": "services/self-repair-pattern-propagation.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/self-repair-pattern-propagation.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/builderos/twins/steps/self-repair-tier1-3.exact",
+          "content_sha256": "4cdd23f657539d851189f22a744f2d7d510cbc5669485285ddf0b4d3fb95ea2e"
+        }
+      },
+      "shipped_at": "2026-07-20T20:33:58.001Z"
     },
     {
       "id": "self-repair-tier2-1",
