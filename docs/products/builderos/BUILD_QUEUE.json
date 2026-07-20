@@ -1041,7 +1041,7 @@
     },
     {
       "id": "self-repair-era1-2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/self-repair-root-cause-chains.js",
       "task": "Implement queryable root-cause-chain storage: symptom -> investigation -> cause -> fix -> verification, searchable by a bug-shape signature so 'have we seen this shape before?' is answerable.",
       "spec": "Self-bootstrap its own table: `CREATE TABLE IF NOT EXISTS self_repair_root_cause_chains (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), symptom TEXT NOT NULL, investigation JSONB NOT NULL DEFAULT '[]', cause TEXT, fix TEXT, verification TEXT, bug_shape_signature TEXT NOT NULL, created_at TIMESTAMPTZ NOT NULL DEFAULT now())` (self-bootstrap pattern, see services/account-manager.js). Export async function recordRootCauseChain(pool, { symptom, investigation, cause, fix, verification, bug_shape_signature }) that inserts a row (investigation is an array of strings, stored as JSONB). Export async function queryRootCauseChains(pool, { bug_shape_signature, limit = 10 }) that returns prior chains matching the same bug_shape_signature, most recent first -- this is the 'have we seen this before' query. bug_shape_signature must be normalized the same way services/governed-autonomous-shipping-loop.js's failureSignature() normalizes error signatures (strip hex ids and numbers so similar shapes match) -- import and reuse failureSignature from services/governed-autonomous-shipping-loop.js rather than reimplementing it.",
@@ -1065,11 +1065,14 @@
       ],
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "self-repair-era1-2",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-20T18:51:39.102Z",
+      "commit_sha": "bbde5fbf94cd5a37a0349b8f587ab71d1cc18adc"
     },
     {
       "id": "self-repair-era1-3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/self-repair-fix-durability.js",
       "task": "Implement the fix-durability clock: track whether a shipped fix later re-breaks, to detect illusory fixes.",
       "spec": "Self-bootstrap: `CREATE TABLE IF NOT EXISTS self_repair_fix_durability (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), fix_id TEXT NOT NULL, target TEXT NOT NULL, shipped_at TIMESTAMPTZ NOT NULL, rebroke_at TIMESTAMPTZ, rebreak_count INTEGER NOT NULL DEFAULT 0, created_at TIMESTAMPTZ NOT NULL DEFAULT now())`. Export async function recordFixShipped(pool, { fix_id, target, shipped_at }) that inserts a new row (shipped_at defaults to now() if omitted). Export async function recordRebreak(pool, { fix_id, target }) that finds the most recent row for that fix_id+target with rebroke_at IS NULL, sets rebroke_at=now(), increments rebreak_count, and returns the computed half_life in milliseconds (rebroke_at - shipped_at); if no matching un-rebroken row exists, insert a fresh row with rebroke_at already set and rebreak_count=1. Export async function getFixDurability(pool, { target, limit = 20 }) returning rows for a target ordered by shipped_at DESC, each with a computed half_life_ms field (rebroke_at - shipped_at in ms, or null if never rebroken).",
@@ -1102,10 +1105,10 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-07-20T18:53:21.943Z",
-        "shipped_at": "2026-07-20T18:53:21.943Z",
+        "sealed_at": "2026-07-20T18:51:49.858Z",
+        "shipped_at": "2026-07-20T18:51:49.858Z",
         "commit_sha": null,
-        "content_sha256": "26546ab549790e77498fd33e329cea9cec6a3585a62fc4a1a7da18622c2276d2",
+        "content_sha256": "2a0706396c5504c1d012eb384a88de44649399b8e187b1c53b8c220a3f529c0b",
         "target_file": "services/self-repair-fix-durability.js",
         "reverse": {
           "mode": "delete_file",
@@ -1116,10 +1119,12 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/builderos/twins/steps/self-repair-era1-3.exact",
-          "content_sha256": "26546ab549790e77498fd33e329cea9cec6a3585a62fc4a1a7da18622c2276d2"
+          "content_sha256": "2a0706396c5504c1d012eb384a88de44649399b8e187b1c53b8c220a3f529c0b"
         }
       },
-      "shipped_at": "2026-07-20T18:53:21.943Z"
+      "shipped_at": "2026-07-20T18:53:28.515Z",
+      "shipped_via": "governed_ship_queue",
+      "commit_sha": "527113074ff3bbd8690a54180c4b885c49f5c1b7"
     },
     {
       "id": "self-repair-era1-4",
