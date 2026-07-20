@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T21:02:25.079Z",
+  "generated_at": "2026-07-20T21:05:10.896Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12074,
+  "file_count": 12075,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -90318,6 +90318,13 @@
       "bytes": 2440,
       "mtime": "2026-07-20T19:21:21.317Z",
       "indexed_at": "2026-07-20T19:21:21.317Z"
+    },
+    {
+      "path": "services/self-repair-quarantine.js",
+      "synopsis": "Exports shouldQuarantineTarget — services/self-repair-quarantine.js.",
+      "bytes": 2569,
+      "mtime": "2026-07-20T21:05:10.896Z",
+      "indexed_at": "2026-07-20T21:05:10.896Z"
     },
     {
       "path": "services/self-repair-root-cause-chains.js",

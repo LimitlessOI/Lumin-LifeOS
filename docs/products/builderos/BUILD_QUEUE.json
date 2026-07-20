@@ -1309,11 +1309,35 @@
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "self-repair-tier1-1",
       "mission_id": "PRODUCT-builderos",
-      "revive_note": "2026-07-20: blocked twice on github_commit_failed_after_local_ship -- transient network/DNS failure (monitor log showed 'Could not resolve host: github.com' during this dispatch window), not a code or spec problem. Reset to pending for a clean retry."
+      "revive_note": "2026-07-20: blocked twice on github_commit_failed_after_local_ship -- transient network/DNS failure (monitor log showed 'Could not resolve host: github.com' during this dispatch window), not a code or spec problem. Reset to pending for a clean retry.",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/builderos/twins/steps/self-repair-tier1-1.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-20T21:05:07.971Z",
+        "shipped_at": "2026-07-20T21:05:07.971Z",
+        "commit_sha": null,
+        "content_sha256": "ab5cdceeb796e47a675bfc7ab4a19ec1128f952c6fc2fd4c0f8edc3367246291",
+        "target_file": "services/self-repair-quarantine.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/self-repair-quarantine.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/builderos/twins/steps/self-repair-tier1-1.exact",
+          "content_sha256": "ab5cdceeb796e47a675bfc7ab4a19ec1128f952c6fc2fd4c0f8edc3367246291"
+        }
+      },
+      "shipped_at": "2026-07-20T21:05:07.971Z"
     },
     {
       "id": "self-repair-tier1-2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/self-repair-failure-router.js",
       "task": "Tier 1 failure-signature router: machine-only detector that routes a new failure to matching prior root-cause chains and negative-knowledge entries, so the same shape of bug isn't re-investigated from scratch.",
       "spec": "This module touches NO table of its own and must contain ZERO occurrences of the literal string 'CREATE TABLE' anywhere in the file -- it is read-only against Tier-0 stores via the two imported functions below, each of which already bootstraps its own table internally. Export async function routeFailure(pool, { failure_signature, target_path, approach_signature }) that calls queryRootCauseChains(pool, { bug_shape_signature: failure_signature }) from services/self-repair-root-cause-chains.js (import and reuse, do not reimplement the query) and hasFailedApproach(pool, { target: target_path, approach_signature }) from services/self-repair-negative-knowledge.js (import and reuse). Returns { action: 'AVOID_KNOWN_BAD'|'RETRY_KNOWN_FIX'|'NOVEL_INVESTIGATE', matched_negative_knowledge: object|null, matched_chains: array, confidence: number }. Decision logic: if hasFailedApproach returns a non-null row, action='AVOID_KNOWN_BAD', confidence = Math.min(0.95, 0.5 + row.times_seen * 0.1). Else if queryRootCauseChains returns 1 or more prior chains for the same bug_shape_signature, action='RETRY_KNOWN_FIX', confidence=0.6 (there's a known chain, but this specific approach hasn't failed before, worth trying the documented fix). Else action='NOVEL_INVESTIGATE', confidence=0, matched_chains=[]. Pure read-and-decide -- must not write to any table, must not call any dispatch/ship function. CRITICAL: the previous attempt (commit d2f691ee5e358a58f7b481454566db59b5d1d953) included a spurious, malformed `await pool.query('CREATE TABLE IF NOT EXISTS ... (...)');` at the top of routeFailure -- literal ellipsis characters, not real SQL -- which throws a Postgres syntax error on the very first real call, despite this module needing no table at all per this spec. Do not include any pool.query('CREATE TABLE...') call anywhere in this file.",
@@ -1337,7 +1361,14 @@
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "self-repair-tier1-2",
       "mission_id": "PRODUCT-builderos",
-      "revive_note": "2026-07-20: independently executing the shipped file's logic against a static read found a malformed 'CREATE TABLE IF NOT EXISTS ... (...)' call with literal ellipsis placeholder text instead of real SQL (or no call at all, since no table was ever required) -- would throw a syntax error on the first real call despite passing exports_smoke. Root cause traced to my own spec's boilerplate CRITICAL warning containing an illustrative '...' DDL fragment that the model copied literally when it had no real table to fall back on. Reset to pending with an explicit zero-CREATE-TABLE requirement."
+      "revive_note": "2026-07-20: independently executing the shipped file's logic against a static read found a malformed 'CREATE TABLE IF NOT EXISTS ... (...)' call with literal ellipsis placeholder text instead of real SQL (or no call at all, since no table was ever required) -- would throw a syntax error on the first real call despite passing exports_smoke. Root cause traced to my own spec's boilerplate CRITICAL warning containing an illustrative '...' DDL fragment that the model copied literally when it had no real table to fall back on. Reset to pending with an explicit zero-CREATE-TABLE requirement.",
+      "pre_existing": true,
+      "shipped_via": "pre_existing_artifact_proof",
+      "shipped_at": "2026-07-20T21:04:39.011Z",
+      "last_error": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null
     },
     {
       "id": "self-repair-tier1-3",
