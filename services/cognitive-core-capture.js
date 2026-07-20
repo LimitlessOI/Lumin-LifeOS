@@ -105,7 +105,7 @@ export function detectShipDecision(text = '') {
   if (EXPLICIT_SHIP.test(t)) return 'ship';
   // A question about a build ("what did the last build do?", "did it ship?") is a status
   // recall, not a decision to build — don't capture it as a falsifiable prediction.
-  if (/\?\s$/.test(t) && /\b(did|has|have|was|what|how|is|are|when|status)\b/i.test(t)) return null;
+  if (/\?\s*$/.test(t) && /\b(did|has|have|was|what|how|is|are|when|status)\b/i.test(t)) return null;
   if (BUILD_VERB.test(t)) return 'build';
   return null;
 }

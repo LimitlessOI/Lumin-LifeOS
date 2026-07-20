@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/memory-intelligence/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-20 — Closed a real outcome-provenance forgery hole: `receipt_verified` can no longer be claimed without a matching real receipt row |
+| **Last Updated** | 2026-07-20 — Applied the capture question-guard regex fix that an earlier commit (`3fa6594f0b`) claimed but never actually made (that commit's diff touched only a generated index file, zero functional change) — caught by independently re-diffing the claimed commit rather than trusting its message |
 
 ---
 **Status:** Active — Phase 1 Complete + Governance Hardening + Builder Integration  

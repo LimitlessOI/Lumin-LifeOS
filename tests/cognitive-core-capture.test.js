@@ -58,6 +58,19 @@ test('detectShipDecision classifies ship vs build vs neither', () => {
   assert.equal(detectShipDecision(''), null);
 });
 
+test('detectShipDecision: a status question containing a ship-verb word is NOT captured as a prediction (regression — was silently uncaught before)', () => {
+  // "did it ship?" contains the BUILD_VERB word "ship", so unlike
+  // "what did the last build do?" (which never hits BUILD_VERB at all),
+  // this specifically exercises the question-guard itself. The guard's
+  // regex must match the end of an already-trimmed string (no trailing
+  // whitespace can ever be present post-.trim()) — a guard requiring one
+  // trailing space can never fire, silently letting status questions get
+  // journaled as real, falsifiable build predictions.
+  assert.equal(detectShipDecision('did it ship?'), null);
+  assert.equal(detectShipDecision('has it shipped?'), null);
+  assert.equal(detectShipDecision('is the build done?'), null);
+});
+
 test('verdictFromBuildJob maps terminal jobs; fail-closed while running/unknown', () => {
   assert.equal(verdictFromBuildJob({ status: 'completed', result: { pass_fail: 'PASS' } }), 'pass');
   assert.equal(verdictFromBuildJob({ status: 'failed', result: { pass_fail: 'FAIL' } }), 'fail');
