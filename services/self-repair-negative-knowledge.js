@@ -4,6 +4,18 @@
 import { Pool } from 'pg';
 
 export async function recordFailedApproach(pool, { target, approach_signature, failed_because }) {
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS self_repair_negative_knowledge (
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+      target TEXT NOT NULL,
+      approach_signature TEXT NOT NULL,
+      failed_because TEXT NOT NULL,
+      first_seen TIMESTAMPTZ NOT NULL DEFAULT now(),
+      times_seen INTEGER NOT NULL DEFAULT 1,
+      UNIQUE(target, approach_signature)
+    )
+  `);
+
   const query = `
     INSERT INTO self_repair_negative_knowledge (target, approach_signature, failed_because)
     VALUES ($1, $2, $3)
@@ -14,6 +26,18 @@ export async function recordFailedApproach(pool, { target, approach_signature, f
 }
 
 export async function hasFailedApproach(pool, { target, approach_signature }) {
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS self_repair_negative_knowledge (
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+      target TEXT NOT NULL,
+      approach_signature TEXT NOT NULL,
+      failed_because TEXT NOT NULL,
+      first_seen TIMESTAMPTZ NOT NULL DEFAULT now(),
+      times_seen INTEGER NOT NULL DEFAULT 1,
+      UNIQUE(target, approach_signature)
+    )
+  `);
+
   const query = `
     SELECT * FROM self_repair_negative_knowledge
     WHERE target = $1 AND approach_signature = $2;

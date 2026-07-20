@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T19:12:46.540Z",
+  "generated_at": "2026-07-20T19:13:48.382Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12066,
   "files": [
@@ -90233,9 +90233,9 @@
     {
       "path": "services/self-repair-negative-knowledge.js",
       "synopsis": "Exports recordFailedApproach — services/self-repair-negative-knowledge.js.",
-      "bytes": 889,
-      "mtime": "2026-07-20T18:56:32.017Z",
-      "indexed_at": "2026-07-20T18:56:32.017Z"
+      "bytes": 1677,
+      "mtime": "2026-07-20T19:13:48.382Z",
+      "indexed_at": "2026-07-20T19:13:48.382Z"
     },
     {
       "path": "services/self-repair-predisk-gate.js",
