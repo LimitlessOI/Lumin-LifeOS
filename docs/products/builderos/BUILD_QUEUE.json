@@ -1488,7 +1488,7 @@
     },
     {
       "id": "self-repair-tier3-1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/self-repair-trust-dashboard.js",
       "task": "Tier 3 trust dashboard: a PULL view only (per doctrine Part 2, Tier 3 is 'never approval-based') -- aggregates existing Tier 0/1 data into one read-only snapshot for a human or auditor to pull on demand. Never gates, never requires anyone to review it.",
       "spec": "No new table for storage -- this module only reads existing tables directly with raw SQL plus reuses existing Tier-0/1 exported read functions where they already exist. Export async function getTopHardestTargets(pool, { limit = 10 } = {}) that runs `SELECT target_path, attempts, failures, hardness_score FROM self_repair_target_reputation ORDER BY hardness_score DESC, attempts DESC LIMIT $1`, self-bootstrapping the table first with EXACTLY this DDL, verbatim, no changes: `CREATE TABLE IF NOT EXISTS self_repair_target_reputation (target_path TEXT PRIMARY KEY, attempts INTEGER NOT NULL DEFAULT 0, failures INTEGER NOT NULL DEFAULT 0, models_tried JSONB NOT NULL DEFAULT '[]', hardness_score NUMERIC NOT NULL DEFAULT 0, updated_at TIMESTAMPTZ NOT NULL DEFAULT now())` -- and returns the rows (empty array if table has no rows yet). CRITICAL: the previous attempt (commit 419d957352c1c0ebe5b941671aeaac0b83d48190) invented a DIFFERENT, incompatible schema from memory instead of copying the real one verbatim (missing the models_tried column entirely, wrong types, wrong column name for updated_at) -- since this is CREATE TABLE IF NOT EXISTS, whichever module's version runs first against a fresh database wins, so a wrong schema here would silently corrupt the real table and break services/self-repair-target-reputation.js's own recordAttempt (which needs the models_tried column) the moment this dashboard function happens to run first. Copy the DDL string above character-for-character, do not paraphrase or reconstruct it from memory. Export async function getTrustDashboardSnapshot(pool, { limit = 20 } = {}) that calls, in parallel via Promise.all: getProvenanceLedger(pool, { limit }) from services/self-repair-provenance-ledger.js, getTopHardestTargets(pool, { limit }) (the function defined above, in this same file), getDecisionLog(pool, { limit }) from services/self-repair-decision-log.js, getPendingPropagationCandidates(pool, { limit }) from services/self-repair-pattern-propagation.js -- import and reuse all of these, do not reimplement any of their queries. Wrap each call in its own try/catch so one failing store does not break the whole snapshot -- on error for any one source, its field is an empty array, not a thrown error. Returns { recent_claims, hardest_targets, recent_decisions, pending_propagation_candidates, generated_at: new Date().toISOString() }.",
@@ -1518,30 +1518,9 @@
       "blueprint_step_id": "self-repair-tier3-1",
       "mission_id": "PRODUCT-builderos",
       "revive_note": "2026-07-20: independent re-read of the shipped file found a hallucinated, schema-incompatible CREATE TABLE for self_repair_target_reputation (missing models_tried, wrong types) instead of the real DDL from services/self-repair-target-reputation.js -- a cross-file consistency bug no single-file SENTRY check (exports_smoke, file_contains) could have caught alone, only found by reading both files together. Reset to pending with the exact DDL pasted verbatim into the spec plus a file_contains guard on the distinguishing models_tried column.",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/builderos/twins/steps/self-repair-tier3-1.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-20T21:05:26.145Z",
-        "shipped_at": "2026-07-20T21:05:26.145Z",
-        "commit_sha": null,
-        "content_sha256": "ac33d1a9f56350ab5658a09677d9ebe0e2dfd9931cc8d41a8417ef2f32f9d664",
-        "target_file": "services/self-repair-trust-dashboard.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/self-repair-trust-dashboard.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/builderos/twins/steps/self-repair-tier3-1.exact",
-          "content_sha256": "ac33d1a9f56350ab5658a09677d9ebe0e2dfd9931cc8d41a8417ef2f32f9d664"
-        }
-      },
-      "shipped_at": "2026-07-20T21:05:26.145Z"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-20T21:05:32.286Z",
+      "commit_sha": "156bb267db5cedf3297e177abab6685e9e9230ef"
     },
     {
       "id": "self-repair-tier3-2",
