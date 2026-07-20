@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T08:53:18.611Z",
+  "generated_at": "2026-07-20T08:59:53.082Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12056,
   "files": [
@@ -30409,9 +30409,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 28743,
-      "mtime": "2026-07-20T07:22:45.275Z",
-      "indexed_at": "2026-07-20T07:28:47.516Z",
+      "bytes": 29294,
+      "mtime": "2026-07-20T08:59:53.082Z",
+      "indexed_at": "2026-07-20T08:59:53.082Z",
       "synopsis_index_only": true
     },
     {
@@ -40389,9 +40389,9 @@
     {
       "path": "docs/products/lifere/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeRE",
-      "bytes": 38575,
-      "mtime": "2026-07-20T07:22:45.657Z",
-      "indexed_at": "2026-07-20T07:28:47.516Z"
+      "bytes": 40291,
+      "mtime": "2026-07-20T08:59:53.082Z",
+      "indexed_at": "2026-07-20T08:59:53.082Z"
     },
     {
       "path": "docs/products/limitlessos/conversations/2026-06-29-founder-ecosystem-session.md",
@@ -68011,9 +68011,9 @@
     {
       "path": "routes/lifere-sales-coaching-routes.js",
       "synopsis": "LifeRE sales coaching routes — simulator sessions, real-time coaching, scenario list.",
-      "bytes": 4853,
-      "mtime": "2026-07-20T07:22:46.110Z",
-      "indexed_at": "2026-07-20T07:28:47.516Z",
+      "bytes": 5644,
+      "mtime": "2026-07-20T08:59:53.082Z",
+      "indexed_at": "2026-07-20T08:59:53.082Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]

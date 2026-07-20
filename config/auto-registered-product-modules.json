@@ -617,6 +617,13 @@
       "mount_path": "/api/v1/cognitive-core",
       "enabled": true,
       "note": "Cognitive Core Era-1+Era-2 \u2014 judgment journal, scoreboard, capsule wear, programs (hypotheses), miss loop, decision replay, counterfactual, external-mind/future-self advisors, relationship twins, learning-style (auto-register; startup/ protected)."
+    },
+    {
+      "path": "routes/lifere-sales-coaching-routes.js",
+      "register": "registerLifereSalesCoachingRoutes",
+      "mount_path": "/api/v1/lifere/sales-coach",
+      "enabled": true,
+      "note": "LifeRE sales coaching simulator (scenarios, session start/turn/end, score, sessions). Was mounted only in the full-runtime lane, so Railway's founder_builder boot never served it \u2014 SENTRY LifeRE probe caught GET /api/v1/lifere/sales-coach/scenarios \u2192 404. Auto-register mounts it on the founder lane (no composition-root edit)."
     }
   ]
 }
