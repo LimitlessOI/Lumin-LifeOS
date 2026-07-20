@@ -1075,7 +1075,7 @@
     },
     {
       "id": "self-repair-era1-3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/self-repair-fix-durability.js",
       "task": "Implement the fix-durability clock: track whether a shipped fix later re-breaks, to detect illusory fixes.",
       "spec": "Self-bootstrap: `CREATE TABLE IF NOT EXISTS self_repair_fix_durability (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), fix_id TEXT NOT NULL, target TEXT NOT NULL, shipped_at TIMESTAMPTZ NOT NULL, rebroke_at TIMESTAMPTZ, rebreak_count INTEGER NOT NULL DEFAULT 0, created_at TIMESTAMPTZ NOT NULL DEFAULT now())`. Export async function recordFixShipped(pool, { fix_id, target, shipped_at }) that inserts a new row (shipped_at defaults to now() if omitted). Export async function recordRebreak(pool, { fix_id, target }) that finds the most recent row for that fix_id+target with rebroke_at IS NULL, sets rebroke_at=now(), increments rebreak_count, and returns the computed half_life in milliseconds (rebroke_at - shipped_at); if no matching un-rebroken row exists, insert a fresh row with rebroke_at already set and rebreak_count=1. Export async function getFixDurability(pool, { target, limit = 20 }) returning rows for a target ordered by shipped_at DESC, each with a computed half_life_ms field (rebroke_at - shipped_at in ms, or null if never rebroken). CRITICAL: the previous attempt exported the required functions but never actually ran the CREATE TABLE statement anywhere -- it went straight to INSERT/SELECT against a table that never gets created, which throws 'relation does not exist' on the very first real call. EVERY exported function that touches this table must run `await pool.query('CREATE TABLE IF NOT EXISTS self_repair_fix_durability (...)')` as its own, separate, no-parameters pool.query() call BEFORE any parameterized query in that same function -- do not combine the CREATE TABLE and a parameterized INSERT/SELECT into one query string, because PostgreSQL's prepared-statement protocol (which pg's pool.query(text, values) uses whenever a values array is passed) rejects multiple SQL statements in a single call with 'cannot insert multiple commands into a prepared statement'.",
@@ -1106,30 +1106,9 @@
       "blueprint_step_id": "self-repair-era1-3",
       "mission_id": "PRODUCT-builderos",
       "revive_note": "2026-07-20: reset after independent verification (reading the actual shipped file, not trusting SENTRY-pass alone) found it missing the CREATE TABLE statement entirely -- exports_smoke only checks the function names exist, it does not run the code, so a function that would throw on its first real call still passed. This is exactly gap #1 from docs/SELF_REPAIR_DOCTRINE.md Part 0 in action. Added file_contains as a second, independent check SENTRY can enforce automatically on rebuild, and strengthened the spec with the exact failure mode so it isn't repeated.",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/builderos/twins/steps/self-repair-era1-3.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-20T19:12:44.154Z",
-        "shipped_at": "2026-07-20T19:12:44.154Z",
-        "commit_sha": null,
-        "content_sha256": "c89ed0c4baa8acb4c81180db8c7c578ccd0fbc5a2a503952968e1df284d2c16b",
-        "target_file": "services/self-repair-fix-durability.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/self-repair-fix-durability.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/builderos/twins/steps/self-repair-era1-3.exact",
-          "content_sha256": "c89ed0c4baa8acb4c81180db8c7c578ccd0fbc5a2a503952968e1df284d2c16b"
-        }
-      },
-      "shipped_at": "2026-07-20T19:12:44.154Z"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-20T19:12:51.938Z",
+      "commit_sha": "1d7634b3c5a4ce983eb0369d25792898adb361be"
     },
     {
       "id": "self-repair-era1-4",
