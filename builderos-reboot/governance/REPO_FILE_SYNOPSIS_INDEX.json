@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T18:53:24.855Z",
+  "generated_at": "2026-07-20T18:56:17.178Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12062,
+  "file_count": 12063,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -90261,6 +90261,13 @@
       "bytes": 1401,
       "mtime": "2026-07-20T18:51:34.847Z",
       "indexed_at": "2026-07-20T18:51:34.847Z"
+    },
+    {
+      "path": "services/self-repair-target-reputation.js",
+      "synopsis": "Exports recordAttempt — services/self-repair-target-reputation.js.",
+      "bytes": 1871,
+      "mtime": "2026-07-20T18:56:17.178Z",
+      "indexed_at": "2026-07-20T18:56:17.178Z"
     },
     {
       "path": "services/self-sabotage-monitor.js",
