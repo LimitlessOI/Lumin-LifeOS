@@ -810,7 +810,7 @@
     },
     {
       "id": "teacher-os-9",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "Register new build modules",
       "spec": "Update the configuration to auto-register new modules created during this build process.",
@@ -822,7 +822,7 @@
       ],
       "dependency_note": "2026-07-20: removed teacher-os-8 from depends_on. It shares its target_file (routes/uxRoutes.js) with teacher-os-5 (already done), but is a genuinely DIFFERENT, real task ('Add UX wireframes route' vs step5's UX flow CRUD) that collided on the same filename during queue generation -- not a duplicate to mark no-op. teacher-os-8 is also founder_gated:true, a deliberate business-scope decision, which this fix does not touch, override, or resolve -- teacher-os-8 itself is left completely untouched (still pending real founder input on the wireframes feature and its filename collision with step5). This dependency was only ever a registration-ordering artifact: registering the 6 already-done files does not require the wireframes feature to exist first.",
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "services/teacherInterviewEnhancement.js",
         "routes/userInterviewRoutes.js",
@@ -836,7 +836,15 @@
       "file_contains_note": "2026-07-20: replaced the malformed entry 'routes/ferpaDpaTemplate.js' (a directory-prefix/basename mashup that matched neither real file) with the two real, already-done FERPA files it was presumably meant to represent: services/ferpaDpaTemplate.js (teacher-os-step7, done) and routes/ferpaRoutes.js (teacher-os-step8, done) -- confirmed both exist on disk.",
       "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "teacher-os-9",
-      "mission_id": "PRODUCT-teacher-os"
+      "mission_id": "PRODUCT-teacher-os",
+      "last_attempt_at": "2026-07-20T17:05:54.476Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:services/teacherInterviewEnhancement.js; behavior_assertion: missing_substring:services/competitiveLandscape.js; behavior_assertion: missing_substring:services/pricingValidationEnhancement.js; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "failure_signature": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:services/teacherInterviewEnhancement.js; behavior_assertion: missing_substring:services/competitiveLandscape.js",
+      "same_signature_count": 1,
+      "escalation_class": "evidence_gap"
     }
   ],
   "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
