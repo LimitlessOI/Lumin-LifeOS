@@ -104,3 +104,15 @@ Do not market “digital immortality.” Frame as preserving hard-earned judgmen
 | 10 | Multiply Me | #46–50 | Shipped — council consensus, benchmark, replay, ROI, ship-queue bridge |
 
 Era-6+ were not in the original five-era brainstorm; they absorb orphaned scale/calibrate/compound/govern ideas after Preserve Me. Era-10 closes the 50-idea roadmap and the self-fix loop back into the governed factory (SO-001).
+
+## Closing the loop (depth, not an Era 11)
+
+After the 50-idea roadmap, an external audit (2026-07-19) named the honest gap: wide and shallow — the machinery was proven but the loop never closed on real data, so most domains sat at `n<5` and `can_act` refused everywhere. The right move was **not** a new era but making Law 5 physically true end-to-end:
+
+- **Outcome Oracle (Layer A):** a decision's outcome is resolved from a **real receipt** (deploy SHA / SENTRY pass-fail / revert / CI) with provenance — no human retype, `captured_how='receipt_verified'`, fail-closed (a receipt whose verdict is unresolvable is never guessed).
+- **Proper scoring:** the scoreboard is no longer a naive Brier average. Murphy's exact decomposition (Brier = Reliability − Resolution + Uncertainty), reliability bins, confidence gap, and an **anytime-valid e-value** that refuses to flag small-n noise.
+- **Recalibration is earned:** the Platt map stays the identity until n≥6 **and** e-value≥3 — Law 2 applied to the calibration correction itself (evidence over configuration).
+- **Decide gate is load-bearing:** Chow's reject rule turns a corrected confidence into **proceed / verify / abstain**, thresholded by stake, and every call is logged.
+- **Correct subject:** the loop scores the **principal's** judgment. The builder's own self-confidence is deliberately excluded — mixing them would score the wrong mind and is a Law-1/honesty violation dressed as evidence. Machine-reliability calibration, if ever wanted, gets its own board.
+
+Open (honestly): the oracle needs a prediction journaled *before* the receipt exists; automatically capturing the principal's decision-time prior from chat is the next tap and is not yet built.

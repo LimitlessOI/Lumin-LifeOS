@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T03:02:08.912Z",
+  "generated_at": "2026-07-20T04:07:04.341Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12045,
+  "file_count": 12048,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -36156,6 +36156,13 @@
       "indexed_at": "2026-07-19T21:32:24.093Z"
     },
     {
+      "path": "db/migrations/20260719_cognitive_core_outcome_oracle.sql",
+      "synopsis": "Cognitive Core — Outcome Oracle (closes the predict→observe loop from real receipts).",
+      "bytes": 2491,
+      "mtime": "2026-07-20T04:07:04.341Z",
+      "indexed_at": "2026-07-20T04:07:04.341Z"
+    },
+    {
       "path": "db/migrations/20260719b_lifeos_lab_results_repair.sql",
       "synopsis": "Repair lab_results schema mismatch + create psychometric_results.",
       "bytes": 2611,
@@ -37382,9 +37389,9 @@
     {
       "path": "docs/constitution/COGNITIVE_CORE_LAWS.md",
       "synopsis": "Cognitive Core laws — judgment compiler constitution (subordinate to North Star SSOT)",
-      "bytes": 3825,
-      "mtime": "2026-07-20T02:37:09.138Z",
-      "indexed_at": "2026-07-20T02:37:31.553Z"
+      "bytes": 5557,
+      "mtime": "2026-07-20T04:07:04.341Z",
+      "indexed_at": "2026-07-20T04:07:04.341Z"
     },
     {
       "path": "docs/constitution/CONSTITUTION_CONFLICTS.md",
@@ -37543,9 +37550,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 66909,
-      "mtime": "2026-07-20T02:37:09.141Z",
-      "indexed_at": "2026-07-20T02:37:31.553Z"
+      "bytes": 68793,
+      "mtime": "2026-07-20T04:07:04.341Z",
+      "indexed_at": "2026-07-20T04:07:04.341Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40477,17 +40484,17 @@
     {
       "path": "docs/products/memory-intelligence/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
-      "bytes": 3079,
-      "mtime": "2026-07-20T02:37:09.135Z",
-      "indexed_at": "2026-07-20T02:37:31.553Z",
+      "bytes": 3227,
+      "mtime": "2026-07-20T04:07:04.341Z",
+      "indexed_at": "2026-07-20T04:07:04.341Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/products/memory-intelligence/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Memory Intelligence",
-      "bytes": 39449,
-      "mtime": "2026-07-20T02:37:09.133Z",
-      "indexed_at": "2026-07-20T02:37:31.553Z"
+      "bytes": 42597,
+      "mtime": "2026-07-20T04:07:04.341Z",
+      "indexed_at": "2026-07-20T04:07:04.341Z"
     },
     {
       "path": "docs/products/memory-system/FILE_MANIFEST.json",
@@ -63200,9 +63207,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 32760,
-      "mtime": "2026-07-20T02:37:09.127Z",
-      "indexed_at": "2026-07-20T02:37:31.553Z",
+      "bytes": 32796,
+      "mtime": "2026-07-20T04:07:04.341Z",
+      "indexed_at": "2026-07-20T04:07:04.341Z",
       "synopsis_index_only": true
     },
     {
@@ -66842,9 +66849,9 @@
     {
       "path": "routes/cognitive-core-routes.js",
       "synopsis": "Cognitive Core Era-1–10 API — journal through Govern Me + Multiply Me.",
-      "bytes": 50644,
-      "mtime": "2026-07-20T02:37:09.118Z",
-      "indexed_at": "2026-07-20T02:37:31.553Z",
+      "bytes": 53678,
+      "mtime": "2026-07-20T04:07:04.341Z",
+      "indexed_at": "2026-07-20T04:07:04.341Z",
       "ssot": [
         "docs/products/memory-intelligence/PRODUCT_HOME.md"
       ]
@@ -84967,9 +84974,9 @@
     {
       "path": "services/cognitive-core-judgment.js",
       "synopsis": "Cognitive Core Era-1 — decision journal, predictions, outcomes, miss reports, scoreboard.",
-      "bytes": 12071,
-      "mtime": "2026-07-19T21:32:24.093Z",
-      "indexed_at": "2026-07-19T21:32:24.093Z",
+      "bytes": 12091,
+      "mtime": "2026-07-20T04:07:04.341Z",
+      "indexed_at": "2026-07-20T04:07:04.341Z",
       "ssot": [
         "docs/products/memory-intelligence/PRODUCT_HOME.md"
       ]
@@ -84980,6 +84987,16 @@
       "bytes": 13227,
       "mtime": "2026-07-20T02:37:09.115Z",
       "indexed_at": "2026-07-20T02:37:31.553Z",
+      "ssot": [
+        "docs/products/memory-intelligence/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/cognitive-core-oracle.js",
+      "synopsis": "Cognitive Core — Outcome Oracle + calibration engine that CLOSES the loop.",
+      "bytes": 16207,
+      "mtime": "2026-07-20T04:07:04.341Z",
+      "indexed_at": "2026-07-20T04:07:04.341Z",
       "ssot": [
         "docs/products/memory-intelligence/PRODUCT_HOME.md"
       ]
@@ -93032,6 +93049,13 @@
       "bytes": 2827,
       "mtime": "2026-07-19T21:32:24.093Z",
       "indexed_at": "2026-07-19T21:32:24.093Z"
+    },
+    {
+      "path": "tests/cognitive-core-oracle.test.js",
+      "synopsis": "Cognitive Core Outcome Oracle — deterministic proof of the closed-loop math.",
+      "bytes": 4987,
+      "mtime": "2026-07-20T04:07:04.341Z",
+      "indexed_at": "2026-07-20T04:07:04.341Z"
     },
     {
       "path": "tests/completion-overclaim-guard.test.js",

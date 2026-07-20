@@ -106,7 +106,7 @@ export function createCognitiveCoreJudgment(deps = {}) {
     if (capturedHow === 'inferred_forbidden') {
       throw new Error('outcomes_must_not_be_inferred');
     }
-    const how = ['explicit', 'deferred_review', 'chair_confirm'].includes(capturedHow)
+    const how = ['explicit', 'deferred_review', 'chair_confirm', 'receipt_verified'].includes(capturedHow)
       ? capturedHow
       : 'explicit';
     const { rows } = await pool.query(

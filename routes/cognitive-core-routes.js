@@ -17,6 +17,7 @@ import { createCognitiveCoreCalibrate } from '../services/cognitive-core-calibra
 import { createCognitiveCoreCompound } from '../services/cognitive-core-compound.js';
 import { createCognitiveCoreGovern } from '../services/cognitive-core-govern.js';
 import { createCognitiveCoreMultiply } from '../services/cognitive-core-multiply.js';
+import { createCognitiveCoreOracle } from '../services/cognitive-core-oracle.js';
 import {
   listWearableCapsules,
   detectJudgmentTurn,
@@ -61,6 +62,7 @@ export function createCognitiveCoreRoutes(deps = {}) {
   const compound = createCognitiveCoreCompound({ pool, logger });
   const govern = createCognitiveCoreGovern({ pool, logger });
   const multiply = createCognitiveCoreMultiply({ pool, logger });
+  const oracle = createCognitiveCoreOracle({ pool, logger });
 
   if (typeof requireKey === 'function') {
     router.use(requireKey);
@@ -108,6 +110,12 @@ export function createCognitiveCoreRoutes(deps = {}) {
         'advisor_council_consensus', 'cohort_benchmark', 'judgment_replay_sim',
         'compound_roi_ledger', 'ship_queue_bridge',
       ],
+      loop_closed: true,
+      closed_loop: [
+        'outcome_oracle_from_receipts', 'murphy_decomposition', 'calibration_e_value',
+        'platt_recalibration', 'chow_decide_gate', 'receipt_provenance',
+      ],
+      loop_subject: 'principal_judgment',
       laws: 'docs/constitution/COGNITIVE_CORE_LAWS.md',
     });
   });
@@ -1472,6 +1480,79 @@ export function createCognitiveCoreRoutes(deps = {}) {
       res.json({ ok: true, item: row });
     } catch (err) {
       res.status(400).json({ ok: false, error: err.message });
+    }
+  });
+
+  // ── Closed loop: Outcome Oracle + calibration engine + decide gate ─────
+  // Layer A — resolve a journaled decision's outcome from a REAL receipt (no retype).
+  router.post('/oracle/resolve', async (req, res) => {
+    try {
+      const b = req.body || {};
+      const out = await oracle.resolveFromReceipt({
+        userId: b.user_id || req.user?.id || '1',
+        decisionId: b.decision_id,
+        receiptKind: b.receipt_kind || b.kind,
+        receiptRef: b.receipt_ref || b.ref,
+        verdict: b.verdict,
+        raw: b.raw || {},
+        observedAt: b.observed_at,
+        outcomeVocab: b.outcome_vocab || null,
+      });
+      res.status(out.ok ? 201 : 422).json(out);
+    } catch (err) {
+      res.status(400).json({ ok: false, error: err.message });
+    }
+  });
+
+  // The rich mirror — proper-scoring metrics on real resolved rows.
+  router.get('/oracle/report', async (req, res) => {
+    try {
+      const out = await oracle.calibrationReport({
+        userId: String(req.query.user_id || req.user?.id || '1'),
+        domain: req.query.domain || null,
+      });
+      res.json(out);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // Load-bearing: proceed / verify / abstain, corrected by track record + stake.
+  router.post('/oracle/decide', async (req, res) => {
+    try {
+      const b = req.body || {};
+      const out = await oracle.decide({
+        userId: b.user_id || req.user?.id || '1',
+        domain: b.domain || 'general',
+        statedProb: b.stated_prob ?? b.p ?? b.confidence,
+        stake: b.stake,
+        stakesLabel: b.stakes || b.stakes_label,
+        verifyCost: b.verify_cost,
+        decisionId: b.decision_id,
+      });
+      res.status(out.ok ? 200 : 422).json(out);
+    } catch (err) {
+      res.status(400).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/oracle/receipts', async (req, res) => {
+    try {
+      const userId = String(req.query.user_id || req.user?.id || '1');
+      const links = await oracle.listReceiptLinks(userId, { limit: Number(req.query.limit) || 50 });
+      res.json({ ok: true, receipts: links });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/oracle/decide-log', async (req, res) => {
+    try {
+      const userId = String(req.query.user_id || req.user?.id || '1');
+      const log = await oracle.listDecideLog(userId, { limit: Number(req.query.limit) || 50 });
+      res.json({ ok: true, decide_log: log });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
     }
   });
 

@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/memory-intelligence/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-19 — Cognitive Core Era-9 Govern Me + Era-10 Multiply Me (capstone) |
+| **Last Updated** | 2026-07-19 — Closed the loop: Outcome Oracle + calibration engine + decide gate (depth on Era-1, not a new era) |
 
 ---
 **Status:** Active — Phase 1 Complete + Governance Hardening + Builder Integration  
@@ -223,6 +223,20 @@ Model calls use the strong-model failover chain (`defaultPlannerCallModel`, SO-0
 | Compound ROI (#49) | `GET/POST /multiply/roi` | Calibration gain over a window |
 | Ship-Queue Bridge (#50) | `GET/POST /multiply/bridge*` | Findings → governed queue (staged, not hand-shipped) |
 
+## Closed Loop — Outcome Oracle + Decide Gate (depth on Era-1, NOT a new era)
+
+**Why:** external audit (2026-07-19) placed us ~7/10 — thesis 9, but execution/evidence 3.5 because the loop never closed on real data and the Brier was a naive average. The frontier (POLARIS) and even a 1-star tool (`Anbu-00001/Anamnesis`) proved value by *closing one loop* with proper scoring math. This is that, aimed at the **principal's** judgment — never the builder's self-confidence (that would score the wrong mind).
+
+| Capability | Surface | Behaviour |
+|---|---|---|
+| Outcome Oracle (Layer A) | `POST /oracle/resolve` | Resolve a journaled decision's outcome from a REAL receipt (deploy SHA / SENTRY / revert / CI) with provenance; reuses judgment trust-refresh + miss loop; `captured_how='receipt_verified'`. Fail-closed: never guesses a verdict. |
+| Calibration mirror | `GET /oracle/report` | Murphy exact decomposition (Brier = Rel − Res + Unc), reliability bins, confidence gap, anytime-valid **e-value**, Platt recalibration map, plain-English verdict. |
+| Decide gate (load-bearing) | `POST /oracle/decide` | Chow's reject rule: correct stated prob by track record, threshold by stake → **proceed / verify / abstain**; every call logged. |
+| Receipt provenance | `GET /oracle/receipts` | What real receipt closed each loop. |
+| Decide-gate audit | `GET /oracle/decide-log` | Every gate decision, auditable. |
+
+**Honest v1 boundaries:** recalibration stays the identity until a correction is *earned* (n≥6 AND e-value≥3) — it will not correct on noise. The oracle needs a decision journaled with a prediction *before* the receipt exists; automatic capture of the principal's decision-time prior from chat is the next tap (still open). Subject = `principal_judgment`; builder self-confidence is deliberately excluded and would need its own board.
+
 ## Owned Files
 
 | File | Purpose |
@@ -240,6 +254,7 @@ Model calls use the strong-model failover chain (`defaultPlannerCallModel`, SO-0
 | `db/migrations/20260719_cognitive_core_era8.sql` | Era-8: consumers, can_act calls, improvements, compound log, ladder |
 | `db/migrations/20260719_cognitive_core_era9.sql` | Era-9: integrity_audits, constitutional_checks, decay, drift, findings |
 | `db/migrations/20260719_cognitive_core_era10.sql` | Era-10: council, benchmarks, replay runs, ROI, ship-queue bridge |
+| `db/migrations/20260719_cognitive_core_outcome_oracle.sql` | Closed loop: receipt links + decide log + `receipt_verified` outcome source |
 | `services/memory-intelligence-service.js` | Core evidence engine logic |
 | `services/cognitive-core-judgment.js` | Decision journal + scoreboard |
 | `services/cognitive-core-perspective.js` | Multi-wear tension + judgment turn (+ Era-2/3 proactivity) |
@@ -255,6 +270,7 @@ Model calls use the strong-model failover chain (`defaultPlannerCallModel`, SO-0
 | `services/cognitive-core-compound.js` | Era-8 Compound Me engine |
 | `services/cognitive-core-govern.js` | Era-9 Govern Me engine (self-audit) |
 | `services/cognitive-core-multiply.js` | Era-10 Multiply Me engine (network + self-fix loop) |
+| `services/cognitive-core-oracle.js` | Closed loop: outcome oracle + proper-scoring calibration engine + Chow decide gate |
 | `config/judgment-capsule-contracts.js` | Perspective lens contracts (allow/deny) + outcome-turn detection |
 | `config/cognitive-core-advisors.js` | Era-2 external-mind + future-self wearable lenses |
 | `routes/memory-intelligence-routes.js` | API surface |
@@ -269,6 +285,7 @@ Model calls use the strong-model failover chain (`defaultPlannerCallModel`, SO-0
 | `tests/cognitive-core-era8.test.js` | Era-8 consumers/can_act/ladder |
 | `tests/cognitive-core-era9.test.js` | Era-9 conformance/audit/decay |
 | `tests/cognitive-core-era10.test.js` | Era-10 council/benchmark/replay/bridge |
+| `tests/cognitive-core-oracle.test.js` | Closed-loop math: Murphy identity, Brier, e-value, recalibration, decide gate, receipt mapping |
 | `docs/MEMORY_FRAMEWORK_DESIGN_BRIEF.md` | Full design brief (cross-model reviewed) |
 | `docs/constitution/COGNITIVE_CORE_LAWS.md` | Five laws + meta-learning constitution |
 
@@ -486,6 +503,7 @@ Phase 1 fully built + extended. Phase 2 adoption (S2) now seeded:
 
 | Date | File | What | Why |
 |---|---|---|---|
+| 2026-07-19 | Closed loop: `cognitive-core-oracle.js` + `20260719_cognitive_core_outcome_oracle.sql` + `/oracle/*` routes + `cognitive-core-oracle.test.js` | Outcome Oracle resolves decisions from REAL receipts (deploy/SENTRY/revert/CI) with provenance, fail-closed. Proper scoring: Murphy exact decomposition, anytime-valid e-value, Platt recalibration (identity until earned), Chow decide gate (proceed/verify/abstain, stake-aware, logged). `receipt_verified` outcome source. Health `loop_closed: true`, subject `principal_judgment`. 11/11 new tests; 68/68 cognitive-core suite. Depth on Era-1, NOT a new era. | Adam: "bring this to a ten" after external audit scored execution/evidence 3.5 (loop never closed). Convergent w/ POLARIS + Anamnesis: prove value by closing ONE loop with real math on the correct subject, not by adding surface. |
 | 2026-07-19 | Cognitive Core Era-9 + Era-10 (capstone) | Govern Me (#41–45): integrity auditor, constitutional conformance, calibration decay, drift ledger, self-audit findings (solution-mandatory). Multiply Me (#46–50): advisor council consensus, cohort benchmark, judgment replay, compound ROI, ship-queue bridge (findings → governed factory, not hand-shipped). Migrations era9/era10, govern+multiply services, routes, tests 10/10, health `era: 10`. Completes 50-idea roadmap. | Adam: "after this go to the next 2." |
 | 2026-07-19 | Cognitive Core Era-7 + Era-8 | Calibrate Me (#31–35): heuristics, calibration dashboard, trust transfer, high-stakes auto-tree, rituals. Compound Me (#36–40): product consumers, cross-product can_act, debt→improvements, compound log, role sync, autonomy ladder. Migrations era7/era8, calibrate+compound services, routes, tests, health `era: 8`. | Adam: "do the next 2" after Era-5/6 tip prove. |
 | 2026-07-19 | Cognitive Core Era-5 + Era-6 | Preserve Me (#25): sealed judgment packages + consent transmission (no immortality framing). Transmit Me (#26–30): marketplace, interrupts, cognitive debt, consequence trees, portable import. Migrations era5/era6, preserve+transmit services, routes, tests, health `era: 6`. | Adam: "era 5 is that done if not do both 5 and 6" — tip was still era 4; Era-6 defined as orphaned-ideas band. |
