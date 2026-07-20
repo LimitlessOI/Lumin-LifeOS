@@ -126,6 +126,40 @@ export function createCognitiveCoreJudgment(deps = {}) {
         how = 'explicit';
       }
     }
+    const nextActualOption = String(actualOption || '').slice(0, 2000);
+
+    // A decision only ever has one CURRENT outcome row, but the previous
+    // state must never just vanish — an outcome getting silently corrected
+    // with no trace is exactly the kind of unfalsifiable claim this whole
+    // system exists to prevent. Archive whatever was there before touching it.
+    const { rows: existingRows } = await pool.query(
+      `SELECT outcome_id, actual_option, stated_reasons, captured_how, captured_at
+       FROM judgment_outcomes WHERE decision_id = $1`,
+      [decisionId],
+    );
+    const existing = existingRows[0];
+    if (existing && existing.actual_option !== nextActualOption) {
+      await pool.query(
+        `INSERT INTO judgment_outcome_history
+           (decision_id, outcome_id, prior_actual_option, prior_stated_reasons, prior_captured_how,
+            prior_captured_at, superseded_by_actual_option, superseded_by_captured_how)
+         VALUES ($1,$2,$3,$4::jsonb,$5,$6,$7,$8)`,
+        [
+          decisionId,
+          existing.outcome_id,
+          existing.actual_option,
+          JSON.stringify(existing.stated_reasons || []),
+          existing.captured_how,
+          existing.captured_at,
+          nextActualOption,
+          how,
+        ],
+      ).catch((e) => {
+        logger.warn?.(`[cognitive-core] failed to archive prior outcome for decision ${decisionId}: ${e.message}`);
+      });
+      logger.warn?.(`[cognitive-core] outcome for decision ${decisionId} corrected: "${existing.actual_option}" -> "${nextActualOption}" (archived to judgment_outcome_history)`);
+    }
+
     const { rows } = await pool.query(
       `INSERT INTO judgment_outcomes (decision_id, actual_option, stated_reasons, captured_how)
        VALUES ($1,$2,$3::jsonb,$4)
@@ -137,7 +171,7 @@ export function createCognitiveCoreJudgment(deps = {}) {
        RETURNING *`,
       [
         decisionId,
-        String(actualOption || '').slice(0, 2000),
+        nextActualOption,
         JSON.stringify(Array.isArray(statedReasons) ? statedReasons : []),
         how,
       ],
@@ -147,6 +181,16 @@ export function createCognitiveCoreJudgment(deps = {}) {
       logger.warn?.(`[cognitive-core] trust refresh failed: ${e.message}`);
     });
     return outcome;
+  }
+
+  /** Every prior outcome value for a decision, most recent correction first. */
+  async function getOutcomeHistory(decisionId) {
+    if (!pool) throw new Error('cognitive_core_requires_pool');
+    const { rows } = await pool.query(
+      `SELECT * FROM judgment_outcome_history WHERE decision_id = $1 ORDER BY superseded_at DESC`,
+      [decisionId],
+    );
+    return rows;
   }
 
   async function buildMissReport({
@@ -353,6 +397,7 @@ export function createCognitiveCoreJudgment(deps = {}) {
     recordDecisionTurn,
     recordPrediction,
     recordOutcome,
+    getOutcomeHistory,
     buildMissReport,
     getScoreboard,
     getDecision,

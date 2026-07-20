@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/memory-intelligence/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-20 — Applied the capture question-guard regex fix that an earlier commit (`3fa6594f0b`) claimed but never actually made (that commit's diff touched only a generated index file, zero functional change) — caught by independently re-diffing the claimed commit rather than trusting its message |
+| **Last Updated** | 2026-07-20 — Outcomes can no longer be silently corrected: every overwrite is archived to `judgment_outcome_history` (`GET /decisions/:id/outcome-history`) before it happens |
 
 ---
 **Status:** Active — Phase 1 Complete + Governance Hardening + Builder Integration  
@@ -239,6 +239,8 @@ Model calls use the strong-model failover chain (`defaultPlannerCallModel`, SO-0
 | Capture visibility | `GET /oracle/build-decisions` | Open founder ship/build decisions awaiting a receipt, with their implied prior + source. |
 
 **2026-07-20 integrity fix (Claude audit):** `POST /decisions/:id/outcomes` let any caller holding the shared command-key set `captured_how:'receipt_verified'` directly in the request body — no real receipt required. Empirically confirmed exploitable against production (a real forged claim was accepted and persisted with zero backing rows in `judgment_receipt_links`). `recordOutcome` now requires a `receiptLinkId` that must match a real row for that exact decision before honoring `receipt_verified`; an unproven claim is downgraded to `explicit` and logged, never silently trusted. The oracle's own internal resolve path (the only legitimate caller) already had the real link at hand and now passes it through. 3 new tests (`tests/cognitive-core-outcome-integrity.test.js`).
+
+**2026-07-20 audit-trail fix (Claude audit, founder-flagged gap):** outcomes could previously be silently overwritten (`ON CONFLICT ... DO UPDATE`) with zero trace — a corrected outcome erased its own prior value, no record of what it was, when it changed, or how many times. `recordOutcome` now archives the current row to a new `judgment_outcome_history` table before any real change (a genuine value change only — a no-op re-POST of the same value archives nothing), readable via `GET /decisions/:id/outcome-history`. 3 more tests. Founder: "we cannot just take AI at its word. We have to inspect what we expect."
 
 **Why auto-capture is the keystone:** a mechanism that works ≠ a mechanism with real data flowing. Pre-capture, the scoreboard filled only from manual probes. Now the *prediction half* (Claude's correction: capture a falsifiable prediction, not a row-count) is automatic on the correct subject, and the *outcome half* resolves from receipts — so Eras 1–8 stop being theoretical and fill from lived activity.
 

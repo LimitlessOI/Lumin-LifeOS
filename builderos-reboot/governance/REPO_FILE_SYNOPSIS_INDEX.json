@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T05:21:00.712Z",
+  "generated_at": "2026-07-20T05:39:01.560Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12051,
+  "file_count": 12052,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -36170,6 +36170,13 @@
       "indexed_at": "2026-07-20T00:50:09.408Z"
     },
     {
+      "path": "db/migrations/20260720_judgment_outcome_history.sql",
+      "synopsis": "Audit trail for judgment_outcomes — every prior state is preserved",
+      "bytes": 1045,
+      "mtime": "2026-07-20T05:34:48.861Z",
+      "indexed_at": "2026-07-20T05:39:01.560Z"
+    },
+    {
       "path": "db/migrations/20260724_lifeos_core_stable.sql",
       "synopsis": "Database migration — 20260724_lifeos_core_stable.sql.",
       "bytes": 641,
@@ -40492,9 +40499,9 @@
     {
       "path": "docs/products/memory-intelligence/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Memory Intelligence",
-      "bytes": 47789,
-      "mtime": "2026-07-20T05:20:44.978Z",
-      "indexed_at": "2026-07-20T05:21:00.712Z"
+      "bytes": 48285,
+      "mtime": "2026-07-20T05:38:42.844Z",
+      "indexed_at": "2026-07-20T05:39:01.560Z"
     },
     {
       "path": "docs/products/memory-system/FILE_MANIFEST.json",
@@ -66849,9 +66856,9 @@
     {
       "path": "routes/cognitive-core-routes.js",
       "synopsis": "Cognitive Core Era-1–10 API — journal through Govern Me + Multiply Me.",
-      "bytes": 57049,
-      "mtime": "2026-07-20T04:36:17.235Z",
-      "indexed_at": "2026-07-20T04:36:17.235Z",
+      "bytes": 57542,
+      "mtime": "2026-07-20T05:35:32.507Z",
+      "indexed_at": "2026-07-20T05:39:01.560Z",
       "ssot": [
         "docs/products/memory-intelligence/PRODUCT_HOME.md"
       ]
@@ -84984,9 +84991,9 @@
     {
       "path": "services/cognitive-core-judgment.js",
       "synopsis": "Cognitive Core Era-1 — decision journal, predictions, outcomes, miss reports, scoreboard.",
-      "bytes": 12925,
-      "mtime": "2026-07-20T04:49:15.455Z",
-      "indexed_at": "2026-07-20T04:52:38.597Z",
+      "bytes": 14924,
+      "mtime": "2026-07-20T05:37:15.708Z",
+      "indexed_at": "2026-07-20T05:39:01.560Z",
       "ssot": [
         "docs/products/memory-intelligence/PRODUCT_HOME.md"
       ]
@@ -93077,9 +93084,9 @@
     {
       "path": "tests/cognitive-core-outcome-integrity.test.js",
       "synopsis": "recordOutcome must never accept a bare 'receipt_verified' claim —",
-      "bytes": 2410,
-      "mtime": "2026-07-20T04:50:22.075Z",
-      "indexed_at": "2026-07-20T04:52:38.597Z"
+      "bytes": 4912,
+      "mtime": "2026-07-20T05:36:43.747Z",
+      "indexed_at": "2026-07-20T05:39:01.560Z"
     },
     {
       "path": "tests/completion-overclaim-guard.test.js",
