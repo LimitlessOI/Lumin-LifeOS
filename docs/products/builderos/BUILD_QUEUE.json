@@ -936,38 +936,29 @@
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-step12",
       "mission_id": "PRODUCT-builderos",
-      "last_attempt_at": "2026-07-20T14:50:44.754Z",
+      "last_attempt_at": "2026-07-20T15:06:24.975Z",
       "last_error": "artifact_missing_after_ship: artifact_proof_failed: HTTP 200",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "failure_signature": "artifact_missing_after_ship: artifact_proof_failed: HTTP N",
-      "same_signature_count": 1,
+      "same_signature_count": 2,
       "escalation_class": "fake_green_attempt",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/builderos/twins/steps/builderos-step12.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-20T15:06:17.203Z",
-        "shipped_at": "2026-07-20T15:06:17.203Z",
-        "commit_sha": null,
-        "content_sha256": "7d53ef1225dd77c813973d15cc57a29c2d5596a33d1daf8dfd541fe09d12800e",
-        "target_file": "routes/testing-response.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "routes/testing-response.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/builderos/twins/steps/builderos-step12.exact",
-          "content_sha256": "7d53ef1225dd77c813973d15cc57a29c2d5596a33d1daf8dfd541fe09d12800e"
-        }
-      },
-      "shipped_at": "2026-07-20T15:06:17.203Z"
+      "revive_count": 1,
+      "revived_at": "2026-07-20T15:06:13.296Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "model_rotation": 1,
+      "force_model_rotation": true
     },
     {
       "id": "sentry-broken_workflow:.github/workflows/migrate.yml",
