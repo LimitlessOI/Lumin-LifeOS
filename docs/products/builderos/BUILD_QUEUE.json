@@ -1037,7 +1037,31 @@
       "proof": null,
       "failure_signature": "NOT_ON_BLUEPRINT",
       "same_signature_count": 1,
-      "escalation_class": "governance_block"
+      "escalation_class": "governance_block",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/builderos/twins/steps/self-repair-era1-1.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-20T19:07:55.305Z",
+        "shipped_at": "2026-07-20T19:07:55.305Z",
+        "commit_sha": null,
+        "content_sha256": "e0af91f5fc548f85eba5636654db9150499d82c3a157d4f739ad8408f55b770e",
+        "target_file": "services/self-repair-provenance-ledger.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/self-repair-provenance-ledger.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/builderos/twins/steps/self-repair-era1-1.exact",
+          "content_sha256": "e0af91f5fc548f85eba5636654db9150499d82c3a157d4f739ad8408f55b770e"
+        }
+      },
+      "shipped_at": "2026-07-20T19:07:55.305Z"
     },
     {
       "id": "self-repair-era1-2",
