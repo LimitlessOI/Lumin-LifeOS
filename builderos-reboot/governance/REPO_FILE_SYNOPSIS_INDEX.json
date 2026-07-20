@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T04:30:25.000Z",
+  "generated_at": "2026-07-20T04:32:48.447Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12048,
   "files": [
@@ -40492,9 +40492,9 @@
     {
       "path": "docs/products/memory-intelligence/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Memory Intelligence",
-      "bytes": 42597,
-      "mtime": "2026-07-20T04:07:04.341Z",
-      "indexed_at": "2026-07-20T04:07:04.341Z"
+      "bytes": 43518,
+      "mtime": "2026-07-20T04:32:48.447Z",
+      "indexed_at": "2026-07-20T04:32:48.447Z"
     },
     {
       "path": "docs/products/memory-system/FILE_MANIFEST.json",
