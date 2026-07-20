@@ -34,6 +34,25 @@ export function stepRequiresAuthoring(step) {
   return step.action_type === AUTHORING_ACTION_TYPE || Boolean(step.authoring);
 }
 
+/**
+ * Pure: rotate a tier list forward by `rotation` positions (wrapping), so a
+ * repeated-failure escalation actually tries a different model instead of
+ * restarting from tier 0 every time. Diagnosed live 2026-07-20: the loop's
+ * LOOP_ESCALATION_CONTRACT set step.model_rotation and sent model_escalation
+ * on repeated same-signature failures, but nothing downstream ever read
+ * either value -- codegen always started from tiers[0] again, so three
+ * consecutive attempts on sb-deliverability-gate (site-builder) produced the
+ * exact same missing_exports failure three times in a row from the same
+ * model, not three genuinely different attempts.
+ */
+export function rotateTiers(tiers, rotation) {
+  const list = Array.isArray(tiers) ? tiers : [];
+  if (list.length === 0) return list;
+  const n = Math.max(0, Math.trunc(Number(rotation) || 0)) % list.length;
+  if (n === 0) return list;
+  return [...list.slice(n), ...list.slice(0, n)];
+}
+
 // Strip a single fenced code block if the model wrapped its output in markdown.
 export function extractContent(raw) {
   const text = String(raw || '');
@@ -124,11 +143,12 @@ export async function runAuthoring(step, codegenRunner) {
     const additiveHint = existingSize > 0
       ? `EXISTING FILE IS ${existingSize} bytes. Return the COMPLETE updated file (not a stub). Preserve all existing behavior; only add/change what the task requires. Output length must stay ≥ 30% of the existing file.\n`
       : '';
+    const baseTiers = Array.isArray(authoring.tiers) && authoring.tiers.length ? authoring.tiers : DEFAULT_CODEGEN_TIERS;
     result = await codegenRunner.generate({
       task: authoring.task || step.task || '',
       target_file,
       spec: `${additiveHint}${authoring.spec || step.spec || ''}`,
-      tiers: Array.isArray(authoring.tiers) && authoring.tiers.length ? authoring.tiers : DEFAULT_CODEGEN_TIERS,
+      tiers: rotateTiers(baseTiers, step.model_rotation),
       max_output_tokens: Number(authoring.max_output_tokens || step.max_output_tokens) || 8000,
       last_error: step.last_error || null,
       expected_exports: step.expected_exports || null,

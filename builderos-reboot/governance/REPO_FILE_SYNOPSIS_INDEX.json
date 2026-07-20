@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T12:26:50.229Z",
+  "generated_at": "2026-07-20T13:05:01.053Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12056,
+  "file_count": 12057,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -39671,9 +39671,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 242897,
-      "mtime": "2026-07-20T12:26:26.178Z",
-      "indexed_at": "2026-07-20T12:26:50.229Z"
+      "bytes": 244691,
+      "mtime": "2026-07-20T13:04:40.336Z",
+      "indexed_at": "2026-07-20T13:05:01.053Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -60932,9 +60932,9 @@
     {
       "path": "factory-staging/factory-core/builder/authoring.js",
       "synopsis": "STEP 4 — codegen as an UNTRUSTED authoring sub-step (the \"dumb pipe\").",
-      "bytes": 9035,
-      "mtime": "2026-07-20T07:22:45.955Z",
-      "indexed_at": "2026-07-20T07:28:47.516Z",
+      "bytes": 10052,
+      "mtime": "2026-07-20T13:03:15.557Z",
+      "indexed_at": "2026-07-20T13:05:01.053Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -63214,9 +63214,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 33092,
-      "mtime": "2026-07-20T08:27:38.979Z",
-      "indexed_at": "2026-07-20T08:28:41.447Z",
+      "bytes": 33139,
+      "mtime": "2026-07-20T13:04:08.934Z",
+      "indexed_at": "2026-07-20T13:05:01.053Z",
       "synopsis_index_only": true
     },
     {
@@ -93207,6 +93207,13 @@
       "bytes": 1606,
       "mtime": "2026-07-20T07:22:46.370Z",
       "indexed_at": "2026-07-20T07:28:47.516Z"
+    },
+    {
+      "path": "tests/factory-authoring-model-rotation.test.js",
+      "synopsis": "Exports checkPostmarkDomainVerified — tests/factory-authoring-model-rotation.test.js.",
+      "bytes": 2870,
+      "mtime": "2026-07-20T13:05:00.319Z",
+      "indexed_at": "2026-07-20T13:05:01.053Z"
     },
     {
       "path": "tests/factory-mount-routes-codegen-prompt.test.js",
