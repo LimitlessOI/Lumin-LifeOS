@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T08:24:20.037Z",
+  "generated_at": "2026-07-20T08:28:14.205Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12055,
+  "file_count": 12056,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -39671,9 +39671,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 241061,
-      "mtime": "2026-07-20T07:35:53.662Z",
-      "indexed_at": "2026-07-20T07:36:10.056Z"
+      "bytes": 243014,
+      "mtime": "2026-07-20T08:27:15.626Z",
+      "indexed_at": "2026-07-20T08:28:14.205Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -67104,9 +67104,9 @@
     {
       "path": "routes/factory-mount-routes.js",
       "synopsis": "Mounts the governed factory hot path (BPB → Builder → SENTRY → TSOS → Historian)",
-      "bytes": 21441,
-      "mtime": "2026-07-20T07:22:46.094Z",
-      "indexed_at": "2026-07-20T07:28:47.516Z",
+      "bytes": 22553,
+      "mtime": "2026-07-20T08:25:31.564Z",
+      "indexed_at": "2026-07-20T08:28:14.205Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -93207,6 +93207,13 @@
       "bytes": 1606,
       "mtime": "2026-07-20T07:22:46.370Z",
       "indexed_at": "2026-07-20T07:28:47.516Z"
+    },
+    {
+      "path": "tests/factory-mount-routes-codegen-prompt.test.js",
+      "synopsis": "js — tests/factory-mount-routes-codegen-prompt.test.js.",
+      "bytes": 1349,
+      "mtime": "2026-07-20T08:28:09.711Z",
+      "indexed_at": "2026-07-20T08:28:14.205Z"
     },
     {
       "path": "tests/file-synopsis-commit-hardening.test.js",

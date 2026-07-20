@@ -37,6 +37,24 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const REPO_ROOT = path.resolve(__dirname, '..');
 
+// Existing-file content is inlined into the codegen prompt so an "extend this
+// file" task can preserve everything already there. Below this size, a real
+// existing file was silently omitted from the prompt (size > 20000 skipped
+// it entirely) — the model then had no way to know it must reproduce the
+// existing content, so it authored only the new fragment as a fresh minimal
+// file. The stub detector correctly caught the resulting undersized output,
+// but the step could never succeed: every retry hit the same omission.
+// Diagnosed 2026-07-20 against services/site-builder-prospect-runner.js
+// (21306 bytes) — repeatedly blocked with
+// codegen_stub_detected: generated 1514b is < 30% of existing 21306b.
+// Raised well past realistic single-file sizes in this repo.
+export const MAX_EXISTING_CONTENT_BYTES = 100000;
+
+/** Pure: should the codegen prompt inline this file's existing content? */
+export function shouldIncludeExistingFileContent(byteSize) {
+  return Number.isFinite(byteSize) && byteSize >= 0 && byteSize <= MAX_EXISTING_CONTENT_BYTES;
+}
+
 export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncilMember } = {}) {
   const router = express.Router();
   const guard = typeof requireKey === 'function' ? requireKey : (_req, _res, next) => next();
@@ -124,7 +142,8 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
           const existingContentLines = [];
           if (absTarget) {
             try {
-              if (fs.existsSync(absTarget) && fs.statSync(absTarget).isFile() && fs.statSync(absTarget).size <= 20000) {
+              if (fs.existsSync(absTarget) && fs.statSync(absTarget).isFile()
+                && shouldIncludeExistingFileContent(fs.statSync(absTarget).size)) {
                 existingContentLines.push('EXISTING FILE CONTENT (preserve all existing code; output the complete updated file):\n' + fs.readFileSync(absTarget, 'utf8'));
               }
             } catch { /* ignore read errors */ }
