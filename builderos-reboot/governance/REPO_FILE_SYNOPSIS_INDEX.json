@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T20:39:26.132Z",
+  "generated_at": "2026-07-20T20:49:00.618Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12074,
   "files": [
@@ -30911,10 +30911,10 @@
     },
     {
       "path": "config/smos-pricing.js",
-      "synopsis": "SocialMediaOS content-pack pricing ($49 session pack).",
-      "bytes": 723,
-      "mtime": "2026-07-20T07:22:45.281Z",
-      "indexed_at": "2026-07-20T07:28:47.516Z",
+      "synopsis": "SocialMediaOS pricing — SOURCE OF TRUTH.",
+      "bytes": 6631,
+      "mtime": "2026-07-20T20:49:00.618Z",
+      "indexed_at": "2026-07-20T20:49:00.618Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -40462,9 +40462,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 121537,
-      "mtime": "2026-07-20T07:22:45.659Z",
-      "indexed_at": "2026-07-20T07:28:47.516Z"
+      "bytes": 121991,
+      "mtime": "2026-07-20T20:49:00.618Z",
+      "indexed_at": "2026-07-20T20:49:00.618Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -40484,9 +40484,9 @@
     {
       "path": "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md",
       "synopsis": "SocialMediaOS Module Home",
-      "bytes": 17419,
-      "mtime": "2026-07-20T07:22:45.664Z",
-      "indexed_at": "2026-07-20T07:28:47.516Z"
+      "bytes": 19747,
+      "mtime": "2026-07-20T20:49:00.618Z",
+      "indexed_at": "2026-07-20T20:49:00.618Z"
     },
     {
       "path": "docs/products/memory-intelligence/FILE_MANIFEST.json",

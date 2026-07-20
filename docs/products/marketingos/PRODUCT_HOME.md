@@ -38,7 +38,7 @@ Master verbatim: `docs/conversation_dumps/2026-06-29-limitlessos-ecosystem-found
 | **Lifecycle** | `planning` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `draft` |
-| **Last Updated** | 2026-07-17 — SMOS `/marketing` home has a clickable "Buy Content Pack — $49" button, product tour no longer auto-opens, SENTRY Layer A + Layer B pass on production. |
+| **Last Updated** | 2026-07-20 — **SMOS pricing/trial/consent model ratified & locked into `config/smos-pricing.js`** (source of truth): card-required trial (2 free credits, dormant-until-started, verified phone+email, LifeOS 30-day bonus) → Pro $59 / Studio $159 / Studio Plus $459 (video-credit metered) + à-la-carte add-ons; beta 2-yr price-lock; legally-correct TCPA/CAN-SPAM consent split. Recurring-subscription billing engine NOT yet live — spec locked, build via governed factory (SO-001). Detail in `socialmediaos/PRODUCT_HOME.md`. Prior: 2026-07-17 — `/marketing` "Buy Content Pack — $49" button, SENTRY A+B pass on prod. |
 | **Owner** | adam |
 | **Parent System** | [LimitlessOS](../limitlessos/PRODUCT_HOME.md) |
 | **First Module** | SocialMediaOS |
