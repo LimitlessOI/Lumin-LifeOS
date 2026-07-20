@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T18:50:24.487Z",
+  "generated_at": "2026-07-20T18:51:34.847Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12060,
+  "file_count": 12061,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -90247,6 +90247,13 @@
         "docs/products/command-center/PRODUCT_HOME.md",
         "docs/products/memory-intelligence/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/self-repair-root-cause-chains.js",
+      "synopsis": "Exports recordRootCauseChain — services/self-repair-root-cause-chains.js.",
+      "bytes": 1401,
+      "mtime": "2026-07-20T18:51:34.847Z",
+      "indexed_at": "2026-07-20T18:51:34.847Z"
     },
     {
       "path": "services/self-sabotage-monitor.js",
