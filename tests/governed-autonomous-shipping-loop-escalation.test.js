@@ -20,7 +20,16 @@ import {
   isRepoWideKnownBadSignature,
   recordRepoWideKnownBadSignature,
   markFailedStep,
+  SHIP_QUEUE_TIMEOUT_MS,
 } from '../services/governed-autonomous-shipping-loop.js';
+
+test('SHIP_QUEUE_TIMEOUT_MS: raised past the old 120s cap that was killing large-file codegen mid-generation', () => {
+  // Regression for sb-deliverability-gate (site-builder): confirmed live that
+  // failed attempts died at a gap_ms of ~120991, essentially the exact old
+  // AbortSignal.timeout(120_000) cap, right after the codegen existing-file
+  // cutoff fix started sending large files' full content into the prompt.
+  assert.ok(SHIP_QUEUE_TIMEOUT_MS > 120_000, `expected > 120000, got ${SHIP_QUEUE_TIMEOUT_MS}`);
+});
 
 test('failureSignature normalizes hex ids and numbers so repeat failures share one signature', () => {
   const a = failureSignature('module_resolution_failed: target missing routes/foo123.js at commit a1b2c3d4e5f');

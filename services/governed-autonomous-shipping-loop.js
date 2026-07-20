@@ -233,6 +233,18 @@ function resolveShipTwinAuthority(product_id, ship_steps) {
   };
 }
 
+// Self-HTTP budget for the whole /factory/ship-queue round trip (codegen +
+// SENTRY behavior proof). 120s was too tight for large existing-file extend
+// tasks: routes/factory-mount-routes.js's codegen prompt now correctly
+// inlines full existing content up to 100000 bytes (raised 2026-07-20 from
+// 20000, see MAX_EXISTING_CONTENT_BYTES), which means more input tokens and
+// slower generation for exactly the files that most need it. Confirmed live
+// against sb-deliverability-gate (site-builder): 3 of 6 attempts died at a
+// gap_ms of ~120991 -- essentially the exact old cap -- while the OTHER 3
+// attempts completed and reached real SENTRY verification. Raised so large
+// files get a real chance to finish instead of being killed mid-generation.
+export const SHIP_QUEUE_TIMEOUT_MS = Number(process.env.GOVERNED_AUTONOMOUS_SHIP_QUEUE_TIMEOUT_MS) || 240_000;
+
 async function shipViaGovernedQueue({ product_id, ship_steps }) {
   const auth = resolveShipTwinAuthority(product_id, ship_steps);
   if (!auth.ok) {
@@ -256,7 +268,7 @@ async function shipViaGovernedQueue({ product_id, ship_steps }) {
           ...(Array.isArray(ship_steps) ? ship_steps.map((s) => Number(s?.model_rotation) || 0) : [0]),
         ),
       }),
-      signal: AbortSignal.timeout(120_000),
+      signal: AbortSignal.timeout(SHIP_QUEUE_TIMEOUT_MS),
     });
     const body = await res.json().catch(() => ({}));
     return { status: res.status, body };
