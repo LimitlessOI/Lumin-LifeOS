@@ -1,0 +1,26 @@
+{
+  "schema": "chair_judgment_receipt_v1",
+  "topic": "self_repair_tier1_scope",
+  "question": "Build Tier 1 self-repair infrastructure (self-quarantine, failure-signature router, pattern propagation) now as empty/inert code, or hold until Tier 0 has accumulated real production data, per docs/SELF_REPAIR_DOCTRINE.md Part 2's explicit counter-warning against speculative building?",
+  "chair_channel": "cognitive_core",
+  "model_routing": { "route": "lumin_chair_native", "complexity": "high", "estimated_cost_tier": "strong" },
+  "rounds": [
+    {
+      "decision_id": "7459de6e-1073-4505-ae0b-ca390c27569f",
+      "human_summary": "Building Tier 1 infrastructure now risks misaligned resources and potential rework if Tier 0 data reveals unexpected needs. Consider waiting for meaningful data to ensure user-aligned decisions.",
+      "note": "prediction.option in this round diverged (predicted Adam might lean 'build now' under momentum pressure, 0.7 confidence) -- prediction is a model of what Adam might choose, not the chair's own recommendation. Asked for a clarifying follow-up round to force the chair's own judgment rather than a prediction of Adam's psychology."
+    },
+    {
+      "decision_id": "c2ad89fa-5d1f-4c3b-8952-a4a5837d7c65",
+      "human_summary": "The value here lies in ensuring that resources are not wasted on speculative efforts that may need reworking.",
+      "prediction_option": "hold until Tier 0 has real data",
+      "prediction_confidence": 0.65
+    }
+  ],
+  "consensus": "HOLD — do not build Tier 1-3 self-repair infrastructure now. Wait until Tier 0 (Era 1, all 8 stores/gates, shipped 2026-07-20) has accumulated real production data to pull from. Matches docs/SELF_REPAIR_DOCTRINE.md Part 2's explicit counter-warning: 'Tiers 1-3 are pulled by real pain and accumulating data, never pushed speculatively -- pushing them is itself an SO-003 violation.'",
+  "escalated_to_founder": false,
+  "escalated_to_sentry": false,
+  "reason_no_further_escalation": "Two consecutive chair rounds converged on the same answer; per founder instruction, SENTRY escalation is only needed if chair can't reach consensus",
+  "routing_context": "Founder explicitly declined to arbitrate this scope question directly and instructed routing technical/architectural judgment calls through Chair (and SENTRY if needed) instead of asking him -- see docs/AGENT_INBOX.md pattern extended to solo judgment calls.",
+  "at": "2026-07-20T19:35:00.000Z"
+}
