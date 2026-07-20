@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T07:36:10.056Z",
+  "generated_at": "2026-07-20T08:01:26.848Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12055,
   "files": [
@@ -40353,9 +40353,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 646767,
-      "mtime": "2026-07-20T07:22:45.655Z",
-      "indexed_at": "2026-07-20T07:28:47.516Z"
+      "bytes": 648760,
+      "mtime": "2026-07-20T08:01:26.848Z",
+      "indexed_at": "2026-07-20T08:01:26.848Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -63214,9 +63214,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 33002,
-      "mtime": "2026-07-20T07:22:45.986Z",
-      "indexed_at": "2026-07-20T07:28:47.516Z",
+      "bytes": 33042,
+      "mtime": "2026-07-20T08:01:26.848Z",
+      "indexed_at": "2026-07-20T08:01:26.848Z",
       "synopsis_index_only": true
     },
     {
@@ -86541,9 +86541,9 @@
     {
       "path": "services/founder-usability-verdict.js",
       "synopsis": "Parse a founder's plain-language usability verdict from chat.",
-      "bytes": 3189,
-      "mtime": "2026-07-20T07:22:46.277Z",
-      "indexed_at": "2026-07-20T07:28:47.516Z",
+      "bytes": 5160,
+      "mtime": "2026-07-20T08:01:26.848Z",
+      "indexed_at": "2026-07-20T08:01:26.848Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -93373,9 +93373,9 @@
     {
       "path": "tests/founder-usability-verdict.test.js",
       "synopsis": "js — tests/founder-usability-verdict.test.js.",
-      "bytes": 2369,
-      "mtime": "2026-07-20T07:22:46.373Z",
-      "indexed_at": "2026-07-20T07:28:47.516Z"
+      "bytes": 4141,
+      "mtime": "2026-07-20T08:01:26.848Z",
+      "indexed_at": "2026-07-20T08:01:26.848Z"
     },
     {
       "path": "tests/fsar_artifact.test.js",
