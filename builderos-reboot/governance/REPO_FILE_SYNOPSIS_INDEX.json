@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T16:31:39.994Z",
+  "generated_at": "2026-07-20T16:34:11.355Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12058,
+  "file_count": 12059,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -67059,6 +67059,13 @@
       "ssot": [
         "docs/products/lumin-university/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "routes/dialogue-bundle-skus-routes.js",
+      "synopsis": "HTTP route module — Dialogue Bundle Skus Routes.",
+      "bytes": 525,
+      "mtime": "2026-07-20T16:34:11.355Z",
+      "indexed_at": "2026-07-20T16:34:11.355Z"
     },
     {
       "path": "routes/egress-proxy-routes.js",

@@ -850,7 +850,31 @@
       "false_done_note": "2026-07-20: this step claimed status:done with a real-looking shipped_via/commit_sha, but the target file does not exist anywhere in the current repo. Traced the commit directly: 76f3cceb1208741ba31efeeaa407887e91da8d52 genuinely added routes/dialogue-bundle-skus-routes.js on 2026-07-15, but `git merge-base --is-ancestor` proves that commit is NOT an ancestor of origin/main -- it only exists on origin/builderos-autonomous and origin/builderos-shadow. The autonomous shipping loop was, at that point in time, committing to a different branch than main (likely tied to GITHUB_DEPLOY_BRANCH being unset in production -- confirmed via the managed-env registry this same session: registryStatus SET but present:false, healthStatus missing_critical -- the code's `|| 'main'` fallback masks this most of the time but evidently didn't always). Spot-checked 4 other done-with-commit_sha steps in this same file; all 4 ARE genuine ancestors of main, so this looks like an isolated historical artifact from that window, not a systemic corruption -- did not do a full-repo audit of every done step given the scope. Reset to pending so the real governed loop rebuilds this against current main. shipped_at/commit_sha from the false claim removed rather than left to mislead future readers.",
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step11",
-      "mission_id": "PRODUCT-limitlessos"
+      "mission_id": "PRODUCT-limitlessos",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/limitlessos/twins/steps/step11.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-20T16:34:08.329Z",
+        "shipped_at": "2026-07-20T16:34:08.329Z",
+        "commit_sha": null,
+        "content_sha256": "9718e890a41b68f12b878ab8d4362d54c5e7bf654f2d8d622408068e64e39111",
+        "target_file": "routes/dialogue-bundle-skus-routes.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "routes/dialogue-bundle-skus-routes.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/limitlessos/twins/steps/step11.exact",
+          "content_sha256": "9718e890a41b68f12b878ab8d4362d54c5e7bf654f2d8d622408068e64e39111"
+        }
+      },
+      "shipped_at": "2026-07-20T16:34:08.329Z"
     },
     {
       "id": "step12",
