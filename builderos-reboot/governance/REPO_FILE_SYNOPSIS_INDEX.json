@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T18:56:32.017Z",
+  "generated_at": "2026-07-20T18:56:46.694Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12064,
+  "file_count": 12065,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -90151,6 +90151,13 @@
       "ssot": [
         "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/BLUEPRINT.json"
       ]
+    },
+    {
+      "path": "services/self-repair-decision-log.js",
+      "synopsis": "Exports recordFactoryDecision — services/self-repair-decision-log.js.",
+      "bytes": 1100,
+      "mtime": "2026-07-20T18:56:46.694Z",
+      "indexed_at": "2026-07-20T18:56:46.694Z"
     },
     {
       "path": "services/self-repair-deploy-scheduler.js",
