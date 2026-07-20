@@ -903,7 +903,7 @@
     },
     {
       "id": "builderos-step12",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/testing-response.js",
       "task": "verify API readiness",
       "spec": "Ensure HTTP 200 and expected responses; verify readiness for API endpoints adjustments.",
@@ -912,7 +912,7 @@
       ],
       "dependency_note": "2026-07-20: removed builderos-step1 from depends_on -- spurious link, not a real ordering requirement. step1's target is services/mission-ledger.js (createCommitment columns), completely unrelated to this step's target (routes/testing-response.js, a standalone readiness-check route). step1 is permanently demoted (revive_exhausted after repeated codegen_stub_detected failures) and will never become done, so the stale dependency was silently making this step permanently unshippable through the real governed loop -- confirmed live: POST /factory/ship-queue succeeds for this step directly (SENTRY passes), but runGovernedAutonomousShipOnce (which respects depends_on) reported no_shippable_steps because of exactly this link.",
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerTestingResponse"
       ],
@@ -951,7 +951,7 @@
       "demoted_at": null,
       "park_until": null,
       "no_op": null,
-      "pre_existing": null,
+      "pre_existing": true,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
@@ -1003,13 +1003,13 @@
     },
     {
       "id": "self-repair-era1-1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/self-repair-provenance-ledger.js",
       "task": "Implement the provenance ledger: an append-only, real-git-verified record of every 'done'/commit claim the factory makes.",
       "spec": "Self-bootstrap its own table on first use with `CREATE TABLE IF NOT EXISTS self_repair_provenance_ledger (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), claim TEXT NOT NULL, commit_sha TEXT, is_ancestor_of_tip BOOLEAN, verified_at TIMESTAMPTZ, epistemic_grade TEXT NOT NULL DEFAULT 'GUESS', result TEXT, created_at TIMESTAMPTZ NOT NULL DEFAULT now())` (pattern: see services/account-manager.js for the self-bootstrap-on-first-query style, do not require a separate migration file). Export async function recordProvenanceClaim(pool, { claim, commit_sha }) that inserts a row with epistemic_grade='GUESS' and result=null (the claim is unverified at record time). Export async function verifyProvenanceClaim(pool, { claim_id, repoRoot }) that shells out to `git merge-base --is-ancestor <commit_sha> HEAD` (use node:child_process execFileSync, cwd: repoRoot, matching the pattern in services/truth-ladder.js's execFileSync('git', ...) calls) to determine is_ancestor_of_tip, then UPDATEs the row with is_ancestor_of_tip, verified_at=now(), epistemic_grade='KNOW', and result='verified' or 'FALSE_CLAIM' accordingly, and returns the updated row. Export async function getProvenanceLedger(pool, { limit = 50 } = {}) that returns the most recent rows ordered by created_at DESC. Fail closed: if the git command errors (bad sha, not found), verifyProvenanceClaim must set result='FALSE_CLAIM', never silently treat an error as verified.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "recordProvenanceClaim",
         "verifyProvenanceClaim",
@@ -1029,7 +1029,15 @@
       ],
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "self-repair-era1-1",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "last_attempt_at": "2026-07-20T18:51:21.911Z",
+      "last_error": "NOT_ON_BLUEPRINT",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "failure_signature": "NOT_ON_BLUEPRINT",
+      "same_signature_count": 1,
+      "escalation_class": "governance_block"
     },
     {
       "id": "self-repair-era1-2",
