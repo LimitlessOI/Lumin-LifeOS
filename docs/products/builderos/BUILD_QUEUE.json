@@ -903,7 +903,7 @@
     },
     {
       "id": "builderos-step12",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/testing-response.js",
       "task": "verify API readiness",
       "spec": "Ensure HTTP 200 and expected responses; verify readiness for API endpoints adjustments.",
@@ -912,7 +912,7 @@
       ],
       "dependency_note": "2026-07-20: removed builderos-step1 from depends_on -- spurious link, not a real ordering requirement. step1's target is services/mission-ledger.js (createCommitment columns), completely unrelated to this step's target (routes/testing-response.js, a standalone readiness-check route). step1 is permanently demoted (revive_exhausted after repeated codegen_stub_detected failures) and will never become done, so the stale dependency was silently making this step permanently unshippable through the real governed loop -- confirmed live: POST /factory/ship-queue succeeds for this step directly (SENTRY passes), but runGovernedAutonomousShipOnce (which respects depends_on) reported no_shippable_steps because of exactly this link.",
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerTestingResponse"
       ],
@@ -936,34 +936,18 @@
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-step12",
       "mission_id": "PRODUCT-builderos",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/builderos/twins/steps/builderos-step12.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-20T14:50:36.583Z",
-        "shipped_at": "2026-07-20T14:50:36.583Z",
-        "commit_sha": null,
-        "content_sha256": "7d13f48cee0d1622d5953ab62ef9e0f2272f853f2a63b1ef4a554373e53bfa21",
-        "target_file": "routes/testing-response.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "routes/testing-response.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/builderos/twins/steps/builderos-step12.exact",
-          "content_sha256": "7d13f48cee0d1622d5953ab62ef9e0f2272f853f2a63b1ef4a554373e53bfa21"
-        }
-      },
-      "shipped_at": "2026-07-20T14:50:36.583Z"
+      "last_attempt_at": "2026-07-20T14:50:44.754Z",
+      "last_error": "artifact_missing_after_ship: artifact_proof_failed: HTTP 200",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "failure_signature": "artifact_missing_after_ship: artifact_proof_failed: HTTP N",
+      "same_signature_count": 1,
+      "escalation_class": "fake_green_attempt"
     },
     {
       "id": "sentry-broken_workflow:.github/workflows/migrate.yml",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": ".github/workflows/migrate.yml",
       "task": ".github/workflows/migrate.yml has failed in under 5s on its last 3 runs — almost certainly a config/syntax error, not a content failure.",
       "spec": "Read .github/workflows/migrate.yml directly for invalid YAML (stray markdown code-fences are a known real cause) or a broken action reference; fix or remove if superseded by a newer mechanism.",
@@ -984,9 +968,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-19T20:42:23.581Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:github_commit_failed_after_local_ship",
+      "demoted_at": "2026-07-20T14:50:34.873Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
