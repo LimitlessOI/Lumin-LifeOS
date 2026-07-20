@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-20T06:54:26.559Z",
+  "generated_at": "2026-07-20T06:59:43.157Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12054,
+  "file_count": 12055,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -40353,9 +40353,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 645256,
-      "mtime": "2026-07-20T06:03:18.046Z",
-      "indexed_at": "2026-07-20T06:03:36.374Z"
+      "bytes": 646767,
+      "mtime": "2026-07-20T06:59:43.157Z",
+      "indexed_at": "2026-07-20T06:59:43.157Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -63214,9 +63214,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 32958,
-      "mtime": "2026-07-20T06:12:14.781Z",
-      "indexed_at": "2026-07-20T06:13:02.023Z",
+      "bytes": 33002,
+      "mtime": "2026-07-20T06:59:43.157Z",
+      "indexed_at": "2026-07-20T06:59:43.157Z",
       "synopsis_index_only": true
     },
     {
@@ -67556,9 +67556,9 @@
     {
       "path": "routes/lifeos-council-builder-routes.js",
       "synopsis": "routes/lifeos-council-builder-routes.js",
-      "bytes": 160278,
-      "mtime": "2026-07-19T21:03:56.501Z",
-      "indexed_at": "2026-07-19T21:04:54.410Z",
+      "bytes": 161327,
+      "mtime": "2026-07-20T06:59:43.157Z",
+      "indexed_at": "2026-07-20T06:59:43.157Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -71961,9 +71961,9 @@
     {
       "path": "scripts/system-commit-files.mjs",
       "synopsis": "Commit local files to GitHub main via tip BuilderOS execute-batch (no human PR).",
-      "bytes": 3616,
-      "mtime": "2026-07-19T21:03:56.561Z",
-      "indexed_at": "2026-07-19T21:04:54.410Z",
+      "bytes": 5627,
+      "mtime": "2026-07-20T06:59:43.157Z",
+      "indexed_at": "2026-07-20T06:59:43.157Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -85755,9 +85755,9 @@
     {
       "path": "services/deployment-service.js",
       "synopsis": "deployment-service.js",
-      "bytes": 41041,
-      "mtime": "2026-07-19T21:03:56.683Z",
-      "indexed_at": "2026-07-19T21:04:54.410Z",
+      "bytes": 42059,
+      "mtime": "2026-07-20T06:59:43.157Z",
+      "indexed_at": "2026-07-20T06:59:43.157Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -93979,6 +93979,13 @@
       "bytes": 4388,
       "mtime": "2026-07-19T21:03:56.799Z",
       "indexed_at": "2026-07-19T21:04:54.410Z"
+    },
+    {
+      "path": "tests/system-commit-files-noop-gate.test.js",
+      "synopsis": "machine-ship honesty gate — assessShip() blocks reporting success",
+      "bytes": 2085,
+      "mtime": "2026-07-20T06:59:43.157Z",
+      "indexed_at": "2026-07-20T06:59:43.157Z"
     },
     {
       "path": "tests/tc-mailbox-subject.test.js",

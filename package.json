@@ -194,7 +194,7 @@
     "builderos:arc:pipeline": "node scripts/run-arc-pipeline.mjs",
     "builderos:arc:translate": "node scripts/run-arc-translate.mjs",
     "builderos:point-b:gate": "node scripts/run-point-b-gate.mjs",
-    "builderos:working-definition:verify": "node scripts/verify-builderos-working-definition.mjs && node --test tests/builderos-working-definition.test.js",
+    "builderos:working-definition:verify": "node scripts/verify-builderos-working-definition.mjs && node --test tests/builderos-working-definition.test.js tests/system-commit-files-noop-gate.test.js",
     "builderos:working-definition:verify:operational": "BUILDEROS_WORKING_OPERATIONAL=1 node scripts/verify-builderos-working-definition.mjs",
     "builderos:openai:smoke": "node scripts/builderos-openai-smoke.mjs",
     "builderos:mission-step": "node scripts/builderos-run-mission-step.mjs",

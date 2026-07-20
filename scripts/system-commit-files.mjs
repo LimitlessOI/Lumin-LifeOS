@@ -33,6 +33,32 @@ Example: npm run system:commit-files -- --message "GAP-FILL: system ship desk" -
   process.exit(exitCode);
 }
 
+const normPath = (p) => String(p || '').replace(/^\.\//, '').replace(/\\/g, '/');
+
+/**
+ * Honesty gate: given the paths we asked to commit and the execute-batch
+ * response, decide whether every requested file actually changed. A file whose
+ * content matched HEAD produces a commit with NO real diff for it — the exact
+ * shape of the false [system-build] claim found in the audit (commit 3fa6594f).
+ * Fail-open: if the server did not report change-detection (older deploy),
+ * `unchanged` is null and we do not block.
+ */
+export function assessShip(requestedPaths, json) {
+  const requested = requestedPaths.map(normPath);
+  const changed = Array.isArray(json?.changed_files) ? json.changed_files.map(normPath) : null;
+  let unchanged = Array.isArray(json?.unchanged_files) ? json.unchanged_files.map(normPath) : null;
+  if (!unchanged && changed) {
+    unchanged = requested.filter((p) => !changed.includes(p));
+  }
+  const blocking = Array.isArray(unchanged) ? unchanged.filter((p) => requested.includes(p)) : [];
+  return {
+    ok: blocking.length === 0,
+    changed,
+    unchanged: blocking,
+    detection_available: changed !== null || Array.isArray(json?.unchanged_files),
+  };
+}
+
 function parseArgs(argv) {
   const out = { message: '', branch: '', paths: [] };
   let i = 0;
@@ -112,17 +138,34 @@ async function main() {
     process.exit(1);
   }
 
+  const assessment = assessShip(files.map((f) => f.target_file), json);
+  if (!assessment.ok) {
+    console.error(JSON.stringify({
+      ok: false,
+      reason: 'NO_OP_TARGETS — commit landed but these requested files did NOT actually change (empty-diff false-claim risk):',
+      unchanged_files: assessment.unchanged,
+      changed_files: assessment.changed,
+      commit_sha: json.commit_sha || json.sha || null,
+      hint: 'If you meant to change these files, the content you sent matched HEAD. Do not report them as shipped.',
+    }, null, 2));
+    process.exit(1);
+  }
+
   console.log(JSON.stringify({
     ok: true,
     committed: true,
     commit_sha: json.commit_sha || json.sha || null,
     commit_mode: json.commit_mode || null,
     committed_files: json.committed_files || files.map((f) => f.target_file),
+    changed_files: assessment.changed,
+    change_detection: assessment.detection_available ? 'verified' : 'unavailable (older deploy — fail-open)',
     tip: base,
   }, null, 2));
 }
 
-main().catch((err) => {
-  console.error(err?.stack || err?.message || String(err));
-  process.exit(1);
-});
+if (process.argv[1] && process.argv[1].endsWith('system-commit-files.mjs')) {
+  main().catch((err) => {
+    console.error(err?.stack || err?.message || String(err));
+    process.exit(1);
+  });
+}

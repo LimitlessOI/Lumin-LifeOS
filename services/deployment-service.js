@@ -369,7 +369,7 @@ export function createDeploymentService(deps) {
       const msg = err.message || 'GitHub commit failed';
       const retryableConflict = commitRes.status === 409
         || /is at [a-f0-9]{7,40} but expected/i.test(msg)
-        || /sha.*does not match/i.test(msg)
+        || /sha.does not match/i.test(msg)
         || /Update is not a fast forward/i.test(msg);
       if (retryableConflict && attempt < maxAttempts) {
         continue;
@@ -587,7 +587,30 @@ export function createDeploymentService(deps) {
     }
 
     console.log(`✅ [DEPLOY] Batch committed ${paths.length} files → ${targetBranch}${commitSha ? ` (${commitSha.slice(0, 7)})` : ''}`);
-    return { ok: true, sha: commitSha, paths };
+
+    // Honesty guard (post-commit, fail-open): ask GitHub what the commit ACTUALLY
+    // changed, so a no-op file (blob identical to HEAD) can never be reported as
+    // a real change. This is the machine-ship analog of the local commit-msg
+    // empty-diff gate — the machine path bypasses local git hooks entirely.
+    // Runs AFTER the commit is finalized; any failure here leaves shipping intact.
+    let changedFiles = null;
+    if (commitSha) {
+      try {
+        const cmtRes = await fetch(
+          `https://api.github.com/repos/${owner}/${repo}/commits/${commitSha}`,
+          { headers: authHeaders },
+        );
+        if (cmtRes.ok) {
+          const cmt = await cmtRes.json();
+          changedFiles = (Array.isArray(cmt.files) ? cmt.files : [])
+            .map((f) => f.filename)
+            .filter((p) => p && p !== INDEX_REL);
+        }
+      } catch (e) {
+        console.warn(`⚠️ [DEPLOY] post-commit change-detection skipped: ${e.message}`);
+      }
+    }
+    return { ok: true, sha: commitSha, paths, changed_files: changedFiles };
   }
 
   // ── Synopsis index helpers (File Synopsis Law, governance-by-construction) ──
