@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-21T07:06:43.480Z",
+  "generated_at": "2026-07-21T07:09:02.143Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12094,
+  "file_count": 12095,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -92036,6 +92036,13 @@
       "bytes": 3354,
       "mtime": "2026-07-21T06:39:21.593Z",
       "indexed_at": "2026-07-21T06:39:21.593Z"
+    },
+    {
+      "path": "services/voluntary-progress-twin-read.js",
+      "synopsis": "Exports readTypedTwinState — services/voluntary-progress-twin-read.js.",
+      "bytes": 1135,
+      "mtime": "2026-07-21T07:09:02.143Z",
+      "indexed_at": "2026-07-21T07:09:02.143Z"
     },
     {
       "path": "services/vr-experience/engine.js",

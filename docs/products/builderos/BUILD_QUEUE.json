@@ -1675,7 +1675,7 @@
     },
     {
       "id": "grail-wave1-1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/voluntary-progress-twin-read.js",
       "task": "Wave 1, Mission 1 (dependency-first): minimum any-user Twin-read adapter. Devin's reality map (docs/architecture/DIGITAL_TWIN_CURRENT_STATE.md) confirmed Twin reading is fragmented across 3 mechanisms, none unified and typed for arbitrary users -- this module is that missing unification, reusing the one mechanism that already supports arbitrary users rather than building new storage.",
       "spec": "Import and reuse the real, already-exported `readTwin` from `services/lifere-twin-store.js` (`import { readTwin } from './lifere-twin-store.js'` -- it is a pre-instantiated singleton function, NOT a class you construct; its real signature is synchronous: `readTwin({ tenantId = 'default', userId, twinKey, moduleKey, requesterId })` and it returns the parsed JSON object or `null` if no file exists at that path -- do not reimplement file reading, call this exact function). Export async function readTypedTwinState(pool, { userId, tenantId = 'default', twinKey, moduleKey = null, requesterId = null, fields = [] }) that calls readTwin({ tenantId, userId, twinKey, moduleKey, requesterId }), and for each string in `fields` (a list of field names the caller wants), returns one entry per field in a `state` array: if the raw twin object is null OR the field is missing from it, the entry is `{ field, status: 'unknown', value: null }` -- NEVER invent or default a value for a missing field, this is the module's core safety requirement (Devin's map: 'no formal mark unknowns instead of inventing contract' was the confirmed gap). If the field exists in the raw twin object, the entry is `{ field, status: 'user-stated', value: <the raw value> }` (default to 'user-stated' status since this store only records what a user or a prior process wrote, never inferred data -- there is no inference metadata in the underlying store yet). Also handle a thrown `ForbiddenCrossUserError` (exported from `./lifere-twin-store.js`) by catching it and returning `{ ok: false, error: 'forbidden_cross_user', state: [] }` instead of letting it propagate -- a permission error must never crash a caller's turn. On success return `{ ok: true, state }`. Export a second function isFieldKnown(state, field) that takes the `state` array returned above and returns true only if that field's status is NOT 'unknown'. This module reads only -- it must never call writeTwin or any write function. CRITICAL, learned repeatedly tonight: EVERY exported function that touches a table must independently run `await pool.query('CREATE TABLE IF NOT EXISTS <real DDL, not a placeholder>')` as its own, separate, no-parameters pool.query() call before any parameterized query in that same function -- never assume another function in the file already created the table, and never combine the CREATE TABLE with a parameterized query in one pool.query(text, values) call. If this module reuses another module's table or DDL, copy it character-for-character, never reconstruct from memory.",
@@ -1704,7 +1704,38 @@
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "grail-wave1-1",
       "mission_id": "PRODUCT-builderos",
-      "revive_note": "2026-07-21: manually reset after NOT_ON_BLUEPRINT (same transient race pattern seen and self-resolved/manually-revived repeatedly tonight)."
+      "last_attempt_at": "2026-07-21T07:02:03.454Z",
+      "last_error": "NOT_ON_BLUEPRINT",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "failure_signature": "NOT_ON_BLUEPRINT",
+      "same_signature_count": 1,
+      "escalation_class": "governance_block",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/builderos/twins/steps/grail-wave1-1.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-21T07:08:59.550Z",
+        "shipped_at": "2026-07-21T07:08:59.550Z",
+        "commit_sha": null,
+        "content_sha256": "17becace52519872d8238762a2076801707d9a20648b608597f223080890eb3b",
+        "target_file": "services/voluntary-progress-twin-read.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/voluntary-progress-twin-read.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/builderos/twins/steps/grail-wave1-1.exact",
+          "content_sha256": "17becace52519872d8238762a2076801707d9a20648b608597f223080890eb3b"
+        }
+      },
+      "shipped_at": "2026-07-21T07:08:59.550Z"
     },
     {
       "id": "grail-wave1-2",
@@ -1819,7 +1850,7 @@
     },
     {
       "id": "grail-wave1-5",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/voluntary-progress-experiment.js",
       "task": "Wave 1, Mission 5 (highest-reuse rung per Devin's map): experiment + prediction, built ON TOP of the existing cognitive-core-judgment predict/observe/calibrate loop -- explicitly NOT a new Experiment Ledger. Devin confirmed services/cognitive-core-judgment.js already has a real, live, pg-backed recordDecisionTurn/recordPrediction/recordOutcome loop with anti-inference guards -- this module only ADDS the missing goal/experiment linkage on top of it.",
       "spec": "Import `createCognitiveCoreJudgment` from `./cognitive-core-judgment.js` (its real exported factory function -- call it once per invocation as `createCognitiveCoreJudgment({ pool })` to get `{ recordDecisionTurn, recordPrediction, recordOutcome }`, do not reimplement any of these three). Self-bootstrap ONE new, small linking table: `CREATE TABLE IF NOT EXISTS voluntary_progress_goal_experiments (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), user_id TEXT NOT NULL, goal_id TEXT NOT NULL, chosen_path_label TEXT NOT NULL, judgment_decision_id UUID, judgment_prediction_id UUID, created_at TIMESTAMPTZ NOT NULL DEFAULT now())` -- this table exists ONLY to link a voluntary-progress goal to the judgment system's decision/prediction rows, it does not duplicate any prediction/outcome data itself. Export async function createGoalExperiment(pool, { user_id, goal_id, chosen_path_label, path_description }) that: (1) calls the real cognitive-core-judgment factory's recordDecisionTurn({ userId: user_id, domain: 'voluntary_progress_goal', question: `Chosen path for goal ${goal_id}: ${chosen_path_label}`, options: [chosen_path_label], stakes: 'medium' }), (2) calls recordPrediction({ decisionId: <the decision row's id from step 1>, predictedOption: chosen_path_label, confidence: 0.5 }) (0.5 is a neutral default since this module has no real basis yet to predict a specific confidence -- do not invent a higher confidence), (3) inserts a row into voluntary_progress_goal_experiments linking user_id/goal_id/chosen_path_label to the real judgment_decision_id and judgment_prediction_id from steps 1-2, (4) returns { goal_experiment_id, judgment_decision_id, judgment_prediction_id }. Export async function recordGoalExperimentOutcome(pool, { goal_experiment_id, actual_option, captured_how = 'explicit' }) that looks up the linked judgment_decision_id from voluntary_progress_goal_experiments, then calls the real recordOutcome({ decisionId: judgment_decision_id, actualOption: actual_option, capturedHow: captured_how }) -- do not reimplement outcome recording or its anti-inference guards, call the real function. Returns whatever recordOutcome returns. CRITICAL, learned repeatedly tonight: EVERY exported function that touches a table must independently run `await pool.query('CREATE TABLE IF NOT EXISTS <real DDL, not a placeholder>')` as its own, separate, no-parameters pool.query() call before any parameterized query in that same function -- never assume another function in the file already created the table, and never combine the CREATE TABLE with a parameterized query in one pool.query(text, values) call. If this module reuses another module's table or DDL, copy it character-for-character, never reconstruct from memory.",
@@ -1851,9 +1882,30 @@
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "grail-wave1-5",
       "mission_id": "PRODUCT-builderos",
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-21T07:05:00.417Z",
-      "commit_sha": "6e5d74711e23cee67f09fc5fbff940f9392392a8"
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/builderos/twins/steps/grail-wave1-5.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-21T07:04:53.569Z",
+        "shipped_at": "2026-07-21T07:04:53.569Z",
+        "commit_sha": null,
+        "content_sha256": "62264e768e5250cd6bc879d5e3c1feaed5bd97fbee10e2e02b9ded9ec1197a26",
+        "target_file": "services/voluntary-progress-experiment.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/voluntary-progress-experiment.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/builderos/twins/steps/grail-wave1-5.exact",
+          "content_sha256": "62264e768e5250cd6bc879d5e3c1feaed5bd97fbee10e2e02b9ded9ec1197a26"
+        }
+      },
+      "shipped_at": "2026-07-21T07:04:53.569Z"
     },
     {
       "id": "grail-wave1-6",
