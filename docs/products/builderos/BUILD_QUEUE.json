@@ -1959,7 +1959,30 @@
       "escalation_class": null,
       "revive_note": "Prior shipped version had a real ReferenceError bug: compareExperimentOutcome declared 'const twinProposal = await proposeTwinUpdate(...)' (camelCase) but returned '{ ok: true, outcome, twin_proposal }' (snake_case, never declared) -- the function crashed with 'ReferenceError: twin_proposal is not defined' on every single call. Found by independently executing all 4 exports against stubbed dependencies + a fake pool (20/20 behavioral checks -- 19 passed cleanly, this one caught the crash immediately). Confirmed the other 3 exports (proposeGoal, presentAlternativeFutures, confirmGoalDecision) and the rest of compareExperimentOutcome's own logic are all correct: honor-the-no is respected, propose-not-apply is respected, unknown twin fields stay unknown, forbidden_cross_user propagates correctly -- this is an isolated one-line variable-name bug, not a design problem. File deleted via git rm before this reset so claimPreExistingSatisfiedSteps cannot re-ship the broken version.",
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-21T20:04:52.516Z"
+      "shipped_at": "2026-07-21T20:13:38.374Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/builderos/twins/steps/grail-wave2-1.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-21T20:13:38.374Z",
+        "shipped_at": "2026-07-21T20:13:38.374Z",
+        "commit_sha": "58774f854a7618ff6d2ef83bec1c493e3aa78882",
+        "content_sha256": "32f4235b34727f16cb001ea8ef832c7a221844fb58c8c39b328e0f52deb5f824",
+        "target_file": "services/voluntary-progress-slice-orchestrator.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/voluntary-progress-slice-orchestrator.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/builderos/twins/steps/grail-wave2-1.exact",
+          "content_sha256": "32f4235b34727f16cb001ea8ef832c7a221844fb58c8c39b328e0f52deb5f824"
+        }
+      }
     }
   ],
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
