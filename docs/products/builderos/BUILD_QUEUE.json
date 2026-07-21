@@ -1860,13 +1860,13 @@
     },
     {
       "id": "grail-wave1-6",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/voluntary-progress-twin-proposal-gate.js",
       "task": "Wave 1, Mission 6 (the founder's explicit, confirmed requirement): propose-not-apply Twin update gate. Devin's map marked this a 'known_violation' -- every existing Twin write (writeTwin in lifere-twin-store.js) applies immediately with no approval step anywhere. This module is the ONLY sanctioned path for a voluntary-progress-derived Twin update: it must never call writeTwin directly from the proposal-creation function, only from an explicit, separately-called approval function.",
       "spec": "Self-bootstrap `CREATE TABLE IF NOT EXISTS voluntary_progress_twin_proposals (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), user_id TEXT NOT NULL, subject TEXT NOT NULL, current_value JSONB, proposed_value JSONB NOT NULL, truth_grade TEXT NOT NULL DEFAULT 'GUESS', confidence NUMERIC, evidence TEXT, rationale TEXT, proposed_by TEXT NOT NULL, required_approver TEXT NOT NULL DEFAULT 'user', status TEXT NOT NULL DEFAULT 'pending', proposed_at TIMESTAMPTZ NOT NULL DEFAULT now(), decided_at TIMESTAMPTZ, twin_write_receipt JSONB)`. Export async function proposeTwinUpdate(pool, { user_id, subject, current_value = null, proposed_value, truth_grade = 'GUESS', confidence = null, evidence = null, rationale, proposed_by }) that validates truth_grade is one of 'KNOW'/'THINK'/'GUESS' (throw a real Error if not), inserts one row with status='pending' (status must NEVER be set to anything other than 'pending' by this function -- it is a strict INSERT with a hardcoded status literal in the SQL, not a parameter), and returns the inserted row. This function MUST NOT call writeTwin or any Twin-writing function -- it only records the proposal. Export async function approveTwinUpdateProposal(pool, { proposal_id, approved_by, tenantId = 'default', twinKey, moduleKey = null }) that: (1) looks up the proposal row by id, throws a real Error if it does not exist or its status is not 'pending' (an already-decided proposal can never be re-approved -- fail closed), (2) imports and calls the real `writeTwin` from `./lifere-twin-store.js` with the proposal's user_id and proposed_value as the payload, requesterId set to approved_by, (3) updates the proposal row: status='approved', decided_at=now(), twin_write_receipt = the real receipt object writeTwin returned (JSONB), (4) returns the updated proposal row. This is the ONLY function in this module allowed to call writeTwin. Export async function rejectTwinUpdateProposal(pool, { proposal_id, rejected_by, reason = null }) that updates status='rejected', decided_at=now(), rationale = COALESCE existing rationale plus the rejection reason appended -- must NOT call writeTwin. Export async function getPendingProposals(pool, { user_id, limit = 50 } = {}) returning rows where status='pending' for that user, ordered by proposed_at DESC. CRITICAL, learned repeatedly tonight: EVERY exported function that touches a table must independently run `await pool.query('CREATE TABLE IF NOT EXISTS <real DDL, not a placeholder>')` as its own, separate, no-parameters pool.query() call before any parameterized query in that same function -- never assume another function in the file already created the table, and never combine the CREATE TABLE with a parameterized query in one pool.query(text, values) call. If this module reuses another module's table or DDL, copy it character-for-character, never reconstruct from memory.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "proposeTwinUpdate",
         "approveTwinUpdateProposal",
@@ -1895,30 +1895,14 @@
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "grail-wave1-6",
       "mission_id": "PRODUCT-builderos",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/builderos/twins/steps/grail-wave1-6.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-21T07:11:41.283Z",
-        "shipped_at": "2026-07-21T07:11:41.283Z",
-        "commit_sha": null,
-        "content_sha256": "23b623480eb686f4cebb6f59a0055a77115bc31be100e830a763fad12d8d8b18",
-        "target_file": "services/voluntary-progress-twin-proposal-gate.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/voluntary-progress-twin-proposal-gate.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/builderos/twins/steps/grail-wave1-6.exact",
-          "content_sha256": "23b623480eb686f4cebb6f59a0055a77115bc31be100e830a763fad12d8d8b18"
-        }
-      },
-      "shipped_at": "2026-07-21T07:11:41.283Z"
+      "last_attempt_at": "2026-07-21T07:11:48.138Z",
+      "last_error": "artifact_missing_after_ship: artifact_proof_failed: status='pending'",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "failure_signature": "artifact_missing_after_ship: artifact_proof_failed: status='pending'",
+      "same_signature_count": 1,
+      "escalation_class": "fake_green_attempt"
     }
   ],
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
