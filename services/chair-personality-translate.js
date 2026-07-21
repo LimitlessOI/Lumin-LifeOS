@@ -35,6 +35,7 @@ THIS IS TRANSLATION — like turning API output into conversation — NOT rolepl
 - If recent_thread is present, continue the conversation — do not restart or summarize unless they ask.
 - Answer the exact question asked — do not answer a different topic from thread history.
 - If system_knowledge or program_context appear — use them as authoritative; never say "system facts don't contain" when they are present.
+- If grounded_direct_answer appears, it is the VERIFIED answer to this exact question — deliver its substance directly and crisply in your own voice (no counsel drift, no hedging, no "system facts say"). Do not contradict it or invent beyond it.
 - Lumin IS the Chair — can implement product changes via BuilderOS (build_async / council build), not just talk.
 - Predictions must be labeled "Prediction:" if you include any.
 Authority: docs/constitution/LUMIN_COMMUNICATION_DNA.md`;
@@ -186,7 +187,9 @@ Lumin:`;
 
 export function formatFactsFallback(facts = {}) {
   const lines = [];
-  if (facts.grounded_direct_answer) lines.push(String(facts.grounded_direct_answer));
+  // Grounded direct answer survives even a total model-call failure so the
+  // verified content is never lost to a generic fallback (SO-003 safety net).
+  if (facts.grounded_direct_answer) lines.push(String(facts.grounded_direct_answer).slice(0, 3500));
   if (facts.point_b_summary) lines.push(facts.point_b_summary);
   if (facts.alpha_readiness?.ready_for_alpha_testing != null) {
     lines.push(facts.alpha_readiness.ready_for_alpha_testing

@@ -27,6 +27,16 @@ function resolveBaseUrl(req, fallback) {
   return String(fallback || process.env.PUBLIC_BASE_URL || '').replace(/\/+$/, '');
 }
 
+// Every tc_* table types `agent_id` as `uuid`. The routes take a client-supplied
+// agentId, so a non-UUID value made Postgres throw `invalid input syntax for
+// type uuid` — a raw 500 that (in /subscribe) fired AFTER the Stripe session was
+// created but BEFORE the checkout URL was returned, leaving an orphan session and
+// leaking the DB error. Validate at the boundary and fail clean (400) instead.
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+function isUuid(v) {
+  return typeof v === 'string' && UUID_RE.test(v.trim());
+}
+
 export function registerTcBillingRoutes(app, deps) {
   const { pool, requireKey, logger, baseUrl } = deps || {};
 
@@ -49,6 +59,11 @@ export function registerTcBillingRoutes(app, deps) {
       const body = req.body && typeof req.body === 'object' ? req.body : {};
       const agentId = body.agentId ?? body.agent_id;
       if (!agentId) return sendError(res, 400, 'agentId is required');
+      if (!isUuid(agentId)) {
+        return sendError(res, 400, 'agentId must be a valid UUID', {
+          hint: 'Create/resolve the agent first and pass its UUID; TC records key agent_id as uuid.',
+        });
+      }
 
       const tier = String(body.tier || body.plan_tier || 'pro').toLowerCase();
       const amountCents = TIER_CENTS[tier];
@@ -109,6 +124,7 @@ export function registerTcBillingRoutes(app, deps) {
       const agentId = String(req.query.agent_id || '').trim();
       const sessionId = String(req.query.session_id || '').trim();
       if (!agentId || !sessionId) return res.status(400).send('Missing payment confirmation parameters.');
+      if (!isUuid(agentId)) return res.status(400).send('Invalid agent reference.');
 
       const stripe = await getStripeClient();
       if (!stripe) return res.status(503).send('Stripe not configured.');
@@ -176,6 +192,7 @@ export function registerTcBillingRoutes(app, deps) {
     try {
       const { agentId } = req.params || {};
       if (!agentId) return sendError(res, 400, 'agentId is required');
+      if (!isUuid(agentId)) return sendError(res, 400, 'agentId must be a valid UUID');
 
       const result = await pool.query(
         `SELECT id, agent_id, status, payload, created_at, updated_at
