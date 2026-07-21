@@ -782,7 +782,31 @@
       "proof": null,
       "failure_signature": "NOT_ON_BLUEPRINT",
       "same_signature_count": 1,
-      "escalation_class": "governance_block"
+      "escalation_class": "governance_block",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/site-builder/twins/steps/sb-deliverability-gate-v2.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-21T20:36:11.651Z",
+        "shipped_at": "2026-07-21T20:36:11.651Z",
+        "commit_sha": null,
+        "content_sha256": "737ce50a8fb782328bac086931f9269ec2859accec3980733958a02d542dcf24",
+        "target_file": "services/site-builder-deliverability-check.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/site-builder-deliverability-check.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/site-builder/twins/steps/sb-deliverability-gate-v2.exact",
+          "content_sha256": "737ce50a8fb782328bac086931f9269ec2859accec3980733958a02d542dcf24"
+        }
+      },
+      "shipped_at": "2026-07-21T20:36:11.651Z"
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",
