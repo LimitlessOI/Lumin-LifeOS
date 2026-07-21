@@ -1211,10 +1211,10 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
     // Replaces LifeOS-specific long strings with short symbols, then prepends a tiny
     // inline key listing only the symbols that actually fired in this prompt.
     // Works with all free stateless providers — no KV cache required.
-    // Example savings: "CREATE TABLE IF NOT EXISTS" (6 tokens) → "*ct" (1 token).
+    // Example savings: "CREATE TABLE IF NOT EXISTS" (6 tokens) → "ct" (1 token).
     // The drift monitor gates this layer — auto-skips if drift was detected for this pair.
     let lclWasActive = false;
-    let lclSymbolsFired = [];   // raw symbol strings e.g. ['*pq', '*uid'] — used by drift monitor
+    let lclSymbolsFired = [];   // raw symbol strings e.g. ['pq', 'uid'] — used by drift monitor
     if (!isCritical && !lclMonitor.shouldSkipLCL(member, taskType)) {
       const lclResult = promptTranslator.translate(finalPrompt, {
         taskType,
@@ -1225,7 +1225,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
       if (lclResult.savedTokens > 0) {
         // Identify the exact symbols that appear in the compressed text
         const firedEntries = CODE_SYMBOLS.filter(([, sym]) => lclResult.prompt.includes(sym));
-        lclSymbolsFired = firedEntries.map(([, sym]) => sym);  // e.g. ['*pq', '*uid']
+        lclSymbolsFired = firedEntries.map(([, sym]) => sym);  // e.g. ['pq', 'uid']
         const keyLine = firedEntries.map(([full, sym]) => `${sym}=${full}`).join(', ');
         finalPrompt = keyLine
           ? `[KEY:${keyLine}]\n${lclResult.prompt}`
@@ -1343,7 +1343,16 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
       return Math.min(config.maxTokens || 800, 800); // default cap: 800 (was 1000)
     })();
     const scopedMaxTokens = (() => {
-      const n = options.maxOutputTokens;
+      // Honor an explicit caller output-budget override. Historically only
+      // `maxOutputTokens` was read here, but many live call sites pass
+      // `maxTokens` instead (SMOS generate/extract, ClientCare VOB extraction,
+      // LifeRE coaching, YouTube research, …). That key was silently ignored,
+      // so output was clamped to the task-type default (e.g. 400 for `json`,
+      // 800 default) and long JSON/content responses were truncated mid-array —
+      // callers then fell back to templates/heuristics (the SMOS $49-pack
+      // "echoed the transcript" bug). Treat `maxTokens` as an alias so a
+      // caller's explicit budget is honored (still clamped to the hard cap).
+      const n = options.maxOutputTokens ?? options.maxTokens;
       if (typeof n === 'number' && Number.isFinite(n) && n > 0) {
         return Math.min(Math.max(Math.floor(n), 1), MAX_OUTPUT_TOKENS_CAP);
       }
@@ -1364,7 +1373,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
       // callers receiving ```json ... ``` and failing on JSON.parse
       const cleanForCache = (t) => t
         .replace(/^```(?:json|js|javascript|text)?\s*/i, '')
-        .replace(/\s*```\s*$/i, '')
+        .replace(/\s*```\s$/i, '')
         .trim();
 
       if (OPENAI_COMPATIBLE_PROVIDERS.has(config.provider)) {
