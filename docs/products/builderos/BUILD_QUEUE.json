@@ -2004,7 +2004,31 @@
       "proof": null,
       "failure_signature": "NOT_ON_BLUEPRINT",
       "same_signature_count": 1,
-      "escalation_class": "governance_block"
+      "escalation_class": "governance_block",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/builderos/twins/steps/grail-wave3-1.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-21T20:43:05.427Z",
+        "shipped_at": "2026-07-21T20:43:05.427Z",
+        "commit_sha": null,
+        "content_sha256": "fd5e876716fe3c8279e331f86794d0837e5b4ef6f73e7a140df94bbebeb788d9",
+        "target_file": "routes/voluntary-progress-routes.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "routes/voluntary-progress-routes.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/builderos/twins/steps/grail-wave3-1.exact",
+          "content_sha256": "fd5e876716fe3c8279e331f86794d0837e5b4ef6f73e7a140df94bbebeb788d9"
+        }
+      },
+      "shipped_at": "2026-07-21T20:43:05.427Z"
     }
   ],
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",

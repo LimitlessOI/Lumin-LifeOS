@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-21T20:36:14.978Z",
+  "generated_at": "2026-07-21T20:43:08.175Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12100,
+  "file_count": 12101,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -69076,6 +69076,16 @@
       "bytes": 26730,
       "mtime": "2026-07-21T05:32:04.344Z",
       "indexed_at": "2026-07-21T05:58:39.404Z"
+    },
+    {
+      "path": "routes/voluntary-progress-routes.js",
+      "synopsis": "Exports createVoluntaryProgressRoutes — routes/voluntary-progress-routes.js.",
+      "bytes": 2757,
+      "mtime": "2026-07-21T20:43:08.175Z",
+      "indexed_at": "2026-07-21T20:43:08.175Z",
+      "ssot": [
+        "docs/products/lifere/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/web-intelligence-routes.js",
