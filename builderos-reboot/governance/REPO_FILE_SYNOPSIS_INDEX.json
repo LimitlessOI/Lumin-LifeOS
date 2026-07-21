@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-21T05:33:49.961Z",
+  "generated_at": "2026-07-21T05:35:40.044Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12082,
+  "file_count": 12083,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -36833,6 +36833,13 @@
       "bytes": 11959,
       "mtime": "2026-07-20T07:22:45.405Z",
       "indexed_at": "2026-07-20T07:28:47.516Z"
+    },
+    {
+      "path": "docs/architecture/DIGITAL_TWIN_CURRENT_STATE.md",
+      "synopsis": "Receipted reality map of the Digital-Twin-driven LifeOS vertical slice integration path (Devin black-box mapping, observe-only)",
+      "bytes": 11551,
+      "mtime": "2026-07-21T05:35:40.044Z",
+      "indexed_at": "2026-07-21T05:35:40.044Z"
     },
     {
       "path": "docs/architecture/DIGITAL_TWIN_DOCTRINE.md",
