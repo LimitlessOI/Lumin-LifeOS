@@ -39,6 +39,20 @@ if ! node "$ROOT/scripts/verify-gap-fill-honesty.mjs" "$COMMIT_MSG_FILE"; then
   exit 1
 fi
 
+# ── 1c. SO-001 hand-authored size gate (HARD) ─────────────────────────────────
+# The gates above verify a GAP-FILL message exists, is non-vague, and (for one
+# specific lie-shape) isn't factually false -- but nothing stopped a GAP-FILL
+# commit from hand-authoring a large, genuinely load-bearing services/routes/
+# middleware module and just not tripping that one pattern. A 2026-07-20
+# independent audit rated "SO-001 factory-required promise" 4/10 for exactly
+# this reason. This adds a deterministic size threshold: a new file, or a real
+# diff over 15 added lines, requires an explicit HAND-AUTHORED-JUSTIFICATION:
+# line and gets durably logged to docs/products/builderos/GAP_FILL_LEDGER.json
+# for later Architect/Chair review.
+if ! node "$ROOT/scripts/verify-gap-fill-size-gate.mjs" "$COMMIT_MSG_FILE"; then
+  exit 1
+fi
+
 # ── 2. §2.15 Intent Drift gate ────────────────────────────────────────────────
 case "$COMMIT_MSG" in
   *"[system-build]"*|*"GAP-FILL:"*)

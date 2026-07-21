@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-21T20:26:23.148Z",
+  "generated_at": "2026-07-21T20:30:59.155Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12097,
+  "file_count": 12098,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -39734,9 +39734,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 263433,
-      "mtime": "2026-07-21T05:32:03.817Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z"
+      "bytes": 265479,
+      "mtime": "2026-07-21T20:30:43.774Z",
+      "indexed_at": "2026-07-21T20:30:59.155Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -72920,6 +72920,16 @@
       "bytes": 7592,
       "mtime": "2026-07-21T05:32:04.390Z",
       "indexed_at": "2026-07-21T05:58:39.404Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/verify-gap-fill-size-gate.mjs",
+      "synopsis": "Blocks a large hand-authored services/routes/middleware change from",
+      "bytes": 6976,
+      "mtime": "2026-07-21T20:30:05.541Z",
+      "indexed_at": "2026-07-21T20:30:59.155Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
