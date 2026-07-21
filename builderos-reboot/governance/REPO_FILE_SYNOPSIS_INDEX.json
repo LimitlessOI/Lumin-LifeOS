@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-21T00:03:05.583Z",
+  "generated_at": "2026-07-21T02:22:00.803Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12076,
+  "file_count": 12079,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -37564,9 +37564,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 74303,
-      "mtime": "2026-07-20T21:55:01.294Z",
-      "indexed_at": "2026-07-20T21:55:01.294Z"
+      "bytes": 76317,
+      "mtime": "2026-07-21T02:22:00.803Z",
+      "indexed_at": "2026-07-21T02:22:00.803Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -37658,6 +37658,13 @@
       "bytes": 5013,
       "mtime": "2026-07-20T07:22:45.414Z",
       "indexed_at": "2026-07-20T07:28:47.516Z"
+    },
+    {
+      "path": "docs/conversation_dumps/2026-07-20-creative-engine-five-laws-brainstorm.md",
+      "synopsis": "Archive of the 2026-07-20 multi-AI brainstorm — Creative Engine (Voluntary Progress), the Laws, media-as-judgment, laws-of-success research. Structured synopsis (not full verbatim, per founder direction).",
+      "bytes": 15473,
+      "mtime": "2026-07-21T02:22:00.803Z",
+      "indexed_at": "2026-07-21T02:22:00.803Z"
     },
     {
       "path": "docs/conversation_dumps/by-product/sessions/2a4739f2/BUILDEROS-AUTONOMOUS.md",
@@ -38246,6 +38253,13 @@
       "bytes": 20445,
       "mtime": "2026-07-20T07:22:45.389Z",
       "indexed_at": "2026-07-20T07:28:47.516Z"
+    },
+    {
+      "path": "docs/CREATIVE_ENGINE_AND_PROGRESS_DOCTRINE.md",
+      "synopsis": "Creative Engine / Voluntary Progress doctrine CANDIDATE — the One Engine + the Laws of voluntary progress. Pre-ratification brainstorm synthesis, subordinate to North Star, NOT law.",
+      "bytes": 10539,
+      "mtime": "2026-07-21T02:22:00.803Z",
+      "indexed_at": "2026-07-21T02:22:00.803Z"
     },
     {
       "path": "docs/CROSS_AGENT_CHANNEL.md",
@@ -40350,6 +40364,13 @@
       "indexed_at": "2026-07-20T07:28:47.516Z"
     },
     {
+      "path": "docs/products/lifeos/conversations/2026-07-20-creative-engine-five-laws.md",
+      "synopsis": "LifeOS slice of the 2026-07-20 Creative Engine / Laws brainstorm — coaching philosophy, voluntary progress, Be-Do-Have, the Life Graph. Pointer to master.",
+      "bytes": 3396,
+      "mtime": "2026-07-21T02:22:00.803Z",
+      "indexed_at": "2026-07-21T02:22:00.803Z"
+    },
+    {
       "path": "docs/products/lifeos/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 30729,
@@ -40491,9 +40512,9 @@
     {
       "path": "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md",
       "synopsis": "SocialMediaOS Module Home",
-      "bytes": 19747,
-      "mtime": "2026-07-20T20:49:00.618Z",
-      "indexed_at": "2026-07-20T20:49:00.618Z"
+      "bytes": 21226,
+      "mtime": "2026-07-21T02:22:00.803Z",
+      "indexed_at": "2026-07-21T02:22:00.803Z"
     },
     {
       "path": "docs/products/memory-intelligence/FILE_MANIFEST.json",
