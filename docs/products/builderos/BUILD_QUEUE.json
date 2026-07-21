@@ -1592,7 +1592,31 @@
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "grail-phase05-1",
       "mission_id": "PRODUCT-builderos",
-      "revive_note": "2026-07-21: reset to add a consent_scope column -- real gap found via independent critique (Chair live judgment + Opus review both independently converged on this before any real caller was wired to these functions, so zero data-loss risk from redefining the schema now). consent_scope is nullable TEXT, defaulting to 'internal_operational' when not specified, so existing callers (none yet) are not broken -- this is the minimum viable consent field per doctrine A-Z Section H, full retention/deletion/export mechanics remain a later, larger piece of work, not solved here."
+      "revive_note": "2026-07-21: reset to add a consent_scope column -- real gap found via independent critique (Chair live judgment + Opus review both independently converged on this before any real caller was wired to these functions, so zero data-loss risk from redefining the schema now). consent_scope is nullable TEXT, defaulting to 'internal_operational' when not specified, so existing callers (none yet) are not broken -- this is the minimum viable consent field per doctrine A-Z Section H, full retention/deletion/export mechanics remain a later, larger piece of work, not solved here.",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/builderos/twins/steps/grail-phase05-1.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-21T06:57:43.070Z",
+        "shipped_at": "2026-07-21T06:57:43.070Z",
+        "commit_sha": null,
+        "content_sha256": "9ab058a3cd042d4e45a7ef341b14e70811540b28b52e35e3365978731a055aa6",
+        "target_file": "services/voluntary-progress-ask-ledger.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/voluntary-progress-ask-ledger.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/builderos/twins/steps/grail-phase05-1.exact",
+          "content_sha256": "9ab058a3cd042d4e45a7ef341b14e70811540b28b52e35e3365978731a055aa6"
+        }
+      },
+      "shipped_at": "2026-07-21T06:57:43.070Z"
     },
     {
       "id": "grail-phase05-2",

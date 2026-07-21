@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-21T06:55:23.472Z",
+  "generated_at": "2026-07-21T06:57:46.217Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12090,
   "files": [
@@ -91991,9 +91991,9 @@
     {
       "path": "services/voluntary-progress-ask-ledger.js",
       "synopsis": "Exports recordAsk — services/voluntary-progress-ask-ledger.js.",
-      "bytes": 2313,
-      "mtime": "2026-07-21T06:45:34.584Z",
-      "indexed_at": "2026-07-21T06:45:34.584Z"
+      "bytes": 2955,
+      "mtime": "2026-07-21T06:57:46.217Z",
+      "indexed_at": "2026-07-21T06:57:46.217Z"
     },
     {
       "path": "services/voluntary-progress-attention-telemetry.js",
