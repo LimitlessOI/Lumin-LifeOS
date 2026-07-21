@@ -2020,6 +2020,37 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-21T20:43:11.585Z"
+    },
+    {
+      "id": "grail-audit-tsos-wire-1",
+      "status": "pending",
+      "target_file": "routes/tsos-efficiency-routes.js",
+      "task": "Add a registerTsosEfficiencyRoutes(app, deps) wrapper so the TSOS token-efficiency endpoints (currently 404 in production) can be mounted in the founder_builder lane via the existing auto-registered-product-modules.json mechanism -- same fix pattern already proven for lifere-sales-coaching-routes.js.",
+      "spec": "Add EXACTLY one new export to the END of the existing file routes/tsos-efficiency-routes.js (after its closing 'return router; }' for createTsosEfficiencyRoutes -- do not modify createTsosEfficiencyRoutes itself in any way, only append after it):\n\nexport function registerTsosEfficiencyRoutes(app, deps = {}) {\n  const { pool, requireKey, logger } = deps;\n  app.use(createTsosEfficiencyRoutes({ pool, requireKey }));\n  logger?.info?.('Tsos Efficiency Routes registered successfully.');\n}\n\nThis mirrors the exact existing pattern already live in routes/lifere-sales-coaching-routes.js (createLifeRESalesCoachingRoutes + registerLifereSalesCoachingRoutes) -- read that real file to copy its register-wrapper shape exactly, including the app.use(createX(...)) call with no explicit mount-path argument (createTsosEfficiencyRoutes's own router already declares full absolute paths like /api/v1/lifeos/builderos/tsos-efficiency internally via router.get('/api/v1/lifeos/builderos/tsos-efficiency', ...), so app.use() is called with just the router, no separate mount-path string -- verified against the real file, do not invent a mount-path prefix).\n\nRoot cause this fixes: this file's createTsosEfficiencyRoutes is imported and mounted in startup/register-runtime-routes.js (the full-runtime lane) but was NEVER registered in the founder_builder lane, which is the ONLY lane Railway actually boots in production (confirmed live: GET /api/v1/lifeos/builderos/tsos-efficiency returns 404 in production right now). This is the exact same class of bug already found and fixed once tonight for lifere-sales-coaching-routes.js.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "createTsosEfficiencyRoutes",
+        "registerTsosEfficiencyRoutes"
+      ],
+      "file_contains": [
+        "function registerTsosEfficiencyRoutes"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/tsos-efficiency-routes.js",
+          "exports": [
+            "createTsosEfficiencyRoutes",
+            "registerTsosEfficiencyRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/tsos-efficiency-routes.js"
+        }
+      ],
+      "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "grail-audit-tsos-wire-1",
+      "mission_id": "PRODUCT-builderos"
     }
   ],
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",

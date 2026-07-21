@@ -631,6 +631,13 @@
       "mount_path": "/api/v1/lifere/voluntary-progress",
       "enabled": true,
       "note": "GRAIL first vertical slice (goal -> alternatives -> decision -> experiment -> propose-not-apply Twin update) -- wires the built-but-unwired voluntary-progress-slice-orchestrator.js into a real, reachable HTTP call path. Same auto-register pattern as lifere-sales-coaching-routes.js."
+    },
+    {
+      "path": "routes/tsos-efficiency-routes.js",
+      "register": "registerTsosEfficiencyRoutes",
+      "mount_path": "(router declares absolute paths internally)",
+      "enabled": true,
+      "note": "TSOS token-efficiency scorecard endpoints (tsos-efficiency, tsos-routing-decisions, tsos-evidence) -- was mounted only in the full-runtime lane, which Railway never boots (prod = founder_builder), confirmed via live 404 2026-07-21. Same fix pattern as lifere-sales-coaching-routes.js."
     }
   ]
 }
