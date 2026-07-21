@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-21T21:15:56.983Z",
+  "generated_at": "2026-07-21T21:18:48.172Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12101,
   "files": [
@@ -92058,12 +92058,9 @@
     {
       "path": "services/voluntary-progress-context-view.js",
       "synopsis": "Exports activateContextView — services/voluntary-progress-context-view.js.",
-      "bytes": 2503,
-      "mtime": "2026-07-21T19:41:22.529Z",
-      "indexed_at": "2026-07-21T19:42:13.163Z",
-      "ssot": [
-        "docs/products/lifere/PRODUCT_HOME.md"
-      ]
+      "bytes": 2525,
+      "mtime": "2026-07-21T21:18:48.172Z",
+      "indexed_at": "2026-07-21T21:18:48.172Z"
     },
     {
       "path": "services/voluntary-progress-decision-step.js",

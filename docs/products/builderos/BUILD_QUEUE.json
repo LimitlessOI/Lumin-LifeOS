@@ -1743,9 +1743,32 @@
       "blueprint_step_id": "grail-wave1-2",
       "mission_id": "PRODUCT-builderos",
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-21T07:04:05.087Z",
+      "shipped_at": "2026-07-21T21:18:45.381Z",
       "commit_sha": "8c65198a2098e53f774c7dc228bcb97d38245575",
-      "revive_note": "REAL LIVE PRODUCTION BUG found via an actual end-to-end audit call (not a mock): POST /api/v1/lifere/voluntary-progress/goals/:id/alternatives failed with Postgres error \"invalid input syntax for type json\". Root cause: activateContextView inserts permitted_reads/forbidden_reads/permitted_proposals as RAW JS arrays into JSONB columns without JSON.stringify() -- node-postgres does not auto-serialize arrays/objects for jsonb columns; a raw array becomes an invalid non-JSON string and Postgres rejects it. This bug was NOT caught by mock-pool unit verification earlier tonight because the mock fake pool does not enforce real Postgres JSON type strictness -- a real, now-documented blind spot in that verification method, only caught by an actual live call."
+      "revive_note": "REAL LIVE PRODUCTION BUG found via an actual end-to-end audit call (not a mock): POST /api/v1/lifere/voluntary-progress/goals/:id/alternatives failed with Postgres error \"invalid input syntax for type json\". Root cause: activateContextView inserts permitted_reads/forbidden_reads/permitted_proposals as RAW JS arrays into JSONB columns without JSON.stringify() -- node-postgres does not auto-serialize arrays/objects for jsonb columns; a raw array becomes an invalid non-JSON string and Postgres rejects it. This bug was NOT caught by mock-pool unit verification earlier tonight because the mock fake pool does not enforce real Postgres JSON type strictness -- a real, now-documented blind spot in that verification method, only caught by an actual live call.",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/builderos/twins/steps/grail-wave1-2.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-21T21:18:45.381Z",
+        "shipped_at": "2026-07-21T21:18:45.381Z",
+        "commit_sha": "8c65198a2098e53f774c7dc228bcb97d38245575",
+        "content_sha256": "c451b73a5e324c60dc7a389ff4b78c97c61e928dc5b47b9aa20bc31049c45b60",
+        "target_file": "services/voluntary-progress-context-view.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/voluntary-progress-context-view.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/builderos/twins/steps/grail-wave1-2.exact",
+          "content_sha256": "c451b73a5e324c60dc7a389ff4b78c97c61e928dc5b47b9aa20bc31049c45b60"
+        }
+      }
     },
     {
       "id": "grail-wave1-3",
