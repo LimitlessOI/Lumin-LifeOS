@@ -1743,9 +1743,32 @@
       "blueprint_step_id": "grail-wave1-2",
       "mission_id": "PRODUCT-builderos",
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-21T21:18:52.827Z",
+      "shipped_at": "2026-07-21T21:19:00.053Z",
       "commit_sha": "aed5a626f1f408ad15d3e6afbb90ea130aa2ec8e",
-      "revive_note": "REAL LIVE PRODUCTION BUG found via an actual end-to-end audit call (not a mock): POST /api/v1/lifere/voluntary-progress/goals/:id/alternatives failed with Postgres error \"invalid input syntax for type json\". Root cause: activateContextView inserts permitted_reads/forbidden_reads/permitted_proposals as RAW JS arrays into JSONB columns without JSON.stringify() -- node-postgres does not auto-serialize arrays/objects for jsonb columns; a raw array becomes an invalid non-JSON string and Postgres rejects it. This bug was NOT caught by mock-pool unit verification earlier tonight because the mock fake pool does not enforce real Postgres JSON type strictness -- a real, now-documented blind spot in that verification method, only caught by an actual live call."
+      "revive_note": "REAL LIVE PRODUCTION BUG found via an actual end-to-end audit call (not a mock): POST /api/v1/lifere/voluntary-progress/goals/:id/alternatives failed with Postgres error \"invalid input syntax for type json\". Root cause: activateContextView inserts permitted_reads/forbidden_reads/permitted_proposals as RAW JS arrays into JSONB columns without JSON.stringify() -- node-postgres does not auto-serialize arrays/objects for jsonb columns; a raw array becomes an invalid non-JSON string and Postgres rejects it. This bug was NOT caught by mock-pool unit verification earlier tonight because the mock fake pool does not enforce real Postgres JSON type strictness -- a real, now-documented blind spot in that verification method, only caught by an actual live call.",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/builderos/twins/steps/grail-wave1-2.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-21T21:19:00.053Z",
+        "shipped_at": "2026-07-21T21:19:00.053Z",
+        "commit_sha": "aed5a626f1f408ad15d3e6afbb90ea130aa2ec8e",
+        "content_sha256": "ee3bfd95146804fbbb3cf5b4a7a41b994fd58c5c02799129e486bd14001bd8e2",
+        "target_file": "services/voluntary-progress-context-view.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/voluntary-progress-context-view.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/builderos/twins/steps/grail-wave1-2.exact",
+          "content_sha256": "ee3bfd95146804fbbb3cf5b4a7a41b994fd58c5c02799129e486bd14001bd8e2"
+        }
+      }
     },
     {
       "id": "grail-wave1-3",
@@ -1907,7 +1930,30 @@
       "same_signature_count": 0,
       "escalation_class": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-21T07:20:38.071Z"
+      "shipped_at": "2026-07-21T21:19:08.803Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/builderos/twins/steps/grail-wave1-6.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-21T21:19:08.803Z",
+        "shipped_at": "2026-07-21T21:19:08.803Z",
+        "commit_sha": "b128a718ecb4e14fb48b00b4108d4f51d1a58048",
+        "content_sha256": "9f951e3d69965af434ffddcf5608ab0f94ba5664e570a0c3e57a57c25d1b95cf",
+        "target_file": "services/voluntary-progress-twin-proposal-gate.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/voluntary-progress-twin-proposal-gate.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/builderos/twins/steps/grail-wave1-6.exact",
+          "content_sha256": "9f951e3d69965af434ffddcf5608ab0f94ba5664e570a0c3e57a57c25d1b95cf"
+        }
+      }
     },
     {
       "id": "grail-wave2-1",

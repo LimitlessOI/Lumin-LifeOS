@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-21T21:18:48.172Z",
+  "generated_at": "2026-07-21T21:19:11.374Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12101,
   "files": [
@@ -92105,12 +92105,9 @@
     {
       "path": "services/voluntary-progress-twin-proposal-gate.js",
       "synopsis": "Exports proposeTwinUpdate — services/voluntary-progress-twin-proposal-gate.js.",
-      "bytes": 4907,
-      "mtime": "2026-07-21T19:41:22.724Z",
-      "indexed_at": "2026-07-21T19:42:13.163Z",
-      "ssot": [
-        "docs/products/lifere/PRODUCT_HOME.md"
-      ]
+      "bytes": 5062,
+      "mtime": "2026-07-21T21:19:11.374Z",
+      "indexed_at": "2026-07-21T21:19:11.374Z"
     },
     {
       "path": "services/voluntary-progress-twin-read.js",
