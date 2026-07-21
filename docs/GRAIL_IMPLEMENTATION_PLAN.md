@@ -23,7 +23,7 @@
 | **Passes-on-success** | a test that proves the gate allows a real valid case (no unpassable checks) |
 | **Observer** | the *different* power that audits this gate (never the gate itself) |
 | **Override** | how a human bypass is logged + sampled (bounded, never silent) |
-| **Enforcement status** | current honest live state — one of `proven-live` / `built-unwired` / `partially-enforced` / `candidate` / `known-violation`. A claim defaults to `candidate` and may become `proven-live` **only** when its fires-on-breakage test actually passes in CI. This is the field that makes an SO-003 situation structurally impossible: a doc can never silently say "enforced" over a running path that contradicts it. |
+| **Enforcement status** | current honest live state on an ordered ladder: `candidate` → `specified` → `built-unwired` → `partially-enforced` → `proven-live`, plus off-ladder `known-violation` and `retired`. Every transition (especially `built-unwired → proven-live`) requires a **receipt**: commit · wiring point · fires-on-breakage result · passes-on-success result · independent observer · timestamp. "Enforced" is therefore a *verified state transition*, not descriptive language. Defaults to `candidate`; reaches `proven-live` **only** when the fires-on-breakage test passes in CI under an independent observer — making an SO-003 overclaim structurally impossible. |
 
 A rule missing any field ships as **candidate**, not law. This is the whole difference between GRAIL and "nice words." *(Eighth field added 2026-07-20 from the tri-AI division-of-labor review — it mechanizes the SO-003 lesson: "enforced" is a receipt, not an adjective.)*
 
@@ -195,7 +195,7 @@ The advantage of three capable systems is **not 3× code — it is independent r
 | Office | Holder | Mandate | Must NOT |
 |---|---|---|---|
 | **Architect + adversarial reviewer** | Cursor/Opus (this office) | contracts, threat model, conformance audit of shipped diffs | hand-build load-bearing modules (SO-001); repair its own findings in the audit pass |
-| **Builder + repair owner** | Claude Code | build via governed factory, repair verified findings | grade its own output as passing |
+| **Implementation Conductor** | Claude Code | convert ratified architecture → bounded factory build-specs; route builds through the governed factory; confirm SENTRY independence; assemble results; route verified defects back for repair; prove phase exit criteria | hand-author load-bearing production modules where SO-001 requires factory construction; verify its own judgment claims; promote its own work to `proven-live` |
 | **Integration investigator + black-box acceptance** | Devin *(activate only if live — do not assume)* | choke-point map, client-readiness, journey tests | design contracts |
 | **Disagreement resolver** | Chair / Council | compare independent outputs, surface contradictions | build or test |
 | **Human Guardian** | Adam | goals, values, risk, ratification | — |
@@ -204,6 +204,21 @@ The advantage of three capable systems is **not 3× code — it is independent r
 1. **Residual correlation:** if the Architect authors the contract *and* audits conformance to it, that pair isn't fully independent — it only checks "impl matches my design," not "the design was right." The contract's **correctness** must be attacked by an uncorrelated office (Devin black-box + Chair). This is Phase-6 gap #5 (builder/grader/verifier must not share a model family where judgment is load-bearing) — name it explicitly, don't assume the office labels alone guarantee it.
 2. **Don't assume Devin is a live operator.** KNOW: Cursor/Opus + Claude Code are active this session. Devin's current operational status is **DON'T KNOW** — the structure is sound but its activation is fail-closed until confirmed; until then Chair black-box + SENTRY carry the acceptance role.
 3. **Compress the contract phase.** Writing eight contracts before one working slice risks the plan's own "prove the substrate before the visible layer" rule. Write the **minimum** contract the one LifeOS slice needs (Twin item schema + read/write + Context View + experiment), prove the slice, then generalize the remaining contracts *from what the slice taught.*
+
+**Independence is earned, not assumed (Phase-6 mechanism):** offices are permanent; **occupants earn continued authority.** Combine stable primary offices + **rotating secondary observers** + **planted independence canaries** — periodically feed an assigned observer a deliberately-flawed artifact and measure whether it catches it; repeated misses lower that occupant's trust score for that capability. The office is permanent; the occupant is not guaranteed.
+
+## Planning Sufficiency Gate (planning answers to "reality is the scoreboard" too)
+
+Planning can improve forever; it must **stop** when *enough architecture exists to prevent foreseeable damage* — not when all uncertainty is gone. Planning stops and the first slice begins when all are true:
+1. the problem is bounded
+2. current reality is sufficiently verified (no rediscovery)
+3. the target behavior is clear
+4. the first vertical slice is selected
+5. its fires-on-breakage + passes-on-success tests exist
+6. ownership is assigned
+7. no unresolved disagreement blocks *the first slice* (open questions about the eventual full system are not blockers)
+
+**Status (2026-07-20): GATE PASSED** — all seven met; see `docs/FIRST_SLICE_CONTRACT.md`. No further full-system architecture rounds before the first slice ships a receipt.
 
 ## Ratification & authority
 

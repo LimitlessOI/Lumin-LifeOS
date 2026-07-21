@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-21T05:22:53.884Z",
+  "generated_at": "2026-07-21T05:33:49.961Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12080,
+  "file_count": 12082,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -38326,6 +38326,13 @@
       "synopsis_index_only": true
     },
     {
+      "path": "docs/DIGITAL_TWIN_CURRENT_STATE.md",
+      "synopsis": "Receipted reality map of the Digital Twin as it exists today. Stops rediscovery; only verified findings are marked verified.",
+      "bytes": 3406,
+      "mtime": "2026-07-21T05:33:49.961Z",
+      "indexed_at": "2026-07-21T05:33:49.961Z"
+    },
+    {
       "path": "docs/DRIFT_SENTINEL.md",
       "synopsis": "Drift Sentinel (Local-Only) — System Spec",
       "bytes": 1446,
@@ -38381,6 +38388,13 @@
       "bytes": 9448,
       "mtime": "2026-07-20T07:22:45.390Z",
       "indexed_at": "2026-07-20T07:28:47.516Z"
+    },
+    {
+      "path": "docs/FIRST_SLICE_CONTRACT.md",
+      "synopsis": "The minimum contract + frozen consensus to ship the first Digital-Twin-driven LifeOS vertical slice. Architect-office deliverable.",
+      "bytes": 6271,
+      "mtime": "2026-07-21T05:33:49.961Z",
+      "indexed_at": "2026-07-21T05:33:49.961Z"
     },
     {
       "path": "docs/FIX_GIT_AND_RAILWAY.md",
@@ -38483,9 +38497,9 @@
     {
       "path": "docs/GRAIL_IMPLEMENTATION_PLAN.md",
       "synopsis": "GRAIL — the enforceable governance layer + phased implementation plan for everything designed 2026-07-20 (doctrine → mechanism). Subordinate to North Star; pre-Article-VII plan, not law.",
-      "bytes": 28016,
-      "mtime": "2026-07-21T05:22:53.884Z",
-      "indexed_at": "2026-07-21T05:22:53.884Z"
+      "bytes": 29859,
+      "mtime": "2026-07-21T05:33:49.961Z",
+      "indexed_at": "2026-07-21T05:33:49.961Z"
     },
     {
       "path": "docs/HANDOFF_IDEAS_TO_PRODUCTS_REVIEW.md",
