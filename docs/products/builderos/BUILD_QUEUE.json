@@ -1555,6 +1555,108 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-20T21:05:51.035Z",
       "commit_sha": "3bb6cf5e58d1d524a4f7ed77e003d1e58b0347b7"
+    },
+    {
+      "id": "grail-phase05-1",
+      "status": "pending",
+      "target_file": "services/voluntary-progress-ask-ledger.js",
+      "task": "GRAIL Phase 0.5 (seed the clock, Tier-0 shaped): append-only ask/opt-out ledger. Gates nothing -- pure capture. Prerequisite for the Phase 2 opt-out gate (Law 4), which cannot exist without real data on what was asked and what was declined.",
+      "spec": "Self-bootstrap `CREATE TABLE IF NOT EXISTS voluntary_progress_asks (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), user_id TEXT NOT NULL, ask_type TEXT NOT NULL, ask_context TEXT, channel TEXT, asked_at TIMESTAMPTZ NOT NULL DEFAULT now())` and a second table `CREATE TABLE IF NOT EXISTS voluntary_progress_optouts (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), user_id TEXT NOT NULL, ask_type TEXT NOT NULL, opt_out_reason TEXT, opted_out_at TIMESTAMPTZ NOT NULL DEFAULT now(), UNIQUE(user_id, ask_type))`. Export async function recordAsk(pool, { user_id, ask_type, ask_context = null, channel = null }) that inserts a row into voluntary_progress_asks (append-only, no upsert -- every ask is its own row so a full ask history exists). Export async function recordOptOut(pool, { user_id, ask_type, opt_out_reason = null }) that upserts into voluntary_progress_optouts (INSERT ... ON CONFLICT (user_id, ask_type) DO UPDATE SET opt_out_reason = EXCLUDED.opt_out_reason, opted_out_at = now() -- an opt-out is a current state per (user, ask_type), not a history). Export async function hasOptedOut(pool, { user_id, ask_type }) returning the opt-out row (with opted_out_at, opt_out_reason) if one exists for this exact (user_id, ask_type) pair, or null if the user has never opted out of this specific ask type. Export async function getRecentAsks(pool, { user_id, limit = 50 } = {}) returning the most recent rows from voluntary_progress_asks for that user, ordered by asked_at DESC. This module is pure capture: it must not decide whether to block or allow anything, must not call any dispatch/render function -- it only records and answers 'has this user opted out of this' for a future caller (the Phase 2 gate) to consult. CRITICAL, learned repeatedly tonight: EVERY exported function that touches a table must independently run `await pool.query('CREATE TABLE IF NOT EXISTS <real DDL, not a placeholder>')` as its own, separate, no-parameters pool.query() call before any parameterized query in that same function -- never assume another function in the file already created the table, and never combine the CREATE TABLE with a parameterized query in one pool.query(text, values) call (PostgreSQL's prepared-statement protocol rejects multiple statements in one call with params). If this module reuses another module's table, copy that table's real DDL character-for-character -- do not paraphrase or reconstruct a schema from memory, since a plausible-but-wrong reconstruction (missing a column, wrong type) silently corrupts the shared table for whichever module's CREATE TABLE runs first.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "recordAsk",
+        "recordOptOut",
+        "hasOptedOut",
+        "getRecentAsks"
+      ],
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS voluntary_progress_asks",
+        "CREATE TABLE IF NOT EXISTS voluntary_progress_optouts"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/voluntary-progress-ask-ledger.js",
+          "exports": [
+            "recordAsk",
+            "recordOptOut",
+            "hasOptedOut",
+            "getRecentAsks"
+          ],
+          "assertion_id": "expected_exports:services/voluntary-progress-ask-ledger.js"
+        }
+      ],
+      "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "grail-phase05-1",
+      "mission_id": "PRODUCT-builderos"
+    },
+    {
+      "id": "grail-phase05-2",
+      "status": "pending",
+      "target_file": "services/voluntary-progress-attention-telemetry.js",
+      "task": "GRAIL Phase 0.5 (seed the clock, Tier-0 shaped): Attention Contract telemetry. Records the attention/trust/knowledge budget OBSERVED for a given artifact -- capture only, no validation against a 'desired' threshold yet, since there is no real data to calibrate 'desired' against until this has been running.",
+      "spec": "Self-bootstrap `CREATE TABLE IF NOT EXISTS voluntary_progress_attention_observations (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), artifact_id TEXT NOT NULL, artifact_type TEXT NOT NULL, product TEXT NOT NULL, attention_budget_observed_seconds NUMERIC, trust_budget_observed NUMERIC, knowledge_budget_observed NUMERIC, next_decision TEXT, observed_at TIMESTAMPTZ NOT NULL DEFAULT now())`. Export async function recordAttentionObservation(pool, { artifact_id, artifact_type, product, attention_budget_observed_seconds = null, trust_budget_observed = null, knowledge_budget_observed = null, next_decision = null }) that inserts one row (append-only -- every observation is its own row, this is a time series, not a current-state table). Export async function getAttentionHistory(pool, { artifact_id, limit = 50 } = {}) returning the most recent observations for that artifact, ordered by observed_at DESC. Export async function getAttentionHistoryByProduct(pool, { product, limit = 100 } = {}) returning the most recent observations across all artifacts for a given product, ordered by observed_at DESC -- this is what lets Phase 1+ eventually calibrate a 'desired' threshold once enough rows exist; this module does not compute that threshold itself, it only captures. Pure capture: must not decide whether an artifact passes or fails any threshold, must not call any dispatch/render function. CRITICAL, learned repeatedly tonight: EVERY exported function that touches a table must independently run `await pool.query('CREATE TABLE IF NOT EXISTS <real DDL, not a placeholder>')` as its own, separate, no-parameters pool.query() call before any parameterized query in that same function -- never assume another function in the file already created the table, and never combine the CREATE TABLE with a parameterized query in one pool.query(text, values) call (PostgreSQL's prepared-statement protocol rejects multiple statements in one call with params). If this module reuses another module's table, copy that table's real DDL character-for-character -- do not paraphrase or reconstruct a schema from memory, since a plausible-but-wrong reconstruction (missing a column, wrong type) silently corrupts the shared table for whichever module's CREATE TABLE runs first.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "recordAttentionObservation",
+        "getAttentionHistory",
+        "getAttentionHistoryByProduct"
+      ],
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS voluntary_progress_attention_observations"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/voluntary-progress-attention-telemetry.js",
+          "exports": [
+            "recordAttentionObservation",
+            "getAttentionHistory",
+            "getAttentionHistoryByProduct"
+          ],
+          "assertion_id": "expected_exports:services/voluntary-progress-attention-telemetry.js"
+        }
+      ],
+      "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "grail-phase05-2",
+      "mission_id": "PRODUCT-builderos"
+    },
+    {
+      "id": "grail-phase05-3",
+      "status": "pending",
+      "target_file": "services/voluntary-progress-mission-intake-log.js",
+      "task": "GRAIL Phase 0.5 (seed the clock, Tier-0 shaped): Mission Contract intake logging, non-blocking. Records whether a coherent intake (mission/customer/objection/trust-strategy/next-action/success-metric) existed for a render, WITHOUT ever blocking the render -- the render proceeds regardless of what this logs. This turns the eventual Phase 1 gate into 'start rejecting the cases already being logged as incomplete' instead of a cold-start block.",
+      "spec": "Self-bootstrap `CREATE TABLE IF NOT EXISTS voluntary_progress_mission_intake_log (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), artifact_id TEXT NOT NULL, product TEXT NOT NULL, mission TEXT, customer TEXT, journey_stage_current TEXT, journey_stage_target TEXT, primary_objection TEXT, trust_strategy TEXT, next_voluntary_action TEXT, success_metric TEXT, intake_complete BOOLEAN NOT NULL, logged_at TIMESTAMPTZ NOT NULL DEFAULT now())`. Export async function logMissionIntake(pool, { artifact_id, product, mission = null, customer = null, journey_stage_current = null, journey_stage_target = null, primary_objection = null, trust_strategy = null, next_voluntary_action = null, success_metric = null }) that computes intake_complete as true only if mission, customer, primary_objection, trust_strategy, next_voluntary_action, and success_metric are ALL non-empty strings (journey_stage fields are not required for completeness -- they are often unknown at first contact), inserts one row (append-only, every render logs its own row), and returns { intake_complete, missing_fields: string[] } (missing_fields lists which of the six required fields were empty or null). This function must NEVER throw in a way that would stop a caller's render pipeline -- wrap the insert in a try/catch and return { intake_complete: false, missing_fields: ['logging_failed'], logging_error: String(error.message || error) } on any database error, so a logging failure can never block or crash the actual render it's observing. Export async function getMissionIntakeStats(pool, { product, since = null } = {}) returning { total: number, complete: number, incomplete: number, incomplete_rate: number } aggregated via a single SQL COUNT query (not fetched-then-counted-in-JS) for the given product, optionally filtered to logged_at >= since. CRITICAL, learned repeatedly tonight: EVERY exported function that touches a table must independently run `await pool.query('CREATE TABLE IF NOT EXISTS <real DDL, not a placeholder>')` as its own, separate, no-parameters pool.query() call before any parameterized query in that same function -- never assume another function in the file already created the table, and never combine the CREATE TABLE with a parameterized query in one pool.query(text, values) call (PostgreSQL's prepared-statement protocol rejects multiple statements in one call with params). If this module reuses another module's table, copy that table's real DDL character-for-character -- do not paraphrase or reconstruct a schema from memory, since a plausible-but-wrong reconstruction (missing a column, wrong type) silently corrupts the shared table for whichever module's CREATE TABLE runs first.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "logMissionIntake",
+        "getMissionIntakeStats"
+      ],
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS voluntary_progress_mission_intake_log",
+        "try",
+        "catch"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/voluntary-progress-mission-intake-log.js",
+          "exports": [
+            "logMissionIntake",
+            "getMissionIntakeStats"
+          ],
+          "assertion_id": "expected_exports:services/voluntary-progress-mission-intake-log.js"
+        }
+      ],
+      "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "grail-phase05-3",
+      "mission_id": "PRODUCT-builderos"
     }
   ],
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
