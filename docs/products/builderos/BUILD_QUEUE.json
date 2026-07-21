@@ -1715,7 +1715,7 @@
     },
     {
       "id": "grail-wave1-2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/voluntary-progress-context-view.js",
       "task": "Wave 1, Mission 2: minimal Context View. Devin's reality map confirmed ZERO implementation exists anywhere in the repo (grep for context view / ContextView / contextView returns only raw memory dumps, no real code) -- this is the first real implementation of the concept, kept deliberately minimal for this one slice, not a general system.",
       "spec": "Self-bootstrap `CREATE TABLE IF NOT EXISTS voluntary_progress_context_views (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), user_id TEXT NOT NULL, activation_reason TEXT NOT NULL, permitted_reads JSONB NOT NULL, forbidden_reads JSONB NOT NULL DEFAULT '[]', permitted_proposals JSONB NOT NULL DEFAULT '[]', consent_scope TEXT NOT NULL DEFAULT 'internal_operational', expires_at TIMESTAMPTZ NOT NULL, activated_at TIMESTAMPTZ NOT NULL DEFAULT now())`. Export async function activateContextView(pool, { user_id, activation_reason, permitted_reads, forbidden_reads = [], permitted_proposals = [], consent_scope = 'internal_operational', ttl_minutes = 30 }) that inserts one row (expires_at = now() + ttl_minutes minutes, computed in SQL as `now() + ($N || ' minutes')::interval`) and returns the inserted row including its `id`. Export pure function applyContextView(twinReadState, contextViewRow) -- twinReadState is the `state` array shape returned by readTypedTwinState in services/voluntary-progress-twin-read.js (import nothing from that file, just accept the same array shape as a plain parameter to keep this module dependency-light): filters twinReadState down to only entries whose `field` is present in contextViewRow.permitted_reads, and for any entry whose field is present in contextViewRow.forbidden_reads, that field is excluded even if it was also in permitted_reads (forbidden always wins over permitted). Returns the filtered array. Export async function isContextViewExpired(pool, { context_view_id }) that self-bootstraps the table, looks up the row by id, and returns true if expires_at < now() or the row does not exist, false otherwise -- fail closed (missing or expired context view means true/expired, never assume valid). CRITICAL, learned repeatedly tonight: EVERY exported function that touches a table must independently run `await pool.query('CREATE TABLE IF NOT EXISTS <real DDL, not a placeholder>')` as its own, separate, no-parameters pool.query() call before any parameterized query in that same function -- never assume another function in the file already created the table, and never combine the CREATE TABLE with a parameterized query in one pool.query(text, values) call. If this module reuses another module's table or DDL, copy it character-for-character, never reconstruct from memory.",
@@ -1746,30 +1746,9 @@
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "grail-wave1-2",
       "mission_id": "PRODUCT-builderos",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/builderos/twins/steps/grail-wave1-2.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-21T07:03:58.272Z",
-        "shipped_at": "2026-07-21T07:03:58.272Z",
-        "commit_sha": null,
-        "content_sha256": "7b48fdb55131a8ba616accf2c43a6796185cdcb46c078b6c65cd973dad078322",
-        "target_file": "services/voluntary-progress-context-view.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/voluntary-progress-context-view.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/builderos/twins/steps/grail-wave1-2.exact",
-          "content_sha256": "7b48fdb55131a8ba616accf2c43a6796185cdcb46c078b6c65cd973dad078322"
-        }
-      },
-      "shipped_at": "2026-07-21T07:03:58.272Z"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-21T07:04:05.087Z",
+      "commit_sha": "8c65198a2098e53f774c7dc228bcb97d38245575"
     },
     {
       "id": "grail-wave1-3",
