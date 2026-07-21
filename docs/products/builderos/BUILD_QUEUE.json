@@ -1675,7 +1675,7 @@
     },
     {
       "id": "grail-wave1-1",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/voluntary-progress-twin-read.js",
       "task": "Wave 1, Mission 1 (dependency-first): minimum any-user Twin-read adapter. Devin's reality map (docs/architecture/DIGITAL_TWIN_CURRENT_STATE.md) confirmed Twin reading is fragmented across 3 mechanisms, none unified and typed for arbitrary users -- this module is that missing unification, reusing the one mechanism that already supports arbitrary users rather than building new storage.",
       "spec": "Import and reuse the real, already-exported `readTwin` from `services/lifere-twin-store.js` (`import { readTwin } from './lifere-twin-store.js'` -- it is a pre-instantiated singleton function, NOT a class you construct; its real signature is synchronous: `readTwin({ tenantId = 'default', userId, twinKey, moduleKey, requesterId })` and it returns the parsed JSON object or `null` if no file exists at that path -- do not reimplement file reading, call this exact function). Export async function readTypedTwinState(pool, { userId, tenantId = 'default', twinKey, moduleKey = null, requesterId = null, fields = [] }) that calls readTwin({ tenantId, userId, twinKey, moduleKey, requesterId }), and for each string in `fields` (a list of field names the caller wants), returns one entry per field in a `state` array: if the raw twin object is null OR the field is missing from it, the entry is `{ field, status: 'unknown', value: null }` -- NEVER invent or default a value for a missing field, this is the module's core safety requirement (Devin's map: 'no formal mark unknowns instead of inventing contract' was the confirmed gap). If the field exists in the raw twin object, the entry is `{ field, status: 'user-stated', value: <the raw value> }` (default to 'user-stated' status since this store only records what a user or a prior process wrote, never inferred data -- there is no inference metadata in the underlying store yet). Also handle a thrown `ForbiddenCrossUserError` (exported from `./lifere-twin-store.js`) by catching it and returning `{ ok: false, error: 'forbidden_cross_user', state: [] }` instead of letting it propagate -- a permission error must never crash a caller's turn. On success return `{ ok: true, state }`. Export a second function isFieldKnown(state, field) that takes the `state` array returned above and returns true only if that field's status is NOT 'unknown'. This module reads only -- it must never call writeTwin or any write function. CRITICAL, learned repeatedly tonight: EVERY exported function that touches a table must independently run `await pool.query('CREATE TABLE IF NOT EXISTS <real DDL, not a placeholder>')` as its own, separate, no-parameters pool.query() call before any parameterized query in that same function -- never assume another function in the file already created the table, and never combine the CREATE TABLE with a parameterized query in one pool.query(text, values) call. If this module reuses another module's table or DDL, copy it character-for-character, never reconstruct from memory.",
@@ -1704,14 +1704,7 @@
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "grail-wave1-1",
       "mission_id": "PRODUCT-builderos",
-      "last_attempt_at": "2026-07-21T07:02:03.454Z",
-      "last_error": "NOT_ON_BLUEPRINT",
-      "commit_sha": null,
-      "built_sha": null,
-      "proof": null,
-      "failure_signature": "NOT_ON_BLUEPRINT",
-      "same_signature_count": 1,
-      "escalation_class": "governance_block"
+      "revive_note": "2026-07-21: manually reset after NOT_ON_BLUEPRINT (same transient race pattern seen and self-resolved/manually-revived repeatedly tonight)."
     },
     {
       "id": "grail-wave1-2",
