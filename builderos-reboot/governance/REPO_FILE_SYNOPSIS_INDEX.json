@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-21T06:57:46.217Z",
+  "generated_at": "2026-07-21T06:58:04.337Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12090,
   "files": [
@@ -91998,9 +91998,9 @@
     {
       "path": "services/voluntary-progress-attention-telemetry.js",
       "synopsis": "Exports recordAttentionObservation — services/voluntary-progress-attention-telemetry.js.",
-      "bytes": 1957,
-      "mtime": "2026-07-21T06:39:03.527Z",
-      "indexed_at": "2026-07-21T06:39:03.527Z"
+      "bytes": 2977,
+      "mtime": "2026-07-21T06:58:04.337Z",
+      "indexed_at": "2026-07-21T06:58:04.337Z"
     },
     {
       "path": "services/voluntary-progress-mission-intake-log.js",
