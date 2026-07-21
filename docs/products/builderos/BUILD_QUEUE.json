@@ -1638,7 +1638,7 @@
     },
     {
       "id": "grail-phase05-3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/voluntary-progress-mission-intake-log.js",
       "task": "GRAIL Phase 0.5 (seed the clock, Tier-0 shaped): Mission Contract intake logging, non-blocking. Records whether a coherent intake (mission/customer/objection/trust-strategy/next-action/success-metric) existed for a render, WITHOUT ever blocking the render -- the render proceeds regardless of what this logs. This turns the eventual Phase 1 gate into 'start rejecting the cases already being logged as incomplete' instead of a cold-start block.",
       "spec": "Self-bootstrap `CREATE TABLE IF NOT EXISTS voluntary_progress_mission_intake_log (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), artifact_id TEXT NOT NULL, product TEXT NOT NULL, mission TEXT, customer TEXT, journey_stage_current TEXT, journey_stage_target TEXT, primary_objection TEXT, trust_strategy TEXT, next_voluntary_action TEXT, success_metric TEXT, intake_complete BOOLEAN NOT NULL, logged_at TIMESTAMPTZ NOT NULL DEFAULT now())`. Export async function logMissionIntake(pool, { artifact_id, product, mission = null, customer = null, journey_stage_current = null, journey_stage_target = null, primary_objection = null, trust_strategy = null, next_voluntary_action = null, success_metric = null }) that computes intake_complete as true only if mission, customer, primary_objection, trust_strategy, next_voluntary_action, and success_metric are ALL non-empty strings (journey_stage fields are not required for completeness -- they are often unknown at first contact), inserts one row (append-only, every render logs its own row), and returns { intake_complete, missing_fields: string[] } (missing_fields lists which of the six required fields were empty or null). This function must NEVER throw in a way that would stop a caller's render pipeline -- wrap the insert in a try/catch and return { intake_complete: false, missing_fields: ['logging_failed'], logging_error: String(error.message || error) } on any database error, so a logging failure can never block or crash the actual render it's observing. Export async function getMissionIntakeStats(pool, { product, since = null } = {}) returning { total: number, complete: number, incomplete: number, incomplete_rate: number } aggregated via a single SQL COUNT query (not fetched-then-counted-in-JS) for the given product, optionally filtered to logged_at >= since. CRITICAL, learned repeatedly tonight: EVERY exported function that touches a table must independently run `await pool.query('CREATE TABLE IF NOT EXISTS <real DDL, not a placeholder>')` as its own, separate, no-parameters pool.query() call before any parameterized query in that same function -- never assume another function in the file already created the table, and never combine the CREATE TABLE with a parameterized query in one pool.query(text, values) call (PostgreSQL's prepared-statement protocol rejects multiple statements in one call with params). If this module reuses another module's table, copy that table's real DDL character-for-character -- do not paraphrase or reconstruct a schema from memory, since a plausible-but-wrong reconstruction (missing a column, wrong type) silently corrupts the shared table for whichever module's CREATE TABLE runs first.",
@@ -1668,30 +1668,9 @@
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "grail-phase05-3",
       "mission_id": "PRODUCT-builderos",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/builderos/twins/steps/grail-phase05-3.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-21T06:39:18.960Z",
-        "shipped_at": "2026-07-21T06:39:18.960Z",
-        "commit_sha": null,
-        "content_sha256": "ec232b4ab21b31aa076f87fe57d1f75d89523826dfd90e0a86d58bab0dd77810",
-        "target_file": "services/voluntary-progress-mission-intake-log.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/voluntary-progress-mission-intake-log.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/builderos/twins/steps/grail-phase05-3.exact",
-          "content_sha256": "ec232b4ab21b31aa076f87fe57d1f75d89523826dfd90e0a86d58bab0dd77810"
-        }
-      },
-      "shipped_at": "2026-07-21T06:39:18.960Z"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-21T06:39:25.120Z",
+      "commit_sha": "0d8edbdf82aaef0faeba9d64f09bc8607602e599"
     }
   ],
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
