@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-21T05:35:40.044Z",
+  "generated_at": "2026-07-21T05:45:40.292Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12083,
+  "file_count": 12084,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -60136,6 +60136,13 @@
       "bytes": 4141,
       "mtime": "2026-07-20T07:22:45.880Z",
       "indexed_at": "2026-07-20T07:28:47.516Z"
+    },
+    {
+      "path": "docs/reviews/A_TO_Z_INDEPENDENT_AUDIT_OPUS.md",
+      "synopsis": "Adversarial coverage+coherence audit of the A–Z Master Roadmap by the Architect office (Cursor/Opus). Stored BEFORE Devin/Chair passes to preserve independence ordering.",
+      "bytes": 8703,
+      "mtime": "2026-07-21T05:45:40.292Z",
+      "indexed_at": "2026-07-21T05:45:40.292Z"
     },
     {
       "path": "docs/runbook.md",
