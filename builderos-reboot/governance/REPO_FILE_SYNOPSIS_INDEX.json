@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-21T21:39:19.883Z",
+  "generated_at": "2026-07-21T21:40:31.138Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12101,
   "files": [
@@ -66531,9 +66531,9 @@
     {
       "path": "routes/account-manager-routes.js",
       "synopsis": "account-manager-routes.js — managed accounts + LifeOS connect guide APIs.",
-      "bytes": 16244,
-      "mtime": "2026-07-21T05:32:04.298Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "bytes": 18122,
+      "mtime": "2026-07-21T21:40:31.138Z",
+      "indexed_at": "2026-07-21T21:40:31.138Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

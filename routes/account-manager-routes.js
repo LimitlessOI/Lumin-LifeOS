@@ -347,6 +347,54 @@ export function createAccountManagerRoutes({ requireKey, accountManager, pool, l
     }
   });
 
+  // On-demand read of the latest verification email (link OR numeric code) from the
+  // system signup inbox via IMAP. Read-only glue over email-reader; no account row required,
+  // so it works for signups a human started in their own browser.
+  router.post("/read-verification", requireKey, async (req, res) => {
+    try {
+      const body = req.body || {};
+      const email = body.email || process.env.GMAIL_SIGNUP_EMAIL;
+      const imap = imapCredsForEmail(email);
+      if (!imap.appPassword) {
+        return res.status(503).json({ ok: false, error: "IMAP password missing for mailbox", email });
+      }
+      const sinceMinutes = Math.min(Math.max(Number(body.sinceMinutes) || 30, 1), 2880);
+      const since = new Date(Date.now() - sinceMinutes * 60 * 1000);
+      const result = await findRecentVerificationEmail({
+        email: imap.email,
+        appPassword: imap.appPassword,
+        fromDomain: body.fromDomain || null,
+        subjectContains: body.subjectContains || null,
+        since,
+        logger,
+      });
+      if (!result) {
+        return res.status(404).json({
+          ok: false,
+          error: "No verification email found in lookback window",
+          sinceMinutes,
+        });
+      }
+      const text = String(result.body || "")
+        .replace(/=\r?\n/g, "")
+        .replace(/<[^>]+>/g, " ")
+        .replace(/&nbsp;/g, " ");
+      const codes = [...new Set(text.match(/(?<![\w-])\d{4,8}(?![\w-])/g) || [])].slice(0, 6);
+      res.json({
+        ok: true,
+        subject: result.subject,
+        from: result.from,
+        date: result.date,
+        mailbox: result.mailbox || null,
+        links: result.links,
+        verifyLink: findVerificationLink(result.links, { preferDomain: body.fromDomain || null }),
+        codes,
+      });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
   router.get("/:service", requireKey, async (req, res) => {
     try {
       const account = await findAccount(req.params.service, req.query.email || null);
