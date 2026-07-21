@@ -23,8 +23,9 @@
 | **Passes-on-success** | a test that proves the gate allows a real valid case (no unpassable checks) |
 | **Observer** | the *different* power that audits this gate (never the gate itself) |
 | **Override** | how a human bypass is logged + sampled (bounded, never silent) |
+| **Enforcement status** | current honest live state — one of `proven-live` / `built-unwired` / `partially-enforced` / `candidate` / `known-violation`. A claim defaults to `candidate` and may become `proven-live` **only** when its fires-on-breakage test actually passes in CI. This is the field that makes an SO-003 situation structurally impossible: a doc can never silently say "enforced" over a running path that contradicts it. |
 
-A rule missing any field ships as **candidate**, not law. This is the whole difference between GRAIL and "nice words."
+A rule missing any field ships as **candidate**, not law. This is the whole difference between GRAIL and "nice words." *(Eighth field added 2026-07-20 from the tri-AI division-of-labor review — it mechanizes the SO-003 lesson: "enforced" is a receipt, not an adjective.)*
 
 > **Completeness pass (2026-07-20):** this plan was originally governance-only and silently omitted the *creative-production stack* (tonight's opening topic) and several intelligence components. Those are now added below (Phase A, expanded Phase 2) plus an explicit **"Deferred with reasoning"** section and a **coverage map**, so nothing from tonight is dropped without a reason. **Update (2026-07-20b):** added **Phase B — the state layer (Digital Twin)** after a code audit found the Twin is *real but fragmented across ≥5 implementations with a live `capsule` naming collision* — the missing "state, not governance" abstraction, folded in audit-first rather than assumed clean. See `docs/CREATIVE_ENGINE_AND_PROGRESS_DOCTRINE.md` and the media-stack brainstorm for the source ideas.
 
@@ -49,12 +50,14 @@ A rule missing any field ships as **candidate**, not law. This is the whole diff
 
 **Grounded reality (verified 2026-07-20, not assumed):** the Twin is **real but fragmented** — there is *no single canonical object* everything reads/writes. State lives across ≥5 live implementations: **Cognitive Core** (decision model: programs/values/judgment/trust-by-domain/calibration/oracle), **Memory** (knowledge store: `memory_capsules`, working/institutional/relationship/provenance/retrieval/embeddings), **LifeRE's own** `lifere-twin-store` cluster, **LifeOS** `lifeos-twin-simulator` + `twin-auto-ingest`, and **Creator** `creatorPersonaTwin`. The file named `digital-twin.js` is **legacy/dead**. So this phase is **canonicalization + consolidation**, not greenfield.
 
-**Naming collision to resolve (also verified):** "capsule" is overloaded — `memory-capsule.js` = a *storage unit*; `cognitive-core-perspective.js` = an *attention lens* (multi-wear, **already implemented**). GRAIL adopts the **attention-lens** meaning: **Capsules are context-specific projections/views of the Twin** (the "hats" — Marketing / Health / Relationship / Financial / Business). Multi-wear is already live; segregate the memory-storage "capsule" name to end the collision.
+**Naming collision — RESOLVED (decision 2026-07-20):** "capsule" is overloaded — `memory-capsule.js` = a *storage unit*; `cognitive-core-perspective.js` = an *attention lens* (multi-wear, **already implemented**). **Decision:** the projection/attention-lens layer is formally named **Context View** in all schemas, contracts, and code; **"Capsule" is retained only as the founder-facing colloquial term** ("wearing a hat"). `memory_capsules` keeps its name as the storage table. This ends the collision without renaming a live table. Context Views are context-specific projections of the Twin (Marketing / Health / Relationship / Financial / Business); multi-wear + suppression stay as built.
+
+**Fact ≠ hypothesis (the load-bearing Twin rule):** every Twin item carries `value · truth_grade · confidence · source · observed_at · valid_until · supersedes · consent_scope`. The Twin stores **both facts and hypotheses but never silently converts one into the other** — promotion from hypothesis → fact is an explicit, receipted transition (mirrors the memory `PROPOSED → CANONICAL` gate already in `memory-capsule.js`). This is the state-layer analogue of the eighth GRAIL field.
 
 Steps (audit-first):
-1. **Twin inventory + canonical definition:** map the ≥5 implementations; declare the canonical Twin = **Cognitive Core (how the person/org decides) + Memory (what is known)**; decide per product *consolidate vs. federate-behind-one-interface*. *Spec → factory.*
-2. **READS/WRITES contract (the standing rule):** every subsystem — Creative Engine, LifeOS, Oracle, Limitless, each office/renderer — **must declare what it READS from the Twin and what validated knowledge it WRITES back.** *This is the duplicate-state fix.*
-3. **Capsules = projections:** formalize capsules as scoped views of the Twin; keep multi-wear + suppression contracts (`config/judgment-capsule-contracts.js`).
+1. **Twin inventory + canonical definition:** map the ≥5 implementations; declare the canonical Twin = **Cognitive Core (how the person/org decides) + Memory (what is known)**; adopt the per-item schema above (`truth_grade`/`confidence`/`provenance`/`valid_until`/`consent_scope`); decide per product *consolidate vs. federate-behind-one-interface*. Likely an **adapter + migration layer**, not a rip-and-replace. *Spec → factory.*
+2. **READS/WRITES contract (the standing rule):** every subsystem — Creative Engine, LifeOS, Oracle, Limitless, each office/renderer — **must declare what it READS from the Twin, what it WRITES directly, what it may only PROPOSE, and what is FORBIDDEN.** *This is the duplicate-state fix.*
+3. **Context Views = projections:** formalize Context Views as scoped views of the Twin, each declaring readable fields / writable fields / propose-only fields / forbidden-sensitive fields / expiry / activation reason; keep multi-wear + suppression contracts (`config/judgment-capsule-contracts.js`).
 4. **Alternative-futures simulation (extends the Phase-4 Decision Brief):** the Twin simulates not just a goal's cost but **alternative futures** (aggressive vs. specialist vs. small-business) and asks *which future matches the person's values* (read from the Twin), not which makes the most money.
 
 **Enforceability:** the READS/WRITES contract is a deterministic gate (**fires-on-breakage:** a subsystem that touches Twin state without a declared contract fails CI; **passes-on-success:** a declared, contract-conformant subsystem passes). **Observer:** the contract registry is audited by a different office than the writer.
@@ -67,7 +70,7 @@ Steps (audit-first):
 
 1. **Wire the 15 self-repair modules** into the live build/ship path (provenance ledger, root-cause chains, fix-durability, target-reputation, negative-knowledge, decision-log, pre-disk gate, sentry-canary, quarantine, failure-router, pattern-propagation, contract-gate, secret-deploy-gate, trust-dashboard, calibration-sampling). *Spec → factory.*
 2. **Close the known governance holes:** (a) `claimPreExistingSatisfiedSteps` overclaims a "≥6 revive-failures" gate its code doesn't have — add the real gate; (b) **SO-003 (P0, verified 2026-07-20):** `services/chair-lumin-unified.js` lines 51–59 short-circuit the Chair to canned templates (`formatDirectProgramAnswer`/`formatDirectFactualAnswer` via `needsSystemKnowledge`/`shouldUseDirectProgramAnswer`/`shouldUseDirectFactualAnswer`) *before* the strong-model `translatePersonality` path — route load-bearing / counsel-class turns through the strong model. *Spec → factory.*
-3. **Write `docs/constitution/GRAIL_CHARTER.md`** = the rule table below, each row filled to all seven fields. This is the ratifiable artifact.
+3. **Write `docs/constitution/GRAIL_CHARTER.md`** = the rule table below, each row filled to all **eight** fields (incl. Enforcement status). This is the ratifiable artifact.
 4. **Enforcement of Phase 0 itself:** pre-commit + CI must fail if a GRAIL rule lacks a fires-on-breakage or passes-on-success test (a linter over the charter). Observer: CI (deterministic), sampled by Chair.
 
 **Exit test:** run every wired gate's fires-on-breakage + passes-on-success test in CI; green = Phase 0 done.
@@ -184,6 +187,23 @@ Discussed tonight, **intentionally not yet phased** — each with the reason, so
 | Offices-not-models · capability matrix · verify-the-verifier · self-pruning governance | **Phase 6** |
 | Path to First Compounding Dollar · cross-product immunity | **Phase 7** |
 | Oracle market-watch · Institutional Taste · Plain Sight · Opportunity Radar · Creative R&D Queue | **Deferred (with reasoning)** |
+
+## Operating offices (permanent roles, not rotating builders)
+
+The advantage of three capable systems is **not 3× code — it is independent reasoning, independent implementation, and independent verification** so no single model designs, builds, tests, and declares itself correct. Roles (ratified-in-practice this session; formal ratification per below):
+
+| Office | Holder | Mandate | Must NOT |
+|---|---|---|---|
+| **Architect + adversarial reviewer** | Cursor/Opus (this office) | contracts, threat model, conformance audit of shipped diffs | hand-build load-bearing modules (SO-001); repair its own findings in the audit pass |
+| **Builder + repair owner** | Claude Code | build via governed factory, repair verified findings | grade its own output as passing |
+| **Integration investigator + black-box acceptance** | Devin *(activate only if live — do not assume)* | choke-point map, client-readiness, journey tests | design contracts |
+| **Disagreement resolver** | Chair / Council | compare independent outputs, surface contradictions | build or test |
+| **Human Guardian** | Adam | goals, values, risk, ratification | — |
+
+**Three honest caveats from the adversarial-reviewer seat (applied to this proposal itself):**
+1. **Residual correlation:** if the Architect authors the contract *and* audits conformance to it, that pair isn't fully independent — it only checks "impl matches my design," not "the design was right." The contract's **correctness** must be attacked by an uncorrelated office (Devin black-box + Chair). This is Phase-6 gap #5 (builder/grader/verifier must not share a model family where judgment is load-bearing) — name it explicitly, don't assume the office labels alone guarantee it.
+2. **Don't assume Devin is a live operator.** KNOW: Cursor/Opus + Claude Code are active this session. Devin's current operational status is **DON'T KNOW** — the structure is sound but its activation is fail-closed until confirmed; until then Chair black-box + SENTRY carry the acceptance role.
+3. **Compress the contract phase.** Writing eight contracts before one working slice risks the plan's own "prove the substrate before the visible layer" rule. Write the **minimum** contract the one LifeOS slice needs (Twin item schema + read/write + Context View + experiment), prove the slice, then generalize the remaining contracts *from what the slice taught.*
 
 ## Ratification & authority
 
