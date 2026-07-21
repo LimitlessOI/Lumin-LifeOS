@@ -83,12 +83,23 @@ The same **predict → measure → calibrate** primitive already shipped (Cognit
 
 **Unverified (kept labeled):** that Napoleon Hill's circle "certified" W.P. Patrick as living the principles; that Tony Robbins came up "through PSI." Neither corroborated; documented Robbins lineage is Jim Rohn → NLP (Grinder).
 
+## 6b. First real code (2026-07-21 — this doctrine stopped being only theory)
+
+`docs/GRAIL_IMPLEMENTATION_PLAN.md` and `docs/FIRST_SLICE_CONTRACT.md` operationalize this doctrine's first vertical slice (a LifeOS user states a goal → alternatives → decision → experiment → propose-not-apply Twin update). As of tonight, pieces of it are real, shipped, and independently verified against live production (not just individually mocked):
+
+- **Law 2 (people own their goals)** — `services/voluntary-progress-twin-proposal-gate.js`: any Twin update derived from voluntary-progress data is `proposeTwinUpdate`-only; the only function allowed to actually write (`approveTwinUpdateProposal`) is never called by the orchestrator. Confirmed live: a real proposal was left `status: 'pending'`, `twin_write_receipt: null`.
+- **Law 4's falsifiable proxy (honor the opt-out)** — `services/voluntary-progress-decision-step.js`'s `shouldStopPursuingGoal`: confirmed live that a rejected goal returns `{ ok: false, reason: 'goal_declined_do_not_re_pursue' }` on re-pursuit, not a re-ask.
+- **Simulate-before-commit, narrow first cut** — `services/voluntary-progress-alternative-futures.js` generates 3 hand-templated paths (Aggressive/Steady/Minimal-commitment) with cost/risk/reversibility per FIRST_SLICE_CONTRACT's minimum contract. **Not yet the full Decision Brief** (§3 above) — no stakes threshold, no premeditatio-malorum-style honest cost/benefit simulation, no calibration-loop comparison to reality yet. Enforcement status: `built-unwired → partially-enforced` (wired into real HTTP routes, not yet reachable from an actual LifeOS conversation).
+- **Law 6 (relatedness)** — still correctly unbuilt. `GRAIL_IMPLEMENTATION_PLAN.md` Phase 4 adds one real safety consideration not in this document: co-rumination research (unstructured shared-distress pairing measurably worsens outcomes at high levels) — if Law 6 is ever built ahead of ratification, it should ship only as a small, strictly opt-in, reversible experiment, never surfaced/pushed. Carry this caveat wherever Law 6 is discussed.
+
+None of the above is "done" — the reasoning-gate coherence layer, the stakes-gated Decision Brief, and Laws 1/3/5 as actual gates are all still open exactly as listed below.
+
 ## 7. Open items (honest, pre-consensus)
 
 1. **Law 5 economics** — how the business survives its own success (service/ecosystem thread is a lead, not an answer).
 2. **Reasoning-gate coherence layer** — flagged as necessary, not yet designed.
 3. **Knowledge Graph / Life Graph** — direction, not a schema; storage decision unmade.
-4. **Law 6** — proposed addition, needs founder confirmation before it joins the set.
+4. **Law 6** — proposed addition, needs founder confirmation before it joins the set; see §6b's co-rumination caveat if it's ever built.
 5. **Ratification** — this whole document is pre-Article-VII. Route through Chair/Council when Adam is ready; do not treat as behavior SSOT until then.
 
 ## 8. Provenance

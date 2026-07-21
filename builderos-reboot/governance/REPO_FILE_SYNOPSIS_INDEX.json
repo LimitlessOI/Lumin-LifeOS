@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-21T21:41:11.784Z",
+  "generated_at": "2026-07-21T22:56:21.716Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12101,
   "files": [
@@ -38264,9 +38264,9 @@
     {
       "path": "docs/CREATIVE_ENGINE_AND_PROGRESS_DOCTRINE.md",
       "synopsis": "Creative Engine / Voluntary Progress doctrine CANDIDATE — the One Engine + the Laws of voluntary progress. Pre-ratification brainstorm synthesis, subordinate to North Star, NOT law.",
-      "bytes": 10539,
-      "mtime": "2026-07-21T05:32:03.499Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z"
+      "bytes": 12877,
+      "mtime": "2026-07-21T22:56:10.707Z",
+      "indexed_at": "2026-07-21T22:56:21.716Z"
     },
     {
       "path": "docs/CROSS_AGENT_CHANNEL.md",
