@@ -400,7 +400,11 @@ Respond ONLY with JSON:
             let aiResponseText = '';
             try {
                 aiResponseText = councilText(await callCouncilMember('gemini_flash', extractionPrompt, {
-                    maxTokens: 1800,
+                    // council-service honors `maxOutputTokens` (not `maxTokens`) as the
+                    // output cap override; passing `maxTokens` was silently ignored and
+                    // the response was clamped to the 800-token default, truncating the
+                    // JSON array so parsing failed and extract fell back to heuristics.
+                    maxOutputTokens: 1800,
                     taskType: 'marketing_extract',
                 }));
             } catch (err) {
@@ -511,6 +515,7 @@ Respond ONLY with JSON:
             }
 
             const generatedPieces = [];
+            let templateFallbackPieces = 0; // pieces that echoed the transcript instead of real AI copy
             const validPlatforms = ['instagram', 'linkedin', 'x', 'facebook', 'email', 'general'];
             const validFormats = ['post', 'caption', 'hook', 'subject_line', 'thread', 'short_script'];
 
@@ -565,7 +570,12 @@ Rules:
                 for (const model of modelCascade) {
                     try {
                         aiResponseText = councilText(await callCouncilMember(model, generationPrompt, {
-                            maxTokens: 2200,
+                            // MUST be `maxOutputTokens` — council-service ignores `maxTokens`.
+                            // With the old (ignored) key the output was capped at 800 tokens,
+                            // truncating the 2-3-piece JSON array so it never closed, parsing
+                            // returned null, and EVERY piece silently fell back to a template
+                            // that just echoed the raw transcript (the $49-pack quality bug).
+                            maxOutputTokens: 3000,
                             taskType: 'marketing_generate',
                         }));
                         if (aiResponseText && String(aiResponseText).trim()) {
@@ -615,6 +625,7 @@ Rules:
                             [id, extraction.id, piece.title, piece.platform, piece.format, piece.content_text, 'draft', 'fallback_template']
                         );
                         generatedPieces.push(insertResult.rows[0]);
+                        templateFallbackPieces += 1;
                     }
                     logger.warn(`Failed to generate content for extraction ID ${extraction.id}; used template fallback.`);
                     continue;
@@ -642,7 +653,15 @@ Rules:
                 [id, owner_id]
             );
 
-            res.status(200).json({ ok: true, pieces: generatedPieces });
+            const allTemplateFallback = generatedPieces.length > 0 && templateFallbackPieces === generatedPieces.length;
+            res.status(200).json({
+                ok: true,
+                pieces: generatedPieces,
+                template_fallback_pieces: templateFallbackPieces,
+                ...(allTemplateFallback
+                    ? { warning: 'ai_generate_fell_back_to_template', hint: 'AI content generation returned no usable copy; pieces echo the transcript. Retry Generate or check model availability before selling this pack.' }
+                    : {}),
+            });
         } catch (error) {
             logger.error(`Error in POST /api/v1/marketing/sessions/${req.params.id}/generate:`, error);
             try {
@@ -851,7 +870,8 @@ Rules:
                 const regenerationPrompt = `Using the brand voice: ${JSON.stringify(brandVoice)}, regenerate the following marketing content piece. Original extraction type: ${sourceExtraction.extraction_type}, raw text: "${sourceExtraction.raw_text}". Current content: "${currentPiece.content_text}". Hint for regeneration: "${hint || 'Make it more engaging.'}". Return a JSON object: { "content_text": "Newly generated content here" }.`;
 
                 const aiResponseText = councilText(await callCouncilMember('gemini_flash', regenerationPrompt, {
-                    maxTokens: 1200,
+                    // `maxOutputTokens` is the honored key (see extract/generate above).
+                    maxOutputTokens: 1500,
                     taskType: 'marketing_regenerate',
                 }));
                 const regeneratedContent = parseCouncilResponse(aiResponseText);
