@@ -46,6 +46,13 @@ const OPENAI_COMPATIBLE_PROVIDERS = new Set([
   "fireworks",      // Fireworks AI — $1 free credit on signup
 ]);
 
+export function cleanCouncilResponseForCache(text) {
+  return String(text ?? '')
+    .replace(/^```(?:json|js|javascript|text)?\s*/i, '')
+    .replace(/\s*```\s*$/i, '')
+    .trim();
+}
+
 /**
  * Council service encapsulates all AI council helper logic:
  * - model routing and failover
@@ -1371,11 +1378,6 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
 
       // Strip markdown fencing from any response before caching — prevents
       // callers receiving ```json ... ``` and failing on JSON.parse
-      const cleanForCache = (t) => t
-        .replace(/^```(?:json|js|javascript|text)?\s*/i, '')
-        .replace(/\s*```\s$/i, '')
-        .trim();
-
       if (OPENAI_COMPATIBLE_PROVIDERS.has(config.provider)) {
         // OpenAI-native models (gpt-5.x) require `max_completion_tokens` and reject `max_tokens`
         // and `stop`. Other OpenAI-compatible providers (groq, cerebras, xai, …) still use the
@@ -1484,7 +1486,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
         }
 
         if (options.useCache !== false) {
-          await cacheResponse(prompt, member, cleanForCache(text), taskType);
+          await cacheResponse(prompt, member, cleanCouncilResponseForCache(text), taskType);
         }
 
         await freeTierGovernor.record(provider, inputTokens + outputTokens).catch(() => {});
@@ -1593,7 +1595,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
           }).catch(() => {});
 
         if (options.useCache !== false) {
-          await cacheResponse(prompt, member, cleanForCache(text), taskType);
+          await cacheResponse(prompt, member, cleanCouncilResponseForCache(text), taskType);
         }
 
         await freeTierGovernor.record("gemini", inputTokens + outputTokens).catch(() => {});
@@ -1650,7 +1652,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
         await updateDailySpend(cost);
 
         if (options.useCache !== false) {
-          await cacheResponse(prompt, member, cleanForCache(text), taskType);
+          await cacheResponse(prompt, member, cleanCouncilResponseForCache(text), taskType);
         }
 
         // TCO-E01: ledger for DeepSeek
@@ -1746,7 +1748,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
           }).catch(() => {});
 
         if (options.useCache !== false) {
-          await cacheResponse(prompt, member, cleanForCache(text), taskType);
+          await cacheResponse(prompt, member, cleanCouncilResponseForCache(text), taskType);
         }
 
         recordSessionTurns(effectiveSessionId, finalPrompt, text);
