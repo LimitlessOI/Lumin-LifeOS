@@ -1711,7 +1711,7 @@
     },
     {
       "id": "grail-wave1-2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/voluntary-progress-context-view.js",
       "task": "Wave 1, Mission 2: minimal Context View. Devin's reality map confirmed ZERO implementation exists anywhere in the repo (grep for context view / ContextView / contextView returns only raw memory dumps, no real code) -- this is the first real implementation of the concept, kept deliberately minimal for this one slice, not a general system.",
       "spec": "Self-bootstrap `CREATE TABLE IF NOT EXISTS voluntary_progress_context_views (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), user_id TEXT NOT NULL, activation_reason TEXT NOT NULL, permitted_reads JSONB NOT NULL, forbidden_reads JSONB NOT NULL DEFAULT '[]', permitted_proposals JSONB NOT NULL DEFAULT '[]', consent_scope TEXT NOT NULL DEFAULT 'internal_operational', expires_at TIMESTAMPTZ NOT NULL, activated_at TIMESTAMPTZ NOT NULL DEFAULT now())`. Export async function activateContextView(pool, { user_id, activation_reason, permitted_reads, forbidden_reads = [], permitted_proposals = [], consent_scope = 'internal_operational', ttl_minutes = 30 }) that inserts one row (expires_at = now() + ttl_minutes minutes, computed in SQL as `now() + ($N || ' minutes')::interval`) and returns the inserted row including its `id`. Export pure function applyContextView(twinReadState, contextViewRow) -- twinReadState is the `state` array shape returned by readTypedTwinState in services/voluntary-progress-twin-read.js (import nothing from that file, just accept the same array shape as a plain parameter to keep this module dependency-light): filters twinReadState down to only entries whose `field` is present in contextViewRow.permitted_reads, and for any entry whose field is present in contextViewRow.forbidden_reads, that field is excluded even if it was also in permitted_reads (forbidden always wins over permitted). Returns the filtered array. Export async function isContextViewExpired(pool, { context_view_id }) that self-bootstraps the table, looks up the row by id, and returns true if expires_at < now() or the row does not exist, false otherwise -- fail closed (missing or expired context view means true/expired, never assume valid). CRITICAL, learned repeatedly tonight: EVERY exported function that touches a table must independently run `await pool.query('CREATE TABLE IF NOT EXISTS <real DDL, not a placeholder>')` as its own, separate, no-parameters pool.query() call before any parameterized query in that same function -- never assume another function in the file already created the table, and never combine the CREATE TABLE with a parameterized query in one pool.query(text, values) call. If this module reuses another module's table or DDL, copy it character-for-character, never reconstruct from memory.\n\nCRITICAL BUG FIX (found via live production testing, not caught by mocks): in the INSERT INTO voluntary_progress_context_views call, permitted_reads, forbidden_reads, and permitted_proposals MUST be wrapped in JSON.stringify() before being passed as query parameters -- e.g. JSON.stringify(permitted_reads), JSON.stringify(forbidden_reads), JSON.stringify(permitted_proposals) -- NOT passed as raw JS arrays. node-postgres does not automatically serialize arrays/objects for JSONB columns; passing one raw causes Postgres error \"invalid input syntax for type json\". This exact bug was confirmed live in production and must not recur.",
@@ -1743,32 +1743,9 @@
       "blueprint_step_id": "grail-wave1-2",
       "mission_id": "PRODUCT-builderos",
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-21T21:18:45.381Z",
-      "commit_sha": "8c65198a2098e53f774c7dc228bcb97d38245575",
-      "revive_note": "REAL LIVE PRODUCTION BUG found via an actual end-to-end audit call (not a mock): POST /api/v1/lifere/voluntary-progress/goals/:id/alternatives failed with Postgres error \"invalid input syntax for type json\". Root cause: activateContextView inserts permitted_reads/forbidden_reads/permitted_proposals as RAW JS arrays into JSONB columns without JSON.stringify() -- node-postgres does not auto-serialize arrays/objects for jsonb columns; a raw array becomes an invalid non-JSON string and Postgres rejects it. This bug was NOT caught by mock-pool unit verification earlier tonight because the mock fake pool does not enforce real Postgres JSON type strictness -- a real, now-documented blind spot in that verification method, only caught by an actual live call.",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/builderos/twins/steps/grail-wave1-2.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-21T21:18:45.381Z",
-        "shipped_at": "2026-07-21T21:18:45.381Z",
-        "commit_sha": "8c65198a2098e53f774c7dc228bcb97d38245575",
-        "content_sha256": "c451b73a5e324c60dc7a389ff4b78c97c61e928dc5b47b9aa20bc31049c45b60",
-        "target_file": "services/voluntary-progress-context-view.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/voluntary-progress-context-view.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/builderos/twins/steps/grail-wave1-2.exact",
-          "content_sha256": "c451b73a5e324c60dc7a389ff4b78c97c61e928dc5b47b9aa20bc31049c45b60"
-        }
-      }
+      "shipped_at": "2026-07-21T21:18:52.827Z",
+      "commit_sha": "aed5a626f1f408ad15d3e6afbb90ea130aa2ec8e",
+      "revive_note": "REAL LIVE PRODUCTION BUG found via an actual end-to-end audit call (not a mock): POST /api/v1/lifere/voluntary-progress/goals/:id/alternatives failed with Postgres error \"invalid input syntax for type json\". Root cause: activateContextView inserts permitted_reads/forbidden_reads/permitted_proposals as RAW JS arrays into JSONB columns without JSON.stringify() -- node-postgres does not auto-serialize arrays/objects for jsonb columns; a raw array becomes an invalid non-JSON string and Postgres rejects it. This bug was NOT caught by mock-pool unit verification earlier tonight because the mock fake pool does not enforce real Postgres JSON type strictness -- a real, now-documented blind spot in that verification method, only caught by an actual live call."
     },
     {
       "id": "grail-wave1-3",
