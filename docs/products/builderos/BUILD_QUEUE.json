@@ -1602,7 +1602,7 @@
     },
     {
       "id": "grail-phase05-2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/voluntary-progress-attention-telemetry.js",
       "task": "GRAIL Phase 0.5 (seed the clock, Tier-0 shaped): Attention Contract telemetry. Records the attention/trust/knowledge budget OBSERVED for a given artifact -- capture only, no validation against a 'desired' threshold yet, since there is no real data to calibrate 'desired' against until this has been running.",
       "spec": "Self-bootstrap `CREATE TABLE IF NOT EXISTS voluntary_progress_attention_observations (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), artifact_id TEXT NOT NULL, artifact_type TEXT NOT NULL, product TEXT NOT NULL, attention_budget_observed_seconds NUMERIC, trust_budget_observed NUMERIC, knowledge_budget_observed NUMERIC, next_decision TEXT, observed_at TIMESTAMPTZ NOT NULL DEFAULT now())`. Export async function recordAttentionObservation(pool, { artifact_id, artifact_type, product, attention_budget_observed_seconds = null, trust_budget_observed = null, knowledge_budget_observed = null, next_decision = null }) that inserts one row (append-only -- every observation is its own row, this is a time series, not a current-state table). Export async function getAttentionHistory(pool, { artifact_id, limit = 50 } = {}) returning the most recent observations for that artifact, ordered by observed_at DESC. Export async function getAttentionHistoryByProduct(pool, { product, limit = 100 } = {}) returning the most recent observations across all artifacts for a given product, ordered by observed_at DESC -- this is what lets Phase 1+ eventually calibrate a 'desired' threshold once enough rows exist; this module does not compute that threshold itself, it only captures. Pure capture: must not decide whether an artifact passes or fails any threshold, must not call any dispatch/render function. CRITICAL, learned repeatedly tonight: EVERY exported function that touches a table must independently run `await pool.query('CREATE TABLE IF NOT EXISTS <real DDL, not a placeholder>')` as its own, separate, no-parameters pool.query() call before any parameterized query in that same function -- never assume another function in the file already created the table, and never combine the CREATE TABLE with a parameterized query in one pool.query(text, values) call (PostgreSQL's prepared-statement protocol rejects multiple statements in one call with params). If this module reuses another module's table, copy that table's real DDL character-for-character -- do not paraphrase or reconstruct a schema from memory, since a plausible-but-wrong reconstruction (missing a column, wrong type) silently corrupts the shared table for whichever module's CREATE TABLE runs first.",
@@ -1632,30 +1632,9 @@
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "grail-phase05-2",
       "mission_id": "PRODUCT-builderos",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/builderos/twins/steps/grail-phase05-2.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-21T06:39:00.875Z",
-        "shipped_at": "2026-07-21T06:39:00.875Z",
-        "commit_sha": null,
-        "content_sha256": "83634fcd7ce1a5798cb6d5a4d016fd73b85cf856993e2c9da3df3419f8b09bbb",
-        "target_file": "services/voluntary-progress-attention-telemetry.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/voluntary-progress-attention-telemetry.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/builderos/twins/steps/grail-phase05-2.exact",
-          "content_sha256": "83634fcd7ce1a5798cb6d5a4d016fd73b85cf856993e2c9da3df3419f8b09bbb"
-        }
-      },
-      "shipped_at": "2026-07-21T06:39:00.875Z"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-21T06:39:07.176Z",
+      "commit_sha": "213d3682d3782a24c029ef81d3e0c51296b2e53f"
     },
     {
       "id": "grail-phase05-3",
