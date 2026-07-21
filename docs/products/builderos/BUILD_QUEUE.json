@@ -1631,7 +1631,31 @@
       ],
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "grail-phase05-2",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/builderos/twins/steps/grail-phase05-2.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-21T06:39:00.875Z",
+        "shipped_at": "2026-07-21T06:39:00.875Z",
+        "commit_sha": null,
+        "content_sha256": "83634fcd7ce1a5798cb6d5a4d016fd73b85cf856993e2c9da3df3419f8b09bbb",
+        "target_file": "services/voluntary-progress-attention-telemetry.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/voluntary-progress-attention-telemetry.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/builderos/twins/steps/grail-phase05-2.exact",
+          "content_sha256": "83634fcd7ce1a5798cb6d5a4d016fd73b85cf856993e2c9da3df3419f8b09bbb"
+        }
+      },
+      "shipped_at": "2026-07-21T06:39:00.875Z"
     },
     {
       "id": "grail-phase05-3",

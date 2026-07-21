@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-21T06:38:22.716Z",
+  "generated_at": "2026-07-21T06:39:03.527Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12087,
+  "file_count": 12088,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -91987,6 +91987,13 @@
         "docs/products/lifeos/PRODUCT_HOME.md",
         "builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/FOUNDER_PACKET.md"
       ]
+    },
+    {
+      "path": "services/voluntary-progress-attention-telemetry.js",
+      "synopsis": "Exports recordAttentionObservation — services/voluntary-progress-attention-telemetry.js.",
+      "bytes": 1957,
+      "mtime": "2026-07-21T06:39:03.527Z",
+      "indexed_at": "2026-07-21T06:39:03.527Z"
     },
     {
       "path": "services/vr-experience/engine.js",
