@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Exports logMissionIntake — services/voluntary-progress-mission-intake-log.js.
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 import { Pool } from 'pg';
 

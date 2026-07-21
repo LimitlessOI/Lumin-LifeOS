@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Exports generateAlternativeFutures — services/voluntary-progress-alternative-futures.js.
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 export function generateAlternativeFutures({ goal_text, goal_category = 'general' }) {
   return [

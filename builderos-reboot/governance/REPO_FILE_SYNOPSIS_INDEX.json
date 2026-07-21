@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-21T09:50:05.120Z",
+  "generated_at": "2026-07-21T19:42:13.163Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12096,
   "files": [
@@ -21634,9 +21634,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3645151,
-      "mtime": "2026-07-21T05:58:40.458Z",
-      "indexed_at": "2026-07-21T05:58:48.283Z"
+      "bytes": 3648465,
+      "mtime": "2026-07-21T19:42:04.564Z",
+      "indexed_at": "2026-07-21T19:42:13.163Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -40459,9 +40459,9 @@
     {
       "path": "docs/products/lifere/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeRE",
-      "bytes": 40291,
-      "mtime": "2026-07-21T05:32:03.837Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z"
+      "bytes": 42178,
+      "mtime": "2026-07-21T19:41:52.417Z",
+      "indexed_at": "2026-07-21T19:42:13.163Z"
     },
     {
       "path": "docs/products/limitlessos/conversations/2026-06-29-founder-ecosystem-session.md",
@@ -91991,65 +91991,92 @@
     {
       "path": "services/voluntary-progress-alternative-futures.js",
       "synopsis": "Exports generateAlternativeFutures — services/voluntary-progress-alternative-futures.js.",
-      "bytes": 1342,
-      "mtime": "2026-07-21T07:04:37.640Z",
-      "indexed_at": "2026-07-21T07:04:37.640Z"
+      "bytes": 1388,
+      "mtime": "2026-07-21T19:41:22.626Z",
+      "indexed_at": "2026-07-21T19:42:13.163Z",
+      "ssot": [
+        "docs/products/lifere/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/voluntary-progress-ask-ledger.js",
       "synopsis": "Exports recordAsk — services/voluntary-progress-ask-ledger.js.",
-      "bytes": 2313,
-      "mtime": "2026-07-21T06:45:34.584Z",
-      "indexed_at": "2026-07-21T06:45:34.584Z"
+      "bytes": 3001,
+      "mtime": "2026-07-21T19:41:22.775Z",
+      "indexed_at": "2026-07-21T19:42:13.163Z",
+      "ssot": [
+        "docs/products/lifere/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/voluntary-progress-attention-telemetry.js",
       "synopsis": "Exports recordAttentionObservation — services/voluntary-progress-attention-telemetry.js.",
-      "bytes": 1957,
-      "mtime": "2026-07-21T06:39:03.527Z",
-      "indexed_at": "2026-07-21T06:39:03.527Z"
+      "bytes": 3023,
+      "mtime": "2026-07-21T19:41:22.824Z",
+      "indexed_at": "2026-07-21T19:42:13.163Z",
+      "ssot": [
+        "docs/products/lifere/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/voluntary-progress-context-view.js",
       "synopsis": "Exports activateContextView — services/voluntary-progress-context-view.js.",
-      "bytes": 2457,
-      "mtime": "2026-07-21T07:04:01.188Z",
-      "indexed_at": "2026-07-21T07:04:01.188Z"
+      "bytes": 2503,
+      "mtime": "2026-07-21T19:41:22.529Z",
+      "indexed_at": "2026-07-21T19:42:13.163Z",
+      "ssot": [
+        "docs/products/lifere/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/voluntary-progress-decision-step.js",
       "synopsis": "Exports recordDecision — services/voluntary-progress-decision-step.js.",
-      "bytes": 3189,
-      "mtime": "2026-07-21T07:04:22.790Z",
-      "indexed_at": "2026-07-21T07:04:22.790Z"
+      "bytes": 3235,
+      "mtime": "2026-07-21T19:41:22.578Z",
+      "indexed_at": "2026-07-21T19:42:13.163Z",
+      "ssot": [
+        "docs/products/lifere/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/voluntary-progress-experiment.js",
       "synopsis": "Exports createGoalExperiment — services/voluntary-progress-experiment.js.",
-      "bytes": 2610,
-      "mtime": "2026-07-21T07:04:56.196Z",
-      "indexed_at": "2026-07-21T07:04:56.196Z"
+      "bytes": 2656,
+      "mtime": "2026-07-21T19:41:22.676Z",
+      "indexed_at": "2026-07-21T19:42:13.163Z",
+      "ssot": [
+        "docs/products/lifere/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/voluntary-progress-mission-intake-log.js",
       "synopsis": "Exports logMissionIntake — services/voluntary-progress-mission-intake-log.js.",
-      "bytes": 3354,
-      "mtime": "2026-07-21T06:39:21.593Z",
-      "indexed_at": "2026-07-21T06:39:21.593Z"
+      "bytes": 3313,
+      "mtime": "2026-07-21T19:41:22.874Z",
+      "indexed_at": "2026-07-21T19:42:13.163Z",
+      "ssot": [
+        "docs/products/lifere/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/voluntary-progress-twin-proposal-gate.js",
       "synopsis": "Exports proposeTwinUpdate — services/voluntary-progress-twin-proposal-gate.js.",
-      "bytes": 4861,
-      "mtime": "2026-07-21T07:20:34.158Z",
-      "indexed_at": "2026-07-21T07:20:34.158Z"
+      "bytes": 4907,
+      "mtime": "2026-07-21T19:41:22.724Z",
+      "indexed_at": "2026-07-21T19:42:13.163Z",
+      "ssot": [
+        "docs/products/lifere/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/voluntary-progress-twin-read.js",
       "synopsis": "Exports readTypedTwinState — services/voluntary-progress-twin-read.js.",
-      "bytes": 1135,
-      "mtime": "2026-07-21T07:09:02.143Z",
-      "indexed_at": "2026-07-21T07:09:02.143Z"
+      "bytes": 1181,
+      "mtime": "2026-07-21T19:41:22.477Z",
+      "indexed_at": "2026-07-21T19:42:13.163Z",
+      "ssot": [
+        "docs/products/lifere/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/vr-experience/engine.js",

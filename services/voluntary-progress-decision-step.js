@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Exports recordDecision — services/voluntary-progress-decision-step.js.
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 import { recordAsk, recordOptOut, hasOptedOut } from './voluntary-progress-ask-ledger.js';
 

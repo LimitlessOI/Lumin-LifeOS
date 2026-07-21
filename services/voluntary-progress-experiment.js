@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Exports createGoalExperiment — services/voluntary-progress-experiment.js.
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 import { createCognitiveCoreJudgment } from './cognitive-core-judgment.js';
 

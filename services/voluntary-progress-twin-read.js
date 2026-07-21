@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Exports readTypedTwinState — services/voluntary-progress-twin-read.js.
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 import { readTwin, ForbiddenCrossUserError } from './lifere-twin-store.js';
 

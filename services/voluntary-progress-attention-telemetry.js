@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Exports recordAttentionObservation — services/voluntary-progress-attention-telemetry.js.
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 import { Pool } from 'pg';
 

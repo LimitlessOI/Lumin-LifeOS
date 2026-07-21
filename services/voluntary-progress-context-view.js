@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Exports activateContextView — services/voluntary-progress-context-view.js.
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 import pg from 'pg';
 

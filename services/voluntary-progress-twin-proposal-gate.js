@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Exports proposeTwinUpdate — services/voluntary-progress-twin-proposal-gate.js.
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 import { writeTwin } from './lifere-twin-store.js';
 

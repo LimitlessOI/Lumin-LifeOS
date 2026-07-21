@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Exports recordAsk — services/voluntary-progress-ask-ledger.js.
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 export async function recordAsk(pool, { user_id, ask_type, ask_context = null, channel = null, consent_scope = 'internal_operational' }) {
   await pool.query('CREATE TABLE IF NOT EXISTS voluntary_progress_asks (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), user_id TEXT NOT NULL, ask_type TEXT NOT NULL, ask_context TEXT, channel TEXT, consent_scope TEXT NOT NULL DEFAULT \'internal_operational\', asked_at TIMESTAMPTZ NOT NULL DEFAULT now())');
