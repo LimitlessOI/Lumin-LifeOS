@@ -752,13 +752,13 @@
     },
     {
       "id": "sb-deliverability-gate-v2",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/site-builder-deliverability-check.js",
       "task": "Workaround for sb-deliverability-gate (superseded): same DNS-based SPF/DKIM deliverability check, targeting a brand-new file instead of appending to services/site-builder-prospect-runner.js, to avoid a confirmed platform bug where the builder fails to produce a real export when appending a new function to a file ending in an export default {} object (10/10 confirmed failures on the old target).",
       "spec": "Create a brand-new file (this file does not exist yet -- greenfield, no existing content to merge with, no export default {} object anywhere in it, which is the deliberate point: a prior 10-attempt effort to add this same function to services/site-builder-prospect-runner.js -- which DOES end in an export default {} object -- failed every single time with the function only being referenced inside that object instead of declared as a real export, despite maximally explicit specs; this is a workaround that avoids the trigger condition entirely rather than another attempt at the same pattern).\n\nThe file's ENTIRE content should be just this one function, exported directly:\n\nexport async function checkDomainDeliverabilityDNS(domain, { dkimSelector = 'default', resolveTxtFn } = {}) {\n  const resolve = resolveTxtFn || ((name) => import('node:dns').then((dns) => dns.promises.resolveTxt(name)));\n  if (!domain) {\n    return { deliverabilityReady: false, deliverabilityBlockers: ['missing_domain'] };\n  }\n  const blockers = [];\n  let spfFound = false;\n  let dkimFound = false;\n  try {\n    const spfRecords = await resolve(domain);\n    spfFound = spfRecords.some((rec) => rec.join('').toLowerCase().includes('v=spf1'));\n  } catch (err) {\n    blockers.push(`spf_lookup_failed:${err.code || err.message}`);\n  }\n  if (!spfFound) blockers.push('spf_record_not_found');\n  try {\n    const dkimRecords = await resolve(`${dkimSelector}._domainkey.${domain}`);\n    dkimFound = dkimRecords.some((rec) => rec.join('').toLowerCase().includes('v=dkim1'));\n  } catch (err) {\n    blockers.push(`dkim_lookup_failed:${err.code || err.message}`);\n  }\n  if (!dkimFound) blockers.push('dkim_record_not_found');\n  return {\n    deliverabilityReady: spfFound && dkimFound,\n    deliverabilityBlockers: blockers,\n  };\n}\n\nAdd this JSDoc block as the very first thing in the file, before the function: /**\n * SYNOPSIS: Exports checkDomainDeliverabilityDNS — services/site-builder-deliverability-check.js.\n * @ssot docs/products/site-builder/PRODUCT_HOME.md\n */\n\nThat is the entire file -- nothing else. Do not add an export default object. Do not import or reference services/site-builder-prospect-runner.js from this file (wiring the two together is a separate, later step). resolveTxtFn is dependency-injected for testability; defaults to a real node:dns lookup. Must fail closed (deliverabilityReady: false with a specific blocker string) on any error -- never fail open, never throw.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "checkDomainDeliverabilityDNS"
       ],
@@ -775,38 +775,29 @@
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "sb-deliverability-gate-v2",
       "mission_id": "PRODUCT-site-builder",
-      "last_attempt_at": "2026-07-21T20:20:19.477Z",
-      "last_error": "NOT_ON_BLUEPRINT",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "4580148a46d896a971797d5d71ff496c77c1abed",
       "built_sha": null,
       "proof": null,
       "failure_signature": "NOT_ON_BLUEPRINT",
       "same_signature_count": 1,
       "escalation_class": "governance_block",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/site-builder/twins/steps/sb-deliverability-gate-v2.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-21T20:36:11.651Z",
-        "shipped_at": "2026-07-21T20:36:11.651Z",
-        "commit_sha": null,
-        "content_sha256": "737ce50a8fb782328bac086931f9269ec2859accec3980733958a02d542dcf24",
-        "target_file": "services/site-builder-deliverability-check.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/site-builder-deliverability-check.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/site-builder/twins/steps/sb-deliverability-gate-v2.exact",
-          "content_sha256": "737ce50a8fb782328bac086931f9269ec2859accec3980733958a02d542dcf24"
-        }
-      },
-      "shipped_at": "2026-07-21T20:36:11.651Z"
+      "revive_count": 0,
+      "revived_at": "2026-07-21T20:36:07.022Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-21T20:36:18.949Z"
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",
