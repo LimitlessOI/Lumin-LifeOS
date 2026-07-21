@@ -1790,7 +1790,7 @@
     },
     {
       "id": "grail-wave1-4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/voluntary-progress-alternative-futures.js",
       "task": "Wave 1, Mission 4: alternative-futures generator, deliberately simplified for this first slice per explicit agreement -- hand-templated paths, NOT a general AI-generative multi-path simulator (that generalization is later work, pulled only once this narrow version proves the wiring). Devin's map found the existing future-self-simulator projects a single skill/domain, not multi-path goal futures -- this is a new, narrow module, not an extension of that one.",
       "spec": "No table needed -- this is a pure, deterministic function module (no pool argument at all in any export). Export function generateAlternativeFutures({ goal_text, goal_category = 'general' }) that returns an array of exactly 3 plain objects, each shaped `{ path_label: string, description: string, time_estimate: string, financial_cost_estimate: string, emotional_cost_estimate: 'low'|'medium'|'high', risk_level: 'low'|'medium'|'high', reversibility: 'easily_reversible'|'partially_reversible'|'hard_to_reverse' }`. The 3 paths must be genuinely distinct in character, not just reworded -- use this fixed template regardless of goal_category (do not attempt to dynamically generate categories via an AI call, this must stay deterministic and free for the first slice): Path 1 'Aggressive' (fastest, highest cost and risk, hard_to_reverse), Path 2 'Steady' (moderate pace, moderate cost/risk, partially_reversible), Path 3 'Minimal-commitment' (slowest, lowest cost/risk, easily_reversible -- e.g. a small experiment or trial version of the goal). Each path's `description` field must reference the actual `goal_text` passed in (not a generic template with no connection to what the user actually said) -- e.g. interpolate goal_text into the description string. Export function pathRequiresFullDecisionBrief(path) that returns true only if path.risk_level === 'high' or path.reversibility === 'hard_to_reverse' (matches the Gate Charter stakes-threshold: full Decision Brief only for irreversible/high-blast-radius paths, per doctrine already established tonight). CRITICAL, learned repeatedly tonight: EVERY exported function that touches a table must independently run `await pool.query('CREATE TABLE IF NOT EXISTS <real DDL, not a placeholder>')` as its own, separate, no-parameters pool.query() call before any parameterized query in that same function -- never assume another function in the file already created the table, and never combine the CREATE TABLE with a parameterized query in one pool.query(text, values) call. If this module reuses another module's table or DDL, copy it character-for-character, never reconstruct from memory.",
@@ -1820,30 +1820,9 @@
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "grail-wave1-4",
       "mission_id": "PRODUCT-builderos",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/builderos/twins/steps/grail-wave1-4.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-21T07:04:35.187Z",
-        "shipped_at": "2026-07-21T07:04:35.187Z",
-        "commit_sha": null,
-        "content_sha256": "974b60eca714b58602bb6371149440553317cff96df89ddb250f6d9090aa294b",
-        "target_file": "services/voluntary-progress-alternative-futures.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/voluntary-progress-alternative-futures.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/builderos/twins/steps/grail-wave1-4.exact",
-          "content_sha256": "974b60eca714b58602bb6371149440553317cff96df89ddb250f6d9090aa294b"
-        }
-      },
-      "shipped_at": "2026-07-21T07:04:35.187Z"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-21T07:04:42.460Z",
+      "commit_sha": "2089c31392dc013fe16e8107b2e25cb1a35610d7"
     },
     {
       "id": "grail-wave1-5",
