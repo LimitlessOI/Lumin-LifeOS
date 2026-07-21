@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-21T07:04:37.640Z",
+  "generated_at": "2026-07-21T07:04:56.196Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12093,
+  "file_count": 12094,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -92022,6 +92022,13 @@
       "bytes": 3189,
       "mtime": "2026-07-21T07:04:22.790Z",
       "indexed_at": "2026-07-21T07:04:22.790Z"
+    },
+    {
+      "path": "services/voluntary-progress-experiment.js",
+      "synopsis": "Exports createGoalExperiment — services/voluntary-progress-experiment.js.",
+      "bytes": 2610,
+      "mtime": "2026-07-21T07:04:56.196Z",
+      "indexed_at": "2026-07-21T07:04:56.196Z"
     },
     {
       "path": "services/voluntary-progress-mission-intake-log.js",
