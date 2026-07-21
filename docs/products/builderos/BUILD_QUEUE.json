@@ -2067,7 +2067,7 @@
     },
     {
       "id": "grail-audit-tsos-wire-2",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/tsos-efficiency-register.js",
       "task": "Workaround for grail-audit-tsos-wire-1 (superseded): register wrapper for TSOS token-efficiency routes in a brand-new file instead of appending to the existing routes/tsos-efficiency-routes.js, to avoid a confirmed builder bug where appending an export to an existing file fails to produce a real export 11/11 times tonight while greenfield files succeed 100% of the time.",
       "spec": "Create a brand-new file (greenfield -- do not touch routes/tsos-efficiency-routes.js at all, it stays exactly as-is). This works around a confirmed builder bug: appending a new export to an already-populated existing file has failed 11 times tonight across two different files with the identical symptom (file_contains passes, exports_smoke fails), while every greenfield new-file dispatch has succeeded. This file's entire content is:\n\nimport { createTsosEfficiencyRoutes } from './tsos-efficiency-routes.js';\n\nexport function registerTsosEfficiencyRoutes(app, deps = {}) {\n  const { pool, requireKey, logger } = deps;\n  app.use(createTsosEfficiencyRoutes({ pool, requireKey }));\n  logger?.info?.('Tsos Efficiency Routes registered successfully.');\n}\n\nAdd this JSDoc block as the very first thing in the file, before the import: /**\n * SYNOPSIS: Exports registerTsosEfficiencyRoutes — routes/tsos-efficiency-register.js.\n * @ssot docs/products/builderos/PRODUCT_HOME.md\n */\n\nThat is the entire file -- nothing else.",
@@ -2090,30 +2090,9 @@
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "grail-audit-tsos-wire-2",
       "mission_id": "PRODUCT-builderos",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/builderos/twins/steps/grail-audit-tsos-wire-2.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-21T21:15:07.571Z",
-        "shipped_at": "2026-07-21T21:15:07.571Z",
-        "commit_sha": null,
-        "content_sha256": "72188180faafb34ff6e2d8fe071e6870f0f1624c8cfa3561f85810b632528fcd",
-        "target_file": "routes/tsos-efficiency-register.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "routes/tsos-efficiency-register.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/builderos/twins/steps/grail-audit-tsos-wire-2.exact",
-          "content_sha256": "72188180faafb34ff6e2d8fe071e6870f0f1624c8cfa3561f85810b632528fcd"
-        }
-      },
-      "shipped_at": "2026-07-21T21:15:07.571Z"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-21T21:15:15.054Z",
+      "commit_sha": "8533d0af5a8cbdff3954bf338da7661716258f9d"
     }
   ],
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
