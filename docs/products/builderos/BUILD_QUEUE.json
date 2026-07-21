@@ -1558,7 +1558,7 @@
     },
     {
       "id": "grail-phase05-1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/voluntary-progress-ask-ledger.js",
       "task": "GRAIL Phase 0.5 (seed the clock, Tier-0 shaped): append-only ask/opt-out ledger. Gates nothing -- pure capture. Prerequisite for the Phase 2 opt-out gate (Law 4), which cannot exist without real data on what was asked and what was declined.",
       "spec": "Self-bootstrap `CREATE TABLE IF NOT EXISTS voluntary_progress_asks (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), user_id TEXT NOT NULL, ask_type TEXT NOT NULL, ask_context TEXT, channel TEXT, consent_scope TEXT NOT NULL DEFAULT 'internal_operational', asked_at TIMESTAMPTZ NOT NULL DEFAULT now())` and a second table `CREATE TABLE IF NOT EXISTS voluntary_progress_optouts (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), user_id TEXT NOT NULL, ask_type TEXT NOT NULL, opt_out_reason TEXT, consent_scope TEXT NOT NULL DEFAULT 'internal_operational', opted_out_at TIMESTAMPTZ NOT NULL DEFAULT now(), UNIQUE(user_id, ask_type))`. consent_scope is a plain string tag (e.g. 'internal_operational', 'user_facing_coaching', 'marketing') describing what this row's data may be used for -- not full access-control enforcement, just the minimum field so retention/deletion/export logic (a separate future piece of work) has something to key off. Export async function recordAsk(pool, { user_id, ask_type, ask_context = null, channel = null, consent_scope = 'internal_operational' }) that inserts a row into voluntary_progress_asks (append-only). Export async function recordOptOut(pool, { user_id, ask_type, opt_out_reason = null, consent_scope = 'internal_operational' }) that upserts into voluntary_progress_optouts (INSERT ... ON CONFLICT (user_id, ask_type) DO UPDATE SET opt_out_reason = EXCLUDED.opt_out_reason, consent_scope = EXCLUDED.consent_scope, opted_out_at = now()). Export async function hasOptedOut(pool, { user_id, ask_type }) returning the opt-out row (with opted_out_at, opt_out_reason, consent_scope) if one exists for this exact (user_id, ask_type) pair, or null. Export async function getRecentAsks(pool, { user_id, limit = 50 } = {}) returning the most recent rows from voluntary_progress_asks for that user, ordered by asked_at DESC. Pure capture: must not decide whether to block or allow anything, must not call any dispatch/render function. CRITICAL, learned repeatedly tonight: EVERY exported function that touches a table must independently run `await pool.query('CREATE TABLE IF NOT EXISTS <real DDL, not a placeholder>')` as its own, separate, no-parameters pool.query() call before any parameterized query in that same function -- never assume another function in the file already created the table, and never combine the CREATE TABLE with a parameterized query in one pool.query(text, values) call. If this module reuses another module's table, copy that table's real DDL character-for-character.",
@@ -1593,30 +1593,9 @@
       "blueprint_step_id": "grail-phase05-1",
       "mission_id": "PRODUCT-builderos",
       "revive_note": "2026-07-21: reset to add a consent_scope column -- real gap found via independent critique (Chair live judgment + Opus review both independently converged on this before any real caller was wired to these functions, so zero data-loss risk from redefining the schema now). consent_scope is nullable TEXT, defaulting to 'internal_operational' when not specified, so existing callers (none yet) are not broken -- this is the minimum viable consent field per doctrine A-Z Section H, full retention/deletion/export mechanics remain a later, larger piece of work, not solved here.",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/builderos/twins/steps/grail-phase05-1.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-21T06:57:43.070Z",
-        "shipped_at": "2026-07-21T06:57:43.070Z",
-        "commit_sha": null,
-        "content_sha256": "9ab058a3cd042d4e45a7ef341b14e70811540b28b52e35e3365978731a055aa6",
-        "target_file": "services/voluntary-progress-ask-ledger.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/voluntary-progress-ask-ledger.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/builderos/twins/steps/grail-phase05-1.exact",
-          "content_sha256": "9ab058a3cd042d4e45a7ef341b14e70811540b28b52e35e3365978731a055aa6"
-        }
-      },
-      "shipped_at": "2026-07-21T06:57:43.070Z"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-21T06:57:50.064Z",
+      "commit_sha": "f48c2c1f065d77db5837f86e8bbb2d06d225d6ea"
     },
     {
       "id": "grail-phase05-2",
