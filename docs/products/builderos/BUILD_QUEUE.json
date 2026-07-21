@@ -2031,7 +2031,7 @@
       "spec": "Add EXACTLY one new export to the END of the existing file routes/tsos-efficiency-routes.js (after its closing 'return router; }' for createTsosEfficiencyRoutes -- do not modify createTsosEfficiencyRoutes itself in any way, only append after it):\n\nexport function registerTsosEfficiencyRoutes(app, deps = {}) {\n  const { pool, requireKey, logger } = deps;\n  app.use(createTsosEfficiencyRoutes({ pool, requireKey }));\n  logger?.info?.('Tsos Efficiency Routes registered successfully.');\n}\n\nThis mirrors the exact existing pattern already live in routes/lifere-sales-coaching-routes.js (createLifeRESalesCoachingRoutes + registerLifereSalesCoachingRoutes) -- read that real file to copy its register-wrapper shape exactly, including the app.use(createX(...)) call with no explicit mount-path argument (createTsosEfficiencyRoutes's own router already declares full absolute paths like /api/v1/lifeos/builderos/tsos-efficiency internally via router.get('/api/v1/lifeos/builderos/tsos-efficiency', ...), so app.use() is called with just the router, no separate mount-path string -- verified against the real file, do not invent a mount-path prefix).\n\nRoot cause this fixes: this file's createTsosEfficiencyRoutes is imported and mounted in startup/register-runtime-routes.js (the full-runtime lane) but was NEVER registered in the founder_builder lane, which is the ONLY lane Railway actually boots in production (confirmed live: GET /api/v1/lifeos/builderos/tsos-efficiency returns 404 in production right now). This is the exact same class of bug already found and fixed once tonight for lifere-sales-coaching-routes.js.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 1,
       "expected_exports": [
         "createTsosEfficiencyRoutes",
         "registerTsosEfficiencyRoutes"
@@ -2057,15 +2057,28 @@
         "method": "GET",
         "path": "/api/v1/lifeos/builderos/tsos-efficiency"
       },
-      "last_attempt_at": "2026-07-21T21:14:56.718Z",
+      "last_attempt_at": "2026-07-21T21:30:45.002Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerTsosEfficiencyRoutes; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "failure_signature": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerTsosEfficiencyRoutes; behavior_assertion_failed; behavior_proof",
-      "same_signature_count": 1,
+      "same_signature_count": 2,
       "escalation_class": "evidence_gap",
-      "revive_note": "Superseded by grail-audit-tsos-wire-2 (new file, not append). Same systematic pattern now confirmed across TWO existing files (site-builder-prospect-runner.js x10 attempts, this file x1): every greenfield/new-file dispatch tonight succeeded; every append-a-function-to-an-existing-file dispatch failed identically (file_contains passes, exports_smoke fails on the new export specifically). This is a builder patch-application bug, not a spec-wording or file-structure-specific issue -- confirmed by this file NOT ending in an export default {} object (ruling out the earlier narrower theory) yet failing the exact same way."
+      "revive_note": "Superseded by grail-audit-tsos-wire-2 (new file, not append). Same systematic pattern now confirmed across TWO existing files (site-builder-prospect-runner.js x10 attempts, this file x1): every greenfield/new-file dispatch tonight succeeded; every append-a-function-to-an-existing-file dispatch failed identically (file_contains passes, exports_smoke fails on the new export specifically). This is a builder patch-application bug, not a spec-wording or file-structure-specific issue -- confirmed by this file NOT ending in an export default {} object (ruling out the earlier narrower theory) yet failing the exact same way.",
+      "revive_count": 1,
+      "revived_at": "2026-07-21T21:30:36.276Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "grail-audit-tsos-wire-2",
