@@ -7,13 +7,13 @@
   "steps": [
     {
       "id": "sb-deliverability-gate",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/site-builder-prospect-runner.js",
-      "task": "Extend evaluateSiteBuilderEmailReadiness() to check actual sending-domain deliverability status (SPF/DKIM verified in Postmark), not just that env vars are present. Add checkPostmarkDomainVerified(domain, { apiToken, fetchFn }) that calls Postmark's sender-signature/domain API and returns whether the sending domain is DKIM/SPF verified. evaluateSiteBuilderEmailReadiness() should surface a new deliverabilityReady flag (false + a clear blocker reason if the domain isn't verified yet) alongside the existing coldEmailSending flag, so callers can gate real outreach volume on genuine deliverability, not just config presence.",
-      "spec": "8th attempt. All 7 prior attempts failed IDENTICALLY: the model writes the string 'checkPostmarkDomainVerified' into the file (satisfying a naive substring check) but does NOT declare it as `export function checkPostmarkDomainVerified` / `export async function checkPostmarkDomainVerified` -- it keeps only referencing the name inside the existing `export default { ... }` object at the bottom of the file, which does NOT satisfy exports_smoke (import * as mod; mod.checkPostmarkDomainVerified must exist as an own property from a real export statement).\n\nInsert EXACTLY this code block, verbatim, character for character, immediately BEFORE the line that reads `export default {` in services/site-builder-prospect-runner.js (that line currently begins the file's closing default-export object listing createProspectClientId, enqueueProspectJob, etc.). Do NOT edit, add to, or remove anything from the `export default { ... }` object itself -- leave it byte-for-byte as-is. Do NOT add checkPostmarkDomainVerified as a property inside that object.\n\nInsert this exact block:\n\nexport async function checkPostmarkDomainVerified(domain, { apiToken, fetchFn = fetch } = {}) {\n  if (!apiToken || !domain) {\n    return { deliverabilityReady: false, deliverabilityBlockers: ['missing_api_token_or_domain'] };\n  }\n  try {\n    const res = await fetchFn('https://api.postmarkapp.com/domains', {\n      headers: { Accept: 'application/json', 'X-Postmark-Account-Token': apiToken },\n    });\n    if (!res.ok) {\n      return { deliverabilityReady: false, deliverabilityBlockers: [`postmark_api_error_${res.status}`] };\n    }\n    const body = await res.json();\n    const domains = Array.isArray(body?.Domains) ? body.Domains : [];\n    const match = domains.find((d) => String(d?.Name || '').toLowerCase() === String(domain).toLowerCase());\n    if (!match) {\n      return { deliverabilityReady: false, deliverabilityBlockers: ['domain_not_found_in_postmark'] };\n    }\n    const verified = match.SPFVerified === true && match.DKIMVerified === true;\n    return {\n      deliverabilityReady: verified,\n      deliverabilityBlockers: verified ? [] : ['spf_or_dkim_not_verified'],\n    };\n  } catch (err) {\n    return { deliverabilityReady: false, deliverabilityBlockers: [`postmark_check_failed:${err.message}`] };\n  }\n}\n\nThis is the ENTIRE required change for this step -- do not modify evaluateSiteBuilderEmailReadiness, enqueueProspectJob, or any other function. Do not add anything else. The function must fail closed (deliverabilityReady: false) on any error, missing token, or missing domain match -- never fail open. fetchFn defaults to the global fetch so real callers work without passing it, but tests can inject a fake fetchFn.",
+      "task": "FOUNDER DECISION (2026-07-21): Postmark cannot be used for cold outreach -- its AUP does not permit unsolicited/cold email sending. This supersedes the original Postmark-API-based approach (9 straight failed attempts, all the same missing-export bug). New approach: a vendor-neutral deliverability check using standard DNS SPF/DKIM records, which works regardless of which sending provider (Amazon SES, Mailgun, SMTP2GO, etc.) is eventually chosen for actual cold-email sending.",
+      "spec": "Insert EXACTLY this code block, verbatim, character for character, immediately BEFORE the line that reads `export default {` in services/site-builder-prospect-runner.js (that line currently begins the file's closing default-export object listing createProspectClientId, enqueueProspectJob, etc.). Do NOT edit, add to, or remove anything from the `export default { ... }` object itself -- leave it byte-for-byte as-is. Do NOT add checkDomainDeliverabilityDNS as a property inside that object -- its export must come ONLY from the `export async function` declaration below, not from being merely named inside the default-export object (that distinction is what caused 9 straight failures on the prior, unrelated Postmark-based version of this step -- this is a fresh function name and fresh approach, but the same file-structure rule applies).\n\nAdd this import at the very top of the file, immediately after the existing `import logger from './logger.js';` line: `import dns from 'node:dns';`\n\nInsert this exact function block immediately before `export default {`:\n\nexport async function checkDomainDeliverabilityDNS(domain, { dkimSelector = 'default', resolveTxtFn } = {}) {\n  const resolve = resolveTxtFn || ((name) => dns.promises.resolveTxt(name));\n  if (!domain) {\n    return { deliverabilityReady: false, deliverabilityBlockers: ['missing_domain'] };\n  }\n  const blockers = [];\n  let spfFound = false;\n  let dkimFound = false;\n  try {\n    const spfRecords = await resolve(domain);\n    spfFound = spfRecords.some((rec) => rec.join('').toLowerCase().includes('v=spf1'));\n  } catch (err) {\n    blockers.push(`spf_lookup_failed:${err.code || err.message}`);\n  }\n  if (!spfFound) blockers.push('spf_record_not_found');\n  try {\n    const dkimRecords = await resolve(`${dkimSelector}._domainkey.${domain}`);\n    dkimFound = dkimRecords.some((rec) => rec.join('').toLowerCase().includes('v=dkim1'));\n  } catch (err) {\n    blockers.push(`dkim_lookup_failed:${err.code || err.message}`);\n  }\n  if (!dkimFound) blockers.push('dkim_record_not_found');\n  return {\n    deliverabilityReady: spfFound && dkimFound,\n    deliverabilityBlockers: blockers,\n  };\n}\n\nThis is the ENTIRE required change for this step -- do not modify evaluateSiteBuilderEmailReadiness, enqueueProspectJob, or any other function, and do not add, remove, or reference Postmark anywhere (this function is intentionally provider-agnostic: it checks the sending domain's own public DNS records, which is identical regardless of which ESP -- Amazon SES, Mailgun, SMTP2GO, or anything else -- is used to actually send). resolveTxtFn is dependency-injected so tests can supply a fake DNS resolver instead of making real network calls; it defaults to a real node:dns lookup when not supplied. Must fail closed (deliverabilityReady: false, with a specific blocker string) on any DNS lookup error or missing record -- never fail open, never throw out of this function.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "priority": "high",
       "source": "chair_architect_competitive_review",
       "finding_note": "2026-07-19 competitive review: every DFY cold-outreach competitor researched (OutreachBloom, doneforyou.com) treats domain warming/deliverability verification as foundational before real send volume; this blueprint jumps straight from env-var setup to sending real prospects with no deliverability check at all.",
@@ -21,28 +21,28 @@
       "blueprint_step_id": "sb-deliverability-gate",
       "mission_id": "PRODUCT-site-builder",
       "expected_exports": [
-        "checkPostmarkDomainVerified"
+        "checkDomainDeliverabilityDNS"
       ],
       "behavior_assertions": [
         {
           "type": "exports_smoke",
           "path": "services/site-builder-prospect-runner.js",
           "exports": [
-            "checkPostmarkDomainVerified"
+            "checkDomainDeliverabilityDNS"
           ],
           "assertion_id": "expected_exports:services/site-builder-prospect-runner.js"
         }
       ],
-      "last_attempt_at": "2026-07-21T19:53:18.125Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:checkPostmarkDomainVerified; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": null,
+      "last_error": null,
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "failure_signature": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:checkPostmarkDomainVerified; behavior_assertion_failed; behavior_proof",
-      "same_signature_count": 1,
-      "escalation_class": "evidence_gap",
-      "revive_count": 7,
-      "revived_at": "2026-07-21T19:49:31.425Z",
+      "failure_signature": null,
+      "same_signature_count": 0,
+      "escalation_class": null,
+      "revive_count": 8,
+      "revived_at": "2026-07-21T19:57:21.036Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
