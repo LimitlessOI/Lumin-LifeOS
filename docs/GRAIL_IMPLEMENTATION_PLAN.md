@@ -32,7 +32,7 @@ A rule missing any field ships as **candidate**, not law. This is the whole diff
 
 ## Phase A — The creative production stack (audit-first; parallel foundational track to Phase 0)
 
-**Why this exists:** tonight opened with the video/image stack. A plan that gates generation but never *builds* generation is half a plan. A working stack already exists (Replicate → Ideogram/Flux for images, FFmpeg for assembly, ElevenLabs/OpenAI for audio), so this is **audit + extend**, not greenfield. Runs in parallel with the governance wiring in Phase 0.
+**Why this exists:** tonight opened with the video/image stack. A plan that gates generation but never *builds* generation is half a plan. **What's actually live (verified 2026-07-20):** Flux-Schnell stills via Replicate + FFmpeg assembly (`services/creative-engine/` → `services/video-pipeline.js`) and audio via ElevenLabs (`video-pipeline.js` + voice services), reachable from the creative-engine's FFmpeg-compose delegation. **What's gated / not live:** advanced video generation (Wan/Kling) is explicitly flagged `Enable after footage_edit is tip-proven` in `modes/generative-broll.js`. So this is **audit + extend** on a *real but partial* stack — the video-gen tier is a **build**, not a wiring. Runs in parallel with the governance wiring in Phase 0.
 
 1. **Media Model Router** (partial today → make it *self-calibrating*): route each job by **quality × speed × cost**, not hardcoded models; **log cost/latency/quality per job** → feed the Phase-3 scoreboard + Oracle. Includes **quality-floor routing** (cheapest model that clears the bar per format), **live provider price arbitrage**, and an **open-weight self-host escape valve** when volume justifies. *Spec → factory.*
 2. **Creative Genome** (per creator/brand): pacing, humor, energy, storytelling, camera movement, editing rhythm, emotional profile — plus a **brand/character consistency lock** (identity embedding) so identity is known *before* rendering.
@@ -66,7 +66,7 @@ Steps (audit-first):
 **Why first:** the Self-Repair Tier-0→3 modules and the Cognitive Core Oracle are **built but not called by anything** — nothing is enforced until wired. And a plan named "enforceable" must start by proving the existing gates fire.
 
 1. **Wire the 15 self-repair modules** into the live build/ship path (provenance ledger, root-cause chains, fix-durability, target-reputation, negative-knowledge, decision-log, pre-disk gate, sentry-canary, quarantine, failure-router, pattern-propagation, contract-gate, secret-deploy-gate, trust-dashboard, calibration-sampling). *Spec → factory.*
-2. **Close the known governance hole:** `claimPreExistingSatisfiedSteps` overclaims a "≥6 revive-failures" gate its code doesn't have — add the real gate. *Spec → factory.*
+2. **Close the known governance holes:** (a) `claimPreExistingSatisfiedSteps` overclaims a "≥6 revive-failures" gate its code doesn't have — add the real gate; (b) **SO-003 (P0, verified 2026-07-20):** `services/chair-lumin-unified.js` lines 51–59 short-circuit the Chair to canned templates (`formatDirectProgramAnswer`/`formatDirectFactualAnswer` via `needsSystemKnowledge`/`shouldUseDirectProgramAnswer`/`shouldUseDirectFactualAnswer`) *before* the strong-model `translatePersonality` path — route load-bearing / counsel-class turns through the strong model. *Spec → factory.*
 3. **Write `docs/constitution/GRAIL_CHARTER.md`** = the rule table below, each row filled to all seven fields. This is the ratifiable artifact.
 4. **Enforcement of Phase 0 itself:** pre-commit + CI must fail if a GRAIL rule lacks a fires-on-breakage or passes-on-success test (a linter over the charter). Observer: CI (deterministic), sampled by Chair.
 
@@ -124,7 +124,7 @@ This is how **organized creative needs** are handled. The Creative Engine is **o
 | **L5 Build capability, not dependency** | dependency metric (usage that never graduates flags review) | a design that maximizes indefinite reliance |
 | **L6 Progress happens in relationship** *(proposed)* | isolation/connection signal; system routes toward real people, never substitutes | system positions itself as the only relationship |
 
-- **LifeOS coaching specifics:** three scores per interaction (**progress / engagement / emotional-cost**); **SO-003** enforced by the model-routing gate (the coaching channel may **never** be served a cheap-tier or canned response).
+- **LifeOS coaching specifics:** three scores per interaction (**progress / engagement / emotional-cost**); **SO-003** *must be* enforced by the model-routing gate (the coaching/counsel channel may **never** be served a cheap-tier or canned response). **⚠️ Not yet true — see the Phase-0 SO-003 hole (`chair-lumin-unified.js` 51–59):** GRAIL cannot claim SO-003 "enforced" until that short-circuit is closed. **Fires-on-breakage test:** a counsel-class prompt that currently returns a template must instead reach the strong model.
 - **Decision Brief (simulate-before-commit):** **stakes-thresholded** per the Gate Charter — full brief only for irreversible / high-blast-radius goals (career, major finance, major health); a daily micro-step gets none (or it violates L3).
 - **Companion:** *reality tells whether; dignity constrains how* — an artifact that wins on metrics but fails a dignity check is not adopted.
 
@@ -134,6 +134,7 @@ This is how **organized creative needs** are handled. The Creative Engine is **o
 
 - **Constitutional Knowledge Graph** (company): unify today's flat tables (`self-repair-root-cause-chains`, the Unified Doctrine Map) into a queryable graph — principles as nodes, enforcement + domains as edges. Query by "which principles apply here," not by chat history (Adam's stated root problem: ideas trapped in conversations).
 - **Life Graph** (per user) on the **same substrate**: Identity center; Health/Business/Relationships/Purpose/Learning edges that ripple. Cold-start from best general human-development evidence, personalize from reality.
+- **Sequencing gate (consistency fix — same discipline Phase 7 now carries):** the Knowledge Graph's *table-unification* is substrate work (capture-first, allowed early), but the **graph query/traversal layer and the Life-Graph personalization are deferred until there is real query demand + per-user reality data to calibrate against.** Build the substrate; earn the query layer. Cold-start models stay Hypothesis-grade until reality data promotes them. (This closes the "P5 didn't get P7's evidence-gate" inconsistency.)
 - **Guardrail (protects L2):** "kind of person who…" identity models are offered as hypotheses, never prescribed.
 
 ## Phase 6 — Offices not models · verify-the-verifier · self-pruning governance

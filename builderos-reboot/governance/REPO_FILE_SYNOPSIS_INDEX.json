@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-21T04:24:12.555Z",
+  "generated_at": "2026-07-21T04:27:00.955Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12080,
   "files": [
@@ -38483,9 +38483,9 @@
     {
       "path": "docs/GRAIL_IMPLEMENTATION_PLAN.md",
       "synopsis": "GRAIL — the enforceable governance layer + phased implementation plan for everything designed 2026-07-20 (doctrine → mechanism). Subordinate to North Star; pre-Article-VII plan, not law.",
-      "bytes": 22319,
-      "mtime": "2026-07-21T04:24:12.555Z",
-      "indexed_at": "2026-07-21T04:24:12.555Z"
+      "bytes": 23958,
+      "mtime": "2026-07-21T04:27:00.955Z",
+      "indexed_at": "2026-07-21T04:27:00.955Z"
     },
     {
       "path": "docs/HANDOFF_IDEAS_TO_PRODUCTS_REVIEW.md",
