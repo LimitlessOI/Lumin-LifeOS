@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-21T06:58:04.337Z",
+  "generated_at": "2026-07-21T06:58:23.842Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12090,
   "files": [
@@ -92005,9 +92005,9 @@
     {
       "path": "services/voluntary-progress-mission-intake-log.js",
       "synopsis": "Exports logMissionIntake — services/voluntary-progress-mission-intake-log.js.",
-      "bytes": 3354,
-      "mtime": "2026-07-21T06:39:21.593Z",
-      "indexed_at": "2026-07-21T06:39:21.593Z"
+      "bytes": 3267,
+      "mtime": "2026-07-21T06:58:23.842Z",
+      "indexed_at": "2026-07-21T06:58:23.842Z"
     },
     {
       "path": "services/vr-experience/engine.js",
