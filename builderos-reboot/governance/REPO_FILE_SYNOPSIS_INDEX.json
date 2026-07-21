@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-21T21:23:06.586Z",
+  "generated_at": "2026-07-21T21:25:41.240Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12101,
   "files": [
@@ -92075,12 +92075,9 @@
     {
       "path": "services/voluntary-progress-experiment.js",
       "synopsis": "Exports createGoalExperiment — services/voluntary-progress-experiment.js.",
-      "bytes": 2656,
-      "mtime": "2026-07-21T19:41:22.676Z",
-      "indexed_at": "2026-07-21T19:42:13.163Z",
-      "ssot": [
-        "docs/products/lifere/PRODUCT_HOME.md"
-      ]
+      "bytes": 2590,
+      "mtime": "2026-07-21T21:25:41.240Z",
+      "indexed_at": "2026-07-21T21:25:41.240Z"
     },
     {
       "path": "services/voluntary-progress-mission-intake-log.js",

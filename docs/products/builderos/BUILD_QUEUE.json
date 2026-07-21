@@ -1856,9 +1856,32 @@
       "blueprint_step_id": "grail-wave1-5",
       "mission_id": "PRODUCT-builderos",
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-21T07:05:00.417Z",
+      "shipped_at": "2026-07-21T21:25:38.462Z",
       "commit_sha": "6e5d74711e23cee67f09fc5fbff940f9392392a8",
-      "revive_note": "REAL LIVE PRODUCTION BUG found via an actual end-to-end audit walkthrough (not a mock): POST .../decision with a chosen_path_label failed with Postgres error \"null value in column decision_id of relation judgment_predictions violates not-null constraint\". Root cause verified against the real migration db/migrations/20260719_cognitive_core_judgment.sql: judgment_decisions primary key column is decision_id (NOT id); judgment_predictions primary key is prediction_id (NOT id); judgment_outcomes primary key is outcome_id (NOT id). createGoalExperiment read decisionResult.id (undefined) instead of decisionResult.decision_id, and predictionResult.id (undefined) instead of predictionResult.prediction_id -- both silently stored undefined into voluntary_progress_goal_experiments.judgment_decision_id/judgment_prediction_id (which are untyped UUID columns, so undefined got coerced oddly) until the NOT NULL constraint on judgment_predictions.decision_id caught it. This bug was NOT caught by mock-pool unit verification because the mock fake pool returned whatever id shape the test happened to construct, not the real column names from the actual migration -- another confirmed blind spot in that verification method, only caught by a live call against the real schema."
+      "revive_note": "REAL LIVE PRODUCTION BUG found via an actual end-to-end audit walkthrough (not a mock): POST .../decision with a chosen_path_label failed with Postgres error \"null value in column decision_id of relation judgment_predictions violates not-null constraint\". Root cause verified against the real migration db/migrations/20260719_cognitive_core_judgment.sql: judgment_decisions primary key column is decision_id (NOT id); judgment_predictions primary key is prediction_id (NOT id); judgment_outcomes primary key is outcome_id (NOT id). createGoalExperiment read decisionResult.id (undefined) instead of decisionResult.decision_id, and predictionResult.id (undefined) instead of predictionResult.prediction_id -- both silently stored undefined into voluntary_progress_goal_experiments.judgment_decision_id/judgment_prediction_id (which are untyped UUID columns, so undefined got coerced oddly) until the NOT NULL constraint on judgment_predictions.decision_id caught it. This bug was NOT caught by mock-pool unit verification because the mock fake pool returned whatever id shape the test happened to construct, not the real column names from the actual migration -- another confirmed blind spot in that verification method, only caught by a live call against the real schema.",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/builderos/twins/steps/grail-wave1-5.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-21T21:25:38.462Z",
+        "shipped_at": "2026-07-21T21:25:38.462Z",
+        "commit_sha": "6e5d74711e23cee67f09fc5fbff940f9392392a8",
+        "content_sha256": "ecec58b01c7164009301d9811737f0b18853cccdeed3d6194c46263d840691ed",
+        "target_file": "services/voluntary-progress-experiment.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/voluntary-progress-experiment.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/builderos/twins/steps/grail-wave1-5.exact",
+          "content_sha256": "ecec58b01c7164009301d9811737f0b18853cccdeed3d6194c46263d840691ed"
+        }
+      }
     },
     {
       "id": "grail-wave1-6",
