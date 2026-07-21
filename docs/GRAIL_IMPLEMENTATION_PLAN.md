@@ -26,7 +26,7 @@
 
 A rule missing any field ships as **candidate**, not law. This is the whole difference between GRAIL and "nice words."
 
-> **Completeness pass (2026-07-20):** this plan was originally governance-only and silently omitted the *creative-production stack* (tonight's opening topic) and several intelligence components. Those are now added below (Phase A, expanded Phase 2) plus an explicit **"Deferred with reasoning"** section and a **coverage map**, so nothing from tonight is dropped without a reason. See `docs/CREATIVE_ENGINE_AND_PROGRESS_DOCTRINE.md` and the media-stack brainstorm for the source ideas.
+> **Completeness pass (2026-07-20):** this plan was originally governance-only and silently omitted the *creative-production stack* (tonight's opening topic) and several intelligence components. Those are now added below (Phase A, expanded Phase 2) plus an explicit **"Deferred with reasoning"** section and a **coverage map**, so nothing from tonight is dropped without a reason. **Update (2026-07-20b):** added **Phase B — the state layer (Digital Twin)** after a code audit found the Twin is *real but fragmented across ≥5 implementations with a live `capsule` naming collision* — the missing "state, not governance" abstraction, folded in audit-first rather than assumed clean. See `docs/CREATIVE_ENGINE_AND_PROGRESS_DOCTRINE.md` and the media-stack brainstorm for the source ideas.
 
 ---
 
@@ -42,6 +42,24 @@ A rule missing any field ships as **candidate**, not law. This is the whole diff
 6. **Predict-before-spend:** a **Tier-2 money gate** (Gate Charter) — estimate expected performance/ROI before GPU spend; low-ROI renders are refused or downgraded.
 
 **Enforceability:** predict-before-spend and negative-render are gates (**fires-on-breakage:** a render with no ROI estimate, or a known-failed prompt/model combo, is blocked; **passes-on-success:** a novel, ROI-estimated render proceeds). Router calibration is a Phase-3 scoreboard claim. **Sequencing:** per-job cost/latency/quality logging is *capture-first* and must precede any "taste" weighting.
+
+## Phase B — The state layer: the Digital Twin as center of gravity (audit-first; the layer *before* the reasoning gate)
+
+**Why this exists (the missing abstraction — state, not governance):** GRAIL governs *how* reasoning happens; the Phase-2 reasoning gate asks Mission/Customer/Objection — but *where do those answers come from?* From a continuously-evolving **state model**, or every artifact starts from scratch. That model already exists as the **Digital Twin** — constitutionally the **Founder Intent Model** (§2.0H). **Do not build a new "Living Model."**
+
+**Grounded reality (verified 2026-07-20, not assumed):** the Twin is **real but fragmented** — there is *no single canonical object* everything reads/writes. State lives across ≥5 live implementations: **Cognitive Core** (decision model: programs/values/judgment/trust-by-domain/calibration/oracle), **Memory** (knowledge store: `memory_capsules`, working/institutional/relationship/provenance/retrieval/embeddings), **LifeRE's own** `lifere-twin-store` cluster, **LifeOS** `lifeos-twin-simulator` + `twin-auto-ingest`, and **Creator** `creatorPersonaTwin`. The file named `digital-twin.js` is **legacy/dead**. So this phase is **canonicalization + consolidation**, not greenfield.
+
+**Naming collision to resolve (also verified):** "capsule" is overloaded — `memory-capsule.js` = a *storage unit*; `cognitive-core-perspective.js` = an *attention lens* (multi-wear, **already implemented**). GRAIL adopts the **attention-lens** meaning: **Capsules are context-specific projections/views of the Twin** (the "hats" — Marketing / Health / Relationship / Financial / Business). Multi-wear is already live; segregate the memory-storage "capsule" name to end the collision.
+
+Steps (audit-first):
+1. **Twin inventory + canonical definition:** map the ≥5 implementations; declare the canonical Twin = **Cognitive Core (how the person/org decides) + Memory (what is known)**; decide per product *consolidate vs. federate-behind-one-interface*. *Spec → factory.*
+2. **READS/WRITES contract (the standing rule):** every subsystem — Creative Engine, LifeOS, Oracle, Limitless, each office/renderer — **must declare what it READS from the Twin and what validated knowledge it WRITES back.** *This is the duplicate-state fix.*
+3. **Capsules = projections:** formalize capsules as scoped views of the Twin; keep multi-wear + suppression contracts (`config/judgment-capsule-contracts.js`).
+4. **Alternative-futures simulation (extends the Phase-4 Decision Brief):** the Twin simulates not just a goal's cost but **alternative futures** (aggressive vs. specialist vs. small-business) and asks *which future matches the person's values* (read from the Twin), not which makes the most money.
+
+**Enforceability:** the READS/WRITES contract is a deterministic gate (**fires-on-breakage:** a subsystem that touches Twin state without a declared contract fails CI; **passes-on-success:** a declared, contract-conformant subsystem passes). **Observer:** the contract registry is audited by a different office than the writer.
+
+**Closed-loop anchor:** *GRAIL governs how reasoning happens · the Digital Twin stores what is known · Capsules decide what is relevant now · renderers decide how to communicate · Oracle decides whether it was correct · Reality updates the Twin.* One architecture, not several parallel systems.
 
 ## Phase 0 — Wire what already exists; charter what doesn't (no new capability yet)
 
@@ -153,6 +171,8 @@ Discussed tonight, **intentionally not yet phased** — each with the reason, so
 |---|---|
 | Media Router / Creative Genome / Generate-Once | **Phase A** |
 | Negative-render KB · predict-before-spend | **Phase A** (gates) |
+| Digital Twin as canonical state (audit ≥5 fragmented impls) · READS/WRITES contract · alternative-futures sim | **Phase B** |
+| Capsules as Twin projections (multi-wear already live) · resolve `memory-capsule` vs `perspective` naming | **Phase B** |
 | Wire built-but-unwired self-repair + revive-gate hole | **Phase 0** |
 | Provenance incl. reasoning-citations · verify-the-conductor | **Phase 1** |
 | Hard-gate-the-reasoning · Creative Intake Contract | **Phase 2** |
