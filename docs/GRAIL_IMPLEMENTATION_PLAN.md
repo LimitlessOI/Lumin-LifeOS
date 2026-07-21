@@ -26,7 +26,22 @@
 
 A rule missing any field ships as **candidate**, not law. This is the whole difference between GRAIL and "nice words."
 
+> **Completeness pass (2026-07-20):** this plan was originally governance-only and silently omitted the *creative-production stack* (tonight's opening topic) and several intelligence components. Those are now added below (Phase A, expanded Phase 2) plus an explicit **"Deferred with reasoning"** section and a **coverage map**, so nothing from tonight is dropped without a reason. See `docs/CREATIVE_ENGINE_AND_PROGRESS_DOCTRINE.md` and the media-stack brainstorm for the source ideas.
+
 ---
+
+## Phase A — The creative production stack (audit-first; parallel foundational track to Phase 0)
+
+**Why this exists:** tonight opened with the video/image stack. A plan that gates generation but never *builds* generation is half a plan. A working stack already exists (Replicate → Ideogram/Flux for images, FFmpeg for assembly, ElevenLabs/OpenAI for audio), so this is **audit + extend**, not greenfield. Runs in parallel with the governance wiring in Phase 0.
+
+1. **Media Model Router** (partial today → make it *self-calibrating*): route each job by **quality × speed × cost**, not hardcoded models; **log cost/latency/quality per job** → feed the Phase-3 scoreboard + Oracle. Includes **quality-floor routing** (cheapest model that clears the bar per format), **live provider price arbitrage**, and an **open-weight self-host escape valve** when volume justifies. *Spec → factory.*
+2. **Creative Genome** (per creator/brand): pacing, humor, energy, storytelling, camera movement, editing rhythm, emotional profile — plus a **brand/character consistency lock** (identity embedding) so identity is known *before* rendering.
+3. **Generate-Once-Use-Everywhere:** every asset reusable across SMOS / SiteBuilder / LifeRE / email / ads; **cross-creator generic-asset cache** for commodity shots.
+4. **Director-then-Cinematographer two-pass:** an LLM writes the shot list / brief → the media model executes it.
+5. **Negative-render KB:** failed prompt/model combos stored (reuse the shipped `self-repair-negative-knowledge.js` pattern) so spend is never repeated.
+6. **Predict-before-spend:** a **Tier-2 money gate** (Gate Charter) — estimate expected performance/ROI before GPU spend; low-ROI renders are refused or downgraded.
+
+**Enforceability:** predict-before-spend and negative-render are gates (**fires-on-breakage:** a render with no ROI estimate, or a known-failed prompt/model combo, is blocked; **passes-on-success:** a novel, ROI-estimated render proceeds). Router calibration is a Phase-3 scoreboard claim. **Sequencing:** per-job cost/latency/quality logging is *capture-first* and must precede any "taste" weighting.
 
 ## Phase 0 — Wire what already exists; charter what doesn't (no new capability yet)
 
@@ -55,6 +70,13 @@ Closes gaps #1, #2, #4 from the Unified Doctrine Map.
 This is how **organized creative needs** are handled. The Creative Engine is **one decision engine, many renderers** (SiteBuilder, SMOS video, email, ads). **Hard-gate the reasoning, not the behavior.**
 
 - **Creative Intake Contract** (object required before any render): `mission · customer · journey_stage_current · journey_stage_target · primary_objection · evidence_required · trust_strategy · next_voluntary_action · success_metric`.
+- **The concrete intelligence behind those fields (named, not generic — each is its own component):**
+  - **Objection Model** — the unanswered objections (price / trust / time / risk / complexity / need / authority); `primary_objection` is *selected from* this model, not invented.
+  - **Gap Engine** — "what isn't anyone saying?" (competitor / messaging / emotional / educational / trust gaps) → feeds `trust_strategy` and differentiation.
+  - **Competitive Intelligence scoring** — score competitors on positioning / evidence / trust / differentiation / emotional appeal / authority / clarity (10-second test) / friction, then diff against the client.
+  - **Confidence scoring** — measurable (expertise / evidence / social proof / transparency / guarantees / process clarity / risk reduction / presentation / cross-channel consistency) → e.g. "high authority, low reassurance."
+  - **Visitor Question Coverage** — why-care / why-now / why-you / why-trust / what-next / what-risk / what-reward / how-much-effort must all be answered or the artifact isn't finished.
+  - **Attention Architect** (constitutional office) — one job: *"has this earned the right to ask for the next thing?"* If no, it returns the work. This office **enforces L3 at the artifact level.**
 - **Two enforcement layers:**
   1. **Presence check** (deterministic): render endpoint refuses if any field is empty. *Necessary but insufficient — a placeholder satisfies it (the "13 bugs" lesson).*
   2. **Coherence check** (cross-model, adversarial): does the objection follow from the journey stage? does the trust strategy address the stated objection? — the SENTRY-canary principle aimed at content.
@@ -113,7 +135,34 @@ Closes gaps #2, #3, #5.
 
 ## Sequencing discipline (non-negotiable, learned today)
 
-**Capture before routing before gating before dashboards.** Do not build the exciting visible layer (taste, forecasting, ROI-gated spend, Decision Simulator UX) before the substrate that can *prove* any of it is real. By Law 1's own logic, an uncalibrated layer is Hypothesis-grade — build the boring capture first (Phase 0–1), then earn the rest.
+**Capture before routing before gating before dashboards.** Do not build the exciting visible layer (Institutional Taste, forecasting, ROI-gated spend, Decision Simulator UX) before the substrate that can *prove* any of it is real. By Law 1's own logic, an uncalibrated layer is Hypothesis-grade — build the boring capture first (Phase A per-job logging + Phase 0–1 provenance), then earn the rest.
+
+## Explicitly deferred (named, not silently dropped)
+
+Discussed tonight, **intentionally not yet phased** — each with the reason, so nothing is lost:
+
+- **Oracle market-watch** (weekly trend / threat / opportunity scan) — deferred until it can pass the **Zero-Waste AI Call Rule** (a `workCheck`, not a calendar trigger), or it burns tokens on reports nobody pulled.
+- **Institutional Taste** — deferred until **Phase-3 calibration data exists**; must cash out as a *falsifiable learned weighting* over Creative-Genome dimensions scored against real outcomes, or it's a vibe.
+- **Plain Sight Reports / Opportunity Radar** — deferred; both are Oracle outputs that depend on the market-watch substrate above.
+- **Creative R&D Queue** ("what would have to become true?") — deferred to after Phase A; decompose "impossible" into missing-capability + trigger-signals + expected-value.
+- **Path to First Compounding Dollar as an *active* triage gate** — Phase 7 defines it; live enforcement deferred until Tier-0 customer data exists.
+
+## Coverage map (every tonight-topic → where it lives)
+
+| Tonight's topic | Home |
+|---|---|
+| Media Router / Creative Genome / Generate-Once | **Phase A** |
+| Negative-render KB · predict-before-spend | **Phase A** (gates) |
+| Wire built-but-unwired self-repair + revive-gate hole | **Phase 0** |
+| Provenance incl. reasoning-citations · verify-the-conductor | **Phase 1** |
+| Hard-gate-the-reasoning · Creative Intake Contract | **Phase 2** |
+| Objection Model · Gap Engine · Competitive Intel · Confidence scoring · Visitor Qs · Attention Architect | **Phase 2** (named) |
+| Reality-is-scoreboard for creative · Decision Simulator | **Phase 3** |
+| Six Laws as gates · honor-the-no · SO-003 coaching · Decision Brief · 3 coaching scores | **Phase 4** |
+| Constitutional Knowledge Graph · Life Graph | **Phase 5** |
+| Offices-not-models · capability matrix · verify-the-verifier · self-pruning governance | **Phase 6** |
+| Path to First Compounding Dollar · cross-product immunity | **Phase 7** |
+| Oracle market-watch · Institutional Taste · Plain Sight · Opportunity Radar · Creative R&D Queue | **Deferred (with reasoning)** |
 
 ## Ratification & authority
 
