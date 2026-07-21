@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-21T20:03:21.952Z",
+  "generated_at": "2026-07-21T20:04:47.804Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12096,
+  "file_count": 12097,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -92057,6 +92057,13 @@
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/voluntary-progress-slice-orchestrator.js",
+      "synopsis": "Exports proposeGoal — services/voluntary-progress-slice-orchestrator.js.",
+      "bytes": 4847,
+      "mtime": "2026-07-21T20:04:47.804Z",
+      "indexed_at": "2026-07-21T20:04:47.804Z"
     },
     {
       "path": "services/voluntary-progress-twin-proposal-gate.js",

@@ -1910,13 +1910,13 @@
     },
     {
       "id": "grail-wave2-1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/voluntary-progress-slice-orchestrator.js",
       "task": "FIRST_SLICE_CONTRACT mission #3 (the vertical slice itself): wire the 6 already-shipped Wave 1 modules into the actual 13-step goal->simulate->choose->experiment->propose-update flow. This is what makes Wave 1 wired instead of built-but-unwired.",
       "spec": "This is the wiring mission: mission #3 from docs/FIRST_SLICE_CONTRACT.md ('the goal -> simulate -> choose -> experiment -> propose-update flow in LifeOS through the factory... the vertical slice itself'). It composes 6 ALREADY-SHIPPED files that must be imported EXACTLY as follows (verified against the real files on disk -- do not guess, do not re-derive signatures, do not reimplement any of this logic inline):\n\n1. import { readTypedTwinState, isFieldKnown } from './voluntary-progress-twin-read.js' -- readTypedTwinState(pool, { userId, tenantId = 'default', twinKey, moduleKey = null, requesterId = null, fields = [] }) returns { ok, state } where state is an array of { field, status: 'unknown'|'user-stated', value }, OR { ok: false, error: 'forbidden_cross_user', state: [] } on cross-user violation -- this function is ASYNC.\n\n2. import { activateContextView, applyContextView } from './voluntary-progress-context-view.js' -- activateContextView(pool, { user_id, activation_reason, permitted_reads, forbidden_reads = [], permitted_proposals = [], consent_scope = 'internal_operational', ttl_minutes = 30 }) is ASYNC and returns the inserted context_view row (has .permitted_reads and .forbidden_reads). applyContextView(twinReadState, contextViewRow) is SYNCHRONOUS and returns a filtered array (call it with the .state array from readTypedTwinState's return value, and the context_view row from activateContextView).\n\n3. import { recordDecision, shouldStopPursuingGoal } from './voluntary-progress-decision-step.js' -- recordDecision(pool, { user_id, goal_id, decision_status, modified_goal_text = null }) is ASYNC, decision_status MUST be one of 'accepted'|'modified'|'rejected'|'opted_out'|'deferred' (throws a real Error otherwise), returns the inserted decision row. It ALREADY internally records an opt-out ledger entry when decision_status is 'opted_out' -- do not duplicate that call yourself. shouldStopPursuingGoal(pool, { user_id, goal_id }) is ASYNC and returns a boolean -- true means a prior 'rejected' or 'opted_out' decision (or an opt-out ledger entry) exists for this exact goal_id and it must NEVER be re-pursued this session.\n\n4. import { generateAlternativeFutures, pathRequiresFullDecisionBrief } from './voluntary-progress-alternative-futures.js' -- generateAlternativeFutures({ goal_text, goal_category = 'general' }) is SYNCHRONOUS (no pool, no await) and returns an array of exactly 3 path objects (Aggressive/Steady/Minimal-commitment), each with path_label, description, time_estimate, financial_cost_estimate, emotional_cost_estimate, risk_level, reversibility.\n\n5. import { createGoalExperiment, recordGoalExperimentOutcome } from './voluntary-progress-experiment.js' -- createGoalExperiment(pool, { user_id, goal_id, chosen_path_label, path_description }) is ASYNC and returns { goal_experiment_id, judgment_decision_id, judgment_prediction_id }. recordGoalExperimentOutcome(pool, { goal_experiment_id, actual_option, captured_how = 'explicit' }) is ASYNC and returns the recorded outcome row from cognitive-core-judgment.\n\n6. import { proposeTwinUpdate } from './voluntary-progress-twin-proposal-gate.js' -- proposeTwinUpdate(pool, { user_id, subject, current_value = null, proposed_value, truth_grade = 'GUESS', confidence = null, evidence = null, rationale, proposed_by }) is ASYNC and returns the inserted proposal row with status 'pending'. CRITICAL: this module's approveTwinUpdateProposal function (which actually calls writeTwin) must NEVER be called anywhere in this new file -- Twin updates are PROPOSED ONLY, never auto-applied, per Law 2 (people own their goals) and the propose-not-apply gate. Do not import approveTwinUpdateProposal at all.\n\nSelf-bootstrap one new table: CREATE TABLE IF NOT EXISTS voluntary_progress_goals (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), user_id TEXT NOT NULL, goal_text TEXT NOT NULL, goal_category TEXT NOT NULL DEFAULT 'general', origin TEXT NOT NULL DEFAULT 'user_stated', status TEXT NOT NULL DEFAULT 'proposed', declared_at TIMESTAMPTZ NOT NULL DEFAULT now()) -- as its own separate pool.query() call in every exported function that touches it, never combined with a parameterized query.\n\nExport these 4 functions, composing the 6 imports above, implementing the FIRST_SLICE_CONTRACT 13-step flow. Do not reimplement any logic that belongs in an imported file -- only orchestrate:\n\nA. export async function proposeGoal(pool, { user_id, goal_text, goal_category = 'general' }) -- validates goal_text is a non-empty string (throw a real Error if not -- this is step 1, 'record the goal as user-stated, not system-inferred'), inserts one row into voluntary_progress_goals with origin='user_stated' and status='proposed', returns the inserted row (has .id as the goal_id).\n\nB. export async function presentAlternativeFutures(pool, { user_id, goal_id, twinKey, moduleKey = null, tenantId = 'default', fields = [] }) -- implements steps 2-6. FIRST calls shouldStopPursuingGoal(pool, { user_id, goal_id }); if true, return { ok: false, reason: 'goal_declined_do_not_re_pursue' } immediately and do nothing else (this is the fires-on-breakage case: a declined goal must never be re-pursued). Otherwise: look up the goal row from voluntary_progress_goals by id (throw a real Error if not found). Call activateContextView(pool, { user_id, activation_reason: a short string describing this goal, permitted_reads: fields, consent_scope: 'internal_operational' }) to get a context_view row. Call readTypedTwinState(pool, { userId: user_id, tenantId, twinKey, moduleKey, requesterId: user_id, fields }) to get the raw twin state; if it returns { ok: false, error: 'forbidden_cross_user' }, propagate that same shape as this function's return value and stop. Otherwise call applyContextView(twinReadResult.state, contextView) to get the filtered, permitted twin state. Call generateAlternativeFutures({ goal_text: goal.goal_text, goal_category: goal.goal_category }) to get the 3 paths. Return { ok: true, goal, context_view: contextView, twin_state: filteredState, alternative_futures: paths } -- every twin_state entry with status 'unknown' MUST be preserved as 'unknown' in the output, never silently invented or defaulted to a guessed value (step 3, 'mark unknowns as unknown').\n\nC. export async function confirmGoalDecision(pool, { user_id, goal_id, decision_status, modified_goal_text = null, chosen_path_label = null, path_description = null }) -- implements steps 7-9 + 11. Calls recordDecision(pool, { user_id, goal_id, decision_status, modified_goal_text }) first (this handles the opt-out ledger internally, do not duplicate). Then updates voluntary_progress_goals.status for this goal_id to match decision_status ('accepted'->'accepted', 'modified'->'modified', 'rejected'->'declined', 'opted_out'->'declined', 'deferred'->'proposed' unchanged) via a separate UPDATE query. If decision_status is 'accepted' or 'modified' AND both chosen_path_label and path_description were provided, ALSO call createGoalExperiment(pool, { user_id, goal_id, chosen_path_label, path_description }) (step 8-9, Be-Do-Have -> one reversible first experiment with a recorded prediction) and include its return value as experiment in the result. If decision_status is 'rejected' or 'opted_out', do NOT call createGoalExperiment under any circumstance (step 11, honor the no) even if chosen_path_label/path_description were passed in by mistake -- this is the single most important fires-on-breakage case in this whole file. Return { ok: true, decision, experiment: experiment-or-null }.\n\nD. export async function compareExperimentOutcome(pool, { user_id, goal_experiment_id, actual_option, captured_how = 'explicit', twin_subject, twin_proposed_value, truth_grade = 'THINK', evidence = null }) -- implements steps 12-13. Calls recordGoalExperimentOutcome(pool, { goal_experiment_id, actual_option, captured_how }) to record the real outcome (step 12, compare outcome vs prediction). Then calls proposeTwinUpdate(pool, { user_id, subject: twin_subject, proposed_value: twin_proposed_value, truth_grade, evidence, rationale: a string describing this came from a compared experiment outcome including goal_experiment_id and actual_option, proposed_by: 'voluntary-progress-slice-orchestrator' }) -- step 13, propose (never silently apply) a Twin update from what was learned. Return { ok: true, outcome, twin_proposal }. Do NOT import or call approveTwinUpdateProposal or writeTwin anywhere in this function or file.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "proposeGoal",
         "presentAlternativeFutures",
@@ -1949,15 +1949,38 @@
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "grail-wave2-1",
       "mission_id": "PRODUCT-builderos",
-      "last_attempt_at": null,
-      "last_error": null,
+      "last_attempt_at": "2026-07-21T19:45:44.614Z",
+      "last_error": "NOT_ON_BLUEPRINT",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "failure_signature": null,
-      "same_signature_count": 0,
-      "escalation_class": null,
-      "revive_note": "Manual revive: two dispatch attempts (autonomous loop + direct API) both returned failure/stale NOT_ON_BLUEPRINT without ever landing a commit for services/voluntary-progress-slice-orchestrator.js. File confirmed absent from origin/main before this reset, so claimPreExistingSatisfiedSteps cannot re-ship stale content."
+      "failure_signature": "NOT_ON_BLUEPRINT",
+      "same_signature_count": 1,
+      "escalation_class": "governance_block",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/builderos/twins/steps/grail-wave2-1.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-21T20:04:44.832Z",
+        "shipped_at": "2026-07-21T20:04:44.832Z",
+        "commit_sha": null,
+        "content_sha256": "89189431b8a6f0d5338fa214cdfd64c92eb6d459361e3923d414e1ffd000a2eb",
+        "target_file": "services/voluntary-progress-slice-orchestrator.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/voluntary-progress-slice-orchestrator.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/builderos/twins/steps/grail-wave2-1.exact",
+          "content_sha256": "89189431b8a6f0d5338fa214cdfd64c92eb6d459361e3923d414e1ffd000a2eb"
+        }
+      },
+      "shipped_at": "2026-07-21T20:04:44.832Z"
     }
   ],
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
