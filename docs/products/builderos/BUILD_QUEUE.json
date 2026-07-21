@@ -1558,13 +1558,13 @@
     },
     {
       "id": "grail-phase05-1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/voluntary-progress-ask-ledger.js",
       "task": "GRAIL Phase 0.5 (seed the clock, Tier-0 shaped): append-only ask/opt-out ledger. Gates nothing -- pure capture. Prerequisite for the Phase 2 opt-out gate (Law 4), which cannot exist without real data on what was asked and what was declined.",
       "spec": "Self-bootstrap `CREATE TABLE IF NOT EXISTS voluntary_progress_asks (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), user_id TEXT NOT NULL, ask_type TEXT NOT NULL, ask_context TEXT, channel TEXT, asked_at TIMESTAMPTZ NOT NULL DEFAULT now())` and a second table `CREATE TABLE IF NOT EXISTS voluntary_progress_optouts (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), user_id TEXT NOT NULL, ask_type TEXT NOT NULL, opt_out_reason TEXT, opted_out_at TIMESTAMPTZ NOT NULL DEFAULT now(), UNIQUE(user_id, ask_type))`. Export async function recordAsk(pool, { user_id, ask_type, ask_context = null, channel = null }) that inserts a row into voluntary_progress_asks (append-only, no upsert -- every ask is its own row so a full ask history exists). Export async function recordOptOut(pool, { user_id, ask_type, opt_out_reason = null }) that upserts into voluntary_progress_optouts (INSERT ... ON CONFLICT (user_id, ask_type) DO UPDATE SET opt_out_reason = EXCLUDED.opt_out_reason, opted_out_at = now() -- an opt-out is a current state per (user, ask_type), not a history). Export async function hasOptedOut(pool, { user_id, ask_type }) returning the opt-out row (with opted_out_at, opt_out_reason) if one exists for this exact (user_id, ask_type) pair, or null if the user has never opted out of this specific ask type. Export async function getRecentAsks(pool, { user_id, limit = 50 } = {}) returning the most recent rows from voluntary_progress_asks for that user, ordered by asked_at DESC. This module is pure capture: it must not decide whether to block or allow anything, must not call any dispatch/render function -- it only records and answers 'has this user opted out of this' for a future caller (the Phase 2 gate) to consult. CRITICAL, learned repeatedly tonight: EVERY exported function that touches a table must independently run `await pool.query('CREATE TABLE IF NOT EXISTS <real DDL, not a placeholder>')` as its own, separate, no-parameters pool.query() call before any parameterized query in that same function -- never assume another function in the file already created the table, and never combine the CREATE TABLE with a parameterized query in one pool.query(text, values) call (PostgreSQL's prepared-statement protocol rejects multiple statements in one call with params). If this module reuses another module's table, copy that table's real DDL character-for-character -- do not paraphrase or reconstruct a schema from memory, since a plausible-but-wrong reconstruction (missing a column, wrong type) silently corrupts the shared table for whichever module's CREATE TABLE runs first.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "recordAsk",
         "recordOptOut",
@@ -1590,7 +1590,15 @@
       ],
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "grail-phase05-1",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "last_attempt_at": "2026-07-21T06:38:49.278Z",
+      "last_error": "NOT_ON_BLUEPRINT",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "failure_signature": "NOT_ON_BLUEPRINT",
+      "same_signature_count": 1,
+      "escalation_class": "governance_block"
     },
     {
       "id": "grail-phase05-2",
