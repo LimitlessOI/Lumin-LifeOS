@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-21T20:30:59.155Z",
+  "generated_at": "2026-07-21T20:35:56.995Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12098,
+  "file_count": 12099,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -38383,6 +38383,13 @@
       "indexed_at": "2026-07-21T05:58:39.404Z"
     },
     {
+      "path": "docs/EXTERNAL_SERVICE_COMPLIANCE_LEDGER.md",
+      "synopsis": "Living ledger of third-party service Terms of Service / Acceptable Use Policy restrictions relevant to what LifeOS products actually do with each integration — not internal governance (see TSOS_COMPLIANCE_OFFICER.md for that).",
+      "bytes": 8282,
+      "mtime": "2026-07-21T20:35:25.219Z",
+      "indexed_at": "2026-07-21T20:35:56.995Z"
+    },
+    {
       "path": "docs/FAILURE_CAUSALITY_PROOF_AUDIT_V1.md",
       "synopsis": "FAILURE CAUSALITY PROOF AUDIT V1",
       "bytes": 7276,
@@ -40859,9 +40866,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 140277,
-      "mtime": "2026-07-21T19:57:41.587Z",
-      "indexed_at": "2026-07-21T20:01:08.520Z"
+      "bytes": 141228,
+      "mtime": "2026-07-21T20:35:45.413Z",
+      "indexed_at": "2026-07-21T20:35:56.995Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
