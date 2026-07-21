@@ -191,8 +191,8 @@ html[data-theme="light"] [data-lifere="daily-command-center"] .deal-pick.active 
 /* Lumin + dashboard assistant reply bubbles — founder UI preference */
 .lumin-msg.assistant,
 .msg.assistant {
-  background: #ffeb3b !important;
-  border-color: #f9d800 !important;
+  background: #ffffff !important;
+  border-color: #cccccc !important;
   color: #000000 !important;
 }
 /* founder-assistant-bubble-style:end */
