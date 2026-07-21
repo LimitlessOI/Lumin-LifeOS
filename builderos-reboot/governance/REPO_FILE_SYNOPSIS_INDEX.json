@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-21T05:45:40.292Z",
+  "generated_at": "2026-07-21T05:54:50.116Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12084,
+  "file_count": 12080,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -36835,13 +36835,6 @@
       "indexed_at": "2026-07-20T07:28:47.516Z"
     },
     {
-      "path": "docs/architecture/DIGITAL_TWIN_CURRENT_STATE.md",
-      "synopsis": "Receipted reality map of the Digital-Twin-driven LifeOS vertical slice integration path (Devin black-box mapping, observe-only)",
-      "bytes": 11551,
-      "mtime": "2026-07-21T05:35:40.044Z",
-      "indexed_at": "2026-07-21T05:35:40.044Z"
-    },
-    {
       "path": "docs/architecture/DIGITAL_TWIN_DOCTRINE.md",
       "synopsis": "Digital Twin — universal per-person understanding (capsules = evidence layer)",
       "bytes": 5749,
@@ -38333,13 +38326,6 @@
       "synopsis_index_only": true
     },
     {
-      "path": "docs/DIGITAL_TWIN_CURRENT_STATE.md",
-      "synopsis": "Receipted reality map of the Digital Twin as it exists today. Stops rediscovery; only verified findings are marked verified.",
-      "bytes": 3406,
-      "mtime": "2026-07-21T05:33:49.961Z",
-      "indexed_at": "2026-07-21T05:33:49.961Z"
-    },
-    {
       "path": "docs/DRIFT_SENTINEL.md",
       "synopsis": "Drift Sentinel (Local-Only) — System Spec",
       "bytes": 1446,
@@ -38395,13 +38381,6 @@
       "bytes": 9448,
       "mtime": "2026-07-20T07:22:45.390Z",
       "indexed_at": "2026-07-20T07:28:47.516Z"
-    },
-    {
-      "path": "docs/FIRST_SLICE_CONTRACT.md",
-      "synopsis": "The minimum contract + frozen consensus to ship the first Digital-Twin-driven LifeOS vertical slice. Architect-office deliverable.",
-      "bytes": 6271,
-      "mtime": "2026-07-21T05:33:49.961Z",
-      "indexed_at": "2026-07-21T05:33:49.961Z"
     },
     {
       "path": "docs/FIX_GIT_AND_RAILWAY.md",
@@ -38504,9 +38483,9 @@
     {
       "path": "docs/GRAIL_IMPLEMENTATION_PLAN.md",
       "synopsis": "GRAIL — the enforceable governance layer + phased implementation plan for everything designed 2026-07-20 (doctrine → mechanism). Subordinate to North Star; pre-Article-VII plan, not law.",
-      "bytes": 29859,
-      "mtime": "2026-07-21T05:33:49.961Z",
-      "indexed_at": "2026-07-21T05:33:49.961Z"
+      "bytes": 28743,
+      "mtime": "2026-07-21T05:54:00.468Z",
+      "indexed_at": "2026-07-21T05:54:50.116Z"
     },
     {
       "path": "docs/HANDOFF_IDEAS_TO_PRODUCTS_REVIEW.md",
@@ -60136,13 +60115,6 @@
       "bytes": 4141,
       "mtime": "2026-07-20T07:22:45.880Z",
       "indexed_at": "2026-07-20T07:28:47.516Z"
-    },
-    {
-      "path": "docs/reviews/A_TO_Z_INDEPENDENT_AUDIT_OPUS.md",
-      "synopsis": "Adversarial coverage+coherence audit of the A–Z Master Roadmap by the Architect office (Cursor/Opus). Stored BEFORE Devin/Chair passes to preserve independence ordering.",
-      "bytes": 8703,
-      "mtime": "2026-07-21T05:45:40.292Z",
-      "indexed_at": "2026-07-21T05:45:40.292Z"
     },
     {
       "path": "docs/runbook.md",
