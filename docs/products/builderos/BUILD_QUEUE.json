@@ -1752,7 +1752,7 @@
     },
     {
       "id": "grail-wave1-3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/voluntary-progress-decision-step.js",
       "task": "Wave 1, Mission 3 (before the experiment/prediction step, since a rejected or opted-out goal must never reach prediction/experiment): the user decision + opt-out handler. Devin's map found decision surfaces scattered across the Chair (intent-clarify, wisdom-clarify, outcome-capture) with no single slice-level accept/modify/reject/opt-out handler -- this is that missing handler, reusing the ask/opt-out ledger already shipped tonight rather than duplicating opt-out storage.",
       "spec": "Import and reuse `recordAsk`, `recordOptOut`, `hasOptedOut` from `./voluntary-progress-ask-ledger.js` (already shipped this session -- do not reimplement ask/opt-out storage). Self-bootstrap a NEW, separate table `CREATE TABLE IF NOT EXISTS voluntary_progress_decisions (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), user_id TEXT NOT NULL, goal_id TEXT NOT NULL, decision_status TEXT NOT NULL, modified_goal_text TEXT, decided_at TIMESTAMPTZ NOT NULL DEFAULT now())` -- this table is distinct from the ask/opt-out ledger because it tracks decision status on a specific goal, not a general ask/opt-out pair; decision_status must be constrained in application code (not a DB CHECK constraint, keep this simple) to one of: 'accepted', 'modified', 'rejected', 'opted_out', 'deferred'. Export async function recordDecision(pool, { user_id, goal_id, decision_status, modified_goal_text = null }) that validates decision_status is one of the five allowed values (throw a real Error with a clear message if not -- do not silently coerce an invalid value), inserts one row, and if decision_status is 'opted_out' ALSO calls recordOptOut(pool, { user_id, ask_type: `goal:${goal_id}`, opt_out_reason: 'explicit_opt_out_on_goal' }) so the opt-out ledger and the decision table stay consistent (both must reflect an opt-out, not just one). Returns the inserted decision row. Export async function shouldStopPursuingGoal(pool, { user_id, goal_id }) that self-bootstraps the table, checks BOTH this table's most recent decision for that (user_id, goal_id) AND calls hasOptedOut(pool, { user_id, ask_type: `goal:${goal_id}` }) -- returns true if EITHER source indicates rejected/opted_out, false only if both sources are clear. This dual-check exists specifically so an opt-out can never be silently missed by only checking one of the two tables. Export async function getDecisionHistory(pool, { user_id, goal_id, limit = 20 } = {}) returning recent decisions for that goal, ordered by decided_at DESC. CRITICAL, learned repeatedly tonight: EVERY exported function that touches a table must independently run `await pool.query('CREATE TABLE IF NOT EXISTS <real DDL, not a placeholder>')` as its own, separate, no-parameters pool.query() call before any parameterized query in that same function -- never assume another function in the file already created the table, and never combine the CREATE TABLE with a parameterized query in one pool.query(text, values) call. If this module reuses another module's table or DDL, copy it character-for-character, never reconstruct from memory.",
@@ -1784,30 +1784,9 @@
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "grail-wave1-3",
       "mission_id": "PRODUCT-builderos",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/builderos/twins/steps/grail-wave1-3.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-21T07:04:20.103Z",
-        "shipped_at": "2026-07-21T07:04:20.103Z",
-        "commit_sha": null,
-        "content_sha256": "a9a4cee0fd5a487fdbab7c57ea435f1dc6b5e127912c3c10ebd85ca1c0d10c7a",
-        "target_file": "services/voluntary-progress-decision-step.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/voluntary-progress-decision-step.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/builderos/twins/steps/grail-wave1-3.exact",
-          "content_sha256": "a9a4cee0fd5a487fdbab7c57ea435f1dc6b5e127912c3c10ebd85ca1c0d10c7a"
-        }
-      },
-      "shipped_at": "2026-07-21T07:04:20.103Z"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-21T07:04:26.459Z",
+      "commit_sha": "9d5c19c009748a1a604800cb46b8fe35096d0ea8"
     },
     {
       "id": "grail-wave1-4",
