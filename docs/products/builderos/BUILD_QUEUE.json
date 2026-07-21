@@ -2057,17 +2057,17 @@
         "method": "GET",
         "path": "/api/v1/lifeos/builderos/tsos-efficiency"
       },
-      "last_attempt_at": "2026-07-21T21:30:45.002Z",
+      "last_attempt_at": "2026-07-21T21:46:13.563Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerTsosEfficiencyRoutes; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "failure_signature": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerTsosEfficiencyRoutes; behavior_assertion_failed; behavior_proof",
-      "same_signature_count": 2,
+      "same_signature_count": 3,
       "escalation_class": "evidence_gap",
       "revive_note": "Superseded by grail-audit-tsos-wire-2 (new file, not append). Same systematic pattern now confirmed across TWO existing files (site-builder-prospect-runner.js x10 attempts, this file x1): every greenfield/new-file dispatch tonight succeeded; every append-a-function-to-an-existing-file dispatch failed identically (file_contains passes, exports_smoke fails on the new export specifically). This is a builder patch-application bug, not a spec-wording or file-structure-specific issue -- confirmed by this file NOT ending in an export default {} object (ruling out the earlier narrower theory) yet failing the exact same way.",
-      "revive_count": 1,
-      "revived_at": "2026-07-21T21:30:36.276Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-21T21:46:05.436Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -2141,7 +2141,11 @@
       ],
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "grail-audit-telemetry-wire-1",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "route": {
+        "method": "POST",
+        "path": "/factory/ship-queue"
+      }
     }
   ],
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
