@@ -2023,7 +2023,7 @@
     },
     {
       "id": "grail-audit-tsos-wire-1",
-      "status": "blocked",
+      "status": "superseded",
       "target_file": "routes/tsos-efficiency-routes.js",
       "task": "Add a registerTsosEfficiencyRoutes(app, deps) wrapper so the TSOS token-efficiency endpoints (currently 404 in production) can be mounted in the founder_builder lane via the existing auto-registered-product-modules.json mechanism -- same fix pattern already proven for lifere-sales-coaching-routes.js.",
       "spec": "Add EXACTLY one new export to the END of the existing file routes/tsos-efficiency-routes.js (after its closing 'return router; }' for createTsosEfficiencyRoutes -- do not modify createTsosEfficiencyRoutes itself in any way, only append after it):\n\nexport function registerTsosEfficiencyRoutes(app, deps = {}) {\n  const { pool, requireKey, logger } = deps;\n  app.use(createTsosEfficiencyRoutes({ pool, requireKey }));\n  logger?.info?.('Tsos Efficiency Routes registered successfully.');\n}\n\nThis mirrors the exact existing pattern already live in routes/lifere-sales-coaching-routes.js (createLifeRESalesCoachingRoutes + registerLifereSalesCoachingRoutes) -- read that real file to copy its register-wrapper shape exactly, including the app.use(createX(...)) call with no explicit mount-path argument (createTsosEfficiencyRoutes's own router already declares full absolute paths like /api/v1/lifeos/builderos/tsos-efficiency internally via router.get('/api/v1/lifeos/builderos/tsos-efficiency', ...), so app.use() is called with just the router, no separate mount-path string -- verified against the real file, do not invent a mount-path prefix).\n\nRoot cause this fixes: this file's createTsosEfficiencyRoutes is imported and mounted in startup/register-runtime-routes.js (the full-runtime lane) but was NEVER registered in the founder_builder lane, which is the ONLY lane Railway actually boots in production (confirmed live: GET /api/v1/lifeos/builderos/tsos-efficiency returns 404 in production right now). This is the exact same class of bug already found and fixed once tonight for lifere-sales-coaching-routes.js.",
@@ -2062,7 +2062,34 @@
       "proof": null,
       "failure_signature": "NOT_ON_BLUEPRINT",
       "same_signature_count": 1,
-      "escalation_class": "governance_block"
+      "escalation_class": "governance_block",
+      "revive_note": "Superseded by grail-audit-tsos-wire-2 (new file, not append). Same systematic pattern now confirmed across TWO existing files (site-builder-prospect-runner.js x10 attempts, this file x1): every greenfield/new-file dispatch tonight succeeded; every append-a-function-to-an-existing-file dispatch failed identically (file_contains passes, exports_smoke fails on the new export specifically). This is a builder patch-application bug, not a spec-wording or file-structure-specific issue -- confirmed by this file NOT ending in an export default {} object (ruling out the earlier narrower theory) yet failing the exact same way."
+    },
+    {
+      "id": "grail-audit-tsos-wire-2",
+      "status": "pending",
+      "target_file": "routes/tsos-efficiency-register.js",
+      "task": "Workaround for grail-audit-tsos-wire-1 (superseded): register wrapper for TSOS token-efficiency routes in a brand-new file instead of appending to the existing routes/tsos-efficiency-routes.js, to avoid a confirmed builder bug where appending an export to an existing file fails to produce a real export 11/11 times tonight while greenfield files succeed 100% of the time.",
+      "spec": "Create a brand-new file (greenfield -- do not touch routes/tsos-efficiency-routes.js at all, it stays exactly as-is). This works around a confirmed builder bug: appending a new export to an already-populated existing file has failed 11 times tonight across two different files with the identical symptom (file_contains passes, exports_smoke fails), while every greenfield new-file dispatch has succeeded. This file's entire content is:\n\nimport { createTsosEfficiencyRoutes } from './tsos-efficiency-routes.js';\n\nexport function registerTsosEfficiencyRoutes(app, deps = {}) {\n  const { pool, requireKey, logger } = deps;\n  app.use(createTsosEfficiencyRoutes({ pool, requireKey }));\n  logger?.info?.('Tsos Efficiency Routes registered successfully.');\n}\n\nAdd this JSDoc block as the very first thing in the file, before the import: /**\n * SYNOPSIS: Exports registerTsosEfficiencyRoutes — routes/tsos-efficiency-register.js.\n * @ssot docs/products/builderos/PRODUCT_HOME.md\n */\n\nThat is the entire file -- nothing else.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerTsosEfficiencyRoutes"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/tsos-efficiency-register.js",
+          "exports": [
+            "registerTsosEfficiencyRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/tsos-efficiency-register.js"
+        }
+      ],
+      "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "grail-audit-tsos-wire-2",
+      "mission_id": "PRODUCT-builderos"
     }
   ],
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
