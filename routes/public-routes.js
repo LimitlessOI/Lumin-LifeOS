@@ -335,8 +335,12 @@ export function registerPublicRoutes(app, {
     return res.status(404).send("LifeOS shell not found.");
   });
 
-  // ==================== ROOT ROUTE - API COST SAVINGS LANDING PAGE ====================
-  // Must be defined BEFORE static middleware to take precedence
+  // ==================== ROOT ROUTE - PUBLIC FRONT DOOR ====================
+  // Must be defined BEFORE static middleware to take precedence.
+  // If a real landing file exists it wins; otherwise send visitors to the
+  // live, sellable product instead of a dead 404 (revenue front-door fix
+  // 2026-07-21 — bare domain previously served "Landing page not found").
+  // INTERIM: destination pending founder's chosen primary landing.
   app.get("/", (req, res) => {
     const landingPagePath = path.join(
       __dirname,
@@ -347,10 +351,7 @@ export function registerPublicRoutes(app, {
     if (fs.existsSync(landingPagePath)) {
       res.sendFile(landingPagePath);
     } else {
-      console.warn(
-        "⚠️ [ROUTE] API Cost Savings landing page not found, serving default"
-      );
-      res.status(404).send("Landing page not found");
+      res.redirect(302, "/marketing");
     }
   });
 
