@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-21T02:22:00.803Z",
+  "generated_at": "2026-07-21T02:29:38.776Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12079,
+  "file_count": 12080,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -37564,9 +37564,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 76317,
-      "mtime": "2026-07-21T02:22:00.803Z",
-      "indexed_at": "2026-07-21T02:22:00.803Z"
+      "bytes": 78167,
+      "mtime": "2026-07-21T02:29:38.776Z",
+      "indexed_at": "2026-07-21T02:29:38.776Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -38479,6 +38479,13 @@
       "bytes": 9525,
       "mtime": "2026-07-20T07:22:45.527Z",
       "indexed_at": "2026-07-20T07:28:47.516Z"
+    },
+    {
+      "path": "docs/GRAIL_IMPLEMENTATION_PLAN.md",
+      "synopsis": "GRAIL — the enforceable governance layer + phased implementation plan for everything designed 2026-07-20 (doctrine → mechanism). Subordinate to North Star; pre-Article-VII plan, not law.",
+      "bytes": 12196,
+      "mtime": "2026-07-21T02:29:38.776Z",
+      "indexed_at": "2026-07-21T02:29:38.776Z"
     },
     {
       "path": "docs/HANDOFF_IDEAS_TO_PRODUCTS_REVIEW.md",
