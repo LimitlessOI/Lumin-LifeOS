@@ -2089,7 +2089,31 @@
       ],
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "grail-audit-tsos-wire-2",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/builderos/twins/steps/grail-audit-tsos-wire-2.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-21T21:15:07.571Z",
+        "shipped_at": "2026-07-21T21:15:07.571Z",
+        "commit_sha": null,
+        "content_sha256": "72188180faafb34ff6e2d8fe071e6870f0f1624c8cfa3561f85810b632528fcd",
+        "target_file": "routes/tsos-efficiency-register.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "routes/tsos-efficiency-register.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/builderos/twins/steps/grail-audit-tsos-wire-2.exact",
+          "content_sha256": "72188180faafb34ff6e2d8fe071e6870f0f1624c8cfa3561f85810b632528fcd"
+        }
+      },
+      "shipped_at": "2026-07-21T21:15:07.571Z"
     }
   ],
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",

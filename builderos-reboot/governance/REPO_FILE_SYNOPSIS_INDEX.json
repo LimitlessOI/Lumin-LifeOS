@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-21T21:12:19.482Z",
+  "generated_at": "2026-07-21T21:15:10.381Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12101,
+  "file_count": 12102,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -68987,6 +68987,16 @@
       "bytes": 1067,
       "mtime": "2026-07-21T05:32:04.342Z",
       "indexed_at": "2026-07-21T05:58:39.404Z"
+    },
+    {
+      "path": "routes/tsos-efficiency-register.js",
+      "synopsis": "Exports registerTsosEfficiencyRoutes — routes/tsos-efficiency-register.js.",
+      "bytes": 462,
+      "mtime": "2026-07-21T21:15:10.381Z",
+      "indexed_at": "2026-07-21T21:15:10.381Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/tsos-efficiency-routes.js",
