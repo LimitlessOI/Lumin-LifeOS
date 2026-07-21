@@ -1963,13 +1963,13 @@
     },
     {
       "id": "grail-wave3-1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/voluntary-progress-routes.js",
       "task": "Wire Wave 1+2 (the built-but-unwired GRAIL vertical slice) into a real, reachable HTTP call path -- currently proposeGoal/presentAlternativeFutures/confirmGoalDecision/compareExperimentOutcome exist and are individually verified correct, but nothing in the live system calls them. This exposes them as real API routes, following the exact same createXRoutes+registerXRoutes+auto-registered-product-modules.json pattern already proven live for routes/lifere-sales-coaching-routes.js.",
       "spec": "Follow the EXACT real pattern already used by routes/lifere-sales-coaching-routes.js (verified against that actual file -- do not invent a different shape): export a factory function that builds an Express Router, PLUS a register wrapper for auto-mounting. Real imports required, verified against the actual shipped file services/voluntary-progress-slice-orchestrator.js -- do not guess or re-derive:\n\nimport { Router } from 'express';\nimport { proposeGoal, presentAlternativeFutures, confirmGoalDecision, compareExperimentOutcome } from '../services/voluntary-progress-slice-orchestrator.js';\n\nAll 4 are ASYNC functions with these exact signatures (verified against the real shipped file):\n- proposeGoal(pool, { user_id, goal_text, goal_category = 'general' }) -- throws a real Error if goal_text is empty/not a string. Returns the inserted goal row (has .id, .status='proposed').\n- presentAlternativeFutures(pool, { user_id, goal_id, twinKey, moduleKey = null, tenantId = 'default', fields = [] }) -- returns { ok: false, reason: 'goal_declined_do_not_re_pursue' } if the goal was previously declined (never re-pursue), OR { ok: false, error: 'forbidden_cross_user', state: [] } on a cross-user Twin violation, OR { ok: true, goal, context_view, twin_state, alternative_futures } on success. Throws a real Error if goal_id does not exist.\n- confirmGoalDecision(pool, { user_id, goal_id, decision_status, modified_goal_text = null, chosen_path_label = null, path_description = null }) -- decision_status must be one of 'accepted'|'modified'|'rejected'|'opted_out'|'deferred'. Returns { ok: true, decision, experiment } where experiment is null unless decision_status is 'accepted' or 'modified' AND both chosen_path_label and path_description were supplied.\n- compareExperimentOutcome(pool, { user_id, goal_experiment_id, actual_option, captured_how = 'explicit', twin_subject, twin_proposed_value, truth_grade = 'THINK', evidence = null }) -- returns { ok: true, outcome, twin_proposal } where twin_proposal.status is always 'pending' (never auto-applied).\n\nexport function createVoluntaryProgressRoutes({ pool, requireKey, logger }) that returns a Router with these 4 routes, each wrapped in try/catch returning { ok: false, error: err.message } with HTTP 400 on a thrown Error, and mounted behind requireKey the same way createLifeRESalesCoachingRoutes's router uses its requireKey dependency (apply it as router-level middleware, e.g. router.use(requireKey), matching the existing file's own auth pattern -- read routes/lifere-sales-coaching-routes.js in the actual repo to copy the exact requireKey usage, do not invent a different auth mechanism):\n\n1. POST /goals -- body { user_id, goal_text, goal_category }. Calls proposeGoal. Returns { ok: true, goal } on success, HTTP 201.\n2. POST /goals/:goalId/alternatives -- body { user_id, twinKey, moduleKey, tenantId, fields }. Calls presentAlternativeFutures(pool, { user_id, goal_id: req.params.goalId, twinKey, moduleKey, tenantId, fields }). Returns the function's own result object directly as the response body, HTTP 200 (even when ok:false for the goal_declined_do_not_re_pursue or forbidden_cross_user cases -- those are valid, expected outcomes, not server errors).\n3. POST /goals/:goalId/decision -- body { user_id, decision_status, modified_goal_text, chosen_path_label, path_description }. Calls confirmGoalDecision(pool, { user_id, goal_id: req.params.goalId, decision_status, modified_goal_text, chosen_path_label, path_description }). Returns the function's own result object, HTTP 200.\n4. POST /experiments/:experimentId/outcome -- body { user_id, actual_option, captured_how, twin_subject, twin_proposed_value, truth_grade, evidence }. Calls compareExperimentOutcome(pool, { user_id, goal_experiment_id: req.params.experimentId, actual_option, captured_how, twin_subject, twin_proposed_value, truth_grade, evidence }). Returns the function's own result object, HTTP 200.\n\nexport function registerVoluntaryProgressRoutes(app, deps = {}) that destructures { pool, requireKey, logger } from deps and calls app.use('/api/v1/lifere/voluntary-progress', createVoluntaryProgressRoutes({ pool, requireKey, logger })), then logs a success message via logger?.info?.(...) the same way registerLifereSalesCoachingRoutes does -- copy that exact pattern from the real file.\n\nAdd the standard JSDoc header: /**\n * SYNOPSIS: Exports createVoluntaryProgressRoutes — routes/voluntary-progress-routes.js.\n * @ssot docs/products/lifere/PRODUCT_HOME.md\n */",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "createVoluntaryProgressRoutes",
         "registerVoluntaryProgressRoutes"
@@ -1992,7 +1992,19 @@
       ],
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "grail-wave3-1",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "route": {
+        "method": "POST",
+        "path": "/goals"
+      },
+      "last_attempt_at": "2026-07-21T20:26:43.423Z",
+      "last_error": "NOT_ON_BLUEPRINT",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "failure_signature": "NOT_ON_BLUEPRINT",
+      "same_signature_count": 1,
+      "escalation_class": "governance_block"
     }
   ],
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
