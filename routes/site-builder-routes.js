@@ -36,6 +36,11 @@ import {
   failStaleProspectJobs,
   evaluateSiteBuilderEmailReadiness,
 } from '../services/site-builder-prospect-runner.js';
+import {
+  isUnresolvedPublicBase,
+  resolveDurablePublicBase,
+  resolveRequestPublicBase,
+} from '../services/site-builder-public-base.js';
 
 function buildingPlaceholderHtml(clientId, businessName = '') {
   const safeName = String(businessName || 'your site').replace(/[<>&"]/g, '');
@@ -171,7 +176,7 @@ async function notifySlack(event, businessName, detail = '') {
   if (!url) return;
   const emoji = event === 'replied' ? '💬' : '👀';
   const label = event === 'replied' ? 'REPLIED to cold email' : 'VIEWED preview';
-  const text = `${emoji} *Warm lead alert — ${label}*\n*Business:* ${businessName}\n${detail}`;
+  const text = `${emoji} Warm lead alert — ${label}*\nBusiness:* ${businessName}\n${detail}`;
   try {
     await fetch(url, {
       method: 'POST',
@@ -1040,7 +1045,7 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
         const p = result.rows[0];
         logger.info('[SITE] Preview viewed — warm lead', { clientId: id, businessName: p.business_name });
         notifySlack('viewed', p.business_name,
-          `*Preview:* ${p.preview_url}\n*Email:* ${p.contact_email}\n*Lead ID:* \`${id}\``
+          `Preview:* ${p.preview_url}\nEmail:* ${p.contact_email}\nLead ID:* \`${id}\``
         );
       }
     } catch (err) {
@@ -1071,7 +1076,7 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
         if (r.rowCount > 0) businessName = r.rows[0].business_name || id;
       }
       notifySlack('viewed', businessName,
-        `*Picked design:* \`${style || 'unknown'}\`\n*Lead ID:* \`${id}\`\nThis prospect toggled through the designs and chose one — strong buying signal.`
+        `Picked design:* \`${style || 'unknown'}\`\nLead ID:* \`${id}\`\nThis prospect toggled through the designs and chose one — strong buying signal.`
       );
     } catch (err) {
       logger.warn('[SITE] select-design tracking failed', { error: err.message });
@@ -1140,7 +1145,7 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
           from: fromEmail,
         });
         notifySlack('replied', prospect.business_name,
-          `*From:* ${fromEmail}\n*Subject:* ${subject}\n*Preview:* ${snippet}\n*Lead ID:* \`${prospect.client_id}\``
+          `From:* ${fromEmail}\nSubject:* ${subject}\nPreview:* ${snippet}\nLead ID:* \`${prospect.client_id}\``
         );
       }
 
@@ -1224,6 +1229,16 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
       }
     }
 
+    const configuredPublicBase = resolveDurablePublicBase([
+      process.env.SITE_BASE_URL,
+      baseUrl,
+      process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` : '',
+    ]);
+    const brandedBasePoisoned =
+      isUnresolvedPublicBase(process.env.SITE_BASE_URL)
+      || isUnresolvedPublicBase(baseUrl)
+      || isUnresolvedPublicBase(process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` : '');
+
     const capabilities = {
       site_build: true,
       preview_serving: true,
@@ -1236,6 +1251,8 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
       pos_partner_referrals: true,
       follow_up_sequence: emailReadiness.coldEmailSending,
       slack_notifications: !!process.env.SLACK_WEBHOOK_URL,
+      public_base_resolvable: !brandedBasePoisoned || Boolean(configuredPublicBase),
+      public_base_url: configuredPublicBase,
     };
 
     res.json({
@@ -1259,9 +1276,9 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
     if (!clientId || !/[\w-]+/.test(String(clientId))) {
       return res.status(400).json({ ok: false, error: 'Invalid clientId' });
     }
-    const safeBase = String(baseUrl || '').replace(/\/$/, '') || `${req.protocol}://${req.get('host')}`;
+    const safeBase = resolveRequestPublicBase(req, baseUrl);
     const referralUrl = `${safeBase}/overlay/site-builder-landing.html?ref=${encodeURIComponent(clientId)}`;
-    return res.json({ ok: true, clientId, referralUrl });
+    return res.json({ ok: true, clientId, referralUrl, publicBase: safeBase });
   });
 
   app.use('/api/v1/sites', router);
@@ -1275,7 +1292,11 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
       if (!result.success) logger.warn('[SITE] Follow-up email not sent', { to, reason: result.error });
       return result;
     };
-    const tick = () => runFollowUpCron({ pool, sendEmail, baseUrl }).catch((err) => {
+    const tick = () => runFollowUpCron({
+      pool,
+      sendEmail,
+      baseUrl: resolveDurablePublicBase([baseUrl]),
+    }).catch((err) => {
       logger.warn('[SITE] Follow-up cron error', { error: err.message });
     });
     setTimeout(tick, 60 * 1000);

@@ -33,6 +33,7 @@
 import logger from './logger.js';
 import { scoreProspectUrl } from './site-builder-opportunity-scorer.js';
 import { createProspectClientId } from './site-builder-prospect-runner.js';
+import { resolveDurablePublicBase } from './site-builder-public-base.js';
 
 // Entry-product pricing (foot-in-door → care plan + add-ons)
 import { SITE_BUILDER_PRICING, getBetaPublishOfferSummary, getBetaDealReasonWhy } from '../config/site-builder-pricing.js';
@@ -72,7 +73,7 @@ export default class ProspectPipeline {
   }
 
   resolvePreviewUrl(clientId) {
-    const base = String(this.baseUrl || process.env.SITE_BASE_URL || '').replace(/\/+$/, '');
+    const base = resolveDurablePublicBase([this.baseUrl, process.env.SITE_BASE_URL]);
     return base ? `${base}/previews/${clientId}` : `/previews/${clientId}`;
   }
 
@@ -765,8 +766,9 @@ Return ONLY valid JSON:
     const biz = businessName || 'your business';
     const offer = getBetaPublishOfferSummary();
     const months = SITE_BUILDER_PRICING.carePlan.includedMonthsOnPublish || 2;
-    const referralLink = referralCode && this.baseUrl
-      ? `${String(this.baseUrl).replace(/\/$/, '')}/overlay/site-builder-landing.html?ref=${encodeURIComponent(referralCode)}`
+    const publicBase = resolveDurablePublicBase([this.baseUrl, process.env.SITE_BASE_URL]);
+    const referralLink = referralCode && publicBase
+      ? `${publicBase}/overlay/site-builder-landing.html?ref=${encodeURIComponent(referralCode)}`
       : null;
     const referralBlock = referralLink
       ? `<p>Know another business owner who could use this? Forward them your referral link: <a href="${referralLink}" style="color:#0F766E;">${referralLink}</a>. If they publish, you get one free month of care.</p>`

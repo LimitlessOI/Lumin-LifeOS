@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-22T17:32:09.294Z",
+  "generated_at": "2026-07-22T18:16:28.885Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12103,
+  "file_count": 12105,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -40866,9 +40866,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 141654,
-      "mtime": "2026-07-22T17:32:09.294Z",
-      "indexed_at": "2026-07-22T17:32:09.294Z"
+      "bytes": 142787,
+      "mtime": "2026-07-22T18:16:28.885Z",
+      "indexed_at": "2026-07-22T18:16:28.885Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -68661,9 +68661,9 @@
     {
       "path": "routes/site-builder-checkout-routes.js",
       "synopsis": "Site Builder beta publish checkout routes ($45 entry + 2 mo management).",
-      "bytes": 8735,
-      "mtime": "2026-07-21T05:32:04.337Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "bytes": 8982,
+      "mtime": "2026-07-22T18:16:28.885Z",
+      "indexed_at": "2026-07-22T18:16:28.885Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -68729,9 +68729,9 @@
     {
       "path": "routes/site-builder-routes.js",
       "synopsis": "Site Builder Routes — Done-for-you website pipeline",
-      "bytes": 53099,
-      "mtime": "2026-07-21T05:32:04.339Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "bytes": 53859,
+      "mtime": "2026-07-22T18:16:28.885Z",
+      "indexed_at": "2026-07-22T18:16:28.885Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -89893,9 +89893,9 @@
     {
       "path": "services/prospect-pipeline.js",
       "synopsis": "Prospect Pipeline — Find a business → build their mock site → email it to them",
-      "bytes": 42887,
-      "mtime": "2026-07-21T05:32:04.655Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "bytes": 43013,
+      "mtime": "2026-07-22T18:16:28.885Z",
+      "indexed_at": "2026-07-22T18:16:28.885Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -90710,6 +90710,16 @@
       ]
     },
     {
+      "path": "services/site-builder-public-base.js",
+      "synopsis": "Resolvable public origin for Site Builder money-path URLs.",
+      "bytes": 2909,
+      "mtime": "2026-07-22T18:16:28.885Z",
+      "indexed_at": "2026-07-22T18:16:28.885Z",
+      "ssot": [
+        "docs/products/site-builder/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/site-builder-quality-scorer.js",
       "synopsis": "Pure-function HTML quality scorer — no DOM, no dependencies.",
       "bytes": 4598,
@@ -90767,9 +90777,9 @@
     {
       "path": "services/site-builder.js",
       "synopsis": "Site Builder — Scrape existing site → AI-generates complete click-funnel website",
-      "bytes": 98167,
-      "mtime": "2026-07-21T05:32:04.669Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "bytes": 98286,
+      "mtime": "2026-07-22T18:16:28.885Z",
+      "indexed_at": "2026-07-22T18:16:28.885Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -94308,6 +94318,16 @@
       "bytes": 2769,
       "mtime": "2026-07-21T05:32:04.722Z",
       "indexed_at": "2026-07-21T05:58:39.404Z"
+    },
+    {
+      "path": "tests/site-builder-public-base.test.js",
+      "synopsis": "js — tests/site-builder-public-base.test.js.",
+      "bytes": 2249,
+      "mtime": "2026-07-22T18:16:28.885Z",
+      "indexed_at": "2026-07-22T18:16:28.885Z",
+      "ssot": [
+        "docs/products/site-builder/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "tests/site-builder-quality-scorer.test.js",

@@ -38,6 +38,7 @@ import { getVariantSwitcherHtml } from '../config/site-builder-switcher.js';
 import { ingestAll } from './site-builder-asset-ingestion.js';
 import { SITE_BUILDER_PRICING } from '../config/site-builder-pricing.js';
 import { getModelForTask, getCandidateModelsForTask } from '../config/task-model-routing.js';
+import { resolveDurablePublicBase } from './site-builder-public-base.js';
 import { renderSalesDoctrineForPrompt } from '../config/site-builder-sales-doctrine.js';
 import { matchIndustrySalesPack } from '../config/site-builder-industry-sales.js';
 
@@ -203,7 +204,7 @@ export function renderLeanProspectHtml(info = {}, posPartner = null) {
 </html>`;
 }
 
-// POS partner referral links — set AFFILIATE_*_URL env vars in Railway to activate commission tracking
+// POS partner referral links — set AFFILIATE__URL env vars in Railway to activate commission tracking
 export const POS_PARTNERS = {
   jane_app: {
     name: 'Jane App',
@@ -344,7 +345,7 @@ export default class SiteBuilder {
   constructor({ callCouncil, previewsDir = 'public/previews', baseUrl = '', pool = null } = {}) {
     this.callCouncil = callCouncil;
     this.previewsDir = previewsDir;
-    this.baseUrl = baseUrl;
+    this.baseUrl = resolveDurablePublicBase([baseUrl, process.env.SITE_BASE_URL]);
     this.pool = pool;
   }
 
@@ -1153,9 +1154,9 @@ Output the ENTIRE HTML file from <!DOCTYPE html> to </html> then BUILD_COMPLETE.
     if (!this.callCouncil) throw new Error('callCouncil required for site generation');
 
     const response = await this.callWithFallback(GENERATION_CANDIDATES, prompt, { maxOutputTokens: GENERATION_MAX_TOKENS, taskType: 'site_builder.generate_site', useCache: false, label: 'generateSiteHtml' });
-    let clean = response.replace(/BUILD_COMPLETE[\s\S]*$/, '').trim();
+    let clean = response.replace(/BUILD_COMPLETE[\s\S]$/, '').trim();
     // Strip markdown fences AI models sometimes wrap HTML in (```html...``` or ```...```)
-    clean = clean.replace(/^```(?:html)?\s*\n?/, '').replace(/\n?```\s*$/, '').trim();
+    clean = clean.replace(/^```(?:html)?\s*\n?/, '').replace(/\n?```\s$/, '').trim();
 
     if (!clean.includes('<!DOCTYPE html') && !clean.includes('<html')) {
       throw new Error('AI did not return valid HTML');
@@ -1224,9 +1225,9 @@ Output the ENTIRE HTML file from <!DOCTYPE html> to </html> then BUILD_COMPLETE.
         ? h.replace('</head>', `${dsBlock}\n</head>`)
         : dsBlock + h;
     }
-    if (!/<body\b[^>]*data-lumin-ds/i.test(h)) {
+    if (!/<body\b[^>]data-lumin-ds/i.test(h)) {
       h = h.replace(/<body\b([^>]*)>/i, '<body data-lumin-ds="1" data-theme="light"$1>');
-    } else if (!/<body\b[^>]*data-theme/i.test(h)) {
+    } else if (!/<body\b[^>]data-theme/i.test(h)) {
       h = h.replace(/<body\b([^>]*)>/i, '<body data-theme="light"$1>');
     }
 
@@ -1255,12 +1256,12 @@ Output the ENTIRE HTML file from <!DOCTYPE html> to </html> then BUILD_COMPLETE.
     // 0c.1 If no blog posts were generated, remove any "Coming Soon" blog placeholder section.
     if (!blogPosts.length) {
       h = h.replace(/<section[^>]*>[\s\S]*?Coming Soon:[\s\S]*?<\/section>/gi, '');
-      h = h.replace(/<p[^>]*>\s*Coming Soon:[\s\S]*?<\/p>/gi, '');
+      h = h.replace(/<p[^>]*>\sComing Soon:[\s\S]*?<\/p>/gi, '');
     }
 
     // 0d. Replace [framemarker...] placeholders with real YouTube embeds or remove them
     const videos = extractVideoEmbedUrls(info);
-    h = h.replace(/\[\s*framemarker[^\]]*\]/gi, (match) => {
+    h = h.replace(/\[\sframemarker[^\]]*\]/gi, (match) => {
       const video = videos.find((v) => !v.used);
       if (video) {
         video.used = true;
@@ -1299,7 +1300,7 @@ button:focus-visible,a:focus-visible{outline:2px solid ${primary};outline-offset
     }
 
     // 3. Mobile sticky CTA bar — required for hasStickyMobileCta (6pts)
-    if (!/fixed bottom|sticky.*bottom|bottom booking|small screens only/i.test(h)) {
+    if (!/fixed bottom|sticky.bottom|bottom booking|small screens only/i.test(h)) {
       const callLink = phone
         ? `<a href="tel:${phone.replace(/[^\d+]/g, '')}" class="flex-1 border border-white/30 rounded-full py-2.5 text-center text-sm font-semibold text-white">Call Us</a>`
         : '';
@@ -1390,7 +1391,7 @@ ${existingHtml}
 `;
 
     const response = await this.callWithFallback(REPAIR_CANDIDATES, prompt, { maxOutputTokens: REPAIR_MAX_TOKENS, taskType: 'site_builder.repair_site', useCache: false, label: 'improveSiteHtml' });
-    const clean = String(response || '').replace(/BUILD_COMPLETE[\s\S]*$/, '').trim();
+    const clean = String(response || '').replace(/BUILD_COMPLETE[\s\S]$/, '').trim();
     if (!clean.includes('<!DOCTYPE html') && !clean.includes('<html')) {
       throw new Error('AI did not return valid repaired HTML');
     }

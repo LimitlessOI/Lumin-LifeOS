@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/site-builder/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-22 — WRM copy: trust claim corrected to **40+ midwives and doulas trained** (not midwives-only). |
+| **Last Updated** | 2026-07-22 — Money-path fix: never emit NXDOMAIN `sitebuilder.taloaos.com` on checkout/referral/email; use request origin + Railway fallback. |
 
 ---
 
@@ -35,7 +35,9 @@ Done-for-you website builder for **any local business with a weak site** (dentis
 
 Verified live 2026-07-10 via the real SENTRY pre-alpha gate (`node scripts/sentry-prealpha-gate.mjs site-builder`) on deploy `991df22238`, fresh fixture, not a stale note: **Layer A 7/7 PASS, Layer B 8/8 PASS, UX verdict "good", 0 findings** — preview build, editor (10-template toggle, upsell chips, chat quick-actions, comparison carousel all present), and **live Stripe checkout** (`cs_live_...`, not test mode) all resolve on production. Email sending (Postmark + Gmail SMTP fallback) has real fixes landed 2026-07-07. The env vars below are **historical** — they blocked this product from March through early July and are kept here only as a record; do not treat them as a current blocker without re-checking Railway directly.
 
-**Known real gap (not env vars):** no receipt anywhere of an actual prospect email converting to a paying customer. The pipeline is mechanically proven end-to-end; commercial proof is the next real milestone, not more code.
+**Known real gap (not env vars):** no receipt anywhere of an actual prospect email converting to a paying customer. The pipeline is mechanically proven end-to-end; commercial proof is the next real milestone.
+
+**2026-07-22 money-path landmine (fixed in code):** tip `RAILWAY_PUBLIC_DOMAIN` / `SITE_BASE_URL` pointed at branded `sitebuilder.taloaos.com` which is still **NXDOMAIN**. Checkout creation worked, but success/cancel/referral/email preview links were poisoned. Fix: `services/site-builder-public-base.js` — request-origin for checkout/referral; durable Railway fallback for emails/builds until `SITE_BUILDER_BRANDED_HOST_LIVE=1` or Cloudflare DNS is provisioned.
 
 **Historical hard blocker (resolved — kept for record only):** Railway env vars once unset:
 - `POSTMARK_SERVER_TOKEN` — email sending
@@ -328,6 +330,7 @@ Founder directive: review every revenue blueprint for gaps against real competit
 
 | Date | What Changed | Why | Verified | Next |
 |---|---|---|---|---|
+| 2026-07-22 | **Money-path public base: stop emitting NXDOMAIN.** New `services/site-builder-public-base.js` + tests. Checkout/upsell success+cancel, referral, SiteBuilder preview/publish URLs, prospect email links, follow-up cron — all prefer request origin or skip known-dead `sitebuilder.taloaos.com` and fall back to Railway tip origin. Launch-readiness surfaces `public_base_url`. | Adam: Site Builder ready to make money now; branded host still NXDOMAIN was stranding buyers after live Stripe pay. | unit tests + tip verify after deploy | Close first $45 on Railway URL; provision Cloudflare DNS for branded host when token available |
 | 2026-07-22 | **WRM credential copy: 40+ midwives and doulas.** Trust bar, Meet Sherry bullets, speaker blurb, meta/OG — all say **40+ midwives and doulas trained** (plus kept). | Founder/Sherry: not midwives-only; she trained midwives and doulas (40+, maybe more). | local | tip deploy |
 | 2026-07-22 | **Well Rounded Feminine template registered in Site Builder.** New free design system `wellrounded-feminine` in `config/design-studio.js` (blush/coral/Fraunces/Sacramento tokens from WRM). Layout shell `shellWellroundedFeminine` in `config/design-studio-layouts.js` (photo hero + parallax, trust strip, meet, three pillars, quote band, consult CTA). Midwifery/doula/maternity/placenta brands prefer it via `getDesignSystemForBrand`. Picker option added in `services/site-builder-template-options.js`. WRM page: Cora tag → "Midwife and Placenta Specialist". | Adam: save WRM look as a reusable Site Builder template; fix Cora label. | local registry + shell wired | tip deploy; rebuild a midwifery prospect with `styleIds:['wellrounded-feminine']` |
 | 2026-07-22 | **WRM API co-shipped with preview on branch.** `routes/wrm-consult-routes.js` mounted unconditionally from `startup/register-runtime-routes.js` so merging the preview alone cannot leave `/api/v1/wrm/consult` and `/track` as 404s. | Branch audit: preview was on HEAD; WRM routes were on disk but not in the branch commit. | local mount + `@ssot` | tip deploy + live form e2e |

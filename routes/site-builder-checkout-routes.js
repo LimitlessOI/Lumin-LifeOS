@@ -13,6 +13,7 @@ import {
   verifyUpsellCheckoutSession,
 } from '../services/site-builder-entry-checkout.js';
 import { SITE_BUILDER_PRICING, getBetaPublishOfferSummary } from '../config/site-builder-pricing.js';
+import { resolveRequestPublicBase } from '../services/site-builder-public-base.js';
 
 async function loadProspectContext(pool, clientId) {
   if (!pool) return { businessName: null };
@@ -78,11 +79,12 @@ export function createSiteBuilderCheckoutRoutes(app, { pool, baseUrl } = {}) {
 
       const prospect = await loadProspectContext(pool, clientId);
       const businessName = meta.businessInfo?.businessName || prospect.business_name || 'your business';
+      const effectiveBase = resolveRequestPublicBase(req, baseUrl);
 
       const checkout = await createPublishCheckoutSession({
         clientId,
         businessName,
-        baseUrl,
+        baseUrl: effectiveBase,
         pool,
         templateTier: String(req.query.templateTier || '').trim(),
         selectedDesign: String(req.query.selectedDesign || '').trim(),
@@ -117,7 +119,7 @@ export function createSiteBuilderCheckoutRoutes(app, { pool, baseUrl } = {}) {
         return res.status(400).send(`Payment verification failed: ${result.error}`);
       }
 
-      const previewUrl = `${String(baseUrl || '').replace(/\/$/, '')}/previews/${encodeURIComponent(clientId)}/`;
+      const previewUrl = `${resolveRequestPublicBase(req, baseUrl)}/previews/${encodeURIComponent(clientId)}/`;
       const months = result.careIncludedMonths || SITE_BUILDER_PRICING.carePlan.includedMonthsOnPublish || 2;
       res.set('Content-Type', 'text/html; charset=utf-8');
       res.send(`<!DOCTYPE html>
@@ -175,12 +177,13 @@ export function createSiteBuilderCheckoutRoutes(app, { pool, baseUrl } = {}) {
 
       const prospect = await loadProspectContext(pool, clientId);
       const businessName = meta.businessInfo?.businessName || prospect.business_name || 'your business';
+      const effectiveBase = resolveRequestPublicBase(req, baseUrl);
 
       const checkout = await createUpsellCheckoutSession({
         clientId,
         businessName,
         kind,
-        baseUrl,
+        baseUrl: effectiveBase,
         pool,
         note: String(req.query.note || '').slice(0, 400),
       });
