@@ -63,8 +63,11 @@
   /* Top bar */
   .topbar{position:sticky;top:0;z-index:40;background:rgba(253,248,244,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
   .topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:70px}
-  .brand{font-family:Fraunces,serif;font-weight:500;font-size:1.28rem;letter-spacing:.01em;display:flex;flex-direction:column;line-height:1}
+  .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink)}
+  .brand img{height:48px;width:auto}
+  .brand .wm{font-family:Fraunces,serif;font-weight:500;font-size:1.28rem;letter-spacing:.01em;display:flex;flex-direction:column;line-height:1}
   .brand .sm{font-family:Sacramento,cursive;font-size:1.15rem;color:var(--coral);margin-top:2px}
+  @media(max-width:520px){.brand .wm{display:none}.brand img{height:44px}}
   .nav-links{display:flex;gap:26px;align-items:center}
   .nav-links a{text-decoration:none;font-weight:600;font-size:.95rem;color:var(--ink);opacity:.8}
   .nav-links a:hover{opacity:1;color:var(--coral-deep)}
@@ -216,9 +219,12 @@
 </head>
 <body>
 
-<header class="topbar">
+<header class="topbar" id="top">
   <div class="wrap">
-    <div class="brand">Well&nbsp;Rounded<span class="sm">Momma</span></div>
+    <a class="brand" href="#top" aria-label="Well Rounded Momma home">
+      <img src="assets/wrm-logo.png" alt="Well Rounded Momma logo" />
+      <span class="wm">Well&nbsp;Rounded<span class="sm">Momma</span></span>
+    </a>
     <nav class="nav-links">
       <a href="#meet">Meet Sherry</a>
       <a href="#stories">Birth Stories</a>
@@ -290,10 +296,10 @@
       <p>Sherry shares real education on birth, pregnancy, and midwifery — the questions every family is quietly wondering about.</p>
     </div>
     <div class="video-grid" id="videoGrid">
-      <div class="vcard" data-video="zMqYdXI9Qzg" data-label="journey_ep1">
-        <img src="https://img.youtube.com/vi/zMqYdXI9Qzg/hqdefault.jpg" alt="Our Journey into Midwifery — Episode 1" loading="lazy" />
+      <div class="vcard" data-video="NFSULEWsdqQ" data-label="craziest_birth_stories">
+        <img src="https://img.youtube.com/vi/NFSULEWsdqQ/hqdefault.jpg" alt="Craziest birth stories with Well Rounded Momma" loading="lazy" />
         <div class="play"><span></span></div>
-        <div class="vtitle">Our Journey into Midwifery — Episode 1</div>
+        <div class="vtitle">Craziest Birth Stories</div>
       </div>
       <div class="vcard" data-video="Bf-2RwwFxZk" data-label="birth_plan">
         <img src="https://img.youtube.com/vi/Bf-2RwwFxZk/hqdefault.jpg" alt="Creating a baby birth plan" loading="lazy" />
@@ -312,7 +318,7 @@
       </div>
     </div>
     <div class="more">
-      <a class="btn-ghost" href="https://www.youtube.com/wellroundedmomma" target="_blank" rel="noopener" data-track="social_click" data-label="youtube_all">See all videos on YouTube ↗</a>
+      <a class="btn-ghost" href="https://www.youtube.com/@Wellroundedmomma1" target="_blank" rel="noopener" data-track="social_click" data-label="youtube_all">See all videos on YouTube ↗</a>
     </div>
   </div>
 </section>
@@ -490,7 +496,7 @@
     <h2>Learn, watch, and connect</h2>
     <p>Follow Well Rounded Momma for birth education, real stories, and honest guidance.</p>
     <div class="social-row">
-      <a class="social" href="https://www.youtube.com/wellroundedmomma" target="_blank" rel="noopener" data-track="social_click" data-label="yt">▶ YouTube</a>
+      <a class="social" href="https://www.youtube.com/@Wellroundedmomma1" target="_blank" rel="noopener" data-track="social_click" data-label="yt">▶ YouTube</a>
       <a class="social" href="https://www.instagram.com/wrmomma" target="_blank" rel="noopener" data-track="social_click" data-label="ig_wrm">◎ @wrmomma</a>
       <a class="social" href="https://www.facebook.com/wellroundedmomma" target="_blank" rel="noopener" data-track="social_click" data-label="fb">f Facebook</a>
       <a class="social" href="tel:+17024785080" data-track="call_click" data-label="community_call">✆ 702‑478‑5080</a>
