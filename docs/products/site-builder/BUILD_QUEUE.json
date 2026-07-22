@@ -860,7 +860,33 @@
           ],
           "assertion_id": "expected_exports:services/site-builder-new-templates.js"
         }
-      ]
+      ],
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/site-builder/twins/steps/step2.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-22T23:39:53.490Z",
+        "shipped_at": "2026-07-22T23:39:53.490Z",
+        "commit_sha": null,
+        "content_sha256": "0665eb82e40d3861334b92c6ccf83a1245d746af60959c6ae2322438c34d5626",
+        "target_file": "services/site-builder-new-templates.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/site-builder-new-templates.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/site-builder/twins/steps/step2.exact",
+          "content_sha256": "0665eb82e40d3861334b92c6ccf83a1245d746af60959c6ae2322438c34d5626"
+        }
+      },
+      "shipped_at": "2026-07-22T23:39:53.490Z",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step2"
     },
     {
       "id": "step3",
