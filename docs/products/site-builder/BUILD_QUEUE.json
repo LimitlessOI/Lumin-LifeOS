@@ -962,6 +962,112 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-22T23:06:52.903Z",
       "commit_sha": "4ae016eb64c7d1084450bcb13f0dd0b44239bd28"
+    },
+    {
+      "id": "1",
+      "status": "pending",
+      "target_file": "db/migrations/20241001_add_template_choices.sql",
+      "task": "create database table",
+      "spec": "Implement a new table for additional template choices for user brand selection.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS template_choices"
+      ]
+    },
+    {
+      "id": "2",
+      "status": "pending",
+      "target_file": "services/site-builder-new-template-choices.js",
+      "task": "develop new template choices service",
+      "spec": "Service to manage and serve additional template choices for site-builder.",
+      "depends_on": [
+        "1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getTemplateChoices",
+        "addTemplateChoice"
+      ]
+    },
+    {
+      "id": "3",
+      "status": "pending",
+      "target_file": "routes/site-builder-new-template-choices-routes.js",
+      "task": "create route for new template choices",
+      "spec": "Route to expose API for new template choices handling.",
+      "depends_on": [
+        "2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerNewTemplateChoicesRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/site-builder/template-choices"
+      }
+    },
+    {
+      "id": "4",
+      "status": "pending",
+      "target_file": "services/site-builder-interactive-elements-label-update.js",
+      "task": "label update for interactive elements",
+      "spec": "Update service to add clear labels to all interactive elements.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "updateInteractiveElementLabels"
+      ]
+    },
+    {
+      "id": "5",
+      "status": "pending",
+      "target_file": "routes/site-builder-interactive-elements-label-update-routes.js",
+      "task": "create route for interactive elements label update",
+      "spec": "Route to update labels on interactive elements for better understanding.",
+      "depends_on": [
+        "4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerInteractiveElementsLabelUpdateRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/site-builder/update-interactive-element-labels"
+      }
+    },
+    {
+      "id": "6",
+      "status": "pending",
+      "target_file": "public/overlay/site-builder-template-choice.html",
+      "task": "design UI for new template choices interface",
+      "spec": "User interface to showcase and select from additional template choices.",
+      "depends_on": [
+        "2",
+        "3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "design_review_flagged": true
+    },
+    {
+      "id": "7",
+      "status": "pending",
+      "target_file": "public/overlay/site-builder-interactive-elements-update.html",
+      "task": "design UI update for labeled interactive elements",
+      "spec": "User interface update to display clear labels on all interactive elements.",
+      "depends_on": [
+        "4",
+        "5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "design_review_flagged": true
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",
