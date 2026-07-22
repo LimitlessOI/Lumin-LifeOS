@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-22T02:21:27.372Z",
+  "generated_at": "2026-07-22T05:17:04.130Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12103,
   "files": [
@@ -40866,9 +40866,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 138946,
-      "mtime": "2026-07-22T02:14:28.141Z",
-      "indexed_at": "2026-07-22T02:14:28.141Z"
+      "bytes": 140104,
+      "mtime": "2026-07-22T05:17:04.130Z",
+      "indexed_at": "2026-07-22T05:17:04.130Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -66162,10 +66162,10 @@
     },
     {
       "path": "public/previews/wellrounded-momma/index.html",
-      "synopsis": "HTML page: Well Rounded Momma — Experienced Midwifery & Home Birth in Las Vegas",
-      "bytes": 23246,
-      "mtime": "2026-07-22T02:06:03.639Z",
-      "indexed_at": "2026-07-22T02:06:03.639Z"
+      "synopsis": "HTML page: Well Rounded Momma — Midwifery & Home Birth in Las Vegas | Sherry Hopkins, CPM",
+      "bytes": 36208,
+      "mtime": "2026-07-22T05:17:04.130Z",
+      "indexed_at": "2026-07-22T05:17:04.130Z"
     },
     {
       "path": "public/previews/wellrounded/index.html",
@@ -69168,9 +69168,9 @@
     {
       "path": "routes/wrm-consult-routes.js",
       "synopsis": "Well Rounded Momma consult lead capture.",
-      "bytes": 9688,
-      "mtime": "2026-07-22T02:21:27.372Z",
-      "indexed_at": "2026-07-22T02:21:27.372Z",
+      "bytes": 13361,
+      "mtime": "2026-07-22T05:17:04.130Z",
+      "indexed_at": "2026-07-22T05:17:04.130Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]

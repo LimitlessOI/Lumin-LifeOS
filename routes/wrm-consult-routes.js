@@ -124,8 +124,31 @@ export function registerWrmConsultRoutes(app, deps = {}) {
       email_error TEXT,
       created_at TIMESTAMPTZ DEFAULT now()
     )`);
+    await pool.query(`CREATE TABLE IF NOT EXISTS wrm_events (
+      id BIGSERIAL PRIMARY KEY,
+      event TEXT NOT NULL,
+      label TEXT,
+      site TEXT,
+      session_id TEXT,
+      path TEXT,
+      referrer TEXT,
+      created_at TIMESTAMPTZ DEFAULT now()
+    )`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS wrm_events_event_idx ON wrm_events (event)`);
     schemaReady = true;
   }
+
+  const ALLOWED_EVENTS = new Set([
+    "page_view",
+    "cta_click",
+    "tile_click",
+    "video_play",
+    "social_click",
+    "site_link_click",
+    "form_start",
+    "form_submit",
+    "call_click",
+  ]);
 
   const hits = new Map();
   function rateLimited(ip) {
@@ -228,6 +251,15 @@ export function registerWrmConsultRoutes(app, deps = {}) {
         });
       }
 
+      if (pool) {
+        pool
+          .query(
+            `INSERT INTO wrm_events (event, label, site, session_id) VALUES ('form_submit',$1,$2,$3)`,
+            [source, "wellrounded-momma", String(b.sessionId || "").slice(0, 64)]
+          )
+          .catch(() => {});
+      }
+
       return res.json({
         ok: true,
         message: "Thank you! Sherry will call you to schedule your consultation.",
@@ -242,7 +274,80 @@ export function registerWrmConsultRoutes(app, deps = {}) {
     }
   });
 
+  // Public, fire-and-forget analytics. Records the funnel: page_view -> clicks -> form_submit.
+  router.post("/track", async (req, res) => {
+    try {
+      const b = req.body || {};
+      const event = String(b.event || "").trim().slice(0, 40);
+      if (!ALLOWED_EVENTS.has(event)) {
+        return res.status(400).json({ ok: false, error: "unknown event" });
+      }
+      const ip = String(req.headers["x-forwarded-for"] || req.ip || "")
+        .split(",")[0]
+        .trim();
+      if (rateLimited(`t:${ip}:${event}`)) return res.json({ ok: true }); // silently drop floods
+      await ensureSchema();
+      if (pool) {
+        await pool.query(
+          `INSERT INTO wrm_events (event, label, site, session_id, path, referrer)
+           VALUES ($1,$2,$3,$4,$5,$6)`,
+          [
+            event,
+            String(b.label || "").slice(0, 120),
+            String(b.site || "wellrounded-momma").slice(0, 60),
+            String(b.sessionId || "").slice(0, 64),
+            String(b.path || "").slice(0, 200),
+            String(b.referrer || "").slice(0, 300),
+          ]
+        );
+      }
+      res.json({ ok: true });
+    } catch (err) {
+      res.status(200).json({ ok: false, error: err.message });
+    }
+  });
+
   const guard = typeof requireKey === "function" ? requireKey : (_req, _res, next) => next();
+
+  // Funnel stats — clicks, form starts/submits, per event + per label, last N days.
+  router.get("/stats", guard, async (req, res) => {
+    try {
+      await ensureSchema();
+      const days = Math.min(Math.max(Number(req.query.days) || 30, 1), 365);
+      if (!pool) return res.json({ ok: true, days, totals: {}, byLabel: [], leads: 0 });
+      const [totals, byLabel, leads] = await Promise.all([
+        pool.query(
+          `SELECT event, COUNT(*)::int AS n FROM wrm_events
+           WHERE created_at > now() - ($1 || ' days')::interval GROUP BY event ORDER BY n DESC`,
+          [String(days)]
+        ),
+        pool.query(
+          `SELECT event, label, COUNT(*)::int AS n FROM wrm_events
+           WHERE created_at > now() - ($1 || ' days')::interval AND label <> ''
+           GROUP BY event, label ORDER BY n DESC LIMIT 50`,
+          [String(days)]
+        ),
+        pool.query(
+          `SELECT COUNT(*)::int AS n FROM wrm_consult_leads
+           WHERE created_at > now() - ($1 || ' days')::interval`,
+          [String(days)]
+        ),
+      ]);
+      const totalsObj = Object.fromEntries(totals.rows.map((r) => [r.event, r.n]));
+      const views = totalsObj.page_view || 0;
+      const submits = totalsObj.form_submit || 0;
+      res.json({
+        ok: true,
+        days,
+        totals: totalsObj,
+        conversion_rate: views ? Number(((submits / views) * 100).toFixed(2)) : null,
+        leads: leads.rows[0]?.n || 0,
+        byLabel: byLabel.rows,
+      });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
   router.get("/consult/leads", guard, async (req, res) => {
     try {
       await ensureSchema();
