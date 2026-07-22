@@ -1103,7 +1103,7 @@
     },
     {
       "id": "5",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/site-builder-interactive-elements-label-update-routes.js",
       "task": "create route for interactive elements label update",
       "spec": "Route to update labels on interactive elements for better understanding.",
@@ -1128,32 +1128,9 @@
           "assertion_id": "expected_exports:routes/site-builder-interactive-elements-label-update-routes.js"
         }
       ],
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/site-builder/twins/steps/5.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-22T23:14:20.124Z",
-        "shipped_at": "2026-07-22T23:14:20.124Z",
-        "commit_sha": null,
-        "content_sha256": "002586c36439dfa505ba8a103657f0097d4619a52c0732b7881b2525230e6b92",
-        "target_file": "routes/site-builder-interactive-elements-label-update-routes.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "routes/site-builder-interactive-elements-label-update-routes.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/site-builder/twins/steps/5.exact",
-          "content_sha256": "002586c36439dfa505ba8a103657f0097d4619a52c0732b7881b2525230e6b92"
-        }
-      },
-      "shipped_at": "2026-07-22T23:14:20.124Z",
-      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
-      "blueprint_step_id": "5"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-22T23:14:27.238Z",
+      "commit_sha": "466a6e83baed11aa71246765dd3ac72e9210c05b"
     },
     {
       "id": "6",
