@@ -1898,6 +1898,14 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
         pregnancyId: req.body?.pregnancy_id || req.body?.pregnancyId || null,
         pageTimeoutMs: req.body?.page_timeout_ms,
       };
+      const tenantId = getTenantId(req);
+      if (args.pregnancyId && !(await billingService.pregnancyAllowsBilling(args.pregnancyId, tenantId))) {
+        return res.status(409).json({
+          ok: false,
+          error: 'Claim is deactivated and cannot be billed',
+          pregnancy_id: args.pregnancyId,
+        });
+      }
       // Sync path avoids multi-instance job recycle (tip: async file_superbill_claim stale empty @180s).
       if (req.body?.sync === true || req.query?.sync === '1') {
         const result = await browserService.fileSuperBillClaim(args);
@@ -2760,6 +2768,12 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
           repair: null,
           proved_filed: false,
         };
+        if (!(await billingService.claimAllowsBilling(item.claim_id, tenantId))) {
+          step.skipped = true;
+          step.skip_reason = 'claim_not_billable';
+          results.push(step);
+          continue;
+        }
         try {
           let pregnancyId = item.pregnancy_id
             || stagePregnancyIdFromHref(item.billing_href)
@@ -3021,6 +3035,12 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
           file: null,
           proved_filed: false,
         };
+        if (!(await billingService.pregnancyAllowsBilling(pregnancyId, tenantId))) {
+          step.skipped = true;
+          step.skip_reason = 'claim_deactivated';
+          results.push(step);
+          continue;
+        }
         try {
           if (birth.billingHref) {
             step.prepare = await browserService.prepareClaimStatus({ billingHref: birth.billingHref, dryRun: false });

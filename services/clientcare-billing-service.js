@@ -19,6 +19,15 @@ import {
 } from '../config/clientcare-billing-stages.js';
 
 const DAY_MS = 24 * 60 * 60 * 1000;
+const NON_BILLABLE_RESCUE_BUCKETS = new Set(['resolved', 'do_not_bill']);
+
+export function isClaimBillingExcluded(claim = {}) {
+  const bucket = String(claim.rescue_bucket || claim.rescueBucket || '').trim().toLowerCase();
+  const deactivated = claim.metadata?.deactivated === true
+    || String(claim.metadata?.deactivated || '').toLowerCase() === 'true';
+  return NON_BILLABLE_RESCUE_BUCKETS.has(bucket) || deactivated;
+}
+
 const IMPORT_TEMPLATE_FIELDS = [
   'external_claim_id',
   'patient_id',
@@ -773,6 +782,7 @@ export function createClientCareBillingService({ pool, logger = console, now = (
   } = {}) {
     const claim = await getClaimById(claimId);
     if (!claim) throw new Error(`claim ${claimId} not found`);
+    if (isClaimBillingExcluded(claim)) return claim;
     const pid = pregnancyId || pregnancyIdFromHref(billingHref);
     if (!pid && !billingHref) throw new Error('pregnancy_id or billing_href required');
     const meta = {
@@ -810,6 +820,7 @@ export function createClientCareBillingService({ pool, logger = console, now = (
   async function recordResolveFailure(claimId, errorCode = 'pregnancy_id_missing_after_resolve', detail = null) {
     const claim = await getClaimById(claimId);
     if (!claim) return null;
+    if (isClaimBillingExcluded(claim)) return claim;
     const prev = Number(claim.metadata?.resolve_fail_count || 0) || 0;
     const meta = {
       ...(claim.metadata || {}),
@@ -830,6 +841,7 @@ export function createClientCareBillingService({ pool, logger = console, now = (
 
   async function syncClaimStageClocks(claimRow, payerOverridesMap = null) {
     if (!claimRow?.id) return null;
+    if (isClaimBillingExcluded(claimRow)) return null;
     const map = payerOverridesMap || await getPayerRuleOverridesMap();
     const payerOverride = map.get(normalizePayerKey(claimRow.payer_name)) || null;
     const plan = buildStagePlan(claimRow, payerOverride, now());
@@ -852,6 +864,9 @@ export function createClientCareBillingService({ pool, logger = console, now = (
   async function advanceClaimStage(claimId, event = 'advance', { notes = null } = {}) {
     const claim = await getClaimById(claimId);
     if (!claim) throw new Error(`claim ${claimId} not found`);
+    if (isClaimBillingExcluded(claim)) {
+      return { ok: false, skipped: true, reason: 'claim_not_billable', claim };
+    }
     const payerOverrides = await getPayerRuleOverridesMap();
     const payerOverride = payerOverrides.get(normalizePayerKey(claim.payer_name)) || null;
     const scenario = inferBillingScenario(claim);
@@ -1120,9 +1135,22 @@ export function createClientCareBillingService({ pool, logger = console, now = (
            patient_balance = EXCLUDED.patient_balance, insurance_balance = EXCLUDED.insurance_balance,
            cpt_codes = EXCLUDED.cpt_codes, icd_codes = EXCLUDED.icd_codes, modifiers = EXCLUDED.modifiers,
            timely_filing_deadline = EXCLUDED.timely_filing_deadline, timely_filing_source = EXCLUDED.timely_filing_source,
-           rescue_bucket = EXCLUDED.rescue_bucket, rescue_confidence = EXCLUDED.rescue_confidence,
+           rescue_bucket = CASE
+             WHEN clientcare_claims.rescue_bucket = 'do_not_bill'
+               OR COALESCE(clientcare_claims.metadata->>'deactivated', 'false') = 'true'
+             THEN clientcare_claims.rescue_bucket
+             ELSE EXCLUDED.rescue_bucket
+           END,
+           rescue_confidence = EXCLUDED.rescue_confidence,
            recovery_probability = EXCLUDED.recovery_probability, priority_score = EXCLUDED.priority_score,
-           source = EXCLUDED.source, notes = EXCLUDED.notes, metadata = EXCLUDED.metadata, updated_at = NOW()
+           source = EXCLUDED.source, notes = EXCLUDED.notes,
+           metadata = CASE
+             WHEN clientcare_claims.rescue_bucket = 'do_not_bill'
+               OR COALESCE(clientcare_claims.metadata->>'deactivated', 'false') = 'true'
+             THEN COALESCE(EXCLUDED.metadata, '{}'::jsonb) || COALESCE(clientcare_claims.metadata, '{}'::jsonb)
+             ELSE EXCLUDED.metadata
+           END,
+           updated_at = NOW()
          RETURNING *`,
         valuesWithExternal
       ));
@@ -1152,6 +1180,12 @@ export function createClientCareBillingService({ pool, logger = console, now = (
     }
 
     const saved = mapClaimRow(rows[0]);
+    if (isClaimBillingExcluded(saved)) {
+      classification.rescueBucket = saved.rescue_bucket;
+      classification.actions = [];
+      await ensureClaimActions(saved.id, []);
+      return { claim: saved, classification, stage: null, excluded: true };
+    }
     const duePlan = await syncClaimStageClocks(saved);
     const dueAt = duePlan?.next_due_at || null;
     await ensureClaimActions(
@@ -1206,9 +1240,32 @@ export function createClientCareBillingService({ pool, logger = console, now = (
     return mapClaimRow(rows[0] || null);
   }
 
+  async function claimAllowsBilling(claimId, tenantId = null) {
+    const claim = await getClaimById(claimId, tenantId);
+    return Boolean(claim && !isClaimBillingExcluded(claim));
+  }
+
+  async function pregnancyAllowsBilling(pregnancyId, tenantId = null) {
+    const pid = String(pregnancyId || '').trim();
+    if (!pid) return false;
+    const { rows } = await pool.query(
+      `SELECT rescue_bucket, metadata
+       FROM clientcare_claims
+       WHERE (
+         metadata->>'pregnancy_id' = $1
+         OR COALESCE(metadata->>'billing_href', '') ILIKE '%' || $1 || '%'
+       )${tenantFilterSql(tenantId, 2)}`,
+      [pid, tenantId]
+    );
+    return !rows.some((row) => isClaimBillingExcluded(row));
+  }
+
   async function reclassifyClaim(claimId, tenantId = null) {
     const claim = await getClaimById(claimId, tenantId);
     if (!claim) return null;
+    if (isClaimBillingExcluded(claim)) {
+      return { claim, classification: null, stage: null, excluded: true };
+    }
     const classification = classifyClientCareClaim(claim, now(), { payerRuleOverrides: await getPayerRuleOverridesMap() });
     const { rows } = await pool.query(
       `UPDATE clientcare_claims
@@ -1250,11 +1307,16 @@ export function createClientCareBillingService({ pool, logger = console, now = (
           deactivated_by: requestedBy || 'operator',
           deactivated_at: new Date().toISOString(),
           prior_rescue_bucket: claim.rescueBucket ?? claim.rescue_bucket ?? null,
+          forever_chase: false,
+          billable_now: false,
+          next_due_at: null,
+          stage_worker: null,
         }),
         tenantId,
       ]
     );
     if (!rows[0]) return null;
+    await ensureClaimActions(claimId, []);
     return mapClaimRow(rows[0]);
   }
 
@@ -1288,6 +1350,8 @@ export function createClientCareBillingService({ pool, logger = console, now = (
         `SELECT a.* FROM clientcare_claim_actions a
          JOIN clientcare_claims c ON c.id = a.claim_id
          WHERE a.claim_id=$1${tenantFilterSql(tenantId, 2).replace(/tenant_id/, 'c.tenant_id')}
+           AND COALESCE(c.rescue_bucket, '') NOT IN ('resolved', 'do_not_bill')
+           AND COALESCE(c.metadata->>'deactivated', 'false') <> 'true'
          ORDER BY a.created_at DESC`,
         [claimId, tenantId]
       );
@@ -1299,6 +1363,8 @@ export function createClientCareBillingService({ pool, logger = console, now = (
        FROM clientcare_claim_actions a
        JOIN clientcare_claims c ON c.id=a.claim_id
        WHERE a.status <> 'completed'${tenantFilterSql(tenantId, 1).replace(/tenant_id/, 'c.tenant_id')}
+         AND COALESCE(c.rescue_bucket, '') NOT IN ('resolved', 'do_not_bill')
+         AND COALESCE(c.metadata->>'deactivated', 'false') <> 'true'
        ORDER BY CASE a.priority WHEN 'critical' THEN 1 WHEN 'high' THEN 2 WHEN 'normal' THEN 3 ELSE 4 END,
                 c.priority_score DESC NULLS LAST,
                 a.created_at ASC`,
@@ -2089,6 +2155,8 @@ export function createClientCareBillingService({ pool, logger = console, now = (
            updated_at = NOW()
        WHERE (rescue_bucket IN ('likely_uncollectible', 'timely_filing_exception')
           OR (metadata->>'forever_chase') = 'true')
+         AND COALESCE(rescue_bucket, '') <> 'do_not_bill'
+         AND COALESCE(metadata->>'deactivated', 'false') <> 'true'
          AND COALESCE(tenant_id, 0) = COALESCE($2::bigint, 0)`
       ,
       [workNote, tenantId]
@@ -2114,7 +2182,8 @@ export function createClientCareBillingService({ pool, logger = console, now = (
     const lim = hasTenant ? '$2' : '$1';
     const { rows } = await pool.query(
       `SELECT * FROM clientcare_claims
-       WHERE COALESCE(rescue_bucket, '') <> 'resolved'
+       WHERE COALESCE(rescue_bucket, '') NOT IN ('resolved', 'do_not_bill')
+         AND COALESCE(metadata->>'deactivated', 'false') <> 'true'
          AND (
            source ILIKE '%billing_notes%'
            OR COALESCE(metadata->>'lane', '') IN ('billing_notes_backlog', 'transport_prenatal')
@@ -2176,7 +2245,9 @@ export function createClientCareBillingService({ pool, logger = console, now = (
              billed_amount = COALESCE($5::numeric, billed_amount),
              insurance_balance = COALESCE($5::numeric, insurance_balance),
              updated_at = NOW()
-         WHERE id = $1`,
+         WHERE id = $1
+           AND COALESCE(rescue_bucket, '') NOT IN ('resolved', 'do_not_bill')
+           AND COALESCE(metadata->>'deactivated', 'false') <> 'true'`,
         [
           claim.id,
           JSON.stringify(meta),
@@ -2199,7 +2270,8 @@ export function createClientCareBillingService({ pool, logger = console, now = (
     const lim = hasTenant ? '$2' : '$1';
     const { rows } = await pool.query(
       `SELECT * FROM clientcare_claims
-       WHERE COALESCE(rescue_bucket, '') <> 'resolved'${tenantSql}
+       WHERE COALESCE(rescue_bucket, '') NOT IN ('resolved', 'do_not_bill')
+         AND COALESCE(metadata->>'deactivated', 'false') <> 'true'${tenantSql}
        ORDER BY updated_at DESC NULLS LAST
        LIMIT ${lim}`,
       params
@@ -2234,6 +2306,7 @@ export function createClientCareBillingService({ pool, logger = console, now = (
     const nowMs = now().getTime();
     const enriched = [];
     for (const item of queue.items || []) {
+      if (isClaimBillingExcluded(item)) continue;
       const payerOverride = payerOverrides.get(normalizePayerKey(item.payer_name)) || null;
       // Live notes determinant when seed missed or notes text arrived later.
       let working = item;
@@ -2395,7 +2468,8 @@ export function createClientCareBillingService({ pool, logger = console, now = (
          )::int AS underpaid,
          COUNT(*) FILTER (WHERE rescue_bucket = 'forever_chase')::int AS forever_chase_bucket
        FROM clientcare_claims
-       WHERE COALESCE(rescue_bucket, '') <> 'resolved'
+       WHERE COALESCE(rescue_bucket, '') NOT IN ('resolved', 'do_not_bill')
+         AND COALESCE(metadata->>'deactivated', 'false') <> 'true'
          AND (
            (metadata->>'forever_chase') = 'true'
            OR rescue_bucket IN ('forever_chase', 'submit_now', 'correct_and_resubmit', 'payer_followup', 'proof_of_timely_filing', 'timely_filing_exception', 'likely_uncollectible')
@@ -2411,7 +2485,8 @@ export function createClientCareBillingService({ pool, logger = console, now = (
          rescue_bucket, priority_score, source, notes, metadata, updated_at,
          GREATEST(COALESCE(allowed_amount, 0) - COALESCE(patient_balance, 0) - COALESCE(paid_amount, 0), 0)::numeric AS short_paid_amount
        FROM clientcare_claims
-       WHERE COALESCE(rescue_bucket, '') <> 'resolved'
+       WHERE COALESCE(rescue_bucket, '') NOT IN ('resolved', 'do_not_bill')
+         AND COALESCE(metadata->>'deactivated', 'false') <> 'true'
          AND (
            (metadata->>'forever_chase') = 'true'
            OR rescue_bucket IN ('forever_chase', 'submit_now', 'correct_and_resubmit', 'payer_followup', 'proof_of_timely_filing', 'timely_filing_exception', 'likely_uncollectible')
@@ -2475,6 +2550,8 @@ export function createClientCareBillingService({ pool, logger = console, now = (
     importPaymentHistoryCsv,
     upsertClaim,
     getClaimById,
+    claimAllowsBilling,
+    pregnancyAllowsBilling,
     reclassifyClaim,
     deactivateClaim,
     listClaims,
