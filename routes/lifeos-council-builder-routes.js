@@ -2399,65 +2399,72 @@ export function createLifeOSCouncilBuilderRoutes({
     for (const file of files) {
       const target_file = String(file?.target_file || file?.path || '').trim();
       let output = file?.output ?? file?.content ?? '';
+      const encoding = String(file?.encoding || 'utf-8').toLowerCase();
+      const isBinary =
+        encoding === 'base64' ||
+        /\.(png|jpe?g|gif|webp|ico|woff2?|ttf|eot|pdf|mp4|mov|zip|wasm)$/i.test(target_file);
       if (!target_file || !output) {
         return res.status(400).json({ ok: false, error: 'Each file requires target_file and output' });
       }
 
-      if (/\.html$/i.test(target_file)) {
-        const extracted = extractHtmlFromOutput(output);
-        if (extracted !== output) output = extracted;
-      } else if (/\.(js|mjs|cjs)$/i.test(target_file)) {
-        output = fixAsteriskShorthandParams(extractJavaScriptFromOutput(output));
-      } else if (/\.(css|scss|sass|less)$/i.test(target_file)) {
-        output = extractCssFromOutput(output);
-      }
+      // Binary payloads are base64 — never run text extractors / synopsis validation.
+      if (!isBinary) {
+        if (/\.html$/i.test(target_file)) {
+          const extracted = extractHtmlFromOutput(output);
+          if (extracted !== output) output = extracted;
+        } else if (/\.(js|mjs|cjs)$/i.test(target_file)) {
+          output = fixAsteriskShorthandParams(extractJavaScriptFromOutput(output));
+        } else if (/\.(css|scss|sass|less)$/i.test(target_file)) {
+          output = extractCssFromOutput(output);
+        }
 
-      const validationError = validateGeneratedOutputForTarget(target_file, output);
-      if (validationError) {
-        return res.status(422).json({
-          ok: false,
-          error: validationError,
-          committed: false,
-          target_file,
-          failed_file: target_file,
-        });
-      }
-
-      // Truncation gates — the batch path must be as strict as single-file
-      // /execute: run the real syntax/completeness check per target type so a
-      // truncated JS or SQL file can never slip through a batch commit (in
-      // local-mirror mode nothing downstream re-checks, and commitManyToGitHub
-      // only node --checks JS, never SQL).
-      if (/\.(js|mjs|cjs)$/i.test(target_file)) {
-        const chk = await verifyGeneratedJavaScriptWithNodeCheck(output, target_file);
-        if (!chk.ok) {
+        const validationError = validateGeneratedOutputForTarget(target_file, output);
+        if (validationError) {
           return res.status(422).json({
             ok: false,
+            error: validationError,
             committed: false,
-            error: `Pre-commit syntax check failed: ${chk.error}`,
             target_file,
             failed_file: target_file,
           });
         }
-      } else if (/\.sql$/i.test(target_file)) {
-        const sqlCheck = validateSqlMigrationContent(output);
-        if (!sqlCheck.ok) {
-          return res.status(422).json({
-            ok: false,
-            committed: false,
-            error: `SQL migration validation failed: ${sqlCheck.error}`,
-            target_file,
-            failed_file: target_file,
-          });
+
+        // Truncation gates — the batch path must be as strict as single-file
+        // /execute: run the real syntax/completeness check per target type so a
+        // truncated JS or SQL file can never slip through a batch commit (in
+        // local-mirror mode nothing downstream re-checks, and commitManyToGitHub
+        // only node --checks JS, never SQL).
+        if (/\.(js|mjs|cjs)$/i.test(target_file)) {
+          const chk = await verifyGeneratedJavaScriptWithNodeCheck(output, target_file);
+          if (!chk.ok) {
+            return res.status(422).json({
+              ok: false,
+              committed: false,
+              error: `Pre-commit syntax check failed: ${chk.error}`,
+              target_file,
+              failed_file: target_file,
+            });
+          }
+        } else if (/\.sql$/i.test(target_file)) {
+          const sqlCheck = validateSqlMigrationContent(output);
+          if (!sqlCheck.ok) {
+            return res.status(422).json({
+              ok: false,
+              committed: false,
+              error: `SQL migration validation failed: ${sqlCheck.error}`,
+              target_file,
+              failed_file: target_file,
+            });
+          }
         }
       }
-      cleaned.push({ target_file, output });
+      cleaned.push({ target_file, output, encoding: isBinary ? 'base64' : 'utf-8' });
     }
 
     const msg = commit_message || `[system-build] batch ${cleaned.length} files`;
     try {
       const commitResult = await commitOrMirrorFiles(
-        cleaned.map((f) => ({ path: f.target_file, content: f.output })),
+        cleaned.map((f) => ({ path: f.target_file, content: f.output, encoding: f.encoding })),
         msg,
         branch,
       );

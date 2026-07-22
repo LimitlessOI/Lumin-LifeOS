@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-22T14:30:55.218Z",
+  "generated_at": "2026-07-22T14:31:12.146Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12103,
   "files": [
@@ -40430,9 +40430,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 655735,
-      "mtime": "2026-07-21T09:50:05.120Z",
-      "indexed_at": "2026-07-21T09:50:05.120Z"
+      "bytes": 614305,
+      "mtime": "2026-07-22T14:31:12.146Z",
+      "indexed_at": "2026-07-22T14:31:12.146Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -67669,9 +67669,9 @@
     {
       "path": "routes/lifeos-council-builder-routes.js",
       "synopsis": "routes/lifeos-council-builder-routes.js",
-      "bytes": 162449,
-      "mtime": "2026-07-21T05:32:04.317Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "bytes": 162946,
+      "mtime": "2026-07-22T14:31:12.146Z",
+      "indexed_at": "2026-07-22T14:31:12.146Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -72101,9 +72101,9 @@
     {
       "path": "scripts/system-commit-files.mjs",
       "synopsis": "Commit local files to GitHub main via tip BuilderOS execute-batch (no human PR).",
-      "bytes": 5627,
-      "mtime": "2026-07-21T05:32:04.382Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "bytes": 6048,
+      "mtime": "2026-07-22T14:31:12.146Z",
+      "indexed_at": "2026-07-22T14:31:12.146Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -85905,9 +85905,9 @@
     {
       "path": "services/deployment-service.js",
       "synopsis": "deployment-service.js",
-      "bytes": 43922,
-      "mtime": "2026-07-21T05:32:04.560Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "bytes": 45008,
+      "mtime": "2026-07-22T14:31:12.146Z",
+      "indexed_at": "2026-07-22T14:31:12.146Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

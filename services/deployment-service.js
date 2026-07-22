@@ -433,10 +433,31 @@ export function createDeploymentService(deps) {
     const tree = [];
     const paths = [];
     const committedForIndex = [];
+    const BINARY_PATH = /\.(png|jpe?g|gif|webp|ico|woff2?|ttf|eot|pdf|mp4|mov|zip|wasm)$/i;
     for (const entry of fileEntries) {
       const normalizedPath = normalizeRepoRelativePath(entry.path || entry.target_file);
       let content = String(entry.content ?? entry.output ?? '');
       paths.push(normalizedPath);
+
+      // Binary path: content is already (or must be treated as) base64. Never run
+      // UTF-8 synopsis/fence transforms — those corrupt JPEG/PNG bytes.
+      const entryEncoding = String(entry.encoding || '').toLowerCase();
+      const isBinary = entryEncoding === 'base64' || BINARY_PATH.test(normalizedPath);
+      if (isBinary) {
+        const blobRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/blobs`, {
+          method: 'POST',
+          headers: authHeaders,
+          body: JSON.stringify({ content, encoding: 'base64' }),
+        });
+        if (!blobRes.ok) {
+          const err = await blobRes.json().catch(() => ({}));
+          throw new Error(err.message || `GitHub blob create failed for ${normalizedPath}`);
+        }
+        const blob = await blobRes.json();
+        tree.push({ path: normalizedPath, mode: '100644', type: 'blob', sha: blob.sha });
+        committedForIndex.push({ path: normalizedPath, content: '' });
+        continue;
+      }
 
       // Same builder-output hygiene as the single-file path: strip a whole-file
       // markdown fence, inject the SYNOPSIS header, then validate JSON — so batch

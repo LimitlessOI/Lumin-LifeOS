@@ -92,6 +92,7 @@ async function main() {
   }
   if (!message || paths.length === 0) usage(1);
 
+  const BINARY_EXT = /\.(png|jpe?g|gif|webp|ico|woff2?|ttf|eot|pdf|mp4|mov|zip|wasm)$/i;
   const files = [];
   for (const rel of paths) {
     const normalized = rel.replace(/^\.\//, '').replace(/\\/g, '/');
@@ -104,10 +105,20 @@ async function main() {
       console.error(`Not a file: ${normalized}`);
       process.exit(1);
     }
-    files.push({
-      target_file: normalized,
-      output: fs.readFileSync(abs, 'utf8'),
-    });
+    // Binary files MUST be base64 — reading as utf8 corrupts JPEG/PNG (0xFF → U+FFFD).
+    if (BINARY_EXT.test(normalized)) {
+      files.push({
+        target_file: normalized,
+        output: fs.readFileSync(abs).toString('base64'),
+        encoding: 'base64',
+      });
+    } else {
+      files.push({
+        target_file: normalized,
+        output: fs.readFileSync(abs, 'utf8'),
+        encoding: 'utf-8',
+      });
+    }
   }
 
   const body = {
