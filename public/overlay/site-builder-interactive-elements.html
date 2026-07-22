@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Interactive Elements -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Elements</title>
+    <style>
+        .interactive-element {
+            position: relative;
+            display: inline-block;
+            margin: 20px;
+        }
+        .label {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #f0f0f0;
+            padding: 5px;
+            border-radius: 5px;
+            font-size: 12px;
+            display: none;
+        }
+        .interactive-element:hover .label {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="interactive-element">
+        <button>Button 1</button>
+        <div class="label">Label for Button 1</div>
+    </div>
+    <div class="interactive-element">
+        <button>Button 2</button>
+        <div class="label">Label for Button 2</div>
+    </div>
+    <div class="interactive-element">
+        <input type="text" placeholder="Enter text">
+        <div class="label">Label for Text Input</div>
+    </div>
+</body>
+</html>
