@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-22T23:06:48.831Z",
+  "generated_at": "2026-07-22T23:08:01.280Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12110,
+  "file_count": 12111,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -90684,6 +90684,13 @@
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/site-builder-interactive-elements-label-update.js",
+      "synopsis": "services/site-builder-interactive-elements-label-update.js",
+      "bytes": 1005,
+      "mtime": "2026-07-22T23:08:01.280Z",
+      "indexed_at": "2026-07-22T23:08:01.280Z"
     },
     {
       "path": "services/site-builder-interactive-elements.js",
