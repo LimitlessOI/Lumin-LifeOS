@@ -978,50 +978,39 @@
     },
     {
       "id": "1",
-      "status": "blocked",
+      "status": "done",
       "target_file": "db/migrations/20241001_add_template_choices.sql",
       "task": "create database table",
       "spec": "Implement a new table for additional template choices for user brand selection.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS template_choices"
       ],
-      "last_attempt_at": "2026-07-22T23:07:47.782Z",
-      "last_error": "NOT_ON_BLUEPRINT",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "8211e754d948e5657d35f9c8a65b9f18711c0be7",
       "built_sha": null,
       "proof": null,
       "failure_signature": "NOT_ON_BLUEPRINT",
       "same_signature_count": 1,
       "escalation_class": "governance_block",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/site-builder/twins/steps/1.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-22T23:22:52.587Z",
-        "shipped_at": "2026-07-22T23:22:52.587Z",
-        "commit_sha": null,
-        "content_sha256": "c136b85fc4beb631fd6ba129c2ad56daef744c5729491673ced3f513d263d6ad",
-        "target_file": "db/migrations/20241001_add_template_choices.sql",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "db/migrations/20241001_add_template_choices.sql",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/site-builder/twins/steps/1.exact",
-          "content_sha256": "c136b85fc4beb631fd6ba129c2ad56daef744c5729491673ced3f513d263d6ad"
-        }
-      },
-      "shipped_at": "2026-07-22T23:22:52.587Z",
-      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
-      "blueprint_step_id": "1"
+      "revive_count": 0,
+      "revived_at": "2026-07-22T23:22:51.592Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-22T23:22:58.851Z"
     },
     {
       "id": "2",
