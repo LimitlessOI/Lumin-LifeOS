@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/site-builder/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-22 — Money-path fix: never emit NXDOMAIN `sitebuilder.taloaos.com` on checkout/referral/email; use request origin + Railway fallback. |
+| **Last Updated** | 2026-07-22 — Landing demo sample swapped to **Well Rounded Momma Collective** (`/previews/wellrounded-momma/`). |
 
 ---
 
@@ -330,6 +330,7 @@ Founder directive: review every revenue blueprint for gaps against real competit
 
 | Date | What Changed | Why | Verified | Next |
 |---|---|---|---|---|
+| 2026-07-22 | **Landing demo = Well Rounded Momma.** `site-builder-landing.html` iframe/open/checkout sample now `clientId=wellrounded-momma`. Added `public/previews/wellrounded-momma/meta.json` so $45 publish checkout resolves. | Adam: put WRM in the sample. | local | tip deploy + live checkout prove |
 | 2026-07-22 | **Money-path public base: stop emitting NXDOMAIN.** New `services/site-builder-public-base.js` + tests. Checkout/upsell success+cancel, referral, SiteBuilder preview/publish URLs, prospect email links, follow-up cron — all prefer request origin or skip known-dead `sitebuilder.taloaos.com` and fall back to Railway tip origin. Launch-readiness surfaces `public_base_url`. | Adam: Site Builder ready to make money now; branded host still NXDOMAIN was stranding buyers after live Stripe pay. | ✅ tip `299f6f7f6d`: referral/public_base = Railway; live Stripe `cs_live_…` $45; SENTRY A+B PASS | Close first $45; Cloudflare DNS for `sitebuilder.taloaos.com` when token available |
 | 2026-07-22 | **WRM credential copy: 40+ midwives and doulas.** Trust bar, Meet Sherry bullets, speaker blurb, meta/OG — all say **40+ midwives and doulas trained** (plus kept). | Founder/Sherry: not midwives-only; she trained midwives and doulas (40+, maybe more). | local | tip deploy |
 | 2026-07-22 | **Well Rounded Feminine template registered in Site Builder.** New free design system `wellrounded-feminine` in `config/design-studio.js` (blush/coral/Fraunces/Sacramento tokens from WRM). Layout shell `shellWellroundedFeminine` in `config/design-studio-layouts.js` (photo hero + parallax, trust strip, meet, three pillars, quote band, consult CTA). Midwifery/doula/maternity/placenta brands prefer it via `getDesignSystemForBrand`. Picker option added in `services/site-builder-template-options.js`. WRM page: Cora tag → "Midwife and Placenta Specialist". | Adam: save WRM look as a reusable Site Builder template; fix Cora label. | local registry + shell wired | tip deploy; rebuild a midwifery prospect with `styleIds:['wellrounded-feminine']` |

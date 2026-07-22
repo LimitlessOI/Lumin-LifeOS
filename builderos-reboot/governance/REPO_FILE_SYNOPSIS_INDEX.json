@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-22T18:21:03.436Z",
+  "generated_at": "2026-07-22T20:40:07.807Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12105,
+  "file_count": 12106,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -40866,9 +40866,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 142839,
-      "mtime": "2026-07-22T18:21:03.436Z",
-      "indexed_at": "2026-07-22T18:21:03.436Z"
+      "bytes": 143115,
+      "mtime": "2026-07-22T20:40:07.807Z",
+      "indexed_at": "2026-07-22T20:40:07.807Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -65999,9 +65999,9 @@
     {
       "path": "public/overlay/site-builder-landing.html",
       "synopsis": "HTML page: Site Builder — public $45 beta sales front door",
-      "bytes": 40226,
-      "mtime": "2026-07-21T05:32:04.288Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z"
+      "bytes": 40260,
+      "mtime": "2026-07-22T20:40:07.807Z",
+      "indexed_at": "2026-07-22T20:40:07.807Z"
     },
     {
       "path": "public/overlay/site-builder-save-confirmation.html",
@@ -66166,6 +66166,14 @@
       "bytes": 80488,
       "mtime": "2026-07-22T17:32:09.294Z",
       "indexed_at": "2026-07-22T17:32:09.294Z"
+    },
+    {
+      "path": "public/previews/wellrounded-momma/meta.json",
+      "synopsis": "JSON data/config — public/previews/wellrounded-momma/meta.json.",
+      "bytes": 356,
+      "mtime": "2026-07-22T20:40:07.807Z",
+      "indexed_at": "2026-07-22T20:40:07.807Z",
+      "synopsis_index_only": true
     },
     {
       "path": "public/previews/wellrounded/index.html",
