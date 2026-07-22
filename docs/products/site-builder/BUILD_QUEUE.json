@@ -1158,7 +1158,33 @@
       ],
       "founder_gated": false,
       "attempts": 0,
-      "design_review_flagged": true
+      "design_review_flagged": true,
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/site-builder/twins/steps/7.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-22T23:14:35.920Z",
+        "shipped_at": "2026-07-22T23:14:35.920Z",
+        "commit_sha": null,
+        "content_sha256": "6d2514fcb60dc61ed10da6a86fe4c6c68e249dda609169c985ce1f2caf0084c6",
+        "target_file": "public/overlay/site-builder-interactive-elements-update.html",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "public/overlay/site-builder-interactive-elements-update.html",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/site-builder/twins/steps/7.exact",
+          "content_sha256": "6d2514fcb60dc61ed10da6a86fe4c6c68e249dda609169c985ce1f2caf0084c6"
+        }
+      },
+      "shipped_at": "2026-07-22T23:14:35.920Z",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "7"
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",
