@@ -965,16 +965,24 @@
     },
     {
       "id": "1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/20241001_add_template_choices.sql",
       "task": "create database table",
       "spec": "Implement a new table for additional template choices for user brand selection.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS template_choices"
-      ]
+      ],
+      "last_attempt_at": "2026-07-22T23:07:47.782Z",
+      "last_error": "NOT_ON_BLUEPRINT",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "failure_signature": "NOT_ON_BLUEPRINT",
+      "same_signature_count": 1,
+      "escalation_class": "governance_block"
     },
     {
       "id": "2",
@@ -990,6 +998,17 @@
       "expected_exports": [
         "getTemplateChoices",
         "addTemplateChoice"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/site-builder-new-template-choices.js",
+          "exports": [
+            "getTemplateChoices",
+            "addTemplateChoice"
+          ],
+          "assertion_id": "expected_exports:services/site-builder-new-template-choices.js"
+        }
       ]
     },
     {
@@ -1008,7 +1027,17 @@
       ],
       "route": {
         "path": "/api/v1/site-builder/template-choices"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/site-builder-new-template-choices-routes.js",
+          "exports": [
+            "registerNewTemplateChoicesRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/site-builder-new-template-choices-routes.js"
+        }
+      ]
     },
     {
       "id": "4",
@@ -1021,6 +1050,16 @@
       "attempts": 0,
       "expected_exports": [
         "updateInteractiveElementLabels"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/site-builder-interactive-elements-label-update.js",
+          "exports": [
+            "updateInteractiveElementLabels"
+          ],
+          "assertion_id": "expected_exports:services/site-builder-interactive-elements-label-update.js"
+        }
       ]
     },
     {
@@ -1039,7 +1078,17 @@
       ],
       "route": {
         "path": "/api/v1/site-builder/update-interactive-element-labels"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/site-builder-interactive-elements-label-update-routes.js",
+          "exports": [
+            "registerInteractiveElementsLabelUpdateRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/site-builder-interactive-elements-label-update-routes.js"
+        }
+      ]
     },
     {
       "id": "6",
