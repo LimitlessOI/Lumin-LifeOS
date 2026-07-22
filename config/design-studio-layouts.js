@@ -1283,10 +1283,192 @@ ${footer(content)}
 </body></html>`;
 }
 
+/** Well Rounded Momma–derived feminine midwifery shell (photo pillars + consult CTA). */
+function shellWellroundedFeminine(system, content) {
+  const phoneHref = content.phone ? `tel:${String(content.phone).replace(/[^\d+]/g, '')}` : content.booking;
+  const callLabel = content.phone || 'Request a consult';
+  const t0 = content.testimonials[0];
+  const quote = t0
+    ? `“${escapeHtml(String(t0.text || '').slice(0, 280))}”`
+    : `“Clear, calm care — with a real conversation before you decide.”`;
+  const cite = t0 ? `— ${escapeHtml(t0.author || 'Client')}` : `— ${escapeHtml(content.name)} family`;
+  const pillarPhotos = [
+    content.gallery?.[0] || content.hero || '',
+    content.gallery?.[1] || content.gallery?.[0] || content.hero || '',
+    content.gallery?.[2] || content.gallery?.[0] || content.hero || '',
+  ];
+  const services = content.services.slice(0, 3);
+  const css = `
+.script{font-family:"Sacramento",cursive;font-weight:400;color:var(--primary);line-height:1}
+.topbar{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:66px}
+.brand{display:flex;align-items:center;gap:.65rem;font-family:var(--font-display);font-weight:500;text-decoration:none}
+.brand img{height:42px;width:auto}
+.callbtn{display:inline-flex;align-items:center;background:var(--primary);color:#fff;text-decoration:none;padding:.65rem 1.1rem;border-radius:999px;font-weight:700;font-size:.92rem;box-shadow:var(--shadow)}
+.hero{position:relative;min-height:72vh;display:flex;align-items:center;overflow:hidden;background:color-mix(in srgb,var(--primary) 12%,var(--bg))}
+.hero-bg{position:absolute;inset:-22% 0;background-size:cover;background-position:center 35%;opacity:.75;will-change:transform;z-index:0}
+.hero::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(105deg,color-mix(in srgb,var(--bg) 90%,transparent) 0%,color-mix(in srgb,var(--bg) 55%,transparent) 42%,transparent 78%)}
+.hero .wrap{position:relative;z-index:2;padding:3rem 0}
+.hero-inner{max-width:34rem}
+.hero h1{font-size:clamp(1.65rem,2.8vw,2.35rem);font-weight:500;margin-top:.4rem}
+.hero .lede{color:var(--muted);margin-top:1rem;font-size:1.05rem;max-width:40ch}
+.hero-cta{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:1.5rem}
+.btn{border-radius:999px!important;background:var(--primary);color:#fff;box-shadow:var(--shadow)}
+.btn-ghost{background:rgba(255,255,255,.75)!important;color:var(--text)!important;border:1px solid var(--line)!important;box-shadow:none!important}
+.trust{background:var(--accent);color:#f7ece9}
+.trust .wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;padding:1.35rem 0;text-align:center}
+.trust b{display:block;font-family:var(--font-display);font-size:1.5rem;color:#fff}
+.trust small{font-size:.8rem;opacity:.85}
+@media(max-width:720px){.trust .wrap{grid-template-columns:1fr}}
+.block{padding:4.5rem 0}
+.meet{display:grid;grid-template-columns:.9fr 1.1fr;gap:2.5rem;align-items:center}
+.meet .photo{background:color-mix(in srgb,var(--primary) 22%,var(--bg));border-radius:20px 20px 110px 20px;aspect-ratio:4/5;overflow:hidden;box-shadow:var(--shadow)}
+.meet .photo img{width:100%;height:100%;object-fit:cover}
+.meet .role{color:var(--primary);font-weight:700;margin:.4rem 0 1rem}
+@media(max-width:860px){.meet{grid-template-columns:1fr}}
+.section-head{text-align:center;max-width:40rem;margin:0 auto 2.2rem}
+.pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:1.35rem}
+.pillar{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:0 16px 40px -30px rgba(123,85,96,.55);display:flex;flex-direction:column}
+.pillar .pimg{height:170px;background:color-mix(in srgb,var(--primary) 28%,var(--bg));position:relative;overflow:hidden}
+.pillar .pimg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55}
+.pillar .pbody{padding:1.35rem;display:flex;flex-direction:column;flex:1}
+.pillar .tag{font-family:"Sacramento",cursive;font-size:1.25rem;color:var(--primary)}
+.pillar h3{font-size:1.35rem;margin:.15rem 0}
+.pillar .role{color:var(--accent);font-weight:700;font-size:.9rem;margin-bottom:.65rem}
+.pillar p{color:var(--muted);font-size:.95rem}
+.pillar .foot{margin-top:auto;padding-top:1rem}
+@media(max-width:860px){.pillars{grid-template-columns:1fr}}
+.band{position:relative;min-height:46vh;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden}
+.band-bg{position:absolute;inset:-22% 0;background-size:cover;background-position:center;opacity:.85;will-change:transform;z-index:0}
+.band::after{content:"";position:absolute;inset:0;background:rgba(74,59,63,.42);z-index:1}
+.band .wrap{position:relative;z-index:2;color:#fff;max-width:42rem}
+.band .quote{font-family:var(--font-display);font-style:italic;font-size:clamp(1.3rem,2.8vw,1.9rem);line-height:1.4}
+.band cite{display:block;margin-top:1rem;font-style:normal;font-family:var(--font-body);font-weight:700;opacity:.9}
+.soft{background:color-mix(in srgb,var(--primary) 10%,var(--bg))}
+.grid{display:grid;gap:1rem}
+@media(min-width:800px){.grid-3{grid-template-columns:repeat(3,1fr)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:1.35rem;box-shadow:var(--shadow)}
+.cta{text-align:center;padding:3.5rem 1rem;background:linear-gradient(120deg,var(--primary),color-mix(in srgb,var(--primary) 70%,#6a3a32));color:#fff;border-radius:var(--radius);box-shadow:var(--shadow)}
+.cta .btn{background:#fff!important;color:var(--primary)!important}
+details{background:var(--card);border-radius:14px;padding:1rem 1.1rem;margin-bottom:.65rem;border:1px solid var(--line)}
+summary{cursor:pointer;font-weight:700}
+details p{margin-top:.55rem}
+.site-footer{padding:2.5rem 0 5rem;color:var(--muted);font-size:.9rem}
+`;
+  const heroBg = content.hero
+    ? `style="background-image:url('${escapeHtml(content.hero)}')"`
+    : '';
+  const bandBg = (content.gallery?.[1] || content.hero)
+    ? `style="background-image:url('${escapeHtml(content.gallery?.[1] || content.hero)}')"`
+    : '';
+  const pillarCards = services.map((s, i) => {
+    const photo = pillarPhotos[i];
+    const tags = ['The Practice', 'Your Care Team', 'The Choice'];
+    return `<article class="pillar">
+      <div class="pimg">${photo ? `<img src="${escapeHtml(photo)}" alt="" loading="lazy"/>` : ''}</div>
+      <div class="pbody">
+        <span class="tag">${escapeHtml(tags[i] || 'Care')}</span>
+        <h3>${escapeHtml(s)}</h3>
+        <p>Real details confirmed in consult — book to see if this care model is the right fit.</p>
+        <div class="foot"><a class="btn" href="${escapeHtml(content.booking)}">Request a consultation</a></div>
+      </div>
+    </article>`;
+  }).join('');
+
+  return `${head(system, content, css)}
+<body data-lumin-ds="1" data-layout="wellrounded-feminine">
+<header class="topbar"><div class="wrap">
+  <a class="brand" href="#top">${content.logo ? `<img src="${escapeHtml(content.logo)}" alt=""/>` : ''}<span>${escapeHtml(content.name)}</span></a>
+  <a class="callbtn" href="${escapeHtml(phoneHref)}">${escapeHtml(callLabel)}</a>
+</div></header>
+<main id="top">
+  <section class="hero">
+    <div class="hero-bg" data-parallax="0.35" ${heroBg}></div>
+    <div class="wrap"><div class="hero-inner">
+      ${proofLine(content)}
+      <h1>${escapeHtml(content.tagline)}</h1>
+      <p class="lede">${escapeHtml(content.about.slice(0, 220))}</p>
+      <div class="hero-cta">
+        <a class="btn" href="${escapeHtml(content.booking)}">Request a consultation</a>
+        <a class="btn btn-ghost" href="#care">Meet the team</a>
+      </div>
+    </div></div>
+  </section>
+  <section class="trust"><div class="wrap">
+    <div><b>${escapeHtml(content.location || content.industry)}</b><small>local care</small></div>
+    <div><b>Personal</b><small>unhurried visits</small></div>
+    <div><b>Clear next step</b><small>consult first</small></div>
+  </div></section>
+  <section class="block" id="meet"><div class="wrap meet">
+    <div class="photo">${content.hero ? `<img src="${escapeHtml(content.hero)}" alt="${escapeHtml(content.name)}" loading="eager"/>` : ''}</div>
+    <div>
+      <p class="script" style="font-size:1.6rem;margin:0">Meet your care</p>
+      <h2>${escapeHtml(content.name)}</h2>
+      <div class="role">${escapeHtml(content.industry)}${content.location ? ` · ${escapeHtml(content.location)}` : ''}</div>
+      <p class="muted">${escapeHtml(content.about.slice(0, 420))}</p>
+      <a class="btn" style="margin-top:1.25rem" href="${escapeHtml(content.booking)}">Request a consultation</a>
+    </div>
+  </div></section>
+  <section class="block" id="care"><div class="wrap">
+    <div class="section-head">
+      <p class="script" style="font-size:1.5rem;margin:0">Who you'll work with</p>
+      <h2>Care built around you</h2>
+      <p class="muted" style="margin-top:.75rem">Photo-led pillars so visitors see the people and the choice before scrolling further.</p>
+    </div>
+    <div class="pillars">${pillarCards || serviceCards(content, 'pillar')}</div>
+  </div></section>
+  <section class="band">
+    <div class="band-bg" data-parallax="0.35" ${bandBg}></div>
+    <div class="wrap">
+      <p class="quote">${quote}</p>
+      <cite>${cite}</cite>
+    </div>
+  </section>
+  <section class="block soft" id="services"><div class="wrap">
+    <div class="section-head"><h2>What care includes</h2></div>
+    <div class="grid grid-3">${serviceCards(content)}</div>
+  </div></section>
+  <section class="block"><div class="wrap">
+    <h2 style="margin-bottom:1rem">Gentle answers</h2>
+    ${faqBlock(content)}
+  </div></section>
+  <section class="block"><div class="wrap">
+    <div class="cta">
+      <h2>Ready to talk?</h2>
+      <p style="margin:0.85rem auto 0;max-width:40ch;opacity:.92">Fill out a short request — a real person follows up to schedule. No pressure.</p>
+      <a class="btn" style="margin-top:1.25rem" href="${escapeHtml(content.booking)}">Request your consultation</a>
+    </div>
+  </div></section>
+</main>
+${footer(content)}
+<script>
+(function(){
+  var els=[].slice.call(document.querySelectorAll('[data-parallax]'));
+  if(!els.length||window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var t=false;
+  function go(){
+    els.forEach(function(el){
+      var speed=parseFloat(el.getAttribute('data-parallax'))||0.35;
+      var rect=el.parentElement.getBoundingClientRect();
+      var mid=rect.top+rect.height/2;
+      el.style.transform='translate3d(0,'+((window.innerHeight/2-mid)speed).toFixed(1)+'px,0)';
+    });
+    t=false;
+  }
+  function on(){ if(!t){ requestAnimationFrame(go); t=true; } }
+  window.addEventListener('scroll',on,{passive:true});
+  window.addEventListener('resize',go);
+  go();
+})();
+</script>
+</body></html>`;
+}
+
 const LAYOUT_RENDERERS = {
   'editorial-luxe': shellEditorialLuxe,
   'modern-clinical': shellModernClinical,
   'organic-warm': shellOrganicWarm,
+  'wellrounded-feminine': shellWellroundedFeminine,
   'bold-minimal': shellBoldMinimal,
   'dark-aura': shellDarkAura,
   'coastal-light': shellCoastal,

@@ -15,7 +15,7 @@
  */
 
 export const DEFAULT_DESIGN_SYSTEM_ID = 'editorial-luxe';
-export const FREE_DESIGN_SYSTEM_IDS = ['editorial-luxe', 'modern-clinical', 'organic-warm', 'bold-minimal'];
+export const FREE_DESIGN_SYSTEM_IDS = ['editorial-luxe', 'modern-clinical', 'organic-warm', 'bold-minimal', 'wellrounded-feminine'];
 
 const DESIGN_SYSTEMS = [
   {
@@ -119,6 +119,41 @@ const DESIGN_SYSTEMS = [
     motifs: `Soft terracotta and sage gradients, rounded blobs, hand-drawn-feeling icons, and natural textures. Use lots of rounded corners and gentle shadow.`,
     antiPatterns: `Do not use sharp corners. Do not use neon colors. Do not use a dark or clinical background. Do not use generic purple. Do not use rigid grid lines. Do not use all-caps headings.`,
     sections: `1. Soft nav with rounded CTA. 2. Hero with rounded image and warm copy. 3. Problem cards with organic shapes. 4. Solution steps. 5. Services with rounded cards. 6. Testimonials. 7. Offer. 8. About. 9. FAQ. 10. Blog preview. 11. Video. 12. Booking CTA. 13. Footer.`,
+  },
+  {
+    id: 'wellrounded-feminine',
+    name: 'Well Rounded Feminine',
+    blurb: 'Soft blush and coral, script accents, photo-forward pillars — proven on Well Rounded Momma midwifery.',
+    tier: 'free',
+    audience: 'Midwives, home birth, maternity, placenta care, doulas, and feminine wellness practices.',
+    personality: ['feminine', 'soft', 'photo-forward', 'trustworthy', 'warm'],
+    tokens: {
+      bg: '#fdf8f4',
+      text: '#4a3b3f',
+      muted: '#8a7176',
+      line: 'rgba(74,59,63,.12)',
+      card: '#FFFFFF',
+      overlay: 'rgba(74,59,63,.03)',
+      primary: '#c47a6d',
+      accent: '#7b5560',
+      buttonText: '#FFFFFF',
+      radius: '22px',
+      shadow: '0 24px 60px -30px rgba(123,85,96,.5)',
+    },
+    fonts: {
+      display: '"Fraunces", Georgia, "Times New Roman", serif',
+      body: '"Nunito Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+      google: [
+        { family: 'Fraunces', weights: 'ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400' },
+        { family: 'Nunito Sans', weights: 'opsz,wght@6..12,300;6..12,400;6..12,600;6..12,700' },
+        { family: 'Sacramento', weights: 'wght@400' },
+      ],
+    },
+    layout: `Photo-led hero with soft cream veil and quieter headline. Trust stats strip. Meet-the-provider split with portrait. Three care pillars (provider / collaborator / why this choice). Quote band over a birth photo. Services, FAQ, and a request-consult form band. Max width ~1140px. Pill-shaped CTAs.`,
+    components: `Buttons: rounded-full coral. Script eyebrows (Sacramento). Pillar cards with soft photo tops. Portrait frames with blush fill. Forms on blush bands with rose labels.`,
+    motifs: `Blush/coral/mauve palette, script accents, parallax photo bands, real client photography, gentle shadows — never clinical purple or earthy-corporate green.`,
+    antiPatterns: `Do not use earthy olive/corporate greens as primary. Do not use huge billboard headlines. Do not use sharp brutalist corners. Do not invent testimonials. Do not hide the consult CTA below long video grids.`,
+    sections: `1. Soft sticky nav + call CTA. 2. Photo hero + quieter tagline. 3. Trust stats. 4. Meet provider. 5. Three care pillars. 6. Quote / testimonial band. 7. Why this care. 8. Services. 9. FAQ. 10. Consult form CTA. 11. Footer.`,
   },
   {
     id: 'bold-minimal',
@@ -707,7 +742,10 @@ export function getDesignSystemForBrand(brandInfo = {}, { preferredId } = {}) {
   const industry = String(brandInfo.industry || '').toLowerCase();
   const tone = String(brandInfo.tone || '').toLowerCase();
   if (tone.includes('clinical') || industry.includes('dental') || industry.includes('medical') || industry.includes('doctor') || industry.includes('therapy')) return getDesignSystem('modern-clinical');
-  if (tone.includes('warm') || tone.includes('organic') || industry.includes('midwife') || industry.includes('wellness') || industry.includes('coach') || industry.includes('holistic')) return getDesignSystem('organic-warm');
+  if (industry.includes('midwife') || industry.includes('home birth') || industry.includes('doula') || industry.includes('placenta') || industry.includes('maternity')) {
+    return getDesignSystem('wellrounded-feminine');
+  }
+  if (tone.includes('warm') || tone.includes('organic') || industry.includes('wellness') || industry.includes('coach') || industry.includes('holistic')) return getDesignSystem('organic-warm');
   if (tone.includes('bold') || tone.includes('minimal') || industry.includes('consult') || industry.includes('agency') || industry.includes('design')) return getDesignSystem('bold-minimal');
   if (tone.includes('premium') || tone.includes('luxury') || industry.includes('law') || industry.includes('financial') || industry.includes('advisor')) return getDesignSystem('editorial-luxe');
   if (tone.includes('playful') || tone.includes('retro') || industry.includes('food') || industry.includes('shop')) return getDesignSystem('retro-warm');

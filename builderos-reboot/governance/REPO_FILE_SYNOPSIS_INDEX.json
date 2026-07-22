@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-22T15:09:41.784Z",
+  "generated_at": "2026-07-22T15:27:38.646Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12103,
   "files": [
@@ -30587,9 +30587,9 @@
     {
       "path": "config/design-studio-layouts.js",
       "synopsis": "Hand-authored layout shells per design system — real structural",
-      "bytes": 76638,
-      "mtime": "2026-07-21T05:32:03.392Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "bytes": 87611,
+      "mtime": "2026-07-22T15:27:38.646Z",
+      "indexed_at": "2026-07-22T15:27:38.646Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -30597,9 +30597,9 @@
     {
       "path": "config/design-studio.js",
       "synopsis": "Shared Design Studio — curated, research-backed design systems",
-      "bytes": 43290,
-      "mtime": "2026-07-21T05:32:03.393Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "bytes": 45850,
+      "mtime": "2026-07-22T15:27:38.646Z",
+      "indexed_at": "2026-07-22T15:27:38.646Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -40866,9 +40866,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 140104,
-      "mtime": "2026-07-22T05:17:04.130Z",
-      "indexed_at": "2026-07-22T05:17:04.130Z"
+      "bytes": 141438,
+      "mtime": "2026-07-22T15:27:38.646Z",
+      "indexed_at": "2026-07-22T15:27:38.646Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -66163,9 +66163,9 @@
     {
       "path": "public/previews/wellrounded-momma/index.html",
       "synopsis": "HTML page: Well Rounded Momma — Midwifery & Home Birth in Las Vegas | Sherry Hopkins, CPM",
-      "bytes": 96411,
-      "mtime": "2026-07-22T15:09:41.784Z",
-      "indexed_at": "2026-07-22T15:09:41.784Z"
+      "bytes": 96418,
+      "mtime": "2026-07-22T15:27:38.646Z",
+      "indexed_at": "2026-07-22T15:27:38.646Z"
     },
     {
       "path": "public/previews/wellrounded/index.html",
@@ -90753,9 +90753,9 @@
     {
       "path": "services/site-builder-template-options.js",
       "synopsis": "Exports getTemplateOptions — services/site-builder-template-options.js.",
-      "bytes": 1454,
-      "mtime": "2026-07-21T05:32:04.668Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z"
+      "bytes": 1842,
+      "mtime": "2026-07-22T15:27:38.646Z",
+      "indexed_at": "2026-07-22T15:27:38.646Z"
     },
     {
       "path": "services/site-builder-templates.js",
