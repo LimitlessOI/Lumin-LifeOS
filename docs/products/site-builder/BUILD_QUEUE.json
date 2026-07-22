@@ -801,16 +801,24 @@
     },
     {
       "id": "step1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/20241001_add_more_templates.sql",
       "task": "create template choices table",
       "spec": "Create a new table for additional site templates to address ux_friction_1.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS additional_templates"
-      ]
+      ],
+      "last_attempt_at": "2026-07-22T23:06:03.227Z",
+      "last_error": "NOT_ON_BLUEPRINT",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "failure_signature": "NOT_ON_BLUEPRINT",
+      "same_signature_count": 1,
+      "escalation_class": "governance_block"
     },
     {
       "id": "step2",
@@ -826,6 +834,17 @@
       "expected_exports": [
         "getTemplates",
         "addTemplate"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/site-builder-new-templates.js",
+          "exports": [
+            "getTemplates",
+            "addTemplate"
+          ],
+          "assertion_id": "expected_exports:services/site-builder-new-templates.js"
+        }
       ]
     },
     {
@@ -844,7 +863,17 @@
       ],
       "route": {
         "path": "/api/v1/site-builder/templates"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/site-builder-new-templates-routes.js",
+          "exports": [
+            "registerNewTemplateRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/site-builder-new-templates-routes.js"
+        }
+      ]
     },
     {
       "id": "step4",
@@ -871,6 +900,17 @@
       "expected_exports": [
         "getElementLabels",
         "setElementLabel"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/site-builder-interactive-elements.js",
+          "exports": [
+            "getElementLabels",
+            "setElementLabel"
+          ],
+          "assertion_id": "expected_exports:services/site-builder-interactive-elements.js"
+        }
       ]
     },
     {
@@ -889,7 +929,17 @@
       ],
       "route": {
         "path": "/api/v1/site-builder/elements"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/site-builder-interactive-elements-routes.js",
+          "exports": [
+            "registerInteractiveElementsRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/site-builder-interactive-elements-routes.js"
+        }
+      ]
     },
     {
       "id": "step7",
