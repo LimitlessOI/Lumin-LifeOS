@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/site-builder/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-22 — Registered **Well Rounded Feminine** design system (`wellrounded-feminine`) from the WRM build into Site Builder templates; midwifery/doula/maternity brands prefer it. |
+| **Last Updated** | 2026-07-22 — WRM copy: trust claim corrected to **40+ midwives and doulas trained** (not midwives-only). |
 
 ---
 
@@ -328,6 +328,7 @@ Founder directive: review every revenue blueprint for gaps against real competit
 
 | Date | What Changed | Why | Verified | Next |
 |---|---|---|---|---|
+| 2026-07-22 | **WRM credential copy: 40+ midwives and doulas.** Trust bar, Meet Sherry bullets, speaker blurb, meta/OG — all say **40+ midwives and doulas trained** (plus kept). | Founder/Sherry: not midwives-only; she trained midwives and doulas (40+, maybe more). | local | tip deploy |
 | 2026-07-22 | **Well Rounded Feminine template registered in Site Builder.** New free design system `wellrounded-feminine` in `config/design-studio.js` (blush/coral/Fraunces/Sacramento tokens from WRM). Layout shell `shellWellroundedFeminine` in `config/design-studio-layouts.js` (photo hero + parallax, trust strip, meet, three pillars, quote band, consult CTA). Midwifery/doula/maternity/placenta brands prefer it via `getDesignSystemForBrand`. Picker option added in `services/site-builder-template-options.js`. WRM page: Cora tag → "Midwife and Placenta Specialist". | Adam: save WRM look as a reusable Site Builder template; fix Cora label. | local registry + shell wired | tip deploy; rebuild a midwifery prospect with `styleIds:['wellrounded-feminine']` |
 | 2026-07-22 | **WRM API co-shipped with preview on branch.** `routes/wrm-consult-routes.js` mounted unconditionally from `startup/register-runtime-routes.js` so merging the preview alone cannot leave `/api/v1/wrm/consult` and `/track` as 404s. | Branch audit: preview was on HEAD; WRM routes were on disk but not in the branch commit. | local mount + `@ssot` | tip deploy + live form e2e |
 | 2026-07-21 | **WRM feminine redesign + real assets + video/testimonial + funnel tracking.** Rebuilt `public/previews/wellrounded-momma/index.html`: blush/coral feminine palette, Sacramento script + Fraunces, JS parallax hero/bands, **11 real self-hosted photos** harvested from sherrylhopkins.com (Sherry portraits, water-birth, newborn, care moments) into `assets/`, **4 live YouTube videos** (click-to-play facade — replaces her site's dead Vimeo StoryFrames embeds that 404), real Amanda testimonial, Speaker/teaching section (40+ midwives trained, Henderson in-service) with speaking-inquiry path, **Sherry tile → consult form** (no external redirect; her site link kept secondary), Cora tile → her site. Added funnel tracking: `wrm_events` table + `POST /api/v1/wrm/track` (page_view/cta/tile/video/social/call/form) + key-gated `GET /api/v1/wrm/stats` (conversion rate). | Adam: her site is significantly better/more feminine; put testimonials+videos front & center; track clicks→forms; Sherry click → filled consult page not redirect. | pending ship+live e2e | Rebuild sherrylhopkins.com w/ same assets; GBP optimization; SMS lead alert |
