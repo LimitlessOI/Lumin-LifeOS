@@ -65,7 +65,6 @@ async function sendConsultEmail(notifier, lead) {
       subject,
       html: primary.html,
       text: primary.text,
-      from: lead.email || undefined,
       campaignId: "wrm-consult",
     });
   } catch (err) {

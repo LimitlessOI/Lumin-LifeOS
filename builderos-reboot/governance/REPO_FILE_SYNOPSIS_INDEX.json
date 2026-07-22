@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-22T02:14:28.141Z",
+  "generated_at": "2026-07-22T02:21:27.372Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12103,
   "files": [
@@ -69168,9 +69168,9 @@
     {
       "path": "routes/wrm-consult-routes.js",
       "synopsis": "Well Rounded Momma consult lead capture.",
-      "bytes": 9725,
-      "mtime": "2026-07-22T02:10:33.245Z",
-      "indexed_at": "2026-07-22T02:10:33.245Z",
+      "bytes": 9688,
+      "mtime": "2026-07-22T02:21:27.372Z",
+      "indexed_at": "2026-07-22T02:21:27.372Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
