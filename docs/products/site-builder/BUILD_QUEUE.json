@@ -811,14 +811,27 @@
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS additional_templates"
       ],
-      "last_attempt_at": "2026-07-22T23:06:03.227Z",
-      "last_error": "NOT_ON_BLUEPRINT",
+      "last_attempt_at": "2026-07-22T23:22:44.834Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS additional_templates; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "failure_signature": "NOT_ON_BLUEPRINT",
+      "failure_signature": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS additional_templates; behavior_assertion_failed; behavior_proof",
       "same_signature_count": 1,
-      "escalation_class": "governance_block"
+      "escalation_class": "evidence_gap",
+      "revive_count": 1,
+      "revived_at": "2026-07-22T23:22:43.468Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "step2",
