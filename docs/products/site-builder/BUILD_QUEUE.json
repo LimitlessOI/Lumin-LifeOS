@@ -890,7 +890,7 @@
     },
     {
       "id": "step5",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/site-builder-interactive-elements.js",
       "task": "add labels to interactive elements service",
       "spec": "Create service to manage labels for interactive elements to address ux_friction_2.",
@@ -912,32 +912,9 @@
           "assertion_id": "expected_exports:services/site-builder-interactive-elements.js"
         }
       ],
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/site-builder/twins/steps/step5.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-22T23:06:13.391Z",
-        "shipped_at": "2026-07-22T23:06:13.391Z",
-        "commit_sha": null,
-        "content_sha256": "2b5ec68d32d8f5fc0ecdb119f808c979dda1b219a6f7aa9b37d2baaccf128568",
-        "target_file": "services/site-builder-interactive-elements.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/site-builder-interactive-elements.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/site-builder/twins/steps/step5.exact",
-          "content_sha256": "2b5ec68d32d8f5fc0ecdb119f808c979dda1b219a6f7aa9b37d2baaccf128568"
-        }
-      },
-      "shipped_at": "2026-07-22T23:06:13.391Z",
-      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
-      "blueprint_step_id": "step5"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-22T23:06:19.750Z",
+      "commit_sha": "39e0dba60215dee5e88a9b2657191150a028f750"
     },
     {
       "id": "step6",
