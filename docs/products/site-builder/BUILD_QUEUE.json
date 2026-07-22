@@ -867,7 +867,7 @@
     },
     {
       "id": "step3",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/site-builder-new-templates-routes.js",
       "task": "create API for new templates",
       "spec": "Provide API endpoints to manage new site templates to address ux_friction_1.",
@@ -892,32 +892,9 @@
           "assertion_id": "expected_exports:routes/site-builder-new-templates-routes.js"
         }
       ],
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/site-builder/twins/steps/step3.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-22T23:40:13.475Z",
-        "shipped_at": "2026-07-22T23:40:13.475Z",
-        "commit_sha": null,
-        "content_sha256": "31b7f544968c78feb5ca287a08f04e8c800108df1ecec6763e3bef3fef6b70f3",
-        "target_file": "routes/site-builder-new-templates-routes.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "routes/site-builder-new-templates-routes.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/site-builder/twins/steps/step3.exact",
-          "content_sha256": "31b7f544968c78feb5ca287a08f04e8c800108df1ecec6763e3bef3fef6b70f3"
-        }
-      },
-      "shipped_at": "2026-07-22T23:40:13.475Z",
-      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
-      "blueprint_step_id": "step3"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-22T23:40:20.456Z",
+      "commit_sha": "349526d41794df79d93df961c102db2a21388406"
     },
     {
       "id": "step4",
