@@ -1068,7 +1068,33 @@
           ],
           "assertion_id": "expected_exports:routes/site-builder-new-template-choices-routes.js"
         }
-      ]
+      ],
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/site-builder/twins/steps/3.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-22T23:23:24.867Z",
+        "shipped_at": "2026-07-22T23:23:24.867Z",
+        "commit_sha": null,
+        "content_sha256": "2833cdff9eafcb57f1d71769ea39553cb895bd6cd34eedafbcce4e1f342af880",
+        "target_file": "routes/site-builder-new-template-choices-routes.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "routes/site-builder-new-template-choices-routes.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/site-builder/twins/steps/3.exact",
+          "content_sha256": "2833cdff9eafcb57f1d71769ea39553cb895bd6cd34eedafbcce4e1f342af880"
+        }
+      },
+      "shipped_at": "2026-07-22T23:23:24.867Z",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "3"
     },
     {
       "id": "4",
