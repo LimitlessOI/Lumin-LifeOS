@@ -898,7 +898,7 @@
     },
     {
       "id": "step4",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/site-builder-template-options.html",
       "task": "update UI for template selection",
       "spec": "Update template selection UI to display more template choices addressing ux_friction_1.",
@@ -908,32 +908,9 @@
       "founder_gated": false,
       "attempts": 0,
       "design_review_flagged": true,
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/site-builder/twins/steps/step4.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-22T23:40:30.336Z",
-        "shipped_at": "2026-07-22T23:40:30.336Z",
-        "commit_sha": null,
-        "content_sha256": "bf9c7cd71d25528a8a30e1bb8447be89169c1da962bd02db8dbe92d65a87ea71",
-        "target_file": "public/overlay/site-builder-template-options.html",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "public/overlay/site-builder-template-options.html",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/site-builder/twins/steps/step4.exact",
-          "content_sha256": "bf9c7cd71d25528a8a30e1bb8447be89169c1da962bd02db8dbe92d65a87ea71"
-        }
-      },
-      "shipped_at": "2026-07-22T23:40:30.336Z",
-      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
-      "blueprint_step_id": "step4"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-22T23:40:37.147Z",
+      "commit_sha": "2341c2fedb5af1d99699dd6c3f1dd63f34d8e4ed"
     },
     {
       "id": "step5",
