@@ -798,6 +798,111 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-21T20:36:18.949Z"
+    },
+    {
+      "id": "step1",
+      "status": "pending",
+      "target_file": "db/migrations/20241001_add_more_templates.sql",
+      "task": "create template choices table",
+      "spec": "Create a new table for additional site templates to address ux_friction_1.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS additional_templates"
+      ]
+    },
+    {
+      "id": "step2",
+      "status": "pending",
+      "target_file": "services/site-builder-new-templates.js",
+      "task": "add new template service",
+      "spec": "Implement service for managing additional site templates to address ux_friction_1.",
+      "depends_on": [
+        "step1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getTemplates",
+        "addTemplate"
+      ]
+    },
+    {
+      "id": "step3",
+      "status": "pending",
+      "target_file": "routes/site-builder-new-templates-routes.js",
+      "task": "create API for new templates",
+      "spec": "Provide API endpoints to manage new site templates to address ux_friction_1.",
+      "depends_on": [
+        "step2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerNewTemplateRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/site-builder/templates"
+      }
+    },
+    {
+      "id": "step4",
+      "status": "pending",
+      "target_file": "public/overlay/site-builder-template-options.html",
+      "task": "update UI for template selection",
+      "spec": "Update template selection UI to display more template choices addressing ux_friction_1.",
+      "depends_on": [
+        "step3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "design_review_flagged": true
+    },
+    {
+      "id": "step5",
+      "status": "pending",
+      "target_file": "services/site-builder-interactive-elements.js",
+      "task": "add labels to interactive elements service",
+      "spec": "Create service to manage labels for interactive elements to address ux_friction_2.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getElementLabels",
+        "setElementLabel"
+      ]
+    },
+    {
+      "id": "step6",
+      "status": "pending",
+      "target_file": "routes/site-builder-interactive-elements-routes.js",
+      "task": "create API for managing element labels",
+      "spec": "Provide API endpoints to manage labels on interactive elements to address ux_friction_2.",
+      "depends_on": [
+        "step5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerInteractiveElementsRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/site-builder/elements"
+      }
+    },
+    {
+      "id": "step7",
+      "status": "pending",
+      "target_file": "public/overlay/site-builder-interactive-elements.html",
+      "task": "update UI to show labels on elements",
+      "spec": "Update UI to display clear labels on interactive elements addressing ux_friction_2.",
+      "depends_on": [
+        "step6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "design_review_flagged": true
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",
