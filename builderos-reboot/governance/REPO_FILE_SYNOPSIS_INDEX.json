@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-21T22:56:21.716Z",
+  "generated_at": "2026-07-22T01:37:25.362Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12101,
+  "file_count": 12102,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -66159,6 +66159,13 @@
       "bytes": 11779,
       "mtime": "2026-07-21T05:32:04.291Z",
       "indexed_at": "2026-07-21T05:58:39.404Z"
+    },
+    {
+      "path": "public/previews/wellrounded-momma/index.html",
+      "synopsis": "HTML page: Well Rounded Momma — Experienced Midwifery & Home Birth in Las Vegas",
+      "bytes": 14452,
+      "mtime": "2026-07-22T01:37:25.362Z",
+      "indexed_at": "2026-07-22T01:37:25.362Z"
     },
     {
       "path": "public/previews/wellrounded/index.html",

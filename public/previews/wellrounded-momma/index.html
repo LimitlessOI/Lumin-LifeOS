@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Well Rounded Momma — Experienced Midwifery & Home Birth in Las Vegas -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Well Rounded Momma — Experienced Midwifery & Home Birth in Las Vegas</title>
+<meta name="description" content="Well Rounded Momma: evidence-based midwifery and home birth care in Las Vegas with Sherry Hopkins, CPM — 1,000+ babies, 20 years, Henderson Hospital advisory board." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink:#2b2a26; --muted:#6b675d; --cream:#f8f4ec; --sand:#efe6d6;
+    --green:#3f5b4c; --green-2:#5d7a68; --terra:#b5643f; --gold:#c9a24b;
+    --line:rgba(43,42,38,.12); --shadow:0 18px 50px -24px rgba(43,42,38,.35);
+    --maxw:1120px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--cream);color:var(--ink);
+    font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.6;font-size:17px;-webkit-font-smoothing:antialiased}
+  h1,h2,h3{font-family:Fraunces,Georgia,serif;font-weight:600;line-height:1.1;margin:0}
+  a{color:inherit}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+  .eyebrow{font-size:.8rem;letter-spacing:.16em;text-transform:uppercase;color:var(--terra);font-weight:600}
+
+  /* Top bar */
+  .topbar{position:sticky;top:0;z-index:20;background:rgba(248,244,236,.9);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:66px}
+  .brand{font-family:Fraunces,serif;font-weight:600;font-size:1.25rem;letter-spacing:.01em}
+  .brand span{color:var(--green)}
+  .callbtn{display:inline-flex;align-items:center;gap:8px;background:var(--green);color:#fff;text-decoration:none;
+    padding:10px 18px;border-radius:999px;font-weight:600;font-size:.95rem;box-shadow:var(--shadow);transition:transform .15s ease,background .15s ease}
+  .callbtn:hover{transform:translateY(-1px);background:#354d40}
+
+  /* Hero */
+  .hero{position:relative;padding:88px 0 76px;background:
+     radial-gradient(1200px 480px at 82% -8%, rgba(93,122,104,.22), transparent 60%),
+     linear-gradient(180deg,var(--cream),var(--sand))}
+  .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center}
+  .hero h1{font-size:clamp(2.4rem,5vw,3.9rem);letter-spacing:-.01em}
+  .hero p.lede{font-size:1.2rem;color:var(--muted);margin:22px 0 0;max-width:46ch}
+  .hero-cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px}
+  .btn-primary{background:var(--terra);color:#fff;text-decoration:none;padding:15px 28px;border-radius:12px;font-weight:600;box-shadow:var(--shadow);transition:transform .15s ease}
+  .btn-primary:hover{transform:translateY(-2px)}
+  .btn-ghost{background:transparent;color:var(--ink);text-decoration:none;padding:15px 24px;border-radius:12px;font-weight:600;border:1px solid var(--line)}
+  .hero-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:30px;box-shadow:var(--shadow)}
+  .hero-card h3{font-size:1.15rem}
+  .stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:20px}
+  .stat{text-align:center}
+  .stat b{display:block;font-family:Fraunces,serif;font-size:1.8rem;color:var(--green);line-height:1}
+  .stat small{color:var(--muted);font-size:.82rem}
+
+  /* Section */
+  section.block{padding:74px 0}
+  .section-head{max-width:64ch;margin-bottom:44px}
+  .section-head h2{font-size:clamp(1.9rem,3.6vw,2.7rem);margin-top:10px}
+  .section-head p{color:var(--muted);font-size:1.1rem;margin:14px 0 0}
+
+  /* Pillars */
+  .pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+  .pillar{background:#fff;border:1px solid var(--line);border-radius:20px;padding:30px;display:flex;flex-direction:column;box-shadow:0 10px 30px -22px rgba(43,42,38,.4)}
+  .pillar .tag{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--terra)}
+  .pillar h3{font-size:1.5rem;margin:8px 0 4px}
+  .pillar .role{color:var(--green);font-weight:600;font-size:.98rem;margin-bottom:14px}
+  .pillar p{color:var(--muted);margin:0 0 14px;font-size:1rem}
+  .pillar ul{list-style:none;padding:0;margin:0 0 20px}
+  .pillar li{position:relative;padding-left:26px;margin:9px 0;font-size:.97rem}
+  .pillar li::before{content:"";position:absolute;left:0;top:9px;width:12px;height:12px;border-radius:50%;
+    background:var(--gold);box-shadow:0 0 0 4px rgba(201,162,75,.18)}
+  .pillar .foot{margin-top:auto}
+  .pill-link{display:inline-flex;align-items:center;gap:8px;font-weight:600;color:var(--green);text-decoration:none;border-bottom:2px solid rgba(63,91,76,.25);padding-bottom:2px}
+  .pill-link:hover{border-color:var(--green)}
+  .pending{display:inline-block;font-size:.8rem;background:var(--sand);color:var(--muted);border:1px dashed var(--line);border-radius:999px;padding:5px 12px}
+
+  /* Why homebirth extra list */
+  .benefits{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;margin-top:8px}
+  .benefit{background:#fff;border:1px solid var(--line);border-radius:16px;padding:24px}
+  .benefit h4{font-family:Fraunces,serif;font-weight:600;font-size:1.15rem;margin:0 0 6px}
+  .benefit p{color:var(--muted);margin:0;font-size:.97rem}
+
+  /* Community */
+  .community{background:var(--green);color:#f4efe4}
+  .community h2{color:#fff}
+  .community p{color:rgba(244,239,228,.85)}
+  .social-row{display:flex;flex-wrap:wrap;gap:14px;margin-top:26px}
+  .social{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);
+    color:#fff;text-decoration:none;padding:13px 20px;border-radius:12px;font-weight:600;transition:background .15s ease}
+  .social:hover{background:rgba(255,255,255,.2)}
+
+  /* CTA banner */
+  .cta-banner{background:linear-gradient(120deg,var(--terra),#9a5030);color:#fff;border-radius:24px;padding:52px;text-align:center;box-shadow:var(--shadow)}
+  .cta-banner h2{color:#fff;font-size:clamp(1.8rem,3.4vw,2.5rem)}
+  .cta-banner p{color:rgba(255,255,255,.9);max-width:52ch;margin:14px auto 28px}
+  .cta-banner .btn-primary{background:#fff;color:var(--terra)}
+
+  footer{padding:40px 0 60px;color:var(--muted);font-size:.9rem;border-top:1px solid var(--line);margin-top:20px}
+  footer .wrap{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center}
+
+  @media(max-width:900px){
+    .hero-grid{grid-template-columns:1fr}
+    .pillars{grid-template-columns:1fr}
+    .benefits{grid-template-columns:1fr}
+    .cta-banner{padding:36px 24px}
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <div class="brand">Well&nbsp;Rounded&nbsp;<span>Momma</span></div>
+    <a class="callbtn" href="tel:+17024785080">Call 702‑478‑5080</a>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">Las Vegas Midwifery &amp; Home Birth</span>
+      <h1>Experienced, evidence‑based care for your birth — on your terms.</h1>
+      <p class="lede">Two seasoned practitioners. One place to find calm, skilled, personalized support through pregnancy, birth, and beyond.</p>
+      <div class="hero-cta">
+        <a class="btn-primary" href="tel:+17024785080">Book a consultation</a>
+        <a class="btn-ghost" href="#why">Why home birth?</a>
+      </div>
+    </div>
+    <aside class="hero-card">
+      <h3>Care led by Sherry Hopkins, CPM</h3>
+      <p style="color:var(--muted);margin:10px 0 0;font-size:.97rem">Founder of Well Rounded Momma, Certified Professional Midwife, and a trusted voice in the Las Vegas birth community.</p>
+      <div class="stat-row">
+        <div class="stat"><b>1,000+</b><small>babies welcomed</small></div>
+        <div class="stat"><b>20&nbsp;yrs</b><small>of midwifery</small></div>
+        <div class="stat"><b>Board</b><small>Henderson Hospital advisory</small></div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- PILLARS -->
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Who you'll work with &amp; what to know</span>
+      <h2>Three things that matter most</h2>
+      <p>Real practitioners with real credentials — and a clear, honest look at what home birth actually offers.</p>
+    </div>
+
+    <div class="pillars">
+
+      <!-- Pillar 1: Sherry -->
+      <article class="pillar">
+        <span class="tag">The Midwife</span>
+        <h3>Sherry Hopkins</h3>
+        <div class="role">Certified Professional Midwife (CPM)</div>
+        <p>Sherry founded Well Rounded Momma in 2006 and has spent nearly two decades walking alongside Las Vegas families — combining traditional midwifery with evidence‑based care.</p>
+        <ul>
+          <li>Over <strong>1,000 babies</strong> delivered across two decades of practice</li>
+          <li>Serves on the <strong>Advisory Board for Henderson Hospital</strong></li>
+          <li><strong>Trains midwives</strong> (NARM Qualified Evaluator) and leads in‑service education for hospital nurses</li>
+          <li>Member, National Association of Certified Professional Midwives</li>
+        </ul>
+        <div class="foot">
+          <a class="pill-link" href="https://www.sherrylhopkins.com" target="_blank" rel="noopener">Visit Sherry's site →</a>
+        </div>
+      </article>
+
+      <!-- Pillar 2: Cora (pending) -->
+      <article class="pillar">
+        <span class="tag">The Bodyworker &amp; Midwife</span>
+        <h3>Cora</h3>
+        <div class="role">Massage Therapist &amp; Direct‑Entry Midwife</div>
+        <p>Cora brings hands‑on bodywork and direct‑entry midwifery together — supporting comfort, mobility, and recovery through every stage of pregnancy and postpartum.</p>
+        <ul>
+          <li>Licensed massage therapy for pregnancy &amp; recovery</li>
+          <li>Direct‑entry midwifery care</li>
+          <li>Personalized, one‑on‑one support</li>
+        </ul>
+        <div class="foot">
+          <span class="pending">Cora's full bio &amp; website — coming next</span>
+        </div>
+      </article>
+
+      <!-- Pillar 3: Why home birth -->
+      <article class="pillar">
+        <span class="tag">The Choice</span>
+        <h3>Why Home Birth?</h3>
+        <div class="role">Calm, personal, and evidence‑based</div>
+        <p>For a healthy, low‑risk pregnancy, planned home birth with a skilled midwife offers something a busy hospital often can't: time, continuity, and choice.</p>
+        <ul>
+          <li>Unhurried prenatal visits — real relationship, not a 10‑minute slot</li>
+          <li>Freedom to move, use water, and labor in your own space</li>
+          <li>The same newborn screenings performed after birth</li>
+          <li>Attentive postpartum care for 6–8 weeks</li>
+        </ul>
+        <div class="foot">
+          <a class="pill-link" href="#why">See the full picture →</a>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- WHY HOME BIRTH DETAIL -->
+<section class="block" id="why" style="background:var(--sand)">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">The Choice, in depth</span>
+      <h2>What home birth really offers</h2>
+      <p>Home birth isn't about doing without — it's about a different kind of care, grounded in evidence and centered on you. Here's what that looks like with an experienced midwife.</p>
+    </div>
+    <div class="benefits">
+      <div class="benefit"><h4>Time and continuity</h4><p>A midwife typically supports only a few families a month — so your visits are unhurried and the person at your birth is the person who knows your story.</p></div>
+      <div class="benefit"><h4>Evidence‑based options</h4><p>Movement, hydrotherapy, and different positions in labor are supported here — safe options many families aren't offered elsewhere.</p></div>
+      <div class="benefit"><h4>A calm, familiar space</h4><p>Labor in your own home, on your own terms, surrounded by the people you choose.</p></div>
+      <div class="benefit"><h4>Full newborn care</h4><p>Your midwife returns after birth to check on you and baby and performs the routine newborn screenings — the same ones done in a hospital.</p></div>
+      <div class="benefit"><h4>Trained for the unexpected</h4><p>Experienced midwives are trained in emergency response and recognize when a situation needs a higher level of care.</p></div>
+      <div class="benefit"><h4>Support well beyond the birth</h4><p>Postpartum visits over 6–8 weeks cover healing, newborn care, and feeding — you're never sent off alone.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- COMMUNITY -->
+<section class="block community">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow" style="color:var(--gold)">Join the community</span>
+      <h2>Learn, watch, and connect</h2>
+      <p>Sherry shares real birth stories, home‑birth prep, and honest guidance across her channels.</p>
+    </div>
+    <div class="social-row">
+      <a class="social" href="https://www.youtube.com/results?search_query=Well+Rounded+Momma+Las+Vegas+midwife" target="_blank" rel="noopener">▶ YouTube</a>
+      <a class="social" href="https://instagram.com/sherhopkins" target="_blank" rel="noopener">◎ @sherhopkins</a>
+      <a class="social" href="https://instagram.com/wrmomma" target="_blank" rel="noopener">◎ @wrmomma</a>
+      <a class="social" href="tel:+17024785080">✆ 702‑478‑5080</a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="block">
+  <div class="wrap">
+    <div class="cta-banner">
+      <h2>Ready to talk about your birth?</h2>
+      <p>Sit down with Sherry, ask your questions, and see if home birth is the right fit for your family. There's no pressure — just an honest conversation.</p>
+      <a class="btn-primary" href="tel:+17024785080">Book your consultation</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div><strong>Well Rounded Momma</strong> · Las Vegas, Nevada · 702‑478‑5080</div>
+    <div>Evidence‑based midwifery &amp; home birth care.</div>
+  </div>
+</footer>
+
+</body>
+</html>
