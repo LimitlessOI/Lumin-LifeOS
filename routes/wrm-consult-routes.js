@@ -7,13 +7,15 @@
  * @ssot docs/products/site-builder/PRODUCT_HOME.md
  */
 import express from "express";
-
-const POSTMARK_API = "https://api.postmarkapp.com/email";
+import { NotificationService } from "../core/notification-service.js";
 
 const CONSULT_TO = () =>
   String(process.env.WRM_CONSULT_EMAIL || "maternity@wellroundedmomma.com").trim();
-const CONSULT_CC = () =>
-  String(process.env.WRM_CONSULT_CC || process.env.ADAM_NOTIFY_EMAIL || "").trim();
+// Fallback recipient on the same domain as the system From address. Used only if
+// the primary send fails (e.g. an email provider that is still pending approval
+// and can't reach cross-domain) — so a lead is never merely captured-but-unseen.
+const CONSULT_FALLBACK_TO = () =>
+  String(process.env.WRM_CONSULT_FALLBACK_EMAIL || process.env.ADAM_NOTIFY_EMAIL || process.env.WORK_EMAIL || "").trim();
 const CALL_NUMBER = "702-478-5080";
 
 function esc(str) {
@@ -24,13 +26,12 @@ function esc(str) {
     .replace(/"/g, "&quot;");
 }
 
-async function sendConsultEmail({ name, phone, email, preferredTime, message, leadId }) {
-  const token = String(process.env.POSTMARK_SERVER_TOKEN || "").trim();
-  const from = String(process.env.EMAIL_FROM || process.env.POSTMARK_FROM || "").trim();
-  if (!token) return { sent: false, error: "POSTMARK_SERVER_TOKEN not set" };
-  if (!from) return { sent: false, error: "EMAIL_FROM/POSTMARK_FROM not set" };
-
-  const html = `<h2 style="font-family:Arial,sans-serif">New consultation request — Well Rounded Momma</h2>
+function buildConsultBody({ name, phone, email, preferredTime, message, leadId, forwardedFor }) {
+  const banner = forwardedFor
+    ? `<p style="font-family:Arial,sans-serif;background:#fff6ec;border:1px solid #e6cba8;padding:10px 12px;border-radius:8px;font-size:13px">
+        Forwarded to you because the practice inbox (${esc(forwardedFor)}) could not be reached directly. Please pass this lead to Sherry.</p>`
+    : "";
+  const html = `${banner}<h2 style="font-family:Arial,sans-serif">New consultation request — Well Rounded Momma</h2>
     <p style="font-family:Arial,sans-serif;font-size:15px">
       <b>Name:</b> ${esc(name)}<br>
       <b>Phone:</b> ${esc(phone) || "(none provided)"}<br>
@@ -51,41 +52,63 @@ Email: ${email || "(none)"}
 Best time to call: ${preferredTime || "(none)"}
 Message: ${message || "(none)"}
 Lead #${leadId || "n/a"}`;
+  return { html, text };
+}
 
-  const payload = {
-    From: from,
-    To: CONSULT_TO(),
-    Subject: `New consult request — ${name}`,
-    HtmlBody: html,
-    TextBody: text,
-    MessageStream: "outbound",
-  };
-  const cc = CONSULT_CC();
-  if (cc) payload.Cc = cc;
-  if (email) payload.ReplyTo = email;
-
+async function sendConsultEmail(notifier, lead) {
+  const subject = `New consult request — ${lead.name}`;
+  const primary = buildConsultBody(lead);
+  let result;
   try {
-    const res = await fetch(POSTMARK_API, {
-      method: "POST",
-      headers: {
-        "X-Postmark-Server-Token": token,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
+    result = await notifier.sendEmail({
+      to: CONSULT_TO(),
+      subject,
+      html: primary.html,
+      text: primary.text,
+      from: lead.email || undefined,
+      campaignId: "wrm-consult",
     });
-    const json = await res.json().catch(() => ({}));
-    if (!res.ok) {
-      return { sent: false, error: json.Message || String(json.ErrorCode || res.status) };
-    }
-    return { sent: true, messageId: json.MessageID };
   } catch (err) {
-    return { sent: false, error: err.message };
+    result = { success: false, error: err.message };
   }
+  if (result?.success) {
+    return { sent: true, to: CONSULT_TO(), provider: result.provider, messageId: result.messageId };
+  }
+
+  // Primary delivery failed — forward to a reachable same-domain inbox so the lead is SEEN, not just stored.
+  const fallbackTo = CONSULT_FALLBACK_TO();
+  if (fallbackTo) {
+    const fwd = buildConsultBody({ ...lead, forwardedFor: CONSULT_TO() });
+    try {
+      const fb = await notifier.sendEmail({
+        to: fallbackTo,
+        subject: `[FWD] ${subject}`,
+        html: fwd.html,
+        text: fwd.text,
+        campaignId: "wrm-consult",
+      });
+      if (fb?.success) {
+        return {
+          sent: true,
+          to: fallbackTo,
+          forwarded: true,
+          provider: fb.provider,
+          messageId: fb.messageId,
+          primary_error: String(result?.error || "").slice(0, 300),
+        };
+      }
+      return { sent: false, error: `primary+fallback failed: ${result?.error} | ${fb?.error}` };
+    } catch (err) {
+      return { sent: false, error: `primary failed (${result?.error}); fallback threw: ${err.message}` };
+    }
+  }
+  return { sent: false, error: String(result?.error || "email send failed") };
 }
 
 export function registerWrmConsultRoutes(app, deps = {}) {
   const { pool, requireKey, logger = console } = deps;
   const router = express.Router();
+  const notifier = new NotificationService({ pool });
 
   let schemaReady = false;
   async function ensureSchema() {
@@ -161,7 +184,7 @@ export function registerWrmConsultRoutes(app, deps = {}) {
         logger.error?.("[WRM] consult DB capture failed", { error: dbErr.message });
       }
 
-      const emailResult = await sendConsultEmail({
+      const emailResult = await sendConsultEmail(notifier, {
         name,
         phone,
         email,
@@ -171,10 +194,15 @@ export function registerWrmConsultRoutes(app, deps = {}) {
       });
 
       if (pool && leadId) {
+        const note = emailResult.sent
+          ? emailResult.forwarded
+            ? `forwarded to ${emailResult.to} (primary ${CONSULT_TO()} unreachable: ${emailResult.primary_error})`
+            : null
+          : String(emailResult.error || "").slice(0, 300);
         pool
           .query(`UPDATE wrm_consult_leads SET emailed=$1, email_error=$2 WHERE id=$3`, [
             emailResult.sent,
-            emailResult.sent ? null : String(emailResult.error || "").slice(0, 300),
+            note,
             leadId,
           ])
           .catch(() => {});
@@ -184,6 +212,12 @@ export function registerWrmConsultRoutes(app, deps = {}) {
         logger.error?.("[WRM] consult email failed — lead retained in DB", {
           leadId,
           error: emailResult.error,
+        });
+      } else if (emailResult.forwarded) {
+        logger.warn?.("[WRM] consult forwarded to fallback inbox — primary unreachable", {
+          leadId,
+          fallback: emailResult.to,
+          primary_error: emailResult.primary_error,
         });
       }
 

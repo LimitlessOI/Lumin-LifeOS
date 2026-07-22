@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-22T02:06:03.639Z",
+  "generated_at": "2026-07-22T02:10:33.245Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12103,
   "files": [
@@ -40867,8 +40867,8 @@
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
       "bytes": 137720,
-      "mtime": "2026-07-22T02:06:03.639Z",
-      "indexed_at": "2026-07-22T02:06:03.639Z"
+      "mtime": "2026-07-22T02:10:33.245Z",
+      "indexed_at": "2026-07-22T02:10:33.245Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -69168,9 +69168,9 @@
     {
       "path": "routes/wrm-consult-routes.js",
       "synopsis": "Well Rounded Momma consult lead capture.",
-      "bytes": 8022,
-      "mtime": "2026-07-22T02:06:03.639Z",
-      "indexed_at": "2026-07-22T02:06:03.639Z",
+      "bytes": 9725,
+      "mtime": "2026-07-22T02:10:33.245Z",
+      "indexed_at": "2026-07-22T02:10:33.245Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
