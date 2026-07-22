@@ -2420,6 +2420,24 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     }
   });
 
+  router.post('/claims/:claimId/deactivate', async (req, res) => {
+    try {
+      await enforceOperatorAccess(req, ['operator', 'manager']);
+      const tenantId = getTenantId(req);
+      const reason = String(req.body?.reason || '').trim();
+      const result = await billingService.deactivateClaim(req.params.claimId, {
+        reason,
+        requestedBy: String(req.body?.requested_by || 'operator'),
+        tenantId,
+      });
+      if (!result) return res.status(404).json({ ok: false, error: 'Claim not found' });
+      res.json({ ok: true, claim: result });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] deactivate claim failed');
+      res.status(error.message?.includes('required') || error.message?.includes('Active operator') ? 400 : 500).json({ ok: false, error: error.message });
+    }
+  });
+
   router.get('/actions', async (req, res) => {
     try {
       await enforceOperatorAccess(req, ['operator', 'manager']);

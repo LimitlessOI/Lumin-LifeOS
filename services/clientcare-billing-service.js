@@ -1224,6 +1224,40 @@ export function createClientCareBillingService({ pool, logger = console, now = (
     return { claim: await getClaimById(claimId, tenantId), classification, stage };
   }
 
+  // Reversible removal from the active billing/forever-chase queue — never a
+  // hard DELETE. Root cause of the 2026-07-17 chart-damage incident was
+  // destructive/unsupervised automation; this keeps the row + full history
+  // intact (audit trail, undo path) while stopping the system from chasing
+  // a claim that should never have been created (e.g. a cash-pay client
+  // wrongly auto-billed to insurance).
+  async function deactivateClaim(claimId, { reason, requestedBy, tenantId = null } = {}) {
+    if (!reason || !String(reason).trim()) {
+      throw new Error('reason is required to deactivate a claim');
+    }
+    const claim = await getClaimById(claimId, tenantId);
+    if (!claim) return null;
+    const { rows } = await pool.query(
+      `UPDATE clientcare_claims
+       SET rescue_bucket='do_not_bill',
+           metadata = COALESCE(metadata, '{}'::jsonb) || $2::jsonb,
+           updated_at = NOW()
+       WHERE id=$1${tenantFilterSql(tenantId, 3)} RETURNING *`,
+      [
+        claimId,
+        JSON.stringify({
+          deactivated: true,
+          deactivated_reason: String(reason).trim(),
+          deactivated_by: requestedBy || 'operator',
+          deactivated_at: new Date().toISOString(),
+          prior_rescue_bucket: claim.rescueBucket ?? claim.rescue_bucket ?? null,
+        }),
+        tenantId,
+      ]
+    );
+    if (!rows[0]) return null;
+    return mapClaimRow(rows[0]);
+  }
+
   async function listClaims(filters = {}) {
     const clauses = [];
     const values = [];
@@ -2442,6 +2476,7 @@ export function createClientCareBillingService({ pool, logger = console, now = (
     upsertClaim,
     getClaimById,
     reclassifyClaim,
+    deactivateClaim,
     listClaims,
     listActions,
     updateAction,
