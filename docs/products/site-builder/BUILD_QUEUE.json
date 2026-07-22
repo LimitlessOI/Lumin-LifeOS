@@ -1041,13 +1041,13 @@
     },
     {
       "id": "4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/site-builder-interactive-elements-label-update.js",
       "task": "label update for interactive elements",
       "spec": "Update service to add clear labels to all interactive elements.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "updateInteractiveElementLabels"
       ],
@@ -1086,7 +1086,15 @@
       },
       "shipped_at": "2026-07-22T23:07:58.518Z",
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
-      "blueprint_step_id": "4"
+      "blueprint_step_id": "4",
+      "last_attempt_at": "2026-07-22T23:09:44.615Z",
+      "last_error": "NOT_ON_BLUEPRINT",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "failure_signature": "NOT_ON_BLUEPRINT",
+      "same_signature_count": 1,
+      "escalation_class": "governance_block"
     },
     {
       "id": "5",
