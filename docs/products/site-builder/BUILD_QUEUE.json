@@ -831,7 +831,33 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/site-builder/twins/steps/step1.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-22T23:39:40.712Z",
+        "shipped_at": "2026-07-22T23:39:40.712Z",
+        "commit_sha": null,
+        "content_sha256": "ce5e2b9d8d76bd5f86d5c45f158357735429fcc27d7d13682c6282a70069f8c5",
+        "target_file": "db/migrations/20241001_add_more_templates.sql",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "db/migrations/20241001_add_more_templates.sql",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/site-builder/twins/steps/step1.exact",
+          "content_sha256": "ce5e2b9d8d76bd5f86d5c45f158357735429fcc27d7d13682c6282a70069f8c5"
+        }
+      },
+      "shipped_at": "2026-07-22T23:39:40.712Z",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step1"
     },
     {
       "id": "step2",
@@ -1237,10 +1263,11 @@
       "shipped_at": "2026-07-22T23:34:51.470Z"
     }
   ],
-  "sentry_signature": "beba57e366c8c9cf",
-  "sentry_unplannable_at": "2026-07-12T18:05:57.513Z",
-  "sentry_unplannable_reason": "planner filtered all steps (already-done); spin-break so LifeOS can build",
+  "sentry_signature": "bfe02459bcbbc6ec",
+  "sentry_unplannable_at": "2026-07-22T23:37:38.176Z",
+  "sentry_unplannable_reason": "[BUILD-QUEUE-PLANNER] all proposed steps filtered (dedupe/already-done/no target_file) — fail closed",
   "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-site-builder",
-  "twin_kind": "product_build_queue_registered"
+  "twin_kind": "product_build_queue_registered",
+  "_sourcePath": "/usr/src/app/docs/products/site-builder/BUILD_QUEUE.json"
 }
