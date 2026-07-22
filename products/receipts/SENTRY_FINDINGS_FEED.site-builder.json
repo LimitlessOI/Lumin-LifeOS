@@ -1,35 +1,21 @@
 {
   "schema": "sentry_findings_feed_v1",
   "product": "site-builder",
-  "generated_at": "2026-07-10T21:04:35.129Z",
-  "findings_count": 4,
+  "generated_at": "2026-07-22T23:03:13.309Z",
+  "findings_count": 2,
   "without_solution": 0,
   "findings": [
     {
       "code": "ux_friction_1",
-      "detail": "Only one template choice, so it feels like I’m being handed a finished look instead of picking what fits my business.",
-      "proposed_solution": "Offer a few more template options so I can choose a style that feels like my business.",
+      "detail": "Only one template option means I don't feel like I'm designing my site, just filling in blanks.",
+      "proposed_solution": "Offer more template choices so I can pick a design that feels right for my brand.",
       "severity": "warning",
       "source": "uxCritique"
     },
     {
       "code": "ux_friction_2",
-      "detail": "There are only three color palettes, which feels a bit limiting if I want the site to match my brand.",
-      "proposed_solution": "Add simple labels or helper text for the chat, save, and device toggle so I know what each one is for.",
-      "severity": "warning",
-      "source": "uxCritique"
-    },
-    {
-      "code": "ux_friction_3",
-      "detail": "The chat box is visible, but it’s not obvious what I should ask it to do or whether it will actually help me change the site.",
-      "proposed_solution": "Provide a very short getting-started prompt like ‘Choose a template, then pick a color palette’ to reduce the blank-screen feeling.",
-      "severity": "warning",
-      "source": "uxCritique"
-    },
-    {
-      "code": "ux_friction_4",
-      "detail": "The editor seems to work, but as a non-technical user I’d want clearer guidance on where to start and what each control does.",
-      "proposed_solution": "Show a clearer before/after preview when switching device views so I can tell what changed.",
+      "detail": "Not seeing clear labels on the 'chips' makes me hesitant to click them, not knowing what they do.",
+      "proposed_solution": "Add clear labels to all interactive elements so I understand their function before clicking.",
       "severity": "warning",
       "source": "uxCritique"
     }
@@ -39,19 +25,11 @@
     "warnings": [
       {
         "code": "ux_friction_1",
-        "detail": "Only one template choice, so it feels like I’m being handed a finished look instead of picking what fits my business."
+        "detail": "Only one template option means I don't feel like I'm designing my site, just filling in blanks."
       },
       {
         "code": "ux_friction_2",
-        "detail": "There are only three color palettes, which feels a bit limiting if I want the site to match my brand."
-      },
-      {
-        "code": "ux_friction_3",
-        "detail": "The chat box is visible, but it’s not obvious what I should ask it to do or whether it will actually help me change the site."
-      },
-      {
-        "code": "ux_friction_4",
-        "detail": "The editor seems to work, but as a non-technical user I’d want clearer guidance on where to start and what each control does."
+        "detail": "Not seeing clear labels on the 'chips' makes me hesitant to click them, not knowing what they do."
       }
     ]
   }

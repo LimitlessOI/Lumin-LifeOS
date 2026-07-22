@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/site-builder/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-22 — Landing demo sample swapped to **Well Rounded Momma Collective** (`/previews/wellrounded-momma/`). |
+| **Last Updated** | 2026-07-22 — **ON THE MARKET (technical):** SENTRY A+B PASS; launch-readiness ready; public front door + live Stripe $45 proven on Railway tip. |
 
 ---
 
@@ -31,7 +31,7 @@ Done-for-you website builder for **any local business with a weak site** (dentis
 
 ## Readiness state
 
-`LIVE — TECHNICAL_PASS, revenue path proven, real conversion unproven`
+`LIVE — ON THE MARKET (technical) — revenue path proven; real conversion still unproven`
 
 Verified live 2026-07-10 via the real SENTRY pre-alpha gate (`node scripts/sentry-prealpha-gate.mjs site-builder`) on deploy `991df22238`, fresh fixture, not a stale note: **Layer A 7/7 PASS, Layer B 8/8 PASS, UX verdict "good", 0 findings** — preview build, editor (10-template toggle, upsell chips, chat quick-actions, comparison carousel all present), and **live Stripe checkout** (`cs_live_...`, not test mode) all resolve on production. Email sending (Postmark + Gmail SMTP fallback) has real fixes landed 2026-07-07. The env vars below are **historical** — they blocked this product from March through early July and are kept here only as a record; do not treat them as a current blocker without re-checking Railway directly.
 
@@ -330,6 +330,7 @@ Founder directive: review every revenue blueprint for gaps against real competit
 
 | Date | What Changed | Why | Verified | Next |
 |---|---|---|---|---|
+| 2026-07-22 | **ON THE MARKET (technical) — SENTRY gate restored + front door re-proved.** `scripts/run-site-builder-prealpha.mjs` hydratePreviewUrls: `/previews` list rows (esp. WRM demo) omit `previewUrl`/`editorUrl`, which crashed Layer A on `.replace`. Prefer `wellrounded-momma` fixture. Live prove: launch-readiness `ready:true` (Postmark+Stripe+email present; public_base=Railway); `/site-builder` → landing 200 with form/$45/demo; `POST /public-lead` bare domain → 202; SENTRY **Layer A 7/7 + Layer B 8/8 GATE PASS** incl. live Stripe `cs_live_…`. Layer B UX warnings only (1 template on hand-built demo; chip labels). | Adam: "Let's get SiteBuilder. On the market" — no new stack spend. | ✅ gate PASS + public-lead 202 + checkout 302 Stripe live | First real $45 conversion; optional Cloudflare `sitebuilder.taloaos.com` later; cold outreach batch when deliverability step done |
 | 2026-07-22 | **Landing demo = Well Rounded Momma.** `site-builder-landing.html` iframe/open/checkout sample now `clientId=wellrounded-momma`. Added `public/previews/wellrounded-momma/meta.json` so $45 publish checkout resolves. | Adam: put WRM in the sample. | local | tip deploy + live checkout prove |
 | 2026-07-22 | **Money-path public base: stop emitting NXDOMAIN.** New `services/site-builder-public-base.js` + tests. Checkout/upsell success+cancel, referral, SiteBuilder preview/publish URLs, prospect email links, follow-up cron — all prefer request origin or skip known-dead `sitebuilder.taloaos.com` and fall back to Railway tip origin. Launch-readiness surfaces `public_base_url`. | Adam: Site Builder ready to make money now; branded host still NXDOMAIN was stranding buyers after live Stripe pay. | ✅ tip `299f6f7f6d`: referral/public_base = Railway; live Stripe `cs_live_…` $45; SENTRY A+B PASS | Close first $45; Cloudflare DNS for `sitebuilder.taloaos.com` when token available |
 | 2026-07-22 | **WRM credential copy: 40+ midwives and doulas.** Trust bar, Meet Sherry bullets, speaker blurb, meta/OG — all say **40+ midwives and doulas trained** (plus kept). | Founder/Sherry: not midwives-only; she trained midwives and doulas (40+, maybe more). | local | tip deploy |

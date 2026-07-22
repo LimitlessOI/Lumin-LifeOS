@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /**
  * SYNOPSIS: Site Builder pre-alpha SENTRY gate — Layer A (structural walkthrough).
  * Acts as a client's browser would at the HTTP level: preview loads, editor loads,
@@ -69,29 +68,39 @@ async function fetchRaw(url, { method = 'GET', redirect = 'follow', timeout = 30
 // Extract the canvas iframe src from the rendered editor HTML.
 function extractIframeSrc(html) {
   const m = html.match(/data-lifeos-iframe[^>]*\bsrc="([^"]+)"/i)
-    || html.match(/<iframe[^>]*\bsrc="([^"]+)"[^>]*data-lifeos-iframe/i)
+    || html.match(/<iframe[^>]*\bsrc="([^"]+)"[^>]data-lifeos-iframe/i)
     || html.match(/class="lifeos-canvas-frame"[^>]*\bsrc="([^"]+)"/i);
   return m ? m[1].replace(/&amp;/g, '&') : '';
 }
 
+/** Normalize list/API preview rows that may omit absolute URLs (demo samples often do). */
+function hydratePreviewUrls(row) {
+  if (!row?.clientId) return null;
+  const clientId = String(row.clientId);
+  const token = String(row.editToken || process.env.PREVIEW_EDIT_TOKEN || '');
+  const previewUrl = row.previewUrl || row.preview_url || `${BASE}/previews/${clientId}`;
+  const editorUrl = row.editorUrl || row.editor_url
+    || `${BASE}/api/v1/sites/editor?clientId=${encodeURIComponent(clientId)}&token=${encodeURIComponent(token)}`;
+  const publishCheckoutUrl = row.publishCheckoutUrl || row.publish_checkout_url
+    || `${BASE}/api/v1/sites/publish/checkout?clientId=${encodeURIComponent(clientId)}`;
+  return { ...row, clientId, editToken: token, previewUrl, editorUrl, publishCheckoutUrl };
+}
+
 async function resolvePreview() {
   if (process.env.PREVIEW_CLIENT_ID) {
-    const clientId = process.env.PREVIEW_CLIENT_ID;
-    const token = process.env.PREVIEW_EDIT_TOKEN || '';
-    return {
-      clientId,
-      editToken: token,
-      previewUrl: `${BASE}/previews/${clientId}`,
-      editorUrl: `${BASE}/api/v1/sites/editor?clientId=${clientId}&token=${token}`,
-      publishCheckoutUrl: `${BASE}/api/v1/sites/publish/checkout?clientId=${clientId}`,
-    };
+    return hydratePreviewUrls({
+      clientId: process.env.PREVIEW_CLIENT_ID,
+      editToken: process.env.PREVIEW_EDIT_TOKEN || '',
+    });
   }
   const res = await fetchRaw(`${BASE}/api/v1/sites/previews`);
   if (res.status !== 200) return null;
   let list = [];
   try { list = JSON.parse(res.text)?.previews || []; } catch { /* ignore */ }
-  const withToken = list.find((p) => p && p.editToken && p.clientId);
-  return withToken || null;
+  // Prefer the named demo sample (stable market fixture), else newest row with a token.
+  const demo = list.find((p) => p && p.clientId === 'wellrounded-momma' && p.editToken);
+  const withToken = demo || list.find((p) => p && p.editToken && p.clientId);
+  return hydratePreviewUrls(withToken);
 }
 
 async function main() {

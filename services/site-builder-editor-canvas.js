@@ -65,7 +65,8 @@ export function renderCanvas({
   const variantChips = data.variants
     .map((variant) => {
       const isActive = variant.file === initialFile;
-      return `<button type="button" class="lifeos-canvas-chip${isActive ? " is-active" : ""}" data-lifeos-template-file="${htmlEscape(variant.file)}" data-lifeos-template-id="${htmlEscape(variant.id)}">${htmlEscape(variant.name || variant.id || variant.file)}</button>`;
+      const label = variant.name || variant.id || variant.file || "Template";
+      return `<button type="button" class="lifeos-canvas-chip${isActive ? " is-active" : ""}" data-lifeos-template-file="${htmlEscape(variant.file)}" data-lifeos-template-id="${htmlEscape(variant.id)}" aria-label="Switch to ${htmlEscape(label)} template" title="Switch site look: ${htmlEscape(label)}">${htmlEscape(label)}</button>`;
     })
     .join("");
 

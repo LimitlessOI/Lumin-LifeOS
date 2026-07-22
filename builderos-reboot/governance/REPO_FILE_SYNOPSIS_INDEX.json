@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-22T20:40:07.807Z",
+  "generated_at": "2026-07-22T23:03:56.691Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12106,
+  "file_count": 12107,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -40866,9 +40866,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 143115,
-      "mtime": "2026-07-22T20:40:07.807Z",
-      "indexed_at": "2026-07-22T20:40:07.807Z"
+      "bytes": 144069,
+      "mtime": "2026-07-22T23:03:56.691Z",
+      "indexed_at": "2026-07-22T23:03:56.691Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -64280,9 +64280,9 @@
     {
       "path": "products/receipts/SENTRY_FINDINGS_FEED.site-builder.json",
       "synopsis": "Product receipt — SENTRY FINDINGS FEED.Site Builder.",
-      "bytes": 2508,
-      "mtime": "2026-07-21T05:32:04.210Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "bytes": 1255,
+      "mtime": "2026-07-22T23:03:56.691Z",
+      "indexed_at": "2026-07-22T23:03:56.691Z",
       "synopsis_index_only": true
     },
     {
@@ -64299,6 +64299,14 @@
       "bytes": 1036,
       "mtime": "2026-07-21T05:32:04.210Z",
       "indexed_at": "2026-07-21T05:58:39.404Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/SITE_BUILDER_PREALPHA_LAYER_A.json",
+      "synopsis": "Product receipt — SITE BUILDER PREALPHA LAYER A.",
+      "bytes": 2390,
+      "mtime": "2026-07-22T23:03:56.691Z",
+      "indexed_at": "2026-07-22T23:03:56.691Z",
       "synopsis_index_only": true
     },
     {
@@ -71720,9 +71728,9 @@
     {
       "path": "scripts/run-site-builder-prealpha.mjs",
       "synopsis": "Site Builder pre-alpha SENTRY gate — Layer A (structural walkthrough).",
-      "bytes": 9322,
-      "mtime": "2026-07-21T05:32:04.376Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "bytes": 10052,
+      "mtime": "2026-07-22T23:03:56.691Z",
+      "indexed_at": "2026-07-22T23:03:56.691Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -90598,9 +90606,9 @@
     {
       "path": "services/site-builder-editor-canvas.js",
       "synopsis": "Exports renderCanvas — services/site-builder-editor-canvas.js.",
-      "bytes": 22597,
-      "mtime": "2026-07-21T05:32:04.665Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "bytes": 22738,
+      "mtime": "2026-07-22T23:03:56.691Z",
+      "indexed_at": "2026-07-22T23:03:56.691Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]

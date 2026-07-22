@@ -1,0 +1,67 @@
+{
+  "schema": "site_builder_prealpha_layer_a_v1",
+  "layer": "A_structural",
+  "at": "2026-07-22T23:03:06.933Z",
+  "base": "https://lumin-web-production-e3a9.up.railway.app",
+  "preview": {
+    "clientId": "wellrounded-momma"
+  },
+  "ok": true,
+  "verdict": "PASS",
+  "tests_passed": 7,
+  "tests_failed": 0,
+  "passed": [
+    "SBPA-A01_preview_available",
+    "SBPA-A02_preview_loads",
+    "SBPA-A03_editor_loads",
+    "SBPA-A04_iframe_src_absolute",
+    "SBPA-A05_iframe_loads_real_site",
+    "SBPA-A05b_scraped_real_business",
+    "SBPA-A06_checkout_resolves_stripe"
+  ],
+  "failed": [],
+  "steps": [
+    {
+      "id": "SBPA-A01_preview_available",
+      "ok": true,
+      "detail": "clientId=wellrounded-momma token=present"
+    },
+    {
+      "id": "SBPA-A02_preview_loads",
+      "ok": true,
+      "detail": "HTTP 200 at https://lumin-web-production-e3a9.up.railway.app/previews/wellrounded-momma/index.html"
+    },
+    {
+      "id": "SBPA-A03_editor_loads",
+      "ok": true,
+      "detail": "HTTP 200; iframe_marker=true"
+    },
+    {
+      "id": "SBPA-A04_iframe_src_absolute",
+      "ok": true,
+      "detail": "iframe src=\"https://lumin-web-production-e3a9.up.railway.app/previews/wellrounded-momma/index.html\"",
+      "iframeSrc": "https://lumin-web-production-e3a9.up.railway.app/previews/wellrounded-momma/index.html"
+    },
+    {
+      "id": "SBPA-A05_iframe_loads_real_site",
+      "ok": true,
+      "detail": "HTTP 200 at iframe src"
+    },
+    {
+      "id": "SBPA-A05b_scraped_real_business",
+      "ok": true,
+      "detail": "no parking/placeholder markers in the built site"
+    },
+    {
+      "id": "SBPA-A06_checkout_resolves_stripe",
+      "ok": true,
+      "detail": "HTTP 302; location=https://checkout.stripe.com/c/pay/cs_live_a1hFp9lFAFHyvZINLQ72CAV0UImJIJlOp34eArwIM9VPT76hcxHBv9HsGJ#fidnandhYHdWcXxpYCc%2FJ2FgY2RwaXEnKSdicGRmZGhqaWBTZHdsZGtxJz8nZmprcXdqaScpJ2R1bE5gfCc%2FJ3VuWmlsc2BaMDRWQTVnZ089Y2FLf251fENTY19Eb3JsakdANFAzN0o9NmZSQTNAUkpAaFVLZDd8YG9Ic1RTdGFxQD1kTWR9M31IQk4zaGBDZG9wYzNvRzM3aXJhUXBtc1M1NTRqZ3Zkd2tsJyknY3dqaFZgd3Ngdyc%2FcXdwYCknZ2RmbmJ3anBrYUZqaWp3Jz8nJmNjY2NjYycpJ2lkfGpwcVF8dWAnPyd2bGtiaWBabHFgaCcpJ2BrZGdpYFVpZGZgbWppYWB3dic%2FcXdwYHgl"
+    }
+  ],
+  "note": "Layer A structural walkthrough passed. Proceed to Layer B (human-sim browser + UX critique).",
+  "bp_sync": {
+    "updated": [
+      "builderos-reboot/BP_PRIORITY.json"
+    ]
+  }
+}
