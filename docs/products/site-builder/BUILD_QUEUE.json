@@ -1165,7 +1165,7 @@
     },
     {
       "id": "8",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "public/overlay/site-builder-interactive-elements-label-ui.html",
       "task": "create interactive elements label UI",
       "spec": "UI to display and edit labels on interactive elements.",
@@ -1173,8 +1173,16 @@
         "4"
       ],
       "founder_gated": false,
-      "attempts": 0,
-      "design_review_flagged": true
+      "attempts": 1,
+      "design_review_flagged": true,
+      "last_attempt_at": "2026-07-22T23:17:57.025Z",
+      "last_error": "NOT_ON_BLUEPRINT",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "failure_signature": "NOT_ON_BLUEPRINT",
+      "same_signature_count": 1,
+      "escalation_class": "governance_block"
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",
