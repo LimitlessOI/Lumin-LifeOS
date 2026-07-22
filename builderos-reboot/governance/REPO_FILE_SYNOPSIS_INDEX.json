@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-22T02:00:06.373Z",
+  "generated_at": "2026-07-22T02:06:03.639Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12102,
+  "file_count": 12103,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -30409,9 +30409,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 30170,
-      "mtime": "2026-07-21T21:12:10.240Z",
-      "indexed_at": "2026-07-21T21:12:19.482Z",
+      "bytes": 29883,
+      "mtime": "2026-07-22T02:06:03.639Z",
+      "indexed_at": "2026-07-22T02:06:03.639Z",
       "synopsis_index_only": true
     },
     {
@@ -40866,9 +40866,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 141228,
-      "mtime": "2026-07-21T20:35:45.413Z",
-      "indexed_at": "2026-07-21T20:35:56.995Z"
+      "bytes": 137720,
+      "mtime": "2026-07-22T02:06:03.639Z",
+      "indexed_at": "2026-07-22T02:06:03.639Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -66163,9 +66163,9 @@
     {
       "path": "public/previews/wellrounded-momma/index.html",
       "synopsis": "HTML page: Well Rounded Momma — Experienced Midwifery & Home Birth in Las Vegas",
-      "bytes": 14817,
-      "mtime": "2026-07-22T01:44:47.904Z",
-      "indexed_at": "2026-07-22T01:44:47.904Z"
+      "bytes": 23246,
+      "mtime": "2026-07-22T02:06:03.639Z",
+      "indexed_at": "2026-07-22T02:06:03.639Z"
     },
     {
       "path": "public/previews/wellrounded/index.html",
@@ -69163,6 +69163,16 @@
       "indexed_at": "2026-07-21T05:58:39.404Z",
       "ssot": [
         "docs/products/word-keeper/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "routes/wrm-consult-routes.js",
+      "synopsis": "Well Rounded Momma consult lead capture.",
+      "bytes": 8022,
+      "mtime": "2026-07-22T02:06:03.639Z",
+      "indexed_at": "2026-07-22T02:06:03.639Z",
+      "ssot": [
+        "docs/products/site-builder/PRODUCT_HOME.md"
       ]
     },
     {

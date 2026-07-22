@@ -5,7 +5,53 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Well Rounded Momma — Experienced Midwifery & Home Birth in Las Vegas</title>
-<meta name="description" content="Well Rounded Momma: evidence-based midwifery and home birth care in Las Vegas with Sherry Hopkins, CPM — 1,000+ babies, 20 years, Henderson Hospital advisory board." />
+<meta name="description" content="Well Rounded Momma: evidence-based midwifery and home birth care in Las Vegas with Sherry Hopkins, CPM — 2,000+ births, 20 years, Henderson Hospital advisory board. Request a consultation today." />
+<link rel="canonical" href="https://www.wellroundedmomma.com/" />
+<meta name="robots" content="index,follow" />
+<meta name="theme-color" content="#3f5b4c" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Well Rounded Momma" />
+<meta property="og:title" content="Well Rounded Momma — Midwifery & Home Birth in Las Vegas" />
+<meta property="og:description" content="Experienced, evidence-based midwifery and home birth care in Las Vegas with Sherry Hopkins, CPM — 2,000+ births over 20 years. Request a consultation." />
+<meta property="og:url" content="https://www.wellroundedmomma.com/" />
+<meta property="og:image" content="https://www.wellroundedmomma.com/og-image.jpg" />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Well Rounded Momma — Midwifery & Home Birth in Las Vegas" />
+<meta name="twitter:description" content="Experienced, evidence-based midwifery and home birth care in Las Vegas with Sherry Hopkins, CPM — 2,000+ births over 20 years." />
+<meta name="twitter:image" content="https://www.wellroundedmomma.com/og-image.jpg" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalBusiness",
+  "additionalType": "https://schema.org/Midwifery",
+  "name": "Well Rounded Momma",
+  "description": "Evidence-based midwifery and home birth care in Las Vegas led by Sherry Hopkins, CPM — over 2,000 births across 20 years of practice.",
+  "url": "https://www.wellroundedmomma.com/",
+  "telephone": "+1-702-478-5080",
+  "email": "maternity@wellroundedmomma.com",
+  "areaServed": { "@type": "City", "name": "Las Vegas, Nevada" },
+  "address": { "@type": "PostalAddress", "addressLocality": "Las Vegas", "addressRegion": "NV", "addressCountry": "US" },
+  "medicalSpecialty": "Midwifery",
+  "founder": {
+    "@type": "Person",
+    "name": "Sherry Hopkins",
+    "jobTitle": "Certified Professional Midwife (CPM)",
+    "url": "https://www.sherrylhopkins.com"
+  },
+  "employee": {
+    "@type": "Person",
+    "name": "Cora Williams",
+    "jobTitle": "Direct-Entry Midwife, LMT, Placenta Specialist",
+    "url": "https://www.coramermaidmidwife.com"
+  }
+}
+</script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -95,6 +141,31 @@
   .cta-banner p{color:rgba(255,255,255,.9);max-width:52ch;margin:14px auto 28px}
   .cta-banner .btn-primary{background:#fff;color:var(--terra)}
 
+  /* Consult form */
+  .consult{background:var(--sand)}
+  .consult-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:44px;align-items:start}
+  .consult-copy h2{font-size:clamp(1.9rem,3.4vw,2.6rem)}
+  .consult-copy p{color:var(--muted);font-size:1.08rem;margin:16px 0 0;max-width:44ch}
+  .consult-copy .reassure{margin-top:22px;padding-left:0;list-style:none}
+  .consult-copy .reassure li{position:relative;padding-left:28px;margin:12px 0;font-size:1rem}
+  .consult-copy .reassure li::before{content:"✓";position:absolute;left:0;top:0;color:var(--green);font-weight:700}
+  .form-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:32px;box-shadow:var(--shadow)}
+  .form-row{margin:0 0 16px}
+  .form-row label{display:block;font-weight:600;font-size:.92rem;margin-bottom:6px}
+  .form-row input,.form-row textarea{width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:10px;
+    font-family:inherit;font-size:1rem;background:var(--cream);color:var(--ink)}
+  .form-row input:focus,.form-row textarea:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px rgba(63,91,76,.15)}
+  .form-row textarea{min-height:96px;resize:vertical}
+  .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+  .form-submit{width:100%;background:var(--terra);color:#fff;border:0;padding:16px;border-radius:12px;font-weight:600;
+    font-size:1.05rem;cursor:pointer;box-shadow:var(--shadow);transition:transform .15s ease,opacity .15s ease}
+  .form-submit:hover{transform:translateY(-2px)}
+  .form-submit:disabled{opacity:.6;cursor:default;transform:none}
+  .form-note{color:var(--muted);font-size:.85rem;margin:14px 0 0;text-align:center}
+  .form-msg{margin-top:16px;padding:14px 16px;border-radius:10px;font-size:.97rem;display:none}
+  .form-msg.ok{display:block;background:#e8f0ea;color:#2f4a3a;border:1px solid rgba(63,91,76,.3)}
+  .form-msg.err{display:block;background:#fbeae4;color:#8a3b1f;border:1px solid rgba(181,100,63,.35)}
+
   footer{padding:40px 0 60px;color:var(--muted);font-size:.9rem;border-top:1px solid var(--line);margin-top:20px}
   footer .wrap{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center}
 
@@ -103,6 +174,7 @@
     .pillars{grid-template-columns:1fr}
     .benefits{grid-template-columns:1fr}
     .cta-banner{padding:36px 24px}
+    .consult-grid{grid-template-columns:1fr;gap:28px}
   }
 </style>
 </head>
@@ -123,8 +195,8 @@
       <h1>Experienced, evidence‑based care for your birth — on your terms.</h1>
       <p class="lede">Two seasoned practitioners. One place to find calm, skilled, personalized support through pregnancy, birth, and beyond.</p>
       <div class="hero-cta">
-        <a class="btn-primary" href="tel:+17024785080">Book a consultation</a>
-        <a class="btn-ghost" href="#why">Why home birth?</a>
+        <a class="btn-primary" href="#consult">Request a consultation</a>
+        <a class="btn-ghost" href="tel:+17024785080">or call 702‑478‑5080</a>
       </div>
     </div>
     <aside class="hero-card">
@@ -177,7 +249,7 @@
           <li>Direct‑entry midwifery — prenatal, birth &amp; postpartum care</li>
           <li>Placenta preparation &amp; encapsulation for postpartum recovery</li>
           <li>Licensed massage therapy &amp; Reiki</li>
-          <li>Well‑baby visits — 5th visit free with her punch card</li>
+          <li>Well‑baby visits &amp; postpartum bodywork</li>
           <li>Background as a labor doula</li>
           <li>Insurance welcome · Las Vegas office</li>
         </ul>
@@ -249,7 +321,55 @@
     <div class="cta-banner">
       <h2>Ready to talk about your birth?</h2>
       <p>Sit down with Sherry, ask your questions, and see if home birth is the right fit for your family. There's no pressure — just an honest conversation.</p>
-      <a class="btn-primary" href="tel:+17024785080">Book your consultation</a>
+      <a class="btn-primary" href="#consult">Request your consultation</a>
+    </div>
+  </div>
+</section>
+
+<!-- CONSULT FORM -->
+<section class="block consult" id="consult">
+  <div class="wrap consult-grid">
+    <div class="consult-copy">
+      <span class="eyebrow">Request a consultation</span>
+      <h2>Tell Sherry a little about you</h2>
+      <p>Fill out the form and Sherry will call you personally to answer your questions and schedule your consultation. No pressure — just a real conversation about your birth.</p>
+      <ul class="reassure">
+        <li>A real midwife calls you back — not an auto‑reply</li>
+        <li>Free, no‑obligation first conversation</li>
+        <li>Your information is private and never shared</li>
+      </ul>
+      <p style="margin-top:20px">Prefer to talk now? <a href="tel:+17024785080" style="color:var(--green);font-weight:600">Call 702‑478‑5080</a>.</p>
+    </div>
+
+    <div class="form-card">
+      <form id="consultForm" novalidate>
+        <div class="form-row">
+          <label for="cf-name">Your name *</label>
+          <input id="cf-name" name="name" type="text" autocomplete="name" required />
+        </div>
+        <div class="form-row">
+          <label for="cf-phone">Phone number *</label>
+          <input id="cf-phone" name="phone" type="tel" autocomplete="tel" placeholder="(702) 000‑0000" />
+        </div>
+        <div class="form-row">
+          <label for="cf-email">Email</label>
+          <input id="cf-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" />
+        </div>
+        <div class="form-row">
+          <label for="cf-time">Best time to call</label>
+          <input id="cf-time" name="preferredTime" type="text" placeholder="e.g. weekday mornings" />
+        </div>
+        <div class="form-row">
+          <label for="cf-message">Anything you'd like Sherry to know?</label>
+          <textarea id="cf-message" name="message" placeholder="Due date, questions, what you're hoping for…"></textarea>
+        </div>
+        <div class="hp" aria-hidden="true">
+          <label>Company<input name="company" type="text" tabindex="-1" autocomplete="off" /></label>
+        </div>
+        <button class="form-submit" type="submit" id="cf-submit">Send my request</button>
+        <p class="form-note">* Name and a phone number (or email) so Sherry can reach you.</p>
+        <div class="form-msg" id="cf-msg" role="status"></div>
+      </form>
     </div>
   </div>
 </section>
@@ -260,6 +380,51 @@
     <div>Evidence‑based midwifery &amp; home birth care.</div>
   </div>
 </footer>
+
+<script>
+(function(){
+  var form = document.getElementById('consultForm');
+  if(!form) return;
+  var btn = document.getElementById('cf-submit');
+  var msg = document.getElementById('cf-msg');
+  function show(kind, text){ msg.className = 'form-msg ' + kind; msg.textContent = text; }
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var data = {
+      name: form.name.value.trim(),
+      phone: form.phone.value.trim(),
+      email: form.email.value.trim(),
+      preferredTime: form.preferredTime.value.trim(),
+      message: form.message.value.trim(),
+      company: form.company.value.trim(),
+      source: 'wellrounded-momma-web'
+    };
+    if(!data.name || (!data.phone && !data.email)){
+      show('err', 'Please add your name and a phone number or email so Sherry can reach you.');
+      return;
+    }
+    btn.disabled = true; btn.textContent = 'Sending…';
+    fetch('/api/v1/wrm/consult', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(data)
+    }).then(function(r){ return r.json().catch(function(){ return {ok:false}; }); })
+      .then(function(res){
+        if(res && res.ok){
+          form.style.display = 'none';
+          show('ok', res.message || 'Thank you! Sherry will call you to schedule your consultation.');
+        } else {
+          show('err', (res && res.error) || 'Something went wrong. Please call Sherry at 702‑478‑5080.');
+          btn.disabled = false; btn.textContent = 'Send my request';
+        }
+      })
+      .catch(function(){
+        show('err', 'Network error. Please call Sherry at 702‑478‑5080.');
+        btn.disabled = false; btn.textContent = 'Send my request';
+      });
+  });
+})();
+</script>
 
 </body>
 </html>

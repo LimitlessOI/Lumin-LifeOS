@@ -40,7 +40,7 @@
       "register": "registerLifeOSCycleRoutes",
       "mount_path": "/api/v1/lifeos/cycle",
       "enabled": true,
-      "note": "Cycle tracking API was built but not mounted on founder_builder — UI returned 404s. Auto-register closes P1 phase overlay."
+      "note": "Cycle tracking API was built but not mounted on founder_builder \u2014 UI returned 404s. Auto-register closes P1 phase overlay."
     },
     {
       "path": "routes/lifeos-deep-talk-decks-routes.js",
@@ -54,7 +54,7 @@
       "register": "registerLifeOSLegacyRoutes",
       "mount_path": "/api/v1/lifeos/legacy",
       "enabled": true,
-      "note": "Legacy/community API was built but not mounted on founder_builder — UI shell needs live endpoints."
+      "note": "Legacy/community API was built but not mounted on founder_builder \u2014 UI shell needs live endpoints."
     },
     {
       "path": "routes/lifeos-psychometric-battery-routes.js",
@@ -103,7 +103,7 @@
       "register": "registerLifeOSVictoryVaultRoutes",
       "mount_path": "/api/v1/lifeos",
       "enabled": true,
-      "note": "Victory Vault API — UI was live, /victories 404'd on founder_builder."
+      "note": "Victory Vault API \u2014 UI was live, /victories 404'd on founder_builder."
     },
     {
       "path": "routes/lifeos-purpose-routes.js",
@@ -117,7 +117,7 @@
       "register": "registerLifeosDateNightRoutes",
       "mount_path": "/api/v1/lifeos/date-night",
       "enabled": true,
-      "note": "Shared ritual / date-night planner P2→shipped as concrete surface."
+      "note": "Shared ritual / date-night planner P2\u2192shipped as concrete surface."
     },
     {
       "path": "routes/founder-sms-routes.js",
@@ -130,28 +130,28 @@
       "register": "registerLifeOSFinanceRoutes",
       "mount_path": "/api/v1/lifeos/finance",
       "enabled": true,
-      "note": "LifeOS Personal Finance API. The finance router was defined but never mounted in the founder-builder runtime lane, so the dashboard's GET /api/v1/lifeos/finance/goals returned 404 — surfaced by SENTRY lifeos-founder-ui finding no_js_errors (Error loading goals: HTTP 404). Mounted here via auto-register (no composition-root edit) so the dashboard goals/summary/accounts calls resolve. Fixes SENTRY defect #1 (rank 8)."
+      "note": "LifeOS Personal Finance API. The finance router was defined but never mounted in the founder-builder runtime lane, so the dashboard's GET /api/v1/lifeos/finance/goals returned 404 \u2014 surfaced by SENTRY lifeos-founder-ui finding no_js_errors (Error loading goals: HTTP 404). Mounted here via auto-register (no composition-root edit) so the dashboard goals/summary/accounts calls resolve. Fixes SENTRY defect #1 (rank 8)."
     },
     {
       "path": "routes/lifeos-engine-routes.js",
       "register": "registerLifeOSEngineRoutes",
       "mount_path": "/api/v1/lifeos/engine",
       "enabled": true,
-      "note": "GAP-FILL: LifeOS Engine (Google Calendar connect/sync, calendar events, outreach) 404'd on tip because Railway boots founder_builder only and never runs the full-runtime mount. Same auto-register pattern as finance/core. Unblocks Connect → Google Calendar for LifeOS, LifeRe scheduling context, and MarketingOS/SocialMediaOS shared Google OAuth app."
+      "note": "GAP-FILL: LifeOS Engine (Google Calendar connect/sync, calendar events, outreach) 404'd on tip because Railway boots founder_builder only and never runs the full-runtime mount. Same auto-register pattern as finance/core. Unblocks Connect \u2192 Google Calendar for LifeOS, LifeRe scheduling context, and MarketingOS/SocialMediaOS shared Google OAuth app."
     },
     {
       "path": "routes/lifeos-core-routes.js",
       "register": "registerLifeOSCoreRoutes",
       "mount_path": "/api/v1/lifeos",
       "enabled": true,
-      "note": "LifeOS core APIs (commitments + dashboard/scoreboard). Dashboard loadMITs/loadScores 404'd in founder lane — SENTRY lifeos-founder-ui no_js_errors. Auto-register mounts without composition-root edit."
+      "note": "LifeOS core APIs (commitments + dashboard/scoreboard). Dashboard loadMITs/loadScores 404'd in founder lane \u2014 SENTRY lifeos-founder-ui no_js_errors. Auto-register mounts without composition-root edit."
     },
     {
       "path": "routes/lifeos-briefing-routes.js",
       "register": "registerLifeOSBriefingRoutes",
       "mount_path": "/api/v1/lifeos/briefing",
       "enabled": true,
-      "note": "Daily briefing API. Dashboard loadCalendar() calls GET /api/v1/lifeos/briefing/today — was 404 in founder lane."
+      "note": "Daily briefing API. Dashboard loadCalendar() calls GET /api/v1/lifeos/briefing/today \u2014 was 404 in founder lane."
     },
     {
       "path": "routes/site-builder-ab-subject-routes.js",
@@ -169,13 +169,13 @@
       "path": "routes/site-builder-prealpha-routes.js",
       "register": "registerSiteBuilderPrealphaRoutes",
       "enabled": true,
-      "note": "CONDUCTOR-GLUE SENTRY pre-alpha Layer B (human-sim). Mounts POST /api/v1/sites/prealpha/layer-b — drives the live editor with a real browser like a client (loads editor, verifies canvas iframe shows the REAL site not 'Cannot GET', switches a template, types in the AI chat, clicks Save with no edits, checks the publish path), captures screenshots into /previews/<id>/_sentry/, and asks a cheap model to critique the UX + propose improvements. Fails closed. Mounted in the founder lane so it runs on prod where Chrome launches. Pairs with Layer A (scripts/run-site-builder-prealpha.mjs); no feature is 'done' until both pass."
+      "note": "CONDUCTOR-GLUE SENTRY pre-alpha Layer B (human-sim). Mounts POST /api/v1/sites/prealpha/layer-b \u2014 drives the live editor with a real browser like a client (loads editor, verifies canvas iframe shows the REAL site not 'Cannot GET', switches a template, types in the AI chat, clicks Save with no edits, checks the publish path), captures screenshots into /previews/<id>/_sentry/, and asks a cheap model to critique the UX + propose improvements. Fails closed. Mounted in the founder lane so it runs on prod where Chrome launches. Pairs with Layer A (scripts/run-site-builder-prealpha.mjs); no feature is 'done' until both pass."
     },
     {
       "path": "routes/governed-fence-routes.js",
       "register": "registerGovernedFenceRoutes",
       "enabled": true,
-      "note": "CONDUCTOR-GLUE separation-of-powers switch. Mounts GET /api/v1/factory/governance/fence + POST .../fence/enable so the SYSTEM can turn its own governance fence ON (GOVERNED_FACTORY_ONLY=1) via Railway API + self-redeploy, but is physically unable to turn it OFF (enable-only ratchet — only a human in Railway can). PR #272 added the guard; this mounts the live surface that was missing so the flip can actually happen. Chair receipt LIFERE_COUNCIL_1783462353983."
+      "note": "CONDUCTOR-GLUE separation-of-powers switch. Mounts GET /api/v1/factory/governance/fence + POST .../fence/enable so the SYSTEM can turn its own governance fence ON (GOVERNED_FACTORY_ONLY=1) via Railway API + self-redeploy, but is physically unable to turn it OFF (enable-only ratchet \u2014 only a human in Railway can). PR #272 added the guard; this mounts the live surface that was missing so the flip can actually happen. Chair receipt LIFERE_COUNCIL_1783462353983."
     },
     {
       "path": "routes/general-browser-agent-routes.js",
@@ -194,43 +194,43 @@
       "path": "routes/marketing-session-routes.js",
       "register": "registerMarketingSessionRoutes",
       "enabled": true,
-      "note": "MarketingOS SocialMediaOS Phase 1 JSON API (§6). The autonomous loop rebuilds this file (re-queued mos-session-routes); once deployed the boot mounts it here and the functional-proof gate verifies /api/v1/marketing/* is LIVE before the step can be done. Records a benign 'module not found' health error until the loop ships the file — fail-open, never blocks boot."
+      "note": "MarketingOS SocialMediaOS Phase 1 JSON API (\u00a76). The autonomous loop rebuilds this file (re-queued mos-session-routes); once deployed the boot mounts it here and the functional-proof gate verifies /api/v1/marketing/* is LIVE before the step can be done. Records a benign 'module not found' health error until the loop ships the file \u2014 fail-open, never blocks boot."
     },
     {
       "path": "routes/marketing-session-ui-routes.js",
       "register": "registerMarketingSessionUiRoutes",
       "enabled": true,
-      "note": "MarketingOS SocialMediaOS Phase 1 SSR screens (§5). Rebuilt by the loop (re-queued mos-session-ui); mounted here so module-health proves the /marketing pages load LIVE."
+      "note": "MarketingOS SocialMediaOS Phase 1 SSR screens (\u00a75). Rebuilt by the loop (re-queued mos-session-ui); mounted here so module-health proves the /marketing pages load LIVE."
     },
     {
       "path": "routes/marketing-calendar-routes.js",
       "register": "registerMarketingCalendarRoutes",
       "enabled": true,
-      "note": "MarketingOS Phase 2 calendar/atoms JSON API (§5 Phase 2). Built by the loop (queued mos-phase2-routes); once deployed the boot mounts it and the functional-proof gate verifies /api/v1/marketing/calendar + /atoms are LIVE before the step can be done. Records a benign 'module not found' health error until the loop ships the file — fail-open, never blocks boot."
+      "note": "MarketingOS Phase 2 calendar/atoms JSON API (\u00a75 Phase 2). Built by the loop (queued mos-phase2-routes); once deployed the boot mounts it and the functional-proof gate verifies /api/v1/marketing/calendar + /atoms are LIVE before the step can be done. Records a benign 'module not found' health error until the loop ships the file \u2014 fail-open, never blocks boot."
     },
     {
       "path": "routes/marketing-calendar-ui-routes.js",
       "register": "registerMarketingCalendarUiRoutes",
       "enabled": true,
-      "note": "MarketingOS Phase 2 SSR content-calendar + atom-library screens (§5 Phase 2). Built by the loop (queued mos-phase2-ui); mounted here so module-health proves /marketing/calendar loads LIVE."
+      "note": "MarketingOS Phase 2 SSR content-calendar + atom-library screens (\u00a75 Phase 2). Built by the loop (queued mos-phase2-ui); mounted here so module-health proves /marketing/calendar loads LIVE."
     },
     {
       "path": "routes/marketing-intel-routes.js",
       "register": "registerMarketingIntelRoutes",
       "enabled": true,
-      "note": "SocialMediaOS Content Intelligence API (Priority Ideas subset). Built by the loop (queued smos-intel-routes); imports the four intel services (title-universe, script-scorer, publish-gate, repurpose) and exposes /api/v1/marketing/intel/*. Mounted here so the functional-proof gate verifies the endpoints are LIVE before the step can be done. Records a benign 'module not found' health error until the loop ships the file — fail-open, never blocks boot."
+      "note": "SocialMediaOS Content Intelligence API (Priority Ideas subset). Built by the loop (queued smos-intel-routes); imports the four intel services (title-universe, script-scorer, publish-gate, repurpose) and exposes /api/v1/marketing/intel/*. Mounted here so the functional-proof gate verifies the endpoints are LIVE before the step can be done. Records a benign 'module not found' health error until the loop ships the file \u2014 fail-open, never blocks boot."
     },
     {
       "path": "routes/lifeos-phase2-routes.js",
       "register": "registerLifeosPhase2Routes",
       "enabled": true,
-      "note": "LifeOS Phase 2 REST surface. Was blocked forever because s07 (auto-register) depended on s06 while s06 failed module-health for missing auto-register — chicken-egg. Mounted here so functional-proof can pass and the loop can finish Phase 2."
+      "note": "LifeOS Phase 2 REST surface. Was blocked forever because s07 (auto-register) depended on s06 while s06 failed module-health for missing auto-register \u2014 chicken-egg. Mounted here so functional-proof can pass and the loop can finish Phase 2."
     },
     {
       "path": "routes/lifeos-phase3-routes.js",
       "register": "registerLifeosPhase3Routes",
       "enabled": true,
-      "note": "LifeOS Phase 3 REST (habits/energy/learning/calendar-protection). s7 blocked on missing auto-register after builder wrote broken sN-*-service imports — conductor GAP-FILL rewired to real lifeos-* services + mounted here."
+      "note": "LifeOS Phase 3 REST (habits/energy/learning/calendar-protection). s7 blocked on missing auto-register after builder wrote broken sN-*-service imports \u2014 conductor GAP-FILL rewired to real lifeos-* services + mounted here."
     },
     {
       "path": "routes/tc-intake-routes.js",
@@ -266,13 +266,13 @@
       "path": "routes/mission-routes.js",
       "register": "registerMissionRoutes",
       "enabled": true,
-      "note": "BuilderOS mission runtime API at /api/missions*. GAP-FILL: step-04 was built but unreachable (createMissionRoutes, never auto-registered) — never-stop spun. Mounted here so module-health can prove LIVE and the queue can advance."
+      "note": "BuilderOS mission runtime API at /api/missions*. GAP-FILL: step-04 was built but unreachable (createMissionRoutes, never auto-registered) \u2014 never-stop spun. Mounted here so module-health can prove LIVE and the queue can advance."
     },
     {
       "path": "routes/creative-engine-routes.js",
       "register": "registerCreativeEngineRoutes",
       "enabled": true,
-      "note": "Creative Engine shared render API at /api/v1/creative/* — footage_edit, photo_polish, script_compose, generative_broll. Auto-registered so founder lane mounts without composition-root edit."
+      "note": "Creative Engine shared render API at /api/v1/creative/* \u2014 footage_edit, photo_polish, script_compose, generative_broll. Auto-registered so founder lane mounts without composition-root edit."
     },
     {
       "path": "routes/creative-engine-ui-routes.js",
@@ -284,19 +284,19 @@
       "path": "routes/creative-engine-graphic-design-routes.js",
       "register": "registerCreativeEngineGraphicDesignRoutes",
       "enabled": true,
-      "note": "Real AI graphic-design generation (Ideogram/Recraft/Flux via Replicate) at /api/v1/creative/graphic-design/{estimate,render} — governed-built 2026-07-14 for SocialMediaOS thumbnails + Site Builder hero/brand imagery. Stateless v1 (no DB job persistence); the shared services/creative-engine/index.js dispatcher is Zone-3 (>150 lines) so this is a dedicated route pair rather than an edit to that file. Gated on REPLICATE_API_TOKEN — NOT YET SET on Railway as of this note (GET /api/v1/creative/health reports replicateConfigured:false); render returns 503 until the founder adds the token."
+      "note": "Real AI graphic-design generation (Ideogram/Recraft/Flux via Replicate) at /api/v1/creative/graphic-design/{estimate,render} \u2014 governed-built 2026-07-14 for SocialMediaOS thumbnails + Site Builder hero/brand imagery. Stateless v1 (no DB job persistence); the shared services/creative-engine/index.js dispatcher is Zone-3 (>150 lines) so this is a dedicated route pair rather than an edit to that file. Gated on REPLICATE_API_TOKEN \u2014 NOT YET SET on Railway as of this note (GET /api/v1/creative/health reports replicateConfigured:false); render returns 503 until the founder adds the token."
     },
     {
       "path": "routes/marketing-publish-routes.js",
       "register": "registerMarketingPublishRoutes",
       "enabled": true,
-      "note": "Phase 5 social publish API — enabled 2026-07-12 for money path (LIVE_SOCIAL_PUBLISH_ENABLED + approval gate still required for live posts)."
+      "note": "Phase 5 social publish API \u2014 enabled 2026-07-12 for money path (LIVE_SOCIAL_PUBLISH_ENABLED + approval gate still required for live posts)."
     },
     {
       "path": "routes/marketing-youtube-routes.js",
       "register": "registerMarketingYoutubeRoutes",
       "enabled": true,
-      "note": "MarketingOS Phase 6 YouTube connect flow — ONE shared Google OAuth app (reuses GOOGLE_CLIENT_ID/SECRET already live for Calendar), per-client one-time consent via Google's own real login page. Exposes GET /api/v1/marketing/youtube/connect (redirect to Google), GET /.../callback (token exchange, stored in the existing user_integrations table under provider 'youtube_channel'), GET /.../status. Built by the loop (queued mos-youtube-connect-routes); mounted here so the functional-proof gate verifies the endpoints are LIVE before the step can be done. Records a benign 'module not found' health error until the loop ships the file — fail-open, never blocks boot."
+      "note": "MarketingOS Phase 6 YouTube connect flow \u2014 ONE shared Google OAuth app (reuses GOOGLE_CLIENT_ID/SECRET already live for Calendar), per-client one-time consent via Google's own real login page. Exposes GET /api/v1/marketing/youtube/connect (redirect to Google), GET /.../callback (token exchange, stored in the existing user_integrations table under provider 'youtube_channel'), GET /.../status. Built by the loop (queued mos-youtube-connect-routes); mounted here so the functional-proof gate verifies the endpoints are LIVE before the step can be done. Records a benign 'module not found' health error until the loop ships the file \u2014 fail-open, never blocks boot."
     },
     {
       "path": "routes/wellness-therapist-routes.js",
@@ -331,7 +331,7 @@
       "register": "registerMemberFeedbackRoutes",
       "mount_path": "/api/v1/lifeos/member-feedback",
       "enabled": true,
-      "note": "Member feedback → founder intake queue (persisted). Never builder execute."
+      "note": "Member feedback \u2192 founder intake queue (persisted). Never builder execute."
     },
     {
       "path": "routes/lifeos-ethics-routes.js",
@@ -616,28 +616,21 @@
       "register": "registerCognitiveCoreRoutes",
       "mount_path": "/api/v1/cognitive-core",
       "enabled": true,
-      "note": "Cognitive Core Era-1+Era-2 — judgment journal, scoreboard, capsule wear, programs (hypotheses), miss loop, decision replay, counterfactual, external-mind/future-self advisors, relationship twins, learning-style (auto-register; startup/ protected)."
+      "note": "Cognitive Core Era-1+Era-2 \u2014 judgment journal, scoreboard, capsule wear, programs (hypotheses), miss loop, decision replay, counterfactual, external-mind/future-self advisors, relationship twins, learning-style (auto-register; startup/ protected)."
     },
     {
       "path": "routes/lifere-sales-coaching-routes.js",
       "register": "registerLifereSalesCoachingRoutes",
       "mount_path": "/api/v1/lifere/sales-coach",
       "enabled": true,
-      "note": "LifeRE sales coaching simulator (scenarios, session start/turn/end, score, sessions). Was mounted only in the full-runtime lane, so Railway's founder_builder boot never served it — SENTRY LifeRE probe caught GET /api/v1/lifere/sales-coach/scenarios → 404. Auto-register mounts it on the founder lane (no composition-root edit)."
+      "note": "LifeRE sales coaching simulator (scenarios, session start/turn/end, score, sessions). Was mounted only in the full-runtime lane, so Railway's founder_builder boot never served it \u2014 SENTRY LifeRE probe caught GET /api/v1/lifere/sales-coach/scenarios \u2192 404. Auto-register mounts it on the founder lane (no composition-root edit)."
     },
     {
-      "path": "routes/voluntary-progress-routes.js",
-      "register": "registerVoluntaryProgressRoutes",
-      "mount_path": "/api/v1/lifere/voluntary-progress",
+      "path": "routes/wrm-consult-routes.js",
+      "register": "registerWrmConsultRoutes",
+      "mount_path": "/api/v1/wrm",
       "enabled": true,
-      "note": "GRAIL first vertical slice (goal -> alternatives -> decision -> experiment -> propose-not-apply Twin update) -- wires the built-but-unwired voluntary-progress-slice-orchestrator.js into a real, reachable HTTP call path. Same auto-register pattern as lifere-sales-coaching-routes.js."
-    },
-    {
-      "path": "routes/tsos-efficiency-register.js",
-      "register": "registerTsosEfficiencyRoutes",
-      "mount_path": "(router declares absolute paths internally)",
-      "enabled": true,
-      "note": "TSOS token-efficiency scorecard endpoints -- register wrapper lives in a separate new file (tsos-efficiency-register.js) importing from tsos-efficiency-routes.js, working around a confirmed builder bug where appending exports to existing files fails."
+      "note": "Well Rounded Momma consult lead capture. POST /api/v1/wrm/consult captures every form submission to wrm_consult_leads FIRST (never silently lost like the year-broken Wix booking link), then emails maternity@wellroundedmomma.com via Postmark with founder CC for delivery proof. GET /api/v1/wrm/consult/leads (key) is the safety-net list. Powers the consult form on public/previews/wellrounded-momma/index.html."
     }
   ]
 }
