@@ -76,11 +76,11 @@
   .callbtn:hover{transform:translateY(-1px);background:var(--coral-deep)}
   @media(max-width:820px){.nav-links a:not(.callbtn){display:none}}
 
-  /* Hero */
-  .hero{position:relative;min-height:86vh;display:flex;align-items:center;overflow:hidden}
-  .hero-bg{position:absolute;inset:-12% 0;background:url('assets/hero-parents-newborn.jpg') center 30%/cover no-repeat;will-change:transform;z-index:0}
+  /* Hero — photo at ~75% visible; soft blush veil on the text side only */
+  .hero{position:relative;min-height:86vh;display:flex;align-items:center;overflow:hidden;background:var(--blush)}
+  .hero-bg{position:absolute;inset:-12% 0;background:url('/previews/wellrounded-momma/assets/newborn-chest.jpg') center 35%/cover no-repeat;opacity:.75;will-change:transform;z-index:0}
   .hero::after{content:"";position:absolute;inset:0;z-index:1;
-    background:linear-gradient(105deg, rgba(253,248,244,.94) 0%, rgba(251,234,230,.82) 42%, rgba(251,234,230,.25) 72%, rgba(251,234,230,.05) 100%)}
+    background:linear-gradient(105deg, rgba(253,248,244,.88) 0%, rgba(253,248,244,.55) 38%, rgba(253,248,244,.18) 68%, rgba(253,248,244,.05) 100%)}
   .hero .wrap{position:relative;z-index:2;padding-top:60px;padding-bottom:60px}
   .hero-inner{max-width:620px}
   .hero h1{font-size:clamp(2.6rem,5.4vw,4.3rem);margin-top:10px}
@@ -104,11 +104,11 @@
   .section-head h2{font-size:clamp(2rem,3.8vw,2.9rem);margin-top:8px}
   .section-head p{color:var(--muted);font-size:1.12rem;margin:14px 0 0}
 
-  /* Meet Sherry */
+  /* Meet Sherry — portrait at 75% opacity over a soft blush fill */
   .meet{display:grid;grid-template-columns:.85fr 1.15fr;gap:52px;align-items:center}
-  .meet .photo{position:relative}
-  .meet .photo img{border-radius:20px 20px 120px 20px;box-shadow:var(--shadow);aspect-ratio:4/5;object-fit:cover;width:100%}
-  .meet .photo::before{content:"";position:absolute;inset:18px -18px -18px 18px;border:2px solid var(--rose);border-radius:20px 20px 120px 20px;z-index:-1}
+  .meet .photo{position:relative;background:linear-gradient(160deg,var(--rose),var(--blush));border-radius:20px 20px 120px 20px;aspect-ratio:4/5;overflow:hidden;box-shadow:var(--shadow)}
+  .meet .photo img{border-radius:20px 20px 120px 20px;aspect-ratio:4/5;object-fit:cover;width:100%;height:100%;opacity:.75;display:block}
+  .meet .photo::before{content:"";position:absolute;inset:18px -18px -18px 18px;border:2px solid var(--rose);border-radius:20px 20px 120px 20px;z-index:-1;pointer-events:none}
   .meet h2{font-size:clamp(2rem,3.6vw,2.8rem)}
   .meet .role{color:var(--coral-deep);font-weight:700;margin:6px 0 16px}
   .cred{list-style:none;padding:0;margin:18px 0 26px}
@@ -139,7 +139,11 @@
   .pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
   .pillar{background:#fff;border:1px solid var(--line);border-radius:22px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 16px 40px -30px rgba(123,85,96,.55);transition:transform .2s ease,box-shadow .2s ease}
   .pillar:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
-  .pillar .pimg{height:190px;background-size:cover;background-position:center}
+  /* Little boxes: blush fill always visible; photo layered at 25% (3rd card at 75%) */
+  .pillar .pimg{height:190px;background-color:var(--rose);position:relative;overflow:hidden}
+  .pillar .pimg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.25;display:block}
+  .pillar .pimg-strong{background-color:var(--blush)}
+  .pillar .pimg-strong img{opacity:.75}
   .pillar .pbody{padding:26px;display:flex;flex-direction:column;flex:1}
   .pillar .tag{font-family:Sacramento,cursive;font-size:1.3rem;color:var(--coral)}
   .pillar h3{font-size:1.5rem;margin:2px 0 4px}
@@ -222,7 +226,7 @@
 <header class="topbar" id="top">
   <div class="wrap">
     <a class="brand" href="#top" aria-label="Well Rounded Momma home">
-      <img src="assets/wrm-logo.png" alt="Well Rounded Momma logo" />
+      <img src="/previews/wellrounded-momma/assets/wrm-logo.png" alt="Well Rounded Momma logo" />
       <span class="wm">Well&nbsp;Rounded<span class="sm">Momma</span></span>
     </a>
     <nav class="nav-links">
@@ -265,7 +269,7 @@
 <section class="block" id="meet">
   <div class="wrap meet">
     <div class="photo">
-      <img src="assets/sherry-portrait.jpg" alt="Sherry Hopkins, Certified Professional Midwife in Las Vegas" loading="lazy" />
+      <img src="/previews/wellrounded-momma/assets/sherry-portrait.jpg" alt="Sherry Hopkins, Certified Professional Midwife in Las Vegas" width="800" height="1000" />
     </div>
     <div>
       <span class="eyebrow">Meet your midwife</span>
@@ -334,7 +338,9 @@
     <div class="pillars">
 
       <article class="pillar">
-        <div class="pimg" style="background-image:url('assets/midwife-newborn.jpg')"></div>
+        <div class="pimg">
+          <img src="/previews/wellrounded-momma/assets/midwife-newborn.jpg" alt="Sherry with a newborn" loading="lazy" />
+        </div>
         <div class="pbody">
           <span class="tag">The Midwife</span>
           <h3>Sherry Hopkins</h3>
@@ -352,7 +358,9 @@
       </article>
 
       <article class="pillar">
-        <div class="pimg" style="background-image:url('assets/waterbirth-tub.jpg')"></div>
+        <div class="pimg">
+          <img src="/previews/wellrounded-momma/assets/waterbirth-tub.jpg" alt="Water birth with midwife support" loading="lazy" />
+        </div>
         <div class="pbody">
           <span class="tag">Bodyworker &amp; Midwife</span>
           <h3>Cora Williams</h3>
@@ -370,7 +378,9 @@
       </article>
 
       <article class="pillar">
-        <div class="pimg" style="background-image:url('assets/newborn-chest.jpg')"></div>
+        <div class="pimg pimg-strong">
+          <img src="/previews/wellrounded-momma/assets/newborn-chest.jpg" alt="Newborn moments after home birth" loading="lazy" />
+        </div>
         <div class="pbody">
           <span class="tag">The Choice</span>
           <h3>Why Home Birth?</h3>
@@ -393,7 +403,7 @@
 
 <!-- PARALLAX QUOTE BAND (real testimonial) -->
 <section class="band">
-  <div class="band-bg" data-parallax="0.2" style="background-image:url('assets/waterbirth-bw.jpg')"></div>
+  <div class="band-bg" data-parallax="0.2" style="background-image:url('/previews/wellrounded-momma/assets/waterbirth-bw.jpg');opacity:.85"></div>
   <div class="wrap">
     <p class="quote">"We had an amazing home birth, each time, with Sherry. My husband was reluctant at first, but after meeting her he was well assured in her skill and our safety. She is amazing and I couldn't recommend her enough — Sherry will always be a part of our family."</p>
     <cite>— Amanda, Well Rounded Momma family</cite>
@@ -436,7 +446,7 @@
       <a class="btn-primary" href="#consult" data-track="cta_click" data-label="speaker_inquiry" id="speakerCta">Invite Sherry to speak</a>
     </div>
     <div class="photo">
-      <img src="assets/sherry-portrait-full.jpg" alt="Sherry Hopkins speaking and teaching midwifery" loading="lazy" />
+      <img src="/previews/wellrounded-momma/assets/sherry-portrait-full.jpg" alt="Sherry Hopkins speaking and teaching midwifery" loading="lazy" style="opacity:.75" />
     </div>
   </div>
 </section>
