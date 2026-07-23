@@ -56,7 +56,7 @@ export function shouldUseDirectFactualAnswer(input = '', systemFacts = {}) {
     const hits = qTokens.filter((w) => search.toLowerCase().includes(w)).length;
     if (hits < Math.min(2, Math.max(1, Math.ceil(qTokens.length * 0.2)))) return false;
   }
-  if (/\?\s*$/.test(t)) return true;
+  if (/\?\s$/.test(t)) return true;
   return /^(what|who|when|where|why|how|is|are|does|did|can|could|tell me about)\b/i.test(t);
 }
 
@@ -82,49 +82,27 @@ export function formatDirectProgramAnswer(input = '', systemFacts = {}) {
   const t = String(input || '').trim();
 
   if (/\b(connected|connection|system api|lifeos api|apis right now)\b/i.test(t) && /\b(you|lumin|chair|are you)\b/i.test(t)) {
-    return [
-      'Yes — same system, same API.',
-      '',
-      'Lumin IS the Chair. This drawer hits `POST /api/v1/lifeos/builderos/command-control/founder-interface/message` — the same path the platform uses.',
-      'I load your **digital twin**, **DB thread**, **SSOT amendments**, and the **repo synopsis index** into facts before I answer.',
-      'When you order a change, I route to **build_async** (BuilderOS council + commit) or a work executor (SMOS, system actions). `command_truth` in the response tells you if something actually ran.',
-    ].join('\n');
+    return 'Lumin is the Chair. This drawer posts to `POST /api/v1/lifeos/builderos/command-control/founder-interface/message` — same system, same API. I load the digital twin, DB thread, SSOT amendments, and repo synopsis before I answer. Ordered changes route to `build_async` (BuilderOS council + commit); `command_truth` in the response reports whether something actually ran.';
   }
 
   const programs = systemFacts.program_context || [];
   const smos = programs.find((p) => p.id === 'smos');
   if ((smos || SMOS_TOPIC.test(t)) && SMOS_WORKFLOW.test(t)) {
-    const lines = [
-      'Our Social Media OS workflow (MarketingOS Phase 1 — LIVE on `/api/v1/marketing/*`):',
-      '',
-      '1. **Consent** — timestamped consent before any session.',
-      '2. **Session** — founder speaks / types; coach interviews for real stories.',
-      '3. **Coach** — pulls hooks, angles, and authentic voice from that session.',
-      '4. **Extract** — typed pulls: hook, story, teaching, objection, offer, CTA, emotional truth.',
-      '5. **Generate** — content pack (posts, captions, scripts) from those extracts — not blank-brief AI.',
-      '6. **Approve** — you review; nothing ships without approval.',
-      '7. **Export** — download the pack (publishing automation is a later phase).',
-      '',
-      'Authority: `docs/products/marketingos/PRODUCT_HOME.md`. Video/image generation and clip editing are later phases — not Phase 1.',
-    ];
-    if (/relocation/i.test(input)) {
-      lines.splice(2, 0, 'For **relocation content**: the coach stage is where you narrate the market angle (seller hesitation, buyer education, etc.); extract then pulls story + objection heaviest.');
+    let base = String(systemFacts.system_knowledge || '').trim();
+    if (base.length < 80) {
+      base = 'SMOS workflow phases: consent → session → coach → extract → generate → approve → export (MarketingOS Phase 1 on `/api/v1/marketing/*`). Authority: `docs/products/marketingos/PRODUCT_HOME.md`.';
     }
-    return lines.join('\n');
+    const relocationNote = /relocation/i.test(input)
+      ? ' For relocation content, the coach stage narrates the market angle (seller hesitation, buyer education) and extract pulls story + objection heaviest.'
+      : '';
+    return base + relocationNote;
   }
 
   const chair = programs.find((p) => p.id === 'lumin_chair');
   const builderExplain = /\b(lumin|chair|builderos|builder)\b/i.test(t)
     && /\b(build|implement|change|how|explain)\b/i.test(t);
   if ((chair || builderExplain || systemFacts.builder_capability) && builderExplain) {
-    return [
-      'Yes. Lumin is the Chair — product changes go through BuilderOS, not theater.',
-      '',
-      '**How:** say what you want in the founder drawer (`/founder-interface/message`). UI/CSS orders route to `build_async` (council + commit). Explicit orders: `do: <change>` + `target_file: public/overlay/lifeos-app.html`.',
-      'System path: `POST /api/v1/lifeos/builder/build` with task + target_file when running from operator shell.',
-      'Content work (SMOS): brief → coach → scripts via the SMOS executor — not generic video templates.',
-      'Context: SSOT excerpts, repo synopsis, twin profile, and this thread are loaded every turn.',
-    ].join('\n');
+    return 'Lumin is the Chair. Product/UI changes route to `build_async` (BuilderOS council + commit). System path: `POST /api/v1/lifeos/builder/build` with task + target_file. Content work (SMOS) uses the SMOS executor — brief → coach → scripts — not generic video templates. SSOT excerpts, repo synopsis, twin profile, and this thread load every turn.';
   }
 
   if (/\b(ssot|north star|amendment)\b/i.test(t) && systemFacts.system_knowledge) {

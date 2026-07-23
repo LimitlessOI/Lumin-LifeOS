@@ -274,7 +274,7 @@ export async function runChairDirectAgent({ message, history = [], deps = {}, ct
   const isGovernanceCounsel = /\b(governance|constitution|pipeline|separation of powers|digital twin|point a|point b|architect|factory|dual.?judge|honesty|blueprint law|not_on_blueprint|chair counsel|ratify)\b/i.test(message)
     || /\b(mandate|enforceable|zero lying|never redefine)\b/i.test(message);
   const isPresenceTurn = isCounselPresenceIntent(message)
-    || /\b(how are you|just say hi|^hi[.!]?\s*$|^hey[.!]?\s*$)\b/i.test(String(message || '').trim());
+    || /\b(how are you|just say hi|^hi[.!]?\s$|^hey[.!]?\s$)\b/i.test(String(message || '').trim());
 
   let systemFacts = {};
   try {
@@ -315,6 +315,19 @@ export async function runChairDirectAgent({ message, history = [], deps = {}, ct
   let shellAction = null;
   let actionReceipt = null;
   let actionType = null;
+
+  const intentExecution = ctx.intentExecution || null;
+  if (intentExecution) {
+    const status = intentExecution.ok === false ? 'FAILED' : (intentExecution.status || 'DONE');
+    const summary = String(intentExecution.summary || intentExecution.message || '').slice(0, 400);
+    observations.push(`LIFE_ADMIN INTENT ALREADY EXECUTED — do not run another system action this turn. Result (${status}): ${JSON.stringify({
+      intent: intentExecution.intent,
+      ok: intentExecution.ok,
+      status: intentExecution.status,
+      transport: intentExecution.transport,
+      summary,
+    })}. You must respond with {"action":"reply",...} summarizing this result or asking the natural follow-up in your own voice.`);
+  }
 
   const priorReceipt = systemFacts?.last_build_receipt;
   if (priorReceipt?.commit_sha || priorReceipt?.pass_fail) {

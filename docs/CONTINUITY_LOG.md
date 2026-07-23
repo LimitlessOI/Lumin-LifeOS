@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-23 — Chair/chat anti-template fix + communication strategy review
+
+Adam: the chair felt like a template because `life_admin` and `grounded_direct_answer` paths emitted pre-written prose. GAP-FILL: `services/lifeos-chat-intent-executor.js` now returns a concise `human_summary` of the executed action; `services/chair-program-direct-answer.js` returns fact-grounding strings or `system_knowledge` blocks instead of canned paragraphs; `services/chair-direct-agent.js` accepts `ctx.intentExecution` so the model knows the action is already done; `services/lumin-chair-orchestrator.js` calls `executeChatIntent` then `runChairDirectAgent` for every known `life_admin` intent, so the API model speaks every reply. Preflight passed locally (396/396). Adam also asked for a full communication-strategy review across the constitution, SSOTs, and product conversations, with focus on personality/tone, client feedback grouping, and whether the system is directly tied to the "Karen" browser TTS voice. Next: document the synthesized communication approach, then continue the ChatGPT-style layout, real-time voice transcript, read-aloud controls, queued/multi-request, and file-attachment work.
+
 ## 2026-07-23 — Go Vegas flagship site + recognition flywheel
 
 Adam: multi-brand value posts (not Adam-show); daily recognition questions → outreach “Superior Place” + Best Of + join free network; rotating member threads; free SiteBuilder as contest/surprise. Shipped `/go-vegas` public site (powered by SiteBuilder) + `config/go-vegas-network-playbook.js`. Next: wire recognition sends to go_vegas_prospects; fill Best Of from real nominations.
