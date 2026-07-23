@@ -105,13 +105,6 @@ export function getVariantSwitcherHtml({ info, clientId, variants, editToken = '
           <a :href='checkoutUrl' class='bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold px-3 py-2 rounded-lg'><span x-text='selected === customDesignId ? customDesignLabel : publishLabel'></span></a>
           <button @click='choose()' class='bg-emerald-500 hover:bg-emerald-400 text-white text-sm font-semibold px-4 py-2 rounded-lg'>Use this design</button>
           <p class='text-xs text-slate-400 mb-1 w-full' x-text='current.name + (current.tier === paidTier ? paidPublishNote : freePublishNote)'></p>
-          <form @submit.prevent='applyCompCode()' class='w-full flex flex-wrap gap-2 items-center justify-end mt-1'>
-            <label class='text-xs text-slate-400 flex items-center gap-2'>
-              Have a code?
-              <input x-model='compCode' type='text' autocomplete='off' autocapitalize='characters' placeholder='Complimentary code' class='bg-slate-800 border border-slate-600 rounded-lg px-2 py-1.5 text-sm text-white w-44' />
-            </label>
-            <button type='submit' class='bg-slate-700 hover:bg-slate-600 text-white text-xs font-semibold px-3 py-2 rounded-lg'>Apply free publish</button>
-          </form>
         </div>
       </div>
       <p class='text-xs text-slate-400 mt-2'>10 free niche templates · 40 more from the 50-template catalog · $35 custom co-design (pay only when you approve). Toggle to compare — each layout is structurally different.</p>
@@ -233,7 +226,6 @@ export function getVariantSwitcherHtml({ info, clientId, variants, editToken = '
       frameUrl: '',
       compareOpen: false,
       compareIndex: 0,
-      compCode: '',
       compareCards: (typeof window !== 'undefined' && window.luminCompareData) || [],
       typeLabels: { competitor: 'Competitor score', presence: 'Presence gap', design: 'Design strategy', empty: 'Insight' },
       verdictClasses: { ahead: 'bg-emerald-900 text-emerald-300', behind: 'bg-rose-900 text-rose-300', even: 'bg-slate-700 text-slate-300', default: 'bg-slate-700 text-slate-300' },
@@ -247,16 +239,7 @@ export function getVariantSwitcherHtml({ info, clientId, variants, editToken = '
         let url = base;
         if (this.selected === this.customDesignId) url += '&templateTier=template-custom';
         else if (this.selected && this.selectedTier === this.paidTier) url += '&templateTier=template-additional&selectedDesign=' + encodeURIComponent(this.selected);
-        const code = String(this.compCode || '').trim();
-        if (code) url += '&code=' + encodeURIComponent(code);
         return url;
-      },
-      applyCompCode(){
-        const code = String(this.compCode || '').trim();
-        if (!code) { this.saved = true; this.savedMsg = 'Enter a complimentary code first.'; setTimeout(()=>{ this.saved = false; }, 3000); return; }
-        const url = this.checkoutUrl;
-        if (!url) return;
-        window.location.href = url;
       },
       get currentCompare(){ return this.compareCards[this.compareIndex] || {}; },
       init(){

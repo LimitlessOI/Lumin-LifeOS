@@ -21,7 +21,7 @@ export async function redeemPublishCompCode({ clientId, code, pool, businessName
   }
   const normalized = normalizePublishCompCode(code);
   if (!isValidPublishCompCode(normalized)) {
-    return { ok: false, error: 'Invalid or unknown complimentary code' };
+    return { ok: false, error: 'Invalid or unknown discount code' };
   }
   if (!pool) {
     return { ok: false, error: 'Database required for complimentary publish' };

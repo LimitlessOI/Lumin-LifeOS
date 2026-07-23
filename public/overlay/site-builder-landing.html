@@ -776,8 +776,8 @@
           <p>You get 10 free niche templates to preview and switch — HVAC dark, plumber before/after, dental clinical, law authority, menu-board, and more. Forty more from the 50-template catalog are $1 each when you publish. A fully custom one-of-one is $35 — co-designed with you, never duplicated.</p>
         </details>
         <details>
-          <summary>I was given a complimentary code — how do I use it?</summary>
-          <p>After your preview is ready, enter the code in the complimentary-code box and tap Apply free publish. It skips the $45 Stripe charge for that preview.</p>
+          <summary>I have a discount code — where do I enter it?</summary>
+          <p>Open your preview, tap Publish, and enter the code on the checkout page before you pay — same place most sites put promo codes.</p>
         </details>
       </div>
     </section>
@@ -805,14 +805,6 @@
         <div class="preview-actions" id="preview-actions">
           <a class="btn btn-secondary" id="preview-link" href="#" target="_blank" rel="noopener">Open preview</a>
           <a class="btn btn-primary" id="publish-link" href="#" target="_blank" rel="noopener">Publish for $45</a>
-        </div>
-        <div class="comp-code-row" id="comp-code-row" hidden>
-          <label>
-            Have a complimentary code?
-            <input id="compCode" name="compCode" type="text" placeholder="Enter code" autocomplete="off" autocapitalize="characters" spellcheck="false" />
-          </label>
-          <button class="btn btn-secondary" type="button" id="comp-apply">Apply free publish</button>
-          <div class="status" id="comp-status" aria-live="polite"></div>
         </div>
         <div class="small-note">Prefer to talk? <a href="tel:+17028602007">Call or text Adam at (702) 860-2007</a> · or <a href="mailto:adam@hopkinsgroup.org">email adam@hopkinsgroup.org</a></div>
       </form>
@@ -858,22 +850,15 @@
       const previewActions = document.getElementById('preview-actions');
       const previewLink = document.getElementById('preview-link');
       const publishLink = document.getElementById('publish-link');
-      const compCodeRow = document.getElementById('comp-code-row');
-      const compCodeInput = document.getElementById('compCode');
-      const compApply = document.getElementById('comp-apply');
-      const compStatus = document.getElementById('comp-status');
 
       let pollTimer = null;
-      let lastClientId = null;
 
       function showPreviewReady(clientId, previewUrl) {
-        lastClientId = clientId || null;
         if (previewUrl) previewLink.href = previewUrl;
         if (clientId) {
           publishLink.href = `/api/v1/sites/publish/checkout?clientId=${encodeURIComponent(clientId)}`;
         }
         previewActions.classList.add('visible');
-        if (compCodeRow) compCodeRow.hidden = false;
       }
 
       function normalizeUrl(raw) {
@@ -988,26 +973,6 @@
         });
       }
 
-      if (compApply) {
-        compApply.addEventListener('click', () => {
-          const code = String(compCodeInput?.value || '').trim();
-          if (!lastClientId) {
-            if (compStatus) {
-              compStatus.className = 'status error';
-              compStatus.textContent = 'Build a preview first, then apply your code.';
-            }
-            return;
-          }
-          if (!code) {
-            if (compStatus) {
-              compStatus.className = 'status error';
-              compStatus.textContent = 'Enter your complimentary code.';
-            }
-            return;
-          }
-          window.location.href = `/api/v1/sites/publish/checkout?clientId=${encodeURIComponent(lastClientId)}&code=${encodeURIComponent(code)}`;
-        });
-      }
     })();
 
     (function () {

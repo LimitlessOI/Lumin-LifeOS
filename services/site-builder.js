@@ -57,14 +57,9 @@ function injectPreviewChrome(html, { clientId, baseUrl, editToken }) {
   const editorUrl = `/api/v1/sites/editor?clientId=${encodeURIComponent(clientId)}&token=${encodeURIComponent(editToken || '')}`;
   const bar = `
 <div id="sb-preview-chrome" style="position:fixed;left:0;right:0;bottom:0;z-index:99999;background:rgba(17,24,39,.96);color:#fff;padding:12px 16px;display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;font-family:system-ui,sans-serif;font-size:14px;box-shadow:0 -8px 30px rgba(0,0,0,.25)">
-  <span>Your free preview — customize it or publish when ready.</span>
+  <span>Your preview — customize it or publish when ready.</span>
   <a href="${editorUrl}" style="background:#334155;color:#fff;padding:8px 14px;border-radius:999px;text-decoration:none;font-weight:600">Open editor</a>
   <a href="${publishUrl}" style="background:#7c3aed;color:#fff;padding:8px 14px;border-radius:999px;text-decoration:none;font-weight:600">Publish ${SITE_BUILDER_PRICING.publish.display}</a>
-  <form action="${publishUrl}" method="get" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:0">
-    <input type="hidden" name="clientId" value="${escapeHtml(clientId)}" />
-    <input name="code" type="text" placeholder="Complimentary code" autocomplete="off" autocapitalize="characters" style="background:#1e293b;border:1px solid #475569;color:#fff;border-radius:999px;padding:8px 12px;font-size:13px;width:11rem" />
-    <button type="submit" style="background:#334155;color:#fff;padding:8px 12px;border:0;border-radius:999px;font-weight:600;cursor:pointer">Apply free publish</button>
-  </form>
 </div>`;
   if (html.includes('</body>')) return html.replace('</body>', `${bar}\n</body>`);
   return `${html}${bar}`;
