@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-23T18:50:12.084Z",
+  "generated_at": "2026-07-23T18:57:15.277Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12135,
   "files": [
@@ -30676,9 +30676,9 @@
     {
       "path": "config/go-vegas-network-playbook.js",
       "synopsis": "Go Vegas free network — multi-brand posting + recognition flywheel.",
-      "bytes": 5151,
-      "mtime": "2026-07-23T18:50:12.084Z",
-      "indexed_at": "2026-07-23T18:50:12.084Z",
+      "bytes": 9327,
+      "mtime": "2026-07-23T18:57:15.277Z",
+      "indexed_at": "2026-07-23T18:57:15.277Z",
       "ssot": [
         "docs/products/limitlessos/PRODUCT_HOME.md"
       ]
@@ -40540,9 +40540,9 @@
     {
       "path": "docs/products/limitlessos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LimitlessOS business stack",
-      "bytes": 10649,
-      "mtime": "2026-07-23T18:50:12.084Z",
-      "indexed_at": "2026-07-23T18:50:12.084Z"
+      "bytes": 11098,
+      "mtime": "2026-07-23T18:57:15.277Z",
+      "indexed_at": "2026-07-23T18:57:15.277Z"
     },
     {
       "path": "docs/products/lumin-university/FILE_MANIFEST.json",
@@ -93990,9 +93990,9 @@
     {
       "path": "tests/go-vegas-network-playbook.test.js",
       "synopsis": "js — tests/go-vegas-network-playbook.test.js.",
-      "bytes": 1573,
-      "mtime": "2026-07-23T18:50:12.084Z",
-      "indexed_at": "2026-07-23T18:50:12.084Z",
+      "bytes": 2629,
+      "mtime": "2026-07-23T18:57:15.277Z",
+      "indexed_at": "2026-07-23T18:57:15.277Z",
       "ssot": [
         "docs/products/limitlessos/PRODUCT_HOME.md"
       ]

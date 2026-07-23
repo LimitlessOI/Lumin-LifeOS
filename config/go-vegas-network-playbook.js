@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Go Vegas free network — multi-brand posting + recognition flywheel.
- * Cadence: Adam (human) heavy discussion; product accounts = specialty value personalities.
+ * Meta group recommendations surface "31+" activity — we target that floor daily.
  * @ssot docs/products/limitlessos/PRODUCT_HOME.md
  */
 
@@ -19,12 +19,22 @@ export const PRODUCT_ACCOUNT_NAMES = {
 };
 
 /**
- * Adam (admin / human): ~12 discussion + LV pulse posts/day.
- * Each product account: 5–10 (up to ~20) with its own personality — specialty value, not Adam clones.
+ * Facebook surfaces "31+" (vs "10+") when the group is this active —
+ * that drives recommendations. Owned posts must clear 31; member posts are bonus.
+ *
+ * Rough split (adjust by day, stay human):
+ * - Adam: ~12 discussion / recognition / LV pulse
+ * - Product accounts combined: ~20 (SiteBuilder, Taloa Social, etc. — own personalities)
+ * - Member-stimulated: aim +20 (rec asks, card days, exclusives)
  */
 export const GO_VEGAS_CADENCE = {
+  /** Hard floor so the group shows 31+ in Meta's activity chip */
+  groupOwnedPostsFloor: 31,
+  groupOwnedPostsTarget: 35,
+  memberPostsTarget: 20,
   adamPerDay: { min: 10, target: 12, max: 15 },
-  productAccountPerDay: { min: 5, target: 8, max: 20 },
+  productAccountsCombinedPerDay: { min: 18, target: 20, max: 28 },
+  productAccountPerDay: { min: 5, target: 8, max: 12 },
   valueBeforePromoFromProduct: 15,
   promoOwner: 'human_admin',
 };
@@ -39,6 +49,23 @@ export const RECOGNITION_QUESTION_BANK = [
   'Who’s a small business here that deserves way more attention than they get?',
   'Coffee / breakfast stop that never lets you down before a long day?',
   'Who went above and beyond after a mistake — and earned your loyalty?',
+];
+
+/**
+ * Recommendation-ask posts from our product/network voices.
+ * Members (and we) name plumbers, HVAC, dentists, etc. → warm soft-open to that business.
+ */
+export const RECOMMENDATION_ASK_BANK = [
+  { niche: 'plumber', prompt: 'Vegas folks — who do you actually trust for a plumber when something breaks at the worst time? Drop a name + why.' },
+  { niche: 'hvac', prompt: 'Who’s your go-to HVAC person in the valley when the AC dies in July? Real recommendations only.' },
+  { niche: 'electrician', prompt: 'Need an electrician recommendation in Las Vegas — who have you used and would use again?' },
+  { niche: 'dentist', prompt: 'Who’s a dentist in LV you’d send family to? Not the biggest billboard — who you trust.' },
+  { niche: 'realtor', prompt: 'Buying or selling in the valley — which realtor actually took care of you?' },
+  { niche: 'auto-repair', prompt: 'Honest auto shop in Las Vegas that doesn’t make you feel dumb — who?' },
+  { niche: 'restaurant', prompt: 'Client lunch that never fails in Las Vegas — where are you taking people lately?' },
+  { niche: 'web-designer', prompt: 'Has anyone here had a website rebuilt that actually got them more calls? Who did it?' },
+  { niche: 'lawyer', prompt: 'Need a referral: solid local attorney for small business stuff in NV — who do you trust?' },
+  { niche: 'cleaner', prompt: 'House / office cleaner you’d recommend without hesitating — drop them.' },
 ];
 
 /** Rotating sub-promo threads inside the group (mix daily — not the same ask). */
@@ -65,6 +92,11 @@ export function pickRecognitionQuestion(dayIndex = Date.now()) {
 export function pickSubPromoThread(dayIndex = Date.now()) {
   const i = Math.abs(Number(dayIndex)) % DAILY_SUBPROMO_THREADS.length;
   return DAILY_SUBPROMO_THREADS[i];
+}
+
+export function pickRecommendationAsk(dayIndex = Date.now()) {
+  const i = Math.abs(Number(dayIndex)) % RECOMMENDATION_ASK_BANK.length;
+  return RECOMMENDATION_ASK_BANK[i];
 }
 
 /**
@@ -102,15 +134,69 @@ export function buildRecognitionOutreachEmail({
   };
 }
 
+/**
+ * Soft open after someone in the group recommended a business (plumber, HVAC, etc.).
+ * Warm intro first → free spec site → competitor score snapshot → link.
+ */
+export function buildRecommendationSoftOpenEmail({
+  businessName,
+  recommenderName = 'a member',
+  niche = 'your industry',
+  previewUrl = '',
+  theirScore = null,
+  competitorScore = null,
+  upgrades = [],
+} = {}) {
+  const name = String(businessName || 'there').trim();
+  const who = String(recommenderName || 'a member').trim();
+  const scoreLine =
+    theirScore != null && competitorScore != null
+      ? `We scored your current site about a ${theirScore}/10 against local competitors sitting near ${competitorScore}/10.`
+      : `We looked at your site next to a few local competitors in ${niche}.`;
+  const upgradeLines = (Array.isArray(upgrades) ? upgrades : [])
+    .filter(Boolean)
+    .slice(0, 5)
+    .map((u, i) => `${i + 1}. ${u}`);
+  const howWeLift = upgradeLines.length
+    ? ['Here\'s how we\'d take it up — the same moves on the free preview:', ...upgradeLines]
+    : [
+        'On the free preview we tightened the offer, put proof above the fold, and made one clear next step (call/book) so visitors aren\'t guessing.',
+      ];
+
+  return {
+    subject: `${who} from Go Vegas thought we could help ${name}`,
+    text: [
+      `Hi ${name},`,
+      '',
+      `${who} from our Go Vegas business group recommended I reach out — they thought I could really help you.`,
+      '',
+      `I'm with SiteBuilder by Taloa. We built you a free spec website (like a commercial on spec — look first, only buy if you like it).`,
+      '',
+      scoreLine,
+      ...howWeLift,
+      '',
+      previewUrl ? `Here's your free preview: ${previewUrl}` : 'Reply with your website URL and I\'ll send the preview link.',
+      '',
+      `No pitch call required. If it's not useful, ignore this — totally fine.`,
+      '',
+      `— Adam / SiteBuilder by Taloa`,
+      `Go Vegas: ${GO_VEGAS_GROUP_URL}`,
+    ].join('\n'),
+  };
+}
+
 export default {
   GO_VEGAS_GROUP_URL,
   GO_VEGAS_SITE_PATH,
   PRODUCT_ACCOUNT_NAMES,
   GO_VEGAS_CADENCE,
   RECOGNITION_QUESTION_BANK,
+  RECOMMENDATION_ASK_BANK,
   DAILY_SUBPROMO_THREADS,
   REWARD_HOOKS,
   pickRecognitionQuestion,
   pickSubPromoThread,
+  pickRecommendationAsk,
   buildRecognitionOutreachEmail,
+  buildRecommendationSoftOpenEmail,
 };
