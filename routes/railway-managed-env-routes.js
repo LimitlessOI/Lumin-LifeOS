@@ -783,6 +783,44 @@ export function createRailwayManagedEnvRoutes({ requireKey, managedEnvService })
   });
 
   /**
+   * DELETE /custom-domains
+   * Body: { id: "<customDomainId>" } or { domain: "example.com" }
+   * Frees Railway plan slots (e.g. reclaim unused taloaos hosts for WRM).
+   */
+  router.delete("/custom-domains", requireKey, async (req, res) => {
+    try {
+      let id = String(req.body?.id || "").trim();
+      const domainWanted = String(req.body?.domain || "").trim().toLowerCase();
+      if (!id && domainWanted) {
+        const projectId = process.env.RAILWAY_PROJECT_ID;
+        const { serviceId, environmentId } = getRailwayIds();
+        const data = await railwayGql(
+          `query Domains($projectId: String!, $environmentId: String!, $serviceId: String!) {
+            domains(projectId: $projectId, environmentId: $environmentId, serviceId: $serviceId) {
+              customDomains { id domain }
+            }
+          }`,
+          { projectId, environmentId, serviceId },
+        );
+        const hit = (data?.domains?.customDomains || []).find(
+          (d) => String(d.domain || "").toLowerCase() === domainWanted,
+        );
+        id = hit?.id || "";
+      }
+      if (!id) {
+        return res.status(400).json({ ok: false, error: "id or domain required" });
+      }
+      await railwayGql(
+        `mutation CustomDomainDelete($id: String!) { customDomainDelete(id: $id) }`,
+        { id },
+      );
+      res.json({ ok: true, deleted: id, domain: domainWanted || null });
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  /**
    * POST /custom-domains/apply-cloudflare-dns
    * System path: upsert Railway-required CNAME + TXT into Cloudflare DNS.
    * Body: { token?, zoneId?, proxied?: false, persistToken?: true }

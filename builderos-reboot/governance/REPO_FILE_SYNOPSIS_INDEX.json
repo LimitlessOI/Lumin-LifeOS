@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-23T21:00:00.536Z",
+  "generated_at": "2026-07-23T21:03:52.492Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12142,
   "files": [
@@ -40482,9 +40482,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 614992,
-      "mtime": "2026-07-23T21:00:00.536Z",
-      "indexed_at": "2026-07-23T21:00:00.536Z"
+      "bytes": 615258,
+      "mtime": "2026-07-23T21:03:52.492Z",
+      "indexed_at": "2026-07-23T21:03:52.492Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -68672,9 +68672,9 @@
     {
       "path": "routes/railway-managed-env-routes.js",
       "synopsis": "Railway env vault + sync (production spine).",
-      "bytes": 36987,
-      "mtime": "2026-07-21T05:32:04.336Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "bytes": 38493,
+      "mtime": "2026-07-23T21:03:52.492Z",
+      "indexed_at": "2026-07-23T21:03:52.492Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
