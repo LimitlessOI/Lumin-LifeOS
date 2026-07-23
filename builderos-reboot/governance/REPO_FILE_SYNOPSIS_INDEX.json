@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-23T19:34:58.342Z",
+  "generated_at": "2026-07-23T19:36:45.199Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12141,
   "files": [
@@ -30676,9 +30676,9 @@
     {
       "path": "config/go-vegas-network-playbook.js",
       "synopsis": "Go Vegas free network — multi-brand posting + recognition flywheel.",
-      "bytes": 12772,
-      "mtime": "2026-07-23T19:04:49.357Z",
-      "indexed_at": "2026-07-23T19:04:49.357Z",
+      "bytes": 14007,
+      "mtime": "2026-07-23T19:36:45.199Z",
+      "indexed_at": "2026-07-23T19:36:45.199Z",
       "ssot": [
         "docs/products/limitlessos/PRODUCT_HOME.md"
       ]
@@ -87037,9 +87037,9 @@
     {
       "path": "services/go-vegas-daily-pack.js",
       "synopsis": "Build a full Go Vegas daily post pack (31+) for human approve → paste.",
-      "bytes": 9599,
-      "mtime": "2026-07-23T19:18:59.005Z",
-      "indexed_at": "2026-07-23T19:18:59.005Z",
+      "bytes": 9916,
+      "mtime": "2026-07-23T19:36:45.199Z",
+      "indexed_at": "2026-07-23T19:36:45.199Z",
       "ssot": [
         "docs/products/limitlessos/PRODUCT_HOME.md"
       ]

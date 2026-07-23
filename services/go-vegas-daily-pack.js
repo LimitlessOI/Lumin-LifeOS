@@ -14,6 +14,7 @@ import {
   pickRecognitionQuestion,
   pickRecommendationAsk,
   pickSubPromoThread,
+  maybeHumanMisspell,
 } from '../config/go-vegas-network-playbook.js';
 
 const LV_PULSE = [
@@ -210,11 +211,20 @@ export function buildGoVegasDailyPack({ date = new Date(), includeContest = true
   }
 
   const times = slotTimes(posts.length);
-  const scheduled = posts.map((p, i) => ({
-    ...p,
-    suggestedTimePT: times[i],
-    order: i + 1,
-  }));
+  const scheduled = posts.map((p, i) => {
+    const humanLane = p.account === PRODUCT_ACCOUNT_NAMES.human
+      && (p.lane === 'discussion' || p.lane === 'lv_pulse');
+    const body = humanLane
+      ? maybeHumanMisspell(p.body, { salt: idx + i })
+      : p.body;
+    return {
+      ...p,
+      body,
+      suggestedTimePT: times[i],
+      order: i + 1,
+      humanTexture: body !== p.body,
+    };
+  });
 
   const byAccount = {};
   for (const p of scheduled) {

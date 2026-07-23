@@ -128,6 +128,38 @@ export const META_GROUP_SIGNALS = {
   preferNativeOverExternalLinks: true,
 };
 
+/**
+ * Human texture (not spam). Occasional natural typos / casual spelling in human*
+ * accounts only — never on polished brand legal copy. Sparingly: ~1 in 8–12 posts.
+ * Also draws “wait what?” comment corrections → more conversation (the real goal).
+ */
+export const HUMAN_TEXTURE = {
+  enabled: true,
+  applyToAccounts: ['Adam Hopkins'],
+  maxFractionOfPosts: 0.12,
+  examples: ['definately', 'seperate', 'recieve', 'tommorow', 'buisness', 'recomend'],
+  rule: 'One soft misspell max per post; still readable; never in contest rules or SiteBuilder pitch lines.',
+};
+
+/** Optionally nudge one casual word in Adam-voice body copy. */
+export function maybeHumanMisspell(text, { force = false, salt = 0 } = {}) {
+  const body = String(text || '');
+  if (!HUMAN_TEXTURE.enabled || !body) return body;
+  if (!force && Math.abs(Number(salt)) % 9 !== 0) return body;
+  const pairs = [
+    [/definitely/i, 'definately'],
+    [/separate/i, 'seperate'],
+    [/receive/i, 'recieve'],
+    [/tomorrow/i, 'tommorow'],
+    [/business/i, 'buisness'],
+    [/recommend/i, 'recomend'],
+  ];
+  for (const [re, bad] of pairs) {
+    if (re.test(body)) return body.replace(re, bad);
+  }
+  return body;
+}
+
 export function buildBestPostContestAnnounce() {
   return BEST_POST_CONTEST.announcePost;
 }
@@ -268,6 +300,8 @@ export default {
   buildRecognitionOutreachEmail,
   buildRecommendationSoftOpenEmail,
   META_GROUP_SIGNALS,
+  HUMAN_TEXTURE,
+  maybeHumanMisspell,
   buildBestPostContestAnnounce,
   buildBestPostWinnerPost,
   scoreBestPostContest,
