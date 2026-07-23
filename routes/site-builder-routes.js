@@ -42,6 +42,17 @@ import {
   resolveRequestPublicBase,
 } from '../services/site-builder-public-base.js';
 
+/** Strip legacy "Complimentary code / Apply free publish" chrome from baked preview HTML. Discount belongs on checkout only. */
+function stripLegacyCompCodeChrome(html) {
+  if (typeof html !== 'string' || !html) return html;
+  let out = html;
+  // Older switcher headers baked a form that posted/applied a "free publish" code.
+  out = out.replace(/<form\b[^>]*\bapplyCompCode\b[\s\S]*?<\/form>/gi, '');
+  out = out.replace(/<form\b[^>]*>[\s\S]*?\bx-model=['"]compCode['"][\s\S]*?<\/form>/gi, '');
+  out = out.replace(/<form\b[^>]*>[\s\S]*?\bComplimentary code\b[\s\S]*?<\/form>/gi, '');
+  return out;
+}
+
 function buildingPlaceholderHtml(clientId, businessName = '') {
   const safeName = String(businessName || 'your site').replace(/[<>&"]/g, '');
   const safeId = String(clientId || '').replace(/[^\w-]/g, '');
@@ -484,7 +495,7 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
       );
       const row = result.rows[0];
       const meta = row?.metadata && typeof row.metadata === 'object' ? { ...row.metadata } : {};
-      const html = meta.previewHtml;
+      const html = stripLegacyCompCodeChrome(meta.previewHtml);
       if (html && typeof html === 'string') {
         const deployDir = path.join(process.cwd(), 'public', 'previews', clientId);
         await fsp.mkdir(deployDir, { recursive: true }).catch(() => null);
