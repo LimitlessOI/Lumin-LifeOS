@@ -90,19 +90,42 @@ export const REWARD_HOOKS = [
   { id: 'random_kindness', label: 'Random recognition gift', note: 'If someone is called out for kindness, surprise free site/logo when it fits' },
 ];
 
-/** Adam/admin announcement — mix into the 31+ day; pick a winner publicly next morning. */
+/**
+ * Best-post contest scoring — comments dominate (Meta MSI / group ranking).
+ * KNOW: Meta Individual Group Feed predicts comment likelihood using group comment totals.
+ * THINK: ~5× comment weight vs reaction is industry consensus for “conversation > vanity.”
+ * Replies-on-comments count as comments (back-and-forth is the viral signal).
+ */
 export const BEST_POST_CONTEST = {
   id: 'best_post_free_site',
   cadence: 'daily_or_3x_week',
   prize: 'Free website via SiteBuilder by Taloa',
+  scoring: {
+    pointsPerComment: 5,
+    pointsPerReaction: 1,
+    /** Optional: shares are rarer but strong distribution signal */
+    pointsPerShare: 3,
+    rulePublic:
+      'Winner = highest score by end of day (Pacific). Comments = 5 pts each. Reactions = 1 pt. Shares = 3 pts. Replies in a thread count as comments. Ties → most comments wins.',
+  },
   announcePost:
-    'Quick one — whoever drops the best post in this group today wins a free website (built by SiteBuilder by Taloa). Helpful, funny, real local value — judges are me + the room. Winner announced tomorrow. Go.',
-  winnerPostTemplate: ({ winnerName, postHint = '' } = {}) =>
+    'Contest today: best post wins a free website (SiteBuilder by Taloa).\n\nHow we pick the winner (transparent): Comments count 5× more than likes — because conversation is what grows this group. Score = (comments × 5) + (reactions × 1) + (shares × 3). Winner announced tomorrow morning.\n\nPost something useful, funny, or real for Vegas owners. Go.',
+  winnerPostTemplate: ({ winnerName, postHint = '', score = null } = {}) =>
     [
-      `Yesterday’s best post: ${winnerName || 'our winner'}${postHint ? ` — “${String(postHint).slice(0, 120)}”` : ''}.`,
+      `Yesterday’s winner: ${winnerName || 'our winner'}${postHint ? ` — “${String(postHint).slice(0, 120)}”` : ''}${score != null ? ` (score ${score})` : ''}.`,
       'You just won a free website from SiteBuilder by Taloa. DM me (or comment here) and we’ll build your free spec this week.',
-      'Everyone else — we’re running this again. Best post today wins the next one.',
+      'Everyone else — same contest today. Comments weigh more than likes. Best post wins.',
     ].join('\n\n'),
+};
+
+/** Meta-aligned activity floors (see docs/products/limitlessos/GO_VEGAS_FB_GROWTH_PLAYBOOK.md). */
+export const META_GROUP_SIGNALS = {
+  /** KNOW — Meta Transparency: Individual Group Feed ranking requires ≥20 posts in past day */
+  minPostsPastDayForFeedRanking: 20,
+  /** Founder target — activity chip / recommendation surface often shows 31+ */
+  activityChipTarget: 31,
+  firstHourReplyRequired: true,
+  preferNativeOverExternalLinks: true,
 };
 
 export function buildBestPostContestAnnounce() {
@@ -111,6 +134,21 @@ export function buildBestPostContestAnnounce() {
 
 export function buildBestPostWinnerPost(opts = {}) {
   return BEST_POST_CONTEST.winnerPostTemplate(opts);
+}
+
+/** Score a candidate post for the free-website contest. */
+export function scoreBestPostContest({ comments = 0, reactions = 0, shares = 0 } = {}) {
+  const s = BEST_POST_CONTEST.scoring;
+  const c = Math.max(0, Number(comments) || 0);
+  const r = Math.max(0, Number(reactions) || 0);
+  const sh = Math.max(0, Number(shares) || 0);
+  return {
+    score: c * s.pointsPerComment + r * s.pointsPerReaction + sh * s.pointsPerShare,
+    comments: c,
+    reactions: r,
+    shares: sh,
+    breakdown: `${c} comments×${s.pointsPerComment} + ${r} reactions×${s.pointsPerReaction} + ${sh} shares×${s.pointsPerShare}`,
+  };
 }
 
 export function pickRecognitionQuestion(dayIndex = Date.now()) {
@@ -229,6 +267,8 @@ export default {
   pickRecommendationAsk,
   buildRecognitionOutreachEmail,
   buildRecommendationSoftOpenEmail,
+  META_GROUP_SIGNALS,
   buildBestPostContestAnnounce,
   buildBestPostWinnerPost,
+  scoreBestPostContest,
 };

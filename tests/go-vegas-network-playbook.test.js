@@ -15,6 +15,8 @@ import {
   buildRecommendationSoftOpenEmail,
   buildBestPostContestAnnounce,
   buildBestPostWinnerPost,
+  scoreBestPostContest,
+  META_GROUP_SIGNALS,
   GO_VEGAS_CADENCE,
   PRODUCT_ACCOUNT_NAMES,
 } from '../config/go-vegas-network-playbook.js';
@@ -72,10 +74,17 @@ describe('go-vegas network playbook', () => {
 
   it('announces best-post-of-the-day free website contest', () => {
     const announce = buildBestPostContestAnnounce();
-    assert.match(announce, /best post/i);
+    assert.match(announce, /Comments count 5/i);
     assert.match(announce, /free website/i);
     const win = buildBestPostWinnerPost({ winnerName: 'Jordan', postHint: 'brought donuts to the crew' });
     assert.match(win, /Jordan/);
     assert.match(win, /SiteBuilder/);
+  });
+
+  it('weights comments 5× reactions for contest score', () => {
+    const likesHeavy = scoreBestPostContest({ comments: 2, reactions: 40, shares: 0 });
+    const commentsHeavy = scoreBestPostContest({ comments: 12, reactions: 5, shares: 0 });
+    assert.ok(commentsHeavy.score > likesHeavy.score);
+    assert.equal(META_GROUP_SIGNALS.minPostsPastDayForFeedRanking, 20);
   });
 });

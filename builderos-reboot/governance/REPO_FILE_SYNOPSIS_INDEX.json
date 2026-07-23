@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-23T19:02:25.588Z",
+  "generated_at": "2026-07-23T19:04:49.357Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12135,
+  "file_count": 12136,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -30676,9 +30676,9 @@
     {
       "path": "config/go-vegas-network-playbook.js",
       "synopsis": "Go Vegas free network — multi-brand posting + recognition flywheel.",
-      "bytes": 10826,
-      "mtime": "2026-07-23T19:02:25.588Z",
-      "indexed_at": "2026-07-23T19:02:25.588Z",
+      "bytes": 12772,
+      "mtime": "2026-07-23T19:04:49.357Z",
+      "indexed_at": "2026-07-23T19:04:49.357Z",
       "ssot": [
         "docs/products/limitlessos/PRODUCT_HOME.md"
       ]
@@ -40538,11 +40538,18 @@
       "synopsis_index_only": true
     },
     {
+      "path": "docs/products/limitlessos/GO_VEGAS_FB_GROWTH_PLAYBOOK.md",
+      "synopsis": "How to revive Go Vegas FB group so Meta recommends it — signals, contest rules, daily ops",
+      "bytes": 6504,
+      "mtime": "2026-07-23T19:04:49.357Z",
+      "indexed_at": "2026-07-23T19:04:49.357Z"
+    },
+    {
       "path": "docs/products/limitlessos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LimitlessOS business stack",
-      "bytes": 11098,
-      "mtime": "2026-07-23T18:57:15.277Z",
-      "indexed_at": "2026-07-23T18:57:15.277Z"
+      "bytes": 11560,
+      "mtime": "2026-07-23T19:04:49.357Z",
+      "indexed_at": "2026-07-23T19:04:49.357Z"
     },
     {
       "path": "docs/products/lumin-university/FILE_MANIFEST.json",
@@ -93990,9 +93997,9 @@
     {
       "path": "tests/go-vegas-network-playbook.test.js",
       "synopsis": "js — tests/go-vegas-network-playbook.test.js.",
-      "bytes": 3081,
-      "mtime": "2026-07-23T19:02:25.588Z",
-      "indexed_at": "2026-07-23T19:02:25.588Z",
+      "bytes": 3512,
+      "mtime": "2026-07-23T19:04:49.357Z",
+      "indexed_at": "2026-07-23T19:04:49.357Z",
       "ssot": [
         "docs/products/limitlessos/PRODUCT_HOME.md"
       ]
