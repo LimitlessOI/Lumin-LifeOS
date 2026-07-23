@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/site-builder/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-23 — **WRM Wix→Railway DNS cutover:** deterministic tip endpoint `POST /api/v1/browser-agent/wrm-wix-dns-cutover` (WRM_WIX_* env); Railway custom domains attached; public still on Wix until DNS propagates. |
+| **Last Updated** | 2026-07-23 — **WRM hosting cutover complete + cancel-old-host done.** Site serves on Railway (`railway-hikari`); WRM Wix Business Premium + Contact Collection + Events Calendar = AUTO RENEW OFF. Sherry’s other Wix sites/domains kept. Hosting-handoff doctrine below. |
 
 ---
 
@@ -28,6 +28,22 @@ Done-for-you website builder for **any local business with a weak site** (dentis
 **Sales-first law (founder, 2026-07-14):** A website is not an ego page. It must sell — book, call, buy, inquire — **and** look custom. Pretty alone fails. Convert-ugly alone fails. Both.
 
 **Start from the client (founder, 2026-07-14):** Begin with unanswered questions the buyer still has for that industry (agent interview questions, fears, “why you?”). Build visitor-state path doors from those — do not force one funnel. Example — real estate: IDX/search + schedule showing · why this agent / how to pick · consult. Example — midwifery: why this midwife · why home birth · energy/wellness. Industry packs specialize; universal brief covers everyone else.
+
+## Hosting handoff (BoFA-link style) — founder doctrine 2026-07-23
+
+Product UX for moving a client onto our hosting should feel like bank account linking (e.g. BoFA connect), not a DNS homework sheet.
+
+| Step | What happens |
+|---|---|
+| 1. Connect | Client signs into their current host (Wix / Squarespace / etc.) in a guided browser session — human completes login/2FA when needed; system takes over for DNS/ops. |
+| 2. Move | System attaches the domain to our host (Railway custom domain + verify TXT/CNAME/A as required) and updates their DNS so traffic hits our Site Builder preview/publish. |
+| 3. Verify | Prove our site is live on the real hostname (`Host` routing + public resolver + HTTP `server: railway-hikari` / expected title). Local DNS cache may lag; force-resolve / alternate resolvers count. |
+| 4. Offer | Ask: **cancel old host and switch to us**, or **stay where they are** (DNS can still point at us while they keep the old plan). |
+| 5. Cancel (when they choose us / founder mandates) | Cancel **that site’s** Premium + paid apps only. Never delete a whole platform account if other sites/domains live there. Do **not** remove the domain from the old DNS host until nameservers have moved elsewhere — keeping the zone while records point at Railway is OK short-term. |
+
+**WRM first instance (done 2026-07-23):** hosting verified on Railway → unassigned `wellroundedmomma.com` from Wix site WRM 2.0 → canceled WRM Business Premium + Contact Collection Premium + Events Calendar Premium (auto-renew off; features run out through next billing dates). Kept: `sherry` Premium, `sherrylhopkins.com`, `sherrylhopkinsmidwife.com`. DNS zone still on Wix NS with Railway targets.
+
+**Build later:** productized connect UI + governed browser-agent cancel playbooks per host; WRM was the manual proof.
 
 ## Readiness state
 
@@ -330,6 +346,7 @@ Founder directive: review every revenue blueprint for gaps against real competit
 
 | Date | What Changed | Why | Verified | Next |
 |---|---|---|---|---|
+| 2026-07-23 | **WRM old-host cancel + hosting-handoff doctrine.** After Railway hosting proved (`www` → Railway, HTML title Well Rounded Momma Collective, `server: railway-hikari`): unassigned domain from Wix WRM 2.0; canceled WRM Business Premium + Contact Collection + Events Calendar (all AUTO RENEW OFF). Left sherry sites/domains alone. Documented BoFA-style connect → migrate → verify → cancel-or-stay offer in this PRODUCT_HOME. | Adam: bank-link UX for domain move; for WRM close old hosting once ours is verified. | Wix Studio subscriptions UI: 3× AUTO RENEW OFF on WRM; curl force-resolve serves new site | Productize connect UI; optional move NS off Wix; clear leftover apex A `185.230.63.171` if still dual |
 | 2026-07-23 | **WRM deterministic Wix DNS cutover.** `services/wrm-wix-dns-cutover.js` + `POST /api/v1/browser-agent/wrm-wix-dns-cutover` — tip Playwright logs in with `WRM_WIX_*` (never echoed) and upserts Railway www/apex CNAME + `_railway-verify` TXT. LLM `/run` could not pass Wix email-first login. Railway domains already attached (`www`→`d7at9e8j…`, apex→`ydwz6n89…`). | Adam: get Sherry’s site up ASAP — public DNS still Wix/Pepyaka. | tip endpoint + redeploy | prove DNS + `https://www.wellroundedmomma.com` serves SiteBuilder |
 | 2026-07-23 | **WRM host routing for cutover.** `routes/public-routes.js` serves `public/previews/wellrounded-momma` when `Host` is `wellroundedmomma.com` / `www`. Next: Railway custom domain + Wix DNS CNAME to Railway target (creds on tip). | Adam: get WRM site up on real domain — preview was live, public still Wix. | host middleware shipped | attach domains + update Wix DNS |
 | 2026-07-23 | **WRM Wix cutover prep.** Managed-env allowlist: `WRM_WIX_EMAIL`, `WRM_WIX_PASSWORD`, `WRM_DOMAIN` (+ `WIX_*` aliases). Status probe `scripts/wrm-wix-cutover-status.mjs`. New site already live at `/previews/wellrounded-momma/`; `wellroundedmomma.com` still on Wix NS (`ns1.wix.com`). Cutover = set creds on Railway (never chat) → release domain from Wix → point DNS to Railway. | Adam: put Wix login in Railway; system swaps her old site for new. | allowlist + status script | Adam sets Railway env; then execute domain release |

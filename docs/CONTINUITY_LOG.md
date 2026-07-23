@@ -1,8 +1,8 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
-## 2026-07-23 — Chair/chat anti-template fix + communication strategy review
+## 2026-07-23 — WRM on Railway; Wix WRM hosting canceled
 
-Adam: the chair felt like a template because `life_admin` and `grounded_direct_answer` paths emitted pre-written prose. GAP-FILL: `services/lifeos-chat-intent-executor.js` now returns a concise `human_summary` of the executed action; `services/chair-program-direct-answer.js` returns fact-grounding strings or `system_knowledge` blocks instead of canned paragraphs; `services/chair-direct-agent.js` accepts `ctx.intentExecution` so the model knows the action is already done; `services/lumin-chair-orchestrator.js` calls `executeChatIntent` then `runChairDirectAgent` for every known `life_admin` intent, so the API model speaks every reply. Preflight passed locally (396/396). Adam also asked for a full communication-strategy review across the constitution, SSOTs, and product conversations, with focus on personality/tone, client feedback grouping, and whether the system is directly tied to the "Karen" browser TTS voice. Next: document the synthesized communication approach, then continue the ChatGPT-style layout, real-time voice transcript, read-aloud controls, queued/multi-request, and file-attachment work.
+Adam: BoFA-style “link old host → we move DNS → ask cancel or stay”; for WRM cancel old hosting once ours is verified. KNOW: `www.wellroundedmomma.com` serves Site Builder on Railway; Wix WRM Business Premium + Contact Collection + Events Calendar set AUTO RENEW OFF; sherry domains/plans untouched. Doctrine in `docs/products/site-builder/PRODUCT_HOME.md` § Hosting handoff. Next: productize connect UI; optional NS move off Wix; dual apex A cleanup if needed.
 
 ## 2026-07-23 — Go Vegas flagship site + recognition flywheel
 

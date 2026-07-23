@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-23T21:40:35.154Z",
+  "generated_at": "2026-07-23T22:04:36.698Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12143,
   "files": [
@@ -37623,9 +37623,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 22318,
-      "mtime": "2026-07-23T21:40:35.154Z",
-      "indexed_at": "2026-07-23T21:40:35.154Z"
+      "bytes": 21651,
+      "mtime": "2026-07-23T22:04:36.698Z",
+      "indexed_at": "2026-07-23T22:04:36.698Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40932,9 +40932,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 148977,
-      "mtime": "2026-07-23T21:19:27.929Z",
-      "indexed_at": "2026-07-23T21:19:27.929Z"
+      "bytes": 151585,
+      "mtime": "2026-07-23T22:04:36.698Z",
+      "indexed_at": "2026-07-23T22:04:36.698Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
