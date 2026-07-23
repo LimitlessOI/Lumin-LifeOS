@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: Go Vegas Business Network — public flagship site (powered by SiteBuilder) -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Go Vegas — Free Las Vegas Business Referral Network</title>
+  <meta name="description" content="Free Las Vegas business network. Get recognized, get referrals, join 16,000+ local owners. Best Of list. Powered by SiteBuilder by Taloa." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #0a0706;
+      --sand: #f4e6d4;
+      --sand-dim: #c4b09a;
+      --copper: #e8a45a;
+      --neon: #ff4d6d;
+      --line: rgba(244, 230, 212, 0.14);
+      --font-display: "Bebas Neue", Impact, sans-serif;
+      --font-body: "Outfit", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+    body {
+      margin: 0;
+      font-family: var(--font-body);
+      color: var(--sand);
+      background: var(--ink);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; }
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.25rem 1.25rem 3.5rem;
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(10,7,6,0.15) 0%, rgba(10,7,6,0.55) 45%, rgba(10,7,6,0.96) 100%),
+        radial-gradient(ellipse 90% 60% at 70% 20%, rgba(232,164,90,0.35), transparent 55%),
+        radial-gradient(ellipse 50% 40% at 15% 70%, rgba(255,77,109,0.18), transparent 50%),
+        linear-gradient(165deg, #1a0f0c 0%, #0a0706 50%, #120a14 100%);
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+      opacity: 0.45;
+      pointer-events: none;
+    }
+    .hero-skyline {
+      position: absolute;
+      left: 0; right: 0; bottom: 28%;
+      height: 22vh;
+      background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(232,164,90,0.08) 20%,
+        rgba(255,77,109,0.12) 48%,
+        rgba(232,164,90,0.1) 72%,
+        transparent 100%);
+      clip-path: polygon(0 100%, 4% 70%, 9% 85%, 14% 40%, 18% 55%, 24% 20%, 28% 45%, 35% 10%, 40% 35%, 48% 5%, 55% 30%, 62% 8%, 70% 38%, 78% 15%, 85% 50%, 92% 25%, 100% 60%, 100% 100%);
+      animation: glowPulse 6s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes glowPulse {
+      0%, 100% { opacity: 0.55; filter: brightness(1); }
+      50% { opacity: 0.9; filter: brightness(1.25); }
+    }
+    .top {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.1rem 1.25rem;
+      z-index: 2;
+    }
+    .top a.join-top {
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 0.55rem 0.9rem;
+      border: 1px solid var(--copper);
+      color: var(--copper);
+      transition: background 0.25s, color 0.25s;
+    }
+    .top a.join-top:hover { background: var(--copper); color: var(--ink); }
+    .powered-mini {
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--sand-dim);
+      text-decoration: none;
+    }
+    .powered-mini strong { color: var(--sand); font-weight: 600; }
+    .hero-copy { position: relative; z-index: 2; max-width: 40rem; }
+    .brand-mark {
+      font-family: var(--font-display);
+      font-size: clamp(4.5rem, 16vw, 9rem);
+      line-height: 0.85;
+      letter-spacing: 0.02em;
+      margin: 0 0 0.35rem;
+      animation: riseIn 0.9s ease-out both;
+    }
+    .brand-mark span { color: var(--copper); }
+    .hero-line {
+      font-size: clamp(1.05rem, 2.4vw, 1.35rem);
+      font-weight: 500;
+      max-width: 28ch;
+      margin: 0 0 1.5rem;
+      color: var(--sand);
+      animation: riseIn 0.9s ease-out 0.12s both;
+    }
+    .hero-cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      animation: riseIn 0.9s ease-out 0.22s both;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.9rem 1.35rem;
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s, filter 0.2s;
+    }
+    .btn:hover { transform: translateY(-2px); filter: brightness(1.05); }
+    .btn-primary { background: var(--copper); color: var(--ink); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--sand);
+      border: 1px solid var(--line);
+    }
+    @keyframes riseIn {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    main { padding: 0 0 4rem; }
+    section {
+      width: min(720px, calc(100% - 2.5rem));
+      margin: 0 auto;
+      padding: 3.5rem 0 0;
+    }
+    section h2 {
+      font-family: var(--font-display);
+      font-size: clamp(2.4rem, 7vw, 3.4rem);
+      letter-spacing: 0.03em;
+      margin: 0 0 0.75rem;
+      line-height: 1;
+    }
+    section .lede {
+      margin: 0 0 1.75rem;
+      color: var(--sand-dim);
+      font-size: 1.05rem;
+      max-width: 42ch;
+    }
+    .steps {
+      display: grid;
+      gap: 1.25rem;
+      counter-reset: step;
+    }
+    .steps li {
+      list-style: none;
+      padding: 0 0 0 3rem;
+      position: relative;
+      border-top: 1px solid var(--line);
+      padding-top: 1.25rem;
+    }
+    .steps li::before {
+      counter-increment: step;
+      content: counter(step, decimal-leading-zero);
+      position: absolute;
+      left: 0;
+      top: 1.25rem;
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      color: var(--neon);
+    }
+    .steps strong { display: block; font-size: 1.1rem; margin-bottom: 0.25rem; }
+    .steps p { margin: 0; color: var(--sand-dim); font-size: 0.95rem; }
+    .best-grid {
+      display: grid;
+      gap: 0;
+    }
+    .best-item {
+      display: grid;
+      gap: 0.35rem;
+      padding: 1.35rem 0;
+      border-top: 1px solid var(--line);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .best-item:hover .biz { color: var(--copper); }
+    .best-item .biz {
+      font-family: var(--font-display);
+      font-size: 1.85rem;
+      letter-spacing: 0.02em;
+      transition: color 0.2s;
+    }
+    .best-item .meta { font-size: 0.85rem; color: var(--sand-dim); }
+    .best-item .quote {
+      font-size: 1rem;
+      font-style: italic;
+      color: var(--sand);
+      max-width: 40ch;
+    }
+    .thread-list { display: grid; gap: 1rem; margin: 0; padding: 0; }
+    .thread-list li {
+      list-style: none;
+      padding: 1rem 0;
+      border-top: 1px solid var(--line);
+      color: var(--sand-dim);
+      font-size: 0.98rem;
+    }
+    .thread-list strong { color: var(--sand); display: block; margin-bottom: 0.2rem; }
+    .cta-band {
+      width: min(720px, calc(100% - 2.5rem));
+      margin: 4rem auto 0;
+      padding: 2.5rem 0;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+    }
+    .cta-band h2 { margin-bottom: 0.5rem; }
+    .cta-band p { color: var(--sand-dim); margin: 0 0 1.5rem; max-width: 36ch; }
+    footer {
+      width: min(720px, calc(100% - 2.5rem));
+      margin: 0 auto;
+      padding: 2.5rem 0 3rem;
+      font-size: 0.8rem;
+      color: var(--sand-dim);
+    }
+    footer a { color: var(--copper); }
+    .powered {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 0.4rem;
+      margin-top: 0.75rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+    .powered em { font-style: normal; color: var(--sand); font-weight: 600; }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-skyline" aria-hidden="true"></div>
+    <div class="top">
+      <a class="powered-mini" href="/site-builder">Powered by <strong>SiteBuilder</strong></a>
+      <a class="join-top" href="https://www.facebook.com/groups/govegas" target="_blank" rel="noopener">Join free</a>
+    </div>
+    <div class="hero-copy">
+      <h1 class="brand-mark">GO <span>VEGAS</span></h1>
+      <p class="hero-line">Free business referral network for Las Vegas owners who actually help each other.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="https://www.facebook.com/groups/govegas" target="_blank" rel="noopener">Join the network</a>
+        <a class="btn btn-ghost" href="#best-of">See Best Of</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="how">
+      <h2>How recognition works</h2>
+      <p class="lede">Every day the group names businesses that went out of their way. We reach out, put them on Best Of, and invite them in — free.</p>
+      <ol class="steps">
+        <li>
+          <strong>The room answers a real question</strong>
+          <p>“Who went out of their way for you?” “Favorite lunch between jobs?” — discussion, not ads.</p>
+        </li>
+        <li>
+          <strong>We tell that business they were recognized</strong>
+          <p>Direct outreach with a partial quote from the community + a link to join Go Vegas.</p>
+        </li>
+        <li>
+          <strong>Best Of + warm referrals</strong>
+          <p>Standouts land on this list. Members trade intros, perks, and real local help — no membership fee.</p>
+        </li>
+      </ol>
+    </section>
+
+    <section id="best-of">
+      <h2>Best Of Las Vegas</h2>
+      <p class="lede">Community-recognized Superior Places of Business. Growing as the group talks.</p>
+      <div class="best-grid" id="bestGrid">
+        <article class="best-item">
+          <div class="biz">Your business could be next</div>
+          <div class="meta">Nominated by Go Vegas members · Free to join</div>
+          <p class="quote">“When someone in the valley says you went out of your way — we listen.”</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="in-the-group">
+      <h2>Inside the group</h2>
+      <p class="lede">Daily discussion starters. Rotating member threads. Value first — always.</p>
+      <ul class="thread-list">
+        <li><strong>Recognition questions</strong> Who helped you. Where you eat. Who deserves more attention.</li>
+        <li><strong>Business card days</strong> One line what you do + who you want intros to.</li>
+        <li><strong>Member exclusives</strong> Discounts and perks for Go Vegas members only.</li>
+        <li><strong>Warm intros</strong> Ask for a specific niche + neighborhood — get connected.</li>
+        <li><strong>Surprise rewards</strong> Contests and random free SiteBuilder sites / logos for standout kindness.</li>
+      </ul>
+    </section>
+
+    <div class="cta-band">
+      <h2>16,000+ strong</h2>
+      <p>Free. Local. Built for owners who give more than they take. Come say hello.</p>
+      <a class="btn btn-primary" href="https://www.facebook.com/groups/govegas" target="_blank" rel="noopener">Join Go Vegas free</a>
+    </div>
+  </main>
+
+  <footer>
+    <div>Go Vegas Business Network · Las Vegas, NV · Run by Adam Hopkins</div>
+    <a class="powered" href="/site-builder">Powered by <em>SiteBuilder by Taloa</em></a>
+    <p style="margin:1rem 0 0">Want a site this sharp for your business? <a href="/site-builder">Get a free preview</a>.</p>
+  </footer>
+
+  <script>
+    // Best Of can be hydrated later from API; seed keeps the page honest while empty.
+    const seed = [];
+    const grid = document.getElementById('bestGrid');
+    if (seed.length && grid) {
+      grid.innerHTML = seed.map((b) => `
+        <article class="best-item">
+          <div class="biz">${b.name}</div>
+          <div class="meta">${b.niche || 'Local business'}${b.area ? ' · ' + b.area : ''}</div>
+          ${b.quote ? `<p class="quote">“${b.quote}”</p>` : ''}
+        </article>
+      `).join('');
+    }
+  </script>
+</body>
+</html>

@@ -176,6 +176,13 @@ export function registerPublicRoutes(app, {
     return res.status(404).send("ClientCare billing overlay not found.");
   });
 
+  app.get("/go-vegas", (_req, res) => {
+    const filePath = path.join(__dirname, "public", "overlay", "go-vegas.html");
+    if (fs.existsSync(filePath)) return sendPublicFileNoCache(res, filePath);
+    return res.status(404).send("Go Vegas site not found.");
+  });
+  app.get("/govegas", (_req, res) => res.redirect(301, "/go-vegas"));
+
   app.get("/boldtrail", (req, res) => {
     console.log("🏠 [ROUTE] /boldtrail accessed");
     // Only accept header-based auth (no query params)

@@ -6,7 +6,7 @@
 **Parent platform:** Lumin / LifeOS ecosystem  
 **Constitutional law:** `docs/constitution/NORTH_STAR_SSOT.md`  
 **Machine manifest:** `docs/products/limitlessos/FILE_MANIFEST.json`  
-**Last Updated:** 2026-07-20 — Found and fixed a real false-`done` claim in `BUILD_QUEUE.json`: `step11` (`routes/dialogue-bundle-skus-routes.js`) carried a real-looking `shipped_via`/`commit_sha`, but the file doesn't exist in the current repo. Traced the exact commit (`76f3cceb12`, genuinely added the file on 2026-07-15) and proved via `git merge-base --is-ancestor` that it's NOT an ancestor of `origin/main` — it only exists on `origin/builderos-autonomous`/`origin/builderos-shadow`, meaning the autonomous shipping loop was, at that point, committing to a different branch than `main` (likely tied to `GITHUB_DEPLOY_BRANCH` being unset in production — confirmed via the managed-env registry: `present:false`, `healthStatus: missing_critical`; the code's `|| 'main'` fallback masks this most of the time but evidently didn't always). Spot-checked 4 other `done` steps in this file — all genuine `main` ancestors — so this looks like an isolated historical artifact from that window, not systemic; did not audit every `done` step across the repo. Reset `step11` to `pending` and removed the false claim rather than leave it misleading. (Prior: 2026-07-11 — Go Vegas manual `POST /api/v1/go-vegas/prospects/seed`.)
+**Last Updated:** 2026-07-23 — Go Vegas flagship site `/go-vegas` + recognition flywheel playbook (Best Of → join network).
 
 | Field | Value |
 |-------|-------|
@@ -197,6 +197,7 @@ Together: AI handles repetitive, disconnected, administrative work — humans fo
 
 | Date | What | Why |
 |------|------|-----|
+| 2026-07-23 | **Go Vegas network site + recognition flywheel.** Public flagship `GET /go-vegas` (`public/overlay/go-vegas.html`) — Best Of, join CTA, powered by SiteBuilder by Taloa. Playbook `config/go-vegas-network-playbook.js`: Adam ~12/day discussion; product accounts 5–20 with own personality; daily recognition questions → outreach “Superior Place” + Best Of; rotating sub-promo threads; contest/surprise free-site rewards. | Adam: channel businesses into free network via recognition + hella-good site as SiteBuilder proof. |
 | 2026-07-11 | **Go Vegas manual seed** — `POST /api/v1/go-vegas/prospects/seed` + export `upsertProspect`. Lets conductor enqueue LV leads without `GOOGLE_PLACES_KEY`. Invites still need Postmark approval for external domains. | Adam: path to money — Places key missing; seed unblocks pipeline fill. |
 | 2026-07-09 | **gv-status-route DONE** — `GET /api/v1/go-vegas/scheduler` is live via founder-runtime `createGoVegasOutreachRoutes` (not auto-register). Cleared false `blocked` so never-stop stops thrashing queue-status commits that race founder builds. | A→Z trust — commit races were failing drawer builds with "Reference cannot be updated". |
 | 2026-07-09 | **Go Vegas verify_script** — `scripts/verify-go-vegas-scheduler.mjs` (exports + useful-work-guard contract + boot wire + live `/scheduler`). | Close false-done on revenue slice; never-stop must re-gate after build. |

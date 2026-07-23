@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-23 — Go Vegas flagship site + recognition flywheel
+
+Adam: multi-brand value posts (not Adam-show); daily recognition questions → outreach “Superior Place” + Best Of + join free network; rotating member threads; free SiteBuilder as contest/surprise. Shipped `/go-vegas` public site (powered by SiteBuilder) + `config/go-vegas-network-playbook.js`. Next: wire recognition sends to go_vegas_prospects; fill Best Of from real nominations.
+
 ## 2026-07-23 — Site Builder: 50 niche templates + denser images
 
 Adam: template toggles look the same; need more photos from their site (stock/Google holding before ~2–3¢ Replicate); want ~50 different niche templates. Shipped `site-builder-template-catalog-50.js` + 16 layout families, family round-robin picks, per-variant `imageOffset`, secondary-page image crawl, hero cap 16, curated Unsplash/Google CSE holding before Flux. Next: tip rebuild + eye-test diversity.

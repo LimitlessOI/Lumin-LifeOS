@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-23T16:51:27.653Z",
+  "generated_at": "2026-07-23T18:50:12.084Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12132,
+  "file_count": 12135,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -30674,6 +30674,16 @@
       ]
     },
     {
+      "path": "config/go-vegas-network-playbook.js",
+      "synopsis": "Go Vegas free network — multi-brand posting + recognition flywheel.",
+      "bytes": 5151,
+      "mtime": "2026-07-23T18:50:12.084Z",
+      "indexed_at": "2026-07-23T18:50:12.084Z",
+      "ssot": [
+        "docs/products/limitlessos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "config/hardware-profiles.json",
       "synopsis": "Configuration — Hardware Profiles.",
       "bytes": 326,
@@ -37613,9 +37623,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 20664,
-      "mtime": "2026-07-23T16:51:27.653Z",
-      "indexed_at": "2026-07-23T16:51:27.653Z"
+      "bytes": 21119,
+      "mtime": "2026-07-23T18:50:12.084Z",
+      "indexed_at": "2026-07-23T18:50:12.084Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40472,9 +40482,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 614658,
-      "mtime": "2026-07-23T07:35:30.076Z",
-      "indexed_at": "2026-07-23T07:35:30.076Z"
+      "bytes": 614992,
+      "mtime": "2026-07-23T18:50:12.084Z",
+      "indexed_at": "2026-07-23T18:50:12.084Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -40530,9 +40540,9 @@
     {
       "path": "docs/products/limitlessos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LimitlessOS business stack",
-      "bytes": 11208,
-      "mtime": "2026-07-21T05:32:03.837Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z"
+      "bytes": 10649,
+      "mtime": "2026-07-23T18:50:12.084Z",
+      "indexed_at": "2026-07-23T18:50:12.084Z"
     },
     {
       "path": "docs/products/lumin-university/FILE_MANIFEST.json",
@@ -65329,6 +65339,13 @@
       "indexed_at": "2026-07-21T05:58:39.404Z"
     },
     {
+      "path": "public/overlay/go-vegas.html",
+      "synopsis": "Go Vegas Business Network — public flagship site (powered by SiteBuilder)",
+      "bytes": 12805,
+      "mtime": "2026-07-23T18:50:12.084Z",
+      "indexed_at": "2026-07-23T18:50:12.084Z"
+    },
+    {
       "path": "public/overlay/ideavault.html",
       "synopsis": "HTML page: IdeaVault Overlay",
       "bytes": 14529,
@@ -68600,9 +68617,9 @@
     {
       "path": "routes/public-routes.js",
       "synopsis": "Public HTML entry routes for operator-facing overlays and portals.",
-      "bytes": 15240,
-      "mtime": "2026-07-21T06:55:23.472Z",
-      "indexed_at": "2026-07-21T06:55:23.472Z",
+      "bytes": 15577,
+      "mtime": "2026-07-23T18:50:12.084Z",
+      "indexed_at": "2026-07-23T18:50:12.084Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -93968,6 +93985,16 @@
       "indexed_at": "2026-07-21T05:58:39.404Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "tests/go-vegas-network-playbook.test.js",
+      "synopsis": "js — tests/go-vegas-network-playbook.test.js.",
+      "bytes": 1573,
+      "mtime": "2026-07-23T18:50:12.084Z",
+      "indexed_at": "2026-07-23T18:50:12.084Z",
+      "ssot": [
+        "docs/products/limitlessos/PRODUCT_HOME.md"
       ]
     },
     {
