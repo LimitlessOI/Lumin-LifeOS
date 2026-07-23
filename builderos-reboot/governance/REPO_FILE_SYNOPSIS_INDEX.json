@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-23T22:19:12.059Z",
+  "generated_at": "2026-07-23T22:21:07.082Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12144,
   "files": [
@@ -37504,9 +37504,9 @@
     {
       "path": "docs/constitution/LUMIN_COMMUNICATION_DNA.md",
       "synopsis": "Lumin Communication DNA — translation not formula; twin-matched voice (constitutional)",
-      "bytes": 6401,
-      "mtime": "2026-07-23T22:19:12.059Z",
-      "indexed_at": "2026-07-23T22:19:12.059Z"
+      "bytes": 6578,
+      "mtime": "2026-07-23T22:21:07.082Z",
+      "indexed_at": "2026-07-23T22:21:07.082Z"
     },
     {
       "path": "docs/constitution/LUMIN_DISPLAY_DNA.md",
@@ -37630,9 +37630,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 23811,
-      "mtime": "2026-07-23T22:19:12.059Z",
-      "indexed_at": "2026-07-23T22:19:12.059Z"
+      "bytes": 24327,
+      "mtime": "2026-07-23T22:21:07.082Z",
+      "indexed_at": "2026-07-23T22:21:07.082Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40489,9 +40489,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 618459,
-      "mtime": "2026-07-23T22:19:12.059Z",
-      "indexed_at": "2026-07-23T22:19:12.059Z"
+      "bytes": 619067,
+      "mtime": "2026-07-23T22:21:07.082Z",
+      "indexed_at": "2026-07-23T22:21:07.082Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -84917,9 +84917,9 @@
     {
       "path": "services/chair-direct-agent.js",
       "synopsis": "Direct Chair agent — talks + acts; human prose obeys Lumin Communication DNA (not theater).",
-      "bytes": 25525,
-      "mtime": "2026-07-23T22:19:12.059Z",
-      "indexed_at": "2026-07-23T22:19:12.059Z",
+      "bytes": 25694,
+      "mtime": "2026-07-23T22:21:07.082Z",
+      "indexed_at": "2026-07-23T22:21:07.082Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -85017,9 +85017,9 @@
     {
       "path": "services/chair-personality-translate.js",
       "synopsis": "Lumin personality translate — human-language layer on SYSTEM_FACTS only (not theater).",
-      "bytes": 9106,
-      "mtime": "2026-07-23T22:19:12.059Z",
-      "indexed_at": "2026-07-23T22:19:12.059Z",
+      "bytes": 9210,
+      "mtime": "2026-07-23T22:21:07.082Z",
+      "indexed_at": "2026-07-23T22:21:07.082Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -90316,9 +90316,9 @@
     {
       "path": "services/response-variety.js",
       "synopsis": "services/response-variety.js",
-      "bytes": 14906,
-      "mtime": "2026-07-23T22:19:12.059Z",
-      "indexed_at": "2026-07-23T22:19:12.059Z",
+      "bytes": 15065,
+      "mtime": "2026-07-23T22:21:07.082Z",
+      "indexed_at": "2026-07-23T22:21:07.082Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

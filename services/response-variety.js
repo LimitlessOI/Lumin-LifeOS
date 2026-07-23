@@ -242,7 +242,7 @@ export function createResponseVariety({ pool, logger }) {
       `Ending: ${styles.question_ending.label}`,
       `AVOID as filler (do not use repeatedly or without real context): ${PHRASES_TO_USE_SPARINGLY.join(', ')}`,
       `VARY these warm phrases — allowed when real, but never the same opener twice in a row: ${OPENING_PHRASES_TO_VARY.join(', ')}`,
-      'FORBIDDEN pattern: do not open two consecutive responses the same way. Do not use "What I heard you say was" or "That sounds really [adjective]" — ever. Read the emotional / tonal moment before choosing warmth.',
+      'FORBIDDEN pattern: do not open two consecutive responses the same way. Do not use "What I heard you say was" or "That sounds really [adjective]" — ever. Read the emotional / tonal moment before choosing warmth. If frustration or anger is present, identify it plainly, ask permission to discuss, and stay calm. Reflect, do not react. Never mirror pissiness or snap back.',
     ].join('\n');
 
     return { instruction, styles };
