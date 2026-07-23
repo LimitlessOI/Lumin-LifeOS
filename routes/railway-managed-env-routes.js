@@ -783,11 +783,11 @@ export function createRailwayManagedEnvRoutes({ requireKey, managedEnvService })
   });
 
   /**
-   * DELETE /custom-domains
-   * Body: { id: "<customDomainId>" } or { domain: "example.com" }
+   * POST /custom-domains/remove
+   * Body: { id } or { domain }. (Not DELETE /custom-domains — that hits DELETE /:name.)
    * Frees Railway plan slots (e.g. reclaim unused taloaos hosts for WRM).
    */
-  router.delete("/custom-domains", requireKey, async (req, res) => {
+  router.post("/custom-domains/remove", requireKey, async (req, res) => {
     try {
       let id = String(req.body?.id || "").trim();
       const domainWanted = String(req.body?.domain || "").trim().toLowerCase();
