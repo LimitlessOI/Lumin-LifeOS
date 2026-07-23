@@ -13,6 +13,8 @@ import {
   pickRecommendationAsk,
   buildRecognitionOutreachEmail,
   buildRecommendationSoftOpenEmail,
+  buildBestPostContestAnnounce,
+  buildBestPostWinnerPost,
   GO_VEGAS_CADENCE,
   PRODUCT_ACCOUNT_NAMES,
 } from '../config/go-vegas-network-playbook.js';
@@ -66,5 +68,14 @@ describe('go-vegas network playbook', () => {
     assert.match(mail.text, /3\/10/);
     assert.match(mail.text, /Before\/after/);
     assert.match(mail.text, /example\.com\/previews\/x/);
+  });
+
+  it('announces best-post-of-the-day free website contest', () => {
+    const announce = buildBestPostContestAnnounce();
+    assert.match(announce, /best post/i);
+    assert.match(announce, /free website/i);
+    const win = buildBestPostWinnerPost({ winnerName: 'Jordan', postHint: 'brought donuts to the crew' });
+    assert.match(win, /Jordan/);
+    assert.match(win, /SiteBuilder/);
   });
 });

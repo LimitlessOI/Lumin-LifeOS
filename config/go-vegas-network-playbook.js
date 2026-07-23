@@ -80,9 +80,38 @@ export const DAILY_SUBPROMO_THREADS = [
 
 /** Contest / surprise rewards (use sparingly — feels generous, not spammy). */
 export const REWARD_HOOKS = [
+  {
+    id: 'best_post_free_site',
+    label: 'Best post of the day → free website',
+    note: 'Daily (or a few×/week): whoever posts the best post today wins a free SiteBuilder site. Drives member posts toward the +20 target.',
+    prize: 'free SiteBuilder by Taloa website (spec + publish)',
+  },
   { id: 'free_site_contest', label: 'Free SiteBuilder site contest', note: 'Prize = free publish/spec site via SiteBuilder by Taloa' },
   { id: 'random_kindness', label: 'Random recognition gift', note: 'If someone is called out for kindness, surprise free site/logo when it fits' },
 ];
+
+/** Adam/admin announcement — mix into the 31+ day; pick a winner publicly next morning. */
+export const BEST_POST_CONTEST = {
+  id: 'best_post_free_site',
+  cadence: 'daily_or_3x_week',
+  prize: 'Free website via SiteBuilder by Taloa',
+  announcePost:
+    'Quick one — whoever drops the best post in this group today wins a free website (built by SiteBuilder by Taloa). Helpful, funny, real local value — judges are me + the room. Winner announced tomorrow. Go.',
+  winnerPostTemplate: ({ winnerName, postHint = '' } = {}) =>
+    [
+      `Yesterday’s best post: ${winnerName || 'our winner'}${postHint ? ` — “${String(postHint).slice(0, 120)}”` : ''}.`,
+      'You just won a free website from SiteBuilder by Taloa. DM me (or comment here) and we’ll build your free spec this week.',
+      'Everyone else — we’re running this again. Best post today wins the next one.',
+    ].join('\n\n'),
+};
+
+export function buildBestPostContestAnnounce() {
+  return BEST_POST_CONTEST.announcePost;
+}
+
+export function buildBestPostWinnerPost(opts = {}) {
+  return BEST_POST_CONTEST.winnerPostTemplate(opts);
+}
 
 export function pickRecognitionQuestion(dayIndex = Date.now()) {
   const i = Math.abs(Number(dayIndex)) % RECOGNITION_QUESTION_BANK.length;
@@ -194,9 +223,12 @@ export default {
   RECOMMENDATION_ASK_BANK,
   DAILY_SUBPROMO_THREADS,
   REWARD_HOOKS,
+  BEST_POST_CONTEST,
   pickRecognitionQuestion,
   pickSubPromoThread,
   pickRecommendationAsk,
   buildRecognitionOutreachEmail,
   buildRecommendationSoftOpenEmail,
+  buildBestPostContestAnnounce,
+  buildBestPostWinnerPost,
 };
