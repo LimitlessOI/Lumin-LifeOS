@@ -13,7 +13,22 @@ const UNRESOLVED_PUBLIC_HOSTS = new Set(
     .map((h) => String(h).toLowerCase()),
 );
 
+/** Client sites must never become Site Builder link origins (WRM cutover poisoned this once). */
+const FORBIDDEN_PUBLIC_HOSTS = new Set([
+  'wellroundedmomma.com',
+  'www.wellroundedmomma.com',
+  'sherrylhopkins.com',
+  'www.sherrylhopkins.com',
+  'sherrylhopkinsmidwife.com',
+  'www.sherrylhopkinsmidwife.com',
+]);
+
 const TIP_FALLBACK_ORIGIN = 'https://lumin-web-production-e3a9.up.railway.app';
+
+export function isForbiddenPublicBase(url) {
+  const host = hostnameOfPublicBase(url);
+  return Boolean(host && FORBIDDEN_PUBLIC_HOSTS.has(host));
+}
 
 export function normalizePublicBase(url) {
   const raw = String(url || '').trim();
@@ -58,6 +73,7 @@ export function resolveDurablePublicBase(candidates = []) {
     const base = normalizePublicBase(candidate);
     if (!base) continue;
     if (isUnresolvedPublicBase(base)) continue;
+    if (isForbiddenPublicBase(base)) continue;
     return base;
   }
 
@@ -85,6 +101,7 @@ export default {
   normalizePublicBase,
   hostnameOfPublicBase,
   isUnresolvedPublicBase,
+  isForbiddenPublicBase,
   resolveDurablePublicBase,
   resolveRequestPublicBase,
 };

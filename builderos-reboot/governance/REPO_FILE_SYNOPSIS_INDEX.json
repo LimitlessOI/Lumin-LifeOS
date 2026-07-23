@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-23T22:24:38.126Z",
+  "generated_at": "2026-07-23T22:35:03.059Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12144,
   "files": [
@@ -40939,9 +40939,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 151541,
-      "mtime": "2026-07-23T22:24:38.126Z",
-      "indexed_at": "2026-07-23T22:24:38.126Z"
+      "bytes": 152167,
+      "mtime": "2026-07-23T22:35:03.059Z",
+      "indexed_at": "2026-07-23T22:35:03.059Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -66108,9 +66108,9 @@
     {
       "path": "public/overlay/site-builder-landing.html",
       "synopsis": "HTML page: Site Builder — public $45 beta sales front door",
-      "bytes": 43650,
-      "mtime": "2026-07-23T16:51:27.653Z",
-      "indexed_at": "2026-07-23T16:51:27.653Z"
+      "bytes": 43755,
+      "mtime": "2026-07-23T22:35:03.059Z",
+      "indexed_at": "2026-07-23T22:35:03.059Z"
     },
     {
       "path": "public/overlay/site-builder-save-confirmation.html",
@@ -90956,9 +90956,9 @@
     {
       "path": "services/site-builder-public-base.js",
       "synopsis": "Resolvable public origin for Site Builder money-path URLs.",
-      "bytes": 2909,
-      "mtime": "2026-07-22T18:16:28.885Z",
-      "indexed_at": "2026-07-22T18:16:28.885Z",
+      "bytes": 3449,
+      "mtime": "2026-07-23T22:35:03.059Z",
+      "indexed_at": "2026-07-23T22:35:03.059Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
