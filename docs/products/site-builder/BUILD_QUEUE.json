@@ -1266,13 +1266,40 @@
       "proof": null,
       "failure_signature": "NOT_ON_BLUEPRINT",
       "same_signature_count": 1,
-      "escalation_class": "governance_block"
+      "escalation_class": "governance_block",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/site-builder/twins/steps/step8.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-23T19:24:23.470Z",
+        "shipped_at": "2026-07-23T19:24:23.470Z",
+        "commit_sha": null,
+        "content_sha256": "bf3b4e15c8d6f756207c99dea83ba2a68a3ee6cacc88d64d80f3ad033cf5b6fa",
+        "target_file": "public/overlay/site-builder-template-choices.html",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "public/overlay/site-builder-template-choices.html",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/site-builder/twins/steps/step8.exact",
+          "content_sha256": "bf3b4e15c8d6f756207c99dea83ba2a68a3ee6cacc88d64d80f3ad033cf5b6fa"
+        }
+      },
+      "shipped_at": "2026-07-23T19:24:23.470Z",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step8"
     }
   ],
-  "sentry_signature": "beba57e366c8c9cf",
-  "sentry_unplannable_at": "2026-07-12T18:05:57.513Z",
-  "sentry_unplannable_reason": "planner filtered all steps (already-done); spin-break so LifeOS can build",
+  "sentry_signature": "bfe02459bcbbc6ec",
+  "sentry_unplannable_at": "2026-07-23T19:22:17.781Z",
+  "sentry_unplannable_reason": "[BUILD-QUEUE-PLANNER] all proposed steps filtered (dedupe/already-done/no target_file) — fail closed",
   "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-site-builder",
-  "twin_kind": "product_build_queue_registered"
+  "twin_kind": "product_build_queue_registered",
+  "_sourcePath": "/usr/src/app/docs/products/site-builder/BUILD_QUEUE.json"
 }
