@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-23T07:35:30.076Z",
+  "generated_at": "2026-07-23T16:51:27.653Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12129,
+  "file_count": 12132,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -30585,11 +30585,21 @@
       ]
     },
     {
+      "path": "config/design-studio-layout-families.js",
+      "synopsis": "Layout-family shells for Site Builder catalog templates — structurally",
+      "bytes": 38621,
+      "mtime": "2026-07-23T16:51:27.653Z",
+      "indexed_at": "2026-07-23T16:51:27.653Z",
+      "ssot": [
+        "docs/products/site-builder/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "config/design-studio-layouts.js",
       "synopsis": "Hand-authored layout shells per design system — real structural",
-      "bytes": 87611,
-      "mtime": "2026-07-22T15:27:38.646Z",
-      "indexed_at": "2026-07-22T15:27:38.646Z",
+      "bytes": 88921,
+      "mtime": "2026-07-23T16:51:27.653Z",
+      "indexed_at": "2026-07-23T16:51:27.653Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -30597,9 +30607,9 @@
     {
       "path": "config/design-studio.js",
       "synopsis": "Shared Design Studio — curated, research-backed design systems",
-      "bytes": 45850,
-      "mtime": "2026-07-22T15:27:38.646Z",
-      "indexed_at": "2026-07-22T15:27:38.646Z",
+      "bytes": 48047,
+      "mtime": "2026-07-23T16:51:27.653Z",
+      "indexed_at": "2026-07-23T16:51:27.653Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -30882,9 +30892,9 @@
     {
       "path": "config/site-builder-pricing.js",
       "synopsis": "Site Builder entry + upsell pricing (beta publish offer).",
-      "bytes": 4548,
-      "mtime": "2026-07-23T06:43:28.502Z",
-      "indexed_at": "2026-07-23T06:43:28.502Z",
+      "bytes": 4587,
+      "mtime": "2026-07-23T16:51:27.653Z",
+      "indexed_at": "2026-07-23T16:51:27.653Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -30902,9 +30912,19 @@
     {
       "path": "config/site-builder-switcher.js",
       "synopsis": "Site Builder variant switcher template with light/dark toggle and competitor comparison popup.",
-      "bytes": 17967,
-      "mtime": "2026-07-23T06:43:28.502Z",
-      "indexed_at": "2026-07-23T06:43:28.502Z",
+      "bytes": 18023,
+      "mtime": "2026-07-23T16:51:27.653Z",
+      "indexed_at": "2026-07-23T16:51:27.653Z",
+      "ssot": [
+        "docs/products/site-builder/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "config/site-builder-template-catalog-50.js",
+      "synopsis": "50 niche Site Builder templates — each a distinct visual + layout family.",
+      "bytes": 23085,
+      "mtime": "2026-07-23T16:51:27.653Z",
+      "indexed_at": "2026-07-23T16:51:27.653Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -37593,9 +37613,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 20187,
-      "mtime": "2026-07-23T07:35:30.076Z",
-      "indexed_at": "2026-07-23T07:35:30.076Z"
+      "bytes": 20664,
+      "mtime": "2026-07-23T16:51:27.653Z",
+      "indexed_at": "2026-07-23T16:51:27.653Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40895,9 +40915,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 146204,
-      "mtime": "2026-07-23T07:35:30.076Z",
-      "indexed_at": "2026-07-23T07:35:30.076Z"
+      "bytes": 147476,
+      "mtime": "2026-07-23T16:51:27.653Z",
+      "indexed_at": "2026-07-23T16:51:27.653Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -66057,9 +66077,9 @@
     {
       "path": "public/overlay/site-builder-landing.html",
       "synopsis": "HTML page: Site Builder — public $45 beta sales front door",
-      "bytes": 43539,
-      "mtime": "2026-07-23T07:28:14.440Z",
-      "indexed_at": "2026-07-23T07:28:14.440Z"
+      "bytes": 43650,
+      "mtime": "2026-07-23T16:51:27.653Z",
+      "indexed_at": "2026-07-23T16:51:27.653Z"
     },
     {
       "path": "public/overlay/site-builder-save-confirmation.html",
@@ -90664,9 +90684,9 @@
     {
       "path": "services/site-builder-asset-ingestion.js",
       "synopsis": "Site Builder Asset Ingestion — discover and pull real assets",
-      "bytes": 71505,
-      "mtime": "2026-07-21T05:32:04.665Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "bytes": 80467,
+      "mtime": "2026-07-23T16:51:27.653Z",
+      "indexed_at": "2026-07-23T16:51:27.653Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -90933,9 +90953,9 @@
     {
       "path": "services/site-builder.js",
       "synopsis": "Site Builder — Scrape existing site → AI-generates complete click-funnel website",
-      "bytes": 99808,
-      "mtime": "2026-07-23T07:28:14.440Z",
-      "indexed_at": "2026-07-23T07:28:14.440Z",
+      "bytes": 99978,
+      "mtime": "2026-07-23T16:51:27.653Z",
+      "indexed_at": "2026-07-23T16:51:27.653Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -94525,6 +94545,16 @@
       "bytes": 2097,
       "mtime": "2026-07-23T07:28:14.440Z",
       "indexed_at": "2026-07-23T07:28:14.440Z"
+    },
+    {
+      "path": "tests/site-builder-template-catalog-50.test.js",
+      "synopsis": "js — tests/site-builder-template-catalog-50.test.js.",
+      "bytes": 3696,
+      "mtime": "2026-07-23T16:51:27.653Z",
+      "indexed_at": "2026-07-23T16:51:27.653Z",
+      "ssot": [
+        "docs/products/site-builder/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "tests/smoke.test.js",

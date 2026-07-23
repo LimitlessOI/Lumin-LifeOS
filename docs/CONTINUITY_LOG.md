@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-23 — Site Builder: 50 niche templates + denser images
+
+Adam: template toggles look the same; need more photos from their site (stock/Google holding before ~2–3¢ Replicate); want ~50 different niche templates. Shipped `site-builder-template-catalog-50.js` + 16 layout families, family round-robin picks, per-variant `imageOffset`, secondary-page image crawl, hero cap 16, curated Unsplash/Google CSE holding before Flux. Next: tip rebuild + eye-test diversity.
+
 ## 2026-07-23 — Site Builder distribution (no founder bottleneck)
 
 Chair: fix first-minute UX before push. Shipped experience gates; built LV Handyman preview (clean title); SMS/voice queued for **08:05 PT** (not midnight). Cold email still blocked — Postmark pending approval (need Resend key or Postmark approve). Reddit requires login; r/smallbusiness bans promo outside megathreads. Playbook: `docs/products/site-builder/DISTRIBUTION_PLAYBOOK.md`. Comp code `TALOA-FRIENDS` still live. Next: morning flush + email unblock.

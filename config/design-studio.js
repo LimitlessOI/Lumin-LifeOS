@@ -14,10 +14,60 @@
  * - Fast-loading, accessible, semantic HTML with visible focus states and schema markup.
  */
 
-export const DEFAULT_DESIGN_SYSTEM_ID = 'editorial-luxe';
-export const FREE_DESIGN_SYSTEM_IDS = ['editorial-luxe', 'modern-clinical', 'organic-warm', 'bold-minimal', 'wellrounded-feminine'];
+import { catalogAsDesignSystems } from './site-builder-template-catalog-50.js';
 
-const DESIGN_SYSTEMS = [
+export const DEFAULT_DESIGN_SYSTEM_ID = 'editorial-luxe';
+export const FREE_DESIGN_SYSTEM_IDS = [
+  'editorial-luxe',
+  'modern-clinical',
+  'organic-warm',
+  'bold-minimal',
+  'wellrounded-feminine',
+  'hvac-emergency-dark',
+  'plumber-before-after',
+  'handyman-toolbox',
+  'dental-clinical-white',
+  'midwife-photo-soft',
+  'law-firm-authority',
+  'realtor-search-first',
+  'restaurant-menu-board',
+  'photographer-folio',
+];
+
+function normalizeCatalogSystem(entry) {
+  const t = entry.tokens || {};
+  return {
+    ...entry,
+    tokens: {
+      bg: t.bg,
+      text: t.text,
+      muted: t.muted,
+      line: t.line,
+      card: t.card,
+      overlay: 'rgba(0,0,0,0.04)',
+      primary: t.accent,
+      accent: t.accent,
+      buttonText: t.accentText || '#FFFFFF',
+      radius: t.radius || '10px',
+      shadow: t.shadow || '0 12px 32px rgba(0,0,0,0.12)',
+    },
+    fonts: {
+      display: `"${t.fontDisplay || 'Fraunces'}", Georgia, serif`,
+      body: `"${t.fontBody || 'Inter'}", system-ui, sans-serif`,
+      google: [
+        { family: t.fontDisplay || 'Fraunces', weights: 'wght@400;600;700' },
+        { family: t.fontBody || 'Inter', weights: 'wght@400;500;600;700' },
+      ],
+    },
+    layout: `${entry.layoutFamily} layout for ${entry.niche} niche.`,
+    components: 'Family shell components — structurally distinct from other templates.',
+    motifs: (entry.personality || []).join(', '),
+    antiPatterns: 'Do not collapse into a generic purple SaaS landing page.',
+    sections: 'Driven by layoutFamily shell.',
+  };
+}
+
+const LEGACY_DESIGN_SYSTEMS = [
   {
     id: 'editorial-luxe',
     name: 'Editorial Luxe',
@@ -563,6 +613,13 @@ const DESIGN_SYSTEMS = [
   },
 ];
 
+const CATALOG_DESIGN_SYSTEMS = catalogAsDesignSystems().map(normalizeCatalogSystem);
+const legacyIds = new Set(LEGACY_DESIGN_SYSTEMS.map((d) => d.id));
+const DESIGN_SYSTEMS = [
+  ...LEGACY_DESIGN_SYSTEMS,
+  ...CATALOG_DESIGN_SYSTEMS.filter((d) => !legacyIds.has(d.id)),
+];
+
 function getGoogleFontLink(fonts) {
   if (!fonts || !fonts.google || !fonts.google.length) return null;
   const parts = fonts.google.map((f) => {
@@ -758,10 +815,26 @@ export function getDesignSystemForBrand(brandInfo = {}, { preferredId } = {}) {
 export function pickDesignSystems(count = 3, preferredIds = []) {
   const preferred = preferredIds.map((id) => getDesignSystem(id)).filter(Boolean);
   const rest = DESIGN_SYSTEMS.filter((d) => !preferred.find((p) => p.id === d.id));
-  const picked = [...preferred];
+  // Round-robin by layoutFamily so the switcher isn't 8 reskins of one shell.
+  const byFamily = new Map();
   for (const ds of rest) {
-    if (picked.length >= count) break;
-    if (!picked.find((p) => p.id === ds.id)) picked.push(ds);
+    const fam = ds.layoutFamily || `legacy:${ds.id}`;
+    if (!byFamily.has(fam)) byFamily.set(fam, []);
+    byFamily.get(fam).push(ds);
+  }
+  const picked = [...preferred];
+  const famKeys = [...byFamily.keys()];
+  while (picked.length < count) {
+    let added = false;
+    for (const fam of famKeys) {
+      if (picked.length >= count) break;
+      const bucket = byFamily.get(fam);
+      if (bucket?.length) {
+        picked.push(bucket.shift());
+        added = true;
+      }
+    }
+    if (!added) break;
   }
   return picked;
 }

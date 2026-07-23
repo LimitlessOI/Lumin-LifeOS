@@ -218,7 +218,7 @@ function extractImagesFromMarkdown(markdown) {
     push(alt, hit[1]);
   }
   const cdnUrls = String(markdown || '').matchAll(
-    /https?:\/\/(?:static\.wixstatic\.com\/media|images\.unsplash\.com|cdninstagram\.com|scontent[^/\s"']+\.cdninstagram\.com|i\.ytimg\.com)\/[^\s"'<>)\\]+/gi
+    /https?:\/\/(?:static\.wixstatic\.com\/media|images\.unsplash\.com|cdninstagram\.com|scontent[^/\s"']+\.cdninstagram\.com|i\.ytimg\.com|images\.squarespace-cdn\.com|cdn\.shopify\.com|res\.cloudinary\.com|imgix\.net|wp-content\/uploads)[^\s"'<>)\\]*/gi
   );
   for (const hit of cdnUrls) {
     let url = hit[0];
@@ -239,7 +239,7 @@ function pickLogo(images) {
   }
   // Fallback: first image that is small (likely a logo) but not a tiny icon.
   for (const img of images) {
-    if (/wixstatic.*mv2\.png|logo|favicon/i.test(img.url)) return img.url;
+    if (/wixstatic.mv2\.png|logo|favicon/i.test(img.url)) return img.url;
   }
   return images[0]?.url || null;
 }
@@ -284,7 +284,7 @@ function pickHeroImages(images, logoUrl = '') {
     .sort((a, b) => b.score - a.score)
     .map((x) => x.url)
     .filter((url, idx, arr) => arr.indexOf(url) === idx)
-    .slice(0, 8);
+    .slice(0, 16);
 }
 
 function pickTeamImages(images, logoUrl = '') {
@@ -292,9 +292,9 @@ function pickTeamImages(images, logoUrl = '') {
     .filter((img) => !isLogoLikeImage(img, logoUrl))
     .filter((img) => /team|staff|practitioner|midwife|doula|about|profile|headshot|portrait/i.test(img.alt || ''))
     .map((i) => i.url);
-  if (preferred.length) return preferred.filter((url, idx, arr) => arr.indexOf(url) === idx).slice(0, 4);
+  if (preferred.length) return preferred.filter((url, idx, arr) => arr.indexOf(url) === idx).slice(0, 8);
   // Fall back to leftover non-logo site photos so team slots aren't empty
-  return pickHeroImages(images, logoUrl).slice(1, 5);
+  return pickHeroImages(images, logoUrl).slice(1, 9);
 }
 
 function pickProductImages(images, logoUrl = '') {
@@ -302,8 +302,155 @@ function pickProductImages(images, logoUrl = '') {
     .filter((img) => !isLogoLikeImage(img, logoUrl))
     .filter((img) => /service|product|facility|room|office|clinic|yoga|massage|birth|baby/i.test(img.alt || ''))
     .map((i) => i.url);
-  if (preferred.length) return preferred.filter((url, idx, arr) => arr.indexOf(url) === idx).slice(0, 4);
-  return pickHeroImages(images, logoUrl).slice(0, 4);
+  if (preferred.length) return preferred.filter((url, idx, arr) => arr.indexOf(url) === idx).slice(0, 8);
+  return pickHeroImages(images, logoUrl).slice(0, 8);
+}
+
+async function scrapeSecondaryImagePages(homepageUrl, homepageText, { logger: log } = {}) {
+  if (!homepageUrl) return [];
+  let origin;
+  try { origin = new URL(homepageUrl).origin; } catch { return []; }
+  const hrefs = new Set();
+  const text = String(homepageText || '');
+  const candidates = [];
+  const htmlHref = /href=["']([^"']+)["']/gi;
+  let m;
+  while ((m = htmlHref.exec(text))) candidates.push(m[1]);
+  // Jina/markdown pages expose links as [label](url)
+  const mdLink = /\[[^\]]*\]\((https?:\/\/[^)\s]+|\/[^)\s]+)\)/gi;
+  while ((m = mdLink.exec(text))) candidates.push(m[1]);
+  // Common path guesses when homepage is thin on links
+  for (const path of ['/gallery', '/photos', '/portfolio', '/about', '/services', '/our-work', '/team']) {
+    candidates.push(path);
+  }
+  for (const raw of candidates) {
+    if (!raw || raw.startsWith('#') || raw.startsWith('mailto:') || raw.startsWith('tel:')) continue;
+    let abs;
+    try { abs = new URL(raw, homepageUrl).href; } catch { continue; }
+    if (!abs.startsWith(origin)) continue;
+    if (/\/(gallery|photos?|portfolio|our-work|projects?|about|team|services?|work|lookbook|menu)(\/|$|\?)/i.test(abs)) {
+      hrefs.add(abs.split('#')[0]);
+    }
+  }
+  const pages = [...hrefs].slice(0, 6);
+  const collected = [];
+  for (const pageUrl of pages) {
+    try {
+      const fetched = await tryFetchHomepage(pageUrl, { timeoutMs: 10_000, label: 'secondaryImagePage' });
+      if (!fetched?.homepageText) continue;
+      collected.push(...extractImagesFromMarkdown(fetched.homepageText));
+    } catch (err) {
+      log?.warn?.('[ASSET] secondary page scrape failed', { pageUrl, error: err.message });
+    }
+  }
+  return collected;
+}
+
+/** Stable Unsplash CDN holding photos (source.unsplash.com is dead). Niche-keyed. */
+const HOLDING_PHOTO_POOL = {
+  dental: [
+    'https://images.unsplash.com/photo-1606811841689-23dfddce3e95?auto=format&fit=crop&w=1600&q=80',
+    'https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?auto=format&fit=crop&w=1600&q=80',
+    'https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=1600&q=80',
+  ],
+  medical: [
+    'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1600&q=80',
+    'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1600&q=80',
+  ],
+  hvac: [
+    'https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=1600&q=80',
+    'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=1600&q=80',
+  ],
+  plumber: [
+    'https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?auto=format&fit=crop&w=1600&q=80',
+    'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=1600&q=80',
+  ],
+  restaurant: [
+    'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1600&q=80',
+    'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1600&q=80',
+    'https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1600&q=80',
+  ],
+  law: [
+    'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=1600&q=80',
+    'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1600&q=80',
+  ],
+  fitness: [
+    'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1600&q=80',
+    'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=1600&q=80',
+  ],
+  salon: [
+    'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1600&q=80',
+    'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1600&q=80',
+  ],
+  realtor: [
+    'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1600&q=80',
+    'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1600&q=80',
+  ],
+  handyman: [
+    'https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&w=1600&q=80',
+    'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?auto=format&fit=crop&w=1600&q=80',
+  ],
+  default: [
+    'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1600&q=80',
+    'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1600&q=80',
+    'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=1600&q=80',
+    'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1600&q=80',
+    'https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1600&q=80',
+    'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=1600&q=80',
+    'https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=1600&q=80',
+    'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=1600&q=80',
+  ],
+};
+
+function holdingPoolForIndustry(industry = '') {
+  const s = String(industry || '').toLowerCase();
+  if (/dent|ortho|tooth/.test(s)) return HOLDING_PHOTO_POOL.dental;
+  if (/medic|clinic|doctor|therapy|chiro|urgent|pharmacy|vet/.test(s)) return HOLDING_PHOTO_POOL.medical;
+  if (/hvac|air.?cond|heat/.test(s)) return HOLDING_PHOTO_POOL.hvac;
+  if (/plumb|drain|pipe/.test(s)) return HOLDING_PHOTO_POOL.plumber;
+  if (/restaur|cafe|bakery|bar|food|cater/.test(s)) return HOLDING_PHOTO_POOL.restaurant;
+  if (/law|attorney|legal|notary/.test(s)) return HOLDING_PHOTO_POOL.law;
+  if (/fit|gym|train|yoga/.test(s)) return HOLDING_PHOTO_POOL.fitness;
+  if (/salon|barber|spa|beauty|hair/.test(s)) return HOLDING_PHOTO_POOL.salon;
+  if (/real.?estate|realtor|mortgage|home.?sales/.test(s)) return HOLDING_PHOTO_POOL.realtor;
+  if (/handy|contract|roof|electr|landscap|garage|pest|clean|auto|tow/.test(s)) return HOLDING_PHOTO_POOL.handyman;
+  return HOLDING_PHOTO_POOL.default;
+}
+
+/**
+ * Holding-space images when the site is thin — Google CSE when keyed,
+ * else curated Unsplash CDN (free, no AI cents). Prefer real business photos always.
+ */
+async function fetchHoldingImages(businessInfo, { count = 8, logger: log } = {}) {
+  const industry = String(businessInfo.industry || 'small business').slice(0, 40);
+  const loc = String(businessInfo.location || '').slice(0, 40);
+  const query = [industry, loc, 'business', 'storefront'].filter(Boolean).join(' ');
+  const out = [];
+
+  const cseKey = process.env.GOOGLE_CSE_KEY || process.env.GOOGLE_CUSTOM_SEARCH_KEY || '';
+  const cseCx = process.env.GOOGLE_CSE_CX || process.env.GOOGLE_CUSTOM_SEARCH_CX || '';
+  if (cseKey && cseCx) {
+    try {
+      const url = `https://www.googleapis.com/customsearch/v1?key=${encodeURIComponent(cseKey)}&cx=${encodeURIComponent(cseCx)}&searchType=image&q=${encodeURIComponent(query)}&num=${Math.min(10, count)}&safe=active`;
+      const resp = await fetch(url, { signal: AbortSignal.timeout(12_000) });
+      const json = await resp.json().catch(() => ({}));
+      for (const item of json.items || []) {
+        if (item.link && /^https?:\/\//i.test(item.link)) out.push(item.link);
+      }
+      if (out.length) {
+        log?.info?.('[ASSET] Google CSE holding images', { count: out.length, query });
+        return out.slice(0, count);
+      }
+    } catch (err) {
+      log?.warn?.('[ASSET] Google CSE image search failed', { error: err.message });
+    }
+  }
+
+  const niche = holdingPoolForIndustry(industry);
+  const pool = [...niche, ...HOLDING_PHOTO_POOL.default];
+  for (let i = 0; i < count; i++) out.push(pool[i % pool.length]);
+  log?.info?.('[ASSET] curated stock holding images (thin site)', { count: out.length, industry });
+  return out;
 }
 
 // Social-link extraction ------------------------------------------------------
@@ -598,9 +745,9 @@ function parseInstagramSearchSnippet(snippet) {
   const handleMatch = text.match(/\(@([a-zA-Z0-9_.]+)\)\s*(?:•|on Instagram|photos|-)/i);
   let handle = handleMatch ? handleMatch[1] : (text.match(/(?:^|\s)instagram\.com\/([a-zA-Z0-9_.]+)/i)?.[1] || null);
   if (handle) handle = handle.replace(/^@+/, '').toLowerCase();
-  const followersMatch = text.match(/([\d,]+(?:\.\d+)?[KkMm]?)\s*Followers/i);
-  const followingMatch = text.match(/([\d,]+(?:\.\d+)?[KkMm]?)\s*Following/i);
-  const postsMatch = text.match(/([\d,]+(?:\.\d+)?[KkMm]?)\s*Posts/i);
+  const followersMatch = text.match(/([\d,]+(?:\.\d+)?[KkMm]?)\sFollowers/i);
+  const followingMatch = text.match(/([\d,]+(?:\.\d+)?[KkMm]?)\sFollowing/i);
+  const postsMatch = text.match(/([\d,]+(?:\.\d+)?[KkMm]?)\sPosts/i);
   const bioMatch = text.match(/:\s*"([^"]+)"/);
   const result = {
     username: handle,
@@ -986,9 +1133,9 @@ function extractRatingFromReviewPage(markdown) {
   let reviewCount = null;
   const avgMatch = text.match(/(?:Average opinion|rating|average rating)[*:\s]*\s*(\d+(?:\.\d+)?)\s*\/\s*5/i) ||
     text.match(/(\d+(?:\.\d+)?)\s*(?:\/?\s*5)?[-\s]star(?:\s+rating)?/i) ||
-    text.match(/average.*?\s(\d+(?:\.\d+)?)\s*out\s+of\s+5/i);
+    text.match(/average.*?\s(\d+(?:\.\d+)?)\sout\s+of\s+5/i);
   if (avgMatch) rating = parseFloat(avgMatch[1]);
-  const countMatch = text.match(/([\d,]+)\s*(?:reviews?|ratings?)(?:\s+on\s+Google\s+My\s+Business)?/i) || text.match(/Google\s+My\s+Business.*?([\d,]+)\s*reviews/i);
+  const countMatch = text.match(/([\d,]+)\s*(?:reviews?|ratings?)(?:\s+on\s+Google\s+My\s+Business)?/i) || text.match(/Google\s+My\s+Business.*?([\d,]+)\sreviews/i);
   if (countMatch) reviewCount = parseInt(countMatch[1].replace(/,/g, ''), 10);
   return { rating, reviewCount };
 }
@@ -1002,7 +1149,7 @@ function isRealReviewQuote(text) {
   if (text.length < 40) return false;
   const lower = text.toLowerCase();
   // skip metadata / aggregate descriptions
-  const blocklist = ['url source:', 'published time:', 'markdown content:', '**address:**', '**phone:**', 'average opinion:', 'this company has', 'well rounded momma is known', 'well rounded momma is a reputable', 'well rounded momma provides', 'well rounded momma at', 'the center offers', 'customers have praised', 'with 59 reviews', 'specialties and services'];
+  const blocklist = ['url source:', 'published time:', 'markdown content:', '*address:**', '*phone:**', 'average opinion:', 'this company has', 'well rounded momma is known', 'well rounded momma is a reputable', 'well rounded momma provides', 'well rounded momma at', 'the center offers', 'customers have praised', 'with 59 reviews', 'specialties and services'];
   if (blocklist.some((b) => lower.includes(b))) return false;
   // prefer first-person quotes; also allow long detailed third-person narratives
   if (/\b(i|my|me|we|our)\b/i.test(text)) return true;
@@ -1024,7 +1171,7 @@ function parseReviewsHeuristic(markdown) {
   for (const block of blocks) {
     const lines = block.split(/\n/).map((l) => l.trim()).filter(Boolean);
     if (!lines.length) continue;
-    const author = lines[0].replace(/\s*[-–—]\s*.*$/, '').trim();
+    const author = lines[0].replace(/\s*[-–—]\s*.$/, '').trim();
     if (isGenericAuthor(author)) continue;
 
     // Look for an optional rating on the next non-image line, then collect the quote
@@ -1415,6 +1562,10 @@ export async function ingestAll(businessInfo, options = {}) {
     }
 
     const images = extractImagesFromMarkdown(homepageText);
+    const secondaryImages = await scrapeSecondaryImagePages(homepageUrl || targetUrl, homepageText, { logger: ingestLogger });
+    for (const img of secondaryImages) {
+      if (!images.some((x) => x.url === img.url)) images.push(img);
+    }
     const parsedAI = homepageText ? await parseBusinessPageWithAI(homepageText, homepageUrl, { callCouncil }) : null;
     const parsedHeuristic = homepageText ? parseBusinessPageHeuristic(homepageText, homepageUrl) : {};
     let page = mergeBusinessPage(parsedAI, parsedHeuristic);
@@ -1458,7 +1609,7 @@ export async function ingestAll(businessInfo, options = {}) {
     const socialImages = (instagramProfile?.posts || [])
       .filter((p) => p.displayUrl && !p.isVideo)
       .map((p) => ({ url: p.displayUrl, caption: p.caption, source: 'Instagram' }))
-      .slice(0, 6);
+      .slice(0, 12);
 
     const allImages = [
       ...(logoUrl ? [{ url: logoUrl, alt: 'logo', source: 'business page' }] : []),
@@ -1605,7 +1756,17 @@ async function maybeFillGeneratedHero(businessInfo, result, log = logger) {
 
   // Drop AI leftovers if any real business media exists
   const owned = pool.filter((u) => !/replicate\.delivery|oaidalle/i.test(u));
-  const chosen = (owned.length ? owned : pool).slice(0, 8);
+  let chosen = (owned.length ? owned : pool).slice(0, 16);
+
+  // Thin sites: fill with Google CSE / Unsplash holding images so templates have
+  // a real photo strip — not empty heroes. Prefer owned first; stock is spacer only.
+  if (chosen.length < 6) {
+    const holding = await fetchHoldingImages(businessInfo, { count: 10 - chosen.length, logger: log });
+    chosen = [...chosen, ...holding].filter((u, idx, arr) => arr.indexOf(u) === idx).slice(0, 16);
+    if (!result.assetData) result.assetData = { images: {} };
+    if (!result.assetData.images) result.assetData.images = {};
+    result.assetData.images.holdingImages = true;
+  }
 
   if (chosen.length > 0) {
     if (!result.assetData) result.assetData = { images: {} };
@@ -1614,15 +1775,20 @@ async function maybeFillGeneratedHero(businessInfo, result, log = logger) {
     result.assetData.images.generatedHero = false;
     businessInfo.heroImages = chosen;
     businessInfo.assetData = result.assetData;
-    log.info('[ASSET] using business-owned photos (skip AI hero)', {
+    log.info('[ASSET] hero photo set', {
       count: chosen.length,
+      owned: owned.length,
       sample: chosen[0]?.slice(0, 80),
       instagramPosts: socialPosts.length,
+      holding: Boolean(result.assetData.images.holdingImages),
     });
-    return;
+    // Only burn Replicate cents when we still have almost nothing owned.
+    if (owned.length >= 2) return;
   }
 
-  if (result?.assetData?.images) result.assetData.images.hero = [];
+  if (owned.length > 0) return;
+
+  if (result?.assetData?.images && !chosen.length) result.assetData.images.hero = [];
   try {
     const { default: runGraphicDesign, getReplicateApiToken } = await import('./creative-engine/modes/graphic-design.js');
     if (!getReplicateApiToken()) return;
@@ -1656,10 +1822,11 @@ async function maybeFillGeneratedHero(businessInfo, result, log = logger) {
 
     if (!result.assetData) result.assetData = { images: {} };
     if (!result.assetData.images) result.assetData.images = {};
-    result.assetData.images.hero = [out.publicUrl];
+    const merged = [out.publicUrl, ...chosen].filter((u, idx, arr) => arr.indexOf(u) === idx).slice(0, 16);
+    result.assetData.images.hero = merged;
     result.assetData.images.generatedHero = true;
     result.assetData.images.all = [out.publicUrl, ...(result.assetData.images.all || [])];
-    businessInfo.heroImages = [out.publicUrl];
+    businessInfo.heroImages = merged;
     businessInfo.assetData = result.assetData;
     log.info('[ASSET] generated Flux hero fallback (no owned photos found)', { url: out.publicUrl.slice(0, 80) });
   } catch (err) {

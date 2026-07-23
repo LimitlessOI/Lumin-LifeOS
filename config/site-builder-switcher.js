@@ -114,7 +114,7 @@ export function getVariantSwitcherHtml({ info, clientId, variants, editToken = '
           </form>
         </div>
       </div>
-      <p class='text-xs text-slate-400 mt-2'>5 free designs · 10 paid designs you can preview · $35 custom co-design (pay only when you approve). Toggle to compare.</p>
+      <p class='text-xs text-slate-400 mt-2'>10 free niche templates · 40 more from the 50-template catalog · $35 custom co-design (pay only when you approve). Toggle to compare — each layout is structurally different.</p>
       <nav class='mt-2 flex gap-2 overflow-x-auto pb-1'>
         <template x-for='(v,i) in variants' :key='v.id'>
           <button class='chip whitespace-nowrap text-sm px-3 py-1.5 rounded-full border border-slate-600 text-slate-200 hover:border-slate-400'

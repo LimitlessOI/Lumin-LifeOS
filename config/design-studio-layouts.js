@@ -7,6 +7,7 @@
 import { getDesignSystemCss, getDesignSystemFontLinks } from './design-studio.js';
 import { matchIndustrySalesPack, buildProviderWhyBullets, practiceOffersEnergyWellness, buildWellnessWhyBullets } from './site-builder-industry-sales.js';
 import { resolveSalesBrief } from './site-builder-sales-doctrine.js';
+import { renderLayoutFamily, registerVisitorSalesShell } from './design-studio-layout-families.js';
 
 function escapeHtml(s) {
   return String(s ?? '')
@@ -29,7 +30,7 @@ function uniqUrls(urls = []) {
   return out;
 }
 
-export function normalizeLayoutContent(info = {}, posPartner = null) {
+export function normalizeLayoutContent(info = {}, posPartner = null, { imageOffset = 0 } = {}) {
   const logo = info.logoUrl || info.assetData?.images?.logo || '';
   const igPosts = (info.assetData?.social?.instagram?.posts || [])
     .map((p) => p.displayUrl || p.url)
@@ -46,7 +47,9 @@ export function normalizeLayoutContent(info = {}, posPartner = null) {
   let heroes = uniqUrls(rawHeroes).filter((u) => u !== logo && !/\blogo\b|favicon/i.test(u));
   const owned = heroes.filter((u) => !/replicate\.delivery|oaidalle/i.test(u));
   if (owned.length) heroes = owned;
-  const hero = heroes[0] || '';
+  const offset = heroes.length ? Math.abs(Number(imageOffset) || 0) % heroes.length : 0;
+  const rotated = heroes.length ? [...heroes.slice(offset), ...heroes.slice(0, offset)] : [];
+  const hero = rotated[0] || '';
   const partner = posPartner || { name: 'booking', url: '#book' };
   const booking = info.bookingUrl || partner.url || '#book';
   const salesPack = matchIndustrySalesPack(info);
@@ -90,8 +93,8 @@ export function normalizeLayoutContent(info = {}, posPartner = null) {
     address: info.address || info.assetData?.businessDetails?.address || '',
     logo,
     hero,
-    heroes,
-    gallery: heroes.slice(0, 6),
+    heroes: rotated.length ? rotated : heroes,
+    gallery: (rotated.length ? rotated : heroes).slice(0, 12),
     booking,
     searchUrl: info.searchUrl || info.idxUrl || info.listingSearchUrl || booking,
     partnerName: partner.name || 'booking',
@@ -119,11 +122,37 @@ export function normalizeLayoutContent(info = {}, posPartner = null) {
   };
 }
 
+function normalizeSystemForLayout(system = {}) {
+  const t = system.tokens || {};
+  const primary = t.primary || t.accent || '#111';
+  const fonts = system.fonts || {
+    display: `"${t.fontDisplay || 'Inter'}", system-ui, sans-serif`,
+    body: `"${t.fontBody || 'Inter'}", system-ui, sans-serif`,
+    google: [
+      ...(t.fontDisplay ? [{ family: t.fontDisplay, weights: 'wght@400;600;700' }] : []),
+      ...(t.fontBody && t.fontBody !== t.fontDisplay ? [{ family: t.fontBody, weights: 'wght@400;500;600' }] : []),
+    ],
+  };
+  return {
+    ...system,
+    tokens: {
+      radius: '16px',
+      shadow: '0 12px 40px rgba(0,0,0,0.08)',
+      overlay: 'rgba(0,0,0,0.04)',
+      ...t,
+      primary,
+      buttonText: t.buttonText || t.accentText || '#FFF',
+    },
+    fonts,
+  };
+}
+
 function head(system, content, extraCss = '') {
-  const primary = system.tokens.primary;
-  const accent = system.tokens.accent;
-  const fontLinks = getDesignSystemFontLinks(system).join('\n');
-  const dsCss = getDesignSystemCss(system, primary, accent);
+  const sys = normalizeSystemForLayout(system);
+  const primary = sys.tokens.primary;
+  const accent = sys.tokens.accent;
+  const fontLinks = getDesignSystemFontLinks(sys).join('\n');
+  const dsCss = getDesignSystemCss(sys, primary, accent);
   const titleBits = [content.name, content.location || content.industry].filter(Boolean);
   return `<!DOCTYPE html>
 <html lang="en">
@@ -1053,7 +1082,7 @@ ${footer(content)}
  * Start from client unanswered questions; doors for searching / why provider / how to choose /
  * optional secondary. Midwifery + real estate packs specialize content; universal brief covers others.
  */
-function shellVisitorStateSales(system, content) {
+export function shellVisitorStateSales(system, content) {
   const pack = content.salesBrief || content.salesPack || {};
   const cat = pack?.categorySale || {};
   const prov = pack?.providerSale || {};
@@ -1483,29 +1512,29 @@ const LAYOUT_RENDERERS = {
   'agentic-conversational': shellAgentic,
 };
 
-const MULTI_PATH_SALES_LAYOUT_IDS = new Set([
-  'organic-warm',
-  'soft-pastel',
-  'local-trust',
-  'editorial-luxe',
-  'modern-clinical',
-  'coastal-light',
-  'artisan-heritage',
+const LEGACY_VISITOR_SALES_IDS = new Set([
+  'agentic-conversational',
 ]);
 
 /**
  * Render a distinct hand-authored layout for a design system.
- * Multi-path sales shell applies to every industry on listed layouts — not midwifery-only.
+ * Catalog templates route via layoutFamily; legacy design systems keep per-id shells.
  */
-export function renderDesignSystemLayout(system, info = {}, posPartner = null) {
+export function renderDesignSystemLayout(system, info = {}, posPartner = null, opts = {}) {
   if (!system?.id) return null;
-  const content = normalizeLayoutContent(info, posPartner);
-  if (MULTI_PATH_SALES_LAYOUT_IDS.has(system.id)) {
+  const content = normalizeLayoutContent(info, posPartner, opts);
+  const family = system.layoutFamily;
+  if (family === 'visitor-sales' || (!family && LEGACY_VISITOR_SALES_IDS.has(system.id))) {
     return shellVisitorStateSales(system, content);
+  }
+  if (family) {
+    return renderLayoutFamily(family, system, content);
   }
   const renderer = LAYOUT_RENDERERS[system.id] || shellEditorialLuxe;
   return renderer(system, content);
 }
+
+registerVisitorSalesShell(shellVisitorStateSales);
 
 export function layoutShellIdForDesignSystem(systemId) {
   const sys = String(systemId || '');

@@ -659,6 +659,7 @@ export default class SiteBuilder {
       // Default: hand-authored layout shells so variants are structurally different.
       // Opt into the old same-funnel AI HTML path with useAiLayouts: true.
       const useLayoutShells = options.useAiLayouts !== true && options.useLayoutShells !== false;
+      let variantIndex = 0;
       for (const ds of systems) {
         try {
           businessInfo.designSystemId = ds.id;
@@ -666,9 +667,11 @@ export default class SiteBuilder {
           let html;
           let usedShell = false;
           if (useLayoutShells) {
-            html = renderDesignSystemLayout(ds, businessInfo, posPartner);
+            // Rotate hero/gallery per template so toggles don't share one photo.
+            html = renderDesignSystemLayout(ds, businessInfo, posPartner, { imageOffset: variantIndex });
             usedShell = Boolean(html);
           }
+          variantIndex += 1;
           if (!html) {
             html = await this.generateSiteHtml(businessInfo, { clientId, posPartner, designBrief, designSystem: ds, leanTemplate: options.leanTemplate, skipAi: options.skipAi });
           }

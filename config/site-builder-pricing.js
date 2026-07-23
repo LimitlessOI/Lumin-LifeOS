@@ -27,15 +27,15 @@ export const SITE_BUILDER_PRICING = {
     'social-media-management': { display: '$297/mo', cadence: 'monthly' },
     'seo-content-care-plan': { display: '$35/mo', cadence: 'monthly' },
   },
-  /** Template gallery: 5 free designs to toggle/preview; 10 more paid for $1
-   *  and a fully bespoke design are paid upsells (founder direction 2026-07-13). */
+  /** Template gallery: 10 free niche designs; 40 more from the 50-template catalog
+   *  for $1 each; fully bespoke co-design is a paid upsell. */
   templates: {
-    freeCount: Number(process.env.SITE_BUILDER_FREE_TEMPLATE_COUNT || 5),
+    freeCount: Number(process.env.SITE_BUILDER_FREE_TEMPLATE_COUNT || 10),
     additional: {
       oneTimeCents: Number(process.env.SITE_BUILDER_TEMPLATE_ADDITIONAL_CENTS || 100),
       display: process.env.SITE_BUILDER_TEMPLATE_ADDITIONAL_DISPLAY || '$1',
-      description: 'Preview and switch to any of 10 additional professionally-designed templates; pay only when you publish.',
-      slotCount: 10,
+      description: 'Preview and switch across the full 50-niche template catalog; pay only when you publish extras.',
+      slotCount: Number(process.env.SITE_BUILDER_TEMPLATE_ADDITIONAL_SLOTS || 40),
     },
     custom: {
       oneTimeCents: Number(process.env.SITE_BUILDER_TEMPLATE_CUSTOM_CENTS || 3500),
