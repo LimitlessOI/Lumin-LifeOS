@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-23T19:24:26.154Z",
+  "generated_at": "2026-07-23T19:31:21.115Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12140,
+  "file_count": 12141,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -39794,8 +39794,8 @@
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
       "bytes": 241170,
-      "mtime": "2026-07-23T07:35:30.076Z",
-      "indexed_at": "2026-07-23T07:35:30.076Z"
+      "mtime": "2026-07-23T19:31:21.115Z",
+      "indexed_at": "2026-07-23T19:31:21.115Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -40932,9 +40932,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 147476,
-      "mtime": "2026-07-23T16:51:27.653Z",
-      "indexed_at": "2026-07-23T16:51:27.653Z"
+      "bytes": 148025,
+      "mtime": "2026-07-23T19:31:21.115Z",
+      "indexed_at": "2026-07-23T19:31:21.115Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -83717,6 +83717,16 @@
       "indexed_at": "2026-07-21T05:58:39.404Z"
     },
     {
+      "path": "scripts/wrm-wix-cutover-status.mjs",
+      "synopsis": "Readiness probe for WRM Wix → SiteBuilder cutover (no secrets printed).",
+      "bytes": 1955,
+      "mtime": "2026-07-23T19:31:21.115Z",
+      "indexed_at": "2026-07-23T19:31:21.115Z",
+      "ssot": [
+        "docs/products/site-builder/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "scripts/zero-drift-check.mjs",
       "synopsis": "Warns (or fails in strict mode) when routes/services changed without",
       "bytes": 2128,
@@ -90150,9 +90160,9 @@
     {
       "path": "services/railway-managed-env-service.js",
       "synopsis": "Exports createRailwayManagedEnvService — services/railway-managed-env-service.js.",
-      "bytes": 23286,
-      "mtime": "2026-07-23T07:35:30.076Z",
-      "indexed_at": "2026-07-23T07:35:30.076Z",
+      "bytes": 23473,
+      "mtime": "2026-07-23T19:31:21.115Z",
+      "indexed_at": "2026-07-23T19:31:21.115Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

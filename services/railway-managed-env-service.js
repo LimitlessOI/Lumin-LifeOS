@@ -74,6 +74,13 @@ const DEFAULT_ALLOWED_KEYS = new Set([
   "GO_VEGAS_SCHEDULER_MS",
   "GOOGLE_PLACES_KEY",
   "GOOGLE_PLACES_API_KEY",
+  /** Well Rounded Momma — Wix dashboard login for domain release / cutover to SiteBuilder */
+  "WRM_WIX_EMAIL",
+  "WRM_WIX_PASSWORD",
+  "WRM_DOMAIN",
+  "WIX_EMAIL",
+  "WIX_PASSWORD",
+
   "GOOGLE_CLIENT_ID",
   "GOOGLE_CLIENT_SECRET",
   "GOOGLE_REDIRECT_URI",
