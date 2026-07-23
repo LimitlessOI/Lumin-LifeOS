@@ -80,6 +80,12 @@ const DEFAULT_ALLOWED_KEYS = new Set([
   "WRM_DOMAIN",
   "WIX_EMAIL",
   "WIX_PASSWORD",
+  /** Facebook — personal / admin login for Go Vegas ops (human paste only; never log values) */
+  "FACEBOOK_EMAIL",
+  "FACEBOOK_PASSWORD",
+  "FB_EMAIL",
+  "FB_PASSWORD",
+
 
   "GOOGLE_CLIENT_ID",
   "GOOGLE_CLIENT_SECRET",

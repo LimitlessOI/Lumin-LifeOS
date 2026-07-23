@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-23T19:31:21.115Z",
+  "generated_at": "2026-07-23T19:34:58.342Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12141,
   "files": [
@@ -40933,8 +40933,8 @@
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
       "bytes": 148025,
-      "mtime": "2026-07-23T19:31:21.115Z",
-      "indexed_at": "2026-07-23T19:31:21.115Z"
+      "mtime": "2026-07-23T19:34:58.342Z",
+      "indexed_at": "2026-07-23T19:34:58.342Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -90160,9 +90160,9 @@
     {
       "path": "services/railway-managed-env-service.js",
       "synopsis": "Exports createRailwayManagedEnvService — services/railway-managed-env-service.js.",
-      "bytes": 23473,
-      "mtime": "2026-07-23T19:31:21.115Z",
-      "indexed_at": "2026-07-23T19:31:21.115Z",
+      "bytes": 23647,
+      "mtime": "2026-07-23T19:34:58.342Z",
+      "indexed_at": "2026-07-23T19:34:58.342Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
