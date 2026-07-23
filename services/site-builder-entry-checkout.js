@@ -2,9 +2,79 @@
  * SYNOPSIS: Site Builder beta publish checkout — Stripe session create + verify.
  * @ssot docs/products/site-builder/PRODUCT_HOME.md
  */
+import crypto from 'node:crypto';
 import logger from './logger.js';
 import { getStripeClient } from './stripe-client.js';
-import { SITE_BUILDER_PRICING, getBetaPublishOfferSummary } from '../config/site-builder-pricing.js';
+import {
+  SITE_BUILDER_PRICING,
+  getBetaPublishOfferSummary,
+  isValidPublishCompCode,
+  normalizePublishCompCode,
+} from '../config/site-builder-pricing.js';
+
+/**
+ * Founder/comp complimentary publish — skips Stripe when code matches SITE_BUILDER_FREE_CODES.
+ */
+export async function redeemPublishCompCode({ clientId, code, pool, businessName = '' }) {
+  if (!clientId || !/^[\w-]+$/.test(String(clientId))) {
+    return { ok: false, error: 'Invalid clientId' };
+  }
+  const normalized = normalizePublishCompCode(code);
+  if (!isValidPublishCompCode(normalized)) {
+    return { ok: false, error: 'Invalid or unknown complimentary code' };
+  }
+  if (!pool) {
+    return { ok: false, error: 'Database required for complimentary publish' };
+  }
+
+  const sessionId = `comp_${crypto.randomBytes(16).toString('hex')}`;
+  const careMonths = SITE_BUILDER_PRICING.carePlan.includedMonthsOnPublish || 2;
+  const careUntil = new Date();
+  careUntil.setMonth(careUntil.getMonth() + careMonths);
+  const now = new Date().toISOString();
+
+  await pool.query(
+    `UPDATE prospect_sites
+        SET status = 'converted',
+            deal_value = COALESCE(deal_value, 0),
+            metadata = COALESCE(metadata, '{}'::jsonb) || $2::jsonb,
+            updated_at = NOW()
+      WHERE client_id = $1`,
+    [
+      clientId,
+      JSON.stringify({
+        publishPaidAt: now,
+        publishTier: 'comp_code',
+        beta: true,
+        complimentary: true,
+        compCode: normalized,
+        compRedeemSessionId: sessionId,
+        compRedeemedAt: now,
+        careIncludedMonths: careMonths,
+        careIncludedUntil: careUntil.toISOString(),
+        offerSummary: `Complimentary publish via code (${businessName || clientId})`,
+      }),
+    ],
+  );
+
+  logger.info('[SITE-CHECKOUT] Complimentary publish redeemed', {
+    clientId,
+    code: normalized,
+    sessionId,
+    businessName: businessName || null,
+  });
+
+  return {
+    ok: true,
+    free: true,
+    clientId,
+    sessionId,
+    code: normalized,
+    dealValue: 0,
+    careIncludedMonths: careMonths,
+    careIncludedUntil: careUntil.toISOString(),
+  };
+}
 
 export async function createPublishCheckoutSession({ clientId, businessName, baseUrl, pool, templateTier = '', selectedDesign = '' }) {
   if (!clientId || !/^[\w-]+$/.test(String(clientId))) {
@@ -73,6 +143,7 @@ export async function createPublishCheckoutSession({ clientId, businessName, bas
   const session = await stripe.checkout.sessions.create({
     mode: 'payment',
     line_items: lineItems,
+    allow_promotion_codes: true,
     success_url: `${safeBase}/api/v1/sites/publish/success?clientId=${encodeURIComponent(clientId)}&session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${safeBase}/previews/${encodeURIComponent(clientId)}/`,
     metadata: {
@@ -121,6 +192,32 @@ export async function createPublishCheckoutSession({ clientId, businessName, bas
 export async function verifyPublishCheckoutSession({ sessionId, clientId, pool }) {
   if (!sessionId || !clientId) {
     return { ok: false, error: 'sessionId and clientId required' };
+  }
+
+  if (String(sessionId).startsWith('comp_')) {
+    if (!pool) {
+      return { ok: false, error: 'Database required for complimentary verify' };
+    }
+    const row = await pool.query(
+      `SELECT status, metadata, deal_value FROM prospect_sites WHERE client_id = $1 LIMIT 1`,
+      [clientId],
+    );
+    const prospect = row.rows[0];
+    const meta = prospect?.metadata || {};
+    if (!prospect || meta.compRedeemSessionId !== String(sessionId)) {
+      return { ok: false, error: 'Complimentary session not found for this preview' };
+    }
+    const careMonths = Number(meta.careIncludedMonths || SITE_BUILDER_PRICING.carePlan.includedMonthsOnPublish || 2);
+    return {
+      ok: true,
+      free: true,
+      clientId,
+      dealValue: Number(prospect.deal_value || 0),
+      sessionId: String(sessionId),
+      careIncludedMonths: careMonths,
+      careIncludedUntil: meta.careIncludedUntil || null,
+      code: meta.compCode || null,
+    };
   }
 
   const stripe = await getStripeClient();
@@ -334,6 +431,7 @@ export async function verifyUpsellCheckoutSession({ sessionId, clientId, kind, p
 export default {
   createPublishCheckoutSession,
   verifyPublishCheckoutSession,
+  redeemPublishCompCode,
   createUpsellCheckoutSession,
   verifyUpsellCheckoutSession,
 };

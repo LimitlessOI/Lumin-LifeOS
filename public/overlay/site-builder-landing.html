@@ -477,6 +477,32 @@
     }
     .preview-actions a { display: none; }
     .preview-actions.visible a { display: inline-flex; }
+    .comp-code-row {
+      display: grid;
+      gap: 0.6rem;
+      margin-top: 0.75rem;
+      padding: 0.9rem 1rem;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.03);
+    }
+    .comp-code-row[hidden] { display: none; }
+    .comp-code-row label {
+      display: grid;
+      gap: 0.35rem;
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
+    .comp-code-row input {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #0f1613;
+      color: var(--ink);
+      padding: 0.85rem 1rem;
+      font-size: 1rem;
+      font-family: var(--sans);
+      max-width: 22rem;
+    }
     .audit-result { margin-top: 1rem; padding: 1.2rem; border: 1px solid var(--line); border-radius: 14px; background: rgba(255,255,255,0.04); }
     .score-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.8rem; }
     .score-ring { width: 72px; height: 72px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: 1.5rem; background: conic-gradient(var(--accent) calc(var(--score, 0) * 1%), rgba(255,255,255,0.08) 0); color: #fff; }
@@ -749,6 +775,10 @@
           <summary>What about templates?</summary>
           <p>You get 5 free designs to preview and switch. Ten more templates are $1 each when you publish. A fully custom one-of-one template is $35 — co-designed with you, never duplicated.</p>
         </details>
+        <details>
+          <summary>I was given a complimentary code — how do I use it?</summary>
+          <p>After your preview is ready, enter the code in the complimentary-code box and tap Apply free publish. It skips the $45 Stripe charge for that preview.</p>
+        </details>
       </div>
     </section>
 
@@ -775,6 +805,14 @@
         <div class="preview-actions" id="preview-actions">
           <a class="btn btn-secondary" id="preview-link" href="#" target="_blank" rel="noopener">Open preview</a>
           <a class="btn btn-primary" id="publish-link" href="#" target="_blank" rel="noopener">Publish for $45</a>
+        </div>
+        <div class="comp-code-row" id="comp-code-row" hidden>
+          <label>
+            Have a complimentary code?
+            <input id="compCode" name="compCode" type="text" placeholder="Enter code" autocomplete="off" autocapitalize="characters" spellcheck="false" />
+          </label>
+          <button class="btn btn-secondary" type="button" id="comp-apply">Apply free publish</button>
+          <div class="status" id="comp-status" aria-live="polite"></div>
         </div>
         <div class="small-note">Prefer to talk? Call or text Adam at (702) 860-2007 · or email adam@hopkinsgroup.org</div>
       </form>
@@ -820,8 +858,23 @@
       const previewActions = document.getElementById('preview-actions');
       const previewLink = document.getElementById('preview-link');
       const publishLink = document.getElementById('publish-link');
+      const compCodeRow = document.getElementById('comp-code-row');
+      const compCodeInput = document.getElementById('compCode');
+      const compApply = document.getElementById('comp-apply');
+      const compStatus = document.getElementById('comp-status');
 
       let pollTimer = null;
+      let lastClientId = null;
+
+      function showPreviewReady(clientId, previewUrl) {
+        lastClientId = clientId || null;
+        if (previewUrl) previewLink.href = previewUrl;
+        if (clientId) {
+          publishLink.href = `/api/v1/sites/publish/checkout?clientId=${encodeURIComponent(clientId)}`;
+        }
+        previewActions.classList.add('visible');
+        if (compCodeRow) compCodeRow.hidden = false;
+      }
 
       function normalizeUrl(raw) {
         if (!raw) return '';
@@ -848,9 +901,7 @@
             if (data.ok && data.ready) {
               stopPoll();
               status.textContent = 'Preview ready. Check your email or open it below.';
-              previewLink.href = previewUrl;
-              publishLink.href = `/api/v1/sites/publish/checkout?clientId=${encodeURIComponent(clientId)}`;
-              previewActions.classList.add('visible');
+              showPreviewReady(clientId, previewUrl);
               submit.disabled = false;
               submit.textContent = 'Build another preview';
               return;
@@ -923,9 +974,7 @@
               pollStatus(clientId, statusUrl, previewUrl);
             } else {
               status.textContent = data.message || 'Preview started. Check your email shortly.';
-              previewLink.href = previewUrl;
-              publishLink.href = `/api/v1/sites/publish/checkout?clientId=${encodeURIComponent(clientId)}`;
-              previewActions.classList.add('visible');
+              showPreviewReady(clientId, previewUrl);
               submit.disabled = false;
               submit.textContent = 'Build another preview';
               form.reset();
@@ -936,6 +985,27 @@
             submit.disabled = false;
             submit.textContent = 'Build my preview';
           }
+        });
+      }
+
+      if (compApply) {
+        compApply.addEventListener('click', () => {
+          const code = String(compCodeInput?.value || '').trim();
+          if (!lastClientId) {
+            if (compStatus) {
+              compStatus.className = 'status error';
+              compStatus.textContent = 'Build a preview first, then apply your code.';
+            }
+            return;
+          }
+          if (!code) {
+            if (compStatus) {
+              compStatus.className = 'status error';
+              compStatus.textContent = 'Enter your complimentary code.';
+            }
+            return;
+          }
+          window.location.href = `/api/v1/sites/publish/checkout?clientId=${encodeURIComponent(lastClientId)}&code=${encodeURIComponent(code)}`;
         });
       }
     })();

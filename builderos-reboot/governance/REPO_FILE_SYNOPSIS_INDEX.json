@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-22T23:40:32.933Z",
+  "generated_at": "2026-07-23T06:43:28.502Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12122,
+  "file_count": 12123,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -30882,9 +30882,9 @@
     {
       "path": "config/site-builder-pricing.js",
       "synopsis": "Site Builder entry + upsell pricing (beta publish offer).",
-      "bytes": 3797,
-      "mtime": "2026-07-21T05:32:03.396Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "bytes": 4548,
+      "mtime": "2026-07-23T06:43:28.502Z",
+      "indexed_at": "2026-07-23T06:43:28.502Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -30902,9 +30902,9 @@
     {
       "path": "config/site-builder-switcher.js",
       "synopsis": "Site Builder variant switcher template with light/dark toggle and competitor comparison popup.",
-      "bytes": 16834,
-      "mtime": "2026-07-21T05:32:03.396Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "bytes": 17967,
+      "mtime": "2026-07-23T06:43:28.502Z",
+      "indexed_at": "2026-07-23T06:43:28.502Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -37585,9 +37585,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 78167,
-      "mtime": "2026-07-21T05:32:03.497Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z"
+      "bytes": 19655,
+      "mtime": "2026-07-23T06:43:28.502Z",
+      "indexed_at": "2026-07-23T06:43:28.502Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39755,9 +39755,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 265479,
-      "mtime": "2026-07-21T20:30:43.774Z",
-      "indexed_at": "2026-07-21T20:30:59.155Z"
+      "bytes": 240871,
+      "mtime": "2026-07-23T06:43:28.502Z",
+      "indexed_at": "2026-07-23T06:43:28.502Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -40880,9 +40880,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 144069,
-      "mtime": "2026-07-22T23:03:56.691Z",
-      "indexed_at": "2026-07-22T23:03:56.691Z"
+      "bytes": 144868,
+      "mtime": "2026-07-23T06:43:28.502Z",
+      "indexed_at": "2026-07-23T06:43:28.502Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -66042,9 +66042,9 @@
     {
       "path": "public/overlay/site-builder-landing.html",
       "synopsis": "HTML page: Site Builder — public $45 beta sales front door",
-      "bytes": 40260,
-      "mtime": "2026-07-22T20:40:07.807Z",
-      "indexed_at": "2026-07-22T20:40:07.807Z"
+      "bytes": 42853,
+      "mtime": "2026-07-23T06:43:28.502Z",
+      "indexed_at": "2026-07-23T06:43:28.502Z"
     },
     {
       "path": "public/overlay/site-builder-save-confirmation.html",
@@ -68726,9 +68726,9 @@
     {
       "path": "routes/site-builder-checkout-routes.js",
       "synopsis": "Site Builder beta publish checkout routes ($45 entry + 2 mo management).",
-      "bytes": 8982,
-      "mtime": "2026-07-22T18:16:28.885Z",
-      "indexed_at": "2026-07-22T18:16:28.885Z",
+      "bytes": 10246,
+      "mtime": "2026-07-23T06:43:28.502Z",
+      "indexed_at": "2026-07-23T06:43:28.502Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -90054,9 +90054,9 @@
     {
       "path": "services/railway-managed-env-service.js",
       "synopsis": "Exports createRailwayManagedEnvService — services/railway-managed-env-service.js.",
-      "bytes": 23169,
-      "mtime": "2026-07-21T05:32:04.656Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "bytes": 23226,
+      "mtime": "2026-07-23T06:43:28.502Z",
+      "indexed_at": "2026-07-23T06:43:28.502Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -90741,9 +90741,9 @@
     {
       "path": "services/site-builder-entry-checkout.js",
       "synopsis": "Site Builder beta publish checkout — Stripe session create + verify.",
-      "bytes": 11866,
-      "mtime": "2026-07-21T05:32:04.666Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "bytes": 14921,
+      "mtime": "2026-07-23T06:43:28.502Z",
+      "indexed_at": "2026-07-23T06:43:28.502Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -90898,9 +90898,9 @@
     {
       "path": "services/site-builder.js",
       "synopsis": "Site Builder — Scrape existing site → AI-generates complete click-funnel website",
-      "bytes": 98286,
-      "mtime": "2026-07-22T18:16:28.885Z",
-      "indexed_at": "2026-07-22T18:16:28.885Z",
+      "bytes": 98903,
+      "mtime": "2026-07-23T06:43:28.502Z",
+      "indexed_at": "2026-07-23T06:43:28.502Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -94422,6 +94422,16 @@
       "bytes": 11195,
       "mtime": "2026-07-21T05:32:04.722Z",
       "indexed_at": "2026-07-21T05:58:39.404Z"
+    },
+    {
+      "path": "tests/site-builder-comp-code.test.js",
+      "synopsis": "Site Builder complimentary publish codes.",
+      "bytes": 3042,
+      "mtime": "2026-07-23T06:43:28.502Z",
+      "indexed_at": "2026-07-23T06:43:28.502Z",
+      "ssot": [
+        "docs/products/site-builder/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "tests/site-builder-postmark-helper.test.js",

@@ -61,6 +61,8 @@ const DEFAULT_ALLOWED_KEYS = new Set([
   "SITE_BUILDER_PUBLISH_CENTS",
   "SITE_BUILDER_PUBLISH_DISPLAY",
   "SITE_BUILDER_PUBLISH_DESCRIPTION",
+  "SITE_BUILDER_FREE_CODES",
+  "SITE_BUILDER_COMP_CODES",
   "SITE_BUILDER_CARE_PLAN_CENTS",
   "SITE_BUILDER_CARE_PLAN_DISPLAY",
   "SITE_BUILDER_CARE_INCLUDED_MONTHS",
@@ -145,7 +147,7 @@ function maskValue(value) {
   const text = String(value || "");
   if (!text) return "";
   if (text.length <= 8) return `${text.slice(0, 2)}****`;
-  return `${text.slice(0, 4)}***${text.slice(-2)}`;
+  return `${text.slice(0, 4)}**${text.slice(-2)}`;
 }
 
 function parseAllowlistPatterns(raw) {

@@ -63,6 +63,30 @@ export function getBetaPublishOfferSummary(pricing = SITE_BUILDER_PRICING) {
   return `${pricing.publish.display} beta-tester publish (includes first ${months} months of care) — priced for feedback while we learn, not full retail`;
 }
 
+/** Complimentary / founder gift codes — set via SITE_BUILDER_FREE_CODES (comma-separated). */
+export function normalizePublishCompCode(code) {
+  return String(code || '')
+    .trim()
+    .toUpperCase()
+    .replace(/\s+/g, '-');
+}
+
+export function getPublishCompCodes() {
+  const raw = process.env.SITE_BUILDER_FREE_CODES || process.env.SITE_BUILDER_COMP_CODES || '';
+  return [...new Set(
+    String(raw)
+      .split(/[,;\n]+/)
+      .map((part) => normalizePublishCompCode(part))
+      .filter((code) => code.length >= 4),
+  )];
+}
+
+export function isValidPublishCompCode(code) {
+  const normalized = normalizePublishCompCode(code);
+  if (!normalized || normalized.length < 4) return false;
+  return getPublishCompCodes().includes(normalized);
+}
+
 /** One-line reason-why for print/email (Claude Hopkins: always explain the deal). */
 export function getBetaDealReasonWhy(pricing = SITE_BUILDER_PRICING) {
   const months = pricing.carePlan?.includedMonthsOnPublish || 2;

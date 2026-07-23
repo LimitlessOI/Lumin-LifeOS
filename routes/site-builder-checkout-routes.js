@@ -9,6 +9,7 @@ import logger from '../services/logger.js';
 import {
   createPublishCheckoutSession,
   verifyPublishCheckoutSession,
+  redeemPublishCompCode,
   createUpsellCheckoutSession,
   verifyUpsellCheckoutSession,
 } from '../services/site-builder-entry-checkout.js';
@@ -62,6 +63,7 @@ export function createSiteBuilderCheckoutRoutes(app, { pool, baseUrl } = {}) {
       publish: SITE_BUILDER_PRICING.publish,
       carePlan: SITE_BUILDER_PRICING.carePlan,
       offer: getBetaPublishOfferSummary(),
+      complimentaryCodesAccepted: true,
     });
   });
 
@@ -80,6 +82,24 @@ export function createSiteBuilderCheckoutRoutes(app, { pool, baseUrl } = {}) {
       const prospect = await loadProspectContext(pool, clientId);
       const businessName = meta.businessInfo?.businessName || prospect.business_name || 'your business';
       const effectiveBase = resolveRequestPublicBase(req, baseUrl);
+      const code = String(req.query.code || req.query.promo || req.query.discount || '').trim();
+
+      if (code) {
+        const redeemed = await redeemPublishCompCode({
+          clientId,
+          code,
+          pool,
+          businessName,
+        });
+        if (!redeemed.ok) {
+          return res.status(400).json(redeemed);
+        }
+        const successUrl = `${effectiveBase}/api/v1/sites/publish/success?clientId=${encodeURIComponent(clientId)}&session_id=${encodeURIComponent(redeemed.sessionId)}`;
+        if (req.query.format === 'json' || req.headers.accept?.includes('application/json')) {
+          return res.json({ ...redeemed, url: successUrl });
+        }
+        return res.redirect(302, successUrl);
+      }
 
       const checkout = await createPublishCheckoutSession({
         clientId,
@@ -121,13 +141,20 @@ export function createSiteBuilderCheckoutRoutes(app, { pool, baseUrl } = {}) {
 
       const previewUrl = `${resolveRequestPublicBase(req, baseUrl)}/previews/${encodeURIComponent(clientId)}/`;
       const months = result.careIncludedMonths || SITE_BUILDER_PRICING.carePlan.includedMonthsOnPublish || 2;
+      const complimentary = result.free === true || Number(result.dealValue) === 0;
+      const headline = complimentary
+        ? 'Complimentary publish confirmed'
+        : 'Payment received — welcome to the beta';
+      const bodyCopy = complimentary
+        ? `Your complimentary code unlocked a free publish. Your first ${months} months of site management are included — same care path as a paid beta publish.`
+        : `Your ${SITE_BUILDER_PRICING.publish.display} beta-tester publish is confirmed. You got this rate because we're still testing with real practices — your feedback helps us finish the product. Your first ${months} months of site management are included.`;
       res.set('Content-Type', 'text/html; charset=utf-8');
       res.send(`<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>You're in beta — Site Builder</title>
+  <title>${complimentary ? 'Complimentary publish' : "You're in beta"} — Site Builder</title>
   <style>
     body { font-family: Georgia, 'Times New Roman', serif; max-width: 520px; margin: 48px auto; padding: 0 20px; color: #111; background: linear-gradient(180deg, #ecfeff 0%, #fff 40%); min-height: 100vh; }
     h1 { font-size: 1.6rem; }
@@ -136,8 +163,8 @@ export function createSiteBuilderCheckoutRoutes(app, { pool, baseUrl } = {}) {
   </style>
 </head>
 <body>
-  <h1>Payment received — welcome to the beta</h1>
-  <p>Your ${SITE_BUILDER_PRICING.publish.display} beta-tester publish is confirmed. You got this rate because we're still testing with real practices — your feedback helps us finish the product. Your first ${months} months of site management are included.</p>
+  <h1>${headline}</h1>
+  <p>${bodyCopy}</p>
   <div class="card">
     <p><strong>Preview:</strong> <a href="${previewUrl}">Open your site</a></p>
     <p><strong>Included:</strong> ${months} months of site management (then ${SITE_BUILDER_PRICING.carePlan.display} if you continue).</p>
