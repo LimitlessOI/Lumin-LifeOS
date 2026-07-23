@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-23T19:36:45.199Z",
+  "generated_at": "2026-07-23T19:45:03.329Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12141,
   "files": [
@@ -90160,9 +90160,9 @@
     {
       "path": "services/railway-managed-env-service.js",
       "synopsis": "Exports createRailwayManagedEnvService — services/railway-managed-env-service.js.",
-      "bytes": 23647,
-      "mtime": "2026-07-23T19:34:58.342Z",
-      "indexed_at": "2026-07-23T19:34:58.342Z",
+      "bytes": 23750,
+      "mtime": "2026-07-23T19:45:03.329Z",
+      "indexed_at": "2026-07-23T19:45:03.329Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
