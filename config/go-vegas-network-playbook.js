@@ -19,6 +19,24 @@ export const PRODUCT_ACCOUNT_NAMES = {
 };
 
 /**
+ * Railway secret naming for multi-account social/Wix logins.
+ * Pattern: {WHO}_{CHANNEL}_EMAIL / {WHO}_{CHANNEL}_PASSWORD
+ * Example: ADAM_FACEBOOK_EMAIL, SITEBUILDER_FACEBOOK_EMAIL, WRM_WIX_EMAIL
+ */
+export const ACCOUNT_SECRET_ENV = {
+  adamFacebook: {
+    email: 'ADAM_FACEBOOK_EMAIL',
+    /** Tip may use ADAMS_FACEBOOK_PASSWORD (typo) or ADAM_FACEBOOK_PASSWORD */
+    password: ['ADAMS_FACEBOOK_PASSWORD', 'ADAM_FACEBOOK_PASSWORD', 'FACEBOOK_PASSWORD'],
+  },
+  wrmWix: {
+    email: 'WRM_WIX_EMAIL',
+    password: ['WRM_WIX_PASSWORD', 'WIX_PASSWORD'],
+    domain: 'WRM_DOMAIN',
+  },
+};
+
+/**
  * Facebook surfaces "31+" (vs "10+") when the group is this active —
  * that drives recommendations. Owned posts must clear 31; member posts are bonus.
  *

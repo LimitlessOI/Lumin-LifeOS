@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-23T19:45:03.329Z",
+  "generated_at": "2026-07-23T19:49:45.462Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12141,
+  "file_count": 12142,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -30676,9 +30676,9 @@
     {
       "path": "config/go-vegas-network-playbook.js",
       "synopsis": "Go Vegas free network — multi-brand posting + recognition flywheel.",
-      "bytes": 14007,
-      "mtime": "2026-07-23T19:36:45.199Z",
-      "indexed_at": "2026-07-23T19:36:45.199Z",
+      "bytes": 14603,
+      "mtime": "2026-07-23T19:49:45.462Z",
+      "indexed_at": "2026-07-23T19:49:45.462Z",
       "ssot": [
         "docs/products/limitlessos/PRODUCT_HOME.md"
       ]
@@ -71253,6 +71253,16 @@
       "indexed_at": "2026-07-21T05:58:39.404Z"
     },
     {
+      "path": "scripts/probe-founder-social-secrets.mjs",
+      "synopsis": "Probe tip for founder social/Wix secret NAMES present (never print values).",
+      "bytes": 2201,
+      "mtime": "2026-07-23T19:49:45.462Z",
+      "indexed_at": "2026-07-23T19:49:45.462Z",
+      "ssot": [
+        "docs/products/limitlessos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "scripts/probe-lifeos-doctrine-live.mjs",
       "synopsis": "Live probe — doctrine artifacts + LifeRE stack endpoints on Railway.",
       "bytes": 7332,
@@ -90161,8 +90171,8 @@
       "path": "services/railway-managed-env-service.js",
       "synopsis": "Exports createRailwayManagedEnvService — services/railway-managed-env-service.js.",
       "bytes": 23750,
-      "mtime": "2026-07-23T19:45:03.329Z",
-      "indexed_at": "2026-07-23T19:45:03.329Z",
+      "mtime": "2026-07-23T19:49:45.462Z",
+      "indexed_at": "2026-07-23T19:49:45.462Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
