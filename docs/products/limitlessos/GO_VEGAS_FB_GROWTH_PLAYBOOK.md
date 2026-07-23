@@ -112,6 +112,19 @@ Spread across the day — don’t dump 31 at 8am.
 
 ---
 
+## Automation (what we automate vs what stays human)
+
+| Layer | Automated now | Your time |
+|-------|---------------|-----------|
+| Daily 31+ post pack | `npm run go-vegas:daily-pack` → `data/go-vegas-daily-packs/YYYY-MM-DD.md` | Approve / light edit / paste (~15–25 min) or hand to VA |
+| Contest + recognition + rec-ask copy | Included in pack | Paste |
+| Recognition / soft-open emails | Draft functions in playbook (paste business name → we fill) | Send |
+| Spec site build | Site Builder pipeline | Trigger when warm |
+| Live comments / defuse / mod | **Not** automated (needs real humans) | Hosts / agents / you |
+| FB Graph auto-post into group | **Blocked / unreliable** without Meta app + often disallowed | Don’t depend on it |
+
+**Principle:** Automate the brain and the queue. Keep a human finger on Send so Meta and the room stay happy.
+
 ## Admin checklist (weekly)
 
 - [ ] Insights: posts/day ≥ 31 most days; active members trending up  

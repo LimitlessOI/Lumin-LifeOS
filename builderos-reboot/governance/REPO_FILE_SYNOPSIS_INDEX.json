@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-23T19:04:49.357Z",
+  "generated_at": "2026-07-23T19:18:59.005Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12136,
+  "file_count": 12139,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -40540,16 +40540,16 @@
     {
       "path": "docs/products/limitlessos/GO_VEGAS_FB_GROWTH_PLAYBOOK.md",
       "synopsis": "How to revive Go Vegas FB group so Meta recommends it — signals, contest rules, daily ops",
-      "bytes": 6504,
-      "mtime": "2026-07-23T19:04:49.357Z",
-      "indexed_at": "2026-07-23T19:04:49.357Z"
+      "bytes": 7362,
+      "mtime": "2026-07-23T19:18:59.005Z",
+      "indexed_at": "2026-07-23T19:18:59.005Z"
     },
     {
       "path": "docs/products/limitlessos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LimitlessOS business stack",
-      "bytes": 11560,
-      "mtime": "2026-07-23T19:04:49.357Z",
-      "indexed_at": "2026-07-23T19:04:49.357Z"
+      "bytes": 11881,
+      "mtime": "2026-07-23T19:18:59.005Z",
+      "indexed_at": "2026-07-23T19:18:59.005Z"
     },
     {
       "path": "docs/products/lumin-university/FILE_MANIFEST.json",
@@ -63371,9 +63371,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 33183,
-      "mtime": "2026-07-23T07:35:30.076Z",
-      "indexed_at": "2026-07-23T07:35:30.076Z",
+      "bytes": 33250,
+      "mtime": "2026-07-23T19:18:59.005Z",
+      "indexed_at": "2026-07-23T19:18:59.005Z",
       "synopsis_index_only": true
     },
     {
@@ -70518,6 +70518,16 @@
       "indexed_at": "2026-07-21T05:58:39.404Z",
       "ssot": [
         "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/go-vegas-daily-pack.mjs",
+      "synopsis": "Generate today's Go Vegas approve→paste pack (31+ posts).",
+      "bytes": 966,
+      "mtime": "2026-07-23T19:18:59.005Z",
+      "indexed_at": "2026-07-23T19:18:59.005Z",
+      "ssot": [
+        "docs/products/limitlessos/PRODUCT_HOME.md"
       ]
     },
     {
@@ -87008,6 +87018,16 @@
       "indexed_at": "2026-07-21T05:58:39.404Z"
     },
     {
+      "path": "services/go-vegas-daily-pack.js",
+      "synopsis": "Build a full Go Vegas daily post pack (31+) for human approve → paste.",
+      "bytes": 9599,
+      "mtime": "2026-07-23T19:18:59.005Z",
+      "indexed_at": "2026-07-23T19:18:59.005Z",
+      "ssot": [
+        "docs/products/limitlessos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/go-vegas-email-finder.js",
       "synopsis": "Extract public contact emails from business websites for Go Vegas outreach.",
       "bytes": 2701,
@@ -93992,6 +94012,16 @@
       "indexed_at": "2026-07-21T05:58:39.404Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "tests/go-vegas-daily-pack.test.js",
+      "synopsis": "js — tests/go-vegas-daily-pack.test.js.",
+      "bytes": 1119,
+      "mtime": "2026-07-23T19:18:59.005Z",
+      "indexed_at": "2026-07-23T19:18:59.005Z",
+      "ssot": [
+        "docs/products/limitlessos/PRODUCT_HOME.md"
       ]
     },
     {
