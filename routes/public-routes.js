@@ -79,6 +79,38 @@ export function registerPublicRoutes(app, {
     return Boolean(key && expected && key === expected);
   }
 
+  /** Well Rounded Momma — serve SiteBuilder preview when custom domain hits tip */
+  const WRM_HOSTS = new Set(
+    String(process.env.WRM_DOMAIN || 'wellroundedmomma.com')
+      .split(',')
+      .flatMap((d) => {
+        const base = String(d || '').trim().toLowerCase().replace(/^www\./, '');
+        return base ? [base, `www.${base}`] : [];
+      }),
+  );
+  const WRM_PREVIEW_ROOT = path.join(__dirname, 'public', 'previews', 'wellrounded-momma');
+
+  app.use((req, res, next) => {
+    const host = String(req.headers['x-forwarded-host'] || req.headers.host || '')
+      .split(',')[0]
+      .trim()
+      .toLowerCase()
+      .replace(/:\d+$/, '');
+    if (!WRM_HOSTS.has(host)) return next();
+    if (String(req.path || '').startsWith('/api/')) return next();
+
+    let rel = req.path === '/' || req.path === '' ? 'index.html' : String(req.path || '').replace(/^\/+/, '');
+    if (rel.includes('..')) return res.status(400).send('Bad path');
+    const filePath = path.normalize(path.join(WRM_PREVIEW_ROOT, rel));
+    if (!filePath.startsWith(WRM_PREVIEW_ROOT)) return res.status(400).send('Bad path');
+    if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
+      return sendPublicFileNoCache(res, filePath);
+    }
+    const indexPath = path.join(WRM_PREVIEW_ROOT, 'index.html');
+    if (fs.existsSync(indexPath)) return sendPublicFileNoCache(res, indexPath);
+    return next();
+  });
+
   // ==================== COMMAND CENTER ROUTES (FIRST - Before all middleware) ====================
   // These MUST be defined before static middleware to work correctly
   app.get("/activate", (req, res) => {
