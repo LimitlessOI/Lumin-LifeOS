@@ -53,14 +53,23 @@ async function fillFirst(page, selectors, value) {
 async function pageSignals(page) {
   return page.evaluate(() => {
     const text = (document.body?.innerText || '').toLowerCase();
+    // Wix always loads reCAPTCHA scripts on /signin — only treat as blocker when a
+    // visible challenge is up (not mere iframe/script presence).
+    const challengeIframes = Array.from(
+      document.querySelectorAll('iframe[src*="recaptcha"], iframe[src*="hcaptcha"], iframe[src*="turnstile"]'),
+    ).filter((f) => {
+      const r = f.getBoundingClientRect();
+      return r.width >= 100 && r.height >= 40 && getComputedStyle(f).visibility !== 'hidden';
+    });
+    const visibleChallengeText = /verify you are human|i'm not a robot|complete the security check|press and hold/.test(text);
     return {
       url: location.href,
       title: document.title,
       hasPassword: Boolean(document.querySelector('input[type="password"]')),
       hasEmail: Boolean(document.querySelector('input[type="email"], input[name="email"], input[autocomplete="username"]')),
-      captcha: /recaptcha|hcaptcha|turnstile|verify you are human/.test(text)
-        || Boolean(document.querySelector('.g-recaptcha, .h-captcha, iframe[src*="recaptcha"], iframe[src*="hcaptcha"], iframe[src*="turnstile"]')),
-      mfa: /verification code|enter the code|two-factor|2-step|authenticate|check your email for a code/.test(text),
+      captcha: visibleChallengeText || challengeIframes.length > 0,
+      mfa: /verification code|enter the code|two-factor|2-step|check your email for a code/.test(text)
+        && !/log in|continue with email/.test(text),
       loggedInHint: /my sites|dashboard|domains|account settings|manage dns|dns records/.test(text)
         || /manage\.wix\.com|www\.wix\.com\/dashboard|www\.wix\.com\/account/.test(location.href),
     };

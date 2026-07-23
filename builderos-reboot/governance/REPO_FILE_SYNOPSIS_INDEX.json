@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-23T21:17:48.231Z",
+  "generated_at": "2026-07-23T21:19:27.929Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12143,
   "files": [
@@ -40933,8 +40933,8 @@
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
       "bytes": 148977,
-      "mtime": "2026-07-23T21:17:48.231Z",
-      "indexed_at": "2026-07-23T21:17:48.231Z"
+      "mtime": "2026-07-23T21:19:27.929Z",
+      "indexed_at": "2026-07-23T21:19:27.929Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -92552,9 +92552,9 @@
     {
       "path": "services/wrm-wix-dns-cutover.js",
       "synopsis": "Deterministic Wix login + DNS upsert for WRM → Railway custom domains.",
-      "bytes": 14614,
-      "mtime": "2026-07-23T21:17:48.231Z",
-      "indexed_at": "2026-07-23T21:17:48.231Z",
+      "bytes": 15093,
+      "mtime": "2026-07-23T21:19:27.929Z",
+      "indexed_at": "2026-07-23T21:19:27.929Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
