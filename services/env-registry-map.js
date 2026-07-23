@@ -196,6 +196,18 @@ export const ENV_REGISTRY = [
   { name: "NOTION_CONTACTS_DB_ID",status: "OPTIONAL",  category: "notion",   purpose: "Notion database ID for contacts" },
   { name: "NOTION_TASKS_DB_ID",  status: "OPTIONAL",   category: "notion",   purpose: "Notion database ID for tasks" },
 
+  // ── Multi-account social / Wix (prefix WHO_CHANNEL_*) ─────────────────────────
+  { name: "ADAM_FACEBOOK_EMAIL",      status: "OPTIONAL", category: "social",   purpose: "Adam Facebook login email — Go Vegas admin ops (multi-account: ADAM_*)" },
+  { name: "ADAMS_FACEBOOK_PASSWORD",  status: "OPTIONAL", category: "social",   purpose: "Adam Facebook password (typo name as set in Railway) — never log" },
+  { name: "ADAM_FACEBOOK_PASSWORD",   status: "OPTIONAL", category: "social",   purpose: "Preferred spelling alias for Adam Facebook password — never log" },
+  { name: "FACEBOOK_EMAIL",           status: "OPTIONAL", category: "social",   purpose: "Generic Facebook email alias" },
+  { name: "FACEBOOK_PASSWORD",        status: "OPTIONAL", category: "social",   purpose: "Generic Facebook password alias — never log" },
+  { name: "WRM_WIX_EMAIL",            status: "OPTIONAL", category: "social",   purpose: "Well Rounded Momma Wix login (maternity@…) for domain cutover" },
+  { name: "WRM_WIX_PASSWORD",         status: "OPTIONAL", category: "social",   purpose: "WRM Wix password — never log" },
+  { name: "WRM_DOMAIN",               status: "OPTIONAL", category: "social",   purpose: "WRM public domain default wellroundedmomma.com" },
+  { name: "WIX_EMAIL",                status: "OPTIONAL", category: "social",   purpose: "Generic Wix email alias" },
+  { name: "WIX_PASSWORD",             status: "OPTIONAL", category: "social",   purpose: "Generic Wix password alias — never log" },
+
   // ── Signup Agent ──────────────────────────────────────────────────────────────
   { name: "GMAIL_SIGNUP_EMAIL",       status: "SET",      category: "signup",   purpose: "System signup email — lumea.lifeos@gmail.com (not founder UI login)" },
   { name: "GMAIL_SIGNUP_APP_PASSWORD",status: "NEEDED",   category: "signup",   purpose: "Gmail App Password for IMAP email verification reads" },

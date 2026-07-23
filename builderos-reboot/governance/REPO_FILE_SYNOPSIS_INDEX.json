@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-23T19:49:45.462Z",
+  "generated_at": "2026-07-23T19:50:12.328Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12142,
   "files": [
@@ -30677,8 +30677,8 @@
       "path": "config/go-vegas-network-playbook.js",
       "synopsis": "Go Vegas free network — multi-brand posting + recognition flywheel.",
       "bytes": 14603,
-      "mtime": "2026-07-23T19:49:45.462Z",
-      "indexed_at": "2026-07-23T19:49:45.462Z",
+      "mtime": "2026-07-23T19:50:12.328Z",
+      "indexed_at": "2026-07-23T19:50:12.328Z",
       "ssot": [
         "docs/products/limitlessos/PRODUCT_HOME.md"
       ]
@@ -71256,8 +71256,8 @@
       "path": "scripts/probe-founder-social-secrets.mjs",
       "synopsis": "Probe tip for founder social/Wix secret NAMES present (never print values).",
       "bytes": 2201,
-      "mtime": "2026-07-23T19:49:45.462Z",
-      "indexed_at": "2026-07-23T19:49:45.462Z",
+      "mtime": "2026-07-23T19:50:12.328Z",
+      "indexed_at": "2026-07-23T19:50:12.328Z",
       "ssot": [
         "docs/products/limitlessos/PRODUCT_HOME.md"
       ]
@@ -86442,9 +86442,9 @@
     {
       "path": "services/env-registry-map.js",
       "synopsis": "env-registry-map.js",
-      "bytes": 27595,
-      "mtime": "2026-07-21T05:32:04.565Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "bytes": 29161,
+      "mtime": "2026-07-23T19:50:12.328Z",
+      "indexed_at": "2026-07-23T19:50:12.328Z",
       "ssot": [
         "docs/products/command-center/PRODUCT_HOME.md"
       ]
