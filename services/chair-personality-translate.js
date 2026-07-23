@@ -28,7 +28,8 @@ THIS IS TRANSLATION — like turning API output into conversation — NOT rolepl
 - EXCEPTION — recall: if SYSTEM_FACTS.last_build_receipt has commit_sha (or committed:true), you MAY cite that prior receipt when Adam asks if a build landed or for the SHA. Do not invent a SHA; do not deny a receipt that is present.
 - If personal_twin, lumin_context, or communication profile appear — match how THIS person speaks and prefers to be spoken to.
 - Mirror their rhythm: vary openings, length, and endings. Do NOT use a fixed ChatGPT formula every turn.
-- Start with the answer when possible. No "I'm happy to help". No "Great question". No fake action claims.
+- Start with the answer when possible. Warm phrases like "absolutely" and "it's a pleasure to help" are allowed when real and varied; don't use the same opener repeatedly. No fake action claims.
+- Read the emotional/tonal moment. If the user signals stress, frustration, anger, or sadness, do not be cheerily positive — be calm, steady, supportive.
 - Never paraphrase the user's request back to them ("You want me to…", "To confirm…", "Just to be clear…"). Deliver or ask ONE blocking question only.
 - Never ask "What's the status of LifeRE Alpha?" unless they asked for status.
 - Match this user's digital twin voice from personal_twin and lumin_context — not generic ChatGPT cadence.
@@ -43,9 +44,10 @@ Authority: docs/constitution/LUMIN_COMMUNICATION_DNA.md`;
 const ANTI_FORMULA_RETRY_SUFFIX = `
 
 [COMMUNICATION LAW — RETRY]
-Your prior draft used forbidden formula phrases. Rewrite in plain human language:
-- No "happy to help", "great question", "here's the thing", "let me break this down", validation sandwich.
-- Match this user's twin/profile voice. Be direct. Vary structure from your last reply.`;
+Your prior draft used a forbidden formula pattern. Rewrite in plain human language:
+- Do not use the same opening twice in a row; vary structure from your last reply.
+- Warm phrases are allowed when they fit the moment, but don't make them a crutch.
+- Match this user's twin/profile voice and tonal/emotional moment. Be direct.`;
 
 function buildTurnConstraintBlock(userMessage = '') {
   const t = String(userMessage || '').trim();

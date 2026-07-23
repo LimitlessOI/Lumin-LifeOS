@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-23T22:04:36.698Z",
+  "generated_at": "2026-07-23T22:19:12.059Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12143,
+  "file_count": 12144,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21586,9 +21586,9 @@
     {
       "path": "builderos-reboot/governance/LUMIN_COMMUNICATION_LAW.json",
       "synopsis": "BuilderOS artifact — LUMIN COMMUNICATION LAW.",
-      "bytes": 6903,
-      "mtime": "2026-07-21T05:32:03.368Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "bytes": 6898,
+      "mtime": "2026-07-23T22:19:12.059Z",
+      "indexed_at": "2026-07-23T22:19:12.059Z",
       "synopsis_index_only": true
     },
     {
@@ -21705,9 +21705,9 @@
     {
       "path": "builderos-reboot/governance/SENTRY_FINDINGS_QUEUE.json",
       "synopsis": "BuilderOS artifact — SENTRY FINDINGS QUEUE.",
-      "bytes": 4699,
-      "mtime": "2026-07-21T05:32:03.375Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "bytes": 9524,
+      "mtime": "2026-07-23T22:19:12.059Z",
+      "indexed_at": "2026-07-23T22:19:12.059Z",
       "synopsis_index_only": true
     },
     {
@@ -31026,9 +31026,9 @@
     {
       "path": "config/voice-rail-stt-vocabulary.js",
       "synopsis": "Voice Rail STT — Whisper prompt terms + post-transcription corrections.",
-      "bytes": 2788,
-      "mtime": "2026-07-21T05:32:03.397Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "bytes": 3543,
+      "mtime": "2026-07-23T22:19:12.059Z",
+      "indexed_at": "2026-07-23T22:19:12.059Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md",
         "docs/products/builderos/PRODUCT_HOME.md"
@@ -36229,6 +36229,13 @@
       "indexed_at": "2026-07-21T05:58:39.404Z"
     },
     {
+      "path": "db/migrations/20260723_voice_rail_stt_corrections.sql",
+      "synopsis": "Database migration — 20260723_voice_rail_stt_corrections.sql",
+      "bytes": 745,
+      "mtime": "2026-07-23T22:19:12.059Z",
+      "indexed_at": "2026-07-23T22:19:12.059Z"
+    },
+    {
       "path": "db/migrations/20260724_lifeos_core_stable.sql",
       "synopsis": "Database migration — 20260724_lifeos_core_stable.sql.",
       "bytes": 641,
@@ -37497,9 +37504,9 @@
     {
       "path": "docs/constitution/LUMIN_COMMUNICATION_DNA.md",
       "synopsis": "Lumin Communication DNA — translation not formula; twin-matched voice (constitutional)",
-      "bytes": 5875,
-      "mtime": "2026-07-21T05:32:03.530Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z"
+      "bytes": 6401,
+      "mtime": "2026-07-23T22:19:12.059Z",
+      "indexed_at": "2026-07-23T22:19:12.059Z"
     },
     {
       "path": "docs/constitution/LUMIN_DISPLAY_DNA.md",
@@ -37623,9 +37630,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 21651,
-      "mtime": "2026-07-23T22:04:36.698Z",
-      "indexed_at": "2026-07-23T22:04:36.698Z"
+      "bytes": 23811,
+      "mtime": "2026-07-23T22:19:12.059Z",
+      "indexed_at": "2026-07-23T22:19:12.059Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39793,9 +39800,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 241170,
-      "mtime": "2026-07-23T19:31:21.115Z",
-      "indexed_at": "2026-07-23T19:31:21.115Z"
+      "bytes": 241589,
+      "mtime": "2026-07-23T22:19:12.059Z",
+      "indexed_at": "2026-07-23T22:19:12.059Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -40482,9 +40489,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 617056,
-      "mtime": "2026-07-23T21:40:35.154Z",
-      "indexed_at": "2026-07-23T21:40:35.154Z"
+      "bytes": 618459,
+      "mtime": "2026-07-23T22:19:12.059Z",
+      "indexed_at": "2026-07-23T22:19:12.059Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -64299,8 +64306,8 @@
       "path": "products/receipts/POINT_B_DNA_VERIFY.json",
       "synopsis": "Product receipt — POINT B DNA VERIFY.",
       "bytes": 198,
-      "mtime": "2026-07-21T05:32:04.210Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "mtime": "2026-07-23T22:19:12.059Z",
+      "indexed_at": "2026-07-23T22:19:12.059Z",
       "synopsis_index_only": true
     },
     {
@@ -64314,9 +64321,9 @@
     {
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
-      "bytes": 3840,
-      "mtime": "2026-07-21T05:32:04.210Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "bytes": 4107,
+      "mtime": "2026-07-23T22:19:12.059Z",
+      "indexed_at": "2026-07-23T22:19:12.059Z",
       "synopsis_index_only": true
     },
     {
@@ -64475,16 +64482,16 @@
       "path": "products/receipts/TRUTH_ENFORCEMENT_AUDIT.json",
       "synopsis": "Product receipt — TRUTH ENFORCEMENT AUDIT.",
       "bytes": 782,
-      "mtime": "2026-07-21T05:32:04.212Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "mtime": "2026-07-23T22:19:12.059Z",
+      "indexed_at": "2026-07-23T22:19:12.059Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/TRUTH_LOCKDOWN_VERIFY.json",
       "synopsis": "Product receipt — TRUTH LOCKDOWN VERIFY.",
       "bytes": 1195,
-      "mtime": "2026-07-21T05:32:04.212Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "mtime": "2026-07-23T22:19:12.059Z",
+      "indexed_at": "2026-07-23T22:19:12.059Z",
       "synopsis_index_only": true
     },
     {
@@ -64515,8 +64522,8 @@
       "path": "products/receipts/WISDOM_TRUTH_AUDIT.json",
       "synopsis": "Product receipt — WISDOM TRUTH AUDIT.",
       "bytes": 1001,
-      "mtime": "2026-07-21T05:32:04.212Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "mtime": "2026-07-23T22:19:12.059Z",
+      "indexed_at": "2026-07-23T22:19:12.059Z",
       "synopsis_index_only": true
     },
     {
@@ -65414,9 +65421,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 201657,
-      "mtime": "2026-07-21T21:41:11.784Z",
-      "indexed_at": "2026-07-21T21:41:11.784Z"
+      "bytes": 202308,
+      "mtime": "2026-07-23T22:19:12.059Z",
+      "indexed_at": "2026-07-23T22:19:12.059Z"
     },
     {
       "path": "public/overlay/lifeos-ask-your-life.html",
@@ -68207,9 +68214,9 @@
     {
       "path": "routes/lifeos-voice-rail-routes.js",
       "synopsis": "Voice Rail v1 API — canonical communication layer.",
-      "bytes": 18436,
-      "mtime": "2026-07-21T05:32:04.326Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "bytes": 19632,
+      "mtime": "2026-07-23T22:19:12.059Z",
+      "indexed_at": "2026-07-23T22:19:12.059Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md",
         "builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/FOUNDER_PACKET.md"
@@ -84910,9 +84917,9 @@
     {
       "path": "services/chair-direct-agent.js",
       "synopsis": "Direct Chair agent — talks + acts; human prose obeys Lumin Communication DNA (not theater).",
-      "bytes": 25305,
-      "mtime": "2026-07-23T21:40:35.154Z",
-      "indexed_at": "2026-07-23T21:40:35.154Z",
+      "bytes": 25525,
+      "mtime": "2026-07-23T22:19:12.059Z",
+      "indexed_at": "2026-07-23T22:19:12.059Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -85010,9 +85017,9 @@
     {
       "path": "services/chair-personality-translate.js",
       "synopsis": "Lumin personality translate — human-language layer on SYSTEM_FACTS only (not theater).",
-      "bytes": 8811,
-      "mtime": "2026-07-21T09:50:05.120Z",
-      "indexed_at": "2026-07-21T09:50:05.120Z",
+      "bytes": 9106,
+      "mtime": "2026-07-23T22:19:12.059Z",
+      "indexed_at": "2026-07-23T22:19:12.059Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -85031,8 +85038,8 @@
       "path": "services/chair-program-direct-answer.js",
       "synopsis": "Direct program answers from system_knowledge — no counsel drift on SMOS/SSOT asks.",
       "bytes": 6042,
-      "mtime": "2026-07-23T21:40:35.154Z",
-      "indexed_at": "2026-07-23T21:40:35.154Z",
+      "mtime": "2026-07-23T22:19:12.059Z",
+      "indexed_at": "2026-07-23T22:19:12.059Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -87758,8 +87765,8 @@
       "path": "services/lifeos-chat-intent-executor.js",
       "synopsis": "services/lifeos-chat-intent-executor.js",
       "bytes": 8625,
-      "mtime": "2026-07-23T21:40:35.154Z",
-      "indexed_at": "2026-07-23T21:40:35.154Z",
+      "mtime": "2026-07-23T22:19:12.059Z",
+      "indexed_at": "2026-07-23T22:19:12.059Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -88842,8 +88849,8 @@
       "path": "services/lumin-chair-orchestrator.js",
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
       "bytes": 76664,
-      "mtime": "2026-07-23T21:40:35.154Z",
-      "indexed_at": "2026-07-23T21:40:35.154Z",
+      "mtime": "2026-07-23T22:19:12.059Z",
+      "indexed_at": "2026-07-23T22:19:12.059Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -90309,9 +90316,9 @@
     {
       "path": "services/response-variety.js",
       "synopsis": "services/response-variety.js",
-      "bytes": 14628,
-      "mtime": "2026-07-21T05:32:04.658Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "bytes": 14906,
+      "mtime": "2026-07-23T22:19:12.059Z",
+      "indexed_at": "2026-07-23T22:19:12.059Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -92241,9 +92248,9 @@
     {
       "path": "services/voice-rail-stt.js",
       "synopsis": "Voice Rail — server-side STT (OpenAI Whisper) with LifeOS vocabulary bias.",
-      "bytes": 3486,
-      "mtime": "2026-07-21T05:32:04.689Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "bytes": 5560,
+      "mtime": "2026-07-23T22:19:12.059Z",
+      "indexed_at": "2026-07-23T22:19:12.059Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -94241,9 +94248,9 @@
     {
       "path": "tests/lumin-communication-law.test.js",
       "synopsis": "Lumin Communication Law — anti-formula + wiring audit tests.",
-      "bytes": 2805,
-      "mtime": "2026-07-21T05:32:04.717Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z"
+      "bytes": 2835,
+      "mtime": "2026-07-23T22:19:12.059Z",
+      "indexed_at": "2026-07-23T22:19:12.059Z"
     },
     {
       "path": "tests/lumin-connection-guard.test.js",

@@ -12,6 +12,58 @@ import {
 const WHISPER_MODEL = process.env.VOICE_RAIL_STT_MODEL?.trim() || 'whisper-1';
 const MIN_BYTES = 400;
 
+async function loadUserCorrections(pool, userId) {
+  if (!pool || !userId) return [];
+  try {
+    const { rows } = await pool.query(
+      `SELECT misheard, canonical FROM voice_rail_stt_corrections
+        WHERE user_id = $1
+        ORDER BY updated_at DESC`,
+      [userId],
+    );
+    return rows || [];
+  } catch {
+    return [];
+  }
+}
+
+export async function listVoiceRailSttCorrections(pool, userId) {
+  if (!pool || !userId) return [];
+  return loadUserCorrections(pool, userId);
+}
+
+export async function addVoiceRailSttCorrection(pool, userId, misheard, canonical, source = null) {
+  if (!pool || !userId) return { ok: false, error: 'missing_pool_or_user' };
+  const m = String(misheard || '').trim();
+  const c = String(canonical || '').trim();
+  if (!m || !c) return { ok: false, error: 'misheard_and_canonical_required' };
+  if (m.toLowerCase() === c.toLowerCase()) return { ok: false, error: 'same_word' };
+  try {
+    const { rows } = await pool.query(
+      `SELECT id FROM voice_rail_stt_corrections
+        WHERE user_id = $1 AND LOWER(misheard) = LOWER($2)`,
+      [userId, m],
+    );
+    if (rows?.length) {
+      await pool.query(
+        `UPDATE voice_rail_stt_corrections
+          SET canonical = $1, source = $2, updated_at = NOW()
+          WHERE id = $3`,
+        [c, source || null, rows[0].id],
+      );
+    } else {
+      await pool.query(
+        `INSERT INTO voice_rail_stt_corrections (user_id, misheard, canonical, source)
+          VALUES ($1, $2, $3, $4)`,
+        [userId, m, c, source || null],
+      );
+    }
+    return { ok: true, misheard: m, canonical: c };
+  } catch (err) {
+    return { ok: false, error: err?.message || 'db_error' };
+  }
+}
+
 function extensionForMime(mimeType) {
   const m = String(mimeType || '').toLowerCase();
   if (m.includes('webm')) return 'webm';
@@ -69,7 +121,7 @@ export function voiceRailSttStatus() {
  * Transcribe an audio buffer via OpenAI Whisper.
  * @param {Buffer} audioBuffer
  * @param {string} [mimeType]
- * @param {{ context?: string, filename?: string }} [opts]
+ * @param {{ context?: string, filename?: string, userId?: number|string, pool?: object }} [opts]
  */
 export async function transcribeVoiceRailAudio(audioBuffer, mimeType = 'audio/webm', opts = {}) {
   const apiKey = process.env.OPENAI_API_KEY?.trim();
@@ -80,9 +132,12 @@ export async function transcribeVoiceRailAudio(audioBuffer, mimeType = 'audio/we
     return { ok: true, text: '', skipped: 'too_short' };
   }
 
+  const userCorrections = await loadUserCorrections(opts.pool, opts.userId);
+  const extraTerms = userCorrections.map((r) => r.canonical).filter(Boolean);
+  const correctionHints = userCorrections.map((r) => `${r.misheard} → ${r.canonical}`).filter(Boolean);
   const ext = extensionForMime(mimeType);
   const filename = opts.filename || `voice-rail.${ext}`;
-  const prompt = buildWhisperPrompt(opts.context || '');
+  const prompt = buildWhisperPrompt(opts.context || '', { extraTerms, correctionHints });
   const { body, boundary } = buildMultipartBody(audioBuffer, mimeType, filename, prompt);
 
   const response = await fetch('https://api.openai.com/v1/audio/transcriptions', {
@@ -106,6 +161,6 @@ export async function transcribeVoiceRailAudio(audioBuffer, mimeType = 'audio/we
 
   const data = await response.json();
   const raw = String(data?.text || '').trim();
-  const text = applyVoiceRailVocabulary(raw);
-  return { ok: true, text, raw_text: raw !== text ? raw : undefined };
+  const text = applyVoiceRailVocabulary(raw, userCorrections);
+  return { ok: true, text, raw_text: raw !== text ? raw : undefined, corrections_used: userCorrections.length };
 }

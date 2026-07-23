@@ -1,8 +1,8 @@
 {
   "schema": "receipt_truth_validation_v1",
-  "at": "2026-07-15T07:30:57.135Z",
+  "at": "2026-07-23T22:18:09.006Z",
   "ok": true,
-  "checked": 28,
+  "checked": 30,
   "failures": [],
   "results": [
     {
@@ -25,6 +25,12 @@
     },
     {
       "file": "CAPTURE_PIPELINE_V2_ACCEPTANCE.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": true
+    },
+    {
+      "file": "COGNITIVE_CORE_ERA34_TIP_AUDIT.json",
       "ok": true,
       "violations": [],
       "claims_pass": true
@@ -139,6 +145,12 @@
     },
     {
       "file": "RECEIPT_TRUTH_VALIDATION.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false
+    },
+    {
+      "file": "SMOS_REAL_CUSTOMER_READINESS.json",
       "ok": true,
       "violations": [],
       "claims_pass": false

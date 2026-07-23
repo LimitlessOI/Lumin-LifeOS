@@ -56,7 +56,7 @@ const QUESTION_ENDINGS = [
   { id: 'implicit',    label: 'do not ask a question, but leave space — imply curiosity without demanding a response' },
 ];
 
-const FORBIDDEN_PHRASES = [
+const PHRASES_TO_USE_SPARINGLY = [
   'what i heard you say',
   'that sounds really',
   'it sounds like',
@@ -64,11 +64,15 @@ const FORBIDDEN_PHRASES = [
   'thank you for sharing',
   'that must be',
   'i understand that',
+  'i appreciate',
+];
+
+const OPENING_PHRASES_TO_VARY = [
+  'happy to help',
+  'great question',
   'absolutely',
   'of course',
   'certainly',
-  'great question',
-  'i appreciate',
 ];
 
 // ── Dimension config (for iteration) ─────────────────────────────────────────
@@ -236,8 +240,9 @@ export function createResponseVariety({ pool, logger }) {
       `Length: ${styles.length.label}`,
       `Register: ${styles.tone.label}`,
       `Ending: ${styles.question_ending.label}`,
-      `FORBIDDEN phrases (never use these exact phrases): ${FORBIDDEN_PHRASES.join(', ')}`,
-      'FORBIDDEN pattern: do not open two consecutive responses the same way. Do not use "What I heard you say was" or "That sounds really [adjective]" — ever.',
+      `AVOID as filler (do not use repeatedly or without real context): ${PHRASES_TO_USE_SPARINGLY.join(', ')}`,
+      `VARY these warm phrases — allowed when real, but never the same opener twice in a row: ${OPENING_PHRASES_TO_VARY.join(', ')}`,
+      'FORBIDDEN pattern: do not open two consecutive responses the same way. Do not use "What I heard you say was" or "That sounds really [adjective]" — ever. Read the emotional / tonal moment before choosing warmth.',
     ].join('\n');
 
     return { instruction, styles };

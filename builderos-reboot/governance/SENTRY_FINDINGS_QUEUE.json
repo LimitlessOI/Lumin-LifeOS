@@ -59,6 +59,48 @@
       "chair_reasoning": "product scope/priority is a business decision, not a technical one — routed to founder per D8, not auto-approved",
       "queue_status": "open",
       "first_detected_at": "2026-07-19T18:27:58.153Z"
+    },
+    {
+      "id": "ci_health:smoke-test.yml:3c2e1ccbedd22ab6d837a84418bfc7cd15a1a836",
+      "check": "ci_health",
+      "severity": "P0",
+      "summary": "main's smoke-test.yml is FAILING at 3c2e1cc.",
+      "proposed_solution": "Read the failing run log (gh run view --log-failed) at https://github.com/LimitlessOI/Lumin-LifeOS/actions/runs/30045716554, identify the exact failing assertion, and fix it directly on main — do not let further commits ship on top of red CI.",
+      "detected_at": "2026-07-23T21:32:37.475Z",
+      "chair_status": "approved",
+      "chair_reasoning": "infrastructure/config finding with a concrete solution — within technical authority, no founder judgment required | Chair (AI): The proposed solution is sound and straightforward, focusing on immediate remediation of the failing smoke test. There are no additional contexts needed beyond what is presented. As a Priority 0 (P0) issue, it is appropriately classified — CI failures at this level halt deployment pipelines, potentially masking further issues and hindering continuous integration efforts. It is crucial to fix this failure before any new commits are accepted to maintain codebase stability. The specific instruction to not let further commits ship on top of a failed CI run underscores its urgency. Thus, no further action beyond the proposed solution is needed.",
+      "chair_reasoning_source": "ai_model",
+      "architect_status": "needs_manual_targeting",
+      "queue_status": "open",
+      "first_detected_at": "2026-07-23T21:32:37.475Z"
+    },
+    {
+      "id": "broken_workflow:.github/workflows/migrate.yml",
+      "check": "workflow_health",
+      "severity": "P2",
+      "summary": ".github/workflows/migrate.yml has failed in under 5s on its last 3 runs — almost certainly a config/syntax error, not a content failure.",
+      "proposed_solution": "Read .github/workflows/migrate.yml directly for invalid YAML (stray markdown code-fences are a known real cause) or a broken action reference; fix or remove if superseded by a newer mechanism.",
+      "detected_at": "2026-07-23T21:32:39.088Z",
+      "chair_status": "approved",
+      "chair_reasoning": "infrastructure/config finding with a concrete solution — within technical authority, no founder judgment required | Chair (AI): The proposed solution is sound and appropriate for addressing the detected issue. Checking the **migrate.yml** file for syntax errors such as stray markdown code-fences or broken action references is likely to resolve the immediate problem of the workflow failing to execute properly. The severity level of P2 seems appropriate, as this is not a critical failure affecting production but could impede development processes, particularly if migration tasks are essential for the application's evolution or deployment. It’s important for the founder to ensure that this workflow is either fixed or correctly deprecated if a newer process is in place to avoid confusion and maintain clarity in the project's automated processes.",
+      "chair_reasoning_source": "ai_model",
+      "architect_status": "already_queued",
+      "queue_status": "open",
+      "first_detected_at": "2026-07-23T21:32:39.088Z"
+    },
+    {
+      "id": "ci_health:smoke-test.yml:bf6898d89367caa3fa515a925945cd71f6b58d55",
+      "check": "ci_health",
+      "severity": "P0",
+      "summary": "main's smoke-test.yml is FAILING at bf6898d.",
+      "proposed_solution": "Read the failing run log (gh run view --log-failed) at https://github.com/LimitlessOI/Lumin-LifeOS/actions/runs/30047107500, identify the exact failing assertion, and fix it directly on main — do not let further commits ship on top of red CI.",
+      "detected_at": "2026-07-23T22:01:07.445Z",
+      "chair_status": "approved",
+      "chair_reasoning": "infrastructure/config finding with a concrete solution — within technical authority, no founder judgment required | Chair (AI): The proposed solution is sound and adequately addresses the problem by directing immediate attention to the failing smoke test, which is crucial to maintaining system stability. Given that the severity is marked as P0, it rightly treats the issue as urgent, since letting commits pile on a failing CI can compound errors and disrupt the development workflow. For a single developer, this approach is critical because it prevents a backlog of unchecked features that could lead to later complications. Addressing this promptly ensures that the main branch is stable and reduces potential downstream issues. There’s nothing more to add beyond this rule; the founder should act as instructed without delay.",
+      "chair_reasoning_source": "ai_model",
+      "architect_status": "needs_manual_targeting",
+      "queue_status": "open",
+      "first_detected_at": "2026-07-23T22:01:07.445Z"
     }
   ]
 }
