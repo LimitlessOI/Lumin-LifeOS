@@ -148,6 +148,8 @@ export function registerGeneralBrowserAgentRoutes(app, deps = {}) {
       startUrl = null,
       site = null,
       vaultService = null,
+      /** Inject login from tip process.env — e.g. WRM_WIX → WRM_WIX_EMAIL + WRM_WIX_PASSWORD (never echo values). */
+      envCreds = null,
       mustContain = [],
       mustHaveSelector = [],
       expectSiteHost = null,
@@ -166,6 +168,25 @@ export function registerGeneralBrowserAgentRoutes(app, deps = {}) {
       const targetUrl = url || startUrl;
       const useGlvar = site === 'glvar' && !targetUrl;
       let effectiveGoal = String(goal);
+
+      const envCredKey = String(envCreds || '').trim().toUpperCase();
+      if (envCredKey === 'WRM_WIX' || envCredKey === 'WIX') {
+        const email = String(process.env.WRM_WIX_EMAIL || process.env.WIX_EMAIL || '').trim();
+        const password = String(process.env.WRM_WIX_PASSWORD || process.env.WIX_PASSWORD || '').trim();
+        if (!email || !password) {
+          return res.status(503).json({
+            ok: false,
+            error: 'WRM_WIX_EMAIL / WRM_WIX_PASSWORD not set on tip',
+          });
+        }
+        effectiveGoal = [
+          `Log in with email ${email} and password ${password}.`,
+          'If already logged in, continue.',
+          'Do not invent credentials. Do not navigate away from wix.com / users.wix.com except as needed for Domains DNS.',
+          effectiveGoal,
+        ].join('\n');
+        logger.info?.('[BROWSER-AGENT] envCreds WRM_WIX injected (email present, password redacted)');
+      }
 
       if (vaultService) {
         const accountManager = await getAccountManager();
