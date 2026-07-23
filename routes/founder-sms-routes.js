@@ -248,7 +248,7 @@ export function registerFounderSmsRoutes(app, deps = {}) {
       const say =
         String(req.body?.say || '').trim() ||
         [
-          `Hello, this is a quick business message from Adam Hopkins with Limitless O S Site Builder.`,
+          `Hello, this is a quick business message from Adam Hopkins with Taloa Site Builder.`,
           `I built a complimentary modern website preview for ${businessName}.`,
           previewUrl ? `You can view it online, and publishing is forty five dollars including two months of management.` : '',
           callback

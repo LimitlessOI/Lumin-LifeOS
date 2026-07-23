@@ -93,7 +93,7 @@ export async function createPublishCheckoutSession({ clientId, businessName, bas
 
   const safeBase = String(baseUrl || '').replace(/\/$/, '');
   const months = SITE_BUILDER_PRICING.carePlan.includedMonthsOnPublish || 2;
-  const label = businessName ? `Beta publish — ${businessName}` : 'Beta publish your site';
+  const label = businessName ? `Taloa — publish ${businessName}` : 'Taloa — publish your site';
   const description = `${SITE_BUILDER_PRICING.publish.description} (${getBetaPublishOfferSummary()})`;
 
   const lineItems = [

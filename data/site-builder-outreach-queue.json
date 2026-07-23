@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "channel_policy": {
+    "email": "blocked_until_postmark_approved_or_resend_key",
+    "sms_voice_window_local": "08:00-17:00 America/Los_Angeles",
+    "reddit": "value_first_inbound_only_no_spam",
+    "nightly_cap": 8
+  },
+  "experience_gates": [
+    "preview_title_not_error_page",
+    "scrape_poison_blocks_auto_email",
+    "honest_health_score_on_scan_fail",
+    "no_demo_checkout_as_buyer_product",
+    "no_cold_contact_outside_business_hours"
+  ],
+  "queued": [
+    {
+      "id": "lv-handyman-1",
+      "businessName": "Las Vegas Handyman Services",
+      "businessUrl": "http://lvhandymanservices.com",
+      "clientId": "prev_1784791961326_i2dt",
+      "previewUrl": "https://lumin-web-production-e3a9.up.railway.app/previews/prev_1784791961326_i2dt/",
+      "phone": "+17023000084",
+      "email": null,
+      "channels": ["sms", "voice"],
+      "status": "queued_for_business_hours",
+      "sendAfterLocal": "2026-07-23T08:05:00-07:00",
+      "qa": {
+        "title": "Las Vegas Handyman Services — Choose your design",
+        "poisoned": false,
+        "builtAt": "2026-07-23T07:35:00Z"
+      },
+      "smsBody": "Hi — Adam with Taloa Site Builder. I rebuilt a free modern homepage preview for Las Vegas Handyman Services (no card): https://lumin-web-production-e3a9.up.railway.app/previews/prev_1784791961326_i2dt/ — publish is $45 with 2 months care if you like it. Reply STOP to opt out.",
+      "notes": "Built overnight; SMS/voice delayed to business hours for experience."
+    }
+  ]
+}

@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-23T07:28:14.440Z",
+  "generated_at": "2026-07-23T07:35:30.076Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12126,
+  "file_count": 12129,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -32534,6 +32534,14 @@
       "synopsis_index_only": true
     },
     {
+      "path": "data/site-builder-outreach-queue.json",
+      "synopsis": "JSON data/config — data/site-builder-outreach-queue.json.",
+      "bytes": 1528,
+      "mtime": "2026-07-23T07:35:30.076Z",
+      "indexed_at": "2026-07-23T07:35:30.076Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "data/twins/default/adam/communication.json",
       "synopsis": "JSON data/config — data/twins/default/adam/communication.json.",
       "bytes": 225,
@@ -37585,9 +37593,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 19655,
-      "mtime": "2026-07-23T06:43:28.502Z",
-      "indexed_at": "2026-07-23T06:43:28.502Z"
+      "bytes": 20187,
+      "mtime": "2026-07-23T07:35:30.076Z",
+      "indexed_at": "2026-07-23T07:35:30.076Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39755,9 +39763,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 240871,
-      "mtime": "2026-07-23T06:43:28.502Z",
-      "indexed_at": "2026-07-23T06:43:28.502Z"
+      "bytes": 241170,
+      "mtime": "2026-07-23T07:35:30.076Z",
+      "indexed_at": "2026-07-23T07:35:30.076Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -40444,9 +40452,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 614305,
-      "mtime": "2026-07-22T14:31:12.146Z",
-      "indexed_at": "2026-07-22T14:31:12.146Z"
+      "bytes": 614658,
+      "mtime": "2026-07-23T07:35:30.076Z",
+      "indexed_at": "2026-07-23T07:35:30.076Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -40863,6 +40871,13 @@
       "indexed_at": "2026-07-21T05:58:39.404Z"
     },
     {
+      "path": "docs/products/site-builder/DISTRIBUTION_PLAYBOOK.md",
+      "synopsis": "Autonomous Site Builder distribution playbook (channels, caps, experience gates).",
+      "bytes": 2220,
+      "mtime": "2026-07-23T07:35:30.076Z",
+      "indexed_at": "2026-07-23T07:35:30.076Z"
+    },
+    {
       "path": "docs/products/site-builder/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 6753,
@@ -40880,9 +40895,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 145675,
-      "mtime": "2026-07-23T07:28:14.440Z",
-      "indexed_at": "2026-07-23T07:28:14.440Z"
+      "bytes": 146204,
+      "mtime": "2026-07-23T07:35:30.076Z",
+      "indexed_at": "2026-07-23T07:35:30.076Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -63319,9 +63334,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 33139,
-      "mtime": "2026-07-21T05:32:04.199Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "bytes": 33183,
+      "mtime": "2026-07-23T07:35:30.076Z",
+      "indexed_at": "2026-07-23T07:35:30.076Z",
       "synopsis_index_only": true
     },
     {
@@ -67360,9 +67375,9 @@
     {
       "path": "routes/founder-sms-routes.js",
       "synopsis": "Founder SMS helper — tip can text ADAM_SMS_NUMBER (Twilio) without full phone stack.",
-      "bytes": 12977,
-      "mtime": "2026-07-21T05:32:04.310Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "bytes": 12968,
+      "mtime": "2026-07-23T07:35:30.076Z",
+      "indexed_at": "2026-07-23T07:35:30.076Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -72031,6 +72046,16 @@
       "bytes": 6617,
       "mtime": "2026-07-21T05:32:04.380Z",
       "indexed_at": "2026-07-21T05:58:39.404Z",
+      "ssot": [
+        "docs/products/site-builder/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/site-builder-flush-outreach-queue.mjs",
+      "synopsis": "Flush Site Builder outreach queue (SMS/voice) only in local business hours.",
+      "bytes": 5160,
+      "mtime": "2026-07-23T07:35:30.076Z",
+      "indexed_at": "2026-07-23T07:35:30.076Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -90054,9 +90079,9 @@
     {
       "path": "services/railway-managed-env-service.js",
       "synopsis": "Exports createRailwayManagedEnvService — services/railway-managed-env-service.js.",
-      "bytes": 23226,
-      "mtime": "2026-07-23T06:43:28.502Z",
-      "indexed_at": "2026-07-23T06:43:28.502Z",
+      "bytes": 23286,
+      "mtime": "2026-07-23T07:35:30.076Z",
+      "indexed_at": "2026-07-23T07:35:30.076Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -90741,9 +90766,9 @@
     {
       "path": "services/site-builder-entry-checkout.js",
       "synopsis": "Site Builder beta publish checkout — Stripe session create + verify.",
-      "bytes": 14921,
-      "mtime": "2026-07-23T06:43:28.502Z",
-      "indexed_at": "2026-07-23T06:43:28.502Z",
+      "bytes": 14927,
+      "mtime": "2026-07-23T07:35:30.076Z",
+      "indexed_at": "2026-07-23T07:35:30.076Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]

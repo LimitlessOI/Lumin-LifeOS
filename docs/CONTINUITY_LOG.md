@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-23 — Site Builder distribution (no founder bottleneck)
+
+Chair: fix first-minute UX before push. Shipped experience gates; built LV Handyman preview (clean title); SMS/voice queued for **08:05 PT** (not midnight). Cold email still blocked — Postmark pending approval (need Resend key or Postmark approve). Reddit requires login; r/smallbusiness bans promo outside megathreads. Playbook: `docs/products/site-builder/DISTRIBUTION_PLAYBOOK.md`. Comp code `TALOA-FRIENDS` still live. Next: morning flush + email unblock.
+
 ## 2026-07-23 — Site Builder complimentary publish codes
 
 Adam asked for a discount/comp code so he can publish free and gift free publish to a friend/business when he wants. Shipped `SITE_BUILDER_FREE_CODES` (comma-separated) → `GET /api/v1/sites/publish/checkout?clientId=…&code=…` redeems without Stripe; landing + preview chrome have “Have a code?”. Paid path unchanged; Stripe also allows promotion codes. Next: set code on Railway, tip-prove redeem, share privately.
