@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/site-builder/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-23 — **50 niche templates + richer image scrape:** catalog families are structurally distinct; asset ingestion crawls secondary pages, raises photo caps, stock/Google holding before Replicate. |
+| **Last Updated** | 2026-07-23 — **WRM Wix→Railway DNS cutover:** deterministic tip endpoint `POST /api/v1/browser-agent/wrm-wix-dns-cutover` (WRM_WIX_* env); Railway custom domains attached; public still on Wix until DNS propagates. |
 
 ---
 
@@ -330,6 +330,7 @@ Founder directive: review every revenue blueprint for gaps against real competit
 
 | Date | What Changed | Why | Verified | Next |
 |---|---|---|---|---|
+| 2026-07-23 | **WRM deterministic Wix DNS cutover.** `services/wrm-wix-dns-cutover.js` + `POST /api/v1/browser-agent/wrm-wix-dns-cutover` — tip Playwright logs in with `WRM_WIX_*` (never echoed) and upserts Railway www/apex CNAME + `_railway-verify` TXT. LLM `/run` could not pass Wix email-first login. Railway domains already attached (`www`→`d7at9e8j…`, apex→`ydwz6n89…`). | Adam: get Sherry’s site up ASAP — public DNS still Wix/Pepyaka. | tip endpoint + redeploy | prove DNS + `https://www.wellroundedmomma.com` serves SiteBuilder |
 | 2026-07-23 | **WRM host routing for cutover.** `routes/public-routes.js` serves `public/previews/wellrounded-momma` when `Host` is `wellroundedmomma.com` / `www`. Next: Railway custom domain + Wix DNS CNAME to Railway target (creds on tip). | Adam: get WRM site up on real domain — preview was live, public still Wix. | host middleware shipped | attach domains + update Wix DNS |
 | 2026-07-23 | **WRM Wix cutover prep.** Managed-env allowlist: `WRM_WIX_EMAIL`, `WRM_WIX_PASSWORD`, `WRM_DOMAIN` (+ `WIX_*` aliases). Status probe `scripts/wrm-wix-cutover-status.mjs`. New site already live at `/previews/wellrounded-momma/`; `wellroundedmomma.com` still on Wix NS (`ns1.wix.com`). Cutover = set creds on Railway (never chat) → release domain from Wix → point DNS to Railway. | Adam: put Wix login in Railway; system swaps her old site for new. | allowlist + status script | Adam sets Railway env; then execute domain release |
 | 2026-07-23 | **50 distinct niche templates + image density.** `config/site-builder-template-catalog-50.js` (50 niches × 16 layout families). Families in `design-studio-layout-families.js`; `pickDesignSystems` round-robins by family; `buildVariants` passes `imageOffset` so toggles rotate photos. Asset ingestion: crawl about/gallery/services pages, hero cap 16, Instagram 12, Google CSE or curated Unsplash holding when &lt;6 owned photos — Replicate only if zero owned. Pricing/UI: 10 free / 40 catalog extras. Test: `tests/site-builder-template-catalog-50.test.js`. | Adam: template examples look the same; need more site photos (stock holding before paid gen); want ~50 different niche templates. | local 7/7 catalog tests | tip rebuild a prospect; eye-test sticky-call vs before-after vs menu-board + photo strip |

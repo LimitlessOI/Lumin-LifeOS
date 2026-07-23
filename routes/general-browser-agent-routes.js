@@ -19,6 +19,7 @@ import {
 } from '../config/cloudflare-railway.js';
 import { createBrowserSignupOrchestrator } from '../services/browser-signup-orchestrator.js';
 import { evaluateFounderPaymentReadiness } from '../services/founder-payment-vault.js';
+import { runWrmWixDnsCutover, WRM_RAILWAY_DNS } from '../services/wrm-wix-dns-cutover.js';
 
 export function registerGeneralBrowserAgentRoutes(app, deps = {}) {
   const requireKey = deps.requireKey;
@@ -252,6 +253,28 @@ export function registerGeneralBrowserAgentRoutes(app, deps = {}) {
       return res.status(500).json({ ok: false, error: err.message, screenshots });
     } finally {
       if (session?.close) await session.close().catch(() => {});
+    }
+  });
+
+  /**
+   * POST /api/v1/browser-agent/wrm-wix-dns-cutover
+   * Deterministic tip Playwright: login with WRM_WIX_* env → upsert Railway DNS on Wix.
+   * Never echoes password. Prefer this over LLM /browser-agent/run for Sherry cutover.
+   */
+  app.post('/api/v1/browser-agent/wrm-wix-dns-cutover', requireKey, async (req, res) => {
+    try {
+      const result = await runWrmWixDnsCutover({ logger });
+      const status = result.ok ? 200 : (result.needs_human || result.dns?.needs_human ? 409 : 500);
+      return res.status(status).json({
+        ok: Boolean(result.ok),
+        targets: WRM_RAILWAY_DNS,
+        ...result,
+        // belt-and-suspenders: never return password-shaped fields
+        password: undefined,
+      });
+    } catch (err) {
+      logger.error?.({ err: err.message }, '[BROWSER-AGENT] wrm-wix-dns-cutover failed');
+      return res.status(500).json({ ok: false, error: err.message });
     }
   });
 

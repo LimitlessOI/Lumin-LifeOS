@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-23T21:12:11.618Z",
+  "generated_at": "2026-07-23T21:17:48.231Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12142,
+  "file_count": 12143,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -40932,9 +40932,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 148409,
-      "mtime": "2026-07-23T21:00:00.536Z",
-      "indexed_at": "2026-07-23T21:00:00.536Z"
+      "bytes": 148977,
+      "mtime": "2026-07-23T21:17:48.231Z",
+      "indexed_at": "2026-07-23T21:17:48.231Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -40990,9 +40990,9 @@
     {
       "path": "docs/products/tc-service/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — TC Service",
-      "bytes": 123611,
-      "mtime": "2026-07-21T09:50:05.120Z",
-      "indexed_at": "2026-07-21T09:50:05.120Z"
+      "bytes": 123933,
+      "mtime": "2026-07-23T21:17:48.231Z",
+      "indexed_at": "2026-07-23T21:17:48.231Z"
     },
     {
       "path": "docs/products/TCSERVICE.md",
@@ -67467,9 +67467,9 @@
     {
       "path": "routes/general-browser-agent-routes.js",
       "synopsis": "Founder-lane browser agent — any-site goals + founder-authorized account signup.",
-      "bytes": 26621,
-      "mtime": "2026-07-23T21:12:11.618Z",
-      "indexed_at": "2026-07-23T21:12:11.618Z",
+      "bytes": 27639,
+      "mtime": "2026-07-23T21:17:48.231Z",
+      "indexed_at": "2026-07-23T21:17:48.231Z",
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]
@@ -92547,6 +92547,16 @@
       "indexed_at": "2026-07-21T05:58:39.404Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/wrm-wix-dns-cutover.js",
+      "synopsis": "Deterministic Wix login + DNS upsert for WRM → Railway custom domains.",
+      "bytes": 14614,
+      "mtime": "2026-07-23T21:17:48.231Z",
+      "indexed_at": "2026-07-23T21:17:48.231Z",
+      "ssot": [
+        "docs/products/site-builder/PRODUCT_HOME.md"
       ]
     },
     {
