@@ -1246,6 +1246,19 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-22T23:34:51.470Z"
+    },
+    {
+      "id": "step8",
+      "status": "pending",
+      "target_file": "public/overlay/site-builder-template-choices.html",
+      "task": "update UI",
+      "spec": "Add UI for displaying and selecting new template choices.",
+      "depends_on": [
+        "step6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "design_review_flagged": true
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",
