@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/site-builder/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-23 — **WRM hosting cutover complete + cancel-old-host done.** Site serves on Railway (`railway-hikari`); WRM Wix Business Premium + Contact Collection + Events Calendar = AUTO RENEW OFF. Sherry’s other Wix sites/domains kept. Hosting-handoff doctrine below. |
+| **Last Updated** | 2026-07-23 — **WRM click-funnel audit.** All anchors/externals live; consult POST ok. Patched brochure dead-ends (`#why`, stories, quote, footer tel) + nav “Request consult” so every major section advances to call/form. |
 
 ---
 
