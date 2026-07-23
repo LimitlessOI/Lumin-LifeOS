@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-23T06:43:28.502Z",
+  "generated_at": "2026-07-23T07:28:14.440Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12123,
+  "file_count": 12126,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -40880,9 +40880,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 144868,
-      "mtime": "2026-07-23T06:43:28.502Z",
-      "indexed_at": "2026-07-23T06:43:28.502Z"
+      "bytes": 145675,
+      "mtime": "2026-07-23T07:28:14.440Z",
+      "indexed_at": "2026-07-23T07:28:14.440Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -66042,9 +66042,9 @@
     {
       "path": "public/overlay/site-builder-landing.html",
       "synopsis": "HTML page: Site Builder — public $45 beta sales front door",
-      "bytes": 42853,
-      "mtime": "2026-07-23T06:43:28.502Z",
-      "indexed_at": "2026-07-23T06:43:28.502Z"
+      "bytes": 43539,
+      "mtime": "2026-07-23T07:28:14.440Z",
+      "indexed_at": "2026-07-23T07:28:14.440Z"
     },
     {
       "path": "public/overlay/site-builder-save-confirmation.html",
@@ -68822,9 +68822,9 @@
     {
       "path": "routes/site-builder-routes.js",
       "synopsis": "Site Builder Routes — Done-for-you website pipeline",
-      "bytes": 53859,
-      "mtime": "2026-07-22T18:16:28.885Z",
-      "indexed_at": "2026-07-22T18:16:28.885Z",
+      "bytes": 54770,
+      "mtime": "2026-07-23T07:28:14.440Z",
+      "indexed_at": "2026-07-23T07:28:14.440Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -89986,9 +89986,9 @@
     {
       "path": "services/prospect-pipeline.js",
       "synopsis": "Prospect Pipeline — Find a business → build their mock site → email it to them",
-      "bytes": 43013,
-      "mtime": "2026-07-22T18:16:28.885Z",
-      "indexed_at": "2026-07-22T18:16:28.885Z",
+      "bytes": 43190,
+      "mtime": "2026-07-23T07:28:14.440Z",
+      "indexed_at": "2026-07-23T07:28:14.440Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -90789,9 +90789,9 @@
     {
       "path": "services/site-builder-opportunity-scorer.js",
       "synopsis": "Scores how bad a prospect's EXISTING website is so we know who to pitch first.",
-      "bytes": 9268,
-      "mtime": "2026-07-21T05:32:04.667Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "bytes": 9842,
+      "mtime": "2026-07-23T07:28:14.440Z",
+      "indexed_at": "2026-07-23T07:28:14.440Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -90865,6 +90865,16 @@
       "indexed_at": "2026-07-21T05:58:39.404Z"
     },
     {
+      "path": "services/site-builder-scrape-guard.js",
+      "synopsis": "Detect CDN/error/parked scrape poison and resolve safe business names.",
+      "bytes": 5223,
+      "mtime": "2026-07-23T07:28:14.440Z",
+      "indexed_at": "2026-07-23T07:28:14.440Z",
+      "ssot": [
+        "docs/products/site-builder/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/site-builder-service-catalog.js",
       "synopsis": "À-la-carte service catalog for editor sidebar upsells.",
       "bytes": 7301,
@@ -90898,9 +90908,9 @@
     {
       "path": "services/site-builder.js",
       "synopsis": "Site Builder — Scrape existing site → AI-generates complete click-funnel website",
-      "bytes": 98903,
-      "mtime": "2026-07-23T06:43:28.502Z",
-      "indexed_at": "2026-07-23T06:43:28.502Z",
+      "bytes": 99808,
+      "mtime": "2026-07-23T07:28:14.440Z",
+      "indexed_at": "2026-07-23T07:28:14.440Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -94434,6 +94444,13 @@
       ]
     },
     {
+      "path": "tests/site-builder-opportunity-scorer.test.js",
+      "synopsis": "js — tests/site-builder-opportunity-scorer.test.js.",
+      "bytes": 1303,
+      "mtime": "2026-07-23T07:28:14.440Z",
+      "indexed_at": "2026-07-23T07:28:14.440Z"
+    },
+    {
       "path": "tests/site-builder-postmark-helper.test.js",
       "synopsis": "Regression tests for `services/site-builder-postmark-helper.js` (no live Postmark calls).",
       "bytes": 1834,
@@ -94476,6 +94493,13 @@
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "tests/site-builder-scrape-guard.test.js",
+      "synopsis": "js — tests/site-builder-scrape-guard.test.js.",
+      "bytes": 2097,
+      "mtime": "2026-07-23T07:28:14.440Z",
+      "indexed_at": "2026-07-23T07:28:14.440Z"
     },
     {
       "path": "tests/smoke.test.js",

@@ -444,9 +444,12 @@ export default class ProspectPipeline {
 
     const previewUrl = buildResult.previewUrl;
     const name = contactName || buildResult.businessName || businessName || 'there';
-    const biz = buildResult.businessName || businessName || 'your business';
+    const biz = businessName || buildResult.businessName || 'your business';
     const qualityReport = buildResult.qualityReport || buildResult.metadata?.qualityReport || null;
-    const qaHold = qualityReport ? qualityReport.readyToSend === false : false;
+    const scrapePoisoned = Boolean(
+      buildResult.metadata?.businessInfo?.scrapePoisoned || qualityReport?.scrapePoisoned
+    );
+    const qaHold = scrapePoisoned || (qualityReport ? qualityReport.readyToSend === false : false);
     const clientId = options.clientId || buildResult.clientId;
 
     // Persist preview BEFORE email so SMTP hangs / resume cannot lose the build.
@@ -527,6 +530,7 @@ export default class ProspectPipeline {
         businessUrl,
         previewUrl,
         qualityScore: qualityReport?.score,
+        scrapePoisoned,
         issues: qualityReport?.summaryIssues,
       });
     }

@@ -41,6 +41,7 @@ import { getModelForTask, getCandidateModelsForTask } from '../config/task-model
 import { resolveDurablePublicBase } from './site-builder-public-base.js';
 import { renderSalesDoctrineForPrompt } from '../config/site-builder-sales-doctrine.js';
 import { matchIndustrySalesPack } from '../config/site-builder-industry-sales.js';
+import { applyScrapeGuard, applyScrapePoisonQualityGate } from './site-builder-scrape-guard.js';
 
 function createEditToken() {
   return crypto.randomBytes(24).toString('hex');
@@ -484,6 +485,7 @@ export default class SiteBuilder {
           if (qualityReport.scorePct >= TARGET_QUALITY_SCORE) break;
         }
       }
+      qualityReport = applyScrapePoisonQualityGate(qualityReport, businessInfo);
 
       // Step 4: Build blog index page from blog posts already generated before the main site HTML
       const blogHtml = this.generateBlogIndex(businessInfo, blogPosts);
@@ -718,6 +720,7 @@ export default class SiteBuilder {
         logger.warn('[SITE] Could not re-score best variant (non-fatal)', { clientId, error: err.message });
         qualityReport = { scorePct: bestVariant.scorePct, readyToSend: bestVariant.scorePct >= MIN_SEND_SCORE, grade: null, issues: [] };
       }
+      qualityReport = applyScrapePoisonQualityGate(qualityReport, businessInfo);
 
       const editToken = createEditToken();
       const switcher = this.generateVariantSwitcher(businessInfo, clientId, variants, editToken, benchmark, presence);
@@ -794,8 +797,10 @@ export default class SiteBuilder {
     // If manual info is provided (no scraping needed), use it directly, but
     // always attach the source URL so richer ingestion knows what to look up.
     if (options.businessInfo) {
-      const info = options.businessInfo;
+      const info = { ...options.businessInfo };
       if (!info.sourceUrl) info.sourceUrl = url;
+      const submittedName = String(options.businessName || info.businessName || '').trim();
+      if (submittedName) info.businessName = submittedName;
       return info;
     }
 
@@ -865,15 +870,29 @@ export default class SiteBuilder {
 
       await browser.close();
 
-      // Use AI to extract structured business info from the raw scraped text
       const extracted = await this.extractBusinessInfoWithAI(scraped, url);
-      return { ...scraped, ...extracted, sourceUrl: url, existingSiteScore };
+      let businessInfo = { ...scraped, ...extracted, sourceUrl: url, existingSiteScore };
+      businessInfo = applyScrapeGuard(businessInfo, {
+        submittedName: options.businessName,
+        url,
+      });
+      if (businessInfo.scrapePoisoned) {
+        logger.warn('[SITE] Scrape poison detected — blocking outreach until manual review', {
+          url,
+          marker: businessInfo.scrapePoisonMarker,
+          businessName: businessInfo.businessName,
+        });
+      }
+      return businessInfo;
 
     } catch (err) {
       if (browser) await browser.close().catch(() => {});
       logger.warn('[SITE] Scrape failed, using AI extraction only', { url, error: err.message });
-      // Fallback: use AI to infer info from URL + domain name alone
-      return this.extractBusinessInfoWithAI({ title: url, bodyText: '', sourceUrl: url }, url);
+      const extracted = await this.extractBusinessInfoWithAI({ title: url, bodyText: '', sourceUrl: url }, url);
+      return applyScrapeGuard(
+        { ...extracted, sourceUrl: url, scrapeFetchFailed: true },
+        { submittedName: options.businessName, url, forcePoisoned: true }
+      );
     }
   }
 

@@ -5,6 +5,23 @@
  * High opportunityScore (0-100) = bad site = high priority for cold outreach.
  */
 
+import { detectPoisonScrape, extractHtmlTitle, htmlBodySnippet } from './site-builder-scrape-guard.js';
+
+function scanFailedResult(url, message, fetchError = null) {
+  return {
+    url,
+    opportunityScore: null,
+    grade: null,
+    painPoints: [message],
+    strengths: [],
+    recommendation: 'We could not scan this site — check the URL or try again later.',
+    responseTimeMs: null,
+    analyzed: false,
+    scanFailed: true,
+    error: fetchError,
+  };
+}
+
 export function createOpportunityScorer(options = {}) {
   const timeoutMs = options.timeout || 5000;
 
@@ -38,17 +55,22 @@ export function createOpportunityScorer(options = {}) {
       }
 
       if (fetchError) {
-        return {
+        return scanFailedResult(
           url,
-          opportunityScore: 50,
-          grade: 'C',
-          painPoints: ['Could not load site to analyze — may be down or blocking crawlers'],
-          strengths: [],
-          recommendation: 'Unable to analyze site — try manually or skip.',
-          responseTimeMs: null,
-          analyzed: false,
-          error: fetchError,
-        };
+          'Could not load site to analyze — may be down or blocking crawlers',
+          fetchError
+        );
+      }
+
+      const poison = detectPoisonScrape({
+        title: extractHtmlTitle(html),
+        bodyText: htmlBodySnippet(html),
+      });
+      if (poison.poisoned) {
+        return scanFailedResult(
+          url,
+          'Site returned an error or placeholder page — we could not analyze the real business site'
+        );
       }
 
       const lowerHtml = html.toLowerCase();
@@ -75,7 +97,7 @@ export function createOpportunityScorer(options = {}) {
         // Also catch: any link with /book, /booking, /appointments, /schedule in the href
         && !/<a[^>]+href=["'][^"']*\/(?:book|booking|appointments?|schedule)[/"'?]/i.test(html);
       const noTitle = !/<title[^>]*>[^<]{3,}<\/title>/i.test(html);
-      const noMetaDesc = !/<meta[^>]+name=["']description["'][^>]*content=["'][^"']{10,}/i.test(html);
+      const noMetaDesc = !/<meta[^>]+name=["']description["'][^>]content=["'][^"']{10,}/i.test(html);
       const noSocialProof = !/(testimonial|review|rated|rating|stars|five.star|5.star)/i.test(lowerHtml);
       const noCTA = !/(book now|book a|schedule|appointment|call now|get started|contact us|free consult)/i.test(lowerHtml);
       const oldYear = (() => {

@@ -607,7 +607,7 @@
           </div>
           <div class="demo-footer">
             <span>Real midwifery practice preview — feminine, photo-forward, consult form ready.</span>
-            <a class="btn btn-primary" href="/api/v1/sites/publish/checkout?clientId=wellrounded-momma" target="_blank" rel="noopener">Buy this demo for $45</a>
+            <a class="btn btn-primary" href="#request">Get my free preview</a>
           </div>
         </div>
     </section>
@@ -1055,6 +1055,17 @@
             const data = await resp.json().catch(() => ({}));
             if (!resp.ok || data.ok === false) {
               throw new Error(data.error || ('Request failed (' + resp.status + ')'));
+            }
+            if (data.analyzed === false || data.scanFailed) {
+              auditScore.textContent = '—';
+              auditScore.style.setProperty('--score', 0);
+              auditGrade.textContent = "Couldn't scan";
+              auditRecommendation.textContent = data.recommendation || data.message || "We couldn't analyze this URL — it may be down, blocking crawlers, or showing an error page.";
+              auditPains.innerHTML = (data.painPoints || []).slice(0, 5).map(p => `<li>${p}</li>`).join('');
+              auditCta.href = `#request?url=${encodeURIComponent(url)}`;
+              auditResult.style.display = 'block';
+              auditStatus.textContent = "Couldn't scan — try your URL in the form below.";
+              return;
             }
             auditScore.textContent = data.opportunityScore ?? data.score ?? '—';
             auditScore.style.setProperty('--score', data.opportunityScore ?? data.score ?? 0);

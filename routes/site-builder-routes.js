@@ -376,6 +376,21 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
       const { scoreProspectUrl } = await import('../services/site-builder-opportunity-scorer.js');
       const result = await scoreProspectUrl(targetUrl, { timeout: 6000 });
 
+      if (!result.analyzed || result.scanFailed) {
+        return res.json({
+          ok: true,
+          analyzed: false,
+          scanFailed: true,
+          url: targetUrl,
+          message: "We couldn't scan this site",
+          recommendation: result.recommendation,
+          painPoints: result.painPoints || [],
+          error: result.error || null,
+          revenueLeakEstimate: 0,
+          leadValue: null,
+        });
+      }
+
       // Rough revenue-leak estimate for the lead magnet. Not a real forecast.
       const leadValue = { dentist: 2500, attorney: 2400, contractor: 1500, advisor: 1800, default: 1200 };
       const vertical = String(req.query.vertical || '').trim();
@@ -415,6 +430,22 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
 
       const { scoreProspectUrl } = await import('../services/site-builder-opportunity-scorer.js');
       const result = await scoreProspectUrl(targetUrl, { timeout: 6000 });
+
+      if (!result.analyzed || result.scanFailed) {
+        return res.json({
+          ok: true,
+          audit: true,
+          analyzed: false,
+          scanFailed: true,
+          url: targetUrl,
+          message: "We couldn't scan this site",
+          recommendation: result.recommendation,
+          painPoints: result.painPoints || [],
+          error: result.error || null,
+          revenueLeakEstimate: 0,
+          leadValue: null,
+        });
+      }
 
       const leadValue = { dentist: 2500, attorney: 2400, contractor: 1500, advisor: 1800, default: 1200 };
       const vertical = String(req.query.vertical || '').trim();
