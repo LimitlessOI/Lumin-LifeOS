@@ -41,6 +41,10 @@ import {
   resolveDurablePublicBase,
   resolveRequestPublicBase,
 } from '../services/site-builder-public-base.js';
+import {
+  getInstantlyConfig,
+  createInstantlySendEmailAdapter,
+} from '../services/site-builder-instantly-outreach.js';
 
 /** Strip legacy "Complimentary code / Apply free publish" chrome from baked preview HTML. Discount belongs on checkout only. */
 function stripLegacyCompCodeChrome(html) {
@@ -213,10 +217,13 @@ function getProspectPipeline({ callCouncilMember, pool, outreachAutomation, noti
   if (!_prospectPipeline) {
     const builder = getSiteBuilder({ callCouncilMember, baseUrl, pool });
 
-    // Build sendEmail adapter — prefer NotificationService (Postmark + suppression),
-    // fall back to outreachAutomation, then log-only.
+    // Cold lane: Instantly (built for unsolicited B2B). Do NOT use Postmark/Resend/
+    // SendGrid for cold prospecting — they ban it (Postmark already refused Adam).
     let sendEmail;
-    if (notificationService) {
+    if (getInstantlyConfig().configured) {
+      sendEmail = createInstantlySendEmailAdapter({ logger });
+      logger.info('[PROSPECT] Cold outreach provider: Instantly');
+    } else if (notificationService) {
       sendEmail = async (to, subject, html) => {
         const result = await notificationService.sendEmail({ to, subject, html, text: '' });
         if (!result.success) logger.warn('[PROSPECT] Email not sent', { to, reason: result.error });
@@ -227,6 +234,7 @@ function getProspectPipeline({ callCouncilMember, pool, outreachAutomation, noti
     } else {
       sendEmail = async (to, subject) => {
         logger.info('[PROSPECT] Email (no sender configured)', { to, subject });
+        return { success: false, error: 'no email sender configured — set INSTANTLY_API_KEY + INSTANTLY_CAMPAIGN_ID' };
       };
     }
 

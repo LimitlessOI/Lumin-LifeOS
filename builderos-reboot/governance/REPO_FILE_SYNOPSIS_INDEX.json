@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-24T13:17:03.470Z",
+  "generated_at": "2026-07-24T17:41:44.237Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12147,
+  "file_count": 12149,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -37630,9 +37630,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 23891,
-      "mtime": "2026-07-24T13:17:03.470Z",
-      "indexed_at": "2026-07-24T13:17:03.470Z"
+      "bytes": 24141,
+      "mtime": "2026-07-24T17:41:44.237Z",
+      "indexed_at": "2026-07-24T17:41:44.237Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39800,9 +39800,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 242347,
-      "mtime": "2026-07-24T02:37:58.255Z",
-      "indexed_at": "2026-07-24T02:37:58.255Z"
+      "bytes": 241415,
+      "mtime": "2026-07-24T17:41:44.237Z",
+      "indexed_at": "2026-07-24T17:41:44.237Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -40917,9 +40917,9 @@
     {
       "path": "docs/products/site-builder/DISTRIBUTION_PLAYBOOK.md",
       "synopsis": "Autonomous Site Builder distribution playbook (channels, caps, experience gates).",
-      "bytes": 3436,
-      "mtime": "2026-07-24T13:17:03.470Z",
-      "indexed_at": "2026-07-24T13:17:03.470Z"
+      "bytes": 4658,
+      "mtime": "2026-07-24T17:41:44.237Z",
+      "indexed_at": "2026-07-24T17:41:44.237Z"
     },
     {
       "path": "docs/products/site-builder/FILE_MANIFEST.json",
@@ -40939,9 +40939,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 155834,
-      "mtime": "2026-07-24T13:17:03.470Z",
-      "indexed_at": "2026-07-24T13:17:03.470Z"
+      "bytes": 156111,
+      "mtime": "2026-07-24T17:41:44.237Z",
+      "indexed_at": "2026-07-24T17:41:44.237Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -68909,9 +68909,9 @@
     {
       "path": "routes/site-builder-routes.js",
       "synopsis": "Site Builder Routes — Done-for-you website pipeline",
-      "bytes": 55739,
-      "mtime": "2026-07-24T13:17:03.470Z",
-      "indexed_at": "2026-07-24T13:17:03.470Z",
+      "bytes": 56192,
+      "mtime": "2026-07-24T17:41:44.237Z",
+      "indexed_at": "2026-07-24T17:41:44.237Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -90123,9 +90123,9 @@
     {
       "path": "services/prospect-pipeline.js",
       "synopsis": "Prospect Pipeline — Find a business → build their mock site → email it to them",
-      "bytes": 43190,
-      "mtime": "2026-07-23T07:28:14.440Z",
-      "indexed_at": "2026-07-23T07:28:14.440Z",
+      "bytes": 44204,
+      "mtime": "2026-07-24T17:41:44.237Z",
+      "indexed_at": "2026-07-24T17:41:44.237Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -90191,9 +90191,9 @@
     {
       "path": "services/railway-managed-env-service.js",
       "synopsis": "Exports createRailwayManagedEnvService — services/railway-managed-env-service.js.",
-      "bytes": 23750,
-      "mtime": "2026-07-23T19:49:45.462Z",
-      "indexed_at": "2026-07-23T19:49:45.462Z",
+      "bytes": 23886,
+      "mtime": "2026-07-24T17:41:44.237Z",
+      "indexed_at": "2026-07-24T17:41:44.237Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -90886,6 +90886,16 @@
       ]
     },
     {
+      "path": "services/site-builder-instantly-outreach.js",
+      "synopsis": "Site Builder cold outreach via Instantly (growth/cold lane — not Postmark/Resend).",
+      "bytes": 5198,
+      "mtime": "2026-07-24T17:41:44.237Z",
+      "indexed_at": "2026-07-24T17:41:44.237Z",
+      "ssot": [
+        "docs/products/site-builder/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/site-builder-interactive-element-labels.js",
       "synopsis": "services/site-builder-interactive-element-labels.js",
       "bytes": 723,
@@ -90967,9 +90977,9 @@
     {
       "path": "services/site-builder-prospect-runner.js",
       "synopsis": "Async Site Builder prospect jobs — accept fast, build+email in background.",
-      "bytes": 22766,
-      "mtime": "2026-07-24T13:17:03.470Z",
-      "indexed_at": "2026-07-24T13:17:03.470Z",
+      "bytes": 23676,
+      "mtime": "2026-07-24T17:41:44.237Z",
+      "indexed_at": "2026-07-24T17:41:44.237Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -94618,6 +94628,16 @@
       ]
     },
     {
+      "path": "tests/site-builder-instantly-outreach.test.js",
+      "synopsis": "Instantly cold-outreach adapter unit tests.",
+      "bytes": 2634,
+      "mtime": "2026-07-24T17:41:44.237Z",
+      "indexed_at": "2026-07-24T17:41:44.237Z",
+      "ssot": [
+        "docs/products/site-builder/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "tests/site-builder-opportunity-scorer.test.js",
       "synopsis": "js — tests/site-builder-opportunity-scorer.test.js.",
       "bytes": 1303,
@@ -94638,8 +94658,8 @@
       "path": "tests/site-builder-prospect-runner.test.js",
       "synopsis": "js — tests/site-builder-prospect-runner.test.js.",
       "bytes": 3605,
-      "mtime": "2026-07-24T13:17:03.470Z",
-      "indexed_at": "2026-07-24T13:17:03.470Z"
+      "mtime": "2026-07-24T17:41:44.237Z",
+      "indexed_at": "2026-07-24T17:41:44.237Z"
     },
     {
       "path": "tests/site-builder-public-base.test.js",

@@ -514,6 +514,28 @@ export function evaluateSiteBuilderEmailReadiness(env = process.env) {
   const present = [];
   const notes = [];
 
+  // Instantly is the cold-outreach lane (Postmark/Resend ban cold email).
+  const instantlyKey = String(env.INSTANTLY_API_KEY || '').trim();
+  const instantlyCampaign = String(env.INSTANTLY_CAMPAIGN_ID || '').trim();
+  if (instantlyKey && instantlyCampaign) {
+    present.push('INSTANTLY_API_KEY', 'INSTANTLY_CAMPAIGN_ID');
+    if (emailFrom) present.push('EMAIL_FROM');
+    return {
+      provider: 'instantly',
+      ready: true,
+      blockers: [],
+      present,
+      notes: ['Cold outreach via Instantly campaign (not Postmark/Resend)'],
+      keysPresent: true,
+      coldEmailSending: true,
+    };
+  }
+  if (instantlyKey || instantlyCampaign) {
+    notes.push('Instantly partially configured — need both INSTANTLY_API_KEY and INSTANTLY_CAMPAIGN_ID');
+  } else {
+    notes.push('For cold outreach use Instantly (Postmark/Resend ban cold email). Set INSTANTLY_API_KEY + INSTANTLY_CAMPAIGN_ID.');
+  }
+
   if (!emailFrom) {
     blockers.push({ name: 'EMAIL_FROM', purpose: 'Sender address for outreach' });
   } else {

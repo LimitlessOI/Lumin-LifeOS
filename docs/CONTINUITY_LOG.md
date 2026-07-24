@@ -1,8 +1,12 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-24 — Instantly replaces Postmark for cold Site Builder email
+
+Adam: Postmark will not approve (they don’t do cold). Correct — Resend/SendGrid same ban. Wired Instantly as cold lane (`INSTANTLY_API_KEY` + `INSTANTLY_CAMPAIGN_ID`); playbook has signup steps. Next: Adam creates Instantly campaign + pastes keys → resend Handyman (`prev_1784791961326_i2dt`).
+
 ## 2026-07-24 — Market for cash: Chair SMOS-first; email honesty; warm push
 
-Adam: keep going, ask Chair, finish products, make money / market. Chair: SMOS self-serve first; warm network while outbound blocked. Tip-proved: Postmark still pending (Handyman resend failed); Twilio trial blocks cold SMS; Places key missing. Texted Adam market links via founder SMS. Hardened `/marketing/for-you` signup-first; launch-readiness no longer claims cold email sends on bare Postmark token. **Founder unlock needed:** `RESEND_API_KEY` (or Postmark approve) + Twilio upgrade for cold SMS. Next: warm shares of SMOS/SB/TC links; email unlock → Handyman follow-up.
+Adam: keep going, ask Chair, finish products, make money / market. Chair: SMOS self-serve first; warm network while outbound blocked. Tip-proved: Postmark still pending (Handyman resend failed); Twilio trial blocks cold SMS; Places key missing. Texted Adam market links via founder SMS. Hardened `/marketing/for-you` signup-first; launch-readiness no longer claims cold email sends on bare Postmark token. **Superseded unlock:** Instantly (not Resend).
 
 ## 2026-07-24 — Market-readiness sweep: SMOS auth, Site Builder SENTRY A06, TC enroll
 

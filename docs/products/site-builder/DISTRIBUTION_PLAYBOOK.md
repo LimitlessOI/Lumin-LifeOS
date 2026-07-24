@@ -18,16 +18,36 @@ Market without consulting Adam. Fix experience before send. Use system email / T
 4. No SMS/voice outside **08:00–17:00 America/Los_Angeles**.
 5. Cold email only when Postmark is approved **or** `RESEND_API_KEY` is set (HTTPS works on Railway).
 
+## Cold email doctrine (hard)
+
+**Do not use Postmark, Resend, SendGrid, or Amazon SES for Site Builder prospecting.** They are transactional providers and ban unsolicited/cold B2B email — Postmark already refused Adam’s account for that reason. Resend is the same category; it is **not** the unlock.
+
+**Use Instantly** (or Smartlead) — growth/cold lane with Google Workspace / Microsoft inboxes, warmup, and rotation.
+
+### Instantly setup (founder — ~20 min)
+
+1. Create account at [instantly.ai](https://instantly.ai) — **Growth** plan or above (API V2).
+2. Connect 1–2 Google Workspace mailboxes on a **sending subdomain** (e.g. `mail.yourdomain.com`), not the main brand inbox if possible.
+3. Start warmup (or keep volume tiny: single digits/day week 1).
+4. Create a campaign e.g. **“Site Builder Preview”** with body using Instantly variables:
+   - `{{company_name}}`, `{{website}}`, `{{personalization}}`
+   - Custom vars we send: `{{preview_url}}`, `{{business_name}}`, `{{subject_hint}}`, `{{client_id}}`
+5. Copy **API key** (Settings → Integrations → API V2) + **campaign UUID**.
+6. Set on Railway (or tell Cursor to set via managed-env):
+   - `INSTANTLY_API_KEY`
+   - `INSTANTLY_CAMPAIGN_ID`
+7. Tip will enqueue leads on prospect/resend; Instantly sends the sequence. Then resend Handyman.
+
 ## Live blockers (tip-proved 2026-07-24)
 
 | Blocker | Evidence | Unlock |
 |---|---|---|
-| Postmark pending approval | `resend-outreach` → `Postmark pending approval; SMTP fallback also failed: Connection timeout` | Approve Postmark **or** set `RESEND_API_KEY` + `EMAIL_PROVIDER=resend` |
-| Twilio trial → unverified To | Handyman SMS 502 unverified number | Upgrade Twilio account **or** verify each To number |
-| `GOOGLE_PLACES_KEY` missing | `/api/v1/go-vegas/discover` fails | Set Places key on Railway for auto discovery |
-| Hot lead waiting | LV Handyman preview **viewed**, email not delivered | Same email unlock — then resend + follow-up |
+| Postmark refused cold | Account not approved for cold email | **Instantly** (wired) — not Resend |
+| Twilio trial → unverified To | Handyman SMS 502 unverified number | Upgrade Twilio **or** verify each To |
+| `GOOGLE_PLACES_KEY` missing | `/api/v1/go-vegas/discover` fails | Set Places key on Railway |
+| Hot lead waiting | LV Handyman preview **viewed**, email not delivered | Instantly keys → `resend-outreach` |
 
-Until email unlocks: market via warm network + inbound pages only (SMS to Adam’s verified phone still works for founder alerts).
+Until Instantly keys land: market via warm network + inbound pages only.
 
 ## Channels (priority)
 
@@ -36,8 +56,9 @@ Until email unlocks: market via warm network + inbound pages only (SMS to Adam�
 | SMOS inbound `/marketing/for-you` | **Live** — primary cash door | unlimited |
 | Site Builder inbound `/site-builder` | Live | unlimited (self-serve) |
 | TC enroll `/overlay/tc-agent-enroll.html` | Live Stripe | unlimited |
+| Cold email (**Instantly**) | **Code live — waiting on Adam keys** | campaign daily caps in Instantly |
 | Twilio SMS + voice (preview link) | **Blocked for cold** — trial unverified To | 0 cold until upgrade |
-| Cold email (Postmark) | **Blocked** — pending approval; SMTP dead on Railway | 0 until Resend/Postmark |
+| Cold email (Postmark/Resend) | **Do not use** — policy bans cold | — |
 | Reddit / communities | Inbound value only; promo megathreads only | 2 helpful replies/day |
 
 ## Reddit / community rules (TOS-safe)
@@ -58,8 +79,9 @@ Until email unlocks: market via warm network + inbound pages only (SMS to Adam�
 - Env: `SITE_BUILDER_FREE_CODES` (e.g. `TALOA-FRIENDS`)
 - Checkout: `?clientId=…&code=…`
 
-## Unblock email (next system action)
+## Unblock cold email (next system action)
 
-1. Approve Postmark account / sender domain, **or**
-2. Set `RESEND_API_KEY` + `EMAIL_PROVIDER=resend` (or leave Postmark and rely on pending→Resend fallback) via managed-env bulk.
-3. Then email channel re-opens under the same experience gates.
+1. Adam completes Instantly setup above.
+2. Set `INSTANTLY_API_KEY` + `INSTANTLY_CAMPAIGN_ID` on tip.
+3. `POST /api/v1/sites/prospects/prev_1784791961326_i2dt/resend-outreach` with Handyman email.
+4. Keep Postmark (if any) for transactional only — never prospecting.

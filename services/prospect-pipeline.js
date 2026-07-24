@@ -163,6 +163,15 @@ export default class ProspectPipeline {
     let emailSent = false;
     let emailSendError = null;
     try {
+      if (typeof this.sendEmail === 'function') {
+        this.sendEmail.meta = {
+          clientId,
+          businessName: biz,
+          businessUrl,
+          contactName: name,
+          previewUrl: url,
+        };
+      }
       const delivery = await Promise.race([
         this.sendEmail(contactEmail, emailContent.subject, emailContent.html),
         new Promise((_, reject) => setTimeout(() => reject(new Error('sendEmail timed out after 25000ms')), 25_000)),
@@ -171,6 +180,8 @@ export default class ProspectPipeline {
       if (!emailSent) emailSendError = delivery?.error || 'unknown';
     } catch (err) {
       emailSendError = err.message;
+    } finally {
+      if (this.sendEmail) this.sendEmail.meta = null;
     }
 
     if (this.pool && clientId) {
@@ -506,17 +517,27 @@ export default class ProspectPipeline {
       await this.touchProspectJob(clientId, skipEmail ? 'skip_email' : 'send_email');
       if (contactEmail && !skipEmail && !qaHold) {
         try {
+          if (typeof this.sendEmail === 'function') {
+            this.sendEmail.meta = {
+              clientId,
+              businessName: biz,
+              businessUrl,
+              contactName: name,
+              previewUrl,
+            };
+          }
           const delivery = await Promise.race([
             this.sendEmail(contactEmail, emailContent.subject, emailContent.html),
             new Promise((_, reject) => setTimeout(() => reject(new Error('sendEmail timed out after 25000ms')), 25_000)),
           ]);
           emailSent = delivery?.success !== false;
           if (emailSent) {
-            logger.info('[PROSPECT] Outreach email sent', { contactEmail, previewUrl });
+            logger.info('[PROSPECT] Outreach email sent', { contactEmail, previewUrl, provider: delivery?.provider });
           } else {
             emailSendError = delivery?.error || emailSendError || 'unknown';
             logger.warn('[PROSPECT] Outreach email not sent', { contactEmail, previewUrl, error: emailSendError });
           }
+          if (this.sendEmail) this.sendEmail.meta = null;
         } catch (err) {
           emailSendError = err.message;
           logger.warn('[PROSPECT] Email send failed', { error: err.message });
@@ -624,7 +645,21 @@ export default class ProspectPipeline {
           html: this.fallbackEmailHtml(row.contact_name, row.business_name, row.preview_url, []),
         };
 
-    const delivery = await this.sendEmail(row.contact_email, emailContent.subject, emailContent.html);
+    if (typeof this.sendEmail === 'function') {
+      this.sendEmail.meta = {
+        clientId,
+        businessName: row.business_name,
+        businessUrl: row.business_url,
+        contactName: row.contact_name,
+        previewUrl: row.preview_url,
+      };
+    }
+    let delivery;
+    try {
+      delivery = await this.sendEmail(row.contact_email, emailContent.subject, emailContent.html);
+    } finally {
+      if (this.sendEmail) this.sendEmail.meta = null;
+    }
     const emailSent = delivery?.success !== false;
 
     await this.recordProspect({
