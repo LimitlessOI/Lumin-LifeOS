@@ -4357,6 +4357,7 @@ function initLuminDrawerVoiceSend() {
       if (!msg || luminState.sending) return;
       luminSend({ text: msg, voice: true });
     },
+    serverTtsFetch: luminServerTtsFetch,
     onInterim: ({ text }) => {
       const el = document.getElementById('lumin-interim-text');
       if (!el) return;
@@ -4489,6 +4490,22 @@ function luminAdjustReadRate(delta) {
   luminUpdateVoiceCtrlUi();
 }
 
+async function luminServerTtsFetch(text) {
+  try {
+    const h = await directSystemHeaders();
+    h['Content-Type'] = 'application/json';
+    const r = await fetch('/api/v1/lifeos/voice-rail/tts', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: h,
+      body: JSON.stringify({ text, department: 'ChC' }),
+    });
+    if (!r.ok) return { ok: false };
+    const blob = await r.blob();
+    return { ok: true, blob };
+  } catch { return { ok: false }; }
+}
+
 function speakLuminReply(text) {
   const plain = String(text || '')
     .replace(/\b(PASS|FAIL|COMMAND_RAN|NO_COMMAND_RAN)\b/g, '')
@@ -4498,8 +4515,8 @@ function speakLuminReply(text) {
   if (!plain) return;
   const rate = luminState.readAloud.rate || 0.95;
   try {
-    if (window.LifeOSVoiceChat && typeof window.LifeOSVoiceChat.speakText === 'function') {
-      window.LifeOSVoiceChat.speakText(plain, { rate, pitch: 1.04 });
+    if (window.LifeOSVoiceChat && typeof window.LifeOSVoiceChat.speakTextAsync === 'function') {
+      window.LifeOSVoiceChat.speakTextAsync(plain, { rate, pitch: 1.04, preferServerTts: true, serverTtsFetch: luminServerTtsFetch });
       return;
     }
   } catch { /* fall back to native */ }

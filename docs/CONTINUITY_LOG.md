@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-23 — Server TTS wired for read-aloud in Lumin drawer
+
+Adam: wants the best available voice reading replies; make it real. GAP-FILL: `public/overlay/lifeos-app.html` adds `luminServerTtsFetch()` that POSTs to `/api/v1/lifeos/voice-rail/tts` and wires it into `speakLuminReply()` via `LifeOSVoiceChat.speakTextAsync(..., { preferServerTts: true })`. The existing read-aloud rate buttons now throttle the server audio playback. Browser TTS remains fallback if server TTS is unavailable. Product home updated.
+
 ## 2026-07-23 — Live interim transcript overlay in Lumin drawer
 
 Adam: wants to see the words as he speaks, not wait. GAP-FILL: `public/shared/lifeos-voice-chat.js` now exposes an `onInterim` callback in `LifeOSVoiceChat.attach()`; `public/overlay/lifeos-app.html` renders `lumin-interim-text` above the composer and updates it with the in-flight STT text; server STT chunk interval reduced to 800ms for faster word visibility. Product homes and CONTINUITY_LOG updated. Next: read-aloud speed/voice controls, ChatGPT-style layout, queued/multi-request, file attachments, tonal/prosody pipeline.
