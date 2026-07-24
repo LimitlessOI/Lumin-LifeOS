@@ -184,17 +184,14 @@
   .pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
   .pillar{background:#fff;border:1px solid var(--line);border-radius:22px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 16px 40px -30px rgba(123,85,96,.55);transition:transform .2s ease,box-shadow .2s ease}
   .pillar:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
-  /* Little boxes: blush fill always visible; photo layered at 25% (3rd card at 75%) */
-  .pillar .pimg{height:190px;background-color:var(--rose);position:relative;overflow:hidden}
-  .pillar .pimg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.45;display:block}
+  /* Care cards: same clear photo treatment on all three (no washed-out overlay) */
+  .pillar .pimg{height:220px;background-color:var(--blush);position:relative;overflow:hidden}
+  .pillar .pimg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.95;display:block}
   .pillar .pimg-strong{background-color:var(--blush)}
-  .pillar .pimg-strong img{opacity:.75}
-  /* Sherry tile: pull back so face + baby both read in the crop */
-  .pillar .pimg-sherry{height:260px;background-color:var(--blush)}
-  .pillar .pimg-sherry img{opacity:.95;object-fit:cover;object-position:50% 38%;transform:scale(.72);transform-origin:center center}
-  /* Cora tile: midwife-in-action portrait from her site */
-  .pillar .pimg-cora{height:240px;background-color:var(--blush)}
-  .pillar .pimg-cora img{opacity:.92;object-fit:cover;object-position:50% 22%}
+  .pillar .pimg-strong img{opacity:.95}
+  .pillar .pimg-sherry img{object-position:50% 28%}
+  .pillar .pimg-cora img{object-position:50% 18%}
+  .pillar .pimg-why img{object-position:50% 42%}
   .pillar .pbody{padding:26px;display:flex;flex-direction:column;flex:1}
   .pillar .tag{font-family:Sacramento,cursive;font-size:1.3rem;color:var(--coral)}
   .pillar h3{font-size:1.5rem;margin:2px 0 4px}
@@ -225,7 +222,18 @@
   .benefit{background:#fff;border:1px solid var(--line);border-radius:18px;padding:26px}
   .benefit h4{font-size:1.18rem;margin:0 0 8px;color:var(--mauve)}
   .benefit p{color:var(--muted);margin:0;font-size:.97rem}
-  @media(max-width:860px){.benefits{grid-template-columns:1fr}}
+  .fear-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin:0 0 40px}
+  .fear-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:28px}
+  .fear-card h3{font-size:1.35rem;margin:0 0 10px}
+  .fear-card .role{color:var(--coral-deep);font-weight:700;margin:0 0 14px;font-size:.95rem}
+  .fear-card ul{list-style:none;padding:0;margin:0}
+  .fear-card li{position:relative;padding-left:22px;margin:10px 0;color:var(--muted);font-size:.98rem}
+  .fear-card li::before{content:"";position:absolute;left:0;top:9px;width:9px;height:9px;border-radius:50%;background:var(--coral)}
+  .stat-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:8px 0 40px}
+  .stat-strip div{background:var(--blush);border:1px solid var(--rose);border-radius:16px;padding:22px;text-align:center}
+  .stat-strip b{display:block;font-family:Fraunces,Georgia,serif;font-size:1.85rem;color:var(--mauve);margin-bottom:6px}
+  .stat-strip span{color:var(--muted);font-size:.92rem;line-height:1.4}
+  @media(max-width:860px){.benefits,.fear-grid,.stat-strip{grid-template-columns:1fr}}
 
   /* Speaker */
   .speaker{background:var(--rose)}
@@ -386,7 +394,7 @@
     <div class="section-head">
       <span class="eyebrow">Who you'll work with</span>
       <h2>Care built around you</h2>
-      <p>Two experienced practitioners, and an honest look at what home birth really offers.</p>
+      <p>Two experienced practitioners — and a straight answer to the safety question every parent asks first.</p>
     </div>
     <div class="pillars">
 
@@ -431,21 +439,21 @@
       </article>
 
       <article class="pillar">
-        <div class="pimg pimg-strong">
-          <img src="https://static.wixstatic.com/media/fb1e61_9039cee3c9dd414bbba9b84b4f8bd692~mv2.jpg" alt="Newborn moments after home birth" loading="lazy" />
+        <div class="pimg pimg-strong pimg-why">
+          <img src="https://static.wixstatic.com/media/fb1e61_9039cee3c9dd414bbba9b84b4f8bd692~mv2.jpg" alt="Mother and newborn after home birth" loading="lazy" />
         </div>
         <div class="pbody">
           <span class="tag">The Choice</span>
           <h3>Why Home Birth?</h3>
-          <div class="role">For healthy, low‑risk pregnancies</div>
-          <p>When researchers ask why families choose home birth, the same answers rise to the top: avoid unnecessary intervention, labor in a place that feels safe, and keep decision‑making in your hands — with a midwife who already knows you.</p>
+          <div class="role">Safety first — for healthy, low‑risk pregnancies</div>
+          <p>The first question is always: is it safe? For the right family, with a skilled midwife and a real hospital plan, home birth means fewer interventions, less exposure to hospital germs, and an hour of your midwife’s attention — not five minutes after a two‑hour wait.</p>
           <ul>
-            <li>Skip the cascade: far fewer cesareans, inductions, forceps &amp; episiotomies</li>
-            <li>Your bedroom, your rules — move, eat, labor in water, people you choose</li>
-            <li>One midwife from pregnancy through postpartum — not a revolving hospital staff</li>
+            <li>Safer for low‑risk births: fewer interventions, clear transfer plan</li>
+            <li>Your home, not a hospital ward — lower exposure to hospital infections</li>
+            <li>Hour‑long prenatal visits with one midwife who knows you</li>
           </ul>
           <div class="foot">
-            <a class="pill-link" href="#why" data-track="tile_click" data-label="why_tile">See the full picture →</a>
+            <a class="pill-link" href="#why" data-track="tile_click" data-label="why_tile">Read why families choose this →</a>
           </div>
         </div>
       </article>
@@ -508,23 +516,60 @@
 <section class="block" id="why">
   <div class="wrap">
     <div class="section-head">
-      <span class="eyebrow">The choice, in depth</span>
-      <h2>What home birth really offers</h2>
-      <p>In study after study, the #1 reason families choose home birth is simple: they want to avoid unnecessary medical intervention — and keep the comfort, privacy, and control that let labor actually work. For healthy, low‑risk pregnancies with a skilled midwife and a clear hospital transfer plan, that choice is backed by strong outcome data.</p>
+      <span class="eyebrow">What mothers &amp; fathers actually ask</span>
+      <h2>Is home birth safe — and is it better for our family?</h2>
+      <p>Safety is question one. Everything else is why families stay once that question is answered honestly. For healthy, low‑risk pregnancies with a skilled midwife and a clear hospital transfer plan, planned home birth is linked with fewer interventions, less maternal infectious morbidity than hospital birth in multiple studies, and care that feels like a relationship — not a conveyor belt.</p>
+    </div>
+
+    <div class="fear-grid">
+      <div class="fear-card">
+        <h3>What mothers are afraid of</h3>
+        <p class="role">Named, then answered</p>
+        <ul>
+          <li><strong>“What if something goes wrong?”</strong> — Sherry screens for low‑risk care, carries emergency skills &amp; equipment, and transfers when a hospital is wiser. She also works with local hospital teams (Henderson Hospital advisory).</li>
+          <li><strong>“Will I be alone / ignored?”</strong> — Prenatal visits run about an hour. At birth, your midwife is with you — not covering three rooms.</li>
+          <li><strong>“Will they push interventions I don’t want?”</strong> — Home birth is built for physiologic birth: far fewer inductions, episiotomies, forceps/vacuum, and cesareans than typical U.S. hospital care.</li>
+          <li><strong>“Will strangers own my birth?”</strong> — You choose who is in the room. No shift‑change parade. Your birth stays yours.</li>
+        </ul>
+      </div>
+      <div class="fear-card">
+        <h3>What fathers / partners ask</h3>
+        <p class="role">The questions behind “I’m nervous”</p>
+        <ul>
+          <li><strong>“Is this reckless?”</strong> — For the right candidate, large midwife‑attended home‑birth studies show very high rates of spontaneous vaginal birth and low intervention — with a transfer plan when needed.</li>
+          <li><strong>“What is my job?”</strong> — At home you are not a visitor. You stay, support, and meet your baby without hospital visitor rules.</li>
+          <li><strong>“Can we get to a hospital fast enough?”</strong> — That plan is made before labor. Most transfers are for slow progress or pain relief — not drama. Knowing the path reduces panic.</li>
+          <li><strong>“Will she be safe from hospital germs?”</strong> — Your home isn’t a shared ward. Hospital environments concentrate illness; home birth avoids that exposure while sterile instruments are still used when needed.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="stat-strip" aria-label="Outcome highlights from midwife-attended planned home birth research">
+      <div><b>~5%</b><span>Cesarean rate in a large U.S. planned home‑birth midwife study (MANA) — vs ~32% typical U.S. hospital rate</span></div>
+      <div><b>~94%</b><span>Spontaneous vaginal births in that same home‑birth cohort — birth without forceps, vacuum, or surgery</span></div>
+      <div><b>~1 hour</b><span>Your prenatal visit with Sherry — not 5–10 minutes with a doctor after waiting two hours</span></div>
+    </div>
+
+    <div class="section-head" style="margin-bottom:28px">
+      <span class="eyebrow">Why families choose home</span>
+      <h2>The reasons that actually move people</h2>
+      <p>Aligned with what Sherry teaches on her own site — and what mothers keep saying when they choose again for the next baby.</p>
     </div>
     <div class="benefits">
-      <div class="benefit"><h4>Avoid the intervention cascade</h4><p>This is the reason families name most often. Planned home birth with qualified midwives is consistently linked with far fewer inductions, epidurals, episiotomies, forceps/vacuum births, and cesareans than typical hospital care — more spontaneous vaginal births, less “one intervention leading to the next.”</p></div>
-      <div class="benefit"><h4>You stay in charge of your birth</h4><p>Who is in the room. How you move. Whether you eat or labor in water. No strangers walking in for shift change, no policy deciding your positions. Autonomy and informed consent aren’t a bonus at home — they’re the point.</p></div>
-      <div class="benefit"><h4>Home feels safer to your body</h4><p>Oxytocin (the hormone that runs labor) thrives on privacy, dim light, and feeling unwatched. Families choose home because it’s familiar — your bed, your bathroom, your partner close — so the nervous system can settle and labor can progress.</p></div>
-      <div class="benefit"><h4>One midwife who already knows you</h4><p>Continuity of midwifery care — the same midwife through pregnancy, birth, and postpartum — is linked with better experiences and fewer interventions. Visits are unhurried. The person catching your baby already knows your history, your fears, and your plan.</p></div>
-      <div class="benefit"><h4>Your people get to be part of it</h4><p>Partners aren’t visitors. Kids can meet their sibling in the next room. The people who love you can stay without hospital visitor rules. Birth becomes a family event again — not a procedure behind a curtain.</p></div>
-      <div class="benefit"><h4>Baby stays with you — then care keeps coming</h4><p>Uninterrupted skin‑to‑skin. Breastfeeding support in the first hour. Newborn checks in your arms. Then days and weeks of postpartum visits for healing, feeding, and newborn care — instead of a 24‑hour discharge and a “good luck” pamphlet.</p></div>
-      <div class="benefit"><h4>Safety means screening + a real transfer plan</h4><p>Home birth is for healthy, low‑risk pregnancies with a skilled midwife who carries emergency training and equipment — and transfers when a hospital is the wiser next step. Sherry collaborates with local hospital teams (including Henderson Hospital advisory work), so that bridge is practiced, not theoretical.</p></div>
-      <div class="benefit"><h4>A birth you still recognize as yours</h4><p>When the dust settles, families don’t just want “a healthy baby.” They want to remember the birth as theirs — calm, respected, unbroken. That positive birth experience is one of the most powerful reasons people choose home again for the next baby.</p></div>
+      <div class="benefit"><h4>1. Safer for you &amp; baby when you’re low‑risk</h4><p>Skilled midwife + screening + transfer plan. Research on planned home birth for healthy pregnancies shows maternal outcomes that are as good or better on many measures — including fewer severe tears and less infectious morbidity than hospital cohorts in several studies.</p></div>
+      <div class="benefit"><h4>2. Less exposure to hospital infections</h4><p>Hospitals concentrate sick people. At home you’re in your own environment; medical tools are sterilized as needed. Families choose home partly to avoid hospital‑acquired infections (including staph/MRSA risk that comes with shared wards and high traffic).</p></div>
+      <div class="benefit"><h4>3. Far fewer interventions</h4><p>The #1 stated reason in study after study. Fewer inductions, epidurals as default, episiotomies, instrumental births, and cesareans — so you’re less likely to get pulled into a cascade you never asked for.</p></div>
+      <div class="benefit"><h4>4. An hour with your midwife — every visit</h4><p>Compare that to a typical OB visit: wait two hours, then five to ten minutes with the doctor. Unhurried midwifery visits mean your questions get answered and your midwife actually knows you before labor starts.</p></div>
+      <div class="benefit"><h4>5. Your home. Your terms.</h4><p>Eat. Move. Labor in water. Dim the lights. Your bed, your bathroom, your partner close. Oxytocin (the hormone that runs labor) loves privacy — which is why labor often progresses better where you feel safest.</p></div>
+      <div class="benefit"><h4>6. Partner &amp; family are part of it</h4><p>Fathers aren’t visitors. Kids can meet the baby without a nurse clearing the room. Birth becomes a family event again — intimate, protected, yours.</p></div>
+      <div class="benefit"><h4>7. Baby stays with you</h4><p>Skin‑to‑skin uninterrupted. Breastfeeding support in the first hour. Newborn checks in your arms — not whisked to a nursery for routine pokes you didn’t ask for.</p></div>
+      <div class="benefit"><h4>8. Care doesn’t end at discharge</h4><p>Postpartum visits for healing, feeding, and newborn care in the days and weeks after — instead of a 24‑hour hospital discharge and a pamphlet.</p></div>
+      <div class="benefit"><h4>9. A birth you still recognize as yours</h4><p>Families don’t only want “a healthy baby.” They want to remember the birth as calm, respected, and unbroken. That experience is why so many come back for home birth again.</p></div>
     </div>
-    <div class="more" style="margin-top:34px">
-      <a class="btn-primary" href="#consult" data-track="cta_click" data-label="why_request">If that sounds like your birth — request a consultation</a>
-      <a class="btn-ghost" href="tel:+17024785080" data-track="call_click" data-label="why_call" style="margin-left:12px">Or call 702‑478‑5080</a>
+    <div class="more" style="margin-top:40px;text-align:center">
+      <p style="color:var(--muted);max-width:48ch;margin:0 auto 22px;font-size:1.05rem">Still have the safety question in your chest? Good. Bring it to a consult — Sherry will answer it with your history in hand, not a brochure.</p>
+      <a class="btn-primary" href="#consult" data-track="cta_click" data-label="why_request">Request a consultation with Sherry</a>
+      <a class="btn-ghost" href="tel:+17024785080" data-track="call_click" data-label="why_call" style="margin-left:12px">Call 702‑478‑5080</a>
     </div>
   </div>
 </section>
