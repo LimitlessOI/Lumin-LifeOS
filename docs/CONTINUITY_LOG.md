@@ -2,7 +2,7 @@
 
 ## 2026-07-24 — Market-readiness sweep: SMOS auth, Site Builder SENTRY A06, TC enroll
 
-Adam: get LifeOS, LifeRE, Site Builder, Social Media OS, TC market-ready; UI-test through property product. Fixed SMOS “Signed in” + Unauthorized (stale JWT without command key). Aligned Site Builder SENTRY A06 to discount interstitial + `?pay=1` → Stripe. Replaced broken TC enroll stub with public `/api/tc/billing/enroll` + Stripe Checkout UI; for-you CTA wired. Next: tip redeploy + browser prove packs/enroll/SENTRY; continue LifeOS + LifeRE + BoldTrail UI walks.
+Adam: get LifeOS, LifeRE, Site Builder, Social Media OS, TC market-ready; UI-test through property product. Shipped `9b08fea08509`: SMOS packs/YouTube load again; SB Layer A 7/7; TC enroll UI → live Stripe Pro checkout. Follow-up: LifeRE overlay auth key names so priorities don’t stick on Loading. BoldTrail remains key-gated at `/activate` (property CRM, not open storefront). Next: tip redeploy LifeRE auth; founder usability confirm on LifeRE.
 
 ## 2026-07-23 — WRM trust-bar hover tips (2,000 / 20 yrs / 40+)
 

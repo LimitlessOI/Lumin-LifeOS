@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-24T12:50:09.527Z",
+  "generated_at": "2026-07-24T12:53:46.243Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12144,
   "files": [
@@ -37630,9 +37630,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 23255,
-      "mtime": "2026-07-24T12:50:09.527Z",
-      "indexed_at": "2026-07-24T12:50:09.527Z"
+      "bytes": 23232,
+      "mtime": "2026-07-24T12:53:46.243Z",
+      "indexed_at": "2026-07-24T12:53:46.243Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40525,9 +40525,9 @@
     {
       "path": "docs/products/lifere/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeRE",
-      "bytes": 42178,
-      "mtime": "2026-07-21T19:41:52.417Z",
-      "indexed_at": "2026-07-21T19:42:13.163Z"
+      "bytes": 29526,
+      "mtime": "2026-07-24T12:53:46.243Z",
+      "indexed_at": "2026-07-24T12:53:46.243Z"
     },
     {
       "path": "docs/products/limitlessos/conversations/2026-06-29-founder-ecosystem-session.md",
@@ -65721,9 +65721,9 @@
     {
       "path": "public/overlay/lifeos-lifere.html",
       "synopsis": "LifeRE Alpha — daily command center (Point B surface)",
-      "bytes": 145894,
-      "mtime": "2026-07-21T05:32:04.275Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z"
+      "bytes": 124360,
+      "mtime": "2026-07-24T12:53:46.243Z",
+      "indexed_at": "2026-07-24T12:53:46.243Z"
     },
     {
       "path": "public/overlay/lifeos-listening-setup.html",
