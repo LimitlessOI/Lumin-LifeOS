@@ -1285,7 +1285,7 @@
     },
     {
       "id": "9",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/site-builder-interactive-element-labels.js",
       "task": "Handle interactive element labels",
       "spec": "Manage the logic for retrieving and updating labels of interactive elements",
@@ -1293,11 +1293,30 @@
         "8"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "getElementLabels",
         "updateElementLabel"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/site-builder-interactive-element-labels.js",
+          "exports": [
+            "getElementLabels",
+            "updateElementLabel"
+          ],
+          "assertion_id": "expected_exports:services/site-builder-interactive-element-labels.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-24T12:55:39.615Z",
+      "last_error": "NOT_ON_BLUEPRINT",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "failure_signature": "NOT_ON_BLUEPRINT",
+      "same_signature_count": 1,
+      "escalation_class": "governance_block"
     },
     {
       "id": "10",
@@ -1315,7 +1334,17 @@
       ],
       "route": {
         "path": "/api/v1/site-builder/element-labels"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/site-builder-interactive-element-label-routes.js",
+          "exports": [
+            "registerInteractiveElementLabelRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/site-builder-interactive-element-label-routes.js"
+        }
+      ]
     },
     {
       "id": "11",
