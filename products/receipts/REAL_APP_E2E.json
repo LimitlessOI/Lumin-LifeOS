@@ -1,6 +1,6 @@
 {
   "schema": "real_app_e2e_v1",
-  "at": "2026-07-10T06:16:10.004Z",
+  "at": "2026-07-24T02:58:33.004Z",
   "base": "https://lumin-web-production-e3a9.up.railway.app",
   "ok": true,
   "passed": [
@@ -41,7 +41,7 @@
     },
     "chat_response": {
       "ok": true,
-      "detail": "281 chars: \"LifeOS Consumer Alpha. 55%. Blocked: machine:blueprint missing phases P4. Fix: n…\""
+      "detail": "44 chars: \"Yes, I'm receiving you on JWT auth.\n02:57 AM…\""
     },
     "smos_question": {
       "ok": true,
@@ -53,7 +53,7 @@
     },
     "drawer_direct_build": {
       "ok": true,
-      "detail": "✅ PASS · build Command: COMMITTED Receipt: COMMIT_SHA_PRESENT Transport: COMMIT_ONLY_NOT_LIVE Path: founder_smoke_canary_mjs_patch File: scr"
+      "detail": "✅ PASS · build Command: COMMITTED Transport: COMMIT_ONLY_NOT_LIVE File: scripts/lifeos-direct-build-smoke-test.mjs Commit: 22bed06ae5ae ✅ D"
     },
     "navigate_lifere": {
       "ok": true,
@@ -69,7 +69,7 @@
     },
     "dashboard_loads": {
       "ok": true,
-      "detail": "2445 chars visible"
+      "detail": "2988 chars visible"
     },
     "page_nav": {
       "ok": true,
