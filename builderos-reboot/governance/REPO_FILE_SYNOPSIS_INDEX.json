@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-24T12:53:46.243Z",
+  "generated_at": "2026-07-24T12:55:54.910Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12144,
+  "file_count": 12145,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -66083,6 +66083,13 @@
       "bytes": 1341,
       "mtime": "2026-07-21T05:32:04.288Z",
       "indexed_at": "2026-07-21T05:58:39.404Z"
+    },
+    {
+      "path": "public/overlay/site-builder-interactive-element-labels.html",
+      "synopsis": "HTML page: Interactive Element Labels",
+      "bytes": 1196,
+      "mtime": "2026-07-24T12:55:54.910Z",
+      "indexed_at": "2026-07-24T12:55:54.910Z"
     },
     {
       "path": "public/overlay/site-builder-interactive-elements-label-ui.html",
