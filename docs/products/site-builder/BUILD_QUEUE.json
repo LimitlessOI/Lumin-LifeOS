@@ -1335,7 +1335,7 @@
     },
     {
       "id": "10",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/site-builder-interactive-element-label-routes.js",
       "task": "Setup routes for element labels",
       "spec": "Create API endpoints for interactive element labels management",
@@ -1360,32 +1360,9 @@
           "assertion_id": "expected_exports:routes/site-builder-interactive-element-label-routes.js"
         }
       ],
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/site-builder/twins/steps/10.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-24T13:11:24.351Z",
-        "shipped_at": "2026-07-24T13:11:24.351Z",
-        "commit_sha": null,
-        "content_sha256": "6b79dc836bc088f52e427fadb4dbd70428587174f9e5832a09e24af6e7e480e5",
-        "target_file": "routes/site-builder-interactive-element-label-routes.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "routes/site-builder-interactive-element-label-routes.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/site-builder/twins/steps/10.exact",
-          "content_sha256": "6b79dc836bc088f52e427fadb4dbd70428587174f9e5832a09e24af6e7e480e5"
-        }
-      },
-      "shipped_at": "2026-07-24T13:11:24.351Z",
-      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
-      "blueprint_step_id": "10"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-24T13:11:31.916Z",
+      "commit_sha": "75fae2cded57d11cf6031e69a11ea3cd23cd78a1"
     },
     {
       "id": "11",
