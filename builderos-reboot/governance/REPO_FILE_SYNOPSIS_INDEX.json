@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-24T21:24:59.944Z",
+  "generated_at": "2026-07-24T21:25:13.968Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12156,
+  "file_count": 12157,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -91089,6 +91089,13 @@
       "bytes": 1842,
       "mtime": "2026-07-22T15:27:38.646Z",
       "indexed_at": "2026-07-22T15:27:38.646Z"
+    },
+    {
+      "path": "services/site-builder-template-variations.js",
+      "synopsis": "services/site-builder-template-variations.js",
+      "bytes": 686,
+      "mtime": "2026-07-24T21:25:13.968Z",
+      "indexed_at": "2026-07-24T21:25:13.968Z"
     },
     {
       "path": "services/site-builder-templates.js",
