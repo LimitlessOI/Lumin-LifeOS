@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-23 — Copy/paste/drop attachments + image vision in Lumin drawer
+
+Adam: wants to attach any file, image, or video by copy/paste or drop and have it read/processed. GAP-FILL: `public/overlay/lifeos-app.html` now accepts file paste on the textarea, drag-and-drop on the composer, and file-picker input. It classifies attachments as text, image, video, or generic; reads text files inline; thumbnails images and sends them to `POST /api/v1/lifeos/voice-rail/describe-attachments` before the Chair sees them; notes videos/binaries by name and type for the model. Videos are not yet transcribed (no pipeline). Product home updated.
+
 ## 2026-07-23 — Request queue added to Lumin drawer
 
 Adam: wants a Cursor-style queue where commands stack while the system keeps working. GAP-FILL: `public/overlay/lifeos-app.html` now has a `Queue` toggle with a count badge and a panel; `luminSend()` queues new requests while another is in flight, `luminProcessQueue()` drains sequentially, and users can reorder/delete items. This is the first slice — sequential drain keeps the composer usable while work is in flight. Next: image/video attachment capture, ChatGPT-style layout, and server-side background context merging.

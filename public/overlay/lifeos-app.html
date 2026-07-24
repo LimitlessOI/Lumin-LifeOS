@@ -4063,6 +4063,16 @@ async function luminSend(opts = {}) {
 
   // Fold any attached files into the outbound message so the Chair can read them.
   luminState.attachments = useAttachments;
+
+  // Analyze pasted images with vision before the Chair sees them.
+  const pendingImages = luminState.attachments.filter((a) => a.kind === 'image' && a.data && !a.description);
+  if (pendingImages.length) {
+    const statusEl = document.getElementById('lumin-status-text');
+    if (statusEl) statusEl.textContent = `Reading ${pendingImages.length} image(s)…`;
+    const blocks = await luminDescribeImageAttachments(pendingImages);
+    pendingImages.forEach((a, i) => { a.description = blocks[i]; });
+  }
+
   const attachBlock = luminBuildAttachmentBlock();
   const outboundMsg = attachBlock ? (msg ? `${msg}\n\n${attachBlock}` : attachBlock) : msg;
   const attachNames = hasAttachments ? luminState.attachments.map((a) => a.name).join(', ') : '';
@@ -4530,6 +4540,7 @@ function initLuminDrawerVoiceSend() {
 document.addEventListener('DOMContentLoaded', () => {
   luminInitReadAloudPrefs();
   luminRenderQueue();
+  luminInitComposerInteractions();
   // The voice module script may still be loading — retry init until it's ready.
   let tries = 0;
   const tryInit = () => {
@@ -4901,17 +4912,26 @@ const LUMIN_MAX_ATTACH = 5;
 const LUMIN_MAX_TEXT_BYTES = 200 * 1024;
 const LUMIN_TEXT_EXT = /\.(txt|md|markdown|json|csv|tsv|log|js|mjs|ts|jsx|tsx|html|css|xml|yaml|yml|py|sh|sql|env|ini|conf)$/i;
 
-function luminOnFilePick(event) {
-  const files = Array.from(event.target?.files || []);
-  event.target.value = '';
-  files.forEach((file) => {
+function luminHandleFiles(files) {
+  Array.from(files || []).forEach((file) => {
     if (luminState.attachments.length >= LUMIN_MAX_ATTACH) {
       toast(`Up to ${LUMIN_MAX_ATTACH} files at a time`);
       return;
     }
-    const record = { name: file.name, size: file.size, type: file.type || '', text: null };
+    const isImage = (file.type || '').startsWith('image/');
+    const isVideo = (file.type || '').startsWith('video/');
+    const isText = !isImage && !isVideo && LUMIN_TEXT_EXT.test(file.name) && file.size <= LUMIN_MAX_TEXT_BYTES;
+    const record = {
+      name: file.name, size: file.size, type: file.type || 'application/octet-stream',
+      kind: isImage ? 'image' : isVideo ? 'video' : isText ? 'text' : 'file',
+      text: null, data: null, description: null,
+    };
     luminState.attachments.push(record);
-    if (LUMIN_TEXT_EXT.test(file.name) && file.size <= LUMIN_MAX_TEXT_BYTES) {
+    if (isImage) {
+      const reader = new FileReader();
+      reader.onload = () => { record.data = String(reader.result || ''); };
+      reader.readAsDataURL(file);
+    } else if (isText) {
       const reader = new FileReader();
       reader.onload = () => { record.text = String(reader.result || '').slice(0, LUMIN_MAX_TEXT_BYTES); };
       reader.onerror = () => { record.text = null; };
@@ -4921,12 +4941,19 @@ function luminOnFilePick(event) {
   luminRenderAttachChips();
 }
 
+function luminOnFilePick(event) {
+  const files = Array.from(event.target?.files || []);
+  event.target.value = '';
+  luminHandleFiles(files);
+}
+
 function luminRenderAttachChips() {
   const wrap = document.getElementById('lumin-attach-chips');
   if (!wrap) return;
-  wrap.innerHTML = luminState.attachments.map((a, i) =>
-    `<span class="lumin-attach-chip">📎 ${_escHtml(a.name)} <button type="button" onclick="luminRemoveAttachment(${i})" title="Remove">✕</button></span>`
-  ).join('');
+  wrap.innerHTML = luminState.attachments.map((a, i) => {
+    const thumb = a.kind === 'image' && a.data ? `<img src="${_escHtml(a.data)}" style="width:18px;height:18px;object-fit:cover;border-radius:3px;margin-right:4px;vertical-align:middle;" alt="" />` : '📎 ';
+    return `<span class="lumin-attach-chip">${thumb}${_escHtml(a.name)} <button type="button" onclick="luminRemoveAttachment(${i})" title="Remove">✕</button></span>`;
+  }).join('');
 }
 
 function luminRemoveAttachment(idx) {
@@ -4943,10 +4970,59 @@ function luminBuildAttachmentBlock() {
   if (!luminState.attachments.length) return '';
   const parts = luminState.attachments.map((a) => {
     const head = `FILE: ${a.name} (${Math.round((a.size || 0) / 1024) || 1}KB${a.type ? ', ' + a.type : ''})`;
+    if (a.kind === 'image') {
+      if (a.description) return `${head}\n---\n${a.description}\n---`;
+      return `${head} — image attached; awaiting vision analysis or no description available.`;
+    }
+    if (a.kind === 'video') return `${head} — video attached; describe or transcribe on request.`;
     if (a.text) return `${head}\n---\n${a.text}\n---`;
     return `${head} — binary/unsupported for inline read; note its name and ask me for its contents if needed.`;
   });
   return `[Attached files from founder]\n${parts.join('\n\n')}`;
+}
+
+function luminInitComposerInteractions() {
+  const input = document.getElementById('lumin-input');
+  const wrap = document.querySelector('.lumin-input-wrap');
+  if (input) {
+    input.addEventListener('paste', (e) => {
+      const files = Array.from(e.clipboardData?.files || []);
+      if (!files.length) return;
+      e.preventDefault();
+      luminHandleFiles(files);
+    });
+  }
+  if (wrap) {
+    wrap.addEventListener('dragover', (e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'copy'; });
+    wrap.addEventListener('drop', (e) => {
+      e.preventDefault();
+      luminHandleFiles(e.dataTransfer?.files);
+    });
+  }
+}
+
+async function luminDescribeImageAttachments(images) {
+  try {
+    const payload = images.map((a) => ({
+      name: a.name,
+      mime: a.type,
+      data: String(a.data || '').split(',')[1] || '',
+    }));
+    const h = await directSystemHeaders();
+    h['Content-Type'] = 'application/json';
+    const r = await fetch('/api/v1/lifeos/voice-rail/describe-attachments', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: h,
+      body: JSON.stringify({ attachments: payload }),
+    });
+    if (!r.ok) return images.map(() => '[image: could not analyze — server error]');
+    const data = await r.json().catch(() => ({}));
+    const blocks = Array.isArray(data.blocks) ? data.blocks : [];
+    return images.map((_, i) => blocks[i] || '[image: no description returned]');
+  } catch (err) {
+    return images.map(() => `[image: could not analyze — ${err.message}]`);
+  }
 }
 
 function toggleLuminWakeListen() {
