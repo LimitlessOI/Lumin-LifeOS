@@ -1028,3 +1028,19 @@ E2E off-by-one fixed (wait for new assistant bubble); Chair PASS/COMMITTED recei
 
 ## 2026-07-09 — Conductor: finish near-done
 BP_PRIORITY #8 founder-UI proof → TECHNICAL_PASS via system acceptance. LifeOS queue: skip UI sentry verify on db/migrations so never-stop can finish s1–s7 (was stranded on verify_exit_1). E2E think-panel wait hardened (16/16). Next: never-stop builds LifeOS pending; founder_usability still human for TECH_PASS ranks.
+
+## [FOUNDER-MEMORY] 2026-07-24T02:33:47.590Z · chore · receipt `fmrcpt_1784860427590_c464135e`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+The Railway redeploy target robust-magic-production.up.railway.app is returning 404 Application not found. Where should I redeploy Lumin-LifeOS, or what is the current production Railway service name?
+
+## [FOUNDER-MEMORY] 2026-07-24T02:33:47.626Z · chore · receipt `fmrcpt_1784860427626_359221f9`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+Redeploy failed: Failed to parse URL from https:// https://robust-magic-production.up.railway.app/api/v1/railway/managed-env/build-from-latest

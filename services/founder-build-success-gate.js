@@ -287,8 +287,8 @@ export function resolveFounderBuildBaseUrl() {
 
   const base = onRailway
     ? (
-      process.env.PUBLIC_BASE_URL
-      || (process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` : '')
+      String(process.env.PUBLIC_BASE_URL || '').trim()
+      || (process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${String(process.env.RAILWAY_PUBLIC_DOMAIN).trim()}` : '')
       || localLoopback
     )
     : localLoopback;

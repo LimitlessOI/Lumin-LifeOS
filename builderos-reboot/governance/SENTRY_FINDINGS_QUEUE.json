@@ -129,6 +129,20 @@
       "architect_status": "needs_manual_targeting",
       "queue_status": "open",
       "first_detected_at": "2026-07-23T23:01:07.409Z"
+    },
+    {
+      "id": "ci_health:smoke-test.yml:ecf1f5e77473251cb4eb7b53eb82a008103915a0",
+      "check": "ci_health",
+      "severity": "P0",
+      "summary": "main's smoke-test.yml is FAILING at ecf1f5e.",
+      "proposed_solution": "Read the failing run log (gh run view --log-failed) at https://github.com/LimitlessOI/Lumin-LifeOS/actions/runs/30055508764, identify the exact failing assertion, and fix it directly on main — do not let further commits ship on top of red CI.",
+      "detected_at": "2026-07-24T00:31:07.452Z",
+      "chair_status": "approved",
+      "chair_reasoning": "infrastructure/config finding with a concrete solution — within technical authority, no founder judgment required | Chair (AI): The proposed solution is sound and comprehensive. It provides clear instructions to diagnose and address the issue directly by checking the logs for the failing assertion and fixing it in the main branch. Since this is a P0 severity issue, it correctly prioritizes maintaining the integrity of the CI/CD pipeline, which is crucial for a codebase managed by a sole founder. The prescribed action prevents the accumulation of unresolved issues on top of a failing main branch, which is vital for continued code stability. Importantly, there are no further contextual elements required beyond what's provided; thus, the action plan should be promptly executed to maintain system health.",
+      "chair_reasoning_source": "ai_model",
+      "architect_status": "needs_manual_targeting",
+      "queue_status": "open",
+      "first_detected_at": "2026-07-24T00:31:07.452Z"
     }
   ]
 }

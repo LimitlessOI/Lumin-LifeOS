@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-23 — Deploy fix: trim PUBLIC_BASE_URL whitespace in founder build gate
+
+The shell env `PUBLIC_BASE_URL` had a leading space and pointed to the retired `robust-magic-production.up.railway.app` host, causing `npm run system:railway:redeploy` and Chair redeploy actions to 404 or fail to parse `https:// https://…`. Fixed `services/founder-build-success-gate.js` (`resolveFounderBuildBaseUrl`) and `scripts/system-railway-redeploy.mjs` to `.trim()` the deploy origin. Redeploy succeeded to `https://lumin-web-production-e3a9.up.railway.app` at `ecf1f5e77`; live `/builder/ready` confirms the SHA.
+
 ## 2026-07-23 — Copy/paste/drop attachments + image vision in Lumin drawer
 
 Adam: wants to attach any file, image, or video by copy/paste or drop and have it read/processed. GAP-FILL: `public/overlay/lifeos-app.html` now accepts file paste on the textarea, drag-and-drop on the composer, and file-picker input. It classifies attachments as text, image, video, or generic; reads text files inline; thumbnails images and sends them to `POST /api/v1/lifeos/voice-rail/describe-attachments` before the Chair sees them; notes videos/binaries by name and type for the model. Videos are not yet transcribed (no pipeline). Product home updated.
