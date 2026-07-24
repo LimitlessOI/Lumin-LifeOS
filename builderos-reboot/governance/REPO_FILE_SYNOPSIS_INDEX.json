@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-24T20:26:17.641Z",
+  "generated_at": "2026-07-24T20:27:12.239Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12152,
+  "file_count": 12153,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -90904,6 +90904,13 @@
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/site-builder-interactive-element-guides.js",
+      "synopsis": "Exports getElementGuides — services/site-builder-interactive-element-guides.js.",
+      "bytes": 521,
+      "mtime": "2026-07-24T20:27:12.239Z",
+      "indexed_at": "2026-07-24T20:27:12.239Z"
     },
     {
       "path": "services/site-builder-interactive-element-labels.js",
