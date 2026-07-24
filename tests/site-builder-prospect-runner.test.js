@@ -15,7 +15,7 @@ describe('site-builder-prospect-runner', () => {
     assert.match(id, /^prev_\d+_[a-z0-9]+$/);
   });
 
-  it('evaluateSiteBuilderEmailReadiness accepts Gmail SMTP config', () => {
+  it('evaluateSiteBuilderEmailReadiness accepts Gmail SMTP keys but requires proved send on tip', () => {
     const result = evaluateSiteBuilderEmailReadiness({
       EMAIL_PROVIDER: 'smtp',
       EMAIL_FROM: 'Lumea LifeOS <lumea.lifeos@gmail.com>',
@@ -23,7 +23,8 @@ describe('site-builder-prospect-runner', () => {
       SMTP_PASS: 'secret',
     });
     assert.equal(result.ready, true);
-    assert.equal(result.coldEmailSending, true);
+    assert.equal(result.keysPresent, true);
+    assert.equal(result.coldEmailSending, false);
     assert.equal(result.provider, 'smtp');
   });
 
@@ -34,6 +35,27 @@ describe('site-builder-prospect-runner', () => {
     });
     assert.equal(result.ready, false);
     assert.ok(result.blockers.some((b) => b.name === 'POSTMARK_SERVER_KEY' || b.name === 'POSTMARK_SERVER_TOKEN'));
+  });
+
+  it('evaluateSiteBuilderEmailReadiness does not claim sending for bare Postmark token', () => {
+    const result = evaluateSiteBuilderEmailReadiness({
+      EMAIL_PROVIDER: 'postmark',
+      EMAIL_FROM: 'hello@example.com',
+      POSTMARK_SERVER_TOKEN: 'pm-token',
+    });
+    assert.equal(result.ready, true);
+    assert.equal(result.keysPresent, true);
+    assert.equal(result.coldEmailSending, false);
+  });
+
+  it('evaluateSiteBuilderEmailReadiness treats Resend as sendable on Railway', () => {
+    const result = evaluateSiteBuilderEmailReadiness({
+      EMAIL_PROVIDER: 'resend',
+      EMAIL_FROM: 'hello@example.com',
+      RESEND_API_KEY: 're_test',
+    });
+    assert.equal(result.ready, true);
+    assert.equal(result.coldEmailSending, true);
   });
 
   it('enqueueDeferredProspectJob reserves + invites without calling processProspect', async () => {

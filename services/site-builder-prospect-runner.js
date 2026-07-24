@@ -139,7 +139,7 @@ export async function triggerBuildOnView(pipeline, clientId) {
   if (row.status === 'building' && activeJobs.has(String(clientId))) {
     return { ok: true, started: false, reason: 'building', building: true };
   }
-  // A 'building' row not in *this* instance's in-memory activeJobs isn't necessarily
+  // A 'building' row not in this* instance's in-memory activeJobs isn't necessarily
   // stalled — on Railway's multi-instance deploy, the job may simply be running on a
   // different instance than the one serving this request. Trust the DB's recency
   // (heartbeat) over local-only state: only treat it as stuck once it's actually stale
@@ -512,6 +512,7 @@ export function evaluateSiteBuilderEmailReadiness(env = process.env) {
   const emailFrom = String(env.EMAIL_FROM || '').trim();
   const blockers = [];
   const present = [];
+  const notes = [];
 
   if (!emailFrom) {
     blockers.push({ name: 'EMAIL_FROM', purpose: 'Sender address for outreach' });
@@ -519,17 +520,31 @@ export function evaluateSiteBuilderEmailReadiness(env = process.env) {
     present.push('EMAIL_FROM');
   }
 
+  let keysPresent = false;
+  let coldEmailSending = false;
+
   if (provider === 'smtp') {
     present.push('EMAIL_PROVIDER');
-    if (!String(env.SMTP_USER || '').trim()) {
-      blockers.push({ name: 'SMTP_USER', purpose: 'SMTP login (e.g. lumea.lifeos@gmail.com)' });
-    } else {
-      present.push('SMTP_USER');
+    const userOk = !!String(env.SMTP_USER || '').trim();
+    const passOk = !!String(env.SMTP_PASS || '').trim();
+    if (!userOk) blockers.push({ name: 'SMTP_USER', purpose: 'SMTP login (e.g. lumea.lifeos@gmail.com)' });
+    else present.push('SMTP_USER');
+    if (!passOk) blockers.push({ name: 'SMTP_PASS', purpose: 'SMTP app password' });
+    else present.push('SMTP_PASS');
+    keysPresent = userOk && passOk && !!emailFrom;
+    // Railway tip often cannot open SMTP ports — treat as sendable only when proved.
+    coldEmailSending = keysPresent && String(env.SITE_BUILDER_EMAIL_PROVED || '').trim() === '1';
+    if (keysPresent && !coldEmailSending) {
+      notes.push('SMTP keys present but SITE_BUILDER_EMAIL_PROVED!=1 (Railway often blocks outbound SMTP)');
     }
-    if (!String(env.SMTP_PASS || '').trim()) {
-      blockers.push({ name: 'SMTP_PASS', purpose: 'SMTP app password' });
+  } else if (provider === 'resend') {
+    present.push('EMAIL_PROVIDER');
+    if (!String(env.RESEND_API_KEY || '').trim()) {
+      blockers.push({ name: 'RESEND_API_KEY', purpose: 'Resend HTTPS API key (works on Railway)' });
     } else {
-      present.push('SMTP_PASS');
+      present.push('RESEND_API_KEY');
+      keysPresent = !!emailFrom;
+      coldEmailSending = keysPresent;
     }
   } else if (provider === 'postmark') {
     present.push('EMAIL_PROVIDER');
@@ -537,9 +552,18 @@ export function evaluateSiteBuilderEmailReadiness(env = process.env) {
       blockers.push({ name: 'POSTMARK_SERVER_TOKEN', purpose: 'Postmark API token' });
     } else {
       present.push('POSTMARK_SERVER_TOKEN');
+      keysPresent = !!emailFrom;
+      // Token alone is not enough — tip proves pending-approval + SMTP timeout.
+      const approved = String(env.POSTMARK_APPROVED || env.SITE_BUILDER_EMAIL_PROVED || '').trim() === '1';
+      const resendFallback = !!String(env.RESEND_API_KEY || '').trim();
+      if (resendFallback) present.push('RESEND_API_KEY');
+      coldEmailSending = keysPresent && (approved || resendFallback);
+      if (keysPresent && !coldEmailSending) {
+        notes.push('Postmark token present but not approved — set POSTMARK_APPROVED=1 after approval, or RESEND_API_KEY for HTTPS fallback');
+      }
     }
   } else if (provider !== 'disabled') {
-    blockers.push({ name: 'EMAIL_PROVIDER', purpose: 'Must be smtp or postmark' });
+    blockers.push({ name: 'EMAIL_PROVIDER', purpose: 'Must be smtp, postmark, or resend' });
   }
 
   return {
@@ -547,7 +571,9 @@ export function evaluateSiteBuilderEmailReadiness(env = process.env) {
     ready: blockers.length === 0 && !!emailFrom,
     blockers,
     present,
-    coldEmailSending: blockers.length === 0 && !!emailFrom,
+    notes,
+    keysPresent,
+    coldEmailSending,
   };
 }
 

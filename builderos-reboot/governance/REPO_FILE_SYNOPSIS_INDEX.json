@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-24T13:11:27.443Z",
+  "generated_at": "2026-07-24T13:17:03.470Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12147,
   "files": [
@@ -37630,9 +37630,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 23232,
-      "mtime": "2026-07-24T12:53:46.243Z",
-      "indexed_at": "2026-07-24T12:53:46.243Z"
+      "bytes": 23891,
+      "mtime": "2026-07-24T13:17:03.470Z",
+      "indexed_at": "2026-07-24T13:17:03.470Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40627,9 +40627,9 @@
     {
       "path": "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md",
       "synopsis": "SocialMediaOS Module Home",
-      "bytes": 21226,
-      "mtime": "2026-07-21T05:32:03.846Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z"
+      "bytes": 20592,
+      "mtime": "2026-07-24T13:17:03.470Z",
+      "indexed_at": "2026-07-24T13:17:03.470Z"
     },
     {
       "path": "docs/products/memory-intelligence/FILE_MANIFEST.json",
@@ -40917,9 +40917,9 @@
     {
       "path": "docs/products/site-builder/DISTRIBUTION_PLAYBOOK.md",
       "synopsis": "Autonomous Site Builder distribution playbook (channels, caps, experience gates).",
-      "bytes": 2220,
-      "mtime": "2026-07-23T07:35:30.076Z",
-      "indexed_at": "2026-07-23T07:35:30.076Z"
+      "bytes": 3436,
+      "mtime": "2026-07-24T13:17:03.470Z",
+      "indexed_at": "2026-07-24T13:17:03.470Z"
     },
     {
       "path": "docs/products/site-builder/FILE_MANIFEST.json",
@@ -40939,9 +40939,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 155339,
-      "mtime": "2026-07-24T12:50:09.527Z",
-      "indexed_at": "2026-07-24T12:50:09.527Z"
+      "bytes": 155834,
+      "mtime": "2026-07-24T13:17:03.470Z",
+      "indexed_at": "2026-07-24T13:17:03.470Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -40997,9 +40997,9 @@
     {
       "path": "docs/products/tc-service/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — TC Service",
-      "bytes": 122696,
-      "mtime": "2026-07-24T12:50:09.527Z",
-      "indexed_at": "2026-07-24T12:50:09.527Z"
+      "bytes": 122554,
+      "mtime": "2026-07-24T13:17:03.470Z",
+      "indexed_at": "2026-07-24T13:17:03.470Z"
     },
     {
       "path": "docs/products/TCSERVICE.md",
@@ -65946,10 +65946,10 @@
     },
     {
       "path": "public/overlay/marketing-for-you.html",
-      "synopsis": "SocialMediaOS / MarketingOS — marketplace landing + content-pack checkout entry",
-      "bytes": 5858,
-      "mtime": "2026-07-21T05:32:04.280Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z"
+      "synopsis": "SocialMediaOS public market landing — signup → session → $49 unlock",
+      "bytes": 4411,
+      "mtime": "2026-07-24T13:17:03.470Z",
+      "indexed_at": "2026-07-24T13:17:03.470Z"
     },
     {
       "path": "public/overlay/marketing-session.html",
@@ -66237,9 +66237,9 @@
     {
       "path": "public/overlay/tc-for-you.html",
       "synopsis": "TC — polished presentation surface with Studio hero",
-      "bytes": 3867,
-      "mtime": "2026-07-24T12:50:09.527Z",
-      "indexed_at": "2026-07-24T12:50:09.527Z"
+      "bytes": 4031,
+      "mtime": "2026-07-24T13:17:03.470Z",
+      "indexed_at": "2026-07-24T13:17:03.470Z"
     },
     {
       "path": "public/overlay/tc-intake-dashboard.html",
@@ -68909,9 +68909,9 @@
     {
       "path": "routes/site-builder-routes.js",
       "synopsis": "Site Builder Routes — Done-for-you website pipeline",
-      "bytes": 55402,
-      "mtime": "2026-07-23T22:53:51.769Z",
-      "indexed_at": "2026-07-23T22:53:51.769Z",
+      "bytes": 55739,
+      "mtime": "2026-07-24T13:17:03.470Z",
+      "indexed_at": "2026-07-24T13:17:03.470Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -90967,9 +90967,9 @@
     {
       "path": "services/site-builder-prospect-runner.js",
       "synopsis": "Async Site Builder prospect jobs — accept fast, build+email in background.",
-      "bytes": 21306,
-      "mtime": "2026-07-21T05:32:04.667Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "bytes": 22766,
+      "mtime": "2026-07-24T13:17:03.470Z",
+      "indexed_at": "2026-07-24T13:17:03.470Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -94637,9 +94637,9 @@
     {
       "path": "tests/site-builder-prospect-runner.test.js",
       "synopsis": "js — tests/site-builder-prospect-runner.test.js.",
-      "bytes": 2769,
-      "mtime": "2026-07-21T05:32:04.722Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z"
+      "bytes": 3605,
+      "mtime": "2026-07-24T13:17:03.470Z",
+      "indexed_at": "2026-07-24T13:17:03.470Z"
     },
     {
       "path": "tests/site-builder-public-base.test.js",

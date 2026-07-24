@@ -1287,6 +1287,7 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
       quality_scoring: true,
       prospect_db: !!pool,
       async_prospect_jobs: true,
+      cold_email_keys_present: emailReadiness.keysPresent === true,
       cold_email_sending: emailReadiness.coldEmailSending,
       publish_checkout: !!process.env.STRIPE_SECRET_KEY,
       live_editor: true,
@@ -1297,13 +1298,18 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
       public_base_url: configuredPublicBase,
     };
 
+    // Stripe publish can be ready even when cold email is pending approval.
+    const stripeReady = !!process.env.STRIPE_SECRET_KEY;
+    const emailNotes = Array.isArray(emailReadiness.notes) ? emailReadiness.notes : [];
+
     res.json({
       ok: true,
-      ready: blockers.length === 0,
+      ready: blockers.length === 0 && stripeReady,
       revenue_blockers: blockers,
       missing,
       present,
       email_provider: emailReadiness.provider,
+      email_notes: emailNotes,
       capabilities,
       checked_at: new Date().toISOString(),
     });

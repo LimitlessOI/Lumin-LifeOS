@@ -2,11 +2,13 @@
 
 # Site Builder — Distribution Playbook
 
-**Last Updated:** 2026-07-23
+**Last Updated:** 2026-07-24
 
 ## Chair + founder standing order
 
 Market without consulting Adam. Fix experience before send. Use system email / Twilio / Stripe already on Railway. No spam that burns the domain or Reddit.
+
+**Cash order (Chair judgment 2026-07-24):** Social Media OS self-serve first (`/marketing/for-you` → signup → $49), then Site Builder inbound + warm network, then TC enroll. BoldTrail stays key-gated.
 
 ## Hard gates before any outreach
 
@@ -16,13 +18,26 @@ Market without consulting Adam. Fix experience before send. Use system email / T
 4. No SMS/voice outside **08:00–17:00 America/Los_Angeles**.
 5. Cold email only when Postmark is approved **or** `RESEND_API_KEY` is set (HTTPS works on Railway).
 
+## Live blockers (tip-proved 2026-07-24)
+
+| Blocker | Evidence | Unlock |
+|---|---|---|
+| Postmark pending approval | `resend-outreach` → `Postmark pending approval; SMTP fallback also failed: Connection timeout` | Approve Postmark **or** set `RESEND_API_KEY` + `EMAIL_PROVIDER=resend` |
+| Twilio trial → unverified To | Handyman SMS 502 unverified number | Upgrade Twilio account **or** verify each To number |
+| `GOOGLE_PLACES_KEY` missing | `/api/v1/go-vegas/discover` fails | Set Places key on Railway for auto discovery |
+| Hot lead waiting | LV Handyman preview **viewed**, email not delivered | Same email unlock — then resend + follow-up |
+
+Until email unlocks: market via warm network + inbound pages only (SMS to Adam’s verified phone still works for founder alerts).
+
 ## Channels (priority)
 
 | Channel | Status | Cap |
 |---|---|---|
-| Twilio SMS + voice (preview link) | **Live** — queued flush | 8/day |
-| Public inbound `/site-builder` | Live | unlimited (self-serve) |
-| Cold email (Postmark) | **Blocked** — pending approval | 0 until unblocked |
+| SMOS inbound `/marketing/for-you` | **Live** — primary cash door | unlimited |
+| Site Builder inbound `/site-builder` | Live | unlimited (self-serve) |
+| TC enroll `/overlay/tc-agent-enroll.html` | Live Stripe | unlimited |
+| Twilio SMS + voice (preview link) | **Blocked for cold** — trial unverified To | 0 cold until upgrade |
+| Cold email (Postmark) | **Blocked** — pending approval; SMTP dead on Railway | 0 until Resend/Postmark |
 | Reddit / communities | Inbound value only; promo megathreads only | 2 helpful replies/day |
 
 ## Reddit / community rules (TOS-safe)

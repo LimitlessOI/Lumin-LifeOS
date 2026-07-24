@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/tc-service/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-24 — **TC self-serve enroll money path.** Public `POST /api/tc/billing/enroll` + rewritten `tc-agent-enroll.html` → Stripe Checkout; `/tc/for-you` primary CTA. Prior: 2026-07-21 UUID boundary harden on subscribe/success/status; 2026-07-20 real Stripe subscription path. |
+| **Last Updated** | 2026-07-24 — **TC market CTA.** `/tc/for-you` primary “Start subscription — from $49/mo”. Prior: public enroll → Stripe Checkout. |
 
 ---
 

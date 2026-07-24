@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-24 — Market for cash: Chair SMOS-first; email honesty; warm push
+
+Adam: keep going, ask Chair, finish products, make money / market. Chair: SMOS self-serve first; warm network while outbound blocked. Tip-proved: Postmark still pending (Handyman resend failed); Twilio trial blocks cold SMS; Places key missing. Texted Adam market links via founder SMS. Hardened `/marketing/for-you` signup-first; launch-readiness no longer claims cold email sends on bare Postmark token. **Founder unlock needed:** `RESEND_API_KEY` (or Postmark approve) + Twilio upgrade for cold SMS. Next: warm shares of SMOS/SB/TC links; email unlock → Handyman follow-up.
+
 ## 2026-07-24 — Market-readiness sweep: SMOS auth, Site Builder SENTRY A06, TC enroll
 
 Adam: get LifeOS, LifeRE, Site Builder, Social Media OS, TC market-ready; UI-test through property product. Shipped `9b08fea08509`: SMOS packs/YouTube load again; SB Layer A 7/7; TC enroll UI → live Stripe Pro checkout. Follow-up: LifeRE overlay auth key names so priorities don’t stick on Loading. BoldTrail remains key-gated at `/activate` (property CRM, not open storefront). Next: tip redeploy LifeRE auth; founder usability confirm on LifeRE.
