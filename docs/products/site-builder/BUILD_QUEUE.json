@@ -1380,7 +1380,7 @@
     },
     {
       "id": "001",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20241015_add_template_variations.sql",
       "task": "Create migration for additional template variations",
       "spec": "Create a table for additional template variations to accommodate more design choices for users. MUST include a `CREATE TABLE IF NOT EXISTS template_variations` statement, a primary key column using `gen_random_uuid()`, and a timestamp column with `DEFAULT now()` -- write the function call as LOWERCASE `now()` exactly (not `NOW()` or `CURRENT_TIMESTAMP`), since the completion check does an exact case-sensitive literal-substring match on `now()`. Root cause of 4 prior failed attempts (revive_count=4, same_signature_count=1, failure_signature missing_substring:now()): the generated SQL used a differently-cased or different timestamp default and never contained the literal text the check requires -- this is the fix, not a re-attempt of the same ambiguous instruction.",
@@ -1393,15 +1393,15 @@
         "now()"
       ],
       "design_review_flagged": true,
-      "last_attempt_at": "2026-07-24T21:13:13.067Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:now(); behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "12e6c77c45156b18eafb9e66278f93cc69cf89a7",
       "built_sha": null,
       "proof": null,
       "failure_signature": null,
       "same_signature_count": 0,
       "escalation_class": null,
-      "revive_count": 4,
+      "revive_count": 0,
       "revived_at": "2026-07-24T21:13:11.539Z",
       "last_attempt": null,
       "demoted": false,
@@ -1414,32 +1414,8 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/site-builder/twins/steps/001.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-24T21:24:57.336Z",
-        "shipped_at": "2026-07-24T21:24:57.336Z",
-        "commit_sha": null,
-        "content_sha256": "dc5ad28e6e7b3ace584f75234f9bfbc038a3da4dc5319810363ee4e86ea7e0f0",
-        "target_file": "db/migrations/20241015_add_template_variations.sql",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "db/migrations/20241015_add_template_variations.sql",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/site-builder/twins/steps/001.exact",
-          "content_sha256": "dc5ad28e6e7b3ace584f75234f9bfbc038a3da4dc5319810363ee4e86ea7e0f0"
-        }
-      },
-      "shipped_at": "2026-07-24T21:24:57.336Z",
-      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
-      "blueprint_step_id": "001"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-24T21:25:03.872Z"
     },
     {
       "id": "002",
