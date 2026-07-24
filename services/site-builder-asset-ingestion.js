@@ -192,14 +192,25 @@ function cleanDdgUrl(url) {
 
 // Image extraction ------------------------------------------------------------
 
+/** Prefer full Wix media object over tiny /v1/fill/w_200 transforms (blurry heroes). */
+function normalizeMediaUrl(url = '') {
+  let u = String(url || '').trim().replace(/[),.&quot;]+$/g, '').replace(/&quot;/g, '');
+  if (!u) return '';
+  if (/wixstatic\.com\/media\//i.test(u)) {
+    u = u.split('/v1/')[0];
+  }
+  return u;
+}
+
 function extractImagesFromMarkdown(markdown) {
   const images = [];
   const seen = new Set();
   const push = (alt, url) => {
-    const u = String(url || '').trim().replace(/[),]+$/, '');
+    const u = normalizeMediaUrl(url);
     if (!u || seen.has(u)) return;
     if (!/^https?:\/\//i.test(u)) return;
     if (/\.(?:svg|gif|ico)(?:\?|$)/i.test(u) && !/wixstatic/i.test(u)) return;
+    if (isVideoThumbnailUrl(u)) return;
     seen.add(u);
     images.push({ alt: String(alt || '').trim(), url: u });
   };
@@ -222,13 +233,7 @@ function extractImagesFromMarkdown(markdown) {
     /https?:\/\/(?:static\.wixstatic\.com\/media|images\.unsplash\.com|cdninstagram\.com|scontent[^/\s"']+\.cdninstagram\.com|images\.squarespace-cdn\.com|cdn\.shopify\.com|res\.cloudinary\.com|imgix\.net|wp-content\/uploads)[^\s"'<>)\\]*/gi
   );
   for (const hit of cdnUrls) {
-    let url = hit[0];
-    // Prefer the base Wix media object (drop /v1/fill transforms for scoring)
-    if (/wixstatic\.com\/media\//i.test(url)) {
-      url = url.split('/v1/')[0];
-    }
-    if (isVideoThumbnailUrl(url)) continue;
-    push('', url);
+    push('', hit[0]);
   }
   return images;
 }
