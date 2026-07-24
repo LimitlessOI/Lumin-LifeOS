@@ -184,11 +184,11 @@
   .pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
   .pillar{background:#fff;border:1px solid var(--line);border-radius:22px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 16px 40px -30px rgba(123,85,96,.55);transition:transform .2s ease,box-shadow .2s ease}
   .pillar:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
-  /* Care cards: blush fill + photo at 25% so the tile color reads first */
+  /* Care cards: blush fill + photo at 75% */
   .pillar .pimg{height:220px;background-color:var(--blush);position:relative;overflow:hidden}
-  .pillar .pimg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.25;display:block}
+  .pillar .pimg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.75;display:block}
   .pillar .pimg-strong{background-color:var(--blush)}
-  .pillar .pimg-strong img{opacity:.25}
+  .pillar .pimg-strong img{opacity:.75}
   .pillar .pimg-sherry img{object-position:50% 28%}
   .pillar .pimg-cora img{object-position:50% 18%}
   .pillar .pimg-why img{object-position:50% 42%}
@@ -567,8 +567,8 @@
       <div class="benefit"><h4>9. A birth you still recognize as yours</h4><p>Families don’t only want “a healthy baby.” They want to remember the birth as calm, respected, and unbroken. That experience is why so many come back for home birth again.</p></div>
     </div>
     <div class="more" style="margin-top:40px;text-align:center">
-      <p style="color:var(--muted);max-width:48ch;margin:0 auto 22px;font-size:1.05rem">Still have the safety question in your chest? Good. Bring it to a consult — Sherry will answer it with your history in hand, not a brochure.</p>
-      <a class="btn-primary" href="#consult" data-track="cta_click" data-label="why_request">Request a consultation with Sherry</a>
+      <p style="color:var(--muted);max-width:48ch;margin:0 auto 22px;font-size:1.05rem">Still have the safety question in your chest? Good. Bring it to a consult — your WRM midwife will answer it with your history in hand, not a brochure.</p>
+      <a class="btn-primary" href="#consult" data-track="cta_click" data-label="why_request">Request a consultation</a>
       <a class="btn-ghost" href="tel:+17024785080" data-track="call_click" data-label="why_call" style="margin-left:12px">Call 702‑478‑5080</a>
     </div>
   </div>
