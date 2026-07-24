@@ -129,7 +129,11 @@ function shellPhotoEditorial(system, content) {
     </div>
   </section>
   ${gallery.length ? `<section class="wrap"><div class="scroll-gallery" aria-label="Gallery">${gallery.map((u) => `<img src="${escapeHtml(u)}" alt="" loading="lazy"/>`).join('')}</div></section>` : ''}
-  <section class="section"><div class="wrap"><h2 style="margin-bottom:1.25rem">Services</h2><div class="grid-3">${content.services.map((s) => `<article class="card"><h3>${escapeHtml(s)}</h3><p class="muted" style="margin-top:.5rem">Details confirmed in consult.</p></article>`).join('')}</div></div></section>
+  <section class="section"><div class="wrap"><h2 style="margin-bottom:1.25rem">Services</h2><div class="grid-3">${(content.serviceDetails || content.services.map((n) => ({ name: n, description: '' }))).map((s) => {
+    const name = typeof s === 'string' ? s : s.name;
+    const desc = (typeof s === 'object' && s.description) || content.about?.slice(0, 140) || `How ${content.name} can help — reach out to confirm fit.`;
+    return `<article class="card"><h3>${escapeHtml(name)}</h3><p class="muted" style="margin-top:.5rem">${escapeHtml(String(desc).slice(0, 200))}</p></article>`;
+  }).join('')}</div></div></section>
   <section class="section" style="background:var(--card)"><div class="wrap"><h2 style="margin-bottom:1rem">FAQ</h2>${faqBlock(content)}</div></section>
 </main>
 ${footer(content)}

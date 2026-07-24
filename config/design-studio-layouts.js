@@ -30,6 +30,82 @@ function uniqUrls(urls = []) {
   return out;
 }
 
+function isAffiliateBookingUrl(url) {
+  const u = String(url || '').toLowerCase();
+  if (!u || u === '#book' || u.startsWith('tel:') || u.startsWith('mailto:')) return false;
+  // Bare jane.app / mindbody / square homepages are affiliate placeholders — not this client's book link.
+  if (/^https?:\/\/(www\.)?jane\.app\/?(\?|#|$)/i.test(u)) return true;
+  if (/^https?:\/\/(www\.)?(mindbodyonline|squareup)\.com\/?(\?|#|$)/i.test(u)) return true;
+  return false;
+}
+
+function resolvePrimaryBooking(info = {}, posPartner = null) {
+  const phone = info.phone || info.assetData?.businessDetails?.phone || '';
+  const tel = phone ? `tel:${String(phone).replace(/[^\d+]/g, '')}` : '';
+  const candidates = [
+    info.bookingUrl,
+    info.bookUrl,
+    info.appointmentUrl,
+  ].filter(Boolean);
+  for (const c of candidates) {
+    if (!isAffiliateBookingUrl(c)) return c;
+  }
+  if (tel) return tel;
+  // Never use bare Jane/Mindbody/Square as the hero CTA — that is the trash path.
+  const partnerUrl = posPartner?.url;
+  if (partnerUrl && !isAffiliateBookingUrl(partnerUrl)) return partnerUrl;
+  return '#contact';
+}
+
+function normalizeServices(info = {}) {
+  const details = Array.isArray(info.serviceDetails) ? info.serviceDetails : [];
+  if (details.length) {
+    return details.slice(0, 6).map((s) => ({
+      name: String(s.name || s).trim(),
+      description: String(s.description || '').trim(),
+    })).filter((s) => s.name);
+  }
+  const raw = info.services || [];
+  if (Array.isArray(raw) && raw.length) {
+    return raw.slice(0, 6).map((s) => {
+      if (s && typeof s === 'object') {
+        return { name: String(s.name || '').trim(), description: String(s.description || '').trim() };
+      }
+      return { name: String(s).trim(), description: '' };
+    }).filter((s) => s.name);
+  }
+  const industry = String(info.industry || '').toLowerCase();
+  if (/midwif|doula|birth|maternity/.test(industry) || /midwif|prenatal|birth|postpartum/i.test(info.bodyText || '')) {
+    return [
+      { name: 'Prenatal Care', description: 'Ongoing prenatal visits, education, and support tailored to your pregnancy.' },
+      { name: 'Birth Support', description: 'Continuous labor and birth care — present, calm, and centered on your plan.' },
+      { name: 'Postpartum Care', description: 'Recovery visits, newborn checks, and support in the early weeks after birth.' },
+    ];
+  }
+  return [
+    { name: 'Primary service', description: info.uniqueValue || info.tagline || 'Ask about how we can help — details confirmed when you reach out.' },
+    { name: 'Consultation', description: 'A conversation about your goals and whether we are the right fit.' },
+    { name: 'Follow-up care', description: 'Ongoing support after your first visit.' },
+  ];
+}
+
+function resolveTagline(info = {}) {
+  const candidates = [
+    info.tagline,
+    info.h1,
+    info.uniqueValue,
+    info.metaDescription,
+  ].map((s) => String(s || '').trim()).filter(Boolean);
+  const generic = /clear outcomes|with a clear next step|your business here|lorem ipsum/i;
+  for (const c of candidates) {
+    if (c.length >= 12 && !generic.test(c)) return c.slice(0, 140);
+  }
+  const name = info.businessName || 'This practice';
+  const industry = info.industry || 'care';
+  const loc = info.location ? ` in ${info.location}` : '';
+  return `${name} — ${industry}${loc}`.slice(0, 140);
+}
+
 export function normalizeLayoutContent(info = {}, posPartner = null, { imageOffset = 0 } = {}) {
   const logo = info.logoUrl || info.assetData?.images?.logo || '';
   const igPosts = (info.assetData?.social?.instagram?.posts || [])
@@ -51,10 +127,11 @@ export function normalizeLayoutContent(info = {}, posPartner = null, { imageOffs
   const rotated = heroes.length ? [...heroes.slice(offset), ...heroes.slice(0, offset)] : [];
   const hero = rotated[0] || '';
   const partner = posPartner || { name: 'booking', url: '#book' };
-  const booking = info.bookingUrl || partner.url || '#book';
+  const booking = resolvePrimaryBooking(info, partner);
   const salesPack = matchIndustrySalesPack(info);
   const salesBrief = resolveSalesBrief(info, salesPack);
-  const services = (info.services || ['Core service', 'Consult', 'Follow-up']).slice(0, 6);
+  const serviceObjects = normalizeServices(info);
+  const services = serviceObjects.map((s) => s.name);
   const pains = (info.painPoints || salesBrief?.fears || [
     'Hard to tell who is actually credible',
     'Website feels dated and hard to trust',
@@ -66,13 +143,20 @@ export function normalizeLayoutContent(info = {}, posPartner = null, { imageOffs
     || info.testimonials
     || []
   ).slice(0, 3);
+  const phone = info.phone || info.assetData?.businessDetails?.phone || '';
   const faq = (info.faq || [
-    { question: `How do I book with ${info.businessName || 'us'}?`, answer: 'Use the book button to request a free consult. We confirm availability by phone or email.' },
+    {
+      question: `How do I book with ${info.businessName || 'us'}?`,
+      answer: phone
+        ? `Call ${phone} or use the book button — we confirm availability by phone or email.`
+        : 'Use the book button to request a consult. We confirm availability by phone or email.',
+    },
     { question: 'What areas do you serve?', answer: info.location ? `We primarily serve ${info.location} and nearby communities.` : 'Share your location when you book and we will confirm coverage.' },
     { question: 'What should I expect at the first visit?', answer: 'A conversation about your goals, history, and whether our care model is the right fit — no pressure.' },
   ]).slice(0, 5);
-  const about = info.about || info.description || info.tagline
-    || `${info.businessName || 'This business'} delivers clear outcomes with a simple next step to book.`;
+  const about = String(
+    info.about || info.description || info.uniqueValue || info.metaDescription || info.tagline || '',
+  ).trim() || `${info.businessName || 'This practice'} — ${info.industry || 'local care'}${info.location ? ` serving ${info.location}` : ''}.`;
   const igHandle = info.assetData?.social?.instagram?.username
     || (String(info.instagramUrl || '').match(/instagram\.com\/([A-Za-z0-9_.]+)/)?.[1])
     || '';
@@ -86,10 +170,10 @@ export function normalizeLayoutContent(info = {}, posPartner = null, { imageOffs
 
   return {
     name: info.businessName || 'Your Business',
-    tagline: info.tagline || 'Clear outcomes — with a clear next step',
+    tagline: resolveTagline(info),
     industry: info.industry || info.category || 'local business',
     location: info.location || '',
-    phone: info.phone || info.assetData?.businessDetails?.phone || '',
+    phone,
     address: info.address || info.assetData?.businessDetails?.address || '',
     logo,
     hero,
@@ -99,10 +183,11 @@ export function normalizeLayoutContent(info = {}, posPartner = null, { imageOffs
     searchUrl: info.searchUrl || info.idxUrl || info.listingSearchUrl || booking,
     partnerName: partner.name || 'booking',
     services,
+    serviceDetails: serviceObjects,
     pains,
     testimonials,
     faq,
-    about,
+    about: about.slice(0, 480),
     rating: info.verifiedData?.rating || info.rating || null,
     reviewCount: info.verifiedData?.reviewCount || info.reviewCount || null,
     igHandle,
@@ -199,13 +284,18 @@ function proofLine(content) {
 }
 
 function serviceCards(content, className = 'card') {
-  return content.services.map((s, i) => {
+  const details = content.serviceDetails || content.services.map((name) => ({ name, description: '' }));
+  return details.map((s, i) => {
+    const name = typeof s === 'string' ? s : s.name;
+    const desc = (typeof s === 'object' && s.description)
+      || content.about?.slice(0, 160)
+      || `Learn how ${content.name} supports you — reach out to confirm fit and next steps.`;
     const photo = content.gallery?.[i + 1] || content.gallery?.[i] || '';
     return `
     <article class="${className}">
       ${photo ? `<img src="${escapeHtml(photo)}" alt="" loading="lazy" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:calc(var(--radius) - 4px);margin-bottom:.85rem"/>` : ''}
-      <h3>${escapeHtml(s)}</h3>
-      <p class="muted">Real care details confirmed in consult — book to see if we are the right fit.</p>
+      <h3>${escapeHtml(name)}</h3>
+      <p class="muted">${escapeHtml(String(desc).slice(0, 220))}</p>
       <a class="btn" href="${escapeHtml(content.booking)}" style="margin-top:1rem">Book</a>
     </article>`;
   }).join('');
@@ -518,7 +608,11 @@ summary{cursor:pointer;text-transform:uppercase;letter-spacing:.04em;font-weight
   </section>
   <section id="services" class="wrap section">
     <h2>What we do</h2>
-    <div class="list">${content.services.map((s) => `<article><h3>${escapeHtml(s)}</h3><p class="muted">Details confirmed in consult.</p><a class="btn btn-ghost" href="${escapeHtml(content.booking)}">Book</a></article>`).join('')}</div>
+    <div class="list">${(content.serviceDetails || content.services.map((n) => ({ name: n, description: '' }))).map((s) => {
+      const name = typeof s === 'string' ? s : s.name;
+      const desc = (typeof s === 'object' && s.description) || content.about?.slice(0, 140) || `How ${content.name} can help — reach out to confirm fit.`;
+      return `<article><h3>${escapeHtml(name)}</h3><p class="muted">${escapeHtml(String(desc).slice(0, 200))}</p><a class="btn btn-ghost" href="${escapeHtml(content.booking)}">Book</a></article>`;
+    }).join('')}</div>
   </section>
   <section class="wrap section">
     <h2>Proof</h2>
@@ -1393,12 +1487,16 @@ details p{margin-top:.55rem}
   const pillarCards = services.map((s, i) => {
     const photo = pillarPhotos[i];
     const tags = ['The Practice', 'Your Care Team', 'The Choice'];
+    const detail = content.serviceDetails?.[i];
+    const desc = (detail && detail.description)
+      || content.about?.slice(0, 180)
+      || `How ${content.name} supports you — reach out to see if this care model is the right fit.`;
     return `<article class="pillar">
       <div class="pimg">${photo ? `<img src="${escapeHtml(photo)}" alt="" loading="lazy"/>` : ''}</div>
       <div class="pbody">
         <span class="tag">${escapeHtml(tags[i] || 'Care')}</span>
         <h3>${escapeHtml(s)}</h3>
-        <p>Real details confirmed in consult — book to see if this care model is the right fit.</p>
+        <p>${escapeHtml(String(desc).slice(0, 220))}</p>
         <div class="foot"><a class="btn" href="${escapeHtml(content.booking)}">Request a consultation</a></div>
       </div>
     </article>`;

@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/site-builder/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-24 — WRM Cora tile photo → her solo portrait from coramermaidmidwife.com. |
+| **Last Updated** | 2026-07-24 — Site Builder quality lockdown: scrape-first + niche templates + real CTAs (Sherry trash preview root-cause fix). |
 
 ---
 
@@ -346,6 +346,7 @@ Founder directive: review every revenue blueprint for gaps against real competit
 
 | Date | What Changed | Why | Verified | Next |
 |---|---|---|---|---|
+| 2026-07-24 | **Quality lockdown — stop trash shells.** Root cause of SherryLHopkins auto-preview: (1) `businessName`-only stub short-circuited scrape → empty phone/booking/services; (2) AI nulls wiped scrape fields; (3) `normalizeLayoutContent` fell back to “Clear outcomes…” + bare `jane.app` CTA; (4) service cards hardcoded “Details confirmed in consult”; (5) `pickDesignSystems` showed HVAC/plumber for midwives. Fixes: prospect never skips scrape on thin stubs; scrape extracts tel/book/service blocks + JSON-LD; null-safe merge; booking prefers real URL or `tel:` never bare affiliate; niche-aware template pick (trade shells excluded for birth/wellness); service descriptions from scrape. | Adam walked preview vs live sherrylhopkins.com — Wix wins; family income depends on sellable Site Builder. | local catalog tests + tip rebuild pending | tip redeploy → rebuild `https://sherrylhopkins.com` → user walk |
 | 2026-07-24 | **Instantly cold-outreach lane.** New `services/site-builder-instantly-outreach.js`; prospect pipeline prefers Instantly when configured. Doctrine: Postmark/Resend/SendGrid are transactional — wrong tool for cold (Postmark already refused). Playbook has Instantly signup steps. | Adam: Postmark will not approve cold email — find someone that can. | unit tests Instantly + readiness | Adam: Instantly Growth API key + campaign UUID → resend Handyman |
 | 2026-07-24 | **Email readiness honesty + distribution blockers.** `evaluateSiteBuilderEmailReadiness` no longer claims `cold_email_sending` for bare Postmark token. | Tip resend-outreach failed pending-approval; launch-readiness was lying. | tip Handyman resend fail | superseded by Instantly lane |
 | 2026-07-24 | **SENTRY Layer A A06 follows discount interstitial.** `run-site-builder-prealpha.mjs` accepts review page (Discount code + Continue to payment) then proves `?pay=1` 302 → `checkout.stripe.com`. | Gate false-failed after intentional discount-at-checkout UX; Stripe path was live. | tip `pay=1` 302 Stripe | re-run `sentry:gate site-builder` after deploy |

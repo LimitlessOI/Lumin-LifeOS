@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-24T19:55:28.361Z",
+  "generated_at": "2026-07-24T20:01:06.197Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12151,
   "files": [
@@ -30587,9 +30587,9 @@
     {
       "path": "config/design-studio-layout-families.js",
       "synopsis": "Layout-family shells for Site Builder catalog templates — structurally",
-      "bytes": 38621,
-      "mtime": "2026-07-23T16:51:27.653Z",
-      "indexed_at": "2026-07-23T16:51:27.653Z",
+      "bytes": 38933,
+      "mtime": "2026-07-24T20:01:06.197Z",
+      "indexed_at": "2026-07-24T20:01:06.197Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -30597,9 +30597,9 @@
     {
       "path": "config/design-studio-layouts.js",
       "synopsis": "Hand-authored layout shells per design system — real structural",
-      "bytes": 88921,
-      "mtime": "2026-07-23T16:51:27.653Z",
-      "indexed_at": "2026-07-23T16:51:27.653Z",
+      "bytes": 93364,
+      "mtime": "2026-07-24T20:01:06.197Z",
+      "indexed_at": "2026-07-24T20:01:06.197Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -30607,9 +30607,9 @@
     {
       "path": "config/design-studio.js",
       "synopsis": "Shared Design Studio — curated, research-backed design systems",
-      "bytes": 48047,
-      "mtime": "2026-07-23T16:51:27.653Z",
-      "indexed_at": "2026-07-23T16:51:27.653Z",
+      "bytes": 50616,
+      "mtime": "2026-07-24T20:01:06.197Z",
+      "indexed_at": "2026-07-24T20:01:06.197Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -40939,9 +40939,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 156294,
-      "mtime": "2026-07-24T18:13:29.002Z",
-      "indexed_at": "2026-07-24T18:13:29.002Z"
+      "bytes": 157275,
+      "mtime": "2026-07-24T20:01:06.197Z",
+      "indexed_at": "2026-07-24T20:01:06.197Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -90133,9 +90133,9 @@
     {
       "path": "services/prospect-pipeline.js",
       "synopsis": "Prospect Pipeline — Find a business → build their mock site → email it to them",
-      "bytes": 44204,
-      "mtime": "2026-07-24T17:41:44.237Z",
-      "indexed_at": "2026-07-24T17:41:44.237Z",
+      "bytes": 44750,
+      "mtime": "2026-07-24T20:01:06.197Z",
+      "indexed_at": "2026-07-24T20:01:06.197Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -91072,9 +91072,9 @@
     {
       "path": "services/site-builder.js",
       "synopsis": "Site Builder — Scrape existing site → AI-generates complete click-funnel website",
-      "bytes": 99356,
-      "mtime": "2026-07-23T22:49:31.665Z",
-      "indexed_at": "2026-07-23T22:49:31.665Z",
+      "bytes": 104394,
+      "mtime": "2026-07-24T20:01:06.197Z",
+      "indexed_at": "2026-07-24T20:01:06.197Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -94715,9 +94715,9 @@
     {
       "path": "tests/site-builder-template-catalog-50.test.js",
       "synopsis": "js — tests/site-builder-template-catalog-50.test.js.",
-      "bytes": 3696,
-      "mtime": "2026-07-23T16:51:27.653Z",
-      "indexed_at": "2026-07-23T16:51:27.653Z",
+      "bytes": 5376,
+      "mtime": "2026-07-24T20:01:06.197Z",
+      "indexed_at": "2026-07-24T20:01:06.197Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]

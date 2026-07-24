@@ -40,6 +40,33 @@ describe('site-builder 50-template catalog', () => {
     assert.ok(fams.size >= 8, `expected diversified families, got ${fams.size}: ${[...fams].join(',')}`);
   });
 
+  it('pickDesignSystems excludes trade shells for midwifery', () => {
+    const picked = pickDesignSystems(12, [], { industry: 'midwifery', bodyText: 'prenatal birth postpartum midwife' });
+    const niches = picked.map((d) => d.niche);
+    assert.ok(!niches.includes('hvac'), `HVAC leaked into midwife set: ${picked.map((d) => d.id).join(',')}`);
+    assert.ok(!niches.includes('plumbing'), `plumber leaked into midwife set`);
+    assert.ok(picked.some((d) => d.niche === 'midwifery' || /midwife|wellrounded|organic|editorial/i.test(d.id)),
+      `expected birth/wellness-leaning templates, got ${picked.map((d) => d.id).join(',')}`);
+  });
+
+  it('normalizeLayoutContent never uses bare Jane affiliate as primary booking', () => {
+    const c = normalizeLayoutContent({
+      businessName: 'Sherry L Hopkins CPM',
+      industry: 'midwifery',
+      phone: '702-478-5080',
+      h1: 'Certified Professional Midwife serving Las Vegas',
+      uniqueValue: 'Compassionate home birth care for growing families',
+      services: ['Prenatal Care', 'Birth Support', 'Postpartum Care'],
+      serviceDetails: [
+        { name: 'Prenatal Care', description: 'Ongoing prenatal visits and education.' },
+      ],
+    }, { name: 'Jane App', url: 'https://jane.app' });
+    assert.ok(!/^https?:\/\/(www\.)?jane\.app\/?$/i.test(c.booking), `booking was affiliate: ${c.booking}`);
+    assert.ok(c.booking.startsWith('tel:') || c.booking.includes('702'), `expected tel booking, got ${c.booking}`);
+    assert.ok(!/clear outcomes/i.test(c.tagline), `generic tagline leaked: ${c.tagline}`);
+    assert.ok(c.serviceDetails[0].description.includes('prenatal'), 'service description missing');
+  });
+
   it('FREE_DESIGN_SYSTEM_IDS are resolvable', () => {
     for (const id of FREE_DESIGN_SYSTEM_IDS) {
       assert.ok(DESIGN_SYSTEMS.some((d) => d.id === id), `free id missing: ${id}`);

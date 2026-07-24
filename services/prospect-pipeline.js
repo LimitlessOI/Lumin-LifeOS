@@ -415,14 +415,21 @@ export default class ProspectPipeline {
       };
     }
 
-    // If the caller gave a businessName but no structured businessInfo, use it
-    // as the profile. This prevents parked/placeholder sites (e.g. HugeDomains)
-    // from poisoning the generated site with the parking page's brand.
-    if (!options.businessInfo && options.businessName) {
-      options.businessInfo = {
-        businessName: options.businessName,
-        industry: options.vertical || 'wellness',
-      };
+    // Never skip scrape when only a businessName is provided. Passing a thin
+    // businessInfo short-circuits scrapeBusinessInfo and produces trash shells
+    // (generic H1, no phone, Jane App CTAs, empty service blurbs). Name is
+    // applied as a preferred label AFTER scrape inside scrapeBusinessInfo.
+    if (options.businessInfo) {
+      const bi = options.businessInfo;
+      const thinStub = !bi.sourceUrl && !bi.bodyText && !bi.phone && !bi.bookingUrl
+        && !(Array.isArray(bi.services) && bi.services.length)
+        && !bi.about && !bi.uniqueValue;
+      if (thinStub) {
+        options.preferredBusinessName = bi.businessName || options.businessName || null;
+        options.businessInfo = null;
+      }
+    } else if (options.businessName) {
+      options.preferredBusinessName = options.businessName;
     }
 
     await this.touchProspectJob(clientIdEarly, 'build');
@@ -436,6 +443,8 @@ export default class ProspectPipeline {
       // durably stored in metadata (previewHtml + variantHtmls) for DB fallback.
       buildResult = await this.siteBuilder.buildVariants(businessUrl, {
         businessInfo: options.businessInfo || null,
+        preferredBusinessName: options.preferredBusinessName || options.businessName || null,
+        businessName: options.businessName || null,
         clientId: options.clientId || null,
         enrich: options.enrich,
         skipRepair: options.skipRepair,

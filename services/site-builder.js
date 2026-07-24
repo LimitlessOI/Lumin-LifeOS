@@ -580,11 +580,18 @@ export default class SiteBuilder {
   async buildVariants(targetUrl, options = {}) {
     const clientId = options.clientId || `prev_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
     const count = Math.max(1, Number(options.variantCount || process.env.SITE_BUILDER_VARIANTS || (SITE_BUILDER_PRICING.templates.freeCount + SITE_BUILDER_PRICING.templates.additional.slotCount) || 10));
-    const systems = pickDesignSystems(count, options.styleIds || []);
-    logger.info('[SITE] Building variants', { clientId, targetUrl, systems: systems.map((s) => s.id) });
 
     try {
+      // Scrape BEFORE picking templates so niche filter can prefer midwife shells
+      // over HVAC/plumber for birth/wellness businesses.
       const businessInfo = await this.scrapeBusinessInfo(targetUrl, options);
+      const systems = pickDesignSystems(count, options.styleIds || [], {
+        industry: businessInfo.industry,
+        keywords: businessInfo.keywords,
+        bodyText: businessInfo.bodyText,
+        tagline: businessInfo.tagline,
+      });
+      logger.info('[SITE] Building variants', { clientId, targetUrl, systems: systems.map((s) => s.id), industry: businessInfo.industry });
 
       if (ENRICHMENT_ENABLED && options.enrich !== false) {
         try {
@@ -792,14 +799,30 @@ export default class SiteBuilder {
    * Extracts: name, tagline, services, contact, colors, testimonials, social links.
    */
   async scrapeBusinessInfo(url, options = {}) {
-    // If manual info is provided (no scraping needed), use it directly, but
-    // always attach the source URL so richer ingestion knows what to look up.
+    // Only skip scrape for a REAL structured profile (has body/services/phone).
+    // A bare { businessName } must NOT short-circuit — that path produced the
+    // SherryLHopkins trash preview (generic H1, no phone, affiliate booking).
     if (options.businessInfo) {
       const info = { ...options.businessInfo };
-      if (!info.sourceUrl) info.sourceUrl = url;
-      const submittedName = String(options.businessName || info.businessName || '').trim();
-      if (submittedName) info.businessName = submittedName;
-      return info;
+      const hasSubstance = Boolean(
+        info.bodyText
+        || info.phone
+        || info.bookingUrl
+        || (Array.isArray(info.services) && info.services.length)
+        || info.about
+        || info.uniqueValue
+      );
+      if (hasSubstance) {
+        if (!info.sourceUrl) info.sourceUrl = url;
+        const submittedName = String(options.businessName || options.preferredBusinessName || info.businessName || '').trim();
+        if (submittedName) info.businessName = submittedName;
+        return info;
+      }
+      // Thin stub — fall through to live scrape, keep preferred name.
+      options.preferredBusinessName = options.preferredBusinessName
+        || options.businessName
+        || info.businessName
+        || null;
     }
 
     let puppeteer;
@@ -821,20 +844,48 @@ export default class SiteBuilder {
           document.querySelector(`meta[name="${name}"]`)?.content ||
           document.querySelector(`meta[property="og:${name}"]`)?.content || '';
 
-        // Extract all visible text
         const bodyText = document.body?.innerText?.slice(0, 8000) || '';
-
-        // Look for phone, email, address
         const phoneMatch = bodyText.match(/\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}/);
         const emailMatch = bodyText.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,}/);
 
-        // Find social links
-        const links = Array.from(document.querySelectorAll('a[href]')).map(a => a.href);
+        const anchors = Array.from(document.querySelectorAll('a[href]'));
+        const links = anchors.map(a => a.href);
         const youtube = links.find(l => l.includes('youtube.com/channel') || l.includes('youtube.com/@'));
         const instagram = links.find(l => l.includes('instagram.com/'));
         const facebook = links.find(l => l.includes('facebook.com/'));
 
-        // Try to get YouTube channel ID from URL
+        const telHref = anchors.map(a => a.getAttribute('href') || '').find(h => /^tel:/i.test(h));
+        const telPhone = telHref ? telHref.replace(/^tel:/i, '').trim() : '';
+
+        const booking = anchors.map(a => ({
+          href: a.href,
+          text: (a.innerText || a.getAttribute('aria-label') || '').trim().toLowerCase(),
+        })).find(({ href, text }) => {
+          if (!href || href.startsWith('mailto:') || href.startsWith('tel:')) return false;
+          if (/book-online|booknow|book-now|scheduling|appointment|calendly|acuityscheduling|jane\.app\/[^/?#]+/i.test(href)) return true;
+          if (/(^|\b)(book|schedule|consult|appointment)(\b|$)/i.test(text) && !/facebook|instagram|youtube|login|cart/i.test(href)) return true;
+          return false;
+        })?.href || '';
+
+        // Service headings + following paragraph (Prenatal / Birth / Postpartum pattern)
+        const serviceBlocks = [];
+        const headings = Array.from(document.querySelectorAll('h2, h3, h4, strong'));
+        for (const h of headings) {
+          const name = (h.innerText || '').trim();
+          if (!name || name.length < 3 || name.length > 80) continue;
+          if (!/care|birth|prenatal|postpartum|labor|yoga|sound|healing|package|service|wellness|midwif/i.test(name)) continue;
+          let desc = '';
+          let sib = h.nextElementSibling;
+          for (let i = 0; i < 4 && sib; i += 1, sib = sib.nextElementSibling) {
+            const t = (sib.innerText || '').trim();
+            if (t && t.length > 40) { desc = t.slice(0, 280); break; }
+          }
+          if (!serviceBlocks.find(s => s.name.toLowerCase() === name.toLowerCase())) {
+            serviceBlocks.push({ name, description: desc });
+          }
+          if (serviceBlocks.length >= 6) break;
+        }
+
         let youtubeChannelId = null;
         if (youtube) {
           const chMatch = youtube.match(/channel\/(UC[\w-]+)/);
@@ -842,17 +893,34 @@ export default class SiteBuilder {
           youtubeChannelId = chMatch ? chMatch[1] : (handleMatch ? handleMatch[1] : null);
         }
 
+        let jsonLdPhone = '';
+        let jsonLdName = '';
+        for (const script of Array.from(document.querySelectorAll('script[type="application/ld+json"]'))) {
+          try {
+            const data = JSON.parse(script.textContent || '{}');
+            const nodes = Array.isArray(data) ? data : [data, ...(Array.isArray(data['@graph']) ? data['@graph'] : [])];
+            for (const n of nodes) {
+              if (!jsonLdPhone && n?.telephone) jsonLdPhone = String(n.telephone);
+              if (!jsonLdName && (n?.name || n?.legalName)) jsonLdName = String(n.name || n.legalName);
+            }
+          } catch { /* ignore bad json-ld */ }
+        }
+
         return {
           title: document.title || '',
           metaDescription: getMeta('description'),
           h1: getText('h1'),
           bodyText,
-          phone: phoneMatch ? phoneMatch[0] : '',
+          phone: telPhone || phoneMatch?.[0] || jsonLdPhone || '',
           email: emailMatch ? emailMatch[0] : '',
+          bookingUrl: booking || '',
+          serviceDetails: serviceBlocks,
+          services: serviceBlocks.map(s => s.name),
           youtubeUrl: youtube || '',
           youtubeChannelId,
           instagramUrl: instagram || '',
           facebookUrl: facebook || '',
+          jsonLdName,
         };
       });
 
@@ -869,9 +937,38 @@ export default class SiteBuilder {
       await browser.close();
 
       const extracted = await this.extractBusinessInfoWithAI(scraped, url);
-      let businessInfo = { ...scraped, ...extracted, sourceUrl: url, existingSiteScore };
+      // Null-safe merge: AI often returns null for phone/booking and wipes scrape.
+      const preferredName = String(options.preferredBusinessName || options.businessName || '').trim();
+      let businessInfo = {
+        ...scraped,
+        ...Object.fromEntries(
+          Object.entries(extracted || {}).filter(([, v]) => v != null && v !== ''),
+        ),
+        sourceUrl: url,
+        existingSiteScore,
+      };
+      if (scraped.phone && !businessInfo.phone) businessInfo.phone = scraped.phone;
+      if (scraped.bookingUrl && !businessInfo.bookingUrl) businessInfo.bookingUrl = scraped.bookingUrl;
+      if (Array.isArray(scraped.serviceDetails) && scraped.serviceDetails.length) {
+        businessInfo.serviceDetails = scraped.serviceDetails;
+        if (!Array.isArray(businessInfo.services) || !businessInfo.services.length) {
+          businessInfo.services = scraped.serviceDetails.map((s) => s.name);
+        }
+      }
+      if (Array.isArray(scraped.services) && scraped.services.length
+        && (!Array.isArray(businessInfo.services) || !businessInfo.services.length)) {
+        businessInfo.services = scraped.services;
+      }
+      if (!businessInfo.tagline) {
+        businessInfo.tagline = scraped.h1 || scraped.metaDescription || businessInfo.uniqueValue || '';
+      }
+      if (!businessInfo.about) {
+        businessInfo.about = businessInfo.uniqueValue || scraped.metaDescription || scraped.bodyText?.slice(0, 280) || '';
+      }
+      if (preferredName) businessInfo.businessName = preferredName;
+      else if (scraped.jsonLdName && !businessInfo.businessName) businessInfo.businessName = scraped.jsonLdName;
       businessInfo = applyScrapeGuard(businessInfo, {
-        submittedName: options.businessName,
+        submittedName: preferredName || options.businessName,
         url,
       });
       if (businessInfo.scrapePoisoned) {

@@ -812,12 +812,56 @@ export function getDesignSystemForBrand(brandInfo = {}, { preferredId } = {}) {
   return getDesignSystem(DEFAULT_DESIGN_SYSTEM_ID);
 }
 
-export function pickDesignSystems(count = 3, preferredIds = []) {
+/** Map scraped industry text → catalog niche buckets that feel on-brand. */
+const INDUSTRY_NICHE_AFFINITY = [
+  { match: /midwif|doula|birth|maternity|prenatal|postpartum|placenta/, niches: ['midwifery', 'therapy', 'medspa', 'wedding', 'photography', 'spa'] },
+  { match: /dental|dentist|ortho/, niches: ['dental', 'orthodontics', 'medspa'] },
+  { match: /chiro|physio|therapy|counsel/, niches: ['chiropractic', 'therapy', 'urgent-care', 'medspa'] },
+  { match: /hvac|air.?cond|heating/, niches: ['hvac', 'plumbing', 'handyman', 'electrical'] },
+  { match: /plumb|drain/, niches: ['plumbing', 'hvac', 'handyman'] },
+  { match: /law|attorney|legal/, niches: ['law', 'personal-injury', 'accounting'] },
+  { match: /real.?estate|realtor|broker/, niches: ['real-estate', 'mortgage', 'photography'] },
+  { match: /restaurant|cafe|bakery|food/, niches: ['restaurant', 'cafe', 'bakery', 'bar'] },
+  { match: /salon|spa|beauty|medspa/, niches: ['salon', 'spa', 'medspa', 'barber'] },
+  { match: /photo|wedding/, niches: ['photography', 'wedding', 'boutique'] },
+  { match: /fitness|gym|yoga|pilates/, niches: ['fitness', 'spa', 'therapy'] },
+  { match: /wellness|holistic|coach|naturop/, niches: ['therapy', 'midwifery', 'spa', 'medspa', 'fitness'] },
+];
+
+function nicheAffinityForBrand(brandHint = {}) {
+  const blob = [
+    brandHint.industry,
+    ...(Array.isArray(brandHint.keywords) ? brandHint.keywords : []),
+    brandHint.tagline,
+    String(brandHint.bodyText || '').slice(0, 800),
+  ].filter(Boolean).join(' ').toLowerCase();
+  if (!blob) return null;
+  for (const row of INDUSTRY_NICHE_AFFINITY) {
+    if (row.match.test(blob)) return new Set(row.niches);
+  }
+  return null;
+}
+
+export function pickDesignSystems(count = 3, preferredIds = [], brandHint = {}) {
   const preferred = preferredIds.map((id) => getDesignSystem(id)).filter(Boolean);
-  const rest = DESIGN_SYSTEMS.filter((d) => !preferred.find((p) => p.id === d.id));
+  const affinity = nicheAffinityForBrand(brandHint);
+  // Hard exclude trade-emergency shells for birth/wellness (HVAC in a midwife switcher = trash).
+  const tradeNiches = new Set(['hvac', 'plumbing', 'electrical', 'roofing', 'handyman', 'garage-door', 'pest-control', 'towing', 'auto-repair']);
+  const birthLike = affinity && [...affinity].some((n) => ['midwifery', 'therapy', 'spa', 'medspa', 'wedding'].includes(n));
+
+  let pool = DESIGN_SYSTEMS.filter((d) => !preferred.find((p) => p.id === d.id));
+  if (birthLike) {
+    pool = pool.filter((d) => !tradeNiches.has(d.niche));
+  }
+  if (affinity) {
+    const onNiche = pool.filter((d) => affinity.has(d.niche) || affinity.has(String(d.id || '').split('-')[0]));
+    const soft = pool.filter((d) => !onNiche.includes(d) && d.tier === 'free' && !tradeNiches.has(d.niche));
+    const rest = pool.filter((d) => !onNiche.includes(d) && !soft.includes(d));
+    pool = [...onNiche, ...soft, ...rest];
+  }
   // Round-robin by layoutFamily so the switcher isn't 8 reskins of one shell.
   const byFamily = new Map();
-  for (const ds of rest) {
+  for (const ds of pool) {
     const fam = ds.layoutFamily || `legacy:${ds.id}`;
     if (!byFamily.has(fam)) byFamily.set(fam, []);
     byFamily.get(fam).push(ds);
