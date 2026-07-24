@@ -1413,7 +1413,33 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/site-builder/twins/steps/001.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-24T21:24:57.336Z",
+        "shipped_at": "2026-07-24T21:24:57.336Z",
+        "commit_sha": null,
+        "content_sha256": "dc5ad28e6e7b3ace584f75234f9bfbc038a3da4dc5319810363ee4e86ea7e0f0",
+        "target_file": "db/migrations/20241015_add_template_variations.sql",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "db/migrations/20241015_add_template_variations.sql",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/site-builder/twins/steps/001.exact",
+          "content_sha256": "dc5ad28e6e7b3ace584f75234f9bfbc038a3da4dc5319810363ee4e86ea7e0f0"
+        }
+      },
+      "shipped_at": "2026-07-24T21:24:57.336Z",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "001"
     },
     {
       "id": "002",
