@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-24T18:32:40.531Z",
+  "generated_at": "2026-07-24T18:48:49.349Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12151,
   "files": [
@@ -66300,9 +66300,9 @@
     {
       "path": "public/previews/wellrounded-momma/index.html",
       "synopsis": "HTML page: Well Rounded Momma — Midwifery & Home Birth in Las Vegas | Sherry Hopkins, CPM",
-      "bytes": 90941,
-      "mtime": "2026-07-24T18:32:40.531Z",
-      "indexed_at": "2026-07-24T18:32:40.531Z"
+      "bytes": 92168,
+      "mtime": "2026-07-24T18:48:49.349Z",
+      "indexed_at": "2026-07-24T18:48:49.349Z"
     },
     {
       "path": "public/previews/wellrounded-momma/meta.json",
