@@ -184,11 +184,11 @@
   .pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
   .pillar{background:#fff;border:1px solid var(--line);border-radius:22px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 16px 40px -30px rgba(123,85,96,.55);transition:transform .2s ease,box-shadow .2s ease}
   .pillar:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
-  /* Care cards: same clear photo treatment on all three (no washed-out overlay) */
+  /* Care cards: blush fill + photo at 25% so the tile color reads first */
   .pillar .pimg{height:220px;background-color:var(--blush);position:relative;overflow:hidden}
-  .pillar .pimg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.95;display:block}
+  .pillar .pimg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.25;display:block}
   .pillar .pimg-strong{background-color:var(--blush)}
-  .pillar .pimg-strong img{opacity:.95}
+  .pillar .pimg-strong img{opacity:.25}
   .pillar .pimg-sherry img{object-position:50% 28%}
   .pillar .pimg-cora img{object-position:50% 18%}
   .pillar .pimg-why img{object-position:50% 42%}
@@ -526,7 +526,7 @@
         <h3>What mothers are afraid of</h3>
         <p class="role">Named, then answered</p>
         <ul>
-          <li><strong>“What if something goes wrong?”</strong> — Sherry screens for low‑risk care, carries emergency skills &amp; equipment, and transfers when a hospital is wiser. She also works with local hospital teams (Henderson Hospital advisory).</li>
+          <li><strong>“What if something goes wrong?”</strong> — Your WRM midwife screens for low‑risk care, carries emergency skills &amp; equipment, and transfers when a hospital is wiser — with real collaboration to local hospital teams (including Henderson Hospital advisory).</li>
           <li><strong>“Will I be alone / ignored?”</strong> — Prenatal visits run about an hour. At birth, your midwife is with you — not covering three rooms.</li>
           <li><strong>“Will they push interventions I don’t want?”</strong> — Home birth is built for physiologic birth: far fewer inductions, episiotomies, forceps/vacuum, and cesareans than typical U.S. hospital care.</li>
           <li><strong>“Will strangers own my birth?”</strong> — You choose who is in the room. No shift‑change parade. Your birth stays yours.</li>
@@ -547,13 +547,13 @@
     <div class="stat-strip" aria-label="Outcome highlights from midwife-attended planned home birth research">
       <div><b>~5%</b><span>Cesarean rate in a large U.S. planned home‑birth midwife study (MANA) — vs ~32% typical U.S. hospital rate</span></div>
       <div><b>~94%</b><span>Spontaneous vaginal births in that same home‑birth cohort — birth without forceps, vacuum, or surgery</span></div>
-      <div><b>~1 hour</b><span>Your prenatal visit with Sherry — not 5–10 minutes with a doctor after waiting two hours</span></div>
+      <div><b>~1 hour</b><span>Your prenatal visit with a WRM midwife — not 5–10 minutes with a doctor after waiting two hours</span></div>
     </div>
 
     <div class="section-head" style="margin-bottom:28px">
       <span class="eyebrow">Why families choose home</span>
       <h2>The reasons that actually move people</h2>
-      <p>Aligned with what Sherry teaches on her own site — and what mothers keep saying when they choose again for the next baby.</p>
+      <p>What mothers keep saying when they choose home birth again for the next baby — safety, time, and a birth that still feels like theirs.</p>
     </div>
     <div class="benefits">
       <div class="benefit"><h4>1. Safer for you &amp; baby when you’re low‑risk</h4><p>Skilled midwife + screening + transfer plan. Research on planned home birth for healthy pregnancies shows maternal outcomes that are as good or better on many measures — including fewer severe tears and less infectious morbidity than hospital cohorts in several studies.</p></div>
