@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-23 — Voice Rail STT correction engine: `db/migrations/20260723_voice_rail_stt_corrections.sql`, `config/voice-rail-stt-vocabulary.js`, `services/voice-rail-stt.js`, `routes/lifeos-voice-rail-routes.js`, and `public/overlay/lifeos-app.html` now learn user-specific mishearings (e.g., Tolowa → Taloa) and apply them to the Whisper prompt and post-transcription. Communication Law updated: warm phrases allowed when real and varied, tone/emotional awareness added. Next: tonal/prosody pipeline, queued/multi-request, file attachments, ChatGPT-style resizable layout. |
+| **Last Updated** | 2026-07-23 — Live interim transcript, server TTS read-aloud, Cursor-style request queue, and copy/paste/drop file+image attachments shipped in `public/overlay/lifeos-app.html`. Deploy fix: `PUBLIC_BASE_URL` and `RAILWAY_PUBLIC_DOMAIN` are `.trim()`ed in `services/founder-build-success-gate.js` and `scripts/system-railway-redeploy.mjs` so the stale `robust-magic` host no longer breaks redeploy. Live at `https://lumin-web-production-e3a9.up.railway.app` (`6585051c`). Next: ChatGPT-style resizable layout, tonal/prosody intelligence pipeline, client feedback clustering. |
 ---
 
 ## Founder conversations (2026-06-29)
