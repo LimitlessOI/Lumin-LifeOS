@@ -1609,6 +1609,94 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-24T20:30:53.048Z",
       "commit_sha": "715f5cfcc7016d70623077c33e79bcaba1c462ba"
+    },
+    {
+      "id": "sb-current-site-baseline",
+      "status": "pending",
+      "target_file": "services/site-builder-current-site-baseline.js",
+      "task": "New self-contained module scoring the PROSPECT'S EXISTING live site as the baseline every generated variant must beat. Export async scoreCurrentSiteBaseline({ html, screenshotBuffer }) -> { visualScore: 0-100, structuralSignals: { hasHeroImage:boolean, navItemCount:number, primaryCtaDetected:boolean, aboveFoldWordCount:number, imageCount:number }, notes: string[] }. Reuse the same scoring dimensions services/site-builder-quality-scorer.js already uses (doctype/viewport/H1 count/CTA keyword) via direct import so the SAME rubric scores both the current site and generated variants — the whole point is a fair before/after number, not a second incompatible scorer. screenshotBuffer is optional and only used for a coarse heuristic (e.g. presence implies hasHeroImage likely true when combined with an <img> in the hero region) — this module does NOT call Puppeteer itself; the caller captures the screenshot and passes the buffer in.",
+      "spec": "Single self-contained ESM module. Import services/site-builder-quality-scorer.js's exported scorer function by relative path only (no other project imports, no network, no DB, no Puppeteer/browser imports here). Named export scoreCurrentSiteBaseline + default. Guard html as possibly empty string -> return a well-formed zero/low-confidence result, never throw. Deterministic given the same inputs. Start with `// SYNOPSIS:` + `// @ssot docs/products/site-builder/PRODUCT_HOME.md`.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "priority": "high",
+      "source": "founder_directive_2026-07-24",
+      "finding_note": "2026-07-24 founder session: confirmed services/site-builder.js scrapes the prospect's current site for TEXT FACTS ONLY (phone, services, testimonials) and never scores or compares its actual design against generated variants — generation is fully design-blind. This step is the first piece of a real before/after baseline.",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "sb-current-site-baseline",
+      "mission_id": "PRODUCT-site-builder"
+    },
+    {
+      "id": "sb-architect-creative-brief",
+      "status": "pending",
+      "target_file": "services/site-builder-architect-brief.js",
+      "task": "New self-contained module implementing the 'Architect hands the blueprint to the Studio' handoff. Export buildCreativeBrief({ businessInfo, opportunityAnalysis, currentSiteBaseline }) -> { sitemap: [{ section:string, purpose:string, priority:number }], brandSignals: { industry:string, tone:string, mustHaveElements:string[] }, painPointsToAddress: string[], baselineToBeat: { visualScore:number, structuralSignals:object } }. This is a PURE data-shaping function (no AI call, no network) that assembles the already-computed businessInfo/opportunityAnalysis/currentSiteBaseline into ONE structured brief object — the literal artifact the Architect passes to the Creative Engine. sitemap must always include at minimum: hero, services/offerings, social-proof, contact/cta sections, derived from businessInfo.services when present.",
+      "spec": "Single self-contained ESM module, pure function, zero import-time side effects, no project imports (accept plain objects as args only — do not import site-builder.js or create a circular dependency). Named export buildCreativeBrief + default export. Guard every field as possibly undefined; never throw on missing data, degrade to reasonable defaults instead. Deterministic given the same inputs. Start with `// SYNOPSIS:` + `// @ssot docs/products/site-builder/PRODUCT_HOME.md`.",
+      "depends_on": [
+        "sb-current-site-baseline"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "priority": "high",
+      "source": "founder_directive_2026-07-24",
+      "finding_note": "Founder directive 2026-07-24: 'when we even make a blueprint, the architect needs to send it over to the studio (creative engine) and make a site map and what it should visually look like.' This module is that exact handoff artifact, kept as plain data so it's testable and reusable by any consumer (site-builder today, other products later) without a runtime dependency between them.",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "sb-architect-creative-brief",
+      "mission_id": "PRODUCT-site-builder"
+    },
+    {
+      "id": "cg-ux-heuristic-gate",
+      "status": "pending",
+      "target_file": "services/creative-engine/ux-heuristic-gate.js",
+      "task": "New self-contained module scoring generated site HTML on REAL usability heuristics, not just structural presence. Export scoreUxHeuristics(html) -> { ctaPlacement: { score:0-10, note }, informationDensity: { score:0-10, verdict:'overloaded'|'sparse'|'balanced', wordsPerScreen:number }, visualHierarchy: { score:0-10, hasSingleH1:boolean, headingNestingValid:boolean }, navConvention: { score:0-10, note }, overall: 0-100 }. Deterministic rubric only (parse the HTML string with regex/simple DOM-string parsing — no browser, no AI call in this step): ctaPlacement checks a primary CTA (button/link containing action words: book, call, contact, schedule, get started) appears within the first ~600 words of body content (above-the-fold proxy) AND again near the end; informationDensity buckets estimated words-per-'section' (split on <section>/<div class> boundaries or heading tags) against fixed thresholds (>250 words with no sub-heading = overloaded, <20 words in a content section = sparse); visualHierarchy checks exactly one <h1> and that h2/h3 nesting doesn't skip levels; navConvention checks nav/header links count is between 3-7 (too few = weak, too many = overload) per standard usability convention.",
+      "spec": "Single self-contained ESM module. Pure function, no network/DB/browser, only node: builtins if needed. Named export scoreUxHeuristics + default. Never throw on malformed HTML — wrap parsing in try/catch, degrade to a low-confidence zero-ish score with a note explaining why rather than crashing. Deterministic given the same input. This is the SocialMediaOS-equivalent of services/marketing-publish-gate.js's rubric-based scoring, applied to sites instead of scripts. Start with `// SYNOPSIS:` + `// @ssot docs/products/site-builder/PRODUCT_HOME.md`.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "priority": "high",
+      "source": "founder_directive_2026-07-24",
+      "finding_note": "Founder directive 2026-07-24: '...the best tactics for setup, design, usability, our buttons in the right most convenient place, easy to understand what's happening on this page or is it overload.' Confirmed services/site-builder-quality-scorer.js today is doctype/viewport/H1-count/keyword regex only, zero usability judgment. This step is that missing judgment, built deterministic (not AI-vibes) so it's falsifiable and fast, mirroring the marketing-publish-gate.js pattern already proven for SocialMediaOS.",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "cg-ux-heuristic-gate",
+      "mission_id": "PRODUCT-site-builder"
+    },
+    {
+      "id": "cg-site-design-mode",
+      "status": "pending",
+      "target_file": "services/creative-engine/modes/site-design.js",
+      "task": "New Creative Engine mode 'site_design' — the shared Studio brain site-builder (and later other products) calls to actually design a site from an Architect brief. Export async runSiteDesign({ creativeBrief, callCouncilMember }) -> { html:string, designNotes:string[], sitemapUsed:array }. creativeBrief is the exact shape produced by services/site-builder-architect-brief.js's buildCreativeBrief(). Build ONE prompt for callCouncilMember (STRONG paid model tier — this is a real design decision, not a cheap-tier call per SO-003) that includes: the full sitemap, brandSignals, painPointsToAddress, and baselineToBeat (explicitly instructing the model its output must beat the baseline's structural signals — more/better hero presence, appropriate CTA placement, balanced information density per section). Return the model's HTML plus a short array of designNotes explaining the key choices made (for later human/SENTRY review).",
+      "spec": "Single self-contained ESM module. callCouncilMember is dependency-injected (the ONLY AI hook) — no direct provider SDK imports. Import ONLY node: builtins plus nothing else at module scope (no importing site-builder.js — creative-engine must not depend on a specific product's internals, only on the brief shape passed in). try/catch everything -> structured { ok:false, error } on failure, never throw uncaught. Parse/validate the model's response defensively (must contain '<html'; on failure return { ok:false, reason:'invalid_model_output', raw }). Start with `// SYNOPSIS:` + `// @ssot docs/products/marketingos/socialmediaos/PRODUCT_HOME.md`.",
+      "depends_on": [
+        "sb-architect-creative-brief"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "priority": "high",
+      "source": "founder_directive_2026-07-24",
+      "finding_note": "Founder directive 2026-07-24: 'Use one creative brain to function for all creative aspects. It's our studio.' services/creative-engine/index.js already dispatches footage_edit/photo_polish/script_compose/generative_broll/graphic_design by job.mode — this adds 'site_design' as a first-class mode on the SAME shared engine SocialMediaOS already uses, instead of site-builder having its own separate, weaker AI path (services/site-builder.js generateSiteHtml, confirmed this session to be a fallback-only path behind hand-authored template shells by default).",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "cg-site-design-mode",
+      "mission_id": "PRODUCT-site-builder"
+    },
+    {
+      "id": "sb-variant-gate-cull",
+      "status": "pending",
+      "target_file": "services/site-builder-variant-gate.js",
+      "task": "New self-contained module implementing the actual publish-or-kill decision for site variants — the enforcement layer that stops a prospect from ever seeing a variant worse than their current site. Export decideVariantFate({ variantScore, uxHeuristics, baseline }) -> { keep:boolean, reason:string, rank:number }. keep is false when variantScore.scorePct (from services/site-builder-quality-scorer.js) is below baseline.visualScore (from sb-current-site-baseline), OR when uxHeuristics.overall (from cg-ux-heuristic-gate) is below a fixed minimum threshold (60/100). rank orders surviving variants by a combined score (weight structural + ux heuristics evenly) so the caller can show best-first. This module does NOT itself call the two scorers or Puppeteer/AI — it is a pure decision function over already-computed scores, so it stays trivially testable.",
+      "spec": "Single self-contained ESM module, pure function, zero imports beyond node: builtins if any, no network/DB/browser. Named export decideVariantFate + default. Guard every field as possibly undefined -> treat missing baseline as 'cannot compare, keep with a caveat note' rather than crashing (fail toward showing SOMETHING with an honest flag, not toward showing nothing when data is incomplete — but ALWAYS keep=false when uxHeuristics.overall is present and below the 60 threshold, that check is never skipped). Deterministic. Start with `// SYNOPSIS:` + `// @ssot docs/products/site-builder/PRODUCT_HOME.md`. NOTE for the wiring step (separate, later): services/site-builder.js buildVariants() (~line 665-710) is where this decision function gets called per-variant before variants[] is returned to callers — that wiring is intentionally NOT part of this step's scope (this step only ships the decision function itself, single-file per queue convention); a follow-up step wires it into buildVariants().",
+      "depends_on": [
+        "cg-site-design-mode",
+        "cg-ux-heuristic-gate",
+        "sb-current-site-baseline"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "priority": "high",
+      "source": "founder_directive_2026-07-24",
+      "finding_note": "Founder directive 2026-07-24: 'of course, I needed it all enforced. It must use the pathways we create, which is the best product we can create.' Confirmed this session that services/site-builder.js buildVariants() currently shows every variant that builds successfully with zero culling — all 10, unranked, unfiltered. This is the enforcement mechanism; the follow-up wiring step is deliberately separated so each factory step stays single-file and independently verifiable.",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "sb-variant-gate-cull",
+      "mission_id": "PRODUCT-site-builder"
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-24T20:30:49.493Z",
+  "generated_at": "2026-07-24T21:08:26.170Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12155,
   "files": [
@@ -40627,9 +40627,9 @@
     {
       "path": "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md",
       "synopsis": "SocialMediaOS Module Home",
-      "bytes": 20800,
-      "mtime": "2026-07-24T18:09:19.320Z",
-      "indexed_at": "2026-07-24T18:09:19.320Z"
+      "bytes": 21553,
+      "mtime": "2026-07-24T21:08:10.435Z",
+      "indexed_at": "2026-07-24T21:08:26.170Z"
     },
     {
       "path": "docs/products/memory-intelligence/FILE_MANIFEST.json",
@@ -40939,9 +40939,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 158091,
-      "mtime": "2026-07-24T20:25:55.868Z",
-      "indexed_at": "2026-07-24T20:25:55.868Z"
+      "bytes": 160870,
+      "mtime": "2026-07-24T21:07:55.800Z",
+      "indexed_at": "2026-07-24T21:08:26.170Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
