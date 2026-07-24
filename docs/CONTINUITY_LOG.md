@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-24 — SMOS Connect+Publish (bank-style account link)
+
+Adam: connect social accounts in-app like bank linking, then post. Shipped Phase 5 UX: `/marketing` Connected accounts → popup `/marketing/connect/:platform` (real platform login in secured browser view; password never typed into SMOS forms) → encrypted cookies → Approve → Publish. Fixed publisher connection unwrap + `createBrowserSession` injection. **Live posts remain off** until `LIVE_SOCIAL_PUBLISH_ENABLED=true`. Next: tip redeploy; Adam connect one account and prove dry-run ready, then flip kill switch for a real post.
+
 ## 2026-07-24 — Instantly replaces Postmark for cold Site Builder email
 
 Adam: Postmark will not approve (they don’t do cold). Correct — Resend/SendGrid same ban. Wired Instantly as cold lane (`INSTANTLY_API_KEY` + `INSTANTLY_CAMPAIGN_ID`); playbook has signup steps. Next: Adam creates Instantly campaign + pastes keys → resend Handyman (`prev_1784791961326_i2dt`).

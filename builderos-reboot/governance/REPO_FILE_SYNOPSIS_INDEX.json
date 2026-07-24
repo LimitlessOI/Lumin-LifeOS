@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-24T17:41:44.237Z",
+  "generated_at": "2026-07-24T18:09:19.320Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12149,
+  "file_count": 12151,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -37630,9 +37630,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 24141,
-      "mtime": "2026-07-24T17:41:44.237Z",
-      "indexed_at": "2026-07-24T17:41:44.237Z"
+      "bytes": 24746,
+      "mtime": "2026-07-24T18:09:19.320Z",
+      "indexed_at": "2026-07-24T18:09:19.320Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40605,9 +40605,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 124694,
-      "mtime": "2026-07-24T12:50:09.527Z",
-      "indexed_at": "2026-07-24T12:50:09.527Z"
+      "bytes": 125824,
+      "mtime": "2026-07-24T18:09:19.320Z",
+      "indexed_at": "2026-07-24T18:09:19.320Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -40627,9 +40627,9 @@
     {
       "path": "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md",
       "synopsis": "SocialMediaOS Module Home",
-      "bytes": 20592,
-      "mtime": "2026-07-24T13:17:03.470Z",
-      "indexed_at": "2026-07-24T13:17:03.470Z"
+      "bytes": 20800,
+      "mtime": "2026-07-24T18:09:19.320Z",
+      "indexed_at": "2026-07-24T18:09:19.320Z"
     },
     {
       "path": "docs/products/memory-intelligence/FILE_MANIFEST.json",
@@ -68332,10 +68332,10 @@
     },
     {
       "path": "routes/marketing-publish-routes.js",
-      "synopsis": "MarketingOS social publish + connections HTTP surface.",
-      "bytes": 2751,
-      "mtime": "2026-07-21T05:32:04.330Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "synopsis": "MarketingOS social connect + publish HTTP surface.",
+      "bytes": 9248,
+      "mtime": "2026-07-24T18:09:19.320Z",
+      "indexed_at": "2026-07-24T18:09:19.320Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -68373,9 +68373,9 @@
     {
       "path": "routes/marketing-session-ui-routes.js",
       "synopsis": "SocialMediaOS / MarketingOS Phase 1 SSR UI — consent → coach → extract → generate → approve → export",
-      "bytes": 125331,
-      "mtime": "2026-07-24T12:50:09.527Z",
-      "indexed_at": "2026-07-24T12:50:09.527Z",
+      "bytes": 140456,
+      "mtime": "2026-07-24T18:09:19.320Z",
+      "indexed_at": "2026-07-24T18:09:19.320Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -89083,10 +89083,10 @@
     },
     {
       "path": "services/marketing-publisher.js",
-      "synopsis": "// @ssot docs/products/marketingos/PRODUCT_HOME.md",
-      "bytes": 5711,
-      "mtime": "2026-07-21T05:32:04.609Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "synopsis": "Publish an approved MarketingOS content piece via browser-agent replay/explore.",
+      "bytes": 6533,
+      "mtime": "2026-07-24T18:09:19.320Z",
+      "indexed_at": "2026-07-24T18:09:19.320Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -89129,11 +89129,21 @@
       "indexed_at": "2026-07-21T05:58:39.404Z"
     },
     {
+      "path": "services/marketing-social-connect-session.js",
+      "synopsis": "Interactive social-login browser sessions for MarketingOS Connect.",
+      "bytes": 7637,
+      "mtime": "2026-07-24T18:09:19.320Z",
+      "indexed_at": "2026-07-24T18:09:19.320Z",
+      "ssot": [
+        "docs/products/marketingos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/marketing-social-connections.js",
       "synopsis": "social account connection seam for MarketingOS publisher",
-      "bytes": 3948,
-      "mtime": "2026-07-21T05:32:04.610Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "bytes": 3956,
+      "mtime": "2026-07-24T18:09:19.320Z",
+      "indexed_at": "2026-07-24T18:09:19.320Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -94303,6 +94313,13 @@
       "bytes": 1339,
       "mtime": "2026-07-21T05:32:04.717Z",
       "indexed_at": "2026-07-21T05:58:39.404Z"
+    },
+    {
+      "path": "tests/marketing-social-publish.test.js",
+      "synopsis": "js — tests/marketing-social-publish.test.js.",
+      "bytes": 4333,
+      "mtime": "2026-07-24T18:09:19.320Z",
+      "indexed_at": "2026-07-24T18:09:19.320Z"
     },
     {
       "path": "tests/memory-embeddings-backfill.test.js",
