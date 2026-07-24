@@ -101,6 +101,34 @@
       "architect_status": "needs_manual_targeting",
       "queue_status": "open",
       "first_detected_at": "2026-07-23T22:01:07.445Z"
+    },
+    {
+      "id": "ci_health:smoke-test.yml:51885b4353d4a83e30d60fdcb8ec545b6a093f15",
+      "check": "ci_health",
+      "severity": "P0",
+      "summary": "main's smoke-test.yml is FAILING at 51885b4.",
+      "proposed_solution": "Read the failing run log (gh run view --log-failed) at https://github.com/LimitlessOI/Lumin-LifeOS/actions/runs/30049784159, identify the exact failing assertion, and fix it directly on main — do not let further commits ship on top of red CI.",
+      "detected_at": "2026-07-23T22:31:07.417Z",
+      "chair_status": "approved",
+      "chair_reasoning": "infrastructure/config finding with a concrete solution — within technical authority, no founder judgment required | Chair (AI): The proposed solution is sound and should be followed. The failing smoke test at 51885b4 is a P0 severity issue, indicating it is critical and requires immediate attention. Ensuring that no further commits bypass this failure is crucial to maintain the integrity and reliability of the codebase. This situation does not merely threaten automated workflows but indicates that the fundamental stability of the code may be compromised. The founder should prioritize resolving the issue quickly to avoid potential compounding errors. No further context or considerations are necessary beyond the proposed solution; it provides a clear path to resolving the problem appropriately.",
+      "chair_reasoning_source": "ai_model",
+      "architect_status": "needs_manual_targeting",
+      "queue_status": "open",
+      "first_detected_at": "2026-07-23T22:31:07.417Z"
+    },
+    {
+      "id": "ci_health:smoke-test.yml:c0f0eac2db1340b56d6f6ffad21b44390bc3d19c",
+      "check": "ci_health",
+      "severity": "P0",
+      "summary": "main's smoke-test.yml is FAILING at c0f0eac.",
+      "proposed_solution": "Read the failing run log (gh run view --log-failed) at https://github.com/LimitlessOI/Lumin-LifeOS/actions/runs/30051455857, identify the exact failing assertion, and fix it directly on main — do not let further commits ship on top of red CI.",
+      "detected_at": "2026-07-23T23:01:07.409Z",
+      "chair_status": "approved",
+      "chair_reasoning": "infrastructure/config finding with a concrete solution — within technical authority, no founder judgment required | Chair (AI): The proposed solution is sound and addresses the core issue: identifying and fixing the failing assertion in the smoke-test.yml. Since this failure prevents the CI pipeline from passing, the severity of P0 is appropriate as it blocks further reliable development and deployment. The founder should prioritize this since it directly affects the stability and deployment of new code. It's crucial to resolve this before any new commits are made to maintain the integrity of the main branch. No additional context or information is necessary beyond what's provided in the finding, as the solution outlined is clear and actionable.",
+      "chair_reasoning_source": "ai_model",
+      "architect_status": "needs_manual_targeting",
+      "queue_status": "open",
+      "first_detected_at": "2026-07-23T23:01:07.409Z"
     }
   ]
 }

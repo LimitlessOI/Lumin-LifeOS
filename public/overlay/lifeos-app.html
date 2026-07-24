@@ -1903,6 +1903,25 @@
       line-height: 1.45;
     }
     .lumin-judgment-meta strong { opacity: 1; }
+    .lumin-interim {
+      width: 100%;
+      padding: 0 18px;
+      font-size: 12px;
+      line-height: 1.35;
+      color: var(--studio-text-muted, #6b7280);
+      min-height: 0;
+      opacity: 0;
+      transition: opacity 0.15s ease, min-height 0.15s ease;
+      white-space: pre-wrap;
+      word-break: break-word;
+      pointer-events: none;
+    }
+    .lumin-interim.visible {
+      opacity: 1;
+      min-height: 17px;
+      padding-top: 2px;
+      padding-bottom: 6px;
+    }
     .lumin-input-bar {
       padding: 14px 18px;
       border-top: 1px solid var(--studio-border);
@@ -2677,6 +2696,7 @@
     </div>
   </div>
 
+  <div class="lumin-interim" id="lumin-interim-text"></div>
   <div class="lumin-input-bar">
     <div class="lumin-wear-bar" id="lumin-wear-bar" title="Cognitive Core — wear perspective capsules before you ask">
       <span class="lumin-wear-label">Think with</span>
@@ -4318,7 +4338,7 @@ function initLuminDrawerVoiceSend() {
     keepListeningOnVoiceSend: true,
     persistentListen: false,
     serverSttEnabled: true,
-    serverSttChunkMs: 1200,
+    serverSttChunkMs: 800,
     serverSttMinBytes: 400,
     serverSttTranscribe: async (blob, { committed }) => {
       const form = new FormData();
@@ -4336,6 +4356,23 @@ function initLuminDrawerVoiceSend() {
       const msg = String(text || '').trim();
       if (!msg || luminState.sending) return;
       luminSend({ text: msg, voice: true });
+    },
+    onInterim: ({ text }) => {
+      const el = document.getElementById('lumin-interim-text');
+      if (!el) return;
+      if (!text) {
+        el.classList.remove('visible');
+        el.textContent = '';
+        return;
+      }
+      el.textContent = text;
+      el.classList.add('visible');
+    },
+    onStop: () => {
+      const el = document.getElementById('lumin-interim-text');
+      if (!el) return;
+      el.classList.remove('visible');
+      el.textContent = '';
     },
     silenceAutoSendMs: 0,
     sendOnMicStop: false,
