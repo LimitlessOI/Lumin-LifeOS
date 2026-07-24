@@ -61,18 +61,29 @@ const sharedMarketingClientAuth = `
           return path;
         }
       }
-      function marketingAuthHeaders(extra = {}) {
-        const h = { 'Content-Type': 'application/json', ...extra };
-        const token = globalThis['localStorage'].getItem('lifeos_access_token') || '';
-        const key = globalThis['localStorage'].getItem('command_key')
+      function marketingCommandKey() {
+        return globalThis['localStorage'].getItem('command_key')
           || globalThis['localStorage'].getItem('commandKey')
           || globalThis['localStorage'].getItem('lifeos_command_key')
           || globalThis['localStorage'].getItem('COMMAND_CENTER_KEY')
           || globalThis['localStorage'].getItem('lifeos_key')
           || '';
+      }
+      function marketingAuthHeaders(extra = {}) {
+        const h = { 'Content-Type': 'application/json', ...extra };
+        const token = globalThis['localStorage'].getItem('lifeos_access_token') || '';
+        const key = marketingCommandKey();
+        // Send BOTH when present. A stale JWT alone used to 401 while the
+        // command key sat unused in localStorage (else-if bug → "Signed in"
+        // chrome with Unauthorized packs/YouTube).
         if (token) h['Authorization'] = 'Bearer ' + token;
-        else if (key) { h['x-command-key'] = key; h['x-api-key'] = key; }
+        if (key) { h['x-command-key'] = key; h['x-api-key'] = key; }
         return h;
+      }
+      function marketingClearStaleJwt() {
+        try {
+          globalThis['localStorage'].removeItem('lifeos_access_token');
+        } catch (_) {}
       }
       function marketingOwnerId() {
         try {
@@ -90,12 +101,32 @@ const sharedMarketingClientAuth = `
         }
       }
       function marketingHasAuth() {
-        return !!(globalThis['localStorage'].getItem('lifeos_access_token')
-          || globalThis['localStorage'].getItem('command_key')
-          || globalThis['localStorage'].getItem('commandKey')
-          || globalThis['localStorage'].getItem('lifeos_command_key')
-          || globalThis['localStorage'].getItem('COMMAND_CENTER_KEY')
-          || globalThis['localStorage'].getItem('lifeos_key'));
+        return !!(globalThis['localStorage'].getItem('lifeos_access_token') || marketingCommandKey());
+      }
+      function marketingHasCustomerJwt() {
+        return !!globalThis['localStorage'].getItem('lifeos_access_token');
+      }
+      function marketingPaintAuthChrome() {
+        const signedIn = marketingHasCustomerJwt() || !!marketingCommandKey();
+        const signup = globalThis['document'].getElementById('signupBtn');
+        const signin = globalThis['document'].getElementById('signinBtn');
+        const start = globalThis['document'].getElementById('startSessionBtn');
+        if (signedIn) {
+          if (signup) signup.style.display = 'none';
+          if (signin) {
+            signin.textContent = marketingHasCustomerJwt() ? 'Signed in' : 'Operator';
+            signin.removeAttribute('href');
+            signin.setAttribute('aria-current', 'true');
+          }
+          if (start) start.textContent = 'Start a session';
+        } else {
+          if (signup) signup.style.display = '';
+          if (signin) {
+            signin.textContent = 'Sign in';
+            if (!signin.getAttribute('href')) signin.setAttribute('href', '/marketing/login');
+            signin.removeAttribute('aria-current');
+          }
+        }
       }
       async function marketingFetch(url, opts = {}) {
         if (!marketingHasAuth()) {
@@ -104,8 +135,15 @@ const sharedMarketingClientAuth = `
           throw new Error('Sign in to Social Media OS to continue.');
         }
         const headers = marketingAuthHeaders(opts.headers || {});
-        const res = await fetch(url, { ...opts, headers });
+        let res = await fetch(url, { ...opts, headers });
+        if (res.status === 401 && headers.Authorization && marketingCommandKey()) {
+          marketingClearStaleJwt();
+          const retryHeaders = marketingAuthHeaders(opts.headers || {});
+          res = await fetch(url, { ...opts, headers: retryHeaders });
+        }
         if (res.status === 401) {
+          marketingClearStaleJwt();
+          marketingPaintAuthChrome();
           const next = encodeURIComponent(location.pathname + location.search);
           location.href = '/marketing/login?next=' + next;
           throw new Error('Session expired — sign in again.');
@@ -774,7 +812,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                 return;
               }
               try {
-                const res = await fetch('/api/v1/marketing/youtube/status?owner_id=' + encodeURIComponent(marketingOwnerId()), { headers: marketingAuthHeaders() });
+                const res = await marketingFetch('/api/v1/marketing/youtube/status?owner_id=' + encodeURIComponent(marketingOwnerId()));
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error || 'status failed');
                 if (!data.oauthConfigured) {
@@ -827,7 +865,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
               try {
                 const q = '/api/v1/marketing/youtube/suggestions?owner_id=' + encodeURIComponent(marketingOwnerId())
                   + (deep ? '' : '&mode=fast');
-                const res = await fetch(q, { headers: marketingAuthHeaders() });
+                const res = await marketingFetch(q);
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error || 'suggestions failed');
                 await applySuggestionsPayload(data, meta, apiBanner);
@@ -910,21 +948,8 @@ export function registerMarketingSessionUiRoutes(app, deps) {
             globalThis['document'].getElementById('ytRefreshBtn').addEventListener('click', function() { loadSuggestions({ deep: true }); });
             renderModes();
             (function authChrome() {
-              const signedIn = marketingHasAuth();
-              const signup = globalThis['document'].getElementById('signupBtn');
-              const signin = globalThis['document'].getElementById('signinBtn');
+              marketingPaintAuthChrome();
               const start = globalThis['document'].getElementById('startSessionBtn');
-              if (signedIn) {
-                if (signup) signup.style.display = 'none';
-                if (signin) {
-                  signin.textContent = 'Signed in';
-                  signin.removeAttribute('href');
-                  signin.setAttribute('aria-current', 'true');
-                }
-                if (start) start.textContent = 'Start a session';
-              } else if (start) {
-                start.textContent = 'Start a session';
-              }
               if (start) {
                 start.addEventListener('click', function(e) {
                   if (!marketingHasAuth()) {
@@ -943,9 +968,8 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                     return;
                   }
                   try {
-                    const res = await fetch('/api/v1/socialmediaos/content-pack/checkout', {
+                    const res = await marketingFetch('/api/v1/socialmediaos/content-pack/checkout', {
                       method: 'POST',
-                      headers: marketingAuthHeaders(),
                       body: JSON.stringify({})
                     });
                     const data = await res.json().catch(function(){ return {}; });
@@ -972,7 +996,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                 return;
               }
               try {
-                const res = await fetch('/api/v1/marketing/sessions?limit=8', { headers: marketingAuthHeaders() });
+                const res = await marketingFetch('/api/v1/marketing/sessions?limit=8');
                 const data = await res.json().catch(function(){ return {}; });
                 if (!res.ok) throw new Error(data.error || 'Failed to load sessions');
                 const sessions = data.sessions || [];

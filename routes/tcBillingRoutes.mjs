@@ -4,6 +4,7 @@
  * invent stripe_customer_id/subscription_id and never charged anyone).
  * @ssot docs/products/tc-service/PRODUCT_HOME.md
  */
+import { randomUUID } from 'node:crypto';
 import { getStripeClient } from '../services/stripe-client.js';
 
 // Tiered monthly price (cents). Inline price_data so no pre-created Stripe Price
@@ -53,7 +54,146 @@ export function registerTcBillingRoutes(app, deps) {
     return res.status(statusCode).json(payload);
   };
 
-  // Create a REAL Stripe subscription checkout session for an agent.
+  async function createSubscriptionCheckout({ agentId, tier, email, agentName, req }) {
+    const amountCents = TIER_CENTS[tier];
+    if (!amountCents) {
+      return { ok: false, status: 400, error: `Unknown tier: ${tier} (starter|pro|enterprise)` };
+    }
+    const stripe = await getStripeClient();
+    if (!stripe) {
+      return { ok: false, status: 503, error: 'Stripe not configured (STRIPE_SECRET_KEY missing)' };
+    }
+    const base = resolveBaseUrl(req, baseUrl);
+    const session = await stripe.checkout.sessions.create({
+      mode: 'subscription',
+      ...(email ? { customer_email: String(email).trim() } : {}),
+      line_items: [
+        {
+          price_data: {
+            currency: 'usd',
+            product_data: {
+              name: TIER_LABEL[tier],
+              description: 'Transaction coordination service — monthly',
+            },
+            unit_amount: Math.round(amountCents),
+            recurring: { interval: 'month' },
+          },
+          quantity: 1,
+        },
+      ],
+      success_url: `${base}/api/tc/billing/success?agent_id=${encodeURIComponent(String(agentId))}&session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${base}/overlay/tc-agent-enroll.html?canceled=1`,
+      client_reference_id: String(agentId),
+      metadata: {
+        agent_id: String(agentId),
+        tier,
+        product: 'tc-service',
+        agent_name: agentName ? String(agentName).slice(0, 120) : '',
+        agent_email: email ? String(email).slice(0, 200) : '',
+      },
+    });
+
+    const insert = await pool.query(
+      `INSERT INTO tc_billing_subscriptions (agent_id, status, payload)
+       VALUES ($1, $2, $3)
+       RETURNING id, agent_id, status, payload, created_at, updated_at`,
+      [
+        String(agentId),
+        'incomplete',
+        {
+          checkout_session_id: session.id,
+          plan_tier: tier,
+          amount_cents: amountCents,
+          agent_name: agentName || null,
+          agent_email: email || null,
+        },
+      ]
+    );
+
+    return {
+      ok: true,
+      url: session.url,
+      session_id: session.id,
+      agent_id: String(agentId),
+      tier,
+      amount_cents: amountCents,
+      subscription: insert.rows[0] || null,
+    };
+  }
+
+  // Public market enroll: name + email + tier → UUID agent + Stripe Checkout.
+  // No command key (customers will not have one). Rate-limit lightly by IP in-process.
+  const enrollHits = new Map();
+  app.post('/api/tc/billing/enroll', async (req, res) => {
+    try {
+      const ip = String(req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown')
+        .split(',')[0]
+        .trim();
+      const now = Date.now();
+      const hit = enrollHits.get(ip) || { n: 0, t: now };
+      if (now - hit.t > 60_000) { hit.n = 0; hit.t = now; }
+      hit.n += 1;
+      enrollHits.set(ip, hit);
+      if (hit.n > 8) return sendError(res, 429, 'Too many enroll attempts — try again in a minute.');
+
+      const body = req.body && typeof req.body === 'object' ? req.body : {};
+      const agentName = String(body.agentName || body.name || '').trim();
+      const email = String(body.email || '').trim().toLowerCase();
+      const tier = String(body.tier || body.planTier || body.plan_tier || 'starter').toLowerCase();
+      if (!agentName || agentName.length < 2) return sendError(res, 400, 'agentName is required');
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        return sendError(res, 400, 'Valid email is required');
+      }
+      if (!TIER_CENTS[tier]) return sendError(res, 400, `Unknown tier: ${tier} (starter|pro|enterprise)`);
+
+      // Prefer an existing incomplete/active billing UUID for this email; else mint one.
+      let agentId = null;
+      try {
+        const prior = await pool.query(
+          `SELECT agent_id FROM tc_billing_subscriptions
+            WHERE payload->>'agent_email' = $1
+            ORDER BY updated_at DESC NULLS LAST, created_at DESC
+            LIMIT 1`,
+          [email]
+        );
+        if (prior.rows[0]?.agent_id) agentId = String(prior.rows[0].agent_id);
+      } catch { /* table may be empty */ }
+      if (!agentId) agentId = randomUUID();
+
+      // Best-effort registry row (serial id) for ops; billing keys on UUID above.
+      try {
+        await pool.query(
+          `INSERT INTO tc_agent_clients (name, email, plan, monthly_fee, setup_fee, setup_fee_waived, setup_paid, active, notes)
+           VALUES ($1, $2, 'monthly', $3, 0, true, false, true, $4)
+           ON CONFLICT (email) DO UPDATE SET
+             name = EXCLUDED.name,
+             notes = EXCLUDED.notes,
+             updated_at = NOW()`,
+          [
+            agentName,
+            email,
+            (TIER_CENTS[tier] / 100).toFixed(2),
+            `billing_agent_id=${agentId}; tier=${tier}`,
+          ]
+        );
+      } catch (regErr) {
+        logger?.warn?.({ err: regErr.message }, 'tc enroll registry upsert skipped');
+      }
+
+      const checkout = await createSubscriptionCheckout({
+        agentId, tier, email, agentName, req,
+      });
+      if (!checkout.ok) return sendError(res, checkout.status || 500, checkout.error);
+
+      logger?.info?.({ agentId, tier, email, sessionId: checkout.session_id }, 'tc public enroll checkout created');
+      return res.status(200).json(checkout);
+    } catch (error) {
+      logger?.error?.({ err: error }, 'tc billing enroll failed');
+      return sendError(res, 500, error.message || 'Failed to start enrollment');
+    }
+  });
+
+  // Create a REAL Stripe subscription checkout session for an agent (keyed callers).
   app.post('/api/tc/billing/subscribe', requireKey, async (req, res) => {
     try {
       const body = req.body && typeof req.body === 'object' ? req.body : {};
@@ -66,51 +206,17 @@ export function registerTcBillingRoutes(app, deps) {
       }
 
       const tier = String(body.tier || body.plan_tier || 'pro').toLowerCase();
-      const amountCents = TIER_CENTS[tier];
-      if (!amountCents) return sendError(res, 400, `Unknown tier: ${tier} (starter|pro|enterprise)`);
-
-      const stripe = await getStripeClient();
-      if (!stripe) return sendError(res, 503, 'Stripe not configured (STRIPE_SECRET_KEY missing)');
-
-      const base = resolveBaseUrl(req, baseUrl);
-      const session = await stripe.checkout.sessions.create({
-        mode: 'subscription',
-        line_items: [
-          {
-            price_data: {
-              currency: 'usd',
-              product_data: { name: TIER_LABEL[tier], description: 'Transaction coordination service — monthly' },
-              unit_amount: Math.round(amountCents),
-              recurring: { interval: 'month' },
-            },
-            quantity: 1,
-          },
-        ],
-        success_url: `${base}/api/tc/billing/success?agent_id=${encodeURIComponent(String(agentId))}&session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${base}/tc?canceled=true`,
-        client_reference_id: String(agentId),
-        metadata: { agent_id: String(agentId), tier, product: 'tc-service' },
-      });
-
-      // Record an 'incomplete' subscription intent; access is granted only after
-      // /success verifies a genuinely paid session.
-      const insert = await pool.query(
-        `INSERT INTO tc_billing_subscriptions (agent_id, status, payload)
-         VALUES ($1, $2, $3)
-         RETURNING id, agent_id, status, payload, created_at, updated_at`,
-        [String(agentId), 'incomplete', { checkout_session_id: session.id, plan_tier: tier, amount_cents: amountCents }]
-      );
-
-      logger?.info?.({ agentId, tier, sessionId: session.id }, 'tc billing checkout session created');
-      return res.status(200).json({
-        ok: true,
-        url: session.url,
-        session_id: session.id,
-        agent_id: String(agentId),
+      const checkout = await createSubscriptionCheckout({
+        agentId,
         tier,
-        amount_cents: amountCents,
-        subscription: insert.rows[0] || null,
+        email: body.email,
+        agentName: body.agentName || body.name,
+        req,
       });
+      if (!checkout.ok) return sendError(res, checkout.status || 500, checkout.error);
+
+      logger?.info?.({ agentId, tier, sessionId: checkout.session_id }, 'tc billing checkout session created');
+      return res.status(200).json(checkout);
     } catch (error) {
       logger?.error?.({ err: error }, 'tc billing subscribe failed');
       return sendError(res, 500, error.message || 'Failed to create subscription');

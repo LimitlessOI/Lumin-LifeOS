@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/site-builder/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-23 — **WRM trust-bar hover tips.** Stats (2,000+ / 20 yrs / 40+ / Advisory) open credibility microcopy on hover/tap — births+cesarean story, founding, million-midwives teaching, hospital board. |
+| **Last Updated** | 2026-07-24 — **SENTRY A06 aligned to discount checkout interstitial** (`?pay=1` → Stripe). Money path already tip-proved; gate was failing on intentional review page. Prior: 2026-07-23 — **WRM trust-bar hover tips.** |
 
 ---
 
@@ -346,6 +346,7 @@ Founder directive: review every revenue blueprint for gaps against real competit
 
 | Date | What Changed | Why | Verified | Next |
 |---|---|---|---|---|
+| 2026-07-24 | **SENTRY Layer A A06 follows discount interstitial.** `run-site-builder-prealpha.mjs` accepts review page (Discount code + Continue to payment) then proves `?pay=1` 302 → `checkout.stripe.com`. | Gate false-failed after intentional discount-at-checkout UX; Stripe path was live. | tip `pay=1` 302 Stripe | re-run `sentry:gate site-builder` after deploy |
 | 2026-07-23 | **WRM trust-bar + credential hover/tap tips.** Each trust chip (2,000+ births, 20 yrs, 40+ trained, Henderson advisory) shows a short story card on hover/focus/tap; Meet Sherry bullets tippable too. Copy includes founding (2006), million-midwives teaching seriousness, national evaluator role, and practice cesarean rate historically ~4–6× lower than typical U.S. hospital averages (ask-in-consult for current figures). Tracks `stat_tip_open` / `cred_tip_open`. | Adam: hover stats for the story — births outcomes, how she started, midwives trained, national reputation. | local HTML | tip redeploy; confirm exact cesarean multiplier with Sherry before locking harder claim copy |
 | 2026-07-23 | **Discount code only at checkout (no complimentary chrome).** Preview switcher/landing no longer say “Complimentary code / Apply free publish”. Checkout interstitial: **Discount code** + Continue to payment / Pay without a code. Success copy: “Discount applied…”. Serve-time `stripLegacyCompCodeChrome` on DB-baked preview HTML so old previews lose the free-publish form without rebuild. | Adam: every competitor shows a normal discount at checkout close — not free-publish marketing on the preview. | tip `673e8b13fa` checkout label; strip unit-proved on Sherry preview HTML | tip redeploy strip; image relevance gate (wrong hero photos kill trust vs Wix); CTA dupe “Call Call now” on HVAC shell |
 | 2026-07-23 | **Wix template competitive eye-test (therapist + construction demos).** Wix wins on curated hero photography, split-screen composure, restrained type, one job per first viewport. Our Midwife Photo Soft is closest to competitive; Well Rounded Feminine can show wrong/off-niche stock (mechanical hero); HVAC shell has “Call Call now” concat bug; catalog niches are structurally different but content+photo discipline is the lose-condition. | Adam: compare our templates to Wix; learn features; if we don’t do it well we lose. | browser walk Sherry switcher + Wix therapist View demo | rebuild Sherry with photo relevance; fix sticky-call CTA concat; gallery UX (thumbnails not only chips) |

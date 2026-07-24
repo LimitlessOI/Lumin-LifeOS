@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-24T03:16:03.299Z",
+  "generated_at": "2026-07-24T12:50:09.527Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12144,
   "files": [
@@ -37630,9 +37630,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 28920,
-      "mtime": "2026-07-24T03:00:04.285Z",
-      "indexed_at": "2026-07-24T03:00:04.285Z"
+      "bytes": 23255,
+      "mtime": "2026-07-24T12:50:09.527Z",
+      "indexed_at": "2026-07-24T12:50:09.527Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40605,9 +40605,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 123760,
-      "mtime": "2026-07-21T07:13:10.362Z",
-      "indexed_at": "2026-07-21T07:13:10.362Z"
+      "bytes": 124694,
+      "mtime": "2026-07-24T12:50:09.527Z",
+      "indexed_at": "2026-07-24T12:50:09.527Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -40939,9 +40939,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 154950,
-      "mtime": "2026-07-24T00:05:42.410Z",
-      "indexed_at": "2026-07-24T00:05:42.410Z"
+      "bytes": 155339,
+      "mtime": "2026-07-24T12:50:09.527Z",
+      "indexed_at": "2026-07-24T12:50:09.527Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -40997,9 +40997,9 @@
     {
       "path": "docs/products/tc-service/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — TC Service",
-      "bytes": 123933,
-      "mtime": "2026-07-23T21:17:48.231Z",
-      "indexed_at": "2026-07-23T21:17:48.231Z"
+      "bytes": 122696,
+      "mtime": "2026-07-24T12:50:09.527Z",
+      "indexed_at": "2026-07-24T12:50:09.527Z"
     },
     {
       "path": "docs/products/TCSERVICE.md",
@@ -66208,10 +66208,10 @@
     },
     {
       "path": "public/overlay/tc-agent-enroll.html",
-      "synopsis": "HTML page: Agent Enrollment",
-      "bytes": 4282,
-      "mtime": "2026-07-21T05:32:04.290Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z"
+      "synopsis": "TC Service — public agent enrollment → Stripe subscription checkout",
+      "bytes": 5646,
+      "mtime": "2026-07-24T12:50:09.527Z",
+      "indexed_at": "2026-07-24T12:50:09.527Z"
     },
     {
       "path": "public/overlay/tc-billing-enroll.html",
@@ -66230,9 +66230,9 @@
     {
       "path": "public/overlay/tc-for-you.html",
       "synopsis": "TC — polished presentation surface with Studio hero",
-      "bytes": 3844,
-      "mtime": "2026-07-21T05:32:04.290Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z"
+      "bytes": 3867,
+      "mtime": "2026-07-24T12:50:09.527Z",
+      "indexed_at": "2026-07-24T12:50:09.527Z"
     },
     {
       "path": "public/overlay/tc-intake-dashboard.html",
@@ -68366,9 +68366,9 @@
     {
       "path": "routes/marketing-session-ui-routes.js",
       "synopsis": "SocialMediaOS / MarketingOS Phase 1 SSR UI — consent → coach → extract → generate → approve → export",
-      "bytes": 124465,
-      "mtime": "2026-07-21T05:32:04.331Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "bytes": 125331,
+      "mtime": "2026-07-24T12:50:09.527Z",
+      "indexed_at": "2026-07-24T12:50:09.527Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -69059,9 +69059,9 @@
     {
       "path": "routes/tcBillingRoutes.mjs",
       "synopsis": "TC Service agent billing — REAL Stripe subscription checkout + fail-closed",
-      "bytes": 10029,
-      "mtime": "2026-07-21T09:50:05.120Z",
-      "indexed_at": "2026-07-21T09:50:05.120Z",
+      "bytes": 14020,
+      "mtime": "2026-07-24T12:50:09.527Z",
+      "indexed_at": "2026-07-24T12:50:09.527Z",
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]
@@ -71898,9 +71898,9 @@
     {
       "path": "scripts/run-site-builder-prealpha.mjs",
       "synopsis": "Site Builder pre-alpha SENTRY gate — Layer A (structural walkthrough).",
-      "bytes": 10052,
-      "mtime": "2026-07-22T23:03:56.691Z",
-      "indexed_at": "2026-07-22T23:03:56.691Z",
+      "bytes": 10724,
+      "mtime": "2026-07-24T12:50:09.527Z",
+      "indexed_at": "2026-07-24T12:50:09.527Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]

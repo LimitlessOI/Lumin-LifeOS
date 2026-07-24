@@ -1,123 +1,118 @@
 <!DOCTYPE html>
-<!-- SYNOPSIS: HTML page: Agent Enrollment -->
+<!-- SYNOPSIS: TC Service — public agent enrollment → Stripe subscription checkout -->
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agent Enrollment</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            max-width: 600px;
-            margin: auto;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 8px;
-            box-sizing: border-box;
-        }
-        .error {
-            color: red;
-            font-size: 0.9em;
-        }
-        .success-card {
-            display: none;
-            margin-top: 20px;
-            padding: 20px;
-            border: 1px solid #4CAF50;
-            background-color: #d4edda;
-            color: #155724;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Enroll — TC Service</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root { --ink:#142029; --muted:#5a6f74; --deep:#0a3d40; --teal:#14716c; --line:rgba(10,61,64,.12); --serif:"Fraunces",Georgia,serif; --sans:"Manrope",system-ui,sans-serif; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: var(--sans); color: var(--ink);
+      background: linear-gradient(180deg, #e8f2f1, #f4f8f8 45%, #e3eceb); min-height: 100vh;
+    }
+    .wrap { width: min(440px, calc(100vw - 2rem)); margin: 0 auto; padding: 2.5rem 0 3rem; }
+    .brand { font-family: var(--serif); font-weight: 700; font-size: 1.2rem; color: var(--deep); }
+    .brand span { color: var(--teal); font-weight: 500; }
+    h1 { font-family: var(--serif); font-size: 1.85rem; margin: 0.85rem 0 0.35rem; letter-spacing: -0.02em; }
+    .lead { color: var(--muted); margin: 0 0 1.4rem; line-height: 1.45; }
+    .card {
+      background: #fff; border: 1px solid var(--line); border-radius: 16px;
+      padding: 1.35rem; box-shadow: 0 10px 36px rgba(10, 61, 64, 0.06);
+    }
+    label { display: block; font-size: 0.8rem; font-weight: 700; color: var(--muted); margin: 0.9rem 0 0.35rem; }
+    input, select {
+      width: 100%; padding: 0.75rem 0.85rem; border: 1px solid #c5d4d3; border-radius: 10px;
+      font: inherit; background: #fff;
+    }
+    .price { margin: 1rem 0 0; font-size: 0.95rem; color: var(--deep); font-weight: 600; }
+    .btn {
+      margin-top: 1.15rem; width: 100%; border: 0; border-radius: 999px; padding: 0.9rem 1.1rem;
+      font: inherit; font-weight: 700; background: var(--deep); color: #fff; cursor: pointer;
+    }
+    .btn:disabled { opacity: 0.55; cursor: wait; }
+    .err { color: #b91c1c; font-size: 0.9rem; margin: 0.75rem 0 0; display: none; }
+    .back { display: inline-block; margin-top: 1.25rem; color: var(--muted); text-decoration: none; font-size: 0.9rem; }
+    .tiers { display: grid; gap: 0.45rem; margin-top: 0.35rem; font-size: 0.85rem; color: var(--muted); }
+  </style>
 </head>
 <body>
-    <h1>Agent Enrollment</h1>
-    <form id="enrollmentForm">
-        <div class="form-group">
-            <label for="agentName">Agent Name</label>
-            <input type="text" id="agentName" name="agentName" required>
-            <div class="error" id="agentNameError"></div>
-        </div>
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" required>
-            <div class="error" id="emailError"></div>
-        </div>
-        <div class="form-group">
-            <label for="planTier">Plan Tier</label>
-            <select id="planTier" name="planTier" required>
-                <option value="starter">Starter</option>
-                <option value="pro">Pro</option>
-                <option value="enterprise">Enterprise</option>
-            </select>
-            <div class="error" id="planTierError"></div>
-        </div>
-        <div class="form-group">
-            <label for="paymentMethodToken">Stripe Payment Method Token</label>
-            <input type="text" id="paymentMethodToken" name="paymentMethodToken" required>
-            <div class="error" id="paymentMethodTokenError"></div>
-        </div>
-        <button type="submit">Submit</button>
+  <main class="wrap">
+    <div class="brand">TC <span>· transaction care</span></div>
+    <h1>Start your subscription</h1>
+    <p class="lead">Name, email, and plan — then secure Stripe checkout. No payment token forms.</p>
+    <form id="enrollForm" class="card">
+      <label for="agentName">Agent name</label>
+      <input id="agentName" name="agentName" required autocomplete="name" placeholder="Your name" />
+
+      <label for="email">Work email</label>
+      <input id="email" name="email" type="email" required autocomplete="email" placeholder="you@brokerage.com" />
+
+      <label for="planTier">Plan</label>
+      <select id="planTier" name="planTier" required>
+        <option value="starter">Starter — $49/mo</option>
+        <option value="pro" selected>Pro — $99/mo</option>
+        <option value="enterprise">Enterprise — $249/mo</option>
+      </select>
+      <div class="tiers">
+        <div>Starter: core file tracking + reminders</div>
+        <div>Pro: portals + assistant + weekly rhythm</div>
+        <div>Enterprise: multi-agent desk + priority ops</div>
+      </div>
+      <p class="price" id="priceLine">Pro · $99/month after checkout</p>
+      <p class="err" id="error" role="alert"></p>
+      <button class="btn" type="submit" id="submitBtn">Continue to payment</button>
     </form>
-    <div class="success-card" id="successCard">
-        <h2>Subscription Successful!</h2>
-        <p id="subscriptionId"></p>
-        <ul>
-            <li>Check your email for confirmation.</li>
-            <li>Complete your profile setup.</li>
-            <li>Start using your new plan features.</li>
-        </ul>
-    </div>
-    <script>
-        document.getElementById('enrollmentForm').addEventListener('submit', function(event) {
-            event.preventDefault();
+    <a class="back" href="/tc/for-you">← Back to TC</a>
+  </main>
+  <script>
+    const prices = { starter: 49, pro: 99, enterprise: 249 };
+    const tierEl = document.getElementById('planTier');
+    const priceLine = document.getElementById('priceLine');
+    const err = document.getElementById('error');
+    const btn = document.getElementById('submitBtn');
 
-            const data = {
-                agentName: document.getElementById('agentName').value.trim(),
-                email: document.getElementById('email').value.trim(),
-                planTier: document.getElementById('planTier').value,
-                paymentMethodToken: document.getElementById('paymentMethodToken').value.trim()
-            };
+    function paintPrice() {
+      const t = tierEl.value;
+      const label = t.charAt(0).toUpperCase() + t.slice(1);
+      priceLine.textContent = label + ' · $' + prices[t] + '/month after checkout';
+    }
+    tierEl.addEventListener('change', paintPrice);
+    paintPrice();
 
-            let hasError = false;
+    if (new URLSearchParams(location.search).get('canceled') === '1') {
+      err.style.display = 'block';
+      err.textContent = 'Checkout canceled — pick a plan when you are ready.';
+    }
 
-            Object.keys(data).forEach(key => {
-                const errorElement = document.getElementById(key + 'Error');
-                if (!data[key]) {
-                    errorElement.textContent = 'This field is required.';
-                    hasError = true;
-                } else {
-                    errorElement.textContent = '';
-                }
-            });
-
-            if (hasError) return;
-
-            fetch('/api/tc/billing/subscribe', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.subscriptionId) {
-                    document.getElementById('subscriptionId').textContent = 'Subscription ID: ' + data.subscriptionId;
-                    document.getElementById('successCard').style.display = 'block';
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+    document.getElementById('enrollForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      err.style.display = 'none';
+      btn.disabled = true;
+      btn.textContent = 'Opening Stripe…';
+      try {
+        const res = await fetch('/api/tc/billing/enroll', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            agentName: document.getElementById('agentName').value.trim(),
+            email: document.getElementById('email').value.trim(),
+            tier: tierEl.value,
+          }),
         });
-    </script>
+        const data = await res.json().catch(function () { return {}; });
+        if (!res.ok) throw new Error(data.error || 'Enrollment failed');
+        if (!data.url) throw new Error('No checkout URL returned');
+        location.href = data.url;
+      } catch (ex) {
+        err.style.display = 'block';
+        err.textContent = ex.message || 'Could not start checkout';
+        btn.disabled = false;
+        btn.textContent = 'Continue to payment';
+      }
+    });
+  </script>
 </body>
 </html>

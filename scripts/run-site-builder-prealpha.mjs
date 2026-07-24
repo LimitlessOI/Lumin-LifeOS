@@ -164,16 +164,29 @@ async function main() {
       ? `PARKED/PLACEHOLDER content detected ("${parkedHit}") — source is not a real business site`
       : 'no parking/placeholder markers in the built site');
 
-  // A06 — publish resolves to Stripe checkout (302 with a stripe Location, or a
-  // followed page on checkout.stripe.com).
-  const noRedirect = await fetchRaw(preview.publishCheckoutUrl, { redirect: 'manual' });
-  const locIsStripe = /stripe\.com/i.test(noRedirect.location);
-  let checkoutOk = (noRedirect.status >= 300 && noRedirect.status < 400 && locIsStripe);
-  let checkoutDetail = `HTTP ${noRedirect.status}; location=${noRedirect.location || '(none)'}`;
+  // A06 — publish money path reaches Stripe. The first hop is an intentional
+  // review page (discount code + Continue to payment). Prove that page, then
+  // follow ?pay=1 to a Stripe Location (or checkout.stripe.com body).
+  const review = await fetchRaw(preview.publishCheckoutUrl, { redirect: 'manual' });
+  const reviewHtml = review.text || '';
+  const isReviewPage = review.status === 200
+    && /Continue to payment|Discount code|Publish/i.test(reviewHtml)
+    && /name="pay"|pay=1/i.test(reviewHtml);
+  const payUrl = preview.publishCheckoutUrl.includes('?')
+    ? `${preview.publishCheckoutUrl}&pay=1`
+    : `${preview.publishCheckoutUrl}?pay=1`;
+  const payHop = await fetchRaw(payUrl, { redirect: 'manual' });
+  const locIsStripe = /stripe\.com/i.test(payHop.location || '');
+  let checkoutOk = isReviewPage && payHop.status >= 300 && payHop.status < 400 && locIsStripe;
+  let checkoutDetail = `review HTTP ${review.status} review_page=${isReviewPage}; pay=1 HTTP ${payHop.status}; location=${payHop.location || '(none)'}`;
+  if (!checkoutOk && locIsStripe) {
+    checkoutOk = true;
+    checkoutDetail += ' | direct_stripe_ok';
+  }
   if (!checkoutOk) {
-    const followed = await fetchRaw(preview.publishCheckoutUrl, { redirect: 'follow' });
-    checkoutOk = /checkout\.stripe\.com|js\.stripe\.com|stripe/i.test(followed.text) && followed.status === 200;
-    checkoutDetail += ` | followed HTTP ${followed.status} stripe_in_body=${/stripe/i.test(followed.text)}`;
+    const followed = await fetchRaw(payUrl, { redirect: 'follow' });
+    checkoutOk = /checkout\.stripe\.com|js\.stripe\.com/i.test(followed.text || '') && followed.status === 200;
+    checkoutDetail += ` | followed pay=1 HTTP ${followed.status} stripe_in_body=${/stripe/i.test(followed.text || '')}`;
   }
   step('SBPA-A06_checkout_resolves_stripe', checkoutOk, checkoutDetail);
 
