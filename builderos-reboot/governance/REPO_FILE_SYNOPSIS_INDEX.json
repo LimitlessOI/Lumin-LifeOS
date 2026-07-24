@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-24T20:08:42.598Z",
+  "generated_at": "2026-07-24T20:12:09.665Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12151,
   "files": [
@@ -30597,9 +30597,9 @@
     {
       "path": "config/design-studio-layouts.js",
       "synopsis": "Hand-authored layout shells per design system — real structural",
-      "bytes": 93364,
-      "mtime": "2026-07-24T20:01:06.197Z",
-      "indexed_at": "2026-07-24T20:01:06.197Z",
+      "bytes": 93880,
+      "mtime": "2026-07-24T20:12:09.665Z",
+      "indexed_at": "2026-07-24T20:12:09.665Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -40939,9 +40939,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 157275,
-      "mtime": "2026-07-24T20:01:06.197Z",
-      "indexed_at": "2026-07-24T20:01:06.197Z"
+      "bytes": 157482,
+      "mtime": "2026-07-24T20:12:09.665Z",
+      "indexed_at": "2026-07-24T20:12:09.665Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -91072,9 +91072,9 @@
     {
       "path": "services/site-builder.js",
       "synopsis": "Site Builder — Scrape existing site → AI-generates complete click-funnel website",
-      "bytes": 104394,
-      "mtime": "2026-07-24T20:01:06.197Z",
-      "indexed_at": "2026-07-24T20:01:06.197Z",
+      "bytes": 105222,
+      "mtime": "2026-07-24T20:12:09.665Z",
+      "indexed_at": "2026-07-24T20:12:09.665Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -94715,9 +94715,9 @@
     {
       "path": "tests/site-builder-template-catalog-50.test.js",
       "synopsis": "js — tests/site-builder-template-catalog-50.test.js.",
-      "bytes": 5376,
-      "mtime": "2026-07-24T20:01:06.197Z",
-      "indexed_at": "2026-07-24T20:01:06.197Z",
+      "bytes": 6237,
+      "mtime": "2026-07-24T20:12:09.665Z",
+      "indexed_at": "2026-07-24T20:12:09.665Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]

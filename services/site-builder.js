@@ -867,19 +867,23 @@ export default class SiteBuilder {
           return false;
         })?.href || '';
 
-        // Service headings + following paragraph (Prenatal / Birth / Postpartum pattern)
+        // Service headings + following paragraph (Prenatal / Birth / Postpartum pattern).
+        // Skip nav chrome ("Services", "Birth Story Videos") — those poisoned shells.
+        const junkService = /^(services?|menu|home|about|contact|blog|videos?|gallery|book(ing)?|login|shop|cart|faq|resources?|birth story videos?)$/i;
         const serviceBlocks = [];
-        const headings = Array.from(document.querySelectorAll('h2, h3, h4, strong'));
+        const headings = Array.from(document.querySelectorAll('h2, h3, h4'));
         for (const h of headings) {
-          const name = (h.innerText || '').trim();
-          if (!name || name.length < 3 || name.length > 80) continue;
-          if (!/care|birth|prenatal|postpartum|labor|yoga|sound|healing|package|service|wellness|midwif/i.test(name)) continue;
+          const name = (h.innerText || '').trim().replace(/\s+/g, ' ');
+          if (!name || name.length < 4 || name.length > 60) continue;
+          if (junkService.test(name)) continue;
+          if (!/care|birth|prenatal|postpartum|labor|yoga|sound|healing|package|wellness|midwif|doula|consult|newborn|acutonic|reiki|herbal/i.test(name)) continue;
           let desc = '';
           let sib = h.nextElementSibling;
           for (let i = 0; i < 4 && sib; i += 1, sib = sib.nextElementSibling) {
             const t = (sib.innerText || '').trim();
             if (t && t.length > 40) { desc = t.slice(0, 280); break; }
           }
+          if (!desc) continue; // name-only nav labels are not services
           if (!serviceBlocks.find(s => s.name.toLowerCase() === name.toLowerCase())) {
             serviceBlocks.push({ name, description: desc });
           }
@@ -949,14 +953,22 @@ export default class SiteBuilder {
       };
       if (scraped.phone && !businessInfo.phone) businessInfo.phone = scraped.phone;
       if (scraped.bookingUrl && !businessInfo.bookingUrl) businessInfo.bookingUrl = scraped.bookingUrl;
-      if (Array.isArray(scraped.serviceDetails) && scraped.serviceDetails.length) {
-        businessInfo.serviceDetails = scraped.serviceDetails;
-        if (!Array.isArray(businessInfo.services) || !businessInfo.services.length) {
-          businessInfo.services = scraped.serviceDetails.map((s) => s.name);
-        }
-      }
-      if (Array.isArray(scraped.services) && scraped.services.length
-        && (!Array.isArray(businessInfo.services) || !businessInfo.services.length)) {
+      // Prefer AI service names when scrape details are empty/junk nav labels.
+      const aiServices = Array.isArray(extracted?.services)
+        ? extracted.services.map((s) => (typeof s === 'string' ? s : s?.name)).filter(Boolean)
+        : [];
+      const scrapedDetails = (Array.isArray(scraped.serviceDetails) ? scraped.serviceDetails : [])
+        .filter((s) => s?.name && s?.description && String(s.description).length > 20);
+      if (scrapedDetails.length) {
+        businessInfo.serviceDetails = scrapedDetails;
+        if (!aiServices.length) businessInfo.services = scrapedDetails.map((s) => s.name);
+      } else if (aiServices.length) {
+        businessInfo.services = aiServices;
+        businessInfo.serviceDetails = aiServices.map((name) => ({
+          name,
+          description: '',
+        }));
+      } else if (Array.isArray(scraped.services) && scraped.services.length) {
         businessInfo.services = scraped.services;
       }
       if (!businessInfo.tagline) {

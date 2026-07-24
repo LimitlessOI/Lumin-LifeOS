@@ -67,6 +67,24 @@ describe('site-builder 50-template catalog', () => {
     assert.ok(c.serviceDetails[0].description.includes('prenatal'), 'service description missing');
   });
 
+  it('normalizeLayoutContent prefers AI service names over junk scrape labels', () => {
+    const c = normalizeLayoutContent({
+      businessName: 'Sherry L Hopkins CPM',
+      industry: 'midwifery',
+      phone: '702-478-5080',
+      tagline: 'Transform from feeling shy or uncertain to truly shining in your life.',
+      about: 'Certified Professional Midwife offering home birth and wellness.',
+      services: ['Prenatal Care', 'Labor & Birth At Home', 'Postpartum & Newborn Care'],
+      serviceDetails: [
+        { name: 'Birth Story Videos', description: '' },
+        { name: 'Services', description: '' },
+      ],
+    }, null);
+    assert.deepEqual(c.services, ['Prenatal Care', 'Labor & Birth At Home', 'Postpartum & Newborn Care']);
+    assert.ok(!c.services.includes('Services'));
+    assert.ok(!c.services.includes('Birth Story Videos'));
+  });
+
   it('FREE_DESIGN_SYSTEM_IDS are resolvable', () => {
     for (const id of FREE_DESIGN_SYSTEM_IDS) {
       assert.ok(DESIGN_SYSTEMS.some((d) => d.id === id), `free id missing: ${id}`);

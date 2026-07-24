@@ -57,22 +57,30 @@ function resolvePrimaryBooking(info = {}, posPartner = null) {
   return '#contact';
 }
 
+function isJunkServiceName(name) {
+  return /^(services?|menu|home|about|contact|blog|videos?|gallery|book(ing)?|login|shop|cart|faq|resources?|birth story videos?)$/i.test(String(name || '').trim());
+}
+
 function normalizeServices(info = {}) {
-  const details = Array.isArray(info.serviceDetails) ? info.serviceDetails : [];
-  if (details.length) {
-    return details.slice(0, 6).map((s) => ({
+  const aboutBite = String(info.about || info.uniqueValue || info.tagline || '').trim().slice(0, 160);
+  const details = (Array.isArray(info.serviceDetails) ? info.serviceDetails : [])
+    .map((s) => ({
       name: String(s.name || s).trim(),
       description: String(s.description || '').trim(),
-    })).filter((s) => s.name);
-  }
+    }))
+    .filter((s) => s.name && !isJunkServiceName(s.name));
+  const usableDetails = details.filter((s) => s.description.length > 20);
+  if (usableDetails.length) return usableDetails.slice(0, 6);
+
   const raw = info.services || [];
   if (Array.isArray(raw) && raw.length) {
-    return raw.slice(0, 6).map((s) => {
+    const mapped = raw.slice(0, 6).map((s) => {
       if (s && typeof s === 'object') {
-        return { name: String(s.name || '').trim(), description: String(s.description || '').trim() };
+        return { name: String(s.name || '').trim(), description: String(s.description || aboutBite).trim() };
       }
-      return { name: String(s).trim(), description: '' };
-    }).filter((s) => s.name);
+      return { name: String(s).trim(), description: aboutBite };
+    }).filter((s) => s.name && !isJunkServiceName(s.name));
+    if (mapped.length) return mapped;
   }
   const industry = String(info.industry || '').toLowerCase();
   if (/midwif|doula|birth|maternity/.test(industry) || /midwif|prenatal|birth|postpartum/i.test(info.bodyText || '')) {
