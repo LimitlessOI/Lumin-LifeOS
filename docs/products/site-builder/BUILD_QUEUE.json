@@ -1488,13 +1488,13 @@
     },
     {
       "id": "005",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/site-builder-interactive-element-guides.js",
       "task": "Create service for interactive element guides",
       "spec": "Service to provide labels and descriptions for all interactive elements to reduce user hesitation.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "getElementGuides",
         "addElementGuide"
@@ -1510,18 +1510,33 @@
           "assertion_id": "expected_exports:services/site-builder-interactive-element-guides.js"
         }
       ],
-      "last_attempt_at": "2026-07-24T20:10:45.639Z",
-      "last_error": "NOT_ON_BLUEPRINT",
+      "last_attempt_at": null,
+      "last_error": null,
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "failure_signature": "NOT_ON_BLUEPRINT",
       "same_signature_count": 1,
-      "escalation_class": "governance_block"
+      "escalation_class": "governance_block",
+      "revive_count": 1,
+      "revived_at": "2026-07-24T20:30:43.453Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": true,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "pre_existing_artifact_proof",
+      "shipped_at": "2026-07-24T20:30:43.512Z"
     },
     {
       "id": "006",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/site-builder-interactive-element-guides-routes.js",
       "task": "Setup routes for interactive element guides",
       "spec": "API routes for accessing and updating guides for interactive elements.",
@@ -1569,9 +1584,15 @@
           "content_sha256": "3aebaa1d25155bb242d87d24f06254800aa05cf63494ea208b6c880467d0898c"
         }
       },
-      "shipped_at": "2026-07-24T20:28:46.416Z",
+      "shipped_at": "2026-07-24T20:30:43.512Z",
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
-      "blueprint_step_id": "006"
+      "blueprint_step_id": "006",
+      "pre_existing": true,
+      "shipped_via": "pre_existing_artifact_proof",
+      "last_error": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null
     },
     {
       "id": "007",
@@ -1584,7 +1605,33 @@
       ],
       "founder_gated": false,
       "attempts": 0,
-      "design_review_flagged": true
+      "design_review_flagged": true,
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/site-builder/twins/steps/007.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-24T20:30:46.831Z",
+        "shipped_at": "2026-07-24T20:30:46.831Z",
+        "commit_sha": null,
+        "content_sha256": "ab272789e5d5cfd3415e32e178176e7b5bbdce486c2c29fc1f74598250b33a74",
+        "target_file": "public/overlay/site-builder-interactive-guides.html",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "public/overlay/site-builder-interactive-guides.html",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/site-builder/twins/steps/007.exact",
+          "content_sha256": "ab272789e5d5cfd3415e32e178176e7b5bbdce486c2c29fc1f74598250b33a74"
+        }
+      },
+      "shipped_at": "2026-07-24T20:30:46.831Z",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "007"
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",
