@@ -1,5 +1,13 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-23 — WRM trust-bar hover tips (2,000 / 20 yrs / 40+)
+
+Adam: hover the big numbers for the story — births outcomes vs hospitals, how she started, midwives trained, million-midwives seriousness, nationally known. Shipped tip cards on WRM trust bar + tippable Meet Sherry credentials. Cesarean “4–6× lower than typical hospital averages” phrased with ask-in-consult for current figures. Next: tip redeploy; Sherry confirm exact multiplier.
+
+## 2026-07-23 — Site Builder vs Wix templates; discount at checkout only
+
+Adam: walk front door + every template; compare to Wix; no complimentary/free-publish on preview — normal discount at checkout. Shipped discount interstitial + landing FAQ; tip `673e8b13fa`. Serve-time strip for baked preview chrome. Eye-test: Wix therapist demos win on photo curation + split-hero composure; our Midwife Photo Soft is closest; Well Rounded Feminine showed wrong hero imagery; HVAC shell “Call Call now” concat. Next: photo-relevance gate + CTA fix + optional thumbnail gallery.
+
 ## 2026-07-23 — WRM on Railway; Wix WRM hosting canceled
 
 Adam: BoFA-style “link old host → we move DNS → ask cancel or stay”; for WRM cancel old hosting once ours is verified. KNOW: `www.wellroundedmomma.com` serves Site Builder on Railway; Wix WRM Business Premium + Contact Collection + Events Calendar set AUTO RENEW OFF; sherry domains/plans untouched. Doctrine in `docs/products/site-builder/PRODUCT_HOME.md` § Hosting handoff. Next: productize connect UI; optional NS move off Wix; dual apex A cleanup if needed.
