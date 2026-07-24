@@ -1377,6 +1377,116 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-24T12:55:58.985Z",
       "commit_sha": "72a13cd0e59362bbf28622dd7b8f2ff0a69c5e1f"
+    },
+    {
+      "id": "001",
+      "status": "pending",
+      "target_file": "db/migrations/20241015_add_template_variations.sql",
+      "task": "Create migration for additional template variations",
+      "spec": "Create a table for additional template variations to accommodate more design choices for users.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS template_variations",
+        "gen_random_uuid()",
+        "now()"
+      ],
+      "design_review_flagged": true
+    },
+    {
+      "id": "002",
+      "status": "pending",
+      "target_file": "services/site-builder-template-variations.js",
+      "task": "Implement service for template variations",
+      "spec": "Service to manage different template variations, allowing multiple design choices.",
+      "depends_on": [
+        "001"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getTemplateVariations",
+        "addTemplateVariation",
+        "listAllVariations"
+      ],
+      "design_review_flagged": true
+    },
+    {
+      "id": "003",
+      "status": "pending",
+      "target_file": "routes/site-builder-template-variations-routes.js",
+      "task": "Define routes for template variations",
+      "spec": "API routes for accessing and managing template variations.",
+      "depends_on": [
+        "002"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerTemplateVariationsRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/site-builder/template-variations"
+      }
+    },
+    {
+      "id": "004",
+      "status": "pending",
+      "target_file": "public/overlay/site-builder-template-selection.html",
+      "task": "Design UI for template selection",
+      "spec": "User interface for selecting among multiple template options provided by the site builder.",
+      "depends_on": [
+        "003"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "design_review_flagged": true
+    },
+    {
+      "id": "005",
+      "status": "pending",
+      "target_file": "services/site-builder-interactive-element-guides.js",
+      "task": "Create service for interactive element guides",
+      "spec": "Service to provide labels and descriptions for all interactive elements to reduce user hesitation.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getElementGuides",
+        "addElementGuide"
+      ]
+    },
+    {
+      "id": "006",
+      "status": "pending",
+      "target_file": "routes/site-builder-interactive-element-guides-routes.js",
+      "task": "Setup routes for interactive element guides",
+      "spec": "API routes for accessing and updating guides for interactive elements.",
+      "depends_on": [
+        "005"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerInteractiveElementGuidesRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/site-builder/interactive-element-guides"
+      }
+    },
+    {
+      "id": "007",
+      "status": "pending",
+      "target_file": "public/overlay/site-builder-interactive-guides.html",
+      "task": "Build UI for interactive element guides",
+      "spec": "User interface for displaying guides and labels for interactive elements, enhancing usability.",
+      "depends_on": [
+        "006"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "design_review_flagged": true
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",
