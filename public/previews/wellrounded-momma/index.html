@@ -189,6 +189,12 @@
   .pillar .pimg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.45;display:block}
   .pillar .pimg-strong{background-color:var(--blush)}
   .pillar .pimg-strong img{opacity:.75}
+  /* Sherry tile: pull back so face + baby both read in the crop */
+  .pillar .pimg-sherry{height:260px;background-color:var(--blush)}
+  .pillar .pimg-sherry img{opacity:.95;object-fit:cover;object-position:50% 38%;transform:scale(.72);transform-origin:center center}
+  /* Cora tile: midwife-in-action portrait from her site */
+  .pillar .pimg-cora{height:240px;background-color:var(--blush)}
+  .pillar .pimg-cora img{opacity:.92;object-fit:cover;object-position:50% 22%}
   .pillar .pbody{padding:26px;display:flex;flex-direction:column;flex:1}
   .pillar .tag{font-family:Sacramento,cursive;font-size:1.3rem;color:var(--coral)}
   .pillar h3{font-size:1.5rem;margin:2px 0 4px}
@@ -385,8 +391,8 @@
     <div class="pillars">
 
       <article class="pillar">
-        <div class="pimg">
-          <img src="https://static.wixstatic.com/media/fb1e61_586c083b0792433d9cf56d17473df9a0~mv2.jpg" alt="Sherry with a newborn" loading="lazy" />
+        <div class="pimg pimg-sherry">
+          <img src="https://static.wixstatic.com/media/fb1e61_586c083b0792433d9cf56d17473df9a0~mv2.jpg" alt="Sherry Hopkins with a newborn" loading="lazy" />
         </div>
         <div class="pbody">
           <span class="tag">The Midwife</span>
@@ -405,8 +411,8 @@
       </article>
 
       <article class="pillar">
-        <div class="pimg">
-          <img src="https://static.wixstatic.com/media/477ca8_2235e5fb1e504777b47d194b18ee7b70~mv2.jpg/v1/crop/x_0,y_396,w_3118,h_3886/fill/w_900,h_1120,al_c,q_85/_MG_4656-Enhanced-NR.jpg" alt="Cora Williams, Mermaid Cove Midwifery" loading="lazy" />
+        <div class="pimg pimg-cora">
+          <img src="https://static.wixstatic.com/media/477ca8_2db0e294357c4be3bf50404e3a677356~mv2.jpg/v1/fill/w_1200,h_900,al_c,q_85/477ca8_2db0e294357c4be3bf50404e3a677356~mv2.jpg" alt="Cora Williams providing prenatal midwifery care" loading="lazy" />
         </div>
         <div class="pbody">
           <span class="tag">Midwife and Placenta Specialist</span>
