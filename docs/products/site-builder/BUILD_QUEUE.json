@@ -1282,6 +1282,51 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-23T19:24:30.084Z"
+    },
+    {
+      "id": "9",
+      "status": "pending",
+      "target_file": "services/site-builder-interactive-element-labels.js",
+      "task": "Handle interactive element labels",
+      "spec": "Manage the logic for retrieving and updating labels of interactive elements",
+      "depends_on": [
+        "8"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getElementLabels",
+        "updateElementLabel"
+      ]
+    },
+    {
+      "id": "10",
+      "status": "pending",
+      "target_file": "routes/site-builder-interactive-element-label-routes.js",
+      "task": "Setup routes for element labels",
+      "spec": "Create API endpoints for interactive element labels management",
+      "depends_on": [
+        "9"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerInteractiveElementLabelRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/site-builder/element-labels"
+      }
+    },
+    {
+      "id": "11",
+      "status": "pending",
+      "target_file": "public/overlay/site-builder-interactive-element-labels.html",
+      "task": "UI for interactive element labels",
+      "spec": "Design the UI showing labels for interactive elements",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "design_review_flagged": true
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",
