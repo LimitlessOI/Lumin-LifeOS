@@ -120,6 +120,7 @@ export function normalizeLayoutContent(info = {}, posPartner = null, { imageOffs
     .map((p) => p.displayUrl || p.url)
     .filter(Boolean);
   const social = (info.assetData?.images?.social || []).map((i) => i.url || i);
+  const isVideoThumb = (u) => /ytimg\.com|i\.ytimg\.com|img\.youtube\.com|youtube\.com\/vi\/|vumbnail\.com|i\.vimeocdn\.com/i.test(String(u || ''));
   const rawHeroes = [
     ...igPosts,
     ...social,
@@ -128,9 +129,13 @@ export function normalizeLayoutContent(info = {}, posPartner = null, { imageOffs
     ...(info.assetData?.images?.product || []),
     ...(info.assetData?.images?.team || []),
   ];
-  let heroes = uniqUrls(rawHeroes).filter((u) => u !== logo && !/\blogo\b|favicon/i.test(u));
-  const owned = heroes.filter((u) => !/replicate\.delivery|oaidalle/i.test(u));
+  // Never use YouTube/Vimeo clickbait thumbs as heroes — Adam's Sherry preview proof.
+  let heroes = uniqUrls(rawHeroes).filter((u) => u !== logo && !/\blogo\b|favicon/i.test(u) && !isVideoThumb(u));
+  const owned = heroes.filter((u) => !/replicate\.delivery|oaidalle|unsplash\.com/i.test(u));
   if (owned.length) heroes = owned;
+  // Prefer real photos (jpg/webp) over Wix graphic PNGs when both exist
+  const photos = heroes.filter((u) => /\.(jpe?g|webp)(?:\?|$|\/)/i.test(u) || /cdninstagram|fbcdn|scontent/i.test(u));
+  if (photos.length) heroes = [...photos, ...heroes.filter((u) => !photos.includes(u))];
   const offset = heroes.length ? Math.abs(Number(imageOffset) || 0) % heroes.length : 0;
   const rotated = heroes.length ? [...heroes.slice(offset), ...heroes.slice(0, offset)] : [];
   const hero = rotated[0] || '';

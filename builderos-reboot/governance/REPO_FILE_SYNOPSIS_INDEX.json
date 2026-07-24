@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-24T20:12:09.665Z",
+  "generated_at": "2026-07-24T20:23:12.481Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12151,
+  "file_count": 12152,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -30597,9 +30597,9 @@
     {
       "path": "config/design-studio-layouts.js",
       "synopsis": "Hand-authored layout shells per design system — real structural",
-      "bytes": 93880,
-      "mtime": "2026-07-24T20:12:09.665Z",
-      "indexed_at": "2026-07-24T20:12:09.665Z",
+      "bytes": 94433,
+      "mtime": "2026-07-24T20:23:12.481Z",
+      "indexed_at": "2026-07-24T20:23:12.481Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -40939,9 +40939,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 157482,
-      "mtime": "2026-07-24T20:12:09.665Z",
-      "indexed_at": "2026-07-24T20:12:09.665Z"
+      "bytes": 158091,
+      "mtime": "2026-07-24T20:23:12.481Z",
+      "indexed_at": "2026-07-24T20:23:12.481Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -90786,9 +90786,9 @@
     {
       "path": "services/site-builder-asset-ingestion.js",
       "synopsis": "Site Builder Asset Ingestion — discover and pull real assets",
-      "bytes": 80467,
-      "mtime": "2026-07-23T16:51:27.653Z",
-      "indexed_at": "2026-07-23T16:51:27.653Z",
+      "bytes": 82182,
+      "mtime": "2026-07-24T20:23:12.481Z",
+      "indexed_at": "2026-07-24T20:23:12.481Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -94633,6 +94633,16 @@
       "bytes": 11195,
       "mtime": "2026-07-21T05:32:04.722Z",
       "indexed_at": "2026-07-21T05:58:39.404Z"
+    },
+    {
+      "path": "tests/site-builder-asset-hero-filter.test.js",
+      "synopsis": "js — tests/site-builder-asset-hero-filter.test.js.",
+      "bytes": 1486,
+      "mtime": "2026-07-24T20:23:12.481Z",
+      "indexed_at": "2026-07-24T20:23:12.481Z",
+      "ssot": [
+        "docs/products/site-builder/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "tests/site-builder-comp-code.test.js",

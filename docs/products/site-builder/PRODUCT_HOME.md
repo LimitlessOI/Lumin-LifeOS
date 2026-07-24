@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/site-builder/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-24 — Site Builder quality lockdown: scrape-first + niche templates + real CTAs (Sherry trash preview root-cause fix). |
+| **Last Updated** | 2026-07-24 — Ban YouTube thumbs as heroes; scrape about-me Wix JPGs (Sherry clickbait-hero fix). |
 
 ---
 
@@ -346,6 +346,7 @@ Founder directive: review every revenue blueprint for gaps against real competit
 
 | Date | What Changed | Why | Verified | Next |
 |---|---|---|---|---|
+| 2026-07-24 | **Ban YouTube video thumbnails as heroes.** Asset ingestion was scoring `ytimg` +25 and merging channel thumbs into `heroImages` — Midwife/Photographer/Editorial shells showed clickbait overlays (“You’re Not Alone”, “Question Everything”) instead of birth photos. Fix: `isVideoThumbnailUrl` hard-ban; remove YT from image pool; scrape `/about-me` + midwife-services via direct HTML (Wix JPGs); prefer jpg over graphic PNGs in `normalizeLayoutContent`. | Adam screenshots vs sherrylhopkins.com — would never buy YouTube-thumb sites. | unit hero-filter tests | tip rebuild Sherry; eye-test Midwife Photo Soft |
 | 2026-07-24 | **Quality lockdown — stop trash shells.** Root cause of SherryLHopkins auto-preview: (1) `businessName`-only stub short-circuited scrape → empty phone/booking/services; (2) AI nulls wiped scrape fields; (3) `normalizeLayoutContent` fell back to “Clear outcomes…” + bare `jane.app` CTA; (4) service cards hardcoded “Details confirmed in consult”; (5) `pickDesignSystems` showed HVAC/plumber for midwives. Fixes: prospect never skips scrape on thin stubs; scrape extracts tel/book/service blocks + JSON-LD; null-safe merge; booking prefers real URL or `tel:` never bare affiliate; niche-aware template pick (trade shells excluded for birth/wellness); service descriptions from scrape. Follow-up: junk scrape labels (“Services”, “Birth Story Videos”) no longer override AI service names (Prenatal / Birth / Postpartum). | Adam walked preview vs live sherrylhopkins.com — Wix wins; family income depends on sellable Site Builder. | tip `a1586781ac` rebuild `prev_1784923426748_tfjd` — real H1/phone/book-online, no Jane/HVAC; services follow-up shipping | tip rebuild after services merge; founder eye-test |
 | 2026-07-24 | **Instantly cold-outreach lane.** New `services/site-builder-instantly-outreach.js`; prospect pipeline prefers Instantly when configured. Doctrine: Postmark/Resend/SendGrid are transactional — wrong tool for cold (Postmark already refused). Playbook has Instantly signup steps. | Adam: Postmark will not approve cold email — find someone that can. | unit tests Instantly + readiness | Adam: Instantly Growth API key + campaign UUID → resend Handyman |
 | 2026-07-24 | **Email readiness honesty + distribution blockers.** `evaluateSiteBuilderEmailReadiness` no longer claims `cold_email_sending` for bare Postmark token. | Tip resend-outreach failed pending-approval; launch-readiness was lying. | tip Handyman resend fail | superseded by Instantly lane |

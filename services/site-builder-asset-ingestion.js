@@ -217,8 +217,9 @@ function extractImagesFromMarkdown(markdown) {
     const alt = (tag.match(/alt=["']([^"']*)["']/i) || [])[1] || '';
     push(alt, hit[1]);
   }
+  // Deliberately omit i.ytimg.com — video thumbs must not enter the hero pool.
   const cdnUrls = String(markdown || '').matchAll(
-    /https?:\/\/(?:static\.wixstatic\.com\/media|images\.unsplash\.com|cdninstagram\.com|scontent[^/\s"']+\.cdninstagram\.com|i\.ytimg\.com|images\.squarespace-cdn\.com|cdn\.shopify\.com|res\.cloudinary\.com|imgix\.net|wp-content\/uploads)[^\s"'<>)\\]*/gi
+    /https?:\/\/(?:static\.wixstatic\.com\/media|images\.unsplash\.com|cdninstagram\.com|scontent[^/\s"']+\.cdninstagram\.com|images\.squarespace-cdn\.com|cdn\.shopify\.com|res\.cloudinary\.com|imgix\.net|wp-content\/uploads)[^\s"'<>)\\]*/gi
   );
   for (const hit of cdnUrls) {
     let url = hit[0];
@@ -226,6 +227,7 @@ function extractImagesFromMarkdown(markdown) {
     if (/wixstatic\.com\/media\//i.test(url)) {
       url = url.split('/v1/')[0];
     }
+    if (isVideoThumbnailUrl(url)) continue;
     push('', url);
   }
   return images;
@@ -244,15 +246,26 @@ function pickLogo(images) {
   return images[0]?.url || null;
 }
 
+/** YouTube / Vimeo / clickbait video thumbs must NEVER be site heroes — they look like trash. */
+export function isVideoThumbnailUrl(url = '') {
+  const u = String(url || '').toLowerCase();
+  if (!u) return false;
+  if (/ytimg\.com|i\.ytimg\.com|img\.youtube\.com|youtube\.com\/vi\//i.test(u)) return true;
+  if (/vumbnail\.com|i\.vimeocdn\.com|vimeo\.com\/._thumb/i.test(u)) return true;
+  if (/hqdefault|mqdefault|sddefault|maxresdefault|default\.jpg/i.test(u) && /ytimg|youtube/i.test(u)) return true;
+  return false;
+}
+
 function isLogoLikeImage(img, logoUrl = '') {
   if (!img?.url) return true;
   if (logoUrl && img.url === logoUrl) return true;
   const alt = String(img.alt || '');
   const url = String(img.url || '');
+  if (isVideoThumbnailUrl(url)) return true;
   if (/\blogo\b|favicon|site icon|brand mark|sprite/i.test(alt)) return true;
   if (/\blogo\b|favicon|\.ico(?:\?|$)/i.test(url)) return true;
   // Tiny Wix transforms / decorative sprites — not usable photos
-  if (/\/v1\/fill\/w_(?:1|2)\d(?!\d)/i.test(url)) return true;
+  if (/\/v1\/fill\/w_(?:[1-9]|[1-9]\d|1\d\d)(?!\d)/i.test(url)) return true; // w_1..w_199
   if (/\.svg(?:\?|$)/i.test(url)) return true;
   return false;
 }
@@ -261,15 +274,17 @@ function scoreImageForHero(img, logoUrl = '') {
   if (isLogoLikeImage(img, logoUrl)) return -1;
   const url = String(img.url || '');
   const alt = String(img.alt || '');
+  if (isVideoThumbnailUrl(url)) return -1;
   let score = 5;
   // Their own Instagram posts first — photos they already chose to show the world
   if (/cdninstagram|fbcdn\.net|scontent/.test(url)) score += 80;
-  if (/ytimg|i\.ytimg|youtube/.test(url)) score += 25;
-  if (/\.(jpe?g|webp)(?:\?|$)/i.test(url)) score += 20;
-  if (/wixstatic|wp-content|squarespace|shopify|cloudinary|imgix/i.test(url)) score += 15;
-  if (/hero|banner|home|main|background|birth|baby|family|care|room|clinic|wellness|midwife|doula/i.test(alt)) score += 30;
-  if (/\.png(?:\?|$)/i.test(url) && /wixstatic/i.test(url)) score -= 5; // often logos/icons on Wix
-  if (/replicate\.delivery|oaidalle|generated/i.test(url)) score -= 40; // never prefer AI over theirs
+  // Real photos beat graphics: JPG/WebP from their site CDN
+  if (/\.(jpe?g|webp)(?:\?|$|\/)/i.test(url)) score += 40;
+  if (/wixstatic\.com\/media|wp-content|squarespace|shopify|cloudinary|imgix/i.test(url)) score += 35;
+  if (/hero|banner|home|main|background|birth|baby|family|care|room|clinic|wellness|midwife|doula|newborn|portrait/i.test(alt)) score += 30;
+  // Wix PNGs are often logos, overlays, "You're Not Alone" graphics — demote hard
+  if (/\.png(?:\?|$|\/)/i.test(url) && /wixstatic/i.test(url)) score -= 25;
+  if (/replicate\.delivery|oaidalle|generated|unsplash\.com/i.test(url)) score -= 40;
   return score;
 }
 
@@ -319,8 +334,12 @@ async function scrapeSecondaryImagePages(homepageUrl, homepageText, { logger: lo
   // Jina/markdown pages expose links as [label](url)
   const mdLink = /\[[^\]]*\]\((https?:\/\/[^)\s]+|\/[^)\s]+)\)/gi;
   while ((m = mdLink.exec(text))) candidates.push(m[1]);
-  // Common path guesses when homepage is thin on links
-  for (const path of ['/gallery', '/photos', '/portfolio', '/about', '/services', '/our-work', '/team']) {
+  // Common path guesses — Wix often uses about-me / midwife-services (not bare /about)
+  for (const path of [
+    '/gallery', '/photos', '/portfolio', '/about', '/about-me', '/about-us',
+    '/services', '/midwife-services', '/our-work', '/team', '/why-have-a-homebirth',
+    '/testimonials', '/birth-stories', '/maternity-care',
+  ]) {
     candidates.push(path);
   }
   for (const raw of candidates) {
@@ -328,17 +347,26 @@ async function scrapeSecondaryImagePages(homepageUrl, homepageText, { logger: lo
     let abs;
     try { abs = new URL(raw, homepageUrl).href; } catch { continue; }
     if (!abs.startsWith(origin)) continue;
-    if (/\/(gallery|photos?|portfolio|our-work|projects?|about|team|services?|work|lookbook|menu)(\/|$|\?)/i.test(abs)) {
+    // Match about-me, midwife-services, why-have-a-homebirth — not only bare /about|/services
+    if (/\/(gallery|photos?|portfolio|our-work|projects?|about(?:-me|-us|-midwifery)?|team|[^/]services?|work|lookbook|menu|testimonials?|birth|maternity|homebirth|home-birth)(\/|$|\?|-)/i.test(abs)) {
       hrefs.add(abs.split('#')[0]);
     }
   }
-  const pages = [...hrefs].slice(0, 6);
+  const pages = [...hrefs].slice(0, 8);
   const collected = [];
   for (const pageUrl of pages) {
     try {
-      const fetched = await tryFetchHomepage(pageUrl, { timeoutMs: 10_000, label: 'secondaryImagePage' });
-      if (!fetched?.homepageText) continue;
-      collected.push(...extractImagesFromMarkdown(fetched.homepageText));
+      // Direct HTML first — Wix packs real JPGs in page source; Jina often strips them.
+      const direct = await fetchText(pageUrl, {
+        timeoutMs: 12_000,
+        headers: { 'User-Agent': 'Mozilla/5.0 (compatible; LuminBot/1.0)' },
+      });
+      if (direct?.ok && direct.text) {
+        collected.push(...extractImagesFromMarkdown(direct.text));
+      } else {
+        const fetched = await tryFetchHomepage(pageUrl, { timeoutMs: 10_000, label: 'secondaryImagePage' });
+        if (fetched?.homepageText) collected.push(...extractImagesFromMarkdown(fetched.homepageText));
+      }
     } catch (err) {
       log?.warn?.('[ASSET] secondary page scrape failed', { pageUrl, error: err.message });
     }
@@ -1611,12 +1639,13 @@ export async function ingestAll(businessInfo, options = {}) {
       .map((p) => ({ url: p.displayUrl, caption: p.caption, source: 'Instagram' }))
       .slice(0, 12);
 
+    // Never put YouTube thumbs in the site image pool — they become clickbait heroes.
+    // Videos stay on businessInfo.youtubeVideos for an optional Videos section only.
     const allImages = [
       ...(logoUrl ? [{ url: logoUrl, alt: 'logo', source: 'business page' }] : []),
       ...images.map((i) => ({ url: i.url, alt: i.alt, source: 'business page' })),
       ...socialImages,
-      ...(youtubeData?.videos || []).map((v) => ({ url: v.thumbnailUrl, alt: v.title, source: 'YouTube' })),
-    ];
+    ].filter((i) => i?.url && !isVideoThumbnailUrl(i.url));
 
     // Combine ratings from the review page and any rating found on the business page
     const finalRating = page.rating || reviewsRating || (testimonials.length ? 4.4 : null);
@@ -1727,17 +1756,16 @@ export async function ingestAll(businessInfo, options = {}) {
 }
 
 /**
- * Prefer the business's own photos (site + Instagram + YouTube thumbs).
+ * Prefer the business's own photos (site + Instagram). Never YouTube thumbs —
+ * those are clickbait overlays and look like garbage on midwife/local sites.
  * AI/Flux is last resort only — never spend when they already posted images they like.
  */
 async function maybeFillGeneratedHero(businessInfo, result, log = logger) {
   const logo = result?.assetData?.images?.logo || businessInfo.logoUrl || '';
   const images = result?.assetData?.images || {};
   const socialPosts = (result?.assetData?.social?.instagram?.posts || [])
+    .filter((p) => p.displayUrl && !p.isVideo)
     .map((p) => p.displayUrl || p.url)
-    .filter(Boolean);
-  const ytThumbs = (result?.assetData?.social?.youtube?.videos || [])
-    .map((v) => v.thumbnailUrl)
     .filter(Boolean);
 
   const pool = [
@@ -1747,11 +1775,11 @@ async function maybeFillGeneratedHero(businessInfo, result, log = logger) {
     ...(Array.isArray(images.product) ? images.product : []),
     ...(Array.isArray(images.team) ? images.team : []),
     ...(Array.isArray(images.all) ? images.all.map((i) => (typeof i === 'string' ? i : i?.url)) : []),
-    ...ytThumbs,
     ...(businessInfo.heroImages || []),
   ]
     .map((u) => String(u || '').trim())
     .filter((u) => u && u !== logo && !/\blogo\b|favicon/i.test(u) && !/\.svg(?:\?|$)/i.test(u))
+    .filter((u) => !isVideoThumbnailUrl(u))
     .filter((u, idx, arr) => arr.indexOf(u) === idx);
 
   // Drop AI leftovers if any real business media exists
