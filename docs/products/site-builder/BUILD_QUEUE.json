@@ -1419,7 +1419,7 @@
     },
     {
       "id": "002",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/site-builder-template-variations.js",
       "task": "Implement service for template variations",
       "spec": "Service to manage different template variations, allowing multiple design choices.",
@@ -1446,32 +1446,9 @@
           "assertion_id": "expected_exports:services/site-builder-template-variations.js"
         }
       ],
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/site-builder/twins/steps/002.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-24T21:25:11.524Z",
-        "shipped_at": "2026-07-24T21:25:11.524Z",
-        "commit_sha": null,
-        "content_sha256": "7d38985c3809bc4bffb10e8c36ff8c569bd5a049775e6cda3e17775ac23a590c",
-        "target_file": "services/site-builder-template-variations.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/site-builder-template-variations.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/site-builder/twins/steps/002.exact",
-          "content_sha256": "7d38985c3809bc4bffb10e8c36ff8c569bd5a049775e6cda3e17775ac23a590c"
-        }
-      },
-      "shipped_at": "2026-07-24T21:25:11.524Z",
-      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
-      "blueprint_step_id": "002"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-24T21:25:17.687Z",
+      "commit_sha": "c59f38e850740e659125f940cb868c394e2e9248"
     },
     {
       "id": "003",
