@@ -1451,6 +1451,7 @@
       display: flex;
       align-items: center;
       gap: 10px;
+      flex-wrap: wrap;
       flex-shrink: 0;
       background:
         linear-gradient(135deg, rgba(var(--studio-accent-rgb),0.12), rgba(var(--studio-accent-two-rgb),0.08)),
@@ -1803,6 +1804,33 @@
     .lumin-voice-btn:hover { color: var(--studio-text, #fff); }
     .lumin-voice-btn.on { color: #6366f1; border-color: rgba(99,102,241,0.6); }
     .lumin-voice-rate { font-size: 10px; opacity: 0.7; min-width: 30px; text-align: center; font-variant-numeric: tabular-nums; }
+    /* Request queue — Cursor-style toggle */
+    .lumin-queue-ctrl { position: relative; display: inline-flex; align-items: center; }
+    .lumin-queue-badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 16px; height: 16px; padding: 0 4px; margin-left: 4px;
+      font-size: 9px; font-weight: 700; border-radius: 8px;
+      background: var(--studio-accent, #6366f1); color: #fff;
+    }
+    .lumin-queue-badge:empty, .lumin-queue-badge.hidden { display: none; }
+    .lumin-queue-panel {
+      position: absolute; top: calc(100% + 6px); right: 0; z-index: 50;
+      width: 260px; max-height: 320px; overflow: auto;
+      background: var(--studio-bg, #111827); border: 1px solid var(--studio-border, rgba(255,255,255,0.08));
+      border-radius: 10px; box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+      padding: 10px; display: none;
+    }
+    .lumin-queue-panel.open { display: block; }
+    .lumin-queue-panel-head { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--studio-text-secondary, #9ca3af); margin-bottom: 8px; }
+    .lumin-queue-list { display: flex; flex-direction: column; gap: 6px; }
+    .lumin-queue-item { display: flex; align-items: center; gap: 6px; padding: 6px 8px; border-radius: 8px; background: var(--studio-bg-surface2, rgba(255,255,255,0.05)); font-size: 12px; }
+    .lumin-queue-item-text { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .lumin-queue-item-voice { font-size: 10px; opacity: 0.7; }
+    .lumin-queue-empty { font-size: 12px; opacity: 0.6; padding: 8px 0; }
+    .lumin-queue-btn { background: transparent; border: 1px solid var(--studio-border); color: var(--studio-text-secondary); border-radius: 6px; width: 22px; height: 22px; font-size: 12px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+    .lumin-queue-btn:hover { color: var(--studio-text); border-color: var(--studio-border-focus); }
+    .lumin-queue-clear { width: 100%; margin-top: 8px; padding: 6px; font-size: 11px; border: 1px solid var(--studio-border); border-radius: 6px; background: transparent; color: var(--studio-text-secondary); cursor: pointer; }
+    .lumin-queue-clear:hover { color: var(--studio-text); border-color: var(--studio-border-focus); }
     .lumin-input-attach {
       background: transparent; border: none; color: var(--studio-text-muted, #6b7280);
       cursor: pointer; font-size: 16px; padding: 0 4px;
@@ -2678,6 +2706,14 @@
       <span class="lumin-voice-rate" id="lumin-tts-rate">1.0×</span>
       <button type="button" class="lumin-voice-btn" id="lumin-tts-faster" onclick="luminAdjustReadRate(0.1)" title="Read faster">›</button>
     </div>
+    <div class="lumin-queue-ctrl">
+      <button type="button" class="lumin-dock-btn" id="lumin-queue-btn" onclick="luminToggleQueuePanel(event)" title="Request queue">Queue <span class="lumin-queue-badge" id="lumin-queue-badge"></span></button>
+      <div class="lumin-queue-panel" id="lumin-queue-panel">
+        <div class="lumin-queue-panel-head">Up next</div>
+        <div class="lumin-queue-list" id="lumin-queue-list"></div>
+        <button type="button" class="lumin-queue-clear" onclick="luminClearQueue()">Clear queue</button>
+      </div>
+    </div>
     <span class="lumin-history-link" onclick="openFullChat()">Full history →</span>
     <button class="lumin-drawer-close" onclick="closeLuminDrawer()">✕</button>
   </div>
@@ -3534,6 +3570,8 @@ const luminState = {
   chatHistory: [],
   readAloud: { enabled: false, rate: 1.0 },
   attachments: [],
+  queue: [],
+  queueOpen: false,
   thinkTimers: {},
   wornCapsules: (() => {
     try {
@@ -4004,13 +4042,27 @@ window.addEventListener('message', (ev) => {
 async function luminSend(opts = {}) {
   const input = document.getElementById('lumin-input');
   let msg = safePromptText(opts.text || input?.value || '');
-  const hasAttachments = Array.isArray(luminState.attachments) && luminState.attachments.length > 0;
-  if ((!msg && !hasAttachments) || luminState.sending) return;
+  let useAttachments = Array.isArray(opts.attachments) && opts.attachments.length
+    ? opts.attachments
+    : (Array.isArray(luminState.attachments) ? luminState.attachments : []);
+  const hasAttachments = useAttachments.length > 0;
+
+  // If already working, queue this request and keep the user typing.
+  if (luminState.sending && !opts._fromQueue) {
+    luminEnqueue(msg, useAttachments, opts.voice === true || luminState.voiceTurn);
+    if (!opts.text && input) { input.value = ''; luminAutoResize(input); }
+    if (!opts.attachments) { luminClearAttachments(); }
+    luminState.voiceTurn = false;
+    return;
+  }
+  if ((!msg && !hasAttachments)) return;
+
   const voiceTurn = opts.voice === true || luminState.voiceTurn;
   luminState.voiceTurn = false;
   if (!USE_DIRECT_SYSTEM_CHAT && !luminState.threadId) { await luminCreateThread(); }
 
   // Fold any attached files into the outbound message so the Chair can read them.
+  luminState.attachments = useAttachments;
   const attachBlock = luminBuildAttachmentBlock();
   const outboundMsg = attachBlock ? (msg ? `${msg}\n\n${attachBlock}` : attachBlock) : msg;
   const attachNames = hasAttachments ? luminState.attachments.map((a) => a.name).join(', ') : '';
@@ -4161,6 +4213,7 @@ async function luminSend(opts = {}) {
         statusEl.textContent = 'Ready';
       }
     }
+    setTimeout(luminProcessQueue, 0);
   }
 }
 
@@ -4197,6 +4250,80 @@ function buildLuminConversationHistoryPayload() {
     .slice(0, -1)
     .slice(-12)
     .map((m) => ({ role: m.role, content: m.content }));
+}
+
+function luminEnqueue(text, attachments, voice) {
+  const safeText = String(text || '').trim();
+  const safeAttachments = Array.isArray(attachments) ? attachments.slice() : [];
+  if (!safeText && !safeAttachments.length) return;
+  luminState.queue.push({
+    id: `q-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+    text: safeText,
+    attachments: safeAttachments,
+    voice: !!voice,
+  });
+  luminRenderQueue();
+  toast(`Queued · ${luminState.queue.length} waiting`);
+}
+
+function luminProcessQueue() {
+  if (luminState.sending || !luminState.queue.length) return;
+  const item = luminState.queue.shift();
+  luminRenderQueue();
+  if (!item) return;
+  luminSend({ text: item.text, attachments: item.attachments, voice: item.voice, _fromQueue: true });
+}
+
+function luminToggleQueuePanel() {
+  luminState.queueOpen = !luminState.queueOpen;
+  const panel = document.getElementById('lumin-queue-panel');
+  if (panel) panel.classList.toggle('open', luminState.queueOpen);
+}
+
+function luminRenderQueue() {
+  const list = document.getElementById('lumin-queue-list');
+  const badge = document.getElementById('lumin-queue-badge');
+  const btn = document.getElementById('lumin-queue-btn');
+  if (badge) {
+    badge.textContent = luminState.queue.length || '';
+    badge.classList.toggle('hidden', !luminState.queue.length);
+  }
+  if (!list) return;
+  if (!luminState.queue.length) {
+    list.innerHTML = '<div class="lumin-queue-empty">No queued requests.</div>';
+    return;
+  }
+  list.innerHTML = luminState.queue.map((item, idx) => {
+    const raw = (item.text || '(attachment)').slice(0, 60);
+    const snippet = _escHtml(raw);
+    const titleText = raw.replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const voiceIcon = item.voice ? ' <span class="lumin-queue-item-voice">🎙</span>' : '';
+    return `<div class="lumin-queue-item" data-qid="${item.id}">
+      <span class="lumin-queue-item-text" title="${titleText}">${snippet}${voiceIcon}</span>
+      <button type="button" class="lumin-queue-btn" onclick="luminMoveQueueItem(${idx}, -1)" title="Move up" ${idx === 0 ? 'disabled' : ''}>↑</button>
+      <button type="button" class="lumin-queue-btn" onclick="luminMoveQueueItem(${idx}, 1)" title="Move down" ${idx === luminState.queue.length - 1 ? 'disabled' : ''}>↓</button>
+      <button type="button" class="lumin-queue-btn" onclick="luminDeleteQueueItem(${idx})" title="Remove">✕</button>
+    </div>`;
+  }).join('');
+}
+
+function luminMoveQueueItem(idx, delta) {
+  const newIdx = idx + delta;
+  if (newIdx < 0 || newIdx >= luminState.queue.length) return;
+  const [item] = luminState.queue.splice(idx, 1);
+  luminState.queue.splice(newIdx, 0, item);
+  luminRenderQueue();
+}
+
+function luminDeleteQueueItem(idx) {
+  if (idx < 0 || idx >= luminState.queue.length) return;
+  luminState.queue.splice(idx, 1);
+  luminRenderQueue();
+}
+
+function luminClearQueue() {
+  luminState.queue = [];
+  luminRenderQueue();
 }
 
 async function directSystemHeaders() {
@@ -4402,6 +4529,7 @@ function initLuminDrawerVoiceSend() {
 
 document.addEventListener('DOMContentLoaded', () => {
   luminInitReadAloudPrefs();
+  luminRenderQueue();
   // The voice module script may still be loading — retry init until it's ready.
   let tries = 0;
   const tryInit = () => {

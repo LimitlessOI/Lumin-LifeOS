@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-23 — Request queue added to Lumin drawer
+
+Adam: wants a Cursor-style queue where commands stack while the system keeps working. GAP-FILL: `public/overlay/lifeos-app.html` now has a `Queue` toggle with a count badge and a panel; `luminSend()` queues new requests while another is in flight, `luminProcessQueue()` drains sequentially, and users can reorder/delete items. This is the first slice — sequential drain keeps the composer usable while work is in flight. Next: image/video attachment capture, ChatGPT-style layout, and server-side background context merging.
+
 ## 2026-07-23 — Server TTS wired for read-aloud in Lumin drawer
 
 Adam: wants the best available voice reading replies; make it real. GAP-FILL: `public/overlay/lifeos-app.html` adds `luminServerTtsFetch()` that POSTs to `/api/v1/lifeos/voice-rail/tts` and wires it into `speakLuminReply()` via `LifeOSVoiceChat.speakTextAsync(..., { preferServerTts: true })`. The existing read-aloud rate buttons now throttle the server audio playback. Browser TTS remains fallback if server TTS is unavailable. Product home updated.
