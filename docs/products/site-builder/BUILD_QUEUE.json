@@ -1708,6 +1708,24 @@
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "sb-variant-gate-cull",
       "mission_id": "PRODUCT-site-builder"
+    },
+    {
+      "id": "sb-variant-wire-buildvariants",
+      "status": "pending",
+      "target_file": "services/site-builder.js",
+      "task": "Wire the 4 new modules (sb-current-site-baseline, sb-architect-creative-brief, cg-ux-heuristic-gate, sb-variant-gate-cull) into buildVariants() so the publish-or-kill decision is ACTUALLY ENFORCED, not just built. Two changes in this ONE file: (1) GAP FOUND while queuing this step: the raw scraped HTML of the prospect's current site is already fetched during scraping (see the existing `businessInfo.existingSiteScore = this.scoreSiteHtml(existingHtml, {})` call) but is NEVER stored on businessInfo, so buildVariants() has no way to reach it today. In that same scraping code path, add `businessInfo.existingSiteHtml = existingHtml;` right next to the existing `existingSiteScore` assignment, so it survives into buildVariants(). (2) In buildVariants() (the per-design-system loop that currently does `let quality = this.scoreSiteHtml(html, businessInfo);` then unconditionally `variants.push({...})`): BEFORE the loop, compute `const baseline = businessInfo.existingSiteHtml ? await (await import('./site-builder-current-site-baseline.js')).scoreCurrentSiteBaseline({ html: businessInfo.existingSiteHtml }) : null;`. INSIDE the loop, after `quality` is computed for each variant, also compute `const uxHeuristics = (await import('./creative-engine/ux-heuristic-gate.js')).scoreUxHeuristics(html);` and `const fate = (await import('./site-builder-variant-gate.js')).decideVariantFate({ variantScore: quality, uxHeuristics, baseline });`. Only `variants.push({...})` (adding `uxOverall: uxHeuristics.overall, kept: fate.keep, killReason: fate.keep ? null : fate.reason` to the pushed object) when `fate.keep !== false` — when a variant is killed, log it via `logger.info('[SITE] variant killed by quality gate', { clientId, style: ds.id, reason: fate.reason })` and do NOT write its file or push it, so it never reaches a prospect. Keep the existing `if (!variants.length) throw new Error('all variant generations failed');` check AFTER this filtering — if the gate kills every variant, that error now correctly means 'nothing cleared the bar,' not 'nothing was generated,' which is the intended honest behavior per the founder directive that a variant worse than the current site must never be shown.",
+      "spec": "Modify services/site-builder.js ONLY inside buildVariants() and the scraping function that already computes existingSiteScore (same file — do not touch any other function). Use dynamic `await import(...)` for the 4 new sibling modules exactly as shown above (matches this codebase's existing dynamic-import convention elsewhere in the file) rather than adding new static top-level imports, to keep the diff minimal and avoid import-order risk in a large existing file. Wrap each new call in try/catch — if baseline scoring or the ux gate throws for any reason, log a warning and treat that variant as kept with a caveat note (fail toward showing content over showing nothing, per sb-variant-gate-cull's own fail-open-on-missing-data behavior) rather than crashing the whole build. Do not change the shape of scoreSiteHtml, generateSiteHtml, or any other existing function. Do not remove or rename any existing field on the pushed variant objects — only add the 3 new fields named above. @ssot docs/products/site-builder/PRODUCT_HOME.md.",
+      "depends_on": [
+        "sb-variant-gate-cull"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "priority": "high",
+      "source": "founder_directive_2026-07-24",
+      "finding_note": "Founder directive 2026-07-24: 'build it, and don't stop until it's all the way down from end to end.' The 4 prior steps build the enforcement pieces but do nothing unless wired in — this is the actual enforcement moment. Also closes a gap found while writing this spec: businessInfo never retained the scraped existingHtml needed by the baseline scorer, so that fix is folded into this step rather than left as a silent second gap.",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "sb-variant-wire-buildvariants",
+      "mission_id": "PRODUCT-site-builder"
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",
