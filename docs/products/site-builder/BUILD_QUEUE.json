@@ -1623,7 +1623,7 @@
     },
     {
       "id": "sb-current-site-baseline",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/site-builder-current-site-baseline.js",
       "task": "New self-contained module scoring the PROSPECT'S EXISTING live site as the baseline every generated variant must beat. Export async scoreCurrentSiteBaseline({ html, screenshotBuffer }) -> { visualScore: 0-100, structuralSignals: { hasHeroImage:boolean, navItemCount:number, primaryCtaDetected:boolean, aboveFoldWordCount:number, imageCount:number }, notes: string[] }. Reuse the same scoring dimensions services/site-builder-quality-scorer.js already uses (doctype/viewport/H1 count/CTA keyword) via direct import so the SAME rubric scores both the current site and generated variants — the whole point is a fair before/after number, not a second incompatible scorer. screenshotBuffer is optional and only used for a coarse heuristic (e.g. presence implies hasHeroImage likely true when combined with an <img> in the hero region) — this module does NOT call Puppeteer itself; the caller captures the screenshot and passes the buffer in.",
       "spec": "Single self-contained ESM module. Import EXACTLY this from './site-builder-quality-scorer.js' (relative path): `import { scoreGeneratedSite } from './site-builder-quality-scorer.js';` -- this is the file's real, confirmed export name (signature: scoreGeneratedSite(html, businessInfo = {}, options = {}) -> { score, maxScore, scorePct, grade, criteria, issues, readyToSend, recommendedAction }). Do NOT import any other name from that file -- 2 prior attempts failed identically because codegen guessed a wrong export name ('score') instead of the real one, verified directly against the file's actual `export function scoreGeneratedSite(...)` declaration. Call it as `scoreGeneratedSite(html, {})` and map its `.scorePct` field directly to this module's own `visualScore` output field. No other project imports, no network, no DB, no Puppeteer/browser imports here. Named export scoreCurrentSiteBaseline + default. Guard html as possibly empty string -> return a well-formed zero/low-confidence result, never throw. Deterministic given the same inputs. Start with `// SYNOPSIS:` + `// @ssot docs/products/site-builder/PRODUCT_HOME.md`.",
@@ -1649,15 +1649,15 @@
           "assertion_id": "expected_exports:services/site-builder-current-site-baseline.js"
         }
       ],
-      "last_attempt_at": "2026-07-25T02:19:55.543Z",
+      "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": null,
+      "commit_sha": "e2e72cb53666f68fc5ffaa8921182a2f56fa93fa",
       "built_sha": null,
       "proof": null,
       "failure_signature": null,
       "same_signature_count": 0,
       "escalation_class": null,
-      "revive_count": 1,
+      "revive_count": 0,
       "revived_at": "2026-07-25T02:19:40.383Z",
       "last_attempt": null,
       "demoted": false,
@@ -1670,32 +1670,9 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "shipped_via": null,
-      "shipped_at": "2026-07-25T02:36:37.494Z",
-      "false_done_gap_fill_note": "2026-07-25: re-clobbered back to a false done by a stale container mid-redeploy-transition (second occurrence). Reset again to pending. If this recurs a third time, the systemic fix in bo-claim-pre-existing-git-check needs to actually land before this stops happening.",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/site-builder/twins/steps/sb-current-site-baseline.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-25T02:36:37.494Z",
-        "shipped_at": "2026-07-25T02:36:37.494Z",
-        "commit_sha": null,
-        "content_sha256": "0e2b984909ea30f94913419715ada4c9f4521b7b1a34a0c1673749a05eed3f65",
-        "target_file": "services/site-builder-current-site-baseline.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/site-builder-current-site-baseline.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/site-builder/twins/steps/sb-current-site-baseline.exact",
-          "content_sha256": "0e2b984909ea30f94913419715ada4c9f4521b7b1a34a0c1673749a05eed3f65"
-        }
-      }
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-25T02:36:43.809Z",
+      "false_done_gap_fill_note": "2026-07-25: re-clobbered back to a false done by a stale container mid-redeploy-transition (second occurrence). Reset again to pending. If this recurs a third time, the systemic fix in bo-claim-pre-existing-git-check needs to actually land before this stops happening."
     },
     {
       "id": "sb-architect-creative-brief",
@@ -1835,7 +1812,7 @@
     },
     {
       "id": "sb-variant-wire-buildvariants",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/site-builder.js",
       "task": "Wire the 4 new modules (sb-current-site-baseline, sb-architect-creative-brief, cg-ux-heuristic-gate, sb-variant-gate-cull) into buildVariants() so the publish-or-kill decision is ACTUALLY ENFORCED, not just built. Two changes in this ONE file: (1) GAP FOUND while queuing this step: the raw scraped HTML of the prospect's current site is already fetched during scraping (see the existing `businessInfo.existingSiteScore = this.scoreSiteHtml(existingHtml, {})` call) but is NEVER stored on businessInfo, so buildVariants() has no way to reach it today. In that same scraping code path, add `businessInfo.existingSiteHtml = existingHtml;` right next to the existing `existingSiteScore` assignment, so it survives into buildVariants(). (2) In buildVariants() (the per-design-system loop that currently does `let quality = this.scoreSiteHtml(html, businessInfo);` then unconditionally `variants.push({...})`): BEFORE the loop, compute `const baseline = businessInfo.existingSiteHtml ? await (await import('./site-builder-current-site-baseline.js')).scoreCurrentSiteBaseline({ html: businessInfo.existingSiteHtml }) : null;`. INSIDE the loop, after `quality` is computed for each variant, also compute `const uxHeuristics = (await import('./creative-engine/ux-heuristic-gate.js')).scoreUxHeuristics(html);` and `const fate = (await import('./site-builder-variant-gate.js')).decideVariantFate({ variantScore: quality, uxHeuristics, baseline });`. Only `variants.push({...})` (adding `uxOverall: uxHeuristics.overall, kept: fate.keep, killReason: fate.keep ? null : fate.reason` to the pushed object) when `fate.keep !== false` — when a variant is killed, log it via `logger.info('[SITE] variant killed by quality gate', { clientId, style: ds.id, reason: fate.reason })` and do NOT write its file or push it, so it never reaches a prospect. Keep the existing `if (!variants.length) throw new Error('all variant generations failed');` check AFTER this filtering — if the gate kills every variant, that error now correctly means 'nothing cleared the bar,' not 'nothing was generated,' which is the intended honest behavior per the founder directive that a variant worse than the current site must never be shown.",
       "spec": "Modify services/site-builder.js ONLY inside buildVariants() and the scraping function that already computes existingSiteScore (same file — do not touch any other function). Use dynamic `await import(...)` for the 4 new sibling modules exactly as shown above (matches this codebase's existing dynamic-import convention elsewhere in the file) rather than adding new static top-level imports, to keep the diff minimal and avoid import-order risk in a large existing file. Wrap each new call in try/catch — if baseline scoring or the ux gate throws for any reason, log a warning and treat that variant as kept with a caveat note (fail toward showing content over showing nothing, per sb-variant-gate-cull's own fail-open-on-missing-data behavior) rather than crashing the whole build. Do not change the shape of scoreSiteHtml, generateSiteHtml, or any other existing function. Do not remove or rename any existing field on the pushed variant objects — only add the 3 new fields named above. @ssot docs/products/site-builder/PRODUCT_HOME.md.",
@@ -1844,7 +1821,7 @@
         "sb-current-site-baseline"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "priority": "high",
       "source": "founder_directive_2026-07-24",
       "finding_note": "Founder directive 2026-07-24: 'build it, and don't stop until it's all the way down from end to end.' The 4 prior steps build the enforcement pieces but do nothing unless wired in — this is the actual enforcement moment. Also closes a gap found while writing this spec: businessInfo never retained the scraped existingHtml needed by the baseline scorer, so that fix is folded into this step rather than left as a silent second gap.",
@@ -1856,7 +1833,7 @@
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "sb-variant-wire-buildvariants",
       "mission_id": "PRODUCT-site-builder",
-      "last_attempt_at": "2026-07-25T02:33:05.101Z",
+      "last_attempt_at": null,
       "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 2016b is < 30% of existing 105222b",
       "commit_sha": null,
       "built_sha": null,
@@ -1864,8 +1841,8 @@
       "failure_signature": "codegen_authoring_failed: codegen_stub_detected: generated Nb is < N% of existing #",
       "same_signature_count": 3,
       "escalation_class": "same_signature_repeat",
-      "revive_count": 2,
-      "revived_at": "2026-07-25T02:32:26.292Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-25T02:36:33.917Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1882,25 +1859,38 @@
     },
     {
       "id": "s1",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "db/migrations/20241030_create_additional_templates.sql",
       "task": "create migration for additional templates",
       "spec": "Adds new template options for site-builder to increase design choices.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS"
       ],
       "design_review_flagged": true,
-      "last_attempt_at": "2026-07-25T02:20:09.507Z",
+      "last_attempt_at": null,
       "last_error": "NOT_ON_BLUEPRINT",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "failure_signature": "NOT_ON_BLUEPRINT",
       "same_signature_count": 1,
-      "escalation_class": "governance_block"
+      "escalation_class": "governance_block",
+      "revive_count": 1,
+      "revived_at": "2026-07-25T02:36:33.917Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "s2",
