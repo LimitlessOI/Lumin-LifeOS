@@ -1768,7 +1768,31 @@
           ],
           "assertion_id": "expected_exports:services/creative-engine/modes/site-design.js"
         }
-      ]
+      ],
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/site-builder/twins/steps/cg-site-design-mode.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-25T02:25:34.423Z",
+        "shipped_at": "2026-07-25T02:25:34.423Z",
+        "commit_sha": null,
+        "content_sha256": "4709a64122fa52801a47a8c8ea1809a70cb0bda6f9850da0ba67b8242b41b1b0",
+        "target_file": "services/creative-engine/modes/site-design.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/creative-engine/modes/site-design.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/site-builder/twins/steps/cg-site-design-mode.exact",
+          "content_sha256": "4709a64122fa52801a47a8c8ea1809a70cb0bda6f9850da0ba67b8242b41b1b0"
+        }
+      },
+      "shipped_at": "2026-07-25T02:25:34.423Z"
     },
     {
       "id": "sb-variant-gate-cull",
