@@ -1675,7 +1675,7 @@
     },
     {
       "id": "sb-architect-creative-brief",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/site-builder-architect-brief.js",
       "task": "New self-contained module implementing the 'Architect hands the blueprint to the Studio' handoff. Export buildCreativeBrief({ businessInfo, opportunityAnalysis, currentSiteBaseline }) -> { sitemap: [{ section:string, purpose:string, priority:number }], brandSignals: { industry:string, tone:string, mustHaveElements:string[] }, painPointsToAddress: string[], baselineToBeat: { visualScore:number, structuralSignals:object } }. This is a PURE data-shaping function (no AI call, no network) that assembles the already-computed businessInfo/opportunityAnalysis/currentSiteBaseline into ONE structured brief object — the literal artifact the Architect passes to the Creative Engine. sitemap must always include at minimum: hero, services/offerings, social-proof, contact/cta sections, derived from businessInfo.services when present.",
       "spec": "Single self-contained ESM module, pure function, zero import-time side effects, no project imports (accept plain objects as args only — do not import site-builder.js or create a circular dependency). Named export buildCreativeBrief + default export. Guard every field as possibly undefined; never throw on missing data, degrade to reasonable defaults instead. Deterministic given the same inputs. Start with `// SYNOPSIS:` + `// @ssot docs/products/site-builder/PRODUCT_HOME.md`.",
@@ -1703,30 +1703,9 @@
           "assertion_id": "expected_exports:services/site-builder-architect-brief.js"
         }
       ],
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/site-builder/twins/steps/sb-architect-creative-brief.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-25T02:25:16.811Z",
-        "shipped_at": "2026-07-25T02:25:16.811Z",
-        "commit_sha": null,
-        "content_sha256": "4b39cbefd36d02aba5833c750e6c4427cec5201e92505138949c26f480c29cf1",
-        "target_file": "services/site-builder-architect-brief.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/site-builder-architect-brief.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/site-builder/twins/steps/sb-architect-creative-brief.exact",
-          "content_sha256": "4b39cbefd36d02aba5833c750e6c4427cec5201e92505138949c26f480c29cf1"
-        }
-      },
-      "shipped_at": "2026-07-25T02:25:16.811Z"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-25T02:25:23.816Z",
+      "commit_sha": "215d9d41e1db69e732d8945758384b13dc8f6a4f"
     },
     {
       "id": "cg-ux-heuristic-gate",
