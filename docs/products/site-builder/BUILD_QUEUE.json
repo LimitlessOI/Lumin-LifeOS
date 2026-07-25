@@ -1820,6 +1820,94 @@
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "sb-variant-wire-buildvariants",
       "mission_id": "PRODUCT-site-builder"
+    },
+    {
+      "id": "s1",
+      "status": "pending",
+      "target_file": "db/migrations/20241030_create_additional_templates.sql",
+      "task": "create migration for additional templates",
+      "spec": "Adds new template options for site-builder to increase design choices.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ],
+      "design_review_flagged": true
+    },
+    {
+      "id": "s2",
+      "status": "pending",
+      "target_file": "services/site-builder-additional-templates.js",
+      "task": "provide service for additional templates",
+      "spec": "Service for handling new template options for site-builder.",
+      "depends_on": [
+        "s1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getTemplateOptions"
+      ]
+    },
+    {
+      "id": "s3",
+      "status": "pending",
+      "target_file": "routes/site-builder-additional-templates-routes.js",
+      "task": "register routes for additional templates",
+      "spec": "Routes for accessing additional template options in site-builder.",
+      "depends_on": [
+        "s2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerAdditionalTemplateRoutes"
+      ],
+      "route": {
+        "path": "/api/site-builder/additional-templates"
+      }
+    },
+    {
+      "id": "s4",
+      "status": "pending",
+      "target_file": "public/overlay/site-builder-additional-templates.html",
+      "task": "create UI for additional templates",
+      "spec": "HTML overlay for displaying additional template options.",
+      "depends_on": [
+        "s3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "design_review_flagged": true
+    },
+    {
+      "id": "s5",
+      "status": "pending",
+      "target_file": "db/migrations/20241030_add_interactive_element_labels.sql",
+      "task": "create migration for interactive element labels",
+      "spec": "Adds clear labels to interactive elements in the database.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ]
+    },
+    {
+      "id": "s6",
+      "status": "pending",
+      "target_file": "services/site-builder-interactive-element-label-service.js",
+      "task": "provide service for element labels",
+      "spec": "Service for managing interactive element labels.",
+      "depends_on": [
+        "s5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getElementLabels"
+      ]
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",
