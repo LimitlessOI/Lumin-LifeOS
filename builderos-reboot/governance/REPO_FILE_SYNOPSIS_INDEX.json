@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-25T02:20:20.087Z",
+  "generated_at": "2026-07-25T02:20:32.879Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12161,
+  "file_count": 12162,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -90963,6 +90963,13 @@
       "bytes": 521,
       "mtime": "2026-07-24T20:27:12.239Z",
       "indexed_at": "2026-07-24T20:27:12.239Z"
+    },
+    {
+      "path": "services/site-builder-interactive-element-label-service.js",
+      "synopsis": "Existing code (if any) should be preserved here",
+      "bytes": 458,
+      "mtime": "2026-07-25T02:20:32.879Z",
+      "indexed_at": "2026-07-25T02:20:32.879Z"
     },
     {
       "path": "services/site-builder-interactive-element-labels.js",
