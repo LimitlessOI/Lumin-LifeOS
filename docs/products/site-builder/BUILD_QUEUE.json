@@ -1859,7 +1859,7 @@
     },
     {
       "id": "s1",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20241030_create_additional_templates.sql",
       "task": "create migration for additional templates",
       "spec": "Adds new template options for site-builder to increase design choices.",
@@ -1871,14 +1871,14 @@
       ],
       "design_review_flagged": true,
       "last_attempt_at": null,
-      "last_error": "NOT_ON_BLUEPRINT",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "9ff91877d4467e209822115ce0773cf478054211",
       "built_sha": null,
       "proof": null,
       "failure_signature": "NOT_ON_BLUEPRINT",
       "same_signature_count": 1,
       "escalation_class": "governance_block",
-      "revive_count": 1,
+      "revive_count": 0,
       "revived_at": "2026-07-25T02:36:33.917Z",
       "last_attempt": null,
       "demoted": false,
@@ -1891,32 +1891,8 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/site-builder/twins/steps/s1.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-25T02:37:02.180Z",
-        "shipped_at": "2026-07-25T02:37:02.180Z",
-        "commit_sha": null,
-        "content_sha256": "e2bee89b710c7eb59d2d5a61336f0e77c16cc6a5be85fa45cfac3cd3b519eb6e",
-        "target_file": "db/migrations/20241030_create_additional_templates.sql",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "db/migrations/20241030_create_additional_templates.sql",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/site-builder/twins/steps/s1.exact",
-          "content_sha256": "e2bee89b710c7eb59d2d5a61336f0e77c16cc6a5be85fa45cfac3cd3b519eb6e"
-        }
-      },
-      "shipped_at": "2026-07-25T02:37:02.180Z",
-      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
-      "blueprint_step_id": "s1"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-25T02:37:07.913Z"
     },
     {
       "id": "s2",
