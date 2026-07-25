@@ -1,13 +1,5 @@
 /**
- * SYNOPSIS: Mounts the governed factory hot path (BPB → Builder → SENTRY → TSOS → Historian)
- * from factory-staging/factory-core onto the production Express app under /factory/*.
- *
- * This is the production cutover of the governed factory: it exposes the same
- * execute-step / execute-mission / intake / readiness surfaces the staging server
- * (factory-staging/startup/register-routes.js) exposes, WITHOUT re-registering the
- * staging GET /health (which would collide with the production /health).
- *
- * @ssot docs/products/builderos/PRODUCT_HOME.md
+ * SYNOPSIS: Pure: should the codegen prompt inline this file's existing content?
  */
 import express from 'express';
 import fs from 'node:fs';
@@ -25,6 +17,7 @@ import { summarizeTsosMetrics } from '../factory-staging/factory-core/tsos/tsos-
 import { reconcileRemoteTruth } from '../factory-staging/factory-core/readiness/remote-truth-reconciler.js';
 import { extractContent } from '../factory-staging/factory-core/builder/authoring.js';
 import { runGovernedShippingQueue } from '../services/governed-shipping-runner.js';
+import { runGovernedAutonomousShipOnce } from '../services/governed-autonomous-shipping-loop.js';
 import {
   blueprintFollowClaim,
   exactChangeClaim,
@@ -37,17 +30,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const REPO_ROOT = path.resolve(__dirname, '..');
 
-// Existing-file content is inlined into the codegen prompt so an "extend this
-// file" task can preserve everything already there. Below this size, a real
-// existing file was silently omitted from the prompt (size > 20000 skipped
-// it entirely) — the model then had no way to know it must reproduce the
-// existing content, so it authored only the new fragment as a fresh minimal
-// file. The stub detector correctly caught the resulting undersized output,
-// but the step could never succeed: every retry hit the same omission.
-// Diagnosed 2026-07-20 against services/site-builder-prospect-runner.js
-// (21306 bytes) — repeatedly blocked with
-// codegen_stub_detected: generated 1514b is < 30% of existing 21306b.
-// Raised well past realistic single-file sizes in this repo.
 export const MAX_EXISTING_CONTENT_BYTES = 200000;
 
 /** Pure: should the codegen prompt inline this file's existing content? */
@@ -59,11 +41,6 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
   const router = express.Router();
   const guard = typeof requireKey === 'function' ? requireKey : (_req, _res, next) => next();
 
-  // SENTRY behavioral-proof runner, injected at the route boundary so
-  // factory-core stays pure. Fail-closed: if a required assertion cannot run
-  // (no runner), SENTRY returns FAIL rather than passing on omission.
-  // SENTRY must re-probe the local container after a runtime reload; a public
-  // baseUrl would hit a different Railway container and 404.
   const httpBase = `http://127.0.0.1:${process.env.PORT || 8080}`.replace(/\/$/, '');
   const assertionRunner = {
     db: pool
@@ -95,11 +72,6 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
     },
   };
 
-  // STEP 4 codegen runner (the "hands"), injected at the route boundary so
-  // factory-core stays pure. It returns CANDIDATE CONTENT ONLY — never assertions
-  // (assertion-provenance lock). Strong-first, provider-diverse tier order; escalate
-  // only on failure/empty output. The authored content is untrusted input that SENTRY
-  // proves independently via the Step-3 behavior gate.
   const codegenRunner = callCouncilMember
     ? {
         generate: async ({
@@ -175,11 +147,6 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
               });
               const content = extractContent(typeof raw === 'string' ? raw : raw?.content || raw?.text || '');
               if (content && content.trim()) {
-                // Fail-fast: reject syntax-broken JS/ESM codegen before it reaches SENTRY.
-                // node --check parses only; it does not load modules, so missing deps
-                // do not fail the check. We use .mjs to force ESM parsing. Skip for
-                // non-JS targets (e.g. .sql migrations, .html overlays) so the loop
-                // does not falsely reject valid non-JavaScript artifacts.
                 const targetExt = path.extname(target_file || '').toLowerCase();
                 const needsJsCheck = ['.js', '.mjs', '.cjs', '.jsx', '.ts', '.tsx'].includes(targetExt);
                 if (needsJsCheck) {
@@ -194,10 +161,6 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
                   }
                   try { fs.unlinkSync(syntaxCheckFile); } catch {}
 
-                  // Import-resolution check: actually load the module from the target
-                  // directory so missing top-level relative imports (e.g. a generated
-                  // route importing a non-existent sibling module) are caught before the
-                  // file is written and poisons the routes/services spine preflight.
                   const importCheckFile = absTarget
                     ? path.join(path.dirname(absTarget), `.factory-import-check-${Date.now()}-${process.pid}.mjs`)
                     : null;
@@ -213,7 +176,6 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
                     try { fs.unlinkSync(importCheckFile); } catch {}
                   }
                 }
-                // Prefer real usage when council returns an object; otherwise estimate from text length.
                 const usage = (raw && typeof raw === 'object' && raw.usage) ? raw.usage : null;
                 const promptTokens = Number(usage?.prompt_tokens) || Math.ceil(prompt.length / 4);
                 const completionTokens = Number(usage?.completion_tokens) || Math.ceil(content.length / 4);
@@ -287,11 +249,6 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
     }
   });
 
-  // STEP 5c — the governed shipping runner as a live surface. Walks a build queue
-  // and ships EVERY step through the governed pipe (in-process dispatchExecuteStep:
-  // BPB->Builder->SENTRY->TSOS->Historian) instead of the legacy ungoverned /build.
-  // Century's flag: crash/block signals are recorded durably to the Historian with
-  // resume_from, so a mid-queue failure is loud + resumable, never a silent skip.
   router.post('/factory/ship-queue', guard, async (req, res) => {
     try {
       const {
@@ -305,7 +262,6 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
       if (!Array.isArray(steps) || steps.length === 0) {
         return res.status(400).json({ ok: false, error: 'steps[] required' });
       }
-      // Fail-closed twin + exact-change proof before any dispatch.
       const firstStep = steps[0] || {};
       const stepKey = firstStep.blueprint_step_id || firstStep.step_id || firstStep.id;
       const twinProbe = blueprintFollowClaim({
@@ -335,7 +291,6 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
           twin_probe: twinProbe,
         });
       }
-      // Twin disk is authority for target_file — request body cannot redefine the aspect.
       const boundSteps = steps.map((s) => {
         const sid = s.blueprint_step_id || s.step_id || s.id;
         const loaded = getTwinStep(blueprint_id, sid);
@@ -365,8 +320,6 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
           encoding: 'utf8',
         }).trim();
       } catch { /* reverse falls back to delete_file */ }
-      // Mission pack twins must pass BPB intake. Registered product queue twins
-      // are already proven on disk by blueprintFollowClaim — intake pack N/A.
       const productTwin = twinProbe.twin_source === 'product_build_queue_twin'
         || twinProbe.twin_source === 'product_blueprint';
       const allowSkip = productTwin === true;
@@ -430,7 +383,15 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
     }
   });
 
-  // Reverse exactly one sealed twin step (pinpoint aspect rollback).
+  router.post('/factory/ship-queue-and-commit', guard, async (req, res) => {
+    try {
+      const result = await runGovernedAutonomousShipOnce({ logger, maxStepsPerProduct: req.body?.maxStepsPerProduct || 1 });
+      res.json(result);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
   router.post('/factory/reverse-step', guard, async (req, res) => {
     try {
       const { blueprint_id, blueprint_step_id, apply = false } = req.body || {};

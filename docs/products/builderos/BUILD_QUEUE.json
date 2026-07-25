@@ -2312,7 +2312,31 @@
       ],
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "bo-expose-governed-ship-once-endpoint",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/builderos/twins/steps/bo-expose-governed-ship-once-endpoint.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-25T17:45:28.430Z",
+        "shipped_at": "2026-07-25T17:45:28.430Z",
+        "commit_sha": null,
+        "content_sha256": "a128d9000fe4fe7ce8b3c3fb20533170d8c6f972855bba54b392e34f9776fea9",
+        "target_file": "routes/factory-mount-routes.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "routes/factory-mount-routes.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/builderos/twins/steps/bo-expose-governed-ship-once-endpoint.exact",
+          "content_sha256": "a128d9000fe4fe7ce8b3c3fb20533170d8c6f972855bba54b392e34f9776fea9"
+        }
+      },
+      "shipped_at": "2026-07-25T17:45:28.430Z"
     }
   ],
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
