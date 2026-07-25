@@ -1623,20 +1623,40 @@
     },
     {
       "id": "sb-current-site-baseline",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/site-builder-current-site-baseline.js",
       "task": "New self-contained module scoring the PROSPECT'S EXISTING live site as the baseline every generated variant must beat. Export async scoreCurrentSiteBaseline({ html, screenshotBuffer }) -> { visualScore: 0-100, structuralSignals: { hasHeroImage:boolean, navItemCount:number, primaryCtaDetected:boolean, aboveFoldWordCount:number, imageCount:number }, notes: string[] }. Reuse the same scoring dimensions services/site-builder-quality-scorer.js already uses (doctype/viewport/H1 count/CTA keyword) via direct import so the SAME rubric scores both the current site and generated variants — the whole point is a fair before/after number, not a second incompatible scorer. screenshotBuffer is optional and only used for a coarse heuristic (e.g. presence implies hasHeroImage likely true when combined with an <img> in the hero region) — this module does NOT call Puppeteer itself; the caller captures the screenshot and passes the buffer in.",
       "spec": "Single self-contained ESM module. Import services/site-builder-quality-scorer.js's exported scorer function by relative path only (no other project imports, no network, no DB, no Puppeteer/browser imports here). Named export scoreCurrentSiteBaseline + default. Guard html as possibly empty string -> return a well-formed zero/low-confidence result, never throw. Deterministic given the same inputs. Start with `// SYNOPSIS:` + `// @ssot docs/products/site-builder/PRODUCT_HOME.md`.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "priority": "high",
       "source": "founder_directive_2026-07-24",
       "finding_note": "2026-07-24 founder session: confirmed services/site-builder.js scrapes the prospect's current site for TEXT FACTS ONLY (phone, services, testimonials) and never scores or compares its actual design against generated variants — generation is fully design-blind. This step is the first piece of a real before/after baseline.",
-      "expected_exports": ["scoreCurrentSiteBaseline"],
+      "expected_exports": [
+        "scoreCurrentSiteBaseline"
+      ],
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "sb-current-site-baseline",
-      "mission_id": "PRODUCT-site-builder"
+      "mission_id": "PRODUCT-site-builder",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/site-builder-current-site-baseline.js",
+          "exports": [
+            "scoreCurrentSiteBaseline"
+          ],
+          "assertion_id": "expected_exports:services/site-builder-current-site-baseline.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-25T02:16:46.344Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/services/.factory-import-check-1784945806310-1.mjs\";",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "failure_signature": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/servic",
+      "same_signature_count": 1,
+      "escalation_class": "same_signature_repeat"
     },
     {
       "id": "sb-architect-creative-brief",
@@ -1652,10 +1672,22 @@
       "priority": "high",
       "source": "founder_directive_2026-07-24",
       "finding_note": "Founder directive 2026-07-24: 'when we even make a blueprint, the architect needs to send it over to the studio (creative engine) and make a site map and what it should visually look like.' This module is that exact handoff artifact, kept as plain data so it's testable and reusable by any consumer (site-builder today, other products later) without a runtime dependency between them.",
-      "expected_exports": ["buildCreativeBrief"],
+      "expected_exports": [
+        "buildCreativeBrief"
+      ],
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "sb-architect-creative-brief",
-      "mission_id": "PRODUCT-site-builder"
+      "mission_id": "PRODUCT-site-builder",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/site-builder-architect-brief.js",
+          "exports": [
+            "buildCreativeBrief"
+          ],
+          "assertion_id": "expected_exports:services/site-builder-architect-brief.js"
+        }
+      ]
     },
     {
       "id": "cg-ux-heuristic-gate",
@@ -1669,10 +1701,22 @@
       "priority": "high",
       "source": "founder_directive_2026-07-24",
       "finding_note": "Founder directive 2026-07-24: '...the best tactics for setup, design, usability, our buttons in the right most convenient place, easy to understand what's happening on this page or is it overload.' Confirmed services/site-builder-quality-scorer.js today is doctype/viewport/H1-count/keyword regex only, zero usability judgment. This step is that missing judgment, built deterministic (not AI-vibes) so it's falsifiable and fast, mirroring the marketing-publish-gate.js pattern already proven for SocialMediaOS.",
-      "expected_exports": ["scoreUxHeuristics"],
+      "expected_exports": [
+        "scoreUxHeuristics"
+      ],
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "cg-ux-heuristic-gate",
-      "mission_id": "PRODUCT-site-builder"
+      "mission_id": "PRODUCT-site-builder",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/creative-engine/ux-heuristic-gate.js",
+          "exports": [
+            "scoreUxHeuristics"
+          ],
+          "assertion_id": "expected_exports:services/creative-engine/ux-heuristic-gate.js"
+        }
+      ]
     },
     {
       "id": "cg-site-design-mode",
@@ -1688,10 +1732,22 @@
       "priority": "high",
       "source": "founder_directive_2026-07-24",
       "finding_note": "Founder directive 2026-07-24: 'Use one creative brain to function for all creative aspects. It's our studio.' services/creative-engine/index.js already dispatches footage_edit/photo_polish/script_compose/generative_broll/graphic_design by job.mode — this adds 'site_design' as a first-class mode on the SAME shared engine SocialMediaOS already uses, instead of site-builder having its own separate, weaker AI path (services/site-builder.js generateSiteHtml, confirmed this session to be a fallback-only path behind hand-authored template shells by default).",
-      "expected_exports": ["runSiteDesign"],
+      "expected_exports": [
+        "runSiteDesign"
+      ],
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "cg-site-design-mode",
-      "mission_id": "PRODUCT-site-builder"
+      "mission_id": "PRODUCT-site-builder",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/creative-engine/modes/site-design.js",
+          "exports": [
+            "runSiteDesign"
+          ],
+          "assertion_id": "expected_exports:services/creative-engine/modes/site-design.js"
+        }
+      ]
     },
     {
       "id": "sb-variant-gate-cull",
@@ -1709,10 +1765,22 @@
       "priority": "high",
       "source": "founder_directive_2026-07-24",
       "finding_note": "Founder directive 2026-07-24: 'of course, I needed it all enforced. It must use the pathways we create, which is the best product we can create.' Confirmed this session that services/site-builder.js buildVariants() currently shows every variant that builds successfully with zero culling — all 10, unranked, unfiltered. This is the enforcement mechanism; the follow-up wiring step is deliberately separated so each factory step stays single-file and independently verifiable.",
-      "expected_exports": ["decideVariantFate"],
+      "expected_exports": [
+        "decideVariantFate"
+      ],
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "sb-variant-gate-cull",
-      "mission_id": "PRODUCT-site-builder"
+      "mission_id": "PRODUCT-site-builder",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/site-builder-variant-gate.js",
+          "exports": [
+            "decideVariantFate"
+          ],
+          "assertion_id": "expected_exports:services/site-builder-variant-gate.js"
+        }
+      ]
     },
     {
       "id": "sb-variant-wire-buildvariants",
@@ -1728,7 +1796,11 @@
       "priority": "high",
       "source": "founder_directive_2026-07-24",
       "finding_note": "Founder directive 2026-07-24: 'build it, and don't stop until it's all the way down from end to end.' The 4 prior steps build the enforcement pieces but do nothing unless wired in — this is the actual enforcement moment. Also closes a gap found while writing this spec: businessInfo never retained the scraped existingHtml needed by the baseline scorer, so that fix is folded into this step rather than left as a silent second gap.",
-      "file_contains": ["businessInfo.existingSiteHtml", "decideVariantFate", "scoreUxHeuristics"],
+      "file_contains": [
+        "businessInfo.existingSiteHtml",
+        "decideVariantFate",
+        "scoreUxHeuristics"
+      ],
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "sb-variant-wire-buildvariants",
       "mission_id": "PRODUCT-site-builder"
