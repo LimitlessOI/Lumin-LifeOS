@@ -2264,16 +2264,16 @@
         "method": "GET",
         "path": "/factory/readiness"
       },
-      "last_attempt_at": "2026-07-25T04:09:37.674Z",
+      "last_attempt_at": "2026-07-25T04:26:06.651Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerFactoryMountRoutes; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "failure_signature": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerFactoryMountRoutes; behavior_assertion_failed; behavior_proof",
-      "same_signature_count": 4,
+      "same_signature_count": 5,
       "escalation_class": "evidence_gap",
-      "revive_count": 3,
-      "revived_at": "2026-07-25T04:09:12.679Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-25T04:25:42.458Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -2284,7 +2284,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "model_rotation": 1,
+      "force_model_rotation": true
     }
   ],
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
