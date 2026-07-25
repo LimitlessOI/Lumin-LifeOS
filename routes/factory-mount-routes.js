@@ -48,7 +48,7 @@ const REPO_ROOT = path.resolve(__dirname, '..');
 // (21306 bytes) — repeatedly blocked with
 // codegen_stub_detected: generated 1514b is < 30% of existing 21306b.
 // Raised well past realistic single-file sizes in this repo.
-export const MAX_EXISTING_CONTENT_BYTES = 100000;
+export const MAX_EXISTING_CONTENT_BYTES = 200000;
 
 /** Pure: should the codegen prompt inline this file's existing content? */
 export function shouldIncludeExistingFileContent(byteSize) {

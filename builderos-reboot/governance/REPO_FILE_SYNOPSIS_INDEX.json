@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-25T04:49:43.246Z",
+  "generated_at": "2026-07-25T04:52:11.991Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12175,
   "files": [
@@ -67419,8 +67419,8 @@
       "path": "routes/factory-mount-routes.js",
       "synopsis": "Mounts the governed factory hot path (BPB → Builder → SENTRY → TSOS → Historian)",
       "bytes": 22553,
-      "mtime": "2026-07-21T05:32:04.309Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "mtime": "2026-07-25T04:52:11.991Z",
+      "indexed_at": "2026-07-25T04:52:11.991Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

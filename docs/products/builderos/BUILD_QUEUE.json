@@ -2287,7 +2287,31 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "model_rotation": 2,
-      "force_model_rotation": true
+      "force_model_rotation": true,
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/builderos/twins/steps/bo-raise-large-file-context-threshold.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-25T04:52:08.106Z",
+        "shipped_at": "2026-07-25T04:52:08.106Z",
+        "commit_sha": null,
+        "content_sha256": "4aa3b55652d450843acc4b4ac387bf564e196d38aa30d03ddef7cf214b71f21b",
+        "target_file": "routes/factory-mount-routes.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "routes/factory-mount-routes.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/builderos/twins/steps/bo-raise-large-file-context-threshold.exact",
+          "content_sha256": "4aa3b55652d450843acc4b4ac387bf564e196d38aa30d03ddef7cf214b71f21b"
+        }
+      },
+      "shipped_at": "2026-07-25T04:52:08.106Z"
     }
   ],
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
