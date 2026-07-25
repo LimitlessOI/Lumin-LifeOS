@@ -1691,7 +1691,7 @@
     },
     {
       "id": "cg-ux-heuristic-gate",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/creative-engine/ux-heuristic-gate.js",
       "task": "New self-contained module scoring generated site HTML on REAL usability heuristics, not just structural presence. Export scoreUxHeuristics(html) -> { ctaPlacement: { score:0-10, note }, informationDensity: { score:0-10, verdict:'overloaded'|'sparse'|'balanced', wordsPerScreen:number }, visualHierarchy: { score:0-10, hasSingleH1:boolean, headingNestingValid:boolean }, navConvention: { score:0-10, note }, overall: 0-100 }. Deterministic rubric only (parse the HTML string with regex/simple DOM-string parsing — no browser, no AI call in this step): ctaPlacement checks a primary CTA (button/link containing action words: book, call, contact, schedule, get started) appears within the first ~600 words of body content (above-the-fold proxy) AND again near the end; informationDensity buckets estimated words-per-'section' (split on <section>/<div class> boundaries or heading tags) against fixed thresholds (>250 words with no sub-heading = overloaded, <20 words in a content section = sparse); visualHierarchy checks exactly one <h1> and that h2/h3 nesting doesn't skip levels; navConvention checks nav/header links count is between 3-7 (too few = weak, too many = overload) per standard usability convention.",
       "spec": "Single self-contained ESM module. Pure function, no network/DB/browser, only node: builtins if needed. Named export scoreUxHeuristics + default. Never throw on malformed HTML — wrap parsing in try/catch, degrade to a low-confidence zero-ish score with a note explaining why rather than crashing. Deterministic given the same input. This is the SocialMediaOS-equivalent of services/marketing-publish-gate.js's rubric-based scoring, applied to sites instead of scripts. Start with `// SYNOPSIS:` + `// @ssot docs/products/site-builder/PRODUCT_HOME.md`.",
@@ -1717,30 +1717,9 @@
           "assertion_id": "expected_exports:services/creative-engine/ux-heuristic-gate.js"
         }
       ],
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/site-builder/twins/steps/cg-ux-heuristic-gate.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-25T02:17:07.734Z",
-        "shipped_at": "2026-07-25T02:17:07.734Z",
-        "commit_sha": null,
-        "content_sha256": "031d638d4c6728456d146c78b6d4ed0a976225c1328908da1d293aa30c002d04",
-        "target_file": "services/creative-engine/ux-heuristic-gate.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/creative-engine/ux-heuristic-gate.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/site-builder/twins/steps/cg-ux-heuristic-gate.exact",
-          "content_sha256": "031d638d4c6728456d146c78b6d4ed0a976225c1328908da1d293aa30c002d04"
-        }
-      },
-      "shipped_at": "2026-07-25T02:17:07.734Z"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-25T02:17:14.467Z",
+      "commit_sha": "ba9354c8ca4d12bbd77799c8d316ef591dcb6130"
     },
     {
       "id": "cg-site-design-mode",
