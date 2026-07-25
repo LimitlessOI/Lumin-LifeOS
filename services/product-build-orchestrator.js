@@ -11,6 +11,7 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { authorAssertionsFromSpec } from '../factory-staging/factory-core/bpb/author-assertions.js';
 import { runBehaviorAssertions } from '../factory-staging/factory-core/sentry/behavior-assertions.js';
+import { execFileSync } from 'node:child_process';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const TYPED_BLOCKERS_PATH = path.join(ROOT, 'builderos-reboot/governance/TYPED_BLOCKER_SSOT.json');
@@ -379,6 +380,15 @@ export async function claimPreExistingSatisfiedSteps(queue, {
       continue;
     }
     if (!proof?.ok || proof.applicable === false) continue;
+
+    // New logic: Check if the file is committed to git
+    const targetPath = path.join(root, step.target_file);
+    try {
+      execFileSync('git', ['-C', root, 'ls-files', '--error-unmatch', targetPath]);
+    } catch {
+      continue; // File is either untracked or has no commits; do not mark as done
+    }
+
     step.status = STEP_STATUS.DONE;
     step.pre_existing = true;
     step.shipped_via = 'pre_existing_artifact_proof';

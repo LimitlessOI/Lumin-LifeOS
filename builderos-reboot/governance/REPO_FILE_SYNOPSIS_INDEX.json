@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-25T02:42:24.369Z",
+  "generated_at": "2026-07-25T02:50:16.809Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12170,
   "files": [
@@ -90150,9 +90150,9 @@
     {
       "path": "services/product-build-orchestrator.js",
       "synopsis": "General product-build orchestrator — turns a product's structured",
-      "bytes": 29672,
-      "mtime": "2026-07-21T05:32:04.647Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "bytes": 30037,
+      "mtime": "2026-07-25T02:50:16.809Z",
+      "indexed_at": "2026-07-25T02:50:16.809Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

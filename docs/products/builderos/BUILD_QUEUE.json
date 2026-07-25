@@ -2211,7 +2211,31 @@
       "proof": null,
       "failure_signature": "NOT_ON_BLUEPRINT",
       "same_signature_count": 1,
-      "escalation_class": "governance_block"
+      "escalation_class": "governance_block",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/builderos/twins/steps/bo-claim-pre-existing-git-check.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-25T02:50:13.513Z",
+        "shipped_at": "2026-07-25T02:50:13.513Z",
+        "commit_sha": null,
+        "content_sha256": "94dc47e1f76525f923f5df04be764007cfedbd9c5e4f9b7e456e8c3322b776d4",
+        "target_file": "services/product-build-orchestrator.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/product-build-orchestrator.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/builderos/twins/steps/bo-claim-pre-existing-git-check.exact",
+          "content_sha256": "94dc47e1f76525f923f5df04be764007cfedbd9c5e4f9b7e456e8c3322b776d4"
+        }
+      },
+      "shipped_at": "2026-07-25T02:50:13.513Z"
     }
   ],
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
