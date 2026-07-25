@@ -2098,7 +2098,7 @@
     },
     {
       "id": "02",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/site-builder-more-template-choices-routes.js",
       "task": "create route for template choices",
       "spec": "Provide HTTP routes to get and set template choices.",
@@ -2123,32 +2123,9 @@
           "assertion_id": "expected_exports:routes/site-builder-more-template-choices-routes.js"
         }
       ],
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/site-builder/twins/steps/02.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-25T03:09:53.454Z",
-        "shipped_at": "2026-07-25T03:09:53.454Z",
-        "commit_sha": null,
-        "content_sha256": "0ca46b8c8498f09fd44801010c51ea71b9ee6be22d3d361561c6e3b665d1a0de",
-        "target_file": "routes/site-builder-more-template-choices-routes.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "routes/site-builder-more-template-choices-routes.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/site-builder/twins/steps/02.exact",
-          "content_sha256": "0ca46b8c8498f09fd44801010c51ea71b9ee6be22d3d361561c6e3b665d1a0de"
-        }
-      },
-      "shipped_at": "2026-07-25T03:09:53.454Z",
-      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
-      "blueprint_step_id": "02"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-25T03:09:59.298Z",
+      "commit_sha": "b7a8387d82cbe7737af2281558fe61d2d6c617d3"
     },
     {
       "id": "03",
