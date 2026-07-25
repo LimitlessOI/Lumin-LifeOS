@@ -2044,6 +2044,86 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-25T02:20:36.787Z",
       "commit_sha": "8fa2e9e5643df9712f72d7c2eafe0eb2062e8065"
+    },
+    {
+      "id": "01",
+      "status": "pending",
+      "target_file": "services/site-builder-more-template-choices.js",
+      "task": "implement more template choices",
+      "spec": "Add functionality to offer more template choices for branding.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getTemplateChoices",
+        "addTemplateChoice"
+      ],
+      "route": {
+        "path": "/api/site-builder/template-choices"
+      }
+    },
+    {
+      "id": "02",
+      "status": "pending",
+      "target_file": "routes/site-builder-more-template-choices-routes.js",
+      "task": "create route for template choices",
+      "spec": "Provide HTTP routes to get and set template choices.",
+      "depends_on": [
+        "01"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerMoreTemplateChoicesRoutes"
+      ],
+      "route": {
+        "path": "/api/site-builder/template-choices"
+      }
+    },
+    {
+      "id": "03",
+      "status": "pending",
+      "target_file": "public/overlay/site-builder-more-templates-ui.html",
+      "task": "design template choices UI",
+      "spec": "UI for selecting from multiple template choices.",
+      "depends_on": [
+        "01"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "design_review_flagged": true
+    },
+    {
+      "id": "04",
+      "status": "pending",
+      "target_file": "db/migrations/20241030_add_interactive_element_labels_table.sql",
+      "task": "create table for interactive element labels",
+      "spec": "Database table to store labels for interactive elements.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ]
+    },
+    {
+      "id": "05",
+      "status": "pending",
+      "target_file": "services/site-builder-interactive-elements-label-update-service.js",
+      "task": "implement label update service",
+      "spec": "Service to update labels for interactive elements.",
+      "depends_on": [
+        "04"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getInteractiveElementLabels",
+        "updateInteractiveElementLabel"
+      ],
+      "route": {
+        "path": "/api/site-builder/interactive-elements/labels"
+      }
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",
