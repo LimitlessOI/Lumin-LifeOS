@@ -2290,6 +2290,29 @@
       "force_model_rotation": true,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-25T04:52:15.789Z"
+    },
+    {
+      "id": "bo-expose-governed-ship-once-endpoint",
+      "status": "pending",
+      "target_file": "routes/factory-mount-routes.js",
+      "task": "Add a new, direct HTTP endpoint that runs ONE full governed-autonomous-ship cycle (codegen + verify + COMMIT to git), not just codegen+verify. Live-reproduced gap (2026-07-25, site-builder step sb-variant-wire-buildvariants): POST /factory/ship-queue (this same file) only runs BPB->Builder->SENTRY dispatch and returns a result with commit_sha:null -- it does NOT commit the shipped file to git. The actual commit step lives inside runGovernedAutonomousShipOnce (services/governed-autonomous-shipping-loop.js), which is only reachable today buried inside the /founder-interface/message chat-intent handler (routes/lifeos-builderos-command-control-routes.js line ~1509) -- a path already documented elsewhere this session as unreliable for dispatch. Without a direct, dedicated endpoint for the full cycle, a founder or operator calling /factory/ship-queue directly (the documented, reliable, proven-all-session dispatch method) gets a real, successfully-built file that is silently stranded on the container's local ephemeral disk with no commit -- exactly what happened tonight, twice.",
+      "spec": "Add `router.post('/factory/ship-queue-and-commit', guard, async (req, res) => { ... })` to routes/factory-mount-routes.js (same file, same router, same guard pattern already used by the existing /factory/ship-queue handler immediately above it). Import runGovernedAutonomousShipOnce from '../services/governed-autonomous-shipping-loop.js' at the top of the file alongside the existing imports. The new handler's body should be minimal: call `await runGovernedAutonomousShipOnce({ logger, maxStepsPerProduct: req.body?.maxStepsPerProduct || 1 })` and return its result as JSON with `res.json(result)`, wrapped in try/catch returning `res.status(500).json({ ok:false, error: err.message })` on failure. Do NOT duplicate or reimplement any of runGovernedAutonomousShipOnce's internal logic -- this endpoint is a thin, direct pass-through, mirroring exactly how the chat-intent handler already calls it, just without the chat-intent wrapper around it. Do not modify the existing /factory/ship-queue handler or any other route in this file.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "priority": "high",
+      "source": "founder_directive_2026-07-25",
+      "finding_note": "Founder directive 2026-07-25: 'what went wrong with the system that it couldn't resolve it... you need to figure out and fix it.' Root cause: no direct, reliable way to trigger a full build+commit cycle exists outside the unreliable chat-intent path. This endpoint closes that gap so a real successful build can never again be silently stranded uncommitted.",
+      "expected_exports": [
+        "createFactoryMountRoutes"
+      ],
+      "file_contains": [
+        "ship-queue-and-commit",
+        "runGovernedAutonomousShipOnce"
+      ],
+      "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "bo-expose-governed-ship-once-endpoint",
+      "mission_id": "PRODUCT-builderos"
     }
   ],
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
