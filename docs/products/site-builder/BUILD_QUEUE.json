@@ -1804,7 +1804,31 @@
           ],
           "assertion_id": "expected_exports:services/site-builder-variant-gate.js"
         }
-      ]
+      ],
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/site-builder/twins/steps/sb-variant-gate-cull.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-25T02:25:48.468Z",
+        "shipped_at": "2026-07-25T02:25:48.468Z",
+        "commit_sha": null,
+        "content_sha256": "e410700871aef589bab55e1419a8494c275b68fa50744afefb5d70ba30050383",
+        "target_file": "services/site-builder-variant-gate.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/site-builder-variant-gate.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/site-builder/twins/steps/sb-variant-gate-cull.exact",
+          "content_sha256": "e410700871aef589bab55e1419a8494c275b68fa50744afefb5d70ba30050383"
+        }
+      },
+      "shipped_at": "2026-07-25T02:25:48.468Z"
     },
     {
       "id": "sb-variant-wire-buildvariants",
