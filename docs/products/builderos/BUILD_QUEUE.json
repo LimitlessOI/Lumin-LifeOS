@@ -2113,7 +2113,7 @@
     },
     {
       "id": "grail-audit-telemetry-wire-1",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "routes/factory-mount-routes.js",
       "task": "Fix the root cause of stale/dead token+model-routing tracking: wire the two already-existing durable-Postgres telemetry writers (emitTSOSHookReading, logShadowRoutingDecision) into the ACTUAL active dispatch path (POST /factory/ship-queue), which currently only writes to an ephemeral local file. Fail-open, additive only, zero risk to the existing dispatch/response behavior.",
       "spec": "ROOT CAUSE (confirmed via live production investigation): the ACTIVE dispatch path (routes/factory-mount-routes.js's POST /factory/ship-queue handler, which both the autonomous shipping loop and every manual dispatch go through) generates real per-step data (which model built it, which file, whether it succeeded) on every single call, but currently only writes that data to an ephemeral local file (factory-staging/data/tsos-step-metrics.jsonl via appendStepMetrics) that does not survive a Railway redeploy. The durable Postgres tables the reporting endpoints actually read from (GET /api/v1/lifeos/builderos/tsos-efficiency, tsos-routing-decisions) are only written by a DIFFERENT, now-largely-unused execution path (services/builderos-governed-loop-executor.js, the old command-control/C2 job queue) -- which is why those endpoints show data going stale weeks ago even though the factory has been shipping constantly.\n\nAdd two REAL, ALREADY-EXISTING, ALREADY-TESTED functions (do not reimplement their logic, just call them -- verified against the real files):\n\n1. import { emitTSOSHookReading } from '../services/builderos-tsos-hook-service.js' (this route file is at routes/factory-mount-routes.js, so this relative path is correct). Real signature (verified): emitTSOSHookReading(pool, { jobId, runId, jobType, targetFile, verifierOk, committed, modelUsed, outputBytes, repairAttempts, durationMs, totalTokenEstimate }) -- ASYNC, fail-open internally (catches its own errors, never throws), deduplicates by runId automatically, returns { ok, row_id } or { ok: false, error }.\n\n2. import { logShadowRoutingDecision } from '../services/builderos-tsos-routing.js'. Real signature (verified): logShadowRoutingDecision(pool, { routingKey, targetFile, taskClassBaseline, baselineModel, routingPolicy = null, operatorOverride = false }) -- ASYNC. This function does NOT wrap its own internal call in try/catch, so the CALLER here must wrap it in try/catch to guarantee fail-open behavior and never let a telemetry error break a real ship response.\n\nIn routes/factory-mount-routes.js, inside the existing POST /factory/ship-queue handler (router.post('/factory/ship-queue', guard, async (req, res) => { ... }), find the existing block:\n\n      const seals = [];\n      if (Array.isArray(outcome.shipped)) {\n        for (const shipped of outcome.shipped) {\n          const sid = shipped.blueprint_step_id || shipped.step_id;\n          const commit_sha = shipped?.codegen?.commit_sha\n            || outcome.commit_sha\n            || null;\n          const seal = sealExactChangeIntoTwin({\n\nImmediately INSIDE that same for-loop, right after the existing seal push and appendHistorianRecord call for 'exact_change_sealed' (do not remove or modify those existing lines, only ADD new lines after them, still inside the same for-loop body, before the loop's closing brace), add this exact block:\n\n          if (pool) {\n            try {\n              const modelUsed = shipped?.codegen?.model_tier || 'unspecified';\n              const targetFile = seal?.target_file || shipped?.target_file || null;\n              const stamp = Date.now();\n              await emitTSOSHookReading(pool, {\n                jobId: `${mission_id || twinProbe.mission_id}:${sid}:${stamp}`,\n                runId: `${mission_id || twinProbe.mission_id}:${sid}:${stamp}`,\n                jobType: 'governed_factory_ship_queue',\n                targetFile,\n                verifierOk: true,\n                committed: true,\n                modelUsed,\n                outputBytes: 0,\n                repairAttempts: 0,\n                durationMs: null,\n                totalTokenEstimate: 0,\n              });\n            } catch (telemetryErr) {\n              logger?.warn?.('[TSOS-HOOK] emit failed (non-blocking):', telemetryErr.message);\n            }\n            try {\n              await logShadowRoutingDecision(pool, {\n                routingKey: `${mission_id || twinProbe.mission_id}.builder.code`,\n                targetFile: seal?.target_file || shipped?.target_file || null,\n                taskClassBaseline: 'bounded_patching',\n                baselineModel: shipped?.codegen?.model_tier || 'unspecified',\n              });\n            } catch (routingErr) {\n              logger?.warn?.('[TSOS-ROUTING] log failed (non-blocking):', routingErr.message);\n            }\n          }\n\nCRITICAL constraints: (a) both new try/catch blocks are ADDITIVE ONLY -- they must never throw out of the loop, never change what gets returned in the HTTP response, never change outcome/seals/shipped in any way. (b) Do not modify sealExactChangeIntoTwin, appendHistorianRecord, or any other existing line in this file. (c) Add the two new import lines at the top of the file alongside the other existing imports, in the same style as the existing import of dispatchExecuteStep from run-step.js. (d) pool is already an existing parameter of createFactoryMountRoutes({ requireKey, logger, pool, baseUrl, callCouncilMember }) and already in scope inside this route handler -- do not add a new pool parameter or import, it already exists in this file's closure.",
@@ -2159,9 +2159,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-21T23:31:26.961Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:dispatchExecuteStep,resolveRepoPath; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-25T02:32:26.293Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -2174,13 +2174,13 @@
     },
     {
       "id": "bo-claim-pre-existing-git-check",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/product-build-orchestrator.js",
       "task": "Fix a real, live-reproduced false-done bug in claimPreExistingSatisfiedSteps() (~line 362-393): it marks a queue step DONE the moment its declared file_contains/expected_exports are satisfied on LOCAL DISK, but never checks whether that file is actually committed to git. Live repro (2026-07-24/25, site-builder product): a direct /factory/ship-queue call authored services/site-builder-current-site-baseline.js onto the running container's local filesystem but the commit step never ran (commit_sha stayed null). The NEXT cycle's claimPreExistingSatisfiedSteps found the local file satisfying its expected_exports and silently marked the step 'done' with shipped_via:'pre_existing_artifact_proof' -- even though git cat-file -e origin/main:<path> proved the file was never in git. Any redeploy after that point would have silently destroyed the only copy of that work while the queue kept claiming it was shipped.",
       "spec": "Modify claimPreExistingSatisfiedSteps() in services/product-build-orchestrator.js ONLY. Add a git-tracked check before allowing the pre-existing-artifact shortcut to mark a step done: use execFileSync (already need to import { execFileSync } from 'node:child_process' if not already imported in this file -- check first, this file may already import it) to run `git -C <root> ls-files --error-unmatch -- <target_file>` wrapped in try/catch; if it throws (non-zero exit = file is untracked or has no commits), the file exists locally but is NOT git-tracked -- do NOT mark the step done via this shortcut in that case (skip it, same as continue for a step that doesn't pass proof). Only when the git check succeeds (file is tracked) may the existing logic proceed to mark status DONE. This turns 'artifact exists on disk' into the intended 'artifact exists on disk AND is durably committed' before the queue is allowed to claim it shipped. Do not change the function's signature, its other behavior for steps that fail evaluateStepExpectations, or any other function in this file. Wrap the new git check so a git-command failure (e.g. not a git repo, or git binary missing) fails closed (treated as untracked -> do not claim) rather than throwing an uncaught error that would crash the whole claim pass.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "priority": "high",
       "source": "founder_directive_2026-07-24",
       "finding_note": "This exact gap was already named as a known, unfixed hole in this session's own governed-build plan notes ('claimPreExistingSatisfiedSteps' pre_existing_artifact_proof shortcut will otherwise silently re-ship the identical broken file without running codegen') -- this step is the first time it was live-reproduced with a concrete repro (site-builder step sb-current-site-baseline, 2026-07-25T02:25:14Z) rather than just described.",
@@ -2193,7 +2193,25 @@
       ],
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "bo-claim-pre-existing-git-check",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/product-build-orchestrator.js",
+          "exports": [
+            "claimPreExistingSatisfiedSteps"
+          ],
+          "assertion_id": "expected_exports:services/product-build-orchestrator.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-25T02:33:08.695Z",
+      "last_error": "NOT_ON_BLUEPRINT",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "failure_signature": "NOT_ON_BLUEPRINT",
+      "same_signature_count": 1,
+      "escalation_class": "governance_block"
     }
   ],
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
