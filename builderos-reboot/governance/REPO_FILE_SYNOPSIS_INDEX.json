@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-25T02:16:17.954Z",
+  "generated_at": "2026-07-25T02:17:10.243Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12159,
+  "file_count": 12160,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -85891,6 +85891,16 @@
       "indexed_at": "2026-07-21T05:58:39.404Z",
       "ssot": [
         "docs/products/creative-engine/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/creative-engine/ux-heuristic-gate.js",
+      "synopsis": "// @ssot docs/products/site-builder/PRODUCT_HOME.md",
+      "bytes": 3674,
+      "mtime": "2026-07-25T02:17:10.243Z",
+      "indexed_at": "2026-07-25T02:17:10.243Z",
+      "ssot": [
+        "docs/products/site-builder/PRODUCT_HOME.md"
       ]
     },
     {

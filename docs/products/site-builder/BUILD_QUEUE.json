@@ -1716,7 +1716,31 @@
           ],
           "assertion_id": "expected_exports:services/creative-engine/ux-heuristic-gate.js"
         }
-      ]
+      ],
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/site-builder/twins/steps/cg-ux-heuristic-gate.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-25T02:17:07.734Z",
+        "shipped_at": "2026-07-25T02:17:07.734Z",
+        "commit_sha": null,
+        "content_sha256": "031d638d4c6728456d146c78b6d4ed0a976225c1328908da1d293aa30c002d04",
+        "target_file": "services/creative-engine/ux-heuristic-gate.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/creative-engine/ux-heuristic-gate.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/site-builder/twins/steps/cg-ux-heuristic-gate.exact",
+          "content_sha256": "031d638d4c6728456d146c78b6d4ed0a976225c1328908da1d293aa30c002d04"
+        }
+      },
+      "shipped_at": "2026-07-25T02:17:07.734Z"
     },
     {
       "id": "cg-site-design-mode",
