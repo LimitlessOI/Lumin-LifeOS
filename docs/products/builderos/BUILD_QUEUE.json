@@ -2230,13 +2230,13 @@
     },
     {
       "id": "bo-raise-large-file-context-threshold",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/factory-mount-routes.js",
       "task": "Raise the hard-coded 20000-byte cutoff (routes/factory-mount-routes.js, inside the codegenRunner.generate implementation, the block reading `if (fs.existsSync(absTarget) && fs.statSync(absTarget).isFile() && fs.statSync(absTarget).size <= 20000) { existingContentLines.push('EXISTING FILE CONTENT ...' + fs.readFileSync(absTarget, 'utf8')); }`) that silently decides whether an existing file's content is included in the codegen prompt at all. Live-reproduced root cause (2026-07-25, site-builder product, step sb-variant-wire-buildvariants): services/site-builder.js is 105222 bytes, so this condition is false, the model is NEVER shown the existing file, yet the prompt still tells it to 'preserve ALL existing code' and 'output the COMPLETE updated file' -- an impossible instruction, since it has no existing content to preserve or reproduce. Result: the model correctly produced 0 bytes rather than hallucinate a fake 105KB file, and this failed identically across every model tier (force_model_rotation escalated through tier 9) and even after max_output_tokens was raised to 40000 -- neither fix touches the real constraint, which is on the INPUT side, not the output side.",
       "spec": "Change the constant `20000` to `200000` in the size check described above (single-line numeric change). This is the minimal, safest fix: it does not change any other logic, does not add a new dependency, and simply widens the file-size window for which existing content is included in the codegen prompt. Do not change anything else in this file. NOTE (self-referential risk, name it in case this fails): routes/factory-mount-routes.js is itself 22877 bytes, just over the CURRENT 20000 threshold this step is trying to raise -- meaning this very fix attempt may hit the same bug it's fixing (codegen won't be shown this file's own content either, until the fix lands). If this step fails identically (0 bytes generated), that failure is itself further proof of the bug, not a reason to keep retrying with different model tiers -- it needs `max_output_tokens` raised on THIS step (try 30000) and/or founder awareness that this one fix may need to be applied by hand given the bootstrapping paradox, which is explicitly outside the SO-001 hand-authoring restriction ONLY if the founder approves an exception for this specific self-referential case.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "max_output_tokens": 30000,
       "priority": "high",
       "source": "founder_directive_2026-07-24",
@@ -2246,7 +2246,32 @@
       ],
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "bo-raise-large-file-context-threshold",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "expected_exports": [
+        "registerFactoryMountRoutes"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/factory-mount-routes.js",
+          "exports": [
+            "registerFactoryMountRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/factory-mount-routes.js"
+        }
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/factory/readiness"
+      },
+      "last_attempt_at": "2026-07-25T03:20:17.622Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerFactoryMountRoutes; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "failure_signature": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerFactoryMountRoutes; behavior_assertion_failed; behavior_proof",
+      "same_signature_count": 1,
+      "escalation_class": "evidence_gap"
     }
   ],
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
