@@ -1633,6 +1633,7 @@
       "priority": "high",
       "source": "founder_directive_2026-07-24",
       "finding_note": "2026-07-24 founder session: confirmed services/site-builder.js scrapes the prospect's current site for TEXT FACTS ONLY (phone, services, testimonials) and never scores or compares its actual design against generated variants — generation is fully design-blind. This step is the first piece of a real before/after baseline.",
+      "expected_exports": ["scoreCurrentSiteBaseline"],
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "sb-current-site-baseline",
       "mission_id": "PRODUCT-site-builder"
@@ -1651,6 +1652,7 @@
       "priority": "high",
       "source": "founder_directive_2026-07-24",
       "finding_note": "Founder directive 2026-07-24: 'when we even make a blueprint, the architect needs to send it over to the studio (creative engine) and make a site map and what it should visually look like.' This module is that exact handoff artifact, kept as plain data so it's testable and reusable by any consumer (site-builder today, other products later) without a runtime dependency between them.",
+      "expected_exports": ["buildCreativeBrief"],
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "sb-architect-creative-brief",
       "mission_id": "PRODUCT-site-builder"
@@ -1667,6 +1669,7 @@
       "priority": "high",
       "source": "founder_directive_2026-07-24",
       "finding_note": "Founder directive 2026-07-24: '...the best tactics for setup, design, usability, our buttons in the right most convenient place, easy to understand what's happening on this page or is it overload.' Confirmed services/site-builder-quality-scorer.js today is doctype/viewport/H1-count/keyword regex only, zero usability judgment. This step is that missing judgment, built deterministic (not AI-vibes) so it's falsifiable and fast, mirroring the marketing-publish-gate.js pattern already proven for SocialMediaOS.",
+      "expected_exports": ["scoreUxHeuristics"],
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "cg-ux-heuristic-gate",
       "mission_id": "PRODUCT-site-builder"
@@ -1685,6 +1688,7 @@
       "priority": "high",
       "source": "founder_directive_2026-07-24",
       "finding_note": "Founder directive 2026-07-24: 'Use one creative brain to function for all creative aspects. It's our studio.' services/creative-engine/index.js already dispatches footage_edit/photo_polish/script_compose/generative_broll/graphic_design by job.mode — this adds 'site_design' as a first-class mode on the SAME shared engine SocialMediaOS already uses, instead of site-builder having its own separate, weaker AI path (services/site-builder.js generateSiteHtml, confirmed this session to be a fallback-only path behind hand-authored template shells by default).",
+      "expected_exports": ["runSiteDesign"],
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "cg-site-design-mode",
       "mission_id": "PRODUCT-site-builder"
@@ -1705,6 +1709,7 @@
       "priority": "high",
       "source": "founder_directive_2026-07-24",
       "finding_note": "Founder directive 2026-07-24: 'of course, I needed it all enforced. It must use the pathways we create, which is the best product we can create.' Confirmed this session that services/site-builder.js buildVariants() currently shows every variant that builds successfully with zero culling — all 10, unranked, unfiltered. This is the enforcement mechanism; the follow-up wiring step is deliberately separated so each factory step stays single-file and independently verifiable.",
+      "expected_exports": ["decideVariantFate"],
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "sb-variant-gate-cull",
       "mission_id": "PRODUCT-site-builder"
@@ -1723,6 +1728,7 @@
       "priority": "high",
       "source": "founder_directive_2026-07-24",
       "finding_note": "Founder directive 2026-07-24: 'build it, and don't stop until it's all the way down from end to end.' The 4 prior steps build the enforcement pieces but do nothing unless wired in — this is the actual enforcement moment. Also closes a gap found while writing this spec: businessInfo never retained the scraped existingHtml needed by the baseline scorer, so that fix is folded into this step rather than left as a silent second gap.",
+      "file_contains": ["businessInfo.existingSiteHtml", "decideVariantFate", "scoreUxHeuristics"],
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "sb-variant-wire-buildvariants",
       "mission_id": "PRODUCT-site-builder"
