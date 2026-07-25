@@ -2140,7 +2140,7 @@
     },
     {
       "id": "05",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/site-builder-interactive-elements-label-update-service.js",
       "task": "implement label update service",
       "spec": "Service to update labels for interactive elements.",
@@ -2167,32 +2167,9 @@
           "assertion_id": "expected_exports:services/site-builder-interactive-elements-label-update-service.js"
         }
       ],
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/site-builder/twins/steps/05.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-25T02:53:51.880Z",
-        "shipped_at": "2026-07-25T02:53:51.880Z",
-        "commit_sha": null,
-        "content_sha256": "704e675f646e9ae3e403f5cbd4017505961a26c9b2caedb020baa5b75560b69e",
-        "target_file": "services/site-builder-interactive-elements-label-update-service.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/site-builder-interactive-elements-label-update-service.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/site-builder/twins/steps/05.exact",
-          "content_sha256": "704e675f646e9ae3e403f5cbd4017505961a26c9b2caedb020baa5b75560b69e"
-        }
-      },
-      "shipped_at": "2026-07-25T02:53:51.880Z",
-      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
-      "blueprint_step_id": "05"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-25T02:53:59.673Z",
+      "commit_sha": "2358688b77eea555465c84d924b89caa3fc93945"
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",
