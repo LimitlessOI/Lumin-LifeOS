@@ -2133,7 +2133,33 @@
       "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS"
-      ]
+      ],
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/site-builder/twins/steps/04.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-25T02:53:37.126Z",
+        "shipped_at": "2026-07-25T02:53:37.126Z",
+        "commit_sha": null,
+        "content_sha256": "a4edb1c2053a2c862df7ca748da139db65e005a82315ed6a52a9e757e4b63aab",
+        "target_file": "db/migrations/20241030_add_interactive_element_labels_table.sql",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "db/migrations/20241030_add_interactive_element_labels_table.sql",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/site-builder/twins/steps/04.exact",
+          "content_sha256": "a4edb1c2053a2c862df7ca748da139db65e005a82315ed6a52a9e757e4b63aab"
+        }
+      },
+      "shipped_at": "2026-07-25T02:53:37.126Z",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "04"
     },
     {
       "id": "05",
