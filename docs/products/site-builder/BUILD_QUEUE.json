@@ -1987,7 +1987,7 @@
     },
     {
       "id": "s4",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/site-builder-additional-templates.html",
       "task": "create UI for additional templates",
       "spec": "HTML overlay for displaying additional template options.",
@@ -1997,32 +1997,9 @@
       "founder_gated": false,
       "attempts": 0,
       "design_review_flagged": true,
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/site-builder/twins/steps/s4.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-25T02:42:21.636Z",
-        "shipped_at": "2026-07-25T02:42:21.636Z",
-        "commit_sha": null,
-        "content_sha256": "49b1d49893ce562e8319237adef3f6d0917fb80f5b43159ad874bce3c1e588c1",
-        "target_file": "public/overlay/site-builder-additional-templates.html",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "public/overlay/site-builder-additional-templates.html",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/site-builder/twins/steps/s4.exact",
-          "content_sha256": "49b1d49893ce562e8319237adef3f6d0917fb80f5b43159ad874bce3c1e588c1"
-        }
-      },
-      "shipped_at": "2026-07-25T02:42:21.636Z",
-      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
-      "blueprint_step_id": "s4"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-25T02:42:27.878Z",
+      "commit_sha": "042c5196fd3eb36a004de5d3b6d81b883b0dcf49"
     },
     {
       "id": "s5",
