@@ -1623,7 +1623,7 @@
     },
     {
       "id": "sb-current-site-baseline",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/site-builder-current-site-baseline.js",
       "task": "New self-contained module scoring the PROSPECT'S EXISTING live site as the baseline every generated variant must beat. Export async scoreCurrentSiteBaseline({ html, screenshotBuffer }) -> { visualScore: 0-100, structuralSignals: { hasHeroImage:boolean, navItemCount:number, primaryCtaDetected:boolean, aboveFoldWordCount:number, imageCount:number }, notes: string[] }. Reuse the same scoring dimensions services/site-builder-quality-scorer.js already uses (doctype/viewport/H1 count/CTA keyword) via direct import so the SAME rubric scores both the current site and generated variants — the whole point is a fair before/after number, not a second incompatible scorer. screenshotBuffer is optional and only used for a coarse heuristic (e.g. presence implies hasHeroImage likely true when combined with an <img> in the hero region) — this module does NOT call Puppeteer itself; the caller captures the screenshot and passes the buffer in.",
       "spec": "Single self-contained ESM module. Import EXACTLY this from './site-builder-quality-scorer.js' (relative path): `import { scoreGeneratedSite } from './site-builder-quality-scorer.js';` -- this is the file's real, confirmed export name (signature: scoreGeneratedSite(html, businessInfo = {}, options = {}) -> { score, maxScore, scorePct, grade, criteria, issues, readyToSend, recommendedAction }). Do NOT import any other name from that file -- 2 prior attempts failed identically because codegen guessed a wrong export name ('score') instead of the real one, verified directly against the file's actual `export function scoreGeneratedSite(...)` declaration. Call it as `scoreGeneratedSite(html, {})` and map its `.scorePct` field directly to this module's own `visualScore` output field. No other project imports, no network, no DB, no Puppeteer/browser imports here. Named export scoreCurrentSiteBaseline + default. Guard html as possibly empty string -> return a well-formed zero/low-confidence result, never throw. Deterministic given the same inputs. Start with `// SYNOPSIS:` + `// @ssot docs/products/site-builder/PRODUCT_HOME.md`.",
@@ -1665,11 +1665,13 @@
       "demoted_at": null,
       "park_until": null,
       "no_op": null,
-      "pre_existing": null,
+      "pre_existing": true,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "pre_existing_artifact_proof",
+      "shipped_at": "2026-07-25T02:25:14.092Z"
     },
     {
       "id": "sb-architect-creative-brief",
@@ -1700,7 +1702,31 @@
           ],
           "assertion_id": "expected_exports:services/site-builder-architect-brief.js"
         }
-      ]
+      ],
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/site-builder/twins/steps/sb-architect-creative-brief.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-25T02:25:16.811Z",
+        "shipped_at": "2026-07-25T02:25:16.811Z",
+        "commit_sha": null,
+        "content_sha256": "4b39cbefd36d02aba5833c750e6c4427cec5201e92505138949c26f480c29cf1",
+        "target_file": "services/site-builder-architect-brief.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/site-builder-architect-brief.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/site-builder/twins/steps/sb-architect-creative-brief.exact",
+          "content_sha256": "4b39cbefd36d02aba5833c750e6c4427cec5201e92505138949c26f480c29cf1"
+        }
+      },
+      "shipped_at": "2026-07-25T02:25:16.811Z"
     },
     {
       "id": "cg-ux-heuristic-gate",
