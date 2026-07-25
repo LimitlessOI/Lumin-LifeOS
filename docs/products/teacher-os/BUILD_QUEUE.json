@@ -810,7 +810,7 @@
     },
     {
       "id": "teacher-os-9",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "Register new build modules",
       "spec": "Update the configuration to auto-register new modules created during this build process.",
@@ -822,7 +822,7 @@
       ],
       "dependency_note": "2026-07-20: removed teacher-os-8 from depends_on. It shares its target_file (routes/uxRoutes.js) with teacher-os-5 (already done), but is a genuinely DIFFERENT, real task ('Add UX wireframes route' vs step5's UX flow CRUD) that collided on the same filename during queue generation -- not a duplicate to mark no-op. teacher-os-8 is also founder_gated:true, a deliberate business-scope decision, which this fix does not touch, override, or resolve -- teacher-os-8 itself is left completely untouched (still pending real founder input on the wireframes feature and its filename collision with step5). This dependency was only ever a registration-ordering artifact: registering the 6 already-done files does not require the wireframes feature to exist first.",
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "routes/userInterviewRoutes.js",
         "routes/competitiveLandscapeRoutes.js",
@@ -833,15 +833,15 @@
       "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "teacher-os-9",
       "mission_id": "PRODUCT-teacher-os",
-      "last_attempt_at": "2026-07-20T17:22:10.435Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:services/teacherInterviewEnhancement.js; behavior_assertion: missing_substring:services/competitiveLandscape.js; behavior_assertion: missing_substring:services/pricingValidationEnhancement.js; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "42e80766d16505a997b31a01279e283ab629d2fd",
       "built_sha": null,
       "proof": null,
       "failure_signature": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:services/teacherInterviewEnhancement.js; behavior_assertion: missing_substring:services/competitiveLandscape.js",
       "same_signature_count": 2,
       "escalation_class": "evidence_gap",
-      "revive_count": 1,
+      "revive_count": 0,
       "revived_at": "2026-07-20T17:22:09.465Z",
       "last_attempt": null,
       "demoted": false,
@@ -854,30 +854,8 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/teacher-os/twins/steps/teacher-os-9.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-25T02:53:08.812Z",
-        "shipped_at": "2026-07-25T02:53:08.812Z",
-        "commit_sha": null,
-        "content_sha256": "0e60599b8c5bf8c09aed9b0862946a9056c3443b311e33cc64584ceb5a96bfe8",
-        "target_file": "config/auto-registered-product-modules.json",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "config/auto-registered-product-modules.json",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/teacher-os/twins/steps/teacher-os-9.exact",
-          "content_sha256": "0e60599b8c5bf8c09aed9b0862946a9056c3443b311e33cc64584ceb5a96bfe8"
-        }
-      },
-      "shipped_at": "2026-07-25T02:53:08.812Z"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-25T02:53:15.102Z"
     }
   ],
   "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
