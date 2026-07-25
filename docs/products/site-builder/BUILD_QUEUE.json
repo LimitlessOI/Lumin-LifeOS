@@ -1741,7 +1741,7 @@
     },
     {
       "id": "cg-site-design-mode",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/creative-engine/modes/site-design.js",
       "task": "New Creative Engine mode 'site_design' — the shared Studio brain site-builder (and later other products) calls to actually design a site from an Architect brief. Export async runSiteDesign({ creativeBrief, callCouncilMember }) -> { html:string, designNotes:string[], sitemapUsed:array }. creativeBrief is the exact shape produced by services/site-builder-architect-brief.js's buildCreativeBrief(). Build ONE prompt for callCouncilMember (STRONG paid model tier — this is a real design decision, not a cheap-tier call per SO-003) that includes: the full sitemap, brandSignals, painPointsToAddress, and baselineToBeat (explicitly instructing the model its output must beat the baseline's structural signals — more/better hero presence, appropriate CTA placement, balanced information density per section). Return the model's HTML plus a short array of designNotes explaining the key choices made (for later human/SENTRY review).",
       "spec": "Single self-contained ESM module. callCouncilMember is dependency-injected (the ONLY AI hook) — no direct provider SDK imports. Import ONLY node: builtins plus nothing else at module scope (no importing site-builder.js — creative-engine must not depend on a specific product's internals, only on the brief shape passed in). try/catch everything -> structured { ok:false, error } on failure, never throw uncaught. Parse/validate the model's response defensively (must contain '<html'; on failure return { ok:false, reason:'invalid_model_output', raw }). Start with `// SYNOPSIS:` + `// @ssot docs/products/marketingos/socialmediaos/PRODUCT_HOME.md`.",
@@ -1769,30 +1769,9 @@
           "assertion_id": "expected_exports:services/creative-engine/modes/site-design.js"
         }
       ],
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/site-builder/twins/steps/cg-site-design-mode.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-25T02:25:34.423Z",
-        "shipped_at": "2026-07-25T02:25:34.423Z",
-        "commit_sha": null,
-        "content_sha256": "4709a64122fa52801a47a8c8ea1809a70cb0bda6f9850da0ba67b8242b41b1b0",
-        "target_file": "services/creative-engine/modes/site-design.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/creative-engine/modes/site-design.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/site-builder/twins/steps/cg-site-design-mode.exact",
-          "content_sha256": "4709a64122fa52801a47a8c8ea1809a70cb0bda6f9850da0ba67b8242b41b1b0"
-        }
-      },
-      "shipped_at": "2026-07-25T02:25:34.423Z"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-25T02:25:40.643Z",
+      "commit_sha": "ba543317569d1dd23ca6b11e41e7a406177c6416"
     },
     {
       "id": "sb-variant-gate-cull",
