@@ -1671,8 +1671,31 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": null,
-      "shipped_at": null,
-      "false_done_gap_fill_note": "2026-07-25: re-clobbered back to a false done by a stale container mid-redeploy-transition (second occurrence). Reset again to pending. If this recurs a third time, the systemic fix in bo-claim-pre-existing-git-check needs to actually land before this stops happening."
+      "shipped_at": "2026-07-25T02:36:37.494Z",
+      "false_done_gap_fill_note": "2026-07-25: re-clobbered back to a false done by a stale container mid-redeploy-transition (second occurrence). Reset again to pending. If this recurs a third time, the systemic fix in bo-claim-pre-existing-git-check needs to actually land before this stops happening.",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/site-builder/twins/steps/sb-current-site-baseline.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-25T02:36:37.494Z",
+        "shipped_at": "2026-07-25T02:36:37.494Z",
+        "commit_sha": null,
+        "content_sha256": "0e2b984909ea30f94913419715ada4c9f4521b7b1a34a0c1673749a05eed3f65",
+        "target_file": "services/site-builder-current-site-baseline.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/site-builder-current-site-baseline.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/site-builder/twins/steps/sb-current-site-baseline.exact",
+          "content_sha256": "0e2b984909ea30f94913419715ada4c9f4521b7b1a34a0c1673749a05eed3f65"
+        }
+      }
     },
     {
       "id": "sb-architect-creative-brief",
