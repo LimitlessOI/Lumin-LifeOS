@@ -1911,7 +1911,7 @@
     },
     {
       "id": "s5",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20241030_add_interactive_element_labels.sql",
       "task": "create migration for interactive element labels",
       "spec": "Adds clear labels to interactive elements in the database.",
@@ -1921,32 +1921,9 @@
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS"
       ],
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/site-builder/twins/steps/s5.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-25T02:20:17.914Z",
-        "shipped_at": "2026-07-25T02:20:17.914Z",
-        "commit_sha": null,
-        "content_sha256": "5ea3f857ac1b3ee115d4e3c09c2bad7e53292a4124d856b648fe8a3232227224",
-        "target_file": "db/migrations/20241030_add_interactive_element_labels.sql",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "db/migrations/20241030_add_interactive_element_labels.sql",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/site-builder/twins/steps/s5.exact",
-          "content_sha256": "5ea3f857ac1b3ee115d4e3c09c2bad7e53292a4124d856b648fe8a3232227224"
-        }
-      },
-      "shipped_at": "2026-07-25T02:20:17.914Z",
-      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
-      "blueprint_step_id": "s5"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-25T02:20:23.496Z",
+      "commit_sha": "a756edb0e3737aec51057622e92727c8cd1b4559"
     },
     {
       "id": "s6",
