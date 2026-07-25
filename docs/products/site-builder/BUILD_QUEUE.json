@@ -1775,7 +1775,7 @@
     },
     {
       "id": "sb-variant-gate-cull",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/site-builder-variant-gate.js",
       "task": "New self-contained module implementing the actual publish-or-kill decision for site variants — the enforcement layer that stops a prospect from ever seeing a variant worse than their current site. Export decideVariantFate({ variantScore, uxHeuristics, baseline }) -> { keep:boolean, reason:string, rank:number }. keep is false when variantScore.scorePct (from services/site-builder-quality-scorer.js) is below baseline.visualScore (from sb-current-site-baseline), OR when uxHeuristics.overall (from cg-ux-heuristic-gate) is below a fixed minimum threshold (60/100). rank orders surviving variants by a combined score (weight structural + ux heuristics evenly) so the caller can show best-first. This module does NOT itself call the two scorers or Puppeteer/AI — it is a pure decision function over already-computed scores, so it stays trivially testable.",
       "spec": "Single self-contained ESM module, pure function, zero imports beyond node: builtins if any, no network/DB/browser. Named export decideVariantFate + default. Guard every field as possibly undefined -> treat missing baseline as 'cannot compare, keep with a caveat note' rather than crashing (fail toward showing SOMETHING with an honest flag, not toward showing nothing when data is incomplete — but ALWAYS keep=false when uxHeuristics.overall is present and below the 60 threshold, that check is never skipped). Deterministic. Start with `// SYNOPSIS:` + `// @ssot docs/products/site-builder/PRODUCT_HOME.md`. NOTE for the wiring step (separate, later): services/site-builder.js buildVariants() (~line 665-710) is where this decision function gets called per-variant before variants[] is returned to callers — that wiring is intentionally NOT part of this step's scope (this step only ships the decision function itself, single-file per queue convention); a follow-up step wires it into buildVariants().",
@@ -1805,30 +1805,9 @@
           "assertion_id": "expected_exports:services/site-builder-variant-gate.js"
         }
       ],
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/site-builder/twins/steps/sb-variant-gate-cull.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-25T02:25:48.468Z",
-        "shipped_at": "2026-07-25T02:25:48.468Z",
-        "commit_sha": null,
-        "content_sha256": "e410700871aef589bab55e1419a8494c275b68fa50744afefb5d70ba30050383",
-        "target_file": "services/site-builder-variant-gate.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/site-builder-variant-gate.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/site-builder/twins/steps/sb-variant-gate-cull.exact",
-          "content_sha256": "e410700871aef589bab55e1419a8494c275b68fa50744afefb5d70ba30050383"
-        }
-      },
-      "shipped_at": "2026-07-25T02:25:48.468Z"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-25T02:25:55.062Z",
+      "commit_sha": "46bca74b67f5762895bbb1b0ce51ef56c41ca1a1"
     },
     {
       "id": "sb-variant-wire-buildvariants",
