@@ -2171,6 +2171,29 @@
       "blocker_resolution": null,
       "model_rotation": 3,
       "force_model_rotation": true
+    },
+    {
+      "id": "bo-claim-pre-existing-git-check",
+      "status": "pending",
+      "target_file": "services/product-build-orchestrator.js",
+      "task": "Fix a real, live-reproduced false-done bug in claimPreExistingSatisfiedSteps() (~line 362-393): it marks a queue step DONE the moment its declared file_contains/expected_exports are satisfied on LOCAL DISK, but never checks whether that file is actually committed to git. Live repro (2026-07-24/25, site-builder product): a direct /factory/ship-queue call authored services/site-builder-current-site-baseline.js onto the running container's local filesystem but the commit step never ran (commit_sha stayed null). The NEXT cycle's claimPreExistingSatisfiedSteps found the local file satisfying its expected_exports and silently marked the step 'done' with shipped_via:'pre_existing_artifact_proof' -- even though git cat-file -e origin/main:<path> proved the file was never in git. Any redeploy after that point would have silently destroyed the only copy of that work while the queue kept claiming it was shipped.",
+      "spec": "Modify claimPreExistingSatisfiedSteps() in services/product-build-orchestrator.js ONLY. Add a git-tracked check before allowing the pre-existing-artifact shortcut to mark a step done: use execFileSync (already need to import { execFileSync } from 'node:child_process' if not already imported in this file -- check first, this file may already import it) to run `git -C <root> ls-files --error-unmatch -- <target_file>` wrapped in try/catch; if it throws (non-zero exit = file is untracked or has no commits), the file exists locally but is NOT git-tracked -- do NOT mark the step done via this shortcut in that case (skip it, same as continue for a step that doesn't pass proof). Only when the git check succeeds (file is tracked) may the existing logic proceed to mark status DONE. This turns 'artifact exists on disk' into the intended 'artifact exists on disk AND is durably committed' before the queue is allowed to claim it shipped. Do not change the function's signature, its other behavior for steps that fail evaluateStepExpectations, or any other function in this file. Wrap the new git check so a git-command failure (e.g. not a git repo, or git binary missing) fails closed (treated as untracked -> do not claim) rather than throwing an uncaught error that would crash the whole claim pass.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "priority": "high",
+      "source": "founder_directive_2026-07-24",
+      "finding_note": "This exact gap was already named as a known, unfixed hole in this session's own governed-build plan notes ('claimPreExistingSatisfiedSteps' pre_existing_artifact_proof shortcut will otherwise silently re-ship the identical broken file without running codegen') -- this step is the first time it was live-reproduced with a concrete repro (site-builder step sb-current-site-baseline, 2026-07-25T02:25:14Z) rather than just described.",
+      "expected_exports": [
+        "claimPreExistingSatisfiedSteps"
+      ],
+      "file_contains": [
+        "ls-files",
+        "--error-unmatch"
+      ],
+      "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "bo-claim-pre-existing-git-check",
+      "mission_id": "PRODUCT-builderos"
     }
   ],
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",

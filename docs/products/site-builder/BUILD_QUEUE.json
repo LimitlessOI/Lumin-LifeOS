@@ -1623,7 +1623,7 @@
     },
     {
       "id": "sb-current-site-baseline",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/site-builder-current-site-baseline.js",
       "task": "New self-contained module scoring the PROSPECT'S EXISTING live site as the baseline every generated variant must beat. Export async scoreCurrentSiteBaseline({ html, screenshotBuffer }) -> { visualScore: 0-100, structuralSignals: { hasHeroImage:boolean, navItemCount:number, primaryCtaDetected:boolean, aboveFoldWordCount:number, imageCount:number }, notes: string[] }. Reuse the same scoring dimensions services/site-builder-quality-scorer.js already uses (doctype/viewport/H1 count/CTA keyword) via direct import so the SAME rubric scores both the current site and generated variants — the whole point is a fair before/after number, not a second incompatible scorer. screenshotBuffer is optional and only used for a coarse heuristic (e.g. presence implies hasHeroImage likely true when combined with an <img> in the hero region) — this module does NOT call Puppeteer itself; the caller captures the screenshot and passes the buffer in.",
       "spec": "Single self-contained ESM module. Import EXACTLY this from './site-builder-quality-scorer.js' (relative path): `import { scoreGeneratedSite } from './site-builder-quality-scorer.js';` -- this is the file's real, confirmed export name (signature: scoreGeneratedSite(html, businessInfo = {}, options = {}) -> { score, maxScore, scorePct, grade, criteria, issues, readyToSend, recommendedAction }). Do NOT import any other name from that file -- 2 prior attempts failed identically because codegen guessed a wrong export name ('score') instead of the real one, verified directly against the file's actual `export function scoreGeneratedSite(...)` declaration. Call it as `scoreGeneratedSite(html, {})` and map its `.scorePct` field directly to this module's own `visualScore` output field. No other project imports, no network, no DB, no Puppeteer/browser imports here. Named export scoreCurrentSiteBaseline + default. Guard html as possibly empty string -> return a well-formed zero/low-confidence result, never throw. Deterministic given the same inputs. Start with `// SYNOPSIS:` + `// @ssot docs/products/site-builder/PRODUCT_HOME.md`.",
@@ -1665,13 +1665,14 @@
       "demoted_at": null,
       "park_until": null,
       "no_op": null,
-      "pre_existing": true,
+      "pre_existing": false,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "shipped_via": "pre_existing_artifact_proof",
-      "shipped_at": "2026-07-25T02:25:14.092Z"
+      "shipped_via": null,
+      "shipped_at": null,
+      "false_done_gap_fill_note": "2026-07-25: previously falsely marked done via claimPreExistingSatisfiedSteps' pre_existing_artifact_proof shortcut -- a direct /factory/ship-queue call had written the file to the container's LOCAL disk but never committed it to git (no commit_sha, file absent from origin/main when independently checked). Reset to pending so a real attempt commits it. Systemic fix queued: docs/products/builderos/BUILD_QUEUE.json step bo-claim-pre-existing-git-check."
     },
     {
       "id": "sb-architect-creative-brief",
@@ -1816,7 +1817,8 @@
       "task": "Wire the 4 new modules (sb-current-site-baseline, sb-architect-creative-brief, cg-ux-heuristic-gate, sb-variant-gate-cull) into buildVariants() so the publish-or-kill decision is ACTUALLY ENFORCED, not just built. Two changes in this ONE file: (1) GAP FOUND while queuing this step: the raw scraped HTML of the prospect's current site is already fetched during scraping (see the existing `businessInfo.existingSiteScore = this.scoreSiteHtml(existingHtml, {})` call) but is NEVER stored on businessInfo, so buildVariants() has no way to reach it today. In that same scraping code path, add `businessInfo.existingSiteHtml = existingHtml;` right next to the existing `existingSiteScore` assignment, so it survives into buildVariants(). (2) In buildVariants() (the per-design-system loop that currently does `let quality = this.scoreSiteHtml(html, businessInfo);` then unconditionally `variants.push({...})`): BEFORE the loop, compute `const baseline = businessInfo.existingSiteHtml ? await (await import('./site-builder-current-site-baseline.js')).scoreCurrentSiteBaseline({ html: businessInfo.existingSiteHtml }) : null;`. INSIDE the loop, after `quality` is computed for each variant, also compute `const uxHeuristics = (await import('./creative-engine/ux-heuristic-gate.js')).scoreUxHeuristics(html);` and `const fate = (await import('./site-builder-variant-gate.js')).decideVariantFate({ variantScore: quality, uxHeuristics, baseline });`. Only `variants.push({...})` (adding `uxOverall: uxHeuristics.overall, kept: fate.keep, killReason: fate.keep ? null : fate.reason` to the pushed object) when `fate.keep !== false` — when a variant is killed, log it via `logger.info('[SITE] variant killed by quality gate', { clientId, style: ds.id, reason: fate.reason })` and do NOT write its file or push it, so it never reaches a prospect. Keep the existing `if (!variants.length) throw new Error('all variant generations failed');` check AFTER this filtering — if the gate kills every variant, that error now correctly means 'nothing cleared the bar,' not 'nothing was generated,' which is the intended honest behavior per the founder directive that a variant worse than the current site must never be shown.",
       "spec": "Modify services/site-builder.js ONLY inside buildVariants() and the scraping function that already computes existingSiteScore (same file — do not touch any other function). Use dynamic `await import(...)` for the 4 new sibling modules exactly as shown above (matches this codebase's existing dynamic-import convention elsewhere in the file) rather than adding new static top-level imports, to keep the diff minimal and avoid import-order risk in a large existing file. Wrap each new call in try/catch — if baseline scoring or the ux gate throws for any reason, log a warning and treat that variant as kept with a caveat note (fail toward showing content over showing nothing, per sb-variant-gate-cull's own fail-open-on-missing-data behavior) rather than crashing the whole build. Do not change the shape of scoreSiteHtml, generateSiteHtml, or any other existing function. Do not remove or rename any existing field on the pushed variant objects — only add the 3 new fields named above. @ssot docs/products/site-builder/PRODUCT_HOME.md.",
       "depends_on": [
-        "sb-variant-gate-cull"
+        "sb-variant-gate-cull",
+        "sb-current-site-baseline"
       ],
       "founder_gated": false,
       "attempts": 1,
