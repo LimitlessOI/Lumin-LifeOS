@@ -2047,20 +2047,39 @@
     },
     {
       "id": "01",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/site-builder-more-template-choices.js",
       "task": "implement more template choices",
       "spec": "Add functionality to offer more template choices for branding.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "getTemplateChoices",
         "addTemplateChoice"
       ],
       "route": {
         "path": "/api/site-builder/template-choices"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/site-builder-more-template-choices.js",
+          "exports": [
+            "getTemplateChoices",
+            "addTemplateChoice"
+          ],
+          "assertion_id": "expected_exports:services/site-builder-more-template-choices.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-25T02:53:28.251Z",
+      "last_error": "NOT_ON_BLUEPRINT",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "failure_signature": "NOT_ON_BLUEPRINT",
+      "same_signature_count": 1,
+      "escalation_class": "governance_block"
     },
     {
       "id": "02",
@@ -2078,7 +2097,17 @@
       ],
       "route": {
         "path": "/api/site-builder/template-choices"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/site-builder-more-template-choices-routes.js",
+          "exports": [
+            "registerMoreTemplateChoicesRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/site-builder-more-template-choices-routes.js"
+        }
+      ]
     },
     {
       "id": "03",
@@ -2123,7 +2152,18 @@
       ],
       "route": {
         "path": "/api/site-builder/interactive-elements/labels"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/site-builder-interactive-elements-label-update-service.js",
+          "exports": [
+            "getInteractiveElementLabels",
+            "updateInteractiveElementLabel"
+          ],
+          "assertion_id": "expected_exports:services/site-builder-interactive-elements-label-update-service.js"
+        }
+      ]
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",
