@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Additional Templates -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Additional Templates</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 90%;
+        }
+        .modal-header {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        .template-option {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+            cursor: pointer;
+        }
+        .template-option:last-child {
+            border-bottom: none;
+        }
+        .template-option:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay">
+        <div class="modal">
+            <div class="modal-header">Choose a Template</div>
+            <div class="template-option">Template 1</div>
+            <div class="template-option">Template 2</div>
+            <div class="template-option">Template 3</div>
+            <div class="template-option">Template 4</div>
+        </div>
+    </div>
+</body>
+</html>
