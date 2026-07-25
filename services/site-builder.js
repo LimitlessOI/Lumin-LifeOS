@@ -662,6 +662,16 @@ export default class SiteBuilder {
       // Opt into the old same-funnel AI HTML path with useAiLayouts: true.
       const useLayoutShells = options.useAiLayouts !== true && options.useLayoutShells !== false;
       let variantIndex = 0;
+
+      let baseline = null;
+      try {
+        if (businessInfo.existingSiteHtml) {
+          baseline = await (await import('./site-builder-current-site-baseline.js')).scoreCurrentSiteBaseline({ html: businessInfo.existingSiteHtml });
+        }
+      } catch (err) {
+        logger.warn('[SITE] current site baseline scoring failed (continuing)', { clientId, error: err.message });
+      }
+
       for (const ds of systems) {
         try {
           businessInfo.designSystemId = ds.id;
@@ -689,19 +699,43 @@ export default class SiteBuilder {
             if (rScore.scorePct > quality.scorePct) { html = repaired; quality = rScore; }
           }
           if (pixel && html.includes('</body>')) html = html.replace('</body>', `${pixel}\n</body>`);
-          const vDir = path.join(deployDir, 'variants', ds.id);
-          await fs.mkdir(vDir, { recursive: true });
-          await fs.writeFile(path.join(vDir, 'index.html'), html);
-          variantHtmls[ds.id] = html;
-          variants.push({
-            id: ds.id,
-            name: ds.name,
-            blurb: ds.blurb,
-            tier: ds.tier || 'paid',
-            file: `variants/${ds.id}/index.html`,
-            scorePct: quality.scorePct,
-            layoutShell: usedShell,
-          });
+
+          let uxHeuristics = null;
+          try {
+            uxHeuristics = (await import('./creative-engine/ux-heuristic-gate.js')).scoreUxHeuristics(html);
+          } catch (err) {
+            logger.warn('[SITE] UX heuristic scoring failed (continuing)', { clientId, style: ds.id, error: err.message });
+            uxHeuristics = { overall: 0, notes: ['UX heuristic scoring failed, assuming minimal UX score.'] };
+          }
+
+          let fate = { keep: true, reason: 'No gate applied' };
+          try {
+            fate = (await import('./site-builder-variant-gate.js')).decideVariantFate({ variantScore: quality, uxHeuristics, baseline });
+          } catch (err) {
+            logger.warn('[SITE] variant gate decision failed (failing open)', { clientId, style: ds.id, error: err.message });
+            fate = { keep: true, reason: `Variant gate failed: ${err.message}` };
+          }
+
+          if (fate.keep !== false) {
+            const vDir = path.join(deployDir, 'variants', ds.id);
+            await fs.mkdir(vDir, { recursive: true });
+            await fs.writeFile(path.join(vDir, 'index.html'), html);
+            variantHtmls[ds.id] = html;
+            variants.push({
+              id: ds.id,
+              name: ds.name,
+              blurb: ds.blurb,
+              tier: ds.tier || 'paid',
+              file: `variants/${ds.id}/index.html`,
+              scorePct: quality.scorePct,
+              layoutShell: usedShell,
+              uxOverall: uxHeuristics.overall,
+              kept: fate.keep,
+              killReason: fate.keep ? null : fate.reason,
+            });
+          } else {
+            logger.info('[SITE] variant killed by quality gate', { clientId, style: ds.id, reason: fate.reason });
+          }
         } catch (err) {
           logger.warn('[SITE] variant generation failed (skipping)', { clientId, style: ds.id, error: err.message });
         }
@@ -931,8 +965,9 @@ export default class SiteBuilder {
       // Score their existing site with the same objective rubric the new site
       // is judged by, so the "before" and "after" numbers are directly comparable.
       let existingSiteScore = null;
+      let existingHtml = null;
       try {
-        const existingHtml = await page.content();
+        existingHtml = await page.content();
         existingSiteScore = this.scoreSiteHtml(existingHtml, {});
       } catch (err) {
         logger.warn('[SITE] Existing-site scoring failed (non-fatal)', { url, error: err.message });
@@ -950,6 +985,7 @@ export default class SiteBuilder {
         ),
         sourceUrl: url,
         existingSiteScore,
+        existingSiteHtml, // Store the raw HTML for baseline comparison later
       };
       if (scraped.phone && !businessInfo.phone) businessInfo.phone = scraped.phone;
       if (scraped.bookingUrl && !businessInfo.bookingUrl) businessInfo.bookingUrl = scraped.bookingUrl;

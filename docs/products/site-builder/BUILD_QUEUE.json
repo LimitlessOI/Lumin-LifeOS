@@ -1859,7 +1859,31 @@
       "force_model_rotation": true,
       "hard_stopped": false,
       "unsolved": false,
-      "actual_root_cause_gap_fill_note": "2026-07-25 (founder-requested root-cause investigation): the file-size threshold fix (bo-raise-large-file-context-threshold, MAX_EXISTING_CONTENT_BYTES=200000) DID resolve the codegen problem -- a direct /factory/ship-queue dispatch after that fix landed produced real, complete content successfully. But that direct call only runs codegen+verify; the actual git-commit step lives inside runGovernedAutonomousShipOnce (services/governed-autonomous-shipping-loop.js), which is NOT exposed as its own direct HTTP endpoint -- it's only reachable buried inside the /founder-interface/message chat-intent handler (routes/lifeos-builderos-command-control-routes.js:1509), already documented elsewhere as unreliable for dispatch. So the successful build was stranded on the container's local disk, uncommitted. Meanwhile this step's own revive_count had drifted to 9 (past DEFAULT_MAX_REVIVES=6) from earlier manual resets in this same session that reset status/attempts but not revive_count, and the system had separately marked hard_stopped:true/unsolved:true -- so the normal automatic revival path had also given up on it independently of the disk/commit issue. Two compounding causes, both now cleared: revive_count and hard_stop state reset here; the missing direct-invoke endpoint queued separately as bo-expose-governed-ship-once-endpoint so this specific trap (real build, no commit path) can't recur silently."
+      "actual_root_cause_gap_fill_note": "2026-07-25 (founder-requested root-cause investigation): the file-size threshold fix (bo-raise-large-file-context-threshold, MAX_EXISTING_CONTENT_BYTES=200000) DID resolve the codegen problem -- a direct /factory/ship-queue dispatch after that fix landed produced real, complete content successfully. But that direct call only runs codegen+verify; the actual git-commit step lives inside runGovernedAutonomousShipOnce (services/governed-autonomous-shipping-loop.js), which is NOT exposed as its own direct HTTP endpoint -- it's only reachable buried inside the /founder-interface/message chat-intent handler (routes/lifeos-builderos-command-control-routes.js:1509), already documented elsewhere as unreliable for dispatch. So the successful build was stranded on the container's local disk, uncommitted. Meanwhile this step's own revive_count had drifted to 9 (past DEFAULT_MAX_REVIVES=6) from earlier manual resets in this same session that reset status/attempts but not revive_count, and the system had separately marked hard_stopped:true/unsolved:true -- so the normal automatic revival path had also given up on it independently of the disk/commit issue. Two compounding causes, both now cleared: revive_count and hard_stop state reset here; the missing direct-invoke endpoint queued separately as bo-expose-governed-ship-once-endpoint so this specific trap (real build, no commit path) can't recur silently.",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/site-builder/twins/steps/sb-variant-wire-buildvariants.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-25T17:50:05.814Z",
+        "shipped_at": "2026-07-25T17:50:05.814Z",
+        "commit_sha": null,
+        "content_sha256": "d2119bd32e876b2b21ee3bf97643c46fe781441686cf0a79570c8eb06613cba8",
+        "target_file": "services/site-builder.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/site-builder.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/site-builder/twins/steps/sb-variant-wire-buildvariants.exact",
+          "content_sha256": "d2119bd32e876b2b21ee3bf97643c46fe781441686cf0a79570c8eb06613cba8"
+        }
+      },
+      "shipped_at": "2026-07-25T17:50:05.814Z"
     },
     {
       "id": "s1",
