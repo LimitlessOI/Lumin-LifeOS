@@ -2333,7 +2333,7 @@
     },
     {
       "id": "bo-patch-mode-codegen",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/factory-mount-routes.js",
       "priority": "high",
       "task": "Add an opt-in PATCH MODE to the codegenRunner.generate implementation in this file, so editing a large existing file no longer requires the model to reproduce the entire file byte-for-byte. Founder-diagnosed root cause (2026-07-26): tonight's worst bug (a ReferenceError that crashed 100% of Site Builder's scrape function for hours) was introduced during exactly this kind of full-file regeneration -- the model was asked to reproduce an unrelated ~105KB file verbatim except for a small change, and silently mis-transcribed one variable reference in the process. Full-file regeneration for large files is fragile by construction: every regeneration is a chance to corrupt code that was never supposed to change, and it also caused repeated real failures tonight from output-token ceilings and the stub-detector's size-ratio heuristic. This is the structural fix, not a one-off patch.",
@@ -2356,30 +2356,23 @@
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "bo-patch-mode-codegen",
       "mission_id": "PRODUCT-builderos",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/builderos/twins/steps/bo-patch-mode-codegen.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-26T18:48:50.225Z",
-        "shipped_at": "2026-07-26T18:48:50.225Z",
-        "commit_sha": null,
-        "content_sha256": "58e02b7816aa584086955bb3c286f1fc1decc5ff04c59b6dabd3ca34fefe198a",
-        "target_file": "routes/factory-mount-routes.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "routes/factory-mount-routes.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/builderos/twins/steps/bo-patch-mode-codegen.exact",
-          "content_sha256": "58e02b7816aa584086955bb3c286f1fc1decc5ff04c59b6dabd3ca34fefe198a"
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/factory-mount-routes.js",
+          "exports": [
+            "createFactoryMountRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/factory-mount-routes.js"
         }
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/factory/readiness"
       },
-      "shipped_at": "2026-07-26T18:48:50.225Z"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-26T18:48:56.985Z",
+      "commit_sha": "08cfe2efe15ded99140e8cf17181ca784deebf9e"
     }
   ],
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
