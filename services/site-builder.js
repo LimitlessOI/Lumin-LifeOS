@@ -672,6 +672,11 @@ export default class SiteBuilder {
         logger.warn('[SITE] current site baseline scoring failed (continuing)', { clientId, error: err.message });
       }
 
+      // Gate may cull every variant when the prospect's live site already scores
+      // higher on the structural rubric than our shells. Keep culled candidates so
+      // we can fail-open instead of throwing and leaving the client with no preview.
+      const culledVariants = [];
+
       for (const ds of systems) {
         try {
           businessInfo.designSystemId = ds.id;
@@ -704,8 +709,9 @@ export default class SiteBuilder {
           try {
             uxHeuristics = (await import('./creative-engine/ux-heuristic-gate.js')).scoreUxHeuristics(html);
           } catch (err) {
+            // Fail open: a scoring crash must not become overall:0 (hard-kill).
             logger.warn('[SITE] UX heuristic scoring failed (continuing)', { clientId, style: ds.id, error: err.message });
-            uxHeuristics = { overall: 0, notes: ['UX heuristic scoring failed, assuming minimal UX score.'] };
+            uxHeuristics = null;
           }
 
           let fate = { keep: true, reason: 'No gate applied' };
@@ -716,24 +722,27 @@ export default class SiteBuilder {
             fate = { keep: true, reason: `Variant gate failed: ${err.message}` };
           }
 
+          const variantMeta = {
+            id: ds.id,
+            name: ds.name,
+            blurb: ds.blurb,
+            tier: ds.tier || 'paid',
+            file: `variants/${ds.id}/index.html`,
+            scorePct: quality.scorePct,
+            layoutShell: usedShell,
+            uxOverall: uxHeuristics?.overall,
+            kept: fate.keep !== false,
+            killReason: fate.keep !== false ? null : fate.reason,
+          };
+
           if (fate.keep !== false) {
             const vDir = path.join(deployDir, 'variants', ds.id);
             await fs.mkdir(vDir, { recursive: true });
             await fs.writeFile(path.join(vDir, 'index.html'), html);
             variantHtmls[ds.id] = html;
-            variants.push({
-              id: ds.id,
-              name: ds.name,
-              blurb: ds.blurb,
-              tier: ds.tier || 'paid',
-              file: `variants/${ds.id}/index.html`,
-              scorePct: quality.scorePct,
-              layoutShell: usedShell,
-              uxOverall: uxHeuristics.overall,
-              kept: fate.keep,
-              killReason: fate.keep ? null : fate.reason,
-            });
+            variants.push(variantMeta);
           } else {
+            culledVariants.push({ html, variant: variantMeta });
             logger.info('[SITE] variant killed by quality gate', { clientId, style: ds.id, reason: fate.reason });
           }
         } catch (err) {
@@ -741,7 +750,29 @@ export default class SiteBuilder {
         }
       }
 
-      if (!variants.length) throw new Error('all variant generations failed');
+      if (!variants.length) {
+        if (!culledVariants.length) throw new Error('all variant generations failed');
+        culledVariants.sort((a, b) => (b.variant.scorePct ?? -1) - (a.variant.scorePct ?? -1));
+        logger.warn('[SITE] variant gate culled all candidates; fail-open restoring best', {
+          clientId,
+          culled: culledVariants.length,
+          baselineVisualScore: baseline?.visualScore,
+          topScorePct: culledVariants[0]?.variant?.scorePct,
+        });
+        for (const { html, variant } of culledVariants) {
+          const vDir = path.join(deployDir, 'variants', variant.id);
+          await fs.mkdir(vDir, { recursive: true });
+          await fs.writeFile(path.join(vDir, 'index.html'), html);
+          variantHtmls[variant.id] = html;
+          variants.push({
+            ...variant,
+            kept: true,
+            killReason: null,
+            failOpenRestored: true,
+            failOpenReason: variant.killReason || 'culled_by_gate',
+          });
+        }
+      }
 
       // Top-level qualityReport = the BEST-scoring variant. Callers (the prospect
       // pipeline's send-quality gate) need one canonical score to decide whether
