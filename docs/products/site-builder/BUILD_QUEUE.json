@@ -2464,7 +2464,33 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/site-builder/twins/steps/s7.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-26T21:55:48.752Z",
+        "shipped_at": "2026-07-26T21:55:48.752Z",
+        "commit_sha": null,
+        "content_sha256": "cf237994e823080bc7837785e8027388d5543a7558595ec4fb062ae0b058f447",
+        "target_file": "public/overlay/site-builder-template-choice-ui.html",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "public/overlay/site-builder-template-choice-ui.html",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/site-builder/twins/steps/s7.exact",
+          "content_sha256": "cf237994e823080bc7837785e8027388d5543a7558595ec4fb062ae0b058f447"
+        }
+      },
+      "shipped_at": "2026-07-26T21:55:48.752Z",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s7"
     },
     {
       "id": "s8",
