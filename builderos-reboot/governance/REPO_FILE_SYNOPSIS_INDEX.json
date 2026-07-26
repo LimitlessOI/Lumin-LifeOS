@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-26T21:55:51.403Z",
+  "generated_at": "2026-07-26T22:08:33.356Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12176,
+  "file_count": 12177,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -91029,6 +91029,13 @@
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/site-builder-friction-report.js",
+      "synopsis": "Exports generateFrictionReport — services/site-builder-friction-report.js.",
+      "bytes": 519,
+      "mtime": "2026-07-26T22:08:33.356Z",
+      "indexed_at": "2026-07-26T22:08:33.356Z"
     },
     {
       "path": "services/site-builder-instantly-outreach.js",
