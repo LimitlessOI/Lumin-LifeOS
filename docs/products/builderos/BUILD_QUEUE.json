@@ -2413,35 +2413,11 @@
       "proof": null,
       "failure_signature": "NOT_ON_BLUEPRINT",
       "same_signature_count": 1,
-      "escalation_class": "governance_block",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/builderos/twins/steps/bo-forward-patch-mode-to-codegen-call.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-26T20:22:14.946Z",
-        "shipped_at": "2026-07-26T20:22:14.946Z",
-        "commit_sha": null,
-        "content_sha256": "ded35549d58c3b3d7223e821b312f65212b5fdfaf4abf424db98afaaaaa4cc13",
-        "target_file": "factory-staging/factory-core/builder/authoring.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "factory-staging/factory-core/builder/authoring.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/builderos/twins/steps/bo-forward-patch-mode-to-codegen-call.exact",
-          "content_sha256": "ded35549d58c3b3d7223e821b312f65212b5fdfaf4abf424db98afaaaaa4cc13"
-        }
-      },
-      "shipped_at": "2026-07-26T20:22:14.946Z"
+      "escalation_class": "governance_block"
     },
     {
       "id": "bo-hard-gate-escalation-required",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/product-build-orchestrator.js",
       "priority": "critical",
       "task": "FOUNDER-MANDATED HARD GATE (2026-07-26), not optional, not a suggestion: after a step fails 3 times with the SAME error signature, the system must STOP silently auto-reviving it forever (current behavior: reviveStaleBlockedSteps just keeps reviving up to effectiveMax revives -- often maxRevives+3 for exactly this codegen-failure class -- then silently SKIPs/demotes it, with no forced escalation step in between). This is precisely the pattern the founder is angry about tonight: a step can fail the identical way many times (tonight: 16 combined failures across 2 steps) with nothing forcing a different approach -- just more of the same automatic retries. This step makes that structurally impossible to skip: it is a HARD gate inside the orchestrator itself, not a document, not a convention someone has to remember to follow.",
@@ -2471,30 +2447,9 @@
           "assertion_id": "expected_exports:services/product-build-orchestrator.js"
         }
       ],
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/builderos/twins/steps/bo-hard-gate-escalation-required.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-26T20:22:51.483Z",
-        "shipped_at": "2026-07-26T20:22:51.483Z",
-        "commit_sha": null,
-        "content_sha256": "02134709cb82fcbcf758a5a2d09e2c527961a865da3d7ae899b953fd1b5de626",
-        "target_file": "services/product-build-orchestrator.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/product-build-orchestrator.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/builderos/twins/steps/bo-hard-gate-escalation-required.exact",
-          "content_sha256": "02134709cb82fcbcf758a5a2d09e2c527961a865da3d7ae899b953fd1b5de626"
-        }
-      },
-      "shipped_at": "2026-07-26T20:22:51.483Z"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-26T20:22:58.137Z",
+      "commit_sha": "f802d8bd789530dfbacad69c6096e4782d94039c"
     }
   ],
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
