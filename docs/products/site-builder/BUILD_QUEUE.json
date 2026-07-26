@@ -2468,7 +2468,7 @@
     },
     {
       "id": "s8",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "public/overlay/site-builder-element-label-ui.html",
       "task": "build element label UI",
       "spec": "Create UI overlay to show updated interactive element labels.",
@@ -2476,18 +2476,18 @@
         "s6"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "<div id='element-label-ui'>"
       ],
       "design_review_flagged": true,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-26T21:24:12.114Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:<div id='element-label-ui'>; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "failure_signature": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:<div id='element-label-ui'>; behavior_assertion_failed; behavior_proof",
-      "same_signature_count": 1,
+      "same_signature_count": 2,
       "escalation_class": "evidence_gap",
       "revive_count": 1,
       "revived_at": "2026-07-26T21:23:58.765Z",
