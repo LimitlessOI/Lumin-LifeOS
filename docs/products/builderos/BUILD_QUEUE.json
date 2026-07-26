@@ -2413,7 +2413,31 @@
       "proof": null,
       "failure_signature": "NOT_ON_BLUEPRINT",
       "same_signature_count": 1,
-      "escalation_class": "governance_block"
+      "escalation_class": "governance_block",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/builderos/twins/steps/bo-forward-patch-mode-to-codegen-call.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-26T20:35:32.320Z",
+        "shipped_at": "2026-07-26T20:35:32.320Z",
+        "commit_sha": null,
+        "content_sha256": "72df8a30aed924f59080714c52942937d7ff613a457ad7ce7fb61c0662d236e7",
+        "target_file": "factory-staging/factory-core/builder/authoring.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "factory-staging/factory-core/builder/authoring.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/builderos/twins/steps/bo-forward-patch-mode-to-codegen-call.exact",
+          "content_sha256": "72df8a30aed924f59080714c52942937d7ff613a457ad7ce7fb61c0662d236e7"
+        }
+      },
+      "shipped_at": "2026-07-26T20:35:32.320Z"
     },
     {
       "id": "bo-hard-gate-escalation-required",

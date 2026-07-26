@@ -99,8 +99,8 @@ export async function runAuthoring(step, codegenRunner) {
   // If the twin's file_contains is already true on disk, do not burn tokens
   // rewriting a large file (root cause of codegen_stub_detected thrash).
   const needles = [
-    ...(Array.isArray(step?.file_contains) ? step.file_contains : []),
-    ...(Array.isArray(step?.assertion_spec?.file_contains) ? step.assertion_spec.file_contains : []),
+    ...(Array(step?.file_contains) ? step.file_contains : []),
+    ...(Array(step?.assertion_spec?.file_contains) ? step.assertion_spec.file_contains : []),
   ];
   const preSatisfied = existingFileSatisfiesContains(target_file, needles);
   if (preSatisfied) {
@@ -140,7 +140,7 @@ export async function runAuthoring(step, codegenRunner) {
     const expectedExports = Array.isArray(step.expected_exports) && step.expected_exports.length
       ? `REQUIRED NAMED EXPORTS: ${step.expected_exports.join(', ')}\nYou MUST export each of these names from the file.\n`
       : '';
-    const additiveHint = existingSize > 0
+    const additiveHint = existingSize > 0 && !(step.patch_mode || authoring.patch_mode)
       ? `EXISTING FILE IS ${existingSize} bytes. Return the COMPLETE updated file (not a stub). Preserve all existing behavior; only add/change what the task requires. Output length must stay ≥ 30% of the existing file.\n`
       : '';
     const baseTiers = Array.isArray(authoring.tiers) && authoring.tiers.length ? authoring.tiers : DEFAULT_CODEGEN_TIERS;
@@ -150,6 +150,7 @@ export async function runAuthoring(step, codegenRunner) {
       spec: `${additiveHint}${authoring.spec || step.spec || ''}`,
       tiers: rotateTiers(baseTiers, step.model_rotation),
       max_output_tokens: Number(authoring.max_output_tokens || step.max_output_tokens) || 8000,
+      patch_mode: step.patch_mode || authoring.patch_mode || false,
       last_error: step.last_error || null,
       expected_exports: step.expected_exports || null,
       failure_context: failureContext,

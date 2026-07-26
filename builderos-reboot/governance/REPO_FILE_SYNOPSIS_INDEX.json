@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-26T20:22:54.382Z",
+  "generated_at": "2026-07-26T20:35:34.777Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12175,
   "files": [
@@ -61124,9 +61124,9 @@
     {
       "path": "factory-staging/factory-core/builder/authoring.js",
       "synopsis": "STEP 4 — codegen as an UNTRUSTED authoring sub-step (the \"dumb pipe\").",
-      "bytes": 10052,
-      "mtime": "2026-07-21T05:32:04.165Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "bytes": 10150,
+      "mtime": "2026-07-26T20:35:34.777Z",
+      "indexed_at": "2026-07-26T20:35:34.777Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
