@@ -2553,7 +2553,7 @@
     },
     {
       "id": "12",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/site-builder-friction-report.js",
       "task": "create friction report service",
       "spec": "Aggregate and report template friction metrics for internal review.",
@@ -2561,10 +2561,28 @@
         "2"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "generateFrictionReport"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/site-builder-friction-report.js",
+          "exports": [
+            "generateFrictionReport"
+          ],
+          "assertion_id": "expected_exports:services/site-builder-friction-report.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-26T21:53:11.611Z",
+      "last_error": "NOT_ON_BLUEPRINT",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "failure_signature": "NOT_ON_BLUEPRINT",
+      "same_signature_count": 1,
+      "escalation_class": "governance_block"
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",
