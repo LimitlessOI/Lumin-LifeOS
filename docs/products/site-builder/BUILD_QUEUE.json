@@ -2555,7 +2555,7 @@
     },
     {
       "id": "12",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/site-builder-friction-report.js",
       "task": "create friction report service",
       "spec": "Aggregate and report template friction metrics for internal review.",
@@ -2563,7 +2563,7 @@
         "2"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "generateFrictionReport"
       ],
@@ -2577,47 +2577,35 @@
           "assertion_id": "expected_exports:services/site-builder-friction-report.js"
         }
       ],
-      "last_attempt_at": "2026-07-26T21:53:11.611Z",
-      "last_error": "NOT_ON_BLUEPRINT",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "a1b4321ed2be79d94509503f87fc8824ff25d549",
       "built_sha": null,
       "proof": null,
       "failure_signature": "NOT_ON_BLUEPRINT",
       "same_signature_count": 1,
       "escalation_class": "governance_block",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/site-builder/twins/steps/12.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-26T22:08:30.866Z",
-        "shipped_at": "2026-07-26T22:08:30.866Z",
-        "commit_sha": null,
-        "content_sha256": "04b0ced5e76df19a6e7bb033f8bb0e760543945da60fa25e75c57a63e05a258f",
-        "target_file": "services/site-builder-friction-report.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/site-builder-friction-report.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/site-builder/twins/steps/12.exact",
-          "content_sha256": "04b0ced5e76df19a6e7bb033f8bb0e760543945da60fa25e75c57a63e05a258f"
-        }
-      },
-      "shipped_at": "2026-07-26T22:08:30.866Z",
-      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
-      "blueprint_step_id": "12"
+      "revive_count": 0,
+      "revived_at": "2026-07-26T22:08:28.667Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-26T22:08:37.597Z"
     }
   ],
-  "sentry_signature": "bfe02459bcbbc6ec",
-  "sentry_unplannable_at": "2026-07-26T21:58:25.084Z",
-  "sentry_unplannable_reason": "[BUILD-QUEUE-PLANNER] all proposed steps filtered (dedupe/already-done/no target_file) — fail closed",
+  "sentry_signature": "beba57e366c8c9cf",
+  "sentry_unplannable_at": "2026-07-12T18:05:57.513Z",
+  "sentry_unplannable_reason": "planner filtered all steps (already-done); spin-break so LifeOS can build",
   "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-site-builder",
-  "twin_kind": "product_build_queue_registered",
-  "_sourcePath": "/usr/src/app/docs/products/site-builder/BUILD_QUEUE.json"
+  "twin_kind": "product_build_queue_registered"
 }
