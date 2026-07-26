@@ -424,6 +424,13 @@ export function reviveStaleBlockedSteps(queue, {
     if (step.status !== STEP_STATUS.BLOCKED) continue;
     if (isHumanHold(step)) continue;
     if (step.demoted === true) continue;
+    if (step.escalation_required === true) continue;
+    if (typeof step.same_signature_count === 'number' && step.same_signature_count >= 3 && step.escalation_required !== true) {
+      step.escalation_required = true;
+      step.status = STEP_STATUS.BLOCKED;
+      step.escalation_note = `HARD GATE: 3+ identical failures (${step.failure_signature}). Automatic revival is disabled for this step until escalation_required is explicitly cleared by a real escalation action (external research + a second model, per founder directive 2026-07-26) -- this step will NOT auto-revive on its own again.`;
+      continue;
+    }
     if (step.park_until) {
       const until = Date.parse(step.park_until);
       if (Number.isFinite(until) && until > now) continue;
