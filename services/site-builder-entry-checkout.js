@@ -189,6 +189,42 @@ export async function createPublishCheckoutSession({ clientId, businessName, bas
   };
 }
 
+/**
+ * Fail-closed Stripe Checkout binding for Site Builder money paths.
+ * Rejects wrong product (e.g. $1 upsell used as publish proof), missing
+ * clientId metadata, unpaid sessions, and non-payment modes.
+ */
+export function assertPaidCheckoutBinding(session, {
+  clientId,
+  expectedProduct,
+  expectedKind = null,
+} = {}) {
+  if (!session || typeof session !== 'object') {
+    return { ok: false, error: 'Checkout session not found' };
+  }
+  if (session.mode !== 'payment') {
+    return { ok: false, error: 'Checkout session is not a one-time payment' };
+  }
+  if (session.payment_status !== 'paid') {
+    return { ok: false, error: 'Payment not completed', paymentStatus: session.payment_status };
+  }
+  const product = String(session.metadata?.product || '');
+  if (!expectedProduct || product !== String(expectedProduct)) {
+    return { ok: false, error: 'Checkout session is not for this product' };
+  }
+  const metaClientId = String(session.metadata?.clientId || '');
+  if (!metaClientId || metaClientId !== String(clientId)) {
+    return { ok: false, error: 'Checkout session does not match this preview' };
+  }
+  if (expectedKind != null && expectedKind !== '') {
+    const metaKind = String(session.metadata?.kind || '');
+    if (!metaKind || metaKind !== String(expectedKind)) {
+      return { ok: false, error: 'Checkout session does not match the requested upsell' };
+    }
+  }
+  return { ok: true };
+}
+
 export async function verifyPublishCheckoutSession({ sessionId, clientId, pool }) {
   if (!sessionId || !clientId) {
     return { ok: false, error: 'sessionId and clientId required' };
@@ -226,15 +262,12 @@ export async function verifyPublishCheckoutSession({ sessionId, clientId, pool }
   }
 
   const session = await stripe.checkout.sessions.retrieve(String(sessionId));
-  const paid = session.payment_status === 'paid' || session.status === 'complete';
-  const metaClientId = session.metadata?.clientId;
-
-  if (!paid) {
-    return { ok: false, error: 'Payment not completed', paymentStatus: session.payment_status };
-  }
-
-  if (metaClientId && metaClientId !== String(clientId)) {
-    return { ok: false, error: 'Checkout session does not match this preview' };
+  const bound = assertPaidCheckoutBinding(session, {
+    clientId,
+    expectedProduct: 'site-builder-publish',
+  });
+  if (!bound.ok) {
+    return bound;
   }
 
   const dealValue = (session.amount_total || SITE_BUILDER_PRICING.publish.oneTimeCents) / 100;
@@ -375,19 +408,15 @@ export async function verifyUpsellCheckoutSession({ sessionId, clientId, kind, p
   }
 
   const session = await stripe.checkout.sessions.retrieve(String(sessionId));
-  const paid = session.payment_status === 'paid' || session.status === 'complete';
-  const metaClientId = session.metadata?.clientId;
+  const bound = assertPaidCheckoutBinding(session, {
+    clientId,
+    expectedProduct: 'site-builder-upsell',
+    expectedKind: kind || null,
+  });
+  if (!bound.ok) {
+    return bound;
+  }
   const metaKind = session.metadata?.kind;
-
-  if (!paid) {
-    return { ok: false, error: 'Payment not completed', paymentStatus: session.payment_status };
-  }
-  if (metaClientId && metaClientId !== String(clientId)) {
-    return { ok: false, error: 'Checkout session does not match this preview' };
-  }
-  if (kind && metaKind && metaKind !== String(kind)) {
-    return { ok: false, error: 'Checkout session does not match the requested upsell' };
-  }
 
   if (pool) {
     const unlockField = metaKind === 'color-custom' ? 'customColorUnlocked' : 'unlockedTemplateSlots';
@@ -434,4 +463,5 @@ export default {
   redeemPublishCompCode,
   createUpsellCheckoutSession,
   verifyUpsellCheckoutSession,
+  assertPaidCheckoutBinding,
 };
