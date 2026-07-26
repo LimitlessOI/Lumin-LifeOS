@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-26 — Critical bug sweep: variant-gate cull-all + pre-existing claim
+
+Daily critical-bug automation on tip. Fixed two high-severity regressions from recent governed ships: (1) Site Builder `buildVariants` threw when the variant gate culled every shell against a strong existing-site baseline — fail-open restore + UX-fail → null; (2) BuilderOS `claimPreExistingSatisfiedSteps` could mark DONE on dirty tracked files after a stranded local write — now requires clean HEAD match. Remaining tip risks (not fixed this run): `requireKey` still accepts any JWT (PR #367 draft), MarketingOS `owner_id` IDOR, tcBilling unsigned webhook, founder-build Promise.race false FAIL, voice-rail `body.user` IDOR, checkout `x-forwarded-host`.
+
 ## 2026-07-24 — SMOS Connect+Publish (bank-style account link)
 
 Adam: connect social accounts in-app like bank linking, then post. Shipped Phase 5 UX: `/marketing` Connected accounts → popup `/marketing/connect/:platform` (real platform login in secured browser view; password never typed into SMOS forms) → encrypted cookies → Approve → Publish. Fixed publisher connection unwrap + `createBrowserSession` injection. **Live posts remain off** until `LIVE_SOCIAL_PUBLISH_ENABLED=true`. Next: tip redeploy; Adam connect one account and prove dry-run ready, then flip kill switch for a real post.
