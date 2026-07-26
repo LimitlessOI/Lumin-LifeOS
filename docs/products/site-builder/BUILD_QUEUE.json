@@ -2505,7 +2505,7 @@
     },
     {
       "id": "sb-expose-generation-errors-in-response",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/site-builder.js",
       "priority": "high",
       "patch_mode": true,
@@ -2524,13 +2524,15 @@
       "blueprint_step_id": "sb-expose-generation-errors-in-response",
       "mission_id": "PRODUCT-site-builder",
       "last_attempt_at": "2026-07-26T21:21:19.665Z",
-      "last_error": "NOT_ON_BLUEPRINT",
+      "last_error": null,
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "failure_signature": "NOT_ON_BLUEPRINT",
-      "same_signature_count": 1,
-      "escalation_class": "governance_block"
+      "failure_signature": null,
+      "same_signature_count": 0,
+      "escalation_class": "governance_block",
+      "escalation_required": false,
+      "escalation_note": null
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",
