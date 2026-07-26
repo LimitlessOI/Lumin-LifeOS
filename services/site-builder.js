@@ -1033,7 +1033,7 @@ export default class SiteBuilder {
       logger.warn('[SITE] Scrape failed, using AI extraction only', { url, error: err.message });
       const extracted = await this.extractBusinessInfoWithAI({ title: url, bodyText: '', sourceUrl: url }, url);
       return applyScrapeGuard(
-        { ...extracted, sourceUrl: url, scrapeFetchFailed: true },
+        { ...extracted, sourceUrl: url, scrapeFetchFailed: true, scrapeFailureReason: String(err?.message || err).slice(0, 300) },
         { submittedName: options.businessName, url, forcePoisoned: true }
       );
     }

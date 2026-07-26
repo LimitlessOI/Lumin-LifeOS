@@ -2236,7 +2236,31 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "model_rotation": 1,
-      "force_model_rotation": true
+      "force_model_rotation": true,
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/site-builder/twins/steps/sb-surface-scrape-failure-reason.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-26T04:54:27.251Z",
+        "shipped_at": "2026-07-26T04:54:27.251Z",
+        "commit_sha": null,
+        "content_sha256": "a83beccc40f5d214e28c8003eb5322bf9acc9d7d1ef8e4e49324818baccd69a1",
+        "target_file": "services/site-builder.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/site-builder.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/site-builder/twins/steps/sb-surface-scrape-failure-reason.exact",
+          "content_sha256": "a83beccc40f5d214e28c8003eb5322bf9acc9d7d1ef8e4e49324818baccd69a1"
+        }
+      },
+      "shipped_at": "2026-07-26T04:54:27.251Z"
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",
