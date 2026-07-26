@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/site-builder/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-26 — ⚠️ IN PROGRESS: independent audit found a real overclaim — Architect brief + shared Studio design mode built but never wired into buildVariants(); only the enforcement/scoring path (baseline, UX gate, kill decision) was actually live. Fixing: a real bug in runSiteDesign (JSON/HTML format mismatch), the missing wiring itself, and exposing killed variants in the API response (previously silently dropped, making the kill path unverifiable). Prior: one-creative-brain enforcement fully wired + live-verified (enforcement path only); scrape ReferenceError found/fixed; SBPA-A07 behavioral gate added. |
+| **Last Updated** | 2026-07-26 — ⚠️ IN PROGRESS: the wiring fix and killed-variants exposure were both blocked by an unrelated infra bug (patch_mode never forwarded to codegen — see builderos PRODUCT_HOME) that also caused one of them to be silently, permanently skipped by the old unenforced revive logic. Infra bug now fixed and independently verified; both steps reset to pending and retrying. Prior: `runSiteDesign` JSON/HTML format bug fixed; overclaim found (Architect brief + Studio mode built but unwired). |
 
 ---
 
