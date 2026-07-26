@@ -2550,6 +2550,21 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-26T21:45:29.787Z"
+    },
+    {
+      "id": "12",
+      "status": "pending",
+      "target_file": "services/site-builder-friction-report.js",
+      "task": "create friction report service",
+      "spec": "Aggregate and report template friction metrics for internal review.",
+      "depends_on": [
+        "2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generateFrictionReport"
+      ]
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",
