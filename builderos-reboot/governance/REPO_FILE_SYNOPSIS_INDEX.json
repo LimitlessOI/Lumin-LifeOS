@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-26T21:47:29.656Z",
+  "generated_at": "2026-07-26T21:51:11.115Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12175,
   "files": [
@@ -40967,9 +40967,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 182069,
-      "mtime": "2026-07-26T21:47:20.233Z",
-      "indexed_at": "2026-07-26T21:47:29.656Z"
+      "bytes": 183835,
+      "mtime": "2026-07-26T21:51:01.608Z",
+      "indexed_at": "2026-07-26T21:51:11.115Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -91245,9 +91245,9 @@
     {
       "path": "services/site-builder.js",
       "synopsis": "Site Builder — Scrape existing site → AI-generates complete click-funnel website",
-      "bytes": 108873,
-      "mtime": "2026-07-26T21:46:45.664Z",
-      "indexed_at": "2026-07-26T21:47:29.656Z",
+      "bytes": 109412,
+      "mtime": "2026-07-26T21:50:39.243Z",
+      "indexed_at": "2026-07-26T21:51:11.115Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]

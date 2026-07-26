@@ -757,9 +757,14 @@ export default class SiteBuilder {
       }
 
       if (!variants.length) {
-        const detail = generationErrors.length ? `: ${generationErrors.map((e) => `${e.id}=${e.error}`).join('; ')}` : '';
-        const allFailedErr = new Error(`all variant generations failed${detail}`);
+        const genDetail = generationErrors.length ? `generation errors: ${generationErrors.map((e) => `${e.id}=${e.error}`).join('; ')}` : '';
+        const killDetail = killedVariants.length ? `quality gate killed all ${killedVariants.length} variant(s): ${killedVariants.map((k) => `${k.id}=${k.killReason}`).join('; ')}` : '';
+        const message = killedVariants.length && !generationErrors.length
+          ? `no variant beat your current site's baseline (${killDetail})`
+          : `all variant generations failed${genDetail ? `: ${genDetail}` : ''}${killDetail ? ` (${killDetail})` : ''}`;
+        const allFailedErr = new Error(message);
         allFailedErr.generationErrors = generationErrors;
+        allFailedErr.killedVariants = killedVariants;
         throw allFailedErr;
       }
 
@@ -837,7 +842,7 @@ export default class SiteBuilder {
       };
     } catch (err) {
       logger.error('[SITE] Variant build failed', { clientId, error: err.message });
-      return { success: false, clientId, error: err.message, generationErrors: err.generationErrors || [] };
+      return { success: false, clientId, error: err.message, generationErrors: err.generationErrors || [], killedVariants: err.killedVariants || [] };
     }
   }
 
