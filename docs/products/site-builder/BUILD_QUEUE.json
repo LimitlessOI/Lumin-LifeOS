@@ -2322,7 +2322,7 @@
     },
     {
       "id": "sb-wire-architect-brief-and-site-design",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/site-builder.js",
       "priority": "critical",
       "patch_mode": true,
@@ -2333,7 +2333,7 @@
       "task": "Fix a real overclaim found by independent audit (2026-07-26): buildCreativeBrief (services/site-builder-architect-brief.js) and runSiteDesign (services/creative-engine/modes/site-design.js) exist with real exports but are NEVER CALLED anywhere in services/site-builder.js -- confirmed via grep, 0 matches for both identifiers. This means the actual 'Architect hands the blueprint to the Studio and designs it' generation path the founder originally asked for does not run at all; buildVariants() still only uses hand-authored template shells (useLayoutShells default) or the old generateSiteHtml() AI fallback. This step wires the new path in as that fallback's replacement -- the narrowest, safest integration point, since shells remain the default and this only changes what happens when a shell is unavailable or AI generation is explicitly requested.",
       "spec": "PATCH MODE. Output ONLY one <<<OLD>>>/<<<NEW>>>/<<<END>>> block (see patch mode instructions), no full file.\n\nFind this exact block inside buildVariants() (the per-design-system loop, right after `variantIndex += 1;`):\n\n          if (!html) {\n            html = await this.generateSiteHtml(businessInfo, { clientId, posPartner, designBrief, designSystem: ds, leanTemplate: options.leanTemplate, skipAi: options.skipAi });\n          }\n\nReplace it with logic that tries the new Architect->Studio path FIRST when a shell wasn't used, falling back to the existing generateSiteHtml on ANY failure (missing modules, invalid model output, thrown error) so this can never make variant generation less reliable than it is today:\n\n          if (!html) {\n            let studioHtml = null;\n            try {\n              const { buildCreativeBrief } = await import('./site-builder-architect-brief.js');\n              const { runSiteDesign } = await import('./creative-engine/modes/site-design.js');\n              const creativeBrief = buildCreativeBrief({ businessInfo, opportunityAnalysis: options.opportunityAnalysis || {}, currentSiteBaseline: baseline || {} });\n              const designResult = await runSiteDesign({ creativeBrief, callCouncilMember: (prompt) => this.callWithFallback(GENERATION_CANDIDATES, prompt, { maxOutputTokens: GENERATION_MAX_TOKENS, taskType: 'site_builder.generate_site', useCache: false, label: 'runSiteDesign' }) });\n              if (designResult.ok && designResult.html) studioHtml = designResult.html;\n              else logger.warn('[SITE] Architect/Studio design path returned no usable html (falling back)', { clientId, style: ds.id, reason: designResult.reason || designResult.error });\n            } catch (err) {\n              logger.warn('[SITE] Architect/Studio design path failed (falling back to generateSiteHtml)', { clientId, style: ds.id, error: err.message });\n            }\n            html = studioHtml || await this.generateSiteHtml(businessInfo, { clientId, posPartner, designBrief, designSystem: ds, leanTemplate: options.leanTemplate, skipAi: options.skipAi });\n          }\n\nUse GENERATION_CANDIDATES and GENERATION_MAX_TOKENS exactly as named -- these are existing module-level constants already used elsewhere in this same file by generateSiteHtml's own callWithFallback invocation; do not redefine them, just reference them. Do not change generateSiteHtml itself, do not change any other function, do not change the shell-selection logic above this block.",
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "source": "founder_directive_2026-07-26",
       "finding_note": "Independent audit, 2026-07-26: 'Two of the six creative brain modules exist but are not wired into buildVariants(). The claim that generation genuinely calls all of the above is an overclaim.' This is the direct fix. Deliberately fail-open to generateSiteHtml on any failure so this cannot regress today's working variant generation.",
       "file_contains": [
@@ -2345,9 +2345,9 @@
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "sb-wire-architect-brief-and-site-design",
       "mission_id": "PRODUCT-site-builder",
-      "last_attempt_at": "2026-07-26T21:06:48.248Z",
+      "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": null,
+      "commit_sha": "dc53e097982a5b377247e87936a321ad97503511",
       "built_sha": null,
       "proof": null,
       "failure_signature": null,
@@ -2374,30 +2374,8 @@
       "unblocked_gap_fill_note": "2026-07-26: real root cause found via the new codegen_error observability fix -- this step declared max_output_tokens:20000 but the openai_builder_mini tier real API ceiling is far lower (HTTP 400 max_tokens is too large:20000). A patch_mode diff for this two-branch if/else does not need anywhere near 20000 output tokens. Lowered to 4000 (safely under any reasonable per-tier ceiling, generous for a small OLD/NEW patch block). This IS a real, diagnosed root-cause fix, not a blind retry -- the exact failure mechanism is proven by the HTTP 400 body itself, not guessed. Escalation gate cleared on that basis, not bypassed. A general fix (clamp scopedMaxTokens against the specific models own config.maxTokens in services/council-service.js, not just the global 128k cap) is a real, separate, non-blocking finding for later -- would prevent this whole class of failure for any future step/model combination, left unshipped tonight to avoid a high-blast-radius edit to a file every AI call in the app depends on.",
       "escalation_required": false,
       "escalation_note": null,
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/site-builder/twins/steps/sb-wire-architect-brief-and-site-design.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-26T21:10:52.220Z",
-        "shipped_at": "2026-07-26T21:10:52.220Z",
-        "commit_sha": null,
-        "content_sha256": "5119537862733a86677705ec0cde7b5804ac0cea7f527015c266bf21b1d8a793",
-        "target_file": "services/site-builder.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/site-builder.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/site-builder/twins/steps/sb-wire-architect-brief-and-site-design.exact",
-          "content_sha256": "5119537862733a86677705ec0cde7b5804ac0cea7f527015c266bf21b1d8a793"
-        }
-      },
-      "shipped_at": "2026-07-26T21:10:52.220Z"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-26T21:10:58.574Z"
     },
     {
       "id": "sb-expose-killed-variants-in-response",
