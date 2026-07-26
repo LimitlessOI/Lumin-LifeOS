@@ -2239,6 +2239,26 @@
       "force_model_rotation": true,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-26T04:54:33.573Z"
+    },
+    {
+      "id": "sb-fix-existing-site-html-referenceerror",
+      "status": "pending",
+      "target_file": "services/site-builder.js",
+      "max_output_tokens": 40000,
+      "priority": "critical",
+      "task": "Fix a ReferenceError that has been silently crashing EVERY SINGLE SCRAPE since sb-variant-wire-buildvariants shipped. Live-reproduced and confirmed via the new scrapeFailureReason diagnostic field (2026-07-26): the object literal that builds `businessInfo` inside scrapeBusinessInfo() contains the line `existingSiteHtml, // Store the raw HTML for baseline comparison later` -- this is ES6 shorthand property syntax, which requires a local variable named EXACTLY `existingSiteHtml` to already be in scope. But the actual declared local variable a few lines above (`const existingHtml = await page.content();`) is named `existingHtml`, WITHOUT 'Site' in it. This mismatch throws `ReferenceError: existingSiteHtml is not defined` on every single call, which the surrounding try/catch silently swallows and mis-reports as a scrape/network failure (scrapeFetchFailed:true) -- confirmed via live testing tonight against 3 completely unrelated real domains (wellroundedmomma.com, sherrylhopkins.com, example.com), all of which failed identically because the bug fires regardless of the target site. This has nothing to do with Puppeteer, Chromium, or network connectivity -- it is a plain JavaScript naming bug.",
+      "spec": "CRITICAL, READ FIRST -- this file is ~107KB. Your response MUST be the ENTIRE, COMPLETE content of services/site-builder.js from first line to last -- every existing function, import, and line UNCHANGED -- with ONLY the one-word fix below. Do NOT output a diff, a patch, a snippet, or a summary.\n\nFind the object literal inside scrapeBusinessInfo() that contains the line reading exactly `existingSiteHtml, // Store the raw HTML for baseline comparison later` (it sits in the same object literal as `sourceUrl: url,` and `existingSiteScore,`). Change that ONE line from `existingSiteHtml,` to `existingSiteHtml: existingHtml,` -- i.e. use explicit key:value syntax mapping the businessInfo field name (existingSiteHtml) to the actual local variable that holds the scraped HTML (existingHtml, declared a few lines above as `const existingHtml = await page.content();`). Do NOT rename the local variable `existingHtml` itself, do NOT rename the businessInfo field `existingSiteHtml` (other code -- buildVariants() -- already reads `businessInfo.existingSiteHtml` and expects that exact field name), and do NOT change anything else anywhere else in the file. This is a single-token fix (add `: existingHtml` after `existingSiteHtml`) inside an otherwise byte-identical file.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "source": "founder_directive_2026-07-24",
+      "finding_note": "Found while investigating why scraping failed identically on every tested domain tonight, per founder's standing directive to root-cause rather than guess. This bug has been live since sb-variant-wire-buildvariants shipped and has been breaking 100% of Site Builder's core scrape-and-build function the entire time since -- the highest-priority fix in the queue right now.",
+      "file_contains": [
+        "existingSiteHtml: existingHtml,"
+      ],
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "sb-fix-existing-site-html-referenceerror",
+      "mission_id": "PRODUCT-site-builder"
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",
