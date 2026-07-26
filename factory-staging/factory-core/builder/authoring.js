@@ -99,8 +99,8 @@ export async function runAuthoring(step, codegenRunner) {
   // If the twin's file_contains is already true on disk, do not burn tokens
   // rewriting a large file (root cause of codegen_stub_detected thrash).
   const needles = [
-    ...(Array(step?.file_contains) ? step.file_contains : []),
-    ...(Array(step?.assertion_spec?.file_contains) ? step.assertion_spec.file_contains : []),
+    ...(Array.isArray(step?.file_contains) ? step.file_contains : []),
+    ...(Array.isArray(step?.assertion_spec?.file_contains) ? step.assertion_spec.file_contains : []),
   ];
   const preSatisfied = existingFileSatisfiesContains(target_file, needles);
   if (preSatisfied) {

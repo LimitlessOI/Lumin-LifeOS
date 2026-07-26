@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-26T20:38:19.786Z",
+  "generated_at": "2026-07-26T20:51:45.092Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12175,
   "files": [
@@ -39828,9 +39828,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 245417,
-      "mtime": "2026-07-26T20:18:28.484Z",
-      "indexed_at": "2026-07-26T20:18:39.140Z"
+      "bytes": 247972,
+      "mtime": "2026-07-26T20:51:33.987Z",
+      "indexed_at": "2026-07-26T20:51:45.092Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -61124,9 +61124,9 @@
     {
       "path": "factory-staging/factory-core/builder/authoring.js",
       "synopsis": "STEP 4 — codegen as an UNTRUSTED authoring sub-step (the \"dumb pipe\").",
-      "bytes": 10150,
-      "mtime": "2026-07-26T20:35:34.777Z",
-      "indexed_at": "2026-07-26T20:35:34.777Z",
+      "bytes": 10166,
+      "mtime": "2026-07-26T20:51:02.057Z",
+      "indexed_at": "2026-07-26T20:51:45.092Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
