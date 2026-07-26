@@ -2376,14 +2376,14 @@
     },
     {
       "id": "bo-forward-patch-mode-to-codegen-call",
-      "status": "blocked",
+      "status": "done",
       "target_file": "factory-staging/factory-core/builder/authoring.js",
       "priority": "critical",
       "task": "Fix a real integration gap in the patch_mode feature just shipped in bo-patch-mode-codegen: the codegenRunner.generate() implementation (routes/factory-mount-routes.js) correctly destructures and handles a `patch_mode` parameter, but THIS FILE -- the actual caller every BUILD_QUEUE step goes through -- never passes `patch_mode` in its call to codegenRunner.generate(). Confirmed via direct read: the call site (around line 147, `result = await codegenRunner.generate({ task: ..., target_file, spec: ..., tiers: ..., max_output_tokens: ..., last_error: ..., expected_exports: ..., failure_context: ..., expected_exports_context: ... });`) has no `patch_mode` field at all. This means patch_mode has NEVER actually activated in production despite being set to true on 2 real queue steps tonight -- both fell through to full-file regeneration on a 107KB file and failed repeatedly (16 combined failures, codegen_stub_detected: generated 0b) because the model was never told to use patch format and the raw OLD/NEW-marker-shaped response (when the model attempted patch-style output anyway, guessing from context) looked like a tiny stub against the full file size.",
       "spec": "TWO small, related changes in factory-staging/factory-core/builder/authoring.js, both near the same block (the one building `additiveHint` and the `codegenRunner.generate({...})` call around lines 143-156). (1) Find: `const additiveHint = existingSize > 0\\n      ? \\`EXISTING FILE IS ${existingSize} bytes. Return the COMPLETE updated file (not a stub). Preserve all existing behavior; only add/change what the task requires. Output length must stay \\u2265 30% of the existing file.\\n\\`\\n      : '';` -- change the condition so this hint is NOT added when patch mode is active (it directly contradicts patch-mode's own instructions to output only an OLD/NEW block, not the complete file): change `existingSize > 0` to `existingSize > 0 && !(step.patch_mode || authoring.patch_mode)`. Do not change the hint text itself, only the condition. (2) In the object literal passed to `codegenRunner.generate({...})` immediately below, add exactly one new field: `patch_mode: step.patch_mode || authoring.patch_mode || false,` as a sibling of the existing `max_output_tokens` field, same style. Do not change any other field in either place, do not change the function signature, do not change any other function in this file.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "source": "founder_directive_2026-07-26",
       "finding_note": "Founder, live: 'Who failed sixteen times to resolve? Did we go through our escalated protocol...' Root cause traced directly (not via Chair this time, by choice given fresh context on the feature): patch_mode was built correctly but never wired to its own caller -- the same class of 'built but not connected' bug the independent audit caught in the Architect/Studio wiring, this time in tonight's own infrastructure fix. This single-line fix unblocks both sb-wire-architect-brief-and-site-design and sb-expose-killed-variants-in-response, which have been retrying blindly against a feature that could never have worked.",
       "expected_exports": [
@@ -2406,38 +2406,29 @@
           "assertion_id": "expected_exports:factory-staging/factory-core/builder/authoring.js"
         }
       ],
-      "last_attempt_at": "2026-07-26T20:19:33.434Z",
-      "last_error": "NOT_ON_BLUEPRINT",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "3cb1b1a88f922c1ccbb0c02afdbb89ceefc463cf",
       "built_sha": null,
       "proof": null,
       "failure_signature": "NOT_ON_BLUEPRINT",
       "same_signature_count": 1,
       "escalation_class": "governance_block",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/builderos/twins/steps/bo-forward-patch-mode-to-codegen-call.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-26T20:35:32.320Z",
-        "shipped_at": "2026-07-26T20:35:32.320Z",
-        "commit_sha": null,
-        "content_sha256": "72df8a30aed924f59080714c52942937d7ff613a457ad7ce7fb61c0662d236e7",
-        "target_file": "factory-staging/factory-core/builder/authoring.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "factory-staging/factory-core/builder/authoring.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/builderos/twins/steps/bo-forward-patch-mode-to-codegen-call.exact",
-          "content_sha256": "72df8a30aed924f59080714c52942937d7ff613a457ad7ce7fb61c0662d236e7"
-        }
-      },
-      "shipped_at": "2026-07-26T20:35:32.320Z"
+      "revive_count": 0,
+      "revived_at": "2026-07-26T20:35:32.021Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-26T20:35:38.269Z"
     },
     {
       "id": "bo-hard-gate-escalation-required",
