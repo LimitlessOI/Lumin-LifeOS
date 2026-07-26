@@ -2373,6 +2373,52 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-26T18:48:56.985Z",
       "commit_sha": "08cfe2efe15ded99140e8cf17181ca784deebf9e"
+    },
+    {
+      "id": "bo-forward-patch-mode-to-codegen-call",
+      "status": "pending",
+      "target_file": "factory-staging/factory-core/builder/authoring.js",
+      "priority": "critical",
+      "task": "Fix a real integration gap in the patch_mode feature just shipped in bo-patch-mode-codegen: the codegenRunner.generate() implementation (routes/factory-mount-routes.js) correctly destructures and handles a `patch_mode` parameter, but THIS FILE -- the actual caller every BUILD_QUEUE step goes through -- never passes `patch_mode` in its call to codegenRunner.generate(). Confirmed via direct read: the call site (around line 147, `result = await codegenRunner.generate({ task: ..., target_file, spec: ..., tiers: ..., max_output_tokens: ..., last_error: ..., expected_exports: ..., failure_context: ..., expected_exports_context: ... });`) has no `patch_mode` field at all. This means patch_mode has NEVER actually activated in production despite being set to true on 2 real queue steps tonight -- both fell through to full-file regeneration on a 107KB file and failed repeatedly (16 combined failures, codegen_stub_detected: generated 0b) because the model was never told to use patch format and the raw OLD/NEW-marker-shaped response (when the model attempted patch-style output anyway, guessing from context) looked like a tiny stub against the full file size.",
+      "spec": "TWO small, related changes in factory-staging/factory-core/builder/authoring.js, both near the same block (the one building `additiveHint` and the `codegenRunner.generate({...})` call around lines 143-156). (1) Find: `const additiveHint = existingSize > 0\\n      ? \\`EXISTING FILE IS ${existingSize} bytes. Return the COMPLETE updated file (not a stub). Preserve all existing behavior; only add/change what the task requires. Output length must stay \\u2265 30% of the existing file.\\n\\`\\n      : '';` -- change the condition so this hint is NOT added when patch mode is active (it directly contradicts patch-mode's own instructions to output only an OLD/NEW block, not the complete file): change `existingSize > 0` to `existingSize > 0 && !(step.patch_mode || authoring.patch_mode)`. Do not change the hint text itself, only the condition. (2) In the object literal passed to `codegenRunner.generate({...})` immediately below, add exactly one new field: `patch_mode: step.patch_mode || authoring.patch_mode || false,` as a sibling of the existing `max_output_tokens` field, same style. Do not change any other field in either place, do not change the function signature, do not change any other function in this file.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "source": "founder_directive_2026-07-26",
+      "finding_note": "Founder, live: 'Who failed sixteen times to resolve? Did we go through our escalated protocol...' Root cause traced directly (not via Chair this time, by choice given fresh context on the feature): patch_mode was built correctly but never wired to its own caller -- the same class of 'built but not connected' bug the independent audit caught in the Architect/Studio wiring, this time in tonight's own infrastructure fix. This single-line fix unblocks both sb-wire-architect-brief-and-site-design and sb-expose-killed-variants-in-response, which have been retrying blindly against a feature that could never have worked.",
+      "expected_exports": [
+        "runAuthoring"
+      ],
+      "file_contains": [
+        "patch_mode: step.patch_mode",
+        "!(step.patch_mode"
+      ],
+      "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "bo-forward-patch-mode-to-codegen-call",
+      "mission_id": "PRODUCT-builderos"
+    },
+    {
+      "id": "bo-hard-gate-escalation-required",
+      "status": "pending",
+      "target_file": "services/product-build-orchestrator.js",
+      "priority": "critical",
+      "task": "FOUNDER-MANDATED HARD GATE (2026-07-26), not optional, not a suggestion: after a step fails 3 times with the SAME error signature, the system must STOP silently auto-reviving it forever (current behavior: reviveStaleBlockedSteps just keeps reviving up to effectiveMax revives -- often maxRevives+3 for exactly this codegen-failure class -- then silently SKIPs/demotes it, with no forced escalation step in between). This is precisely the pattern the founder is angry about tonight: a step can fail the identical way many times (tonight: 16 combined failures across 2 steps) with nothing forcing a different approach -- just more of the same automatic retries. This step makes that structurally impossible to skip: it is a HARD gate inside the orchestrator itself, not a document, not a convention someone has to remember to follow.",
+      "spec": "In services/product-build-orchestrator.js, inside reviveStaleBlockedSteps() (the function that currently loops over BLOCKED steps and decides whether to revive or demote them), add a new check BEFORE the existing effectiveMax/demote logic: if `typeof step.same_signature_count === 'number' && step.same_signature_count >= 3 && step.escalation_required !== true`, then instead of following the normal revive-or-demote path for this step on this pass: set `step.escalation_required = true;`, set `step.status = STEP_STATUS.BLOCKED;` (stays blocked, explicitly, not silently skipped/demoted), add `step.escalation_note = 'HARD GATE: 3+ identical failures (' + step.failure_signature + '). Automatic revival is disabled for this step until escalation_required is explicitly cleared by a real escalation action (external research + a second model, per founder directive 2026-07-26) -- this step will NOT auto-revive on its own again.';`, then `continue;` to the next step in the loop WITHOUT applying the normal revive or demote logic to this step on this pass. Once `escalation_required` is true, THIS SAME new check must also make the step permanently skip both the normal revive path AND the normal demote-to-SKIPPED path on all FUTURE passes too (i.e. the check for `step.escalation_required === true` alone, regardless of same_signature_count value at that point, must also continue past this step) -- the only way out of this state is an external actor (a person or a future escalation-handling step) explicitly setting `escalation_required` back to false or clearing it, never automatic code in this function. Do not change the function signature, do not change behavior for any step with same_signature_count < 3, do not change any other function in this file.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "source": "founder_directive_2026-07-26",
+      "finding_note": "Founder, live, verbatim: 'If I tell you to do something and you agree with it, then you fucking hard code it. You make it so it's gated. You make it so the system can't fucking ignore it.' This is that hard code. It does not yet implement the full multi-model-brainstorm-with-web-research escalation ladder the founder specified (that is a genuinely larger build, honestly scoped separately, not compressed into this step to avoid another 'looks done but isn't' failure) -- but it makes the CURRENT silent-infinite-retry-then-quietly-give-up behavior structurally impossible: a 3x-identical-failure step is now forced into a visibly-flagged, non-auto-recoverable state, not silently cycled or silently dropped.",
+      "expected_exports": [
+        "reviveStaleBlockedSteps"
+      ],
+      "file_contains": [
+        "escalation_required",
+        "same_signature_count >= 3"
+      ],
+      "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "bo-hard-gate-escalation-required",
+      "mission_id": "PRODUCT-builderos"
     }
   ],
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
