@@ -2285,7 +2285,7 @@
     },
     {
       "id": "sb-fix-run-site-design-format-mismatch",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/creative-engine/modes/site-design.js",
       "priority": "critical",
       "task": "Fix a real bug found by independent audit (2026-07-26): runSiteDesign() validates the model response by checking `modelResponse.includes('<html')` (implying the response is raw HTML), then immediately calls `JSON.parse(modelResponse)` on that same response (implying it's JSON). Raw HTML is never valid JSON, so if the model ever actually returns HTML containing '<html', the includes() check passes but JSON.parse() throws, caught by the outer catch, and the function returns { ok:false, error } every single time. This function has never been successfully exercised end-to-end (it isn't called from anywhere yet -- a separate step is wiring it in), so this bug has been latent and undetected.",
@@ -2306,30 +2306,19 @@
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "sb-fix-run-site-design-format-mismatch",
       "mission_id": "PRODUCT-site-builder",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/site-builder/twins/steps/sb-fix-run-site-design-format-mismatch.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-26T19:49:01.616Z",
-        "shipped_at": "2026-07-26T19:49:01.616Z",
-        "commit_sha": null,
-        "content_sha256": "a212b323c994f5233b9992200e896c1e414b641c5d04317e53e2f063cec7c850",
-        "target_file": "services/creative-engine/modes/site-design.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/creative-engine/modes/site-design.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/site-builder/twins/steps/sb-fix-run-site-design-format-mismatch.exact",
-          "content_sha256": "a212b323c994f5233b9992200e896c1e414b641c5d04317e53e2f063cec7c850"
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/creative-engine/modes/site-design.js",
+          "exports": [
+            "runSiteDesign"
+          ],
+          "assertion_id": "expected_exports:services/creative-engine/modes/site-design.js"
         }
-      },
-      "shipped_at": "2026-07-26T19:49:01.616Z"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-26T19:49:08.038Z",
+      "commit_sha": "ca6689e760987e5c23182ca5fb8f2874c862e083"
     },
     {
       "id": "sb-wire-architect-brief-and-site-design",
