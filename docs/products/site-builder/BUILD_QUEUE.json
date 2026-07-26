@@ -2476,6 +2476,27 @@
       "failure_signature": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:<div id='element-label-ui'>; behavior_assertion_failed; behavior_proof",
       "same_signature_count": 1,
       "escalation_class": "evidence_gap"
+    },
+    {
+      "id": "sb-expose-generation-errors-in-response",
+      "status": "pending",
+      "target_file": "services/site-builder.js",
+      "priority": "high",
+      "patch_mode": true,
+      "max_output_tokens": 4000,
+      "depends_on": [],
+      "task": "Fix a real, reproducible bug found live 2026-07-26: build-variants against a real client site (wellroundedmomma.com, itself Lumin-hosted, confirmed reachable via direct curl 200) returns {ok:false, error:\"all variant generations failed\"} with zero diagnostic detail. Root cause traced: the per-design-system loop in buildVariants() has a catch block that only logs server-side (logger.warn(\"[SITE] variant generation failed (skipping)\", ...)) and never records the thrown error anywhere visible to the API caller -- this is the same observability class as the killedVariants gap fixed earlier tonight, but for thrown exceptions instead of explicit quality-gate kills. When ALL design systems throw, the final response is a single opaque message with no way to diagnose which design system failed or why, from outside server log access.",
+      "spec": "PATCH MODE. Output ONLY one <<<OLD>>>/<<<NEW>>>/<<<END>>> block, no full file.\n\nFind this exact block inside buildVariants() (the per-design-system loop's outer catch):\n\n        } catch (err) {\n          logger.warn('[SITE] variant generation failed (skipping)', { clientId, style: ds.id, error: err.message });\n        }\n      }\n\n      if (!variants.length) throw new Error('all variant generations failed');\n\nReplace it with a version that ALSO records the failure in a lightweight array so it survives past the throw (name/error only -- never any partial HTML):\n\n        } catch (err) {\n          logger.warn('[SITE] variant generation failed (skipping)', { clientId, style: ds.id, error: err.message });\n          generationErrors.push({ id: ds.id, name: ds.name, error: err.message });\n        }\n      }\n\n      if (!variants.length) {\n        const detail = generationErrors.length ? `: ${generationErrors.map((e) => `${e.id}=${e.error}`).join('; ')}` : '';\n        const allFailedErr = new Error(`all variant generations failed${detail}`);\n        allFailedErr.generationErrors = generationErrors;\n        throw allFailedErr;\n      }\n\nThen find where `const killedVariants = [];` is declared near the top of buildVariants() (same function) and add a sibling array declaration immediately after it:\n\nconst killedVariants = [];\nconst generationErrors = [];\n\nFinally, find the top-level route handler or catch site that turns a thrown buildVariants() error into the {ok:false, error: err.message} JSON response (search for where the string \"all variant generations failed\" would surface, likely a catch around the buildVariants() call in routes/site-builder-routes.js or similar) and add `generationErrors: err.generationErrors || []` as a sibling field in that same error response object, so the per-design-system failure detail survives into the actual API response. Do not change the shape or meaning of any existing field.",
+      "founder_gated": false,
+      "attempts": 0,
+      "source": "founder_directive_2026-07-26",
+      "finding_note": "Found live 2026-07-26 while re-testing baseline-kill against real business URLs post-wiring-fix: wellroundedmomma.com (a real Lumin-hosted client site, confirmed reachable) reproducibly returns all variant generations failed with zero diagnostic detail. example.com and starbucks.com both succeeded in the same test session, so this is domain-specific, not a regression from tonight's wiring -- but it is currently undiagnosable without server log access.",
+      "file_contains": [
+        "generationErrors"
+      ],
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "sb-expose-generation-errors-in-response",
+      "mission_id": "PRODUCT-site-builder"
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",
