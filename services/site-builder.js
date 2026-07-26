@@ -686,7 +686,18 @@ export default class SiteBuilder {
           }
           variantIndex += 1;
           if (!html) {
-            html = await this.generateSiteHtml(businessInfo, { clientId, posPartner, designBrief, designSystem: ds, leanTemplate: options.leanTemplate, skipAi: options.skipAi });
+            let studioHtml = null;
+            try {
+              const { buildCreativeBrief } = await import('./site-builder-architect-brief.js');
+              const { runSiteDesign } = await import('./creative-engine/modes/site-design.js');
+              const creativeBrief = buildCreativeBrief({ businessInfo, opportunityAnalysis: options.opportunityAnalysis || {}, currentSiteBaseline: baseline || {} });
+              const designResult = await runSiteDesign({ creativeBrief, callCouncilMember: (prompt) => this.callWithFallback(GENERATION_CANDIDATES, prompt, { maxOutputTokens: GENERATION_MAX_TOKENS, taskType: 'site_builder.generate_site', useCache: false, label: 'runSiteDesign' }) });
+              if (designResult.ok && designResult.html) studioHtml = designResult.html;
+              else logger.warn('[SITE] Architect/Studio design path returned no usable html (falling back)', { clientId, style: ds.id, reason: designResult.reason || designResult.error });
+            } catch (err) {
+              logger.warn('[SITE] Architect/Studio design path failed (falling back to generateSiteHtml)', { clientId, style: ds.id, error: err.message });
+            }
+            html = studioHtml || await this.generateSiteHtml(businessInfo, { clientId, posPartner, designBrief, designSystem: ds, leanTemplate: options.leanTemplate, skipAi: options.skipAi });
           }
           html = this.patchSiteHtml(html, businessInfo);
           let quality = this.scoreSiteHtml(html, businessInfo);

@@ -2373,7 +2373,31 @@
       "unsolved": false,
       "unblocked_gap_fill_note": "2026-07-26: real root cause found via the new codegen_error observability fix -- this step declared max_output_tokens:20000 but the openai_builder_mini tier real API ceiling is far lower (HTTP 400 max_tokens is too large:20000). A patch_mode diff for this two-branch if/else does not need anywhere near 20000 output tokens. Lowered to 4000 (safely under any reasonable per-tier ceiling, generous for a small OLD/NEW patch block). This IS a real, diagnosed root-cause fix, not a blind retry -- the exact failure mechanism is proven by the HTTP 400 body itself, not guessed. Escalation gate cleared on that basis, not bypassed. A general fix (clamp scopedMaxTokens against the specific models own config.maxTokens in services/council-service.js, not just the global 128k cap) is a real, separate, non-blocking finding for later -- would prevent this whole class of failure for any future step/model combination, left unshipped tonight to avoid a high-blast-radius edit to a file every AI call in the app depends on.",
       "escalation_required": false,
-      "escalation_note": null
+      "escalation_note": null,
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/site-builder/twins/steps/sb-wire-architect-brief-and-site-design.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-26T21:10:52.220Z",
+        "shipped_at": "2026-07-26T21:10:52.220Z",
+        "commit_sha": null,
+        "content_sha256": "5119537862733a86677705ec0cde7b5804ac0cea7f527015c266bf21b1d8a793",
+        "target_file": "services/site-builder.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/site-builder.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/site-builder/twins/steps/sb-wire-architect-brief-and-site-design.exact",
+          "content_sha256": "5119537862733a86677705ec0cde7b5804ac0cea7f527015c266bf21b1d8a793"
+        }
+      },
+      "shipped_at": "2026-07-26T21:10:52.220Z"
     },
     {
       "id": "sb-expose-killed-variants-in-response",
