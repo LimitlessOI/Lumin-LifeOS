@@ -658,6 +658,7 @@ export default class SiteBuilder {
 
       const variants = [];
       const killedVariants = [];
+      const generationErrors = [];
       const variantHtmls = {};
       // Default: hand-authored layout shells so variants are structurally different.
       // Opt into the old same-funnel AI HTML path with useAiLayouts: true.
@@ -836,7 +837,7 @@ export default class SiteBuilder {
       };
     } catch (err) {
       logger.error('[SITE] Variant build failed', { clientId, error: err.message });
-      return { success: false, clientId, error: err.message };
+      return { success: false, clientId, error: err.message, generationErrors: err.generationErrors || [] };
     }
   }
 
