@@ -2507,7 +2507,7 @@
     },
     {
       "id": "sb-expose-generation-errors-in-response",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/site-builder.js",
       "priority": "high",
       "patch_mode": true,
@@ -2526,8 +2526,8 @@
       "blueprint_step_id": "sb-expose-generation-errors-in-response",
       "mission_id": "PRODUCT-site-builder",
       "last_attempt_at": null,
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 0b is < 30% of existing 108458b. underlying: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///u",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "3d6586db4d53e594291aa3cc12d1f8c135cecd03",
       "built_sha": null,
       "proof": null,
       "failure_signature": "codegen_authoring_failed: codegen_stub_detected: generated Nb is < N% of existing #. underlying: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node -",
@@ -2535,7 +2535,7 @@
       "escalation_class": "same_signature_repeat",
       "escalation_required": false,
       "escalation_note": null,
-      "revive_count": 4,
+      "revive_count": 0,
       "revived_at": "2026-07-26T21:45:22.914Z",
       "last_attempt": null,
       "demoted": false,
@@ -2548,30 +2548,8 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/site-builder/twins/steps/sb-expose-generation-errors-in-response.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-26T21:45:23.015Z",
-        "shipped_at": "2026-07-26T21:45:23.015Z",
-        "commit_sha": null,
-        "content_sha256": "2adf9e6eaf836b3dbd36556beb267fd1ede62814845d677aa20f45fd5a52f1c9",
-        "target_file": "services/site-builder.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/site-builder.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/site-builder/twins/steps/sb-expose-generation-errors-in-response.exact",
-          "content_sha256": "2adf9e6eaf836b3dbd36556beb267fd1ede62814845d677aa20f45fd5a52f1c9"
-        }
-      },
-      "shipped_at": "2026-07-26T21:45:23.015Z"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-26T21:45:29.787Z"
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",
