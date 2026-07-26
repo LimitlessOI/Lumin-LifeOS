@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-26T19:47:03.902Z",
+  "generated_at": "2026-07-26T19:49:04.536Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12175,
   "files": [
@@ -85932,9 +85932,9 @@
     {
       "path": "services/creative-engine/modes/site-design.js",
       "synopsis": "// @ssot docs/products/marketingos/socialmediaos/PRODUCT_HOME.md",
-      "bytes": 1247,
-      "mtime": "2026-07-25T02:25:37.014Z",
-      "indexed_at": "2026-07-25T02:25:37.014Z",
+      "bytes": 1638,
+      "mtime": "2026-07-26T19:49:04.536Z",
+      "indexed_at": "2026-07-26T19:49:04.536Z",
       "ssot": [
         "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md"
       ]

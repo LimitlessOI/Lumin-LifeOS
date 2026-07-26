@@ -12,18 +12,29 @@ export async function runSiteDesign({ creativeBrief, callCouncilMember }) {
     Brand Signals: ${JSON.stringify(brandSignals)}
     Pain Points to Address: ${JSON.stringify(painPointsToAddress)}
     Baseline to Beat: ${JSON.stringify(baselineToBeat)}
+    
+    Respond with ONLY a single JSON object, no markdown fences, no commentary, in exactly this shape: {"html": "<the complete HTML document as a string>", "designNotes": ["note1", "note2"]}
   `;
 
   try {
     const modelResponse = await callCouncilMember(prompt);
-    if (!modelResponse || !modelResponse.includes('<html')) {
-      return { ok: false, reason: 'invalid_model_output', raw: modelResponse };
+    let parsed;
+    try {
+      parsed = JSON.parse(modelResponse);
+    } catch (parseError) {
+      return { ok: false, reason: 'invalid_model_output', raw: String(modelResponse).slice(0, 500) };
     }
 
-    // Assuming the response has a defined structure: { html, designNotes }
-    const { html, designNotes } = JSON.parse(modelResponse);
-    
-    return { ok: true, html, designNotes, sitemapUsed: sitemap };
+    if (typeof parsed.html !== 'string' || !/<html/i.test(parsed.html)) {
+      return { ok: false, reason: 'missing_html_field', raw: String(modelResponse).slice(0, 500) };
+    }
+
+    return {
+      ok: true,
+      html: parsed.html,
+      designNotes: Array.isArray(parsed.designNotes) ? parsed.designNotes : [],
+      sitemapUsed: sitemap
+    };
   } catch (error) {
     return { ok: false, error };
   }

@@ -2305,7 +2305,31 @@
       ],
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "sb-fix-run-site-design-format-mismatch",
-      "mission_id": "PRODUCT-site-builder"
+      "mission_id": "PRODUCT-site-builder",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/site-builder/twins/steps/sb-fix-run-site-design-format-mismatch.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-26T19:49:01.616Z",
+        "shipped_at": "2026-07-26T19:49:01.616Z",
+        "commit_sha": null,
+        "content_sha256": "a212b323c994f5233b9992200e896c1e414b641c5d04317e53e2f063cec7c850",
+        "target_file": "services/creative-engine/modes/site-design.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/creative-engine/modes/site-design.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/site-builder/twins/steps/sb-fix-run-site-design-format-mismatch.exact",
+          "content_sha256": "a212b323c994f5233b9992200e896c1e414b641c5d04317e53e2f063cec7c850"
+        }
+      },
+      "shipped_at": "2026-07-26T19:49:01.616Z"
     },
     {
       "id": "sb-wire-architect-brief-and-site-design",
