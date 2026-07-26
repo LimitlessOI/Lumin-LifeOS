@@ -2266,13 +2266,38 @@
       "proof": null,
       "failure_signature": "NOT_ON_BLUEPRINT",
       "same_signature_count": 1,
-      "escalation_class": "governance_block"
+      "escalation_class": "governance_block",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/site-builder/twins/steps/sb-fix-existing-site-html-referenceerror.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-26T06:57:36.277Z",
+        "shipped_at": "2026-07-26T06:57:36.277Z",
+        "commit_sha": null,
+        "content_sha256": "89e66a5001b4fd6e791978bcef0b9cd415479537eb9319c6b885c4b18db23def",
+        "target_file": "services/site-builder.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/site-builder.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/site-builder/twins/steps/sb-fix-existing-site-html-referenceerror.exact",
+          "content_sha256": "89e66a5001b4fd6e791978bcef0b9cd415479537eb9319c6b885c4b18db23def"
+        }
+      },
+      "shipped_at": "2026-07-26T06:57:36.277Z"
     }
   ],
-  "sentry_signature": "beba57e366c8c9cf",
-  "sentry_unplannable_at": "2026-07-12T18:05:57.513Z",
-  "sentry_unplannable_reason": "planner filtered all steps (already-done); spin-break so LifeOS can build",
+  "sentry_signature": "bfe02459bcbbc6ec",
+  "sentry_unplannable_at": "2026-07-26T06:41:40.524Z",
+  "sentry_unplannable_reason": "[BUILD-QUEUE-PLANNER] all proposed steps filtered (dedupe/already-done/no target_file) — fail closed",
   "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-site-builder",
-  "twin_kind": "product_build_queue_registered"
+  "twin_kind": "product_build_queue_registered",
+  "_sourcePath": "/usr/src/app/docs/products/site-builder/BUILD_QUEUE.json"
 }

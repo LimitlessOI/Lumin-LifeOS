@@ -985,7 +985,7 @@ export default class SiteBuilder {
         ),
         sourceUrl: url,
         existingSiteScore,
-        existingSiteHtml, // Store the raw HTML for baseline comparison later
+        existingSiteHtml: existingHtml, // Store the raw HTML for baseline comparison later
       };
       if (scraped.phone && !businessInfo.phone) businessInfo.phone = scraped.phone;
       if (scraped.bookingUrl && !businessInfo.bookingUrl) businessInfo.bookingUrl = scraped.bookingUrl;
