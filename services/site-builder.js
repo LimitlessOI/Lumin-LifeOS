@@ -657,6 +657,7 @@ export default class SiteBuilder {
         : '';
 
       const variants = [];
+      const killedVariants = [];
       const variantHtmls = {};
       // Default: hand-authored layout shells so variants are structurally different.
       // Opt into the old same-funnel AI HTML path with useAiLayouts: true.
@@ -735,6 +736,7 @@ export default class SiteBuilder {
             });
           } else {
             logger.info('[SITE] variant killed by quality gate', { clientId, style: ds.id, reason: fate.reason });
+            killedVariants.push({ id: ds.id, name: ds.name, scorePct: quality.scorePct, uxOverall: uxHeuristics.overall, killReason: fate.reason });
           }
         } catch (err) {
           logger.warn('[SITE] variant generation failed (skipping)', { clientId, style: ds.id, error: err.message });
@@ -781,6 +783,7 @@ export default class SiteBuilder {
         businessInfo,
         posPartner,
         variants,
+        killedVariants,
         qualityReport,
         blogPosts: blogPosts.map((p) => ({ slug: p.slug, title: p.title })),
         editToken,
@@ -808,6 +811,7 @@ export default class SiteBuilder {
         previewUrl: metadata.previewUrl,
         businessName: businessInfo.businessName,
         variants,
+        killedVariants,
         qualityReport,
         posPartner: posPartner.name,
         metadata,

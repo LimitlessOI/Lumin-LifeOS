@@ -2423,7 +2423,31 @@
       "unsolved": false,
       "unblocked_gap_fill_note": "2026-07-26: root cause found and fixed -- authoring.js used Array(x) instead of Array.isArray(x) in its needles guard, which always evaluated truthy regardless of input and crashed on undefined spread/property access. This was the actual source of the \"not iterable\" / \"Cannot read properties of undefined (reading file_contains)\" failures on this step. Fixed, node --check clean, committed 17bc588932, deployed and SHA-parity confirmed live. Verified the fix directly: a raw /factory/ship-queue dispatch of sb-expose-killed-variants-in-response returned HTTP 200 ok:true with a real SENTRY-verified codegen result (no crash). Reset to pending for a clean natural re-run through the governed autonomous loop so it ships AND commits.",
       "escalation_required": false,
-      "escalation_note": null
+      "escalation_note": null,
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/site-builder/twins/steps/sb-expose-killed-variants-in-response.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-26T21:02:14.037Z",
+        "shipped_at": "2026-07-26T21:02:14.037Z",
+        "commit_sha": null,
+        "content_sha256": "65d309794c2cbc04205efd16665b313ed39bceb2f29b862bb44787e705366dd2",
+        "target_file": "services/site-builder.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/site-builder.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/site-builder/twins/steps/sb-expose-killed-variants-in-response.exact",
+          "content_sha256": "65d309794c2cbc04205efd16665b313ed39bceb2f29b862bb44787e705366dd2"
+        }
+      },
+      "shipped_at": "2026-07-26T21:02:14.037Z"
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",
