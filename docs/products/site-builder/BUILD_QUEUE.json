@@ -2431,7 +2431,7 @@
     },
     {
       "id": "s7",
-      "status": "blocked",
+      "status": "done",
       "target_file": "public/overlay/site-builder-template-choice-ui.html",
       "task": "build template choice UI",
       "spec": "Create UI overlay to showcase new template choices.",
@@ -2439,21 +2439,21 @@
         "s4"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "<div id='template-choice-ui'>"
       ],
       "design_review_flagged": true,
-      "last_attempt_at": "2026-07-26T21:40:26.454Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:<div id='template-choice-ui'>; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "58ecf27a6d8ede7ecf927cde7a1540b9b545c3b6",
       "built_sha": null,
       "proof": null,
       "failure_signature": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:<div id='template-choice-ui'>; behavior_assertion_failed; behavior_proof",
       "same_signature_count": 2,
       "escalation_class": "evidence_gap",
-      "revive_count": 2,
-      "revived_at": "2026-07-26T21:40:23.611Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-26T21:55:45.796Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -2465,32 +2465,8 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/site-builder/twins/steps/s7.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-26T21:55:48.752Z",
-        "shipped_at": "2026-07-26T21:55:48.752Z",
-        "commit_sha": null,
-        "content_sha256": "cf237994e823080bc7837785e8027388d5543a7558595ec4fb062ae0b058f447",
-        "target_file": "public/overlay/site-builder-template-choice-ui.html",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "public/overlay/site-builder-template-choice-ui.html",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/site-builder/twins/steps/s7.exact",
-          "content_sha256": "cf237994e823080bc7837785e8027388d5543a7558595ec4fb062ae0b058f447"
-        }
-      },
-      "shipped_at": "2026-07-26T21:55:48.752Z",
-      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
-      "blueprint_step_id": "s7"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-26T21:55:55.155Z"
     },
     {
       "id": "s8",
