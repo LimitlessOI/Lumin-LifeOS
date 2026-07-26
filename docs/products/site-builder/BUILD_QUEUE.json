@@ -2372,8 +2372,8 @@
       "hard_stopped": false,
       "unsolved": false,
       "unblocked_gap_fill_note": "2026-07-26: root cause found and fixed -- authoring.js used Array(x) instead of Array.isArray(x) in its needles guard, which always evaluated truthy regardless of input and crashed on undefined spread/property access. This was the actual source of the \"not iterable\" / \"Cannot read properties of undefined (reading file_contains)\" failures on this step. Fixed, node --check clean, committed 17bc588932, deployed and SHA-parity confirmed live. Verified the fix directly: a raw /factory/ship-queue dispatch of sb-expose-killed-variants-in-response returned HTTP 200 ok:true with a real SENTRY-verified codegen result (no crash). Reset to pending for a clean natural re-run through the governed autonomous loop so it ships AND commits.",
-      "escalation_required": false,
-      "escalation_note": null
+      "escalation_required": true,
+      "escalation_note": "HARD GATE: 3+ identical failures (codegen_authoring_failed: codegen_stub_detected: generated Nb is < N% of existing #. underlying: openai_builder_mini: HTTP N: {\n  \"error\": {\n    \"message\": \"max_tokens is too large). Automatic revival is disabled for this step until escalation_required is explicitly cleared by a real escalation action (external research + a second model, per founder directive 2026-07-26) -- this step will NOT auto-revive on its own again."
     },
     {
       "id": "sb-expose-killed-variants-in-response",
@@ -2429,7 +2429,7 @@
     },
     {
       "id": "s7",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "public/overlay/site-builder-template-choice-ui.html",
       "task": "build template choice UI",
       "spec": "Create UI overlay to showcase new template choices.",
@@ -2437,11 +2437,19 @@
         "s4"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "<div id='template-choice-ui'>"
       ],
-      "design_review_flagged": true
+      "design_review_flagged": true,
+      "last_attempt_at": "2026-07-26T21:07:03.142Z",
+      "last_error": "NOT_ON_BLUEPRINT",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "failure_signature": "NOT_ON_BLUEPRINT",
+      "same_signature_count": 1,
+      "escalation_class": "governance_block"
     },
     {
       "id": "s8",
