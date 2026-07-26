@@ -2242,7 +2242,7 @@
     },
     {
       "id": "sb-fix-existing-site-html-referenceerror",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/site-builder.js",
       "max_output_tokens": 40000,
       "priority": "critical",
@@ -2250,7 +2250,7 @@
       "spec": "CRITICAL, READ FIRST -- this file is ~107KB. Your response MUST be the ENTIRE, COMPLETE content of services/site-builder.js from first line to last -- every existing function, import, and line UNCHANGED -- with ONLY the one-word fix below. Do NOT output a diff, a patch, a snippet, or a summary.\n\nFind the object literal inside scrapeBusinessInfo() that contains the line reading exactly `existingSiteHtml, // Store the raw HTML for baseline comparison later` (it sits in the same object literal as `sourceUrl: url,` and `existingSiteScore,`). Change that ONE line from `existingSiteHtml,` to `existingSiteHtml: existingHtml,` -- i.e. use explicit key:value syntax mapping the businessInfo field name (existingSiteHtml) to the actual local variable that holds the scraped HTML (existingHtml, declared a few lines above as `const existingHtml = await page.content();`). Do NOT rename the local variable `existingHtml` itself, do NOT rename the businessInfo field `existingSiteHtml` (other code -- buildVariants() -- already reads `businessInfo.existingSiteHtml` and expects that exact field name), and do NOT change anything else anywhere else in the file. This is a single-token fix (add `: existingHtml` after `existingSiteHtml`) inside an otherwise byte-identical file.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "source": "founder_directive_2026-07-24",
       "finding_note": "Found while investigating why scraping failed identically on every tested domain tonight, per founder's standing directive to root-cause rather than guess. This bug has been live since sb-variant-wire-buildvariants shipped and has been breaking 100% of Site Builder's core scrape-and-build function the entire time since -- the highest-priority fix in the queue right now.",
       "file_contains": [
@@ -2258,7 +2258,15 @@
       ],
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "sb-fix-existing-site-html-referenceerror",
-      "mission_id": "PRODUCT-site-builder"
+      "mission_id": "PRODUCT-site-builder",
+      "last_attempt_at": "2026-07-26T06:39:35.349Z",
+      "last_error": "NOT_ON_BLUEPRINT",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "failure_signature": "NOT_ON_BLUEPRINT",
+      "same_signature_count": 1,
+      "escalation_class": "governance_block"
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",
