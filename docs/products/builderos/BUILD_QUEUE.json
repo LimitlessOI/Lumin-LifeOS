@@ -2330,9 +2330,36 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-25T17:45:35.519Z",
       "commit_sha": "89dc50f44a9a8a592e20087583e3b23c26701ce5"
+    },
+    {
+      "id": "bo-patch-mode-codegen",
+      "status": "pending",
+      "target_file": "routes/factory-mount-routes.js",
+      "priority": "high",
+      "task": "Add an opt-in PATCH MODE to the codegenRunner.generate implementation in this file, so editing a large existing file no longer requires the model to reproduce the entire file byte-for-byte. Founder-diagnosed root cause (2026-07-26): tonight's worst bug (a ReferenceError that crashed 100% of Site Builder's scrape function for hours) was introduced during exactly this kind of full-file regeneration -- the model was asked to reproduce an unrelated ~105KB file verbatim except for a small change, and silently mis-transcribed one variable reference in the process. Full-file regeneration for large files is fragile by construction: every regeneration is a chance to corrupt code that was never supposed to change, and it also caused repeated real failures tonight from output-token ceilings and the stub-detector's size-ratio heuristic. This is the structural fix, not a one-off patch.",
+      "spec": "In the SAME inline codegenRunner.generate function already in this file (do not create a new file or function elsewhere), add support for a new step field `patch_mode: true` passed through from the step object (thread it through the existing destructured parameters of codegenRunner.generate the same way `max_output_tokens`/`stepMaxTokens` already is -- add `patch_mode` to that destructuring list). When `patch_mode === true` AND existingContentLines is non-empty (i.e. the target file exists and its content is being included per shouldIncludeExistingFileContent), REPLACE the 'CRITICAL: preserve ALL existing code... output the COMPLETE updated file' formatLines instruction (for isJs) with these instructions instead: 'PATCH MODE: Do NOT output the complete file. Output EXACTLY ONE block in this exact format, nothing else: <<<OLD>>>\\n(the exact, verbatim existing lines you are replacing, copied character-for-character from EXISTING FILE CONTENT below)\\n<<<NEW>>>\\n(your replacement lines)\\n<<<END>>>. The OLD block must match a contiguous substring of EXISTING FILE CONTENT EXACTLY, including whitespace -- copy it, do not retype it from memory.' Then, after receiving the raw model response (in the same place `content` is currently extracted and used as the final file content to write), when patch_mode is true: parse the response for the literal markers <<<OLD>>>, <<<NEW>>>, <<<END>>> (use indexOf/lastIndexOf or a simple regex, not a full parser); extract the OLD and NEW text between them; read the CURRENT file content fresh from disk (fs.readFileSync(absTarget, 'utf8')); count occurrences of the OLD text in that content using a simple split-based count; if the markers are missing, or OLD text is empty, or the occurrence count is not exactly 1, return a structured failure (do NOT write anything, do NOT fall through to treating the raw response as file content) -- the caller already has error-handling paths for `content` being empty/invalid, reuse that same failure path with a clear reason string like 'patch_apply_failed: old_text_not_found' or 'patch_apply_failed: old_text_ambiguous:N_matches'; when exactly one match is found, replace that one occurrence in the full file content (a single String.replace with the OLD text as a literal string search, not a regex, so special characters in the matched code are not misinterpreted) and use the RESULTING FULL FILE STRING as `content` going forward -- everything downstream (stub-detector size check, assertion checks, commit) must receive the same complete-file shape it already expects, unchanged.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "max_output_tokens": 20000,
+      "source": "founder_directive_2026-07-26",
+      "finding_note": "Founder, live: 'Weak on large, whole-file regeneration why and how do we fix it. Why? And how do we fix it?' This is the structural answer -- not a bigger token ceiling (already tried, helps but doesn't remove the corruption risk), but changing the shape of what the model is asked to produce so 99% of a large file is never touched or regenerated at all. Deliberately additive/opt-in (patch_mode defaults to false/undefined = existing full-file behavior unchanged) so this doesn't risk breaking any of tonight's already-working full-file steps.",
+      "expected_exports": [
+        "createFactoryMountRoutes"
+      ],
+      "file_contains": [
+        "patch_mode",
+        "<<<OLD>>>",
+        "<<<NEW>>>",
+        "patch_apply_failed"
+      ],
+      "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "bo-patch-mode-codegen",
+      "mission_id": "PRODUCT-builderos"
     }
   ],
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-builderos",
   "twin_kind": "product_build_queue_registered"
 }
+
