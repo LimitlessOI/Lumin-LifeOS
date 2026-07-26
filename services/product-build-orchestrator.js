@@ -381,12 +381,18 @@ export async function claimPreExistingSatisfiedSteps(queue, {
     }
     if (!proof?.ok || proof.applicable === false) continue;
 
-    // New logic: Check if the file is committed to git
-    const targetPath = path.join(root, step.target_file);
+    // Require the satisfied bytes to be on HEAD (not merely a tracked path with
+    // uncommitted local edits). `git ls-files` alone is insufficient: a prior
+    // ship can write a tracked file, fail the GitHub commit, and leave disk
+    // proving expectations while tip still lacks the change — claiming DONE
+    // then skips real work and redeploy loses the write.
+    const rel = String(step.target_file || '').replace(/\\/g, '/');
+    if (!rel || rel.startsWith('/') || rel.startsWith('../') || rel.includes('/../')) continue;
     try {
-      execFileSync('git', ['-C', root, 'ls-files', '--error-unmatch', targetPath]);
+      execFileSync('git', ['-C', root, 'cat-file', '-e', `HEAD:${rel}`], { stdio: 'ignore' });
+      execFileSync('git', ['-C', root, 'diff', '--quiet', 'HEAD', '--', rel], { stdio: 'ignore' });
     } catch {
-      continue; // File is either untracked or has no commits; do not mark as done
+      continue;
     }
 
     step.status = STEP_STATUS.DONE;

@@ -37,6 +37,7 @@
 
 | Date | Change | Why | Proof |
 |---|---|---|---|
+| 2026-07-26 | **Critical: `claimPreExistingSatisfiedSteps` no longer marks DONE on dirty tracked files.** The `bo-claim-pre-existing-git-check` ship only ran `git ls-files --error-unmatch`, which proves the path is tracked — not that HEAD contains the satisfied bytes. A stranded local write (codegen OK, GitHub commit failed) could still prove `file_contains` on disk and be claimed DONE, skipping real work; redeploy then loses the write. Fix: require `HEAD:<path>` exists and `git diff --quiet HEAD -- <path>`. | Tip critical-bug sweep after `98f247e3f`. | `node --test tests/product-build-orchestrator.test.js` (dirty tracked stays PENDING; clean HEAD claims DONE) |
 | 2026-07-24 | Managed-env allowlist adds `INSTANTLY_API_KEY` + `INSTANTLY_CAMPAIGN_ID` for Site Builder cold lane (Postmark/Resend ban cold email). | Founder: Postmark refused cold; need a cold-capable sender. | allowlist + Instantly adapter |
 | 2026-07-23 | Managed-env allowlist adds `SITE_BUILDER_MIN_OPPORTUNITY_SCORE` + `RESEND_API_KEY` (plus prior free-code keys) so distribution can tune qualify floor and unblock Postmark-pending email via Resend without a dashboard click. | Autonomous Site Builder distribution. | allowlist update |
 | 2026-07-23 | Managed-env allowlist adds `SITE_BUILDER_FREE_CODES` / `SITE_BUILDER_COMP_CODES` so complimentary Site Builder publish codes can be rotated on Railway without a dashboard click. | Founder gift / free-publish codes for Site Builder. | allowlist + Site Builder redeem path |

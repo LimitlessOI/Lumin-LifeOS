@@ -4,6 +4,10 @@
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import { execFileSync } from 'node:child_process';
 import {
   normalizeQueue,
   selectNextStep,
@@ -11,6 +15,7 @@ import {
   queueSummary,
   reviveStaleBlockedSteps,
   evaluateStepExpectations,
+  claimPreExistingSatisfiedSteps,
   STEP_STATUS,
 } from '../services/product-build-orchestrator.js';
 
@@ -320,4 +325,64 @@ test('evaluateStepExpectations skips when step declares nothing', async () => {
   const proof = await evaluateStepExpectations({ id: 'a', target_file: 'docs/x.md' });
   assert.equal(proof.ok, true);
   assert.equal(proof.applicable, false);
+});
+
+test('claimPreExistingSatisfiedSteps does not mark DONE for dirty tracked files', async () => {
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'claim-pre-existing-'));
+  try {
+    execFileSync('git', ['init'], { cwd: tmp });
+    execFileSync('git', ['config', 'user.email', 'test@example.com'], { cwd: tmp });
+    execFileSync('git', ['config', 'user.name', 'Test'], { cwd: tmp });
+    const rel = 'services/example-module.js';
+    const abs = path.join(tmp, rel);
+    fs.mkdirSync(path.dirname(abs), { recursive: true });
+    fs.writeFileSync(abs, 'export function hello() { return 1; }\n');
+    execFileSync('git', ['add', rel], { cwd: tmp });
+    execFileSync('git', ['commit', '-m', 'seed'], { cwd: tmp });
+
+    // Local write satisfies expectations but was never committed (stranded ship).
+    fs.writeFileSync(abs, 'export function hello() { return 1; }\nexport function wiredMarker() {}\n');
+
+    const q = makeQueue([{
+      id: 'wire',
+      target_file: rel,
+      task: 'wire marker',
+      status: STEP_STATUS.PENDING,
+      file_contains: ['wiredMarker'],
+    }]);
+    const claimed = await claimPreExistingSatisfiedSteps(q, { root: tmp });
+    assert.deepEqual(claimed, []);
+    assert.equal(q.steps[0].status, STEP_STATUS.PENDING);
+  } finally {
+    fs.rmSync(tmp, { recursive: true, force: true });
+  }
+});
+
+test('claimPreExistingSatisfiedSteps marks DONE only when HEAD matches disk proof', async () => {
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'claim-pre-existing-'));
+  try {
+    execFileSync('git', ['init'], { cwd: tmp });
+    execFileSync('git', ['config', 'user.email', 'test@example.com'], { cwd: tmp });
+    execFileSync('git', ['config', 'user.name', 'Test'], { cwd: tmp });
+    const rel = 'services/example-module.js';
+    const abs = path.join(tmp, rel);
+    fs.mkdirSync(path.dirname(abs), { recursive: true });
+    fs.writeFileSync(abs, 'export function wiredMarker() { return true; }\n');
+    execFileSync('git', ['add', rel], { cwd: tmp });
+    execFileSync('git', ['commit', '-m', 'seed'], { cwd: tmp });
+
+    const q = makeQueue([{
+      id: 'wire',
+      target_file: rel,
+      task: 'wire marker',
+      status: STEP_STATUS.PENDING,
+      file_contains: ['wiredMarker'],
+    }]);
+    const claimed = await claimPreExistingSatisfiedSteps(q, { root: tmp });
+    assert.deepEqual(claimed, ['wire']);
+    assert.equal(q.steps[0].status, STEP_STATUS.DONE);
+    assert.equal(q.steps[0].pre_existing, true);
+  } finally {
+    fs.rmSync(tmp, { recursive: true, force: true });
+  }
 });
