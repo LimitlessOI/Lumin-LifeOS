@@ -2197,13 +2197,13 @@
     },
     {
       "id": "sb-surface-scrape-failure-reason",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/site-builder.js",
       "task": "Surface the REAL underlying scrape error instead of a bare scrapeFetchFailed:true flag. Live-reproduced finding (2026-07-25, founder session): 3 back-to-back live build-variants calls against 3 completely different real domains (wellroundedmomma.com, sherrylhopkins.com, and even a maximally simple static page example.com with zero JS) ALL failed identically with scrapeFetchFailed:true / scrapePoisoned:true, despite all 3 domains returning a normal HTTP 200 to a plain curl request from outside the container. This strongly suggests the failure is inside scrapeBusinessInfo()'s try block (Puppeteer launch, page.goto, or page.evaluate) rather than the target sites -- but the current catch block (around the end of scrapeBusinessInfo, the `catch (err) { ... logger.warn('[SITE] Scrape failed, using AI extraction only', { url, error: err.message }); return applyScrapeGuard({ ...extracted, sourceUrl: url, scrapeFetchFailed: true }, ...) }` block) only logs err.message server-side and never returns it to the caller, so there is currently no way to diagnose this from outside the running container.",
       "spec": "In services/site-builder.js, in scrapeBusinessInfo()'s catch block (the one that currently sets scrapeFetchFailed:true), ADD a new field `scrapeFailureReason: String(err?.message || err).slice(0, 300)` to the object passed into applyScrapeGuard's first argument, alongside the existing scrapeFetchFailed:true. Do not change any other behavior of this catch block -- only add this one new field so the real error message flows through businessInfo and becomes visible in the API response's metadata.businessInfo.scrapeFailureReason for the next diagnostic pass. Do not modify the try block, the launch config, or any other function in this file.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "priority": "high",
       "source": "founder_directive_2026-07-24",
       "finding_note": "Founder standing directive: when the system hits something it can't resolve, diagnose and fix the real cause rather than stop or guess. This is a real, reproducible, 3-for-3 scrape failure across totally unrelated real domains including a trivial static page -- worth investigating since it could affect the live prospect pipeline, not just this session's tests. This step makes the next diagnostic pass possible; it does not yet fix the underlying scrape failure itself, because the real cause isn't visible without this first.",
@@ -2212,7 +2212,15 @@
       ],
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "sb-surface-scrape-failure-reason",
-      "mission_id": "PRODUCT-site-builder"
+      "mission_id": "PRODUCT-site-builder",
+      "last_attempt_at": "2026-07-26T03:58:02.181Z",
+      "last_error": "NOT_ON_BLUEPRINT",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "failure_signature": "NOT_ON_BLUEPRINT",
+      "same_signature_count": 1,
+      "escalation_class": "governance_block"
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",
@@ -2222,4 +2230,3 @@
   "mission_id": "PRODUCT-site-builder",
   "twin_kind": "product_build_queue_registered"
 }
-
