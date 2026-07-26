@@ -2197,7 +2197,7 @@
     },
     {
       "id": "sb-surface-scrape-failure-reason",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/site-builder.js",
       "max_output_tokens": 40000,
       "task": "Surface the REAL underlying scrape error instead of a bare scrapeFetchFailed:true flag. Live-reproduced finding (2026-07-25, founder session): 3 back-to-back live build-variants calls against 3 completely different real domains (wellroundedmomma.com, sherrylhopkins.com, and even a maximally simple static page example.com with zero JS) ALL failed identically with scrapeFetchFailed:true / scrapePoisoned:true, despite all 3 domains returning a normal HTTP 200 to a plain curl request from outside the container. This strongly suggests the failure is inside scrapeBusinessInfo()'s try block (Puppeteer launch, page.goto, or page.evaluate) rather than the target sites -- but the current catch block (around the end of scrapeBusinessInfo, the `catch (err) { ... logger.warn('[SITE] Scrape failed, using AI extraction only', { url, error: err.message }); return applyScrapeGuard({ ...extracted, sourceUrl: url, scrapeFetchFailed: true }, ...) }` block) only logs err.message server-side and never returns it to the caller, so there is currently no way to diagnose this from outside the running container.",
@@ -2214,15 +2214,15 @@
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "sb-surface-scrape-failure-reason",
       "mission_id": "PRODUCT-site-builder",
-      "last_attempt_at": "2026-07-26T04:49:40.328Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 0b is < 30% of existing 106964b",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "58dbadb1351d16c9df18a4846486d89297035d50",
       "built_sha": null,
       "proof": null,
       "failure_signature": "codegen_authoring_failed: codegen_stub_detected: generated Nb is < N% of existing #",
       "same_signature_count": 3,
       "escalation_class": "same_signature_repeat",
-      "revive_count": 4,
+      "revive_count": 0,
       "revived_at": "2026-07-26T04:45:59.357Z",
       "last_attempt": null,
       "demoted": false,
@@ -2237,30 +2237,8 @@
       "blocker_resolution": null,
       "model_rotation": 1,
       "force_model_rotation": true,
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/site-builder/twins/steps/sb-surface-scrape-failure-reason.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-26T04:54:27.251Z",
-        "shipped_at": "2026-07-26T04:54:27.251Z",
-        "commit_sha": null,
-        "content_sha256": "a83beccc40f5d214e28c8003eb5322bf9acc9d7d1ef8e4e49324818baccd69a1",
-        "target_file": "services/site-builder.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/site-builder.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/site-builder/twins/steps/sb-surface-scrape-failure-reason.exact",
-          "content_sha256": "a83beccc40f5d214e28c8003eb5322bf9acc9d7d1ef8e4e49324818baccd69a1"
-        }
-      },
-      "shipped_at": "2026-07-26T04:54:27.251Z"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-26T04:54:33.573Z"
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",
