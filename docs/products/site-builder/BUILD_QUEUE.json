@@ -2507,7 +2507,7 @@
     },
     {
       "id": "sb-expose-generation-errors-in-response",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/site-builder.js",
       "priority": "high",
       "patch_mode": true,
@@ -2516,7 +2516,7 @@
       "task": "Fix a real, reproducible bug found live 2026-07-26: build-variants against a real client site (wellroundedmomma.com, itself Lumin-hosted, confirmed reachable via direct curl 200) returns {ok:false, error:\"all variant generations failed\"} with zero diagnostic detail. Root cause traced: the per-design-system loop in buildVariants() has a catch block that only logs server-side (logger.warn(\"[SITE] variant generation failed (skipping)\", ...)) and never records the thrown error anywhere visible to the API caller -- this is the same observability class as the killedVariants gap fixed earlier tonight, but for thrown exceptions instead of explicit quality-gate kills. When ALL design systems throw, the final response is a single opaque message with no way to diagnose which design system failed or why, from outside server log access.",
       "spec": "PATCH MODE. Output ONLY one <<<OLD>>>/<<<NEW>>>/<<<END>>> block, no full file.\n\nFind this exact block inside buildVariants() (the per-design-system loop's outer catch):\n\n        } catch (err) {\n          logger.warn('[SITE] variant generation failed (skipping)', { clientId, style: ds.id, error: err.message });\n        }\n      }\n\n      if (!variants.length) throw new Error('all variant generations failed');\n\nReplace it with a version that ALSO records the failure in a lightweight array so it survives past the throw (name/error only -- never any partial HTML):\n\n        } catch (err) {\n          logger.warn('[SITE] variant generation failed (skipping)', { clientId, style: ds.id, error: err.message });\n          generationErrors.push({ id: ds.id, name: ds.name, error: err.message });\n        }\n      }\n\n      if (!variants.length) {\n        const detail = generationErrors.length ? `: ${generationErrors.map((e) => `${e.id}=${e.error}`).join('; ')}` : '';\n        const allFailedErr = new Error(`all variant generations failed${detail}`);\n        allFailedErr.generationErrors = generationErrors;\n        throw allFailedErr;\n      }\n\nThen find where `const killedVariants = [];` is declared near the top of buildVariants() (same function) and add a sibling array declaration immediately after it:\n\nconst killedVariants = [];\nconst generationErrors = [];\n\nFinally, find the top-level route handler or catch site that turns a thrown buildVariants() error into the {ok:false, error: err.message} JSON response (search for where the string \"all variant generations failed\" would surface, likely a catch around the buildVariants() call in routes/site-builder-routes.js or similar) and add `generationErrors: err.generationErrors || []` as a sibling field in that same error response object, so the per-design-system failure detail survives into the actual API response. Do not change the shape or meaning of any existing field.",
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "source": "founder_directive_2026-07-26",
       "finding_note": "Found live 2026-07-26 while re-testing baseline-kill against real business URLs post-wiring-fix: wellroundedmomma.com (a real Lumin-hosted client site, confirmed reachable) reproducibly returns all variant generations failed with zero diagnostic detail. example.com and starbucks.com both succeeded in the same test session, so this is domain-specific, not a regression from tonight's wiring -- but it is currently undiagnosable without server log access.",
       "file_contains": [
@@ -2525,7 +2525,7 @@
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "sb-expose-generation-errors-in-response",
       "mission_id": "PRODUCT-site-builder",
-      "last_attempt_at": "2026-07-26T21:43:40.236Z",
+      "last_attempt_at": null,
       "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 0b is < 30% of existing 108458b. underlying: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///u",
       "commit_sha": null,
       "built_sha": null,
@@ -2535,8 +2535,8 @@
       "escalation_class": "same_signature_repeat",
       "escalation_required": false,
       "escalation_note": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-26T21:43:18.313Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-26T21:45:22.914Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -2547,7 +2547,31 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/site-builder/twins/steps/sb-expose-generation-errors-in-response.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-26T21:45:23.015Z",
+        "shipped_at": "2026-07-26T21:45:23.015Z",
+        "commit_sha": null,
+        "content_sha256": "2adf9e6eaf836b3dbd36556beb267fd1ede62814845d677aa20f45fd5a52f1c9",
+        "target_file": "services/site-builder.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/site-builder.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/site-builder/twins/steps/sb-expose-generation-errors-in-response.exact",
+          "content_sha256": "2adf9e6eaf836b3dbd36556beb267fd1ede62814845d677aa20f45fd5a52f1c9"
+        }
+      },
+      "shipped_at": "2026-07-26T21:45:23.015Z"
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",

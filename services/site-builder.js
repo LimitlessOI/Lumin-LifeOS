@@ -751,10 +751,16 @@ export default class SiteBuilder {
           }
         } catch (err) {
           logger.warn('[SITE] variant generation failed (skipping)', { clientId, style: ds.id, error: err.message });
+          generationErrors.push({ id: ds.id, name: ds.name, error: err.message });
         }
       }
 
-      if (!variants.length) throw new Error('all variant generations failed');
+      if (!variants.length) {
+        const detail = generationErrors.length ? `: ${generationErrors.map((e) => `${e.id}=${e.error}`).join('; ')}` : '';
+        const allFailedErr = new Error(`all variant generations failed${detail}`);
+        allFailedErr.generationErrors = generationErrors;
+        throw allFailedErr;
+      }
 
       // Top-level qualityReport = the BEST-scoring variant. Callers (the prospect
       // pipeline's send-quality gate) need one canonical score to decide whether
