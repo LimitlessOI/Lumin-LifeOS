@@ -2355,11 +2355,34 @@
       ],
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "bo-patch-mode-codegen",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/builderos/twins/steps/bo-patch-mode-codegen.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-26T18:48:50.225Z",
+        "shipped_at": "2026-07-26T18:48:50.225Z",
+        "commit_sha": null,
+        "content_sha256": "58e02b7816aa584086955bb3c286f1fc1decc5ff04c59b6dabd3ca34fefe198a",
+        "target_file": "routes/factory-mount-routes.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "routes/factory-mount-routes.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/builderos/twins/steps/bo-patch-mode-codegen.exact",
+          "content_sha256": "58e02b7816aa584086955bb3c286f1fc1decc5ff04c59b6dabd3ca34fefe198a"
+        }
+      },
+      "shipped_at": "2026-07-26T18:48:50.225Z"
     }
   ],
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-builderos",
   "twin_kind": "product_build_queue_registered"
 }
-

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-26T18:46:02.128Z",
+  "generated_at": "2026-07-26T18:48:52.834Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12175,
   "files": [
@@ -67418,9 +67418,9 @@
     {
       "path": "routes/factory-mount-routes.js",
       "synopsis": "Pure: should the codegen prompt inline this file's existing content?",
-      "bytes": 19270,
-      "mtime": "2026-07-25T17:45:31.216Z",
-      "indexed_at": "2026-07-25T17:45:31.216Z"
+      "bytes": 21506,
+      "mtime": "2026-07-26T18:48:52.834Z",
+      "indexed_at": "2026-07-26T18:48:52.834Z"
     },
     {
       "path": "routes/faith-studio-routes.js",

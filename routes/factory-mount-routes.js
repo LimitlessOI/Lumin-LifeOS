@@ -75,7 +75,7 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
   const codegenRunner = callCouncilMember
     ? {
         generate: async ({
-          task, target_file, spec, tiers, max_output_tokens: stepMaxTokens,
+          task, target_file, spec, tiers, max_output_tokens: stepMaxTokens, patch_mode,
           last_error, expected_exports, failure_context, expected_exports_context,
         }) => {
           const targetExt = path.extname(target_file || '').toLowerCase();
@@ -91,7 +91,11 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
               'REPO CONSTRAINT: This repository is "type": "module" (ES modules).',
               'Use ES module syntax with named exports (e.g. export function name, export const name, export { name }).',
               'CRITICAL: do NOT duplicate any export. If you declare `export function name` or `export const name`, do NOT also add `export { name }` for the same identifier.',
-              'CRITICAL: if the EXISTING FILE CONTENT is provided below, preserve ALL existing code, routes, handlers, and exports. Output the COMPLETE updated file — do NOT return a stub or minimal example.',
+              ...(patch_mode ? [
+                'PATCH MODE: Do NOT output the complete file. Output EXACTLY ONE block in this exact format, nothing else: <<<OLD>>>\n(the exact, verbatim existing lines you are replacing, copied character-for-character from EXISTING FILE CONTENT below)\n<<<NEW>>>\n(your replacement lines)\n<<<END>>>. The OLD block must match a contiguous substring of EXISTING FILE CONTENT EXACTLY, including whitespace -- copy it, do not retype it from memory.',
+              ] : [
+                'CRITICAL: if the EXISTING FILE CONTENT is provided below, preserve ALL existing code, routes, handlers, and exports. Output the COMPLETE updated file — do NOT return a stub or minimal example.',
+              ]),
               'Do NOT use CommonJS require or module.exports.',
             ] : []),
             ...(isSql ? [
@@ -111,12 +115,14 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
             ] : []),
           ];
           const absTarget = target_file ? (path.isAbsolute(target_file) ? target_file : path.join(REPO_ROOT, target_file)) : null;
+          let existingFileContent = null;
           const existingContentLines = [];
           if (absTarget) {
             try {
               if (fs.existsSync(absTarget) && fs.statSync(absTarget).isFile()
                 && shouldIncludeExistingFileContent(fs.statSync(absTarget).size)) {
-                existingContentLines.push('EXISTING FILE CONTENT (preserve all existing code; output the complete updated file):\n' + fs.readFileSync(absTarget, 'utf8'));
+                existingFileContent = fs.readFileSync(absTarget, 'utf8');
+                existingContentLines.push('EXISTING FILE CONTENT (preserve all existing code; output the complete updated file):\n' + existingFileContent);
               }
             } catch { /* ignore read errors */ }
           }
@@ -145,7 +151,42 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
                 returnObject: true,
                 critical: true,
               });
-              const content = extractContent(typeof raw === 'string' ? raw : raw?.content || raw?.text || '');
+              let content = extractContent(typeof raw === 'string' ? raw : raw?.content || raw?.text || '');
+
+              if (patch_mode && existingFileContent) {
+                const oldMarker = '<<<OLD>>>\n';
+                const newMarker = '<<<NEW>>>\n';
+                const endMarker = '<<<END>>>';
+
+                const oldStartIndex = content.indexOf(oldMarker);
+                const newStartIndex = content.indexOf(newMarker, oldStartIndex + oldMarker.length);
+                const newEndIndex = content.indexOf(endMarker, newStartIndex + newMarker.length);
+
+                if (oldStartIndex !== -1 && newStartIndex !== -1 && newEndIndex !== -1) {
+                  const oldText = content.substring(oldStartIndex + oldMarker.length, newStartIndex).trim();
+                  const newText = content.substring(newStartIndex + newMarker.length, newEndIndex).trim();
+
+                  if (!oldText) {
+                    lastError = 'patch_apply_failed: old_text_empty';
+                    continue;
+                  }
+
+                  // Read current file content fresh from disk for patch application
+                  const currentFileContent = fs.readFileSync(absTarget, 'utf8');
+                  const occurrences = currentFileContent.split(oldText).length - 1;
+
+                  if (occurrences !== 1) {
+                    lastError = `patch_apply_failed: old_text_ambiguous:${occurrences}_matches`;
+                    continue;
+                  }
+
+                  content = currentFileContent.replace(oldText, newText);
+                } else {
+                  lastError = 'patch_apply_failed: markers_missing';
+                  continue;
+                }
+              }
+
               if (content && content.trim()) {
                 const targetExt = path.extname(target_file || '').toLowerCase();
                 const needsJsCheck = ['.js', '.mjs', '.cjs', '.jsx', '.ts', '.tsx'].includes(targetExt);
