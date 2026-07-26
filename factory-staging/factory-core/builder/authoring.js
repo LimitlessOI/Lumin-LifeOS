@@ -182,12 +182,14 @@ export async function runAuthoring(step, codegenRunner) {
         stub_healed: true,
       };
     }
+    const underlyingReason = result?.error ? ` underlying: ${String(result.error).slice(0, 300)}` : '';
     return {
       ...base,
       ok: false,
-      reason: `codegen_stub_detected: generated ${content.length}b is < 30% of existing ${existingSize}b`,
-      error: `generated content appears to be a stub (existing ${existingSize}b, generated ${content.length}b)`,
+      reason: `codegen_stub_detected: generated ${content.length}b is < 30% of existing ${existingSize}b.${underlyingReason}`,
+      error: `generated content appears to be a stub (existing ${existingSize}b, generated ${content.length}b).${underlyingReason}`,
       model_tier: result?.model_tier || null,
+      codegen_error: result?.error || null,
     };
   }
 
