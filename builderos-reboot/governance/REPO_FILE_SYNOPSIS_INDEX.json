@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-26T06:57:39.278Z",
+  "generated_at": "2026-07-26T18:43:40.061Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12175,
   "files": [
@@ -40967,9 +40967,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 165020,
-      "mtime": "2026-07-25T17:40:26.540Z",
-      "indexed_at": "2026-07-25T17:40:37.599Z"
+      "bytes": 167683,
+      "mtime": "2026-07-26T18:43:28.827Z",
+      "indexed_at": "2026-07-26T18:43:40.061Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -71993,9 +71993,9 @@
     {
       "path": "scripts/run-site-builder-prealpha.mjs",
       "synopsis": "Site Builder pre-alpha SENTRY gate — Layer A (structural walkthrough).",
-      "bytes": 10724,
-      "mtime": "2026-07-24T12:50:09.527Z",
-      "indexed_at": "2026-07-24T12:50:09.527Z",
+      "bytes": 12314,
+      "mtime": "2026-07-26T18:42:15.023Z",
+      "indexed_at": "2026-07-26T18:43:40.061Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
