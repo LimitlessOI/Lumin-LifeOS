@@ -2426,6 +2426,38 @@
       "escalation_note": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-26T21:02:21.065Z"
+    },
+    {
+      "id": "s7",
+      "status": "pending",
+      "target_file": "public/overlay/site-builder-template-choice-ui.html",
+      "task": "build template choice UI",
+      "spec": "Create UI overlay to showcase new template choices.",
+      "depends_on": [
+        "s4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "<div id='template-choice-ui'>"
+      ],
+      "design_review_flagged": true
+    },
+    {
+      "id": "s8",
+      "status": "pending",
+      "target_file": "public/overlay/site-builder-element-label-ui.html",
+      "task": "build element label UI",
+      "spec": "Create UI overlay to show updated interactive element labels.",
+      "depends_on": [
+        "s6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "<div id='element-label-ui'>"
+      ],
+      "design_review_flagged": true
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",
