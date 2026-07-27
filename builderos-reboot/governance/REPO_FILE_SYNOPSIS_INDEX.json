@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-27T04:46:17.630Z",
+  "generated_at": "2026-07-27T04:46:27.405Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12178,
   "files": [
@@ -91096,8 +91096,8 @@
       "path": "services/site-builder-lead-capture.js",
       "synopsis": "Exports captureAndNotifyLead — services/site-builder-lead-capture.js.",
       "bytes": 2420,
-      "mtime": "2026-07-27T04:46:17.630Z",
-      "indexed_at": "2026-07-27T04:46:17.630Z"
+      "mtime": "2026-07-27T04:46:27.405Z",
+      "indexed_at": "2026-07-27T04:46:27.405Z"
     },
     {
       "path": "services/site-builder-logo-studio.js",
