@@ -7,6 +7,14 @@
       "added_real_lines": 30,
       "justification": "this is not hand-authored server logic under\nSO-001 -- the patch content is byte-identical to what the governed factory\nalready authored and SENTRY-verified via /factory/ship-queue (content_sha256\n58d7f4bb6176b9cbc2f7a4a0f5482ecd44ea1385352ff02f586fb257e38d6e7f), applied\nhere only because the factory's own automated commit step falsely reported\nsuccess without writing it. Real open bug filed in PRODUCT_HOME.md: the\nfactory needs to require a real commit_sha before claiming a step\npre-existing-satisfied.\n\nCo-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>",
       "commit_message_excerpt": "GAP-FILL: manually complete sb-lead-capture-route ship after factory falsely claimed commit success"
+    },
+    {
+      "at": "2026-07-27T22:20:16.715Z",
+      "file": "routes/tc-routes.js",
+      "is_new_file": false,
+      "added_real_lines": 122,
+      "justification": "(1) routes/tc-routes.js -- direct re-restoration\nof an already-justified security fix, identical regex, same standing\nauthorization as commit 778507eac9. (2) scripts/security-invariants-check.mjs\nand githooks/pre-commit -- CI/tooling infrastructure, not product server\nlogic; same category as other hand-written scripts/CI changes explicitly\nallowed under SO-001 even for governed-factory-scope products. Urgency\n(second live occurrence of the same currently-exploitable regression in 11\nminutes) overrides waiting for governed-factory dispatch, consistent with\nSO-002's fail-closed doctrine.\n\nCo-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>",
+      "commit_message_excerpt": "GAP-FILL: SECURITY -- re-fix requireLifeOSAdmin regression (2nd occurrence, 11min later) + build the structural guard"
     }
   ]
 }
