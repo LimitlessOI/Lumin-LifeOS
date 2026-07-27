@@ -189,6 +189,26 @@ export function registerGeneralBrowserAgentRoutes(app, deps = {}) {
         logger.info?.('[BROWSER-AGENT] envCreds WRM_WIX injected (email present, password redacted)');
       }
 
+      if (envCredKey === 'TC_IMAP' || envCredKey === 'ADAM_GMAIL' || envCredKey === 'GMAIL_ADAM') {
+        const { getTCImapUser, getTCImapPassword } = await import('../services/credential-aliases.js');
+        const email = String(getTCImapUser() || process.env.TC_IMAP_USER || 'adam@hopkinsgroup.org').trim();
+        const password = String(getTCImapPassword() || process.env.TC_IMAP_APP_PASSWORD || '').trim();
+        if (!email || !password) {
+          return res.status(503).json({
+            ok: false,
+            error: 'TC_IMAP_USER / TC_IMAP_APP_PASSWORD not set on tip',
+          });
+        }
+        effectiveGoal = [
+          `Log in to Google/Gmail with email ${email} and app password ${password}.`,
+          'If Google asks for an app password, use the provided app password.',
+          'If already logged in as that account, continue.',
+          'Do not invent credentials. Stay on accounts.google.com / mail.google.com.',
+          effectiveGoal,
+        ].join('\n');
+        logger.info?.('[BROWSER-AGENT] envCreds TC_IMAP/ADAM_GMAIL injected (email present, password redacted)');
+      }
+
       if (vaultService) {
         const accountManager = await getAccountManager();
         const acct = await resolveVaultAccount(accountManager, String(vaultService));
