@@ -2853,6 +2853,39 @@
         }
       },
       "shipped_at": "2026-07-27T04:51:25.592Z"
+    },
+    {
+      "id": "sb-lead-capture-route",
+      "status": "pending",
+      "target_file": "routes/site-builder-routes.js",
+      "priority": "high",
+      "patch_mode": true,
+      "max_output_tokens": 4000,
+      "depends_on": [
+        "sb-lead-capture-service"
+      ],
+      "task": "Step 2 of 3 of the lead-capture feature (step 1, services/site-builder-lead-capture.js's captureAndNotifyLead, already shipped and verified real). Add a public, rate-limited route exposing it so a real prospect on a real generated site can submit a lead. This route is PUBLIC (no requireKey) since real anonymous site visitors must be able to call it -- protected by rate limiting instead, same pattern already used for the public /health-score and /audit routes in this same file.",
+      "spec": "PATCH MODE. Output ONLY one <<<OLD>>>/<<<NEW>>>/<<<END>>> block, no full file.\n\nFind this exact block inside routes/site-builder-routes.js (the deliverability-status route, already shipped):\n\n  router.get('/deliverability-status', requireKey, async (req, res) => {\n    try {\n      const { checkDomainDeliverabilityDNS } = await import('../services/site-builder-deliverability-check.js');\n      const emailFrom = String(process.env.EMAIL_FROM || '').trim();\n      const emailMatch = emailFrom.match(/@([^\\s>]+)/);\n      const domain = emailMatch ? emailMatch[1] : '';\n      if (!domain) {\n        return res.json({ ok: true, deliverabilityReady: false, deliverabilityBlockers: ['EMAIL_FROM not configured'], domain: null });\n      }\n      const result = await checkDomainDeliverabilityDNS(domain);\n      res.json({ ok: true, domain, ...result });\n    } catch (err) {\n      res.status(500).json({ ok: false, error: err.message });\n    }\n  });\n\nInsert a new route immediately AFTER it (do not modify the /deliverability-status route itself):\n\n  router.get('/deliverability-status', requireKey, async (req, res) => {\n    try {\n      const { checkDomainDeliverabilityDNS } = await import('../services/site-builder-deliverability-check.js');\n      const emailFrom = String(process.env.EMAIL_FROM || '').trim();\n      const emailMatch = emailFrom.match(/@([^\\s>]+)/);\n      const domain = emailMatch ? emailMatch[1] : '';\n      if (!domain) {\n        return res.json({ ok: true, deliverabilityReady: false, deliverabilityBlockers: ['EMAIL_FROM not configured'], domain: null });\n      }\n      const result = await checkDomainDeliverabilityDNS(domain);\n      res.json({ ok: true, domain, ...result });\n    } catch (err) {\n      res.status(500).json({ ok: false, error: err.message });\n    }\n  });\n\n  const leadCaptureLimiter = rateLimit({\n    windowMs: 60 * 60 * 1000,\n    max: 20,\n    message: { ok: false, error: 'Too many submissions — please call or email us directly.' },\n    standardHeaders: true,\n    legacyHeaders: false,\n  });\n\n  /**\n   * POST /api/v1/sites/:clientId/lead\n   * Public lead-capture form submission for a generated site. Rate-limited,\n   * not requireKey-gated -- real anonymous prospects call this directly.\n   */\n  router.post('/:clientId/lead', leadCaptureLimiter, async (req, res) => {\n    try {\n      const clientId = String(req.params.clientId || '').trim();\n      if (!clientId) return res.status(400).json({ ok: false, error: 'clientId required' });\n      // Honeypot: real visitors never fill \"company\"; bots do.\n      if (String(req.body?.company || '').trim()) return res.json({ ok: true });\n\n      const { captureAndNotifyLead } = await import('../services/site-builder-lead-capture.js');\n      const result = await captureAndNotifyLead({\n        pool,\n        clientId,\n        name: String(req.body?.name || '').trim().slice(0, 120),\n        phone: String(req.body?.phone || '').trim().slice(0, 40),\n        email: String(req.body?.email || '').trim().slice(0, 160),\n        message: String(req.body?.message || '').trim().slice(0, 2000),\n        source: String(req.body?.source || 'site-builder').trim().slice(0, 80),\n        notifier: notificationService,\n        logger,\n      });\n      if (!result.ok) return res.status(400).json(result);\n      res.json({ ok: true, leadId: result.leadId, message: 'Thank you! We will be in touch shortly.' });\n    } catch (err) {\n      res.status(500).json({ ok: false, error: err.message });\n    }\n  });\n\nUse `rateLimit`, `pool`, `notificationService`, and `logger` exactly as named -- these are already available in this file's scope (rateLimit is already imported at the top of the file and used by the existing publicHealthScoreLimiter a few lines above; pool and notificationService are both already destructured parameters of createSiteBuilderRoutes). Do not redeclare or reimport any of them. Do not change any other route or function in the file.",
+      "founder_gated": false,
+      "attempts": 0,
+      "source": "founder_directive_2026-07-27",
+      "finding_note": "Design/competitive-feature audit 2026-07-27, step 2 of 3: exposes the already-shipped, already-verified captureAndNotifyLead service as a real, public, rate-limited route so generated sites can actually capture leads once step 3 (template form injection) wires a real <form> to POST here.",
+      "expected_exports": [
+        "createSiteBuilderRoutes"
+      ],
+      "assertion_spec": {
+        "expected_exports": [
+          "createSiteBuilderRoutes"
+        ],
+        "file_contains": [
+          "leadCaptureLimiter",
+          "/:clientId/lead",
+          "captureAndNotifyLead"
+        ]
+      },
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "sb-lead-capture-route",
+      "mission_id": "PRODUCT-site-builder"
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",
