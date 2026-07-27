@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-27T22:05:56.161Z",
+  "generated_at": "2026-07-27T22:09:19.714Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12179,
   "files": [
@@ -21634,9 +21634,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3672294,
-      "mtime": "2026-07-27T03:02:51.554Z",
-      "indexed_at": "2026-07-27T03:03:22.003Z"
+      "bytes": 3672921,
+      "mtime": "2026-07-27T22:09:03.298Z",
+      "indexed_at": "2026-07-27T22:09:19.714Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -41033,9 +41033,9 @@
     {
       "path": "docs/products/tc-service/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — TC Service",
-      "bytes": 123031,
-      "mtime": "2026-07-27T22:05:56.161Z",
-      "indexed_at": "2026-07-27T22:05:56.161Z"
+      "bytes": 125483,
+      "mtime": "2026-07-27T22:08:45.862Z",
+      "indexed_at": "2026-07-27T22:09:19.714Z"
     },
     {
       "path": "docs/products/TCSERVICE.md",
@@ -69162,9 +69162,9 @@
     {
       "path": "routes/tc-routes.js",
       "synopsis": "tc-routes.js",
-      "bytes": 167002,
-      "mtime": "2026-07-27T22:05:56.161Z",
-      "indexed_at": "2026-07-27T22:05:56.161Z",
+      "bytes": 169500,
+      "mtime": "2026-07-27T22:08:13.919Z",
+      "indexed_at": "2026-07-27T22:09:19.714Z",
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]
