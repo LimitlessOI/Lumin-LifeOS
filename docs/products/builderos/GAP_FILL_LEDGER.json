@@ -1,0 +1,12 @@
+{
+  "entries": [
+    {
+      "at": "2026-07-27T20:52:55.390Z",
+      "file": "routes/site-builder-routes.js",
+      "is_new_file": false,
+      "added_real_lines": 30,
+      "justification": "this is not hand-authored server logic under\nSO-001 -- the patch content is byte-identical to what the governed factory\nalready authored and SENTRY-verified via /factory/ship-queue (content_sha256\n58d7f4bb6176b9cbc2f7a4a0f5482ecd44ea1385352ff02f586fb257e38d6e7f), applied\nhere only because the factory's own automated commit step falsely reported\nsuccess without writing it. Real open bug filed in PRODUCT_HOME.md: the\nfactory needs to require a real commit_sha before claiming a step\npre-existing-satisfied.\n\nCo-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>",
+      "commit_message_excerpt": "GAP-FILL: manually complete sb-lead-capture-route ship after factory falsely claimed commit success"
+    }
+  ]
+}

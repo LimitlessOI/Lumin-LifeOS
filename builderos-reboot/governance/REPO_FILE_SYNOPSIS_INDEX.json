@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-27T20:52:54.915Z",
+  "generated_at": "2026-07-27T20:59:04.280Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12178,
+  "file_count": 12179,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -39819,6 +39819,14 @@
       "synopsis_index_only": true
     },
     {
+      "path": "docs/products/builderos/GAP_FILL_LEDGER.json",
+      "synopsis": "Documentation — GAP FILL LEDGER.",
+      "bytes": 915,
+      "mtime": "2026-07-27T20:52:55.392Z",
+      "indexed_at": "2026-07-27T20:59:04.280Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "docs/products/builderos/OB_EXECUTION_LADDER.md",
       "synopsis": "Canonical OpenAI Builder execution ladder",
       "bytes": 7058,
@@ -40553,9 +40561,9 @@
     {
       "path": "docs/products/lifere/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeRE",
-      "bytes": 31587,
-      "mtime": "2026-07-27T04:50:52.264Z",
-      "indexed_at": "2026-07-27T04:51:06.891Z"
+      "bytes": 33716,
+      "mtime": "2026-07-27T20:58:52.341Z",
+      "indexed_at": "2026-07-27T20:59:04.280Z"
     },
     {
       "path": "docs/products/limitlessos/conversations/2026-06-29-founder-ecosystem-session.md",
@@ -88589,9 +88597,9 @@
     {
       "path": "services/lifere-council-router.js",
       "synopsis": "LifeRE council router — invokes live council when callCouncilMember provided.",
-      "bytes": 4498,
-      "mtime": "2026-07-21T05:32:04.596Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "bytes": 4480,
+      "mtime": "2026-07-27T20:58:24.089Z",
+      "indexed_at": "2026-07-27T20:59:04.280Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]

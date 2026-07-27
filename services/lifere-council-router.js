@@ -56,7 +56,7 @@ export async function runCouncilDeliberation({
     const spec = cfg.roles?.[key] || cfg.roles?.[role];
     let summary = `${role} reviewed: ${message?.slice(0, 120) || intent}`;
 
-    if (callCouncilMember && role !== 'CFO') {
+    if (callCouncilMember) {
       try {
         const prompt = `[LifeRE ${role}] Intent: ${intent}\nUser: ${userId}\nMessage: ${message || ''}\nRespond in 2-3 sentences as ${role}. Label uncertainty THINK if inferring.`;
         const member = role === 'Chair' ? 'anthropic' : 'gemini';
