@@ -705,7 +705,8 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
     try {
       const { checkDomainDeliverabilityDNS } = await import('../services/site-builder-deliverability-check.js');
       const emailFrom = String(process.env.EMAIL_FROM || '').trim();
-      const domain = emailFrom.includes('@') ? emailFrom.split('@')[1] : '';
+      const emailMatch = emailFrom.match(/@([^\s>]+)/);
+      const domain = emailMatch ? emailMatch[1] : '';
       if (!domain) {
         return res.json({ ok: true, deliverabilityReady: false, deliverabilityBlockers: ['EMAIL_FROM not configured'], domain: null });
       }
