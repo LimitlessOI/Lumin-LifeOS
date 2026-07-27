@@ -24,7 +24,8 @@ function sha256Buffer(buf) {
 }
 
 export function pathMatchesSandbox(relativePath, sandboxBoundary) {
-  const normalized = relativePath.replace(/\\/g, '/');
+  const normalized = path.posix.normalize(String(relativePath || '').replace(/\\/g, '/'));
+  if (normalized === '..' || normalized.startsWith('../')) return false;
   const boundary = sandboxBoundary.replace(/\\/g, '/').replace(/\/\*\*$/, '');
   return normalized === boundary || normalized.startsWith(`${boundary}/`);
 }

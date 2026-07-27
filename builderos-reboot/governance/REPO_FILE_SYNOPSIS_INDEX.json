@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-27T01:37:56.981Z",
+  "generated_at": "2026-07-27T03:03:22.003Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12177,
   "files": [
@@ -21634,9 +21634,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3650398,
-      "mtime": "2026-07-22T01:59:35.941Z",
-      "indexed_at": "2026-07-22T02:00:06.373Z"
+      "bytes": 3672294,
+      "mtime": "2026-07-27T03:02:51.554Z",
+      "indexed_at": "2026-07-27T03:03:22.003Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -39828,9 +39828,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 249409,
-      "mtime": "2026-07-26T20:58:37.050Z",
-      "indexed_at": "2026-07-26T20:58:44.712Z"
+      "bytes": 251127,
+      "mtime": "2026-07-27T03:01:21.777Z",
+      "indexed_at": "2026-07-27T03:03:22.003Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -40553,9 +40553,9 @@
     {
       "path": "docs/products/lifere/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeRE",
-      "bytes": 29526,
-      "mtime": "2026-07-24T12:53:46.243Z",
-      "indexed_at": "2026-07-24T12:53:46.243Z"
+      "bytes": 30645,
+      "mtime": "2026-07-27T03:01:04.607Z",
+      "indexed_at": "2026-07-27T03:03:22.003Z"
     },
     {
       "path": "docs/products/limitlessos/conversations/2026-06-29-founder-ecosystem-session.md",
@@ -40967,9 +40967,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 200415,
-      "mtime": "2026-07-27T01:37:47.860Z",
-      "indexed_at": "2026-07-27T01:37:56.981Z"
+      "bytes": 202433,
+      "mtime": "2026-07-27T03:02:01.146Z",
+      "indexed_at": "2026-07-27T03:03:22.003Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -61155,9 +61155,9 @@
     {
       "path": "factory-staging/factory-core/builder/run-step.js",
       "synopsis": "Exports resolveRepoPath — factory-staging/factory-core/builder/run-step.js.",
-      "bytes": 10968,
-      "mtime": "2026-07-21T05:32:04.165Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z"
+      "bytes": 11077,
+      "mtime": "2026-07-27T02:56:57.221Z",
+      "indexed_at": "2026-07-27T03:03:22.003Z"
     },
     {
       "path": "factory-staging/factory-core/builder/sandbox.js",
@@ -61415,9 +61415,9 @@
     {
       "path": "factory-staging/factory-core/repo-paths.js",
       "synopsis": "Factory-core path roots leaf — REPO_ROOT/FACTORY_ROOT, dependency-free.",
-      "bytes": 767,
-      "mtime": "2026-07-21T05:32:04.169Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "bytes": 944,
+      "mtime": "2026-07-27T02:57:08.314Z",
+      "indexed_at": "2026-07-27T03:03:22.003Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -68873,9 +68873,9 @@
     {
       "path": "routes/site-builder-checkout-routes.js",
       "synopsis": "Site Builder beta publish checkout routes ($45 entry + 2 mo management).",
-      "bytes": 14277,
-      "mtime": "2026-07-23T22:49:31.665Z",
-      "indexed_at": "2026-07-23T22:49:31.665Z",
+      "bytes": 14710,
+      "mtime": "2026-07-27T03:00:20.544Z",
+      "indexed_at": "2026-07-27T03:03:22.003Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -88666,9 +88666,9 @@
     {
       "path": "services/lifere-funnel-ingress.js",
       "synopsis": "LifeRE ClickFunnels webhook ingress (stub without secret).",
-      "bytes": 1173,
-      "mtime": "2026-07-21T05:32:04.597Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "bytes": 1206,
+      "mtime": "2026-07-27T02:59:30.718Z",
+      "indexed_at": "2026-07-27T03:03:22.003Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -91123,9 +91123,9 @@
     {
       "path": "services/site-builder-opportunity-scorer.js",
       "synopsis": "Scores how bad a prospect's EXISTING website is so we know who to pitch first.",
-      "bytes": 9842,
-      "mtime": "2026-07-23T07:28:14.440Z",
-      "indexed_at": "2026-07-23T07:28:14.440Z",
+      "bytes": 10595,
+      "mtime": "2026-07-27T02:58:47.880Z",
+      "indexed_at": "2026-07-27T03:03:22.003Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -91201,9 +91201,9 @@
     {
       "path": "services/site-builder-scrape-guard.js",
       "synopsis": "Detect CDN/error/parked scrape poison and resolve safe business names.",
-      "bytes": 5223,
-      "mtime": "2026-07-23T07:28:14.440Z",
-      "indexed_at": "2026-07-23T07:28:14.440Z",
+      "bytes": 7363,
+      "mtime": "2026-07-27T02:58:30.612Z",
+      "indexed_at": "2026-07-27T03:03:22.003Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]

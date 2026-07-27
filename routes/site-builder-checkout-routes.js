@@ -3,6 +3,7 @@
  * @ssot docs/products/site-builder/PRODUCT_HOME.md
  */
 import { Router } from 'express';
+import rateLimit from 'express-rate-limit';
 import { promises as fsp } from 'node:fs';
 import path from 'node:path';
 import logger from '../services/logger.js';
@@ -55,6 +56,16 @@ async function loadPreviewMeta(clientId, pool = null) {
 
 export function createSiteBuilderCheckoutRoutes(app, { pool, baseUrl } = {}) {
   const router = Router();
+
+  // Comp codes are short (config/site-builder-pricing.js min length 4) and a match
+  // bypasses Stripe entirely -- throttle guessing attempts hard.
+  const compCodeLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000,
+    max: 10,
+    message: { ok: false, error: 'Too many attempts — try again in an hour' },
+    standardHeaders: true,
+    legacyHeaders: false,
+  });
 
   router.get('/publish/pricing', (_req, res) => {
     res.json({
@@ -125,7 +136,7 @@ export function createSiteBuilderCheckoutRoutes(app, { pool, baseUrl } = {}) {
 </html>`;
   }
 
-  router.get('/publish/checkout', async (req, res) => {
+  router.get('/publish/checkout', compCodeLimiter, async (req, res) => {
     try {
       const clientId = String(req.query.clientId || req.query.id || '').trim();
       if (!clientId || !/^[\w-]+$/.test(clientId)) {
