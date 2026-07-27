@@ -125,8 +125,21 @@ export function authorAssertionsFromSpec(step) {
  * declared directly (those are already provenance-clean); only fills the gap.
  */
 export function attachAuthoredAssertions(step) {
-  if (Array.isArray(step?.behavior_assertions) && step.behavior_assertions.length > 0) {
-    return { ok: true, step, provenance: 'blueprint_declared' };
+  const frozen = Array.isArray(step?.behavior_assertions) && step.behavior_assertions.length > 0;
+  if (frozen) {
+    // A frozen exports_smoke assertion is only trustworthy if its `exports`
+    // still match the step's CURRENT expected_exports -- otherwise a stale
+    // first-pass guess (auto-inferred, later corrected) would be trusted
+    // forever, since this function otherwise never re-derives once non-empty.
+    // Confirmed live 2026-07-27: exactly this staleness silently ignored
+    // multiple explicit expected_exports corrections across several redeploys.
+    const declaredExports = Array.isArray(step?.expected_exports) ? step.expected_exports : null;
+    const existingExportsAssertion = step.behavior_assertions.find((a) => a?.type === 'exports_smoke');
+    const stale = declaredExports && existingExportsAssertion
+      && JSON.stringify(existingExportsAssertion.exports) !== JSON.stringify(declaredExports);
+    if (!stale) {
+      return { ok: true, step, provenance: 'blueprint_declared' };
+    }
   }
   const authored = authorAssertionsFromSpec(step);
   if (!authored.ok) return { ok: false, step, reason: authored.reason };

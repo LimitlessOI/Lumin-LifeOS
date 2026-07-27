@@ -28,7 +28,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { execFileSync } from 'node:child_process';
 import { createUsefulWorkGuard } from './useful-work-guard.js';
 import { governedFactoryOnly } from './governed-factory-guard.js';
-import { hasTokenCapacity, dailyBuildBudget, recordDailyBuildAttempts, mergeQueueRuntimeStatus, defaultPlannerCallModel, discoverPlanWork, discoverSentryFixWork, runPlanBuildQueue } from './never-stop-product-factory.js';
+import { hasTokenCapacity, dailyBuildBudget, recordDailyBuildAttempts, mergeQueueRuntimeStatus, defaultPlannerCallModel, discoverPlanWork, discoverSentryFixWork, runPlanBuildQueue, commitQueueStatusToRepo } from './never-stop-product-factory.js';
 import { planGovernedBuildQueueRun } from './governed-build-queue-scheduler.js';
 import {
   loadBuildQueue,
@@ -737,24 +737,22 @@ async function fetchRemoteBuildQueue(productId) {
   return loadBuildQueue(productId);
 }
 
+// Delegates to commitQueueStatusToRepo (never-stop-product-factory.js), which
+// does a real GET -> merge -> PUT-with-sha retry loop on a lost race (409/422).
+// The prior inline implementation here used commitManyToGitHub with no retry
+// or re-merge on failure -- it just logged a warning and dropped the update,
+// which is the confirmed root cause of queue fields observed reverting to a
+// stale value shortly after being corrected (a sibling commit landing in the
+// same window silently won, and this function's update was never retried).
 async function commitQueueStatus(product_id, stepIds, queue, commitSha, logger) {
-  const { _sourcePath, ...clean } = queue;
-  const queuePath = queue._sourcePath || queuePathForProduct(product_id);
-  const relPath = path.relative(REPO_ROOT, queuePath).replace(/\\/g, '/');
-  const content = `${JSON.stringify(clean, null, 2)}\n`;
-  const branch = process.env.GITHUB_DEPLOY_BRANCH || 'main';
   const failed = commitSha === 'failed';
-  const statusTag = failed ? 'FAILED' : 'QUEUE';
-  const shaTag = failed ? '0000000' : commitSha.slice(0, 7);
-  try {
-    const result = await commitManyToGitHub([{ path: relPath, content }], `GOVERNED-AUTONOMOUS-${statusTag}: ${product_id} ${stepIds.join(', ')} ${shaTag}`, branch);
-    if (result?.ok && result.sha) {
-      logger?.info?.(`[GOVERNED-AUTONOMOUS-QUEUE] ${product_id} BUILD_QUEUE.json updated with ${shaTag}`);
-    } else {
-      logger?.warn?.(`[GOVERNED-AUTONOMOUS-QUEUE] ${product_id} commit returned !ok: ${result?.error || 'unknown'}`);
-    }
-  } catch (err) {
-    logger?.warn?.(`[GOVERNED-AUTONOMOUS-QUEUE] ${product_id} commit failed: ${err.message}`);
+  const shaTag = failed ? '0000000' : String(commitSha || '').slice(0, 7);
+  const queueWithId = { ...queue, product_id: queue.product_id || product_id };
+  const result = await commitQueueStatusToRepo(queueWithId, `${stepIds.join(', ')} ${shaTag}`.trim());
+  if (result?.ok) {
+    logger?.info?.(`[GOVERNED-AUTONOMOUS-QUEUE] ${product_id} BUILD_QUEUE.json updated with ${shaTag}`);
+  } else if (result?.error && result.error !== 'no_change') {
+    logger?.warn?.(`[GOVERNED-AUTONOMOUS-QUEUE] ${product_id} commit returned !ok: ${result.error}`);
   }
 }
 
@@ -988,10 +986,12 @@ export async function runGovernedAutonomousShipOnce({ logger, maxStepsPerProduct
       return { ok: true, shipped: 0, reason: 'no_shippable_steps', gaps: plan.total_gaps };
     }
     let shipped = 0;
+    let dispatchAttempts = 0;
     const perProduct = [];
     for (const entry of plan.by_product) {
       if (!Array.isArray(entry.ship_steps) || entry.ship_steps.length === 0) continue;
       const queue = queueCache[entry.product_id];
+      dispatchAttempts += 1;
       const { status, body } = await shipFn(entry);
       const ok = status === 200 && body && body.ok === true;
       let shippedIds = ok && Array.isArray(body.shipped)
@@ -1045,7 +1045,10 @@ export async function runGovernedAutonomousShipOnce({ logger, maxStepsPerProduct
       });
     }
     queueCommitted = await commitQueueRuntimeChanges(queueCache, queueSnapshots, 'queue', logger, queueCommitted);
-    recordDailyBuildAttempts(shipped);
+    // Count every real dispatch attempt against the daily cap, not just
+    // successes -- a step stuck retrying (each retry a real paid model call)
+    // previously never tripped the budget because only `shipped` was counted.
+    recordDailyBuildAttempts(dispatchAttempts);
     state.lastShipped = shipped;
     await persistState();
     return { ok: true, shipped, products: perProduct, gaps: plan.total_gaps };

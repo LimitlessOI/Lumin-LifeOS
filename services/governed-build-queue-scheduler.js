@@ -106,10 +106,23 @@ function inferQueueExpectations(queue) {
     // exports_smoke assertion so the builder gets precise missing-export
     // feedback instead of a generic "missing_behavior_proof" failure.
     if (Array.isArray(step.expected_exports) && step.expected_exports.length > 0) {
+      // A previously-materialized exports_smoke assertion is only trustworthy if
+      // its `exports` still match the CURRENT expected_exports -- otherwise a
+      // stale/wrong first-pass guess (e.g. an auto-inferred export name later
+      // corrected) silently persists forever, since the earlier checks below
+      // only catch "missing" or "static_export_scan", not "wrong". Confirmed
+      // live 2026-07-27: a corrected expected_exports value was ignored across
+      // multiple redeploys because this exact staleness was never detected.
+      const existingExportsAssertion = Array.isArray(step.behavior_assertions)
+        ? step.behavior_assertions.find((a) => a?.type === 'exports_smoke')
+        : null;
+      const existingExportsStale = existingExportsAssertion
+        && JSON.stringify(existingExportsAssertion.exports) !== JSON.stringify(step.expected_exports);
       const needsBehaviorAssertion =
         !Array.isArray(step.behavior_assertions) ||
         step.behavior_assertions.length === 0 ||
-        step.behavior_assertions.some((a) => a?.type === 'static_export_scan');
+        step.behavior_assertions.some((a) => a?.type === 'static_export_scan') ||
+        existingExportsStale;
       if (needsBehaviorAssertion) {
         step.behavior_assertions = [
           {

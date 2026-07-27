@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-27T03:07:15.987Z",
+  "generated_at": "2026-07-27T03:13:17.845Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12177,
   "files": [
@@ -39828,9 +39828,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 251127,
-      "mtime": "2026-07-27T03:01:21.777Z",
-      "indexed_at": "2026-07-27T03:03:22.003Z"
+      "bytes": 253380,
+      "mtime": "2026-07-27T03:12:52.750Z",
+      "indexed_at": "2026-07-27T03:13:17.845Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -61080,9 +61080,9 @@
     {
       "path": "factory-staging/factory-core/bpb/author-assertions.js",
       "synopsis": "STEP 5b — BPB authors behavior_assertions from the BLUEPRINT SPEC at",
-      "bytes": 17132,
-      "mtime": "2026-07-21T05:32:04.164Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "bytes": 18002,
+      "mtime": "2026-07-27T03:12:12.019Z",
+      "indexed_at": "2026-07-27T03:13:17.845Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -87243,9 +87243,9 @@
     {
       "path": "services/governed-autonomous-shipping-loop.js",
       "synopsis": "STEP 5g — the governed AUTONOMOUS shipping loop. When the STEP 5a",
-      "bytes": 55959,
-      "mtime": "2026-07-21T05:32:04.576Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "bytes": 56389,
+      "mtime": "2026-07-27T03:11:05.654Z",
+      "indexed_at": "2026-07-27T03:13:17.845Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -87253,9 +87253,9 @@
     {
       "path": "services/governed-build-queue-scheduler.js",
       "synopsis": "STEP 5f — the governed BUILD_QUEUE scheduler. Gathers the shippable",
-      "bytes": 9622,
-      "mtime": "2026-07-21T05:32:04.576Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "bytes": 10541,
+      "mtime": "2026-07-27T03:11:35.503Z",
+      "indexed_at": "2026-07-27T03:13:17.845Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
