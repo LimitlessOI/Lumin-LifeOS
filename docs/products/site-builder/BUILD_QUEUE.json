@@ -2603,7 +2603,7 @@
     },
     {
       "id": "sb-deliverability-status-route",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/site-builder-routes.js",
       "priority": "high",
       "patch_mode": true,
@@ -2630,7 +2630,7 @@
         "path": "/design-systems"
       },
       "last_attempt_at": "2026-07-27T01:11:28.528Z",
-      "last_error": null,
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerSiteBuilderRoutes; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
