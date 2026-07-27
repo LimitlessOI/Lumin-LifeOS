@@ -957,14 +957,33 @@ export function createCouncilService({
     const isFreeModel = COUNCIL_MEMBERS[member]?.isFree === true;
 
     if (!isFreeModel && Number.isFinite(effectiveSpendCap) && effectiveSpendCap > 0 && spend >= effectiveSpendCap) {
+      // SO-003: "never idle because one provider ran dry... the only hard
+      // stop is the daily budget cap." The cap itself stays hard (no spend
+      // beyond it, no silent raise) -- but hitting it must fail over to a
+      // free-tier provider, same as the two other spend gates above in this
+      // function, instead of going fully idle. Found live 2026-07-27: this
+      // was the one spend gate of the three missing the cascade, and it was
+      // the one actually firing (Chair chat returning "Nothing ran").
+      const nextProvider = await freeTierGovernor.getNextAvailable();
+      if (nextProvider) {
+        const fallbackMembers = freeTierGovernor.PROVIDER_LIMITS[nextProvider]?.councilMembers || ['cerebras_llama'];
+        for (const fallbackMember of fallbackMembers) {
+          if (COUNCIL_MEMBERS[fallbackMember]) {
+            console.log(
+              `💰 [SPEND CAP] $${spend.toFixed(4)}/$${effectiveSpendCap}${builderLane ? ' [builder lane]' : ''} → cascading ${member} to ${fallbackMember} (${nextProvider})`
+            );
+            return await callCouncilMember(fallbackMember, prompt, options);
+          }
+        }
+      }
       throw new Error(
         builderLane
           ? `BuilderOS spend limit ($${effectiveSpendCap}) reached at $${spend.toFixed(
               4
-            )} for ${today}. Raise BUILDEROS_MAX_DAILY_SPEND or lower builder activity.`
+            )} for ${today}. Raise BUILDEROS_MAX_DAILY_SPEND or lower builder activity. No free providers available either.`
           : `Daily spend limit ($${effectiveSpendCap}) reached at $${spend.toFixed(
               4
-            )} for ${today}. Resets at midnight UTC.`
+            )} for ${today}. Resets at midnight UTC. No free providers available either.`
       );
     }
 
