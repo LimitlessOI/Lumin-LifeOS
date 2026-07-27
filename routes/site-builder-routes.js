@@ -697,6 +697,26 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
   });
 
   /**
+   * GET /api/v1/sites/deliverability-status
+   * Read-only check: does the cold-outreach sending domain (EMAIL_FROM) have
+   * real SPF/DKIM DNS records? Visibility only -- does not block sending.
+   */
+  router.get('/deliverability-status', requireKey, async (req, res) => {
+    try {
+      const { checkDomainDeliverabilityDNS } = await import('../services/site-builder-deliverability-check.js');
+      const emailFrom = String(process.env.EMAIL_FROM || '').trim();
+      const domain = emailFrom.includes('@') ? emailFrom.split('@')[1] : '';
+      if (!domain) {
+        return res.json({ ok: true, deliverabilityReady: false, deliverabilityBlockers: ['EMAIL_FROM not configured'], domain: null });
+      }
+      const result = await checkDomainDeliverabilityDNS(domain);
+      res.json({ ok: true, domain, ...result });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  /**
    * GET /api/v1/sites/logo-studio
    * Serve the interactive Logo Studio page. If a clientId is given, prefills the
    * business name/colors from that preview's metadata; otherwise uses query params.

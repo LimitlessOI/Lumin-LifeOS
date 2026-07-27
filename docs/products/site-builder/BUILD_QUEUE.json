@@ -2654,7 +2654,31 @@
           "deliverability-status",
           "checkDomainDeliverabilityDNS"
         ]
-      }
+      },
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/site-builder/twins/steps/sb-deliverability-status-route.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-27T01:30:36.358Z",
+        "shipped_at": "2026-07-27T01:30:36.358Z",
+        "commit_sha": null,
+        "content_sha256": "24b7e7f230e25e3f4792eaf732df9cb7a004add5b574ad132a6446d8523b97aa",
+        "target_file": "routes/site-builder-routes.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "routes/site-builder-routes.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/site-builder/twins/steps/sb-deliverability-status-route.exact",
+          "content_sha256": "24b7e7f230e25e3f4792eaf732df9cb7a004add5b574ad132a6446d8523b97aa"
+        }
+      },
+      "shipped_at": "2026-07-27T01:30:36.358Z"
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",

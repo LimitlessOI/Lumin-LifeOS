@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-27T01:28:51.728Z",
+  "generated_at": "2026-07-27T01:30:39.320Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12177,
   "files": [
@@ -68990,9 +68990,9 @@
     {
       "path": "routes/site-builder-routes.js",
       "synopsis": "Site Builder Routes — Done-for-you website pipeline",
-      "bytes": 56192,
-      "mtime": "2026-07-24T17:41:44.237Z",
-      "indexed_at": "2026-07-24T17:41:44.237Z",
+      "bytes": 57119,
+      "mtime": "2026-07-27T01:30:39.320Z",
+      "indexed_at": "2026-07-27T01:30:39.320Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
