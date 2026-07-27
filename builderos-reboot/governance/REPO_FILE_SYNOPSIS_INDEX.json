@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-27T03:03:22.003Z",
+  "generated_at": "2026-07-27T03:07:15.987Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12177,
   "files": [
@@ -40655,9 +40655,9 @@
     {
       "path": "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md",
       "synopsis": "SocialMediaOS Module Home",
-      "bytes": 21553,
-      "mtime": "2026-07-24T21:08:10.435Z",
-      "indexed_at": "2026-07-24T21:08:26.170Z"
+      "bytes": 23735,
+      "mtime": "2026-07-27T03:07:05.166Z",
+      "indexed_at": "2026-07-27T03:07:15.987Z"
     },
     {
       "path": "docs/products/memory-intelligence/FILE_MANIFEST.json",
@@ -91313,9 +91313,9 @@
     {
       "path": "services/socialmediaos-service.js",
       "synopsis": "SocialMediaOS / MarketingOS content-pack session and checkout service.",
-      "bytes": 14629,
-      "mtime": "2026-07-21T05:32:04.670Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "bytes": 14880,
+      "mtime": "2026-07-27T03:05:44.577Z",
+      "indexed_at": "2026-07-27T03:07:15.987Z",
       "ssot": [
         "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md"
       ]
