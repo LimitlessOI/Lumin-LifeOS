@@ -2603,7 +2603,7 @@
     },
     {
       "id": "sb-deliverability-status-route",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/site-builder-routes.js",
       "priority": "high",
       "patch_mode": true,
@@ -2623,7 +2623,7 @@
       "blueprint_step_id": "sb-deliverability-status-route",
       "mission_id": "PRODUCT-site-builder",
       "expected_exports": [
-        "createSiteBuilderRoutes"
+        "registerSiteBuilderRoutes"
       ],
       "behavior_assertions": [
         {
@@ -2639,14 +2639,27 @@
         "method": "GET",
         "path": "/design-systems"
       },
-      "last_attempt_at": "2026-07-27T01:05:46.039Z",
-      "last_error": null,
+      "last_attempt_at": "2026-07-27T01:08:28.971Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 0b is < 30% of existing 56192b. underlying: syntax_check_failed:openai_builder_mini: Command failed: /usr/local/bin/node --check /tmp/factory-codegen-1785114508935.mjs",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "failure_signature": null,
-      "same_signature_count": 0,
-      "escalation_class": "same_signature_repeat"
+      "failure_signature": "codegen_authoring_failed: codegen_stub_detected: generated Nb is < N% of existing Nb. underlying: syntax_check_failed:openai_builder_mini: Command failed: /usr/local/bin/node --che",
+      "same_signature_count": 2,
+      "escalation_class": "same_signature_repeat",
+      "revive_count": 1,
+      "revived_at": "2026-07-27T01:07:36.917Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",
