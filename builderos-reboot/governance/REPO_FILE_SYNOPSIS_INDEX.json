@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-27T22:22:03.385Z",
+  "generated_at": "2026-07-27T22:46:42.035Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12181,
   "files": [
@@ -39836,9 +39836,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 255894,
-      "mtime": "2026-07-27T05:45:50.704Z",
-      "indexed_at": "2026-07-27T22:21:57.522Z"
+      "bytes": 258553,
+      "mtime": "2026-07-27T22:46:26.959Z",
+      "indexed_at": "2026-07-27T22:46:42.035Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -87274,9 +87274,9 @@
     {
       "path": "services/governed-autonomous-shipping-loop.js",
       "synopsis": "STEP 5g — the governed AUTONOMOUS shipping loop. When the STEP 5a",
-      "bytes": 56389,
-      "mtime": "2026-07-27T03:11:05.654Z",
-      "indexed_at": "2026-07-27T22:21:57.522Z",
+      "bytes": 58663,
+      "mtime": "2026-07-27T22:45:18.512Z",
+      "indexed_at": "2026-07-27T22:46:42.035Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

@@ -49,11 +49,18 @@ const state = {
   running: false,
   lastFounderAlert: null,
   lastRunAt: null,
+  // Set unconditionally on every loopTick() call, whether or not there was
+  // real work to do. Distinct from lastRunAt (which only updates when
+  // execute() actually runs). This is the true "is the loop still alive"
+  // signal -- lastRunAt alone has expected multi-minute gaps during idle
+  // polling and can't tell a healthy idle loop from a silently-dead one.
+  lastTickAt: null,
   totalRuns: 0,
   lastShipped: 0,
   tokenHaltSince: null,
   lastCommitSha: null,
   lastCommitError: null,
+  watchdogRecoveries: 0,
 };
 
 let sharedPool = null;
@@ -1229,6 +1236,7 @@ export function startGovernedAutonomousShippingLoop({ logger, pool } = {}) {
 
   async function loopTick() {
     if (controller.stopped) return;
+    state.lastTickAt = new Date().toISOString();
     let result;
     try {
       result = await guardedTick();
@@ -1243,12 +1251,41 @@ export function startGovernedAutonomousShippingLoop({ logger, pool } = {}) {
 
   controller.handle = setTimeout(loopTick, bootDelayMs);
 
+  // Watchdog: the design above is already resilient to a single tick
+  // throwing (try/catch + unconditional reschedule), but nothing previously
+  // verified the loop was STILL ALIVE versus silently dead -- Railway's
+  // ON_FAILURE restart policy only catches the whole process crashing, not
+  // a logical stall where the process is up but loopTick's own reschedule
+  // chain stopped firing for some unforeseen reason. Checks state.lastTickAt
+  // (set unconditionally above, every tick, whether or not there was real
+  // work) against the longest gap the loop should ever legitimately have —
+  // if it's stale well past that, force an immediate recovery tick rather
+  // than waiting on a full container restart.
+  const watchdogIntervalMs = Number(process.env.GOVERNED_AUTONOMOUS_SHIP_WATCHDOG_INTERVAL_MS || 5 * 60 * 1000);
+  const staleThresholdMs = Number(process.env.GOVERNED_AUTONOMOUS_SHIP_WATCHDOG_STALE_MS || Math.max(idleIntervalMs * 3, 10 * 60 * 1000));
+  const watchdogHandle = setInterval(() => {
+    if (controller.stopped) return;
+    if (!state.lastTickAt) return; // still within boot delay, nothing to check yet
+    const ageMs = Date.now() - new Date(state.lastTickAt).getTime();
+    if (ageMs <= staleThresholdMs) return;
+    state.watchdogRecoveries += 1;
+    logger?.error?.(
+      { ageMs, staleThresholdMs, recoveries: state.watchdogRecoveries },
+      '[GOVERNED-AUTONOMOUS-SHIP] WATCHDOG: loop appears stalled (no tick within threshold) — forcing recovery tick'
+    );
+    if (controller.handle) clearTimeout(controller.handle);
+    state.running = false; // clear a possibly-stuck running flag so the forced tick isn't self-blocked
+    controller.handle = setTimeout(loopTick, 0);
+  }, watchdogIntervalMs);
+  watchdogHandle.unref?.();
+
   // Preserve the previous contract (callers may clearInterval/clearTimeout the
   // return value) while exposing an explicit stop for the self-rescheduler.
   controller.unref = () => controller.handle?.unref?.();
   controller.stop = () => {
     controller.stopped = true;
     if (controller.handle) clearTimeout(controller.handle);
+    clearInterval(watchdogHandle);
   };
   return controller;
 }
