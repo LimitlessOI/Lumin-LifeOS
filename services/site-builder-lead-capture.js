@@ -32,38 +32,42 @@ export async function captureAndNotifyLead({ pool, clientId, name, phone, email,
     const insertResult = await pool.query(insertLeadQuery, [clientId, name, phone, email, message, source]);
     const leadId = insertResult.rows[0].id;
 
-    let notificationEmail;
-    try {
-      const emailQuery = 'SELECT notification_email FROM prospect_sites WHERE client_id = $1';
-      const emailResult = await pool.query(emailQuery, [clientId]);
-      notificationEmail = emailResult.rows[0]?.notification_email || process.env.SITE_BUILDER_LEAD_FALLBACK_EMAIL;
-    } catch (err) {
-      logger.error('Error retrieving notification email:', err);
-    }
-
     let emailed = false;
-    let emailError = null;
-    if (notificationEmail) {
+    try {
+      let notificationEmail;
       try {
-        await notifier.sendEmail({
-          to: notificationEmail,
-          subject: `New Lead from ${source || 'Site Builder'}`,
-          text: `Name: ${name}\nPhone: ${phone}\nEmail: ${email}\nMessage: ${message}`
-        });
-        emailed = true;
+        const emailQuery = 'SELECT notification_email FROM prospect_sites WHERE client_id = $1';
+        const emailResult = await pool.query(emailQuery, [clientId]);
+        notificationEmail = emailResult.rows[0]?.notification_email || process.env.SITE_BUILDER_LEAD_FALLBACK_EMAIL;
       } catch (err) {
-        emailError = err.message;
-        logger.error('Error sending notification email:', err);
+        logger.error('Error retrieving notification email:', err);
       }
-    } else {
-      emailError = 'No notification email available';
-      logger.warn(emailError);
-    }
 
-    await pool.query(
-      'UPDATE site_builder_leads SET emailed = $1, email_error = $2 WHERE id = $3',
-      [emailed, emailError, leadId]
-    );
+      let emailError = null;
+      if (notificationEmail) {
+        try {
+          await notifier.sendEmail({
+            to: notificationEmail,
+            subject: `New Lead from ${source || 'Site Builder'}`,
+            text: `Name: ${name}\nPhone: ${phone}\nEmail: ${email}\nMessage: ${message}`
+          });
+          emailed = true;
+        } catch (err) {
+          emailError = err.message;
+          logger.error('Error sending notification email:', err);
+        }
+      } else {
+        emailError = 'No notification email available';
+        logger.warn(emailError);
+      }
+
+      await pool.query(
+        'UPDATE site_builder_leads SET emailed = $1, email_error = $2 WHERE id = $3',
+        [emailed, emailError, leadId]
+      );
+    } catch (postCaptureErr) {
+      logger.error('Error in post-capture notification step (lead already saved):', postCaptureErr);
+    }
 
     return { ok: true, leadId, emailed };
   } catch (err) {

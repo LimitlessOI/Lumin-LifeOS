@@ -2784,7 +2784,7 @@
     },
     {
       "id": "sb-lead-capture-false-negative-fix",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/site-builder-lead-capture.js",
       "priority": "high",
       "patch_mode": true,
@@ -2793,7 +2793,7 @@
       "task": "Fix a real, verified bug in captureAndNotifyLead (shipped 2026-07-26, commit 450fbc6e70): the notification-email lookup, the email send, and the final UPDATE statement are all inside the SAME outer try/catch as the lead INSERT itself. If the final UPDATE fails for any reason AFTER the lead was already successfully inserted (tested directly: a mock DB throwing only on the UPDATE call), the function returns {ok:false, error:'Error capturing lead.'} even though the lead genuinely IS captured in the database -- a false negative. This directly contradicts the feature's whole purpose (modeled on routes/wrm-consult-routes.js's own stated design goal: \"a lead is ALWAYS captured to the DB first... so it can never be silently lost\") and could make a future caller tell a real prospect their submission failed when it actually succeeded.",
       "spec": "PATCH MODE. Output ONLY one <<<OLD>>>/<<<NEW>>>/<<<END>>> block, no full file.\n\nFind this exact block (the INSERT through the final UPDATE, inside the single outer try):\n\n    const insertResult = await pool.query(insertLeadQuery, [clientId, name, phone, email, message, source]);\n    const leadId = insertResult.rows[0].id;\n\n    let notificationEmail;\n    try {\n      const emailQuery = 'SELECT notification_email FROM prospect_sites WHERE client_id = $1';\n      const emailResult = await pool.query(emailQuery, [clientId]);\n      notificationEmail = emailResult.rows[0]?.notification_email || process.env.SITE_BUILDER_LEAD_FALLBACK_EMAIL;\n    } catch (err) {\n      logger.error('Error retrieving notification email:', err);\n    }\n\n    let emailed = false;\n    let emailError = null;\n    if (notificationEmail) {\n      try {\n        await notifier.sendEmail({\n          to: notificationEmail,\n          subject: `New Lead from ${source || 'Site Builder'}`,\n          text: `Name: ${name}\\nPhone: ${phone}\\nEmail: ${email}\\nMessage: ${message}`\n        });\n        emailed = true;\n      } catch (err) {\n        emailError = err.message;\n        logger.error('Error sending notification email:', err);\n      }\n    } else {\n      emailError = 'No notification email available';\n      logger.warn(emailError);\n    }\n\n    await pool.query(\n      'UPDATE site_builder_leads SET emailed = $1, email_error = $2 WHERE id = $3',\n      [emailed, emailError, leadId]\n    );\n\n    return { ok: true, leadId, emailed };\n\nReplace it with a version where the notification-lookup + email-send + final UPDATE are wrapped in their OWN try/catch, separate from the INSERT -- so once the lead is captured (leadId exists), nothing after that point can turn the result into ok:false:\n\n    const insertResult = await pool.query(insertLeadQuery, [clientId, name, phone, email, message, source]);\n    const leadId = insertResult.rows[0].id;\n\n    let emailed = false;\n    try {\n      let notificationEmail;\n      try {\n        const emailQuery = 'SELECT notification_email FROM prospect_sites WHERE client_id = $1';\n        const emailResult = await pool.query(emailQuery, [clientId]);\n        notificationEmail = emailResult.rows[0]?.notification_email || process.env.SITE_BUILDER_LEAD_FALLBACK_EMAIL;\n      } catch (err) {\n        logger.error('Error retrieving notification email:', err);\n      }\n\n      let emailError = null;\n      if (notificationEmail) {\n        try {\n          await notifier.sendEmail({\n            to: notificationEmail,\n            subject: `New Lead from ${source || 'Site Builder'}`,\n            text: `Name: ${name}\\nPhone: ${phone}\\nEmail: ${email}\\nMessage: ${message}`\n          });\n          emailed = true;\n        } catch (err) {\n          emailError = err.message;\n          logger.error('Error sending notification email:', err);\n        }\n      } else {\n        emailError = 'No notification email available';\n        logger.warn(emailError);\n      }\n\n      await pool.query(\n        'UPDATE site_builder_leads SET emailed = $1, email_error = $2 WHERE id = $3',\n        [emailed, emailError, leadId]\n      );\n    } catch (postCaptureErr) {\n      logger.error('Error in post-capture notification step (lead already saved):', postCaptureErr);\n    }\n\n    return { ok: true, leadId, emailed };\n\nDo not change the validation check, the CREATE TABLE, the INSERT statement, or the outer catch block that handles a genuine INSERT failure -- only restructure the notification/UPDATE section into its own inner try/catch as shown.",
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "source": "founder_directive_2026-07-27",
       "finding_note": "Verified directly by testing the real shipped function with a mock DB that throws only on the final UPDATE call: result was {ok:false} even though the lead was genuinely captured (INSERT succeeded). A real false-negative bug in a feature whose entire purpose is \"never silently lose a lead.\"",
       "expected_exports": [
@@ -2810,7 +2810,49 @@
       },
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "sb-lead-capture-false-negative-fix",
-      "mission_id": "PRODUCT-site-builder"
+      "mission_id": "PRODUCT-site-builder",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/site-builder-lead-capture.js",
+          "exports": [
+            "captureAndNotifyLead"
+          ],
+          "assertion_id": "expected_exports:services/site-builder-lead-capture.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-27T04:51:22.835Z",
+      "last_error": "github_commit_failed_after_local_ship",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "failure_signature": "github_commit_failed_after_local_ship",
+      "same_signature_count": 1,
+      "escalation_class": "same_signature_repeat",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/site-builder/twins/steps/sb-lead-capture-false-negative-fix.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-27T04:51:25.592Z",
+        "shipped_at": "2026-07-27T04:51:25.592Z",
+        "commit_sha": null,
+        "content_sha256": "66702c2470b2615dc9d43d721c5f8d6f0b8233b26ecba466ef146b92af82bd5c",
+        "target_file": "services/site-builder-lead-capture.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/site-builder-lead-capture.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/site-builder/twins/steps/sb-lead-capture-false-negative-fix.exact",
+          "content_sha256": "66702c2470b2615dc9d43d721c5f8d6f0b8233b26ecba466ef146b92af82bd5c"
+        }
+      },
+      "shipped_at": "2026-07-27T04:51:25.592Z"
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",
