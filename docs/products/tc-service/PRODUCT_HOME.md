@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/tc-service/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-27 — **GLVAR Clareity MFA via TC IMAP** + `POST /api/v1/tc/email/send-as-founder` (adam@hopkinsgroup.org SMTP). Prior: TC market CTA. |
+| **Last Updated** | 2026-07-27 — **ADAM_GMAIL browser send path** (SMTP blocked on Railway). Prior: GLVAR MFA via IMAP + send-as-founder. |
 
 ---
 
