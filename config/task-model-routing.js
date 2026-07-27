@@ -105,11 +105,24 @@ export const TASK_MODEL_MAP = {
 
 /** Default model when task type is unknown */
 export const DEFAULT_MODEL = 'openai_gpt';
+// Genuinely strong-first, provider-diverse (SO-003) -- the array order IS the
+// escalation order, since the codegen dispatcher (routes/factory-mount-routes.js
+// codegenRunner.generate) stops at the FIRST tier that produces syntactically
+// valid, non-empty output. Found live 2026-07-27: the prior order put
+// 'openai_builder_standard'/'openai_gpt' (both gpt-4o) and 'deepseek' ahead of
+// 'claude_sonnet' (claude-sonnet-4-6, the actual strongest model configured in
+// this system) -- meaning the strongest model was effectively never reached in
+// practice, because gpt-4o rarely fails outright even when it writes correct-
+// looking-but-wrong logic (the exact class of bug found repeatedly tonight).
+// 'openai_builder_escalation' also mapped to the SAME gpt-4o as
+// 'openai_builder_standard' -- not a real escalation, just a relabeled
+// duplicate; left in the list (harmless) but moved past the tiers that add
+// real strength or provider diversity.
 export const TRUSTED_FALLBACK_MODELS = [
-  'openai_builder_standard',
-  'openai_gpt',
-  'deepseek',
   'claude_sonnet',
+  'openai_builder_standard',
+  'deepseek',
+  'openai_gpt',
   'openai_builder_escalation',
   'gemini_flash',
   'groq_llama',
