@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-27T23:44:25.960Z",
+  "generated_at": "2026-07-27T23:51:12.093Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12182,
   "files": [
@@ -39836,9 +39836,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 261438,
-      "mtime": "2026-07-27T23:44:11.589Z",
-      "indexed_at": "2026-07-27T23:44:25.960Z"
+      "bytes": 264479,
+      "mtime": "2026-07-27T23:50:56.475Z",
+      "indexed_at": "2026-07-27T23:51:12.093Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -60150,9 +60150,9 @@
     {
       "path": "docs/QUICK_LAUNCH.md",
       "synopsis": "QUICK LAUNCH — Conductor Start",
-      "bytes": 21270,
-      "mtime": "2026-07-24T21:06:07.513Z",
-      "indexed_at": "2026-07-27T22:21:57.522Z"
+      "bytes": 25535,
+      "mtime": "2026-07-27T23:49:54.713Z",
+      "indexed_at": "2026-07-27T23:51:12.093Z"
     },
     {
       "path": "docs/QUICK_START_CHAT.md",
@@ -60361,9 +60361,9 @@
     {
       "path": "docs/SSOT_COMPANION.md",
       "synopsis": "LIFEOS / LIMITLESSOS — SSOT COMPANION DOCUMENT",
-      "bytes": 55027,
-      "mtime": "2026-07-24T21:06:07.518Z",
-      "indexed_at": "2026-07-27T22:21:57.522Z"
+      "bytes": 56204,
+      "mtime": "2026-07-27T23:50:26.055Z",
+      "indexed_at": "2026-07-27T23:51:12.093Z"
     },
     {
       "path": "docs/SSOT_DUAL_CHANNEL.md",
