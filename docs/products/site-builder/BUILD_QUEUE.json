@@ -2717,6 +2717,34 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-27T01:35:31.558Z",
       "commit_sha": "ce9b86f71ce87b18bc5c2f82df75f54aa0f36445"
+    },
+    {
+      "id": "sb-lead-capture-service",
+      "status": "pending",
+      "target_file": "services/site-builder-lead-capture.js",
+      "priority": "high",
+      "depends_on": [],
+      "task": "Create a generalized, per-client lead-capture service for Site Builder, following the exact proven pattern already live for one hand-crafted client (routes/wrm-consult-routes.js) -- generalize it to work for ANY clientId instead of being hardcoded to Well Rounded Momma. This is step 1 of a multi-step feature (a design/competitive-feature audit found 2026-07-27 that generated sites have no first-party lead-capture form -- every CTA resolves to a POS-partner URL, tel:, mailto:, or a scraped bookingUrl, never a form that posts to us -- the single highest-leverage gap vs named competitors like Squarespace AI/10Web/Durable, which all ship a working contact form by default). This step ONLY builds the backend service; wiring it into a route and injecting a <form> into the generated HTML templates are separate, later steps -- do not attempt either here.",
+      "spec": "Create services/site-builder-lead-capture.js as a NEW file (greenfield, no existing content to merge with).\n\nExport ONE async function: captureAndNotifyLead({ pool, clientId, name, phone, email, message, source, notifier, logger }).\n\nBehavior, modeled directly on routes/wrm-consult-routes.js's proven pattern (read that file for the exact approach before writing this):\n1. Validate: name is required AND at least one of phone/email is required. If invalid, return { ok: false, error: 'validation message' } -- do not throw.\n2. Ensure a generic (not WRM-specific) DB table exists via CREATE TABLE IF NOT EXISTS site_builder_leads (id BIGSERIAL PRIMARY KEY, client_id TEXT NOT NULL, name TEXT, phone TEXT, email TEXT, message TEXT, source TEXT, emailed BOOLEAN DEFAULT false, email_error TEXT, created_at TIMESTAMPTZ DEFAULT now()). Always CREATE TABLE IF NOT EXISTS as its own call inside this function (self-bootstrapping, same convention used throughout this codebase tonight) -- never assume the table exists.\n3. Insert the lead into site_builder_leads scoped to clientId FIRST, before attempting any notification -- a lead must never be lost even if email sending fails (this is the core lesson from the WRM implementation's own header comment).\n4. Look up the notification target for this client: query a prospect_sites or site_builder metadata table for a stored contact/notification email for this clientId (search the codebase for how existing site-builder metadata is stored per clientId -- likely a prospect_sites table or similar -- and resolve the real column name; if genuinely no per-client notification email can be resolved, fall back to process.env.SITE_BUILDER_LEAD_FALLBACK_EMAIL, and if that's also unset, skip the email step entirely and just note it in email_error -- the lead is still safely captured in the DB either way, this must never throw).\n5. If a target email was resolved, send via the injected notifier (same NotificationService pattern as wrm-consult-routes.js -- accept it as a parameter, do not construct one internally, so this stays testable and doesn't duplicate WRM's exact wiring).\n6. Update the lead row's emailed/email_error columns based on the send result.\n7. Return { ok: true, leadId, emailed: boolean } on success (success meaning the lead was captured in the DB -- email delivery is best-effort and does not affect ok).\n\nFail-closed on the one case that actually matters: if the DB insert itself fails (lead was never captured anywhere), return { ok: false, error: '...' } -- everything else (notification lookup, email send) is best-effort and must not prevent returning ok:true once the lead is safely in the database.",
+      "founder_gated": false,
+      "attempts": 0,
+      "source": "founder_directive_2026-07-27",
+      "finding_note": "Design/competitive-feature audit 2026-07-27: \"No embedded lead-capture form on any generated site... the single highest-leverage fix -- a site that can't capture a lead itself is a worse product than a Wix demo.\" Step 1 of 3 (service, then route, then template injection).",
+      "expected_exports": [
+        "captureAndNotifyLead"
+      ],
+      "assertion_spec": {
+        "expected_exports": [
+          "captureAndNotifyLead"
+        ],
+        "file_contains": [
+          "site_builder_leads",
+          "CREATE TABLE IF NOT EXISTS"
+        ]
+      },
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "sb-lead-capture-service",
+      "mission_id": "PRODUCT-site-builder"
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",
