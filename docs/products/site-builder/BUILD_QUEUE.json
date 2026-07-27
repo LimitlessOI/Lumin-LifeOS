@@ -2671,6 +2671,35 @@
       },
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-27T01:30:42.979Z"
+    },
+    {
+      "id": "sb-deliverability-status-domain-parse-fix",
+      "status": "pending",
+      "target_file": "routes/site-builder-routes.js",
+      "priority": "high",
+      "patch_mode": true,
+      "max_output_tokens": 3000,
+      "depends_on": [],
+      "task": "Fix a real bug found live 2026-07-27 in the just-shipped GET /api/v1/sites/deliverability-status route: EMAIL_FROM is commonly formatted as \"Display Name <email@domain.com>\" (angle-bracket form), but the domain-extraction logic (emailFrom.split('@')[1]) grabs everything after '@' including the trailing '>' -- observed live: {\"domain\":\"hopkinsgroup.org>\",\"deliverabilityBlockers\":[\"spf_lookup_failed:EBADNAME\",...]}. The DNS lookup fails with EBADNAME because \">\" is not a valid hostname character, so the route currently reports false negatives regardless of the domain's real SPF/DKIM status.",
+      "spec": "PATCH MODE. Output ONLY one <<<OLD>>>/<<<NEW>>>/<<<END>>> block, no full file.\n\nFind this exact block inside the /deliverability-status route (just shipped):\n\n      const emailFrom = String(process.env.EMAIL_FROM || '').trim();\n      const domain = emailFrom.includes('@') ? emailFrom.split('@')[1] : '';\n\nReplace it with a version that strips a trailing angle bracket (and any trailing whitespace) so both bare \"email@domain.com\" and \"Name <email@domain.com>\" formats extract the correct domain:\n\n      const emailFrom = String(process.env.EMAIL_FROM || '').trim();\n      const emailMatch = emailFrom.match(/@([^\\s>]+)/);\n      const domain = emailMatch ? emailMatch[1] : '';\n\nDo not change anything else in the route or the file.",
+      "founder_gated": false,
+      "attempts": 0,
+      "source": "founder_directive_2026-07-26",
+      "finding_note": "Found immediately after sb-deliverability-status-route shipped, by testing the live endpoint (not trusting the SENTRY PASS): real live response showed domain:\"hopkinsgroup.org>\" with a stray trailing \">\" causing DNS EBADNAME errors, so the route currently gives wrong/false-negative results.",
+      "expected_exports": [
+        "createSiteBuilderRoutes"
+      ],
+      "assertion_spec": {
+        "expected_exports": [
+          "createSiteBuilderRoutes"
+        ],
+        "file_contains": [
+          "emailMatch"
+        ]
+      },
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "sb-deliverability-status-domain-parse-fix",
+      "mission_id": "PRODUCT-site-builder"
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",
