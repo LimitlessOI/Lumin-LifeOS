@@ -870,6 +870,33 @@ export function createCouncilService({
     const builderLane = isBuilderLaneRequest(member, options);
     const builderLaneSpendCap = builderLane ? getBuilderLaneSpendCap() : null;
 
+    // Try every free-tier provider in priority order (not just the first) so
+    // a single provider's own limit (e.g. Groq's small per-model TPM cap)
+    // doesn't look identical to "no free providers available" and give up.
+    // Found live 2026-07-27: the prior single-attempt cascade picked
+    // groq_llama, which 413'd on a normal-sized prompt (6431 tokens vs its
+    // 6000 TPM cap) -- a real provider limit, not proof nothing free was
+    // available. SO-003: never idle because one provider ran dry.
+    async function cascadeToFreeTier(blockedMember, reasonLabel) {
+      const tried = [];
+      const maxAttempts = Object.keys(freeTierGovernor.PROVIDER_LIMITS || {}).length || 5;
+      for (let attempt = 0; attempt < maxAttempts; attempt++) {
+        const nextProvider = await freeTierGovernor.getNextAvailable(tried);
+        if (!nextProvider) break;
+        tried.push(nextProvider);
+        const fallbackMembers = freeTierGovernor.PROVIDER_LIMITS[nextProvider]?.councilMembers || [];
+        const fallbackMember = fallbackMembers.find((m) => COUNCIL_MEMBERS[m]);
+        if (!fallbackMember) continue;
+        try {
+          console.log(`💰 [${reasonLabel}] ${blockedMember} → cascading to ${fallbackMember} (${nextProvider})`);
+          return await callCouncilMember(fallbackMember, prompt, options);
+        } catch (err) {
+          console.warn(`💰 [${reasonLabel}] ${fallbackMember} (${nextProvider}) failed too: ${err.message} — trying next provider`);
+        }
+      }
+      throw new Error(`💰 [${reasonLabel}] Blocked ${blockedMember} — tried ${tried.length} free provider(s), none succeeded.`);
+    }
+
     function finalizeResponse(rawText, taskTypeForEnvelope = options.taskType || 'general', usage = null, cost = 0) {
       const { text, envelope } = envelopeCouncilMemberOutput(rawText, options, taskTypeForEnvelope, member);
       if (envelope.theater_blocked || envelope.voice_lie_blocked) {
@@ -911,38 +938,12 @@ export function createCouncilService({
     // ── Free-tier cascade (Groq → Gemini → Cerebras → OpenRouter → Mistral → Fireworks) ──
     // Founder Voice Rail comms always use configured paid council member (no silent downgrade).
     if (!founderComms && !builderLane && MAX_DAILY_SPEND === 0 && isPaid) {
-      const nextProvider = await freeTierGovernor.getNextAvailable();
-      if (!nextProvider) {
-        throw new Error(
-          `💰 [COST SHUTDOWN] Blocked ${member} — no free providers available.`
-        );
-      }
-      const fallbackMembers = freeTierGovernor.PROVIDER_LIMITS[nextProvider]?.councilMembers || ['cerebras_llama'];
-      for (const fallbackMember of fallbackMembers) {
-        if (COUNCIL_MEMBERS[fallbackMember]) {
-          console.log(`💰 [COST SHUTDOWN] Blocked ${member} → cascading to ${fallbackMember} (${nextProvider})`);
-          return await callCouncilMember(fallbackMember, prompt, options);
-        }
-      }
-      throw new Error(`💰 [COST SHUTDOWN] Blocked ${member} — no free providers available right now.`);
+      return await cascadeToFreeTier(member, 'COST SHUTDOWN');
     }
 
     const effectiveShutdownThreshold = COST_SHUTDOWN_THRESHOLD > 0 ? COST_SHUTDOWN_THRESHOLD : MAX_DAILY_SPEND;
     if (!founderComms && !builderLane && spend >= effectiveShutdownThreshold && isPaid) {
-      const nextProvider = await freeTierGovernor.getNextAvailable();
-      if (!nextProvider) {
-        throw new Error(
-          `💰 [SPEND LIMIT] $${spend.toFixed(2)}/$${effectiveShutdownThreshold} — no free providers available.`
-        );
-      }
-      const fallbackMembers = freeTierGovernor.PROVIDER_LIMITS[nextProvider]?.councilMembers || ['cerebras_llama'];
-      for (const fallbackMember of fallbackMembers) {
-        if (COUNCIL_MEMBERS[fallbackMember]) {
-          console.log(`💰 [SPEND LIMIT] $${spend.toFixed(2)}/$${effectiveShutdownThreshold} → cascading to ${fallbackMember} (${nextProvider})`);
-          return await callCouncilMember(fallbackMember, prompt, options);
-        }
-      }
-      throw new Error(`💰 [SPEND LIMIT] $${spend.toFixed(2)}/$${effectiveShutdownThreshold} — no free providers available.`);
+      return await cascadeToFreeTier(member, 'SPEND LIMIT');
     }
 
     const effectiveSpendCap = builderLane ? (builderLaneSpendCap ?? MAX_DAILY_SPEND) : MAX_DAILY_SPEND;
@@ -964,27 +965,19 @@ export function createCouncilService({
       // function, instead of going fully idle. Found live 2026-07-27: this
       // was the one spend gate of the three missing the cascade, and it was
       // the one actually firing (Chair chat returning "Nothing ran").
-      const nextProvider = await freeTierGovernor.getNextAvailable();
-      if (nextProvider) {
-        const fallbackMembers = freeTierGovernor.PROVIDER_LIMITS[nextProvider]?.councilMembers || ['cerebras_llama'];
-        for (const fallbackMember of fallbackMembers) {
-          if (COUNCIL_MEMBERS[fallbackMember]) {
-            console.log(
-              `💰 [SPEND CAP] $${spend.toFixed(4)}/$${effectiveSpendCap}${builderLane ? ' [builder lane]' : ''} → cascading ${member} to ${fallbackMember} (${nextProvider})`
-            );
-            return await callCouncilMember(fallbackMember, prompt, options);
-          }
-        }
+      try {
+        return await cascadeToFreeTier(member, 'SPEND CAP');
+      } catch {
+        throw new Error(
+          builderLane
+            ? `BuilderOS spend limit ($${effectiveSpendCap}) reached at $${spend.toFixed(
+                4
+              )} for ${today}. Raise BUILDEROS_MAX_DAILY_SPEND or lower builder activity. No free providers available either.`
+            : `Daily spend limit ($${effectiveSpendCap}) reached at $${spend.toFixed(
+                4
+              )} for ${today}. Resets at midnight UTC. No free providers available either.`
+        );
       }
-      throw new Error(
-        builderLane
-          ? `BuilderOS spend limit ($${effectiveSpendCap}) reached at $${spend.toFixed(
-              4
-            )} for ${today}. Raise BUILDEROS_MAX_DAILY_SPEND or lower builder activity. No free providers available either.`
-          : `Daily spend limit ($${effectiveSpendCap}) reached at $${spend.toFixed(
-              4
-            )} for ${today}. Resets at midnight UTC. No free providers available either.`
-      );
     }
 
     if (tokenAccounting) {

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-27T21:25:00.510Z",
+  "generated_at": "2026-07-27T21:29:15.893Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12179,
   "files": [
@@ -39691,9 +39691,9 @@
     {
       "path": "docs/products/ai-council/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — AI Council",
-      "bytes": 60156,
-      "mtime": "2026-07-27T21:24:48.362Z",
-      "indexed_at": "2026-07-27T21:25:00.510Z"
+      "bytes": 61734,
+      "mtime": "2026-07-27T21:29:04.341Z",
+      "indexed_at": "2026-07-27T21:29:15.893Z"
     },
     {
       "path": "docs/products/ai-receptionist/FILE_MANIFEST.json",
@@ -85859,9 +85859,9 @@
     {
       "path": "services/council-service.js",
       "synopsis": "Council routing, token/LCL/savings, and model failover for platform AI calls.",
-      "bytes": 81505,
-      "mtime": "2026-07-27T21:24:16.668Z",
-      "indexed_at": "2026-07-27T21:25:00.510Z",
+      "bytes": 81146,
+      "mtime": "2026-07-27T21:28:41.577Z",
+      "indexed_at": "2026-07-27T21:29:15.893Z",
       "ssot": [
         "docs/products/ai-council/PRODUCT_HOME.md"
       ]
