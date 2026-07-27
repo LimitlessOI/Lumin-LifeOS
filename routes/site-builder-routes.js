@@ -717,6 +717,45 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
     }
   });
 
+  const leadCaptureLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000,
+    max: 20,
+    message: { ok: false, error: 'Too many submissions — please call or email us directly.' },
+    standardHeaders: true,
+    legacyHeaders: false,
+  });
+
+  /**
+   * POST /api/v1/sites/:clientId/lead
+   * Public lead-capture form submission for a generated site. Rate-limited,
+   * not requireKey-gated -- real anonymous prospects call this directly.
+   */
+  router.post('/:clientId/lead', leadCaptureLimiter, async (req, res) => {
+    try {
+      const clientId = String(req.params.clientId || '').trim();
+      if (!clientId) return res.status(400).json({ ok: false, error: 'clientId required' });
+      // Honeypot: real visitors never fill "company"; bots do.
+      if (String(req.body?.company || '').trim()) return res.json({ ok: true });
+
+      const { captureAndNotifyLead } = await import('../services/site-builder-lead-capture.js');
+      const result = await captureAndNotifyLead({
+        pool,
+        clientId,
+        name: String(req.body?.name || '').trim().slice(0, 120),
+        phone: String(req.body?.phone || '').trim().slice(0, 40),
+        email: String(req.body?.email || '').trim().slice(0, 160),
+        message: String(req.body?.message || '').trim().slice(0, 2000),
+        source: String(req.body?.source || 'site-builder').trim().slice(0, 80),
+        notifier: notificationService,
+        logger,
+      });
+      if (!result.ok) return res.status(400).json(result);
+      res.json({ ok: true, leadId: result.leadId, message: 'Thank you! We will be in touch shortly.' });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
   /**
    * GET /api/v1/sites/logo-studio
    * Serve the interactive Logo Studio page. If a clientId is given, prefills the
