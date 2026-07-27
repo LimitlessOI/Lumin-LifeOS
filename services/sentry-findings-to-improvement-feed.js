@@ -29,6 +29,31 @@ function synthesizeSolution(detail) {
   return 'Inspect the failed gate output and fix the first failing step.';
 }
 
+// root_cause_class distinguishes "code doesn't do what the blueprint asked"
+// from "code correctly does what the blueprint asked, but the blueprint's
+// own spec was wrong" -- founder, direct: "I could follow the blueprint,
+// but the blueprint was poorly designed. That needs to be reported and
+// fixed at the architect level." Before this, every finding was implicitly
+// treated as a code problem to hand back to Builder, with no path to
+// "revise the blueprint instead of retrying the code."
+//
+// Honest scope: Layer A (structural conformance -- does the route/export
+// exist) failing is near-certain evidence of a CODE gap, since the
+// blueprint did ask for the thing and it's simply missing/broken -- that
+// classification is safe to assign automatically. Layer B / UX critique
+// findings can be either a code-polish issue OR a genuine spec gap (the
+// blueprint never asked for the thing a real user needed), and cannot be
+// safely auto-classified from text alone without a real judgment call this
+// function isn't positioned to make -- those are marked
+// 'unclassified_needs_review' rather than guessed, so a human or a real
+// model reviewing the finding (not a heuristic) makes the call. This is
+// Tier-0: the schema and hard gate are real and live now; the deeper
+// automatic classification is deliberately deferred, not faked.
+function inferRootCauseClass(source) {
+  if (source === 'layer-a') return 'code_defect';
+  return 'unclassified_needs_review';
+}
+
 function normalizeFinding(entry, fallbackSource) {
   if (!isObject(entry)) return null;
 
@@ -44,12 +69,17 @@ function normalizeFinding(entry, fallbackSource) {
     proposed_solution = synthesizeSolution(detail);
   }
 
+  const allowedClasses = new Set(['code_defect', 'blueprint_defect', 'unclassified_needs_review']);
+  const declaredClass = trimOrEmpty(entry.root_cause_class);
+  const root_cause_class = allowedClasses.has(declaredClass) ? declaredClass : inferRootCauseClass(source);
+
   const finding = {
     code,
     detail,
     proposed_solution,
     severity,
-    source
+    source,
+    root_cause_class
   };
 
   if (proposed_solution_source) {
@@ -108,7 +138,8 @@ function normalizeSentryFindings(gateResult) {
           proposed_solution,
           proposed_solution_source: trimOrEmpty(improvement) ? undefined : 'synthesized',
           severity: 'warning',
-          source: 'uxCritique'
+          source: 'uxCritique',
+          root_cause_class: inferRootCauseClass('uxCritique')
         });
         if (!trimOrEmpty(improvement)) {
           findings[findings.length - 1].proposed_solution_source = 'synthesized';
@@ -128,7 +159,8 @@ function toReadinessFindings(findings) {
     if (!isObject(finding)) continue;
     const entry = {
       code: trimOrEmpty(finding.code) || 'sentry_finding',
-      detail: trimOrEmpty(finding.detail) || trimOrEmpty(finding.proposed_solution) || 'Unspecified finding'
+      detail: trimOrEmpty(finding.detail) || trimOrEmpty(finding.proposed_solution) || 'Unspecified finding',
+      root_cause_class: trimOrEmpty(finding.root_cause_class) || 'unclassified_needs_review'
     };
 
     if (safeSeverity(finding.severity) === 'error') {
@@ -141,9 +173,10 @@ function toReadinessFindings(findings) {
   return ready;
 }
 
-export { normalizeSentryFindings, toReadinessFindings };
+export { normalizeSentryFindings, toReadinessFindings, inferRootCauseClass };
 
 export default {
   normalizeSentryFindings,
-  toReadinessFindings
+  toReadinessFindings,
+  inferRootCauseClass
 };
