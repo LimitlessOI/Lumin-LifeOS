@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-27 — Critical auth trio still open on tip; fix re-applied
+
+Automation tip sweep confirmed three high-severity auth regressions still live after draft PR #367 never merged: (1) any LifeOS member JWT satisfied bare `requireKey` (factory ship/Railway operator routes), (2) public `set-password` could bootstrap passwordless accounts, (3) `forgot-password` disclosed `tip_reset_token` when any non-empty command-key header was present. Re-applied the minimal role-gate + auth middleware + verified-key disclosure fix with regression tests on `cursor/critical-bug-investigation-375b`. Remaining open tip items (not fixed this pass): Site Builder Stripe product binding, `x-forwarded-host` checkout spoof, MarketingOS owner_id IDOR, TC billing webhook, founder-build Promise.race, voice-rail user IDOR.
+
 ## 2026-07-24 — SMOS Connect+Publish (bank-style account link)
 
 Adam: connect social accounts in-app like bank linking, then post. Shipped Phase 5 UX: `/marketing` Connected accounts → popup `/marketing/connect/:platform` (real platform login in secured browser view; password never typed into SMOS forms) → encrypted cookies → Approve → Publish. Fixed publisher connection unwrap + `createBrowserSession` injection. **Live posts remain off** until `LIVE_SOCIAL_PUBLISH_ENABLED=true`. Next: tip redeploy; Adam connect one account and prove dry-run ready, then flip kill switch for a real post.
