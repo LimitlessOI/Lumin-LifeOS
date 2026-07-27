@@ -2674,7 +2674,7 @@
     },
     {
       "id": "sb-deliverability-status-domain-parse-fix",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/site-builder-routes.js",
       "priority": "high",
       "patch_mode": true,
@@ -2700,30 +2700,23 @@
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "sb-deliverability-status-domain-parse-fix",
       "mission_id": "PRODUCT-site-builder",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/site-builder/twins/steps/sb-deliverability-status-domain-parse-fix.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-27T01:35:24.338Z",
-        "shipped_at": "2026-07-27T01:35:24.338Z",
-        "commit_sha": null,
-        "content_sha256": "56d9b3d6870419cae85e70c1d0eb4371cbe0b134c812b34c47e0864c5e69adc8",
-        "target_file": "routes/site-builder-routes.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "routes/site-builder-routes.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/site-builder/twins/steps/sb-deliverability-status-domain-parse-fix.exact",
-          "content_sha256": "56d9b3d6870419cae85e70c1d0eb4371cbe0b134c812b34c47e0864c5e69adc8"
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/site-builder-routes.js",
+          "exports": [
+            "createSiteBuilderRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/site-builder-routes.js"
         }
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/public-lead"
       },
-      "shipped_at": "2026-07-27T01:35:24.338Z"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-27T01:35:31.558Z",
+      "commit_sha": "ce9b86f71ce87b18bc5c2f82df75f54aa0f36445"
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",
