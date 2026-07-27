@@ -20,6 +20,7 @@ import { createCrmRoutes } from "../routes/crm-routes.js";
 import { createGoVegasOutreachRoutes } from "../routes/go-vegas-outreach-routes.js";
 import { startGoVegasOutreachScheduler } from "../services/go-vegas-outreach-scheduler.js";
 import { createTCRoutes } from "../routes/tc-routes.js";
+import { createReceptionistRoutes } from "../routes/receptionist-routes.js";
 import { createTCCoordinator } from "../services/tc-coordinator.js";
 import { createAccountManager } from "../services/account-manager.js";
 import { createClientCareBillingRoutes } from "../routes/clientcare-billing-routes.js";
@@ -199,6 +200,19 @@ export async function registerFounderRuntimeRoutes(app, deps) {
     logger.info("✅ [TC] Founder-builder routes mounted at /api/v1/tc");
   } catch (err) {
     logger.warn?.({ err: err.message }, "[TC] founder-lane mount failed (non-fatal)");
+  }
+
+  // AI Receptionist (Vapi-backed) -- was only wired into the dead full-runtime
+  // lane, so it 404'd in production despite VAPI_API_KEY/VAPI_ASSISTANT_ID
+  // being genuinely configured and services/receptionist-service.js having a
+  // real createVapiAgent implementation. Not a fake surface being exposed --
+  // an already-built, already-credentialed feature that was unreachable due
+  // to a routing oversight.
+  try {
+    app.use("/api/v1/receptionist", createReceptionistRoutes(app, { pool, requireKey: requireUserOrKey, rk: requireUserOrKey, logger }));
+    logger.info("✅ [RECEPTIONIST] Founder-builder routes mounted at /api/v1/receptionist");
+  } catch (err) {
+    logger.warn?.({ err: err.message }, "[RECEPTIONIST] founder-lane mount failed (non-fatal)");
   }
 
   // ClientCare billing rescue must live on founder lane — production boots founder_builder.

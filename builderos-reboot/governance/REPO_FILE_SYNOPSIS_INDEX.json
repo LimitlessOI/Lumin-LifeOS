@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-27T04:27:35.016Z",
+  "generated_at": "2026-07-27T04:32:52.780Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12177,
   "files": [
@@ -39706,9 +39706,9 @@
     {
       "path": "docs/products/ai-receptionist/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — AI Receptionist",
-      "bytes": 11387,
-      "mtime": "2026-07-21T05:32:03.813Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z"
+      "bytes": 13135,
+      "mtime": "2026-07-27T04:32:34.932Z",
+      "indexed_at": "2026-07-27T04:32:52.780Z"
     },
     {
       "path": "docs/products/AICOUNCIL.md",
@@ -93112,9 +93112,9 @@
     {
       "path": "startup/register-founder-runtime-routes.js",
       "synopsis": "Minimal founder-builder runtime route composition.",
-      "bytes": 15939,
-      "mtime": "2026-07-21T05:32:04.700Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z",
+      "bytes": 16794,
+      "mtime": "2026-07-27T04:32:06.262Z",
+      "indexed_at": "2026-07-27T04:32:52.780Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
