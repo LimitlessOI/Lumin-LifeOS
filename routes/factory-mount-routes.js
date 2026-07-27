@@ -18,6 +18,7 @@ import { reconcileRemoteTruth } from '../factory-staging/factory-core/readiness/
 import { extractContent } from '../factory-staging/factory-core/builder/authoring.js';
 import { runGovernedShippingQueue } from '../services/governed-shipping-runner.js';
 import { runGovernedAutonomousShipOnce } from '../services/governed-autonomous-shipping-loop.js';
+import { getModelRankings } from '../services/model-capability-ledger.js';
 import {
   blueprintFollowClaim,
   exactChangeClaim,
@@ -272,6 +273,21 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
 
   router.get('/factory/tsos/summary', guard, (_req, res) => {
     res.json({ ok: true, tsos: summarizeTsosMetrics(), guardrails: 'measurement_only_no_mission_authority' });
+  });
+
+  // Real, per-model-tier ranking from actual governed-factory codegen
+  // outcomes -- founder, direct: "every model that sits in here needs to be
+  // rated... Have we ranked any of them?" Data is recorded automatically by
+  // every governed ship (services/model-capability-ledger.js, hooked into
+  // runGovernedAutonomousShipOnce's mandatory result path) -- this route
+  // makes that ledger actually visible, not just written to a silent table.
+  router.get('/factory/model-rankings', guard, async (_req, res) => {
+    try {
+      const rankings = await getModelRankings(pool);
+      res.json({ ok: true, rankings, note: rankings.length === 0 ? 'no governed ships recorded yet' : undefined });
+    } catch (err) {
+      res.status(503).json({ ok: false, error: err?.message || String(err) });
+    }
   });
 
   router.get('/factory/gates/intake', guard, (req, res) => {

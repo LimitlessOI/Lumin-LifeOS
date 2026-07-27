@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-27T22:46:42.035Z",
+  "generated_at": "2026-07-27T23:23:23.602Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12181,
+  "file_count": 12182,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -39691,9 +39691,9 @@
     {
       "path": "docs/products/ai-council/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — AI Council",
-      "bytes": 61734,
-      "mtime": "2026-07-27T21:29:04.341Z",
-      "indexed_at": "2026-07-27T22:21:57.522Z"
+      "bytes": 64893,
+      "mtime": "2026-07-27T23:22:59.120Z",
+      "indexed_at": "2026-07-27T23:23:23.602Z"
     },
     {
       "path": "docs/products/ai-receptionist/FILE_MANIFEST.json",
@@ -67433,9 +67433,9 @@
     {
       "path": "routes/factory-mount-routes.js",
       "synopsis": "Pure: should the codegen prompt inline this file's existing content?",
-      "bytes": 21506,
-      "mtime": "2026-07-26T19:44:57.899Z",
-      "indexed_at": "2026-07-27T22:21:57.522Z"
+      "bytes": 22393,
+      "mtime": "2026-07-27T23:21:32.469Z",
+      "indexed_at": "2026-07-27T23:23:23.602Z"
     },
     {
       "path": "routes/faith-studio-routes.js",
@@ -87274,9 +87274,9 @@
     {
       "path": "services/governed-autonomous-shipping-loop.js",
       "synopsis": "STEP 5g — the governed AUTONOMOUS shipping loop. When the STEP 5a",
-      "bytes": 58663,
-      "mtime": "2026-07-27T22:45:18.512Z",
-      "indexed_at": "2026-07-27T22:46:42.035Z",
+      "bytes": 60063,
+      "mtime": "2026-07-27T23:20:55.480Z",
+      "indexed_at": "2026-07-27T23:23:23.602Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -89696,6 +89696,16 @@
       "indexed_at": "2026-07-27T22:21:57.522Z",
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/model-capability-ledger.js",
+      "synopsis": "services/model-capability-ledger.js",
+      "bytes": 4254,
+      "mtime": "2026-07-27T23:20:17.137Z",
+      "indexed_at": "2026-07-27T23:23:23.602Z",
+      "ssot": [
+        "docs/products/ai-council/PRODUCT_HOME.md"
       ]
     },
     {

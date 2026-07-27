@@ -40,6 +40,7 @@ import {
   reviveStaleBlockedSteps,
 } from './product-build-orchestrator.js';
 import { createDeploymentService } from './deployment-service.js';
+import { recordModelOutcome } from './model-capability-ledger.js';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const PRODUCTS_DIR = path.join(REPO_ROOT, 'docs/products');
@@ -1004,6 +1005,30 @@ export async function runGovernedAutonomousShipOnce({ logger, maxStepsPerProduct
       let shippedIds = ok && Array.isArray(body.shipped)
         ? body.shipped.map((s) => s.step_id).filter(Boolean)
         : [];
+      // Real per-model outcome ledger. Founder, direct: "every model that
+      // sits in here needs to be rated... Have we ranked any of them?" --
+      // hooked here because this is the one place every governed-factory
+      // codegen dispatch (autonomous loop and manual ship-queue-and-commit
+      // calls alike) already surfaces model_tier + the real self/peer/compare
+      // honesty grade -- recording cannot be silently skipped by a caller
+      // forgetting to opt in, since it's inside the mandatory result path,
+      // not a bolt-on someone has to remember to call.
+      if (sharedPool && Array.isArray(body?.shipped)) {
+        for (const s of body.shipped) {
+          try {
+            await recordModelOutcome(sharedPool, {
+              model_tier: s?.codegen?.model_tier,
+              ok: true, // reaching body.shipped means codegen+SENTRY passed for this step
+              trust_earned: s?.trust_earned === true,
+              theater_detected: s?.honesty?.theater === true,
+              escalated: s?.codegen?.escalated === true,
+              effective_grade: s?.honesty?.effective_grade || null,
+            });
+          } catch (err) {
+            logger?.warn?.({ err: err.message }, '[GOVERNED-AUTONOMOUS-SHIP] model-capability-ledger record failed (non-fatal)');
+          }
+        }
+      }
       if (shippedIds.length && queue) {
         const commitSha = await commitShippedFiles(entry.product_id, shippedIds, entry.ship_steps, logger);
         if (commitSha) {
