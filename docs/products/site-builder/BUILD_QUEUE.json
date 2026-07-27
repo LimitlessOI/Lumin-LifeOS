@@ -2603,7 +2603,7 @@
     },
     {
       "id": "sb-deliverability-status-route",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/site-builder-routes.js",
       "priority": "high",
       "patch_mode": true,
@@ -2612,7 +2612,7 @@
       "task": "Wire the already-built, already-verified checkDomainDeliverabilityDNS (services/site-builder-deliverability-check.js, shipped commit 4580148a46, zero call sites today) into a real, read-only diagnostic route so cold-outreach deliverability is actually visible before real send volume. Deliberately targets routes/site-builder-routes.js (NOT services/site-builder-prospect-runner.js) -- that file has a documented, confirmed platform bug: 10/10 prior attempts to append a NEW export to prospect-runner.js silently failed because the file ends in an export default {} object literal (see sb-deliverability-gate's revive_note in this same BUILD_QUEUE.json for the full diagnosis). This step deliberately avoids that trigger condition by adding a route to a different file instead. This is visibility only (a GET endpoint), not an enforcement gate on the actual send path -- gating real sends is a separate, later step once this is proven live.",
       "spec": "PATCH MODE. Output ONLY one <<<OLD>>>/<<<NEW>>>/<<<END>>> block, no full file.\n\nFind this exact block inside routes/site-builder-routes.js (the GET /design-systems route):\n\n  router.get('/design-systems', (req, res) => {\n    res.json({ ok: true, designSystems: DESIGN_SYSTEMS.map(({ id, name, blurb }) => ({ id, name, blurb })) });\n  });\n\nInsert a new route immediately AFTER it (do not modify the /design-systems route itself):\n\n  router.get('/design-systems', (req, res) => {\n    res.json({ ok: true, designSystems: DESIGN_SYSTEMS.map(({ id, name, blurb }) => ({ id, name, blurb })) });\n  });\n\n  /**\n   * GET /api/v1/sites/deliverability-status\n   * Read-only check: does the cold-outreach sending domain (EMAIL_FROM) have\n   * real SPF/DKIM DNS records? Visibility only -- does not block sending.\n   */\n  router.get('/deliverability-status', requireKey, async (req, res) => {\n    try {\n      const { checkDomainDeliverabilityDNS } = await import('../services/site-builder-deliverability-check.js');\n      const emailFrom = String(process.env.EMAIL_FROM || '').trim();\n      const domain = emailFrom.includes('@') ? emailFrom.split('@')[1] : '';\n      if (!domain) {\n        return res.json({ ok: true, deliverabilityReady: false, deliverabilityBlockers: ['EMAIL_FROM not configured'], domain: null });\n      }\n      const result = await checkDomainDeliverabilityDNS(domain);\n      res.json({ ok: true, domain, ...result });\n    } catch (err) {\n      res.status(500).json({ ok: false, error: err.message });\n    }\n  });\n\nAdd ONLY the new /deliverability-status route block shown above. Do not change DESIGN_SYSTEMS, the /design-systems route, requireKey, or anything else in the file. requireKey is already imported/used elsewhere in this same file for other routes -- reuse it, do not redeclare it.",
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "source": "founder_directive_2026-07-26",
       "finding_note": "Found while checking system status live 2026-07-26: checkDomainDeliverabilityDNS was built and verified real (commit 4580148a46) but has zero call sites anywhere -- a real, revenue-relevant competitive-review finding (sb-deliverability-gate, 2026-07-19) built but never wired. Targeting this route file instead of the historically fragile prospect-runner.js to avoid the documented, confirmed platform bug that caused 10 consecutive failures on the original target.",
       "file_contains": [
@@ -2625,15 +2625,15 @@
       "expected_exports": [
         "createSiteBuilderRoutes"
       ],
-      "last_attempt_at": "2026-07-27T01:27:33.180Z",
+      "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": null,
+      "commit_sha": "2541fb20722e0135d8b560946ab6be4a536a88fc",
       "built_sha": null,
       "proof": null,
       "failure_signature": null,
       "same_signature_count": 0,
       "escalation_class": "same_signature_repeat",
-      "revive_count": 2,
+      "revive_count": 0,
       "revived_at": "2026-07-27T01:27:11.725Z",
       "last_attempt": null,
       "demoted": false,
@@ -2655,30 +2655,22 @@
           "checkDomainDeliverabilityDNS"
         ]
       },
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/site-builder/twins/steps/sb-deliverability-status-route.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-27T01:30:36.358Z",
-        "shipped_at": "2026-07-27T01:30:36.358Z",
-        "commit_sha": null,
-        "content_sha256": "24b7e7f230e25e3f4792eaf732df9cb7a004add5b574ad132a6446d8523b97aa",
-        "target_file": "routes/site-builder-routes.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "routes/site-builder-routes.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/site-builder/twins/steps/sb-deliverability-status-route.exact",
-          "content_sha256": "24b7e7f230e25e3f4792eaf732df9cb7a004add5b574ad132a6446d8523b97aa"
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/site-builder-routes.js",
+          "exports": [
+            "createSiteBuilderRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/site-builder-routes.js"
         }
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/design-systems"
       },
-      "shipped_at": "2026-07-27T01:30:36.358Z"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-27T01:30:42.979Z"
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",
