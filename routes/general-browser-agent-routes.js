@@ -209,7 +209,9 @@ export function registerGeneralBrowserAgentRoutes(app, deps = {}) {
       if (useGlvar) {
         const accountManager = await getAccountManager();
         const tcBrowser = createTCBrowserAgent({ accountManager, logger });
-        const login = await tcBrowser.loginToGLVAR(false);
+        const mfaCode = req.body?.mfaCode || req.body?.mfa_code || null;
+        const autoMfa = req.body?.autoMfa !== false && req.body?.auto_mfa !== false;
+        const login = await tcBrowser.loginToGLVAR(false, { mfaCode, autoMfa });
         session = login.session;
       } else {
         if (!targetUrl) {

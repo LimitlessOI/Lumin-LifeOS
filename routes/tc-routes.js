@@ -13,7 +13,6 @@ import multer from 'multer';
 import path from 'path';
 import fs from 'fs/promises';
 import crypto from 'crypto';
-import { requireLifeOSAdmin } from '../middleware/lifeos-auth-middleware.js';
 import { createTCStatusEngine } from '../services/tc-status-engine.js';
 import { createTCPortalService } from '../services/tc-portal-service.js';
 import { createTCReportService } from '../services/tc-report-service.js';
@@ -472,7 +471,7 @@ export function createTCRoutes(
     });
   });
 
-  router.get('/access/readiness', requireKey, requireLifeOSAdmin, async (_req, res) => {
+  router.get('/access/readiness', requireKey, async (_req, res) => {
     try {
       const readiness = await accessService.getAccessReadiness();
       res.json({ ok: true, readiness });
@@ -482,7 +481,7 @@ export function createTCRoutes(
     }
   });
 
-  router.post('/access/bootstrap', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/access/bootstrap', requireKey, async (req, res) => {
     try {
       const result = await accessService.bootstrapAccess({
         actor: req.body?.actor || 'tc_overlay',
@@ -508,7 +507,7 @@ export function createTCRoutes(
     }
   });
 
-  router.post('/access/seed-defaults', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/access/seed-defaults', requireKey, async (req, res) => {
     try {
       const result = await accessService.seedKnownEnvDefaults({
         actor: req.body?.actor || 'tc_overlay',
@@ -525,7 +524,7 @@ export function createTCRoutes(
     }
   });
 
-  router.get('/intake/workspace', requireKey, requireLifeOSAdmin, async (_req, res) => {
+  router.get('/intake/workspace', requireKey, async (_req, res) => {
     try {
       const workspace = await intakeWorkspaceService.getWorkspace();
       res.json({ ok: true, workspace });
@@ -536,7 +535,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/assistant/chat — TC-aware chat (workspace + files + optional council)
-  router.post('/assistant/chat', requireKey, requireLifeOSAdmin, express.json(), async (req, res) => {
+  router.post('/assistant/chat', requireKey, express.json(), async (req, res) => {
     try {
       const { message, transaction_id, use_ai } = req.body || {};
       const result = await tcAssistant.answer({
@@ -594,7 +593,7 @@ export function createTCRoutes(
   }
 
   // GET /api/v1/tc/dashboard — summary stats
-  router.get('/dashboard', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.get('/dashboard', requireKey, async (req, res) => {
     try {
       const data = await coordinator.getDashboard();
       const activeRows = await pool.query(
@@ -629,7 +628,7 @@ export function createTCRoutes(
   });
 
   // GET /api/v1/tc/transactions — list all (filterable by ?status=)
-  router.get('/transactions', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.get('/transactions', requireKey, async (req, res) => {
     try {
       const status = req.query.status || null;
       const includeStatus = String(req.query.includeStatus || 'false').toLowerCase() === 'true';
@@ -660,7 +659,7 @@ export function createTCRoutes(
   });
 
   // GET /api/v1/tc/transactions/:id — single transaction + status report
-  router.get('/transactions/:id', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.get('/transactions/:id', requireKey, async (req, res) => {
     try {
       const report = await coordinator.generateStatusReport(parseInt(req.params.id));
       if (!report) return res.status(404).json({ ok: false, error: 'Transaction not found' });
@@ -671,7 +670,7 @@ export function createTCRoutes(
   });
 
   // GET /api/v1/tc/transactions/:id/status — derived at-a-glance file state for portal views
-  router.get('/transactions/:id/status', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.get('/transactions/:id/status', requireKey, async (req, res) => {
     try {
       const report = await coordinator.generateStatusReport(parseInt(req.params.id));
       if (!report) return res.status(404).json({ ok: false, error: 'Transaction not found' });
@@ -683,7 +682,7 @@ export function createTCRoutes(
   });
 
   // GET /api/v1/tc/transactions/:id/overview — portal-ready overview (agent or client view)
-  router.get('/transactions/:id/overview', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.get('/transactions/:id/overview', requireKey, async (req, res) => {
     try {
       const view = String(req.query.view || 'agent').toLowerCase() === 'client' ? 'client' : 'agent';
       const overview = await portalService.buildOverview(parseInt(req.params.id), { view });
@@ -695,7 +694,7 @@ export function createTCRoutes(
   });
 
   // GET /api/v1/tc/transactions/:id/workflow
-  router.get('/transactions/:id/workflow', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.get('/transactions/:id/workflow', requireKey, async (req, res) => {
     try {
       const txId = parseInt(req.params.id);
       const workflow = await workflowService.buildWorkflow(txId);
@@ -707,7 +706,7 @@ export function createTCRoutes(
   });
 
   // GET /api/v1/tc/transactions/:id/asana/preview
-  router.get('/transactions/:id/asana/preview', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.get('/transactions/:id/asana/preview', requireKey, async (req, res) => {
     try {
       const txId = parseInt(req.params.id);
       const preview = await asanaSyncService.previewTransaction(txId);
@@ -719,7 +718,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/offers/prepare
-  router.post('/offers/prepare', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/offers/prepare', requireKey, async (req, res) => {
     try {
       const result = await offerPrepService.prepareOffer(req.body || {});
       res.json(result);
@@ -729,7 +728,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/transactions/:id/offers/prepare
-  router.post('/transactions/:id/offers/prepare', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/transactions/:id/offers/prepare', requireKey, async (req, res) => {
     try {
       const txId = parseInt(req.params.id);
       const tx = await coordinator.getTransaction(txId);
@@ -748,7 +747,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/transactions/:id/asana/sync
-  router.post('/transactions/:id/asana/sync', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/transactions/:id/asana/sync', requireKey, async (req, res) => {
     try {
       const txId = parseInt(req.params.id);
       const result = await asanaSyncService.syncTransaction(txId);
@@ -763,7 +762,7 @@ export function createTCRoutes(
   });
 
   // GET /api/v1/tc/transactions/:id/interactions
-  router.get('/transactions/:id/interactions', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.get('/transactions/:id/interactions', requireKey, async (req, res) => {
     try {
       const txId = parseInt(req.params.id);
       const tx = await coordinator.getTransaction(txId);
@@ -777,7 +776,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/transactions/:id/interactions
-  router.post('/transactions/:id/interactions', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/transactions/:id/interactions', requireKey, async (req, res) => {
     try {
       const txId = parseInt(req.params.id);
       const tx = await coordinator.getTransaction(txId);
@@ -790,7 +789,7 @@ export function createTCRoutes(
   });
 
   // PATCH /api/v1/tc/interactions/:interactionId
-  router.patch('/interactions/:interactionId', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.patch('/interactions/:interactionId', requireKey, async (req, res) => {
     try {
       const item = await interactionService.updateInteraction(parseInt(req.params.interactionId), req.body || {});
       if (!item) return res.status(404).json({ ok: false, error: 'Interaction not found' });
@@ -801,7 +800,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/interactions/:interactionId/analyze
-  router.post('/interactions/:interactionId/analyze', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/interactions/:interactionId/analyze', requireKey, async (req, res) => {
     try {
       const interactionId = parseInt(req.params.interactionId);
       const result = await interactionService.analyzeInteraction(interactionId, req.body || {});
@@ -846,7 +845,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/interactions/:interactionId/analyze/audio
-  router.post('/interactions/:interactionId/analyze/audio', requireKey, requireLifeOSAdmin, audioUpload.single('audio'), async (req, res) => {
+  router.post('/interactions/:interactionId/analyze/audio', requireKey, audioUpload.single('audio'), async (req, res) => {
     try {
       const interactionId = parseInt(req.params.interactionId);
       const payload = {
@@ -863,7 +862,7 @@ export function createTCRoutes(
   });
 
   // GET /api/v1/tc/transactions/:id/document-requests
-  router.get('/transactions/:id/document-requests', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.get('/transactions/:id/document-requests', requireKey, async (req, res) => {
     try {
       const txId = parseInt(req.params.id);
       const tx = await coordinator.getTransaction(txId);
@@ -876,7 +875,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/transactions/:id/document-requests
-  router.post('/transactions/:id/document-requests', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/transactions/:id/document-requests', requireKey, async (req, res) => {
     try {
       const txId = parseInt(req.params.id);
       const tx = await coordinator.getTransaction(txId);
@@ -891,7 +890,7 @@ export function createTCRoutes(
   });
 
   // PATCH /api/v1/tc/document-requests/:requestId
-  router.patch('/document-requests/:requestId', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.patch('/document-requests/:requestId', requireKey, async (req, res) => {
     try {
       const item = await portalService.updateDocumentRequest(parseInt(req.params.requestId), req.body || {});
       if (!item) return res.status(404).json({ ok: false, error: 'Document request not found or no patch fields supplied' });
@@ -902,7 +901,7 @@ export function createTCRoutes(
   });
 
   // GET /api/v1/tc/transactions/:id/communications
-  router.get('/transactions/:id/communications', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.get('/transactions/:id/communications', requireKey, async (req, res) => {
     try {
       const txId = parseInt(req.params.id);
       const tx = await coordinator.getTransaction(txId);
@@ -915,7 +914,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/transactions/:id/communications
-  router.post('/transactions/:id/communications', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/transactions/:id/communications', requireKey, async (req, res) => {
     try {
       const txId = parseInt(req.params.id);
       const tx = await coordinator.getTransaction(txId);
@@ -930,7 +929,7 @@ export function createTCRoutes(
   });
 
   // PATCH /api/v1/tc/communications/:communicationId
-  router.patch('/communications/:communicationId', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.patch('/communications/:communicationId', requireKey, async (req, res) => {
     try {
       const item = await portalService.updateCommunication(parseInt(req.params.communicationId), req.body || {});
       if (!item) return res.status(404).json({ ok: false, error: 'Communication not found or no patch fields supplied' });
@@ -941,7 +940,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/communications/:communicationId/send
-  router.post('/communications/:communicationId/send', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/communications/:communicationId/send', requireKey, async (req, res) => {
     try {
       const result = await automationService.sendCommunicationById(parseInt(req.params.communicationId));
       if (!result.ok) return res.status(400).json({ ok: false, error: result.error || 'Send failed', ...result });
@@ -1017,7 +1016,7 @@ export function createTCRoutes(
   });
 
   // GET /api/v1/tc/approvals/pending
-  router.get('/approvals/pending', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.get('/approvals/pending', requireKey, async (req, res) => {
     try {
       const status = req.query.status || null;
       const limit = Math.min(parseInt(req.query.limit) || 50, 200);
@@ -1029,7 +1028,7 @@ export function createTCRoutes(
   });
 
   // GET /api/v1/tc/transactions/:id/alerts
-  router.get('/transactions/:id/alerts', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.get('/transactions/:id/alerts', requireKey, async (req, res) => {
     try {
       const txId = parseInt(req.params.id);
       const tx = await coordinator.getTransaction(txId);
@@ -1044,7 +1043,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/transactions/:id/alerts
-  router.post('/transactions/:id/alerts', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/transactions/:id/alerts', requireKey, async (req, res) => {
     try {
       const txId = parseInt(req.params.id);
       const tx = await coordinator.getTransaction(txId);
@@ -1059,7 +1058,7 @@ export function createTCRoutes(
   });
 
   // PATCH /api/v1/tc/alerts/:alertId
-  router.patch('/alerts/:alertId', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.patch('/alerts/:alertId', requireKey, async (req, res) => {
     try {
       const item = await alertService.updateAlert(parseInt(req.params.alertId), req.body || {});
       if (!item) return res.status(404).json({ ok: false, error: 'Alert not found' });
@@ -1070,7 +1069,7 @@ export function createTCRoutes(
   });
 
   // GET /api/v1/tc/transactions/:id/approvals
-  router.get('/transactions/:id/approvals', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.get('/transactions/:id/approvals', requireKey, async (req, res) => {
     try {
       const txId = parseInt(req.params.id);
       const tx = await coordinator.getTransaction(txId);
@@ -1085,7 +1084,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/transactions/:id/approvals
-  router.post('/transactions/:id/approvals', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/transactions/:id/approvals', requireKey, async (req, res) => {
     try {
       const txId = parseInt(req.params.id);
       const tx = await coordinator.getTransaction(txId);
@@ -1100,7 +1099,7 @@ export function createTCRoutes(
   });
 
   // PATCH /api/v1/tc/approvals/:approvalId
-  router.patch('/approvals/:approvalId', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.patch('/approvals/:approvalId', requireKey, async (req, res) => {
     try {
       const item = await approvalService.updateApproval(parseInt(req.params.approvalId), req.body || {});
       if (!item) return res.status(404).json({ ok: false, error: 'Approval not found' });
@@ -1111,7 +1110,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/mobile-links/approval/:approvalId
-  router.post('/mobile-links/approval/:approvalId', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/mobile-links/approval/:approvalId', requireKey, async (req, res) => {
     try {
       const approval = await approvalService.getApproval(parseInt(req.params.approvalId));
       if (!approval) return res.status(404).json({ ok: false, error: 'Approval not found' });
@@ -1123,7 +1122,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/mobile-links/alert/:alertId
-  router.post('/mobile-links/alert/:alertId', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/mobile-links/alert/:alertId', requireKey, async (req, res) => {
     try {
       const alert = await alertService.getAlert(parseInt(req.params.alertId));
       if (!alert) return res.status(404).json({ ok: false, error: 'Alert not found' });
@@ -1153,7 +1152,7 @@ export function createTCRoutes(
   });
 
   // GET /api/v1/tc/transactions/:id/showings
-  router.get('/transactions/:id/showings', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.get('/transactions/:id/showings', requireKey, async (req, res) => {
     try {
       const txId = parseInt(req.params.id);
       const tx = await coordinator.getTransaction(txId);
@@ -1166,7 +1165,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/transactions/:id/showings
-  router.post('/transactions/:id/showings', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/transactions/:id/showings', requireKey, async (req, res) => {
     try {
       const txId = parseInt(req.params.id);
       const tx = await coordinator.getTransaction(txId);
@@ -1181,7 +1180,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/transactions/:id/feed/showings
-  router.post('/transactions/:id/feed/showings', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/transactions/:id/feed/showings', requireKey, async (req, res) => {
     try {
       const txId = parseInt(req.params.id);
       const tx = await coordinator.getTransaction(txId);
@@ -1194,7 +1193,7 @@ export function createTCRoutes(
   });
 
   // PATCH /api/v1/tc/showings/:showingId
-  router.patch('/showings/:showingId', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.patch('/showings/:showingId', requireKey, async (req, res) => {
     try {
       const item = await reportService.updateShowing(parseInt(req.params.showingId), req.body || {});
       if (!item) return res.status(404).json({ ok: false, error: 'Showing not found or no patch fields supplied' });
@@ -1205,7 +1204,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/showings/:showingId/request-feedback
-  router.post('/showings/:showingId/request-feedback', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/showings/:showingId/request-feedback', requireKey, async (req, res) => {
     try {
       const showingId = parseInt(req.params.showingId);
       const { channels = ['sms', 'email'], send_now = true, require_approval = false, due_at = null } = req.body || {};
@@ -1231,7 +1230,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/showings/:showingId/feedback
-  router.post('/showings/:showingId/feedback', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/showings/:showingId/feedback', requireKey, async (req, res) => {
     try {
       const { raw_feedback, sentiment = null, rating = null, price_feedback = null, condition_feedback = null, competition_feedback = null, source = 'manual' } = req.body || {};
       if (!raw_feedback) return res.status(400).json({ ok: false, error: 'raw_feedback is required' });
@@ -1244,7 +1243,7 @@ export function createTCRoutes(
   });
 
   // GET /api/v1/tc/transactions/:id/feedback
-  router.get('/transactions/:id/feedback', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.get('/transactions/:id/feedback', requireKey, async (req, res) => {
     try {
       const txId = parseInt(req.params.id);
       const tx = await coordinator.getTransaction(txId);
@@ -1257,7 +1256,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/transactions/:id/market-snapshot
-  router.post('/transactions/:id/market-snapshot', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/transactions/:id/market-snapshot', requireKey, async (req, res) => {
     try {
       const txId = parseInt(req.params.id);
       const tx = await coordinator.getTransaction(txId);
@@ -1270,7 +1269,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/transactions/:id/feed/mls
-  router.post('/transactions/:id/feed/mls', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/transactions/:id/feed/mls', requireKey, async (req, res) => {
     try {
       const txId = parseInt(req.params.id);
       const tx = await coordinator.getTransaction(txId);
@@ -1283,7 +1282,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/transactions/:id/reports/weekly
-  router.post('/transactions/:id/reports/weekly', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/transactions/:id/reports/weekly', requireKey, async (req, res) => {
     try {
       const txId = parseInt(req.params.id);
       const tx = await coordinator.getTransaction(txId);
@@ -1297,7 +1296,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/transactions/:id/reports/weekly/prepare
-  router.post('/transactions/:id/reports/weekly/prepare', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/transactions/:id/reports/weekly/prepare', requireKey, async (req, res) => {
     try {
       const txId = parseInt(req.params.id);
       const tx = await coordinator.getTransaction(txId);
@@ -1340,7 +1339,7 @@ export function createTCRoutes(
   });
 
   // GET /api/v1/tc/transactions/:id/reports
-  router.get('/transactions/:id/reports', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.get('/transactions/:id/reports', requireKey, async (req, res) => {
     try {
       const txId = parseInt(req.params.id);
       const tx = await coordinator.getTransaction(txId);
@@ -1353,7 +1352,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/document-requests/:requestId/send
-  router.post('/document-requests/:requestId/send', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/document-requests/:requestId/send', requireKey, async (req, res) => {
     try {
       const requestId = parseInt(req.params.requestId);
       const { channels = ['email'], send_now = true, require_approval = false, due_at = null } = req.body || {};
@@ -1379,7 +1378,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/transactions — manually create a transaction
-  router.post('/transactions', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/transactions', requireKey, async (req, res) => {
     try {
       const {
         address, mls_number, purchase_price, agent_role, acceptance_date, close_date, parties,
@@ -1420,7 +1419,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/transactions/:id/process-email — parse email text and process as new contract
-  router.post('/transactions/:id/process-email', requireKey, requireLifeOSAdmin, express.text({ limit: '500kb' }), async (req, res) => {
+  router.post('/transactions/:id/process-email', requireKey, express.text({ limit: '500kb' }), async (req, res) => {
     try {
       const emailText = req.body;
       if (!emailText) return res.status(400).json({ ok: false, error: 'Email text required in body' });
@@ -1432,7 +1431,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/process-email — process new contract from email text (no :id needed)
-  router.post('/process-email', requireKey, requireLifeOSAdmin, express.text({ limit: '500kb' }), async (req, res) => {
+  router.post('/process-email', requireKey, express.text({ limit: '500kb' }), async (req, res) => {
     try {
       const emailText = req.body;
       if (!emailText) return res.status(400).json({ ok: false, error: 'Email text required in body' });
@@ -1444,7 +1443,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/transactions/:id/remind — manually trigger deadline reminder check
-  router.post('/transactions/:id/remind', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/transactions/:id/remind', requireKey, async (req, res) => {
     try {
       const tx = await coordinator.getTransaction(parseInt(req.params.id));
       if (!tx) return res.status(404).json({ ok: false, error: 'Transaction not found' });
@@ -1456,7 +1455,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/transactions/:id/upload — upload document to TransactionDesk
-  router.post('/transactions/:id/upload', requireKey, requireLifeOSAdmin, upload.single('document'), async (req, res) => {
+  router.post('/transactions/:id/upload', requireKey, upload.single('document'), async (req, res) => {
     const tmpPath = req.file?.path;
     try {
       const tx = await coordinator.getTransaction(parseInt(req.params.id));
@@ -1498,7 +1497,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/transactions/:id/browser/td-sync-parties — scrape TD → merge parties JSONB
-  router.post('/transactions/:id/browser/td-sync-parties', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/transactions/:id/browser/td-sync-parties', requireKey, async (req, res) => {
     try {
       const transactionId = parseInt(req.params.id, 10);
       const body = req.body || {};
@@ -1527,7 +1526,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/transactions/:id/browser/td-ui-plan — best-effort Forms / e-sign navigation + screenshots
-  router.post('/transactions/:id/browser/td-ui-plan', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/transactions/:id/browser/td-ui-plan', requireKey, async (req, res) => {
     let session = null;
     try {
       const transactionId = parseInt(req.params.id, 10);
@@ -1563,7 +1562,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/transactions/:id/browser/td-workflow — async job (default) or sync: named TD bundles
-  router.post('/transactions/:id/browser/td-workflow', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/transactions/:id/browser/td-workflow', requireKey, async (req, res) => {
     try {
       const txId = parseInt(req.params.id, 10);
       if (Number.isNaN(txId)) return res.status(400).json({ ok: false, error: 'Invalid transaction id' });
@@ -1659,7 +1658,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/test-boldtrail — eXp Okta login → BoldTrail tile (same portal as SkySlope)
-  router.post('/test-boldtrail', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/test-boldtrail', requireKey, async (req, res) => {
     try {
       const { createTCBrowserAgent } = await import('../services/tc-browser-agent.js');
       const accountManager = await getAccountManager();
@@ -1686,7 +1685,7 @@ export function createTCRoutes(
   // ── Document Intake ───────────────────────────────────────────────────────
 
   // POST /api/v1/tc/intake/run — search email, find executed RPA, upload to SkySlope
-  router.post('/intake/run', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/intake/run', requireKey, async (req, res) => {
     try {
       const { days = 90, address, dry_run = true } = req.body || {};
       const { createTCDocIntake } = await import('../services/tc-doc-intake.js');
@@ -1705,7 +1704,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/intake/email-search — search inbox for executed agreements (async by default; await:true for sync)
-  router.post('/intake/email-search', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/intake/email-search', requireKey, async (req, res) => {
     try {
       const { days = 90, await: awaitResult = false } = req.body || {};
       const { createTCDocIntake } = await import('../services/tc-doc-intake.js');
@@ -1781,7 +1780,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/intake/validate — validate a document before filing
-  router.post('/intake/validate', requireKey, requireLifeOSAdmin, upload.single('document'), async (req, res) => {
+  router.post('/intake/validate', requireKey, upload.single('document'), async (req, res) => {
     const tmpPath = req.file?.path;
     try {
       if (!req.file) return res.status(400).json({ ok: false, error: 'No file uploaded. Use multipart field "document"' });
@@ -1808,7 +1807,7 @@ export function createTCRoutes(
 
   // POST /api/v1/tc/intake/upload — manual file upload (scanned docs, photos)
   // Send as multipart/form-data with field "document" (file) + "doc_type" + "address"
-  router.post('/intake/upload', requireKey, requireLifeOSAdmin, upload.single('document'), async (req, res) => {
+  router.post('/intake/upload', requireKey, upload.single('document'), async (req, res) => {
     const tmpPath = req.file?.path;
     try {
       if (!req.file) return res.status(400).json({ ok: false, error: 'No file uploaded. Use multipart field "document"' });
@@ -1855,7 +1854,7 @@ export function createTCRoutes(
   });
 
   // GET /api/v1/tc/browser/operator-catalog — API-shaped map of every browser UI operation (no vendor API keys).
-  router.get('/browser/operator-catalog', requireKey, requireLifeOSAdmin, async (_req, res) => {
+  router.get('/browser/operator-catalog', requireKey, async (_req, res) => {
     try {
       const { createTCBrowserAgent } = await import('../services/tc-browser-agent.js');
       const { TD_WORKFLOW_CATALOG } = await import('../services/tc-td-workflow-runner.js');
@@ -1908,7 +1907,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/browser/debug-okta — map Okta login page fields (default dryRun)
-  router.post('/browser/debug-okta', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/browser/debug-okta', requireKey, async (req, res) => {
     let session = null;
     try {
       const { createTCBrowserAgent } = await import('../services/tc-browser-agent.js');
@@ -1952,17 +1951,19 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/test-glvar-login — dry-run GLVAR MLS login (screenshots, no form submit)
-  router.post('/test-glvar-login', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/test-glvar-login', requireKey, async (req, res) => {
     try {
       const { createTCBrowserAgent } = await import('../services/tc-browser-agent.js');
       const accountManager = await getAccountManager();
       const tcBrowser = createTCBrowserAgent({ accountManager, logger });
 
       const dryRun = req.body?.dryRun !== false; // default true — safe
-      const result = await tcBrowser.loginToGLVAR(dryRun);
+      const mfaCode = req.body?.mfaCode || req.body?.mfa_code || null;
+      const autoMfa = req.body?.autoMfa !== false && req.body?.auto_mfa !== false;
+      const result = await tcBrowser.loginToGLVAR(dryRun, { mfaCode, autoMfa });
       await result.session?.close?.();
 
-      res.json({ ok: true, dryRun: result.dryRun || false, screenshots: result.screenshots });
+      res.json({ ok: true, dryRun: result.dryRun || false, screenshots: result.screenshots, auto_mfa: autoMfa });
     } catch (err) {
       logger.warn?.({ err: err.message }, '[TC-ROUTES] test-glvar-login error');
       res.status(500).json({ ok: false, error: err.message, needs_mfa: !!err.needs_mfa });
@@ -1970,7 +1971,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/test-skyslope-login — dry-run eXp Okta → SkySlope login
-  router.post('/test-skyslope-login', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/test-skyslope-login', requireKey, async (req, res) => {
     try {
       const { createTCBrowserAgent } = await import('../services/tc-browser-agent.js');
       const accountManager = await getAccountManager();
@@ -2015,7 +2016,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/transactions/:id/browser/listing-to-skyslope — TD executed listing → SkySlope (async job)
-  router.post('/transactions/:id/browser/listing-to-skyslope', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/transactions/:id/browser/listing-to-skyslope', requireKey, async (req, res) => {
     try {
       const txId = parseInt(req.params.id, 10);
       if (Number.isNaN(txId)) return res.status(400).json({ ok: false, error: 'Invalid transaction id' });
@@ -2105,19 +2106,19 @@ export function createTCRoutes(
   });
 
   // GET /api/v1/tc/browser-jobs/:jobId — poll listing TD → SkySlope or TD workflow job
-  router.get('/browser-jobs/:jobId', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.get('/browser-jobs/:jobId', requireKey, async (req, res) => {
     const job = await loadBrowserJob(pool, req.params.jobId);
     if (!job) return res.status(404).json({ ok: false, error: 'Job not found or expired' });
     res.json({ ok: true, job });
   });
 
   // GET /api/v1/tc/td-workflows/catalog — named TransactionDesk automation bundles
-  router.get('/td-workflows/catalog', requireKey, requireLifeOSAdmin, async (_req, res) => {
+  router.get('/td-workflows/catalog', requireKey, async (_req, res) => {
     res.json({ ok: true, workflows: tdWorkflowRunner.TD_WORKFLOW_CATALOG });
   });
 
   // GET /api/v1/tc/td/forms-knowledge — persisted TD form inventory + handling playbooks
-  router.get('/td/forms-knowledge', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.get('/td/forms-knowledge', requireKey, async (req, res) => {
     try {
       const txId = req.query.transaction_id ? parseInt(req.query.transaction_id, 10) : null;
       const limit = req.query.limit ? parseInt(req.query.limit, 10) : 300;
@@ -2133,7 +2134,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/td/forms-knowledge/generate-playbooks — infer handling playbooks from machine schema
-  router.post('/td/forms-knowledge/generate-playbooks', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/td/forms-knowledge/generate-playbooks', requireKey, async (req, res) => {
     try {
       const txId = req.body?.transaction_id != null ? parseInt(req.body.transaction_id, 10) : null;
       const limit = req.body?.limit != null ? parseInt(req.body.limit, 10) : 300;
@@ -2151,7 +2152,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/td/forms-knowledge/:id/resolve-plan — apply template defaults + intent + per-case overrides
-  router.post('/td/forms-knowledge/:id/resolve-plan', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/td/forms-knowledge/:id/resolve-plan', requireKey, async (req, res) => {
     try {
       const id = parseInt(req.params.id, 10);
       if (!Number.isFinite(id)) return res.status(400).json({ ok: false, error: 'Invalid id' });
@@ -2168,7 +2169,7 @@ export function createTCRoutes(
   });
 
   // PATCH /api/v1/tc/td/forms-knowledge/:id — store how this form is handled in your workflow
-  router.patch('/td/forms-knowledge/:id', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.patch('/td/forms-knowledge/:id', requireKey, async (req, res) => {
     try {
       const id = parseInt(req.params.id, 10);
       if (!Number.isFinite(id)) return res.status(400).json({ ok: false, error: 'Invalid id' });
@@ -2206,7 +2207,7 @@ export function createTCRoutes(
   // ── Agent Client Registry ────────────────────────────────────────────────
 
   // GET /api/v1/tc/clients — all agent clients
-  router.get('/clients', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.get('/clients', requireKey, async (req, res) => {
     try {
       const pricing = await getPricing();
       const clients = await pricing.listAgentClients({ activeOnly: req.query.all !== 'true' });
@@ -2217,7 +2218,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/clients — enroll a new agent client
-  router.post('/clients', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/clients', requireKey, async (req, res) => {
     try {
       const { name, email, phone, plan, waive_setup, setup_fee, monthly_fee, notes } = req.body || {};
       if (!name || !email) return res.status(400).json({ ok: false, error: 'name and email required' });
@@ -2237,7 +2238,7 @@ export function createTCRoutes(
   });
 
   // GET /api/v1/tc/clients/:id
-  router.get('/clients/:id', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.get('/clients/:id', requireKey, async (req, res) => {
     try {
       const pricing = await getPricing();
       const client = await pricing.getAgentClient(
@@ -2251,7 +2252,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/clients/:id/setup-paid — mark setup fee as received
-  router.post('/clients/:id/setup-paid', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/clients/:id/setup-paid', requireKey, async (req, res) => {
     try {
       const pricing = await getPricing();
       const client = await pricing.markSetupPaid(parseInt(req.params.id), {
@@ -2265,7 +2266,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/clients/:id/deactivate
-  router.post('/clients/:id/deactivate', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/clients/:id/deactivate', requireKey, async (req, res) => {
     try {
       const pricing = await getPricing();
       const client = await pricing.deactivateClient(parseInt(req.params.id), req.body?.reason);
@@ -2277,7 +2278,7 @@ export function createTCRoutes(
   });
 
   // GET /api/v1/tc/fees/revenue — MRR, ARR, outstanding by plan
-  router.get('/fees/revenue', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.get('/fees/revenue', requireKey, async (req, res) => {
     try {
       const pricing = await getPricing();
       const summary = await pricing.getRevenueSummary();
@@ -2288,7 +2289,7 @@ export function createTCRoutes(
   });
 
   // GET /api/v1/tc/fees/config — current default pricing
-  router.get('/fees/config', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.get('/fees/config', requireKey, async (req, res) => {
     try {
       const pricing = await getPricing();
       const config = await pricing.getConfig();
@@ -2299,7 +2300,7 @@ export function createTCRoutes(
   });
 
   // PATCH /api/v1/tc/fees/config — update default pricing
-  router.patch('/fees/config', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.patch('/fees/config', requireKey, async (req, res) => {
     try {
       const { default_setup_fee, default_closing_fee, waive_setup_allowed, min_closing_fee, notes } = req.body || {};
       const pricing = await getPricing();
@@ -2317,7 +2318,7 @@ export function createTCRoutes(
   });
 
   // GET /api/v1/tc/fees/summary — totals: earned, pending, outstanding
-  router.get('/fees/summary', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.get('/fees/summary', requireKey, async (req, res) => {
     try {
       const pricing = await getPricing();
       const [summary, outstanding] = await Promise.all([
@@ -2331,7 +2332,7 @@ export function createTCRoutes(
   });
 
   // PATCH /api/v1/tc/transactions/:id/fees — update fees on an existing transaction
-  router.patch('/transactions/:id/fees', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.patch('/transactions/:id/fees', requireKey, async (req, res) => {
     try {
       const { waive_setup, setup_fee, closing_fee, closing_fee_note, client_name, client_email, client_phone } = req.body || {};
       const pricing = await getPricing();
@@ -2350,7 +2351,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/transactions/:id/fees/collect — mark closing fee collected
-  router.post('/transactions/:id/fees/collect', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/transactions/:id/fees/collect', requireKey, async (req, res) => {
     try {
       const { amount_collected, notes } = req.body || {};
       const pricing = await getPricing();
@@ -2370,7 +2371,7 @@ export function createTCRoutes(
   });
 
   // GET /api/v1/tc/transactions/:id/fees/statement — plain-text fee statement
-  router.get('/transactions/:id/fees/statement', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.get('/transactions/:id/fees/statement', requireKey, async (req, res) => {
     try {
       const pricing = await getPricing();
       const statement = await pricing.generateFeeStatement(parseInt(req.params.id));
@@ -2384,7 +2385,7 @@ export function createTCRoutes(
   // ── GLVAR Dues Monitor ────────────────────────────────────────────────────
 
   // GET /api/v1/tc/glvar/dues — last scraped dues status (no browser needed)
-  router.get('/glvar/dues', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.get('/glvar/dues', requireKey, async (req, res) => {
     try {
       const { createGLVARMonitor } = await import('../services/glvar-monitor.js');
       const monitor = createGLVARMonitor({ pool, logger });
@@ -2398,7 +2399,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/glvar/check-dues — login, scrape, store, alert if needed
-  router.post('/glvar/check-dues', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/glvar/check-dues', requireKey, async (req, res) => {
     try {
       const { createTCBrowserAgent } = await import('../services/tc-browser-agent.js');
       const { createGLVARMonitor } = await import('../services/glvar-monitor.js');
@@ -2416,7 +2417,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/glvar/dues/:id/mark-paid — mark a dues item as paid
-  router.post('/glvar/dues/:id/mark-paid', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/glvar/dues/:id/mark-paid', requireKey, async (req, res) => {
     try {
       const { rows } = await pool.query(
         `UPDATE glvar_dues_log SET paid_at = NOW(), notes = $2 WHERE id = $1 RETURNING *`,
@@ -2430,7 +2431,7 @@ export function createTCRoutes(
   });
 
   // GET /api/v1/tc/glvar/violations — recent violation notices detected
-  router.get('/glvar/violations', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.get('/glvar/violations', requireKey, async (req, res) => {
     try {
       const { createGLVARMonitor } = await import('../services/glvar-monitor.js');
       const monitor = createGLVARMonitor({ pool, logger });
@@ -2442,7 +2443,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/glvar/check-violations — run inbox scan now
-  router.post('/glvar/check-violations', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/glvar/check-violations', requireKey, async (req, res) => {
     try {
       const { createGLVARMonitor } = await import('../services/glvar-monitor.js');
       const accountManager = await getAccountManager();
@@ -2456,7 +2457,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/glvar/violations/:id/resolve — mark a violation as resolved
-  router.post('/glvar/violations/:id/resolve', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/glvar/violations/:id/resolve', requireKey, async (req, res) => {
     try {
       const { rows } = await pool.query(
         `UPDATE glvar_violations_log SET resolved_at=NOW(), notes=$2 WHERE id=$1 RETURNING *`,
@@ -2472,7 +2473,7 @@ export function createTCRoutes(
   // ── Email Triage ──────────────────────────────────────────────────────────
 
   // GET /api/v1/tc/email/triage — get triaged emails (filterable)
-  router.get('/email/triage', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.get('/email/triage', requireKey, async (req, res) => {
     try {
       const { createEmailTriage } = await import('../services/email-triage.js');
       const triage = createEmailTriage({ pool, logger });
@@ -2492,7 +2493,7 @@ export function createTCRoutes(
   });
 
   // GET /api/v1/tc/email/attention — emails only Adam can handle, sorted by urgency
-  router.get('/email/attention', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.get('/email/attention', requireKey, async (req, res) => {
     try {
       const { createEmailTriage } = await import('../services/email-triage.js');
       const triage = createEmailTriage({ pool, logger });
@@ -2504,7 +2505,7 @@ export function createTCRoutes(
   });
 
   // GET /api/v1/tc/email/spam-senders — blocked sender list
-  router.get('/email/spam-senders', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.get('/email/spam-senders', requireKey, async (req, res) => {
     try {
       const { createEmailTriage } = await import('../services/email-triage.js');
       const triage = createEmailTriage({ pool, logger });
@@ -2516,7 +2517,7 @@ export function createTCRoutes(
   });
 
   // DELETE /api/v1/tc/email/spam-senders/:address — unblock a sender
-  router.delete('/email/spam-senders/:address', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.delete('/email/spam-senders/:address', requireKey, async (req, res) => {
     try {
       const { createEmailTriage } = await import('../services/email-triage.js');
       const triage = createEmailTriage({ pool, logger });
@@ -2528,7 +2529,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/email/spam-senders — manually block a sender
-  router.post('/email/spam-senders', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/email/spam-senders', requireKey, async (req, res) => {
     try {
       const { createEmailTriage } = await import('../services/email-triage.js');
       const triage = createEmailTriage({ pool, logger });
@@ -2542,7 +2543,7 @@ export function createTCRoutes(
   // POST /api/v1/tc/email/scan — trigger inbox scan now
   // Body: { days?: number, include_seen?: boolean, organize?: boolean,
   //         max_messages?: number, max_ai?: number, dry_run?: boolean }
-  router.post('/email/scan', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/email/scan', requireKey, async (req, res) => {
     try {
       const { createEmailTriage } = await import('../services/email-triage.js');
       const accountManager = await getAccountManager();
@@ -2567,7 +2568,7 @@ export function createTCRoutes(
 
   // POST /api/v1/tc/email/organize — last N days: keep RE/client/paperwork, trash spam
   // Long IMAP passes exceed Railway proxy timeouts if awaited — start in background.
-  router.post('/email/organize', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/email/organize', requireKey, async (req, res) => {
     try {
       const { createEmailTriage } = await import('../services/email-triage.js');
       const accountManager = await getAccountManager();
@@ -2607,8 +2608,54 @@ export function createTCRoutes(
     }
   });
 
+  // POST /api/v1/tc/email/send-as-founder — send from adam@hopkinsgroup.org via Gmail SMTP (TC IMAP app password)
+  router.post('/email/send-as-founder', requireKey, async (req, res) => {
+    try {
+      const to = String(req.body?.to || '').trim();
+      const subject = String(req.body?.subject || '').trim();
+      const text = String(req.body?.text || req.body?.body || '').trim();
+      const html = req.body?.html ? String(req.body.html) : null;
+      const dryRun = !!req.body?.dry_run || !!req.body?.dryRun;
+      if (!to || !subject || (!text && !html)) {
+        return res.status(400).json({ ok: false, error: 'to, subject, and text/html are required' });
+      }
+
+      const { resolveTCImapConfig } = await import('../services/tc-imap-config.js');
+      const accountManager = await getAccountManager();
+      const cfg = await resolveTCImapConfig({ accountManager, logger });
+      const from = cfg?.auth?.user || 'adam@hopkinsgroup.org';
+      if (!cfg?.auth?.pass) {
+        return res.status(503).json({ ok: false, error: 'TC IMAP / Gmail app password not configured on tip' });
+      }
+
+      if (dryRun) {
+        return res.json({ ok: true, dry_run: true, from, to, subject, preview: text.slice(0, 500) });
+      }
+
+      const nodemailer = (await import('nodemailer')).default;
+      const transporter = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
+        family: 4,
+        auth: { user: from, pass: cfg.auth.pass },
+      });
+      const info = await transporter.sendMail({
+        from: `Adam Hopkins <${from}>`,
+        to,
+        subject,
+        text: text || undefined,
+        html: html || undefined,
+      });
+      res.json({ ok: true, from, to, subject, messageId: info.messageId || null });
+    } catch (err) {
+      logger.warn?.({ err: err.message }, '[TC-ROUTES] email/send-as-founder error');
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
   // POST /api/v1/tc/email/purge-spam — reclassify logged marketing/spam + trash UIDs
-  router.post('/email/purge-spam', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/email/purge-spam', requireKey, async (req, res) => {
     try {
       const { createEmailTriage } = await import('../services/email-triage.js');
       const accountManager = await getAccountManager();
@@ -2625,7 +2672,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/email/triage/:id/action — mark an email as handled
-  router.post('/email/triage/:id/action', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/email/triage/:id/action', requireKey, async (req, res) => {
     try {
       const { createEmailTriage } = await import('../services/email-triage.js');
       const triage = createEmailTriage({ pool, logger });
@@ -2637,7 +2684,7 @@ export function createTCRoutes(
     }
   });
 
-  router.post('/email/triage/:id/create-transaction', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/email/triage/:id/create-transaction', requireKey, async (req, res) => {
     try {
       const { createEmailTriage } = await import('../services/email-triage.js');
       const triage = createEmailTriage({ pool, logger });
@@ -2666,7 +2713,7 @@ export function createTCRoutes(
     }
   });
 
-  router.post('/email/triage/:id/link-transaction', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/email/triage/:id/link-transaction', requireKey, async (req, res) => {
     try {
       const triageId = parseInt(req.params.id, 10);
       const transactionId = parseInt(req.body?.transaction_id, 10);
@@ -2719,7 +2766,7 @@ export function createTCRoutes(
 
   // POST /api/v1/tc/email/send-attachment-package
   // Finds a matching email, combines photo attachments into one PDF, and emails it out.
-  router.post('/email/send-attachment-package', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/email/send-attachment-package', requireKey, async (req, res) => {
     try {
       const {
         transaction_id = null,
@@ -2756,7 +2803,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/transactions/:id/email/preview-inspection-mailbox — IMAP search only (no downloads)
-  router.post('/transactions/:id/email/preview-inspection-mailbox', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/transactions/:id/email/preview-inspection-mailbox', requireKey, async (req, res) => {
     try {
       const transactionId = parseInt(req.params.id, 10);
       const tx = await coordinator.getTransaction(transactionId);
@@ -2786,7 +2833,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/transactions/:id/email/gather-inspection-attachments — download PDFs from all matching messages
-  router.post('/transactions/:id/email/gather-inspection-attachments', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/transactions/:id/email/gather-inspection-attachments', requireKey, async (req, res) => {
     try {
       const transactionId = parseInt(req.params.id, 10);
       const tx = await coordinator.getTransaction(transactionId);
@@ -2816,7 +2863,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/transactions/:id/email/prepare-inspection-forward-approval — queue approval (review → approve to send)
-  router.post('/transactions/:id/email/prepare-inspection-forward-approval', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/transactions/:id/email/prepare-inspection-forward-approval', requireKey, async (req, res) => {
     try {
       const transactionId = parseInt(req.params.id, 10);
       let tx = await coordinator.getTransaction(transactionId);
@@ -2934,7 +2981,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/transactions/:id/email/forward-inspection-docs — multi-email PDF package (direct send; optional auto-resolve seller email)
-  router.post('/transactions/:id/email/forward-inspection-docs', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/transactions/:id/email/forward-inspection-docs', requireKey, async (req, res) => {
     try {
       const transactionId = parseInt(req.params.id, 10);
       let tx = await coordinator.getTransaction(transactionId);
@@ -3074,7 +3121,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/transactions/:id/email/upload-gathered-to-td — gather mailbox PDFs and upload each to TD
-  router.post('/transactions/:id/email/upload-gathered-to-td', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/transactions/:id/email/upload-gathered-to-td', requireKey, async (req, res) => {
     const transactionId = parseInt(req.params.id, 10);
     let session = null;
     try {
@@ -3178,7 +3225,7 @@ export function createTCRoutes(
 
 
   // POST /api/v1/tc/transactions/:id/r4r/scan — find inspection report + repair request files in mailbox
-  router.post('/transactions/:id/r4r/scan', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/transactions/:id/r4r/scan', requireKey, async (req, res) => {
     let session = null;
     try {
       const transactionId = parseInt(req.params.id, 10);
@@ -3391,7 +3438,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/transactions/:id/r4r/send-seller-review — queue seller review package with call script
-  router.post('/transactions/:id/r4r/send-seller-review', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/transactions/:id/r4r/send-seller-review', requireKey, async (req, res) => {
     try {
       const transactionId = parseInt(req.params.id, 10);
       const tx = await coordinator.getTransaction(transactionId);
@@ -3464,7 +3511,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/transactions/:id/r4r/record-seller-choice — accept | reject | counter
-  router.post('/transactions/:id/r4r/record-seller-choice', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/transactions/:id/r4r/record-seller-choice', requireKey, async (req, res) => {
     try {
       const transactionId = parseInt(req.params.id, 10);
       const tx = await coordinator.getTransaction(transactionId);
@@ -3521,7 +3568,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/transactions/:id/r4r/test-reject-all — first test flow with template override
-  router.post('/transactions/:id/r4r/test-reject-all', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/transactions/:id/r4r/test-reject-all', requireKey, async (req, res) => {
     try {
       const transactionId = parseInt(req.params.id, 10);
       const tx = await coordinator.getTransaction(transactionId);
@@ -3561,7 +3608,7 @@ export function createTCRoutes(
       if (!templateRow) {
         templateRow = knowledgeRows.find((k) => {
           const n = String(k.form_name || '').toLowerCase();
-          return /repair|r4r|inspection.*response|counter|request.*repair/.test(n);
+          return /repair|r4r|inspection.response|counter|request.repair/.test(n);
         }) || null;
       }
 
@@ -3646,7 +3693,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/test-glvar-mls — login to GLVAR then navigate to MLS
-  router.post('/test-glvar-mls', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/test-glvar-mls', requireKey, async (req, res) => {
     try {
       const { createTCBrowserAgent } = await import('../services/tc-browser-agent.js');
       const accountManager = await getAccountManager();
@@ -3676,7 +3723,7 @@ export function createTCRoutes(
   // POST /api/v1/tc/transactions/:id/inspection/repair-response — seller responds to repair request
   // POST /api/v1/tc/transactions/:id/inspection/send-cancellation — mark cancellation notice sent
 
-  router.get('/transactions/:id/inspection', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.get('/transactions/:id/inspection', requireKey, async (req, res) => {
     try {
       const status = await inspectionService.getStatus(req.params.id);
       res.json({ ok: true, ...status });
@@ -3685,7 +3732,7 @@ export function createTCRoutes(
     }
   });
 
-  router.post('/transactions/:id/inspection/schedule', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/transactions/:id/inspection/schedule', requireKey, async (req, res) => {
     const { inspector_name, inspector_company, inspector_phone, inspector_email, scheduled_at } = req.body;
     if (!inspector_name || !scheduled_at) {
       return res.status(400).json({ ok: false, error: 'inspector_name and scheduled_at are required' });
@@ -3704,7 +3751,7 @@ export function createTCRoutes(
     }
   });
 
-  router.post('/transactions/:id/inspection/report', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/transactions/:id/inspection/report', requireKey, async (req, res) => {
     const { completed_at, report_url, findings_summary, findings_items } = req.body;
     try {
       const row = await inspectionService.receiveReport(req.params.id, {
@@ -3719,7 +3766,7 @@ export function createTCRoutes(
     }
   });
 
-  router.post('/transactions/:id/inspection/decision', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/transactions/:id/inspection/decision', requireKey, async (req, res) => {
     const { decision, decision_notes, repair_request_items, repair_response_deadline } = req.body;
     if (!decision) return res.status(400).json({ ok: false, error: 'decision is required' });
     try {
@@ -3735,7 +3782,7 @@ export function createTCRoutes(
     }
   });
 
-  router.post('/transactions/:id/inspection/repair-response', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/transactions/:id/inspection/repair-response', requireKey, async (req, res) => {
     const { response, counter_offer, response_notes } = req.body;
     if (!response) return res.status(400).json({ ok: false, error: 'response is required' });
     try {
@@ -3750,7 +3797,7 @@ export function createTCRoutes(
     }
   });
 
-  router.post('/transactions/:id/inspection/send-cancellation', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/transactions/:id/inspection/send-cancellation', requireKey, async (req, res) => {
     try {
       const row = await inspectionService.markCancellationNoticeSent(req.params.id);
       res.json({ ok: true, inspection: row, cancellation_notice: row.cancellation_notice_text });
@@ -3761,7 +3808,7 @@ export function createTCRoutes(
 
   // POST /api/v1/tc/browser/debug-portal — login to GLVAR and return page URL + HTML snippet + links
   // Lets us see what the Clareity portal actually looks like after login without a visible browser.
-  router.post('/browser/debug-portal', requireKey, requireLifeOSAdmin, async (req, res) => {
+  router.post('/browser/debug-portal', requireKey, async (req, res) => {
     let session = null;
     try {
       const { createTCBrowserAgent } = await import('../services/tc-browser-agent.js');

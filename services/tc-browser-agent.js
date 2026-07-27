@@ -12,14 +12,37 @@
 
 import path from 'path';
 import fs from 'fs/promises';
+import { ImapFlow } from 'imapflow';
 import { createSession } from './browser-agent.js';
 import { getExpOktaCredentialsFromEnv, getGLVARCredentialsFromEnv } from './credential-aliases.js';
+import { resolveTCImapConfig } from './tc-imap-config.js';
 
 const GLVAR_LOGIN_URL = 'https://glvar.clareityiam.net/idp/login';
 const EXP_OKTA_URL   = 'https://exprealty.okta.com';
 const SCREENSHOT_DIR = '/tmp/tc-screenshots';
 const LOGIN_TIMEOUT_MS = 45_000;
 const NAV_TIMEOUT_MS = 30_000;
+const MFA_IMAP_TIMEOUT_MS = 90_000;
+const MFA_IMAP_POLL_MS = 4_000;
+
+function extractMfaCodeFromText(text) {
+  const blob = String(text || '');
+  const patterns = [
+    /(?:verification|security|authentication|one[-\s]?time|login)\scode[:\s]+(\d{4,8})/i,
+    /(?:code is|code:)\s*(\d{4,8})/i,
+    /\b(\d{6})\b/,
+  ];
+  for (const re of patterns) {
+    const m = blob.match(re);
+    if (m?.[1]) return m[1];
+  }
+  return null;
+}
+
+function looksLikeClareityMfaMail({ from = '', subject = '', body = '' } = {}) {
+  const blob = `${from} ${subject} ${body}`.toLowerCase();
+  return /clareity|glvar|greater las vegas|verification code|security code|one[-\s]?time|authentication code/.test(blob);
+}
 
 // Nevada-standard contingency days from acceptance
 const NEVADA_DEFAULTS = {
@@ -345,10 +368,173 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
   }
 
   /**
+   * Poll Adam's TC IMAP mailbox for a fresh Clareity/GLVAR MFA code.
+   */
+  async function pollImapForClareityMfaCode({ since, timeoutMs = MFA_IMAP_TIMEOUT_MS } = {}) {
+    const cfg = await resolveTCImapConfig({ accountManager, logger });
+    if (!cfg?.auth?.user || !cfg?.auth?.pass) {
+      throw Object.assign(
+        new Error('TC IMAP not configured — cannot auto-read Clareity MFA code from adam@hopkinsgroup.org'),
+        { needs_mfa: true }
+      );
+    }
+
+    const deadline = Date.now() + timeoutMs;
+    const lookback = since instanceof Date ? since : new Date(Date.now() - 5 * 60 * 1000);
+    let lastErr = null;
+
+    while (Date.now() < deadline) {
+      const client = new ImapFlow({
+        host: cfg.host,
+        port: cfg.port,
+        secure: cfg.secure !== false,
+        auth: cfg.auth,
+        logger: false,
+        tls: cfg.tls,
+      });
+      try {
+        await client.connect();
+        for (const mailbox of ['INBOX', '[Gmail]/Spam']) {
+          try {
+            await client.mailboxOpen(mailbox);
+            const uids = await client.search({ since: lookback });
+            if (!uids?.length) continue;
+            const recent = uids.slice(-12);
+            for (const uid of recent.reverse()) {
+              const msg = await client.fetchOne(uid, { envelope: true, source: true });
+              if (!msg) continue;
+              const from = msg.envelope?.from?.[0]?.address || '';
+              const subject = msg.envelope?.subject || '';
+              const body = msg.source?.toString('utf8') || '';
+              if (!looksLikeClareityMfaMail({ from, subject, body })) continue;
+              const code = extractMfaCodeFromText(`${subject}\n${body}`);
+              if (code) {
+                logger.info?.({ mailbox, from, subject }, '[TC-BROWSER] Clareity MFA code found in IMAP');
+                await client.logout().catch(() => {});
+                return code;
+              }
+            }
+          } catch (err) {
+            lastErr = err;
+          }
+        }
+        await client.logout().catch(() => {});
+      } catch (err) {
+        lastErr = err;
+        await client.logout().catch(() => {});
+      }
+      await new Promise((r) => setTimeout(r, MFA_IMAP_POLL_MS));
+    }
+
+    const detail = lastErr?.message ? ` Last IMAP error: ${lastErr.message}` : '';
+    throw Object.assign(
+      new Error(`Clareity MFA code not found in IMAP within ${Math.round(timeoutMs / 1000)}s.${detail}`),
+      { needs_mfa: true }
+    );
+  }
+
+  async function completeClareityMfa(session, { mfaCode = null, autoMfa = true } = {}) {
+    await session.page.evaluate(() => {
+      const nodes = Array.from(document.querySelectorAll('button, a, label, input[type="button"], input[type="submit"], [role="button"]'));
+      const emailBtn = nodes.find((el) => /email/i.test(el.textContent || el.value || ''));
+      if (emailBtn) emailBtn.click();
+    }).catch(() => {});
+    await session.page.waitForTimeout(1500).catch(() => {});
+
+    const since = new Date(Date.now() - 2 * 60 * 1000);
+    let code = String(mfaCode || '').trim();
+    if (!code && autoMfa) {
+      code = await pollImapForClareityMfaCode({ since });
+    }
+    if (!code) {
+      const mfaSp = await screenshotPath('glvar-mfa-required');
+      await session.page.screenshot({ path: mfaSp });
+      throw Object.assign(
+        new Error(`GLVAR/Clareity requires a live 2FA code (email or SMS). Pass mfaCode or ensure MFA email reaches TC IMAP. Screenshot: ${mfaSp}`),
+        { needs_mfa: true }
+      );
+    }
+
+    const codeSelectors = [
+      'input[name*="otp" i]',
+      'input[name*="code" i]',
+      'input[autocomplete="one-time-code"]',
+      'input[inputmode="numeric"]',
+      'input[type="tel"]',
+      'input[type="text"]',
+    ];
+    let filled = false;
+    for (const sel of codeSelectors) {
+      const el = await session.page.$(sel).catch(() => null);
+      if (!el) continue;
+      await el.click({ clickCount: 3 }).catch(() => {});
+      await el.type(code, { delay: 20 });
+      filled = true;
+      break;
+    }
+    if (!filled) {
+      filled = await session.page.evaluate((otp) => {
+        const inputs = Array.from(document.querySelectorAll('input')).filter((i) => {
+          const t = (i.type || 'text').toLowerCase();
+          return t === 'text' || t === 'tel' || t === 'number' || t === 'password';
+        });
+        const target = inputs.find((i) => /otp|code|token|mfa|verify/i.test(`${i.name} ${i.id} ${i.placeholder}`))
+          || inputs[0];
+        if (!target) return false;
+        target.focus();
+        target.value = otp;
+        target.dispatchEvent(new Event('input', { bubbles: true }));
+        target.dispatchEvent(new Event('change', { bubbles: true }));
+        return true;
+      }, code);
+    }
+    if (!filled) {
+      throw Object.assign(new Error('Clareity MFA code input not found on page'), { needs_mfa: true });
+    }
+
+    const submitSelectors = [
+      'button[type="submit"]',
+      'input[type="submit"]',
+      'button.btn-signin',
+      'button',
+    ];
+    let submitted = false;
+    for (const sel of submitSelectors) {
+      const el = await session.page.$(sel).catch(() => null);
+      if (!el) continue;
+      const label = await el.evaluate((n) => (n.textContent || n.value || '').trim()).catch(() => '');
+      if (sel === 'button' && label && !/verify|continue|submit|sign\sin|confirm|next/i.test(label)) continue;
+      await el.click();
+      submitted = true;
+      break;
+    }
+    if (!submitted) {
+      await session.page.keyboard.press('Enter').catch(() => {});
+    }
+    await session.page.waitForNavigation({ waitUntil: 'networkidle2', timeout: LOGIN_TIMEOUT_MS }).catch(() => {});
+    await session.page.waitForTimeout(1500).catch(() => {});
+
+    const url = session.page.url();
+    const content = await session.page.content();
+    if (/\/authentication\/mfa/i.test(url) || /verify your identity|invalid code|incorrect code/i.test(content)) {
+      const failSp = await screenshotPath('glvar-mfa-failed');
+      await session.page.screenshot({ path: failSp });
+      throw Object.assign(
+        new Error(`Clareity MFA rejected or still required. Screenshot: ${failSp}`),
+        { needs_mfa: true }
+      );
+    }
+    return { codeUsed: true };
+  }
+
+  /**
    * Log into GLVAR MLS via Clareity IAM.
    * Returns the open session (do NOT close before calling navigateToTransactionDesk).
+   * options: { mfaCode, autoMfa=true } — autoMfa polls adam@hopkinsgroup.org IMAP for Clareity codes.
    */
-  async function loginToGLVAR(dryRun = false) {
+  async function loginToGLVAR(dryRun = false, options = {}) {
+    const mfaCode = options.mfaCode || null;
+    const autoMfa = options.autoMfa !== false;
     const credentials = await getGLVARCredentials();
     const session = await createSession();
 
@@ -363,14 +549,12 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
         return { session, ok: true, dryRun: true, screenshots: [sp] };
       }
 
-      // Clareity IAM standard selectors
       await session.fill('#username, input[name="username"], input[type="text"]', credentials.username);
       await session.fill('input[type="password"]', credentials.password);
 
       const submitSp = await screenshotPath('glvar-pre-submit');
       await session.page.screenshot({ path: submitSp });
 
-      // Try submit button selectors in priority order, fall back to Enter key on password field
       const submitSelectors = [
         'button[type="submit"]',
         'input[type="submit"]',
@@ -386,28 +570,18 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
         if (el) { await el.click(); submitted = true; break; }
       }
       if (!submitted) {
-        // Last resort: press Enter on the password field to submit
         await session.page.$('input[type="password"]').then(el => el?.press('Enter')).catch(() => {});
       }
       await session.page.waitForNavigation({ waitUntil: 'networkidle2', timeout: LOGIN_TIMEOUT_MS }).catch(() => {});
 
-      const url = session.page.url();
-      const content = await session.page.content();
+      let url = session.page.url();
+      let content = await session.page.content();
 
-      // Clareity can require a live 2FA code (email/SMS) after correct credentials.
-      // This is NOT a login failure by the checks below (no /idp/login redirect, no
-      // "invalid" text) — without this check the function fell through to `ok: true`
-      // and handed callers a session stuck on the MFA page, which downstream surfaced
-      // as a misleading "TransactionDesk link not found" instead of the real cause.
       if (/\/authentication\/mfa/i.test(url) || /verify your identity|send code via (email|sms)/i.test(content)) {
-        const mfaSp = await screenshotPath('glvar-mfa-required');
-        await session.page.screenshot({ path: mfaSp });
-        await session.close();
-        const mfaErr = new Error(
-          `GLVAR/Clareity requires a live 2FA code (email or SMS) before login can complete — this cannot be automated without a human providing the code. Screenshot: ${mfaSp}`
-        );
-        mfaErr.needs_mfa = true;
-        throw mfaErr;
+        logger.info?.({ url, autoMfa: !!autoMfa, hasCode: !!mfaCode }, '[TC-BROWSER] Clareity MFA required — attempting completion');
+        await completeClareityMfa(session, { mfaCode, autoMfa });
+        url = session.page.url();
+        content = await session.page.content();
       }
 
       if (url.includes('/idp/login') || /invalid|authentication failed|incorrect/i.test(content)) {
@@ -494,7 +668,7 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
           const clickedSso = await session.page.evaluate(() => {
             const els = Array.from(document.querySelectorAll('a, button, [role="button"], input[type="submit"]'));
             const el = els.find((e) =>
-              /clareity|sso|single\s*sign|mls\s*login|glvar|login\s*with/i.test(
+              /clareity|sso|single\ssign|mls\slogin|glvar|login\swith/i.test(
                 `${e.textContent || ''} ${e.value || ''} ${e.getAttribute?.('href') || ''}`
               )
             );
@@ -568,7 +742,7 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
           document.querySelectorAll('a, button, [role="button"], [role="link"], [class*="tile"], [class*="app"], [class*="icon"], img')
         );
         const td = candidates.find((l) =>
-          /transactiondesk|transaction desk|lone\s*wolf\s*transactions|zip\s*form|zipform/i.test(
+          /transactiondesk|transaction desk|lone\swolf\stransactions|zip\sform|zipform/i.test(
             `${l.textContent || ''} ${l.getAttribute?.('title') || ''} ${l.getAttribute?.('aria-label') || ''} ${l.getAttribute?.('alt') || ''} ${l.getAttribute?.('href') || ''}`
           )
         );
@@ -621,7 +795,7 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
       );
       const el = candidates.find((e) => {
         const t = `${e.textContent || ''} ${e.getAttribute?.('value') || ''} ${e.getAttribute?.('title') || ''}`;
-        return /transaction\s*launch|launch\s*transaction|open\s*transaction\s*desk|transaction\s*desk\s*launch|zipform\s*launch/i.test(
+        return /transaction\slaunch|launch\stransaction|open\stransaction\sdesk|transaction\sdesk\slaunch|zipform\slaunch/i.test(
           t
         );
       });
@@ -890,7 +1064,7 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
         let score = 10;
         if (/listing/i.test(t)) score += 5;
         if (/agreement/i.test(t)) score += 5;
-        if (/executed|fully\s*executed|signed/i.test(t)) score += 8;
+        if (/executed|fully\sexecuted|signed/i.test(t)) score += 8;
         if (/draft/i.test(t)) score -= 6;
         scored.push({ row, score, text: t.slice(0, 200) });
       }
@@ -961,7 +1135,7 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
       // Text search fallback
       created = await session.page.evaluate(() => {
         const btns = Array.from(document.querySelectorAll('button, a'));
-        const btn = btns.find(b => /new\s+transaction|\+\s*transaction/i.test(b.textContent));
+        const btn = btns.find(b => /new\s+transaction|\+\stransaction/i.test(b.textContent));
         if (btn) { btn.click(); return true; }
         return false;
       });
@@ -1066,9 +1240,9 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
           .replace(/\s+/g, ' ')
           .trim();
         if (!t || t.length > 72) return false;
-        if (/history|audit|expiration|document\s*#|log\b/i.test(t) && !/document\s*library/i.test(t)) return false;
+        if (/history|audit|expiration|document\s*#|log\b/i.test(t) && !/document\slibrary/i.test(t)) return false;
         if (/^(documents?|files?|docs?|attachments?|paperwork|library)$/i.test(t)) return true;
-        if (/\b(documents?|attachments?|paperwork|file\s*library|document\s*library)\b/i.test(t) && t.length < 64)
+        if (/\b(documents?|attachments?|paperwork|file\slibrary|document\slibrary)\b/i.test(t) && t.length < 64)
           return true;
         return false;
       };
@@ -1122,7 +1296,7 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
       const inputs = Array.from(document.querySelectorAll('input:not([type="hidden"]), textarea'));
       const pick = inputs.find((i) => {
         const ph = `${i.placeholder || ''} ${i.name || ''} ${i.id || ''}`.toLowerCase();
-        return /description|document\s*name|title|type|label|name/i.test(ph);
+        return /description|document\sname|title|type|label|name/i.test(ph);
       });
       if (!pick || pick.disabled || pick.readOnly) return false;
       pick.focus();
@@ -1531,7 +1705,7 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
           try {
             await session.page.goto(target, { waitUntil: 'networkidle2', timeout: 28_000 });
             const title = await session.page.title();
-            if (!/sign\s*in|log\s*in|error|not found/i.test(title)) {
+            if (!/sign\sin|log\sin|error|not found/i.test(title)) {
               const sp = await screenshotPath('td-opened-via-goto');
               await session.page.screenshot({ path: sp, fullPage: true }).catch(() => {});
               screenshots.push(sp);
@@ -1568,10 +1742,10 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
       const EMAIL = /([a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,})/gi;
       function roleHint(text) {
         const t = (text || '').toLowerCase();
-        if (/listing\s*agent|list\s*agent|seller'?s?\s*(listing\s*)?agent/i.test(t)) return 'listing_agent';
-        if (/buyer'?s?\s*agent|selling\s*agent|co-?op(?:erating)?\s*agent|co-?op/i.test(t)) return 'buyer_agent';
-        if (/\bseller\b(?!\s*agent)/i.test(t)) return 'seller';
-        if (/\bbuyer\b(?!\s*agent)/i.test(t)) return 'buyer';
+        if (/listing\sagent|list\sagent|seller'?s?\s*(listing\s*)?agent/i.test(t)) return 'listing_agent';
+        if (/buyer'?s?\sagent|selling\sagent|co-?op(?:erating)?\sagent|co-?op/i.test(t)) return 'buyer_agent';
+        if (/\bseller\b(?!\sagent)/i.test(t)) return 'seller';
+        if (/\bbuyer\b(?!\sagent)/i.test(t)) return 'buyer';
         if (/\bescrow\b|\btitle\b|\bclosing\b/.test(t)) return 'escrow';
         return 'other';
       }
@@ -1640,7 +1814,7 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
     ],
     open_forms: [
       { action: 'wait', ms: 1000 },
-      { action: 'click_text', re: '(^forms?$|form\\s*library|add\\s+a?\\s*form|templates?|form\\s*central)' },
+      { action: 'click_text', re: '(^forms?$|form\\slibrary|add\\s+a?\\sform|templates?|form\\scentral)' },
       { action: 'screenshot', label: 'td-after-forms' },
     ],
     open_documents: [
@@ -1655,7 +1829,7 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
       { action: 'click_text', re: '(documents?|files?)' },
       { action: 'wait', ms: 1500 },
       { action: 'screenshot', label: 'td-workflow-1-documents' },
-      { action: 'click_text', re: '(^forms?$|form\\s*library|add\\s+a?\\s*form|templates?)' },
+      { action: 'click_text', re: '(^forms?$|form\\slibrary|add\\s+a?\\sform|templates?)' },
       { action: 'wait', ms: 1500 },
       { action: 'screenshot', label: 'td-workflow-2-forms' },
       { action: 'click_text', re: '(e-?sign|signature|signing|send\\s+for\\s+sign)' },
