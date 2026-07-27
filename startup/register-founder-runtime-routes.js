@@ -21,6 +21,8 @@ import { createGoVegasOutreachRoutes } from "../routes/go-vegas-outreach-routes.
 import { startGoVegasOutreachScheduler } from "../services/go-vegas-outreach-scheduler.js";
 import { createTCRoutes } from "../routes/tc-routes.js";
 import { createReceptionistRoutes } from "../routes/receptionist-routes.js";
+import { createMLSRoutes } from "../routes/mls-routes.js";
+import { requireLifeOSAdmin } from "../middleware/lifeos-auth-middleware.js";
 import { createTCCoordinator } from "../services/tc-coordinator.js";
 import { createAccountManager } from "../services/account-manager.js";
 import { createClientCareBillingRoutes } from "../routes/clientcare-billing-routes.js";
@@ -213,6 +215,20 @@ export async function registerFounderRuntimeRoutes(app, deps) {
     logger.info("✅ [RECEPTIONIST] Founder-builder routes mounted at /api/v1/receptionist");
   } catch (err) {
     logger.warn?.({ err: err.message }, "[RECEPTIONIST] founder-lane mount failed (non-fatal)");
+  }
+
+  // MLS Deal Scanner -- same class of gap as AI Receptionist: real, DB-backed
+  // routes (mls_investors/mls_deal_matches) only ever wired into the dead
+  // full-runtime lane. Admin-gated (requireUserOrKey + requireLifeOSAdmin,
+  // same composition as TC Service) since investor/deal data is comparably
+  // sensitive real client data, not just plain requireKey as the dead lane used.
+  try {
+    const requireMlsAccess = (req, res, next) => requireUserOrKey(req, res, () => requireLifeOSAdmin(req, res, next));
+    const mlsAccountManager = createAccountManager({ pool, logger });
+    createMLSRoutes(app, { pool, requireKey: requireMlsAccess, callCouncilMember, logger, accountManager: mlsAccountManager });
+    logger.info("✅ [MLS] Founder-builder routes mounted at /api/v1/mls");
+  } catch (err) {
+    logger.warn?.({ err: err.message }, "[MLS] founder-lane mount failed (non-fatal)");
   }
 
   // ClientCare billing rescue must live on founder lane — production boots founder_builder.

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-27T04:32:52.780Z",
+  "generated_at": "2026-07-27T04:38:24.198Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12177,
   "files": [
@@ -41025,9 +41025,9 @@
     {
       "path": "docs/products/tc-service/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — TC Service",
-      "bytes": 125459,
-      "mtime": "2026-07-27T04:24:04.076Z",
-      "indexed_at": "2026-07-27T04:24:25.912Z"
+      "bytes": 126319,
+      "mtime": "2026-07-27T04:38:02.144Z",
+      "indexed_at": "2026-07-27T04:38:24.198Z"
     },
     {
       "path": "docs/products/TCSERVICE.md",
@@ -68538,9 +68538,12 @@
     {
       "path": "routes/mls-routes.js",
       "synopsis": "mls-routes.js",
-      "bytes": 10787,
-      "mtime": "2026-07-21T05:32:04.334Z",
-      "indexed_at": "2026-07-21T05:58:39.404Z"
+      "bytes": 10837,
+      "mtime": "2026-07-27T04:37:39.446Z",
+      "indexed_at": "2026-07-27T04:38:24.198Z",
+      "ssot": [
+        "docs/products/tc-service/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/model-performance-routes.js",
@@ -93112,9 +93115,9 @@
     {
       "path": "startup/register-founder-runtime-routes.js",
       "synopsis": "Minimal founder-builder runtime route composition.",
-      "bytes": 16794,
-      "mtime": "2026-07-27T04:32:06.262Z",
-      "indexed_at": "2026-07-27T04:32:52.780Z",
+      "bytes": 17831,
+      "mtime": "2026-07-27T04:36:48.094Z",
+      "indexed_at": "2026-07-27T04:38:24.198Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
