@@ -2744,7 +2744,31 @@
       },
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "sb-lead-capture-service",
-      "mission_id": "PRODUCT-site-builder"
+      "mission_id": "PRODUCT-site-builder",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/site-builder/twins/steps/sb-lead-capture-service.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-27T04:46:14.846Z",
+        "shipped_at": "2026-07-27T04:46:14.846Z",
+        "commit_sha": null,
+        "content_sha256": "cea0c2df5ce26bd6b3aa4b49e1e918030fdb25d3ea14d71b5e0e91a6591a1069",
+        "target_file": "services/site-builder-lead-capture.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/site-builder-lead-capture.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/site-builder/twins/steps/sb-lead-capture-service.exact",
+          "content_sha256": "cea0c2df5ce26bd6b3aa4b49e1e918030fdb25d3ea14d71b5e0e91a6591a1069"
+        }
+      },
+      "shipped_at": "2026-07-27T04:46:14.846Z"
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",
