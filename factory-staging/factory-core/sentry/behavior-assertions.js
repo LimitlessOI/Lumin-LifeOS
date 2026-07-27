@@ -107,6 +107,49 @@ export async function runSingleAssertion(assertion, runner = {}) {
           mode: 'static_export_scan',
         };
       }
+      case 'function_behavior_test': {
+        // Every other assertion type proves SHAPE (the export exists, is
+        // callable, a string appears in the file, an HTTP route responds) --
+        // none of them prove a function actually computes the right answer.
+        // This is the real, confirmed root cause behind 3 separate bugs found
+        // live 2026-07-27 that had already passed exports_smoke/file_contains:
+        // a hardcoded-false hero-image flag, a false-negative masking a
+        // successful DB write, and a fabricated placeholder returning fake
+        // numbers -- all shape-valid, all logically wrong. This assertion
+        // actually imports the module, calls the named export with a real,
+        // literal (JSON-serializable) argument, and checks specific keys of
+        // the real result. Deliberately scoped to pure/simple-argument
+        // functions for now -- functions needing injected DB/notifier mocks
+        // are a real, separate future extension, not attempted here to avoid
+        // shipping a half-built mocking framework.
+        if (typeof runner.importModule !== 'function') return { ...base, ok: false, reason: 'no_import_runner' };
+        const mod = await runner.importModule(assertion.target || assertion.path);
+        const fnName = assertion.export;
+        const fn = mod?.[fnName];
+        if (typeof fn !== 'function') {
+          return { ...base, ok: false, reason: `export_not_a_function:${fnName}` };
+        }
+        let result;
+        try {
+          result = await fn(assertion.args);
+        } catch (err) {
+          return { ...base, ok: false, reason: `function_threw:${String(err?.message || err).slice(0, 300)}` };
+        }
+        const expect = assertion.expect && typeof assertion.expect === 'object' ? assertion.expect : {};
+        const mismatches = [];
+        for (const [key, expected] of Object.entries(expect)) {
+          const actual = result && typeof result === 'object' ? result[key] : undefined;
+          if (JSON.stringify(actual) !== JSON.stringify(expected)) {
+            mismatches.push(`${key}: expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`);
+          }
+        }
+        return {
+          ...base,
+          ok: mismatches.length === 0,
+          reason: mismatches.length ? `output_mismatch: ${mismatches.join('; ')}` : undefined,
+          result,
+        };
+      }
       default:
         return { ...base, ok: false, reason: `unknown_assertion_type:${assertion?.type}` };
     }

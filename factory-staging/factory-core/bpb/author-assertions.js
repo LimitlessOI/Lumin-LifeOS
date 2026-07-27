@@ -98,6 +98,26 @@ export function authorAssertionsFromSpec(step) {
     });
   }
 
+  // Real behavior proof: import the target, call the named export with a
+  // literal argument, check specific keys of the actual result. Closes the
+  // gap every other assertion type leaves open -- proving a function EXISTS
+  // and is CALLABLE (exports_smoke) is not the same as proving it computes
+  // the right answer. Root-caused live 2026-07-27 after 3 separate bugs
+  // (a hardcoded-false flag, a false-negative masking a successful DB write,
+  // a fabricated placeholder) all shipped past exports_smoke/file_contains.
+  const behaviorTests = Array.isArray(spec.function_behavior_tests) ? spec.function_behavior_tests : [];
+  for (const t of behaviorTests) {
+    if (!t || typeof t !== 'object' || typeof t.export !== 'string' || !t.export.trim()) continue;
+    if (!t.expect || typeof t.expect !== 'object') continue;
+    assertions.push({
+      type: 'function_behavior_test',
+      target,
+      export: t.export.trim(),
+      args: t.args,
+      expect: t.expect,
+    });
+  }
+
   if (spec.db && typeof spec.db.sql === 'string' && spec.db.sql.trim()) {
     assertions.push({
       type: 'db_row_exists',

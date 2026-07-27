@@ -240,6 +240,7 @@ export async function evaluateStepExpectations(step, {
   // on verify_script / moduleHealthFn. Artifact proof owns file/export content.
   const runnable = authored.assertions.filter((a) => {
     if (a.type === 'file_contains' || a.type === 'exports_smoke') return true;
+    if (a.type === 'function_behavior_test' && typeof runner.importModule === 'function') return true;
     if ((a.type === 'http_status' || a.type === 'module_mounts') && typeof runner.http === 'function') return true;
     if (a.type === 'db_row_exists' && typeof runner.db === 'function') return true;
     return false;
