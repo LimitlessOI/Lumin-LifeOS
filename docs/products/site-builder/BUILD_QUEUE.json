@@ -2612,7 +2612,7 @@
       "task": "Wire the already-built, already-verified checkDomainDeliverabilityDNS (services/site-builder-deliverability-check.js, shipped commit 4580148a46, zero call sites today) into a real, read-only diagnostic route so cold-outreach deliverability is actually visible before real send volume. Deliberately targets routes/site-builder-routes.js (NOT services/site-builder-prospect-runner.js) -- that file has a documented, confirmed platform bug: 10/10 prior attempts to append a NEW export to prospect-runner.js silently failed because the file ends in an export default {} object literal (see sb-deliverability-gate's revive_note in this same BUILD_QUEUE.json for the full diagnosis). This step deliberately avoids that trigger condition by adding a route to a different file instead. This is visibility only (a GET endpoint), not an enforcement gate on the actual send path -- gating real sends is a separate, later step once this is proven live.",
       "spec": "PATCH MODE. Output ONLY one <<<OLD>>>/<<<NEW>>>/<<<END>>> block, no full file.\n\nFind this exact block inside routes/site-builder-routes.js (the GET /design-systems route):\n\n  router.get('/design-systems', (req, res) => {\n    res.json({ ok: true, designSystems: DESIGN_SYSTEMS.map(({ id, name, blurb }) => ({ id, name, blurb })) });\n  });\n\nInsert a new route immediately AFTER it (do not modify the /design-systems route itself):\n\n  router.get('/design-systems', (req, res) => {\n    res.json({ ok: true, designSystems: DESIGN_SYSTEMS.map(({ id, name, blurb }) => ({ id, name, blurb })) });\n  });\n\n  /**\n   * GET /api/v1/sites/deliverability-status\n   * Read-only check: does the cold-outreach sending domain (EMAIL_FROM) have\n   * real SPF/DKIM DNS records? Visibility only -- does not block sending.\n   */\n  router.get('/deliverability-status', requireKey, async (req, res) => {\n    try {\n      const { checkDomainDeliverabilityDNS } = await import('../services/site-builder-deliverability-check.js');\n      const emailFrom = String(process.env.EMAIL_FROM || '').trim();\n      const domain = emailFrom.includes('@') ? emailFrom.split('@')[1] : '';\n      if (!domain) {\n        return res.json({ ok: true, deliverabilityReady: false, deliverabilityBlockers: ['EMAIL_FROM not configured'], domain: null });\n      }\n      const result = await checkDomainDeliverabilityDNS(domain);\n      res.json({ ok: true, domain, ...result });\n    } catch (err) {\n      res.status(500).json({ ok: false, error: err.message });\n    }\n  });\n\nAdd ONLY the new /deliverability-status route block shown above. Do not change DESIGN_SYSTEMS, the /design-systems route, requireKey, or anything else in the file. requireKey is already imported/used elsewhere in this same file for other routes -- reuse it, do not redeclare it.",
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 1,
       "source": "founder_directive_2026-07-26",
       "finding_note": "Found while checking system status live 2026-07-26: checkDomainDeliverabilityDNS was built and verified real (commit 4580148a46) but has zero call sites anywhere -- a real, revenue-relevant competitive-review finding (sb-deliverability-gate, 2026-07-19) built but never wired. Targeting this route file instead of the historically fragile prospect-runner.js to avoid the documented, confirmed platform bug that caused 10 consecutive failures on the original target.",
       "file_contains": [
@@ -2625,16 +2625,16 @@
       "expected_exports": [
         "createSiteBuilderRoutes"
       ],
-      "last_attempt_at": "2026-07-27T01:11:28.528Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerSiteBuilderRoutes; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-27T01:27:33.180Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 0b is < 30% of existing 56192b. underlying: syntax_check_failed:openai_builder_mini: Command failed: /usr/local/bin/node --check /tmp/factory-codegen-1785115653149.mjs",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "failure_signature": null,
-      "same_signature_count": 0,
-      "escalation_class": "evidence_gap",
-      "revive_count": 1,
-      "revived_at": "2026-07-27T01:07:36.917Z",
+      "failure_signature": "codegen_authoring_failed: codegen_stub_detected: generated Nb is < N% of existing Nb. underlying: syntax_check_failed:openai_builder_mini: Command failed: /usr/local/bin/node --che",
+      "same_signature_count": 1,
+      "escalation_class": "same_signature_repeat",
+      "revive_count": 2,
+      "revived_at": "2026-07-27T01:27:11.725Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -2645,7 +2645,21 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/site-builder-routes.js",
+          "exports": [
+            "createSiteBuilderRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/site-builder-routes.js"
+        }
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/design-systems"
+      }
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",
