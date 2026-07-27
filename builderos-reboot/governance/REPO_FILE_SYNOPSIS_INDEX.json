@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-27T04:48:57.352Z",
+  "generated_at": "2026-07-27T04:51:06.891Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12178,
   "files": [
@@ -40553,9 +40553,9 @@
     {
       "path": "docs/products/lifere/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeRE",
-      "bytes": 30645,
-      "mtime": "2026-07-27T03:01:04.607Z",
-      "indexed_at": "2026-07-27T03:03:22.003Z"
+      "bytes": 31587,
+      "mtime": "2026-07-27T04:50:52.264Z",
+      "indexed_at": "2026-07-27T04:51:06.891Z"
     },
     {
       "path": "docs/products/limitlessos/conversations/2026-06-29-founder-ecosystem-session.md",
