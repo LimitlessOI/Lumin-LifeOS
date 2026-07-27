@@ -22,6 +22,7 @@ import { startGoVegasOutreachScheduler } from "../services/go-vegas-outreach-sch
 import { createTCRoutes } from "../routes/tc-routes.js";
 import { createReceptionistRoutes } from "../routes/receptionist-routes.js";
 import { createMLSRoutes } from "../routes/mls-routes.js";
+import { createLifeOSCommitmentRoutes } from "../routes/lifeos-commitment-routes.js";
 import { requireLifeOSAdmin } from "../middleware/lifeos-auth-middleware.js";
 import { createTCCoordinator } from "../services/tc-coordinator.js";
 import { createAccountManager } from "../services/account-manager.js";
@@ -229,6 +230,22 @@ export async function registerFounderRuntimeRoutes(app, deps) {
     logger.info("✅ [MLS] Founder-builder routes mounted at /api/v1/mls");
   } catch (err) {
     logger.warn?.({ err: err.message }, "[MLS] founder-lane mount failed (non-fatal)");
+  }
+
+  // Commitments/to-do tracker -- same class of gap as AI Receptionist/MLS: a
+  // real, complete, DB-backed route (GET/POST /, /:id/complete, /overdue,
+  // plus BPB-0001 mission-linked /mission, /mission/:id using the real
+  // createCommitment/listCommitments/updateCommitment in mission-ledger.js)
+  // existed and was never mounted anywhere reachable in production. Direct
+  // answer to the founder's repeated, explicit ask: "I wanted it to set the
+  // schedule, keep track of commitments and to dos". requireUserOrKey (not
+  // admin-gated) since this is personal commitment data for the account
+  // owner, same tier as the AI Receptionist mount above.
+  try {
+    app.use("/api/v1/lifeos/commitments", createLifeOSCommitmentRoutes({ pool, requireKey: requireUserOrKey, logger }));
+    logger.info("✅ [COMMITMENTS] Founder-builder routes mounted at /api/v1/lifeos/commitments");
+  } catch (err) {
+    logger.warn?.({ err: err.message }, "[COMMITMENTS] founder-lane mount failed (non-fatal)");
   }
 
   // ClientCare billing rescue must live on founder lane — production boots founder_builder.
