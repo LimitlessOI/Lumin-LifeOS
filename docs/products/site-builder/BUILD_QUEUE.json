@@ -2603,7 +2603,7 @@
     },
     {
       "id": "sb-deliverability-status-route",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "routes/site-builder-routes.js",
       "priority": "high",
       "patch_mode": true,
@@ -2626,12 +2626,12 @@
         "createSiteBuilderRoutes"
       ],
       "last_attempt_at": "2026-07-27T01:27:33.180Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 0b is < 30% of existing 56192b. underlying: syntax_check_failed:openai_builder_mini: Command failed: /usr/local/bin/node --check /tmp/factory-codegen-1785115653149.mjs",
+      "last_error": null,
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "failure_signature": "codegen_authoring_failed: codegen_stub_detected: generated Nb is < N% of existing Nb. underlying: syntax_check_failed:openai_builder_mini: Command failed: /usr/local/bin/node --che",
-      "same_signature_count": 1,
+      "failure_signature": null,
+      "same_signature_count": 0,
       "escalation_class": "same_signature_repeat",
       "revive_count": 2,
       "revived_at": "2026-07-27T01:27:11.725Z",
@@ -2646,19 +2646,14 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "routes/site-builder-routes.js",
-          "exports": [
-            "createSiteBuilderRoutes"
-          ],
-          "assertion_id": "expected_exports:routes/site-builder-routes.js"
-        }
-      ],
-      "route": {
-        "method": "GET",
-        "path": "/design-systems"
+      "assertion_spec": {
+        "expected_exports": [
+          "createSiteBuilderRoutes"
+        ],
+        "file_contains": [
+          "deliverability-status",
+          "checkDomainDeliverabilityDNS"
+        ]
       }
     }
   ],
