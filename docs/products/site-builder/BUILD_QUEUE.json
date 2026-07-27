@@ -2757,7 +2757,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-27T04:46:24.948Z",
-      "commit_sha": "a2df6abfaa85237f17f845b7ea7ddcec56937cf2",
+      "commit_sha": "450fbc6e7064b9459ff3b6090eef64a3c08b9c30",
       "action_type": "write_file_exact",
       "exact_inputs": {
         "content_source_path": "docs/products/site-builder/twins/steps/sb-lead-capture-service.exact"
