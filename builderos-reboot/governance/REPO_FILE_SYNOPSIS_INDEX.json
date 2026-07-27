@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-27T01:03:14.721Z",
+  "generated_at": "2026-07-27T01:07:32.832Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12177,
   "files": [
@@ -40967,9 +40967,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 189649,
-      "mtime": "2026-07-27T01:03:05.988Z",
-      "indexed_at": "2026-07-27T01:03:14.721Z"
+      "bytes": 191257,
+      "mtime": "2026-07-27T01:07:20.771Z",
+      "indexed_at": "2026-07-27T01:07:32.832Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
