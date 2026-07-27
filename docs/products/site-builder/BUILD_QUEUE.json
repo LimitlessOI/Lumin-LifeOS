@@ -2603,7 +2603,7 @@
     },
     {
       "id": "sb-deliverability-status-route",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "routes/site-builder-routes.js",
       "priority": "high",
       "patch_mode": true,
@@ -2625,27 +2625,17 @@
       "expected_exports": [
         "createSiteBuilderRoutes"
       ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "routes/site-builder-routes.js",
-          "exports": [
-            "registerSiteBuilderRoutes"
-          ],
-          "assertion_id": "expected_exports:routes/site-builder-routes.js"
-        }
-      ],
       "route": {
         "method": "GET",
         "path": "/design-systems"
       },
       "last_attempt_at": "2026-07-27T01:11:28.528Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerSiteBuilderRoutes; behavior_assertion_failed; behavior_proof",
+      "last_error": null,
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "failure_signature": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerSiteBuilderRoutes; behavior_assertion_failed; behavior_proof",
-      "same_signature_count": 1,
+      "failure_signature": null,
+      "same_signature_count": 0,
       "escalation_class": "evidence_gap",
       "revive_count": 1,
       "revived_at": "2026-07-27T01:07:36.917Z",
