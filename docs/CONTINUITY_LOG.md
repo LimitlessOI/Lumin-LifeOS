@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-28 — CRITICAL auth gates still open on tip (re-fixed)
+
+Daily critical-bug sweep: tip still lacked the auth trio from unmerged PR #370 (`cursor/critical-bug-investigation-375b`). Member JWTs passed bare `requireKey`; public `set-password` could claim passwordless accounts; fake `x-command-key` disclosed `tip_reset_token`. Restored on `cursor/critical-bug-investigation-6178` with regression tests. Remaining known open (not fixed this run): Stripe product binding (#368), MarketingOS owner_id IDOR, x-forwarded-host checkout URLs, voice-rail body.user IDOR.
+
 ## 2026-07-24 — SMOS Connect+Publish (bank-style account link)
 
 Adam: connect social accounts in-app like bank linking, then post. Shipped Phase 5 UX: `/marketing` Connected accounts → popup `/marketing/connect/:platform` (real platform login in secured browser view; password never typed into SMOS forms) → encrypted cookies → Approve → Publish. Fixed publisher connection unwrap + `createBrowserSession` injection. **Live posts remain off** until `LIVE_SOCIAL_PUBLISH_ENABLED=true`. Next: tip redeploy; Adam connect one account and prove dry-run ready, then flip kill switch for a real post.
