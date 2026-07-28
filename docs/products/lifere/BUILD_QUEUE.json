@@ -666,7 +666,7 @@
       "last_attempt": null,
       "demoted": true,
       "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: openai_builder_mini: HTTP 429: {\n    \"error\": {\n        \"message\": \"You exceeded your current quota, please check your ",
-      "demoted_at": "2026-07-28T00:39:19.170Z",
+      "demoted_at": "2026-07-28T00:39:29.328Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -708,13 +708,13 @@
     },
     {
       "id": "10",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/livePhoneService.js",
       "task": "implement live phone service",
       "spec": "Create a service for live phone answering functionality utilizing Vapi/Twilio.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "answerLivePhone"
       ],
@@ -733,7 +733,7 @@
       ],
       "last_attempt_at": "2026-07-28T00:39:26.621Z",
       "last_error": "codegen_authoring_failed: codegen_empty: openai_builder_mini: HTTP 429: {\n    \"error\": {\n        \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, read",
-      "commit_sha": null,
+      "commit_sha": "b4f22772ac491b7b7410acdb29af10ea7465194f",
       "built_sha": null,
       "proof": null,
       "failure_signature": "codegen_authoring_failed: codegen_empty: openai_builder_mini: HTTP N: {\n    \"error\": {\n        \"message\": \"You exceeded your current quota, please check your plan and billing detai",
