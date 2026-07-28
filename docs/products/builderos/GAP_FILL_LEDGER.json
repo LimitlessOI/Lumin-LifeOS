@@ -15,6 +15,14 @@
       "added_real_lines": 122,
       "justification": "(1) routes/tc-routes.js -- direct re-restoration\nof an already-justified security fix, identical regex, same standing\nauthorization as commit 778507eac9. (2) scripts/security-invariants-check.mjs\nand githooks/pre-commit -- CI/tooling infrastructure, not product server\nlogic; same category as other hand-written scripts/CI changes explicitly\nallowed under SO-001 even for governed-factory-scope products. Urgency\n(second live occurrence of the same currently-exploitable regression in 11\nminutes) overrides waiting for governed-factory dispatch, consistent with\nSO-002's fail-closed doctrine.\n\nCo-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>",
       "commit_message_excerpt": "GAP-FILL: SECURITY -- re-fix requireLifeOSAdmin regression (2nd occurrence, 11min later) + build the structural guard"
+    },
+    {
+      "at": "2026-07-28T00:14:57.325Z",
+      "file": "services/governance-law-review.js",
+      "is_new_file": true,
+      "added_real_lines": 95,
+      "justification": "services/governance-law-review.js is narrow,\nself-contained, read-only observability infrastructure (same category as\nmodel-capability-ledger, no server-request-handling logic of its own);\nroutes/factory-mount-routes.js addition mirrors the existing\n/factory/model-rankings pattern exactly. The BUILD_QUEUE.json reset is a\ndata/state edit, not code, following the same pattern used throughout this\nsession for reviving stuck steps.\n\nCo-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>",
+      "commit_message_excerpt": "GAP-FILL: governance law review (§2.0G) + unblock stuck LifeRE step 10"
     }
   ]
 }

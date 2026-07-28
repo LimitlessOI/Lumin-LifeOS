@@ -141,6 +141,17 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
           const maxOutputTokens = Number(stepMaxTokens) || 8000;
           let lastError = null;
           let member = null;
+          // Full per-tier failure history, not just the last one. Found
+          // live 2026-07-28: this loop already tries every tier in order
+          // (the model-ordering fix works), but only ever kept the LAST
+          // tier's error string -- so when all 8 tiers failed, the response
+          // showed only the final one (e.g. openai_builder_mini's quota
+          // error) and completely hid what happened with claude_sonnet and
+          // every other tier tried before it. Real diagnostic gap, not a
+          // dispatch bug -- this makes it possible to tell "the strong
+          // model failed for a real reason" apart from "the strong model
+          // was never actually reachable."
+          const tierErrors = [];
           for (let i = 0; i < tiers.length; i += 1) {
             member = tiers[i];
             try {
@@ -170,6 +181,7 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
 
                   if (!oldText) {
                     lastError = 'patch_apply_failed: old_text_empty';
+                    tierErrors.push({ tier: member, reason: lastError });
                     continue;
                   }
 
@@ -179,12 +191,14 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
 
                   if (occurrences !== 1) {
                     lastError = `patch_apply_failed: old_text_ambiguous:${occurrences}_matches`;
+                    tierErrors.push({ tier: member, reason: lastError });
                     continue;
                   }
 
                   content = currentFileContent.replace(oldText, newText);
                 } else {
                   lastError = 'patch_apply_failed: markers_missing';
+                  tierErrors.push({ tier: member, reason: lastError });
                   continue;
                 }
               }
@@ -199,6 +213,7 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
                     execFileSync(process.execPath, ['--check', syntaxCheckFile]);
                   } catch (err) {
                     lastError = `syntax_check_failed:${member}: ${String(err?.message || err)}`;
+                    tierErrors.push({ tier: member, reason: lastError });
                     try { fs.unlinkSync(syntaxCheckFile); } catch {}
                     continue;
                   }
@@ -213,6 +228,7 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
                       execFileSync(process.execPath, ['--input-type=module', '-e', `import ${JSON.stringify(pathToFileURL(importCheckFile).href)};`]);
                     } catch (err) {
                       lastError = `import_resolution_failed:${member}: ${String(err?.message || err)}`;
+                      tierErrors.push({ tier: member, reason: lastError });
                       try { fs.unlinkSync(importCheckFile); } catch {}
                       continue;
                     }
@@ -241,11 +257,13 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
                 };
               }
               lastError = `empty_output_from:${member}`;
+              tierErrors.push({ tier: member, reason: lastError });
             } catch (err) {
               lastError = `${member}: ${String(err?.message || err)}`;
+              tierErrors.push({ tier: member, reason: lastError });
             }
           }
-          return { content: null, error: lastError || 'all_tiers_failed', model_tier: member || null };
+          return { content: null, error: lastError || 'all_tiers_failed', model_tier: member || null, tier_errors: tierErrors };
         },
       }
     : null;

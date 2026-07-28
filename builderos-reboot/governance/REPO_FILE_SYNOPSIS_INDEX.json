@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-28T00:14:56.827Z",
+  "generated_at": "2026-07-28T00:21:30.166Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12184,
   "files": [
@@ -39821,9 +39821,9 @@
     {
       "path": "docs/products/builderos/GAP_FILL_LEDGER.json",
       "synopsis": "Documentation — GAP FILL LEDGER.",
-      "bytes": 1902,
-      "mtime": "2026-07-27T22:21:37.659Z",
-      "indexed_at": "2026-07-27T22:21:57.522Z",
+      "bytes": 2692,
+      "mtime": "2026-07-28T00:14:57.327Z",
+      "indexed_at": "2026-07-28T00:21:30.166Z",
       "synopsis_index_only": true
     },
     {
@@ -39836,9 +39836,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 266523,
-      "mtime": "2026-07-28T00:14:37.892Z",
-      "indexed_at": "2026-07-28T00:14:56.827Z"
+      "bytes": 268618,
+      "mtime": "2026-07-28T00:21:12.630Z",
+      "indexed_at": "2026-07-28T00:21:30.166Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -61132,9 +61132,9 @@
     {
       "path": "factory-staging/factory-core/builder/authoring.js",
       "synopsis": "STEP 4 — codegen as an UNTRUSTED authoring sub-step (the \"dumb pipe\").",
-      "bytes": 10354,
-      "mtime": "2026-07-26T20:58:57.806Z",
-      "indexed_at": "2026-07-27T22:21:57.522Z",
+      "bytes": 10807,
+      "mtime": "2026-07-28T00:20:02.168Z",
+      "indexed_at": "2026-07-28T00:21:30.166Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -61163,9 +61163,9 @@
     {
       "path": "factory-staging/factory-core/builder/run-step.js",
       "synopsis": "Exports resolveRepoPath — factory-staging/factory-core/builder/run-step.js.",
-      "bytes": 11077,
-      "mtime": "2026-07-27T02:56:57.221Z",
-      "indexed_at": "2026-07-27T22:21:57.522Z"
+      "bytes": 11174,
+      "mtime": "2026-07-28T00:20:20.292Z",
+      "indexed_at": "2026-07-28T00:21:30.166Z"
     },
     {
       "path": "factory-staging/factory-core/builder/sandbox.js",
@@ -67433,9 +67433,9 @@
     {
       "path": "routes/factory-mount-routes.js",
       "synopsis": "Pure: should the codegen prompt inline this file's existing content?",
-      "bytes": 23035,
-      "mtime": "2026-07-28T00:13:29.026Z",
-      "indexed_at": "2026-07-28T00:14:56.827Z"
+      "bytes": 24309,
+      "mtime": "2026-07-28T00:19:33.054Z",
+      "indexed_at": "2026-07-28T00:21:30.166Z"
     },
     {
       "path": "routes/faith-studio-routes.js",

@@ -195,12 +195,18 @@ export async function runAuthoring(step, codegenRunner) {
 
   if (!content || !content.trim()) {
     const errMsg = result?.error || null;
+    // tier_errors (routes/factory-mount-routes.js codegenRunner.generate)
+    // carries every tier's own real failure reason, not just the last one
+    // tried -- surfaced here so a full-chain failure is diagnosable (which
+    // tiers actually got reached, why each one specifically failed) instead
+    // of only showing the final tier's error and hiding the rest.
     return {
       ...base,
       ok: false,
       reason: errMsg ? `codegen_empty: ${String(errMsg).slice(0, 500)}` : 'codegen_empty',
       model_tier: result?.model_tier || null,
       error: errMsg,
+      tier_errors: Array.isArray(result?.tier_errors) ? result.tier_errors : null,
     };
   }
 
