@@ -1,5 +1,21 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-28 — Deploy-truth: production proves the ship, or the verdict is UNSOLVED
+
+Adam: review the whole deploy pipeline, kill every source of production drift, never report "deployed" unless production can independently prove it. Audited the ship path and found nine ways it could claim success with nothing proven — four of them live: no branch guard before committing working-tree bytes to `main` (silent-revert risk), commit "proof" that was just the builder's own `changed_files` echo, SHA parity declared from ONE sample (observed: parity claimed for `6d63035c63f8` while `d275740392b0` sat QUEUED), and `.dockerignore` excluding files from the image so a ship can be green yet absent from the container. Built `npm run ship:truth` (eight fail-closed phases → receipt) and `npm run deploy:truth:audit` (read-only drift audit), on `scripts/lib/deploy-truth-{guard,io}.mjs`; commit proof uses local git, not the GitHub API. Verdicts are PROVEN / DRIFT / **UNSOLVED** with exit codes 0/1/3. Hardened `system:railway:redeploy` with the same stability confirmation. Open gap, honestly unresolved: runtime bytes of `routes/`/`services/` files are unprovable with today's endpoints, so server-code ships stay UNSOLVED unless `--probe` declares an assertion — governed runtime-fingerprint endpoint filed as `Q-001` in `docs/AGENT_INBOX.md`.
+
+## 2026-07-28 — Motley Fool vs our buy-and-hold
+
+Adam: MF track record; pay ~$100?; filter their picks with our eval; compare our B&H ID vs theirs same span. MF long-run ad real but power-law / recent years mixed. Same year: our quality top10 **~+44%** ≈ MF-ish proxy **~+44%** >> SPY **+13%**. Best $100 use = their ideas + our filter. `npm run lip:blind:motley` · `180_MOTLEY_FOOL_VS_OUR_BUYHOLD.md`.
+
+## 2026-07-28 — Good-trajectory longs + selective margin
+
+Adam: same 1y scenario as failure shorts; find good offerings; use margin when it makes sense. No look-ahead. **Best +12.5%** (SPY-strong + selective margin) vs SPY **+13.2%**; selective margin **+4.9%** beat always-margin **+2.5%**; failure shorts were **−18%**. `npm run lip:blind:success` · `170_SUCCESS_TRAJECTORY_LONGS.md`.
+
+## 2026-07-28 — Failure-trajectory shorts (1y, no look-ahead)
+
+Adam: short companies on a path to failure; give AI all needed info but not future results; full year. Walk-forward tape score → next-day short. **Primary −18%**; random −15%; SPY **+13%**. Best variant (only short when SPY weak + strict score) ~**−1.7%**. Thesis not confirmed yet — weakness is visible, profitable short timing in a bull year is not. `npm run lip:blind:failure` · `160_FAILURE_TRAJECTORY_SHORTS.md`.
+
 ## 2026-07-28 — Other methods vs +125%/month
 
 Adam: which investment methods have a better chance of that kind of result? Ranked in `140_OTHER_METHODS_VS_125.md`. Steady sleeves won’t print it; stretch odds rise with asymmetric options, capped leverage, catalyst snipes, early info — run as a **small barbell sleeve**, not the whole book.

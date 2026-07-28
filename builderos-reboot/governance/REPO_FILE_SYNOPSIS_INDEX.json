@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-28T18:21:55.373Z",
+  "generated_at": "2026-07-28T20:04:36.454Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12284,
+  "file_count": 12289,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -36914,9 +36914,9 @@
     {
       "path": "docs/AGENT_INBOX.md",
       "synopsis": "Agent Inbox",
-      "bytes": 1069,
-      "mtime": "2026-07-10T01:14:19.288Z",
-      "indexed_at": "2026-07-28T18:12:07.716Z"
+      "bytes": 2052,
+      "mtime": "2026-07-28T20:04:36.454Z",
+      "indexed_at": "2026-07-28T20:04:36.454Z"
     },
     {
       "path": "docs/AGENT_RULES.compact.md",
@@ -37816,9 +37816,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 33207,
-      "mtime": "2026-07-28T17:59:00.638Z",
-      "indexed_at": "2026-07-28T18:12:07.716Z"
+      "bytes": 35856,
+      "mtime": "2026-07-28T20:04:36.454Z",
+      "indexed_at": "2026-07-28T20:04:36.454Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40022,9 +40022,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 274686,
-      "mtime": "2026-07-28T18:00:56.871Z",
-      "indexed_at": "2026-07-28T18:12:07.716Z"
+      "bytes": 278326,
+      "mtime": "2026-07-28T20:04:36.454Z",
+      "indexed_at": "2026-07-28T20:04:36.454Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -63811,9 +63811,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 34278,
-      "mtime": "2026-07-28T06:13:53.396Z",
-      "indexed_at": "2026-07-28T18:12:07.716Z",
+      "bytes": 34714,
+      "mtime": "2026-07-28T20:04:36.454Z",
+      "indexed_at": "2026-07-28T20:04:36.454Z",
       "synopsis_index_only": true
     },
     {
@@ -70858,6 +70858,16 @@
       ]
     },
     {
+      "path": "scripts/drift-audit.mjs",
+      "synopsis": "Read-only production drift audit — prove prod runs the deploy branch, or UNSOLVED.",
+      "bytes": 10719,
+      "mtime": "2026-07-28T20:04:36.454Z",
+      "indexed_at": "2026-07-28T20:04:36.454Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "scripts/enable-fp-v2-production-env.mjs",
       "synopsis": "Push FP V2 production env defaults to Railway managed env (lane intel + prediction score).",
       "bytes": 1527,
@@ -71249,6 +71259,26 @@
       "indexed_at": "2026-07-28T18:12:07.716Z",
       "ssot": [
         "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/lib/deploy-truth-guard.mjs",
+      "synopsis": "Deploy-truth guard primitives — prove a ship reached production or say UNSOLVED.",
+      "bytes": 17873,
+      "mtime": "2026-07-28T20:04:36.454Z",
+      "indexed_at": "2026-07-28T20:04:36.454Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/lib/deploy-truth-io.mjs",
+      "synopsis": "Deploy-truth I/O — git + Railway + HTTP probes used to prove a ship.",
+      "bytes": 11673,
+      "mtime": "2026-07-28T20:04:36.454Z",
+      "indexed_at": "2026-07-28T20:04:36.454Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
@@ -73027,6 +73057,16 @@
       "indexed_at": "2026-07-28T18:12:07.716Z"
     },
     {
+      "path": "scripts/ship-truth.mjs",
+      "synopsis": "Ship files and prove production runs them — or report UNSOLVED.",
+      "bytes": 32122,
+      "mtime": "2026-07-28T20:04:36.454Z",
+      "indexed_at": "2026-07-28T20:04:36.454Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "scripts/signedIPAWorkflow.mjs",
       "synopsis": "Exports buildSignedIPA — scripts/signedIPAWorkflow.mjs.",
       "bytes": 1661,
@@ -73239,9 +73279,9 @@
     {
       "path": "scripts/system-railway-redeploy.mjs",
       "synopsis": "Triggers Railway redeploy via the RUNNING app.",
-      "bytes": 11444,
-      "mtime": "2026-07-28T17:47:22.548Z",
-      "indexed_at": "2026-07-28T18:12:07.716Z",
+      "bytes": 14005,
+      "mtime": "2026-07-28T20:04:36.454Z",
+      "indexed_at": "2026-07-28T20:04:36.454Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -94906,6 +94946,16 @@
       "indexed_at": "2026-07-28T18:12:07.716Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "tests/deploy-truth-guard.test.js",
+      "synopsis": "Tests for deploy-truth guard — unproven must never round up to success.",
+      "bytes": 12513,
+      "mtime": "2026-07-28T20:04:36.454Z",
+      "indexed_at": "2026-07-28T20:04:36.454Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {

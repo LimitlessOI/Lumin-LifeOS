@@ -7,7 +7,13 @@
  *   3. POST /api/v1/railway/managed-env/build-from-latest — fresh build from GitHub HEAD (explicit SHA when known)
  *   4. `railway redeploy`                   — local Railway CLI fallback when repo is linked
  *
- * Success requires deploy_commit_sha on /builder/ready to match origin/main (not just /healthz).
+ * Success requires deploy_commit_sha on /builder/ready to match origin/main (not
+ * just /healthz) AND to keep matching across several samples with no deployment
+ * in flight — a single parity observation can be superseded seconds later by a
+ * deployment that was already queued behind it.
+ *
+ * For a full ship with commit-content and runtime proof, prefer
+ * `npm run ship:truth`; this script only proves the deploy dimension.
  *
  * Env:
  *   PUBLIC_BASE_URL | BUILDER_BASE_URL | LUMIN_SMOKE_BASE_URL
@@ -15,6 +21,8 @@
  *   RAILWAY_TOKEN  (optional — enables self-redeploy fallback)
  *   REDEPLOY_WAIT_MS (default 600000) — max wait for SHA parity
  *   REDEPLOY_POLL_MS (default 10000)
+ *   REDEPLOY_SETTLE_SAMPLES (default 3) — parity re-checks after the first match
+ *   REDEPLOY_SETTLE_MS (default 15000) — gap between those re-checks
  *
  * Usage:
  *   npm run system:railway:redeploy
@@ -25,6 +33,8 @@
 import 'dotenv/config';
 import { execFile, spawnSync } from 'node:child_process';
 import { promisify } from 'node:util';
+
+import { assessParityStability, isDeploymentInFlight } from './lib/deploy-truth-guard.mjs';
 
 const execFileAsync = promisify(execFile);
 
@@ -45,6 +55,12 @@ const key =
 const railwayToken = process.env.RAILWAY_TOKEN || '';
 const waitMs = Number(process.env.REDEPLOY_WAIT_MS || '600000');
 const pollMs = Number(process.env.REDEPLOY_POLL_MS || '10000');
+// Parity from a single observation is not proof: a newer deployment can already
+// be QUEUED behind the one we just watched land, so "live" is true for seconds
+// and false after. Confirm parity holds across several samples with nothing in
+// flight before this script reports success.
+const settleSamples = Number(process.env.REDEPLOY_SETTLE_SAMPLES || '3');
+const settleMs = Number(process.env.REDEPLOY_SETTLE_MS || '15000');
 
 function shaPrefix(a, b) {
   if (!a || !b) return false;
@@ -125,6 +141,33 @@ async function liveReadyShape() {
   }
 }
 
+/**
+ * Re-observe parity several times. Any sample that stops serving the target, or
+ * that sees a deployment in flight, means the earlier match was a snapshot of a
+ * moving system rather than proof the build is live.
+ */
+async function confirmParityStable(targetSha, headers) {
+  const samples = [];
+  for (let i = 0; i < Math.max(1, settleSamples); i += 1) {
+    if (i > 0) await new Promise((resolve) => setTimeout(resolve, settleMs));
+    const ready = await liveReadyShape();
+    const latest = await fetchLatestDeployment(headers);
+    const status = latest.json?.deployment?.status || null;
+    const sample = {
+      served_sha: ready.deployCommitSha,
+      serves_commit: shaPrefix(ready.deployCommitSha, targetSha),
+      deployment_status: status,
+      in_flight: isDeploymentInFlight(status),
+    };
+    samples.push(sample);
+    console.log(
+      `  settle ${i + 1}/${settleSamples}: live_sha=${sample.served_sha?.slice(0, 12) || '?'} ` +
+      `serves_target=${sample.serves_commit} deployment=${status || '?'}`,
+    );
+  }
+  return assessParityStability(samples, { requiredSamples: Math.max(1, settleSamples) });
+}
+
 async function waitForDeployShaParity(targetSha) {
   const headers = key ? { 'x-command-key': key } : {};
   const deadline = Date.now() + waitMs;
@@ -154,8 +197,14 @@ async function waitForDeployShaParity(targetSha) {
     }
 
     if (targetSha && shaPrefix(liveSha, targetSha)) {
-      console.log(`\n✅ Deploy SHA parity: production running ${liveSha?.slice(0, 12)}\n`);
-      return { ok: true, liveSha, depSha, depStatus };
+      const stability = await confirmParityStable(targetSha, headers);
+      if (stability.status === 'pass') {
+        console.log(`\n✅ Deploy SHA parity confirmed stable: production running ${liveSha?.slice(0, 12)}\n`);
+        return { ok: true, liveSha, depSha, depStatus, stability };
+      }
+      console.error(`\n❌ Parity was NOT stable: ${stability.detail}`);
+      if (stability.proposed_solution) console.error(`   → ${stability.proposed_solution}`);
+      return { ok: false, reason: stability.reason, liveSha, depSha, depStatus, stability };
     }
 
     if (depStatus === 'SUCCESS' && targetSha && depSha && shaPrefix(depSha, targetSha) && !shaPrefix(liveSha, targetSha)) {
