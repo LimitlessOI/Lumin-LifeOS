@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-28T00:34:12.483Z",
+  "generated_at": "2026-07-28T00:39:37.349Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12185,
+  "file_count": 12186,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -88993,6 +88993,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/livePhoneService.js",
+      "synopsis": "Answers an incoming live phone call using Vapi for AI-powered conversation.",
+      "bytes": 1782,
+      "mtime": "2026-07-28T00:39:37.349Z",
+      "indexed_at": "2026-07-28T00:39:37.349Z"
     },
     {
       "path": "services/llm-egress-proxy.js",
