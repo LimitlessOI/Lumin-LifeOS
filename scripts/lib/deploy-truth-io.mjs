@@ -113,6 +113,12 @@ export function diffNumstatVsRef(ref, relPath) {
   return { added: Number(added) || 0, removed: Number(removed) || 0 };
 }
 
+/** Blob text at a commit, for diagnosing HOW committed bytes differ from sent. */
+export function blobTextAtCommit(commitSha, relPath) {
+  const r = git(['cat-file', 'blob', `${commitSha}:${relPath}`], { encoding: 'buffer' });
+  return r.ok ? r.stdout.toString('utf8') : null;
+}
+
 /** Files a commit changed relative to its first parent. */
 export function commitChangedFiles(commitSha) {
   const r = git(['diff-tree', '--no-commit-id', '--name-only', '-r', commitSha]);

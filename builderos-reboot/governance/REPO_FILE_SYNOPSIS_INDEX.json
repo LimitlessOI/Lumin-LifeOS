@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-28T20:04:36.454Z",
+  "generated_at": "2026-07-28T20:11:03.432Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12289,
   "files": [
@@ -36914,9 +36914,9 @@
     {
       "path": "docs/AGENT_INBOX.md",
       "synopsis": "Agent Inbox",
-      "bytes": 2052,
-      "mtime": "2026-07-28T20:04:36.454Z",
-      "indexed_at": "2026-07-28T20:04:36.454Z"
+      "bytes": 3750,
+      "mtime": "2026-07-28T20:11:03.432Z",
+      "indexed_at": "2026-07-28T20:11:03.432Z"
     },
     {
       "path": "docs/AGENT_RULES.compact.md",
@@ -40022,9 +40022,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 278326,
-      "mtime": "2026-07-28T20:04:36.454Z",
-      "indexed_at": "2026-07-28T20:04:36.454Z"
+      "bytes": 279625,
+      "mtime": "2026-07-28T20:11:03.432Z",
+      "indexed_at": "2026-07-28T20:11:03.432Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -71264,9 +71264,9 @@
     {
       "path": "scripts/lib/deploy-truth-guard.mjs",
       "synopsis": "Deploy-truth guard primitives — prove a ship reached production or say UNSOLVED.",
-      "bytes": 17873,
-      "mtime": "2026-07-28T20:04:36.454Z",
-      "indexed_at": "2026-07-28T20:04:36.454Z",
+      "bytes": 20123,
+      "mtime": "2026-07-28T20:11:03.432Z",
+      "indexed_at": "2026-07-28T20:11:03.432Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -71274,9 +71274,9 @@
     {
       "path": "scripts/lib/deploy-truth-io.mjs",
       "synopsis": "Deploy-truth I/O — git + Railway + HTTP probes used to prove a ship.",
-      "bytes": 11673,
-      "mtime": "2026-07-28T20:04:36.454Z",
-      "indexed_at": "2026-07-28T20:04:36.454Z",
+      "bytes": 11954,
+      "mtime": "2026-07-28T20:11:03.432Z",
+      "indexed_at": "2026-07-28T20:11:03.432Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -73059,9 +73059,9 @@
     {
       "path": "scripts/ship-truth.mjs",
       "synopsis": "Ship files and prove production runs them — or report UNSOLVED.",
-      "bytes": 32122,
-      "mtime": "2026-07-28T20:04:36.454Z",
-      "indexed_at": "2026-07-28T20:04:36.454Z",
+      "bytes": 33361,
+      "mtime": "2026-07-28T20:11:03.432Z",
+      "indexed_at": "2026-07-28T20:11:03.432Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -94951,9 +94951,9 @@
     {
       "path": "tests/deploy-truth-guard.test.js",
       "synopsis": "Tests for deploy-truth guard — unproven must never round up to success.",
-      "bytes": 12513,
-      "mtime": "2026-07-28T20:04:36.454Z",
-      "indexed_at": "2026-07-28T20:04:36.454Z",
+      "bytes": 14248,
+      "mtime": "2026-07-28T20:11:03.432Z",
+      "indexed_at": "2026-07-28T20:11:03.432Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

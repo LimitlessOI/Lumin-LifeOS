@@ -53,6 +53,7 @@ import {
   assessParityStability,
   buildReceipt,
   classifyRuntimeProof,
+  diagnoseContentMutation,
   dockerImageMembership,
   exitCodeForVerdict,
   isDeploymentInFlight,
@@ -63,6 +64,7 @@ import {
 import {
   aheadBehind,
   blobSha256AtCommit,
+  blobTextAtCommit,
   commitChangedFiles,
   commitExistsLocally,
   currentBranch,
@@ -453,18 +455,32 @@ async function main() {
   if (!onBranch) bail({ commitSha, files, identity });
 
   const contentMismatches = [];
+  const mutationKinds = new Set();
   for (const f of files) {
     const blob = blobSha256AtCommit(commitSha, f.target_file);
     f.committed_sha256 = blob.sha256;
     f.commit_content_verified = blob.ok && blob.sha256 === f.local_sha256;
-    if (!f.commit_content_verified) {
-      contentMismatches.push(`${f.target_file} (sent ${f.local_sha256.slice(0, 12)}, commit has ${blob.sha256?.slice(0, 12) || 'nothing'})`);
-    }
+    if (f.commit_content_verified) continue;
+
+    const committedText = blobTextAtCommit(commitSha, f.target_file);
+    const mutations = committedText === null ? [] : diagnoseContentMutation(f.payload.output, committedText);
+    f.mutations = mutations;
+    for (const m of mutations) mutationKinds.add(m.kind);
+    contentMismatches.push(
+      `${f.target_file} (sent ${f.local_sha256.slice(0, 12)}, commit has ${blob.sha256?.slice(0, 12) || 'nothing'}${mutations.length ? `: ${mutations.map((m) => m.detail).join('; ')}` : ''})`,
+    );
   }
-  record('commit.content_matches', contentMismatches.length === 0 ? CHECK_STATUS.PASS : CHECK_STATUS.FAIL, contentMismatches.length === 0 ? `all ${files.length} blob(s) in ${String(commitSha).slice(0, 12)} hash-match the bytes sent` : `commit does not contain the bytes sent: ${contentMismatches.join('; ')}`, {
+  record('commit.content_matches', contentMismatches.length === 0 ? CHECK_STATUS.PASS : CHECK_STATUS.FAIL, contentMismatches.length === 0 ? `all ${files.length} blob(s) in ${String(commitSha).slice(0, 12)} hash-match the bytes sent` : `commit does not contain the bytes sent — ${contentMismatches.join(' | ')}`, {
+    mutation_kinds: [...mutationKinds],
     ...(contentMismatches.length === 0
       ? {}
-      : { proposed_solution: 'The commit content differs from what was sent (encoding or a concurrent write). Re-ship and, if it repeats, inspect commitManyToGitHub blob construction in services/deployment-service.js.' }),
+      : {
+          proposed_solution: mutationKinds.has('asterisk_stripped')
+            ? 'execute-batch ran the payload through fixAsteriskShorthandParams (routes/lifeos-council-builder-routes.js), which strips "*" before any identifier and therefore rewrites regex/string literals. Do not re-ship until the source avoids that pattern or the transform is fixed — the committed code no longer means what was written.'
+            : mutationKinds.has('shebang_stripped')
+              ? 'execute-batch ran the payload through extractJavaScriptFromOutput, which drops a leading "#!" line because a shebang matches none of its code-start patterns. Remove the shebang (these scripts run via node/npm) or fix the extractor before re-shipping.'
+              : 'The commit content differs from what was sent. Re-ship and, if it repeats, inspect the content transforms in routes/lifeos-council-builder-routes.js and commitManyToGitHub in services/deployment-service.js.',
+        }),
   });
   if (contentMismatches.length > 0) bail({ commitSha, files, identity });
 

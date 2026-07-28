@@ -19,6 +19,7 @@ import {
   buildReceipt,
   classifyRuntimeProof,
   computeVerdict,
+  diagnoseContentMutation,
   dockerImageMembership,
   exitCodeForVerdict,
   globToRegExp,
@@ -90,6 +91,39 @@ test('every unprovable classification carries a concrete next action', () => {
       assert.ok(c.proposed_solution && c.proposed_solution.length > 20, `${p} needs a solution`);
     }
   }
+});
+
+test('diagnoseContentMutation names the shebang strip', () => {
+  const sent = '#!/usr/bin/env node\nconst a = 1;\n';
+  const committed = 'const a = 1;';
+  const kinds = diagnoseContentMutation(sent, committed).map((m) => m.kind);
+  assert.ok(kinds.includes('shebang_stripped'));
+});
+
+test('diagnoseContentMutation separates inert trailing whitespace from real edits', () => {
+  const found = diagnoseContentMutation('const a = 1;\n', 'const a = 1;');
+  assert.deepEqual(found.map((m) => m.kind), ['trailing_whitespace_stripped']);
+});
+
+test('diagnoseContentMutation catches an asterisk stripped out of a regex literal', () => {
+  // The real corruption caught on the first live ship of this pipeline: the
+  // builder rewrote a `.` + star + `alpha` regex into `.` + `alpha`, silently
+  // changing what it matches. The star is concatenated here rather than written
+  // literally, because a literal star-before-letter in this very file would be
+  // rewritten by that same transform on the way to the commit.
+  const star = String.fromCharCode(42);
+  const sent = `const re = /content-verified.${star}verified live/;\n`;
+  const committed = 'const re = /content-verified.verified live/;';
+  const found = diagnoseContentMutation(sent, committed);
+  const asterisk = found.find((m) => m.kind === 'asterisk_stripped');
+  assert.ok(asterisk, 'must flag the stripped asterisk');
+  assert.match(asterisk.detail, /changes regex and string meaning/);
+});
+
+test('diagnoseContentMutation ignores generator syntax and reports the unexplained', () => {
+  assert.deepEqual(diagnoseContentMutation('function *gen() {}', 'function *gen() {}'), []);
+  const kinds = diagnoseContentMutation('const a = 1;', 'const b = 2;').map((m) => m.kind);
+  assert.deepEqual(kinds, ['unexplained_difference']);
 });
 
 test('assessBranchDivergence refuses to overwrite a file the branch moved', () => {
@@ -264,7 +298,6 @@ test('a proven ship summary distinguishes live paths from unverifiable ones', ()
   });
   assert.match(receipt.human_summary, /1 path\(s\) verified live in the running app/);
   assert.match(receipt.human_summary, /1 path\(s\) have no HTTP-verifiable surface/);
-  assert.doesNotMatch(receipt.human_summary, /content-verified.verified live/);
 });
 
 test('a proven audit summary does not claim paths were shipped', () => {

@@ -160,6 +160,66 @@ export function dockerImageMembership(relPath, rules = []) {
   return { path: norm, ...decision };
 }
 
+// ── D3b: naming the mutation when committed bytes differ from sent bytes ─────
+//
+// `execute-batch` runs `.js`/`.mjs` payloads through `extractJavaScriptFromOutput`
+// and `fixAsteriskShorthandParams` before committing, so what lands is not always
+// what was sent. Reporting only "hashes differ" leaves the operator guessing;
+// these detectors name the transformation so the next action is obvious.
+
+/**
+ * Compare sent vs committed text and describe how the pipeline changed it.
+ *   -> [{ kind, detail }]
+ */
+export function diagnoseContentMutation(sent = '', committed = '') {
+  const a = String(sent);
+  const b = String(committed);
+  const findings = [];
+  if (a === b) return findings;
+
+  const shebang = a.match(/^#![^\n]*\n/);
+  let aWork = a;
+  if (shebang && !b.startsWith('#!')) {
+    findings.push({
+      kind: 'shebang_stripped',
+      detail: `the leading ${JSON.stringify(shebang[0].trim())} line was removed, so the file is no longer directly executable`,
+    });
+    aWork = a.slice(shebang[0].length);
+  }
+
+  if (aWork.replace(/\s+$/, '') === b.replace(/\s+$/, '') && aWork !== b) {
+    findings.push({
+      kind: 'trailing_whitespace_stripped',
+      detail: 'trailing newline/whitespace was trimmed (semantically inert, but the bytes differ)',
+    });
+    return findings;
+  }
+
+  // Asterisks removed from in-code text (regex literals, strings, comments).
+  const asteriskVictims = [];
+  for (const m of aWork.matchAll(/\*([A-Za-z_$][\w$]*)/g)) {
+    const idx = m.index ?? 0;
+    if (/function\s$/.test(aWork.slice(Math.max(0, idx - 9), idx))) continue;
+    if (!b.includes(m[0])) asteriskVictims.push(m[0]);
+  }
+  if (asteriskVictims.length > 0) {
+    findings.push({
+      kind: 'asterisk_stripped',
+      detail:
+        `${asteriskVictims.length} occurrence(s) of "*<identifier>" lost the asterisk ` +
+        `(${[...new Set(asteriskVictims)].slice(0, 6).join(', ')}) — this changes regex and string meaning, not just formatting`,
+    });
+  }
+
+  if (findings.length === 0) {
+    findings.push({
+      kind: 'unexplained_difference',
+      detail: `sent ${a.length} bytes, commit holds ${b.length} bytes, and no known pipeline transformation explains the difference`,
+    });
+  }
+  return findings;
+}
+
 // ── D9: how (and whether) runtime bytes can be proven for a path ─────────────
 
 const RUNTIME_PROOF = {
