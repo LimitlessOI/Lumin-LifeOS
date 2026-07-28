@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-28T23:23:56.892Z",
+  "generated_at": "2026-07-28T23:28:41.259Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12300,
   "files": [
@@ -34122,9 +34122,9 @@
     {
       "path": "db/migrations/20241030_create_additional_templates.sql",
       "synopsis": "Database migration — 20241030_create_additional_templates.sql.",
-      "bytes": 364,
-      "mtime": "2026-07-28T17:47:22.483Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 466,
+      "mtime": "2026-07-28T23:27:45.152Z",
+      "indexed_at": "2026-07-28T23:28:39.318Z"
     },
     {
       "path": "db/migrations/20260313_core_schema.sql",
@@ -40488,9 +40488,9 @@
     {
       "path": "docs/products/financial-revenue/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Financial Revenue",
-      "bytes": 15043,
-      "mtime": "2026-07-28T23:23:30.323Z",
-      "indexed_at": "2026-07-28T23:23:37.073Z"
+      "bytes": 17258,
+      "mtime": "2026-07-28T23:28:26.337Z",
+      "indexed_at": "2026-07-28T23:28:39.318Z"
     },
     {
       "path": "docs/products/FINANCIALREVENUE.md",
