@@ -20,6 +20,7 @@ import { runGovernedShippingQueue } from '../services/governed-shipping-runner.j
 import { runGovernedAutonomousShipOnce } from '../services/governed-autonomous-shipping-loop.js';
 import { getModelRankings } from '../services/model-capability-ledger.js';
 import { runGovernanceReview } from '../services/governance-law-review.js';
+import { recordFounderDecision, getFounderDecisionHistory, findFounderDecisions } from '../services/founder-intent-model.js';
 import {
   blueprintFollowClaim,
   exactChangeClaim,
@@ -317,6 +318,30 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
     try {
       const review = await runGovernanceReview({ pool });
       res.json(review);
+    } catch (err) {
+      res.status(503).json({ ok: false, error: err?.message || String(err) });
+    }
+  });
+
+  // North Star §2.0H Founder Intent Model — Tier-0: preserve founder intent
+  // as a real, queryable decision log. Deliberately records only decisions
+  // already made, never predictions (see services/founder-intent-model.js
+  // for why prediction is scoped out for now).
+  router.post('/factory/founder-decisions', guard, async (req, res) => {
+    try {
+      const result = await recordFounderDecision(pool, req.body || {});
+      res.status(result.ok ? 201 : 400).json(result);
+    } catch (err) {
+      res.status(503).json({ ok: false, error: err?.message || String(err) });
+    }
+  });
+
+  router.get('/factory/founder-decisions', guard, async (req, res) => {
+    try {
+      const result = req.query.q
+        ? await findFounderDecisions(pool, { query: req.query.q, limit: req.query.limit })
+        : await getFounderDecisionHistory(pool, { category: req.query.category, limit: req.query.limit });
+      res.json(result);
     } catch (err) {
       res.status(503).json({ ok: false, error: err?.message || String(err) });
     }
