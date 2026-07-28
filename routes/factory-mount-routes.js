@@ -21,6 +21,7 @@ import { runGovernedAutonomousShipOnce } from '../services/governed-autonomous-s
 import { getModelRankings, KNOWN_ROLES } from '../services/model-capability-ledger.js';
 import { runGovernanceReview } from '../services/governance-law-review.js';
 import { recordFounderDecision, getFounderDecisionHistory, findFounderDecisions } from '../services/founder-intent-model.js';
+import { createMission, getMission, listMissions, transitionMission, MISSION_STATES } from '../services/mission-tracker.js';
 import {
   blueprintFollowClaim,
   exactChangeClaim,
@@ -347,6 +348,50 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
         ? await findFounderDecisions(pool, { query: req.query.q, limit: req.query.limit })
         : await getFounderDecisionHistory(pool, { category: req.query.category, limit: req.query.limit });
       res.json(result);
+    } catch (err) {
+      res.status(503).json({ ok: false, error: err?.message || String(err) });
+    }
+  });
+
+  // North Star §2.0D Mission State Machine Law + Companion §0.9 Mission-
+  // First Attachment Rule. Priority item 5, the last of the founder's
+  // "build them all" list -- real state machine, proven against a real
+  // mission from this same session, not a retroactive rewrite of history.
+  router.post('/factory/missions', guard, async (req, res) => {
+    try {
+      const result = await createMission(pool, req.body || {});
+      res.status(result.ok ? 201 : 400).json(result);
+    } catch (err) {
+      res.status(503).json({ ok: false, error: err?.message || String(err) });
+    }
+  });
+
+  router.get('/factory/missions', guard, async (req, res) => {
+    try {
+      const result = await listMissions(pool, { state: req.query.state, limit: req.query.limit });
+      res.json({ ...result, known_states: MISSION_STATES });
+    } catch (err) {
+      res.status(503).json({ ok: false, error: err?.message || String(err) });
+    }
+  });
+
+  router.get('/factory/missions/:id', guard, async (req, res) => {
+    try {
+      const result = await getMission(pool, { mission_id: req.params.id });
+      res.status(result.ok ? 200 : 404).json(result);
+    } catch (err) {
+      res.status(503).json({ ok: false, error: err?.message || String(err) });
+    }
+  });
+
+  router.post('/factory/missions/:id/transition', guard, async (req, res) => {
+    try {
+      const result = await transitionMission(pool, {
+        mission_id: req.params.id,
+        to_state: req.body?.to_state,
+        evidence: req.body?.evidence,
+      });
+      res.status(result.ok ? 200 : 400).json(result);
     } catch (err) {
       res.status(503).json({ ok: false, error: err?.message || String(err) });
     }
