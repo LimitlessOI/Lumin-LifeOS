@@ -17,6 +17,7 @@ import { createLifeREClientComms } from '../services/lifere-client-comms.js';
 import { createLifeRELifeOSCrosscheck } from '../services/lifere-lifeos-crosscheck.js';
 import { createLifeREPersonalityCalibration } from '../services/lifere-personality-calibration.js';
 import { createLifeRESkillCoaching } from '../services/lifere-skill-coaching.js';
+import { createLifeREAgentSuperpowers } from '../services/lifere-agent-superpowers.js';
 import { createLifeREMarketingModule } from '../services/lifere-marketing-module.js';
 import { createLifeREFunnelIngress } from '../services/lifere-funnel-ingress.js';
 import { createLifeREYouTubeResearch } from '../services/lifere-youtube-research.js';
@@ -64,6 +65,7 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
   const lifeosCrosscheck = createLifeRELifeOSCrosscheck({ pool });
   const personality = createLifeREPersonalityCalibration({ pool });
   const coaching = createLifeRESkillCoaching({ pool });
+  const superpowers = createLifeREAgentSuperpowers({ pool });
   const marketing = createLifeREMarketingModule({ pool });
   const funnel = createLifeREFunnelIngress({ pool });
   const youtube = createLifeREYouTubeResearch();
@@ -716,6 +718,34 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
 
   router.get('/coaching/modules', requireKey, (_req, res) => {
     res.json({ ok: true, ...coaching.listModules() });
+  });
+
+  // Real strength/interest profile from actual drill history (score +
+  // voluntary practice_hours per module) -- not a personality quiz.
+  // Founder: "find out what their superpowers are and direct them to do
+  // the things they like to do."
+  router.get('/coaching/superpowers', requireKey, (req, res) => {
+    try {
+      const profile = superpowers.getAgentProfile({
+        tenantId: tenantId(req),
+        userId: userId(req),
+      });
+      res.json(profile);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/coaching/recommend-next', requireKey, (req, res) => {
+    try {
+      const recommendation = superpowers.recommendNextModule({
+        tenantId: tenantId(req),
+        userId: userId(req),
+      });
+      res.json(recommendation);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
   });
 
   router.post('/coaching/drill/start', requireKey, async (req, res) => {

@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-27T23:51:12.093Z",
+  "generated_at": "2026-07-28T00:08:48.837Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12182,
+  "file_count": 12183,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -40561,9 +40561,9 @@
     {
       "path": "docs/products/lifere/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeRE",
-      "bytes": 36329,
-      "mtime": "2026-07-27T21:20:51.309Z",
-      "indexed_at": "2026-07-27T22:21:57.522Z"
+      "bytes": 38363,
+      "mtime": "2026-07-28T00:08:26.487Z",
+      "indexed_at": "2026-07-28T00:08:48.837Z"
     },
     {
       "path": "docs/products/limitlessos/conversations/2026-06-29-founder-ecosystem-session.md",
@@ -68327,9 +68327,9 @@
     {
       "path": "routes/lifere-os-routes.js",
       "synopsis": "LifeRE OS routes — full A-to-Z API (W1–W6).",
-      "bytes": 55586,
-      "mtime": "2026-07-24T21:06:08.332Z",
-      "indexed_at": "2026-07-27T22:21:57.522Z",
+      "bytes": 56646,
+      "mtime": "2026-07-28T00:06:07.505Z",
+      "indexed_at": "2026-07-28T00:08:48.837Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -88513,6 +88513,16 @@
       "bytes": 1007,
       "mtime": "2026-07-24T21:06:08.534Z",
       "indexed_at": "2026-07-27T22:21:57.522Z"
+    },
+    {
+      "path": "services/lifere-agent-superpowers.js",
+      "synopsis": "LifeRE agent superpowers — real strength/interest profile from",
+      "bytes": 5698,
+      "mtime": "2026-07-28T00:05:10.752Z",
+      "indexed_at": "2026-07-28T00:08:48.837Z",
+      "ssot": [
+        "docs/products/lifere/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/lifere-alpha-daily-cycle.js",
