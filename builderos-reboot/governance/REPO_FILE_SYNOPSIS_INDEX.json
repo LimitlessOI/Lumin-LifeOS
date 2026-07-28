@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-28T22:54:49.130Z",
+  "generated_at": "2026-07-28T23:09:19.765Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12298,
+  "file_count": 12300,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21634,9 +21634,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3711873,
-      "mtime": "2026-07-28T22:54:48.266Z",
-      "indexed_at": "2026-07-28T22:54:49.130Z"
+      "bytes": 3712622,
+      "mtime": "2026-07-28T23:09:04.821Z",
+      "indexed_at": "2026-07-28T23:09:19.765Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -29508,9 +29508,9 @@
     {
       "path": "builderos-reboot/PRODUCT_READINESS_REPORT.json",
       "synopsis": "BuilderOS artifact — PRODUCT READINESS REPORT.",
-      "bytes": 43376,
+      "bytes": 43377,
       "mtime": "2026-07-28T22:32:15.911Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "indexed_at": "2026-07-28T23:06:09.687Z",
       "synopsis_index_only": true
     },
     {
@@ -32357,9 +32357,9 @@
     {
       "path": "data/builderos-compound-improvement-state.json",
       "synopsis": "JSON data/config — data/builderos-compound-improvement-state.json.",
-      "bytes": 1609,
+      "bytes": 1607,
       "mtime": "2026-07-28T20:13:27.534Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "indexed_at": "2026-07-28T23:06:09.687Z",
       "synopsis_index_only": true
     },
     {
@@ -40806,9 +40806,9 @@
     {
       "path": "docs/products/lip/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LIP (Limitless Investment Protocol)",
-      "bytes": 5583,
+      "bytes": 4564,
       "mtime": "2026-07-28T22:28:39.124Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "indexed_at": "2026-07-28T23:06:09.687Z"
     },
     {
       "path": "docs/products/lumin-university/FILE_MANIFEST.json",
@@ -41425,9 +41425,9 @@
     {
       "path": "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — ZERO DRIFT HANDOFF PROTOCOL",
-      "bytes": 106502,
-      "mtime": "2026-07-18T19:01:13.573Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 109777,
+      "mtime": "2026-07-28T23:08:28.062Z",
+      "indexed_at": "2026-07-28T23:09:03.191Z"
     },
     {
       "path": "docs/products/ZERODRIFTHANDOFFPROTOCOL.md",
@@ -63819,9 +63819,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 35258,
-      "mtime": "2026-07-28T22:39:49.779Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 35300,
+      "mtime": "2026-07-28T23:07:19.043Z",
+      "indexed_at": "2026-07-28T23:09:03.191Z",
       "synopsis_index_only": true
     },
     {
@@ -71031,9 +71031,9 @@
     {
       "path": "scripts/generate-file-synopsis-index.mjs",
       "synopsis": "Build/update REPO_FILE_SYNOPSIS_INDEX.json for all git-tracked indexable files.",
-      "bytes": 3904,
-      "mtime": "2026-07-06T21:31:21.636Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 4982,
+      "mtime": "2026-07-28T23:06:00.571Z",
+      "indexed_at": "2026-07-28T23:09:03.191Z",
       "ssot": [
         "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md"
       ]
@@ -71303,6 +71303,16 @@
       "bytes": 11419,
       "mtime": "2026-07-07T02:22:52.999Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "ssot": [
+        "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/lib/git-content.mjs",
+      "synopsis": "Resolve the file content git would commit (index blob, not dirty worktree) for governance gates.",
+      "bytes": 2871,
+      "mtime": "2026-07-28T23:07:06.038Z",
+      "indexed_at": "2026-07-28T23:09:03.191Z",
       "ssot": [
         "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md"
       ]
@@ -73876,9 +73886,9 @@
     {
       "path": "scripts/verify-file-synopsis.mjs",
       "synopsis": "HARD verify — every tracked file has synopsis + index row; blocks commit/push/CI on drift.",
-      "bytes": 7366,
-      "mtime": "2026-07-07T21:41:40.937Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 7704,
+      "mtime": "2026-07-28T23:04:27.845Z",
+      "indexed_at": "2026-07-28T23:09:03.191Z",
       "ssot": [
         "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md"
       ]
@@ -95284,6 +95294,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "tests/git-content-committed-bytes.test.js",
+      "synopsis": "Proves governance gates read committed bytes, not dirty worktree bytes.",
+      "bytes": 4017,
+      "mtime": "2026-07-28T23:06:50.767Z",
+      "indexed_at": "2026-07-28T23:09:03.191Z",
+      "ssot": [
+        "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md"
       ]
     },
     {

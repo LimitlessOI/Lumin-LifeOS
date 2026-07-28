@@ -17,10 +17,12 @@ import {
   isInFileEnforceable,
   shouldSkipIndex,
 } from './lib/file-synopsis.mjs';
+import { gitUnstagedPaths, resolveCommittedFile } from './lib/git-content.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 const INDEX_ABS = path.join(ROOT, INDEX_REL);
+const UNSTAGED = gitUnstagedPaths(ROOT);
 
 function gitLines(cmd) {
   try {
@@ -55,18 +57,18 @@ function skipStaleCheck(rel) {
 }
 
 function verifyFile(rel, { indexMap, failures, contentOverride }) {
-  const abs = path.join(ROOT, rel);
-  if (!fs.existsSync(abs)) return;
+  // Resolve what a commit of `rel` would contain, never dirty-worktree-only bytes:
+  // CI can only ever see committed content, so comparing the index against the
+  // worktree made this gate pass locally and fail in CI on the same commit.
+  const resolved = resolveCommittedFile(ROOT, rel, UNSTAGED);
+  if (!resolved) return;
 
-  let content = contentOverride;
-  let stat;
-  try {
-    stat = fs.statSync(abs);
-    if (!content) content = fs.readFileSync(abs, 'utf8');
-  } catch {
+  const content = contentOverride ?? resolved.content;
+  if (typeof content !== 'string') {
     failures.push({ id: 'SYNOPSIS_READ_FAIL', detail: rel });
     return;
   }
+  const size = resolved.size;
 
   const ext = path.extname(rel).toLowerCase();
 
@@ -84,16 +86,16 @@ function verifyFile(rel, { indexMap, failures, contentOverride }) {
     failures.push({ id: 'INDEX_SYNOPSIS_EMPTY', detail: `${rel} — index row has no synopsis` });
   }
 
-  if (stat.size <= 750_000 && !skipStaleCheck(rel)) {
+  if (size <= 750_000 && !skipStaleCheck(rel)) {
     // Freshness signal = `bytes` (content-derived file size), NOT mtime. Git does not preserve
     // mtimes: every checkout, rebase, or fresh clone rewrites them to the operation timestamp,
     // so mtime equality is impossible to satisfy in CI and flaky locally after a rebase. File
     // size survives all of those and the index co-commit gates force index regeneration whenever
     // an indexable file changes, so a bytes mismatch reliably means the index is stale.
-    if (typeof entry.bytes === 'number' && entry.bytes !== stat.size) {
+    if (typeof entry.bytes === 'number' && entry.bytes !== size) {
       failures.push({
         id: 'INDEX_STALE',
-        detail: `${rel} — index bytes ${entry.bytes} ≠ disk ${stat.size}. Run: npm run lifeos:file-synopsis:index`,
+        detail: `${rel} — index bytes ${entry.bytes} ≠ committed ${size}. Run: npm run lifeos:file-synopsis:index`,
       });
     }
   }

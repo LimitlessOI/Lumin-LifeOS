@@ -266,7 +266,7 @@
     "ship:truth": "node scripts/ship-truth.mjs",
     "deploy:truth:audit": "node scripts/drift-audit.mjs",
     "deploy:truth:test": "node --test tests/deploy-truth-guard.test.js",
-    "governance:separation:test": "node --test tests/security-invariants.test.js tests/security-invariants-ship-path.test.js tests/receipt-separation.test.js tests/migration-truth.test.js",
+    "governance:separation:test": "node --test tests/security-invariants.test.js tests/security-invariants-ship-path.test.js tests/receipt-separation.test.js tests/migration-truth.test.js tests/git-content-committed-bytes.test.js",
     "system:cloudflare-railway": "node scripts/setup-cloudflare-railway.mjs",
     "system:fp-v2:production-env": "node scripts/enable-fp-v2-production-env.mjs",
     "system:rotate-command-key": "node scripts/system-rotate-command-key.mjs",

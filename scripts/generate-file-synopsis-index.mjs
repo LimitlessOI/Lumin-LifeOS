@@ -15,6 +15,7 @@ import {
   isIndexable,
   shouldSkipIndex,
 } from './lib/file-synopsis.mjs';
+import { gitUnstagedPaths, resolveCommittedFile } from './lib/git-content.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -35,6 +36,23 @@ function loadExisting() {
   } catch {
     return { files: [] };
   }
+}
+
+/**
+ * Keep the prior row when nothing content-derived changed, so a 2-file edit produces
+ * a 2-row diff instead of rewriting `indexed_at` on all ~12k rows. The churn version
+ * made every concurrent branch conflict on this file and the diff unreviewable.
+ * `mtime` is excluded from the comparison because git rewrites it on every checkout.
+ */
+function stableEntry(prev, next) {
+  if (!prev) return next;
+  const meaningful = (e) => JSON.stringify({
+    synopsis: e.synopsis,
+    bytes: e.bytes,
+    ssot: e.ssot || null,
+    synopsis_index_only: e.synopsis_index_only || false,
+  });
+  return meaningful(prev) === meaningful(next) ? prev : next;
 }
 
 function main() {
@@ -65,42 +83,37 @@ function main() {
   let updated = 0;
   let skippedLarge = 0;
 
+  // Record the bytes a commit would contain, not dirty-worktree bytes. Indexing an
+  // uncommitted local edit writes a number CI can never reproduce, which turns the
+  // File Synopsis Law red on push for a file this commit does not even touch.
+  const unstaged = gitUnstagedPaths(ROOT);
+
   for (const rel of targets) {
-    const abs = path.join(ROOT, rel);
-    if (!fs.existsSync(abs)) {
-      byPath.delete(rel);
+    const resolved = resolveCommittedFile(ROOT, rel, unstaged, { maxBytes: MAX_BYTES });
+    if (!resolved) {
+      if (!fs.existsSync(path.join(ROOT, rel))) byPath.delete(rel);
       continue;
     }
 
-    let stat;
-    try {
-      stat = fs.statSync(abs);
-    } catch {
-      continue;
-    }
+    const stat = { size: resolved.size, mtime: resolved.mtime };
 
-    if (stat.size > MAX_BYTES) {
-      byPath.set(rel, {
+    const prior = byPath.get(rel);
+
+    if (resolved.content === null) {
+      byPath.set(rel, stableEntry(prior, {
         path: rel,
         synopsis: 'FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS',
         bytes: stat.size,
         mtime: stat.mtime.toISOString(),
         indexed_at: indexedAt,
-      });
+      }));
       skippedLarge += 1;
-      updated += 1;
       continue;
     }
 
-    let content = '';
-    try {
-      content = fs.readFileSync(abs, 'utf8');
-    } catch {
-      continue;
-    }
-
-    byPath.set(rel, buildIndexEntry(rel, content, stat, indexedAt));
-    updated += 1;
+    const next = stableEntry(prior, buildIndexEntry(rel, resolved.content, stat, indexedAt));
+    if (next !== prior) updated += 1;
+    byPath.set(rel, next);
   }
 
   const files = [...byPath.values()].sort((a, b) => a.path.localeCompare(b.path));
