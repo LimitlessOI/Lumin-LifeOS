@@ -1666,24 +1666,29 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
         }
 
         // TCO-E01: ledger for DeepSeek
-        {
-          const dsIn = json.usage?.prompt_tokens || estimateTokens(finalPrompt);
-          const dsOut = json.usage?.completion_tokens || estimateTokens(text);
-          recordMetered({
-            ...meterTiming(),
-            provider: 'deepseek',
-            model: config.model || member,
-            taskType,
-            originalTokens: dsIn + totalSavedInputTokens,
-            compressedTokens: dsIn,
-            outputTokens: dsOut,
-            savedTokens: totalSavedInputTokens,
-            savedOutputPct: codSavedOutputPct,
-            costUSD: cost,
-            cacheHit: false,
-            compressionLayers: buildRecordedCompressionLayers(compressionLayers, dsOut, codSavedOutputPct),
-          }).catch(() => {});
-        }
+        // Found live 2026-07-28: dsIn/dsOut were declared inside this block's
+        // own { } scope, then referenced below at the finalizeResponse call
+        // outside it -- a real ReferenceError ("dsIn is not defined") that
+        // silently took DeepSeek out of the codegen tier rotation on every
+        // real dispatch, discovered only because the new tier_errors
+        // diagnostic (this same session) finally surfaced it instead of
+        // hiding it behind whichever tier failed last.
+        const dsIn = json.usage?.prompt_tokens || estimateTokens(finalPrompt);
+        const dsOut = json.usage?.completion_tokens || estimateTokens(text);
+        recordMetered({
+          ...meterTiming(),
+          provider: 'deepseek',
+          model: config.model || member,
+          taskType,
+          originalTokens: dsIn + totalSavedInputTokens,
+          compressedTokens: dsIn,
+          outputTokens: dsOut,
+          savedTokens: totalSavedInputTokens,
+          savedOutputPct: codSavedOutputPct,
+          costUSD: cost,
+          cacheHit: false,
+          compressionLayers: buildRecordedCompressionLayers(compressionLayers, dsOut, codSavedOutputPct),
+        }).catch(() => {});
 
         recordSessionTurns(effectiveSessionId, finalPrompt, text);
 
