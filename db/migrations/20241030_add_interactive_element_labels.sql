@@ -7,10 +7,17 @@ CREATE TABLE IF NOT EXISTS interactive_element_labels (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-ALTER TABLE IF EXISTS interactive_element_labels
-ADD CONSTRAINT fk_element
-FOREIGN KEY (element_id) 
-REFERENCES interactive_elements(id)
-ON DELETE CASCADE;
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_constraint WHERE conname = 'fk_element'
+  ) THEN
+    ALTER TABLE interactive_element_labels
+    ADD CONSTRAINT fk_element
+    FOREIGN KEY (element_id)
+    REFERENCES interactive_elements(id)
+    ON DELETE CASCADE;
+  END IF;
+END $$;
 
 CREATE INDEX IF NOT EXISTS idx_interactive_element_labels_element_id ON interactive_element_labels(element_id);
