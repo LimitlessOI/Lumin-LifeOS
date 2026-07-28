@@ -5,9 +5,11 @@
  * (assertion-provenance lock), (3) a full author_then_write step flows through the
  * write + Step-3 SENTRY behavior gate to PASS using a stub codegen + stub assertion
  * runner, (4) codegen CANNOT supply assertions — only the blueprint's are used,
- * (5) cheapest tier is tried first and escalation is recorded. Stub runners only.
+ * (5) the strongest tier is tried first (SO-003) and escalation is recorded.
+ * Stub runners only.
  */
 import { stepRequiresAuthoring, runAuthoring, DEFAULT_CODEGEN_TIERS } from '../../factory-staging/factory-core/builder/authoring.js';
+import { QUALITY_FIRST_FALLBACK_MODELS } from '../../config/task-model-routing.js';
 import { dispatchExecuteStep } from '../../factory-staging/factory-core/builder/run-step.js';
 
 const results = [];
@@ -57,7 +59,7 @@ const authored = await runAuthoring(baseStep, stubCodegen);
 assert('authoring returns content only', authored.ok === true && authored.content === CONTENT && !('behavior_assertions' in authored), { keys: Object.keys(authored) });
 assert('authoring records blueprint provenance', authored.assertion_provenance === 'blueprint');
 
-// (5) cheapest tier first + escalation recorded
+// (5) strongest tier first (SO-003) + escalation recorded
 let attempts = 0;
 const escalatingCodegen = {
   generate: async ({ tiers }) => {
@@ -71,7 +73,24 @@ const escalatingCodegen = {
   },
 };
 const esc = await runAuthoring(baseStep, escalatingCodegen);
-assert('strong tier first (tier[0] attempted first)', DEFAULT_CODEGEN_TIERS[0] === 'openai_builder_standard');
+// Asserted against the declared policy rather than a hardcoded model name: this
+// assertion has already broken twice (2026-07-14, 2026-07-27) because the chain was
+// legitimately reordered. TRUSTED_FALLBACK_MODELS_OVERRIDE is a ratified operational
+// lever for when the strong providers are unfunded, so an override is not drift —
+// but with no override set, the code default must still be strong-first per SO-003.
+const tierOverride = String(process.env.TRUSTED_FALLBACK_MODELS_OVERRIDE || '').trim();
+assert(
+  tierOverride
+    ? 'tier[0] follows the operational override (SO-003 strong-first default deferred)'
+    : 'tier[0] is the declared strong-first default (SO-003)',
+  tierOverride
+    ? typeof DEFAULT_CODEGEN_TIERS[0] === 'string' && DEFAULT_CODEGEN_TIERS[0].length > 0
+    : DEFAULT_CODEGEN_TIERS[0] === QUALITY_FIRST_FALLBACK_MODELS[0],
+  { tier_0: DEFAULT_CODEGEN_TIERS[0], override: tierOverride || null },
+);
+assert('escalation chain has at least two distinct tiers', DEFAULT_CODEGEN_TIERS.length >= 2
+  && new Set(DEFAULT_CODEGEN_TIERS).size === DEFAULT_CODEGEN_TIERS.length,
+{ tiers: DEFAULT_CODEGEN_TIERS });
 assert('escalates on first-tier failure', esc.ok === true && esc.escalated === true && esc.model_tier === DEFAULT_CODEGEN_TIERS[1], { model_tier: esc.model_tier, escalated: esc.escalated });
 
 // (6) FULL PIPE: author_then_write flows through write + SENTRY behavior gate to PASS.

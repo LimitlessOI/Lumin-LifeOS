@@ -118,7 +118,7 @@ export const DEFAULT_MODEL = 'openai_gpt';
 // 'openai_builder_standard' -- not a real escalation, just a relabeled
 // duplicate; left in the list (harmless) but moved past the tiers that add
 // real strength or provider diversity.
-const QUALITY_FIRST_FALLBACK_MODELS = [
+export const QUALITY_FIRST_FALLBACK_MODELS = [
   'claude_sonnet',
   'openai_builder_standard',
   'deepseek',

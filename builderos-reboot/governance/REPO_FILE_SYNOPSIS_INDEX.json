@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-28T23:28:41.259Z",
+  "generated_at": "2026-07-28T23:44:37.187Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12300,
   "files": [
@@ -21811,9 +21811,9 @@
     {
       "path": "builderos-reboot/MISSION_PACK_INDEX.json",
       "synopsis": "BuilderOS artifact — MISSION PACK INDEX.",
-      "bytes": 11247,
-      "mtime": "2026-07-18T22:36:38.708Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 11388,
+      "mtime": "2026-07-28T23:42:55.035Z",
+      "indexed_at": "2026-07-28T23:44:15.529Z",
       "synopsis_index_only": true
     },
     {
@@ -24084,9 +24084,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0005/CONTENT/run-step.js",
       "synopsis": "Exports resolveRepoPath — factory-staging/factory-core/builder/run-step.js.",
-      "bytes": 10968,
-      "mtime": "2026-07-10T00:25:23.974Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 11174,
+      "mtime": "2026-07-28T23:38:09.025Z",
+      "indexed_at": "2026-07-28T23:44:15.529Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0005/CONTENT/run-verification.js",
@@ -24743,9 +24743,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0013/CONTENT/run-step.js",
       "synopsis": "Exports resolveRepoPath — factory-staging/factory-core/builder/run-step.js.",
-      "bytes": 10968,
-      "mtime": "2026-07-10T00:25:23.976Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 11174,
+      "mtime": "2026-07-28T23:38:09.024Z",
+      "indexed_at": "2026-07-28T23:44:15.529Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0013/FOUNDER_PACKET.json",
@@ -25941,9 +25941,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0029/CONTENT/run-step.js",
       "synopsis": "Exports resolveRepoPath — factory-staging/factory-core/builder/run-step.js.",
-      "bytes": 10968,
-      "mtime": "2026-07-10T00:25:23.977Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 11174,
+      "mtime": "2026-07-28T23:38:09.022Z",
+      "indexed_at": "2026-07-28T23:44:15.529Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0029/CONTENT/TSOS_FACTORY_INTEGRATION.md",
@@ -29508,9 +29508,9 @@
     {
       "path": "builderos-reboot/PRODUCT_READINESS_REPORT.json",
       "synopsis": "BuilderOS artifact — PRODUCT READINESS REPORT.",
-      "bytes": 43377,
+      "bytes": 43376,
       "mtime": "2026-07-28T22:32:15.911Z",
-      "indexed_at": "2026-07-28T23:06:09.687Z",
+      "indexed_at": "2026-07-28T23:44:15.529Z",
       "synopsis_index_only": true
     },
     {
@@ -29634,9 +29634,9 @@
     {
       "path": "builderos-reboot/scripts/codegen-dumbpipe-proof.mjs",
       "synopsis": "STEP 4 proof — codegen as an untrusted \"dumb pipe\" authoring sub-step.",
-      "bytes": 5832,
-      "mtime": "2026-07-14T20:06:04.097Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 6968,
+      "mtime": "2026-07-28T23:41:31.564Z",
+      "indexed_at": "2026-07-28T23:44:15.529Z"
     },
     {
       "path": "builderos-reboot/scripts/compare-run-directories.sh",
@@ -31113,9 +31113,9 @@
     {
       "path": "config/task-model-routing.js",
       "synopsis": "config/task-model-routing.js",
-      "bytes": 11926,
-      "mtime": "2026-07-28T17:47:22.479Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 11933,
+      "mtime": "2026-07-28T23:40:54.610Z",
+      "indexed_at": "2026-07-28T23:44:15.529Z",
       "ssot": [
         "docs/products/ai-council/PRODUCT_HOME.md"
       ]
@@ -39885,9 +39885,9 @@
     {
       "path": "docs/products/ai-council/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — AI Council",
-      "bytes": 71483,
-      "mtime": "2026-07-28T18:01:25.484Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 73601,
+      "mtime": "2026-07-28T23:43:28.198Z",
+      "indexed_at": "2026-07-28T23:44:15.529Z"
     },
     {
       "path": "docs/products/ai-receptionist/FILE_MANIFEST.json",
@@ -40030,9 +40030,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 280233,
-      "mtime": "2026-07-28T20:16:02.774Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 283701,
+      "mtime": "2026-07-28T23:44:07.853Z",
+      "indexed_at": "2026-07-28T23:44:15.529Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",

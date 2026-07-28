@@ -7,9 +7,9 @@
     "role": "Mission pack index — generated from MISSION_QUEUE.json",
     "canonical_work_queue": "builderos-reboot/BP_PRIORITY.json"
   },
-  "generated_at": "2026-07-18T22:36:38.706Z",
+  "generated_at": "2026-07-28T23:42:55.033Z",
   "source_of_truth": "builderos-reboot/MISSION_QUEUE.json",
-  "mission_count": 56,
+  "mission_count": 57,
   "missions_complete": 37,
   "missions": [
     {
@@ -328,6 +328,12 @@
       "scope": "lifeos_commitment_route_v2",
       "steps": 4,
       "status": "unknown"
+    },
+    {
+      "mission_id": "PRODUCT-LIFEOS-CREDIT-V1-0001",
+      "steps": 0,
+      "status": "unknown",
+      "error": "no_blueprint"
     },
     {
       "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",

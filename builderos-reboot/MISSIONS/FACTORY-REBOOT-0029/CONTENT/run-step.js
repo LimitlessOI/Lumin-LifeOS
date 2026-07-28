@@ -24,7 +24,8 @@ function sha256Buffer(buf) {
 }
 
 export function pathMatchesSandbox(relativePath, sandboxBoundary) {
-  const normalized = relativePath.replace(/\\/g, '/');
+  const normalized = path.posix.normalize(String(relativePath || '').replace(/\\/g, '/'));
+  if (normalized === '..' || normalized.startsWith('../')) return false;
   const boundary = sandboxBoundary.replace(/\\/g, '/').replace(/\/\*\*$/, '');
   return normalized === boundary || normalized.startsWith(`${boundary}/`);
 }
@@ -188,7 +189,11 @@ export async function dispatchExecuteStep(body, options = {}) {
           summary: `Authoring sub-step failed: ${authoringResult.reason}`,
           attempted_action: 'runAuthoring',
           missing_information: [],
-          evidence: { reason: authoringResult.reason, model_tier: authoringResult.model_tier || null },
+          evidence: {
+            reason: authoringResult.reason,
+            model_tier: authoringResult.model_tier || null,
+            tier_errors: authoringResult.tier_errors || null,
+          },
         }),
       };
     }
