@@ -1,189 +1,949 @@
 {
   "schema": "receipt_truth_validation_v1",
-  "at": "2026-07-24T02:37:40.635Z",
-  "ok": true,
-  "checked": 30,
-  "failures": [],
+  "at": "2026-07-28T22:39:58.984Z",
+  "ok": false,
+  "checked": 127,
+  "failures": [
+    "DEPLOY_TRUTH_VERIFY.json:PASS_WITHOUT_NAMED_VERIFIER"
+  ],
+  "known_debt": [
+    "MACHINE_ALPHA_WALKTHROUGH.json:ACCEPTANCE_PASS_WITHOUT_SHA_OR_BASE",
+    "SITE_BUILDER_PREALPHA_LAYER_A.json:ACCEPTANCE_PASS_WITHOUT_SHA_OR_BASE"
+  ],
+  "stale_baseline": [],
+  "advisories": [
+    "ACTION_INBOX_V1_ACCEPTANCE.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
+    "BUILDEROS_AUTONOMY_CLOSURE_V1_ACCEPTANCE.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
+    "BUILDEROS_BUILD_DEPLOY_TRUTH.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
+    "BUILDEROS_FOUNDER_UI_PROOF.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
+    "BUILDEROS_SAME_TIER_DETERMINISM.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
+    "CAPTURE_PIPELINE_V2_ACCEPTANCE.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
+    "COGNITIVE_CORE_ERA34_TIP_AUDIT.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
+    "COMMITMENT_ROUTE_V2_ACCEPTANCE.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
+    "CONVERSATION_COMMITMENTS_V1_ACCEPTANCE.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
+    "FOUNDER_CHAT_ALPHA_BATTERY.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
+    "FOUNDER_MEMORY_V1_SENTRY.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
+    "LIFEOS_COMMS_PRESENCE_LOCK_PROOF.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
+    "LIFEOS_LABS_PERSIST_PROOF.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
+    "LIFEOS_USER_AUTH_V1_ACCEPTANCE.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
+    "LIFERE_SALES_COACHING_V1_ACCEPTANCE.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
+    "LUMIN_CHAIR_DIRECT_CONNECTION_PARITY.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
+    "MACHINE_ALPHA_WALKTHROUGH.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
+    "PATH_TO_10_T05_FOUNDER_MEMORY.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
+    "SITE_BUILDER_PREALPHA_LAYER_A.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
+    "SOCIALMEDIAOS_SESSION_MVP_ACCEPTANCE.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
+    "VOICE_RAIL_V1_ACCEPTANCE.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER"
+  ],
   "results": [
     {
       "file": "ACTION_INBOX_V1_ACCEPTANCE.json",
       "ok": true,
       "violations": [],
-      "claims_pass": true
+      "claims_pass": true,
+      "proposed_solutions": []
     },
     {
       "file": "BUILDEROS_AUTONOMY_CLOSURE_V1_ACCEPTANCE.json",
       "ok": true,
       "violations": [],
-      "claims_pass": true
+      "claims_pass": true,
+      "proposed_solutions": []
+    },
+    {
+      "file": "BUILDEROS_BUILD_DEPLOY_TRUTH.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": true,
+      "proposed_solutions": []
+    },
+    {
+      "file": "BUILDEROS_FOUNDER_UI_PROOF.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": true,
+      "proposed_solutions": []
     },
     {
       "file": "BUILDEROS_INTAKE_LOOP_V1_ACCEPTANCE.json",
       "ok": true,
       "violations": [],
-      "claims_pass": false
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "BUILDEROS_OPERATIONAL_PROOF.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "BUILDEROS_SAME_TIER_DETERMINISM.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": true,
+      "proposed_solutions": []
     },
     {
       "file": "CAPTURE_PIPELINE_V2_ACCEPTANCE.json",
       "ok": true,
       "violations": [],
-      "claims_pass": true
+      "claims_pass": true,
+      "proposed_solutions": []
+    },
+    {
+      "file": "CHAIR_COMM_REFINE_PROOF.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "CHAIR_JUDGMENT_SELF_REPAIR_TIER1_SCOPE_1784576796000.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "CHAIR_UI_CHANGE_REFRESH_PROOF.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
     },
     {
       "file": "COGNITIVE_CORE_ERA34_TIP_AUDIT.json",
       "ok": true,
       "violations": [],
-      "claims_pass": true
+      "claims_pass": true,
+      "proposed_solutions": []
     },
     {
       "file": "COMMITMENT_ROUTE_V2_ACCEPTANCE.json",
       "ok": true,
       "violations": [],
-      "claims_pass": true
+      "claims_pass": true,
+      "proposed_solutions": []
     },
     {
       "file": "CONVERSATION_COMMITMENTS_V1_ACCEPTANCE.json",
       "ok": true,
       "violations": [],
-      "claims_pass": true
+      "claims_pass": true,
+      "proposed_solutions": []
+    },
+    {
+      "file": "CREATIVE_ENGINE_V1_FOOTAGE_EDIT.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "CREATIVE_ENGINE_V1_SHIP.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "CRM_ALPHA_TEST.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "CURSOR_SESSIONS_BATCH.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "CURSOR_SESSION_2A4739F2.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "CURSOR_SESSION_34AFB0D1.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "CURSOR_SESSION_48F2917E.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "CURSOR_SESSION_7449D204.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "CURSOR_SESSION_7DC85F20.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "CURSOR_SESSION_A70380F7.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "CURSOR_SESSION_BC7E829E.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "CURSOR_SESSION_D5421079.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "CURSOR_SESSION_E9B7659E.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "DEPLOY_DRIFT_AUDIT.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": true,
+      "proposed_solutions": []
+    },
+    {
+      "file": "DEPLOY_TRUTH_VERIFY.json",
+      "ok": false,
+      "violations": [
+        "PASS_WITHOUT_NAMED_VERIFIER"
+      ],
+      "claims_pass": true,
+      "proposed_solutions": [
+        {
+          "violation": "PASS_WITHOUT_NAMED_VERIFIER",
+          "proposed_solution": "Add verified_by naming the independent actor that checked this (must differ from produced_by). If no independent verifier existed, set separation_collapsed: true plus separation_note explaining why no safer alternative existed, per PRODUCT_HOME Separation Of Duties."
+        }
+      ]
+    },
+    {
+      "file": "DIRECT_EXECUTION_POINT_B_LIVE.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
     },
     {
       "file": "FOUNDER_ALPHA_READINESS_AUDIT.json",
       "ok": true,
       "violations": [],
-      "claims_pass": false
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "FOUNDER_CHAT_ALPHA_BATTERY.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": true,
+      "proposed_solutions": []
+    },
+    {
+      "file": "FOUNDER_JWT_CHAT_PROOF.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "FOUNDER_LIVE_CHAT_BUILD_PROBE.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "FOUNDER_MEMORY_V1_SENTRY.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": true,
+      "proposed_solutions": []
+    },
+    {
+      "file": "FOUNDER_NATURAL_CHAIR_PROOF.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "FOUNDER_UI_LOGIN_E2E.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "GOVERNANCE_COVENANT_LIVE.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "LIFEOS_ALPHA_BREAK_IT.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "LIFEOS_COMMS_OVERNIGHT_PROOF.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "LIFEOS_COMMS_PRESENCE_LOCK_PROOF.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": true,
+      "proposed_solutions": []
     },
     {
       "file": "LIFEOS_DIRECT_ACTION_V1_ACCEPTANCE.json",
       "ok": true,
       "violations": [],
-      "claims_pass": false
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "LIFEOS_DOCTRINE_LIVE_PROBE.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "LIFEOS_LABS_PERSIST_PROOF.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": true,
+      "proposed_solutions": []
+    },
+    {
+      "file": "LIFEOS_SERVICE_DOCTRINE_WIRED.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
     },
     {
       "file": "LIFEOS_USER_AUTH_V1_ACCEPTANCE.json",
       "ok": true,
       "violations": [],
-      "claims_pass": true
+      "claims_pass": true,
+      "proposed_solutions": []
+    },
+    {
+      "file": "LIFERE_AGENT_ALPHA.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
     },
     {
       "file": "LIFERE_ALPHA_AUDIT_20260623.json",
       "ok": true,
       "violations": [],
-      "claims_pass": false
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "LIFERE_ALPHA_E2E.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
     },
     {
       "file": "LIFERE_ALPHA_READINESS.json",
       "ok": true,
       "violations": [],
-      "claims_pass": false
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "LIFERE_ALPHA_READY.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
     },
     {
       "file": "LIFERE_AZ_ACCEPTANCE.json",
       "ok": true,
       "violations": [],
-      "claims_pass": false
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "LIFERE_CODER_GAP_REPORT.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "LIFERE_COUNCIL_1782215055180.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "LIFERE_COUNCIL_1782215059083.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "LIFERE_COUNCIL_1782215063500.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "LIFERE_COUNCIL_1782215066340.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "LIFERE_COUNCIL_1782215074518.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "LIFERE_COUNCIL_1782215161083.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "LIFERE_COUNCIL_1782215173304.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "LIFERE_COUNCIL_1782215220088.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "LIFERE_COUNCIL_1782215240241.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "LIFERE_COUNCIL_1782215327771.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "LIFERE_COUNCIL_1782507795129.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "LIFERE_COUNCIL_1782507798058.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "LIFERE_COUNCIL_1782507882948.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "LIFERE_COUNCIL_1782507883266.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "LIFERE_COUNCIL_1782507884517.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "LIFERE_COUNCIL_1782507884834.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "LIFERE_COUNCIL_1782507892992.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "LIFERE_COUNCIL_1782507893310.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "LIFERE_COUNCIL_1782507944242.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "LIFERE_COUNCIL_1782507944559.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "LIFERE_COUNCIL_1782689156452.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "LIFERE_COUNCIL_1782689156770.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "LIFERE_COUNCIL_1782689158041.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "LIFERE_COUNCIL_1782689158357.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "LIFERE_COUNCIL_1782689167363.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "LIFERE_COUNCIL_1782689167690.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "LIFERE_COUNCIL_1782689471044.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "LIFERE_COUNCIL_1782689471372.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "LIFERE_COUNCIL_1782689472614.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "LIFERE_COUNCIL_1782689472934.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "LIFERE_COUNCIL_1782689481127.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "LIFERE_COUNCIL_1782689481439.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
     },
     {
       "file": "LIFERE_FULL_AUDIT.json",
       "ok": true,
       "violations": [],
-      "claims_pass": false
+      "claims_pass": false,
+      "proposed_solutions": []
     },
     {
       "file": "LIFERE_OS_V1_ACCEPTANCE.json",
       "ok": true,
       "violations": [],
-      "claims_pass": true
+      "claims_pass": true,
+      "proposed_solutions": []
+    },
+    {
+      "file": "LIFERE_RUNTIME_INTEGRATION.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
     },
     {
       "file": "LIFERE_SALES_COACHING_V1_ACCEPTANCE.json",
       "ok": true,
       "violations": [],
-      "claims_pass": true
+      "claims_pass": true,
+      "proposed_solutions": []
     },
     {
       "file": "LIFERE_SELF_AUDIT.json",
       "ok": true,
       "violations": [],
-      "claims_pass": false
+      "claims_pass": false,
+      "proposed_solutions": []
     },
     {
       "file": "LUMIN_ALPHA_CONNECTION_TEST.json",
       "ok": true,
       "violations": [],
-      "claims_pass": false
+      "claims_pass": false,
+      "proposed_solutions": []
     },
     {
       "file": "LUMIN_CHAIR_DIRECT_CONNECTION_PARITY.json",
       "ok": true,
       "violations": [],
-      "claims_pass": true
+      "claims_pass": true,
+      "proposed_solutions": []
     },
     {
       "file": "LUMIN_OVERLAY_ALPHA_READINESS.json",
       "ok": true,
       "violations": [],
-      "claims_pass": false
+      "claims_pass": false,
+      "proposed_solutions": []
     },
     {
       "file": "LUMIN_TERMINAL_CONNECTION_PROOF.json",
       "ok": true,
       "violations": [],
-      "claims_pass": false
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "MACHINE_ALPHA_WALKTHROUGH.json",
+      "ok": false,
+      "violations": [
+        "ACCEPTANCE_PASS_WITHOUT_SHA_OR_BASE"
+      ],
+      "claims_pass": true,
+      "proposed_solutions": [
+        {
+          "violation": "ACCEPTANCE_PASS_WITHOUT_SHA_OR_BASE",
+          "proposed_solution": "Add commit_sha (or git_sha) and production_base to this receipt so the PASS claim points at a specific commit and a reachable environment. If neither can be produced, the verdict is not PASS — change it to UNSOLVED."
+        }
+      ]
     },
     {
       "file": "MARKETING_PHASE1_VERIFY.json",
       "ok": true,
       "violations": [],
-      "claims_pass": false
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "OVERLAY_ALPHA_BATTERY.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "PATH_TO_10_T02_LEAN_BUILT.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "PATH_TO_10_T05_FOUNDER_MEMORY.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": true,
+      "proposed_solutions": []
     },
     {
       "file": "POINT_B_DNA_VERIFY.json",
       "ok": true,
       "violations": [],
-      "claims_pass": true
+      "claims_pass": true,
+      "proposed_solutions": []
     },
     {
-      "file": "RECEIPT_TRUTH_VALIDATION.json",
+      "file": "REAL_APP_E2E.json",
       "ok": true,
       "violations": [],
-      "claims_pass": false
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "SENTRY_FINDINGS_FEED.clientcare-billing-recovery.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "SENTRY_FINDINGS_FEED.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "SENTRY_FINDINGS_FEED.lifeos-founder-ui.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "SENTRY_FINDINGS_FEED.marketingos.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "SENTRY_FINDINGS_FEED.site-builder.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "SENTRY_MARKETINGOS_LAYER_A.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "SENTRY_MARKETINGOS_LAYER_B.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "SITE_BUILDER_PREALPHA_LAYER_A.json",
+      "ok": false,
+      "violations": [
+        "ACCEPTANCE_PASS_WITHOUT_SHA_OR_BASE"
+      ],
+      "claims_pass": true,
+      "proposed_solutions": [
+        {
+          "violation": "ACCEPTANCE_PASS_WITHOUT_SHA_OR_BASE",
+          "proposed_solution": "Add commit_sha (or git_sha) and production_base to this receipt so the PASS claim points at a specific commit and a reachable environment. If neither can be produced, the verdict is not PASS — change it to UNSOLVED."
+        }
+      ]
+    },
+    {
+      "file": "SMOS_CLIENT_LOGIN_UX_TIP_PROOF.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "SMOS_CLIENT_SCORE_10_PASS.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "SMOS_CLIENT_SIGNUP_TIP_PROOF.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "SMOS_LIFEOS_UI_LOOP.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "SMOS_MARKET_READY_TIP_PROOF.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "SMOS_MONEY_READY_TIP_PROOF.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
     },
     {
       "file": "SMOS_REAL_CUSTOMER_READINESS.json",
       "ok": true,
       "violations": [],
-      "claims_pass": false
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "SMOS_STANDALONE_UI_LOOP.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "SOCIALMEDIAOS_BLOCKERS.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "SOCIALMEDIAOS_FOUNDER_CHAT_A2Z.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "SOCIALMEDIAOS_OVERSEE_LIVE_PROOF.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
     },
     {
       "file": "SOCIALMEDIAOS_SESSION_MVP_ACCEPTANCE.json",
       "ok": true,
       "violations": [],
-      "claims_pass": true
+      "claims_pass": true,
+      "proposed_solutions": []
     },
     {
       "file": "TRUTH_ENFORCEMENT_AUDIT.json",
       "ok": true,
       "violations": [],
-      "claims_pass": false
+      "claims_pass": false,
+      "proposed_solutions": []
     },
     {
       "file": "TRUTH_LOCKDOWN_VERIFY.json",
       "ok": true,
       "violations": [],
-      "claims_pass": true
+      "claims_pass": true,
+      "proposed_solutions": []
+    },
+    {
+      "file": "UI_ALPHA_GATE.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "VOICE_RAIL_CAPABILITY_PROOF.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
     },
     {
       "file": "VOICE_RAIL_V1_ACCEPTANCE.json",
       "ok": true,
       "violations": [],
-      "claims_pass": true
+      "claims_pass": true,
+      "proposed_solutions": []
     },
     {
       "file": "WISDOM_TRUTH_AUDIT.json",
       "ok": true,
       "violations": [],
-      "claims_pass": false
+      "claims_pass": false,
+      "proposed_solutions": []
     }
   ]
 }

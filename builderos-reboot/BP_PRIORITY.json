@@ -8,7 +8,7 @@
     "mandatory_read": "builderos-reboot/AGENTS.md"
   },
   "queue_id": "BP-PRIORITY-0001",
-  "updated_at": "2026-07-10",
+  "updated_at": "2026-07-28",
   "operator_lock": "Adam 2026-06-22 — Voice Rail SCRAPPED (salvage only). BP_PRIORITY is the scheduler queue; each mission's founder packet and blueprint remain the execution authority.",
   "lifeos_version_queue": "builderos-reboot/LIFEOS_VERSION_QUEUE.json",
   "scrapped_items": [
@@ -41,6 +41,13 @@
       "operator_lock": "Internal Layer A structural walkthrough receipt — not an active product queue item.",
       "receipt_path": "products/receipts/SITE_BUILDER_PREALPHA_LAYER_A.json",
       "note": "Site Builder pre-alpha Layer A tip proof; registered to satisfy §2.18 orphan-PASS guard."
+    },
+    {
+      "mission_id": "FACTORY-GOVERNANCE-ROLE-SEPARATION-0001",
+      "status": "INTERNAL_PROOF_ONLY",
+      "operator_lock": "Internal governance proof receipt — not an active product queue item.",
+      "receipt_path": "products/receipts/GOVERNANCE_ROLE_SEPARATION_P0.json",
+      "note": "Role-separation P0: security invariants enforced on the machine ship path (githooks could not cover a GitHub API commit), migrations must prove their declared end state, and receipt validation no longer lets a filename opt a PASS claim out of review. Chair ruling c646160f-128a-4b43-9884-af37cd5a868a. Declares separation_collapsed:true — one actor wrote both the gates and their tests."
     }
   ],
   "items": [
@@ -167,14 +174,14 @@
       "note": "Point B = LifeRE Alpha. Founder success test = lifeos-app LifeRE path + daily cycle.",
       "verdict": "TECHNICAL_PASS",
       "receipt_verdict": "PASS",
-      "technical_pass_at": "2026-06-29T08:35:05.946Z",
-      "git_sha": "5cc2bb65fb1c0cfdc808f0da6e73fc74c9c827c2",
+      "technical_pass_at": "2026-07-28T22:32:15.904Z",
+      "git_sha": "58f9ee0afba924114318403b7c493c1b4844949c",
       "production_base": "",
       "build_method": "system-build",
       "founder_usability_pass": false,
       "objective_verdict": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/OBJECTIVE_VERDICT.json",
       "artifact_sync": {
-        "at": "2026-06-29T08:35:05.946Z",
+        "at": "2026-07-28T22:32:15.904Z",
         "mode": "technical_acceptance",
         "status": "CURRENT"
       },
@@ -378,6 +385,6 @@
       }
     }
   ],
-  "_last_updated": "2026-06-29-smos-lsc-bps-added",
+  "_last_updated": "2026-07-28",
   "_note": "SSM and LSC added 2026-06-29 — execute SSM first (LSC-006 depends on SSM-007 output)"
 }

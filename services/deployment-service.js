@@ -33,6 +33,7 @@ import {
   stripWrappingCodeFence,
   INDEX_REL,
 } from '../scripts/lib/file-synopsis.mjs';
+import { evaluateInvariants, formatFindings } from '../scripts/lib/security-invariants.mjs';
 import { BLOCKED_WRITE_PATHS, ROUTE_REGISTRATION_FILE } from '../config/builder-safe-scope.js';
 
 const execFile = promisify(execFileCb);
@@ -59,6 +60,28 @@ async function writeSyntaxCheckModuleType(tmpDir, filePath) {
     // default commonjs (Node's own default when "type" is absent)
   }
   await fsPromises.writeFile(path.join(tmpDir, 'package.json'), JSON.stringify({ type }), 'utf8');
+}
+
+// Security invariants, enforced at the lowest choke point: these two functions are
+// where bytes actually leave for GitHub, so gating here covers the builder routes,
+// scripts/system-commit-files.mjs, and any future caller alike. githooks/pre-commit
+// cannot cover ANY of them — a GitHub API commit runs no local hook, which is how
+// routes/tc-routes.js lost requireLifeOSAdmin on all 121 routes twice on 2026-07-27
+// and reached production both times. Hard-block is sanctioned for this class only
+// (auth/secrets/money) by the Gate Charter's irreversible carve-out; Chair ruling
+// c646160f-128a-4b43-9884-af37cd5a868a.
+function assertSecurityInvariants(fileEntries, label = 'commitToGitHub') {
+  const verdict = evaluateInvariants(
+    (fileEntries || []).map((entry) => {
+      const p = String(entry?.path || entry?.target_file || '').replace(/\\/g, '/').replace(/^\/+/, '');
+      const isBase64 = String(entry?.encoding || '').toLowerCase() === 'base64';
+      return { path: p, content: isBase64 ? null : (entry?.content ?? entry?.output ?? '') };
+    }),
+  );
+  if (verdict.ok) return;
+  throw new Error(
+    `${label} BLOCKED: security invariant violation — refusing to push.\n${formatFindings(verdict.blocking)}`,
+  );
 }
 
 function assertNotBuilderBlockedPath(normalizedPath, label = 'commitToGitHub', { allowRouteRegistration = false } = {}) {
@@ -166,6 +189,7 @@ export function createDeploymentService(deps) {
     const token = GITHUB_TOKEN?.trim();
     if (!token) throw new Error('GITHUB_TOKEN not configured');
     if (!GITHUB_REPO) throw new Error('GITHUB_REPO not configured');
+    assertSecurityInvariants([{ path: filePath, content }], 'commitToGitHub');
 
     const targetBranch = branch || GITHUB_DEPLOY_BRANCH || 'main';
     const [owner, repo] = GITHUB_REPO.split('/');
@@ -421,6 +445,7 @@ export function createDeploymentService(deps) {
     if (!Array.isArray(fileEntries) || !fileEntries.length) {
       throw new Error('commitManyToGitHub requires at least one file');
     }
+    assertSecurityInvariants(fileEntries, 'commitManyToGitHub');
 
     const targetBranch = branch || GITHUB_DEPLOY_BRANCH || 'main';
     const [owner, repo] = GITHUB_REPO.split('/');

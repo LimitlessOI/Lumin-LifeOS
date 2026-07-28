@@ -179,6 +179,10 @@ const report = {
   ok: failures.length === 0,
   failures,
   checks: REQUIRED.map((r) => r.file),
+  // Separation of duties: this script audits code it did not write.
+  produced_by: 'codebase',
+  verified_by: 'scripts/verify-truth-lockdown.mjs',
+  verification_kind: 'deterministic',
 };
 
 const outPath = path.join(ROOT, 'products/receipts/TRUTH_LOCKDOWN_VERIFY.json');

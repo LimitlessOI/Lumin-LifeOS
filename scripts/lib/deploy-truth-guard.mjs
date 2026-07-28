@@ -552,6 +552,13 @@ export function buildReceipt({
     deployment,
     runtime_identity: identity,
     checks,
+    // Separation of duties (PRODUCT_HOME "Separation Of Duties"): the agent that
+    // authored the change is not what attests it. Every verdict here comes from
+    // git ancestry/blob hashes, the Railway API, and live HTTP probes — sources
+    // outside this process that cannot be talked into agreeing.
+    produced_by: 'cursor-agent',
+    verified_by: 'git+railway-api+production-http-probe',
+    verification_kind: 'deterministic+external',
     ...extra,
   };
   receipt.human_summary = summarizeVerdict(receipt);

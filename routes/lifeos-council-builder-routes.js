@@ -46,6 +46,7 @@ import { BUILDER_MODE, BUILDER_MODE_RULES, DEFAULT_BUILDER_MODE } from '../confi
 import { isSafeTarget } from '../config/builder-safe-scope.js';
 import { writeSecurityReceipt, SECURITY_RECEIPT_TYPES } from '../services/oil-security-receipts.js';
 import { runPrecommitGovernance } from '../services/builderos-precommit-governance.js';
+import { evaluateInvariants, formatFindings } from '../scripts/lib/security-invariants.mjs';
 import { normalizeBuilderCodegenOutput } from '../services/builderos-codegen-normalize.js';
 import { classifyBuildTarget, classifyPatchIntent } from '../services/builderos-patch-mode-policy.js';
 import { applyBuilderRoutingPolicy } from '../services/builderos-routing-policy.js';
@@ -1419,6 +1420,40 @@ export function createLifeOSCouncilBuilderRoutes({
   }
 
   async function commitOrMirrorFiles(fileEntries, commitMessage, branch) {
+    // Security invariants — the last gate before bytes leave this process.
+    // githooks/pre-commit cannot protect this path: the standing orders ship via
+    // execute-batch -> commitToGitHub, and a GitHub API commit runs no local hook.
+    // That is how routes/tc-routes.js lost requireLifeOSAdmin on all 121 routes
+    // twice on 2026-07-27 and reached production both times. Placed here rather
+    // than in a route handler so every commit site (single, batch, auto-wire) is
+    // covered and a future caller cannot route around it. Hard-block is allowed
+    // here per the Gate Charter's irreversible/high-blast-radius carve-out for
+    // auth (Chair ruling c646160f-128a-4b43-9884-af37cd5a868a).
+    const invariantVerdict = evaluateInvariants(
+      fileEntries.map((entry) => ({
+        path: entry.path,
+        content: entry.encoding === 'base64' ? null : entry.content,
+      })),
+    );
+    if (invariantVerdict.routed.length) {
+      log.warn(
+        { findings: invariantVerdict.routed },
+        '[BUILDER] security invariant detect-and-route finding (not blocking)',
+      );
+    }
+    if (!invariantVerdict.ok) {
+      log.error(
+        { findings: invariantVerdict.blocking },
+        '[BUILDER] SECURITY INVARIANT VIOLATION — commit refused',
+      );
+      const err = new Error(
+        `SECURITY_INVARIANT_VIOLATION — commit refused.\n${formatFindings(invariantVerdict.blocking)}`,
+      );
+      err.code = 'SECURITY_INVARIANT_VIOLATION';
+      err.findings = invariantVerdict.blocking;
+      throw err;
+    }
+
     if (typeof commitManyToGitHub === 'function') {
       try {
         const commitResult = await commitManyToGitHub(fileEntries, commitMessage, branch || undefined);
@@ -2513,6 +2548,16 @@ export function createLifeOSCouncilBuilderRoutes({
         warning: commitResult?.warning || null,
       });
     } catch (err) {
+      if (err?.code === 'SECURITY_INVARIANT_VIOLATION') {
+        log.error({ findings: err.findings }, '[BUILDER] /execute-batch refused by security invariant');
+        return res.status(422).json({
+          ok: false,
+          committed: false,
+          error: err.message,
+          code: err.code,
+          security_invariant_findings: err.findings,
+        });
+      }
       log.error({ err: err.message }, '[BUILDER] /execute-batch commit failed');
       return res.status(500).json({ ok: false, error: err.message, committed: false });
     }

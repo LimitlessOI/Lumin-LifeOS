@@ -1,6 +1,6 @@
 {
   "schema": "truth_lockdown_verify_v1",
-  "at": "2026-07-24T02:37:40.854Z",
+  "at": "2026-07-28T22:31:47.001Z",
   "ok": true,
   "failures": [],
   "checks": [
@@ -32,5 +32,8 @@
     "startup/boot-domains.js",
     "services/point-b-dna.js",
     "docs/constitution/POINT_B_DNA.md"
-  ]
+  ],
+  "produced_by": "codebase",
+  "verified_by": "scripts/verify-truth-lockdown.mjs",
+  "verification_kind": "deterministic"
 }

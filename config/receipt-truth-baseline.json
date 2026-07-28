@@ -1,0 +1,21 @@
+{
+  "schema": "receipt_truth_baseline_v1",
+  "purpose": "Pre-existing receipt-truth violations, surfaced on 2026-07-28 when validator coverage widened from 32 of 128 receipts to all of them. Listed here so they stay visible without red-lighting builder:preflight. New violations are never baselined - they fail. This file is meant to shrink to empty.",
+  "rule": "Adding an entry here is a deliberate, reviewable act that admits known debt. It is not a way to pass a check. Removing the underlying violation and then deleting the entry is the only correct resolution.",
+  "known_violations": [
+    {
+      "file": "SITE_BUILDER_PREALPHA_LAYER_A.json",
+      "violations": ["ACCEPTANCE_PASS_WITHOUT_SHA_OR_BASE"],
+      "found": "2026-07-28",
+      "why_not_fixed_now": "This is the SO-002 Layer A gate receipt asserting PASS with no commit_sha and no production_base, so there is no evidence identifying which build passed. The correct fix is to re-run npm run sentry:site-builder:layer-a and let it stamp a real commit and base. Fabricating a SHA to clear the check would be the exact dishonesty this validator exists to catch.",
+      "proposed_solution": "Re-run the Layer A gate so it writes commit_sha + production_base, then delete this entry."
+    },
+    {
+      "file": "MACHINE_ALPHA_WALKTHROUGH.json",
+      "violations": ["ACCEPTANCE_PASS_WITHOUT_SHA_OR_BASE"],
+      "found": "2026-07-28",
+      "why_not_fixed_now": "Asserts a passing walkthrough with no commit or environment recorded, so the claim cannot be tied to a build. The original run cannot be reconstructed after the fact.",
+      "proposed_solution": "Re-run the walkthrough capturing commit_sha + production_base, or downgrade the verdict to UNSOLVED, then delete this entry."
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "schema": "governance_role_separation_p0_v2",
+  "at": "2026-07-28T22:30:00.000Z",
+  "verdict": "PASS",
+  "scope": "P0 of the constitutional role-separation audit: independent verification required before work counts as done.",
+  "produced_by": "cursor-agent",
+  "verified_by": "node --test (deterministic) + git blob comparison + Chair ruling c646160f-128a-4b43-9884-af37cd5a868a",
+  "verification_kind": "deterministic",
+  "separation_collapsed": true,
+  "separation_note": "One actor (cursor-agent) designed the gates AND authored the tests that prove them, so the verifier is not independent of the producer in the strict sense. Declared rather than hidden, per docs/products/builderos/PRODUCT_HOME.md Separation Of Duties. Partial independence does exist and is named: the Chair (separate model, judgment_degraded=false, strong tier) ruled on blocking posture and scope before implementation, git supplied the byte comparisons rather than any self-report, and every assertion is a deterministic substring/existence check that no model can reason its way past. The residual risk is a blind spot shared between gate and test - an independent actor re-deriving the falsification cases from the doctrine alone would close it. This receipt is the first in the repository to make this declaration, which is itself a finding: the requirement has existed in doctrine and 128 of 128 receipts had ignored it.",
+  "bp_sync": {
+    "updated": ["builderos-reboot/BP_PRIORITY.json"],
+    "registration": "scrapped_items / INTERNAL_PROOF_ONLY under mission FACTORY-GOVERNANCE-ROLE-SEPARATION-0001",
+    "why": "This is an internal governance proof, not an active product queue item, so it carries no founder packet. Registered rather than downgraded: dropping the verdict below PASS to slip past the orphan-PASS guard would be gaming the check this work exists to strengthen."
+  },
+  "chair_decision_id": "c646160f-128a-4b43-9884-af37cd5a868a",
+  "chair_ruling": {
+    "posture": "Hard-block ONLY for the irreversible / high-blast-radius set (auth, secrets, money). Detect-and-route for everything else so the autonomous loop is never idled (SO-003).",
+    "scope": "All three P0 items: ship-path gates, migration verification, receipt validation coverage. Hold P1 until data pulls it.",
+    "conservation_law": "A machine-path gate running the same checks as the hook SUBSUMES the hook for that path rather than accreting a new tier."
+  },
+  "headline_finding": "githooks/pre-commit was the ONLY caller of scripts/security-invariants-check.mjs, and a GitHub API commit cannot run a local hook. The standing orders mandate shipping via execute-batch -> commitToGitHub, so the single gate protecting tenant isolation did not cover the only path agents are allowed to use. routes/tc-routes.js lost requireLifeOSAdmin on all 121 routes twice on 2026-07-27 and reached production both times. CI does not backstop it either: .github/workflows/railway-deploy.yml is workflow_dispatch only, and the real deploy is build-from-latest, so no workflow gates an automatic deploy.",
+  "changes": [
+    {
+      "item": "P0-1 ship-path security invariants",
+      "files": [
+        "scripts/lib/security-invariants.mjs",
+        "scripts/security-invariants-check.mjs",
+        "routes/lifeos-council-builder-routes.js"
+      ],
+      "design": "One checker, two callers. The invariant list and evaluation moved into a pure lib that judges PROPOSED bytes, so it works before a file exists on disk. The hook is now a thin CLI over it (and reads the STAGED blob rather than the worktree, which is what a pre-commit gate should judge). The gate is installed in commitOrMirrorFiles - the single choke point all three commit sites funnel through - so no future route can route around it.",
+      "posture": "hard-block (auth class only)",
+      "proven": "Refuses an auth-stripping batch with HTTP 422 and commitManyToGitHub is never reached; lets a clean file and an intact protected file through; blocked a real staged regression end-to-end with the protected file restored byte-identical (sha e963484c165c696f0f43396ddcaa44ac0dc9e6f48591591ef7c426de1488687a before and after)."
+    },
+    {
+      "item": "P0-2 migrations must prove their end state",
+      "files": ["scripts/lib/migration-truth.mjs", "startup/database.js", "services/migration-runner.js"],
+      "design": "Opt-in `-- @assert table:/column:/index:` directives checked by read-only SELECT 1 after apply; a migration whose declared objects are absent is NOT marked applied so it retries. The /already exists/ forgiveness is now conditional on the declared end state existing, closing the case where a multi-statement file rolls back whole yet is recorded applied forever. schema_migrations.checksum gives a migration an identity beyond its filename so editing an applied file is detectable. The two incompatible schema_migrations declarations were converged.",
+      "posture": "detect-and-route (boot is never blocked - refusing to boot is more destructive than the drift)",
+      "proven": "14 tests including both falsifiability directions. 0 of 401 existing migrations declare an assertion, so current behaviour is unchanged by construction."
+    },
+    {
+      "item": "P0-3 receipt validation coverage and verifier identity",
+      "files": [
+        "scripts/lib/receipt-separation.mjs",
+        "services/receipt-truth-validator.js",
+        "scripts/verify-receipt-truth.mjs",
+        "config/receipt-truth-baseline.json"
+      ],
+      "design": "Validation scope was chosen BY FILENAME, so a producer could opt its own claim out of review by naming the file something the hint list did not match - 96 of 128 receipts were never checked, 14 of them asserting PASS, including the SO-002 SENTRY Layer A gate receipt itself. Scope is now every receipt except the validator's own report (which it was previously grading). PASS claims must name produced_by and verified_by, or declare separation_collapsed with a real reason. Legacy receipts are grandfathered by date/schema so the rule cannot red-light builder:preflight.",
+      "posture": "detect-and-route, with a shrinking baseline for pre-existing debt",
+      "proven": "Immediately caught two PASS claims with no commit evidence that filenames had been hiding, plus five PASS claims with no named verifier - including this agent's own deploy-truth receipts. Five were fixed at the producer; two are baselined with named fixes."
+    }
+  ],
+  "not_proven": [
+    "The ship-path gate has not yet refused a real regression in PRODUCTION - only locally and in tests. Runtime proof requires the deployed build, and safely probing it would mean POSTing an auth-stripped tc-routes.js to the live builder, which is exactly the harm the gate exists to prevent. Deliberately not attempted; the gate's production behaviour is THINK, not KNOW, until it fires on its own.",
+    "Migration assertion and checksum paths have not executed against the production database, only against a stub pool. First real exercise is the next boot after deploy.",
+    "config/receipt-truth-baseline.json holds 2 admitted violations. SITE_BUILDER_PREALPHA_LAYER_A.json is the SO-002 gate receipt asserting PASS with no commit_sha and no production_base, so there is currently no evidence identifying which build passed that gate."
+  ],
+  "deliberately_not_built": "scripts/ssot-check.js and the file-synopsis law are still hook-only and therefore still bypassed on every machine ship. They are NOT the irreversible class, so copying the hard-block pattern would violate the Gate Charter; they need detect-and-route instead. Filed as Q-003 rather than built, per the Chair's warning against speculative governance accretion.",
+  "commands": [
+    "npm run governance:separation:test (43 tests, 43 pass)",
+    "node scripts/verify-receipt-truth.mjs",
+    "node --check on every modified module"
+  ]
+}

@@ -22,6 +22,10 @@ const report = {
   tests_failed: [],
   founder_usability_pass: false,
   point_b: 'LifeRE Alpha — acceptance must PASS before Point B claim',
+  // Separation of duties: this acceptance script audits code it did not write.
+  produced_by: 'codebase',
+  verified_by: 'scripts/run-lifere-os-v1-acceptance.mjs',
+  verification_kind: 'deterministic',
 };
 
 function step(id, ok, detail = '') {

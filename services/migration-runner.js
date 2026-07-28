@@ -35,6 +35,15 @@ export async function runMigrations(pool) {
   const results = { ran: [], skipped: [], failed: [] };
   // Bootstrap: ensure tracking table exists
   await pool.query(BOOTSTRAP_SQL);
+  // This module is NOT the boot runner — startup/database.js is (called from
+  // server-founder-runtime.js). Both declare schema_migrations with
+  // CREATE TABLE IF NOT EXISTS but with different columns, so whichever ran first
+  // won and this one's INSERT of duration_ms would throw against the other's
+  // table, recording a migration as FAILED whose SQL had actually applied. These
+  // idempotent ALTERs converge the two shapes so that trap cannot fire.
+  await pool.query('ALTER TABLE schema_migrations ADD COLUMN IF NOT EXISTS checksum TEXT');
+  await pool.query('ALTER TABLE schema_migrations ADD COLUMN IF NOT EXISTS duration_ms INTEGER');
+  await pool.query('ALTER TABLE schema_migrations ADD COLUMN IF NOT EXISTS applied_at TIMESTAMPTZ DEFAULT NOW()');
 
   // Get already-run migrations
   const { rows: done } = await pool.query(

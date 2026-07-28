@@ -63,6 +63,11 @@ const report = {
   ok: failures.length === 0,
   failures,
   supreme_authority: 'docs/constitution/POINT_B_DNA.md',
+  // Separation of duties: this script audits code it did not write. The subject
+  // is the codebase; the verifier is this deterministic checker.
+  produced_by: 'codebase',
+  verified_by: 'scripts/verify-point-b-dna.mjs',
+  verification_kind: 'deterministic',
 };
 
 const outPath = path.join(ROOT, 'products/receipts/POINT_B_DNA_VERIFY.json');
