@@ -50,6 +50,7 @@ import {
   EXIT,
   VERDICT,
   assessBranchDivergence,
+  assessCommitAppliedPaths,
   assessParityStability,
   buildReceipt,
   classifyRuntimeProof,
@@ -421,16 +422,10 @@ async function main() {
 
   const commitSha = body.commit_sha || body.sha || null;
   const shipAssessment = assessShip(shipPaths, body);
-  if (!shipAssessment.ok) {
-    record('commit.all_files_changed', CHECK_STATUS.FAIL, `commit ${String(commitSha).slice(0, 12)} landed but these paths did not actually change: ${shipAssessment.unchanged.join(', ')}`, {
-      unchanged_files: shipAssessment.unchanged,
-      proposed_solution: 'Those files already matched the branch. Remove them from the ship list or make the intended edit — they must not be reported as shipped.',
-    });
-    bail({ commitSha, files, identity, deployment: preDeployment.deployment });
-  }
   record('commit.landed', CHECK_STATUS.PASS, `execute-batch committed ${String(commitSha).slice(0, 12)} (mode ${body.commit_mode})`, {
     commit_mode: body.commit_mode,
     builder_changed_files: body.changed_files || null,
+    builder_reported_unchanged: shipAssessment.unchanged,
   });
 
   // ── Phase 2: independent commit verification (D3/D4) ───────────────────────
@@ -484,10 +479,16 @@ async function main() {
   });
   if (contentMismatches.length > 0) bail({ commitSha, files, identity });
 
-  const extraFiles = commitChangedFiles(commitSha).filter((p) => !shipPaths.includes(p));
-  record('commit.no_extra_files', CHECK_STATUS.PASS, extraFiles.length === 0 ? 'commit touched only the requested paths' : `commit also touched ${extraFiles.length} path(s) not in the ship list: ${extraFiles.slice(0, 10).join(', ')}`, {
-    unrequested_files: extraFiles,
+  const gitChanged = commitChangedFiles(commitSha);
+  const applied = assessCommitAppliedPaths(shipPaths, gitChanged);
+  record('commit.all_files_changed', applied.status, applied.detail, {
+    git_changed_files: gitChanged,
+    missing_files: applied.missing,
+    unrequested_files: applied.extra,
+    builder_reported_unchanged: shipAssessment.unchanged,
+    ...(applied.proposed_solution ? { proposed_solution: applied.proposed_solution } : {}),
   });
+  if (applied.status === CHECK_STATUS.FAIL) bail({ commitSha, files, identity, deployment: preDeployment.deployment });
 
   if (!args.deploy) {
     record('deploy.triggered', CHECK_STATUS.UNPROVEN, '--no-deploy: the commit is verified but production still runs older code', {

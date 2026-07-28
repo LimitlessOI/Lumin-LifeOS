@@ -353,6 +353,40 @@ export function assessBranchDivergence({
   };
 }
 
+/**
+ * Did the commit actually apply every shipped path, and only those?
+ *
+ * Judged from git's own diff-tree rather than the builder's `changed_files`,
+ * which deliberately filters its synopsis-index file and so reports a real change
+ * as unchanged. The rule of this whole module applies to the builder too: never
+ * let the thing being checked supply the proof.
+ */
+export function assessCommitAppliedPaths(shipPaths = [], gitChangedFiles = []) {
+  const changed = new Set(gitChangedFiles);
+  const ship = new Set(shipPaths);
+  const missing = shipPaths.filter((p) => !changed.has(p));
+  const extra = gitChangedFiles.filter((p) => !ship.has(p));
+
+  if (missing.length > 0) {
+    return {
+      status: CHECK_STATUS.FAIL,
+      missing,
+      extra,
+      detail: `git reports the commit did not change ${missing.length} requested path(s): ${missing.join(', ')}`,
+      proposed_solution:
+        'Those files already matched the branch, so nothing shipped for them. Remove them from the ship list or make the intended edit — they must not be reported as shipped.',
+    };
+  }
+  return {
+    status: CHECK_STATUS.PASS,
+    missing: [],
+    extra,
+    detail:
+      `git confirms the commit applied all ${shipPaths.length} requested path(s)` +
+      (extra.length > 0 ? `, plus ${extra.length} it added on its own: ${extra.slice(0, 6).join(', ')}` : ' and nothing else'),
+  };
+}
+
 // ── D7: deploy race / stability ──────────────────────────────────────────────
 
 const IN_FLIGHT_STATUSES = new Set(['BUILDING', 'DEPLOYING', 'QUEUED', 'INITIALIZING', 'WAITING', 'REMOVING']);

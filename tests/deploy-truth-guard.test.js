@@ -15,6 +15,7 @@ import {
   RUNTIME_PROOF,
   VERDICT,
   assessBranchDivergence,
+  assessCommitAppliedPaths,
   assessParityStability,
   buildReceipt,
   classifyRuntimeProof,
@@ -173,6 +174,24 @@ test('assessBranchDivergence passes cleanly when local matches the branch', () =
   const r = assessBranchDivergence({ ahead: 0, behind: 0, shipPaths: ['a.js'] });
   assert.equal(r.status, CHECK_STATUS.PASS);
   assert.equal(r.reason, 'LOCAL_TREE_ALIGNED_WITH_DEPLOY_BRANCH');
+});
+
+test('applied-path check trusts git, not the builder self-report', () => {
+  // The builder filters its own synopsis-index out of `changed_files`, which made
+  // a real change look like a no-op. Git is the authority.
+  const indexPath = 'builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json';
+  const ok = assessCommitAppliedPaths([indexPath], [indexPath]);
+  assert.equal(ok.status, CHECK_STATUS.PASS);
+  assert.deepEqual(ok.missing, []);
+
+  const missing = assessCommitAppliedPaths(['routes/a.js', 'routes/b.js'], ['routes/a.js']);
+  assert.equal(missing.status, CHECK_STATUS.FAIL);
+  assert.deepEqual(missing.missing, ['routes/b.js']);
+  assert.ok(missing.proposed_solution);
+
+  const extra = assessCommitAppliedPaths(['routes/a.js'], ['routes/a.js', indexPath]);
+  assert.equal(extra.status, CHECK_STATUS.PASS);
+  assert.deepEqual(extra.extra, [indexPath]);
 });
 
 test('parity is unproven from a single sample', () => {
