@@ -19,6 +19,7 @@ import { extractContent } from '../factory-staging/factory-core/builder/authorin
 import { runGovernedShippingQueue } from '../services/governed-shipping-runner.js';
 import { runGovernedAutonomousShipOnce } from '../services/governed-autonomous-shipping-loop.js';
 import { getModelRankings } from '../services/model-capability-ledger.js';
+import { runGovernanceReview } from '../services/governance-law-review.js';
 import {
   blueprintFollowClaim,
   exactChangeClaim,
@@ -285,6 +286,19 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
     try {
       const rankings = await getModelRankings(pool);
       res.json({ ok: true, rankings, note: rankings.length === 0 ? 'no governed ships recorded yet' : undefined });
+    } catch (err) {
+      res.status(503).json({ ok: false, error: err?.message || String(err) });
+    }
+  });
+
+  // North Star §2.0G Governance Evolution Law: "at fixed cadence, review
+  // which laws helped/hurt/caused drift." On-demand for now (Companion §0.6
+  // requires a new automatic timer be reviewed/approved before it runs
+  // unattended) -- real data, callable now, not yet scheduled.
+  router.get('/factory/governance-review', guard, async (_req, res) => {
+    try {
+      const review = await runGovernanceReview({ pool });
+      res.json(review);
     } catch (err) {
       res.status(503).json({ ok: false, error: err?.message || String(err) });
     }

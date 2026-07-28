@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-28T00:08:48.837Z",
+  "generated_at": "2026-07-28T00:14:56.827Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12183,
+  "file_count": 12184,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -39836,9 +39836,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 264479,
-      "mtime": "2026-07-27T23:50:56.475Z",
-      "indexed_at": "2026-07-27T23:51:12.093Z"
+      "bytes": 266523,
+      "mtime": "2026-07-28T00:14:37.892Z",
+      "indexed_at": "2026-07-28T00:14:56.827Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -40561,9 +40561,9 @@
     {
       "path": "docs/products/lifere/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeRE",
-      "bytes": 38363,
-      "mtime": "2026-07-28T00:08:26.487Z",
-      "indexed_at": "2026-07-28T00:08:48.837Z"
+      "bytes": 39761,
+      "mtime": "2026-07-28T00:13:04.723Z",
+      "indexed_at": "2026-07-28T00:14:56.827Z"
     },
     {
       "path": "docs/products/limitlessos/conversations/2026-06-29-founder-ecosystem-session.md",
@@ -67433,9 +67433,9 @@
     {
       "path": "routes/factory-mount-routes.js",
       "synopsis": "Pure: should the codegen prompt inline this file's existing content?",
-      "bytes": 22393,
-      "mtime": "2026-07-27T23:21:32.469Z",
-      "indexed_at": "2026-07-27T23:23:23.602Z"
+      "bytes": 23035,
+      "mtime": "2026-07-28T00:13:29.026Z",
+      "indexed_at": "2026-07-28T00:14:56.827Z"
     },
     {
       "path": "routes/faith-studio-routes.js",
@@ -87269,6 +87269,16 @@
       "indexed_at": "2026-07-27T22:21:57.522Z",
       "ssot": [
         "docs/products/word-keeper/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/governance-law-review.js",
+      "synopsis": "services/governance-law-review.js",
+      "bytes": 5451,
+      "mtime": "2026-07-28T00:13:55.934Z",
+      "indexed_at": "2026-07-28T00:14:56.827Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
