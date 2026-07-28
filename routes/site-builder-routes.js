@@ -36,6 +36,26 @@ import {
   failStaleProspectJobs,
   evaluateSiteBuilderEmailReadiness,
 } from '../services/site-builder-prospect-runner.js';
+import {
+  isUnresolvedPublicBase,
+  resolveDurablePublicBase,
+  resolveRequestPublicBase,
+} from '../services/site-builder-public-base.js';
+import {
+  getInstantlyConfig,
+  createInstantlySendEmailAdapter,
+} from '../services/site-builder-instantly-outreach.js';
+
+/** Strip legacy "Complimentary code / Apply free publish" chrome from baked preview HTML. Discount belongs on checkout only. */
+function stripLegacyCompCodeChrome(html) {
+  if (typeof html !== 'string' || !html) return html;
+  let out = html;
+  // Older switcher headers baked a form that posted/applied a "free publish" code.
+  out = out.replace(/<form\b[^>]*\bapplyCompCode\b[\s\S]*?<\/form>/gi, '');
+  out = out.replace(/<form\b[^>]*>[\s\S]*?\bx-model=['"]compCode['"][\s\S]*?<\/form>/gi, '');
+  out = out.replace(/<form\b[^>]*>[\s\S]*?\bComplimentary code\b[\s\S]*?<\/form>/gi, '');
+  return out;
+}
 
 function buildingPlaceholderHtml(clientId, businessName = '') {
   const safeName = String(businessName || 'your site').replace(/[<>&"]/g, '');
@@ -197,10 +217,13 @@ function getProspectPipeline({ callCouncilMember, pool, outreachAutomation, noti
   if (!_prospectPipeline) {
     const builder = getSiteBuilder({ callCouncilMember, baseUrl, pool });
 
-    // Build sendEmail adapter — prefer NotificationService (Postmark + suppression),
-    // fall back to outreachAutomation, then log-only.
+    // Cold lane: Instantly (built for unsolicited B2B). Do NOT use Postmark/Resend/
+    // SendGrid for cold prospecting — they ban it (Postmark already refused Adam).
     let sendEmail;
-    if (notificationService) {
+    if (getInstantlyConfig().configured) {
+      sendEmail = createInstantlySendEmailAdapter({ logger });
+      logger.info('[PROSPECT] Cold outreach provider: Instantly');
+    } else if (notificationService) {
       sendEmail = async (to, subject, html) => {
         const result = await notificationService.sendEmail({ to, subject, html, text: '' });
         if (!result.success) logger.warn('[PROSPECT] Email not sent', { to, reason: result.error });
@@ -211,6 +234,7 @@ function getProspectPipeline({ callCouncilMember, pool, outreachAutomation, noti
     } else {
       sendEmail = async (to, subject) => {
         logger.info('[PROSPECT] Email (no sender configured)', { to, subject });
+        return { success: false, error: 'no email sender configured — set INSTANTLY_API_KEY + INSTANTLY_CAMPAIGN_ID' };
       };
     }
 
@@ -371,6 +395,21 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
       const { scoreProspectUrl } = await import('../services/site-builder-opportunity-scorer.js');
       const result = await scoreProspectUrl(targetUrl, { timeout: 6000 });
 
+      if (!result.analyzed || result.scanFailed) {
+        return res.json({
+          ok: true,
+          analyzed: false,
+          scanFailed: true,
+          url: targetUrl,
+          message: "We couldn't scan this site",
+          recommendation: result.recommendation,
+          painPoints: result.painPoints || [],
+          error: result.error || null,
+          revenueLeakEstimate: 0,
+          leadValue: null,
+        });
+      }
+
       // Rough revenue-leak estimate for the lead magnet. Not a real forecast.
       const leadValue = { dentist: 2500, attorney: 2400, contractor: 1500, advisor: 1800, default: 1200 };
       const vertical = String(req.query.vertical || '').trim();
@@ -411,6 +450,22 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
       const { scoreProspectUrl } = await import('../services/site-builder-opportunity-scorer.js');
       const result = await scoreProspectUrl(targetUrl, { timeout: 6000 });
 
+      if (!result.analyzed || result.scanFailed) {
+        return res.json({
+          ok: true,
+          audit: true,
+          analyzed: false,
+          scanFailed: true,
+          url: targetUrl,
+          message: "We couldn't scan this site",
+          recommendation: result.recommendation,
+          painPoints: result.painPoints || [],
+          error: result.error || null,
+          revenueLeakEstimate: 0,
+          leadValue: null,
+        });
+      }
+
       const leadValue = { dentist: 2500, attorney: 2400, contractor: 1500, advisor: 1800, default: 1200 };
       const vertical = String(req.query.vertical || '').trim();
       const baseValue = leadValue[vertical] || leadValue.default;
@@ -448,7 +503,7 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
       );
       const row = result.rows[0];
       const meta = row?.metadata && typeof row.metadata === 'object' ? { ...row.metadata } : {};
-      const html = meta.previewHtml;
+      const html = stripLegacyCompCodeChrome(meta.previewHtml);
       if (html && typeof html === 'string') {
         const deployDir = path.join(process.cwd(), 'public', 'previews', clientId);
         await fsp.mkdir(deployDir, { recursive: true }).catch(() => null);
@@ -1224,27 +1279,45 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
       }
     }
 
+    const configuredPublicBase = resolveDurablePublicBase([
+      process.env.SITE_BASE_URL,
+      baseUrl,
+      process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` : '',
+    ]);
+    const brandedBasePoisoned =
+      isUnresolvedPublicBase(process.env.SITE_BASE_URL)
+      || isUnresolvedPublicBase(baseUrl)
+      || isUnresolvedPublicBase(process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` : '');
+
     const capabilities = {
       site_build: true,
       preview_serving: true,
       quality_scoring: true,
       prospect_db: !!pool,
       async_prospect_jobs: true,
+      cold_email_keys_present: emailReadiness.keysPresent === true,
       cold_email_sending: emailReadiness.coldEmailSending,
       publish_checkout: !!process.env.STRIPE_SECRET_KEY,
       live_editor: true,
       pos_partner_referrals: true,
       follow_up_sequence: emailReadiness.coldEmailSending,
       slack_notifications: !!process.env.SLACK_WEBHOOK_URL,
+      public_base_resolvable: !brandedBasePoisoned || Boolean(configuredPublicBase),
+      public_base_url: configuredPublicBase,
     };
+
+    // Stripe publish can be ready even when cold email is pending approval.
+    const stripeReady = !!process.env.STRIPE_SECRET_KEY;
+    const emailNotes = Array.isArray(emailReadiness.notes) ? emailReadiness.notes : [];
 
     res.json({
       ok: true,
-      ready: blockers.length === 0,
+      ready: blockers.length === 0 && stripeReady,
       revenue_blockers: blockers,
       missing,
       present,
       email_provider: emailReadiness.provider,
+      email_notes: emailNotes,
       capabilities,
       checked_at: new Date().toISOString(),
     });
@@ -1259,9 +1332,9 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
     if (!clientId || !/[\w-]+/.test(String(clientId))) {
       return res.status(400).json({ ok: false, error: 'Invalid clientId' });
     }
-    const safeBase = String(baseUrl || '').replace(/\/$/, '') || `${req.protocol}://${req.get('host')}`;
+    const safeBase = resolveRequestPublicBase(req, baseUrl);
     const referralUrl = `${safeBase}/overlay/site-builder-landing.html?ref=${encodeURIComponent(clientId)}`;
-    return res.json({ ok: true, clientId, referralUrl });
+    return res.json({ ok: true, clientId, referralUrl, publicBase: safeBase });
   });
 
   app.use('/api/v1/sites', router);
@@ -1275,7 +1348,11 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
       if (!result.success) logger.warn('[SITE] Follow-up email not sent', { to, reason: result.error });
       return result;
     };
-    const tick = () => runFollowUpCron({ pool, sendEmail, baseUrl }).catch((err) => {
+    const tick = () => runFollowUpCron({
+      pool,
+      sendEmail,
+      baseUrl: resolveDurablePublicBase([baseUrl]),
+    }).catch((err) => {
       logger.warn('[SITE] Follow-up cron error', { error: err.message });
     });
     setTimeout(tick, 60 * 1000);

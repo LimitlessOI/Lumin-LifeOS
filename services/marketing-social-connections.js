@@ -42,7 +42,7 @@ export async function saveConnection(pool, { ownerId, platform, sessionState, st
         updated_at = NOW()
       RETURNING id, owner_id, platform, auth_mode, status, connected_at, last_verified_at, last_error, created_at, updated_at
       `,
-      [ownerId, platform, 'session', encrypted, status],
+      [ownerId, platform, 'browser_session', encrypted, status],
     );
 
     return { ok: true, connection: result.rows[0] ? sanitizeRow(result.rows[0]) : null };

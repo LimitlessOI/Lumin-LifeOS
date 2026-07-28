@@ -104,7 +104,7 @@ export function isBuildStatusQuestion(text = '') {
 }
 
 /**
- * Emotional / presence counsel — "don't fix me", "be with me".
+ * Emotional / presence counsel — "don't fix me", "be with me", anger/vent.
  * Must never trip the build verb matcher on the word "fix".
  */
 export function isCounselPresenceIntent(text = '') {
@@ -112,8 +112,10 @@ export function isCounselPresenceIntent(text = '') {
   if (!t) return false;
   if (/\b(don'?t|do not|never)\s+(try to\s+)?fix(\s+me)?\b/i.test(t)) return true;
   if (/\b(just )?be with me\b/i.test(t)) return true;
-  if (/\b(not asking you to fix|don'?t try to solve)\b/i.test(t)) return true;
+  if (/\b(not asking you to fix|don'?t try to solve|don'?t pitch|no next steps)\b/i.test(t)) return true;
   if (/\bnobody gets\b/i.test(t) || /\bhow hard this is\b/i.test(t)) return true;
+  if (/\bi('m| am) (pissed|angry|furious|exhausted|burned out|burnt out)\b/i.test(t)) return true;
+  if (/\b(everything feels stuck|tired of pretending|i'?m tired of pretending)\b/i.test(t)) return true;
   if (/\bi feel (like|so|alone|lost|scared|tired|heavy)\b/i.test(t) && !isProductBuildChangeVerb(t)) {
     return true;
   }
@@ -128,6 +130,9 @@ export function isBuildRequest(text) {
   if (isCounselPresenceIntent(t)) return false;
   if (isBlueprintExecuteIntent(t)) return false;
   if (isCounselOnlyBypass(t)) return false;
+  // Cognitive Core: "Should I X or Y / make … first?" is judgment, not a build order.
+  if (/\b(should i|should we)\b/i.test(t) && /\bor\b/i.test(t)) return false;
+  if (/\b(decide|decision|choose between|trade ?off)\b/i.test(t) && /\?/i.test(t)) return false;
   if (/\b(intake blueprint|intake_blueprint|mos-p1)\b/i.test(t)) return false;
   if (/\b(social\smedia\sos|socialmediaos|smos)\b/i.test(t) && /\b(intake|blueprint|a to z|a-to-z)\b/i.test(t)) return false;
   if (/\b(counsel only|do not run|don't run|without building|without running|explain how you|walk me through)\b/i.test(t)) {

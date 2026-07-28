@@ -7,6 +7,7 @@
 import { getDesignSystemCss, getDesignSystemFontLinks } from './design-studio.js';
 import { matchIndustrySalesPack, buildProviderWhyBullets, practiceOffersEnergyWellness, buildWellnessWhyBullets } from './site-builder-industry-sales.js';
 import { resolveSalesBrief } from './site-builder-sales-doctrine.js';
+import { renderLayoutFamily, registerVisitorSalesShell } from './design-studio-layout-families.js';
 
 function escapeHtml(s) {
   return String(s ?? '')
@@ -29,12 +30,97 @@ function uniqUrls(urls = []) {
   return out;
 }
 
-export function normalizeLayoutContent(info = {}, posPartner = null) {
+function isAffiliateBookingUrl(url) {
+  const u = String(url || '').toLowerCase();
+  if (!u || u === '#book' || u.startsWith('tel:') || u.startsWith('mailto:')) return false;
+  // Bare jane.app / mindbody / square homepages are affiliate placeholders — not this client's book link.
+  if (/^https?:\/\/(www\.)?jane\.app\/?(\?|#|$)/i.test(u)) return true;
+  if (/^https?:\/\/(www\.)?(mindbodyonline|squareup)\.com\/?(\?|#|$)/i.test(u)) return true;
+  return false;
+}
+
+function resolvePrimaryBooking(info = {}, posPartner = null) {
+  const phone = info.phone || info.assetData?.businessDetails?.phone || '';
+  const tel = phone ? `tel:${String(phone).replace(/[^\d+]/g, '')}` : '';
+  const candidates = [
+    info.bookingUrl,
+    info.bookUrl,
+    info.appointmentUrl,
+  ].filter(Boolean);
+  for (const c of candidates) {
+    if (!isAffiliateBookingUrl(c)) return c;
+  }
+  if (tel) return tel;
+  // Never use bare Jane/Mindbody/Square as the hero CTA — that is the trash path.
+  const partnerUrl = posPartner?.url;
+  if (partnerUrl && !isAffiliateBookingUrl(partnerUrl)) return partnerUrl;
+  return '#contact';
+}
+
+function isJunkServiceName(name) {
+  return /^(services?|menu|home|about|contact|blog|videos?|gallery|book(ing)?|login|shop|cart|faq|resources?|birth story videos?)$/i.test(String(name || '').trim());
+}
+
+function normalizeServices(info = {}) {
+  const aboutBite = String(info.about || info.uniqueValue || info.tagline || '').trim().slice(0, 160);
+  const details = (Array.isArray(info.serviceDetails) ? info.serviceDetails : [])
+    .map((s) => ({
+      name: String(s.name || s).trim(),
+      description: String(s.description || '').trim(),
+    }))
+    .filter((s) => s.name && !isJunkServiceName(s.name));
+  const usableDetails = details.filter((s) => s.description.length > 20);
+  if (usableDetails.length) return usableDetails.slice(0, 6);
+
+  const raw = info.services || [];
+  if (Array.isArray(raw) && raw.length) {
+    const mapped = raw.slice(0, 6).map((s) => {
+      if (s && typeof s === 'object') {
+        return { name: String(s.name || '').trim(), description: String(s.description || aboutBite).trim() };
+      }
+      return { name: String(s).trim(), description: aboutBite };
+    }).filter((s) => s.name && !isJunkServiceName(s.name));
+    if (mapped.length) return mapped;
+  }
+  const industry = String(info.industry || '').toLowerCase();
+  if (/midwif|doula|birth|maternity/.test(industry) || /midwif|prenatal|birth|postpartum/i.test(info.bodyText || '')) {
+    return [
+      { name: 'Prenatal Care', description: 'Ongoing prenatal visits, education, and support tailored to your pregnancy.' },
+      { name: 'Birth Support', description: 'Continuous labor and birth care — present, calm, and centered on your plan.' },
+      { name: 'Postpartum Care', description: 'Recovery visits, newborn checks, and support in the early weeks after birth.' },
+    ];
+  }
+  return [
+    { name: 'Primary service', description: info.uniqueValue || info.tagline || 'Ask about how we can help — details confirmed when you reach out.' },
+    { name: 'Consultation', description: 'A conversation about your goals and whether we are the right fit.' },
+    { name: 'Follow-up care', description: 'Ongoing support after your first visit.' },
+  ];
+}
+
+function resolveTagline(info = {}) {
+  const candidates = [
+    info.tagline,
+    info.h1,
+    info.uniqueValue,
+    info.metaDescription,
+  ].map((s) => String(s || '').trim()).filter(Boolean);
+  const generic = /clear outcomes|with a clear next step|your business here|lorem ipsum/i;
+  for (const c of candidates) {
+    if (c.length >= 12 && !generic.test(c)) return c.slice(0, 140);
+  }
+  const name = info.businessName || 'This practice';
+  const industry = info.industry || 'care';
+  const loc = info.location ? ` in ${info.location}` : '';
+  return `${name} — ${industry}${loc}`.slice(0, 140);
+}
+
+export function normalizeLayoutContent(info = {}, posPartner = null, { imageOffset = 0 } = {}) {
   const logo = info.logoUrl || info.assetData?.images?.logo || '';
   const igPosts = (info.assetData?.social?.instagram?.posts || [])
     .map((p) => p.displayUrl || p.url)
     .filter(Boolean);
   const social = (info.assetData?.images?.social || []).map((i) => i.url || i);
+  const isVideoThumb = (u) => /ytimg\.com|i\.ytimg\.com|img\.youtube\.com|youtube\.com\/vi\/|vumbnail\.com|i\.vimeocdn\.com/i.test(String(u || ''));
   const rawHeroes = [
     ...igPosts,
     ...social,
@@ -43,15 +129,22 @@ export function normalizeLayoutContent(info = {}, posPartner = null) {
     ...(info.assetData?.images?.product || []),
     ...(info.assetData?.images?.team || []),
   ];
-  let heroes = uniqUrls(rawHeroes).filter((u) => u !== logo && !/\blogo\b|favicon/i.test(u));
-  const owned = heroes.filter((u) => !/replicate\.delivery|oaidalle/i.test(u));
+  // Never use YouTube/Vimeo clickbait thumbs as heroes — Adam's Sherry preview proof.
+  let heroes = uniqUrls(rawHeroes).filter((u) => u !== logo && !/\blogo\b|favicon/i.test(u) && !isVideoThumb(u));
+  const owned = heroes.filter((u) => !/replicate\.delivery|oaidalle|unsplash\.com/i.test(u));
   if (owned.length) heroes = owned;
-  const hero = heroes[0] || '';
+  // Prefer real photos (jpg/webp) over Wix graphic PNGs when both exist
+  const photos = heroes.filter((u) => /\.(jpe?g|webp)(?:\?|$|\/)/i.test(u) || /cdninstagram|fbcdn|scontent/i.test(u));
+  if (photos.length) heroes = [...photos, ...heroes.filter((u) => !photos.includes(u))];
+  const offset = heroes.length ? Math.abs(Number(imageOffset) || 0) % heroes.length : 0;
+  const rotated = heroes.length ? [...heroes.slice(offset), ...heroes.slice(0, offset)] : [];
+  const hero = rotated[0] || '';
   const partner = posPartner || { name: 'booking', url: '#book' };
-  const booking = info.bookingUrl || partner.url || '#book';
+  const booking = resolvePrimaryBooking(info, partner);
   const salesPack = matchIndustrySalesPack(info);
   const salesBrief = resolveSalesBrief(info, salesPack);
-  const services = (info.services || ['Core service', 'Consult', 'Follow-up']).slice(0, 6);
+  const serviceObjects = normalizeServices(info);
+  const services = serviceObjects.map((s) => s.name);
   const pains = (info.painPoints || salesBrief?.fears || [
     'Hard to tell who is actually credible',
     'Website feels dated and hard to trust',
@@ -63,13 +156,20 @@ export function normalizeLayoutContent(info = {}, posPartner = null) {
     || info.testimonials
     || []
   ).slice(0, 3);
+  const phone = info.phone || info.assetData?.businessDetails?.phone || '';
   const faq = (info.faq || [
-    { question: `How do I book with ${info.businessName || 'us'}?`, answer: 'Use the book button to request a free consult. We confirm availability by phone or email.' },
+    {
+      question: `How do I book with ${info.businessName || 'us'}?`,
+      answer: phone
+        ? `Call ${phone} or use the book button — we confirm availability by phone or email.`
+        : 'Use the book button to request a consult. We confirm availability by phone or email.',
+    },
     { question: 'What areas do you serve?', answer: info.location ? `We primarily serve ${info.location} and nearby communities.` : 'Share your location when you book and we will confirm coverage.' },
     { question: 'What should I expect at the first visit?', answer: 'A conversation about your goals, history, and whether our care model is the right fit — no pressure.' },
   ]).slice(0, 5);
-  const about = info.about || info.description || info.tagline
-    || `${info.businessName || 'This business'} delivers clear outcomes with a simple next step to book.`;
+  const about = String(
+    info.about || info.description || info.uniqueValue || info.metaDescription || info.tagline || '',
+  ).trim() || `${info.businessName || 'This practice'} — ${info.industry || 'local care'}${info.location ? ` serving ${info.location}` : ''}.`;
   const igHandle = info.assetData?.social?.instagram?.username
     || (String(info.instagramUrl || '').match(/instagram\.com\/([A-Za-z0-9_.]+)/)?.[1])
     || '';
@@ -83,23 +183,24 @@ export function normalizeLayoutContent(info = {}, posPartner = null) {
 
   return {
     name: info.businessName || 'Your Business',
-    tagline: info.tagline || 'Clear outcomes — with a clear next step',
+    tagline: resolveTagline(info),
     industry: info.industry || info.category || 'local business',
     location: info.location || '',
-    phone: info.phone || info.assetData?.businessDetails?.phone || '',
+    phone,
     address: info.address || info.assetData?.businessDetails?.address || '',
     logo,
     hero,
-    heroes,
-    gallery: heroes.slice(0, 6),
+    heroes: rotated.length ? rotated : heroes,
+    gallery: (rotated.length ? rotated : heroes).slice(0, 12),
     booking,
     searchUrl: info.searchUrl || info.idxUrl || info.listingSearchUrl || booking,
     partnerName: partner.name || 'booking',
     services,
+    serviceDetails: serviceObjects,
     pains,
     testimonials,
     faq,
-    about,
+    about: about.slice(0, 480),
     rating: info.verifiedData?.rating || info.rating || null,
     reviewCount: info.verifiedData?.reviewCount || info.reviewCount || null,
     igHandle,
@@ -119,11 +220,37 @@ export function normalizeLayoutContent(info = {}, posPartner = null) {
   };
 }
 
+function normalizeSystemForLayout(system = {}) {
+  const t = system.tokens || {};
+  const primary = t.primary || t.accent || '#111';
+  const fonts = system.fonts || {
+    display: `"${t.fontDisplay || 'Inter'}", system-ui, sans-serif`,
+    body: `"${t.fontBody || 'Inter'}", system-ui, sans-serif`,
+    google: [
+      ...(t.fontDisplay ? [{ family: t.fontDisplay, weights: 'wght@400;600;700' }] : []),
+      ...(t.fontBody && t.fontBody !== t.fontDisplay ? [{ family: t.fontBody, weights: 'wght@400;500;600' }] : []),
+    ],
+  };
+  return {
+    ...system,
+    tokens: {
+      radius: '16px',
+      shadow: '0 12px 40px rgba(0,0,0,0.08)',
+      overlay: 'rgba(0,0,0,0.04)',
+      ...t,
+      primary,
+      buttonText: t.buttonText || t.accentText || '#FFF',
+    },
+    fonts,
+  };
+}
+
 function head(system, content, extraCss = '') {
-  const primary = system.tokens.primary;
-  const accent = system.tokens.accent;
-  const fontLinks = getDesignSystemFontLinks(system).join('\n');
-  const dsCss = getDesignSystemCss(system, primary, accent);
+  const sys = normalizeSystemForLayout(system);
+  const primary = sys.tokens.primary;
+  const accent = sys.tokens.accent;
+  const fontLinks = getDesignSystemFontLinks(sys).join('\n');
+  const dsCss = getDesignSystemCss(sys, primary, accent);
   const titleBits = [content.name, content.location || content.industry].filter(Boolean);
   return `<!DOCTYPE html>
 <html lang="en">
@@ -170,13 +297,18 @@ function proofLine(content) {
 }
 
 function serviceCards(content, className = 'card') {
-  return content.services.map((s, i) => {
+  const details = content.serviceDetails || content.services.map((name) => ({ name, description: '' }));
+  return details.map((s, i) => {
+    const name = typeof s === 'string' ? s : s.name;
+    const desc = (typeof s === 'object' && s.description)
+      || content.about?.slice(0, 160)
+      || `Learn how ${content.name} supports you — reach out to confirm fit and next steps.`;
     const photo = content.gallery?.[i + 1] || content.gallery?.[i] || '';
     return `
     <article class="${className}">
       ${photo ? `<img src="${escapeHtml(photo)}" alt="" loading="lazy" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:calc(var(--radius) - 4px);margin-bottom:.85rem"/>` : ''}
-      <h3>${escapeHtml(s)}</h3>
-      <p class="muted">Real care details confirmed in consult — book to see if we are the right fit.</p>
+      <h3>${escapeHtml(name)}</h3>
+      <p class="muted">${escapeHtml(String(desc).slice(0, 220))}</p>
       <a class="btn" href="${escapeHtml(content.booking)}" style="margin-top:1rem">Book</a>
     </article>`;
   }).join('');
@@ -489,7 +621,11 @@ summary{cursor:pointer;text-transform:uppercase;letter-spacing:.04em;font-weight
   </section>
   <section id="services" class="wrap section">
     <h2>What we do</h2>
-    <div class="list">${content.services.map((s) => `<article><h3>${escapeHtml(s)}</h3><p class="muted">Details confirmed in consult.</p><a class="btn btn-ghost" href="${escapeHtml(content.booking)}">Book</a></article>`).join('')}</div>
+    <div class="list">${(content.serviceDetails || content.services.map((n) => ({ name: n, description: '' }))).map((s) => {
+      const name = typeof s === 'string' ? s : s.name;
+      const desc = (typeof s === 'object' && s.description) || content.about?.slice(0, 140) || `How ${content.name} can help — reach out to confirm fit.`;
+      return `<article><h3>${escapeHtml(name)}</h3><p class="muted">${escapeHtml(String(desc).slice(0, 200))}</p><a class="btn btn-ghost" href="${escapeHtml(content.booking)}">Book</a></article>`;
+    }).join('')}</div>
   </section>
   <section class="wrap section">
     <h2>Proof</h2>
@@ -1053,7 +1189,7 @@ ${footer(content)}
  * Start from client unanswered questions; doors for searching / why provider / how to choose /
  * optional secondary. Midwifery + real estate packs specialize content; universal brief covers others.
  */
-function shellVisitorStateSales(system, content) {
+export function shellVisitorStateSales(system, content) {
   const pack = content.salesBrief || content.salesPack || {};
   const cat = pack?.categorySale || {};
   const prov = pack?.providerSale || {};
@@ -1283,10 +1419,196 @@ ${footer(content)}
 </body></html>`;
 }
 
+/** Well Rounded Momma–derived feminine midwifery shell (photo pillars + consult CTA). */
+function shellWellroundedFeminine(system, content) {
+  const phoneHref = content.phone ? `tel:${String(content.phone).replace(/[^\d+]/g, '')}` : content.booking;
+  const callLabel = content.phone || 'Request a consult';
+  const t0 = content.testimonials[0];
+  const quote = t0
+    ? `“${escapeHtml(String(t0.text || '').slice(0, 280))}”`
+    : `“Clear, calm care — with a real conversation before you decide.”`;
+  const cite = t0 ? `— ${escapeHtml(t0.author || 'Client')}` : `— ${escapeHtml(content.name)} family`;
+  const pillarPhotos = [
+    content.gallery?.[0] || content.hero || '',
+    content.gallery?.[1] || content.gallery?.[0] || content.hero || '',
+    content.gallery?.[2] || content.gallery?.[0] || content.hero || '',
+  ];
+  const services = content.services.slice(0, 3);
+  const css = `
+.script{font-family:"Sacramento",cursive;font-weight:400;color:var(--primary);line-height:1}
+.topbar{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:66px}
+.brand{display:flex;align-items:center;gap:.65rem;font-family:var(--font-display);font-weight:500;text-decoration:none}
+.brand img{height:42px;width:auto}
+.callbtn{display:inline-flex;align-items:center;background:var(--primary);color:#fff;text-decoration:none;padding:.65rem 1.1rem;border-radius:999px;font-weight:700;font-size:.92rem;box-shadow:var(--shadow)}
+.hero{position:relative;min-height:72vh;display:flex;align-items:center;overflow:hidden;background:color-mix(in srgb,var(--primary) 12%,var(--bg))}
+.hero-bg{position:absolute;inset:-22% 0;background-size:cover;background-position:center 35%;opacity:.75;will-change:transform;z-index:0}
+.hero::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(105deg,color-mix(in srgb,var(--bg) 90%,transparent) 0%,color-mix(in srgb,var(--bg) 55%,transparent) 42%,transparent 78%)}
+.hero .wrap{position:relative;z-index:2;padding:3rem 0}
+.hero-inner{max-width:34rem}
+.hero h1{font-size:clamp(1.65rem,2.8vw,2.35rem);font-weight:500;margin-top:.4rem}
+.hero .lede{color:var(--muted);margin-top:1rem;font-size:1.05rem;max-width:40ch}
+.hero-cta{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:1.5rem}
+.btn{border-radius:999px!important;background:var(--primary);color:#fff;box-shadow:var(--shadow)}
+.btn-ghost{background:rgba(255,255,255,.75)!important;color:var(--text)!important;border:1px solid var(--line)!important;box-shadow:none!important}
+.trust{background:var(--accent);color:#f7ece9}
+.trust .wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;padding:1.35rem 0;text-align:center}
+.trust b{display:block;font-family:var(--font-display);font-size:1.5rem;color:#fff}
+.trust small{font-size:.8rem;opacity:.85}
+@media(max-width:720px){.trust .wrap{grid-template-columns:1fr}}
+.block{padding:4.5rem 0}
+.meet{display:grid;grid-template-columns:.9fr 1.1fr;gap:2.5rem;align-items:center}
+.meet .photo{background:color-mix(in srgb,var(--primary) 22%,var(--bg));border-radius:20px 20px 110px 20px;aspect-ratio:4/5;overflow:hidden;box-shadow:var(--shadow)}
+.meet .photo img{width:100%;height:100%;object-fit:cover}
+.meet .role{color:var(--primary);font-weight:700;margin:.4rem 0 1rem}
+@media(max-width:860px){.meet{grid-template-columns:1fr}}
+.section-head{text-align:center;max-width:40rem;margin:0 auto 2.2rem}
+.pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:1.35rem}
+.pillar{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:0 16px 40px -30px rgba(123,85,96,.55);display:flex;flex-direction:column}
+.pillar .pimg{height:170px;background:color-mix(in srgb,var(--primary) 28%,var(--bg));position:relative;overflow:hidden}
+.pillar .pimg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55}
+.pillar .pbody{padding:1.35rem;display:flex;flex-direction:column;flex:1}
+.pillar .tag{font-family:"Sacramento",cursive;font-size:1.25rem;color:var(--primary)}
+.pillar h3{font-size:1.35rem;margin:.15rem 0}
+.pillar .role{color:var(--accent);font-weight:700;font-size:.9rem;margin-bottom:.65rem}
+.pillar p{color:var(--muted);font-size:.95rem}
+.pillar .foot{margin-top:auto;padding-top:1rem}
+@media(max-width:860px){.pillars{grid-template-columns:1fr}}
+.band{position:relative;min-height:46vh;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden}
+.band-bg{position:absolute;inset:-22% 0;background-size:cover;background-position:center;opacity:.85;will-change:transform;z-index:0}
+.band::after{content:"";position:absolute;inset:0;background:rgba(74,59,63,.42);z-index:1}
+.band .wrap{position:relative;z-index:2;color:#fff;max-width:42rem}
+.band .quote{font-family:var(--font-display);font-style:italic;font-size:clamp(1.3rem,2.8vw,1.9rem);line-height:1.4}
+.band cite{display:block;margin-top:1rem;font-style:normal;font-family:var(--font-body);font-weight:700;opacity:.9}
+.soft{background:color-mix(in srgb,var(--primary) 10%,var(--bg))}
+.grid{display:grid;gap:1rem}
+@media(min-width:800px){.grid-3{grid-template-columns:repeat(3,1fr)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:1.35rem;box-shadow:var(--shadow)}
+.cta{text-align:center;padding:3.5rem 1rem;background:linear-gradient(120deg,var(--primary),color-mix(in srgb,var(--primary) 70%,#6a3a32));color:#fff;border-radius:var(--radius);box-shadow:var(--shadow)}
+.cta .btn{background:#fff!important;color:var(--primary)!important}
+details{background:var(--card);border-radius:14px;padding:1rem 1.1rem;margin-bottom:.65rem;border:1px solid var(--line)}
+summary{cursor:pointer;font-weight:700}
+details p{margin-top:.55rem}
+.site-footer{padding:2.5rem 0 5rem;color:var(--muted);font-size:.9rem}
+`;
+  const heroBg = content.hero
+    ? `style="background-image:url('${escapeHtml(content.hero)}')"`
+    : '';
+  const bandBg = (content.gallery?.[1] || content.hero)
+    ? `style="background-image:url('${escapeHtml(content.gallery?.[1] || content.hero)}')"`
+    : '';
+  const pillarCards = services.map((s, i) => {
+    const photo = pillarPhotos[i];
+    const tags = ['The Practice', 'Your Care Team', 'The Choice'];
+    const detail = content.serviceDetails?.[i];
+    const desc = (detail && detail.description)
+      || content.about?.slice(0, 180)
+      || `How ${content.name} supports you — reach out to see if this care model is the right fit.`;
+    return `<article class="pillar">
+      <div class="pimg">${photo ? `<img src="${escapeHtml(photo)}" alt="" loading="lazy"/>` : ''}</div>
+      <div class="pbody">
+        <span class="tag">${escapeHtml(tags[i] || 'Care')}</span>
+        <h3>${escapeHtml(s)}</h3>
+        <p>${escapeHtml(String(desc).slice(0, 220))}</p>
+        <div class="foot"><a class="btn" href="${escapeHtml(content.booking)}">Request a consultation</a></div>
+      </div>
+    </article>`;
+  }).join('');
+
+  return `${head(system, content, css)}
+<body data-lumin-ds="1" data-layout="wellrounded-feminine">
+<header class="topbar"><div class="wrap">
+  <a class="brand" href="#top">${content.logo ? `<img src="${escapeHtml(content.logo)}" alt=""/>` : ''}<span>${escapeHtml(content.name)}</span></a>
+  <a class="callbtn" href="${escapeHtml(phoneHref)}">${escapeHtml(callLabel)}</a>
+</div></header>
+<main id="top">
+  <section class="hero">
+    <div class="hero-bg" data-parallax="0.35" ${heroBg}></div>
+    <div class="wrap"><div class="hero-inner">
+      ${proofLine(content)}
+      <h1>${escapeHtml(content.tagline)}</h1>
+      <p class="lede">${escapeHtml(content.about.slice(0, 220))}</p>
+      <div class="hero-cta">
+        <a class="btn" href="${escapeHtml(content.booking)}">Request a consultation</a>
+        <a class="btn btn-ghost" href="#care">Meet the team</a>
+      </div>
+    </div></div>
+  </section>
+  <section class="trust"><div class="wrap">
+    <div><b>${escapeHtml(content.location || content.industry)}</b><small>local care</small></div>
+    <div><b>Personal</b><small>unhurried visits</small></div>
+    <div><b>Clear next step</b><small>consult first</small></div>
+  </div></section>
+  <section class="block" id="meet"><div class="wrap meet">
+    <div class="photo">${content.hero ? `<img src="${escapeHtml(content.hero)}" alt="${escapeHtml(content.name)}" loading="eager"/>` : ''}</div>
+    <div>
+      <p class="script" style="font-size:1.6rem;margin:0">Meet your care</p>
+      <h2>${escapeHtml(content.name)}</h2>
+      <div class="role">${escapeHtml(content.industry)}${content.location ? ` · ${escapeHtml(content.location)}` : ''}</div>
+      <p class="muted">${escapeHtml(content.about.slice(0, 420))}</p>
+      <a class="btn" style="margin-top:1.25rem" href="${escapeHtml(content.booking)}">Request a consultation</a>
+    </div>
+  </div></section>
+  <section class="block" id="care"><div class="wrap">
+    <div class="section-head">
+      <p class="script" style="font-size:1.5rem;margin:0">Who you'll work with</p>
+      <h2>Care built around you</h2>
+      <p class="muted" style="margin-top:.75rem">Photo-led pillars so visitors see the people and the choice before scrolling further.</p>
+    </div>
+    <div class="pillars">${pillarCards || serviceCards(content, 'pillar')}</div>
+  </div></section>
+  <section class="band">
+    <div class="band-bg" data-parallax="0.35" ${bandBg}></div>
+    <div class="wrap">
+      <p class="quote">${quote}</p>
+      <cite>${cite}</cite>
+    </div>
+  </section>
+  <section class="block soft" id="services"><div class="wrap">
+    <div class="section-head"><h2>What care includes</h2></div>
+    <div class="grid grid-3">${serviceCards(content)}</div>
+  </div></section>
+  <section class="block"><div class="wrap">
+    <h2 style="margin-bottom:1rem">Gentle answers</h2>
+    ${faqBlock(content)}
+  </div></section>
+  <section class="block"><div class="wrap">
+    <div class="cta">
+      <h2>Ready to talk?</h2>
+      <p style="margin:0.85rem auto 0;max-width:40ch;opacity:.92">Fill out a short request — a real person follows up to schedule. No pressure.</p>
+      <a class="btn" style="margin-top:1.25rem" href="${escapeHtml(content.booking)}">Request your consultation</a>
+    </div>
+  </div></section>
+</main>
+${footer(content)}
+<script>
+(function(){
+  var els=[].slice.call(document.querySelectorAll('[data-parallax]'));
+  if(!els.length||window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var t=false;
+  function go(){
+    els.forEach(function(el){
+      var speed=parseFloat(el.getAttribute('data-parallax'))||0.35;
+      var rect=el.parentElement.getBoundingClientRect();
+      var mid=rect.top+rect.height/2;
+      el.style.transform='translate3d(0,'+((window.innerHeight/2-mid)*speed).toFixed(1)+'px,0)';
+    });
+    t=false;
+  }
+  function on(){ if(!t){ requestAnimationFrame(go); t=true; } }
+  window.addEventListener('scroll',on,{passive:true});
+  window.addEventListener('resize',go);
+  go();
+})();
+</script>
+</body></html>`;
+}
+
 const LAYOUT_RENDERERS = {
   'editorial-luxe': shellEditorialLuxe,
   'modern-clinical': shellModernClinical,
   'organic-warm': shellOrganicWarm,
+  'wellrounded-feminine': shellWellroundedFeminine,
   'bold-minimal': shellBoldMinimal,
   'dark-aura': shellDarkAura,
   'coastal-light': shellCoastal,
@@ -1301,29 +1623,29 @@ const LAYOUT_RENDERERS = {
   'agentic-conversational': shellAgentic,
 };
 
-const MULTI_PATH_SALES_LAYOUT_IDS = new Set([
-  'organic-warm',
-  'soft-pastel',
-  'local-trust',
-  'editorial-luxe',
-  'modern-clinical',
-  'coastal-light',
-  'artisan-heritage',
+const LEGACY_VISITOR_SALES_IDS = new Set([
+  'agentic-conversational',
 ]);
 
 /**
  * Render a distinct hand-authored layout for a design system.
- * Multi-path sales shell applies to every industry on listed layouts — not midwifery-only.
+ * Catalog templates route via layoutFamily; legacy design systems keep per-id shells.
  */
-export function renderDesignSystemLayout(system, info = {}, posPartner = null) {
+export function renderDesignSystemLayout(system, info = {}, posPartner = null, opts = {}) {
   if (!system?.id) return null;
-  const content = normalizeLayoutContent(info, posPartner);
-  if (MULTI_PATH_SALES_LAYOUT_IDS.has(system.id)) {
+  const content = normalizeLayoutContent(info, posPartner, opts);
+  const family = system.layoutFamily;
+  if (family === 'visitor-sales' || (!family && LEGACY_VISITOR_SALES_IDS.has(system.id))) {
     return shellVisitorStateSales(system, content);
+  }
+  if (family) {
+    return renderLayoutFamily(family, system, content);
   }
   const renderer = LAYOUT_RENDERERS[system.id] || shellEditorialLuxe;
   return renderer(system, content);
 }
+
+registerVisitorSalesShell(shellVisitorStateSales);
 
 export function layoutShellIdForDesignSystem(systemId) {
   const sys = String(systemId || '');

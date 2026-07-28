@@ -4,6 +4,8 @@
  */
 
 import express from 'express';
+import fs from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { buildContextForPrompt, storeMemory } from '../core/memory-system.js';
 import { spawn } from 'node:child_process';
 import path from 'node:path';
@@ -53,8 +55,10 @@ import {
 } from '../services/lumin-chair-orchestrator.js';
 import { isIntakeBlueprintIntent } from '../services/lifeos-mission-pipeline-executor.js';
 import { needsSystemKnowledge } from '../services/chair-system-knowledge.js';
-import { parseLuminChairSystemAction, shouldSkipInputNormalize } from '../services/lumin-chair-system-actions.js';
+import { parseLuminChairSystemAction, shouldSkipInputNormalize, tryLuminChairSystemAction } from '../services/lumin-chair-system-actions.js';
+import { parseLifeOSDirectAction } from '../services/lifeos-direct-action.js';
 import { stripChairDoPrefix } from '../services/chair-intent-signals.js';
+import { createCognitiveCoreCapture } from '../services/cognitive-core-capture.js';
 import { isFounderPersonalLifeIntent } from '../services/founder-life-admin-intent.js';
 import { isExplicitDisplayOnlyRequest } from '../services/lumin-conversation-routing.js';
 import { translateChairPersonality } from '../services/chair-personality-translate.js';
@@ -82,6 +86,80 @@ import {
 import { commitQueueStatusToRepo } from '../services/never-stop-product-factory.js';
 
 const FOUNDER_BUILD_JOB_TIMEOUT_MS = Number(process.env.FOUNDER_BUILD_JOB_TIMEOUT_MS || '480000');
+
+/** Deploy-truth canary — stamped on every founder-interface response so tip SHA lies are visible. */
+export const FI_ROUTE_MARKER = 'fi-route-marker-v5';
+const FI_ROUTE_FILE = fileURLToPath(import.meta.url);
+let FI_DISK_HAS_NAV = false;
+try {
+  FI_DISK_HAS_NAV = fs.readFileSync(FI_ROUTE_FILE, 'utf8').includes("nav_canary: 'fi-nav-v1'");
+} catch {
+  FI_DISK_HAS_NAV = false;
+}
+
+/** Inline navigate map — do not depend on a possibly-stale system-actions import for shell open. */
+const INLINE_NAV_PAGES = [
+  { keys: ['lifere', 'life re', 'life-re'], page: 'lifeos-lifere.html', stack: 'lifere', action_type: 'open_lifere' },
+  { keys: ['dashboard', 'home'], page: 'lifeos-dashboard.html', action_type: 'open_dashboard' },
+  { keys: ['today'], page: 'lifeos-today.html', action_type: 'open_today' },
+  { keys: ['mirror'], page: 'lifeos-mirror.html', action_type: 'open_mirror' },
+  { keys: ['purpose'], page: 'lifeos-purpose.html', action_type: 'open_purpose' },
+  { keys: ['food', 'food logger', 'nutrition'], page: 'lifeos-food.html', action_type: 'open_food' },
+  { keys: ['habits', 'habit tracker'], page: 'lifeos-habits.html', action_type: 'open_habits' },
+  { keys: ['cycle'], page: 'lifeos-cycle.html', action_type: 'open_cycle' },
+  { keys: ['coach', 'therapy'], page: 'lifeos-coach.html', action_type: 'open_coach' },
+  { keys: ['family'], page: 'lifeos-family.html', action_type: 'open_family' },
+  { keys: ['household'], page: 'lifeos-household.html', action_type: 'open_household' },
+  { keys: ['date night', 'datenight'], page: 'lifeos-date-night.html', action_type: 'open_date_night' },
+  { keys: ['parent mode', 'meltdown'], page: 'lifeos-parent-mode.html', action_type: 'open_parent_mode' },
+  { keys: ['twin directives', 'ui directives', 'twin'], page: 'lifeos-twin-directives.html', action_type: 'open_twin_directives' },
+  { keys: ['member feedback', 'feedback'], page: 'lifeos-member-feedback.html', action_type: 'open_member_feedback' },
+  { keys: ['victory vault', 'victories'], page: 'lifeos-victory-vault.html', action_type: 'open_victory' },
+  { keys: ['ask your life', 'ask life'], page: 'lifeos-ask-your-life.html', action_type: 'open_ask_life' },
+  { keys: ['decisions'], page: 'lifeos-decisions.html', action_type: 'open_decisions' },
+  { keys: ['legacy'], page: 'lifeos-legacy.html', action_type: 'open_legacy' },
+  { keys: ['ethics', 'privacy'], page: 'lifeos-ethics.html', action_type: 'open_ethics' },
+  { keys: ['connect'], page: 'lifeos-connect.html', action_type: 'open_connect' },
+  { keys: ['finance'], page: 'lifeos-finance.html', action_type: 'open_finance' },
+  { keys: ['health'], page: 'lifeos-health.html', action_type: 'open_health' },
+  { keys: ['chat', 'history'], page: 'lifeos-chat.html', action_type: 'open_chat' },
+];
+
+function parseShellNavigateInline(text = '') {
+  const t = String(text || '').trim().toLowerCase().replace(/[?.!]+$/g, '');
+  if (!t) return null;
+  const verbs = ['open ', 'go to ', 'show ', 'launch ', 'switch to ', 'take me to ', 'navigate to '];
+  let target = null;
+  for (const verb of verbs) {
+    if (t.startsWith(verb)) {
+      target = t.slice(verb.length).replace(/^the\s+/, '').trim();
+      break;
+    }
+  }
+  if (!target) return null;
+  for (const entry of INLINE_NAV_PAGES) {
+    if (entry.keys.some((k) => target === k || target.includes(k) || k.includes(target))) {
+      return {
+        matched: true,
+        action_type: entry.action_type || 'navigate',
+        shell_action: {
+          type: 'navigate',
+          page: entry.page,
+          ...(entry.stack ? { stack: entry.stack } : {}),
+        },
+      };
+    }
+  }
+  return null;
+}
+
+function fiRouteStamp(extra = {}) {
+  return {
+    fi_route_marker: FI_ROUTE_MARKER,
+    fi_disk_has_nav: FI_DISK_HAS_NAV,
+    ...extra,
+  };
+}
 
 /** Direct LifeOS BUILD_QUEUE ship via founder UI — not blueprint intake theater. */
 function isLifeosQueueBuildIntent(text = '') {
@@ -127,7 +205,7 @@ export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey, ca
 
   const EXECUTE_ALLOWED_ROLES = new Set(['founder_admin', 'operator', 'admin']);
 
-  async function persistFounderTurn(req, userMessage, replyText) {
+  async function persistFounderTurn(req, userMessage, replyText, opts = {}) {
     const reply = String(replyText || '').trim();
     if (!reply) return null;
     if (!luminPersist) return 'HISTORY_NOT_SAVED';
@@ -143,7 +221,10 @@ export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey, ca
       }
       if (!userId) return 'HISTORY_NOT_SAVED';
       const thread = await luminPersist.getOrCreateDefaultThread(userId);
-      await luminPersist.recordExchange(thread.id, userId, userMessage, reply);
+      const commandTruth = opts.command_truth || 'NO_COMMAND_RAN';
+      await luminPersist.recordExchange(thread.id, userId, userMessage, reply, {
+        command_truth: commandTruth,
+      });
       if (pool) {
         try {
           const { createFounderMemoryStore } = await import('../services/founder-memory-store.js');
@@ -1261,6 +1342,94 @@ HOW TO RESPOND:
         });
       }
 
+      // HTTP-boundary act: navigate + LifeOS writes + redeploy/alpha BEFORE counsel.
+      if (originalText && action !== 'display') {
+        const shellNav = parseShellNavigateInline(originalText)
+          || (() => {
+            const parsed = parseLuminChairSystemAction(originalText);
+            return parsed?.matched && parsed.shell_action ? parsed : null;
+          })();
+        if (shellNav?.matched && shellNav.shell_action) {
+          const human = `Opening ${shellNav.shell_action.page} now.`;
+          const persistWarning = req.body?.alpha_probe === true
+            ? 'ALPHA_PROBE_SKIP_PERSIST'
+            : await persistFounderTurn(req, originalText, human, { command_truth: 'COMMAND_RAN' });
+          clearTimeout(handlerDeadline);
+          _log(`route_nav_fastpath type=${shellNav.action_type} page=${shellNav.shell_action.page}`);
+          res.setHeader('Cache-Control', 'private, no-store, max-age=0');
+          return res.status(200).json(lockFounderResponse({
+            ok: true,
+            interface: 'Lumin',
+            lumin_chair: true,
+            lumin: true,
+            direct_connection: true,
+            action: shellNav.action_type || 'system_action',
+            chair_channel: 'system_action',
+            command_truth: 'COMMAND_RAN',
+            pass_fail: 'PASS',
+            execution_kind: 'SYSTEM_EXECUTE',
+            shell_action: shellNav.shell_action,
+            human_summary: human,
+            done_synopsis: `Navigated to ${shellNav.shell_action.page}`,
+            route_nav_fastpath: true,
+            nav_canary: 'fi-nav-v1',
+            ...(persistWarning ? { persist_warning: persistWarning } : {}),
+            ...fiRouteStamp(),
+          }, 'system_action'));
+        }
+
+        const sysParsed = parseLuminChairSystemAction(originalText);
+        const lifeParsed = parseLifeOSDirectAction(originalText);
+        if ((sysParsed.matched && !sysParsed.shell_action) || lifeParsed.matched) {
+          const boundaryKey = getForwardedOperatorKey(req)
+            || process.env.COMMAND_CENTER_KEY
+            || process.env.LIFEOS_KEY
+            || process.env.API_KEY;
+          try {
+            const actResult = await tryLuminChairSystemAction(originalText, {
+              pool,
+              logger: console,
+              operatorKey: boundaryKey,
+              founderBuildBaseUrl: resolveFounderBuildBaseUrl(),
+              userId: req.lifeosUser?.sub || null,
+            });
+            if (actResult?.matched) {
+              const human = actResult.human_summary || actResult.error || 'System action finished.';
+              const actTruth = actResult.command_truth
+                || (actResult.executed ? 'COMMAND_RAN' : 'NO_COMMAND_RAN');
+              const persistWarning = req.body?.alpha_probe === true
+                ? 'ALPHA_PROBE_SKIP_PERSIST'
+                : await persistFounderTurn(req, originalText, human, { command_truth: actTruth });
+              clearTimeout(handlerDeadline);
+              _log(`route_act_fastpath type=${actResult.action_type} ok=${actResult.ok}`);
+              res.setHeader('Cache-Control', 'private, no-store, max-age=0');
+              return res.status(200).json(lockFounderResponse({
+                ok: actResult.ok === true,
+                interface: 'Lumin',
+                lumin_chair: true,
+                lumin: true,
+                direct_connection: true,
+                action: actResult.action_type || 'system_action',
+                chair_channel: 'system_action',
+                command_truth: actResult.command_truth
+                  || (actResult.executed ? 'COMMAND_RAN' : 'NO_COMMAND_RAN'),
+                pass_fail: actResult.ok === true ? 'PASS' : 'FAIL',
+                execution_kind: 'SYSTEM_EXECUTE',
+                shell_action: actResult.shell_action || null,
+                execution_receipt: actResult.receipt || null,
+                human_summary: human,
+                done_synopsis: actResult.done_synopsis || actResult.human_summary || null,
+                route_act_fastpath: true,
+                ...(persistWarning ? { persist_warning: persistWarning } : {}),
+                ...fiRouteStamp(),
+              }, 'system_action'));
+            }
+          } catch (actErr) {
+            _log(`route_act_fastpath_error=${actErr.message}`);
+          }
+        }
+      }
+
       // Founder usability verdict from plain chat (Wave 0 item 3).
       // Soft status/continuation probes must NEVER record FOUNDER_USABILITY_PASS.
       // parseFounderUsabilityVerdict is fail-closed; COMMAND_RAN only if confirm wrote.
@@ -1582,18 +1751,103 @@ HOW TO RESPOND:
 
       const persistWarning = req.body?.alpha_probe === true
         ? 'ALPHA_PROBE_SKIP_PERSIST'
-        : await persistFounderTurn(req, cleanedInput, chairResult.body.human_summary);
+        : await persistFounderTurn(req, cleanedInput, chairResult.body.human_summary, {
+          command_truth: chairResult.body.command_truth || 'NO_COMMAND_RAN',
+        });
       clearTimeout(handlerDeadline);
+
+      // ── Cognitive Core: auto-capture the founder's real ship/build DECISION ──
+      // Every real build turn becomes a journaled decision carrying a falsifiable
+      // prediction at a confidence inferred from Adam's OWN words (never the builder's).
+      // Fire-and-forget: this must never affect the reply or add latency. The async
+      // sweep (same process → same in-memory job store) resolves prior builds whose
+      // jobs have since finished, deterministically keyed by job_id (no mis-attribution).
+      try {
+        const cb = chairResult?.body || {};
+        const isBuildTurn = /^(build|execute)$/i.test(String(cb.action || ''))
+          || ['build_async', 'build_terminal', 'execute', 'blueprint_execute'].includes(String(cb.chair_channel || ''))
+          || /BUILD_ATTEMPTED|BUILD_/i.test(String(cb.command_truth || ''))
+          || cb.job_id != null;
+        if (isBuildTurn && pool && process.env.COGNITIVE_CORE_CAPTURE !== '0') {
+          const capUserId = String(userId || userHandle || '1');
+          const capText = originalText || cleanedInput || '';
+          const capThread = req.body?.thread_id || req.body?.conversation_id || null;
+          const capStakes = (req.body?.ui_context && req.body.ui_context.stakes) || 'medium';
+          Promise.resolve().then(async () => {
+            const capture = createCognitiveCoreCapture({ pool, logger: console });
+            const rec = await capture.captureBuildDecision({
+              userId: capUserId,
+              text: capText,
+              threadId: capThread,
+              stakes: capStakes,
+              jobId: cb.job_id || null,
+              commitSha: cb.commit_sha || null,
+              channel: cb.chair_channel || cb.action || null,
+            });
+            if (rec?.ok && rec.decision_id && !rec.deduped
+              && cb.commit_sha && /^(PASS|FAIL)$/.test(String(cb.pass_fail || '').toUpperCase())) {
+              await capture.resolveCaptured({
+                userId: capUserId,
+                decisionId: rec.decision_id,
+                commitSha: cb.commit_sha,
+                passFail: String(cb.pass_fail).toUpperCase(),
+              });
+            }
+            await capture.sweepOpenBuildDecisions({ userId: capUserId }).catch(() => {});
+          }).catch((e) => console.warn('[cognitive-core-capture] boundary capture failed:', e?.message));
+        }
+      } catch (_) { /* capture must never break the reply */ }
+
       if (res.headersSent) return;
       const locked = lockFounderResponse(chairResult.body, chairResult.body.chair_channel || 'founder_interface');
+      res.setHeader('Cache-Control', 'private, no-store, max-age=0');
       return res.status(chairResult.statusCode).json({
         ...locked,
+        ...fiRouteStamp(),
         ...(persistWarning ? { persist_warning: persistWarning } : {}),
       });
     } catch (error) {
       clearTimeout(handlerDeadline);
       next(error);
     }
+  });
+
+  router.get('/founder-interface/source-proof', requireFounderInterfaceAuth, (_req, res) => {
+    const probeText = ['open', 'food'].join(' ');
+    let diskSnippet = null;
+    let parseProbe = null;
+    try {
+      const src = fs.readFileSync(FI_ROUTE_FILE, 'utf8');
+      diskSnippet = {
+        bytes: src.length,
+        has_nav_canary: src.includes("nav_canary: 'fi-nav-v1'"),
+        has_inline_nav: src.includes('parseShellNavigateInline'),
+        has_marker: src.includes(FI_ROUTE_MARKER),
+        has_food_page_literal: src.includes('lifeos-food.html'),
+      };
+      const inline = parseShellNavigateInline(probeText);
+      const imported = parseLuminChairSystemAction(probeText);
+      const foodEntry = INLINE_NAV_PAGES.find((e) => e.page === 'lifeos-food.html') || null;
+      parseProbe = {
+        probeText,
+        inline,
+        imported,
+        inline_pages: INLINE_NAV_PAGES.length,
+        food_entry: foodEntry,
+        regex_match: probeText.match(/\b(?:open|go to|show|launch|switch to|take me to|navigate to)\s+(?:the\s+)?(.+?)\s$/i)?.[1] || null,
+      };
+    } catch (err) {
+      diskSnippet = { error: err.message };
+      parseProbe = { error: err.message };
+    }
+    res.setHeader('Cache-Control', 'private, no-store, max-age=0');
+    return res.status(200).json({
+      ok: true,
+      ...fiRouteStamp(),
+      deploy_commit_sha: process.env.RAILWAY_GIT_COMMIT_SHA || process.env.GITHUB_SHA || null,
+      disk: diskSnippet,
+      parse_probe: parseProbe,
+    });
   });
 
   return router;

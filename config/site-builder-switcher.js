@@ -107,7 +107,7 @@ export function getVariantSwitcherHtml({ info, clientId, variants, editToken = '
           <p class='text-xs text-slate-400 mb-1 w-full' x-text='current.name + (current.tier === paidTier ? paidPublishNote : freePublishNote)'></p>
         </div>
       </div>
-      <p class='text-xs text-slate-400 mt-2'>5 free designs · 10 paid designs you can preview · $35 custom co-design (pay only when you approve). Toggle to compare.</p>
+      <p class='text-xs text-slate-400 mt-2'>10 free niche templates · 40 more from the 50-template catalog · $35 custom co-design (pay only when you approve). Toggle to compare — each layout is structurally different.</p>
       <nav class='mt-2 flex gap-2 overflow-x-auto pb-1'>
         <template x-for='(v,i) in variants' :key='v.id'>
           <button class='chip whitespace-nowrap text-sm px-3 py-1.5 rounded-full border border-slate-600 text-slate-200 hover:border-slate-400'
@@ -236,9 +236,10 @@ export function getVariantSwitcherHtml({ info, clientId, variants, editToken = '
       get checkoutUrl(){
         const base = ${safeJson(publishUrl)};
         if (!base) return '';
-        if (this.selected === this.customDesignId) return base + '&templateTier=template-custom';
-        if (this.selected && this.selectedTier === this.paidTier) return base + '&templateTier=template-additional&selectedDesign=' + encodeURIComponent(this.selected);
-        return base;
+        let url = base;
+        if (this.selected === this.customDesignId) url += '&templateTier=template-custom';
+        else if (this.selected && this.selectedTier === this.paidTier) url += '&templateTier=template-additional&selectedDesign=' + encodeURIComponent(this.selected);
+        return url;
       },
       get currentCompare(){ return this.compareCards[this.compareIndex] || {}; },
       init(){

@@ -22,12 +22,8 @@
 
     const themeColor = document.querySelector('meta[name="theme-color"]');
     if (themeColor) {
-      themeColor.setAttribute('content', nextTheme === 'light' ? '#e8eef4' : '#070b12');
+      themeColor.setAttribute('content', nextTheme === 'light' ? '#f6f7fb' : '#0a0a0f');
     }
-
-    window.LifeOSStudioShell?.reapplyTheme?.();
-    window.dispatchEvent(new CustomEvent('lifeos-theme-changed', { detail: { theme: nextTheme } }));
-
     return nextTheme;
   }
 

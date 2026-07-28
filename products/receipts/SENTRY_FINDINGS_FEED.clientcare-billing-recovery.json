@@ -1,0 +1,18 @@
+{
+  "product": "clientcare-billing-recovery",
+  "updated_at": "2026-07-19T23:19:06.580Z",
+  "findings": [
+    {
+      "code": "BIRTH_ACTIVITY_EMPTY",
+      "detail": "Birth Activity returned 0 rows (ok=false, err=ClientCare browser credentials are not fully configured). Cannot discover chart-linked births to file.",
+      "proposed_solution": "Move Birth Activity scan to killable child (like HCFA); keep 90s race; improve Babies Born scrape so unfiled births have real mother names + billingHref.",
+      "evidence": {
+        "url": null,
+        "headings": null,
+        "directoryCount": null,
+        "error": "ClientCare browser credentials are not fully configured"
+      },
+      "at": "2026-07-19T23:19:06.580Z"
+    }
+  ]
+}

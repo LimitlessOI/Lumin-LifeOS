@@ -1,6 +1,6 @@
 {
   "schema": "founder_ui_login_e2e_v1",
-  "at": "2026-07-09T18:25:21.707Z",
+  "at": "2026-07-20T08:52:01.556Z",
   "ok": true,
   "auth_mode": "ui_form_login",
   "source": "operator_vault_puppeteer",
@@ -15,7 +15,7 @@
     },
     "chat_send": {
       "ok": true,
-      "probe": "trust-gate-ui-1783621522548"
+      "probe": "trust-gate-ui-1784537522577"
     },
     "session_held": {
       "ok": true,
@@ -25,7 +25,7 @@
   "cred_source": "LIFEOS_FOUNDER_LOGIN_EMAIL+LIFEOS_FOUNDER_LOGIN_PASSWORD",
   "base": "https://lumin-web-production-e3a9.up.railway.app",
   "blocker": null,
-  "duration_ms": 3563,
+  "duration_ms": 3838,
   "truth_spine_applied": true,
   "truth_spine_version": "truth_enforcement_spine_v1",
   "point_b_dna_version": "point_b_dna_v1",

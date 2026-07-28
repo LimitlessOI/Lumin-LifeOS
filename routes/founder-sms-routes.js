@@ -248,7 +248,7 @@ export function registerFounderSmsRoutes(app, deps = {}) {
       const say =
         String(req.body?.say || '').trim() ||
         [
-          `Hello, this is a quick business message from Adam Hopkins with Limitless O S Site Builder.`,
+          `Hello, this is a quick business message from Adam Hopkins with Taloa Site Builder.`,
           `I built a complimentary modern website preview for ${businessName}.`,
           previewUrl ? `You can view it online, and publishing is forty five dollars including two months of management.` : '',
           callback
@@ -283,6 +283,36 @@ export function registerFounderSmsRoutes(app, deps = {}) {
       }
       logger.info?.({ to, sid: json.sid }, '[FOUNDER-VOICE] outbound call queued');
       return res.json({ ok: true, sid: json.sid, status: json.status, to: params.get('To'), from });
+    } catch (err) {
+      return res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // Read-only diagnostic (2026-07-19): the governed autonomous loop's
+  // migrate.yml self-repair attempt built locally but failed to commit to
+  // GitHub (github_commit_failed_after_local_ship). Working hypothesis:
+  // .github/workflows/* writes need a token with the separate `workflow`
+  // OAuth scope, not just repo/Contents access — every other file commit
+  // worked all session, only this path failed. This can only be checked
+  // server-side, where the real GITHUB_TOKEN actually lives.
+  app.get('/api/v1/lifeos/founder/github-token-scopes', requireKey, async (_req, res) => {
+    try {
+      const token = process.env.GITHUB_TOKEN?.trim();
+      if (!token) {
+        return res.status(503).json({ ok: false, error: 'GITHUB_TOKEN not configured' });
+      }
+      const resp = await fetch('https://api.github.com/user', {
+        headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' },
+      });
+      const scopesHeader = resp.headers.get('x-oauth-scopes') || '';
+      const scopes = scopesHeader.split(',').map((s) => s.trim()).filter(Boolean);
+      return res.json({
+        ok: resp.ok,
+        status: resp.status,
+        scopes,
+        has_workflow_scope: scopes.includes('workflow'),
+        has_repo_scope: scopes.includes('repo'),
+      });
     } catch (err) {
       return res.status(500).json({ ok: false, error: err.message });
     }

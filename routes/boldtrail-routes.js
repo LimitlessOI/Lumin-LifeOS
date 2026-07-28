@@ -4,14 +4,25 @@
  * @ssot docs/products/boldtrail/PRODUCT_HOME.md
  */
 import logger from '../services/logger.js';
+import { getStripeClient } from '../services/stripe-client.js';
+
+// Resolve a client-reachable base URL from the incoming request (the origin the
+// caller actually used), falling back to configured public origins. Avoids
+// "https://undefined/..." when RAILWAY_PUBLIC_DOMAIN was never injected.
+function resolveBaseUrl(req) {
+  const fwdProto = String(req.headers['x-forwarded-proto'] || '').split(',')[0].trim();
+  const fwdHost = String(req.headers['x-forwarded-host'] || req.headers.host || '').split(',')[0].trim();
+  if (fwdHost) return `${fwdProto || 'https'}://${fwdHost}`;
+  if (req.headers.origin) return String(req.headers.origin);
+  const env = process.env.PUBLIC_BASE_URL || (process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` : '');
+  return env.replace(/\/+$/, '');
+}
 
 export function createBoldTrailRoutes(app, ctx) {
   const {
     pool,
     requireKey,
     callCouncilWithFailover,
-    getStripeClient,
-    RAILWAY_PUBLIC_DOMAIN,
   } = ctx;
 
 // ==================== BOLDTRAIL REAL ESTATE CRM ENDPOINTS ====================
@@ -368,9 +379,10 @@ app.post("/api/v1/boldtrail/create-subscription", requireKey, async (req, res) =
     } else {
       const result = await pool.query("SELECT * FROM boldtrail_agents WHERE email = $1", [email]);
       if (result.rows.length === 0) {
-        // Create agent first
+        // Create agent first — start 'incomplete' so an unpaid agent is never
+        // treated as an active subscriber (the table default is 'active').
         const newAgent = await pool.query(
-          "INSERT INTO boldtrail_agents (email, name) VALUES ($1, $2) RETURNING *",
+          "INSERT INTO boldtrail_agents (email, name, subscription_status) VALUES ($1, $2, 'incomplete') RETURNING *",
           [email, name || null]
         );
         agent = newAgent.rows[0];
@@ -414,8 +426,8 @@ app.post("/api/v1/boldtrail/create-subscription", requireKey, async (req, res) =
           quantity: 1,
         },
       ],
-      success_url: `${req.headers.origin || "https://" + RAILWAY_PUBLIC_DOMAIN}/boldtrail?success=true`,
-      cancel_url: `${req.headers.origin || "https://" + RAILWAY_PUBLIC_DOMAIN}/boldtrail?canceled=true`,
+      success_url: `${resolveBaseUrl(req)}/api/v1/boldtrail/subscription/success?agent_id=${agent.id}&session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${resolveBaseUrl(req)}/boldtrail?canceled=true`,
       metadata: { agent_id: agent.id.toString() },
     });
 
@@ -428,6 +440,59 @@ app.post("/api/v1/boldtrail/create-subscription", requireKey, async (req, res) =
   } catch (error) {
     console.error("BoldTrail subscription creation error:", error);
     res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Post-payment access grant. Stripe redirects here (no JWT/command key) with the
+// session id; we retrieve the session, confirm it is genuinely paid/active, and
+// only then flip the agent to an active subscriber. Fail-closed: an unpaid or
+// mismatched session grants nothing.
+app.get("/api/v1/boldtrail/subscription/success", async (req, res) => {
+  try {
+    const agentId = String(req.query.agent_id || "").trim();
+    const sessionId = String(req.query.session_id || "").trim();
+    if (!agentId || !sessionId) {
+      return res.status(400).send("Missing payment confirmation parameters.");
+    }
+
+    const stripe = await getStripeClient();
+    if (!stripe) {
+      return res.status(503).send("Stripe not configured.");
+    }
+
+    const session = await stripe.checkout.sessions.retrieve(sessionId);
+    const paid =
+      session.payment_status === "paid" ||
+      session.status === "complete" ||
+      session.status === "active";
+    const metaAgentId = session.metadata?.agent_id;
+
+    if (!paid) {
+      return res.status(400).send("Payment not completed.");
+    }
+    if (metaAgentId && metaAgentId !== agentId) {
+      return res.status(400).send("Checkout session does not match this account.");
+    }
+
+    await pool.query(
+      `UPDATE boldtrail_agents
+          SET subscription_status = 'active',
+              stripe_subscription_id = COALESCE($2, stripe_subscription_id)
+        WHERE id = $1`,
+      [agentId, session.subscription ? String(session.subscription) : null]
+    );
+
+    res.set("Content-Type", "text/html; charset=utf-8");
+    res.send(`<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Subscription active — BoldTrail</title>
+<style>body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;max-width:520px;margin:48px auto;padding:0 20px;color:#111}h1{font-size:1.5rem}.card{border:1px solid #99f6e4;border-radius:12px;padding:20px;margin-top:16px}</style>
+</head><body><h1>You're subscribed — welcome to BoldTrail Pro</h1>
+<div class="card"><p>Your subscription is active. Your AI assistant is now enabled on your account.</p></div>
+</body></html>`);
+  } catch (error) {
+    logger.error("[BOLDTRAIL] subscription success handler error", { error: error.message });
+    res.status(500).send("Something went wrong confirming your subscription.");
   }
 });
 

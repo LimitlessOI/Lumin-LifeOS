@@ -6,33 +6,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <script src="/overlay/lifeos-bootstrap.js?v=20260519d"></script>
   <script src="/shared/lifeos-native-shell.js?v=20260519e"></script>
-  <script src="/overlay/lifeos-studio-shell.js?v=20260714b"></script>
-  <script src="/overlay/lifeos-theme.js?v=20260714b"></script>
+  <script src="/overlay/lifeos-studio-shell.js?v=20260627a"></script>
+  <script src="/overlay/lifeos-theme.js"></script>
   <script src="/overlay/lifeos-feature-data.js"></script>
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="LifeOS">
-  <meta name="theme-color" content="#070b12">
+  <meta name="theme-color" content="#0a0a0f">
   <link rel="manifest" href="/overlay/lifeos.webmanifest">
   <link rel="apple-touch-icon" href="/overlay/icons/icon-192.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Sora:wght@500;600;700&display=swap" rel="stylesheet">
   <title>LifeOS</title>
   <style>
     /* ── Design tokens (mirrors lifeos-ds.css — shell uses its own copy since it IS the chrome) ── */
     :root {
-      --bg-base:      #070b12;
-      --bg-raised:    #0e1520;
-      --bg-surface:   #141c28;
-      --bg-surface2:  #1a2433;
-      --bg-overlay:   #223044;
-      --border:       rgba(232,238,246,0.10);
-      --border-focus: rgba(46,196,182,0.42);
-      --text-primary: #e8eef6;
-      --text-secondary:#9aabc0;
-      --text-muted:   #6b7c93;
+      --bg-base:      #0a0a0f;
+      --bg-raised:    #0d0d15;
+      --bg-surface:   #111118;
+      --bg-surface2:  #17171f;
+      --bg-overlay:   #1e1e28;
+      --border:       rgba(255,255,255,0.07);
+      --border-focus: rgba(255,255,255,0.15);
+      --text-primary: #e8e8f0;
+      --text-secondary:#9999bb;
+      --text-muted:   #555566;
 
       /* Section accent colors */
       --c-today:      #5b6af5;
@@ -96,30 +93,28 @@
       --studio-text-muted: var(--text-muted);
       --studio-border: var(--border);
       --studio-border-focus: var(--border-focus);
-      --studio-accent: #2ec4b6;
-      --studio-accent-two: #e3b23c;
-      --studio-accent-rgb: 46, 196, 182;
-      --studio-accent-two-rgb: 227, 178, 60;
-      --studio-accent-soft: rgba(46,196,182,0.14);
-      --studio-hero-gradient: linear-gradient(135deg, #2ec4b6 0%, #1a6f8a 55%, #e3b23c 130%);
-      --studio-font-display: "Sora", "Avenir Next", sans-serif;
-      --studio-font-body: "DM Sans", "Avenir Next", sans-serif;
+      --studio-accent: var(--c-today);
+      --studio-accent-two: var(--c-engine);
+      --studio-accent-soft: rgba(91,106,245,0.12);
+      --studio-hero-gradient: linear-gradient(135deg, var(--c-today), var(--c-mirror));
+      --studio-font-display: "Space Grotesk", "Trebuchet MS", sans-serif;
+      --studio-font-body: "Manrope", "Avenir Next", sans-serif;
       --studio-font-code: "IBM Plex Mono", monospace;
-      --studio-shadow: 0 28px 90px rgba(0, 8, 20, 0.55);
+      --studio-shadow: 0 24px 80px rgba(38,45,61,0.16);
     }
 
     html[data-theme="light"] {
       color-scheme: light;
-      --bg-base:      #e8eef4;
-      --bg-raised:    #f7fafc;
+      --bg-base:      #f6f7fb;
+      --bg-raised:    #ffffff;
       --bg-surface:   #ffffff;
-      --bg-surface2:  #eef3f8;
-      --bg-overlay:   #e2e9f1;
-      --border:       rgba(15,23,36,0.10);
-      --border-focus: rgba(46,196,182,0.38);
-      --text-primary: #0f1724;
-      --text-secondary:#4a5d73;
-      --text-muted:   #6b7f95;
+      --bg-surface2:  #f3f5fb;
+      --bg-overlay:   #ffffff;
+      --border:       rgba(15,23,42,0.12);
+      --border-focus: rgba(91,106,245,0.32);
+      --text-primary: #111827;
+      --text-secondary:#475569;
+      --text-muted:   #64748b;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -133,9 +128,8 @@
     body {
       font-family: var(--studio-font-body);
       background:
-        radial-gradient(circle at top right, rgba(var(--studio-accent-rgb), 0.14), transparent 34%),
-        radial-gradient(circle at bottom left, rgba(var(--studio-accent-two-rgb), 0.10), transparent 30%),
-        radial-gradient(ellipse at 50% 0%, rgba(26, 111, 138, 0.12), transparent 42%),
+        radial-gradient(circle at top right, rgba(28,124,84,0.10), transparent 32%),
+        radial-gradient(circle at bottom left, rgba(217,108,6,0.10), transparent 28%),
         var(--studio-bg);
       color: var(--studio-text);
       height: 100%;
@@ -241,14 +235,14 @@
       height: 32px;
       min-width: 32px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #134e5e, #1a6f8a);
-      border: 1.5px solid rgba(var(--studio-accent-rgb), 0.45);
+      background: linear-gradient(135deg, #2a2060, #3a1a60);
+      border: 1.5px solid rgba(91,106,245,0.4);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 13px;
       font-weight: 700;
-      color: #9ee8df;
+      color: #a0aaff;
     }
     .user-info { overflow: hidden; flex: 1; min-width: 0; }
     .user-name  { font-size: 13px; font-weight: 600; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -451,7 +445,7 @@
       flex-shrink: 0;
       background:
         linear-gradient(135deg, rgba(255,255,255,0.82), rgba(255,255,255,0.62)),
-        linear-gradient(180deg, rgba(var(--studio-accent-rgb),0.08), rgba(var(--studio-accent-two-rgb),0.04));
+        linear-gradient(180deg, rgba(28,124,84,0.08), rgba(217,108,6,0.04));
       box-shadow: var(--studio-shadow);
       position: relative;
       overflow: hidden;
@@ -550,7 +544,7 @@
       border: 1px solid var(--studio-border);
       border-radius: var(--studio-panel-radius);
       background:
-        radial-gradient(circle at top right, rgba(var(--studio-accent-rgb),0.14), transparent 24%),
+        radial-gradient(circle at top right, rgba(28,124,84,0.14), transparent 24%),
         linear-gradient(135deg, rgba(255,255,255,0.92), rgba(255,255,255,0.74));
       box-shadow: var(--studio-shadow);
       cursor: pointer;
@@ -563,16 +557,16 @@
     .lumin-quick-bar:hover,
     .lumin-quick-bar:focus-visible {
       background:
-        radial-gradient(circle at top right, rgba(var(--studio-accent-rgb),0.18), transparent 28%),
+        radial-gradient(circle at top right, rgba(28,124,84,0.18), transparent 28%),
         linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,255,255,0.82));
       transform: translateY(-1px);
       outline: none;
     }
     .lumin-quick-bar:focus-visible {
-      box-shadow: var(--studio-shadow), inset 0 0 0 2px rgba(var(--studio-accent-rgb),0.26);
+      box-shadow: var(--studio-shadow), inset 0 0 0 2px rgba(28,124,84,0.26);
     }
     .lumin-quick-bar.active {
-      box-shadow: var(--studio-shadow), inset 0 0 0 2px rgba(var(--studio-accent-rgb),0.32);
+      box-shadow: var(--studio-shadow), inset 0 0 0 2px rgba(28,124,84,0.32);
     }
     .lumin-quick-icon {
       width: 42px;
@@ -585,7 +579,7 @@
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      box-shadow: 0 12px 30px rgba(var(--studio-accent-rgb),0.18);
+      box-shadow: 0 12px 30px rgba(28,124,84,0.18);
     }
     .lumin-quick-copy {
       flex: 1;
@@ -644,7 +638,7 @@
     .studio-chip:hover,
     .studio-chip:focus-visible {
       background: rgba(255,255,255,0.94);
-      border-color: rgba(var(--studio-accent-rgb),0.26);
+      border-color: rgba(28,124,84,0.26);
       transform: translateY(-1px);
       outline: none;
     }
@@ -737,8 +731,8 @@
       border-radius: var(--studio-stage-radius);
       border: 1px solid rgba(23,32,51,0.08);
       background:
-        radial-gradient(circle at top left, rgba(var(--studio-accent-two-rgb),0.08), transparent 26%),
-        radial-gradient(circle at bottom right, rgba(var(--studio-accent-rgb),0.08), transparent 22%),
+        radial-gradient(circle at top left, rgba(217,108,6,0.08), transparent 26%),
+        radial-gradient(circle at bottom right, rgba(28,124,84,0.08), transparent 22%),
         rgba(255,255,255,0.62);
       box-shadow: var(--studio-shadow);
     }
@@ -1363,7 +1357,7 @@
       transition: transform 0.2s, box-shadow 0.2s;
       -webkit-tap-highlight-color: transparent;
     }
-    .lumin-fab:hover { transform: scale(1.08); box-shadow: 0 18px 45px rgba(var(--studio-accent-rgb),0.25); }
+    .lumin-fab:hover { transform: scale(1.08); box-shadow: 0 18px 45px rgba(28,124,84,0.25); }
     .lumin-fab.drawer-open { transform: scale(0.92); }
     .lumin-fab-badge {
       position: absolute;
@@ -1453,7 +1447,7 @@
       gap: 10px;
       flex-shrink: 0;
       background:
-        linear-gradient(135deg, rgba(var(--studio-accent-rgb),0.12), rgba(var(--studio-accent-two-rgb),0.08)),
+        linear-gradient(135deg, rgba(28,124,84,0.12), rgba(217,108,6,0.08)),
         transparent;
     }
     .lumin-drawer-avatar {
@@ -1882,7 +1876,7 @@
     }
     .lumin-input-wrap:focus-within {
       border-color: var(--studio-border-focus);
-      box-shadow: 0 0 0 3px rgba(var(--studio-accent-rgb),0.10);
+      box-shadow: 0 0 0 3px rgba(28,124,84,0.10);
     }
     .lumin-input {
       flex: 1;
@@ -2080,69 +2074,9 @@
         <span class="nav-icon">⚖️</span>
         <span class="nav-label">Mediation</span>
       </a>
-      <a class="nav-item" id="nav-psychometrics" data-page="lifeos-psychometrics.html" data-label="Psychometrics" href="#" role="button">
-        <span class="nav-icon">🧠</span>
-        <span class="nav-label">Psychometrics</span>
-      </a>
-      <a class="nav-item" id="nav-parenting-scripts" data-page="lifeos-parenting-scripts.html" data-label="Parent Scripts" href="#" role="button">
-        <span class="nav-icon">👪</span>
-        <span class="nav-label">Parent Scripts</span>
-      </a>
-      <a class="nav-item" id="nav-labs" data-page="lifeos-labs.html" data-label="Labs" href="#" role="button">
-        <span class="nav-icon">🔬</span>
-        <span class="nav-label">Labs</span>
-      </a>
-      <a class="nav-item" id="nav-year-pixels" data-page="lifeos-year-in-pixels.html" data-label="Year in Pixels" href="#" role="button">
-        <span class="nav-icon">🎨</span>
-        <span class="nav-label">Year in Pixels</span>
-      </a>
-      <a class="nav-item" id="nav-household" data-page="lifeos-household.html" data-label="Household" href="#" role="button">
-        <span class="nav-icon">🏠</span>
-        <span class="nav-label">Household</span>
-      </a>
-      <a class="nav-item" id="nav-date-night" data-page="lifeos-date-night.html" data-label="Date Night" href="#" role="button">
-        <span class="nav-icon">🌙</span>
-        <span class="nav-label">Date Night</span>
-      </a>
-      <a class="nav-item" id="nav-parent-mode" data-page="lifeos-parent-mode.html" data-label="Parent Mode" href="#" role="button">
-        <span class="nav-icon">🗣️</span>
-        <span class="nav-label">Parent Mode</span>
-      </a>
-      <a class="nav-item" id="nav-twin-directives" data-page="lifeos-twin-directives.html" data-label="Twin Directives" href="#" role="button">
-        <span class="nav-icon">🎛️</span>
-        <span class="nav-label">Twin Directives</span>
-      </a>
-      <a class="nav-item" id="nav-member-feedback" data-page="lifeos-member-feedback.html" data-label="Member Feedback" href="#" role="button">
-        <span class="nav-icon">📥</span>
-        <span class="nav-label">Member Feedback</span>
-      </a>
-      <a class="nav-item" id="nav-deep-talk" data-page="lifeos-deep-talk.html" data-label="Deep Talk" href="#" role="button">
+      <a class="nav-item" id="nav-coach"    data-page="lifeos-coach.html"     data-label="Coach"      href="#" role="button">
         <span class="nav-icon">💬</span>
-        <span class="nav-label">Deep Talk</span>
-      </a>
-      <a class="nav-item" id="nav-ask-life" data-page="lifeos-ask-your-life.html" data-label="Ask your life" href="#" role="button">
-        <span class="nav-icon">🔎</span>
-        <span class="nav-label">Ask your life</span>
-      </a>
-      <a class="nav-item" id="nav-voice-journal" data-page="lifeos-voice-note-journal.html" data-label="Voice Journal" href="#" role="button">
-        <span class="nav-icon">🎙️</span>
-        <span class="nav-label">Voice Journal</span>
-      </a>
-      <a class="nav-item" id="nav-food" data-page="lifeos-food.html" data-label="Food" href="#" role="button">
-        <span class="nav-icon">🍽️</span>
-        <span class="nav-label">Food</span>
-      </a>
-      <a class="nav-item" id="nav-practice" data-page="lifeos-practice.html" data-label="Practice" href="#" role="button">
-        <span class="nav-icon">🧘</span>
-        <span class="nav-label">Practice</span>
-      </a>
-      <a class="nav-item" id="nav-failure-museum" data-page="lifeos-failure-museum.html" data-label="Failure Museum" href="#" role="button">
-        <span class="nav-icon">📜</span>
-        <span class="nav-label">Failure Museum</span>
-      </a>
-      <a class="nav-item" id="nav-coach"    data-page="lifeos-coach.html"     data-label="Coach & Therapy" href="#" role="button">
-        <span class="nav-icon">💬</span>
-        <span class="nav-label">Coach & Therapy</span>
+        <span class="nav-label">Coach</span>
       </a>
 
       <div class="nav-divider"></div>
@@ -2386,9 +2320,9 @@
       <span class="more-item-icon">⚖️</span>
       <span class="more-item-label">Mediation</span>
     </div>
-    <div class="more-item" data-page="lifeos-coach.html" data-label="Coach & Therapy" onclick="mobileNavFromMore('lifeos-coach.html','Coach & Therapy','--c-coach')">
+    <div class="more-item" data-page="lifeos-coach.html" data-label="Coach" onclick="mobileNavFromMore('lifeos-coach.html','Coach','--c-coach')">
       <span class="more-item-icon">💬</span>
-      <span class="more-item-label">Coach & Therapy</span>
+      <span class="more-item-label">Coach</span>
     </div>
     <div class="more-item" data-page="lifeos-identity.html" data-label="Identity" onclick="mobileNavFromMore('lifeos-identity.html','Identity','--c-identity')">
       <span class="more-item-icon">🔑</span>
@@ -2426,18 +2360,6 @@
     <div class="more-item" data-page="lifeos-weekly-review.html" data-label="Weekly Review" onclick="mobileNavFromMore('lifeos-weekly-review.html','Weekly Review','--c-mirror')">
       <span class="more-item-icon">📋</span>
       <span class="more-item-label">Weekly</span>
-    </div>
-    <div class="more-item" data-page="lifeos-food.html" data-label="Food" onclick="mobileNavFromMore('lifeos-food.html','Food','--c-health')">
-      <span class="more-item-icon">🍽️</span>
-      <span class="more-item-label">Food</span>
-    </div>
-    <div class="more-item" data-page="lifeos-practice.html" data-label="Practice" onclick="mobileNavFromMore('lifeos-practice.html','Practice','--c-coach')">
-      <span class="more-item-icon">🧘</span>
-      <span class="more-item-label">Practice</span>
-    </div>
-    <div class="more-item" data-page="lifeos-failure-museum.html" data-label="Failure Museum" onclick="mobileNavFromMore('lifeos-failure-museum.html','Failure Museum','--c-conflict')">
-      <span class="more-item-icon">📜</span>
-      <span class="more-item-label">Failure Museum</span>
     </div>
     <div class="more-item" data-page="lifeos-victory-vault.html" data-label="Victory Vault" onclick="mobileNavFromMore('lifeos-victory-vault.html','Victory Vault','--c-victory')">
       <span class="more-item-icon">🏆</span>
@@ -2710,7 +2632,7 @@ const PAGE_META = {
   'lifeos-conflict.html':     { title: 'Conflict',      icon: '🔥',  color: '--c-conflict'  },
   'lifeos-balance-wheel.html':{ title: 'Balance Wheel', icon: '⚖',  color: '--c-balance'   },
   'lifeos-mediation.html': { title: 'Mediation',  icon: '⚖️',  color: '--c-mediation' },
-  'lifeos-coach.html':     { title: 'Coach & Therapy', icon: '💬',  color: '--c-coach'     },
+  'lifeos-coach.html':     { title: 'Coach',      icon: '💬',  color: '--c-coach'     },
   'lifeos-identity.html':  { title: 'Identity',   icon: '🔑',  color: '--c-identity'  },
   'lifeos-decisions.html': { title: 'Decisions',  icon: '🧭',  color: '--c-decisions' },
   'lifeos-growth.html':    { title: 'Growth',     icon: '🌱',  color: '--c-growth'    },
@@ -2728,21 +2650,6 @@ const PAGE_META = {
   'lifeos-clip-vault.html': { title: 'Clip Vault', icon: '🎞️', color: '--c-mirror' },
   'lifeos-feature.html': { title: 'Feature Guide', icon: 'ℹ️', color: '--c-purpose' },
   'lifeos-chat.html':    { title: 'Lumin Chat',    icon: '💬', color: '--c-coach'   },
-  'lifeos-psychometrics.html': { title: 'Psychometrics', icon: '🧠', color: '--c-growth' },
-  'lifeos-parenting-scripts.html': { title: 'Parent Scripts', icon: '👪', color: '--c-coach' },
-  'lifeos-labs.html': { title: 'Labs', icon: '🔬', color: '--c-health' },
-  'lifeos-year-in-pixels.html': { title: 'Year in Pixels', icon: '🎨', color: '--c-coach' },
-  'lifeos-household.html': { title: 'Household', icon: '🏠', color: '--c-family' },
-  'lifeos-date-night.html': { title: 'Date Night', icon: '🌙', color: '--c-coach' },
-  'lifeos-parent-mode.html': { title: 'Parent Mode', icon: '🗣️', color: '--c-coach' },
-  'lifeos-twin-directives.html': { title: 'Twin Directives', icon: '🎛️', color: '--c-coach' },
-  'lifeos-member-feedback.html': { title: 'Member Feedback', icon: '📥', color: '--c-coach' },
-  'lifeos-deep-talk.html': { title: 'Deep Talk', icon: '💬', color: '--c-coach' },
-  'lifeos-ask-your-life.html': { title: 'Ask your life', icon: '🔎', color: '--c-mirror' },
-  'lifeos-voice-note-journal.html': { title: 'Voice Journal', icon: '🎙️', color: '--c-coach' },
-  'lifeos-food.html': { title: 'Food', icon: '🍽️', color: '--c-health' },
-  'lifeos-practice.html': { title: 'Practice', icon: '🧘', color: '--c-coach' },
-  'lifeos-failure-museum.html': { title: 'Failure Museum', icon: '📜', color: '--c-conflict' },
   'lifeos-victory-vault.html': { title: 'Victory Vault', icon: '🏆', color: '--c-victory' },
   'lifeos-backtest.html': { title: 'Backtest',     icon: '📊', color: '--c-finance' },
   'lifeos-weekly-review.html': { title: 'Weekly Review', icon: '📋', color: '--c-mirror' },
@@ -4718,8 +4625,7 @@ window.lifeosSetContextIntent = function lifeosSetContextIntent(text) {
 <script src="/shared/lifeos-local-vault.js?v=20260519c"></script>
 <script src="/shared/lifeos-listening-orchestrator.js?v=20260519c"></script>
 <script src="/shared/lifeos-family-tone-guard.js?v=20260519d"></script>
-<script src="/shared/lifeos-ambient-listener.js?v=20260519b" data-thought-stream="1"></script>
-<!-- thought-stream: ambient listener feeds continuous thought capture into LifeOS -->
+<script src="/shared/lifeos-ambient-listener.js?v=20260519b"></script>
 <script>
 (function initListeningOrchestrator() {
   const btn = document.getElementById('listening-master-toggle');

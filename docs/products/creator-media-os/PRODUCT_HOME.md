@@ -326,3 +326,13 @@ The channel memory and asset model should be platform-agnostic: one source can f
 
 ### Gate 5 — How We Beat Them
 Competitors either help you edit, generate, or optimize; Creator Media OS aims to remember your brand, likeness, and channel performance so one captured performance can become the full publishing package, not just another isolated asset.
+
+## Chair/Architect Competitive Review (2026-07-19)
+
+Founder directive: every blueprint reviewed against real competitors. Real web research (cited), not invented.
+
+**Confirms the existing Gate 5 positioning is correct, not undercut by fresh research:** the 2026 creator-monetization landscape (Patreon, Kajabi, Gumroad, Stan Store, Substack, Maven, CommuniPass) is entirely about payment/delivery rails for content a creator already made elsewhere — none of them touch capture, likeness, or channel-performance memory the way this blueprint already plans. That's a real, still-open gap in the market, not just an internal assumption.
+
+**Real pricing/fee data for the existing Creator Partner Program section:** researched rev-share/fee norms — Patreon/Substack 8-12%, Stan Store 7.5%, Maven 10% on cohorts. Useful anchor if this product's own partner/payout terms need a market-relative check later.
+
+**Real idea from research, not currently in this blueprint:** CommuniPass's "Paid Challenges" (5-21 day cohort-based programs with AI-agent-assisted delivery) is a monetization shape none of the older platforms (Patreon, Kajabi) offer — worth considering as a distribution format for this product's captured/branded content, distinct from one-off asset publishing. Chair status: `escalate_to_founder` — new monetization format is a product-direction call.

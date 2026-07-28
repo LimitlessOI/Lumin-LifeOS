@@ -433,10 +433,31 @@ export function createDeploymentService(deps) {
     const tree = [];
     const paths = [];
     const committedForIndex = [];
+    const BINARY_PATH = /\.(png|jpe?g|gif|webp|ico|woff2?|ttf|eot|pdf|mp4|mov|zip|wasm)$/i;
     for (const entry of fileEntries) {
       const normalizedPath = normalizeRepoRelativePath(entry.path || entry.target_file);
       let content = String(entry.content ?? entry.output ?? '');
       paths.push(normalizedPath);
+
+      // Binary path: content is already (or must be treated as) base64. Never run
+      // UTF-8 synopsis/fence transforms — those corrupt JPEG/PNG bytes.
+      const entryEncoding = String(entry.encoding || '').toLowerCase();
+      const isBinary = entryEncoding === 'base64' || BINARY_PATH.test(normalizedPath);
+      if (isBinary) {
+        const blobRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/blobs`, {
+          method: 'POST',
+          headers: authHeaders,
+          body: JSON.stringify({ content, encoding: 'base64' }),
+        });
+        if (!blobRes.ok) {
+          const err = await blobRes.json().catch(() => ({}));
+          throw new Error(err.message || `GitHub blob create failed for ${normalizedPath}`);
+        }
+        const blob = await blobRes.json();
+        tree.push({ path: normalizedPath, mode: '100644', type: 'blob', sha: blob.sha });
+        committedForIndex.push({ path: normalizedPath, content: '' });
+        continue;
+      }
 
       // Same builder-output hygiene as the single-file path: strip a whole-file
       // markdown fence, inject the SYNOPSIS header, then validate JSON — so batch
@@ -497,6 +518,64 @@ export function createDeploymentService(deps) {
       committedForIndex.push({ path: normalizedPath, content });
     }
 
+    // ── Base ref / commit / tree (needed for the no-op guard AND the commit) ──
+    const refRes = await fetch(
+      `https://api.github.com/repos/${owner}/${repo}/git/refs/heads/${targetBranch}`,
+      { headers: authHeaders },
+    );
+    if (!refRes.ok) {
+      const err = await refRes.json().catch(() => ({}));
+      throw new Error(err.message || `Could not read ref heads/${targetBranch}`);
+    }
+    const refData = await refRes.json();
+    const baseCommitSha = refData?.object?.sha;
+    if (!baseCommitSha) throw new Error('Missing base commit SHA for batch commit');
+
+    const baseCommitRes = await fetch(
+      `https://api.github.com/repos/${owner}/${repo}/git/commits/${baseCommitSha}`,
+      { headers: authHeaders },
+    );
+    if (!baseCommitRes.ok) throw new Error('Could not read base commit for batch commit');
+    const baseCommit = await baseCommitRes.json();
+    const baseTreeSha = baseCommit?.tree?.sha;
+    if (!baseTreeSha) throw new Error('Missing base tree SHA for batch commit');
+
+    // ── No-op guard (fail-open) ───────────────────────────────────────────────
+    // If every REQUESTED file's blob is byte-identical to HEAD, applying those
+    // blobs onto the base tree yields the base tree unchanged. That means there is
+    // nothing real to ship — do NOT land a commit. Without this, the synopsis-index
+    // co-commit below would still change the tree and land an index-only "phantom"
+    // commit — the exact churn an audit flagged: the tool blocked the false CLAIM,
+    // but the empty commit still landed on main. Any error in this probe → fall
+    // through and commit normally, so a legitimate ship can never be broken by it.
+    try {
+      const probeRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/trees`, {
+        method: 'POST',
+        headers: authHeaders,
+        body: JSON.stringify({ base_tree: baseTreeSha, tree }),
+      });
+      if (probeRes.ok) {
+        const probeTree = await probeRes.json();
+        if (probeTree?.sha && probeTree.sha === baseTreeSha) {
+          console.log(
+            `↩️ [DEPLOY] No-op batch — all ${paths.length} requested file(s) identical to HEAD; skipping commit (no phantom commit landed).`,
+          );
+          return {
+            ok: true,
+            committed: false,
+            no_op: true,
+            sha: baseCommitSha,
+            commit_sha: null,
+            paths,
+            changed_files: [],
+            reason: 'NO_OP_NOTHING_TO_COMMIT',
+          };
+        }
+      }
+    } catch (e) {
+      console.warn(`⚠️ [DEPLOY] no-op detection skipped (committing normally): ${e.message}`);
+    }
+
     // ── Atomic File Synopsis Law index co-commit ──────────────────────────────
     // Fold a fresh index row for every indexable file into the SAME commit, so a
     // builder commit can never land governance-noncompliant (INDEX_MISSING /
@@ -524,27 +603,6 @@ export function createDeploymentService(deps) {
         console.warn(`⚠️ [DEPLOY] synopsis index co-commit skipped: ${e.message}`);
       }
     }
-
-    const refRes = await fetch(
-      `https://api.github.com/repos/${owner}/${repo}/git/refs/heads/${targetBranch}`,
-      { headers: authHeaders },
-    );
-    if (!refRes.ok) {
-      const err = await refRes.json().catch(() => ({}));
-      throw new Error(err.message || `Could not read ref heads/${targetBranch}`);
-    }
-    const refData = await refRes.json();
-    const baseCommitSha = refData?.object?.sha;
-    if (!baseCommitSha) throw new Error('Missing base commit SHA for batch commit');
-
-    const baseCommitRes = await fetch(
-      `https://api.github.com/repos/${owner}/${repo}/git/commits/${baseCommitSha}`,
-      { headers: authHeaders },
-    );
-    if (!baseCommitRes.ok) throw new Error('Could not read base commit for batch commit');
-    const baseCommit = await baseCommitRes.json();
-    const baseTreeSha = baseCommit?.tree?.sha;
-    if (!baseTreeSha) throw new Error('Missing base tree SHA for batch commit');
 
     const treeRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/trees`, {
       method: 'POST',
@@ -587,7 +645,30 @@ export function createDeploymentService(deps) {
     }
 
     console.log(`✅ [DEPLOY] Batch committed ${paths.length} files → ${targetBranch}${commitSha ? ` (${commitSha.slice(0, 7)})` : ''}`);
-    return { ok: true, sha: commitSha, paths };
+
+    // Honesty guard (post-commit, fail-open): ask GitHub what the commit ACTUALLY
+    // changed, so a no-op file (blob identical to HEAD) can never be reported as
+    // a real change. This is the machine-ship analog of the local commit-msg
+    // empty-diff gate — the machine path bypasses local git hooks entirely.
+    // Runs AFTER the commit is finalized; any failure here leaves shipping intact.
+    let changedFiles = null;
+    if (commitSha) {
+      try {
+        const cmtRes = await fetch(
+          `https://api.github.com/repos/${owner}/${repo}/commits/${commitSha}`,
+          { headers: authHeaders },
+        );
+        if (cmtRes.ok) {
+          const cmt = await cmtRes.json();
+          changedFiles = (Array.isArray(cmt.files) ? cmt.files : [])
+            .map((f) => f.filename)
+            .filter((p) => p && p !== INDEX_REL);
+        }
+      } catch (e) {
+        console.warn(`⚠️ [DEPLOY] post-commit change-detection skipped: ${e.message}`);
+      }
+    }
+    return { ok: true, committed: true, sha: commitSha, commit_sha: commitSha, paths, changed_files: changedFiles };
   }
 
   // ── Synopsis index helpers (File Synopsis Law, governance-by-construction) ──

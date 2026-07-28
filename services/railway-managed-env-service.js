@@ -61,6 +61,13 @@ const DEFAULT_ALLOWED_KEYS = new Set([
   "SITE_BUILDER_PUBLISH_CENTS",
   "SITE_BUILDER_PUBLISH_DISPLAY",
   "SITE_BUILDER_PUBLISH_DESCRIPTION",
+  "SITE_BUILDER_FREE_CODES",
+  "SITE_BUILDER_COMP_CODES",
+  "SITE_BUILDER_MIN_OPPORTUNITY_SCORE",
+  "RESEND_API_KEY",
+  /** Cold outreach lane (Instantly) — Postmark/Resend ban unsolicited B2B email */
+  "INSTANTLY_API_KEY",
+  "INSTANTLY_CAMPAIGN_ID",
   "SITE_BUILDER_CARE_PLAN_CENTS",
   "SITE_BUILDER_CARE_PLAN_DISPLAY",
   "SITE_BUILDER_CARE_INCLUDED_MONTHS",
@@ -70,6 +77,23 @@ const DEFAULT_ALLOWED_KEYS = new Set([
   "GO_VEGAS_SCHEDULER_MS",
   "GOOGLE_PLACES_KEY",
   "GOOGLE_PLACES_API_KEY",
+  /** Well Rounded Momma — Wix dashboard login for domain release / cutover to SiteBuilder */
+  "WRM_WIX_EMAIL",
+  "WRM_WIX_PASSWORD",
+  "WRM_DOMAIN",
+  "WIX_EMAIL",
+  "WIX_PASSWORD",
+  /** Facebook — personal / admin login for Go Vegas ops (human paste only; never log values) */
+  "FACEBOOK_EMAIL",
+  "FACEBOOK_PASSWORD",
+  "FB_EMAIL",
+  "FB_PASSWORD",
+  "ADAM_FACEBOOK_EMAIL",
+  "ADAMS_FACEBOOK_PASSWORD",
+  "ADAM_FACEBOOK_PASSWORD",
+  "ADAM_SMS_NUMBER",
+
+
   "GOOGLE_CLIENT_ID",
   "GOOGLE_CLIENT_SECRET",
   "GOOGLE_REDIRECT_URI",

@@ -165,7 +165,11 @@ export function listProductsWithQueues() {
     const ids = fs.readdirSync(PRODUCTS_DIR, { withFileTypes: true })
       .filter((d) => d.isDirectory())
       .map((d) => d.name)
-      .filter((id) => fs.existsSync(path.join(PRODUCTS_DIR, id, 'BUILD_QUEUE.json')));
+      .filter((id) => fs.existsSync(path.join(PRODUCTS_DIR, id, 'BUILD_QUEUE.json')))
+      // Founder-owned income-lane focus: skip products the founder paused so the
+      // loop spends tokens/commits only on the active revenue lane. Previously
+      // loaded but never applied — pausing a product had no effect.
+      .filter((id) => !paused.has(id));
     return ids.sort((a, b) => {
       const oa = order.get(a);
       const ob = order.get(b);
@@ -331,6 +335,7 @@ function isPowerOfTwo(n) {
 // enforcement is wired here directly.
 const ESCALATION_CONTRACT_PATH = path.join(REPO_ROOT, 'builderos-reboot/LOOP_ESCALATION_CONTRACT.json');
 const FOUNDER_ALERTS_PATH = path.join(REPO_ROOT, 'data/founder-alerts.jsonl');
+const KNOWN_BAD_SIGNATURES_REGISTRY_PATH = path.join(REPO_ROOT, 'data/known-bad-signatures-registry.json');
 let escalationContractCache = null;
 
 function loadEscalationContract() {
@@ -436,6 +441,52 @@ export function isKnownBadSignature(step, signature) {
   return knownBad.some((k) => k?.signature === signature);
 }
 
+// Repo-wide known-bad-signature memory. isKnownBadSignature above is scoped to
+// ONE build-queue step — it structurally cannot see "this exact defect was
+// already fixed on a different branch/step/product," which is precisely how
+// the same orphaned-import bug shipped to `main` twice on 2026-07-18/19 (the
+// branch fix's known_bad_signatures stamp lived on the branch's own step;
+// main's queue state had no record of it, so the loop reproduced it blind).
+// This registry is deliberately separate from any one queue file so a
+// signature recorded anywhere is checked everywhere.
+export function loadKnownBadSignaturesRegistry() {
+  try {
+    const raw = fs.readFileSync(KNOWN_BAD_SIGNATURES_REGISTRY_PATH, 'utf8');
+    const parsed = JSON.parse(raw);
+    return { signatures: Array.isArray(parsed?.signatures) ? parsed.signatures : [] };
+  } catch {
+    return { signatures: [] };
+  }
+}
+
+export function saveKnownBadSignaturesRegistry(registry) {
+  const dir = path.dirname(KNOWN_BAD_SIGNATURES_REGISTRY_PATH);
+  fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(KNOWN_BAD_SIGNATURES_REGISTRY_PATH, JSON.stringify(registry, null, 2));
+}
+
+// Pure — no fs — so it's directly unit-testable against an injected registry.
+export function findRepoWideKnownBadSignature(signature, registry) {
+  const list = Array.isArray(registry?.signatures) ? registry.signatures : [];
+  return list.find((s) => s?.signature === signature) || null;
+}
+
+export function isRepoWideKnownBadSignature(signature, registry) {
+  return Boolean(findRepoWideKnownBadSignature(signature, registry));
+}
+
+// Pure — returns a NEW registry with the entry appended (dedup on signature),
+// never mutates the input. Used by scripts/mark-step-known-bad-signature.mjs.
+export function recordRepoWideKnownBadSignature(signature, meta, registry) {
+  const list = Array.isArray(registry?.signatures) ? registry.signatures : [];
+  if (list.some((s) => s?.signature === signature)) {
+    return { signatures: list };
+  }
+  return {
+    signatures: [...list, { signature, recorded_at: new Date().toISOString(), ...meta }],
+  };
+}
+
 export async function markFailedStep(queue, stepId, body, productId, logger) {
   if (!queue || !Array.isArray(queue.steps)) return;
   const step = queue.steps.find((s) => s.id === stepId || s.step_id === stepId);
@@ -474,12 +525,43 @@ export async function markFailedStep(queue, stepId, body, productId, logger) {
   // pending; a plain status reset does not clear it. If the factory reproduces
   // a signature already recorded here, skip the ladder and go straight to
   // model rotation instead of re-earning it from attempt 1.
-  const isKnownRepeat = isKnownBadSignature(step, signature);
+  //
+  // Checks TWO registries, not one: the per-step known_bad_signatures array
+  // (fine-grained, carries a step-specific note) AND a repo-wide registry
+  // (data/known-bad-signatures-registry.json). The per-step-only version has a
+  // structural blind spot, proven live 2026-07-18/19: a fix's known-bad stamp
+  // lived on a feature branch's copy of the step; `main`'s own queue state had
+  // no record of it, so the loop on `main` reproduced the identical bug a
+  // second time with zero warning. The repo-wide registry closes that —
+  // recorded once, checked everywhere, independent of which branch/step
+  // originally hit it.
+  //
+  // 2026-07-19 fix: this block previously referenced an out-of-scope `knownBad`
+  // variable (only defined inside isKnownBadSignature's own closure) when
+  // building the log line below — a real ReferenceError that fired exactly
+  // when a repeat regression was detected, throwing before persistQueue() at
+  // the end of this function could run. The repeat-regression protection could
+  // not actually complete a save the one time it mattered. Caught by direct
+  // code read, not a test — isKnownBadSignature's own unit tests only exercise
+  // the pure function in isolation, never this call site (deliberately, to
+  // avoid markFailedStep's real commitQueueStatus GitHub-API side effect in a
+  // unit test). Fixed by resolving the matched entry once, correctly scoped.
+  const repoWideRegistry = loadKnownBadSignaturesRegistry();
+  const stepKnownBadEntry = (Array.isArray(step?.known_bad_signatures) ? step.known_bad_signatures : [])
+    .find((k) => k?.signature === signature) || null;
+  const repoWideKnownBadEntry = findRepoWideKnownBadSignature(signature, repoWideRegistry);
+  const isKnownRepeat = Boolean(stepKnownBadEntry) || Boolean(repoWideKnownBadEntry);
   if (isKnownRepeat && !step.force_model_rotation) {
     step.model_rotation = (typeof step.model_rotation === 'number' ? step.model_rotation : 0) + 1;
     step.force_model_rotation = true;
     logger?.warn?.(
-      { product_id: productId, step_id: stepId, failure_signature: signature, known_bad_note: knownBad.find((k) => k?.signature === signature)?.note },
+      {
+        product_id: productId,
+        step_id: stepId,
+        failure_signature: signature,
+        known_bad_note: stepKnownBadEntry?.note || repoWideKnownBadEntry?.note,
+        known_bad_source: stepKnownBadEntry ? 'step' : 'repo_wide_registry',
+      },
       '[GOVERNED-AUTONOMOUS-SHIP] REPEAT REGRESSION — this exact failure signature was already fixed once and is recorded known-bad; skipping the escalation ladder and rotating model immediately instead of re-shipping it a third time',
     );
   }

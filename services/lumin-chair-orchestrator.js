@@ -84,6 +84,14 @@ import {
   mergeConversationHistory,
 } from './lumin-thread-context.js';
 import { runChairDirectAgent } from './chair-direct-agent.js';
+import {
+  detectJudgmentTurn,
+  runCognitiveCoreJudgmentTurn,
+} from './cognitive-core-perspective.js';
+import { detectOutcomeTurn } from '../config/judgment-capsule-contracts.js';
+import { createCognitiveCoreJudgment } from './cognitive-core-judgment.js';
+import { createCognitiveCoreImprove } from './cognitive-core-improve.js';
+import { createCognitiveCoreExtend } from './cognitive-core-extend.js';
 
 export {
   isBlueprintExecuteIntent,
@@ -399,6 +407,81 @@ function systemActionChairResponse(ctx, result) {
   };
 }
 
+function chairJudgmentResponse(ctx, judgment) {
+  const reply = String(judgment.reply || '').trim()
+    || 'I could not complete the judgment pass. Ask again, or wear different capsules.';
+  const truth = finalizeTruth({
+    ok: judgment.ok !== false,
+    pass_fail: 'NO_COMMAND_RAN',
+    command_truth: 'NO_COMMAND_RAN',
+    action: 'judgment',
+    human_summary_technical: reply,
+    conversational_mode: ctx.conversationalMode,
+  }, 'chair');
+  return {
+    statusCode: 200,
+    body: chairEnvelope('chair', {
+      ...truth,
+      chair_channel: 'cognitive_core',
+      cognitive_core: true,
+      judgment_compiler: true,
+      judgment_degraded: judgment.degraded === true,
+      judgment_degrade_reason: judgment.degrade_reason || null,
+      worn_capsules: judgment.worn_capsule_ids || [],
+      tension_ledger: judgment.tension_ledger || [],
+      prediction: judgment.prediction || null,
+      activated_programs: judgment.activated_program_briefs || [],
+      missing_info: judgment.missing_info || null,
+      consequences: judgment.consequences || null,
+      decision_id: judgment.decision_id || null,
+      prediction_id: judgment.prediction_id || null,
+      stack_summary: judgment.stack_summary || null,
+      domain: judgment.domain || null,
+      intake_normalized: ctx.intakeNormalized,
+      source_mode: ctx.sourceMode,
+      auth_mode: ctx.auth_mode,
+      user_role: ctx.user_role,
+      conversational_mode: ctx.conversationalMode,
+      direct_connection: true,
+    }),
+  };
+}
+
+function chairOutcomeResponse(ctx, capture) {
+  const reply = String(capture.reply || '').trim() || 'Logged your actual choice.';
+  const truth = finalizeTruth({
+    ok: true,
+    pass_fail: 'NO_COMMAND_RAN',
+    command_truth: 'NO_COMMAND_RAN',
+    action: 'outcome_capture',
+    human_summary_technical: reply,
+    conversational_mode: ctx.conversationalMode,
+  }, 'chair');
+  return {
+    statusCode: 200,
+    body: chairEnvelope('chair', {
+      ...truth,
+      chair_channel: 'cognitive_core',
+      cognitive_core: true,
+      judgment_compiler: true,
+      outcome_capture: true,
+      decision_id: capture.decision_id || null,
+      predicted_option: capture.predicted_option || null,
+      actual_option: capture.actual_option || null,
+      prediction_hit: capture.prediction_hit,
+      miss: capture.miss || null,
+      calibration: capture.calibration || null,
+      value_drift: capture.value_drift || null,
+      intake_normalized: ctx.intakeNormalized,
+      source_mode: ctx.sourceMode,
+      auth_mode: ctx.auth_mode,
+      user_role: ctx.user_role,
+      conversational_mode: ctx.conversationalMode,
+      direct_connection: true,
+    }),
+  };
+}
+
 export async function runLuminChairTurn(ctx, deps) {
   const _ct0 = Date.now();
   const _clog = (label) => console.log(`[CHAIR-TURN] ${label} +${Date.now() - _ct0}ms`);
@@ -448,12 +531,20 @@ export async function runLuminChairTurn(ctx, deps) {
   _clog('loadHistory');
 
   const doPrefix = stripChairDoPrefix(cleanedInput);
+  const wornFromUi = Array.isArray(uiContext?.worn_capsules)
+    ? uiContext.worn_capsules
+    : (Array.isArray(uiContext?.worn) ? uiContext.worn : []);
+  const judgmentDetect = detectJudgmentTurn(ctx.originalText || cleanedInput, {
+    worn: wornFromUi,
+    stakes: uiContext?.stakes || null,
+  });
   // Build/execute orders must use build_async (202 + job poll). The direct agent
   // runs a sync builder inside the HTTP turn and hits Railway/proxy 502 + the
   // 92s handler deadline — which is exactly how drawer_direct_build got
   // "No response from system." Skip the front-door agent for those turns.
   const isFastSurgicalPatch = isSmokeCanaryMjsCommentPatch(doPrefix.text || cleanedInput);
-  const skipDirectAgentForBuild = (!isFastSurgicalPatch && doPrefix.forcedExecute)
+  const skipDirectAgentForBuild = !judgmentDetect.is_judgment_turn && (
+    (!isFastSurgicalPatch && doPrefix.forcedExecute)
     || (
       isBuildRequest(doPrefix.text || cleanedInput)
       && !isBuildStatusQuestion(doPrefix.text || cleanedInput)
@@ -461,7 +552,8 @@ export async function runLuminChairTurn(ctx, deps) {
       && !isFastSurgicalPatch
     )
     || (isExplicitExecuteCommand(cleanedInput) && !isFastSurgicalPatch)
-    || (/^\s*(do|execute|run)\s*:/i.test(ctx.originalText || cleanedInput) && !isFastSurgicalPatch);
+    || (/^\s*(do|execute|run)\s*:/i.test(ctx.originalText || cleanedInput) && !isFastSurgicalPatch)
+  );
 
   // ── SYSTEM ACTIONS FIRST (direct execution, then personality wraps) ──
   // Open/redeploy/alpha must not be eaten by a conversational reply.
@@ -480,6 +572,144 @@ export async function runLuminChairTurn(ctx, deps) {
         { intakeNormalized, sourceMode, auth_mode, user_role },
         earlySystemAction,
       );
+    }
+  }
+
+  // ── COGNITIVE CORE OUTCOME CAPTURE (Law 5: every miss improves the engine) ──
+  // Adam reporting the choice he ACTUALLY made ("I went with X") closes the loop:
+  // record the real outcome against the most-recent open decision, then, on a miss,
+  // auto-classify it and move program confidence. Never infers — explicit self-report only.
+  if (
+    conversationalMode
+    && !shouldDisplayOnly
+    && !ctx.alphaProbe
+    && explicitAction !== 'display'
+    && deps.pool
+    && process.env.COGNITIVE_CORE_JUDGMENT !== '0'
+  ) {
+    try {
+      const outcomeDetect = detectOutcomeTurn(ctx.originalText || cleanedInput);
+      if (outcomeDetect.is_outcome_turn) {
+        const journal = createCognitiveCoreJudgment({ pool: deps.pool, logger: deps.logger || console });
+        const uidForOutcome = String(resolvedUserId || ctx.userId || ctx.userHandle || '1');
+        const openDecisions = await journal.listOpenDecisions(uidForOutcome, 5);
+        if (openDecisions.length) {
+          const target = openDecisions[0];
+          const actual = outcomeDetect.chosen_option || (ctx.originalText || cleanedInput).slice(0, 200);
+          await journal.recordOutcome({
+            decisionId: target.decision_id,
+            actualOption: actual,
+            statedReasons: [String(ctx.originalText || cleanedInput).slice(0, 500)],
+            capturedHow: 'chair_confirm',
+          });
+          const predicted = target.predicted_option || null;
+          const hit = predicted
+            && String(predicted).trim().toLowerCase() === String(actual).trim().toLowerCase();
+          let missSummary = null;
+          if (!hit) {
+            // Use the improve engine's own strong-model failover chain (defaultPlannerCallModel,
+            // SO-003) — the council 'planner' member name is not a valid council route.
+            const improve = createCognitiveCoreImprove({
+              pool: deps.pool,
+              logger: deps.logger || console,
+            });
+            missSummary = await improve.classifyMissAndCorrect({ decisionId: target.decision_id })
+              .catch((e) => ({ ok: false, reason: e.message }));
+          }
+          const board = await journal.getScoreboard(uidForOutcome).catch(() => null);
+          const domainRow = board?.by_domain?.find((d) => d.domain === target.domain) || null;
+          // Era-3 #14: check the ACTUAL choice against stated principles (surfaced, never punished).
+          let driftEvents = [];
+          try {
+            const extend = createCognitiveCoreExtend({ pool: deps.pool, logger: deps.logger || console });
+            const driftRes = await extend.checkValueDrift({ decisionId: target.decision_id });
+            if (driftRes?.ok && Array.isArray(driftRes.drift)) driftEvents = driftRes.drift;
+          } catch (e) {
+            (deps.logger || console).warn?.(`[cognitive-core] value-drift check failed: ${e.message}`);
+          }
+          const driftNote = driftEvents.length
+            ? ` Heads up — this choice diverges from ${driftEvents.length === 1 ? 'a stated principle' : `${driftEvents.length} stated principles`}: ${driftEvents.map((d) => d.principle).filter(Boolean).slice(0, 2).join('; ')}. Worth a look (could just mean the value is shifting).`
+            : '';
+          const reply = (hit
+            ? `Logged — I predicted "${predicted}" and that's what you chose. Calibration updated for ${target.domain}.`
+            : `Logged your actual choice: "${actual}"${predicted ? ` (I had predicted "${predicted}")` : ''}. ${missSummary?.miss && missSummary?.failure_class ? `Miss classified as ${missSummary.failure_class} — I updated the model, not just the note.` : 'I recorded the miss to improve the model.'}`) + driftNote;
+          _clog(`cognitive_core_outcome_capture decision=${target.decision_id} hit=${hit}`);
+          return chairOutcomeResponse(
+            { intakeNormalized, sourceMode, auth_mode, user_role, conversationalMode },
+            {
+              reply,
+              decision_id: target.decision_id,
+              predicted_option: predicted,
+              actual_option: actual,
+              prediction_hit: Boolean(hit),
+              miss: missSummary && missSummary.miss ? {
+                failure_class: missSummary.failure_class,
+                correction_hypothesis: missSummary.correction_hypothesis,
+                miss_id: missSummary.miss_id,
+              } : null,
+              calibration: domainRow ? {
+                domain: target.domain,
+                accuracy: domainRow.accuracy,
+                brier_score: domainRow.brier_score,
+                delegation_tier: domainRow.delegation_tier,
+                n: domainRow.n,
+              } : null,
+              value_drift: driftEvents.length ? { drift: driftEvents } : null,
+            },
+          );
+        }
+      }
+    } catch (outcomeErr) {
+      _clog(`cognitive_core_outcome_capture_error: ${outcomeErr.message}`);
+    }
+  }
+
+  // ── COGNITIVE CORE (perspective → conflict → predict → log) ──
+  // Decision turns / worn capsules: judgment compiler before build or counsel.
+  if (
+    judgmentDetect.is_judgment_turn
+    && conversationalMode
+    && !shouldDisplayOnly
+    && !ctx.alphaProbe
+    && explicitAction !== 'display'
+    && typeof deps.callCouncilMember === 'function'
+    && process.env.COGNITIVE_CORE_JUDGMENT !== '0'
+  ) {
+    try {
+      _clog('cognitive_core_judgment_start');
+      let memoryContext = null;
+      if (typeof deps.loadChairMemoryContext === 'function') {
+        memoryContext = await deps.loadChairMemoryContext({
+          userId: resolvedUserId,
+          userHandle: ctx.userHandle || userHandle || null,
+          messageText: ctx.originalText || cleanedInput,
+          productId: ctx.productId || null,
+        }).catch(() => null);
+      }
+      const judgment = await runCognitiveCoreJudgmentTurn({
+        message: ctx.originalText || cleanedInput,
+        worn: judgmentDetect.default_wear,
+        memoryContext: typeof memoryContext === 'string'
+          ? memoryContext
+          : (memoryContext?.prompt_block || memoryContext?.text || null),
+        history: mergedHistory,
+        callAI: deps.callCouncilMember,
+        pool: deps.pool,
+        userId: resolvedUserId || ctx.userId || ctx.userHandle || '1',
+        sourceSurface: uiContext?.surface || 'founder-interface',
+        stakes: uiContext?.stakes || 'medium',
+        logger: deps.logger || console,
+      });
+      if (judgment?.matched && judgment?.ok && judgment?.reply) {
+        _clog(`cognitive_core_judgment_done decision=${judgment.decision_id || 'n/a'}`);
+        return chairJudgmentResponse(
+          { intakeNormalized, sourceMode, auth_mode, user_role, conversationalMode },
+          judgment,
+        );
+      }
+      _clog(`cognitive_core_judgment_fallback reason=${judgment?.error || judgment?.reason || 'empty'}`);
+    } catch (judgmentErr) {
+      _clog(`cognitive_core_judgment_error: ${judgmentErr.message}`);
     }
   }
 

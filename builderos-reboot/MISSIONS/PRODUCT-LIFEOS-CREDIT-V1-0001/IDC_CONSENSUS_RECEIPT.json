@@ -1,0 +1,34 @@
+{
+  "schema": "idc_consensus_receipt_v1",
+  "mission_id": "PRODUCT-LIFEOS-CREDIT-V1-0001",
+  "at": "2026-07-28T00:14:59.301Z",
+  "chair_led": true,
+  "load_bearing_decision": "handoff_to_arc_corridor",
+  "dissent": [
+    {
+      "seat": "SNT",
+      "verdict": "BLOCKED_INTENT_AMBIGUITY",
+      "note": "Failed simulation — Chair must resolve"
+    },
+    {
+      "seat": "CFO",
+      "verdict": "priority_unconfirmed",
+      "note": "Failed simulation — Chair must resolve"
+    }
+  ],
+  "synthesis": [
+    {
+      "seat": "CHAIR",
+      "verdict": "forecast_acceptable",
+      "aligned": true
+    },
+    {
+      "seat": "WISDOM",
+      "verdict": "proceed",
+      "aligned": true
+    }
+  ],
+  "consensus_reached": false,
+  "founder_escalation_required": false,
+  "verdict": "BLOCKED_PENDING_CHAIR"
+}

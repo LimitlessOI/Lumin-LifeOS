@@ -1,0 +1,33 @@
+{
+  "schema": "product_file_manifest_v1",
+  "product_id": "lip",
+  "project_id": "lip",
+  "name": "Limitless Investment Protocol",
+  "canonical_home": "docs/products/lip/PRODUCT_HOME.md",
+  "updated_at": "2026-07-27",
+  "ownership_policy": "pointer_not_duplication",
+  "owned_files": [
+    "docs/products/lip/PRODUCT_HOME.md",
+    "docs/products/lip/FILE_MANIFEST.json",
+    "scripts/lip/seed-accounts.mjs",
+    "scripts/lip/scan-pumps.mjs",
+    "scripts/lip/backtest-limitless.mjs",
+    "scripts/lip/run-paper-cycle.mjs",
+    "scripts/lip/lib/accounts.mjs",
+    "scripts/lip/lib/detector.mjs",
+    "scripts/lip/lib/strategy.mjs",
+    "scripts/lip/lib/paths.mjs",
+    "scripts/lip/lib/synthetic.mjs",
+    "tests/lip-limitless-protocol.test.js"
+  ],
+  "shared_dependencies": [],
+  "required_routes": [],
+  "required_tables": [],
+  "required_env": [],
+  "assertions": [
+    {
+      "type": "file_exists",
+      "path": "docs/products/lip/PRODUCT_HOME.md"
+    }
+  ]
+}

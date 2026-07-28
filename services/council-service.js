@@ -1343,7 +1343,16 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
       return Math.min(config.maxTokens || 800, 800); // default cap: 800 (was 1000)
     })();
     const scopedMaxTokens = (() => {
-      const n = options.maxOutputTokens;
+      // Honor an explicit caller output-budget override. Historically only
+      // `maxOutputTokens` was read here, but many live call sites pass
+      // `maxTokens` instead (SMOS generate/extract, ClientCare VOB extraction,
+      // LifeRE coaching, YouTube research, …). That key was silently ignored,
+      // so output was clamped to the task-type default (e.g. 400 for `json`,
+      // 800 default) and long JSON/content responses were truncated mid-array —
+      // callers then fell back to templates/heuristics (the SMOS $49-pack
+      // "echoed the transcript" bug). Treat `maxTokens` as an alias so a
+      // caller's explicit budget is honored (still clamped to the hard cap).
+      const n = options.maxOutputTokens ?? options.maxTokens;
       if (typeof n === 'number' && Number.isFinite(n) && n > 0) {
         return Math.min(Math.max(Math.floor(n), 1), MAX_OUTPUT_TOKENS_CAP);
       }

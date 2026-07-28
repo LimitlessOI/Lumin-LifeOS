@@ -129,3 +129,19 @@ export function createLifeRESalesCoachingRoutes({ pool, requireKey, callCouncilM
 
   return router;
 }
+
+/**
+ * Auto-register wrapper (loader contract: register(app, deps) mounts itself).
+ * The full-runtime lane mounts this at /api/v1/lifere/sales-coach, but Railway
+ * boots the founder_builder lane only — so without this the simulator 404'd in
+ * prod (SENTRY LifeRE probe: GET /api/v1/lifere/sales-coach/scenarios → 404).
+ * Mounted here via auto-register (no composition-root edit; startup/ is protected).
+ */
+export function registerLifereSalesCoachingRoutes(app, deps = {}) {
+  const { pool, requireKey, callCouncilMember, logger } = deps;
+  app.use(
+    '/api/v1/lifere/sales-coach',
+    createLifeRESalesCoachingRoutes({ pool, requireKey, callCouncilMember, logger })
+  );
+  logger?.info?.('✅ [LIFERE-SALES-COACH] Founder-builder routes mounted at /api/v1/lifere/sales-coach');
+}

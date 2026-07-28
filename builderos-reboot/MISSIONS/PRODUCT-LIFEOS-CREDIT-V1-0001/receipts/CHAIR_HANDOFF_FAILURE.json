@@ -1,0 +1,24 @@
+{
+  "schema": "chair_handoff_failure_v1",
+  "mission_id": "PRODUCT-LIFEOS-CREDIT-V1-0001",
+  "recorded_at": "2026-07-28T00:14:59.303Z",
+  "chair_failed": true,
+  "pushed_by": "ARC",
+  "defect_owner_seat": "Chair",
+  "violations": [
+    "department:SNT",
+    "department:CFO",
+    "development:FOUNDER_PACKET missing acceptance command",
+    "development:intent_not_clear failure_metric:MISSING,scope_boundary:MISSING,unacceptable_result:MISSING,priority_fit:MISSING",
+    "development:INTENT_BASELINE not HANDOFF_READY (missing)",
+    "department:SNT simulation failed (BLOCKED_INTENT_AMBIGUITY)",
+    "department:CFO simulation failed (priority_unconfirmed)"
+  ],
+  "escalate_to_founder": true,
+  "founder_message": "Chair failed to synthesize your intent from our conversation — not that you failed to provide it.",
+  "next": [
+    "ARC → Chair (handoff incomplete)",
+    "Chair → Adam (Chair acknowledges synthesis failure)",
+    "resolve → back down chain"
+  ]
+}

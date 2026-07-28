@@ -180,6 +180,18 @@ CREATE TABLE IF NOT EXISTS call_logs (
 
 ---
 
+## Chair/Architect Competitive Review (2026-07-19)
+
+Founder directive: review every revenue blueprint for gaps against real competitors, propose additions/removals, ship what's safe now. Real web research (not invented), cited.
+
+**Pricing positioning flag — founder decision, not silently changed:** real 2026 market pricing found: pure-AI receptionists (AIRA, Dialzara, Rosie, Goodcall) range **$24.95–$59/mo**; the AI+human hybrid tier (Smith.ai) sits at **$95/mo**; pure-human legacy services (Ruby, AnswerConnect) run **$235–$289+/mo**. This product's Starter tier is **$99/mo**, priced roughly at the AI+human hybrid level while (as documented here) being pure-AI, not hybrid. That's not necessarily wrong — **BoldTrail CRM sync and real-estate-specific call handling are real differentiators general-purpose competitors don't have** — but it's a real pricing-vs-market gap worth a deliberate look, not an assumption that $99 is correctly positioned.
+
+**Real gap found, not currently in this blueprint:** none of the researched competitors' feature sets mention **AI-to-human live handoff for high-value/urgent calls** (e.g., a qualified lead ready to make an offer, or a call the AI's confidence score is low on) — Smith.ai's whole differentiation is exactly this hybrid handoff. Given this product's target is real estate agents (where a single missed hot lead can be a five-figure commission), a "hand off to a live human/the agent's own phone when the AI is uncertain or the caller signals urgency" path is worth strong consideration — closes the gap with the market's most-trusted-for-high-stakes competitor (Smith.ai) without competing purely on the AI-only price floor.
+
+**Confirms an already-planned item:** BoldTrail sync (Build Priority #6) is exactly the kind of vertical-specific integration none of the horizontal competitors (AIRA, Dialzara, Smith.ai, Ruby) offer — correctly prioritized, keep it.
+
+**Chair status:** all of the above are `escalate_to_founder` — pricing and human-handoff-threshold are product/business calls, not technical ones.
+
 ## Change Receipts
 
 | Date | Change | Author |

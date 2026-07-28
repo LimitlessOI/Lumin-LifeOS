@@ -1,0 +1,24 @@
+{
+  "receipt": "COGNITIVE_CORE_ERA34_TIP_AUDIT",
+  "at": "2026-07-20T00:49:30.000Z",
+  "tip_sha": "d1d0a195de2b",
+  "auditor": "cursor-agent-author-pass-independent-tip-prove",
+  "pass_fail": "PASS",
+  "notes": "Independent tip prove of Era-3+4 ship (same SHA the parallel Claude audit noticed). Not a full adversarial code review of every AI path — Layer A + Law-2 refuse gate + persist smoke.",
+  "know": [
+    "GET /api/v1/cognitive-core/health → era:4 with 6 era3 + 6 era4 feature ids",
+    "GET /trust/can-act?stakes=low → can_act:false action:refuse n:0 law2 present",
+    "POST /trust/actions draft_a_note → status:refused + can_act_snapshot persisted",
+    "POST /trust/legacy + POST /values → 201 rows with UUIDs (era3/4 tables live after migration)",
+    "GET /energy and /ideas → HTTP 200",
+    "Unit tests tests/cognitive-core-era3.test.js + era4.test.js → 15/15 local pass"
+  ],
+  "think": [
+    "Expert debate / compress / apprentice AI paths not tip-proven this pass (token cost; fail-closed if model dry)",
+    "UI meta lines for missing/consequences/trust need a real judgment turn to visually confirm"
+  ],
+  "gaps": [
+    "Presence strip had no CI until follow-up test in chair-comms-routing.test.js",
+    "lab_results schema repair was founder_gated — migration authored as GAP-FILL in same follow-up"
+  ]
+}

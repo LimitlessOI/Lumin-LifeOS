@@ -1,0 +1,13 @@
+{
+  "receipt": "LIFEOS_LABS_PERSIST_PROOF",
+  "at": "2026-07-20T01:29:13.000Z",
+  "tip_sha": "9d86e28d25f5",
+  "pass_fail": "PASS",
+  "know": [
+    "POST /api/v1/lifeos/labs/import with x-command-key → persisted:db, lab.id UUID, user_id 1, biomarkers stored",
+    "GET /api/v1/lifeos/labs/me returns ≥2 DB rows including the just-imported id 158d98b2…",
+    "auth_mode: command_key_fallback (founder tip-prove path)",
+    "Schema repair migration applied on tip (biomarkers/drawn_at/user_id bigint present)"
+  ],
+  "notes": "Closes open thread from Era-3/4 Claude audit: labs persist live without personal JWT."
+}

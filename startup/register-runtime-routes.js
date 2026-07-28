@@ -13,6 +13,7 @@ import { createTwinRoutes } from "../routes/twin-routes.js";
 import { createAdfRoutes } from "../routes/adf-routes.js";
 import { createConversationHistoryRoutes } from "../routes/conversation-history-routes.js";
 import { createClientCareBillingRoutes } from "../routes/clientcare-billing-routes.js";
+import { registerWrmConsultRoutes } from "../routes/wrm-consult-routes.js";
 import { createWordKeeperRoutes } from "../routes/word-keeper-routes.js";
 import { createAutonomyRoutes } from "../routes/autonomy-routes.js";
 import { createRailwayManagedEnvRoutes } from "../routes/railway-managed-env-routes.js";
@@ -282,6 +283,11 @@ export async function registerRuntimeRoutes(app, deps) {
 
   app.use("/api/v1/history", createConversationHistoryRoutes({ pool, requireKey, callCouncilMember }));
   logger.info("✅ [HISTORY] Routes mounted at /api/v1/history");
+
+  // Public marketing-site lead capture + funnel analytics for the Well Rounded
+  // Momma site (public/previews/wellrounded-momma). Self-mounts at /api/v1/wrm.
+  // Mounted unconditionally: the live site's consult form 404s without it.
+  registerWrmConsultRoutes(app, { pool, requireKey, logger });
 
   if (externalProductRoutesEnabled) {
     app.use("/api/v1/clientcare-billing", createClientCareBillingRoutes({ pool, requireKey, logger, callCouncilMember, callCouncilWithFailover, notificationService, sendSMS }));

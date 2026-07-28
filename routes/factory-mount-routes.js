@@ -25,6 +25,7 @@ import { summarizeTsosMetrics } from '../factory-staging/factory-core/tsos/tsos-
 import { reconcileRemoteTruth } from '../factory-staging/factory-core/readiness/remote-truth-reconciler.js';
 import { extractContent } from '../factory-staging/factory-core/builder/authoring.js';
 import { runGovernedShippingQueue } from '../services/governed-shipping-runner.js';
+import { GRADE_ESCALATION_TIERS } from '../services/builderos-model-escalation-gate.js';
 import {
   blueprintFollowClaim,
   exactChangeClaim,
@@ -282,7 +283,14 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
         start_index,
         skip_intake_gate,
         claim_following_blueprint,
+        model_escalation,
       } = req.body || {};
+      // Autonomous loop sends model_escalation (>0) after repeated same-signature
+      // failures. Apply GRADE_ESCALATION_TIERS to every bound step's authoring.tiers
+      // so codegen starts on the strong-first chain instead of silently ignoring the
+      // request (previous behavior: accepted the field, never changed dispatch).
+      const escalationRequested = Math.max(0, Number(model_escalation) || 0);
+      const escalationTiers = escalationRequested > 0 ? [...GRADE_ESCALATION_TIERS] : null;
       if (!Array.isArray(steps) || steps.length === 0) {
         return res.status(400).json({ ok: false, error: 'steps[] required' });
       }
@@ -320,25 +328,47 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
       const boundSteps = steps.map((s) => {
         const sid = s.blueprint_step_id || s.step_id || s.id;
         const loaded = getTwinStep(blueprint_id, sid);
-        if (!loaded.ok) return s;
-        const twin = loaded.step;
-        return {
-          ...s,
-          step_id: s.step_id || sid,
-          blueprint_step_id: sid,
-          blueprint_id,
-          target_file: twin.target_file || s.target_file,
-          task: twin.task || s.task,
-          spec: twin.spec || s.spec,
-          assertion_spec: twin.assertion_spec || s.assertion_spec,
-          expected_exports: twin.expected_exports || s.expected_exports,
-          action_type: twin.action_type || s.action_type,
-          exact_inputs: twin.exact_inputs || s.exact_inputs,
-          sandbox_boundary: s.sandbox_boundary || (twin.target_file
-            ? `${String(twin.target_file).split('/')[0]}/**`
-            : s.sandbox_boundary),
-        };
+        let bound;
+        if (!loaded.ok) {
+          bound = { ...s };
+        } else {
+          const twin = loaded.step;
+          bound = {
+            ...s,
+            step_id: s.step_id || sid,
+            blueprint_step_id: sid,
+            blueprint_id,
+            target_file: twin.target_file || s.target_file,
+            task: twin.task || s.task,
+            spec: twin.spec || s.spec,
+            assertion_spec: twin.assertion_spec || s.assertion_spec,
+            expected_exports: twin.expected_exports || s.expected_exports,
+            action_type: twin.action_type || s.action_type,
+            exact_inputs: twin.exact_inputs || s.exact_inputs,
+            sandbox_boundary: s.sandbox_boundary || (twin.target_file
+              ? `${String(twin.target_file).split('/')[0]}/**`
+              : s.sandbox_boundary),
+          };
+        }
+        if (escalationTiers) {
+          bound.authoring = {
+            ...(bound.authoring || {}),
+            tiers: escalationTiers,
+          };
+          bound.model_escalation = escalationRequested;
+        }
+        return bound;
       });
+      if (escalationRequested > 0) {
+        appendHistorianRecord({
+          type: 'model_escalation_applied',
+          mission_id: mission_id || twinProbe.mission_id,
+          blueprint_id: blueprint_id || twinProbe.blueprint_id,
+          model_escalation: escalationRequested,
+          tiers: escalationTiers,
+          trust_level: 'outcome-linked',
+        });
+      }
       let prior_commit_sha = null;
       try {
         prior_commit_sha = execFileSync('git', ['rev-parse', 'HEAD'], {
@@ -399,6 +429,8 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
       }
       res.status(outcome.ok ? 200 : 422).json({
         ...outcome,
+        model_escalation: escalationRequested,
+        model_escalation_tiers: escalationTiers,
         exact_probe: {
           status: exactProbe.status,
           target_file: exactProbe.target_file,

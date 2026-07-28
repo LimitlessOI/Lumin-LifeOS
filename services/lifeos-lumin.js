@@ -287,13 +287,14 @@ export function createLifeOSLumin({ pool, callAI, logger }) {
     return { user_message: userMsg, reply: assistantMsg };
   }
 
-  async function recordExchange(threadId, userId, userMessage, assistantMessage) {
+  async function recordExchange(threadId, userId, userMessage, assistantMessage, opts = {}) {
     const thread = await getThread(threadId, userId);
     if (!thread) throw Object.assign(new Error('Thread not found'), { status: 404 });
     const userText = String(userMessage || '').trim();
+    const commandTruth = opts.command_truth || 'NO_COMMAND_RAN';
     const assistantText = scrubProseForStorage(
       String(assistantMessage || '').trim(),
-      { taskType: 'lumin_record_exchange', command_truth: 'NO_COMMAND_RAN' },
+      { taskType: 'lumin_record_exchange', command_truth: commandTruth },
     );
     if (!userText || !assistantText) {
       throw Object.assign(new Error('user_message and assistant_message required'), { status: 400 });

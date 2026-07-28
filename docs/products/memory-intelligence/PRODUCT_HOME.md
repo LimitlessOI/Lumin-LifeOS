@@ -11,14 +11,14 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/memory-intelligence/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-29 |
+| **Last Updated** | 2026-07-27 — Brainstorm vault: Jul 27 continuity dump indexed; Phase 1 status corrected (C21–S5 largely shipped); next = friction meter / DNA population — not Phase 1 rebuild |
 
 ---
 **Status:** Active — Phase 1 Complete + Governance Hardening + Builder Integration  
 **Priority:** High  
 **Owner:** Adam  
-**Last Updated:** 2026-06-28
-**Stability:** Stable (Phase 1 + builder sync complete; Phases 2–4 in backlog)
+**Last Updated:** 2026-07-27
+**Stability:** Stable (Phase 1 + builder sync complete; Phases 2–4 in backlog; Cognitive Core eras extend forecast→learn)
 
 ---
 
@@ -96,6 +96,152 @@ Important facts carry a `disproof_recipe` — the fastest known way to try to br
 
 ---
 
+## Cognitive Core Era-1 (Judgment Compiler)
+
+**Laws:** `docs/constitution/COGNITIVE_CORE_LAWS.md`  
+**Thesis:** Optimize the compiler that models the user (predict → miss → causal correction), not a static twin. Capsules are attention lenses; Decision Journal + Prediction Scoreboard are the engine; Chair wear UI is the steering wheel.
+
+| Surface | Path |
+|---|---|
+| Health / capsules / scoreboard / journal | `/api/v1/cognitive-core/*` |
+| Chair cutover | `services/lumin-chair-orchestrator.js` → `runCognitiveCoreJudgmentTurn` before build/counsel |
+| Capsule contracts | `config/judgment-capsule-contracts.js` |
+| Schema | `db/migrations/20260719_cognitive_core_judgment.sql` |
+
+Am 39 `agent_performance` is fed on outcome scoring (`cognitive_core_compiler`). Domain trust tiers: refuse / ask / suggest / allow.
+
+## Cognitive Core Era-2 (Improve Me)
+
+**Thesis:** the system stops merely recording and starts improving Adam's thinking. Every miss now updates the *compiler* (Law 5), not just a note. Layer 2 (Programs) is live: deep recurring patterns modeled as **evolving hypotheses** (confidence + evidence + change trajectory — never truth, Law 1).
+
+| Capability (idea #) | Surface | Behaviour |
+|---|---|---|
+| Programs layer (#3 as hypotheses) | `services/cognitive-core-programs.js`, `GET/POST /programs`, `PATCH /programs/:id` | Deep patterns w/ triggers, protective purpose, cost, confidence, evidence for/against, trajectory. Injected into every judgment prompt; predictions link to concrete program ids via activations. |
+| Causal miss loop (Law 5) | `services/cognitive-core-improve.js` → `classifyMissAndCorrect`; auto-runs on outcome | On a miss: classify across the 5 failure classes, propose correction, **move program confidence on that evidence**, induce a new program hypothesis when `missing_program`. |
+| Outcome capture | orchestrator `detectOutcomeTurn` → record outcome (`chair_confirm`) → miss loop → calibration reply | "I went with X" closes the loop from chat — explicit self-report only, never inferred. |
+| Decision replay (#4) | `POST /decisions/:id/replay` | Re-run a past decision with today's programs; would_change + what_changed. |
+| Counterfactual engine (#7) | `POST /decisions/:id/counterfactual` | 2nd/3rd-order effects of the road not taken (hedged hypotheses). |
+| External minds + Future Self (#8, #10) | `config/cognitive-core-advisors.js`, `GET /advisors`, wear chips | Munger/Bezos/Jobs/Buffett/Feynman/Therapist/Operator/Future-You reasoning-style lenses. Each carries an explicit `simulation_note` — NOT the real person. |
+| Relationship twins (#11) | `services/cognitive-core-improve.js`, `GET/POST /relationships` | Hypotheses about people Adam works with (comms style, values, triggers, what works). |
+| Learning-style model (#12) | `GET/PUT /learning-style` | Modality hypotheses (visual/narrative/examples/debate…) with modest confidence. |
+
+Model calls use the strong-model failover chain (`defaultPlannerCallModel`, SO-003 — never idle). All AI output is hypothesis; confidence is clamped and never fabricated.
+
+## Cognitive Core Era-3 (Extend Me)
+
+**Thesis:** proactive partner — notices patterns, predicts consequences, fills knowledge gaps before asked.
+
+| Capability (idea #) | Surface | Behaviour |
+|---|---|---|
+| Energy & Performance (#13) | `GET /energy` | Decision-quality by part-of-day from journal hit rates; honest low confidence until n is real |
+| Value Drift (#14) | `GET/POST /values`, `GET /values/drift` | Principles as hypotheses; drift events on outcome (not auto-punish) |
+| Consequence Simulator (#15) | judgment turn + `POST /decisions/:id/consequences` | Prospective 2nd/3rd-order effects + watch signals |
+| Missing Info (#16) | judgment turn + `POST /decisions/:id/missing-info` | Most valuable missing fact + cheapest way to learn |
+| Idea Evolution Graph (#17) | `GET/POST /ideas`, `POST /ideas/link` | Nodes/edges (mutation/combination/contradiction/breakthrough) |
+| Curiosity Engine (#18) | `GET/POST /curiosity` | Learning targets from misses + weak programs |
+
+## Cognitive Core Era-4 (Trust Me)
+
+**Thesis:** AI has earned enough evidence to handle **narrowly defined** decisions on Adam's behalf, keep him informed, allow override. Law 2 is non-negotiable — no autonomy from a flipped flag.
+
+| Capability (idea #) | Surface | Behaviour |
+|---|---|---|
+| Expert Collaboration (#19) | `POST /trust/debate` | Structured multi-advisor debate; tension first, then synthesis |
+| Memory Compression (#20) | `GET /trust/models`, `POST /trust/models/compress` | Distill decisions into high-level mental-model hypotheses |
+| Legacy Recorder (#21) | `GET/POST /trust/legacy` | Principles / heuristics / stories / failures / lessons |
+| Apprenticeship (#22) | `POST /trust/apprentice/:decisionId` | Teach the reasoning *process*, not just the conclusion |
+| Delegation Confidence (#23) | `GET /trust/can-act`, `GET/POST /trust/scopes*` | Scoreboard → scopes; founder approve only when n≥5 and not refuse |
+| Autonomous Advisor (#24) | `GET/POST /trust/actions`, override | Bounded proposals logged; refuse/ask/suggest/allow; always overridable |
+
+## Cognitive Core Era-5 (Preserve Me)
+
+**Thesis:** Seal a versioned judgment package with a confidence map (confident / extrapolated / unknown). Transmit only with consent. Frame as preserved judgment — never “digital immortality.”
+
+| Capability (idea #) | Surface | Behaviour |
+|---|---|---|
+| Judgment Packages (#25) | `GET/POST /preserve/packages`, seal | Snapshot programs/legacy/models/scopes/values + confidence_map |
+| Legacy Transmission (#25) | `POST /preserve/transmit`, `GET /preserve/transmissions` | Sealed + consent required; payload summary only until import |
+
+## Cognitive Core Era-6 (Transmit Me)
+
+**Thesis:** Scale preserved judgment — marketplace lenses, debt interrupts, deep consequence trees, portable handshake import. Original brainstorm stopped at Era-5; Era-6 is the orphaned-ideas band.
+
+| Capability (idea #) | Surface | Behaviour |
+|---|---|---|
+| Capsule Marketplace (#26) | `GET/POST /transmit/marketplace`, install | Publish sealed-pack subsets as wearable lenses |
+| Subconscious Interrupts (#27) | `GET/POST /transmit/interrupts*` | Debt/pattern-driven pending interrupts |
+| Cognitive Debt (#28) | `GET/POST /transmit/debt*` | Open decisions, weak programs, unpaid predictions |
+| Consequence Trees (#29) | `GET/POST /transmit/trees` | Multi-order prospective tree (rule + AI) |
+| Portable Handshake (#30) | `POST /transmit/imports/accept` | Import sealed transmission with provenance |
+
+## Cognitive Core Era-7 (Calibrate Me)
+
+**Thesis:** Compress judgment into named heuristics; measure over/underconfidence; propose cautious cross-domain trust transfer; auto-fire deep trees on high stakes; ritualize recalibration.
+
+| Capability (idea #) | Surface | Behaviour |
+|---|---|---|
+| Decision Compression (#31) | `GET/POST /calibrate/heuristics*` | Named heuristics + seed pack + activate/hit |
+| Calibration Dashboard (#32) | `GET /calibrate/dashboard` | Accuracy/Brier + overconfidence proxies by domain |
+| Trust Transfer (#33) | `GET/POST /calibrate/transfers*` | Strong→weak domain proposals (still Law-2 local) |
+| High-stakes Auto-Tree (#34) | `POST /calibrate/auto-tree` | Depth 8 on high / 5 on medium; skip low |
+| Recalibration Rituals (#35) | `POST /calibrate/ritual` | Findings + adjustments from scoreboard |
+
+## Cognitive Core Era-8 (Compound Me)
+
+**Thesis:** Wire products into `can_act`, turn debt into improvement proposals, append compound evidence, sync sealed packages to roles, review autonomy ladder.
+
+| Capability (idea #) | Surface | Behaviour |
+|---|---|---|
+| Product Consumers (#36) | `GET/POST /compound/consumers*` | Seed site-builder / wellness / marketing / lifeos |
+| Cross-product can_act (#36) | `POST /compound/can-act` | Product-scoped Law-2 gate + call log |
+| Improvement Proposals (#37) | `GET/POST /compound/improvements*` | Debt → proposed changes |
+| Compound Log (#38) | `GET /compound/log` | Append-only cognitive compound events |
+| Role Sync (#39) | `POST /compound/role-sync` | Sealed package ↔ role provenance |
+| Autonomy Ladder (#40) | `POST /compound/ladder/review` | Promote/demote/hold suggestions from scoreboard |
+
+## Cognitive Core Era-9 (Govern Me)
+
+**Thesis:** The compiler audits itself. Integrity audits check the five laws against live scoreboard/programs; every finding is solution-mandatory (carries a `proposed_fix`). Calibration decay and drift are logged, not hidden.
+
+| Capability (idea #) | Surface | Behaviour |
+|---|---|---|
+| Integrity Auditor (#41) | `POST /govern/audit`, `GET /govern/audits` | Run scoped audit → findings with proposed_fix |
+| Constitutional Conformance (#42) | `GET /govern/conformance` | Law 1/2/5 checks vs live data |
+| Calibration Decay (#43) | (in audit) | Accuracy drop >5pt logs a decay event |
+| Compiler Drift Ledger (#44) | `GET /govern/drift`, resolve | Append-only drift record |
+| Self-Audit Findings (#45) | `GET/POST /govern/findings*` | Open→queued→resolved lifecycle |
+
+## Cognitive Core Era-10 (Multiply Me)
+
+**Thesis:** Multiply judgment — advisor council consensus (dissent preserved), cohort benchmark (reference is a hypothesis), replay simulation, compound ROI, and the self-fix loop that bridges findings into the **governed** factory queue (SO-001), never hand-shipped.
+
+| Capability (idea #) | Surface | Behaviour |
+|---|---|---|
+| Advisor Council (#46) | `GET/POST /multiply/council` | Multi-advisor positions + consensus + dissent |
+| Cohort Benchmark (#47) | `GET/POST /multiply/benchmark*` | User vs reference band percentile (hypothesis) |
+| Judgment Replay (#48) | `GET/POST /multiply/replay*` | Confidence-reweight proxy over past outcomes |
+| Compound ROI (#49) | `GET/POST /multiply/roi` | Calibration gain over a window |
+| Ship-Queue Bridge (#50) | `GET/POST /multiply/bridge*` | Findings → governed queue (staged, not hand-shipped) |
+
+## Closed Loop — Outcome Oracle + Decide Gate (depth on Era-1, NOT a new era)
+
+**Why:** external audit (2026-07-19) placed us ~7/10 — thesis 9, but execution/evidence 3.5 because the loop never closed on real data and the Brier was a naive average. The frontier (POLARIS) and even a 1-star tool (`Anbu-00001/Anamnesis`) proved value by *closing one loop* with proper scoring math. This is that, aimed at the **principal's** judgment — never the builder's self-confidence (that would score the wrong mind).
+
+| Capability | Surface | Behaviour |
+|---|---|---|
+| Outcome Oracle (Layer A) | `POST /oracle/resolve` | Resolve a journaled decision's outcome from a REAL receipt (deploy SHA / SENTRY / revert / CI) with provenance; reuses judgment trust-refresh + miss loop; `captured_how='receipt_verified'`. Fail-closed: never guesses a verdict. |
+| Calibration mirror | `GET /oracle/report` | Murphy exact decomposition (Brier = Rel − Res + Unc), reliability bins, confidence gap, anytime-valid **e-value**, Platt recalibration map, plain-English verdict. |
+| Decide gate (load-bearing) | `POST /oracle/decide` | Chow's reject rule: correct stated prob by track record, threshold by stake → **proceed / verify / abstain**; every call logged. |
+| Receipt provenance | `GET /oracle/receipts` | What real receipt closed each loop. |
+| Decide-gate audit | `GET /oracle/decide-log` | Every gate decision, auditable. |
+| **Prediction auto-capture** | founder-interface boundary + `POST /oracle/capture` | Every real founder ship/build turn is journaled as a `shipping` decision (`source_surface='founder_build'`) carrying a falsifiable prediction (`predicted_option='pass'`) at a confidence **inferred from Adam's own decision-time language** — high ("should just work") / low ("let's try") / hedged / neutral-default. Fire-and-forget; never affects the reply. Subject stays the principal, not the builder. |
+| **Auto-resolve sweep** | per build turn + `POST /oracle/sweep` | Reconciles open `founder_build` decisions against the in-process founder build job store, **deterministically keyed by `job_id`** (terminal `pass_fail` + `commit_sha` → `ci` receipt via the oracle). Zero mis-attribution; fail-closed while a job is running / pruned / unknown. |
+| Capture visibility | `GET /oracle/build-decisions` | Open founder ship/build decisions awaiting a receipt, with their implied prior + source. |
+
+**Why auto-capture is the keystone:** a mechanism that works ≠ a mechanism with real data flowing. Pre-capture, the scoreboard filled only from manual probes. Now the *prediction half* (Claude's correction: capture a falsifiable prediction, not a row-count) is automatic on the correct subject, and the *outcome half* resolves from receipts — so Eras 1–8 stop being theoretical and fill from lived activity.
+
+**Honest v1 boundaries:** recalibration stays the identity until a correction is *earned* (n≥6 AND e-value≥3) — it will not correct on noise. The language-implied prior is a cheap GUESS-grade read of Adam's confidence (clearly labelled `prior_source`); the e-value refuses to trust it until density earns a correction (Law 2). Async resolve depends on the in-process job store (30-min TTL) — jobs lost to a restart stay open (honest unknown). Deeper gap left open: SO-002 **Layer B** "green build but wrong thing" — a `pass_fail=PASS` commit resolves as `pass`; a human "that passed but was the wrong thing" override channel is the next tap. Subject = `principal_judgment`; builder self-confidence is deliberately excluded and would need its own board.
+
 ## Owned Files
 
 | File | Purpose |
@@ -103,9 +249,52 @@ Important facts carry a `disproof_recipe` — the fastest known way to try to br
 | `db/migrations/20260426_memory_intelligence.sql` | Schema: all 7 tables + 2 views |
 | `db/migrations/20260426_memory_intelligence_hardening.sql` | Source-count + future-lookback hardening |
 | `db/migrations/20260426_memory_protocol_enforcement.sql` | Protocol violations + task authority |
+| `db/migrations/20260719_cognitive_core_judgment.sql` | Judgment journal, predictions, outcomes, miss reports, domain trust |
+| `db/migrations/20260719_cognitive_core_era2.sql` | Era-2: programs, program_activations, replays, counterfactuals, relationship_twins, learning_style |
+| `db/migrations/20260719_cognitive_core_era3.sql` | Era-3: values, drift, consequences, missing_info, ideas, curiosity, energy |
+| `db/migrations/20260719_cognitive_core_era4.sql` | Era-4: debates, mental_models, legacy, apprenticeship, delegation_scopes, autonomous_actions |
+| `db/migrations/20260719_cognitive_core_era5.sql` | Era-5: judgment_packages, judgment_transmissions |
+| `db/migrations/20260719_cognitive_core_era6.sql` | Era-6: marketplace, interrupts, debt, trees, imports |
+| `db/migrations/20260719_cognitive_core_era7.sql` | Era-7: heuristics, calibration, transfers, auto-tree, rituals |
+| `db/migrations/20260719_cognitive_core_era8.sql` | Era-8: consumers, can_act calls, improvements, compound log, ladder |
+| `db/migrations/20260719_cognitive_core_era9.sql` | Era-9: integrity_audits, constitutional_checks, decay, drift, findings |
+| `db/migrations/20260719_cognitive_core_era10.sql` | Era-10: council, benchmarks, replay runs, ROI, ship-queue bridge |
+| `db/migrations/20260719_cognitive_core_outcome_oracle.sql` | Closed loop: receipt links + decide log + `receipt_verified` outcome source |
 | `services/memory-intelligence-service.js` | Core evidence engine logic |
+| `services/cognitive-core-judgment.js` | Decision journal + scoreboard |
+| `services/cognitive-core-perspective.js` | Multi-wear tension + judgment turn (+ Era-2/3 proactivity) |
+| `services/cognitive-core-programs.js` | Era-2 Programs layer (hypotheses, confidence/evidence, activations) |
+| `services/cognitive-core-improve.js` | Era-2 Improve engine: miss loop, induction, replay, counterfactual, relationship/learning |
+| `services/cognitive-core-extend.js` | Era-3 Extend engine |
+| `services/cognitive-core-values.js` | Era-3 value drift store |
+| `services/cognitive-core-ideas.js` | Era-3 idea evolution graph |
+| `services/cognitive-core-trust.js` | Era-4 Trust Me engine |
+| `services/cognitive-core-preserve.js` | Era-5 Preserve Me engine |
+| `services/cognitive-core-transmit.js` | Era-6 Transmit Me engine |
+| `services/cognitive-core-calibrate.js` | Era-7 Calibrate Me engine |
+| `services/cognitive-core-compound.js` | Era-8 Compound Me engine |
+| `services/cognitive-core-govern.js` | Era-9 Govern Me engine (self-audit) |
+| `services/cognitive-core-multiply.js` | Era-10 Multiply Me engine (network + self-fix loop) |
+| `services/cognitive-core-oracle.js` | Closed loop: outcome oracle + proper-scoring calibration engine + Chow decide gate |
+| `services/cognitive-core-capture.js` | Prediction auto-capture: founder-language prior + deterministic auto-resolve sweep (fills the loop from real activity) |
+| `config/judgment-capsule-contracts.js` | Perspective lens contracts (allow/deny) + outcome-turn detection |
+| `config/cognitive-core-advisors.js` | Era-2 external-mind + future-self wearable lenses |
 | `routes/memory-intelligence-routes.js` | API surface |
+| `routes/cognitive-core-routes.js` | Cognitive Core API (Era-1–10) |
+| `tests/cognitive-core-judgment.test.js` | Era-1 unit tests |
+| `tests/cognitive-core-era2.test.js` | Era-2 unit tests |
+| `tests/cognitive-core-era3.test.js` | Era-3 unit tests |
+| `tests/cognitive-core-era4.test.js` | Era-4 Law-2 / trust unit tests |
+| `tests/cognitive-core-era5.test.js` | Era-5 preserve/transmit consent gates |
+| `tests/cognitive-core-era6.test.js` | Era-6 marketplace/debt/trees/import |
+| `tests/cognitive-core-era7.test.js` | Era-7 heuristics/auto-tree/transfer |
+| `tests/cognitive-core-era8.test.js` | Era-8 consumers/can_act/ladder |
+| `tests/cognitive-core-era9.test.js` | Era-9 conformance/audit/decay |
+| `tests/cognitive-core-era10.test.js` | Era-10 council/benchmark/replay/bridge |
+| `tests/cognitive-core-oracle.test.js` | Closed-loop math: Murphy identity, Brier, e-value, recalibration, decide gate, receipt mapping |
+| `tests/cognitive-core-capture.test.js` | Auto-capture: language-implied prior, ship detection, terminal-job verdict, deterministic sweep (fail-closed) |
 | `docs/MEMORY_FRAMEWORK_DESIGN_BRIEF.md` | Full design brief (cross-model reviewed) |
+| `docs/constitution/COGNITIVE_CORE_LAWS.md` | Five laws + meta-learning constitution |
 
 ---
 
@@ -290,30 +479,27 @@ Current truth:
 
 ## Agent Handoff Notes
 
-**Current state (2026-05-14, S2 complete):**
-Phase 1 fully built + extended. Phase 2 adoption (S2) now seeded:
+**Current state (2026-07-27):**
+May S2 seed + Jul Cognitive Core oracle/capture remain the living memory path. Jul 27 brainstorm vault documents continuity mega-thread and corrects status drift (Phase 1 builder slices C21–S5 + Founder Decoder already shipped). See `docs/projects/BRAINSTORM_SESSIONS/tsos-platform/2026-07-27_memory-governance-continuity/`.
+
+**Still true from 2026-05-14 S2:**
 - All 7 tables + 2 views auto-apply on deploy
-- `epistemic_facts`: 3678 rows (seeded 2026-04-26 from SSOT receipts + ENV_REGISTRY + architectural invariants)
-- `lessons_learned`: **10 rows** (seeded 2026-05-14, S2 — real repair-loop lessons from AM36/CONTINUITY_LOG)
-- `npm run memory:seed` — seeds epistemic_facts (SSOT sources)
-- `npm run memory:seed-lessons` — seeds lessons_learned (repair-loop receipts); also writes `docs/INSTITUTIONAL_MEMORY_DIGEST.md`
-- `npm run memory:ci-evidence` — records node --check results as fact_evidence
-- `docs/INSTITUTIONAL_MEMORY_DIGEST.md` — committed static digest generated from lessons_learned DB rows
-- `docs/AI_COLD_START.md` — now includes an "Institutional Memory" section with top lessons (reader confirmed)
-- Builder `/build` has pre-commit syntax gate; `/history` surfaces conductor_builder_audit trail
-- Domain prompt files: `prompts/lifeos-memory-intelligence.md`, `prompts/lifeos-platform.md`
+- `npm run memory:seed` / `memory:seed-lessons` / `memory:ci-evidence`
+- `docs/INSTITUTIONAL_MEMORY_DIGEST.md` + cold-start Institutional Memory section (reader confirmed)
+- Builder `/build` pre-commit syntax gate; `/history` conductor audit
 
 **Next priority (in order):**
-1. **Wire `memory:ci-evidence` into `.github/workflows/smoke-test.yml`** — auto-record CI results as evidence
-2. **Regenerate digest on lesson updates** — add `memory:seed-lessons` to CI or a post-seed hook so INSTITUTIONAL_MEMORY_DIGEST.md stays current
-3. **S3: C09 Build Closure Contract** — per Phase 2 agreed sequence: C21 ✅ → C02 ✅ → C09 next
-4. **Add SQL validation gate** — validate `.sql` files before builder commits them
-5. **Add HTML validation gate** — basic structure check for `.html` files
+1. **Governance friction / paralysis meter (C07 / N16 / A10)** — quantify safe-but-stuck from existing compliance signals (see `2026-07-27_memory-governance-continuity/50_IMPLEMENTATION_PLAN.md`)
+2. **Task DNA population** — fill `why_created` / `proof_required_to_close` on active queues; optional warn→gate for *new* tasks only
+3. **Regenerate digest on lesson updates** — keep `INSTITUTIONAL_MEMORY_DIGEST.md` current when lessons change
+4. **Hybrid / multi-signal retrieval + freshness SLA jobs** — Phase 2 judgment layer
+5. **Do not re-build C21 / C02 / C09 / S4 / S5 / Founder Decoder** — already shipped (May 2026)
 
 **What NOT to do:**
 - Do not merge the evidence ladder with the governance ladder
 - Do not auto-promote anything to INVARIANT without the adversarial gate passing
 - Do not create a second memory system — this IS the memory system
+- Do not re-litigate Phase 1 from chat dumps without reading Jul 27 drift assessment first
 
 ---
 
@@ -321,6 +507,16 @@ Phase 1 fully built + extended. Phase 2 adoption (S2) now seeded:
 
 | Date | File | What | Why |
 |---|---|---|---|
+| 2026-07-27 | `docs/projects/BRAINSTORM_SESSIONS/tsos-platform/2026-07-27_memory-governance-continuity/*` + conversation dumps | Preserved Adam mega-thread (philosophy + A/C/N/G/O + rankings); categorized index; when-to-build plan; drift assessment correcting “Phase 1 missing” narrative — Phase 1 largely ✅; restored `OPERATOR_BRAINSTORM_SESSION_ENTRY.md` | Adam: mandatory preserve + plan; chat continuity failure mode |
+| 2026-07-19 | `cognitive-core-perspective.js` + `lumin-chair-orchestrator.js` | Era-3 surfacing last-mile: judgment turn now returns `missing_info` + `consequences` in its payload/stack, `chairJudgmentResponse` forwards them into the founder-interface envelope (UI already read them but the orchestrator never emitted them — proactive missing-info + consequence sketch were journaled but invisible in chat), and the value-drift monitor now runs on **live-chat** outcome capture (not just the explicit `/outcomes` route), emitting `{drift:[]}` to match the UI + route shape. Verified live on `777d78ea2065`: judgment surfaces missing-info+consequences; a seeded principle + diverging outcome fired a medium-severity drift event with a Law-1 "value may be shifting" note. | Adam: "lets build v3" while CC audited Era-2 (clean pass, `0ec279cabf`). Era-3 core was already shipped; these were the invisible-in-chat gaps. |
+| 2026-07-20 | Prediction auto-capture + auto-resolve sweep: `services/cognitive-core-capture.js` + boundary wiring in `routes/lifeos-builderos-command-control-routes.js` + `/oracle/capture` `/oracle/sweep` `/oracle/build-decisions` in `routes/cognitive-core-routes.js` + `tests/cognitive-core-capture.test.js`. Every real founder ship/build turn is journaled as a `shipping` decision with a falsifiable `pass` prediction at a confidence **inferred from Adam's own language** (never the builder's); the resulting build job auto-resolves it via the oracle, deterministically keyed by `job_id` (terminal `pass_fail`+`commit_sha` → `ci` receipt), fail-closed while running. Fire-and-forget at the boundary — never affects the reply. Health adds `auto_capture[]`. 10/10 new capture tests; 29/29 oracle+capture; `node --check` clean on all 3 edited files. | Adam: chose **A** — "everything else is downstream of this one." The oracle worked but every row came from manual probes; real automatic capture of real ship/build decisions hadn't happened. This is the prediction half (Claude's correction: capture a falsifiable prediction, not a row count) on the correct subject. Let it fill from lived activity before B (Chair defers to gate) or C (temporal-KG). |
+| 2026-07-19 | Closed loop: `cognitive-core-oracle.js` + `20260719_cognitive_core_outcome_oracle.sql` + `/oracle/*` routes + `cognitive-core-oracle.test.js` | Outcome Oracle resolves decisions from REAL receipts (deploy/SENTRY/revert/CI) with provenance, fail-closed. Proper scoring: Murphy exact decomposition, anytime-valid e-value, Platt recalibration (identity until earned), Chow decide gate (proceed/verify/abstain, stake-aware, logged). `receipt_verified` outcome source. Health `loop_closed: true`, subject `principal_judgment`. 11/11 new tests; 68/68 cognitive-core suite. Depth on Era-1, NOT a new era. | Adam: "bring this to a ten" after external audit scored execution/evidence 3.5 (loop never closed). Convergent w/ POLARIS + Anamnesis: prove value by closing ONE loop with real math on the correct subject, not by adding surface. |
+| 2026-07-19 | Cognitive Core Era-9 + Era-10 (capstone) | Govern Me (#41–45): integrity auditor, constitutional conformance, calibration decay, drift ledger, self-audit findings (solution-mandatory). Multiply Me (#46–50): advisor council consensus, cohort benchmark, judgment replay, compound ROI, ship-queue bridge (findings → governed factory, not hand-shipped). Migrations era9/era10, govern+multiply services, routes, tests 10/10, health `era: 10`. Completes 50-idea roadmap. | Adam: "after this go to the next 2." |
+| 2026-07-19 | Cognitive Core Era-7 + Era-8 | Calibrate Me (#31–35): heuristics, calibration dashboard, trust transfer, high-stakes auto-tree, rituals. Compound Me (#36–40): product consumers, cross-product can_act, debt→improvements, compound log, role sync, autonomy ladder. Migrations era7/era8, calibrate+compound services, routes, tests, health `era: 8`. | Adam: "do the next 2" after Era-5/6 tip prove. |
+| 2026-07-19 | Cognitive Core Era-5 + Era-6 | Preserve Me (#25): sealed judgment packages + consent transmission (no immortality framing). Transmit Me (#26–30): marketplace, interrupts, cognitive debt, consequence trees, portable import. Migrations era5/era6, preserve+transmit services, routes, tests, health `era: 6`. | Adam: "era 5 is that done if not do both 5 and 6" — tip was still era 4; Era-6 defined as orphaned-ideas band. |
+| 2026-07-19 | Cognitive Core Era-3 + Era-4 | Extend Me (#13–18) + Trust Me (#19–24): migrations era3/era4, `cognitive-core-extend/values/ideas/trust.js`, routes + Law-2 can-act/scopes/actions/debate/legacy/apprentice, tests era3+era4, health `era: 4`, Chair meta lines. | Adam: "go to ev4" — finish Extend Me gate then Trust Me band (earned delegation, inform + override). |
+| 2026-07-19 | Cognitive Core Era-2 | Programs layer (hypotheses) + `program_activations`; causal miss loop auto-runs on outcome (classify→correct→move program confidence→induce); outcome capture from chat (`detectOutcomeTurn`); decision replay + counterfactual engine; external-mind + future-self advisor lenses; relationship twins; learning-style model. Migration `20260719_cognitive_core_era2.sql`; services `cognitive-core-programs.js` + `cognitive-core-improve.js`; routes extended; `cognitive-core-era2.test.js` wired to CI. | Adam: "finish all of Era 2 before we audit it with CC" — Improve Me era: system improves the compiler on every miss, wears external minds, models people + learning style. Direct-author + independent-audit path (Adam-ratified for this thread). |
+| 2026-07-19 | Cognitive Core Era-1 | Laws doc + judgment schema/services/routes; Chair perspective→conflict→predict→journal; lifeos-app wear chips; decision turns no longer misroute to build via `should I … or …` | Adam: judgment compiler moat — Decision Journal engine + Capsule UI; meta-learning over twin cosplay |
 | 2026-06-28 | `services/self-repair-memory.js` + `services/reality-ledger.js` | Repair memory append path now mirrors each event into the append-only Reality Ledger (owner + expected/actual outcomes). | V1-00 Five Recorders: unrecoverable history must start before the loop is fully closed. |
 | 2026-06-28 | `services/self-repair-memory.js` | Self-repair memory events now persist `attempt_stages[]` and `context_requirements_seen[]` derived from executed repair steps, so memory records whether lessons/research/consensus were actually required in the run that produced the lesson. | BuilderOS closure work needed memory to track not just that a repair happened, but what escalation/carry-forward context shaped that lesson. |
 | 2026-06-24 | `services/truth-scoreboard-worker.js` + `config/truth-governance-hypotheses.json` | Closed-loop scoreboard: parity/verify receipts → `addEvidence` → promote/demote `epistemic_facts`; twin drift ingest; scheduled tick on boot | Adam: truth level from results not fancy — GUESS watched until reality promotes |

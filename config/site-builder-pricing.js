@@ -27,15 +27,15 @@ export const SITE_BUILDER_PRICING = {
     'social-media-management': { display: '$297/mo', cadence: 'monthly' },
     'seo-content-care-plan': { display: '$35/mo', cadence: 'monthly' },
   },
-  /** Template gallery: 5 free designs to toggle/preview; 10 more paid for $1
-   *  and a fully bespoke design are paid upsells (founder direction 2026-07-13). */
+  /** Template gallery: 10 free niche designs; 40 more from the 50-template catalog
+   *  for $1 each; fully bespoke co-design is a paid upsell. */
   templates: {
-    freeCount: Number(process.env.SITE_BUILDER_FREE_TEMPLATE_COUNT || 5),
+    freeCount: Number(process.env.SITE_BUILDER_FREE_TEMPLATE_COUNT || 10),
     additional: {
       oneTimeCents: Number(process.env.SITE_BUILDER_TEMPLATE_ADDITIONAL_CENTS || 100),
       display: process.env.SITE_BUILDER_TEMPLATE_ADDITIONAL_DISPLAY || '$1',
-      description: 'Preview and switch to any of 10 additional professionally-designed templates; pay only when you publish.',
-      slotCount: 10,
+      description: 'Preview and switch across the full 50-niche template catalog; pay only when you publish extras.',
+      slotCount: Number(process.env.SITE_BUILDER_TEMPLATE_ADDITIONAL_SLOTS || 40),
     },
     custom: {
       oneTimeCents: Number(process.env.SITE_BUILDER_TEMPLATE_CUSTOM_CENTS || 3500),
@@ -61,6 +61,30 @@ export const SITE_BUILDER_PRICING = {
 export function getBetaPublishOfferSummary(pricing = SITE_BUILDER_PRICING) {
   const months = pricing.carePlan?.includedMonthsOnPublish || 2;
   return `${pricing.publish.display} beta-tester publish (includes first ${months} months of care) — priced for feedback while we learn, not full retail`;
+}
+
+/** Complimentary / founder gift codes — set via SITE_BUILDER_FREE_CODES (comma-separated). */
+export function normalizePublishCompCode(code) {
+  return String(code || '')
+    .trim()
+    .toUpperCase()
+    .replace(/\s+/g, '-');
+}
+
+export function getPublishCompCodes() {
+  const raw = process.env.SITE_BUILDER_FREE_CODES || process.env.SITE_BUILDER_COMP_CODES || '';
+  return [...new Set(
+    String(raw)
+      .split(/[,;\n]+/)
+      .map((part) => normalizePublishCompCode(part))
+      .filter((code) => code.length >= 4),
+  )];
+}
+
+export function isValidPublishCompCode(code) {
+  const normalized = normalizePublishCompCode(code);
+  if (!normalized || normalized.length < 4) return false;
+  return getPublishCompCodes().includes(normalized);
 }
 
 /** One-line reason-why for print/email (Claude Hopkins: always explain the deal). */

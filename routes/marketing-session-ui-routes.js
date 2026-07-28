@@ -61,18 +61,29 @@ const sharedMarketingClientAuth = `
           return path;
         }
       }
-      function marketingAuthHeaders(extra = {}) {
-        const h = { 'Content-Type': 'application/json', ...extra };
-        const token = globalThis['localStorage'].getItem('lifeos_access_token') || '';
-        const key = globalThis['localStorage'].getItem('command_key')
+      function marketingCommandKey() {
+        return globalThis['localStorage'].getItem('command_key')
           || globalThis['localStorage'].getItem('commandKey')
           || globalThis['localStorage'].getItem('lifeos_command_key')
           || globalThis['localStorage'].getItem('COMMAND_CENTER_KEY')
           || globalThis['localStorage'].getItem('lifeos_key')
           || '';
+      }
+      function marketingAuthHeaders(extra = {}) {
+        const h = { 'Content-Type': 'application/json', ...extra };
+        const token = globalThis['localStorage'].getItem('lifeos_access_token') || '';
+        const key = marketingCommandKey();
+        // Send BOTH when present. A stale JWT alone used to 401 while the
+        // command key sat unused in localStorage (else-if bug → "Signed in"
+        // chrome with Unauthorized packs/YouTube).
         if (token) h['Authorization'] = 'Bearer ' + token;
-        else if (key) { h['x-command-key'] = key; h['x-api-key'] = key; }
+        if (key) { h['x-command-key'] = key; h['x-api-key'] = key; }
         return h;
+      }
+      function marketingClearStaleJwt() {
+        try {
+          globalThis['localStorage'].removeItem('lifeos_access_token');
+        } catch (_) {}
       }
       function marketingOwnerId() {
         try {
@@ -90,12 +101,32 @@ const sharedMarketingClientAuth = `
         }
       }
       function marketingHasAuth() {
-        return !!(globalThis['localStorage'].getItem('lifeos_access_token')
-          || globalThis['localStorage'].getItem('command_key')
-          || globalThis['localStorage'].getItem('commandKey')
-          || globalThis['localStorage'].getItem('lifeos_command_key')
-          || globalThis['localStorage'].getItem('COMMAND_CENTER_KEY')
-          || globalThis['localStorage'].getItem('lifeos_key'));
+        return !!(globalThis['localStorage'].getItem('lifeos_access_token') || marketingCommandKey());
+      }
+      function marketingHasCustomerJwt() {
+        return !!globalThis['localStorage'].getItem('lifeos_access_token');
+      }
+      function marketingPaintAuthChrome() {
+        const signedIn = marketingHasCustomerJwt() || !!marketingCommandKey();
+        const signup = globalThis['document'].getElementById('signupBtn');
+        const signin = globalThis['document'].getElementById('signinBtn');
+        const start = globalThis['document'].getElementById('startSessionBtn');
+        if (signedIn) {
+          if (signup) signup.style.display = 'none';
+          if (signin) {
+            signin.textContent = marketingHasCustomerJwt() ? 'Signed in' : 'Operator';
+            signin.removeAttribute('href');
+            signin.setAttribute('aria-current', 'true');
+          }
+          if (start) start.textContent = 'Start a session';
+        } else {
+          if (signup) signup.style.display = '';
+          if (signin) {
+            signin.textContent = 'Sign in';
+            if (!signin.getAttribute('href')) signin.setAttribute('href', '/marketing/login');
+            signin.removeAttribute('aria-current');
+          }
+        }
       }
       async function marketingFetch(url, opts = {}) {
         if (!marketingHasAuth()) {
@@ -104,8 +135,15 @@ const sharedMarketingClientAuth = `
           throw new Error('Sign in to Social Media OS to continue.');
         }
         const headers = marketingAuthHeaders(opts.headers || {});
-        const res = await fetch(url, { ...opts, headers });
+        let res = await fetch(url, { ...opts, headers });
+        if (res.status === 401 && headers.Authorization && marketingCommandKey()) {
+          marketingClearStaleJwt();
+          const retryHeaders = marketingAuthHeaders(opts.headers || {});
+          res = await fetch(url, { ...opts, headers: retryHeaders });
+        }
         if (res.status === 401) {
+          marketingClearStaleJwt();
+          marketingPaintAuthChrome();
           const next = encodeURIComponent(location.pathname + location.search);
           location.href = '/marketing/login?next=' + next;
           throw new Error('Session expired — sign in again.');
@@ -523,6 +561,15 @@ export function registerMarketingSessionUiRoutes(app, deps) {
               <p class="suggest-meta" id="recentPacksMeta">Loading recent sessions…</p>
               <div id="recentPacksList"></div>
             </div>
+
+            <div class="yt-panel" id="socialAccountsPanel" data-tip="Connect Instagram, LinkedIn, X, and Facebook the bank way — you sign in on their page; we never collect your password.">
+              <h2>Connected accounts</h2>
+              <p class="suggest-meta">Connect once. Approve a post. Publish without copy-paste. You sign in on the platform’s real login screen in a secure window — same idea as linking a bank.</p>
+              <p class="suggest-meta" id="socialAccountsMeta">Loading connections…</p>
+              <div class="mode-grid" id="socialAccountsGrid"></div>
+              <p class="suggest-meta" id="livePublishHint" style="display:none;"></p>
+            </div>
+
             <div id="ytBanner" class="message" style="display:none;"></div>
             <div id="apiBanner" class="message" style="display:none;"></div>
 
@@ -585,6 +632,81 @@ export function registerMarketingSessionUiRoutes(app, deps) {
             let selectedMode = (function(){ try { return globalThis['localStorage'].getItem('smos_film_mode') || ''; } catch(_) { return ''; } })();
             let allSuggestions = [];
             let filmModes = [];
+
+            async function loadSocialAccounts() {
+              const grid = globalThis['document'].getElementById('socialAccountsGrid');
+              const meta = globalThis['document'].getElementById('socialAccountsMeta');
+              const hint = globalThis['document'].getElementById('livePublishHint');
+              if (!grid || !meta) return;
+              try {
+                const res = await marketingFetch('/api/v1/marketing/social-connections?owner_id=' + encodeURIComponent(marketingOwnerId()));
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'Could not load connections');
+                const platforms = data.platforms || ['instagram', 'linkedin', 'x', 'facebook'];
+                const byPlatform = {};
+                (data.connections || []).forEach(function(c) { byPlatform[c.platform] = c; });
+                meta.textContent = data.livePublishEnabled
+                  ? 'Live publish is ON — approved posts can go out after you connect.'
+                  : 'Connections work now. Live publish stays off until LIVE_SOCIAL_PUBLISH_ENABLED is set (safety switch).';
+                if (hint) {
+                  hint.style.display = data.livePublishEnabled ? 'none' : 'block';
+                  hint.textContent = 'Safety: real posting is gated. Connect accounts anytime; flip the live switch when you are ready.';
+                }
+                grid.innerHTML = platforms.map(function(p) {
+                  const c = byPlatform[p];
+                  const status = c ? String(c.status || 'unknown') : 'not_connected';
+                  const connected = status === 'connected';
+                  const label = p.charAt(0).toUpperCase() + p.slice(1);
+                  return '<div class="mode-chip" style="cursor:default;display:flex;flex-direction:column;gap:8px;align-items:stretch;">'
+                    + '<strong>' + escapeHtml(label) + '</strong>'
+                    + '<span class="suggest-meta">' + escapeHtml(connected ? ('Connected' + (c.connected_at ? (' · ' + new Date(c.connected_at).toLocaleDateString()) : '')) : 'Not connected') + '</span>'
+                    + '<div class="actions-row" style="margin:0;">'
+                    + '<button type="button" class="btn" data-social-connect="' + escapeHtml(p) + '">' + (connected ? 'Reconnect' : 'Connect') + '</button>'
+                    + (connected ? '<button type="button" class="secondary" data-social-revoke="' + escapeHtml(p) + '">Disconnect</button>' : '')
+                    + '</div></div>';
+                }).join('');
+              } catch (err) {
+                meta.textContent = 'Could not load accounts: ' + err.message;
+              }
+            }
+
+            globalThis['document'].getElementById('socialAccountsGrid')?.addEventListener('click', async function(e) {
+              const connectBtn = e.target.closest('[data-social-connect]');
+              const revokeBtn = e.target.closest('[data-social-revoke]');
+              if (connectBtn) {
+                const platform = connectBtn.getAttribute('data-social-connect');
+                const owner = encodeURIComponent(marketingOwnerId());
+                const url = '/marketing/connect/' + platform + '?owner_id=' + owner;
+                const popup = globalThis.open(url, 'smos_connect_' + platform, 'width=480,height=780,noopener');
+                if (!popup) {
+                  globalThis.location.href = url;
+                  return;
+                }
+                const timer = globalThis.setInterval(async function() {
+                  if (popup.closed) {
+                    globalThis.clearInterval(timer);
+                    await loadSocialAccounts();
+                  }
+                }, 900);
+                return;
+              }
+              if (revokeBtn) {
+                const platform = revokeBtn.getAttribute('data-social-revoke');
+                try {
+                  const res = await marketingFetch('/api/v1/marketing/social-connections/' + platform + '?owner_id=' + encodeURIComponent(marketingOwnerId()), {
+                    method: 'DELETE',
+                    headers: marketingAuthHeaders()
+                  });
+                  const data = await res.json();
+                  if (!res.ok) throw new Error(data.error || 'Disconnect failed');
+                  await loadSocialAccounts();
+                } catch (err) {
+                  showMsg(banner, 'Disconnect error: ' + err.message, 'error');
+                }
+              }
+            });
+
+            loadSocialAccounts().catch(function() {});
 
             function encodePack(pack) {
               const json = JSON.stringify(pack);
@@ -774,7 +896,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                 return;
               }
               try {
-                const res = await fetch('/api/v1/marketing/youtube/status?owner_id=' + encodeURIComponent(marketingOwnerId()), { headers: marketingAuthHeaders() });
+                const res = await marketingFetch('/api/v1/marketing/youtube/status?owner_id=' + encodeURIComponent(marketingOwnerId()));
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error || 'status failed');
                 if (!data.oauthConfigured) {
@@ -827,7 +949,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
               try {
                 const q = '/api/v1/marketing/youtube/suggestions?owner_id=' + encodeURIComponent(marketingOwnerId())
                   + (deep ? '' : '&mode=fast');
-                const res = await fetch(q, { headers: marketingAuthHeaders() });
+                const res = await marketingFetch(q);
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error || 'suggestions failed');
                 await applySuggestionsPayload(data, meta, apiBanner);
@@ -910,21 +1032,8 @@ export function registerMarketingSessionUiRoutes(app, deps) {
             globalThis['document'].getElementById('ytRefreshBtn').addEventListener('click', function() { loadSuggestions({ deep: true }); });
             renderModes();
             (function authChrome() {
-              const signedIn = marketingHasAuth();
-              const signup = globalThis['document'].getElementById('signupBtn');
-              const signin = globalThis['document'].getElementById('signinBtn');
+              marketingPaintAuthChrome();
               const start = globalThis['document'].getElementById('startSessionBtn');
-              if (signedIn) {
-                if (signup) signup.style.display = 'none';
-                if (signin) {
-                  signin.textContent = 'Signed in';
-                  signin.removeAttribute('href');
-                  signin.setAttribute('aria-current', 'true');
-                }
-                if (start) start.textContent = 'Start a session';
-              } else if (start) {
-                start.textContent = 'Start a session';
-              }
               if (start) {
                 start.addEventListener('click', function(e) {
                   if (!marketingHasAuth()) {
@@ -943,9 +1052,8 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                     return;
                   }
                   try {
-                    const res = await fetch('/api/v1/socialmediaos/content-pack/checkout', {
+                    const res = await marketingFetch('/api/v1/socialmediaos/content-pack/checkout', {
                       method: 'POST',
-                      headers: marketingAuthHeaders(),
                       body: JSON.stringify({})
                     });
                     const data = await res.json().catch(function(){ return {}; });
@@ -972,7 +1080,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                 return;
               }
               try {
-                const res = await fetch('/api/v1/marketing/sessions?limit=8', { headers: marketingAuthHeaders() });
+                const res = await marketingFetch('/api/v1/marketing/sessions?limit=8');
                 const data = await res.json().catch(function(){ return {}; });
                 if (!res.ok) throw new Error(data.error || 'Failed to load sessions');
                 const sessions = data.sessions || [];
@@ -1000,6 +1108,142 @@ export function registerMarketingSessionUiRoutes(app, deps) {
             })();
         `;
     res.send(renderPage('SocialMediaOS', body, clientScript));
+  });
+
+  app.get('/marketing/connect/:platform', (req, res) => {
+    const platform = String(req.params.platform || '').toLowerCase();
+    const ownerQ = String(req.query.owner_id || '');
+    const label = platform ? (platform.charAt(0).toUpperCase() + platform.slice(1)) : 'Account';
+    const body = `
+            <h1>Connect ${escapeHtml(label)}</h1>
+            <p>Sign in on ${escapeHtml(label)}’s real login page below. We never ask for your password in a Social Media OS form — same idea as linking a bank.</p>
+            <p class="suggest-meta" id="connectStatus">Starting secure browser…</p>
+            <div style="margin:12px 0;border:1px solid var(--border);border-radius:14px;overflow:hidden;background:#0b1211;">
+              <img id="connectShot" alt="${escapeHtml(label)} login" style="display:block;width:100%;max-height:520px;object-fit:contain;cursor:crosshair;background:#000;" />
+            </div>
+            <label for="typeBox">Type into the page (for password fields after you click them)</label>
+            <div class="actions-row">
+              <input type="text" id="typeBox" placeholder="Type here, then Send" style="flex:1;min-width:180px;">
+              <button type="button" class="secondary" id="typeBtn">Send</button>
+              <button type="button" class="secondary" id="enterBtn">Enter</button>
+            </div>
+            <div class="actions-row">
+              <button type="button" class="btn" id="doneBtn">I’m signed in — Connect</button>
+              <button type="button" class="secondary" id="reloadBtn">Reload login</button>
+              <button type="button" class="secondary" id="cancelBtn">Cancel</button>
+            </div>
+            <div id="message" class="message" style="display:none;"></div>
+        `;
+    const clientScript = `
+            const platform = ${JSON.stringify(platform)};
+            const ownerFromQuery = ${JSON.stringify(ownerQ)};
+            const statusEl = globalThis['document'].getElementById('connectStatus');
+            const shot = globalThis['document'].getElementById('connectShot');
+            const messageDiv = globalThis['document'].getElementById('message');
+            const owner = function() { return ownerFromQuery || marketingOwnerId(); };
+
+            function paint(data) {
+              if (data && data.screenshotBase64) {
+                shot.src = 'data:image/jpeg;base64,' + data.screenshotBase64;
+              }
+              if (data && data.url) statusEl.textContent = 'On: ' + data.url;
+            }
+
+            async function start() {
+              statusEl.textContent = 'Opening ' + platform + ' login…';
+              const res = await marketingFetch('/api/v1/marketing/social-connections/connect', {
+                method: 'POST',
+                headers: marketingAuthHeaders(),
+                body: JSON.stringify({ platform: platform, owner_id: owner() })
+              });
+              const data = await res.json();
+              if (!res.ok) throw new Error(data.error || 'Could not start connect');
+              paint(data);
+              statusEl.textContent = 'Click the page to focus fields. Sign in. Then press Connect.';
+            }
+
+            async function refresh() {
+              const res = await marketingFetch('/api/v1/marketing/social-connections/connect/' + platform + '?owner_id=' + encodeURIComponent(owner()), {
+                headers: marketingAuthHeaders()
+              });
+              const data = await res.json();
+              if (res.ok) paint(data);
+            }
+
+            async function act(action, payload) {
+              const res = await marketingFetch('/api/v1/marketing/social-connections/connect/' + platform + '/action', {
+                method: 'POST',
+                headers: marketingAuthHeaders(),
+                body: JSON.stringify({ owner_id: owner(), action: action, payload: payload || {} })
+              });
+              const data = await res.json();
+              if (!res.ok) throw new Error(data.error || 'Action failed');
+              paint(data);
+            }
+
+            shot.addEventListener('click', async function(e) {
+              try {
+                const rect = shot.getBoundingClientRect();
+                const scaleX = (shot.naturalWidth || rect.width) / rect.width;
+                const scaleY = (shot.naturalHeight || rect.height) / rect.height;
+                const x = Math.round((e.clientX - rect.left) * scaleX);
+                const y = Math.round((e.clientY - rect.top) * scaleY);
+                await act('click', { x: x, y: y });
+              } catch (err) {
+                showMsg(messageDiv, err.message, 'error');
+              }
+            });
+
+            globalThis['document'].getElementById('typeBtn').addEventListener('click', async function() {
+              try {
+                const text = globalThis['document'].getElementById('typeBox').value || '';
+                await act('type', { text: text });
+                globalThis['document'].getElementById('typeBox').value = '';
+              } catch (err) { showMsg(messageDiv, err.message, 'error'); }
+            });
+            globalThis['document'].getElementById('enterBtn').addEventListener('click', async function() {
+              try { await act('press', { key: 'Enter' }); } catch (err) { showMsg(messageDiv, err.message, 'error'); }
+            });
+            globalThis['document'].getElementById('reloadBtn').addEventListener('click', async function() {
+              try { await act('navigate', {}); } catch (err) { showMsg(messageDiv, err.message, 'error'); }
+            });
+            globalThis['document'].getElementById('doneBtn').addEventListener('click', async function() {
+              this.disabled = true;
+              try {
+                const res = await marketingFetch('/api/v1/marketing/social-connections/connect/' + platform + '/complete', {
+                  method: 'POST',
+                  headers: marketingAuthHeaders(),
+                  body: JSON.stringify({ owner_id: owner() })
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || data.hint || 'Connect failed');
+                showMsg(messageDiv, labelConnected(), 'success');
+                statusEl.textContent = 'Connected. You can close this window.';
+                globalThis.setTimeout(function() { try { globalThis.close(); } catch (_) {} }, 900);
+              } catch (err) {
+                showMsg(messageDiv, err.message, 'error');
+                this.disabled = false;
+              }
+            });
+            function labelConnected() { return platform + ' connected.'; }
+            globalThis['document'].getElementById('cancelBtn').addEventListener('click', async function() {
+              try {
+                await marketingFetch('/api/v1/marketing/social-connections/connect/' + platform + '/cancel', {
+                  method: 'POST',
+                  headers: marketingAuthHeaders(),
+                  body: JSON.stringify({ owner_id: owner() })
+                });
+              } catch (_) {}
+              try { globalThis.close(); } catch (_) { globalThis.location.href = '/marketing'; }
+            });
+
+            start().catch(function(err) {
+              statusEl.textContent = 'Could not start: ' + err.message;
+              showMsg(messageDiv, err.message, 'error');
+            });
+            globalThis.setInterval(function() { refresh().catch(function() {}); }, 4000);
+        `;
+    res.send(renderPage('Connect ' + label, body, clientScript));
   });
 
   app.get('/marketing/signup', (req, res) => {
@@ -1783,9 +2027,10 @@ export function registerMarketingSessionUiRoutes(app, deps) {
     const sessionId = req.params.id;
     const body = `
             <h1>Review &amp; Approve</h1>
-            <p>Approve pieces you want in the export pack. Reject anything that needs another pass.</p>
+            <p>Approve pieces you want in the export pack. Reject anything that needs another pass. Connected accounts can publish an approved piece directly.</p>
             <div class="actions-row" style="margin-bottom:12px;">
               <button type="button" class="btn" id="approveAllBtn">Approve all drafts</button>
+              <a class="btn secondary" href="/marketing">Connect accounts</a>
               <a class="btn secondary" href="/marketing/session/${escapeHtml(sessionId)}/export">Proceed to Export</a>
             </div>
             <div id="contentList"><p>Loading content…</p></div>
@@ -1821,11 +2066,19 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                           '<div class="actions">' +
                           '<button data-action="approve" data-id="' + escapeHtml(piece.id) + '"' + (status === 'approved' ? ' disabled' : '') + '>Approve</button>' +
                           '<button class="secondary" data-action="reject" data-id="' + escapeHtml(piece.id) + '"' + (status === 'rejected' ? ' disabled' : '') + '>Reject</button>' +
+                          (status === 'approved'
+                            ? '<button class="btn" data-action="publish" data-id="' + escapeHtml(piece.id) + '">Publish to ' + escapeHtml(piece.platform || 'account') + '</button>'
+                            : '') +
                           '</div></div>';
                     }).join('');
                     contentListDiv.querySelectorAll('button[data-action]').forEach(function(btn) {
                       btn.addEventListener('click', function() {
-                        updateContentStatus(btn.getAttribute('data-id'), btn.getAttribute('data-action'));
+                        const action = btn.getAttribute('data-action');
+                        if (action === 'publish') {
+                          publishPiece(btn.getAttribute('data-id'), btn);
+                          return;
+                        }
+                        updateContentStatus(btn.getAttribute('data-id'), action);
                       });
                     });
                 } catch (error) {
@@ -1850,6 +2103,38 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                     console.error('Error updating content status:', error);
                     showMsg(messageDiv, 'Error: ' + error.message, 'error');
                 }
+            }
+
+            async function publishPiece(pieceId, btn) {
+              messageDiv.style.display = 'none';
+              if (btn) btn.disabled = true;
+              try {
+                const response = await marketingFetch('/api/v1/marketing/publish', {
+                  method: 'POST',
+                  headers: marketingAuthHeaders(),
+                  body: JSON.stringify({ piece_id: pieceId, owner_id: marketingOwnerId() })
+                });
+                const data = await response.json();
+                if (data.ok) {
+                  showMsg(messageDiv, 'Published to ' + (data.platform || 'account') + (data.path ? (' via ' + data.path) : '') + '.', 'success');
+                  return;
+                }
+                if (data.reason === 'not_connected') {
+                  showMsg(messageDiv, 'Connect that platform first on /marketing, then retry Publish.', 'error');
+                  return;
+                }
+                if (data.reason === 'live_publish_disabled') {
+                  showMsg(messageDiv, data.ready
+                    ? 'Ready: account connected. Live posting is still gated (LIVE_SOCIAL_PUBLISH_ENABLED).'
+                    : (data.hint || 'Live publish is disabled on the server.'), 'success');
+                  return;
+                }
+                throw new Error(data.error || data.reason || 'Publish failed');
+              } catch (error) {
+                showMsg(messageDiv, 'Publish error: ' + error.message, 'error');
+              } finally {
+                if (btn) btn.disabled = false;
+              }
             }
 
             const approveAllBtn = globalThis['document'].getElementById('approveAllBtn');

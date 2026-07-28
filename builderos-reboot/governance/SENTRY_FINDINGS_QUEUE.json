@@ -1,0 +1,64 @@
+{
+  "findings": [
+    {
+      "id": "empty_backlog:clientcare-billing-recovery",
+      "check": "product_backlog",
+      "severity": "P1",
+      "summary": "Product \"clientcare-billing-recovery\" has 100% done BUILD_QUEUE.json (10 steps) and zero documented backlog in its PRODUCT_HOME — the factory has nothing left to build here.",
+      "proposed_solution": "Chair should interview the founder for this product's next real priorities (D8) and have Architect write them into docs/products/clientcare-billing-recovery/PRODUCT_HOME.md under a Backlog/Remaining Work heading so the planner (services/build-queue-planner.js) can turn them into queue steps.",
+      "detected_at": "2026-07-19T18:27:58.137Z",
+      "chair_status": "escalate_to_founder",
+      "chair_reasoning": "product scope/priority is a business decision, not a technical one — routed to founder per D8, not auto-approved",
+      "queue_status": "open",
+      "first_detected_at": "2026-07-19T18:27:58.137Z"
+    },
+    {
+      "id": "empty_backlog:creative-engine",
+      "check": "product_backlog",
+      "severity": "P1",
+      "summary": "Product \"creative-engine\" has 100% done BUILD_QUEUE.json (10 steps) and zero documented backlog in its PRODUCT_HOME — the factory has nothing left to build here.",
+      "proposed_solution": "Chair should interview the founder for this product's next real priorities (D8) and have Architect write them into docs/products/creative-engine/PRODUCT_HOME.md under a Backlog/Remaining Work heading so the planner (services/build-queue-planner.js) can turn them into queue steps.",
+      "detected_at": "2026-07-19T18:27:58.138Z",
+      "chair_status": "escalate_to_founder",
+      "chair_reasoning": "product scope/priority is a business decision, not a technical one — routed to founder per D8, not auto-approved",
+      "queue_status": "open",
+      "first_detected_at": "2026-07-19T18:27:58.138Z"
+    },
+    {
+      "id": "empty_backlog:lifeos",
+      "check": "product_backlog",
+      "severity": "P1",
+      "summary": "Product \"lifeos\" has 100% done BUILD_QUEUE.json (175 steps) and zero documented backlog in its PRODUCT_HOME — the factory has nothing left to build here.",
+      "proposed_solution": "Chair should interview the founder for this product's next real priorities (D8) and have Architect write them into docs/products/lifeos/PRODUCT_HOME.md under a Backlog/Remaining Work heading so the planner (services/build-queue-planner.js) can turn them into queue steps.",
+      "detected_at": "2026-07-19T18:27:58.144Z",
+      "chair_status": "escalate_to_founder",
+      "chair_reasoning": "product scope/priority is a business decision, not a technical one — routed to founder per D8, not auto-approved",
+      "queue_status": "open",
+      "first_detected_at": "2026-07-19T18:27:58.144Z"
+    },
+    {
+      "id": "empty_backlog:personal-finance-os",
+      "check": "product_backlog",
+      "severity": "P1",
+      "summary": "Product \"personal-finance-os\" has 100% done BUILD_QUEUE.json (29 steps) and zero documented backlog in its PRODUCT_HOME — the factory has nothing left to build here.",
+      "proposed_solution": "Chair should interview the founder for this product's next real priorities (D8) and have Architect write them into docs/products/personal-finance-os/PRODUCT_HOME.md under a Backlog/Remaining Work heading so the planner (services/build-queue-planner.js) can turn them into queue steps.",
+      "detected_at": "2026-07-19T18:27:58.150Z",
+      "chair_status": "escalate_to_founder",
+      "chair_reasoning": "product scope/priority is a business decision, not a technical one — routed to founder per D8, not auto-approved",
+      "queue_status": "open",
+      "first_detected_at": "2026-07-19T18:27:58.150Z"
+    },
+    {
+      "id": "empty_backlog:tc-service",
+      "check": "product_backlog",
+      "severity": "P1",
+      "summary": "Product \"tc-service\" has 100% done BUILD_QUEUE.json (24 steps) and zero documented backlog in its PRODUCT_HOME — the factory has nothing left to build here.",
+      "proposed_solution": "Chair should interview the founder for this product's next real priorities (D8) and have Architect write them into docs/products/tc-service/PRODUCT_HOME.md under a Backlog/Remaining Work heading so the planner (services/build-queue-planner.js) can turn them into queue steps.",
+      "detected_at": "2026-07-19T18:27:58.153Z",
+      "chair_status": "escalate_to_founder",
+      "chair_reasoning": "product scope/priority is a business decision, not a technical one — routed to founder per D8, not auto-approved",
+      "queue_status": "open",
+      "first_detected_at": "2026-07-19T18:27:58.153Z"
+    }
+  ]
+}

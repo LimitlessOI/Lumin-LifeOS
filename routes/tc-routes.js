@@ -1958,10 +1958,12 @@ export function createTCRoutes(
       const tcBrowser = createTCBrowserAgent({ accountManager, logger });
 
       const dryRun = req.body?.dryRun !== false; // default true — safe
-      const result = await tcBrowser.loginToGLVAR(dryRun);
+      const mfaCode = req.body?.mfaCode || req.body?.mfa_code || null;
+      const autoMfa = req.body?.autoMfa !== false && req.body?.auto_mfa !== false;
+      const result = await tcBrowser.loginToGLVAR(dryRun, { mfaCode, autoMfa });
       await result.session?.close?.();
 
-      res.json({ ok: true, dryRun: result.dryRun || false, screenshots: result.screenshots });
+      res.json({ ok: true, dryRun: result.dryRun || false, screenshots: result.screenshots, auto_mfa: autoMfa });
     } catch (err) {
       logger.warn?.({ err: err.message }, '[TC-ROUTES] test-glvar-login error');
       res.status(500).json({ ok: false, error: err.message, needs_mfa: !!err.needs_mfa });
@@ -2602,6 +2604,86 @@ export function createTCRoutes(
           });
       });
     } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/email/send-as-founder — send from adam@hopkinsgroup.org via Gmail SMTP (TC IMAP app password)
+  router.post('/email/send-as-founder', requireKey, async (req, res) => {
+    try {
+      const to = String(req.body?.to || '').trim();
+      const subject = String(req.body?.subject || '').trim();
+      const text = String(req.body?.text || req.body?.body || '').trim();
+      const html = req.body?.html ? String(req.body.html) : null;
+      const dryRun = !!req.body?.dry_run || !!req.body?.dryRun;
+      if (!to || !subject || (!text && !html)) {
+        return res.status(400).json({ ok: false, error: 'to, subject, and text/html are required' });
+      }
+
+      const { resolveTCImapConfig } = await import('../services/tc-imap-config.js');
+      const accountManager = await getAccountManager();
+      const cfg = await resolveTCImapConfig({ accountManager, logger });
+      const from = cfg?.auth?.user || 'adam@hopkinsgroup.org';
+      if (!cfg?.auth?.pass) {
+        return res.status(503).json({ ok: false, error: 'TC IMAP / Gmail app password not configured on tip' });
+      }
+
+      if (dryRun) {
+        return res.json({ ok: true, dry_run: true, from, to, subject, preview: text.slice(0, 500) });
+      }
+
+      const dns = await import('node:dns');
+      const nodemailer = (await import('nodemailer')).default;
+      let ipv4 = 'smtp.gmail.com';
+      try {
+        const addrs = dns.promises ? await dns.promises.resolve4('smtp.gmail.com') : [];
+        if (addrs?.[0]) ipv4 = addrs[0];
+      } catch {
+        try {
+          ipv4 = dns.lookupSync('smtp.gmail.com', { family: 4 }).address;
+        } catch {
+          ipv4 = '142.250.80.109';
+        }
+      }
+
+      const ports = [465, 587];
+      let lastErr = null;
+      let info = null;
+      let usedPort = null;
+      for (const port of ports) {
+        try {
+          const transporter = nodemailer.createTransport({
+            host: ipv4,
+            port,
+            secure: port === 465,
+            family: 4,
+            connectionTimeout: 12000,
+            greetingTimeout: 12000,
+            socketTimeout: 25000,
+            requireTLS: port === 587,
+            tls: { servername: 'smtp.gmail.com', minVersion: 'TLSv1.2' },
+            auth: { user: from, pass: cfg.auth.pass },
+          });
+          info = await transporter.sendMail({
+            from: `Adam Hopkins <${from}>`,
+            to,
+            subject,
+            text: text || undefined,
+            html: html || undefined,
+          });
+          usedPort = port;
+          break;
+        } catch (err) {
+          lastErr = err;
+          logger.warn?.({ err: err.message, port }, '[TC-ROUTES] send-as-founder SMTP attempt failed');
+        }
+      }
+      if (!info) {
+        throw lastErr || new Error('SMTP send failed on 465 and 587');
+      }
+      res.json({ ok: true, from, to, subject, messageId: info.messageId || null, smtp_port: usedPort });
+    } catch (err) {
+      logger.warn?.({ err: err.message }, '[TC-ROUTES] email/send-as-founder error');
       res.status(500).json({ ok: false, error: err.message });
     }
   });

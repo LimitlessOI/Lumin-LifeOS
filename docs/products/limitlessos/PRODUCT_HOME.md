@@ -6,7 +6,7 @@
 **Parent platform:** Lumin / LifeOS ecosystem  
 **Constitutional law:** `docs/constitution/NORTH_STAR_SSOT.md`  
 **Machine manifest:** `docs/products/limitlessos/FILE_MANIFEST.json`  
-**Last Updated:** 2026-07-11 — Go Vegas manual `POST /api/v1/go-vegas/prospects/seed` (no Places key required to enqueue leads).
+**Last Updated:** 2026-07-23 — Go Vegas flagship site `/go-vegas` + recognition flywheel playbook (Best Of → join network).
 
 | Field | Value |
 |-------|-------|
@@ -197,6 +197,10 @@ Together: AI handles repetitive, disconnected, administrative work — humans fo
 
 | Date | What | Why |
 |------|------|-----|
+| 2026-07-23 | **Automate daily pack (approve→paste).** `services/go-vegas-daily-pack.js` + `npm run go-vegas:daily-pack` writes 31+ staggered posts (Adam / SiteBuilder / Taloa Social) to `data/go-vegas-daily-packs/`. FB send stays human; emails/spec builds stay system. | Adam: no time for manual — automate prep. |
+| 2026-07-23 | **FB growth deep dive + comment-weighted contest.** `docs/products/limitlessos/GO_VEGAS_FB_GROWTH_PLAYBOOK.md` — Meta ≥20 posts/day feed-ranking eligibility (Transparency), 31+ chip, MSI/comments≫likes, first-hour replies, native>links, quality score, badges, 14-day idle revival. Contest score `(comments×5)+(reactions×1)+(shares×3)` via `scoreBestPostContest`. | Adam: grow idle 16k group; winners by viral (comment-heavy) attention. |
+| 2026-07-23 | **31+ daily activity + rec-ask soft open.** Playbook floor `groupOwnedPostsFloor: 31` (Meta “31+” chip) + `memberPostsTarget: 20`. `RECOMMENDATION_ASK_BANK` (plumber/HVAC/etc.) → `buildRecommendationSoftOpenEmail` (warm “X from Go Vegas thought we could help” + free spec + score vs competitors + upgrade bullets + preview link). | Adam: group must show 31+ to stay recommended; rec threads create soft SiteBuilder opens. |
+| 2026-07-23 | **Go Vegas network site + recognition flywheel.** Public flagship `GET /go-vegas` (`public/overlay/go-vegas.html`) — Best Of, join CTA, powered by SiteBuilder by Taloa. Playbook `config/go-vegas-network-playbook.js`: Adam ~12/day discussion; product accounts 5–20 with own personality; daily recognition questions → outreach “Superior Place” + Best Of; rotating sub-promo threads; contest/surprise free-site rewards. | Adam: channel businesses into free network via recognition + hella-good site as SiteBuilder proof. |
 | 2026-07-11 | **Go Vegas manual seed** — `POST /api/v1/go-vegas/prospects/seed` + export `upsertProspect`. Lets conductor enqueue LV leads without `GOOGLE_PLACES_KEY`. Invites still need Postmark approval for external domains. | Adam: path to money — Places key missing; seed unblocks pipeline fill. |
 | 2026-07-09 | **gv-status-route DONE** — `GET /api/v1/go-vegas/scheduler` is live via founder-runtime `createGoVegasOutreachRoutes` (not auto-register). Cleared false `blocked` so never-stop stops thrashing queue-status commits that race founder builds. | A→Z trust — commit races were failing drawer builds with "Reference cannot be updated". |
 | 2026-07-09 | **Go Vegas verify_script** — `scripts/verify-go-vegas-scheduler.mjs` (exports + useful-work-guard contract + boot wire + live `/scheduler`). | Close false-done on revenue slice; never-stop must re-gate after build. |

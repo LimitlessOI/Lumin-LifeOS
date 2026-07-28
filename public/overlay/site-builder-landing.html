@@ -477,6 +477,32 @@
     }
     .preview-actions a { display: none; }
     .preview-actions.visible a { display: inline-flex; }
+    .comp-code-row {
+      display: grid;
+      gap: 0.6rem;
+      margin-top: 0.75rem;
+      padding: 0.9rem 1rem;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.03);
+    }
+    .comp-code-row[hidden] { display: none; }
+    .comp-code-row label {
+      display: grid;
+      gap: 0.35rem;
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
+    .comp-code-row input {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #0f1613;
+      color: var(--ink);
+      padding: 0.85rem 1rem;
+      font-size: 1rem;
+      font-family: var(--sans);
+      max-width: 22rem;
+    }
     .audit-result { margin-top: 1rem; padding: 1.2rem; border: 1px solid var(--line); border-radius: 14px; background: rgba(255,255,255,0.04); }
     .score-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.8rem; }
     .score-ring { width: 72px; height: 72px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: 1.5rem; background: conic-gradient(var(--accent) calc(var(--score, 0) * 1%), rgba(255,255,255,0.08) 0); color: #fff; }
@@ -569,19 +595,19 @@
       <div class="browser-mockup">
           <div class="browser-header">
             <div class="browser-dots"><span></span><span></span><span></span></div>
-            <div class="browser-title">Live demo · a real local business</div>
-            <a class="browser-open" href="/previews/prev_1783784688744_nw7c/index.html" target="_blank" rel="noopener">Open full</a>
+            <div class="browser-title">Live demo · Well Rounded Momma Collective</div>
+            <a class="browser-open" href="/previews/wellrounded-momma/index.html" target="_blank" rel="noopener">Open full</a>
           </div>
           <div class="demo">
             <iframe
-              title="Site Builder preview demo"
+              title="Well Rounded Momma Site Builder demo"
               loading="lazy"
-              src="/previews/prev_1783784688744_nw7c/index.html"
+              src="/previews/wellrounded-momma/index.html"
             ></iframe>
           </div>
           <div class="demo-footer">
-            <span>This is a real preview built from a public URL.</span>
-            <a class="btn btn-primary" href="/api/v1/sites/publish/checkout?clientId=prev_1783784688744_nw7c" target="_blank" rel="noopener">Buy this demo for $45</a>
+            <span>Real midwifery practice preview — feminine, photo-forward, consult form ready.</span>
+            <a class="btn btn-primary" href="#request">Get my free preview</a>
           </div>
         </div>
     </section>
@@ -747,7 +773,11 @@
         </details>
         <details>
           <summary>What about templates?</summary>
-          <p>You get 5 free designs to preview and switch. Ten more templates are $1 each when you publish. A fully custom one-of-one template is $35 — co-designed with you, never duplicated.</p>
+          <p>You get 10 free niche templates to preview and switch — HVAC dark, plumber before/after, dental clinical, law authority, menu-board, and more. Forty more from the 50-template catalog are $1 each when you publish. A fully custom one-of-one is $35 — co-designed with you, never duplicated.</p>
+        </details>
+        <details>
+          <summary>I have a discount code — where do I enter it?</summary>
+          <p>Open your preview, tap Publish, and enter the code on the checkout page before you pay — same place most sites put promo codes.</p>
         </details>
       </div>
     </section>
@@ -776,7 +806,7 @@
           <a class="btn btn-secondary" id="preview-link" href="#" target="_blank" rel="noopener">Open preview</a>
           <a class="btn btn-primary" id="publish-link" href="#" target="_blank" rel="noopener">Publish for $45</a>
         </div>
-        <div class="small-note">Prefer to talk? Call or text Adam at (702) 860-2007 · or email adam@hopkinsgroup.org</div>
+        <div class="small-note">Prefer to talk? <a href="tel:+17028602007">Call or text Adam at (702) 860-2007</a> · or <a href="mailto:adam@hopkinsgroup.org">email adam@hopkinsgroup.org</a></div>
       </form>
     </section>
 
@@ -804,7 +834,7 @@
 
     <footer class="footer">
       <div>Taloa · Site Builder</div>
-      <div>Questions? <a href="mailto:adam@hopkinsgroup.org">adam@hopkinsgroup.org</a> · (702) 860-2007</div>
+      <div>Questions? <a href="mailto:adam@hopkinsgroup.org">adam@hopkinsgroup.org</a> · <a href="tel:+17028602007">(702) 860-2007</a></div>
     </footer>
   </div>
 
@@ -822,6 +852,14 @@
       const publishLink = document.getElementById('publish-link');
 
       let pollTimer = null;
+
+      function showPreviewReady(clientId, previewUrl) {
+        if (previewUrl) previewLink.href = previewUrl;
+        if (clientId) {
+          publishLink.href = `/api/v1/sites/publish/checkout?clientId=${encodeURIComponent(clientId)}`;
+        }
+        previewActions.classList.add('visible');
+      }
 
       function normalizeUrl(raw) {
         if (!raw) return '';
@@ -848,9 +886,7 @@
             if (data.ok && data.ready) {
               stopPoll();
               status.textContent = 'Preview ready. Check your email or open it below.';
-              previewLink.href = previewUrl;
-              publishLink.href = `/api/v1/sites/publish/checkout?clientId=${encodeURIComponent(clientId)}`;
-              previewActions.classList.add('visible');
+              showPreviewReady(clientId, previewUrl);
               submit.disabled = false;
               submit.textContent = 'Build another preview';
               return;
@@ -923,9 +959,7 @@
               pollStatus(clientId, statusUrl, previewUrl);
             } else {
               status.textContent = data.message || 'Preview started. Check your email shortly.';
-              previewLink.href = previewUrl;
-              publishLink.href = `/api/v1/sites/publish/checkout?clientId=${encodeURIComponent(clientId)}`;
-              previewActions.classList.add('visible');
+              showPreviewReady(clientId, previewUrl);
               submit.disabled = false;
               submit.textContent = 'Build another preview';
               form.reset();
@@ -938,6 +972,7 @@
           }
         });
       }
+
     })();
 
     (function () {
@@ -985,6 +1020,17 @@
             const data = await resp.json().catch(() => ({}));
             if (!resp.ok || data.ok === false) {
               throw new Error(data.error || ('Request failed (' + resp.status + ')'));
+            }
+            if (data.analyzed === false || data.scanFailed) {
+              auditScore.textContent = '—';
+              auditScore.style.setProperty('--score', 0);
+              auditGrade.textContent = "Couldn't scan";
+              auditRecommendation.textContent = data.recommendation || data.message || "We couldn't analyze this URL — it may be down, blocking crawlers, or showing an error page.";
+              auditPains.innerHTML = (data.painPoints || []).slice(0, 5).map(p => `<li>${p}</li>`).join('');
+              auditCta.href = `#request?url=${encodeURIComponent(url)}`;
+              auditResult.style.display = 'block';
+              auditStatus.textContent = "Couldn't scan — try your URL in the form below.";
+              return;
             }
             auditScore.textContent = data.opportunityScore ?? data.score ?? '—';
             auditScore.style.setProperty('--score', data.opportunityScore ?? data.score ?? 0);

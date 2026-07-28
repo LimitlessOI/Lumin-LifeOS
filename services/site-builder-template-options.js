@@ -36,6 +36,13 @@ const templates = [
     description: 'A fun and playful template with vibrant colors.',
     thumbnailUrl: 'https://example.com/thumbnails/playful-vibes.png',
     tags: ['playful', 'fun', 'vibrant']
+  },
+  {
+    id: 'wellrounded-feminine',
+    name: 'Well Rounded Feminine',
+    description: 'Soft blush/coral midwifery look — photo pillars, quieter hero, consult-first (proven on Well Rounded Momma).',
+    thumbnailUrl: 'https://static.wixstatic.com/media/fb1e61_9039cee3c9dd414bbba9b84b4f8bd692~mv2.jpg',
+    tags: ['midwifery', 'feminine', 'maternity', 'wellness', 'photo-forward']
   }
 ];
 

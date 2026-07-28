@@ -33,6 +33,7 @@
 import logger from './logger.js';
 import { scoreProspectUrl } from './site-builder-opportunity-scorer.js';
 import { createProspectClientId } from './site-builder-prospect-runner.js';
+import { resolveDurablePublicBase } from './site-builder-public-base.js';
 
 // Entry-product pricing (foot-in-door → care plan + add-ons)
 import { SITE_BUILDER_PRICING, getBetaPublishOfferSummary, getBetaDealReasonWhy } from '../config/site-builder-pricing.js';
@@ -72,7 +73,7 @@ export default class ProspectPipeline {
   }
 
   resolvePreviewUrl(clientId) {
-    const base = String(this.baseUrl || process.env.SITE_BASE_URL || '').replace(/\/+$/, '');
+    const base = resolveDurablePublicBase([this.baseUrl, process.env.SITE_BASE_URL]);
     return base ? `${base}/previews/${clientId}` : `/previews/${clientId}`;
   }
 
@@ -162,6 +163,15 @@ export default class ProspectPipeline {
     let emailSent = false;
     let emailSendError = null;
     try {
+      if (typeof this.sendEmail === 'function') {
+        this.sendEmail.meta = {
+          clientId,
+          businessName: biz,
+          businessUrl,
+          contactName: name,
+          previewUrl: url,
+        };
+      }
       const delivery = await Promise.race([
         this.sendEmail(contactEmail, emailContent.subject, emailContent.html),
         new Promise((_, reject) => setTimeout(() => reject(new Error('sendEmail timed out after 25000ms')), 25_000)),
@@ -170,6 +180,8 @@ export default class ProspectPipeline {
       if (!emailSent) emailSendError = delivery?.error || 'unknown';
     } catch (err) {
       emailSendError = err.message;
+    } finally {
+      if (this.sendEmail) this.sendEmail.meta = null;
     }
 
     if (this.pool && clientId) {
@@ -403,14 +415,21 @@ export default class ProspectPipeline {
       };
     }
 
-    // If the caller gave a businessName but no structured businessInfo, use it
-    // as the profile. This prevents parked/placeholder sites (e.g. HugeDomains)
-    // from poisoning the generated site with the parking page's brand.
-    if (!options.businessInfo && options.businessName) {
-      options.businessInfo = {
-        businessName: options.businessName,
-        industry: options.vertical || 'wellness',
-      };
+    // Never skip scrape when only a businessName is provided. Passing a thin
+    // businessInfo short-circuits scrapeBusinessInfo and produces trash shells
+    // (generic H1, no phone, Jane App CTAs, empty service blurbs). Name is
+    // applied as a preferred label AFTER scrape inside scrapeBusinessInfo.
+    if (options.businessInfo) {
+      const bi = options.businessInfo;
+      const thinStub = !bi.sourceUrl && !bi.bodyText && !bi.phone && !bi.bookingUrl
+        && !(Array.isArray(bi.services) && bi.services.length)
+        && !bi.about && !bi.uniqueValue;
+      if (thinStub) {
+        options.preferredBusinessName = bi.businessName || options.businessName || null;
+        options.businessInfo = null;
+      }
+    } else if (options.businessName) {
+      options.preferredBusinessName = options.businessName;
     }
 
     await this.touchProspectJob(clientIdEarly, 'build');
@@ -424,6 +443,8 @@ export default class ProspectPipeline {
       // durably stored in metadata (previewHtml + variantHtmls) for DB fallback.
       buildResult = await this.siteBuilder.buildVariants(businessUrl, {
         businessInfo: options.businessInfo || null,
+        preferredBusinessName: options.preferredBusinessName || options.businessName || null,
+        businessName: options.businessName || null,
         clientId: options.clientId || null,
         enrich: options.enrich,
         skipRepair: options.skipRepair,
@@ -443,9 +464,12 @@ export default class ProspectPipeline {
 
     const previewUrl = buildResult.previewUrl;
     const name = contactName || buildResult.businessName || businessName || 'there';
-    const biz = buildResult.businessName || businessName || 'your business';
+    const biz = businessName || buildResult.businessName || 'your business';
     const qualityReport = buildResult.qualityReport || buildResult.metadata?.qualityReport || null;
-    const qaHold = qualityReport ? qualityReport.readyToSend === false : false;
+    const scrapePoisoned = Boolean(
+      buildResult.metadata?.businessInfo?.scrapePoisoned || qualityReport?.scrapePoisoned
+    );
+    const qaHold = scrapePoisoned || (qualityReport ? qualityReport.readyToSend === false : false);
     const clientId = options.clientId || buildResult.clientId;
 
     // Persist preview BEFORE email so SMTP hangs / resume cannot lose the build.
@@ -502,17 +526,27 @@ export default class ProspectPipeline {
       await this.touchProspectJob(clientId, skipEmail ? 'skip_email' : 'send_email');
       if (contactEmail && !skipEmail && !qaHold) {
         try {
+          if (typeof this.sendEmail === 'function') {
+            this.sendEmail.meta = {
+              clientId,
+              businessName: biz,
+              businessUrl,
+              contactName: name,
+              previewUrl,
+            };
+          }
           const delivery = await Promise.race([
             this.sendEmail(contactEmail, emailContent.subject, emailContent.html),
             new Promise((_, reject) => setTimeout(() => reject(new Error('sendEmail timed out after 25000ms')), 25_000)),
           ]);
           emailSent = delivery?.success !== false;
           if (emailSent) {
-            logger.info('[PROSPECT] Outreach email sent', { contactEmail, previewUrl });
+            logger.info('[PROSPECT] Outreach email sent', { contactEmail, previewUrl, provider: delivery?.provider });
           } else {
             emailSendError = delivery?.error || emailSendError || 'unknown';
             logger.warn('[PROSPECT] Outreach email not sent', { contactEmail, previewUrl, error: emailSendError });
           }
+          if (this.sendEmail) this.sendEmail.meta = null;
         } catch (err) {
           emailSendError = err.message;
           logger.warn('[PROSPECT] Email send failed', { error: err.message });
@@ -526,6 +560,7 @@ export default class ProspectPipeline {
         businessUrl,
         previewUrl,
         qualityScore: qualityReport?.score,
+        scrapePoisoned,
         issues: qualityReport?.summaryIssues,
       });
     }
@@ -619,7 +654,21 @@ export default class ProspectPipeline {
           html: this.fallbackEmailHtml(row.contact_name, row.business_name, row.preview_url, []),
         };
 
-    const delivery = await this.sendEmail(row.contact_email, emailContent.subject, emailContent.html);
+    if (typeof this.sendEmail === 'function') {
+      this.sendEmail.meta = {
+        clientId,
+        businessName: row.business_name,
+        businessUrl: row.business_url,
+        contactName: row.contact_name,
+        previewUrl: row.preview_url,
+      };
+    }
+    let delivery;
+    try {
+      delivery = await this.sendEmail(row.contact_email, emailContent.subject, emailContent.html);
+    } finally {
+      if (this.sendEmail) this.sendEmail.meta = null;
+    }
     const emailSent = delivery?.success !== false;
 
     await this.recordProspect({
@@ -765,8 +814,9 @@ Return ONLY valid JSON:
     const biz = businessName || 'your business';
     const offer = getBetaPublishOfferSummary();
     const months = SITE_BUILDER_PRICING.carePlan.includedMonthsOnPublish || 2;
-    const referralLink = referralCode && this.baseUrl
-      ? `${String(this.baseUrl).replace(/\/$/, '')}/overlay/site-builder-landing.html?ref=${encodeURIComponent(referralCode)}`
+    const publicBase = resolveDurablePublicBase([this.baseUrl, process.env.SITE_BASE_URL]);
+    const referralLink = referralCode && publicBase
+      ? `${publicBase}/overlay/site-builder-landing.html?ref=${encodeURIComponent(referralCode)}`
       : null;
     const referralBlock = referralLink
       ? `<p>Know another business owner who could use this? Forward them your referral link: <a href="${referralLink}" style="color:#0F766E;">${referralLink}</a>. If they publish, you get one free month of care.</p>`

@@ -1422,13 +1422,29 @@ export function createLifeOSCouncilBuilderRoutes({
     if (typeof commitManyToGitHub === 'function') {
       try {
         const commitResult = await commitManyToGitHub(fileEntries, commitMessage, branch || undefined);
+        const requested = fileEntries.map((entry) => entry.path);
+        // changed_files is the git-verified truth of what the commit changed (null =
+        // detection unavailable, treat as unknown, never as "all changed"). unchanged_files
+        // are requested targets that did NOT change — the honesty signal for the caller.
+        const changed = Array.isArray(commitResult?.changed_files) ? commitResult.changed_files : null;
+        const norm = (p) => String(p || '').replace(/^\.\//, '').replace(/\\/g, '/');
+        const changedNorm = changed ? changed.map(norm) : null;
+        const unchanged = changedNorm
+          ? requested.filter((p) => !changedNorm.includes(norm(p)))
+          : null;
+        const noOp = commitResult?.no_op === true;
         return {
           ok: true,
+          committed: commitResult?.committed !== false,
+          no_op: noOp,
           sha: commitResult?.sha || null,
-          commit_sha: commitResult?.sha || null,
-          committed_files: fileEntries.map((entry) => entry.path),
+          commit_sha: noOp ? null : (commitResult?.commit_sha || commitResult?.sha || null),
+          committed_files: requested,
+          changed_files: noOp ? [] : changed,
+          unchanged_files: noOp ? requested : unchanged,
           commit_mode: 'github',
           local_only: false,
+          reason: commitResult?.reason || null,
         };
       } catch (err) {
         if (IS_RAILWAY_RUNTIME || !isMissingGitHubCommitCapability(err)) {
@@ -2383,69 +2399,82 @@ export function createLifeOSCouncilBuilderRoutes({
     for (const file of files) {
       const target_file = String(file?.target_file || file?.path || '').trim();
       let output = file?.output ?? file?.content ?? '';
+      const encoding = String(file?.encoding || 'utf-8').toLowerCase();
+      const isBinary =
+        encoding === 'base64' ||
+        /\.(png|jpe?g|gif|webp|ico|woff2?|ttf|eot|pdf|mp4|mov|zip|wasm)$/i.test(target_file);
       if (!target_file || !output) {
         return res.status(400).json({ ok: false, error: 'Each file requires target_file and output' });
       }
 
-      if (/\.html$/i.test(target_file)) {
-        const extracted = extractHtmlFromOutput(output);
-        if (extracted !== output) output = extracted;
-      } else if (/\.(js|mjs|cjs)$/i.test(target_file)) {
-        output = fixAsteriskShorthandParams(extractJavaScriptFromOutput(output));
-      } else if (/\.(css|scss|sass|less)$/i.test(target_file)) {
-        output = extractCssFromOutput(output);
-      }
+      // Binary payloads are base64 — never run text extractors / synopsis validation.
+      if (!isBinary) {
+        if (/\.html$/i.test(target_file)) {
+          const extracted = extractHtmlFromOutput(output);
+          if (extracted !== output) output = extracted;
+        } else if (/\.(js|mjs|cjs)$/i.test(target_file)) {
+          output = fixAsteriskShorthandParams(extractJavaScriptFromOutput(output));
+        } else if (/\.(css|scss|sass|less)$/i.test(target_file)) {
+          output = extractCssFromOutput(output);
+        }
 
-      const validationError = validateGeneratedOutputForTarget(target_file, output);
-      if (validationError) {
-        return res.status(422).json({
-          ok: false,
-          error: validationError,
-          committed: false,
-          target_file,
-          failed_file: target_file,
-        });
-      }
-
-      // Truncation gates — the batch path must be as strict as single-file
-      // /execute: run the real syntax/completeness check per target type so a
-      // truncated JS or SQL file can never slip through a batch commit (in
-      // local-mirror mode nothing downstream re-checks, and commitManyToGitHub
-      // only node --checks JS, never SQL).
-      if (/\.(js|mjs|cjs)$/i.test(target_file)) {
-        const chk = await verifyGeneratedJavaScriptWithNodeCheck(output, target_file);
-        if (!chk.ok) {
+        const validationError = validateGeneratedOutputForTarget(target_file, output);
+        if (validationError) {
           return res.status(422).json({
             ok: false,
+            error: validationError,
             committed: false,
-            error: `Pre-commit syntax check failed: ${chk.error}`,
             target_file,
             failed_file: target_file,
           });
         }
-      } else if (/\.sql$/i.test(target_file)) {
-        const sqlCheck = validateSqlMigrationContent(output);
-        if (!sqlCheck.ok) {
-          return res.status(422).json({
-            ok: false,
-            committed: false,
-            error: `SQL migration validation failed: ${sqlCheck.error}`,
-            target_file,
-            failed_file: target_file,
-          });
+
+        // Truncation gates — the batch path must be as strict as single-file
+        // /execute: run the real syntax/completeness check per target type so a
+        // truncated JS or SQL file can never slip through a batch commit (in
+        // local-mirror mode nothing downstream re-checks, and commitManyToGitHub
+        // only node --checks JS, never SQL).
+        if (/\.(js|mjs|cjs)$/i.test(target_file)) {
+          const chk = await verifyGeneratedJavaScriptWithNodeCheck(output, target_file);
+          if (!chk.ok) {
+            return res.status(422).json({
+              ok: false,
+              committed: false,
+              error: `Pre-commit syntax check failed: ${chk.error}`,
+              target_file,
+              failed_file: target_file,
+            });
+          }
+        } else if (/\.sql$/i.test(target_file)) {
+          const sqlCheck = validateSqlMigrationContent(output);
+          if (!sqlCheck.ok) {
+            return res.status(422).json({
+              ok: false,
+              committed: false,
+              error: `SQL migration validation failed: ${sqlCheck.error}`,
+              target_file,
+              failed_file: target_file,
+            });
+          }
         }
       }
-      cleaned.push({ target_file, output });
+      cleaned.push({ target_file, output, encoding: isBinary ? 'base64' : 'utf-8' });
     }
 
     const msg = commit_message || `[system-build] batch ${cleaned.length} files`;
     try {
       const commitResult = await commitOrMirrorFiles(
-        cleaned.map((f) => ({ path: f.target_file, content: f.output })),
+        cleaned.map((f) => ({ path: f.target_file, content: f.output, encoding: f.encoding })),
         msg,
         branch,
       );
-      const commitSha = commitResult?.sha || null;
+      const noOp = commitResult?.no_op === true || commitResult?.committed === false;
+      // commit_sha = the NEW commit THIS call created (null on a no-op — honest).
+      // sha (state) = where the requested content currently lives on main (HEAD) —
+      // surfaced even on a no-op so an idempotent caller can cite proof the change
+      // is present without implying a new commit was made this call.
+      const newCommitSha = noOp ? null : (commitResult?.commit_sha || commitResult?.sha || null);
+      const stateSha = commitResult?.sha || null;
       const committed_files = cleaned.map((f) => f.target_file);
       for (const file of cleaned) {
         await insertBuilderAudit({
@@ -2455,23 +2484,32 @@ export function createLifeOSCouncilBuilderRoutes({
           rawOutput: file.output,
           cache_hit: false,
           placement: { target_file: file.target_file },
-          status: 'committed',
-          committed: true,
+          status: noOp ? 'no_op' : 'committed',
+          committed: !noOp,
           routingKey: 'council.builder.execute_batch',
           mode: 'execute',
         });
       }
       return res.json({
         ok: true,
-        committed: true,
+        // Honest: a no-op batch (every requested file identical to HEAD) lands NO
+        // commit, so it must not report committed:true. changed_files:[] +
+        // unchanged_files:all + no_op:true tell the caller nothing shipped.
+        committed: !noOp,
+        no_op: noOp,
         batch: true,
         target_file: committed_files.join(', '),
         committed_files,
+        // Honesty signal: git-verified list of files this commit ACTUALLY changed,
+        // and any requested targets that did NOT change (a no-op false claim risk).
+        changed_files: commitResult?.changed_files ?? null,
+        unchanged_files: commitResult?.unchanged_files ?? null,
         commit_message: msg,
-        sha: commitSha,
-        commit_sha: commitSha,
+        sha: stateSha,
+        commit_sha: newCommitSha,
         commit_mode: commitResult?.commit_mode || 'github',
         local_only: commitResult?.local_only === true,
+        reason: commitResult?.reason || (noOp ? 'NO_OP_NOTHING_TO_COMMIT' : null),
         warning: commitResult?.warning || null,
       });
     } catch (err) {

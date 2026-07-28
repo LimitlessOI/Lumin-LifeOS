@@ -1,0 +1,98 @@
+{
+  "schema": "pre_handoff_intent_gate_v2",
+  "mission_id": "PRODUCT-LIFEOS-CREDIT-V1-0001",
+  "stage": "development",
+  "pass": false,
+  "route_to": "CHAIR",
+  "pushed_by": "ARC",
+  "defect_owner_seat": "Chair",
+  "escalate_to_founder": true,
+  "founder_frame": "Chair failed to synthesize your intent from our conversation — not that you failed to provide it.",
+  "audience": "CHAIR",
+  "violations": [
+    "development:FOUNDER_PACKET missing acceptance command",
+    "development:intent_not_clear failure_metric:MISSING,scope_boundary:MISSING,unacceptable_result:MISSING,priority_fit:MISSING",
+    "development:INTENT_BASELINE not HANDOFF_READY (missing)",
+    "department:SNT simulation failed (BLOCKED_INTENT_AMBIGUITY)",
+    "department:CFO simulation failed (priority_unconfirmed)"
+  ],
+  "checks": {
+    "founder_packet": {
+      "pass": false,
+      "sections": {
+        "has_packet": true,
+        "has_problem": true,
+        "has_outcome": true,
+        "has_success_test": true,
+        "has_acceptance": false,
+        "bytes": 4150
+      }
+    },
+    "intent_coverage": {
+      "pass": false,
+      "gaps": [
+        "failure_metric:MISSING",
+        "scope_boundary:MISSING",
+        "unacceptable_result:MISSING",
+        "priority_fit:MISSING"
+      ]
+    },
+    "intent_baseline": {
+      "pass": false,
+      "status": null
+    },
+    "departments": {
+      "SNT": {
+        "pass": false,
+        "stub": false,
+        "tier": "COUNCIL_SIM",
+        "bootstrapBlocked": false,
+        "verdict": "BLOCKED_INTENT_AMBIGUITY"
+      },
+      "CHAIR": {
+        "pass": true,
+        "stub": false,
+        "tier": "COUNCIL_SIM",
+        "bootstrapBlocked": false,
+        "verdict": "forecast_acceptable"
+      },
+      "CFO": {
+        "pass": false,
+        "stub": false,
+        "tier": "COUNCIL_SIM",
+        "bootstrapBlocked": false,
+        "verdict": "priority_unconfirmed"
+      },
+      "WISDOM": {
+        "pass": true,
+        "stub": false,
+        "tier": "COUNCIL_SIM",
+        "bootstrapBlocked": false,
+        "verdict": "proceed"
+      }
+    }
+  },
+  "upstream": {
+    "schema": "upstream_route_v1",
+    "mission_id": "PRODUCT-LIFEOS-CREDIT-V1-0001",
+    "pushed_by": "ARC",
+    "defect_owner_seat": "Chair",
+    "route_to": "CHAIR",
+    "escalate_to_founder": true,
+    "founder_frame": "Chair failed to synthesize your intent from our conversation — not that you failed to provide it.",
+    "violations": [
+      "development:FOUNDER_PACKET missing acceptance command",
+      "development:intent_not_clear failure_metric:MISSING,scope_boundary:MISSING,unacceptable_result:MISSING,priority_fit:MISSING",
+      "development:INTENT_BASELINE not HANDOFF_READY (missing)",
+      "department:SNT simulation failed (BLOCKED_INTENT_AMBIGUITY)",
+      "department:CFO simulation failed (priority_unconfirmed)"
+    ],
+    "flow": [
+      "ARC → Chair (handoff incomplete)",
+      "Chair → Adam (Chair acknowledges synthesis failure)",
+      "resolve → back down chain"
+    ],
+    "lesson": "Incomplete handoff clarity = Chair failure. Architect pushes upstream."
+  },
+  "lesson": "Handoff incomplete or unclear — Chair failure. ARC pushes upstream. Not founder fault."
+}

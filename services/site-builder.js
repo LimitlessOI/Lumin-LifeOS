@@ -38,8 +38,10 @@ import { getVariantSwitcherHtml } from '../config/site-builder-switcher.js';
 import { ingestAll } from './site-builder-asset-ingestion.js';
 import { SITE_BUILDER_PRICING } from '../config/site-builder-pricing.js';
 import { getModelForTask, getCandidateModelsForTask } from '../config/task-model-routing.js';
+import { resolveDurablePublicBase } from './site-builder-public-base.js';
 import { renderSalesDoctrineForPrompt } from '../config/site-builder-sales-doctrine.js';
 import { matchIndustrySalesPack } from '../config/site-builder-industry-sales.js';
+import { applyScrapeGuard, applyScrapePoisonQualityGate } from './site-builder-scrape-guard.js';
 
 function createEditToken() {
   return crypto.randomBytes(24).toString('hex');
@@ -55,7 +57,7 @@ function injectPreviewChrome(html, { clientId, baseUrl, editToken }) {
   const editorUrl = `/api/v1/sites/editor?clientId=${encodeURIComponent(clientId)}&token=${encodeURIComponent(editToken || '')}`;
   const bar = `
 <div id="sb-preview-chrome" style="position:fixed;left:0;right:0;bottom:0;z-index:99999;background:rgba(17,24,39,.96);color:#fff;padding:12px 16px;display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;font-family:system-ui,sans-serif;font-size:14px;box-shadow:0 -8px 30px rgba(0,0,0,.25)">
-  <span>Your free preview — customize it or publish when ready.</span>
+  <span>Your preview — customize it or publish when ready.</span>
   <a href="${editorUrl}" style="background:#334155;color:#fff;padding:8px 14px;border-radius:999px;text-decoration:none;font-weight:600">Open editor</a>
   <a href="${publishUrl}" style="background:#7c3aed;color:#fff;padding:8px 14px;border-radius:999px;text-decoration:none;font-weight:600">Publish ${SITE_BUILDER_PRICING.publish.display}</a>
 </div>`;
@@ -344,7 +346,7 @@ export default class SiteBuilder {
   constructor({ callCouncil, previewsDir = 'public/previews', baseUrl = '', pool = null } = {}) {
     this.callCouncil = callCouncil;
     this.previewsDir = previewsDir;
-    this.baseUrl = baseUrl;
+    this.baseUrl = resolveDurablePublicBase([baseUrl, process.env.SITE_BASE_URL]);
     this.pool = pool;
   }
 
@@ -478,6 +480,7 @@ export default class SiteBuilder {
           if (qualityReport.scorePct >= TARGET_QUALITY_SCORE) break;
         }
       }
+      qualityReport = applyScrapePoisonQualityGate(qualityReport, businessInfo);
 
       // Step 4: Build blog index page from blog posts already generated before the main site HTML
       const blogHtml = this.generateBlogIndex(businessInfo, blogPosts);
@@ -577,11 +580,18 @@ export default class SiteBuilder {
   async buildVariants(targetUrl, options = {}) {
     const clientId = options.clientId || `prev_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
     const count = Math.max(1, Number(options.variantCount || process.env.SITE_BUILDER_VARIANTS || (SITE_BUILDER_PRICING.templates.freeCount + SITE_BUILDER_PRICING.templates.additional.slotCount) || 10));
-    const systems = pickDesignSystems(count, options.styleIds || []);
-    logger.info('[SITE] Building variants', { clientId, targetUrl, systems: systems.map((s) => s.id) });
 
     try {
+      // Scrape BEFORE picking templates so niche filter can prefer midwife shells
+      // over HVAC/plumber for birth/wellness businesses.
       const businessInfo = await this.scrapeBusinessInfo(targetUrl, options);
+      const systems = pickDesignSystems(count, options.styleIds || [], {
+        industry: businessInfo.industry,
+        keywords: businessInfo.keywords,
+        bodyText: businessInfo.bodyText,
+        tagline: businessInfo.tagline,
+      });
+      logger.info('[SITE] Building variants', { clientId, targetUrl, systems: systems.map((s) => s.id), industry: businessInfo.industry });
 
       if (ENRICHMENT_ENABLED && options.enrich !== false) {
         try {
@@ -651,6 +661,7 @@ export default class SiteBuilder {
       // Default: hand-authored layout shells so variants are structurally different.
       // Opt into the old same-funnel AI HTML path with useAiLayouts: true.
       const useLayoutShells = options.useAiLayouts !== true && options.useLayoutShells !== false;
+      let variantIndex = 0;
       for (const ds of systems) {
         try {
           businessInfo.designSystemId = ds.id;
@@ -658,9 +669,11 @@ export default class SiteBuilder {
           let html;
           let usedShell = false;
           if (useLayoutShells) {
-            html = renderDesignSystemLayout(ds, businessInfo, posPartner);
+            // Rotate hero/gallery per template so toggles don't share one photo.
+            html = renderDesignSystemLayout(ds, businessInfo, posPartner, { imageOffset: variantIndex });
             usedShell = Boolean(html);
           }
+          variantIndex += 1;
           if (!html) {
             html = await this.generateSiteHtml(businessInfo, { clientId, posPartner, designBrief, designSystem: ds, leanTemplate: options.leanTemplate, skipAi: options.skipAi });
           }
@@ -712,6 +725,7 @@ export default class SiteBuilder {
         logger.warn('[SITE] Could not re-score best variant (non-fatal)', { clientId, error: err.message });
         qualityReport = { scorePct: bestVariant.scorePct, readyToSend: bestVariant.scorePct >= MIN_SEND_SCORE, grade: null, issues: [] };
       }
+      qualityReport = applyScrapePoisonQualityGate(qualityReport, businessInfo);
 
       const editToken = createEditToken();
       const switcher = this.generateVariantSwitcher(businessInfo, clientId, variants, editToken, benchmark, presence);
@@ -785,12 +799,30 @@ export default class SiteBuilder {
    * Extracts: name, tagline, services, contact, colors, testimonials, social links.
    */
   async scrapeBusinessInfo(url, options = {}) {
-    // If manual info is provided (no scraping needed), use it directly, but
-    // always attach the source URL so richer ingestion knows what to look up.
+    // Only skip scrape for a REAL structured profile (has body/services/phone).
+    // A bare { businessName } must NOT short-circuit — that path produced the
+    // SherryLHopkins trash preview (generic H1, no phone, affiliate booking).
     if (options.businessInfo) {
-      const info = options.businessInfo;
-      if (!info.sourceUrl) info.sourceUrl = url;
-      return info;
+      const info = { ...options.businessInfo };
+      const hasSubstance = Boolean(
+        info.bodyText
+        || info.phone
+        || info.bookingUrl
+        || (Array.isArray(info.services) && info.services.length)
+        || info.about
+        || info.uniqueValue
+      );
+      if (hasSubstance) {
+        if (!info.sourceUrl) info.sourceUrl = url;
+        const submittedName = String(options.businessName || options.preferredBusinessName || info.businessName || '').trim();
+        if (submittedName) info.businessName = submittedName;
+        return info;
+      }
+      // Thin stub — fall through to live scrape, keep preferred name.
+      options.preferredBusinessName = options.preferredBusinessName
+        || options.businessName
+        || info.businessName
+        || null;
     }
 
     let puppeteer;
@@ -812,20 +844,52 @@ export default class SiteBuilder {
           document.querySelector(`meta[name="${name}"]`)?.content ||
           document.querySelector(`meta[property="og:${name}"]`)?.content || '';
 
-        // Extract all visible text
         const bodyText = document.body?.innerText?.slice(0, 8000) || '';
-
-        // Look for phone, email, address
         const phoneMatch = bodyText.match(/\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}/);
         const emailMatch = bodyText.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,}/);
 
-        // Find social links
-        const links = Array.from(document.querySelectorAll('a[href]')).map(a => a.href);
+        const anchors = Array.from(document.querySelectorAll('a[href]'));
+        const links = anchors.map(a => a.href);
         const youtube = links.find(l => l.includes('youtube.com/channel') || l.includes('youtube.com/@'));
         const instagram = links.find(l => l.includes('instagram.com/'));
         const facebook = links.find(l => l.includes('facebook.com/'));
 
-        // Try to get YouTube channel ID from URL
+        const telHref = anchors.map(a => a.getAttribute('href') || '').find(h => /^tel:/i.test(h));
+        const telPhone = telHref ? telHref.replace(/^tel:/i, '').trim() : '';
+
+        const booking = anchors.map(a => ({
+          href: a.href,
+          text: (a.innerText || a.getAttribute('aria-label') || '').trim().toLowerCase(),
+        })).find(({ href, text }) => {
+          if (!href || href.startsWith('mailto:') || href.startsWith('tel:')) return false;
+          if (/book-online|booknow|book-now|scheduling|appointment|calendly|acuityscheduling|jane\.app\/[^/?#]+/i.test(href)) return true;
+          if (/(^|\b)(book|schedule|consult|appointment)(\b|$)/i.test(text) && !/facebook|instagram|youtube|login|cart/i.test(href)) return true;
+          return false;
+        })?.href || '';
+
+        // Service headings + following paragraph (Prenatal / Birth / Postpartum pattern).
+        // Skip nav chrome ("Services", "Birth Story Videos") — those poisoned shells.
+        const junkService = /^(services?|menu|home|about|contact|blog|videos?|gallery|book(ing)?|login|shop|cart|faq|resources?|birth story videos?)$/i;
+        const serviceBlocks = [];
+        const headings = Array.from(document.querySelectorAll('h2, h3, h4'));
+        for (const h of headings) {
+          const name = (h.innerText || '').trim().replace(/\s+/g, ' ');
+          if (!name || name.length < 4 || name.length > 60) continue;
+          if (junkService.test(name)) continue;
+          if (!/care|birth|prenatal|postpartum|labor|yoga|sound|healing|package|wellness|midwif|doula|consult|newborn|acutonic|reiki|herbal/i.test(name)) continue;
+          let desc = '';
+          let sib = h.nextElementSibling;
+          for (let i = 0; i < 4 && sib; i += 1, sib = sib.nextElementSibling) {
+            const t = (sib.innerText || '').trim();
+            if (t && t.length > 40) { desc = t.slice(0, 280); break; }
+          }
+          if (!desc) continue; // name-only nav labels are not services
+          if (!serviceBlocks.find(s => s.name.toLowerCase() === name.toLowerCase())) {
+            serviceBlocks.push({ name, description: desc });
+          }
+          if (serviceBlocks.length >= 6) break;
+        }
+
         let youtubeChannelId = null;
         if (youtube) {
           const chMatch = youtube.match(/channel\/(UC[\w-]+)/);
@@ -833,17 +897,34 @@ export default class SiteBuilder {
           youtubeChannelId = chMatch ? chMatch[1] : (handleMatch ? handleMatch[1] : null);
         }
 
+        let jsonLdPhone = '';
+        let jsonLdName = '';
+        for (const script of Array.from(document.querySelectorAll('script[type="application/ld+json"]'))) {
+          try {
+            const data = JSON.parse(script.textContent || '{}');
+            const nodes = Array.isArray(data) ? data : [data, ...(Array.isArray(data['@graph']) ? data['@graph'] : [])];
+            for (const n of nodes) {
+              if (!jsonLdPhone && n?.telephone) jsonLdPhone = String(n.telephone);
+              if (!jsonLdName && (n?.name || n?.legalName)) jsonLdName = String(n.name || n.legalName);
+            }
+          } catch { /* ignore bad json-ld */ }
+        }
+
         return {
           title: document.title || '',
           metaDescription: getMeta('description'),
           h1: getText('h1'),
           bodyText,
-          phone: phoneMatch ? phoneMatch[0] : '',
+          phone: telPhone || phoneMatch?.[0] || jsonLdPhone || '',
           email: emailMatch ? emailMatch[0] : '',
+          bookingUrl: booking || '',
+          serviceDetails: serviceBlocks,
+          services: serviceBlocks.map(s => s.name),
           youtubeUrl: youtube || '',
           youtubeChannelId,
           instagramUrl: instagram || '',
           facebookUrl: facebook || '',
+          jsonLdName,
         };
       });
 
@@ -859,15 +940,66 @@ export default class SiteBuilder {
 
       await browser.close();
 
-      // Use AI to extract structured business info from the raw scraped text
       const extracted = await this.extractBusinessInfoWithAI(scraped, url);
-      return { ...scraped, ...extracted, sourceUrl: url, existingSiteScore };
+      // Null-safe merge: AI often returns null for phone/booking and wipes scrape.
+      const preferredName = String(options.preferredBusinessName || options.businessName || '').trim();
+      let businessInfo = {
+        ...scraped,
+        ...Object.fromEntries(
+          Object.entries(extracted || {}).filter(([, v]) => v != null && v !== ''),
+        ),
+        sourceUrl: url,
+        existingSiteScore,
+      };
+      if (scraped.phone && !businessInfo.phone) businessInfo.phone = scraped.phone;
+      if (scraped.bookingUrl && !businessInfo.bookingUrl) businessInfo.bookingUrl = scraped.bookingUrl;
+      // Prefer AI service names when scrape details are empty/junk nav labels.
+      const aiServices = Array.isArray(extracted?.services)
+        ? extracted.services.map((s) => (typeof s === 'string' ? s : s?.name)).filter(Boolean)
+        : [];
+      const scrapedDetails = (Array.isArray(scraped.serviceDetails) ? scraped.serviceDetails : [])
+        .filter((s) => s?.name && s?.description && String(s.description).length > 20);
+      if (scrapedDetails.length) {
+        businessInfo.serviceDetails = scrapedDetails;
+        if (!aiServices.length) businessInfo.services = scrapedDetails.map((s) => s.name);
+      } else if (aiServices.length) {
+        businessInfo.services = aiServices;
+        businessInfo.serviceDetails = aiServices.map((name) => ({
+          name,
+          description: '',
+        }));
+      } else if (Array.isArray(scraped.services) && scraped.services.length) {
+        businessInfo.services = scraped.services;
+      }
+      if (!businessInfo.tagline) {
+        businessInfo.tagline = scraped.h1 || scraped.metaDescription || businessInfo.uniqueValue || '';
+      }
+      if (!businessInfo.about) {
+        businessInfo.about = businessInfo.uniqueValue || scraped.metaDescription || scraped.bodyText?.slice(0, 280) || '';
+      }
+      if (preferredName) businessInfo.businessName = preferredName;
+      else if (scraped.jsonLdName && !businessInfo.businessName) businessInfo.businessName = scraped.jsonLdName;
+      businessInfo = applyScrapeGuard(businessInfo, {
+        submittedName: preferredName || options.businessName,
+        url,
+      });
+      if (businessInfo.scrapePoisoned) {
+        logger.warn('[SITE] Scrape poison detected — blocking outreach until manual review', {
+          url,
+          marker: businessInfo.scrapePoisonMarker,
+          businessName: businessInfo.businessName,
+        });
+      }
+      return businessInfo;
 
     } catch (err) {
       if (browser) await browser.close().catch(() => {});
       logger.warn('[SITE] Scrape failed, using AI extraction only', { url, error: err.message });
-      // Fallback: use AI to infer info from URL + domain name alone
-      return this.extractBusinessInfoWithAI({ title: url, bodyText: '', sourceUrl: url }, url);
+      const extracted = await this.extractBusinessInfoWithAI({ title: url, bodyText: '', sourceUrl: url }, url);
+      return applyScrapeGuard(
+        { ...extracted, sourceUrl: url, scrapeFetchFailed: true },
+        { submittedName: options.businessName, url, forcePoisoned: true }
+      );
     }
   }
 

@@ -13,4 +13,5 @@
 | **Method** | Read NSSOT + brainstorm protocol + current memory/governance/runtime code + legacy Capsule remnants; compare against the chronicle brief; preserve only what survives evidence and present-day constraints |
 | **Chronicle** | `01_CONVERGENCE_CHRONICLE.md` — full preservation + classification + recommended activation order (brainstorm only; not law until ratified elsewhere) |
 | **Phase 1 ideas (operator)** | `10_IDEAS_OPERATOR_PHASE1.md` — Adam-supplied **A01–A25** (2026-05-13) + industry framing; for **`20_RANKINGS_PHASE2.md`** when ranking |
-| **Phase 2 cross-council ranking** | `20_RANKINGS_PHASE2.md` — source-preserving overlap + **`independent_convergence_score`** + worksheet; **C01–C25** stub until Claude Code list pasted |
+| **Phase 2 cross-council ranking** | `20_RANKINGS_PHASE2.md` — source-preserving overlap + **`independent_convergence_score`** + worksheet; **C01–C25** in `11_IDEAS_CLAUDE_CODE_PHASE1.md` |
+| **Child continuity session (2026-07-27)** | `../2026-07-27_memory-governance-continuity/` — mega-dump index + **when-to-build** (Phase 1 mostly ✅ shipped) + drift assessment |

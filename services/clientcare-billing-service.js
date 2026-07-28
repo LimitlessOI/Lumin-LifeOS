@@ -2395,7 +2395,8 @@ export function createClientCareBillingService({ pool, logger = console, now = (
          )::int AS underpaid,
          COUNT(*) FILTER (WHERE rescue_bucket = 'forever_chase')::int AS forever_chase_bucket
        FROM clientcare_claims
-       WHERE COALESCE(rescue_bucket, '') <> 'resolved'
+       WHERE COALESCE(rescue_bucket, '') NOT IN ('resolved', 'do_not_bill')
+         AND COALESCE(metadata->>'deactivated', '') <> 'true'
          AND (
            (metadata->>'forever_chase') = 'true'
            OR rescue_bucket IN ('forever_chase', 'submit_now', 'correct_and_resubmit', 'payer_followup', 'proof_of_timely_filing', 'timely_filing_exception', 'likely_uncollectible')
@@ -2411,7 +2412,8 @@ export function createClientCareBillingService({ pool, logger = console, now = (
          rescue_bucket, priority_score, source, notes, metadata, updated_at,
          GREATEST(COALESCE(allowed_amount, 0) - COALESCE(patient_balance, 0) - COALESCE(paid_amount, 0), 0)::numeric AS short_paid_amount
        FROM clientcare_claims
-       WHERE COALESCE(rescue_bucket, '') <> 'resolved'
+       WHERE COALESCE(rescue_bucket, '') NOT IN ('resolved', 'do_not_bill')
+         AND COALESCE(metadata->>'deactivated', '') <> 'true'
          AND (
            (metadata->>'forever_chase') = 'true'
            OR rescue_bucket IN ('forever_chase', 'submit_now', 'correct_and_resubmit', 'payer_followup', 'proof_of_timely_filing', 'timely_filing_exception', 'likely_uncollectible')

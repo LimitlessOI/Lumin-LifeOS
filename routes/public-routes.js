@@ -79,6 +79,38 @@ export function registerPublicRoutes(app, {
     return Boolean(key && expected && key === expected);
   }
 
+  /** Well Rounded Momma — serve SiteBuilder preview when custom domain hits tip */
+  const WRM_HOSTS = new Set(
+    String(process.env.WRM_DOMAIN || 'wellroundedmomma.com')
+      .split(',')
+      .flatMap((d) => {
+        const base = String(d || '').trim().toLowerCase().replace(/^www\./, '');
+        return base ? [base, `www.${base}`] : [];
+      }),
+  );
+  const WRM_PREVIEW_ROOT = path.join(__dirname, 'public', 'previews', 'wellrounded-momma');
+
+  app.use((req, res, next) => {
+    const host = String(req.headers['x-forwarded-host'] || req.headers.host || '')
+      .split(',')[0]
+      .trim()
+      .toLowerCase()
+      .replace(/:\d+$/, '');
+    if (!WRM_HOSTS.has(host)) return next();
+    if (String(req.path || '').startsWith('/api/')) return next();
+
+    let rel = req.path === '/' || req.path === '' ? 'index.html' : String(req.path || '').replace(/^\/+/, '');
+    if (rel.includes('..')) return res.status(400).send('Bad path');
+    const filePath = path.normalize(path.join(WRM_PREVIEW_ROOT, rel));
+    if (!filePath.startsWith(WRM_PREVIEW_ROOT)) return res.status(400).send('Bad path');
+    if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
+      return sendPublicFileNoCache(res, filePath);
+    }
+    const indexPath = path.join(WRM_PREVIEW_ROOT, 'index.html');
+    if (fs.existsSync(indexPath)) return sendPublicFileNoCache(res, indexPath);
+    return next();
+  });
+
   // ==================== COMMAND CENTER ROUTES (FIRST - Before all middleware) ====================
   // These MUST be defined before static middleware to work correctly
   app.get("/activate", (req, res) => {
@@ -175,6 +207,13 @@ export function registerPublicRoutes(app, {
     if (fs.existsSync(filePath)) return sendPublicFileNoCache(res, filePath);
     return res.status(404).send("ClientCare billing overlay not found.");
   });
+
+  app.get("/go-vegas", (_req, res) => {
+    const filePath = path.join(__dirname, "public", "overlay", "go-vegas.html");
+    if (fs.existsSync(filePath)) return sendPublicFileNoCache(res, filePath);
+    return res.status(404).send("Go Vegas site not found.");
+  });
+  app.get("/govegas", (_req, res) => res.redirect(301, "/go-vegas"));
 
   app.get("/boldtrail", (req, res) => {
     console.log("🏠 [ROUTE] /boldtrail accessed");
@@ -335,8 +374,12 @@ export function registerPublicRoutes(app, {
     return res.status(404).send("LifeOS shell not found.");
   });
 
-  // ==================== ROOT ROUTE - API COST SAVINGS LANDING PAGE ====================
-  // Must be defined BEFORE static middleware to take precedence
+  // ==================== ROOT ROUTE - PUBLIC FRONT DOOR ====================
+  // Must be defined BEFORE static middleware to take precedence.
+  // If a real landing file exists it wins; otherwise send visitors to the
+  // live, sellable product instead of a dead 404 (revenue front-door fix
+  // 2026-07-21 — bare domain previously served "Landing page not found").
+  // INTERIM: destination pending founder's chosen primary landing.
   app.get("/", (req, res) => {
     const landingPagePath = path.join(
       __dirname,
@@ -347,10 +390,7 @@ export function registerPublicRoutes(app, {
     if (fs.existsSync(landingPagePath)) {
       res.sendFile(landingPagePath);
     } else {
-      console.warn(
-        "⚠️ [ROUTE] API Cost Savings landing page not found, serving default"
-      );
-      res.status(404).send("Landing page not found");
+      res.redirect(302, "/marketing");
     }
   });
 

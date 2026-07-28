@@ -67,6 +67,14 @@ RUN test -f factory-staging/factory-core/builder/run-step.js \
 
 EXPOSE 8080
 
+# /healthz is mounted before DB/boot-dependent routes specifically so it stays
+# truthful even if a later route surface regresses (server-founder-runtime.js) —
+# the right liveness target: a wedged/dead process fails this, a
+# still-initializing one does not. Previously no HEALTHCHECK existed at all, so
+# Railway had no way to detect "process alive but unresponsive" (2026-07-19 audit).
+HEALTHCHECK --interval=30s --timeout=5s --start-period=45s --retries=3 \
+  CMD node -e "fetch('http://127.0.0.1:'+(process.env.PORT||8080)+'/healthz').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+
 # Run node through a shell with `exec` so it does not become a bare PID 1.
 # Node as PID 1 does not ignore SIGPIPE the way it does otherwise; when the
 # production pino logger writes JSON to the stdout pipe (Railway/Docker log

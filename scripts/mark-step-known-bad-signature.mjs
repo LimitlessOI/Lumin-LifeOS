@@ -27,7 +27,12 @@
  * together; doing them separately risks someone forgetting the stamp).
  */
 import { loadBuildQueue, persistQueue, STEP_STATUS } from '../services/product-build-orchestrator.js';
-import { failureSignature } from '../services/governed-autonomous-shipping-loop.js';
+import {
+  failureSignature,
+  loadKnownBadSignaturesRegistry,
+  saveKnownBadSignaturesRegistry,
+  recordRepoWideKnownBadSignature,
+} from '../services/governed-autonomous-shipping-loop.js';
 
 function parseArgs(argv) {
   const out = {};
@@ -68,6 +73,23 @@ function main() {
   } else {
     found.known_bad_signatures.push({ signature, note, recorded_at: new Date().toISOString() });
     console.log(`recorded known-bad signature on ${product}/${stepId}: ${signature}`);
+  }
+
+  // Also record repo-wide (data/known-bad-signatures-registry.json), not just
+  // on this one step — closes the blind spot where a fix's stamp lived only on
+  // a branch's copy of a step, and a DIFFERENT branch/product/step reproducing
+  // the identical signature had no way to know it was already fixed once.
+  const registryBefore = loadKnownBadSignaturesRegistry();
+  const registryAfter = recordRepoWideKnownBadSignature(
+    signature,
+    { note, source_product_id: product, source_step_id: stepId },
+    registryBefore,
+  );
+  if (registryAfter.signatures.length === registryBefore.signatures.length) {
+    console.log('signature already recorded repo-wide — no change.');
+  } else {
+    saveKnownBadSignaturesRegistry(registryAfter);
+    console.log(`recorded signature repo-wide: ${signature}`);
   }
 
   if (args.resetPending) {

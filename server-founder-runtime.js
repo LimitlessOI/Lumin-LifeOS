@@ -53,6 +53,9 @@ import { registerFounderRuntimeRoutes } from "./startup/register-founder-runtime
 import { registerFounderServerRoutes } from "./startup/routes/founder-server-routes.js";
 import { startNeverStopProductFactoryScheduler } from "./services/never-stop-product-factory-scheduler.js";
 import { startGovernedAutonomousShippingLoop } from "./services/governed-autonomous-shipping-loop.js";
+import { startCiHealthWatchdogScheduler } from "./scripts/ci-health-watchdog.mjs";
+import { startSentryChairGovernanceScheduler, startCompetitiveResearchScheduler } from "./scripts/sentry-chair-governance-audit.mjs";
+import { startMemoryEmbeddingsBackfillScheduler } from "./scripts/memory-embeddings-backfill.mjs";
 import { initDatabase } from "./startup/database.js";
 import { requireKey } from "./src/server/auth/requireKey.js";
 import { NotificationService } from "./core/notification-service.js";
@@ -472,6 +475,48 @@ async function bootFounderRuntime() {
         startGovernedAutonomousShippingLoop({ logger, pool });
       } catch (govErr) {
         logger.warn("[GOVERNED-AUTONOMOUS-SHIP] failed to start in founder runtime", { error: govErr.message });
+      }
+      // CI health watchdog: nothing in the system previously watched GitHub
+      // Actions/CI status at all (confirmed by repo-wide audit, 2026-07-19) —
+      // this is the first thing that does, and it's the trigger for the
+      // founder SMS/call escalation (routes/founder-sms-routes.js).
+      try {
+        startCiHealthWatchdogScheduler({ logger });
+      } catch (ciWatchdogErr) {
+        logger.warn("[CI-WATCHDOG] failed to start in founder runtime", { error: ciWatchdogErr.message });
+      }
+      // SENTRY (finds + proposes a solution) -> Chair (reviews, routes
+      // technical findings to auto-approved / product-scope findings to
+      // founder escalation) -> persisted findings queue. This is the D7
+      // repair pipeline (FACTORY_REBUILD_MANIFEST_V1.md §16) as real running
+      // code — a narrow, honest slice of the full multi-model-debate vision,
+      // not the whole thing, but genuinely running instead of only documented.
+      try {
+        startSentryChairGovernanceScheduler({ logger });
+      } catch (sentryChairErr) {
+        logger.warn("[SENTRY-CHAIR] failed to start in founder runtime", { error: sentryChairErr.message });
+      }
+      // Ongoing portfolio-wide competitive review: founder directive
+      // (2026-07-19) — "every single blueprint... looking online to see what
+      // competitors are doing." One product per day, real web research (Brave/
+      // Perplexity, graceful AI-knowledge fallback), routed through the same
+      // Chair review + founder-escalation queue as every other finding.
+      // Deliberately its own slow schedule, separate from the 30-min SENTRY
+      // health cycle, to control cost on real API calls.
+      try {
+        startCompetitiveResearchScheduler({ logger });
+      } catch (competitiveResearchErr) {
+        logger.warn("[CHAIR-COMPETITIVE-RESEARCH] scheduler failed to start in founder runtime", { error: competitiveResearchErr.message });
+      }
+      // Memory embeddings backfill: memory_capsules.embedding (vector(1536))
+      // existed in the schema but nothing ever wrote to it (confirmed live,
+      // 21 capsules, 0 embedded). Guarded by createUsefulWorkGuard (Zero
+      // Waste AI Call Rule) — real prerequisite + real work check before any
+      // OpenAI spend.
+      try {
+        startMemoryEmbeddingsBackfillScheduler({ pool, logger });
+      } catch (embeddingsErr) {
+        logger.warn("[MEMORY-EMBEDDINGS] backfill scheduler failed to start in founder runtime", { error: embeddingsErr.message });
       }
       _bootLog('bootFounderRuntime_done');
       return { ok: true, attempt: bootAttempt };

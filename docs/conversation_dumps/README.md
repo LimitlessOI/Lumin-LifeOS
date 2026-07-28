@@ -57,6 +57,15 @@ The AI Counsel OS will scan these files during development to:
 
 **Canonical index:** [`CURSOR_SESSIONS_INDEX.md`](CURSOR_SESSIONS_INDEX.md) — **9 parent sessions** archived.
 
+**2026-07-27 historical vision/revenue dump:**  
+[`2026-07-27-historical-vision-revenue-dump.md`](2026-07-27-historical-vision-revenue-dump.md) → scored ideas  
+`docs/projects/BRAINSTORM_SESSIONS/limitlessos/2026-07-27_historical-vision-revenue-dump/`
+
+**2026-07-27 memory/governance mega-dump (structured, not raw JSONL):**  
+[`2026-07-27-ai-memory-governance-brainstorm.md`](2026-07-27-ai-memory-governance-brainstorm.md) → vault  
+`docs/projects/BRAINSTORM_SESSIONS/tsos-platform/2026-07-27_memory-governance-continuity/` · session slice  
+[`by-product/sessions/48f2917e/MEMORY-GOVERNANCE.md`](by-product/sessions/48f2917e/MEMORY-GOVERNANCE.md)
+
 ```bash
 npm run lifeos:archive-cursor-transcripts:all          # all sessions on disk
 npm run lifeos:archive-cursor-transcript -- <path.jsonl> # one session

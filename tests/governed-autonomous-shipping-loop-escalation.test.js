@@ -14,6 +14,14 @@ import {
   verifyModuleResolves,
   verifyShippedModulesResolve,
   isKnownBadSignature,
+  loadKnownBadSignaturesRegistry,
+  saveKnownBadSignaturesRegistry,
+  findRepoWideKnownBadSignature,
+  isRepoWideKnownBadSignature,
+  recordRepoWideKnownBadSignature,
+  markFailedStep,
+  loadPausedProducts,
+  listProductsWithQueues,
 } from '../services/governed-autonomous-shipping-loop.js';
 
 test('failureSignature normalizes hex ids and numbers so repeat failures share one signature', () => {
@@ -142,4 +150,198 @@ test('isKnownBadSignature is true when the factory reproduces an already-fixed s
   // exactly the volatility failureSignature is designed to normalize away.
   const reproducedError = 'module_resolution_failed: cannot find module ../services/builderOSTokenReceipt987.js at commit ff00ee11aa2';
   assert.equal(isKnownBadSignature(step, failureSignature(reproducedError)), true);
+});
+
+// Repo-wide registry (2026-07-19): closes the blind spot where a known-bad
+// stamp lived only on one step/branch's copy of a queue, so a DIFFERENT
+// branch/product reproducing the identical signature had no way to know it
+// was already fixed once — which is exactly how the orphaned-import defect
+// shipped to `main` twice.
+test('findRepoWideKnownBadSignature / isRepoWideKnownBadSignature: no match on an empty registry', () => {
+  const registry = { signatures: [] };
+  const sig = failureSignature('module_resolution_failed: whatever');
+  assert.equal(findRepoWideKnownBadSignature(sig, registry), null);
+  assert.equal(isRepoWideKnownBadSignature(sig, registry), false);
+});
+
+test('findRepoWideKnownBadSignature / isRepoWideKnownBadSignature: matches regardless of which product/step originally recorded it', () => {
+  const sig = failureSignature('module_resolution_failed: cannot find module ../services/x.js');
+  const registry = {
+    signatures: [{ signature: sig, note: 'fixed on a feature branch, never merged', source_product_id: 'token-accounting-os', source_step_id: 'step1' }],
+  };
+  // A totally different product/step reproduces the identical signature.
+  const found = findRepoWideKnownBadSignature(sig, registry);
+  assert.equal(found.source_product_id, 'token-accounting-os');
+  assert.equal(isRepoWideKnownBadSignature(sig, registry), true);
+});
+
+test('recordRepoWideKnownBadSignature: pure — returns a new registry, appends once, dedupes on re-record', () => {
+  const sig = failureSignature('module_resolution_failed: dup case');
+  const empty = { signatures: [] };
+  const once = recordRepoWideKnownBadSignature(sig, { note: 'first' }, empty);
+  assert.deepEqual(empty.signatures, [], 'input registry must not be mutated');
+  assert.equal(once.signatures.length, 1);
+
+  const twice = recordRepoWideKnownBadSignature(sig, { note: 'second attempt, same signature' }, once);
+  assert.equal(twice.signatures.length, 1, 'recording the same signature again must not duplicate');
+});
+
+test('loadKnownBadSignaturesRegistry: fails open to an empty registry when the file does not exist', () => {
+  const registry = loadKnownBadSignaturesRegistry.call(null); // reads the real (or absent) repo file
+  assert.ok(Array.isArray(registry.signatures));
+});
+
+test('saveKnownBadSignaturesRegistry / loadKnownBadSignaturesRegistry round-trip through the real repo path', () => {
+  // These two are the only pair in this suite that touch the real
+  // data/known-bad-signatures-registry.json path (it's not injectable) —
+  // save the prior content, restore it after, so this test can't leave
+  // permanent state behind in the repo.
+  const before = loadKnownBadSignaturesRegistry();
+  try {
+    const sig = failureSignature('round_trip_test_signature_only');
+    saveKnownBadSignaturesRegistry({ signatures: [{ signature: sig, note: 'round-trip test' }] });
+    const reloaded = loadKnownBadSignaturesRegistry();
+    assert.equal(reloaded.signatures.length, 1);
+    assert.equal(reloaded.signatures[0].signature, sig);
+  } finally {
+    saveKnownBadSignaturesRegistry(before);
+  }
+});
+
+// Regression test for a real bug found 2026-07-19: markFailedStep's repeat-
+// regression log line referenced `knownBad`, a variable that only exists
+// inside isKnownBadSignature's own closure — a ReferenceError that fired
+// exactly when a repeat regression was detected, thrown BEFORE persistQueue()
+// could save the escalation state. The mechanism could not complete a save
+// the one time it mattered. isKnownBadSignature's own unit tests above never
+// caught this because they test the pure function in isolation, not this call
+// site inside markFailedStep — deliberately, since markFailedStep's normal
+// path calls commitQueueStatus, which hits the live GitHub API via
+// GITHUB_TOKEN/GITHUB_REPO (both configured in this environment) and must
+// never be triggered by a unit test. This test exercises the REAL
+// markFailedStep function end-to-end but engineers `shouldCommit` to false
+// (same last_error as before + attempts past the always-commit window + not a
+// power-of-two attempt count) so it returns cleanly right after persistQueue()
+// without ever reaching the network call — proving the fix without the risk.
+test('markFailedStep: repeat-regression branch (step-level) completes without throwing and persists state', async () => {
+  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'mark-failed-step-'));
+  const queuePath = path.join(tmpDir, 'BUILD_QUEUE.json');
+  const errorText = 'module_resolution_failed: cannot find module ../services/known-bad-regression-test.js';
+  const signature = failureSignature(errorText);
+
+  const queue = {
+    product_id: 'test-product-regression',
+    _sourcePath: queuePath,
+    steps: [
+      {
+        id: 'step-1',
+        status: 'in_progress',
+        attempts: 4, // -> 5 after increment: > 2 and not a power of two
+        last_error: errorText, // matches deriveFailureReason(body) below -> shouldCommit stays false
+        known_bad_signatures: [{ signature, note: 'already fixed once; recorded on this step' }],
+      },
+    ],
+  };
+
+  const warnings = [];
+  const logger = { warn: (obj, msg) => warnings.push({ obj, msg }), info() {}, error() {} };
+
+  try {
+    await markFailedStep(queue, 'step-1', { error: errorText }, 'test-product-regression', logger);
+
+    const step = queue.steps[0];
+    assert.equal(step.force_model_rotation, true);
+    assert.equal(step.model_rotation, 1);
+
+    const repeatWarning = warnings.find((w) => /REPEAT REGRESSION/.test(w.msg));
+    assert.ok(repeatWarning, 'expected the REPEAT REGRESSION warning to be logged without throwing');
+    assert.equal(repeatWarning.obj.known_bad_source, 'step');
+    assert.equal(repeatWarning.obj.known_bad_note, 'already fixed once; recorded on this step');
+
+    // persistQueue must have actually run (this was the exact thing the bug
+    // prevented — the throw happened before persistQueue() was reached).
+    assert.ok(fs.existsSync(queuePath), 'persistQueue must have written the queue file');
+    const onDisk = JSON.parse(fs.readFileSync(queuePath, 'utf8'));
+    assert.equal(onDisk.steps[0].force_model_rotation, true);
+  } finally {
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+  }
+});
+
+test('loadPausedProducts reads GOVERNED_AUTONOMOUS_PAUSED_PRODUCTS env', () => {
+  const prev = process.env.GOVERNED_AUTONOMOUS_PAUSED_PRODUCTS;
+  try {
+    process.env.GOVERNED_AUTONOMOUS_PAUSED_PRODUCTS = 'builderos, token-accounting-os';
+    const paused = loadPausedProducts();
+    assert.equal(paused.has('builderos'), true);
+    assert.equal(paused.has('token-accounting-os'), true);
+  } finally {
+    if (prev === undefined) delete process.env.GOVERNED_AUTONOMOUS_PAUSED_PRODUCTS;
+    else process.env.GOVERNED_AUTONOMOUS_PAUSED_PRODUCTS = prev;
+  }
+});
+
+test('listProductsWithQueues excludes paused products so the loop cannot spend tokens on them', () => {
+  const prev = process.env.GOVERNED_AUTONOMOUS_PAUSED_PRODUCTS;
+  try {
+    const before = listProductsWithQueues();
+    if (!before.includes('builderos')) {
+      // Nothing to prove if the product has no BUILD_QUEUE on this checkout.
+      return;
+    }
+    process.env.GOVERNED_AUTONOMOUS_PAUSED_PRODUCTS = 'builderos';
+    const after = listProductsWithQueues();
+    assert.equal(after.includes('builderos'), false);
+  } finally {
+    if (prev === undefined) delete process.env.GOVERNED_AUTONOMOUS_PAUSED_PRODUCTS;
+    else process.env.GOVERNED_AUTONOMOUS_PAUSED_PRODUCTS = prev;
+  }
+});
+
+test('markFailedStep: repeat-regression branch (repo-wide only, no step-level record) also completes cleanly', async () => {
+  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'mark-failed-step-repowide-'));
+  const queuePath = path.join(tmpDir, 'BUILD_QUEUE.json');
+  const errorText = 'module_resolution_failed: cannot find module ../services/repo-wide-regression-test.js';
+  const signature = failureSignature(errorText);
+
+  const queue = {
+    product_id: 'test-product-repowide',
+    _sourcePath: queuePath,
+    steps: [
+      {
+        id: 'step-1',
+        status: 'in_progress',
+        attempts: 4,
+        last_error: errorText,
+        // Deliberately NO known_bad_signatures on the step itself — the
+        // signature is only known via the repo-wide registry, simulating a
+        // fix that was recorded on a DIFFERENT product/branch's step.
+      },
+    ],
+  };
+
+  const before = loadKnownBadSignaturesRegistry();
+  try {
+    saveKnownBadSignaturesRegistry(
+      recordRepoWideKnownBadSignature(signature, { note: 'fixed on a different branch', source_product_id: 'other-product' }, before),
+    );
+
+    const warnings = [];
+    const logger = { warn: (obj, msg) => warnings.push({ obj, msg }), info() {}, error() {} };
+
+    // Must await here — a bare `finally` around a non-awaited call restores
+    // the registry before markFailedStep's async body ever reads it, making
+    // this test pass for the wrong reason (or flake).
+    await markFailedStep(queue, 'step-1', { error: errorText }, 'test-product-repowide', logger);
+
+    const step = queue.steps[0];
+    assert.equal(step.force_model_rotation, true, 'repo-wide match alone must trigger the same protection as a step-level match');
+
+    const repeatWarning = warnings.find((w) => /REPEAT REGRESSION/.test(w.msg));
+    assert.ok(repeatWarning);
+    assert.equal(repeatWarning.obj.known_bad_source, 'repo_wide_registry');
+  } finally {
+    saveKnownBadSignaturesRegistry(before);
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+  }
 });

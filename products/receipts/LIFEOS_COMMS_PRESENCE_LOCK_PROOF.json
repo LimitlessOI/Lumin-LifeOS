@@ -1,0 +1,19 @@
+{
+  "receipt": "LIFEOS_COMMS_PRESENCE_LOCK_PROOF",
+  "at": "2026-07-20T00:20:30.000Z",
+  "commit_sha": "b3730047cb0071fcaa9f6b1c3b011e356d3c8a49",
+  "tip_sha_at_prove": "b3730047cb00",
+  "pass_fail": "PASS",
+  "notes": "Presence turn: no coach closer. Anger turn: no classic coach closer but still soft 'ready to support' — follow-up strip shipped next.",
+  "probes": {
+    "presence": {
+      "coach_closer": false,
+      "sample": "It's tough when it feels like you're carrying it all alone. I'm right here with you, Adam."
+    },
+    "anger": {
+      "coach_closer_classic": false,
+      "soft_support_offer": true,
+      "sample": "I hear you, Adam... I'm here with you, ready to support or just share the moment."
+    }
+  }
+}

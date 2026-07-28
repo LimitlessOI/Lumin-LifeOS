@@ -19,6 +19,7 @@ import {
 } from '../config/cloudflare-railway.js';
 import { createBrowserSignupOrchestrator } from '../services/browser-signup-orchestrator.js';
 import { evaluateFounderPaymentReadiness } from '../services/founder-payment-vault.js';
+import { runWrmWixDnsCutover, WRM_RAILWAY_DNS } from '../services/wrm-wix-dns-cutover.js';
 
 export function registerGeneralBrowserAgentRoutes(app, deps = {}) {
   const requireKey = deps.requireKey;
@@ -148,6 +149,8 @@ export function registerGeneralBrowserAgentRoutes(app, deps = {}) {
       startUrl = null,
       site = null,
       vaultService = null,
+      /** Inject login from tip process.env — e.g. WRM_WIX → WRM_WIX_EMAIL + WRM_WIX_PASSWORD (never echo values). */
+      envCreds = null,
       mustContain = [],
       mustHaveSelector = [],
       expectSiteHost = null,
@@ -166,6 +169,45 @@ export function registerGeneralBrowserAgentRoutes(app, deps = {}) {
       const targetUrl = url || startUrl;
       const useGlvar = site === 'glvar' && !targetUrl;
       let effectiveGoal = String(goal);
+
+      const envCredKey = String(envCreds || '').trim().toUpperCase();
+      if (envCredKey === 'WRM_WIX' || envCredKey === 'WIX') {
+        const email = String(process.env.WRM_WIX_EMAIL || process.env.WIX_EMAIL || '').trim();
+        const password = String(process.env.WRM_WIX_PASSWORD || process.env.WIX_PASSWORD || '').trim();
+        if (!email || !password) {
+          return res.status(503).json({
+            ok: false,
+            error: 'WRM_WIX_EMAIL / WRM_WIX_PASSWORD not set on tip',
+          });
+        }
+        effectiveGoal = [
+          `Log in with email ${email} and password ${password}.`,
+          'If already logged in, continue.',
+          'Do not invent credentials. Do not navigate away from wix.com / users.wix.com except as needed for Domains DNS.',
+          effectiveGoal,
+        ].join('\n');
+        logger.info?.('[BROWSER-AGENT] envCreds WRM_WIX injected (email present, password redacted)');
+      }
+
+      if (envCredKey === 'TC_IMAP' || envCredKey === 'ADAM_GMAIL' || envCredKey === 'GMAIL_ADAM') {
+        const { getTCImapUser, getTCImapPassword } = await import('../services/credential-aliases.js');
+        const email = String(getTCImapUser() || process.env.TC_IMAP_USER || 'adam@hopkinsgroup.org').trim();
+        const password = String(getTCImapPassword() || process.env.TC_IMAP_APP_PASSWORD || '').trim();
+        if (!email || !password) {
+          return res.status(503).json({
+            ok: false,
+            error: 'TC_IMAP_USER / TC_IMAP_APP_PASSWORD not set on tip',
+          });
+        }
+        effectiveGoal = [
+          `Log in to Google/Gmail with email ${email} and app password ${password}.`,
+          'If Google asks for an app password, use the provided app password.',
+          'If already logged in as that account, continue.',
+          'Do not invent credentials. Stay on accounts.google.com / mail.google.com.',
+          effectiveGoal,
+        ].join('\n');
+        logger.info?.('[BROWSER-AGENT] envCreds TC_IMAP/ADAM_GMAIL injected (email present, password redacted)');
+      }
 
       if (vaultService) {
         const accountManager = await getAccountManager();
@@ -187,7 +229,9 @@ export function registerGeneralBrowserAgentRoutes(app, deps = {}) {
       if (useGlvar) {
         const accountManager = await getAccountManager();
         const tcBrowser = createTCBrowserAgent({ accountManager, logger });
-        const login = await tcBrowser.loginToGLVAR(false);
+        const mfaCode = req.body?.mfaCode || req.body?.mfa_code || null;
+        const autoMfa = req.body?.autoMfa !== false && req.body?.auto_mfa !== false;
+        const login = await tcBrowser.loginToGLVAR(false, { mfaCode, autoMfa });
         session = login.session;
       } else {
         if (!targetUrl) {
@@ -231,6 +275,28 @@ export function registerGeneralBrowserAgentRoutes(app, deps = {}) {
       return res.status(500).json({ ok: false, error: err.message, screenshots });
     } finally {
       if (session?.close) await session.close().catch(() => {});
+    }
+  });
+
+  /**
+   * POST /api/v1/browser-agent/wrm-wix-dns-cutover
+   * Deterministic tip Playwright: login with WRM_WIX_* env → upsert Railway DNS on Wix.
+   * Never echoes password. Prefer this over LLM /browser-agent/run for Sherry cutover.
+   */
+  app.post('/api/v1/browser-agent/wrm-wix-dns-cutover', requireKey, async (req, res) => {
+    try {
+      const result = await runWrmWixDnsCutover({ logger });
+      const status = result.ok ? 200 : (result.needs_human || result.dns?.needs_human ? 409 : 500);
+      return res.status(status).json({
+        ok: Boolean(result.ok),
+        targets: WRM_RAILWAY_DNS,
+        ...result,
+        // belt-and-suspenders: never return password-shaped fields
+        password: undefined,
+      });
+    } catch (err) {
+      logger.error?.({ err: err.message }, '[BROWSER-AGENT] wrm-wix-dns-cutover failed');
+      return res.status(500).json({ ok: false, error: err.message });
     }
   });
 

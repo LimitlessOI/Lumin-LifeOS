@@ -14,10 +14,60 @@
  * - Fast-loading, accessible, semantic HTML with visible focus states and schema markup.
  */
 
-export const DEFAULT_DESIGN_SYSTEM_ID = 'editorial-luxe';
-export const FREE_DESIGN_SYSTEM_IDS = ['editorial-luxe', 'modern-clinical', 'organic-warm', 'bold-minimal'];
+import { catalogAsDesignSystems } from './site-builder-template-catalog-50.js';
 
-const DESIGN_SYSTEMS = [
+export const DEFAULT_DESIGN_SYSTEM_ID = 'editorial-luxe';
+export const FREE_DESIGN_SYSTEM_IDS = [
+  'editorial-luxe',
+  'modern-clinical',
+  'organic-warm',
+  'bold-minimal',
+  'wellrounded-feminine',
+  'hvac-emergency-dark',
+  'plumber-before-after',
+  'handyman-toolbox',
+  'dental-clinical-white',
+  'midwife-photo-soft',
+  'law-firm-authority',
+  'realtor-search-first',
+  'restaurant-menu-board',
+  'photographer-folio',
+];
+
+function normalizeCatalogSystem(entry) {
+  const t = entry.tokens || {};
+  return {
+    ...entry,
+    tokens: {
+      bg: t.bg,
+      text: t.text,
+      muted: t.muted,
+      line: t.line,
+      card: t.card,
+      overlay: 'rgba(0,0,0,0.04)',
+      primary: t.accent,
+      accent: t.accent,
+      buttonText: t.accentText || '#FFFFFF',
+      radius: t.radius || '10px',
+      shadow: t.shadow || '0 12px 32px rgba(0,0,0,0.12)',
+    },
+    fonts: {
+      display: `"${t.fontDisplay || 'Fraunces'}", Georgia, serif`,
+      body: `"${t.fontBody || 'Inter'}", system-ui, sans-serif`,
+      google: [
+        { family: t.fontDisplay || 'Fraunces', weights: 'wght@400;600;700' },
+        { family: t.fontBody || 'Inter', weights: 'wght@400;500;600;700' },
+      ],
+    },
+    layout: `${entry.layoutFamily} layout for ${entry.niche} niche.`,
+    components: 'Family shell components — structurally distinct from other templates.',
+    motifs: (entry.personality || []).join(', '),
+    antiPatterns: 'Do not collapse into a generic purple SaaS landing page.',
+    sections: 'Driven by layoutFamily shell.',
+  };
+}
+
+const LEGACY_DESIGN_SYSTEMS = [
   {
     id: 'editorial-luxe',
     name: 'Editorial Luxe',
@@ -119,6 +169,41 @@ const DESIGN_SYSTEMS = [
     motifs: `Soft terracotta and sage gradients, rounded blobs, hand-drawn-feeling icons, and natural textures. Use lots of rounded corners and gentle shadow.`,
     antiPatterns: `Do not use sharp corners. Do not use neon colors. Do not use a dark or clinical background. Do not use generic purple. Do not use rigid grid lines. Do not use all-caps headings.`,
     sections: `1. Soft nav with rounded CTA. 2. Hero with rounded image and warm copy. 3. Problem cards with organic shapes. 4. Solution steps. 5. Services with rounded cards. 6. Testimonials. 7. Offer. 8. About. 9. FAQ. 10. Blog preview. 11. Video. 12. Booking CTA. 13. Footer.`,
+  },
+  {
+    id: 'wellrounded-feminine',
+    name: 'Well Rounded Feminine',
+    blurb: 'Soft blush and coral, script accents, photo-forward pillars — proven on Well Rounded Momma midwifery.',
+    tier: 'free',
+    audience: 'Midwives, home birth, maternity, placenta care, doulas, and feminine wellness practices.',
+    personality: ['feminine', 'soft', 'photo-forward', 'trustworthy', 'warm'],
+    tokens: {
+      bg: '#fdf8f4',
+      text: '#4a3b3f',
+      muted: '#8a7176',
+      line: 'rgba(74,59,63,.12)',
+      card: '#FFFFFF',
+      overlay: 'rgba(74,59,63,.03)',
+      primary: '#c47a6d',
+      accent: '#7b5560',
+      buttonText: '#FFFFFF',
+      radius: '22px',
+      shadow: '0 24px 60px -30px rgba(123,85,96,.5)',
+    },
+    fonts: {
+      display: '"Fraunces", Georgia, "Times New Roman", serif',
+      body: '"Nunito Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+      google: [
+        { family: 'Fraunces', weights: 'ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400' },
+        { family: 'Nunito Sans', weights: 'opsz,wght@6..12,300;6..12,400;6..12,600;6..12,700' },
+        { family: 'Sacramento', weights: 'wght@400' },
+      ],
+    },
+    layout: `Photo-led hero with soft cream veil and quieter headline. Trust stats strip. Meet-the-provider split with portrait. Three care pillars (provider / collaborator / why this choice). Quote band over a birth photo. Services, FAQ, and a request-consult form band. Max width ~1140px. Pill-shaped CTAs.`,
+    components: `Buttons: rounded-full coral. Script eyebrows (Sacramento). Pillar cards with soft photo tops. Portrait frames with blush fill. Forms on blush bands with rose labels.`,
+    motifs: `Blush/coral/mauve palette, script accents, parallax photo bands, real client photography, gentle shadows — never clinical purple or earthy-corporate green.`,
+    antiPatterns: `Do not use earthy olive/corporate greens as primary. Do not use huge billboard headlines. Do not use sharp brutalist corners. Do not invent testimonials. Do not hide the consult CTA below long video grids.`,
+    sections: `1. Soft sticky nav + call CTA. 2. Photo hero + quieter tagline. 3. Trust stats. 4. Meet provider. 5. Three care pillars. 6. Quote / testimonial band. 7. Why this care. 8. Services. 9. FAQ. 10. Consult form CTA. 11. Footer.`,
   },
   {
     id: 'bold-minimal',
@@ -528,6 +613,13 @@ const DESIGN_SYSTEMS = [
   },
 ];
 
+const CATALOG_DESIGN_SYSTEMS = catalogAsDesignSystems().map(normalizeCatalogSystem);
+const legacyIds = new Set(LEGACY_DESIGN_SYSTEMS.map((d) => d.id));
+const DESIGN_SYSTEMS = [
+  ...LEGACY_DESIGN_SYSTEMS,
+  ...CATALOG_DESIGN_SYSTEMS.filter((d) => !legacyIds.has(d.id)),
+];
+
 function getGoogleFontLink(fonts) {
   if (!fonts || !fonts.google || !fonts.google.length) return null;
   const parts = fonts.google.map((f) => {
@@ -707,7 +799,10 @@ export function getDesignSystemForBrand(brandInfo = {}, { preferredId } = {}) {
   const industry = String(brandInfo.industry || '').toLowerCase();
   const tone = String(brandInfo.tone || '').toLowerCase();
   if (tone.includes('clinical') || industry.includes('dental') || industry.includes('medical') || industry.includes('doctor') || industry.includes('therapy')) return getDesignSystem('modern-clinical');
-  if (tone.includes('warm') || tone.includes('organic') || industry.includes('midwife') || industry.includes('wellness') || industry.includes('coach') || industry.includes('holistic')) return getDesignSystem('organic-warm');
+  if (industry.includes('midwife') || industry.includes('home birth') || industry.includes('doula') || industry.includes('placenta') || industry.includes('maternity')) {
+    return getDesignSystem('wellrounded-feminine');
+  }
+  if (tone.includes('warm') || tone.includes('organic') || industry.includes('wellness') || industry.includes('coach') || industry.includes('holistic')) return getDesignSystem('organic-warm');
   if (tone.includes('bold') || tone.includes('minimal') || industry.includes('consult') || industry.includes('agency') || industry.includes('design')) return getDesignSystem('bold-minimal');
   if (tone.includes('premium') || tone.includes('luxury') || industry.includes('law') || industry.includes('financial') || industry.includes('advisor')) return getDesignSystem('editorial-luxe');
   if (tone.includes('playful') || tone.includes('retro') || industry.includes('food') || industry.includes('shop')) return getDesignSystem('retro-warm');
@@ -717,13 +812,73 @@ export function getDesignSystemForBrand(brandInfo = {}, { preferredId } = {}) {
   return getDesignSystem(DEFAULT_DESIGN_SYSTEM_ID);
 }
 
-export function pickDesignSystems(count = 3, preferredIds = []) {
+/** Map scraped industry text → catalog niche buckets that feel on-brand. */
+const INDUSTRY_NICHE_AFFINITY = [
+  { match: /midwif|doula|birth|maternity|prenatal|postpartum|placenta/, niches: ['midwifery', 'therapy', 'medspa', 'wedding', 'photography', 'spa'] },
+  { match: /dental|dentist|ortho/, niches: ['dental', 'orthodontics', 'medspa'] },
+  { match: /chiro|physio|therapy|counsel/, niches: ['chiropractic', 'therapy', 'urgent-care', 'medspa'] },
+  { match: /hvac|air.?cond|heating/, niches: ['hvac', 'plumbing', 'handyman', 'electrical'] },
+  { match: /plumb|drain/, niches: ['plumbing', 'hvac', 'handyman'] },
+  { match: /law|attorney|legal/, niches: ['law', 'personal-injury', 'accounting'] },
+  { match: /real.?estate|realtor|broker/, niches: ['real-estate', 'mortgage', 'photography'] },
+  { match: /restaurant|cafe|bakery|food/, niches: ['restaurant', 'cafe', 'bakery', 'bar'] },
+  { match: /salon|spa|beauty|medspa/, niches: ['salon', 'spa', 'medspa', 'barber'] },
+  { match: /photo|wedding/, niches: ['photography', 'wedding', 'boutique'] },
+  { match: /fitness|gym|yoga|pilates/, niches: ['fitness', 'spa', 'therapy'] },
+  { match: /wellness|holistic|coach|naturop/, niches: ['therapy', 'midwifery', 'spa', 'medspa', 'fitness'] },
+];
+
+function nicheAffinityForBrand(brandHint = {}) {
+  const blob = [
+    brandHint.industry,
+    ...(Array.isArray(brandHint.keywords) ? brandHint.keywords : []),
+    brandHint.tagline,
+    String(brandHint.bodyText || '').slice(0, 800),
+  ].filter(Boolean).join(' ').toLowerCase();
+  if (!blob) return null;
+  for (const row of INDUSTRY_NICHE_AFFINITY) {
+    if (row.match.test(blob)) return new Set(row.niches);
+  }
+  return null;
+}
+
+export function pickDesignSystems(count = 3, preferredIds = [], brandHint = {}) {
   const preferred = preferredIds.map((id) => getDesignSystem(id)).filter(Boolean);
-  const rest = DESIGN_SYSTEMS.filter((d) => !preferred.find((p) => p.id === d.id));
+  const affinity = nicheAffinityForBrand(brandHint);
+  // Hard exclude trade-emergency shells for birth/wellness (HVAC in a midwife switcher = trash).
+  const tradeNiches = new Set(['hvac', 'plumbing', 'electrical', 'roofing', 'handyman', 'garage-door', 'pest-control', 'towing', 'auto-repair']);
+  const birthLike = affinity && [...affinity].some((n) => ['midwifery', 'therapy', 'spa', 'medspa', 'wedding'].includes(n));
+
+  let pool = DESIGN_SYSTEMS.filter((d) => !preferred.find((p) => p.id === d.id));
+  if (birthLike) {
+    pool = pool.filter((d) => !tradeNiches.has(d.niche));
+  }
+  if (affinity) {
+    const onNiche = pool.filter((d) => affinity.has(d.niche) || affinity.has(String(d.id || '').split('-')[0]));
+    const soft = pool.filter((d) => !onNiche.includes(d) && d.tier === 'free' && !tradeNiches.has(d.niche));
+    const rest = pool.filter((d) => !onNiche.includes(d) && !soft.includes(d));
+    pool = [...onNiche, ...soft, ...rest];
+  }
+  // Round-robin by layoutFamily so the switcher isn't 8 reskins of one shell.
+  const byFamily = new Map();
+  for (const ds of pool) {
+    const fam = ds.layoutFamily || `legacy:${ds.id}`;
+    if (!byFamily.has(fam)) byFamily.set(fam, []);
+    byFamily.get(fam).push(ds);
+  }
   const picked = [...preferred];
-  for (const ds of rest) {
-    if (picked.length >= count) break;
-    if (!picked.find((p) => p.id === ds.id)) picked.push(ds);
+  const famKeys = [...byFamily.keys()];
+  while (picked.length < count) {
+    let added = false;
+    for (const fam of famKeys) {
+      if (picked.length >= count) break;
+      const bucket = byFamily.get(fam);
+      if (bucket?.length) {
+        picked.push(bucket.shift());
+        added = true;
+      }
+    }
+    if (!added) break;
   }
   return picked;
 }

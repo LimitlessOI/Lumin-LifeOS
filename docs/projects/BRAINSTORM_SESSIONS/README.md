@@ -12,4 +12,6 @@ See **`docs/BRAINSTORM_SESSIONS_PROTOCOL.md`** for required files (`00_CHARTER.m
 
 **Programs:** use different slugs (e.g. `lifeos`, `site-builder`, `tsos-platform`) so sessions stay legible.
 
-**Latest operator burst (LifeOS · 2026-05-08):** **`lifeos/2026-05-08_operator-uplift/`** — Phases **1–5** complete (**`50_TRIAGE.md`**). Digest **`npm run lifeos:builder:digest`** shipped; Tailwind exit = **`docs/projects/BUILDER_TAILWIND_EXIT_SPIKE.md`** (implementation NEXT).
+**Latest continuity vault (tsos-platform · 2026-07-27):** **`tsos-platform/2026-07-27_memory-governance-continuity/`** — index + implementation plan + drift (Phase 1 mostly shipped). Parent: **`tsos-platform/2026-05-13_capsule-ssot-convergence/`**.
+
+**Earlier operator burst (LifeOS · 2026-05-08):** **`lifeos/2026-05-08_operator-uplift/`** — Phases **1–5** complete (**`50_TRIAGE.md`**).
