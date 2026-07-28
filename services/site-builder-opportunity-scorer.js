@@ -5,7 +5,25 @@
  * High opportunityScore (0-100) = bad site = high priority for cold outreach.
  */
 
-import { detectPoisonScrape, extractHtmlTitle, htmlBodySnippet } from './site-builder-scrape-guard.js';
+import { detectPoisonScrape, extractHtmlTitle, htmlBodySnippet, assertSafeExternalUrl } from './site-builder-scrape-guard.js';
+
+const MAX_REDIRECT_HOPS = 5;
+
+// SSRF-safe fetch: validates the URL and every redirect hop (not just the initial
+// URL) against private/link-local IPs and cloud metadata endpoints before following.
+async function safeFetch(startUrl, { signal, headers } = {}) {
+  let currentUrl = startUrl;
+  for (let hop = 0; hop <= MAX_REDIRECT_HOPS; hop += 1) {
+    await assertSafeExternalUrl(currentUrl);
+    const response = await fetch(currentUrl, { headers, signal, redirect: 'manual' });
+    if ([301, 302, 303, 307, 308].includes(response.status) && response.headers.get('location')) {
+      currentUrl = new URL(response.headers.get('location'), currentUrl).toString();
+      continue;
+    }
+    return response;
+  }
+  throw new Error('too_many_redirects');
+}
 
 function scanFailedResult(url, message, fetchError = null) {
   return {
@@ -36,10 +54,9 @@ export function createOpportunityScorer(options = {}) {
       let fetchError = null;
 
       try {
-        const response = await fetch(url, {
+        const response = await safeFetch(url, {
           headers: { 'user-agent': 'Mozilla/5.0 (compatible; SiteScorer/1.0)' },
           signal: controller.signal,
-          redirect: 'follow',
         });
         clearTimeout(timer);
         responseTimeMs = Date.now() - startedAt;
@@ -97,7 +114,7 @@ export function createOpportunityScorer(options = {}) {
         // Also catch: any link with /book, /booking, /appointments, /schedule in the href
         && !/<a[^>]+href=["'][^"']*\/(?:book|booking|appointments?|schedule)[/"'?]/i.test(html);
       const noTitle = !/<title[^>]*>[^<]{3,}<\/title>/i.test(html);
-      const noMetaDesc = !/<meta[^>]+name=["']description["'][^>]*content=["'][^"']{10,}/i.test(html);
+      const noMetaDesc = !/<meta[^>]+name=["']description["'][^>]content=["'][^"']{10,}/i.test(html);
       const noSocialProof = !/(testimonial|review|rated|rating|stars|five.star|5.star)/i.test(lowerHtml);
       const noCTA = !/(book now|book a|schedule|appointment|call now|get started|contact us|free consult)/i.test(lowerHtml);
       const oldYear = (() => {

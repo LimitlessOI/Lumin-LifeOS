@@ -205,7 +205,7 @@ export function renderLeanProspectHtml(info = {}, posPartner = null) {
 </html>`;
 }
 
-// POS partner referral links — set AFFILIATE_*_URL env vars in Railway to activate commission tracking
+// POS partner referral links — set AFFILIATE__URL env vars in Railway to activate commission tracking
 export const POS_PARTNERS = {
   jane_app: {
     name: 'Jane App',
@@ -657,11 +657,23 @@ export default class SiteBuilder {
         : '';
 
       const variants = [];
+      const killedVariants = [];
+      const generationErrors = [];
       const variantHtmls = {};
       // Default: hand-authored layout shells so variants are structurally different.
       // Opt into the old same-funnel AI HTML path with useAiLayouts: true.
       const useLayoutShells = options.useAiLayouts !== true && options.useLayoutShells !== false;
       let variantIndex = 0;
+
+      let baseline = null;
+      try {
+        if (businessInfo.existingSiteHtml) {
+          baseline = await (await import('./site-builder-current-site-baseline.js')).scoreCurrentSiteBaseline({ html: businessInfo.existingSiteHtml });
+        }
+      } catch (err) {
+        logger.warn('[SITE] current site baseline scoring failed (continuing)', { clientId, error: err.message });
+      }
+
       for (const ds of systems) {
         try {
           businessInfo.designSystemId = ds.id;
@@ -675,7 +687,18 @@ export default class SiteBuilder {
           }
           variantIndex += 1;
           if (!html) {
-            html = await this.generateSiteHtml(businessInfo, { clientId, posPartner, designBrief, designSystem: ds, leanTemplate: options.leanTemplate, skipAi: options.skipAi });
+            let studioHtml = null;
+            try {
+              const { buildCreativeBrief } = await import('./site-builder-architect-brief.js');
+              const { runSiteDesign } = await import('./creative-engine/modes/site-design.js');
+              const creativeBrief = buildCreativeBrief({ businessInfo, opportunityAnalysis: options.opportunityAnalysis || {}, currentSiteBaseline: baseline || {} });
+              const designResult = await runSiteDesign({ creativeBrief, callCouncilMember: (prompt) => this.callWithFallback(GENERATION_CANDIDATES, prompt, { maxOutputTokens: GENERATION_MAX_TOKENS, taskType: 'site_builder.generate_site', useCache: false, label: 'runSiteDesign' }) });
+              if (designResult.ok && designResult.html) studioHtml = designResult.html;
+              else logger.warn('[SITE] Architect/Studio design path returned no usable html (falling back)', { clientId, style: ds.id, reason: designResult.reason || designResult.error });
+            } catch (err) {
+              logger.warn('[SITE] Architect/Studio design path failed (falling back to generateSiteHtml)', { clientId, style: ds.id, error: err.message });
+            }
+            html = studioHtml || await this.generateSiteHtml(businessInfo, { clientId, posPartner, designBrief, designSystem: ds, leanTemplate: options.leanTemplate, skipAi: options.skipAi });
           }
           html = this.patchSiteHtml(html, businessInfo);
           let quality = this.scoreSiteHtml(html, businessInfo);
@@ -689,25 +712,61 @@ export default class SiteBuilder {
             if (rScore.scorePct > quality.scorePct) { html = repaired; quality = rScore; }
           }
           if (pixel && html.includes('</body>')) html = html.replace('</body>', `${pixel}\n</body>`);
-          const vDir = path.join(deployDir, 'variants', ds.id);
-          await fs.mkdir(vDir, { recursive: true });
-          await fs.writeFile(path.join(vDir, 'index.html'), html);
-          variantHtmls[ds.id] = html;
-          variants.push({
-            id: ds.id,
-            name: ds.name,
-            blurb: ds.blurb,
-            tier: ds.tier || 'paid',
-            file: `variants/${ds.id}/index.html`,
-            scorePct: quality.scorePct,
-            layoutShell: usedShell,
-          });
+
+          let uxHeuristics = null;
+          try {
+            uxHeuristics = (await import('./creative-engine/ux-heuristic-gate.js')).scoreUxHeuristics(html);
+          } catch (err) {
+            logger.warn('[SITE] UX heuristic scoring failed (continuing)', { clientId, style: ds.id, error: err.message });
+            uxHeuristics = { overall: 0, notes: ['UX heuristic scoring failed, assuming minimal UX score.'] };
+          }
+
+          let fate = { keep: true, reason: 'No gate applied' };
+          try {
+            fate = (await import('./site-builder-variant-gate.js')).decideVariantFate({ variantScore: quality, uxHeuristics, baseline });
+          } catch (err) {
+            logger.warn('[SITE] variant gate decision failed (failing open)', { clientId, style: ds.id, error: err.message });
+            fate = { keep: true, reason: `Variant gate failed: ${err.message}` };
+          }
+
+          if (fate.keep !== false) {
+            const vDir = path.join(deployDir, 'variants', ds.id);
+            await fs.mkdir(vDir, { recursive: true });
+            await fs.writeFile(path.join(vDir, 'index.html'), html);
+            variantHtmls[ds.id] = html;
+            variants.push({
+              id: ds.id,
+              name: ds.name,
+              blurb: ds.blurb,
+              tier: ds.tier || 'paid',
+              file: `variants/${ds.id}/index.html`,
+              scorePct: quality.scorePct,
+              layoutShell: usedShell,
+              uxOverall: uxHeuristics.overall,
+              kept: fate.keep,
+              killReason: fate.keep ? null : fate.reason,
+            });
+          } else {
+            logger.info('[SITE] variant killed by quality gate', { clientId, style: ds.id, reason: fate.reason });
+            killedVariants.push({ id: ds.id, name: ds.name, scorePct: quality.scorePct, uxOverall: uxHeuristics.overall, killReason: fate.reason });
+          }
         } catch (err) {
           logger.warn('[SITE] variant generation failed (skipping)', { clientId, style: ds.id, error: err.message });
+          generationErrors.push({ id: ds.id, name: ds.name, error: err.message });
         }
       }
 
-      if (!variants.length) throw new Error('all variant generations failed');
+      if (!variants.length) {
+        const genDetail = generationErrors.length ? `generation errors: ${generationErrors.map((e) => `${e.id}=${e.error}`).join('; ')}` : '';
+        const killDetail = killedVariants.length ? `quality gate killed all ${killedVariants.length} variant(s): ${killedVariants.map((k) => `${k.id}=${k.killReason}`).join('; ')}` : '';
+        const message = killedVariants.length && !generationErrors.length
+          ? `no variant beat your current site's baseline (${killDetail})`
+          : `all variant generations failed${genDetail ? `: ${genDetail}` : ''}${killDetail ? ` (${killDetail})` : ''}`;
+        const allFailedErr = new Error(message);
+        allFailedErr.generationErrors = generationErrors;
+        allFailedErr.killedVariants = killedVariants;
+        throw allFailedErr;
+      }
 
       // Top-level qualityReport = the BEST-scoring variant. Callers (the prospect
       // pipeline's send-quality gate) need one canonical score to decide whether
@@ -747,6 +806,7 @@ export default class SiteBuilder {
         businessInfo,
         posPartner,
         variants,
+        killedVariants,
         qualityReport,
         blogPosts: blogPosts.map((p) => ({ slug: p.slug, title: p.title })),
         editToken,
@@ -774,6 +834,7 @@ export default class SiteBuilder {
         previewUrl: metadata.previewUrl,
         businessName: businessInfo.businessName,
         variants,
+        killedVariants,
         qualityReport,
         posPartner: posPartner.name,
         metadata,
@@ -781,7 +842,7 @@ export default class SiteBuilder {
       };
     } catch (err) {
       logger.error('[SITE] Variant build failed', { clientId, error: err.message });
-      return { success: false, clientId, error: err.message };
+      return { success: false, clientId, error: err.message, generationErrors: err.generationErrors || [], killedVariants: err.killedVariants || [] };
     }
   }
 
@@ -931,8 +992,9 @@ export default class SiteBuilder {
       // Score their existing site with the same objective rubric the new site
       // is judged by, so the "before" and "after" numbers are directly comparable.
       let existingSiteScore = null;
+      let existingHtml = null;
       try {
-        const existingHtml = await page.content();
+        existingHtml = await page.content();
         existingSiteScore = this.scoreSiteHtml(existingHtml, {});
       } catch (err) {
         logger.warn('[SITE] Existing-site scoring failed (non-fatal)', { url, error: err.message });
@@ -950,6 +1012,7 @@ export default class SiteBuilder {
         ),
         sourceUrl: url,
         existingSiteScore,
+        existingSiteHtml: existingHtml, // Store the raw HTML for baseline comparison later
       };
       if (scraped.phone && !businessInfo.phone) businessInfo.phone = scraped.phone;
       if (scraped.bookingUrl && !businessInfo.bookingUrl) businessInfo.bookingUrl = scraped.bookingUrl;
@@ -997,7 +1060,7 @@ export default class SiteBuilder {
       logger.warn('[SITE] Scrape failed, using AI extraction only', { url, error: err.message });
       const extracted = await this.extractBusinessInfoWithAI({ title: url, bodyText: '', sourceUrl: url }, url);
       return applyScrapeGuard(
-        { ...extracted, sourceUrl: url, scrapeFetchFailed: true },
+        { ...extracted, sourceUrl: url, scrapeFetchFailed: true, scrapeFailureReason: String(err?.message || err).slice(0, 300) },
         { submittedName: options.businessName, url, forcePoisoned: true }
       );
     }
@@ -1285,9 +1348,9 @@ Output the ENTIRE HTML file from <!DOCTYPE html> to </html> then BUILD_COMPLETE.
     if (!this.callCouncil) throw new Error('callCouncil required for site generation');
 
     const response = await this.callWithFallback(GENERATION_CANDIDATES, prompt, { maxOutputTokens: GENERATION_MAX_TOKENS, taskType: 'site_builder.generate_site', useCache: false, label: 'generateSiteHtml' });
-    let clean = response.replace(/BUILD_COMPLETE[\s\S]*$/, '').trim();
+    let clean = response.replace(/BUILD_COMPLETE[\s\S]$/, '').trim();
     // Strip markdown fences AI models sometimes wrap HTML in (```html...``` or ```...```)
-    clean = clean.replace(/^```(?:html)?\s*\n?/, '').replace(/\n?```\s*$/, '').trim();
+    clean = clean.replace(/^```(?:html)?\s*\n?/, '').replace(/\n?```\s$/, '').trim();
 
     if (!clean.includes('<!DOCTYPE html') && !clean.includes('<html')) {
       throw new Error('AI did not return valid HTML');
@@ -1356,9 +1419,9 @@ Output the ENTIRE HTML file from <!DOCTYPE html> to </html> then BUILD_COMPLETE.
         ? h.replace('</head>', `${dsBlock}\n</head>`)
         : dsBlock + h;
     }
-    if (!/<body\b[^>]*data-lumin-ds/i.test(h)) {
+    if (!/<body\b[^>]data-lumin-ds/i.test(h)) {
       h = h.replace(/<body\b([^>]*)>/i, '<body data-lumin-ds="1" data-theme="light"$1>');
-    } else if (!/<body\b[^>]*data-theme/i.test(h)) {
+    } else if (!/<body\b[^>]data-theme/i.test(h)) {
       h = h.replace(/<body\b([^>]*)>/i, '<body data-theme="light"$1>');
     }
 
@@ -1387,12 +1450,12 @@ Output the ENTIRE HTML file from <!DOCTYPE html> to </html> then BUILD_COMPLETE.
     // 0c.1 If no blog posts were generated, remove any "Coming Soon" blog placeholder section.
     if (!blogPosts.length) {
       h = h.replace(/<section[^>]*>[\s\S]*?Coming Soon:[\s\S]*?<\/section>/gi, '');
-      h = h.replace(/<p[^>]*>\s*Coming Soon:[\s\S]*?<\/p>/gi, '');
+      h = h.replace(/<p[^>]*>\sComing Soon:[\s\S]*?<\/p>/gi, '');
     }
 
     // 0d. Replace [framemarker...] placeholders with real YouTube embeds or remove them
     const videos = extractVideoEmbedUrls(info);
-    h = h.replace(/\[\s*framemarker[^\]]*\]/gi, (match) => {
+    h = h.replace(/\[\sframemarker[^\]]*\]/gi, (match) => {
       const video = videos.find((v) => !v.used);
       if (video) {
         video.used = true;
@@ -1431,7 +1494,7 @@ button:focus-visible,a:focus-visible{outline:2px solid ${primary};outline-offset
     }
 
     // 3. Mobile sticky CTA bar — required for hasStickyMobileCta (6pts)
-    if (!/fixed bottom|sticky.*bottom|bottom booking|small screens only/i.test(h)) {
+    if (!/fixed bottom|sticky.bottom|bottom booking|small screens only/i.test(h)) {
       const callLink = phone
         ? `<a href="tel:${phone.replace(/[^\d+]/g, '')}" class="flex-1 border border-white/30 rounded-full py-2.5 text-center text-sm font-semibold text-white">Call Us</a>`
         : '';
@@ -1522,7 +1585,7 @@ ${existingHtml}
 `;
 
     const response = await this.callWithFallback(REPAIR_CANDIDATES, prompt, { maxOutputTokens: REPAIR_MAX_TOKENS, taskType: 'site_builder.repair_site', useCache: false, label: 'improveSiteHtml' });
-    const clean = String(response || '').replace(/BUILD_COMPLETE[\s\S]*$/, '').trim();
+    const clean = String(response || '').replace(/BUILD_COMPLETE[\s\S]$/, '').trim();
     if (!clean.includes('<!DOCTYPE html') && !clean.includes('<html')) {
       throw new Error('AI did not return valid repaired HTML');
     }

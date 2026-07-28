@@ -20,9 +20,48 @@ import {
   isRepoWideKnownBadSignature,
   recordRepoWideKnownBadSignature,
   markFailedStep,
+  SHIP_QUEUE_TIMEOUT_MS,
   loadPausedProducts,
   listProductsWithQueues,
 } from '../services/governed-autonomous-shipping-loop.js';
+
+test('SHIP_QUEUE_TIMEOUT_MS: raised past the old 120s cap that was killing large-file codegen mid-generation', () => {
+  // Regression for sb-deliverability-gate (site-builder): confirmed live that
+  // failed attempts died at a gap_ms of ~120991, essentially the exact old
+  // AbortSignal.timeout(120_000) cap, right after the codegen existing-file
+  // cutoff fix started sending large files' full content into the prompt.
+  assert.ok(SHIP_QUEUE_TIMEOUT_MS > 120_000, `expected > 120000, got ${SHIP_QUEUE_TIMEOUT_MS}`);
+});
+
+test('loadPausedProducts reads GOVERNED_AUTONOMOUS_PAUSED_PRODUCTS env', () => {
+  const prev = process.env.GOVERNED_AUTONOMOUS_PAUSED_PRODUCTS;
+  try {
+    process.env.GOVERNED_AUTONOMOUS_PAUSED_PRODUCTS = 'builderos, token-accounting-os';
+    const paused = loadPausedProducts();
+    assert.equal(paused.has('builderos'), true);
+    assert.equal(paused.has('token-accounting-os'), true);
+  } finally {
+    if (prev === undefined) delete process.env.GOVERNED_AUTONOMOUS_PAUSED_PRODUCTS;
+    else process.env.GOVERNED_AUTONOMOUS_PAUSED_PRODUCTS = prev;
+  }
+});
+
+test('listProductsWithQueues excludes paused products so the loop cannot spend tokens on them', () => {
+  const prev = process.env.GOVERNED_AUTONOMOUS_PAUSED_PRODUCTS;
+  try {
+    const before = listProductsWithQueues();
+    if (!before.includes('builderos')) {
+      // Nothing to prove if the product has no BUILD_QUEUE on this checkout.
+      return;
+    }
+    process.env.GOVERNED_AUTONOMOUS_PAUSED_PRODUCTS = 'builderos';
+    const after = listProductsWithQueues();
+    assert.equal(after.includes('builderos'), false);
+  } finally {
+    if (prev === undefined) delete process.env.GOVERNED_AUTONOMOUS_PAUSED_PRODUCTS;
+    else process.env.GOVERNED_AUTONOMOUS_PAUSED_PRODUCTS = prev;
+  }
+});
 
 test('failureSignature normalizes hex ids and numbers so repeat failures share one signature', () => {
   const a = failureSignature('module_resolution_failed: target missing routes/foo123.js at commit a1b2c3d4e5f');
@@ -265,36 +304,6 @@ test('markFailedStep: repeat-regression branch (step-level) completes without th
     assert.equal(onDisk.steps[0].force_model_rotation, true);
   } finally {
     fs.rmSync(tmpDir, { recursive: true, force: true });
-  }
-});
-
-test('loadPausedProducts reads GOVERNED_AUTONOMOUS_PAUSED_PRODUCTS env', () => {
-  const prev = process.env.GOVERNED_AUTONOMOUS_PAUSED_PRODUCTS;
-  try {
-    process.env.GOVERNED_AUTONOMOUS_PAUSED_PRODUCTS = 'builderos, token-accounting-os';
-    const paused = loadPausedProducts();
-    assert.equal(paused.has('builderos'), true);
-    assert.equal(paused.has('token-accounting-os'), true);
-  } finally {
-    if (prev === undefined) delete process.env.GOVERNED_AUTONOMOUS_PAUSED_PRODUCTS;
-    else process.env.GOVERNED_AUTONOMOUS_PAUSED_PRODUCTS = prev;
-  }
-});
-
-test('listProductsWithQueues excludes paused products so the loop cannot spend tokens on them', () => {
-  const prev = process.env.GOVERNED_AUTONOMOUS_PAUSED_PRODUCTS;
-  try {
-    const before = listProductsWithQueues();
-    if (!before.includes('builderos')) {
-      // Nothing to prove if the product has no BUILD_QUEUE on this checkout.
-      return;
-    }
-    process.env.GOVERNED_AUTONOMOUS_PAUSED_PRODUCTS = 'builderos';
-    const after = listProductsWithQueues();
-    assert.equal(after.includes('builderos'), false);
-  } finally {
-    if (prev === undefined) delete process.env.GOVERNED_AUTONOMOUS_PAUSED_PRODUCTS;
-    else process.env.GOVERNED_AUTONOMOUS_PAUSED_PRODUCTS = prev;
   }
 });
 

@@ -353,9 +353,17 @@ export function checkStagedProductReceiptCommit({ root }) {
 
   const bp = loadBpPriority({ root });
   const byReceipt = new Map((bp.items || []).map((i) => [i.receipt_path, i]));
+  // scrapped_items holds legitimate INTERNAL_PROOF_ONLY registrations (e.g.
+  // SITE_BUILDER_PREALPHA_LAYER_A.json) — real, intentional registrations,
+  // but explicitly "not an active product queue item," so the active-queue
+  // co-staging requirements below (bp_sync proof, founder_packet) don't
+  // apply to them; a separate set lets the loop recognize and skip them
+  // rather than mistake them for BP_STAGED_RECEIPT_UNKNOWN.
+  const scrappedReceipts = new Set((bp.scrapped_items || []).map((i) => i.receipt_path));
 
   for (const rel of staged) {
     if (!rel.startsWith('products/receipts/') || !rel.endsWith('.json')) continue;
+    if (scrappedReceipts.has(rel)) continue;
     const raw = readStagedFile(root, rel);
     if (!raw) continue;
     let receipt;

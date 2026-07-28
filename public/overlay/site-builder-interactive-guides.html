@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Interactive Guides -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Guides</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .interactive-guide {
+            position: relative;
+            display: inline-block;
+            margin: 20px;
+        }
+        .guide-label {
+            display: none;
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+        .interactive-guide:hover .guide-label {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="interactive-guide">
+        <button>Click Me!</button>
+        <div class="guide-label">This button triggers an action</div>
+    </div>
+    <div class="interactive-guide">
+        <input type="text" placeholder="Type here...">
+        <div class="guide-label">Enter your text in this field</div>
+    </div>
+</body>
+</html>

@@ -3,6 +3,54 @@
   "generated_at": "2026-07-09",
   "pairs": [
     {
+      "table": "lab_results",
+      "first_file": "20260422_lifeos_biological_age.sql",
+      "second_file": "20260718_lifeos_labs_psychometrics.sql",
+      "note": "2026-07-20: this second file's CREATE TABLE never actually applied (silently no-op'd against the first, real live schema) — already confirmed and documented in the 2026-07-19 lab_results audit. Its intended columns are what the 20260719b repair migration adds via idempotent ALTER TABLE instead. Genuinely harmless; nothing further to reconcile."
+    },
+    {
+      "table": "lab_results",
+      "first_file": "20260422_lifeos_biological_age.sql",
+      "second_file": "20260719b_lifeos_lab_results_repair.sql",
+      "note": "2026-07-20: the repair migration's CREATE TABLE is guarded by `IF to_regclass('public.lab_results') IS NULL` inside a DO block (from-scratch case only) — it never fires against the real, already-existing table; the real repair work is the ALTER TABLE statements below it. Live-verified end-to-end (POST /labs/import + GET /labs/me round trip against production) the same night this was shipped."
+    },
+    {
+      "table": "psychometric_results",
+      "first_file": "20260718_lifeos_labs_psychometrics.sql",
+      "second_file": "20260719b_lifeos_lab_results_repair.sql",
+      "note": "2026-07-20: the first file's CREATE TABLE never applied (rolled back by an unrelated failure later in the same migration batch — see the lab_results audit); the repair migration's CREATE TABLE IF NOT EXISTS is the one that actually created this table. Confirmed no other file defines it."
+    },
+    {
+      "table": "sleep_logs",
+      "first_file": "20260420_lifeos_phase2_schema.sql",
+      "second_file": "20260424_create_sleep_tracking_tables.sql",
+      "note": "2026-07-19 audit: confirmed harmless. Live schema (BIGINT user_id, sleep_start/sleep_end/duration_minutes) actually comes from the already-grandfathered 20260427/20260513 files, not this one. This file's SERIAL-id/uuid-less shape never applied and nothing in services/ or routes/ consumes it."
+    },
+    {
+      "table": "epistemic_facts",
+      "first_file": "20260426_memory_intelligence.sql",
+      "second_file": "202606013.sql",
+      "note": "2026-07-19 audit: confirmed harmless. Live schema is the rich 20260426 version (domain/level/context_required/etc, what memory-status-routes.js and command-center routes actually query). This file's 4-column stub never applied; nothing consumes fact/source."
+    },
+    {
+      "table": "user_trials",
+      "first_file": "20260313_core_schema.sql",
+      "second_file": "create_user_trials_table.sql",
+      "note": "2026-07-19 audit: confirmed harmless. Live schema matches 20260313 (command_key/duration_days/active/has_subscription) plus later ALTER-added notes/trial_id. No code references this file's trial_date/trial_result columns."
+    },
+    {
+      "table": "user_trials",
+      "first_file": "20260313_core_schema.sql",
+      "second_file": "user_trials_table_amendment.sql",
+      "note": "2026-07-19 audit: confirmed harmless, same reasoning as create_user_trials_table.sql. No code references trial_started_at/trial_ended_at/status."
+    },
+    {
+      "table": "curriculum_modules",
+      "first_file": "add_virtual_real_estate_curriculum.sql",
+      "second_file": "virtual_real_estate_curriculum_structure.sql",
+      "note": "2026-07-19 audit: the second file already self-documents as an intentional IF-NOT-EXISTS no-op duplicate (see its own header comment) rather than something to delete outright."
+    },
+    {
       "table": "energy_transactions",
       "first_file": "001_create_energy_tables.sql",
       "second_file": "001_create_initial_schema.sql"

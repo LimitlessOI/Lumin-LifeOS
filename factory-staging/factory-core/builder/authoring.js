@@ -34,6 +34,25 @@ export function stepRequiresAuthoring(step) {
   return step.action_type === AUTHORING_ACTION_TYPE || Boolean(step.authoring);
 }
 
+/**
+ * Pure: rotate a tier list forward by `rotation` positions (wrapping), so a
+ * repeated-failure escalation actually tries a different model instead of
+ * restarting from tier 0 every time. Diagnosed live 2026-07-20: the loop's
+ * LOOP_ESCALATION_CONTRACT set step.model_rotation and sent model_escalation
+ * on repeated same-signature failures, but nothing downstream ever read
+ * either value -- codegen always started from tiers[0] again, so three
+ * consecutive attempts on sb-deliverability-gate (site-builder) produced the
+ * exact same missing_exports failure three times in a row from the same
+ * model, not three genuinely different attempts.
+ */
+export function rotateTiers(tiers, rotation) {
+  const list = Array.isArray(tiers) ? tiers : [];
+  if (list.length === 0) return list;
+  const n = Math.max(0, Math.trunc(Number(rotation) || 0)) % list.length;
+  if (n === 0) return list;
+  return [...list.slice(n), ...list.slice(0, n)];
+}
+
 // Strip a single fenced code block if the model wrapped its output in markdown.
 export function extractContent(raw) {
   const text = String(raw || '');
@@ -121,15 +140,17 @@ export async function runAuthoring(step, codegenRunner) {
     const expectedExports = Array.isArray(step.expected_exports) && step.expected_exports.length
       ? `REQUIRED NAMED EXPORTS: ${step.expected_exports.join(', ')}\nYou MUST export each of these names from the file.\n`
       : '';
-    const additiveHint = existingSize > 0
+    const additiveHint = existingSize > 0 && !(step.patch_mode || authoring.patch_mode)
       ? `EXISTING FILE IS ${existingSize} bytes. Return the COMPLETE updated file (not a stub). Preserve all existing behavior; only add/change what the task requires. Output length must stay ≥ 30% of the existing file.\n`
       : '';
+    const baseTiers = Array.isArray(authoring.tiers) && authoring.tiers.length ? authoring.tiers : DEFAULT_CODEGEN_TIERS;
     result = await codegenRunner.generate({
       task: authoring.task || step.task || '',
       target_file,
       spec: `${additiveHint}${authoring.spec || step.spec || ''}`,
-      tiers: Array.isArray(authoring.tiers) && authoring.tiers.length ? authoring.tiers : DEFAULT_CODEGEN_TIERS,
+      tiers: rotateTiers(baseTiers, step.model_rotation),
       max_output_tokens: Number(authoring.max_output_tokens || step.max_output_tokens) || 8000,
+      patch_mode: step.patch_mode || authoring.patch_mode || false,
       last_error: step.last_error || null,
       expected_exports: step.expected_exports || null,
       failure_context: failureContext,
@@ -161,23 +182,31 @@ export async function runAuthoring(step, codegenRunner) {
         stub_healed: true,
       };
     }
+    const underlyingReason = result?.error ? ` underlying: ${String(result.error).slice(0, 300)}` : '';
     return {
       ...base,
       ok: false,
-      reason: `codegen_stub_detected: generated ${content.length}b is < 30% of existing ${existingSize}b`,
-      error: `generated content appears to be a stub (existing ${existingSize}b, generated ${content.length}b)`,
+      reason: `codegen_stub_detected: generated ${content.length}b is < 30% of existing ${existingSize}b.${underlyingReason}`,
+      error: `generated content appears to be a stub (existing ${existingSize}b, generated ${content.length}b).${underlyingReason}`,
       model_tier: result?.model_tier || null,
+      codegen_error: result?.error || null,
     };
   }
 
   if (!content || !content.trim()) {
     const errMsg = result?.error || null;
+    // tier_errors (routes/factory-mount-routes.js codegenRunner.generate)
+    // carries every tier's own real failure reason, not just the last one
+    // tried -- surfaced here so a full-chain failure is diagnosable (which
+    // tiers actually got reached, why each one specifically failed) instead
+    // of only showing the final tier's error and hiding the rest.
     return {
       ...base,
       ok: false,
       reason: errMsg ? `codegen_empty: ${String(errMsg).slice(0, 500)}` : 'codegen_empty',
       model_tier: result?.model_tier || null,
       error: errMsg,
+      tier_errors: Array.isArray(result?.tier_errors) ? result.tier_errors : null,
     };
   }
 

@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /**
  * SYNOPSIS: Triggers Railway redeploy via the RUNNING app.
  * Triggers Railway redeploy via the RUNNING app.
@@ -34,7 +33,7 @@ const base = (
   process.env.PUBLIC_BASE_URL ||
   process.env.LUMIN_SMOKE_BASE_URL ||
   ''
-).replace(/\/$/, '');
+).trim().replace(/\/$/, '');
 
 const key =
   process.env.COMMAND_CENTER_KEY ||

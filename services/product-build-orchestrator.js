@@ -11,6 +11,7 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { authorAssertionsFromSpec } from '../factory-staging/factory-core/bpb/author-assertions.js';
 import { runBehaviorAssertions } from '../factory-staging/factory-core/sentry/behavior-assertions.js';
+import { execFileSync } from 'node:child_process';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const TYPED_BLOCKERS_PATH = path.join(ROOT, 'builderos-reboot/governance/TYPED_BLOCKER_SSOT.json');
@@ -239,6 +240,7 @@ export async function evaluateStepExpectations(step, {
   // on verify_script / moduleHealthFn. Artifact proof owns file/export content.
   const runnable = authored.assertions.filter((a) => {
     if (a.type === 'file_contains' || a.type === 'exports_smoke') return true;
+    if (a.type === 'function_behavior_test' && typeof runner.importModule === 'function') return true;
     if ((a.type === 'http_status' || a.type === 'module_mounts') && typeof runner.http === 'function') return true;
     if (a.type === 'db_row_exists' && typeof runner.db === 'function') return true;
     return false;
@@ -379,6 +381,15 @@ export async function claimPreExistingSatisfiedSteps(queue, {
       continue;
     }
     if (!proof?.ok || proof.applicable === false) continue;
+
+    // New logic: Check if the file is committed to git
+    const targetPath = path.join(root, step.target_file);
+    try {
+      execFileSync('git', ['-C', root, 'ls-files', '--error-unmatch', targetPath]);
+    } catch {
+      continue; // File is either untracked or has no commits; do not mark as done
+    }
+
     step.status = STEP_STATUS.DONE;
     step.pre_existing = true;
     step.shipped_via = 'pre_existing_artifact_proof';
@@ -414,6 +425,13 @@ export function reviveStaleBlockedSteps(queue, {
     if (step.status !== STEP_STATUS.BLOCKED) continue;
     if (isHumanHold(step)) continue;
     if (step.demoted === true) continue;
+    if (step.escalation_required === true) continue;
+    if (typeof step.same_signature_count === 'number' && step.same_signature_count >= 3 && step.escalation_required !== true) {
+      step.escalation_required = true;
+      step.status = STEP_STATUS.BLOCKED;
+      step.escalation_note = `HARD GATE: 3+ identical failures (${step.failure_signature}). Automatic revival is disabled for this step until escalation_required is explicitly cleared by a real escalation action (external research + a second model, per founder directive 2026-07-26) -- this step will NOT auto-revive on its own again.`;
+      continue;
+    }
     if (step.park_until) {
       const until = Date.parse(step.park_until);
       if (Number.isFinite(until) && until > now) continue;

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Template Choices -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template Choices</title>
+    <style>
+        .template-choice {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px;
+            display: inline-block;
+            cursor: pointer;
+        }
+        .template-choice.selected {
+            border-color: blue;
+        }
+    </style>
+    <script>
+        function selectTemplate(templateId) {
+            const choices = document.querySelectorAll('.template-choice');
+            choices.forEach(choice => choice.classList.remove('selected'));
+            const selectedChoice = document.getElementById(templateId);
+            selectedChoice.classList.add('selected');
+            // Logic to handle template selection can be added here
+            console.log('Selected template:', templateId);
+        }
+    </script>
+</head>
+<body>
+    <h1>Select a Template</h1>
+    <div id="template1" class="template-choice" onclick="selectTemplate('template1')">
+        <h2>Template 1</h2>
+        <p>Description of Template 1</p>
+    </div>
+    <div id="template2" class="template-choice" onclick="selectTemplate('template2')">
+        <h2>Template 2</h2>
+        <p>Description of Template 2</p>
+    </div>
+    <div id="template3" class="template-choice" onclick="selectTemplate('template3')">
+        <h2>Template 3</h2>
+        <p>Description of Template 3</p>
+    </div>
+    <!-- Add more templates as needed -->
+</body>
+</html>

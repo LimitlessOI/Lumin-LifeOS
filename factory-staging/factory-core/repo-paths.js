@@ -15,5 +15,9 @@ export const REPO_ROOT = path.resolve(CORE_DIR, '../..');
 export const FACTORY_ROOT = path.resolve(CORE_DIR, '..');
 
 export function resolveRepoPath(relativePath) {
-  return path.join(REPO_ROOT, String(relativePath).replace(/\\/g, '/'));
+  const resolved = path.resolve(REPO_ROOT, String(relativePath).replace(/\\/g, '/'));
+  if (resolved !== REPO_ROOT && !resolved.startsWith(REPO_ROOT + path.sep)) {
+    throw new Error(`path_escapes_repo_root:${relativePath}`);
+  }
+  return resolved;
 }

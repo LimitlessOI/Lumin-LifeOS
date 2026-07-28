@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /**
  * SYNOPSIS: Site Builder pre-alpha SENTRY gate — Layer A (structural walkthrough).
  * Acts as a client's browser would at the HTTP level: preview loads, editor loads,
@@ -69,7 +68,7 @@ async function fetchRaw(url, { method = 'GET', redirect = 'follow', timeout = 30
 // Extract the canvas iframe src from the rendered editor HTML.
 function extractIframeSrc(html) {
   const m = html.match(/data-lifeos-iframe[^>]*\bsrc="([^"]+)"/i)
-    || html.match(/<iframe[^>]*\bsrc="([^"]+)"[^>]*data-lifeos-iframe/i)
+    || html.match(/<iframe[^>]*\bsrc="([^"]+)"[^>]data-lifeos-iframe/i)
     || html.match(/class="lifeos-canvas-frame"[^>]*\bsrc="([^"]+)"/i);
   return m ? m[1].replace(/&amp;/g, '&') : '';
 }
@@ -190,6 +189,34 @@ async function main() {
     checkoutDetail += ` | followed pay=1 HTTP ${followed.status} stripe_in_body=${/stripe/i.test(followed.text || '')}`;
   }
   step('SBPA-A06_checkout_resolves_stripe', checkoutOk, checkoutDetail);
+
+  // A07 — LIVE SCRAPE BEHAVIOR GATE. Every prior check above reuses an existing
+  // preview; none of them actually re-run scrapeBusinessInfo() with fresh input.
+  // Founder-reproduced 2026-07-26: a plain JS ReferenceError inside that function
+  // silently crashed EVERY scrape for hours while exports_smoke/file_contains
+  // checks kept passing, because those only check static file shape, never that
+  // the function actually executes without throwing. This step closes that hole
+  // by actually invoking the real scrape-and-build path against a fast, reliable,
+  // content-stable target (example.com) and asserting it did not fail closed.
+  let scrapeOk = false;
+  let scrapeDetail = '';
+  try {
+    const scrapeRes = await fetch(`${BASE}/api/v1/sites/build-variants`, {
+      method: 'POST',
+      headers: { 'x-command-key': KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url: 'https://example.com', variantCount: 1 }),
+      signal: AbortSignal.timeout(60000),
+    });
+    const scrapeBody = await scrapeRes.json().catch(() => ({}));
+    const bi = scrapeBody?.metadata?.businessInfo || {};
+    scrapeOk = scrapeRes.status === 200 && bi.scrapeFetchFailed !== true;
+    scrapeDetail = scrapeOk
+      ? `HTTP ${scrapeRes.status}; businessName="${bi.businessName || ''}"`
+      : `HTTP ${scrapeRes.status}; scrapeFetchFailed=${bi.scrapeFetchFailed}; scrapeFailureReason="${bi.scrapeFailureReason || '(none)'}"`;
+  } catch (err) {
+    scrapeDetail = `request failed: ${err.message}`;
+  }
+  step('SBPA-A07_live_scrape_behavior', scrapeOk, scrapeDetail);
 
   finish(preview);
 }

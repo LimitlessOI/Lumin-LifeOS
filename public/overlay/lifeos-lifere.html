@@ -216,6 +216,76 @@
     .tab-panel { display: none; }
     .tab-panel.active { display: block; }
     input, select, textarea { background: var(--lifere-elevated); border: 1px solid var(--border); color: var(--text); border-radius: 6px; padding: 6px 8px; font-size: 13px; width: 100%; margin-bottom: 8px; }
+
+    /* Chair chat — the real communication engine, not a form widget */
+    .chair-chat-section {
+      background: var(--card);
+      border: 1px solid rgba(14, 165, 233, 0.25);
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 0 rgba(14, 165, 233, 0.06) inset;
+    }
+    .chair-chat-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; gap: 10px; }
+    .chair-chat-title { display: flex; align-items: center; gap: 8px; }
+    .chair-chat-dot { width: 8px; height: 8px; border-radius: 50%; background: #86efac; box-shadow: 0 0 0 3px rgba(134, 239, 172, 0.15); flex-shrink: 0; }
+    .chair-chat-dot.busy { background: #fcd34d; box-shadow: 0 0 0 3px rgba(252, 211, 77, 0.15); animation: chair-pulse 1.1s ease-in-out infinite; }
+    @keyframes chair-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+    .chair-chat-title h2 { font-size: 14px; font-weight: 700; letter-spacing: -0.01em; }
+    .chair-chat-sub { font-size: 12px; color: var(--muted); }
+    .chair-chat-log {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 360px;
+      overflow-y: auto;
+      padding: 4px 2px 10px;
+      margin-bottom: 10px;
+    }
+    .chair-chat-empty { font-size: 13px; color: var(--muted); padding: 18px 8px; text-align: center; border: 1px dashed var(--border); border-radius: 10px; }
+    .chair-msg { display: flex; gap: 10px; max-width: 92%; }
+    .chair-msg.from-user { align-self: flex-end; flex-direction: row-reverse; }
+    .chair-msg-avatar {
+      width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; color: #fff;
+      background: var(--lifere-accent);
+    }
+    .chair-msg.from-user .chair-msg-avatar { background: #64748b; }
+    .chair-msg-bubble {
+      background: var(--lifere-elevated);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 13px;
+      font-size: 13.5px;
+      line-height: 1.5;
+      color: var(--lifere-body-text);
+      white-space: pre-wrap;
+    }
+    .chair-msg.from-user .chair-msg-bubble { background: rgba(14, 165, 233, 0.12); border-color: rgba(14, 165, 233, 0.25); }
+    .chair-msg.from-assistant .chair-msg-bubble.thinking { color: var(--muted); font-style: italic; }
+    .chair-chat-composer { display: flex; gap: 8px; align-items: flex-end; }
+    .chair-chat-composer textarea { margin-bottom: 0; resize: none; min-height: 40px; max-height: 120px; }
+    .chair-chat-composer .btn-primary { flex-shrink: 0; height: 40px; }
+    .chair-chat-suggestions { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+    .chair-chat-suggestion { font-size: 12px; padding: 5px 10px; border-radius: 999px; border: 1px solid var(--border); background: var(--lifere-elevated); color: var(--lifere-body-text); cursor: pointer; }
+    .chair-chat-suggestion:hover { border-color: var(--lifere-accent); color: var(--lifere-accent); }
+
+    /* Guided walkthrough */
+    .lifere-tour-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 9998;
+    }
+    .lifere-tour-card {
+      position: fixed; z-index: 9999; max-width: 320px;
+      background: var(--card); border: 1px solid var(--lifere-accent);
+      border-radius: 12px; padding: 16px; box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+    }
+    .lifere-tour-step { font-size: 11px; color: var(--lifere-accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
+    .lifere-tour-title { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+    .lifere-tour-body { font-size: 13px; color: var(--lifere-body-text); line-height: 1.5; margin-bottom: 12px; }
+    .lifere-tour-actions { display: flex; justify-content: space-between; align-items: center; }
+    .lifere-tour-skip { font-size: 12px; color: var(--muted); background: none; border: none; cursor: pointer; }
+    .lifere-tour-highlight { outline: 2px solid var(--lifere-accent); outline-offset: 3px; border-radius: 10px; position: relative; z-index: 9999; }
   </style>
 </head>
 <body>
@@ -231,9 +301,34 @@
           <h1>LifeRE · Real Estate Stack</h1>
           <p id="lifere-dateline">Loading…</p>
         </div>
+        <button type="button" class="btn btn-sm" id="lifere-restart-tour" title="Replay the guided walkthrough">Take the tour</button>
         <button type="button" class="btn lifere-theme-btn" id="lifere-theme-toggle" title="Toggle light/dark theme" aria-label="Toggle theme">☀︎</button>
       </div>
     </header>
+
+    <section class="chair-chat-section" id="lifere-chair-chat" data-lifere-tour="chat">
+      <div class="chair-chat-header">
+        <div class="chair-chat-title">
+          <span class="chair-chat-dot" id="chair-chat-dot"></span>
+          <h2>Ask Chair</h2>
+        </div>
+        <span class="chair-chat-sub">Real answers about your day, your deals, and this system — not a script.</span>
+      </div>
+      <div class="chair-chat-log" id="chair-chat-log">
+        <div class="chair-chat-empty" id="chair-chat-empty">
+          Ask about a deal, a client, today's priorities, or how any part of LifeRE works. This talks to the same Chair engine as LifeOS — real, not canned.
+        </div>
+      </div>
+      <div class="chair-chat-suggestions" id="chair-chat-suggestions">
+        <button type="button" class="chair-chat-suggestion" data-q="What should I focus on for the next hour?">What should I focus on for the next hour?</button>
+        <button type="button" class="chair-chat-suggestion" data-q="Walk me through what LifeRE can do for a new agent.">Walk me through what LifeRE can do for a new agent.</button>
+        <button type="button" class="chair-chat-suggestion" data-q="What's blocking my pipeline right now?">What's blocking my pipeline right now?</button>
+      </div>
+      <div class="chair-chat-composer">
+        <textarea id="chair-chat-input" placeholder="Ask Chair anything…" rows="1"></textarea>
+        <button type="button" class="btn btn-primary" id="chair-chat-send">Send</button>
+      </div>
+    </section>
 
     <section class="alpha-ready-banner pending" id="lifere-alpha-ready-banner" data-lifere="alpha-ready-banner">
       <h2 id="alpha-ready-title">Alpha status — checking…</h2>
@@ -2305,6 +2400,147 @@
         switchToClientsTab('buyer', null);
       });
 
+      // ── Chair chat — real conversation, same engine as LifeOS ────────────────
+      // Talks to the exact endpoint the working LifeOS chat uses
+      // (public/overlay/lifeos-app.html DIRECT_SYSTEM_ENDPOINT), not a
+      // reduced or fake clone. Real per-account JWT / command-key auth via
+      // apiFetch, real conversation_history sent every turn, real
+      // human_summary rendered back — no template strings, no "reviewed:" filler.
+      const CHAIR_ENDPOINT = '/api/v1/lifeos/builderos/command-control/founder-interface/message';
+      let chairHistory = [];
+      const chairLog = document.getElementById('chair-chat-log');
+      const chairEmpty = document.getElementById('chair-chat-empty');
+      const chairDot = document.getElementById('chair-chat-dot');
+      const chairInput = document.getElementById('chair-chat-input');
+
+      function renderChairMessage(role, text, opts) {
+        if (chairEmpty) chairEmpty.remove();
+        const row = document.createElement('div');
+        row.className = `chair-msg from-${role}`;
+        const avatar = document.createElement('div');
+        avatar.className = 'chair-msg-avatar';
+        avatar.textContent = role === 'user' ? 'You' : 'AI';
+        const bubble = document.createElement('div');
+        bubble.className = 'chair-msg-bubble' + (opts?.thinking ? ' thinking' : '');
+        bubble.textContent = text;
+        row.appendChild(avatar);
+        row.appendChild(bubble);
+        chairLog.appendChild(row);
+        chairLog.scrollTop = chairLog.scrollHeight;
+        return bubble;
+      }
+
+      async function sendChairMessage(rawText) {
+        const text = (rawText ?? chairInput.value).trim();
+        if (!text) return;
+        chairInput.value = '';
+        chairInput.style.height = 'auto';
+        renderChairMessage('user', text);
+        chairHistory.push({ role: 'user', content: text });
+        const thinkingBubble = renderChairMessage('assistant', 'Thinking…', { thinking: true });
+        chairDot?.classList.add('busy');
+        try {
+          const res = await apiFetch(CHAIR_ENDPOINT, {
+            method: 'POST',
+            body: JSON.stringify({
+              text,
+              action: 'auto',
+              stage: 'system',
+              source_mode: 'text',
+              conversational_mode: true,
+              async: false,
+              conversation_history: chairHistory.slice(-20),
+              ui_context: { surface: 'lifere-dashboard', page: location.pathname },
+              client_version: 'lifere-chair-chat-v1',
+            }),
+          });
+          const data = await res.json();
+          const reply = data.human_summary || data.error || 'No response — please try again.';
+          thinkingBubble.textContent = reply;
+          thinkingBubble.classList.remove('thinking');
+          chairHistory.push({ role: 'assistant', content: reply });
+        } catch (err) {
+          thinkingBubble.textContent = `Couldn't reach Chair: ${err.message}`;
+          thinkingBubble.classList.remove('thinking');
+        } finally {
+          chairDot?.classList.remove('busy');
+        }
+      }
+
+      document.getElementById('chair-chat-send')?.addEventListener('click', () => sendChairMessage());
+      chairInput?.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChairMessage(); }
+      });
+      chairInput?.addEventListener('input', () => {
+        chairInput.style.height = 'auto';
+        chairInput.style.height = Math.min(120, chairInput.scrollHeight) + 'px';
+      });
+      document.querySelectorAll('.chair-chat-suggestion').forEach((btn) => {
+        btn.addEventListener('click', () => sendChairMessage(btn.dataset.q));
+      });
+
+      // ── First-run guided walkthrough ──────────────────────────────────────────
+      function initLifereTour() {
+        if (localStorage.getItem('lifere_tour_done') === '1') return;
+        const steps = [
+          { el: '#lifere-chair-chat', title: 'Ask Chair anything', body: 'This is real, live conversation with the same AI engine LifeOS uses — ask about a deal, a client, or how any part of this works.' },
+          { el: '#lifere-top-3', title: "Today's top 3", body: 'The system picks your highest-leverage priorities for the day from your real pipeline, not a generic checklist.' },
+          { el: '.tab-btn[data-tab="coaching"]', title: 'Coaching & curriculum', body: 'A real, leveled curriculum plus 24 coaching modules — scripts, objections, listings, open houses, niche discovery — built for agents at any experience level.' },
+          { el: '.tab-btn[data-tab="deals"]', title: 'Deals, synced with your CRM', body: 'Live deal and transaction data pulled from BoldTrail, with next-best-action recommendations based on where each deal is actually stuck.' },
+        ];
+        let i = 0;
+        let overlayEl = null, cardEl = null, highlightedEl = null;
+        function cleanup() {
+          overlayEl?.remove();
+          cardEl?.remove();
+          highlightedEl?.classList.remove('lifere-tour-highlight');
+        }
+        function showStep() {
+          highlightedEl?.classList.remove('lifere-tour-highlight');
+          if (i >= steps.length) {
+            cleanup();
+            localStorage.setItem('lifere_tour_done', '1');
+            return;
+          }
+          const step = steps[i];
+          const target = document.querySelector(step.el);
+          if (!target) { i++; showStep(); return; }
+          target.classList.add('lifere-tour-highlight');
+          highlightedEl = target;
+          target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          const rect = target.getBoundingClientRect();
+          if (!overlayEl) {
+            overlayEl = document.createElement('div');
+            overlayEl.className = 'lifere-tour-overlay';
+            document.body.appendChild(overlayEl);
+          }
+          if (cardEl) cardEl.remove();
+          cardEl = document.createElement('div');
+          cardEl.className = 'lifere-tour-card';
+          cardEl.style.top = `${Math.min(window.innerHeight - 200, rect.bottom + 12)}px`;
+          cardEl.style.left = `${Math.min(window.innerWidth - 336, Math.max(16, rect.left))}px`;
+          cardEl.innerHTML = `
+            <div class="lifere-tour-step">Step ${i + 1} of ${steps.length}</div>
+            <div class="lifere-tour-title">${escapeHtml(step.title)}</div>
+            <div class="lifere-tour-body">${escapeHtml(step.body)}</div>
+            <div class="lifere-tour-actions">
+              <button type="button" class="lifere-tour-skip" id="lifere-tour-skip">Skip tour</button>
+              <button type="button" class="btn btn-primary btn-sm" id="lifere-tour-next">${i === steps.length - 1 ? 'Done' : 'Next'}</button>
+            </div>`;
+          document.body.appendChild(cardEl);
+          document.getElementById('lifere-tour-next').addEventListener('click', () => { i++; showStep(); });
+          document.getElementById('lifere-tour-skip').addEventListener('click', () => {
+            cleanup();
+            localStorage.setItem('lifere_tour_done', '1');
+          });
+        }
+        showStep();
+      }
+      document.getElementById('lifere-restart-tour')?.addEventListener('click', () => {
+        localStorage.removeItem('lifere_tour_done');
+        initLifereTour();
+      });
+
       await loadAlphaReadiness();
       await loadMotivation();
       await loadCommandCenter();
@@ -2316,6 +2552,7 @@
       await loadLifeIntegration();
       await loadOps();
       await loadDealsPanel();
+      initLifereTour();
     })();
   </script>
 </body>

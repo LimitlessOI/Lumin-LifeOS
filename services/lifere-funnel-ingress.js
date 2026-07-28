@@ -15,7 +15,7 @@ export function createLifeREFunnelIngress({ pool = null } = {}) {
         label: 'THINK',
       };
     }
-    if (secret && secret !== process.env.CLICKFUNNELS_WEBHOOK_SECRET) {
+    if (process.env.CLICKFUNNELS_WEBHOOK_SECRET && secret !== process.env.CLICKFUNNELS_WEBHOOK_SECRET) {
       return { ok: false, status: 401, error: 'Invalid webhook secret' };
     }
     if (pool) {

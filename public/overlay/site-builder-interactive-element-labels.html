@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Interactive Element Labels -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Element Labels</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+        .interactive-label {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .interactive-label:hover {
+            background-color: #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+    <div class="interactive-label" tabindex="0" role="button" aria-label="Submit Button">
+        Submit
+    </div>
+    <div class="interactive-label" tabindex="0" role="checkbox" aria-checked="false">
+        Accept Terms
+    </div>
+    <div class="interactive-label" tabindex="0" role="link" aria-label="Go to Homepage">
+        Home
+    </div>
+</body>
+</html>

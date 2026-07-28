@@ -191,7 +191,7 @@ async function notifySlack(event, businessName, detail = '') {
   if (!url) return;
   const emoji = event === 'replied' ? '💬' : '👀';
   const label = event === 'replied' ? 'REPLIED to cold email' : 'VIEWED preview';
-  const text = `${emoji} *Warm lead alert — ${label}*\n*Business:* ${businessName}\n${detail}`;
+  const text = `${emoji} Warm lead alert — ${label}*\nBusiness:* ${businessName}\n${detail}`;
   try {
     await fetch(url, {
       method: 'POST',
@@ -697,6 +697,66 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
   });
 
   /**
+   * GET /api/v1/sites/deliverability-status
+   * Read-only check: does the cold-outreach sending domain (EMAIL_FROM) have
+   * real SPF/DKIM DNS records? Visibility only -- does not block sending.
+   */
+  router.get('/deliverability-status', requireKey, async (req, res) => {
+    try {
+      const { checkDomainDeliverabilityDNS } = await import('../services/site-builder-deliverability-check.js');
+      const emailFrom = String(process.env.EMAIL_FROM || '').trim();
+      const emailMatch = emailFrom.match(/@([^\s>]+)/);
+      const domain = emailMatch ? emailMatch[1] : '';
+      if (!domain) {
+        return res.json({ ok: true, deliverabilityReady: false, deliverabilityBlockers: ['EMAIL_FROM not configured'], domain: null });
+      }
+      const result = await checkDomainDeliverabilityDNS(domain);
+      res.json({ ok: true, domain, ...result });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  const leadCaptureLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000,
+    max: 20,
+    message: { ok: false, error: 'Too many submissions — please call or email us directly.' },
+    standardHeaders: true,
+    legacyHeaders: false,
+  });
+
+  /**
+   * POST /api/v1/sites/:clientId/lead
+   * Public lead-capture form submission for a generated site. Rate-limited,
+   * not requireKey-gated -- real anonymous prospects call this directly.
+   */
+  router.post('/:clientId/lead', leadCaptureLimiter, async (req, res) => {
+    try {
+      const clientId = String(req.params.clientId || '').trim();
+      if (!clientId) return res.status(400).json({ ok: false, error: 'clientId required' });
+      // Honeypot: real visitors never fill "company"; bots do.
+      if (String(req.body?.company || '').trim()) return res.json({ ok: true });
+
+      const { captureAndNotifyLead } = await import('../services/site-builder-lead-capture.js');
+      const result = await captureAndNotifyLead({
+        pool,
+        clientId,
+        name: String(req.body?.name || '').trim().slice(0, 120),
+        phone: String(req.body?.phone || '').trim().slice(0, 40),
+        email: String(req.body?.email || '').trim().slice(0, 160),
+        message: String(req.body?.message || '').trim().slice(0, 2000),
+        source: String(req.body?.source || 'site-builder').trim().slice(0, 80),
+        notifier: notificationService,
+        logger,
+      });
+      if (!result.ok) return res.status(400).json(result);
+      res.json({ ok: true, leadId: result.leadId, message: 'Thank you! We will be in touch shortly.' });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  /**
    * GET /api/v1/sites/logo-studio
    * Serve the interactive Logo Studio page. If a clientId is given, prefills the
    * business name/colors from that preview's metadata; otherwise uses query params.
@@ -1095,7 +1155,7 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
         const p = result.rows[0];
         logger.info('[SITE] Preview viewed — warm lead', { clientId: id, businessName: p.business_name });
         notifySlack('viewed', p.business_name,
-          `*Preview:* ${p.preview_url}\n*Email:* ${p.contact_email}\n*Lead ID:* \`${id}\``
+          `Preview:* ${p.preview_url}\nEmail:* ${p.contact_email}\nLead ID:* \`${id}\``
         );
       }
     } catch (err) {
@@ -1126,7 +1186,7 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
         if (r.rowCount > 0) businessName = r.rows[0].business_name || id;
       }
       notifySlack('viewed', businessName,
-        `*Picked design:* \`${style || 'unknown'}\`\n*Lead ID:* \`${id}\`\nThis prospect toggled through the designs and chose one — strong buying signal.`
+        `Picked design:* \`${style || 'unknown'}\`\nLead ID:* \`${id}\`\nThis prospect toggled through the designs and chose one — strong buying signal.`
       );
     } catch (err) {
       logger.warn('[SITE] select-design tracking failed', { error: err.message });
@@ -1195,7 +1255,7 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
           from: fromEmail,
         });
         notifySlack('replied', prospect.business_name,
-          `*From:* ${fromEmail}\n*Subject:* ${subject}\n*Preview:* ${snippet}\n*Lead ID:* \`${prospect.client_id}\``
+          `From:* ${fromEmail}\nSubject:* ${subject}\nPreview:* ${snippet}\nLead ID:* \`${prospect.client_id}\``
         );
       }
 

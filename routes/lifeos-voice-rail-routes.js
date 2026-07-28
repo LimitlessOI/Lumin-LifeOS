@@ -12,7 +12,12 @@ import {
   VOICE_RAIL_EXECUTION_MANIFEST,
 } from '../services/voice-rail-execution-truth.js';
 import { synthesizeVoiceRailSpeech, voiceRailTtsStatus } from '../services/voice-rail-tts.js';
-import { transcribeVoiceRailAudio, voiceRailSttStatus } from '../services/voice-rail-stt.js';
+import {
+  transcribeVoiceRailAudio,
+  voiceRailSttStatus,
+  addVoiceRailSttCorrection,
+  listVoiceRailSttCorrections,
+} from '../services/voice-rail-stt.js';
 import {
   describeVoiceRailImages,
   normalizeVoiceRailAttachments,
@@ -171,11 +176,12 @@ export function createLifeOSVoiceRailRoutes({
       if (!req.file?.buffer) {
         return res.status(400).json({ ok: false, error: 'audio_required' });
       }
+      const userId = await voiceRail.resolveUserId(req.body?.user || 'adam');
       const context = String(req.body?.context || '').trim();
       const result = await transcribeVoiceRailAudio(
         req.file.buffer,
         req.file.mimetype || 'audio/webm',
-        { context, filename: req.file.originalname || 'voice-rail.webm' },
+        { context, filename: req.file.originalname || 'voice-rail.webm', userId, pool },
       );
       if (!result.ok) {
         return res.status(503).json({ ok: false, error: result.error, detail: result.detail });
@@ -186,7 +192,37 @@ export function createLifeOSVoiceRailRoutes({
         engine: 'openai-whisper',
         raw_text: result.raw_text || undefined,
         skipped: result.skipped || undefined,
+        corrections_used: result.corrections_used || 0,
       });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  router.get('/stt/corrections', requireKey, async (req, res, next) => {
+    try {
+      const userId = await voiceRail.resolveUserId(req.query.user || 'adam');
+      if (!userId) return res.status(404).json({ ok: false, error: 'user_not_found' });
+      const corrections = await listVoiceRailSttCorrections(pool, userId);
+      res.json({ ok: true, corrections });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  router.post('/stt/corrections', requireKey, async (req, res, next) => {
+    try {
+      const userId = await voiceRail.resolveUserId(req.body.user || 'adam');
+      if (!userId) return res.status(404).json({ ok: false, error: 'user_not_found' });
+      const result = await addVoiceRailSttCorrection(
+        pool,
+        userId,
+        req.body.misheard,
+        req.body.canonical,
+        req.body.source || 'manual',
+      );
+      if (!result.ok) return res.status(400).json(result);
+      res.json(result);
     } catch (err) {
       next(err);
     }

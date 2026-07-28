@@ -1,0 +1,38 @@
+<!-- SYNOPSIS: LifeOS overlay UI — Site Builder Template Choice Ui. -->
+<div id='template-choice-ui'>
+  <style>
+    #template-choice-ui {
+      background-color: rgba(0, 0, 0, 0.8);
+      color: white;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .template-option {
+      background-color: #333;
+      padding: 20px;
+      margin: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .template-option:hover {
+      background-color: #555;
+    }
+  </style>
+  <div class="template-option" onclick="chooseTemplate('Template1')">Template 1</div>
+  <div class="template-option" onclick="chooseTemplate('Template2')">Template 2</div>
+  <div class="template-option" onclick="chooseTemplate('Template3')">Template 3</div>
+  <script>
+    function chooseTemplate(templateName) {
+      console.log('Template chosen:', templateName);
+      document.getElementById('template-choice-ui').style.display = 'none';
+    }
+  </script>
+</div>

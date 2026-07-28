@@ -1,13 +1,5 @@
 /**
- * SYNOPSIS: Mounts the governed factory hot path (BPB → Builder → SENTRY → TSOS → Historian)
- * from factory-staging/factory-core onto the production Express app under /factory/*.
- *
- * This is the production cutover of the governed factory: it exposes the same
- * execute-step / execute-mission / intake / readiness surfaces the staging server
- * (factory-staging/startup/register-routes.js) exposes, WITHOUT re-registering the
- * staging GET /health (which would collide with the production /health).
- *
- * @ssot docs/products/builderos/PRODUCT_HOME.md
+ * SYNOPSIS: Pure: should the codegen prompt inline this file's existing content?
  */
 import express from 'express';
 import fs from 'node:fs';
@@ -26,6 +18,10 @@ import { reconcileRemoteTruth } from '../factory-staging/factory-core/readiness/
 import { extractContent } from '../factory-staging/factory-core/builder/authoring.js';
 import { runGovernedShippingQueue } from '../services/governed-shipping-runner.js';
 import { GRADE_ESCALATION_TIERS } from '../services/builderos-model-escalation-gate.js';
+import { runGovernedAutonomousShipOnce } from '../services/governed-autonomous-shipping-loop.js';
+import { getModelRankings, KNOWN_ROLES } from '../services/model-capability-ledger.js';
+import { runGovernanceReview } from '../services/governance-law-review.js';
+import { recordFounderDecision, getFounderDecisionHistory, findFounderDecisions } from '../services/founder-intent-model.js';
 import {
   blueprintFollowClaim,
   exactChangeClaim,
@@ -38,15 +34,17 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const REPO_ROOT = path.resolve(__dirname, '..');
 
+export const MAX_EXISTING_CONTENT_BYTES = 200000;
+
+/** Pure: should the codegen prompt inline this file's existing content? */
+export function shouldIncludeExistingFileContent(byteSize) {
+  return Number.isFinite(byteSize) && byteSize >= 0 && byteSize <= MAX_EXISTING_CONTENT_BYTES;
+}
+
 export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncilMember } = {}) {
   const router = express.Router();
   const guard = typeof requireKey === 'function' ? requireKey : (_req, _res, next) => next();
 
-  // SENTRY behavioral-proof runner, injected at the route boundary so
-  // factory-core stays pure. Fail-closed: if a required assertion cannot run
-  // (no runner), SENTRY returns FAIL rather than passing on omission.
-  // SENTRY must re-probe the local container after a runtime reload; a public
-  // baseUrl would hit a different Railway container and 404.
   const httpBase = `http://127.0.0.1:${process.env.PORT || 8080}`.replace(/\/$/, '');
   const assertionRunner = {
     db: pool
@@ -78,15 +76,10 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
     },
   };
 
-  // STEP 4 codegen runner (the "hands"), injected at the route boundary so
-  // factory-core stays pure. It returns CANDIDATE CONTENT ONLY — never assertions
-  // (assertion-provenance lock). Strong-first, provider-diverse tier order; escalate
-  // only on failure/empty output. The authored content is untrusted input that SENTRY
-  // proves independently via the Step-3 behavior gate.
   const codegenRunner = callCouncilMember
     ? {
         generate: async ({
-          task, target_file, spec, tiers, max_output_tokens: stepMaxTokens,
+          task, target_file, spec, tiers, max_output_tokens: stepMaxTokens, patch_mode,
           last_error, expected_exports, failure_context, expected_exports_context,
         }) => {
           const targetExt = path.extname(target_file || '').toLowerCase();
@@ -102,7 +95,11 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
               'REPO CONSTRAINT: This repository is "type": "module" (ES modules).',
               'Use ES module syntax with named exports (e.g. export function name, export const name, export { name }).',
               'CRITICAL: do NOT duplicate any export. If you declare `export function name` or `export const name`, do NOT also add `export { name }` for the same identifier.',
-              'CRITICAL: if the EXISTING FILE CONTENT is provided below, preserve ALL existing code, routes, handlers, and exports. Output the COMPLETE updated file — do NOT return a stub or minimal example.',
+              ...(patch_mode ? [
+                'PATCH MODE: Do NOT output the complete file. Output EXACTLY ONE block in this exact format, nothing else: <<<OLD>>>\n(the exact, verbatim existing lines you are replacing, copied character-for-character from EXISTING FILE CONTENT below)\n<<<NEW>>>\n(your replacement lines)\n<<<END>>>. The OLD block must match a contiguous substring of EXISTING FILE CONTENT EXACTLY, including whitespace -- copy it, do not retype it from memory.',
+              ] : [
+                'CRITICAL: if the EXISTING FILE CONTENT is provided below, preserve ALL existing code, routes, handlers, and exports. Output the COMPLETE updated file — do NOT return a stub or minimal example.',
+              ]),
               'Do NOT use CommonJS require or module.exports.',
             ] : []),
             ...(isSql ? [
@@ -122,11 +119,14 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
             ] : []),
           ];
           const absTarget = target_file ? (path.isAbsolute(target_file) ? target_file : path.join(REPO_ROOT, target_file)) : null;
+          let existingFileContent = null;
           const existingContentLines = [];
           if (absTarget) {
             try {
-              if (fs.existsSync(absTarget) && fs.statSync(absTarget).isFile() && fs.statSync(absTarget).size <= 20000) {
-                existingContentLines.push('EXISTING FILE CONTENT (preserve all existing code; output the complete updated file):\n' + fs.readFileSync(absTarget, 'utf8'));
+              if (fs.existsSync(absTarget) && fs.statSync(absTarget).isFile()
+                && shouldIncludeExistingFileContent(fs.statSync(absTarget).size)) {
+                existingFileContent = fs.readFileSync(absTarget, 'utf8');
+                existingContentLines.push('EXISTING FILE CONTENT (preserve all existing code; output the complete updated file):\n' + existingFileContent);
               }
             } catch { /* ignore read errors */ }
           }
@@ -143,6 +143,17 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
           const maxOutputTokens = Number(stepMaxTokens) || 8000;
           let lastError = null;
           let member = null;
+          // Full per-tier failure history, not just the last one. Found
+          // live 2026-07-28: this loop already tries every tier in order
+          // (the model-ordering fix works), but only ever kept the LAST
+          // tier's error string -- so when all 8 tiers failed, the response
+          // showed only the final one (e.g. openai_builder_mini's quota
+          // error) and completely hid what happened with claude_sonnet and
+          // every other tier tried before it. Real diagnostic gap, not a
+          // dispatch bug -- this makes it possible to tell "the strong
+          // model failed for a real reason" apart from "the strong model
+          // was never actually reachable."
+          const tierErrors = [];
           for (let i = 0; i < tiers.length; i += 1) {
             member = tiers[i];
             try {
@@ -155,13 +166,46 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
                 returnObject: true,
                 critical: true,
               });
-              const content = extractContent(typeof raw === 'string' ? raw : raw?.content || raw?.text || '');
+              let content = extractContent(typeof raw === 'string' ? raw : raw?.content || raw?.text || '');
+
+              if (patch_mode && existingFileContent) {
+                const oldMarker = '<<<OLD>>>\n';
+                const newMarker = '<<<NEW>>>\n';
+                const endMarker = '<<<END>>>';
+
+                const oldStartIndex = content.indexOf(oldMarker);
+                const newStartIndex = content.indexOf(newMarker, oldStartIndex + oldMarker.length);
+                const newEndIndex = content.indexOf(endMarker, newStartIndex + newMarker.length);
+
+                if (oldStartIndex !== -1 && newStartIndex !== -1 && newEndIndex !== -1) {
+                  const oldText = content.substring(oldStartIndex + oldMarker.length, newStartIndex).trim();
+                  const newText = content.substring(newStartIndex + newMarker.length, newEndIndex).trim();
+
+                  if (!oldText) {
+                    lastError = 'patch_apply_failed: old_text_empty';
+                    tierErrors.push({ tier: member, reason: lastError });
+                    continue;
+                  }
+
+                  // Read current file content fresh from disk for patch application
+                  const currentFileContent = fs.readFileSync(absTarget, 'utf8');
+                  const occurrences = currentFileContent.split(oldText).length - 1;
+
+                  if (occurrences !== 1) {
+                    lastError = `patch_apply_failed: old_text_ambiguous:${occurrences}_matches`;
+                    tierErrors.push({ tier: member, reason: lastError });
+                    continue;
+                  }
+
+                  content = currentFileContent.replace(oldText, newText);
+                } else {
+                  lastError = 'patch_apply_failed: markers_missing';
+                  tierErrors.push({ tier: member, reason: lastError });
+                  continue;
+                }
+              }
+
               if (content && content.trim()) {
-                // Fail-fast: reject syntax-broken JS/ESM codegen before it reaches SENTRY.
-                // node --check parses only; it does not load modules, so missing deps
-                // do not fail the check. We use .mjs to force ESM parsing. Skip for
-                // non-JS targets (e.g. .sql migrations, .html overlays) so the loop
-                // does not falsely reject valid non-JavaScript artifacts.
                 const targetExt = path.extname(target_file || '').toLowerCase();
                 const needsJsCheck = ['.js', '.mjs', '.cjs', '.jsx', '.ts', '.tsx'].includes(targetExt);
                 if (needsJsCheck) {
@@ -171,15 +215,12 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
                     execFileSync(process.execPath, ['--check', syntaxCheckFile]);
                   } catch (err) {
                     lastError = `syntax_check_failed:${member}: ${String(err?.message || err)}`;
+                    tierErrors.push({ tier: member, reason: lastError });
                     try { fs.unlinkSync(syntaxCheckFile); } catch {}
                     continue;
                   }
                   try { fs.unlinkSync(syntaxCheckFile); } catch {}
 
-                  // Import-resolution check: actually load the module from the target
-                  // directory so missing top-level relative imports (e.g. a generated
-                  // route importing a non-existent sibling module) are caught before the
-                  // file is written and poisons the routes/services spine preflight.
                   const importCheckFile = absTarget
                     ? path.join(path.dirname(absTarget), `.factory-import-check-${Date.now()}-${process.pid}.mjs`)
                     : null;
@@ -189,13 +230,13 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
                       execFileSync(process.execPath, ['--input-type=module', '-e', `import ${JSON.stringify(pathToFileURL(importCheckFile).href)};`]);
                     } catch (err) {
                       lastError = `import_resolution_failed:${member}: ${String(err?.message || err)}`;
+                      tierErrors.push({ tier: member, reason: lastError });
                       try { fs.unlinkSync(importCheckFile); } catch {}
                       continue;
                     }
                     try { fs.unlinkSync(importCheckFile); } catch {}
                   }
                 }
-                // Prefer real usage when council returns an object; otherwise estimate from text length.
                 const usage = (raw && typeof raw === 'object' && raw.usage) ? raw.usage : null;
                 const promptTokens = Number(usage?.prompt_tokens) || Math.ceil(prompt.length / 4);
                 const completionTokens = Number(usage?.completion_tokens) || Math.ceil(content.length / 4);
@@ -218,11 +259,13 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
                 };
               }
               lastError = `empty_output_from:${member}`;
+              tierErrors.push({ tier: member, reason: lastError });
             } catch (err) {
               lastError = `${member}: ${String(err?.message || err)}`;
+              tierErrors.push({ tier: member, reason: lastError });
             }
           }
-          return { content: null, error: lastError || 'all_tiers_failed', model_tier: member || null };
+          return { content: null, error: lastError || 'all_tiers_failed', model_tier: member || null, tier_errors: tierErrors };
         },
       }
     : null;
@@ -253,6 +296,76 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
     res.json({ ok: true, tsos: summarizeTsosMetrics(), guardrails: 'measurement_only_no_mission_authority' });
   });
 
+  // Real, per-model-tier ranking from actual governed-factory codegen
+  // outcomes -- founder, direct: "every model that sits in here needs to be
+  // rated... Have we ranked any of them?" Data is recorded automatically by
+  // every governed ship (services/model-capability-ledger.js, hooked into
+  // runGovernedAutonomousShipOnce's mandatory result path) -- this route
+  // makes that ledger actually visible, not just written to a silent table.
+  router.get('/factory/model-rankings', guard, async (req, res) => {
+    try {
+      const rankings = await getModelRankings(pool, { role: req.query.role || null });
+      res.json({
+        ok: true,
+        rankings,
+        known_roles: KNOWN_ROLES,
+        note: rankings.length === 0 ? 'no outcomes recorded yet for this filter' : undefined,
+      });
+    } catch (err) {
+      res.status(503).json({ ok: false, error: err?.message || String(err) });
+    }
+  });
+
+  // North Star §2.0G Governance Evolution Law: "at fixed cadence, review
+  // which laws helped/hurt/caused drift." On-demand for now (Companion §0.6
+  // requires a new automatic timer be reviewed/approved before it runs
+  // unattended) -- real data, callable now, not yet scheduled.
+  router.get('/factory/governance-review', guard, async (_req, res) => {
+    try {
+      const review = await runGovernanceReview({ pool });
+      res.json(review);
+    } catch (err) {
+      res.status(503).json({ ok: false, error: err?.message || String(err) });
+    }
+  });
+
+  // North Star §2.0H Founder Intent Model — Tier-0: preserve founder intent
+  // as a real, queryable decision log. Deliberately records only decisions
+  // already made, never predictions (see services/founder-intent-model.js
+  // for why prediction is scoped out for now).
+  router.post('/factory/founder-decisions', guard, async (req, res) => {
+    try {
+      const result = await recordFounderDecision(pool, req.body || {});
+      res.status(result.ok ? 201 : 400).json(result);
+    } catch (err) {
+      res.status(503).json({ ok: false, error: err?.message || String(err) });
+    }
+  });
+
+  router.get('/factory/founder-decisions', guard, async (req, res) => {
+    try {
+      const result = req.query.q
+        ? await findFounderDecisions(pool, { query: req.query.q, limit: req.query.limit })
+        : await getFounderDecisionHistory(pool, { category: req.query.category, limit: req.query.limit });
+      res.json(result);
+    } catch (err) {
+      res.status(503).json({ ok: false, error: err?.message || String(err) });
+    }
+  });
+
+  // North Star §2.0D Mission State Machine Law + Companion §0.9: found live
+  // (2026-07-28) that a real, complete, already-approved implementation of
+  // this already exists and is already live -- services/mission-ledger.js +
+  // routes/mission-routes.js (registerMissionRoutes, GET/POST /api/missions,
+  // /api/missions/:id/transition, etc.), backed by real tables from
+  // db/migrations/20260604_mission_runtime_v1.sql, per BPB-0001 and AIC
+  // DISCUSSION-6 (founder-only, mandatory-note-justified backward
+  // transitions -- a more correct rule than a first hand-authored attempt
+  // at this made here and then removed). No new route added: /api/missions
+  // already satisfies this requirement and adding a parallel /factory/
+  // alias over the same data would be exactly the "competing authority
+  // vocabulary" North Star §2.0F forbids.
+
   router.get('/factory/gates/intake', guard, (req, res) => {
     const mission_id = req.query.mission_id;
     if (!mission_id) return res.status(400).json({ ok: false, error: 'mission_id query required' });
@@ -269,11 +382,6 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
     }
   });
 
-  // STEP 5c — the governed shipping runner as a live surface. Walks a build queue
-  // and ships EVERY step through the governed pipe (in-process dispatchExecuteStep:
-  // BPB->Builder->SENTRY->TSOS->Historian) instead of the legacy ungoverned /build.
-  // Century's flag: crash/block signals are recorded durably to the Historian with
-  // resume_from, so a mid-queue failure is loud + resumable, never a silent skip.
   router.post('/factory/ship-queue', guard, async (req, res) => {
     try {
       const {
@@ -294,7 +402,6 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
       if (!Array.isArray(steps) || steps.length === 0) {
         return res.status(400).json({ ok: false, error: 'steps[] required' });
       }
-      // Fail-closed twin + exact-change proof before any dispatch.
       const firstStep = steps[0] || {};
       const stepKey = firstStep.blueprint_step_id || firstStep.step_id || firstStep.id;
       const twinProbe = blueprintFollowClaim({
@@ -324,7 +431,6 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
           twin_probe: twinProbe,
         });
       }
-      // Twin disk is authority for target_file — request body cannot redefine the aspect.
       const boundSteps = steps.map((s) => {
         const sid = s.blueprint_step_id || s.step_id || s.id;
         const loaded = getTwinStep(blueprint_id, sid);
@@ -376,8 +482,6 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
           encoding: 'utf8',
         }).trim();
       } catch { /* reverse falls back to delete_file */ }
-      // Mission pack twins must pass BPB intake. Registered product queue twins
-      // are already proven on disk by blueprintFollowClaim — intake pack N/A.
       const productTwin = twinProbe.twin_source === 'product_build_queue_twin'
         || twinProbe.twin_source === 'product_blueprint';
       const allowSkip = productTwin === true;
@@ -443,7 +547,15 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
     }
   });
 
-  // Reverse exactly one sealed twin step (pinpoint aspect rollback).
+  router.post('/factory/ship-queue-and-commit', guard, async (req, res) => {
+    try {
+      const result = await runGovernedAutonomousShipOnce({ logger, maxStepsPerProduct: req.body?.maxStepsPerProduct || 1 });
+      res.json(result);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
   router.post('/factory/reverse-step', guard, async (req, res) => {
     try {
       const { blueprint_id, blueprint_step_id, apply = false } = req.body || {};

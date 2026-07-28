@@ -233,6 +233,18 @@ export function createCognitiveCoreRoutes(deps = {}) {
     }
   });
 
+  // Every prior outcome value for a decision, before it was corrected —
+  // the audit trail that makes "was this outcome ever silently changed?"
+  // an answerable question instead of an unfalsifiable claim.
+  router.get('/decisions/:id/outcome-history', async (req, res) => {
+    try {
+      const history = await core.getOutcomeHistory(req.params.id);
+      res.json({ ok: true, history });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
   // ── Era-2: Programs layer ──
   router.get('/programs', async (req, res) => {
     try {

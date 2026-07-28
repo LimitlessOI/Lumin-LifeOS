@@ -147,7 +147,7 @@ export const META_GROUP_SIGNALS = {
 };
 
 /**
- * Human texture (not spam). Occasional natural typos / casual spelling in *human*
+ * Human texture (not spam). Occasional natural typos / casual spelling in human*
  * accounts only — never on polished brand legal copy. Sparingly: ~1 in 8–12 posts.
  * Also draws “wait what?” comment corrections → more conversation (the real goal).
  */

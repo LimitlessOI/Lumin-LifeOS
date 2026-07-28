@@ -1765,7 +1765,7 @@
     },
     {
       "id": "step12",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register struggle form fill route",
       "spec": "Ensure struggleFormFill.js route is registered",
@@ -1785,6 +1785,38 @@
       "revive_count": 6,
       "revived_at": "2026-07-18T17:31:24.705Z",
       "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:struggleFormFill.js; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-18T19:49:48.991Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "s1",
+      "status": "done",
+      "target_file": "db/migrations/addPwaInstallTrackingTable.sql",
+      "task": "create table",
+      "spec": "Create a table to track PWA installations with default IDs and timestamps.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "pwa_install_tracking"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "e2dfb7c6374b2d16e9f4aea96191316862907b99",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-18T20:05:38.309Z",
+      "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
@@ -1794,7 +1826,356 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-18T20:05:44.884Z"
+    },
+    {
+      "id": "s2",
+      "status": "done",
+      "target_file": "services/pwaInstallTracker.js",
+      "task": "implement tracker service",
+      "spec": "Implement service for tracking PWA installations and exporting the tracker functions.",
+      "depends_on": [
+        "s1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "trackPwaInstall"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/pwaInstallTracker.js",
+          "exports": [
+            "trackPwaInstall"
+          ],
+          "assertion_id": "expected_exports:services/pwaInstallTracker.js"
+        }
+      ],
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/s2.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-18T20:05:51.434Z",
+        "shipped_at": "2026-07-18T20:05:51.434Z",
+        "commit_sha": null,
+        "content_sha256": "510a4306c8fd6d5c5d816905fb1ab0b10e7d745e4ff8579d725bb713097aae3f",
+        "target_file": "services/pwaInstallTracker.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/pwaInstallTracker.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/universal-overlay/twins/steps/s2.exact",
+          "content_sha256": "510a4306c8fd6d5c5d816905fb1ab0b10e7d745e4ff8579d725bb713097aae3f"
+        }
+      },
+      "shipped_at": "2026-07-18T20:09:14.955Z",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s2",
+      "pre_existing": true,
+      "shipped_via": "pre_existing_artifact_proof",
+      "last_error": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "commit_sha": "06ac85c70884f0b36470dd8e5cc896ce6d58fe61"
+    },
+    {
+      "id": "s3",
+      "status": "done",
+      "target_file": "routes/pwaInstall.js",
+      "task": "add PWA install route",
+      "spec": "Create route to track PWA installations via a POST request.",
+      "depends_on": [
+        "s2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPwaInstallRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/pwa/install"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/pwaInstall.js",
+          "exports": [
+            "registerPwaInstallRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/pwaInstall.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-18T20:09:22.091Z",
+      "commit_sha": "4519d425c8fd51fb198e5af6ebad395290ab4572"
+    },
+    {
+      "id": "s4",
+      "status": "done",
+      "target_file": "public/overlay/pwaInstall.html",
+      "task": "create PWA install UI",
+      "spec": "Implement the UI for PWA installation tracking.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "Add to Home Screen",
+        "PWA Install"
+      ],
+      "design_review_flagged": true,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "3f07ce5791aae6eff3734d8b0a2059e1dab5f6c3",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-18T20:05:38.309Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-18T20:10:16.833Z"
+    },
+    {
+      "id": "s5",
+      "status": "done",
+      "target_file": "db/migrations/addStruggleDetectionLogTable.sql",
+      "task": "create log table",
+      "spec": "Create a table to log struggle detection events.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "struggle_detection_log"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "f3b429a0f4dd3081db115fc34fe10a2fff69c12f",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-18T20:05:38.309Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-18T20:11:09.035Z"
+    },
+    {
+      "id": "s6",
+      "status": "done",
+      "target_file": "services/struggleDetectionLogger.js",
+      "task": "implement logging service",
+      "spec": "Implement service to log struggle detection events.",
+      "depends_on": [
+        "s5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "logStruggleDetectionEvent"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/struggleDetectionLogger.js",
+          "exports": [
+            "logStruggleDetectionEvent"
+          ],
+          "assertion_id": "expected_exports:services/struggleDetectionLogger.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-18T20:11:20.732Z",
+      "commit_sha": "6575707a8692d2086d05deaf1c08fdc0819e623f"
+    },
+    {
+      "id": "s7",
+      "status": "done",
+      "target_file": "routes/struggleLogger.js",
+      "task": "add struggle log route",
+      "spec": "Create route to log struggle detection events via POST.",
+      "depends_on": [
+        "s6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerStruggleLoggerRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/struggle/log"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/struggleLogger.js",
+          "exports": [
+            "registerStruggleLoggerRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/struggleLogger.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-18T20:12:12.702Z",
+      "commit_sha": "3d29447c7ed1b747d0def5a8945e184c5b673caa"
+    },
+    {
+      "id": "s8",
+      "status": "done",
+      "target_file": "public/overlay/struggleDetectionUI.html",
+      "task": "create struggle detection UI",
+      "spec": "Implement the UI for showing struggle detection in the overlay.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "Struggle Detection",
+        "Log Event"
+      ],
+      "design_review_flagged": true,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "d850d2bcb258b496d0a4ff51effcfb85b23391d3",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-18T20:05:38.309Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/s8.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-18T20:08:26.280Z",
+        "shipped_at": "2026-07-18T20:08:26.280Z",
+        "commit_sha": null,
+        "content_sha256": "4befb0d8ec2fa9329399c98d070a6abc460dc53836b7cd10ca1a53ca0ffe5630",
+        "target_file": "public/overlay/struggleDetectionUI.html",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "public/overlay/struggleDetectionUI.html",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/universal-overlay/twins/steps/s8.exact",
+          "content_sha256": "4befb0d8ec2fa9329399c98d070a6abc460dc53836b7cd10ca1a53ca0ffe5630"
+        }
+      },
+      "shipped_at": "2026-07-18T20:13:53.029Z",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s8",
+      "shipped_via": "governed_ship_queue"
+    },
+    {
+      "id": "07",
+      "status": "blocked",
+      "target_file": "routes/struggleDetectionFormFillData.js",
+      "task": "create route for struggle detection form fill data",
+      "spec": "Expose an HTTP route to store and analyze struggle detection form fill data using the corresponding service.",
+      "depends_on": [
+        "06"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "registerStruggleDetectionFormFillDataRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/struggle/form-fill-data"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/struggleDetectionFormFillData.js",
+          "exports": [
+            "registerStruggleDetectionFormFillDataRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/struggleDetectionFormFillData.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-20T03:12:32.536Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/routes/.factory-import-check-1784517152497-1.mjs\";\nn",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "failure_signature": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/routes",
+      "same_signature_count": 10,
+      "escalation_class": "same_signature_repeat",
+      "revive_count": 9,
+      "revived_at": "2026-07-20T03:12:19.911Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "model_rotation": 8,
+      "force_model_rotation": true,
+      "founder_alerted_signature": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/routes",
+      "hard_stopped": true,
+      "unsolved": true
+    },
+    {
+      "id": "08",
+      "status": "pending",
+      "target_file": "public/overlay/struggleDetectionFormFillUI.html",
+      "task": "build UI for struggle detection form fill data",
+      "spec": "Design a UI component to display struggle detection form fill data and analytics. The page should provide meaningful visual insights.",
+      "depends_on": [
+        "07"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "design_review_flagged": true
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",

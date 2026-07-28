@@ -14,7 +14,7 @@
  *   GET  /api/v1/lifeos/builder/domains         list available domain prompt files
  *   GET  /api/v1/lifeos/builder/domain/:name    read a specific domain prompt file
  *   GET  /api/v1/lifeos/builder/next-task      cold-start packet excerpts + read order
- *   POST /api/v1/lifeos/builder/task            dispatch a task to the council (body `files[]` = repo-relative paths → *server reads and injects file contents** into prompt; optional `target_file` improves HTML full-file hints; code mode passes scaled `maxOutputTokens` to the council; optional **`max_output_tokens`** or **`maxOutputTokens`** clamps completion budget on code mode — *same auth as `/build`; use sparingly when estimator lags deploy**)
+ *   POST /api/v1/lifeos/builder/task            dispatch a task to the council (body `files[]` = repo-relative paths → server reads and injects file contents** into prompt; optional `target_file` improves HTML full-file hints; code mode passes scaled `maxOutputTokens` to the council; optional **`max_output_tokens`** or **`maxOutputTokens`** clamps completion budget on code mode — same auth as `/build`; use sparingly when estimator lags deploy**)
  *   POST /api/v1/lifeos/builder/review          ask the council to review code/diff
  *   GET  /api/v1/lifeos/builder/model-map       show task-to-model routing table
  *   GET  /api/v1/lifeos/builder/history         recent builder audit trail

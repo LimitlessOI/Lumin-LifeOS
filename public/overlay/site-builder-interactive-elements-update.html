@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Interactive Elements Update -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Elements Update</title>
+    <style>
+        button, input[type="submit"], a {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            text-align: center;
+            text-decoration: none;
+            color: white;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover, input[type="submit"]:hover, a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Interactive Elements Example</h1>
+    <button aria-label="Submit Form">Submit</button>
+    <input type="submit" value="Send" aria-label="Send Data">
+    <a href="#" aria-label="Learn More">Learn More</a>
+</body>
+</html>

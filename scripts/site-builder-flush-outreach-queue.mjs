@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /**
  * SYNOPSIS: Flush Site Builder outreach queue (SMS/voice) only in local business hours.
  * @ssot docs/products/site-builder/PRODUCT_HOME.md

@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /**
  * SYNOPSIS: Readiness probe for WRM Wix → SiteBuilder cutover (no secrets printed).
  * @ssot docs/products/site-builder/PRODUCT_HOME.md

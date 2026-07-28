@@ -870,6 +870,33 @@ export function createCouncilService({
     const builderLane = isBuilderLaneRequest(member, options);
     const builderLaneSpendCap = builderLane ? getBuilderLaneSpendCap() : null;
 
+    // Try every free-tier provider in priority order (not just the first) so
+    // a single provider's own limit (e.g. Groq's small per-model TPM cap)
+    // doesn't look identical to "no free providers available" and give up.
+    // Found live 2026-07-27: the prior single-attempt cascade picked
+    // groq_llama, which 413'd on a normal-sized prompt (6431 tokens vs its
+    // 6000 TPM cap) -- a real provider limit, not proof nothing free was
+    // available. SO-003: never idle because one provider ran dry.
+    async function cascadeToFreeTier(blockedMember, reasonLabel) {
+      const tried = [];
+      const maxAttempts = Object.keys(freeTierGovernor.PROVIDER_LIMITS || {}).length || 5;
+      for (let attempt = 0; attempt < maxAttempts; attempt++) {
+        const nextProvider = await freeTierGovernor.getNextAvailable(tried);
+        if (!nextProvider) break;
+        tried.push(nextProvider);
+        const fallbackMembers = freeTierGovernor.PROVIDER_LIMITS[nextProvider]?.councilMembers || [];
+        const fallbackMember = fallbackMembers.find((m) => COUNCIL_MEMBERS[m]);
+        if (!fallbackMember) continue;
+        try {
+          console.log(`💰 [${reasonLabel}] ${blockedMember} → cascading to ${fallbackMember} (${nextProvider})`);
+          return await callCouncilMember(fallbackMember, prompt, options);
+        } catch (err) {
+          console.warn(`💰 [${reasonLabel}] ${fallbackMember} (${nextProvider}) failed too: ${err.message} — trying next provider`);
+        }
+      }
+      throw new Error(`💰 [${reasonLabel}] Blocked ${blockedMember} — tried ${tried.length} free provider(s), none succeeded.`);
+    }
+
     function finalizeResponse(rawText, taskTypeForEnvelope = options.taskType || 'general', usage = null, cost = 0) {
       const { text, envelope } = envelopeCouncilMemberOutput(rawText, options, taskTypeForEnvelope, member);
       if (envelope.theater_blocked || envelope.voice_lie_blocked) {
@@ -911,38 +938,12 @@ export function createCouncilService({
     // ── Free-tier cascade (Groq → Gemini → Cerebras → OpenRouter → Mistral → Fireworks) ──
     // Founder Voice Rail comms always use configured paid council member (no silent downgrade).
     if (!founderComms && !builderLane && MAX_DAILY_SPEND === 0 && isPaid) {
-      const nextProvider = await freeTierGovernor.getNextAvailable();
-      if (!nextProvider) {
-        throw new Error(
-          `💰 [COST SHUTDOWN] Blocked ${member} — no free providers available.`
-        );
-      }
-      const fallbackMembers = freeTierGovernor.PROVIDER_LIMITS[nextProvider]?.councilMembers || ['cerebras_llama'];
-      for (const fallbackMember of fallbackMembers) {
-        if (COUNCIL_MEMBERS[fallbackMember]) {
-          console.log(`💰 [COST SHUTDOWN] Blocked ${member} → cascading to ${fallbackMember} (${nextProvider})`);
-          return await callCouncilMember(fallbackMember, prompt, options);
-        }
-      }
-      throw new Error(`💰 [COST SHUTDOWN] Blocked ${member} — no free providers available right now.`);
+      return await cascadeToFreeTier(member, 'COST SHUTDOWN');
     }
 
     const effectiveShutdownThreshold = COST_SHUTDOWN_THRESHOLD > 0 ? COST_SHUTDOWN_THRESHOLD : MAX_DAILY_SPEND;
     if (!founderComms && !builderLane && spend >= effectiveShutdownThreshold && isPaid) {
-      const nextProvider = await freeTierGovernor.getNextAvailable();
-      if (!nextProvider) {
-        throw new Error(
-          `💰 [SPEND LIMIT] $${spend.toFixed(2)}/$${effectiveShutdownThreshold} — no free providers available.`
-        );
-      }
-      const fallbackMembers = freeTierGovernor.PROVIDER_LIMITS[nextProvider]?.councilMembers || ['cerebras_llama'];
-      for (const fallbackMember of fallbackMembers) {
-        if (COUNCIL_MEMBERS[fallbackMember]) {
-          console.log(`💰 [SPEND LIMIT] $${spend.toFixed(2)}/$${effectiveShutdownThreshold} → cascading to ${fallbackMember} (${nextProvider})`);
-          return await callCouncilMember(fallbackMember, prompt, options);
-        }
-      }
-      throw new Error(`💰 [SPEND LIMIT] $${spend.toFixed(2)}/$${effectiveShutdownThreshold} — no free providers available.`);
+      return await cascadeToFreeTier(member, 'SPEND LIMIT');
     }
 
     const effectiveSpendCap = builderLane ? (builderLaneSpendCap ?? MAX_DAILY_SPEND) : MAX_DAILY_SPEND;
@@ -957,15 +958,26 @@ export function createCouncilService({
     const isFreeModel = COUNCIL_MEMBERS[member]?.isFree === true;
 
     if (!isFreeModel && Number.isFinite(effectiveSpendCap) && effectiveSpendCap > 0 && spend >= effectiveSpendCap) {
-      throw new Error(
-        builderLane
-          ? `BuilderOS spend limit ($${effectiveSpendCap}) reached at $${spend.toFixed(
-              4
-            )} for ${today}. Raise BUILDEROS_MAX_DAILY_SPEND or lower builder activity.`
-          : `Daily spend limit ($${effectiveSpendCap}) reached at $${spend.toFixed(
-              4
-            )} for ${today}. Resets at midnight UTC.`
-      );
+      // SO-003: "never idle because one provider ran dry... the only hard
+      // stop is the daily budget cap." The cap itself stays hard (no spend
+      // beyond it, no silent raise) -- but hitting it must fail over to a
+      // free-tier provider, same as the two other spend gates above in this
+      // function, instead of going fully idle. Found live 2026-07-27: this
+      // was the one spend gate of the three missing the cascade, and it was
+      // the one actually firing (Chair chat returning "Nothing ran").
+      try {
+        return await cascadeToFreeTier(member, 'SPEND CAP');
+      } catch {
+        throw new Error(
+          builderLane
+            ? `BuilderOS spend limit ($${effectiveSpendCap}) reached at $${spend.toFixed(
+                4
+              )} for ${today}. Raise BUILDEROS_MAX_DAILY_SPEND or lower builder activity. No free providers available either.`
+            : `Daily spend limit ($${effectiveSpendCap}) reached at $${spend.toFixed(
+                4
+              )} for ${today}. Resets at midnight UTC. No free providers available either.`
+        );
+      }
     }
 
     if (tokenAccounting) {
@@ -1211,10 +1223,10 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
     // Replaces LifeOS-specific long strings with short symbols, then prepends a tiny
     // inline key listing only the symbols that actually fired in this prompt.
     // Works with all free stateless providers — no KV cache required.
-    // Example savings: "CREATE TABLE IF NOT EXISTS" (6 tokens) → "*ct" (1 token).
+    // Example savings: "CREATE TABLE IF NOT EXISTS" (6 tokens) → "ct" (1 token).
     // The drift monitor gates this layer — auto-skips if drift was detected for this pair.
     let lclWasActive = false;
-    let lclSymbolsFired = [];   // raw symbol strings e.g. ['*pq', '*uid'] — used by drift monitor
+    let lclSymbolsFired = [];   // raw symbol strings e.g. ['pq', 'uid'] — used by drift monitor
     if (!isCritical && !lclMonitor.shouldSkipLCL(member, taskType)) {
       const lclResult = promptTranslator.translate(finalPrompt, {
         taskType,
@@ -1225,7 +1237,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
       if (lclResult.savedTokens > 0) {
         // Identify the exact symbols that appear in the compressed text
         const firedEntries = CODE_SYMBOLS.filter(([, sym]) => lclResult.prompt.includes(sym));
-        lclSymbolsFired = firedEntries.map(([, sym]) => sym);  // e.g. ['*pq', '*uid']
+        lclSymbolsFired = firedEntries.map(([, sym]) => sym);  // e.g. ['pq', 'uid']
         const keyLine = firedEntries.map(([full, sym]) => `${sym}=${full}`).join(', ');
         finalPrompt = keyLine
           ? `[KEY:${keyLine}]\n${lclResult.prompt}`
@@ -1373,7 +1385,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
       // callers receiving ```json ... ``` and failing on JSON.parse
       const cleanForCache = (t) => t
         .replace(/^```(?:json|js|javascript|text)?\s*/i, '')
-        .replace(/\s*```\s*$/i, '')
+        .replace(/\s*```\s$/i, '')
         .trim();
 
       if (OPENAI_COMPATIBLE_PROVIDERS.has(config.provider)) {
@@ -1654,24 +1666,29 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
         }
 
         // TCO-E01: ledger for DeepSeek
-        {
-          const dsIn = json.usage?.prompt_tokens || estimateTokens(finalPrompt);
-          const dsOut = json.usage?.completion_tokens || estimateTokens(text);
-          recordMetered({
-            ...meterTiming(),
-            provider: 'deepseek',
-            model: config.model || member,
-            taskType,
-            originalTokens: dsIn + totalSavedInputTokens,
-            compressedTokens: dsIn,
-            outputTokens: dsOut,
-            savedTokens: totalSavedInputTokens,
-            savedOutputPct: codSavedOutputPct,
-            costUSD: cost,
-            cacheHit: false,
-            compressionLayers: buildRecordedCompressionLayers(compressionLayers, dsOut, codSavedOutputPct),
-          }).catch(() => {});
-        }
+        // Found live 2026-07-28: dsIn/dsOut were declared inside this block's
+        // own { } scope, then referenced below at the finalizeResponse call
+        // outside it -- a real ReferenceError ("dsIn is not defined") that
+        // silently took DeepSeek out of the codegen tier rotation on every
+        // real dispatch, discovered only because the new tier_errors
+        // diagnostic (this same session) finally surfaced it instead of
+        // hiding it behind whichever tier failed last.
+        const dsIn = json.usage?.prompt_tokens || estimateTokens(finalPrompt);
+        const dsOut = json.usage?.completion_tokens || estimateTokens(text);
+        recordMetered({
+          ...meterTiming(),
+          provider: 'deepseek',
+          model: config.model || member,
+          taskType,
+          originalTokens: dsIn + totalSavedInputTokens,
+          compressedTokens: dsIn,
+          outputTokens: dsOut,
+          savedTokens: totalSavedInputTokens,
+          savedOutputPct: codSavedOutputPct,
+          costUSD: cost,
+          cacheHit: false,
+          compressionLayers: buildRecordedCompressionLayers(compressionLayers, dsOut, codSavedOutputPct),
+        }).catch(() => {});
 
         recordSessionTurns(effectiveSessionId, finalPrompt, text);
 

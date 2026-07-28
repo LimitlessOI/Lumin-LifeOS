@@ -369,7 +369,7 @@ export function createDeploymentService(deps) {
       const msg = err.message || 'GitHub commit failed';
       const retryableConflict = commitRes.status === 409
         || /is at [a-f0-9]{7,40} but expected/i.test(msg)
-        || /sha.*does not match/i.test(msg)
+        || /sha.does not match/i.test(msg)
         || /Update is not a fast forward/i.test(msg);
       if (retryableConflict && attempt < maxAttempts) {
         continue;

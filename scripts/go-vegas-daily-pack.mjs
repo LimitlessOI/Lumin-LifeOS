@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /**
  * SYNOPSIS: Generate today's Go Vegas approve→paste pack (31+ posts).
  * Usage: npm run go-vegas:daily-pack

@@ -1303,10 +1303,10 @@
     html[data-shell-layout="desktop"] .topbar { display: flex !important; }
     html[data-shell-layout="desktop"] .lumin-drawer {
       top: 0;
-      right: -420px;
+      right: -100vw;
       bottom: 0;
       left: auto;
-      width: 400px;
+      width: min(100vw, 1120px);
       max-width: 100vw;
       height: auto;
       border-left: 1px solid var(--border-focus);
@@ -1445,6 +1445,7 @@
       display: flex;
       align-items: center;
       gap: 10px;
+      flex-wrap: wrap;
       flex-shrink: 0;
       background:
         linear-gradient(135deg, rgba(28,124,84,0.12), rgba(217,108,6,0.08)),
@@ -1597,11 +1598,13 @@
     }
     .lumin-msg.assistant {
       align-self: flex-start;
-      background: #ffeb3b;
-      border: 1px solid #f9d800;
-      color: #000000;
+      background: #1e2030;
+      border: 1px solid #3d4266;
+      color: #e8e8f0;
       border-bottom-left-radius: 4px;
     }
+
+
 
 
 
@@ -1796,6 +1799,33 @@
     .lumin-voice-btn:hover { color: var(--studio-text, #fff); }
     .lumin-voice-btn.on { color: #6366f1; border-color: rgba(99,102,241,0.6); }
     .lumin-voice-rate { font-size: 10px; opacity: 0.7; min-width: 30px; text-align: center; font-variant-numeric: tabular-nums; }
+    /* Request queue — Cursor-style toggle */
+    .lumin-queue-ctrl { position: relative; display: inline-flex; align-items: center; }
+    .lumin-queue-badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 16px; height: 16px; padding: 0 4px; margin-left: 4px;
+      font-size: 9px; font-weight: 700; border-radius: 8px;
+      background: var(--studio-accent, #6366f1); color: #fff;
+    }
+    .lumin-queue-badge:empty, .lumin-queue-badge.hidden { display: none; }
+    .lumin-queue-panel {
+      position: absolute; top: calc(100% + 6px); right: 0; z-index: 50;
+      width: 260px; max-height: 320px; overflow: auto;
+      background: var(--studio-bg, #111827); border: 1px solid var(--studio-border, rgba(255,255,255,0.08));
+      border-radius: 10px; box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+      padding: 10px; display: none;
+    }
+    .lumin-queue-panel.open { display: block; }
+    .lumin-queue-panel-head { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--studio-text-secondary, #9ca3af); margin-bottom: 8px; }
+    .lumin-queue-list { display: flex; flex-direction: column; gap: 6px; }
+    .lumin-queue-item { display: flex; align-items: center; gap: 6px; padding: 6px 8px; border-radius: 8px; background: var(--studio-bg-surface2, rgba(255,255,255,0.05)); font-size: 12px; }
+    .lumin-queue-item-text { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .lumin-queue-item-voice { font-size: 10px; opacity: 0.7; }
+    .lumin-queue-empty { font-size: 12px; opacity: 0.6; padding: 8px 0; }
+    .lumin-queue-btn { background: transparent; border: 1px solid var(--studio-border); color: var(--studio-text-secondary); border-radius: 6px; width: 22px; height: 22px; font-size: 12px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+    .lumin-queue-btn:hover { color: var(--studio-text); border-color: var(--studio-border-focus); }
+    .lumin-queue-clear { width: 100%; margin-top: 8px; padding: 6px; font-size: 11px; border: 1px solid var(--studio-border); border-radius: 6px; background: transparent; color: var(--studio-text-secondary); cursor: pointer; }
+    .lumin-queue-clear:hover { color: var(--studio-text); border-color: var(--studio-border-focus); }
     .lumin-input-attach {
       background: transparent; border: none; color: var(--studio-text-muted, #6b7280);
       cursor: pointer; font-size: 16px; padding: 0 4px;
@@ -1851,11 +1881,206 @@
       color: var(--studio-text-muted);
     }
 
+    /* ChatGPT-style layout: left segments, center conversation, right artifacts */
+    .lumin-layout {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+    }
+    .lumin-left, .lumin-right {
+      display: none;
+      flex-direction: column;
+      background: var(--studio-bg-raised, #111827);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .lumin-left.open, .lumin-right.open { display: flex; }
+    .lumin-left-head, .lumin-right-head {
+      padding: 12px 14px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--studio-text-secondary, #9ca3af);
+      border-bottom: 1px solid var(--studio-border, rgba(255,255,255,0.08));
+      flex-shrink: 0;
+    }
+    .lumin-left-list, .lumin-right-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .lumin-center {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;
+    }
+    .lumin-top-panel {
+      display: none;
+      flex-direction: column;
+      gap: 8px;
+      padding: 10px 18px;
+      border-bottom: 1px solid var(--studio-border);
+      background: var(--studio-bg-raised);
+      flex-shrink: 0;
+    }
+    .lumin-center.mode-lifeRE .lumin-top-panel { display: flex; }
+    .lumin-center.mode-lifeRE .lumin-drawer-header,
+    .lumin-center.composer-top .lumin-drawer-header { order: -2; }
+    .lumin-center.composer-top .lumin-top-panel { order: -1; }
+    .lumin-center.composer-top .lumin-input-bar { order: -1; }
+    .lumin-segment {
+      background: transparent;
+      border: 1px solid var(--studio-border);
+      color: var(--studio-text-secondary);
+      border-radius: 8px;
+      padding: 8px 10px;
+      text-align: left;
+      cursor: pointer;
+      font-size: 12px;
+      line-height: 1.3;
+      transition: background var(--transition), border-color var(--transition);
+    }
+    .lumin-segment:hover, .lumin-segment.active {
+      background: var(--studio-bg-surface2, rgba(255,255,255,0.05));
+      border-color: var(--studio-border-focus);
+      color: var(--studio-text);
+    }
+    .lumin-segment-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .lumin-segment-meta { font-size: 10px; opacity: 0.6; margin-top: 3px; }
+    .lumin-segment-empty { padding: 12px; font-size: 12px; opacity: 0.5; text-align: center; }
+    .lumin-splitter {
+      width: 6px;
+      background: transparent;
+      cursor: col-resize;
+      flex-shrink: 0;
+      transition: background var(--transition);
+      z-index: 5;
+    }
+    .lumin-splitter:hover { background: rgba(99,102,241,0.25); }
+
+    @media (max-width: 899px) {
+      .lumin-layout {
+        flex-direction: row !important;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+      }
+      .lumin-left, .lumin-center, .lumin-right {
+        display: flex !important;
+        flex: 0 0 100%;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        scroll-snap-align: start;
+      }
+      .lumin-left.open, .lumin-right.open { display: flex !important; }
+      .lumin-splitter { display: none; }
+      .lumin-left-list, .lumin-right-content { overflow-y: auto; }
+    }
+
+    @media (min-width: 900px) {
+      .lumin-layout { flex-direction: row !important; }
+      .lumin-left {
+        width: var(--lumin-left-width, 220px);
+        min-width: 160px;
+        max-width: 40vw;
+        border-right: 1px solid var(--studio-border);
+      }
+      .lumin-right {
+        width: var(--lumin-right-width, 260px);
+        min-width: 180px;
+        max-width: 40vw;
+        border-left: 1px solid var(--studio-border);
+      }
+      .lumin-left:not(.open), .lumin-right:not(.open) { display: none; }
+    }
+
+    /* LifeRE top panel placeholders */
+    .lumin-progress-row { display: flex; align-items: center; gap: 10px; }
+    .lumin-progress-label { font-size: 11px; min-width: 100px; color: var(--studio-text-secondary); }
+    .lumin-progress-track { flex: 1; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; }
+    .lumin-progress-fill { height: 100%; background: var(--studio-hero-gradient); width: 0%; transition: width 0.3s ease; }
+    .lumin-goals { font-size: 12px; color: var(--studio-text-secondary); }
+
     /* Input bar */
+    .lumin-wear-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      padding: 0 4px 6px;
+      width: 100%;
+    }
+    .lumin-wear-label {
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      opacity: 0.55;
+      flex-shrink: 0;
+    }
+    .lumin-wear-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .lumin-wear-chip {
+      border: 1px solid rgba(255,255,255,0.14);
+      background: transparent;
+      color: inherit;
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      cursor: pointer;
+      opacity: 0.7;
+    }
+    .lumin-wear-chip.on {
+      opacity: 1;
+      border-color: rgba(212, 175, 120, 0.65);
+      background: rgba(212, 175, 120, 0.12);
+    }
+    .lumin-judgment-meta {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      font-size: 12px;
+      opacity: 0.85;
+      line-height: 1.45;
+    }
+    .lumin-judgment-meta strong { opacity: 1; }
+    .lumin-interim {
+      width: 100%;
+      padding: 0 18px;
+      font-size: 12px;
+      line-height: 1.35;
+      color: var(--studio-text-muted, #6b7280);
+      min-height: 0;
+      opacity: 0;
+      transition: opacity 0.15s ease, min-height 0.15s ease;
+      white-space: pre-wrap;
+      word-break: break-word;
+      pointer-events: none;
+    }
+    .lumin-interim.visible {
+      opacity: 1;
+      min-height: 17px;
+      padding-top: 2px;
+      padding-bottom: 6px;
+    }
     .lumin-input-bar {
       padding: 14px 18px;
       border-top: 1px solid var(--studio-border);
       display: flex;
+      flex-wrap: wrap;
       align-items: flex-end;
       gap: 8px;
       flex-shrink: 0;
@@ -1963,7 +2188,7 @@
       }
     }
   </style>
-  <link rel="stylesheet" href="/overlay/lifeos-theme-overrides.css?v=f1783664656268">
+  <link rel="stylesheet" href="/overlay/lifeos-theme-overrides.css?v=f1784923717984">
   <script src="/overlay/lifeos-voice.js?v=20260622"></script>
   <script src="/shared/lifeos-voice-chat.js?v=20260626"></script>
   <script src="/overlay/lifeos-ambient-sense.js"></script>
@@ -2516,60 +2741,101 @@
 <!-- lumin parity probe -->
 <!-- point-b-direct-exec-probe -->
 <div class="lumin-drawer dock-right" id="lumin-drawer">
-  <div class="lumin-drawer-header" onclick="onLuminHeaderClick(event)">
-    <div class="lumin-drawer-avatar">◎</div>
-    <div class="lumin-drawer-title">
-      <strong>Lumin</strong>
-      <span id="lumin-status-text">Counsel · Lumin</span>
-    </div>
-    <div class="lumin-dock-controls" id="lumin-dock-controls">
-      <button type="button" class="lumin-dock-btn active" data-dock="right" onclick="setLuminDock('right')">Side</button>
-      <button type="button" class="lumin-dock-btn" data-dock="top" onclick="setLuminDock('top')">Top</button>
-      <button type="button" class="lumin-dock-btn" data-dock="bottom" onclick="setLuminDock('bottom')">Bottom</button>
-      <button type="button" class="lumin-dock-btn" id="lumin-pin-btn" onclick="toggleLuminPin()">Pin</button>
-      <button type="button" class="lumin-dock-btn" id="lumin-min-btn" onclick="toggleLuminMinimize()">Min</button>
-    </div>
-    <div class="lumin-voice-ctrl" id="lumin-voice-ctrl">
-      <button type="button" class="lumin-voice-btn" id="lumin-tts-toggle" onclick="luminToggleReadAloud()" title="Read replies aloud in a feminine voice">🔈</button>
-      <button type="button" class="lumin-voice-btn" id="lumin-tts-slower" onclick="luminAdjustReadRate(-0.1)" title="Read slower">‹</button>
-      <span class="lumin-voice-rate" id="lumin-tts-rate">1.0×</span>
-      <button type="button" class="lumin-voice-btn" id="lumin-tts-faster" onclick="luminAdjustReadRate(0.1)" title="Read faster">›</button>
-    </div>
-    <span class="lumin-history-link" onclick="openFullChat()">Full history →</span>
-    <button class="lumin-drawer-close" onclick="closeLuminDrawer()">✕</button>
-  </div>
-
-  <div class="lumin-interim" id="lumin-interim"></div>
-
-  <div class="lumin-messages" id="lumin-messages">
-    <div class="lumin-empty" id="lumin-empty">
-      <div class="lumin-empty-icon">◎</div>
-      <div class="lumin-empty-title" data-studio-copy="emptyHeading">Talk to Lumin</div>
-      <div class="lumin-empty-subtitle" data-studio-copy="emptySubhead">You are talking to the system. Ask anything — or say do: / ask to build to change it.</div>
-      <div class="lumin-suggestions">
-        <div class="lumin-suggestions-heading" id="lumin-suggestions-heading">Start with one of these</div>
-        <div class="lumin-suggestion-chips" id="lumin-suggestion-chips"></div>
+  <div class="lumin-layout" id="lumin-layout">
+    <aside class="lumin-left open" id="lumin-left">
+      <div class="lumin-left-head">Jump-cuts</div>
+      <div class="lumin-left-list" id="lumin-segments"></div>
+    </aside>
+    <div class="lumin-splitter" id="lumin-splitter-left"></div>
+    <main class="lumin-center" id="lumin-center">
+      <div class="lumin-drawer-header" onclick="onLuminHeaderClick(event)">
+        <div class="lumin-drawer-avatar">◎</div>
+        <div class="lumin-drawer-title">
+          <strong>Lumin</strong>
+          <span id="lumin-status-text">Counsel · Lumin</span>
+        </div>
+        <div class="lumin-dock-controls" id="lumin-dock-controls">
+          <button type="button" class="lumin-dock-btn active" data-dock="right" onclick="setLuminDock('right')">Side</button>
+          <button type="button" class="lumin-dock-btn" data-dock="top" onclick="setLuminDock('top')">Top</button>
+          <button type="button" class="lumin-dock-btn" data-dock="bottom" onclick="setLuminDock('bottom')">Bottom</button>
+          <button type="button" class="lumin-dock-btn" id="lumin-pin-btn" onclick="toggleLuminPin()">Pin</button>
+          <button type="button" class="lumin-dock-btn" id="lumin-min-btn" onclick="toggleLuminMinimize()">Min</button>
+        </div>
+        <div class="lumin-dock-controls" id="lumin-layout-controls">
+          <button type="button" class="lumin-dock-btn" onclick="toggleLuminLeftPanel()" title="History / jump-cuts">☰</button>
+          <button type="button" class="lumin-dock-btn" onclick="toggleLuminRightPanel()" title="Reports / artifacts">▣</button>
+          <button type="button" class="lumin-dock-btn" onclick="cycleLuminComposerDock()" title="Composer top / bottom">⇅</button>
+          <button type="button" class="lumin-dock-btn" id="lumin-mode-btn" onclick="cycleLuminMode()" title="Switch mode">Chat</button>
+        </div>
+        <div class="lumin-voice-ctrl" id="lumin-voice-ctrl">
+          <button type="button" class="lumin-voice-btn" id="lumin-tts-toggle" onclick="luminToggleReadAloud()" title="Read replies aloud in a feminine voice">🔈</button>
+          <button type="button" class="lumin-voice-btn" id="lumin-tts-slower" onclick="luminAdjustReadRate(-0.1)" title="Read slower">‹</button>
+          <span class="lumin-voice-rate" id="lumin-tts-rate">1.0×</span>
+          <button type="button" class="lumin-voice-btn" id="lumin-tts-faster" onclick="luminAdjustReadRate(0.1)" title="Read faster">›</button>
+        </div>
+        <div class="lumin-queue-ctrl">
+          <button type="button" class="lumin-dock-btn" id="lumin-queue-btn" onclick="luminToggleQueuePanel(event)" title="Request queue">Queue <span class="lumin-queue-badge" id="lumin-queue-badge"></span></button>
+          <div class="lumin-queue-panel" id="lumin-queue-panel">
+            <div class="lumin-queue-panel-head">Up next</div>
+            <div class="lumin-queue-list" id="lumin-queue-list"></div>
+            <button type="button" class="lumin-queue-clear" onclick="luminClearQueue()">Clear queue</button>
+          </div>
+        </div>
+        <span class="lumin-history-link" onclick="openFullChat()">Full history →</span>
+        <button class="lumin-drawer-close" onclick="closeLuminDrawer()">✕</button>
       </div>
-    </div>
-  </div>
 
-  <div class="lumin-input-bar">
-    <div id="lumin-attach-chips"></div>
-    <div class="lumin-input-wrap">
-      <textarea
-        class="lumin-input"
-        id="lumin-input"
-        placeholder="Lumin — ask anything, or `do: open LifeRE` / `do: fix …` to execute"
-        rows="3"
-        onkeydown="luminHandleKey(event)"
-        oninput="luminAutoResize(this)"></textarea>
-      <button type="button" class="lumin-input-attach" id="lumin-attach-btn" onclick="document.getElementById('lumin-file-input').click()" title="Attach a file">📎</button>
-      <button class="lumin-input-mic" id="lumin-mic-btn" onclick="luminVoiceInput()" title="Voice input (tap to toggle)">🎙</button>
-      <button class="lumin-input-mic" id="lumin-ptt-btn" title="Push-to-talk — hold, speak, release to send">🎤</button>
-    </div>
-    <input type="file" id="lumin-file-input" multiple style="display:none" onchange="luminOnFilePick(event)" />
-    <button class="lumin-send-btn" id="lumin-send-btn" onclick="luminSend()" title="Send">↑</button>
-    <button type="button" class="lumin-dock-btn" id="lumin-save-moment-btn" onclick="luminSaveLastMoment()" title="Save last reply as lesson/moment">★</button>
+      <div class="lumin-top-panel" id="lumin-top-panel">
+        <div class="lumin-progress-row">
+          <span class="lumin-progress-label">LifeRE Progress</span>
+          <div class="lumin-progress-track"><div class="lumin-progress-fill" id="lumin-progress-fill" style="width:0%"></div></div>
+        </div>
+        <div class="lumin-goals" id="lumin-goals">Top 3 goals will appear here when you set them.</div>
+      </div>
+
+      <div class="lumin-interim" id="lumin-interim"></div>
+
+      <div class="lumin-messages" id="lumin-messages">
+        <div class="lumin-empty" id="lumin-empty">
+          <div class="lumin-empty-icon">◎</div>
+          <div class="lumin-empty-title" data-studio-copy="emptyHeading">Talk to Lumin</div>
+          <div class="lumin-empty-subtitle" data-studio-copy="emptySubhead">You are talking to the system. Ask anything — or say do: / ask to build to change it.</div>
+          <div class="lumin-suggestions">
+            <div class="lumin-suggestions-heading" id="lumin-suggestions-heading">Start with one of these</div>
+            <div class="lumin-suggestion-chips" id="lumin-suggestion-chips"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lumin-interim" id="lumin-interim-text"></div>
+      <div class="lumin-input-bar">
+        <div class="lumin-wear-bar" id="lumin-wear-bar" title="Cognitive Core — wear perspective capsules before you ask">
+          <span class="lumin-wear-label">Think with</span>
+          <div class="lumin-wear-chips" id="lumin-wear-chips"></div>
+        </div>
+        <div id="lumin-attach-chips"></div>
+        <div class="lumin-input-wrap">
+          <textarea
+            class="lumin-input"
+            id="lumin-input"
+            placeholder="Lumin — ask anything, or `do: open LifeRE` / `do: fix …` to execute"
+            rows="3"
+            onkeydown="luminHandleKey(event)"
+            oninput="luminAutoResize(this)"></textarea>
+          <button type="button" class="lumin-input-attach" id="lumin-attach-btn" onclick="document.getElementById('lumin-file-input').click()" title="Attach a file">📎</button>
+          <button class="lumin-input-mic" id="lumin-mic-btn" onclick="luminVoiceInput()" title="Voice input (tap to toggle)">🎙</button>
+          <button class="lumin-input-mic" id="lumin-ptt-btn" title="Push-to-talk — hold, speak, release to send">🎤</button>
+        </div>
+        <input type="file" id="lumin-file-input" multiple style="display:none" onchange="luminOnFilePick(event)" />
+        <button class="lumin-send-btn" id="lumin-send-btn" onclick="luminSend()" title="Send">↑</button>
+        <button type="button" class="lumin-dock-btn" id="lumin-save-moment-btn" onclick="luminSaveLastMoment()" title="Save last reply as lesson/moment">★</button>
+      </div>
+    </main>
+    <div class="lumin-splitter" id="lumin-splitter-right"></div>
+    <aside class="lumin-right" id="lumin-right">
+      <div class="lumin-right-head">Report / Artifact</div>
+      <div class="lumin-right-content" id="lumin-right-content"></div>
+    </aside>
   </div>
 </div>
 
@@ -3342,6 +3608,22 @@ function toast(msg) {
 const CHAT_BASE = '/api/v1/lifeos/chat';
 const DIRECT_SYSTEM_ENDPOINT = '/api/v1/lifeos/builderos/command-control/founder-interface/message';
 const USE_DIRECT_SYSTEM_CHAT = true;
+const LUMIN_WEAR_KEY = 'lifeos_worn_capsules';
+const LUMIN_WEARABLE = [
+  { id: 'founder', label: 'Founder' },
+  { id: 'customer', label: 'Customer' },
+  { id: 'engineer', label: 'Engineer' },
+  { id: 'competitor', label: 'Competitor' },
+  { id: 'anti_you', label: 'Anti-you' },
+  { id: 'munger', label: 'Munger', group: 'minds' },
+  { id: 'bezos', label: 'Bezos', group: 'minds' },
+  { id: 'jobs', label: 'Jobs', group: 'minds' },
+  { id: 'buffett', label: 'Buffett', group: 'minds' },
+  { id: 'feynman', label: 'Feynman', group: 'minds' },
+  { id: 'therapist', label: 'Therapist', group: 'minds' },
+  { id: 'operator', label: 'Operator', group: 'minds' },
+  { id: 'future_self', label: 'Future You', group: 'minds' },
+];
 const luminState = {
   open: false,
   threadId: null,
@@ -3353,15 +3635,168 @@ const luminState = {
   wakeListenActive: false,
   lastReply: '',
   chatHistory: [],
+  nextMsgId: 0,
   readAloud: { enabled: false, rate: 1.0 },
   attachments: [],
+  queue: [],
+  queueOpen: false,
   thinkTimers: {},
+  leftOpen: true,
+  rightOpen: false,
+  composerDock: 'bottom',
+  mode: 'chat',
+  wornCapsules: (() => {
+    try {
+      const raw = JSON.parse(localStorage.getItem(LUMIN_WEAR_KEY) || '[]');
+      return Array.isArray(raw) ? raw.filter((id) => LUMIN_WEARABLE.some((c) => c.id === id)) : [];
+    } catch {
+      return [];
+    }
+  })(),
 };
+
+function initLuminWearChips() {
+  const host = document.getElementById('lumin-wear-chips');
+  if (!host) return;
+  host.innerHTML = '';
+  for (const c of LUMIN_WEARABLE) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'lumin-wear-chip' + (luminState.wornCapsules.includes(c.id) ? ' on' : '');
+    btn.textContent = c.label;
+    btn.dataset.capsule = c.id;
+    btn.onclick = () => {
+      const i = luminState.wornCapsules.indexOf(c.id);
+      if (i >= 0) luminState.wornCapsules.splice(i, 1);
+      else luminState.wornCapsules.push(c.id);
+      localStorage.setItem(LUMIN_WEAR_KEY, JSON.stringify(luminState.wornCapsules));
+      initLuminWearChips();
+    };
+    host.appendChild(btn);
+  }
+}
+initLuminWearChips();
+
+function appendLuminJudgmentMeta(data) {
+  if (!data?.cognitive_core && !data?.judgment_compiler && !data?.tension_ledger && !data?.outcome_capture) return;
+  const container = document.getElementById('lumin-messages');
+  if (!container) return;
+  const lines = [];
+
+  // Era-2 outcome capture: prediction vs reality + calibration movement.
+  if (data.outcome_capture) {
+    if (data.actual_option) {
+      lines.push(`<div><strong>You chose</strong> ${ _escHtml(String(data.actual_option)) }${data.prediction_hit ? ' ✓ predicted' : (data.predicted_option ? ` (predicted ${ _escHtml(String(data.predicted_option)) })` : '')}</div>`);
+    }
+    if (data.miss && data.miss.failure_class) {
+      lines.push(`<div><strong>Miss</strong> ${ _escHtml(String(data.miss.failure_class)) } — model updated, not just noted</div>`);
+    }
+    if (data.calibration) {
+      const acc = data.calibration.accuracy != null ? Math.round(Number(data.calibration.accuracy) * 100) : null;
+      lines.push(`<div><strong>Calibration</strong> ${ _escHtml(String(data.calibration.domain)) }: ${acc != null ? acc + '% acc' : '—'} · tier ${ _escHtml(String(data.calibration.delegation_tier || 'refuse')) } (n=${data.calibration.n || 0})</div>`);
+    }
+    if (data.decision_id) lines.push(`<div><strong>Journal</strong> ${ _escHtml(String(data.decision_id).slice(0, 8)) }…</div>`);
+    if (lines.length) _renderJudgmentMeta(container, lines);
+    return;
+  }
+
+  const worn = Array.isArray(data.worn_capsules) ? data.worn_capsules.join(' + ') : '';
+  const pred = data.prediction || {};
+  const conf = pred.confidence != null ? Math.round(Number(pred.confidence) * 100) : null;
+  const tension = Array.isArray(data.tension_ledger) ? data.tension_ledger : [];
+  const programs = Array.isArray(data.activated_programs) ? data.activated_programs : [];
+  if (worn) lines.push(`<div><strong>Worn</strong> ${ _escHtml(worn) }</div>`);
+  if (pred.option) {
+    lines.push(`<div><strong>Prediction</strong> ${ _escHtml(String(pred.option)) }${conf != null ? ` (${conf}%)` : ''} — hypothesis, not identity</div>`);
+  }
+  if (programs.length) {
+    const bits = programs.slice(0, 4).map((p) => {
+      const label = p.label || p;
+      const pc = p.confidence != null ? ` ${Math.round(Number(p.confidence) * 100)}%` : '';
+      return `${label}${pc}`;
+    }).join(' · ');
+    lines.push(`<div><strong>Programs</strong> ${ _escHtml(bits) } — deep patterns (hypotheses)</div>`);
+  }
+  if (tension.length) {
+    const bits = tension.slice(0, 5).map((t) => {
+      const id = t.capsule_id || t.id || '?';
+      const stance = t.stance || t.wants || t.objects_to || '';
+      return `${id}: ${stance}`;
+    }).join(' · ');
+    lines.push(`<div><strong>Tension</strong> ${ _escHtml(bits) }</div>`);
+  }
+  if (data.decision_id) {
+    lines.push(`<div><strong>Journal</strong> ${ _escHtml(String(data.decision_id).slice(0, 8)) }…</div>`);
+  }
+  // Era-3 Extend Me — proactive missing-info + consequence sketch (hypothesis).
+  const mi = data.missing_info || data.cognitive_core?.missing_info;
+  if (mi?.most_valuable) {
+    lines.push(`<div><strong>Missing</strong> ${ _escHtml(String(mi.most_valuable)) }${mi.cheapest_way_to_learn ? ` · learn: ${ _escHtml(String(mi.cheapest_way_to_learn)) }` : ''}</div>`);
+  }
+  const cs = data.consequences || data.cognitive_core?.consequences;
+  if (cs && (arrLen(cs.second_order) || arrLen(cs.watch_signals))) {
+    const watch = Array.isArray(cs.watch_signals) ? cs.watch_signals.slice(0, 2).join('; ') : '';
+    lines.push(`<div><strong>Consequences</strong> ${watch ? _escHtml(watch) : '2nd/3rd-order sketched'} — hypothesis</div>`);
+  }
+  if (data.value_drift?.drift?.length) {
+    const d0 = data.value_drift.drift[0];
+    lines.push(`<div><strong>Value drift</strong> ${ _escHtml(String(d0.principle || d0.drift_description || 'divergence noted')) }</div>`);
+  }
+  // Era-4 Trust Me — delegation disposition when present.
+  const trust = data.trust || data.can_act_gate || data.cognitive_core?.trust;
+  if (trust?.delegation_tier || trust?.action) {
+    lines.push(`<div><strong>Trust</strong> tier ${ _escHtml(String(trust.delegation_tier || trust.action))} · can_act=${trust.can_act ? 'yes' : 'no'} (earned)</div>`);
+  }
+  // Era-5/6 Preserve + Transmit — package / debt / interrupt signals when present.
+  const preserve = data.preserve || data.judgment_package || data.cognitive_core?.preserve;
+  if (preserve?.label || preserve?.package_id) {
+    const confN = Array.isArray(preserve.confidence_map?.confident) ? preserve.confidence_map.confident.length : null;
+    lines.push(`<div><strong>Preserve</strong> ${ _escHtml(String(preserve.label || 'package'))}${confN != null ? ` · ${confN} confident` : ''} — not immortality</div>`);
+  }
+  const debt = data.cognitive_debt || data.debt || data.cognitive_core?.debt;
+  if (Array.isArray(debt) && debt.length) {
+    lines.push(`<div><strong>Cognitive debt</strong> ${debt.length} open — recalibrate before acting</div>`);
+  }
+  const interrupt = data.interrupt || data.subconscious_interrupt || data.cognitive_core?.interrupt;
+  if (interrupt?.message) {
+    lines.push(`<div><strong>Interrupt</strong> ${ _escHtml(String(interrupt.message).slice(0, 120)) }</div>`);
+  }
+  const cal = data.calibration || data.cognitive_core?.calibration;
+  if (cal?.overall?.accuracy != null || cal?.domains?.length) {
+    const acc = cal.overall?.accuracy != null ? Number(cal.overall.accuracy).toFixed(2) : '?';
+    lines.push(`<div><strong>Calibration</strong> acc ${ _escHtml(acc) } — hypothesis metrics</div>`);
+  }
+  const ladder = data.ladder || data.autonomy_ladder || data.cognitive_core?.ladder;
+  if (ladder?.direction || ladder?.suggested_tier) {
+    lines.push(`<div><strong>Ladder</strong> ${ _escHtml(String(ladder.direction || 'hold'))} → ${ _escHtml(String(ladder.suggested_tier || '')) }</div>`);
+  }
+  const audit = data.integrity_audit || data.cognitive_core?.audit;
+  if (audit && (audit.passed != null || audit.findings_n != null)) {
+    lines.push(`<div><strong>Integrity</strong> ${audit.passed ? 'clean' : `${audit.findings_n ?? '?'} finding(s)`} — each carries a fix</div>`);
+  }
+  const council = data.council || data.cognitive_core?.council;
+  if (council?.consensus || (Array.isArray(council?.dissent) && council.dissent.length)) {
+    lines.push(`<div><strong>Council</strong> consensus + ${ (council.dissent || []).length } dissent (lenses)</div>`);
+  }
+  if (!lines.length) return;
+  _renderJudgmentMeta(container, lines);
+}
+
+function arrLen(v) { return Array.isArray(v) ? v.length : 0; }
+
+function _renderJudgmentMeta(container, lines) {
+  const div = document.createElement('div');
+  div.className = 'lumin-msg assistant';
+  div.innerHTML = `<div class="lumin-judgment-meta">${lines.join('')}</div>`;
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
 
 const LUMIN_DOCK_KEY = 'lifeos_lumin_dock_position';
 const LUMIN_PIN_KEY = 'lifeos_lumin_dock_pinned';
 const LUMIN_MIN_KEY = 'lifeos_lumin_dock_minimized';
 initLuminDock();
+initLuminLayout();
 
 function initLuminDock() {
   const drawer = document.getElementById('lumin-drawer');
@@ -3581,6 +4016,8 @@ function luminRenderHistory(messages) {
   const container = document.getElementById('lumin-messages');
   if (!messages.length) return;
   container.innerHTML = '';
+  luminState.chatHistory = [];
+  luminState.nextMsgId = 0;
   const subset = messages.slice(-80);
   subset.forEach(m => {
     const role = m.role === 'user' ? 'user' : 'assistant';
@@ -3680,13 +4117,38 @@ window.addEventListener('message', (ev) => {
 async function luminSend(opts = {}) {
   const input = document.getElementById('lumin-input');
   let msg = safePromptText(opts.text || input?.value || '');
-  const hasAttachments = Array.isArray(luminState.attachments) && luminState.attachments.length > 0;
-  if ((!msg && !hasAttachments) || luminState.sending) return;
+  luminDetectLayoutModeFromText(msg);
+  let useAttachments = Array.isArray(opts.attachments) && opts.attachments.length
+    ? opts.attachments
+    : (Array.isArray(luminState.attachments) ? luminState.attachments : []);
+  const hasAttachments = useAttachments.length > 0;
+
+  // If already working, queue this request and keep the user typing.
+  if (luminState.sending && !opts._fromQueue) {
+    luminEnqueue(msg, useAttachments, opts.voice === true || luminState.voiceTurn);
+    if (!opts.text && input) { input.value = ''; luminAutoResize(input); }
+    if (!opts.attachments) { luminClearAttachments(); }
+    luminState.voiceTurn = false;
+    return;
+  }
+  if ((!msg && !hasAttachments)) return;
+
   const voiceTurn = opts.voice === true || luminState.voiceTurn;
   luminState.voiceTurn = false;
   if (!USE_DIRECT_SYSTEM_CHAT && !luminState.threadId) { await luminCreateThread(); }
 
   // Fold any attached files into the outbound message so the Chair can read them.
+  luminState.attachments = useAttachments;
+
+  // Analyze pasted images with vision before the Chair sees them.
+  const pendingImages = luminState.attachments.filter((a) => a.kind === 'image' && a.data && !a.description);
+  if (pendingImages.length) {
+    const statusEl = document.getElementById('lumin-status-text');
+    if (statusEl) statusEl.textContent = `Reading ${pendingImages.length} image(s)…`;
+    const blocks = await luminDescribeImageAttachments(pendingImages);
+    pendingImages.forEach((a, i) => { a.description = blocks[i]; });
+  }
+
   const attachBlock = luminBuildAttachmentBlock();
   const outboundMsg = attachBlock ? (msg ? `${msg}\n\n${attachBlock}` : attachBlock) : msg;
   const attachNames = hasAttachments ? luminState.attachments.map((a) => a.name).join(', ') : '';
@@ -3729,8 +4191,9 @@ async function luminSend(opts = {}) {
             surface: 'lifeos-app',
             focused_element: '#lumin-input',
             page: location.pathname + location.search,
+            worn_capsules: Array.isArray(luminState.wornCapsules) ? [...luminState.wornCapsules] : [],
           },
-          client_version: '20260709-display-dna',
+          client_version: '20260719-cognitive-core',
         }
       : { user: USER || 'adam', message: outboundMsg };
     const endpoint = USE_DIRECT_SYSTEM_CHAT
@@ -3800,6 +4263,7 @@ async function luminSend(opts = {}) {
       reply = appendClientBubbleProof(reply, data);
       luminState.lastReply = reply;
       luminDeliverReply(reply, voiceTurn);
+      appendLuminJudgmentMeta(data);
       applyLuminShellAction(data);
       if (!luminState.open) {
         document.getElementById('lumin-fab-badge').classList.add('show');
@@ -3835,6 +4299,7 @@ async function luminSend(opts = {}) {
         statusEl.textContent = 'Ready';
       }
     }
+    setTimeout(luminProcessQueue, 0);
   }
 }
 
@@ -3842,14 +4307,18 @@ function _appendLuminMsg(role, content, createdAt, scroll) {
   const container = document.getElementById('lumin-messages');
   const div = document.createElement('div');
   div.className = `lumin-msg ${role}`;
+  const msgId = luminState.nextMsgId++;
+  div.dataset.msgId = String(msgId);
+  div.id = `lumin-msg-${msgId}`;
   const time = createdAt ? new Date(createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
   div.innerHTML = `<div style="white-space:pre-wrap;word-break:break-word;">${_escHtml(content)}</div>${time ? `<div class="lumin-msg-time">${time}</div>` : ''}`;
   container.appendChild(div);
   if (scroll) container.scrollTop = container.scrollHeight;
   if (role === 'user' || role === 'assistant') {
-    luminState.chatHistory.push({ role, content: String(content || '') });
+    luminState.chatHistory.push({ role, content: String(content || ''), createdAt, msgId });
     if (luminState.chatHistory.length > 40) luminState.chatHistory.shift();
   }
+  luminRenderSegments();
 }
 
 function _appendLuminMsgRaw(id, role, content) {
@@ -3871,6 +4340,289 @@ function buildLuminConversationHistoryPayload() {
     .slice(0, -1)
     .slice(-12)
     .map((m) => ({ role: m.role, content: m.content }));
+}
+
+function luminEnqueue(text, attachments, voice) {
+  const safeText = String(text || '').trim();
+  const safeAttachments = Array.isArray(attachments) ? attachments.slice() : [];
+  if (!safeText && !safeAttachments.length) return;
+  luminState.queue.push({
+    id: `q-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+    text: safeText,
+    attachments: safeAttachments,
+    voice: !!voice,
+  });
+  luminRenderQueue();
+  toast(`Queued · ${luminState.queue.length} waiting`);
+}
+
+function luminProcessQueue() {
+  if (luminState.sending || !luminState.queue.length) return;
+  const item = luminState.queue.shift();
+  luminRenderQueue();
+  if (!item) return;
+  luminSend({ text: item.text, attachments: item.attachments, voice: item.voice, _fromQueue: true });
+}
+
+function luminToggleQueuePanel() {
+  luminState.queueOpen = !luminState.queueOpen;
+  const panel = document.getElementById('lumin-queue-panel');
+  if (panel) panel.classList.toggle('open', luminState.queueOpen);
+}
+
+function luminRenderQueue() {
+  const list = document.getElementById('lumin-queue-list');
+  const badge = document.getElementById('lumin-queue-badge');
+  const btn = document.getElementById('lumin-queue-btn');
+  if (badge) {
+    badge.textContent = luminState.queue.length || '';
+    badge.classList.toggle('hidden', !luminState.queue.length);
+  }
+  if (!list) return;
+  if (!luminState.queue.length) {
+    list.innerHTML = '<div class="lumin-queue-empty">No queued requests.</div>';
+    return;
+  }
+  list.innerHTML = luminState.queue.map((item, idx) => {
+    const raw = (item.text || '(attachment)').slice(0, 60);
+    const snippet = _escHtml(raw);
+    const titleText = raw.replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const voiceIcon = item.voice ? ' <span class="lumin-queue-item-voice">🎙</span>' : '';
+    return `<div class="lumin-queue-item" data-qid="${item.id}">
+      <span class="lumin-queue-item-text" title="${titleText}">${snippet}${voiceIcon}</span>
+      <button type="button" class="lumin-queue-btn" onclick="luminMoveQueueItem(${idx}, -1)" title="Move up" ${idx === 0 ? 'disabled' : ''}>↑</button>
+      <button type="button" class="lumin-queue-btn" onclick="luminMoveQueueItem(${idx}, 1)" title="Move down" ${idx === luminState.queue.length - 1 ? 'disabled' : ''}>↓</button>
+      <button type="button" class="lumin-queue-btn" onclick="luminDeleteQueueItem(${idx})" title="Remove">✕</button>
+    </div>`;
+  }).join('');
+}
+
+function luminMoveQueueItem(idx, delta) {
+  const newIdx = idx + delta;
+  if (newIdx < 0 || newIdx >= luminState.queue.length) return;
+  const [item] = luminState.queue.splice(idx, 1);
+  luminState.queue.splice(newIdx, 0, item);
+  luminRenderQueue();
+}
+
+function luminDeleteQueueItem(idx) {
+  if (idx < 0 || idx >= luminState.queue.length) return;
+  luminState.queue.splice(idx, 1);
+  luminRenderQueue();
+}
+
+function luminClearQueue() {
+  luminState.queue = [];
+  luminRenderQueue();
+}
+
+function makeSegmentTitle(text) {
+  const t = String(text || '').replace(/\[Attached files from founder\][\s\S]*/i, '').replace(/📎.*/g, '').replace(/\n+/g, ' ').trim();
+  if (!t) return 'New turn';
+  return t.length > 45 ? t.slice(0, 45) + '…' : t;
+}
+
+function luminRenderSegments() {
+  const list = document.getElementById('lumin-segments');
+  if (!list) return;
+  const hist = luminState.chatHistory.filter((m) => m.role === 'user' || m.role === 'assistant');
+  const GAP_MS = 10 * 60 * 1000;
+  const segments = [];
+  let current = null;
+  for (const m of hist) {
+    if (m.role === 'user') {
+      const t = m.createdAt ? new Date(m.createdAt).getTime() : 0;
+      if (!current || (current.lastUserTime && t - current.lastUserTime > GAP_MS)) {
+        if (current) segments.push(current);
+        current = { title: makeSegmentTitle(m.content), messages: [m], lastUserTime: t, firstMsgId: m.msgId };
+      } else {
+        current.messages.push(m);
+        current.lastUserTime = t;
+      }
+    } else if (current) {
+      current.messages.push(m);
+    }
+  }
+  if (current) segments.push(current);
+  if (!segments.length) {
+    list.innerHTML = '<div class="lumin-segment-empty">Start talking — your conversation jump-cuts will appear here.</div>';
+    return;
+  }
+  list.innerHTML = segments.map((s, i) => `<button type="button" class="lumin-segment" data-segment-idx="${i}" onclick="luminScrollToSegment(${s.firstMsgId})">
+    <div class="lumin-segment-title">${_escHtml(s.title)}</div>
+    <div class="lumin-segment-meta">${s.messages.length} message${s.messages.length === 1 ? '' : 's'}</div>
+  </button>`).join('');
+}
+
+function luminScrollToSegment(msgId) {
+  const el = document.getElementById(`lumin-msg-${msgId}`) || document.querySelector(`.lumin-msg[data-msg-id="${msgId}"]`);
+  if (!el) return;
+  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.querySelectorAll('.lumin-segment').forEach((b) => b.classList.remove('active'));
+  const seg = document.querySelector(`.lumin-segment[onclick*="${msgId}"]`);
+  if (seg) seg.classList.add('active');
+}
+
+function luminShowArtifact(html, title = 'Artifact') {
+  const head = document.querySelector('#lumin-right .lumin-right-head');
+  const content = document.getElementById('lumin-right-content');
+  if (head) head.textContent = title;
+  if (content) content.innerHTML = html;
+  if (window.innerWidth >= 900) setLuminRightPanel(true);
+}
+
+function applyLuminLayout() {
+  const left = document.getElementById('lumin-left');
+  const right = document.getElementById('lumin-right');
+  const center = document.getElementById('lumin-center');
+  const layout = document.getElementById('lumin-layout');
+  const leftSplitter = document.getElementById('lumin-splitter-left');
+  const rightSplitter = document.getElementById('lumin-splitter-right');
+  if (left) left.classList.toggle('open', luminState.leftOpen);
+  if (right) right.classList.toggle('open', luminState.rightOpen);
+  if (leftSplitter) leftSplitter.style.display = (luminState.leftOpen && window.innerWidth >= 900) ? 'block' : 'none';
+  if (rightSplitter) rightSplitter.style.display = (luminState.rightOpen && window.innerWidth >= 900) ? 'block' : 'none';
+  if (center) {
+    center.classList.remove('composer-top', 'composer-bottom', 'mode-chat', 'mode-lifeRE');
+    center.classList.add(`composer-${luminState.composerDock}`, `mode-${luminState.mode}`);
+  }
+  const modeBtn = document.getElementById('lumin-mode-btn');
+  if (modeBtn) modeBtn.textContent = luminState.mode === 'lifeRE' ? 'LifeRE' : 'Chat';
+  const layoutVars = [
+    ['--lumin-left-width', localStorage.getItem('lumin_left_width') || '220px'],
+    ['--lumin-right-width', localStorage.getItem('lumin_right_width') || '260px'],
+  ];
+  layoutVars.forEach(([k, v]) => {
+    if (layout) layout.style.setProperty(k, v);
+  });
+}
+
+function toggleLuminLeftPanel() {
+  luminState.leftOpen = !luminState.leftOpen;
+  localStorage.setItem('lumin_left_open', luminState.leftOpen ? '1' : '0');
+  applyLuminLayout();
+}
+
+function toggleLuminRightPanel() {
+  luminState.rightOpen = !luminState.rightOpen;
+  localStorage.setItem('lumin_right_open', luminState.rightOpen ? '1' : '0');
+  applyLuminLayout();
+}
+
+function setLuminLeftPanel(open) {
+  luminState.leftOpen = !!open;
+  localStorage.setItem('lumin_left_open', luminState.leftOpen ? '1' : '0');
+  applyLuminLayout();
+}
+
+function setLuminRightPanel(open) {
+  luminState.rightOpen = !!open;
+  localStorage.setItem('lumin_right_open', luminState.rightOpen ? '1' : '0');
+  applyLuminLayout();
+}
+
+function setLuminComposerDock(pos) {
+  if (!['top', 'bottom'].includes(pos)) return;
+  luminState.composerDock = pos;
+  localStorage.setItem('lumin_composer_dock', pos);
+  applyLuminLayout();
+}
+
+function cycleLuminComposerDock() {
+  setLuminComposerDock(luminState.composerDock === 'bottom' ? 'top' : 'bottom');
+}
+
+function setLuminMode(mode) {
+  if (!['chat', 'lifeRE'].includes(mode)) return;
+  luminState.mode = mode;
+  localStorage.setItem('lumin_mode', mode);
+  applyLuminLayout();
+}
+
+function cycleLuminMode() {
+  setLuminMode(luminState.mode === 'chat' ? 'lifeRE' : 'chat');
+}
+
+function initLuminLayout() {
+  luminState.leftOpen = localStorage.getItem('lumin_left_open') !== '0';
+  luminState.rightOpen = localStorage.getItem('lumin_right_open') === '1';
+  luminState.composerDock = localStorage.getItem('lumin_composer_dock') || 'bottom';
+  luminState.mode = localStorage.getItem('lumin_mode') || 'chat';
+  applyLuminLayout();
+  luminRenderSegments();
+  initLuminResizers();
+  initLuminSwipe();
+}
+
+function initLuminResizers() {
+  const leftSplitter = document.getElementById('lumin-splitter-left');
+  const rightSplitter = document.getElementById('lumin-splitter-right');
+  if (!leftSplitter || !rightSplitter) return;
+  let side = null;
+  let startX = 0;
+  let startWidth = 0;
+  function start(e) {
+    side = e.target.dataset.side;
+    startX = e.clientX || e.touches?.[0]?.clientX;
+    const prop = side === 'left' ? '--lumin-left-width' : '--lumin-right-width';
+    startWidth = parseFloat(getComputedStyle(document.getElementById('lumin-layout')).getPropertyValue(prop)) || (side === 'left' ? 220 : 260);
+    document.body.style.userSelect = 'none';
+    document.addEventListener('mousemove', move);
+    document.addEventListener('mouseup', stop);
+    document.addEventListener('touchmove', move, { passive: false });
+    document.addEventListener('touchend', stop);
+  }
+  function move(e) {
+    if (!side) return;
+    const x = e.clientX || e.touches?.[0]?.clientX;
+    const delta = side === 'left' ? x - startX : startX - x;
+    const prop = side === 'left' ? '--lumin-left-width' : '--lumin-right-width';
+    const newWidth = Math.max(160, Math.min(600, startWidth + delta));
+    document.getElementById('lumin-layout').style.setProperty(prop, `${newWidth}px`);
+  }
+  function stop() {
+    if (!side) return;
+    const prop = side === 'left' ? '--lumin-left-width' : '--lumin-right-width';
+    const val = document.getElementById('lumin-layout').style.getPropertyValue(prop);
+    if (val) localStorage.setItem(side === 'left' ? 'lumin_left_width' : 'lumin_right_width', val);
+    side = null;
+    document.body.style.userSelect = '';
+    document.removeEventListener('mousemove', move);
+    document.removeEventListener('mouseup', stop);
+    document.removeEventListener('touchmove', move);
+    document.removeEventListener('touchend', stop);
+  }
+  leftSplitter.dataset.side = 'left';
+  rightSplitter.dataset.side = 'right';
+  leftSplitter.addEventListener('mousedown', start);
+  leftSplitter.addEventListener('touchstart', start, { passive: false });
+  rightSplitter.addEventListener('mousedown', start);
+  rightSplitter.addEventListener('touchstart', start, { passive: false });
+}
+
+function initLuminSwipe() {
+  const layout = document.getElementById('lumin-layout');
+  if (!layout) return;
+  let startX = null;
+  layout.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; }, { passive: true });
+  layout.addEventListener('touchend', (e) => {
+    if (startX === null || window.innerWidth >= 900) return;
+    const endX = e.changedTouches[0].clientX;
+    const dx = endX - startX;
+    const threshold = 60;
+    const width = layout.offsetWidth / 3;
+    if (Math.abs(dx) > threshold) {
+      const current = Math.round(layout.scrollLeft / width);
+      if (dx < 0 && current < 2) layout.scrollTo({ left: (current + 1) * width, behavior: 'smooth' });
+      if (dx > 0 && current > 0) layout.scrollTo({ left: (current - 1) * width, behavior: 'smooth' });
+    }
+    startX = null;
+  }, { passive: true });
+}
+
+function luminDetectLayoutModeFromText(text) {
+  if (/open\s+lifeRE/i.test(text)) setLuminMode('lifeRE');
+  if (/close\s+lifeRE|exit\s+lifeRE|back\s+to\s+chat/i.test(text)) setLuminMode('chat');
 }
 
 async function directSystemHeaders() {
@@ -4011,10 +4763,43 @@ function initLuminDrawerVoiceSend() {
     manualSendOnly: true,
     keepListeningOnVoiceSend: true,
     persistentListen: false,
+    serverSttEnabled: true,
+    serverSttChunkMs: 800,
+    serverSttMinBytes: 400,
+    serverSttTranscribe: async (blob, { committed }) => {
+      const form = new FormData();
+      form.append('audio', blob, 'chunk.webm');
+      form.append('context', String(committed || '').trim());
+      form.append('user', USER || 'adam');
+      const h = await directSystemHeaders();
+      delete h['Content-Type'];
+      const r = await fetch('/api/v1/lifeos/voice-rail/stt', { method: 'POST', headers: h, body: form });
+      if (!r.ok) throw new Error('stt_failed');
+      const data = await r.json().catch(() => ({}));
+      return data.text || '';
+    },
     onVoiceSend: (text) => {
       const msg = String(text || '').trim();
       if (!msg || luminState.sending) return;
       luminSend({ text: msg, voice: true });
+    },
+    serverTtsFetch: luminServerTtsFetch,
+    onInterim: ({ text }) => {
+      const el = document.getElementById('lumin-interim-text');
+      if (!el) return;
+      if (!text) {
+        el.classList.remove('visible');
+        el.textContent = '';
+        return;
+      }
+      el.textContent = text;
+      el.classList.add('visible');
+    },
+    onStop: () => {
+      const el = document.getElementById('lumin-interim-text');
+      if (!el) return;
+      el.classList.remove('visible');
+      el.textContent = '';
     },
     silenceAutoSendMs: 0,
     sendOnMicStop: false,
@@ -4043,6 +4828,8 @@ function initLuminDrawerVoiceSend() {
 
 document.addEventListener('DOMContentLoaded', () => {
   luminInitReadAloudPrefs();
+  luminRenderQueue();
+  luminInitComposerInteractions();
   // The voice module script may still be loading — retry init until it's ready.
   let tries = 0;
   const tryInit = () => {
@@ -4131,6 +4918,22 @@ function luminAdjustReadRate(delta) {
   luminUpdateVoiceCtrlUi();
 }
 
+async function luminServerTtsFetch(text) {
+  try {
+    const h = await directSystemHeaders();
+    h['Content-Type'] = 'application/json';
+    const r = await fetch('/api/v1/lifeos/voice-rail/tts', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: h,
+      body: JSON.stringify({ text, department: 'ChC' }),
+    });
+    if (!r.ok) return { ok: false };
+    const blob = await r.blob();
+    return { ok: true, blob };
+  } catch { return { ok: false }; }
+}
+
 function speakLuminReply(text) {
   const plain = String(text || '')
     .replace(/\b(PASS|FAIL|COMMAND_RAN|NO_COMMAND_RAN)\b/g, '')
@@ -4140,8 +4943,8 @@ function speakLuminReply(text) {
   if (!plain) return;
   const rate = luminState.readAloud.rate || 0.95;
   try {
-    if (window.LifeOSVoiceChat && typeof window.LifeOSVoiceChat.speakText === 'function') {
-      window.LifeOSVoiceChat.speakText(plain, { rate, pitch: 1.04 });
+    if (window.LifeOSVoiceChat && typeof window.LifeOSVoiceChat.speakTextAsync === 'function') {
+      window.LifeOSVoiceChat.speakTextAsync(plain, { rate, pitch: 1.04, preferServerTts: true, serverTtsFetch: luminServerTtsFetch });
       return;
     }
   } catch { /* fall back to native */ }
@@ -4398,17 +5201,26 @@ const LUMIN_MAX_ATTACH = 5;
 const LUMIN_MAX_TEXT_BYTES = 200 * 1024;
 const LUMIN_TEXT_EXT = /\.(txt|md|markdown|json|csv|tsv|log|js|mjs|ts|jsx|tsx|html|css|xml|yaml|yml|py|sh|sql|env|ini|conf)$/i;
 
-function luminOnFilePick(event) {
-  const files = Array.from(event.target?.files || []);
-  event.target.value = '';
-  files.forEach((file) => {
+function luminHandleFiles(files) {
+  Array.from(files || []).forEach((file) => {
     if (luminState.attachments.length >= LUMIN_MAX_ATTACH) {
       toast(`Up to ${LUMIN_MAX_ATTACH} files at a time`);
       return;
     }
-    const record = { name: file.name, size: file.size, type: file.type || '', text: null };
+    const isImage = (file.type || '').startsWith('image/');
+    const isVideo = (file.type || '').startsWith('video/');
+    const isText = !isImage && !isVideo && LUMIN_TEXT_EXT.test(file.name) && file.size <= LUMIN_MAX_TEXT_BYTES;
+    const record = {
+      name: file.name, size: file.size, type: file.type || 'application/octet-stream',
+      kind: isImage ? 'image' : isVideo ? 'video' : isText ? 'text' : 'file',
+      text: null, data: null, description: null,
+    };
     luminState.attachments.push(record);
-    if (LUMIN_TEXT_EXT.test(file.name) && file.size <= LUMIN_MAX_TEXT_BYTES) {
+    if (isImage) {
+      const reader = new FileReader();
+      reader.onload = () => { record.data = String(reader.result || ''); };
+      reader.readAsDataURL(file);
+    } else if (isText) {
       const reader = new FileReader();
       reader.onload = () => { record.text = String(reader.result || '').slice(0, LUMIN_MAX_TEXT_BYTES); };
       reader.onerror = () => { record.text = null; };
@@ -4418,12 +5230,19 @@ function luminOnFilePick(event) {
   luminRenderAttachChips();
 }
 
+function luminOnFilePick(event) {
+  const files = Array.from(event.target?.files || []);
+  event.target.value = '';
+  luminHandleFiles(files);
+}
+
 function luminRenderAttachChips() {
   const wrap = document.getElementById('lumin-attach-chips');
   if (!wrap) return;
-  wrap.innerHTML = luminState.attachments.map((a, i) =>
-    `<span class="lumin-attach-chip">📎 ${_escHtml(a.name)} <button type="button" onclick="luminRemoveAttachment(${i})" title="Remove">✕</button></span>`
-  ).join('');
+  wrap.innerHTML = luminState.attachments.map((a, i) => {
+    const thumb = a.kind === 'image' && a.data ? `<img src="${_escHtml(a.data)}" style="width:18px;height:18px;object-fit:cover;border-radius:3px;margin-right:4px;vertical-align:middle;" alt="" />` : '📎 ';
+    return `<span class="lumin-attach-chip">${thumb}${_escHtml(a.name)} <button type="button" onclick="luminRemoveAttachment(${i})" title="Remove">✕</button></span>`;
+  }).join('');
 }
 
 function luminRemoveAttachment(idx) {
@@ -4440,10 +5259,59 @@ function luminBuildAttachmentBlock() {
   if (!luminState.attachments.length) return '';
   const parts = luminState.attachments.map((a) => {
     const head = `FILE: ${a.name} (${Math.round((a.size || 0) / 1024) || 1}KB${a.type ? ', ' + a.type : ''})`;
+    if (a.kind === 'image') {
+      if (a.description) return `${head}\n---\n${a.description}\n---`;
+      return `${head} — image attached; awaiting vision analysis or no description available.`;
+    }
+    if (a.kind === 'video') return `${head} — video attached; describe or transcribe on request.`;
     if (a.text) return `${head}\n---\n${a.text}\n---`;
     return `${head} — binary/unsupported for inline read; note its name and ask me for its contents if needed.`;
   });
   return `[Attached files from founder]\n${parts.join('\n\n')}`;
+}
+
+function luminInitComposerInteractions() {
+  const input = document.getElementById('lumin-input');
+  const wrap = document.querySelector('.lumin-input-wrap');
+  if (input) {
+    input.addEventListener('paste', (e) => {
+      const files = Array.from(e.clipboardData?.files || []);
+      if (!files.length) return;
+      e.preventDefault();
+      luminHandleFiles(files);
+    });
+  }
+  if (wrap) {
+    wrap.addEventListener('dragover', (e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'copy'; });
+    wrap.addEventListener('drop', (e) => {
+      e.preventDefault();
+      luminHandleFiles(e.dataTransfer?.files);
+    });
+  }
+}
+
+async function luminDescribeImageAttachments(images) {
+  try {
+    const payload = images.map((a) => ({
+      name: a.name,
+      mime: a.type,
+      data: String(a.data || '').split(',')[1] || '',
+    }));
+    const h = await directSystemHeaders();
+    h['Content-Type'] = 'application/json';
+    const r = await fetch('/api/v1/lifeos/voice-rail/describe-attachments', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: h,
+      body: JSON.stringify({ attachments: payload }),
+    });
+    if (!r.ok) return images.map(() => '[image: could not analyze — server error]');
+    const data = await r.json().catch(() => ({}));
+    const blocks = Array.isArray(data.blocks) ? data.blocks : [];
+    return images.map((_, i) => blocks[i] || '[image: no description returned]');
+  } catch (err) {
+    return images.map(() => `[image: could not analyze — ${err.message}]`);
+  }
 }
 
 function toggleLuminWakeListen() {

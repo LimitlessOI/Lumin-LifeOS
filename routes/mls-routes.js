@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: mls-routes.js
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
  * mls-routes.js
  * MLS deal scanner + investor registry API.
  *

@@ -12,7 +12,7 @@ import {
 const COMMENT_RE = /<!--\s*([^>]+?)\s*-->/;
 
 const SMOKE_CANARY_FILE = 'scripts/lifeos-direct-build-smoke-test.mjs';
-const SMOKE_PROOF_RE = /\/\/\s*ui-e2e-build-proof:\s*(\S+)/i;
+const SMOKE_PROOF_RE = /\/\/\sui-e2e-build-proof:\s*(\S+)/i;
 
 export function isSurgicalHtmlCommentPatch(task = '') {
   const t = String(task || '');

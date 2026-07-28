@@ -33,6 +33,11 @@ const DEFAULT_ALLOWED_KEYS = new Set([
   "OLLAMA_ENDPOINT",
   "DEEPSEEK_LOCAL_ENDPOINT",
   "DEEPSEEK_BRIDGE_ENABLED",
+  // Non-secret operational lever added 2026-07-28 (config/task-model-
+  // routing.js) so a real funding-constrained model-tier order can be set
+  // live via this same self-serve path, without a code deploy or a
+  // hardcoded temporary hack that has to be remembered and reverted later.
+  "TRUSTED_FALLBACK_MODELS_OVERRIDE",
   "PUBLIC_BASE_URL",
   "RAILWAY_PUBLIC_DOMAIN",
   "COMMAND_CENTER_KEY",
@@ -169,7 +174,7 @@ function maskValue(value) {
   const text = String(value || "");
   if (!text) return "";
   if (text.length <= 8) return `${text.slice(0, 2)}****`;
-  return `${text.slice(0, 4)}***${text.slice(-2)}`;
+  return `${text.slice(0, 4)}**${text.slice(-2)}`;
 }
 
 function parseAllowlistPatterns(raw) {

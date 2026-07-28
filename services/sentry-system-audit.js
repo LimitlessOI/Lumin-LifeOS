@@ -190,6 +190,84 @@ export async function checkWorkflowHealth({ token, repo, fetchFn = fetch, instan
 }
 
 /**
+ * SENTRY check 4: receipt reproducibility. A row existing in
+ * judgment_receipt_links is not the same as the row's CONTENT being true —
+ * this independently re-derives the claim from the primary source (GitHub's
+ * own commit record) instead of trusting whatever was stored at write-time.
+ * "We cannot just take AI at its word. We have to inspect what we expect."
+ * (founder, 2026-07-19) — this is that instruction as running code, applied
+ * one layer past the forgery fix: even a REAL row could name a fabricated or
+ * mistyped commit SHA, and nothing before this check would ever notice.
+ *
+ * V1 scope, stated honestly: only 'deploy' and 'ci' receipts are
+ * independently reproducible with what's available here (does the claimed
+ * commit SHA genuinely exist in the repo's real history on GitHub?).
+ * 'sentry' / 'revert' / 'manual' receipt kinds are not yet reproducible —
+ * silently skipped rather than falsely flagged OR falsely trusted.
+ * Fails open on network/transient errors — a timeout is never treated as
+ * proof of fabrication.
+ */
+export async function checkReceiptReproducibility({
+  pool,
+  token,
+  repo,
+  sampleSize = 25,
+  fetchFn = fetch,
+} = {}) {
+  if (!pool || !token || !repo) return [];
+  const [owner, name] = String(repo).split('/');
+  let rows;
+  try {
+    ({ rows } = await pool.query(
+      `SELECT link_id, decision_id, receipt_kind, receipt_ref
+       FROM judgment_receipt_links
+       WHERE receipt_kind IN ('deploy', 'ci')
+       ORDER BY created_at DESC
+       LIMIT $1`,
+      [sampleSize],
+    ));
+  } catch {
+    return [];
+  }
+
+  const findings = [];
+  for (const link of rows) {
+    if (!link.receipt_ref) {
+      findings.push({
+        id: `receipt_integrity:${link.link_id}`,
+        check: 'receipt_integrity',
+        severity: 'P1',
+        summary: `judgment_receipt_links row ${link.link_id} (decision ${link.decision_id}, kind=${link.receipt_kind}) has no receipt_ref to independently verify against.`,
+        proposed_solution: `Re-open decision ${link.decision_id} for manual review — a ${link.receipt_kind} receipt with no reference cannot be reproduced from the primary source, so it should not count as receipt_verified evidence until corrected.`,
+        detected_at: new Date().toISOString(),
+      });
+      continue;
+    }
+    let resp;
+    try {
+      resp = await fetchFn(`https://api.github.com/repos/${owner}/${name}/commits/${link.receipt_ref}`, {
+        headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' },
+      });
+    } catch {
+      continue; // transient network error — fail open, never accuse on a timeout
+    }
+    if (resp.status === 404) {
+      findings.push({
+        id: `receipt_integrity:${link.link_id}`,
+        check: 'receipt_integrity',
+        severity: 'P0',
+        summary: `judgment_receipt_links row ${link.link_id} (decision ${link.decision_id}) claims a ${link.receipt_kind} receipt for commit "${link.receipt_ref}", but no such commit exists in ${repo} — the claim does not reproduce.`,
+        proposed_solution: `Re-open decision ${link.decision_id} for manual review immediately — this outcome was counted as receipt-verified evidence in the calibration scoreboard but the underlying receipt is fabricated, mistyped, or the history was rewritten. Do not count it toward calibration until a real, verifiable commit is found or the row is corrected.`,
+        detected_at: new Date().toISOString(),
+      });
+    }
+    // any other status (200 = genuinely exists, or a non-404 API error) —
+    // never flag on ambiguity, only on a confirmed 404 non-existence.
+  }
+  return findings;
+}
+
+/**
  * Runs all SENTRY checks and returns the combined finding list. Each check
  * fails open (returns [] on its own error) so one broken check never blocks
  * the others.
@@ -198,11 +276,13 @@ export async function runSentrySystemAudit({
   token = process.env.GITHUB_TOKEN,
   repo = process.env.GITHUB_REPO,
   productsDir = PRODUCTS_DIR,
+  pool = undefined,
 } = {}) {
-  const [ciFindings, backlogFindings, workflowFindings] = await Promise.all([
+  const [ciFindings, backlogFindings, workflowFindings, receiptFindings] = await Promise.all([
     checkCiHealth({ token, repo }).catch(() => []),
     Promise.resolve().then(() => checkProductBacklogs({ productsDir })).catch(() => []),
     checkWorkflowHealth({ token, repo }).catch(() => []),
+    checkReceiptReproducibility({ pool, token, repo }).catch(() => []),
   ]);
-  return [...ciFindings, ...backlogFindings, ...workflowFindings];
+  return [...ciFindings, ...backlogFindings, ...workflowFindings, ...receiptFindings];
 }

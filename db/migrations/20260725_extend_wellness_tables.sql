@@ -1,23 +1,13 @@
 -- SYNOPSIS: Database migration — 20260725_extend_wellness_tables.sql.
--- Extend joy_checkins table
-ALTER TABLE joy_checkins
-ADD COLUMN new_column_1 TYPE,  -- Replace TYPE with the appropriate data type
-ADD COLUMN new_column_2 TYPE;  -- Add as many columns as needed
-
--- Extend integrity_score_log table
-ALTER TABLE integrity_score_log
-ADD COLUMN new_column_3 TYPE,
-ADD COLUMN new_column_4 TYPE;
-
--- Extend wearable_data table
-ALTER TABLE wearable_data
-ADD COLUMN new_column_5 TYPE,
-ADD COLUMN new_column_6 TYPE;
-
--- Extend emotional_patterns table
-ALTER TABLE emotional_patterns
-ADD COLUMN new_column_7 TYPE,
-ADD COLUMN new_column_8 TYPE;
-
--- Make sure to replace new_column_X with actual column names and TYPE with actual data types.
--- Check for any existing column names to avoid conflicts.
+-- This file originally contained a placeholder template (literal `TYPE` as a
+-- fake data type, `new_column_1..8` as fake column names) instead of real SQL
+-- — an unfinished migration stub that got committed with a .sql extension.
+-- `TYPE` is not a valid PostgreSQL type, so every production boot has been
+-- attempting to execute this and failing (syntax error), retried every boot
+-- per startup/database.js's fail-open design. No code references any
+-- new_column_* name, and no specific schema intent for joy_checkins /
+-- integrity_score_log / wearable_data / emotional_patterns was ever recorded
+-- — rather than invent columns, this is neutralized to a genuine no-op. If
+-- these tables do need real new columns, that needs founder-specified intent
+-- (what field, what type, what feature) before a real migration can be written.
+SELECT 1;

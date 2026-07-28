@@ -28,7 +28,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { execFileSync } from 'node:child_process';
 import { createUsefulWorkGuard } from './useful-work-guard.js';
 import { governedFactoryOnly } from './governed-factory-guard.js';
-import { hasTokenCapacity, dailyBuildBudget, recordDailyBuildAttempts, mergeQueueRuntimeStatus, defaultPlannerCallModel, discoverPlanWork, discoverSentryFixWork, runPlanBuildQueue } from './never-stop-product-factory.js';
+import { hasTokenCapacity, dailyBuildBudget, recordDailyBuildAttempts, mergeQueueRuntimeStatus, defaultPlannerCallModel, discoverPlanWork, discoverSentryFixWork, runPlanBuildQueue, commitQueueStatusToRepo } from './never-stop-product-factory.js';
 import { planGovernedBuildQueueRun } from './governed-build-queue-scheduler.js';
 import {
   loadBuildQueue,
@@ -40,6 +40,7 @@ import {
   reviveStaleBlockedSteps,
 } from './product-build-orchestrator.js';
 import { createDeploymentService } from './deployment-service.js';
+import { recordModelOutcome } from './model-capability-ledger.js';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const PRODUCTS_DIR = path.join(REPO_ROOT, 'docs/products');
@@ -49,11 +50,18 @@ const state = {
   running: false,
   lastFounderAlert: null,
   lastRunAt: null,
+  // Set unconditionally on every loopTick() call, whether or not there was
+  // real work to do. Distinct from lastRunAt (which only updates when
+  // execute() actually runs). This is the true "is the loop still alive"
+  // signal -- lastRunAt alone has expected multi-minute gaps during idle
+  // polling and can't tell a healthy idle loop from a silently-dead one.
+  lastTickAt: null,
   totalRuns: 0,
   lastShipped: 0,
   tokenHaltSince: null,
   lastCommitSha: null,
   lastCommitError: null,
+  watchdogRecoveries: 0,
 };
 
 let sharedPool = null;
@@ -237,6 +245,18 @@ function resolveShipTwinAuthority(product_id, ship_steps) {
   };
 }
 
+// Self-HTTP budget for the whole /factory/ship-queue round trip (codegen +
+// SENTRY behavior proof). 120s was too tight for large existing-file extend
+// tasks: routes/factory-mount-routes.js's codegen prompt now correctly
+// inlines full existing content up to 100000 bytes (raised 2026-07-20 from
+// 20000, see MAX_EXISTING_CONTENT_BYTES), which means more input tokens and
+// slower generation for exactly the files that most need it. Confirmed live
+// against sb-deliverability-gate (site-builder): 3 of 6 attempts died at a
+// gap_ms of ~120991 -- essentially the exact old cap -- while the OTHER 3
+// attempts completed and reached real SENTRY verification. Raised so large
+// files get a real chance to finish instead of being killed mid-generation.
+export const SHIP_QUEUE_TIMEOUT_MS = Number(process.env.GOVERNED_AUTONOMOUS_SHIP_QUEUE_TIMEOUT_MS) || 240_000;
+
 async function shipViaGovernedQueue({ product_id, ship_steps }) {
   const auth = resolveShipTwinAuthority(product_id, ship_steps);
   if (!auth.ok) {
@@ -260,7 +280,7 @@ async function shipViaGovernedQueue({ product_id, ship_steps }) {
           ...(Array.isArray(ship_steps) ? ship_steps.map((s) => Number(s?.model_rotation) || 0) : [0]),
         ),
       }),
-      signal: AbortSignal.timeout(120_000),
+      signal: AbortSignal.timeout(SHIP_QUEUE_TIMEOUT_MS),
     });
     const body = await res.json().catch(() => ({}));
     return { status: res.status, body };
@@ -729,24 +749,22 @@ async function fetchRemoteBuildQueue(productId) {
   return loadBuildQueue(productId);
 }
 
+// Delegates to commitQueueStatusToRepo (never-stop-product-factory.js), which
+// does a real GET -> merge -> PUT-with-sha retry loop on a lost race (409/422).
+// The prior inline implementation here used commitManyToGitHub with no retry
+// or re-merge on failure -- it just logged a warning and dropped the update,
+// which is the confirmed root cause of queue fields observed reverting to a
+// stale value shortly after being corrected (a sibling commit landing in the
+// same window silently won, and this function's update was never retried).
 async function commitQueueStatus(product_id, stepIds, queue, commitSha, logger) {
-  const { _sourcePath, ...clean } = queue;
-  const queuePath = queue._sourcePath || queuePathForProduct(product_id);
-  const relPath = path.relative(REPO_ROOT, queuePath).replace(/\\/g, '/');
-  const content = `${JSON.stringify(clean, null, 2)}\n`;
-  const branch = process.env.GITHUB_DEPLOY_BRANCH || 'main';
   const failed = commitSha === 'failed';
-  const statusTag = failed ? 'FAILED' : 'QUEUE';
-  const shaTag = failed ? '0000000' : commitSha.slice(0, 7);
-  try {
-    const result = await commitManyToGitHub([{ path: relPath, content }], `GOVERNED-AUTONOMOUS-${statusTag}: ${product_id} ${stepIds.join(', ')} ${shaTag}`, branch);
-    if (result?.ok && result.sha) {
-      logger?.info?.(`[GOVERNED-AUTONOMOUS-QUEUE] ${product_id} BUILD_QUEUE.json updated with ${shaTag}`);
-    } else {
-      logger?.warn?.(`[GOVERNED-AUTONOMOUS-QUEUE] ${product_id} commit returned !ok: ${result?.error || 'unknown'}`);
-    }
-  } catch (err) {
-    logger?.warn?.(`[GOVERNED-AUTONOMOUS-QUEUE] ${product_id} commit failed: ${err.message}`);
+  const shaTag = failed ? '0000000' : String(commitSha || '').slice(0, 7);
+  const queueWithId = { ...queue, product_id: queue.product_id || product_id };
+  const result = await commitQueueStatusToRepo(queueWithId, `${stepIds.join(', ')} ${shaTag}`.trim());
+  if (result?.ok) {
+    logger?.info?.(`[GOVERNED-AUTONOMOUS-QUEUE] ${product_id} BUILD_QUEUE.json updated with ${shaTag}`);
+  } else if (result?.error && result.error !== 'no_change') {
+    logger?.warn?.(`[GOVERNED-AUTONOMOUS-QUEUE] ${product_id} commit returned !ok: ${result.error}`);
   }
 }
 
@@ -980,15 +998,41 @@ export async function runGovernedAutonomousShipOnce({ logger, maxStepsPerProduct
       return { ok: true, shipped: 0, reason: 'no_shippable_steps', gaps: plan.total_gaps };
     }
     let shipped = 0;
+    let dispatchAttempts = 0;
     const perProduct = [];
     for (const entry of plan.by_product) {
       if (!Array.isArray(entry.ship_steps) || entry.ship_steps.length === 0) continue;
       const queue = queueCache[entry.product_id];
+      dispatchAttempts += 1;
       const { status, body } = await shipFn(entry);
       const ok = status === 200 && body && body.ok === true;
       let shippedIds = ok && Array.isArray(body.shipped)
         ? body.shipped.map((s) => s.step_id).filter(Boolean)
         : [];
+      // Real per-model outcome ledger. Founder, direct: "every model that
+      // sits in here needs to be rated... Have we ranked any of them?" --
+      // hooked here because this is the one place every governed-factory
+      // codegen dispatch (autonomous loop and manual ship-queue-and-commit
+      // calls alike) already surfaces model_tier + the real self/peer/compare
+      // honesty grade -- recording cannot be silently skipped by a caller
+      // forgetting to opt in, since it's inside the mandatory result path,
+      // not a bolt-on someone has to remember to call.
+      if (sharedPool && Array.isArray(body?.shipped)) {
+        for (const s of body.shipped) {
+          try {
+            await recordModelOutcome(sharedPool, {
+              model_tier: s?.codegen?.model_tier,
+              ok: true, // reaching body.shipped means codegen+SENTRY passed for this step
+              trust_earned: s?.trust_earned === true,
+              theater_detected: s?.honesty?.theater === true,
+              escalated: s?.codegen?.escalated === true,
+              effective_grade: s?.honesty?.effective_grade || null,
+            });
+          } catch (err) {
+            logger?.warn?.({ err: err.message }, '[GOVERNED-AUTONOMOUS-SHIP] model-capability-ledger record failed (non-fatal)');
+          }
+        }
+      }
       if (shippedIds.length && queue) {
         const commitSha = await commitShippedFiles(entry.product_id, shippedIds, entry.ship_steps, logger);
         if (commitSha) {
@@ -1037,7 +1081,10 @@ export async function runGovernedAutonomousShipOnce({ logger, maxStepsPerProduct
       });
     }
     queueCommitted = await commitQueueRuntimeChanges(queueCache, queueSnapshots, 'queue', logger, queueCommitted);
-    recordDailyBuildAttempts(shipped);
+    // Count every real dispatch attempt against the daily cap, not just
+    // successes -- a step stuck retrying (each retry a real paid model call)
+    // previously never tripped the budget because only `shipped` was counted.
+    recordDailyBuildAttempts(dispatchAttempts);
     state.lastShipped = shipped;
     await persistState();
     return { ok: true, shipped, products: perProduct, gaps: plan.total_gaps };
@@ -1134,6 +1181,32 @@ export function startGovernedAutonomousShippingLoop({ logger, pool } = {}) {
           logger?.warn?.(`[GOVERNED-AUTONOMOUS-SHIP] workCheck could not load queue for ${pid}: ${err.message}`);
         }
       }));
+      // BLOCKED-step blindness fix (2026-07-20): selectShippableSteps (used
+      // below by planGovernedBuildQueueRun) excludes any step with
+      // status===BLOCKED, even one whose revive cooldown has fully elapsed --
+      // reviving BLOCKED->PENDING only happened inside execute(), which
+      // createUsefulWorkGuard only calls when this workCheck reports count>=1.
+      // Net effect, confirmed live: a BLOCKED step with no OTHER genuinely-
+      // PENDING step existing anywhere across all products at the same moment
+      // was invisible to this gate forever -- the loop reported "0 shippable"
+      // and never called execute(), so revival never ran, so it stayed
+      // invisible, indefinitely. Observed directly: sb-deliverability-gate
+      // (site-builder) sat BLOCKED and un-retried for 1.5+ hours despite being
+      // ~1h15m past its 15-minute cooldown, while workCheck logged "0
+      // shippable...0 active products" every single tick in between. Revive
+      // here too (mutates the same object reused as execute()'s
+      // sharedQueueCache below, so this is not wasted work) so a cooled-down
+      // BLOCKED step is counted -- and therefore actually re-attempted --
+      // without needing an unrelated coincidental PENDING step elsewhere.
+      for (const pid of products) {
+        const queue = cache[pid];
+        if (!queue || !Array.isArray(queue.steps)) continue;
+        try {
+          reviveStaleBlockedSteps(queue);
+        } catch (err) {
+          logger?.warn?.(`[GOVERNED-AUTONOMOUS-SHIP] workCheck revive ${pid} failed: ${err.message}`);
+        }
+      }
       sharedQueueCache = cache;
       const plan = planGovernedBuildQueueRun({
         products,
@@ -1192,6 +1265,7 @@ export function startGovernedAutonomousShippingLoop({ logger, pool } = {}) {
 
   async function loopTick() {
     if (controller.stopped) return;
+    state.lastTickAt = new Date().toISOString();
     let result;
     try {
       result = await guardedTick();
@@ -1206,12 +1280,41 @@ export function startGovernedAutonomousShippingLoop({ logger, pool } = {}) {
 
   controller.handle = setTimeout(loopTick, bootDelayMs);
 
+  // Watchdog: the design above is already resilient to a single tick
+  // throwing (try/catch + unconditional reschedule), but nothing previously
+  // verified the loop was STILL ALIVE versus silently dead -- Railway's
+  // ON_FAILURE restart policy only catches the whole process crashing, not
+  // a logical stall where the process is up but loopTick's own reschedule
+  // chain stopped firing for some unforeseen reason. Checks state.lastTickAt
+  // (set unconditionally above, every tick, whether or not there was real
+  // work) against the longest gap the loop should ever legitimately have —
+  // if it's stale well past that, force an immediate recovery tick rather
+  // than waiting on a full container restart.
+  const watchdogIntervalMs = Number(process.env.GOVERNED_AUTONOMOUS_SHIP_WATCHDOG_INTERVAL_MS || 5 * 60 * 1000);
+  const staleThresholdMs = Number(process.env.GOVERNED_AUTONOMOUS_SHIP_WATCHDOG_STALE_MS || Math.max(idleIntervalMs * 3, 10 * 60 * 1000));
+  const watchdogHandle = setInterval(() => {
+    if (controller.stopped) return;
+    if (!state.lastTickAt) return; // still within boot delay, nothing to check yet
+    const ageMs = Date.now() - new Date(state.lastTickAt).getTime();
+    if (ageMs <= staleThresholdMs) return;
+    state.watchdogRecoveries += 1;
+    logger?.error?.(
+      { ageMs, staleThresholdMs, recoveries: state.watchdogRecoveries },
+      '[GOVERNED-AUTONOMOUS-SHIP] WATCHDOG: loop appears stalled (no tick within threshold) — forcing recovery tick'
+    );
+    if (controller.handle) clearTimeout(controller.handle);
+    state.running = false; // clear a possibly-stuck running flag so the forced tick isn't self-blocked
+    controller.handle = setTimeout(loopTick, 0);
+  }, watchdogIntervalMs);
+  watchdogHandle.unref?.();
+
   // Preserve the previous contract (callers may clearInterval/clearTimeout the
   // return value) while exposing an explicit stop for the self-rescheduler.
   controller.unref = () => controller.handle?.unref?.();
   controller.stop = () => {
     controller.stopped = true;
     if (controller.handle) clearTimeout(controller.handle);
+    clearInterval(watchdogHandle);
   };
   return controller;
 }

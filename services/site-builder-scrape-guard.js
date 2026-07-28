@@ -3,6 +3,64 @@
  * @ssot docs/products/site-builder/PRODUCT_HOME.md
  */
 
+import dns from 'node:dns';
+import net from 'node:net';
+
+const BLOCKED_HOSTNAMES = new Set(['localhost', '0.0.0.0', 'metadata.google.internal']);
+
+function isPrivateOrLinkLocalIp(ip) {
+  if (net.isIPv4(ip)) {
+    const parts = ip.split('.').map(Number);
+    if (parts[0] === 127 || parts[0] === 0 || parts[0] === 10) return true;
+    if (parts[0] === 172 && parts[1] >= 16 && parts[1] <= 31) return true;
+    if (parts[0] === 192 && parts[1] === 168) return true;
+    if (parts[0] === 169 && parts[1] === 254) return true; // includes cloud metadata 169.254.169.254
+    return false;
+  }
+  if (net.isIPv6(ip)) {
+    const lower = ip.toLowerCase();
+    if (lower === '::1') return true;
+    if (lower.startsWith('fe80:') || lower.startsWith('fc') || lower.startsWith('fd')) return true;
+    if (lower.startsWith('::ffff:')) {
+      const v4 = lower.split(':').pop();
+      if (net.isIPv4(v4)) return isPrivateOrLinkLocalIp(v4);
+    }
+    return false;
+  }
+  return true; // unrecognized format -- fail closed
+}
+
+// SSRF guard: throws if a URL's hostname is a blocked literal, a private/link-local
+// IP, or resolves (via DNS) to one. Does not defend against a DNS-rebind between
+// this check and the actual fetch -- callers doing a real fetch should re-validate
+// each redirect hop rather than trust `redirect: 'follow'` blindly.
+export async function assertSafeExternalUrl(urlString) {
+  let parsed;
+  try {
+    parsed = new URL(urlString);
+  } catch {
+    throw new Error('invalid_url');
+  }
+  if (!['http:', 'https:'].includes(parsed.protocol)) {
+    throw new Error('unsupported_protocol');
+  }
+  const hostname = parsed.hostname.toLowerCase().replace(/^\[|\]$/g, '');
+  if (BLOCKED_HOSTNAMES.has(hostname)) {
+    throw new Error('blocked_hostname');
+  }
+  if (net.isIP(hostname)) {
+    if (isPrivateOrLinkLocalIp(hostname)) throw new Error('blocked_private_ip');
+    return true;
+  }
+  const addresses = await dns.promises.resolve(hostname).catch(() => null);
+  if (addresses) {
+    for (const addr of addresses) {
+      if (isPrivateOrLinkLocalIp(addr)) throw new Error('blocked_resolves_to_private_ip');
+    }
+  }
+  return true;
+}
+
 const POISON_BODY_MARKERS = /hugedomains|godaddy|is for sale|buy this domain|domain (name )?(is )?for sale|this domain (is|may be)|parked (free|domain)|just a moment|checking your browser|namecheap|sedo|cloudflare|attention required|ray id|enable javascript and cookies|the request could not be satisfied|403 error|502 bad gateway|503 service unavailable|504 gateway timeout|dns_probe_finished|err_name_not_resolved|site can't be reached|this site can't be reached|web server is down|error 1016|error 1020|access denied/i;
 
 const POISON_TITLE_MARKERS = /could not be satisfied|403 forbidden|404 not found|502 bad gateway|503 service unavailable|504 gateway timeout|access denied|just a moment|checking your browser|attention required|error \d{3}|dns_probe|site can't be reached|this site can't be reached|web server is down|is for sale|buy this domain|hugedomains|parked domain|cloudflare/i;

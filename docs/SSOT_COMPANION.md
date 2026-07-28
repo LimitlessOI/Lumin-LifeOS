@@ -307,6 +307,8 @@ Exposed secrets; destructive DB; money/legal/medical/high-stakes external; auton
 - Auto-builder is manual-first: queueing/build runs happen on direct operator request; background scheduler remains off unless explicitly enabled.
 - Savings/reporting must be based on authoritative ledger rows only; duplicate/non-authoritative write paths must not drive operator dashboards.
 
+**Explicit re-enable on record (2026-07-27, found during a founder-directed constitution/SSOT audit — this note closes a real SSOT-vs-reality gap, not a new authorization):** the continuous autonomous build loop has been explicitly, repeatedly instructed by the founder across multiple sessions ("don't let this stop building," "never stop, don't ask to confirm continuation," "it needs to keep building") — this satisfies this section's own "unless explicitly instructed or explicitly re-enabled" clause. `services/governed-autonomous-shipping-loop.js`, self-gated on live env flags `GOVERNED_FACTORY_ONLY=1` / `GOVERNED_AUTONOMOUS_SHIP=1`, is the reviewed, approved, currently-running mechanism (see `docs/QUICK_LAUNCH.md` → *Continuous Autonomous Operations*, corrected same session). This note exists because the paragraph above, read alone, described the opposite of the system's actual current, founder-authorized operating posture — exactly the "system's story doesn't match measured state" drift §0.5E names as a §2.6 violation if left uncorrected. Re-review this authorization if the founder ever says otherwise, or at the next full constitutional session.
+
 ## 0.7 Constitutional Refactor Operating Rules (NEW)
 
 This Companion now operationalizes the trust-first constitutional refactor:

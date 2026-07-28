@@ -20,6 +20,10 @@ import { createCrmRoutes } from "../routes/crm-routes.js";
 import { createGoVegasOutreachRoutes } from "../routes/go-vegas-outreach-routes.js";
 import { startGoVegasOutreachScheduler } from "../services/go-vegas-outreach-scheduler.js";
 import { createTCRoutes } from "../routes/tc-routes.js";
+import { createReceptionistRoutes } from "../routes/receptionist-routes.js";
+import { createMLSRoutes } from "../routes/mls-routes.js";
+import { createLifeOSCommitmentRoutes } from "../routes/lifeos-commitment-routes.js";
+import { requireLifeOSAdmin } from "../middleware/lifeos-auth-middleware.js";
 import { createTCCoordinator } from "../services/tc-coordinator.js";
 import { createAccountManager } from "../services/account-manager.js";
 import { createClientCareBillingRoutes } from "../routes/clientcare-billing-routes.js";
@@ -199,6 +203,49 @@ export async function registerFounderRuntimeRoutes(app, deps) {
     logger.info("✅ [TC] Founder-builder routes mounted at /api/v1/tc");
   } catch (err) {
     logger.warn?.({ err: err.message }, "[TC] founder-lane mount failed (non-fatal)");
+  }
+
+  // AI Receptionist (Vapi-backed) -- was only wired into the dead full-runtime
+  // lane, so it 404'd in production despite VAPI_API_KEY/VAPI_ASSISTANT_ID
+  // being genuinely configured and services/receptionist-service.js having a
+  // real createVapiAgent implementation. Not a fake surface being exposed --
+  // an already-built, already-credentialed feature that was unreachable due
+  // to a routing oversight.
+  try {
+    app.use("/api/v1/receptionist", createReceptionistRoutes(app, { pool, requireKey: requireUserOrKey, rk: requireUserOrKey, logger }));
+    logger.info("✅ [RECEPTIONIST] Founder-builder routes mounted at /api/v1/receptionist");
+  } catch (err) {
+    logger.warn?.({ err: err.message }, "[RECEPTIONIST] founder-lane mount failed (non-fatal)");
+  }
+
+  // MLS Deal Scanner -- same class of gap as AI Receptionist: real, DB-backed
+  // routes (mls_investors/mls_deal_matches) only ever wired into the dead
+  // full-runtime lane. Admin-gated (requireUserOrKey + requireLifeOSAdmin,
+  // same composition as TC Service) since investor/deal data is comparably
+  // sensitive real client data, not just plain requireKey as the dead lane used.
+  try {
+    const requireMlsAccess = (req, res, next) => requireUserOrKey(req, res, () => requireLifeOSAdmin(req, res, next));
+    const mlsAccountManager = createAccountManager({ pool, logger });
+    createMLSRoutes(app, { pool, requireKey: requireMlsAccess, callCouncilMember, logger, accountManager: mlsAccountManager });
+    logger.info("✅ [MLS] Founder-builder routes mounted at /api/v1/mls");
+  } catch (err) {
+    logger.warn?.({ err: err.message }, "[MLS] founder-lane mount failed (non-fatal)");
+  }
+
+  // Commitments/to-do tracker -- same class of gap as AI Receptionist/MLS: a
+  // real, complete, DB-backed route (GET/POST /, /:id/complete, /overdue,
+  // plus BPB-0001 mission-linked /mission, /mission/:id using the real
+  // createCommitment/listCommitments/updateCommitment in mission-ledger.js)
+  // existed and was never mounted anywhere reachable in production. Direct
+  // answer to the founder's repeated, explicit ask: "I wanted it to set the
+  // schedule, keep track of commitments and to dos". requireUserOrKey (not
+  // admin-gated) since this is personal commitment data for the account
+  // owner, same tier as the AI Receptionist mount above.
+  try {
+    app.use("/api/v1/lifeos/commitments", createLifeOSCommitmentRoutes({ pool, requireKey: requireUserOrKey, logger }));
+    logger.info("✅ [COMMITMENTS] Founder-builder routes mounted at /api/v1/lifeos/commitments");
+  } catch (err) {
+    logger.warn?.({ err: err.message }, "[COMMITMENTS] founder-lane mount failed (non-fatal)");
   }
 
   // ClientCare billing rescue must live on founder lane — production boots founder_builder.

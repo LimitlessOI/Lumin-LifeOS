@@ -83,7 +83,11 @@ export const PROVIDERS = [
       const res = await timedFetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: { 'content-type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01' },
-        body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1, messages: [{ role: 'user', content: 'ping' }] }),
+        // 'claude-sonnet-4-20250514' was already retired upstream (fixed
+        // elsewhere in this codebase 2026-07-14) -- this probe still used
+        // it, meaning it could report Anthropic "invalid model" even on a
+        // funded account. Matches config/council-members.js's real model.
+        body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 1, messages: [{ role: 'user', content: 'ping' }] }),
       });
       return classify(res.status, await res.text());
     },
@@ -92,8 +96,13 @@ export const PROVIDERS = [
     id: 'gemini', label: 'Google Gemini', envVars: ['GEMINI_API_KEY', 'GOOGLE_API_KEY'],
     billingUrl: 'https://aistudio.google.com/app/apikey',
     probe: async (key) => {
+      // 'gemini-2.0-flash' is retired upstream (confirmed live 2026-07-28:
+      // this exact probe returned "this model ... is no longer available").
+      // Real production code (config/council-members.js gemini_flash)
+      // already uses gemini-2.5-flash -- this probe was giving a false
+      // "error" reading on a genuinely working, funded key.
       const res = await timedFetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${key}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${key}`,
         {
           method: 'POST',
           headers: { 'content-type': 'application/json' },

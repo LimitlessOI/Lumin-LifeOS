@@ -17,6 +17,9 @@ import { createLifeREClientComms } from '../services/lifere-client-comms.js';
 import { createLifeRELifeOSCrosscheck } from '../services/lifere-lifeos-crosscheck.js';
 import { createLifeREPersonalityCalibration } from '../services/lifere-personality-calibration.js';
 import { createLifeRESkillCoaching } from '../services/lifere-skill-coaching.js';
+import { createLifeREAgentSuperpowers } from '../services/lifere-agent-superpowers.js';
+import { answerLivePhone } from '../services/livePhoneService.js';
+import twilio from 'twilio';
 import { createLifeREMarketingModule } from '../services/lifere-marketing-module.js';
 import { createLifeREFunnelIngress } from '../services/lifere-funnel-ingress.js';
 import { createLifeREYouTubeResearch } from '../services/lifere-youtube-research.js';
@@ -64,6 +67,7 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
   const lifeosCrosscheck = createLifeRELifeOSCrosscheck({ pool });
   const personality = createLifeREPersonalityCalibration({ pool });
   const coaching = createLifeRESkillCoaching({ pool });
+  const superpowers = createLifeREAgentSuperpowers({ pool });
   const marketing = createLifeREMarketingModule({ pool });
   const funnel = createLifeREFunnelIngress({ pool });
   const youtube = createLifeREYouTubeResearch();
@@ -77,7 +81,7 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
   const bestPractice = createLifeREBestPracticeEngine();
   const relationship = createLifeRERelationshipTwin({ pool });
   const founder = createLifeREFounderExtensions();
-  const council = createLifeRECouncilRouter({ callCouncilMember, logger });
+  const council = createLifeRECouncilRouter({ callCouncilMember, logger, pool });
   const dealSide = createLifeREDealSideOS({ pool });
   const followUpOS = createLifeREFollowUpOS({ pool });
   const commandCenter = createLifeRECommandCenter({ pool, logger });
@@ -718,6 +722,34 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
     res.json({ ok: true, ...coaching.listModules() });
   });
 
+  // Real strength/interest profile from actual drill history (score +
+  // voluntary practice_hours per module) -- not a personality quiz.
+  // Founder: "find out what their superpowers are and direct them to do
+  // the things they like to do."
+  router.get('/coaching/superpowers', requireKey, (req, res) => {
+    try {
+      const profile = superpowers.getAgentProfile({
+        tenantId: tenantId(req),
+        userId: userId(req),
+      });
+      res.json(profile);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/coaching/recommend-next', requireKey, (req, res) => {
+    try {
+      const recommendation = superpowers.recommendNextModule({
+        tenantId: tenantId(req),
+        userId: userId(req),
+      });
+      res.json(recommendation);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
   router.post('/coaching/drill/start', requireKey, async (req, res) => {
     try {
       const result = await coaching.startDrill({
@@ -1339,6 +1371,36 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
       res.json({ ok: true, call_id: call.call_id, queued });
     } catch (error) {
       res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  // Real gap found live 2026-07-28: the governed factory shipped
+  // services/livePhoneService.js (real Twilio+Vapi call-answering code, not
+  // a stub) but its own queue step never included a matching route step --
+  // the service existed and was completely unreachable. Twilio webhooks are
+  // always POST, form-urlencoded, and must be verified via the
+  // X-Twilio-Signature header (skipped only when TWILIO_AUTH_TOKEN isn't
+  // configured, matching the same env-gated pattern as the Vapi webhook
+  // below) -- a public phone-call webhook with no signature check would let
+  // anyone trigger a live call session, the same class of bug as the
+  // ClickFunnels auth-bypass found and fixed earlier this session.
+  router.post('/live-phone', express.urlencoded({ extended: false }), async (req, res) => {
+    try {
+      const authToken = process.env.TWILIO_AUTH_TOKEN;
+      const signature = req.headers['x-twilio-signature'];
+      if (authToken && signature) {
+        const publicBase = process.env.PUBLIC_BASE_URL || `https://${process.env.RAILWAY_PUBLIC_DOMAIN || ''}`;
+        const fullUrl = `${publicBase}/api/v1/lifere/live-phone`;
+        const valid = twilio.validateRequest(authToken, signature, fullUrl, req.body || {});
+        if (!valid) {
+          return res.status(403).set('Content-Type', 'text/xml').send('<Response><Reject/></Response>');
+        }
+      }
+      const result = await answerLivePhone(req.body || {});
+      res.set('Content-Type', 'text/xml').send(result.twiml);
+    } catch (err) {
+      logger.warn?.({ err: err.message }, '[LIFERE] live-phone webhook error');
+      res.status(500).set('Content-Type', 'text/xml').send('<Response><Say>An error occurred. Please try again later.</Say></Response>');
     }
   });
 

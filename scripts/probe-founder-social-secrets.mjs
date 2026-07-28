@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /**
  * SYNOPSIS: Probe tip for founder social/Wix secret NAMES present (never print values).
  * @ssot docs/products/limitlessos/PRODUCT_HOME.md

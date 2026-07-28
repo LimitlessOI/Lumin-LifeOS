@@ -492,7 +492,7 @@ async function bootFounderRuntime() {
       // code — a narrow, honest slice of the full multi-model-debate vision,
       // not the whole thing, but genuinely running instead of only documented.
       try {
-        startSentryChairGovernanceScheduler({ logger });
+        startSentryChairGovernanceScheduler({ logger, pool });
       } catch (sentryChairErr) {
         logger.warn("[SENTRY-CHAIR] failed to start in founder runtime", { error: sentryChairErr.message });
       }

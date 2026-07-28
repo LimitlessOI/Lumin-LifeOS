@@ -153,6 +153,31 @@ export function createCouncilMembers({ DEEPSEEK_BRIDGE_ENABLED }) {
       isFree: true,
       isLocal: false,
     },
+    mistral_free: {
+      // Founder, direct, 2026-07-28: "I'm out of money... maybe you think
+      // above some solutions for lack of money." Live provider-key-health
+      // check found MISTRAL_API_KEY genuinely working (HTTP 200) but with
+      // zero entry anywhere in this registry -- a real, free, funded
+      // provider was completely unreachable by the actual codegen/reasoning
+      // pipeline despite the key being valid. Transport layer (endpoint,
+      // headers, OPENAI_COMPATIBLE_PROVIDERS dispatch) already existed in
+      // services/council-service.js; only this entry was missing.
+      // "-latest" alias kept deliberately (not a pinned dated model) to
+      // avoid the exact class of bug found live in the same investigation
+      // (Gemini/Cerebras health-probe strings going stale after a pinned
+      // model name was retired upstream).
+      name: "Mistral Small (Free)",
+      model: process.env.MISTRAL_MODEL || "mistral-small-latest",
+      provider: "mistral",
+      role: "Fast Cloud Generalist",
+      focus: "quick reasoning, structured extraction, free-tier responses",
+      maxTokens: 8192,
+      tier: "tier0",
+      costPer1M: 0,
+      specialties: ["fast", "reasoning", "general", "extraction"],
+      isFree: true,
+      isLocal: false,
+    },
     cerebras_llama: {
       name: "Cerebras Llama (Free)",
       model: process.env.CEREBRAS_MODEL || "llama3.1-8b",

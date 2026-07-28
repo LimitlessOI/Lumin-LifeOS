@@ -22,11 +22,8 @@
       "previewUrl": "https://lumin-web-production-e3a9.up.railway.app/previews/prev_1784791961326_i2dt/",
       "phone": "+17023000084",
       "email": null,
-      "channels": [
-        "sms",
-        "voice"
-      ],
-      "status": "failed",
+      "channels": ["sms", "voice"],
+      "status": "queued_for_business_hours",
       "sendAfterLocal": "2026-07-23T08:05:00-07:00",
       "qa": {
         "title": "Las Vegas Handyman Services — Choose your design",
@@ -34,20 +31,7 @@
         "builtAt": "2026-07-23T07:35:00Z"
       },
       "smsBody": "Hi — Adam with Taloa Site Builder. I rebuilt a free modern homepage preview for Las Vegas Handyman Services (no card): https://lumin-web-production-e3a9.up.railway.app/previews/prev_1784791961326_i2dt/ — publish is $45 with 2 months care if you like it. Reply STOP to opt out.",
-      "notes": "Built overnight; SMS/voice delayed to business hours for experience.",
-      "sentAt": "2026-07-23T16:47:24.339Z",
-      "lastResult": {
-        "sms": {
-          "status": 502,
-          "ok": false,
-          "error": "The number +1702300XXXX is unverified. Trial accounts cannot send messages to unverified numbers; verify +1702300XXXX at twilio.com/user/account/phone-numbers/verified, or purchase a Twilio number to send messages to unverified numbers"
-        },
-        "voice": {
-          "status": 502,
-          "ok": false,
-          "error": "The number +17023000084 is unverified. Trial accounts may only make calls to verified numbers."
-        }
-      }
+      "notes": "Built overnight; SMS/voice delayed to business hours for experience."
     }
   ]
 }

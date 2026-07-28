@@ -10,7 +10,7 @@
 
   function normalizeText(value) {
     return String(value || '')
-      .replace(/[`*_>#-]+/g, ' ')
+      .replace(/[`_>#-]+/g, ' ')
       .replace(/\[(.*?)\]\((.*?)\)/g, '$1')
       .replace(/\s+/g, ' ')
       .trim();
@@ -123,7 +123,7 @@
     let cleaned = normalizeText(text);
     cleaned = cleaned
       .replace(/\bintent:\s*\S+/gi, '')
-      .replace(/\bvia lifeos\/\S+.*$/gim, '')
+      .replace(/\bvia lifeos\/\S+.$/gim, '')
       .replace(/\bcouncil:\s*\S+/gi, '')
       .replace(/\bmodel:\s*\S+/gi, '')
       .trim();
@@ -203,7 +203,7 @@
     let cleaned = normalizeText(text);
     cleaned = cleaned
       .replace(/\bintent:\s*\S+/gi, '')
-      .replace(/\bvia lifeos\/\S+.*$/gim, '')
+      .replace(/\bvia lifeos\/\S+.$/gim, '')
       .replace(/\bcouncil:\s*\S+/gi, '')
       .replace(/\bmodel:\s*\S+/gi, '')
       .trim();
@@ -252,7 +252,7 @@
     for (let i = 0; i < list.length; i += 1) {
       const raw = String(list[i] || '').trim();
       if (!raw) continue;
-      const re = new RegExp('(?:^|\\s)' + raw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\.?\\s*$', 'i');
+      const re = new RegExp('(?:^|\\s)' + raw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\.?\\s$', 'i');
       if (re.test(t)) {
         const message = t.replace(re, '').trim();
         if (message) return { send: true, message };
@@ -314,6 +314,7 @@
       silentStatus: false,
       onStart: null,
       onStop: null,
+      onInterim: null,
       onAutoSend: null,
       silenceAutoSendMs: 0,
       sendOnMicStop: false,
@@ -942,6 +943,9 @@
         if (finalChunk.trim() && maybeVoiceSend(finalChunk)) return;
         if (!settings.manualSendOnly && String(input?.value || '').trim()) scheduleSilenceAutoSend();
         updateStatus(interimChunk ? interimChunk.trim() : 'Listening…');
+        if (typeof settings.onInterim === 'function') {
+          try { settings.onInterim({ text: (interimChunk || finalChunk).trim(), interim: Boolean(interimChunk.trim()) }); } catch (_) {}
+        }
       };
       recognition.onend = function onEnd() {
         if (sessionEpoch !== state.dictationEpoch) return;
@@ -1027,6 +1031,9 @@
         const trimmed = String(text || '').trim();
         if (trimmed) {
           state.serverSttConsecutiveFailures = 0;
+          if (typeof settings.onInterim === 'function') {
+            try { settings.onInterim({ text: trimmed, interim: true, engine: 'whisper' }); } catch (_) {}
+          }
           appendServerTranscript(trimmed);
           if (maybeVoiceSend(trimmed)) return;
           updateStatus('Listening (Whisper)…');

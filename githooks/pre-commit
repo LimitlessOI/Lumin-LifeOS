@@ -58,6 +58,21 @@ else
   exit 1
 fi
 
+# ── 2c. Security invariants (HARD — no bypass) ────────────────────────────────
+# Small, explicit, growable list of security-critical substrings (e.g. an
+# auth-gating middleware) that a named sensitive file must retain a minimum
+# count of. Exists because a governed factory dispatch can regenerate large
+# parts of a file from stale context and silently drop an auth gate outside
+# its own step spec -- confirmed live twice on 2026-07-27 on
+# routes/tc-routes.js (requireLifeOSAdmin dropped from all 121 routes, twice,
+# each already deployed before being caught by hand). Fast, deterministic,
+# no false negatives from a differently-worded "fix".
+if node "$ROOT/scripts/security-invariants-check.mjs" 2>&1; then
+  :
+else
+  exit 1
+fi
+
 # ── 3. SSOT read-before-write gate (HARD for interactive sessions) ─────────────
 # When editing an SSOT amendment, the agent must confirm they read the FULL file
 # in this session — not from memory. Token limits = HALT. Partial = blind patch.

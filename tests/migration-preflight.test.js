@@ -12,6 +12,7 @@ import {
   parseSqlIdent,
   bareTableName,
   hasDestructiveAllowBanner,
+  hasToRegclassGuard,
   scanMigrationSql,
   findCreateTableCollisions,
   runMigrationPreflight,
@@ -60,6 +61,50 @@ test('CREATE TABLE IF NOT EXISTS passes create-table rule', () => {
     failures.filter((f) => f.code === 'CREATE_TABLE_MISSING_IF_NOT_EXISTS').length,
     0,
   );
+});
+
+test('CREATE TABLE with no literal IF NOT EXISTS but guarded by a to_regclass IS NULL check inside a DO block does NOT fail (real pattern, 20260719b_lifeos_lab_results_repair.sql)', () => {
+  const sql = `
+DO $$
+BEGIN
+  IF to_regclass('public.lab_results') IS NULL THEN
+    CREATE TABLE lab_results (id UUID PRIMARY KEY);
+    RETURN;
+  END IF;
+END $$;`;
+  const { failures } = scanMigrationSql({ file: 'a.sql', raw: sql });
+  assert.equal(
+    failures.filter((f) => f.code === 'CREATE_TABLE_MISSING_IF_NOT_EXISTS').length,
+    0,
+  );
+});
+
+test('CREATE TABLE with no IF NOT EXISTS and no to_regclass guard still fails, even inside an unrelated DO block', () => {
+  const sql = `
+DO $$
+BEGIN
+  IF to_regclass('public.some_other_table') IS NULL THEN
+    RAISE NOTICE 'unrelated';
+  END IF;
+  CREATE TABLE widgets (id int);
+END $$;`;
+  const { failures } = scanMigrationSql({ file: 'a.sql', raw: sql });
+  assert.equal(
+    failures.filter((f) => f.code === 'CREATE_TABLE_MISSING_IF_NOT_EXISTS').length,
+    1,
+  );
+});
+
+test('hasToRegclassGuard: false when there is no enclosing DO block at all', () => {
+  const sql = 'CREATE TABLE widgets (id int);';
+  const idx = sql.indexOf('CREATE TABLE');
+  assert.equal(hasToRegclassGuard(sql, idx, 'widgets'), false);
+});
+
+test('hasToRegclassGuard: false when the guard is for a DIFFERENT table name', () => {
+  const sql = `DO $$ BEGIN IF to_regclass('public.other_table') IS NULL THEN CREATE TABLE widgets (id int); END IF; END $$;`;
+  const idx = sql.indexOf('CREATE TABLE');
+  assert.equal(hasToRegclassGuard(sql, idx, 'widgets'), false);
 });
 
 test('CREATE INDEX / UNIQUE INDEX without IF NOT EXISTS fails', () => {

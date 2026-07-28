@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Struggle Detection Overlay -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Struggle Detection Overlay</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            z-index: 1000;
+        }
+        #struggleMessage {
+            background: #333;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+        #logEventButton {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #008CBA;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="overlay">
+        <div id="struggleMessage">
+            <h2>Struggle Detected</h2>
+            <p>It seems like you're having trouble. Would you like to log this event?</p>
+            <button id="logEventButton" onclick="logEvent()">Log Event</button>
+        </div>
+    </div>
+    <script>
+        function logEvent() {
+            console.log('Log Event');
+            alert('Event has been logged.');
+        }
+    </script>
+</body>
+</html>

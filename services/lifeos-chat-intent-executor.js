@@ -24,7 +24,7 @@ export function classifyIntent(text) {
   const t = String(text || '').trim();
   const lower = t.toLowerCase();
 
-  if (/(?:what.*scheduled|show.*appointment|my appointment|upcoming commitment|what.*commitment)/i.test(t)) {
+  if (/(?:what.scheduled|show.appointment|my appointment|upcoming commitment|what.commitment)/i.test(t)) {
     return 'commitment_query';
   }
 
@@ -36,11 +36,11 @@ export function classifyIntent(text) {
     return 'note';
   }
 
-  if (/(?:check[\s-]?in|daily check|what.*worked on|status update|how.*day)/i.test(t)) {
+  if (/(?:check[\s-]?in|daily check|what.worked on|status update|how.day)/i.test(t)) {
     return 'check_in';
   }
 
-  if (/(?:worked on|finished|completed|spent.*on|just did|i did|i worked)/i.test(t)) {
+  if (/(?:worked on|finished|completed|spent.on|just did|i did|i worked)/i.test(t)) {
     return 'check_in_response';
   }
 
@@ -76,7 +76,7 @@ async function routeBuildRequest(text) {
         step: {
           target_file: target.target_file,
           task: `Implement ${target.feature}`,
-          spec: `Create a self-contained service that implements "${target.feature}" for product ${target.productId}. Export a register function and an API route.`,
+          spec: `Create a self-contained service that implements "${target.feature}" for product ${productId}. Export a register function and an API route.`,
           expected_exports: [`register${target.target_file.split('/').pop().replace(/\.js$/, '').replace(/-([a-z])/g, (_, c) => c.toUpperCase()).replace(/^[a-z]/, (c) => c.toUpperCase())}Routes`],
           file_contains: ['@ssot'],
           founder_gated: true,
@@ -84,15 +84,18 @@ async function routeBuildRequest(text) {
       }),
     });
     const body = await res.json().catch(() => ({}));
+    const ok = res.ok && body.ok !== false;
     return {
-      ok: res.ok && body.ok !== false,
+      ok,
       chair_channel: 'life_admin',
       execution_kind: 'command',
-      status: res.ok ? 'QUEUED' : 'FAIL',
+      status: ok ? 'QUEUED' : 'FAIL',
       transport: 'factory_execute_step',
       file: target.target_file,
       commit: body.commit_sha || body.commit || 'queued',
-      message: body.message || `Build request queued for ${target.productId}: ${target.feature}`,
+      human_summary: ok
+        ? `Build request queued for ${target.productId}: ${target.feature}`
+        : `Build request failed for ${target.productId}: ${target.feature} — ${body.error || 'unknown error'}`,
       target,
     };
   } catch (e) {
@@ -104,7 +107,7 @@ async function routeBuildRequest(text) {
       transport: 'factory_execute_step (offline)',
       file: target.target_file,
       commit: 'n/a',
-      message: `I heard the build request (${target.productId}: ${target.feature}). The factory will pick it up on the next cycle.`,
+      human_summary: `Build request (${target.productId}: ${target.feature}) staged offline; the factory will pick it up on the next cycle.`,
       target,
     };
   }
@@ -120,13 +123,13 @@ export async function executeIntent({ db, userId, timezone, intent, text }) {
     case 'commitment_query': {
       const rows = await getCommitments(db, userId);
       if (!rows || rows.length === 0) {
-        return { ok: true, chair_channel: 'life_admin', execution_kind: 'command', message: 'You have no upcoming commitments on file.' };
+        return { ok: true, chair_channel: 'life_admin', execution_kind: 'command', status: 'QUERY', transport: 'commitments_table', human_summary: 'No upcoming commitments on file.' };
       }
       const list = rows
         .slice(0, 5)
         .map((r) => `• ${r.title} — ${new Date(r.datetime).toLocaleString('en-US', { timeZone: tz, dateStyle: 'short', timeStyle: 'short' })}`)
         .join('\n');
-      return { ok: true, chair_channel: 'life_admin', execution_kind: 'command', message: `Upcoming commitments:\n${list}` };
+      return { ok: true, chair_channel: 'life_admin', execution_kind: 'command', status: 'QUERY', transport: 'commitments_table', human_summary: `Upcoming commitments:\n${list}` };
     }
 
     case 'commitment': {
@@ -141,10 +144,10 @@ export async function executeIntent({ db, userId, timezone, intent, text }) {
           transport: 'commitments_table',
           file: 'services/lifeos-commitment-service.js',
           commit: 'n/a',
-          message: `Got it. Commitment captured:\n• ${row.title}\n• ${time}\nCalendar event requested: ${row.calendar_event_requested ? 'yes' : 'no'}`,
+          human_summary: `Commitment captured: ${row.title} at ${time}. Calendar event requested: ${row.calendar_event_requested ? 'yes' : 'no'}.`,
         };
       } catch (e) {
-        return { ok: false, chair_channel: 'life_admin', execution_kind: 'command', message: `I couldn't parse that as a commitment. Try: "dentist appointment at 2pm next Tuesday"` };
+        return { ok: false, chair_channel: 'life_admin', execution_kind: 'command', status: 'FAIL', transport: 'commitments_table', human_summary: 'I could not parse that as a commitment. Try: "dentist appointment at 2pm next Tuesday".' };
       }
     }
 
@@ -159,7 +162,7 @@ export async function executeIntent({ db, userId, timezone, intent, text }) {
         transport: 'lifeos_notes_table',
         file: 'services/lifeos-note-capture-service.js',
         commit: 'n/a',
-        message: `Note saved. Summary: ${note.summary}${note.tags?.length ? ` (tags: ${note.tags.join(', ')})` : ''}`,
+        human_summary: `Note saved. Summary: ${note.summary}${note.tags?.length ? ` (tags: ${note.tags.join(', ')})` : ''}.`,
       };
     }
 
@@ -167,8 +170,10 @@ export async function executeIntent({ db, userId, timezone, intent, text }) {
       return {
         ok: true,
         chair_channel: 'life_admin',
-        execution_kind: 'command',
-        message: 'Adam, what have you worked on for the last 15 minutes?',
+        execution_kind: 'counsel',
+        status: 'PROMPT',
+        transport: 'life_admin',
+        human_summary: 'Ask Adam what he worked on for the last 15 minutes.',
       };
     }
 
@@ -182,7 +187,7 @@ export async function executeIntent({ db, userId, timezone, intent, text }) {
         transport: 'lifeos_notes_table',
         file: 'services/lifeos-note-capture-service.js',
         commit: 'n/a',
-        message: `Check-in logged. Summary: ${note.summary}`,
+        human_summary: `Check-in logged. Summary: ${note.summary}.`,
       };
     }
 
@@ -191,12 +196,13 @@ export async function executeIntent({ db, userId, timezone, intent, text }) {
     }
 
     default:
-      return { ok: true, chair_channel: 'life_admin', execution_kind: 'counsel', message: null };
+      return { ok: true, chair_channel: 'life_admin', execution_kind: 'counsel', status: 'NONE', transport: 'life_admin', human_summary: null };
   }
 }
 
 export function formatReply(result) {
   if (!result) return 'I did not understand that.';
+  if (result.human_summary) return result.human_summary;
   if (result.message) return result.message;
   if (result.status) {
     return [

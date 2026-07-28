@@ -139,7 +139,7 @@ export async function triggerBuildOnView(pipeline, clientId) {
   if (row.status === 'building' && activeJobs.has(String(clientId))) {
     return { ok: true, started: false, reason: 'building', building: true };
   }
-  // A 'building' row not in *this* instance's in-memory activeJobs isn't necessarily
+  // A 'building' row not in this* instance's in-memory activeJobs isn't necessarily
   // stalled — on Railway's multi-instance deploy, the job may simply be running on a
   // different instance than the one serving this request. Trust the DB's recency
   // (heartbeat) over local-only state: only treat it as stuck once it's actually stale

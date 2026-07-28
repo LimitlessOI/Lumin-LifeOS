@@ -79,7 +79,7 @@
     },
     {
       "id": "3",
-      "status": "blocked",
+      "status": "done",
       "target_file": "db/migrations/persist_provider_cooldowns.sql",
       "task": "Persist provider cooldowns",
       "spec": "Persist provider cooldowns to the database to survive restarts.",
@@ -104,15 +104,16 @@
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "demoted_at": "2026-07-15T07:49:40.395Z",
       "park_until": null,
-      "no_op": null,
-      "pre_existing": null,
+      "no_op": true,
+      "pre_existing": true,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null,
+      "blocker_resolution": "manually_verified_duplicate_and_precondition_true",
       "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "3",
-      "mission_id": "PRODUCT-ai-council"
+      "mission_id": "PRODUCT-ai-council",
+      "resolution_note": "2026-07-20: marked done manually, not by codegen. Same planner defect class as wellness-studio-step6/7/8 (see docs/products/wellness-studio/PRODUCT_HOME.md 2026-07-20 entry): a module_mounts behavior assertion checking route '/' against a .sql migration target file, which can never pass (route '/' proves nothing about a migration; reload_failed every attempt trying to import() SQL as an Express module). This entry is also a duplicate of already-done queue entry 'ai-council-3' (target db/migrations/20231005_add_provider_cooldowns.sql, shipped_via governed_ship_queue, real commit_sha 68e35db6d0). The file_contains check itself was also mismatched (checked for 'free_tier_usage', an unrelated table, not provider_cooldowns -- further evidence this entry was never a coherently-specified task). Independently verified the real underlying feature IS live: queried production, confirmed the provider_cooldowns table exists. No real missing work -- marking done rather than leaving a satisfied, duplicate condition to churn forever on an unpassable assertion."
     },
     {
       "id": "4",

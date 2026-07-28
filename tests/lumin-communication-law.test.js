@@ -21,7 +21,7 @@ test('isLuminCommunicationLawEnforced defaults on', () => {
 });
 
 test('detectFormulaViolations catches ChatGPT boilerplate', () => {
-  const hits = detectFormulaViolations("Great question! I'm happy to help with that.");
+  const hits = detectFormulaViolations('What I heard you say was that it sounds really hard. Thank you for sharing.');
   assert.ok(hits.length >= 2);
 });
 

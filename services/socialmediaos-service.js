@@ -360,6 +360,12 @@ export function createMarketingOSFactory({ pool, logger }) {
       err.stripeError = stripeErr;
       throw err;
     }
+    const sessionMatchesPack = String(session.metadata?.contentPackId || '') === String(contentPackId || '');
+    if (!sessionMatchesPack) {
+      const err = new Error('checkout_session_pack_mismatch');
+      err.status = 400;
+      throw err;
+    }
     const paid = session.payment_status === 'paid';
 
     if (paid && contentPackId) {

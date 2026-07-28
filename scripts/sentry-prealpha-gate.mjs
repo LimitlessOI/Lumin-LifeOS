@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /**
  * SYNOPSIS: Product-agnostic SENTRY pre-alpha completion gate — the generalized
  * form of Standing Order SO-002. Reads builderos-reboot/governance/
@@ -25,7 +24,7 @@ import { spawn } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { normalizeSentryFindings, toReadinessFindings } from '../services/sentry-findings-to-improvement-feed.js';
+import { normalizeSentryFindings, toReadinessFindings, inferRootCauseClass } from '../services/sentry-findings-to-improvement-feed.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const REGISTRY_PATH = path.join(ROOT, 'builderos-reboot/governance/SENTRY_PRODUCT_REGISTRY.json');
@@ -87,7 +86,13 @@ function concreteSolution(id, detail, source) {
 // already understands, and the E2E "results" map (id -> { ok, error/detail }).
 function findingsFromReceipt(receipt, source) {
   if (!receipt || typeof receipt !== 'object') return [];
-  if (Array.isArray(receipt.findings)) return receipt.findings;
+  if (Array.isArray(receipt.findings)) {
+    // Backfill root_cause_class on pre-existing findings arrays that predate
+    // this field so nothing silently skips the classification requirement.
+    return receipt.findings.map((f) => (f && !f.root_cause_class
+      ? { ...f, root_cause_class: inferRootCauseClass(f.source) }
+      : f));
+  }
 
   const findings = normalizeSentryFindings(receipt);
 
@@ -103,6 +108,9 @@ function findingsFromReceipt(receipt, source) {
         proposed_solution_source: 'synthesized',
         severity: 'error',
         source,
+        // A raw pass/fail E2E result (not a nuanced UX critique) is a safe
+        // auto-classification: the assertion failed outright, execution gap.
+        root_cause_class: 'code_defect',
       });
     }
   }
@@ -174,12 +182,24 @@ async function runLayer(layer) {
 
 function emitFeed(product, allFindings) {
   const readiness = toReadinessFindings(allFindings);
+  // SO-002 solution-mandatory, made an actual hard signal rather than a
+  // reported-but-unused number: an error-severity finding whose root cause
+  // is still 'unclassified_needs_review' is exactly the founder's named gap
+  // ("I could follow the blueprint, but the blueprint was poorly designed.
+  // That needs to be reported and fixed at the architect level.") -- it
+  // cannot be silently treated as "everything resolved" (see fullySatisfied
+  // below) until a real classification decides whether Builder or Architect
+  // owns the fix.
+  const unclassifiedErrorFindings = allFindings.filter(
+    (f) => f && f.severity === 'error' && f.root_cause_class === 'unclassified_needs_review'
+  );
   const feed = {
     schema: 'sentry_findings_feed_v1',
     product: product.id,
     generated_at: new Date().toISOString(),
     findings_count: allFindings.length,
     without_solution: allFindings.filter((f) => !f || !f.proposed_solution).length,
+    unclassified_error_findings: unclassifiedErrorFindings.length,
     findings: allFindings,
     readiness,
   };
@@ -207,6 +227,9 @@ async function runProduct(product) {
         proposed_solution_source: 'synthesized',
         severity: 'error',
         source: `layer-${String(layer.name || '').toLowerCase()}`,
+        // A layer that failed to run at all (env/timeout) is an execution
+        // problem, not a blueprint-quality question -- safe to auto-classify.
+        root_cause_class: 'code_defect',
       }];
     }
     layerResults.push(r);
@@ -216,7 +239,7 @@ async function runProduct(product) {
   }
 
   const feed = emitFeed(product, allFindings);
-  console.log(`\n▶ Self-fix feed: ${feed.findings_count} finding(s), ${feed.without_solution} without a solution → ${product.findingsFeed}`);
+  console.log(`\n▶ Self-fix feed: ${feed.findings_count} finding(s), ${feed.without_solution} without a solution, ${feed.unclassified_error_findings} error-severity unclassified (code vs blueprint defect) → ${product.findingsFeed}`);
 
   // Fail-closed: every layer that RAN must pass. Deferred layers (env absent)
   // pass here unless --enforce-creds (founder maturity: credentialed Layer B required).
@@ -233,11 +256,20 @@ async function runProduct(product) {
   if (ENFORCE_CREDS && deferredHardCredLayers.length) {
     gateOk = false;
   }
-  const fullySatisfied = ranLayers.length === (product.layers || []).length && gateOk && !(ENFORCE_CREDS && deferredHardCredLayers.length);
+  const fullySatisfied = ranLayers.length === (product.layers || []).length && gateOk
+    && !(ENFORCE_CREDS && deferredHardCredLayers.length)
+    && feed.unclassified_error_findings === 0;
   const anyDeferred = layerResults.some((r) => r.deferred);
 
   console.log(`\n── GATE ${product.id}: ${gateOk ? 'PASS' : 'FAIL'}${ENFORCE_CREDS && deferredHardCredLayers.length ? ' (--enforce-creds: credentialed layer deferred)' : anyDeferred ? ' (some layers deferred — run on prod with creds for full proof)' : fullySatisfied ? ' (all layers satisfied)' : ''} ──`);
-  return { id: product.id, ok: gateOk, fullySatisfied, findings_count: feed.findings_count, layers: layerResults.map((r) => ({ name: r.name, ok: r.ok, ran: r.ran, deferred: r.deferred })) };
+  return {
+    id: product.id,
+    ok: gateOk,
+    fullySatisfied,
+    findings_count: feed.findings_count,
+    unclassified_error_findings: feed.unclassified_error_findings,
+    layers: layerResults.map((r) => ({ name: r.name, ok: r.ok, ran: r.ran, deferred: r.deferred })),
+  };
 }
 
 // Scoped self-provision (SO-002 amendment, founder-ratified 2026-07-20):

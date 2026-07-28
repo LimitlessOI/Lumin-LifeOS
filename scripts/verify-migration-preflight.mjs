@@ -107,6 +107,45 @@ export function loadCollisionAllowlist(allowlistPath) {
 }
 
 /**
+ * A CREATE TABLE with no literal IF NOT EXISTS can still be safely idempotent
+ * when it's wrapped in a PL/pgSQL DO $$ block guarded by
+ * `IF to_regclass('table') IS NULL THEN ... CREATE TABLE ... END IF`. That's
+ * a real, deliberate pattern used in this repo (e.g. db/migrations/
+ * 20260719b_lifeos_lab_results_repair.sql) — functionally equivalent safety,
+ * expressed at the PL/pgSQL control-flow level instead of the SQL clause
+ * level. The static scanner only understood the SQL-clause form; this
+ * recognizes the DO-block form too rather than false-positiving on it.
+ * @param {string} sql
+ * @param {number} matchIndex
+ * @param {string} tableName
+ * @returns {boolean}
+ */
+export function hasToRegclassGuard(sql, matchIndex, tableName) {
+  const bare = bareTableName(tableName);
+  // Find the nearest enclosing DO $...$ block start before matchIndex.
+  const doBlockRe = /\bDO\s+\$(\w*)\$/gi;
+  let lastDoStart = -1;
+  let dm;
+  while ((dm = doBlockRe.exec(sql)) !== null) {
+    if (dm.index >= matchIndex) break;
+    // Confirm this DO block hasn't already closed before matchIndex.
+    const closeRe = new RegExp(`\\$${dm[1]}\\$\\s*;`, 'i');
+    const closeMatch = closeRe.exec(sql.slice(dm.index + dm[0].length));
+    const closeIndex = closeMatch ? dm.index + dm[0].length + closeMatch.index : -1;
+    if (closeIndex === -1 || closeIndex >= matchIndex) {
+      lastDoStart = dm.index;
+    }
+  }
+  if (lastDoStart === -1) return false;
+  const blockText = sql.slice(lastDoStart, matchIndex);
+  const guardRe = new RegExp(
+    `to_regclass\\s*\\(\\s*'(?:public\\.)?${bare.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}'\\s*\\)\\s+IS\\s+NULL`,
+    'i',
+  );
+  return guardRe.test(blockText);
+}
+
+/**
  * Scan migration SQL text for pre-flight findings.
  * @param {{ file: string, raw: string }} file
  * @returns {{ failures: object[], warnings: object[] }}
@@ -127,7 +166,7 @@ export function scanMigrationSql({ file, raw }) {
     const hasIf = Boolean(m[1]);
     const name = parseSqlIdent(sql.slice(m.index + m[0].length));
     if (!name) continue;
-    if (!hasIf) {
+    if (!hasIf && !hasToRegclassGuard(sql, m.index, name)) {
       failures.push({
         code: 'CREATE_TABLE_MISSING_IF_NOT_EXISTS',
         file,
