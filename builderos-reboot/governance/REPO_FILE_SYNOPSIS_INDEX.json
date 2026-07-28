@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-28T05:25:23.027Z",
+  "generated_at": "2026-07-28T05:28:09.561Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12186,
   "files": [
@@ -39691,9 +39691,9 @@
     {
       "path": "docs/products/ai-council/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — AI Council",
-      "bytes": 71202,
-      "mtime": "2026-07-28T05:25:04.995Z",
-      "indexed_at": "2026-07-28T05:25:23.027Z"
+      "bytes": 71483,
+      "mtime": "2026-07-28T05:27:56.763Z",
+      "indexed_at": "2026-07-28T05:28:09.561Z"
     },
     {
       "path": "docs/products/ai-receptionist/FILE_MANIFEST.json",
@@ -90390,9 +90390,9 @@
     {
       "path": "services/railway-managed-env-service.js",
       "synopsis": "Exports createRailwayManagedEnvService — services/railway-managed-env-service.js.",
-      "bytes": 23886,
-      "mtime": "2026-07-24T21:06:08.593Z",
-      "indexed_at": "2026-07-27T22:21:57.522Z",
+      "bytes": 24214,
+      "mtime": "2026-07-28T05:27:31.002Z",
+      "indexed_at": "2026-07-28T05:28:09.561Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
