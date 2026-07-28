@@ -219,7 +219,10 @@ function scaffoldPhase1Steps({ productName, parentSsot }) {
   const slug = productFileSlug(productName);
   const prefix = productStepPrefix(productName);
   const date = new Date().toISOString().slice(0, 10).replace(/-/g, '');
-  const tag = parentSsot || 'docs/projects/AMENDMENT_XX.md';
+  // docs/projects/AMENDMENT_*.md no longer exist (confirmed live 2026-07-28) —
+  // falling back to one would bake a dead ssot_tag into every generated step.
+  // Derive the real product home from the same slug used for the step files.
+  const tag = parentSsot || `docs/products/${slug}/PRODUCT_HOME.md`;
   return [
     { id: `${prefix}-P1-001`, file: `db/migrations/${date}_${slug}_core.sql`, type: 'sql', purpose: `Core ${slug} tables and indexes`, deps: [], ssot_tag: tag },
     { id: `${prefix}-P1-002`, file: `services/${slug}-service.js`, type: 'esm', purpose: `Core ${slug} business logic`, deps: [`${prefix}-P1-001`], ssot_tag: tag },

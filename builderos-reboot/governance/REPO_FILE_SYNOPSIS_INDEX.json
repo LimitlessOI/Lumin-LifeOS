@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-24T20:40:13.196Z",
+  "generated_at": "2026-07-28T17:00:03.085Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11975,
   "files": [
@@ -30816,9 +30816,9 @@
     {
       "path": "config/rep-catalog.json",
       "synopsis": "Configuration — Rep Catalog.",
-      "bytes": 1004,
-      "mtime": "2026-06-10T09:33:55.266Z",
-      "indexed_at": "2026-07-18T19:00:28.378Z",
+      "bytes": 1034,
+      "mtime": "2026-07-28T16:56:44.969Z",
+      "indexed_at": "2026-07-28T17:00:03.085Z",
       "synopsis_index_only": true
     },
     {
@@ -39509,9 +39509,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 235080,
-      "mtime": "2026-07-18T22:31:17.168Z",
-      "indexed_at": "2026-07-18T22:31:53.046Z"
+      "bytes": 243787,
+      "mtime": "2026-07-28T16:59:06.021Z",
+      "indexed_at": "2026-07-28T17:00:03.085Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -40184,9 +40184,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 637783,
-      "mtime": "2026-07-18T18:59:26.836Z",
-      "indexed_at": "2026-07-18T19:00:28.378Z"
+      "bytes": 616720,
+      "mtime": "2026-07-28T16:59:22.919Z",
+      "indexed_at": "2026-07-28T17:00:03.085Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -83624,9 +83624,9 @@
     {
       "path": "services/blueprint-intake.js",
       "synopsis": "Blueprint Intake Service — three flows: backfill existing amendment, greenfield",
-      "bytes": 57561,
-      "mtime": "2026-07-05T19:10:02.198Z",
-      "indexed_at": "2026-07-18T19:00:28.378Z",
+      "bytes": 57808,
+      "mtime": "2026-07-28T16:57:17.216Z",
+      "indexed_at": "2026-07-28T17:00:03.085Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -85943,9 +85943,9 @@
     {
       "path": "services/founder-governance-clarify.js",
       "synopsis": "Governance / SSOT / North Star asks — clarify layer + right-way routing.",
-      "bytes": 7052,
-      "mtime": "2026-07-17T19:19:29.720Z",
-      "indexed_at": "2026-07-18T19:00:28.378Z",
+      "bytes": 7540,
+      "mtime": "2026-07-28T16:56:15.702Z",
+      "indexed_at": "2026-07-28T17:00:03.085Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md",
         "on touched .js files.',"

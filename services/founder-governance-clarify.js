@@ -30,10 +30,15 @@ export function isGovernanceOrSsotIntent(text = '') {
 
 export function inferGovernanceAmendment(text = '') {
   const t = String(text || '');
+  // docs/projects/AMENDMENT_*.md no longer exist — all real content lives in
+  // docs/products/<product>/PRODUCT_HOME.md now (confirmed live 2026-07-28,
+  // zero AMENDMENT_*.md files remain on disk). A literal "amendment NN" in
+  // the ask can't be resolved to a specific product from the number alone,
+  // so point at the real registry instead of constructing a dead path.
   const m = t.match(/\bAMENDMENT[_\s-]?(\d+)\b/i) || t.match(/\bamendment\s+(\d+)\b/i);
-  if (m) return `docs/projects/AMENDMENT_${String(m[1]).padStart(2, '0')}_*.md (verify exact file)`;
+  if (m) return `docs/products/INDEX.md (amendment ${m[1]} is archived — find the owning product there, then edit its PRODUCT_HOME.md)`;
   if (/lifeos|lumin|chair|founder interface/i.test(t)) return 'docs/products/lifeos/PRODUCT_HOME.md';
-  if (/builder|builderos|c2|command control/i.test(t)) return 'docs/products/builderos/PRODUCT_HOME.md + owning amendment';
+  if (/builder|builderos|c2|command control/i.test(t)) return 'docs/products/builderos/PRODUCT_HOME.md';
   if (/north star|nssot|constitution/i.test(t)) return 'docs/constitution/NORTH_STAR_SSOT.md (full read before any edit — Article VII path)';
   return null;
 }
@@ -56,7 +61,7 @@ function governancePathOptions(text) {
       label: 'Operational truth only (Change Receipts, handoff, continuity — no law rewrite)',
       channel: 'counsel',
       right_way: [
-        amendmentHint ? `Append a new row to ## Change Receipts in ${amendmentHint}` : 'Identify owning amendment first (AMENDMENT_21 for LifeOS lane).',
+        amendmentHint ? `Append a new row to ## Change Receipts in ${amendmentHint}` : 'Identify owning product home first (e.g. docs/products/lifeos/PRODUCT_HOME.md for LifeOS lane) — see docs/products/INDEX.md.',
         'Update docs/CONTINUITY_LOG.md — append only, never erase history.',
         'No NSSOT merge; no gate removal.',
       ],
@@ -67,7 +72,7 @@ function governancePathOptions(text) {
       channel: 'gate_change',
       right_way: [
         'Run recorded council: npm run lifeos:gate-change-run -- --preset maturity (or POST /api/v1/lifeos/gate-change/run-preset).',
-        'Read prompts/lifeos-gate-change-proposal.md + AMENDMENT_01 gate-change subsection.',
+        'Read prompts/lifeos-gate-change-proposal.md + docs/SSOT_COMPANION.md §5.5 (gate-change / council process).',
         'Receipt + SSOT update before removing or weakening any gate.',
       ],
     },

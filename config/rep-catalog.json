@@ -13,5 +13,5 @@
     { "name": "Privacy", "description": "Data sovereignty, consent" },
     { "name": "Education", "description": "Learning, clarity, coachability" }
   ],
-  "add_rep_rule": "One-line receipt in AMENDMENT_48 Change Receipts when adding a REP"
+  "add_rep_rule": "One-line receipt in docs/products/builderos/PRODUCT_HOME.md ## Change Receipts when adding a REP"
 }
