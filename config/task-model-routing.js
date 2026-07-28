@@ -118,7 +118,7 @@ export const DEFAULT_MODEL = 'openai_gpt';
 // 'openai_builder_standard' -- not a real escalation, just a relabeled
 // duplicate; left in the list (harmless) but moved past the tiers that add
 // real strength or provider diversity.
-export const TRUSTED_FALLBACK_MODELS = [
+const QUALITY_FIRST_FALLBACK_MODELS = [
   'claude_sonnet',
   'openai_builder_standard',
   'deepseek',
@@ -126,8 +126,32 @@ export const TRUSTED_FALLBACK_MODELS = [
   'openai_builder_escalation',
   'gemini_flash',
   'groq_llama',
+  'mistral_free',
   'openai_builder_mini',
 ];
+
+// Live operational override (2026-07-28): a real, immediately reversible
+// answer to "we're out of money, what do we do for now" -- founder, direct:
+// "we're gonna have to operate without it for now... maybe you think above
+// some solutions for lack of money from now just for testing." Verified
+// live via GET /api/v1/lifeos/provider-key-health that Anthropic, OpenAI,
+// and Together are all needs_payment right now, while Groq, Mistral, and
+// DeepSeek are genuinely funded and working -- so the default quality-first
+// order above would burn a real network round-trip failing through 5 dead
+// tiers before ever reaching a working one, on every single dispatch.
+// TRUSTED_FALLBACK_MODELS_OVERRIDE (Railway env, comma-separated member
+// keys) lets this be set operationally, live, without touching code --
+// deliberately NOT hardcoded here, so the moment funding returns, clearing
+// the env var instantly restores the quality-first default above with zero
+// risk of a forgotten temporary hack lingering in source.
+function resolveTrustedFallbackModels() {
+  const override = String(process.env.TRUSTED_FALLBACK_MODELS_OVERRIDE || '').trim();
+  if (!override) return QUALITY_FIRST_FALLBACK_MODELS;
+  const parsed = override.split(',').map((s) => s.trim()).filter(Boolean);
+  return parsed.length ? parsed : QUALITY_FIRST_FALLBACK_MODELS;
+}
+
+export const TRUSTED_FALLBACK_MODELS = resolveTrustedFallbackModels();
 
 /**
  * Get the council member key for a given task type.

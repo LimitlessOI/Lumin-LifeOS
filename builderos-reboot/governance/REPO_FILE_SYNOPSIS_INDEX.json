@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-28T02:01:11.652Z",
+  "generated_at": "2026-07-28T05:25:23.027Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12186,
   "files": [
@@ -30538,9 +30538,9 @@
     {
       "path": "config/council-members.js",
       "synopsis": "Exports createCouncilMembers — config/council-members.js.",
-      "bytes": 7517,
-      "mtime": "2026-07-24T21:06:07.398Z",
-      "indexed_at": "2026-07-27T22:21:57.522Z",
+      "bytes": 8812,
+      "mtime": "2026-07-28T05:22:47.591Z",
+      "indexed_at": "2026-07-28T05:25:23.027Z",
       "ssot": [
         "docs/products/ai-council/PRODUCT_HOME.md"
       ]
@@ -30970,9 +30970,9 @@
     {
       "path": "config/task-model-routing.js",
       "synopsis": "config/task-model-routing.js",
-      "bytes": 10483,
-      "mtime": "2026-07-27T17:22:50.131Z",
-      "indexed_at": "2026-07-27T22:21:57.522Z",
+      "bytes": 11926,
+      "mtime": "2026-07-28T05:24:20.962Z",
+      "indexed_at": "2026-07-28T05:25:23.027Z",
       "ssot": [
         "docs/products/ai-council/PRODUCT_HOME.md"
       ]
@@ -39691,9 +39691,9 @@
     {
       "path": "docs/products/ai-council/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — AI Council",
-      "bytes": 68662,
-      "mtime": "2026-07-28T00:40:59.096Z",
-      "indexed_at": "2026-07-28T00:41:15.794Z"
+      "bytes": 71202,
+      "mtime": "2026-07-28T05:25:04.995Z",
+      "indexed_at": "2026-07-28T05:25:23.027Z"
     },
     {
       "path": "docs/products/ai-receptionist/FILE_MANIFEST.json",
@@ -90332,9 +90332,9 @@
     {
       "path": "services/provider-key-health.js",
       "synopsis": "Provider API-key health — enumerate the AI/LLM/tool keys Railway",
-      "bytes": 9202,
-      "mtime": "2026-07-24T21:06:08.593Z",
-      "indexed_at": "2026-07-27T22:21:57.522Z",
+      "bytes": 9851,
+      "mtime": "2026-07-28T05:23:34.812Z",
+      "indexed_at": "2026-07-28T05:25:23.027Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
