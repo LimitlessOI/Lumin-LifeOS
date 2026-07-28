@@ -79,7 +79,7 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
   const bestPractice = createLifeREBestPracticeEngine();
   const relationship = createLifeRERelationshipTwin({ pool });
   const founder = createLifeREFounderExtensions();
-  const council = createLifeRECouncilRouter({ callCouncilMember, logger });
+  const council = createLifeRECouncilRouter({ callCouncilMember, logger, pool });
   const dealSide = createLifeREDealSideOS({ pool });
   const followUpOS = createLifeREFollowUpOS({ pool });
   const commandCenter = createLifeRECommandCenter({ pool, logger });

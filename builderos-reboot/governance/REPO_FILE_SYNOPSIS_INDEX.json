@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-28T00:39:37.349Z",
+  "generated_at": "2026-07-28T00:41:15.794Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12186,
+  "file_count": 12185,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -39691,9 +39691,9 @@
     {
       "path": "docs/products/ai-council/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — AI Council",
-      "bytes": 67258,
-      "mtime": "2026-07-28T00:25:58.190Z",
-      "indexed_at": "2026-07-28T00:26:10.961Z"
+      "bytes": 68662,
+      "mtime": "2026-07-28T00:40:59.096Z",
+      "indexed_at": "2026-07-28T00:41:15.794Z"
     },
     {
       "path": "docs/products/ai-receptionist/FILE_MANIFEST.json",
@@ -67433,9 +67433,9 @@
     {
       "path": "routes/factory-mount-routes.js",
       "synopsis": "Pure: should the codegen prompt inline this file's existing content?",
-      "bytes": 25484,
-      "mtime": "2026-07-28T00:33:24.146Z",
-      "indexed_at": "2026-07-28T00:34:12.483Z"
+      "bytes": 25605,
+      "mtime": "2026-07-28T00:40:31.114Z",
+      "indexed_at": "2026-07-28T00:41:15.794Z"
     },
     {
       "path": "routes/faith-studio-routes.js",
@@ -68327,9 +68327,9 @@
     {
       "path": "routes/lifere-os-routes.js",
       "synopsis": "LifeRE OS routes — full A-to-Z API (W1–W6).",
-      "bytes": 56646,
-      "mtime": "2026-07-28T00:06:07.505Z",
-      "indexed_at": "2026-07-28T00:08:48.837Z",
+      "bytes": 56652,
+      "mtime": "2026-07-28T00:39:48.006Z",
+      "indexed_at": "2026-07-28T00:41:15.794Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -88647,9 +88647,9 @@
     {
       "path": "services/lifere-council-router.js",
       "synopsis": "LifeRE council router — invokes live council when callCouncilMember provided.",
-      "bytes": 4480,
-      "mtime": "2026-07-27T20:58:24.089Z",
-      "indexed_at": "2026-07-27T22:21:57.522Z",
+      "bytes": 5254,
+      "mtime": "2026-07-28T00:39:37.629Z",
+      "indexed_at": "2026-07-28T00:41:15.794Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -88993,13 +88993,6 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
-    },
-    {
-      "path": "services/livePhoneService.js",
-      "synopsis": "Answers an incoming live phone call using Vapi for AI-powered conversation.",
-      "bytes": 1782,
-      "mtime": "2026-07-28T00:39:37.349Z",
-      "indexed_at": "2026-07-28T00:39:37.349Z"
     },
     {
       "path": "services/llm-egress-proxy.js",
@@ -89738,9 +89731,9 @@
     {
       "path": "services/model-capability-ledger.js",
       "synopsis": "services/model-capability-ledger.js",
-      "bytes": 4254,
-      "mtime": "2026-07-27T23:20:17.137Z",
-      "indexed_at": "2026-07-27T23:23:23.602Z",
+      "bytes": 6283,
+      "mtime": "2026-07-28T00:38:35.031Z",
+      "indexed_at": "2026-07-28T00:41:15.794Z",
       "ssot": [
         "docs/products/ai-council/PRODUCT_HOME.md"
       ]

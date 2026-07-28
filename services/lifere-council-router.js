@@ -7,6 +7,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { pickModel } from './lifere-model-router.js';
 import { applyAiProseTruthEnvelope } from './ai-prose-truth-envelope.js';
+import { recordModelOutcome } from './model-capability-ledger.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -45,6 +46,7 @@ export async function runCouncilDeliberation({
   twins = {},
   callCouncilMember = null,
   logger = console,
+  pool = null,
 }) {
   const roles = selectCouncilRoles({ intent, twins });
   const cfg = loadCouncilConfig();
@@ -55,18 +57,32 @@ export async function runCouncilDeliberation({
     const key = role.replace(/ /g, '_');
     const spec = cfg.roles?.[key] || cfg.roles?.[role];
     let summary = `${role} reviewed: ${message?.slice(0, 120) || intent}`;
+    const member = role === 'Chair' ? 'anthropic' : 'gemini';
 
     if (callCouncilMember) {
+      let realOutputReceived = false;
       try {
         const prompt = `[LifeRE ${role}] Intent: ${intent}\nUser: ${userId}\nMessage: ${message || ''}\nRespond in 2-3 sentences as ${role}. Label uncertainty THINK if inferring.`;
-        const member = role === 'Chair' ? 'anthropic' : 'gemini';
         const raw = await callCouncilMember(member, prompt, { maxTokens: 300, taskType: 'lifere_council' });
         const rawText = typeof raw === 'string' ? raw : raw?.content || summary;
         const enveloped = envelopeCouncilRoleProse(rawText, role);
         summary = enveloped.summary;
+        realOutputReceived = true;
       } catch (err) {
         logger.warn?.(`[lifere-council] ${role} skip:`, err.message);
       }
+      // North Star §2.0J model benchmarking, role 'aic_debate': real success
+      // signal is whether a genuine model reply replaced the fallback
+      // template, not just "the call didn't throw" -- theater_detected
+      // marks exactly the case this session found and fixed once already
+      // (the CFO role permanently hardcoded to the fallback template).
+      recordModelOutcome(pool, {
+        model_tier: member,
+        role: 'aic_debate',
+        ok: realOutputReceived,
+        trust_earned: realOutputReceived,
+        theater_detected: !realOutputReceived,
+      }).catch(() => {});
     }
 
     role_outputs.push({
@@ -114,10 +130,10 @@ export async function runCouncilDeliberation({
   };
 }
 
-export function createLifeRECouncilRouter({ callCouncilMember = null, logger = console } = {}) {
+export function createLifeRECouncilRouter({ callCouncilMember = null, logger = console, pool = null } = {}) {
   return {
     selectCouncilRoles,
-    runCouncilDeliberation: (opts) => runCouncilDeliberation({ ...opts, callCouncilMember, logger }),
+    runCouncilDeliberation: (opts) => runCouncilDeliberation({ ...opts, callCouncilMember, logger, pool }),
     loadCouncilConfig,
   };
 }

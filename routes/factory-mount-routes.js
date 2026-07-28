@@ -18,7 +18,7 @@ import { reconcileRemoteTruth } from '../factory-staging/factory-core/readiness/
 import { extractContent } from '../factory-staging/factory-core/builder/authoring.js';
 import { runGovernedShippingQueue } from '../services/governed-shipping-runner.js';
 import { runGovernedAutonomousShipOnce } from '../services/governed-autonomous-shipping-loop.js';
-import { getModelRankings } from '../services/model-capability-ledger.js';
+import { getModelRankings, KNOWN_ROLES } from '../services/model-capability-ledger.js';
 import { runGovernanceReview } from '../services/governance-law-review.js';
 import { recordFounderDecision, getFounderDecisionHistory, findFounderDecisions } from '../services/founder-intent-model.js';
 import {
@@ -301,10 +301,15 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
   // every governed ship (services/model-capability-ledger.js, hooked into
   // runGovernedAutonomousShipOnce's mandatory result path) -- this route
   // makes that ledger actually visible, not just written to a silent table.
-  router.get('/factory/model-rankings', guard, async (_req, res) => {
+  router.get('/factory/model-rankings', guard, async (req, res) => {
     try {
-      const rankings = await getModelRankings(pool);
-      res.json({ ok: true, rankings, note: rankings.length === 0 ? 'no governed ships recorded yet' : undefined });
+      const rankings = await getModelRankings(pool, { role: req.query.role || null });
+      res.json({
+        ok: true,
+        rankings,
+        known_roles: KNOWN_ROLES,
+        note: rankings.length === 0 ? 'no outcomes recorded yet for this filter' : undefined,
+      });
     } catch (err) {
       res.status(503).json({ ok: false, error: err?.message || String(err) });
     }
