@@ -88,9 +88,13 @@ export function formatDirectProgramAnswer(input = '', systemFacts = {}) {
   const programs = systemFacts.program_context || [];
   const smos = programs.find((p) => p.id === 'smos');
   if ((smos || SMOS_TOPIC.test(t)) && SMOS_WORKFLOW.test(t)) {
+    const canonicalSmos = 'SMOS workflow phases: consent → session → coach → extract → generate → approve → export (MarketingOS Phase 1 on `/api/v1/marketing/*`). Authority: `docs/products/marketingos/PRODUCT_HOME.md`.';
     let base = String(systemFacts.system_knowledge || '').trim();
     if (base.length < 80) {
-      base = 'SMOS workflow phases: consent → session → coach → extract → generate → approve → export (MarketingOS Phase 1 on `/api/v1/marketing/*`). Authority: `docs/products/marketingos/PRODUCT_HOME.md`.';
+      // A one-line fact is too thin to ground a workflow answer, but it is still
+      // real retrieved knowledge — append the canonical phases instead of
+      // discarding it, so the grounding is never worse than what the caller had.
+      base = base ? `${base} ${canonicalSmos}` : canonicalSmos;
     }
     const relocationNote = /relocation/i.test(input)
       ? ' For relocation content, the coach stage narrates the market angle (seller hesitation, buyer education) and extract pulls story + objection heaviest.'

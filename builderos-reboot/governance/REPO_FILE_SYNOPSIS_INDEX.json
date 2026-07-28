@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-28T23:09:19.765Z",
+  "generated_at": "2026-07-28T23:23:56.892Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12300,
   "files": [
@@ -40488,9 +40488,9 @@
     {
       "path": "docs/products/financial-revenue/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Financial Revenue",
-      "bytes": 13148,
-      "mtime": "2026-07-28T22:41:30.408Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 15043,
+      "mtime": "2026-07-28T23:23:30.323Z",
+      "indexed_at": "2026-07-28T23:23:37.073Z"
     },
     {
       "path": "docs/products/FINANCIALREVENUE.md",
@@ -40726,9 +40726,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 629711,
-      "mtime": "2026-07-28T22:44:40.909Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 631390,
+      "mtime": "2026-07-28T23:22:59.520Z",
+      "indexed_at": "2026-07-28T23:23:37.073Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -86065,9 +86065,9 @@
     {
       "path": "services/chair-program-direct-answer.js",
       "synopsis": "Direct program answers from system_knowledge — no counsel drift on SMOS/SSOT asks.",
-      "bytes": 6042,
-      "mtime": "2026-07-28T17:47:22.552Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 6360,
+      "mtime": "2026-07-28T23:21:53.055Z",
+      "indexed_at": "2026-07-28T23:23:37.073Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
