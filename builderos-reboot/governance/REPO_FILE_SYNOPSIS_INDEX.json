@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-28T18:17:25.557Z",
+  "generated_at": "2026-07-28T18:21:55.373Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12284,
   "files": [
@@ -34107,9 +34107,9 @@
     {
       "path": "db/migrations/20241030_add_interactive_element_labels.sql",
       "synopsis": "Database migration — 20241030_add_interactive_element_labels.sql.",
-      "bytes": 724,
-      "mtime": "2026-07-28T18:16:39.604Z",
-      "indexed_at": "2026-07-28T18:17:25.557Z"
+      "bytes": 1104,
+      "mtime": "2026-07-28T18:20:10.192Z",
+      "indexed_at": "2026-07-28T18:21:55.373Z"
     },
     {
       "path": "db/migrations/20241030_create_additional_templates.sql",
@@ -36459,9 +36459,9 @@
     {
       "path": "db/migrations/addStruggleDetectionFormFill.sql",
       "synopsis": "Database migration — addStruggleDetectionFormFill.sql.",
-      "bytes": 466,
-      "mtime": "2026-07-18T18:46:59.220Z",
-      "indexed_at": "2026-07-28T18:12:07.716Z"
+      "bytes": 866,
+      "mtime": "2026-07-28T18:21:19.740Z",
+      "indexed_at": "2026-07-28T18:21:55.373Z"
     },
     {
       "path": "db/migrations/addStruggleDetectionLogTable.sql",
