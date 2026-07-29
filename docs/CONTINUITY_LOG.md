@@ -2,7 +2,7 @@
 
 ## 2026-07-30 — SMOS market-readiness blockers (in progress)
 
-Adam (via auditor): SocialMediaOS pack sales is the closest-to-market product, but two blockers remain from `SMOS_REAL_CUSTOMER_READINESS.json` (commit `a2472460`): password-reset email delivery never worked, and no live Stripe card charge has completed. This session is closing them on current tip (`b4aa44cea`). First fix: `services/password-reset-email.js` now respects `EMAIL_PROVIDER` (postmark/resend/smtp/disabled) and sends via Postmark/Resend/SMTP with a 10s HTTP timeout; `services/env-registry-map.js` marks `POSTMARK_SERVER_TOKEN` SET. `npm run builder:preflight` passes 401/401. Next: deploy, prove live email send, prove live $49 pack charge + unlock, and re-run SENTRY Layer A+B on current tip.
+Adam (via auditor): SocialMediaOS pack sales is the closest-to-market product, but two blockers remain from `SMOS_REAL_CUSTOMER_READINESS.json` (commit `a2472460`): password-reset email delivery never worked, and no live Stripe card charge has completed. This session is closing them on current tip (`b4aa44cea`). First fix: `services/password-reset-email.js` now respects `EMAIL_PROVIDER` (postmark/resend/smtp/disabled) and sends via Postmark/Resend/SMTP with a 10s HTTP timeout; `services/env-registry-map.js` marks `POSTMARK_SERVER_TOKEN` SET. Added fallback to Resend (then SMTP) when Postmark rejects with a pending-approval / same-domain error, so a real customer is not blocked while Postmark account approval is pending. `npm run builder:preflight` passes 401/401. Next: deploy, prove live email send, prove live $49 pack charge + unlock, and re-run SENTRY Layer A+B on current tip.
 
 ## 2026-07-29 — Adam Digital Twin ACTIVE + system inject
 

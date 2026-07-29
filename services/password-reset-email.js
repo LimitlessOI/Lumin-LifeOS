@@ -105,6 +105,10 @@ async function smtpSend({ to, subject, textBody, htmlBody, from, logger }) {
   return { sent: true, provider: 'smtp', messageId: info.messageId || null };
 }
 
+function isPostmarkPendingApproval(error) {
+  return /pending approval|same domain as the 'From' address|domain of the 'From' address/i.test(String(error || ''));
+}
+
 export async function sendPasswordResetEmail({ to, resetUrl, logger = console } = {}) {
   const recipient = String(to || '').trim().toLowerCase();
   const link = String(resetUrl || '').trim();
@@ -131,11 +135,34 @@ export async function sendPasswordResetEmail({ to, resetUrl, logger = console } 
   }
 
   try {
+    // Postmark first when configured or auto
     if (configuredProvider === 'postmark' || (configuredProvider === 'auto' && postmarkToken)) {
       if (!postmarkToken) {
         return { sent: false, provider: 'postmark', error: 'POSTMARK_SERVER_TOKEN_not_set' };
       }
-      return await postmarkSend({ to: recipient, subject, textBody, htmlBody, token: postmarkToken, from, logger });
+      const pm = await postmarkSend({ to: recipient, subject, textBody, htmlBody, token: postmarkToken, from, logger });
+      if (pm.sent) return pm;
+      // If Postmark is pending approval, fall through to Resend/SMTP so real customers can still recover passwords
+      if (isPostmarkPendingApproval(pm.error) && resendKey) {
+        logger?.warn?.('[PASSWORD-RESET] Postmark pending approval; falling back to Resend', { error: pm.error });
+        const rd = await resendSend({ to: recipient, subject, textBody, htmlBody, token: resendKey, from, logger });
+        if (rd.sent) return rd;
+        // If Resend also fails, try SMTP as last resort before giving up
+        const sm = await smtpSend({ to: recipient, subject, textBody, htmlBody, from, logger });
+        if (sm.sent) return sm;
+        return { sent: false, provider: 'resend', error: rd.error, fallback_error: sm.error };
+      }
+      // For any other Postmark failure, optionally try Resend/SMTP when in auto mode
+      if (configuredProvider === 'auto' && (resendKey || process.env.SMTP_USER || process.env.WORK_EMAIL_APP_PASSWORD)) {
+        logger?.warn?.('[PASSWORD-RESET] Postmark failed; trying fallbacks', { error: pm.error });
+        if (resendKey) {
+          const rd = await resendSend({ to: recipient, subject, textBody, htmlBody, token: resendKey, from, logger });
+          if (rd.sent) return rd;
+        }
+        const sm = await smtpSend({ to: recipient, subject, textBody, htmlBody, from, logger });
+        if (sm.sent) return sm;
+      }
+      return pm;
     }
 
     if (configuredProvider === 'resend' || (configuredProvider === 'auto' && resendKey)) {

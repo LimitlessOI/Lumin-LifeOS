@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-29T21:22:28.237Z",
+  "generated_at": "2026-07-29T21:28:46.444Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12308,
   "files": [
@@ -37824,9 +37824,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 40982,
-      "mtime": "2026-07-29T21:22:28.237Z",
-      "indexed_at": "2026-07-29T21:22:28.237Z"
+      "bytes": 41164,
+      "mtime": "2026-07-29T21:28:46.444Z",
+      "indexed_at": "2026-07-29T21:28:46.444Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40726,9 +40726,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 632804,
-      "mtime": "2026-07-29T21:22:28.237Z",
-      "indexed_at": "2026-07-29T21:22:28.237Z"
+      "bytes": 632974,
+      "mtime": "2026-07-29T21:28:46.444Z",
+      "indexed_at": "2026-07-29T21:28:46.444Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -40857,9 +40857,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 126959,
-      "mtime": "2026-07-29T21:22:28.237Z",
-      "indexed_at": "2026-07-29T21:22:28.237Z"
+      "bytes": 127051,
+      "mtime": "2026-07-29T21:28:46.444Z",
+      "indexed_at": "2026-07-29T21:28:46.444Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -91001,9 +91001,9 @@
     {
       "path": "services/password-reset-email.js",
       "synopsis": "Send password-reset email via the configured provider (postmark, resend, smtp, disabled).",
-      "bytes": 5411,
-      "mtime": "2026-07-29T21:22:28.237Z",
-      "indexed_at": "2026-07-29T21:22:28.237Z",
+      "bytes": 7054,
+      "mtime": "2026-07-29T21:28:46.444Z",
+      "indexed_at": "2026-07-29T21:28:46.444Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
