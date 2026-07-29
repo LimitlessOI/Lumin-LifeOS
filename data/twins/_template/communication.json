@@ -1,0 +1,14 @@
+{
+  "schema": "lifere_communication_twin_v1",
+  "phrases": [],
+  "tone_vector": {
+    "formal": null,
+    "casual": null,
+    "empathy": null
+  },
+  "story_style": null,
+  "banned_phrases": [],
+  "how_to_address": null,
+  "packet_preference": null,
+  "updated_at": null
+}

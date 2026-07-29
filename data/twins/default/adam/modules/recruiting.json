@@ -1,0 +1,29 @@
+{
+  "schema": "digital_twin_module_recruiting_v1",
+  "module": "recruiting",
+  "name": "eXp recruiting + lead calls",
+  "status": "CAPTURED",
+  "quotas": {
+    "new_calls_hours_per_day": 1,
+    "follow_up_hours_per_day": 1,
+    "days_per_week": 5,
+    "goal": "number one eXp recruiter"
+  },
+  "lead_lanes": [
+    "expired",
+    "FSBO",
+    "pre-foreclosure",
+    "probate",
+    "SOI"
+  ],
+  "resistances": [
+    "Don't like the calls",
+    "Agents break commitments",
+    "Uncomfortable",
+    "Takes time",
+    "Pressure to deliver value"
+  ],
+  "evidence_level": "CLAIM",
+  "source_ref": "operator-intake B05 + D1",
+  "updated_at": "2026-07-29T13:00:00.000Z"
+}

@@ -11,12 +11,24 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/life-coaching/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-29 |
+| **Last Updated** | 2026-07-29 — Universal Digital Twin template + Adam reference fill (`twins/`) |
 
 ---
-**Status:** LIVE (local use) | Digital Twin: OPERATIONAL
+**Status:** LIVE (local use) | Digital Twin: **TEMPLATE + ADAM SEED (review)** — see [`twins/DIGITAL_TWIN_TEMPLATE.md`](twins/DIGITAL_TWIN_TEMPLATE.md)
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-04-25 (historical exports → Digital Twin path cross-linked from **Amendment 38** § Operator corpus). Prior: 2026-04-18 (twin-auto-ingest.js tracked into repo alongside lifeos follow-up session)
+**Last Updated:** 2026-07-29 — template v1 + Adam founder twin assembled from operator digests. Prior: 2026-04-25 historical exports → Digital Twin path.
+
+### Digital Twin (canonical)
+
+| Doc | Path |
+|-----|------|
+| Template (what a twin is) | [`twins/DIGITAL_TWIN_TEMPLATE.md`](twins/DIGITAL_TWIN_TEMPLATE.md) |
+| Adam v1 summary + supervision checklist | [`twins/ADAM_FOUNDER_TWIN_v1.md`](twins/ADAM_FOUNDER_TWIN_v1.md) |
+| Cheap-model assembly playbook | [`twins/TWIN_ASSEMBLY_PLAYBOOK.md`](twins/TWIN_ASSEMBLY_PLAYBOOK.md) |
+| Machine schema | `config/digital-twin-template-v1.json` |
+| Blank copy-me | `data/twins/_template/` |
+| Adam filled facets | `data/twins/default/adam/` |
+| Decision-identity deep spec | `docs/products/builderos/specs/FOUNDER_VIRTUAL_TWIN.md` |
 
 ---
 
@@ -138,6 +150,7 @@ The personal operating system layer. Goal tracking, activity logging, calendar m
 ### Change Receipts (Digital Twin)
 | Date | Change |
 |---|---|
+| 2026-07-29 | **Adam twin ACTIVE + system inject.** Facets locked under supervision (30k personal / 83k company, GVBN free, Vegas TZ, 5 videos/wk, weight 205→&lt;185, wake 9–10 transitional → earlier). `services/lumin-context-loader.js` loads full twin into Chair/Lumin prompt context (`loadFullTwin`, `getTwinInjectBlock`). Verify: `npm run twin:verify`. Template + blank `_template/` remain the copy path for other users. Prediction still deferred. |
 | 2026-04-25 | **`### Historical multi‑MB chat exports → Digital Twin`** — documents `run-memory-import.mjs` → `memory_dump_chunks` → `import-dumps-to-twin.js` → `adam_decisions` / `adam_profile` → `POST /api/v1/twin/simulate`; cross-link **Amendment 38** dual lane; Zero‑Waste guard note for any future auto-scan. *Why:* Adam — system should study operator + organize conversations; twin path was implemented but not indexed next to Idea Vault. |
 | 2026-04-04 | Applied twin_ingest_control migration. Built scripts/import-dumps-to-twin.js — imports all 448 memory dump chunks + 377 conversation messages into adam_decisions (544 total). Wired twin-auto-ingest into bootAllDomains (runs at boot + every 30 min). Adam filter now has full historical record as source material for profile build. |
 

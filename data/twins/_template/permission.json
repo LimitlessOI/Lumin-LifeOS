@@ -1,0 +1,12 @@
+{
+  "schema": "digital_twin_permission_v1",
+  "default_level": 0,
+  "by_action": {},
+  "never_autonomous": [
+    "constitutional_edit",
+    "spend_money",
+    "message_third_parties_as_user",
+    "health_or_legal_advice"
+  ],
+  "updated_at": null
+}

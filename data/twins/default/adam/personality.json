@@ -1,9 +1,19 @@
 {
   "schema": "lifere_personality_twin_v1",
-  "humor": 0.5,
-  "confidence": 0.5,
-  "warmth": 0.6200000000000001,
-  "directness": 0.5,
+  "humor": 0.55,
+  "confidence": 0.7,
+  "warmth": 0.75,
+  "directness": 0.85,
+  "beliefs": [
+    "Consistency beats perfection",
+    "Schedule should free highest work, not cage freedom",
+    "Community businesses supporting each other creates real local power",
+    "Honesty with self and family is non-negotiable"
+  ],
+  "calibration_notes": [
+    "Prior seed had default 0.5 dials — updated from coaching tone 2026-07-29",
+    "Humor present (JK video-games line in A/B list) but not flippant on money/family"
+  ],
   "calibration_drafts_rated": 6,
-  "updated_at": "2026-06-28T23:31:21.441Z"
+  "updated_at": "2026-07-29T13:00:00.000Z"
 }

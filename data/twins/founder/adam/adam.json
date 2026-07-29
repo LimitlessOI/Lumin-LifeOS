@@ -1,16 +1,24 @@
 {
   "schema": "lifere_adam_twin_v1",
   "owner": "adam",
+  "canonical_facet_root": "data/twins/default/adam/",
+  "template": "config/digital-twin-template-v1.json",
   "goals": [
-    "30k/mo GCI",
-    "family time protected",
-    "BuilderOS to Point B"
+    "30k/mo personal take-home (first gate)",
+    "83k/mo company run-rate",
+    "family time + wife valued",
+    "185 lbs maintain",
+    "#1 eXp recruiter",
+    "GVBN free network — give lots of value",
+    "BuilderOS / twin template for all members"
   ],
   "motivations": [
+    "family_eye_test",
     "freedom",
     "impact",
-    "family"
+    "debt_clear"
   ],
-  "label": "THINK",
-  "updated_at": "2026-06-23T11:44:04.265Z"
+  "label": "VERIFIED",
+  "note": "Index only — full twin lives under data/twins/default/adam/ (template v1)",
+  "updated_at": "2026-07-29T19:17:00.000Z"
 }

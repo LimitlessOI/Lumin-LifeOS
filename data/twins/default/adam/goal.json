@@ -1,9 +1,134 @@
 {
-  "schema": "lifere_goal_twin_v1",
+  "schema": "digital_twin_goal_v1",
   "weights": {
-    "income": 0.4,
+    "income": 0.35,
     "family": 0.3,
-    "freedom": 0.3
+    "health": 0.15,
+    "freedom": 0.1,
+    "community_impact": 0.1
   },
-  "updated_at": "2026-06-28T23:31:21.125Z"
+  "horizons": {
+    "90d": [
+      "3 appointments per day habit",
+      "1 hr new recruiting + 1 hr follow-up × 5 days/week",
+      "GVBN: first 2 events scheduled; path to 100 businesses",
+      "YouTube: 5 videos/week minimum (SocialMediaOS when ready)",
+      "Weight: move from 205 toward under 185",
+      "Debt reduction trajectory visible"
+    ],
+    "1y": [
+      "Personal take-home $30K/mo (first gate)",
+      "Company run-rate $83K/mo",
+      "Number one eXp recruiter (stated goal)",
+      "Get below 185 lbs and maintain + healthy diet/exercise",
+      "Wife feels loved and valued as default, not exception",
+      "Go Vegas / GVBN as trusted local network (free)"
+    ],
+    "5y": [
+      "Time freedom with family (Europe / trips on vision board)",
+      "Businesses improved while costs drop (LimitlessOS promise)",
+      "Digital twin template proven — every member has one"
+    ]
+  },
+  "active_targets": {
+    "income_personal_takehome_monthly_usd": {
+      "value": 30000,
+      "role": "personal",
+      "note": "What Adam takes for himself for a while — first gate even if company produces more",
+      "evidence_level": "VERIFIED",
+      "source_ref": "founder confirm 2026-07-29"
+    },
+    "income_company_monthly_usd": {
+      "value": 83000,
+      "role": "company",
+      "note": "Company / business run-rate goal — not the same as personal take-home",
+      "evidence_level": "VERIFIED",
+      "source_ref": "founder confirm 2026-07-29"
+    },
+    "income_monthly_usd": {
+      "value": 30000,
+      "deprecated_alias": true,
+      "maps_to": "income_personal_takehome_monthly_usd",
+      "note": "Alias for older readers — prefer personal vs company fields"
+    },
+    "appointments_per_day": {
+      "value": 3,
+      "evidence_level": "CLAIM",
+      "source_ref": "D1"
+    },
+    "weight_lbs": {
+      "current": 205,
+      "target": 185,
+      "target_direction": "below",
+      "note": "Currently 205; goal get below 185",
+      "evidence_level": "VERIFIED",
+      "source_ref": "founder confirm 2026-07-29",
+      "privacy": "system_ok",
+      "privacy_note": "Nothing about Adam is hidden from the system — incomplete twin otherwise"
+    },
+    "recruiting": {
+      "value": "1hr new calls + 1hr follow-up × 5 days/week; #1 eXp recruiter",
+      "evidence_level": "CLAIM",
+      "source_ref": "D1"
+    },
+    "content_videos_per_week": {
+      "value": 5,
+      "minimum": 5,
+      "note": "Especially when SocialMediaOS is functioning and ready",
+      "depends_on": "marketingos/socialmediaos",
+      "evidence_level": "VERIFIED",
+      "source_ref": "founder confirm 2026-07-29",
+      "status": "LOCKED"
+    },
+    "group_posts_per_day": {
+      "value": 10,
+      "note": "Also playbook floor 31+ owned for Meta — reconcile Adam personal vs group machine",
+      "evidence_level": "CLAIM",
+      "source_ref": "D1 + GO_VEGAS_FB_GROWTH_PLAYBOOK"
+    }
+  },
+  "conflicts": [],
+  "resolved": [
+    {
+      "id": "income_split",
+      "resolution": "30k personal take-home first gate; 83k company goal",
+      "at": "2026-07-29"
+    },
+    {
+      "id": "gvbn_pricing",
+      "resolution": "free — value > fee; $10 was a sales barrier",
+      "at": "2026-07-29"
+    },
+    {
+      "id": "timezone",
+      "resolution": "America/Los_Angeles — lives in Las Vegas",
+      "at": "2026-07-29"
+    },
+    {
+      "id": "health_privacy",
+      "resolution": "system_ok — nothing hidden from the system; twin must be complete",
+      "at": "2026-07-29"
+    },
+    {
+      "id": "video_cadence",
+      "resolution": "5 videos/week minimum",
+      "at": "2026-07-29"
+    },
+    {
+      "id": "weight",
+      "resolution": "current 205; target below 185",
+      "at": "2026-07-29"
+    },
+    {
+      "id": "morning_640",
+      "resolution": "NOT ready for 6:40 — aspirational only; current wake 9–10; if later, slide day",
+      "at": "2026-07-29"
+    },
+    {
+      "id": "wake_current",
+      "resolution": "Currently 9–10 but do NOT keep that as permanent — push earlier; late wake only when up late",
+      "at": "2026-07-29"
+    }
+  ],
+  "updated_at": "2026-07-29T19:34:00.000Z"
 }

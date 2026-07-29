@@ -1,0 +1,14 @@
+{
+  "schema": "digital_twin_operating_system_v1",
+  "ideal_day": [],
+  "weekly_quotas": {},
+  "priority_abc": {
+    "A": [],
+    "B": [],
+    "C": []
+  },
+  "accountability": null,
+  "obstacles_and_reframes": [],
+  "non_negotiables": [],
+  "updated_at": null
+}

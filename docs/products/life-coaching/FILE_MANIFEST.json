@@ -5,12 +5,27 @@
   "name": "Life Coaching / Personal OS + Digital Twin",
   "canonical_home": "docs/products/life-coaching/PRODUCT_HOME.md",
   "amendment_path": "docs/products/life-coaching/PRODUCT_HOME.md",
-  "updated_at": "2026-06-29",
+  "updated_at": "2026-07-29",
   "ownership_policy": "pointer_not_duplication",
   "owned_files": [
     "docs/products/life-coaching/PRODUCT_HOME.md",
-    "docs/products/life-coaching/FILE_MANIFEST.json"
+    "docs/products/life-coaching/FILE_MANIFEST.json",
+    "docs/products/life-coaching/twins/DIGITAL_TWIN_TEMPLATE.md",
+    "docs/products/life-coaching/twins/TWIN_ASSEMBLY_PLAYBOOK.md",
+    "docs/products/life-coaching/twins/ADAM_FOUNDER_TWIN_v1.md",
+    "config/digital-twin-template-v1.json",
+    "data/twins/README.md",
+    "data/twins/_template/",
+    "data/twins/default/adam/",
+    "scripts/verify-digital-twin.mjs",
+    "tests/digital-twin-loader.test.js"
   ],
-  "shared_dependencies": [],
+  "shared_dependencies": [
+    "docs/architecture/DIGITAL_TWIN_DOCTRINE.md",
+    "docs/products/builderos/specs/FOUNDER_VIRTUAL_TWIN.md",
+    "services/lifere-twin-store.js",
+    "services/lumin-context-loader.js",
+    "services/twin-auto-ingest.js"
+  ],
   "history_anchors": []
 }

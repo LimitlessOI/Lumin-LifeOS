@@ -1,0 +1,39 @@
+{
+  "schema": "digital_twin_module_content_v1",
+  "module": "content",
+  "name": "YouTube / Vegas Report / group video",
+  "status": "CAPTURED",
+  "cadence": {
+    "videos_per_week": 5,
+    "minimum": 5,
+    "status": "LOCKED",
+    "note": "Especially when SocialMediaOS is functioning and ready to go",
+    "depends_on": "marketingos/socialmediaos",
+    "evidence_level": "VERIFIED",
+    "source_ref": "founder confirm 2026-07-29"
+  },
+  "release_day_hint": "Wednesday",
+  "blockers": [
+    "No editor — DIY slow",
+    "Dislikes thumbnails",
+    "Research/scripts slow and disliked",
+    "Never feels good enough"
+  ],
+  "series_ideas": [
+    {
+      "title": "Biggest change in real estate in 150 years",
+      "outline": [
+        "What changed",
+        "Intent of changes",
+        "How client benefits",
+        "Why now after 150 years",
+        "Winners and losers",
+        "What it means for agents"
+      ],
+      "evidence_level": "CLAIM",
+      "source_ref": "D1"
+    }
+  ],
+  "product_route": ["creator-media-os", "marketingos/socialmediaos"],
+  "updated_at": "2026-07-29T19:23:00.000Z"
+}

@@ -1,0 +1,12 @@
+{
+  "schema": "digital_twin_goal_v1",
+  "weights": {},
+  "horizons": {
+    "90d": [],
+    "1y": [],
+    "5y": []
+  },
+  "active_targets": {},
+  "conflicts": [],
+  "updated_at": null
+}

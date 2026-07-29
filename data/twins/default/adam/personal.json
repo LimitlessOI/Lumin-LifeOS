@@ -1,37 +1,164 @@
 {
   "schema": "lifeos_personal_twin_v2",
-  "name": "Adam",
-  "roles": ["founder", "agent", "tc"],
-  "timezone": "America/Chicago",
+  "name": "Adam Hopkins",
+  "roles": [
+    "founder",
+    "las_vegas_realtor",
+    "exp_recruiter",
+    "tc_operator",
+    "govegas_admin",
+    "content_creator"
+  ],
+    "timezone": {
+      "value": "America/Los_Angeles",
+      "evidence_level": "VERIFIED",
+      "source_ref": "founder confirm 2026-07-29 — lives in Las Vegas"
+    },
   "coaching_tolerance": "open",
   "break_intent": "curious",
-  "superpowers": ["on-camera riff", "market intuition", "community building", "direct communication"],
-  "unwanted_busywork": ["SEO metadata copy-paste", "video editing", "comment threading across platforms", "scheduling uploads"],
+  "superpowers": [
+    "on-camera riff",
+    "market intuition",
+    "community building (Go Vegas)",
+    "direct communication",
+    "recruiting conversations when he shows up"
+  ],
+  "unwanted_busywork": [
+    "SEO metadata copy-paste",
+    "video editing",
+    "thumbnails",
+    "research and script writing",
+    "comment threading across platforms",
+    "scheduling uploads",
+    "making schedule 'perfect' before acting"
+  ],
   "liked_busywork": [],
   "whys": [
+    {
+      "id": "why_family_eye_test",
+      "label": "Look family in the eye",
+      "story": "Commitments mean he can look his family in the eye knowing he did right by them — no matter what.",
+      "feeling": "integrity, love, duty",
+      "linked_activities": ["daily_top3", "recruiting_hours", "appointments", "accountability_frank"],
+      "evidence_level": "CLAIM",
+      "source_ref": "operator-intake D1 coaching notes",
+      "never_use_as_template_for_others": true
+    },
+    {
+      "id": "why_wife_valued",
+      "label": "Wife feels loved and valued",
+      "story": "Family — make wife feel loved and valued.",
+      "feeling": "partnership, romance, safety",
+      "linked_activities": ["family_time", "income_stability"],
+      "evidence_level": "CLAIM",
+      "source_ref": "operator-intake D1",
+      "never_use_as_template_for_others": true
+    },
     {
       "id": "why_europe_partner",
       "label": "Europe with partner",
       "story": "Trip she always wanted; doing it together when the life supports it.",
       "feeling": "promise kept, romance, pride",
       "linked_activities": ["consistent_marketing", "pipeline_health", "life_quality"],
+      "evidence_level": "CLAIM",
+      "source_ref": "prior twin seed 2026-06",
       "never_use_as_template_for_others": true
     },
     {
       "id": "why_go_vegas_community",
-      "label": "Go Vegas community",
-      "story": "17k Facebook group — local trust and value-first presence.",
+      "label": "Go Vegas / GVBN community",
+      "story": "Build local businesses while building ours — referrals, reviews, mastermind, give back.",
       "feeling": "impact, belonging, authority without hype",
-      "linked_activities": ["socialmediaos", "comment_value_add"],
+      "linked_activities": ["gvbn", "govegas_posts", "business_invites", "radio"],
+      "evidence_level": "CLAIM",
+      "source_ref": "operator-intake D1+D2",
+      "never_use_as_template_for_others": true
+    },
+    {
+      "id": "why_debt_freedom_income",
+      "label": "Out of debt + company $83K / personal $30K",
+      "story": "Clear debt. Company goal is $83K/mo; for a while Adam only takes $30K personal out of that — first gate so family has stability even before full company scale feels like his paycheck.",
+      "feeling": "relief, power, options",
+      "linked_activities": ["appointments", "recruiting", "listings", "content"],
+      "evidence_level": "VERIFIED",
+      "source_ref": "founder confirm 2026-07-29",
       "never_use_as_template_for_others": true
     }
   ],
-  "motivations_legacy_tags": ["family", "freedom", "impact"],
-  "demotivators": ["AI theater", "generic templates", "governance ceremony without results"],
-  "autopilot_programs": [],
+  "demotivators": [
+    "AI theater / fake done claims",
+    "generic templates",
+    "governance ceremony without results",
+    "feeling locked into a rigid schedule with no ability to adjust",
+    "schedule items that are not highest use of time",
+    "agents who break commitments",
+    "pressure to deliver value on uncomfortable calls without support",
+    "perfectionism on videos (never good enough)"
+  ],
+  "constraints": [
+    "Resists schedules that kill freedom — needs adjustability",
+    "Fails when night-before plan is skipped",
+    "Dislikes expired/FSBO calls but knows they are load-bearing",
+    "No dedicated video editor — DIY is slow"
+  ],
+  "blind_spots": [
+    {
+      "text": "May over-invest time making the schedule accurate instead of executing",
+      "evidence_level": "HYPOTHESIS",
+      "source_ref": "D1 schedule obstacle #2"
+    }
+  ],
+  "fears": [
+    {
+      "text": "Working on enjoyable wrong things instead of uncomfortable right things",
+      "evidence_level": "CLAIM",
+      "source_ref": "D1 schedule obstacle #1 reframe"
+    }
+  ],
+  "strengths": [
+    "Community builder",
+    "Direct communicator",
+    "Recruiter when consistent",
+    "Can teach agents and clients simultaneously"
+  ],
+  "energy_pattern": {
+    "value": "Morning visualization + workout before calls; deep production mid-day; editing late afternoon if needed",
+    "evidence_level": "CLAIM",
+    "source_ref": "D1 schedule blocks"
+  },
+  "autopilot_programs": [
+    {
+      "trigger": "Schedule feels locking",
+      "behavior": "Rebel or drift to enjoyable tasks",
+      "benefit": "Preserves felt freedom",
+      "cost": "Misses highest-ROI work",
+      "serves_me": false,
+      "reframe": "Schedule protects highest use of time; adjust when something better appears"
+    },
+    {
+      "trigger": "Video not perfect",
+      "behavior": "Delay publish",
+      "benefit": "Quality pride",
+      "cost": "Zero consistency = zero compound",
+      "serves_me": false,
+      "reframe": "Consistency is key — ship weekly minimum"
+    }
+  ],
   "serve_me_map": [],
-  "habit_loops": [],
+  "habit_loops": [
+    {
+      "cue": "Alarm + music (morning)",
+      "routine": "15-min visualization then vision board / goals",
+      "reward": "Clarity + fight-reason before work"
+    },
+    {
+      "cue": "Night before",
+      "routine": "Identify what + when for tomorrow; top 3",
+      "reward": "Less resistance at 8am"
+    }
+  ],
   "goal_reviews": [],
-  "label": "KNOW",
-  "updated_at": "2026-06-13"
+  "motivations_legacy_tags": ["family", "freedom", "impact", "debt_clear", "health"],
+  "label": "CLAIM",
+  "updated_at": "2026-07-29T19:17:00.000Z"
 }

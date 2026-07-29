@@ -1,0 +1,10 @@
+{
+  "schema": "lifere_personality_twin_v1",
+  "humor": null,
+  "confidence": null,
+  "warmth": null,
+  "directness": null,
+  "beliefs": [],
+  "calibration_notes": [],
+  "updated_at": null
+}

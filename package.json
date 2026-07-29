@@ -93,6 +93,7 @@
     "lifeos:lumin:connection:verify": "node scripts/verify-lumin-connection.mjs && node scripts/verify-lumin-communication-law.mjs && node --test tests/lumin-connection-guard.test.js tests/lumin-communication-law.test.js",
     "lifeos:lumin:connection:verify:live": "node scripts/verify-lumin-connection.mjs --live && node scripts/verify-lumin-conversation-routing.mjs --live",
     "lifeos:lumin:communication:verify": "node scripts/verify-lumin-communication-law.mjs && node --test tests/lumin-communication-law.test.js",
+    "twin:verify": "node scripts/verify-digital-twin.mjs && node --test tests/digital-twin-loader.test.js",
     "lifeos:lumin:conversation:verify": "node scripts/verify-lumin-conversation-routing.mjs && node --test tests/lumin-conversation-routing.test.js",
     "lifeos:lumin:conversation:verify:live": "node scripts/verify-lumin-conversation-routing.mjs --live",
     "mobile:sync": "npx cap sync",

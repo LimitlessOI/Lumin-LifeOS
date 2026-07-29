@@ -1,0 +1,46 @@
+{
+  "schema": "digital_twin_module_gvbn_v1",
+  "module": "gvbn",
+  "name": "Go Vegas Business Network / Referral Network",
+  "status": "CAPTURED",
+  "offer": {
+    "one_liner": "Small businesses support small businesses — referrals, discounts, mastermind, reviews, jobs",
+    "pricing": "free",
+    "pricing_status": "LOCKED",
+    "pricing_rationale": {
+      "text": "Value of being in the network is greater than a fee. $10 created a barrier and forced more time selling benefits. Free is a no-brainer — give lots of value.",
+      "rejected": ["$10/mo"],
+      "evidence_level": "VERIFIED",
+      "source_ref": "founder confirm 2026-07-29"
+    },
+    "incentives": [
+      "20 free COOL FM radio spots (stated in outreach)",
+      "20 free GoVegas FB posts",
+      "Monthly free promo post on GoVegas FB",
+      "Bi-monthly meetings: evening mixer + morning breakfast intros"
+    ],
+    "member_gives": [
+      "Use businesses in network",
+      "Invite missing categories",
+      "Positive Google/Yelp reviews when used",
+      "Help fellow members grow",
+      "Attend monthly meetings"
+    ],
+    "targets": {
+      "businesses": 100,
+      "events_first": "2 scheduled (mixer + breakfast)"
+    }
+  },
+  "open_systems": [
+    "Deliverables clarity (what they get for free — spell out so value is obvious)",
+    "Zoom vs in-person rules",
+    "Meeting agendas",
+    "Intro question redo"
+  ],
+  "closed_systems": [
+    "Membership payment — N/A while free"
+  ],
+  "evidence_level": "VERIFIED",
+  "source_ref": "founder confirm 2026-07-29 + operator-intake B01–B03,B12",
+  "updated_at": "2026-07-29T19:17:00.000Z"
+}

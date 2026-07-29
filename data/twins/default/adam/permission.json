@@ -1,0 +1,37 @@
+{
+  "schema": "digital_twin_permission_v1",
+  "default_level": 2,
+  "by_action": {
+    "read_twin": 5,
+    "propose_twin_update": 4,
+    "apply_twin_update_reviewed_fields": 1,
+    "railway_env_redeploy": 4,
+    "system_commit_ship": 4,
+    "spend_money": 0,
+    "constitutional_edit": 0,
+    "message_as_adam_to_third_parties": 0,
+    "predict_adam_decision_as_authority": 0
+  },
+  "level_legend": {
+    "0": "never without explicit Adam",
+    "1": "ask first",
+    "2": "propose then wait",
+    "3": "act in sandbox",
+    "4": "act within standing orders",
+    "5": "full for this action class"
+  },
+  "never_autonomous": [
+    "constitutional_edit",
+    "spend_money",
+    "message_third_parties_as_adam",
+    "health_or_legal_advice_as_fact",
+    "claim_prediction_as_decision"
+  ],
+  "transparency": {
+    "hide_facets_from_system": false,
+    "note": "Founder doctrine: who I am is what I am — no hidden twin fields from the system; incomplete otherwise",
+    "evidence_level": "VERIFIED",
+    "source_ref": "founder confirm 2026-07-29"
+  },
+  "updated_at": "2026-07-29T19:23:00.000Z"
+}

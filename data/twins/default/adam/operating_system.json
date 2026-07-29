@@ -1,0 +1,136 @@
+{
+  "schema": "digital_twin_operating_system_v1",
+  "mantra": "CONSISTENCY IS KEY",
+  "wake": {
+    "current_window": { "earliest": "09:00", "latest": "10:00" },
+    "current_is_not_the_goal": true,
+    "direction": "earlier — do not lock 9–10 as the permanent standard",
+    "aspirational": "06:40",
+    "exception": "If up late the night before, waking 9–10 (or later) that morning is OK — don't force early after a late night",
+    "flex_rule": "Default push toward earlier wake over time. Only slide the day later when the prior night was late. Never treat 9–10 as 'this is who I am forever.'",
+    "note": "Currently wake 9–10, but Adam does not want to keep it that way unless up late. 6:40 remains aspirational; coach progress toward earlier without shaming today's clock.",
+    "evidence_level": "VERIFIED",
+    "source_ref": "founder confirm 2026-07-29"
+  },
+  "ideal_day_status": "aspirational_direction",
+  "current_day_status": "transitional",
+  "ideal_day": [
+    { "time": "06:40", "activity": "Visualization — why fight, what's worth the price", "tier": "A", "status": "aspirational" },
+    { "time": "06:50", "activity": "Bathroom / prep", "tier": "A", "status": "aspirational" },
+    { "time": "07:30", "activity": "Gym / workout", "tier": "A", "status": "aspirational" },
+    { "time": "08:00", "activity": "Expired + FSBO calls", "tier": "A", "status": "aspirational" },
+    { "time": "09:00", "activity": "eXp recruiting calls", "tier": "A", "status": "aspirational" },
+    { "time": "10:00", "activity": "Business calls / social (YouTube, FB, IG) OR agent calls", "tier": "A/B", "status": "aspirational" },
+    { "time": "11:00", "activity": "Follow-up calls", "tier": "A", "status": "aspirational" },
+    { "time": "12:00", "activity": "Lunch / food", "tier": "B", "status": "aspirational" },
+    { "time": "13:00-18:00", "activity": "Appointments / highest todos", "tier": "A", "status": "aspirational" },
+    { "time": "18:00-19:00", "activity": "Editing (if video day)", "tier": "B", "status": "aspirational" }
+  ],
+  "current_day": [
+    { "offset": "wake", "activity": "Wake (today often 9–10; push earlier over time unless night was late)", "tier": "A" },
+    { "offset": "+0–15m", "activity": "Visualization / why fight", "tier": "A" },
+    { "offset": "+15–45m", "activity": "Bathroom + workout (or short movement if late night)", "tier": "A" },
+    { "offset": "block 1", "activity": "Expired + FSBO calls", "tier": "A" },
+    { "offset": "block 2", "activity": "eXp recruiting calls", "tier": "A" },
+    { "offset": "block 3", "activity": "Business / social / YouTube OR agent calls", "tier": "A/B" },
+    { "offset": "block 4", "activity": "Follow-up calls", "tier": "A" },
+    { "offset": "midday", "activity": "Lunch / food", "tier": "B" },
+    { "offset": "afternoon", "activity": "Appointments / highest todos", "tier": "A" },
+    { "offset": "late", "activity": "Editing if video day", "tier": "B" }
+  ],
+  "current_day_note": "9–10 is transitional reality, not the identity. Coach earlier wake as direction. Only fully slide the day later when prior night was late. Protect A-tier sequence either way.",
+  "schedule_philosophy": {
+    "text": "Schedule protects highest use of time — not lock-in. Current wake often 9–10 but that is not the permanent standard — push earlier unless up late. Plan night before (what + when) also protects morning. Meet him where he is today while holding the earlier direction.",
+    "evidence_level": "VERIFIED",
+    "source_ref": "D1 + founder 2026-07-29"
+  },
+  "weekly_quotas": {
+    "soi": { "value": 1, "unit": "activity", "evidence_level": "CLAIM" },
+    "group": { "value": 2, "unit": "activity", "evidence_level": "CLAIM" },
+    "gvbn": { "value": 5, "unit": "activity", "evidence_level": "CLAIM" },
+    "radio": { "value": 5, "unit": "activity", "evidence_level": "CLAIM" },
+    "youtube": { "value": 5, "unit": "videos", "minimum": 5, "evidence_level": "VERIFIED", "source_ref": "founder 2026-07-29" },
+    "fsbo_expires_probate": { "value": 5, "unit": "activity", "evidence_level": "CLAIM" },
+    "recruiting_days": { "value": 5, "unit": "days with 1hr new + 1hr follow-up", "evidence_level": "CLAIM" }
+  },
+  "priority_abc": {
+    "A": [
+      "Visualize success / review goals / set goals",
+      "Expired + FSBO calls",
+      "Recruiting calls and meetings",
+      "Follow-up calls",
+      "CRM: input leads + drip campaigns",
+      "Post to group (target 10/day)",
+      "Accountability results to Frank",
+      "Workout",
+      "Schedule + score day / plan next day",
+      "Appointments / listing work",
+      "Write todos"
+    ],
+    "B": [
+      "YouTube record / edit / scripts / SEO / thumbnails",
+      "Show homes",
+      "Email",
+      "Track numbers",
+      "Meal tracking / cook",
+      "Vegas Report business outreach / canvassing",
+      "Investment / escrow oversight",
+      "Hot prospect list review",
+      "Accountability meetings"
+    ],
+    "C": [
+      "Chamber networking",
+      "Open house",
+      "Vision board updates"
+    ]
+  },
+  "accountability": {
+    "partner": "Frank",
+    "daily": [
+      "Top 3 for the day",
+      "Report what was done",
+      "Send photo of schedule",
+      "Grease and send numbers"
+    ],
+    "grade": "Grade activities all day — including off-clock",
+    "evidence_level": "CLAIM",
+    "source_ref": "D1"
+  },
+  "obstacles_and_reframes": [
+    {
+      "obstacle": "Don't like feeling locked into a schedule",
+      "reframe": "Schedule protects highest-ROI work; freedom to adjust when better use appears"
+    },
+    {
+      "obstacle": "Resist because unsure schedule is right / planning takes time",
+      "reframe": "Time on priority ID saves more time and money than it costs"
+    },
+    {
+      "obstacle": "Fail to plan night before",
+      "reframe": "Non-negotiable: what + when before sleep"
+    },
+    {
+      "obstacle": "Expired/FSBO discomfort",
+      "reframe": "A-tier money work; discomfort ≠ skip"
+    },
+    {
+      "obstacle": "Video: no editor, thumbnails, scripts, perfectionism",
+      "reframe": "Ship minimum cadence; system/Creator Media OS absorbs busywork over time"
+    }
+  ],
+  "non_negotiables": [
+    "Morning visualization",
+    "Workout",
+    "Highest-use calls before comfort work",
+    "Night-before plan",
+    "Daily accountability packet to Frank",
+    "Consistency over perfection"
+  ],
+  "hot_sheet": {
+    "description": "Always-on pocket priority card (mission blue-card style)",
+    "status": "SPECIFIED_NOT_BUILT",
+    "evidence_level": "CLAIM",
+    "source_ref": "D1 O05"
+  },
+  "updated_at": "2026-07-29T19:34:00.000Z"
+}

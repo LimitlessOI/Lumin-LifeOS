@@ -1,0 +1,14 @@
+{
+  "schema": "digital_twin_decision_identity_v1",
+  "layers": {
+    "values": [],
+    "vetoes": [],
+    "heuristics": [],
+    "escalation": [],
+    "precedents": [],
+    "presentation": []
+  },
+  "compiler_status": "empty",
+  "note": "Each item: { pattern_text, evidence_level, source_ref, applies_when }",
+  "updated_at": null
+}

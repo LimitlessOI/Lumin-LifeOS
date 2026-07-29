@@ -1,0 +1,16 @@
+{
+  "schema": "digital_twin_meta_v1",
+  "twin_id": "REPLACE_ME",
+  "user_id": "REPLACE_ME",
+  "display_name": "REPLACE_ME",
+  "template_version": "1.0.0",
+  "status": "draft",
+  "authority_scope": "member",
+  "sources": [],
+  "supervision": {
+    "last_reviewed_by": null,
+    "last_reviewed_at": null,
+    "open_questions": []
+  },
+  "updated_at": null
+}

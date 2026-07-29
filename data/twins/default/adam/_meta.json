@@ -1,0 +1,57 @@
+{
+  "schema": "digital_twin_meta_v1",
+  "twin_id": "default/adam",
+  "user_id": "adam",
+  "display_name": "Adam Hopkins",
+  "template_version": "1.0.0",
+  "status": "active",
+  "authority_scope": "founder",
+  "transparency_doctrine": {
+    "text": "The system should not have hidden things about Adam. Who he is and what he is — is what he is. Not afraid of the system truly knowing him; otherwise the twin is incomplete.",
+    "evidence_level": "VERIFIED",
+    "source_ref": "founder confirm 2026-07-29"
+  },
+  "sources": [
+    {
+      "path": "docs/products/ideavault/conversations/2026-07-29-operator-intake-compact-digest.md",
+      "batch_id": "D1+D2+D3",
+      "note": "Coaching notes + GoVegas mega-dump digest + laws/contacts"
+    },
+    {
+      "path": "docs/products/builderos/specs/FOUNDER_VIRTUAL_TWIN.md",
+      "batch_id": "FVT",
+      "note": "Decision identity law"
+    },
+    {
+      "path": "docs/architecture/DIGITAL_TWIN_DOCTRINE.md",
+      "batch_id": "doctrine",
+      "note": "Universal twin doctrine"
+    },
+    {
+      "path": "data/twins/default/adam/personal.json",
+      "batch_id": "prior_seed_2026-06",
+      "note": "Earlier skeleton — merged, not discarded"
+    },
+    {
+      "path": "founder chat 2026-07-29",
+      "batch_id": "supervision_pass_3",
+      "note": "All core locks including wake 9–10 flex"
+    }
+  ],
+  "supervision": {
+    "last_reviewed_by": "adam",
+    "last_reviewed_at": "2026-07-29T19:33:00.000Z",
+    "resolved": [
+      "Income: $30K personal take-home (first gate); $83K company goal",
+      "GVBN pricing: free — value > fee; $10 was a sales barrier",
+      "Timezone: America/Los_Angeles — lives in Las Vegas",
+      "Transparency: nothing about Adam hidden from the system — incomplete twin otherwise",
+      "Videos: 5/week minimum (esp. when SocialMediaOS ready)",
+      "Weight: current 205; target below 185",
+      "Wake: currently 9–10 (transitional — not permanent); push earlier; late wake OK only if up late; 6:40 aspirational"
+    ],
+    "open_questions": []
+  },
+  "reference_for_all_twins": true,
+  "updated_at": "2026-07-29T19:34:00.000Z"
+}

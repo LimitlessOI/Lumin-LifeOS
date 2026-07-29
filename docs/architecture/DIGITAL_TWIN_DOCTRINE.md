@@ -110,6 +110,12 @@ Smaller model + **rich twin** beats frontier model + amnesia.
 
 ## Related docs
 
+- **Universal template (start here):** `docs/products/life-coaching/twins/DIGITAL_TWIN_TEMPLATE.md`
+- **Machine schema:** `config/digital-twin-template-v1.json`
+- **Blank copy:** `data/twins/_template/`
+- **Adam reference fill:** `data/twins/default/adam/` + `docs/products/life-coaching/twins/ADAM_FOUNDER_TWIN_v1.md`
+- **Cheap-model assembly:** `docs/products/life-coaching/twins/TWIN_ASSEMBLY_PLAYBOOK.md`
+- **Decision identity (founder deep):** `docs/products/builderos/specs/FOUNDER_VIRTUAL_TWIN.md`
 - `docs/LUMIN_DOCTRINE.md` — Chair, honesty, Wisdom
 - `docs/architecture/LUMIN_TRANSLATION_AND_ACCOUNT_MODEL.md` — translation + cost routing
 - `docs/LIFERE_FULL_DIGITAL_TWIN_BLUEPRINT.md` — full twin taxonomy

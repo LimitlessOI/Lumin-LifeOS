@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-29 — Adam Digital Twin ACTIVE + system inject
+
+Adam: build the twin with what we have for the system. Supervision locks complete (30k personal / 83k company, GVBN free, Vegas, 5 videos/wk, weight 205→&lt;185, wake 9–10 transitional not permanent). Facets at `data/twins/default/adam/` status `active`. `lumin-context-loader` now injects full twin into Chair/Lumin prompt context. `npm run twin:verify` PASS. Template for others: `data/twins/_template/` + `docs/products/life-coaching/twins/`. Prediction deferred.
+
 ## 2026-07-28 — Role separation: the gate that protected the wrong path
 
 Adam: audit every BuilderOS workflow for places one agent plans, implements, tests and approves its own work; require independent verification before COMPLETE. He explicitly declined to arbitrate the technical tradeoff ("I am not a programmer... talk with the chair"), so it went to the Chair, not to him — which is what `docs/AGENT_INBOX.md` says should happen with AI-vs-AI disputes anyway. Chair ruled (`decision_id c646160f-128a-4b43-9884-af37cd5a868a`, strong tier, `judgment_degraded:false`): hard-block ONLY for the irreversible / high-blast-radius set (auth, secrets, money), detect-and-route for everything else so the loop never idles (SO-003); do all three P0 items; a machine-path gate SUBSUMES the hook rather than accreting a tier.

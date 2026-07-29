@@ -1,0 +1,40 @@
+{
+  "schema": "digital_twin_memory_v1",
+  "capsule_refs": [],
+  "digest_refs": [
+    {
+      "path": "docs/products/ideavault/conversations/2026-07-29-operator-intake-compact-digest.md",
+      "role": "primary_cheap_read",
+      "batches": ["D1", "D2", "D3"]
+    },
+    {
+      "path": "docs/products/ideavault/conversations/2026-07-29-best-ideas-master-catalog.md",
+      "role": "platform_ideas"
+    },
+    {
+      "path": "docs/products/life-coaching/twins/DIGITAL_TWIN_TEMPLATE.md",
+      "role": "template_law"
+    },
+    {
+      "path": "docs/products/builderos/specs/FOUNDER_VIRTUAL_TWIN.md",
+      "role": "decision_compiler_spec"
+    },
+    {
+      "path": "docs/products/limitlessos/GO_VEGAS_FB_GROWTH_PLAYBOOK.md",
+      "role": "govegas_ops"
+    }
+  ],
+  "episodic_summaries": [
+    {
+      "at": "2026-07-29",
+      "summary": "Adam dumped coaching notes + prior mega GoVegas paste; asked for cheap-model digests and twin/template build under supervision.",
+      "evidence_level": "FACT"
+    }
+  ],
+  "do_not_ingest": [
+    "Secrets / API keys",
+    "Third-party private client PII without consent",
+    "Raw 968k paste when digest exists — use digest first"
+  ],
+  "updated_at": "2026-07-29T13:00:00.000Z"
+}

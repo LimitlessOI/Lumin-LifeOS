@@ -1,0 +1,136 @@
+{
+  "schema": "digital_twin_template_v1",
+  "version": "1.0.0",
+  "authority": [
+    "docs/architecture/DIGITAL_TWIN_DOCTRINE.md",
+    "docs/products/life-coaching/twins/DIGITAL_TWIN_TEMPLATE.md",
+    "docs/products/builderos/specs/FOUNDER_VIRTUAL_TWIN.md"
+  ],
+  "description": "Copy this shape for every person. Adam's filled twin at data/twins/default/adam/ is the reference implementation.",
+  "storage": {
+    "root": "data/twins/{tenant_id}/{user_id}/",
+    "module_root": "data/twins/{tenant_id}/{user_id}/modules/",
+    "founder_extensions": "data/twins/founder/{key}.json"
+  },
+  "required_files": [
+    "_meta.json",
+    "personal.json",
+    "personality.json",
+    "communication.json",
+    "goal.json",
+    "operating_system.json",
+    "decision_identity.json",
+    "permission.json",
+    "memory.json"
+  ],
+  "optional_modules": [
+    "recruiting",
+    "listings",
+    "gvbn",
+    "content",
+    "finance",
+    "buyer",
+    "seller",
+    "lead"
+  ],
+  "evidence_levels": [
+    "CLAIM",
+    "HYPOTHESIS",
+    "TESTED",
+    "RECEIPT",
+    "VERIFIED",
+    "FACT",
+    "INVARIANT"
+  ],
+  "field_contracts": {
+    "_meta": {
+      "twin_id": "string",
+      "user_id": "string",
+      "display_name": "string",
+      "template_version": "string",
+      "status": "draft|review|active|frozen",
+      "authority_scope": "member|founder|relationship",
+      "sources": "array of {path, batch_id, note}",
+      "supervision": "{ last_reviewed_by, last_reviewed_at, open_questions[] }",
+      "updated_at": "iso8601"
+    },
+    "personal": {
+      "schema_note": "lifeos_personal_twin_v2 + doctrine personal fields",
+      "core": [
+        "name",
+        "roles",
+        "timezone",
+        "whys",
+        "demotivators",
+        "superpowers",
+        "unwanted_busywork",
+        "liked_busywork",
+        "constraints",
+        "blind_spots",
+        "fears",
+        "strengths",
+        "energy_pattern"
+      ]
+    },
+    "personality": [
+      "humor",
+      "confidence",
+      "warmth",
+      "directness",
+      "beliefs",
+      "calibration_notes"
+    ],
+    "communication": [
+      "phrases",
+      "tone_vector",
+      "story_style",
+      "banned_phrases",
+      "how_to_address",
+      "packet_preference"
+    ],
+    "goal": [
+      "weights",
+      "horizons",
+      "active_targets",
+      "conflicts"
+    ],
+    "operating_system": [
+      "ideal_day",
+      "weekly_quotas",
+      "priority_abc",
+      "accountability",
+      "obstacles_and_reframes",
+      "non_negotiables"
+    ],
+    "decision_identity": {
+      "note": "Founder Virtual Twin six layers — every user gets a lighter version; founders get full",
+      "layers": [
+        "values",
+        "vetoes",
+        "heuristics",
+        "escalation",
+        "precedents",
+        "presentation"
+      ]
+    },
+    "permission": [
+      "default_level",
+      "by_action",
+      "never_autonomous"
+    ],
+    "memory": [
+      "capsule_refs",
+      "digest_refs",
+      "episodic_summaries",
+      "do_not_ingest"
+    ]
+  },
+  "rules": [
+    "Never invent personal facts — mark UNKNOWN or omit.",
+    "Every non-obvious field carries evidence_level + source_ref.",
+    "Propose twin updates; do not silently overwrite founder-reviewed fields without supervision flag.",
+    "Constitutional / North Star law outranks twin patterns.",
+    "Member twins never get platform build authority.",
+    "Whys are never copied as templates for other people."
+  ]
+}
