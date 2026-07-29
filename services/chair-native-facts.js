@@ -16,7 +16,7 @@ import {
 import { hasProductBuildContext } from './chair-context-classifier.js';
 import { isBuildRequest } from './chair-intent-signals.js';
 import { gatherStrategicBriefForChair } from './lumin-strategic-intelligence.js';
-import { createLuminContextLoader } from './lumin-context-loader.js';
+import { createLuminContextLoader, isFounderTwinHardGated } from './lumin-context-loader.js';
 import { gatherChairSystemKnowledge, needsSystemKnowledge } from './chair-system-knowledge.js';
 import { loadKnowledgeContext, getKnowledgeContext } from './knowledge-context.js';
 import { getLatestFounderBuildJobForUser } from './founder-build-job-store.js';
@@ -46,7 +46,7 @@ function needsGeneralWebSearch(text = '', chairContext = {}) {
   if (/\b(point b|lifere alpha|alpha readiness|alpha battery|alpha test|lifere|ssot|amendment|deploy|railway|builder os|builder pipeline|queue status|target_file|smos|social media os)\b/i.test(t)) {
     return false;
   }
-  if (/\?\s*$/.test(t)) return true;
+  if (/\?\s$/.test(t)) return true;
   if (/^(what|who|when|where|why|how|is|are|does|did|can|could|tell me about)\b/i.test(t)) return true;
   if (chairContext.personal_search) return true;
   return false;
@@ -178,8 +178,6 @@ export async function gatherChairNativeFacts(input, deps = {}, chairContext = {}
 
   if (deps.pool) {
     try {
-      const loader = createLuminContextLoader({ pool: deps.pool, callAI: deps.callAI });
-
       if (numericUserId && !userHandle) {
         const { rows } = await deps.pool.query(
           `SELECT user_handle FROM lifeos_users WHERE id = $1 AND active = TRUE LIMIT 1`,
@@ -203,17 +201,42 @@ export async function gatherChairNativeFacts(input, deps = {}, chairContext = {}
         ).catch(() => ({ rows: [] }));
         numericUserId = rows[0]?.id || null;
       }
+    } catch {
+      /* identity resolve non-fatal — twin still loads from disk */
+    }
+  }
 
-      userHandle = userHandle || 'adam';
+  userHandle = userHandle || 'adam';
 
+  try {
+    const loader = createLuminContextLoader({ pool: deps.pool || null, callAI: deps.callAI });
+    const twinGate = await loader.getTwinGate(userHandle);
+    facts.twin_gate = twinGate;
+    facts.twin_user_handle = userHandle;
+
+    if (isFounderTwinHardGated(userHandle) && !twinGate.ok) {
+      facts.lumin_context = null;
+      facts.personal_twin = null;
+      facts.twin_required = true;
+      facts.chair_note = `${facts.chair_note || ''} TWIN HARD GATE FAILED (${twinGate.reason}). Do not answer as if you know Adam without the twin.`;
+    } else {
       facts.lumin_context = await loader.buildPromptContext({
         userId: numericUserId,
         userHandle,
       });
       facts.personal_twin = await loader.loadPersonalTwin(userHandle);
-      facts.twin_user_handle = userHandle;
-    } catch {
-      /* non-fatal */
+      facts.twin_required = isFounderTwinHardGated(userHandle);
+    }
+  } catch (err) {
+    facts.twin_gate = {
+      ok: false,
+      reason: err?.message || 'twin_load_failed',
+      hard_gated_for_user: isFounderTwinHardGated(userHandle),
+    };
+    if (isFounderTwinHardGated(userHandle)) {
+      facts.lumin_context = null;
+      facts.personal_twin = null;
+      facts.twin_required = true;
     }
   }
 

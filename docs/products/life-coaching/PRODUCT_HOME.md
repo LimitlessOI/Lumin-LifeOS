@@ -11,12 +11,12 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/life-coaching/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-29 — Universal Digital Twin template + Adam reference fill (`twins/`) |
+| **Last Updated** | 2026-07-29 — Twin hard-gate + facet learn loop live |
 
 ---
-**Status:** LIVE (local use) | Digital Twin: **TEMPLATE + ADAM SEED (review)** — see [`twins/DIGITAL_TWIN_TEMPLATE.md`](twins/DIGITAL_TWIN_TEMPLATE.md)
+**Status:** LIVE (local use) | Digital Twin: **ACTIVE + HARD-GATED for founder** — see [`twins/DIGITAL_TWIN_TEMPLATE.md`](twins/DIGITAL_TWIN_TEMPLATE.md)
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-07-29 — template v1 + Adam founder twin assembled from operator digests. Prior: 2026-04-25 historical exports → Digital Twin path.
+**Last Updated:** 2026-07-29 — hard-gate + learn loop. Prior: template v1 + Adam founder twin from operator digests.
 
 ### Digital Twin (canonical)
 
@@ -150,6 +150,7 @@ The personal operating system layer. Goal tracking, activity logging, calendar m
 ### Change Receipts (Digital Twin)
 | Date | Change |
 |---|---|
+| 2026-07-29 | **Hard gate + learn.** Founder Chair paths refuse to answer without active twin inject. Live turns + `twin-auto-ingest` write episodic memory and decision heuristics into facet files (`learnFromFounderMessage`). Does not overwrite VERIFIED locks. Prediction still deferred. Adam: both hard-gate and learn-as-I-decide. Verify: `npm run twin:verify`. |
 | 2026-07-29 | **Adam twin ACTIVE + system inject.** Facets locked under supervision (30k personal / 83k company, GVBN free, Vegas TZ, 5 videos/wk, weight 205→&lt;185, wake 9–10 transitional → earlier). `services/lumin-context-loader.js` loads full twin into Chair/Lumin prompt context (`loadFullTwin`, `getTwinInjectBlock`). Verify: `npm run twin:verify`. Template + blank `_template/` remain the copy path for other users. Prediction still deferred. |
 | 2026-04-25 | **`### Historical multi‑MB chat exports → Digital Twin`** — documents `run-memory-import.mjs` → `memory_dump_chunks` → `import-dumps-to-twin.js` → `adam_decisions` / `adam_profile` → `POST /api/v1/twin/simulate`; cross-link **Amendment 38** dual lane; Zero‑Waste guard note for any future auto-scan. *Why:* Adam — system should study operator + organize conversations; twin path was implemented but not indexed next to Idea Vault. |
 | 2026-04-04 | Applied twin_ingest_control migration. Built scripts/import-dumps-to-twin.js — imports all 448 memory dump chunks + 377 conversation messages into adam_decisions (544 total). Wired twin-auto-ingest into bootAllDomains (runs at boot + every 30 min). Adam filter now has full historical record as source material for profile build. |

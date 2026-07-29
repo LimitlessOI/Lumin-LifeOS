@@ -62,6 +62,161 @@ function formatDecisionLayer(layers, layerName, max = 4) {
   return `${layerName.toUpperCase()}:\n${lines.join('\n')}`;
 }
 
+const FOUNDER_TWIN_REQUIRED = ['_meta', 'personal', 'goal', 'operating_system', 'decision_identity'];
+const DECISION_SIGNAL_RE =
+  /\b(i (decided|decide|want|will|need|chose|choose)|from now on|locked|lock it|no longer|never |always |my goal|don't want|do not want|both\.|hard.?gate)\b/i;
+
+export function isFounderTwinHardGated(userHandle = 'adam') {
+  if (process.env.TWIN_HARD_GATE === '0' || /^false$/i.test(String(process.env.TWIN_HARD_GATE || ''))) {
+    return false;
+  }
+  const h = String(userHandle || 'adam').toLowerCase();
+  return h === 'adam' || h === 'founder';
+}
+
+export function evaluateTwinGate(bundle, injectText = '') {
+  const missing = FOUNDER_TWIN_REQUIRED.filter((k) => !bundle?.[k]);
+  const status = bundle?._meta?.status || null;
+  const statusOk = status === 'active' || status === 'review';
+  const inject = String(injectText || '');
+  const injectOk = inject.includes('DIGITAL TWIN') && inject.length >= 400;
+  const ok = missing.length === 0 && statusOk && injectOk;
+  let reason = 'ok';
+  if (missing.length) reason = `missing facets: ${missing.join(', ')}`;
+  else if (!statusOk) reason = `twin status not ready (${status || 'null'})`;
+  else if (!injectOk) reason = 'twin inject block missing or too thin';
+  return {
+    ok,
+    reason,
+    missing,
+    status,
+    inject_chars: inject.length,
+    hard_gated: true,
+  };
+}
+
+function looksLikeDecision(text = '') {
+  const t = String(text || '').trim();
+  if (t.length < 24) return false;
+  return DECISION_SIGNAL_RE.test(t);
+}
+
+function normalizePatternKey(text = '') {
+  return String(text).toLowerCase().replace(/\s+/g, ' ').trim().slice(0, 160);
+}
+
+/**
+ * Learn from a founder message into facet twin files (memory + decision_identity).
+ * Deterministic — no model required. Does not overwrite VERIFIED locks.
+ */
+export async function learnFromFounderMessage({
+  userHandle = 'adam',
+  messageText,
+  source = 'chair',
+  pool = null,
+  logger = console,
+} = {}) {
+  const text = String(messageText || '').trim();
+  if (!text || text.length < 12) {
+    return { learned: false, reason: 'too_short' };
+  }
+
+  const store = createLifeRETwinStore({ pool, logger });
+  const now = new Date().toISOString();
+  const receipt = { source, at: now, quote: text.slice(0, 280) };
+  const writes = [];
+
+  const memory = store.readTwin({ tenantId: 'default', userId: userHandle, twinKey: 'memory' }) || {
+    schema: 'digital_twin_memory_v1',
+    capsule_refs: [],
+    digest_refs: [],
+    episodic_summaries: [],
+    do_not_ingest: [],
+  };
+  const episodes = Array.isArray(memory.episodic_summaries) ? [...memory.episodic_summaries] : [];
+  episodes.push({
+    at: now,
+    summary: text.slice(0, 400),
+    evidence_level: 'CLAIM',
+    source,
+  });
+  memory.episodic_summaries = episodes.slice(-50);
+  memory.updated_at = now;
+  await store.writeTwin({
+    tenantId: 'default',
+    userId: userHandle,
+    twinKey: 'memory',
+    payload: memory,
+    receiptMeta: receipt,
+  });
+  writes.push('memory');
+
+  let decisionLearned = false;
+  if (looksLikeDecision(text)) {
+    const decision = store.readTwin({
+      tenantId: 'default',
+      userId: userHandle,
+      twinKey: 'decision_identity',
+    }) || {
+      schema: 'digital_twin_decision_identity_v1',
+      layers: { values: [], vetoes: [], heuristics: [], escalation: [], precedents: [], presentation: [] },
+      compiler_status: 'live_learn',
+    };
+    if (!decision.layers) decision.layers = {};
+    if (!Array.isArray(decision.layers.heuristics)) decision.layers.heuristics = [];
+    const patternText = text.length > 220 ? `${text.slice(0, 217)}…` : text;
+    const key = normalizePatternKey(patternText);
+    const exists = decision.layers.heuristics.some(
+      (h) => normalizePatternKey(h.pattern_text || '') === key,
+    );
+    if (!exists) {
+      decision.layers.heuristics.push({
+        pattern_text: patternText,
+        evidence_level: 'CLAIM',
+        source_ref: `${source}:${now}`,
+        applies_when: 'live founder conversation',
+        learned_at: now,
+      });
+      decision.layers.heuristics = decision.layers.heuristics.slice(-40);
+      decision.compiler_status = 'live_learn';
+      decision.updated_at = now;
+      await store.writeTwin({
+        tenantId: 'default',
+        userId: userHandle,
+        twinKey: 'decision_identity',
+        payload: decision,
+        receiptMeta: receipt,
+      });
+      writes.push('decision_identity');
+      decisionLearned = true;
+    }
+  }
+
+  const meta = store.readTwin({ tenantId: 'default', userId: userHandle, twinKey: '_meta' });
+  if (meta) {
+    meta.last_learned_at = now;
+    meta.last_learned_source = source;
+    meta.updated_at = now;
+    if (!meta.supervision) meta.supervision = {};
+    meta.supervision.last_learned_at = now;
+    await store.writeTwin({
+      tenantId: 'default',
+      userId: userHandle,
+      twinKey: '_meta',
+      payload: meta,
+      receiptMeta: receipt,
+    });
+    writes.push('_meta');
+  }
+
+  return {
+    learned: true,
+    decision_learned: decisionLearned,
+    writes,
+    at: now,
+  };
+}
+
 function formatTwinInjectBlock(bundle, { maxChars = 7000 } = {}) {
   if (!bundle) return '';
   const parts = [];
@@ -268,6 +423,27 @@ export function createLuminContextLoader({ pool, callAI = null, logger = console
     return formatTwinInjectBlock(bundle, opts);
   }
 
+  async function getTwinGate(userHandle = 'adam') {
+    const bundle = await loadFullTwin(userHandle);
+    const inject = formatTwinInjectBlock(bundle);
+    return {
+      ...evaluateTwinGate(bundle, inject),
+      hard_gated_for_user: isFounderTwinHardGated(userHandle),
+      inject_preview: inject.slice(0, 180),
+    };
+  }
+
+  async function requireTwinOrThrow(userHandle = 'adam') {
+    const gate = await getTwinGate(userHandle);
+    if (isFounderTwinHardGated(userHandle) && !gate.ok) {
+      const err = new Error(`TWIN_GATE_FAILED: ${gate.reason}`);
+      err.code = 'TWIN_GATE_FAILED';
+      err.twin_gate = gate;
+      throw err;
+    }
+    return gate;
+  }
+
   async function loadRecentLessons(limit = 6) {
     if (!pool) return [];
     const { rows } = await pool.query(
@@ -352,6 +528,8 @@ export function createLuminContextLoader({ pool, callAI = null, logger = console
     loadPersonalTwin,
     loadFullTwin,
     getTwinInjectBlock,
+    getTwinGate,
+    requireTwinOrThrow,
     formatTwinInjectBlock,
     loadRecentLessons,
     loadRecentMoments,

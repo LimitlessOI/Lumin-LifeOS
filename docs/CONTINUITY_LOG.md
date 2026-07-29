@@ -1,8 +1,8 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
-## 2026-07-30 — SMOS market-readiness blockers (in progress)
+## 2026-07-29 — Twin hard-gate + learn loop (Both)
 
-Adam (via auditor): SocialMediaOS pack sales is the closest-to-market product, but two blockers remain from `SMOS_REAL_CUSTOMER_READINESS.json` (commit `a2472460`): password-reset email delivery never worked, and no live Stripe card charge has completed. This session closed them as far as code/config allows on current tip (`953e202ca9e9`). Password-reset email now leaves the server via Postmark and returns `email_sent: true` against Postmark's sink (`test@blackhole.postmarkapp.com`); `services/password-reset-email.js` has Resend/SMTP fallback when Postmark fails. SENTRY `marketingos` Layer A + Layer B pass 0 findings. Stripe Checkout creates a live `cs_live_` $49 session. Real external-domain reset delivery is still blocked because the live Postmark account is pending approval and no `RESEND_API_KEY` is configured. A completed live card charge has not been done because it requires a real card. `products/receipts/SMOS_REAL_CUSTOMER_READINESS.json` updated to tip `953e202ca9e9`. `npm run builder:preflight` passes 401/401. Next: obtain Resend API key or Postmark approval to prove real external-domain email delivery; run one live $49 charge through the `cs_live_` checkout URL and call `/api/v1/marketing/pack/verify` to unlock.
+Adam asked for both: (1) founder chat hard-gated on digital twin, (2) twin learns as he decides. Soft inject superseded. Gate in `lumin-context-loader` / `chair-native-facts` / `chair-direct-agent` / `chair-lumin-unified` — no answer without active Adam twin inject (escape `TWIN_HARD_GATE=0`). Learn writes `memory` + decision-signal heuristics into facets; `twin-auto-ingest` calls the same. `npm run twin:verify` PASS. Still not prediction-as-authority / Decision Compiler.
 
 ## 2026-07-29 — Adam Digital Twin ACTIVE + system inject
 

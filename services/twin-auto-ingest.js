@@ -25,6 +25,7 @@
  */
 
 import { createAdamLogger, EVENTS } from './adam-logger.js';
+import { learnFromFounderMessage } from './lumin-context-loader.js';
 
 const REBUILD_THRESHOLD = 25; // rebuild profile after every 25 new decisions
 const INGEST_BATCH = 100;     // process up to 100 messages per run
@@ -135,6 +136,16 @@ export function createTwinAutoIngest({ pool, callAI }) {
         },
         tags: adamLogger.extractTags ? adamLogger.extractTags(text) : [],
       });
+
+      // Facet twin learn (memory + decision_identity heuristics) — non-fatal
+      try {
+        await learnFromFounderMessage({
+          userHandle: 'adam',
+          messageText: text,
+          source: `twin_auto_ingest:${msg.source || 'conversation'}`,
+          pool,
+        });
+      } catch { /* never block twin ingest */ }
 
       // ── LifeOS commitment extraction ───────────────────────────────────────
       // Silently extract any commitments from this message and log them
