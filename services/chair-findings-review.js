@@ -26,6 +26,8 @@
 // these through without founder judgment, matching the founder's own
 // distinction in this codebase's operating doctrine: technical disputes get
 // resolved without going to him; only business/product decisions do.
+import { recordModelOutcome } from './model-capability-ledger.js';
+
 const AUTO_APPROVABLE_CHECKS = new Set(['ci_health', 'workflow_health']);
 
 // Finding "check" types that touch product SCOPE/priority — what a product
@@ -116,7 +118,7 @@ function buildChairAIPrompt(finding, ruleBased) {
  * SO-003 auto-failover: this must never leave a finding un-reviewed just
  * because a model call didn't work.
  */
-export async function reviewFindingWithAI(finding, { callModel, model = 'claude_sonnet', logger = console } = {}) {
+export async function reviewFindingWithAI(finding, { callModel, model = 'claude_sonnet', logger = console, pool = undefined } = {}) {
   const ruleBased = reviewFinding(finding);
 
   // SO-002 rejections are a factual check (is proposed_solution present?),
@@ -130,12 +132,19 @@ export async function reviewFindingWithAI(finding, { callModel, model = 'claude_
     return { ...ruleBased, chair_reasoning_source: 'rule_based_no_model' };
   }
 
+  // North Star §2.0J model benchmarking, role 'oil_review': Chair's
+  // AI-enriched review of a SENTRY/audit finding is the OIL adversarial
+  // review role in code. theater_detected marks the exact cases where the
+  // "AI layer" produced nothing real (empty response, threw) and the
+  // rule-based floor carried the result instead -- previously invisible.
   try {
     const raw = await callModel(model, buildChairAIPrompt(finding, ruleBased), { maxOutputTokens: 300, taskType: 'chair_review' });
     const aiText = String(raw || '').trim();
     if (!aiText) {
+      recordModelOutcome(pool, { model_tier: model, role: 'oil_review', ok: false, theater_detected: true }).catch(() => {});
       return { ...ruleBased, chair_reasoning_source: 'rule_based_empty_model_response' };
     }
+    recordModelOutcome(pool, { model_tier: model, role: 'oil_review', ok: true, trust_earned: true }).catch(() => {});
     return {
       ...ruleBased,
       // chair_status is intentionally NOT overwritten from ruleBased — the AI
@@ -145,6 +154,7 @@ export async function reviewFindingWithAI(finding, { callModel, model = 'claude_
     };
   } catch (err) {
     logger?.warn?.({ finding_id: finding.id, err: err.message }, '[CHAIR-AI] model call failed — falling back to rule-based reasoning');
+    recordModelOutcome(pool, { model_tier: model, role: 'oil_review', ok: false }).catch(() => {});
     return { ...ruleBased, chair_reasoning_source: 'rule_based_model_error' };
   }
 }

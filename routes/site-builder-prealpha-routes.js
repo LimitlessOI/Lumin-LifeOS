@@ -14,6 +14,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { createSession } from '../services/browser-agent.js';
+import { recordModelOutcome } from '../services/model-capability-ledger.js';
 
 const PREVIEWS_ROOT = path.resolve(process.cwd(), 'public/previews');
 const CLIENT_ID_RE = /^[\w-]+$/;
@@ -285,8 +286,13 @@ Return STRICT JSON only:
           const text = typeof raw === 'string' ? raw : (raw?.text || raw?.content || '');
           const m = text.match(/\{[\s\S]*\}/);
           if (m) uxCritique = JSON.parse(m[0]);
+          // North Star §2.0J model benchmarking, role 'verifier': this Layer B
+          // human-sim critique IS the SO-002 verifier role in code -- a real
+          // model judging real captured evidence, not a deterministic check.
+          recordModelOutcome(pool, { model_tier: 'gemini_flash', role: 'verifier', ok: Boolean(uxCritique?.verdict), trust_earned: Boolean(uxCritique?.verdict) }).catch(() => {});
         } catch (err) {
           uxCritique = { error: String(err.message || err).slice(0, 200) };
+          recordModelOutcome(pool, { model_tier: 'gemini_flash', role: 'verifier', ok: false }).catch(() => {});
         }
       }
 

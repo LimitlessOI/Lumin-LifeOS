@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-29T04:01:55.226Z",
+  "generated_at": "2026-07-29T04:10:07.162Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12304,
   "files": [
@@ -40030,9 +40030,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 293787,
-      "mtime": "2026-07-29T04:01:21.827Z",
-      "indexed_at": "2026-07-29T04:01:55.226Z"
+      "bytes": 295850,
+      "mtime": "2026-07-29T04:09:43.380Z",
+      "indexed_at": "2026-07-29T04:10:07.162Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -69409,9 +69409,9 @@
     {
       "path": "routes/site-builder-prealpha-routes.js",
       "synopsis": "CONDUCTOR-GLUE SENTRY pre-alpha Layer B (human-sim) route for Site",
-      "bytes": 16148,
-      "mtime": "2026-07-28T17:47:22.541Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 16755,
+      "mtime": "2026-07-29T04:05:36.505Z",
+      "indexed_at": "2026-07-29T04:10:07.162Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -73074,9 +73074,9 @@
     {
       "path": "scripts/sentry-chair-governance-audit.mjs",
       "synopsis": "Orchestrates SENTRY (finds + proposes) -> Chair (reviews, real AI",
-      "bytes": 10965,
-      "mtime": "2026-07-28T17:54:14.998Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 10971,
+      "mtime": "2026-07-29T04:09:00.669Z",
+      "indexed_at": "2026-07-29T04:10:07.162Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -85985,9 +85985,9 @@
     {
       "path": "services/chair-findings-review.js",
       "synopsis": "Chair review of SENTRY findings — the \"Chair reviews\" half of the",
-      "bytes": 8393,
-      "mtime": "2026-07-19T20:55:41.462Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 9186,
+      "mtime": "2026-07-29T04:08:20.344Z",
+      "indexed_at": "2026-07-29T04:10:07.162Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

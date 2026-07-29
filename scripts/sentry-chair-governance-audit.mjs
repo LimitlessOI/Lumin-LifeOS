@@ -111,7 +111,7 @@ export async function runGovernanceAuditCycle({
 } = {}) {
   const rawFindings = await runSentrySystemAudit({ token, repo, pool, ...(productsDir ? { productsDir } : {}) });
   const reviewed = callModel
-    ? await reviewFindingsWithAI(rawFindings, { callModel, logger })
+    ? await reviewFindingsWithAI(rawFindings, { callModel, logger, pool })
     : reviewFindings(rawFindings);
 
   // Architect: turn every Chair-approved finding into a real BUILD_QUEUE step
