@@ -2465,6 +2465,39 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-26T20:22:58.137Z",
       "commit_sha": "f802d8bd789530dfbacad69c6096e4782d94039c"
+    },
+    {
+      "id": "bo-verify-ship-lands-on-main",
+      "status": "pending",
+      "target_file": "services/governed-autonomous-shipping-loop.js",
+      "priority": "critical",
+      "task": "Fix a confirmed live incident: markShippedStepsDone() marks a BUILD_QUEUE step 'done' as soon as commitShippedFiles() returns a truthy commit SHA, but never verifies that SHA actually landed on origin/main. Found live 2026-07-29 by auditing lumin-university and lifere's BUILD_QUEUE.json against real disk state: 19 steps (17 lumin-university, 2 lifere) were marked done with shipped_via:'governed_ship_queue' and a real commit_sha, but the target_file does not exist anywhere in the working tree. Root-caused: every one of the 19 commit SHAs is a real git object (git cat-file -e succeeds) that lives on origin/builderos-autonomous or origin/builderos-shadow, and is confirmed NOT an ancestor of origin/main (git merge-base --is-ancestor <sha> origin/main fails for all 19). commitManyToGitHub reported ok:true with a real SHA -- the commit genuinely happened -- just on the wrong branch (a GITHUB_DEPLOY_BRANCH env mismatch in whatever process ran that ship cycle, not a code bug in the commit call itself). Because commitShippedFiles()'s success was trusted at face value, markShippedStepsDone() ran immediately after with no independent check that the branch main (the one BUILD_QUEUE.json readers and production actually trust) contains the commit.",
+      "spec": "In services/governed-autonomous-shipping-loop.js, after commitShippedFiles() returns a truthy commitSha (around the call site near line 1037, before markShippedStepsDone() is invoked), add a verification step: fetch the current origin/main SHA (reuse whatever git/GitHub-API primitive this file or its imports already use to talk to GitHub -- do not add a new HTTP client) and confirm commitSha is an ancestor of it (or, if using the GitHub REST API instead of local git, call GET /repos/{owner}/{repo}/compare/main...{commitSha} and check status is 'identical' or 'behind', never 'diverged' or 'ahead'). If the verification fails, do NOT call markShippedStepsDone() for those step IDs -- instead route them through the existing markFailedStep() path with a clear reason string like 'ship_commit_not_on_main: <sha> not found in origin/main history' so they re-attempt on the next cycle instead of being silently marked done. Log a warn-level message naming the branch mismatch explicitly so it's visible in normal operation, not just discoverable via a manual audit like the one that found this incident.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "source": "live_audit_2026-07-29",
+      "finding_note": "Also worth noting for whoever picks this up: even setting the branch-mismatch bug aside, the actual content of all 19 orphaned commits was placeholder/stub code (e.g. services/mentorQualification.js on origin/builderos-autonomous is hardcoded sample data with a comment reading 'Sample data representing qualification criteria'; routes/credentialVerificationRoutes.js's handler just does res.send('Credential verification logic goes here')) -- confirmed by direct git show inspection, not assumed. Recovering/merging those specific commits is NOT the fix; they were correctly reset to pending in the same audit (see false_done_audit field on each affected step in lumin-university and lifere BUILD_QUEUE.json) so real implementations get built. This queue item is scoped to the systemic verification gap only, not to rebuilding those 19 steps (that happens automatically once they're back to pending).",
+      "expected_exports": [
+        "startGovernedAutonomousShippingLoop"
+      ],
+      "file_contains": [
+        "is not an ancestor",
+        "ship_commit_not_on_main"
+      ],
+      "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "bo-verify-ship-lands-on-main",
+      "mission_id": "PRODUCT-builderos",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/governed-autonomous-shipping-loop.js",
+          "exports": [
+            "startGovernedAutonomousShippingLoop"
+          ],
+          "assertion_id": "expected_exports:services/governed-autonomous-shipping-loop.js"
+        }
+      ]
     }
   ],
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",

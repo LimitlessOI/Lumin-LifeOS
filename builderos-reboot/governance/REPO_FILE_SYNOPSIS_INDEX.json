@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-29T05:56:57.071Z",
+  "generated_at": "2026-07-29T19:30:22.614Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12307,
   "files": [
@@ -40030,9 +40030,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 313476,
-      "mtime": "2026-07-29T05:56:48.840Z",
-      "indexed_at": "2026-07-29T05:56:57.071Z"
+      "bytes": 316928,
+      "mtime": "2026-07-29T19:29:39.416Z",
+      "indexed_at": "2026-07-29T19:30:22.614Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -40762,9 +40762,9 @@
     {
       "path": "docs/products/lifere/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeRE",
-      "bytes": 42843,
-      "mtime": "2026-07-28T18:01:25.488Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 44471,
+      "mtime": "2026-07-29T19:29:00.430Z",
+      "indexed_at": "2026-07-29T19:30:22.614Z"
     },
     {
       "path": "docs/products/limitlessos/conversations/2026-06-29-founder-ecosystem-session.md",
@@ -40821,9 +40821,9 @@
     {
       "path": "docs/products/lumin-university/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Lumin University",
-      "bytes": 17013,
-      "mtime": "2026-06-29T17:35:43.032Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 19165,
+      "mtime": "2026-07-29T19:28:38.713Z",
+      "indexed_at": "2026-07-29T19:30:22.614Z"
     },
     {
       "path": "docs/products/LUMINUNIVERSITY.md",

@@ -9,7 +9,7 @@
   "steps": [
     {
       "id": "1",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/migrations/001_create_competency_standards.sql",
       "task": "create competency standards table",
       "spec": "Table for storing detailed competency standards.",
@@ -23,7 +23,7 @@
       ],
       "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": "557f21223d3b5d21c79f7ea324482ce8968363ab",
+      "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -39,15 +39,22 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T18:11:43.230Z",
+      "shipped_via": null,
+      "shipped_at": null,
       "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "1",
-      "mission_id": "PRODUCT-lumin-university"
+      "mission_id": "PRODUCT-lumin-university",
+      "false_done_audit": {
+        "found_at": "2026-07-29T00:00:00.000Z",
+        "claimed_commit_sha": "557f21223d3b5d21c79f7ea324482ce8968363ab",
+        "claimed_shipped_via": "governed_ship_queue",
+        "claimed_shipped_at": "2026-07-15T18:11:43.230Z",
+        "reason": "commit_sha exists in repo but is not an ancestor of origin/main -- ship landed on origin/builderos-autonomous or origin/builderos-shadow instead of main (GITHUB_DEPLOY_BRANCH mismatch), and the content itself was placeholder/stub code (verified by direct inspection), not a real implementation. Confirmed via: git merge-base --is-ancestor <sha> origin/main."
+      }
     },
     {
       "id": "2",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/migrations/002_create_mentor_criteria.sql",
       "task": "create mentor qualification criteria table",
       "spec": "Table to store evaluator/mentor qualification criteria.",
@@ -60,7 +67,7 @@
       ],
       "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": "09e46d2b94d584da04d90a7b316da8fc3ccaee22",
+      "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -76,15 +83,22 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T19:49:48.674Z",
+      "shipped_via": null,
+      "shipped_at": null,
       "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "2",
-      "mission_id": "PRODUCT-lumin-university"
+      "mission_id": "PRODUCT-lumin-university",
+      "false_done_audit": {
+        "found_at": "2026-07-29T00:00:00.000Z",
+        "claimed_commit_sha": "09e46d2b94d584da04d90a7b316da8fc3ccaee22",
+        "claimed_shipped_via": "governed_ship_queue",
+        "claimed_shipped_at": "2026-07-15T19:49:48.674Z",
+        "reason": "commit_sha exists in repo but is not an ancestor of origin/main -- ship landed on origin/builderos-autonomous or origin/builderos-shadow instead of main (GITHUB_DEPLOY_BRANCH mismatch), and the content itself was placeholder/stub code (verified by direct inspection), not a real implementation. Confirmed via: git merge-base --is-ancestor <sha> origin/main."
+      }
     },
     {
       "id": "3",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/migrations/003_create_credential_verification.sql",
       "task": "create credential verification table",
       "spec": "Table to store credential verification data.",
@@ -97,7 +111,7 @@
       ],
       "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": "7a47ff9fa4fc445670ea94369011fe79a1dda75b",
+      "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -113,15 +127,22 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T19:17:30.384Z",
+      "shipped_via": null,
+      "shipped_at": null,
       "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "3",
-      "mission_id": "PRODUCT-lumin-university"
+      "mission_id": "PRODUCT-lumin-university",
+      "false_done_audit": {
+        "found_at": "2026-07-29T00:00:00.000Z",
+        "claimed_commit_sha": "7a47ff9fa4fc445670ea94369011fe79a1dda75b",
+        "claimed_shipped_via": "governed_ship_queue",
+        "claimed_shipped_at": "2026-07-15T19:17:30.384Z",
+        "reason": "commit_sha exists in repo but is not an ancestor of origin/main -- ship landed on origin/builderos-autonomous or origin/builderos-shadow instead of main (GITHUB_DEPLOY_BRANCH mismatch), and the content itself was placeholder/stub code (verified by direct inspection), not a real implementation. Confirmed via: git merge-base --is-ancestor <sha> origin/main."
+      }
     },
     {
       "id": "4",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/credentialVerification.js",
       "task": "implement credential verification service",
       "spec": "Service implements credential verification methods.",
@@ -143,16 +164,29 @@
           "assertion_id": "expected_exports:services/credentialVerification.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T19:21:13.877Z",
-      "commit_sha": "edab2f98740fccc51d2ac5775084dc628fb25bd4",
+      "shipped_via": null,
+      "shipped_at": null,
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "4",
-      "mission_id": "PRODUCT-lumin-university"
+      "mission_id": "PRODUCT-lumin-university",
+      "last_error": null,
+      "last_attempt_at": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "park_until": null,
+      "revive_count": 0,
+      "false_done_audit": {
+        "found_at": "2026-07-29T00:00:00.000Z",
+        "claimed_commit_sha": "edab2f98740fccc51d2ac5775084dc628fb25bd4",
+        "claimed_shipped_via": "governed_ship_queue",
+        "claimed_shipped_at": "2026-07-15T19:21:13.877Z",
+        "reason": "commit_sha exists in repo but is not an ancestor of origin/main -- ship landed on origin/builderos-autonomous or origin/builderos-shadow instead of main (GITHUB_DEPLOY_BRANCH mismatch), and the content itself was placeholder/stub code (verified by direct inspection), not a real implementation. Confirmed via: git merge-base --is-ancestor <sha> origin/main."
+      }
     },
     {
       "id": "5",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/credentialVerificationRoutes.js",
       "task": "add credential verification route",
       "spec": "Route for credential verification API.",
@@ -178,16 +212,29 @@
           "assertion_id": "expected_exports:routes/credentialVerificationRoutes.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T19:24:55.985Z",
-      "commit_sha": "9062cd89bcff828ba1e2b14d10429fb4c81e8540",
+      "shipped_via": null,
+      "shipped_at": null,
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "5",
-      "mission_id": "PRODUCT-lumin-university"
+      "mission_id": "PRODUCT-lumin-university",
+      "last_error": null,
+      "last_attempt_at": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "park_until": null,
+      "revive_count": 0,
+      "false_done_audit": {
+        "found_at": "2026-07-29T00:00:00.000Z",
+        "claimed_commit_sha": "9062cd89bcff828ba1e2b14d10429fb4c81e8540",
+        "claimed_shipped_via": "governed_ship_queue",
+        "claimed_shipped_at": "2026-07-15T19:24:55.985Z",
+        "reason": "commit_sha exists in repo but is not an ancestor of origin/main -- ship landed on origin/builderos-autonomous or origin/builderos-shadow instead of main (GITHUB_DEPLOY_BRANCH mismatch), and the content itself was placeholder/stub code (verified by direct inspection), not a real implementation. Confirmed via: git merge-base --is-ancestor <sha> origin/main."
+      }
     },
     {
       "id": "6",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/migrations/004_create_accreditation_legal.sql",
       "task": "create accreditation legal structure table",
       "spec": "Table to store legal structure for accreditation-seeking institution.",
@@ -200,7 +247,7 @@
       ],
       "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": "4cac677a121bd643ebf579df044d473895de3e55",
+      "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -216,11 +263,18 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T20:01:07.031Z",
+      "shipped_via": null,
+      "shipped_at": null,
       "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "6",
-      "mission_id": "PRODUCT-lumin-university"
+      "mission_id": "PRODUCT-lumin-university",
+      "false_done_audit": {
+        "found_at": "2026-07-29T00:00:00.000Z",
+        "claimed_commit_sha": "4cac677a121bd643ebf579df044d473895de3e55",
+        "claimed_shipped_via": "governed_ship_queue",
+        "claimed_shipped_at": "2026-07-15T20:01:07.031Z",
+        "reason": "commit_sha exists in repo but is not an ancestor of origin/main -- ship landed on origin/builderos-autonomous or origin/builderos-shadow instead of main (GITHUB_DEPLOY_BRANCH mismatch), and the content itself was placeholder/stub code (verified by direct inspection), not a real implementation. Confirmed via: git merge-base --is-ancestor <sha> origin/main."
+      }
     },
     {
       "id": "7",
@@ -255,7 +309,7 @@
     },
     {
       "id": "8",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/accreditationRoutes.js",
       "task": "add accreditation route",
       "spec": "Route for accreditation structure API.",
@@ -281,16 +335,29 @@
           "assertion_id": "expected_exports:routes/accreditationRoutes.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T20:14:31.474Z",
-      "commit_sha": "058dc246ed91e5fac61bc01062cc832d1f1c2196",
+      "shipped_via": null,
+      "shipped_at": null,
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "8",
-      "mission_id": "PRODUCT-lumin-university"
+      "mission_id": "PRODUCT-lumin-university",
+      "last_error": null,
+      "last_attempt_at": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "park_until": null,
+      "revive_count": 0,
+      "false_done_audit": {
+        "found_at": "2026-07-29T00:00:00.000Z",
+        "claimed_commit_sha": "058dc246ed91e5fac61bc01062cc832d1f1c2196",
+        "claimed_shipped_via": "governed_ship_queue",
+        "claimed_shipped_at": "2026-07-15T20:14:31.474Z",
+        "reason": "commit_sha exists in repo but is not an ancestor of origin/main -- ship landed on origin/builderos-autonomous or origin/builderos-shadow instead of main (GITHUB_DEPLOY_BRANCH mismatch), and the content itself was placeholder/stub code (verified by direct inspection), not a real implementation. Confirmed via: git merge-base --is-ancestor <sha> origin/main."
+      }
     },
     {
       "id": "9",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/studentInterviews.js",
       "task": "implement student interview recording",
       "spec": "Service records interviews with prospective students.",
@@ -310,16 +377,29 @@
           "assertion_id": "expected_exports:services/studentInterviews.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T19:39:36.002Z",
-      "commit_sha": "8719320c0929070ab04b35b91df89747c5dbeb72",
+      "shipped_via": null,
+      "shipped_at": null,
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "9",
-      "mission_id": "PRODUCT-lumin-university"
+      "mission_id": "PRODUCT-lumin-university",
+      "last_error": null,
+      "last_attempt_at": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "park_until": null,
+      "revive_count": 0,
+      "false_done_audit": {
+        "found_at": "2026-07-29T00:00:00.000Z",
+        "claimed_commit_sha": "8719320c0929070ab04b35b91df89747c5dbeb72",
+        "claimed_shipped_via": "governed_ship_queue",
+        "claimed_shipped_at": "2026-07-15T19:39:36.002Z",
+        "reason": "commit_sha exists in repo but is not an ancestor of origin/main -- ship landed on origin/builderos-autonomous or origin/builderos-shadow instead of main (GITHUB_DEPLOY_BRANCH mismatch), and the content itself was placeholder/stub code (verified by direct inspection), not a real implementation. Confirmed via: git merge-base --is-ancestor <sha> origin/main."
+      }
     },
     {
       "id": "10",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/employerInterviews.js",
       "task": "implement employer interview recording",
       "spec": "Service records interviews with employers regarding credentials.",
@@ -339,12 +419,25 @@
           "assertion_id": "expected_exports:services/employerInterviews.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T19:46:11.867Z",
-      "commit_sha": "1373bfdf1bd9b17d732e2938ccb7229c92084c55",
+      "shipped_via": null,
+      "shipped_at": null,
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "10",
-      "mission_id": "PRODUCT-lumin-university"
+      "mission_id": "PRODUCT-lumin-university",
+      "last_error": null,
+      "last_attempt_at": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "park_until": null,
+      "revive_count": 0,
+      "false_done_audit": {
+        "found_at": "2026-07-29T00:00:00.000Z",
+        "claimed_commit_sha": "1373bfdf1bd9b17d732e2938ccb7229c92084c55",
+        "claimed_shipped_via": "governed_ship_queue",
+        "claimed_shipped_at": "2026-07-15T19:46:11.867Z",
+        "reason": "commit_sha exists in repo but is not an ancestor of origin/main -- ship landed on origin/builderos-autonomous or origin/builderos-shadow instead of main (GITHUB_DEPLOY_BRANCH mismatch), and the content itself was placeholder/stub code (verified by direct inspection), not a real implementation. Confirmed via: git merge-base --is-ancestor <sha> origin/main."
+      }
     },
     {
       "id": "11",
@@ -415,7 +508,7 @@
     },
     {
       "id": "step1",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/migrations/005_create_evaluator_mentor_qualification.sql",
       "task": "create SQL table",
       "spec": "Create a table for evaluator and mentor qualifications.",
@@ -427,7 +520,7 @@
       ],
       "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": "9ccf7af90050ed0fdecbbc9e8d3e084404665f24",
+      "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -443,11 +536,18 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T03:45:19.133Z",
+      "shipped_via": null,
+      "shipped_at": null,
       "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step1",
-      "mission_id": "PRODUCT-lumin-university"
+      "mission_id": "PRODUCT-lumin-university",
+      "false_done_audit": {
+        "found_at": "2026-07-29T00:00:00.000Z",
+        "claimed_commit_sha": "9ccf7af90050ed0fdecbbc9e8d3e084404665f24",
+        "claimed_shipped_via": "governed_ship_queue",
+        "claimed_shipped_at": "2026-07-16T03:45:19.133Z",
+        "reason": "commit_sha exists in repo but is not an ancestor of origin/main -- ship landed on origin/builderos-autonomous or origin/builderos-shadow instead of main (GITHUB_DEPLOY_BRANCH mismatch), and the content itself was placeholder/stub code (verified by direct inspection), not a real implementation. Confirmed via: git merge-base --is-ancestor <sha> origin/main."
+      }
     },
     {
       "id": "step2",
@@ -484,7 +584,7 @@
     },
     {
       "id": "step3",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/evaluatorMentorRoutes.js",
       "task": "create route module",
       "spec": "Routes for evaluator and mentor qualifications management.",
@@ -509,12 +609,25 @@
           "assertion_id": "expected_exports:routes/evaluatorMentorRoutes.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T03:53:45.057Z",
-      "commit_sha": "75805c8c1e971ca003be79db1efa2d4e0fb3924d",
+      "shipped_via": null,
+      "shipped_at": null,
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step3",
-      "mission_id": "PRODUCT-lumin-university"
+      "mission_id": "PRODUCT-lumin-university",
+      "last_error": null,
+      "last_attempt_at": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "park_until": null,
+      "revive_count": 0,
+      "false_done_audit": {
+        "found_at": "2026-07-29T00:00:00.000Z",
+        "claimed_commit_sha": "75805c8c1e971ca003be79db1efa2d4e0fb3924d",
+        "claimed_shipped_via": "governed_ship_queue",
+        "claimed_shipped_at": "2026-07-16T03:53:45.057Z",
+        "reason": "commit_sha exists in repo but is not an ancestor of origin/main -- ship landed on origin/builderos-autonomous or origin/builderos-shadow instead of main (GITHUB_DEPLOY_BRANCH mismatch), and the content itself was placeholder/stub code (verified by direct inspection), not a real implementation. Confirmed via: git merge-base --is-ancestor <sha> origin/main."
+      }
     },
     {
       "id": "step4",
@@ -534,7 +647,7 @@
     },
     {
       "id": "step5",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/accreditationConsultation.js",
       "task": "create service module",
       "spec": "Service for accreditation body preliminary consultation.",
@@ -556,16 +669,29 @@
           "assertion_id": "expected_exports:services/accreditationConsultation.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T03:30:58.094Z",
-      "commit_sha": "750ffa44bae219992a96fca1391d52c79d084365",
+      "shipped_via": null,
+      "shipped_at": null,
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step5",
-      "mission_id": "PRODUCT-lumin-university"
+      "mission_id": "PRODUCT-lumin-university",
+      "last_error": null,
+      "last_attempt_at": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "park_until": null,
+      "revive_count": 0,
+      "false_done_audit": {
+        "found_at": "2026-07-29T00:00:00.000Z",
+        "claimed_commit_sha": "750ffa44bae219992a96fca1391d52c79d084365",
+        "claimed_shipped_via": "governed_ship_queue",
+        "claimed_shipped_at": "2026-07-16T03:30:58.094Z",
+        "reason": "commit_sha exists in repo but is not an ancestor of origin/main -- ship landed on origin/builderos-autonomous or origin/builderos-shadow instead of main (GITHUB_DEPLOY_BRANCH mismatch), and the content itself was placeholder/stub code (verified by direct inspection), not a real implementation. Confirmed via: git merge-base --is-ancestor <sha> origin/main."
+      }
     },
     {
       "id": "step6",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/accreditationConsultationRoutes.js",
       "task": "create route module",
       "spec": "Routes for accreditation body consultation management.",
@@ -590,16 +716,29 @@
           "assertion_id": "expected_exports:routes/accreditationConsultationRoutes.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T03:35:29.914Z",
-      "commit_sha": "15eab3251e641f17467d4a1f9ca4d9d072ce3fad",
+      "shipped_via": null,
+      "shipped_at": null,
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step6",
-      "mission_id": "PRODUCT-lumin-university"
+      "mission_id": "PRODUCT-lumin-university",
+      "last_error": null,
+      "last_attempt_at": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "park_until": null,
+      "revive_count": 0,
+      "false_done_audit": {
+        "found_at": "2026-07-29T00:00:00.000Z",
+        "claimed_commit_sha": "15eab3251e641f17467d4a1f9ca4d9d072ce3fad",
+        "claimed_shipped_via": "governed_ship_queue",
+        "claimed_shipped_at": "2026-07-16T03:35:29.914Z",
+        "reason": "commit_sha exists in repo but is not an ancestor of origin/main -- ship landed on origin/builderos-autonomous or origin/builderos-shadow instead of main (GITHUB_DEPLOY_BRANCH mismatch), and the content itself was placeholder/stub code (verified by direct inspection), not a real implementation. Confirmed via: git merge-base --is-ancestor <sha> origin/main."
+      }
     },
     {
       "id": "step7",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/studentInterviewAnalytics.js",
       "task": "create service module",
       "spec": "Service to analyze student interview data.",
@@ -619,16 +758,29 @@
           "assertion_id": "expected_exports:services/studentInterviewAnalytics.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T03:40:07.209Z",
-      "commit_sha": "8ec265e58b45e6da813b187f861a8f2864cf697d",
+      "shipped_via": null,
+      "shipped_at": null,
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step7",
-      "mission_id": "PRODUCT-lumin-university"
+      "mission_id": "PRODUCT-lumin-university",
+      "last_error": null,
+      "last_attempt_at": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "park_until": null,
+      "revive_count": 0,
+      "false_done_audit": {
+        "found_at": "2026-07-29T00:00:00.000Z",
+        "claimed_commit_sha": "8ec265e58b45e6da813b187f861a8f2864cf697d",
+        "claimed_shipped_via": "governed_ship_queue",
+        "claimed_shipped_at": "2026-07-16T03:40:07.209Z",
+        "reason": "commit_sha exists in repo but is not an ancestor of origin/main -- ship landed on origin/builderos-autonomous or origin/builderos-shadow instead of main (GITHUB_DEPLOY_BRANCH mismatch), and the content itself was placeholder/stub code (verified by direct inspection), not a real implementation. Confirmed via: git merge-base --is-ancestor <sha> origin/main."
+      }
     },
     {
       "id": "step8",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/studentInterviewAnalyticsRoutes.js",
       "task": "create route module",
       "spec": "Routes for accessing student interview analytics.",
@@ -653,12 +805,25 @@
           "assertion_id": "expected_exports:routes/studentInterviewAnalyticsRoutes.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T03:56:53.091Z",
-      "commit_sha": "0c5b133c65b4d1dbebec8ec1a8ee262987e92934",
+      "shipped_via": null,
+      "shipped_at": null,
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step8",
-      "mission_id": "PRODUCT-lumin-university"
+      "mission_id": "PRODUCT-lumin-university",
+      "last_error": null,
+      "last_attempt_at": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "park_until": null,
+      "revive_count": 0,
+      "false_done_audit": {
+        "found_at": "2026-07-29T00:00:00.000Z",
+        "claimed_commit_sha": "0c5b133c65b4d1dbebec8ec1a8ee262987e92934",
+        "claimed_shipped_via": "governed_ship_queue",
+        "claimed_shipped_at": "2026-07-16T03:56:53.091Z",
+        "reason": "commit_sha exists in repo but is not an ancestor of origin/main -- ship landed on origin/builderos-autonomous or origin/builderos-shadow instead of main (GITHUB_DEPLOY_BRANCH mismatch), and the content itself was placeholder/stub code (verified by direct inspection), not a real implementation. Confirmed via: git merge-base --is-ancestor <sha> origin/main."
+      }
     },
     {
       "id": "001",
@@ -696,7 +861,7 @@
     },
     {
       "id": "002",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/mentorQualification.js",
       "task": "implement evaluator/mentor qualification criteria",
       "spec": "Create a service for handling evaluator and mentor qualification criteria.",
@@ -721,16 +886,29 @@
           "assertion_id": "expected_exports:services/mentorQualification.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T04:07:59.491Z",
-      "commit_sha": "1157107a8f882b1d185252c182b1b2e86a30e8dd",
+      "shipped_via": null,
+      "shipped_at": null,
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "002",
-      "mission_id": "PRODUCT-lumin-university"
+      "mission_id": "PRODUCT-lumin-university",
+      "last_error": null,
+      "last_attempt_at": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "park_until": null,
+      "revive_count": 0,
+      "false_done_audit": {
+        "found_at": "2026-07-29T00:00:00.000Z",
+        "claimed_commit_sha": "1157107a8f882b1d185252c182b1b2e86a30e8dd",
+        "claimed_shipped_via": "governed_ship_queue",
+        "claimed_shipped_at": "2026-07-16T04:07:59.491Z",
+        "reason": "commit_sha exists in repo but is not an ancestor of origin/main -- ship landed on origin/builderos-autonomous or origin/builderos-shadow instead of main (GITHUB_DEPLOY_BRANCH mismatch), and the content itself was placeholder/stub code (verified by direct inspection), not a real implementation. Confirmed via: git merge-base --is-ancestor <sha> origin/main."
+      }
     },
     {
       "id": "003",
-      "status": "done",
+      "status": "pending",
       "target_file": "scripts/credentialVerificationScoping.mjs",
       "task": "scope credential verification technology",
       "spec": "Outline the credential verification technology, assessing options like blockchain and cryptographic hash.",
@@ -741,12 +919,25 @@
         "evaluateBlockchainSolution",
         "evaluateHashSolution"
       ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T04:17:36.048Z",
-      "commit_sha": "e2ed2f5d29e8fd4fb338a72fbd3e34f6832b094f",
+      "shipped_via": null,
+      "shipped_at": null,
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "003",
-      "mission_id": "PRODUCT-lumin-university"
+      "mission_id": "PRODUCT-lumin-university",
+      "last_error": null,
+      "last_attempt_at": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "park_until": null,
+      "revive_count": 0,
+      "false_done_audit": {
+        "found_at": "2026-07-29T00:00:00.000Z",
+        "claimed_commit_sha": "e2ed2f5d29e8fd4fb338a72fbd3e34f6832b094f",
+        "claimed_shipped_via": "governed_ship_queue",
+        "claimed_shipped_at": "2026-07-16T04:17:36.048Z",
+        "reason": "commit_sha exists in repo but is not an ancestor of origin/main -- ship landed on origin/builderos-autonomous or origin/builderos-shadow instead of main (GITHUB_DEPLOY_BRANCH mismatch), and the content itself was placeholder/stub code (verified by direct inspection), not a real implementation. Confirmed via: git merge-base --is-ancestor <sha> origin/main."
+      }
     },
     {
       "id": "004",

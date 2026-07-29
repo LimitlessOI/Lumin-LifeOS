@@ -11,11 +11,11 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lumin-university/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-29 |
+| **Last Updated** | 2026-07-29 |
 
 ---
 **Status:** Candidate — Long-Range Specification Phase
-**Last Updated:** 2026-04-04
+**Last Updated:** 2026-07-29
 **Priority:** High (long-arc mission capstone, builds on Kids OS foundation)
 **Category:** Education / Accredited Institution / Constitutional Mission
 **Parent Documents:**
@@ -331,4 +331,5 @@ CREATE TABLE lumin_university_mentors (
 
 | Date | Change |
 |---|---|
+| 2026-07-29 | **Real audit found and corrected 17 false "done" claims in BUILD_QUEUE.json.** Verified every "done" step's target_file against actual disk state (not trusted from the status field) — 17 of 39 done steps had target files that don't exist anywhere in the working tree (db/migrations 001-005, credentialVerification.js + routes, accreditationRoutes.js, studentInterviews.js, employerInterviews.js, evaluatorMentorRoutes.js, accreditationConsultation.js + routes, studentInterviewAnalytics.js + routes, mentorQualification.js, credentialVerificationScoping.mjs). Root cause confirmed by direct git inspection, not assumed: every claimed commit_sha is a real git object but landed on `origin/builderos-autonomous`/`origin/builderos-shadow`, never `origin/main` (`git merge-base --is-ancestor <sha> origin/main` fails for all 17). Checked whether the orphaned commits were worth recovering rather than rebuilding — they were not: direct `git show` on 3 sampled files showed placeholder/stub content (`res.send('Credential verification logic goes here')`, hardcoded `mentorQualificationCriteria` sample data, a `cleanupBoldTrailTestContacts()` that only `console.log`s) — the same "passes exports_smoke while functionally fake" pattern already known from elsewhere in this repo. All 17 reset to `pending` with the false claim preserved under a new `false_done_audit` field (commit_sha/shipped_via/shipped_at cleared) so the real build happens for real, and the systemic gap (ship-loop never verifies the commit reached origin/main before marking done) filed as a new `builderos` queue item (`bo-verify-ship-lands-on-main`) rather than just patched here. | Continuing this session's "verify a done claim against real committed content, never self-report" standard, applied to a completely different product than where it was established (security_review) — the same discipline caught a much larger, pre-existing problem here. | `git merge-base --is-ancestor` run against all 17 commit SHAs (100% fail — confirmed, not assumed); `git show <sha>:<file>` on 3 samples confirmed stub content; BUILD_QUEUE.json diff shows the correction |
 | 2026-04-04 | Amendment created — Lumin University defined. Vision, life-as-curriculum model, competency-based credits, Kids OS continuity, peer network model, accreditation roadmap, DB schema (5 tables), business model, pre-build readiness gates |
