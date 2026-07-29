@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-29T22:03:41.456Z",
+  "generated_at": "2026-07-29T22:04:03.790Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12309,
+  "file_count": 12311,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -37824,9 +37824,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 40741,
-      "mtime": "2026-07-29T22:03:41.456Z",
-      "indexed_at": "2026-07-29T22:03:41.456Z"
+      "bytes": 41841,
+      "mtime": "2026-07-29T22:04:03.790Z",
+      "indexed_at": "2026-07-29T22:04:03.790Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40833,6 +40833,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "docs/products/MARKET_READINESS_PLAN.md",
+      "synopsis": "Market-readiness audit and implementation plan for every active product.",
+      "bytes": 10919,
+      "mtime": "2026-07-29T22:04:03.790Z",
+      "indexed_at": "2026-07-29T22:04:03.790Z"
+    },
+    {
       "path": "docs/products/MARKETINGOS.md",
       "synopsis": "MarketingOS — redirect stub — see PRODUCT_HOME.md",
       "bytes": 434,
@@ -41413,6 +41420,13 @@
       "bytes": 436,
       "mtime": "2026-06-29T17:21:02.542Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "docs/products/ZERO_BUDGET_MARKETING_PLAN.md",
+      "synopsis": "Zero-budget, limited-email marketing plan for launching products once market ready.",
+      "bytes": 6871,
+      "mtime": "2026-07-29T22:04:03.790Z",
+      "indexed_at": "2026-07-29T22:04:03.790Z"
     },
     {
       "path": "docs/products/zero-drift-handoff-protocol/FILE_MANIFEST.json",
