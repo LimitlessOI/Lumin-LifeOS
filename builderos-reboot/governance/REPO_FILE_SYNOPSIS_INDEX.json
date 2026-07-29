@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-29T05:37:13.833Z",
+  "generated_at": "2026-07-29T05:41:01.886Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12307,
   "files": [
@@ -40030,9 +40030,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 305297,
-      "mtime": "2026-07-29T05:36:52.390Z",
-      "indexed_at": "2026-07-29T05:37:13.833Z"
+      "bytes": 307018,
+      "mtime": "2026-07-29T05:40:40.938Z",
+      "indexed_at": "2026-07-29T05:41:01.886Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -69976,9 +69976,9 @@
     {
       "path": "scripts/ai-security-review.mjs",
       "synopsis": "AI-powered adversarial security review of a diff — the real",
-      "bytes": 7265,
-      "mtime": "2026-07-29T05:32:25.676Z",
-      "indexed_at": "2026-07-29T05:33:34.447Z",
+      "bytes": 7804,
+      "mtime": "2026-07-29T05:40:04.199Z",
+      "indexed_at": "2026-07-29T05:41:01.886Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

@@ -87,7 +87,14 @@ export async function reviewDiffForSecurity({
   const prompt = buildSecurityReviewPrompt(diffText, { changedFiles });
   let raw;
   try {
-    raw = await callModel(model, prompt, { maxOutputTokens: 2000, taskType: 'security_review', responseFormat: 'json' });
+    // useCache:false is load-bearing, not cosmetic: confirmed live 2026-07-29
+    // that without it, all 9 tried tiers (including claude_sonnet,
+    // openai_gpt) returned byte-identical text for the identical prompt --
+    // a cache keyed on prompt content, not on which model answered, so the
+    // "different tier" retry loop was silently hitting the same cached
+    // response every time. The earlier "weak fallback model" diagnosis was
+    // itself likely a caching artifact, not a real per-model quality gap.
+    raw = await callModel(model, prompt, { maxOutputTokens: 2000, taskType: 'security_review', responseFormat: 'json', useCache: false });
   } catch (err) {
     recordModelOutcomeSafe(pool, { model_tier: model, role: 'security_review', ok: false });
     logger?.warn?.(`[AI-SECURITY-REVIEW] model call failed: ${err.message}`);
