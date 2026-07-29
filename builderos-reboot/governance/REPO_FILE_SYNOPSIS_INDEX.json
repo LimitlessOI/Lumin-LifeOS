@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-29T20:59:22.043Z",
+  "generated_at": "2026-07-29T21:22:28.237Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12308,
   "files": [
@@ -37824,9 +37824,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 39675,
-      "mtime": "2026-07-28T22:45:19.610Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 40982,
+      "mtime": "2026-07-29T21:22:28.237Z",
+      "indexed_at": "2026-07-29T21:22:28.237Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40726,9 +40726,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 631390,
-      "mtime": "2026-07-28T23:22:59.520Z",
-      "indexed_at": "2026-07-28T23:23:37.073Z"
+      "bytes": 632804,
+      "mtime": "2026-07-29T21:22:28.237Z",
+      "indexed_at": "2026-07-29T21:22:28.237Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -40857,9 +40857,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 125824,
-      "mtime": "2026-07-24T18:36:41.703Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 126959,
+      "mtime": "2026-07-29T21:22:28.237Z",
+      "indexed_at": "2026-07-29T21:22:28.237Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -64755,8 +64755,8 @@
       "path": "products/receipts/POINT_B_DNA_VERIFY.json",
       "synopsis": "Product receipt — POINT B DNA VERIFY.",
       "bytes": 318,
-      "mtime": "2026-07-28T22:31:46.482Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "mtime": "2026-07-29T21:22:28.237Z",
+      "indexed_at": "2026-07-29T21:22:28.237Z",
       "synopsis_index_only": true
     },
     {
@@ -64770,9 +64770,9 @@
     {
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
-      "bytes": 24178,
-      "mtime": "2026-07-28T22:39:58.986Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 23544,
+      "mtime": "2026-07-29T21:22:28.237Z",
+      "indexed_at": "2026-07-29T21:22:28.237Z",
       "synopsis_index_only": true
     },
     {
@@ -64939,16 +64939,16 @@
       "path": "products/receipts/TRUTH_ENFORCEMENT_AUDIT.json",
       "synopsis": "Product receipt — TRUTH ENFORCEMENT AUDIT.",
       "bytes": 782,
-      "mtime": "2026-07-28T20:19:15.026Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "mtime": "2026-07-29T21:22:28.237Z",
+      "indexed_at": "2026-07-29T21:22:28.237Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/TRUTH_LOCKDOWN_VERIFY.json",
       "synopsis": "Product receipt — TRUTH LOCKDOWN VERIFY.",
       "bytes": 1318,
-      "mtime": "2026-07-28T22:31:47.002Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "mtime": "2026-07-29T21:22:28.237Z",
+      "indexed_at": "2026-07-29T21:22:28.237Z",
       "synopsis_index_only": true
     },
     {
@@ -64979,8 +64979,8 @@
       "path": "products/receipts/WISDOM_TRUTH_AUDIT.json",
       "synopsis": "Product receipt — WISDOM TRUTH AUDIT.",
       "bytes": 1001,
-      "mtime": "2026-07-28T20:19:15.159Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "mtime": "2026-07-29T21:22:28.237Z",
+      "indexed_at": "2026-07-29T21:22:28.237Z",
       "synopsis_index_only": true
     },
     {
@@ -87534,9 +87534,9 @@
     {
       "path": "services/env-registry-map.js",
       "synopsis": "env-registry-map.js",
-      "bytes": 29161,
-      "mtime": "2026-07-28T17:47:22.557Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 29135,
+      "mtime": "2026-07-29T21:22:28.237Z",
+      "indexed_at": "2026-07-29T21:22:28.237Z",
       "ssot": [
         "docs/products/command-center/PRODUCT_HOME.md"
       ]
@@ -91000,10 +91000,10 @@
     },
     {
       "path": "services/password-reset-email.js",
-      "synopsis": "Send password-reset email via Resend or SMTP when configured.",
-      "bytes": 3032,
-      "mtime": "2026-07-24T18:36:41.703Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis": "Send password-reset email via the configured provider (postmark, resend, smtp, disabled).",
+      "bytes": 5411,
+      "mtime": "2026-07-29T21:22:28.237Z",
+      "indexed_at": "2026-07-29T21:22:28.237Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

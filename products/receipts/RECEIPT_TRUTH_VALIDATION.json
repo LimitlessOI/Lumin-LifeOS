@@ -1,11 +1,9 @@
 {
   "schema": "receipt_truth_validation_v1",
-  "at": "2026-07-28T22:39:58.984Z",
-  "ok": false,
-  "checked": 127,
-  "failures": [
-    "DEPLOY_TRUTH_VERIFY.json:PASS_WITHOUT_NAMED_VERIFIER"
-  ],
+  "at": "2026-07-29T21:22:04.302Z",
+  "ok": true,
+  "checked": 126,
+  "failures": [],
   "known_debt": [
     "MACHINE_ALPHA_WALKTHROUGH.json:ACCEPTANCE_PASS_WITHOUT_SHA_OR_BASE",
     "SITE_BUILDER_PREALPHA_LAYER_A.json:ACCEPTANCE_PASS_WITHOUT_SHA_OR_BASE"
@@ -225,27 +223,6 @@
       "proposed_solutions": []
     },
     {
-      "file": "DEPLOY_DRIFT_AUDIT.json",
-      "ok": true,
-      "violations": [],
-      "claims_pass": true,
-      "proposed_solutions": []
-    },
-    {
-      "file": "DEPLOY_TRUTH_VERIFY.json",
-      "ok": false,
-      "violations": [
-        "PASS_WITHOUT_NAMED_VERIFIER"
-      ],
-      "claims_pass": true,
-      "proposed_solutions": [
-        {
-          "violation": "PASS_WITHOUT_NAMED_VERIFIER",
-          "proposed_solution": "Add verified_by naming the independent actor that checked this (must differ from produced_by). If no independent verifier existed, set separation_collapsed: true plus separation_note explaining why no safer alternative existed, per PRODUCT_HOME Separation Of Duties."
-        }
-      ]
-    },
-    {
       "file": "DIRECT_EXECUTION_POINT_B_LIVE.json",
       "ok": true,
       "violations": [],
@@ -306,6 +283,13 @@
       "ok": true,
       "violations": [],
       "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "GOVERNANCE_ROLE_SEPARATION_P0.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": true,
       "proposed_solutions": []
     },
     {
