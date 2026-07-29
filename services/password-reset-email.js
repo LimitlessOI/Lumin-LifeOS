@@ -142,25 +142,24 @@ export async function sendPasswordResetEmail({ to, resetUrl, logger = console } 
       }
       const pm = await postmarkSend({ to: recipient, subject, textBody, htmlBody, token: postmarkToken, from, logger });
       if (pm.sent) return pm;
-      // If Postmark is pending approval, fall through to Resend/SMTP so real customers can still recover passwords
-      if (isPostmarkPendingApproval(pm.error) && resendKey) {
-        logger?.warn?.('[PASSWORD-RESET] Postmark pending approval; falling back to Resend', { error: pm.error });
-        const rd = await resendSend({ to: recipient, subject, textBody, htmlBody, token: resendKey, from, logger });
-        if (rd.sent) return rd;
-        // If Resend also fails, try SMTP as last resort before giving up
-        const sm = await smtpSend({ to: recipient, subject, textBody, htmlBody, from, logger });
-        if (sm.sent) return sm;
-        return { sent: false, provider: 'resend', error: rd.error, fallback_error: sm.error };
-      }
-      // For any other Postmark failure, optionally try Resend/SMTP when in auto mode
-      if (configuredProvider === 'auto' && (resendKey || process.env.SMTP_USER || process.env.WORK_EMAIL_APP_PASSWORD)) {
-        logger?.warn?.('[PASSWORD-RESET] Postmark failed; trying fallbacks', { error: pm.error });
+      // If Postmark fails (especially pending-approval / same-domain), fall through to Resend/SMTP so real customers can still recover passwords
+      const hasSmtp = Boolean(String(process.env.SMTP_USER || process.env.WORK_EMAIL || '').trim() && String(process.env.SMTP_PASS || process.env.WORK_EMAIL_APP_PASSWORD || '').trim());
+      if (resendKey || hasSmtp) {
+        logger?.warn?.('[PASSWORD-RESET] Postmark failed; trying fallback', { error: pm.error, resendConfigured: Boolean(resendKey), smtpConfigured: hasSmtp });
         if (resendKey) {
           const rd = await resendSend({ to: recipient, subject, textBody, htmlBody, token: resendKey, from, logger });
           if (rd.sent) return rd;
+          // Resend failed but we still have SMTP; try it before returning the Postmark error
+          if (hasSmtp) {
+            const sm = await smtpSend({ to: recipient, subject, textBody, htmlBody, from, logger });
+            if (sm.sent) return sm;
+            return { sent: false, provider: 'smtp', postmark_error: pm.error, resend_error: rd.error, error: sm.error };
+          }
+          return { sent: false, provider: 'resend', postmark_error: pm.error, error: rd.error };
         }
         const sm = await smtpSend({ to: recipient, subject, textBody, htmlBody, from, logger });
         if (sm.sent) return sm;
+        return { sent: false, provider: 'smtp', postmark_error: pm.error, error: sm.error };
       }
       return pm;
     }

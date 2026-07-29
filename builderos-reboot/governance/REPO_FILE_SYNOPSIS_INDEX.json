@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-29T21:28:46.444Z",
+  "generated_at": "2026-07-29T21:32:35.116Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12308,
   "files": [
@@ -91001,9 +91001,9 @@
     {
       "path": "services/password-reset-email.js",
       "synopsis": "Send password-reset email via the configured provider (postmark, resend, smtp, disabled).",
-      "bytes": 7054,
-      "mtime": "2026-07-29T21:28:46.444Z",
-      "indexed_at": "2026-07-29T21:28:46.444Z",
+      "bytes": 7105,
+      "mtime": "2026-07-29T21:32:35.116Z",
+      "indexed_at": "2026-07-29T21:32:35.116Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
