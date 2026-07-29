@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-28T23:44:37.187Z",
+  "generated_at": "2026-07-29T00:45:17.399Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12300,
+  "file_count": 12301,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21634,9 +21634,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3712622,
-      "mtime": "2026-07-28T23:09:04.821Z",
-      "indexed_at": "2026-07-28T23:09:19.765Z"
+      "bytes": 3712956,
+      "mtime": "2026-07-29T00:44:25.967Z",
+      "indexed_at": "2026-07-29T00:45:17.399Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -40030,9 +40030,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 283701,
-      "mtime": "2026-07-28T23:44:07.853Z",
-      "indexed_at": "2026-07-28T23:44:15.529Z"
+      "bytes": 286565,
+      "mtime": "2026-07-29T00:43:26.226Z",
+      "indexed_at": "2026-07-29T00:44:25.890Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -67851,9 +67851,9 @@
     {
       "path": "routes/factory-mount-routes.js",
       "synopsis": "Pure: should the codegen prompt inline this file's existing content?",
-      "bytes": 27900,
-      "mtime": "2026-07-28T17:56:35.988Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 32514,
+      "mtime": "2026-07-29T00:41:11.460Z",
+      "indexed_at": "2026-07-29T00:44:25.890Z"
     },
     {
       "path": "routes/faith-studio-routes.js",
@@ -70987,6 +70987,16 @@
       "bytes": 1723,
       "mtime": "2026-07-17T19:19:29.719Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "scripts/founder-decision-backfill.mjs",
+      "synopsis": "Backfill founder_decision_log from the existing historical",
+      "bytes": 7448,
+      "mtime": "2026-07-29T00:41:49.891Z",
+      "indexed_at": "2026-07-29T00:44:25.890Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/founder-decoder.mjs",
@@ -85255,9 +85265,9 @@
     {
       "path": "services/blueprint-intake.js",
       "synopsis": "Blueprint Intake Service — three flows: backfill existing amendment, greenfield",
-      "bytes": 57808,
-      "mtime": "2026-07-28T16:57:17.216Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 58721,
+      "mtime": "2026-07-29T00:35:45.175Z",
+      "indexed_at": "2026-07-29T00:44:25.890Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

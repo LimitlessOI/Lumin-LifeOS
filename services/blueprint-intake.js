@@ -9,6 +9,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { scanCodebasePatterns } from './blueprint-codebase-scanner.js';
+import { recordModelOutcome } from './model-capability-ledger.js';
+import { COUNCIL_ALIAS_MAP } from '../config/council-members.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -477,7 +479,22 @@ async function updateSession(pool, id, updates) {
 
 // ── Factory ───────────────────────────────────────────────────────────────────
 
-export function createBlueprintIntakeService(pool, callCouncilMember) {
+export function createBlueprintIntakeService(pool, rawCallCouncilMember) {
+  // North Star §2.0J model benchmarking, role 'bpb_blueprinting': wrapped once
+  // here rather than at each of the ~10 call sites below, so every real BPB
+  // model dispatch in this service is recorded automatically -- including
+  // future call sites -- without per-call-site instrumentation debt.
+  async function callCouncilMember(member, prompt, options = {}) {
+    const tier = COUNCIL_ALIAS_MAP[member] || member;
+    let ok = false;
+    try {
+      const result = await rawCallCouncilMember(member, prompt, options);
+      ok = typeof result === 'string' ? result.trim().length > 0 : Boolean(result);
+      return result;
+    } finally {
+      recordModelOutcome(pool, { model_tier: tier, role: 'bpb_blueprinting', ok, trust_earned: ok }).catch(() => {});
+    }
+  }
 
   // ── FLOW 1: Backfill (existing amendment → blueprint) ─────────────────────
   // amendmentText takes precedence over amendmentFile — CLI reads locally and passes text.

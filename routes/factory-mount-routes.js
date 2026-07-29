@@ -22,6 +22,8 @@ import { runGovernedAutonomousShipOnce } from '../services/governed-autonomous-s
 import { getModelRankings, KNOWN_ROLES } from '../services/model-capability-ledger.js';
 import { runGovernanceReview } from '../services/governance-law-review.js';
 import { recordFounderDecision, getFounderDecisionHistory, findFounderDecisions } from '../services/founder-intent-model.js';
+import { recordModelOutcome } from '../services/model-capability-ledger.js';
+import { getCandidateModelsForTask } from '../config/task-model-routing.js';
 import {
   blueprintFollowClaim,
   exactChangeClaim,
@@ -348,6 +350,87 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
         ? await findFounderDecisions(pool, { query: req.query.q, limit: req.query.limit })
         : await getFounderDecisionHistory(pool, { category: req.query.category, limit: req.query.limit });
       res.json(result);
+    } catch (err) {
+      res.status(503).json({ ok: false, error: err?.message || String(err) });
+    }
+  });
+
+  // North Star §2.0H Founder Intent Model — real backfill from the existing
+  // historical conversation corpus (docs/conversation_dumps/raw/*.jsonl +
+  // Lumin-Memory/00_INBOX), not a wait-for-future-events-only log. Founder,
+  // direct (2026-07-28): "I have hours and hours of communication... study
+  // that shit and make my twin." Server-side because real provider keys only
+  // exist in the Railway env; the caller sends raw text, the model here does
+  // the actual extraction, and this endpoint also doubles as the first real
+  // call site for KNOWN_ROLES.founder_intent_modeling (previously unwired).
+  router.post('/factory/founder-decisions/extract', guard, async (req, res) => {
+    try {
+      const { text_batch, source = 'historical_conversation_backfill', file_label = null } = req.body || {};
+      const text = String(text_batch || '').trim();
+      if (!text) return res.status(400).json({ ok: false, error: 'text_batch required' });
+      if (!callCouncilMember) return res.status(503).json({ ok: false, error: 'callCouncilMember not available' });
+
+      const prompt = `You are extracting REAL, ALREADY-MADE decisions, directives, and stated preferences the founder (Adam) expressed in this raw conversation excerpt. This is historical record-keeping, not prediction -- only extract what he actually said, in his own words or a faithful close paraphrase.
+
+Rules:
+- Only extract genuine decisions/directives/preferences (e.g. "always do X", "never do Y", "I've decided Z", a clear choice between options, a stated priority, a correction of the system's approach). Skip small talk, debugging back-and-forth, and requests with no lasting decision content.
+- category must be exactly one of: governance, product_scope, financial, quality_standard, process, priority, other.
+- decision_text: Adam's own words or a faithful close paraphrase. Keep it concrete and specific.
+- context: one sentence on what prompted it, if inferable from the excerpt. null if not inferable.
+- Return STRICT JSON only, no markdown fences, no commentary: {"decisions":[{"decision_text":"...","context":"...","category":"..."}]}
+- If nothing in this excerpt is a genuine decision, return {"decisions":[]}. Do not invent decisions to have something to return.
+
+EXCERPT${file_label ? ` (source: ${file_label})` : ''}:
+${text.slice(0, 24000)}`;
+
+      const candidates = getCandidateModelsForTask('founder_intent.extract_decisions');
+      let raw = null;
+      let usedTier = null;
+      let lastErr = null;
+      for (const tier of candidates) {
+        try {
+          raw = await callCouncilMember(tier, prompt, {
+            taskType: 'json',
+            product_lane: 'builderos',
+            maxOutputTokens: 3000,
+            responseFormat: 'json',
+            useCache: false,
+          });
+          usedTier = tier;
+          break;
+        } catch (err) {
+          lastErr = err;
+          recordModelOutcome(pool, { model_tier: tier, role: 'founder_intent_modeling', ok: false }).catch(() => {});
+        }
+      }
+      if (!raw) {
+        return res.status(503).json({ ok: false, error: `all model tiers failed: ${lastErr?.message || 'unknown'}` });
+      }
+
+      let parsed;
+      try {
+        const cleaned = String(raw).trim().replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/i, '');
+        parsed = JSON.parse(cleaned);
+      } catch (err) {
+        recordModelOutcome(pool, { model_tier: usedTier, role: 'founder_intent_modeling', ok: false, theater_detected: true }).catch(() => {});
+        return res.status(502).json({ ok: false, error: `model returned non-JSON: ${err.message}`, raw_preview: String(raw).slice(0, 300) });
+      }
+
+      const items = Array.isArray(parsed?.decisions) ? parsed.decisions : [];
+      recordModelOutcome(pool, { model_tier: usedTier, role: 'founder_intent_modeling', ok: true, trust_earned: true }).catch(() => {});
+
+      const written = [];
+      for (const item of items) {
+        const result = await recordFounderDecision(pool, {
+          decision_text: item?.decision_text,
+          context: item?.context || null,
+          category: item?.category,
+          source,
+        });
+        if (result.ok) written.push(result.id);
+      }
+
+      res.json({ ok: true, model_used: usedTier, candidates_extracted: items.length, written_count: written.length, written_ids: written });
     } catch (err) {
       res.status(503).json({ ok: false, error: err?.message || String(err) });
     }
