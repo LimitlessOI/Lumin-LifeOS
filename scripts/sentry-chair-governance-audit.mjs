@@ -173,10 +173,12 @@ export async function runCompetitiveResearchAuditCycle({
   productsDir = undefined,
   cursorPath = undefined,
   webSearchService = undefined,
+  pool = undefined,
   logger = console,
 } = {}) {
   const result = await runCompetitiveResearchCycle({
     logger,
+    pool,
     ...(productsDir ? { productsDir } : {}),
     ...(cursorPath ? { cursorPath } : {}),
     ...(webSearchService ? { webSearchService } : {}),
@@ -186,7 +188,7 @@ export async function runCompetitiveResearchAuditCycle({
   }
 
   const reviewed = callModel
-    ? await reviewFindingsWithAI([result.finding], { callModel, logger })
+    ? await reviewFindingsWithAI([result.finding], { callModel, logger, pool })
     : reviewFindings([result.finding]);
 
   const existingQueue = loadFindingsQueue();
@@ -200,7 +202,7 @@ export async function runCompetitiveResearchAuditCycle({
   return { productId: result.productId, reviewed: true, added: newlyAdded.length > 0 };
 }
 
-export function startCompetitiveResearchScheduler({ logger = console } = {}) {
+export function startCompetitiveResearchScheduler({ logger = console, pool = undefined } = {}) {
   // Default: once per day. At ~46 products, one lap of the full portfolio
   // takes about 6-7 weeks -- deliberately slow and cheap, not a cost spike,
   // per the founder's own "seen all the way through" ask meaning sustained,
@@ -210,7 +212,7 @@ export function startCompetitiveResearchScheduler({ logger = console } = {}) {
 
   const tick = async () => {
     try {
-      await runCompetitiveResearchAuditCycle({ logger });
+      await runCompetitiveResearchAuditCycle({ logger, pool });
     } catch (err) {
       logger?.warn?.({ err: err.message }, '[CHAIR-COMPETITIVE-RESEARCH] cycle failed');
     }

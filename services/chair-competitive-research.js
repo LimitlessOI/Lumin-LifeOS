@@ -104,6 +104,7 @@ export async function runCompetitiveResearchCycle({
   cursorPath = CURSOR_PATH,
   webSearchService,
   callAI,
+  pool = undefined,
   logger = console,
 } = {}) {
   const allIds = listReviewableProducts({ productsDir });
@@ -130,6 +131,7 @@ export async function runCompetitiveResearchCycle({
     BRAVE_SEARCH_API_KEY: process.env.BRAVE_SEARCH_API_KEY,
     PERPLEXITY_API_KEY: process.env.PERPLEXITY_API_KEY,
     callAI,
+    pool,
   });
 
   let analysis = null;

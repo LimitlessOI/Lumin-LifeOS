@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-29T04:10:07.162Z",
+  "generated_at": "2026-07-29T05:18:22.632Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12304,
+  "file_count": 12305,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -40030,9 +40030,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 295850,
-      "mtime": "2026-07-29T04:09:43.380Z",
-      "indexed_at": "2026-07-29T04:10:07.162Z"
+      "bytes": 299306,
+      "mtime": "2026-07-29T05:17:50.061Z",
+      "indexed_at": "2026-07-29T05:18:22.632Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -63819,9 +63819,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 35410,
-      "mtime": "2026-07-29T04:00:55.953Z",
-      "indexed_at": "2026-07-29T04:01:55.226Z",
+      "bytes": 35456,
+      "mtime": "2026-07-29T05:17:26.703Z",
+      "indexed_at": "2026-07-29T05:18:22.632Z",
       "synopsis_index_only": true
     },
     {
@@ -73074,9 +73074,9 @@
     {
       "path": "scripts/sentry-chair-governance-audit.mjs",
       "synopsis": "Orchestrates SENTRY (finds + proposes) -> Chair (reviews, real AI",
-      "bytes": 10971,
-      "mtime": "2026-07-29T04:09:00.669Z",
-      "indexed_at": "2026-07-29T04:10:07.162Z",
+      "bytes": 11031,
+      "mtime": "2026-07-29T05:16:09.559Z",
+      "indexed_at": "2026-07-29T05:18:22.632Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -84818,9 +84818,9 @@
     {
       "path": "server-founder-runtime.js",
       "synopsis": "Founder-builder minimal runtime entrypoint.",
-      "bytes": 22265,
-      "mtime": "2026-07-29T04:00:04.664Z",
-      "indexed_at": "2026-07-29T04:01:55.226Z",
+      "bytes": 22271,
+      "mtime": "2026-07-29T05:16:38.727Z",
+      "indexed_at": "2026-07-29T05:18:22.632Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -85945,9 +85945,9 @@
     {
       "path": "services/chair-competitive-research.js",
       "synopsis": "Chair's real, ongoing competitive-research capability — the",
-      "bytes": 6585,
-      "mtime": "2026-07-19T20:58:37.043Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 6615,
+      "mtime": "2026-07-29T05:15:33.460Z",
+      "indexed_at": "2026-07-29T05:18:22.632Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -86055,9 +86055,9 @@
     {
       "path": "services/chair-native-facts.js",
       "synopsis": "Chair native facts — real system state Lumin IS (not chat overlay).",
-      "bytes": 15564,
-      "mtime": "2026-07-16T19:42:53.455Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 15585,
+      "mtime": "2026-07-29T05:15:04.234Z",
+      "indexed_at": "2026-07-29T05:18:22.632Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -93683,9 +93683,9 @@
     {
       "path": "services/web-search-service.js",
       "synopsis": "services/web-search-service.js",
-      "bytes": 9770,
-      "mtime": "2026-07-03T00:17:46.224Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 10740,
+      "mtime": "2026-07-29T05:14:32.886Z",
+      "indexed_at": "2026-07-29T05:18:22.632Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -96182,6 +96182,13 @@
       "bytes": 577,
       "mtime": "2026-06-21T21:39:28.943Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "tests/web-search-service-model-ledger.test.js",
+      "synopsis": "js — tests/web-search-service-model-ledger.test.js.",
+      "bytes": 2704,
+      "mtime": "2026-07-29T05:17:13.713Z",
+      "indexed_at": "2026-07-29T05:18:22.632Z"
     },
     {
       "path": "tests/wisdom-truth-auditor.test.js",

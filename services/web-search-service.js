@@ -12,8 +12,17 @@
  * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
+import { recordModelOutcome } from './model-capability-ledger.js';
+
 const BRAVE_API = 'https://api.search.brave.com/res/v1/web/search';
 const PERPLEXITY_API = 'https://api.perplexity.ai/chat/completions';
+
+// Fire-and-forget wrapper: never let ledger recording delay or fail a real
+// search response. Safe no-op when pool is undefined (most callers today).
+function recordModelOutcomeSafe(pool, fields) {
+  if (!pool) return;
+  recordModelOutcome(pool, fields).catch(() => {});
+}
 
 // Interactive chat cannot afford an unbounded external call. Cap every network
 // hop so a stalled provider fails fast instead of hanging the founder turn.
@@ -28,7 +37,7 @@ function withTimeout(promise, ms, label) {
   return Promise.race([promise, timeout]).finally(() => clearTimeout(timer));
 }
 
-export function createWebSearchService({ BRAVE_SEARCH_API_KEY, PERPLEXITY_API_KEY, callAI }) {
+export function createWebSearchService({ BRAVE_SEARCH_API_KEY, PERPLEXITY_API_KEY, callAI, pool = undefined }) {
   // ── Raw web search ──────────────────────────────────────────────────────────
   async function search(query, { count = 5 } = {}) {
     // Try Brave first
@@ -84,10 +93,16 @@ export function createWebSearchService({ BRAVE_SEARCH_API_KEY, PERPLEXITY_API_KE
           const data = await res.json();
           const content = data.choices?.[0]?.message?.content || '';
           console.log(`🔍 [WEB-SEARCH] Perplexity: "${query}"`);
+          // North Star §2.0J model benchmarking, role 'external_research':
+          // Perplexity's sonar models are a real AI call (not a raw index
+          // lookup), the clearest live external_research call site found.
+          recordModelOutcomeSafe(pool, { model_tier: 'perplexity_sonar', role: 'external_research', ok: Boolean(content), trust_earned: Boolean(content) });
           return { source: 'perplexity', results: [{ title: query, description: content, url: null }] };
         }
+        recordModelOutcomeSafe(pool, { model_tier: 'perplexity_sonar', role: 'external_research', ok: false });
       } catch (err) {
         console.warn(`[WEB-SEARCH] Perplexity failed: ${err.message}`);
+        recordModelOutcomeSafe(pool, { model_tier: 'perplexity_sonar', role: 'external_research', ok: false });
       }
     }
 

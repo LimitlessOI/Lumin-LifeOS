@@ -516,7 +516,7 @@ async function bootFounderRuntime() {
       // Deliberately its own slow schedule, separate from the 30-min SENTRY
       // health cycle, to control cost on real API calls.
       try {
-        startCompetitiveResearchScheduler({ logger });
+        startCompetitiveResearchScheduler({ logger, pool });
       } catch (competitiveResearchErr) {
         logger.warn("[CHAIR-COMPETITIVE-RESEARCH] scheduler failed to start in founder runtime", { error: competitiveResearchErr.message });
       }

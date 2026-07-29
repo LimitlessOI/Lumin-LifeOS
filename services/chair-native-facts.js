@@ -57,6 +57,7 @@ async function attachVerifiedSearch(facts, text, deps) {
     BRAVE_SEARCH_API_KEY: process.env.BRAVE_SEARCH_API_KEY,
     PERPLEXITY_API_KEY: process.env.PERPLEXITY_API_KEY,
     callAI: deps.callAI,
+    pool: deps.pool,
   });
   try {
     const query = buildLifeAdminSearchQuery(text) || String(text).slice(0, 160);
