@@ -54,6 +54,7 @@ import { registerFounderServerRoutes } from "./startup/routes/founder-server-rou
 import { startNeverStopProductFactoryScheduler } from "./services/never-stop-product-factory-scheduler.js";
 import { startGovernedAutonomousShippingLoop } from "./services/governed-autonomous-shipping-loop.js";
 import { startCiHealthWatchdogScheduler } from "./scripts/ci-health-watchdog.mjs";
+import { startProdHealthWatchdogScheduler } from "./scripts/prod-health-watchdog.mjs";
 import { startSentryChairGovernanceScheduler, startCompetitiveResearchScheduler } from "./scripts/sentry-chair-governance-audit.mjs";
 import { startMemoryEmbeddingsBackfillScheduler } from "./scripts/memory-embeddings-backfill.mjs";
 import { initDatabase } from "./startup/database.js";
@@ -484,6 +485,17 @@ async function bootFounderRuntime() {
         startCiHealthWatchdogScheduler({ logger });
       } catch (ciWatchdogErr) {
         logger.warn("[CI-WATCHDOG] failed to start in founder runtime", { error: ciWatchdogErr.message });
+      }
+      // Production runtime-health watchdog: keep-alive.yml curls /healthz
+      // every 5min but only checks the HTTP status code — a 200 response
+      // with "status":"degraded" (confirmed live 2026-07-28: two migrations
+      // silently failing on every boot) passed that check silently. This
+      // reads the actual body and escalates the same way the CI watchdog
+      // does. Punch-list item #6 from the founder-requested builder rating.
+      try {
+        startProdHealthWatchdogScheduler({ logger });
+      } catch (prodWatchdogErr) {
+        logger.warn("[PROD-HEALTH-WATCHDOG] failed to start in founder runtime", { error: prodWatchdogErr.message });
       }
       // SENTRY (finds + proposes a solution) -> Chair (reviews, routes
       // technical findings to auto-approved / product-scope findings to

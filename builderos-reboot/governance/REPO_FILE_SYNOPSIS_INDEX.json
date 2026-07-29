@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-29T02:37:33.366Z",
+  "generated_at": "2026-07-29T04:01:55.226Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12302,
+  "file_count": 12304,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -40015,9 +40015,9 @@
     {
       "path": "docs/products/builderos/GAP_FILL_LEDGER.json",
       "synopsis": "Documentation — GAP FILL LEDGER.",
-      "bytes": 19147,
-      "mtime": "2026-07-29T00:45:17.954Z",
-      "indexed_at": "2026-07-29T00:45:31.105Z",
+      "bytes": 20937,
+      "mtime": "2026-07-29T02:37:33.923Z",
+      "indexed_at": "2026-07-29T04:01:55.226Z",
       "synopsis_index_only": true
     },
     {
@@ -40030,9 +40030,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 291946,
-      "mtime": "2026-07-29T02:37:10.026Z",
-      "indexed_at": "2026-07-29T02:37:33.366Z"
+      "bytes": 293787,
+      "mtime": "2026-07-29T04:01:21.827Z",
+      "indexed_at": "2026-07-29T04:01:55.226Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -63819,9 +63819,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 35300,
-      "mtime": "2026-07-28T23:07:19.043Z",
-      "indexed_at": "2026-07-28T23:09:03.191Z",
+      "bytes": 35410,
+      "mtime": "2026-07-29T04:00:55.953Z",
+      "indexed_at": "2026-07-29T04:01:55.226Z",
       "synopsis_index_only": true
     },
     {
@@ -72286,6 +72286,16 @@
       "bytes": 5787,
       "mtime": "2026-06-21T21:39:08.125Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "scripts/prod-health-watchdog.mjs",
+      "synopsis": "Production runtime-health watchdog — polls this server's own",
+      "bytes": 6449,
+      "mtime": "2026-07-29T03:59:20.620Z",
+      "indexed_at": "2026-07-29T04:01:55.226Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/programming-artifacts-preflight.js",
@@ -84808,9 +84818,9 @@
     {
       "path": "server-founder-runtime.js",
       "synopsis": "Founder-builder minimal runtime entrypoint.",
-      "bytes": 21499,
-      "mtime": "2026-07-28T17:50:50.798Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 22265,
+      "mtime": "2026-07-29T04:00:04.664Z",
+      "indexed_at": "2026-07-29T04:01:55.226Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -95769,6 +95779,13 @@
       "ssot": [
         "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "tests/prod-health-watchdog.test.js",
+      "synopsis": "js — tests/prod-health-watchdog.test.js.",
+      "bytes": 3902,
+      "mtime": "2026-07-29T04:00:35.718Z",
+      "indexed_at": "2026-07-29T04:01:55.226Z"
     },
     {
       "path": "tests/product-build-orchestrator.test.js",
