@@ -319,13 +319,25 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
   });
 
   // North Star §2.0G Governance Evolution Law: "at fixed cadence, review
-  // which laws helped/hurt/caused drift." On-demand for now (Companion §0.6
-  // requires a new automatic timer be reviewed/approved before it runs
-  // unattended) -- real data, callable now, not yet scheduled.
+  // which laws helped/hurt/caused drift." Now on a real scheduled cadence
+  // (services/governance-review-scheduler.js, default 24h, wired in
+  // startup/boot-domains.js) with persisted history in
+  // governance_review_log -- this route still runs it live, on demand, for
+  // an immediate answer without waiting for the next tick.
   router.get('/factory/governance-review', guard, async (_req, res) => {
     try {
       const review = await runGovernanceReview({ pool });
       res.json(review);
+    } catch (err) {
+      res.status(503).json({ ok: false, error: err?.message || String(err) });
+    }
+  });
+
+  router.get('/factory/governance-review/history', guard, async (req, res) => {
+    try {
+      const { getGovernanceReviewHistory } = await import('../services/governance-review-scheduler.js');
+      const result = await getGovernanceReviewHistory(pool, { limit: req.query.limit });
+      res.json(result);
     } catch (err) {
       res.status(503).json({ ok: false, error: err?.message || String(err) });
     }

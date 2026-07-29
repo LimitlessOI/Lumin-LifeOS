@@ -242,6 +242,21 @@ async function bootChairPredictionScore(deps) {
   }
 }
 
+async function bootGovernanceReview(deps) {
+  const { pool, logger } = deps;
+  if (process.env.GOVERNANCE_REVIEW_ENABLED === '0') {
+    logger?.info?.('[BOOT] Governance review scheduler OFF (GOVERNANCE_REVIEW_ENABLED=0)');
+    return;
+  }
+  try {
+    const { registerGovernanceReviewScheduler } = await import('../services/governance-review-scheduler.js');
+    registerGovernanceReviewScheduler({ pool, logger });
+    logger?.info?.('[BOOT] Governance review scheduler active (North Star §2.0G — real fixed cadence)');
+  } catch (err) {
+    logger?.warn?.(`[BOOT] Governance review scheduler failed: ${err.message}`);
+  }
+}
+
 async function bootLaneIntel(deps) {
   const { pool, logger, callCouncilMember } = deps;
   if (process.env.LANE_INTEL_ENABLED === '0') {
@@ -503,6 +518,7 @@ export async function bootAllDomains(deps) {
     bootTruthScoreboard(deps),
     ...(fullRuntimeProfile ? [bootWisdomTruthAuditor(deps)] : []),
     ...(fullRuntimeProfile ? [bootChairPredictionScore(deps)] : []),
+    ...(fullRuntimeProfile ? [bootGovernanceReview(deps)] : []),
     ...(twinAutoIngestBootEnabled ? [bootTwinAutoIngest(deps)] : []),
     ...(fullRuntimeProfile ? [bootOILDailySummary(deps)] : []),
     bootSelfRepairDeployCheck(deps),

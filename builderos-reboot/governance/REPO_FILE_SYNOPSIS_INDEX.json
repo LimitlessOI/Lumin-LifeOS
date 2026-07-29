@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-29T02:29:40.159Z",
+  "generated_at": "2026-07-29T02:37:33.366Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12301,
+  "file_count": 12302,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -40030,9 +40030,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 289889,
-      "mtime": "2026-07-29T02:29:12.467Z",
-      "indexed_at": "2026-07-29T02:29:40.159Z"
+      "bytes": 291946,
+      "mtime": "2026-07-29T02:37:10.026Z",
+      "indexed_at": "2026-07-29T02:37:33.366Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -67851,9 +67851,9 @@
     {
       "path": "routes/factory-mount-routes.js",
       "synopsis": "Pure: should the codegen prompt inline this file's existing content?",
-      "bytes": 33974,
-      "mtime": "2026-07-29T02:28:25.644Z",
-      "indexed_at": "2026-07-29T02:29:40.159Z"
+      "bytes": 34516,
+      "mtime": "2026-07-29T02:36:34.377Z",
+      "indexed_at": "2026-07-29T02:37:33.366Z"
     },
     {
       "path": "routes/faith-studio-routes.js",
@@ -88197,6 +88197,16 @@
       ]
     },
     {
+      "path": "services/governance-review-scheduler.js",
+      "synopsis": "North Star §2.0G Governance Evolution Law — real fixed cadence.",
+      "bytes": 3981,
+      "mtime": "2026-07-29T02:35:50.805Z",
+      "indexed_at": "2026-07-29T02:37:33.366Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/governed-autonomous-shipping-loop.js",
       "synopsis": "STEP 5g — the governed AUTONOMOUS shipping loop. When the STEP 5a",
       "bytes": 60335,
@@ -94054,9 +94064,9 @@
     {
       "path": "startup/boot-domains.js",
       "synopsis": "boot-domains.js",
-      "bytes": 21068,
-      "mtime": "2026-07-15T03:25:45.223Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 21762,
+      "mtime": "2026-07-29T02:35:04.732Z",
+      "indexed_at": "2026-07-29T02:37:33.366Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
