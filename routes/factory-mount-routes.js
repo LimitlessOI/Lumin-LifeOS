@@ -460,6 +460,42 @@ ${text.slice(0, 24000)}`;
     }
   });
 
+  // North Star §2.0J model benchmarking, role 'security_review': the real
+  // AI-judgment layer on top of scripts/lib/security-invariants.mjs's
+  // deterministic floor. Confirmed live (2026-07-29) that no AI-powered
+  // security check existed anywhere in this codebase before this — every
+  // security fix landed this session was pattern-matching, which cannot
+  // catch a vulnerability class nobody wrote a rule for yet. ROUTE posture
+  // (Gate Charter / Chair ruling c646160f-128a-4b43-9884-af37cd5a868a),
+  // not BLOCK -- this is a brand-new, unproven mechanism; reports findings,
+  // does not refuse anything yet.
+  router.post('/factory/security-review', guard, async (req, res) => {
+    try {
+      const { diff_text, changed_files } = req.body || {};
+      const { reviewDiffForSecurity } = await import('../scripts/ai-security-review.mjs');
+      const candidates = getCandidateModelsForTask('security_review.review_diff');
+      let result = null;
+      let lastErr = null;
+      for (const tier of candidates) {
+        result = await reviewDiffForSecurity({
+          diffText: diff_text,
+          changedFiles: Array.isArray(changed_files) ? changed_files : [],
+          callModel: callCouncilMember,
+          model: tier,
+          pool,
+        });
+        if (result.ok) break;
+        lastErr = result.error;
+      }
+      if (!result?.ok) {
+        return res.status(503).json({ ok: false, error: lastErr || 'all model tiers failed' });
+      }
+      res.json(result);
+    } catch (err) {
+      res.status(503).json({ ok: false, error: err?.message || String(err) });
+    }
+  });
+
   // North Star §2.0D Mission State Machine Law + Companion §0.9: found live
   // (2026-07-28) that a real, complete, already-approved implementation of
   // this already exists and is already live -- services/mission-ledger.js +

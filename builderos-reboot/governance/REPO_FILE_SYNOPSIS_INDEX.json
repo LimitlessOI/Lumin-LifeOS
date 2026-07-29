@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-29T05:18:22.632Z",
+  "generated_at": "2026-07-29T05:28:44.039Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12305,
+  "file_count": 12307,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -40030,9 +40030,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 299306,
-      "mtime": "2026-07-29T05:17:50.061Z",
-      "indexed_at": "2026-07-29T05:18:22.632Z"
+      "bytes": 301846,
+      "mtime": "2026-07-29T05:28:14.926Z",
+      "indexed_at": "2026-07-29T05:28:44.039Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -63819,9 +63819,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 35456,
-      "mtime": "2026-07-29T05:17:26.703Z",
-      "indexed_at": "2026-07-29T05:18:22.632Z",
+      "bytes": 35489,
+      "mtime": "2026-07-29T05:27:50.107Z",
+      "indexed_at": "2026-07-29T05:28:44.039Z",
       "synopsis_index_only": true
     },
     {
@@ -67851,9 +67851,9 @@
     {
       "path": "routes/factory-mount-routes.js",
       "synopsis": "Pure: should the codegen prompt inline this file's existing content?",
-      "bytes": 34516,
-      "mtime": "2026-07-29T02:36:34.377Z",
-      "indexed_at": "2026-07-29T02:37:33.366Z"
+      "bytes": 36129,
+      "mtime": "2026-07-29T05:24:45.358Z",
+      "indexed_at": "2026-07-29T05:28:44.039Z"
     },
     {
       "path": "routes/faith-studio-routes.js",
@@ -69972,6 +69972,16 @@
       "bytes": 1927,
       "mtime": "2026-06-21T21:39:05.393Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "scripts/ai-security-review.mjs",
+      "synopsis": "AI-powered adversarial security review of a diff — the real",
+      "bytes": 6620,
+      "mtime": "2026-07-29T05:24:00.128Z",
+      "indexed_at": "2026-07-29T05:28:44.039Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/alpha-loop-stress-test.mjs",
@@ -94398,6 +94408,13 @@
       "ssot": [
         "docs/products/ai-council/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "tests/ai-security-review.test.js",
+      "synopsis": "js — tests/ai-security-review.test.js.",
+      "bytes": 4622,
+      "mtime": "2026-07-29T05:27:33.095Z",
+      "indexed_at": "2026-07-29T05:28:44.039Z"
     },
     {
       "path": "tests/api.test.js",
