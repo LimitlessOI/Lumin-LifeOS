@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-29T05:28:44.039Z",
+  "generated_at": "2026-07-29T05:33:34.447Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12307,
   "files": [
@@ -40015,9 +40015,9 @@
     {
       "path": "docs/products/builderos/GAP_FILL_LEDGER.json",
       "synopsis": "Documentation — GAP FILL LEDGER.",
-      "bytes": 20937,
-      "mtime": "2026-07-29T02:37:33.923Z",
-      "indexed_at": "2026-07-29T04:01:55.226Z",
+      "bytes": 23320,
+      "mtime": "2026-07-29T05:28:44.608Z",
+      "indexed_at": "2026-07-29T05:33:34.447Z",
       "synopsis_index_only": true
     },
     {
@@ -40030,9 +40030,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 301846,
-      "mtime": "2026-07-29T05:28:14.926Z",
-      "indexed_at": "2026-07-29T05:28:44.039Z"
+      "bytes": 303685,
+      "mtime": "2026-07-29T05:33:16.785Z",
+      "indexed_at": "2026-07-29T05:33:34.447Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -69976,9 +69976,9 @@
     {
       "path": "scripts/ai-security-review.mjs",
       "synopsis": "AI-powered adversarial security review of a diff — the real",
-      "bytes": 6620,
-      "mtime": "2026-07-29T05:24:00.128Z",
-      "indexed_at": "2026-07-29T05:28:44.039Z",
+      "bytes": 7265,
+      "mtime": "2026-07-29T05:32:25.676Z",
+      "indexed_at": "2026-07-29T05:33:34.447Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -94412,9 +94412,9 @@
     {
       "path": "tests/ai-security-review.test.js",
       "synopsis": "js — tests/ai-security-review.test.js.",
-      "bytes": 4622,
-      "mtime": "2026-07-29T05:27:33.095Z",
-      "indexed_at": "2026-07-29T05:28:44.039Z"
+      "bytes": 5441,
+      "mtime": "2026-07-29T05:32:42.629Z",
+      "indexed_at": "2026-07-29T05:33:34.447Z"
     },
     {
       "path": "tests/api.test.js",

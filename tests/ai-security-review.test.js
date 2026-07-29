@@ -94,6 +94,20 @@ test('reviewDiffForSecurity: non-JSON model response records theater_detected an
   assert.equal(pool.inserts[0].theater, 1);
 });
 
+test('reviewDiffForSecurity: a JSON object wrapped in prose still parses (real model behavior found live 2026-07-29)', async () => {
+  const callModel = async () => 'Finding 1: here is my analysis.\n\n{"findings":[],"clean":true}\n\nLet me know if you need more detail.';
+  const result = await reviewDiffForSecurity({ diffText: '+ const x = 1;', callModel });
+  assert.equal(result.ok, true);
+  assert.equal(result.clean, true);
+});
+
+test('reviewDiffForSecurity: pure prose with no JSON object anywhere still fails cleanly', async () => {
+  const callModel = async () => 'I refuse to answer in JSON, here is prose instead with no braces at all.';
+  const result = await reviewDiffForSecurity({ diffText: '+ exec(x)', callModel });
+  assert.equal(result.ok, false);
+  assert.ok(result.error.includes('non-JSON'));
+});
+
 test('reviewDiffForSecurity: no pool is a safe no-op, never throws', async () => {
   const callModel = async () => JSON.stringify({ findings: [], clean: true });
   const result = await reviewDiffForSecurity({ diffText: '+ x', callModel });

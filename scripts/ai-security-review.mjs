@@ -94,10 +94,19 @@ export async function reviewDiffForSecurity({
     return { ok: false, error: err.message };
   }
 
+  // Confirmed live 2026-07-29: not every model tier reliably follows a
+  // strict-JSON-only instruction on this longer, more complex prompt (the
+  // simpler founder-decisions/extract prompt worked fine on gemini_flash,
+  // but a fallback tier on this prompt returned "Finding 1: ..." prose).
+  // Extract the first {...} block rather than requiring the WHOLE response
+  // to be pure JSON -- same forgiving-extraction pattern already proven in
+  // routes/site-builder-prealpha-routes.js's UX critique parsing.
   let parsed;
   try {
     const cleaned = String(raw).trim().replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/i, '');
-    parsed = JSON.parse(cleaned);
+    const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) throw new Error('no JSON object found in response');
+    parsed = JSON.parse(jsonMatch[0]);
   } catch (err) {
     recordModelOutcomeSafe(pool, { model_tier: model, role: 'security_review', ok: false, theater_detected: true });
     logger?.warn?.(`[AI-SECURITY-REVIEW] model returned non-JSON: ${err.message}`);
