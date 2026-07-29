@@ -2498,6 +2498,40 @@
           "assertion_id": "expected_exports:services/governed-autonomous-shipping-loop.js"
         }
       ]
+    },
+    {
+      "id": "bo-wire-security-review-into-commit-path",
+      "status": "pending",
+      "target_file": "routes/lifeos-council-builder-routes.js",
+      "priority": "high",
+      "task": "scripts/ai-security-review.mjs's reviewDiffForSecurity() (the real AI-powered adversarial security layer, model role 'security_review' in the model-capability-ledger) is built, unit-tested (11/11 pass), and live-verified end-to-end via POST /factory/security-review -- but nothing calls it automatically. It only fires when a human or agent manually POSTs to that endpoint. This is the same 'built but dead' gap already fixed once tonight for other model roles: a real, working capability that never actually runs in production traffic delivers zero value until it's wired into a real call path.",
+      "spec": "In routes/lifeos-council-builder-routes.js's commitOrMirrorFiles() function (~line 1422 -- the shared commit choke point already doing a deterministic evaluateInvariants() check right before commitManyToGitHub is called), add a call to reviewDiffForSecurity() from scripts/ai-security-review.mjs immediately after the existing evaluateInvariants() block (after the `if (!invariantVerdict.ok) { ... throw err; }` block, still before the `if (typeof commitManyToGitHub === 'function')` block). Import: `import { reviewDiffForSecurity } from '../scripts/ai-security-review.mjs';`. Build a lightweight diff-like text from fileEntries (each entry has .path and .content, .encoding may be 'base64' -- skip base64 entries, only review text content) formatted as `--- ${entry.path}\\n+++ ${entry.path}\\n${entry.content}` joined per file, capped the same way the function already does elsewhere (do not add a new cap constant -- reuse or mirror the existing 4000-char-per-file budget pattern already in ai-security-review.mjs's own prompt builder if you need to bound total size, but do not modify ai-security-review.mjs itself in this step). Call it fire-and-forget, non-blocking, never throwing into the caller: `reviewDiffForSecurity({ diffText, changedFiles: fileEntries.map(e => e.path), callModel: <the same callCouncilMember/model-call function already available in this file's closure -- find and reuse it, do not add a new one>, pool: <the same pool already available in this file's closure> }).then((result) => { if (result?.ok && !result.clean) { log.warn({ findings: result.findings }, '[BUILDER] AI security_review finding (not blocking, ROUTE posture per Gate Charter c646160f-128a-4b43-9884-af37cd5a868a -- unproven mechanism, zero track record yet)'); } }).catch(() => {});` -- CRITICAL: this must never be awaited inline in the main commit path and must never throw or reject into the caller; the commit must proceed identically whether this succeeds, fails, or is still running. This is advisory-only logging, matching the exact posture already established for security_review in scripts/ai-security-review.mjs's own file header. Do not change evaluateInvariants(), do not change the hard-block behavior for invariant violations, do not change commitManyToGitHub's call, do not make this synchronous or blocking under any circumstance.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "patch_mode": true,
+      "source": "live_audit_2026-07-29",
+      "finding_note": "This is the OTHER real commit choke point besides services/governed-autonomous-shipping-loop.js's own internal commitShippedFiles() -- this one (commitOrMirrorFiles in lifeos-council-builder-routes.js) is what CLAUDE.md's own standing order tells Cursor/Codex to ship through ('npm run system:commit-files -> POST /api/v1/lifeos/builder/execute-batch'), so wiring security_review here covers human/agent-triggered machine ships, not just the autonomous loop's own internal ships. Fire-and-forget is not a cut corner here -- it is the correct choice: this mechanism has zero track record on true/false-positive rate yet (see the one real live test tonight, which found a likely false positive), so it must never be able to slow down or block a real commit while that track record is being built. Promotion to a synchronous or blocking check is a separate, later, deliberate decision once there is real data to judge it by.",
+      "expected_exports": [
+        "createLifeOSCouncilBuilderRoutes"
+      ],
+      "file_contains": [
+        "reviewDiffForSecurity",
+        "security_review finding"
+      ],
+      "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "bo-wire-security-review-into-commit-path",
+      "mission_id": "PRODUCT-builderos",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/lifeos-council-builder-routes.js",
+          "exports": [
+            "createLifeOSCouncilBuilderRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/lifeos-council-builder-routes.js"
+        }
+      ]
     }
   ],
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",

@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-29T20:48:29.772Z",
+  "generated_at": "2026-07-29T20:59:22.043Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12335,
+  "file_count": 12308,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -30750,14 +30750,6 @@
       ]
     },
     {
-      "path": "config/digital-twin-template-v1.json",
-      "synopsis": "Configuration — Digital Twin Template V1.",
-      "bytes": 3447,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z",
-      "synopsis_index_only": true
-    },
-    {
       "path": "config/edge-config.toml",
       "synopsis": "Configuration — Edge Config.",
       "bytes": 143,
@@ -32746,218 +32738,75 @@
       "synopsis_index_only": true
     },
     {
-      "path": "data/twins/_template/_meta.json",
-      "synopsis": "JSON data/config — data/twins/_template/_meta.json.",
-      "bytes": 356,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z",
-      "synopsis_index_only": true
-    },
-    {
-      "path": "data/twins/_template/communication.json",
-      "synopsis": "JSON data/config — data/twins/_template/communication.json.",
-      "bytes": 272,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z",
-      "synopsis_index_only": true
-    },
-    {
-      "path": "data/twins/_template/decision_identity.json",
-      "synopsis": "JSON data/config — data/twins/_template/decision_identity.json.",
-      "bytes": 331,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z",
-      "synopsis_index_only": true
-    },
-    {
-      "path": "data/twins/_template/goal.json",
-      "synopsis": "JSON data/config — data/twins/_template/goal.json.",
-      "bytes": 184,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z",
-      "synopsis_index_only": true
-    },
-    {
-      "path": "data/twins/_template/memory.json",
-      "synopsis": "JSON data/config — data/twins/_template/memory.json.",
-      "bytes": 157,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z",
-      "synopsis_index_only": true
-    },
-    {
-      "path": "data/twins/_template/operating_system.json",
-      "synopsis": "JSON data/config — data/twins/_template/operating_system.json.",
-      "bytes": 261,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z",
-      "synopsis_index_only": true
-    },
-    {
-      "path": "data/twins/_template/permission.json",
-      "synopsis": "JSON data/config — data/twins/_template/permission.json.",
-      "bytes": 249,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z",
-      "synopsis_index_only": true
-    },
-    {
-      "path": "data/twins/_template/personal.json",
-      "synopsis": "JSON data/config — data/twins/_template/personal.json.",
-      "bytes": 535,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z",
-      "synopsis_index_only": true
-    },
-    {
-      "path": "data/twins/_template/personality.json",
-      "synopsis": "JSON data/config — data/twins/_template/personality.json.",
-      "bytes": 190,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z",
-      "synopsis_index_only": true
-    },
-    {
-      "path": "data/twins/_template/README.md",
-      "synopsis": "Digital Twin — blank template",
-      "bytes": 238,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z"
-    },
-    {
-      "path": "data/twins/default/adam/_meta.json",
-      "synopsis": "JSON data/config — data/twins/default/adam/_meta.json.",
-      "bytes": 2132,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z",
-      "synopsis_index_only": true
-    },
-    {
       "path": "data/twins/default/adam/communication.json",
       "synopsis": "JSON data/config — data/twins/default/adam/communication.json.",
-      "bytes": 1070,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z",
-      "synopsis_index_only": true
-    },
-    {
-      "path": "data/twins/default/adam/decision_identity.json",
-      "synopsis": "JSON data/config — data/twins/default/adam/decision_identity.json.",
-      "bytes": 6658,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z",
+      "bytes": 225,
+      "mtime": "2026-06-28T23:37:30.199Z",
+      "indexed_at": "2026-07-28T22:54:46.666Z",
       "synopsis_index_only": true
     },
     {
       "path": "data/twins/default/adam/future.json",
       "synopsis": "JSON data/config — data/twins/default/adam/future.json.",
       "bytes": 372,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z",
+      "mtime": "2026-06-29T03:59:55.444Z",
+      "indexed_at": "2026-07-28T22:54:46.666Z",
       "synopsis_index_only": true
     },
     {
       "path": "data/twins/default/adam/goal.json",
       "synopsis": "JSON data/config — data/twins/default/adam/goal.json.",
-      "bytes": 4309,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z",
-      "synopsis_index_only": true
-    },
-    {
-      "path": "data/twins/default/adam/memory.json",
-      "synopsis": "JSON data/config — data/twins/default/adam/memory.json.",
-      "bytes": 1225,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z",
+      "bytes": 159,
+      "mtime": "2026-06-28T23:37:30.199Z",
+      "indexed_at": "2026-07-28T22:54:46.666Z",
       "synopsis_index_only": true
     },
     {
       "path": "data/twins/default/adam/modules/buyer.json",
       "synopsis": "JSON data/config — data/twins/default/adam/modules/buyer.json.",
       "bytes": 4676,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z",
-      "synopsis_index_only": true
-    },
-    {
-      "path": "data/twins/default/adam/modules/content.json",
-      "synopsis": "JSON data/config — data/twins/default/adam/modules/content.json.",
-      "bytes": 1105,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z",
-      "synopsis_index_only": true
-    },
-    {
-      "path": "data/twins/default/adam/modules/gvbn.json",
-      "synopsis": "JSON data/config — data/twins/default/adam/modules/gvbn.json.",
-      "bytes": 1630,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z",
+      "mtime": "2026-06-28T23:37:30.199Z",
+      "indexed_at": "2026-07-28T22:54:46.666Z",
       "synopsis_index_only": true
     },
     {
       "path": "data/twins/default/adam/modules/lead.json",
       "synopsis": "JSON data/config — data/twins/default/adam/modules/lead.json.",
       "bytes": 3349,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z",
-      "synopsis_index_only": true
-    },
-    {
-      "path": "data/twins/default/adam/modules/recruiting.json",
-      "synopsis": "JSON data/config — data/twins/default/adam/modules/recruiting.json.",
-      "bytes": 663,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z",
+      "mtime": "2026-06-28T23:37:30.200Z",
+      "indexed_at": "2026-07-28T22:54:46.666Z",
       "synopsis_index_only": true
     },
     {
       "path": "data/twins/default/adam/modules/seller.json",
       "synopsis": "JSON data/config — data/twins/default/adam/modules/seller.json.",
       "bytes": 463,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z",
-      "synopsis_index_only": true
-    },
-    {
-      "path": "data/twins/default/adam/operating_system.json",
-      "synopsis": "JSON data/config — data/twins/default/adam/operating_system.json.",
-      "bytes": 6642,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z",
+      "mtime": "2026-06-28T23:37:30.200Z",
+      "indexed_at": "2026-07-28T22:54:46.666Z",
       "synopsis_index_only": true
     },
     {
       "path": "data/twins/default/adam/performance.json",
       "synopsis": "JSON data/config — data/twins/default/adam/performance.json.",
       "bytes": 170,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z",
-      "synopsis_index_only": true
-    },
-    {
-      "path": "data/twins/default/adam/permission.json",
-      "synopsis": "JSON data/config — data/twins/default/adam/permission.json.",
-      "bytes": 1095,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z",
+      "mtime": "2026-06-23T11:47:19.157Z",
+      "indexed_at": "2026-07-28T22:54:46.666Z",
       "synopsis_index_only": true
     },
     {
       "path": "data/twins/default/adam/personal.json",
       "synopsis": "JSON data/config — data/twins/default/adam/personal.json.",
-      "bytes": 5865,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z",
+      "bytes": 1462,
+      "mtime": "2026-06-24T00:08:36.987Z",
+      "indexed_at": "2026-07-28T22:54:46.666Z",
       "synopsis_index_only": true
     },
     {
       "path": "data/twins/default/adam/personality.json",
       "synopsis": "JSON data/config — data/twins/default/adam/personality.json.",
-      "bytes": 642,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z",
+      "bytes": 212,
+      "mtime": "2026-06-28T23:37:30.200Z",
+      "indexed_at": "2026-07-28T22:54:46.666Z",
       "synopsis_index_only": true
     },
     {
@@ -32971,9 +32820,9 @@
     {
       "path": "data/twins/founder/adam/adam.json",
       "synopsis": "JSON data/config — data/twins/founder/adam/adam.json.",
-      "bytes": 686,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z",
+      "bytes": 279,
+      "mtime": "2026-06-23T11:44:04.266Z",
+      "indexed_at": "2026-07-28T22:54:46.666Z",
       "synopsis_index_only": true
     },
     {
@@ -33015,13 +32864,6 @@
       "mtime": "2026-06-23T11:44:04.266Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "synopsis_index_only": true
-    },
-    {
-      "path": "data/twins/README.md",
-      "synopsis": "Digital Twins (data)",
-      "bytes": 722,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z"
     },
     {
       "path": "data/useful-work-guard-audit-results.json",
@@ -37255,9 +37097,9 @@
     {
       "path": "docs/architecture/DIGITAL_TWIN_DOCTRINE.md",
       "synopsis": "Digital Twin — universal per-person understanding (capsules = evidence layer)",
-      "bytes": 6254,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z"
+      "bytes": 5749,
+      "mtime": "2026-06-29T17:21:07.943Z",
+      "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
       "path": "docs/architecture/DOC_REORG_RECEIPT.md",
@@ -37982,9 +37824,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 40207,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z"
+      "bytes": 39675,
+      "mtime": "2026-07-28T22:45:19.610Z",
+      "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40189,8 +40031,8 @@
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
       "bytes": 316928,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z"
+      "mtime": "2026-07-29T19:29:39.416Z",
+      "indexed_at": "2026-07-29T19:30:22.614Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -40198,13 +40040,6 @@
       "bytes": 21471,
       "mtime": "2026-07-03T00:17:45.056Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
-    },
-    {
-      "path": "docs/products/builderos/specs/FOUNDER_VIRTUAL_TWIN.md",
-      "synopsis": "Founder Virtual Twin — what to capture, how to compile it, and the build order",
-      "bytes": 12163,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z"
     },
     {
       "path": "docs/products/builderos/TWIN.md",
@@ -40715,13 +40550,6 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
-      "path": "docs/products/ideavault/conversations/2026-07-29-operator-intake-compact-digest.md",
-      "synopsis": "Cheap-read digest — Jul 28–29 operator dumps (coaching, GVBN, mega paste)",
-      "bytes": 6886,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z"
-    },
-    {
       "path": "docs/products/ideavault/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 1893,
@@ -40819,38 +40647,17 @@
     {
       "path": "docs/products/life-coaching/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
-      "bytes": 1197,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z",
+      "bytes": 560,
+      "mtime": "2026-06-29T17:21:02.531Z",
+      "indexed_at": "2026-07-28T22:54:46.666Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/products/life-coaching/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Life Coaching",
-      "bytes": 13394,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z"
-    },
-    {
-      "path": "docs/products/life-coaching/twins/ADAM_FOUNDER_TWIN_v1.md",
-      "synopsis": "Adam Founder Twin v1 — human summary + supervision checklist",
-      "bytes": 3094,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z"
-    },
-    {
-      "path": "docs/products/life-coaching/twins/DIGITAL_TWIN_TEMPLATE.md",
-      "synopsis": "What a Digital Twin is — universal template (Adam is the reference fill)",
-      "bytes": 5402,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z"
-    },
-    {
-      "path": "docs/products/life-coaching/twins/TWIN_ASSEMBLY_PLAYBOOK.md",
-      "synopsis": "How cheap models fill Digital Twin facets from conversations",
-      "bytes": 3844,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z"
+      "bytes": 12208,
+      "mtime": "2026-06-29T17:35:43.027Z",
+      "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
       "path": "docs/products/LIFECOACHING.md",
@@ -40912,16 +40719,16 @@
       "path": "docs/products/lifeos/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 30729,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z",
+      "mtime": "2026-07-24T18:36:41.691Z",
+      "indexed_at": "2026-07-28T22:54:46.666Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 631845,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z"
+      "bytes": 631390,
+      "mtime": "2026-07-28T23:22:59.520Z",
+      "indexed_at": "2026-07-28T23:23:37.073Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -64012,9 +63819,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 35597,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z",
+      "bytes": 35489,
+      "mtime": "2026-07-29T05:27:50.107Z",
+      "indexed_at": "2026-07-29T05:28:44.039Z",
       "synopsis_index_only": true
     },
     {
@@ -74085,13 +73892,6 @@
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
-    },
-    {
-      "path": "scripts/verify-digital-twin.mjs",
-      "synopsis": "Verify digital twin facets exist and inject block builds.",
-      "bytes": 1147,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z"
     },
     {
       "path": "scripts/verify-dual-path-spine.mjs",
@@ -90220,9 +90020,9 @@
     {
       "path": "services/lumin-context-loader.js",
       "synopsis": "Loads per-user twin + communication profile + recent learning for Lumin prompts.",
-      "bytes": 12734,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z",
+      "bytes": 5124,
+      "mtime": "2026-07-16T19:42:53.459Z",
+      "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -95287,13 +95087,6 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
-    },
-    {
-      "path": "tests/digital-twin-loader.test.js",
-      "synopsis": "Unit tests for digital twin inject loader.",
-      "bytes": 1641,
-      "mtime": "2026-07-29T20:48:29.772Z",
-      "indexed_at": "2026-07-29T20:48:29.772Z"
     },
     {
       "path": "tests/doctrine-enforcement.test.js",
