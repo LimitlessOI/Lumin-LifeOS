@@ -370,15 +370,23 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
       if (!text) return res.status(400).json({ ok: false, error: 'text_batch required' });
       if (!callCouncilMember) return res.status(503).json({ ok: false, error: 'callCouncilMember not available' });
 
-      const prompt = `You are extracting REAL, ALREADY-MADE decisions, directives, and stated preferences the founder (Adam) expressed in this raw conversation excerpt. This is historical record-keeping, not prediction -- only extract what he actually said, in his own words or a faithful close paraphrase.
+      const prompt = `You are extracting REAL things the founder (Adam) expressed in this raw historical conversation excerpt, for a durable record of how he actually thinks and decides -- not prediction, not feature-mining. Only extract what he actually said or clearly experienced, in his own words or a faithful close paraphrase.
 
-Rules:
-- Only extract genuine decisions/directives/preferences (e.g. "always do X", "never do Y", "I've decided Z", a clear choice between options, a stated priority, a correction of the system's approach). Skip small talk, debugging back-and-forth, and requests with no lasting decision content.
-- category must be exactly one of: governance, product_scope, financial, quality_standard, process, priority, other.
-- decision_text: Adam's own words or a faithful close paraphrase. Keep it concrete and specific.
+Extract FOUR kinds of real content, each a distinct category:
+
+1. decisions/directives/preferences (category: governance, product_scope, financial, quality_standard, process, or priority) -- "always do X", "never do Y", "I've decided Z", a clear choice between options, a correction of the system's approach.
+
+2. ai_failure_pattern -- a real moment where Adam identified or experienced an AI system failing him: lying or overclaiming, taking a shortcut instead of the real fix, missing an obvious connection he had to point out himself ("have you thought of X" moments), going in circles on the same problem repeatedly, or any other concrete AI weakness he named from direct experience. This is the single most valuable category in this corpus -- founder, direct: "I didn't realize how much AI lies to me... the AI takes the shortest cut path... AI can [fail to] see something that's so easily understood as connected." Capture the SPECIFIC failure, not a generic complaint.
+
+3. founder_insight -- an original idea, connection, or solution Adam came up with himself, especially ones that came from him "connecting dots" the AI had missed. Not a system feature request -- his own reasoning or realization, in his own words.
+
+4. other -- skip small talk and pure debugging back-and-forth with no lasting content. If genuinely nothing in this excerpt fits any category, return {"decisions":[]}. Do not invent content to have something to return.
+
+Output rules:
+- category must be exactly one of: governance, product_scope, financial, quality_standard, process, priority, ai_failure_pattern, founder_insight, other.
+- decision_text: Adam's own words or a faithful close paraphrase. Keep it concrete and specific -- name the actual failure, the actual idea, the actual decision, not a vague summary.
 - context: one sentence on what prompted it, if inferable from the excerpt. null if not inferable.
 - Return STRICT JSON only, no markdown fences, no commentary: {"decisions":[{"decision_text":"...","context":"...","category":"..."}]}
-- If nothing in this excerpt is a genuine decision, return {"decisions":[]}. Do not invent decisions to have something to return.
 
 EXCERPT${file_label ? ` (source: ${file_label})` : ''}:
 ${text.slice(0, 24000)}`;
@@ -392,7 +400,11 @@ ${text.slice(0, 24000)}`;
           raw = await callCouncilMember(tier, prompt, {
             taskType: 'json',
             product_lane: 'builderos',
-            maxOutputTokens: 3000,
+            // Raised from 3000 after observing real truncation failures
+            // ("Unterminated string in JSON") on chunks with unusually many
+            // extractable items; the 4-category prompt (2026-07-29) extracts
+            // more per chunk on average, not less.
+            maxOutputTokens: 6000,
             responseFormat: 'json',
             useCache: false,
           });

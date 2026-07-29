@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-29T00:45:38.702Z",
+  "generated_at": "2026-07-29T02:29:40.159Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12301,
   "files": [
@@ -40030,9 +40030,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 286565,
-      "mtime": "2026-07-29T00:43:26.226Z",
-      "indexed_at": "2026-07-29T00:44:25.890Z"
+      "bytes": 289889,
+      "mtime": "2026-07-29T02:29:12.467Z",
+      "indexed_at": "2026-07-29T02:29:40.159Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -67851,9 +67851,9 @@
     {
       "path": "routes/factory-mount-routes.js",
       "synopsis": "Pure: should the codegen prompt inline this file's existing content?",
-      "bytes": 32514,
-      "mtime": "2026-07-29T00:41:11.460Z",
-      "indexed_at": "2026-07-29T00:44:25.890Z"
+      "bytes": 33974,
+      "mtime": "2026-07-29T02:28:25.644Z",
+      "indexed_at": "2026-07-29T02:29:40.159Z"
     },
     {
       "path": "routes/faith-studio-routes.js",
@@ -87825,9 +87825,9 @@
     {
       "path": "services/founder-intent-model.js",
       "synopsis": "services/founder-intent-model.js",
-      "bytes": 4100,
-      "mtime": "2026-07-28T17:47:22.558Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 4576,
+      "mtime": "2026-07-29T02:27:39.711Z",
+      "indexed_at": "2026-07-29T02:29:40.159Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

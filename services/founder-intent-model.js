@@ -36,6 +36,13 @@ async function ensureTable(pool) {
 const VALID_CATEGORIES = new Set([
   'governance', 'product_scope', 'financial', 'quality_standard',
   'process', 'priority', 'other',
+  // Added 2026-07-29 -- founder, direct: the most valuable thing in the
+  // historical corpus is not feature ideas, it's what he learned the hard
+  // way about how AI actually fails him (lies, takes shortcuts, misses
+  // obvious connections he had to point out himself) and his own original
+  // ideas/insights. Both shape his decisions as much as explicit directives
+  // do, so they belong in the same log, not a separate one.
+  'ai_failure_pattern', 'founder_insight',
 ]);
 
 /**
