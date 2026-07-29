@@ -1,20 +1,24 @@
 {
-  "deploy_commit_sha": "a2472460d3da5986d50451c9aaa01f704821707e",
-  "proved_at": "2026-07-16T00:00:00Z",
+  "deploy_commit_sha": "953e202ca9e92e0fa48c12c8046aa93efe76d340",
+  "proved_at": "2026-07-29T21:38:00Z",
   "ready_for_real_customers": "soft_launch_yes_mass_market_not_yet",
-  "score_know": 9,
+  "score_know": 8,
   "tip_proved": {
     "signup_terms": true,
     "password_reset_token_flow": true,
     "password_reset_email_delivery": false,
+    "password_reset_email_provider_api_reaches_postmark": true,
+    "password_reset_email_code_has_resend_smtp_fallback": true,
     "pack_loop_and_unlock_flag": true,
     "stripe_checkout_create": true,
-    "stripe_live_card_charge": false
+    "stripe_checkout_url_is_live_mode": true,
+    "stripe_live_card_charge": false,
+    "sentry_pre_alpha_gate_marketingos": true
   },
   "blockers_for_mass_market": [
-    "RESEND_API_KEY/SMTP not confirmed sending reset emails on tip (token flow works; email_sent false)",
-    "Live card charge → success_url verify not tip-proved with real money (Checkout create + unlock-after-paid proven)"
+    "Postmark account is pending approval and only allows same-domain recipients. A live $49 pack purchase requires a real card payment (cs_live checkout URL created; payment not yet completed).",
+    "No verified RESEND_API_KEY or working SMTP fallback is configured in Railway vault, so real external-domain password-reset delivery is still unconfirmed."
   ],
   "ok_to_sell_early_customers": true,
-  "honest_pitch": "Early customers can sign up, generate a pack, pay $49 via Stripe Checkout, and download. Password recovery works if mail is configured; otherwise email adam@limitlessoi.com."
+  "honest_pitch": "Early customers can sign up, generate a pack, and create a live $49 Stripe Checkout session. Pack unlock works (verified via operator mark-paid and export gate). Password reset token flow works; reset email leaves the server and reaches Postmark's sink, but delivery to arbitrary customer inboxes is blocked until Postmark account approval or a Resend/SMTP fallback is added."
 }

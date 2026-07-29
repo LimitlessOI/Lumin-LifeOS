@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-29T21:32:35.116Z",
+  "generated_at": "2026-07-29T21:42:24.832Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12308,
   "files": [
@@ -37824,9 +37824,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 41164,
-      "mtime": "2026-07-29T21:28:46.444Z",
-      "indexed_at": "2026-07-29T21:28:46.444Z"
+      "bytes": 41515,
+      "mtime": "2026-07-29T21:42:24.832Z",
+      "indexed_at": "2026-07-29T21:42:24.832Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40726,9 +40726,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 632974,
-      "mtime": "2026-07-29T21:28:46.444Z",
-      "indexed_at": "2026-07-29T21:28:46.444Z"
+      "bytes": 634269,
+      "mtime": "2026-07-29T21:42:24.832Z",
+      "indexed_at": "2026-07-29T21:42:24.832Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -40857,9 +40857,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 127051,
-      "mtime": "2026-07-29T21:28:46.444Z",
-      "indexed_at": "2026-07-29T21:28:46.444Z"
+      "bytes": 128606,
+      "mtime": "2026-07-29T21:42:24.832Z",
+      "indexed_at": "2026-07-29T21:42:24.832Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -64802,9 +64802,9 @@
     {
       "path": "products/receipts/SENTRY_FINDINGS_FEED.marketingos.json",
       "synopsis": "Product receipt — SENTRY FINDINGS FEED.Marketingos.",
-      "bytes": 243,
-      "mtime": "2026-07-20T08:51:23.724Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 279,
+      "mtime": "2026-07-29T21:42:24.832Z",
+      "indexed_at": "2026-07-29T21:42:24.832Z",
       "synopsis_index_only": true
     },
     {
@@ -64819,16 +64819,16 @@
       "path": "products/receipts/SENTRY_MARKETINGOS_LAYER_A.json",
       "synopsis": "Product receipt — SENTRY MARKETINGOS LAYER A.",
       "bytes": 1081,
-      "mtime": "2026-07-20T08:51:20.308Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "mtime": "2026-07-29T21:42:24.832Z",
+      "indexed_at": "2026-07-29T21:42:24.832Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/SENTRY_MARKETINGOS_LAYER_B.json",
       "synopsis": "Product receipt — SENTRY MARKETINGOS LAYER B.",
       "bytes": 1036,
-      "mtime": "2026-07-20T08:51:23.719Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "mtime": "2026-07-29T21:42:24.832Z",
+      "indexed_at": "2026-07-29T21:42:24.832Z",
       "synopsis_index_only": true
     },
     {
@@ -64890,9 +64890,9 @@
     {
       "path": "products/receipts/SMOS_REAL_CUSTOMER_READINESS.json",
       "synopsis": "Product receipt — SMOS REAL CUSTOMER READINESS.",
-      "bytes": 939,
-      "mtime": "2026-07-16T19:42:53.594Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 1491,
+      "mtime": "2026-07-29T21:42:24.832Z",
+      "indexed_at": "2026-07-29T21:42:24.832Z",
       "synopsis_index_only": true
     },
     {
