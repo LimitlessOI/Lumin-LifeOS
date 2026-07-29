@@ -475,7 +475,12 @@ ${text.slice(0, 24000)}`;
       const { reviewDiffForSecurity } = await import('../scripts/ai-security-review.mjs');
       const candidates = getCandidateModelsForTask('security_review.review_diff');
       let result = null;
-      let lastErr = null;
+      // Same diagnostic gap already found and fixed once this session for
+      // codegen (tier_errors): a single lastErr string threw away which
+      // tier failed and why, making a real live failure ("Finding 1: ..."
+      // prose from a weak fallback tier) undiagnosable from the HTTP
+      // response alone. Keep every tier's result, not just the last.
+      const tierAttempts = [];
       for (const tier of candidates) {
         result = await reviewDiffForSecurity({
           diffText: diff_text,
@@ -484,11 +489,11 @@ ${text.slice(0, 24000)}`;
           model: tier,
           pool,
         });
+        tierAttempts.push({ tier, ok: result.ok, error: result.error, raw_preview: result.raw_preview });
         if (result.ok) break;
-        lastErr = result.error;
       }
       if (!result?.ok) {
-        return res.status(503).json({ ok: false, error: lastErr || 'all model tiers failed' });
+        return res.status(503).json({ ok: false, error: result?.error || 'all model tiers failed', tier_attempts: tierAttempts });
       }
       res.json(result);
     } catch (err) {
