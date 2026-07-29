@@ -18,6 +18,7 @@
   },
   "priority": [
     "lifeos",
+    "builderos",
     "site-builder",
     "marketingos",
     "limitlessos",
@@ -26,7 +27,6 @@
     "lifere",
     "tc-service",
     "memory-system",
-    "builderos",
     "financial-revenue",
     "ai-receptionist",
     "ai-council",
@@ -49,6 +49,7 @@
     "zero-drift-handoff-protocol"
   ],
   "notes": [
+    "2026-07-29: Adam, direct and real-time -- 'we're building the builder right now, and I want it to be rated a ten... continue working until it is.' Moved builderos from #10 to #2 (right after lifeos, ahead of site-builder/marketingos) so the never-stop loop actually reaches builderos's real pending fixes (bo-verify-ship-lands-on-main, bo-wire-security-review-into-commit-path) instead of them sitting at attempts:0 behind 9 higher-priority products' work every cycle. Not a permanent reprioritization -- revisit once the builder's own punch list is closed and revenue-lane products can resume top priority.",
     "2026-07-12 PM: Adam \u2014 LifeOS first (never stop; follow BUILD_QUEUE blueprint step-by-step). Then Site Builder, MarketingOS, LimitlessOS, and the rest in financial priority order. Only stop for token/budget exhaustion or SENTRY/governance failure.",
     "2026-07-12: Adam \u2014 LifeOS whole kit (chat must ship; therapist account with consent). lifeos \u2192 wellness-studio \u2192 site-builder money parallel.",
     "2026-07-11: Adam \u2014 keep building but what matters. Reordered: site-builder + limitlessos (first dollar) \u2192 lifeos \u2192 marketingos publish. YouTube SENTRY is not ahead of money.",
