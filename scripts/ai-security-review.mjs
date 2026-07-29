@@ -53,7 +53,15 @@ Rules:
 Changed files: ${changedFiles.join(', ') || '(not provided)'}
 
 DIFF:
-${diffText.slice(0, 20000)}
+${
+  // 11000 chars, not 20000: confirmed live 2026-07-29 that with Anthropic/
+  // OpenAI/Together all needs_payment, real dispatch falls through to
+  // Groq's free tier, whose smallest model caps at 6000 TPM -- a 20000-char
+  // excerpt plus the vuln-class list pushed the real request to ~6275
+  // tokens, over the limit, on every free-tier fallback. This budget is
+  // sized to fit under that ceiling with headroom, not picked arbitrarily.
+  diffText.slice(0, 11000)
+}
 
 Return STRICT JSON only, no markdown fences, no commentary:
 {"findings":[{"severity":"P0"|"P1"|"P2","vuln_class":"...","file":"...","description":"...","exploit_scenario":"...","proposed_solution":"..."}],"clean":true|false}`;
