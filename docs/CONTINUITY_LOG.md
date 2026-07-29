@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-29 — Critical tip sweep: auth trio still open (draft PRs never merged)
+
+Daily critical-bug automation re-read tip and found the same auth security holes reported 2026-07-24..28 still live because draft PRs #367/#370/#371 never merged. Concrete triggers: (1) member login JWT passes `requireKey` → operator/builder/Railway routes; (2) unauthenticated `POST /set-password` with `{handle,newPassword}` sets password on passwordless accounts; (3) any client sending `x-command-key` (even wrong value) + `return_token:true` on forgot-password gets raw reset token. Re-fixed on `cursor/critical-bug-investigation-147e` with regression tests. Remaining known open (not fixed this sweep): Site Builder Stripe product binding (#368), x-forwarded-host checkout URLs, MarketingOS owner_id IDOR, voice-rail body.user IDOR, founder-build Promise.race false FAIL.
+
 ## 2026-07-28 — Role separation: the gate that protected the wrong path
 
 Adam: audit every BuilderOS workflow for places one agent plans, implements, tests and approves its own work; require independent verification before COMPLETE. He explicitly declined to arbitrate the technical tradeoff ("I am not a programmer... talk with the chair"), so it went to the Chair, not to him — which is what `docs/AGENT_INBOX.md` says should happen with AI-vs-AI disputes anyway. Chair ruled (`decision_id c646160f-128a-4b43-9884-af37cd5a868a`, strong tier, `judgment_degraded:false`): hard-block ONLY for the irreversible / high-blast-radius set (auth, secrets, money), detect-and-route for everything else so the loop never idles (SO-003); do all three P0 items; a machine-path gate SUBSUMES the hook rather than accreting a tier.
