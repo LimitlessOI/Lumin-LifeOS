@@ -54,13 +54,23 @@ Changed files: ${changedFiles.join(', ') || '(not provided)'}
 
 DIFF:
 ${
-  // 11000 chars, not 20000: confirmed live 2026-07-29 that with Anthropic/
-  // OpenAI/Together all needs_payment, real dispatch falls through to
-  // Groq's free tier, whose smallest model caps at 6000 TPM -- a 20000-char
-  // excerpt plus the vuln-class list pushed the real request to ~6275
-  // tokens, over the limit, on every free-tier fallback. This budget is
-  // sized to fit under that ceiling with headroom, not picked arbitrarily.
-  diffText.slice(0, 11000)
+  // 4000 chars, not 11000: Round 5's 11000-char budget was itself wrong --
+  // live re-test 2026-07-29 against a real 16763-char code diff showed the
+  // 11000-char slice still produced HTTP 413 on Groq, requesting 9681
+  // tokens against the 6000 TPM limit (WORSE than the original 6275-token
+  // overage this was supposed to fix). Root cause of the wrong fix: Round 5
+  // assumed a ~3.3 chars/token ratio extrapolated from one earlier
+  // measurement, but code diffs (punctuation, camelCase identifiers,
+  // indentation) tokenize far denser than that -- this codebase's own
+  // chars/4 fallback heuristic (services/autonomous-telemetry-service.js)
+  // is itself too generous for code. Measured live ratio this round: a
+  // ~13100-char full prompt (11000-char diff + ~2100-char boilerplate)
+  // produced a 9681-token request -- ~1.35 chars/token, not ~3.3. Sized
+  // this budget from THAT real ratio, not another extrapolation: target
+  // ~4600 total requested tokens (prompt + the 1024-token output reserve
+  // below) against the 6000 limit, leaving ~1400 tokens (~23%) headroom
+  // for ratio variance across different diffs.
+  diffText.slice(0, 4000)
 }
 
 Return STRICT JSON only, no markdown fences, no commentary:
@@ -102,7 +112,13 @@ export async function reviewDiffForSecurity({
     // "different tier" retry loop was silently hitting the same cached
     // response every time. The earlier "weak fallback model" diagnosis was
     // itself likely a caching artifact, not a real per-model quality gap.
-    raw = await callModel(model, prompt, { maxOutputTokens: 2000, taskType: 'security_review', responseFormat: 'json', useCache: false });
+    //
+    // maxOutputTokens 1024, not 2000: Groq's TPM ceiling appears to reserve
+    // the requested output budget against the same per-minute cap as the
+    // input (see the diff-slice comment above for the full measurement) --
+    // cutting this in half buys real headroom for free without truncating
+    // findings, which are short structured JSON, not prose.
+    raw = await callModel(model, prompt, { maxOutputTokens: 1024, taskType: 'security_review', responseFormat: 'json', useCache: false });
   } catch (err) {
     recordModelOutcomeSafe(pool, { model_tier: model, role: 'security_review', ok: false });
     logger?.warn?.(`[AI-SECURITY-REVIEW] model call failed: ${err.message}`);
