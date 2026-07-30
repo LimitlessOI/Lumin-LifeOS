@@ -510,7 +510,7 @@
     },
     {
       "id": "ai-receptionist-1",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20231028_create_vapi_account.sql",
       "task": "create migration for vapi account",
       "spec": "Write a DB migration that creates a table for Vapi account information with necessary fields.",
@@ -522,12 +522,12 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-30T21:48:07.998Z",
-      "commit_sha": "9e438c2422d713dedd7d37750af18e05486a42b6",
+      "commit_sha": "e0a56d06d9615a0ab57a1527ff3409d9529a46c9",
       "blueprint_id": "PRODUCT-AI-RECEPTIONIST-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "ai-receptionist-1",
       "mission_id": "PRODUCT-ai-receptionist",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
+      "last_error": null,
       "reaudit_reset_at": "2026-07-30T18:55:06.298Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
