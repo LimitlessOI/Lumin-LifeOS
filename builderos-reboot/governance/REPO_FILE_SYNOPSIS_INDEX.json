@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T20:16:17.766Z",
+  "generated_at": "2026-07-30T20:18:50.645Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12352,
+  "file_count": 12353,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -36474,6 +36474,13 @@
       "bytes": 568,
       "mtime": "2026-07-24T18:36:41.538Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "db/migrations/20260716_lifeos_core_phase_2.sql",
+      "synopsis": "Database migration — 20260716_lifeos_core_phase_2.sql.",
+      "bytes": 400,
+      "mtime": "2026-07-30T20:18:50.645Z",
+      "indexed_at": "2026-07-30T20:18:50.645Z"
     },
     {
       "path": "db/migrations/20260717_socialmediaos_owner_id_text.sql",
