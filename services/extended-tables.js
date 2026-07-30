@@ -133,5 +133,48 @@ export function extendTables(knex, existingTables) {
       }
       return null;
     }),
+    // New table for user settings - to avoid schema conflicts and respect module requirements
+    knex.schema.hasTable('user_settings').then((exists) => {
+      if (!exists) {
+        return knex.schema.createTable('user_settings', (table) => {
+          table.increments('id').primary();
+          if (existingTables.includes('users')) {
+            table.integer('user_id').unsigned().references('id').inTable('users').onDelete('CASCADE').unique();
+          } else {
+            table.integer('user_id').unsigned().unique();
+          }
+          table.jsonb('settings_data');
+          table.timestamp('last_updated').defaultTo(knex.fn.now());
+        });
+      }
+      return null;
+    }),
+    // New table for system logs - for module-specific logging
+    knex.schema.hasTable('system_logs').then((exists) => {
+      if (!exists) {
+        return knex.schema.createTable('system_logs', (table) => {
+          table.increments('id').primary();
+          table.string('log_level');
+          table.string('module_name');
+          table.text('log_message');
+          table.jsonb('context_data');
+          table.timestamp('logged_at').defaultTo(knex.fn.now());
+        });
+      }
+      return null;
+    }),
+    // New table for features flags - for module-specific feature toggles
+    knex.schema.hasTable('feature_flags').then((exists) => {
+      if (!exists) {
+        return knex.schema.createTable('feature_flags', (table) => {
+          table.increments('id').primary();
+          table.string('feature_name').unique();
+          table.boolean('is_enabled').defaultTo(false);
+          table.jsonb('configuration');
+          table.timestamp('last_modified').defaultTo(knex.fn.now());
+        });
+      }
+      return null;
+    }),
   ]);
 }
