@@ -2743,14 +2743,37 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-16T04:14:52.960Z",
+      "shipped_at": "2026-07-30T20:29:37.711Z",
       "commit_sha": "5400b407b0b06743b64888482dc1a6b2701bea27",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-3",
       "mission_id": "PRODUCT-lifeos",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.601Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.601Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/lifeos/twins/steps/lifeos-3.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T20:29:37.711Z",
+        "shipped_at": "2026-07-30T20:29:37.711Z",
+        "commit_sha": "5400b407b0b06743b64888482dc1a6b2701bea27",
+        "content_sha256": "184d222e009006a421151d80c3771687a46fbe7652b77ae1bbdc33d686da888a",
+        "target_file": "services/lifeos-chat-intent-executor.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/lifeos-chat-intent-executor.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/lifeos/twins/steps/lifeos-3.exact",
+          "content_sha256": "184d222e009006a421151d80c3771687a46fbe7652b77ae1bbdc33d686da888a"
+        }
+      }
     },
     {
       "id": "lifeos-4",
