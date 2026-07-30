@@ -648,7 +648,7 @@
     },
     {
       "id": "ai-receptionist-4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/vapiRoutes.js",
       "task": "add routes for vapi operations",
       "spec": "Create routes to expose Vapi account creation and setup functionalities.",
@@ -656,7 +656,7 @@
         "ai-receptionist-2"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerVapiRoutes"
       ],
@@ -675,13 +675,16 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-16T04:31:17.225Z",
-      "commit_sha": "038354163922d281e87e4071bd727a1f5758e5b4",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-AI-RECEPTIONIST-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "ai-receptionist-4",
       "mission_id": "PRODUCT-ai-receptionist",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerVapiRoutes; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.298Z"
+      "last_error": "codegen_authoring_failed: codegen_empty: openai_builder_mini: HTTP 429: {\n    \"error\": {\n        \"message\": \"You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organiza",
+      "reaudit_reset_at": "2026-07-30T18:55:06.298Z",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-30T22:37:07.641Z"
     },
     {
       "id": "ai-receptionist-5",
