@@ -756,13 +756,13 @@
     },
     {
       "id": "11",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/api/tokenRoutes.js",
       "task": "expose token usage",
       "spec": "Expose a new API route for token usage logging and management.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerTokenRoutes"
       ],
@@ -794,7 +794,7 @@
       "reaudit_reset_at": "2026-07-30T18:55:06.242Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-30T22:37:14.254Z",
       "last_attempt": null,
       "revive_count": 3,
       "revived_at": "2026-07-30T22:21:54.595Z",
