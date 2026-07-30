@@ -784,7 +784,7 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-16T04:15:57.721Z",
+      "shipped_at": "2026-07-30T22:56:51.888Z",
       "commit_sha": null,
       "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "11",
@@ -806,7 +806,30 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/ai-council/twins/steps/11.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T22:56:51.888Z",
+        "shipped_at": "2026-07-30T22:56:51.888Z",
+        "commit_sha": null,
+        "content_sha256": "c1c18ca539e82247536b26b1c95922acf9073affeff349e3450955197075c2ee",
+        "target_file": "routes/api/tokenRoutes.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "routes/api/tokenRoutes.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/ai-council/twins/steps/11.exact",
+          "content_sha256": "c1c18ca539e82247536b26b1c95922acf9073affeff349e3450955197075c2ee"
+        }
+      }
     },
     {
       "id": "ai-council-1",
