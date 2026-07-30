@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T03:37:07.856Z",
+  "generated_at": "2026-07-30T03:39:44.514Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12354,
   "files": [
@@ -40586,9 +40586,9 @@
     {
       "path": "docs/products/creative-engine/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Creative Engine",
-      "bytes": 11034,
-      "mtime": "2026-07-30T03:37:07.856Z",
-      "indexed_at": "2026-07-30T03:37:07.856Z"
+      "bytes": 11025,
+      "mtime": "2026-07-30T03:39:44.514Z",
+      "indexed_at": "2026-07-30T03:39:44.514Z"
     },
     {
       "path": "docs/products/CREATIVEENGINE.md",
@@ -87128,9 +87128,9 @@
     {
       "path": "services/creative-engine/modes/footage-edit-smart.js",
       "synopsis": "Creative Engine mode — AI-driven footage cleanup (filler/repetition/silence removal + content-aware keep/cut)",
-      "bytes": 4716,
-      "mtime": "2026-07-30T03:20:35.298Z",
-      "indexed_at": "2026-07-30T03:20:35.298Z",
+      "bytes": 4932,
+      "mtime": "2026-07-30T03:39:44.514Z",
+      "indexed_at": "2026-07-30T03:39:44.514Z",
       "ssot": [
         "docs/products/creative-engine/PRODUCT_HOME.md"
       ]

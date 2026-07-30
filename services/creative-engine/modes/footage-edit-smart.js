@@ -73,7 +73,12 @@ export async function runSmartFootageEdit({ ffmpeg, storage, job, logger }) {
         minKeepSec: smart.minKeepSec,
       });
 
-  if (!plan.keepRanges.length) throw new Error('smart_cut_no_kept_segments');
+  if (!plan.keepRanges.length) {
+    logger?.info?.('[footage_edit_smart] no speech/keepable segments found; keeping full video');
+    plan.keepRanges = [[0, duration]];
+    plan.removeRanges = [];
+    plan.summary = `${plan.summary || 'no_words'} -> kept full video (no speech detected)`;
+  }
 
   logger?.info?.('[footage_edit_smart] cut plan', {
     words: transcript.words.length,
