@@ -169,7 +169,31 @@
       "blueprint_step_id": "4",
       "mission_id": "PRODUCT-creator-media-os",
       "shipped_via": null,
-      "reaudit_reset_at": "2026-07-30T18:55:06.422Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.422Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/creator-media-os/twins/steps/4.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T19:08:07.853Z",
+        "shipped_at": "2026-07-30T19:08:07.853Z",
+        "commit_sha": "4464a66ce6d446c3f76d04e737eaf0f692fed815",
+        "content_sha256": "a0c58768e7dee9e12cb3071308650fb8e0b4df6099afc52101a0703132948558",
+        "target_file": "services/sceneEngine.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/sceneEngine.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/creator-media-os/twins/steps/4.exact",
+          "content_sha256": "a0c58768e7dee9e12cb3071308650fb8e0b4df6099afc52101a0703132948558"
+        }
+      },
+      "shipped_at": "2026-07-30T19:08:07.853Z"
     },
     {
       "id": "5",
