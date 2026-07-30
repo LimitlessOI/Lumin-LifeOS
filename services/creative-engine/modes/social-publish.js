@@ -2,9 +2,8 @@
 // @ssot docs/products/creative-engine/PRODUCT_HOME.md
 
 import { existsSync } from 'node:fs';
-import { readFile } from 'node:fs/promises';
 import { defaultPlannerCallModel } from '../../never-stop-product-factory.js';
-import { getConnection, listConnections } from '../../marketing-social-connections.js';
+import { getConnection } from '../../marketing-social-connections.js';
 
 const SUPPORTED_PLATFORMS = ['instagram', 'linkedin', 'x', 'facebook', 'youtube', 'tiktok'];
 
@@ -53,12 +52,7 @@ Return STRICT JSON only: {"caption":"string","hashtags":["string"]}. Do not incl
   }
 }
 
-async function resolveVideoFile({ outputKey, videoUrl, storage, logger }) {
-  if (outputKey) {
-    const abs = storage.getLocalPath(outputKey);
-    if (existsSync(abs)) return { outputKey, absolutePath: abs };
-    // If not on this instance, try to fetch via public URL from assets table (caller may pass videoUrl)
-  }
+async function resolveVideoFile({ outputKey, videoUrl, storage, pool, logger }) {
   if (videoUrl) {
     try {
       const res = await fetch(videoUrl);
@@ -71,7 +65,45 @@ async function resolveVideoFile({ outputKey, videoUrl, storage, logger }) {
       return { error: `video_fetch_failed:${err.message}` };
     }
   }
-  return { error: 'outputKey or videoUrl required' };
+  if (!outputKey) return { error: 'outputKey or videoUrl required' };
+
+  const abs = storage.getLocalPath(outputKey);
+  if (existsSync(abs)) return { outputKey, absolutePath: abs };
+
+  let publicUrl = null;
+  if (pool) {
+    try {
+      const { rows } = await pool.query('SELECT public_url, owner_id FROM creative_assets WHERE storage_key = $1 LIMIT 1', [outputKey]);
+      publicUrl = rows[0]?.public_url || null;
+    } catch (err) {
+      logger?.warn?.('[social_publish] asset lookup failed', { error: err.message });
+    }
+  }
+
+  const base = String(process.env.PUBLIC_BASE_URL || 'https://lumin-web-production-e3a9.up.railway.app').replace(/\/$/, '');
+  const urls = new Set([publicUrl].filter(Boolean));
+  urls.add(`${base}/previews/creative/${outputKey.replace(/^\/+/, '')}`);
+
+  for (const url of urls) {
+    try {
+      logger?.info?.('[social_publish] trying video fetch', { url });
+      const res = await fetch(url, { method: 'GET' });
+      if (!res.ok) continue;
+      const contentType = res.headers.get('content-type') || '';
+      if (!contentType.includes('video') && !contentType.includes('octet-stream')) {
+        logger?.warn?.('[social_publish] fetched non-video content', { url, contentType });
+        continue;
+      }
+      const buf = Buffer.from(await res.arrayBuffer());
+      if (!buf.length) continue;
+      const saved = await storage.saveUpload(buf, { ownerId: 'social-publish', filename: 'video.mp4', kind: 'video' });
+      return { outputKey: saved.key, absolutePath: saved.absolutePath };
+    } catch (err) {
+      logger?.warn?.('[social_publish] video fetch failed', { url, error: err.message });
+    }
+  }
+
+  return { error: 'video_file_not_reachable', detail: 'The outputKey video is not on this instance and could not be fetched via public_url. Set R2_* env vars for durable multi-instance storage, or pass videoUrl directly.' };
 }
 
 export async function runSocialPublish({ pool = null, storage, job, logger }) {
@@ -79,7 +111,7 @@ export async function runSocialPublish({ pool = null, storage, job, logger }) {
   const req = job.request_json || job.request || {};
   const ownerId = job.owner_id || 'anon';
   const platforms = normalizePlatforms(req.platforms).length ? normalizePlatforms(req.platforms) : SUPPORTED_PLATFORMS;
-  const video = await resolveVideoFile({ outputKey: req.outputKey, videoUrl: req.videoUrl, storage, logger });
+  const video = await resolveVideoFile({ outputKey: req.outputKey, videoUrl: req.videoUrl, storage, pool, logger });
   if (video.error) return { ok: false, error: video.error };
 
   const liveEnabled = process.env.LIVE_SOCIAL_PUBLISH_ENABLED === 'true';

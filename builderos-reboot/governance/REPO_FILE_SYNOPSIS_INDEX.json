@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T03:31:40.672Z",
+  "generated_at": "2026-07-30T03:34:57.948Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12353,
   "files": [
@@ -40579,9 +40579,9 @@
     {
       "path": "docs/products/creative-engine/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Creative Engine",
-      "bytes": 10951,
-      "mtime": "2026-07-30T03:31:40.672Z",
-      "indexed_at": "2026-07-30T03:31:40.672Z"
+      "bytes": 11034,
+      "mtime": "2026-07-30T03:34:57.948Z",
+      "indexed_at": "2026-07-30T03:34:57.948Z"
     },
     {
       "path": "docs/products/CREATIVEENGINE.md",
@@ -87188,9 +87188,9 @@
     {
       "path": "services/creative-engine/modes/social-publish.js",
       "synopsis": "Creative Engine mode — queue one-click social publishing for a video output",
-      "bytes": 6898,
-      "mtime": "2026-07-30T03:31:40.672Z",
-      "indexed_at": "2026-07-30T03:31:40.672Z",
+      "bytes": 8424,
+      "mtime": "2026-07-30T03:34:57.948Z",
+      "indexed_at": "2026-07-30T03:34:57.948Z",
       "ssot": [
         "docs/products/creative-engine/PRODUCT_HOME.md"
       ]
