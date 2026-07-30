@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T20:13:35.761Z",
+  "generated_at": "2026-07-30T20:16:17.766Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12351,
+  "file_count": 12352,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -89591,6 +89591,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/lifeos-natural-build-router.js",
+      "synopsis": "Exports parseBuildRequest — services/lifeos-natural-build-router.js.",
+      "bytes": 2861,
+      "mtime": "2026-07-30T20:16:17.766Z",
+      "indexed_at": "2026-07-30T20:16:17.766Z"
     },
     {
       "path": "services/lifeos-note-capture-service.js",

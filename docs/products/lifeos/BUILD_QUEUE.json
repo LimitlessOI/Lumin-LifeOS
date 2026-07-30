@@ -1810,7 +1810,7 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": null,
-      "shipped_at": "2026-07-16T01:09:09.626Z",
+      "shipped_at": "2026-07-30T20:16:14.918Z",
       "expected_exports": [
         "parseBuildRequest",
         "buildBuildPayload",
@@ -1833,7 +1833,30 @@
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-chat-v2-07",
       "mission_id": "PRODUCT-lifeos",
-      "reaudit_reset_at": "2026-07-30T18:55:06.601Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.601Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/lifeos/twins/steps/lifeos-chat-v2-07.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T20:16:14.918Z",
+        "shipped_at": "2026-07-30T20:16:14.918Z",
+        "commit_sha": null,
+        "content_sha256": "1b66b0ee77fb15308b93645ffd1731dc640d57c536ab258e20bad7d31f21726d",
+        "target_file": "services/lifeos-natural-build-router.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/lifeos-natural-build-router.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/lifeos/twins/steps/lifeos-chat-v2-07.exact",
+          "content_sha256": "1b66b0ee77fb15308b93645ffd1731dc640d57c536ab258e20bad7d31f21726d"
+        }
+      }
     },
     {
       "id": "lifeos-chat-v2-08",
