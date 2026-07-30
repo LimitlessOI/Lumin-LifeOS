@@ -58,7 +58,7 @@ export function createMediaStorage({
   async function saveUpload(data, { ownerId = 'anon', filename = 'upload.bin', kind = 'upload' } = {}) {
     await ensureDirs();
     const safeName = String(filename).replace(/[^a-zA-Z0-9._-]/g, '_').slice(0, 120) || 'upload.bin';
-    const folder = kind === 'output' ? 'outputs' : kind === 'tmp' ? 'tmp' : 'uploads';
+    const folder = (kind === 'output' || kind === 'report' || kind === 'video') ? 'outputs' : kind === 'tmp' ? 'tmp' : 'uploads';
     const key = `${folder}/${ownerId}/${Date.now()}_${randomUUID().slice(0, 8)}_${safeName}`;
     const abs = getLocalPath(key);
     await fs.mkdir(path.dirname(abs), { recursive: true });
@@ -73,7 +73,7 @@ export function createMediaStorage({
     let publicUrl = getPublicUrl(key);
     let r2Key = null;
 
-    if (kind === 'output' && isR2Configured()) {
+    if ((kind === 'output' || kind === 'report' || kind === 'video') && isR2Configured()) {
       try {
         const buffer = await fs.readFile(abs);
         const uploaded = await uploadBufferToR2({

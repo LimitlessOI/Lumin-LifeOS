@@ -1,16 +1,8 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
-## 2026-07-30 — BuilderOS Q-001 + main-ancestor false-done gate
+## 2026-07-30 — Creative Engine gets competitor analysis + social publish scaffold; smart edit tip-proven
 
-Still not a 10 / FULLY_MACHINE_READY. Closed Q-001: `GET /api/v1/builderos/control-plane/runtime-fingerprint` (allowlisted disk sha256) + `ship:truth` proves server paths without `--probe`. Closed shadow-branch false-done: `verifyCommitOnMain` before `markShippedStepsDone`. Remaining to 10: founder_usability + cold-coder SAME_TIER (founder/human gates) + any live burn-in of the new gates.
-
-## 2026-07-30 — BuilderOS toward 10: Q-002 + Q-003 closed
-
-Adam: get BuilderOS to a 10. Closed the two ship-path holes that made primetime unsafe: (1) Q-002 — `execute-batch` no longer rewrites regex/string meaning via global asterisk strip; shebang + trailing newline preserved (`scripts/lib/builder-js-sanitize.mjs`). (2) Q-003 — SYNOPSIS/@ssot co-commit detect-and-route on machine path (`governance_warnings[]`, never hard-block). Chicken-egg ship uses `--bytes-exact`. **Superseded next:** Q-001 + main-ancestor gate closed in the entry above.
-
-## 2026-07-30 — Creative Engine smart video edit (filler/repetition/silence removal + content-aware keep/cut)
-
-Built and committed `footage_edit` smart-edit pipeline in `services/creative-engine/`: `transcribe-edit.js` calls Gemini for word-level audio transcription; `modes/footage-edit-smart.js` removes filler words (`um`, `uh`, `like`, `you know`, etc.), repeated words, and long silences, with optional LLM content-aware keep/cut via `defaultPlannerCallModel`; `providers/ffmpeg-local.js` adds `getDuration`/`extractAudio`/`cutKeepRanges`; `services/creative-engine/index.js` routes `smartEdit` requests and updates `estimate`. Gated on `GOOGLE_API_KEY`/`GEMINI_API_KEY`. Next: deploy to tip and run an end-to-end upload → smart render with a sample video to prove it; then add competitor niche analysis and one-click social publish.
+Smart `footage_edit` is live on production: `POST /api/v1/creative/render` with `smartEdit` removed 13 filler/hesitation words from a 44-word GTTS sample and produced a cut 9:16 MP4 (`kept 31/44 words, 12 segments, 12 removals`), retrievable via `/api/v1/creative/jobs/:id/download`. `transcribe-edit.js` uses robust JSON parsing for Gemini markdown/trailing-comma output. Also fixed `services/never-stop-product-factory.js` default Gemini model from `gemini-1.5-pro` (404) to `gemini-2.5-flash`. Added `services/creative-engine/modes/competitor-niche-analysis.js` (fetches public competitor metadata/oEmbed and returns a strategic report with strengths/weaknesses/gaps/incorporate ideas) and `services/creative-engine/modes/social-publish.js` (queues per-platform captions and checks connections, ready for live posting once `LIVE_SOCIAL_PUBLISH_ENABLED` and platform connections are configured). DB migration `20260730_creative_modes_and_publish.sql` expands the Creative Engine schema. Next: run `npm run builder:preflight`, commit, redeploy, and prove both new modes on tip.
 
 ## 2026-07-30 — code-side market-readiness fixes shipped; human-only blocker list ready
 

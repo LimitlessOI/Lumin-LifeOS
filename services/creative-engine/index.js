@@ -10,8 +10,10 @@ import { runPhotoPolish } from './modes/photo-polish.js';
 import { runScriptCompose } from './modes/script-compose.js';
 import { runGenerativeBroll, estimateGenerativeBrollCost } from './modes/generative-broll.js';
 import { getReplicateApiToken } from './modes/graphic-design.js';
+import { runCompetitorNicheAnalysis } from './modes/competitor-niche-analysis.js';
+import { runSocialPublish } from './modes/social-publish.js';
 
-const MODES = ['footage_edit', 'photo_polish', 'script_compose', 'generative_broll', 'graphic_design'];
+const MODES = ['footage_edit', 'photo_polish', 'script_compose', 'generative_broll', 'graphic_design', 'competitor_analysis', 'social_publish'];
 
 export function createCreativeEngine({
   pool,
@@ -66,6 +68,18 @@ export function createCreativeEngine({
       costEstimateCents = est.cents;
       etaSeconds = 120 * (est.sceneCount || 1);
       notes.push('Scaffold only in v1 — Wan/Kling not enabled yet');
+    } else if (mode === 'competitor_analysis') {
+      costEstimateCents = 1;
+      etaSeconds = 30;
+      notes.push('Niche competitor analysis: fetch public metadata + LLM strategic report');
+      const geminiKey = Boolean(process.env.GOOGLE_API_KEY || process.env.GEMINI_API_KEY);
+      gated = !geminiKey;
+      requirements.push('GOOGLE_API_KEY or GEMINI_API_KEY');
+    } else if (mode === 'social_publish') {
+      costEstimateCents = request.caption ? 0 : 1;
+      etaSeconds = 20;
+      notes.push('One-click social publish queue: caption generation + connection check + publish task');
+      if (!process.env.LIVE_SOCIAL_PUBLISH_ENABLED) notes.push('Set LIVE_SOCIAL_PUBLISH_ENABLED=true for live posting');
     } else {
       return { ok: false, error: 'unknown_mode', modes: MODES };
     }
@@ -123,6 +137,7 @@ export function createCreativeEngine({
 
     try {
       let result;
+      const shared = { pool, storage, job, logger };
       if (job.mode === 'footage_edit') {
         const req = job.request_json || job.request || {};
         result = (req.smartEdit || req.smart_edit)
@@ -134,6 +149,10 @@ export function createCreativeEngine({
         result = await runScriptCompose({ job, logger, storage });
       } else if (job.mode === 'generative_broll') {
         result = await runGenerativeBroll({ job, logger });
+      } else if (job.mode === 'competitor_analysis') {
+        result = await runCompetitorNicheAnalysis(shared);
+      } else if (job.mode === 'social_publish') {
+        result = await runSocialPublish(shared);
       } else {
         throw new Error(`unsupported_mode:${job.mode}`);
       }
@@ -147,10 +166,11 @@ export function createCreativeEngine({
       }
 
       if (result?.outputKey) {
+        const kind = job.mode === 'photo_polish' ? 'photo' : job.mode === 'competitor_analysis' ? 'report' : 'output';
         await insertAsset({
           ownerId: job.owner_id,
           jobId,
-          kind: job.mode === 'photo_polish' ? 'photo' : 'output',
+          kind,
           storageKey: result.outputKey,
           publicUrl: result.publicUrl,
           metadata: { mode: job.mode, aspect: result.aspect || null },
@@ -185,7 +205,7 @@ export function createCreativeEngine({
     );
     const job = insert.rows[0];
 
-    const runInline = sync || mode === 'generative_broll' || !addJob;
+    const runInline = sync || mode === 'generative_broll' || mode === 'competitor_analysis' || mode === 'social_publish' || !addJob;
     if (runInline) {
       const processed = await processJob(job.id);
       const fresh = await pool.query(`SELECT * FROM creative_jobs WHERE id = $1`, [job.id]);

@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T03:27:48.205Z",
+  "generated_at": "2026-07-30T03:31:40.672Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12350,
+  "file_count": 12353,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -36602,6 +36602,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "db/migrations/20260730_creative_modes_and_publish.sql",
+      "synopsis": "Creative Engine schema expansion — competitor analysis + social video publish queue",
+      "bytes": 2323,
+      "mtime": "2026-07-30T03:31:40.672Z",
+      "indexed_at": "2026-07-30T03:31:40.672Z"
+    },
+    {
       "path": "db/migrations/20260730_lifere_learning_profile.sql",
       "synopsis": "Database migration — add metadata JSONB column to lifere_coaching_sessions for learning profile.",
       "bytes": 215,
@@ -37988,10 +37995,10 @@
     },
     {
       "path": "docs/CONTINUITY_LOG.md",
-      "synopsis": "Documentation — CONTINUITY LOG.",
-      "bytes": 0,
-      "mtime": "2026-07-30T03:22:51.776Z",
-      "indexed_at": "2026-07-30T03:22:51.776Z"
+      "synopsis": "Continuity Log — chronological session handoff and key decisions.",
+      "bytes": 44710,
+      "mtime": "2026-07-30T03:31:40.672Z",
+      "indexed_at": "2026-07-30T03:31:40.672Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40572,9 +40579,9 @@
     {
       "path": "docs/products/creative-engine/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Creative Engine",
-      "bytes": 10040,
-      "mtime": "2026-07-30T03:20:35.298Z",
-      "indexed_at": "2026-07-30T03:20:35.298Z"
+      "bytes": 10951,
+      "mtime": "2026-07-30T03:31:40.672Z",
+      "indexed_at": "2026-07-30T03:31:40.672Z"
     },
     {
       "path": "docs/products/CREATIVEENGINE.md",
@@ -87084,9 +87091,9 @@
     {
       "path": "services/creative-engine/index.js",
       "synopsis": "Creative Engine — estimate/render/jobs for footage, photo, script, b-roll modes",
-      "bytes": 9032,
-      "mtime": "2026-07-30T03:20:35.298Z",
-      "indexed_at": "2026-07-30T03:20:35.298Z",
+      "bytes": 10333,
+      "mtime": "2026-07-30T03:31:40.672Z",
+      "indexed_at": "2026-07-30T03:31:40.672Z",
       "ssot": [
         "docs/products/creative-engine/PRODUCT_HOME.md"
       ]
@@ -87094,9 +87101,19 @@
     {
       "path": "services/creative-engine/media-storage.js",
       "synopsis": "Local + optional R2 media storage for Creative Engine uploads and outputs",
-      "bytes": 4176,
-      "mtime": "2026-07-24T18:36:41.703Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 4262,
+      "mtime": "2026-07-30T03:31:40.672Z",
+      "indexed_at": "2026-07-30T03:31:40.672Z",
+      "ssot": [
+        "docs/products/creative-engine/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/creative-engine/modes/competitor-niche-analysis.js",
+      "synopsis": "Creative Engine mode — competitor niche analysis for video content",
+      "bytes": 9772,
+      "mtime": "2026-07-30T03:31:40.672Z",
+      "indexed_at": "2026-07-30T03:31:40.672Z",
       "ssot": [
         "docs/products/creative-engine/PRODUCT_HOME.md"
       ]
@@ -87166,6 +87183,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/creative-engine/modes/social-publish.js",
+      "synopsis": "Creative Engine mode — queue one-click social publishing for a video output",
+      "bytes": 6898,
+      "mtime": "2026-07-30T03:31:40.672Z",
+      "indexed_at": "2026-07-30T03:31:40.672Z",
+      "ssot": [
+        "docs/products/creative-engine/PRODUCT_HOME.md"
       ]
     },
     {
