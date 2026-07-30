@@ -187,7 +187,7 @@
     },
     {
       "id": "step1",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/headingPass.js",
       "task": "append Stream subsection or extend Stream I/portfolio table",
       "spec": "Ensure heading pass processes new exports over 500KB, appending to Stream subsection or extending Stream I/portfolio table.",
@@ -215,7 +215,7 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:processHeading; processHeading; extendPortfolioTable",
       "commit_sha": "3e6799234a0f2e593fa3b0fe86cb07ba6de2dd00",
       "built_sha": null,
       "proof": null,
@@ -227,16 +227,17 @@
       "demoted_at": null,
       "park_until": null,
       "no_op": null,
-      "pre_existing": null,
+      "pre_existing": false,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T04:34:54.132Z",
       "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step1",
-      "mission_id": "PRODUCT-ideavault"
+      "mission_id": "PRODUCT-ideavault",
+      "reaudit_reset_at": "2026-07-30T18:55:06.431Z"
     },
     {
       "id": "step2",

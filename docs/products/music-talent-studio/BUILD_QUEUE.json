@@ -38,7 +38,7 @@
     },
     {
       "id": "step2",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/audioAnalysis.js",
       "task": "decide audio analysis approach",
       "spec": "Decide between third-party API integration or custom approach for audio analysis services.",
@@ -60,16 +60,19 @@
           "assertion_id": "expected_exports:services/audioAnalysis.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T17:56:57.631Z",
       "commit_sha": "d1d8b5449ac0a82a15971c6f72643bc1614630e0",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step2",
-      "mission_id": "PRODUCT-music-talent-studio"
+      "mission_id": "PRODUCT-music-talent-studio",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:performAudioAnalysis; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.680Z"
     },
     {
       "id": "step3",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/migrations/001_create_music_teachers_table.sql",
       "task": "create music teachers table",
       "spec": "Create a table for storing information about interviewed music teachers.",
@@ -79,16 +82,19 @@
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS music_teachers"
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T19:12:41.903Z",
       "commit_sha": "a5337ae12c285d56860e82d3cf9ff538b83cf1d3",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step3",
-      "mission_id": "PRODUCT-music-talent-studio"
+      "mission_id": "PRODUCT-music-talent-studio",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.680Z"
     },
     {
       "id": "step4",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/musicTeachers.js",
       "task": "implement music teachers service",
       "spec": "Implement service for managing music teachers data.",
@@ -112,16 +118,19 @@
           "assertion_id": "expected_exports:services/musicTeachers.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T19:17:39.591Z",
       "commit_sha": "333150bbc9117110e938f7a86c130543420f3d0a",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step4",
-      "mission_id": "PRODUCT-music-talent-studio"
+      "mission_id": "PRODUCT-music-talent-studio",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:addMusicTeacher,getMusicTeachers; assertion_threw; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.680Z"
     },
     {
       "id": "step5",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/musicTeachersRoutes.js",
       "task": "create music teachers routes",
       "spec": "Expose REST API endpoints for music teachers operations.",
@@ -147,16 +156,19 @@
           "assertion_id": "expected_exports:routes/musicTeachersRoutes.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T19:21:24.226Z",
       "commit_sha": "84b3bb5db017dc70455292d9197f187286196e9d",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step5",
-      "mission_id": "PRODUCT-music-talent-studio"
+      "mission_id": "PRODUCT-music-talent-studio",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerMusicTeachersRoutes; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.680Z"
     },
     {
       "id": "step6",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/migrations/002_create_students_table.sql",
       "task": "create students table",
       "spec": "Create a table for storing information about interviewed students or parents.",
@@ -166,16 +178,19 @@
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS students"
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T19:25:04.489Z",
       "commit_sha": "a93e4ad7d3963d9fdf096d3105d6b04b564c22e7",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step6",
-      "mission_id": "PRODUCT-music-talent-studio"
+      "mission_id": "PRODUCT-music-talent-studio",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.680Z"
     },
     {
       "id": "step7",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/students.js",
       "task": "implement students service",
       "spec": "Implement service for managing students data.",
@@ -199,16 +214,19 @@
           "assertion_id": "expected_exports:services/students.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T19:32:28.089Z",
       "commit_sha": "b8d5aa5b0118c5bb3894a946f50f5733da9fcebf",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step7",
-      "mission_id": "PRODUCT-music-talent-studio"
+      "mission_id": "PRODUCT-music-talent-studio",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:addStudent,getStudents; assertion_threw; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.680Z"
     },
     {
       "id": "step8",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/studentsRoutes.js",
       "task": "create students routes",
       "spec": "Expose REST API endpoints for student operations.",
@@ -234,16 +252,19 @@
           "assertion_id": "expected_exports:routes/studentsRoutes.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T19:39:48.232Z",
       "commit_sha": "8db9135246c9ada747e34d2423b5d574b6b24148",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step8",
-      "mission_id": "PRODUCT-music-talent-studio"
+      "mission_id": "PRODUCT-music-talent-studio",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerStudentsRoutes; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.680Z"
     },
     {
       "id": "step9",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/musicIndustryConsult.js",
       "task": "implement industry consultation service",
       "spec": "Implement service for handling consultations with music industry professionals.",
@@ -263,12 +284,15 @@
           "assertion_id": "expected_exports:services/musicIndustryConsult.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T19:46:25.389Z",
       "commit_sha": "8ed2d48b5607e053f5d246bbb038cab518b1e84a",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step9",
-      "mission_id": "PRODUCT-music-talent-studio"
+      "mission_id": "PRODUCT-music-talent-studio",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:consultMusicIndustry; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.680Z"
     },
     {
       "id": "step10",
@@ -372,7 +396,7 @@
     },
     {
       "id": "3",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/musicTeachersInterview.js",
       "task": "interview 5 music teachers",
       "spec": "Conduct and store interviews with 5 music teachers to gather insights.",
@@ -395,16 +419,19 @@
           "assertion_id": "expected_exports:services/musicTeachersInterview.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T21:21:34.124Z",
       "commit_sha": "4fb1105d1f9c977eacb9540ca451ca3573b6f9a5",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "3",
-      "mission_id": "PRODUCT-music-talent-studio"
+      "mission_id": "PRODUCT-music-talent-studio",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:getTeacherInsights; getTeacherInsights; INTERVIEW_TEACHERS",
+      "reaudit_reset_at": "2026-07-30T18:55:06.680Z"
     },
     {
       "id": "4",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/studentsInterview.js",
       "task": "interview students or parents",
       "spec": "Interview 5 students or parents and store feedback.",
@@ -427,16 +454,19 @@
           "assertion_id": "expected_exports:services/studentsInterview.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T21:23:32.268Z",
       "commit_sha": "7f1428c86134c60155384e4f1104073ccd121698",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "4",
-      "mission_id": "PRODUCT-music-talent-studio"
+      "mission_id": "PRODUCT-music-talent-studio",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:getStudentFeedback; assertion_threw; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.680Z"
     },
     {
       "id": "1",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/apiSpecification.js",
       "task": "verify API specification",
       "spec": "Ensure detailed API specification is complete and accurate.",
@@ -463,12 +493,15 @@
           "assertion_id": "expected_exports:services/apiSpecification.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T21:45:58.495Z",
       "commit_sha": "3012578e8d5f9dea42dd0a8c8b0d80d0f50e66d0",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "1",
-      "mission_id": "PRODUCT-music-talent-studio"
+      "mission_id": "PRODUCT-music-talent-studio",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:validateApiSpecification; assertion_threw; assertion_threw; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.680Z"
     },
     {
       "id": "5",
@@ -508,7 +541,7 @@
     },
     {
       "id": "6",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/pricingValidationVerification.js",
       "task": "validate pricing strategy",
       "spec": "Verify pricing is validated as per business requirements.",
@@ -535,16 +568,19 @@
           "assertion_id": "expected_exports:services/pricingValidationVerification.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T21:48:18.738Z",
       "commit_sha": "35017eef76067c422e511369014e90fc00d58962",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "6",
-      "mission_id": "PRODUCT-music-talent-studio"
+      "mission_id": "PRODUCT-music-talent-studio",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:confirmPricingValidation; confirmPricingValidation; Pricing Validation",
+      "reaudit_reset_at": "2026-07-30T18:55:06.680Z"
     },
     {
       "id": "7",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/studentsInterview.js",
       "task": "update interview service for students",
       "spec": "Allow storage and retrieval of student interview records.",
@@ -571,16 +607,19 @@
           "assertion_id": "expected_exports:services/studentsInterview.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T04:17:46.500Z",
       "commit_sha": "52e743dc5b387c72c963b040a81d280a52df814f",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "7",
-      "mission_id": "PRODUCT-music-talent-studio"
+      "mission_id": "PRODUCT-music-talent-studio",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:addStudentInterview,getStudentInterview; assertion_threw; assertion_threw; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.680Z"
     },
     {
       "id": "8",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/studentsInterviewRoutes.js",
       "task": "create routes for student interviews",
       "spec": "Routes for handling student interviews.",
@@ -606,16 +645,19 @@
           "assertion_id": "expected_exports:routes/studentsInterviewRoutes.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T04:23:19.932Z",
       "commit_sha": "67f55c2d10aa9cc5567a7f484c9f52c6f3a3f278",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "8",
-      "mission_id": "PRODUCT-music-talent-studio"
+      "mission_id": "PRODUCT-music-talent-studio",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerStudentsInterviewRoutes; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.680Z"
     },
     {
       "id": "9",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/migrations/005_create_music_industry_consults_table.sql",
       "task": "create table for industry consultation",
       "spec": "A table holding consultation records with music industry professionals.",
@@ -625,12 +667,15 @@
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS music_industry_consults"
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T04:36:26.003Z",
       "commit_sha": "c48c6569e2f373e1b5ff9820561821a6367521e6",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "9",
-      "mission_id": "PRODUCT-music-talent-studio"
+      "mission_id": "PRODUCT-music-talent-studio",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.680Z"
     },
     {
       "id": "10",

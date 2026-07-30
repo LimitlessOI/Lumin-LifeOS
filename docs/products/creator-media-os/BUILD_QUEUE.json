@@ -124,7 +124,7 @@
     },
     {
       "id": "4",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/sceneEngine.js",
       "task": "assemble scenes",
       "spec": "Scene engine and edit assembly workflow.",
@@ -148,7 +148,7 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:assembleScenes; assertion_threw; assertion_threw",
       "commit_sha": "4464a66ce6d446c3f76d04e737eaf0f692fed815",
       "built_sha": null,
       "proof": null,
@@ -160,18 +160,20 @@
       "demoted_at": null,
       "park_until": null,
       "no_op": null,
-      "pre_existing": null,
+      "pre_existing": false,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "4",
-      "mission_id": "PRODUCT-creator-media-os"
+      "mission_id": "PRODUCT-creator-media-os",
+      "shipped_via": null,
+      "reaudit_reset_at": "2026-07-30T18:55:06.422Z"
     },
     {
       "id": "5",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/thumbnailPipeline.js",
       "task": "manage thumbnail/SEO pipeline",
       "spec": "Pipeline handles thumbnails and SEO repurposing with shared sources.",
@@ -195,7 +197,7 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:setupThumbnailSEO; assertion_threw; assertion_threw",
       "commit_sha": "5d03b10167b061e0cc86825467a1f58221e2bacd",
       "built_sha": null,
       "proof": null,
@@ -207,14 +209,16 @@
       "demoted_at": null,
       "park_until": null,
       "no_op": null,
-      "pre_existing": null,
+      "pre_existing": false,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "5",
-      "mission_id": "PRODUCT-creator-media-os"
+      "mission_id": "PRODUCT-creator-media-os",
+      "shipped_via": null,
+      "reaudit_reset_at": "2026-07-30T18:55:06.422Z"
     },
     {
       "id": "6",

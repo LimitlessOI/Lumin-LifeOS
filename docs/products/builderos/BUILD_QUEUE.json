@@ -259,7 +259,7 @@
     },
     {
       "id": "builderos-6",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/mission-runtime.js",
       "task": "resume C2-first priority stack",
       "spec": "Implement route logic to handle the C2-first priority stack.",
@@ -286,16 +286,19 @@
           "assertion_id": "expected_exports:routes/mission-runtime.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T04:34:27.265Z",
       "commit_sha": "ec33c126a9c6071131380ed4c46e6cb0af8310be",
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-6",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerMissionRuntimeRoutes; assertion_threw; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.356Z"
     },
     {
       "id": "builderos-7",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/income-priority.js",
       "task": "calculate income priorities",
       "spec": "Implement service to compute tasks with significant financial impact.",
@@ -318,12 +321,15 @@
           "assertion_id": "expected_exports:services/income-priority.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T04:39:39.143Z",
       "commit_sha": "b550e493e1b81f8b5ed79141e8c0b45fa43997f7",
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-7",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:calculateIncomePriorities; calculateIncomePriorities; income priorities",
+      "reaudit_reset_at": "2026-07-30T18:55:06.356Z"
     },
     {
       "id": "builderos-8",
@@ -2538,7 +2544,7 @@
     },
     {
       "id": "bo-runtime-fingerprint",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/builderos-runtime-fingerprint-routes.js",
       "priority": "critical",
       "task": "Q-001: Production cannot prove the runtime bytes of any routes/services file. deploy_commit_sha is only RAILWAY_GIT_COMMIT_SHA (build-time label); the image ships without .git; no endpoint reads repo files at runtime. ship:truth therefore returns UNSOLVED for server-code ships unless --probe declares a behaviour assertion. Build a governed GET /api/v1/lifeos/builder/runtime-fingerprint?paths=… that returns sha256 of named repo-relative files as they exist on the container disk (allowlisted prefixes only: routes/, services/, middleware/, startup/, config/, scripts/lib/, requireKey auth), so ship:truth can prove runtime.content for every path instead of probe-dependent.",
@@ -2567,10 +2573,12 @@
           "assertion_id": "expected_exports:routes/builderos-runtime-fingerprint-routes.js"
         }
       ],
-      "shipped_via": "cursor_conductor_glue",
+      "shipped_via": null,
       "shipped_at": "2026-07-30T03:22:23.123Z",
-      "last_error": null,
-      "finding_note": " | Closed 2026-07-30: judgment in scripts/lib; wired into existing control-plane route / shipping loop (not a new SO-001 module)."
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:createBuilderRuntimeFingerprintRoutes; assertion_threw; assertion_threw; assertion_threw",
+      "finding_note": " | Closed 2026-07-30: judgment in scripts/lib; wired into existing control-plane route / shipping loop (not a new SO-001 module).",
+      "pre_existing": false,
+      "reaudit_reset_at": "2026-07-30T18:55:06.356Z"
     }
   ],
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",

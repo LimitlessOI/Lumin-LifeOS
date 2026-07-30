@@ -73,7 +73,7 @@
     },
     {
       "id": "3",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/migrations/001_create_vector_embedding.sql",
       "task": "define vector embedding strategy",
       "spec": "Add a migration to support vector embedding using either pgvector or Pinecone. Specify database schema changes.",
@@ -83,16 +83,19 @@
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS vector_embeddings"
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T18:01:40.661Z",
       "commit_sha": "6ff2386f707d745ffd442ec50e6c2c2d135ca788",
       "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "3",
-      "mission_id": "PRODUCT-knowledge-base"
+      "mission_id": "PRODUCT-knowledge-base",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.480Z"
     },
     {
       "id": "4",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/context-injection.js",
       "task": "define token budget for context injection",
       "spec": "Implement a strategy for token budget and truncation in the context injection process.",
@@ -114,12 +117,15 @@
           "assertion_id": "expected_exports:services/context-injection.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T18:07:41.289Z",
       "commit_sha": "208ef86d20357985972970a07d22b8cb99f085ed",
       "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "4",
-      "mission_id": "PRODUCT-knowledge-base"
+      "mission_id": "PRODUCT-knowledge-base",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:calculateTokenBudget,truncateContext; assertion_threw; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.480Z"
     },
     {
       "id": "5",
@@ -219,7 +225,7 @@
     },
     {
       "id": "8",
-      "status": "done",
+      "status": "pending",
       "target_file": "public/overlay/security-policy.html",
       "task": "document security policy for malware scanning",
       "spec": "Details the security measures for scanning uploaded files for malware.",
@@ -231,7 +237,7 @@
       ],
       "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
       "commit_sha": "bf419857610639130ccf795c9f28aeaac2abb38c",
       "built_sha": null,
       "proof": null,
@@ -243,20 +249,21 @@
       "demoted_at": null,
       "park_until": null,
       "no_op": null,
-      "pre_existing": null,
+      "pre_existing": false,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T22:25:40.797Z",
       "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "8",
-      "mission_id": "PRODUCT-knowledge-base"
+      "mission_id": "PRODUCT-knowledge-base",
+      "reaudit_reset_at": "2026-07-30T18:55:06.480Z"
     },
     {
       "id": "step1",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/migrations/002_define_token_budget.sql",
       "task": "define token budget for context injection",
       "spec": "Create a migration to define token budget for context injection, specifying max_tokens cap and truncation strategy.",
@@ -268,16 +275,19 @@
         "max_tokens INT",
         "truncation_strategy VARCHAR"
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T02:42:51.739Z",
       "commit_sha": "3c70447c4242182f20dfb042f13f8510a95e8261",
       "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step1",
-      "mission_id": "PRODUCT-knowledge-base"
+      "mission_id": "PRODUCT-knowledge-base",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw; assertion_threw; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.480Z"
     },
     {
       "id": "step2",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/migrations/003_add_search_provider_config.sql",
       "task": "specify search API provider",
       "spec": "Add a migration to specify and store the search API provider configuration.",
@@ -288,16 +298,19 @@
         "CREATE TABLE IF NOT EXISTS search_provider_config",
         "provider_name VARCHAR"
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T02:47:42.258Z",
       "commit_sha": "784df35d895aacd58e2e8eed3e72a29eea30337a",
       "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step2",
-      "mission_id": "PRODUCT-knowledge-base"
+      "mission_id": "PRODUCT-knowledge-base",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.480Z"
     },
     {
       "id": "step3",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/security-routes.js",
       "task": "implement malware scanning for uploads",
       "spec": "Extract malware scanning functionality into a new route to secure file uploads.",
@@ -326,16 +339,19 @@
           "assertion_id": "expected_exports:routes/security-routes.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T02:53:14.782Z",
       "commit_sha": "cea32c6ab3eda1abe15463e6d69ddd6ff7b3556d",
       "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step3",
-      "mission_id": "PRODUCT-knowledge-base"
+      "mission_id": "PRODUCT-knowledge-base",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerSecurityRoutes; assertion_threw; assertion_threw; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.480Z"
     },
     {
       "id": "knowledge-base-3",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/migrations/004_create_vector_embedding_strategy.sql",
       "task": "create vector embedding table",
       "spec": "Implement vector embedding strategy using pgvector",
@@ -346,7 +362,7 @@
         "CREATE TABLE IF NOT EXISTS embeddings"
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
       "commit_sha": "c4c8e309a7a3b87df05886ac129bdedbcb1970ff",
       "built_sha": null,
       "proof": null,
@@ -358,16 +374,17 @@
       "demoted_at": null,
       "park_until": null,
       "no_op": null,
-      "pre_existing": null,
+      "pre_existing": false,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T04:40:29.123Z",
       "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "knowledge-base-3",
-      "mission_id": "PRODUCT-knowledge-base"
+      "mission_id": "PRODUCT-knowledge-base",
+      "reaudit_reset_at": "2026-07-30T18:55:06.480Z"
     },
     {
       "id": "knowledge-base-4",

@@ -79,7 +79,7 @@
     },
     {
       "id": "3",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/migrations/persist_provider_cooldowns.sql",
       "task": "Persist provider cooldowns",
       "spec": "Persist provider cooldowns to the database to survive restarts.",
@@ -93,7 +93,7 @@
         "CREATE TABLE IF NOT EXISTS free_tier_usage"
       ],
       "last_attempt_at": "2026-07-15T07:26:25.419Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
@@ -105,7 +105,7 @@
       "demoted_at": "2026-07-15T07:49:40.395Z",
       "park_until": null,
       "no_op": true,
-      "pre_existing": true,
+      "pre_existing": false,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
@@ -113,7 +113,9 @@
       "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "3",
       "mission_id": "PRODUCT-ai-council",
-      "resolution_note": "2026-07-20: marked done manually, not by codegen. Same planner defect class as wellness-studio-step6/7/8 (see docs/products/wellness-studio/PRODUCT_HOME.md 2026-07-20 entry): a module_mounts behavior assertion checking route '/' against a .sql migration target file, which can never pass (route '/' proves nothing about a migration; reload_failed every attempt trying to import() SQL as an Express module). This entry is also a duplicate of already-done queue entry 'ai-council-3' (target db/migrations/20231005_add_provider_cooldowns.sql, shipped_via governed_ship_queue, real commit_sha 68e35db6d0). The file_contains check itself was also mismatched (checked for 'free_tier_usage', an unrelated table, not provider_cooldowns -- further evidence this entry was never a coherently-specified task). Independently verified the real underlying feature IS live: queried production, confirmed the provider_cooldowns table exists. No real missing work -- marking done rather than leaving a satisfied, duplicate condition to churn forever on an unpassable assertion."
+      "resolution_note": "2026-07-20: marked done manually, not by codegen. Same planner defect class as wellness-studio-step6/7/8 (see docs/products/wellness-studio/PRODUCT_HOME.md 2026-07-20 entry): a module_mounts behavior assertion checking route '/' against a .sql migration target file, which can never pass (route '/' proves nothing about a migration; reload_failed every attempt trying to import() SQL as an Express module). This entry is also a duplicate of already-done queue entry 'ai-council-3' (target db/migrations/20231005_add_provider_cooldowns.sql, shipped_via governed_ship_queue, real commit_sha 68e35db6d0). The file_contains check itself was also mismatched (checked for 'free_tier_usage', an unrelated table, not provider_cooldowns -- further evidence this entry was never a coherently-specified task). Independently verified the real underlying feature IS live: queried production, confirmed the provider_cooldowns table exists. No real missing work -- marking done rather than leaving a satisfied, duplicate condition to churn forever on an unpassable assertion.",
+      "shipped_via": null,
+      "reaudit_reset_at": "2026-07-30T18:55:06.242Z"
     },
     {
       "id": "4",
@@ -646,7 +648,7 @@
     },
     {
       "id": "9",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/habLimitRoutes.js",
       "task": "add HAB limit route",
       "spec": "Add route to ensure HAB limit blocks at 100 calls/day per key.",
@@ -669,16 +671,19 @@
           "assertion_id": "expected_exports:routes/habLimitRoutes.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T04:04:07.704Z",
       "commit_sha": "110194e1a64455f399f6ef619bff6e5d6059837c",
       "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "9",
-      "mission_id": "PRODUCT-ai-council"
+      "mission_id": "PRODUCT-ai-council",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerHABLimitRoutes; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.242Z"
     },
     {
       "id": "10",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/usageLogger.js",
       "task": "verify token usage logging",
       "spec": "Ensure consistent logging for token usage particularly provider usage column.",
@@ -701,16 +706,19 @@
           "assertion_id": "expected_exports:services/usageLogger.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T04:07:44.776Z",
       "commit_sha": "4e8c02edd1378f394766614e3caaedd3841109f3",
       "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "10",
-      "mission_id": "PRODUCT-ai-council"
+      "mission_id": "PRODUCT-ai-council",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:logUsage",
+      "reaudit_reset_at": "2026-07-30T18:55:06.242Z"
     },
     {
       "id": "11",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/api/tokenRoutes.js",
       "task": "expose token usage",
       "spec": "Expose a new API route for token usage logging and management.",
@@ -737,16 +745,19 @@
           "assertion_id": "expected_exports:routes/api/tokenRoutes.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T04:15:57.721Z",
       "commit_sha": "0911b9039c7b108058314bf9d1aef679c9525e0b",
       "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "11",
-      "mission_id": "PRODUCT-ai-council"
+      "mission_id": "PRODUCT-ai-council",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerTokenRoutes; assertion_threw; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.242Z"
     },
     {
       "id": "ai-council-1",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/generalTaskOptimizer.js",
       "task": "improve task savings",
       "spec": "Enhance the general task optimizer to increase savings from 4% to at least 15%.",
@@ -772,16 +783,19 @@
           "assertion_id": "expected_exports:services/generalTaskOptimizer.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T04:21:50.524Z",
       "commit_sha": "46a7eab78503409637049ae6771fb9371ffd7c55",
       "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "ai-council-1",
-      "mission_id": "PRODUCT-ai-council"
+      "mission_id": "PRODUCT-ai-council",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:optimizeGeneralTask; increase savings to 15%",
+      "reaudit_reset_at": "2026-07-30T18:55:06.242Z"
     },
     {
       "id": "ai-council-3",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/migrations/20231005_add_provider_cooldowns.sql",
       "task": "persist provider cooldowns",
       "spec": "Create a table to persist provider cooldowns that survive restarts.",
@@ -794,16 +808,19 @@
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS provider_cooldowns"
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T04:26:32.295Z",
       "commit_sha": "68e35db6d0d90165e2249284e687b1bdad554239",
       "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "ai-council-3",
-      "mission_id": "PRODUCT-ai-council"
+      "mission_id": "PRODUCT-ai-council",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.242Z"
     },
     {
       "id": "ai-council-4",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/providerCooldownManager.js",
       "task": "manage provider cooldowns",
       "spec": "Implement logic to manage and persist provider cooldowns using the database.",
@@ -834,7 +851,7 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:getCooldowns; getCooldowns; persist cooldowns to DB",
       "commit_sha": "62ca01aac29103b6903c09566739c80042975bdc",
       "built_sha": null,
       "proof": null,
@@ -846,20 +863,21 @@
       "demoted_at": null,
       "park_until": null,
       "no_op": null,
-      "pre_existing": null,
+      "pre_existing": false,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T05:13:43.205Z",
       "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "ai-council-4",
-      "mission_id": "PRODUCT-ai-council"
+      "mission_id": "PRODUCT-ai-council",
+      "reaudit_reset_at": "2026-07-30T18:55:06.242Z"
     },
     {
       "id": "ai-council-2",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/ollamaInvestigation.js",
       "task": "investigate system prompt bloat",
       "spec": "Investigate and document the cause of the high average token usage in Ollama due to potential bloated system prompts.",
@@ -882,12 +900,15 @@
           "assertion_id": "expected_exports:services/ollamaInvestigation.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T04:34:44.533Z",
       "commit_sha": "f6ff47cd4401f006abca617421569e5757c05fc6",
       "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "ai-council-2",
-      "mission_id": "PRODUCT-ai-council"
+      "mission_id": "PRODUCT-ai-council",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:investigateOllamaPrompts; investigateOllamaPrompts; investigateOllamaPrompts",
+      "reaudit_reset_at": "2026-07-30T18:55:06.242Z"
     },
     {
       "id": "ai-council-5",

@@ -9,7 +9,7 @@
   "steps": [
     {
       "id": "1",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/struggleDetection.js",
       "task": "integrate struggle detection",
       "spec": "Implement struggle detection engine based on dwell timer, click repeat, and edit cycle counter.",
@@ -32,16 +32,19 @@
           "assertion_id": "expected_exports:services/struggleDetection.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T17:50:56.528Z",
       "commit_sha": "a07d7fe29cc38d47107f18c0e3479841a9939735",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "1",
-      "mission_id": "PRODUCT-universal-overlay"
+      "mission_id": "PRODUCT-universal-overlay",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:detectStruggles; detectStruggles",
+      "reaudit_reset_at": "2026-07-30T18:55:06.758Z"
     },
     {
       "id": "2",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/formFieldInference.js",
       "task": "implement form field schema inference",
       "spec": "Use label association, ARIA, and placeholder as fallback to infer form field schema.",
@@ -64,16 +67,19 @@
           "assertion_id": "expected_exports:services/formFieldInference.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T17:58:06.261Z",
       "commit_sha": "ac3ec840059d7988fa58461927a5fce50e92f936",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "2",
-      "mission_id": "PRODUCT-universal-overlay"
+      "mission_id": "PRODUCT-universal-overlay",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:inferFormSchema",
+      "reaudit_reset_at": "2026-07-30T18:55:06.758Z"
     },
     {
       "id": "3",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/migrations/addInsuranceProfilesTable.sql",
       "task": "create insurance_profiles table",
       "spec": "Create a table for insurance profiles with member IDs, group numbers, payer names per user.",
@@ -83,12 +89,15 @@
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS insurance_profiles"
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T18:04:14.461Z",
       "commit_sha": "7c06278e434327d8e096280ac4185c5f075970df",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "3",
-      "mission_id": "PRODUCT-universal-overlay"
+      "mission_id": "PRODUCT-universal-overlay",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.758Z"
     },
     {
       "id": "4",
@@ -141,7 +150,7 @@
     },
     {
       "id": "5",
-      "status": "done",
+      "status": "pending",
       "target_file": "public/overlay/moduleRouter.js",
       "task": "build fluid UI context router",
       "spec": "Route UI context based on URL patterns for assembled view logic.",
@@ -152,16 +161,19 @@
         "routeUIContext"
       ],
       "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T22:13:12.909Z",
       "commit_sha": "608fbbcaf99ae3346c33853b18618d86aae56691",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "5",
-      "mission_id": "PRODUCT-universal-overlay"
+      "mission_id": "PRODUCT-universal-overlay",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:routeUIContext; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.758Z"
     },
     {
       "id": "6",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/voiceDictation.js",
       "task": "implement voice dictation bridge",
       "spec": "Enable voice dictation into any form field using the LuminVoice bridge.",
@@ -186,7 +198,7 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerVoiceDictationRoutes; assertion_threw",
       "commit_sha": "508b170780b39e83089778da2f7b15315ffeae14",
       "built_sha": null,
       "proof": null,
@@ -198,20 +210,21 @@
       "demoted_at": null,
       "park_until": null,
       "no_op": null,
-      "pre_existing": null,
+      "pre_existing": false,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T20:14:43.641Z",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "6",
-      "mission_id": "PRODUCT-universal-overlay"
+      "mission_id": "PRODUCT-universal-overlay",
+      "reaudit_reset_at": "2026-07-30T18:55:06.758Z"
     },
     {
       "id": "7",
-      "status": "done",
+      "status": "pending",
       "target_file": "public/overlay/adaptiveLayout.js",
       "task": "adapt layout preferences",
       "spec": "Save user layout preferences to `flourishing_prefs`.",
@@ -222,16 +235,19 @@
         "adaptLayoutPreferences"
       ],
       "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T22:17:14.890Z",
       "commit_sha": "414cbd0e2809e51e88efe93321c6180bb142c4a9",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "7",
-      "mission_id": "PRODUCT-universal-overlay"
+      "mission_id": "PRODUCT-universal-overlay",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:adaptLayoutPreferences; adaptLayoutPreferences",
+      "reaudit_reset_at": "2026-07-30T18:55:06.758Z"
     },
     {
       "id": "8",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/migrations/addAdaptiveLayoutColumn.sql",
       "task": "add adaptive layout column",
       "spec": "Add column for adaptive layout preferences in `flourishing_prefs`.",
@@ -242,7 +258,7 @@
         "CREATE TABLE IF NOT EXISTS flourishing_prefs"
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
       "commit_sha": "1e0bed7a4bf70a31e0f665f577cb974ba8dcd772",
       "built_sha": null,
       "proof": null,
@@ -254,16 +270,17 @@
       "demoted_at": null,
       "park_until": null,
       "no_op": null,
-      "pre_existing": null,
+      "pre_existing": false,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T20:36:39.360Z",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "8",
-      "mission_id": "PRODUCT-universal-overlay"
+      "mission_id": "PRODUCT-universal-overlay",
+      "reaudit_reset_at": "2026-07-30T18:55:06.758Z"
     },
     {
       "id": "9",
@@ -299,7 +316,7 @@
     },
     {
       "id": "10",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/pageSummarization.js",
       "task": "create page summarization feature",
       "spec": "Provide a summary of the page content via AI assistance.",
@@ -325,7 +342,7 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerPageSummarizationRoutes; assertion_threw",
       "commit_sha": "d1cd2ca334a12482cc6ad4460666c2772a2ff071",
       "built_sha": null,
       "proof": null,
@@ -337,20 +354,21 @@
       "demoted_at": null,
       "park_until": null,
       "no_op": null,
-      "pre_existing": null,
+      "pre_existing": false,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T22:26:59.237Z",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "10",
-      "mission_id": "PRODUCT-universal-overlay"
+      "mission_id": "PRODUCT-universal-overlay",
+      "reaudit_reset_at": "2026-07-30T18:55:06.758Z"
     },
     {
       "id": "11",
-      "status": "done",
+      "status": "pending",
       "target_file": "public/overlay/uiExtensions.js",
       "task": "develop extension icons",
       "spec": "Add LifeOS branded extension icons for different sizes (16/32/48/128px).",
@@ -364,12 +382,15 @@
         "128px"
       ],
       "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T22:23:49.799Z",
       "commit_sha": "0d57bed25e4c2f43dfd3f34c3f39fd2ad3dadbbe",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "11",
-      "mission_id": "PRODUCT-universal-overlay"
+      "mission_id": "PRODUCT-universal-overlay",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw; assertion_threw; assertion_threw; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.758Z"
     },
     {
       "id": "12",
@@ -390,7 +411,7 @@
     },
     {
       "id": "universal-overlay-1",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/proactiveToastSystem.js",
       "task": "implement proactive toast system",
       "spec": "Create a proactive toast system with dismissible, preference-learned features.",
@@ -410,12 +431,15 @@
           "assertion_id": "expected_exports:services/proactiveToastSystem.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T04:18:26.201Z",
       "commit_sha": "f3dbf1798e4598ee6fb397f3253387d9eeac399a",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "universal-overlay-1",
-      "mission_id": "PRODUCT-universal-overlay"
+      "mission_id": "PRODUCT-universal-overlay",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerProactiveToast; registerProactiveToast",
+      "reaudit_reset_at": "2026-07-30T18:55:06.758Z"
     },
     {
       "id": "universal-overlay-2",

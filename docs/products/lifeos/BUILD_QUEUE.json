@@ -1223,7 +1223,7 @@
     },
     {
       "id": "lifeos-chat-v2-01",
-      "status": "done",
+      "status": "pending",
       "target_file": "public/overlay/lifeos-chat-thoughts.js",
       "task": "Build the chat thought-stream UI module for lifeos-app.html",
       "spec": "Classic browser script (NOT an ES module; no top-level import or export statements). Self-initializing on DOMContentLoaded. It must locate the existing chat message container (#lumin-messages) and input/send flow in public/overlay/lifeos-app.html. Intercept fetch calls to the founder chat endpoint (/api/v1/lifeos/builderos/command-control/founder-interface/message) and any legacy /message path; parse the JSON response. For each assistant response, create a thought-stream element above the assistant message bubble. The panel displays concise labels: model routing/provider used, command_ran (yes/no), command_executed, target_file, sha/commit_sha, first_blocker, command_truth, pass_fail, build status, duration_ms. Each label is shown as a collapsible/expandable item with a chevron; default state can be toggled, with a top-level Collapse all / Expand all control. Use existing CSS custom properties from lifeos-theme.js (dark theme, accent, border, text-muted) so it matches the UI. If the response includes a thoughts array (future schema), render those steps verbatim with timestamps. The module must not interfere with sending messages or break if the endpoint changes; if container not found, silently exit. Attach the public API to window.LifeOSChatThoughts only. Do not use top-level `return`. File contains: renderThoughtStream, toggleThought, collapseAllThoughts, expandAllThoughts, thought-stream, command_truth, first_blocker, lumin-messages.",
@@ -1262,7 +1262,7 @@
       "founder_gated": false,
       "attempts": 0,
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw",
       "commit_sha": "9d459cb55dcb37095d94a1ae1dc3b6e9b4c4f238",
       "built_sha": null,
       "proof": null,
@@ -1274,18 +1274,20 @@
       "demoted_at": null,
       "park_until": null,
       "no_op": null,
-      "pre_existing": null,
+      "pre_existing": false,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-chat-v2-01",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "shipped_via": null,
+      "reaudit_reset_at": "2026-07-30T18:55:06.601Z"
     },
     {
       "id": "lifeos-chat-v2-02",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/lifeos-chat-intent-router.js",
       "task": "Build the chat intent router so the LifeOS chair replies with real workflow content or a real build receipt instead of counsel text",
       "spec": "ESM service. Exports classifyFounderIntent(message, context) returning { lane, confidence, payload } where lane is one of counsel, workflow_content, direct_build, ambient, commitment, note, checkin, digital_twin_context. Exports buildSMOSWorkflowReply(intent, context) that returns concrete Social Media OS relocation workflow content (not an apology or essay). Exports buildDirectBuildReply(intent, context, options) that calls POST /api/v1/lifeos/builder/build with the build instruction and x-command-key, waits for the result, and returns a terminal PASS/FAIL receipt with command_truth, pass_fail, command_executed, target_file, commit_sha, duration_ms, and first_blocker. Exports routeByIntent(message, context) that picks the right lane and returns the reply object. No top-level side effects. Use fetch to http://127.0.0.1:$PORT or process.env.PUBLIC_BASE_URL. Handle errors gracefully and return counsel fallback only when no other lane matches.",
@@ -1328,7 +1330,7 @@
       "founder_gated": false,
       "attempts": 0,
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:classifyFounderIntent,buildSMOSWorkflowReply,buildDirectBuildReply,routeByIntent; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw",
       "commit_sha": "52b7e0475874935bd217be15a059a8e5cb284dc4",
       "built_sha": null,
       "proof": null,
@@ -1340,12 +1342,12 @@
       "demoted_at": null,
       "park_until": null,
       "no_op": null,
-      "pre_existing": null,
+      "pre_existing": false,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T00:06:25.458Z",
       "expected_exports": [
         "classifyFounderIntent",
@@ -1368,7 +1370,8 @@
       ],
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-chat-v2-02",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "reaudit_reset_at": "2026-07-30T18:55:06.601Z"
     },
     {
       "id": "lifeos-chat-v2-03",
@@ -1522,7 +1525,7 @@
     },
     {
       "id": "lifeos-chat-v2-05",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/lifeos-note-capture-service.js",
       "task": "Build the note capture service from natural language",
       "spec": "ESM service. Exports captureNote(text, { userId, source, tags }) that extracts the note, suggested tags, and a one-line summary. Exports getNotes(userId, opts), searchNotes(userId, query), and tagNotes(userId, noteIds, tags). Uses a lightweight in-memory or SQL notes table (CREATE TABLE IF NOT EXISTS in a separate migration step). Suggested tags can be comma-separated or inferred from keywords. No top-level side effects.",
@@ -1563,7 +1566,7 @@
       "founder_gated": false,
       "attempts": 0,
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:captureNote,getNotes,searchNotes,tagNotes; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw",
       "commit_sha": "5b9990a1f0cb10f21f5ee918971f2865b81c8622",
       "built_sha": null,
       "proof": null,
@@ -1575,12 +1578,12 @@
       "demoted_at": null,
       "park_until": null,
       "no_op": null,
-      "pre_existing": null,
+      "pre_existing": false,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T00:52:33.093Z",
       "expected_exports": [
         "captureNote",
@@ -1603,11 +1606,12 @@
       ],
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-chat-v2-05",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "reaudit_reset_at": "2026-07-30T18:55:06.601Z"
     },
     {
       "id": "lifeos-chat-v2-06",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/lifeos-daily-checkin-service.js",
       "task": "Build the daily activity check-in service (\"what have you worked on in the last 15 minutes?\")",
       "spec": "ESM service. Exports startCheckin(db, userId) returning a prompt string by calling getPromptForUser. Exports addCheckinEntry(db, userId, text, { minutesAgo }) that records an activity snippet. Exports getTodaySummary(db, userId) returning a list of entries and a generated summary. Exports getPromptForUser(db, userId) returning the question \"Adam, what have you worked on for the last 15 minutes?\" plus any context. Exports buildReplyFromEntries(entries) that turns entries into concise bullet notes. Accept `db` as the FIRST argument on every exported function that touches the database (pg pool/client) and use ONLY parameterized pg queries (`await db.query('INSERT INTO checkins ... RETURNING *', [userId, text, ...])`). Do NOT import helper files (e.g. './database-connection.js') because they do not exist. No knex/objection ORM. No top-level side effects. No imports other than node built-ins. The `checkins` table is assumed to exist from a separate migration.",
@@ -1653,7 +1657,7 @@
       "founder_gated": false,
       "attempts": 0,
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:startCheckin,addCheckinEntry,getTodaySummary,getPromptForUser,buildReplyFromEntries; startCheckin; addCheckinEntry; getTodaySummary; getPromptForUser; buildReplyFromEntries; startCheckin; addCheckinEntry; getTodaySummary; getPromptForUser; buildReplyFromEntries; what have you worked on",
       "commit_sha": "f3b7316668e37451836aa7b645fbef408aa2665a",
       "built_sha": null,
       "proof": null,
@@ -1665,12 +1669,12 @@
       "demoted_at": null,
       "park_until": null,
       "no_op": null,
-      "pre_existing": null,
+      "pre_existing": false,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T01:04:30.018Z",
       "expected_exports": [
         "startCheckin",
@@ -1695,11 +1699,12 @@
       ],
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-chat-v2-06",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "reaudit_reset_at": "2026-07-30T18:55:06.601Z"
     },
     {
       "id": "lifeos-chat-v2-07",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/lifeos-natural-build-router.js",
       "task": "Build the normal-language build request router that turns founder instructions into governed BuilderOS tasks",
       "spec": "ESM service. Exports parseBuildRequest(text) that extracts a build instruction (e.g. \"build a commitment calendar route\") and a target file guess. Exports buildBuildPayload(parsed) returning { task, target_file, spec_hint, product_id: \"lifeos\" }. Exports submitToBuilder(payload, { commandKey, baseUrl }) that POSTs to `${baseUrl}/api/v1/lifeos/builder/build` with `x-command-key: ${commandKey}` and `Content-Type: application/json` using global `fetch`, and returns the JSON receipt. Exports replyFromReceipt(receipt) that turns the build result into a concise founder-facing message. Do NOT import helper files (e.g. './api-client.js') because they do not exist; use global `fetch`. No top-level side effects. No imports other than node built-ins.",
@@ -1740,7 +1745,7 @@
       "founder_gated": false,
       "attempts": 0,
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:parseBuildRequest,buildBuildPayload,submitToBuilder,replyFromReceipt; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw",
       "commit_sha": "563e14a44dfcec1ffb1dfc7e91fb6c3a41506c1c",
       "built_sha": null,
       "proof": null,
@@ -1752,12 +1757,12 @@
       "demoted_at": null,
       "park_until": null,
       "no_op": null,
-      "pre_existing": null,
+      "pre_existing": false,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T01:09:09.626Z",
       "expected_exports": [
         "parseBuildRequest",
@@ -1780,11 +1785,12 @@
       ],
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-chat-v2-07",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "reaudit_reset_at": "2026-07-30T18:55:06.601Z"
     },
     {
       "id": "lifeos-chat-v2-08",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/lifeos-digital-twin-context.js",
       "task": "Build the digital twin context loader for the LifeOS chair",
       "spec": "ESM service. Exports getTwinContextForUser(db, userId) that uses ONLY parameterized pg queries (`await db.query('SELECT ...', [userId])`) against existing twin tables (users, twin_simulator, flourishing_preferences, ui_directives, lifeos_notes) and returns a compact summary object { identity, recentNotes, openCommitments, emotionalState, uiDirectives, energyLevel }. Exports injectTwinContext(prompt, userId) that appends the twin summary to the prompt string. Exports updateTwinFromInteraction(db, userId, message, reply) that writes a short learned fact to the twin store with a parameterized pg query. Accept `db` as the FIRST argument on every exported function that touches the database. Do NOT import helper files (e.g. './database.js', './twin-store.js') because they do not exist. No knex/objection ORM. No external API calls. No top-level side effects. No imports other than node built-ins.",
@@ -1824,7 +1830,7 @@
       "founder_gated": false,
       "attempts": 0,
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:getTwinContextForUser,injectTwinContext,updateTwinFromInteraction; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw",
       "commit_sha": "5ca04d795b9bfbac20303d4f8ef60f638c0f0373",
       "built_sha": null,
       "proof": null,
@@ -1836,12 +1842,12 @@
       "demoted_at": null,
       "park_until": null,
       "no_op": null,
-      "pre_existing": null,
+      "pre_existing": false,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T01:14:08.805Z",
       "expected_exports": [
         "getTwinContextForUser",
@@ -1862,11 +1868,12 @@
       ],
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-chat-v2-08",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "reaudit_reset_at": "2026-07-30T18:55:06.601Z"
     },
     {
       "id": "lifeos-chat-v2-09",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/lifeos-chat-action-service.js",
       "task": "Build the LifeOS chat action executor that turns intent-router lanes into real execution",
       "spec": "ESM service. This file ONLY imports the exact named exports listed below from the three sibling services that already shipped. Sibling API contract (do NOT invent different function names): ./lifeos-commitment-service.js exports captureCommitment(db, text, { userId, timezone }) and getCommitments(db, userId); ./lifeos-note-capture-service.js exports captureNote(text, { userId, source, tags }); ./lifeos-daily-checkin-service.js exports addCheckinEntry(db, userId, text, { minutesAgo }) and getTodaySummary(db, userId). Exports executeCommitment(db, text, { userId, timezone }) that calls `const commitment = await captureCommitment(db, text, { userId, timezone })` and returns a confirmation string including commitment.title and commitment.datetime. Exports executeNote(text, { userId, source, tags }) that calls `const note = captureNote(text, { userId, source, tags })` and returns a confirmation including note.text or note.summary. Exports executeCheckin(db, userId, text, { minutesAgo }) that calls `await addCheckinEntry(db, userId, text, { minutesAgo })`, then `const summary = await getTodaySummary(db, userId)` and returns a bullet list of today's entries. Exports executeBuild(task, { routeToBuilder, operatorKey }) that calls `const receipt = await routeToBuilder(task, operatorKey, { confirmIntent: true })` and returns a plain-English PASS/FAIL message using `receipt.ok`, `receipt.committed`, `receipt.sha`, `receipt.error`, or JSON.stringify(receipt) as fallback. Exports executeAmbient(text) returning a hint to tap the mic icon. Each execute* function MUST wrap in try/catch and return a plain-English failure string, never throw. No top-level side effects. No imports other than the three sibling services and node built-ins.",
@@ -1912,7 +1919,7 @@
       "founder_gated": false,
       "attempts": 0,
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:executeCommitment,executeNote,executeCheckin,executeBuild,executeAmbient; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw",
       "commit_sha": "39609ccaf9dbca9fb1284e09ecc2a7be88766553",
       "built_sha": null,
       "proof": null,
@@ -1924,12 +1931,12 @@
       "demoted_at": null,
       "park_until": null,
       "no_op": null,
-      "pre_existing": null,
+      "pre_existing": false,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T01:22:00.131Z",
       "expected_exports": [
         "executeCommitment",
@@ -1954,11 +1961,12 @@
       ],
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-chat-v2-09",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "reaudit_reset_at": "2026-07-30T18:55:06.601Z"
     },
     {
       "id": "step1",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/lifeos-menstrual-cycle-tracking.js",
       "task": "implement menstrual cycle tracking",
       "spec": "Integrate wearable data to predict cycle phase and feed into energy patterns.",
@@ -1987,16 +1995,19 @@
           "assertion_id": "expected_exports:services/lifeos-menstrual-cycle-tracking.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T23:45:35.031Z",
       "commit_sha": "4c7e2ab17d6981e9338f355662fdf506de8c1545",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step1",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:predictCyclePhase,updateEnergyPatterns; assertion_threw; assertion_threw; assertion_threw; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.601Z"
     },
     {
       "id": "step2",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/lifeos-sleep-debt.js",
       "task": "implement sleep-debt tracking",
       "spec": "Calculate rolling sleep-debt score and derive chronotype classification from Apple Watch timing.",
@@ -2025,16 +2036,19 @@
           "assertion_id": "expected_exports:services/lifeos-sleep-debt.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T23:47:05.012Z",
       "commit_sha": "87e69d4f3fe9b080e84e003d31757476f09e5a76",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step2",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:calculateSleepDebt,classifyChronotype; assertion_threw; assertion_threw; assertion_threw; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.601Z"
     },
     {
       "id": "step3",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/lifeos-assessment-battery.js",
       "task": "build assessment battery",
       "spec": "Implement user assessments for emotional patterns.",
@@ -2063,12 +2077,15 @@
           "assertion_id": "expected_exports:services/lifeos-assessment-battery.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T23:49:06.940Z",
       "commit_sha": "da80dbb0bb9bf4c2c5ba70cf2e9f34e4747157dd",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step3",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:getAssessments,compareAssessments; getAssessments; compareAssessments; function getAssessments; function compareAssessments",
+      "reaudit_reset_at": "2026-07-30T18:55:06.601Z"
     },
     {
       "id": "step4",
@@ -2125,7 +2142,7 @@
     },
     {
       "id": "step5",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/lifeos-psychometric-battery-routes.js",
       "task": "route psychometric battery",
       "spec": "Expose psychometric battery API through dedicated routes.",
@@ -2153,16 +2170,19 @@
           "assertion_id": "expected_exports:routes/lifeos-psychometric-battery-routes.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T23:58:41.324Z",
       "commit_sha": "59f66a1d1a8da6e5454143f9d5761e96abce1607",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step5",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerPsychometricRoutes; registerPsychometricRoutes; /psychometric-battery",
+      "reaudit_reset_at": "2026-07-30T18:55:06.601Z"
     },
     {
       "id": "step6",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/lifeos-habit-tracker.js",
       "task": "create habit tracker",
       "spec": "Track habits with identity framing and streak recovery.",
@@ -2191,16 +2211,19 @@
           "assertion_id": "expected_exports:services/lifeos-habit-tracker.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T01:51:10.509Z",
       "commit_sha": "fa41a32b54ffefa6408d278a77dff8815fea6784",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step6",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:trackHabit,recoverStreak; assertion_threw; assertion_threw; assertion_threw; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.601Z"
     },
     {
       "id": "step7",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/migrations/20261101_habit_tables.sql",
       "task": "add habit tables",
       "spec": "Habits and habit_completions tables already exist from 20260422_lifeos_habits.sql; this step is a no-op migration that avoids CREATE TABLE collision.",
@@ -2210,16 +2233,19 @@
       "file_contains": [
         "SELECT 1"
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T01:53:28.289Z",
       "commit_sha": "b4565fbea607398d5bf3fc59805f02640f5dcf33",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step7",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.601Z"
     },
     {
       "id": "step8",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/lifeos-habit-tracker-routes.js",
       "task": "route habit tracker",
       "spec": "Provide API routes for the habit tracker.",
@@ -2247,12 +2273,15 @@
           "assertion_id": "expected_exports:routes/lifeos-habit-tracker-routes.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T01:58:45.462Z",
       "commit_sha": "2c8458fb6c1a2c7b1d7193b09013febbac0f2e56",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step8",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerHabitTrackerRoutes; assertion_threw; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.601Z"
     },
     {
       "id": "step9",
@@ -2364,7 +2393,7 @@
     },
     {
       "id": "step12",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/lifeos-trusted-contact.js",
       "task": "Enhance legacy with trusted contacts",
       "spec": "Implement trusted-contact table interactions and checks for legacy features.",
@@ -2393,16 +2422,19 @@
           "assertion_id": "expected_exports:services/lifeos-trusted-contact.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T02:00:24.116Z",
       "commit_sha": "9c31a51339aaa19c48b4b0a570a36091f0b498a1",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step12",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:manageTrustedContacts,scheduleLegacyDeliveries; assertion_threw; assertion_threw; assertion_threw; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.601Z"
     },
     {
       "id": "lifeos-1",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/lifeos-builderos-command-control-routes.js",
       "task": "Add executeChatIntent helper",
       "spec": "Add an executeChatIntent helper that uses classifyIntent for specific intents and handles them directly, preserving existing logic for other intents.",
@@ -2432,13 +2464,16 @@
         "path": "/jobs"
       },
       "last_attempt_at": "2026-07-16T04:20:59.413Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 978b is < 30% of existing 62069b",
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:executeChatIntent; executeChatIntent",
       "commit_sha": "manual",
       "built_sha": null,
       "proof": null,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-1",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "shipped_via": null,
+      "pre_existing": false,
+      "reaudit_reset_at": "2026-07-30T18:55:06.601Z"
     },
     {
       "id": "lifeos-2",
@@ -2476,7 +2511,7 @@
     },
     {
       "id": "lifeos-3",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/lifeos-chat-intent-executor.js",
       "task": "Create module for chat intents",
       "spec": "Implement classifyIntent, executeIntent, and formatReply. Handle intents: commitment, note, check_in, build_request. Return card or summary.",
@@ -2504,12 +2539,15 @@
           "assertion_id": "expected_exports:services/lifeos-chat-intent-executor.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T04:14:52.960Z",
       "commit_sha": "5400b407b0b06743b64888482dc1a6b2701bea27",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-3",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.601Z"
     },
     {
       "id": "lifeos-4",
@@ -2747,7 +2785,7 @@
     },
     {
       "id": "lifeos-10",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/lifeos-finance.js",
       "task": "Implement net worth tracking",
       "spec": "Add logic for calculating and storing net worth snapshots from total assets and liabilities.",
@@ -2774,7 +2812,7 @@
         }
       ],
       "last_attempt_at": "2026-07-16T06:07:28.748Z",
-      "last_error": null,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:calculateNetWorth; calculateNetWorth",
       "commit_sha": "pre-existing-claim",
       "built_sha": null,
       "proof": null,
@@ -2786,7 +2824,7 @@
       "demoted_at": null,
       "park_until": null,
       "no_op": null,
-      "pre_existing": true,
+      "pre_existing": false,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
@@ -2794,8 +2832,9 @@
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-10",
       "mission_id": "PRODUCT-lifeos",
-      "shipped_via": "pre_existing_net_worth",
-      "shipped_at": "2026-07-18T01:07:59.873Z"
+      "shipped_via": null,
+      "shipped_at": "2026-07-18T01:07:59.873Z",
+      "reaudit_reset_at": "2026-07-30T18:55:06.601Z"
     },
     {
       "id": "lifeos-11",
@@ -2870,7 +2909,7 @@
     },
     {
       "id": "lifeos-step1",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/lifeos-chat-intent-executor.js",
       "task": "create new module",
       "spec": "Export classifyIntent, executeIntent, and formatReply functions. Implement commitment, note, check_in, build_request intents handling.",
@@ -2899,7 +2938,7 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
       "commit_sha": "c16286b6e3433864d080beb06ecaedd4bfc30d26",
       "built_sha": null,
       "proof": null,
@@ -2911,16 +2950,17 @@
       "demoted_at": null,
       "park_until": null,
       "no_op": null,
-      "pre_existing": null,
+      "pre_existing": false,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T06:25:28.698Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-step1",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "reaudit_reset_at": "2026-07-30T18:55:06.601Z"
     },
     {
       "id": "lifeos-step3",

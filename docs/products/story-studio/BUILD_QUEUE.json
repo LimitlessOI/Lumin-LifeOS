@@ -46,7 +46,7 @@
     },
     {
       "id": "2",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/characterProfile.js",
       "task": "Develop character/world/story bible editor",
       "spec": "Implement service for character/world/story bible editing and self-profile insertion",
@@ -68,7 +68,11 @@
       "commit_sha": "0c794674a632d2a943d402c95fadce9af00a8698",
       "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "2",
-      "mission_id": "PRODUCT-story-studio"
+      "mission_id": "PRODUCT-story-studio",
+      "shipped_via": null,
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:editCharacterProfile,addSelfInsertProfile; assertion_threw; assertion_threw; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.739Z"
     },
     {
       "id": "3",
@@ -185,7 +189,7 @@
     },
     {
       "id": "6",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/franchiseScoring.js",
       "task": "Develop franchise scoring system with anti-abuse",
       "spec": "Implement employer score logic and community feedback mechanisms with anti-fraud measures",
@@ -205,7 +209,11 @@
       "commit_sha": "0ca74fbb5598196a4f1154cca3ad30eed55a2a1e",
       "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "6",
-      "mission_id": "PRODUCT-story-studio"
+      "mission_id": "PRODUCT-story-studio",
+      "shipped_via": null,
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:calculateFranchiseScore,getCommunityFeedback; assertion_threw; assertion_threw; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.739Z"
     },
     {
       "id": "7",

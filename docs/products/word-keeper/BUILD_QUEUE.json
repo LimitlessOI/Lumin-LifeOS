@@ -77,7 +77,7 @@
     },
     {
       "id": "1",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/migrations/002_add_transcript_purge_cron.sql",
       "task": "Create transcript purge table",
       "spec": "Create a table to track 24h transcript auto-purge operations.",
@@ -87,16 +87,19 @@
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS transcript_purge"
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T02:43:13.356Z",
       "commit_sha": "fad790696a0f4183378cea60a5d456615f5fbbc6",
       "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "1",
-      "mission_id": "PRODUCT-word-keeper"
+      "mission_id": "PRODUCT-word-keeper",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:07.447Z"
     },
     {
       "id": "3",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/transcriptPurgeService.js",
       "task": "Implement transcript purge logic",
       "spec": "Implement a service to handle purging transcripts older than 24 hours.",
@@ -118,16 +121,19 @@
           "assertion_id": "expected_exports:services/transcriptPurgeService.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T02:48:02.263Z",
       "commit_sha": "0c4795d42397cce12ea682cb49cf258222130714",
       "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "3",
-      "mission_id": "PRODUCT-word-keeper"
+      "mission_id": "PRODUCT-word-keeper",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:purgeOldTranscripts; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:07.447Z"
     },
     {
       "id": "4",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/transcriptPurgeRoutes.js",
       "task": "Create route for transcript purge confirmation",
       "spec": "Create a route to confirm the 24h transcript auto-purge operation.",
@@ -153,12 +159,15 @@
           "assertion_id": "expected_exports:routes/transcriptPurgeRoutes.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T02:53:24.399Z",
       "commit_sha": "b252f4ec3285789584b2b79465444e88d52115bb",
       "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "4",
-      "mission_id": "PRODUCT-word-keeper"
+      "mission_id": "PRODUCT-word-keeper",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerTranscriptPurgeRoutes; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:07.447Z"
     },
     {
       "id": "5",
@@ -180,7 +189,7 @@
     },
     {
       "id": "2",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/migrations/003_confirm_transcript_purge.sql",
       "task": "confirm transcript purge implementation",
       "spec": "Ensure transcript auto-purge cron job is confirmed by adding a verification entry to the migrations.",
@@ -191,7 +200,7 @@
         "INSERT INTO transcript_purge_verification"
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
       "commit_sha": "d798159a5c166d92044c923f4c996555fc5003ed",
       "built_sha": null,
       "proof": null,
@@ -203,20 +212,21 @@
       "demoted_at": null,
       "park_until": null,
       "no_op": null,
-      "pre_existing": null,
+      "pre_existing": false,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T04:24:05.568Z",
       "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "2",
-      "mission_id": "PRODUCT-word-keeper"
+      "mission_id": "PRODUCT-word-keeper",
+      "reaudit_reset_at": "2026-07-30T18:55:07.447Z"
     },
     {
       "id": "word-keeper-step1",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/googleCalendarRoutes.js",
       "task": "add Google Calendar integration route",
       "spec": "Create a route to integrate Google Calendar. This route should handle incoming requests to connect to the user's Google Calendar without utilizing OAuth, as per the documented requirement.",
@@ -243,12 +253,15 @@
           "assertion_id": "expected_exports:routes/googleCalendarRoutes.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T04:18:45.174Z",
       "commit_sha": "fa20e493ca0b1ca8dca76b6fc38a68712728147a",
       "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "word-keeper-step1",
-      "mission_id": "PRODUCT-word-keeper"
+      "mission_id": "PRODUCT-word-keeper",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerGoogleCalendarRoutes; assertion_threw; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:07.447Z"
     },
     {
       "id": "word-keeper-step2",

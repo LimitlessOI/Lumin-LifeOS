@@ -2148,7 +2148,7 @@
     },
     {
       "id": "04",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/migrations/20241030_add_interactive_element_labels_table.sql",
       "task": "create table for interactive element labels",
       "spec": "Database table to store labels for interactive elements.",
@@ -2158,9 +2158,12 @@
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS"
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-25T02:53:43.167Z",
-      "commit_sha": "c92652e3edd8770c56d63007a640332680dd1b91"
+      "commit_sha": "c92652e3edd8770c56d63007a640332680dd1b91",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.735Z"
     },
     {
       "id": "05",

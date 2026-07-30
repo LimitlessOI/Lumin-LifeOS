@@ -162,7 +162,7 @@
     },
     {
       "id": "8",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/migrations/20231011_create_irlen_consultation.sql",
       "task": "Record Irlen Syndrome community consultation",
       "spec": "Create table to store feedback from Irlen Syndrome community consultation.",
@@ -175,12 +175,15 @@
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS irlen_consultation"
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T18:03:04.659Z",
       "commit_sha": "7324fa151cb2162b90160e0ffe5ecfb8ae2fc509",
       "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "8",
-      "mission_id": "PRODUCT-kids-os"
+      "mission_id": "PRODUCT-kids-os",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.433Z"
     },
     {
       "id": "9",
@@ -364,7 +367,7 @@
     },
     {
       "id": "step5",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/irlenInsights.js",
       "task": "Expose Irlen insights API",
       "spec": "Provide an API endpoint to fetch Irlen consultation insights.",
@@ -390,16 +393,19 @@
           "assertion_id": "expected_exports:routes/irlenInsights.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T00:00:56.728Z",
       "commit_sha": "c85d747c733d89f258bd1e6898ec449416391d9d",
       "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step5",
-      "mission_id": "PRODUCT-kids-os"
+      "mission_id": "PRODUCT-kids-os",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerIrlenInsightsRoutes; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.433Z"
     },
     {
       "id": "step6",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/pricingValidation.js",
       "task": "Expose pricing validation API",
       "spec": "Provide an API endpoint to validate pricing with users.",
@@ -423,16 +429,19 @@
           "assertion_id": "expected_exports:routes/pricingValidation.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T00:48:01.425Z",
       "commit_sha": "5b760d246343400433bce4b05cbd593b6d44b0a2",
       "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step6",
-      "mission_id": "PRODUCT-kids-os"
+      "mission_id": "PRODUCT-kids-os",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerPricingValidationRoutes; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.433Z"
     },
     {
       "id": "step7",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/migrations/20231012_coppa_compliance.sql",
       "task": "Add COPPA compliance migration",
       "spec": "Ensure database schema provides necessary structures for COPPA compliance review.",
@@ -442,16 +451,19 @@
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS coppa_compliance"
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T00:52:59.948Z",
       "commit_sha": "18d501763ce2fdd4807ac1b819eda788eb7c6d55",
       "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step7",
-      "mission_id": "PRODUCT-kids-os"
+      "mission_id": "PRODUCT-kids-os",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.433Z"
     },
     {
       "id": "step8",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/coppaReview.js",
       "task": "Summarize COPPA review",
       "spec": "Document results of the COPPA compliance review for the kids-os platform.",
@@ -474,12 +486,15 @@
           "assertion_id": "expected_exports:services/coppaReview.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T01:14:28.348Z",
       "commit_sha": "af0e282e81ad6540cdd99a2eddf28335f2e55d27",
       "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step8",
-      "mission_id": "PRODUCT-kids-os"
+      "mission_id": "PRODUCT-kids-os",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:getCoppaReview; assertion_threw; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.433Z"
     },
     {
       "id": "step9",
@@ -552,7 +567,7 @@
     },
     {
       "id": "step11",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/pricingValidation.js",
       "task": "expose pricing validation route",
       "spec": "Expose an API endpoint for the pricing validation with users.",
@@ -578,12 +593,15 @@
           "assertion_id": "expected_exports:routes/pricingValidation.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T04:40:53.281Z",
       "commit_sha": "18912d725978c9e9bb8963b7ca901997099ba953",
       "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step11",
-      "mission_id": "PRODUCT-kids-os"
+      "mission_id": "PRODUCT-kids-os",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerPricingValidationRoutes; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.433Z"
     },
     {
       "id": "step12",

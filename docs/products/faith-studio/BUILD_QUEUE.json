@@ -225,7 +225,7 @@
     },
     {
       "id": "step7",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/privateWitnessMode.js",
       "task": "configure private witness mode controls",
       "spec": "Private witness mode allowed but public publishing remains controlled.",
@@ -244,7 +244,11 @@
       "commit_sha": "b7ec0940ff9a943285ff2c492efc48719a05b7cd",
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step7",
-      "mission_id": "PRODUCT-faith-studio"
+      "mission_id": "PRODUCT-faith-studio",
+      "shipped_via": null,
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerPrivateWitnessModeRoutes; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.428Z"
     },
     {
       "id": "step8",
@@ -282,7 +286,7 @@
     },
     {
       "id": "step9",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/familySafety.js",
       "task": "enforce stricter default safety settings",
       "spec": "Enforce stricter defaults for family/church/classroom-safe modes.",
@@ -301,7 +305,11 @@
       "commit_sha": "00aa83e1ed17faad6dfca5ebf1f13bf905d9d220",
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step9",
-      "mission_id": "PRODUCT-faith-studio"
+      "mission_id": "PRODUCT-faith-studio",
+      "shipped_via": null,
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerFamilySafetyRoutes; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.428Z"
     },
     {
       "id": "step10",
@@ -339,7 +347,7 @@
     },
     {
       "id": "1",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/traditionProfilesService.js",
       "task": "Detail tradition profiles",
       "spec": "Tradition profiles should factor in detailed theological/denominational interpretations.",
@@ -362,16 +370,19 @@
           "assertion_id": "expected_exports:services/traditionProfilesService.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T23:45:45.708Z",
       "commit_sha": "b5de1a0c18b206a8733dbf0535ded96aa8b67aab",
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "1",
-      "mission_id": "PRODUCT-faith-studio"
+      "mission_id": "PRODUCT-faith-studio",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:getTraditionProfilesDetail; assertion_threw; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.428Z"
     },
     {
       "id": "2",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/migrations/add_public_sacred_review_path.sql",
       "task": "Specify public sacred-content review path",
       "spec": "Define the database schema required for public sacred-content review.",
@@ -382,7 +393,7 @@
         "CREATE TABLE IF NOT EXISTS sacred_review_path"
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
       "commit_sha": "f2f5b9ed7100b8e78ded55c032becc6c6f335a0e",
       "built_sha": null,
       "proof": null,
@@ -394,20 +405,21 @@
       "demoted_at": null,
       "park_until": null,
       "no_op": null,
-      "pre_existing": null,
+      "pre_existing": false,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T00:06:40.982Z",
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "2",
-      "mission_id": "PRODUCT-faith-studio"
+      "mission_id": "PRODUCT-faith-studio",
+      "reaudit_reset_at": "2026-07-30T18:55:06.428Z"
     },
     {
       "id": "3",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/sacredContentReviewService.js",
       "task": "Design sacred-content review service",
       "spec": "Service to handle preservation of sacred intent in content review workflows.",
@@ -433,16 +445,19 @@
           "assertion_id": "expected_exports:services/sacredContentReviewService.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T02:10:20.541Z",
       "commit_sha": "fb558daefdf38aaa23bc7471703470d25fa20e2e",
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "3",
-      "mission_id": "PRODUCT-faith-studio"
+      "mission_id": "PRODUCT-faith-studio",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:sacredContentRevise; assertion_threw; assertion_threw; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.428Z"
     },
     {
       "id": "4",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/sacredContentReview.js",
       "task": "Implement sacred-content review route",
       "spec": "Route for handling API requests related to sacred-content review.",
@@ -468,16 +483,19 @@
           "assertion_id": "expected_exports:routes/sacredContentReview.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T02:14:08.283Z",
       "commit_sha": "b180a99aa753188416acbd2cfc4afe075686ed84",
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "4",
-      "mission_id": "PRODUCT-faith-studio"
+      "mission_id": "PRODUCT-faith-studio",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerSacredContentReviewRoutes; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.428Z"
     },
     {
       "id": "5",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/interpretiveAdaptation.js",
       "task": "Enforce interpretive adaptation in outputs",
       "spec": "Service to ensure outputs include source, tradition lens, and interpretive notes.",
@@ -501,16 +519,19 @@
           "assertion_id": "expected_exports:services/interpretiveAdaptation.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T23:49:23.875Z",
       "commit_sha": "e4972d34eba3583a0f99e08fd01e5baf783a8639",
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "5",
-      "mission_id": "PRODUCT-faith-studio"
+      "mission_id": "PRODUCT-faith-studio",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:ensureInterpretiveAdaptation; assertion_threw; assertion_threw; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.428Z"
     },
     {
       "id": "6",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/advisoryCouncilService.js",
       "task": "Create advisory council model",
       "spec": "Model for theological/denominational advisory processes.",
@@ -533,16 +554,19 @@
           "assertion_id": "expected_exports:services/advisoryCouncilService.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T23:51:31.290Z",
       "commit_sha": "87af01983b4938e41716f1cf973ac445592eb5e5",
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "6",
-      "mission_id": "PRODUCT-faith-studio"
+      "mission_id": "PRODUCT-faith-studio",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:adviseOnSacredAccuracy; assertion_threw; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.428Z"
     },
     {
       "id": "7",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/reviewModerationFlow.js",
       "task": "Define review/moderation flow",
       "spec": "Service for moderation flow detail used in sacred-content review.",
@@ -565,16 +589,19 @@
           "assertion_id": "expected_exports:services/reviewModerationFlow.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T23:58:51.308Z",
       "commit_sha": "4d2436bb55fe45afd6b5e146521bc1fa539a3c62",
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "7",
-      "mission_id": "PRODUCT-faith-studio"
+      "mission_id": "PRODUCT-faith-studio",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:getModerationRules; assertion_threw; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.428Z"
     },
     {
       "id": "8",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/privateModeExtension.js",
       "task": "Extend private witness mode",
       "spec": "Enhance private mode to influence the public publishing guard completely via safe defaults.",
@@ -594,16 +621,19 @@
           "assertion_id": "expected_exports:routes/privateModeExtension.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T02:18:59.038Z",
       "commit_sha": "a88940daa5efc88dee311dda3c09cd7dc7381ccc",
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "8",
-      "mission_id": "PRODUCT-faith-studio"
+      "mission_id": "PRODUCT-faith-studio",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerPrivateModeExtensions; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.428Z"
     },
     {
       "id": "9",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/doctrineProfilesService.js",
       "task": "Prepare doctrine-specific profiles",
       "spec": "Service to prepare ready-under-test doctrine-specific profiles.",
@@ -626,16 +656,19 @@
           "assertion_id": "expected_exports:services/doctrineProfilesService.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T00:00:46.477Z",
       "commit_sha": "93387f7ddbdcaefbf94ae4cc9a953118d4f330eb",
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "9",
-      "mission_id": "PRODUCT-faith-studio"
+      "mission_id": "PRODUCT-faith-studio",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:getDoctrineDetails; assertion_threw; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.428Z"
     },
     {
       "id": "01",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/privateWitnessService.js",
       "task": "implement private witness mode",
       "spec": "Implement the private witness mode functionality, ensuring that outputs are permissible as specified, but avoid public exposure.",
@@ -661,16 +694,19 @@
           "assertion_id": "expected_exports:services/privateWitnessService.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T02:42:42.744Z",
       "commit_sha": "dad6a4bca865f4aef6cd6d4a269dd56c54928545",
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "01",
-      "mission_id": "PRODUCT-faith-studio"
+      "mission_id": "PRODUCT-faith-studio",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:handlePrivateWitnessMode; assertion_threw; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.428Z"
     },
     {
       "id": "02",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/familySafetyService.js",
       "task": "enforce family safety modes",
       "spec": "Service should enforce family/church/classroom-safe output options with stricter defaults for sensitive content.",
@@ -696,12 +732,15 @@
           "assertion_id": "expected_exports:services/familySafetyService.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T02:47:33.468Z",
       "commit_sha": "18840875c81ddbe850d99ddb9e97bc326874cc63",
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "02",
-      "mission_id": "PRODUCT-faith-studio"
+      "mission_id": "PRODUCT-faith-studio",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:applyFamilySafetyFilters; assertion_threw; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.428Z"
     },
     {
       "id": "04",
@@ -740,7 +779,7 @@
     },
     {
       "id": "05",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/traditionProfilesUpdate.js",
       "task": "enhance tradition profiles",
       "spec": "Update tradition profiles to provide detailed explanations and visual framings without omitting source text.",
@@ -766,16 +805,19 @@
           "assertion_id": "expected_exports:services/traditionProfilesUpdate.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T02:52:22.362Z",
       "commit_sha": "4b0e3ddce9b143ee41d3c584f3ac66a6ad36cbb7",
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "05",
-      "mission_id": "PRODUCT-faith-studio"
+      "mission_id": "PRODUCT-faith-studio",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:updateTraditionProfiles; assertion_threw; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.428Z"
     },
     {
       "id": "06",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/migrations/add_doctrine_profiles.sql",
       "task": "create Doctrine Profiles table",
       "spec": "Define a table for doctrine-specific profiles with an appropriate schema.",
@@ -786,7 +828,7 @@
         "CREATE TABLE IF NOT EXISTS DoctrineProfiles"
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
       "commit_sha": "8b5cb3105019e621e370cd85370276617a723229",
       "built_sha": null,
       "proof": null,
@@ -798,20 +840,21 @@
       "demoted_at": null,
       "park_until": null,
       "no_op": null,
-      "pre_existing": null,
+      "pre_existing": false,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T03:09:09.548Z",
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "06",
-      "mission_id": "PRODUCT-faith-studio"
+      "mission_id": "PRODUCT-faith-studio",
+      "reaudit_reset_at": "2026-07-30T18:55:06.428Z"
     },
     {
       "id": "08",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/reviewModerationFlowDetail.js",
       "task": "specify review moderation flow",
       "spec": "Detail the review and moderation flow for public submissions, ensuring all critical paths are covered.",
@@ -837,16 +880,19 @@
           "assertion_id": "expected_exports:services/reviewModerationFlowDetail.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T02:57:00.157Z",
       "commit_sha": "0b8f2312cc2c4ef0a7dfe6c226315e8827389319",
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "08",
-      "mission_id": "PRODUCT-faith-studio"
+      "mission_id": "PRODUCT-faith-studio",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:moderateSubmissions; assertion_threw; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.428Z"
     },
     {
       "id": "09",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/advisoryCouncilProcess.js",
       "task": "define advisory council process",
       "spec": "Define the advisory council process for reviewing sacred content for accuracy and sensitivity.",
@@ -872,16 +918,19 @@
           "assertion_id": "expected_exports:services/advisoryCouncilProcess.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T03:01:25.071Z",
       "commit_sha": "0668174425305bb09896d5a24c8d131dcbd9cda4",
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "09",
-      "mission_id": "PRODUCT-faith-studio"
+      "mission_id": "PRODUCT-faith-studio",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:councilReview; assertion_threw; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.428Z"
     },
     {
       "id": "10",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/reviewModerationFlow.js",
       "task": "implement review moderation flow",
       "spec": "Detail the review and moderation flow ensuring effective handling of high-risk outputs.",
@@ -901,16 +950,19 @@
           "assertion_id": "expected_exports:services/reviewModerationFlow.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T04:16:14.874Z",
       "commit_sha": "7da1acb13ea9aef4dd86814902b6ae70fff8d2df",
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "10",
-      "mission_id": "PRODUCT-faith-studio"
+      "mission_id": "PRODUCT-faith-studio",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:processReviewModeration; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.428Z"
     },
     {
       "id": "faith-studio-step-1",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/traditionProfileService.js",
       "task": "Add source labeling",
       "spec": "Integrate source labeling engine into the tradition profile model service.",
@@ -930,16 +982,19 @@
           "assertion_id": "expected_exports:services/traditionProfileService.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T04:22:12.252Z",
       "commit_sha": "2dc991e54e861c4691c7a45e990b5d9a105b1eaa",
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "faith-studio-step-1",
-      "mission_id": "PRODUCT-faith-studio"
+      "mission_id": "PRODUCT-faith-studio",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:enhanceWithSourceLabels; enhanceWithSourceLabels",
+      "reaudit_reset_at": "2026-07-30T18:55:06.428Z"
     },
     {
       "id": "faith-studio-step-2",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/reverenceGuardService.js",
       "task": "Integrate labels",
       "spec": "Enhance reverence guard with interpretation and tradition/source labels.",
@@ -961,16 +1016,19 @@
           "assertion_id": "expected_exports:services/reverenceGuardService.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T04:26:47.152Z",
       "commit_sha": "ca8100a14d4e674bbde2470898aa78131a091085",
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "faith-studio-step-2",
-      "mission_id": "PRODUCT-faith-studio"
+      "mission_id": "PRODUCT-faith-studio",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:applyLabelGuard; applyLabelGuard",
+      "reaudit_reset_at": "2026-07-30T18:55:06.428Z"
     },
     {
       "id": "faith-studio-step-3",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/scriptureSceneBuilder.js",
       "task": "Add private witness mode",
       "spec": "Enable scripture scene builder to support private witness mode capability.",
@@ -992,12 +1050,15 @@
           "assertion_id": "expected_exports:services/scriptureSceneBuilder.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T04:35:04.004Z",
       "commit_sha": "9df5d254088cd978014cd3bbc032e2f584bc9d50",
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "faith-studio-step-3",
-      "mission_id": "PRODUCT-faith-studio"
+      "mission_id": "PRODUCT-faith-studio",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:buildSceneWithPrivateMode; buildSceneWithPrivateMode",
+      "reaudit_reset_at": "2026-07-30T18:55:06.428Z"
     },
     {
       "id": "faith-studio-step-4",

@@ -9,7 +9,7 @@
   "steps": [
     {
       "id": "1",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/migrations/202604261.sql",
       "task": "create epistemic_facts table",
       "spec": "Defines epistemic_facts table with necessary columns, seeded from SSOT receipts and ENV_REGISTRY.",
@@ -19,16 +19,19 @@
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS epistemic_facts"
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T17:55:32.723Z",
       "commit_sha": "de86844cbddccb13000514b250147d79a06b1381",
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "1",
-      "mission_id": "PRODUCT-memory-intelligence"
+      "mission_id": "PRODUCT-memory-intelligence",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.671Z"
     },
     {
       "id": "2",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/migrations/202605141.sql",
       "task": "create lessons_learned table",
       "spec": "Defines lessons_learned table, seeded from AM36/CONTINUITY_LOG.",
@@ -38,16 +41,19 @@
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS lessons_learned"
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T18:01:49.912Z",
       "commit_sha": "6cf1631116f386966b345dd1815d21d1ec1b713a",
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "2",
-      "mission_id": "PRODUCT-memory-intelligence"
+      "mission_id": "PRODUCT-memory-intelligence",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.671Z"
     },
     {
       "id": "3",
-      "status": "done",
+      "status": "pending",
       "target_file": "scripts/memory-seed-epistemic.mjs",
       "task": "implement memory seeding",
       "spec": "Implements npm run memory:seed to seed epistemic_facts from SSOT sources.",
@@ -63,7 +69,7 @@
         "npm run memory:seed"
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:seedEpistemicFacts; assertion_threw; assertion_threw",
       "commit_sha": "3230a67740f7e45536b53839f352fb0839efd7bf",
       "built_sha": null,
       "proof": null,
@@ -75,20 +81,21 @@
       "demoted_at": null,
       "park_until": null,
       "no_op": null,
-      "pre_existing": null,
+      "pre_existing": false,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T19:11:46.759Z",
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "3",
-      "mission_id": "PRODUCT-memory-intelligence"
+      "mission_id": "PRODUCT-memory-intelligence",
+      "reaudit_reset_at": "2026-07-30T18:55:06.671Z"
     },
     {
       "id": "4",
-      "status": "done",
+      "status": "pending",
       "target_file": "scripts/memory-seed-lessons.mjs",
       "task": "implement lessons seeding",
       "spec": "Implements npm run memory:seed-lessons to seed lessons_learned and update documents.",
@@ -104,7 +111,7 @@
         "npm run memory:seed-lessons"
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:seedLessonsLearned; assertion_threw; assertion_threw",
       "commit_sha": "6199bb71b8f7196314456f48de80da9e3fa328a1",
       "built_sha": null,
       "proof": null,
@@ -116,20 +123,21 @@
       "demoted_at": null,
       "park_until": null,
       "no_op": null,
-      "pre_existing": null,
+      "pre_existing": false,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T19:45:20.033Z",
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "4",
-      "mission_id": "PRODUCT-memory-intelligence"
+      "mission_id": "PRODUCT-memory-intelligence",
+      "reaudit_reset_at": "2026-07-30T18:55:06.671Z"
     },
     {
       "id": "5",
-      "status": "done",
+      "status": "pending",
       "target_file": "scripts/memory-ci-evidence.mjs",
       "task": "record CI evidence",
       "spec": "Runs npm run memory:ci-evidence to record node --check results as fact_evidence.",
@@ -142,12 +150,15 @@
       "file_contains": [
         "npm run memory:ci-evidence"
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T19:31:45.162Z",
       "commit_sha": "61ce02864291ec9ad0314794b7edb11f6fad8abe",
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "5",
-      "mission_id": "PRODUCT-memory-intelligence"
+      "mission_id": "PRODUCT-memory-intelligence",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:recordCiEvidence; assertion_threw; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.671Z"
     },
     {
       "id": "6",
@@ -406,7 +417,7 @@
     },
     {
       "id": "memory-intelligence-2",
-      "status": "done",
+      "status": "pending",
       "target_file": "scripts/memory-seed-epistemic.mjs",
       "task": "seed epistemic facts",
       "spec": "Run the SSH command to seed epistemic_facts with data from SSOT.",
@@ -416,16 +427,19 @@
       "expected_exports": [
         "seedEpistemicFacts"
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T04:22:49.564Z",
       "commit_sha": "7f05db9017cff9bc25bf8f443df25f771511cd88",
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-intelligence-2",
-      "mission_id": "PRODUCT-memory-intelligence"
+      "mission_id": "PRODUCT-memory-intelligence",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:seedEpistemicFacts; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.671Z"
     },
     {
       "id": "memory-intelligence-3",
-      "status": "done",
+      "status": "pending",
       "target_file": "scripts/memory-seed-lessons.mjs",
       "task": "seed lessons learned",
       "spec": "Seed lessons_learned using receipts from AM36/CONTINUITY_LOG.",
@@ -435,16 +449,19 @@
       "expected_exports": [
         "seedLessonsLearned"
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T04:36:02.507Z",
       "commit_sha": "8284a460cb61063b6ef9b9baf7ab0d8cbff776a1",
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-intelligence-3",
-      "mission_id": "PRODUCT-memory-intelligence"
+      "mission_id": "PRODUCT-memory-intelligence",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:seedLessonsLearned; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.671Z"
     },
     {
       "id": "memory-intelligence-4",
-      "status": "done",
+      "status": "pending",
       "target_file": "scripts/memory-ci-evidence.mjs",
       "task": "generate memory CI evidence",
       "spec": "Record the node --check results as fact_evidence in the database.",
@@ -454,12 +471,15 @@
       "expected_exports": [
         "createFactEvidence"
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T04:40:42.832Z",
       "commit_sha": "f49bd0c101c2ab1f2799af7be31108c024d56202",
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-intelligence-4",
-      "mission_id": "PRODUCT-memory-intelligence"
+      "mission_id": "PRODUCT-memory-intelligence",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:createFactEvidence; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.671Z"
     },
     {
       "id": "memory-intelligence-5",

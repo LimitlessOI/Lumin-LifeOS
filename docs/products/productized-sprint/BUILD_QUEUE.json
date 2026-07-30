@@ -131,7 +131,7 @@
     },
     {
       "id": "05",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/sprintQueuePanel.js",
       "task": "create Sprint Queue panel",
       "spec": "Provide a panel for sprint queue within Command Center.",
@@ -156,12 +156,15 @@
           "assertion_id": "expected_exports:routes/sprintQueuePanel.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T22:17:04.908Z",
       "commit_sha": "9ee37ebb271c3ddfc903f153c499e842cba6555c",
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "05",
-      "mission_id": "PRODUCT-productized-sprint"
+      "mission_id": "PRODUCT-productized-sprint",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerSprintQueuePanel",
+      "reaudit_reset_at": "2026-07-30T18:55:06.702Z"
     },
     {
       "id": "06",
@@ -232,7 +235,7 @@
     },
     {
       "id": "1",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/salesPageRoutes.js",
       "task": "set up sales page route",
       "spec": "Create a route to serve the sales page for each offer tier.",
@@ -256,12 +259,15 @@
           "assertion_id": "expected_exports:routes/salesPageRoutes.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T22:26:47.147Z",
       "commit_sha": "de59be578c1784a80838e874e3d97328b99515ec",
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "1",
-      "mission_id": "PRODUCT-productized-sprint"
+      "mission_id": "PRODUCT-productized-sprint",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerSalesPageRoutes; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.702Z"
     },
     {
       "id": "2",
@@ -304,7 +310,7 @@
     },
     {
       "id": "3",
-      "status": "done",
+      "status": "pending",
       "target_file": "templates/deliveryEmailTemplate.js",
       "task": "write delivery email template",
       "spec": "JavaScript module exporting an email template string for customer delivery notifications.",
@@ -319,7 +325,7 @@
       ],
       "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:getDeliveryEmailTemplate; assertion_threw; assertion_threw",
       "commit_sha": "f6aa85303c852d16ad4046f3a30767cc00b5467d",
       "built_sha": null,
       "proof": null,
@@ -331,20 +337,21 @@
       "demoted_at": null,
       "park_until": null,
       "no_op": null,
-      "pre_existing": null,
+      "pre_existing": false,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T01:05:09.844Z",
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "3",
-      "mission_id": "PRODUCT-productized-sprint"
+      "mission_id": "PRODUCT-productized-sprint",
+      "reaudit_reset_at": "2026-07-30T18:55:06.702Z"
     },
     {
       "id": "4",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/sprintQueueService.js",
       "task": "create sprint queue service",
       "spec": "Service managing sprint queue logic for scheduling and managing sprints.",
@@ -369,16 +376,19 @@
           "assertion_id": "expected_exports:services/sprintQueueService.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T21:20:26.369Z",
       "commit_sha": "4f2991bfe2320721c1f69e4ea1984aba958deb2a",
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "4",
-      "mission_id": "PRODUCT-productized-sprint"
+      "mission_id": "PRODUCT-productized-sprint",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:addSprintToQueue,removeSprintFromQueue; assertion_threw; assertion_threw; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.702Z"
     },
     {
       "id": "5",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/sprintQueueRoutes.js",
       "task": "set up sprint queue routes",
       "spec": "Route handling CRUD operations for the sprint queue.",
@@ -403,12 +413,15 @@
           "assertion_id": "expected_exports:routes/sprintQueueRoutes.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T21:21:46.851Z",
       "commit_sha": "ef28b7c78f06b41e0c6ee2faff4abf17cb5a3af8",
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "5",
-      "mission_id": "PRODUCT-productized-sprint"
+      "mission_id": "PRODUCT-productized-sprint",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerSprintQueueRoutes; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.702Z"
     },
     {
       "id": "6",
@@ -511,7 +524,7 @@
     },
     {
       "id": "create-intake-form",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/intakeFormRoute.js",
       "task": "create intake form route",
       "spec": "Route to render the intake form page to users.",
@@ -535,16 +548,19 @@
           "assertion_id": "expected_exports:routes/intakeFormRoute.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T02:10:39.399Z",
       "commit_sha": "bf61f06c0a99b54baecb367eabab0f9a587b0de4",
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "create-intake-form",
-      "mission_id": "PRODUCT-productized-sprint"
+      "mission_id": "PRODUCT-productized-sprint",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerIntakeFormRoutes; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.702Z"
     },
     {
       "id": "create-stripe-links",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/stripePaymentRoute.js",
       "task": "create stripe payment links route",
       "spec": "Route to create and manage Stripe payment links for all three tiers.",
@@ -568,16 +584,19 @@
           "assertion_id": "expected_exports:routes/stripePaymentRoute.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T23:46:29.243Z",
       "commit_sha": "79f30f18cb64eab0d4c55d9842df42ed39cbbed3",
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "create-stripe-links",
-      "mission_id": "PRODUCT-productized-sprint"
+      "mission_id": "PRODUCT-productized-sprint",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerStripePaymentRoutes; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.702Z"
     },
     {
       "id": "create-delivery-email-template",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/deliveryEmailRoute.js",
       "task": "create delivery email template route",
       "spec": "Route to render the delivery email template users receive at completion.",
@@ -601,16 +620,19 @@
           "assertion_id": "expected_exports:routes/deliveryEmailRoute.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T02:14:18.759Z",
       "commit_sha": "a95f295ac4c388f627f2bf53dd4dad1c49899caa",
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "create-delivery-email-template",
-      "mission_id": "PRODUCT-productized-sprint"
+      "mission_id": "PRODUCT-productized-sprint",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerDeliveryEmailRoutes; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.702Z"
     },
     {
       "id": "create-ai-pre-analysis-prompt",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/aiPreAnalysisRoute.js",
       "task": "create AI pre-analysis prompt route",
       "spec": "Route to initiate and test AI pre-analysis prompts.",
@@ -634,16 +656,19 @@
           "assertion_id": "expected_exports:routes/aiPreAnalysisRoute.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T23:47:41.508Z",
       "commit_sha": "27ff50e037d144455a0355fad035eacee953e7a3",
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "create-ai-pre-analysis-prompt",
-      "mission_id": "PRODUCT-productized-sprint"
+      "mission_id": "PRODUCT-productized-sprint",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerAIPreAnalysisRoutes; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.702Z"
     },
     {
       "id": "create-sprint-queue-panel",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/sprintQueuePanelRoute.js",
       "task": "create sprint queue panel route",
       "spec": "Route for displaying the Sprint Queue panel or temporary Notion board.",
@@ -667,16 +692,19 @@
           "assertion_id": "expected_exports:routes/sprintQueuePanelRoute.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T02:22:41.401Z",
       "commit_sha": "67436153ddfc1f5b3c394ebdc17641ce0fedfbdc",
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "create-sprint-queue-panel",
-      "mission_id": "PRODUCT-productized-sprint"
+      "mission_id": "PRODUCT-productized-sprint",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerSprintQueuePanelRoutes",
+      "reaudit_reset_at": "2026-07-30T18:55:06.702Z"
     },
     {
       "id": "create-sales-page",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/salesPageRoute.js",
       "task": "create sales page route",
       "spec": "Route to display the one-page sales page for all offers.",
@@ -700,16 +728,19 @@
           "assertion_id": "expected_exports:routes/salesPageRoute.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T02:27:25.989Z",
       "commit_sha": "07f8bf759114a7bd9b20946f5037dc3c2188e8b2",
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "create-sales-page",
-      "mission_id": "PRODUCT-productized-sprint"
+      "mission_id": "PRODUCT-productized-sprint",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerSalesPageRoutes; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.702Z"
     },
     {
       "id": "update-linkedin-profile",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/linkedinProfileRoute.js",
       "task": "update LinkedIn profile route",
       "spec": "Route for updating the LinkedIn profile to reference sprint offers.",
@@ -733,16 +764,19 @@
           "assertion_id": "expected_exports:routes/linkedinProfileRoute.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T23:51:47.467Z",
       "commit_sha": "8e429c46e90ed17bd19f5843dcc889da3df2cb8f",
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "update-linkedin-profile",
-      "mission_id": "PRODUCT-productized-sprint"
+      "mission_id": "PRODUCT-productized-sprint",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerLinkedinProfileRoutes; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.702Z"
     },
     {
       "id": "identify-first-5-customers",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/identifyCustomersRoute.js",
       "task": "identify first 5 target customers",
       "spec": "Route to identify the first 5 target customers from network for outreach.",
@@ -766,12 +800,15 @@
           "assertion_id": "expected_exports:routes/identifyCustomersRoute.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T00:10:37.743Z",
       "commit_sha": "1ceb9c64aa967cf7f44000b2b1ebed08121e9e88",
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "identify-first-5-customers",
-      "mission_id": "PRODUCT-productized-sprint"
+      "mission_id": "PRODUCT-productized-sprint",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerIdentifyCustomersRoutes; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.702Z"
     },
     {
       "id": "step1",
@@ -876,7 +913,7 @@
     },
     {
       "id": "step5",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/sprintQueuePanelRoute.js",
       "task": "develop sprint queue panel",
       "spec": "Implement Sprint Queue panel viewing by users; start with interim Notion board if necessary.",
@@ -906,9 +943,12 @@
           "assertion_id": "expected_exports:routes/sprintQueuePanelRoute.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-17T22:42:33.444Z",
-      "commit_sha": "40970cd94e194a996eefae5c0e2de5e6276d2b1b"
+      "commit_sha": "40970cd94e194a996eefae5c0e2de5e6276d2b1b",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerSprintQueuePanelRoutes; app.get('/sprint/queue/panel'",
+      "reaudit_reset_at": "2026-07-30T18:55:06.702Z"
     },
     {
       "id": "step6",
@@ -987,7 +1027,7 @@
     },
     {
       "id": "step8",
-      "status": "done",
+      "status": "pending",
       "target_file": "scripts/identifyTargetCustomers.mjs",
       "task": "identify initial customers for outreach",
       "spec": "Define first 5 target customers from existing network for initial outreach list.",
@@ -1001,7 +1041,7 @@
         "export const getInitialTargetCustomers"
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:getInitialTargetCustomers; getInitialTargetCustomers; export const getInitialTargetCustomers",
       "commit_sha": "34e15fdf55197a99eda02ab74cae19e353605148",
       "built_sha": null,
       "proof": null,
@@ -1013,16 +1053,17 @@
       "demoted_at": null,
       "park_until": null,
       "no_op": null,
-      "pre_existing": null,
+      "pre_existing": false,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T05:24:19.194Z",
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step8",
-      "mission_id": "PRODUCT-productized-sprint"
+      "mission_id": "PRODUCT-productized-sprint",
+      "reaudit_reset_at": "2026-07-30T18:55:06.702Z"
     },
     {
       "id": "productized-sprint-1",

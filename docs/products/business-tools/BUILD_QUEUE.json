@@ -570,7 +570,7 @@
     },
     {
       "id": "7",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/entitlementsGatewayService.js",
       "task": "implement entitlement feature gate logic",
       "spec": "Implement logic to enforce feature access based on `project_entitlements` entries.",
@@ -592,16 +592,19 @@
           "assertion_id": "expected_exports:services/entitlementsGatewayService.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T03:06:26.194Z",
       "commit_sha": "dc5d220658103a6118a51c401cf097155cae75e0",
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "7",
-      "mission_id": "PRODUCT-business-tools"
+      "mission_id": "PRODUCT-business-tools",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:checkEntitlements; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.365Z"
     },
     {
       "id": "8",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/approvalsTimeoutService.js",
       "task": "implement 48h approval timeout",
       "spec": "Add logic to automatically reject controversial approvals after 48h timeout.",
@@ -622,7 +625,7 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:applyApprovalTimeout; assertion_threw",
       "commit_sha": "12ca5d0975400a74cb765c8218557d4b4a07f12a",
       "built_sha": null,
       "proof": null,
@@ -634,20 +637,21 @@
       "demoted_at": null,
       "park_until": null,
       "no_op": null,
-      "pre_existing": null,
+      "pre_existing": false,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T03:23:32.344Z",
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "8",
-      "mission_id": "PRODUCT-business-tools"
+      "mission_id": "PRODUCT-business-tools",
+      "reaudit_reset_at": "2026-07-30T18:55:06.365Z"
     },
     {
       "id": "business-tools-1",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/extractSubFeatures.js",
       "task": "extract features",
       "spec": "Sub-features from server.js should be modularized into individual route files.",
@@ -671,12 +675,15 @@
           "assertion_id": "expected_exports:services/extractSubFeatures.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T04:16:24.889Z",
       "commit_sha": "0f069e4c9656d54e9b07ad61914d832876ebe1ae",
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "business-tools-1",
-      "mission_id": "PRODUCT-business-tools"
+      "mission_id": "PRODUCT-business-tools",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:extractSubFeatures; assertion_threw; assertion_threw; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.365Z"
     },
     {
       "id": "business-tools-2",
@@ -715,7 +722,7 @@
     },
     {
       "id": "business-tools-3",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/realEstateCurriculumStructure.js",
       "task": "specify curriculum structure",
       "spec": "Outline modules and DB schema per student for virtual real estate class.",
@@ -741,12 +748,15 @@
           "assertion_id": "expected_exports:services/realEstateCurriculumStructure.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T04:26:58.499Z",
       "commit_sha": "e12e1e73609f82a344d313a0cabf4b49ee61cb22",
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "business-tools-3",
-      "mission_id": "PRODUCT-business-tools"
+      "mission_id": "PRODUCT-business-tools",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:getCurriculumModules,getStudentSchema; assertion_threw; assertion_threw; assertion_threw; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.365Z"
     },
     {
       "id": "business-tools-4",

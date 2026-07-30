@@ -194,7 +194,7 @@
     },
     {
       "id": "step3",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/migrations/add_video_jobs_table.sql",
       "task": "create videoJobs table",
       "spec": "Database migration script to create videoJobs table.",
@@ -204,12 +204,15 @@
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS videoJobs"
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T08:41:04.089Z",
       "commit_sha": "a72741324b4d38638990c4ca46c04f7f4f6f82a7",
       "blueprint_id": "PRODUCT-VIDEO-PIPELINE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step3",
-      "mission_id": "PRODUCT-video-pipeline"
+      "mission_id": "PRODUCT-video-pipeline",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.839Z"
     },
     {
       "id": "step4",

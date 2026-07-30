@@ -9,7 +9,7 @@
   "steps": [
     {
       "id": "1",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/migrations/AMENDMENT_21.sql",
       "task": "design and migrate Layer 12 DB schema",
       "spec": "Design Layer 12 DB schema and migrate it as per AMENDMENT_21.",
@@ -20,12 +20,15 @@
         "CREATE TABLE IF NOT EXISTS"
       ],
       "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T22:07:05.645Z",
       "commit_sha": "b8c3f55d916d9088fcb6987e6697698bb7377d39",
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "1",
-      "mission_id": "PRODUCT-personal-finance-os"
+      "mission_id": "PRODUCT-personal-finance-os",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.693Z"
     },
     {
       "id": "2",
@@ -278,7 +281,7 @@
     },
     {
       "id": "step3",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/performanceDisclosureApproval.js",
       "task": "review and approve past-performance disclosure language",
       "spec": "Implement service to review and approve disclosure.",
@@ -301,12 +304,15 @@
           "assertion_id": "expected_exports:services/performanceDisclosureApproval.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T09:17:44.582Z",
       "commit_sha": "09065f0dc8cb2732cc112705906cd68e3b35009e",
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step3",
-      "mission_id": "PRODUCT-personal-finance-os"
+      "mission_id": "PRODUCT-personal-finance-os",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:approvePerformanceDisclosure",
+      "reaudit_reset_at": "2026-07-30T18:55:06.693Z"
     },
     {
       "id": "step4",
@@ -534,7 +540,7 @@
     },
     {
       "id": "personal-finance-os-4",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/mvpSourceDecision.js",
       "task": "decide Plaid vs CSV",
       "spec": "Determine the data source strategy as Plaid or CSV-only for MVP.",
@@ -559,12 +565,15 @@
           "assertion_id": "expected_exports:services/mvpSourceDecision.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T04:27:07.540Z",
       "commit_sha": "efc72243cbe58fe39d9865dcec1f0ab623404ba2",
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "personal-finance-os-4",
-      "mission_id": "PRODUCT-personal-finance-os"
+      "mission_id": "PRODUCT-personal-finance-os",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:selectMVPSource; assertion_threw; assertion_threw; assertion_threw; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.693Z"
     },
     {
       "id": "personal-finance-os-5",

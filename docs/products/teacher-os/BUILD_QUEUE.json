@@ -9,7 +9,7 @@
   "steps": [
     {
       "id": "1",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/userInterviews.js",
       "task": "compile teacher feedback",
       "spec": "Compile and summarize the feedback from 5 teachers interviewed.",
@@ -32,16 +32,19 @@
           "assertion_id": "expected_exports:services/userInterviews.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T17:50:44.624Z",
       "commit_sha": "9dd2df5369c292810b79780df848d88e3b24682f",
       "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "1",
-      "mission_id": "PRODUCT-teacher-os"
+      "mission_id": "PRODUCT-teacher-os",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:summarizeInterviews; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.746Z"
     },
     {
       "id": "2",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/competitiveAnalysis.js",
       "task": "analyze competitors",
       "spec": "Analyze the competitive landscape focusing on Planboard, Teachermade, Nearpod, Google Classroom, and Formative.",
@@ -64,12 +67,15 @@
           "assertion_id": "expected_exports:services/competitiveAnalysis.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T17:57:44.512Z",
       "commit_sha": "32989e7f23a046569d018e0da5cb8e107756d80d",
       "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "2",
-      "mission_id": "PRODUCT-teacher-os"
+      "mission_id": "PRODUCT-teacher-os",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:analyzeCompetitors; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.746Z"
     },
     {
       "id": "3",
@@ -105,7 +111,7 @@
     },
     {
       "id": "4",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/ferpaTemplate.js",
       "task": "draft FERPA agreement",
       "spec": "Draft a FERPA data processing agreement template.",
@@ -128,12 +134,15 @@
           "assertion_id": "expected_exports:services/ferpaTemplate.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T19:13:21.801Z",
       "commit_sha": "cbc449fc76f37f741e9e76e4217dc40243bbf80c",
       "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "4",
-      "mission_id": "PRODUCT-teacher-os"
+      "mission_id": "PRODUCT-teacher-os",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:draftFERPATemplate; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.746Z"
     },
     {
       "id": "5",
@@ -199,7 +208,7 @@
     },
     {
       "id": "teacher-os-1",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/uxFlow.js",
       "task": "create UX flow service",
       "spec": "Implement the UX flow logic to generate UX flow data.",
@@ -219,16 +228,19 @@
           "assertion_id": "expected_exports:services/uxFlow.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T04:18:15.869Z",
       "commit_sha": "6b008fd40fed6e028309f3fc6603bc7b9691d12d",
       "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "teacher-os-1",
-      "mission_id": "PRODUCT-teacher-os"
+      "mission_id": "PRODUCT-teacher-os",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:generateUXFlow; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.746Z"
     },
     {
       "id": "teacher-os-2",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/userInterviewEnhancement.js",
       "task": "create addInterview service",
       "spec": "Enhance userInterviews to add and track interviews.",
@@ -248,16 +260,19 @@
           "assertion_id": "expected_exports:services/userInterviewEnhancement.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T04:23:43.373Z",
       "commit_sha": "4d48705ea4e624eea5bbbeb21e50cbd5257fa935",
       "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "teacher-os-2",
-      "mission_id": "PRODUCT-teacher-os"
+      "mission_id": "PRODUCT-teacher-os",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:addInterview; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.746Z"
     },
     {
       "id": "teacher-os-3",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/ferpaTemplateEnhancement.js",
       "task": "create enhanceFERPATemplate service",
       "spec": "Enhance ferpaTemplate to source new templates.",
@@ -277,12 +292,15 @@
           "assertion_id": "expected_exports:services/ferpaTemplateEnhancement.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T04:36:49.482Z",
       "commit_sha": "6528ef07821d75764aecc815f577cfbf975f9db2",
       "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "teacher-os-3",
-      "mission_id": "PRODUCT-teacher-os"
+      "mission_id": "PRODUCT-teacher-os",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:enhanceFERPATemplate; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.746Z"
     },
     {
       "id": "teacher-os-4",

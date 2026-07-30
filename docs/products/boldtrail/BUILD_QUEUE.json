@@ -96,7 +96,7 @@
     },
     {
       "id": "boldtrail-1",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/leadScoringAlgorithm.js",
       "task": "implement scoring rubric",
       "spec": "Add an explicit scoring rubric in segment description.",
@@ -119,12 +119,15 @@
           "assertion_id": "expected_exports:services/leadScoringAlgorithm.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T04:16:33.667Z",
       "commit_sha": "ee34ad6e7e15e8db6e2da4e190b37e0f38644ae6",
       "blueprint_id": "PRODUCT-BOLDTRAIL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "boldtrail-1",
-      "mission_id": "PRODUCT-boldtrail"
+      "mission_id": "PRODUCT-boldtrail",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:calculateLeadScore",
+      "reaudit_reset_at": "2026-07-30T18:55:06.301Z"
     },
     {
       "id": "boldtrail-2",
@@ -164,7 +167,7 @@
     },
     {
       "id": "boldtrail-step1",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/leadScoringSegment.js",
       "task": "add scoring rubric support",
       "spec": "Implement a method to attach an explicit scoring rubric to each lead segment description.",
@@ -187,12 +190,15 @@
           "assertion_id": "expected_exports:services/leadScoringSegment.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T04:35:19.104Z",
       "commit_sha": "fca960661a34c31bc7fe9c48e58718c475ddc769",
       "blueprint_id": "PRODUCT-BOLDTRAIL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "boldtrail-step1",
-      "mission_id": "PRODUCT-boldtrail"
+      "mission_id": "PRODUCT-boldtrail",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:applyScoringRubric; assertion_threw; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.301Z"
     },
     {
       "id": "boldtrail-step2",

@@ -70,7 +70,7 @@
     },
     {
       "id": "3",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/partner-onboarding.js",
       "task": "specify partner onboarding flow",
       "spec": "Create endpoint for creating a new partner config.",
@@ -94,12 +94,15 @@
           "assertion_id": "expected_exports:routes/partner-onboarding.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T18:04:26.009Z",
       "commit_sha": "da9bc36dda0464fadc76cdeb515ddaf5fcfe9db2",
       "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "3",
-      "mission_id": "PRODUCT-white-label"
+      "mission_id": "PRODUCT-white-label",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerPartnerOnboardingRoutes; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.853Z"
     },
     {
       "id": "4",
@@ -133,7 +136,7 @@
     },
     {
       "id": "5",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/stripe-billing.js",
       "task": "design billing for partners",
       "spec": "Implement billing flow for partners separate from direct clients.",
@@ -154,16 +157,19 @@
           "assertion_id": "expected_exports:services/stripe-billing.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T22:17:31.331Z",
       "commit_sha": "6aee915f02361025756d46040cd1797823362e9f",
       "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "5",
-      "mission_id": "PRODUCT-white-label"
+      "mission_id": "PRODUCT-white-label",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:processPartnerBilling; processPartnerBilling",
+      "reaudit_reset_at": "2026-07-30T18:55:06.853Z"
     },
     {
       "id": "6",
-      "status": "done",
+      "status": "pending",
       "target_file": "config/railway-config.json",
       "task": "document Railway config for CNAME support",
       "spec": "Add necessary configuration for custom domain CNAME support.",
@@ -173,16 +179,19 @@
       "file_contains": [
         "CNAME"
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T19:13:45.318Z",
       "commit_sha": "1a5f0a360e273aa64ffad3c64f632e09df767290",
       "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "6",
-      "mission_id": "PRODUCT-white-label"
+      "mission_id": "PRODUCT-white-label",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.853Z"
     },
     {
       "id": "step1",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/config-endpoints.js",
       "task": "migrate config endpoints",
       "spec": "Extract config endpoints from server.js lines 10171-10198 and place here.",
@@ -205,16 +214,19 @@
           "assertion_id": "expected_exports:routes/config-endpoints.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T23:46:42.449Z",
       "commit_sha": "1445332e43033e8f18073530086f7dd6634bf42d",
       "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step1",
-      "mission_id": "PRODUCT-white-label"
+      "mission_id": "PRODUCT-white-label",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerConfigEndpoints; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.853Z"
     },
     {
       "id": "step3",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/partner-config-creation.js",
       "task": "create partner config endpoint",
       "spec": "Implement POST /partner-config to create new partner configurations.",
@@ -238,16 +250,19 @@
           "assertion_id": "expected_exports:routes/partner-config-creation.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T23:47:50.647Z",
       "commit_sha": "515f1956c48596f7c53b502984bb1739ef48f412",
       "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step3",
-      "mission_id": "PRODUCT-white-label"
+      "mission_id": "PRODUCT-white-label",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerPartnerConfigRoutes; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.853Z"
     },
     {
       "id": "step4",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/partner-key-scheme.js",
       "task": "design partner API key generation schema",
       "spec": "Define schema for partner keys versus platform keys.",
@@ -269,16 +284,19 @@
           "assertion_id": "expected_exports:services/partner-key-scheme.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T02:10:50.589Z",
       "commit_sha": "f3f5bac830c40edefcb4050bfe5702ba1c5e17b0",
       "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step4",
-      "mission_id": "PRODUCT-white-label"
+      "mission_id": "PRODUCT-white-label",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:generatePartnerKeys,generatePlatformKeys; generatePartnerKeys; generatePlatformKeys",
+      "reaudit_reset_at": "2026-07-30T18:55:06.853Z"
     },
     {
       "id": "step5",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/stripe-billing-separation.js",
       "task": "separate Stripe billing flow",
       "spec": "Create separate billing flow for partners and direct clients using Stripe.",
@@ -300,12 +318,15 @@
           "assertion_id": "expected_exports:services/stripe-billing-separation.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-15T23:50:32.333Z",
       "commit_sha": "b8fc232835a789a2c6e9024cb856a7e6eef76510",
       "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step5",
-      "mission_id": "PRODUCT-white-label"
+      "mission_id": "PRODUCT-white-label",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:setupPartnerBillingFlow,setupClientBillingFlow; setupPartnerBillingFlow; setupClientBillingFlow",
+      "reaudit_reset_at": "2026-07-30T18:55:06.853Z"
     },
     {
       "id": "step6",
@@ -378,7 +399,7 @@
     },
     {
       "id": "white-label-3",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/partner-config-creation.js",
       "task": "specify partner onboarding flow",
       "spec": "Create an endpoint to handle new partner config creation for onboarding.",
@@ -402,12 +423,15 @@
           "assertion_id": "expected_exports:routes/partner-config-creation.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T04:23:56.895Z",
       "commit_sha": "6a72794484b93a5a789f3a576b26dc058ba5538c",
       "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "white-label-3",
-      "mission_id": "PRODUCT-white-label"
+      "mission_id": "PRODUCT-white-label",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerPartnerConfigRoutes; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.853Z"
     },
     {
       "id": "white-label-5",
