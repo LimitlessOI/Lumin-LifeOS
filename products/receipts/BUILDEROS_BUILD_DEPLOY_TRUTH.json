@@ -48,5 +48,7 @@
       "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/BLUEPRINT.json"
     ],
     "skipped": []
-  }
+  },
+  "separation_collapsed": true,
+  "separation_note": "This acceptance receipt was produced and verified by the same deterministic script run on 2026-07-30; no independent verifier was available at that time. Future acceptance runs must name a distinct verifier or declare separation_collapsed with a reason."
 }

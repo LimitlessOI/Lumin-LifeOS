@@ -12,9 +12,15 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
+import { resolvePublicBaseUrl } from '../config/public-origin.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const BASE = (process.env.PUBLIC_BASE_URL || '').replace(/\/$/, '');
+const BASE = resolvePublicBaseUrl(
+  process.env.PUBLIC_BASE_URL,
+  process.env.SITE_BASE_URL,
+  process.env.BASE_URL,
+  process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` : ''
+);
 const KEY = process.env.COMMAND_CENTER_KEY || process.env.LIFEOS_KEY || '';
 const RECEIPT = path.join(ROOT, 'products/receipts/SENTRY_MARKETINGOS_LAYER_B.json');
 const SHOTS = path.join(ROOT, 'products/receipts/e2e-screenshots/marketingos-layer-b');

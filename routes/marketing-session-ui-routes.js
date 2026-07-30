@@ -1052,14 +1052,26 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                     return;
                   }
                   try {
-                    const res = await marketingFetch('/api/v1/socialmediaos/content-pack/checkout', {
+                    const recentRes = await marketingFetch('/api/v1/marketing/sessions?limit=1');
+                    const recentData = await recentRes.json().catch(function(){ return {}; });
+                    const sessions = Array.isArray(recentData.sessions) ? recentData.sessions : [];
+                    if (!recentRes.ok || !sessions.length) {
+                      location.href = '/marketing/session/new';
+                      return;
+                    }
+                    const sessionId = String(sessions[0].id || '');
+                    if (!sessionId) {
+                      location.href = '/marketing/session/new';
+                      return;
+                    }
+                    const res = await marketingFetch('/api/v1/marketing/pack/checkout', {
                       method: 'POST',
-                      body: JSON.stringify({})
+                      body: JSON.stringify({ session_id: sessionId, owner_id: marketingOwnerId() })
                     });
                     const data = await res.json().catch(function(){ return {}; });
-                    if (!res.ok) throw new Error(data.error || 'Checkout failed');
-                    if (data.ok && data.checkoutUrl) {
-                      globalThis.location.href = data.checkoutUrl;
+                    if (!res.ok) throw new Error(data.error || 'Checkout failed (' + res.status + ')');
+                    if (data.ok && data.url) {
+                      globalThis.location.href = data.url;
                     } else {
                       throw new Error(data.error || 'No checkout URL returned');
                     }

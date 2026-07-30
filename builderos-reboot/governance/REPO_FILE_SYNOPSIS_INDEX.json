@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T22:24:55.480Z",
+  "generated_at": "2026-07-30T22:32:11.913Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12373,
+  "file_count": 12420,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21307,9 +21307,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 22228,
-      "mtime": "2026-07-30T19:01:34.577Z",
-      "indexed_at": "2026-07-30T19:02:02.759Z",
+      "bytes": 22107,
+      "mtime": "2026-07-30T22:30:31.097Z",
+      "indexed_at": "2026-07-30T22:31:11.508Z",
       "synopsis_index_only": true
     },
     {
@@ -21634,9 +21634,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3723298,
-      "mtime": "2026-07-30T01:21:54.968Z",
-      "indexed_at": "2026-07-30T01:22:40.402Z"
+      "bytes": 3733427,
+      "mtime": "2026-07-30T22:32:11.877Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -26363,6 +26363,14 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-CONVERSATION-COMMITMENTS-C2-0001/receipts/MISSION_DOCTRINE_REPORT.json",
+      "synopsis": "BuilderOS artifact — MISSION DOCTRINE REPORT.",
+      "bytes": 10117,
+      "mtime": "2026-07-30T20:29:45.821Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "builderos-reboot/MISSIONS/PRODUCT-CONVERSATION-COMMITMENTS-C2-0001/SALVAGE_REVIEW_CHECKLIST.md",
       "synopsis": "Salvage review checklist — PRODUCT-CONVERSATION-COMMITMENTS-C2-0001",
       "bytes": 2406,
@@ -29524,9 +29532,9 @@
     {
       "path": "builderos-reboot/PROJECT_CERTIFICATION.json",
       "synopsis": "BuilderOS artifact — PROJECT CERTIFICATION.",
-      "bytes": 2650,
-      "mtime": "2026-07-18T22:36:38.767Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 3192,
+      "mtime": "2026-07-30T20:29:45.821Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "synopsis_index_only": true
     },
     {
@@ -29671,10 +29679,10 @@
     },
     {
       "path": "builderos-reboot/scripts/emit-project-certification.mjs",
-      "synopsis": "Final certification v2 — includes Phase 11 full loop + Phase 12 salvage. Final certification v2 — includes Phase 11 full loop + Phase 12 salvage.",
-      "bytes": 6457,
-      "mtime": "2026-07-10T05:55:37.209Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "synopsis": "Final certification v2 — includes Phase 11 full loop + Phase 12 salvage.",
+      "bytes": 8549,
+      "mtime": "2026-07-30T20:29:45.829Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
     },
     {
       "path": "builderos-reboot/scripts/execute-mission-step.mjs",
@@ -30148,9 +30156,9 @@
     {
       "path": "builderos-reboot/scripts/run-sentry-checks.mjs",
       "synopsis": "Mechanical SENTRY checklist — outputs SENTRY_CHECK_RESULT.json Mechanical SENTRY checklist — outputs SENTRY_CHECK_RESULT.json",
-      "bytes": 3307,
-      "mtime": "2026-07-10T00:46:03.295Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 3924,
+      "mtime": "2026-07-30T20:29:45.829Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
     },
     {
       "path": "builderos-reboot/scripts/sentry-behavior-proof.mjs",
@@ -32365,9 +32373,9 @@
     {
       "path": "data/builderos-compound-improvement-state.json",
       "synopsis": "JSON data/config — data/builderos-compound-improvement-state.json.",
-      "bytes": 1607,
-      "mtime": "2026-07-28T20:13:27.534Z",
-      "indexed_at": "2026-07-28T23:06:09.687Z",
+      "bytes": 1609,
+      "mtime": "2026-07-30T18:09:12.929Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "synopsis_index_only": true
     },
     {
@@ -32381,9 +32389,9 @@
     {
       "path": "data/builderos-harness-gap-audit.json",
       "synopsis": "JSON data/config — data/builderos-harness-gap-audit.json.",
-      "bytes": 13543,
-      "mtime": "2026-07-09T03:27:25.479Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 15890,
+      "mtime": "2026-07-30T20:29:45.829Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "synopsis_index_only": true
     },
     {
@@ -32396,10 +32404,10 @@
     },
     {
       "path": "data/builderos-intake-regression-last-run.json",
-      "synopsis": "Exports createMarketingOSFactory — data/builderos-intake-regression-last-run.json.",
-      "bytes": 1760,
-      "mtime": "2026-07-03T00:17:44.967Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis": "JSON data/config — data/builderos-intake-regression-last-run.json.",
+      "bytes": 1076,
+      "mtime": "2026-07-30T18:16:49.613Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "synopsis_index_only": true
     },
     {
@@ -34148,15 +34156,15 @@
       "path": "db/migrations/20231020_create_vapi_integration.sql",
       "synopsis": "Database migration — 20231020_create_vapi_integration.sql.",
       "bytes": 1278,
-      "mtime": "2026-07-30T20:52:41.628Z",
-      "indexed_at": "2026-07-30T20:52:41.628Z"
+      "mtime": "2026-07-30T19:23:07.474Z",
+      "indexed_at": "2026-07-30T19:23:07.474Z"
     },
     {
       "path": "db/migrations/20231021_create_stripe_price_ids.sql",
       "synopsis": "Database migration — 20231021_create_stripe_price_ids.sql.",
       "bytes": 728,
-      "mtime": "2026-07-30T20:58:37.423Z",
-      "indexed_at": "2026-07-30T20:58:37.423Z"
+      "mtime": "2026-07-30T22:32:04.393Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
     },
     {
       "path": "db/migrations/20231025_add_competitors.sql",
@@ -34169,15 +34177,15 @@
       "path": "db/migrations/20231026_create_stripe_price_tier.sql",
       "synopsis": "Database migration — 20231026_create_stripe_price_tier.sql.",
       "bytes": 666,
-      "mtime": "2026-07-30T21:23:48.943Z",
-      "indexed_at": "2026-07-30T21:23:48.943Z"
+      "mtime": "2026-07-30T22:32:04.393Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
     },
     {
       "path": "db/migrations/20231028_create_vapi_account.sql",
       "synopsis": "Database migration — 20231028_create_vapi_account.sql.",
       "bytes": 712,
-      "mtime": "2026-07-30T21:48:10.733Z",
-      "indexed_at": "2026-07-30T21:48:10.733Z"
+      "mtime": "2026-07-30T22:32:04.393Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
     },
     {
       "path": "db/migrations/20231029_create_stripe_price_ids_extended.sql",
@@ -34294,9 +34302,9 @@
     {
       "path": "db/migrations/20241030_add_interactive_element_labels_table.sql",
       "synopsis": "Database migration — 20241030_add_interactive_element_labels_table.sql.",
-      "bytes": 333,
-      "mtime": "2026-07-28T17:47:22.483Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 1014,
+      "mtime": "2026-07-30T20:29:45.829Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
     },
     {
       "path": "db/migrations/20241030_add_interactive_element_labels.sql",
@@ -36500,15 +36508,15 @@
       "path": "db/migrations/20260716_lifeos_core_phase_2.sql",
       "synopsis": "Database migration — 20260716_lifeos_core_phase_2.sql.",
       "bytes": 400,
-      "mtime": "2026-07-30T20:34:32.812Z",
-      "indexed_at": "2026-07-30T20:34:32.812Z"
+      "mtime": "2026-07-30T20:18:50.645Z",
+      "indexed_at": "2026-07-30T20:18:50.645Z"
     },
     {
       "path": "db/migrations/20260717_lifeos_core_phase_3.sql",
       "synopsis": "Database migration — 20260717_lifeos_core_phase_3.sql.",
       "bytes": 593,
-      "mtime": "2026-07-30T21:12:27.997Z",
-      "indexed_at": "2026-07-30T21:12:27.997Z"
+      "mtime": "2026-07-30T22:32:04.393Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
     },
     {
       "path": "db/migrations/20260717_socialmediaos_owner_id_text.sql",
@@ -36521,8 +36529,8 @@
       "path": "db/migrations/20260718_lifeos_core_phase_4.sql",
       "synopsis": "Database migration — 20260718_lifeos_core_phase_4.sql.",
       "bytes": 792,
-      "mtime": "2026-07-30T21:47:59.554Z",
-      "indexed_at": "2026-07-30T21:47:59.554Z"
+      "mtime": "2026-07-30T22:32:04.393Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
     },
     {
       "path": "db/migrations/20260718_lifeos_food_logs.sql",
@@ -36626,8 +36634,8 @@
       "path": "db/migrations/20260719_lifeos_core_phase_5.sql",
       "synopsis": "Database migration — 20260719_lifeos_core_phase_5.sql.",
       "bytes": 262,
-      "mtime": "2026-07-30T22:24:17.617Z",
-      "indexed_at": "2026-07-30T22:24:17.617Z"
+      "mtime": "2026-07-30T22:32:04.393Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
     },
     {
       "path": "db/migrations/20260719b_lifeos_lab_results_repair.sql",
@@ -36665,18 +36673,46 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "db/migrations/20260730_creative_modes_and_publish.sql",
+      "synopsis": "Creative Engine schema expansion — competitor analysis + social video publish queue",
+      "bytes": 2323,
+      "mtime": "2026-07-30T03:57:08.479Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
+    },
+    {
+      "path": "db/migrations/20260730_lifeos_billing.sql",
+      "synopsis": "Creative Engine schema expansion — LifeOS paid tier checkout sessions",
+      "bytes": 1000,
+      "mtime": "2026-07-30T17:58:19.124Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
+    },
+    {
+      "path": "db/migrations/20260730_lifere_learning_profile.sql",
+      "synopsis": "Database migration — add metadata JSONB column to lifere_coaching_sessions for learning profile.",
+      "bytes": 215,
+      "mtime": "2026-07-30T02:15:14.002Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
+    },
+    {
+      "path": "db/migrations/20260730_social_publish_status_fix.sql",
+      "synopsis": "Fix creative_publish_queue status enum to include needs_connection",
+      "bytes": 457,
+      "mtime": "2026-07-30T03:57:08.479Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
+    },
+    {
       "path": "db/migrations/20261101_habit_tables.sql",
       "synopsis": "Database migration — 20261101_habit_tables.sql.",
       "bytes": 72,
-      "mtime": "2026-07-30T20:34:18.110Z",
-      "indexed_at": "2026-07-30T20:34:18.110Z"
+      "mtime": "2026-07-30T22:32:04.393Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
     },
     {
       "path": "db/migrations/add_video_jobs_table.sql",
       "synopsis": "Database migration — add_video_jobs_table.sql.",
       "bytes": 918,
-      "mtime": "2026-07-30T20:53:34.151Z",
-      "indexed_at": "2026-07-30T20:53:34.151Z"
+      "mtime": "2026-07-30T22:32:04.393Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
     },
     {
       "path": "db/migrations/add_virtual_real_estate_curriculum.sql",
@@ -36724,8 +36760,8 @@
       "path": "db/migrations/AMENDMENT_21.sql",
       "synopsis": "Database migration — AMENDMENT_21.sql.",
       "bytes": 1829,
-      "mtime": "2026-07-30T21:13:38.605Z",
-      "indexed_at": "2026-07-30T21:13:38.605Z"
+      "mtime": "2026-07-30T22:32:04.393Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
     },
     {
       "path": "db/migrations/builderos_command_control.sql",
@@ -37157,16 +37193,16 @@
     {
       "path": "docs/AGENT_INBOX_ARCHIVE.md",
       "synopsis": "Agent Inbox — Archive",
-      "bytes": 1581,
-      "mtime": "2026-07-10T01:14:24.786Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 3249,
+      "mtime": "2026-07-30T03:57:08.479Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
     },
     {
       "path": "docs/AGENT_INBOX.md",
       "synopsis": "Agent Inbox",
-      "bytes": 5209,
-      "mtime": "2026-07-28T22:41:48.170Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 1107,
+      "mtime": "2026-07-30T03:57:08.479Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
     },
     {
       "path": "docs/AGENT_RULES.compact.md",
@@ -37665,6 +37701,150 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "docs/audits/builderos-mission-1/00_MASTER_INDEX.md",
+      "synopsis": "BuilderOS Mission 1 — Constitutional Reality Audit & Architectural Map",
+      "bytes": 1047,
+      "mtime": "2026-07-30T22:31:03.793Z",
+      "indexed_at": "2026-07-30T22:31:11.508Z"
+    },
+    {
+      "path": "docs/audits/builderos-mission-1/01_CONSTITUTIONAL_MAP.md",
+      "synopsis": "1. Constitutional Map",
+      "bytes": 13161,
+      "mtime": "2026-07-30T22:31:03.813Z",
+      "indexed_at": "2026-07-30T22:31:11.508Z"
+    },
+    {
+      "path": "docs/audits/builderos-mission-1/02_DEPENDENCY_GRAPH.md",
+      "synopsis": "2. Dependency Graph",
+      "bytes": 7319,
+      "mtime": "2026-07-30T22:31:03.825Z",
+      "indexed_at": "2026-07-30T22:31:11.508Z"
+    },
+    {
+      "path": "docs/audits/builderos-mission-1/03_DUPLICATION_REPORT.md",
+      "synopsis": "3. Duplication Report",
+      "bytes": 2873,
+      "mtime": "2026-07-30T22:31:03.837Z",
+      "indexed_at": "2026-07-30T22:31:11.508Z"
+    },
+    {
+      "path": "docs/audits/builderos-mission-1/04_BLUEPRINT_DRIFT.md",
+      "synopsis": "4. Blueprint Drift Report",
+      "bytes": 11697,
+      "mtime": "2026-07-30T22:31:03.853Z",
+      "indexed_at": "2026-07-30T22:31:11.508Z"
+    },
+    {
+      "path": "docs/audits/builderos-mission-1/05_RUNTIME_DRIFT.md",
+      "synopsis": "5. Runtime Drift Report",
+      "bytes": 3178,
+      "mtime": "2026-07-30T22:31:03.865Z",
+      "indexed_at": "2026-07-30T22:31:11.508Z"
+    },
+    {
+      "path": "docs/audits/builderos-mission-1/06_GOVERNANCE_DRIFT.md",
+      "synopsis": "6. Governance Drift Report",
+      "bytes": 3062,
+      "mtime": "2026-07-30T22:31:03.877Z",
+      "indexed_at": "2026-07-30T22:31:11.508Z"
+    },
+    {
+      "path": "docs/audits/builderos-mission-1/07_TRUTH_AUDIT.md",
+      "synopsis": "7. Truth Audit",
+      "bytes": 2539,
+      "mtime": "2026-07-30T22:31:03.889Z",
+      "indexed_at": "2026-07-30T22:31:11.508Z"
+    },
+    {
+      "path": "docs/audits/builderos-mission-1/08_SENTRY_AUDIT.md",
+      "synopsis": "8. SENTRY Audit",
+      "bytes": 1913,
+      "mtime": "2026-07-30T22:31:03.901Z",
+      "indexed_at": "2026-07-30T22:31:11.508Z"
+    },
+    {
+      "path": "docs/audits/builderos-mission-1/09_FOUNDER_TWIN_AUDIT.md",
+      "synopsis": "Loads per-user twin + communication profile + recent learning for Lumin prompts.",
+      "bytes": 10217,
+      "mtime": "2026-07-30T20:33:45.005Z",
+      "indexed_at": "2026-07-30T22:31:11.508Z"
+    },
+    {
+      "path": "docs/audits/builderos-mission-1/10_ARCHITECTURAL_INVENTORY.md",
+      "synopsis": "10. Architectural Inventory",
+      "bytes": 9204,
+      "mtime": "2026-07-30T22:31:03.921Z",
+      "indexed_at": "2026-07-30T22:31:11.508Z"
+    },
+    {
+      "path": "docs/audits/builderos-mission-1/flags.json",
+      "synopsis": "Documentation — Flags.",
+      "bytes": 151,
+      "mtime": "2026-07-30T20:29:30.017Z",
+      "indexed_at": "2026-07-30T22:31:11.508Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/audits/builderos-mission-1/health.json",
+      "synopsis": "Documentation — Health.",
+      "bytes": 455,
+      "mtime": "2026-07-30T20:29:29.829Z",
+      "indexed_at": "2026-07-30T22:31:11.508Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/audits/builderos-mission-1/MISSION_1_5_CONSTITUTIONAL_MATRIX.md",
+      "synopsis": "Mission 1.5 — Constitutional Classification & Enforcement Matrix",
+      "bytes": 438753,
+      "mtime": "2026-07-30T22:31:03.937Z",
+      "indexed_at": "2026-07-30T22:31:11.508Z"
+    },
+    {
+      "path": "docs/audits/builderos-mission-1/MISSION_1_6_VALIDATION_REPORT.md",
+      "synopsis": "Point B DNA — runtime stamp + prompt inject; supreme purpose enforcement.; `services/point-b-dna.js:10` in `DNA_JSON_PATH`: const DNA_JSON_PATH = path.join(ROOT, 'builderos-reboot/governance/POINT_B_DNA.json');; `services/point-b-navigator.",
+      "bytes": 402256,
+      "mtime": "2026-07-30T21:18:51.313Z",
+      "indexed_at": "2026-07-30T22:31:11.508Z"
+    },
+    {
+      "path": "docs/audits/builderos-mission-1/MISSION_1_7_STRATEGIC_ASSESSMENT.md",
+      "synopsis": "Mission 1.7 — Independent Architectural Assessment & Strategic Recommendations",
+      "bytes": 24652,
+      "mtime": "2026-07-30T22:31:03.961Z",
+      "indexed_at": "2026-07-30T22:31:11.508Z"
+    },
+    {
+      "path": "docs/audits/builderos-mission-1/MISSION_1_BUILDEROS_AUDIT.md",
+      "synopsis": "BuilderOS Mission 1 — Constitutional Reality Audit & Architectural Map",
+      "bytes": 69639,
+      "mtime": "2026-07-30T22:31:03.973Z",
+      "indexed_at": "2026-07-30T22:31:11.508Z"
+    },
+    {
+      "path": "docs/audits/builderos-mission-1/runtime_fingerprint.json",
+      "synopsis": "Documentation — Runtime Fingerprint.",
+      "bytes": 189,
+      "mtime": "2026-07-30T20:29:29.501Z",
+      "indexed_at": "2026-07-30T22:31:11.508Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/audits/builderos-mission-1/runtime_ready.json",
+      "synopsis": "Documentation — Runtime Ready.",
+      "bytes": 1182,
+      "mtime": "2026-07-30T20:29:29.265Z",
+      "indexed_at": "2026-07-30T22:31:11.508Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/audits/builderos-mission-2/MISSION_2_0_PROMPT.md",
+      "synopsis": "BuilderOS Mission 2.0 implementation prompt — reconciled scope for Devin.",
+      "bytes": 17546,
+      "mtime": "2026-07-30T22:18:59.581Z",
+      "indexed_at": "2026-07-30T22:31:11.508Z"
+    },
+    {
       "path": "docs/AUTHORITY_CONSOLIDATION_MASTER_AUDIT_V1.md",
       "synopsis": "AUTHORITY CONSOLIDATION MASTER AUDIT V1",
       "bytes": 27067,
@@ -38066,9 +38246,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 41841,
-      "mtime": "2026-07-29T22:03:20.029Z",
-      "indexed_at": "2026-07-30T01:21:52.231Z"
+      "bytes": 52229,
+      "mtime": "2026-07-30T22:31:03.777Z",
+      "indexed_at": "2026-07-30T22:31:11.508Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40240,6 +40420,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "docs/products/builderos/AUDIT_BUILDEROS_2026-07-30.md",
+      "synopsis": "BuilderOS full audit against constitution, SSOT, and product builder — 2026-07-30",
+      "bytes": 17024,
+      "mtime": "2026-07-30T18:16:49.613Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
+    },
+    {
       "path": "docs/products/builderos/DEVIN_HANDOFF.md",
       "synopsis": "Devin execution host handoff for BuilderOS",
       "bytes": 6614,
@@ -40257,9 +40444,9 @@
     {
       "path": "docs/products/builderos/GAP_FILL_LEDGER.json",
       "synopsis": "Documentation — GAP FILL LEDGER.",
-      "bytes": 23320,
-      "mtime": "2026-07-29T05:28:44.608Z",
-      "indexed_at": "2026-07-29T05:33:34.447Z",
+      "bytes": 24881,
+      "mtime": "2026-07-30T22:31:11.861Z",
+      "indexed_at": "2026-07-30T22:31:58.026Z",
       "synopsis_index_only": true
     },
     {
@@ -40279,9 +40466,9 @@
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
       "synopsis": "BUILDEROS_BP_V1 — executable Version-1 blueprint: close the build loop (L0) + turn on the five recorders",
-      "bytes": 21471,
-      "mtime": "2026-07-03T00:17:45.056Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 23871,
+      "mtime": "2026-07-30T18:25:48.697Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
     },
     {
       "path": "docs/products/builderos/specs/FOUNDER_VIRTUAL_TWIN.md",
@@ -40293,9 +40480,9 @@
     {
       "path": "docs/products/builderos/TWIN.md",
       "synopsis": "BUILDEROS_TWIN — complete digital twin of the ACTUAL BuilderOS code (reality map, kept in sync with code)",
-      "bytes": 12188,
-      "mtime": "2026-06-29T18:25:12.025Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 11903,
+      "mtime": "2026-07-30T18:25:48.697Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
     },
     {
       "path": "docs/products/business-tools/FILE_MANIFEST.json",
@@ -40649,9 +40836,9 @@
     {
       "path": "docs/products/creative-engine/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Creative Engine",
-      "bytes": 9018,
-      "mtime": "2026-07-24T18:36:41.547Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 11025,
+      "mtime": "2026-07-30T03:57:08.479Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
     },
     {
       "path": "docs/products/CREATIVEENGINE.md",
@@ -41003,9 +41190,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 634830,
-      "mtime": "2026-07-30T01:21:44.767Z",
-      "indexed_at": "2026-07-30T01:22:40.402Z"
+      "bytes": 638553,
+      "mtime": "2026-07-30T18:16:49.621Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -41039,9 +41226,9 @@
     {
       "path": "docs/products/lifere/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeRE",
-      "bytes": 46176,
-      "mtime": "2026-07-29T19:35:23.770Z",
-      "indexed_at": "2026-07-29T19:35:35.389Z"
+      "bytes": 47530,
+      "mtime": "2026-07-30T02:15:14.010Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
     },
     {
       "path": "docs/products/limitlessos/conversations/2026-06-29-founder-ecosystem-session.md",
@@ -41112,9 +41299,9 @@
     {
       "path": "docs/products/MARKET_READINESS_PLAN.md",
       "synopsis": "Market-readiness audit and implementation plan for every active product.",
-      "bytes": 10919,
-      "mtime": "1970-01-01T00:00:00.000Z",
-      "indexed_at": "2026-07-30T01:21:52.231Z"
+      "bytes": 16667,
+      "mtime": "2026-07-30T18:09:10.681Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
     },
     {
       "path": "docs/products/MARKETINGOS.md",
@@ -41141,9 +41328,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 128606,
-      "mtime": "2026-07-24T18:36:41.703Z",
-      "indexed_at": "2026-07-30T01:21:52.231Z"
+      "bytes": 128213,
+      "mtime": "2026-07-30T22:26:14.273Z",
+      "indexed_at": "2026-07-30T22:31:11.508Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -41163,9 +41350,9 @@
     {
       "path": "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md",
       "synopsis": "SocialMediaOS Module Home",
-      "bytes": 23735,
-      "mtime": "2026-07-28T17:52:15.534Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 25263,
+      "mtime": "2026-07-30T22:26:21.793Z",
+      "indexed_at": "2026-07-30T22:31:11.508Z"
     },
     {
       "path": "docs/products/memory-intelligence/FILE_MANIFEST.json",
@@ -41475,9 +41662,16 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 213403,
-      "mtime": "2026-07-28T18:01:25.489Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 214457,
+      "mtime": "2026-07-30T17:57:40.604Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
+    },
+    {
+      "path": "docs/products/site-builder/SITE_TEMPLATE_CATALOG.md",
+      "synopsis": "Live Site Template Catalog",
+      "bytes": 95365,
+      "mtime": "2026-07-30T18:09:10.681Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -41577,9 +41771,9 @@
     {
       "path": "docs/products/token-accounting-os/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Token Accounting OS",
-      "bytes": 7385,
-      "mtime": "2026-07-28T17:52:56.523Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 7699,
+      "mtime": "2026-07-30T03:57:08.483Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
     },
     {
       "path": "docs/products/TOKENACCOUNTINGOS.md",
@@ -64269,25 +64463,25 @@
     {
       "path": "products/receipts/BUILDEROS_AUTONOMY_CLOSURE_V1_ACCEPTANCE.json",
       "synopsis": "Product receipt — BUILDEROS AUTONOMY CLOSURE V1 ACCEPTANCE.",
-      "bytes": 12258,
-      "mtime": "2026-07-10T06:02:41.690Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 12527,
+      "mtime": "2026-07-30T22:19:25.473Z",
+      "indexed_at": "2026-07-30T22:31:11.508Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/BUILDEROS_BUILD_DEPLOY_TRUTH.json",
       "synopsis": "Product receipt — BUILDEROS BUILD DEPLOY TRUTH.",
-      "bytes": 1913,
-      "mtime": "2026-07-10T06:01:54.284Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 2223,
+      "mtime": "2026-07-30T22:19:28.037Z",
+      "indexed_at": "2026-07-30T22:31:11.508Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/BUILDEROS_FOUNDER_UI_PROOF.json",
       "synopsis": "Product receipt — BUILDEROS FOUNDER UI PROOF.",
-      "bytes": 16195,
-      "mtime": "2026-07-10T06:28:08.584Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 16648,
+      "mtime": "2026-07-30T22:19:28.073Z",
+      "indexed_at": "2026-07-30T22:31:11.508Z",
       "synopsis_index_only": true
     },
     {
@@ -64309,9 +64503,9 @@
     {
       "path": "products/receipts/BUILDEROS_SAME_TIER_DETERMINISM.json",
       "synopsis": "Product receipt — BUILDEROS SAME TIER DETERMINISM.",
-      "bytes": 948,
-      "mtime": "2026-07-10T05:52:30.572Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 1258,
+      "mtime": "2026-07-30T22:19:28.109Z",
+      "indexed_at": "2026-07-30T22:31:11.508Z",
       "synopsis_index_only": true
     },
     {
@@ -64475,6 +64669,14 @@
       "synopsis_index_only": true
     },
     {
+      "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
+      "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
+      "bytes": 3767,
+      "mtime": "2026-07-30T20:29:45.837Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "products/receipts/DIRECT_EXECUTION_POINT_B_LIVE.json",
       "synopsis": "Product receipt — DIRECT EXECUTION POINT B LIVE.",
       "bytes": 3057,
@@ -64501,9 +64703,9 @@
     {
       "path": "products/receipts/FOUNDER_JWT_CHAT_PROOF.json",
       "synopsis": "Product receipt — FOUNDER JWT CHAT PROOF.",
-      "bytes": 921,
-      "mtime": "2026-07-20T08:52:01.076Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 671,
+      "mtime": "2026-07-30T02:27:48.226Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "synopsis_index_only": true
     },
     {
@@ -64533,9 +64735,9 @@
     {
       "path": "products/receipts/FOUNDER_UI_LOGIN_E2E.json",
       "synopsis": "Product receipt — FOUNDER UI LOGIN E2E.",
-      "bytes": 1223,
-      "mtime": "2026-07-20T08:52:05.355Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 804,
+      "mtime": "2026-07-30T02:27:48.226Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "synopsis_index_only": true
     },
     {
@@ -64971,6 +65173,14 @@
       "synopsis_index_only": true
     },
     {
+      "path": "products/receipts/LIVE_SITE_SURFACE_CATALOG.json",
+      "synopsis": "Product receipt — LIVE SITE SURFACE CATALOG.",
+      "bytes": 207034,
+      "mtime": "2026-07-30T18:09:10.681Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "products/receipts/LUMIN_ALPHA_CONNECTION_TEST.json",
       "synopsis": "Product receipt — LUMIN ALPHA CONNECTION TEST.",
       "bytes": 318,
@@ -65053,17 +65263,17 @@
     {
       "path": "products/receipts/REAL_APP_E2E.json",
       "synopsis": "Product receipt — REAL APP E2E.",
-      "bytes": 2391,
-      "mtime": "2026-07-28T17:53:47.851Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 2426,
+      "mtime": "2026-07-30T02:27:48.226Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
-      "bytes": 23544,
-      "mtime": "2026-07-28T22:39:58.986Z",
-      "indexed_at": "2026-07-30T01:21:52.231Z",
+      "bytes": 23873,
+      "mtime": "2026-07-30T22:30:54.529Z",
+      "indexed_at": "2026-07-30T22:31:11.508Z",
       "synopsis_index_only": true
     },
     {
@@ -65085,9 +65295,9 @@
     {
       "path": "products/receipts/SENTRY_FINDINGS_FEED.lifeos-founder-ui.json",
       "synopsis": "Product receipt — SENTRY FINDINGS FEED.Lifeos Founder Ui.",
-      "bytes": 249,
-      "mtime": "2026-07-28T17:53:47.939Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 285,
+      "mtime": "2026-07-30T02:27:48.226Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "synopsis_index_only": true
     },
     {
@@ -65101,9 +65311,9 @@
     {
       "path": "products/receipts/SENTRY_FINDINGS_FEED.site-builder.json",
       "synopsis": "Product receipt — SENTRY FINDINGS FEED.Site Builder.",
-      "bytes": 856,
-      "mtime": "2026-07-28T17:53:48.145Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 280,
+      "mtime": "2026-07-30T03:57:35.667Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "synopsis_index_only": true
     },
     {
@@ -65125,9 +65335,9 @@
     {
       "path": "products/receipts/SITE_BUILDER_PREALPHA_LAYER_A.json",
       "synopsis": "Product receipt — SITE BUILDER PREALPHA LAYER A.",
-      "bytes": 2390,
-      "mtime": "2026-07-28T17:47:22.524Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 2673,
+      "mtime": "2026-07-30T03:57:35.667Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "synopsis_index_only": true
     },
     {
@@ -65229,9 +65439,9 @@
     {
       "path": "products/receipts/TRUTH_ENFORCEMENT_AUDIT.json",
       "synopsis": "Product receipt — TRUTH ENFORCEMENT AUDIT.",
-      "bytes": 782,
-      "mtime": "2026-07-28T20:19:15.026Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 833,
+      "mtime": "2026-07-30T22:30:54.981Z",
+      "indexed_at": "2026-07-30T22:31:11.508Z",
       "synopsis_index_only": true
     },
     {
@@ -65832,6 +66042,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "public/overlay/audit-intake-flow.html",
+      "synopsis": "HTML page: Audit Intake Form",
+      "bytes": 12082,
+      "mtime": "2026-07-30T20:29:45.837Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
+    },
+    {
       "path": "public/overlay/audit.html",
       "synopsis": "HTML page: LimitlessOS Audit Results",
       "bytes": 18739,
@@ -66169,9 +66386,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 222485,
-      "mtime": "2026-07-28T17:47:22.525Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 222487,
+      "mtime": "2026-07-30T20:29:45.841Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
     },
     {
       "path": "public/overlay/lifeos-ask-your-life.html",
@@ -66186,6 +66403,13 @@
       "bytes": 15825,
       "mtime": "2026-06-21T21:39:01.200Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "public/overlay/lifeos-billing.html",
+      "synopsis": "HTML page: LifeOS — Upgrade",
+      "bytes": 5265,
+      "mtime": "2026-07-30T17:58:19.132Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
     },
     {
       "path": "public/overlay/lifeos-bootstrap.js",
@@ -66287,9 +66511,9 @@
     {
       "path": "public/overlay/lifeos-dashboard.html",
       "synopsis": "HTML page: Dashboard · LifeOS",
-      "bytes": 47874,
-      "mtime": "2026-07-28T17:47:22.526Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 47876,
+      "mtime": "2026-07-30T20:29:45.841Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
     },
     {
       "path": "public/overlay/lifeos-date-night.html",
@@ -67738,9 +67962,9 @@
     {
       "path": "routes/builderos-control-plane-routes.js",
       "synopsis": "BuilderOS Control Plane API — measurement health + build ledger.",
-      "bytes": 2633,
-      "mtime": "2026-06-29T17:21:08.501Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 5256,
+      "mtime": "2026-07-30T03:57:08.487Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -68171,8 +68395,8 @@
       "path": "routes/familySafety.js",
       "synopsis": "Registers FamilySafetyRoutes routes/handlers (routes/familySafety.js).",
       "bytes": 3255,
-      "mtime": "2026-07-30T21:13:17.372Z",
-      "indexed_at": "2026-07-30T21:13:17.372Z"
+      "mtime": "2026-07-30T22:32:04.401Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
     },
     {
       "path": "routes/ferpaRoutes.js",
@@ -68331,6 +68555,13 @@
       ]
     },
     {
+      "path": "routes/habLimitRoutes.js",
+      "synopsis": "HTTP route module — HabLimitRoutes.",
+      "bytes": 1060,
+      "mtime": "2026-07-30T20:29:45.841Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
+    },
+    {
       "path": "routes/idea-queue-routes.js",
       "synopsis": "routes/idea-queue-routes.js",
       "bytes": 13264,
@@ -68475,9 +68706,9 @@
     {
       "path": "routes/lifeos-auth-routes.js",
       "synopsis": "routes/lifeos-auth-routes.js",
-      "bytes": 38282,
-      "mtime": "2026-07-18T18:46:59.242Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 46013,
+      "mtime": "2026-07-30T17:58:19.132Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -68612,9 +68843,9 @@
     {
       "path": "routes/lifeos-council-builder-routes.js",
       "synopsis": "routes/lifeos-council-builder-routes.js",
-      "bytes": 164971,
-      "mtime": "2026-07-28T22:24:40.353Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 166259,
+      "mtime": "2026-07-30T03:57:08.487Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -69064,9 +69295,9 @@
     {
       "path": "routes/lifere-os-routes.js",
       "synopsis": "LifeRE OS routes — full A-to-Z API (W1–W6).",
-      "bytes": 58511,
-      "mtime": "2026-07-28T17:47:22.536Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 58630,
+      "mtime": "2026-07-30T02:15:14.030Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -69074,9 +69305,9 @@
     {
       "path": "routes/lifere-sales-coaching-routes.js",
       "synopsis": "LifeRE sales coaching routes — simulator sessions, real-time coaching, scenario list.",
-      "bytes": 5645,
-      "mtime": "2026-07-28T17:50:51.147Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 5697,
+      "mtime": "2026-07-30T02:15:14.030Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -69158,9 +69389,9 @@
     {
       "path": "routes/marketing-session-export-routes.js",
       "synopsis": "Exports registerMarketingSessionExportRoutes — routes/marketing-session-export-routes.js.",
-      "bytes": 3735,
-      "mtime": "2026-07-13T08:19:56.689Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 4174,
+      "mtime": "2026-07-30T22:24:04.677Z",
+      "indexed_at": "2026-07-30T22:31:11.508Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -69168,9 +69399,9 @@
     {
       "path": "routes/marketing-session-routes.js",
       "synopsis": "Express route module for MarketingOS session API.",
-      "bytes": 50859,
-      "mtime": "2026-07-24T18:36:41.703Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 50684,
+      "mtime": "2026-07-30T22:23:01.453Z",
+      "indexed_at": "2026-07-30T22:31:11.508Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -69178,9 +69409,9 @@
     {
       "path": "routes/marketing-session-ui-routes.js",
       "synopsis": "SocialMediaOS / MarketingOS Phase 1 SSR UI — consent → coach → extract → generate → approve → export",
-      "bytes": 140456,
-      "mtime": "2026-07-24T18:36:41.703Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 141194,
+      "mtime": "2026-07-30T22:22:39.697Z",
+      "indexed_at": "2026-07-30T22:31:11.508Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -69420,8 +69651,8 @@
       "path": "routes/privateWitnessMode.js",
       "synopsis": "HTTP route module — PrivateWitnessMode.",
       "bytes": 3833,
-      "mtime": "2026-07-30T20:53:20.839Z",
-      "indexed_at": "2026-07-30T20:53:20.839Z"
+      "mtime": "2026-07-30T22:32:04.401Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
     },
     {
       "path": "routes/progress-report-routes.js",
@@ -69789,9 +70020,9 @@
     {
       "path": "routes/socialmediaos-coaching-routes.js",
       "synopsis": "SocialMediaOS AI coaching session routes — start, answer Q&A, generate content pack, export.",
-      "bytes": 5394,
-      "mtime": "2026-06-30T04:09:51.111Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 5503,
+      "mtime": "2026-07-30T02:15:14.030Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md"
       ]
@@ -69799,9 +70030,9 @@
     {
       "path": "routes/socialmediaos-routes.js",
       "synopsis": "SocialMediaOS API routes — sessions, content packs, and marketplace checkout.",
-      "bytes": 8370,
-      "mtime": "2026-07-17T21:42:16.101Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 8312,
+      "mtime": "2026-07-30T22:22:44.185Z",
+      "indexed_at": "2026-07-30T22:31:11.508Z",
       "ssot": [
         "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md"
       ]
@@ -70430,9 +70661,9 @@
     {
       "path": "scripts/audit-truth-enforcement.mjs",
       "synopsis": "Audit entire repo for truth enforcement bypass paths — fail-closed in preflight.",
-      "bytes": 4894,
-      "mtime": "2026-07-14T09:22:00.748Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 4943,
+      "mtime": "2026-07-30T03:57:08.487Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -70812,9 +71043,9 @@
     {
       "path": "scripts/builderos-intake-regression-harness.mjs",
       "synopsis": "Golden intake blueprint regression — acceptance-only (default), dry-run, or full rebuild.",
-      "bytes": 1952,
-      "mtime": "2026-07-03T00:17:45.087Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 2004,
+      "mtime": "2026-07-30T18:09:12.929Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -70852,9 +71083,9 @@
     {
       "path": "scripts/builderos-pre-build-gate.mjs",
       "synopsis": "Pre-build gate for canonical harness — ready, deploy, doctrine, env.",
-      "bytes": 6913,
-      "mtime": "2026-07-01T09:29:53.622Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 6972,
+      "mtime": "2026-07-30T18:09:12.929Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "builderos-reboot/governance/BUILDEROS_HARNESS_TOOLS.json"
       ]
@@ -70882,9 +71113,9 @@
     {
       "path": "scripts/builderos-run-operational-proof.mjs",
       "synopsis": "Live BuilderOS operational proof — canonical build + compound log + gap classify.",
-      "bytes": 7479,
-      "mtime": "2026-06-24T20:34:41.966Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 7531,
+      "mtime": "2026-07-30T18:09:12.929Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "builderos-reboot/BUILDEROS_WORKING_DEFINITION.json"
       ]
@@ -71025,9 +71256,9 @@
     {
       "path": "scripts/council-builder-preflight.mjs",
       "synopsis": "Proves the Council Builder is reachable and reports why POST /api/v1/lifeos/builder/build",
-      "bytes": 14778,
-      "mtime": "2026-07-01T09:17:07.296Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 14804,
+      "mtime": "2026-07-30T18:09:12.929Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -71219,9 +71450,9 @@
     {
       "path": "scripts/drift-audit.mjs",
       "synopsis": "Read-only production drift audit — prove prod runs the deploy branch, or UNSOLVED.",
-      "bytes": 10719,
-      "mtime": "2026-07-28T20:09:18.837Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 10777,
+      "mtime": "2026-07-30T18:25:20.089Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -71621,6 +71852,16 @@
       ]
     },
     {
+      "path": "scripts/lib/builder-js-sanitize.mjs",
+      "synopsis": "Safe JS sanitize for builder execute-batch (Q-002).",
+      "bytes": 1854,
+      "mtime": "2026-07-30T03:57:08.487Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "scripts/lib/closure-contract.mjs",
       "synopsis": "C09 — Build Closure Contract",
       "bytes": 3673,
@@ -71633,9 +71874,9 @@
     {
       "path": "scripts/lib/deploy-truth-guard.mjs",
       "synopsis": "Deploy-truth guard primitives — prove a ship reached production or say UNSOLVED.",
-      "bytes": 21960,
-      "mtime": "2026-07-28T22:31:39.761Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 22339,
+      "mtime": "2026-07-30T03:57:08.487Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -71643,11 +71884,22 @@
     {
       "path": "scripts/lib/deploy-truth-io.mjs",
       "synopsis": "Deploy-truth I/O — git + Railway + HTTP probes used to prove a ship.",
-      "bytes": 11954,
-      "mtime": "2026-07-28T20:09:18.837Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 13216,
+      "mtime": "2026-07-30T03:57:08.487Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/lib/doc-hygiene-gate.mjs",
+      "synopsis": "Doc-hygiene detect-and-route for machine ship path (Q-003).",
+      "bytes": 3087,
+      "mtime": "2026-07-30T03:57:08.487Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md",
+        "/ co-commit."
       ]
     },
     {
@@ -71732,6 +71984,16 @@
       ]
     },
     {
+      "path": "scripts/lib/runtime-fingerprint.mjs",
+      "synopsis": "Runtime file fingerprint primitives (Q-001) — allowlisted disk sha256.",
+      "bytes": 3206,
+      "mtime": "2026-07-30T03:57:08.487Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "scripts/lib/security-invariants.mjs",
       "synopsis": "Security-invariant primitives — one checker, callable from the git hook and the machine ship path.",
       "bytes": 4989,
@@ -71739,6 +72001,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/lib/ship-main-ancestor.mjs",
+      "synopsis": "Prove a ship commit landed on origin/main (false-done guard).",
+      "bytes": 2086,
+      "mtime": "2026-07-30T03:57:08.487Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
@@ -72332,6 +72604,16 @@
       ]
     },
     {
+      "path": "scripts/map-live-site.mjs",
+      "synopsis": "Static site surface mapper — generates a template catalog of public overlays and API routes.",
+      "bytes": 6922,
+      "mtime": "2026-07-30T18:09:10.685Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
+      "ssot": [
+        "docs/products/site-builder/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "scripts/mark-step-known-bad-signature.mjs",
       "synopsis": "Stamp a BUILD_QUEUE.json step with a known-bad failure signature",
       "bytes": 4377,
@@ -72769,9 +73051,9 @@
     {
       "path": "scripts/run-builderos-autonomy-closure-v1-acceptance.mjs",
       "synopsis": "BuilderOS autonomy closure v1 acceptance.",
-      "bytes": 18627,
-      "mtime": "2026-07-03T21:46:43.870Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 19824,
+      "mtime": "2026-07-30T20:29:45.841Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/BLUEPRINT.json"
       ]
@@ -72869,9 +73151,9 @@
     {
       "path": "scripts/run-founder-chat-alpha-battery.mjs",
       "synopsis": "Founder chat alpha — build must build, questions must answer, search when unknown.",
-      "bytes": 16333,
-      "mtime": "2026-07-01T12:58:06.309Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 16683,
+      "mtime": "2026-07-30T18:25:48.697Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -73151,9 +73433,9 @@
     {
       "path": "scripts/run-marketingos-layer-a.mjs",
       "synopsis": "MarketingOS / SocialMediaOS SENTRY Layer A — structural LIVE probes (no browser).",
-      "bytes": 7257,
-      "mtime": "2026-07-10T02:08:34.938Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 7467,
+      "mtime": "2026-07-30T22:24:12.361Z",
+      "indexed_at": "2026-07-30T22:31:11.508Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -73161,9 +73443,9 @@
     {
       "path": "scripts/run-marketingos-layer-b.mjs",
       "synopsis": "MarketingOS SENTRY Layer B — Playwright human-sim of /marketing UI (browser).",
-      "bytes": 8591,
-      "mtime": "2026-07-10T03:15:32.488Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 8801,
+      "mtime": "2026-07-30T22:24:14.557Z",
+      "indexed_at": "2026-07-30T22:31:11.508Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -73437,9 +73719,9 @@
     {
       "path": "scripts/sentry-site-builder-prealpha-gate.mjs",
       "synopsis": "SENTRY Site Builder pre-alpha completion gate — runs BOTH doctrine",
-      "bytes": 9436,
-      "mtime": "2026-07-13T07:02:23.885Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 10932,
+      "mtime": "2026-07-30T02:27:48.242Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -73478,9 +73760,9 @@
     {
       "path": "scripts/ship-truth.mjs",
       "synopsis": "Ship files and prove production runs them — or report UNSOLVED.",
-      "bytes": 33127,
-      "mtime": "2026-07-28T20:15:21.154Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 34764,
+      "mtime": "2026-07-30T03:57:08.487Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -73594,6 +73876,16 @@
       ]
     },
     {
+      "path": "scripts/spend-outcomes-report.mjs",
+      "synopsis": "Founder S00 report — $ spend → shipped build outcomes.",
+      "bytes": 1785,
+      "mtime": "2026-07-30T03:57:08.487Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "scripts/ssot-check.js",
       "synopsis": "ssot-check.js",
       "bytes": 11708,
@@ -73678,9 +73970,9 @@
     {
       "path": "scripts/system-commit-files.mjs",
       "synopsis": "Commit local files to GitHub main via tip BuilderOS execute-batch (no human PR).",
-      "bytes": 6048,
-      "mtime": "2026-07-24T18:36:41.697Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 6457,
+      "mtime": "2026-07-30T18:09:12.929Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -73698,9 +73990,9 @@
     {
       "path": "scripts/system-railway-redeploy.mjs",
       "synopsis": "Triggers Railway redeploy via the RUNNING app.",
-      "bytes": 14005,
-      "mtime": "2026-07-28T19:59:10.668Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 14050,
+      "mtime": "2026-07-30T18:09:12.929Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -74062,9 +74354,9 @@
     {
       "path": "scripts/verify-builderos-working-definition.mjs",
       "synopsis": "BuilderOS working definition — STRUCTURAL vs OPERATIONAL (honest 10/10).",
-      "bytes": 17971,
-      "mtime": "2026-07-09T03:27:25.478Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 18033,
+      "mtime": "2026-07-30T18:16:49.621Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "builderos-reboot/BUILDEROS_WORKING_DEFINITION.json"
       ]
@@ -84995,10 +85287,10 @@
     },
     {
       "path": "scripts/verify-token-receipt-linkage.mjs",
-      "synopsis": "This module provides functionality to verify the linkage between token receipts",
-      "bytes": 3605,
-      "mtime": "2026-06-29T17:44:54.809Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis": "Verify token↔build linkage rate (S00). Prefer live DB; fall back to control-plane API.",
+      "bytes": 3278,
+      "mtime": "2026-07-30T03:57:08.487Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -86004,9 +86296,9 @@
     {
       "path": "services/builderos-control-plane-service.js",
       "synopsis": "BuilderOS Control Plane — measurement aggregation + DONE gate + build ledger.",
-      "bytes": 15821,
-      "mtime": "2026-06-29T17:21:08.807Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 28446,
+      "mtime": "2026-07-30T03:57:08.487Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -86085,9 +86377,9 @@
     {
       "path": "services/builderos-intake-regression-harness.js",
       "synopsis": "Golden intake blueprint regression — acceptance-only and dry-run dispatch probes.",
-      "bytes": 6838,
-      "mtime": "2026-06-29T17:44:54.496Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 6844,
+      "mtime": "2026-07-30T18:09:12.929Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -86315,9 +86607,9 @@
     {
       "path": "services/chair-direct-agent.js",
       "synopsis": "Direct Chair agent — talks + acts; human prose obeys Lumin Communication DNA (not theater).",
-      "bytes": 27707,
-      "mtime": "2026-07-29T22:02:10.648Z",
-      "indexed_at": "2026-07-30T01:21:52.231Z",
+      "bytes": 28010,
+      "mtime": "2026-07-30T02:15:14.030Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -86395,9 +86687,9 @@
     {
       "path": "services/chair-lumin-unified.js",
       "synopsis": "Chair native turn — Lumin IS the Chair; personality translates real facts only.",
-      "bytes": 7157,
-      "mtime": "2026-07-29T22:02:42.679Z",
-      "indexed_at": "2026-07-30T01:21:52.231Z",
+      "bytes": 5150,
+      "mtime": "2026-07-23T13:25:51.199Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -86405,9 +86697,9 @@
     {
       "path": "services/chair-native-facts.js",
       "synopsis": "Chair native facts — real system state Lumin IS (not chat overlay).",
-      "bytes": 16488,
-      "mtime": "2026-07-29T22:01:50.058Z",
-      "indexed_at": "2026-07-30T01:21:52.231Z",
+      "bytes": 15583,
+      "mtime": "2026-07-30T02:15:14.034Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -86415,9 +86707,9 @@
     {
       "path": "services/chair-personality-translate.js",
       "synopsis": "Lumin personality translate — human-language layer on SYSTEM_FACTS only (not theater).",
-      "bytes": 9914,
-      "mtime": "2026-07-30T01:16:05.193Z",
-      "indexed_at": "2026-07-30T01:22:40.402Z",
+      "bytes": 9382,
+      "mtime": "2026-07-30T02:15:14.034Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -86493,8 +86785,8 @@
       "path": "services/characterProfile.js",
       "synopsis": "Exports editCharacterProfile, addSelfInsertProfile, editStoryBible, editWorldBible — services/characterProfile.js.",
       "bytes": 1952,
-      "mtime": "2026-07-30T22:24:44.164Z",
-      "indexed_at": "2026-07-30T22:24:44.164Z"
+      "mtime": "2026-07-30T22:32:04.401Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
     },
     {
       "path": "services/chatgpt-import.js",
@@ -87182,9 +87474,9 @@
     {
       "path": "services/creative-engine/index.js",
       "synopsis": "Creative Engine — estimate/render/jobs for footage, photo, script, b-roll modes",
-      "bytes": 8334,
-      "mtime": "2026-07-24T18:36:41.704Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 10333,
+      "mtime": "2026-07-30T03:57:08.487Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "docs/products/creative-engine/PRODUCT_HOME.md"
       ]
@@ -87192,9 +87484,29 @@
     {
       "path": "services/creative-engine/media-storage.js",
       "synopsis": "Local + optional R2 media storage for Creative Engine uploads and outputs",
-      "bytes": 4176,
-      "mtime": "2026-07-24T18:36:41.703Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 4262,
+      "mtime": "2026-07-30T03:57:08.487Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
+      "ssot": [
+        "docs/products/creative-engine/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/creative-engine/modes/competitor-niche-analysis.js",
+      "synopsis": "Creative Engine mode — competitor niche analysis for video content",
+      "bytes": 9772,
+      "mtime": "2026-07-30T03:57:08.487Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
+      "ssot": [
+        "docs/products/creative-engine/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/creative-engine/modes/footage-edit-smart.js",
+      "synopsis": "Creative Engine mode — AI-driven footage cleanup (filler/repetition/silence removal + content-aware keep/cut)",
+      "bytes": 4932,
+      "mtime": "2026-07-30T03:57:08.487Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "docs/products/creative-engine/PRODUCT_HOME.md"
       ]
@@ -87202,9 +87514,9 @@
     {
       "path": "services/creative-engine/modes/footage-edit.js",
       "synopsis": "Creative Engine mode — real footage trim + captions + aspect crop",
-      "bytes": 3333,
-      "mtime": "2026-07-10T21:33:45.138Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 3508,
+      "mtime": "2026-07-30T03:57:08.487Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "docs/products/creative-engine/PRODUCT_HOME.md"
       ]
@@ -87257,11 +87569,31 @@
       ]
     },
     {
+      "path": "services/creative-engine/modes/social-publish.js",
+      "synopsis": "Creative Engine mode — queue one-click social publishing for a video output",
+      "bytes": 8424,
+      "mtime": "2026-07-30T03:57:08.487Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
+      "ssot": [
+        "docs/products/creative-engine/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/creative-engine/providers/ffmpeg-local.js",
       "synopsis": "FFmpeg provider — trim, captions, crop, photo polish (array-arg spawn only)",
-      "bytes": 5088,
-      "mtime": "2026-07-10T21:33:45.139Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 7343,
+      "mtime": "2026-07-30T03:57:08.487Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
+      "ssot": [
+        "docs/products/creative-engine/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/creative-engine/transcribe-edit.js",
+      "synopsis": "Smart video edit helpers — Gemini audio transcription + filler/repetition/silence cut planning",
+      "bytes": 10139,
+      "mtime": "2026-07-30T03:57:08.487Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "docs/products/creative-engine/PRODUCT_HOME.md"
       ]
@@ -87888,9 +88220,9 @@
     {
       "path": "services/env-registry-map.js",
       "synopsis": "env-registry-map.js",
-      "bytes": 29135,
-      "mtime": "2026-07-28T17:47:22.557Z",
-      "indexed_at": "2026-07-30T01:21:52.231Z",
+      "bytes": 29372,
+      "mtime": "2026-07-30T02:15:14.034Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "docs/products/command-center/PRODUCT_HOME.md"
       ]
@@ -87941,8 +88273,8 @@
       "path": "services/extended-tables.js",
       "synopsis": "Exports extendTables — services/extended-tables.js.",
       "bytes": 6931,
-      "mtime": "2026-07-30T22:16:23.061Z",
-      "indexed_at": "2026-07-30T22:16:23.061Z"
+      "mtime": "2026-07-30T22:32:04.401Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
     },
     {
       "path": "services/extractRoutes.js",
@@ -88405,8 +88737,8 @@
       "path": "services/franchiseScoring.js",
       "synopsis": "Service module — FranchiseScoring.",
       "bytes": 11919,
-      "mtime": "2026-07-30T22:17:05.411Z",
-      "indexed_at": "2026-07-30T22:17:05.411Z"
+      "mtime": "2026-07-30T22:32:04.401Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
     },
     {
       "path": "services/free-tier-governor.js",
@@ -88604,9 +88936,9 @@
     {
       "path": "services/governed-autonomous-shipping-loop.js",
       "synopsis": "STEP 5g — the governed AUTONOMOUS shipping loop. When the STEP 5a",
-      "bytes": 60335,
-      "mtime": "2026-07-28T17:47:22.560Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 61653,
+      "mtime": "2026-07-30T03:57:08.487Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -88918,9 +89250,9 @@
     {
       "path": "services/intake-blueprint-executor.js",
       "synopsis": "Execute ARC-ready intake skeleton blueprints step-by-step via POST /lifeos/builder/build.",
-      "bytes": 32350,
-      "mtime": "2026-07-05T19:10:02.201Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 32410,
+      "mtime": "2026-07-30T18:09:12.929Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -89248,8 +89580,8 @@
       "path": "services/lifeos-chat-intent-executor.js",
       "synopsis": "services/lifeos-chat-intent-executor.js",
       "bytes": 8625,
-      "mtime": "2026-07-30T20:36:09.578Z",
-      "indexed_at": "2026-07-30T20:36:09.578Z",
+      "mtime": "2026-07-28T17:47:22.561Z",
+      "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -90263,9 +90595,9 @@
     {
       "path": "services/lifere-sales-simulator.js",
       "synopsis": "LifeRE sales coaching simulator — AI plays the client, real-time coaching, objection mastery.",
-      "bytes": 13868,
-      "mtime": "2026-06-30T04:24:21.810Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 15578,
+      "mtime": "2026-07-30T02:15:14.034Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -90283,9 +90615,9 @@
     {
       "path": "services/lifere-skill-coaching.js",
       "synopsis": "LifeRE skill coaching — 24 modules, drills, performance link.",
-      "bytes": 2441,
-      "mtime": "2026-06-29T17:21:08.927Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 4058,
+      "mtime": "2026-07-30T02:15:14.034Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -90444,9 +90776,9 @@
     {
       "path": "services/lumin-context-loader.js",
       "synopsis": "Loads per-user twin + communication profile + recent learning for Lumin prompts.",
-      "bytes": 18494,
-      "mtime": "2026-07-29T22:01:48.972Z",
-      "indexed_at": "2026-07-30T01:21:52.231Z",
+      "bytes": 19765,
+      "mtime": "2026-07-30T02:15:14.034Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -91208,9 +91540,9 @@
     {
       "path": "services/never-stop-product-factory.js",
       "synopsis": "Permanent product expansion lane — work exists even when BP_PRIORITY queue reads complete.",
-      "bytes": 81193,
-      "mtime": "2026-07-24T18:36:41.539Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 81195,
+      "mtime": "2026-07-30T03:57:08.487Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -91770,9 +92102,9 @@
     {
       "path": "services/railway-managed-env-service.js",
       "synopsis": "Exports createRailwayManagedEnvService — services/railway-managed-env-service.js.",
-      "bytes": 24214,
-      "mtime": "2026-07-28T17:47:22.567Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 24548,
+      "mtime": "2026-07-30T17:58:19.132Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -92005,8 +92337,8 @@
       "path": "services/sceneEngine.js",
       "synopsis": "Service module — SceneEngine.",
       "bytes": 1916,
-      "mtime": "2026-07-30T22:24:55.480Z",
-      "indexed_at": "2026-07-30T22:24:55.480Z"
+      "mtime": "2026-07-30T22:32:04.401Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
     },
     {
       "path": "services/scriptEngine.js",
@@ -92734,9 +93066,9 @@
     {
       "path": "services/site-builder.js",
       "synopsis": "Site Builder — Scrape existing site → AI-generates complete click-funnel website",
-      "bytes": 109412,
-      "mtime": "2026-07-28T17:57:12.675Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 112094,
+      "mtime": "2026-07-30T03:57:08.487Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -92751,9 +93083,9 @@
     {
       "path": "services/smos-pack-checkout.js",
       "synopsis": "SocialMediaOS $49 pack Stripe checkout + verify unlock.",
-      "bytes": 4528,
-      "mtime": "2026-07-24T18:36:41.697Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 5358,
+      "mtime": "2026-07-30T22:22:55.237Z",
+      "indexed_at": "2026-07-30T22:31:11.508Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -92768,9 +93100,9 @@
     {
       "path": "services/socialmediaos-coaching-service.js",
       "synopsis": "AI coaching Q&A loop for SocialMediaOS client sessions — 5 questions, story extraction.",
-      "bytes": 3786,
-      "mtime": "2026-06-30T04:09:51.108Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 4247,
+      "mtime": "2026-07-30T02:15:14.034Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md"
       ]
@@ -92778,9 +93110,9 @@
     {
       "path": "services/socialmediaos-content-generator.js",
       "synopsis": "Generates content packs from coaching session answers using AI council.",
-      "bytes": 9647,
-      "mtime": "2026-06-30T04:09:51.110Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 11216,
+      "mtime": "2026-07-30T02:15:14.034Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md"
       ]
@@ -92949,8 +93281,8 @@
       "path": "services/stripePriceService.js",
       "synopsis": "Exports createPriceIds — services/stripePriceService.js.",
       "bytes": 2099,
-      "mtime": "2026-07-30T22:24:30.047Z",
-      "indexed_at": "2026-07-30T22:24:30.047Z"
+      "mtime": "2026-07-30T22:32:04.401Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
     },
     {
       "path": "services/stripePriceTierService.js",
@@ -93580,8 +93912,8 @@
       "path": "services/thumbnailPipeline.js",
       "synopsis": "Exports setupThumbnailSEO — services/thumbnailPipeline.js.",
       "bytes": 7903,
-      "mtime": "2026-07-30T22:17:22.804Z",
-      "indexed_at": "2026-07-30T22:17:22.804Z"
+      "mtime": "2026-07-30T22:32:04.401Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
     },
     {
       "path": "services/timezone-utils.js",
@@ -93696,8 +94028,8 @@
       "path": "services/traditionProfilesService.js",
       "synopsis": "Service module — TraditionProfilesService.",
       "bytes": 13077,
-      "mtime": "2026-07-30T21:49:13.244Z",
-      "indexed_at": "2026-07-30T21:49:13.244Z"
+      "mtime": "2026-07-30T22:32:04.401Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
     },
     {
       "path": "services/travel/itineraryGenerator.js",
@@ -93776,9 +94108,9 @@
     {
       "path": "services/tsos-platform-kernel.js",
       "synopsis": "TSOS Platform Kernel — Phase 0 execution syscall layer.",
-      "bytes": 15091,
-      "mtime": "2026-06-29T17:21:09.008Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 15970,
+      "mtime": "2026-07-30T03:57:08.491Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -93842,8 +94174,15 @@
       "path": "services/vapiAccountCreationService.js",
       "synopsis": "Exports createVapiAccount — services/vapiAccountCreationService.js.",
       "bytes": 414,
-      "mtime": "2026-07-30T22:16:33.633Z",
-      "indexed_at": "2026-07-30T22:16:33.633Z"
+      "mtime": "2026-07-30T22:32:04.401Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
+    },
+    {
+      "path": "services/vapiAccountService.js",
+      "synopsis": "Exports createVapiAccount — services/vapiAccountService.js.",
+      "bytes": 1574,
+      "mtime": "2026-07-30T20:29:45.841Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
     },
     {
       "path": "services/vapiService.js",
@@ -95023,6 +95362,13 @@
       ]
     },
     {
+      "path": "tests/builder-js-sanitize.test.js",
+      "synopsis": "Tests for Q-002 builder JS sanitize (asterisk + shebang).",
+      "bytes": 2077,
+      "mtime": "2026-07-30T03:57:08.491Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
+    },
+    {
       "path": "tests/builder-loop.test.js",
       "synopsis": "tests/builder-loop.test.js — unit tests for the never-idle continuous-run control.",
       "bytes": 1884,
@@ -95527,9 +95873,9 @@
     {
       "path": "tests/deploy-truth-guard.test.js",
       "synopsis": "Tests for deploy-truth guard — unproven must never round up to success.",
-      "bytes": 15149,
-      "mtime": "2026-07-28T20:15:35.435Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 15437,
+      "mtime": "2026-07-30T03:57:08.491Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -95560,6 +95906,17 @@
       "bytes": 4188,
       "mtime": "2026-07-29T22:02:55.054Z",
       "indexed_at": "2026-07-30T01:21:52.231Z"
+    },
+    {
+      "path": "tests/doc-hygiene-gate.test.js",
+      "synopsis": "Tests for Q-003 doc-hygiene detect-and-route gate.",
+      "bytes": 1682,
+      "mtime": "2026-07-30T03:57:08.491Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md",
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "tests/doctrine-enforcement.test.js",
@@ -96364,6 +96721,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "tests/runtime-fingerprint-main-ancestor.test.js",
+      "synopsis": "Tests for Q-001 runtime fingerprint + main-ancestor ship guard.",
+      "bytes": 3281,
+      "mtime": "2026-07-30T03:57:08.491Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
+    },
+    {
       "path": "tests/runtime-modes.test.js",
       "synopsis": "js — tests/runtime-modes.test.js.",
       "bytes": 1095,
@@ -96532,6 +96896,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "tests/spend-outcomes-report.test.js",
+      "synopsis": "Unit tests for S00 spend→outcomes report helpers.",
+      "bytes": 4047,
+      "mtime": "2026-07-30T03:57:08.491Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
     },
     {
       "path": "tests/spine-import-resolution.test.js",

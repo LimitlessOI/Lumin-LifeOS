@@ -4,6 +4,7 @@
 import { Router } from 'express';
 import { createHash } from 'crypto';
 import { getDesignSystemForBrand, buildDesignSystemPrompt } from '../config/design-studio.js';
+import { isSessionPaid } from '../services/smos-pack-checkout.js';
 
 const router = Router();
 
@@ -39,16 +40,6 @@ function isFounderBypass(req) {
       return true;
     }
     return false;
-}
-
-async function sessionIsPaid(pool, sessionId) {
-    const { rows } = await pool.query(
-      `SELECT 1 FROM marketing_pack_checkouts
-        WHERE session_id = $1 AND status = 'paid'
-        LIMIT 1`,
-      [sessionId]
-    );
-    return rows.length > 0;
 }
 
 function councilText(aiResponse) {
@@ -899,7 +890,7 @@ Rules:
         try {
             const { id } = req.params;
             if (!isFounderBypass(req)) {
-                const paid = await sessionIsPaid(pool, id);
+                const paid = await isSessionPaid({ pool, sessionId: id });
                 if (!paid) {
                     return res.status(402).json({
                         ok: false,

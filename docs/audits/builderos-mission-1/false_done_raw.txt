@@ -1,0 +1,437 @@
+
+> ai-counsel-os@1.0.0 factory:false-done:audit
+> node scripts/audit-false-done-steps.mjs
+
+(node:24714) Warning: NodeVersionSupportWarning: The AWS SDK for JavaScript (v3)
+versions published after the first week of January 2027
+will require node >=22. You are running node v20.18.1.
+
+To continue receiving updates to AWS services, bug fixes,
+and security updates please upgrade to node >=22.
+
+More information can be found at: https://a.co/c895JFp
+(Use `node --trace-warnings ...` to show where the warning was created)
+[
+  { id: 1, name: 'Customer A' },
+  { id: 2, name: 'Customer B' },
+  { id: 3, name: 'Customer C' },
+  { id: 4, name: 'Customer D' },
+  { id: 5, name: 'Customer E' }
+]
+
+HARD  ai-council:
+    - [MISSING_FILE] 3 → db/migrations/persist_provider_cooldowns.sql: artifact_proof_failed: assertion_threw
+    - [MISSING_FILE] 9 → routes/habLimitRoutes.js: artifact_proof_failed: missing_exports:registerHABLimitRoutes; assertion_threw
+    - [IMPORT_BROKE] 10 → services/usageLogger.js: artifact_proof_failed: missing_exports:logUsage
+    - [MISSING_FILE] 11 → routes/api/tokenRoutes.js: artifact_proof_failed: missing_exports:registerTokenRoutes; assertion_threw; assertion_threw
+    - [IMPORT_BROKE] ai-council-1 → services/generalTaskOptimizer.js: artifact_proof_failed: missing_exports:optimizeGeneralTask; increase savings to 15%
+    - [MISSING_FILE] ai-council-3 → db/migrations/20231005_add_provider_cooldowns.sql: artifact_proof_failed: assertion_threw
+    - [IMPORT_BROKE] ai-council-4 → services/providerCooldownManager.js: artifact_proof_failed: missing_exports:getCooldowns; getCooldowns; persist cooldowns to DB
+    - [IMPORT_BROKE] ai-council-2 → services/ollamaInvestigation.js: artifact_proof_failed: missing_exports:investigateOllamaPrompts; investigateOllamaPrompts; investigateOllamaPrompts
+
+HARD  ai-receptionist:
+    - [MISSING_FILE] 1 → services/vapiAccountService.js: artifact_proof_failed: missing_exports:createVapiAccount,fetchVapiApiKey; assertion_threw; assertion_threw
+    - [MISSING_FILE] 4 → db/migrations/20231020_create_vapi_integration.sql: artifact_proof_failed: assertion_threw
+    - [MISSING_FILE] 3 → db/migrations/20231021_create_stripe_price_ids.sql: artifact_proof_failed: assertion_threw
+    - [MISSING_FILE] 2 → services/stripePriceService.js: artifact_proof_failed: missing_exports:createPriceIds; assertion_threw; assertion_threw
+    - [MISSING_FILE] 6 → db/migrations/20231026_create_stripe_price_tier.sql: artifact_proof_failed: assertion_threw; assertion_threw
+    - [MISSING_FILE] ai-receptionist-1 → db/migrations/20231028_create_vapi_account.sql: artifact_proof_failed: assertion_threw
+    - [MISSING_FILE] ai-receptionist-2 → services/vapiAccountCreationService.js: artifact_proof_failed: missing_exports:createVapiAccount; assertion_threw
+    - [MISSING_FILE] ai-receptionist-4 → routes/vapiRoutes.js: artifact_proof_failed: missing_exports:registerVapiRoutes; assertion_threw
+
+HARD  boldtrail:
+    - [IMPORT_BROKE] boldtrail-1 → services/leadScoringAlgorithm.js: artifact_proof_failed: missing_exports:calculateLeadScore
+    - [MISSING_FILE] boldtrail-step1 → services/leadScoringSegment.js: artifact_proof_failed: missing_exports:applyScoringRubric; assertion_threw; assertion_threw
+
+HARD  builderos:
+    - [MISSING_FILE] builderos-6 → routes/mission-runtime.js: artifact_proof_failed: missing_exports:registerMissionRuntimeRoutes; assertion_threw; assertion_threw
+    - [IMPORT_BROKE] builderos-7 → services/income-priority.js: artifact_proof_failed: missing_exports:calculateIncomePriorities; calculateIncomePriorities; income priorities
+    - [MISSING_FILE] bo-runtime-fingerprint → routes/builderos-runtime-fingerprint-routes.js: artifact_proof_failed: missing_exports:createBuilderRuntimeFingerprintRoutes; assertion_threw; assertion_threw; assertion_threw
+
+HARD  business-tools:
+    - [MISSING_FILE] 7 → services/entitlementsGatewayService.js: artifact_proof_failed: missing_exports:checkEntitlements; assertion_threw
+    - [MISSING_FILE] 8 → services/approvalsTimeoutService.js: artifact_proof_failed: missing_exports:applyApprovalTimeout; assertion_threw
+    - [MISSING_FILE] business-tools-1 → services/extractSubFeatures.js: artifact_proof_failed: missing_exports:extractSubFeatures; assertion_threw; assertion_threw; assertion_threw
+    - [MISSING_FILE] business-tools-3 → services/realEstateCurriculumStructure.js: artifact_proof_failed: missing_exports:getCurriculumModules,getStudentSchema; assertion_threw; assertion_threw; assertion_threw; assertion_threw
+
+HARD  creator-media-os:
+    - [MISSING_FILE] 4 → services/sceneEngine.js: artifact_proof_failed: missing_exports:assembleScenes; assertion_threw; assertion_threw
+    - [MISSING_FILE] 5 → services/thumbnailPipeline.js: artifact_proof_failed: missing_exports:setupThumbnailSEO; assertion_threw; assertion_threw
+
+HARD  faith-studio:
+    - [MISSING_FILE] step7 → routes/privateWitnessMode.js: artifact_proof_failed: missing_exports:registerPrivateWitnessModeRoutes; assertion_threw
+    - [MISSING_FILE] step9 → routes/familySafety.js: artifact_proof_failed: missing_exports:registerFamilySafetyRoutes; assertion_threw
+    - [MISSING_FILE] 1 → services/traditionProfilesService.js: artifact_proof_failed: missing_exports:getTraditionProfilesDetail; assertion_threw; assertion_threw
+    - [MISSING_FILE] 2 → db/migrations/add_public_sacred_review_path.sql: artifact_proof_failed: assertion_threw
+    - [MISSING_FILE] 3 → services/sacredContentReviewService.js: artifact_proof_failed: missing_exports:sacredContentRevise; assertion_threw; assertion_threw; assertion_threw
+    - [MISSING_FILE] 4 → routes/sacredContentReview.js: artifact_proof_failed: missing_exports:registerSacredContentReviewRoutes; assertion_threw
+    - [MISSING_FILE] 5 → services/interpretiveAdaptation.js: artifact_proof_failed: missing_exports:ensureInterpretiveAdaptation; assertion_threw; assertion_threw; assertion_threw
+    - [MISSING_FILE] 6 → services/advisoryCouncilService.js: artifact_proof_failed: missing_exports:adviseOnSacredAccuracy; assertion_threw; assertion_threw
+    - [MISSING_FILE] 7 → services/reviewModerationFlow.js: artifact_proof_failed: missing_exports:getModerationRules; assertion_threw; assertion_threw
+    - [MISSING_FILE] 8 → routes/privateModeExtension.js: artifact_proof_failed: missing_exports:registerPrivateModeExtensions; assertion_threw
+    - [MISSING_FILE] 9 → services/doctrineProfilesService.js: artifact_proof_failed: missing_exports:getDoctrineDetails; assertion_threw; assertion_threw
+    - [MISSING_FILE] 01 → services/privateWitnessService.js: artifact_proof_failed: missing_exports:handlePrivateWitnessMode; assertion_threw; assertion_threw
+    - [MISSING_FILE] 02 → services/familySafetyService.js: artifact_proof_failed: missing_exports:applyFamilySafetyFilters; assertion_threw; assertion_threw
+    - [MISSING_FILE] 05 → services/traditionProfilesUpdate.js: artifact_proof_failed: missing_exports:updateTraditionProfiles; assertion_threw; assertion_threw
+    - [MISSING_FILE] 06 → db/migrations/add_doctrine_profiles.sql: artifact_proof_failed: assertion_threw
+    - [MISSING_FILE] 08 → services/reviewModerationFlowDetail.js: artifact_proof_failed: missing_exports:moderateSubmissions; assertion_threw; assertion_threw
+    - [MISSING_FILE] 09 → services/advisoryCouncilProcess.js: artifact_proof_failed: missing_exports:councilReview; assertion_threw; assertion_threw
+    - [MISSING_FILE] 10 → services/reviewModerationFlow.js: artifact_proof_failed: missing_exports:processReviewModeration; assertion_threw
+    - [IMPORT_BROKE] faith-studio-step-1 → services/traditionProfileService.js: artifact_proof_failed: missing_exports:enhanceWithSourceLabels; enhanceWithSourceLabels
+    - [IMPORT_BROKE] faith-studio-step-2 → services/reverenceGuardService.js: artifact_proof_failed: missing_exports:applyLabelGuard; applyLabelGuard
+    - [IMPORT_BROKE] faith-studio-step-3 → services/scriptureSceneBuilder.js: artifact_proof_failed: missing_exports:buildSceneWithPrivateMode; buildSceneWithPrivateMode
+
+HARD  ideavault:
+    - [IMPORT_BROKE] step1 → services/headingPass.js: artifact_proof_failed: missing_exports:processHeading; processHeading; extendPortfolioTable
+
+HARD  kids-os:
+    - [MISSING_FILE] 8 → db/migrations/20231011_create_irlen_consultation.sql: artifact_proof_failed: assertion_threw
+    - [MISSING_FILE] step5 → routes/irlenInsights.js: artifact_proof_failed: missing_exports:registerIrlenInsightsRoutes; assertion_threw
+    - [MISSING_FILE] step6 → routes/pricingValidation.js: artifact_proof_failed: missing_exports:registerPricingValidationRoutes; assertion_threw
+    - [MISSING_FILE] step7 → db/migrations/20231012_coppa_compliance.sql: artifact_proof_failed: assertion_threw
+    - [MISSING_FILE] step8 → services/coppaReview.js: artifact_proof_failed: missing_exports:getCoppaReview; assertion_threw; assertion_threw
+    - [MISSING_FILE] step11 → routes/pricingValidation.js: artifact_proof_failed: missing_exports:registerPricingValidationRoutes; assertion_threw
+
+HARD  knowledge-base:
+    - [MISSING_FILE] 3 → db/migrations/001_create_vector_embedding.sql: artifact_proof_failed: assertion_threw
+    - [MISSING_FILE] 4 → services/context-injection.js: artifact_proof_failed: missing_exports:calculateTokenBudget,truncateContext; assertion_threw; assertion_threw
+    - [MISSING_FILE] 8 → public/overlay/security-policy.html: artifact_proof_failed: assertion_threw
+    - [MISSING_FILE] step1 → db/migrations/002_define_token_budget.sql: artifact_proof_failed: assertion_threw; assertion_threw; assertion_threw
+    - [MISSING_FILE] step2 → db/migrations/003_add_search_provider_config.sql: artifact_proof_failed: assertion_threw; assertion_threw
+    - [MISSING_FILE] step3 → routes/security-routes.js: artifact_proof_failed: missing_exports:registerSecurityRoutes; assertion_threw; assertion_threw; assertion_threw
+    - [MISSING_FILE] knowledge-base-3 → db/migrations/004_create_vector_embedding_strategy.sql: artifact_proof_failed: assertion_threw
+
+HARD  lifeos:
+    - [MISSING_FILE] lifeos-chat-v2-01 → public/overlay/lifeos-chat-thoughts.js: artifact_proof_failed: assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw
+    - [MISSING_FILE] lifeos-chat-v2-02 → services/lifeos-chat-intent-router.js: artifact_proof_failed: missing_exports:classifyFounderIntent,buildSMOSWorkflowReply,buildDirectBuildReply,routeByIntent; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw
+    - [MISSING_FILE] lifeos-chat-v2-05 → services/lifeos-note-capture-service.js: artifact_proof_failed: missing_exports:captureNote,getNotes,searchNotes,tagNotes; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw
+    - [IMPORT_BROKE] lifeos-chat-v2-06 → services/lifeos-daily-checkin-service.js: artifact_proof_failed: missing_exports:startCheckin,addCheckinEntry,getTodaySummary,getPromptForUser,buildReplyFromEntries; startCheckin; addCheckinEntry; getTodaySummary; getPromptForUser; buildReplyFromEntries; startCheckin; addCheckinEntry; getTodaySummary; getPromptForUser; buildReplyFromEntries; what have you worked on
+    - [MISSING_FILE] lifeos-chat-v2-07 → services/lifeos-natural-build-router.js: artifact_proof_failed: missing_exports:parseBuildRequest,buildBuildPayload,submitToBuilder,replyFromReceipt; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw
+    - [MISSING_FILE] lifeos-chat-v2-08 → services/lifeos-digital-twin-context.js: artifact_proof_failed: missing_exports:getTwinContextForUser,injectTwinContext,updateTwinFromInteraction; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw
+    - [MISSING_FILE] lifeos-chat-v2-09 → services/lifeos-chat-action-service.js: artifact_proof_failed: missing_exports:executeCommitment,executeNote,executeCheckin,executeBuild,executeAmbient; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw
+    - [MISSING_FILE] step1 → services/lifeos-menstrual-cycle-tracking.js: artifact_proof_failed: missing_exports:predictCyclePhase,updateEnergyPatterns; assertion_threw; assertion_threw; assertion_threw; assertion_threw
+    - [MISSING_FILE] step2 → services/lifeos-sleep-debt.js: artifact_proof_failed: missing_exports:calculateSleepDebt,classifyChronotype; assertion_threw; assertion_threw; assertion_threw; assertion_threw
+    - [IMPORT_BROKE] step3 → services/lifeos-assessment-battery.js: artifact_proof_failed: missing_exports:getAssessments,compareAssessments; getAssessments; compareAssessments; function getAssessments; function compareAssessments
+    - [IMPORT_BROKE] step5 → routes/lifeos-psychometric-battery-routes.js: artifact_proof_failed: missing_exports:registerPsychometricRoutes; registerPsychometricRoutes; /psychometric-battery
+    - [MISSING_FILE] step6 → services/lifeos-habit-tracker.js: artifact_proof_failed: missing_exports:trackHabit,recoverStreak; assertion_threw; assertion_threw; assertion_threw; assertion_threw
+    - [MISSING_FILE] step7 → db/migrations/20261101_habit_tables.sql: artifact_proof_failed: assertion_threw
+    - [MISSING_FILE] step8 → routes/lifeos-habit-tracker-routes.js: artifact_proof_failed: missing_exports:registerHabitTrackerRoutes; assertion_threw; assertion_threw
+    - [MISSING_FILE] step12 → services/lifeos-trusted-contact.js: artifact_proof_failed: missing_exports:manageTrustedContacts,scheduleLegacyDeliveries; assertion_threw; assertion_threw; assertion_threw; assertion_threw
+    - [IMPORT_BROKE] lifeos-1 → routes/lifeos-builderos-command-control-routes.js: artifact_proof_failed: missing_exports:executeChatIntent; executeChatIntent
+    - [IMPORT_BROKE] lifeos-3 → services/lifeos-chat-intent-executor.js: artifact_proof_failed: assertion_threw
+    - [IMPORT_BROKE] lifeos-10 → services/lifeos-finance.js: artifact_proof_failed: missing_exports:calculateNetWorth; calculateNetWorth
+    - [IMPORT_BROKE] lifeos-step1 → services/lifeos-chat-intent-executor.js: artifact_proof_failed: assertion_threw
+
+HARD  lifere:
+    - [MISSING_FILE] step4 → services/optionalBoldTrailContactCleanupService.js: artifact_proof_failed: missing_exports:optionalCleanup; assertion_threw
+
+HARD  limitlessos:
+    - [MISSING_FILE] step2 → public/overlay/audit-intake-flow.html: artifact_proof_failed: assertion_threw; assertion_threw
+    - [MISSING_FILE] step8 → public/overlay/sticker-marketing.html: artifact_proof_failed: assertion_threw; assertion_threw
+    - [IMPORT_BROKE] s1 → routes/limitlessos-ui-routes.js: artifact_proof_failed: missing_exports:registerLimitlessOSIdRoutes; registerLimitlessOSIdRoutes; let canonicalProductId = 'LimitlessOS';
+    - [IMPORT_BROKE] 11 → routes/bundle_social_automation_routes.js: artifact_proof_failed: missing_exports:registerBundleRoutes; registerBundleRoutes
+    - [MISSING_FILE] step10 → services/dialogue-bundle-skus.js: artifact_proof_failed: missing_exports:getBundleSKUs; assertion_threw
+
+HARD  memory-intelligence:
+    - [MISSING_FILE] 1 → db/migrations/202604261.sql: artifact_proof_failed: assertion_threw
+    - [MISSING_FILE] 2 → db/migrations/202605141.sql: artifact_proof_failed: assertion_threw
+    - [MISSING_FILE] 3 → scripts/memory-seed-epistemic.mjs: artifact_proof_failed: missing_exports:seedEpistemicFacts; assertion_threw; assertion_threw
+    - [MISSING_FILE] 4 → scripts/memory-seed-lessons.mjs: artifact_proof_failed: missing_exports:seedLessonsLearned; assertion_threw; assertion_threw
+    - [MISSING_FILE] 5 → scripts/memory-ci-evidence.mjs: artifact_proof_failed: missing_exports:recordCiEvidence; assertion_threw; assertion_threw
+    - [MISSING_FILE] memory-intelligence-2 → scripts/memory-seed-epistemic.mjs: artifact_proof_failed: missing_exports:seedEpistemicFacts; assertion_threw
+    - [MISSING_FILE] memory-intelligence-3 → scripts/memory-seed-lessons.mjs: artifact_proof_failed: missing_exports:seedLessonsLearned; assertion_threw
+    - [MISSING_FILE] memory-intelligence-4 → scripts/memory-ci-evidence.mjs: artifact_proof_failed: missing_exports:createFactEvidence; assertion_threw
+
+HARD  music-talent-studio:
+    - [MISSING_FILE] step2 → services/audioAnalysis.js: artifact_proof_failed: missing_exports:performAudioAnalysis; assertion_threw
+    - [MISSING_FILE] step3 → db/migrations/001_create_music_teachers_table.sql: artifact_proof_failed: assertion_threw
+    - [MISSING_FILE] step4 → services/musicTeachers.js: artifact_proof_failed: missing_exports:addMusicTeacher,getMusicTeachers; assertion_threw; assertion_threw
+    - [MISSING_FILE] step5 → routes/musicTeachersRoutes.js: artifact_proof_failed: missing_exports:registerMusicTeachersRoutes; assertion_threw
+    - [MISSING_FILE] step6 → db/migrations/002_create_students_table.sql: artifact_proof_failed: assertion_threw
+    - [MISSING_FILE] step7 → services/students.js: artifact_proof_failed: missing_exports:addStudent,getStudents; assertion_threw; assertion_threw
+    - [MISSING_FILE] step8 → routes/studentsRoutes.js: artifact_proof_failed: missing_exports:registerStudentsRoutes; assertion_threw
+    - [MISSING_FILE] step9 → services/musicIndustryConsult.js: artifact_proof_failed: missing_exports:consultMusicIndustry; assertion_threw
+    - [IMPORT_BROKE] 3 → services/musicTeachersInterview.js: artifact_proof_failed: missing_exports:getTeacherInsights; getTeacherInsights; INTERVIEW_TEACHERS
+    - [MISSING_FILE] 4 → services/studentsInterview.js: artifact_proof_failed: missing_exports:getStudentFeedback; assertion_threw; assertion_threw
+    - [MISSING_FILE] 1 → services/apiSpecification.js: artifact_proof_failed: missing_exports:validateApiSpecification; assertion_threw; assertion_threw; assertion_threw
+    - [IMPORT_BROKE] 6 → services/pricingValidationVerification.js: artifact_proof_failed: missing_exports:confirmPricingValidation; confirmPricingValidation; Pricing Validation
+    - [MISSING_FILE] 7 → services/studentsInterview.js: artifact_proof_failed: missing_exports:addStudentInterview,getStudentInterview; assertion_threw; assertion_threw; assertion_threw
+    - [MISSING_FILE] 8 → routes/studentsInterviewRoutes.js: artifact_proof_failed: missing_exports:registerStudentsInterviewRoutes; assertion_threw
+    - [MISSING_FILE] 9 → db/migrations/005_create_music_industry_consults_table.sql: artifact_proof_failed: assertion_threw
+
+HARD  oil-security-divisions:
+    - [MISSING_FILE] step1 → db/migrations/2023-10-01-security-receipt-spine.sql: artifact_proof_failed: assertion_threw; assertion_threw; assertion_threw; assertion_threw
+    - [MISSING_FILE] step2 → services/securityReceiptService.js: artifact_proof_failed: missing_exports:createReceipt,getReceipt; assertion_threw; assertion_threw
+    - [MISSING_FILE] step3 → services/secretScannerService.js: artifact_proof_failed: missing_exports:scanSecrets; assertion_threw
+    - [MISSING_FILE] step4 → services/envDiffService.js: artifact_proof_failed: missing_exports:generateEnvDiffReceipt; assertion_threw
+    - [MISSING_FILE] step5 → db/migrations/2023-10-02-env-registry-metadata.sql: artifact_proof_failed: assertion_threw; assertion_threw; assertion_threw; assertion_threw
+    - [MISSING_FILE] step8 → routes/registerSecurityRoutes.js: artifact_proof_failed: missing_exports:registerSecurityRoutes; assertion_threw
+    - [MISSING_FILE] step9 → public/overlay/documentation.html: artifact_proof_failed: assertion_threw
+    - [MISSING_FILE] step10 → db/migrations/2023-10-15-env-registry-metadata-update.sql: artifact_proof_failed: assertion_threw; assertion_threw; assertion_threw
+    - [MISSING_FILE] 1 → scripts/preCommitScannerService.js: artifact_proof_failed: missing_exports:scanSecrets; assertion_threw
+    - [IMPORT_BROKE] 3 → services/honeypotProbeService.js: artifact_proof_failed: missing_exports:createProbeRoute; createProbeRoute
+    - [IMPORT_BROKE] 4 → services/securityAuditService.js: artifact_proof_failed: missing_exports:performSecurityAudit; performSecurityAudit
+    - [IMPORT_BROKE] 6 → scripts/securityPreflightChecks.mjs: artifact_proof_failed: missing_exports:runPreflightChecks; runPreflightChecks
+    - [MISSING_FILE] docs-security-alpha-scope → docs/projects/oil/security/AUDIT_QUEUE.json: artifact_proof_failed: assertion_threw; assertion_threw
+    - [MISSING_FILE] build-sec-f04 → services/envRegistryService.js: artifact_proof_failed: missing_exports:handleRotationMetadata; assertion_threw; assertion_threw
+    - [MISSING_FILE] build-sec-f08 → services/securityPreflightService.js: artifact_proof_failed: missing_exports:performPreflightSecurityChecks; assertion_threw; assertion_threw
+    - [MISSING_FILE] sec-f01 → services/securityReceiptService.js: artifact_proof_failed: missing_exports:securityReceiptSpine; assertion_threw
+    - [MISSING_FILE] sec-f02 → services/secretScannerService.js: artifact_proof_failed: missing_exports:scanSecretsPreCommit,scanSecretsPreflight; assertion_threw; assertion_threw
+    - [MISSING_FILE] sec-f03 → services/envDiffService.js: artifact_proof_failed: missing_exports:generateEnvDiffReceipt; assertion_threw
+    - [MISSING_FILE] sec-f04 → db/migrations/2023-10-02-env-registry-metadata.sql: artifact_proof_failed: assertion_threw
+
+HARD  personal-finance-os:
+    - [MISSING_FILE] 1 → db/migrations/AMENDMENT_21.sql: artifact_proof_failed: assertion_threw
+    - [IMPORT_BROKE] step3 → services/performanceDisclosureApproval.js: artifact_proof_failed: missing_exports:approvePerformanceDisclosure
+    - [MISSING_FILE] personal-finance-os-4 → services/mvpSourceDecision.js: artifact_proof_failed: missing_exports:selectMVPSource; assertion_threw; assertion_threw; assertion_threw; assertion_threw
+
+HARD  productized-sprint:
+    - [IMPORT_BROKE] 05 → routes/sprintQueuePanel.js: artifact_proof_failed: missing_exports:registerSprintQueuePanel
+    - [MISSING_FILE] 1 → routes/salesPageRoutes.js: artifact_proof_failed: missing_exports:registerSalesPageRoutes; assertion_threw
+    - [MISSING_FILE] 3 → templates/deliveryEmailTemplate.js: artifact_proof_failed: missing_exports:getDeliveryEmailTemplate; assertion_threw; assertion_threw
+    - [MISSING_FILE] 4 → services/sprintQueueService.js: artifact_proof_failed: missing_exports:addSprintToQueue,removeSprintFromQueue; assertion_threw; assertion_threw; assertion_threw
+    - [MISSING_FILE] 5 → routes/sprintQueueRoutes.js: artifact_proof_failed: missing_exports:registerSprintQueueRoutes; assertion_threw
+    - [MISSING_FILE] create-intake-form → routes/intakeFormRoute.js: artifact_proof_failed: missing_exports:registerIntakeFormRoutes; assertion_threw
+    - [MISSING_FILE] create-stripe-links → routes/stripePaymentRoute.js: artifact_proof_failed: missing_exports:registerStripePaymentRoutes; assertion_threw
+    - [MISSING_FILE] create-delivery-email-template → routes/deliveryEmailRoute.js: artifact_proof_failed: missing_exports:registerDeliveryEmailRoutes; assertion_threw
+    - [MISSING_FILE] create-ai-pre-analysis-prompt → routes/aiPreAnalysisRoute.js: artifact_proof_failed: missing_exports:registerAIPreAnalysisRoutes; assertion_threw
+    - [IMPORT_BROKE] create-sprint-queue-panel → routes/sprintQueuePanelRoute.js: artifact_proof_failed: missing_exports:registerSprintQueuePanelRoutes
+    - [MISSING_FILE] create-sales-page → routes/salesPageRoute.js: artifact_proof_failed: missing_exports:registerSalesPageRoutes; assertion_threw
+    - [MISSING_FILE] update-linkedin-profile → routes/linkedinProfileRoute.js: artifact_proof_failed: missing_exports:registerLinkedinProfileRoutes; assertion_threw
+    - [MISSING_FILE] identify-first-5-customers → routes/identifyCustomersRoute.js: artifact_proof_failed: missing_exports:registerIdentifyCustomersRoutes; assertion_threw
+    - [IMPORT_BROKE] step5 → routes/sprintQueuePanelRoute.js: artifact_proof_failed: missing_exports:registerSprintQueuePanelRoutes; app.get('/sprint/queue/panel'
+    - [IMPORT_BROKE] step8 → scripts/identifyTargetCustomers.mjs: artifact_proof_failed: missing_exports:getInitialTargetCustomers; getInitialTargetCustomers; export const getInitialTargetCustomers
+
+HARD  site-builder:
+    - [MISSING_FILE] 04 → db/migrations/20241030_add_interactive_element_labels_table.sql: artifact_proof_failed: assertion_threw
+
+HARD  story-studio:
+    - [MISSING_FILE] 2 → services/characterProfile.js: artifact_proof_failed: missing_exports:editCharacterProfile,addSelfInsertProfile; assertion_threw; assertion_threw; assertion_threw
+    - [MISSING_FILE] 6 → services/franchiseScoring.js: artifact_proof_failed: missing_exports:calculateFranchiseScore,getCommunityFeedback; assertion_threw; assertion_threw; assertion_threw
+
+HARD  teacher-os:
+    - [MISSING_FILE] 1 → services/userInterviews.js: artifact_proof_failed: missing_exports:summarizeInterviews; assertion_threw
+    - [MISSING_FILE] 2 → services/competitiveAnalysis.js: artifact_proof_failed: missing_exports:analyzeCompetitors; assertion_threw
+    - [MISSING_FILE] 4 → services/ferpaTemplate.js: artifact_proof_failed: missing_exports:draftFERPATemplate; assertion_threw
+    - [MISSING_FILE] teacher-os-1 → services/uxFlow.js: artifact_proof_failed: missing_exports:generateUXFlow; assertion_threw
+    - [MISSING_FILE] teacher-os-2 → services/userInterviewEnhancement.js: artifact_proof_failed: missing_exports:addInterview; assertion_threw
+    - [MISSING_FILE] teacher-os-3 → services/ferpaTemplateEnhancement.js: artifact_proof_failed: missing_exports:enhanceFERPATemplate; assertion_threw
+
+HARD  token-accounting-os:
+    - [MISSING_FILE] step5 → db/migrations/20231013_create_free_tier_upsert.sql: artifact_proof_failed: assertion_threw; assertion_threw
+    - [MISSING_FILE] step6 → routes/ciGuardBypass.js: artifact_proof_failed: missing_exports:registerCIGuardBypassRoutes; assertion_threw
+
+HARD  universal-overlay:
+    - [IMPORT_BROKE] 1 → services/struggleDetection.js: artifact_proof_failed: missing_exports:detectStruggles; detectStruggles
+    - [IMPORT_BROKE] 2 → services/formFieldInference.js: artifact_proof_failed: missing_exports:inferFormSchema
+    - [MISSING_FILE] 3 → db/migrations/addInsuranceProfilesTable.sql: artifact_proof_failed: assertion_threw
+    - [MISSING_FILE] 5 → public/overlay/moduleRouter.js: artifact_proof_failed: missing_exports:routeUIContext; assertion_threw
+    - [MISSING_FILE] 6 → routes/voiceDictation.js: artifact_proof_failed: missing_exports:registerVoiceDictationRoutes; assertion_threw
+    - [IMPORT_BROKE] 7 → public/overlay/adaptiveLayout.js: artifact_proof_failed: missing_exports:adaptLayoutPreferences; adaptLayoutPreferences
+    - [MISSING_FILE] 8 → db/migrations/addAdaptiveLayoutColumn.sql: artifact_proof_failed: assertion_threw
+    - [MISSING_FILE] 10 → routes/pageSummarization.js: artifact_proof_failed: missing_exports:registerPageSummarizationRoutes; assertion_threw
+    - [MISSING_FILE] 11 → public/overlay/uiExtensions.js: artifact_proof_failed: assertion_threw; assertion_threw; assertion_threw; assertion_threw
+    - [IMPORT_BROKE] universal-overlay-1 → services/proactiveToastSystem.js: artifact_proof_failed: missing_exports:registerProactiveToast; registerProactiveToast
+
+HARD  video-pipeline:
+    - [MISSING_FILE] step3 → db/migrations/add_video_jobs_table.sql: artifact_proof_failed: assertion_threw
+
+HARD  wellness-studio:
+    - [MISSING_FILE] step1 → db/migrations/20260715_lifeos_core_phase_1.sql: artifact_proof_failed: assertion_threw; assertion_threw
+    - [MISSING_FILE] step2 → db/migrations/20260716_lifeos_core_phase_2.sql: artifact_proof_failed: assertion_threw; assertion_threw
+    - [MISSING_FILE] step3 → db/migrations/20260717_lifeos_core_phase_3.sql: artifact_proof_failed: assertion_threw; assertion_threw
+    - [MISSING_FILE] step4 → db/migrations/20260718_lifeos_core_phase_4.sql: artifact_proof_failed: assertion_threw; assertion_threw
+    - [MISSING_FILE] step5 → db/migrations/20260719_lifeos_core_phase_5.sql: artifact_proof_failed: assertion_threw; assertion_threw
+    - [MISSING_FILE] step6 → db/migrations/20260720_lifeos_core_phase_6.sql: artifact_proof_failed: assertion_threw; assertion_threw
+    - [MISSING_FILE] step7 → db/migrations/20260721_lifeos_core_phase_7.sql: artifact_proof_failed: assertion_threw; assertion_threw
+    - [MISSING_FILE] step8 → db/migrations/20260722_lifeos_core_phase_8.sql: artifact_proof_failed: assertion_threw; assertion_threw
+    - [MISSING_FILE] step9 → services/extended-tables.js: artifact_proof_failed: missing_exports:extendJoyCheckins,extendIntegrityScoreLog,extendWearableData,extendEmotionalPatterns; assertion_threw; assertion_threw; assertion_threw; assertion_threw
+    - [MISSING_FILE] wellness-studio-1 → services/extended-tables.js: artifact_proof_failed: missing_exports:extendTables; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw
+    - [MISSING_FILE] wellness-studio-2 → db/migrations/20260723_lifeos_core_complete.sql: artifact_proof_failed: assertion_threw; assertion_threw; assertion_threw; assertion_threw
+    - [MISSING_FILE] wellness-studio-step6 → db/migrations/20260720_lifeos_core_phase_6.sql: artifact_proof_failed: assertion_threw
+    - [MISSING_FILE] wellness-studio-step7 → db/migrations/20260721_lifeos_core_phase_7.sql: artifact_proof_failed: assertion_threw
+    - [MISSING_FILE] wellness-studio-step8 → db/migrations/20260722_lifeos_core_phase_8.sql: artifact_proof_failed: assertion_threw
+
+HARD  white-label:
+    - [MISSING_FILE] 3 → routes/partner-onboarding.js: artifact_proof_failed: missing_exports:registerPartnerOnboardingRoutes; assertion_threw
+    - [IMPORT_BROKE] 5 → services/stripe-billing.js: artifact_proof_failed: missing_exports:processPartnerBilling; processPartnerBilling
+    - [MISSING_FILE] 6 → config/railway-config.json: artifact_proof_failed: assertion_threw
+    - [MISSING_FILE] step1 → routes/config-endpoints.js: artifact_proof_failed: missing_exports:registerConfigEndpoints; assertion_threw
+    - [MISSING_FILE] step3 → routes/partner-config-creation.js: artifact_proof_failed: missing_exports:registerPartnerConfigRoutes; assertion_threw
+    - [IMPORT_BROKE] step4 → services/partner-key-scheme.js: artifact_proof_failed: missing_exports:generatePartnerKeys,generatePlatformKeys; generatePartnerKeys; generatePlatformKeys
+    - [IMPORT_BROKE] step5 → services/stripe-billing-separation.js: artifact_proof_failed: missing_exports:setupPartnerBillingFlow,setupClientBillingFlow; setupPartnerBillingFlow; setupClientBillingFlow
+    - [MISSING_FILE] white-label-3 → routes/partner-config-creation.js: artifact_proof_failed: missing_exports:registerPartnerConfigRoutes; assertion_threw
+
+HARD  word-keeper:
+    - [MISSING_FILE] 1 → db/migrations/002_add_transcript_purge_cron.sql: artifact_proof_failed: assertion_threw
+    - [MISSING_FILE] 3 → services/transcriptPurgeService.js: artifact_proof_failed: missing_exports:purgeOldTranscripts; assertion_threw
+    - [MISSING_FILE] 4 → routes/transcriptPurgeRoutes.js: artifact_proof_failed: missing_exports:registerTranscriptPurgeRoutes; assertion_threw
+    - [MISSING_FILE] 2 → db/migrations/003_confirm_transcript_purge.sql: artifact_proof_failed: assertion_threw
+    - [MISSING_FILE] word-keeper-step1 → routes/googleCalendarRoutes.js: artifact_proof_failed: missing_exports:registerGoogleCalendarRoutes; assertion_threw; assertion_threw
+
+SOFT  boldtrail: 3 content-drift (file exists+imports; declared substring/assertion not met)
+    - 1 → services/leadScoring.js: artifact_proof_failed: function getScoringRubric; const scoringRubric
+    - step1 → services/leadScoringAlgorithm.js: artifact_proof_failed: segment description
+    - boldtrail-step2 → routes/leadScoring.js: artifact_proof_failed: app.post('/api/v1/leadscoring/segment'
+
+SOFT  builderos: 7 content-drift (file exists+imports; declared substring/assertion not met)
+    - builderos-3 → services/timezone-utils.js: artifact_proof_failed: Intl.DateTimeFormat
+    - builderos-8 → routes/board.js: artifact_proof_failed: 8 sections populated
+    - builderos-9 → services/approval-system.js: artifact_proof_failed: waiting approval
+    - builderos-10 → routes/approval.js: artifact_proof_failed: commitment approvals
+    - builderos-step2 → services/commitment-seeder.js: artifact_proof_failed: 26, Adam; 27, Adam; 28, Adam; 29, Adam; 30, Sherry; 31, Sherry; 32, Sherry; 33, pending approval
+    - builderos-step3 → services/timezone-utils.js: artifact_proof_failed: CURRENT_DATE; timezone check
+    - builderos-step7 → routes/commitment-routing.js: artifact_proof_failed: app.get; /api/v1/lifeos/commitments
+
+SOFT  business-tools: 11 content-drift (file exists+imports; declared substring/assertion not met)
+    - 3 → services/realEstateCurriculum.js: artifact_proof_failed: curriculum; DB schema
+    - 4 → db/migrations/create_user_trials_table.sql: artifact_proof_failed: trial_start; trial_end
+    - 6 → routes/server.approvals.js: artifact_proof_failed: setTimeout; 48h auto-reject
+    - step1 → services/makeGenerator.js: artifact_proof_failed: "type": "object"
+    - step3 → services/entitlements.js: artifact_proof_failed: project_entitlements; gating strategy
+    - step5 → routes/issueApprovalRoutes.js: artifact_proof_failed: approval_timeout
+    - step6 → routes/entitlementRoutes.js: artifact_proof_failed: checkEntitlements
+    - step8 → routes/curriculumRoutes.js: artifact_proof_failed: real_estate_curriculum
+    - step10 → services/extractRoutes.js: artifact_proof_failed: extraction logic
+    - business-tools-5 → services/entitlementsFeatureGating.js: artifact_proof_failed: project_entitlements; gate features
+    - business-tools-6 → services/implementApprovalTimeout.js: artifact_proof_failed: 48h
+
+SOFT  creator-media-os: 6 content-drift (file exists+imports; declared substring/assertion not met)
+    - 1 → services/channelMemory.js: artifact_proof_failed: Channel memory profile
+    - 2 → routes/likenessConsent.js: artifact_proof_failed: Explicit likeness consent recorded
+    - 3 → services/scriptEngine.js: artifact_proof_failed: Script for long and short form
+    - 6 → services/analyticsMemory.js: artifact_proof_failed: Publish analytics memory loop
+    - 8 → services/consentContract.js: artifact_proof_failed: Consent contract model
+    - 10 → routes/scriptRoutes.js: artifact_proof_failed: app.post
+
+SOFT  faith-studio: 2 content-drift (file exists+imports; declared substring/assertion not met)
+    - 04 → services/theologicalAdvisoryModel.js: artifact_proof_failed: Theological advisory model
+    - faith-studio-4 → services/safeOutputService.js: artifact_proof_failed: safeOutput
+
+SOFT  ideavault: 2 content-drift (file exists+imports; declared substring/assertion not met)
+    - 2 → scripts/runMemoryImport.mjs: artifact_proof_failed: import-dumps-to-twin
+    - ideavault-step1 → services/headingPassStream.js: artifact_proof_failed: Stream I/portfolio table
+
+SOFT  kids-os: 4 content-drift (file exists+imports; declared substring/assertion not met)
+    - step1 → services/apiSpec.js: artifact_proof_failed: /** API specification for kids-os */
+    - step4 → services/irlenConsultation.js: artifact_proof_failed: /** Irlen Syndrome community insights */
+    - kids-os-1 → services/apiSpec.js: artifact_proof_failed: /api/spec
+    - kids-os-4 → services/irlenConsultation.js: artifact_proof_failed: Irlen Syndrome insights
+
+SOFT  lifeos: 18 content-drift (file exists+imports; declared substring/assertion not met)
+    - 12 → routes/lifeos-perfect-day-routes.js: artifact_proof_failed: await planPerfectDay(req.body.user_id
+    - lifeos-chat-v2-03 → public/overlay/lifeos-ambient-listener.js: artifact_proof_failed: SpeechRecognition; webkitSpeechRecognition; lumin-mic-btn; LifeOSAmbientListener
+    - step11 → public/overlay/lifeos-voice-note-journal.html: artifact_proof_failed: <div class='voice-note-journaling'>
+    - lifeos-6 → services/lifeos-commitment-service.js: artifact_proof_failed: query mode
+    - lifeos-7 → public/overlay/lifeos-voice-note-journal.html: artifact_proof_failed: Web Speech API
+    - lifeos-9 → services/lifeos-psychometric-battery.js: artifact_proof_failed: cognitive_distortion_mode
+    - lifeos-step4 → public/overlay/lifeos-app.html: artifact_proof_failed: thought-stream
+    - lifeos-step8 → public/overlay/lifeos-voice-note-journal.html: artifact_proof_failed: Web Speech API
+    - lifeos-step12 → services/lifeos-sleep.js: artifact_proof_failed: bedtime; wake time
+    - lifeos-p1-practice-nav → public/overlay/lifeos-app.html: artifact_proof_failed: lifeos-practice.html; lifeos-failure-museum.html
+    - lifeos-p1-food-nav → public/overlay/lifeos-app.html: artifact_proof_failed: lifeos-food.html; lifeos-practice.html
+    - lifeos-p1-ask-voice-nav → public/overlay/lifeos-app.html: artifact_proof_failed: lifeos-ask-your-life.html; lifeos-voice-note-journal.html
+    - lifeos-p1-deep-talk-nav → public/overlay/lifeos-app.html: artifact_proof_failed: lifeos-deep-talk.html
+    - lifeos-p1-feature-nav-batch → public/overlay/lifeos-app.html: artifact_proof_failed: lifeos-psychometrics.html; lifeos-parenting-scripts.html; lifeos-labs.html
+    - lifeos-p1-year-household-nav → public/overlay/lifeos-app.html: artifact_proof_failed: lifeos-year-in-pixels.html; lifeos-household.html
+    - lifeos-p1-date-parent-nav → public/overlay/lifeos-app.html: artifact_proof_failed: lifeos-date-night.html; lifeos-parent-mode.html
+    - lifeos-p1-twin-directives-nav → public/overlay/lifeos-app.html: artifact_proof_failed: lifeos-twin-directives.html
+    - lifeos-p1-member-feedback-nav → public/overlay/lifeos-app.html: artifact_proof_failed: lifeos-member-feedback.html
+
+SOFT  limitlessos: 12 content-drift (file exists+imports; declared substring/assertion not met)
+    - step1 → public/overlay/formalize-businessos-ui.html: artifact_proof_failed: LimitlessOS
+    - step4 → services/price-book-vendor-comparison.js: artifact_proof_failed: expensive
+    - step5 → routes/price-book-vendor-comparison-routes.js: artifact_proof_failed: Vendor Comparison
+    - step7 → routes/cityos-home-creation-routes.js: artifact_proof_failed: Product Home Creation
+    - s6 → services/vendor-price-book.js: artifact_proof_failed: import
+    - 12 → routes/limitlessos-ui-routes.js: artifact_proof_failed: UI update registration
+    - limitlessos-step2 → routes/audit-intake-flow-routes.js: artifact_proof_failed: intake questions
+    - limitlessos-step4 → services/price-book-vendor-comparison.js: artifact_proof_failed: vendor comparison; explain or exclude
+    - limitlessos-step5 → routes/price-book-vendor-comparison-routes.js: artifact_proof_failed: compareVendors
+    - limitlessos-step6 → services/sticker-marketing-skus.js: artifact_proof_failed: website + automation + social tiers
+    - limitlessos-step7 → routes/bundle_social_automation_routes.js: artifact_proof_failed: createBundleSKUs
+    - limitlessos-5 → services/price-book-vendor-comparison.js: artifact_proof_failed: handleVendorComparison
+
+SOFT  lumin-university: 3 content-drift (file exists+imports; declared substring/assertion not met)
+    - lumin-university-1 → services/competencyStandards.js: artifact_proof_failed: function getCompetencyStandards()
+    - lumin-university-6 → services/employerInterviewProcess.js: artifact_proof_failed: 5 employers; competency credentials
+    - lumin-university-7 → services/pricingValidationProcess.js: artifact_proof_failed: pricing validation
+
+SOFT  memory-intelligence: 2 content-drift (file exists+imports; declared substring/assertion not met)
+    - 6 → .github/workflows/smoke-test.yml: artifact_proof_failed: memory:ci-evidence
+    - memory-intelligence-1 → db/memory-auto-apply.sql: artifact_proof_failed: CREATE VIEW IF NOT EXISTS
+
+SOFT  memory-system: 2 content-drift (file exists+imports; declared substring/assertion not met)
+    - memory-system-8 → routes/final_pr_review.js: artifact_proof_failed: pull request; final review
+    - memory-system-s6 → routes/final_pr_review.js: artifact_proof_failed: final PR review; ready for merge
+
+SOFT  music-talent-studio: 2 content-drift (file exists+imports; declared substring/assertion not met)
+    - 5 → services/musicIndustryConsultation.js: artifact_proof_failed: Music Industry Consultation
+    - 11 → config/auto-registered-product-modules.json: artifact_proof_failed: musicTeachersInterviewRoutes
+
+SOFT  outreach-crm: 1 content-drift (file exists+imports; declared substring/assertion not met)
+    - step3 → config/auto-registered-product-modules.json: artifact_proof_failed: {"path":"routes/boldtrail-routes.js","module":"registerBoldTrailRoutes"}
+
+SOFT  personal-finance-os: 8 content-drift (file exists+imports; declared substring/assertion not met)
+    - step2 → services/ipsReview.js: artifact_proof_failed: @ssot
+    - 8 → services/emotionalIntelligence.js: artifact_proof_failed: joyScoreLog; wearableDataCorrelation
+    - personal-finance-os-2 → services/performanceDisclosureApproval.js: artifact_proof_failed: disclosure language; approval status
+    - personal-finance-os-step1 → routes/ipsReview.js: artifact_proof_failed: attorney review RIA
+    - personal-finance-os-step2 → services/performanceDisclosureApproval.js: artifact_proof_failed: disclosure check; approve performance
+    - personal-finance-os-step6 → services/dreamFunding.js: artifact_proof_failed: activate Dream Funding
+    - personal-finance-os-step7 → routes/commitmentTracker.js: artifact_proof_failed: commitment tracking phase 1
+    - personal-finance-os-step8 → services/emotionalIntelligence.js: artifact_proof_failed: joy score; wearable data correlation
+
+SOFT  productized-sprint: 6 content-drift (file exists+imports; declared substring/assertion not met)
+    - 01 → services/intakeFormService.js: artifact_proof_failed: createIntakeForm
+    - 04 → services/aiPreAnalysisService.js: artifact_proof_failed: runPreAnalysis
+    - 7 → config/auto-registered-product-modules.json: artifact_proof_failed: "salesPageRoutes"; "sprintQueueRoutes"
+    - 8 → scripts/linkedinProfileUpdater.mjs: artifact_proof_failed: addSprintOffersToProfile
+    - step1 → services/intakeFormService.js: artifact_proof_failed: module.exports = { intakeFormHandler }
+    - step4 → services/aiPreAnalysisService.js: artifact_proof_failed: const aiPreAnalysisPrompt =
+
+SOFT  project-governance: 6 content-drift (file exists+imports; declared substring/assertion not met)
+    - 1 → services/decisionDebt.js: artifact_proof_failed: function getDecisionDebt(){; return {}
+    - 2 → routes/projectDrawerDetail.js: artifact_proof_failed: project: {}
+    - 4 → services/competitorAnalysis.js: artifact_proof_failed: function analyzeCompetitors(){; return []
+    - 5 → routes/competitorInfo.js: artifact_proof_failed: competitor: {}
+    - 6 → services/innovationListener.js: artifact_proof_failed: function checkCompetitorInnovation(){; return 'adapt'
+    - 8 → services/riskAssessment.js: artifact_proof_failed: function assessRisk(){; return 'monitor'
+
+SOFT  site-builder: 1 content-drift (file exists+imports; declared substring/assertion not met)
+    - s1 → db/migrations/20241030_create_additional_templates.sql: artifact_proof_failed: CREATE TABLE IF NOT EXISTS
+
+SOFT  story-studio: 2 content-drift (file exists+imports; declared substring/assertion not met)
+    - 1 → services/storyProject.js: artifact_proof_failed: A story project can be created and re-opened with persistent canon data
+    - 3 → services/multiFormatExporter.js: artifact_proof_failed: One project can export at least storybook + comic from the same story bible
+
+SOFT  teacher-os: 1 content-drift (file exists+imports; declared substring/assertion not met)
+    - teacher-os-step5 → routes/competitiveLandscapeRoutes.js: artifact_proof_failed: app.get
+
+SOFT  universal-overlay: 3 content-drift (file exists+imports; declared substring/assertion not met)
+    - universal-overlay-step4 → services/proactiveToastSystem.js: artifact_proof_failed: dismissibleToast
+    - universal-overlay-step6 → services/sessionReplay.js: artifact_proof_failed: opt-in session replay
+    - universal-overlay-step10 → routes/firefoxExtension.js: artifact_proof_failed: firefox MV2
+
+SOFT  wellness-studio: 7 content-drift (file exists+imports; declared substring/assertion not met)
+    - wellness-studio-3 → services/therapist-integration.js: artifact_proof_failed: require('communication-profile'); require('truth-delivery')
+    - wellness-studio-4 → routes/therapist-integration-routes.js: artifact_proof_failed: POST /api/therapist/integration; setupIntegration
+    - wellness-studio-step1 → db/migrations/20260724_lifeos_core_stable.sql: artifact_proof_failed: CREATE TABLE IF NOT EXISTS; CHECK (stable IS TRUE)
+    - wellness-studio-step2 → db/migrations/20260725_extend_wellness_tables.sql: artifact_proof_failed: ALTER TABLE
+    - wellness-studio-step3 → services/wellness-table-extensions.js: artifact_proof_failed: extendTableServices
+    - wellness-studio-step4 → routes/wellness-table-extensions-routes.js: artifact_proof_failed: POST /api/v1/wellness/extensions/joy-checkins; POST /api/v1/wellness/extensions/integrity-score; POST /api/v1/wellness/extensions/wearable-data; POST /api/v1/wellness/extensions/emotional-patterns
+    - wellness-studio-step9 → db/migrations/20260724_lifeos_core_stable.sql: artifact_proof_failed: CREATE TABLE IF NOT EXISTS
+
+SOFT  white-label: 5 content-drift (file exists+imports; declared substring/assertion not met)
+    - step2 → services/response-transformation.js: artifact_proof_failed: stripModelNames; stripCosts
+    - white-label-2 → services/response-transformation.js: artifact_proof_failed: module.exports = {; function transformResponse(req, res, next)
+    - white-label-4 → services/partner-key-generation.js: artifact_proof_failed: module.exports = {
+    - white-label-step3 → services/partner-key-scheme.js: artifact_proof_failed: schema.define('partnerKey'
+    - white-label-1 → routes/white-label-routes.js: artifact_proof_failed: app.get('/api/v1/white-label/config',
+
+SOFT  word-keeper: 1 content-drift (file exists+imports; declared substring/assertion not met)
+    - word-keeper-001 → services/googleCalendarService.js: artifact_proof_failed: connect to Google Calendar API
+
+false-done audit summary: HARD=196 (MISSING_FILE=160 IMPORT_BROKE=36) SOFT=115
+
+FAIL: false-done steps detected. Run with --fix to reset HARD ones to pending.

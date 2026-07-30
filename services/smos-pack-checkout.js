@@ -89,6 +89,33 @@ export async function createSmosPackCheckoutSession({
   };
 }
 
+export async function isSessionPaid({ pool, sessionId } = {}) {
+  if (!pool || !sessionId) return false;
+  try {
+    const { rows } = await pool.query(
+      `SELECT 1 FROM marketing_pack_checkouts
+        WHERE session_id = $1 AND status = 'paid'
+        LIMIT 1`,
+      [sessionId]
+    );
+    return rows.length > 0;
+  } catch (err) {
+    logger.warn('[SMOS-CHECKOUT] isSessionPaid query failed', { error: err.message, sessionId });
+    return false;
+  }
+}
+
+export async function assertSessionPaid({ pool, sessionId, error = 'payment_required' } = {}) {
+  const paid = await isSessionPaid({ pool, sessionId });
+  if (!paid) {
+    const e = new Error(error);
+    e.statusCode = 402;
+    e.detail = { hint: 'Buy the $49 content pack to unlock download.' };
+    throw e;
+  }
+  return true;
+}
+
 export async function verifySmosPackCheckoutSession({ checkoutSessionId, expectedMarketingSessionId } = {}) {
   if (!checkoutSessionId) {
     return { ok: false, error: 'checkout_session_id is required', paid: false };
@@ -138,4 +165,6 @@ export async function verifySmosPackCheckoutSession({ checkoutSessionId, expecte
 export default {
   createSmosPackCheckoutSession,
   verifySmosPackCheckoutSession,
+  isSessionPaid,
+  assertSessionPaid,
 };

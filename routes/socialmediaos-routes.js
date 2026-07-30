@@ -170,22 +170,17 @@ export function createSocialmediaosRoutes({ pool, requireKey, logger }) {
     res.json(socialMediaOS.getContentPackPricing());
   });
 
-  router.post('/content-pack/checkout', requireKey, getOwnerId, async (req, res, next) => {
-    try {
-      const { sessionId, packId } = req.body || {};
-      const result = await socialMediaOS.createContentPackCheckout({
-        ownerId: req.ownerId,
-        baseUrl: baseUrlFromReq(req),
-        sessionId,
-        packId,
-      });
-      res.json(result);
-    } catch (err) {
-      if (err.status === 400) return res.status(400).json({ ok: false, error: err.message });
-      if (err.status === 404) return res.status(404).json({ ok: false, error: err.message });
-      if (err.status === 503) return res.status(503).json({ ok: false, error: err.message });
-      next(err);
-    }
+  // HIST-OWNED: deprecated checkout path. Use /api/v1/marketing/pack/checkout after
+  // starting a session at /marketing/session/new. Kept mounted to return a clear
+  // 410 so any cached/embedded links fail closed instead of silently creating
+  // orphan socialmediaos_content_packs rows.
+  router.post('/content-pack/checkout', (req, res) => {
+    res.status(410).json({
+      ok: false,
+      error: 'This checkout path is deprecated. Start a session at /marketing/session/new and complete checkout from your export page.',
+      next: '/marketing/session/new',
+      migration: '/api/v1/marketing/pack/checkout',
+    });
   });
 
   // Public post-payment return URLs — Stripe redirects here with no JWT/command key.

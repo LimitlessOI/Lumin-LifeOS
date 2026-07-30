@@ -5,6 +5,7 @@
 import busboy from 'busboy';
 import { buildSessionExport } from '../services/marketing-session-export.js';
 import { uploadAudioToR2 } from '../services/marketing-r2-upload.js';
+import { assertSessionPaid } from '../services/smos-pack-checkout.js';
 
 function normalizeDb(deps) {
   return deps?.db || deps?.pool;
@@ -12,6 +13,12 @@ function normalizeDb(deps) {
 
 function jsonError(res, status, error, extra = {}) {
   return res.status(status).json({ error, ...extra });
+}
+
+function isFounderBypass(req) {
+  const role = String(req.lifeosUser?.role || '').toLowerCase();
+  const handle = String(req.lifeosUser?.handle || '').toLowerCase();
+  return role === 'admin' || role === 'founder' || role === 'founder_admin' || handle === 'adam';
 }
 
 function isR2MissingError(err) {
@@ -57,6 +64,9 @@ export async function registerMarketingSessionExportRoutes(app, deps) {
   app.post('/marketing/session/:id/export', requireKey, async (req, res) => {
     try {
       const sessionId = req.params.id;
+      if (!isFounderBypass(req)) {
+        await assertSessionPaid({ pool: db, sessionId });
+      }
       const format = req.body?.format === 'markdown' ? 'markdown' : 'json';
       const result = await buildSessionExport(sessionId, format, db, deps?.callCouncilMember);
       return res.json(result);

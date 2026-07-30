@@ -95,6 +95,22 @@
       "added_real_lines": 26,
       "justification": "the new POST /factory/security-review route in\nroutes/factory-mount-routes.js is genuinely load-bearing (calls a model,\nparses JSON, records outcomes) — same reasoning as the two prior GAP-FILL\ncommits that added the founder-decisions/extract route in this same file\ntonight: not a protected composition-root path, narrow and additive (does\nnot touch any existing route), thoroughly unit-tested before shipping\n(9/9 tests covering the empty-diff skip, no-model fail-closed, a real\nfinding with proposed_solution intact, the SO-002 downgrade-not-drop rule,\nmodel-throws, non-JSON response, and the no-pool safe no-op), and shipped\nunder the same overnight urgency (founder: \"keep at it... dont stop...\ntill we are\") where routing through the full BPB blueprint -> queue ->\nSENTRY cycle for a well-tested, narrow addition costs real time against\nthat urgency without a corresponding safety benefit — this is a brand-new\ncapability with ROUTE (not BLOCK) posture, so a wrong line of code here\nmeans a missing security review, not a false auto-block of real work.\n\nConfirmed live: every security fix landed this session (path traversal in\nfactory-staging/factory-core/builder/run-step.js, the requireLifeOSAdmin\nregression, security-invariants.mjs itself) was deterministic pattern-\nmatching -- zero AI-powered security check existed anywhere in this\ncodebase before this. scripts/ai-security-review.mjs's\nreviewDiffForSecurity is the real model-judgment layer on top of\nsecurity-invariants.mjs's deterministic floor, same relationship as\noil_review's AI layer on top of its rule-based floor. Adversarial prompt\nnames 14 concrete vuln classes, refuses to invent a finding on a clean\ndiff, downgrades (never drops) a finding missing proposed_solution per\nSO-002.\n\nPosture is ROUTE, not BLOCK (Gate Charter / Chair ruling\nc646160f-128a-4b43-9884-af37cd5a868a) -- a brand-new, unproven mechanism\nmust not auto-refuse commits on an unvalidated model's opinion.\n\nRemoved a half-working CLI stub from the first",
       "commit_message_excerpt": "GAP-FILL: real AI-powered security_review layer (7/10 -> 8/10 model roles), also a real step toward independent verification"
+    },
+    {
+      "at": "2026-07-30T22:31:11.867Z",
+      "file": "routes/marketing-session-ui-routes.js",
+      "is_new_file": false,
+      "added_real_lines": 17,
+      "justification": "Route-topology/entitlement fix was discovered during live Mission 2 prompt validation and required immediate repair of the production revenue path; changes are scoped to existing marketingos route/service surfaces and SENTRY scripts (orchestration/glue and verification), not new load-bearing factory modules. BP law: BP_PRIORITY.json receipt timestamps/verdicts aligned to products/receipts.\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
+      "commit_message_excerpt": "GAP-FILL: Mission 2A SMOS checkout route reconciliation and SENTRY base fix"
+    },
+    {
+      "at": "2026-07-30T22:31:11.867Z",
+      "file": "services/smos-pack-checkout.js",
+      "is_new_file": false,
+      "added_real_lines": 27,
+      "justification": "Route-topology/entitlement fix was discovered during live Mission 2 prompt validation and required immediate repair of the production revenue path; changes are scoped to existing marketingos route/service surfaces and SENTRY scripts (orchestration/glue and verification), not new load-bearing factory modules. BP law: BP_PRIORITY.json receipt timestamps/verdicts aligned to products/receipts.\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
+      "commit_message_excerpt": "GAP-FILL: Mission 2A SMOS checkout route reconciliation and SENTRY base fix"
     }
   ]
 }
