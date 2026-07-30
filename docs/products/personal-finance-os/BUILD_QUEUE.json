@@ -21,14 +21,37 @@
       ],
       "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": null,
-      "shipped_at": "2026-07-15T22:07:05.645Z",
+      "shipped_at": "2026-07-30T21:13:36.226Z",
       "commit_sha": "b8c3f55d916d9088fcb6987e6697698bb7377d39",
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "1",
       "mission_id": "PRODUCT-personal-finance-os",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.693Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.693Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/personal-finance-os/twins/steps/1.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T21:13:36.226Z",
+        "shipped_at": "2026-07-30T21:13:36.226Z",
+        "commit_sha": "b8c3f55d916d9088fcb6987e6697698bb7377d39",
+        "content_sha256": "e13b154f021915705aa28c6744dc81b650c37d43cc473b50e969f56751052bf5",
+        "target_file": "db/migrations/AMENDMENT_21.sql",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "db/migrations/AMENDMENT_21.sql",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/personal-finance-os/twins/steps/1.exact",
+          "content_sha256": "e13b154f021915705aa28c6744dc81b650c37d43cc473b50e969f56751052bf5"
+        }
+      }
     },
     {
       "id": "2",
