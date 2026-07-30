@@ -775,7 +775,7 @@
     },
     {
       "id": "11",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/bundle_social_automation_routes.js",
       "task": "Route for bundle management",
       "spec": "Expose API routes to manage bundles of website, social, and automation tiers",
@@ -783,7 +783,7 @@
         "10"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerBundleRoutes"
       ],
@@ -803,13 +803,16 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-15T22:36:29.807Z",
-      "commit_sha": "7294df3d95251aa4fba84c706989ddcf55cc84ca",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "11",
       "mission_id": "PRODUCT-limitlessos",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerBundleRoutes; registerBundleRoutes",
-      "reaudit_reset_at": "2026-07-30T18:55:06.661Z"
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerBundleRoutes; behavior_assertion_failed; behavior_proof",
+      "reaudit_reset_at": "2026-07-30T18:55:06.661Z",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-30T19:29:06.335Z"
     },
     {
       "id": "step9",
