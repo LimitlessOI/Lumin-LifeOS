@@ -1073,11 +1073,34 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": null,
-      "shipped_at": "2026-07-16T04:30:37.573Z",
+      "shipped_at": "2026-07-30T20:58:25.081Z",
       "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "wellness-studio-1",
       "mission_id": "PRODUCT-wellness-studio",
-      "reaudit_reset_at": "2026-07-30T18:55:06.847Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.847Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/wellness-studio/twins/steps/wellness-studio-1.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T20:58:25.081Z",
+        "shipped_at": "2026-07-30T20:58:25.081Z",
+        "commit_sha": null,
+        "content_sha256": "da8b762d3c6f7b419decc0ea1faf10a46162e48f28e7b471df137d79c7288199",
+        "target_file": "services/extended-tables.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/extended-tables.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/wellness-studio/twins/steps/wellness-studio-1.exact",
+          "content_sha256": "da8b762d3c6f7b419decc0ea1faf10a46162e48f28e7b471df137d79c7288199"
+        }
+      }
     },
     {
       "id": "wellness-studio-2",
