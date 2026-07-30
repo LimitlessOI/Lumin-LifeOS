@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T23:16:41.880Z",
+  "generated_at": "2026-07-30T23:17:11.057Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12427,
   "files": [
@@ -88789,8 +88789,8 @@
       "path": "services/franchiseScoring.js",
       "synopsis": "Service module — FranchiseScoring.",
       "bytes": 17537,
-      "mtime": "2026-07-30T22:57:21.478Z",
-      "indexed_at": "2026-07-30T22:57:21.478Z"
+      "mtime": "2026-07-30T23:17:11.057Z",
+      "indexed_at": "2026-07-30T23:17:11.057Z"
     },
     {
       "path": "services/free-tier-governor.js",
