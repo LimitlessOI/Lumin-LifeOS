@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T20:01:12.637Z",
+  "generated_at": "2026-07-30T20:02:13.757Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12348,
+  "file_count": 12349,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -89547,6 +89547,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/lifeos-menstrual-cycle-tracking.js",
+      "synopsis": "Predicts the current menstrual cycle phase based on wearable data.",
+      "bytes": 3067,
+      "mtime": "2026-07-30T20:02:13.757Z",
+      "indexed_at": "2026-07-30T20:02:13.757Z"
     },
     {
       "path": "services/lifeos-mission-pipeline-executor.js",

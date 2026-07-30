@@ -1837,7 +1837,7 @@
     },
     {
       "id": "lifeos-chat-v2-08",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/lifeos-digital-twin-context.js",
       "task": "Build the digital twin context loader for the LifeOS chair",
       "spec": "ESM service. Exports getTwinContextForUser(db, userId) that uses ONLY parameterized pg queries (`await db.query('SELECT ...', [userId])`) against existing twin tables (users, twin_simulator, flourishing_preferences, ui_directives, lifeos_notes) and returns a compact summary object { identity, recentNotes, openCommitments, emotionalState, uiDirectives, energyLevel }. Exports injectTwinContext(prompt, userId) that appends the twin summary to the prompt string. Exports updateTwinFromInteraction(db, userId, message, reply) that writes a short learned fact to the twin store with a parameterized pg query. Accept `db` as the FIRST argument on every exported function that touches the database. Do NOT import helper files (e.g. './database.js', './twin-store.js') because they do not exist. No knex/objection ORM. No external API calls. No top-level side effects. No imports other than node built-ins.",
@@ -1877,8 +1877,8 @@
       "founder_gated": false,
       "attempts": 0,
       "last_attempt_at": null,
-      "last_error": null,
-      "commit_sha": "2a76898b2162ee75f3b25983e40f2943370c4598",
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:getTwinContextForUser,injectTwinContext,updateTwinFromInteraction; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw",
+      "commit_sha": "5ca04d795b9bfbac20303d4f8ef60f638c0f0373",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -1895,7 +1895,7 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": null,
-      "shipped_at": "2026-07-30T20:01:09.599Z",
+      "shipped_at": "2026-07-16T01:14:08.805Z",
       "expected_exports": [
         "getTwinContextForUser",
         "injectTwinContext",
@@ -1916,30 +1916,7 @@
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-chat-v2-08",
       "mission_id": "PRODUCT-lifeos",
-      "reaudit_reset_at": "2026-07-30T18:55:06.601Z",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/lifeos/twins/steps/lifeos-chat-v2-08.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-30T20:01:09.599Z",
-        "shipped_at": "2026-07-30T20:01:09.599Z",
-        "commit_sha": "5ca04d795b9bfbac20303d4f8ef60f638c0f0373",
-        "content_sha256": "95f38a41a8956da0fd5880eacd785f2dd51eb57ea4dc69724009bd2dded5af00",
-        "target_file": "services/lifeos-digital-twin-context.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/lifeos-digital-twin-context.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/lifeos/twins/steps/lifeos-chat-v2-08.exact",
-          "content_sha256": "95f38a41a8956da0fd5880eacd785f2dd51eb57ea4dc69724009bd2dded5af00"
-        }
-      }
+      "reaudit_reset_at": "2026-07-30T18:55:06.601Z"
     },
     {
       "id": "lifeos-chat-v2-09",
@@ -2066,14 +2043,37 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-15T23:45:35.031Z",
+      "shipped_at": "2026-07-30T20:02:10.943Z",
       "commit_sha": "4c7e2ab17d6981e9338f355662fdf506de8c1545",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step1",
       "mission_id": "PRODUCT-lifeos",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:predictCyclePhase,updateEnergyPatterns; assertion_threw; assertion_threw; assertion_threw; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.601Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.601Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/lifeos/twins/steps/step1.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T20:02:10.943Z",
+        "shipped_at": "2026-07-30T20:02:10.943Z",
+        "commit_sha": "4c7e2ab17d6981e9338f355662fdf506de8c1545",
+        "content_sha256": "1e7d0523b39309ac0f6b9f7f14d204dc4ed4425e542ccb6a8fcfc561f2abb0a8",
+        "target_file": "services/lifeos-menstrual-cycle-tracking.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/lifeos-menstrual-cycle-tracking.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/lifeos/twins/steps/step1.exact",
+          "content_sha256": "1e7d0523b39309ac0f6b9f7f14d204dc4ed4425e542ccb6a8fcfc561f2abb0a8"
+        }
+      }
     },
     {
       "id": "step2",
