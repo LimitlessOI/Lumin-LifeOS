@@ -9,7 +9,7 @@
   "steps": [
     {
       "id": "1",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/userInterviews.js",
       "task": "compile teacher feedback",
       "spec": "Compile and summarize the feedback from 5 teachers interviewed.",
@@ -34,23 +34,23 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-15T17:50:44.624Z",
-      "commit_sha": "ecfbc2a12bc641e1082913e4855729e23ed55250",
+      "commit_sha": "9dd2df5369c292810b79780df848d88e3b24682f",
       "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "1",
       "mission_id": "PRODUCT-teacher-os",
       "pre_existing": false,
-      "last_error": null,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:summarizeInterviews; assertion_threw",
       "reaudit_reset_at": "2026-07-30T18:55:06.746Z"
     },
     {
       "id": "2",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/competitiveAnalysis.js",
       "task": "analyze competitors",
       "spec": "Analyze the competitive landscape focusing on Planboard, Teachermade, Nearpod, Google Classroom, and Formative.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "analyzeCompetitors"
       ],
@@ -68,40 +68,14 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-30T23:38:07.457Z",
-      "commit_sha": null,
+      "shipped_at": "2026-07-15T17:57:44.512Z",
+      "commit_sha": "32989e7f23a046569d018e0da5cb8e107756d80d",
       "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "2",
       "mission_id": "PRODUCT-teacher-os",
       "pre_existing": false,
-      "last_error": "ship_commit_not_on_main: compare status ahead",
-      "reaudit_reset_at": "2026-07-30T18:55:06.746Z",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/teacher-os/twins/steps/2.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-30T23:38:07.457Z",
-        "shipped_at": "2026-07-30T23:38:07.457Z",
-        "commit_sha": "32989e7f23a046569d018e0da5cb8e107756d80d",
-        "content_sha256": "100a36337d9e0bec5cf50c209a111140fce6feb8040f998ca0e63910aa6be084",
-        "target_file": "services/competitiveAnalysis.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/competitiveAnalysis.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/teacher-os/twins/steps/2.exact",
-          "content_sha256": "100a36337d9e0bec5cf50c209a111140fce6feb8040f998ca0e63910aa6be084"
-        }
-      },
-      "built_sha": null,
-      "proof": null,
-      "last_attempt_at": "2026-07-30T23:38:14.746Z"
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:analyzeCompetitors; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.746Z"
     },
     {
       "id": "3",
@@ -161,14 +135,37 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-15T19:13:21.801Z",
+      "shipped_at": "2026-07-30T23:53:46.744Z",
       "commit_sha": "cbc449fc76f37f741e9e76e4217dc40243bbf80c",
       "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "4",
       "mission_id": "PRODUCT-teacher-os",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:draftFERPATemplate; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.746Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.746Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/teacher-os/twins/steps/4.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T23:53:46.744Z",
+        "shipped_at": "2026-07-30T23:53:46.744Z",
+        "commit_sha": "cbc449fc76f37f741e9e76e4217dc40243bbf80c",
+        "content_sha256": "cb9a88e4e1da28be108b2b658f76f669d741837347f0a21abcc158fc0a141531",
+        "target_file": "services/ferpaTemplate.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/ferpaTemplate.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/teacher-os/twins/steps/4.exact",
+          "content_sha256": "cb9a88e4e1da28be108b2b658f76f669d741837347f0a21abcc158fc0a141531"
+        }
+      }
     },
     {
       "id": "5",
