@@ -2107,14 +2107,37 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-15T23:47:05.012Z",
+      "shipped_at": "2026-07-30T20:06:20.899Z",
       "commit_sha": "87e69d4f3fe9b080e84e003d31757476f09e5a76",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step2",
       "mission_id": "PRODUCT-lifeos",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:calculateSleepDebt,classifyChronotype; assertion_threw; assertion_threw; assertion_threw; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.601Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.601Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/lifeos/twins/steps/step2.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T20:06:20.899Z",
+        "shipped_at": "2026-07-30T20:06:20.899Z",
+        "commit_sha": "87e69d4f3fe9b080e84e003d31757476f09e5a76",
+        "content_sha256": "6a13300079f99fa4355efc333b59838ec94eb63b43abedad5ce2e0d94606accd",
+        "target_file": "services/lifeos-sleep-debt.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/lifeos-sleep-debt.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/lifeos/twins/steps/step2.exact",
+          "content_sha256": "6a13300079f99fa4355efc333b59838ec94eb63b43abedad5ce2e0d94606accd"
+        }
+      }
     },
     {
       "id": "step3",
