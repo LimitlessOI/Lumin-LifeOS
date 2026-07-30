@@ -284,7 +284,7 @@ export async function fetchAssetSha256(url, { timeoutMs = 25_000 } = {}) {
 /** Q-001: ask production for allowlisted on-disk sha256 of a repo-relative path. */
 export async function fetchRuntimeFingerprint(base, key, relPath, { timeoutMs = 25_000 } = {}) {
   const p = String(relPath || '').replace(/^\.\//, '').replace(/\\/g, '/');
-  const url = `${String(base).replace(/\/$/, '')}/api/v1/builderos/control-plane/runtime-fingerprint?paths=${encodeURIComponent(p)}`;
+  const url = `${String(base).replace(/\/$/, '')}/api/v1/lifeos/builder/runtime-fingerprint?paths=${encodeURIComponent(p)}`;
   try {
     const res = await fetch(url, {
       headers: {

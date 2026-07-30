@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T03:22:51.776Z",
+  "generated_at": "2026-07-30T03:27:48.205Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12350,
   "files": [
@@ -40196,8 +40196,8 @@
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Documentation — PRODUCT HOME.",
       "bytes": 0,
-      "mtime": "2026-07-30T03:22:51.776Z",
-      "indexed_at": "2026-07-30T03:22:51.776Z"
+      "mtime": "2026-07-30T03:27:48.205Z",
+      "indexed_at": "2026-07-30T03:27:48.205Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -40927,8 +40927,8 @@
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Documentation — PRODUCT HOME.",
       "bytes": 0,
-      "mtime": "2026-07-30T03:18:07.719Z",
-      "indexed_at": "2026-07-30T03:18:07.719Z"
+      "mtime": "2026-07-30T03:27:48.205Z",
+      "indexed_at": "2026-07-30T03:27:48.205Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -68520,8 +68520,8 @@
       "path": "routes/lifeos-council-builder-routes.js",
       "synopsis": "HTTP route module — Lifeos Council Builder Routes.",
       "bytes": 0,
-      "mtime": "2026-07-30T03:18:07.719Z",
-      "indexed_at": "2026-07-30T03:18:07.719Z"
+      "mtime": "2026-07-30T03:27:48.205Z",
+      "indexed_at": "2026-07-30T03:27:48.205Z"
     },
     {
       "path": "routes/lifeos-cycle-routes.js",
@@ -71524,15 +71524,15 @@
       "path": "scripts/lib/deploy-truth-guard.mjs",
       "synopsis": "Script — Deploy Truth Guard.",
       "bytes": 0,
-      "mtime": "2026-07-30T03:22:51.776Z",
-      "indexed_at": "2026-07-30T03:22:51.776Z"
+      "mtime": "2026-07-30T03:27:48.205Z",
+      "indexed_at": "2026-07-30T03:27:48.205Z"
     },
     {
       "path": "scripts/lib/deploy-truth-io.mjs",
       "synopsis": "Script — Deploy Truth Io.",
       "bytes": 0,
-      "mtime": "2026-07-30T03:22:51.776Z",
-      "indexed_at": "2026-07-30T03:22:51.776Z"
+      "mtime": "2026-07-30T03:27:48.205Z",
+      "indexed_at": "2026-07-30T03:27:48.205Z"
     },
     {
       "path": "scripts/lib/doc-hygiene-gate.mjs",

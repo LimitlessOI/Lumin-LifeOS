@@ -260,7 +260,7 @@ export function classifyRuntimeProof(relPath, { inImage = true } = {}) {
   if (FINGERPRINT_PREFIX_RE.test(p)) {
     return {
       kind: RUNTIME_PROOF.RUNTIME_FINGERPRINT,
-      url_path: `/api/v1/builderos/control-plane/runtime-fingerprint?paths=${encodeURIComponent(p)}`,
+      url_path: `/api/v1/lifeos/builder/runtime-fingerprint?paths=${encodeURIComponent(p)}`,
       proposed_solution: null,
     };
   }

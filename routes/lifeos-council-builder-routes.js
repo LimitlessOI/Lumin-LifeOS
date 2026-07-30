@@ -56,6 +56,10 @@ import {
   fixAsteriskShorthandParams,
   isJavaScriptCodeStartLine,
 } from '../scripts/lib/builder-js-sanitize.mjs';
+import {
+  buildRuntimeFingerprintReport,
+  parseRuntimeFingerprintPaths,
+} from '../scripts/lib/runtime-fingerprint.mjs';
 import { normalizeBuilderCodegenOutput } from '../services/builderos-codegen-normalize.js';
 import { classifyBuildTarget, classifyPatchIntent } from '../services/builderos-patch-mode-policy.js';
 import { applyBuilderRoutingPolicy } from '../services/builderos-routing-policy.js';
@@ -3754,6 +3758,27 @@ async function fetchGitHubFileContent(filePath, { token, owner, repoName, branch
     }
   }
 
+  function getRuntimeFingerprint(req, res) {
+    try {
+      const paths = parseRuntimeFingerprintPaths(req.query.paths || req.query.path || '');
+      if (!paths.length) {
+        return res.status(400).json({
+          ok: false,
+          error: 'paths query required (comma-separated repo-relative allowlisted paths)',
+        });
+      }
+      const report = buildRuntimeFingerprintReport({
+        repoRoot: REPO_ROOT,
+        paths,
+        deployCommitSha: process.env.RAILWAY_GIT_COMMIT_SHA || null,
+      });
+      res.status(report.ok ? 200 : 400).json(report);
+    } catch (err) {
+      log.error({ err: err.message }, '[BUILDER] /runtime-fingerprint failed');
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  }
+
   return function mount(app) {
     const base = '/api/v1/lifeos/builder';
     app.get(`${base}/ready`, requireKey, getBuilderReady);
@@ -3766,6 +3791,7 @@ async function fetchGitHubFileContent(filePath, { token, owner, repoName, branch
     app.get(`${base}/lcl-stats`, requireKey, getLCLStats);
     app.get(`${base}/history`, requireKey, getBuilderHistory);
     app.get(`${base}/gaps`, requireKey, getBuilderGaps);
+    app.get(`${base}/runtime-fingerprint`, requireKey, getRuntimeFingerprint);
     // §2.11 execution endpoints — the system writes and commits code
     app.post(`${base}/execute`, requireKey, executeOutput);
     app.post(`${base}/execute-batch`, requireKey, executeBatch);
@@ -3775,6 +3801,6 @@ async function fetchGitHubFileContent(filePath, { token, owner, repoName, branch
       requireKey,
       platformKernel?.wrapBuild ? platformKernel.wrapBuild(buildAndCommit) : buildAndCommit
     );
-    log.info('✅ [LIFEOS-BUILDER] Council builder routes mounted at /api/v1/lifeos/builder (incl. /execute + /build + /history + /gaps)');
+    log.info('✅ [LIFEOS-BUILDER] Council builder routes mounted at /api/v1/lifeos/builder (incl. /execute + /build + /history + /gaps + /runtime-fingerprint)');
   };
 }
