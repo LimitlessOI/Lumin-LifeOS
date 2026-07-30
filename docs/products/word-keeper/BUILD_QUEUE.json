@@ -77,7 +77,7 @@
     },
     {
       "id": "1",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/002_add_transcript_purge_cron.sql",
       "task": "Create transcript purge table",
       "spec": "Create a table to track 24h transcript auto-purge operations.",
@@ -89,12 +89,12 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-30T23:20:13.061Z",
-      "commit_sha": "fad790696a0f4183378cea60a5d456615f5fbbc6",
+      "commit_sha": "bc34558a063b16c769774b92c421941c881595ad",
       "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "1",
       "mission_id": "PRODUCT-word-keeper",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
+      "last_error": null,
       "reaudit_reset_at": "2026-07-30T18:55:07.447Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
