@@ -17,7 +17,8 @@
  * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
-import 'dotenv/config';
+import * as dotenv from 'dotenv';
+dotenv.config({ override: true });
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -51,7 +52,9 @@ const base = (
   process.env.PUBLIC_BASE_URL ||
   process.env.LUMIN_SMOKE_BASE_URL ||
   ''
-).replace(/\/$/, '');
+)
+  .trim()
+  .replace(/\/$/, '');
 
 const key =
   process.env.COMMAND_CENTER_KEY ||
