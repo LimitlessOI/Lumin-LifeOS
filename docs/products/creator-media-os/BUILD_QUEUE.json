@@ -197,13 +197,13 @@
     },
     {
       "id": "5",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/thumbnailPipeline.js",
       "task": "manage thumbnail/SEO pipeline",
       "spec": "Pipeline handles thumbnails and SEO repurposing with shared sources.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "setupThumbnailSEO"
       ],
@@ -220,9 +220,9 @@
           "assertion_id": "expected_exports:services/thumbnailPipeline.js"
         }
       ],
-      "last_attempt_at": null,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:setupThumbnailSEO; assertion_threw; assertion_threw",
-      "commit_sha": "5d03b10167b061e0cc86825467a1f58221e2bacd",
+      "last_attempt_at": "2026-07-30T20:53:11.804Z",
+      "last_error": "artifact_missing_after_ship: artifact_proof_failed: Thumbnail/SEO from source assets",
+      "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
