@@ -72,7 +72,7 @@
     },
     {
       "id": "step2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/securityReceiptService.js",
       "task": "implement security receipt service functions",
       "spec": "Service functions to handle security receipt operations",
@@ -80,7 +80,7 @@
         "step1"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "createReceipt",
         "getReceipt"
@@ -98,13 +98,16 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-15T19:17:49.386Z",
-      "commit_sha": "a1ed51455d578ce44b75ae9da63e6a00e6ce13d5",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step2",
       "mission_id": "PRODUCT-oil-security-divisions",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:createReceipt,getReceipt; assertion_threw; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.687Z"
+      "last_error": "codegen_authoring_failed: codegen_empty: openai_builder_mini: HTTP 429: {\n    \"error\": {\n        \"message\": \"You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organiza",
+      "reaudit_reset_at": "2026-07-30T18:55:06.687Z",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-30T23:37:52.179Z"
     },
     {
       "id": "step3",
