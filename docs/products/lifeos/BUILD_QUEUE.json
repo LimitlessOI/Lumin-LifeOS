@@ -2672,7 +2672,7 @@
     },
     {
       "id": "lifeos-1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/lifeos-builderos-command-control-routes.js",
       "task": "Add executeChatIntent helper",
       "spec": "Add an executeChatIntent helper that uses classifyIntent for specific intents and handles them directly, preserving existing logic for other intents.",
@@ -2680,7 +2680,7 @@
         "lifeos-3"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "executeChatIntent"
       ],
@@ -2701,7 +2701,7 @@
         "method": "POST",
         "path": "/jobs"
       },
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-30T21:56:42.455Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:executeChatIntent; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
