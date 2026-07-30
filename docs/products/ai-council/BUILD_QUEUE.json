@@ -648,7 +648,7 @@
     },
     {
       "id": "9",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/habLimitRoutes.js",
       "task": "add HAB limit route",
       "spec": "Add route to ensure HAB limit blocks at 100 calls/day per key.",
@@ -673,12 +673,12 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-30T19:07:43.127Z",
-      "commit_sha": "110194e1a64455f399f6ef619bff6e5d6059837c",
+      "commit_sha": "fbbc96d236bb5b587c63a7523c1326829cd29f7b",
       "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "9",
       "mission_id": "PRODUCT-ai-council",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerHABLimitRoutes; assertion_threw",
+      "last_error": null,
       "reaudit_reset_at": "2026-07-30T18:55:06.242Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
