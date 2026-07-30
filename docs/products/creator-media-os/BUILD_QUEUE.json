@@ -147,13 +147,13 @@
           "assertion_id": "expected_exports:services/sceneEngine.js"
         }
       ],
-      "last_attempt_at": "2026-07-30T21:13:08.950Z",
+      "last_attempt_at": "2026-07-30T21:38:16.246Z",
       "last_error": "artifact_missing_after_ship: artifact_proof_failed: Scene assembly workflow",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-30T21:09:55.429Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-30T21:34:43.106Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
