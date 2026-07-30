@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T19:27:12.782Z",
+  "generated_at": "2026-07-30T19:31:51.976Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12342,
+  "file_count": 12343,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -87461,6 +87461,13 @@
       "ssot": [
         "docs/products/music-talent-studio/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/dialogue-bundle-skus.js",
+      "synopsis": "Service module — Dialogue Bundle Skus.",
+      "bytes": 1440,
+      "mtime": "2026-07-30T19:31:51.976Z",
+      "indexed_at": "2026-07-30T19:31:51.976Z"
     },
     {
       "path": "services/docker-automation/docker-compose.base.yml",
