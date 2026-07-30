@@ -32,6 +32,7 @@
  */
 
 import express from 'express';
+import Stripe from 'stripe';
 import { createLifeOSAuth, hashPassword } from '../services/lifeos-auth.js';
 import { requireLifeOSUser, requireLifeOSAdmin, createRequireLifeOSUserOrKey } from '../middleware/lifeos-auth-middleware.js';
 import { createHouseholdSync } from '../services/household-sync.js';
@@ -82,6 +83,9 @@ export function createLifeOSAuthRoutes({ pool, logger, requireKey }) {
   const auth   = createLifeOSAuth(pool);
   const householdSvc = createHouseholdSync({ pool });
   const requireUserOrKey = createRequireLifeOSUserOrKey(requireKey);
+
+  // Billing routes mounted under /api/v1/lifeos/auth/billing
+  router.use('/billing', createLifeOSBillingRoutes({ pool, logger, requireKey }));
 
   // ── Register ────────────────────────────────────────────────────────────────
   router.post('/register', async (req, res) => {
@@ -890,6 +894,203 @@ export function createLifeOSAuthRoutes({ pool, logger, requireKey }) {
       }
     });
   }
+
+  return router;
+}
+
+const TIER_PRICES = {
+  core: { cents: Number(process.env.LIFEOS_CORE_PRICE_CENTS || '1900'), label: 'LifeOS Core' },
+  premium: { cents: Number(process.env.LIFEOS_PREMIUM_PRICE_CENTS || '4900'), label: 'LifeOS Premium' },
+  family: { cents: Number(process.env.LIFEOS_FAMILY_PRICE_CENTS || '9900'), label: 'LifeOS Family' },
+};
+const BILLING_CURRENCY = (process.env.LIFEOS_BILLING_CURRENCY || 'usd').toLowerCase();
+const BILLING_MODE = (process.env.LIFEOS_BILLING_MODE || 'subscription').toLowerCase();
+const BILLING_INTERVAL = (process.env.LIFEOS_BILLING_INTERVAL || 'month').toLowerCase();
+
+function getStripeClient() {
+  if (!process.env.STRIPE_SECRET_KEY) return null;
+  return new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: '2024-06-20' });
+}
+
+function billingOrigin(req) {
+  const env = (process.env.PUBLIC_BASE_URL || '').trim().replace(/\/$/, '');
+  if (env) return env;
+  const xfProto = (req.get('x-forwarded-proto') || '').split(',')[0].trim();
+  const host = (req.get('x-forwarded-host') || req.get('host') || '').split(',')[0].trim();
+  const proto = xfProto || req.protocol || 'https';
+  if (!host) return 'https://lumin-web-production-e3a9.up.railway.app';
+  return `${proto}://${host}`;
+}
+
+/**
+ * Paid tier checkout for LifeOS / LifeRE.
+ * Mounted at /api/v1/lifeos/billing.
+ */
+export function createLifeOSBillingRoutes({ pool, logger, requireKey }) {
+  const router = express.Router();
+
+  router.get('/pricing', (req, res) => {
+    res.json({
+      ok: true,
+      currency: BILLING_CURRENCY,
+      mode: BILLING_MODE,
+      interval: BILLING_INTERVAL,
+      tiers: Object.fromEntries(
+        Object.entries(TIER_PRICES).map(([k, v]) => [k, { ...v, amount_cents: v.cents }]),
+      ),
+    });
+  });
+
+  router.post('/checkout', requireLifeOSUser, async (req, res) => {
+    try {
+      const stripe = getStripeClient();
+      if (!stripe) {
+        return res.status(503).json({ ok: false, error: 'Stripe not configured (STRIPE_SECRET_KEY missing)' });
+      }
+
+      const tier = String(req.body?.tier || 'core').toLowerCase();
+      if (!TIER_PRICES[tier]) {
+        return res.status(400).json({ ok: false, error: 'invalid_tier', tiers: Object.keys(TIER_PRICES) });
+      }
+
+      const userId = req.lifeosUser?.sub;
+      if (!userId) {
+        return res.status(401).json({ ok: false, error: 'Not authenticated' });
+      }
+
+      const { rows: users } = await pool.query(
+        'SELECT id, email, user_handle, tier FROM lifeos_users WHERE id = $1 LIMIT 1',
+        [userId],
+      );
+      if (!users.length) {
+        return res.status(404).json({ ok: false, error: 'user_not_found' });
+      }
+      const user = users[0];
+
+      const origin = billingOrigin(req);
+      const returnUrl = String(req.body?.returnUrl || `${origin}/overlay/lifeos-billing.html`).trim();
+      const successUrl = `${returnUrl.replace(/\/$/, '')}?paid=1&session_id={CHECKOUT_SESSION_ID}`;
+      const cancelUrl = `${returnUrl.replace(/\/$/, '')}?cancelled=1`;
+
+      const priceDef = { currency: BILLING_CURRENCY, unit_amount: TIER_PRICES[tier].cents };
+      if (BILLING_MODE === 'subscription') {
+        priceDef.recurring = { interval: BILLING_INTERVAL };
+      }
+
+      const session = await stripe.checkout.sessions.create({
+        mode: BILLING_MODE === 'subscription' ? 'subscription' : 'payment',
+        payment_method_types: ['card'],
+        client_reference_id: String(userId),
+        customer_email: user.email || undefined,
+        line_items: [
+          {
+            price_data: {
+              currency: priceDef.currency,
+              unit_amount: priceDef.unit_amount,
+              product_data: { name: TIER_PRICES[tier].label },
+              ...(priceDef.recurring ? { recurring: priceDef.recurring } : {}),
+            },
+            quantity: 1,
+          },
+        ],
+        success_url: successUrl,
+        cancel_url: cancelUrl,
+        metadata: { user_id: String(userId), tier, source: 'lifeos_billing' },
+      });
+
+      await pool.query(
+        `INSERT INTO lifeos_checkout_sessions
+           (user_id, tier, stripe_session_id, status, amount_cents, currency, metadata)
+         VALUES ($1, $2, $3, 'pending', $4, $5, $6::jsonb)`,
+        [userId, tier, session.id, TIER_PRICES[tier].cents, BILLING_CURRENCY, JSON.stringify({ returnUrl, mode: BILLING_MODE, interval: BILLING_INTERVAL })],
+      );
+
+      res.json({
+        ok: true,
+        checkout_url: session.url,
+        session_id: session.id,
+        tier,
+        amount_cents: TIER_PRICES[tier].cents,
+        currency: BILLING_CURRENCY,
+        mode: BILLING_MODE,
+      });
+    } catch (e) {
+      logger?.error?.({ err: e.message }, '[LIFEOS-BILLING] checkout failed');
+      res.status(500).json({ ok: false, error: e.message });
+    }
+  });
+
+  router.get('/verify', async (req, res) => {
+    try {
+      const stripe = getStripeClient();
+      if (!stripe) {
+        return res.status(503).json({ ok: false, error: 'Stripe not configured' });
+      }
+
+      const sessionId = String(req.query?.session_id || req.query?.checkout_session_id || '').trim();
+      if (!sessionId) {
+        return res.status(400).json({ ok: false, error: 'session_id required' });
+      }
+
+      const session = await stripe.checkout.sessions.retrieve(sessionId);
+      const paid = session.payment_status === 'paid' || session.status === 'complete' || session.status === 'active';
+      const tier = session.metadata?.tier;
+      const userId = session.client_reference_id || session.metadata?.user_id;
+
+      if (paid && userId && tier) {
+        await pool.query(
+          `UPDATE lifeos_checkout_sessions
+            SET status = 'paid', paid_at = NOW(), stripe_payment_status = $1, updated_at = NOW()
+          WHERE stripe_session_id = $2`,
+          [session.payment_status, sessionId],
+        );
+        await pool.query(
+          `UPDATE lifeos_users SET tier = $1, updated_at = NOW() WHERE id = $2 AND tier != 'family'`,
+          [tier, userId],
+        );
+      } else if (session.status === 'open' || session.status === 'expired') {
+        await pool.query(
+          `UPDATE lifeos_checkout_sessions
+            SET status = $1, stripe_payment_status = $2, updated_at = NOW()
+          WHERE stripe_session_id = $3`,
+          [session.status === 'expired' ? 'cancelled' : 'pending', session.payment_status, sessionId],
+        );
+      }
+
+      res.json({
+        ok: paid,
+        paid,
+        status: session.status,
+        payment_status: session.payment_status,
+        tier,
+        user_id: userId,
+        session_id: sessionId,
+      });
+    } catch (e) {
+      logger?.error?.({ err: e.message }, '[LIFEOS-BILLING] verify failed');
+      res.status(500).json({ ok: false, error: e.message });
+    }
+  });
+
+  router.post('/operator-mark-paid', requireKey, async (req, res) => {
+    try {
+      const { userId, tier = 'premium' } = req.body || {};
+      if (!userId) {
+        return res.status(400).json({ ok: false, error: 'userId required' });
+      }
+      const { rows } = await pool.query(
+        'UPDATE lifeos_users SET tier = $1, updated_at = NOW() WHERE id = $2 RETURNING id, tier',
+        [tier, userId],
+      );
+      if (!rows.length) {
+        return res.status(404).json({ ok: false, error: 'user_not_found' });
+      }
+      res.json({ ok: true, user: rows[0], note: 'Operator-marked for testing only.' });
+    } catch (e) {
+      logger?.error?.({ err: e.message }, '[LIFEOS-BILLING] operator mark paid failed');
+      res.status(500).json({ ok: false, error: e.message });
+    }
+  });
 
   return router;
 }

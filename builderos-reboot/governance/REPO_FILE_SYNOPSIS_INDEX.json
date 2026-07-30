@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T03:54:07.556Z",
+  "generated_at": "2026-07-30T04:01:56.201Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12354,
+  "file_count": 12356,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -36609,6 +36609,13 @@
       "indexed_at": "2026-07-30T03:31:40.672Z"
     },
     {
+      "path": "db/migrations/20260730_lifeos_billing.sql",
+      "synopsis": "Creative Engine schema expansion — LifeOS paid tier checkout sessions",
+      "bytes": 1000,
+      "mtime": "2026-07-30T04:01:56.201Z",
+      "indexed_at": "2026-07-30T04:01:56.201Z"
+    },
+    {
       "path": "db/migrations/20260730_lifere_learning_profile.sql",
       "synopsis": "Database migration — add metadata JSONB column to lifere_coaching_sessions for learning profile.",
       "bytes": 215,
@@ -38003,9 +38010,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 44925,
-      "mtime": "2026-07-30T03:54:07.556Z",
-      "indexed_at": "2026-07-30T03:54:07.556Z"
+      "bytes": 45735,
+      "mtime": "2026-07-30T04:01:56.201Z",
+      "indexed_at": "2026-07-30T04:01:56.201Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40939,10 +40946,10 @@
     },
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
-      "synopsis": "Documentation — PRODUCT HOME.",
-      "bytes": 0,
-      "mtime": "2026-07-30T03:27:48.205Z",
-      "indexed_at": "2026-07-30T03:27:48.205Z"
+      "synopsis": "Canonical product home — LifeOS",
+      "bytes": 637082,
+      "mtime": "2026-07-30T04:01:56.201Z",
+      "indexed_at": "2026-07-30T04:01:56.201Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -66133,6 +66140,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "public/overlay/lifeos-billing.html",
+      "synopsis": "HTML page: LifeOS — Upgrade",
+      "bytes": 5265,
+      "mtime": "2026-07-30T04:01:56.201Z",
+      "indexed_at": "2026-07-30T04:01:56.201Z"
+    },
+    {
       "path": "public/overlay/lifeos-bootstrap.js",
       "synopsis": "Shared overlay bootstrap — JWT/command key context, headers, and (when embedded)",
       "bytes": 14432,
@@ -68396,9 +68410,9 @@
     {
       "path": "routes/lifeos-auth-routes.js",
       "synopsis": "routes/lifeos-auth-routes.js",
-      "bytes": 38282,
-      "mtime": "2026-07-18T18:46:59.242Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 46013,
+      "mtime": "2026-07-30T04:01:56.201Z",
+      "indexed_at": "2026-07-30T04:01:56.201Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

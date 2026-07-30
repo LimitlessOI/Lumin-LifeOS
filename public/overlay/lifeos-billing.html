@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: LifeOS — Upgrade -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LifeOS — Upgrade</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0b0d10; color: #f5f7fa; margin: 0; padding: 2rem; }
+    .container { max-width: 760px; margin: 0 auto; }
+    h1 { font-weight: 500; margin-bottom: .25rem; }
+    p.sub { color: #9aa3b2; margin-bottom: 2rem; }
+    .tiers { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1rem; }
+    .tier { border: 1px solid #2a2f36; border-radius: 12px; padding: 1.25rem; background: #14171d; }
+    .tier.current { border-color: #4a90e2; }
+    .tier h3 { margin: 0 0 .5rem; font-weight: 500; }
+    .tier .price { font-size: 1.75rem; font-weight: 600; margin: .5rem 0; }
+    .tier .price span { font-size: .9rem; color: #9aa3b2; }
+    .tier button { width: 100%; padding: .65rem; border: 0; border-radius: 8px; background: #4a90e2; color: #fff; font-size: 1rem; cursor: pointer; }
+    .tier button:disabled { background: #3a4a5a; cursor: not-allowed; }
+    .status { margin-top: 1.5rem; padding: 1rem; border-radius: 10px; background: #14171d; border: 1px solid #2a2f36; min-height: 1.5rem; }
+    .status.ok { border-color: #2d9f63; color: #9be8c0; }
+    .status.err { border-color: #d13b3b; color: #f6a0a0; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Upgrade your LifeOS</h1>
+    <p class="sub" id="current-tier">Current tier: checking…</p>
+    <div class="tiers" id="tiers"></div>
+    <div class="status" id="status"></div>
+  </div>
+
+  <script>
+    const API = '/api/v1/lifeos/auth';
+    const statusEl = document.getElementById('status');
+    const tiersEl = document.getElementById('tiers');
+    const currentEl = document.getElementById('current-tier');
+
+    function setStatus(msg, ok) {
+      statusEl.textContent = msg;
+      statusEl.className = 'status ' + (ok ? 'ok' : 'err');
+    }
+
+    function token() {
+      return localStorage.getItem('lifeos_access_token') || '';
+    }
+
+    async function json(path, opts = {}) {
+      opts.headers = opts.headers || {};
+      opts.headers['x-lifeos-token'] = token();
+      const r = await fetch(API + path, opts);
+      return { status: r.status, data: await r.json().catch(() => ({})) };
+    }
+
+    async function load() {
+      const me = await json('/lifeos/auth/me');
+      if (me.status !== 200) {
+        currentEl.textContent = 'Please sign in at /overlay/lifeos-login.html first.';
+        setStatus('Not authenticated.', false);
+        return;
+      }
+      currentEl.textContent = `Current tier: ${me.data.user?.tier || 'free'}`;
+
+      const pricing = await json('/lifeos/billing/pricing');
+      if (pricing.status !== 200) {
+        setStatus('Could not load pricing.', false);
+        return;
+      }
+      const info = pricing.data;
+      const interval = info.mode === 'subscription' ? `/${info.interval}` : ' one-time';
+
+      tiersEl.innerHTML = Object.entries(info.tiers).map(([key, t]) => {
+        const isCurrent = me.data.user?.tier === key;
+        const price = (t.cents / 100).toFixed(2);
+        return `
+          <div class="tier ${isCurrent ? 'current' : ''}">
+            <h3>${t.label}</h3>
+            <div class="price">$${price}<span>${interval}</span></div>
+            <button ${isCurrent ? 'disabled' : ''} data-tier="${key}">
+              ${isCurrent ? 'Current plan' : 'Choose ' + t.label}
+            </button>
+          </div>`;
+      }).join('');
+
+      tiersEl.querySelectorAll('button:not(:disabled)').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const tier = btn.dataset.tier;
+          setStatus('Creating checkout…', false);
+          const checkout = await json('/lifeos/billing/checkout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ tier, returnUrl: window.location.href.split('?')[0] }),
+          });
+          if (checkout.status !== 200 || !checkout.data.checkout_url) {
+            setStatus(checkout.data.error || 'Checkout failed.', false);
+            return;
+          }
+          window.location.href = checkout.data.checkout_url;
+        });
+      });
+
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('paid') === '1') {
+        const sid = params.get('session_id') || '';
+        setStatus('Confirming payment…', false);
+        const verify = await json(`/lifeos/billing/verify?session_id=${encodeURIComponent(sid)}`);
+        if (verify.data.paid) {
+          setStatus(`Payment confirmed. Tier: ${verify.data.tier}. Refresh to see your new plan.`, true);
+          currentEl.textContent = `Current tier: ${verify.data.tier}`;
+        } else {
+          setStatus(`Payment status: ${verify.data.payment_status || 'incomplete'}. Contact support if this persists.`, false);
+        }
+      } else if (params.get('cancelled') === '1') {
+        setStatus('Checkout cancelled — your free account is still active.', false);
+      }
+    }
+
+    load().catch(e => setStatus(e.message, false));
+  </script>
+</body>
+</html>
