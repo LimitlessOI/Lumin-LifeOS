@@ -187,13 +187,13 @@
     },
     {
       "id": "step1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/headingPass.js",
       "task": "append Stream subsection or extend Stream I/portfolio table",
       "spec": "Ensure heading pass processes new exports over 500KB, appending to Stream subsection or extending Stream I/portfolio table.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "processHeading"
       ],
@@ -214,9 +214,9 @@
           "assertion_id": "expected_exports:services/headingPass.js"
         }
       ],
-      "last_attempt_at": null,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:processHeading; processHeading; extendPortfolioTable",
-      "commit_sha": "3e6799234a0f2e593fa3b0fe86cb07ba6de2dd00",
+      "last_attempt_at": "2026-07-30T19:07:55.711Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:processHeading; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
