@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T23:17:28.485Z",
+  "generated_at": "2026-07-30T23:18:27.611Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12427,
   "files": [
@@ -94079,9 +94079,9 @@
     {
       "path": "services/traditionProfilesService.js",
       "synopsis": "Service module — TraditionProfilesService.",
-      "bytes": 13077,
-      "mtime": "2026-07-30T22:32:04.401Z",
-      "indexed_at": "2026-07-30T22:32:11.913Z"
+      "bytes": 13262,
+      "mtime": "2026-07-30T23:18:27.611Z",
+      "indexed_at": "2026-07-30T23:18:27.611Z"
     },
     {
       "path": "services/travel/itineraryGenerator.js",

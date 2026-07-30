@@ -419,7 +419,7 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-30T21:49:10.279Z",
+      "shipped_at": "2026-07-30T23:18:24.684Z",
       "commit_sha": null,
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "1",
@@ -433,10 +433,10 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-07-30T21:49:10.279Z",
-        "shipped_at": "2026-07-30T21:49:10.279Z",
-        "commit_sha": "b5de1a0c18b206a8733dbf0535ded96aa8b67aab",
-        "content_sha256": "7ae26c1b79d7dd2d2b3e9fc1f053bf1a93cd7c9c732e42ee73bb10806723699f",
+        "sealed_at": "2026-07-30T23:18:24.684Z",
+        "shipped_at": "2026-07-30T23:18:24.684Z",
+        "commit_sha": null,
+        "content_sha256": "03de2b34a48d619976d64b0aaad664a1d07be8f47b21425e27520ff45f6dd036",
         "target_file": "services/traditionProfilesService.js",
         "reverse": {
           "mode": "delete_file",
@@ -447,7 +447,7 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/faith-studio/twins/steps/1.exact",
-          "content_sha256": "7ae26c1b79d7dd2d2b3e9fc1f053bf1a93cd7c9c732e42ee73bb10806723699f"
+          "content_sha256": "03de2b34a48d619976d64b0aaad664a1d07be8f47b21425e27520ff45f6dd036"
         }
       },
       "built_sha": null,

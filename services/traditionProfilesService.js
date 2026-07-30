@@ -146,3 +146,8 @@ export const getTraditionProfilesDetail = async () => {
     }
   ];
 };
+
+export const fetchDenominationalDetails = async (traditionId) => {
+  const profiles = await getTraditionProfilesDetail();
+  return profiles.find(p => p.id === traditionId) || null;
+};
