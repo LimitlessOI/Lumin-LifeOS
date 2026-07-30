@@ -2591,14 +2591,37 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-16T02:00:24.116Z",
+      "shipped_at": "2026-07-30T20:22:52.554Z",
       "commit_sha": "9c31a51339aaa19c48b4b0a570a36091f0b498a1",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step12",
       "mission_id": "PRODUCT-lifeos",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:manageTrustedContacts,scheduleLegacyDeliveries; assertion_threw; assertion_threw; assertion_threw; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.601Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.601Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/lifeos/twins/steps/step12.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T20:22:52.554Z",
+        "shipped_at": "2026-07-30T20:22:52.554Z",
+        "commit_sha": "9c31a51339aaa19c48b4b0a570a36091f0b498a1",
+        "content_sha256": "40874c2b0666709dddcb2d582788a5bd831c9de9d8e0b4ca3cfc59597f19fdeb",
+        "target_file": "services/lifeos-trusted-contact.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/lifeos-trusted-contact.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/lifeos/twins/steps/step12.exact",
+          "content_sha256": "40874c2b0666709dddcb2d582788a5bd831c9de9d8e0b4ca3cfc59597f19fdeb"
+        }
+      }
     },
     {
       "id": "lifeos-1",

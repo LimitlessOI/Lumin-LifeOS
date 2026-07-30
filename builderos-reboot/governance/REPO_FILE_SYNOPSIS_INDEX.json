@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T20:19:43.067Z",
+  "generated_at": "2026-07-30T20:22:55.185Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12354,
+  "file_count": 12355,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -89743,6 +89743,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/lifeos-trusted-contact.js",
+      "synopsis": "Exports manageTrustedContacts — services/lifeos-trusted-contact.js.",
+      "bytes": 789,
+      "mtime": "2026-07-30T20:22:55.185Z",
+      "indexed_at": "2026-07-30T20:22:55.185Z"
     },
     {
       "path": "services/lifeos-twin-reaction-simulator.js",
