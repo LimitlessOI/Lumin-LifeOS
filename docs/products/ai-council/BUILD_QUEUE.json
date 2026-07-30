@@ -874,7 +874,7 @@
     },
     {
       "id": "ai-council-3",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20231005_add_provider_cooldowns.sql",
       "task": "persist provider cooldowns",
       "spec": "Create a table to persist provider cooldowns that survive restarts.",
@@ -889,12 +889,12 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-30T23:10:18.454Z",
-      "commit_sha": "68e35db6d0d90165e2249284e687b1bdad554239",
+      "commit_sha": "7b7be729cc45a50b76a0e2a7ca652a08d01a4963",
       "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "ai-council-3",
       "mission_id": "PRODUCT-ai-council",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
+      "last_error": null,
       "reaudit_reset_at": "2026-07-30T18:55:06.242Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
