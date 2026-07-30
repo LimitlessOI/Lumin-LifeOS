@@ -73,32 +73,52 @@
     },
     {
       "id": "3",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "db/migrations/001_create_vector_embedding.sql",
       "task": "define vector embedding strategy",
       "spec": "Add a migration to support vector embedding using either pgvector or Pinecone. Specify database schema changes.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS vector_embeddings"
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-15T18:01:40.661Z",
-      "commit_sha": null,
+      "shipped_at": "2026-07-30T23:52:41.751Z",
+      "commit_sha": "6ff2386f707d745ffd442ec50e6c2c2d135ca788",
       "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "3",
       "mission_id": "PRODUCT-knowledge-base",
       "pre_existing": false,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS vector_embeddings; behavior_assertion_failed; behavior_proof",
+      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
       "reaudit_reset_at": "2026-07-30T18:55:06.480Z",
-      "built_sha": null,
-      "proof": null,
-      "last_attempt_at": "2026-07-30T23:18:57.504Z"
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/knowledge-base/twins/steps/3.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T23:52:41.751Z",
+        "shipped_at": "2026-07-30T23:52:41.751Z",
+        "commit_sha": "6ff2386f707d745ffd442ec50e6c2c2d135ca788",
+        "content_sha256": "abc6706065b15f7a4d7d30126da9d1f36100c3e085ae6d8ab7926a039d454791",
+        "target_file": "db/migrations/001_create_vector_embedding.sql",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "db/migrations/001_create_vector_embedding.sql",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/knowledge-base/twins/steps/3.exact",
+          "content_sha256": "abc6706065b15f7a4d7d30126da9d1f36100c3e085ae6d8ab7926a039d454791"
+        }
+      }
     },
     {
       "id": "4",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/context-injection.js",
       "task": "define token budget for context injection",
       "spec": "Implement a strategy for token budget and truncation in the context injection process.",
@@ -121,37 +141,14 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-30T23:37:06.120Z",
-      "commit_sha": "230f05c547b181740cb401614f90674d21a52751",
+      "shipped_at": "2026-07-15T18:07:41.289Z",
+      "commit_sha": "208ef86d20357985972970a07d22b8cb99f085ed",
       "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "4",
       "mission_id": "PRODUCT-knowledge-base",
       "pre_existing": false,
-      "last_error": null,
-      "reaudit_reset_at": "2026-07-30T18:55:06.480Z",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/knowledge-base/twins/steps/4.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-30T23:37:06.120Z",
-        "shipped_at": "2026-07-30T23:37:06.120Z",
-        "commit_sha": "208ef86d20357985972970a07d22b8cb99f085ed",
-        "content_sha256": "e715423167abb0b6d8ec31508fbff9de3e98733b0cc00c6359286f92bc62ea3c",
-        "target_file": "services/context-injection.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/context-injection.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/knowledge-base/twins/steps/4.exact",
-          "content_sha256": "e715423167abb0b6d8ec31508fbff9de3e98733b0cc00c6359286f92bc62ea3c"
-        }
-      }
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:calculateTokenBudget,truncateContext; assertion_threw; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.480Z"
     },
     {
       "id": "5",
