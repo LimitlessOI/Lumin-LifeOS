@@ -10,10 +10,10 @@
  *   POST /api/v1/lifeos/auth/login          — email + password → access + refresh tokens
  *   POST /api/v1/lifeos/auth/refresh        — refresh token → new access token
  *   POST /api/v1/lifeos/auth/logout         — revoke refresh token
- *   POST /api/v1/lifeos/auth/set-password   — set/change password for a handle
  *
- * Authenticated endpoints (requireLifeOSUser):
+ * Authenticated endpoints (requireLifeOSUser / requireUserOrKey):
  *   GET  /api/v1/lifeos/auth/me             — current user info
+ *   POST /api/v1/lifeos/auth/set-password   — change own password; command key may bootstrap passwordless users
  *
  * Admin-only endpoints (requireLifeOSUser + role=admin):
  *   POST /api/v1/lifeos/auth/invite         — generate new invite code; response `invite.signup_url` when `PUBLIC_BASE_URL` or proxy Host is known
@@ -75,6 +75,30 @@ function signupUrlForCode(req, code) {
   const path = `/overlay/lifeos-login.html?invite=${encodeURIComponent(code)}`;
   const origin = publicWebOrigin(req);
   return origin ? `${origin}${path}` : path;
+}
+
+function normalizeAuthKey(value) {
+  if (value == null) return '';
+  return String(value).trim();
+}
+
+/** True only when a provided header/query value matches a configured operator key. */
+function hasVerifiedOperatorKey(req) {
+  const configured = ['API_KEY', 'LIFEOS_KEY', 'COMMAND_CENTER_KEY']
+    .map((name) => normalizeAuthKey(process.env[name]))
+    .filter(Boolean);
+  if (!configured.length) return false;
+  const provided = normalizeAuthKey(
+    (typeof req.get === 'function' && (req.get('x-command-key') || req.get('x-api-key') || req.get('x-lifeos-key') || req.get('x-command-center-key')))
+    || req.headers?.['x-command-key']
+    || req.headers?.['x-api-key']
+    || req.headers?.['x-lifeos-key']
+    || req.headers?.['x-command-center-key']
+    || req.query?.api_key
+    || req.query?.apiKey
+    || ''
+  );
+  return Boolean(provided && configured.includes(provided));
 }
 
 export function createLifeOSAuthRoutes({ pool, logger, requireKey }) {
@@ -157,14 +181,25 @@ export function createLifeOSAuthRoutes({ pool, logger, requireKey }) {
     }
   });
 
-  // ── Set / change password (admin bootstrap + user self-service) ──────────────
-  router.post('/set-password', async (req, res) => {
+  // ── Set / change password (operator bootstrap + user self-service) ───────────
+  router.post('/set-password', requireUserOrKey, async (req, res) => {
     try {
       const { handle, newPassword, currentPassword } = req.body;
       if (!handle || !newPassword) {
         return res.status(400).json({ ok: false, error: 'handle and newPassword required' });
       }
-      const result = await auth.setAdminPassword({ handle, newPassword, currentPassword: currentPassword || null });
+      const isOperatorBootstrap = req.auth_mode === 'command_key_fallback';
+      const requestedHandle = String(handle || '').trim().toLowerCase();
+      const authenticatedHandle = String(req.lifeosUser?.handle || '').trim().toLowerCase();
+      if (!isOperatorBootstrap && requestedHandle !== authenticatedHandle) {
+        return res.status(403).json({ ok: false, error: 'Cannot change another user password' });
+      }
+      const result = await auth.setAdminPassword({
+        handle,
+        newPassword,
+        currentPassword: currentPassword || null,
+        allowBootstrap: isOperatorBootstrap,
+      });
       res.json(result);
     } catch (e) {
       res.status(e.status || 500).json({ ok: false, error: e.message });
@@ -188,7 +223,7 @@ export function createLifeOSAuthRoutes({ pool, logger, requireKey }) {
         });
       }
 
-      const isOperator = Boolean(req.headers['x-command-key'] || req.headers['x-api-key']);
+      const isOperator = hasVerifiedOperatorKey(req);
       const body = {
         ok: true,
         message:
@@ -1033,11 +1068,27 @@ export function createLifeOSBillingRoutes({ pool, logger, requireKey }) {
       }
 
       const session = await stripe.checkout.sessions.retrieve(sessionId);
-      const paid = session.payment_status === 'paid' || session.status === 'complete' || session.status === 'active';
-      const tier = session.metadata?.tier;
+      const source = String(session.metadata?.source || '');
+      const tier = String(session.metadata?.tier || '').toLowerCase();
       const userId = session.client_reference_id || session.metadata?.user_id;
+      const paid = session.payment_status === 'paid'
+        && source === 'lifeos_billing'
+        && Boolean(userId)
+        && Boolean(TIER_PRICES[tier]);
 
-      if (paid && userId && tier) {
+      if (paid) {
+        const { rows: tracked } = await pool.query(
+          `SELECT id, user_id, tier FROM lifeos_checkout_sessions WHERE stripe_session_id = $1 LIMIT 1`,
+          [sessionId],
+        );
+        if (!tracked.length || String(tracked[0].user_id) !== String(userId) || String(tracked[0].tier) !== tier) {
+          return res.status(400).json({
+            ok: false,
+            error: 'session_not_bound',
+            paid: false,
+            session_id: sessionId,
+          });
+        }
         await pool.query(
           `UPDATE lifeos_checkout_sessions
             SET status = 'paid', paid_at = NOW(), stripe_payment_status = $1, updated_at = NOW()
@@ -1062,8 +1113,8 @@ export function createLifeOSBillingRoutes({ pool, logger, requireKey }) {
         paid,
         status: session.status,
         payment_status: session.payment_status,
-        tier,
-        user_id: userId,
+        tier: paid ? tier : undefined,
+        user_id: paid ? userId : undefined,
         session_id: sessionId,
       });
     } catch (e) {
