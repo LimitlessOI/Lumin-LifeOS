@@ -326,29 +326,40 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-16T04:21:17.879Z",
+      "shipped_at": "2026-07-30T19:34:08.299Z",
       "commit_sha": null,
       "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step4",
       "mission_id": "PRODUCT-lifere",
-      "pre_existing": null,
+      "pre_existing": false,
       "last_error": "codegen_authoring_failed: codegen_empty: openai_builder_mini: HTTP 429: {\n    \"error\": {\n        \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, read",
       "reaudit_reset_at": "2026-07-30T18:55:06.654Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-07-30T19:27:25.471Z",
-      "last_attempt": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-30T19:26:51.708Z",
-      "no_op": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
-      "park_until": null,
-      "blocker_class": null,
-      "claim_level": null,
-      "blocker_type": null,
-      "blocker_resolution": null
+      "last_attempt_at": "2026-07-30T19:07:28.816Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/lifere/twins/steps/step4.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T19:34:08.299Z",
+        "shipped_at": "2026-07-30T19:34:08.299Z",
+        "commit_sha": null,
+        "content_sha256": "e7263f0846d97e2056bb17e63f1037ed874cdb462d600985a612541251a951e5",
+        "target_file": "services/optionalBoldTrailContactCleanupService.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/optionalBoldTrailContactCleanupService.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/lifere/twins/steps/step4.exact",
+          "content_sha256": "e7263f0846d97e2056bb17e63f1037ed874cdb462d600985a612541251a951e5"
+        }
+      }
     },
     {
       "id": "step5",
