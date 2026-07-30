@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T19:23:07.474Z",
+  "generated_at": "2026-07-30T19:27:12.782Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12341,
+  "file_count": 12342,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -36446,6 +36446,13 @@
       "bytes": 520,
       "mtime": "2026-07-15T03:25:45.214Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "db/migrations/20260715_lifeos_core_phase_1.sql",
+      "synopsis": "Database migration — 20260715_lifeos_core_phase_1.sql.",
+      "bytes": 1297,
+      "mtime": "2026-07-30T19:27:12.782Z",
+      "indexed_at": "2026-07-30T19:27:12.782Z"
     },
     {
       "path": "db/migrations/20260715_lifeos_password_resets.sql",

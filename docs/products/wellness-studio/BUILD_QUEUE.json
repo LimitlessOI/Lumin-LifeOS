@@ -591,11 +591,34 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": null,
-      "shipped_at": "2026-07-15T21:35:13.966Z",
+      "shipped_at": "2026-07-30T19:27:09.793Z",
       "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step1",
       "mission_id": "PRODUCT-wellness-studio",
-      "reaudit_reset_at": "2026-07-30T18:55:06.847Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.847Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/wellness-studio/twins/steps/step1.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T19:27:09.793Z",
+        "shipped_at": "2026-07-30T19:27:09.793Z",
+        "commit_sha": null,
+        "content_sha256": "8ced268adba41fd115ee4e09e61e179b6eb73ed47017ee76dc441ddebe2e03ce",
+        "target_file": "db/migrations/20260715_lifeos_core_phase_1.sql",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "db/migrations/20260715_lifeos_core_phase_1.sql",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/wellness-studio/twins/steps/step1.exact",
+          "content_sha256": "8ced268adba41fd115ee4e09e61e179b6eb73ed47017ee76dc441ddebe2e03ce"
+        }
+      }
     },
     {
       "id": "step2",
@@ -980,13 +1003,13 @@
     },
     {
       "id": "wellness-studio-1",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/extended-tables.js",
       "task": "extendTables",
       "spec": "Extend existing tables to avoid schema conflicts while respecting module requirements.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "extendTables"
       ],
@@ -1008,9 +1031,9 @@
           "assertion_id": "expected_exports:services/extended-tables.js"
         }
       ],
-      "last_attempt_at": "2026-07-30T19:22:51.718Z",
-      "last_error": "artifact_missing_after_ship: artifact_proof_failed: ALTER TABLE; joy_checkins; integrity_score_log; wearable_data; emotional_patterns; NO CONFLICT",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:extendTables; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw",
+      "commit_sha": "df2ad005d8d3a730e58eaeb96860e04a647787c2",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -1027,34 +1050,11 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": null,
-      "shipped_at": "2026-07-30T19:22:44.357Z",
+      "shipped_at": "2026-07-16T04:30:37.573Z",
       "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "wellness-studio-1",
       "mission_id": "PRODUCT-wellness-studio",
-      "reaudit_reset_at": "2026-07-30T18:55:06.847Z",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/wellness-studio/twins/steps/wellness-studio-1.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-30T19:22:44.357Z",
-        "shipped_at": "2026-07-30T19:22:44.357Z",
-        "commit_sha": "df2ad005d8d3a730e58eaeb96860e04a647787c2",
-        "content_sha256": "4ab359839dc309f63819b3d4332feb98e0f7ae21ecef3d27fff9191a1aae5947",
-        "target_file": "services/extended-tables.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/extended-tables.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/wellness-studio/twins/steps/wellness-studio-1.exact",
-          "content_sha256": "4ab359839dc309f63819b3d4332feb98e0f7ae21ecef3d27fff9191a1aae5947"
-        }
-      }
+      "reaudit_reset_at": "2026-07-30T18:55:06.847Z"
     },
     {
       "id": "wellness-studio-2",
