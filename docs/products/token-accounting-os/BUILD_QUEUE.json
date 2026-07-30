@@ -465,26 +465,29 @@
     },
     {
       "id": "step5",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/20231013_create_free_tier_upsert.sql",
       "task": "create migration for free-tier upsert",
       "spec": "Create a new table or modify existing ones required for free-tier upsert operations, ensuring a CREATE TABLE with the necessary fields.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS",
         "upsert"
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-16T03:18:39.187Z",
-      "commit_sha": "b0555b050db53a68f3fa39dc2c85e64d160f8146",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-TOKEN-ACCOUNTING-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step5",
       "mission_id": "PRODUCT-token-accounting-os",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.748Z"
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:upsert; behavior_assertion_failed; behavior_proof",
+      "reaudit_reset_at": "2026-07-30T18:55:06.748Z",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-30T22:02:06.873Z"
     },
     {
       "id": "step6",
