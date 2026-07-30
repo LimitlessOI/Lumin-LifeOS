@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T21:12:27.997Z",
+  "generated_at": "2026-07-30T21:12:38.694Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12362,
+  "file_count": 12363,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -92888,6 +92888,13 @@
       "ssot": [
         "docs/products/productized-sprint/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/stripePriceService.js",
+      "synopsis": "Exports createPriceIds — services/stripePriceService.js.",
+      "bytes": 971,
+      "mtime": "2026-07-30T21:12:38.694Z",
+      "indexed_at": "2026-07-30T21:12:38.694Z"
     },
     {
       "path": "services/stripePriceTierService.js",

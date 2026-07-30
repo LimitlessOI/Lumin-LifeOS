@@ -379,14 +379,37 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-15T21:45:29.505Z",
+      "shipped_at": "2026-07-30T21:12:35.720Z",
       "commit_sha": "6ebc2d4f068e284c50185d1abc88649ec9c3ce92",
       "blueprint_id": "PRODUCT-AI-RECEPTIONIST-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "2",
       "mission_id": "PRODUCT-ai-receptionist",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:createPriceIds; assertion_threw; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.298Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.298Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/ai-receptionist/twins/steps/2.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T21:12:35.720Z",
+        "shipped_at": "2026-07-30T21:12:35.720Z",
+        "commit_sha": "6ebc2d4f068e284c50185d1abc88649ec9c3ce92",
+        "content_sha256": "ac2c36ef2ac2aabe82d3c8c317c8b324f050897e5d1397238b2dc620e73786a0",
+        "target_file": "services/stripePriceService.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/stripePriceService.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/ai-receptionist/twins/steps/2.exact",
+          "content_sha256": "ac2c36ef2ac2aabe82d3c8c317c8b324f050897e5d1397238b2dc620e73786a0"
+        }
+      }
     },
     {
       "id": "6",
