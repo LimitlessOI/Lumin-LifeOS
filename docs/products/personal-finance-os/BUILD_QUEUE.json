@@ -304,13 +304,13 @@
     },
     {
       "id": "step3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/performanceDisclosureApproval.js",
       "task": "review and approve past-performance disclosure language",
       "spec": "Implement service to review and approve disclosure.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "approvePerformanceDisclosure"
       ],
@@ -329,13 +329,16 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-15T09:17:44.582Z",
-      "commit_sha": "09065f0dc8cb2732cc112705906cd68e3b35009e",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step3",
       "mission_id": "PRODUCT-personal-finance-os",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:approvePerformanceDisclosure",
-      "reaudit_reset_at": "2026-07-30T18:55:06.693Z"
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:approvePerformanceDisclosure; behavior_assertion_failed; behavior_proof",
+      "reaudit_reset_at": "2026-07-30T18:55:06.693Z",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-30T22:02:04.209Z"
     },
     {
       "id": "step4",
