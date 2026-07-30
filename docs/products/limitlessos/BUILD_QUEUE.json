@@ -351,7 +351,31 @@
       "blueprint_step_id": "step2",
       "mission_id": "PRODUCT-limitlessos",
       "shipped_via": null,
-      "reaudit_reset_at": "2026-07-30T18:55:06.661Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.661Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/limitlessos/twins/steps/step2.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T19:07:06.375Z",
+        "shipped_at": "2026-07-30T19:07:06.375Z",
+        "commit_sha": "a1c5170b093cad69e6a2a1c2987012545037db9a",
+        "content_sha256": "83947eb785e7ca4714d8324e7784a85210d2fa8e2b7aa674c8da01756c2bd149",
+        "target_file": "public/overlay/audit-intake-flow.html",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "public/overlay/audit-intake-flow.html",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/limitlessos/twins/steps/step2.exact",
+          "content_sha256": "83947eb785e7ca4714d8324e7784a85210d2fa8e2b7aa674c8da01756c2bd149"
+        }
+      },
+      "shipped_at": "2026-07-30T19:07:06.375Z"
     },
     {
       "id": "step3",

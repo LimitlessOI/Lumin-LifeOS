@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Audit Intake Form -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audit Intake Form</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; background-color: #f4f4f4; }
+        .container { background-color: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); max-width: 800px; margin: auto; }
+        h1 { text-align: center; color: #333; margin-bottom: 30px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; color: #555; }
+        input[type="text"], input[type="email"], input[type="date"], textarea, select {
+            width: calc(100% - 22px);
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        textarea { resize: vertical; min-height: 100px; }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+        button:hover { background-color: #0056b3; }
+        .system-connections {
+            border: 1px solid #e0e0e0;
+            padding: 15px;
+            border-radius: 6px;
+            background-color: #f9f9f9;
+            margin-top: 25px;
+        }
+        .system-connections h3 { margin-top: 0; color: #333; }
+        .checkbox-group { margin-bottom: 10px; }
+        .checkbox-group label { display: inline-block; margin-left: 8px; font-weight: normal; }
+        .add-question-btn {
+            background-color: #28a745;
+            margin-top: 15px;
+            margin-bottom: 20px;
+        }
+        .add-question-btn:hover { background-color: #218838; }
+        .question-item {
+            border: 1px solid #e9ecef;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            background-color: #fcfcfc;
+        }
+        .question-item label { font-weight: normal; margin-bottom: 5px; }
+        .question-item textarea { min-height: 60px; }
+        .remove-question-btn {
+            background-color: #dc3545;
+            float: right;
+            width: auto;
+            padding: 8px 15px;
+            font-size: 14px;
+        }
+        .remove-question-btn:hover { background-color: #c82333; }
+        .error-message { color: red; margin-top: 5px; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Audit Intake Form</h1>
+        <form id="auditIntakeForm">
+            <div class="form-group">
+                <label for="auditTitle">Audit Title:</label>
+                <input type="text" id="auditTitle" name="auditTitle" required>
+            </div>
+
+            <div class="form-group">
+                <label for="requesterName">Requester Name:</label>
+                <input type="text" id="requesterName" name="requesterName" required>
+            </div>
+
+            <div class="form-group">
+                <label for="requesterEmail">Requester Email:</label>
+                <input type="email" id="requesterEmail" name="requesterEmail" required>
+            </div>
+
+            <div class="form-group">
+                <label for="department">Department/Team:</label>
+                <input type="text" id="department" name="department">
+            </div>
+
+            <div class="form-group">
+                <label for="targetDate">Target Completion Date:</label>
+                <input type="date" id="targetDate" name="targetDate">
+            </div>
+
+            <div class="form-group">
+                <label for="auditScope">Audit Scope/Objective:</label>
+                <textarea id="auditScope" name="auditScope" placeholder="Briefly describe the purpose and scope of this audit." required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="businessImpact">Expected Business Impact:</label>
+                <textarea id="businessImpact" name="businessImpact" placeholder="What impact do you expect this audit to have on business operations?"></textarea>
+            </div>
+
+            <h2>Audit Questions</h2>
+            <div id="questionsContainer">
+                <!-- Initial question -->
+                <div class="question-item" data-question-id="1">
+                    <label for="question_1">Question 1:</label>
+                    <textarea id="question_1" name="questions[]" placeholder="Enter your audit question here." required></textarea>
+                    <button type="button" class="remove-question-btn" onclick="removeQuestion(this)">Remove</button>
+                </div>
+            </div>
+            <button type="button" class="add-question-btn" onclick="addQuestion()">Add Another Question</button>
+
+            <div class="system-connections">
+                <h3>Optional System Connections</h3>
+                <p>Select any systems relevant to this audit that may require data access or integration.</p>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="sys_crm" name="systems[]" value="CRM">
+                    <label for="sys_crm">CRM (e.g., Salesforce)</label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="sys_erp" name="systems[]" value="ERP">
+                    <label for="sys_erp">ERP (e.g., SAP, Oracle)</label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="sys_hris" name="systems[]" value="HRIS">
+                    <label for="sys_hris">HRIS (e.g., Workday)</label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="sys_finance" name="systems[]" value="Finance_Accounting">
+                    <label for="sys_finance">Finance/Accounting Software</label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="sys_logging" name="systems[]" value="Logging_Monitoring">
+                    <label for="sys_logging">Logging & Monitoring (e.g., Splunk, ELK)</label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="sys_custom" name="systems[]" value="Custom_Internal">
+                    <label for="sys_custom">Custom Internal Systems (Please specify in scope)</label>
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 30px;">
+                <button type="submit">Submit Audit Request</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        let questionCount = 1;
+
+        function addQuestion() {
+            questionCount++;
+            const questionsContainer = document.getElementById('questionsContainer');
+            const newQuestionDiv = document.createElement('div');
+            newQuestionDiv.classList.add('question-item');
+            newQuestionDiv.setAttribute('data-question-id', questionCount);
+            newQuestionDiv.innerHTML = `
+                <label for="question_${questionCount}">Question ${questionCount}:</label>
+                <textarea id="question_${questionCount}" name="questions[]" placeholder="Enter your audit question here." required></textarea>
+                <button type="button" class="remove-question-btn" onclick="removeQuestion(this)">Remove</button>
+            `;
+            questionsContainer.appendChild(newQuestionDiv);
+        }
+
+        function removeQuestion(buttonElement) {
+            const questionItem = buttonElement.closest('.question-item');
+            questionItem.remove();
+            // Re-index remaining questions for display purposes
+            reindexQuestions();
+        }
+
+        function reindexQuestions() {
+            const questionItems = document.querySelectorAll('#questionsContainer .question-item');
+            questionItems.forEach((item, index) => {
+                const newIndex = index + 1;
+                item.setAttribute('data-question-id', newIndex);
+                const label = item.querySelector('label');
+                if (label) {
+                    label.textContent = `Question ${newIndex}:`;
+                    label.setAttribute('for', `question_${newIndex}`);
+                }
+                const textarea = item.querySelector('textarea');
+                if (textarea) {
+                    textarea.setAttribute('id', `question_${newIndex}`);
+                }
+            });
+            questionCount = questionItems.length; // Update overall question count
+            if (questionCount === 0) {
+                // If all questions are removed, add an initial one back
+                addQuestion();
+            }
+        }
+
+        document.getElementById('auditIntakeForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const formData = new FormData(this);
+            const data = {};
+            for (let [key, value] of formData.entries()) {
+                if (key.endsWith('[]')) { // Handle arrays like questions and systems
+                    const baseKey = key.slice(0, -2);
+                    if (!data[baseKey]) {
+                        data[baseKey] = [];
+                    }
+                    data[baseKey].push(value);
+                } else {
+                    data[key] = value;
+                }
+            }
+
+            // Simple validation check for required fields
+            let isValid = true;
+            this.querySelectorAll('[required]').forEach(input => {
+                if (!input.value.trim()) {
+                    isValid = false;
+                    input.style.borderColor = 'red';
+                    let error = input.nextElementSibling;
+                    if (!error || !error.classList.contains('error-message')) {
+                        error = document.createElement('div');
+                        error.classList.add('error-message');
+                        input.parentNode.insertBefore(error, input.nextSibling);
+                    }
+                    error.textContent = 'This field is required.';
+                } else {
+                    input.style.borderColor = '#ddd';
+                    const error = input.nextElementSibling;
+                    if (error && error.classList.contains('error-message')) {
+                        error.remove();
+                    }
+                }
+            });
+
+            // Specific validation for questions array
+            if (!data.questions || data.questions.length === 0 || data.questions.every(q => !q.trim())) {
+                isValid = false;
+                alert('Please add at least one audit question.');
+                // Optionally highlight the questions section or add a specific error message
+            }
+
+            if (isValid) {
+                console.log('Form Data:', data);
+                alert('Audit request submitted successfully! Check console for data.');
+                // In a real application, you would send 'data' to your backend here
+                // Example: fetch('/api/audit-intake', { method: 'POST', body: JSON.stringify(data), headers: { 'Content-Type': 'application/json' }})
+                // .then(response => response.json())
+                // .then(result => console.log(result))
+                // .catch(error => console.error('Error:', error));
+            } else {
+                alert('Please fill in all required fields.');
+            }
+        });
+
+        // Initialize with one question if none exist (e.g., after loading)
+        if (document.querySelectorAll('#questionsContainer .question-item').length === 0) {
+            addQuestion();
+        }
+    </script>
+</body>
+</html>
