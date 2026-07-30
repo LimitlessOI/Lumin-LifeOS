@@ -162,13 +162,13 @@
     },
     {
       "id": "8",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/20231011_create_irlen_consultation.sql",
       "task": "Record Irlen Syndrome community consultation",
       "spec": "Create table to store feedback from Irlen Syndrome community consultation.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "route": {
         "path": "/"
       },
@@ -177,12 +177,12 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-30T23:19:09.682Z",
-      "commit_sha": "7324fa151cb2162b90160e0ffe5ecfb8ae2fc509",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "8",
       "mission_id": "PRODUCT-kids-os",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
+      "last_error": "ship_commit_not_on_main: compare status ahead",
       "reaudit_reset_at": "2026-07-30T18:55:06.433Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
@@ -206,7 +206,10 @@
           "content_source_path": "docs/products/kids-os/twins/steps/8.exact",
           "content_sha256": "38f51228c559300e063a3ad42cb60ebd44ebce4b9e7fceaac18313d19a6c69ac"
         }
-      }
+      },
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-30T23:19:15.580Z"
     },
     {
       "id": "9",
