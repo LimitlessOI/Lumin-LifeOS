@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T23:47:48.199Z",
+  "generated_at": "2026-07-30T23:47:57.441Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12442,
+  "file_count": 12443,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -92455,6 +92455,13 @@
       "ssot": [
         "docs/products/project-governance/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/sacredContentReviewService.js",
+      "synopsis": "Exports sacredContentRevise — services/sacredContentReviewService.js.",
+      "bytes": 1149,
+      "mtime": "2026-07-30T23:47:57.441Z",
+      "indexed_at": "2026-07-30T23:47:57.441Z"
     },
     {
       "path": "services/safeOutputService.js",

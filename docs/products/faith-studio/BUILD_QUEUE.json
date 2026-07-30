@@ -468,7 +468,7 @@
     },
     {
       "id": "2",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/migrations/add_public_sacred_review_path.sql",
       "task": "Specify public sacred-content review path",
       "spec": "Define the database schema required for public sacred-content review.",
@@ -479,11 +479,11 @@
         "CREATE TABLE IF NOT EXISTS sacred_review_path"
       ],
       "last_attempt_at": null,
-      "last_error": null,
-      "commit_sha": "998f5229b7da247077602c1975c1d048bb0397dd",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS sacred_review_path; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 0,
+      "revive_count": 1,
       "revived_at": "2026-07-30T23:14:14.118Z",
       "last_attempt": null,
       "demoted": false,
@@ -497,34 +497,11 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": null,
-      "shipped_at": "2026-07-30T23:36:33.988Z",
+      "shipped_at": "2026-07-16T00:06:40.982Z",
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "2",
       "mission_id": "PRODUCT-faith-studio",
-      "reaudit_reset_at": "2026-07-30T18:55:06.428Z",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/faith-studio/twins/steps/2.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-30T23:36:33.988Z",
-        "shipped_at": "2026-07-30T23:36:33.988Z",
-        "commit_sha": null,
-        "content_sha256": "c87b48f01c56a7571a0bb8cb774dc8a13645ffccb89cecdf2035571b771e7eef",
-        "target_file": "db/migrations/add_public_sacred_review_path.sql",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "db/migrations/add_public_sacred_review_path.sql",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/faith-studio/twins/steps/2.exact",
-          "content_sha256": "c87b48f01c56a7571a0bb8cb774dc8a13645ffccb89cecdf2035571b771e7eef"
-        }
-      }
+      "reaudit_reset_at": "2026-07-30T18:55:06.428Z"
     },
     {
       "id": "3",
@@ -555,14 +532,37 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-16T02:10:20.541Z",
+      "shipped_at": "2026-07-30T23:47:55.132Z",
       "commit_sha": "fb558daefdf38aaa23bc7471703470d25fa20e2e",
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "3",
       "mission_id": "PRODUCT-faith-studio",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:sacredContentRevise; assertion_threw; assertion_threw; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.428Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.428Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/faith-studio/twins/steps/3.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T23:47:55.132Z",
+        "shipped_at": "2026-07-30T23:47:55.132Z",
+        "commit_sha": "fb558daefdf38aaa23bc7471703470d25fa20e2e",
+        "content_sha256": "7c93a8a3596a31f6d9093bc532789a45cc56b3dcc1b8b62b05330d0a93528073",
+        "target_file": "services/sacredContentReviewService.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/sacredContentReviewService.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/faith-studio/twins/steps/3.exact",
+          "content_sha256": "7c93a8a3596a31f6d9093bc532789a45cc56b3dcc1b8b62b05330d0a93528073"
+        }
+      }
     },
     {
       "id": "4",
