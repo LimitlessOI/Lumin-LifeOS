@@ -13,7 +13,13 @@ export function addSelfInsertProfile(profileData) {
   // `profileData` would contain a field like `likenessOptIn: boolean`
   console.log('Adding self-insert profile:', profileData);
   const newProfileId = `self-insert-${Date.now()}`; // Example ID generation
-  return { success: true, profileId: newProfileId, ...profileData };
+  // Simulate storing the profile data, including likenessOptIn
+  const storedProfile = {
+    profileId: newProfileId,
+    ...profileData,
+    likenessOptIn: profileData.likenessOptIn || false, // Default to false if not provided
+  };
+  return { success: true, ...storedProfile };
 }
 
 export function editStoryBible(storyId, updates) {

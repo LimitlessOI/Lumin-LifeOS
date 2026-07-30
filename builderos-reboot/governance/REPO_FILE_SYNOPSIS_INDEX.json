@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T20:52:41.628Z",
+  "generated_at": "2026-07-30T20:52:58.507Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12358,
   "files": [
@@ -86429,9 +86429,9 @@
     {
       "path": "services/characterProfile.js",
       "synopsis": "Exports editCharacterProfile, addSelfInsertProfile, editStoryBible, editWorldBible — services/characterProfile.js.",
-      "bytes": 1337,
-      "mtime": "2026-07-30T20:35:02.185Z",
-      "indexed_at": "2026-07-30T20:35:02.185Z"
+      "bytes": 1549,
+      "mtime": "2026-07-30T20:52:58.507Z",
+      "indexed_at": "2026-07-30T20:52:58.507Z"
     },
     {
       "path": "services/chatgpt-import.js",
