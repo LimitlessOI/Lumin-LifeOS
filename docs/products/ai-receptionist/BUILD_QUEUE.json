@@ -385,7 +385,7 @@
       "blueprint_step_id": "2",
       "mission_id": "PRODUCT-ai-receptionist",
       "pre_existing": null,
-      "last_error": "artifact_missing_after_ship: artifact_proof_failed: createStripePrice",
+      "last_error": "github_commit_failed_after_local_ship",
       "reaudit_reset_at": "2026-07-30T18:55:06.298Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
@@ -412,10 +412,10 @@
       },
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-07-30T22:24:33.533Z",
+      "last_attempt_at": "2026-07-30T22:44:58.053Z",
       "last_attempt": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-30T22:21:54.595Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-30T22:41:54.372Z",
       "no_op": null,
       "demoted": false,
       "demote_reason": null,
@@ -648,7 +648,7 @@
     },
     {
       "id": "ai-receptionist-4",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "routes/vapiRoutes.js",
       "task": "add routes for vapi operations",
       "spec": "Create routes to expose Vapi account creation and setup functionalities.",
@@ -656,7 +656,7 @@
         "ai-receptionist-2"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerVapiRoutes"
       ],
@@ -679,12 +679,24 @@
       "blueprint_id": "PRODUCT-AI-RECEPTIONIST-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "ai-receptionist-4",
       "mission_id": "PRODUCT-ai-receptionist",
-      "pre_existing": false,
+      "pre_existing": null,
       "last_error": "codegen_authoring_failed: codegen_empty: openai_builder_mini: HTTP 429: {\n    \"error\": {\n        \"message\": \"You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organiza",
       "reaudit_reset_at": "2026-07-30T18:55:06.298Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-07-30T22:37:07.641Z"
+      "last_attempt_at": null,
+      "last_attempt": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-30T22:41:54.372Z",
+      "no_op": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "ai-receptionist-5",
