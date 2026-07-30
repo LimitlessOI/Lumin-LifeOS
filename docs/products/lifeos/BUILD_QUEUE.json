@@ -3011,13 +3011,13 @@
     },
     {
       "id": "lifeos-10",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/lifeos-finance.js",
       "task": "Implement net worth tracking",
       "spec": "Add logic for calculating and storing net worth snapshots from total assets and liabilities.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "calculateNetWorth"
       ],
@@ -3037,9 +3037,9 @@
           "assertion_id": "expected_exports:services/lifeos-finance.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T06:07:28.748Z",
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:calculateNetWorth; calculateNetWorth",
-      "commit_sha": "pre-existing-claim",
+      "last_attempt_at": "2026-07-30T20:32:23.324Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:calculateNetWorth; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 9,
