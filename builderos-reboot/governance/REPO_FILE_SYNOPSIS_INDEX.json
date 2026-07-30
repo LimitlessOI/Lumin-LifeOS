@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T23:52:43.714Z",
+  "generated_at": "2026-07-30T23:53:05.585Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12446,
   "files": [
@@ -34142,8 +34142,8 @@
       "path": "db/migrations/20231011_create_irlen_consultation.sql",
       "synopsis": "Database migration — 20231011_create_irlen_consultation.sql.",
       "bytes": 303,
-      "mtime": "2026-07-30T23:19:11.827Z",
-      "indexed_at": "2026-07-30T23:19:11.827Z"
+      "mtime": "2026-07-30T23:53:05.585Z",
+      "indexed_at": "2026-07-30T23:53:05.585Z"
     },
     {
       "path": "db/migrations/20231012_create_ci_guard.sql",
