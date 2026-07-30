@@ -419,14 +419,37 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-15T23:45:45.708Z",
+      "shipped_at": "2026-07-30T21:49:10.279Z",
       "commit_sha": "b5de1a0c18b206a8733dbf0535ded96aa8b67aab",
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "1",
       "mission_id": "PRODUCT-faith-studio",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:getTraditionProfilesDetail; assertion_threw; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.428Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.428Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/faith-studio/twins/steps/1.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T21:49:10.279Z",
+        "shipped_at": "2026-07-30T21:49:10.279Z",
+        "commit_sha": "b5de1a0c18b206a8733dbf0535ded96aa8b67aab",
+        "content_sha256": "7ae26c1b79d7dd2d2b3e9fc1f053bf1a93cd7c9c732e42ee73bb10806723699f",
+        "target_file": "services/traditionProfilesService.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/traditionProfilesService.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/faith-studio/twins/steps/1.exact",
+          "content_sha256": "7ae26c1b79d7dd2d2b3e9fc1f053bf1a93cd7c9c732e42ee73bb10806723699f"
+        }
+      }
     },
     {
       "id": "2",
