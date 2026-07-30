@@ -176,5 +176,53 @@ export function extendTables(knex, existingTables) {
       }
       return null;
     }),
+    // New table for module_configs - to manage configuration specific to different modules
+    knex.schema.hasTable('module_configs').then((exists) => {
+      if (!exists) {
+        return knex.schema.createTable('module_configs', (table) => {
+          table.increments('id').primary();
+          table.string('module_name').unique();
+          table.jsonb('config_data');
+          table.timestamp('last_updated').defaultTo(knex.fn.now());
+        });
+      }
+      return null;
+    }),
+    // New table for audit_trails - to track changes and operations within the system
+    knex.schema.hasTable('audit_trails').then((exists) => {
+      if (!exists) {
+        return knex.schema.createTable('audit_trails', (table) => {
+          table.increments('id').primary();
+          if (existingTables.includes('users')) {
+            table.integer('user_id').unsigned().references('id').inTable('users').onDelete('SET NULL');
+          } else {
+            table.integer('user_id').unsigned();
+          }
+          table.string('action_type');
+          table.text('description');
+          table.string('target_table');
+          table.integer('target_id');
+          table.jsonb('old_value');
+          table.jsonb('new_value');
+          table.timestamp('action_time').defaultTo(knex.fn.now());
+        });
+      }
+      return null;
+    }),
+    // New table for external_integrations - to store details about third-party services
+    knex.schema.hasTable('external_integrations').then((exists) => {
+      if (!exists) {
+        return knex.schema.createTable('external_integrations', (table) => {
+          table.increments('id').primary();
+          table.string('integration_name').unique();
+          table.string('api_key');
+          table.jsonb('config');
+          table.boolean('is_active').defaultTo(false);
+          table.timestamp('created_at').defaultTo(knex.fn.now());
+          table.timestamp('last_updated').defaultTo(knex.fn.now());
+        });
+      }
+      return null;
+    }),
   ]);
 }
