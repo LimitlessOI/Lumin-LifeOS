@@ -468,7 +468,7 @@
     },
     {
       "id": "2",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/add_public_sacred_review_path.sql",
       "task": "Specify public sacred-content review path",
       "spec": "Define the database schema required for public sacred-content review.",
@@ -479,11 +479,11 @@
         "CREATE TABLE IF NOT EXISTS sacred_review_path"
       ],
       "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS sacred_review_path; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "998f5229b7da247077602c1975c1d048bb0397dd",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
+      "revive_count": 0,
       "revived_at": "2026-07-30T23:14:14.118Z",
       "last_attempt": null,
       "demoted": false,
@@ -505,7 +505,7 @@
     },
     {
       "id": "3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/sacredContentReviewService.js",
       "task": "Design sacred-content review service",
       "spec": "Service to handle preservation of sacred intent in content review workflows.",
@@ -513,7 +513,7 @@
         "2"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "sacredContentRevise"
       ],
@@ -533,13 +533,16 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-16T02:10:20.541Z",
-      "commit_sha": "fb558daefdf38aaa23bc7471703470d25fa20e2e",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "3",
       "mission_id": "PRODUCT-faith-studio",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:sacredContentRevise; assertion_threw; assertion_threw; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.428Z"
+      "last_error": "artifact_missing_after_ship: artifact_proof_failed: @ssot; callCouncilMember",
+      "reaudit_reset_at": "2026-07-30T18:55:06.428Z",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-30T23:48:01.661Z"
     },
     {
       "id": "4",
@@ -581,13 +584,13 @@
     },
     {
       "id": "5",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/interpretiveAdaptation.js",
       "task": "Enforce interpretive adaptation in outputs",
       "spec": "Service to ensure outputs include source, tradition lens, and interpretive notes.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "ensureInterpretiveAdaptation"
       ],
@@ -607,12 +610,12 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-30T23:52:10.203Z",
-      "commit_sha": "e4972d34eba3583a0f99e08fd01e5baf783a8639",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "5",
       "mission_id": "PRODUCT-faith-studio",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:ensureInterpretiveAdaptation; assertion_threw; assertion_threw; assertion_threw",
+      "last_error": "artifact_missing_after_ship: artifact_proof_failed: applySourceLabels; applyTraditionLens",
       "reaudit_reset_at": "2026-07-30T18:55:06.428Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
@@ -636,7 +639,10 @@
           "content_source_path": "docs/products/faith-studio/twins/steps/5.exact",
           "content_sha256": "869a409088b25767804e2f1f574881056ae6c5a144bf95e37bff770001151c7c"
         }
-      }
+      },
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-30T23:52:17.177Z"
     },
     {
       "id": "6",
