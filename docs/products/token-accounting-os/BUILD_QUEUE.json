@@ -526,7 +526,7 @@
     },
     {
       "id": "step6",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/ciGuardBypass.js",
       "task": "implement CI guard against bypassing route",
       "spec": "Introduce an endpoint that interfaces with ciGuard service to ensure builds are monitored and unauthorised paths are not pursued. Ensure to include a CI guard mechanism.",
@@ -552,12 +552,12 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-30T23:52:31.754Z",
-      "commit_sha": "511ce2fa2ccb10c38a0339de0b674e6cfda3100e",
+      "commit_sha": "fa21ea58e490d739226b1ef073f543504bb26e67",
       "blueprint_id": "PRODUCT-TOKEN-ACCOUNTING-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step6",
       "mission_id": "PRODUCT-token-accounting-os",
-      "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerCIGuardBypassRoutes; assertion_threw",
+      "pre_existing": null,
+      "last_error": null,
       "reaudit_reset_at": "2026-07-30T18:55:06.748Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
@@ -581,7 +581,22 @@
           "content_source_path": "docs/products/token-accounting-os/twins/steps/step6.exact",
           "content_sha256": "4d24dcb6445cd34de82ff025ea7ecb2bd1cb9d8cbbaa74befad41159cd0b0eac"
         }
-      }
+      },
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": null,
+      "last_attempt": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-30T23:48:51.215Z",
+      "no_op": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     }
   ],
   "blueprint_id": "PRODUCT-TOKEN-ACCOUNTING-OS-BUILD-QUEUE-TWIN-V1",
