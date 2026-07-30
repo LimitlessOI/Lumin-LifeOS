@@ -1261,20 +1261,20 @@
       "depends_on": [],
       "founder_gated": false,
       "attempts": 1,
-      "last_attempt_at": "2026-07-30T19:20:29.694Z",
+      "last_attempt_at": "2026-07-30T19:06:27.436Z",
       "last_error": "codegen_authoring_failed: codegen_empty: openai_builder_escalation: HTTP 429: {\n    \"error\": {\n        \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-30T19:20:13.639Z",
+      "revive_count": 0,
+      "revived_at": null,
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
       "no_op": null,
-      "pre_existing": null,
+      "pre_existing": false,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
@@ -1283,7 +1283,31 @@
       "blueprint_step_id": "lifeos-chat-v2-01",
       "mission_id": "PRODUCT-lifeos",
       "shipped_via": null,
-      "reaudit_reset_at": "2026-07-30T18:55:06.601Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.601Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/lifeos/twins/steps/lifeos-chat-v2-01.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T19:22:14.027Z",
+        "shipped_at": "2026-07-30T19:22:14.027Z",
+        "commit_sha": null,
+        "content_sha256": "ffbee7c29e034b5c183e34379882c3844d5a2491e68e2fa072474aa4059c405e",
+        "target_file": "public/overlay/lifeos-chat-thoughts.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "public/overlay/lifeos-chat-thoughts.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/lifeos/twins/steps/lifeos-chat-v2-01.exact",
+          "content_sha256": "ffbee7c29e034b5c183e34379882c3844d5a2491e68e2fa072474aa4059c405e"
+        }
+      },
+      "shipped_at": "2026-07-30T19:22:14.027Z"
     },
     {
       "id": "lifeos-chat-v2-02",

@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T19:20:09.298Z",
+  "generated_at": "2026-07-30T19:22:17.057Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12337,
+  "file_count": 12338,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -66112,6 +66112,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "public/overlay/lifeos-chat-thoughts.js",
+      "synopsis": "LifeOS Chat Thought Stream UI Module",
+      "bytes": 17241,
+      "mtime": "2026-07-30T19:22:17.057Z",
+      "indexed_at": "2026-07-30T19:22:17.057Z"
     },
     {
       "path": "public/overlay/lifeos-chat.html",
