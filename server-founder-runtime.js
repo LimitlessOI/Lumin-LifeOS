@@ -57,6 +57,7 @@ import { startCiHealthWatchdogScheduler } from "./scripts/ci-health-watchdog.mjs
 import { startProdHealthWatchdogScheduler } from "./scripts/prod-health-watchdog.mjs";
 import { startSentryChairGovernanceScheduler, startCompetitiveResearchScheduler } from "./scripts/sentry-chair-governance-audit.mjs";
 import { startMemoryEmbeddingsBackfillScheduler } from "./scripts/memory-embeddings-backfill.mjs";
+import { registerGovernanceReviewScheduler } from "./services/governance-review-scheduler.js";
 import { initDatabase } from "./startup/database.js";
 import { requireKey } from "./src/server/auth/requireKey.js";
 import { NotificationService } from "./core/notification-service.js";
@@ -529,6 +530,23 @@ async function bootFounderRuntime() {
         startMemoryEmbeddingsBackfillScheduler({ pool, logger });
       } catch (embeddingsErr) {
         logger.warn("[MEMORY-EMBEDDINGS] backfill scheduler failed to start in founder runtime", { error: embeddingsErr.message });
+      }
+      // North Star §2.0G Governance Evolution Law -- real fixed-cadence course-
+      // correction check. Confirmed live 2026-07-29 this had ZERO recorded
+      // reviews ever, despite services/governance-review-scheduler.js shipping
+      // days earlier: it was only wired into startup/boot-domains.js's
+      // bootAllDomains(), which server.js NEVER calls in production --
+      // isFullRuntimeProfile() is permanently false on Railway, so server.js
+      // always imports server-founder-runtime.js (this file), never
+      // server-full-runtime.js (where bootAllDomains lives). The prior fix to
+      // boot-domains.js's inner fullRuntimeProfile gate was real but
+      // insufficient -- the whole function was unreachable at a level above
+      // that gate. This is the actual fix: register it where production code
+      // really runs.
+      try {
+        registerGovernanceReviewScheduler({ pool, logger });
+      } catch (governanceReviewErr) {
+        logger.warn("[GOVERNANCE-REVIEW] scheduler failed to start in founder runtime", { error: governanceReviewErr.message });
       }
       _bootLog('bootFounderRuntime_done');
       return { ok: true, attempt: bootAttempt };

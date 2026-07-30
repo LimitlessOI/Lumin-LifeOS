@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T01:04:19.957Z",
+  "generated_at": "2026-07-30T01:12:34.786Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12308,
   "files": [
@@ -40030,9 +40030,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 319532,
-      "mtime": "2026-07-30T01:04:00.637Z",
-      "indexed_at": "2026-07-30T01:04:19.957Z"
+      "bytes": 321710,
+      "mtime": "2026-07-30T01:12:12.858Z",
+      "indexed_at": "2026-07-30T01:12:34.786Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -84828,9 +84828,9 @@
     {
       "path": "server-founder-runtime.js",
       "synopsis": "Founder-builder minimal runtime entrypoint.",
-      "bytes": 22271,
-      "mtime": "2026-07-29T05:16:38.727Z",
-      "indexed_at": "2026-07-29T05:18:22.632Z",
+      "bytes": 23469,
+      "mtime": "2026-07-30T01:11:44.436Z",
+      "indexed_at": "2026-07-30T01:12:34.786Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
