@@ -833,13 +833,13 @@
     },
     {
       "id": "ai-council-1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/generalTaskOptimizer.js",
       "task": "improve task savings",
       "spec": "Enhance the general task optimizer to increase savings from 4% to at least 15%.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "optimizeGeneralTask"
       ],
@@ -861,13 +861,16 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-16T04:21:50.524Z",
-      "commit_sha": "46a7eab78503409637049ae6771fb9371ffd7c55",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "ai-council-1",
       "mission_id": "PRODUCT-ai-council",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:optimizeGeneralTask; increase savings to 15%",
-      "reaudit_reset_at": "2026-07-30T18:55:06.242Z"
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:optimizeGeneralTask; behavior_assertion_failed; behavior_proof",
+      "reaudit_reset_at": "2026-07-30T18:55:06.242Z",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-30T23:05:14.290Z"
     },
     {
       "id": "ai-council-3",
