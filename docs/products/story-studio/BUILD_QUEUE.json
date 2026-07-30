@@ -79,8 +79,8 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-07-30T21:37:59.681Z",
-        "shipped_at": "2026-07-30T21:37:59.681Z",
+        "sealed_at": "2026-07-30T22:01:22.893Z",
+        "shipped_at": "2026-07-30T22:01:22.893Z",
         "commit_sha": null,
         "content_sha256": "ea6f634052d53d365a01b0012ea3174ee9976ca9355770b87383e1ada1821164",
         "target_file": "services/characterProfile.js",
@@ -96,7 +96,7 @@
           "content_sha256": "ea6f634052d53d365a01b0012ea3174ee9976ca9355770b87383e1ada1821164"
         }
       },
-      "shipped_at": "2026-07-30T21:37:59.681Z",
+      "shipped_at": "2026-07-30T22:01:22.893Z",
       "built_sha": null,
       "proof": null,
       "last_attempt_at": "2026-07-30T21:38:07.086Z",
