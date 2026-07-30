@@ -2164,13 +2164,13 @@
     },
     {
       "id": "step3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/lifeos-assessment-battery.js",
       "task": "build assessment battery",
       "spec": "Implement user assessments for emotional patterns.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "getAssessments",
         "compareAssessments"
@@ -2204,7 +2204,7 @@
       "reaudit_reset_at": "2026-07-30T18:55:06.601Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-30T20:46:08.251Z",
       "last_attempt": null,
       "revive_count": 2,
       "revived_at": "2026-07-30T20:44:12.470Z",
