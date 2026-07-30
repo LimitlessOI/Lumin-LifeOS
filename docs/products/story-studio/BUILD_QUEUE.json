@@ -259,10 +259,10 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-07-30T22:17:02.382Z",
-        "shipped_at": "2026-07-30T22:17:02.382Z",
+        "sealed_at": "2026-07-30T22:37:34.307Z",
+        "shipped_at": "2026-07-30T22:37:34.307Z",
         "commit_sha": null,
-        "content_sha256": "c2c07e8c84fad4a75ab5812353b2d7d5c07f5092cf0f9df232d4a33650a90e7c",
+        "content_sha256": "ca6cc305601bcb4531f34b2475a0b0adb611ff5bf62cc16f7ab6552752f94ea7",
         "target_file": "services/franchiseScoring.js",
         "reverse": {
           "mode": "delete_file",
@@ -273,10 +273,10 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/story-studio/twins/steps/6.exact",
-          "content_sha256": "c2c07e8c84fad4a75ab5812353b2d7d5c07f5092cf0f9df232d4a33650a90e7c"
+          "content_sha256": "ca6cc305601bcb4531f34b2475a0b0adb611ff5bf62cc16f7ab6552752f94ea7"
         }
       },
-      "shipped_at": "2026-07-30T22:17:02.382Z",
+      "shipped_at": "2026-07-30T22:37:34.307Z",
       "built_sha": null,
       "proof": null,
       "last_attempt_at": "2026-07-30T22:17:10.036Z",
