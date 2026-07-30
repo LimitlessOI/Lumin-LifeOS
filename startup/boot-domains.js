@@ -242,6 +242,18 @@ async function bootChairPredictionScore(deps) {
   }
 }
 
+// Not gated behind fullRuntimeProfile, unlike its siblings below: found live
+// 2026-07-29 that Railway ALWAYS reports runtime_profile 'founder_builder',
+// never 'full' (services/runtime-modes.js fails production closed to
+// founder_builder by explicit founder directive) -- so fullRuntimeProfile is
+// permanently false in production, and every boot item gated behind it,
+// including this one as originally wired, has never actually run there.
+// A live query confirmed zero rows in governance_review_log despite this
+// scheduler shipping days earlier. Governance review itself is safe to run
+// unconditionally (passive, read-only, DB-only side effect, already has its
+// own independent opt-out via GOVERNANCE_REVIEW_ENABLED=0) -- unlike the
+// scope-expanding autonomy schedulers still correctly fenced behind
+// fullRuntimeProfile, so only this one gate is being removed here.
 async function bootGovernanceReview(deps) {
   const { pool, logger } = deps;
   if (process.env.GOVERNANCE_REVIEW_ENABLED === '0') {
@@ -518,7 +530,7 @@ export async function bootAllDomains(deps) {
     bootTruthScoreboard(deps),
     ...(fullRuntimeProfile ? [bootWisdomTruthAuditor(deps)] : []),
     ...(fullRuntimeProfile ? [bootChairPredictionScore(deps)] : []),
-    ...(fullRuntimeProfile ? [bootGovernanceReview(deps)] : []),
+    bootGovernanceReview(deps),
     ...(twinAutoIngestBootEnabled ? [bootTwinAutoIngest(deps)] : []),
     ...(fullRuntimeProfile ? [bootOILDailySummary(deps)] : []),
     bootSelfRepairDeployCheck(deps),
