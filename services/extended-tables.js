@@ -314,5 +314,81 @@ export function extendTables(knex, existingTables) {
       }
       return null;
     }),
+    // New table for system_metrics - to store various system performance metrics
+    knex.schema.hasTable('system_metrics').then((exists) => {
+      if (!exists) {
+        return knex.schema.createTable('system_metrics', (table) => {
+          table.increments('id').primary();
+          table.string('metric_name');
+          table.float('metric_value');
+          table.jsonb('metric_tags'); // e.g., { host: 'server1', region: 'us-east-1' }
+          table.timestamp('recorded_at').defaultTo(knex.fn.now());
+        });
+      }
+      return null;
+    }),
+    // New table for content_metadata - for managing metadata for various content types
+    knex.schema.hasTable('content_metadata').then((exists) => {
+      if (!exists) {
+        return knex.schema.createTable('content_metadata', (table) => {
+          table.increments('id').primary();
+          table.string('content_type'); // e.g., 'article', 'image', 'video'
+          table.integer('content_id'); // ID of the actual content in its respective table
+          table.jsonb('metadata_fields');
+          table.timestamp('created_at').defaultTo(knex.fn.now());
+          table.timestamp('last_updated').defaultTo(knex.fn.now());
+          table.unique(['content_type', 'content_id']); // Ensure uniqueness per content item
+        });
+      }
+      return null;
+    }),
+    // New table for webhooks - to configure and manage outgoing webhooks
+    knex.schema.hasTable('webhooks').then((exists) => {
+      if (!exists) {
+        return knex.schema.createTable('webhooks', (table) => {
+          table.increments('id').primary();
+          table.string('event_type'); // e.g., 'user_created', 'order_updated'
+          table.string('target_url');
+          table.string('secret_token');
+          table.boolean('is_active').defaultTo(true);
+          table.jsonb('config_params');
+          table.timestamp('created_at').defaultTo(knex.fn.now());
+          table.timestamp('last_updated').defaultTo(knex.fn.now());
+        });
+      }
+      return null;
+    }),
+    // New table for email_templates - to store email template content
+    knex.schema.hasTable('email_templates').then((exists) => {
+      if (!exists) {
+        return knex.schema.createTable('email_templates', (table) => {
+          table.increments('id').primary();
+          table.string('template_name').unique();
+          table.string('subject');
+          table.text('body_html');
+          table.text('body_text');
+          table.jsonb('variables'); // Default variables for the template
+          table.timestamp('created_at').defaultTo(knex.fn.now());
+          table.timestamp('last_updated').defaultTo(knex.fn.now());
+        });
+      }
+      return null;
+    }),
+    // New table for search_indices - to manage search index configurations
+    knex.schema.hasTable('search_indices').then((exists) => {
+      if (!exists) {
+        return knex.schema.createTable('search_indices', (table) => {
+          table.increments('id').primary();
+          table.string('index_name').unique();
+          table.string('target_table');
+          table.jsonb('indexed_fields');
+          table.string('strategy'); // e.g., 'full_text', 'keyword'
+          table.boolean('is_active').defaultTo(true);
+          table.timestamp('last_reindexed_at');
+          table.timestamp('created_at').defaultTo(knex.fn.now());
+        });
+      }
+      return null;
+    }),
   ]);
 }
