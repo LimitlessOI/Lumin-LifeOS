@@ -1,6 +1,6 @@
 {
   "schema": "product_readiness_report_v1",
-  "updated_at": "2026-07-28T22:32:15.904Z",
+  "updated_at": "2026-07-30T01:00:11.359Z",
   "authority": {
     "product_registry": "docs/products/PRODUCT_REGISTRY.json",
     "bp_priority": "builderos-reboot/BP_PRIORITY.json",
@@ -668,7 +668,7 @@
           "founder_usability_pass": false,
           "completion_receipt_id": null,
           "artifact_sync": {
-            "at": "2026-07-28T22:32:15.904Z",
+            "at": "2026-07-30T01:00:11.359Z",
             "mode": "technical_acceptance",
             "status": "CURRENT"
           }
@@ -1227,7 +1227,7 @@
   ],
   "freshness": {
     "status": "CURRENT",
-    "updated_at": "2026-07-28T22:32:15.904Z",
+    "updated_at": "2026-07-30T01:00:11.359Z",
     "authority_paths": [
       "docs/products/PRODUCT_REGISTRY.json",
       "builderos-reboot/BP_PRIORITY.json",

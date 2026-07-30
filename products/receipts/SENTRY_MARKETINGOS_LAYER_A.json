@@ -3,8 +3,8 @@
   "ok": true,
   "layer": "A",
   "product": "marketingos",
-  "at": "2026-07-29T21:38:46.820Z",
-  "duration_ms": 8791,
+  "at": "2026-07-30T00:58:58.070Z",
+  "duration_ms": 8420,
   "base": "https://lumin-web-production-e3a9.up.railway.app",
   "results": {
     "ui_marketing_landing": {

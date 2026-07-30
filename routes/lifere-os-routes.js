@@ -756,6 +756,7 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
         tenantId: tenantId(req),
         userId: userId(req),
         moduleId: req.body?.module_id,
+        learningProfile: req.body?.learning_profile || null,
       });
       res.json(result);
     } catch (error) {
@@ -771,6 +772,7 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
       score: Number(req.body?.score),
       durationMinutes: Number(req.body?.duration_minutes) || 15,
       debrief: req.body?.debrief,
+      learningProfile: req.body?.learning_profile || null,
     });
     res.json({ ok: true, result });
   });

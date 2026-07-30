@@ -1,6 +1,6 @@
 {
   "schema": "sentry_marketingos_layer_b_v1",
-  "at": "2026-07-29T21:38:47.105Z",
+  "at": "2026-07-30T00:58:58.373Z",
   "base": "https://lumin-web-production-e3a9.up.railway.app",
   "ok": true,
   "layer": "B",
@@ -28,7 +28,7 @@
     },
     "browser_api_loop": {
       "ok": true,
-      "detail": "session c6d00959-340c-4697-a1ec-d7b9e2a12c69"
+      "detail": "session e1097a76-a85f-4362-87fa-ab4b77dbfeca"
     },
     "audio_upload": {
       "ok": true,

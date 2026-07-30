@@ -1,26 +1,13 @@
 {
   "schema": "sentry_findings_feed_v1",
   "product": "site-builder",
-  "generated_at": "2026-07-24T12:43:46.004Z",
-  "findings_count": 1,
+  "generated_at": "2026-07-30T02:10:14.865Z",
+  "findings_count": 0,
   "without_solution": 0,
-  "findings": [
-    {
-      "code": "layer_a+b_failed",
-      "detail": "Layer A+B (composite) failed with no structured finding.",
-      "proposed_solution": "Run `npm run sentry:gate -- site-builder` with prod creds, read the failing layer's output/receipt, and fix the first failing assertion; if the failure is a build/preview timeout, re-run once the async build completes.",
-      "proposed_solution_source": "synthesized",
-      "severity": "error",
-      "source": "layer-a+b"
-    }
-  ],
+  "unclassified_error_findings": 0,
+  "findings": [],
   "readiness": {
-    "blockers": [
-      {
-        "code": "layer_a+b_failed",
-        "detail": "Layer A+B (composite) failed with no structured finding."
-      }
-    ],
+    "blockers": [],
     "warnings": []
   }
 }

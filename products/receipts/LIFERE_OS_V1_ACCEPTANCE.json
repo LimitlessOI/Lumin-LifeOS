@@ -1,7 +1,7 @@
 {
   "schema": "lifere_os_v1_acceptance_v2",
   "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
-  "started_at": "2026-07-28T22:32:15.878Z",
+  "started_at": "2026-07-30T01:00:11.349Z",
   "tests_passed": [
     "LRE-T01_service_file",
     "LRE-T01b_top3_export",
@@ -29,8 +29,8 @@
   "produced_by": "codebase",
   "verified_by": "scripts/run-lifere-os-v1-acceptance.mjs",
   "verification_kind": "deterministic",
-  "completed_at": "2026-07-28T22:32:15.904Z",
-  "git_sha": "58f9ee0afba924114318403b7c493c1b4844949c",
+  "completed_at": "2026-07-30T01:00:11.359Z",
+  "git_sha": "b4aa44cea3c3c5b3a596f98ceb8ee6e804fcac49",
   "verdict": "PASS",
   "bp_sync": {
     "updated": [

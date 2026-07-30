@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /**
  * SYNOPSIS: SENTRY Site Builder pre-alpha completion gate — runs BOTH doctrine
  * layers and fails closed unless both pass. Layer A (structural, HTTP) always
@@ -33,18 +32,28 @@ const FINDINGS_FEED = 'products/receipts/SENTRY_FINDINGS_FEED.json';
 // the completion gate must self-provision one or it fails closed forever and the
 // never-stop loop thrashes on the blocked step.
 const FIXTURE_URL = process.env.SENTRY_GATE_FIXTURE_URL || 'https://www.wellroundedmomma.com';
+const PLACEHOLDER_RE = /example\.com|hugedomains|godaddy|is for sale|buy this domain|domain (name )?(is )?for sale|parked (free|domain)|namecheap|sedo|this domain (is|may be)/i;
 
-// Ensure at least one editable preview exists on prod before the layers run.
-// Idempotent: reuses an existing preview; only builds when none is present.
-// Best-effort — never throws; the layers still fail closed if this can't provision.
+function isPlaceholderPreview(p) {
+  const sourceUrl = String(p?.businessUrl || p?.sourceUrl || p?.targetUrl || p?.url || '').toLowerCase();
+  return !sourceUrl || PLACEHOLDER_RE.test(sourceUrl);
+}
+
+// Ensure at least one editable, real-business preview exists on prod before the layers run.
+// Idempotent: reuses an existing non-placeholder preview; rebuilds from the real fixture
+// if the newest preview is a placeholder/parked domain (so Layer B does not fail B02b).
 async function ensurePreview() {
   if (!BASE || !KEY) return { ran: false, reason: 'no_prod_creds' };
   const authed = { 'x-command-key': KEY };
   try {
     const list = await fetch(`${BASE}/api/v1/sites/previews`, { headers: authed });
     const body = await list.json().catch(() => ({}));
-    const existing = (body.previews || []).find((p) => p && p.clientId && p.editToken);
-    if (existing) return { ran: true, built: false, clientId: existing.clientId };
+    const real = (body.previews || []).find((p) => p && p.clientId && p.editToken && !isPlaceholderPreview(p));
+    if (real) {
+      process.env.PREVIEW_CLIENT_ID = real.clientId;
+      process.env.PREVIEW_EDIT_TOKEN = real.editToken;
+      return { ran: true, built: false, clientId: real.clientId };
+    }
   } catch { /* fall through to build */ }
   console.log(`▶ No preview on prod — self-provisioning a fixture from ${FIXTURE_URL}…`);
   // Use the ASYNC prospect path (skipEmail): a synchronous /build exceeds Railway's
@@ -72,6 +81,14 @@ async function ensurePreview() {
       if (sb && sb.done) {
         const ok = ['sent', 'built', 'qa_hold'].includes(String(sb.status || '').toLowerCase());
         console.log(`  fixture build ${sb.status} (ok=${ok})`);
+        process.env.PREVIEW_CLIENT_ID = clientId;
+        // Fetch the editToken from the previews list so Layer A/B can open the editor.
+        try {
+          const list2 = await fetch(`${BASE}/api/v1/sites/previews`, { headers: authed });
+          const body2 = await list2.json().catch(() => ({}));
+          const built = (body2.previews || []).find((p) => p.clientId === clientId);
+          if (built?.editToken) process.env.PREVIEW_EDIT_TOKEN = built.editToken;
+        } catch { /* token-less editor will still 403, but layers will report that clearly */ }
         return { ran: true, built: true, ok, clientId };
       }
     }
@@ -99,7 +116,7 @@ async function runLayerB() {
     const res = await fetch(`${BASE}/api/v1/sites/prealpha/layer-b`, {
       method: 'POST',
       headers: { 'content-type': 'application/json', 'x-command-key': KEY },
-      body: JSON.stringify({}),
+      body: JSON.stringify({ clientId: process.env.PREVIEW_CLIENT_ID || undefined }),
     });
     const body = await res.json().catch(() => ({}));
     const ux = body.uxCritique || {};

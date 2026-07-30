@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T01:57:10.187Z",
+  "generated_at": "2026-07-30T02:14:38.254Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12338,
   "files": [
@@ -21308,8 +21308,8 @@
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
       "bytes": 21691,
-      "mtime": "2026-07-28T22:51:46.988Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "mtime": "2026-07-30T02:14:38.254Z",
+      "indexed_at": "2026-07-30T02:14:38.254Z",
       "synopsis_index_only": true
     },
     {
@@ -27786,8 +27786,8 @@
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 3682,
-      "mtime": "2026-07-28T22:32:15.908Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "mtime": "2026-07-30T02:14:38.254Z",
+      "indexed_at": "2026-07-30T02:14:38.254Z",
       "synopsis_index_only": true
     },
     {
@@ -27911,8 +27911,8 @@
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/OBJECTIVE_VERDICT.json",
       "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
       "bytes": 1147,
-      "mtime": "2026-07-28T22:32:15.912Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "mtime": "2026-07-30T02:14:38.254Z",
+      "indexed_at": "2026-07-30T02:14:38.254Z",
       "synopsis_index_only": true
     },
     {
@@ -29509,8 +29509,8 @@
       "path": "builderos-reboot/PRODUCT_READINESS_REPORT.json",
       "synopsis": "BuilderOS artifact — PRODUCT READINESS REPORT.",
       "bytes": 43376,
-      "mtime": "2026-07-28T22:32:15.911Z",
-      "indexed_at": "2026-07-28T23:44:15.529Z",
+      "mtime": "2026-07-30T02:14:38.254Z",
+      "indexed_at": "2026-07-30T02:14:38.254Z",
       "synopsis_index_only": true
     },
     {
@@ -36605,8 +36605,8 @@
       "path": "db/migrations/20260730_lifere_learning_profile.sql",
       "synopsis": "Database migration — add metadata JSONB column to lifere_coaching_sessions for learning profile.",
       "bytes": 215,
-      "mtime": "2026-07-30T01:27:30.151Z",
-      "indexed_at": "2026-07-30T01:27:30.151Z"
+      "mtime": "2026-07-30T02:14:38.254Z",
+      "indexed_at": "2026-07-30T02:14:38.254Z"
     },
     {
       "path": "db/migrations/add_virtual_real_estate_curriculum.sql",
@@ -37989,9 +37989,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 43112,
-      "mtime": "2026-07-30T01:36:30.407Z",
-      "indexed_at": "2026-07-30T01:36:30.407Z"
+      "bytes": 43624,
+      "mtime": "2026-07-30T02:14:38.254Z",
+      "indexed_at": "2026-07-30T02:14:38.254Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40926,9 +40926,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 634143,
-      "mtime": "2026-07-30T01:36:30.407Z",
-      "indexed_at": "2026-07-30T01:36:30.407Z"
+      "bytes": 634892,
+      "mtime": "2026-07-30T02:14:38.254Z",
+      "indexed_at": "2026-07-30T02:14:38.254Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -40962,9 +40962,9 @@
     {
       "path": "docs/products/lifere/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeRE",
-      "bytes": 47026,
-      "mtime": "2026-07-30T01:27:30.151Z",
-      "indexed_at": "2026-07-30T01:27:30.151Z"
+      "bytes": 47530,
+      "mtime": "2026-07-30T02:14:38.254Z",
+      "indexed_at": "2026-07-30T02:14:38.254Z"
     },
     {
       "path": "docs/products/limitlessos/conversations/2026-06-29-founder-ecosystem-session.md",
@@ -41036,8 +41036,8 @@
       "path": "docs/products/MARKET_READINESS_PLAN.md",
       "synopsis": "Market-readiness audit and implementation plan for every active product.",
       "bytes": 10919,
-      "mtime": "2026-07-30T01:27:30.151Z",
-      "indexed_at": "2026-07-30T01:27:30.151Z"
+      "mtime": "2026-07-30T02:14:38.254Z",
+      "indexed_at": "2026-07-30T02:14:38.254Z"
     },
     {
       "path": "docs/products/MARKETINGOS.md",
@@ -41065,8 +41065,8 @@
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
       "bytes": 126670,
-      "mtime": "2026-07-30T01:27:30.151Z",
-      "indexed_at": "2026-07-30T01:27:30.151Z"
+      "mtime": "2026-07-30T02:14:38.254Z",
+      "indexed_at": "2026-07-30T02:14:38.254Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -41087,8 +41087,8 @@
       "path": "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md",
       "synopsis": "SocialMediaOS Module Home",
       "bytes": 24426,
-      "mtime": "2026-07-30T01:27:30.151Z",
-      "indexed_at": "2026-07-30T01:27:30.151Z"
+      "mtime": "2026-07-30T02:14:38.254Z",
+      "indexed_at": "2026-07-30T02:14:38.254Z"
     },
     {
       "path": "docs/products/memory-intelligence/FILE_MANIFEST.json",
@@ -41398,9 +41398,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 213966,
-      "mtime": "2026-07-30T01:27:30.151Z",
-      "indexed_at": "2026-07-30T01:27:30.151Z"
+      "bytes": 213643,
+      "mtime": "2026-07-30T02:14:38.254Z",
+      "indexed_at": "2026-07-30T02:14:38.254Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -41625,8 +41625,8 @@
       "path": "docs/products/ZERO_BUDGET_MARKETING_PLAN.md",
       "synopsis": "Zero-budget, limited-email marketing plan for launching products once market ready.",
       "bytes": 6871,
-      "mtime": "2026-07-30T01:27:30.151Z",
-      "indexed_at": "2026-07-30T01:27:30.151Z"
+      "mtime": "2026-07-30T02:14:38.254Z",
+      "indexed_at": "2026-07-30T02:14:38.254Z"
     },
     {
       "path": "docs/products/zero-drift-handoff-protocol/FILE_MANIFEST.json",
@@ -64424,9 +64424,9 @@
     {
       "path": "products/receipts/FOUNDER_JWT_CHAT_PROOF.json",
       "synopsis": "Product receipt — FOUNDER JWT CHAT PROOF.",
-      "bytes": 921,
-      "mtime": "2026-07-20T08:52:01.076Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 671,
+      "mtime": "2026-07-30T02:14:38.254Z",
+      "indexed_at": "2026-07-30T02:14:38.254Z",
       "synopsis_index_only": true
     },
     {
@@ -64456,9 +64456,9 @@
     {
       "path": "products/receipts/FOUNDER_UI_LOGIN_E2E.json",
       "synopsis": "Product receipt — FOUNDER UI LOGIN E2E.",
-      "bytes": 1223,
-      "mtime": "2026-07-20T08:52:05.355Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 804,
+      "mtime": "2026-07-30T02:14:38.254Z",
+      "indexed_at": "2026-07-30T02:14:38.254Z",
       "synopsis_index_only": true
     },
     {
@@ -64865,8 +64865,8 @@
       "path": "products/receipts/LIFERE_OS_V1_ACCEPTANCE.json",
       "synopsis": "Product receipt — LIFERE OS V1 ACCEPTANCE.",
       "bytes": 1454,
-      "mtime": "2026-07-28T22:32:15.912Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "mtime": "2026-07-30T02:14:38.254Z",
+      "indexed_at": "2026-07-30T02:14:38.254Z",
       "synopsis_index_only": true
     },
     {
@@ -64969,24 +64969,24 @@
       "path": "products/receipts/POINT_B_DNA_VERIFY.json",
       "synopsis": "Product receipt — POINT B DNA VERIFY.",
       "bytes": 318,
-      "mtime": "2026-07-28T22:31:46.482Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "mtime": "2026-07-30T02:14:38.254Z",
+      "indexed_at": "2026-07-30T02:14:38.254Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/REAL_APP_E2E.json",
       "synopsis": "Product receipt — REAL APP E2E.",
-      "bytes": 2391,
-      "mtime": "2026-07-28T17:53:47.851Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 2421,
+      "mtime": "2026-07-30T02:14:38.254Z",
+      "indexed_at": "2026-07-30T02:14:38.254Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
-      "bytes": 23544,
-      "mtime": "2026-07-28T22:39:58.986Z",
-      "indexed_at": "2026-07-30T01:21:52.231Z",
+      "bytes": 23902,
+      "mtime": "2026-07-30T02:14:38.254Z",
+      "indexed_at": "2026-07-30T02:14:38.254Z",
       "synopsis_index_only": true
     },
     {
@@ -65001,56 +65001,56 @@
       "path": "products/receipts/SENTRY_FINDINGS_FEED.json",
       "synopsis": "Product receipt — SENTRY FINDINGS FEED.",
       "bytes": 214,
-      "mtime": "2026-07-24T12:43:45.998Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "mtime": "2026-07-30T02:14:38.254Z",
+      "indexed_at": "2026-07-30T02:14:38.254Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/SENTRY_FINDINGS_FEED.lifeos-founder-ui.json",
       "synopsis": "Product receipt — SENTRY FINDINGS FEED.Lifeos Founder Ui.",
-      "bytes": 249,
-      "mtime": "2026-07-28T17:53:47.939Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 285,
+      "mtime": "2026-07-30T02:14:38.254Z",
+      "indexed_at": "2026-07-30T02:14:38.254Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/SENTRY_FINDINGS_FEED.marketingos.json",
       "synopsis": "Product receipt — SENTRY FINDINGS FEED.Marketingos.",
       "bytes": 279,
-      "mtime": "2026-07-20T08:51:23.724Z",
-      "indexed_at": "2026-07-30T01:21:52.231Z",
+      "mtime": "2026-07-30T02:14:38.254Z",
+      "indexed_at": "2026-07-30T02:14:38.254Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/SENTRY_FINDINGS_FEED.site-builder.json",
       "synopsis": "Product receipt — SENTRY FINDINGS FEED.Site Builder.",
-      "bytes": 856,
-      "mtime": "2026-07-28T17:53:48.145Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 280,
+      "mtime": "2026-07-30T02:14:38.254Z",
+      "indexed_at": "2026-07-30T02:14:38.254Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/SENTRY_MARKETINGOS_LAYER_A.json",
       "synopsis": "Product receipt — SENTRY MARKETINGOS LAYER A.",
       "bytes": 1081,
-      "mtime": "2026-07-20T08:51:20.308Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "mtime": "2026-07-30T02:14:38.254Z",
+      "indexed_at": "2026-07-30T02:14:38.254Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/SENTRY_MARKETINGOS_LAYER_B.json",
       "synopsis": "Product receipt — SENTRY MARKETINGOS LAYER B.",
       "bytes": 1036,
-      "mtime": "2026-07-20T08:51:23.719Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "mtime": "2026-07-30T02:14:38.254Z",
+      "indexed_at": "2026-07-30T02:14:38.254Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/SITE_BUILDER_PREALPHA_LAYER_A.json",
       "synopsis": "Product receipt — SITE BUILDER PREALPHA LAYER A.",
-      "bytes": 2390,
-      "mtime": "2026-07-28T17:47:22.524Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 2673,
+      "mtime": "2026-07-30T02:14:38.254Z",
+      "indexed_at": "2026-07-30T02:14:38.254Z",
       "synopsis_index_only": true
     },
     {
@@ -65105,8 +65105,8 @@
       "path": "products/receipts/SMOS_REAL_CUSTOMER_READINESS.json",
       "synopsis": "Product receipt — SMOS REAL CUSTOMER READINESS.",
       "bytes": 1491,
-      "mtime": "2026-07-16T19:42:53.594Z",
-      "indexed_at": "2026-07-30T01:21:52.231Z",
+      "mtime": "2026-07-30T02:14:38.254Z",
+      "indexed_at": "2026-07-30T02:14:38.254Z",
       "synopsis_index_only": true
     },
     {
@@ -65153,16 +65153,16 @@
       "path": "products/receipts/TRUTH_ENFORCEMENT_AUDIT.json",
       "synopsis": "Product receipt — TRUTH ENFORCEMENT AUDIT.",
       "bytes": 782,
-      "mtime": "2026-07-28T20:19:15.026Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "mtime": "2026-07-30T02:14:38.254Z",
+      "indexed_at": "2026-07-30T02:14:38.254Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/TRUTH_LOCKDOWN_VERIFY.json",
       "synopsis": "Product receipt — TRUTH LOCKDOWN VERIFY.",
       "bytes": 1318,
-      "mtime": "2026-07-28T22:31:47.002Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "mtime": "2026-07-30T02:14:38.254Z",
+      "indexed_at": "2026-07-30T02:14:38.254Z",
       "synopsis_index_only": true
     },
     {
@@ -65193,8 +65193,8 @@
       "path": "products/receipts/WISDOM_TRUTH_AUDIT.json",
       "synopsis": "Product receipt — WISDOM TRUTH AUDIT.",
       "bytes": 1001,
-      "mtime": "2026-07-28T20:19:15.159Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "mtime": "2026-07-30T02:14:38.254Z",
+      "indexed_at": "2026-07-30T02:14:38.254Z",
       "synopsis_index_only": true
     },
     {
@@ -68959,9 +68959,9 @@
     {
       "path": "routes/lifere-os-routes.js",
       "synopsis": "LifeRE OS routes — full A-to-Z API (W1–W6).",
-      "bytes": 58511,
-      "mtime": "2026-07-28T17:47:22.536Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 58630,
+      "mtime": "2026-07-30T02:14:38.254Z",
+      "indexed_at": "2026-07-30T02:14:38.254Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -68970,8 +68970,8 @@
       "path": "routes/lifere-sales-coaching-routes.js",
       "synopsis": "LifeRE sales coaching routes — simulator sessions, real-time coaching, scenario list.",
       "bytes": 5697,
-      "mtime": "2026-07-30T01:27:30.151Z",
-      "indexed_at": "2026-07-30T01:27:30.151Z",
+      "mtime": "2026-07-30T02:14:38.254Z",
+      "indexed_at": "2026-07-30T02:14:38.254Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -69671,8 +69671,8 @@
       "path": "routes/socialmediaos-coaching-routes.js",
       "synopsis": "SocialMediaOS AI coaching session routes — start, answer Q&A, generate content pack, export.",
       "bytes": 5503,
-      "mtime": "2026-07-30T01:27:30.151Z",
-      "indexed_at": "2026-07-30T01:27:30.151Z",
+      "mtime": "2026-07-30T02:14:38.254Z",
+      "indexed_at": "2026-07-30T02:14:38.254Z",
       "ssot": [
         "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md"
       ]
@@ -73318,9 +73318,9 @@
     {
       "path": "scripts/sentry-site-builder-prealpha-gate.mjs",
       "synopsis": "SENTRY Site Builder pre-alpha completion gate — runs BOTH doctrine",
-      "bytes": 9436,
-      "mtime": "2026-07-13T07:02:23.885Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 10582,
+      "mtime": "2026-07-30T02:14:38.254Z",
+      "indexed_at": "2026-07-30T02:14:38.254Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -86197,8 +86197,8 @@
       "path": "services/chair-direct-agent.js",
       "synopsis": "Direct Chair agent — talks + acts; human prose obeys Lumin Communication DNA (not theater).",
       "bytes": 28010,
-      "mtime": "2026-07-30T01:54:29.550Z",
-      "indexed_at": "2026-07-30T01:54:29.550Z",
+      "mtime": "2026-07-30T02:14:38.254Z",
+      "indexed_at": "2026-07-30T02:14:38.254Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -86297,8 +86297,8 @@
       "path": "services/chair-personality-translate.js",
       "synopsis": "Lumin personality translate — human-language layer on SYSTEM_FACTS only (not theater).",
       "bytes": 9382,
-      "mtime": "2026-07-30T01:27:30.151Z",
-      "indexed_at": "2026-07-30T01:27:30.151Z",
+      "mtime": "2026-07-30T02:14:38.254Z",
+      "indexed_at": "2026-07-30T02:14:38.254Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -87756,8 +87756,8 @@
       "path": "services/env-registry-map.js",
       "synopsis": "env-registry-map.js",
       "bytes": 29372,
-      "mtime": "2026-07-30T01:27:30.151Z",
-      "indexed_at": "2026-07-30T01:27:30.151Z",
+      "mtime": "2026-07-30T02:14:38.254Z",
+      "indexed_at": "2026-07-30T02:14:38.254Z",
       "ssot": [
         "docs/products/command-center/PRODUCT_HOME.md"
       ]
@@ -90061,8 +90061,8 @@
       "path": "services/lifere-sales-simulator.js",
       "synopsis": "LifeRE sales coaching simulator — AI plays the client, real-time coaching, objection mastery.",
       "bytes": 15578,
-      "mtime": "2026-07-30T01:27:30.151Z",
-      "indexed_at": "2026-07-30T01:27:30.151Z",
+      "mtime": "2026-07-30T02:14:38.254Z",
+      "indexed_at": "2026-07-30T02:14:38.254Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -90080,9 +90080,9 @@
     {
       "path": "services/lifere-skill-coaching.js",
       "synopsis": "LifeRE skill coaching — 24 modules, drills, performance link.",
-      "bytes": 2441,
-      "mtime": "2026-06-29T17:21:08.927Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 4058,
+      "mtime": "2026-07-30T02:14:38.254Z",
+      "indexed_at": "2026-07-30T02:14:38.254Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -90242,8 +90242,8 @@
       "path": "services/lumin-context-loader.js",
       "synopsis": "Loads per-user twin + communication profile + recent learning for Lumin prompts.",
       "bytes": 19765,
-      "mtime": "2026-07-30T01:43:51.329Z",
-      "indexed_at": "2026-07-30T01:43:51.329Z",
+      "mtime": "2026-07-30T02:14:38.254Z",
+      "indexed_at": "2026-07-30T02:14:38.254Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -91223,8 +91223,8 @@
       "path": "services/password-reset-email.js",
       "synopsis": "Send password-reset email via the configured provider (postmark, resend, smtp, disabled).",
       "bytes": 7105,
-      "mtime": "2026-07-30T01:27:30.151Z",
-      "indexed_at": "2026-07-30T01:27:30.151Z",
+      "mtime": "2026-07-30T02:14:38.254Z",
+      "indexed_at": "2026-07-30T02:14:38.254Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -92518,8 +92518,8 @@
       "path": "services/site-builder.js",
       "synopsis": "Site Builder — Scrape existing site → AI-generates complete click-funnel website",
       "bytes": 111195,
-      "mtime": "2026-07-30T01:27:30.151Z",
-      "indexed_at": "2026-07-30T01:27:30.151Z",
+      "mtime": "2026-07-30T02:14:38.254Z",
+      "indexed_at": "2026-07-30T02:14:38.254Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -92552,8 +92552,8 @@
       "path": "services/socialmediaos-coaching-service.js",
       "synopsis": "AI coaching Q&A loop for SocialMediaOS client sessions — 5 questions, story extraction.",
       "bytes": 4247,
-      "mtime": "2026-07-30T01:27:30.151Z",
-      "indexed_at": "2026-07-30T01:27:30.151Z",
+      "mtime": "2026-07-30T02:14:38.254Z",
+      "indexed_at": "2026-07-30T02:14:38.254Z",
       "ssot": [
         "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md"
       ]
@@ -92562,8 +92562,8 @@
       "path": "services/socialmediaos-content-generator.js",
       "synopsis": "Generates content packs from coaching session answers using AI council.",
       "bytes": 11216,
-      "mtime": "2026-07-30T01:27:30.151Z",
-      "indexed_at": "2026-07-30T01:27:30.151Z",
+      "mtime": "2026-07-30T02:14:38.254Z",
+      "indexed_at": "2026-07-30T02:14:38.254Z",
       "ssot": [
         "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md"
       ]

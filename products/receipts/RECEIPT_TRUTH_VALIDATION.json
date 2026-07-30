@@ -1,12 +1,12 @@
 {
   "schema": "receipt_truth_validation_v1",
-  "at": "2026-07-29T21:22:04.302Z",
+  "at": "2026-07-30T02:11:11.653Z",
   "ok": true,
   "checked": 126,
   "failures": [],
   "known_debt": [
     "MACHINE_ALPHA_WALKTHROUGH.json:ACCEPTANCE_PASS_WITHOUT_SHA_OR_BASE",
-    "SITE_BUILDER_PREALPHA_LAYER_A.json:ACCEPTANCE_PASS_WITHOUT_SHA_OR_BASE"
+    "SITE_BUILDER_PREALPHA_LAYER_A.json:ACCEPTANCE_PASS_WITHOUT_SHA_OR_BASE|PASS_WITHOUT_NAMED_VERIFIER"
   ],
   "stale_baseline": [],
   "advisories": [
@@ -28,7 +28,6 @@
     "LUMIN_CHAIR_DIRECT_CONNECTION_PARITY.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
     "MACHINE_ALPHA_WALKTHROUGH.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
     "PATH_TO_10_T05_FOUNDER_MEMORY.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
-    "SITE_BUILDER_PREALPHA_LAYER_A.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
     "SOCIALMEDIAOS_SESSION_MVP_ACCEPTANCE.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
     "VOICE_RAIL_V1_ACCEPTANCE.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER"
   ],
@@ -793,13 +792,18 @@
       "file": "SITE_BUILDER_PREALPHA_LAYER_A.json",
       "ok": false,
       "violations": [
-        "ACCEPTANCE_PASS_WITHOUT_SHA_OR_BASE"
+        "ACCEPTANCE_PASS_WITHOUT_SHA_OR_BASE",
+        "PASS_WITHOUT_NAMED_VERIFIER"
       ],
       "claims_pass": true,
       "proposed_solutions": [
         {
           "violation": "ACCEPTANCE_PASS_WITHOUT_SHA_OR_BASE",
           "proposed_solution": "Add commit_sha (or git_sha) and production_base to this receipt so the PASS claim points at a specific commit and a reachable environment. If neither can be produced, the verdict is not PASS — change it to UNSOLVED."
+        },
+        {
+          "violation": "PASS_WITHOUT_NAMED_VERIFIER",
+          "proposed_solution": "Add verified_by naming the independent actor that checked this (must differ from produced_by). If no independent verifier existed, set separation_collapsed: true plus separation_note explaining why no safer alternative existed, per PRODUCT_HOME Separation Of Duties."
         }
       ]
     },
