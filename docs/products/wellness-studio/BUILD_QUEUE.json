@@ -622,7 +622,7 @@
     },
     {
       "id": "step2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/20260716_lifeos_core_phase_2.sql",
       "task": "implement phase 2",
       "spec": "Create DB schema for LifeOS Core Phase 2.",
@@ -630,14 +630,14 @@
         "step1"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS",
         "phase_2_table"
       ],
-      "last_attempt_at": null,
-      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw; assertion_threw",
-      "commit_sha": "49f7d6b7ed75995cb118303afdcee3587967e692",
+      "last_attempt_at": "2026-07-30T19:34:02.624Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:phase_2_table; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
