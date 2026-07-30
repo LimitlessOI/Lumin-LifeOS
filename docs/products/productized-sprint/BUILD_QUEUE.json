@@ -131,13 +131,13 @@
     },
     {
       "id": "05",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "routes/sprintQueuePanel.js",
       "task": "create Sprint Queue panel",
       "spec": "Provide a panel for sprint queue within Command Center.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerSprintQueuePanel"
       ],
@@ -158,16 +158,13 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-15T22:17:04.908Z",
-      "commit_sha": null,
+      "commit_sha": "9ee37ebb271c3ddfc903f153c499e842cba6555c",
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "05",
       "mission_id": "PRODUCT-productized-sprint",
       "pre_existing": false,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerSprintQueuePanel; behavior_assertion_failed; behavior_proof",
-      "reaudit_reset_at": "2026-07-30T18:55:06.702Z",
-      "built_sha": null,
-      "proof": null,
-      "last_attempt_at": "2026-07-30T23:19:40.537Z"
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerSprintQueuePanel",
+      "reaudit_reset_at": "2026-07-30T18:55:06.702Z"
     },
     {
       "id": "06",
@@ -263,14 +260,37 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-15T22:26:47.147Z",
+      "shipped_at": "2026-07-30T23:37:55.100Z",
       "commit_sha": "de59be578c1784a80838e874e3d97328b99515ec",
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "1",
       "mission_id": "PRODUCT-productized-sprint",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerSalesPageRoutes; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.702Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.702Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/productized-sprint/twins/steps/1.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T23:37:55.100Z",
+        "shipped_at": "2026-07-30T23:37:55.100Z",
+        "commit_sha": "de59be578c1784a80838e874e3d97328b99515ec",
+        "content_sha256": "7f23cfb8da7a1fc1fa0f83c123737c62d2665ce76186d26dcc0b7c9f9fed5171",
+        "target_file": "routes/salesPageRoutes.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "routes/salesPageRoutes.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/productized-sprint/twins/steps/1.exact",
+          "content_sha256": "7f23cfb8da7a1fc1fa0f83c123737c62d2665ce76186d26dcc0b7c9f9fed5171"
+        }
+      }
     },
     {
       "id": "2",
