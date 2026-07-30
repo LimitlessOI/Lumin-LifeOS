@@ -224,5 +224,95 @@ export function extendTables(knex, existingTables) {
       }
       return null;
     }),
+    // New table for user_sessions - to manage user session data, avoiding conflicts
+    knex.schema.hasTable('user_sessions').then((exists) => {
+      if (!exists) {
+        return knex.schema.createTable('user_sessions', (table) => {
+          table.increments('id').primary();
+          if (existingTables.includes('users')) {
+            table.integer('user_id').unsigned().references('id').inTable('users').onDelete('CASCADE');
+          } else {
+            table.integer('user_id').unsigned();
+          }
+          table.string('session_token').unique();
+          table.timestamp('expires_at');
+          table.jsonb('session_data');
+          table.timestamp('created_at').defaultTo(knex.fn.now());
+          table.timestamp('last_accessed').defaultTo(knex.fn.now());
+        });
+      }
+      return null;
+    }),
+    // New table for data_exports - to track and manage data export operations
+    knex.schema.hasTable('data_exports').then((exists) => {
+      if (!exists) {
+        return knex.schema.createTable('data_exports', (table) => {
+          table.increments('id').primary();
+          if (existingTables.includes('users')) {
+            table.integer('user_id').unsigned().references('id').inTable('users').onDelete('SET NULL');
+          } else {
+            table.integer('user_id').unsigned();
+          }
+          table.string('export_type');
+          table.string('status'); // e.g., 'pending', 'completed', 'failed'
+          table.text('file_path');
+          table.jsonb('export_params');
+          table.timestamp('requested_at').defaultTo(knex.fn.now());
+          table.timestamp('completed_at');
+        });
+      }
+      return null;
+    }),
+    // New table for scheduled_tasks - to manage background or scheduled tasks
+    knex.schema.hasTable('scheduled_tasks').then((exists) => {
+      if (!exists) {
+        return knex.schema.createTable('scheduled_tasks', (table) => {
+          table.increments('id').primary();
+          table.string('task_name');
+          table.string('cron_schedule');
+          table.timestamp('last_run_at');
+          table.timestamp('next_run_at');
+          table.string('status'); // e.g., 'active', 'paused', 'error'
+          table.jsonb('task_config');
+          table.timestamp('created_at').defaultTo(knex.fn.now());
+          table.timestamp('updated_at').defaultTo(knex.fn.now());
+        });
+      }
+      return null;
+    }),
+    // New table for error_monitoring - to log and track system errors
+    knex.schema.hasTable('error_monitoring').then((exists) => {
+      if (!exists) {
+        return knex.schema.createTable('error_monitoring', (table) => {
+          table.increments('id').primary();
+          table.string('error_code');
+          table.string('severity');
+          table.text('message');
+          table.jsonb('stack_trace');
+          table.jsonb('context');
+          table.timestamp('logged_at').defaultTo(knex.fn.now());
+          table.boolean('is_resolved').defaultTo(false);
+        });
+      }
+      return null;
+    }),
+    // New table for resource_locks - for managing concurrent access to shared resources
+    knex.schema.hasTable('resource_locks').then((exists) => {
+      if (!exists) {
+        return knex.schema.createTable('resource_locks', (table) => {
+          table.increments('id').primary();
+          table.string('resource_name').unique();
+          if (existingTables.includes('users')) {
+            table.integer('locked_by_user_id').unsigned().references('id').inTable('users').onDelete('SET NULL');
+          } else {
+            table.integer('locked_by_user_id').unsigned();
+          }
+          table.string('lock_owner_id'); // e.g., process ID, service instance ID
+          table.timestamp('locked_at').defaultTo(knex.fn.now());
+          table.timestamp('expires_at');
+        });
+      }
+      return null;
+    }),
   ]);
 }
