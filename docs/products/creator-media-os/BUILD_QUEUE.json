@@ -249,8 +249,8 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-07-30T21:24:25.474Z",
-        "shipped_at": "2026-07-30T21:24:25.474Z",
+        "sealed_at": "2026-07-30T21:48:45.666Z",
+        "shipped_at": "2026-07-30T21:48:45.666Z",
         "commit_sha": null,
         "content_sha256": "59f53ec6fb2bff0d0a872c05f765937086ea4404aa3dd1ac3e800982ace83c86",
         "target_file": "services/thumbnailPipeline.js",
@@ -266,7 +266,7 @@
           "content_sha256": "59f53ec6fb2bff0d0a872c05f765937086ea4404aa3dd1ac3e800982ace83c86"
         }
       },
-      "shipped_at": "2026-07-30T21:24:25.474Z"
+      "shipped_at": "2026-07-30T21:48:45.666Z"
     },
     {
       "id": "6",
