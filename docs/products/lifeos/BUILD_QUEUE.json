@@ -2141,13 +2141,13 @@
     },
     {
       "id": "step3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/lifeos-assessment-battery.js",
       "task": "build assessment battery",
       "spec": "Implement user assessments for emotional patterns.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "getAssessments",
         "compareAssessments"
@@ -2172,13 +2172,16 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-15T23:49:06.940Z",
-      "commit_sha": "da80dbb0bb9bf4c2c5ba70cf2e9f34e4747157dd",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step3",
       "mission_id": "PRODUCT-lifeos",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:getAssessments,compareAssessments; getAssessments; compareAssessments; function getAssessments; function compareAssessments",
-      "reaudit_reset_at": "2026-07-30T18:55:06.601Z"
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getAssessments,compareAssessments; behavior_assertion_failed; behavior_proof",
+      "reaudit_reset_at": "2026-07-30T18:55:06.601Z",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-30T20:09:14.347Z"
     },
     {
       "id": "step4",
