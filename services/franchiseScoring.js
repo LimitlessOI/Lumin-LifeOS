@@ -7,6 +7,7 @@ const userFeedbackHistory = new Map(); // Map<userId, Array<{franchiseId: string
 const franchiseRatingHistory = new Map(); // Map<franchiseId, Array<{userId: string, timestamp: number, rating: number}>>
 const userFranchiseSpecificAverage = new Map(); // Map<userId_franchiseId, {sum: number, count: number}>
 const franchiseOverallAverage = new Map(); // Map<franchiseId, {sum: number, count: number}>
+const employerScoreHistory = new Map(); // Map<franchiseId, Array<{timestamp: number, score: number}>>
 
 // Configuration for anti-abuse thresholds
 const ANTI_ABUSE_CONFIG = {
@@ -28,10 +29,15 @@ const ANTI_ABUSE_CONFIG = {
   COORDINATED_ATTACK_THRESHOLD_REVIEWS: 5, // Min reviews for a potential coordinated attack
   COORDINATED_ATTACK_TIME_WINDOW_MS: 86400000 * 3, // 3 days for coordinated attack detection
   SUSPICIOUS_RATING_WEIGHT_REDUCTION: 0.5, // Reduce weight of suspicious ratings
+  // New: Employer score specific thresholds
+  EMPLOYER_SCORE_FLUCTUATION_THRESHOLD: 15, // Max points fluctuation in a short period to be suspicious
+  EMPLOYER_SCORE_FLUCTUATION_WINDOW_MS: 86400000 * 7, // 7 days for employer score fluctuation detection
+  EMPLOYER_SCORE_MIN_DATA_POINTS: 3, // Minimum data points to detect fluctuations
 };
 
-const calculateFranchiseScore = (employerData, feedbackData) => {
+const calculateFranchiseScore = (franchiseId, employerData, feedbackData) => {
   let score = 0;
+  const currentTime = Date.now();
 
   // Employer Score Logic
   // Example: Increase score for positive employer attributes
@@ -66,6 +72,29 @@ const calculateFranchiseScore = (employerData, feedbackData) => {
   if (employerData.hasDiversityInitiatives) {
     score += 5;
   }
+
+  // New: Anti-abuse for employer score fluctuations
+  const franchiseEmployerHistory = employerScoreHistory.get(franchiseId) || [];
+  const recentEmployerScores = franchiseEmployerHistory.filter(
+    (entry) => currentTime - entry.timestamp < ANTI_ABUSE_CONFIG.EMPLOYER_SCORE_FLUCTUATION_WINDOW_MS
+  );
+
+  if (recentEmployerScores.length >= ANTI_ABUSE_CONFIG.EMPLOYER_SCORE_MIN_DATA_POINTS) {
+    const previousScores = recentEmployerScores.map(entry => entry.score);
+    const maxScore = Math.max(...previousScores);
+    const minScore = Math.min(...previousScores);
+
+    if (Math.abs(score - maxScore) > ANTI_ABUSE_CONFIG.EMPLOYER_SCORE_FLUCTUATION_THRESHOLD ||
+        Math.abs(score - minScore) > ANTI_ABUSE_CONFIG.EMPLOYER_SCORE_FLUCTUATION_THRESHOLD) {
+      console.warn(`[Anti-Abuse] Employer score for franchise ${franchiseId} flagged: Significant fluctuation detected. Current: ${score}, Range: [${minScore}, ${maxScore}]`);
+      // Could apply a penalty or require manual review for such fluctuations
+      score *= 0.8; // Example: reduce score by 20%
+    }
+  }
+  // Update employer score history
+  franchiseEmployerHistory.push({ timestamp: currentTime, score: score });
+  employerScoreHistory.set(franchiseId, franchiseEmployerHistory);
+
 
   // Community Feedback Integration with Anti-Fraud
   const feedbackScore = feedbackData.reduce((acc, feedback) => {
