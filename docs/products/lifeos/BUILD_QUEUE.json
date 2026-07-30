@@ -1353,13 +1353,13 @@
       ],
       "founder_gated": false,
       "attempts": 1,
-      "last_attempt_at": "2026-07-30T19:43:42.224Z",
+      "last_attempt_at": "2026-07-30T19:32:56.660Z",
       "last_error": "codegen_authoring_failed: codegen_empty: openai_builder_escalation: HTTP 429: {\n    \"error\": {\n        \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-30T19:43:32.459Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-30T19:32:47.123Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1372,7 +1372,7 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": null,
-      "shipped_at": "2026-07-16T00:06:25.458Z",
+      "shipped_at": "2026-07-30T19:49:16.476Z",
       "expected_exports": [
         "classifyFounderIntent",
         "buildSMOSWorkflowReply",
@@ -1395,7 +1395,30 @@
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-chat-v2-02",
       "mission_id": "PRODUCT-lifeos",
-      "reaudit_reset_at": "2026-07-30T18:55:06.601Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.601Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/lifeos/twins/steps/lifeos-chat-v2-02.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T19:49:16.476Z",
+        "shipped_at": "2026-07-30T19:49:16.476Z",
+        "commit_sha": null,
+        "content_sha256": "7e4133fe443006284227d2b10f5066d7a6a94b75965b8071c3d1cdb7d9829258",
+        "target_file": "services/lifeos-chat-intent-router.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/lifeos-chat-intent-router.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/lifeos/twins/steps/lifeos-chat-v2-02.exact",
+          "content_sha256": "7e4133fe443006284227d2b10f5066d7a6a94b75965b8071c3d1cdb7d9829258"
+        }
+      }
     },
     {
       "id": "lifeos-chat-v2-03",
@@ -1595,7 +1618,7 @@
       "built_sha": null,
       "proof": null,
       "revive_count": 1,
-      "revived_at": "2026-07-30T19:26:51.707Z",
+      "revived_at": "2026-07-30T19:32:47.123Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,

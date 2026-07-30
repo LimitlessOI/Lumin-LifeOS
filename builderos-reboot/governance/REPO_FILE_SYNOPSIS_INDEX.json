@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T19:43:59.896Z",
+  "generated_at": "2026-07-30T19:49:19.177Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12345,
+  "file_count": 12346,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -89148,6 +89148,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/lifeos-chat-intent-router.js",
+      "synopsis": "Exports classifyFounderIntent — services/lifeos-chat-intent-router.js.",
+      "bytes": 5489,
+      "mtime": "2026-07-30T19:49:19.177Z",
+      "indexed_at": "2026-07-30T19:49:19.177Z"
     },
     {
       "path": "services/lifeos-commitment-route.js",
