@@ -79,10 +79,10 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-07-30T20:52:56.132Z",
-        "shipped_at": "2026-07-30T20:52:56.132Z",
+        "sealed_at": "2026-07-30T21:12:52.216Z",
+        "shipped_at": "2026-07-30T21:12:52.216Z",
         "commit_sha": null,
-        "content_sha256": "29faba7a9ca1f77360fb6e8c8c1a545bb01991a38de1199b65aa3563bac951d0",
+        "content_sha256": "ea6f634052d53d365a01b0012ea3174ee9976ca9355770b87383e1ada1821164",
         "target_file": "services/characterProfile.js",
         "reverse": {
           "mode": "delete_file",
@@ -93,10 +93,10 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/story-studio/twins/steps/2.exact",
-          "content_sha256": "29faba7a9ca1f77360fb6e8c8c1a545bb01991a38de1199b65aa3563bac951d0"
+          "content_sha256": "ea6f634052d53d365a01b0012ea3174ee9976ca9355770b87383e1ada1821164"
         }
       },
-      "shipped_at": "2026-07-30T20:52:56.132Z",
+      "shipped_at": "2026-07-30T21:12:52.216Z",
       "built_sha": null,
       "proof": null,
       "last_attempt_at": "2026-07-30T20:53:02.668Z",

@@ -4,6 +4,9 @@
 export function editCharacterProfile(profileId, updates) {
   // Placeholder for logic to edit an existing character profile
   console.log(`Editing character profile ${profileId} with updates:`, updates);
+  // In a real application, this would interact with a database or data store
+  // to find and update the character profile.
+  // For now, we simulate success and return the updated profile.
   return { success: true, profileId, ...updates };
 }
 
@@ -19,17 +22,20 @@ export function addSelfInsertProfile(profileData) {
     ...profileData,
     likenessOptIn: profileData.likenessOptIn || false, // Default to false if not provided
   };
+  // In a real application, `storedProfile` would be saved to a database.
   return { success: true, ...storedProfile };
 }
 
 export function editStoryBible(storyId, updates) {
   // Placeholder for logic to edit an existing story bible entry
   console.log(`Editing story bible ${storyId} with updates:`, updates);
+  // Simulate database interaction for updating a story bible entry.
   return { success: true, storyId, ...updates };
 }
 
 export function editWorldBible(worldId, updates) {
   // Placeholder for logic to edit an existing world bible entry
   console.log(`Editing world bible ${worldId} with updates:`, updates);
+  // Simulate database interaction for updating a world bible entry.
   return { success: true, worldId, ...updates };
 }
