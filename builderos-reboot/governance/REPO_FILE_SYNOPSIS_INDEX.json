@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T20:36:09.578Z",
+  "generated_at": "2026-07-30T20:52:41.628Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12358,
   "files": [
@@ -34148,8 +34148,8 @@
       "path": "db/migrations/20231020_create_vapi_integration.sql",
       "synopsis": "Database migration — 20231020_create_vapi_integration.sql.",
       "bytes": 1278,
-      "mtime": "2026-07-30T20:34:41.151Z",
-      "indexed_at": "2026-07-30T20:34:41.151Z"
+      "mtime": "2026-07-30T20:52:41.628Z",
+      "indexed_at": "2026-07-30T20:52:41.628Z"
     },
     {
       "path": "db/migrations/20231025_add_competitors.sql",

@@ -241,7 +241,7 @@
         "CREATE TABLE IF NOT EXISTS"
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-30T20:34:38.625Z",
+      "shipped_at": "2026-07-30T20:52:39.345Z",
       "commit_sha": null,
       "blueprint_id": "PRODUCT-AI-RECEPTIONIST-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "4",
@@ -255,8 +255,8 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-07-30T20:34:38.625Z",
-        "shipped_at": "2026-07-30T20:34:38.625Z",
+        "sealed_at": "2026-07-30T20:52:39.345Z",
+        "shipped_at": "2026-07-30T20:52:39.345Z",
         "commit_sha": null,
         "content_sha256": "40da0fbf98872e6105676cd282800d3682adb1eca5f5cca5284f4fc03171738b",
         "target_file": "db/migrations/20231020_create_vapi_integration.sql",
