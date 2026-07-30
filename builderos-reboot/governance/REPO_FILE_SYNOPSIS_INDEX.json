@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T20:35:21.511Z",
+  "generated_at": "2026-07-30T20:36:09.578Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12358,
   "files": [
@@ -89178,8 +89178,8 @@
       "path": "services/lifeos-chat-intent-executor.js",
       "synopsis": "services/lifeos-chat-intent-executor.js",
       "bytes": 8625,
-      "mtime": "2026-07-30T20:29:41.158Z",
-      "indexed_at": "2026-07-30T20:29:41.158Z",
+      "mtime": "2026-07-30T20:36:09.578Z",
+      "indexed_at": "2026-07-30T20:36:09.578Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
