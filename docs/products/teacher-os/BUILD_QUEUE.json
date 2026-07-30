@@ -9,7 +9,7 @@
   "steps": [
     {
       "id": "1",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/userInterviews.js",
       "task": "compile teacher feedback",
       "spec": "Compile and summarize the feedback from 5 teachers interviewed.",
@@ -33,37 +33,14 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-30T23:19:47.008Z",
-      "commit_sha": "ecfbc2a12bc641e1082913e4855729e23ed55250",
+      "shipped_at": "2026-07-15T17:50:44.624Z",
+      "commit_sha": "9dd2df5369c292810b79780df848d88e3b24682f",
       "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "1",
       "mission_id": "PRODUCT-teacher-os",
       "pre_existing": false,
-      "last_error": null,
-      "reaudit_reset_at": "2026-07-30T18:55:06.746Z",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/teacher-os/twins/steps/1.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-30T23:19:47.008Z",
-        "shipped_at": "2026-07-30T23:19:47.008Z",
-        "commit_sha": "9dd2df5369c292810b79780df848d88e3b24682f",
-        "content_sha256": "13033c22407e013258750ea5d696061fe229bbd7d6110da805cf5d9452c38568",
-        "target_file": "services/userInterviews.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/userInterviews.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/teacher-os/twins/steps/1.exact",
-          "content_sha256": "13033c22407e013258750ea5d696061fe229bbd7d6110da805cf5d9452c38568"
-        }
-      }
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:summarizeInterviews; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.746Z"
     },
     {
       "id": "2",
@@ -91,14 +68,37 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-15T17:57:44.512Z",
+      "shipped_at": "2026-07-30T23:38:07.457Z",
       "commit_sha": "32989e7f23a046569d018e0da5cb8e107756d80d",
       "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "2",
       "mission_id": "PRODUCT-teacher-os",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:analyzeCompetitors; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.746Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.746Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/teacher-os/twins/steps/2.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T23:38:07.457Z",
+        "shipped_at": "2026-07-30T23:38:07.457Z",
+        "commit_sha": "32989e7f23a046569d018e0da5cb8e107756d80d",
+        "content_sha256": "100a36337d9e0bec5cf50c209a111140fce6feb8040f998ca0e63910aa6be084",
+        "target_file": "services/competitiveAnalysis.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/competitiveAnalysis.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/teacher-os/twins/steps/2.exact",
+          "content_sha256": "100a36337d9e0bec5cf50c209a111140fce6feb8040f998ca0e63910aa6be084"
+        }
+      }
     },
     {
       "id": "3",
