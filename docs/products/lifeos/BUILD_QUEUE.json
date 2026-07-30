@@ -2308,14 +2308,37 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-16T01:51:10.509Z",
+      "shipped_at": "2026-07-30T20:13:32.747Z",
       "commit_sha": "fa41a32b54ffefa6408d278a77dff8815fea6784",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step6",
       "mission_id": "PRODUCT-lifeos",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:trackHabit,recoverStreak; assertion_threw; assertion_threw; assertion_threw; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.601Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.601Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/lifeos/twins/steps/step6.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T20:13:32.747Z",
+        "shipped_at": "2026-07-30T20:13:32.747Z",
+        "commit_sha": "fa41a32b54ffefa6408d278a77dff8815fea6784",
+        "content_sha256": "27bd913de10b2527b3e5337a7e45b6bc285062c56eea7c36bf8ce1a10d58c851",
+        "target_file": "services/lifeos-habit-tracker.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/lifeos-habit-tracker.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/lifeos/twins/steps/step6.exact",
+          "content_sha256": "27bd913de10b2527b3e5337a7e45b6bc285062c56eea7c36bf8ce1a10d58c851"
+        }
+      }
     },
     {
       "id": "step7",

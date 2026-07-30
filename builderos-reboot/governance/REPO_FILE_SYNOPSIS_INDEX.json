@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T20:06:23.695Z",
+  "generated_at": "2026-07-30T20:13:35.761Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12350,
+  "file_count": 12351,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -89453,6 +89453,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/lifeos-habit-tracker.js",
+      "synopsis": "Exports trackHabit — services/lifeos-habit-tracker.js.",
+      "bytes": 840,
+      "mtime": "2026-07-30T20:13:35.761Z",
+      "indexed_at": "2026-07-30T20:13:35.761Z"
     },
     {
       "path": "services/lifeos-habits-streaks.js",
