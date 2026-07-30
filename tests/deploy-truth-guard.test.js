@@ -68,14 +68,18 @@ test('the real .dockerignore excludes paths that a ship could wrongly call live'
   assert.equal(dockerImageMembership('products/receipts/DEPLOY_TRUTH_VERIFY.json', rules).in_image, false);
 });
 
-test('classifyRuntimeProof maps public assets to HTTP and server code to a probe', () => {
+test('classifyRuntimeProof maps public assets to HTTP and allowlisted server code to fingerprint', () => {
   const asset = classifyRuntimeProof('public/overlay/lifeos-app.html');
   assert.equal(asset.kind, RUNTIME_PROOF.HTTP_STATIC);
   assert.equal(asset.url_path, '/overlay/lifeos-app.html');
 
   const server = classifyRuntimeProof('routes/tc-routes.js');
-  assert.equal(server.kind, RUNTIME_PROOF.BEHAVIOR_PROBE_REQUIRED);
-  assert.match(server.proposed_solution, /--probe/);
+  assert.equal(server.kind, RUNTIME_PROOF.RUNTIME_FINGERPRINT);
+  assert.match(server.url_path, /runtime-fingerprint/);
+
+  const factory = classifyRuntimeProof('factory-staging/factory-core/builder/run-step.js');
+  assert.equal(factory.kind, RUNTIME_PROOF.BEHAVIOR_PROBE_REQUIRED);
+  assert.match(factory.proposed_solution, /--probe/);
 
   const docs = classifyRuntimeProof('docs/products/lifeos/PRODUCT_HOME.md');
   assert.equal(docs.kind, RUNTIME_PROOF.NO_RUNTIME_SURFACE);
@@ -86,9 +90,9 @@ test('classifyRuntimeProof maps public assets to HTTP and server code to a probe
 });
 
 test('every unprovable classification carries a concrete next action', () => {
-  for (const p of ['routes/a.js', 'docs/a.md', 'weird/a.txt']) {
+  for (const p of ['factory-staging/x.js', 'docs/a.md', 'weird/a.txt']) {
     const c = classifyRuntimeProof(p);
-    if (c.kind !== RUNTIME_PROOF.HTTP_STATIC) {
+    if (c.kind !== RUNTIME_PROOF.HTTP_STATIC && c.kind !== RUNTIME_PROOF.RUNTIME_FINGERPRINT) {
       assert.ok(c.proposed_solution && c.proposed_solution.length > 20, `${p} needs a solution`);
     }
   }

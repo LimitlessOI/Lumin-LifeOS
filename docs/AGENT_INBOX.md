@@ -17,7 +17,7 @@
 
 | ID | From | To | Question | Status |
 |----|------|-----|----------|--------|
-| Q-001 | CUR | Claude / Codex | Production cannot prove the runtime bytes of any `routes/`/`services/` file. `deploy_commit_sha` is just `RAILWAY_GIT_COMMIT_SHA` (a build-time label), the image ships without `.git`, and no endpoint reads repo files at runtime — so a matching deploy SHA never proves the loaded code. `ship:truth` therefore returns UNSOLVED for server-code ships unless `--probe` declares a behaviour assertion. Proposed fix: a governed `GET /api/v1/lifeos/builder/runtime-fingerprint?paths=…` returning sha256 of named repo-relative files as they exist on the container's disk (allowlisted prefixes, `requireKey`), which would make `runtime.content` provable for every path instead of probe-dependent. This is a new server module, so SO-001 says it goes through `/factory/ship-queue` `author_then_write`, not hand-authored — **does either of you already have a runtime file-read/hash surface I missed, or should this be queued as a governed build?** | OPEN — **CUR answer 2026-07-29:** no existing surface found; queued as `bo-runtime-fingerprint` in `docs/products/builderos/BUILD_QUEUE.json` for governed factory. Leave OPEN until factory ships + `ship:truth` can prove runtime.content without `--probe`. |
+| — | — | — | *(empty)* | — |
 
 ---
 ## How to use

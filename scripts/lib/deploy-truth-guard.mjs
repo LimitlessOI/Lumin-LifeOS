@@ -225,6 +225,7 @@ export function diagnoseContentMutation(sent = '', committed = '') {
 const RUNTIME_PROOF = {
   HTTP_STATIC: 'http_static',
   BEHAVIOR_PROBE_REQUIRED: 'behavior_probe_required',
+  RUNTIME_FINGERPRINT: 'runtime_fingerprint',
   NO_RUNTIME_SURFACE: 'no_runtime_surface',
   NOT_IN_IMAGE: 'not_in_image',
 };
@@ -233,15 +234,15 @@ export { RUNTIME_PROOF };
 
 const SERVER_CODE_RE = /^(routes|services|middleware|startup|config|db|factory-staging)\//;
 const SERVER_ENTRY_RE = /^server[\w-]*\.js$/;
+const FINGERPRINT_PREFIX_RE = /^(routes|services|middleware|startup|config|scripts\/lib)\//;
 
 /**
  * Classify how production could independently prove a path's bytes are live.
  *
  * `public/**` is directly fetchable, so its bytes are provable over HTTP.
- * Server modules are not readable over any endpoint in this runtime (no generic
- * file-read surface exists, and the image ships without `.git`), so they can
- * only be proven by a declared behaviour probe. Anything else has no runtime
- * surface at all and must never be described as "live in production".
+ * Allowlisted server modules are provable via runtime-fingerprint (Q-001).
+ * Other server code still needs a behaviour probe. Anything else has no runtime
+ * surface and must never be described as "live in production".
  */
 export function classifyRuntimeProof(relPath, { inImage = true } = {}) {
   const p = String(relPath).replace(/^\/+/, '');
@@ -256,11 +257,18 @@ export function classifyRuntimeProof(relPath, { inImage = true } = {}) {
   if (p.startsWith('public/')) {
     return { kind: RUNTIME_PROOF.HTTP_STATIC, url_path: `/${p.slice('public/'.length)}` };
   }
+  if (FINGERPRINT_PREFIX_RE.test(p)) {
+    return {
+      kind: RUNTIME_PROOF.RUNTIME_FINGERPRINT,
+      url_path: `/api/v1/builderos/control-plane/runtime-fingerprint?paths=${encodeURIComponent(p)}`,
+      proposed_solution: null,
+    };
+  }
   if (SERVER_CODE_RE.test(p) || SERVER_ENTRY_RE.test(p)) {
     return {
       kind: RUNTIME_PROOF.BEHAVIOR_PROBE_REQUIRED,
       proposed_solution:
-        `${p} is server code with no runtime read surface, so a matching deploy SHA is a build-time label, not proof the bytes are loaded. ` +
+        `${p} is server code outside the runtime-fingerprint allowlist, so a matching deploy SHA is a build-time label, not proof the bytes are loaded. ` +
         'Pass --probe with an assertion that only the new code can satisfy (e.g. {"path":"/api/...","expect_body":"<new marker>"}).',
     };
   }
@@ -512,7 +520,10 @@ export function summarizeVerdict(receipt = {}) {
 
   const files = Array.isArray(receipt.files) ? receipt.files : [];
   const runtimeProven = files.filter(
-    (f) => f.runtime_proof_kind === RUNTIME_PROOF.HTTP_STATIC || f.runtime_proof_kind === RUNTIME_PROOF.BEHAVIOR_PROBE_REQUIRED,
+    (f) =>
+      f.runtime_proof_kind === RUNTIME_PROOF.HTTP_STATIC
+      || f.runtime_proof_kind === RUNTIME_PROOF.BEHAVIOR_PROBE_REQUIRED
+      || f.runtime_proof_kind === RUNTIME_PROOF.RUNTIME_FINGERPRINT,
   ).length;
   const repoOnly = files.length - runtimeProven;
   const parts = [`PROVEN — production serves ${sha}`];

@@ -76,6 +76,7 @@ import {
   dirtyPaths,
   executeBatch,
   fetchAssetSha256,
+  fetchRuntimeFingerprint,
   gitFetch,
   isAncestor,
   latestDeployment,
@@ -617,6 +618,32 @@ async function main() {
             proposed_solution: `Fetch ${base}${f.runtime_proof_url} and diff against the local file. A CDN/edge cache is the usual cause — purge it, or verify the static mount actually serves ${f.target_file}.`,
           }),
     });
+  }
+
+  const fingerprintTargets = files.filter((f) => f.runtime_proof_kind === RUNTIME_PROOF.RUNTIME_FINGERPRINT);
+  for (const f of fingerprintTargets) {
+    const url = `${base}${f.runtime_proof_url}`;
+    const live = await fetchRuntimeFingerprint(base, key, f.target_file);
+    f.live_sha256 = live.sha256;
+    const matched = live.ok && live.sha256 === f.local_sha256;
+    record(
+      `runtime.content:${f.target_file}`,
+      matched ? CHECK_STATUS.PASS : CHECK_STATUS.UNPROVEN,
+      matched
+        ? `runtime-fingerprint proves ${f.target_file} sha256 ${live.sha256.slice(0, 12)} matches shipped bytes`
+        : `runtime-fingerprint for ${f.target_file} returned ${live.detail || `sha256 ${live.sha256?.slice(0, 12) || 'none'}`}, not shipped ${f.local_sha256.slice(0, 12)}`,
+      {
+        url,
+        shipped_sha256: f.local_sha256,
+        live_sha256: live.sha256,
+        ...(matched
+          ? {}
+          : {
+              proposed_solution:
+                'Production serves the commit but the container disk bytes for this path do not match what was shipped. Confirm the image includes the file (not dockerignored) and that runtime-fingerprint is live on this tip.',
+            }),
+      },
+    );
   }
 
   const probeRequired = files.filter((f) => f.runtime_proof_kind === RUNTIME_PROOF.BEHAVIOR_PROBE_REQUIRED);

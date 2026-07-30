@@ -281,6 +281,37 @@ export async function fetchAssetSha256(url, { timeoutMs = 25_000 } = {}) {
   }
 }
 
+/** Q-001: ask production for allowlisted on-disk sha256 of a repo-relative path. */
+export async function fetchRuntimeFingerprint(base, key, relPath, { timeoutMs = 25_000 } = {}) {
+  const p = String(relPath || '').replace(/^\.\//, '').replace(/\\/g, '/');
+  const url = `${String(base).replace(/\/$/, '')}/api/v1/builderos/control-plane/runtime-fingerprint?paths=${encodeURIComponent(p)}`;
+  try {
+    const res = await fetch(url, {
+      headers: {
+        'x-command-key': key || '',
+        'Cache-Control': 'no-store',
+      },
+      signal: AbortSignal.timeout(timeoutMs),
+    });
+    const json = await res.json().catch(() => null);
+    const file = Array.isArray(json?.files) ? json.files.find((f) => f?.path === p) : null;
+    if (!res.ok || !file) {
+      return {
+        ok: false,
+        status: res.status,
+        sha256: null,
+        detail: `HTTP ${res.status}${json?.error ? `: ${json.error}` : ''}`,
+      };
+    }
+    if (!file.ok) {
+      return { ok: false, status: res.status, sha256: null, detail: file.reason || 'fingerprint_not_ok' };
+    }
+    return { ok: true, status: res.status, sha256: file.sha256, bytes: file.bytes };
+  } catch (err) {
+    return { ok: false, status: 0, sha256: null, detail: err?.message || 'fetch_failed' };
+  }
+}
+
 /** Run a declared runtime assertion. Only the new code may satisfy it. */
 export async function runProbe(base, key, probe) {
   const url = /^https?:\/\//.test(probe.path || '') ? probe.path : `${base}${probe.path}`;

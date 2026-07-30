@@ -4,6 +4,14 @@
  * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import { Router } from 'express';
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
+import {
+  buildRuntimeFingerprintReport,
+  parseRuntimeFingerprintPaths,
+} from '../scripts/lib/runtime-fingerprint.mjs';
+
+const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 export function createBuilderOSControlPlaneRoutes({ pool, requireKey, controlPlane }) {
   const router = Router();
@@ -114,6 +122,31 @@ export function createBuilderOSControlPlaneRoutes({ pool, requireKey, controlPla
         limit: req.query.limit ? Number(req.query.limit) : 50,
       });
       res.json({ ok: true, ...stats });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  /**
+   * Q-001: prove container disk bytes for allowlisted repo paths (sha256).
+   * GET /runtime-fingerprint?paths=routes/foo.js,services/bar.js
+   */
+  router.get('/runtime-fingerprint', (req, res) => {
+    try {
+      const paths = parseRuntimeFingerprintPaths(req.query.paths || req.query.path || '');
+      if (!paths.length) {
+        return res.status(400).json({
+          ok: false,
+          error: 'paths query required (comma-separated repo-relative allowlisted paths)',
+        });
+      }
+      const report = buildRuntimeFingerprintReport({
+        repoRoot: REPO_ROOT,
+        paths,
+        deployCommitSha: process.env.RAILWAY_GIT_COMMIT_SHA || null,
+      });
+      const status = report.ok ? 200 : 400;
+      res.status(status).json(report);
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }

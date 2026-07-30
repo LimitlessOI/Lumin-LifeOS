@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T03:20:35.298Z",
+  "generated_at": "2026-07-30T03:22:51.776Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12347,
+  "file_count": 12350,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -37081,15 +37081,15 @@
       "path": "docs/AGENT_INBOX_ARCHIVE.md",
       "synopsis": "Documentation — AGENT INBOX ARCHIVE.",
       "bytes": 0,
-      "mtime": "2026-07-30T03:18:07.719Z",
-      "indexed_at": "2026-07-30T03:18:07.719Z"
+      "mtime": "2026-07-30T03:22:51.776Z",
+      "indexed_at": "2026-07-30T03:22:51.776Z"
     },
     {
       "path": "docs/AGENT_INBOX.md",
       "synopsis": "Documentation — AGENT INBOX.",
       "bytes": 0,
-      "mtime": "2026-07-30T03:18:07.719Z",
-      "indexed_at": "2026-07-30T03:18:07.719Z"
+      "mtime": "2026-07-30T03:22:51.776Z",
+      "indexed_at": "2026-07-30T03:22:51.776Z"
     },
     {
       "path": "docs/AGENT_RULES.compact.md",
@@ -37988,10 +37988,10 @@
     },
     {
       "path": "docs/CONTINUITY_LOG.md",
-      "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 44641,
-      "mtime": "2026-07-30T03:20:35.298Z",
-      "indexed_at": "2026-07-30T03:20:35.298Z"
+      "synopsis": "Documentation — CONTINUITY LOG.",
+      "bytes": 0,
+      "mtime": "2026-07-30T03:22:51.776Z",
+      "indexed_at": "2026-07-30T03:22:51.776Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40194,10 +40194,10 @@
     },
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
-      "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 322181,
-      "mtime": "2026-07-30T03:20:35.298Z",
-      "indexed_at": "2026-07-30T03:20:35.298Z"
+      "synopsis": "Documentation — PRODUCT HOME.",
+      "bytes": 0,
+      "mtime": "2026-07-30T03:22:51.776Z",
+      "indexed_at": "2026-07-30T03:22:51.776Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -67654,13 +67654,10 @@
     },
     {
       "path": "routes/builderos-control-plane-routes.js",
-      "synopsis": "BuilderOS Control Plane API — measurement health + build ledger.",
-      "bytes": 4115,
-      "mtime": "2026-07-30T03:05:28.902Z",
-      "indexed_at": "2026-07-30T03:05:28.902Z",
-      "ssot": [
-        "docs/products/builderos/PRODUCT_HOME.md"
-      ]
+      "synopsis": "HTTP route module — Builderos Control Plane Routes.",
+      "bytes": 0,
+      "mtime": "2026-07-30T03:22:51.776Z",
+      "indexed_at": "2026-07-30T03:22:51.776Z"
     },
     {
       "path": "routes/builderos-routes.js",
@@ -71525,23 +71522,17 @@
     },
     {
       "path": "scripts/lib/deploy-truth-guard.mjs",
-      "synopsis": "Deploy-truth guard primitives — prove a ship reached production or say UNSOLVED.",
-      "bytes": 21960,
-      "mtime": "2026-07-28T22:31:39.761Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
-      "ssot": [
-        "docs/products/builderos/PRODUCT_HOME.md"
-      ]
+      "synopsis": "Script — Deploy Truth Guard.",
+      "bytes": 0,
+      "mtime": "2026-07-30T03:22:51.776Z",
+      "indexed_at": "2026-07-30T03:22:51.776Z"
     },
     {
       "path": "scripts/lib/deploy-truth-io.mjs",
-      "synopsis": "Deploy-truth I/O — git + Railway + HTTP probes used to prove a ship.",
-      "bytes": 11954,
-      "mtime": "2026-07-28T20:09:18.837Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
-      "ssot": [
-        "docs/products/builderos/PRODUCT_HOME.md"
-      ]
+      "synopsis": "Script — Deploy Truth Io.",
+      "bytes": 0,
+      "mtime": "2026-07-30T03:22:51.776Z",
+      "indexed_at": "2026-07-30T03:22:51.776Z"
     },
     {
       "path": "scripts/lib/doc-hygiene-gate.mjs",
@@ -71632,6 +71623,13 @@
       ]
     },
     {
+      "path": "scripts/lib/runtime-fingerprint.mjs",
+      "synopsis": "Script — Runtime Fingerprint.",
+      "bytes": 0,
+      "mtime": "2026-07-30T03:22:51.776Z",
+      "indexed_at": "2026-07-30T03:22:51.776Z"
+    },
+    {
       "path": "scripts/lib/security-invariants.mjs",
       "synopsis": "Security-invariant primitives — one checker, callable from the git hook and the machine ship path.",
       "bytes": 4989,
@@ -71640,6 +71638,13 @@
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "scripts/lib/ship-main-ancestor.mjs",
+      "synopsis": "Script — Ship Main Ancestor.",
+      "bytes": 0,
+      "mtime": "2026-07-30T03:22:51.776Z",
+      "indexed_at": "2026-07-30T03:22:51.776Z"
     },
     {
       "path": "scripts/lifeos-alpha-break-it.mjs",
@@ -73379,8 +73384,8 @@
       "path": "scripts/ship-truth.mjs",
       "synopsis": "Script — Ship Truth.",
       "bytes": 0,
-      "mtime": "2026-07-30T03:18:07.719Z",
-      "indexed_at": "2026-07-30T03:18:07.719Z"
+      "mtime": "2026-07-30T03:22:51.776Z",
+      "indexed_at": "2026-07-30T03:22:51.776Z"
     },
     {
       "path": "scripts/signedIPAWorkflow.mjs",
@@ -88499,13 +88504,10 @@
     },
     {
       "path": "services/governed-autonomous-shipping-loop.js",
-      "synopsis": "STEP 5g — the governed AUTONOMOUS shipping loop. When the STEP 5a",
-      "bytes": 60335,
-      "mtime": "2026-07-28T17:47:22.560Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
-      "ssot": [
-        "docs/products/builderos/PRODUCT_HOME.md"
-      ]
+      "synopsis": "Service module — Governed Autonomous Shipping Loop.",
+      "bytes": 0,
+      "mtime": "2026-07-30T03:22:51.776Z",
+      "indexed_at": "2026-07-30T03:22:51.776Z"
     },
     {
       "path": "services/governed-build-queue-scheduler.js",
@@ -95331,13 +95333,10 @@
     },
     {
       "path": "tests/deploy-truth-guard.test.js",
-      "synopsis": "Tests for deploy-truth guard — unproven must never round up to success.",
-      "bytes": 15149,
-      "mtime": "2026-07-28T20:15:35.435Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
-      "ssot": [
-        "docs/products/builderos/PRODUCT_HOME.md"
-      ]
+      "synopsis": "js — tests/deploy-truth-guard.test.js.",
+      "bytes": 0,
+      "mtime": "2026-07-30T03:22:51.776Z",
+      "indexed_at": "2026-07-30T03:22:51.776Z"
     },
     {
       "path": "tests/deploy-truth.test.js",
@@ -96174,6 +96173,13 @@
       "bytes": 2622,
       "mtime": "2026-07-01T11:33:10.876Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "tests/runtime-fingerprint-main-ancestor.test.js",
+      "synopsis": "js — tests/runtime-fingerprint-main-ancestor.test.js.",
+      "bytes": 0,
+      "mtime": "2026-07-30T03:22:51.776Z",
+      "indexed_at": "2026-07-30T03:22:51.776Z"
     },
     {
       "path": "tests/runtime-modes.test.js",

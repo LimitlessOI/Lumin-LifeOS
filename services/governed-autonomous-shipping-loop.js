@@ -30,6 +30,7 @@ import { createUsefulWorkGuard } from './useful-work-guard.js';
 import { governedFactoryOnly } from './governed-factory-guard.js';
 import { hasTokenCapacity, dailyBuildBudget, recordDailyBuildAttempts, mergeQueueRuntimeStatus, defaultPlannerCallModel, discoverPlanWork, discoverSentryFixWork, runPlanBuildQueue, commitQueueStatusToRepo } from './never-stop-product-factory.js';
 import { planGovernedBuildQueueRun } from './governed-build-queue-scheduler.js';
+import { verifyCommitOnMain } from '../scripts/lib/ship-main-ancestor.mjs';
 import {
   loadBuildQueue,
   persistQueue,
@@ -1054,9 +1055,36 @@ export async function runGovernedAutonomousShipOnce({ logger, maxStepsPerProduct
           }
           shippedIds = modProof.proven;
           if (shippedIds.length) {
-            markShippedStepsDone(queue, shippedIds, commitSha);
-            await commitQueueStatus(entry.product_id, shippedIds, queue, commitSha, logger);
-            queueCommitted.add(entry.product_id);
+            // False-done guard: a SHA on builderos-shadow/autonomous must never
+            // mark BUILD_QUEUE done. Verify the commit is in origin/main history.
+            const repo = String(process.env.GITHUB_REPO || '').trim();
+            const [owner, repoName] = repo.includes('/') ? repo.split('/') : [null, null];
+            const onMain = await verifyCommitOnMain(commitSha, {
+              branch: 'main',
+              owner,
+              repo: repoName,
+              token: process.env.GITHUB_TOKEN?.trim(),
+            });
+            if (!onMain.ok) {
+              logger?.warn?.(
+                { product_id: entry.product_id, commit_sha: commitSha, reason: onMain.reason, compare_status: onMain.status },
+                '[GOVERNED-AUTONOMOUS-SHIP] ship commit is not an ancestor of origin/main — refusing done mark',
+              );
+              for (const stepId of shippedIds) {
+                await markFailedStep(
+                  queue,
+                  stepId,
+                  { error: onMain.reason || 'ship_commit_not_on_main' },
+                  entry.product_id,
+                  logger,
+                );
+              }
+              shippedIds = [];
+            } else {
+              markShippedStepsDone(queue, shippedIds, commitSha);
+              await commitQueueStatus(entry.product_id, shippedIds, queue, commitSha, logger);
+              queueCommitted.add(entry.product_id);
+            }
           }
         } else {
           logger?.warn?.({ product_id: entry.product_id, shipped_ids: shippedIds }, '[GOVERNED-AUTONOMOUS-SHIP] factory shipped locally but GitHub commit failed; leaving steps retryable');
