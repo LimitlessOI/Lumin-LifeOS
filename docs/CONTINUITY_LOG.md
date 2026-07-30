@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-30 — BuilderOS toward 10: Q-002 + Q-003 closed
+
+Adam: get BuilderOS to a 10. Closed the two ship-path holes that made primetime unsafe: (1) Q-002 — `execute-batch` no longer rewrites regex/string meaning via global asterisk strip; shebang + trailing newline preserved (`scripts/lib/builder-js-sanitize.mjs`). (2) Q-003 — SYNOPSIS/@ssot co-commit detect-and-route on machine path (`governance_warnings[]`, never hard-block). Chicken-egg ship uses `--bytes-exact`. Queued `bo-runtime-fingerprint` for Q-001 (factory). **Not** claiming `FULLY_MACHINE_READY` — still needs founder_usability + cold-coder SAME_TIER + runtime fingerprint live. Next: factory ships Q-001 + `bo-verify-ship-lands-on-main`; keep working definition verify green.
+
 ## 2026-07-30 — Creative Engine smart video edit (filler/repetition/silence removal + content-aware keep/cut)
 
 Built and committed `footage_edit` smart-edit pipeline in `services/creative-engine/`: `transcribe-edit.js` calls Gemini for word-level audio transcription; `modes/footage-edit-smart.js` removes filler words (`um`, `uh`, `like`, `you know`, etc.), repeated words, and long silences, with optional LLM content-aware keep/cut via `defaultPlannerCallModel`; `providers/ffmpeg-local.js` adds `getDuration`/`extractAudio`/`cutKeepRanges`; `services/creative-engine/index.js` routes `smartEdit` requests and updates `estimate`. Gated on `GOOGLE_API_KEY`/`GEMINI_API_KEY`. Next: deploy to tip and run an end-to-end upload → smart render with a sample video to prove it; then add competitor niche analysis and one-click social publish.

@@ -60,7 +60,7 @@ export function assessShip(requestedPaths, json) {
 }
 
 function parseArgs(argv) {
-  const out = { message: '', branch: '', paths: [] };
+  const out = { message: '', branch: '', paths: [], bytesExact: false };
   let i = 0;
   while (i < argv.length) {
     const a = argv[i];
@@ -68,6 +68,10 @@ function parseArgs(argv) {
       out.message = String(argv[++i] || '').trim();
     } else if (a === '--branch' || a === '-b') {
       out.branch = String(argv[++i] || '').trim();
+    } else if (a === '--bytes-exact') {
+      // Q-002 chicken-egg: send text as base64 so execute-batch skips
+      // extractJavaScriptFromOutput / fixAsteriskShorthandParams (byte-preserving).
+      out.bytesExact = true;
     } else if (a === '--help' || a === '-h') {
       usage(0);
     } else if (a === '--') {
@@ -85,7 +89,7 @@ function parseArgs(argv) {
 }
 
 async function main() {
-  const { message, branch, paths } = parseArgs(process.argv.slice(2));
+  const { message, branch, paths, bytesExact } = parseArgs(process.argv.slice(2));
   if (!key) {
     console.error('Missing COMMAND_CENTER_KEY (or COMMAND_KEY / LIFEOS_KEY / API_KEY).');
     process.exit(1);
@@ -106,7 +110,8 @@ async function main() {
       process.exit(1);
     }
     // Binary files MUST be base64 — reading as utf8 corrupts JPEG/PNG (0xFF → U+FFFD).
-    if (BINARY_EXT.test(normalized)) {
+    // --bytes-exact: also base64 text so tip execute-batch cannot rewrite JS (Q-002).
+    if (BINARY_EXT.test(normalized) || bytesExact) {
       files.push({
         target_file: normalized,
         output: fs.readFileSync(abs).toString('base64'),

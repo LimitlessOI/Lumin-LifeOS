@@ -47,6 +47,15 @@ import { isSafeTarget } from '../config/builder-safe-scope.js';
 import { writeSecurityReceipt, SECURITY_RECEIPT_TYPES } from '../services/oil-security-receipts.js';
 import { runPrecommitGovernance } from '../services/builderos-precommit-governance.js';
 import { evaluateInvariants, formatFindings } from '../scripts/lib/security-invariants.mjs';
+import {
+  evaluateDocHygiene,
+  formatDocHygieneFindings,
+} from '../scripts/lib/doc-hygiene-gate.mjs';
+import {
+  finalizeExtractedJavaScript,
+  fixAsteriskShorthandParams,
+  isJavaScriptCodeStartLine,
+} from '../scripts/lib/builder-js-sanitize.mjs';
 import { normalizeBuilderCodegenOutput } from '../services/builderos-codegen-normalize.js';
 import { classifyBuildTarget, classifyPatchIntent } from '../services/builderos-patch-mode-policy.js';
 import { applyBuilderRoutingPolicy } from '../services/builderos-routing-policy.js';
@@ -621,7 +630,10 @@ function splitBuilderOutput(raw) {
  * Mirrors the HTML preamble strip path so `node --check` sees real JavaScript.
  */
 function extractJavaScriptFromOutput(rawText) {
-  let s = String(rawText || '');
+  const original = String(rawText || '');
+  // Prefer endsWith — avoid regex star-dollar which production's old asterisk sanitizer rewrote.
+  const hadTrailingNewline = original.endsWith('\n') || original.endsWith('\r\n');
+  let s = original;
   let preambleStripPasses = 0;
   while (preambleStripPasses < 4) {
     preambleStripPasses += 1;
@@ -630,7 +642,9 @@ function extractJavaScriptFromOutput(rawText) {
 
     const wholeFence = /^```(?:js|javascript|mjs|cjs)?\s*\r?\n([\s\S]*?)\r?\n```\s$/im;
     const wf = s.match(wholeFence);
-    if (wf && wf[1].trim().length > 40) return wf[1].trim();
+    if (wf && wf[1].trim().length > 40) {
+      return finalizeExtractedJavaScript(wf[1], { hadTrailingNewline: true });
+    }
 
     if (s.startsWith('```')) {
       const firstNl = s.indexOf('\n');
@@ -638,8 +652,9 @@ function extractJavaScriptFromOutput(rawText) {
         let inner = s.slice(firstNl + 1);
         const closeIdx = inner.lastIndexOf('\n```');
         if (closeIdx !== -1) inner = inner.slice(0, closeIdx);
-        inner = inner.trim();
-        if (inner.length > 40) return inner;
+        if (inner.trim().length > 40) {
+          return finalizeExtractedJavaScript(inner, { hadTrailingNewline: true });
+        }
       }
     }
 
@@ -656,27 +671,15 @@ function extractJavaScriptFromOutput(rawText) {
 
   // Models sometimes leak builder file markers or brief commentary before the actual code.
   // Strip those lines, then start from the first line that looks like real JS/ESM code.
+  // Shebang is a valid start (Q-002) — judgment in builder-js-sanitize.mjs.
   const rawLines = s
     .split(/\r?\n/)
     .filter((line) => !/^--- REPO FILE(?::| OMITTED:)/.test(line.trim()));
-  const codeStartIndex = rawLines.findIndex((line) => {
-    const t = line.trim();
-    if (!t) return false;
-    if (/^(import|export)\s/.test(t)) return true;
-    if (/^(const|let|var)\s+[$A-Z_a-z]/.test(t)) return true;
-    if (/^(async\s+)?function\s+[$A-Z_a-z]/.test(t)) return true;
-    if (/^(class)\s+[$A-Z_a-z]/.test(t)) return true;
-    if (/^(if|for|while|switch|try)\s*\(/.test(t)) return true;
-    if (/^(\/\/|\/\*|\{|\(|\[)/.test(t)) return true; // */ is never a valid file start — it means /** was dropped
-    if (/^[$A-Z_a-z][\w$]*\s*=/.test(t)) return true;
-    return false;
-  });
+  const codeStartIndex = rawLines.findIndex((line) => isJavaScriptCodeStartLine(line));
   if (codeStartIndex > 0) {
-    s = rawLines.slice(codeStartIndex).join('\n').trim();
-  } else if (codeStartIndex === -1) {
-    s = rawLines.join('\n').trim();
+    s = rawLines.slice(codeStartIndex).join('\n');
   } else {
-    s = rawLines.join('\n').trim();
+    s = rawLines.join('\n');
   }
 
   // Guard: strip any leading lines that start with a bare `/` (not `//` comment or `/*` block-comment).
@@ -690,16 +693,14 @@ function extractJavaScriptFromOutput(rawText) {
     let stripCount = 0;
     while (stripCount < sLines.length) {
       const tl = sLines[stripCount].trim();
-      // Allow empty lines to pass (they'll be trimmed later)
       if (!tl) { stripCount++; continue; }
-      // Allow `//` and `/*` — those are valid JS comment openers
+      if (/^#!/.test(tl)) break;
       if (/^(\/\/|\/\*)/.test(tl)) break;
-      // A line starting with `/` but not `//` or `/*` is an invalid file opener — strip it
       if (tl.startsWith('/')) { stripCount++; continue; }
       break;
     }
     if (stripCount > 0) {
-      s = sLines.slice(stripCount).join('\n').trim();
+      s = sLines.slice(stripCount).join('\n');
     }
   }
 
@@ -722,23 +723,11 @@ function extractJavaScriptFromOutput(rawText) {
     }
     if (blocks.length) {
       blocks.sort((a, b) => b.length - a.length);
-      return blocks[0];
+      return finalizeExtractedJavaScript(blocks[0], { hadTrailingNewline: true });
     }
   }
 
-  return s.trim();
-}
-
-/**
- * groq_llama hallucinates asterisk-prefixed shorthand like `const rk = requireKey;`
- * which is not valid JS. Strip the * prefix unless it follows `function` (generator syntax).
- */
-function fixAsteriskShorthandParams(s) {
-  return s.replace(/\*([A-Za-z_$][\w$]*)/g, (match, name, offset) => {
-    const before = s.slice(Math.max(0, offset - 9), offset);
-    if (/function\s$/.test(before)) return match;
-    return name;
-  });
+  return finalizeExtractedJavaScript(s, { hadTrailingNewline });
 }
 
 // Detect a TRUNCATED SQL migration (model cut off mid-generation). There is no
@@ -1454,6 +1443,20 @@ export function createLifeOSCouncilBuilderRoutes({
       throw err;
     }
 
+    // Q-003: ssot + synopsis — detect-and-route only (Gate Charter; never hard-block).
+    const hygieneVerdict = evaluateDocHygiene(
+      fileEntries.map((entry) => ({
+        path: entry.path,
+        content: entry.encoding === 'base64' ? null : entry.content,
+      })),
+    );
+    if (hygieneVerdict.routed.length) {
+      log.warn(
+        { findings: hygieneVerdict.routed, summary: formatDocHygieneFindings(hygieneVerdict.routed) },
+        '[BUILDER] doc-hygiene detect-and-route (not blocking) — caller should co-commit SSOT / SYNOPSIS',
+      );
+    }
+
     if (typeof commitManyToGitHub === 'function') {
       try {
         const commitResult = await commitManyToGitHub(fileEntries, commitMessage, branch || undefined);
@@ -1480,6 +1483,7 @@ export function createLifeOSCouncilBuilderRoutes({
           commit_mode: 'github',
           local_only: false,
           reason: commitResult?.reason || null,
+          governance_warnings: hygieneVerdict.routed,
         };
       } catch (err) {
         if (IS_RAILWAY_RUNTIME || !isMissingGitHubCommitCapability(err)) {
@@ -1490,7 +1494,8 @@ export function createLifeOSCouncilBuilderRoutes({
       throw new Error('commitManyToGitHub not available — GITHUB_TOKEN may be missing');
     }
 
-    return mirrorEntriesLocally(fileEntries, commitMessage);
+    const mirror = await mirrorEntriesLocally(fileEntries, commitMessage);
+    return { ...mirror, governance_warnings: hygieneVerdict.routed };
   }
 
   async function recordBuilderGap({
@@ -2546,6 +2551,7 @@ export function createLifeOSCouncilBuilderRoutes({
         local_only: commitResult?.local_only === true,
         reason: commitResult?.reason || (noOp ? 'NO_OP_NOTHING_TO_COMMIT' : null),
         warning: commitResult?.warning || null,
+        governance_warnings: commitResult?.governance_warnings || [],
       });
     } catch (err) {
       if (err?.code === 'SECURITY_INVARIANT_VIOLATION') {

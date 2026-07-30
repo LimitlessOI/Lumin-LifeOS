@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T03:14:20.409Z",
+  "generated_at": "2026-07-30T03:18:07.719Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12343,
+  "file_count": 12347,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -37079,17 +37079,17 @@
     },
     {
       "path": "docs/AGENT_INBOX_ARCHIVE.md",
-      "synopsis": "Agent Inbox — Archive",
-      "bytes": 1581,
-      "mtime": "2026-07-10T01:14:24.786Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "synopsis": "Documentation — AGENT INBOX ARCHIVE.",
+      "bytes": 0,
+      "mtime": "2026-07-30T03:18:07.719Z",
+      "indexed_at": "2026-07-30T03:18:07.719Z"
     },
     {
       "path": "docs/AGENT_INBOX.md",
-      "synopsis": "Agent Inbox",
-      "bytes": 5209,
-      "mtime": "2026-07-28T22:41:48.170Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "synopsis": "Documentation — AGENT INBOX.",
+      "bytes": 0,
+      "mtime": "2026-07-30T03:18:07.719Z",
+      "indexed_at": "2026-07-30T03:18:07.719Z"
     },
     {
       "path": "docs/AGENT_RULES.compact.md",
@@ -37988,10 +37988,10 @@
     },
     {
       "path": "docs/CONTINUITY_LOG.md",
-      "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 44365,
-      "mtime": "2026-07-30T03:14:20.409Z",
-      "indexed_at": "2026-07-30T03:14:20.409Z"
+      "synopsis": "Documentation — CONTINUITY LOG.",
+      "bytes": 0,
+      "mtime": "2026-07-30T03:18:07.719Z",
+      "indexed_at": "2026-07-30T03:18:07.719Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40194,10 +40194,10 @@
     },
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
-      "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 322162,
-      "mtime": "2026-07-30T03:05:28.902Z",
-      "indexed_at": "2026-07-30T03:05:28.902Z"
+      "synopsis": "Documentation — PRODUCT HOME.",
+      "bytes": 0,
+      "mtime": "2026-07-30T03:18:07.719Z",
+      "indexed_at": "2026-07-30T03:18:07.719Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -40925,10 +40925,10 @@
     },
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
-      "synopsis": "Canonical product home — LifeOS",
-      "bytes": 634892,
-      "mtime": "2026-07-30T02:14:38.254Z",
-      "indexed_at": "2026-07-30T02:14:38.254Z"
+      "synopsis": "Documentation — PRODUCT HOME.",
+      "bytes": 0,
+      "mtime": "2026-07-30T03:18:07.719Z",
+      "indexed_at": "2026-07-30T03:18:07.719Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -68521,13 +68521,10 @@
     },
     {
       "path": "routes/lifeos-council-builder-routes.js",
-      "synopsis": "routes/lifeos-council-builder-routes.js",
-      "bytes": 164971,
-      "mtime": "2026-07-28T22:24:40.353Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
-      "ssot": [
-        "docs/products/lifeos/PRODUCT_HOME.md"
-      ]
+      "synopsis": "HTTP route module — Lifeos Council Builder Routes.",
+      "bytes": 0,
+      "mtime": "2026-07-30T03:18:07.719Z",
+      "indexed_at": "2026-07-30T03:18:07.719Z"
     },
     {
       "path": "routes/lifeos-cycle-routes.js",
@@ -71510,6 +71507,13 @@
       ]
     },
     {
+      "path": "scripts/lib/builder-js-sanitize.mjs",
+      "synopsis": "Script — Builder Js Sanitize.",
+      "bytes": 0,
+      "mtime": "2026-07-30T03:18:07.719Z",
+      "indexed_at": "2026-07-30T03:18:07.719Z"
+    },
+    {
       "path": "scripts/lib/closure-contract.mjs",
       "synopsis": "C09 — Build Closure Contract",
       "bytes": 3673,
@@ -71538,6 +71542,13 @@
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "scripts/lib/doc-hygiene-gate.mjs",
+      "synopsis": "Script — Doc Hygiene Gate.",
+      "bytes": 0,
+      "mtime": "2026-07-30T03:18:07.719Z",
+      "indexed_at": "2026-07-30T03:18:07.719Z"
     },
     {
       "path": "scripts/lib/file-synopsis.mjs",
@@ -73366,13 +73377,10 @@
     },
     {
       "path": "scripts/ship-truth.mjs",
-      "synopsis": "Ship files and prove production runs them — or report UNSOLVED.",
-      "bytes": 33127,
-      "mtime": "2026-07-28T20:15:21.154Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
-      "ssot": [
-        "docs/products/builderos/PRODUCT_HOME.md"
-      ]
+      "synopsis": "Script — Ship Truth.",
+      "bytes": 0,
+      "mtime": "2026-07-30T03:18:07.719Z",
+      "indexed_at": "2026-07-30T03:18:07.719Z"
     },
     {
       "path": "scripts/signedIPAWorkflow.mjs",
@@ -73576,13 +73584,10 @@
     },
     {
       "path": "scripts/system-commit-files.mjs",
-      "synopsis": "Commit local files to GitHub main via tip BuilderOS execute-batch (no human PR).",
-      "bytes": 6048,
-      "mtime": "2026-07-24T18:36:41.697Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
-      "ssot": [
-        "docs/products/lifeos/PRODUCT_HOME.md"
-      ]
+      "synopsis": "Script — System Commit Files.",
+      "bytes": 0,
+      "mtime": "2026-07-30T03:18:07.719Z",
+      "indexed_at": "2026-07-30T03:18:07.719Z"
     },
     {
       "path": "scripts/system-maturity-check.mjs",
@@ -94816,6 +94821,13 @@
       ]
     },
     {
+      "path": "tests/builder-js-sanitize.test.js",
+      "synopsis": "js — tests/builder-js-sanitize.test.js.",
+      "bytes": 0,
+      "mtime": "2026-07-30T03:18:07.719Z",
+      "indexed_at": "2026-07-30T03:18:07.719Z"
+    },
+    {
       "path": "tests/builder-loop.test.js",
       "synopsis": "tests/builder-loop.test.js — unit tests for the never-idle continuous-run control.",
       "bytes": 1884,
@@ -95353,6 +95365,13 @@
       "bytes": 4188,
       "mtime": "2026-07-29T22:02:55.054Z",
       "indexed_at": "2026-07-30T01:21:52.231Z"
+    },
+    {
+      "path": "tests/doc-hygiene-gate.test.js",
+      "synopsis": "js — tests/doc-hygiene-gate.test.js.",
+      "bytes": 0,
+      "mtime": "2026-07-30T03:18:07.719Z",
+      "indexed_at": "2026-07-30T03:18:07.719Z"
     },
     {
       "path": "tests/doctrine-enforcement.test.js",

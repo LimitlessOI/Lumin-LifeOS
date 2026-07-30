@@ -29,6 +29,7 @@
  *   --probe <file>    JSON runtime assertions; required to prove server-code ships
  *   --allow-partial   accept that local commits touch files this ship omits
  *   --allow-inflight  do not refuse to ship while a deployment is in flight
+ *   --bytes-exact     send text files as base64 so tip execute-batch cannot rewrite JS (Q-002)
  *   --dry-run         run every pre-commit gate and stop before committing
  *   --no-deploy       commit + verify the commit only (verdict stays UNSOLVED)
  *   --wait-ms         max wait for build + parity (default 900000)
@@ -119,6 +120,7 @@ function parseArgs(argv) {
     probeFile: '',
     allowPartial: false,
     allowInflight: false,
+    bytesExact: false,
     dryRun: false,
     deploy: true,
     waitMs: Number(process.env.SHIP_TRUTH_WAIT_MS || 900_000),
@@ -135,6 +137,7 @@ function parseArgs(argv) {
     else if (a === '--probe') out.probeFile = String(argv[++i] || '').trim();
     else if (a === '--allow-partial') out.allowPartial = true;
     else if (a === '--allow-inflight') out.allowInflight = true;
+    else if (a === '--bytes-exact') out.bytesExact = true;
     else if (a === '--dry-run') out.dryRun = true;
     else if (a === '--no-deploy') out.deploy = false;
     else if (a === '--wait-ms') out.waitMs = Number(argv[++i]);
@@ -255,7 +258,7 @@ async function main() {
       runtime_proof_kind: proof.kind,
       runtime_proof_url: proof.url_path || null,
       runtime_proof_note: proof.proposed_solution || null,
-      payload: BINARY_EXT.test(rel)
+      payload: BINARY_EXT.test(rel) || args.bytesExact
         ? { target_file: rel, output: bytes.toString('base64'), encoding: 'base64' }
         : { target_file: rel, output: bytes.toString('utf8'), encoding: 'utf-8' },
     });
@@ -458,7 +461,11 @@ async function main() {
     if (f.commit_content_verified) continue;
 
     const committedText = blobTextAtCommit(commitSha, f.target_file);
-    const mutations = committedText === null ? [] : diagnoseContentMutation(f.payload.output, committedText);
+    const sentText =
+      String(f.payload?.encoding || '').toLowerCase() === 'base64'
+        ? Buffer.from(String(f.payload.output || ''), 'base64').toString('utf8')
+        : f.payload.output;
+    const mutations = committedText === null ? [] : diagnoseContentMutation(sentText, committedText);
     f.mutations = mutations;
     for (const m of mutations) mutationKinds.add(m.kind);
     contentMismatches.push(

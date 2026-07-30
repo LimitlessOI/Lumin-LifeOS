@@ -2532,6 +2532,38 @@
           "assertion_id": "expected_exports:routes/lifeos-council-builder-routes.js"
         }
       ]
+    },
+    {
+      "id": "bo-runtime-fingerprint",
+      "status": "pending",
+      "target_file": "routes/builderos-runtime-fingerprint-routes.js",
+      "priority": "critical",
+      "task": "Q-001: Production cannot prove the runtime bytes of any routes/services file. deploy_commit_sha is only RAILWAY_GIT_COMMIT_SHA (build-time label); the image ships without .git; no endpoint reads repo files at runtime. ship:truth therefore returns UNSOLVED for server-code ships unless --probe declares a behaviour assertion. Build a governed GET /api/v1/lifeos/builder/runtime-fingerprint?paths=… that returns sha256 of named repo-relative files as they exist on the container disk (allowlisted prefixes only: routes/, services/, middleware/, startup/, config/, scripts/lib/, requireKey auth), so ship:truth can prove runtime.content for every path instead of probe-dependent.",
+      "spec": "Create routes/builderos-runtime-fingerprint-routes.js exporting createBuilderRuntimeFingerprintRoutes(app, deps). Register GET /api/v1/lifeos/builder/runtime-fingerprint (also acceptable under an existing builder router if that is cleaner — prefer additive new route module). Auth: same requireKey / x-command-key pattern as other builder control endpoints. Query: paths=comma-separated repo-relative paths (max 32). Allowlist prefixes: routes/, services/, middleware/, startup/, config/, scripts/lib/. Reject .., absolute paths, and anything outside allowlist with 400. For each allowed path: resolve under process.cwd()/REPO_ROOT, if missing return {path, ok:false, reason:'not_found'}; if present return {path, ok:true, sha256, bytes, mtime_ms}. Response shape: { ok:true, deploy_commit_sha: process.env.RAILWAY_GIT_COMMIT_SHA||null, files:[...] }. Do NOT expose arbitrary filesystem read. Wire mount via existing auto-register or factory-mount pattern used by sibling builder routes. Add tests/builderos-runtime-fingerprint.test.js covering allowlist reject, missing file, and hash of a fixture buffer (injectable fs). SO-001: this is a new routes/ module — author through factory author_then_write, cheapest tier first.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "source": "agent_inbox_Q-001",
+      "expected_exports": [
+        "createBuilderRuntimeFingerprintRoutes"
+      ],
+      "file_contains": [
+        "runtime-fingerprint",
+        "sha256"
+      ],
+      "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "bo-runtime-fingerprint",
+      "mission_id": "PRODUCT-builderos",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/builderos-runtime-fingerprint-routes.js",
+          "exports": [
+            "createBuilderRuntimeFingerprintRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/builderos-runtime-fingerprint-routes.js"
+        }
+      ]
     }
   ],
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
