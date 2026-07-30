@@ -1,10 +1,10 @@
 {
   "schema": "builderos_intake_regression_report_v1",
-  "generated_at": "2026-06-29T17:12:09.291Z",
-  "harness_path": "/Users/adamhopkins/Projects/Lumin-LifeOS/builderos-reboot/governance/BUILDEROS_INTAKE_REGRESSION_HARNESS.json",
+  "generated_at": "2026-07-30T18:10:53.994Z",
+  "harness_path": "/home/ubuntu/repos/Lumin-LifeOS/builderos-reboot/governance/BUILDEROS_INTAKE_REGRESSION_HARNESS.json",
   "harness_updated_at": "2026-06-26",
   "session_count": 1,
-  "base_url": "https://robust-magic-production.up.railway.app",
+  "base_url": "https://lumin-web-production-e3a9.up.railway.app",
   "ok": true,
   "mode": "acceptance_only",
   "results": [
@@ -18,7 +18,7 @@
         "ok": true,
         "status": 0,
         "script": "scripts/verify-socialmediaos.mjs",
-        "stdout_tail": "--- SocialMediaOS Phase 1 Acceptance Audit ---\nPASS [DB-01] Migration file db/migrations/20260626_socialmediaos.sql exists.\nPASS [DB-02] Migration includes literal `CREATE TABLE IF NOT EXISTS socialmediaos_sessions`.\nPASS [DB-03] Migration includes literal `CREATE TABLE IF NOT EXISTS socialmediaos_content_packs`.\nPASS [SVC-01] Service file services/socialmediaos-service.js exists.\nPASS [SVC-02] `services/socialmediaos-service.js` exports literal `export function createMarketingOSFactory`.\nPASS [RTE-01] Routes file routes/socialmediaos-routes.js exists.\nPASS [RTE-02] Routes file includes exact factory signature: `export function createSocialmediaosRoutes({ pool, requireKey, logger })`.\nPASS [HTTP-01] GET /api/v1/socialmediaos/sessions: HTTP 200, ok: true\nPASS [HTTP-02] POST /api/v1/socialmediaos/validate-payment-link: HTTP 200, ok: true, valid: true\n\nAll SocialMediaOS Phase 1 acceptance checks passed.\n",
+        "stdout_tail": "PASS db/migrations/20260626_socialmediaos.sql exists + has CREATE TABLE\nPASS services/socialmediaos-service.js exists + syntax OK\nPASS routes/socialmediaos-routes.js exists + syntax OK\n\nResults: 3 passed, 0 failed of 3 files\nALL CHECKS PASSED\n",
         "stderr_tail": ""
       }
     }

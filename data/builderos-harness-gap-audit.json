@@ -1,12 +1,12 @@
 {
   "schema": "builderos_harness_tool_audit_v1",
-  "generated_at": "2026-06-24T21:10:40.063Z",
+  "generated_at": "2026-07-30T18:07:17.792Z",
   "summary": {
-    "total": 30,
-    "wired": 29,
+    "total": 34,
+    "wired": 33,
     "partial": 1,
     "missing": 0,
-    "required_total": 21,
+    "required_total": 24,
     "required_missing": 0,
     "required_partial": 0
   },
@@ -100,7 +100,7 @@
       "path_exists": true,
       "npm_script_exists": true,
       "issues": [],
-      "note": null
+      "note": "Under founder_builder minimal runtime, skips intake regression checks that require wider product surfaces"
     },
     {
       "id": "harness_proof_mission",
@@ -168,6 +168,45 @@
       "note": null
     },
     {
+      "id": "intake_blueprint_executor",
+      "pillar": "real_programming",
+      "path": "services/intake-blueprint-executor.js",
+      "npm": "blueprint:intake:execute",
+      "tier": "required",
+      "declared_status": "wired",
+      "actual_status": "wired",
+      "path_exists": true,
+      "npm_script_exists": true,
+      "issues": [],
+      "note": null
+    },
+    {
+      "id": "intake_regression_harness",
+      "pillar": "real_programming",
+      "path": "builderos-reboot/governance/BUILDEROS_INTAKE_REGRESSION_HARNESS.json",
+      "npm": "builderos:intake:regression:acceptance",
+      "tier": "required",
+      "declared_status": "wired",
+      "actual_status": "wired",
+      "path_exists": true,
+      "npm_script_exists": true,
+      "issues": [],
+      "note": "Golden intake sessions — acceptance-only catches builder drift without full rebuild"
+    },
+    {
+      "id": "intake_ready_gate",
+      "pillar": "real_programming",
+      "path": "scripts/builderos-intake-ready-gate.mjs",
+      "npm": "builderos:intake:ready",
+      "tier": "required",
+      "declared_status": "wired",
+      "actual_status": "wired",
+      "path_exists": true,
+      "npm_script_exists": true,
+      "issues": [],
+      "note": "Founder gate IGR-01..10 before greenfield/backfill/adjust intake"
+    },
+    {
       "id": "deploy_verify",
       "pillar": "real_programming",
       "path": "scripts/builderos-deploy-verify.mjs",
@@ -178,7 +217,7 @@
       "path_exists": true,
       "npm_script_exists": true,
       "issues": [],
-      "note": null
+      "note": "Tries both /api/v1/lifeos/builder/ready and /ready so timeout on one surface does not hide a live fallback route"
     },
     {
       "id": "builder_output_verifier",
@@ -363,6 +402,19 @@
       "note": null
     },
     {
+      "id": "openai_smoke",
+      "pillar": "cross_cutting",
+      "path": "scripts/builderos-openai-smoke.mjs",
+      "npm": "builderos:openai:smoke",
+      "tier": "recommended",
+      "declared_status": "wired",
+      "actual_status": "wired",
+      "path_exists": true,
+      "npm_script_exists": true,
+      "issues": [],
+      "note": "Cheapest-capable worker lane proof; loads .env.builderos before calling the OpenAI Responses API"
+    },
+    {
       "id": "tool_registry",
       "pillar": "cross_cutting",
       "path": "builderos-reboot/governance/BUILDEROS_TOOL_REGISTRY.json",
@@ -404,6 +456,13 @@
   ],
   "platform_gaps": [
     {
+      "rank": 1,
+      "id": "deploy_stale_local",
+      "summary": "Harness fixes local — production /build may lag until commit+push+redeploy",
+      "tool": "builderos:deploy:verify",
+      "fix": "npm run builderos:deploy:verify && commit push redeploy"
+    },
+    {
       "rank": 2,
       "id": "factory_cutover",
       "summary": "execute-mission.mjs uses factory execute-step; canonical harness uses /build — two hot paths",
@@ -423,9 +482,16 @@
       "summary": "Hist MISSION_QUEUE + builder-daemon compete with BP_PRIORITY",
       "tool": null,
       "fix": "BUILDER_QUEUE_ENABLED=0; use builderos:bp-priority:once only"
+    },
+    {
+      "rank": 5,
+      "id": "mechanical_deliberation",
+      "summary": "MECHANICAL tier deliberation skip requires deploy of council-builder routes",
+      "tool": "builderos:deploy:verify",
+      "fix": "Deploy routes patch from harness audit session"
     }
   ],
-  "platform_gaps_resolved": 2,
+  "platform_gaps_resolved": 0,
   "industry_gaps": [
     {
       "pattern": "openhands_workspace_isolation",
@@ -446,11 +512,6 @@
       "via": "scripts/system-railway-redeploy.mjs + builderos:deploy:verify"
     },
     {
-      "pattern": "self_healing_deploy_attribution",
-      "source": "LangChain / Semaphore self-healing CI",
-      "via": "live deploy SHA matches origin/main"
-    },
-    {
       "pattern": "openhands_workspace_isolation",
       "source": "OpenHands DockerWorkspace",
       "via": "executeCanonicalWorktreeStep + sandbox boundary manifest",
@@ -459,5 +520,5 @@
   ],
   "ok": true,
   "operational_verify": null,
-  "manifest_updated_at": "2026-06-24"
+  "manifest_updated_at": "2026-07-01"
 }

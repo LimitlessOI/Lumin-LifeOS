@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T18:15:53.849Z",
+  "generated_at": "2026-07-30T18:16:11.702Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12360,
+  "file_count": 12361,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21391,9 +21391,9 @@
     {
       "path": "builderos-reboot/DETERMINISM_RECEIPT.json",
       "synopsis": "BuilderOS artifact — DETERMINISM RECEIPT.",
-      "bytes": 831,
-      "mtime": "2026-07-18T22:36:35.354Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 0,
+      "mtime": "2026-07-30T18:16:11.702Z",
+      "indexed_at": "2026-07-30T18:16:11.702Z",
       "synopsis_index_only": true
     },
     {
@@ -21406,9 +21406,9 @@
     {
       "path": "builderos-reboot/DUPLICATION_RECEIPT.json",
       "synopsis": "BuilderOS artifact — DUPLICATION RECEIPT.",
-      "bytes": 1208,
-      "mtime": "2026-07-18T22:36:35.768Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 0,
+      "mtime": "2026-07-30T18:16:11.702Z",
+      "indexed_at": "2026-07-30T18:16:11.702Z",
       "synopsis_index_only": true
     },
     {
@@ -21442,9 +21442,9 @@
     {
       "path": "builderos-reboot/FULL_LOOP_PROOF_RECEIPT.json",
       "synopsis": "BuilderOS artifact — FULL LOOP PROOF RECEIPT.",
-      "bytes": 3893,
-      "mtime": "2026-07-18T22:36:38.592Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 0,
+      "mtime": "2026-07-30T18:16:11.702Z",
+      "indexed_at": "2026-07-30T18:16:11.702Z",
       "synopsis_index_only": true
     },
     {
@@ -21736,9 +21736,9 @@
     {
       "path": "builderos-reboot/GREENFIELD_DETERMINISM_RECEIPT.json",
       "synopsis": "BuilderOS artifact — GREENFIELD DETERMINISM RECEIPT.",
-      "bytes": 847,
-      "mtime": "2026-07-18T22:36:35.518Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 0,
+      "mtime": "2026-07-30T18:16:11.702Z",
+      "indexed_at": "2026-07-30T18:16:11.702Z",
       "synopsis_index_only": true
     },
     {
@@ -21811,9 +21811,9 @@
     {
       "path": "builderos-reboot/MISSION_PACK_INDEX.json",
       "synopsis": "BuilderOS artifact — MISSION PACK INDEX.",
-      "bytes": 11388,
-      "mtime": "2026-07-28T23:42:55.035Z",
-      "indexed_at": "2026-07-28T23:44:15.529Z",
+      "bytes": 0,
+      "mtime": "2026-07-30T18:16:11.702Z",
+      "indexed_at": "2026-07-30T18:16:11.702Z",
       "synopsis_index_only": true
     },
     {
@@ -26363,6 +26363,14 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-CONVERSATION-COMMITMENTS-C2-0001/receipts/MISSION_DOCTRINE_REPORT.json",
+      "synopsis": "BuilderOS artifact — MISSION DOCTRINE REPORT.",
+      "bytes": 0,
+      "mtime": "2026-07-30T18:16:11.702Z",
+      "indexed_at": "2026-07-30T18:16:11.702Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "builderos-reboot/MISSIONS/PRODUCT-CONVERSATION-COMMITMENTS-C2-0001/SALVAGE_REVIEW_CHECKLIST.md",
       "synopsis": "Salvage review checklist — PRODUCT-CONVERSATION-COMMITMENTS-C2-0001",
       "bytes": 2406,
@@ -29516,17 +29524,17 @@
     {
       "path": "builderos-reboot/PRODUCT_SALVAGE_CANDIDATES.json",
       "synopsis": "BuilderOS artifact — PRODUCT SALVAGE CANDIDATES.",
-      "bytes": 206,
-      "mtime": "2026-07-18T22:36:38.648Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 0,
+      "mtime": "2026-07-30T18:16:11.702Z",
+      "indexed_at": "2026-07-30T18:16:11.702Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/PROJECT_CERTIFICATION.json",
       "synopsis": "BuilderOS artifact — PROJECT CERTIFICATION.",
-      "bytes": 2650,
-      "mtime": "2026-07-18T22:36:38.767Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 0,
+      "mtime": "2026-07-30T18:16:11.702Z",
+      "indexed_at": "2026-07-30T18:16:11.702Z",
       "synopsis_index_only": true
     },
     {
@@ -29539,17 +29547,17 @@
     {
       "path": "builderos-reboot/QUEUE_DRY_RUN_RECEIPT.json",
       "synopsis": "BuilderOS artifact — QUEUE DRY RUN RECEIPT.",
-      "bytes": 4969,
-      "mtime": "2026-07-18T22:36:35.831Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 0,
+      "mtime": "2026-07-30T18:16:11.702Z",
+      "indexed_at": "2026-07-30T18:16:11.702Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/READINESS_REPORT.json",
       "synopsis": "BuilderOS artifact — READINESS REPORT.",
-      "bytes": 567,
-      "mtime": "2026-07-18T22:36:38.527Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 0,
+      "mtime": "2026-07-30T18:16:11.702Z",
+      "indexed_at": "2026-07-30T18:16:11.702Z",
       "synopsis_index_only": true
     },
     {
@@ -32365,9 +32373,9 @@
     {
       "path": "data/builderos-compound-improvement-state.json",
       "synopsis": "JSON data/config — data/builderos-compound-improvement-state.json.",
-      "bytes": 1607,
-      "mtime": "2026-07-28T20:13:27.534Z",
-      "indexed_at": "2026-07-28T23:06:09.687Z",
+      "bytes": 0,
+      "mtime": "2026-07-30T18:16:11.702Z",
+      "indexed_at": "2026-07-30T18:16:11.702Z",
       "synopsis_index_only": true
     },
     {
@@ -32381,9 +32389,9 @@
     {
       "path": "data/builderos-harness-gap-audit.json",
       "synopsis": "JSON data/config — data/builderos-harness-gap-audit.json.",
-      "bytes": 13543,
-      "mtime": "2026-07-09T03:27:25.479Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 0,
+      "mtime": "2026-07-30T18:16:11.702Z",
+      "indexed_at": "2026-07-30T18:16:11.702Z",
       "synopsis_index_only": true
     },
     {
@@ -32396,10 +32404,10 @@
     },
     {
       "path": "data/builderos-intake-regression-last-run.json",
-      "synopsis": "Exports createMarketingOSFactory — data/builderos-intake-regression-last-run.json.",
-      "bytes": 1760,
-      "mtime": "2026-07-03T00:17:44.967Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis": "JSON data/config — data/builderos-intake-regression-last-run.json.",
+      "bytes": 0,
+      "mtime": "2026-07-30T18:16:11.702Z",
+      "indexed_at": "2026-07-30T18:16:11.702Z",
       "synopsis_index_only": true
     },
     {
@@ -65019,9 +65027,9 @@
     {
       "path": "products/receipts/POINT_B_DNA_VERIFY.json",
       "synopsis": "Product receipt — POINT B DNA VERIFY.",
-      "bytes": 318,
-      "mtime": "2026-07-30T17:59:00.467Z",
-      "indexed_at": "2026-07-30T17:59:00.467Z",
+      "bytes": 0,
+      "mtime": "2026-07-30T18:16:11.702Z",
+      "indexed_at": "2026-07-30T18:16:11.702Z",
       "synopsis_index_only": true
     },
     {
@@ -65035,9 +65043,9 @@
     {
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
-      "bytes": 24218,
-      "mtime": "2026-07-30T17:59:00.467Z",
-      "indexed_at": "2026-07-30T17:59:00.467Z",
+      "bytes": 0,
+      "mtime": "2026-07-30T18:16:11.702Z",
+      "indexed_at": "2026-07-30T18:16:11.702Z",
       "synopsis_index_only": true
     },
     {
@@ -65203,17 +65211,17 @@
     {
       "path": "products/receipts/TRUTH_ENFORCEMENT_AUDIT.json",
       "synopsis": "Product receipt — TRUTH ENFORCEMENT AUDIT.",
-      "bytes": 833,
-      "mtime": "2026-07-30T17:59:00.467Z",
-      "indexed_at": "2026-07-30T17:59:00.467Z",
+      "bytes": 0,
+      "mtime": "2026-07-30T18:16:11.702Z",
+      "indexed_at": "2026-07-30T18:16:11.702Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/TRUTH_LOCKDOWN_VERIFY.json",
       "synopsis": "Product receipt — TRUTH LOCKDOWN VERIFY.",
-      "bytes": 1318,
-      "mtime": "2026-07-30T17:59:00.467Z",
-      "indexed_at": "2026-07-30T17:59:00.467Z",
+      "bytes": 0,
+      "mtime": "2026-07-30T18:16:11.702Z",
+      "indexed_at": "2026-07-30T18:16:11.702Z",
       "synopsis_index_only": true
     },
     {
@@ -65243,9 +65251,9 @@
     {
       "path": "products/receipts/WISDOM_TRUTH_AUDIT.json",
       "synopsis": "Product receipt — WISDOM TRUTH AUDIT.",
-      "bytes": 1001,
-      "mtime": "2026-07-30T17:59:00.467Z",
-      "indexed_at": "2026-07-30T17:59:00.467Z",
+      "bytes": 0,
+      "mtime": "2026-07-30T18:16:11.702Z",
+      "indexed_at": "2026-07-30T18:16:11.702Z",
       "synopsis_index_only": true
     },
     {

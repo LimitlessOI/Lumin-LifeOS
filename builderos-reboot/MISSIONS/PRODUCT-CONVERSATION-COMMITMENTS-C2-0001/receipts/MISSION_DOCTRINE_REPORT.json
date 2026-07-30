@@ -1,0 +1,229 @@
+{
+  "schema": "mission_doctrine_report_v1",
+  "mission_id": "PRODUCT-CONVERSATION-COMMITMENTS-C2-0001",
+  "evaluated_at": "2026-07-30T18:11:01.519Z",
+  "pass": false,
+  "enforcement": "HARD",
+  "violations": [
+    "doctrine:development:missing INTENT_BASELINE (INTENT_BASELINE.json)",
+    "doctrine:development:missing INTENT_COVERAGE_MAP (INTENT_COVERAGE_MAP.json)",
+    "doctrine:development:missing IDC_CONSENSUS_RECEIPT (IDC_CONSENSUS_RECEIPT.json)",
+    "doctrine:development:missing KNOWN_RISKS (KNOWN_RISKS.json)",
+    "doctrine:development:missing KNOWN_ASSUMPTIONS (KNOWN_ASSUMPTIONS.json)",
+    "doctrine:development:missing PREDICTION_RECEIPT (PREDICTION_RECEIPT.json)",
+    "doctrine:development:missing MODE_A_TO_B_TRANSITION_RECEIPT (MODE_A_TO_B_TRANSITION_RECEIPT.json)",
+    "doctrine:development:missing PRE_ARC_INPUT_PACKET (PRE_ARC_INPUT_PACKET.json)",
+    "doctrine:development:missing ASSET_REUSE_DECISION (ASSET_REUSE_DECISION.json)",
+    "doctrine:development:missing CHAIR_HANDOFF_RECEIPT (CHAIR_HANDOFF_RECEIPT.json)",
+    "doctrine:development:missing SNT_INTENT_ATTACK_RECEIPT (receipts/SNT_INTENT_ATTACK_RECEIPT.json)",
+    "doctrine:development:missing CHAIR_FORECAST_SIMULATION_RECEIPT (receipts/CHAIR_FORECAST_SIMULATION_RECEIPT.json)",
+    "doctrine:development:missing CFO_RESOURCE_SIMULATION_RECEIPT (receipts/CFO_RESOURCE_SIMULATION_RECEIPT.json)",
+    "doctrine:development:missing WISDOM_REVIEW_RECEIPT (receipts/WISDOM_REVIEW_RECEIPT.json)",
+    "doctrine:corridor:missing ARC_RUN_RECEIPT (ARC_RUN_RECEIPT.json)",
+    "doctrine:corridor:missing ARC_TWIN_SIMULATION_RECEIPT (receipts/ARC_TWIN_SIMULATION_RECEIPT.json)",
+    "doctrine:corridor:missing BUILDER_SIMULATION_REPORT (receipts/BUILDER_SIMULATION_REPORT.json)",
+    "doctrine:corridor:missing SNT_TRANSLATION_ATTACK_REPORT (receipts/SNT_TRANSLATION_ATTACK_REPORT.json)",
+    "doctrine:corridor:missing PRE_BUILD_VALIDATION_PACKET (PRE_BUILD_VALIDATION_PACKET.json)",
+    "doctrine:blueprint step CCV1-S01 not executed — cannot discard",
+    "doctrine:blueprint step CCV1-S02 not executed — cannot discard",
+    "doctrine:blueprint step CCV1-S03 not executed — cannot discard",
+    "doctrine:blueprint step CCV1-S04 not executed — cannot discard",
+    "doctrine:blueprint step CCV1-S05 not executed — cannot discard",
+    "doctrine:verdict/objective mismatch (OBJECTIVE_COMPLETE)",
+    "doctrine:BUILDER_SIMULATION_REPORT empty steps for non-empty blueprint",
+    "doctrine:SNT_TRANSLATION_ATTACK stub or missing evidence",
+    "doctrine:department:SNT missing SNT_INTENT_ATTACK_RECEIPT.json",
+    "doctrine:department:CHAIR missing CHAIR_FORECAST_SIMULATION_RECEIPT.json",
+    "doctrine:department:CFO missing CFO_RESOURCE_SIMULATION_RECEIPT.json",
+    "doctrine:department:WISDOM missing WISDOM_REVIEW_RECEIPT.json"
+  ],
+  "checks": {
+    "phases": {
+      "development": {
+        "phase": "development",
+        "gate": "IDC_EXIT",
+        "pass": false,
+        "violations": [
+          "doctrine:development:missing INTENT_BASELINE (INTENT_BASELINE.json)",
+          "doctrine:development:missing INTENT_COVERAGE_MAP (INTENT_COVERAGE_MAP.json)",
+          "doctrine:development:missing IDC_CONSENSUS_RECEIPT (IDC_CONSENSUS_RECEIPT.json)",
+          "doctrine:development:missing KNOWN_RISKS (KNOWN_RISKS.json)",
+          "doctrine:development:missing KNOWN_ASSUMPTIONS (KNOWN_ASSUMPTIONS.json)",
+          "doctrine:development:missing PREDICTION_RECEIPT (PREDICTION_RECEIPT.json)",
+          "doctrine:development:missing MODE_A_TO_B_TRANSITION_RECEIPT (MODE_A_TO_B_TRANSITION_RECEIPT.json)",
+          "doctrine:development:missing PRE_ARC_INPUT_PACKET (PRE_ARC_INPUT_PACKET.json)",
+          "doctrine:development:missing ASSET_REUSE_DECISION (ASSET_REUSE_DECISION.json)",
+          "doctrine:development:missing CHAIR_HANDOFF_RECEIPT (CHAIR_HANDOFF_RECEIPT.json)",
+          "doctrine:development:missing SNT_INTENT_ATTACK_RECEIPT (receipts/SNT_INTENT_ATTACK_RECEIPT.json)",
+          "doctrine:development:missing CHAIR_FORECAST_SIMULATION_RECEIPT (receipts/CHAIR_FORECAST_SIMULATION_RECEIPT.json)",
+          "doctrine:development:missing CFO_RESOURCE_SIMULATION_RECEIPT (receipts/CFO_RESOURCE_SIMULATION_RECEIPT.json)",
+          "doctrine:development:missing WISDOM_REVIEW_RECEIPT (receipts/WISDOM_REVIEW_RECEIPT.json)"
+        ],
+        "checks": {
+          "INTENT_BASELINE": {
+            "pass": false,
+            "path": "INTENT_BASELINE.json"
+          },
+          "INTENT_COVERAGE_MAP": {
+            "pass": false,
+            "path": "INTENT_COVERAGE_MAP.json"
+          },
+          "IDC_CONSENSUS_RECEIPT": {
+            "pass": false,
+            "path": "IDC_CONSENSUS_RECEIPT.json"
+          },
+          "KNOWN_RISKS": {
+            "pass": false,
+            "path": "KNOWN_RISKS.json"
+          },
+          "KNOWN_ASSUMPTIONS": {
+            "pass": false,
+            "path": "KNOWN_ASSUMPTIONS.json"
+          },
+          "PREDICTION_RECEIPT": {
+            "pass": false,
+            "path": "PREDICTION_RECEIPT.json"
+          },
+          "MODE_A_TO_B_TRANSITION_RECEIPT": {
+            "pass": false,
+            "path": "MODE_A_TO_B_TRANSITION_RECEIPT.json"
+          },
+          "PRE_ARC_INPUT_PACKET": {
+            "pass": false,
+            "path": "PRE_ARC_INPUT_PACKET.json"
+          },
+          "ASSET_REUSE_DECISION": {
+            "pass": false,
+            "path": "ASSET_REUSE_DECISION.json"
+          },
+          "CHAIR_HANDOFF_RECEIPT": {
+            "pass": false,
+            "path": "CHAIR_HANDOFF_RECEIPT.json"
+          },
+          "SNT_INTENT_ATTACK_RECEIPT": {
+            "pass": false,
+            "path": "receipts/SNT_INTENT_ATTACK_RECEIPT.json"
+          },
+          "CHAIR_FORECAST_SIMULATION_RECEIPT": {
+            "pass": false,
+            "path": "receipts/CHAIR_FORECAST_SIMULATION_RECEIPT.json"
+          },
+          "CFO_RESOURCE_SIMULATION_RECEIPT": {
+            "pass": false,
+            "path": "receipts/CFO_RESOURCE_SIMULATION_RECEIPT.json"
+          },
+          "WISDOM_REVIEW_RECEIPT": {
+            "pass": false,
+            "path": "receipts/WISDOM_REVIEW_RECEIPT.json"
+          }
+        },
+        "discard_policy": "none — PARKED requires explicit receipt"
+      },
+      "corridor": {
+        "phase": "corridor",
+        "gate": "ARC_ENTRY",
+        "pass": false,
+        "violations": [
+          "doctrine:corridor:missing ARC_RUN_RECEIPT (ARC_RUN_RECEIPT.json)",
+          "doctrine:corridor:missing ARC_TWIN_SIMULATION_RECEIPT (receipts/ARC_TWIN_SIMULATION_RECEIPT.json)",
+          "doctrine:corridor:missing BUILDER_SIMULATION_REPORT (receipts/BUILDER_SIMULATION_REPORT.json)",
+          "doctrine:corridor:missing SNT_TRANSLATION_ATTACK_REPORT (receipts/SNT_TRANSLATION_ATTACK_REPORT.json)",
+          "doctrine:corridor:missing PRE_BUILD_VALIDATION_PACKET (PRE_BUILD_VALIDATION_PACKET.json)"
+        ],
+        "checks": {
+          "BLUEPRINT_TWIN": {
+            "pass": true,
+            "path": "BLUEPRINT.json"
+          },
+          "ARC_RUN_RECEIPT": {
+            "pass": false,
+            "path": "ARC_RUN_RECEIPT.json"
+          },
+          "ARC_TWIN_SIMULATION_RECEIPT": {
+            "pass": false,
+            "path": "receipts/ARC_TWIN_SIMULATION_RECEIPT.json"
+          },
+          "BUILDER_SIMULATION_REPORT": {
+            "pass": false,
+            "path": "receipts/BUILDER_SIMULATION_REPORT.json"
+          },
+          "SNT_TRANSLATION_ATTACK_REPORT": {
+            "pass": false,
+            "path": "receipts/SNT_TRANSLATION_ATTACK_REPORT.json"
+          },
+          "PRE_BUILD_VALIDATION_PACKET": {
+            "pass": false,
+            "path": "PRE_BUILD_VALIDATION_PACKET.json"
+          }
+        },
+        "discard_policy": "none — PARKED requires explicit receipt"
+      }
+    },
+    "blueprint_no_discard": {
+      "pass": false,
+      "violations": [
+        "doctrine:blueprint step CCV1-S01 not executed — cannot discard",
+        "doctrine:blueprint step CCV1-S02 not executed — cannot discard",
+        "doctrine:blueprint step CCV1-S03 not executed — cannot discard",
+        "doctrine:blueprint step CCV1-S04 not executed — cannot discard",
+        "doctrine:blueprint step CCV1-S05 not executed — cannot discard"
+      ],
+      "steps_required": 5,
+      "steps_done": 0
+    },
+    "result_truth": {
+      "pass": false,
+      "violations": [
+        "doctrine:verdict/objective mismatch (OBJECTIVE_COMPLETE)"
+      ],
+      "acceptance_verdict": "PASS"
+    },
+    "simulation_fidelity": {
+      "pass": false,
+      "violations": [
+        "doctrine:BUILDER_SIMULATION_REPORT empty steps for non-empty blueprint",
+        "doctrine:SNT_TRANSLATION_ATTACK stub or missing evidence"
+      ]
+    },
+    "department_roles": {
+      "pass": false,
+      "violations": [
+        "doctrine:department:SNT missing SNT_INTENT_ATTACK_RECEIPT.json",
+        "doctrine:department:CHAIR missing CHAIR_FORECAST_SIMULATION_RECEIPT.json",
+        "doctrine:department:CFO missing CFO_RESOURCE_SIMULATION_RECEIPT.json",
+        "doctrine:department:WISDOM missing WISDOM_REVIEW_RECEIPT.json"
+      ],
+      "checks": {},
+      "departments": {
+        "pass": false,
+        "violations": [
+          "department:SNT missing SNT_INTENT_ATTACK_RECEIPT.json",
+          "department:CHAIR missing CHAIR_FORECAST_SIMULATION_RECEIPT.json",
+          "department:CFO missing CFO_RESOURCE_SIMULATION_RECEIPT.json",
+          "department:WISDOM missing WISDOM_REVIEW_RECEIPT.json"
+        ],
+        "checks": {
+          "SNT": {
+            "pass": false,
+            "reason": "missing"
+          },
+          "CHAIR": {
+            "pass": false,
+            "reason": "missing"
+          },
+          "CFO": {
+            "pass": false,
+            "reason": "missing"
+          },
+          "WISDOM": {
+            "pass": false,
+            "reason": "missing"
+          }
+        },
+        "defect_owner_seat": "Chair",
+        "route_to": "CHAIR"
+      }
+    }
+  },
+  "lesson": "Doctrine violation — fix before claiming healthy or advancing queue."
+}
