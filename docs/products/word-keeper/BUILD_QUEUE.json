@@ -88,14 +88,37 @@
         "CREATE TABLE IF NOT EXISTS transcript_purge"
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-16T02:43:13.356Z",
+      "shipped_at": "2026-07-30T23:20:13.061Z",
       "commit_sha": "fad790696a0f4183378cea60a5d456615f5fbbc6",
       "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "1",
       "mission_id": "PRODUCT-word-keeper",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:07.447Z"
+      "reaudit_reset_at": "2026-07-30T18:55:07.447Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/word-keeper/twins/steps/1.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T23:20:13.061Z",
+        "shipped_at": "2026-07-30T23:20:13.061Z",
+        "commit_sha": "fad790696a0f4183378cea60a5d456615f5fbbc6",
+        "content_sha256": "945a6df9167fc2c53304699d1c27b7bd78d5e91818e959fdd587047d315e05df",
+        "target_file": "db/migrations/002_add_transcript_purge_cron.sql",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "db/migrations/002_add_transcript_purge_cron.sql",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/word-keeper/twins/steps/1.exact",
+          "content_sha256": "945a6df9167fc2c53304699d1c27b7bd78d5e91818e959fdd587047d315e05df"
+        }
+      }
     },
     {
       "id": "3",
