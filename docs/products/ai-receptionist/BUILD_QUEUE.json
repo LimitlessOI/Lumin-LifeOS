@@ -379,7 +379,7 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-30T21:12:35.720Z",
+      "shipped_at": "2026-07-30T21:37:41.727Z",
       "commit_sha": null,
       "blueprint_id": "PRODUCT-AI-RECEPTIONIST-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "2",
@@ -393,10 +393,10 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-07-30T21:12:35.720Z",
-        "shipped_at": "2026-07-30T21:12:35.720Z",
-        "commit_sha": "6ebc2d4f068e284c50185d1abc88649ec9c3ce92",
-        "content_sha256": "ac2c36ef2ac2aabe82d3c8c317c8b324f050897e5d1397238b2dc620e73786a0",
+        "sealed_at": "2026-07-30T21:37:41.727Z",
+        "shipped_at": "2026-07-30T21:37:41.727Z",
+        "commit_sha": null,
+        "content_sha256": "3f0f5e3566a4e892b1250acc6851374a7da1eca857a82c0eda4c0f535342f005",
         "target_file": "services/stripePriceService.js",
         "reverse": {
           "mode": "delete_file",
@@ -407,7 +407,7 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/ai-receptionist/twins/steps/2.exact",
-          "content_sha256": "ac2c36ef2ac2aabe82d3c8c317c8b324f050897e5d1397238b2dc620e73786a0"
+          "content_sha256": "3f0f5e3566a4e892b1250acc6851374a7da1eca857a82c0eda4c0f535342f005"
         }
       },
       "built_sha": null,
