@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T23:18:49.700Z",
+  "generated_at": "2026-07-30T23:19:03.816Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12428,
+  "file_count": 12429,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -35138,6 +35138,13 @@
       "bytes": 1833,
       "mtime": "2026-06-29T17:21:07.769Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "db/migrations/202604261.sql",
+      "synopsis": "Database migration — 202604261.sql.",
+      "bytes": 1234,
+      "mtime": "2026-07-30T23:19:03.816Z",
+      "indexed_at": "2026-07-30T23:19:03.816Z"
     },
     {
       "path": "db/migrations/20260427_lifeos_assessment_battery.sql",

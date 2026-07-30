@@ -20,14 +20,37 @@
         "CREATE TABLE IF NOT EXISTS epistemic_facts"
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-15T17:55:32.723Z",
+      "shipped_at": "2026-07-30T23:19:01.156Z",
       "commit_sha": "de86844cbddccb13000514b250147d79a06b1381",
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "1",
       "mission_id": "PRODUCT-memory-intelligence",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.671Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.671Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/memory-intelligence/twins/steps/1.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T23:19:01.156Z",
+        "shipped_at": "2026-07-30T23:19:01.156Z",
+        "commit_sha": "de86844cbddccb13000514b250147d79a06b1381",
+        "content_sha256": "8b0e6c1b6564c739146d027f53a3bb0111d0bbd257f0e537f7483a680785af72",
+        "target_file": "db/migrations/202604261.sql",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "db/migrations/202604261.sql",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/memory-intelligence/twins/steps/1.exact",
+          "content_sha256": "8b0e6c1b6564c739146d027f53a3bb0111d0bbd257f0e537f7483a680785af72"
+        }
+      }
     },
     {
       "id": "2",
