@@ -526,13 +526,13 @@
     },
     {
       "id": "step6",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/ciGuardBypass.js",
       "task": "implement CI guard against bypassing route",
       "spec": "Introduce an endpoint that interfaces with ciGuard service to ensure builds are monitored and unauthorised paths are not pursued. Ensure to include a CI guard mechanism.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerCIGuardBypassRoutes"
       ],
@@ -552,13 +552,16 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-16T03:23:51.644Z",
-      "commit_sha": "511ce2fa2ccb10c38a0339de0b674e6cfda3100e",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-TOKEN-ACCOUNTING-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step6",
       "mission_id": "PRODUCT-token-accounting-os",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerCIGuardBypassRoutes; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.748Z"
+      "last_error": "codegen_authoring_failed: codegen_empty: openai_builder_mini: HTTP 429: {\n    \"error\": {\n        \"message\": \"You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organiza",
+      "reaudit_reset_at": "2026-07-30T18:55:06.748Z",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-30T23:37:03.621Z"
     }
   ],
   "blueprint_id": "PRODUCT-TOKEN-ACCOUNTING-OS-BUILD-QUEUE-TWIN-V1",
