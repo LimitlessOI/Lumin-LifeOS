@@ -69,7 +69,7 @@ export async function runHarnessAcceptanceOnly({
       continue;
     }
 
-    const acceptance = runBlueprintAcceptance(cmd, baseUrl, commandKey);
+    const acceptance = await runBlueprintAcceptance(cmd, baseUrl, commandKey);
     row.ok = acceptance.ok === true;
     row.acceptance = {
       ok: acceptance.ok,

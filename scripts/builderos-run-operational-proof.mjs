@@ -4,7 +4,8 @@
  * Usage: node scripts/builderos-run-operational-proof.mjs [--skip-live-build] [--force-live-build]
  * @ssot builderos-reboot/BUILDEROS_WORKING_DEFINITION.json
  */
-import 'dotenv/config';
+import * as dotenv from 'dotenv';
+dotenv.config({ override: true });
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -19,7 +20,7 @@ const skipLiveBuild = process.argv.includes('--skip-live-build');
 const forceLiveBuild = process.argv.includes('--force-live-build');
 
 function resolveBaseUrl() {
-  return (process.env.PUBLIC_BASE_URL || process.env.BUILDER_BASE_URL || '').replace(/\/$/, '');
+  return (process.env.PUBLIC_BASE_URL || process.env.BUILDER_BASE_URL || '').trim().replace(/\/$/, '');
 }
 
 function resolveCommandKey() {

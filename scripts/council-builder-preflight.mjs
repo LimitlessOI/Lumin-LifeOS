@@ -14,10 +14,10 @@
  * `PUBLIC_BASE_URL`, `BUILDER_BASE_URL`, and `x-command-key` source vars work without manual `export`.
  */
 
-import 'dotenv/config';
+import * as dotenv from 'dotenv';
+dotenv.config({ override: true });
 // Also load .env.local so Railway URL + key are available without manual export.
 // .env.local values override .env (it holds Railway-matching vars).
-import dotenv from 'dotenv';
 dotenv.config({ path: new URL('../.env.local', import.meta.url).pathname, override: true });
 import './lib/load-builderos-env.mjs';
 
@@ -41,6 +41,7 @@ const base = (
   process.env.LUMIN_SMOKE_BASE_URL ||
   'http://127.0.0.1:3000'
 )
+  .trim()
   .replace(/\/$/, '');
 
 const key =

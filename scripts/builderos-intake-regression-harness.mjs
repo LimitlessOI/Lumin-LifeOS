@@ -8,13 +8,14 @@
  * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
-import 'dotenv/config';
+import * as dotenv from 'dotenv';
+dotenv.config({ override: true });
 import {
   runIntakeRegressionHarness,
   writeIntakeRegressionReceipt,
 } from '../services/builderos-intake-regression-harness.js';
 
-const BASE_URL = (process.env.PUBLIC_BASE_URL || process.env.API_BASE_URL || '').replace(/\/$/, '');
+const BASE_URL = (process.env.PUBLIC_BASE_URL || process.env.API_BASE_URL || '').trim().replace(/\/$/, '');
 const KEY = process.env.COMMAND_CENTER_KEY || process.env.LIFEOS_KEY || '';
 
 function resolveMode(argv) {

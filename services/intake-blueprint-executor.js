@@ -264,7 +264,7 @@ export async function loadIntakeSession(sessionId, { pool = null, baseUrl = null
     return rows[0] || null;
   }
   if (baseUrl && commandKey) {
-    const res = await fetch(`${baseUrl.replace(/\/$/, '')}/api/v1/blueprint/intake/${sessionId}`, {
+    const res = await fetch(`${String(baseUrl).trim().replace(/\/$/, '')}/api/v1/blueprint/intake/${sessionId}`, {
       headers: { 'x-command-center-key': commandKey },
     });
     if (!res.ok) return null;
@@ -322,7 +322,7 @@ export async function verifyIntakeSessionBuildClearance(pool, sessionId, targetF
 }
 
 export async function postWireRoute(baseUrl, commandKey, targetFile, mountPath = null) {
-  const res = await fetch(`${baseUrl.replace(/\/$/, '')}/api/v1/lifeos/builder/wire-route`, {
+  const res = await fetch(`${String(baseUrl).trim().replace(/\/$/, '')}/api/v1/lifeos/builder/wire-route`, {
     method: 'POST',
     headers: { 'content-type': 'application/json', 'x-command-key': commandKey },
     body: JSON.stringify({
@@ -346,7 +346,7 @@ export function runBlueprintAcceptance(acceptanceCmd, baseUrl, commandKey) {
   const scriptAbs = resolve(REPO_ROOT, scriptRel);
   const env = {
     ...process.env,
-    PUBLIC_BASE_URL: baseUrl.replace(/\/$/, ''),
+    PUBLIC_BASE_URL: String(baseUrl).trim().replace(/\/$/, ''),
     COMMAND_CENTER_KEY: commandKey || process.env.COMMAND_CENTER_KEY || '',
   };
   return new Promise((res) => {
@@ -446,7 +446,7 @@ async function commitToGitHubDirect(targetFile, content, commitMessage) {
 }
 
 export async function postBuilderBuild(baseUrl, commandKey, body) {
-  const url = `${baseUrl.replace(/\/$/, '')}/api/v1/lifeos/builder/build`;
+  const url = `${String(baseUrl).trim().replace(/\/$/, '')}/api/v1/lifeos/builder/build`;
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
       const res = await fetch(url, {

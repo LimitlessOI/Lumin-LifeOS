@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T18:06:59.071Z",
+  "generated_at": "2026-07-30T18:15:53.849Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12359,
+  "file_count": 12360,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -38009,10 +38009,10 @@
     },
     {
       "path": "docs/CONTINUITY_LOG.md",
-      "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 48319,
-      "mtime": "2026-07-30T17:59:00.467Z",
-      "indexed_at": "2026-07-30T17:59:00.467Z"
+      "synopsis": "Documentation — CONTINUITY LOG.",
+      "bytes": 0,
+      "mtime": "2026-07-30T18:15:53.849Z",
+      "indexed_at": "2026-07-30T18:15:53.849Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40184,6 +40184,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "docs/products/builderos/AUDIT_BUILDEROS_2026-07-30.md",
+      "synopsis": "Documentation — AUDIT BUILDEROS 2026 07 30.",
+      "bytes": 0,
+      "mtime": "2026-07-30T18:15:53.849Z",
+      "indexed_at": "2026-07-30T18:15:53.849Z"
+    },
+    {
       "path": "docs/products/builderos/DEVIN_HANDOFF.md",
       "synopsis": "Devin execution host handoff for BuilderOS",
       "bytes": 6614,
@@ -40215,10 +40222,10 @@
     },
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
-      "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 323500,
-      "mtime": "2026-07-30T17:45:53.619Z",
-      "indexed_at": "2026-07-30T17:45:53.619Z"
+      "synopsis": "Documentation — PRODUCT HOME.",
+      "bytes": 0,
+      "mtime": "2026-07-30T18:15:53.849Z",
+      "indexed_at": "2026-07-30T18:15:53.849Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -40946,10 +40953,10 @@
     },
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
-      "synopsis": "Canonical product home — LifeOS",
-      "bytes": 637287,
-      "mtime": "2026-07-30T04:04:47.141Z",
-      "indexed_at": "2026-07-30T04:04:47.141Z"
+      "synopsis": "Documentation — PRODUCT HOME.",
+      "bytes": 0,
+      "mtime": "2026-07-30T18:15:53.849Z",
+      "indexed_at": "2026-07-30T18:15:53.849Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -70737,13 +70744,10 @@
     },
     {
       "path": "scripts/builderos-intake-regression-harness.mjs",
-      "synopsis": "Golden intake blueprint regression — acceptance-only (default), dry-run, or full rebuild.",
-      "bytes": 1952,
-      "mtime": "2026-07-03T00:17:45.087Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
-      "ssot": [
-        "docs/products/builderos/PRODUCT_HOME.md"
-      ]
+      "synopsis": "Script — Builderos Intake Regression Harness.",
+      "bytes": 0,
+      "mtime": "2026-07-30T18:15:53.849Z",
+      "indexed_at": "2026-07-30T18:15:53.849Z"
     },
     {
       "path": "scripts/builderos-ollama-token-audit.mjs",
@@ -70777,13 +70781,10 @@
     },
     {
       "path": "scripts/builderos-pre-build-gate.mjs",
-      "synopsis": "Pre-build gate for canonical harness — ready, deploy, doctrine, env.",
-      "bytes": 6913,
-      "mtime": "2026-07-01T09:29:53.622Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
-      "ssot": [
-        "builderos-reboot/governance/BUILDEROS_HARNESS_TOOLS.json"
-      ]
+      "synopsis": "Script — Builderos Pre Build Gate.",
+      "bytes": 0,
+      "mtime": "2026-07-30T18:15:53.849Z",
+      "indexed_at": "2026-07-30T18:15:53.849Z"
     },
     {
       "path": "scripts/builderos-run-mission-step.mjs",
@@ -70807,13 +70808,10 @@
     },
     {
       "path": "scripts/builderos-run-operational-proof.mjs",
-      "synopsis": "Live BuilderOS operational proof — canonical build + compound log + gap classify.",
-      "bytes": 7479,
-      "mtime": "2026-06-24T20:34:41.966Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
-      "ssot": [
-        "builderos-reboot/BUILDEROS_WORKING_DEFINITION.json"
-      ]
+      "synopsis": "Script — Builderos Run Operational Proof.",
+      "bytes": 0,
+      "mtime": "2026-07-30T18:15:53.849Z",
+      "indexed_at": "2026-07-30T18:15:53.849Z"
     },
     {
       "path": "scripts/builderos-stability-marker.mjs",
@@ -70950,13 +70948,10 @@
     },
     {
       "path": "scripts/council-builder-preflight.mjs",
-      "synopsis": "Proves the Council Builder is reachable and reports why POST /api/v1/lifeos/builder/build",
-      "bytes": 14778,
-      "mtime": "2026-07-01T09:17:07.296Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
-      "ssot": [
-        "docs/products/lifeos/PRODUCT_HOME.md"
-      ]
+      "synopsis": "Script — Council Builder Preflight.",
+      "bytes": 0,
+      "mtime": "2026-07-30T18:15:53.849Z",
+      "indexed_at": "2026-07-30T18:15:53.849Z"
     },
     {
       "path": "scripts/council-gate-change-run.mjs",
@@ -73644,8 +73639,8 @@
       "path": "scripts/system-commit-files.mjs",
       "synopsis": "Script — System Commit Files.",
       "bytes": 0,
-      "mtime": "2026-07-30T03:18:07.719Z",
-      "indexed_at": "2026-07-30T03:18:07.719Z"
+      "mtime": "2026-07-30T18:15:53.849Z",
+      "indexed_at": "2026-07-30T18:15:53.849Z"
     },
     {
       "path": "scripts/system-maturity-check.mjs",
@@ -73659,13 +73654,10 @@
     },
     {
       "path": "scripts/system-railway-redeploy.mjs",
-      "synopsis": "Triggers Railway redeploy via the RUNNING app.",
-      "bytes": 14005,
-      "mtime": "2026-07-28T19:59:10.668Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
-      "ssot": [
-        "docs/products/lifeos/PRODUCT_HOME.md"
-      ]
+      "synopsis": "Script — System Railway Redeploy.",
+      "bytes": 0,
+      "mtime": "2026-07-30T18:15:53.849Z",
+      "indexed_at": "2026-07-30T18:15:53.849Z"
     },
     {
       "path": "scripts/system-rotate-command-key.mjs",
@@ -74023,13 +74015,10 @@
     },
     {
       "path": "scripts/verify-builderos-working-definition.mjs",
-      "synopsis": "BuilderOS working definition — STRUCTURAL vs OPERATIONAL (honest 10/10).",
-      "bytes": 17971,
-      "mtime": "2026-07-09T03:27:25.478Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
-      "ssot": [
-        "builderos-reboot/BUILDEROS_WORKING_DEFINITION.json"
-      ]
+      "synopsis": "Script — Verify Builderos Working Definition.",
+      "bytes": 0,
+      "mtime": "2026-07-30T18:15:53.849Z",
+      "indexed_at": "2026-07-30T18:15:53.849Z"
     },
     {
       "path": "scripts/verify-builderos.mjs",
@@ -86046,13 +86035,10 @@
     },
     {
       "path": "services/builderos-intake-regression-harness.js",
-      "synopsis": "Golden intake blueprint regression — acceptance-only and dry-run dispatch probes.",
-      "bytes": 6838,
-      "mtime": "2026-06-29T17:44:54.496Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
-      "ssot": [
-        "docs/products/builderos/PRODUCT_HOME.md"
-      ]
+      "synopsis": "Service module — Builderos Intake Regression Harness.",
+      "bytes": 0,
+      "mtime": "2026-07-30T18:15:53.849Z",
+      "indexed_at": "2026-07-30T18:15:53.849Z"
     },
     {
       "path": "services/builderos-live-enforcement-pass.js",
@@ -88888,13 +88874,10 @@
     },
     {
       "path": "services/intake-blueprint-executor.js",
-      "synopsis": "Execute ARC-ready intake skeleton blueprints step-by-step via POST /lifeos/builder/build.",
-      "bytes": 32350,
-      "mtime": "2026-07-05T19:10:02.201Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
-      "ssot": [
-        "docs/products/builderos/PRODUCT_HOME.md"
-      ]
+      "synopsis": "Service module — Intake Blueprint Executor.",
+      "bytes": 0,
+      "mtime": "2026-07-30T18:15:53.849Z",
+      "indexed_at": "2026-07-30T18:15:53.849Z"
     },
     {
       "path": "services/intakeFormService.js",

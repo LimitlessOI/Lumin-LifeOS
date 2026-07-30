@@ -4,7 +4,8 @@
  * Usage: node scripts/builderos-pre-build-gate.mjs [--allow-stale]
  * @ssot builderos-reboot/governance/BUILDEROS_HARNESS_TOOLS.json
  */
-import 'dotenv/config';
+import * as dotenv from 'dotenv';
+dotenv.config({ override: true });
 import fs from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import path from 'node:path';
@@ -18,7 +19,7 @@ function check(id, ok, detail) {
 }
 
 function resolveBaseUrl() {
-  return (process.env.PUBLIC_BASE_URL || process.env.BUILDER_BASE_URL || '').replace(/\/$/, '');
+  return (process.env.PUBLIC_BASE_URL || process.env.BUILDER_BASE_URL || '').trim().replace(/\/$/, '');
 }
 
 function resolveCommandKey() {
@@ -31,7 +32,7 @@ const BASE_CANDIDATES = [
   process.env.BUILDER_BASE_URL,
   process.env.BASE_URL,
   'http://127.0.0.1:3000',
-].filter(Boolean).map((value) => String(value).replace(/\/$/, ''));
+].filter(Boolean).map((value) => String(value).trim().replace(/\/$/, ''));
 
 async function fetchReady(baseUrl, commandKey) {
   const paths = ['/api/v1/lifeos/builder/ready', '/ready'];

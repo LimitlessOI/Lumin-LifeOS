@@ -30,7 +30,8 @@
  * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
-import 'dotenv/config';
+import * as dotenv from 'dotenv';
+dotenv.config({ override: true });
 import { execFile, spawnSync } from 'node:child_process';
 import { promisify } from 'node:util';
 

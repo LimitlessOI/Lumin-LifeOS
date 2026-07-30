@@ -4,7 +4,8 @@
  * Structural = modules wired. Operational = live proof (ready, gaps, canonical dry-run, compound prod entries).
  * @ssot builderos-reboot/BUILDEROS_WORKING_DEFINITION.json
  */
-import 'dotenv/config';
+import * as dotenv from 'dotenv';
+dotenv.config({ override: true });
 import './lib/load-builderos-env.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -56,7 +57,9 @@ function resolveBaseUrl() {
     process.env.BUILDER_BASE_URL ||
     process.env.LUMIN_SMOKE_BASE_URL ||
     ''
-  ).replace(/\/$/, '');
+  )
+    .trim()
+    .replace(/\/$/, '');
 }
 
 function resolveCommandKey() {
