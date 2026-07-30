@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T23:20:15.655Z",
+  "generated_at": "2026-07-30T23:27:19.175Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12434,
+  "file_count": 12435,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -36699,6 +36699,13 @@
       "bytes": 262,
       "mtime": "2026-07-30T22:56:37.114Z",
       "indexed_at": "2026-07-30T22:56:37.114Z"
+    },
+    {
+      "path": "db/migrations/20260723_lifeos_core_complete.sql",
+      "synopsis": "Database migration — 20260723_lifeos_core_complete.sql.",
+      "bytes": 8387,
+      "mtime": "2026-07-30T23:27:19.175Z",
+      "indexed_at": "2026-07-30T23:27:19.175Z"
     },
     {
       "path": "db/migrations/20260723_voice_rail_stt_corrections.sql",
