@@ -324,13 +324,13 @@
     },
     {
       "id": "builderos-7",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/income-priority.js",
       "task": "calculate income priorities",
       "spec": "Implement service to compute tasks with significant financial impact.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "calculateIncomePriorities"
       ],
@@ -349,13 +349,16 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-16T04:39:39.143Z",
-      "commit_sha": "b550e493e1b81f8b5ed79141e8c0b45fa43997f7",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-7",
       "mission_id": "PRODUCT-builderos",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:calculateIncomePriorities; calculateIncomePriorities; income priorities",
-      "reaudit_reset_at": "2026-07-30T18:55:06.356Z"
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:calculateIncomePriorities; behavior_assertion_failed; behavior_proof",
+      "reaudit_reset_at": "2026-07-30T18:55:06.356Z",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-30T19:10:34.629Z"
     },
     {
       "id": "builderos-8",
