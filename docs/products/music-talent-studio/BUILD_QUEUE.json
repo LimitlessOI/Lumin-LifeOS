@@ -38,7 +38,7 @@
     },
     {
       "id": "step2",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/audioAnalysis.js",
       "task": "decide audio analysis approach",
       "spec": "Decide between third-party API integration or custom approach for audio analysis services.",
@@ -46,7 +46,7 @@
         "step1"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "performAudioAnalysis"
       ],
@@ -61,29 +61,37 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-15T17:56:57.631Z",
-      "commit_sha": null,
+      "shipped_at": "2026-07-30T23:53:17.816Z",
+      "commit_sha": "d1d8b5449ac0a82a15971c6f72643bc1614630e0",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step2",
       "mission_id": "PRODUCT-music-talent-studio",
-      "pre_existing": null,
-      "last_error": "codegen_authoring_failed: codegen_empty: openai_builder_mini: HTTP 429: {\n    \"error\": {\n        \"message\": \"You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organiza",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:performAudioAnalysis; assertion_threw",
       "reaudit_reset_at": "2026-07-30T18:55:06.680Z",
-      "built_sha": null,
-      "proof": null,
-      "last_attempt_at": "2026-07-30T23:37:44.743Z",
-      "last_attempt": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-30T23:33:26.172Z",
-      "no_op": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
-      "park_until": null,
-      "blocker_class": null,
-      "claim_level": null,
-      "blocker_type": null,
-      "blocker_resolution": null
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/music-talent-studio/twins/steps/step2.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T23:53:17.816Z",
+        "shipped_at": "2026-07-30T23:53:17.816Z",
+        "commit_sha": "d1d8b5449ac0a82a15971c6f72643bc1614630e0",
+        "content_sha256": "5aa4c2c28842c3c5dde21b79566b0c98b0f6195b7c89d7aa271ecaa421ad42c1",
+        "target_file": "services/audioAnalysis.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/audioAnalysis.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/music-talent-studio/twins/steps/step2.exact",
+          "content_sha256": "5aa4c2c28842c3c5dde21b79566b0c98b0f6195b7c89d7aa271ecaa421ad42c1"
+        }
+      }
     },
     {
       "id": "step3",
