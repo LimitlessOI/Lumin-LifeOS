@@ -89,6 +89,14 @@ builderos-reboot/_hist/
 builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json
 # factory-staging/ — MUST ship: production spine imports run-step, point-b-gate, run-foundation at boot
 data/
+# Digital twin facets MUST ship (160K, 35 files). chair-lumin-unified hard-gates
+# EVERY founder turn when data/twins/<scope>/ is absent, so excluding these made
+# the Chair permanently non-functional in production while passing locally — and
+# its own error text told the founder to redeploy, which is the step that removed
+# them. Proven live 2026-07-29: gate reported _meta/personal/goal/operating_system/
+# decision_identity missing while all five were committed and non-empty on disk.
+!data/twins/
+!data/twins/**
 .cursor/
 assets/
 products/

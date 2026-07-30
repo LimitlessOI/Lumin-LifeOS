@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T01:12:34.786Z",
+  "generated_at": "2026-07-30T01:23:13.836Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12308,
+  "file_count": 12337,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21634,9 +21634,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3712956,
-      "mtime": "2026-07-29T00:44:25.967Z",
-      "indexed_at": "2026-07-29T00:45:17.399Z"
+      "bytes": 3723298,
+      "mtime": "2026-07-30T01:21:54.968Z",
+      "indexed_at": "2026-07-30T01:22:40.402Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -30750,6 +30750,14 @@
       ]
     },
     {
+      "path": "config/digital-twin-template-v1.json",
+      "synopsis": "Configuration — Digital Twin Template V1.",
+      "bytes": 3447,
+      "mtime": "2026-07-29T13:12:14.412Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "config/edge-config.toml",
       "synopsis": "Configuration — Edge Config.",
       "bytes": 143,
@@ -32738,11 +32746,106 @@
       "synopsis_index_only": true
     },
     {
+      "path": "data/twins/_template/_meta.json",
+      "synopsis": "JSON data/config — data/twins/_template/_meta.json.",
+      "bytes": 356,
+      "mtime": "2026-07-29T13:12:43.309Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/twins/_template/communication.json",
+      "synopsis": "JSON data/config — data/twins/_template/communication.json.",
+      "bytes": 272,
+      "mtime": "2026-07-29T13:12:45.368Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/twins/_template/decision_identity.json",
+      "synopsis": "JSON data/config — data/twins/_template/decision_identity.json.",
+      "bytes": 331,
+      "mtime": "2026-07-29T13:12:47.792Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/twins/_template/goal.json",
+      "synopsis": "JSON data/config — data/twins/_template/goal.json.",
+      "bytes": 184,
+      "mtime": "2026-07-29T13:12:46.121Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/twins/_template/memory.json",
+      "synopsis": "JSON data/config — data/twins/_template/memory.json.",
+      "bytes": 157,
+      "mtime": "2026-07-29T13:12:48.669Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/twins/_template/operating_system.json",
+      "synopsis": "JSON data/config — data/twins/_template/operating_system.json.",
+      "bytes": 261,
+      "mtime": "2026-07-29T13:12:47.026Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/twins/_template/permission.json",
+      "synopsis": "JSON data/config — data/twins/_template/permission.json.",
+      "bytes": 249,
+      "mtime": "2026-07-29T13:12:48.237Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/twins/_template/personal.json",
+      "synopsis": "JSON data/config — data/twins/_template/personal.json.",
+      "bytes": 535,
+      "mtime": "2026-07-29T13:12:43.945Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/twins/_template/personality.json",
+      "synopsis": "JSON data/config — data/twins/_template/personality.json.",
+      "bytes": 190,
+      "mtime": "2026-07-29T13:12:44.731Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/twins/_template/README.md",
+      "synopsis": "Digital Twin — blank template",
+      "bytes": 238,
+      "mtime": "2026-07-29T13:12:48.669Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z"
+    },
+    {
+      "path": "data/twins/default/adam/_meta.json",
+      "synopsis": "JSON data/config — data/twins/default/adam/_meta.json.",
+      "bytes": 2132,
+      "mtime": "2026-07-30T01:20:55.022Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "data/twins/default/adam/communication.json",
       "synopsis": "JSON data/config — data/twins/default/adam/communication.json.",
-      "bytes": 225,
-      "mtime": "2026-06-28T23:37:30.199Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 1070,
+      "mtime": "2026-07-29T20:58:43.243Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/twins/default/adam/decision_identity.json",
+      "synopsis": "JSON data/config — data/twins/default/adam/decision_identity.json.",
+      "bytes": 6658,
+      "mtime": "2026-07-29T22:03:42.695Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z",
       "synopsis_index_only": true
     },
     {
@@ -32756,9 +32859,17 @@
     {
       "path": "data/twins/default/adam/goal.json",
       "synopsis": "JSON data/config — data/twins/default/adam/goal.json.",
-      "bytes": 159,
-      "mtime": "2026-06-28T23:37:30.199Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 4309,
+      "mtime": "2026-07-29T20:58:43.243Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/twins/default/adam/memory.json",
+      "synopsis": "JSON data/config — data/twins/default/adam/memory.json.",
+      "bytes": 1225,
+      "mtime": "2026-07-30T01:20:55.021Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z",
       "synopsis_index_only": true
     },
     {
@@ -32770,11 +32881,35 @@
       "synopsis_index_only": true
     },
     {
+      "path": "data/twins/default/adam/modules/content.json",
+      "synopsis": "JSON data/config — data/twins/default/adam/modules/content.json.",
+      "bytes": 1105,
+      "mtime": "2026-07-29T19:23:58.458Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/twins/default/adam/modules/gvbn.json",
+      "synopsis": "JSON data/config — data/twins/default/adam/modules/gvbn.json.",
+      "bytes": 1630,
+      "mtime": "2026-07-29T19:18:35.151Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "data/twins/default/adam/modules/lead.json",
       "synopsis": "JSON data/config — data/twins/default/adam/modules/lead.json.",
       "bytes": 3349,
       "mtime": "2026-06-28T23:37:30.200Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/twins/default/adam/modules/recruiting.json",
+      "synopsis": "JSON data/config — data/twins/default/adam/modules/recruiting.json.",
+      "bytes": 663,
+      "mtime": "2026-07-29T13:13:48.567Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z",
       "synopsis_index_only": true
     },
     {
@@ -32786,6 +32921,14 @@
       "synopsis_index_only": true
     },
     {
+      "path": "data/twins/default/adam/operating_system.json",
+      "synopsis": "JSON data/config — data/twins/default/adam/operating_system.json.",
+      "bytes": 6642,
+      "mtime": "2026-07-29T19:35:04.395Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "data/twins/default/adam/performance.json",
       "synopsis": "JSON data/config — data/twins/default/adam/performance.json.",
       "bytes": 170,
@@ -32794,19 +32937,27 @@
       "synopsis_index_only": true
     },
     {
+      "path": "data/twins/default/adam/permission.json",
+      "synopsis": "JSON data/config — data/twins/default/adam/permission.json.",
+      "bytes": 1095,
+      "mtime": "2026-07-29T19:24:02.474Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "data/twins/default/adam/personal.json",
       "synopsis": "JSON data/config — data/twins/default/adam/personal.json.",
-      "bytes": 1462,
-      "mtime": "2026-06-24T00:08:36.987Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 5865,
+      "mtime": "2026-07-29T20:58:43.243Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z",
       "synopsis_index_only": true
     },
     {
       "path": "data/twins/default/adam/personality.json",
       "synopsis": "JSON data/config — data/twins/default/adam/personality.json.",
-      "bytes": 212,
-      "mtime": "2026-06-28T23:37:30.200Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 642,
+      "mtime": "2026-07-29T20:58:43.244Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z",
       "synopsis_index_only": true
     },
     {
@@ -32820,9 +32971,9 @@
     {
       "path": "data/twins/founder/adam/adam.json",
       "synopsis": "JSON data/config — data/twins/founder/adam/adam.json.",
-      "bytes": 279,
-      "mtime": "2026-06-23T11:44:04.266Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 686,
+      "mtime": "2026-07-29T20:58:43.244Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z",
       "synopsis_index_only": true
     },
     {
@@ -32864,6 +33015,13 @@
       "mtime": "2026-06-23T11:44:04.266Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "synopsis_index_only": true
+    },
+    {
+      "path": "data/twins/README.md",
+      "synopsis": "Digital Twins (data)",
+      "bytes": 722,
+      "mtime": "2026-07-29T13:14:00.213Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z"
     },
     {
       "path": "data/useful-work-guard-audit-results.json",
@@ -37097,9 +37255,9 @@
     {
       "path": "docs/architecture/DIGITAL_TWIN_DOCTRINE.md",
       "synopsis": "Digital Twin — universal per-person understanding (capsules = evidence layer)",
-      "bytes": 5749,
-      "mtime": "2026-06-29T17:21:07.943Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 6254,
+      "mtime": "2026-07-29T20:58:43.245Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z"
     },
     {
       "path": "docs/architecture/DOC_REORG_RECEIPT.md",
@@ -37824,9 +37982,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 39675,
-      "mtime": "2026-07-28T22:45:19.610Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 41841,
+      "mtime": "2026-07-29T22:03:20.029Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40042,6 +40200,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "docs/products/builderos/specs/FOUNDER_VIRTUAL_TWIN.md",
+      "synopsis": "Founder Virtual Twin — what to capture, how to compile it, and the build order",
+      "bytes": 12163,
+      "mtime": "2026-07-29T13:14:11.927Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z"
+    },
+    {
       "path": "docs/products/builderos/TWIN.md",
       "synopsis": "BUILDEROS_TWIN — complete digital twin of the ACTUAL BuilderOS code (reality map, kept in sync with code)",
       "bytes": 12188,
@@ -40550,6 +40715,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "docs/products/ideavault/conversations/2026-07-29-operator-intake-compact-digest.md",
+      "synopsis": "Cheap-read digest — Jul 28–29 operator dumps (coaching, GVBN, mega paste)",
+      "bytes": 6886,
+      "mtime": "2026-07-29T19:18:56.008Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z"
+    },
+    {
       "path": "docs/products/ideavault/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 1893,
@@ -40647,17 +40819,38 @@
     {
       "path": "docs/products/life-coaching/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
-      "bytes": 560,
-      "mtime": "2026-06-29T17:21:02.531Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 1197,
+      "mtime": "2026-07-29T20:58:43.246Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/products/life-coaching/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Life Coaching",
-      "bytes": 12208,
-      "mtime": "2026-06-29T17:35:43.027Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 13697,
+      "mtime": "2026-07-29T22:03:33.859Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z"
+    },
+    {
+      "path": "docs/products/life-coaching/twins/ADAM_FOUNDER_TWIN_v1.md",
+      "synopsis": "Adam Founder Twin v1 — human summary + supervision checklist",
+      "bytes": 3094,
+      "mtime": "2026-07-29T19:35:07.730Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z"
+    },
+    {
+      "path": "docs/products/life-coaching/twins/DIGITAL_TWIN_TEMPLATE.md",
+      "synopsis": "What a Digital Twin is — universal template (Adam is the reference fill)",
+      "bytes": 5402,
+      "mtime": "2026-07-29T13:12:39.415Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z"
+    },
+    {
+      "path": "docs/products/life-coaching/twins/TWIN_ASSEMBLY_PLAYBOOK.md",
+      "synopsis": "How cheap models fill Digital Twin facets from conversations",
+      "bytes": 3844,
+      "mtime": "2026-07-29T13:12:39.415Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z"
     },
     {
       "path": "docs/products/LIFECOACHING.md",
@@ -40726,9 +40919,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 631390,
-      "mtime": "2026-07-28T23:22:59.520Z",
-      "indexed_at": "2026-07-28T23:23:37.073Z"
+      "bytes": 634830,
+      "mtime": "2026-07-30T01:21:44.767Z",
+      "indexed_at": "2026-07-30T01:22:40.402Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -40833,6 +41026,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "docs/products/MARKET_READINESS_PLAN.md",
+      "synopsis": "Market-readiness audit and implementation plan for every active product.",
+      "bytes": 10919,
+      "mtime": "1970-01-01T00:00:00.000Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z"
+    },
+    {
       "path": "docs/products/MARKETINGOS.md",
       "synopsis": "MarketingOS — redirect stub — see PRODUCT_HOME.md",
       "bytes": 434,
@@ -40857,9 +41057,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 125824,
+      "bytes": 128606,
       "mtime": "2026-07-24T18:36:41.703Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "indexed_at": "2026-07-30T01:21:52.231Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -41413,6 +41613,13 @@
       "bytes": 436,
       "mtime": "2026-06-29T17:21:02.542Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "docs/products/ZERO_BUDGET_MARKETING_PLAN.md",
+      "synopsis": "Zero-budget, limited-email marketing plan for launching products once market ready.",
+      "bytes": 6871,
+      "mtime": "1970-01-01T00:00:00.000Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z"
     },
     {
       "path": "docs/products/zero-drift-handoff-protocol/FILE_MANIFEST.json",
@@ -63819,9 +64026,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 35489,
-      "mtime": "2026-07-29T05:27:50.107Z",
-      "indexed_at": "2026-07-29T05:28:44.039Z",
+      "bytes": 35597,
+      "mtime": "2026-07-29T20:58:43.248Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z",
       "synopsis_index_only": true
     },
     {
@@ -64770,9 +64977,9 @@
     {
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
-      "bytes": 24178,
+      "bytes": 23544,
       "mtime": "2026-07-28T22:39:58.986Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z",
       "synopsis_index_only": true
     },
     {
@@ -64802,9 +65009,9 @@
     {
       "path": "products/receipts/SENTRY_FINDINGS_FEED.marketingos.json",
       "synopsis": "Product receipt — SENTRY FINDINGS FEED.Marketingos.",
-      "bytes": 243,
+      "bytes": 279,
       "mtime": "2026-07-20T08:51:23.724Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z",
       "synopsis_index_only": true
     },
     {
@@ -64890,9 +65097,9 @@
     {
       "path": "products/receipts/SMOS_REAL_CUSTOMER_READINESS.json",
       "synopsis": "Product receipt — SMOS REAL CUSTOMER READINESS.",
-      "bytes": 939,
+      "bytes": 1491,
       "mtime": "2026-07-16T19:42:53.594Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z",
       "synopsis_index_only": true
     },
     {
@@ -73892,6 +74099,13 @@
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "scripts/verify-digital-twin.mjs",
+      "synopsis": "Verify digital twin facets exist and inject block builds.",
+      "bytes": 1147,
+      "mtime": "2026-07-29T20:47:18.136Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z"
     },
     {
       "path": "scripts/verify-dual-path-spine.mjs",
@@ -85975,9 +86189,9 @@
     {
       "path": "services/chair-direct-agent.js",
       "synopsis": "Direct Chair agent — talks + acts; human prose obeys Lumin Communication DNA (not theater).",
-      "bytes": 25696,
-      "mtime": "2026-07-28T17:57:46.024Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 27707,
+      "mtime": "2026-07-29T22:02:10.648Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -86055,9 +86269,9 @@
     {
       "path": "services/chair-lumin-unified.js",
       "synopsis": "Chair native turn — Lumin IS the Chair; personality translates real facts only.",
-      "bytes": 5150,
-      "mtime": "2026-07-28T17:47:22.551Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 7157,
+      "mtime": "2026-07-29T22:02:42.679Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -86065,9 +86279,9 @@
     {
       "path": "services/chair-native-facts.js",
       "synopsis": "Chair native facts — real system state Lumin IS (not chat overlay).",
-      "bytes": 15585,
-      "mtime": "2026-07-29T05:15:04.234Z",
-      "indexed_at": "2026-07-29T05:18:22.632Z",
+      "bytes": 16488,
+      "mtime": "2026-07-29T22:01:50.058Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -86075,9 +86289,9 @@
     {
       "path": "services/chair-personality-translate.js",
       "synopsis": "Lumin personality translate — human-language layer on SYSTEM_FACTS only (not theater).",
-      "bytes": 9210,
-      "mtime": "2026-07-28T17:47:22.552Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 9914,
+      "mtime": "2026-07-30T01:16:05.193Z",
+      "indexed_at": "2026-07-30T01:22:40.402Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -87534,9 +87748,9 @@
     {
       "path": "services/env-registry-map.js",
       "synopsis": "env-registry-map.js",
-      "bytes": 29161,
+      "bytes": 29135,
       "mtime": "2026-07-28T17:47:22.557Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z",
       "ssot": [
         "docs/products/command-center/PRODUCT_HOME.md"
       ]
@@ -90020,9 +90234,9 @@
     {
       "path": "services/lumin-context-loader.js",
       "synopsis": "Loads per-user twin + communication profile + recent learning for Lumin prompts.",
-      "bytes": 5124,
-      "mtime": "2026-07-16T19:42:53.459Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 18494,
+      "mtime": "2026-07-29T22:01:48.972Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -91000,10 +91214,10 @@
     },
     {
       "path": "services/password-reset-email.js",
-      "synopsis": "Send password-reset email via Resend or SMTP when configured.",
-      "bytes": 3032,
+      "synopsis": "Send password-reset email via the configured provider (postmark, resend, smtp, disabled).",
+      "bytes": 7105,
       "mtime": "2026-07-24T18:36:41.703Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -93341,9 +93555,9 @@
     {
       "path": "services/twin-auto-ingest.js",
       "synopsis": "services/twin-auto-ingest.js",
-      "bytes": 8695,
-      "mtime": "2026-06-29T17:21:09.009Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 9101,
+      "mtime": "2026-07-29T22:02:13.803Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z",
       "ssot": [
         "docs/products/life-coaching/PRODUCT_HOME.md (Digital Twin)"
       ]
@@ -94854,9 +95068,9 @@
     {
       "path": "tests/chair-lumin-unified-so003.test.js",
       "synopsis": "SO-003 regression — the Chair must route every reply through a real",
-      "bytes": 2378,
-      "mtime": "2026-07-28T17:50:09.819Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 3036,
+      "mtime": "2026-07-30T01:18:29.773Z",
+      "indexed_at": "2026-07-30T01:22:40.402Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -95087,6 +95301,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "tests/digital-twin-loader.test.js",
+      "synopsis": "Unit tests for digital twin inject loader.",
+      "bytes": 4188,
+      "mtime": "2026-07-29T22:02:55.054Z",
+      "indexed_at": "2026-07-30T01:21:52.231Z"
     },
     {
       "path": "tests/doctrine-enforcement.test.js",

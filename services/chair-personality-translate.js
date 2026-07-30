@@ -187,6 +187,13 @@ Lumin:`;
   }
 }
 
+// Every call site below reaches here only when model prose is absent (no callAI,
+// empty completion, or a thrown provider error). Returning bare facts — or worse,
+// the conversational "What do you need?" — made a template indistinguishable from
+// real reasoning, which is precisely the deception SO-003 forbids. The notice is
+// unconditional so the founder can always tell whether a model actually answered.
+export const NO_MODEL_NOTICE = '[No AI model answered this turn — the provider call failed or none was reachable. Below is verified system data only, not reasoning.]';
+
 export function formatFactsFallback(facts = {}) {
   const lines = [];
   // Grounded direct answer survives even a total model-call failure so the
@@ -202,7 +209,7 @@ export function formatFactsFallback(facts = {}) {
   if (facts.system_knowledge) lines.push(String(facts.system_knowledge).slice(0, 2000));
   if (facts.lumin_context) lines.push(String(facts.lumin_context).slice(0, 1200));
   if (!lines.length) {
-    return 'What do you need?';
+    return `${NO_MODEL_NOTICE} No system facts were available for this turn either, so there is nothing verified to report.`;
   }
-  return lines.join('\n\n');
+  return [NO_MODEL_NOTICE, ...lines].join('\n\n');
 }

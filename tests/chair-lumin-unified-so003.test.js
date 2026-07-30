@@ -18,6 +18,15 @@ const smosFacts = () => ({
   system_knowledge: 'SMOS is the Social Media OS content workflow.',
   chair_note: '',
   personal_turn: false,
+  // Satisfy the founder twin hard gate explicitly instead of inheriting whatever
+  // TWIN_HARD_GATE happens to be in the ambient shell. Without this the gate
+  // short-circuits at chair-lumin-unified.js:72 before translatePersonality is
+  // reached, so the assertion below flipped with the environment rather than with
+  // the code it guards — green in a shell exporting TWIN_HARD_GATE=0, red without.
+  // Satisfying the gate (rather than disabling it) keeps it exercised and proves
+  // the SO-003 property that matters: once the twin loads, a model always answers.
+  twin_gate: { ok: true },
+  lumin_context: 'DIGITAL TWIN loaded (test fixture).',
 });
 
 test('resolveGroundedDirectAnswer returns a verified block for a program ask (grounding present)', () => {
