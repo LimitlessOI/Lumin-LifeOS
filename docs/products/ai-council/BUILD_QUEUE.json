@@ -672,14 +672,37 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-16T04:04:07.704Z",
+      "shipped_at": "2026-07-30T19:07:43.127Z",
       "commit_sha": "110194e1a64455f399f6ef619bff6e5d6059837c",
       "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "9",
       "mission_id": "PRODUCT-ai-council",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerHABLimitRoutes; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.242Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.242Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/ai-council/twins/steps/9.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T19:07:43.127Z",
+        "shipped_at": "2026-07-30T19:07:43.127Z",
+        "commit_sha": "110194e1a64455f399f6ef619bff6e5d6059837c",
+        "content_sha256": "5bf5e7018ac42bb842309fb8c1890aa3f362d972c58f02afb70b96f11d2bcc5f",
+        "target_file": "routes/habLimitRoutes.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "routes/habLimitRoutes.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/ai-council/twins/steps/9.exact",
+          "content_sha256": "5bf5e7018ac42bb842309fb8c1890aa3f362d972c58f02afb70b96f11d2bcc5f"
+        }
+      }
     },
     {
       "id": "10",

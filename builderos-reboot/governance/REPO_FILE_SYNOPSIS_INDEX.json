@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T19:07:35.311Z",
+  "generated_at": "2026-07-30T19:07:45.573Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12340,
+  "file_count": 12341,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -68231,6 +68231,13 @@
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "routes/habLimitRoutes.js",
+      "synopsis": "HTTP route module — HabLimitRoutes.",
+      "bytes": 1060,
+      "mtime": "2026-07-30T19:07:45.573Z",
+      "indexed_at": "2026-07-30T19:07:45.573Z"
     },
     {
       "path": "routes/idea-queue-routes.js",
