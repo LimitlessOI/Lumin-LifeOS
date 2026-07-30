@@ -176,14 +176,37 @@
         "CREATE TABLE IF NOT EXISTS irlen_consultation"
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-15T18:03:04.659Z",
+      "shipped_at": "2026-07-30T23:19:09.682Z",
       "commit_sha": "7324fa151cb2162b90160e0ffe5ecfb8ae2fc509",
       "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "8",
       "mission_id": "PRODUCT-kids-os",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.433Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.433Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/kids-os/twins/steps/8.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T23:19:09.682Z",
+        "shipped_at": "2026-07-30T23:19:09.682Z",
+        "commit_sha": "7324fa151cb2162b90160e0ffe5ecfb8ae2fc509",
+        "content_sha256": "38f51228c559300e063a3ad42cb60ebd44ebce4b9e7fceaac18313d19a6c69ac",
+        "target_file": "db/migrations/20231011_create_irlen_consultation.sql",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "db/migrations/20231011_create_irlen_consultation.sql",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/kids-os/twins/steps/8.exact",
+          "content_sha256": "38f51228c559300e063a3ad42cb60ebd44ebce4b9e7fceaac18313d19a6c69ac"
+        }
+      }
     },
     {
       "id": "9",
