@@ -811,7 +811,7 @@
     },
     {
       "id": "11",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/bundle_social_automation_routes.js",
       "task": "Route for bundle management",
       "spec": "Expose API routes to manage bundles of website, social, and automation tiers",
@@ -819,7 +819,7 @@
         "10"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerBundleRoutes"
       ],
@@ -848,7 +848,7 @@
       "reaudit_reset_at": "2026-07-30T18:55:06.661Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-30T20:52:32.862Z",
       "last_attempt": null,
       "revive_count": 1,
       "revived_at": "2026-07-30T20:02:02.145Z",
