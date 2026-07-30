@@ -48,7 +48,7 @@ export function setupThumbnailSEO(app) {
       // 5. Send the processed image.
 
       // Mock response for demonstration
-      if (imageId === 'sample-image-123') {
+      if (imageId === 'sample-image-123' || imageId === 'original-image-456') { // Allow original-image-456 for thumbnail generation
         res.setHeader('Content-Type', 'image/jpeg');
         res.setHeader('Cache-Control', 'public, max-age=31536000'); // Cache for 1 year
         // In a real app, send actual image buffer
@@ -84,6 +84,11 @@ export function setupThumbnailSEO(app) {
 
       // Mock response for demonstration
       if (sourceAssetId && purpose) {
+        // Ensure that the sourceAssetId corresponds to an existing or valid source asset
+        if (sourceAssetId !== 'original-image-456' && sourceAssetId !== 'sample-image-123') {
+          return res.status(400).send('Invalid or unknown sourceAssetId for SEO image generation.');
+        }
+
         const generatedImageUrl = `/generated-seo/${purpose}-${sourceAssetId}.jpg`;
         res.status(200).json({
           message: `SEO image generated for asset ${sourceAssetId} with purpose ${purpose}.`,
@@ -211,13 +216,13 @@ export function setupThumbnailSEO(app) {
       //    const assetMetadata = await getAssetById(sourceAssetId);
 
       // Mock response for demonstration
-      if (sourceAssetId === 'original-image-456') {
+      if (sourceAssetId === 'original-image-456' || sourceAssetId === 'sample-image-123') { // Allow sample-image-123 as a source asset
         res.status(200).json({
           id: sourceAssetId,
-          name: 'Original Product Photo',
+          name: `Original Asset ${sourceAssetId}`,
           type: 'image/jpeg',
           originalUrl: `/path/to/original/${sourceAssetId}.jpg`,
-          description: 'High-resolution product image for processing.',
+          description: `High-resolution asset ${sourceAssetId} for processing.`,
           uploadedAt: new Date().toISOString()
         });
       } else {

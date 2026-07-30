@@ -249,10 +249,10 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-07-30T22:57:37.243Z",
-        "shipped_at": "2026-07-30T22:57:37.243Z",
+        "sealed_at": "2026-07-30T23:17:26.085Z",
+        "shipped_at": "2026-07-30T23:17:26.085Z",
         "commit_sha": null,
-        "content_sha256": "b22b0a9f7703e7324ed9f62dd066e8a956eb0d252482c223a517eda46f425fde",
+        "content_sha256": "718a684824e32afcc3ef23336d57996070d4dc9d96de8e9fb5a88ad3cc6c0124",
         "target_file": "services/thumbnailPipeline.js",
         "reverse": {
           "mode": "delete_file",
@@ -263,10 +263,10 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/creator-media-os/twins/steps/5.exact",
-          "content_sha256": "b22b0a9f7703e7324ed9f62dd066e8a956eb0d252482c223a517eda46f425fde"
+          "content_sha256": "718a684824e32afcc3ef23336d57996070d4dc9d96de8e9fb5a88ad3cc6c0124"
         }
       },
-      "shipped_at": "2026-07-30T22:57:37.243Z"
+      "shipped_at": "2026-07-30T23:17:26.085Z"
     },
     {
       "id": "6",
