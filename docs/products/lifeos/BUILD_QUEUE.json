@@ -2077,7 +2077,7 @@
     },
     {
       "id": "step2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/lifeos-sleep-debt.js",
       "task": "implement sleep-debt tracking",
       "spec": "Calculate rolling sleep-debt score and derive chronotype classification from Apple Watch timing.",
@@ -2108,12 +2108,12 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-30T20:06:20.899Z",
-      "commit_sha": "87e69d4f3fe9b080e84e003d31757476f09e5a76",
+      "commit_sha": "286792ec211725411c592abd8fb06da7ec2629dd",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step2",
       "mission_id": "PRODUCT-lifeos",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:calculateSleepDebt,classifyChronotype; assertion_threw; assertion_threw; assertion_threw; assertion_threw",
+      "last_error": null,
       "reaudit_reset_at": "2026-07-30T18:55:06.601Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
