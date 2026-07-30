@@ -465,29 +465,29 @@
     },
     {
       "id": "step5",
-      "status": "blocked",
+      "status": "done",
       "target_file": "db/migrations/20231013_create_free_tier_upsert.sql",
       "task": "create migration for free-tier upsert",
       "spec": "Create a new table or modify existing ones required for free-tier upsert operations, ensuring a CREATE TABLE with the necessary fields.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS",
         "upsert"
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-30T23:18:47.390Z",
-      "commit_sha": null,
+      "commit_sha": "08902f7fbdf072518ebe17a2aa4af2461f7ffbe7",
       "blueprint_id": "PRODUCT-TOKEN-ACCOUNTING-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step5",
       "mission_id": "PRODUCT-token-accounting-os",
-      "pre_existing": false,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:upsert; behavior_assertion_failed; behavior_proof",
+      "pre_existing": null,
+      "last_error": null,
       "reaudit_reset_at": "2026-07-30T18:55:06.748Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-07-30T22:02:06.873Z",
+      "last_attempt_at": null,
       "action_type": "write_file_exact",
       "exact_inputs": {
         "content_source_path": "docs/products/token-accounting-os/twins/steps/step5.exact"
@@ -510,7 +510,19 @@
           "content_source_path": "docs/products/token-accounting-os/twins/steps/step5.exact",
           "content_sha256": "7464ef3ac4249b59ecc67d044a6e7b11cc17494d8bdfee760704bf4ef19cd5c4"
         }
-      }
+      },
+      "last_attempt": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-30T23:14:14.118Z",
+      "no_op": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "step6",
