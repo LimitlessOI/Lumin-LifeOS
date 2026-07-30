@@ -193,6 +193,42 @@ export function setupThumbnailSEO(app) {
     }
   });
 
+  /**
+   * Handler to retrieve the original source asset metadata.
+   * This is crucial for the pipeline to fetch the base image/data for both thumbnail and SEO generation.
+   *
+   * @param {object} req The Express request object.
+   * @param {object} res The Express response object.
+   */
+  app.get('/source-assets/:sourceAssetId', async (req, res) => {
+    const { sourceAssetId } = req.params;
+
+    try {
+      // In a real scenario:
+      // 1. Fetch the original source asset's metadata (e.g., URL, file type, creation date)
+      //    from a database or asset management system.
+      //    This would be the starting point for both thumbnail and SEO processing.
+      //    const assetMetadata = await getAssetById(sourceAssetId);
+
+      // Mock response for demonstration
+      if (sourceAssetId === 'original-image-456') {
+        res.status(200).json({
+          id: sourceAssetId,
+          name: 'Original Product Photo',
+          type: 'image/jpeg',
+          originalUrl: `/path/to/original/${sourceAssetId}.jpg`,
+          description: 'High-resolution product image for processing.',
+          uploadedAt: new Date().toISOString()
+        });
+      } else {
+        res.status(404).send('Source asset not found.');
+      }
+    } catch (error) {
+      console.error(`Error retrieving source asset ${sourceAssetId}:`, error);
+      res.status(500).send('Error retrieving source asset metadata.');
+    }
+  });
+
 
   console.log('Thumbnail and SEO pipeline setup initiated.');
 }
