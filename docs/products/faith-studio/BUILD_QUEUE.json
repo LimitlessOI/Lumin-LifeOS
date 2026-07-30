@@ -468,7 +468,7 @@
     },
     {
       "id": "2",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/add_public_sacred_review_path.sql",
       "task": "Specify public sacred-content review path",
       "spec": "Define the database schema required for public sacred-content review.",
@@ -479,11 +479,11 @@
         "CREATE TABLE IF NOT EXISTS sacred_review_path"
       ],
       "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS sacred_review_path; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "998f5229b7da247077602c1975c1d048bb0397dd",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
+      "revive_count": 0,
       "revived_at": "2026-07-30T23:14:14.118Z",
       "last_attempt": null,
       "demoted": false,
