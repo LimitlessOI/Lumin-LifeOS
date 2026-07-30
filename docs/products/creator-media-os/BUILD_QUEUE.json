@@ -220,13 +220,13 @@
           "assertion_id": "expected_exports:services/thumbnailPipeline.js"
         }
       ],
-      "last_attempt_at": "2026-07-30T21:48:53.434Z",
+      "last_attempt_at": "2026-07-30T22:17:26.982Z",
       "last_error": "artifact_missing_after_ship: artifact_proof_failed: Thumbnail/SEO from source assets",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-30T21:45:29.808Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-30T22:13:55.351Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
