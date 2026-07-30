@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T21:24:27.879Z",
+  "generated_at": "2026-07-30T21:37:30.513Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12368,
   "files": [
@@ -87919,9 +87919,9 @@
     {
       "path": "services/extended-tables.js",
       "synopsis": "Exports extendTables — services/extended-tables.js.",
-      "bytes": 2432,
-      "mtime": "2026-07-30T20:58:27.833Z",
-      "indexed_at": "2026-07-30T20:58:27.833Z"
+      "bytes": 5187,
+      "mtime": "2026-07-30T21:37:30.513Z",
+      "indexed_at": "2026-07-30T21:37:30.513Z"
     },
     {
       "path": "services/extractRoutes.js",
