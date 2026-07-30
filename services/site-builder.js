@@ -436,9 +436,20 @@ export default class SiteBuilder {
       await progress('scrape');
       const businessInfo = await this.scrapeBusinessInfo(targetUrl, options);
 
+      // If the source is a placeholder/parked page or the fetch failed, skip expensive
+      // AI content generation — blogs/FAQ/repair won't have real facts to ground on.
+      const skipExpensive = Boolean(businessInfo.scrapePoisoned || businessInfo.scrapeFetchFailed);
+      if (skipExpensive) {
+        options.skipBlogs = true;
+        options.skipFaq = true;
+        options.skipRepair = true;
+        options.skipAi = true;
+        options.enrich = false;
+      }
+
       // Step 1b: Enrich with REAL data from the business's live web presence
       // (Google/Yelp/Facebook reviews, rating, facts). Fails closed — never fabricates.
-      if (ENRICHMENT_ENABLED && options.enrich !== false) {
+      if (ENRICHMENT_ENABLED && options.enrich !== false && !skipExpensive) {
         try {
           await progress('enrich');
           businessInfo.verifiedData = await withTimeout(
@@ -485,7 +496,9 @@ export default class SiteBuilder {
       const blogPosts = options.skipBlogs ? [] : await withTimeout(this.generateBlogPosts(businessInfo, 3), GENERATION_TIMEOUT_MS, 'generateBlogPosts');
       let faq = [];
       try {
-        faq = await withTimeout(this.generateFaq(businessInfo, 5), GENERATION_TIMEOUT_MS, 'generateFaq');
+        if (!options.skipFaq) {
+          faq = await withTimeout(this.generateFaq(businessInfo, 5), GENERATION_TIMEOUT_MS, 'generateFaq');
+        }
       } catch (err) {
         logger.warn('[SITE] FAQ generation failed (continuing)', { clientId, error: err.message });
       }
@@ -632,6 +645,14 @@ export default class SiteBuilder {
       // Scrape BEFORE picking templates so niche filter can prefer midwife shells
       // over HVAC/plumber for birth/wellness businesses.
       const businessInfo = await this.scrapeBusinessInfo(targetUrl, options);
+      const skipExpensive = Boolean(businessInfo.scrapePoisoned || businessInfo.scrapeFetchFailed);
+      if (skipExpensive) {
+        options.skipBlogs = true;
+        options.skipFaq = true;
+        options.skipRepair = true;
+        options.skipAi = true;
+        options.enrich = false;
+      }
       const systems = pickDesignSystems(count, options.styleIds || [], {
         industry: businessInfo.industry,
         keywords: businessInfo.keywords,
@@ -640,7 +661,7 @@ export default class SiteBuilder {
       });
       logger.info('[SITE] Building variants', { clientId, targetUrl, systems: systems.map((s) => s.id), industry: businessInfo.industry });
 
-      if (ENRICHMENT_ENABLED && options.enrich !== false) {
+      if (ENRICHMENT_ENABLED && options.enrich !== false && !skipExpensive) {
         try {
           businessInfo.verifiedData = await this.enrichWithRealData(businessInfo, options);
         } catch (err) {
@@ -672,7 +693,9 @@ export default class SiteBuilder {
       const blogPosts = options.skipBlogs ? [] : await this.generateBlogPosts(businessInfo, 3);
       let faq = [];
       try {
-        faq = await withTimeout(this.generateFaq(businessInfo, 5), GENERATION_TIMEOUT_MS, 'generateFaq');
+        if (!options.skipFaq) {
+          faq = await withTimeout(this.generateFaq(businessInfo, 5), GENERATION_TIMEOUT_MS, 'generateFaq');
+        }
       } catch (err) {
         logger.warn('[SITE] variant FAQ generation failed (continuing)', { clientId, error: err.message });
       }
