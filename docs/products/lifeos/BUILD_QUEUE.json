@@ -2701,7 +2701,7 @@
         "method": "POST",
         "path": "/jobs"
       },
-      "last_attempt_at": "2026-07-30T22:27:38.023Z",
+      "last_attempt_at": "2026-07-30T22:28:39.510Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:executeChatIntent; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
@@ -2714,7 +2714,7 @@
       "reaudit_reset_at": "2026-07-30T18:55:06.601Z",
       "last_attempt": null,
       "revive_count": 6,
-      "revived_at": "2026-07-30T22:27:37.664Z",
+      "revived_at": "2026-07-30T22:28:38.922Z",
       "no_op": null,
       "demoted": false,
       "demote_reason": null,
