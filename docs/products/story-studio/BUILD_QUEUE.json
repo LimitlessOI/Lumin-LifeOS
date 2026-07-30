@@ -72,7 +72,31 @@
       "shipped_via": null,
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:editCharacterProfile,addSelfInsertProfile; assertion_threw; assertion_threw; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.739Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.739Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/story-studio/twins/steps/2.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T19:07:58.074Z",
+        "shipped_at": "2026-07-30T19:07:58.074Z",
+        "commit_sha": "0c794674a632d2a943d402c95fadce9af00a8698",
+        "content_sha256": "ac3f1f9b546bd6508e3cb62fa73c5e022eb5d94c71fa97545fe4bef2227585a4",
+        "target_file": "services/characterProfile.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/characterProfile.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/story-studio/twins/steps/2.exact",
+          "content_sha256": "ac3f1f9b546bd6508e3cb62fa73c5e022eb5d94c71fa97545fe4bef2227585a4"
+        }
+      },
+      "shipped_at": "2026-07-30T19:07:58.074Z"
     },
     {
       "id": "3",
