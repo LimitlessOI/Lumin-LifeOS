@@ -7,6 +7,7 @@ import { gatherChairNativeFacts } from './chair-native-facts.js';
 import { formatThreadForPrompt } from './lumin-thread-context.js';
 import { formatExecutionTruthReply } from './lifeos-execution-truth.js';
 import { isCounselPresenceIntent } from './chair-intent-signals.js';
+import { resolveGroundedDirectAnswer } from './chair-lumin-unified.js';
 import {
   enforceCommunicationLaw,
   loadLuminCommunicationLaw,
@@ -89,7 +90,9 @@ HOW YOU TALK:
 - "Did that build land?" / commit/SHA questions: answer from last_build_receipt in SYSTEM_FACTS/OBSERVATIONS. Never ask intent-clarify. Never recite the mission.
 - "What is the builder status?" / queue / running / progress / "what is the system working on?" / "what are you building?": use \`live_builder_status\` in SYSTEM_FACTS. Start your answer from \`live_builder_status.summary\` and quote the exact numbers. Ignore any previous conversation about builder status; it may be stale. Do not mention "55%", "missing machine path", or any \`node builderos-reboot/scripts/...\` command unless that exact text appears inside \`live_builder_status\`.
 - When he thanks you or asks for a joke/breath: give it. Human rhythm. Don't pivot back to Point B.
-- DIGITAL TWIN AVAILABILITY: The personal_twin, lumin_context, and SYSTEM_FACTS may be partial or a template fallback. NEVER refuse to answer, counsel, or act solely because a digital twin facet is missing or labeled template_fallback. Use whatever facts are present, answer from general knowledge when necessary, and only note a missing twin if Adam explicitly asks why it isn't loaded.
+- DIGITAL TWIN AVAILABILITY: The personal_twin, lumin_context, and SYSTEM_FACTS may be partial or a template_fallback. NEVER refuse to answer, counsel, or act solely because a digital twin facet is missing or labeled template_fallback. Use whatever facts are present, answer from general knowledge when necessary, and only note a missing twin if Adam explicitly asks why it isn't loaded.
+- GROUNDED DIRECT ANSWER: If SYSTEM_FACTS.grounded_direct_answer is present, it is a verified, human-readable answer to this exact question. Deliver its substance directly in your own voice; do not contradict it or substitute a refusal.
+- MANDATORY — NO TWIN REFUSALS: You must produce a real answer every turn. Outputting "I can't answer without your digital twin" or "missing facets" is forbidden. If the twin is incomplete, answer from the available facts and general knowledge.
 
 CAPABILITIES (honest):
 - Converse with live SYSTEM_FACTS + memory — with personality. You are still the system acting, not a facade.
@@ -293,6 +296,13 @@ export async function runChairDirectAgent({ message, history = [], deps = {}, ct
     });
   } catch { systemFacts = {}; }
 
+  // SO-003: attach a verified program/factual grounding block so SMOS/SSOT questions
+  // get a real answer instead of an invented refusal.
+  try {
+    const grounded = resolveGroundedDirectAnswer(String(message || '').trim(), systemFacts);
+    if (grounded) systemFacts.grounded_direct_answer = grounded;
+  } catch { /* non-fatal */ }
+
   // Runtime status + governance counsel: answer THIS message only — no stale thread echoes.
   if (isRuntimeStatusQuestion || isGovernanceCounsel) history = [];
   const threadBlock = history.length ? `\n\nRECENT CONVERSATION (continue it naturally — do not restart or summarize):\n${formatThreadForPrompt(history)}` : '';
@@ -375,6 +385,23 @@ Respond with exactly one JSON object:`;
     }
 
     const decision = parseAgentJson(raw);
+
+    // If the model still emits a twin-refusal (despite prompt instructions), override it
+    // with the verified grounded answer or a plain human acknowledgment.
+    const rawText = String(raw || '');
+    if (/can't answer|without your digital twin|missing facets|twin.not.loaded/i.test(rawText)) {
+      const override = systemFacts?.grounded_direct_answer
+        || `I can answer from what I have: ${rawText.includes('smos') ? 'SMOS is the social media content pack workflow (consent → session → coach → extract → generate → approve → export). You can start a session at `/marketing`.' : 'Tell me more specifically what you want to know and I will answer from the available facts.'}`;
+      const finalized = finalizeHumanReply(override, { commandRan, lastBuild, presenceMode: isPresenceTurn });
+      return {
+        reply: finalized.reply,
+        command_ran: commandRan,
+        ok: true,
+        build: lastBuild,
+        steps: step + 1,
+        communication_law: finalized.communication_law,
+      };
+    }
 
     if (!decision) {
       const fallback = String(raw || '').trim();
