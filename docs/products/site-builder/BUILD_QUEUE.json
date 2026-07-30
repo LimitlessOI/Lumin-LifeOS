@@ -2159,11 +2159,36 @@
         "CREATE TABLE IF NOT EXISTS"
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-25T02:53:43.167Z",
+      "shipped_at": "2026-07-30T19:06:43.486Z",
       "commit_sha": "c92652e3edd8770c56d63007a640332680dd1b91",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.735Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.735Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/site-builder/twins/steps/04.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T19:06:43.486Z",
+        "shipped_at": "2026-07-30T19:06:43.486Z",
+        "commit_sha": "c92652e3edd8770c56d63007a640332680dd1b91",
+        "content_sha256": "3e95030cfceab2c22b24f5a851f2ab6f25526430e870cb1c765ffa3543d1fdfa",
+        "target_file": "db/migrations/20241030_add_interactive_element_labels_table.sql",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "db/migrations/20241030_add_interactive_element_labels_table.sql",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/site-builder/twins/steps/04.exact",
+          "content_sha256": "3e95030cfceab2c22b24f5a851f2ab6f25526430e870cb1c765ffa3543d1fdfa"
+        }
+      },
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "04"
     },
     {
       "id": "05",
