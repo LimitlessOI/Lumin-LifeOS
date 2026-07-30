@@ -318,7 +318,7 @@
     },
     {
       "id": "step2",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/audit-intake-flow.html",
       "task": "enhance audit intake UI",
       "spec": "Create a comprehensive audit intake form allowing for questions and optional system connections.",
@@ -329,12 +329,12 @@
         "Audit Intake Form",
         "System Connections"
       ],
-      "commit_sha": "a1c5170b093cad69e6a2a1c2987012545037db9a",
+      "commit_sha": "6e42cfe11af39add151f07f1d52a2bd226d1d235",
       "built_sha": null,
       "proof": null,
       "last_attempt_at": null,
       "last_attempt": null,
-      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw; assertion_threw",
+      "last_error": null,
       "revive_count": 0,
       "revived_at": "2026-07-15T22:37:38.736Z",
       "no_op": null,
