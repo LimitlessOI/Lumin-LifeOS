@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T23:18:27.611Z",
+  "generated_at": "2026-07-30T23:18:49.700Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12427,
+  "file_count": 12428,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -34130,6 +34130,13 @@
       "bytes": 248,
       "mtime": "2026-07-15T08:53:26.067Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "db/migrations/20231013_create_free_tier_upsert.sql",
+      "synopsis": "Database migration — 20231013_create_free_tier_upsert.sql.",
+      "bytes": 867,
+      "mtime": "2026-07-30T23:18:49.700Z",
+      "indexed_at": "2026-07-30T23:18:49.700Z"
     },
     {
       "path": "db/migrations/20231015_create_channel_profiles.sql",

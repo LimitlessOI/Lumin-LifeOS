@@ -477,7 +477,7 @@
         "upsert"
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-16T03:18:39.187Z",
+      "shipped_at": "2026-07-30T23:18:47.390Z",
       "commit_sha": null,
       "blueprint_id": "PRODUCT-TOKEN-ACCOUNTING-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step5",
@@ -487,7 +487,30 @@
       "reaudit_reset_at": "2026-07-30T18:55:06.748Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-07-30T22:02:06.873Z"
+      "last_attempt_at": "2026-07-30T22:02:06.873Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/token-accounting-os/twins/steps/step5.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T23:18:47.390Z",
+        "shipped_at": "2026-07-30T23:18:47.390Z",
+        "commit_sha": null,
+        "content_sha256": "7464ef3ac4249b59ecc67d044a6e7b11cc17494d8bdfee760704bf4ef19cd5c4",
+        "target_file": "db/migrations/20231013_create_free_tier_upsert.sql",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "db/migrations/20231013_create_free_tier_upsert.sql",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/token-accounting-os/twins/steps/step5.exact",
+          "content_sha256": "7464ef3ac4249b59ecc67d044a6e7b11cc17494d8bdfee760704bf4ef19cd5c4"
+        }
+      }
     },
     {
       "id": "step6",
