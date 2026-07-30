@@ -302,13 +302,13 @@
     },
     {
       "id": "step4",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/optionalBoldTrailContactCleanupService.js",
       "task": "implement optional BoldTrail test contact cleanup",
       "spec": "Create a service to optionally clean up BoldTrail test contacts using existing cleanup logic.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "optionalCleanup"
       ],
@@ -327,16 +327,16 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-30T19:34:08.299Z",
-      "commit_sha": null,
+      "commit_sha": "e4415fa0ec82811de45476e439a845958481125f",
       "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step4",
       "mission_id": "PRODUCT-lifere",
-      "pre_existing": false,
-      "last_error": "codegen_authoring_failed: codegen_empty: openai_builder_mini: HTTP 429: {\n    \"error\": {\n        \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, read",
+      "pre_existing": null,
+      "last_error": null,
       "reaudit_reset_at": "2026-07-30T18:55:06.654Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-07-30T19:07:28.816Z",
+      "last_attempt_at": null,
       "action_type": "write_file_exact",
       "exact_inputs": {
         "content_source_path": "docs/products/lifere/twins/steps/step4.exact"
@@ -359,7 +359,19 @@
           "content_source_path": "docs/products/lifere/twins/steps/step4.exact",
           "content_sha256": "e7263f0846d97e2056bb17e63f1037ed874cdb462d600985a612541251a951e5"
         }
-      }
+      },
+      "last_attempt": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-30T19:33:43.388Z",
+      "no_op": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "step5",
