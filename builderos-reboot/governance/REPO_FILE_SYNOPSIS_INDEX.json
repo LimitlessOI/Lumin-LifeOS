@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T22:57:43.190Z",
+  "generated_at": "2026-07-30T23:05:07.860Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12425,
   "files": [
@@ -93319,8 +93319,8 @@
       "path": "services/stripePriceService.js",
       "synopsis": "Exports createPriceIds — services/stripePriceService.js.",
       "bytes": 2099,
-      "mtime": "2026-07-30T22:32:04.401Z",
-      "indexed_at": "2026-07-30T22:32:11.913Z"
+      "mtime": "2026-07-30T23:05:07.860Z",
+      "indexed_at": "2026-07-30T23:05:07.860Z"
     },
     {
       "path": "services/stripePriceTierService.js",
