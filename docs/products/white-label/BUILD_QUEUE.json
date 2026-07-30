@@ -195,25 +195,28 @@
     },
     {
       "id": "6",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "config/railway-config.json",
       "task": "document Railway config for CNAME support",
       "spec": "Add necessary configuration for custom domain CNAME support.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CNAME"
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-15T19:13:45.318Z",
-      "commit_sha": "1a5f0a360e273aa64ffad3c64f632e09df767290",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "6",
       "mission_id": "PRODUCT-white-label",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.853Z"
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CNAME; behavior_assertion_failed; behavior_proof",
+      "reaudit_reset_at": "2026-07-30T18:55:06.853Z",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-30T23:54:00.592Z"
     },
     {
       "id": "step1",
