@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T19:34:10.799Z",
+  "generated_at": "2026-07-30T19:43:59.896Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12344,
+  "file_count": 12345,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -66891,6 +66891,13 @@
       "bytes": 18123,
       "mtime": "2026-07-05T19:10:02.189Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "public/overlay/sticker-marketing.html",
+      "synopsis": "HTML page: Sticker Marketing SKU Management",
+      "bytes": 9720,
+      "mtime": "2026-07-30T19:43:59.896Z",
+      "indexed_at": "2026-07-30T19:43:59.896Z"
     },
     {
       "path": "public/overlay/stripeInfo.html",

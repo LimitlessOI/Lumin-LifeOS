@@ -608,7 +608,31 @@
       "blueprint_step_id": "step8",
       "mission_id": "PRODUCT-limitlessos",
       "shipped_via": null,
-      "reaudit_reset_at": "2026-07-30T18:55:06.661Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.661Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/limitlessos/twins/steps/step8.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T19:43:57.536Z",
+        "shipped_at": "2026-07-30T19:43:57.536Z",
+        "commit_sha": null,
+        "content_sha256": "d530a48d8152a654c946ffbe376c69562b6a26c5d0510d23e57dcffcce7cf375",
+        "target_file": "public/overlay/sticker-marketing.html",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "public/overlay/sticker-marketing.html",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/limitlessos/twins/steps/step8.exact",
+          "content_sha256": "d530a48d8152a654c946ffbe376c69562b6a26c5d0510d23e57dcffcce7cf375"
+        }
+      },
+      "shipped_at": "2026-07-30T19:43:57.536Z"
     },
     {
       "id": "s1",
@@ -775,7 +799,7 @@
     },
     {
       "id": "11",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "routes/bundle_social_automation_routes.js",
       "task": "Route for bundle management",
       "spec": "Expose API routes to manage bundles of website, social, and automation tiers",
@@ -783,7 +807,7 @@
         "10"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerBundleRoutes"
       ],
@@ -803,16 +827,13 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-15T22:36:29.807Z",
-      "commit_sha": null,
+      "commit_sha": "7294df3d95251aa4fba84c706989ddcf55cc84ca",
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "11",
       "mission_id": "PRODUCT-limitlessos",
       "pre_existing": false,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerBundleRoutes; behavior_assertion_failed; behavior_proof",
-      "reaudit_reset_at": "2026-07-30T18:55:06.661Z",
-      "built_sha": null,
-      "proof": null,
-      "last_attempt_at": "2026-07-30T19:29:06.335Z"
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerBundleRoutes; registerBundleRoutes",
+      "reaudit_reset_at": "2026-07-30T18:55:06.661Z"
     },
     {
       "id": "step9",
@@ -834,7 +855,7 @@
     },
     {
       "id": "step10",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/dialogue-bundle-skus.js",
       "task": "create bundle SKUs management",
       "spec": "Define SKUs for bundling website, automation, and social tiers.",
@@ -855,37 +876,14 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-30T19:31:48.984Z",
-      "commit_sha": "99c6541b44427ac7ed8e8e0820a9057dbca83a66",
+      "shipped_at": "2026-07-16T03:05:43.779Z",
+      "commit_sha": "a5f9a9081af827bacccd46b67e18a0069b3306f1",
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step10",
       "mission_id": "PRODUCT-limitlessos",
       "pre_existing": false,
-      "last_error": null,
-      "reaudit_reset_at": "2026-07-30T18:55:06.661Z",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/limitlessos/twins/steps/step10.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-30T19:31:48.984Z",
-        "shipped_at": "2026-07-30T19:31:48.984Z",
-        "commit_sha": "a5f9a9081af827bacccd46b67e18a0069b3306f1",
-        "content_sha256": "fdc2fa575273e3cced4d05f9c0b1969ede8e502ba0b605c484a9a3b617ea2d15",
-        "target_file": "services/dialogue-bundle-skus.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/dialogue-bundle-skus.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/limitlessos/twins/steps/step10.exact",
-          "content_sha256": "fdc2fa575273e3cced4d05f9c0b1969ede8e502ba0b605c484a9a3b617ea2d15"
-        }
-      }
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:getBundleSKUs; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.661Z"
     },
     {
       "id": "step11",
