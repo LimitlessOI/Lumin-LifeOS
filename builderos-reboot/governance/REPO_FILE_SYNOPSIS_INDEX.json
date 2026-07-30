@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T19:08:10.195Z",
+  "generated_at": "2026-07-30T19:12:03.273Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12343,
+  "file_count": 12337,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -34266,9 +34266,9 @@
     {
       "path": "db/migrations/20241030_add_interactive_element_labels_table.sql",
       "synopsis": "Database migration — 20241030_add_interactive_element_labels_table.sql.",
-      "bytes": 1014,
-      "mtime": "2026-07-30T19:06:46.796Z",
-      "indexed_at": "2026-07-30T19:06:46.796Z"
+      "bytes": 333,
+      "mtime": "2026-07-28T17:47:22.483Z",
+      "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
       "path": "db/migrations/20241030_add_interactive_element_labels.sql",
@@ -65748,13 +65748,6 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
-      "path": "public/overlay/audit-intake-flow.html",
-      "synopsis": "HTML page: Audit Intake Form",
-      "bytes": 12082,
-      "mtime": "2026-07-30T19:07:09.158Z",
-      "indexed_at": "2026-07-30T19:07:09.158Z"
-    },
-    {
       "path": "public/overlay/audit.html",
       "synopsis": "HTML page: LimitlessOS Audit Results",
       "bytes": 18739,
@@ -68233,13 +68226,6 @@
       ]
     },
     {
-      "path": "routes/habLimitRoutes.js",
-      "synopsis": "HTTP route module — HabLimitRoutes.",
-      "bytes": 1060,
-      "mtime": "2026-07-30T19:07:45.573Z",
-      "indexed_at": "2026-07-30T19:07:45.573Z"
-    },
-    {
       "path": "routes/idea-queue-routes.js",
       "synopsis": "routes/idea-queue-routes.js",
       "bytes": 13264,
@@ -69181,13 +69167,6 @@
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
-    },
-    {
-      "path": "routes/mission-runtime.js",
-      "synopsis": "HTTP route module — Mission Runtime.",
-      "bytes": 1328,
-      "mtime": "2026-07-30T19:06:34.903Z",
-      "indexed_at": "2026-07-30T19:06:34.903Z"
     },
     {
       "path": "routes/mls-routes.js",
@@ -86385,13 +86364,6 @@
       ]
     },
     {
-      "path": "services/characterProfile.js",
-      "synopsis": "Exports editCharacterProfile — services/characterProfile.js.",
-      "bytes": 656,
-      "mtime": "2026-07-30T19:08:00.649Z",
-      "indexed_at": "2026-07-30T19:08:00.649Z"
-    },
-    {
       "path": "services/chatgpt-import.js",
       "synopsis": "services/chatgpt-import.js",
       "bytes": 9389,
@@ -91813,13 +91785,6 @@
       ]
     },
     {
-      "path": "services/sceneEngine.js",
-      "synopsis": "Service module — SceneEngine.",
-      "bytes": 226,
-      "mtime": "2026-07-30T19:08:10.195Z",
-      "indexed_at": "2026-07-30T19:08:10.195Z"
-    },
-    {
       "path": "services/scriptEngine.js",
       "synopsis": "Existing code in services/scriptEngine.js",
       "bytes": 853,
@@ -93627,13 +93592,6 @@
       "bytes": 8206,
       "mtime": "2026-06-21T21:39:19.269Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
-    },
-    {
-      "path": "services/vapiAccountService.js",
-      "synopsis": "Exports createVapiAccount — services/vapiAccountService.js.",
-      "bytes": 1574,
-      "mtime": "2026-07-30T19:07:35.311Z",
-      "indexed_at": "2026-07-30T19:07:35.311Z"
     },
     {
       "path": "services/vapiService.js",
