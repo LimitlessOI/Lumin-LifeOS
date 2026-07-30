@@ -578,14 +578,37 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-16T04:21:40.622Z",
+      "shipped_at": "2026-07-30T22:16:31.503Z",
       "commit_sha": "fdaad7f1e8dcbd04cc5d4bd93d4056fc3fdf8a39",
       "blueprint_id": "PRODUCT-AI-RECEPTIONIST-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "ai-receptionist-2",
       "mission_id": "PRODUCT-ai-receptionist",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:createVapiAccount; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.298Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.298Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/ai-receptionist/twins/steps/ai-receptionist-2.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T22:16:31.503Z",
+        "shipped_at": "2026-07-30T22:16:31.503Z",
+        "commit_sha": "fdaad7f1e8dcbd04cc5d4bd93d4056fc3fdf8a39",
+        "content_sha256": "8ffd3bd18c5c61b9518a4871deb5817d877f6a8ca1f3e4e81c0de72be3be1498",
+        "target_file": "services/vapiAccountCreationService.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/vapiAccountCreationService.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/ai-receptionist/twins/steps/ai-receptionist-2.exact",
+          "content_sha256": "8ffd3bd18c5c61b9518a4871deb5817d877f6a8ca1f3e4e81c0de72be3be1498"
+        }
+      }
     },
     {
       "id": "ai-receptionist-3",
