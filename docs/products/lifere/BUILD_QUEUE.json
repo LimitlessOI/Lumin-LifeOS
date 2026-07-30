@@ -302,13 +302,13 @@
     },
     {
       "id": "step4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/optionalBoldTrailContactCleanupService.js",
       "task": "implement optional BoldTrail test contact cleanup",
       "spec": "Create a service to optionally clean up BoldTrail test contacts using existing cleanup logic.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "optionalCleanup"
       ],
@@ -327,13 +327,16 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-16T04:21:17.879Z",
-      "commit_sha": "35b6c845b6fbf2e85d55ff366edcbe49c0f03f2b",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step4",
       "mission_id": "PRODUCT-lifere",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:optionalCleanup; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.654Z"
+      "last_error": "codegen_authoring_failed: codegen_empty: openai_builder_mini: HTTP 429: {\n    \"error\": {\n        \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, read",
+      "reaudit_reset_at": "2026-07-30T18:55:06.654Z",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-30T19:07:28.816Z"
     },
     {
       "id": "step5",
