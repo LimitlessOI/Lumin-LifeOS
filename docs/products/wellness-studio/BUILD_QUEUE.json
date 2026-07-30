@@ -874,7 +874,7 @@
     },
     {
       "id": "step6",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/20260720_lifeos_core_phase_6.sql",
       "task": "implement phase 6",
       "spec": "Create DB schema for LifeOS Core Phase 6.",
@@ -882,14 +882,14 @@
         "step5"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS",
         "phase_6_table"
       ],
-      "last_attempt_at": null,
-      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw; assertion_threw",
-      "commit_sha": "83758b2f480d91de2bc2bada4e9f60f063459c6b",
+      "last_attempt_at": "2026-07-30T22:37:00.613Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:phase_6_table; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -1095,13 +1095,13 @@
     },
     {
       "id": "wellness-studio-1",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/extended-tables.js",
       "task": "extendTables",
       "spec": "Extend existing tables to avoid schema conflicts while respecting module requirements.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "extendTables"
       ],
@@ -1123,13 +1123,13 @@
           "assertion_id": "expected_exports:services/extended-tables.js"
         }
       ],
-      "last_attempt_at": "2026-07-30T22:16:26.814Z",
+      "last_attempt_at": null,
       "last_error": "artifact_missing_after_ship: artifact_proof_failed: ALTER TABLE; NO CONFLICT",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-30T21:58:34.629Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-30T22:34:32.468Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
