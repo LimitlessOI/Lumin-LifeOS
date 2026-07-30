@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T01:46:31.265Z",
+  "generated_at": "2026-07-30T01:47:59.190Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12338,
   "files": [
@@ -86276,9 +86276,9 @@
     {
       "path": "services/chair-lumin-unified.js",
       "synopsis": "Chair native turn — Lumin IS the Chair; personality translates real facts only.",
-      "bytes": 7157,
-      "mtime": "2026-07-29T22:02:42.679Z",
-      "indexed_at": "2026-07-30T01:21:52.231Z",
+      "bytes": 5150,
+      "mtime": "2026-07-30T01:47:59.190Z",
+      "indexed_at": "2026-07-30T01:47:59.190Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -86286,9 +86286,9 @@
     {
       "path": "services/chair-native-facts.js",
       "synopsis": "Chair native facts — real system state Lumin IS (not chat overlay).",
-      "bytes": 16488,
-      "mtime": "2026-07-29T22:01:50.058Z",
-      "indexed_at": "2026-07-30T01:21:52.231Z",
+      "bytes": 15583,
+      "mtime": "2026-07-30T01:47:59.190Z",
+      "indexed_at": "2026-07-30T01:47:59.190Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

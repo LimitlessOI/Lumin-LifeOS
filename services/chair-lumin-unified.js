@@ -10,10 +10,6 @@ import { getDoctrinePromptBlock } from './lifeos-service-doctrine.js';
 import { formatThreadForPrompt } from './lumin-thread-context.js';
 import { shouldUseDirectProgramAnswer, formatDirectProgramAnswer, shouldUseDirectFactualAnswer, formatDirectFactualAnswer } from './chair-program-direct-answer.js';
 import { needsSystemKnowledge } from './chair-system-knowledge.js';
-import {
-  isFounderTwinHardGated,
-  learnFromFounderMessage,
-} from './lumin-context-loader.js';
 
 /**
  * SO-003 grounding resolver. The direct-answer helpers used to BE the Chair
@@ -50,16 +46,6 @@ export async function runChairNativeTurn(cleanedInput, deps = {}, chairContext =
   } = deps;
 
   const dual = detectDualIntent(cleanedInput);
-  const twinHandle = String(deps.userHandle || chairContext.user_handle || 'adam').toLowerCase();
-  const twinLearnPromise = (twinHandle === 'adam' || twinHandle === 'founder')
-    ? learnFromFounderMessage({
-      userHandle: twinHandle === 'founder' ? 'adam' : twinHandle,
-      messageText: cleanedInput,
-      source: 'chair_native',
-      pool,
-    }).catch((err) => ({ learned: false, reason: err?.message || 'learn_failed' }))
-    : Promise.resolve({ learned: false, reason: 'not_founder' });
-
   const systemFacts = await gatherFacts(cleanedInput, {
     callAI,
     pool,
@@ -68,39 +54,6 @@ export async function runChairNativeTurn(cleanedInput, deps = {}, chairContext =
     userId: deps.userId || null,
     userHandle: deps.userHandle || chairContext.user_handle || null,
   }, chairContext);
-
-  if (isFounderTwinHardGated(twinHandle)) {
-    const gate = systemFacts?.twin_gate;
-    const inject = String(systemFacts?.lumin_context || '');
-    const gateOk = gate?.ok === true && inject.includes('DIGITAL TWIN');
-    if (!gateOk) {
-      const twin_learn = await twinLearnPromise;
-      const reason = gate?.reason || 'twin inject missing';
-      const safeReply = `I can't answer you properly without your digital twin loaded (hard gate). Reason: ${reason}. Fix: ensure data/twins/default/adam/ is active and redeployed, or set TWIN_HARD_GATE=0 only for emergency bypass. I still recorded this turn into twin learning.`;
-      return {
-        ok: false,
-        action: 'chair',
-        twin_gate_failed: true,
-        twin_gate: gate || { ok: false, reason },
-        twin_learn,
-        chair_domain: chairContext.domain || 'conversation',
-        personal_turn: true,
-        command_truth: 'NO_COMMAND_RAN',
-        pass_fail: 'FAIL',
-        execution_kind: 'TWIN_GATE',
-        direct_connection: true,
-        dual_intent: null,
-        human_summary_technical: safeReply,
-        chair_native_facts: systemFacts,
-        last_build_receipt: null,
-        conversation_sanitized: false,
-        done_synopsis: null,
-        next_synopsis: null,
-        strategic_brief: null,
-        errand_search_block: null,
-      };
-    }
-  }
 
   const doctrineBlock = getDoctrinePromptBlock();
   if (doctrineBlock && !systemFacts.lifeos_service_doctrine) {
@@ -151,8 +104,6 @@ export async function runChairNativeTurn(cleanedInput, deps = {}, chairContext =
     })
     : voice;
 
-  const twin_learn = await twinLearnPromise;
-
   return {
     ok: true,
     action: 'chair',
@@ -171,7 +122,6 @@ export async function runChairNativeTurn(cleanedInput, deps = {}, chairContext =
     next_synopsis: null,
     strategic_brief: systemFacts.strategic_brief || null,
     errand_search_block: systemFacts.verified_search || null,
-    twin_learn,
   };
 }
 
