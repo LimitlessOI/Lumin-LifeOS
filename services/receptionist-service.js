@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: Receptionist service for AI Receptionist blueprint; creates Vapi agent payloads and routes calls through Council AI.
  * WIRED: service factory only; intended for route/controller registration via existing factory pattern
- * @ssot docs/products/AI_RECEPTIONIST/AI_RECEPTIONIST_HOME.md
+ * @ssot docs/products/ai-receptionist/PRODUCT_HOME.md
  */
 
 const DEFAULT_AGENT_NAME = 'LifeOS Receptionist';

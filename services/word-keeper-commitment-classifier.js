@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: Detect and classify commitment language in transcripts.
  * WIRED: service factory only; pair with route layer from existing factory pattern.
- * @ssot docs/products/WORD_KEEPER/WORD_KEEPER_HOME.md
+ * @ssot docs/products/word-keeper/PRODUCT_HOME.md
  */
 
 const DEFAULT_CLASSIFIER_MODEL = 'claude';

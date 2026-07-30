@@ -191,4 +191,5 @@ Founder directive: every blueprint reviewed against real competitors. Real web r
 
 | Date | Change | Author |
 |---|---|---|
+| 2026-07-30 | Fixed `services/trigger-mapper.js`'s `@ssot` tag — pointed at `docs/products/WELLNESS_STUDIO/WELLNESS_STUDIO_HOME.md`, which doesn't exist. Corrected to this file. Found by `node scripts/ssot-check.js --all`, part of a wider drift audit. | Claude |
 | 2026-04-03 | Initial draft — all 7 modules defined; revenue model; readiness gates | Claude |

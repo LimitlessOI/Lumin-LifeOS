@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: Simulate real-estate scenarios for training via council-member AI calls.
  * WIRED: service-only; intended for factory-based route wiring in the Business Tools Product Home blueprint
- * @ssot docs/products/BUSINESS_TOOLS_PRODUCT_HOME/BUSINESS_TOOLS_PRODUCT_HOME.md
+ * @ssot docs/products/business-tools/PRODUCT_HOME.md
  */
 
 export function createVirtualRealEstateClass({ callCouncilMember }) {

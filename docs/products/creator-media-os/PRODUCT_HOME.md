@@ -285,6 +285,7 @@ No production runbook yet. This project is concept-stage only.
 
 | Date | What Changed | Why | Amendment Updated | Manifest Updated | Verified |
 |---|---|---|---|---|---|
+| 2026-07-30 | Fixed `services/channel-memory.js`'s `@ssot` tag — pointed at `docs/products/CREATOR_MEDIA_OS/CREATOR_MEDIA_OS_HOME.md`, which doesn't exist. Corrected to this file. | Found by `node scripts/ssot-check.js --all`, part of a wider drift audit | ✅ | n/a | doc-only fix |
 | 2026-03-29 | Created Creator Media OS amendment and manifest from conversation history | Promote the AI YouTube/business video system concept into proper SSOT ownership | ✅ | ✅ | pending |
 | 2026-07-18 | Added Wave 2 prime-time roadmap (digital twin, jump-cuts, overdub, text-to-video, dubbing, media vault, fan-out) + Creator Partner Program rev-share; specced each as governed factory step with concrete target_file + credential gates | Founder approved full creator feature set ready for prime time; specs drive the governed factory per SO-001 (no hand-authored modules) | ✅ | pending | specs-only (SENTRY gates pending per feature) |
 | 2026-07-18 | Added reusable video templates with swappable segments + catalog clip-search/remix compiler (realtor "same 10 videos, new details" + remix old→new use case) | Founder ask: repeatable template videos, swap only the changing segment, remix indexed back-catalog clips into new videos/shorts | ✅ | pending | specs-only |

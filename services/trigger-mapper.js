@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: Identify and map personal relapse triggers with AI-assisted structure.
  * WIRED: service factory for Wellness Studio intake blueprint
- * @ssot docs/products/WELLNESS_STUDIO/WELLNESS_STUDIO_HOME.md
+ * @ssot docs/products/wellness-studio/PRODUCT_HOME.md
  */
 const TRIGGER_TYPES = [
   'environmental',

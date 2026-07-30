@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T19:14:49.820Z",
+  "generated_at": "2026-07-30T19:20:09.298Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12337,
   "files": [
@@ -40058,9 +40058,9 @@
     {
       "path": "docs/products/ai-receptionist/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — AI Receptionist",
-      "bytes": 13135,
-      "mtime": "2026-07-28T17:47:22.495Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 13458,
+      "mtime": "2026-07-30T19:18:24.090Z",
+      "indexed_at": "2026-07-30T19:20:09.298Z"
     },
     {
       "path": "docs/products/AICOUNCIL.md",
@@ -40224,9 +40224,9 @@
     {
       "path": "docs/products/business-tools/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Business Tools",
-      "bytes": 8973,
-      "mtime": "2026-06-29T17:35:43.018Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 9331,
+      "mtime": "2026-07-30T19:19:18.790Z",
+      "indexed_at": "2026-07-30T19:20:09.298Z"
     },
     {
       "path": "docs/products/BUSINESSTOOLS.md",
@@ -40587,9 +40587,9 @@
     {
       "path": "docs/products/creator-media-os/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Creator Media OS",
-      "bytes": 21920,
-      "mtime": "2026-07-19T20:51:20.378Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 22207,
+      "mtime": "2026-07-30T19:18:52.099Z",
+      "indexed_at": "2026-07-30T19:20:09.298Z"
     },
     {
       "path": "docs/products/CREATORMEDIAOS.md",
@@ -41559,9 +41559,9 @@
     {
       "path": "docs/products/wellness-studio/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Wellness Studio",
-      "bytes": 17494,
-      "mtime": "2026-07-28T17:47:22.514Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 17760,
+      "mtime": "2026-07-30T19:18:38.175Z",
+      "indexed_at": "2026-07-30T19:20:09.298Z"
     },
     {
       "path": "docs/products/WELLNESSSTUDIO.md",
@@ -41603,9 +41603,9 @@
     {
       "path": "docs/products/word-keeper/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Word Keeper",
-      "bytes": 19011,
-      "mtime": "2026-07-28T17:53:17.852Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 19280,
+      "mtime": "2026-07-30T19:19:29.235Z",
+      "indexed_at": "2026-07-30T19:20:09.298Z"
     },
     {
       "path": "docs/products/WORDKEEPER.md",
@@ -86339,11 +86339,11 @@
     {
       "path": "services/channel-memory.js",
       "synopsis": "Store and manage creator channel performance and brand memory.",
-      "bytes": 7374,
-      "mtime": "2026-07-05T19:10:02.199Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 7365,
+      "mtime": "2026-07-30T19:15:39.308Z",
+      "indexed_at": "2026-07-30T19:16:42.683Z",
       "ssot": [
-        "docs/products/CREATOR_MEDIA_OS/CREATOR_MEDIA_OS_HOME.md"
+        "docs/products/creator-media-os/PRODUCT_HOME.md"
       ]
     },
     {
@@ -91598,11 +91598,11 @@
     {
       "path": "services/receptionist-service.js",
       "synopsis": "Receptionist service for AI Receptionist blueprint; creates Vapi agent payloads and routes calls through Council AI.",
-      "bytes": 7314,
-      "mtime": "2026-07-05T19:10:02.203Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 7306,
+      "mtime": "2026-07-30T19:15:52.177Z",
+      "indexed_at": "2026-07-30T19:16:42.683Z",
       "ssot": [
-        "docs/products/AI_RECEPTIONIST/AI_RECEPTIONIST_HOME.md"
+        "docs/products/ai-receptionist/PRODUCT_HOME.md"
       ]
     },
     {
@@ -93471,11 +93471,11 @@
     {
       "path": "services/trigger-mapper.js",
       "synopsis": "Identify and map personal relapse triggers with AI-assisted structure.",
-      "bytes": 3619,
-      "mtime": "2026-07-05T19:10:02.205Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 3611,
+      "mtime": "2026-07-30T19:15:59.222Z",
+      "indexed_at": "2026-07-30T19:16:42.683Z",
       "ssot": [
-        "docs/products/WELLNESS_STUDIO/WELLNESS_STUDIO_HOME.md"
+        "docs/products/wellness-studio/PRODUCT_HOME.md"
       ]
     },
     {
@@ -93647,11 +93647,11 @@
     {
       "path": "services/virtual-real-estate-class.js",
       "synopsis": "Simulate real-estate scenarios for training via council-member AI calls.",
-      "bytes": 1263,
-      "mtime": "2026-07-05T19:10:02.205Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 1235,
+      "mtime": "2026-07-30T19:15:44.897Z",
+      "indexed_at": "2026-07-30T19:16:42.683Z",
       "ssot": [
-        "docs/products/BUSINESS_TOOLS_PRODUCT_HOME/BUSINESS_TOOLS_PRODUCT_HOME.md"
+        "docs/products/business-tools/PRODUCT_HOME.md"
       ]
     },
     {
@@ -93989,11 +93989,11 @@
     {
       "path": "services/word-keeper-commitment-classifier.js",
       "synopsis": "Detect and classify commitment language in transcripts.",
-      "bytes": 3741,
-      "mtime": "2026-07-05T19:10:02.205Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 3737,
+      "mtime": "2026-07-30T19:16:06.282Z",
+      "indexed_at": "2026-07-30T19:16:42.683Z",
       "ssot": [
-        "docs/products/WORD_KEEPER/WORD_KEEPER_HOME.md"
+        "docs/products/word-keeper/PRODUCT_HOME.md"
       ]
     },
     {

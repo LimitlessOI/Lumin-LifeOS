@@ -3,7 +3,7 @@ import crypto from 'crypto';
 /**
  * SYNOPSIS: Store and manage creator channel performance and brand memory.
  * WIRED: service-only; intended for route/factory integration via existing patterns.
- * @ssot docs/products/CREATOR_MEDIA_OS/CREATOR_MEDIA_OS_HOME.md
+ * @ssot docs/products/creator-media-os/PRODUCT_HOME.md
  */
 
 function toJson(value, fallback = {}) {

@@ -151,3 +151,9 @@ The Make.com generator is a prompt string — if Make.com ships new module types
 
 ### Gate 5 — How We Beat Them
 While Make.com requires hours of manual scenario building, LifeOS generates a complete, importable multi-step automation from a single English sentence — "when a new prospect fills out my site form, add them to my CRM, send a welcome text, and schedule a follow-up email in 3 days" becomes a working Make.com scenario in 30 seconds, with consent gates built in.
+
+## Change Receipts
+
+| Date | Change | Author |
+|---|---|---|
+| 2026-07-30 | Fixed `services/virtual-real-estate-class.js`'s `@ssot` tag — pointed at `docs/products/BUSINESS_TOOLS_PRODUCT_HOME/BUSINESS_TOOLS_PRODUCT_HOME.md`, which doesn't exist. Corrected to this file. Found by `node scripts/ssot-check.js --all`, part of a wider drift audit. | Claude |
