@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /**
  * SYNOPSIS: Audit entire repo for truth enforcement bypass paths — fail-closed in preflight.
  * @ssot docs/products/lifeos/PRODUCT_HOME.md
@@ -31,6 +30,7 @@ const ALLOW_DIRECT_LLM = new Set([
   'services/word-keeper-transcriber.js',
   'services/builder-audit-before-done.js',
   'services/capability-map.js',
+  'services/creative-engine/transcribe-edit.js',
   // Never-stop planner failover chain (Anthropic → OpenAI → Gemini) — strong models only;
   // not a user-facing chat bypass. Required so product-queue planning never sits idle.
   'services/never-stop-product-factory.js',

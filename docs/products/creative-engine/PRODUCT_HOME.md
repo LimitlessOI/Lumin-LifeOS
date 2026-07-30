@@ -9,7 +9,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/creative-engine/FILE_MANIFEST.json` |
 | **Primary runtime surface** | `/api/v1/creative/*` + `/creative` studio UI |
-| **Last Updated** | 2026-07-15 — R2 upload on creative outputs + job download; SMOS money path wired. |
+| **Last Updated** | 2026-07-30 — `footage_edit` smart edit: Gemini audio transcription + filler/repetition/silence removal + content-aware keep/cut via LLM. |
 
 ---
 
@@ -34,7 +34,7 @@
 
 | Mode | Status | Needs |
 |------|--------|-------|
-| `footage_edit` | **LIVE** | FFmpeg — trim, captions, 9:16/1:1/16:9 crop, brand overlay |
+| `footage_edit` | **LIVE** | FFmpeg — trim, captions, 9:16/1:1/16:9 crop, brand overlay; **smart edit** (v1) — Gemini transcription + filler/repetition/silence removal + content-aware keep/cut |
 | `photo_polish` | **LIVE** | FFmpeg — scale + caption overlay |
 | `script_compose` | **GATED** | `REPLICATE_API_TOKEN` — wraps `services/video-pipeline.js` Path B |
 | `generative_broll` | **SCAFFOLD** | Returns gated until footage_edit tip-proven |
@@ -82,5 +82,6 @@ Studio: `/creative`, `/creative/studio`
 | 2026-07-14 | **Wire consumers** — Site Builder `maybeFillGeneratedHero` (Flux when no scraped hero); SMOS `tryIdeogramThumbnail` prefers Ideogram over Sharp compose; `getReplicateApiToken()` accepts `REPLICATE_API`. Tip proved `replicateConfigured:true` + real render. | Adam: token is in as `REPLICATE_API` — finish it. | ✅ tip health + render; wire push pending |
 | 2026-07-14 | **Env alias** — accept Railway `REPLICATE_API` as `REPLICATE_API_TOKEN` via boot alias + registry/provider health. | Founder deployed as `REPLICATE_API`; tip still `replicateConfigured:false`. | ✅ code; tip verify post-redeploy |
 | 2026-07-14 | **graphic_design mode shipped** — `services/creative-engine/modes/graphic-design.js` (Ideogram v3-turbo / Recraft v3-svg / Flux 1.1-pro via Replicate, gated on `REPLICATE_API_TOKEN`) + `routes/creative-engine-graphic-design-routes.js` (standalone, see architectural-gap note above) + auto-register entry in `config/auto-registered-product-modules.json`. Verified live in production: `POST /api/v1/creative/graphic-design/estimate` returns real per-asset-type pricing; `POST .../render` correctly returns 503 `REPLICATE_API_TOKEN_REQUIRED` (token not yet set on Railway). Both governed builds (`22da9c4870`, `94d55baaf7`) committed via `POST /api/v1/lifeos/builder/build` with `platform_gap_fill:true` per SO-001; a third governed build (edit `index.js` dispatcher) was correctly rejected by Zone-3 governance — see architectural-gap note. Site Builder / SocialMediaOS consumption not yet wired (SocialMediaOS actively being iterated by a concurrent agent same day — see `docs/CONTINUITY_LOG.md`; Site Builder wiring needs the same Zone-3 edit-patch platform fix). | Adam: "we don't have [good graphics] and I don't have the time or patience... if it's affordable... let's incorporate it into our system." Researched market (Ideogram/Recraft/Flux all $0.03-0.08/image, already reachable through the existing Replicate account used for Kling/Wan video). | ✅ routes live + verified; ⛔ render blocked on `REPLICATE_API_TOKEN` |
+| 2026-07-30 | **Smart `footage_edit`** — `services/creative-engine/transcribe-edit.js` (Gemini audio transcription with per-word timestamps), `services/creative-engine/modes/footage-edit-smart.js` (filler/repetition/silence removal, optional content-aware keep/cut via `defaultPlannerCallModel`), `services/creative-engine/providers/ffmpeg-local.js` adds `getDuration`/`extractAudio`/`cutKeepRanges`, `services/creative-engine/index.js` routes `smartEdit` requests and updates `estimate`. Gated on `GOOGLE_API_KEY`/`GEMINI_API_KEY`. | Founder: AI video editing must remove ums/stutters, understand keep/cut, and make brilliant videos. | ✅ code; tip prove after deploy |
 | 2026-07-10 | **Tip footage_edit PASS** — health `ffmpeg:true`; upload sample MP4; async render completed; output 1.3MB 9:16 at `/previews/creative/outputs/...`. Receipt `products/receipts/CREATIVE_ENGINE_V1_FOOTAGE_EDIT.json`. Default render for footage_edit is async (sync was Railway 502). | Plan proof criteria. | ✅ tip `069f8a4d25` |
 | 2026-07-10 | **v1 Creative Engine shipped** — schema, FFmpeg in Docker, media-storage, footage_edit + photo_polish + script_compose gate + generative_broll scaffold, routes/UI auto-registered, studio SSR. | Adam: build Creative Engine; video editing in v1; do all modes; decide for him. | ✅ tip `069f8a4d25` + async fix on `main` |

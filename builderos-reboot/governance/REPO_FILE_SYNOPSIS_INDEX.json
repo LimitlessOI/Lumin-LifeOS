@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T03:05:28.902Z",
+  "generated_at": "2026-07-30T03:14:20.409Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12341,
+  "file_count": 12343,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -37989,9 +37989,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 41296,
-      "mtime": "2026-07-30T03:05:28.902Z",
-      "indexed_at": "2026-07-30T03:05:28.902Z"
+      "bytes": 44365,
+      "mtime": "2026-07-30T03:14:20.409Z",
+      "indexed_at": "2026-07-30T03:14:20.409Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40572,9 +40572,9 @@
     {
       "path": "docs/products/creative-engine/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Creative Engine",
-      "bytes": 9018,
-      "mtime": "2026-07-24T18:36:41.547Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 9855,
+      "mtime": "2026-07-30T03:14:20.409Z",
+      "indexed_at": "2026-07-30T03:14:20.409Z"
     },
     {
       "path": "docs/products/CREATIVEENGINE.md",
@@ -64977,8 +64977,8 @@
       "path": "products/receipts/POINT_B_DNA_VERIFY.json",
       "synopsis": "Product receipt — POINT B DNA VERIFY.",
       "bytes": 318,
-      "mtime": "2026-07-30T02:35:52.272Z",
-      "indexed_at": "2026-07-30T02:35:52.272Z",
+      "mtime": "2026-07-30T03:14:20.409Z",
+      "indexed_at": "2026-07-30T03:14:20.409Z",
       "synopsis_index_only": true
     },
     {
@@ -64993,8 +64993,8 @@
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
       "bytes": 24056,
-      "mtime": "2026-07-30T02:35:52.272Z",
-      "indexed_at": "2026-07-30T02:35:52.272Z",
+      "mtime": "2026-07-30T03:14:20.409Z",
+      "indexed_at": "2026-07-30T03:14:20.409Z",
       "synopsis_index_only": true
     },
     {
@@ -65160,17 +65160,17 @@
     {
       "path": "products/receipts/TRUTH_ENFORCEMENT_AUDIT.json",
       "synopsis": "Product receipt — TRUTH ENFORCEMENT AUDIT.",
-      "bytes": 782,
-      "mtime": "2026-07-30T02:35:52.272Z",
-      "indexed_at": "2026-07-30T02:35:52.272Z",
+      "bytes": 833,
+      "mtime": "2026-07-30T03:14:20.409Z",
+      "indexed_at": "2026-07-30T03:14:20.409Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/TRUTH_LOCKDOWN_VERIFY.json",
       "synopsis": "Product receipt — TRUTH LOCKDOWN VERIFY.",
       "bytes": 1318,
-      "mtime": "2026-07-30T02:35:52.272Z",
-      "indexed_at": "2026-07-30T02:35:52.272Z",
+      "mtime": "2026-07-30T03:14:20.409Z",
+      "indexed_at": "2026-07-30T03:14:20.409Z",
       "synopsis_index_only": true
     },
     {
@@ -65201,8 +65201,8 @@
       "path": "products/receipts/WISDOM_TRUTH_AUDIT.json",
       "synopsis": "Product receipt — WISDOM TRUTH AUDIT.",
       "bytes": 1001,
-      "mtime": "2026-07-30T02:35:52.272Z",
-      "indexed_at": "2026-07-30T02:35:52.272Z",
+      "mtime": "2026-07-30T03:14:20.409Z",
+      "indexed_at": "2026-07-30T03:14:20.409Z",
       "synopsis_index_only": true
     },
     {
@@ -70319,9 +70319,9 @@
     {
       "path": "scripts/audit-truth-enforcement.mjs",
       "synopsis": "Audit entire repo for truth enforcement bypass paths — fail-closed in preflight.",
-      "bytes": 4894,
-      "mtime": "2026-07-14T09:22:00.748Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 4922,
+      "mtime": "2026-07-30T03:14:20.409Z",
+      "indexed_at": "2026-07-30T03:14:20.409Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -87074,9 +87074,9 @@
     {
       "path": "services/creative-engine/index.js",
       "synopsis": "Creative Engine — estimate/render/jobs for footage, photo, script, b-roll modes",
-      "bytes": 8334,
-      "mtime": "2026-07-24T18:36:41.704Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 9031,
+      "mtime": "2026-07-30T03:14:20.409Z",
+      "indexed_at": "2026-07-30T03:14:20.409Z",
       "ssot": [
         "docs/products/creative-engine/PRODUCT_HOME.md"
       ]
@@ -87092,11 +87092,21 @@
       ]
     },
     {
+      "path": "services/creative-engine/modes/footage-edit-smart.js",
+      "synopsis": "Creative Engine mode — AI-driven footage cleanup (filler/repetition/silence removal + content-aware keep/cut)",
+      "bytes": 4715,
+      "mtime": "2026-07-30T03:14:20.409Z",
+      "indexed_at": "2026-07-30T03:14:20.409Z",
+      "ssot": [
+        "docs/products/creative-engine/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/creative-engine/modes/footage-edit.js",
       "synopsis": "Creative Engine mode — real footage trim + captions + aspect crop",
-      "bytes": 3333,
-      "mtime": "2026-07-10T21:33:45.138Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 3507,
+      "mtime": "2026-07-30T03:14:20.409Z",
+      "indexed_at": "2026-07-30T03:14:20.409Z",
       "ssot": [
         "docs/products/creative-engine/PRODUCT_HOME.md"
       ]
@@ -87151,9 +87161,19 @@
     {
       "path": "services/creative-engine/providers/ffmpeg-local.js",
       "synopsis": "FFmpeg provider — trim, captions, crop, photo polish (array-arg spawn only)",
-      "bytes": 5088,
-      "mtime": "2026-07-10T21:33:45.139Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 7342,
+      "mtime": "2026-07-30T03:14:20.409Z",
+      "indexed_at": "2026-07-30T03:14:20.409Z",
+      "ssot": [
+        "docs/products/creative-engine/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/creative-engine/transcribe-edit.js",
+      "synopsis": "Smart video edit helpers — Gemini audio transcription + filler/repetition/silence cut planning",
+      "bytes": 9658,
+      "mtime": "2026-07-30T03:14:20.409Z",
+      "indexed_at": "2026-07-30T03:14:20.409Z",
       "ssot": [
         "docs/products/creative-engine/PRODUCT_HOME.md"
       ]

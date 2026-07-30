@@ -4,6 +4,30 @@
 import { spawn } from 'node:child_process';
 import fs from 'node:fs/promises';
 
+function runProbe(bin, args, { timeoutMs = DEFAULT_TIMEOUT_MS, logger } = {}) {
+  return new Promise((resolve, reject) => {
+    const child = spawn(bin, args, { stdio: ['ignore', 'pipe', 'pipe'] });
+    let stdout = '';
+    let stderr = '';
+    const timer = setTimeout(() => {
+      child.kill('SIGKILL');
+      reject(new Error(`ffprobe_timeout_${timeoutMs}ms`));
+    }, timeoutMs);
+    child.stdout.on('data', (d) => { stdout += d.toString(); });
+    child.stderr.on('data', (d) => { stderr += d.toString(); });
+    child.on('error', (err) => { clearTimeout(timer); reject(err); });
+    child.on('close', (code) => {
+      clearTimeout(timer);
+      if (code !== 0) {
+        logger?.warn?.('[FFPROBE] non-zero exit', { code, stderr: stderr.slice(-400) });
+        reject(new Error(`ffprobe_exit_${code}: ${stderr.slice(-300)}`));
+        return;
+      }
+      resolve({ stdout, stderr });
+    });
+  });
+}
+
 const DEFAULT_TIMEOUT_MS = 5 * 60 * 1000;
 
 function runSpawn(bin, args, { timeoutMs = DEFAULT_TIMEOUT_MS, logger } = {}) {
@@ -34,6 +58,34 @@ function runSpawn(bin, args, { timeoutMs = DEFAULT_TIMEOUT_MS, logger } = {}) {
 }
 
 export function createFfmpegProvider({ logger = console, bin = 'ffmpeg' } = {}) {
+  async function getDuration(inputPath) {
+    const probeBin = bin.replace(/ffmpeg$/, 'ffprobe').replace(/ffmpeg\.exe$/, 'ffprobe.exe');
+    const { stdout } = await runProbe(probeBin, ['-v', 'error', '-show_entries', 'format=duration', '-of', 'default=noprint_wrappers=1:nokey=1', inputPath], { timeoutMs: 30000, logger });
+    const d = parseFloat(stdout.trim());
+    if (!Number.isFinite(d) || d <= 0) throw new Error('duration_probe_failed');
+    return d;
+  }
+
+  async function extractAudio({ inputPath, outputPath, sampleRate = 16000, channels = 1, bitrate = '32k' }) {
+    await run(['-y', '-i', inputPath, '-vn', '-ar', String(sampleRate), '-ac', String(channels), '-b:a', bitrate, '-f', 'mp3', outputPath]);
+    return outputPath;
+  }
+
+  async function cutKeepRanges({ inputPath, outputPath, keepRanges = [] }) {
+    if (!keepRanges.length) throw new Error('cutKeepRanges_empty');
+    const expr = keepRanges.map(([s, e]) => `between(t,${Number(s).toFixed(3)},${Number(e).toFixed(3)})`).join('+');
+    await run([
+      '-y', '-i', inputPath,
+      '-vf', `select='${expr}',setpts=N/FRAME_RATE/TB`,
+      '-af', `aselect='${expr}',asetpts=N/SR/TB`,
+      '-c:v', 'libx264',
+      '-c:a', 'aac',
+      '-movflags', '+faststart',
+      outputPath,
+    ]);
+    return outputPath;
+  }
+
   async function probeAvailable() {
     try {
       await runSpawn(bin, ['-version'], { timeoutMs: 10000, logger });
@@ -146,9 +198,12 @@ export function createFfmpegProvider({ logger = console, bin = 'ffmpeg' } = {}) 
   return {
     probeAvailable,
     run,
+    getDuration,
+    extractAudio,
     trimVideo,
     burnCaptions,
     burnCaptionText,
+    cutKeepRanges,
     scaleCrop,
     polishPhoto,
   };

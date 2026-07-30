@@ -1,6 +1,6 @@
 {
   "schema": "truth_enforcement_audit_v1",
-  "at": "2026-07-30T02:35:40.080Z",
+  "at": "2026-07-30T03:13:35.291Z",
   "ok": true,
   "violations": [],
   "scanned_dirs": [
@@ -21,6 +21,7 @@
     "services/word-keeper-transcriber.js",
     "services/builder-audit-before-done.js",
     "services/capability-map.js",
+    "services/creative-engine/transcribe-edit.js",
     "services/never-stop-product-factory.js",
     "core/tier0-council.js",
     "routes/tco-routes.js",

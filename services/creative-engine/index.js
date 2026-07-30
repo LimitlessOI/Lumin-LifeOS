@@ -5,6 +5,7 @@ import path from 'node:path';
 import { createMediaStorage } from './media-storage.js';
 import { createFfmpegProvider } from './providers/ffmpeg-local.js';
 import { runFootageEdit } from './modes/footage-edit.js';
+import { runSmartFootageEdit } from './modes/footage-edit-smart.js';
 import { runPhotoPolish } from './modes/photo-polish.js';
 import { runScriptCompose } from './modes/script-compose.js';
 import { runGenerativeBroll, estimateGenerativeBrollCost } from './modes/generative-broll.js';
@@ -35,9 +36,18 @@ export function createCreativeEngine({
     let notes = [];
 
     if (mode === 'footage_edit') {
-      costEstimateCents = 0;
-      etaSeconds = 45;
-      notes.push('Local FFmpeg trim + captions + crop');
+      if (request.smartEdit || request.smart_edit) {
+        const geminiKey = Boolean(process.env.GOOGLE_API_KEY || process.env.GEMINI_API_KEY);
+        costEstimateCents = 2;
+        etaSeconds = 120;
+        notes.push('AI smart edit: Gemini transcription + filler/repetition/silence removal + content-aware keep/cut + FFmpeg');
+        requirements.push('GOOGLE_API_KEY or GEMINI_API_KEY');
+        gated = !geminiKey;
+      } else {
+        costEstimateCents = 0;
+        etaSeconds = 45;
+        notes.push('Local FFmpeg trim + captions + crop');
+      }
     } else if (mode === 'photo_polish') {
       costEstimateCents = 0;
       etaSeconds = 10;
@@ -114,7 +124,10 @@ export function createCreativeEngine({
     try {
       let result;
       if (job.mode === 'footage_edit') {
-        result = await runFootageEdit({ ffmpeg, storage, job, logger });
+        const req = job.request_json || job.request || {};
+        result = (req.smartEdit || req.smart_edit)
+          ? await runSmartFootageEdit({ ffmpeg, storage, job, logger })
+          : await runFootageEdit({ ffmpeg, storage, job, logger });
       } else if (job.mode === 'photo_polish') {
         result = await runPhotoPolish({ ffmpeg, storage, job, logger });
       } else if (job.mode === 'script_compose') {

@@ -2,6 +2,7 @@
 // @ssot docs/products/creative-engine/PRODUCT_HOME.md
 
 import path from 'node:path';
+import { runSmartFootageEdit } from './footage-edit-smart.js';
 
 function buildSrt(captions = []) {
   return captions.map((c, i) => {
@@ -22,6 +23,10 @@ export async function runFootageEdit({ ffmpeg, storage, job, logger }) {
   const req = job.request_json || job.request || {};
   const assetKey = req.assetKey || req.asset_key;
   if (!assetKey) throw new Error('assetKey_required');
+
+  if (req.smartEdit || req.smart_edit) {
+    return runSmartFootageEdit({ ffmpeg, storage, job, logger });
+  }
 
   await storage.ensureDirs();
   const inputPath = storage.getLocalPath(assetKey);
