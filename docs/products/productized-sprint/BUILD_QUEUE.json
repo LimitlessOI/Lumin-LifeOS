@@ -131,13 +131,13 @@
     },
     {
       "id": "05",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/sprintQueuePanel.js",
       "task": "create Sprint Queue panel",
       "spec": "Provide a panel for sprint queue within Command Center.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerSprintQueuePanel"
       ],
@@ -158,13 +158,16 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-15T22:17:04.908Z",
-      "commit_sha": "9ee37ebb271c3ddfc903f153c499e842cba6555c",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "05",
       "mission_id": "PRODUCT-productized-sprint",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerSprintQueuePanel",
-      "reaudit_reset_at": "2026-07-30T18:55:06.702Z"
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerSprintQueuePanel; behavior_assertion_failed; behavior_proof",
+      "reaudit_reset_at": "2026-07-30T18:55:06.702Z",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-30T23:19:40.537Z"
     },
     {
       "id": "06",
