@@ -318,14 +318,37 @@
         "CREATE TABLE IF NOT EXISTS stripe_price_ids"
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-15T21:19:40.217Z",
+      "shipped_at": "2026-07-30T20:58:35.021Z",
       "commit_sha": "3ff22012523533a15f27942a19c900149a68763e",
       "blueprint_id": "PRODUCT-AI-RECEPTIONIST-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "3",
       "mission_id": "PRODUCT-ai-receptionist",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.298Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.298Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/ai-receptionist/twins/steps/3.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T20:58:35.021Z",
+        "shipped_at": "2026-07-30T20:58:35.021Z",
+        "commit_sha": "3ff22012523533a15f27942a19c900149a68763e",
+        "content_sha256": "e2fa6b79af617e91bbce99dc7aec6beca5b26d56680cf7fb19ffb8a0632911be",
+        "target_file": "db/migrations/20231021_create_stripe_price_ids.sql",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "db/migrations/20231021_create_stripe_price_ids.sql",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/ai-receptionist/twins/steps/3.exact",
+          "content_sha256": "e2fa6b79af617e91bbce99dc7aec6beca5b26d56680cf7fb19ffb8a0632911be"
+        }
+      }
     },
     {
       "id": "2",
