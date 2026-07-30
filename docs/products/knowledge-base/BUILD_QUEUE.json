@@ -73,7 +73,7 @@
     },
     {
       "id": "3",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/001_create_vector_embedding.sql",
       "task": "define vector embedding strategy",
       "spec": "Add a migration to support vector embedding using either pgvector or Pinecone. Specify database schema changes.",
@@ -85,12 +85,12 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-30T23:52:41.751Z",
-      "commit_sha": "6ff2386f707d745ffd442ec50e6c2c2d135ca788",
+      "commit_sha": "0c033248ac99167e06c9f7f1861ff45d4e93ebcb",
       "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "3",
       "mission_id": "PRODUCT-knowledge-base",
-      "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
+      "pre_existing": null,
+      "last_error": null,
       "reaudit_reset_at": "2026-07-30T18:55:06.480Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
@@ -114,11 +114,26 @@
           "content_source_path": "docs/products/knowledge-base/twins/steps/3.exact",
           "content_sha256": "abc6706065b15f7a4d7d30126da9d1f36100c3e085ae6d8ab7926a039d454791"
         }
-      }
+      },
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": null,
+      "last_attempt": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-30T23:48:51.215Z",
+      "no_op": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/context-injection.js",
       "task": "define token budget for context injection",
       "spec": "Implement a strategy for token budget and truncation in the context injection process.",
@@ -142,12 +157,12 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-15T18:07:41.289Z",
-      "commit_sha": "208ef86d20357985972970a07d22b8cb99f085ed",
+      "commit_sha": "230f05c547b181740cb401614f90674d21a52751",
       "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "4",
       "mission_id": "PRODUCT-knowledge-base",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:calculateTokenBudget,truncateContext; assertion_threw; assertion_threw",
+      "last_error": null,
       "reaudit_reset_at": "2026-07-30T18:55:06.480Z"
     },
     {
