@@ -1549,7 +1549,7 @@
     },
     {
       "id": "lifeos-chat-v2-05",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/lifeos-note-capture-service.js",
       "task": "Build the note capture service from natural language",
       "spec": "ESM service. Exports captureNote(text, { userId, source, tags }) that extracts the note, suggested tags, and a one-line summary. Exports getNotes(userId, opts), searchNotes(userId, query), and tagNotes(userId, noteIds, tags). Uses a lightweight in-memory or SQL notes table (CREATE TABLE IF NOT EXISTS in a separate migration step). Suggested tags can be comma-separated or inferred from keywords. No top-level side effects.",
@@ -1588,10 +1588,10 @@
         "lifeos-chat-v2-01"
       ],
       "founder_gated": false,
-      "attempts": 0,
-      "last_attempt_at": null,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:captureNote,getNotes,searchNotes,tagNotes; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw",
-      "commit_sha": "5b9990a1f0cb10f21f5ee918971f2865b81c8622",
+      "attempts": 1,
+      "last_attempt_at": "2026-07-30T19:37:54.203Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: openai_builder_escalation: HTTP 429: {\n    \"error\": {\n        \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error",
+      "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
