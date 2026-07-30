@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T20:34:18.110Z",
+  "generated_at": "2026-07-30T20:34:32.812Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12356,
   "files": [
@@ -36479,8 +36479,8 @@
       "path": "db/migrations/20260716_lifeos_core_phase_2.sql",
       "synopsis": "Database migration — 20260716_lifeos_core_phase_2.sql.",
       "bytes": 400,
-      "mtime": "2026-07-30T20:18:50.645Z",
-      "indexed_at": "2026-07-30T20:18:50.645Z"
+      "mtime": "2026-07-30T20:34:32.812Z",
+      "indexed_at": "2026-07-30T20:34:32.812Z"
     },
     {
       "path": "db/migrations/20260717_socialmediaos_owner_id_text.sql",
