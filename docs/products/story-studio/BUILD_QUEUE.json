@@ -252,7 +252,31 @@
       "shipped_via": null,
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:calculateFranchiseScore,getCommunityFeedback; assertion_threw; assertion_threw; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.739Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.739Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/story-studio/twins/steps/6.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T21:24:10.878Z",
+        "shipped_at": "2026-07-30T21:24:10.878Z",
+        "commit_sha": "0ca74fbb5598196a4f1154cca3ad30eed55a2a1e",
+        "content_sha256": "fbd7a3d027c5f1ac610077fd05724baf262ee0c4babc11443e7466f50ea0307f",
+        "target_file": "services/franchiseScoring.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/franchiseScoring.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/story-studio/twins/steps/6.exact",
+          "content_sha256": "fbd7a3d027c5f1ac610077fd05724baf262ee0c4babc11443e7466f50ea0307f"
+        }
+      },
+      "shipped_at": "2026-07-30T21:24:10.878Z"
     },
     {
       "id": "7",
