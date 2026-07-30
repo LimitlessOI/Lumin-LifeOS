@@ -2377,28 +2377,28 @@
     },
     {
       "id": "step7",
-      "status": "blocked",
+      "status": "done",
       "target_file": "db/migrations/20261101_habit_tables.sql",
       "task": "add habit tables",
       "spec": "Habits and habit_completions tables already exist from 20260422_lifeos_habits.sql; this step is a no-op migration that avoids CREATE TABLE collision.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "SELECT 1"
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-30T20:34:15.058Z",
-      "commit_sha": null,
+      "commit_sha": "527adbda244663b72270b80a0aa3a0ac49046714",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step7",
       "mission_id": "PRODUCT-lifeos",
-      "pre_existing": false,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:SELECT 1; behavior_assertion_failed; behavior_proof",
+      "pre_existing": null,
+      "last_error": null,
       "reaudit_reset_at": "2026-07-30T18:55:06.601Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-07-30T20:18:39.836Z",
+      "last_attempt_at": null,
       "action_type": "write_file_exact",
       "exact_inputs": {
         "content_source_path": "docs/products/lifeos/twins/steps/step7.exact"
@@ -2421,7 +2421,19 @@
           "content_source_path": "docs/products/lifeos/twins/steps/step7.exact",
           "content_sha256": "17db4fd369edb9244b9f91d9aeed145c3d04ad8ba6e95d06247f07a63527d11a"
         }
-      }
+      },
+      "last_attempt": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-30T20:34:13.805Z",
+      "no_op": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "step8",
@@ -3158,7 +3170,7 @@
     },
     {
       "id": "lifeos-step1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/lifeos-chat-intent-executor.js",
       "task": "create new module",
       "spec": "Export classifyIntent, executeIntent, and formatReply functions. Implement commitment, note, check_in, build_request intents handling.",
@@ -3187,8 +3199,8 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
-      "commit_sha": "c16286b6e3433864d080beb06ecaedd4bfc30d26",
+      "last_error": null,
+      "commit_sha": "f4e4163fd0c4badf57dc1dfc7b0f0301f9d97900",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
