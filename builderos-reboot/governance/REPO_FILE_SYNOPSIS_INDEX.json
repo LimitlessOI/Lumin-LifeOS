@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T22:45:16.700Z",
+  "generated_at": "2026-07-30T22:45:26.890Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12420,
+  "file_count": 12423,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21634,9 +21634,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3733427,
-      "mtime": "2026-07-30T22:32:11.877Z",
-      "indexed_at": "2026-07-30T22:32:11.913Z"
+      "bytes": 3747135,
+      "mtime": "2026-07-30T22:44:53.581Z",
+      "indexed_at": "2026-07-30T22:44:53.619Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -37838,6 +37838,13 @@
       "synopsis_index_only": true
     },
     {
+      "path": "docs/audits/builderos-mission-2/MISSION_2_0_HANDOFF.md",
+      "synopsis": "BuilderOS Mission 2.0 canonical handoff artifact",
+      "bytes": 6284,
+      "mtime": "2026-07-30T22:41:18.813Z",
+      "indexed_at": "2026-07-30T22:44:20.932Z"
+    },
+    {
       "path": "docs/audits/builderos-mission-2/MISSION_2_0_PROMPT.md",
       "synopsis": "BuilderOS Mission 2.0 implementation prompt — reconciled scope for Devin.",
       "bytes": 17546,
@@ -38246,9 +38253,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 52229,
-      "mtime": "2026-07-30T22:31:03.777Z",
-      "indexed_at": "2026-07-30T22:31:11.508Z"
+      "bytes": 53465,
+      "mtime": "2026-07-30T22:42:30.025Z",
+      "indexed_at": "2026-07-30T22:44:20.932Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40444,9 +40451,9 @@
     {
       "path": "docs/products/builderos/GAP_FILL_LEDGER.json",
       "synopsis": "Documentation — GAP FILL LEDGER.",
-      "bytes": 24881,
-      "mtime": "2026-07-30T22:31:11.861Z",
-      "indexed_at": "2026-07-30T22:31:58.026Z",
+      "bytes": 25691,
+      "mtime": "2026-07-30T22:44:21.233Z",
+      "indexed_at": "2026-07-30T22:44:48.580Z",
       "synopsis_index_only": true
     },
     {
@@ -40459,9 +40466,16 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 326470,
-      "mtime": "2026-07-30T19:14:34.021Z",
-      "indexed_at": "2026-07-30T19:14:49.820Z"
+      "bytes": 327862,
+      "mtime": "2026-07-30T22:43:44.313Z",
+      "indexed_at": "2026-07-30T22:44:20.932Z"
+    },
+    {
+      "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
+      "synopsis": "BuilderOS scheduler runtime classification and authority audit",
+      "bytes": 11896,
+      "mtime": "2026-07-30T22:42:11.077Z",
+      "indexed_at": "2026-07-30T22:44:20.932Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -41190,9 +41204,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 638553,
-      "mtime": "2026-07-30T18:16:49.621Z",
-      "indexed_at": "2026-07-30T22:32:11.913Z"
+      "bytes": 639589,
+      "mtime": "2026-07-30T22:43:17.277Z",
+      "indexed_at": "2026-07-30T22:44:20.932Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -64671,9 +64685,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 3767,
-      "mtime": "2026-07-30T20:29:45.837Z",
-      "indexed_at": "2026-07-30T22:32:11.913Z",
+      "bytes": 5938,
+      "mtime": "2026-07-30T22:34:45.217Z",
+      "indexed_at": "2026-07-30T22:44:20.932Z",
       "synopsis_index_only": true
     },
     {
@@ -68843,9 +68857,9 @@
     {
       "path": "routes/lifeos-council-builder-routes.js",
       "synopsis": "routes/lifeos-council-builder-routes.js",
-      "bytes": 166259,
-      "mtime": "2026-07-30T03:57:08.487Z",
-      "indexed_at": "2026-07-30T22:32:11.913Z",
+      "bytes": 168822,
+      "mtime": "2026-07-30T22:40:32.853Z",
+      "indexed_at": "2026-07-30T22:44:20.932Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -75069,6 +75083,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/verify-mission-2-handoff.mjs",
+      "synopsis": "Verify BuilderOS Mission 2.0 handoff integrity.",
+      "bytes": 2466,
+      "mtime": "2026-07-30T22:41:24.017Z",
+      "indexed_at": "2026-07-30T22:44:20.932Z",
+      "ssot": [
+        "docs/audits/builderos-mission-2/MISSION_2_0_HANDOFF.md"
       ]
     },
     {
@@ -88273,8 +88297,8 @@
       "path": "services/extended-tables.js",
       "synopsis": "Exports extendTables — services/extended-tables.js.",
       "bytes": 8931,
-      "mtime": "2026-07-30T22:44:36.619Z",
-      "indexed_at": "2026-07-30T22:44:36.619Z"
+      "mtime": "2026-07-30T22:45:13.237Z",
+      "indexed_at": "2026-07-30T22:45:16.146Z"
     },
     {
       "path": "services/extractRoutes.js",
@@ -88737,8 +88761,8 @@
       "path": "services/franchiseScoring.js",
       "synopsis": "Service module — FranchiseScoring.",
       "bytes": 15794,
-      "mtime": "2026-07-30T22:37:36.807Z",
-      "indexed_at": "2026-07-30T22:37:36.807Z"
+      "mtime": "2026-07-30T22:44:51.405Z",
+      "indexed_at": "2026-07-30T22:44:53.619Z"
     },
     {
       "path": "services/free-tier-governor.js",
@@ -92337,8 +92361,8 @@
       "path": "services/sceneEngine.js",
       "synopsis": "Service module — SceneEngine.",
       "bytes": 1916,
-      "mtime": "2026-07-30T22:45:16.700Z",
-      "indexed_at": "2026-07-30T22:45:16.700Z"
+      "mtime": "2026-07-30T22:32:04.401Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z"
     },
     {
       "path": "services/scriptEngine.js",
@@ -93912,8 +93936,8 @@
       "path": "services/thumbnailPipeline.js",
       "synopsis": "Exports setupThumbnailSEO — services/thumbnailPipeline.js.",
       "bytes": 9330,
-      "mtime": "2026-07-30T22:37:55.035Z",
-      "indexed_at": "2026-07-30T22:37:55.035Z"
+      "mtime": "2026-07-30T22:44:51.405Z",
+      "indexed_at": "2026-07-30T22:44:53.619Z"
     },
     {
       "path": "services/timezone-utils.js",

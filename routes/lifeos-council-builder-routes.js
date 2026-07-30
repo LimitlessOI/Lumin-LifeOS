@@ -60,6 +60,7 @@ import {
   buildRuntimeFingerprintReport,
   parseRuntimeFingerprintPaths,
 } from '../scripts/lib/runtime-fingerprint.mjs';
+import { reviewDiffForSecurity } from '../scripts/ai-security-review.mjs';
 import { normalizeBuilderCodegenOutput } from '../services/builderos-codegen-normalize.js';
 import { classifyBuildTarget, classifyPatchIntent } from '../services/builderos-patch-mode-policy.js';
 import { applyBuilderRoutingPolicy } from '../services/builderos-routing-policy.js';
@@ -1460,6 +1461,68 @@ export function createLifeOSCouncilBuilderRoutes({
         '[BUILDER] doc-hygiene detect-and-route (not blocking) — caller should co-commit SSOT / SYNOPSIS',
       );
     }
+
+    // SO-002 / security posture: fire-and-forget adversarial review of the
+    // commit diff. This is ROUTE, not BLOCK (Chair ruling c646160f-...); the
+    // model is unproven, so findings are logged and recorded in the capability
+    // ledger but never refuse a commit here. Promotion to a blocking gate is a
+    // separate, later decision once a true-positive/false-positive track record
+    // exists.
+    function runAiSecurityReviewOnDiff(entries) {
+      if (typeof callCouncilMember !== 'function') {
+        log.warn('[AI-SECURITY-REVIEW] callCouncilMember not available — skipped');
+        return;
+      }
+      const changedFiles = entries.map((entry) => entry.path);
+      let totalChars = 0;
+      const MAX_DIFF_CHARS = 12000;
+      const textEntries = entries
+        .filter((entry) => entry.encoding !== 'base64')
+        .map((entry) => {
+          const content = String(entry.content || '').slice(0, Math.max(0, MAX_DIFF_CHARS - totalChars));
+          totalChars += content.length;
+          const lines = content.split('\n');
+          const hunkHeader = `@@ -1,${lines.length} @@`;
+          const body = lines.map((line) => (line.startsWith(' ') ? line : ' ' + line)).join('\n');
+          return `--- a/${entry.path}\n+++ b/${entry.path}\n${hunkHeader}\n${body}`;
+        })
+        .join('\n');
+      const callModel = async (_model, prompt, options) => {
+        try {
+          return await callCouncilMember('security_review', prompt, options);
+        } catch (err) {
+          return '';
+        }
+      };
+      reviewDiffForSecurity({
+        diffText: textEntries,
+        changedFiles,
+        callModel,
+        pool,
+        logger: log,
+      })
+        .then((result) => {
+          if (!result?.ok) {
+            log.warn(
+              { error: result?.error || 'unknown' },
+              '[AI-SECURITY-REVIEW] skipped or failed (non-blocking)',
+            );
+            return;
+          }
+          if (Array.isArray(result.findings) && result.findings.length) {
+            log.warn(
+              { findings: result.findings, clean: result.clean },
+              '[AI-SECURITY-REVIEW] model findings on commit diff (non-blocking)',
+            );
+          } else {
+            log.info('[AI-SECURITY-REVIEW] clean or no findings');
+          }
+        })
+        .catch((err) => {
+          log.warn({ err: err.message }, '[AI-SECURITY-REVIEW] fire-and-forget failed');
+        });
+    }
+    runAiSecurityReviewOnDiff(fileEntries);
 
     if (typeof commitManyToGitHub === 'function') {
       try {
