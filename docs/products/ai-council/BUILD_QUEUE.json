@@ -888,14 +888,37 @@
         "CREATE TABLE IF NOT EXISTS provider_cooldowns"
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-16T04:26:32.295Z",
+      "shipped_at": "2026-07-30T23:10:18.454Z",
       "commit_sha": "68e35db6d0d90165e2249284e687b1bdad554239",
       "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "ai-council-3",
       "mission_id": "PRODUCT-ai-council",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.242Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.242Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/ai-council/twins/steps/ai-council-3.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T23:10:18.454Z",
+        "shipped_at": "2026-07-30T23:10:18.454Z",
+        "commit_sha": "68e35db6d0d90165e2249284e687b1bdad554239",
+        "content_sha256": "1a377517a75187da939acbf7144da2963d60ee6dac4c3be18bd57a465f438a18",
+        "target_file": "db/migrations/20231005_add_provider_cooldowns.sql",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "db/migrations/20231005_add_provider_cooldowns.sql",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/ai-council/twins/steps/ai-council-3.exact",
+          "content_sha256": "1a377517a75187da939acbf7144da2963d60ee6dac4c3be18bd57a465f438a18"
+        }
+      }
     },
     {
       "id": "ai-council-4",
