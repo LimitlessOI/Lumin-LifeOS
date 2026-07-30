@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T23:53:20.922Z",
+  "generated_at": "2026-07-30T23:53:30.981Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12447,
+  "file_count": 12448,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -92589,6 +92589,13 @@
       "ssot": [
         "docs/products/oil-security-divisions/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/securityReceiptService.js",
+      "synopsis": "Service module — SecurityReceiptService.",
+      "bytes": 940,
+      "mtime": "2026-07-30T23:53:30.981Z",
+      "indexed_at": "2026-07-30T23:53:30.981Z"
     },
     {
       "path": "services/self-improvement-loop.js",

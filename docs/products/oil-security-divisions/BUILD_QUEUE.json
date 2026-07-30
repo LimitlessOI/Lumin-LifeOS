@@ -9,7 +9,7 @@
   "steps": [
     {
       "id": "step1",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/migrations/2023-10-01-security-receipt-spine.sql",
       "task": "create security receipt spine",
       "spec": "Establish receipt structure for security logs",
@@ -23,8 +23,8 @@
         "updated_at"
       ],
       "last_attempt_at": null,
-      "last_error": null,
-      "commit_sha": "570fed4654d56f10ca637089edc4b2ac6174a3e8",
+      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw; assertion_threw; assertion_threw; assertion_threw",
+      "commit_sha": "b01ab6829fbde4160bbfcba058c062384d8a48a8",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -41,38 +41,15 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": null,
-      "shipped_at": "2026-07-30T23:19:29.715Z",
+      "shipped_at": "2026-07-15T19:12:51.641Z",
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step1",
       "mission_id": "PRODUCT-oil-security-divisions",
-      "reaudit_reset_at": "2026-07-30T18:55:06.687Z",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/oil-security-divisions/twins/steps/step1.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-30T23:19:29.715Z",
-        "shipped_at": "2026-07-30T23:19:29.715Z",
-        "commit_sha": "b01ab6829fbde4160bbfcba058c062384d8a48a8",
-        "content_sha256": "6af6ea80adbe48d86d48a750746acd486e008204fe75f5c1b9678a8c32d6574a",
-        "target_file": "db/migrations/2023-10-01-security-receipt-spine.sql",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "db/migrations/2023-10-01-security-receipt-spine.sql",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/oil-security-divisions/twins/steps/step1.exact",
-          "content_sha256": "6af6ea80adbe48d86d48a750746acd486e008204fe75f5c1b9678a8c32d6574a"
-        }
-      }
+      "reaudit_reset_at": "2026-07-30T18:55:06.687Z"
     },
     {
       "id": "step2",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/securityReceiptService.js",
       "task": "implement security receipt service functions",
       "spec": "Service functions to handle security receipt operations",
@@ -80,7 +57,7 @@
         "step1"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "createReceipt",
         "getReceipt"
@@ -97,17 +74,37 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-15T19:17:49.386Z",
-      "commit_sha": null,
+      "shipped_at": "2026-07-30T23:53:28.798Z",
+      "commit_sha": "a1ed51455d578ce44b75ae9da63e6a00e6ce13d5",
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step2",
       "mission_id": "PRODUCT-oil-security-divisions",
       "pre_existing": false,
-      "last_error": "codegen_authoring_failed: codegen_empty: openai_builder_mini: HTTP 429: {\n    \"error\": {\n        \"message\": \"You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organiza",
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:createReceipt,getReceipt; assertion_threw; assertion_threw",
       "reaudit_reset_at": "2026-07-30T18:55:06.687Z",
-      "built_sha": null,
-      "proof": null,
-      "last_attempt_at": "2026-07-30T23:37:52.179Z"
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/oil-security-divisions/twins/steps/step2.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T23:53:28.798Z",
+        "shipped_at": "2026-07-30T23:53:28.798Z",
+        "commit_sha": "a1ed51455d578ce44b75ae9da63e6a00e6ce13d5",
+        "content_sha256": "b67803a09a3d0a7534015491e7920e318fd2de1e362a491c1e3300f784930d5e",
+        "target_file": "services/securityReceiptService.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/securityReceiptService.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/oil-security-divisions/twins/steps/step2.exact",
+          "content_sha256": "b67803a09a3d0a7534015491e7920e318fd2de1e362a491c1e3300f784930d5e"
+        }
+      }
     },
     {
       "id": "step3",
