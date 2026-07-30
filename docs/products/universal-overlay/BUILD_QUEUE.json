@@ -47,13 +47,13 @@
     },
     {
       "id": "2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/formFieldInference.js",
       "task": "implement form field schema inference",
       "spec": "Use label association, ARIA, and placeholder as fallback to infer form field schema.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "inferFormSchema"
       ],
@@ -72,13 +72,16 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-15T17:58:06.261Z",
-      "commit_sha": "ac3ec840059d7988fa58461927a5fce50e92f936",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "2",
       "mission_id": "PRODUCT-universal-overlay",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:inferFormSchema",
-      "reaudit_reset_at": "2026-07-30T18:55:06.758Z"
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:inferFormSchema; behavior_assertion_failed; behavior_proof",
+      "reaudit_reset_at": "2026-07-30T18:55:06.758Z",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-30T23:38:18.286Z"
     },
     {
       "id": "3",
