@@ -27,7 +27,7 @@
 ---
 **Status:** ACTIVE (execution ladder locked; full end-to-end autonomy still requires runtime proof)
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-07-19 — see Change Receipts section below for current entries; older history archived at `docs/history/builderos/LAST_UPDATED_ARCHIVE_2026-07-19.md`.
+**Last Updated:** 2026-07-30 — see Change Receipts section below for current entries; older history archived at `docs/history/builderos/LAST_UPDATED_ARCHIVE_2026-07-19.md`.
 
 ---
 
