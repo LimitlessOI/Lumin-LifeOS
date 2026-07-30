@@ -1751,7 +1751,7 @@
     },
     {
       "id": "lifeos-chat-v2-07",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/lifeos-natural-build-router.js",
       "task": "Build the normal-language build request router that turns founder instructions into governed BuilderOS tasks",
       "spec": "ESM service. Exports parseBuildRequest(text) that extracts a build instruction (e.g. \"build a commitment calendar route\") and a target file guess. Exports buildBuildPayload(parsed) returning { task, target_file, spec_hint, product_id: \"lifeos\" }. Exports submitToBuilder(payload, { commandKey, baseUrl }) that POSTs to `${baseUrl}/api/v1/lifeos/builder/build` with `x-command-key: ${commandKey}` and `Content-Type: application/json` using global `fetch`, and returns the JSON receipt. Exports replyFromReceipt(receipt) that turns the build result into a concise founder-facing message. Do NOT import helper files (e.g. './api-client.js') because they do not exist; use global `fetch`. No top-level side effects. No imports other than node built-ins.",
@@ -1790,10 +1790,10 @@
         "lifeos-chat-v2-01"
       ],
       "founder_gated": false,
-      "attempts": 1,
-      "last_attempt_at": "2026-07-30T20:00:04.174Z",
-      "last_error": "github_commit_failed_after_local_ship",
-      "commit_sha": null,
+      "attempts": 0,
+      "last_attempt_at": null,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:parseBuildRequest,buildBuildPayload,submitToBuilder,replyFromReceipt; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw",
+      "commit_sha": "563e14a44dfcec1ffb1dfc7e91fb6c3a41506c1c",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -1895,7 +1895,7 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": null,
-      "shipped_at": "2026-07-16T01:14:08.805Z",
+      "shipped_at": "2026-07-30T20:01:09.599Z",
       "expected_exports": [
         "getTwinContextForUser",
         "injectTwinContext",
@@ -1916,7 +1916,30 @@
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-chat-v2-08",
       "mission_id": "PRODUCT-lifeos",
-      "reaudit_reset_at": "2026-07-30T18:55:06.601Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.601Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/lifeos/twins/steps/lifeos-chat-v2-08.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T20:01:09.599Z",
+        "shipped_at": "2026-07-30T20:01:09.599Z",
+        "commit_sha": "5ca04d795b9bfbac20303d4f8ef60f638c0f0373",
+        "content_sha256": "95f38a41a8956da0fd5880eacd785f2dd51eb57ea4dc69724009bd2dded5af00",
+        "target_file": "services/lifeos-digital-twin-context.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/lifeos-digital-twin-context.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/lifeos/twins/steps/lifeos-chat-v2-08.exact",
+          "content_sha256": "95f38a41a8956da0fd5880eacd785f2dd51eb57ea4dc69724009bd2dded5af00"
+        }
+      }
     },
     {
       "id": "lifeos-chat-v2-09",

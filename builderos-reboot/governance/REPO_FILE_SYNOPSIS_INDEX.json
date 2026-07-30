@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T19:56:04.863Z",
+  "generated_at": "2026-07-30T20:01:12.637Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12347,
+  "file_count": 12348,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -89312,6 +89312,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/lifeos-digital-twin-context.js",
+      "synopsis": "Exports getTwinContextForUser — services/lifeos-digital-twin-context.js.",
+      "bytes": 3602,
+      "mtime": "2026-07-30T20:01:12.637Z",
+      "indexed_at": "2026-07-30T20:01:12.637Z"
     },
     {
       "path": "services/lifeos-direct-action.js",
