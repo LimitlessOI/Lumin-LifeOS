@@ -674,7 +674,7 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-16T04:31:17.225Z",
+      "shipped_at": "2026-07-30T23:10:09.213Z",
       "commit_sha": null,
       "blueprint_id": "PRODUCT-AI-RECEPTIONIST-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "ai-receptionist-4",
@@ -696,7 +696,30 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/ai-receptionist/twins/steps/ai-receptionist-4.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T23:10:09.213Z",
+        "shipped_at": "2026-07-30T23:10:09.213Z",
+        "commit_sha": null,
+        "content_sha256": "30d5d92a688af18e6e43168a28eca55bdf9e824f90bd8d05479f0c8422da21ce",
+        "target_file": "routes/vapiRoutes.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "routes/vapiRoutes.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/ai-receptionist/twins/steps/ai-receptionist-4.exact",
+          "content_sha256": "30d5d92a688af18e6e43168a28eca55bdf9e824f90bd8d05479f0c8422da21ce"
+        }
+      }
     },
     {
       "id": "ai-receptionist-5",
