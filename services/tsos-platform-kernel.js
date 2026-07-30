@@ -4,6 +4,7 @@
  * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import crypto from 'crypto';
+import { linkTokenReceiptToTask } from './kernel-token-linker.js';
 
 const VALID_KINDS = new Set(['ai', 'build', 'review', 'operator', 'unknown']);
 
@@ -225,8 +226,23 @@ export function createTSOSPlatformKernel({
       const result = await spec.fn();
       const committed = result?.committed === true;
 
-      const tokenProof = await verifyTokenReceipt({ task_id, sinceMs: startedAt - 5000 });
+      let tokenProof = await verifyTokenReceipt({ task_id, sinceMs: startedAt - 5000 });
       receipts.token = tokenProof;
+
+      // S00: always attempt direct/window link into build_task_ledger
+      if (pool && task_id) {
+        const linked = await linkTokenReceiptToTask(pool, task_id, startedAt - 5000).catch((err) => ({
+          linked: false,
+          error: err.message,
+          token_id: null,
+          method: null,
+        }));
+        receipts.token_link = linked;
+        if (linked?.token_id && !(tokenProof?.verified && tokenProof?.id)) {
+          tokenProof = { verified: true, type: 'token', id: linked.token_id, method: linked.method };
+          receipts.token = tokenProof;
+        }
+      }
 
       const oilProof = await verifyOilReceipt({ task_id });
       receipts.oil = oilProof;
@@ -234,7 +250,9 @@ export function createTSOSPlatformKernel({
       if (committed && builderControlPlane?.recordBuildComplete) {
         try {
           const token_receipt_id =
-            tokenProof.verified && tokenProof.type === 'token' ? tokenProof.id : null;
+            tokenProof.verified && (tokenProof.type === 'token' || tokenProof.id)
+              ? tokenProof.id
+              : (receipts.token_link?.token_id || null);
           const unmetered_exception_id =
             tokenProof.verified && String(tokenProof.type || '').includes('unmetered') ? tokenProof.id : null;
           const complete = await builderControlPlane.recordBuildComplete({
@@ -244,7 +262,12 @@ export function createTSOSPlatformKernel({
             oil_receipt_id: oilProof.verified ? oilProof.id : null,
             unmetered_exception_id,
             files_changed: result?.body?.target_file ? [result.body.target_file] : null,
-            metadata: { kernel: 'phase0', committed, ...(spec.metadata || {}) },
+            metadata: {
+              kernel: 'phase0',
+              committed,
+              commit_sha: result?.body?.commit_sha || result?.commit_sha || null,
+              ...(spec.metadata || {}),
+            },
             enforce: strict,
             allow_exception: !strict,
           });

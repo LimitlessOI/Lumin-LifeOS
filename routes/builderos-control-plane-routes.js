@@ -77,5 +77,47 @@ export function createBuilderOSControlPlaneRoutes({ pool, requireKey, controlPla
     }
   });
 
+  /** S00: $ spend → shipped outcomes. ?hours=168&usd=20 */
+  router.get('/spend-outcomes', async (req, res) => {
+    try {
+      const report = await controlPlane.getSpendOutcomesReport({
+        sinceHours: req.query.hours ? Number(req.query.hours) : 168,
+        spendUsd: req.query.usd != null && req.query.usd !== '' ? Number(req.query.usd) : null,
+      });
+      const status = report.blind && (process.env.SPEND_OUTCOME_STRICT === '1') ? 409 : 200;
+      res.status(status).json(report);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  /** S00: estimate duration+$ for named builds from history */
+  router.post('/estimate', async (req, res) => {
+    try {
+      const body = req.body || {};
+      const items = Array.isArray(body.items)
+        ? body.items
+        : Array.isArray(body.builds)
+          ? body.builds
+          : [body];
+      const estimate = await controlPlane.estimateBuilds({ items });
+      res.json(estimate);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/linkage', async (req, res) => {
+    try {
+      const stats = await controlPlane.getLinkageStats({
+        sinceHours: req.query.hours ? Number(req.query.hours) : 168,
+        limit: req.query.limit ? Number(req.query.limit) : 50,
+      });
+      res.json({ ok: true, ...stats });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
   return router;
 }

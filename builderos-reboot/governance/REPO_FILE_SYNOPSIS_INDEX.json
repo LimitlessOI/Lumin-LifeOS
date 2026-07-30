@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T02:35:52.272Z",
+  "generated_at": "2026-07-30T03:05:28.902Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12339,
+  "file_count": 12341,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -37989,9 +37989,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 43521,
-      "mtime": "2026-07-30T02:33:24.369Z",
-      "indexed_at": "2026-07-30T02:33:24.369Z"
+      "bytes": 41296,
+      "mtime": "2026-07-30T03:05:28.902Z",
+      "indexed_at": "2026-07-30T03:05:28.902Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40195,9 +40195,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 321710,
-      "mtime": "2026-07-30T01:12:12.858Z",
-      "indexed_at": "2026-07-30T01:12:34.786Z"
+      "bytes": 322162,
+      "mtime": "2026-07-30T03:05:28.902Z",
+      "indexed_at": "2026-07-30T03:05:28.902Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -41500,9 +41500,9 @@
     {
       "path": "docs/products/token-accounting-os/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Token Accounting OS",
-      "bytes": 7385,
-      "mtime": "2026-07-28T17:52:56.523Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 7699,
+      "mtime": "2026-07-30T03:05:28.902Z",
+      "indexed_at": "2026-07-30T03:05:28.902Z"
     },
     {
       "path": "docs/products/TOKENACCOUNTINGOS.md",
@@ -64033,9 +64033,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 35597,
-      "mtime": "2026-07-29T20:58:43.248Z",
-      "indexed_at": "2026-07-30T01:21:52.231Z",
+      "bytes": 35732,
+      "mtime": "2026-07-30T03:05:28.902Z",
+      "indexed_at": "2026-07-30T03:05:28.902Z",
       "synopsis_index_only": true
     },
     {
@@ -67655,9 +67655,9 @@
     {
       "path": "routes/builderos-control-plane-routes.js",
       "synopsis": "BuilderOS Control Plane API — measurement health + build ledger.",
-      "bytes": 2633,
-      "mtime": "2026-06-29T17:21:08.501Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 4115,
+      "mtime": "2026-07-30T03:05:28.902Z",
+      "indexed_at": "2026-07-30T03:05:28.902Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -73478,6 +73478,16 @@
       "bytes": 1011,
       "mtime": "2026-06-29T17:21:08.664Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/spend-outcomes-report.mjs",
+      "synopsis": "Founder S00 report — $ spend → shipped build outcomes.",
+      "bytes": 1785,
+      "mtime": "2026-07-30T03:05:28.902Z",
+      "indexed_at": "2026-07-30T03:05:28.902Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -84884,10 +84894,10 @@
     },
     {
       "path": "scripts/verify-token-receipt-linkage.mjs",
-      "synopsis": "This module provides functionality to verify the linkage between token receipts",
-      "bytes": 3605,
-      "mtime": "2026-06-29T17:44:54.809Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis": "Verify token↔build linkage rate (S00). Prefer live DB; fall back to control-plane API.",
+      "bytes": 3278,
+      "mtime": "2026-07-30T03:05:28.902Z",
+      "indexed_at": "2026-07-30T03:05:28.902Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -85893,9 +85903,9 @@
     {
       "path": "services/builderos-control-plane-service.js",
       "synopsis": "BuilderOS Control Plane — measurement aggregation + DONE gate + build ledger.",
-      "bytes": 15821,
-      "mtime": "2026-06-29T17:21:08.807Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 28446,
+      "mtime": "2026-07-30T03:05:28.902Z",
+      "indexed_at": "2026-07-30T03:05:28.902Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -93546,9 +93556,9 @@
     {
       "path": "services/tsos-platform-kernel.js",
       "synopsis": "TSOS Platform Kernel — Phase 0 execution syscall layer.",
-      "bytes": 15091,
-      "mtime": "2026-06-29T17:21:09.008Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 15970,
+      "mtime": "2026-07-30T03:05:28.902Z",
+      "indexed_at": "2026-07-30T03:05:28.902Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -96295,6 +96305,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "tests/spend-outcomes-report.test.js",
+      "synopsis": "Unit tests for S00 spend→outcomes report helpers.",
+      "bytes": 4047,
+      "mtime": "2026-07-30T03:05:28.902Z",
+      "indexed_at": "2026-07-30T03:05:28.902Z"
     },
     {
       "path": "tests/spine-import-resolution.test.js",

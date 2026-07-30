@@ -210,6 +210,8 @@
     "tokens:operator": "node scripts/operator-consumption-ledger.mjs",
     "tokens:unified": "node scripts/verify-token-accounting-unified.mjs",
     "builderos:control-plane:verify": "node scripts/verify-builderos-control-plane.mjs",
+    "spend:outcomes": "node scripts/spend-outcomes-report.mjs",
+    "tokens:linkage": "node scripts/verify-token-receipt-linkage.mjs",
     "builderos:intake:tier1-validate": "node scripts/validate-intent-tier1.mjs builderos-reboot/MISSIONS/BUILDEROS-INTAKE-LOOP-V1-0001",
     "builderos:intake:pre-arc-assemble": "node scripts/assemble-pre-arc-packet.mjs builderos-reboot/MISSIONS/BUILDEROS-INTAKE-LOOP-V1-0001",
     "builderos:intake-loop:v1-acceptance": "node scripts/run-builderos-intake-loop-v1-acceptance.mjs",

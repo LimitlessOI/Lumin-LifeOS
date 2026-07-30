@@ -1,80 +1,102 @@
 /**
- * SYNOPSIS: This module provides functionality to verify the linkage between token receipts
+ * SYNOPSIS: Verify token↔build linkage rate (S00). Prefer live DB; fall back to control-plane API.
  * @ssot docs/products/builderos/PRODUCT_HOME.md
- *
- * This module provides functionality to verify the linkage between token receipts
- * and the build task ledger by querying the kernel's health endpoint.
- * It checks for the activity of the council ledger and reports on token accounting metrics.
  */
+import pg from 'pg';
 
-/**
- * Fetches JSON data from a specified URL with an optional command key header.
- * @param {string} baseUrl - The base URL for the API.
- * @param {string} path - The API endpoint path.
- * @param {string} commandKey - The command key to be sent in the x-command-key header.
- * @returns {Promise<object>} The parsed JSON response.
- * @throws {Error} If the network request fails or the response is not OK.
- */
-async function fetchJson(baseUrl, path, commandKey) {
-  const url = new URL(path, baseUrl).toString();
-  const headers = {
-    'Content-Type': 'application/json',
-    'x-command-key': commandKey,
-  };
-
-  const response = await fetch(url, { headers });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`HTTP error! Status: ${response.status}, Body: ${errorText}`);
-  }
-
-  return response.json();
-}
-
-/**
- * Executes a verification check for token receipt linkage by querying the kernel health endpoint.
- * This function fetches health data, specifically focusing on token accounting metrics,
- * and reports on the status of the council ledger and potential linkage gaps.
- *
- * @param {object} params - The parameters for the verification.
- * @param {string} params.baseUrl - The base URL for the kernel API (e.g., 'http://localhost:3000').
- * @param {string} params.commandKey - The command key for authentication with the kernel API.
- * @returns {Promise<object>} An object containing the verification results.
- *   - ok: Boolean indicating if the verification fetch was successful.
- *   - council_ledger_active: Boolean indicating if the council ledger is active.
- *   - token_rows_today: Number of token usage log rows today.
- *   - last_ledger_write: ISO string of the last ledger write timestamp, or null.
- *   - linkage_gap: Always true, indicating a known architectural linkage gap.
- *   - linkage_gap_note: A descriptive note about the linkage gap and its fix.
- *   - checked_at: ISO string of when the check was performed.
- */
-export async function runTokenReceiptLinkageVerification({ baseUrl, commandKey }) {
-  const checked_at = new Date().toISOString();
+async function fromDb() {
+  const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL, max: 1 });
   try {
-    const data = await fetchJson(baseUrl, '/api/v1/kernel/health', commandKey);
-
-    const tokenAccounting = data.health?.token_accounting;
-
+    const { rows } = await pool.query(
+      `SELECT
+         COUNT(*)::int AS sample,
+         COUNT(*) FILTER (WHERE token_receipt_id IS NOT NULL OR unmetered_exception_id IS NOT NULL)::int AS linked
+       FROM (
+         SELECT token_receipt_id, unmetered_exception_id
+         FROM build_task_ledger
+         WHERE start_time >= NOW() - INTERVAL '7 days'
+           AND status IN ('done', 'failed')
+         ORDER BY start_time DESC
+         LIMIT 50
+       ) recent`,
+    );
+    const sample = rows[0]?.sample || 0;
+    const linked = rows[0]?.linked || 0;
+    const linkage_rate = sample > 0 ? linked / sample : null;
     return {
       ok: true,
-      council_ledger_active: Boolean(tokenAccounting?.council_ledger_active),
-      token_rows_today: tokenAccounting?.tul_rows_today || 0,
-      last_ledger_write: tokenAccounting?.last_ledger_write_at || null,
-      linkage_gap: true,
-      linkage_gap_note: 'token_receipt_id in build_task_ledger is null for token_recent type — kernel links by time window only, not by direct task_id join. Fix: use kernel-token-linker.js after each build',
-      checked_at,
+      source: 'database',
+      sample,
+      linked,
+      linkage_rate,
+      linkage_gap: sample === 0 ? true : linkage_rate < 0.5,
+      linkage_gap_note: sample === 0
+        ? 'No recent done/failed builds in ledger — cannot prove spend→outcome join yet'
+        : linkage_rate < 0.5
+          ? `Only ${linked}/${sample} recent builds have token_receipt_id — kernel linker + request_id tagging still incomplete`
+          : 'Linkage rate ≥50% on recent sample',
+      checked_at: new Date().toISOString(),
     };
-  } catch (error) {
-    console.error(`Error during token receipt linkage verification: ${error.message}`);
-    return {
-      ok: false,
-      council_ledger_active: false,
-      token_rows_today: 0,
-      last_ledger_write: null,
-      linkage_gap: true, // The gap itself is a known architectural fact, regardless of fetch success.
-      linkage_gap_note: `Failed to fetch kernel health: ${error.message}`,
-      checked_at,
-    };
+  } finally {
+    await pool.end().catch(() => {});
   }
+}
+
+async function fromApi(baseUrl, commandKey) {
+  const url = new URL('/api/v1/builderos/control-plane/linkage', baseUrl).toString();
+  const res = await fetch(url, {
+    headers: { 'x-command-key': commandKey, 'Content-Type': 'application/json' },
+  });
+  const data = await res.json().catch(() => ({}));
+  return {
+    ok: res.ok && data.ok !== false,
+    source: 'api',
+    ...data,
+    checked_at: new Date().toISOString(),
+  };
+}
+
+export async function runTokenReceiptLinkageVerification({ baseUrl, commandKey } = {}) {
+  if (process.env.DATABASE_URL) {
+    try {
+      return await fromDb();
+    } catch (err) {
+      /* fall through */
+      if (!baseUrl) {
+        return {
+          ok: false,
+          linkage_gap: true,
+          linkage_gap_note: err.message,
+          checked_at: new Date().toISOString(),
+        };
+      }
+    }
+  }
+  if (baseUrl && commandKey) {
+    try {
+      return await fromApi(baseUrl, commandKey);
+    } catch (err) {
+      return {
+        ok: false,
+        linkage_gap: true,
+        linkage_gap_note: err.message,
+        checked_at: new Date().toISOString(),
+      };
+    }
+  }
+  return {
+    ok: false,
+    linkage_gap: true,
+    linkage_gap_note: 'Need DATABASE_URL or baseUrl+commandKey',
+    checked_at: new Date().toISOString(),
+  };
+}
+
+if (import.meta.url === `file://${process.argv[1]}` || process.argv[1]?.endsWith('verify-token-receipt-linkage.mjs')) {
+  const baseUrl = process.env.APP_URL || process.env.BASE_URL || '';
+  const commandKey = process.env.COMMAND_CENTER_KEY || process.env.LIFEOS_COMMAND_KEY || '';
+  runTokenReceiptLinkageVerification({ baseUrl, commandKey }).then((r) => {
+    console.log(JSON.stringify(r, null, 2));
+    process.exit(r.linkage_gap ? 1 : 0);
+  });
 }

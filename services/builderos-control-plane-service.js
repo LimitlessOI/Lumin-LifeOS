@@ -45,7 +45,26 @@ export function createBuilderOSControlPlaneService({ pool, tokenAccounting, logg
     const task_id = payload.task_id;
     if (!task_id) throw new Error('task_id is required');
 
-    const gate = await canMarkBuildDone({ task_id, allow_exception: payload.allow_exception });
+    let token_receipt_id = payload.token_receipt_id ?? null;
+    if (!token_receipt_id && !payload.unmetered_exception_id) {
+      try {
+        const { linkTokenReceiptToTask } = await import('./kernel-token-linker.js');
+        const linked = await linkTokenReceiptToTask(pool, task_id);
+        if (linked?.token_id) token_receipt_id = linked.token_id;
+      } catch {
+        /* non-fatal — gate may still find by request_id */
+      }
+    }
+
+    const gate = await canMarkBuildDone({
+      task_id,
+      allow_exception: payload.allow_exception,
+      pending: {
+        end_time: payload.end_time || new Date().toISOString(),
+        token_receipt_id,
+        oil_receipt_id: payload.oil_receipt_id || null,
+      },
+    });
     if (!gate.allowed && payload.enforce !== false) {
       throw new Error(`BUILDEROS_DONE_BLOCKED: ${gate.reason}`);
     }
@@ -86,7 +105,7 @@ export function createBuilderOSControlPlaneService({ pool, tokenAccounting, logg
         payload.retries ?? null,
         payload.deploy_status || null,
         payload.rollback_status || null,
-        payload.token_receipt_id ?? null,
+        token_receipt_id,
         payload.oil_receipt_id || null,
         payload.unmetered_exception_id ?? null,
         gate.proof_status,
@@ -136,7 +155,7 @@ export function createBuilderOSControlPlaneService({ pool, tokenAccounting, logg
           payload.retries ?? null,
           payload.deploy_status || null,
           payload.rollback_status || null,
-          payload.token_receipt_id ?? null,
+          token_receipt_id,
           payload.oil_receipt_id || null,
           payload.unmetered_exception_id ?? null,
           gate.proof_status,
@@ -378,15 +397,298 @@ export function createBuilderOSControlPlaneService({ pool, tokenAccounting, logg
       health.blind_spots.push('builds_without_proof');
     }
 
+    health.linkage = await getLinkageStats({ sinceHours: 168, limit: 50 });
+    if (health.linkage.linkage_gap) {
+      health.blind_spots.push('spend_outcome_linkage_gap');
+      if (health.status === 'GREEN') health.status = 'YELLOW';
+    }
+    const strictOutcome = process.env.SPEND_OUTCOME_STRICT === '1'
+      || /^true$/i.test(String(process.env.SPEND_OUTCOME_STRICT || ''));
+    if (strictOutcome && health.linkage.linkage_gap) {
+      health.status = 'RED';
+      health.blind_spots.push('spend_outcome_strict_refuse');
+    }
+
     return health;
+  }
+
+  async function getLinkageStats({ sinceHours = 168, limit = 50 } = {}) {
+    if (!pool) {
+      return {
+        sample: 0,
+        linked: 0,
+        linkage_rate: null,
+        linkage_gap: true,
+        note: 'no_database_pool',
+      };
+    }
+    const since = new Date(Date.now() - Math.max(1, Number(sinceHours) || 168) * 3600_000);
+    const { rows } = await pool.query(
+      `SELECT
+         COUNT(*)::int AS sample,
+         COUNT(*) FILTER (WHERE token_receipt_id IS NOT NULL OR unmetered_exception_id IS NOT NULL)::int AS linked
+       FROM (
+         SELECT token_receipt_id, unmetered_exception_id
+         FROM build_task_ledger
+         WHERE start_time >= $1
+           AND status IN ('done', 'failed')
+         ORDER BY start_time DESC
+         LIMIT $2
+       ) recent`,
+      [since.toISOString(), Math.min(Math.max(Number(limit) || 50, 5), 500)],
+    ).catch(() => ({ rows: [{ sample: 0, linked: 0 }] }));
+    const sample = rows[0]?.sample || 0;
+    const linked = rows[0]?.linked || 0;
+    const linkage_rate = sample > 0 ? linked / sample : null;
+    return {
+      sample,
+      linked,
+      linkage_rate,
+      linkage_gap: sample === 0 ? true : linkage_rate < 0.5,
+      since_hours: sinceHours,
+    };
+  }
+
+  /**
+   * Founder S00 report: dollars in → named build outcomes out.
+   * If spendUsd is set, walks newest→oldest builds until cumulative token cost ≈ that budget.
+   */
+  async function getSpendOutcomesReport({
+    sinceHours = 168,
+    spendUsd = null,
+  } = {}) {
+    const since = new Date(Date.now() - Math.max(1, Number(sinceHours) || 168) * 3600_000);
+    const empty = {
+      ok: true,
+      schema: 'spend_outcomes_report_v1',
+      since: since.toISOString(),
+      spend_usd_window: spendUsd != null ? Number(spendUsd) : null,
+      total_spend_usd: 0,
+      total_tokens: 0,
+      builds: 0,
+      shipped: 0,
+      failed: 0,
+      linked_builds: 0,
+      linkage_rate: null,
+      cost_per_shipped_usd: null,
+      avg_duration_ms_shipped: null,
+      outcomes: [],
+      efficiency: null,
+      founder_line: 'No metered build activity in window.',
+      blind: true,
+    };
+    if (!pool) return { ...empty, ok: false, error: 'no_database_pool' };
+
+    const spendQ = await pool.query(
+      `SELECT COALESCE(SUM(cost_usd),0)::float AS spend,
+              COALESCE(SUM(COALESCE(input_tokens,0)+COALESCE(output_tokens,0)),0)::bigint AS tokens
+       FROM token_usage_log WHERE logged_at >= $1`,
+      [since.toISOString()],
+    ).catch(() => ({ rows: [{ spend: 0, tokens: 0 }] }));
+
+    const buildsQ = await pool.query(
+      `SELECT b.task_id, b.blueprint_id, b.product_lane, b.status, b.duration_ms,
+              b.files_changed, b.proof_status, b.start_time, b.end_time,
+              b.token_receipt_id, b.unmetered_exception_id, b.metadata,
+              t.cost_usd::float AS receipt_cost_usd,
+              COALESCE(t.input_tokens,0)::int AS input_tokens,
+              COALESCE(t.output_tokens,0)::int AS output_tokens,
+              t.model, t.provider
+       FROM build_task_ledger b
+       LEFT JOIN token_usage_log t ON t.id::text = b.token_receipt_id::text
+       WHERE b.start_time >= $1
+         AND b.status IN ('done', 'failed')
+       ORDER BY b.start_time DESC
+       LIMIT 200`,
+      [since.toISOString()],
+    ).catch(() => ({ rows: [] }));
+
+    let rows = buildsQ.rows || [];
+    const budget = spendUsd != null && Number(spendUsd) > 0 ? Number(spendUsd) : null;
+    if (budget != null) {
+      const picked = [];
+      let acc = 0;
+      for (const row of rows) {
+        const c = Number(row.receipt_cost_usd || 0);
+        picked.push(row);
+        acc += c;
+        if (acc >= budget) break;
+      }
+      rows = picked;
+    }
+
+    const outcomes = rows.map((r) => {
+      const files = Array.isArray(r.files_changed) ? r.files_changed : [];
+      const meta = typeof r.metadata === 'object' && r.metadata ? r.metadata : {};
+      const commit_sha = meta.commit_sha || meta.sha || null;
+      return {
+        task_id: r.task_id,
+        blueprint_id: r.blueprint_id,
+        product_lane: r.product_lane,
+        status: r.status,
+        duration_ms: r.duration_ms,
+        files_changed: files,
+        commit_sha,
+        cost_usd: r.receipt_cost_usd != null ? Number(r.receipt_cost_usd) : null,
+        tokens: (r.input_tokens || 0) + (r.output_tokens || 0),
+        linked: Boolean(r.token_receipt_id || r.unmetered_exception_id),
+        proof_status: r.proof_status,
+        at: r.start_time,
+      };
+    });
+
+    const shipped = outcomes.filter((o) => o.status === 'done');
+    const failed = outcomes.filter((o) => o.status === 'failed');
+    const linked_builds = outcomes.filter((o) => o.linked).length;
+    const outcomeSpend = outcomes.reduce((s, o) => s + (o.cost_usd || 0), 0);
+    const total_spend_usd = budget != null ? outcomeSpend : Number(spendQ.rows[0]?.spend || 0);
+    const avg_duration_ms_shipped = shipped.length
+      ? Math.round(shipped.reduce((s, o) => s + (o.duration_ms || 0), 0) / shipped.length)
+      : null;
+    const cost_per_shipped_usd = shipped.length
+      ? total_spend_usd / shipped.length
+      : null;
+    const linkage_rate = outcomes.length ? linked_builds / outcomes.length : null;
+
+    const efficiency = await getEfficiencyTrend().catch(() => null);
+
+    const topFiles = shipped
+      .flatMap((o) => o.files_changed || [])
+      .slice(0, 12);
+    const founder_line = shipped.length
+      ? `$${total_spend_usd.toFixed(2)} produced ${shipped.length} shipped build(s)`
+        + (topFiles.length ? ` touching ${[...new Set(topFiles)].slice(0, 5).join(', ')}` : '')
+        + (cost_per_shipped_usd != null ? ` (≈$${cost_per_shipped_usd.toFixed(2)}/shipped)` : '')
+        + '.'
+      : `$${Number(spendQ.rows[0]?.spend || 0).toFixed(2)} spent in window with ${outcomes.length} ledger builds — none status=done (or ledger empty).`;
+
+    const blind = outcomes.length === 0
+      || linkage_rate == null
+      || linkage_rate < 0.5
+      || (shipped.length > 0 && outcomeSpend === 0 && Number(spendQ.rows[0]?.spend || 0) > 0);
+
+    return {
+      ok: true,
+      schema: 'spend_outcomes_report_v1',
+      since: since.toISOString(),
+      spend_usd_window: budget,
+      total_spend_usd,
+      window_spend_usd: Number(spendQ.rows[0]?.spend || 0),
+      total_tokens: Number(spendQ.rows[0]?.tokens || 0),
+      builds: outcomes.length,
+      shipped: shipped.length,
+      failed: failed.length,
+      linked_builds,
+      linkage_rate,
+      cost_per_shipped_usd,
+      avg_duration_ms_shipped,
+      outcomes,
+      efficiency,
+      founder_line,
+      blind,
+      hard_gate: {
+        spend_outcome_strict: process.env.SPEND_OUTCOME_STRICT === '1' || process.env.SPEND_OUTCOME_STRICT === 'true',
+        token_accounting_strict: process.env.TOKEN_ACCOUNTING_STRICT === '1' || process.env.TOKEN_ACCOUNTING_STRICT === 'true',
+        refuse_when_blind: process.env.SPEND_OUTCOME_STRICT === '1' || process.env.SPEND_OUTCOME_STRICT === 'true',
+      },
+    };
+  }
+
+  async function getEfficiencyTrend() {
+    if (!pool) return null;
+    const q = async (hoursAgoStart, hoursAgoEnd) => {
+      const start = new Date(Date.now() - hoursAgoStart * 3600_000);
+      const end = new Date(Date.now() - hoursAgoEnd * 3600_000);
+      const { rows } = await pool.query(
+        `SELECT
+           COUNT(*) FILTER (WHERE b.status = 'done')::int AS shipped,
+           COALESCE(SUM(t.cost_usd) FILTER (WHERE b.status = 'done'),0)::float AS spend,
+           ROUND(AVG(b.duration_ms) FILTER (WHERE b.status = 'done'))::int AS avg_ms
+         FROM build_task_ledger b
+         LEFT JOIN token_usage_log t ON t.id::text = b.token_receipt_id::text
+         WHERE b.start_time >= $1 AND b.start_time < $2`,
+        [start.toISOString(), end.toISOString()],
+      ).catch(() => ({ rows: [{ shipped: 0, spend: 0, avg_ms: null }] }));
+      const shipped = rows[0]?.shipped || 0;
+      const spend = Number(rows[0]?.spend || 0);
+      return {
+        shipped,
+        spend_usd: spend,
+        avg_duration_ms: rows[0]?.avg_ms ?? null,
+        cost_per_shipped_usd: shipped ? spend / shipped : null,
+      };
+    };
+    const current = await q(168, 0);
+    const prior = await q(336, 168);
+    let direction = 'unknown';
+    if (current.cost_per_shipped_usd != null && prior.cost_per_shipped_usd != null) {
+      if (current.cost_per_shipped_usd < prior.cost_per_shipped_usd * 0.95) direction = 'more_efficient';
+      else if (current.cost_per_shipped_usd > prior.cost_per_shipped_usd * 1.05) direction = 'less_efficient';
+      else direction = 'flat';
+    }
+    return { current_7d: current, prior_7d: prior, direction };
+  }
+
+  async function estimateBuilds({ items = [] } = {}) {
+    if (!pool) {
+      return { ok: false, error: 'no_database_pool', estimates: [] };
+    }
+    const list = Array.isArray(items) && items.length
+      ? items
+      : [{ label: 'generic_build' }];
+    const estimates = [];
+    for (const item of list) {
+      const label = item.label || item.blueprint_id || item.product_lane || 'build';
+      const { rows } = await pool.query(
+        `SELECT COUNT(*)::int AS n,
+                ROUND(AVG(b.duration_ms))::int AS avg_ms,
+                COALESCE(AVG(t.cost_usd),0)::float AS avg_cost,
+                PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY b.duration_ms)::int AS p50_ms
+         FROM build_task_ledger b
+         LEFT JOIN token_usage_log t ON t.id::text = b.token_receipt_id::text
+         WHERE b.status = 'done'
+           AND (
+             ($1::text IS NOT NULL AND b.blueprint_id = $1)
+             OR ($2::text IS NOT NULL AND b.product_lane = $2)
+             OR ($1::text IS NULL AND $2::text IS NULL)
+           )
+           AND b.start_time >= NOW() - INTERVAL '60 days'
+           AND b.duration_ms IS NOT NULL`,
+        [item.blueprint_id || null, item.product_lane || null],
+      ).catch(() => ({ rows: [{ n: 0, avg_ms: null, avg_cost: 0, p50_ms: null }] }));
+      const n = rows[0]?.n || 0;
+      estimates.push({
+        label,
+        blueprint_id: item.blueprint_id || null,
+        product_lane: item.product_lane || null,
+        sample_size: n,
+        estimated_duration_ms: rows[0]?.p50_ms ?? rows[0]?.avg_ms ?? null,
+        estimated_cost_usd: n ? Number(rows[0]?.avg_cost || 0) : null,
+        confidence: n >= 10 ? 'high' : n >= 3 ? 'medium' : n >= 1 ? 'low' : 'none',
+      });
+    }
+    const total_ms = estimates.reduce((s, e) => s + (e.estimated_duration_ms || 0), 0);
+    const total_usd = estimates.reduce((s, e) => s + (e.estimated_cost_usd || 0), 0);
+    return {
+      ok: true,
+      schema: 'build_estimate_v1',
+      estimates,
+      total_estimated_duration_ms: estimates.every((e) => e.estimated_duration_ms != null) ? total_ms : null,
+      total_estimated_cost_usd: estimates.every((e) => e.estimated_cost_usd != null) ? total_usd : null,
+      founder_line: estimates.some((e) => e.sample_size === 0)
+        ? 'Insufficient history for at least one item — estimates incomplete.'
+        : `About ${Math.round(total_ms / 60000)} min and $${total_usd.toFixed(2)} for ${estimates.length} item(s) from history.`,
+    };
   }
 
   async function getControlPlaneSummary() {
     const health = await getMeasurementHealth();
+    const spend_outcomes = await getSpendOutcomesReport({ sinceHours: 24 }).catch(() => null);
     return {
       ...health,
       tasks_without_proof: await getTasksWithoutProof(10),
       worst_models: await getWorstPerformingModels(5),
+      spend_outcomes_24h: spend_outcomes,
       answers: {
         ai_calls_today: health.token.ai_calls_today,
         metered_today: health.token.metered_today,
@@ -395,6 +697,8 @@ export function createBuilderOSControlPlaneService({ pool, tokenAccounting, logg
         top_token_task: health.token.top_token_task,
         longest_build_ms: health.build.longest_build_ms,
         builds_today: health.build.builds_today,
+        founder_line_24h: spend_outcomes?.founder_line || null,
+        blind: spend_outcomes?.blind ?? true,
       },
     };
   }
@@ -410,5 +714,9 @@ export function createBuilderOSControlPlaneService({ pool, tokenAccounting, logg
     getWorstPerformingModels,
     getTokenMetricsToday,
     getBuildMetricsToday,
+    getSpendOutcomesReport,
+    getEfficiencyTrend,
+    estimateBuilds,
+    getLinkageStats,
   };
 }
