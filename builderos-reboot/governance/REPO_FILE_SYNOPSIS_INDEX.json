@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T23:19:11.827Z",
+  "generated_at": "2026-07-30T23:19:32.118Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12430,
+  "file_count": 12431,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -34039,6 +34039,13 @@
       "bytes": 457,
       "mtime": "2026-07-16T19:42:53.570Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "db/migrations/2023-10-01-security-receipt-spine.sql",
+      "synopsis": "Database migration — 2023-10-01-security-receipt-spine.sql.",
+      "bytes": 1123,
+      "mtime": "2026-07-30T23:19:32.118Z",
+      "indexed_at": "2026-07-30T23:19:32.118Z"
     },
     {
       "path": "db/migrations/2023-10-20-honeypot-probe-service.sql",

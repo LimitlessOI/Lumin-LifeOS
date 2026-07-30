@@ -41,11 +41,34 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": null,
-      "shipped_at": "2026-07-15T19:12:51.641Z",
+      "shipped_at": "2026-07-30T23:19:29.715Z",
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step1",
       "mission_id": "PRODUCT-oil-security-divisions",
-      "reaudit_reset_at": "2026-07-30T18:55:06.687Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.687Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/oil-security-divisions/twins/steps/step1.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T23:19:29.715Z",
+        "shipped_at": "2026-07-30T23:19:29.715Z",
+        "commit_sha": "b01ab6829fbde4160bbfcba058c062384d8a48a8",
+        "content_sha256": "6af6ea80adbe48d86d48a750746acd486e008204fe75f5c1b9678a8c32d6574a",
+        "target_file": "db/migrations/2023-10-01-security-receipt-spine.sql",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "db/migrations/2023-10-01-security-receipt-spine.sql",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/oil-security-divisions/twins/steps/step1.exact",
+          "content_sha256": "6af6ea80adbe48d86d48a750746acd486e008204fe75f5c1b9678a8c32d6574a"
+        }
+      }
     },
     {
       "id": "step2",
