@@ -99,5 +99,100 @@ export function setupThumbnailSEO(app) {
     }
   });
 
+  /**
+   * Handler to retrieve existing SEO-repurposed images or their metadata.
+   * This would typically fetch a previously generated SEO asset.
+   *
+   * @param {object} req The Express request object.
+   * @param {object} res The Express response object.
+   */
+  app.get('/seo-images/:seoAssetId', async (req, res) => {
+    const { seoAssetId } = req.params;
+
+    try {
+      // In a real scenario:
+      // 1. Fetch the generated SEO asset (image or metadata) based on seoAssetId.
+      //    This could be from a database or a storage service.
+      // 2. If it's an image, set appropriate headers and send the image buffer.
+      // 3. If it's metadata, send the JSON.
+
+      // Mock response for demonstration
+      if (seoAssetId.startsWith('open-graph-') || seoAssetId.startsWith('twitter-card-')) {
+        res.setHeader('Content-Type', 'application/json');
+        res.status(200).json({
+          id: seoAssetId,
+          type: seoAssetId.split('-')[0], // e.g., 'open-graph'
+          url: `/public/seo/${seoAssetId}.jpg`, // Mock URL for the SEO image
+          description: `Repurposed image for ${seoAssetId}`
+        });
+      } else {
+        res.status(404).send('SEO asset not found.');
+      }
+    } catch (error) {
+      console.error(`Error retrieving SEO asset ${seoAssetId}:`, error);
+      res.status(500).send('Error retrieving SEO asset.');
+    }
+  });
+
+  /**
+   * Handler to update an existing SEO-repurposed image or its metadata.
+   * This might involve changing text overlays, or re-generating with new parameters.
+   *
+   * @param {object} req The Express request object.
+   * @param {object} res The Express response object.
+   */
+  app.put('/seo-images/:seoAssetId', async (req, res) => {
+    const { seoAssetId } = req.params;
+    const { title, description, newPurpose } = req.body;
+
+    try {
+      // In a real scenario:
+      // 1. Validate seoAssetId exists.
+      // 2. Update metadata or trigger a re-generation of the image based on new parameters.
+      // 3. Return confirmation or the updated asset details.
+
+      // Mock response for demonstration
+      if (seoAssetId) {
+        res.status(200).json({
+          message: `SEO asset ${seoAssetId} updated successfully.`,
+          updatedFields: { title, description, newPurpose },
+          status: 'pending_regeneration' // Could be 'updated' if only metadata changed
+        });
+      } else {
+        res.status(400).send('Invalid SEO asset ID for update.');
+      }
+    } catch (error) {
+      console.error(`Error updating SEO asset ${seoAssetId}:`, error);
+      res.status(500).send('Error updating SEO asset.');
+    }
+  });
+
+  /**
+   * Handler to delete an SEO-repurposed image.
+   *
+   * @param {object} req The Express request object.
+   * @param {object} res The Express response object.
+   */
+  app.delete('/seo-images/:seoAssetId', async (req, res) => {
+    const { seoAssetId } = req.params;
+
+    try {
+      // In a real scenario:
+      // 1. Locate and delete the SEO asset from storage and any associated database entries.
+      // 2. Return a success message.
+
+      // Mock response for demonstration
+      if (seoAssetId) {
+        res.status(200).json({ message: `SEO asset ${seoAssetId} deleted successfully.` });
+      } else {
+        res.status(400).send('Invalid SEO asset ID for deletion.');
+      }
+    } catch (error) {
+      console.error(`Error deleting SEO asset ${seoAssetId}:`, error);
+      res.status(500).send('Error deleting SEO asset.');
+    }
+  });
+
+
   console.log('Thumbnail and SEO pipeline setup initiated.');
 }
