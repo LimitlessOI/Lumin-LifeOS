@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T04:04:47.141Z",
+  "generated_at": "2026-07-30T04:08:42.522Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12356,
   "files": [
@@ -38010,9 +38010,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 45970,
-      "mtime": "2026-07-30T04:04:47.141Z",
-      "indexed_at": "2026-07-30T04:04:47.141Z"
+      "bytes": 47003,
+      "mtime": "2026-07-30T04:08:42.522Z",
+      "indexed_at": "2026-07-30T04:08:42.522Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41056,9 +41056,9 @@
     {
       "path": "docs/products/MARKET_READINESS_PLAN.md",
       "synopsis": "Market-readiness audit and implementation plan for every active product.",
-      "bytes": 11026,
-      "mtime": "2026-07-30T02:33:24.369Z",
-      "indexed_at": "2026-07-30T02:33:24.369Z"
+      "bytes": 16512,
+      "mtime": "2026-07-30T04:08:42.522Z",
+      "indexed_at": "2026-07-30T04:08:42.522Z"
     },
     {
       "path": "docs/products/MARKETINGOS.md",

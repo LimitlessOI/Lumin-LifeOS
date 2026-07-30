@@ -3,8 +3,8 @@
 
 # Market Readiness Plan — All Products
 
-**Date:** 2026-07-30  
-**Live deploy tip:** `72549d10beb3390de76a3765134d9ed2642d51c3` (`https://lumin-web-production-e3a9.up.railway.app`)  
+**Date:** 2026-07-23  
+**Live deploy tip:** `dd2c792d656495a8b7dbf49f520345fd8c5c7573` (`https://lumin-web-production-e3a9.up.railway.app`)  
 **Truth labels used:** KNOW / THINK / GUESS / DON'T KNOW per `docs/constitution/NORTH_STAR_SSOT.md`.
 
 ## What "market ready" means
@@ -153,3 +153,68 @@ The single biggest cross-cutting blocker is **email delivery**: Postmark was can
 - **THINK:** Resend is the best drop-in replacement for both transactional and creator cold email.
 - **DON'T KNOW:** Whether the Stripe account has payouts configured, whether a real card charge will succeed, or the exact balance of AI provider credits.
 - **DON'T KNOW:** Which paid feature Adam wants to launch first for LifeOS.
+
+---
+
+## TC Service / LifeRE feature-status audit (KNOW)
+
+### LifeRE OS
+**Live surface:** `https://lumin-web-production-e3a9.up.railway.app/api/v1/lifere` — mounted and responding.
+
+**Working right now (tested on `dd2c792d6564`):**
+- `/health` returns all 12 pillars (`daily_command_center`, `top_3_priorities`, `nightly_debrief`, `contextual_education`, `sales_coaching`, `social_media_os_lite`, `follow_up_os_lite`, `tc_document_extraction_lite`, `compliance_guardrails`, `recruiting_lite`, `finance_lite`, `lifeos_accountability`).
+- `/education/curriculum` returns a 10-module adaptive curriculum with `type` (`tab`, `drill`, `sales_sim`) and `level` (`new`, `building`, `scaling`).
+- `/top-3` returns prioritized MIT list for the day.
+- `/alpha/readiness` reports `TECHNICAL_PASS`, `agent_alpha_pass: true`, `live_pg: true`, `ui_markers` all `present: true`.
+- `npm run lifeos:lifere-os:v1-acceptance` passes 19/19 locally.
+
+**Not working / not done:**
+- `founder_usability_pass: false` — no non-engineer has completed the daily cycle end-to-end.
+- `/boldtrail/status` and `/boldtrail/pipeline` return synthetic data because `BOLDTRAIL_*` credentials are not configured.
+- No Stripe checkout for a paid LifeRE tier.
+- The adaptive learning-style branching (`visual`, `auditory`, `reading/writing`, `kinesthetic`) is wired into `services/lifere-council-router.js` and `db/migrations/20260730_lifere_learning_profile.sql`, but it has not been founder-tested.
+- Real call/voice, MLS deal scanning, and TC document extraction are stubs or limited without Twilio/Replicate/MLS credentials.
+
+### TC Service
+**Live surface:** `https://lumin-web-production-e3a9.up.railway.app/api/v1/tc/status` is the only TC route currently mounted in production.
+
+**Why the rest is dark:** `routes/tc-routes.js` (intake, document QA, offer prep, approval cockpit, alert escalation, MLS deal scanner, GLVAR monitor, SkySlope/BoldTrail browser automation) is mounted inside `register-runtime-routes.js` only when `fieldOpsRoutesEnabled` is true. `fieldOpsRoutesEnabled` requires `isFullRuntimeProfile() === true` AND `process.env.LIFEOS_ENABLE_FIELD_OPS_ROUTES === "true"`. `services/runtime-modes.js` forces Railway to `founder_builder` unless `LIFEOS_RUNTIME_PROFILE=full` + `LIFEOS_ENABLE_FULL_RUNTIME=true` + `LIFEOS_ALLOW_FULL_RUNTIME_ON_RAILWAY=true`. None of those env vars are set, so TC field-ops routes are disabled by design.
+
+**What exists in code (from `routes/tc-routes.js` + `routes/tc-intake-routes.js` + `routes/tc-billing-routes.js` + `routes/tc-imap-routes.js` + `routes/tc-r4r-routes.js`):**
+- Transaction intake: `POST /api/v1/tc/intake/workspace`, `POST /api/v1/tc/intake/transaction`.
+- Document intake/validation: `POST /api/v1/tc/documents/upload`, `POST /api/v1/tc/documents/validate`, `GET /api/v1/tc/documents/:id/status`.
+- Inspection workflow: `POST /api/v1/tc/inspections`, `GET /api/v1/tc/inspections/:id`, `POST /api/v1/tc/inspections/:id/forward`.
+- Offer prep: `POST /api/v1/tc/offers/prepare`.
+- Approval cockpit: `GET /api/v1/tc/approvals`, `POST /api/v1/tc/approvals/:id/{approve,reject,snooze}`.
+- Alert escalation: `GET /api/v1/tc/alerts`, `POST /api/v1/tc/alerts/:id/acknowledge`.
+- Portal: `GET /api/v1/tc/portal/agent`, `GET /api/v1/tc/portal/client/:token`.
+- Reports: `GET /api/v1/tc/reports/morning-digest`, `GET /api/v1/tc/reports/weekly-seller`.
+- GLVAR dues/violations: `GET /api/v1/tc/glvar/dues`, `GET /api/v1/tc/glvar/violations`.
+- MLS deal scanner: `POST /api/v1/tc/mls/deals`.
+- Asana sync: `POST /api/v1/tc/asana/sync`.
+- Email IMAP intake: `GET /api/v1/tc/imap/mailboxes`, `POST /api/v1/tc/imap/scan`.
+- Repair-request classification: `POST /api/v1/tc-r4r/scan` (mounted at `/api/v1/tc-r4r`).
+- Browser-automation jobs: SkySlope upload, TransactionDesk party sync, eXp Okta SSO.
+
+**All of those are NOT reachable in production right now** because the router is not mounted. Enabling them requires Railway env changes (see "Cross-cutting blockers" above).
+
+**Missing credentials needed for TC:**
+- `TC_IMAP_*` (Gmail/Outlook IMAP for document intake).
+- `EXP_OKTA_*` or `SKYSLOPE_*` for SkySlope automation.
+- `BOLDTRAIL_*` for CRM sync.
+- `GLVAR_*` for dues/violation scraping.
+- `MLS_*` or `PARAGON_*` for MLS deal scanner.
+- `ASANA_ACCESS_TOKEN` + workspace.
+- `TWILIO_*` for SMS/call alerts.
+
+### Human-only blocker list
+1. **Email provider decision + API key** — needed for SMOS password-reset, Site Builder prospect follow-up, TC email intake, outreach.
+2. **Verified sending domain** — for any outbound email.
+3. **One real $49 SMOS card charge** — to prove money moves and unlock works.
+4. **One real LifeOS paid tier charge** (`core` $19 / `premium` $49 / `family` $99) — to prove `/api/v1/lifeos/auth/billing` end-to-end.
+5. **Railway env decision to enable full runtime** (`LIFEOS_RUNTIME_PROFILE=full`, `LIFEOS_ENABLE_FULL_RUNTIME=true`, `LIFEOS_ALLOW_FULL_RUNTIME_ON_RAILWAY=true`, `LIFEOS_ENABLE_FIELD_OPS_ROUTES=true`) — required before TC routes go live.
+6. **TC / MLS / BoldTrail / ClientCare / Twilio credentials** — required for TC field-ops to do real work.
+7. **Founder usability walkthrough for LifeRE** — non-engineer completes the daily command center, top-3, debrief, and one coaching drill in the LifeOS app.
+8. **Which paid LifeOS / LifeRE feature to launch first** — so we can price, build checkout, and run SENTRY.
+9. **Stripe payout / account configuration** — to move the $45 already in Stripe.
+
