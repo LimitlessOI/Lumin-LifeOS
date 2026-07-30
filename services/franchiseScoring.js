@@ -33,10 +33,6 @@ const ANTI_ABUSE_CONFIG = {
   EMPLOYER_SCORE_FLUCTUATION_THRESHOLD: 15, // Max points fluctuation in a short period to be suspicious
   EMPLOYER_SCORE_FLUCTUATION_WINDOW_MS: 86400000 * 7, // 7 days for employer score fluctuation detection
   EMPLOYER_SCORE_MIN_DATA_POINTS: 3, // Minimum data points to detect fluctuations
-  // New: Community scoring abuse model thresholds
-  COMMUNITY_SCORE_RAPID_NEGATIVE_USERS: 3, // Number of unique users for rapid negative scoring
-  COMMUNITY_SCORE_RAPID_NEGATIVE_WINDOW_MS: 86400000 * 2, // 2 days for rapid negative scoring
-  COMMUNITY_SCORE_ANOMALY_IMPACT_FACTOR: 0.7, // Reduce impact of anomalous community scores
 };
 
 const calculateFranchiseScore = (franchiseId, employerData, feedbackData) => {
@@ -101,57 +97,28 @@ const calculateFranchiseScore = (franchiseId, employerData, feedbackData) => {
 
 
   // Community Feedback Integration with Anti-Fraud
-  let feedbackScore = 0;
-  const franchiseFeedbackActivity = franchiseRatingHistory.get(franchiseId) || [];
-  const recentFranchiseFeedback = franchiseFeedbackActivity.filter(
-    (activity) => currentTime - activity.timestamp < ANTI_ABUSE_CONFIG.COMMUNITY_SCORE_RAPID_NEGATIVE_WINDOW_MS
-  );
-
-  const newFeedbackEntries = []; // To store feedback that passes initial checks
-
-  feedbackData.forEach((feedback) => {
+  const feedbackScore = feedbackData.reduce((acc, feedback) => {
     // Basic anti-fraud: only consider feedback from verified users
     if (feedback.isVerified) {
       const isSus = isSuspiciousFeedback(feedback.userId, feedback.franchiseId, feedback.timestamp, feedback.rating);
       if (!isSus) {
-        newFeedbackEntries.push(feedback);
+        if (feedback.rating >= ANTI_ABUSE_CONFIG.HIGH_RATING_THRESHOLD) {
+          acc += 5;
+        } else if (feedback.rating <= ANTI_ABUSE_CONFIG.LOW_RATING_THRESHOLD) {
+          acc -= 10;
+        }
       } else {
         console.warn(`Suspicious feedback detected from user ${feedback.userId} for franchise ${feedback.franchiseId} (rating: ${feedback.rating}). Applying reduced weight.`);
         // Apply reduced weight for suspicious feedback
         if (feedback.rating >= ANTI_ABUSE_CONFIG.HIGH_RATING_THRESHOLD) {
-          feedbackScore += (5 * ANTI_ABUSE_CONFIG.SUSPICIOUS_RATING_WEIGHT_REDUCTION);
+          acc += (5 * ANTI_ABUSE_CONFIG.SUSPICIOUS_RATING_WEIGHT_REDUCTION);
         } else if (feedback.rating <= ANTI_ABUSE_CONFIG.LOW_RATING_THRESHOLD) {
-          feedbackScore -= (10 * ANTI_ABUSE_CONFIG.SUSPICIOUS_RATING_WEIGHT_REDUCTION);
+          acc -= (10 * ANTI_ABUSE_CONFIG.SUSPICIOUS_RATING_WEIGHT_REDUCTION);
         }
       }
     }
-  });
-
-  // Community Scoring Abuse Model: Check for rapid negative scoring from multiple users
-  const allRecentFeedback = [...recentFranchiseFeedback, ...newFeedbackEntries.map(f => ({ userId: f.userId, timestamp: f.timestamp, rating: f.rating }))];
-
-  const rapidNegativeFeedback = allRecentFeedback.filter(
-    (activity) => activity.rating <= ANTI_ABUSE_CONFIG.LOW_RATING_THRESHOLD &&
-                  (currentTime - activity.timestamp < ANTI_ABUSE_CONFIG.COMMUNITY_SCORE_RAPID_NEGATIVE_WINDOW_MS)
-  );
-
-  if (rapidNegativeFeedback.length > 0) {
-    const uniqueUsersInRapidNegative = new Set(rapidNegativeFeedback.map(activity => activity.userId));
-    if (uniqueUsersInRapidNegative.size >= ANTI_ABUSE_CONFIG.COMMUNITY_SCORE_RAPID_NEGATIVE_USERS) {
-      console.warn(`[Anti-Abuse] Community score for franchise ${franchiseId} flagged: Rapid negative scoring from multiple users detected. Applying impact reduction.`);
-      // Reduce the impact of all recent negative feedback to prevent manipulation
-      feedbackScore = feedbackScore * ANTI_ABUSE_CONFIG.COMMUNITY_SCORE_ANOMALY_IMPACT_FACTOR;
-    }
-  }
-
-  // Add scores from non-suspicious feedback
-  newFeedbackEntries.forEach(feedback => {
-    if (feedback.rating >= ANTI_ABUSE_CONFIG.HIGH_RATING_THRESHOLD) {
-      feedbackScore += 5;
-    } else if (feedback.rating <= ANTI_ABUSE_CONFIG.LOW_RATING_THRESHOLD) {
-      feedbackScore -= 10;
-    }
-  });
+    return acc;
+  }, 0);
 
   score += feedbackScore;
 
