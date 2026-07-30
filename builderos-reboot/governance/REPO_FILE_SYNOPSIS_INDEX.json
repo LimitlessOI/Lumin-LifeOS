@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T23:37:18.201Z",
+  "generated_at": "2026-07-30T23:37:29.516Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12439,
+  "file_count": 12440,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -68682,6 +68682,13 @@
       "ssot": [
         "docs/products/personal-finance-os/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "routes/irlenInsights.js",
+      "synopsis": "GET /api/irlen-insights",
+      "bytes": 1831,
+      "mtime": "2026-07-30T23:37:29.516Z",
+      "indexed_at": "2026-07-30T23:37:29.516Z"
     },
     {
       "path": "routes/issueApprovalRoutes.js",
