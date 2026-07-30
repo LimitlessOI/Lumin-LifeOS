@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T03:34:57.948Z",
+  "generated_at": "2026-07-30T03:37:07.856Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12353,
+  "file_count": 12354,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -36616,6 +36616,13 @@
       "indexed_at": "2026-07-30T02:14:38.254Z"
     },
     {
+      "path": "db/migrations/20260730_social_publish_status_fix.sql",
+      "synopsis": "Fix creative_publish_queue status enum to include needs_connection",
+      "bytes": 457,
+      "mtime": "2026-07-30T03:37:07.856Z",
+      "indexed_at": "2026-07-30T03:37:07.856Z"
+    },
+    {
       "path": "db/migrations/add_virtual_real_estate_curriculum.sql",
       "synopsis": "Database migration — virtual real estate curriculum tables.",
       "bytes": 1949,
@@ -40580,8 +40587,8 @@
       "path": "docs/products/creative-engine/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Creative Engine",
       "bytes": 11034,
-      "mtime": "2026-07-30T03:34:57.948Z",
-      "indexed_at": "2026-07-30T03:34:57.948Z"
+      "mtime": "2026-07-30T03:37:07.856Z",
+      "indexed_at": "2026-07-30T03:37:07.856Z"
     },
     {
       "path": "docs/products/CREATIVEENGINE.md",
