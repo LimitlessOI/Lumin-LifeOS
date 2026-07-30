@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T02:27:36.662Z",
+  "generated_at": "2026-07-30T02:33:24.369Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12339,
   "files": [
@@ -21308,8 +21308,8 @@
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
       "bytes": 21691,
-      "mtime": "2026-07-30T02:14:38.254Z",
-      "indexed_at": "2026-07-30T02:14:38.254Z",
+      "mtime": "2026-07-30T02:33:24.369Z",
+      "indexed_at": "2026-07-30T02:33:24.369Z",
       "synopsis_index_only": true
     },
     {
@@ -27786,8 +27786,8 @@
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 3682,
-      "mtime": "2026-07-30T02:14:38.254Z",
-      "indexed_at": "2026-07-30T02:14:38.254Z",
+      "mtime": "2026-07-30T02:33:24.369Z",
+      "indexed_at": "2026-07-30T02:33:24.369Z",
       "synopsis_index_only": true
     },
     {
@@ -27911,8 +27911,8 @@
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/OBJECTIVE_VERDICT.json",
       "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
       "bytes": 1147,
-      "mtime": "2026-07-30T02:14:38.254Z",
-      "indexed_at": "2026-07-30T02:14:38.254Z",
+      "mtime": "2026-07-30T02:33:24.369Z",
+      "indexed_at": "2026-07-30T02:33:24.369Z",
       "synopsis_index_only": true
     },
     {
@@ -29509,8 +29509,8 @@
       "path": "builderos-reboot/PRODUCT_READINESS_REPORT.json",
       "synopsis": "BuilderOS artifact — PRODUCT READINESS REPORT.",
       "bytes": 43376,
-      "mtime": "2026-07-30T02:14:38.254Z",
-      "indexed_at": "2026-07-30T02:14:38.254Z",
+      "mtime": "2026-07-30T02:33:24.369Z",
+      "indexed_at": "2026-07-30T02:33:24.369Z",
       "synopsis_index_only": true
     },
     {
@@ -37989,9 +37989,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 43723,
-      "mtime": "2026-07-30T02:27:36.662Z",
-      "indexed_at": "2026-07-30T02:27:36.662Z"
+      "bytes": 43521,
+      "mtime": "2026-07-30T02:33:24.369Z",
+      "indexed_at": "2026-07-30T02:33:24.369Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41035,9 +41035,9 @@
     {
       "path": "docs/products/MARKET_READINESS_PLAN.md",
       "synopsis": "Market-readiness audit and implementation plan for every active product.",
-      "bytes": 10919,
-      "mtime": "2026-07-30T02:14:38.254Z",
-      "indexed_at": "2026-07-30T02:14:38.254Z"
+      "bytes": 11026,
+      "mtime": "2026-07-30T02:33:24.369Z",
+      "indexed_at": "2026-07-30T02:33:24.369Z"
     },
     {
       "path": "docs/products/MARKETINGOS.md",
@@ -64400,9 +64400,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 3771,
-      "mtime": "2026-07-30T02:27:36.662Z",
-      "indexed_at": "2026-07-30T02:27:36.662Z",
+      "bytes": 3669,
+      "mtime": "2026-07-30T02:33:24.369Z",
+      "indexed_at": "2026-07-30T02:33:24.369Z",
       "synopsis_index_only": true
     },
     {
@@ -64873,8 +64873,8 @@
       "path": "products/receipts/LIFERE_OS_V1_ACCEPTANCE.json",
       "synopsis": "Product receipt — LIFERE OS V1 ACCEPTANCE.",
       "bytes": 1454,
-      "mtime": "2026-07-30T02:14:38.254Z",
-      "indexed_at": "2026-07-30T02:14:38.254Z",
+      "mtime": "2026-07-30T02:33:24.369Z",
+      "indexed_at": "2026-07-30T02:33:24.369Z",
       "synopsis_index_only": true
     },
     {
@@ -65008,9 +65008,9 @@
     {
       "path": "products/receipts/SENTRY_FINDINGS_FEED.json",
       "synopsis": "Product receipt — SENTRY FINDINGS FEED.",
-      "bytes": 1928,
-      "mtime": "2026-07-30T02:27:36.662Z",
-      "indexed_at": "2026-07-30T02:27:36.662Z",
+      "bytes": 214,
+      "mtime": "2026-07-30T02:33:24.369Z",
+      "indexed_at": "2026-07-30T02:33:24.369Z",
       "synopsis_index_only": true
     },
     {
@@ -65025,40 +65025,40 @@
       "path": "products/receipts/SENTRY_FINDINGS_FEED.marketingos.json",
       "synopsis": "Product receipt — SENTRY FINDINGS FEED.Marketingos.",
       "bytes": 279,
-      "mtime": "2026-07-30T02:14:38.254Z",
-      "indexed_at": "2026-07-30T02:14:38.254Z",
+      "mtime": "2026-07-30T02:33:24.369Z",
+      "indexed_at": "2026-07-30T02:33:24.369Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/SENTRY_FINDINGS_FEED.site-builder.json",
       "synopsis": "Product receipt — SENTRY FINDINGS FEED.Site Builder.",
-      "bytes": 1994,
-      "mtime": "2026-07-30T02:27:36.662Z",
-      "indexed_at": "2026-07-30T02:27:36.662Z",
+      "bytes": 280,
+      "mtime": "2026-07-30T02:33:24.369Z",
+      "indexed_at": "2026-07-30T02:33:24.369Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/SENTRY_MARKETINGOS_LAYER_A.json",
       "synopsis": "Product receipt — SENTRY MARKETINGOS LAYER A.",
       "bytes": 1081,
-      "mtime": "2026-07-30T02:14:38.254Z",
-      "indexed_at": "2026-07-30T02:14:38.254Z",
+      "mtime": "2026-07-30T02:33:24.369Z",
+      "indexed_at": "2026-07-30T02:33:24.369Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/SENTRY_MARKETINGOS_LAYER_B.json",
       "synopsis": "Product receipt — SENTRY MARKETINGOS LAYER B.",
       "bytes": 1036,
-      "mtime": "2026-07-30T02:14:38.254Z",
-      "indexed_at": "2026-07-30T02:14:38.254Z",
+      "mtime": "2026-07-30T02:33:24.369Z",
+      "indexed_at": "2026-07-30T02:33:24.369Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/SITE_BUILDER_PREALPHA_LAYER_A.json",
       "synopsis": "Product receipt — SITE BUILDER PREALPHA LAYER A.",
       "bytes": 2673,
-      "mtime": "2026-07-30T02:27:36.662Z",
-      "indexed_at": "2026-07-30T02:27:36.662Z",
+      "mtime": "2026-07-30T02:33:24.369Z",
+      "indexed_at": "2026-07-30T02:33:24.369Z",
       "synopsis_index_only": true
     },
     {

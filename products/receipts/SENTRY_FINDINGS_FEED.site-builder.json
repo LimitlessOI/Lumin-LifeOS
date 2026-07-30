@@ -1,54 +1,13 @@
 {
   "schema": "sentry_findings_feed_v1",
   "product": "site-builder",
-  "generated_at": "2026-07-30T02:26:38.184Z",
-  "findings_count": 3,
+  "generated_at": "2026-07-30T02:30:50.608Z",
+  "findings_count": 0,
   "without_solution": 0,
   "unclassified_error_findings": 0,
-  "findings": [
-    {
-      "code": "ux_friction_1",
-      "detail": "Only one template option means I don't really get to choose a design.",
-      "proposed_solution": "Offer more template choices to give me design flexibility.",
-      "severity": "warning",
-      "source": "uxCritique",
-      "root_cause_class": "unclassified_needs_review"
-    },
-    {
-      "code": "ux_friction_2",
-      "detail": "The site content is placeholder, not my actual business info, which makes it hard to visualize.",
-      "proposed_solution": "Pre-populate the site with my actual business information or guide me to input it immediately.",
-      "severity": "warning",
-      "source": "uxCritique",
-      "root_cause_class": "unclassified_needs_review"
-    },
-    {
-      "code": "ux_friction_3",
-      "detail": "Having a chat feature is nice, but I'm not sure what it's for yet.",
-      "proposed_solution": "Clarify the purpose of the chat feature early on (e.g., 'Chat with AI for design help').",
-      "severity": "warning",
-      "source": "uxCritique",
-      "root_cause_class": "unclassified_needs_review"
-    }
-  ],
+  "findings": [],
   "readiness": {
     "blockers": [],
-    "warnings": [
-      {
-        "code": "ux_friction_1",
-        "detail": "Only one template option means I don't really get to choose a design.",
-        "root_cause_class": "unclassified_needs_review"
-      },
-      {
-        "code": "ux_friction_2",
-        "detail": "The site content is placeholder, not my actual business info, which makes it hard to visualize.",
-        "root_cause_class": "unclassified_needs_review"
-      },
-      {
-        "code": "ux_friction_3",
-        "detail": "Having a chat feature is nice, but I'm not sure what it's for yet.",
-        "root_cause_class": "unclassified_needs_review"
-      }
-    ]
+    "warnings": []
   }
 }

@@ -1,7 +1,7 @@
 {
   "schema": "sentry_findings_feed_v1",
   "product": "marketingos",
-  "generated_at": "2026-07-30T00:59:01.130Z",
+  "generated_at": "2026-07-30T02:29:36.928Z",
   "findings_count": 0,
   "without_solution": 0,
   "unclassified_error_findings": 0,

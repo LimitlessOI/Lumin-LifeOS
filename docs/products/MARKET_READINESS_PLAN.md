@@ -3,8 +3,8 @@
 
 # Market Readiness Plan — All Products
 
-**Date:** 2026-07-29  
-**Live deploy tip:** `d3042dbfd134` (`https://lumin-web-production-e3a9.up.railway.app`)  
+**Date:** 2026-07-30  
+**Live deploy tip:** `72549d10beb3390de76a3765134d9ed2642d51c3` (`https://lumin-web-production-e3a9.up.railway.app`)  
 **Truth labels used:** KNOW / THINK / GUESS / DON'T KNOW per `docs/constitution/NORTH_STAR_SSOT.md`.
 
 ## What "market ready" means
@@ -24,13 +24,13 @@ Minimum evidence required:
 
 ## Executive summary (KNOW)
 
-- **1 product is closest to market ready:** SocialMediaOS pack sales (`marketingos/socialmediaos`).
-- **1 product is technically live but not conversion-proven:** Site Builder.
-- **Several products are code-complete on technical acceptance but `founder_usability_pass: false`:** LifeOS commitments/inbox, LifeRE, BuilderOS internals.
+- **1 product is closest to market ready:** SocialMediaOS pack sales (`marketingos/socialmediaos`) — SENTRY PASS and live checkout both work; blocked only by external email + a real card charge.
+- **2 products now have SENTRY pre-alpha PASS on current tip:** `marketingos` and `site-builder` (Layer A+B), plus `lifeos-founder-ui` (Layer A+B).
+- **Several products are code-complete on technical acceptance but `founder_usability_pass: false`:** LifeRE, LifeOS commitments/inbox.
 - **Several products are partial code or missing credentials:** ClientCare Billing Recovery, Video Pipeline, Outreach CRM, AI Receptionist.
 - **Many products are still vision documents** and need a `FOUNDER_PACKET` + `BLUEPRINT.json` before implementation.
 
-The single biggest cross-cutting blocker is **email delivery**: Postmark was canceled, and `NotificationService`, `password-reset-email.js`, `site-builder-prospect-runner.js`, `tc-email-document-service.js`, and `tc-email-monitor.js` all depend on it. A new email provider must be chosen, configured, and every mail path re-proved before any customer-facing product is truly market ready.
+The single biggest cross-cutting blocker is **email delivery**: Postmark was canceled; the code now supports Resend/SMTP fallback, but no `RESEND_API_KEY` or SMTP credentials are in Railway. A new email provider must be chosen, configured, and every mail path re-proved before any customer-facing product is truly market ready.
 
 ---
 
@@ -38,10 +38,10 @@ The single biggest cross-cutting blocker is **email delivery**: Postmark was can
 
 | Product | Status | Market-ready? | Blocking gap | Next action (owner) | Size |
 |---|---|---|---|---|---|
-| **SocialMediaOS** | Soft-launch ready, 90% | NO — external email + real card charge unproved | Postmark canceled; no `RESEND_API_KEY`; live $49 charge not completed | 1. Pick new email provider + add key to Railway. 2. Complete a live $49 checkout and `pack/verify`. 3. Re-prove forgot-password to a real inbox. | Small |
-| **Site Builder** | Live, SENTRY Layer A PASS, checkout works | NO — SENTRY Layer B / real conversion unproved | SENTRY composite Layer B failed; no real customer walkthrough; Postmark-dependent follow-up | 1. Run `node scripts/sentry-prealpha-gate.mjs site-builder` and fix Layer B. 2. Replace Postmark with new provider. 3. Founder completes one real preview → purchase. | Small-Medium |
-| **LifeOS founder UI** | SENTRY PASS, new layout live | NO — no paid product or conversion path | No packaged offer or checkout tied to the UI | 1. Pick first paid LifeOS feature (e.g., commitments premium). 2. Add Stripe price + checkout. 3. SENTRY re-prove paid flow. | Medium |
-| **LifeRE OS** | Technical PASS, runtime active | NO — `founder_usability_pass: false`, no money proof | Founder has not completed daily cycle end-to-end; no paid tier checkout | 1. Founder uses `/lifeos-app.html?mode=lifere` for 3 days. 2. Fix UX friction. 3. Add Stripe checkout for LifeRE Pro. | Medium |
+| **SocialMediaOS** | Soft-launch ready, 90% | NO — external email + real card charge unproved | Postmark canceled; no `RESEND_API_KEY` configured; live $49 charge not completed | 1. Pick new email provider + add key to Railway. 2. Complete a live $49 checkout and `pack/verify`. 3. Re-prove forgot-password to a real inbox. | Small |
+| **Site Builder** | SENTRY Layer A+B PASS on current tip, checkout works | NO — real conversion unproved, email follow-up unproved | SENTRY passes; Postmark-dependent follow-up; no real customer walkthrough | 1. Replace Postmark with new provider + verify domain. 2. Founder completes one real preview → purchase. | Small-Medium |
+| **LifeOS founder UI** | SENTRY PASS, new ChatGPT-style layout live | NO — no paid product or conversion path | No packaged offer or checkout tied to the UI | 1. Pick first paid LifeOS feature. 2. Add Stripe price + checkout. 3. SENTRY re-prove paid flow. | Medium |
+| **LifeRE OS** | `npm run lifeos:lifere-os:v1-acceptance` 19/19 PASS, runtime active | NO — `founder_usability_pass: false`, no money proof | Founder has not completed daily cycle end-to-end; no paid tier checkout | 1. Founder uses `/lifeos-app.html?mode=lifere` for 3 days. 2. Fix UX friction. 3. Add Stripe checkout for LifeRE Pro. | Medium |
 | **AI Receptionist** | Code exists, $99/mo offer | NO — no SENTRY pass, no live call proof, no verified domain/number | Needs Twilio/phone number, voice provider, and a real test call | 1. Provision Twilio number. 2. Run SENTRY Layer A+B. 3. Run one real inbound call. | Medium |
 | **ClientCare Billing Recovery** | Partial code, credentials missing | NO — SENTRY finding: `ClientCare browser credentials not configured` | Missing ClientCare login + browser automation credentials | 1. Add ClientCare credentials to Railway. 2. Re-run SENTRY. 3. Prove one claim discovery. | Small |
 | **Video Pipeline** | Partial code | NO — `REPLICATE_API_TOKEN` missing, FFmpeg unverified, no SENTRY | Missing video-gen provider + Railway buildpack check | 1. Add `REPLICATE_API_TOKEN` / `ELEVENLABS_API_KEY`. 2. Verify `ffmpeg` in Railway. 3. Run SENTRY. | Medium |
@@ -73,12 +73,9 @@ The single biggest cross-cutting blocker is **email delivery**: Postmark was can
 3. Record receipt with `live_card_charge: true`.
 
 ### 3. SENTRY Layer B gaps
-**KNOW:** `lifeos-founder-ui` Layer A+B PASS. `marketingos` Layer A+B PASS on current tip. `site-builder` Layer A PASS but composite Layer B failed (stale feed `SENTRY_FINDINGS_FEED.site-builder.json`).
+**KNOW:** `lifeos-founder-ui`, `marketingos`, and `site-builder` SENTRY pre-alpha Layer A+B PASS on current tip (`72549d10b`).
 
-**Fix:**
-1. Re-run `node scripts/sentry-prealpha-gate.mjs site-builder` on current tip.
-2. Fix first failing assertion.
-3. Re-run until `findings_count: 0`.
+**Fix:** Keep SENTRY receipts current on every deploy.
 
 ### 4. Founder usability
 **KNOW:** `BP_PRIORITY.json` shows many products as `TECHNICAL_PASS` but `founder_usability_pass: false`.
@@ -113,17 +110,17 @@ The single biggest cross-cutting blocker is **email delivery**: Postmark was can
 - [ ] Confirm export unlock works for paid user
 - [ ] Update `SMOS_REAL_CUSTOMER_READINESS.json`
 
-### Phase 3 — Re-prove Site Builder (Days 3–5)
-- [ ] Re-run SENTRY site-builder Layer A+B
-- [ ] Fix Layer B findings
-- [ ] Run one real preview → purchase flow
+### Phase 3 — Re-prove Site Builder conversion (Days 3–5)
+- [x] SENTRY site-builder Layer A+B PASS
+- [ ] Replace Postmark; verify follow-up email reaches a real inbox
+- [ ] Founder runs one real preview → purchase flow
 - [ ] Update site-builder product home + receipt
 
 ### Phase 4 — Package LifeOS / LifeRE paid tiers (Days 5–10)
-- [ ] Choose first paid LifeOS feature
+- [ ] Choose first paid LifeOS / LifeRE feature
 - [ ] Add Stripe price + checkout
-- [ ] Founder usability pass
-- [ ] SENTRY re-prove
+- [ ] Adam or a non-engineer completes the daily cycle end-to-end (`founder_usability_pass: true`)
+- [ ] SENTRY re-prove paid flow
 
 ### Phase 5 — Fix credential blockers (parallel)
 - [ ] ClientCare: add ClientCare credentials
@@ -151,8 +148,8 @@ The single biggest cross-cutting blocker is **email delivery**: Postmark was can
 ## Truth summary
 
 - **KNOW:** SocialMediaOS is the closest to market-ready product.
-- **KNOW:** Postmark removal blocks email for SMOS, Site Builder, TC, and outreach.
-- **KNOW:** SENTRY `marketingos` and `lifeos-founder-ui` pass; `site-builder` Layer B needs re-run.
+- **KNOW:** Postmark removal blocks email for SMOS, Site Builder, TC, and outreach; code fallback to Resend/SMTP is ready.
+- **KNOW:** SENTRY `marketingos`, `lifeos-founder-ui`, and `site-builder` all pass Layer A+B on current tip.
 - **THINK:** Resend is the best drop-in replacement for both transactional and creator cold email.
 - **DON'T KNOW:** Whether the Stripe account has payouts configured, whether a real card charge will succeed, or the exact balance of AI provider credits.
 - **DON'T KNOW:** Which paid feature Adam wants to launch first for LifeOS.
