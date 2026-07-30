@@ -1,8 +1,8 @@
 {
   "schema": "receipt_truth_validation_v1",
-  "at": "2026-07-30T03:20:16.702Z",
+  "at": "2026-07-30T17:57:21.352Z",
   "ok": true,
-  "checked": 127,
+  "checked": 128,
   "failures": [],
   "known_debt": [
     "MACHINE_ALPHA_WALKTHROUGH.json:ACCEPTANCE_PASS_WITHOUT_SHA_OR_BASE",
@@ -657,6 +657,13 @@
     },
     {
       "file": "LIFERE_SELF_AUDIT.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "LIVE_SITE_SURFACE_CATALOG.json",
       "ok": true,
       "violations": [],
       "claims_pass": false,

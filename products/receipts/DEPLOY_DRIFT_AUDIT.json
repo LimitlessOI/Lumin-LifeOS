@@ -1,11 +1,11 @@
 {
   "schema": "deploy_truth_verify_v1",
-  "at": "2026-07-30T02:35:18.045Z",
+  "at": "2026-07-30T17:55:20.840Z",
   "command": "drift-audit",
   "production_base": "https://lumin-web-production-e3a9.up.railway.app",
   "deploy_branch": "main",
-  "commit_sha": "972c48bb10b5245357373af2b6a8ce2f811487c7",
-  "served_sha": "972c48bb10b5245357373af2b6a8ce2f811487c7",
+  "commit_sha": "9b6f85068ed1c7c871875a2c4a9407b2a6527a95",
+  "served_sha": "9b6f85068ed1c7c871875a2c4a9407b2a6527a95",
   "verdict": "PROVEN",
   "ok": true,
   "passed": [
@@ -21,11 +21,11 @@
   "skipped": [],
   "files": [],
   "deployment": {
-    "id": "d3a20d05-6335-4199-a746-1771d392f901",
+    "id": "a2a780d8-ab4e-4914-80f5-85a51cdb2aa7",
     "status": "SUCCESS",
-    "created_at": "2026-07-30T02:33:53.350Z",
-    "commit_sha": "972c48bb10b5245357373af2b6a8ce2f811487c7",
-    "commit_message": "[SHIP] Market readiness plan update, LifeRE acceptance receipt, SENETRY receipts",
+    "created_at": "2026-07-30T17:49:44.836Z",
+    "commit_sha": "9b6f85068ed1c7c871875a2c4a9407b2a6527a95",
+    "commit_message": "[GAP-FILL] add runtime profile env levers to managed-env allowlist for TC/field-ops enable",
     "url": null
   },
   "runtime_identity": {
@@ -46,18 +46,18 @@
     {
       "id": "git.fetch",
       "status": "pass",
-      "detail": "origin/main is 972c48bb10b5"
+      "detail": "origin/main is 9b6f85068ed1"
     },
     {
       "id": "local.divergence",
       "status": "pass",
-      "detail": "local main is aligned with origin/main",
+      "detail": "local main is 0 ahead / 4 behind origin/main — local state is not what production deploys from",
       "local_branch": "main",
-      "local_head": "972c48bb10b5245357373af2b6a8ce2f811487c7",
-      "remote_head": "972c48bb10b5245357373af2b6a8ce2f811487c7",
+      "local_head": "9b2efb9c3219853cdcdabe1c051149ad643cd60e",
+      "remote_head": "9b6f85068ed1c7c871875a2c4a9407b2a6527a95",
       "ahead": 0,
-      "behind": 0,
-      "uncommitted": 0
+      "behind": 4,
+      "uncommitted": 14
     },
     {
       "id": "runtime.identity",
@@ -76,25 +76,25 @@
     {
       "id": "runtime.ready",
       "status": "pass",
-      "detail": "production alive, profile founder_builder, policy 2026-05-01a"
+      "detail": "production alive, profile full, policy 2026-05-01a"
     },
     {
       "id": "runtime.version",
       "status": "pass",
-      "detail": "production serves 972c48bb10b5, which contains origin/main (972c48bb10b5)",
-      "served_sha": "972c48bb10b5245357373af2b6a8ce2f811487c7",
-      "remote_head": "972c48bb10b5245357373af2b6a8ce2f811487c7"
+      "detail": "production serves 9b6f85068ed1, which contains origin/main (9b6f85068ed1)",
+      "served_sha": "9b6f85068ed1c7c871875a2c4a9407b2a6527a95",
+      "remote_head": "9b6f85068ed1c7c871875a2c4a9407b2a6527a95"
     },
     {
       "id": "deployment.state",
       "status": "pass",
-      "detail": "latest deployment SUCCESS on 972c48bb10b5, nothing in flight",
+      "detail": "latest deployment SUCCESS on 9b6f85068ed1, nothing in flight",
       "deployment": {
-        "id": "d3a20d05-6335-4199-a746-1771d392f901",
+        "id": "a2a780d8-ab4e-4914-80f5-85a51cdb2aa7",
         "status": "SUCCESS",
-        "created_at": "2026-07-30T02:33:53.350Z",
-        "commit_sha": "972c48bb10b5245357373af2b6a8ce2f811487c7",
-        "commit_message": "[SHIP] Market readiness plan update, LifeRE acceptance receipt, SENETRY receipts",
+        "created_at": "2026-07-30T17:49:44.836Z",
+        "commit_sha": "9b6f85068ed1c7c871875a2c4a9407b2a6527a95",
+        "commit_message": "[GAP-FILL] add runtime profile env levers to managed-env allowlist for TC/field-ops enable",
         "url": null
       }
     }
@@ -102,9 +102,9 @@
   "produced_by": "cursor-agent",
   "verified_by": "git+railway-api+production-http-probe",
   "verification_kind": "deterministic+external",
-  "local_head": "972c48bb10b5245357373af2b6a8ce2f811487c7",
+  "local_head": "9b2efb9c3219853cdcdabe1c051149ad643cd60e",
   "local_branch": "main",
   "ahead": 0,
-  "behind": 0,
-  "human_summary": "PROVEN — production serves 972c48bb10b5, which contains origin/main; no runtime drift found."
+  "behind": 4,
+  "human_summary": "PROVEN — production serves 9b6f85068ed1, which contains origin/main; no runtime drift found."
 }

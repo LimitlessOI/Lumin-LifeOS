@@ -1,3 +1,9 @@
+## 2026-07-30 — TC field-ops routes enabled in production; live site surface catalog mapped
+
+Added runtime profile env levers (`LIFEOS_RUNTIME_PROFILE`, `LIFEOS_ENABLE_FULL_RUNTIME`, `LIFEOS_ALLOW_FULL_RUNTIME_ON_RAILWAY`, `LIFEOS_ENABLE_FIELD_OPS_ROUTES`, `LIFEOS_ENABLE_EXTERNAL_PRODUCT_ROUTES`, `LIFEOS_ENABLE_OPTIONAL_PRODUCT_ROUTES`) to `services/railway-managed-env-service.js` allowlist, set them to `full`/`true` via `POST /api/v1/railway/managed-env/bulk` + `/sync`, and redeployed. Production now serves `9b6f85068ed1` with `runtime_profile: full`; TC routes mount under `/api/v1/tc` and `GET /api/v1/tc/intake/workspace` returns a real workspace with 1 active transaction and credential readiness for IMAP, GLVAR, and SkySlope/eXp. Missing: `exp_okta_Password`, `ASANA_ACCESS_TOKEN`, `ASANA_TC_PROJECT_GID`, `TC_AGENT_PHONE`, `EMAIL_WEBHOOK_SECRET`, `TWILIO_WEBHOOK_SECRET`.
+
+Also added `scripts/map-live-site.mjs` to scan `public/overlay` and `startup/register-runtime-routes.js`, producing `docs/products/site-builder/SITE_TEMPLATE_CATALOG.md` and `products/receipts/LIVE_SITE_SURFACE_CATALOG.json` — 154 public overlays, 112 API groups, 1154 endpoints — to seed Site Builder template packs and sitemap generation. `npm run builder:preflight` passes 401/401; `npm run deploy:truth:audit` PROVEN.
+
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
 ## 2026-07-30 — Site Builder SENTRY gate re-proven; Creative Engine competitor/social pipeline shipped and proven on tip

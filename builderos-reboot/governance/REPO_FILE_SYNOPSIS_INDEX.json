@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T17:45:53.619Z",
+  "generated_at": "2026-07-30T17:59:00.467Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12356,
+  "file_count": 12359,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -38010,9 +38010,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 47003,
-      "mtime": "2026-07-30T04:08:42.522Z",
-      "indexed_at": "2026-07-30T04:08:42.522Z"
+      "bytes": 48319,
+      "mtime": "2026-07-30T17:59:00.467Z",
+      "indexed_at": "2026-07-30T17:59:00.467Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41056,9 +41056,9 @@
     {
       "path": "docs/products/MARKET_READINESS_PLAN.md",
       "synopsis": "Market-readiness audit and implementation plan for every active product.",
-      "bytes": 16512,
-      "mtime": "2026-07-30T04:08:42.522Z",
-      "indexed_at": "2026-07-30T04:08:42.522Z"
+      "bytes": 16667,
+      "mtime": "2026-07-30T17:59:00.467Z",
+      "indexed_at": "2026-07-30T17:59:00.467Z"
     },
     {
       "path": "docs/products/MARKETINGOS.md",
@@ -41422,6 +41422,13 @@
       "bytes": 214457,
       "mtime": "2026-07-30T03:54:07.556Z",
       "indexed_at": "2026-07-30T03:54:07.556Z"
+    },
+    {
+      "path": "docs/products/site-builder/SITE_TEMPLATE_CATALOG.md",
+      "synopsis": "Live Site Template Catalog",
+      "bytes": 95365,
+      "mtime": "2026-07-30T17:59:00.467Z",
+      "indexed_at": "2026-07-30T17:59:00.467Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -64421,9 +64428,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 3699,
-      "mtime": "2026-07-30T02:35:52.272Z",
-      "indexed_at": "2026-07-30T02:35:52.272Z",
+      "bytes": 3767,
+      "mtime": "2026-07-30T17:59:00.467Z",
+      "indexed_at": "2026-07-30T17:59:00.467Z",
       "synopsis_index_only": true
     },
     {
@@ -64923,6 +64930,14 @@
       "synopsis_index_only": true
     },
     {
+      "path": "products/receipts/LIVE_SITE_SURFACE_CATALOG.json",
+      "synopsis": "Product receipt — LIVE SITE SURFACE CATALOG.",
+      "bytes": 207034,
+      "mtime": "2026-07-30T17:59:00.467Z",
+      "indexed_at": "2026-07-30T17:59:00.467Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "products/receipts/LUMIN_ALPHA_CONNECTION_TEST.json",
       "synopsis": "Product receipt — LUMIN ALPHA CONNECTION TEST.",
       "bytes": 318,
@@ -64998,8 +65013,8 @@
       "path": "products/receipts/POINT_B_DNA_VERIFY.json",
       "synopsis": "Product receipt — POINT B DNA VERIFY.",
       "bytes": 318,
-      "mtime": "2026-07-30T03:20:35.298Z",
-      "indexed_at": "2026-07-30T03:20:35.298Z",
+      "mtime": "2026-07-30T17:59:00.467Z",
+      "indexed_at": "2026-07-30T17:59:00.467Z",
       "synopsis_index_only": true
     },
     {
@@ -65013,9 +65028,9 @@
     {
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
-      "bytes": 24056,
-      "mtime": "2026-07-30T03:20:35.298Z",
-      "indexed_at": "2026-07-30T03:20:35.298Z",
+      "bytes": 24218,
+      "mtime": "2026-07-30T17:59:00.467Z",
+      "indexed_at": "2026-07-30T17:59:00.467Z",
       "synopsis_index_only": true
     },
     {
@@ -65182,16 +65197,16 @@
       "path": "products/receipts/TRUTH_ENFORCEMENT_AUDIT.json",
       "synopsis": "Product receipt — TRUTH ENFORCEMENT AUDIT.",
       "bytes": 833,
-      "mtime": "2026-07-30T03:20:35.298Z",
-      "indexed_at": "2026-07-30T03:20:35.298Z",
+      "mtime": "2026-07-30T17:59:00.467Z",
+      "indexed_at": "2026-07-30T17:59:00.467Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/TRUTH_LOCKDOWN_VERIFY.json",
       "synopsis": "Product receipt — TRUTH LOCKDOWN VERIFY.",
       "bytes": 1318,
-      "mtime": "2026-07-30T03:20:35.298Z",
-      "indexed_at": "2026-07-30T03:20:35.298Z",
+      "mtime": "2026-07-30T17:59:00.467Z",
+      "indexed_at": "2026-07-30T17:59:00.467Z",
       "synopsis_index_only": true
     },
     {
@@ -65222,8 +65237,8 @@
       "path": "products/receipts/WISDOM_TRUTH_AUDIT.json",
       "synopsis": "Product receipt — WISDOM TRUTH AUDIT.",
       "bytes": 1001,
-      "mtime": "2026-07-30T03:20:35.298Z",
-      "indexed_at": "2026-07-30T03:20:35.298Z",
+      "mtime": "2026-07-30T17:59:00.467Z",
+      "indexed_at": "2026-07-30T17:59:00.467Z",
       "synopsis_index_only": true
     },
     {
@@ -72262,6 +72277,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/map-live-site.mjs",
+      "synopsis": "Static site surface mapper — generates a template catalog of public overlays and API routes.",
+      "bytes": 6922,
+      "mtime": "2026-07-30T17:59:00.467Z",
+      "indexed_at": "2026-07-30T17:59:00.467Z",
+      "ssot": [
+        "docs/products/site-builder/PRODUCT_HOME.md"
       ]
     },
     {

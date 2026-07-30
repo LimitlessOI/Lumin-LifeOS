@@ -176,12 +176,22 @@ The single biggest cross-cutting blocker is **email delivery**: Postmark was can
 - Real call/voice, MLS deal scanning, and TC document extraction are stubs or limited without Twilio/Replicate/MLS credentials.
 
 ### TC Service
-**Live surface:** `https://lumin-web-production-e3a9.up.railway.app/api/v1/tc/status` is the only TC route currently mounted in production.
+**Live surface (updated 2026-07-30):** `https://lumin-web-production-e3a9.up.railway.app/api/v1/tc` is now mounted and `GET /api/v1/tc/intake/workspace` returns a real workspace with 1 active transaction. `npm run deploy:truth:audit` PROVEN on `9b6f85068ed1` with `runtime_profile: full`.
 
-**Why the rest is dark:** `routes/tc-routes.js` (intake, document QA, offer prep, approval cockpit, alert escalation, MLS deal scanner, GLVAR monitor, SkySlope/BoldTrail browser automation) is mounted inside `register-runtime-routes.js` only when `fieldOpsRoutesEnabled` is true. `fieldOpsRoutesEnabled` requires `isFullRuntimeProfile() === true` AND `process.env.LIFEOS_ENABLE_FIELD_OPS_ROUTES === "true"`. `services/runtime-modes.js` forces Railway to `founder_builder` unless `LIFEOS_RUNTIME_PROFILE=full` + `LIFEOS_ENABLE_FULL_RUNTIME=true` + `LIFEOS_ALLOW_FULL_RUNTIME_ON_RAILWAY=true`. None of those env vars are set, so TC field-ops routes are disabled by design.
+**What is reachable now:**
+- `/api/v1/tc/status` public health.
+- `/api/v1/tc/intake/workspace` and `/api/v1/tc/intake/transaction`.
+- Document QA, offer prep, approval cockpit, alert escalation, MLS deal scanner, GLVAR dues/violations, Asana sync, email IMAP intake, and browser-automation routes (source in `routes/tc-routes.js`).
+
+**Credential readiness from live workspace:**
+- IMAP (`TC_IMAP_*`) — configured and reachable.
+- GLVAR (`GLVAR_mls_*`) — username present, password present.
+- SkySlope/eXp Okta (`exp_okta_Username`) — username present, **password missing** (`exp_okta_Password` not set).
+- Asana — missing `ASANA_ACCESS_TOKEN` + `ASANA_TC_PROJECT_GID`.
+- Agent phone / webhook secrets (`TC_AGENT_PHONE`, `EMAIL_WEBHOOK_SECRET`, `TWILIO_WEBHOOK_SECRET`) — not set.
 
 **What exists in code (from `routes/tc-routes.js` + `routes/tc-intake-routes.js` + `routes/tc-billing-routes.js` + `routes/tc-imap-routes.js` + `routes/tc-r4r-routes.js`):**
-- Transaction intake: `POST /api/v1/tc/intake/workspace`, `POST /api/v1/tc/intake/transaction`.
+- Transaction intake: `GET /api/v1/tc/intake/workspace`, `POST /api/v1/tc/intake/transaction`.
 - Document intake/validation: `POST /api/v1/tc/documents/upload`, `POST /api/v1/tc/documents/validate`, `GET /api/v1/tc/documents/:id/status`.
 - Inspection workflow: `POST /api/v1/tc/inspections`, `GET /api/v1/tc/inspections/:id`, `POST /api/v1/tc/inspections/:id/forward`.
 - Offer prep: `POST /api/v1/tc/offers/prepare`.
@@ -196,7 +206,7 @@ The single biggest cross-cutting blocker is **email delivery**: Postmark was can
 - Repair-request classification: `POST /api/v1/tc-r4r/scan` (mounted at `/api/v1/tc-r4r`).
 - Browser-automation jobs: SkySlope upload, TransactionDesk party sync, eXp Okta SSO.
 
-**All of those are NOT reachable in production right now** because the router is not mounted. Enabling them requires Railway env changes (see "Cross-cutting blockers" above).
+**All of those are now reachable in production** once the missing credentials above are supplied; the router is mounted and the workspace returns real data.
 
 **Missing credentials needed for TC:**
 - `TC_IMAP_*` (Gmail/Outlook IMAP for document intake).
@@ -212,7 +222,7 @@ The single biggest cross-cutting blocker is **email delivery**: Postmark was can
 2. **Verified sending domain** — for any outbound email.
 3. **One real $49 SMOS card charge** — to prove money moves and unlock works.
 4. **One real LifeOS paid tier charge** (`core` $19 / `premium` $49 / `family` $99) — to prove `/api/v1/lifeos/auth/billing` end-to-end.
-5. **Railway env decision to enable full runtime** (`LIFEOS_RUNTIME_PROFILE=full`, `LIFEOS_ENABLE_FULL_RUNTIME=true`, `LIFEOS_ALLOW_FULL_RUNTIME_ON_RAILWAY=true`, `LIFEOS_ENABLE_FIELD_OPS_ROUTES=true`) — required before TC routes go live.
+5. ~~**Railway env decision to enable full runtime**~~ — **DONE 2026-07-30.** Production is now `runtime_profile: full`; TC routes are mounted.
 6. **TC / MLS / BoldTrail / ClientCare / Twilio credentials** — required for TC field-ops to do real work.
 7. **Founder usability walkthrough for LifeRE** — non-engineer completes the daily command center, top-3, debrief, and one coaching drill in the LifeOS app.
 8. **Which paid LifeOS / LifeRE feature to launch first** — so we can price, build checkout, and run SENTRY.
