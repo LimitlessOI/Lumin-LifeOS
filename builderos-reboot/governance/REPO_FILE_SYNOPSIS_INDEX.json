@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T18:25:21.812Z",
+  "generated_at": "2026-07-30T18:25:31.022Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12360,
+  "file_count": 12361,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21634,9 +21634,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3729358,
-      "mtime": "2026-07-30T18:09:18.593Z",
-      "indexed_at": "2026-07-30T18:12:46.510Z"
+      "bytes": 3730403,
+      "mtime": "2026-07-30T18:25:20.081Z",
+      "indexed_at": "2026-07-30T18:25:31.022Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -29679,10 +29679,10 @@
     },
     {
       "path": "builderos-reboot/scripts/emit-project-certification.mjs",
-      "synopsis": "BuilderOS artifact — Emit Project Certification.",
-      "bytes": 0,
-      "mtime": "2026-07-30T18:25:21.812Z",
-      "indexed_at": "2026-07-30T18:25:21.812Z"
+      "synopsis": "Final certification v2 — includes Phase 11 full loop + Phase 12 salvage. Final certification v2 — includes Phase 11 full loop + Phase 12 salvage.",
+      "bytes": 6457,
+      "mtime": "2026-07-10T05:55:37.209Z",
+      "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
       "path": "builderos-reboot/scripts/execute-mission-step.mjs",
@@ -30155,10 +30155,10 @@
     },
     {
       "path": "builderos-reboot/scripts/run-sentry-checks.mjs",
-      "synopsis": "BuilderOS artifact — Run Sentry Checks.",
-      "bytes": 0,
-      "mtime": "2026-07-30T18:25:21.812Z",
-      "indexed_at": "2026-07-30T18:25:21.812Z"
+      "synopsis": "Mechanical SENTRY checklist — outputs SENTRY_CHECK_RESULT.json Mechanical SENTRY checklist — outputs SENTRY_CHECK_RESULT.json",
+      "bytes": 3307,
+      "mtime": "2026-07-10T00:46:03.295Z",
+      "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
       "path": "builderos-reboot/scripts/sentry-behavior-proof.mjs",
@@ -38017,10 +38017,10 @@
     },
     {
       "path": "docs/CONTINUITY_LOG.md",
-      "synopsis": "Documentation — CONTINUITY LOG.",
-      "bytes": 0,
-      "mtime": "2026-07-30T18:22:12.801Z",
-      "indexed_at": "2026-07-30T18:22:12.801Z"
+      "synopsis": "Continuity Log — chronological session handoff and key decisions.",
+      "bytes": 50529,
+      "mtime": "2026-07-30T18:25:20.081Z",
+      "indexed_at": "2026-07-30T18:25:31.022Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40192,6 +40192,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "docs/products/builderos/AUDIT_BUILDEROS_2026-07-30.md",
+      "synopsis": "BuilderOS full audit against constitution, SSOT, and product builder — 2026-07-30",
+      "bytes": 17024,
+      "mtime": "2026-07-30T18:16:49.613Z",
+      "indexed_at": "2026-07-30T18:25:31.022Z"
+    },
+    {
       "path": "docs/products/builderos/DEVIN_HANDOFF.md",
       "synopsis": "Devin execution host handoff for BuilderOS",
       "bytes": 6614,
@@ -40223,17 +40230,17 @@
     },
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
-      "synopsis": "Documentation — PRODUCT HOME.",
-      "bytes": 0,
-      "mtime": "2026-07-30T18:25:21.812Z",
-      "indexed_at": "2026-07-30T18:25:21.812Z"
+      "synopsis": "Canonical product home — BuilderOS",
+      "bytes": 324856,
+      "mtime": "2026-07-30T18:25:20.089Z",
+      "indexed_at": "2026-07-30T18:25:31.022Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
-      "synopsis": "Documentation — BP V1.",
-      "bytes": 0,
-      "mtime": "2026-07-30T18:25:21.812Z",
-      "indexed_at": "2026-07-30T18:25:21.812Z"
+      "synopsis": "BUILDEROS_BP_V1 — executable Version-1 blueprint: close the build loop (L0) + turn on the five recorders",
+      "bytes": 21471,
+      "mtime": "2026-07-03T00:17:45.056Z",
+      "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
       "path": "docs/products/builderos/specs/FOUNDER_VIRTUAL_TWIN.md",
@@ -40244,10 +40251,10 @@
     },
     {
       "path": "docs/products/builderos/TWIN.md",
-      "synopsis": "Documentation — TWIN.",
-      "bytes": 0,
-      "mtime": "2026-07-30T18:25:21.812Z",
-      "indexed_at": "2026-07-30T18:25:21.812Z"
+      "synopsis": "BUILDEROS_TWIN — complete digital twin of the ACTUAL BuilderOS code (reality map, kept in sync with code)",
+      "bytes": 12188,
+      "mtime": "2026-06-29T18:25:12.025Z",
+      "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
       "path": "docs/products/business-tools/FILE_MANIFEST.json",
@@ -40955,9 +40962,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 637287,
-      "mtime": "2026-07-30T04:04:47.141Z",
-      "indexed_at": "2026-07-30T04:04:47.141Z"
+      "bytes": 638553,
+      "mtime": "2026-07-30T18:16:49.621Z",
+      "indexed_at": "2026-07-30T18:25:31.022Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -71158,10 +71165,13 @@
     },
     {
       "path": "scripts/drift-audit.mjs",
-      "synopsis": "Script — Drift Audit.",
-      "bytes": 0,
-      "mtime": "2026-07-30T18:22:12.801Z",
-      "indexed_at": "2026-07-30T18:22:12.801Z"
+      "synopsis": "Read-only production drift audit — prove prod runs the deploy branch, or UNSOLVED.",
+      "bytes": 10777,
+      "mtime": "2026-07-30T18:25:20.089Z",
+      "indexed_at": "2026-07-30T18:25:31.022Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/enable-fp-v2-production-env.mjs",
@@ -72756,10 +72766,13 @@
     },
     {
       "path": "scripts/run-builderos-autonomy-closure-v1-acceptance.mjs",
-      "synopsis": "Script — Run Builderos Autonomy Closure V1 Acceptance.",
-      "bytes": 0,
-      "mtime": "2026-07-30T18:25:21.812Z",
-      "indexed_at": "2026-07-30T18:25:21.812Z"
+      "synopsis": "BuilderOS autonomy closure v1 acceptance.",
+      "bytes": 18627,
+      "mtime": "2026-07-03T21:46:43.870Z",
+      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "ssot": [
+        "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/BLUEPRINT.json"
+      ]
     },
     {
       "path": "scripts/run-builderos-build-deploy-truth.mjs",
@@ -72853,10 +72866,13 @@
     },
     {
       "path": "scripts/run-founder-chat-alpha-battery.mjs",
-      "synopsis": "Script — Run Founder Chat Alpha Battery.",
-      "bytes": 0,
-      "mtime": "2026-07-30T18:25:21.812Z",
-      "indexed_at": "2026-07-30T18:25:21.812Z"
+      "synopsis": "Founder chat alpha — build must build, questions must answer, search when unknown.",
+      "bytes": 16333,
+      "mtime": "2026-07-01T12:58:06.309Z",
+      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/run-founder-direct-provider-proof.mjs",
@@ -74054,9 +74070,9 @@
     {
       "path": "scripts/verify-builderos-working-definition.mjs",
       "synopsis": "BuilderOS working definition — STRUCTURAL vs OPERATIONAL (honest 10/10).",
-      "bytes": 17971,
-      "mtime": "2026-07-09T03:27:25.478Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 18033,
+      "mtime": "2026-07-30T18:16:49.621Z",
+      "indexed_at": "2026-07-30T18:25:31.022Z",
       "ssot": [
         "builderos-reboot/BUILDEROS_WORKING_DEFINITION.json"
       ]
