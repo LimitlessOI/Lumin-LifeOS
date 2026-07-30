@@ -428,14 +428,37 @@
         "stripe_price_tier"
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-16T03:11:32.589Z",
+      "shipped_at": "2026-07-30T21:23:46.544Z",
       "commit_sha": "7e99b58515fdc5f3bef22150e5885e9b67cba623",
       "blueprint_id": "PRODUCT-AI-RECEPTIONIST-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "6",
       "mission_id": "PRODUCT-ai-receptionist",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.298Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.298Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/ai-receptionist/twins/steps/6.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T21:23:46.544Z",
+        "shipped_at": "2026-07-30T21:23:46.544Z",
+        "commit_sha": "7e99b58515fdc5f3bef22150e5885e9b67cba623",
+        "content_sha256": "af53cb0e30b3e0720fcd6f6434dd00e4adcdd305d285f694534f8ce757b2420a",
+        "target_file": "db/migrations/20231026_create_stripe_price_tier.sql",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "db/migrations/20231026_create_stripe_price_tier.sql",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/ai-receptionist/twins/steps/6.exact",
+          "content_sha256": "af53cb0e30b3e0720fcd6f6434dd00e4adcdd305d285f694534f8ce757b2420a"
+        }
+      }
     },
     {
       "id": "7",
