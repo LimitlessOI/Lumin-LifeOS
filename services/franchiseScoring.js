@@ -33,6 +33,10 @@ const ANTI_ABUSE_CONFIG = {
   EMPLOYER_SCORE_FLUCTUATION_THRESHOLD: 15, // Max points fluctuation in a short period to be suspicious
   EMPLOYER_SCORE_FLUCTUATION_WINDOW_MS: 86400000 * 7, // 7 days for employer score fluctuation detection
   EMPLOYER_SCORE_MIN_DATA_POINTS: 3, // Minimum data points to detect fluctuations
+  // New: Community scoring specific thresholds
+  COMMUNITY_SCORING_ANOMALY_THRESHOLD: 0.75, // Deviation from expected community score to be flagged
+  COMMUNITY_SCORING_NEGATIVE_TREND_THRESHOLD: 0.2, // Percentage drop in average score to be flagged
+  COMMUNITY_SCORING_TREND_WINDOW_MS: 86400000 * 14, // 14 days for trend detection
 };
 
 const calculateFranchiseScore = (franchiseId, employerData, feedbackData) => {
@@ -97,30 +101,66 @@ const calculateFranchiseScore = (franchiseId, employerData, feedbackData) => {
 
 
   // Community Feedback Integration with Anti-Fraud
-  const feedbackScore = feedbackData.reduce((acc, feedback) => {
+  let totalFeedbackScore = 0;
+  let feedbackCount = 0;
+  let rawFeedbackSum = 0; // For community scoring abuse model
+
+  feedbackData.forEach((feedback) => {
     // Basic anti-fraud: only consider feedback from verified users
     if (feedback.isVerified) {
       const isSus = isSuspiciousFeedback(feedback.userId, feedback.franchiseId, feedback.timestamp, feedback.rating);
       if (!isSus) {
         if (feedback.rating >= ANTI_ABUSE_CONFIG.HIGH_RATING_THRESHOLD) {
-          acc += 5;
+          totalFeedbackScore += 5;
         } else if (feedback.rating <= ANTI_ABUSE_CONFIG.LOW_RATING_THRESHOLD) {
-          acc -= 10;
+          totalFeedbackScore -= 10;
         }
+        rawFeedbackSum += feedback.rating;
+        feedbackCount++;
       } else {
         console.warn(`Suspicious feedback detected from user ${feedback.userId} for franchise ${feedback.franchiseId} (rating: ${feedback.rating}). Applying reduced weight.`);
         // Apply reduced weight for suspicious feedback
         if (feedback.rating >= ANTI_ABUSE_CONFIG.HIGH_RATING_THRESHOLD) {
-          acc += (5 * ANTI_ABUSE_CONFIG.SUSPICIOUS_RATING_WEIGHT_REDUCTION);
+          totalFeedbackScore += (5 * ANTI_ABUSE_CONFIG.SUSPICIOUS_RATING_WEIGHT_REDUCTION);
         } else if (feedback.rating <= ANTI_ABUSE_CONFIG.LOW_RATING_THRESHOLD) {
-          acc -= (10 * ANTI_ABUSE_CONFIG.SUSPICIOUS_RATING_WEIGHT_REDUCTION);
+          totalFeedbackScore -= (10 * ANTI_ABUSE_CONFIG.SUSPICIOUS_RATING_WEIGHT_REDUCTION);
         }
+        rawFeedbackSum += feedback.rating * ANTI_ABUSE_CONFIG.SUSPICIOUS_RATING_WEIGHT_REDUCTION;
+        feedbackCount += ANTI_ABUSE_CONFIG.SUSPICIOUS_RATING_WEIGHT_REDUCTION; // Count as a fraction
       }
     }
-    return acc;
-  }, 0);
+  });
 
-  score += feedbackScore;
+  score += totalFeedbackScore;
+
+  // New: Community Scoring Abuse Model
+  if (feedbackCount > 0) {
+    const currentCommunityAverage = rawFeedbackSum / feedbackCount;
+    const franchiseActivity = franchiseRatingHistory.get(franchiseId) || [];
+
+    const recentRatingsForCommunityScore = franchiseActivity.filter(
+      (activity) => currentTime - activity.timestamp < ANTI_ABUSE_CONFIG.COMMUNITY_SCORING_TREND_WINDOW_MS
+    );
+
+    if (recentRatingsForCommunityScore.length >= ANTI_ABUSE_CONFIG.MIN_REVIEWS_FOR_AVERAGE_CALC) {
+      const pastCommunityAverageSum = recentRatingsForCommunityScore.reduce((sum, entry) => sum + entry.rating, 0);
+      const pastCommunityAverage = pastCommunityAverageSum / recentRatingsForCommunityScore.length;
+
+      // Check for sudden, anomalous changes in community score
+      if (Math.abs(currentCommunityAverage - pastCommunityAverage) > ANTI_ABUSE_CONFIG.COMMUNITY_SCORING_ANOMALY_THRESHOLD) {
+        console.warn(`[Anti-Abuse] Community score for franchise ${franchiseId} flagged: Anomalous change detected. Current Avg: ${currentCommunityAverage.toFixed(2)}, Past Avg: ${pastCommunityAverage.toFixed(2)}`);
+        score *= 0.85; // Apply penalty
+      }
+
+      // Check for significant negative trends
+      if (currentCommunityAverage < pastCommunityAverage &&
+          (pastCommunityAverage - currentCommunityAverage) / pastCommunityAverage > ANTI_ABUSE_CONFIG.COMMUNITY_SCORING_NEGATIVE_TREND_THRESHOLD) {
+        console.warn(`[Anti-Abuse] Community score for franchise ${franchiseId} flagged: Significant negative trend detected. Current Avg: ${currentCommunityAverage.toFixed(2)}, Past Avg: ${pastCommunityAverage.toFixed(2)}`);
+        score *= 0.9; // Apply penalty
+      }
+    }
+  }
+
 
   // Apply a cap or floor to the score
   return Math.max(0, Math.min(100, score));
