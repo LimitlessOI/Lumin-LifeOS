@@ -159,13 +159,13 @@
     },
     {
       "id": "5",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/stripe-billing.js",
       "task": "design billing for partners",
       "spec": "Implement billing flow for partners separate from direct clients.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "processPartnerBilling"
       ],
@@ -182,13 +182,16 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-15T22:17:31.331Z",
-      "commit_sha": "6aee915f02361025756d46040cd1797823362e9f",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "5",
       "mission_id": "PRODUCT-white-label",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:processPartnerBilling; processPartnerBilling",
-      "reaudit_reset_at": "2026-07-30T18:55:06.853Z"
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:processPartnerBilling; behavior_assertion_failed; behavior_proof",
+      "reaudit_reset_at": "2026-07-30T18:55:06.853Z",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-30T23:38:28.612Z"
     },
     {
       "id": "6",
