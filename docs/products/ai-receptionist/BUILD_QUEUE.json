@@ -648,7 +648,7 @@
     },
     {
       "id": "ai-receptionist-4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/vapiRoutes.js",
       "task": "add routes for vapi operations",
       "spec": "Create routes to expose Vapi account creation and setup functionalities.",
@@ -656,7 +656,7 @@
         "ai-receptionist-2"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerVapiRoutes"
       ],
@@ -684,7 +684,7 @@
       "reaudit_reset_at": "2026-07-30T18:55:06.298Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-30T22:56:49.049Z",
       "last_attempt": null,
       "revive_count": 1,
       "revived_at": "2026-07-30T22:41:54.372Z",
