@@ -9,7 +9,7 @@
   "steps": [
     {
       "id": "step1",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/2023-10-01-security-receipt-spine.sql",
       "task": "create security receipt spine",
       "spec": "Establish receipt structure for security logs",
@@ -23,8 +23,8 @@
         "updated_at"
       ],
       "last_attempt_at": null,
-      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw; assertion_threw; assertion_threw; assertion_threw",
-      "commit_sha": "b01ab6829fbde4160bbfcba058c062384d8a48a8",
+      "last_error": null,
+      "commit_sha": "570fed4654d56f10ca637089edc4b2ac6174a3e8",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
