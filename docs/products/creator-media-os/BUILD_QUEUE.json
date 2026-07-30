@@ -242,7 +242,31 @@
       "blueprint_step_id": "5",
       "mission_id": "PRODUCT-creator-media-os",
       "shipped_via": null,
-      "reaudit_reset_at": "2026-07-30T18:55:06.422Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.422Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/creator-media-os/twins/steps/5.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T20:53:05.278Z",
+        "shipped_at": "2026-07-30T20:53:05.278Z",
+        "commit_sha": "5d03b10167b061e0cc86825467a1f58221e2bacd",
+        "content_sha256": "c7299df776bc0038778e0bf8737dcb6afbdf85af32d053ae56e62059110dc5c5",
+        "target_file": "services/thumbnailPipeline.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/thumbnailPipeline.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/creator-media-os/twins/steps/5.exact",
+          "content_sha256": "c7299df776bc0038778e0bf8737dcb6afbdf85af32d053ae56e62059110dc5c5"
+        }
+      },
+      "shipped_at": "2026-07-30T20:53:05.278Z"
     },
     {
       "id": "6",
