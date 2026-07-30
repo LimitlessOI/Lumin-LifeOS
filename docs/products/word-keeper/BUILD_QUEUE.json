@@ -122,7 +122,7 @@
     },
     {
       "id": "3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/transcriptPurgeService.js",
       "task": "Implement transcript purge logic",
       "spec": "Implement a service to handle purging transcripts older than 24 hours.",
@@ -130,7 +130,7 @@
         "1"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "purgeOldTranscripts"
       ],
@@ -146,13 +146,16 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-16T02:48:02.263Z",
-      "commit_sha": "0c4795d42397cce12ea682cb49cf258222130714",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "3",
       "mission_id": "PRODUCT-word-keeper",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:purgeOldTranscripts; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:07.447Z"
+      "last_error": "codegen_authoring_failed: codegen_empty: openai_builder_mini: HTTP 429: {\n    \"error\": {\n        \"message\": \"You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organiza",
+      "reaudit_reset_at": "2026-07-30T18:55:07.447Z",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-30T23:38:36.721Z"
     },
     {
       "id": "4",
