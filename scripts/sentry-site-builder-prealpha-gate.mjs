@@ -32,10 +32,12 @@ const FINDINGS_FEED = 'products/receipts/SENTRY_FINDINGS_FEED.json';
 // the completion gate must self-provision one or it fails closed forever and the
 // never-stop loop thrashes on the blocked step.
 const FIXTURE_URL = process.env.SENTRY_GATE_FIXTURE_URL || 'https://www.wellroundedmomma.com';
-const PLACEHOLDER_RE = /example\.com|hugedomains|godaddy|is for sale|buy this domain|domain (name )?(is )?for sale|parked (free|domain)|namecheap|sedo|this domain (is|may be)/i;
+const PLACEHOLDER_RE = /example\.com|hugedomains|godaddy|is for sale|buy this domain|domain (name )?(is )?for sale|parked (free|domain)|namecheap|sedo|this domain (is|may be)|hand-built.preview/i;
 
 function isPlaceholderPreview(p) {
-  const sourceUrl = String(p?.businessUrl || p?.sourceUrl || p?.targetUrl || p?.url || '').toLowerCase();
+  const sourceUrl = String(
+    p?.businessInfo?.sourceUrl || p?.businessInfo?.businessUrl || p?.businessUrl || p?.sourceUrl || p?.targetUrl || p?.url || p?.source || p?.businessInfo?.businessName || ''
+  ).toLowerCase();
   return !sourceUrl || PLACEHOLDER_RE.test(sourceUrl);
 }
 
@@ -48,7 +50,11 @@ async function ensurePreview() {
   try {
     const list = await fetch(`${BASE}/api/v1/sites/previews`, { headers: authed });
     const body = await list.json().catch(() => ({}));
-    const real = (body.previews || []).find((p) => p && p.clientId && p.editToken && !isPlaceholderPreview(p));
+    const candidates = (body.previews || []).filter(
+      (p) => p && p.clientId && p.editToken && !isPlaceholderPreview(p)
+    );
+    // Prefer generated variant fixtures (clientId prefix 'prev_') over static hand-built demos.
+    const real = candidates.find((p) => String(p.clientId).startsWith('prev_')) || candidates[0];
     if (real) {
       process.env.PREVIEW_CLIENT_ID = real.clientId;
       process.env.PREVIEW_EDIT_TOKEN = real.editToken;

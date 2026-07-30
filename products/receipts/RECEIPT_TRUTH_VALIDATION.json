@@ -1,8 +1,8 @@
 {
   "schema": "receipt_truth_validation_v1",
-  "at": "2026-07-30T02:11:11.653Z",
+  "at": "2026-07-30T02:26:43.607Z",
   "ok": true,
-  "checked": 126,
+  "checked": 127,
   "failures": [],
   "known_debt": [
     "MACHINE_ALPHA_WALKTHROUGH.json:ACCEPTANCE_PASS_WITHOUT_SHA_OR_BASE",
@@ -219,6 +219,13 @@
       "ok": true,
       "violations": [],
       "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "DEPLOY_DRIFT_AUDIT.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": true,
       "proposed_solutions": []
     },
     {

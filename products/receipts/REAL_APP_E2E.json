@@ -1,6 +1,6 @@
 {
   "schema": "real_app_e2e_v1",
-  "at": "2026-07-30T01:56:58.008Z",
+  "at": "2026-07-30T02:17:21.109Z",
   "base": "https://lumin-web-production-e3a9.up.railway.app",
   "ok": true,
   "passed": [
@@ -41,7 +41,7 @@
     },
     "chat_response": {
       "ok": true,
-      "detail": "74 chars: \"Point B: LifeOS Consumer Alpha (PRODUCT-LIFEOS-USER-AUTH-V1-0001)\n01:56 AM…\""
+      "detail": "90 chars: \"Yes, I am receiving you on JWT auth. Acknowledged: `trust-gate-ui-1785376643294`…\""
     },
     "smos_question": {
       "ok": true,
@@ -53,7 +53,7 @@
     },
     "drawer_direct_build": {
       "ok": true,
-      "detail": "✅ PASS · build Command: COMMITTED Transport: COMMIT_ONLY_NOT_LIVE File: scripts/lifeos-direct-build-smoke-test.mjs Commit: 529e31dc9c94 ✅ D"
+      "detail": "✅ PASS · build Command: COMMITTED Transport: COMMIT_ONLY_NOT_LIVE File: scripts/lifeos-direct-build-smoke-test.mjs Commit: e6cec402632d ✅ D"
     },
     "navigate_lifere": {
       "ok": true,

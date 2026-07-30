@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T02:17:32.901Z",
+  "generated_at": "2026-07-30T02:27:36.662Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12338,
+  "file_count": 12339,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -37989,9 +37989,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 43624,
-      "mtime": "2026-07-30T02:14:38.254Z",
-      "indexed_at": "2026-07-30T02:14:38.254Z"
+      "bytes": 43723,
+      "mtime": "2026-07-30T02:27:36.662Z",
+      "indexed_at": "2026-07-30T02:27:36.662Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41398,9 +41398,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 213643,
-      "mtime": "2026-07-30T02:14:38.254Z",
-      "indexed_at": "2026-07-30T02:14:38.254Z"
+      "bytes": 213697,
+      "mtime": "2026-07-30T02:27:36.662Z",
+      "indexed_at": "2026-07-30T02:27:36.662Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -64398,6 +64398,14 @@
       "synopsis_index_only": true
     },
     {
+      "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
+      "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
+      "bytes": 3771,
+      "mtime": "2026-07-30T02:27:36.662Z",
+      "indexed_at": "2026-07-30T02:27:36.662Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "products/receipts/DIRECT_EXECUTION_POINT_B_LIVE.json",
       "synopsis": "Product receipt — DIRECT EXECUTION POINT B LIVE.",
       "bytes": 3057,
@@ -64425,8 +64433,8 @@
       "path": "products/receipts/FOUNDER_JWT_CHAT_PROOF.json",
       "synopsis": "Product receipt — FOUNDER JWT CHAT PROOF.",
       "bytes": 671,
-      "mtime": "2026-07-30T02:14:38.254Z",
-      "indexed_at": "2026-07-30T02:14:38.254Z",
+      "mtime": "2026-07-30T02:27:36.662Z",
+      "indexed_at": "2026-07-30T02:27:36.662Z",
       "synopsis_index_only": true
     },
     {
@@ -64457,8 +64465,8 @@
       "path": "products/receipts/FOUNDER_UI_LOGIN_E2E.json",
       "synopsis": "Product receipt — FOUNDER UI LOGIN E2E.",
       "bytes": 804,
-      "mtime": "2026-07-30T02:14:38.254Z",
-      "indexed_at": "2026-07-30T02:14:38.254Z",
+      "mtime": "2026-07-30T02:27:36.662Z",
+      "indexed_at": "2026-07-30T02:27:36.662Z",
       "synopsis_index_only": true
     },
     {
@@ -64969,24 +64977,24 @@
       "path": "products/receipts/POINT_B_DNA_VERIFY.json",
       "synopsis": "Product receipt — POINT B DNA VERIFY.",
       "bytes": 318,
-      "mtime": "2026-07-30T02:14:38.254Z",
-      "indexed_at": "2026-07-30T02:14:38.254Z",
+      "mtime": "2026-07-30T02:27:36.662Z",
+      "indexed_at": "2026-07-30T02:27:36.662Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/REAL_APP_E2E.json",
       "synopsis": "Product receipt — REAL APP E2E.",
-      "bytes": 2421,
-      "mtime": "2026-07-30T02:14:38.254Z",
-      "indexed_at": "2026-07-30T02:14:38.254Z",
+      "bytes": 2426,
+      "mtime": "2026-07-30T02:27:36.662Z",
+      "indexed_at": "2026-07-30T02:27:36.662Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
-      "bytes": 23902,
-      "mtime": "2026-07-30T02:14:38.254Z",
-      "indexed_at": "2026-07-30T02:14:38.254Z",
+      "bytes": 24056,
+      "mtime": "2026-07-30T02:27:36.662Z",
+      "indexed_at": "2026-07-30T02:27:36.662Z",
       "synopsis_index_only": true
     },
     {
@@ -65000,17 +65008,17 @@
     {
       "path": "products/receipts/SENTRY_FINDINGS_FEED.json",
       "synopsis": "Product receipt — SENTRY FINDINGS FEED.",
-      "bytes": 214,
-      "mtime": "2026-07-30T02:14:38.254Z",
-      "indexed_at": "2026-07-30T02:14:38.254Z",
+      "bytes": 1928,
+      "mtime": "2026-07-30T02:27:36.662Z",
+      "indexed_at": "2026-07-30T02:27:36.662Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/SENTRY_FINDINGS_FEED.lifeos-founder-ui.json",
       "synopsis": "Product receipt — SENTRY FINDINGS FEED.Lifeos Founder Ui.",
       "bytes": 285,
-      "mtime": "2026-07-30T02:14:38.254Z",
-      "indexed_at": "2026-07-30T02:14:38.254Z",
+      "mtime": "2026-07-30T02:27:36.662Z",
+      "indexed_at": "2026-07-30T02:27:36.662Z",
       "synopsis_index_only": true
     },
     {
@@ -65024,9 +65032,9 @@
     {
       "path": "products/receipts/SENTRY_FINDINGS_FEED.site-builder.json",
       "synopsis": "Product receipt — SENTRY FINDINGS FEED.Site Builder.",
-      "bytes": 280,
-      "mtime": "2026-07-30T02:14:38.254Z",
-      "indexed_at": "2026-07-30T02:14:38.254Z",
+      "bytes": 1994,
+      "mtime": "2026-07-30T02:27:36.662Z",
+      "indexed_at": "2026-07-30T02:27:36.662Z",
       "synopsis_index_only": true
     },
     {
@@ -65049,8 +65057,8 @@
       "path": "products/receipts/SITE_BUILDER_PREALPHA_LAYER_A.json",
       "synopsis": "Product receipt — SITE BUILDER PREALPHA LAYER A.",
       "bytes": 2673,
-      "mtime": "2026-07-30T02:14:38.254Z",
-      "indexed_at": "2026-07-30T02:14:38.254Z",
+      "mtime": "2026-07-30T02:27:36.662Z",
+      "indexed_at": "2026-07-30T02:27:36.662Z",
       "synopsis_index_only": true
     },
     {
@@ -65153,16 +65161,16 @@
       "path": "products/receipts/TRUTH_ENFORCEMENT_AUDIT.json",
       "synopsis": "Product receipt — TRUTH ENFORCEMENT AUDIT.",
       "bytes": 782,
-      "mtime": "2026-07-30T02:14:38.254Z",
-      "indexed_at": "2026-07-30T02:14:38.254Z",
+      "mtime": "2026-07-30T02:27:36.662Z",
+      "indexed_at": "2026-07-30T02:27:36.662Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/TRUTH_LOCKDOWN_VERIFY.json",
       "synopsis": "Product receipt — TRUTH LOCKDOWN VERIFY.",
       "bytes": 1318,
-      "mtime": "2026-07-30T02:14:38.254Z",
-      "indexed_at": "2026-07-30T02:14:38.254Z",
+      "mtime": "2026-07-30T02:27:36.662Z",
+      "indexed_at": "2026-07-30T02:27:36.662Z",
       "synopsis_index_only": true
     },
     {
@@ -65193,8 +65201,8 @@
       "path": "products/receipts/WISDOM_TRUTH_AUDIT.json",
       "synopsis": "Product receipt — WISDOM TRUTH AUDIT.",
       "bytes": 1001,
-      "mtime": "2026-07-30T02:14:38.254Z",
-      "indexed_at": "2026-07-30T02:14:38.254Z",
+      "mtime": "2026-07-30T02:27:36.662Z",
+      "indexed_at": "2026-07-30T02:27:36.662Z",
       "synopsis_index_only": true
     },
     {
@@ -73318,9 +73326,9 @@
     {
       "path": "scripts/sentry-site-builder-prealpha-gate.mjs",
       "synopsis": "SENTRY Site Builder pre-alpha completion gate — runs BOTH doctrine",
-      "bytes": 10582,
-      "mtime": "2026-07-30T02:14:38.254Z",
-      "indexed_at": "2026-07-30T02:14:38.254Z",
+      "bytes": 10932,
+      "mtime": "2026-07-30T02:27:36.662Z",
+      "indexed_at": "2026-07-30T02:27:36.662Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]

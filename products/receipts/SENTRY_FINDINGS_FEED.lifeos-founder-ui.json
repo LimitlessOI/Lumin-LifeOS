@@ -1,7 +1,7 @@
 {
   "schema": "sentry_findings_feed_v1",
   "product": "lifeos-founder-ui",
-  "generated_at": "2026-07-30T01:57:25.849Z",
+  "generated_at": "2026-07-30T02:17:55.236Z",
   "findings_count": 0,
   "without_solution": 0,
   "unclassified_error_findings": 0,

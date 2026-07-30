@@ -1,6 +1,6 @@
 {
   "schema": "founder_ui_login_e2e_v1",
-  "at": "2026-07-30T01:57:22.511Z",
+  "at": "2026-07-30T02:17:51.774Z",
   "base": "https://lumin-web-production-e3a9.up.railway.app",
   "ok": true,
   "auth_mode": "ui_form_login",
@@ -16,7 +16,7 @@
     },
     "chat_send": {
       "ok": true,
-      "probe": "trust-gate-ui-1785376643294"
+      "probe": "trust-gate-ui-1785377872674"
     },
     "session_held": {
       "ok": true,
