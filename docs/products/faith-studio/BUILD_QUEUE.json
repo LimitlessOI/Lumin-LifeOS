@@ -248,7 +248,31 @@
       "shipped_via": null,
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerPrivateWitnessModeRoutes; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.428Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.428Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/faith-studio/twins/steps/step7.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T20:35:18.859Z",
+        "shipped_at": "2026-07-30T20:35:18.859Z",
+        "commit_sha": "b7ec0940ff9a943285ff2c492efc48719a05b7cd",
+        "content_sha256": "ae25c26b33d4afea4fecd7f96190a3d3a32227301e97034c12d0032665638fbf",
+        "target_file": "routes/privateWitnessMode.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "routes/privateWitnessMode.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/faith-studio/twins/steps/step7.exact",
+          "content_sha256": "ae25c26b33d4afea4fecd7f96190a3d3a32227301e97034c12d0032665638fbf"
+        }
+      },
+      "shipped_at": "2026-07-30T20:35:18.859Z"
     },
     {
       "id": "step8",
