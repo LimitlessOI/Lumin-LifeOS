@@ -612,13 +612,13 @@
     },
     {
       "id": "s1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/limitlessos-ui-routes.js",
       "task": "create route for product id",
       "spec": "Creates a route for configuring and displaying a canonical product id for LimitlessOS in the customer-facing UI.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerLimitlessOSIdRoutes"
       ],
@@ -629,14 +629,17 @@
       "file_contains": [
         "let canonicalProductId = 'LimitlessOS';"
       ],
-      "commit_sha": "74261cb7c070c8e1e0754151338871af4fc0d4ea",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "s1",
       "mission_id": "PRODUCT-limitlessos",
       "shipped_via": null,
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerLimitlessOSIdRoutes; registerLimitlessOSIdRoutes; let canonicalProductId = 'LimitlessOS';",
-      "reaudit_reset_at": "2026-07-30T18:55:06.661Z"
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerLimitlessOSIdRoutes; behavior_assertion_failed; behavior_proof",
+      "reaudit_reset_at": "2026-07-30T18:55:06.661Z",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-30T19:27:06.288Z"
     },
     {
       "id": "s2",
