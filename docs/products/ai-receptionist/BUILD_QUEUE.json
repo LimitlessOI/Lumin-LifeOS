@@ -521,14 +521,37 @@
         "CREATE TABLE IF NOT EXISTS vapi_account"
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-16T04:15:45.549Z",
+      "shipped_at": "2026-07-30T21:48:07.998Z",
       "commit_sha": "9e438c2422d713dedd7d37750af18e05486a42b6",
       "blueprint_id": "PRODUCT-AI-RECEPTIONIST-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "ai-receptionist-1",
       "mission_id": "PRODUCT-ai-receptionist",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.298Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.298Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/ai-receptionist/twins/steps/ai-receptionist-1.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T21:48:07.998Z",
+        "shipped_at": "2026-07-30T21:48:07.998Z",
+        "commit_sha": "9e438c2422d713dedd7d37750af18e05486a42b6",
+        "content_sha256": "9f7eed27156ae2acc818d6fa6051f7bab5f4981eefafaa3dcb02bf83989a7c94",
+        "target_file": "db/migrations/20231028_create_vapi_account.sql",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "db/migrations/20231028_create_vapi_account.sql",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/ai-receptionist/twins/steps/ai-receptionist-1.exact",
+          "content_sha256": "9f7eed27156ae2acc818d6fa6051f7bab5f4981eefafaa3dcb02bf83989a7c94"
+        }
+      }
     },
     {
       "id": "ai-receptionist-2",
