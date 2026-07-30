@@ -73,25 +73,28 @@
     },
     {
       "id": "3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/001_create_vector_embedding.sql",
       "task": "define vector embedding strategy",
       "spec": "Add a migration to support vector embedding using either pgvector or Pinecone. Specify database schema changes.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS vector_embeddings"
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-15T18:01:40.661Z",
-      "commit_sha": "6ff2386f707d745ffd442ec50e6c2c2d135ca788",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "3",
       "mission_id": "PRODUCT-knowledge-base",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.480Z"
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS vector_embeddings; behavior_assertion_failed; behavior_proof",
+      "reaudit_reset_at": "2026-07-30T18:55:06.480Z",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-30T23:18:57.504Z"
     },
     {
       "id": "4",
