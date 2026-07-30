@@ -636,13 +636,13 @@
     },
     {
       "id": "s1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/limitlessos-ui-routes.js",
       "task": "create route for product id",
       "spec": "Creates a route for configuring and displaying a canonical product id for LimitlessOS in the customer-facing UI.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerLimitlessOSIdRoutes"
       ],
@@ -663,7 +663,7 @@
       "reaudit_reset_at": "2026-07-30T18:55:06.661Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-30T20:02:24.672Z",
       "last_attempt": null,
       "revive_count": 1,
       "revived_at": "2026-07-30T19:43:32.460Z",
@@ -811,7 +811,7 @@
     },
     {
       "id": "11",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "routes/bundle_social_automation_routes.js",
       "task": "Route for bundle management",
       "spec": "Expose API routes to manage bundles of website, social, and automation tiers",
@@ -819,7 +819,7 @@
         "10"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerBundleRoutes"
       ],
@@ -843,12 +843,24 @@
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "11",
       "mission_id": "PRODUCT-limitlessos",
-      "pre_existing": false,
+      "pre_existing": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerBundleRoutes; behavior_assertion_failed; behavior_proof",
       "reaudit_reset_at": "2026-07-30T18:55:06.661Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-07-30T19:29:06.335Z"
+      "last_attempt_at": null,
+      "last_attempt": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-30T20:02:02.145Z",
+      "no_op": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "step9",
