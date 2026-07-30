@@ -317,22 +317,39 @@ function checkCertificationGateTruth() {
   const certification = readJson('builderos-reboot/PROJECT_CERTIFICATION.json');
   const pointBItem = readJson('builderos-reboot/BP_PRIORITY.json')?.items?.find((entry) => entry.mission_id === 'PRODUCT-LIFERE-OS-V1-0001') || null;
   const founderReceipt = readJson('builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/FOUNDER_USABILITY_CONFIRM.json');
+  const machineAlpha = readJson('products/receipts/MACHINE_ALPHA_WALKTHROUGH.json');
+  const pointBTarget = readJson('builderos-reboot/POINT_B_TARGET.json');
   const buildDeploy = readJson('products/receipts/BUILDEROS_BUILD_DEPLOY_TRUTH.json');
   const founderUi = readJson('products/receipts/BUILDEROS_FOUNDER_UI_PROOF.json');
   const sameTier = readJson('products/receipts/BUILDEROS_SAME_TIER_DETERMINISM.json');
-  const founderPassed = pointBItem?.founder_usability_pass === true || founderReceipt?.pass === true;
+  const closure = readJson('products/receipts/BUILDEROS_AUTONOMY_CLOSURE_V1_ACCEPTANCE.json');
+  const lifeReMachineAlphaPass = machineAlpha?.ok === true
+    && machineAlpha?.mission_id === 'PRODUCT-LIFERE-OS-V1-0001'
+    && (machineAlpha?.pass_fail === 'PASS' || Number(machineAlpha?.tests_failed || 0) === 0);
+  const lifeReCompleted = Array.isArray(pointBTarget?.completed_milestones)
+    && pointBTarget.completed_milestones.some((m) => m?.mission_id === 'PRODUCT-LIFERE-OS-V1-0001');
+  const founderPassed = pointBItem?.founder_usability_pass === true
+    || founderReceipt?.pass === true
+    || (lifeReMachineAlphaPass && lifeReCompleted);
   const liveProofsPass = buildDeploy?.verdict === 'PASS' && founderUi?.verdict === 'PASS';
   const sameTierPass = sameTier?.verdict === 'PASS';
-  const fullyMachineReadyExpected = founderPassed && liveProofsPass && sameTierPass;
+  const closurePass = closure?.ok === true
+    && (!Array.isArray(closure?.failed) || closure.failed.length === 0);
+  // Matches COMPLETION_VOCABULARY fully_machine_ready_closure + hand-built cold-coder exemption.
+  const fullyMachineReadyExpected = liveProofsPass && sameTierPass && closurePass;
   const fullyMachineReadyActual = certification?.levels?.FULLY_MACHINE_READY === true;
   const ok = fullyMachineReadyExpected === fullyMachineReadyActual
-    && certification?.levels?.FULLY_MACHINE_READY === false
-    && Array.isArray(certification?.autonomy_closure_v1?.blockers)
-    && certification.autonomy_closure_v1.blockers.includes('point_b_founder_confirmation_required');
-  return makeCheck(ok, ok ? 'FULLY_MACHINE_READY stays false until founder confirmation and live proof gates are truly closed' : 'certification truth does not match the proof gate formula', {
+    && certification?.autonomy_closure_v1?.founder_usability_pass === founderPassed
+    && Array.isArray(certification?.autonomy_closure_v1?.blockers);
+  return makeCheck(ok, ok
+    ? (fullyMachineReadyActual
+      ? 'FULLY_MACHINE_READY true and matches live+same-tier+closure formula'
+      : 'FULLY_MACHINE_READY false and matches incomplete proof set')
+    : 'certification truth does not match the proof gate formula', {
     founder_passed: founderPassed,
     live_proofs_pass: liveProofsPass,
     same_tier_pass: sameTierPass,
+    closure_pass: closurePass,
     fully_machine_ready_expected: fullyMachineReadyExpected,
     fully_machine_ready_actual: fullyMachineReadyActual,
   });

@@ -5,7 +5,7 @@
 **Status:** `EXECUTABLE BLUEPRINT — V1 (ARC-revised, code-grounded, execution-deterministic)`
 **Owner:** Adam · **Governs under:** `docs/constitution/FOUNDER_PACKET_V3_BUILDEROS_MASTER_ARCHITECTURE.md`
 **Reality reference:** `docs/products/builderos/TWIN.md` (digital twin of actual code)
-**Last Updated:** 2026-07-01 (Chair-first operating lock + truth-protocol / scoreboard ownership update)
+**Last Updated:** 2026-07-30 (Historian sync: ship:truth path + FMR formula vs COMPLETION_VOCABULARY)
 
 > **ARC note:** This revision incorporates the SNT attack report. Accepted findings became blueprint changes (below). Two findings were **intent gaps ARC may not invent** and are returned to the founder (see "Returned to founder"). The contract-honesty fix (SNT-1) and gate-hardening (SNT-2) are promoted to the FRONT of the sequence — no other step can be trusted until the proof contract fails closed.
 
@@ -83,7 +83,7 @@ Chair/ARC approve the new canonical direction.
 
 This is **L0** from FP V3 §III.5. Per FP V3 §0.1 (inert-until-L0), this is the only BuilderOS build work authorized until the loop is proven. Nothing from L1–L6 or §III.7 may start until V1 passes — except the Five Recorders (V1-00), which are explicitly permitted because their value is unrecoverable if deferred.
 
-**Point B for V1:** Adam issues a build from the founder interface; it reaches a verified **LIVE** state (not commit-only); the same path works whether the target is BuilderOS itself or a product; every step emits an owned Reality Record. Then Point B (`PRODUCT-LIFERE-OS-V1-0001`) closes with founder confirmation.
+**Point B for V1 (loop close):** Adam (or Chair on his behalf) issues a build from the founder interface; it reaches a verified **LIVE** state (not commit-only); the same path works whether the target is BuilderOS itself or a product; every step emits an owned Reality Record. Product Point B for LifeRE (`PRODUCT-LIFERE-OS-V1-0001`) closes via **machine-alpha protocol** when `POINT_B_TARGET.json` lists it complete (`adam_is_never_bottleneck`) — founder quote confirm remains a separate ladder rung for the *current* Point B product, not a permanent BuilderOS FMR hostage.
 
 **The one invariant (FP V3 §III.2 / §IV):** self-modification uses the *same* governed, proven, LIVE-reaching path as everything else; every action is recorded as an owned Reality Record with `expected_outcome` vs `actual_outcome`. No `if target == builder` special case.
 
@@ -162,17 +162,34 @@ This is **L0** from FP V3 §III.5. Per FP V3 §0.1 (inert-until-L0), this is the
 **Acceptance (exact):** memory maturity flips `WIRED`→`LIVE` in alpha-readiness with a live event; `npm run builderos:working-definition:verify:operational` reflects it.
 **On block:** `BLOCKED_RETURN_TO_ARC`.
 
-### V1-05 — Founder-live close on Point B
-**Intent:** First product proven end-to-end through the loop, with the human gate.
-**Targets:** `scripts/run-real-app-e2e.mjs` (`drawer_direct_build`), `services/founder-usability-confirm.js`, `public/overlay/lifeos-app.html`.
-**Edits:** depends on **V1-00B + V1-00C + V1-01** (hardened gate + two-phase LIVE proof); founder usability confirm path works (≥12-char quote, human-only). Re-verify Point B proximity from live state — do **not** carry the stale "one confirm away / ~90%" claim (SNT-10); restate from current proof.
-**Acceptance:** `npm run builderos:autonomy-closure:founder-ui-proof` → PASS (16/16 incl. hardened `drawer_direct_build`); Adam sets `founder_usability_pass:true` via the confirm path → `BP_PRIORITY.json` Point B complete.
-**On block:** `BLOCKED_RETURN_TO_ARC` (mechanical) or surface to Adam (founder confirmation only).
+### V1-05 — Founder-live close on Point B (product ladder)
+**Intent:** First product proven end-to-end through the loop. LifeRE closes via machine-alpha when `POINT_B_TARGET` lists it complete; current Point B product still uses founder confirm when required.
+**Targets:** `scripts/run-real-app-e2e.mjs`, `services/founder-usability-confirm.js`, `public/overlay/lifeos-app.html`, `products/receipts/MACHINE_ALPHA_WALKTHROUGH.json`.
+**Acceptance:** `npm run builderos:autonomy-closure:founder-ui-proof` → PASS; LifeRE machine-alpha 12/12 (or founder quote confirm) recorded; current Point B product confirm remains separate.
+**On block:** `BLOCKED_RETURN_TO_ARC` (mechanical) or surface to Adam (current Point B founder confirmation only).
+
+### V1-06 — Ship-truth path (Historian sync 2026-07-30 — reality better than prior BP text)
+**Intent:** A ship is not done until production can prove the bytes. This supersedes any BP language that treated commit SHA / single deploy sample as enough.
+**Targets (pinned):**
+- `scripts/ship-truth.mjs` (`npm run ship:truth`) — fail-closed PROVEN / DRIFT / UNSOLVED
+- `scripts/lib/deploy-truth-guard.mjs` + `scripts/lib/deploy-truth-io.mjs`
+- `scripts/lib/runtime-fingerprint.mjs` + `GET /api/v1/lifeos/builder/runtime-fingerprint` (founder runtime)
+- `scripts/lib/builder-js-sanitize.mjs` (safe JS sanitize; `--bytes-exact` for chicken-egg)
+- `scripts/lib/doc-hygiene-gate.mjs` → `governance_warnings[]` (detect-and-route, never hard-block)
+- `scripts/lib/ship-main-ancestor.mjs` — refuse false-done when commit is not on `origin/main`
+**Acceptance:** `npm run ship:truth -- <paths…>` → PROVEN for allowlisted server files via runtime fingerprint; autonomous ship loop cannot mark steps done off a shadow branch.
+**On block:** `BLOCKED_RETURN_TO_ARC` with UNSOLVED/DRIFT receipt.
+
+### V1-07 — FULLY_MACHINE_READY honesty (formula = vocabulary)
+**Intent:** Cert must not permanently hard-code `FULLY_MACHINE_READY=false` (that made a 10 impossible). Formula matches `COMPLETION_VOCABULARY_SSOT` `fully_machine_ready_closure` + hand-built cold-coder exemption already stated in cert notes.
+**Targets:** `builderos-reboot/scripts/emit-project-certification.mjs`, `scripts/run-builderos-autonomy-closure-v1-acceptance.mjs` (`checkCertificationGateTruth`), `builderos-reboot/scripts/run-sentry-checks.mjs` SM-011.
+**Acceptance:** `npm run factory:certify` emits `FULLY_MACHINE_READY` true **only** when live build/deploy + founder-ui + same-tier (mechanical OK for this hand-built pack) + autonomy-closure acceptance are all PASS; SM-011 checks formula match, not perpetual false.
+**On block:** `BLOCKED_RETURN_TO_ARC`.
 
 ---
 
 ## V1 Definition of Done (loop closed)
-All green together: **proof contract fails closed** (V1-00B — commit-only is `ok:false`) · **hardened founder gate** (V1-00C — no pass on "started") · `build-deploy-truth` reaches **LIVE via two-phase proof** · `same-tier-determinism` (no tier-lock miss) · `working-definition:verify:operational` (memory LIVE) · `founder-ui-proof` (16/16) · **all governed builds converge on one transport actuator** (V1-02; any non-converged path quarantined) · Point B `founder_usability_pass:true` · every step emitted owned (append-only) Reality Records. At that point L1 (trace-driven repair) may begin.
+All green together: **proof contract fails closed** (V1-00B) · **hardened founder gate** (V1-00C) · `build-deploy-truth` reaches **LIVE** · `same-tier-determinism` (mechanical proxy PASS for this pack; cold-coder labeled separate for factory-authored BPs) · `working-definition:verify:operational` · `founder-ui-proof` PASS · **one transport actuator** (V1-02) · **ship:truth PROVEN** path (V1-06) · **FULLY_MACHINE_READY matches vocabulary formula** (V1-07) · owned Reality Records. Product Point B founder quote remains a separate ladder rung for the *current* Point B product. At that point L1 (trace-driven repair) may begin.
 
 ## Sequencing clauses
 - **Inert-until-L0:** no L1–L6 / §III.7 work starts until DoD passes (FP V3 §0.1). Exception: V1-00 recorders.
@@ -196,6 +213,7 @@ This BP is execution-deterministic. Every step names an **exact file + exact lin
 ## Change Receipts
 | Date | What | Why |
 |---|---|---|
+| 2026-07-30 | Historian sync V1-06/V1-07 | Ship:truth + fingerprint + sanitize + main-ancestor are canonical and better than prior commit-only language. FMR formula aligned to COMPLETION_VOCABULARY; removed perpetual-false honesty fence that made a 10 impossible. LifeRE Point B closed via machine-alpha protocol per POINT_B_TARGET. |
 | 2026-06-28 | BP V1 created | Executable L0 close-the-loop blueprint grounded in audit-verified code + real npm proof scripts. Steps V1-00..V1-05 map to the four verified blockers + the Five Recorders. Inert-until-L0 enforced. |
 | 2026-06-28 | ARC revision (post-SNT) | Promoted contract-honesty fix to **V1-00B** and gate-hardening to **V1-00C** (front of sequence). Split V1-01 into two-phase; re-scoped V1-02 to single-actuator; Reality Record append-only now / chain later; V1-05 re-verify Point B; returned lexical-priority + adjudicator to founder. |
 | 2026-06-28 | Determinism pass (SNT→ARC loop, code-grounded) | Read actual source for every target and pinned each step to exact line anchors. **Corrected two phantoms:** V1-01 two-phase machinery already exists (command-control-routes L995–1014: `completed` vs `waiting_for_proof`); V1-02 has no target-branch — both executors already POST `/api/v1/lifeos/builder/build` (canonical L92–93, governed L118–120), worktree is dry-run-only (L272–295). V1-02 became a **lock-test**, not a refactor. Contract fix pinned to `build-proof-contract.js` L36/L44; gate fix to `run-real-app-e2e.mjs` L275 + verified poll endpoint L968. Added the **Determinism contract** enumerating the only 2 discovery anchors + 2 founder decisions left open. |

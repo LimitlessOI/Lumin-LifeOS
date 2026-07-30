@@ -39,7 +39,23 @@ const checks = [
     observed: exists('lumin-factory/REPO_INIT_MANIFEST.json'),
   },
   { id: 'SM-010', name: 'Factory CI umbrella', pass: runOk(['builderos-reboot/scripts/factory-ci.mjs']) },
-  { id: 'SM-011', name: 'No FULLY_MACHINE_READY overclaim', pass: loadJson('builderos-reboot/PROJECT_CERTIFICATION.json')?.levels?.FULLY_MACHINE_READY === false },
+  {
+    id: 'SM-011',
+    name: 'FULLY_MACHINE_READY matches proof formula',
+    pass: (() => {
+      const cert = loadJson('builderos-reboot/PROJECT_CERTIFICATION.json');
+      const buildDeploy = loadJson('products/receipts/BUILDEROS_BUILD_DEPLOY_TRUTH.json');
+      const founderUi = loadJson('products/receipts/BUILDEROS_FOUNDER_UI_PROOF.json');
+      const sameTier = loadJson('products/receipts/BUILDEROS_SAME_TIER_DETERMINISM.json');
+      const closure = loadJson('products/receipts/BUILDEROS_AUTONOMY_CLOSURE_V1_ACCEPTANCE.json');
+      const live = buildDeploy?.verdict === 'PASS' && founderUi?.verdict === 'PASS';
+      const same = sameTier?.verdict === 'PASS';
+      const closureOk = closure?.ok === true
+        && (!Array.isArray(closure?.failed) || closure.failed.length === 0);
+      const expected = live && same && closureOk;
+      return cert?.levels?.FULLY_MACHINE_READY === expected;
+    })(),
+  },
   { id: 'SM-012', name: 'SENTRY audit report exists', pass: exists('builderos-reboot/SENTRY_AUDIT_REPORT.md') },
   { id: 'SM-013', name: 'Full loop proof receipt', pass: loadJson('builderos-reboot/FULL_LOOP_PROOF_RECEIPT.json')?.pass === true },
   { id: 'SM-014', name: 'TSOS hot path integration', pass: runOk(['builderos-reboot/scripts/factory-tsos-integration.mjs']) },

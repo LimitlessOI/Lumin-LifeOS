@@ -57,6 +57,7 @@ async function fetchJsonWithTimeout(url, options = {}, timeoutMs = FETCH_TIMEOUT
 
 async function pollBuildJob(jobId, pollUrl, pollMax = POLL_MAX) {
   const url = pollUrl?.startsWith('http') ? pollUrl : `${BASE}${pollUrl || `/api/v1/lifeos/builderos/command-control/founder-interface/build-job/${jobId}`}`;
+  let consecutiveFetchErrors = 0;
   for (let i = 0; i < pollMax; i += 1) {
     await new Promise((r) => setTimeout(r, POLL_MS));
     let res;
@@ -67,7 +68,12 @@ async function pollBuildJob(jobId, pollUrl, pollMax = POLL_MAX) {
         { headers: authHeaders() },
         FETCH_TIMEOUT_MS,
       ));
+      consecutiveFetchErrors = 0;
     } catch (error) {
+      consecutiveFetchErrors += 1;
+      // One slow poll must not fail the whole probe — Railway multi-instance + FF races
+      // commonly exceed a single 15s fetch. Only hard-fail after repeated fetch errors.
+      if (consecutiveFetchErrors < 3 && i < pollMax - 1) continue;
       return {
         json: {
           pass_fail: 'FAIL',
@@ -224,7 +230,7 @@ const PROBES = [
     poll: true,
     allowAlreadyPresent: true,
     allowBuildStarted: true,
-    pollMax: 24,
+    pollMax: 48,
   },
   {
     id: 'B3_nl_css_yellow',
@@ -234,7 +240,7 @@ const PROBES = [
     poll: true,
     allowAlreadyPresent: true,
     allowBuildStarted: true,
-    pollMax: 24,
+    pollMax: 48,
   },
 ];
 

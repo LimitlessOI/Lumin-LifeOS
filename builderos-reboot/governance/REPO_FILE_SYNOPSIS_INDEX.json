@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T18:22:12.801Z",
+  "generated_at": "2026-07-30T18:25:21.812Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12360,
   "files": [
@@ -29679,10 +29679,10 @@
     },
     {
       "path": "builderos-reboot/scripts/emit-project-certification.mjs",
-      "synopsis": "Final certification v2 — includes Phase 11 full loop + Phase 12 salvage. Final certification v2 — includes Phase 11 full loop + Phase 12 salvage.",
-      "bytes": 6457,
-      "mtime": "2026-07-10T05:55:37.209Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "synopsis": "BuilderOS artifact — Emit Project Certification.",
+      "bytes": 0,
+      "mtime": "2026-07-30T18:25:21.812Z",
+      "indexed_at": "2026-07-30T18:25:21.812Z"
     },
     {
       "path": "builderos-reboot/scripts/execute-mission-step.mjs",
@@ -30155,10 +30155,10 @@
     },
     {
       "path": "builderos-reboot/scripts/run-sentry-checks.mjs",
-      "synopsis": "Mechanical SENTRY checklist — outputs SENTRY_CHECK_RESULT.json Mechanical SENTRY checklist — outputs SENTRY_CHECK_RESULT.json",
-      "bytes": 3307,
-      "mtime": "2026-07-10T00:46:03.295Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "synopsis": "BuilderOS artifact — Run Sentry Checks.",
+      "bytes": 0,
+      "mtime": "2026-07-30T18:25:21.812Z",
+      "indexed_at": "2026-07-30T18:25:21.812Z"
     },
     {
       "path": "builderos-reboot/scripts/sentry-behavior-proof.mjs",
@@ -40225,15 +40225,15 @@
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Documentation — PRODUCT HOME.",
       "bytes": 0,
-      "mtime": "2026-07-30T18:22:12.801Z",
-      "indexed_at": "2026-07-30T18:22:12.801Z"
+      "mtime": "2026-07-30T18:25:21.812Z",
+      "indexed_at": "2026-07-30T18:25:21.812Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
-      "synopsis": "BUILDEROS_BP_V1 — executable Version-1 blueprint: close the build loop (L0) + turn on the five recorders",
-      "bytes": 21471,
-      "mtime": "2026-07-03T00:17:45.056Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "synopsis": "Documentation — BP V1.",
+      "bytes": 0,
+      "mtime": "2026-07-30T18:25:21.812Z",
+      "indexed_at": "2026-07-30T18:25:21.812Z"
     },
     {
       "path": "docs/products/builderos/specs/FOUNDER_VIRTUAL_TWIN.md",
@@ -40244,10 +40244,10 @@
     },
     {
       "path": "docs/products/builderos/TWIN.md",
-      "synopsis": "BUILDEROS_TWIN — complete digital twin of the ACTUAL BuilderOS code (reality map, kept in sync with code)",
-      "bytes": 12188,
-      "mtime": "2026-06-29T18:25:12.025Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "synopsis": "Documentation — TWIN.",
+      "bytes": 0,
+      "mtime": "2026-07-30T18:25:21.812Z",
+      "indexed_at": "2026-07-30T18:25:21.812Z"
     },
     {
       "path": "docs/products/business-tools/FILE_MANIFEST.json",
@@ -72756,13 +72756,10 @@
     },
     {
       "path": "scripts/run-builderos-autonomy-closure-v1-acceptance.mjs",
-      "synopsis": "BuilderOS autonomy closure v1 acceptance.",
-      "bytes": 18627,
-      "mtime": "2026-07-03T21:46:43.870Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
-      "ssot": [
-        "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/BLUEPRINT.json"
-      ]
+      "synopsis": "Script — Run Builderos Autonomy Closure V1 Acceptance.",
+      "bytes": 0,
+      "mtime": "2026-07-30T18:25:21.812Z",
+      "indexed_at": "2026-07-30T18:25:21.812Z"
     },
     {
       "path": "scripts/run-builderos-build-deploy-truth.mjs",
@@ -72856,13 +72853,10 @@
     },
     {
       "path": "scripts/run-founder-chat-alpha-battery.mjs",
-      "synopsis": "Founder chat alpha — build must build, questions must answer, search when unknown.",
-      "bytes": 16333,
-      "mtime": "2026-07-01T12:58:06.309Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
-      "ssot": [
-        "docs/products/lifeos/PRODUCT_HOME.md"
-      ]
+      "synopsis": "Script — Run Founder Chat Alpha Battery.",
+      "bytes": 0,
+      "mtime": "2026-07-30T18:25:21.812Z",
+      "indexed_at": "2026-07-30T18:25:21.812Z"
     },
     {
       "path": "scripts/run-founder-direct-provider-proof.mjs",

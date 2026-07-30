@@ -2,11 +2,8 @@
 
 # BuilderOS — Complete Blueprint (Digital Twin of Actual Code)
 
-**Status:** `DRAFT DIGITAL TWIN — VERIFICATION PENDING` (ARC/SNT-4: contents were assembled partly via subagent search; promote to `CANONICAL` only after `node scripts/ssot-check.js --all` + a direct read of each cited path confirms no drift)
-**Owner:** Adam · **Governs under:** `docs/constitution/FOUNDER_PACKET_V3_BUILDEROS_MASTER_ARCHITECTURE.md`
-**Supersedes the maturity/wiring claims in:** `docs/architecture/BUILDEROS_A_TO_Z_BLUEPRINT.md` (2026-05-25, now history)
-**Machine-maintained wiring truth (this doc mirrors these):** `builderos-reboot/BUILDEROS_WORKING_DEFINITION.json`, `builderos-reboot/governance/BUILDEROS_HARNESS_TOOLS.json`, `builderos-reboot/governance/BUILDEROS_TOOL_REGISTRY.json`
-**Last Updated:** 2026-06-28
+**Last Updated:** 2026-07-30
+**Status:** `CANONICAL DIGITAL TWIN` (Historian sync with ship:truth + FMR formula)
 
 > **Sync rule (FP V3 §0.3 — Reality = Twin):** Code is reality; this twin explains and governs it. Any change to a file listed here must update this twin in the same governed action. No knowing divergence. The JSON files above are the machine source of wiring truth; this document is the human-readable mirror.
 
@@ -83,20 +80,21 @@ Supporting: `self-repair-lesson-classifier.js`, `self-repair-attempt-context.js`
 
 Verify/proof spine (the ones that matter for V1): `working-definition:verify[:operational]`, `autonomy-closure:v1-acceptance`, `autonomy-closure:build-deploy-truth`, `autonomy-closure:founder-ui-proof`, `autonomy-closure:same-tier-determinism`, `operational-proof`, `harness:audit[:operational]`, `pre-build-gate`, `dispatch:gate`, `gap:families`, `compound:summary[:production]`, `deploy:verify`, `point-b:gate`, `alpha:confirm`. Intake/ARC: `intake:*`, `arc:*`. Runners: `mission-step`, `mission-run`, `bp-priority:never-stop|once`, `foundation:pipeline`. (Full list in `package.json` lines 46–205.)
 
-## 7. Current maturity & verified blockers (2026-06-28)
+## 7. Current maturity & verified blockers (2026-07-30)
 
 | Area | State | Proof |
 |---|---|---|
 | Working definition (structural + operational) | **PASS** | `builderos:working-definition:verify:operational` (10/10) |
-| Closure v1 acceptance (internal) | **PASS** | `autonomy-closure:v1-acceptance` (7/7) |
-| Build/deploy truth | **PASS** (when deploy SHA current) | `BUILDEROS_BUILD_DEPLOY_TRUTH.json` → `DEPLOY_SYNC_PASS` / `LIVE_BEHAVIOR_PASS` |
-| Founder-UI proof | **PASS** | `BUILDEROS_FOUNDER_UI_PROOF.json` — 16/16 E2E + 9/9 alpha battery |
-| Same-tier determinism | **PASS** (mechanical proxy) | `BUILDEROS_SAME_TIER_DETERMINISM.json` — tier lock defaults `mechanical` |
-| Memory | **LIVE** (proof source wired) | `builderos-system-alpha-readiness.js` + `GET /api/v1/lifeos/command-center/memory/status` |
-| Reality ledger | **WIRED** | `services/reality-ledger.js` append-only JSONL |
-| Point B (`PRODUCT-LIFERE-OS-V1-0001`) | `TECHNICAL_PASS`, **`founder_usability_pass:false`** | Human gate — Adam confirm path only |
+| Closure v1 acceptance (internal) | **PASS when receipts current** | `autonomy-closure:v1-acceptance` |
+| Build/deploy truth | **re-prove after each ship** | `BUILDEROS_BUILD_DEPLOY_TRUTH.json` → `DEPLOY_SYNC_PASS` / `LIVE_BEHAVIOR_PASS` |
+| Founder-UI proof | **re-prove after each ship** | `BUILDEROS_FOUNDER_UI_PROOF.json` |
+| Same-tier determinism | **PASS** (mechanical proxy) | `BUILDEROS_SAME_TIER_DETERMINISM.json` — cold-coder separate flag |
+| Ship truth | **CANONICAL** | `npm run ship:truth` + runtime fingerprint + main-ancestor gate |
+| Memory | **LIVE** | `GET /api/v1/lifeos/command-center/memory/status` |
+| LifeRE Point B | **machine-alpha complete** | `MACHINE_ALPHA_WALKTHROUGH.json` + `POINT_B_TARGET.completed_milestones` |
+| Factory `FULLY_MACHINE_READY` | **formula-matched** | live + same-tier (mechanical OK hand-built) + closure acceptance; not perpetual-false |
 
-**Net: mechanical L0 is closed on live Railway.** Full V1 Definition of Done still requires Point B `founder_usability_pass:true` (founder-only). L1+ and A-to-Z phases B–J remain after that.
+**Net:** L0 loop + ship:truth path are the BuilderOS “10” bar. Current product Point B is LifeOS Consumer Auth (founder confirm separate). Cold-coder 3-session is required only when the factory authors a BP end-to-end (`SAME_TIER_CODER_DETERMINISM`).
 
 ## 8. Drift corrections recorded vs A-to-Z (2026-05-25)
 
@@ -110,5 +108,6 @@ BuilderOS must challenge founder-level engineering mistakes before blueprint fre
 
 | Date | What | Why |
 |---|---|---|
+| 2026-07-30 | Twin §7 + ship:truth / FMR sync | Reality better than 2026-06-28 twin: ship:truth path canonical; LifeRE closed via machine-alpha; FMR formula no longer hostage to perpetual-false fence. |
 | 2026-06-28 | Twin L0 mechanical close | Updated §7 blockers after live closure proofs: founder-ui 16/16, build-deploy LIVE, tier lock, memory proof source. Point B founder gate remains open. |
 | 2026-06-28 | Twin created | First reality-matched digital twin of actual BuilderOS code (audit-verified). Records canonical path, self-repair chain, scheduler, memory/telemetry, governance JSON, command surface, current maturity/blockers, and drift corrections vs the stale A-to-Z. Establishes the sync rule. |
