@@ -2561,7 +2561,7 @@
     },
     {
       "id": "step12",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/lifeos-trusted-contact.js",
       "task": "Enhance legacy with trusted contacts",
       "spec": "Implement trusted-contact table interactions and checks for legacy features.",
@@ -2592,12 +2592,12 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-30T20:22:52.554Z",
-      "commit_sha": "9c31a51339aaa19c48b4b0a570a36091f0b498a1",
+      "commit_sha": "3289c7f3e8e6aae19c9d5d931bcce378d76013be",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step12",
       "mission_id": "PRODUCT-lifeos",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:manageTrustedContacts,scheduleLegacyDeliveries; assertion_threw; assertion_threw; assertion_threw; assertion_threw",
+      "last_error": null,
       "reaudit_reset_at": "2026-07-30T18:55:06.601Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
