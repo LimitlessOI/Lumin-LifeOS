@@ -1,11 +1,11 @@
 {
   "schema": "deploy_truth_verify_v1",
-  "at": "2026-07-30T22:34:45.221Z",
+  "at": "2026-07-30T22:51:37.635Z",
   "command": "drift-audit",
   "production_base": "https://lumin-web-production-e3a9.up.railway.app",
   "deploy_branch": "main",
-  "commit_sha": "f7db5b53b5dfcd233a096287446d8a36e550c5ee",
-  "served_sha": "f7db5b53b5dfcd233a096287446d8a36e550c5ee",
+  "commit_sha": "5df08e12dbf44e3ce04a2a29e5e1196ee16763a9",
+  "served_sha": "5df08e12dbf44e3ce04a2a29e5e1196ee16763a9",
   "verdict": "PROVEN",
   "ok": true,
   "passed": [
@@ -21,11 +21,11 @@
   "skipped": [],
   "files": [],
   "deployment": {
-    "id": "f4f5c56f-8704-4542-8d05-d62dfc0906f5",
+    "id": "1efb914f-c2e5-4158-800e-0171c3b9fcd8",
     "status": "SUCCESS",
-    "created_at": "2026-07-30T22:32:39.248Z",
-    "commit_sha": "f7db5b53b5dfcd233a096287446d8a36e550c5ee",
-    "commit_message": "GAP-FILL: Mission 2A SMOS checkout route reconciliation and SENTRY base fix\n\n- Fix /marketing dashboard \"Buy Content Pack\" button to call /api/v1/marketing/pack/checkout using the most recent marketing_sessions row, or redirect to /marketing/session/new.\n- Deprecate /api/v1/socialmediaos/content-pack/checkout with 410 Gone.\n- Add shared isSessionPaid/assertSessionPaid helpers in services/smos-pack-checkout.js and wire into both export routes.\n- Fix SENTRY MarketingOS Layer A+B scripts to resolve PUBLIC_BASE_URL via config/public-origin.js, eliminating stale robust-magic base.\n- Reconcile BP_PRIORITY.json receipts for BUILDEROS_FOUNDER_UI_PROOF and FOUNDER_CHAT_ALPHA_BATTERY.\n\nHAND-AUTHORED-JUSTIFICATION: Route-topology/entitlement fix was discovered during live Mission 2 prompt validation and required immediate repair of the production revenue path; changes are scoped to existing marketingos route/service surfaces and SENTRY scripts (orchestration/glue and verification), not new load-bearing factory modules. BP law: BP_PRIORITY.json receipt timestamps/verdicts aligned to products/receipts.\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
+    "created_at": "2026-07-30T22:50:20.764Z",
+    "commit_sha": "5df08e12dbf44e3ce04a2a29e5e1196ee16763a9",
+    "commit_message": "[system-build] Update verification receipts after Mission 2B/2C deploy\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
     "url": null
   },
   "runtime_identity": {
@@ -46,18 +46,18 @@
     {
       "id": "git.fetch",
       "status": "pass",
-      "detail": "origin/main is f7db5b53b5df"
+      "detail": "origin/main is 5df08e12dbf4"
     },
     {
       "id": "local.divergence",
       "status": "pass",
       "detail": "local main is aligned with origin/main",
       "local_branch": "main",
-      "local_head": "f7db5b53b5dfcd233a096287446d8a36e550c5ee",
-      "remote_head": "f7db5b53b5dfcd233a096287446d8a36e550c5ee",
+      "local_head": "5df08e12dbf44e3ce04a2a29e5e1196ee16763a9",
+      "remote_head": "5df08e12dbf44e3ce04a2a29e5e1196ee16763a9",
       "ahead": 0,
       "behind": 0,
-      "uncommitted": 1
+      "uncommitted": 2
     },
     {
       "id": "runtime.identity",
@@ -81,20 +81,20 @@
     {
       "id": "runtime.version",
       "status": "pass",
-      "detail": "production serves f7db5b53b5df, which contains origin/main (f7db5b53b5df)",
-      "served_sha": "f7db5b53b5dfcd233a096287446d8a36e550c5ee",
-      "remote_head": "f7db5b53b5dfcd233a096287446d8a36e550c5ee"
+      "detail": "production serves 5df08e12dbf4, which contains origin/main (5df08e12dbf4)",
+      "served_sha": "5df08e12dbf44e3ce04a2a29e5e1196ee16763a9",
+      "remote_head": "5df08e12dbf44e3ce04a2a29e5e1196ee16763a9"
     },
     {
       "id": "deployment.state",
       "status": "pass",
-      "detail": "latest deployment SUCCESS on f7db5b53b5df, nothing in flight",
+      "detail": "latest deployment SUCCESS on 5df08e12dbf4, nothing in flight",
       "deployment": {
-        "id": "f4f5c56f-8704-4542-8d05-d62dfc0906f5",
+        "id": "1efb914f-c2e5-4158-800e-0171c3b9fcd8",
         "status": "SUCCESS",
-        "created_at": "2026-07-30T22:32:39.248Z",
-        "commit_sha": "f7db5b53b5dfcd233a096287446d8a36e550c5ee",
-        "commit_message": "GAP-FILL: Mission 2A SMOS checkout route reconciliation and SENTRY base fix\n\n- Fix /marketing dashboard \"Buy Content Pack\" button to call /api/v1/marketing/pack/checkout using the most recent marketing_sessions row, or redirect to /marketing/session/new.\n- Deprecate /api/v1/socialmediaos/content-pack/checkout with 410 Gone.\n- Add shared isSessionPaid/assertSessionPaid helpers in services/smos-pack-checkout.js and wire into both export routes.\n- Fix SENTRY MarketingOS Layer A+B scripts to resolve PUBLIC_BASE_URL via config/public-origin.js, eliminating stale robust-magic base.\n- Reconcile BP_PRIORITY.json receipts for BUILDEROS_FOUNDER_UI_PROOF and FOUNDER_CHAT_ALPHA_BATTERY.\n\nHAND-AUTHORED-JUSTIFICATION: Route-topology/entitlement fix was discovered during live Mission 2 prompt validation and required immediate repair of the production revenue path; changes are scoped to existing marketingos route/service surfaces and SENTRY scripts (orchestration/glue and verification), not new load-bearing factory modules. BP law: BP_PRIORITY.json receipt timestamps/verdicts aligned to products/receipts.\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
+        "created_at": "2026-07-30T22:50:20.764Z",
+        "commit_sha": "5df08e12dbf44e3ce04a2a29e5e1196ee16763a9",
+        "commit_message": "[system-build] Update verification receipts after Mission 2B/2C deploy\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
         "url": null
       }
     }
@@ -102,9 +102,9 @@
   "produced_by": "cursor-agent",
   "verified_by": "git+railway-api+production-http-probe",
   "verification_kind": "deterministic+external",
-  "local_head": "f7db5b53b5dfcd233a096287446d8a36e550c5ee",
+  "local_head": "5df08e12dbf44e3ce04a2a29e5e1196ee16763a9",
   "local_branch": "main",
   "ahead": 0,
   "behind": 0,
-  "human_summary": "PROVEN — production serves f7db5b53b5df, which contains origin/main; no runtime drift found."
+  "human_summary": "PROVEN — production serves 5df08e12dbf4, which contains origin/main; no runtime drift found."
 }
