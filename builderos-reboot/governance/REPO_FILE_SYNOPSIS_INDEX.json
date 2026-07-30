@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T23:52:02.868Z",
+  "generated_at": "2026-07-30T23:52:12.377Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12443,
+  "file_count": 12444,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -89433,6 +89433,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/interpretiveAdaptation.js",
+      "synopsis": "Exports ensureInterpretiveAdaptation — services/interpretiveAdaptation.js.",
+      "bytes": 281,
+      "mtime": "2026-07-30T23:52:12.377Z",
+      "indexed_at": "2026-07-30T23:52:12.377Z"
     },
     {
       "path": "services/ipsReview.js",
