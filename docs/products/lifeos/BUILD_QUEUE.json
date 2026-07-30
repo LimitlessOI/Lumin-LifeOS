@@ -2388,7 +2388,7 @@
         "SELECT 1"
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-16T01:53:28.289Z",
+      "shipped_at": "2026-07-30T20:34:15.058Z",
       "commit_sha": null,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step7",
@@ -2398,7 +2398,30 @@
       "reaudit_reset_at": "2026-07-30T18:55:06.601Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-07-30T20:18:39.836Z"
+      "last_attempt_at": "2026-07-30T20:18:39.836Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/lifeos/twins/steps/step7.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T20:34:15.058Z",
+        "shipped_at": "2026-07-30T20:34:15.058Z",
+        "commit_sha": null,
+        "content_sha256": "17db4fd369edb9244b9f91d9aeed145c3d04ad8ba6e95d06247f07a63527d11a",
+        "target_file": "db/migrations/20261101_habit_tables.sql",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "db/migrations/20261101_habit_tables.sql",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/lifeos/twins/steps/step7.exact",
+          "content_sha256": "17db4fd369edb9244b9f91d9aeed145c3d04ad8ba6e95d06247f07a63527d11a"
+        }
+      }
     },
     {
       "id": "step8",
