@@ -205,14 +205,37 @@
         "CREATE TABLE IF NOT EXISTS videoJobs"
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-15T08:41:04.089Z",
+      "shipped_at": "2026-07-30T20:53:29.019Z",
       "commit_sha": "a72741324b4d38638990c4ca46c04f7f4f6f82a7",
       "blueprint_id": "PRODUCT-VIDEO-PIPELINE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step3",
       "mission_id": "PRODUCT-video-pipeline",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.839Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.839Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/video-pipeline/twins/steps/step3.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T20:53:29.019Z",
+        "shipped_at": "2026-07-30T20:53:29.019Z",
+        "commit_sha": "a72741324b4d38638990c4ca46c04f7f4f6f82a7",
+        "content_sha256": "80087fd067153867e48509ccc549bf15aea64fd264ffbdf9da677c4ea926eca2",
+        "target_file": "db/migrations/add_video_jobs_table.sql",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "db/migrations/add_video_jobs_table.sql",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/video-pipeline/twins/steps/step3.exact",
+          "content_sha256": "80087fd067153867e48509ccc549bf15aea64fd264ffbdf9da677c4ea926eca2"
+        }
+      }
     },
     {
       "id": "step4",
