@@ -1072,13 +1072,13 @@
     },
     {
       "id": "wellness-studio-1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/extended-tables.js",
       "task": "extendTables",
       "spec": "Extend existing tables to avoid schema conflicts while respecting module requirements.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "extendTables"
       ],
@@ -1100,7 +1100,7 @@
           "assertion_id": "expected_exports:services/extended-tables.js"
         }
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-30T22:16:26.814Z",
       "last_error": "artifact_missing_after_ship: artifact_proof_failed: ALTER TABLE; NO CONFLICT",
       "commit_sha": null,
       "built_sha": null,
