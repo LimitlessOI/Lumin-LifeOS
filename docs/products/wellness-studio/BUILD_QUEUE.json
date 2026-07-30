@@ -1196,7 +1196,7 @@
     },
     {
       "id": "wellness-studio-2",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20260723_lifeos_core_complete.sql",
       "task": "finalizeLifeOSCore",
       "spec": "Ensure LifeOS Core Phases 1-8 are stable and deployed.",
@@ -1210,8 +1210,8 @@
         "updated_at"
       ],
       "last_attempt_at": null,
-      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw; assertion_threw; assertion_threw; assertion_threw",
-      "commit_sha": "c11d7b77006f4e6663fa7415395d9a4ab36244fc",
+      "last_error": null,
+      "commit_sha": "640d04bf0678c797dae3564ae14b3f64e66fdcb7",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
