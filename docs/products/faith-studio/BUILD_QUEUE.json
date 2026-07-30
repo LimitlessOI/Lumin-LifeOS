@@ -468,7 +468,7 @@
     },
     {
       "id": "2",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/add_public_sacred_review_path.sql",
       "task": "Specify public sacred-content review path",
       "spec": "Define the database schema required for public sacred-content review.",
@@ -479,11 +479,11 @@
         "CREATE TABLE IF NOT EXISTS sacred_review_path"
       ],
       "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS sacred_review_path; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "998f5229b7da247077602c1975c1d048bb0397dd",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
+      "revive_count": 0,
       "revived_at": "2026-07-30T23:14:14.118Z",
       "last_attempt": null,
       "demoted": false,
@@ -505,7 +505,7 @@
     },
     {
       "id": "3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/sacredContentReviewService.js",
       "task": "Design sacred-content review service",
       "spec": "Service to handle preservation of sacred intent in content review workflows.",
@@ -513,7 +513,7 @@
         "2"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "sacredContentRevise"
       ],
@@ -533,12 +533,12 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-30T23:47:55.132Z",
-      "commit_sha": "fb558daefdf38aaa23bc7471703470d25fa20e2e",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "3",
       "mission_id": "PRODUCT-faith-studio",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:sacredContentRevise; assertion_threw; assertion_threw; assertion_threw",
+      "last_error": "artifact_missing_after_ship: artifact_proof_failed: @ssot; callCouncilMember",
       "reaudit_reset_at": "2026-07-30T18:55:06.428Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
@@ -562,7 +562,10 @@
           "content_source_path": "docs/products/faith-studio/twins/steps/3.exact",
           "content_sha256": "7c93a8a3596a31f6d9093bc532789a45cc56b3dcc1b8b62b05330d0a93528073"
         }
-      }
+      },
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-30T23:48:01.661Z"
     },
     {
       "id": "4",
