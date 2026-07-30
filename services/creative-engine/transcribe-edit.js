@@ -3,6 +3,31 @@
 
 import { readFile } from 'node:fs/promises';
 
+function safeJsonParse(raw) {
+  if (!raw || !raw.trim()) return null;
+  const cleaned = raw
+    .replace(/```json\s*|\s*```/g, '')
+    .replace(/^\s*`|\s*`$/g, '')
+    .trim();
+  const attempts = [
+    cleaned,
+    cleaned.replace(/,(\s*[}\]])/g, '$1'),
+    cleaned.replace(/,(\s*\])/g, '$1').replace(/,(\s*\})/g, '$1'),
+  ];
+  for (const t of attempts) {
+    try {
+      return JSON.parse(t);
+    } catch { /* continue */ }
+  }
+  const m = cleaned.match(/\{[\s\S]*\}|\[[\s\S]*\]/);
+  if (m) {
+    try {
+      return JSON.parse(m[0]);
+    } catch { /* continue */ }
+  }
+  return null;
+}
+
 const FILLER_WORDS = new Set([
   'um', 'uh', 'er', 'ah', 'hmm', 'like', 'so', 'well', 'right', 'okay', 'yeah', 'yep',
   'basically', 'literally', 'actually', 'totally', 'seriously', 'honestly', 'obviously',
@@ -226,15 +251,9 @@ export async function transcribeAudioForEdit(opts = {}) {
     });
     const text = await res.text();
     if (!res.ok) return { ok: false, error: `gemini_http_${res.status}`, detail: text.slice(0, 300) };
-    const data = JSON.parse(text);
+    const data = safeJsonParse(text) || {};
     const raw = (data.candidates || []).flatMap((c) => (c?.content?.parts || []).map((p) => p.text || '')).join('').trim();
-    let parsed;
-    try {
-      parsed = JSON.parse(raw);
-    } catch {
-      const m = raw.match(/\{[\s\S]*\}/);
-      parsed = m ? JSON.parse(m[0]) : {};
-    }
+    const parsed = safeJsonParse(raw) || {};
     const words = (parsed.words || [])
       .map((w) => ({ word: String(w.word || ''), start: Number(w.start) || 0, end: Number(w.end) || 0 }))
       .filter((w) => w.word && w.end > w.start)

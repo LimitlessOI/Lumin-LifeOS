@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /**
  * SYNOPSIS: Audit entire repo for truth enforcement bypass paths — fail-closed in preflight.
  * @ssot docs/products/lifeos/PRODUCT_HOME.md

@@ -153,7 +153,7 @@ export function defaultPlannerCallModel() {
   }
   const gKey = process.env.GOOGLE_API_KEY || process.env.GEMINI_API_KEY;
   if (gKey) {
-    const m = process.env.GEMINI_PLANNER_MODEL || 'gemini-1.5-pro';
+    const m = process.env.GEMINI_PLANNER_MODEL || 'gemini-2.5-flash';
     candidates.push({ name: `gemini:${m}`, call: (p, t) => callGeminiModel(gKey, m, p, t) });
   }
   if (!candidates.length) return null;

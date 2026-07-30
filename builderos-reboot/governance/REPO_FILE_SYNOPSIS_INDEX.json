@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T03:18:07.719Z",
+  "generated_at": "2026-07-30T03:20:35.298Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12347,
   "files": [
@@ -37988,10 +37988,10 @@
     },
     {
       "path": "docs/CONTINUITY_LOG.md",
-      "synopsis": "Documentation — CONTINUITY LOG.",
-      "bytes": 0,
-      "mtime": "2026-07-30T03:18:07.719Z",
-      "indexed_at": "2026-07-30T03:18:07.719Z"
+      "synopsis": "Continuity Log — chronological session handoff and key decisions.",
+      "bytes": 44641,
+      "mtime": "2026-07-30T03:20:35.298Z",
+      "indexed_at": "2026-07-30T03:20:35.298Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40194,10 +40194,10 @@
     },
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
-      "synopsis": "Documentation — PRODUCT HOME.",
-      "bytes": 0,
-      "mtime": "2026-07-30T03:18:07.719Z",
-      "indexed_at": "2026-07-30T03:18:07.719Z"
+      "synopsis": "Canonical product home — BuilderOS",
+      "bytes": 322181,
+      "mtime": "2026-07-30T03:20:35.298Z",
+      "indexed_at": "2026-07-30T03:20:35.298Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -40572,9 +40572,9 @@
     {
       "path": "docs/products/creative-engine/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Creative Engine",
-      "bytes": 9855,
-      "mtime": "2026-07-30T03:14:20.409Z",
-      "indexed_at": "2026-07-30T03:14:20.409Z"
+      "bytes": 10040,
+      "mtime": "2026-07-30T03:20:35.298Z",
+      "indexed_at": "2026-07-30T03:20:35.298Z"
     },
     {
       "path": "docs/products/CREATIVEENGINE.md",
@@ -64977,8 +64977,8 @@
       "path": "products/receipts/POINT_B_DNA_VERIFY.json",
       "synopsis": "Product receipt — POINT B DNA VERIFY.",
       "bytes": 318,
-      "mtime": "2026-07-30T03:14:20.409Z",
-      "indexed_at": "2026-07-30T03:14:20.409Z",
+      "mtime": "2026-07-30T03:20:35.298Z",
+      "indexed_at": "2026-07-30T03:20:35.298Z",
       "synopsis_index_only": true
     },
     {
@@ -64993,8 +64993,8 @@
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
       "bytes": 24056,
-      "mtime": "2026-07-30T03:14:20.409Z",
-      "indexed_at": "2026-07-30T03:14:20.409Z",
+      "mtime": "2026-07-30T03:20:35.298Z",
+      "indexed_at": "2026-07-30T03:20:35.298Z",
       "synopsis_index_only": true
     },
     {
@@ -65161,16 +65161,16 @@
       "path": "products/receipts/TRUTH_ENFORCEMENT_AUDIT.json",
       "synopsis": "Product receipt — TRUTH ENFORCEMENT AUDIT.",
       "bytes": 833,
-      "mtime": "2026-07-30T03:14:20.409Z",
-      "indexed_at": "2026-07-30T03:14:20.409Z",
+      "mtime": "2026-07-30T03:20:35.298Z",
+      "indexed_at": "2026-07-30T03:20:35.298Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/TRUTH_LOCKDOWN_VERIFY.json",
       "synopsis": "Product receipt — TRUTH LOCKDOWN VERIFY.",
       "bytes": 1318,
-      "mtime": "2026-07-30T03:14:20.409Z",
-      "indexed_at": "2026-07-30T03:14:20.409Z",
+      "mtime": "2026-07-30T03:20:35.298Z",
+      "indexed_at": "2026-07-30T03:20:35.298Z",
       "synopsis_index_only": true
     },
     {
@@ -65201,8 +65201,8 @@
       "path": "products/receipts/WISDOM_TRUTH_AUDIT.json",
       "synopsis": "Product receipt — WISDOM TRUTH AUDIT.",
       "bytes": 1001,
-      "mtime": "2026-07-30T03:14:20.409Z",
-      "indexed_at": "2026-07-30T03:14:20.409Z",
+      "mtime": "2026-07-30T03:20:35.298Z",
+      "indexed_at": "2026-07-30T03:20:35.298Z",
       "synopsis_index_only": true
     },
     {
@@ -70316,9 +70316,9 @@
     {
       "path": "scripts/audit-truth-enforcement.mjs",
       "synopsis": "Audit entire repo for truth enforcement bypass paths — fail-closed in preflight.",
-      "bytes": 4922,
-      "mtime": "2026-07-30T03:14:20.409Z",
-      "indexed_at": "2026-07-30T03:14:20.409Z",
+      "bytes": 4943,
+      "mtime": "2026-07-30T03:20:35.298Z",
+      "indexed_at": "2026-07-30T03:20:35.298Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -87079,9 +87079,9 @@
     {
       "path": "services/creative-engine/index.js",
       "synopsis": "Creative Engine — estimate/render/jobs for footage, photo, script, b-roll modes",
-      "bytes": 9031,
-      "mtime": "2026-07-30T03:14:20.409Z",
-      "indexed_at": "2026-07-30T03:14:20.409Z",
+      "bytes": 9032,
+      "mtime": "2026-07-30T03:20:35.298Z",
+      "indexed_at": "2026-07-30T03:20:35.298Z",
       "ssot": [
         "docs/products/creative-engine/PRODUCT_HOME.md"
       ]
@@ -87099,9 +87099,9 @@
     {
       "path": "services/creative-engine/modes/footage-edit-smart.js",
       "synopsis": "Creative Engine mode — AI-driven footage cleanup (filler/repetition/silence removal + content-aware keep/cut)",
-      "bytes": 4715,
-      "mtime": "2026-07-30T03:14:20.409Z",
-      "indexed_at": "2026-07-30T03:14:20.409Z",
+      "bytes": 4716,
+      "mtime": "2026-07-30T03:20:35.298Z",
+      "indexed_at": "2026-07-30T03:20:35.298Z",
       "ssot": [
         "docs/products/creative-engine/PRODUCT_HOME.md"
       ]
@@ -87109,9 +87109,9 @@
     {
       "path": "services/creative-engine/modes/footage-edit.js",
       "synopsis": "Creative Engine mode — real footage trim + captions + aspect crop",
-      "bytes": 3507,
-      "mtime": "2026-07-30T03:14:20.409Z",
-      "indexed_at": "2026-07-30T03:14:20.409Z",
+      "bytes": 3508,
+      "mtime": "2026-07-30T03:20:35.298Z",
+      "indexed_at": "2026-07-30T03:20:35.298Z",
       "ssot": [
         "docs/products/creative-engine/PRODUCT_HOME.md"
       ]
@@ -87166,9 +87166,9 @@
     {
       "path": "services/creative-engine/providers/ffmpeg-local.js",
       "synopsis": "FFmpeg provider — trim, captions, crop, photo polish (array-arg spawn only)",
-      "bytes": 7342,
-      "mtime": "2026-07-30T03:14:20.409Z",
-      "indexed_at": "2026-07-30T03:14:20.409Z",
+      "bytes": 7343,
+      "mtime": "2026-07-30T03:20:35.298Z",
+      "indexed_at": "2026-07-30T03:20:35.298Z",
       "ssot": [
         "docs/products/creative-engine/PRODUCT_HOME.md"
       ]
@@ -87176,9 +87176,9 @@
     {
       "path": "services/creative-engine/transcribe-edit.js",
       "synopsis": "Smart video edit helpers — Gemini audio transcription + filler/repetition/silence cut planning",
-      "bytes": 9658,
-      "mtime": "2026-07-30T03:14:20.409Z",
-      "indexed_at": "2026-07-30T03:14:20.409Z",
+      "bytes": 10139,
+      "mtime": "2026-07-30T03:20:35.298Z",
+      "indexed_at": "2026-07-30T03:20:35.298Z",
       "ssot": [
         "docs/products/creative-engine/PRODUCT_HOME.md"
       ]
@@ -91048,9 +91048,9 @@
     {
       "path": "services/never-stop-product-factory.js",
       "synopsis": "Permanent product expansion lane — work exists even when BP_PRIORITY queue reads complete.",
-      "bytes": 81193,
-      "mtime": "2026-07-24T18:36:41.539Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 81195,
+      "mtime": "2026-07-30T03:20:35.298Z",
+      "indexed_at": "2026-07-30T03:20:35.298Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
