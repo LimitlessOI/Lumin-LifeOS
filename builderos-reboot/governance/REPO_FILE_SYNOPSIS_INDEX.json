@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T21:24:13.736Z",
+  "generated_at": "2026-07-30T21:24:27.879Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12368,
   "files": [
@@ -93558,9 +93558,9 @@
     {
       "path": "services/thumbnailPipeline.js",
       "synopsis": "Exports setupThumbnailSEO — services/thumbnailPipeline.js.",
-      "bytes": 582,
-      "mtime": "2026-07-30T20:53:07.834Z",
-      "indexed_at": "2026-07-30T20:53:07.834Z"
+      "bytes": 4410,
+      "mtime": "2026-07-30T21:24:27.879Z",
+      "indexed_at": "2026-07-30T21:24:27.879Z"
     },
     {
       "path": "services/timezone-utils.js",
