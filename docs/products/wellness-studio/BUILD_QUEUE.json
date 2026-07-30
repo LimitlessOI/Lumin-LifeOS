@@ -937,7 +937,7 @@
     },
     {
       "id": "step7",
-      "status": "done",
+      "status": "blocked",
       "target_file": "db/migrations/20260721_lifeos_core_phase_7.sql",
       "task": "implement phase 7",
       "spec": "Create DB schema for LifeOS Core Phase 7.",
@@ -945,25 +945,25 @@
         "step6"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS",
         "phase_7_table"
       ],
-      "last_attempt_at": null,
-      "last_error": null,
-      "commit_sha": "fb87ceb8ec9746904cc562e0de53b3d582da9a4a",
+      "last_attempt_at": "2026-07-30T23:10:06.863Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:phase_7_table; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
-      "revived_at": "2026-07-30T23:29:51.782Z",
+      "revived_at": "2026-07-15T23:50:54.341Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
       "no_op": null,
-      "pre_existing": null,
+      "pre_existing": false,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
@@ -977,7 +977,7 @@
     },
     {
       "id": "step8",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "db/migrations/20260722_lifeos_core_phase_8.sql",
       "task": "implement phase 8",
       "spec": "Create DB schema for LifeOS Core Phase 8.",
@@ -985,14 +985,14 @@
         "step7"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS",
         "phase_8_table"
       ],
-      "last_attempt_at": "2026-07-30T23:35:52.300Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:phase_8_table; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw; assertion_threw",
+      "commit_sha": "3d43452ee1dded60492000eb73cf4edae29d987c",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -1146,13 +1146,13 @@
           "assertion_id": "expected_exports:services/extended-tables.js"
         }
       ],
-      "last_attempt_at": "2026-07-30T23:47:11.279Z",
+      "last_attempt_at": "2026-07-30T23:16:46.117Z",
       "last_error": "artifact_missing_after_ship: artifact_proof_failed: ALTER TABLE; NO CONFLICT",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 6,
-      "revived_at": "2026-07-30T23:44:36.114Z",
+      "revive_count": 5,
+      "revived_at": "2026-07-30T23:07:47.084Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1165,7 +1165,7 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": null,
-      "shipped_at": "2026-07-30T23:47:03.485Z",
+      "shipped_at": "2026-07-30T23:51:16.207Z",
       "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "wellness-studio-1",
       "mission_id": "PRODUCT-wellness-studio",
@@ -1176,10 +1176,10 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-07-30T23:47:03.485Z",
-        "shipped_at": "2026-07-30T23:47:03.485Z",
+        "sealed_at": "2026-07-30T23:51:16.207Z",
+        "shipped_at": "2026-07-30T23:51:16.207Z",
         "commit_sha": null,
-        "content_sha256": "f96a47b77684ade193d0a6b546e006cf11b5bf25b1428665a51023054e7884e2",
+        "content_sha256": "e775dbbf3b7ae1baccc282b6e66dc0e52315a19714a8949f5452fe4f85a52b22",
         "target_file": "services/extended-tables.js",
         "reverse": {
           "mode": "delete_file",
@@ -1190,13 +1190,13 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/wellness-studio/twins/steps/wellness-studio-1.exact",
-          "content_sha256": "f96a47b77684ade193d0a6b546e006cf11b5bf25b1428665a51023054e7884e2"
+          "content_sha256": "e775dbbf3b7ae1baccc282b6e66dc0e52315a19714a8949f5452fe4f85a52b22"
         }
       }
     },
     {
       "id": "wellness-studio-2",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/migrations/20260723_lifeos_core_complete.sql",
       "task": "finalizeLifeOSCore",
       "spec": "Ensure LifeOS Core Phases 1-8 are stable and deployed.",
@@ -1210,8 +1210,8 @@
         "updated_at"
       ],
       "last_attempt_at": null,
-      "last_error": null,
-      "commit_sha": "640d04bf0678c797dae3564ae14b3f64e66fdcb7",
+      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw; assertion_threw; assertion_threw; assertion_threw",
+      "commit_sha": "c11d7b77006f4e6663fa7415395d9a4ab36244fc",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
