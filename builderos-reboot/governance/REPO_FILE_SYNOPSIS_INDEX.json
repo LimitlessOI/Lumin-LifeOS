@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T21:38:02.304Z",
+  "generated_at": "2026-07-30T21:38:12.084Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12368,
   "files": [
@@ -91983,9 +91983,9 @@
     {
       "path": "services/sceneEngine.js",
       "synopsis": "Service module — SceneEngine.",
-      "bytes": 387,
-      "mtime": "2026-07-30T21:13:03.217Z",
-      "indexed_at": "2026-07-30T21:13:03.217Z"
+      "bytes": 565,
+      "mtime": "2026-07-30T21:38:12.084Z",
+      "indexed_at": "2026-07-30T21:38:12.084Z"
     },
     {
       "path": "services/scriptEngine.js",

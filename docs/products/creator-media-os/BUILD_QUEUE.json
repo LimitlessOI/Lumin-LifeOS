@@ -176,10 +176,10 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-07-30T21:13:00.968Z",
-        "shipped_at": "2026-07-30T21:13:00.968Z",
+        "sealed_at": "2026-07-30T21:38:09.519Z",
+        "shipped_at": "2026-07-30T21:38:09.519Z",
         "commit_sha": null,
-        "content_sha256": "f76863a536219d5bd4e94c98e1b7b454e8ac759a99f4da953f7c02db06b0f5c4",
+        "content_sha256": "e089063bd45b760609afbe6cb09d5f9f05a4856bce1af0013caff956baf18e58",
         "target_file": "services/sceneEngine.js",
         "reverse": {
           "mode": "delete_file",
@@ -190,10 +190,10 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/creator-media-os/twins/steps/4.exact",
-          "content_sha256": "f76863a536219d5bd4e94c98e1b7b454e8ac759a99f4da953f7c02db06b0f5c4"
+          "content_sha256": "e089063bd45b760609afbe6cb09d5f9f05a4856bce1af0013caff956baf18e58"
         }
       },
-      "shipped_at": "2026-07-30T21:13:00.968Z"
+      "shipped_at": "2026-07-30T21:38:09.519Z"
     },
     {
       "id": "5",
