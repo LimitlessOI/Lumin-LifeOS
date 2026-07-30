@@ -57,8 +57,8 @@ export function createSocialmediaosCoachingRoutes({ pool, requireKey, callCounci
   // POST /coaching/start — begin a new coaching session
   router.post('/start', requireKey, getOwnerId, async (req, res, next) => {
     try {
-      const { niche, goal } = req.body;
-      const result = await coaching.startCoachingSession({ ownerId: req.ownerId, niche, goal });
+      const { niche, goal, learning_profile } = req.body;
+      const result = await coaching.startCoachingSession({ ownerId: req.ownerId, niche, goal, learningProfile: learning_profile });
       res.json({ ok: true, ...result });
     } catch (err) { next(err); }
   });
@@ -136,6 +136,7 @@ export function createSocialmediaosCoachingRoutes({ pool, requireKey, callCounci
         next_question: nextQuestion,
         niche: meta.niche,
         goal: meta.goal,
+        learning_profile: meta.learning_profile || null,
       });
     } catch (err) { next(err); }
   });

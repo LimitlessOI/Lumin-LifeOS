@@ -67,9 +67,9 @@ export function createLifeRESalesCoachingRoutes({ pool, requireKey, callCouncilM
   // POST /session/start — start a new simulator session
   router.post('/session/start', requireKey, getOwnerId, async (req, res, next) => {
     try {
-      const { scenario_id } = req.body;
+      const { scenario_id, learning_profile } = req.body;
       if (!scenario_id) return res.status(400).json({ ok: false, error: 'scenario_id required' });
-      const result = await simulator.startSession({ ownerId: req.ownerId, scenarioId: scenario_id });
+      const result = await simulator.startSession({ ownerId: req.ownerId, scenarioId: scenario_id, learningProfile: learning_profile });
       res.json({ ok: true, ...result });
     } catch (err) { next(err); }
   });

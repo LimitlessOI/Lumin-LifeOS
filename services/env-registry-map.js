@@ -90,9 +90,10 @@ export const ENV_REGISTRY = [
   { name: "GITHUB_DEPLOY_BRANCH",status: "SET",        category: "github",   purpose: "Branch auto-builder commits to" },
 
   // ── Email ─────────────────────────────────────────────────────────────────────
-  { name: "EMAIL_PROVIDER",      status: "SET",        category: "email",    purpose: "Email provider name: postmark (or as configured)" },
+  { name: "EMAIL_PROVIDER",      status: "NEEDED",     category: "email",    purpose: "Email provider name: resend|postmark|smtp|disabled (Postmark account canceled)" },
   { name: "EMAIL_FROM",          status: "SET",        category: "email",    purpose: "Sender address (e.g. adam@yourdomain.com)" },
-  { name: "POSTMARK_SERVER_TOKEN",status: "SET",    category: "email",    purpose: "Postmark API token for transactional email" },
+  { name: "POSTMARK_SERVER_TOKEN",status: "UNSET",      category: "email",    purpose: "Postmark account canceled; kept for legacy reference only" },
+  { name: "RESEND_API_KEY",      status: "NEEDED",     category: "email",    purpose: "Resend API key for transactional email (recommended Postmark replacement)", revenueBlocking: true },
   { name: "EMAIL_WEBHOOK_SECRET",status: "OPTIONAL",   category: "email",    purpose: "Validates inbound Postmark webhook events" },
   { name: "WORK_EMAIL",          status: "SET",        category: "email",    purpose: "Primary work inbox for alerts and TC fallback identity" },
   { name: "WORK_EMAIL_APP_PASSWORD", status: "OPTIONAL", category: "email",  purpose: "App password for primary work inbox IMAP access" },

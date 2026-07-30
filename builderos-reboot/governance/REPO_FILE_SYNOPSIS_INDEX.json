@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T01:23:13.836Z",
+  "generated_at": "2026-07-30T01:27:30.151Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12337,
+  "file_count": 12338,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -36602,6 +36602,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "db/migrations/20260730_lifere_learning_profile.sql",
+      "synopsis": "Database migration — add metadata JSONB column to lifere_coaching_sessions for learning profile.",
+      "bytes": 215,
+      "mtime": "2026-07-30T01:27:30.151Z",
+      "indexed_at": "2026-07-30T01:27:30.151Z"
+    },
+    {
       "path": "db/migrations/add_virtual_real_estate_curriculum.sql",
       "synopsis": "Database migration — virtual real estate curriculum tables.",
       "bytes": 1949,
@@ -37982,9 +37989,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 41841,
-      "mtime": "2026-07-29T22:03:20.029Z",
-      "indexed_at": "2026-07-30T01:21:52.231Z"
+      "bytes": 43112,
+      "mtime": "2026-07-30T01:27:30.151Z",
+      "indexed_at": "2026-07-30T01:27:30.151Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40919,9 +40926,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 634830,
-      "mtime": "2026-07-30T01:21:44.767Z",
-      "indexed_at": "2026-07-30T01:22:40.402Z"
+      "bytes": 634143,
+      "mtime": "2026-07-30T01:27:30.151Z",
+      "indexed_at": "2026-07-30T01:27:30.151Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -40955,9 +40962,9 @@
     {
       "path": "docs/products/lifere/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeRE",
-      "bytes": 46176,
-      "mtime": "2026-07-29T19:35:23.770Z",
-      "indexed_at": "2026-07-29T19:35:35.389Z"
+      "bytes": 47026,
+      "mtime": "2026-07-30T01:27:30.151Z",
+      "indexed_at": "2026-07-30T01:27:30.151Z"
     },
     {
       "path": "docs/products/limitlessos/conversations/2026-06-29-founder-ecosystem-session.md",
@@ -41029,8 +41036,8 @@
       "path": "docs/products/MARKET_READINESS_PLAN.md",
       "synopsis": "Market-readiness audit and implementation plan for every active product.",
       "bytes": 10919,
-      "mtime": "1970-01-01T00:00:00.000Z",
-      "indexed_at": "2026-07-30T01:21:52.231Z"
+      "mtime": "2026-07-30T01:27:30.151Z",
+      "indexed_at": "2026-07-30T01:27:30.151Z"
     },
     {
       "path": "docs/products/MARKETINGOS.md",
@@ -41057,9 +41064,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 128606,
-      "mtime": "2026-07-24T18:36:41.703Z",
-      "indexed_at": "2026-07-30T01:21:52.231Z"
+      "bytes": 126670,
+      "mtime": "2026-07-30T01:27:30.151Z",
+      "indexed_at": "2026-07-30T01:27:30.151Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -41079,9 +41086,9 @@
     {
       "path": "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md",
       "synopsis": "SocialMediaOS Module Home",
-      "bytes": 23735,
-      "mtime": "2026-07-28T17:52:15.534Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 24426,
+      "mtime": "2026-07-30T01:27:30.151Z",
+      "indexed_at": "2026-07-30T01:27:30.151Z"
     },
     {
       "path": "docs/products/memory-intelligence/FILE_MANIFEST.json",
@@ -41391,9 +41398,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 213403,
-      "mtime": "2026-07-28T18:01:25.489Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 213966,
+      "mtime": "2026-07-30T01:27:30.151Z",
+      "indexed_at": "2026-07-30T01:27:30.151Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -41618,8 +41625,8 @@
       "path": "docs/products/ZERO_BUDGET_MARKETING_PLAN.md",
       "synopsis": "Zero-budget, limited-email marketing plan for launching products once market ready.",
       "bytes": 6871,
-      "mtime": "1970-01-01T00:00:00.000Z",
-      "indexed_at": "2026-07-30T01:21:52.231Z"
+      "mtime": "2026-07-30T01:27:30.151Z",
+      "indexed_at": "2026-07-30T01:27:30.151Z"
     },
     {
       "path": "docs/products/zero-drift-handoff-protocol/FILE_MANIFEST.json",
@@ -68962,9 +68969,9 @@
     {
       "path": "routes/lifere-sales-coaching-routes.js",
       "synopsis": "LifeRE sales coaching routes — simulator sessions, real-time coaching, scenario list.",
-      "bytes": 5645,
-      "mtime": "2026-07-28T17:50:51.147Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 5697,
+      "mtime": "2026-07-30T01:27:30.151Z",
+      "indexed_at": "2026-07-30T01:27:30.151Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -69663,9 +69670,9 @@
     {
       "path": "routes/socialmediaos-coaching-routes.js",
       "synopsis": "SocialMediaOS AI coaching session routes — start, answer Q&A, generate content pack, export.",
-      "bytes": 5394,
-      "mtime": "2026-06-30T04:09:51.111Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 5503,
+      "mtime": "2026-07-30T01:27:30.151Z",
+      "indexed_at": "2026-07-30T01:27:30.151Z",
       "ssot": [
         "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md"
       ]
@@ -86189,9 +86196,9 @@
     {
       "path": "services/chair-direct-agent.js",
       "synopsis": "Direct Chair agent — talks + acts; human prose obeys Lumin Communication DNA (not theater).",
-      "bytes": 27707,
-      "mtime": "2026-07-29T22:02:10.648Z",
-      "indexed_at": "2026-07-30T01:21:52.231Z",
+      "bytes": 26082,
+      "mtime": "2026-07-30T01:27:30.151Z",
+      "indexed_at": "2026-07-30T01:27:30.151Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -86289,9 +86296,9 @@
     {
       "path": "services/chair-personality-translate.js",
       "synopsis": "Lumin personality translate — human-language layer on SYSTEM_FACTS only (not theater).",
-      "bytes": 9914,
-      "mtime": "2026-07-30T01:16:05.193Z",
-      "indexed_at": "2026-07-30T01:22:40.402Z",
+      "bytes": 9382,
+      "mtime": "2026-07-30T01:27:30.151Z",
+      "indexed_at": "2026-07-30T01:27:30.151Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -87748,9 +87755,9 @@
     {
       "path": "services/env-registry-map.js",
       "synopsis": "env-registry-map.js",
-      "bytes": 29135,
-      "mtime": "2026-07-28T17:47:22.557Z",
-      "indexed_at": "2026-07-30T01:21:52.231Z",
+      "bytes": 29372,
+      "mtime": "2026-07-30T01:27:30.151Z",
+      "indexed_at": "2026-07-30T01:27:30.151Z",
       "ssot": [
         "docs/products/command-center/PRODUCT_HOME.md"
       ]
@@ -90053,9 +90060,9 @@
     {
       "path": "services/lifere-sales-simulator.js",
       "synopsis": "LifeRE sales coaching simulator — AI plays the client, real-time coaching, objection mastery.",
-      "bytes": 13868,
-      "mtime": "2026-06-30T04:24:21.810Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 15578,
+      "mtime": "2026-07-30T01:27:30.151Z",
+      "indexed_at": "2026-07-30T01:27:30.151Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -90234,9 +90241,9 @@
     {
       "path": "services/lumin-context-loader.js",
       "synopsis": "Loads per-user twin + communication profile + recent learning for Lumin prompts.",
-      "bytes": 18494,
-      "mtime": "2026-07-29T22:01:48.972Z",
-      "indexed_at": "2026-07-30T01:21:52.231Z",
+      "bytes": 14117,
+      "mtime": "2026-07-30T01:27:30.151Z",
+      "indexed_at": "2026-07-30T01:27:30.151Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -91216,8 +91223,8 @@
       "path": "services/password-reset-email.js",
       "synopsis": "Send password-reset email via the configured provider (postmark, resend, smtp, disabled).",
       "bytes": 7105,
-      "mtime": "2026-07-24T18:36:41.703Z",
-      "indexed_at": "2026-07-30T01:21:52.231Z",
+      "mtime": "2026-07-30T01:27:30.151Z",
+      "indexed_at": "2026-07-30T01:27:30.151Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -92510,9 +92517,9 @@
     {
       "path": "services/site-builder.js",
       "synopsis": "Site Builder — Scrape existing site → AI-generates complete click-funnel website",
-      "bytes": 109412,
-      "mtime": "2026-07-28T17:57:12.675Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 111195,
+      "mtime": "2026-07-30T01:27:30.151Z",
+      "indexed_at": "2026-07-30T01:27:30.151Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -92544,9 +92551,9 @@
     {
       "path": "services/socialmediaos-coaching-service.js",
       "synopsis": "AI coaching Q&A loop for SocialMediaOS client sessions — 5 questions, story extraction.",
-      "bytes": 3786,
-      "mtime": "2026-06-30T04:09:51.108Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 4247,
+      "mtime": "2026-07-30T01:27:30.151Z",
+      "indexed_at": "2026-07-30T01:27:30.151Z",
       "ssot": [
         "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md"
       ]
@@ -92554,9 +92561,9 @@
     {
       "path": "services/socialmediaos-content-generator.js",
       "synopsis": "Generates content packs from coaching session answers using AI council.",
-      "bytes": 9647,
-      "mtime": "2026-06-30T04:09:51.110Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 11216,
+      "mtime": "2026-07-30T01:27:30.151Z",
+      "indexed_at": "2026-07-30T01:27:30.151Z",
       "ssot": [
         "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md"
       ]

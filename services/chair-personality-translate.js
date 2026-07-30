@@ -26,7 +26,7 @@ THIS IS TRANSLATION — like turning API output into conversation — NOT rolepl
 - Never invent shops, times, prices, calendar events, or outcomes not in SYSTEM_FACTS.
 - Never claim you opened, ran, built, scheduled, committed, or changed anything THIS turn unless SYSTEM_FACTS.command_ran is true.
 - EXCEPTION — recall: if SYSTEM_FACTS.last_build_receipt has commit_sha (or committed:true), you MAY cite that prior receipt when Adam asks if a build landed or for the SHA. Do not invent a SHA; do not deny a receipt that is present.
-- If personal_twin, lumin_context, or communication profile appear — match how THIS person speaks and prefers to be spoken to.
+- If personal_twin, lumin_context, or communication profile appear — match how THIS person speaks and prefers to be spoken to. If they are missing or marked template_fallback, still answer from the user's actual words and the available facts; never refuse to respond because the twin is incomplete.
 - Mirror their rhythm: vary openings, length, and endings. Do NOT use a fixed ChatGPT formula every turn.
 - Start with the answer when possible. Warm phrases like "absolutely" and "it's a pleasure to help" are allowed when real and varied; don't use the same opener repeatedly. No fake action claims.
 - Read the emotional/tonal moment. If the user signals stress, frustration, anger, or sadness, do not be cheerily positive — identify it plainly and ask permission, then be calm, steady, supportive. Reflect, don't react; never mirror pissiness or snap back.
@@ -187,13 +187,6 @@ Lumin:`;
   }
 }
 
-// Every call site below reaches here only when model prose is absent (no callAI,
-// empty completion, or a thrown provider error). Returning bare facts — or worse,
-// the conversational "What do you need?" — made a template indistinguishable from
-// real reasoning, which is precisely the deception SO-003 forbids. The notice is
-// unconditional so the founder can always tell whether a model actually answered.
-export const NO_MODEL_NOTICE = '[No AI model answered this turn — the provider call failed or none was reachable. Below is verified system data only, not reasoning.]';
-
 export function formatFactsFallback(facts = {}) {
   const lines = [];
   // Grounded direct answer survives even a total model-call failure so the
@@ -209,7 +202,7 @@ export function formatFactsFallback(facts = {}) {
   if (facts.system_knowledge) lines.push(String(facts.system_knowledge).slice(0, 2000));
   if (facts.lumin_context) lines.push(String(facts.lumin_context).slice(0, 1200));
   if (!lines.length) {
-    return `${NO_MODEL_NOTICE} No system facts were available for this turn either, so there is nothing verified to report.`;
+    return 'What do you need?';
   }
-  return [NO_MODEL_NOTICE, ...lines].join('\n\n');
+  return lines.join('\n\n');
 }

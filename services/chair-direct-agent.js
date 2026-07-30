@@ -12,10 +12,6 @@ import {
   loadLuminCommunicationLaw,
   isLuminCommunicationLawEnforced,
 } from './lumin-communication-guard.js';
-import {
-  isFounderTwinHardGated,
-  learnFromFounderMessage,
-} from './lumin-context-loader.js';
 
 // SO-003: Chair is load-bearing — strong-first. Never default to cheap cascade head.
 const DEFAULT_MODEL = process.env.CHAIR_DIRECT_AGENT_MODEL || 'claude_sonnet';
@@ -82,8 +78,7 @@ The system interprets truth; translation speaks it in human language matched to 
 HOW YOU TALK:
 - Answer Adam's ACTUAL words first — sharp partner in the room, not a status report. Do not open with mission/priority unless he asked.
 - Plain, specific, human. Start with the answer. No filler. No validation sandwich.
-- Match THIS person's rhythm from personal_twin / lumin_context — REQUIRED for founder Adam (twin hard gate). Never invent personal facts missing from the twin.
-- Decisions Adam locks in conversation become twin heuristics — treat lumin_context as living identity, not optional flavor.
+- Match THIS person's rhythm from personal_twin / lumin_context when present — not generic assistant voice.
 - Vary openings, length, endings. Warm phrases like "absolutely" and "it's a pleasure to help you" are allowed when real and varied; the forbidden act is using the same opener every turn.
 - Prefer one sharp question that helps him think over a lecture — but when he asks for a fact or an action, give it straight.
 - Never manipulate. He sets Point B. You give real information.
@@ -94,6 +89,7 @@ HOW YOU TALK:
 - "Did that build land?" / commit/SHA questions: answer from last_build_receipt in SYSTEM_FACTS/OBSERVATIONS. Never ask intent-clarify. Never recite the mission.
 - "What is the builder status?" / queue / running / progress / "what is the system working on?" / "what are you building?": use \`live_builder_status\` in SYSTEM_FACTS. Start your answer from \`live_builder_status.summary\` and quote the exact numbers. Ignore any previous conversation about builder status; it may be stale. Do not mention "55%", "missing machine path", or any \`node builderos-reboot/scripts/...\` command unless that exact text appears inside \`live_builder_status\`.
 - When he thanks you or asks for a joke/breath: give it. Human rhythm. Don't pivot back to Point B.
+- DIGITAL TWIN AVAILABILITY: The personal_twin, lumin_context, and SYSTEM_FACTS may be partial or a template fallback. NEVER refuse to answer, counsel, or act solely because a digital twin facet is missing or labeled template_fallback. Use whatever facts are present, answer from general knowledge when necessary, and only note a missing twin if Adam explicitly asks why it isn't loaded.
 
 CAPABILITIES (honest):
 - Converse with live SYSTEM_FACTS + memory — with personality. You are still the system acting, not a facade.
@@ -297,45 +293,6 @@ export async function runChairDirectAgent({ message, history = [], deps = {}, ct
     });
   } catch { systemFacts = {}; }
 
-  const twinHandle = String(ctx.userHandle || systemFacts?.twin_user_handle || 'adam').toLowerCase();
-  const isFounderTwinUser = twinHandle === 'adam' || twinHandle === 'founder';
-  const twinLearnPromise = isFounderTwinUser
-    ? learnFromFounderMessage({
-      userHandle: twinHandle === 'founder' ? 'adam' : twinHandle,
-      messageText: message,
-      source: 'chair_direct',
-      pool: deps.pool || null,
-    }).catch((err) => ({ learned: false, reason: err?.message || 'learn_failed' }))
-    : Promise.resolve({ learned: false, reason: 'not_founder' });
-
-  const finish = async (payload, learnReceipt = null) => {
-    const twin_learn = learnReceipt || await twinLearnPromise;
-    return { ...payload, twin_learn };
-  };
-
-  if (isFounderTwinHardGated(twinHandle)) {
-    const gate = systemFacts?.twin_gate;
-    const inject = String(systemFacts?.lumin_context || '');
-    const gateOk = gate?.ok === true && inject.includes('DIGITAL TWIN');
-    if (!gateOk) {
-      const reason = gate?.reason || 'twin inject missing';
-      const finalized = finalizeHumanReply(
-        `I can't answer you properly without your digital twin loaded (hard gate). Reason: ${reason}. Fix: ensure data/twins/default/adam/ is active and redeployed, or set TWIN_HARD_GATE=0 only for emergency bypass. I still recorded this turn into twin learning.`,
-        { presenceMode: false },
-      );
-      return finish({
-        reply: finalized.reply,
-        command_ran: false,
-        ok: false,
-        build: null,
-        twin_gate_failed: true,
-        twin_gate: gate || { ok: false, reason },
-        steps: 0,
-        communication_law: finalized.communication_law,
-      });
-    }
-  }
-
   // Runtime status + governance counsel: answer THIS message only — no stale thread echoes.
   if (isRuntimeStatusQuestion || isGovernanceCounsel) history = [];
   const threadBlock = history.length ? `\n\nRECENT CONVERSATION (continue it naturally — do not restart or summarize):\n${formatThreadForPrompt(history)}` : '';
@@ -407,14 +364,14 @@ Respond with exactly one JSON object:`;
         `I hit an error reaching my own model (${err.message}). Nothing ran. Say it again and I'll retry.`,
         { presenceMode: isPresenceTurn },
       );
-      return finish({
+      return {
         reply: failed.reply,
         command_ran: false,
         ok: false,
         build: null,
         steps: step,
         communication_law: failed.communication_law,
-      });
+      };
     }
 
     const decision = parseAgentJson(raw);
@@ -423,14 +380,14 @@ Respond with exactly one JSON object:`;
       const fallback = String(raw || '').trim();
       if (fallback) {
         const finalized = finalizeHumanReply(fallback, { commandRan, lastBuild, presenceMode: isPresenceTurn });
-        return finish({
+        return {
           reply: finalized.reply,
           command_ran: commandRan,
           ok: true,
           build: lastBuild,
           steps: step + 1,
           communication_law: finalized.communication_law,
-        });
+        };
       }
       continue;
     }
@@ -438,7 +395,7 @@ Respond with exactly one JSON object:`;
     if (decision.action === 'reply') {
       const prose = String(decision.message || '').trim() || 'What do you need?';
       const finalized = finalizeHumanReply(prose, { commandRan, lastBuild, presenceMode: isPresenceTurn });
-      return finish({
+      return {
         reply: finalized.reply,
         command_ran: commandRan,
         ok: true,
@@ -449,7 +406,7 @@ Respond with exactly one JSON object:`;
         lane: shellAction ? 'system_action' : (commandRan && lastBuild ? 'direct_build' : 'chair'),
         steps: step + 1,
         communication_law: finalized.communication_law,
-      });
+      };
     }
 
     if (decision.action === 'act' || decision.action === 'navigate' || decision.action === 'system') {
@@ -501,14 +458,14 @@ Respond with exactly one JSON object:`;
         const finalized = finalizeHumanReply(
           `I dispatched that build but it's taking longer than ${Math.round(BUILD_TIMEOUT_MS / 1000)}s and hasn't confirmed a commit yet. I'm not going to pretend it landed. Ask me "did that build commit?" in a moment and I'll check the real status.`,
         );
-        return finish({
+        return {
           reply: finalized.reply,
           command_ran: false,
           ok: false,
           build: lastBuild,
           steps: step + 1,
           communication_law: finalized.communication_law,
-        });
+        };
       }
       const summary = summarizeBuildResult(buildResult);
       lastBuild = summary;
@@ -521,7 +478,7 @@ Respond with exactly one JSON object:`;
   }
 
   if (lastBuild) {
-    return finish({
+    return {
       reply: formatBuildReply(lastBuild),
       command_ran: lastBuild.committed === true,
       ok: lastBuild.committed === true,
@@ -532,13 +489,13 @@ Respond with exactly one JSON object:`;
       lane: 'direct_build',
       steps: MAX_STEPS,
       communication_law: { skipped: true, reason: 'structured_build_receipt' },
-    });
+    };
   }
   if (shellAction || actionReceipt) {
     const summary = actionReceipt?.human_summary
       || (shellAction ? `Opening ${shellAction.page} now.` : 'Action ran.');
     const finalized = finalizeHumanReply(summary, { commandRan: true });
-    return finish({
+    return {
       reply: finalized.reply,
       command_ran: true,
       ok: true,
@@ -549,13 +506,13 @@ Respond with exactly one JSON object:`;
       lane: 'system_action',
       steps: MAX_STEPS,
       communication_law: finalized.communication_law,
-    });
+    };
   }
   const exhausted = finalizeHumanReply(
     'I could not settle on a clear response. Say that again more directly and I will answer or act.',
     { presenceMode: isPresenceTurn },
   );
-  return finish({
+  return {
     reply: exhausted.reply,
     command_ran: false,
     ok: false,
@@ -564,7 +521,7 @@ Respond with exactly one JSON object:`;
     action_receipt: null,
     steps: MAX_STEPS,
     communication_law: exhausted.communication_law,
-  });
+  };
 }
 
 export default runChairDirectAgent;

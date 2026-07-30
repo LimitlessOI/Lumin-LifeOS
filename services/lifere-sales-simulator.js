@@ -102,6 +102,24 @@ function buildFallbackDebrief(turns, quadrant) {
   };
 }
 
+function learningStyleInstruction(learningProfile) {
+  if (!learningProfile) return '';
+  const style = String(learningProfile.learning_style || learningProfile.style || learningProfile || '').toLowerCase();
+  if (style.includes('visual')) {
+    return '\nLEARNING PROFILE: This learner is visual. Use concrete examples, mental pictures, and show-don\'t-tell explanations in your coaching.';
+  }
+  if (style.includes('aud') || style.includes('hear') || style.includes('listen') || style.includes('sound')) {
+    return '\nLEARNING PROFILE: This learner is auditory. Keep coaching rhythmic, conversational, and suitable to read aloud or record.';
+  }
+  if (style.includes('read') || style.includes('write') || style.includes('text')) {
+    return '\nLEARNING PROFILE: This learner prefers reading/writing. Give them a concise written takeaway they can save and reference.';
+  }
+  if (style.includes('kine') || style.includes('do') || style.includes('pract') || style.includes('hands')) {
+    return '\nLEARNING PROFILE: This learner is kinesthetic. End with one specific action or role-play step they can try immediately.';
+  }
+  return `\nLEARNING PROFILE: ${JSON.stringify(learningProfile)}`;
+}
+
 const QUADRANT_DETECTION_PROMPT = `Based on the following agent message, infer which personality quadrant the speaker is in:
 - Analytical: data-driven, asks many questions, methodical
 - Driver: direct, results-focused, impatient, concise
@@ -132,7 +150,7 @@ AGENT SAID: "{agent_message}"
 CLIENT RESPONDED: "{client_message}"
 DETECTED QUADRANT: {quadrant}
 TURN: {turn} of session
-
+{learning_profile}
 Your job: Give ONE specific coaching note (max 40 words). Pick the highest-value insight only.
 
 Format: [Observation] | [What to do next]
@@ -146,6 +164,7 @@ const DEBRIEF_PROMPT = `You are a sales training analyst. Give a post-session de
 SCENARIO: {scenario_id}
 TURNS: {turns}
 TOTAL EXCHANGES: {turn_count}
+{learning_profile}
 
 Full conversation:
 {history}
@@ -206,14 +225,14 @@ export function createLifeRESalesSimulator({ pool, callAI }) {
       .join('\n');
   }
 
-  async function startSession({ ownerId, scenarioId }) {
+  async function startSession({ ownerId, scenarioId, learningProfile }) {
     const scenario = getScenario(scenarioId);
     const sessionId = randomUUID();
     await pool.query(
       `INSERT INTO lifere_coaching_sessions
-         (id, owner_id, scenario_id, status, turns, created_at)
-       VALUES ($1, $2, $3, 'active', '[]'::jsonb, NOW())`,
-      [sessionId, ownerId, scenarioId]
+         (id, owner_id, scenario_id, status, turns, metadata, created_at)
+       VALUES ($1, $2, $3, 'active', '[]'::jsonb, $4::jsonb, NOW())`,
+      [sessionId, ownerId, scenarioId, JSON.stringify({ learning_profile: learningProfile || null })]
     );
     return {
       sessionId,
@@ -235,6 +254,8 @@ export function createLifeRESalesSimulator({ pool, callAI }) {
     if (!rows.length) throw Object.assign(new Error('Session not found'), { statusCode: 404 });
 
     const session = rows[0];
+    const metadata = session.metadata || {};
+    const learningProfile = metadata.learning_profile || null;
     const scenario = getScenario(session.scenario_id);
     const turns = session.turns || [];
     const turnCount = turns.filter((t) => t.role === 'agent').length + 1;
@@ -269,7 +290,8 @@ export function createLifeRESalesSimulator({ pool, callAI }) {
       .replace('{agent_message}', agentMessage)
       .replace('{client_message}', clientResponse)
       .replace('{quadrant}', quadrant || 'Unknown')
-      .replace('{turn}', String(turnCount));
+      .replace('{turn}', String(turnCount))
+      .replace('{learning_profile}', learningStyleInstruction(learningProfile));
 
     const coachRaw = await safeCallAI(coachPrompt);
     const coachingNote = typeof coachRaw === 'string'
@@ -307,6 +329,8 @@ export function createLifeRESalesSimulator({ pool, callAI }) {
     if (!rows.length) throw Object.assign(new Error('Session not found'), { statusCode: 404 });
 
     const session = rows[0];
+    const metadata = session.metadata || {};
+    const learningProfile = metadata.learning_profile || null;
     const turns = session.turns || [];
     const scenario = getScenario(session.scenario_id);
 
@@ -317,6 +341,7 @@ export function createLifeRESalesSimulator({ pool, callAI }) {
       .replace('{scenario_id}', session.scenario_id)
       .replace('{turns}', JSON.stringify(agentTurns))
       .replace('{turn_count}', String(agentTurns.length))
+      .replace('{learning_profile}', learningStyleInstruction(learningProfile))
       .replace('{history}', history);
 
     let debrief;

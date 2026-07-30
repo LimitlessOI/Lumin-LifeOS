@@ -82,7 +82,25 @@ function buildFallbackPack(niche, goal, answers = []) {
   };
 }
 
-function buildGenerationPrompt(niche, goal, answers) {
+function learningStyleInstruction(learningProfile) {
+  if (!learningProfile) return '';
+  const style = String(learningProfile.learning_style || learningProfile.style || learningProfile || '').toLowerCase();
+  if (style.includes('visual')) {
+    return '\nLEARNING STYLE ADAPTATION: This user learns best visually. Include concrete imagery, describe diagrams or carousel layouts in text, use bold section headers, and structure content so it could be turned into infographics or slide decks.';
+  }
+  if (style.includes('aud') || style.includes('hear') || style.includes('listen') || style.includes('sound')) {
+    return '\nLEARNING STYLE ADAPTATION: This user learns best by hearing. Write content that reads like spoken language, use rhythm and pauses, script-style framing, and suggest audio or video formats.';
+  }
+  if (style.includes('read') || style.includes('write') || style.includes('text')) {
+    return '\nLEARNING STYLE ADAPTATION: This user learns best by reading/writing. Use bullet points, concise paragraphs, clear takeaways, and formats that can be saved as notes or newsletters.';
+  }
+  if (style.includes('kine') || style.includes('do') || style.includes('pract') || style.includes('hands')) {
+    return '\nLEARNING STYLE ADAPTATION: This user learns best by doing. End each piece with one small action, a fill-in-the-blank prompt, or a hands-on exercise they can complete today.';
+  }
+  return `\nLEARNING STYLE ADAPTATION: ${JSON.stringify(learningProfile)}`;
+}
+
+function buildGenerationPrompt(niche, goal, answers, learningProfile) {
   const answerBlock = answers
     .map((a, i) => `Q${i + 1}: ${a.answer}`)
     .join('\n\n');
@@ -91,7 +109,7 @@ function buildGenerationPrompt(niche, goal, answers) {
 Generate a complete social media content pack from this coaching session.
 
 NICHE: ${niche || 'business / professional services'}
-GOAL: ${goal || 'grow audience and attract ideal clients'}
+GOAL: ${goal || 'grow audience and attract ideal clients'}${learningStyleInstruction(learningProfile)}
 
 CLIENT ANSWERS:
 ${answerBlock}
@@ -147,7 +165,7 @@ export function createSocialmediaosContentGenerator({ pool, callAI }) {
     }
 
     const meta = rows[0].metadata;
-    const prompt = buildGenerationPrompt(meta.niche, meta.goal, meta.answers || []);
+    const prompt = buildGenerationPrompt(meta.niche, meta.goal, meta.answers || [], meta.learning_profile);
 
     let pack;
     let generationMode = 'ai';

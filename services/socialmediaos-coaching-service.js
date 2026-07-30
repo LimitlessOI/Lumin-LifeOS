@@ -4,6 +4,12 @@
  */
 import { randomUUID } from 'node:crypto';
 
+const LEARNING_STYLE_QUESTION = {
+  id: 'q0_learning_style',
+  text: "How do you learn best? Pick one: by seeing visuals/diagrams, by hearing it explained, by reading/writing notes, or by doing/practicing. Or just describe what works for you.",
+  purpose: 'learning style detection',
+};
+
 const COACHING_QUESTIONS = [
   {
     id: 'q1_what_you_do',
@@ -33,9 +39,15 @@ const COACHING_QUESTIONS = [
 ];
 
 export function createSocialmediaosCoachingService({ pool }) {
-  async function startCoachingSession({ ownerId, niche, goal }) {
+  async function startCoachingSession({ ownerId, niche, goal, learningProfile }) {
     const sessionId = randomUUID();
-    const meta = JSON.stringify({ niche: niche || '', goal: goal || '', answers: [], currentQuestion: 0 });
+    const meta = JSON.stringify({
+      niche: niche || '',
+      goal: goal || '',
+      learning_profile: learningProfile || null,
+      answers: [],
+      currentQuestion: 0,
+    });
     await pool.query(
       `INSERT INTO socialmediaos_sessions
          (id, owner_id, status, session_type, metadata, created_at, updated_at)
@@ -47,6 +59,7 @@ export function createSocialmediaosCoachingService({ pool }) {
       question: COACHING_QUESTIONS[0],
       questionNumber: 1,
       totalQuestions: COACHING_QUESTIONS.length,
+      learningProfilePrompt: learningProfile ? null : LEARNING_STYLE_QUESTION,
     };
   }
 

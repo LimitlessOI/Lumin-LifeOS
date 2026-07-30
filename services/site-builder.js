@@ -41,7 +41,13 @@ import { getModelForTask, getCandidateModelsForTask } from '../config/task-model
 import { resolveDurablePublicBase } from './site-builder-public-base.js';
 import { renderSalesDoctrineForPrompt } from '../config/site-builder-sales-doctrine.js';
 import { matchIndustrySalesPack } from '../config/site-builder-industry-sales.js';
-import { applyScrapeGuard, applyScrapePoisonQualityGate } from './site-builder-scrape-guard.js';
+import {
+  applyScrapeGuard,
+  applyScrapePoisonQualityGate,
+  extractHtmlTitle,
+  htmlBodySnippet,
+  hostnameBusinessName,
+} from './site-builder-scrape-guard.js';
 
 function createEditToken() {
   return crypto.randomBytes(24).toString('hex');
@@ -117,6 +123,47 @@ function withTimeout(promise, ms, label) {
     if (typeof timer?.unref === 'function') timer.unref();
   });
   return Promise.race([promise, timeout]).finally(() => clearTimeout(timer));
+}
+
+async function quickHttpScrape(url, options = {}) {
+  try {
+    const resp = await fetch(url, {
+      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; LuminBot/1.0; +https://lumin.ai)' },
+      signal: AbortSignal.timeout(8000),
+      redirect: 'follow',
+    });
+    if (!resp.ok) return null;
+    const html = await resp.text();
+    if (!html) return null;
+    const title = extractHtmlTitle(html);
+    const bodyText = htmlBodySnippet(html, 8000);
+    const h1Match = html.match(/<h1[^>]*>([^<]*)<\/h1>/i);
+    const h1 = h1Match ? h1Match[1].trim() : '';
+    const phoneMatch = bodyText.match(/\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}/);
+    const emailMatch = bodyText.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,}/);
+    const businessName = title || h1 || hostnameBusinessName(url);
+    const profile = {
+      title,
+      h1,
+      metaDescription: '',
+      bodyText,
+      phone: phoneMatch ? phoneMatch[0] : '',
+      email: emailMatch ? emailMatch[0] : '',
+      services: [],
+      serviceDetails: [],
+      bookingUrl: '',
+      businessName,
+      sourceUrl: url,
+      scrapeFetchFailed: false,
+      scrapeMethod: 'http_fetch',
+    };
+    return applyScrapeGuard(profile, {
+      submittedName: options.preferredBusinessName || options.businessName,
+      url,
+    });
+  } catch {
+    return null;
+  }
 }
 
 function escapeHtml(s) {
@@ -1057,7 +1104,13 @@ export default class SiteBuilder {
 
     } catch (err) {
       if (browser) await browser.close().catch(() => {});
-      logger.warn('[SITE] Scrape failed, using AI extraction only', { url, error: err.message });
+      logger.warn('[SITE] Puppeteer scrape failed; trying HTTP fetch fallback', { url, error: err.message });
+      const fetchProfile = await quickHttpScrape(url, options);
+      if (fetchProfile && !fetchProfile.scrapeFetchFailed) {
+        logger.info('[SITE] HTTP fetch scrape succeeded as fallback', { url, businessName: fetchProfile.businessName });
+        return fetchProfile;
+      }
+      logger.warn('[SITE] HTTP fetch fallback also failed; using AI extraction only', { url });
       const extracted = await this.extractBusinessInfoWithAI({ title: url, bodyText: '', sourceUrl: url }, url);
       return applyScrapeGuard(
         { ...extracted, sourceUrl: url, scrapeFetchFailed: true, scrapeFailureReason: String(err?.message || err).slice(0, 300) },
