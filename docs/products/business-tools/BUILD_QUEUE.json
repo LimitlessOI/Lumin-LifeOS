@@ -570,7 +570,7 @@
     },
     {
       "id": "7",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/entitlementsGatewayService.js",
       "task": "implement entitlement feature gate logic",
       "spec": "Implement logic to enforce feature access based on `project_entitlements` entries.",
@@ -578,7 +578,7 @@
         "6"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "checkEntitlements"
       ],
@@ -594,13 +594,16 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-16T03:06:26.194Z",
-      "commit_sha": "dc5d220658103a6118a51c401cf097155cae75e0",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "7",
       "mission_id": "PRODUCT-business-tools",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:checkEntitlements; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.365Z"
+      "last_error": "codegen_authoring_failed: codegen_empty: openai_builder_mini: HTTP 429: {\n    \"error\": {\n        \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, read",
+      "reaudit_reset_at": "2026-07-30T18:55:06.365Z",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-30T20:53:49.595Z"
     },
     {
       "id": "8",
