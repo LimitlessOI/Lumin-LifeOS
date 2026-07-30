@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T21:13:03.217Z",
+  "generated_at": "2026-07-30T21:13:17.372Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12364,
+  "file_count": 12365,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -68131,6 +68131,13 @@
       "bytes": 10511,
       "mtime": "2026-07-05T19:10:02.191Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "routes/familySafety.js",
+      "synopsis": "Registers FamilySafetyRoutes routes/handlers (routes/familySafety.js).",
+      "bytes": 3255,
+      "mtime": "2026-07-30T21:13:17.372Z",
+      "indexed_at": "2026-07-30T21:13:17.372Z"
     },
     {
       "path": "routes/ferpaRoutes.js",

@@ -333,7 +333,31 @@
       "shipped_via": null,
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerFamilySafetyRoutes; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.428Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.428Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/faith-studio/twins/steps/step9.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T21:13:14.450Z",
+        "shipped_at": "2026-07-30T21:13:14.450Z",
+        "commit_sha": "00aa83e1ed17faad6dfca5ebf1f13bf905d9d220",
+        "content_sha256": "c9daa5df9cb675c48eb5f66a51070f738742b1532c5f829469db1d4d69d0a5aa",
+        "target_file": "routes/familySafety.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "routes/familySafety.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/faith-studio/twins/steps/step9.exact",
+          "content_sha256": "c9daa5df9cb675c48eb5f66a51070f738742b1532c5f829469db1d4d69d0a5aa"
+        }
+      },
+      "shipped_at": "2026-07-30T21:13:14.450Z"
     },
     {
       "id": "step10",
