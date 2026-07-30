@@ -176,8 +176,8 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-07-30T22:01:36.824Z",
-        "shipped_at": "2026-07-30T22:01:36.824Z",
+        "sealed_at": "2026-07-30T22:24:52.870Z",
+        "shipped_at": "2026-07-30T22:24:52.870Z",
         "commit_sha": null,
         "content_sha256": "b48ffc0642c05b1a997270185b39aa2b449a149f845812c4281fd19cce526d12",
         "target_file": "services/sceneEngine.js",
@@ -193,7 +193,7 @@
           "content_sha256": "b48ffc0642c05b1a997270185b39aa2b449a149f845812c4281fd19cce526d12"
         }
       },
-      "shipped_at": "2026-07-30T22:01:36.824Z"
+      "shipped_at": "2026-07-30T22:24:52.870Z"
     },
     {
       "id": "5",
