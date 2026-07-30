@@ -176,10 +176,10 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-07-30T19:08:07.853Z",
-        "shipped_at": "2026-07-30T19:08:07.853Z",
-        "commit_sha": "4464a66ce6d446c3f76d04e737eaf0f692fed815",
-        "content_sha256": "a0c58768e7dee9e12cb3071308650fb8e0b4df6099afc52101a0703132948558",
+        "sealed_at": "2026-07-30T21:13:00.968Z",
+        "shipped_at": "2026-07-30T21:13:00.968Z",
+        "commit_sha": null,
+        "content_sha256": "f76863a536219d5bd4e94c98e1b7b454e8ac759a99f4da953f7c02db06b0f5c4",
         "target_file": "services/sceneEngine.js",
         "reverse": {
           "mode": "delete_file",
@@ -190,10 +190,10 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/creator-media-os/twins/steps/4.exact",
-          "content_sha256": "a0c58768e7dee9e12cb3071308650fb8e0b4df6099afc52101a0703132948558"
+          "content_sha256": "f76863a536219d5bd4e94c98e1b7b454e8ac759a99f4da953f7c02db06b0f5c4"
         }
       },
-      "shipped_at": "2026-07-30T19:08:07.853Z"
+      "shipped_at": "2026-07-30T21:13:00.968Z"
     },
     {
       "id": "5",
