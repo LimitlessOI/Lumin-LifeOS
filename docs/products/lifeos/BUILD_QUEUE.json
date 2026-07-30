@@ -2680,7 +2680,7 @@
         "lifeos-3"
       ],
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 1,
       "expected_exports": [
         "executeChatIntent"
       ],
@@ -2701,7 +2701,7 @@
         "method": "POST",
         "path": "/jobs"
       },
-      "last_attempt_at": "2026-07-30T20:31:40.096Z",
+      "last_attempt_at": "2026-07-30T20:48:08.165Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:executeChatIntent; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
@@ -2710,8 +2710,20 @@
       "blueprint_step_id": "lifeos-1",
       "mission_id": "PRODUCT-lifeos",
       "shipped_via": null,
-      "pre_existing": false,
-      "reaudit_reset_at": "2026-07-30T18:55:06.601Z"
+      "pre_existing": null,
+      "reaudit_reset_at": "2026-07-30T18:55:06.601Z",
+      "last_attempt": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-30T20:48:07.914Z",
+      "no_op": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "lifeos-2",
