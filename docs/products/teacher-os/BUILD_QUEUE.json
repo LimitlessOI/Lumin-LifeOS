@@ -9,7 +9,7 @@
   "steps": [
     {
       "id": "1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/userInterviews.js",
       "task": "compile teacher feedback",
       "spec": "Compile and summarize the feedback from 5 teachers interviewed.",
@@ -34,23 +34,23 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-15T17:50:44.624Z",
-      "commit_sha": "9dd2df5369c292810b79780df848d88e3b24682f",
+      "commit_sha": "ecfbc2a12bc641e1082913e4855729e23ed55250",
       "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "1",
       "mission_id": "PRODUCT-teacher-os",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:summarizeInterviews; assertion_threw",
+      "last_error": null,
       "reaudit_reset_at": "2026-07-30T18:55:06.746Z"
     },
     {
       "id": "2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/competitiveAnalysis.js",
       "task": "analyze competitors",
       "spec": "Analyze the competitive landscape focusing on Planboard, Teachermade, Nearpod, Google Classroom, and Formative.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "analyzeCompetitors"
       ],
@@ -69,13 +69,16 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-15T17:57:44.512Z",
-      "commit_sha": "32989e7f23a046569d018e0da5cb8e107756d80d",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "2",
       "mission_id": "PRODUCT-teacher-os",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:analyzeCompetitors; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.746Z"
+      "last_error": "ship_commit_not_on_main: compare status ahead",
+      "reaudit_reset_at": "2026-07-30T18:55:06.746Z",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-30T23:38:14.746Z"
     },
     {
       "id": "3",
@@ -111,7 +114,7 @@
     },
     {
       "id": "4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/ferpaTemplate.js",
       "task": "draft FERPA agreement",
       "spec": "Draft a FERPA data processing agreement template.",
@@ -136,12 +139,12 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-30T23:53:46.744Z",
-      "commit_sha": "cbc449fc76f37f741e9e76e4217dc40243bbf80c",
+      "commit_sha": "6f5ba02a5b39ae1d00ec5d00c32529eb26e8dc9f",
       "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "4",
       "mission_id": "PRODUCT-teacher-os",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:draftFERPATemplate; assertion_threw",
+      "last_error": null,
       "reaudit_reset_at": "2026-07-30T18:55:06.746Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
