@@ -95,14 +95,37 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-15T18:04:26.009Z",
+      "shipped_at": "2026-07-30T23:20:02.279Z",
       "commit_sha": "da9bc36dda0464fadc76cdeb515ddaf5fcfe9db2",
       "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "3",
       "mission_id": "PRODUCT-white-label",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerPartnerOnboardingRoutes; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.853Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.853Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/white-label/twins/steps/3.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-30T23:20:02.279Z",
+        "shipped_at": "2026-07-30T23:20:02.279Z",
+        "commit_sha": "da9bc36dda0464fadc76cdeb515ddaf5fcfe9db2",
+        "content_sha256": "aacefbc56d40ef0b4f88d929b504253e22b7872f976a2580378d9a8e95313e96",
+        "target_file": "routes/partner-onboarding.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "routes/partner-onboarding.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/white-label/twins/steps/3.exact",
+          "content_sha256": "aacefbc56d40ef0b4f88d929b504253e22b7872f976a2580378d9a8e95313e96"
+        }
+      }
     },
     {
       "id": "4",
