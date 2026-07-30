@@ -1751,7 +1751,7 @@
     },
     {
       "id": "lifeos-chat-v2-07",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/lifeos-natural-build-router.js",
       "task": "Build the normal-language build request router that turns founder instructions into governed BuilderOS tasks",
       "spec": "ESM service. Exports parseBuildRequest(text) that extracts a build instruction (e.g. \"build a commitment calendar route\") and a target file guess. Exports buildBuildPayload(parsed) returning { task, target_file, spec_hint, product_id: \"lifeos\" }. Exports submitToBuilder(payload, { commandKey, baseUrl }) that POSTs to `${baseUrl}/api/v1/lifeos/builder/build` with `x-command-key: ${commandKey}` and `Content-Type: application/json` using global `fetch`, and returns the JSON receipt. Exports replyFromReceipt(receipt) that turns the build result into a concise founder-facing message. Do NOT import helper files (e.g. './api-client.js') because they do not exist; use global `fetch`. No top-level side effects. No imports other than node built-ins.",
@@ -1790,10 +1790,10 @@
         "lifeos-chat-v2-01"
       ],
       "founder_gated": false,
-      "attempts": 0,
-      "last_attempt_at": null,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:parseBuildRequest,buildBuildPayload,submitToBuilder,replyFromReceipt; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw",
-      "commit_sha": "563e14a44dfcec1ffb1dfc7e91fb6c3a41506c1c",
+      "attempts": 1,
+      "last_attempt_at": "2026-07-30T20:00:04.174Z",
+      "last_error": "github_commit_failed_after_local_ship",
+      "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
