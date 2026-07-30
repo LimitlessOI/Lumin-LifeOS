@@ -113,6 +113,130 @@ export function evaluateTwinGate(bundle, injectText = '') {
   return { ok, reason };
 }
 
+function looksLikeDecision(t = '') {
+  const text = String(t || '').trim();
+  if (text.length < 24) return false;
+  const DECISION_SIGNAL_RE =
+    /\b(i (decided|decide|want|will|need|chose|choose)|from now on|locked|lock it|no longer|never |always |my goal|don't want|do not want|both\.|hard.?gate)\b/i;
+  return DECISION_SIGNAL_RE.test(text);
+}
+
+function normalizePatternKey(text = '') {
+  return String(text).toLowerCase().replace(/\s+/g, ' ').trim().slice(0, 160);
+}
+
+/**
+ * Learn from a founder message into facet twin files (memory + decision_identity).
+ * Deterministic — no model required. Does not overwrite VERIFIED locks.
+ */
+export async function learnFromFounderMessage({
+  userHandle = 'adam',
+  messageText,
+  source = 'chair',
+  pool = null,
+  logger = console,
+} = {}) {
+  const text = String(messageText || '').trim();
+  if (!text || text.length < 12) {
+    return { learned: false, reason: 'too_short' };
+  }
+
+  const store = createLifeRETwinStore({ pool, logger });
+  const now = new Date().toISOString();
+  const receipt = { source, at: now, quote: text.slice(0, 280) };
+  const writes = [];
+
+  const memory = store.readTwin({ tenantId: 'default', userId: userHandle, twinKey: 'memory' }) || {
+    schema: 'digital_twin_memory_v1',
+    capsule_refs: [],
+    digest_refs: [],
+    episodic_summaries: [],
+    do_not_ingest: [],
+  };
+  const episodes = Array.isArray(memory.episodic_summaries) ? [...memory.episodic_summaries] : [];
+  episodes.push({
+    at: now,
+    summary: text.slice(0, 400),
+    evidence_level: 'CLAIM',
+    source,
+  });
+  memory.episodic_summaries = episodes.slice(-50);
+  memory.updated_at = now;
+  await store.writeTwin({
+    tenantId: 'default',
+    userId: userHandle,
+    twinKey: 'memory',
+    payload: memory,
+    receiptMeta: receipt,
+  });
+  writes.push('memory');
+
+  let decisionLearned = false;
+  if (looksLikeDecision(text)) {
+    const decision = store.readTwin({
+      tenantId: 'default',
+      userId: userHandle,
+      twinKey: 'decision_identity',
+    }) || {
+      schema: 'digital_twin_decision_identity_v1',
+      layers: { values: [], vetoes: [], heuristics: [], escalation: [], precedents: [], presentation: [] },
+      compiler_status: 'live_learn',
+    };
+    if (!decision.layers) decision.layers = {};
+    if (!Array.isArray(decision.layers.heuristics)) decision.layers.heuristics = [];
+    const patternText = text.length > 220 ? `${text.slice(0, 217)}…` : text;
+    const key = normalizePatternKey(patternText);
+    const exists = decision.layers.heuristics.some(
+      (h) => normalizePatternKey(h.pattern_text || '') === key,
+    );
+    if (!exists) {
+      decision.layers.heuristics.push({
+        pattern_text: patternText,
+        evidence_level: 'CLAIM',
+        source_ref: `${source}:${now}`,
+        applies_when: 'live founder conversation',
+        learned_at: now,
+      });
+      decision.layers.heuristics = decision.layers.heuristics.slice(-40);
+      decision.compiler_status = 'live_learn';
+      decision.updated_at = now;
+      await store.writeTwin({
+        tenantId: 'default',
+        userId: userHandle,
+        twinKey: 'decision_identity',
+        payload: decision,
+        receiptMeta: receipt,
+      });
+      writes.push('decision_identity');
+      decisionLearned = true;
+    }
+  }
+
+  const meta = store.readTwin({ tenantId: 'default', userId: userHandle, twinKey: '_meta' });
+  if (meta) {
+    meta.last_learned_at = now;
+    meta.last_learned_source = source;
+    meta.updated_at = now;
+    if (!meta.supervision) meta.supervision = {};
+    meta.supervision.last_learned_at = now;
+    await store.writeTwin({
+      tenantId: 'default',
+      userId: userHandle,
+      twinKey: '_meta',
+      payload: meta,
+      receiptMeta: receipt,
+    });
+    writes.push('_meta');
+  }
+
+  return {
+    learned: true,
+    decision_learned: decisionLearned,
+    writes,
+    at: now,
+  };
+}
+
 function formatTwinInjectBlock(bundle, { maxChars = 7000 } = {}) {
   if (!bundle) return '';
   const parts = [];
