@@ -91,6 +91,28 @@ function formatDecisionLayer(layers, layerName, max = 4) {
   return `${layerName.toUpperCase()}:\n${lines.join('\n')}`;
 }
 
+const FOUNDER_TWIN_REQUIRED = ['_meta', 'personal', 'goal', 'operating_system', 'decision_identity'];
+
+export function isFounderTwinHardGated(userHandle = 'adam') {
+  // Hard gating is DISABLED. The Chair must answer from available facts and template fallback.
+  // Keeping the export so existing callers still resolve, but the gate never fires.
+  return false;
+}
+
+export function evaluateTwinGate(bundle, injectText = '') {
+  const missing = FOUNDER_TWIN_REQUIRED.filter((k) => !bundle?.[k]);
+  const status = bundle?._meta?.status || null;
+  const statusOk = status === 'active' || status === 'review';
+  const inject = String(injectText || '');
+  const injectOk = inject.includes('DIGITAL TWIN') && inject.length >= 400;
+  const ok = missing.length === 0 && statusOk && injectOk;
+  let reason = 'ok';
+  if (missing.length) reason = `missing facets: ${missing.join(', ')}`;
+  else if (!statusOk) reason = `twin status not ready (${status || 'null'})`;
+  else if (!injectOk) reason = 'twin inject block missing or too thin';
+  return { ok, reason };
+}
+
 function formatTwinInjectBlock(bundle, { maxChars = 7000 } = {}) {
   if (!bundle) return '';
   const parts = [];
@@ -308,6 +330,27 @@ export function createLuminContextLoader({ pool, callAI = null, logger = console
     return formatTwinInjectBlock(bundle, opts);
   }
 
+  async function getTwinGate(userHandle = 'adam') {
+    const bundle = await loadFullTwin(userHandle);
+    const inject = formatTwinInjectBlock(bundle);
+    return {
+      ...evaluateTwinGate(bundle, inject),
+      hard_gated_for_user: isFounderTwinHardGated(userHandle),
+      inject_preview: inject.slice(0, 180),
+    };
+  }
+
+  async function requireTwinOrThrow(userHandle = 'adam') {
+    const gate = await getTwinGate(userHandle);
+    if (isFounderTwinHardGated(userHandle) && !gate.ok) {
+      const err = new Error(`TWIN_GATE_FAILED: ${gate.reason}`);
+      err.code = 'TWIN_GATE_FAILED';
+      err.twin_gate = gate;
+      throw err;
+    }
+    return gate;
+  }
+
   async function loadRecentLessons(limit = 6) {
     if (!pool) return [];
     const { rows } = await pool.query(
@@ -392,6 +435,8 @@ export function createLuminContextLoader({ pool, callAI = null, logger = console
     loadPersonalTwin,
     loadFullTwin,
     getTwinInjectBlock,
+    getTwinGate,
+    requireTwinOrThrow,
     formatTwinInjectBlock,
     loadRecentLessons,
     loadRecentMoments,

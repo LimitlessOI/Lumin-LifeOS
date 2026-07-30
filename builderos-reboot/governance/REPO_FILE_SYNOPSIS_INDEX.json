@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T01:27:30.151Z",
+  "generated_at": "2026-07-30T01:36:30.407Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12338,
   "files": [
@@ -37990,8 +37990,8 @@
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
       "bytes": 43112,
-      "mtime": "2026-07-30T01:27:30.151Z",
-      "indexed_at": "2026-07-30T01:27:30.151Z"
+      "mtime": "2026-07-30T01:36:30.407Z",
+      "indexed_at": "2026-07-30T01:36:30.407Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40927,8 +40927,8 @@
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
       "bytes": 634143,
-      "mtime": "2026-07-30T01:27:30.151Z",
-      "indexed_at": "2026-07-30T01:27:30.151Z"
+      "mtime": "2026-07-30T01:36:30.407Z",
+      "indexed_at": "2026-07-30T01:36:30.407Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -90241,9 +90241,9 @@
     {
       "path": "services/lumin-context-loader.js",
       "synopsis": "Loads per-user twin + communication profile + recent learning for Lumin prompts.",
-      "bytes": 14117,
-      "mtime": "2026-07-30T01:27:30.151Z",
-      "indexed_at": "2026-07-30T01:27:30.151Z",
+      "bytes": 15880,
+      "mtime": "2026-07-30T01:36:30.407Z",
+      "indexed_at": "2026-07-30T01:36:30.407Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
