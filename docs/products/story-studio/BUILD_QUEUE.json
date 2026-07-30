@@ -228,13 +228,13 @@
     },
     {
       "id": "6",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/franchiseScoring.js",
       "task": "Develop franchise scoring system with anti-abuse",
       "spec": "Implement employer score logic and community feedback mechanisms with anti-fraud measures",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "calculateFranchiseScore",
         "getCommunityFeedback"
@@ -245,13 +245,13 @@
       "file_contains": [
         "Community scoring abuse model not yet designed"
       ],
-      "commit_sha": "0ca74fbb5598196a4f1154cca3ad30eed55a2a1e",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "6",
       "mission_id": "PRODUCT-story-studio",
       "shipped_via": null,
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:calculateFranchiseScore,getCommunityFeedback; assertion_threw; assertion_threw; assertion_threw",
+      "last_error": "artifact_missing_after_ship: artifact_proof_failed: Community scoring abuse model not yet designed",
       "reaudit_reset_at": "2026-07-30T18:55:06.739Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
@@ -276,7 +276,10 @@
           "content_sha256": "fbd7a3d027c5f1ac610077fd05724baf262ee0c4babc11443e7466f50ea0307f"
         }
       },
-      "shipped_at": "2026-07-30T21:24:10.878Z"
+      "shipped_at": "2026-07-30T21:24:10.878Z",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-30T21:24:18.232Z"
     },
     {
       "id": "7",
