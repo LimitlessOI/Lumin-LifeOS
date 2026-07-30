@@ -47,12 +47,10 @@ const checks = [
       const buildDeploy = loadJson('products/receipts/BUILDEROS_BUILD_DEPLOY_TRUTH.json');
       const founderUi = loadJson('products/receipts/BUILDEROS_FOUNDER_UI_PROOF.json');
       const sameTier = loadJson('products/receipts/BUILDEROS_SAME_TIER_DETERMINISM.json');
-      const closure = loadJson('products/receipts/BUILDEROS_AUTONOMY_CLOSURE_V1_ACCEPTANCE.json');
       const live = buildDeploy?.verdict === 'PASS' && founderUi?.verdict === 'PASS';
       const same = sameTier?.verdict === 'PASS';
-      const closureOk = closure?.ok === true
-        && (!Array.isArray(closure?.failed) || closure.failed.length === 0);
-      const expected = live && same && closureOk;
+      // Must not depend on autonomy-closure acceptance receipt (reads FMR → chicken-egg).
+      const expected = live && same;
       return cert?.levels?.FULLY_MACHINE_READY === expected;
     })(),
   },

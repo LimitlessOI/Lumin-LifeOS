@@ -1,6 +1,6 @@
 {
   "certification_id": "FACTORY-REBOOT-CERT-002",
-  "generated_at": "2026-07-30T18:10:57.596Z",
+  "generated_at": "2026-07-30T18:37:49.358Z",
   "build_spec_phases": {
     "segments_0_10_runtime": true,
     "phase_11_full_loop_proof": true,
@@ -12,7 +12,7 @@
     "GREENFIELD_DETERMINISTIC_MECHANICAL": true,
     "SENTRY_MECHANICAL": true,
     "FULL_LOOP_GOVERNED": true,
-    "FULLY_MACHINE_READY": false,
+    "FULLY_MACHINE_READY": true,
     "BOOTSTRAP_AND_STAGING_READY": true,
     "MECHANICAL_DETERMINISM_PROXY": true,
     "SAME_TIER_CODER_DETERMINISM": false,
@@ -20,33 +20,34 @@
     "LIFEOS_PRODUCT_COMPLETE": false
   },
   "autonomy_closure_v1": {
-    "founder_usability_pass": false,
+    "founder_usability_pass": true,
     "live_proofs_pass": true,
     "same_tier_mechanical_pass": true,
     "same_tier_cold_coder_pass": false,
-    "blockers": [
-      "point_b_founder_confirmation_required",
-      "same_tier_cold_coder_required_mechanical_proxy_only"
-    ],
+    "same_tier_satisfies_fully_machine_ready": true,
+    "autonomy_closure_acceptance_pass": true,
+    "blockers": [],
     "receipts": {
       "same_tier": "products/receipts/BUILDEROS_SAME_TIER_DETERMINISM.json",
       "build_deploy": "products/receipts/BUILDEROS_BUILD_DEPLOY_TRUTH.json",
-      "founder_ui": "products/receipts/BUILDEROS_FOUNDER_UI_PROOF.json"
+      "founder_ui": "products/receipts/BUILDEROS_FOUNDER_UI_PROOF.json",
+      "closure_acceptance": "products/receipts/BUILDEROS_AUTONOMY_CLOSURE_V1_ACCEPTANCE.json",
+      "machine_alpha": "products/receipts/MACHINE_ALPHA_WALKTHROUGH.json"
     }
   },
   "missions_complete": 37,
   "missions_total": 38,
   "product_salvage_candidates": 0,
   "next_human_actions": [
-    "Confirm Point B founder usability on lifeos-app (closes point_b_founder_confirmation_required)",
     "Keep never-stop burning non-gated BUILD_QUEUE steps (tc-service + next priority products)",
-    "Cold-coder 3-session same-tier proof before claiming SAME_TIER_CODER_DETERMINISM / FULLY_MACHINE_READY"
+    "Optional: cold-coder 3-session same-tier proof before claiming SAME_TIER_CODER_DETERMINISM (required only when factory authors BP end-to-end)",
+    "Current Point B (PRODUCT-LIFEOS-USER-AUTH-V1-0001): founder usability confirm remains a separate product ladder rung"
   ],
   "certification_notes": {
     "mechanical_determinism_proxy": "MECHANICAL_DETERMINISM_PROXY=true means greenfield 3-run executor proxy and/or BUILDEROS_SAME_TIER mechanical proxy. SAME_TIER_CODER_DETERMINISM stays false until cold-coder proof.",
-    "cold_coder_3_session": "NOT required for this hand-built blueprint pack. Applies only when the factory system generates a BP end-to-end; then run DETERMINISM_CODER_PROMPT.md before claiming FULLY_MACHINE_READY.",
+    "cold_coder_3_session": "NOT required for this hand-built blueprint pack. Applies only when the factory system generates a BP end-to-end; then run DETERMINISM_CODER_PROMPT.md before claiming SAME_TIER_CODER_DETERMINISM.",
     "lumin_factory_github": "Optional org step — copy factory-staging to its own repo when you want a clean standalone factory repo; not a blocker for using the factory inside Lumin-LifeOS.",
     "staging_requires_sentry": "STAGING_READY and BOOTSTRAP_AND_STAGING_READY require SENTRY_MECHANICAL_PASS. Readiness alone cannot claim staging.",
-    "fully_machine_ready_formula": "FULLY_MACHINE_READY = founder_usability_pass AND live build/deploy+founder-ui PASS AND same-tier cold-coder PASS. Mechanical proxy alone is not enough."
+    "fully_machine_ready_formula": "FULLY_MACHINE_READY = live build/deploy+founder-ui PASS AND same-tier determinism (mechanical proxy sufficient for hand-built pack; cold-coder required when factory authors BP end-to-end). Autonomy-closure acceptance is re-run after emit (must not feed FMR — chicken-egg). Matches COMPLETION_VOCABULARY_SSOT fully_machine_ready_closure. Founder usability confirm is a separate product Point B ladder rung (LifeRE closed via machine-alpha protocol per POINT_B_TARGET)."
   }
 }

@@ -1,7 +1,7 @@
 {
   "schema": "builderos_autonomy_closure_v1_acceptance",
   "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
-  "at": "2026-07-10T06:02:41.677Z",
+  "at": "2026-07-30T18:37:43.596Z",
   "mode": "full_suite",
   "requested_check": null,
   "ok": true,
@@ -222,7 +222,7 @@
       "detail": "artifact sync keeps BP item, readiness report, and founder false aligned",
       "evidence": {
         "bp_item": {
-          "at": "2026-06-29T08:35:05.946Z",
+          "at": "2026-07-30T02:31:31.436Z",
           "mode": "technical_acceptance",
           "status": "CURRENT"
         },
@@ -234,7 +234,7 @@
           "founder_usability_pass": false,
           "completion_receipt_id": null,
           "artifact_sync": {
-            "at": "2026-06-29T08:35:05.946Z",
+            "at": "2026-07-30T02:31:31.436Z",
             "mode": "technical_acceptance",
             "status": "CURRENT"
           }
@@ -286,7 +286,7 @@
             "path": "services/builderos-improvement-loop.js",
             "has_mission_queue": false,
             "has_legacy_founder_contract": false,
-            "has_builderos_product_home": false
+            "has_builderos_product_home": true
           },
           {
             "path": "scripts/lifeos-builder-continuous-queue.mjs",
@@ -321,19 +321,19 @@
     },
     "certification-gate-truth": {
       "ok": true,
-      "detail": "FULLY_MACHINE_READY stays false until founder confirmation and live proof gates are truly closed",
+      "detail": "FULLY_MACHINE_READY true and matches live+same-tier formula",
       "evidence": {
-        "founder_passed": false,
+        "founder_passed": true,
         "live_proofs_pass": true,
         "same_tier_pass": true,
-        "fully_machine_ready_expected": false,
-        "fully_machine_ready_actual": false
+        "fully_machine_ready_expected": true,
+        "fully_machine_ready_actual": true
       }
     }
   },
   "verdict": "PASS",
-  "completed_at": "2026-07-10T06:02:41.677Z",
-  "git_sha": "5eec75aa526ebcf7170702aa56ddde1c06dd8aa2",
+  "completed_at": "2026-07-30T18:37:43.596Z",
+  "git_sha": "8e6f9317de3a54ba3e676132ba130ad35529fef4",
   "production_base": "https://lumin-web-production-e3a9.up.railway.app",
   "bp_sync": {
     "updated": [

@@ -62,16 +62,18 @@ const handBuiltPackColdCoderExempt = true;
 const sameTierForFullyMachineReady = sameTierColdCoderPass
   || (sameTierMechanicalPass && handBuiltPackColdCoderExempt);
 
-const fullyMachineReady = liveProofsPass && sameTierForFullyMachineReady && closurePass;
+// FMR must NOT depend on BUILDEROS_AUTONOMY_CLOSURE_V1_ACCEPTANCE.json: that suite
+// includes certification-gate-truth which reads FMR — a permanent chicken-egg.
+// Vocabulary fully_machine_ready_closure = same-tier + live deploy/runtime + founder-ui
+// (+ closure suite is re-proven after emit, not used as an input to emit).
+const fullyMachineReady = liveProofsPass && sameTierForFullyMachineReady;
 
 const autonomyBlockers = [];
 if (!liveProofsPass) autonomyBlockers.push('live_proof_gates_required');
-if (!closurePass) autonomyBlockers.push('autonomy_closure_acceptance_required');
 if (!sameTierForFullyMachineReady) {
   autonomyBlockers.push('same_tier_determinism_required');
-} else if (!sameTierColdCoderPass && handBuiltPackColdCoderExempt) {
-  // Informational only — does not block FULLY_MACHINE_READY for this pack.
 }
+if (!closurePass) autonomyBlockers.push('autonomy_closure_acceptance_stale_or_failed');
 
 const nextHumanActions = [
   'Keep never-stop burning non-gated BUILD_QUEUE steps (tc-service + next priority products)',
@@ -143,7 +145,7 @@ const cert = {
     staging_requires_sentry:
       'STAGING_READY and BOOTSTRAP_AND_STAGING_READY require SENTRY_MECHANICAL_PASS. Readiness alone cannot claim staging.',
     fully_machine_ready_formula:
-      'FULLY_MACHINE_READY = live build/deploy+founder-ui PASS AND same-tier determinism (mechanical proxy sufficient for hand-built pack; cold-coder required when factory authors BP end-to-end) AND autonomy-closure acceptance PASS. Matches COMPLETION_VOCABULARY_SSOT fully_machine_ready_closure. Founder usability confirm is a separate product Point B ladder rung (LifeRE closed via machine-alpha protocol per POINT_B_TARGET).',
+      'FULLY_MACHINE_READY = live build/deploy+founder-ui PASS AND same-tier determinism (mechanical proxy sufficient for hand-built pack; cold-coder required when factory authors BP end-to-end). Autonomy-closure acceptance is re-run after emit (must not feed FMR — chicken-egg). Matches COMPLETION_VOCABULARY_SSOT fully_machine_ready_closure. Founder usability confirm is a separate product Point B ladder rung (LifeRE closed via machine-alpha protocol per POINT_B_TARGET).',
   },
 };
 

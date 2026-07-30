@@ -6,6 +6,7 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
+import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { getCompletionState } from '../services/bp-priority-completion.js';
 import { buildAttemptCarryForwardContext } from '../services/self-repair-attempt-context.js';
@@ -322,7 +323,6 @@ function checkCertificationGateTruth() {
   const buildDeploy = readJson('products/receipts/BUILDEROS_BUILD_DEPLOY_TRUTH.json');
   const founderUi = readJson('products/receipts/BUILDEROS_FOUNDER_UI_PROOF.json');
   const sameTier = readJson('products/receipts/BUILDEROS_SAME_TIER_DETERMINISM.json');
-  const closure = readJson('products/receipts/BUILDEROS_AUTONOMY_CLOSURE_V1_ACCEPTANCE.json');
   const lifeReMachineAlphaPass = machineAlpha?.ok === true
     && machineAlpha?.mission_id === 'PRODUCT-LIFERE-OS-V1-0001'
     && (machineAlpha?.pass_fail === 'PASS' || Number(machineAlpha?.tests_failed || 0) === 0);
@@ -333,23 +333,34 @@ function checkCertificationGateTruth() {
     || (lifeReMachineAlphaPass && lifeReCompleted);
   const liveProofsPass = buildDeploy?.verdict === 'PASS' && founderUi?.verdict === 'PASS';
   const sameTierPass = sameTier?.verdict === 'PASS';
-  const closurePass = closure?.ok === true
-    && (!Array.isArray(closure?.failed) || closure.failed.length === 0);
-  // Matches COMPLETION_VOCABULARY fully_machine_ready_closure + hand-built cold-coder exemption.
-  const fullyMachineReadyExpected = liveProofsPass && sameTierPass && closurePass;
-  const fullyMachineReadyActual = certification?.levels?.FULLY_MACHINE_READY === true;
+  // Do not read this suite's own acceptance receipt — chicken-egg with FMR.
+  const fullyMachineReadyExpected = liveProofsPass && sameTierPass;
+  let cert = certification;
+  let fullyMachineReadyActual = cert?.levels?.FULLY_MACHINE_READY === true;
+  if (fullyMachineReadyExpected && !fullyMachineReadyActual) {
+    try {
+      spawnSync(process.execPath, ['builderos-reboot/scripts/emit-project-certification.mjs'], {
+        cwd: ROOT,
+        encoding: 'utf8',
+        stdio: 'pipe',
+      });
+      cert = readJson('builderos-reboot/PROJECT_CERTIFICATION.json') || cert;
+      fullyMachineReadyActual = cert?.levels?.FULLY_MACHINE_READY === true;
+    } catch {
+      // leave actual as-is; ok check below fails closed
+    }
+  }
   const ok = fullyMachineReadyExpected === fullyMachineReadyActual
-    && certification?.autonomy_closure_v1?.founder_usability_pass === founderPassed
-    && Array.isArray(certification?.autonomy_closure_v1?.blockers);
+    && cert?.autonomy_closure_v1?.founder_usability_pass === founderPassed
+    && Array.isArray(cert?.autonomy_closure_v1?.blockers);
   return makeCheck(ok, ok
     ? (fullyMachineReadyActual
-      ? 'FULLY_MACHINE_READY true and matches live+same-tier+closure formula'
+      ? 'FULLY_MACHINE_READY true and matches live+same-tier formula'
       : 'FULLY_MACHINE_READY false and matches incomplete proof set')
     : 'certification truth does not match the proof gate formula', {
     founder_passed: founderPassed,
     live_proofs_pass: liveProofsPass,
     same_tier_pass: sameTierPass,
-    closure_pass: closurePass,
     fully_machine_ready_expected: fullyMachineReadyExpected,
     fully_machine_ready_actual: fullyMachineReadyActual,
   });

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T18:32:06.418Z",
+  "generated_at": "2026-07-30T18:54:50.350Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12361,
   "files": [
@@ -29532,9 +29532,9 @@
     {
       "path": "builderos-reboot/PROJECT_CERTIFICATION.json",
       "synopsis": "BuilderOS artifact — PROJECT CERTIFICATION.",
-      "bytes": 2650,
-      "mtime": "2026-07-18T22:36:38.767Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 0,
+      "mtime": "2026-07-30T18:54:50.350Z",
+      "indexed_at": "2026-07-30T18:54:50.350Z",
       "synopsis_index_only": true
     },
     {
@@ -29679,10 +29679,10 @@
     },
     {
       "path": "builderos-reboot/scripts/emit-project-certification.mjs",
-      "synopsis": "Final certification v2 — includes Phase 11 full loop + Phase 12 salvage. Final certification v2 — includes Phase 11 full loop + Phase 12 salvage.",
-      "bytes": 6457,
-      "mtime": "2026-07-10T05:55:37.209Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "synopsis": "BuilderOS artifact — Emit Project Certification.",
+      "bytes": 0,
+      "mtime": "2026-07-30T18:54:50.350Z",
+      "indexed_at": "2026-07-30T18:54:50.350Z"
     },
     {
       "path": "builderos-reboot/scripts/execute-mission-step.mjs",
@@ -30155,10 +30155,10 @@
     },
     {
       "path": "builderos-reboot/scripts/run-sentry-checks.mjs",
-      "synopsis": "Mechanical SENTRY checklist — outputs SENTRY_CHECK_RESULT.json Mechanical SENTRY checklist — outputs SENTRY_CHECK_RESULT.json",
-      "bytes": 3307,
-      "mtime": "2026-07-10T00:46:03.295Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "synopsis": "BuilderOS artifact — Run Sentry Checks.",
+      "bytes": 0,
+      "mtime": "2026-07-30T18:54:50.350Z",
+      "indexed_at": "2026-07-30T18:54:50.350Z"
     },
     {
       "path": "builderos-reboot/scripts/sentry-behavior-proof.mjs",
@@ -40230,10 +40230,10 @@
     },
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
-      "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 324856,
-      "mtime": "2026-07-30T18:25:20.089Z",
-      "indexed_at": "2026-07-30T18:25:31.022Z"
+      "synopsis": "Documentation — PRODUCT HOME.",
+      "bytes": 0,
+      "mtime": "2026-07-30T18:54:50.350Z",
+      "indexed_at": "2026-07-30T18:54:50.350Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -64235,25 +64235,25 @@
     {
       "path": "products/receipts/BUILDEROS_AUTONOMY_CLOSURE_V1_ACCEPTANCE.json",
       "synopsis": "Product receipt — BUILDEROS AUTONOMY CLOSURE V1 ACCEPTANCE.",
-      "bytes": 12258,
-      "mtime": "2026-07-10T06:02:41.690Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 0,
+      "mtime": "2026-07-30T18:54:50.350Z",
+      "indexed_at": "2026-07-30T18:54:50.350Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/BUILDEROS_BUILD_DEPLOY_TRUTH.json",
       "synopsis": "Product receipt — BUILDEROS BUILD DEPLOY TRUTH.",
-      "bytes": 1913,
-      "mtime": "2026-07-10T06:01:54.284Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 0,
+      "mtime": "2026-07-30T18:54:50.350Z",
+      "indexed_at": "2026-07-30T18:54:50.350Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/BUILDEROS_FOUNDER_UI_PROOF.json",
       "synopsis": "Product receipt — BUILDEROS FOUNDER UI PROOF.",
-      "bytes": 16195,
-      "mtime": "2026-07-10T06:28:08.584Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 0,
+      "mtime": "2026-07-30T18:54:50.350Z",
+      "indexed_at": "2026-07-30T18:54:50.350Z",
       "synopsis_index_only": true
     },
     {
@@ -64275,9 +64275,9 @@
     {
       "path": "products/receipts/BUILDEROS_SAME_TIER_DETERMINISM.json",
       "synopsis": "Product receipt — BUILDEROS SAME TIER DETERMINISM.",
-      "bytes": 948,
-      "mtime": "2026-07-10T05:52:30.572Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 0,
+      "mtime": "2026-07-30T18:54:50.350Z",
+      "indexed_at": "2026-07-30T18:54:50.350Z",
       "synopsis_index_only": true
     },
     {
@@ -72766,13 +72766,10 @@
     },
     {
       "path": "scripts/run-builderos-autonomy-closure-v1-acceptance.mjs",
-      "synopsis": "BuilderOS autonomy closure v1 acceptance.",
-      "bytes": 18627,
-      "mtime": "2026-07-03T21:46:43.870Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
-      "ssot": [
-        "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/BLUEPRINT.json"
-      ]
+      "synopsis": "Script — Run Builderos Autonomy Closure V1 Acceptance.",
+      "bytes": 0,
+      "mtime": "2026-07-30T18:54:50.350Z",
+      "indexed_at": "2026-07-30T18:54:50.350Z"
     },
     {
       "path": "scripts/run-builderos-build-deploy-truth.mjs",
