@@ -259,13 +259,13 @@
     },
     {
       "id": "builderos-6",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/mission-runtime.js",
       "task": "resume C2-first priority stack",
       "spec": "Implement route logic to handle the C2-first priority stack.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerMissionRuntimeRoutes"
       ],
@@ -288,12 +288,12 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-30T19:06:31.598Z",
-      "commit_sha": "ec33c126a9c6071131380ed4c46e6cb0af8310be",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-6",
       "mission_id": "PRODUCT-builderos",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerMissionRuntimeRoutes; assertion_threw; assertion_threw",
+      "last_error": "ship_commit_not_on_main: compare status ahead",
       "reaudit_reset_at": "2026-07-30T18:55:06.356Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
@@ -317,7 +317,10 @@
           "content_source_path": "docs/products/builderos/twins/steps/builderos-6.exact",
           "content_sha256": "cfb67188a63a13bceaeb62b32febff13341799ccd2d1404f109bd97fcab862b8"
         }
-      }
+      },
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-30T19:06:39.753Z"
     },
     {
       "id": "builderos-7",
