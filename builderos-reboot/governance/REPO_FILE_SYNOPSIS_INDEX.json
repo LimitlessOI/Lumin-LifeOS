@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-30T20:53:07.834Z",
+  "generated_at": "2026-07-30T20:53:20.839Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12359,
   "files": [
@@ -69356,9 +69356,9 @@
     {
       "path": "routes/privateWitnessMode.js",
       "synopsis": "HTTP route module — PrivateWitnessMode.",
-      "bytes": 1300,
-      "mtime": "2026-07-30T20:35:21.511Z",
-      "indexed_at": "2026-07-30T20:35:21.511Z"
+      "bytes": 3833,
+      "mtime": "2026-07-30T20:53:20.839Z",
+      "indexed_at": "2026-07-30T20:53:20.839Z"
     },
     {
       "path": "routes/progress-report-routes.js",
