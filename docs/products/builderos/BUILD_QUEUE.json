@@ -287,7 +287,7 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-30T19:06:31.598Z",
+      "shipped_at": "2026-07-30T19:22:23.474Z",
       "commit_sha": null,
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-6",
@@ -301,10 +301,10 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-07-30T19:06:31.598Z",
-        "shipped_at": "2026-07-30T19:06:31.598Z",
-        "commit_sha": "ec33c126a9c6071131380ed4c46e6cb0af8310be",
-        "content_sha256": "cfb67188a63a13bceaeb62b32febff13341799ccd2d1404f109bd97fcab862b8",
+        "sealed_at": "2026-07-30T19:22:23.474Z",
+        "shipped_at": "2026-07-30T19:22:23.474Z",
+        "commit_sha": null,
+        "content_sha256": "2f20f08b6e89753ba0f91128f9411de7db58ac4d79daed3519d6a31812b20ccf",
         "target_file": "routes/mission-runtime.js",
         "reverse": {
           "mode": "delete_file",
@@ -315,7 +315,7 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/builderos/twins/steps/builderos-6.exact",
-          "content_sha256": "cfb67188a63a13bceaeb62b32febff13341799ccd2d1404f109bd97fcab862b8"
+          "content_sha256": "2f20f08b6e89753ba0f91128f9411de7db58ac4d79daed3519d6a31812b20ccf"
         }
       },
       "built_sha": null,
@@ -324,13 +324,13 @@
     },
     {
       "id": "builderos-7",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/income-priority.js",
       "task": "calculate income priorities",
       "spec": "Implement service to compute tasks with significant financial impact.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "calculateIncomePriorities"
       ],
@@ -349,16 +349,13 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-16T04:39:39.143Z",
-      "commit_sha": null,
+      "commit_sha": "b550e493e1b81f8b5ed79141e8c0b45fa43997f7",
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-7",
       "mission_id": "PRODUCT-builderos",
       "pre_existing": false,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:calculateIncomePriorities; behavior_assertion_failed; behavior_proof",
-      "reaudit_reset_at": "2026-07-30T18:55:06.356Z",
-      "built_sha": null,
-      "proof": null,
-      "last_attempt_at": "2026-07-30T19:10:34.629Z"
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:calculateIncomePriorities; calculateIncomePriorities; income priorities",
+      "reaudit_reset_at": "2026-07-30T18:55:06.356Z"
     },
     {
       "id": "builderos-8",
@@ -2608,39 +2605,6 @@
       "finding_note": " | Closed 2026-07-30: judgment in scripts/lib; wired into existing control-plane route / shipping loop (not a new SO-001 module).",
       "pre_existing": false,
       "reaudit_reset_at": "2026-07-30T18:55:06.356Z"
-    },
-    {
-      "id": "bo-schedule-site-builder-sentry-gate",
-      "status": "pending",
-      "target_file": "scripts/sentry-site-builder-schedule.mjs",
-      "priority": "high",
-      "task": "SO-002 requires SENTRY to walk every Site Builder feature as a real client via BOTH Layer A (structural) and Layer B (real-browser human-sim walkthrough) before it's 'done'. The combined gate script (scripts/sentry-site-builder-prealpha-gate.mjs, npm run sentry:site-builder:gate) is real and well-designed -- genuine Puppeteer session, self-provisions a preview fixture if none exists, feeds findings into the self-fix improvement loop -- but confirmed live 2026-07-30 that nothing calls it on a schedule. Layer A has a dedicated recent receipt (products/receipts/SITE_BUILDER_PREALPHA_LAYER_A.json, updated daily); there has never been a products/receipts/SITE_BUILDER_PREALPHA_LAYER_B.json or equivalent gate receipt found, meaning the real browser test is effectively opt-in/manual-only, not the continuous SENTRY loop the doctrine describes.",
-      "spec": "Create scripts/sentry-site-builder-schedule.mjs modeled directly on the existing, working services/governance-review-scheduler.js pattern (read that file first for the exact shape to follow -- CREATE TABLE IF NOT EXISTS bootstrap, createUsefulWorkGuard from services/useful-work-guard.js wrapping the real work, an immediate first-tick plus setInterval, .unref() on the timer). Export `registerSiteBuilderSentryGateScheduler({ pool, logger = console, intervalMs = 6 * 60 * 60 * 1000 })` (default cadence: every 6 hours, matching this doctrine's existing cadence precedent of npm run sentry:site-builder:gate being a periodic completion gate, not a per-commit one). Inside the guarded tick: dynamically import and invoke the default-exported or named run function from scripts/sentry-site-builder-prealpha-gate.mjs (read that file to find its real programmatic entry point -- if it only exposes a CLI/top-level-execution shape today, add the smallest possible named export of its existing logic so it's callable both from the CLI and from this scheduler, without duplicating the gate logic in two places). Persist each run's result (verdict, findings count, timestamp) into a new sentry_site_builder_gate_log table (id SERIAL, generated_at TIMESTAMPTZ DEFAULT now(), report_json JSONB) via a small ensureTable + insert, same shape as governance_review_log. workCheck prerequisite: skip the run entirely if PUBLIC_BASE_URL/SITE_BASE_URL and COMMAND_CENTER_KEY aren't both present (the gate script already needs these; fail closed via the guard rather than letting the gate script itself throw). Do not change scripts/sentry-site-builder-prealpha-gate.mjs's existing behavior or its CLI usage.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 0,
-      "source": "founder_directive_2026-07-30",
-      "finding_note": "Founder, direct: rated the system honestly and asked what it takes to reach a 10 -- item 3 on the resulting list was 'wire SENTRY Layer B into an actual schedule; the mechanism is real, it just doesn't run on its own.' This closes that specific gap. Cadence chosen at 6h, not per-commit, because Layer B does a real, costly browser session + model UX critique call -- running it on every ship would be wasteful per the Zero Waste AI Call Rule, and 6h still catches regressions same-day.",
-      "expected_exports": [
-        "registerSiteBuilderSentryGateScheduler"
-      ],
-      "file_contains": [
-        "createUsefulWorkGuard",
-        "sentry_site_builder_gate_log"
-      ],
-      "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
-      "blueprint_step_id": "bo-schedule-site-builder-sentry-gate",
-      "mission_id": "PRODUCT-builderos",
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "scripts/sentry-site-builder-schedule.mjs",
-          "exports": [
-            "registerSiteBuilderSentryGateScheduler"
-          ],
-          "assertion_id": "expected_exports:scripts/sentry-site-builder-schedule.mjs"
-        }
-      ]
     }
   ],
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
