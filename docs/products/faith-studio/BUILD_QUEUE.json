@@ -225,7 +225,7 @@
     },
     {
       "id": "step7",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/privateWitnessMode.js",
       "task": "configure private witness mode controls",
       "spec": "Private witness mode allowed but public publishing remains controlled.",
@@ -241,13 +241,13 @@
         "method": "GET",
         "path": "/private-witness-mode"
       },
-      "commit_sha": "b7ec0940ff9a943285ff2c492efc48719a05b7cd",
+      "commit_sha": "fe3c931c63ce20a46c753eac131c18cf3cb87bce",
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step7",
       "mission_id": "PRODUCT-faith-studio",
       "shipped_via": null,
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerPrivateWitnessModeRoutes; assertion_threw",
+      "last_error": null,
       "reaudit_reset_at": "2026-07-30T18:55:06.428Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
