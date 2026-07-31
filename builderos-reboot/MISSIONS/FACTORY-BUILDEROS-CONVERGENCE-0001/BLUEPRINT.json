@@ -3,7 +3,7 @@
   "blueprint_id": "FACTORY-BUILDEROS-CONVERGENCE-0001-v2",
   "blueprint_status": "completed",
   "completed_at": "2026-07-31T06:25:00Z",
-  "git_sha": null,
+  "git_sha": "6fa5dafcae5bd6bd654bcc6e3055ee546be2af4f",
   "receipt_verdict": "CONVERGED",
   "scope": "builderos_convergence",
   "summary": "Stop BuilderOS from certifying false completion. Phase 0 hardens seal correctness; later phases build blueprint authority, decision records, runtime convergence, and revenue closure.",
@@ -549,7 +549,7 @@
       "status": "DONE",
       "started_at": "2026-07-31T06:35:00Z",
       "completed_at": "2026-07-31T06:15:00Z",
-      "git_sha": null,
+      "git_sha": "19e57573f04f39039571c4e14e9fbb552fbdb3e6",
       "evidence": "Created scripts/verify-smos-email-provider.mjs (probes email provider config/API without sending) and scripts/verify-smos-live-charge.mjs (probes Stripe + SMOS pricing config without charging). Auto-generated docs/products/financial-revenue/SMOS_REVENUE_READINESS.md. Local run halted on missing EMAIL_FROM and Stripe keys; no real charge or email sent. npm run builder:preflight PASS.",
       "target_files": [
         "scripts/verify-smos-email-provider.mjs",
@@ -591,7 +591,7 @@
       "status": "DONE",
       "started_at": "2026-07-31T06:20:00Z",
       "completed_at": "2026-07-31T06:25:00Z",
-      "git_sha": null,
+      "git_sha": "0e92ae517a2971fd0500754dface8a328cdbe727",
       "evidence": "Created scripts/wisdom-decision-drift.mjs to compare decision predictions to reality judgments and produce REALITY_SCORECARD.md/json; updated OBJECTIVE_VERDICT.json to CONVERGED with metrics and mission_3_prep; created scripts/verify-mission-2-convergence-handoff.mjs and MISSION_2_CONVERGENCE_HANDOFF.md/json. Updated DECISION-0001.md and DECISION-0002.md reality sections to CONFIRMED. npm run builder:preflight PASS.",
       "target_files": [
         "scripts/wisdom-decision-drift.mjs",
