@@ -162,13 +162,13 @@
     },
     {
       "id": "8",
-      "status": "done",
+      "status": "blocked",
       "target_file": "db/migrations/20231011_create_irlen_consultation.sql",
       "task": "Record Irlen Syndrome community consultation",
       "spec": "Create table to store feedback from Irlen Syndrome community consultation.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "route": {
         "path": "/"
       },
@@ -176,13 +176,13 @@
         "CREATE TABLE IF NOT EXISTS irlen_consultation"
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-30T23:53:03.150Z",
-      "commit_sha": "f7fac880a7a31e8d303a7251bf58456099561f17",
+      "shipped_at": "2026-07-30T23:19:09.682Z",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "8",
       "mission_id": "PRODUCT-kids-os",
-      "pre_existing": null,
-      "last_error": null,
+      "pre_existing": false,
+      "last_error": "ship_commit_not_on_main: compare status ahead",
       "reaudit_reset_at": "2026-07-30T18:55:06.433Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
@@ -190,8 +190,8 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-07-30T23:53:03.150Z",
-        "shipped_at": "2026-07-30T23:53:03.150Z",
+        "sealed_at": "2026-07-30T23:19:09.682Z",
+        "shipped_at": "2026-07-30T23:19:09.682Z",
         "commit_sha": "7324fa151cb2162b90160e0ffe5ecfb8ae2fc509",
         "content_sha256": "38f51228c559300e063a3ad42cb60ebd44ebce4b9e7fceaac18313d19a6c69ac",
         "target_file": "db/migrations/20231011_create_irlen_consultation.sql",
@@ -209,19 +209,7 @@
       },
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
-      "last_attempt": null,
-      "revive_count": 0,
-      "revived_at": "2026-07-30T23:48:51.215Z",
-      "no_op": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
-      "park_until": null,
-      "blocker_class": null,
-      "claim_level": null,
-      "blocker_type": null,
-      "blocker_resolution": null
+      "last_attempt_at": "2026-07-30T23:19:15.580Z"
     },
     {
       "id": "9",
@@ -405,7 +393,7 @@
     },
     {
       "id": "step5",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/irlenInsights.js",
       "task": "Expose Irlen insights API",
       "spec": "Provide an API endpoint to fetch Irlen consultation insights.",
@@ -433,12 +421,12 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-16T00:00:56.728Z",
-      "commit_sha": "12ec6730c3e1396f1a1d9647b82c2ffe9f3b4c43",
+      "commit_sha": "c85d747c733d89f258bd1e6898ec449416391d9d",
       "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step5",
       "mission_id": "PRODUCT-kids-os",
       "pre_existing": false,
-      "last_error": null,
+      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerIrlenInsightsRoutes; assertion_threw",
       "reaudit_reset_at": "2026-07-30T18:55:06.433Z"
     },
     {
@@ -468,14 +456,37 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-16T00:48:01.425Z",
+      "shipped_at": "2026-07-31T00:05:25.554Z",
       "commit_sha": "5b760d246343400433bce4b05cbd593b6d44b0a2",
       "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step6",
       "mission_id": "PRODUCT-kids-os",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerPricingValidationRoutes; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.433Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.433Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/kids-os/twins/steps/step6.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-31T00:05:25.554Z",
+        "shipped_at": "2026-07-31T00:05:25.554Z",
+        "commit_sha": "5b760d246343400433bce4b05cbd593b6d44b0a2",
+        "content_sha256": "25fb7ddf0cb30af9776c61e9ecff19f9685a8a6f542a8ac26fc1f381cb65f727",
+        "target_file": "routes/pricingValidation.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "routes/pricingValidation.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/kids-os/twins/steps/step6.exact",
+          "content_sha256": "25fb7ddf0cb30af9776c61e9ecff19f9685a8a6f542a8ac26fc1f381cb65f727"
+        }
+      }
     },
     {
       "id": "step7",
