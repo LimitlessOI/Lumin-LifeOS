@@ -444,7 +444,7 @@
     },
     {
       "id": "step8",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/studentsRoutes.js",
       "task": "create students routes",
       "spec": "Expose REST API endpoints for student operations.",
@@ -472,12 +472,12 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-31T07:35:41.470Z",
-      "commit_sha": "8db9135246c9ada747e34d2423b5d574b6b24148",
+      "commit_sha": "cae5ea22ab003f07fdf4fa4c71a97ed38a39e99f",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step8",
       "mission_id": "PRODUCT-music-talent-studio",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerStudentsRoutes; assertion_threw",
+      "last_error": null,
       "reaudit_reset_at": "2026-07-30T18:55:06.680Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
