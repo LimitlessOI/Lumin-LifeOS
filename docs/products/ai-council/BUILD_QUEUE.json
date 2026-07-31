@@ -870,10 +870,10 @@
       "reaudit_reset_at": "2026-07-30T18:55:06.242Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-07-31T00:59:23.274Z",
+      "last_attempt_at": "2026-07-31T01:26:02.066Z",
       "last_attempt": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-31T00:56:51.427Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-31T01:23:08.581Z",
       "no_op": null,
       "demoted": false,
       "demote_reason": null,
@@ -934,7 +934,7 @@
     },
     {
       "id": "ai-council-4",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/providerCooldownManager.js",
       "task": "manage provider cooldowns",
       "spec": "Implement logic to manage and persist provider cooldowns using the database.",
@@ -942,7 +942,7 @@
         "ai-council-3"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "persistCooldowns",
         "getCooldowns"
@@ -964,13 +964,13 @@
           "assertion_id": "expected_exports:services/providerCooldownManager.js"
         }
       ],
-      "last_attempt_at": "2026-07-31T01:08:06.860Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getCooldowns; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-31T00:01:25.738Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-31T01:23:08.581Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
