@@ -54,6 +54,20 @@ function parseMultipartAudio(req) {
   });
 }
 
+async function getOwnerId(req, db) {
+  const userId = req.lifeosUser?.id;
+  if (!userId) return null;
+
+  const result = await db.query(
+    `SELECT owner_id
+     FROM marketing_users
+     WHERE user_id = $1`,
+    [userId]
+  );
+
+  return result.rows[0]?.owner_id || null;
+}
+
 export async function registerMarketingSessionExportRoutes(app, deps) {
   const db = normalizeDb(deps);
   const requireKey = deps?.requireKey;
@@ -64,9 +78,27 @@ export async function registerMarketingSessionExportRoutes(app, deps) {
   app.post('/marketing/session/:id/export', requireKey, async (req, res) => {
     try {
       const sessionId = req.params.id;
+      const ownerId = await getOwnerId(req, db);
+
       if (!isFounderBypass(req)) {
+        const session = await db.query(
+          `SELECT owner_id
+           FROM marketing_sessions
+           WHERE id = $1`,
+          [sessionId]
+        ).then(rows => rows[0]);
+
+        if (!session) {
+          throw { statusCode: 404, message: 'Session not found' };
+        }
+
+        if (session.owner_id !== ownerId) {
+          throw { statusCode: 403, message: 'Forbidden: session does not belong to the requesting user' };
+        }
+
         await assertSessionPaid({ pool: db, sessionId });
       }
+
       const format = req.body?.format === 'markdown' ? 'markdown' : 'json';
       const result = await buildSessionExport(sessionId, format, db, deps?.callCouncilMember);
       return res.json(result);
