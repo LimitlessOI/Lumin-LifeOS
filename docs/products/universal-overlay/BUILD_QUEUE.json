@@ -59,13 +59,13 @@
     },
     {
       "id": "2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/formFieldInference.js",
       "task": "implement form field schema inference",
       "spec": "Use label association, ARIA, and placeholder as fallback to infer form field schema.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "inferFormSchema"
       ],
@@ -93,7 +93,7 @@
       "reaudit_reset_at": "2026-07-30T18:55:06.758Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-31T08:36:25.337Z",
       "last_attempt": null,
       "revive_count": 3,
       "revived_at": "2026-07-31T08:15:59.678Z",
