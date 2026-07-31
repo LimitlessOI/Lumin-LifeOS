@@ -1,0 +1,28 @@
+{
+  "ok": true,
+  "base_commit": "19e57573f04f39039571c4e14e9fbb552fbdb3e6",
+  "origin_main": "19e57573f04f39039571c4e14e9fbb552fbdb3e6",
+  "generated_at": "2026-07-31T06:24:21.306Z",
+  "mission_id": "FACTORY-BUILDEROS-CONVERGENCE-0001",
+  "blueprint_status": "completed",
+  "summary": "Mission 2 — BuilderOS Convergence handoff. P0 stop false completion, P1 Builder Readiness Audit, P2 Collaboration Spine, P3 blueprint authority gate, P4 runtime/scheduler convergence, P5 SMOS revenue readiness, and P7 wisdom/reality scorecard are complete. Revenue loop is prepared but awaits founder credentials.",
+  "package_status": {
+    "blueprint_all_steps_done": true,
+    "completed_steps": 14,
+    "total_steps": 14,
+    "open_steps": [],
+    "objective_verdict": "CONVERGED",
+    "revenue_loop_closed": false,
+    "reality_drift_count": 0
+  },
+  "verification_commands": [
+    "node scripts/wisdom-decision-drift.mjs",
+    "node scripts/verify-mission-2-convergence-handoff.mjs",
+    "npm run builder:preflight"
+  ],
+  "next_actions": [
+    "Founder: provide email provider (RESEND_API_KEY/SMTP) and Stripe credentials to close SMOS revenue loop.",
+    "Run SENTRY Layer A+B on a real $49 SMOS purchase once credentials are live.",
+    "Use builderos-reboot/DECISIONS/COLLABORATION_SPINE.md as the canonical context for Mission 3 scoping."
+  ]
+}

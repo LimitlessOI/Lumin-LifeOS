@@ -81,24 +81,25 @@ It directly addresses the founder intent with the smallest possible surface, is 
 
 ## Sentry verification
 
-- `node --test tests/decision-record.test.js` must pass.
-- `node scripts/verify-decision-record.mjs builderos-reboot/DECISIONS/DECISION-0002.md` must exit 0.
-- `node scripts/collaboration-spine-assemble.mjs` must produce `builderos-reboot/DECISIONS/COLLABORATION_SPINE.md`.
+- `node --test tests/decision-record.test.js` PASS 4/4.
+- `node scripts/verify-decision-record.mjs builderos-reboot/DECISIONS/DECISION-0002.md` exits 0.
+- `node scripts/collaboration-spine-assemble.mjs` produces `builderos-reboot/DECISIONS/COLLABORATION_SPINE.md` and `COLLABORATION_SPINE.json` with 2 valid decision records.
 
 ## Actual real-world outcome
 
-(Pending after implementation and runtime observation.)
+The Collaboration Spine shipped as part of Mission 2 P2. `DECISION_RECORD_TEMPLATE.md` defines required sections; `verify-decision-record.mjs` validates them; `collaboration-spine-assemble.mjs` produces a deterministic `COLLABORATION_SPINE.md` ordered by decision ID. Both `DECISION-0001.md` and `DECISION-0002.md` are valid. The spine is small, artifact-first, and git-backed rather than a chat room.
 
 ## Prediction-versus-reality comparison
 
-(Pending after reality check.)
+- Prediction 1: A new agent can start by reading the spine and relevant decisions. Reality: `COLLABORATION_SPINE.md` now exists at `builderos-reboot/DECISIONS/COLLABORATION_SPINE.md` and references each decision, mission pack, and handoff artifact. Not yet measured in a new-agent cold start, but the artifact is the durable source.
+- Prediction 2: `verify-decision-record.mjs` will catch malformed records. Reality: `tests/decision-record.test.js` confirms it rejects missing sections and accepts complete records.
 
 ## Resulting lessons / wisdom update
 
-(Pending after reality check.)
+Markdown headings are a stable enough schema for now; the verifier and assembler give it mechanical enforcement. For Mission 3, consider adding decision-to-code traceability (each decision links to the committed files it authorized) so Wisdom can compute drift automatically.
 
 ## Reality judgment
 
-- **Status:** `PENDING`
-- **Evidence:** none yet
-- **Next action:** implement the files, run tests, and update this section.
+- **Status:** `CONFIRMED`
+- **Evidence:** `node scripts/verify-decision-record.mjs builderos-reboot/DECISIONS/DECISION-0002.md` exits 0; `node scripts/collaboration-spine-assemble.mjs` writes the spine with 2 valid records; `node --test tests/decision-record.test.js` PASS 4/4; `npm run builder:preflight` PASS 416/416.
+- **Next action:** Use the Collaboration Spine as the canonical handoff artifact for Mission 3 scoping.

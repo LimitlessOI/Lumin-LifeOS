@@ -1,0 +1,25 @@
+{
+  "decisions": [
+    {
+      "decision_id": "DECISION-0001",
+      "file": "DECISION-0001.md",
+      "missing_sections": [],
+      "predictions_count": 5,
+      "reality_status": "CONFIRMED",
+      "has_actual_outcome": true,
+      "drift": false
+    },
+    {
+      "decision_id": "DECISION-0002",
+      "file": "DECISION-0002.md",
+      "missing_sections": [],
+      "predictions_count": 2,
+      "reality_status": "CONFIRMED",
+      "has_actual_outcome": true,
+      "drift": false
+    }
+  ],
+  "drift_count": 0,
+  "total": 2,
+  "generated_at": "2026-07-31T06:22:52.366Z"
+}

@@ -96,8 +96,8 @@ It stops the directly evidenced bleeding first without rebuilding the factory fr
 ## Reality judgment
 
 - **Status:** CONFIRMED
-- **Evidence:** `services/blueprint-grounding-check.js` and `services/truth-ladder.js` prevent missing-export/missing-table seals; `product-build-orchestrator.js` sticky escalation keeps blocked steps from auto-reviving; `tests/blueprint-grounding-check.test.js` (7/7), `tests/truth-ladder.test.js` (23/23), `tests/product-build-orchestrator.test.js` (21/21), `tests/run-step-overwrite-guard.test.js` (2/2), `tests/self-repair-decision-log.test.js` (3/3) all pass; `npm run builder:preflight` PASS 416/416; `products/receipts/PHASE_0_STOP_GATE.json` and `docs/audits/builderos-mission-2/MISSION_2_CONVERGENCE_HANDOFF.md` produced.
-- **Next action:** Phase 0 closed; proceed with Mission 2 convergence work.
+- **Evidence:** All five Phase 0 work packages have behavioral tests that fail before the fix and pass after. `services/blueprint-grounding-check.js` and `services/truth-ladder.js` prevent missing-export/missing-table seals; `product-build-orchestrator.js` sticky escalation keeps blocked steps from auto-reviving; the overwrite guard is in place; the decision-log hybrid schema round-trips. `npm run builder:preflight` PASS 416/416. `products/receipts/PHASE_0_STOP_GATE.json` and `docs/audits/builderos-mission-2/MISSION_2_CONVERGENCE_HANDOFF.md` produced and deployed.
+- **Next action:** Phase 0 closed; Mission 2 convergence completed through P5; P7 final handoff in progress.
 
 ## Implementation trace
 
@@ -112,11 +112,16 @@ It stops the directly evidenced bleeding first without rebuilding the factory fr
 
 ## Sentry verification
 
-To be filled after implementation.
+- `node --test tests/blueprint-grounding-check.test.js` PASS 7/7.
+- `node --test tests/truth-ladder.test.js` PASS 23/23.
+- `node --test tests/product-build-orchestrator.test.js` PASS 21/21.
+- `node --test tests/run-step-overwrite-guard.test.js` PASS 2/2.
+- `node --test tests/self-repair-decision-log.test.js` PASS 3/3.
+- `npm run builder:preflight` PASS 416/416.
 
 ## Actual real-world outcome
 
-Pending Phase 0 stop-gate evidence.
+Phase 0 stop-gate closed and deployed. The deterministic grounding gate in `services/blueprint-grounding-check.js` blocks seals for missing named exports and nonexistent SQL tables; `services/truth-ladder.js` and `services/product-build-orchestrator.js` route grounded failures without marking DONE. Sticky escalation via `escalateBlockedStep` keeps blocked steps from auto-reviving. The overwrite-path trace identified `factory-staging/factory-core/builder/run-step.js` and `services/governed-shipping-runner.js` as the regeneration paths and a narrow guard was added. The hybrid-schema decision-log extension in `services/self-repair-decision-log.js` round-trips without breaking existing readers. Production deploy parity confirmed for the Phase 0 commit. Reality judgment: CONFIRMED.
 
 ## Prediction-versus-reality comparison
 
