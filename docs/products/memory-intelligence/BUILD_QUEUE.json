@@ -141,7 +141,7 @@
     },
     {
       "id": "4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/memory-seed-lessons.mjs",
       "task": "implement lessons seeding",
       "spec": "Implements npm run memory:seed-lessons to seed lessons_learned and update documents.",
@@ -149,15 +149,15 @@
         "2"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "seedLessonsLearned"
       ],
       "file_contains": [
         "npm run memory:seed-lessons"
       ],
-      "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:npm run memory:seed-lessons; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-31T01:17:07.509Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: openai_builder_mini: HTTP 429: {\n    \"error\": {\n        \"message\": \"You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organiza",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
