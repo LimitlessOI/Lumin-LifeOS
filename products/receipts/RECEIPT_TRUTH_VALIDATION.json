@@ -1,6 +1,6 @@
 {
   "schema": "receipt_truth_validation_v1",
-  "at": "2026-07-31T09:48:04.320Z",
+  "at": "2026-07-31T10:48:55.769Z",
   "ok": true,
   "checked": 130,
   "failures": [],
@@ -106,17 +106,17 @@
       "proposed_solutions": []
     },
     {
-      "file": "COGNITIVE_CORE_ERA34_TIP_AUDIT.json",
+      "file": "COGNITIVE_ARCHITECTURE_V1_ACCEPTANCE.json",
       "ok": true,
       "violations": [],
       "claims_pass": true,
       "proposed_solutions": []
     },
     {
-      "file": "COGNITIVE_TRANSCRIPT_2026-07-31T09-45-27-144Z.json",
+      "file": "COGNITIVE_CORE_ERA34_TIP_AUDIT.json",
       "ok": true,
       "violations": [],
-      "claims_pass": false,
+      "claims_pass": true,
       "proposed_solutions": []
     },
     {

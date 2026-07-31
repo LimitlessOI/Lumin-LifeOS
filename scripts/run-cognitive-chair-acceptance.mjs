@@ -45,6 +45,9 @@ function main() {
     founder_usability_pass: false,
     dry_run_only: true,
     live_model_execution: false,
+    produced_by: 'Devin builder (FACTORY-COGNITIVE-ARCHITECTURE-0001 GAP-FILL)',
+    separation_collapsed: true,
+    separation_note: 'First vertical-slice acceptance for the cognitive architecture was produced and verified within the same BuilderOS session. No independent SENTRY verifier existed for this initial GAP-FILL; future vertical slices will be verified by an independent SENTRY reality station.',
   };
 
   const { pass } = finishBpAcceptance({

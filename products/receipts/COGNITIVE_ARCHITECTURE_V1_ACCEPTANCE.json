@@ -1,7 +1,7 @@
 {
   "schema": "cognitive_architecture_v1_acceptance",
   "mission_id": "FACTORY-COGNITIVE-ARCHITECTURE-0001",
-  "at": "2026-07-31T09:49:31.978Z",
+  "at": "2026-07-31T10:48:52.957Z",
   "mode": "full_suite",
   "ok": true,
   "tests_passed": [
@@ -9,15 +9,18 @@
     "bp_sync_mandatory"
   ],
   "tests_failed": [],
-  "test_output": "TAP version 13\n# Subtest: cognitive-chair\n    # Subtest: loads the lens registry with sample lenses\n    ok 1 - loads the lens registry with sample lenses\n      ---\n      duration_ms: 1.496917\n      ...\n    # Subtest: loads an individual lens\n    ok 2 - loads an individual lens\n      ---\n      duration_ms: 0.280005\n      ...\n    # Subtest: lists lenses\n    ok 3 - lists lenses\n      ---\n      duration_ms: 0.146194\n      ...\n    # Subtest: resolves responsibilities with default fallback\n    ok 4 - resolves responsibilities with default fallback\n      ---\n      duration_ms: 0.457281\n      ...\n    # Subtest: selects lenses by responsibility\n    ok 5 - selects lenses by responsibility\n      ---\n      duration_ms: 0.227903\n      ...\n    # Subtest: honors requested lens ids\n    ok 6 - honors requested lens ids\n      ---\n      duration_ms: 0.237274\n      ...\n    # Subtest: selects a model member for a lens\n    ok 7 - selects a model member for a lens\n      ---\n      duration_ms: 0.14267\n      ...\n    # Subtest: builds a lens prompt containing mission and lens philosophy\n    ok 8 - builds a lens prompt containing mission and lens philosophy\n      ---\n      duration_ms: 0.241758\n      ...\n    # Subtest: builds a chair synthesis prompt from outputs\n    ok 9 - builds a chair synthesis prompt from outputs\n      ---\n      duration_ms: 0.21883\n      ...\n    # Subtest: composes a dry-run reasoning transcript\n    ok 10 - composes a dry-run reasoning transcript\n      ---\n      duration_ms: 0.4907\n      ...\n    # Subtest: composes with execute mode using a fake callModel\n    ok 11 - composes with execute mode using a fake callModel\n      ---\n      duration_ms: 0.368211\n      ...\n    1..11\nok 1 - cognitive-chair\n  ---\n  duration_ms: 5.38425\n  type: 'suite'\n  ...\n1..1\n# tests 11\n# suites 1\n# pass 11\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 47.933874\n",
+  "test_output": "TAP version 13\n# Subtest: cognitive-chair\n    # Subtest: loads the lens registry with sample lenses\n    ok 1 - loads the lens registry with sample lenses\n      ---\n      duration_ms: 1.622853\n      ...\n    # Subtest: loads an individual lens\n    ok 2 - loads an individual lens\n      ---\n      duration_ms: 0.316523\n      ...\n    # Subtest: lists lenses\n    ok 3 - lists lenses\n      ---\n      duration_ms: 0.178848\n      ...\n    # Subtest: resolves responsibilities with default fallback\n    ok 4 - resolves responsibilities with default fallback\n      ---\n      duration_ms: 0.529095\n      ...\n    # Subtest: selects lenses by responsibility\n    ok 5 - selects lenses by responsibility\n      ---\n      duration_ms: 0.23087\n      ...\n    # Subtest: honors requested lens ids\n    ok 6 - honors requested lens ids\n      ---\n      duration_ms: 0.262394\n      ...\n    # Subtest: selects a model member for a lens\n    ok 7 - selects a model member for a lens\n      ---\n      duration_ms: 0.157899\n      ...\n    # Subtest: builds a lens prompt containing mission and lens philosophy\n    ok 8 - builds a lens prompt containing mission and lens philosophy\n      ---\n      duration_ms: 0.251506\n      ...\n    # Subtest: builds a chair synthesis prompt from outputs\n    ok 9 - builds a chair synthesis prompt from outputs\n      ---\n      duration_ms: 0.250014\n      ...\n    # Subtest: composes a dry-run reasoning transcript\n    ok 10 - composes a dry-run reasoning transcript\n      ---\n      duration_ms: 0.538971\n      ...\n    # Subtest: composes with execute mode using a fake callModel\n    ok 11 - composes with execute mode using a fake callModel\n      ---\n      duration_ms: 0.423987\n      ...\n    1..11\nok 1 - cognitive-chair\n  ---\n  duration_ms: 5.96815\n  type: 'suite'\n  ...\n1..1\n# tests 11\n# suites 1\n# pass 11\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 48.896679\n",
   "test_stderr": "",
   "exit_code": 0,
-  "completed_at": "2026-07-31T09:49:31.982Z",
+  "completed_at": "2026-07-31T10:48:52.961Z",
   "production_base": "https://lumin-web-production-e3a9.up.railway.app",
   "founder_usability_pass": false,
   "dry_run_only": true,
   "live_model_execution": false,
-  "git_sha": "ddd102155e1528005bee80383dbc671edc34fe3d",
+  "produced_by": "Devin builder (FACTORY-COGNITIVE-ARCHITECTURE-0001 GAP-FILL)",
+  "separation_collapsed": true,
+  "separation_note": "First vertical-slice acceptance for the cognitive architecture was produced and verified within the same BuilderOS session. No independent SENTRY verifier existed for this initial GAP-FILL; future vertical slices will be verified by an independent SENTRY reality station.",
+  "git_sha": "e13f07ca6ff9aa8949403e46591bfb1fa199e532",
   "verdict": "PASS",
   "bp_sync": {
     "updated": [

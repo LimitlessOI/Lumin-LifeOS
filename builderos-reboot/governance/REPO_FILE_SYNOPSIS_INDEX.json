@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T10:33:47.501Z",
+  "generated_at": "2026-07-31T10:49:55.089Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12565,
+  "file_count": 12566,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21476,6 +21476,14 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "builderos-reboot/FOUNDER_STOP.json",
+      "synopsis": "BuilderOS artifact — FOUNDER STOP.",
+      "bytes": 571,
+      "mtime": "2026-07-31T10:49:09.184Z",
+      "indexed_at": "2026-07-31T10:49:35.205Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "builderos-reboot/FULL_LOOP_PROOF_RECEIPT.json",
       "synopsis": "BuilderOS artifact — FULL LOOP PROOF RECEIPT.",
       "bytes": 3893,
@@ -21670,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3787172,
-      "mtime": "2026-07-31T10:17:06.645Z",
-      "indexed_at": "2026-07-31T10:17:14.125Z"
+      "bytes": 3787955,
+      "mtime": "2026-07-31T10:49:35.272Z",
+      "indexed_at": "2026-07-31T10:49:55.089Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -40882,9 +40890,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 344714,
-      "mtime": "2026-07-31T10:16:59.042Z",
-      "indexed_at": "2026-07-31T10:17:06.560Z"
+      "bytes": 344861,
+      "mtime": "2026-07-31T10:49:32.608Z",
+      "indexed_at": "2026-07-31T10:49:35.205Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -64990,9 +64998,9 @@
     {
       "path": "products/receipts/COGNITIVE_ARCHITECTURE_V1_ACCEPTANCE.json",
       "synopsis": "Product receipt — COGNITIVE ARCHITECTURE V1 ACCEPTANCE.",
-      "bytes": 2942,
-      "mtime": "2026-07-31T09:49:31.984Z",
-      "indexed_at": "2026-07-31T09:51:46.501Z",
+      "bytes": 3354,
+      "mtime": "2026-07-31T10:48:52.964Z",
+      "indexed_at": "2026-07-31T10:49:35.205Z",
       "synopsis_index_only": true
     },
     {
@@ -65734,9 +65742,9 @@
     {
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
-      "bytes": 24209,
-      "mtime": "2026-07-31T09:48:04.316Z",
-      "indexed_at": "2026-07-31T09:51:46.501Z",
+      "bytes": 24199,
+      "mtime": "2026-07-31T10:48:55.768Z",
+      "indexed_at": "2026-07-31T10:49:35.205Z",
       "synopsis_index_only": true
     },
     {
@@ -73819,9 +73827,9 @@
     {
       "path": "scripts/run-cognitive-chair-acceptance.mjs",
       "synopsis": "Acceptance script for FACTORY-COGNITIVE-ARCHITECTURE-0001.",
-      "bytes": 2530,
-      "mtime": "2026-07-31T09:49:27.568Z",
-      "indexed_at": "2026-07-31T09:51:46.501Z",
+      "bytes": 2939,
+      "mtime": "2026-07-31T10:48:51.100Z",
+      "indexed_at": "2026-07-31T10:49:35.205Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
