@@ -429,12 +429,12 @@
       "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step3",
       "mission_id": "PRODUCT-knowledge-base",
-      "pre_existing": false,
-      "last_error": "codegen_authoring_failed: codegen_empty: openai_builder_mini: HTTP 429: {\n    \"error\": {\n        \"message\": \"You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organiza",
+      "pre_existing": null,
+      "last_error": "artifact_missing_after_ship: artifact_proof_failed: const scanUploadedFile =; callCouncilMember('malwareScanner',",
       "reaudit_reset_at": "2026-07-30T18:55:06.480Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-07-31T01:35:24.139Z",
+      "last_attempt_at": "2026-07-31T01:43:19.938Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
         "content_source_path": "docs/products/knowledge-base/twins/steps/step3.exact"
@@ -457,7 +457,19 @@
           "content_source_path": "docs/products/knowledge-base/twins/steps/step3.exact",
           "content_sha256": "3e0d218f94d17592bf882af0297325eea49554f2a7f0d4e33c06ea65711aa72d"
         }
-      }
+      },
+      "last_attempt": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-31T01:40:05.216Z",
+      "no_op": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "knowledge-base-3",
