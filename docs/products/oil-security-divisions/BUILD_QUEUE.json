@@ -523,7 +523,7 @@
     },
     {
       "id": "1",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/preCommitScannerService.js",
       "task": "implement secret scanner",
       "spec": "Create a secret scanner service to scan for known secret patterns, ensuring no false blocks on placeholders.",
@@ -535,12 +535,12 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-31T09:04:28.399Z",
-      "commit_sha": "989af633d2c960a794c65547f900c784290f1c63",
+      "commit_sha": "705dd34cc03dcac9aac8c86b8ed2d7087f9fdc4c",
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "1",
       "mission_id": "PRODUCT-oil-security-divisions",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:scanSecrets; assertion_threw",
+      "last_error": null,
       "reaudit_reset_at": "2026-07-30T18:55:06.687Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
