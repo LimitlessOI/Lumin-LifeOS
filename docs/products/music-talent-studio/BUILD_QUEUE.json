@@ -913,7 +913,7 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "failure_signature": "STEP_STATUS_FORBIDDEN",
-      "same_signature_count": 1,
+      "same_signature_count": 2,
       "escalation_class": "same_signature_repeat"
     },
     {
@@ -946,7 +946,7 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-31T09:38:24.015Z",
+      "shipped_at": "2026-07-31T09:59:21.736Z",
       "commit_sha": null,
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "1",
@@ -960,10 +960,10 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-07-31T09:38:24.015Z",
-        "shipped_at": "2026-07-31T09:38:24.015Z",
+        "sealed_at": "2026-07-31T09:59:21.736Z",
+        "shipped_at": "2026-07-31T09:59:21.736Z",
         "commit_sha": null,
-        "content_sha256": "95edc2e52442c06b05b6e68b647414b33b31aaaf6e4a1e053b6fa34160643d3a",
+        "content_sha256": "2ce885053d35eb4060acdc80da8e80a80a30e9122e8ef0111002f4fe4394cd11",
         "target_file": "services/apiSpecification.js",
         "reverse": {
           "mode": "delete_file",
@@ -976,7 +976,7 @@
           "reason": "indeterminate_sql: SQL string could not be parsed for table names",
           "details": {
             "filePath": "/usr/src/app/services/apiSpecification.js",
-            "hash": "95edc2e52442c06b05b6e68b647414b33b31aaaf6e4a1e053b6fa34160643d3a",
+            "hash": "2ce885053d35eb4060acdc80da8e80a80a30e9122e8ef0111002f4fe4394cd11",
             "importChecks": [],
             "sqlChecks": [
               {
@@ -1001,6 +1001,41 @@
               },
               {
                 "text": "Operation for method \"${method}\" on path \"${path}\" is missing \"responses\".",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Invalid HTTP status code \"${statusCode}\" in responses for method \"${method}\" on ",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Response for status code \"${statusCode}\" in method \"${method}\" on path \"${path}\"",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Parameters for method \"${method}\" on path \"${path}\" must be an array.",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Malformed parameter in method \"${method}\" on path \"${path}\". Missing \"name\" or \"",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Invalid parameter location \"${param.in}\" for parameter \"${param.name}\" in method",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Path parameter \"${param.name}\" in method \"${method}\" on path \"${path}\" must be r",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Parameter \"${param.name}\" in method \"${method}\" on path \"${path}\" is missing or ",
                 "status": "PASS",
                 "reason": "not_a_sql_string"
               },
@@ -1165,6 +1200,91 @@
                 "reason": "not_a_sql_string"
               },
               {
+                "text": "default",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "object",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "description",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "string",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "parameters",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "object",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "name",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "in",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "query",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "header",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "path",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "cookie",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "path",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "required",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "schema",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "object",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
                 "text": "parameters",
                 "status": "PASS",
                 "reason": "not_a_sql_string"
@@ -1245,6 +1365,126 @@
                 "reason": "not_a_sql_string"
               },
               {
+                "text": "${statusCode}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${method}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${path}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${statusCode}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${method}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${path}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "description",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${method}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${path}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${method}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${path}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "name",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "in",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${param.in}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${param.name}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${method}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${path}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${param.name}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${method}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${path}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${param.name}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${method}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${path}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "schema",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
                 "text": "${path}",
                 "status": "PASS",
                 "reason": "not_a_sql_string"
@@ -1265,7 +1505,7 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/music-talent-studio/twins/steps/1.exact",
-          "content_sha256": "95edc2e52442c06b05b6e68b647414b33b31aaaf6e4a1e053b6fa34160643d3a"
+          "content_sha256": "2ce885053d35eb4060acdc80da8e80a80a30e9122e8ef0111002f4fe4394cd11"
         }
       },
       "built_sha": null,

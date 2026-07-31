@@ -62,6 +62,42 @@ export function validateApiSpecification(apiSpec) {
             if (!('responses' in operation) || typeof operation.responses !== 'object' || Object.keys(operation.responses).length === 0) {
               return { isValid: false, message: `Operation for method "${method}" on path "${path}" is missing "responses".` };
             }
+
+            // Validate responses object content
+            for (const statusCode in operation.responses) {
+              if (Object.prototype.hasOwnProperty.call(operation.responses, statusCode)) {
+                if (!/^\d{3}$/.test(statusCode) && statusCode !== 'default') {
+                  return { isValid: false, message: `Invalid HTTP status code "${statusCode}" in responses for method "${method}" on path "${path}".` };
+                }
+                const response = operation.responses[statusCode];
+                if (typeof response !== 'object' || !('description' in response) || typeof response.description !== 'string' || response.description.trim() === '') {
+                  return { isValid: false, message: `Response for status code "${statusCode}" in method "${method}" on path "${path}" is missing or has invalid "description".` };
+                }
+              }
+            }
+
+            // Validate parameters if present
+            if ('parameters' in operation) {
+              if (!Array.isArray(operation.parameters)) {
+                return { isValid: false, message: `Parameters for method "${method}" on path "${path}" must be an array.` };
+              }
+              for (const param of operation.parameters) {
+                if (typeof param !== 'object' || !('name' in param) || !('in' in param)) {
+                  return { isValid: false, message: `Malformed parameter in method "${method}" on path "${path}". Missing "name" or "in".` };
+                }
+                const allowedParamLocations = ['query', 'header', 'path', 'cookie'];
+                if (!allowedParamLocations.includes(param.in)) {
+                  return { isValid: false, message: `Invalid parameter location "${param.in}" for parameter "${param.name}" in method "${method}" on path "${path}".` };
+                }
+                if (param.in === 'path' && (!('required' in param) || param.required !== true)) {
+                  return { isValid: false, message: `Path parameter "${param.name}" in method "${method}" on path "${path}" must be required.` };
+                }
+                if (!('schema' in param) || typeof param.schema !== 'object') {
+                  return { isValid: false, message: `Parameter "${param.name}" in method "${method}" on path "${path}" is missing or has invalid "schema".` };
+                }
+              }
+            }
+
           } else if (!['parameters', 'description', 'summary'].includes(method.toLowerCase())) { // Allow path-level parameters/description
             return { isValid: false, message: `Path "${path}" contains an invalid HTTP method or field: "${method}".` };
           }
