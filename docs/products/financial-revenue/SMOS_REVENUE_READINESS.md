@@ -3,7 +3,7 @@
 
 | Field | Value |
 |---|---|
-| **Generated** | 2026-07-31T07:08:18.225Z |
+| **Generated** | 2026-07-31T18:58:18.722Z |
 | **Overall** | NOT_READY |
 | **Email provider** | BLOCKED (postmark) |
 | **Live charge capability** | BLOCKED |
@@ -13,7 +13,7 @@
 ```json
 {
   "schema": "smos_email_provider_verify_v1",
-  "at": "2026-07-31T07:08:18.198Z",
+  "at": "2026-07-31T18:58:18.722Z",
   "provider": "postmark",
   "configured": false,
   "from_address": null,
@@ -29,7 +29,7 @@
 ```json
 {
   "schema": "smos_live_charge_verify_v1",
-  "at": "2026-07-31T07:08:18.225Z",
+  "at": "2026-07-31T18:58:18.698Z",
   "expected_amount_cents": 4900,
   "amount_cents": 4900,
   "amount_match": true,

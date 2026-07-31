@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T18:55:12.780Z",
+  "generated_at": "2026-07-31T18:58:29.223Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12600,
   "files": [
@@ -41423,8 +41423,8 @@
       "path": "docs/products/financial-revenue/SMOS_REVENUE_READINESS.md",
       "synopsis": "SMOS revenue readiness snapshot -- automatically updated by scripts/verify-smos-email-provider.mjs and scripts/verify-smos-live-charge.mjs",
       "bytes": 1670,
-      "mtime": "2026-07-31T06:13:42.639Z",
-      "indexed_at": "2026-07-31T06:18:39.006Z"
+      "mtime": "2026-07-31T18:58:29.223Z",
+      "indexed_at": "2026-07-31T18:58:29.223Z"
     },
     {
       "path": "docs/products/FINANCIALREVENUE.md",
