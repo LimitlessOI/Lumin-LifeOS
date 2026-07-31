@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T10:17:05.758Z",
+  "generated_at": "2026-07-31T10:17:14.125Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12563,
   "files": [
@@ -21670,9 +21670,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3779179,
-      "mtime": "2026-07-31T09:13:02.128Z",
-      "indexed_at": "2026-07-31T09:13:12.982Z"
+      "bytes": 3787172,
+      "mtime": "2026-07-31T10:17:06.645Z",
+      "indexed_at": "2026-07-31T10:17:14.125Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -40875,9 +40875,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 343267,
-      "mtime": "2026-07-31T09:47:31.192Z",
-      "indexed_at": "2026-07-31T09:51:46.501Z"
+      "bytes": 344714,
+      "mtime": "2026-07-31T10:16:59.042Z",
+      "indexed_at": "2026-07-31T10:17:06.560Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -70154,9 +70154,9 @@
     {
       "path": "routes/partner-config-creation.js",
       "synopsis": "HTTP route module — Partner Config Creation.",
-      "bytes": 2141,
-      "mtime": "2026-07-31T10:15:54.580Z",
-      "indexed_at": "2026-07-31T10:15:54.580Z"
+      "bytes": 1131,
+      "mtime": "2026-07-31T09:38:58.110Z",
+      "indexed_at": "2026-07-31T09:38:58.110Z"
     },
     {
       "path": "routes/partner-onboarding.js",
@@ -86409,9 +86409,9 @@
     {
       "path": "services/advisoryCouncilProcess.js",
       "synopsis": "Exports councilReview — services/advisoryCouncilProcess.js.",
-      "bytes": 3852,
-      "mtime": "2026-07-31T10:17:05.758Z",
-      "indexed_at": "2026-07-31T10:17:05.758Z"
+      "bytes": 1177,
+      "mtime": "2026-07-31T09:59:06.638Z",
+      "indexed_at": "2026-07-31T09:59:06.638Z"
     },
     {
       "path": "services/advisoryCouncilService.js",
@@ -93233,10 +93233,10 @@
     },
     {
       "path": "services/reviewModerationFlowDetail.js",
-      "synopsis": "Exports moderateSubmissions and reviewSubmission - services/reviewModerationFlowDetail.js.",
-      "bytes": 3418,
-      "mtime": "2026-07-31T10:16:27.951Z",
-      "indexed_at": "2026-07-31T10:16:27.951Z"
+      "synopsis": "Exports moderateSubmissions — services/reviewModerationFlowDetail.js.",
+      "bytes": 794,
+      "mtime": "2026-07-31T09:39:39.686Z",
+      "indexed_at": "2026-07-31T09:39:39.686Z"
     },
     {
       "path": "services/risk-scorer.js",
@@ -94360,8 +94360,8 @@
       "path": "services/studentsInterview.js",
       "synopsis": "Exports getStudentFeedback — services/studentsInterview.js.",
       "bytes": 610,
-      "mtime": "2026-07-31T10:16:37.255Z",
-      "indexed_at": "2026-07-31T10:16:37.255Z"
+      "mtime": "2026-07-31T09:39:48.559Z",
+      "indexed_at": "2026-07-31T09:39:48.559Z"
     },
     {
       "path": "services/supervised-autonomy-readiness.js",
@@ -95106,9 +95106,9 @@
     {
       "path": "services/truth-ladder.js",
       "synopsis": "Truth-ladder enforcement — grades load-bearing CLAIMS (not code",
-      "bytes": 29185,
-      "mtime": "2026-07-31T08:26:37.859Z",
-      "indexed_at": "2026-07-31T08:33:28.712Z",
+      "bytes": 30125,
+      "mtime": "2026-07-31T10:16:29.761Z",
+      "indexed_at": "2026-07-31T10:17:06.560Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

@@ -388,6 +388,15 @@ function stepIdentity(step) {
   return String(step?.blueprint_step_id || step?.step_id || step?.id || '').trim();
 }
 
+function safeMtimeIso(filePath) {
+  if (!filePath) return 'unknown';
+  try {
+    return fs.statSync(filePath).mtime.toISOString();
+  } catch {
+    return 'unreadable';
+  }
+}
+
 function hasExactRebuildBytes(step) {
   if (typeof step?.exact_content === 'string' && step.exact_content.length > 0) return true;
   if (typeof step?.exact_inputs?.exact_content === 'string' && step.exact_inputs.exact_content.length > 0) return true;
@@ -492,7 +501,15 @@ export function exactChangeClaim({
     return {
       ok: false,
       status: 'STEP_STATUS_FORBIDDEN',
-      error: `Step ${blueprint_step_id} status is "${stepStatus}" — cannot construct from a terminal/blocked step without a blueprint amendment`,
+      // 2026-07-31 diagnostic (KNOW/THINK split, not yet root-caused): dozens of
+      // steps across ~25 products are thrashing revive(pending)->ship->this
+      // rejection->reblock in a loop, bounded only by reviveStaleBlockedSteps'
+      // revive_count cap. Revival persists status:'pending' to the same
+      // BUILD_QUEUE.json this reads via resolveTwinBlueprint's fresh
+      // fs.readFileSync, so the two should agree; twin_source/twin_path/mtime
+      // are appended here so the next occurrence's last_error pins whether this
+      // read hit a stale/duplicate twin source or a genuine still-blocked step.
+      error: `Step ${blueprint_step_id} status is "${stepStatus}" — cannot construct from a terminal/blocked step without a blueprint amendment [diag twin_source=${loaded.twin_source || 'unknown'} twin_path=${loaded.twin_path || 'unknown'} twin_mtime=${safeMtimeIso(loaded.twin_path)}]`,
       trust_earned: false,
       twin: follow,
       target_file: String(step.target_file || ''),
