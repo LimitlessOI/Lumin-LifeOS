@@ -206,7 +206,7 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-31T02:33:47.262Z",
+      "shipped_at": "2026-07-31T05:30:31.303Z",
       "commit_sha": null,
       "blueprint_id": "PRODUCT-BOLDTRAIL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "boldtrail-step1",
@@ -220,10 +220,10 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-07-31T02:33:47.262Z",
-        "shipped_at": "2026-07-31T02:33:47.262Z",
+        "sealed_at": "2026-07-31T05:30:31.303Z",
+        "shipped_at": "2026-07-31T05:30:31.303Z",
         "commit_sha": null,
-        "content_sha256": "64957174237aaa91bdbd569fa9b0df4204dd2a0b7739c73577b6588499d52e19",
+        "content_sha256": "c97e437c3cb75041ed701b771b7f9e5ecde5f16807774a9bd05020e6eb73727b",
         "target_file": "services/leadScoringSegment.js",
         "reverse": {
           "mode": "delete_file",
@@ -231,10 +231,13 @@
           "prior_commit_sha": null,
           "prior_content_sha256": null
         },
+        "grounding": {
+          "status": "PASS"
+        },
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/boldtrail/twins/steps/boldtrail-step1.exact",
-          "content_sha256": "64957174237aaa91bdbd569fa9b0df4204dd2a0b7739c73577b6588499d52e19"
+          "content_sha256": "c97e437c3cb75041ed701b771b7f9e5ecde5f16807774a9bd05020e6eb73727b"
         }
       },
       "built_sha": null,

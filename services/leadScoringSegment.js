@@ -58,3 +58,17 @@ export const defineScoringRubric = (name, criteria) => {
     updatedAt: new Date().toISOString(),
   };
 };
+
+/**
+ * SYNOPSIS: Attaches an explicit scoring rubric to a lead segment description.
+ * This function now specifically implements the task requirement.
+ * @param {string} segmentDescription - The description of the lead segment.
+ * @param {object} rubricDefinition - The explicit scoring rubric to attach.
+ * @returns {object} An object containing the segment description and its attached explicit rubric.
+ */
+export const attachExplicitScoringRubric = (segmentDescription, rubricDefinition) => {
+  return {
+    segmentDescription,
+    scoringRubric: rubricDefinition,
+  };
+};
