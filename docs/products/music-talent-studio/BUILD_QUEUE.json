@@ -842,8 +842,8 @@
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "4",
       "mission_id": "PRODUCT-music-talent-studio",
-      "pre_existing": false,
-      "last_error": "artifact_missing_after_ship: artifact_proof_failed: INTERVIEW_STUDENTS",
+      "pre_existing": null,
+      "last_error": "governed_ship_failed",
       "reaudit_reset_at": "2026-07-30T18:55:06.680Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
@@ -886,7 +886,19 @@
       },
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-07-31T08:10:30.701Z"
+      "last_attempt_at": "2026-07-31T08:36:06.314Z",
+      "last_attempt": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-31T08:28:40.272Z",
+      "no_op": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "1",
