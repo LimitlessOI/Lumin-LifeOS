@@ -178,13 +178,13 @@
     },
     {
       "id": "step4",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/envDiffService.js",
       "task": "build env diff receipt generator",
       "spec": "Generate a receipt for env diffs, tracking only name changes",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "generateEnvDiffReceipt"
       ],
@@ -200,12 +200,12 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-31T07:18:29.455Z",
-      "commit_sha": null,
+      "commit_sha": "b4b18146eb6682e21b83933fb5887db78064d277",
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step4",
       "mission_id": "PRODUCT-oil-security-divisions",
-      "pre_existing": false,
-      "last_error": "ship_commit_not_on_main: compare status ahead",
+      "pre_existing": null,
+      "last_error": null,
       "reaudit_reset_at": "2026-07-30T18:55:06.687Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
@@ -235,7 +235,19 @@
       },
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-07-31T06:51:42.479Z"
+      "last_attempt_at": null,
+      "last_attempt": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-31T07:11:37.582Z",
+      "no_op": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "step5",
