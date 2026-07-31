@@ -191,6 +191,22 @@
       "added_real_lines": 22,
       "justification": "this is orchestration/glue wiring and an observability endpoint, not new product business logic. The factory could not build this because it required moving an existing, already-SENTRY-gated scheduler from the unreachable full-runtime path into the founder-runtime path and surfacing its status; that is a runtime topology decision, not a feature module.\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
       "commit_message_excerpt": "P4 — runtime convergence: BP_PRIORITY scheduler wiring + control-plane endpoint (M2C-011)"
+    },
+    {
+      "at": "2026-07-31T08:33:29.069Z",
+      "file": "routes/lifeos-council-builder-routes.js",
+      "is_new_file": false,
+      "added_real_lines": 40,
+      "justification": "governance infrastructure required by mini blueprint Phase 3 to mechanically prevent AI agents from creating unowned protected source files and from shipping blocked/done factory steps; adds scripts/lib/file-placement-gate.mjs and scripts/verify-file-placement.mjs, wires a hard block into routes/lifeos-council-builder-routes.js#commitOrMirrorFiles and githooks/pre-commit, and hardens services/truth-ladder.js, factory-staging/factory-core/builder/run-step.js, routes/factory-mount-routes.js, and services/governed-shipping-runner.js.\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
+      "commit_message_excerpt": "GAP-FILL: file-placement authority gate + step-status enforcement. HAND-AUTHORED-JUSTIFICATION: governance infrastructure required by mini blueprint Phase 3 to mechanically prevent AI agents from crea"
+    },
+    {
+      "at": "2026-07-31T08:33:29.069Z",
+      "file": "services/truth-ladder.js",
+      "is_new_file": false,
+      "added_real_lines": 33,
+      "justification": "governance infrastructure required by mini blueprint Phase 3 to mechanically prevent AI agents from creating unowned protected source files and from shipping blocked/done factory steps; adds scripts/lib/file-placement-gate.mjs and scripts/verify-file-placement.mjs, wires a hard block into routes/lifeos-council-builder-routes.js#commitOrMirrorFiles and githooks/pre-commit, and hardens services/truth-ladder.js, factory-staging/factory-core/builder/run-step.js, routes/factory-mount-routes.js, and services/governed-shipping-runner.js.\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
+      "commit_message_excerpt": "GAP-FILL: file-placement authority gate + step-status enforcement. HAND-AUTHORED-JUSTIFICATION: governance infrastructure required by mini blueprint Phase 3 to mechanically prevent AI agents from crea"
     }
   ]
 }

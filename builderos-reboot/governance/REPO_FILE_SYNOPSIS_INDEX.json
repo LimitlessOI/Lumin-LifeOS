@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T08:36:38.419Z",
+  "generated_at": "2026-07-31T08:36:45.872Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12527,
   "files": [
@@ -21671,8 +21671,8 @@
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
       "bytes": 3776709,
-      "mtime": "2026-07-31T08:36:38.379Z",
-      "indexed_at": "2026-07-31T08:36:38.419Z"
+      "mtime": "2026-07-31T08:36:45.835Z",
+      "indexed_at": "2026-07-31T08:36:45.872Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -40739,9 +40739,9 @@
     {
       "path": "docs/products/builderos/GAP_FILL_LEDGER.json",
       "synopsis": "Documentation — GAP FILL LEDGER.",
-      "bytes": 32733,
-      "mtime": "2026-07-31T06:10:33.431Z",
-      "indexed_at": "2026-07-31T06:18:39.006Z",
+      "bytes": 34832,
+      "mtime": "2026-07-31T08:33:29.067Z",
+      "indexed_at": "2026-07-31T08:33:58.806Z",
       "synopsis_index_only": true
     },
     {
@@ -70178,7 +70178,7 @@
       "synopsis": "Registers SecurityRoutes routes/handlers (routes/registerSecurityRoutes.js).",
       "bytes": 2181,
       "mtime": "2026-07-31T08:36:36.811Z",
-      "indexed_at": "2026-07-31T08:36:38.419Z"
+      "indexed_at": "2026-07-31T08:36:45.872Z"
     },
     {
       "path": "routes/replacement-plan-routes.js",
@@ -88955,7 +88955,7 @@
       "synopsis": "Exports applyFamilySafetyFilters — services/familySafetyService.js.",
       "bytes": 3307,
       "mtime": "2026-07-31T08:34:54.759Z",
-      "indexed_at": "2026-07-31T08:36:38.419Z"
+      "indexed_at": "2026-07-31T08:36:45.872Z"
     },
     {
       "path": "services/ferpaDpaTemplate.js",
