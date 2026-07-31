@@ -301,7 +301,7 @@
     },
     {
       "id": "step1",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/migrations/002_define_token_budget.sql",
       "task": "define token budget for context injection",
       "spec": "Create a migration to define token budget for context injection, specifying max_tokens cap and truncation strategy.",
@@ -314,37 +314,14 @@
         "truncation_strategy VARCHAR"
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-31T01:08:45.715Z",
-      "commit_sha": "418df5cc27e1059d0e0bd738cce769fcd663ea32",
+      "shipped_at": "2026-07-16T02:42:51.739Z",
+      "commit_sha": "3c70447c4242182f20dfb042f13f8510a95e8261",
       "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step1",
       "mission_id": "PRODUCT-knowledge-base",
       "pre_existing": false,
-      "last_error": null,
-      "reaudit_reset_at": "2026-07-30T18:55:06.480Z",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/knowledge-base/twins/steps/step1.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-31T01:08:45.715Z",
-        "shipped_at": "2026-07-31T01:08:45.715Z",
-        "commit_sha": "3c70447c4242182f20dfb042f13f8510a95e8261",
-        "content_sha256": "5853c900108bdc652871cee388606ea102fc59e7c0005325c8ada415f12ed2e4",
-        "target_file": "db/migrations/002_define_token_budget.sql",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "db/migrations/002_define_token_budget.sql",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/knowledge-base/twins/steps/step1.exact",
-          "content_sha256": "5853c900108bdc652871cee388606ea102fc59e7c0005325c8ada415f12ed2e4"
-        }
-      }
+      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw; assertion_threw; assertion_threw",
+      "reaudit_reset_at": "2026-07-30T18:55:06.480Z"
     },
     {
       "id": "step2",
@@ -360,14 +337,37 @@
         "provider_name VARCHAR"
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-16T02:47:42.258Z",
+      "shipped_at": "2026-07-31T01:16:45.572Z",
       "commit_sha": "784df35d895aacd58e2e8eed3e72a29eea30337a",
       "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step2",
       "mission_id": "PRODUCT-knowledge-base",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.480Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.480Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/knowledge-base/twins/steps/step2.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-31T01:16:45.572Z",
+        "shipped_at": "2026-07-31T01:16:45.572Z",
+        "commit_sha": "784df35d895aacd58e2e8eed3e72a29eea30337a",
+        "content_sha256": "8717ca8c4320426e210742cc1cf3df95fae1e5d793f862f7d04840bd40723cf3",
+        "target_file": "db/migrations/003_add_search_provider_config.sql",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "db/migrations/003_add_search_provider_config.sql",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/knowledge-base/twins/steps/step2.exact",
+          "content_sha256": "8717ca8c4320426e210742cc1cf3df95fae1e5d793f862f7d04840bd40723cf3"
+        }
+      }
     },
     {
       "id": "step3",
