@@ -268,14 +268,40 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-15T23:46:42.449Z",
+      "shipped_at": "2026-07-31T09:04:58.960Z",
       "commit_sha": "1445332e43033e8f18073530086f7dd6634bf42d",
       "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step1",
       "mission_id": "PRODUCT-white-label",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerConfigEndpoints; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.853Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.853Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/white-label/twins/steps/step1.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-31T09:04:58.960Z",
+        "shipped_at": "2026-07-31T09:04:58.960Z",
+        "commit_sha": "1445332e43033e8f18073530086f7dd6634bf42d",
+        "content_sha256": "c7ee135cef4c5d9a03a3a8619bbbc08a234cba49f534fd397af9daa37cd352ac",
+        "target_file": "routes/config-endpoints.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "routes/config-endpoints.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/white-label/twins/steps/step1.exact",
+          "content_sha256": "c7ee135cef4c5d9a03a3a8619bbbc08a234cba49f534fd397af9daa37cd352ac"
+        }
+      }
     },
     {
       "id": "step3",
