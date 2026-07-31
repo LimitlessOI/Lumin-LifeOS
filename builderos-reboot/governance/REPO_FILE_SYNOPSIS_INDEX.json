@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T10:17:14.125Z",
+  "generated_at": "2026-07-31T10:32:35.508Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12563,
   "files": [
@@ -86537,9 +86537,9 @@
     {
       "path": "services/apiSpecification.js",
       "synopsis": "Exports validateApiSpecification — services/apiSpecification.js.",
-      "bytes": 6330,
-      "mtime": "2026-07-31T09:59:24.759Z",
-      "indexed_at": "2026-07-31T09:59:24.759Z"
+      "bytes": 11577,
+      "mtime": "2026-07-31T10:32:35.508Z",
+      "indexed_at": "2026-07-31T10:32:35.508Z"
     },
     {
       "path": "services/approval-system.js",

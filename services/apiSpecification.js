@@ -73,6 +73,20 @@ export function validateApiSpecification(apiSpec) {
                 if (typeof response !== 'object' || !('description' in response) || typeof response.description !== 'string' || response.description.trim() === '') {
                   return { isValid: false, message: `Response for status code "${statusCode}" in method "${method}" on path "${path}" is missing or has invalid "description".` };
                 }
+                // Validate content if present
+                if ('content' in response) {
+                  if (typeof response.content !== 'object' || Object.keys(response.content).length === 0) {
+                    return { isValid: false, message: `Response content for status code "${statusCode}" in method "${method}" on path "${path}" is malformed or empty.` };
+                  }
+                  for (const mediaType in response.content) {
+                    if (Object.prototype.hasOwnProperty.call(response.content, mediaType)) {
+                      const mediaTypeObject = response.content[mediaType];
+                      if (typeof mediaTypeObject !== 'object' || !('schema' in mediaTypeObject) || typeof mediaTypeObject.schema !== 'object') {
+                        return { isValid: false, message: `Media type "${mediaType}" for status code "${statusCode}" in method "${method}" on path "${path}" is missing or has invalid "schema".` };
+                      }
+                    }
+                  }
+                }
               }
             }
 
@@ -98,7 +112,23 @@ export function validateApiSpecification(apiSpec) {
               }
             }
 
-          } else if (!['parameters', 'description', 'summary'].includes(method.toLowerCase())) { // Allow path-level parameters/description
+            // Validate requestBody if present
+            if ('requestBody' in operation) {
+              const requestBody = operation.requestBody;
+              if (typeof requestBody !== 'object' || !('content' in requestBody) || typeof requestBody.content !== 'object' || Object.keys(requestBody.content).length === 0) {
+                return { isValid: false, message: `Request body for method "${method}" on path "${path}" is malformed or missing "content".` };
+              }
+              for (const mediaType in requestBody.content) {
+                if (Object.prototype.hasOwnProperty.call(requestBody.content, mediaType)) {
+                  const mediaTypeObject = requestBody.content[mediaType];
+                  if (typeof mediaTypeObject !== 'object' || !('schema' in mediaTypeObject) || typeof mediaTypeObject.schema !== 'object') {
+                    return { isValid: false, message: `Media type "${mediaType}" in request body for method "${method}" on path "${path}" is missing or has invalid "schema".` };
+                  }
+                }
+              }
+            }
+
+          } else if (!['parameters', 'description', 'summary', 'servers', 'security', 'tags', 'externalDocs', 'callbacks'].includes(method.toLowerCase())) { // Allow path-level parameters/description/other OpenAPI fields
             return { isValid: false, message: `Path "${path}" contains an invalid HTTP method or field: "${method}".` };
           }
         }
@@ -109,8 +139,72 @@ export function validateApiSpecification(apiSpec) {
     }
   }
 
-  // Add more specific validation rules here as needed
-  // For instance, checking for valid HTTP methods, response schemas, etc.
+  // Validate components if present
+  if ('components' in apiSpec) {
+    const components = apiSpec.components;
+    if (typeof components !== 'object') {
+      return { isValid: false, message: 'API specification "components" field must be an object.' };
+    }
+
+    // Validate schemas
+    if ('schemas' in components) {
+      const schemas = components.schemas;
+      if (typeof schemas !== 'object') {
+        return { isValid: false, message: 'API specification "components.schemas" field must be an object.' };
+      }
+      for (const schemaName in schemas) {
+        if (Object.prototype.hasOwnProperty.call(schemas, schemaName)) {
+          const schema = schemas[schemaName];
+          if (typeof schema !== 'object' || Object.keys(schema).length === 0) {
+            return { isValid: false, message: `Component schema "${schemaName}" is malformed or empty.` };
+          }
+          // Basic check for schema type, more detailed validation would use a schema validator
+          if (!('type' in schema) && !('$ref' in schema)) { // Allow $ref for referencing other schemas
+            return { isValid: false, message: `Component schema "${schemaName}" is missing "type" or "$ref".` };
+          }
+        }
+      }
+    }
+
+    // Validate securitySchemes
+    if ('securitySchemes' in components) {
+      const securitySchemes = components.securitySchemes;
+      if (typeof securitySchemes !== 'object') {
+        return { isValid: false, message: 'API specification "components.securitySchemes" field must be an object.' };
+      }
+      for (const schemeName in securitySchemes) {
+        if (Object.prototype.hasOwnProperty.call(securitySchemes, schemeName)) {
+          const scheme = securitySchemes[schemeName];
+          if (typeof scheme !== 'object' || !('type' in scheme) || typeof scheme.type !== 'string') {
+            return { isValid: false, message: `Security scheme "${schemeName}" is malformed or missing "type".` };
+          }
+          const allowedSchemeTypes = ['apiKey', 'http', 'oauth2', 'openIdConnect'];
+          if (!allowedSchemeTypes.includes(scheme.type)) {
+            return { isValid: false, message: `Invalid security scheme type "${scheme.type}" for scheme "${schemeName}".` };
+          }
+        }
+      }
+    }
+  }
+
+  // Validate security if present at top level
+  if ('security' in apiSpec) {
+    if (!Array.isArray(apiSpec.security)) {
+      return { isValid: false, message: 'API specification "security" field must be an array.' };
+    }
+    for (const securityRequirement of apiSpec.security) {
+      if (typeof securityRequirement !== 'object' || Object.keys(securityRequirement).length === 0) {
+        return { isValid: false, message: 'Malformed security requirement in top-level "security" array.' };
+      }
+      for (const schemeName in securityRequirement) {
+        if (Object.prototype.hasOwnProperty.call(securityRequirement, schemeName)) {
+          if (!Array.isArray(securityRequirement[schemeName])) {
+            return { isValid: false, message: `Scopes for security scheme "${schemeName}" in top-level "security" must be an array.` };
+          }
+        }
+      }
+    }
+  }
 
   return { isValid: true, message: 'API specification is valid.' };
 }

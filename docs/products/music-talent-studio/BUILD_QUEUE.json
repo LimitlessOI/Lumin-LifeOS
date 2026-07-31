@@ -946,7 +946,7 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-31T09:59:21.736Z",
+      "shipped_at": "2026-07-31T10:32:32.340Z",
       "commit_sha": null,
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "1",
@@ -960,10 +960,10 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-07-31T09:59:21.736Z",
-        "shipped_at": "2026-07-31T09:59:21.736Z",
+        "sealed_at": "2026-07-31T10:32:32.340Z",
+        "shipped_at": "2026-07-31T10:32:32.340Z",
         "commit_sha": null,
-        "content_sha256": "2ce885053d35eb4060acdc80da8e80a80a30e9122e8ef0111002f4fe4394cd11",
+        "content_sha256": "fb7306d17c1bfada5a9ac6c6b9179039a105c743d33fae53fc48371a6ae589a4",
         "target_file": "services/apiSpecification.js",
         "reverse": {
           "mode": "delete_file",
@@ -976,7 +976,7 @@
           "reason": "indeterminate_sql: SQL string could not be parsed for table names",
           "details": {
             "filePath": "/usr/src/app/services/apiSpecification.js",
-            "hash": "2ce885053d35eb4060acdc80da8e80a80a30e9122e8ef0111002f4fe4394cd11",
+            "hash": "fb7306d17c1bfada5a9ac6c6b9179039a105c743d33fae53fc48371a6ae589a4",
             "importChecks": [],
             "sqlChecks": [
               {
@@ -1015,6 +1015,16 @@
                 "reason": "not_a_sql_string"
               },
               {
+                "text": "Response content for status code \"${statusCode}\" in method \"${method}\" on path \"",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Media type \"${mediaType}\" for status code \"${statusCode}\" in method \"${method}\" ",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
                 "text": "Parameters for method \"${method}\" on path \"${path}\" must be an array.",
                 "status": "PASS",
                 "reason": "not_a_sql_string"
@@ -1040,12 +1050,47 @@
                 "reason": "not_a_sql_string"
               },
               {
+                "text": "Request body for method \"${method}\" on path \"${path}\" is malformed or missing \"c",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Media type \"${mediaType}\" in request body for method \"${method}\" on path \"${path",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
                 "text": "Path \"${path}\" contains an invalid HTTP method or field: \"${method}\".",
                 "status": "PASS",
                 "reason": "not_a_sql_string"
               },
               {
                 "text": "Path \"${path}\" does not define any valid HTTP operations.",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Component schema \"${schemaName}\" is malformed or empty.",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Component schema \"${schemaName}\" is missing \"type\" or \"$ref\".",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Security scheme \"${schemeName}\" is malformed or missing \"type\".",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Invalid security scheme type \"${scheme.type}\" for scheme \"${schemeName}\".",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Scopes for security scheme \"${schemeName}\" in top-level \"security\" must be an ar",
                 "status": "PASS",
                 "reason": "not_a_sql_string"
               },
@@ -1225,6 +1270,31 @@
                 "reason": "not_a_sql_string"
               },
               {
+                "text": "content",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "object",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "object",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "schema",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "object",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
                 "text": "parameters",
                 "status": "PASS",
                 "reason": "not_a_sql_string"
@@ -1285,6 +1355,41 @@
                 "reason": "not_a_sql_string"
               },
               {
+                "text": "requestBody",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "object",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "content",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "object",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "object",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "schema",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "object",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
                 "text": "parameters",
                 "status": "PASS",
                 "reason": "not_a_sql_string"
@@ -1296,6 +1401,146 @@
               },
               {
                 "text": "summary",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "servers",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "security",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "tags",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "externalDocs",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "callbacks",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "components",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "object",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "API specification \"components\" field must be an object.",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "schemas",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "object",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "API specification \"components.schemas\" field must be an object.",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "object",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "type",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "$ref",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "securitySchemes",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "object",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "API specification \"components.securitySchemes\" field must be an object.",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "object",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "type",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "string",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "apiKey",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "http",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "oauth2",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "openIdConnect",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "security",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "API specification \"security\" field must be an array.",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "object",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Malformed security requirement in top-level \"security\" array.",
                 "status": "PASS",
                 "reason": "not_a_sql_string"
               },
@@ -1400,6 +1645,46 @@
                 "reason": "not_a_sql_string"
               },
               {
+                "text": "${statusCode}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${method}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${path}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${mediaType}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${statusCode}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${method}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${path}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "schema",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
                 "text": "${method}",
                 "status": "PASS",
                 "reason": "not_a_sql_string"
@@ -1485,6 +1770,41 @@
                 "reason": "not_a_sql_string"
               },
               {
+                "text": "${method}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${path}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "content",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${mediaType}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${method}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${path}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "schema",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
                 "text": "${path}",
                 "status": "PASS",
                 "reason": "not_a_sql_string"
@@ -1498,6 +1818,81 @@
                 "text": "${path}",
                 "status": "PASS",
                 "reason": "not_a_sql_string"
+              },
+              {
+                "text": "components",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "components.schemas",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${schemaName}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${schemaName}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "type",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "$ref",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "components.securitySchemes",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${schemeName}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "type",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${scheme.type}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${schemeName}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "security",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "security",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${schemeName}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "security",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
               }
             ]
           }
@@ -1505,7 +1900,7 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/music-talent-studio/twins/steps/1.exact",
-          "content_sha256": "2ce885053d35eb4060acdc80da8e80a80a30e9122e8ef0111002f4fe4394cd11"
+          "content_sha256": "fb7306d17c1bfada5a9ac6c6b9179039a105c743d33fae53fc48371a6ae589a4"
         }
       },
       "built_sha": null,
