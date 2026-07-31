@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T05:21:02.492Z",
+  "generated_at": "2026-07-31T05:23:39.185Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12483,
   "files": [
@@ -38432,9 +38432,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 55666,
-      "mtime": "2026-07-31T05:18:20.771Z",
-      "indexed_at": "2026-07-31T05:18:27.338Z"
+      "bytes": 55694,
+      "mtime": "2026-07-31T05:23:18.495Z",
+      "indexed_at": "2026-07-31T05:23:39.185Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40645,9 +40645,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 334997,
-      "mtime": "2026-07-31T05:18:13.615Z",
-      "indexed_at": "2026-07-31T05:18:27.338Z"
+      "bytes": 335025,
+      "mtime": "2026-07-31T05:23:14.731Z",
+      "indexed_at": "2026-07-31T05:23:39.185Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -65451,9 +65451,9 @@
     {
       "path": "products/receipts/PHASE_0_STOP_GATE.json",
       "synopsis": "Product receipt — PHASE 0 STOP GATE.",
-      "bytes": 4171,
-      "mtime": "2026-07-31T05:18:07.355Z",
-      "indexed_at": "2026-07-31T05:18:27.338Z",
+      "bytes": 4227,
+      "mtime": "2026-07-31T05:23:11.247Z",
+      "indexed_at": "2026-07-31T05:23:39.185Z",
       "synopsis_index_only": true
     },
     {

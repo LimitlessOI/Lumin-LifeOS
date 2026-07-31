@@ -5,8 +5,8 @@
   "verified_at": "2026-07-23T22:00:00Z",
   "ok": true,
   "git_sha": "c6f6d6c574f8f9a09f5e59f032438534e65785f2",
-  "verification_sha": "9024d76bdf19a75d080f113612ae327a6473d06a",
-  "deploy_commit_sha": "9024d76bdf19a75d080f113612ae327a6473d06a",
+  "verification_sha": "5d5f55f61c6c9d6fa64a0feef15d890349eaec9b",
+  "deploy_commit_sha": "5d5f55f61c6c9d6fa64a0feef15d890349eaec9b",
   "phase": "P0",
   "phase_title": "Stop false completion",
   "summary": "Phase 0 stop-gate conditions are satisfied with behavioral evidence. The seal path now fails closed for conclusively detected semantic defects, unseals preserve rejected hashes and block reseal, blocked steps can be made sticky, the overwrite path is traced and narrowed, and the decision log carries a hybrid schema for Phase 0+ decisions.",
@@ -53,7 +53,7 @@
     "The overwrite fix blocks identical rejected bytes; it does not yet prevent semantically equivalent but textually different regenerated broken content.",
     "WP0.4 did not require a Chair/Architect decision — the root cause was unambiguous and the correction was already governed by the rejected-hash consensus."
   ],
-  "preflight": "npm run builder:preflight PASS 416/416 at verification commit 9024d76bdf19; production /ready deploy_commit_sha parity confirmed at 9024d76bdf19.",
+  "preflight": "npm run builder:preflight PASS 416/416 at verification commit 5d5f55f61c6c9d6fa64a0feef15d890349eaec9b; production /ready deploy_commit_sha parity confirmed at 5d5f55f61c6c9d6fa64a0feef15d890349eaec9b.",
   "next_phase": "P1 — Builder Readiness Audit",
   "authority": {
     "decision_record": "builderos-reboot/DECISIONS/DECISION-0001.md",
