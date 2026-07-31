@@ -505,11 +505,37 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": null,
-      "shipped_at": "2026-07-16T04:40:29.123Z",
+      "shipped_at": "2026-07-31T05:51:33.915Z",
       "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "knowledge-base-3",
       "mission_id": "PRODUCT-knowledge-base",
-      "reaudit_reset_at": "2026-07-30T18:55:06.480Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.480Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/knowledge-base/twins/steps/knowledge-base-3.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-31T05:51:33.915Z",
+        "shipped_at": "2026-07-31T05:51:33.915Z",
+        "commit_sha": null,
+        "content_sha256": "5662da37044e1b02caa1daadb2b4796ad61325fc6e3a01f01faae27a9d56315e",
+        "target_file": "db/migrations/004_create_vector_embedding_strategy.sql",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "db/migrations/004_create_vector_embedding_strategy.sql",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/knowledge-base/twins/steps/knowledge-base-3.exact",
+          "content_sha256": "5662da37044e1b02caa1daadb2b4796ad61325fc6e3a01f01faae27a9d56315e"
+        }
+      }
     },
     {
       "id": "knowledge-base-4",
