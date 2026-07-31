@@ -2563,7 +2563,7 @@
     },
     {
       "id": "bo-wire-security-review-into-commit-path",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/lifeos-council-builder-routes.js",
       "priority": "high",
       "task": "scripts/ai-security-review.mjs's reviewDiffForSecurity() (the real AI-powered adversarial security layer, model role 'security_review' in the model-capability-ledger) is built, unit-tested (11/11 pass), and live-verified end-to-end via POST /factory/security-review -- but nothing calls it automatically. It only fires when a human or agent manually POSTs to that endpoint. This is the same 'built but dead' gap already fixed once tonight for other model roles: a real, working capability that never actually runs in production traffic delivers zero value until it's wired into a real call path.",
@@ -2597,7 +2597,7 @@
     },
     {
       "id": "bo-runtime-fingerprint",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/builderos-runtime-fingerprint-routes.js",
       "priority": "critical",
       "task": "Q-001: Production cannot prove the runtime bytes of any routes/services file. deploy_commit_sha is only RAILWAY_GIT_COMMIT_SHA (build-time label); the image ships without .git; no endpoint reads repo files at runtime. ship:truth therefore returns UNSOLVED for server-code ships unless --probe declares a behaviour assertion. Build a governed GET /api/v1/lifeos/builder/runtime-fingerprint?paths=… that returns sha256 of named repo-relative files as they exist on the container disk (allowlisted prefixes only: routes/, services/, middleware/, startup/, config/, scripts/lib/, requireKey auth), so ship:truth can prove runtime.content for every path instead of probe-dependent.",
@@ -2628,7 +2628,7 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-31T02:01:49.831Z",
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:createBuilderRuntimeFingerprintRoutes; assertion_threw; assertion_threw; assertion_threw",
+      "last_error": null,
       "finding_note": " | Closed 2026-07-30: judgment in scripts/lib; wired into existing control-plane route / shipping loop (not a new SO-001 module).",
       "pre_existing": false,
       "reaudit_reset_at": "2026-07-30T18:55:06.356Z",
@@ -2654,7 +2654,8 @@
           "content_source_path": "docs/products/builderos/twins/steps/bo-runtime-fingerprint.exact",
           "content_sha256": "1a9e03e30e76c25923a06b21a8823285581c7cc3d54835153b4c93b5c1f481e6"
         }
-      }
+      },
+      "commit_sha": "7243a618586ffda19ceea59b9bc2e9544116ea84"
     },
     {
       "id": "bo-schedule-site-builder-sentry-gate",
