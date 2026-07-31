@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T01:17:23.897Z",
+  "generated_at": "2026-07-31T01:26:12.873Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12461,
   "files": [
@@ -92570,10 +92570,10 @@
     },
     {
       "path": "services/sacredContentReviewService.js",
-      "synopsis": "Exports sacredContentRevise, sacredContentValidate, sacredContentAssessImpact — services/sacredContentReviewService.js.",
-      "bytes": 3716,
-      "mtime": "2026-07-31T00:59:31.676Z",
-      "indexed_at": "2026-07-31T00:59:31.676Z"
+      "synopsis": "Exports sacredContentRevise, sacredContentValidate, sacredContentAssessImpact, sacredContentAuditTrail, sacredContentEscalate — services/sacredContentReviewService.js.",
+      "bytes": 5092,
+      "mtime": "2026-07-31T01:26:12.873Z",
+      "indexed_at": "2026-07-31T01:26:12.873Z"
     },
     {
       "path": "services/safeOutputService.js",
