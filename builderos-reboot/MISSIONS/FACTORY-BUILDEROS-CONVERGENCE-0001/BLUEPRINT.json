@@ -88,6 +88,10 @@
       "step_id": "M2C-000",
       "phase_id": "P0",
       "title": "Record Phase 0 consensus decision",
+      "status": "DONE",
+      "completed_at": "2026-07-23T21:30:00Z",
+      "git_sha": "c6f6d6c574f8f9a09f5e59f032438534e65785f2",
+      "evidence": "builderos-reboot/DECISIONS/DECISION-0001.md created; BLUEPRINT.json execution_gate set OPEN; P0 placed before P1.",
       "target_files": [
         "builderos-reboot/DECISIONS/DECISION-0001.md",
         "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-CONVERGENCE-0001/BLUEPRINT.json",
@@ -120,6 +124,10 @@
       "step_id": "M2C-001",
       "phase_id": "P0",
       "title": "WP0.1 — Implement semantic grounding check before seal",
+      "status": "DONE",
+      "completed_at": "2026-07-23T21:30:00Z",
+      "git_sha": "c6f6d6c574f8f9a09f5e59f032438534e65785f2",
+      "evidence": "services/blueprint-grounding-check.js created; integrated into services/truth-ladder.js, services/product-build-orchestrator.js, routes/factory-mount-routes.js; tests/blueprint-grounding-check.test.js PASS 7/7.",
       "target_files": [
         "services/blueprint-grounding-check.js",
         "services/truth-ladder.js",
@@ -161,6 +169,10 @@
       "step_id": "M2C-002",
       "phase_id": "P0",
       "title": "WP0.2 — Implement auditable unseal + anti-reseal",
+      "status": "DONE",
+      "completed_at": "2026-07-23T21:30:00Z",
+      "git_sha": "c6f6d6c574f8f9a09f5e59f032438534e65785f2",
+      "evidence": "services/truth-ladder.js exports unsealExactChangeInTwin; POST /factory/unseal-step route added; rejected hash anti-reseal proven; tests/truth-ladder.test.js PASS 23/23.",
       "target_files": [
         "services/truth-ladder.js",
         "routes/factory-mount-routes.js",
@@ -194,6 +206,10 @@
       "step_id": "M2C-003",
       "phase_id": "P0",
       "title": "WP0.3 — Implement sticky escalation for manual blocked steps",
+      "status": "DONE",
+      "completed_at": "2026-07-23T21:30:00Z",
+      "git_sha": "c6f6d6c574f8f9a09f5e59f032438534e65785f2",
+      "evidence": "services/product-build-orchestrator.js exports escalateBlockedStep; POST /factory/escalate-step route added; sticky behavior proven; tests/product-build-orchestrator.test.js PASS 21/21."
       "target_files": [
         "services/product-build-orchestrator.js",
         "routes/factory-mount-routes.js",
@@ -227,6 +243,10 @@
       "step_id": "M2C-004",
       "phase_id": "P0",
       "title": "WP0.4 — Trace the overwrite path and fix the smallest root cause",
+      "status": "DONE",
+      "completed_at": "2026-07-23T21:30:00Z",
+      "git_sha": "c6f6d6c574f8f9a09f5e59f032438534e65785f2",
+      "evidence": "docs/audits/builderos-mission-2/OVERWRITE_PATH_TRACE.md records the chain; factory-staging/factory-core/builder/run-step.js blocks rejected-content writes; services/governed-shipping-runner.js forwards rejected_content_hashes; tests/run-step-overwrite-guard.test.js PASS 2/2."
       "target_files": [
         "services/governed-shipping-runner.js",
         "services/governed-autonomous-ship-loop.js",
@@ -264,6 +284,10 @@
       "step_id": "M2C-005",
       "phase_id": "P0",
       "title": "WP0.5 — Extend self-repair-decision-log.js schema and write/read path",
+      "status": "DONE",
+      "completed_at": "2026-07-23T21:30:00Z",
+      "git_sha": "c6f6d6c574f8f9a09f5e59f032438534e65785f2",
+      "evidence": "services/self-repair-decision-log.js extended with hybrid schema (explicit columns + JSONB metadata); backward-compatible; tests/self-repair-decision-log.test.js PASS 3/3."
       "target_files": [
         "services/self-repair-decision-log.js",
         "tests/self-repair-decision-log.test.js"
@@ -295,6 +319,10 @@
       "step_id": "M2C-006",
       "phase_id": "P0",
       "title": "Phase 0 stop-gate and handoff",
+      "status": "DONE",
+      "completed_at": "2026-07-23T21:30:00Z",
+      "git_sha": "c6f6d6c574f8f9a09f5e59f032438534e65785f2",
+      "evidence": "products/receipts/PHASE_0_STOP_GATE.json and docs/audits/builderos-mission-2/MISSION_2_CONVERGENCE_HANDOFF.md created; npm run builder:preflight PASS 416/416."
       "target_files": [
         "products/receipts/PHASE_0_STOP_GATE.json",
         "docs/audits/builderos-mission-2/MISSION_2_CONVERGENCE_HANDOFF.md"

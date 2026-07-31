@@ -1,0 +1,60 @@
+{
+  "schema": "phase_0_stop_gate_v1",
+  "mission_id": "FACTORY-BUILDEROS-CONVERGENCE-0001",
+  "at": "2026-07-23T21:30:00Z",
+  "ok": true,
+  "git_sha": "c6f6d6c574f8f9a09f5e59f032438534e65785f2",
+  "phase": "P0",
+  "phase_title": "Stop false completion",
+  "summary": "Phase 0 stop-gate conditions are satisfied with behavioral evidence. The seal path now fails closed for conclusively detected semantic defects, unseals preserve rejected hashes and block reseal, blocked steps can be made sticky, the overwrite path is traced and narrowed, and the decision log carries a hybrid schema for Phase 0+ decisions.",
+  "wp_status": {
+    "WP0.1": {
+      "title": "Semantic grounding check before seal",
+      "status": "PASS",
+      "files": ["services/blueprint-grounding-check.js", "services/truth-ladder.js", "services/product-build-orchestrator.js", "routes/factory-mount-routes.js"],
+      "tests": "tests/blueprint-grounding-check.test.js 7/7 PASS",
+      "notes": "Deterministic checks for missing named exports and nonexistent SQL tables fail-closed from the first commit. Dynamic/external imports are treated as INDETERMINATE, not FAIL."
+    },
+    "WP0.2": {
+      "title": "Auditable unseal + rejected-hash anti-reseal",
+      "status": "PASS",
+      "files": ["services/truth-ladder.js", "routes/factory-mount-routes.js"],
+      "tests": "tests/truth-ladder.test.js 23/23 PASS",
+      "notes": "unsealExactChangeInTwin records unsealed_at/by/reason/evidence, preserves the rejected content hash, and blocks reseal of identical content."
+    },
+    "WP0.3": {
+      "title": "Sticky escalation for manual blocked steps",
+      "status": "PASS",
+      "files": ["services/product-build-orchestrator.js", "routes/factory-mount-routes.js"],
+      "tests": "tests/product-build-orchestrator.test.js 21/21 PASS",
+      "notes": "escalateBlockedStep sets escalation_required and prevents auto-revival while still allowing ordinary blocked steps to revive."
+    },
+    "WP0.4": {
+      "title": "Overwrite-path trace and narrow root-cause fix",
+      "status": "PASS",
+      "files": ["factory-staging/factory-core/builder/run-step.js", "services/governed-shipping-runner.js", "docs/audits/builderos-mission-2/OVERWRITE_PATH_TRACE.md"],
+      "tests": "tests/run-step-overwrite-guard.test.js 2/2 PASS",
+      "notes": "Rejected content hashes are now checked before fs.writeFileSync, so an identical broken artifact cannot overwrite an approved correction."
+    },
+    "WP0.5": {
+      "title": "Hybrid-schema decision-log extension",
+      "status": "PASS",
+      "files": ["services/self-repair-decision-log.js"],
+      "tests": "tests/self-repair-decision-log.test.js 3/3 PASS",
+      "notes": "Explicit lifecycle columns plus JSONB metadata; additive migration; backward-compatible old caller signature."
+    }
+  },
+  "remaining_undetected": [
+    "Grounding checker does not yet evaluate all SQL constructs (e.g., CTEs, subqueries, aliased tables) or all dynamic import patterns beyond non-literal sources.",
+    "Grounding checker relies on db/migrations/*.sql and db/schema.sql for table names; it does not yet introspect a live Postgres information_schema.",
+    "The overwrite fix blocks identical rejected bytes; it does not yet prevent semantically equivalent but textually different regenerated broken content.",
+    "WP0.4 did not require a Chair/Architect decision — the root cause was unambiguous and the correction was already governed by the rejected-hash consensus."
+  ],
+  "preflight": "npm run builder:preflight PASS 416/416 at commit c6f6d6c574f8",
+  "next_phase": "P1 — Builder Readiness Audit",
+  "authority": {
+    "decision_record": "builderos-reboot/DECISIONS/DECISION-0001.md",
+    "blueprint": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-CONVERGENCE-0001/BLUEPRINT.json",
+    "founder_packet": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-CONVERGENCE-0001/FOUNDER_PACKET.md"
+  }
+}

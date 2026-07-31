@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T05:04:10.354Z",
+  "generated_at": "2026-07-31T05:12:14.152Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12481,
+  "file_count": 12483,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -22283,9 +22283,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-CONVERGENCE-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 16315,
-      "mtime": "2026-07-31T04:50:42.671Z",
-      "indexed_at": "2026-07-31T05:01:14.830Z",
+      "bytes": 18663,
+      "mtime": "2026-07-31T05:09:10.879Z",
+      "indexed_at": "2026-07-31T05:12:14.152Z",
       "synopsis_index_only": true
     },
     {
@@ -38017,6 +38017,13 @@
       "indexed_at": "2026-07-30T22:31:11.508Z"
     },
     {
+      "path": "docs/audits/builderos-mission-2/MISSION_2_CONVERGENCE_HANDOFF.md",
+      "synopsis": "BuilderOS Mission 2 — Convergence Phase 0 handoff artifact",
+      "bytes": 5144,
+      "mtime": "2026-07-31T05:10:14.783Z",
+      "indexed_at": "2026-07-31T05:12:14.152Z"
+    },
+    {
       "path": "docs/audits/builderos-mission-2/OVERWRITE_PATH_TRACE.md",
       "synopsis": "OVERWRITE PATH TRACE — Mission 2 Phase 0 WP0.4",
       "bytes": 2614,
@@ -38425,9 +38432,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 54447,
-      "mtime": "2026-07-31T04:31:38.799Z",
-      "indexed_at": "2026-07-31T04:36:42.694Z"
+      "bytes": 55734,
+      "mtime": "2026-07-31T05:11:45.115Z",
+      "indexed_at": "2026-07-31T05:12:14.152Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -65439,6 +65446,14 @@
       "bytes": 591,
       "mtime": "2026-07-10T10:52:18.696Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/PHASE_0_STOP_GATE.json",
+      "synopsis": "Product receipt — PHASE 0 STOP GATE.",
+      "bytes": 3913,
+      "mtime": "2026-07-31T05:09:59.043Z",
+      "indexed_at": "2026-07-31T05:12:14.152Z",
       "synopsis_index_only": true
     },
     {
