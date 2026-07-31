@@ -816,13 +816,13 @@
     },
     {
       "id": "4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/studentsInterview.js",
       "task": "interview students or parents",
       "spec": "Interview 5 students or parents and store feedback.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "getStudentFeedback"
       ],
@@ -846,7 +846,7 @@
       "blueprint_step_id": "4",
       "mission_id": "PRODUCT-music-talent-studio",
       "pre_existing": null,
-      "last_error": "STEP_STATUS_FORBIDDEN",
+      "last_error": "artifact_missing_after_ship: artifact_proof_failed: INTERVIEW_STUDENTS",
       "reaudit_reset_at": "2026-07-30T18:55:06.680Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
@@ -899,7 +899,7 @@
       },
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-31T10:16:40.972Z",
       "last_attempt": null,
       "revive_count": 6,
       "revived_at": "2026-07-31T10:16:04.571Z",
