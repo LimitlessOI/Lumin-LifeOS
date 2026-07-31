@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T11:47:39.396Z",
+  "generated_at": "2026-07-31T11:52:50.518Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12568,
+  "file_count": 12572,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21307,9 +21307,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 24847,
-      "mtime": "2026-07-31T09:49:31.980Z",
-      "indexed_at": "2026-07-31T09:51:46.501Z",
+      "bytes": 25918,
+      "mtime": "2026-07-31T11:52:50.518Z",
+      "indexed_at": "2026-07-31T11:52:50.518Z",
       "synopsis_index_only": true
     },
     {
@@ -23454,6 +23454,29 @@
       "bytes": 4226,
       "mtime": "2026-07-03T00:18:28.978Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/BLUEPRINT.json",
+      "synopsis": "BuilderOS artifact — BLUEPRINT.",
+      "bytes": 14513,
+      "mtime": "2026-07-31T11:52:50.518Z",
+      "indexed_at": "2026-07-31T11:52:50.518Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/FOUNDER_PACKET.md",
+      "synopsis": "Founder packet for FACTORY-PATH-TO-TEN-0001 — turn BuilderOS into a self-correcting, revenue-proving cognitive manufacturing system.",
+      "bytes": 5816,
+      "mtime": "2026-07-31T11:52:50.518Z",
+      "indexed_at": "2026-07-31T11:52:50.518Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/OBJECTIVE_VERDICT.json",
+      "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
+      "bytes": 1091,
+      "mtime": "2026-07-31T11:52:50.518Z",
+      "indexed_at": "2026-07-31T11:52:50.518Z",
       "synopsis_index_only": true
     },
     {
@@ -38677,9 +38700,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 65312,
-      "mtime": "2026-07-31T11:47:39.396Z",
-      "indexed_at": "2026-07-31T11:47:39.396Z"
+      "bytes": 66070,
+      "mtime": "2026-07-31T11:52:50.518Z",
+      "indexed_at": "2026-07-31T11:52:50.518Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40890,9 +40913,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 345558,
-      "mtime": "2026-07-31T11:47:39.396Z",
-      "indexed_at": "2026-07-31T11:47:39.396Z"
+      "bytes": 346333,
+      "mtime": "2026-07-31T11:52:50.518Z",
+      "indexed_at": "2026-07-31T11:52:50.518Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -64759,9 +64782,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 35901,
-      "mtime": "2026-07-31T09:49:29.004Z",
-      "indexed_at": "2026-07-31T09:51:46.501Z",
+      "bytes": 35981,
+      "mtime": "2026-07-31T11:52:50.518Z",
+      "indexed_at": "2026-07-31T11:52:50.518Z",
       "synopsis_index_only": true
     },
     {
@@ -76035,6 +76058,16 @@
       "bytes": 3595,
       "mtime": "2026-06-29T17:44:54.636Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/verify-path-to-ten-acceptance.mjs",
+      "synopsis": "Final acceptance script for FACTORY-PATH-TO-TEN-0001.",
+      "bytes": 3720,
+      "mtime": "2026-07-31T11:52:50.518Z",
+      "indexed_at": "2026-07-31T11:52:50.518Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

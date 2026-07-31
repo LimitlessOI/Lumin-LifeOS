@@ -158,6 +158,7 @@
     "sentry:gate:all": "node scripts/sentry-prealpha-gate.mjs --all",
     "sentry:gate:list": "node scripts/sentry-prealpha-gate.mjs --list",
     "path-to-10:status": "node scripts/path-to-10-status.mjs",
+    "path-to-ten:acceptance": "node scripts/verify-path-to-ten-acceptance.mjs",
     "lifeos:user-auth:v1-acceptance": "node scripts/run-lifeos-user-auth-v1-acceptance.mjs",
     "smos:session:acceptance": "node scripts/run-socialmediaos-session-acceptance.mjs",
     "lifere:sales-coaching:v1-acceptance": "node scripts/run-lifere-sales-coaching-acceptance.mjs",

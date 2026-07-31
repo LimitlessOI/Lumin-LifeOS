@@ -418,6 +418,24 @@
         "mode": "technical_acceptance",
         "status": "CURRENT"
       }
+    },
+    {
+      "rank": 15,
+      "mission_id": "FACTORY-PATH-TO-TEN-0001",
+      "product_id": "builderos",
+      "product_home": "docs/products/builderos/",
+      "product_ssot": "docs/products/builderos/PRODUCT_HOME.md",
+      "objective_home": "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/",
+      "founder_packet": "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/FOUNDER_PACKET.md",
+      "blueprint_path": "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/BLUEPRINT.json",
+      "blueprint_status": "in_progress",
+      "acceptance_command": "npm run path-to-ten:acceptance",
+      "receipt_path": "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/FINAL_AUDIT.md",
+      "verdict": "IN_PROGRESS",
+      "build_method": "system-build",
+      "founder_usability_pass": false,
+      "note": "BuilderOS Path to 10: self-correcting, revenue-proving cognitive manufacturing system. Real-money steps and final ratification require founder sign-off.",
+      "objective_verdict": "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/OBJECTIVE_VERDICT.json"
     }
   ],
   "_last_updated": "2026-07-31",

@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-31 — PATH-TO-TEN v4 blueprint ratified and BP_PRIORITY registration
+
+Folded the ChatGPT/Claude v4 consensus into `builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/BLUEPRINT.json` (18 steps, `verify_command` per step, `budget_ceiling`, `phase_transition_authority`, BuilderOS vs Cognitive Core disambiguation, `execution_gate: CONDITIONAL_PENDING_FOUNDER_APPROVAL`). Updated `FOUNDER_PACKET.md` and `OBJECTIVE_VERDICT.json`, registered the mission in `BP_PRIORITY.json` at rank 15, and added the `path-to-ten:acceptance` npm script plus `scripts/verify-path-to-ten-acceptance.mjs` wired to `finishBpAcceptance`. `node scripts/verify-bp-priority-guardrails.mjs` PASS; `npm run lifeos:bp-priority:verify` PASS; `npm run builder:preflight` PASS.
+
 ## 2026-07-23 — PATH-TO-TEN Phase 1: migration preflight green and strict BP-priority gate unblocked
 
 Grandfathered 13 `CREATE TABLE` collision pairs in `config/migration-preflight-collision-allowlist.json` and hardened 7 migration files to use `ADD COLUMN IF NOT EXISTS` / `ALTER TABLE IF EXISTS ADD COLUMN IF NOT EXISTS`. `node scripts/verify-migration-preflight.mjs` now reports PASS with 0 warnings; `npm run lifeos:bp-priority:verify` exits 0. The remaining PATH-TO-TEN work is the enforcement spine (never-stop bypass closure), Receipt Auditor / SENTRY, Chair/Lens pipeline wiring, ROI/Wisdom, and SMOS revenue proof.
