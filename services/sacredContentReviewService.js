@@ -75,7 +75,7 @@ export function sacredContentAssessImpact(content, communityProfile) {
   if (communityProfile.strictInterpretation && /loose_interpretation_phrase/i.test(content)) {
     potentialImpact.riskLevel = 'high';
     potentialImpact.sentiment = 'negative';
-    potentialImpact.potentialRections.push('Likely to be perceived negatively by those with strict interpretations.');
+    potentialImpact.potentialReactions.push('Likely to be perceived negatively by those with strict interpretations.');
   }
   if (communityProfile.values.some(value => content.includes(`violates ${value}`))) {
     potentialImpact.riskLevel = 'high';
