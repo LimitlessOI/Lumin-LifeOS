@@ -933,7 +933,7 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-31T08:53:21.033Z",
+      "shipped_at": "2026-07-31T09:38:24.015Z",
       "commit_sha": null,
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "1",
@@ -947,10 +947,10 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-07-31T08:53:21.033Z",
-        "shipped_at": "2026-07-31T08:53:21.033Z",
-        "commit_sha": "3012578e8d5f9dea42dd0a8c8b0d80d0f50e66d0",
-        "content_sha256": "74592ed273edf2cb204b3835d00333ca01752adf625c4d11a9d077287cf16cf3",
+        "sealed_at": "2026-07-31T09:38:24.015Z",
+        "shipped_at": "2026-07-31T09:38:24.015Z",
+        "commit_sha": null,
+        "content_sha256": "95edc2e52442c06b05b6e68b647414b33b31aaaf6e4a1e053b6fa34160643d3a",
         "target_file": "services/apiSpecification.js",
         "reverse": {
           "mode": "delete_file",
@@ -959,12 +959,300 @@
           "prior_content_sha256": null
         },
         "grounding": {
-          "status": "PASS"
+          "status": "INDETERMINATE",
+          "reason": "indeterminate_sql: SQL string could not be parsed for table names",
+          "details": {
+            "filePath": "/usr/src/app/services/apiSpecification.js",
+            "hash": "95edc2e52442c06b05b6e68b647414b33b31aaaf6e4a1e053b6fa34160643d3a",
+            "importChecks": [],
+            "sqlChecks": [
+              {
+                "text": "API specification is missing required top-level field: ${field}.",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "API specification \"info\" field is missing or has invalid \"${field}\".",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Path \"${path}\" in API specification is malformed or empty.",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Operation for method \"${method}\" on path \"${path}\" is malformed or empty.",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Operation for method \"${method}\" on path \"${path}\" is missing \"responses\".",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Path \"${path}\" contains an invalid HTTP method or field: \"${method}\".",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Path \"${path}\" does not define any valid HTTP operations.",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "object",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "API specification is empty, null, or not an object.",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "openapi",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "info",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "paths",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "openapi",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "string",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "API specification \"openapi\" field must be a valid version string (e.g., \"3.0.0\")",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "info",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "object",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "API specification \"info\" field is missing or empty.",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "title",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "version",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "string",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "paths",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "object",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "API specification is missing or has empty \"paths\" object.",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "object",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "get",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "post",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "put",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "delete",
+                "status": "INDETERMINATE",
+                "reason": "sql_keywords_present_but_no_table_extracted"
+              },
+              {
+                "text": "patch",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "head",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "options",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "trace",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "object",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "responses",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "object",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "parameters",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "description",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "summary",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "API specification is valid.",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "openapi",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "3.0.0",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "info",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "info",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${field}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "paths",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${path}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${method}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${path}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${method}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${path}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "responses",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${path}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${method}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${path}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              }
+            ]
+          }
         },
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/music-talent-studio/twins/steps/1.exact",
-          "content_sha256": "74592ed273edf2cb204b3835d00333ca01752adf625c4d11a9d077287cf16cf3"
+          "content_sha256": "95edc2e52442c06b05b6e68b647414b33b31aaaf6e4a1e053b6fa34160643d3a"
         }
       },
       "built_sha": null,
