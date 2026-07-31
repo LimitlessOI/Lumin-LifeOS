@@ -1252,13 +1252,13 @@
     },
     {
       "id": "create-sprint-queue-panel",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/sprintQueuePanelRoute.js",
       "task": "create sprint queue panel route",
       "spec": "Route for displaying the Sprint Queue panel or temporary Notion board.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerSprintQueuePanelRoutes"
       ],
@@ -1287,7 +1287,7 @@
       "reaudit_reset_at": "2026-07-30T18:55:06.702Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-31T10:33:56.521Z",
       "last_attempt": null,
       "revive_count": 1,
       "revived_at": "2026-07-31T10:33:16.917Z",
