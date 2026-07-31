@@ -763,7 +763,7 @@
     },
     {
       "id": "3",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/musicTeachersInterview.js",
       "task": "interview 5 music teachers",
       "spec": "Conduct and store interviews with 5 music teachers to gather insights.",
@@ -802,9 +802,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-31T10:16:04.571Z",
       "no_op": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:STEP_STATUS_FORBIDDEN",
+      "demoted_at": "2026-07-31T10:33:16.917Z",
       "park_until": null,
       "blocker_class": null,
       "claim_level": null,
@@ -816,7 +816,7 @@
     },
     {
       "id": "4",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/studentsInterview.js",
       "task": "interview students or parents",
       "spec": "Interview 5 students or parents and store feedback.",
@@ -904,9 +904,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-31T10:16:04.571Z",
       "no_op": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:artifact_missing_after_ship: artifact_proof_failed: INTERVIEW_STUDENTS",
+      "demoted_at": "2026-07-31T10:33:16.917Z",
       "park_until": null,
       "blocker_class": null,
       "claim_level": null,
@@ -2007,7 +2007,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "failure_signature": "STEP_STATUS_FORBIDDEN",
+      "same_signature_count": 1,
+      "escalation_class": "same_signature_repeat"
     },
     {
       "id": "7",
@@ -2099,14 +2102,40 @@
         "CREATE TABLE IF NOT EXISTS music_industry_consults"
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-16T04:36:26.003Z",
+      "shipped_at": "2026-07-31T10:33:44.790Z",
       "commit_sha": "c48c6569e2f373e1b5ff9820561821a6367521e6",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "9",
       "mission_id": "PRODUCT-music-talent-studio",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.680Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.680Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/music-talent-studio/twins/steps/9.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-31T10:33:44.790Z",
+        "shipped_at": "2026-07-31T10:33:44.790Z",
+        "commit_sha": "c48c6569e2f373e1b5ff9820561821a6367521e6",
+        "content_sha256": "047c421e88ca7a1925c981c5dc8e80af74be394ab00e9c8baa9e3917515cf894",
+        "target_file": "db/migrations/005_create_music_industry_consults_table.sql",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "db/migrations/005_create_music_industry_consults_table.sql",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/music-talent-studio/twins/steps/9.exact",
+          "content_sha256": "047c421e88ca7a1925c981c5dc8e80af74be394ab00e9c8baa9e3917515cf894"
+        }
+      }
     },
     {
       "id": "10",
