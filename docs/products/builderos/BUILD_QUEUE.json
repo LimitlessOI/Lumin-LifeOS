@@ -2788,18 +2788,18 @@
     },
     {
       "id": "bo-security-review-real-diff-format",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/lifeos-council-builder-routes.js",
       "task": "Feed the AI security review a real unified diff instead of full file content mislabeled as unchanged",
       "spec": "In routes/lifeos-council-builder-routes.js's runAiSecurityReviewOnDiff (added in commit 77f63ddfd0, ~line 1483), the diff payload sent to reviewDiffForSecurity (scripts/ai-security-review.mjs) is built by prefixing every line of the new file content with a single space -- the unified-diff 'unchanged context line' marker -- and never marks any line as added (+) or removed (-). The model therefore receives full file content labeled as an all-context, zero-change diff, which weakens its ability to focus scrutiny on what actually changed in the commit. Fix: compute a real unified diff against the file's prior committed content (already available via the same commit path -- e.g. git show HEAD:<path> or the pre-commit blob) and mark added/removed/context lines correctly, falling back to whole-file content only for genuinely new files (where everything really is additions). Found during a direct code audit of Mission 2B (commit 77f63ddfd0). Review remains fire-and-forget/non-blocking per the existing Chair ruling c646160f-... -- do not change that; this is a payload-quality fix only.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 3,
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "bo-security-review-real-diff-format",
       "mission_id": "PRODUCT-builderos",
       "commit_sha": "d478ab21f5eeae32279f013865428b5a73b34c2d",
-      "last_attempt_at": "2026-07-31T23:44:58.152Z",
+      "last_attempt_at": "2026-07-31T23:50:56.655Z",
       "last_error": "route module not auto-registered — add {\"path\":\"routes/lifeos-council-builder-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
       "blocker_class": "BLOCKED_TOOLING",
       "failure_signature": "functional_proof|BLOCKED_TOOLING|route module not auto-registered — add {\"path\":\"routes/lifeos-council-builder-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actual",
@@ -3264,7 +3264,8 @@
             "reason": "sql_template_literal_with_interpolation"
           }
         ]
-      }
+      },
+      "completed_at": "2026-07-31T23:50:57.273Z"
     }
   ],
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
