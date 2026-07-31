@@ -340,7 +340,7 @@
     },
     {
       "id": "step8",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/registerSecurityRoutes.js",
       "task": "register security-related routes",
       "spec": "Setup routes for security modules",
@@ -350,7 +350,7 @@
         "step4"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerSecurityRoutes"
       ],
@@ -369,12 +369,12 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-31T07:47:22.294Z",
-      "commit_sha": "318df63595b06f24072b41b4d07656609793b4b8",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step8",
       "mission_id": "PRODUCT-oil-security-divisions",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerSecurityRoutes; assertion_threw",
+      "last_error": "ship_commit_not_on_main: compare status ahead",
       "reaudit_reset_at": "2026-07-30T18:55:06.687Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
@@ -401,7 +401,10 @@
           "content_source_path": "docs/products/oil-security-divisions/twins/steps/step8.exact",
           "content_sha256": "741fa0f1e7e6a536e3136c77a7ddd1da2eb3a3bf0d7b2db184771f8d7a6f38cd"
         }
-      }
+      },
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-31T07:47:29.814Z"
     },
     {
       "id": "step9",
