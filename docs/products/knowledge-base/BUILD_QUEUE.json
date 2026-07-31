@@ -476,7 +476,7 @@
     },
     {
       "id": "knowledge-base-3",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/004_create_vector_embedding_strategy.sql",
       "task": "create vector embedding table",
       "spec": "Implement vector embedding strategy using pgvector",
@@ -487,11 +487,11 @@
         "CREATE TABLE IF NOT EXISTS embeddings"
       ],
       "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS embeddings; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "36481ffea04d8898d40db90ae90fe9657df39ea6",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
+      "revive_count": 0,
       "revived_at": "2026-07-31T02:45:40.289Z",
       "last_attempt": null,
       "demoted": false,
