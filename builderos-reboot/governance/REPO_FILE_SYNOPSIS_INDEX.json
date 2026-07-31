@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T09:38:58.110Z",
+  "generated_at": "2026-07-31T09:39:07.530Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12540,
   "files": [
@@ -68944,8 +68944,8 @@
       "path": "routes/googleCalendarRoutes.js",
       "synopsis": "HTTP route module — GoogleCalendarRoutes.",
       "bytes": 1512,
-      "mtime": "2026-07-31T09:12:46.004Z",
-      "indexed_at": "2026-07-31T09:13:02.062Z",
+      "mtime": "2026-07-31T09:39:07.530Z",
+      "indexed_at": "2026-07-31T09:39:07.530Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
