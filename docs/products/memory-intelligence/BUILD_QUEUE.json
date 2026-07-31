@@ -175,11 +175,34 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": null,
-      "shipped_at": "2026-07-15T19:45:20.033Z",
+      "shipped_at": "2026-07-31T02:49:06.549Z",
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "4",
       "mission_id": "PRODUCT-memory-intelligence",
-      "reaudit_reset_at": "2026-07-30T18:55:06.671Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.671Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/memory-intelligence/twins/steps/4.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-31T02:49:06.549Z",
+        "shipped_at": "2026-07-31T02:49:06.549Z",
+        "commit_sha": null,
+        "content_sha256": "7be8d178876537efb1ef361f6bab9070590818287cde3c4558b8c70213b12e16",
+        "target_file": "scripts/memory-seed-lessons.mjs",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "scripts/memory-seed-lessons.mjs",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/memory-intelligence/twins/steps/4.exact",
+          "content_sha256": "7be8d178876537efb1ef361f6bab9070590818287cde3c4558b8c70213b12e16"
+        }
+      }
     },
     {
       "id": "5",
