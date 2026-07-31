@@ -1373,7 +1373,7 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-31T06:50:53.833Z",
+      "shipped_at": "2026-07-31T07:17:44.955Z",
       "commit_sha": null,
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "01",
@@ -1387,10 +1387,10 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-07-31T06:50:53.833Z",
-        "shipped_at": "2026-07-31T06:50:53.833Z",
+        "sealed_at": "2026-07-31T07:17:44.955Z",
+        "shipped_at": "2026-07-31T07:17:44.955Z",
         "commit_sha": null,
-        "content_sha256": "bc07b3339bf025e948a73974f61e4e4599980de5f6f3647fc59bb9d59907fed9",
+        "content_sha256": "8072eca66da4a952b83f9ed0e1d5fd9fd9eb7937d43d9271bdb3059fe5b6c10a",
         "target_file": "services/privateWitnessService.js",
         "reverse": {
           "mode": "delete_file",
@@ -1403,7 +1403,7 @@
           "reason": "indeterminate_sql: SQL string could not be parsed for table names",
           "details": {
             "filePath": "/usr/src/app/services/privateWitnessService.js",
-            "hash": "bc07b3339bf025e948a73974f61e4e4599980de5f6f3647fc59bb9d59907fed9",
+            "hash": "8072eca66da4a952b83f9ed0e1d5fd9fd9eb7937d43d9271bdb3059fe5b6c10a",
             "importChecks": [],
             "sqlChecks": [
               {
@@ -1500,7 +1500,7 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/faith-studio/twins/steps/01.exact",
-          "content_sha256": "bc07b3339bf025e948a73974f61e4e4599980de5f6f3647fc59bb9d59907fed9"
+          "content_sha256": "8072eca66da4a952b83f9ed0e1d5fd9fd9eb7937d43d9271bdb3059fe5b6c10a"
         }
       },
       "built_sha": null,
