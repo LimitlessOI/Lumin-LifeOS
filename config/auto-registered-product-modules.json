@@ -8,6 +8,13 @@
       "note": "LifeOS assessment battery (attachment/love language/conflict/values). Twin step lifeos-p1-assessment-autoreg."
     },
     {
+      "path": "routes/lifeos-council-builder-routes.js",
+      "register": "register",
+      "mount_path": "/api/v1/lifeos/builder",
+      "enabled": true,
+      "note": "Legacy production spine council builder route. Mounted by startup/register-runtime-routes.js; register() is a no-op so the functional-proof module-health gate can record it as mounted without double-mounting."
+    },
+    {
       "path": "routes/lifeos-food-logger-routes.js",
       "register": "registerLifeosFoodLoggerRoutes",
       "mount_path": "/api/v1/lifeos/food",

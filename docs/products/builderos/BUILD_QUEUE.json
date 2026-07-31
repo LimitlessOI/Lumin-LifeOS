@@ -18,7 +18,8 @@
       "completed_at": "2026-07-10T10:45:09.709Z",
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step-01",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "same_signature_count": 0
     },
     {
       "id": "step-02",
@@ -36,7 +37,8 @@
       "completed_at": "2026-07-10T10:47:04.662Z",
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step-02",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "same_signature_count": 0
     },
     {
       "id": "step-03",
@@ -55,7 +57,8 @@
       "completed_at": "2026-07-10T10:48:53.763Z",
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step-03",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "same_signature_count": 0
     },
     {
       "id": "step-04",
@@ -76,7 +79,8 @@
       "detail": "GAP-FILL: registerMissionRoutes + auto-register; tip module-health mounted + GET /api/missions 200",
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step-04",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "same_signature_count": 0
     },
     {
       "id": "step-05",
@@ -99,7 +103,8 @@
       "detail": "GAP-FILL: entry added with step-04 (chicken-egg); tip proves mounted",
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step-05",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "same_signature_count": 0
     },
     {
       "id": "step-06",
@@ -115,7 +120,8 @@
       "commit_sha": "869c062f56b493ce2fb1c447e8794af51b0fe811",
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step-06",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "same_signature_count": 0
     },
     {
       "id": "builderos-1",
@@ -149,7 +155,8 @@
       "commit_sha": "3706775c9d297957c175b2ece7f3fb538adcae3d",
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-1",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "same_signature_count": 0
     },
     {
       "id": "builderos-2",
@@ -168,7 +175,8 @@
       "commit_sha": "ab2c9f8e82a615f16be3def4ad0def75b101fad9",
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-2",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "same_signature_count": 0
     },
     {
       "id": "builderos-3",
@@ -200,7 +208,8 @@
       "commit_sha": "c4a3ec2e3195c69f190417889facb2db7531f65c",
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-3",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "same_signature_count": 0
     },
     {
       "id": "builderos-4",
@@ -236,7 +245,8 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-4",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "same_signature_count": 0
     },
     {
       "id": "builderos-5",
@@ -255,7 +265,8 @@
       "commit_sha": "481094eab93c7d0b5615bd055cdf33d1304afce3",
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-5",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "same_signature_count": 0
     },
     {
       "id": "builderos-6",
@@ -332,7 +343,8 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "same_signature_count": 0
     },
     {
       "id": "builderos-7",
@@ -386,7 +398,8 @@
       "escalation_required": true,
       "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
       "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
-      "escalated_at": "2026-07-31T18:40:13.616Z"
+      "escalated_at": "2026-07-31T18:40:13.616Z",
+      "same_signature_count": 0
     },
     {
       "id": "builderos-8",
@@ -422,7 +435,8 @@
       "commit_sha": "54f3154becae458c3e4ca924c1ab53e9466cded6",
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-8",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "same_signature_count": 0
     },
     {
       "id": "builderos-9",
@@ -456,7 +470,8 @@
       "commit_sha": "4c1bff68ffb56d5880eafc2b9258635035f1a86d",
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-9",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "same_signature_count": 0
     },
     {
       "id": "builderos-10",
@@ -494,7 +509,8 @@
       "commit_sha": "3bf717040fc0d1acdc9432c3bcae7dc29b6cb2a3",
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-10",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "same_signature_count": 0
     },
     {
       "id": "builderos-11",
@@ -530,7 +546,8 @@
       "shipped_at": "2026-07-16T05:36:06.365Z",
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-11",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "same_signature_count": 0
     },
     {
       "id": "builderos-12",
@@ -566,7 +583,8 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-17T21:46:37.663Z"
+      "shipped_at": "2026-07-17T21:46:37.663Z",
+      "same_signature_count": 0
     },
     {
       "id": "builderos-step1",
@@ -613,7 +631,8 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-step1",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "same_signature_count": 0
     },
     {
       "id": "builderos-step2",
@@ -652,7 +671,8 @@
       "commit_sha": "2dbf6991617d80fccf613da4552e2c33143404f0",
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-step2",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "same_signature_count": 0
     },
     {
       "id": "builderos-step3",
@@ -685,7 +705,8 @@
       "commit_sha": "25203ac49119e1daaf351f75d5c08e62985442cc",
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-step3",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "same_signature_count": 0
     },
     {
       "id": "builderos-step4",
@@ -725,7 +746,8 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-step4",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "same_signature_count": 0
     },
     {
       "id": "builderos-step5",
@@ -761,7 +783,8 @@
       "shipped_at": "2026-07-16T07:17:35.506Z",
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-step5",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "same_signature_count": 0
     },
     {
       "id": "builderos-step6",
@@ -796,7 +819,8 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-step6",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "same_signature_count": 0
     },
     {
       "id": "builderos-step7",
@@ -835,7 +859,8 @@
       "commit_sha": "58adab3723b0e92f3b958552129f066b051feeb6",
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-step7",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "same_signature_count": 0
     },
     {
       "id": "builderos-step8",
@@ -859,7 +884,8 @@
       "built_sha": null,
       "proof": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-17T21:54:42.406Z"
+      "shipped_at": "2026-07-17T21:54:42.406Z",
+      "same_signature_count": 0
     },
     {
       "id": "builderos-step9",
@@ -891,7 +917,8 @@
       "commit_sha": "5ea7597903f032efdd170b47de275c9849012ed3",
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-step9",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "same_signature_count": 0
     },
     {
       "id": "builderos-step10",
@@ -925,7 +952,8 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-step10",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "same_signature_count": 0
     },
     {
       "id": "builderos-step11",
@@ -962,7 +990,8 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-step11",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "same_signature_count": 0
     },
     {
       "id": "builderos-step12",
@@ -1099,7 +1128,8 @@
       "revive_note": "2026-07-20: first attempt hit NOT_ON_BLUEPRINT (transient race). Second attempt (commit e054c97b60e200a699c88337822f2980e155a591) shipped and was read directly -- recordProvenanceClaim self-bootstraps correctly, but verifyProvenanceClaim and getProvenanceLedger do not, a real bug (same class as era1-4's getTargetReputation gap). Third attempt was falsely marked done via pre_existing_artifact_proof -- claimPreExistingSatisfiedSteps found the SAME unfixed file still on disk and shipped_via'd it through on a shallow file_contains substring match, without codegen ever running. The stale file has now been deleted (commit 8e40b6dd6d) so this dispatch is forced through real codegen against the strengthened spec above.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-20T19:21:28.194Z",
-      "commit_sha": "44ab44bbeb7fc2b6b6b9a76079a4b761739e8abe"
+      "commit_sha": "44ab44bbeb7fc2b6b6b9a76079a4b761739e8abe",
+      "same_signature_count": 0
     },
     {
       "id": "self-repair-era1-2",
@@ -1130,7 +1160,8 @@
       "mission_id": "PRODUCT-builderos",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-20T18:51:39.102Z",
-      "commit_sha": "bbde5fbf94cd5a37a0349b8f587ab71d1cc18adc"
+      "commit_sha": "bbde5fbf94cd5a37a0349b8f587ab71d1cc18adc",
+      "same_signature_count": 0
     },
     {
       "id": "self-repair-era1-3",
@@ -1167,7 +1198,8 @@
       "revive_note": "2026-07-20: reset after independent verification (reading the actual shipped file, not trusting SENTRY-pass alone) found it missing the CREATE TABLE statement entirely -- exports_smoke only checks the function names exist, it does not run the code, so a function that would throw on its first real call still passed. This is exactly gap #1 from docs/SELF_REPAIR_DOCTRINE.md Part 0 in action. Added file_contains as a second, independent check SENTRY can enforce automatically on rebuild, and strengthened the spec with the exact failure mode so it isn't repeated.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-20T19:12:51.938Z",
-      "commit_sha": "1d7634b3c5a4ce983eb0369d25792898adb361be"
+      "commit_sha": "1d7634b3c5a4ce983eb0369d25792898adb361be",
+      "same_signature_count": 0
     },
     {
       "id": "self-repair-era1-4",
@@ -1202,7 +1234,8 @@
       "revive_note": "2026-07-20: independently reading the shipped file (commit 6ac78b58949b9b3c74aeac131f2f7549d9088762) found recordAttempt bootstraps correctly but getTargetReputation does not -- a real bug (throws on a fresh target/deploy) even though SENTRY's exports_smoke assertion passed. Reset to pending with a strengthened spec + file_contains guard. Next attempt was falsely marked done via pre_existing_artifact_proof (same unfixed file, shallow file_contains substring match, no codegen run). Stale file deleted (commit 8e40b6dd6d) to force real regeneration.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-20T19:21:47.434Z",
-      "commit_sha": "de802bbdb3bad5971d573477d8a49260c2cd339d"
+      "commit_sha": "de802bbdb3bad5971d573477d8a49260c2cd339d",
+      "same_signature_count": 0
     },
     {
       "id": "self-repair-era1-5",
@@ -1237,7 +1270,8 @@
       "revive_note": "2026-07-20: reset after independent verification found it missing the CREATE TABLE statement entirely -- exports_smoke only checks function names exist, not that the code runs. Added file_contains as a second, independent, SENTRY-enforceable check.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-20T19:13:53.107Z",
-      "commit_sha": "c82d3b3b8178b31dd057cdec1ef959ea6adcb6cc"
+      "commit_sha": "c82d3b3b8178b31dd057cdec1ef959ea6adcb6cc",
+      "same_signature_count": 0
     },
     {
       "id": "self-repair-era1-6",
@@ -1272,7 +1306,8 @@
       "revive_note": "2026-07-20: reset after independent verification found a real Postgres protocol bug (multiple statements in one parameterized pool.query call) that would throw at runtime despite passing exports_smoke. Strengthened spec with the exact mechanism; added file_contains as a second check. Next attempt was falsely marked done via pre_existing_artifact_proof -- the SAME unfixed file (still combining CREATE TABLE + parameterized INSERT in one call) satisfied the shallow file_contains substring check and got shipped through without codegen ever running. Stale file deleted (commit 8e40b6dd6d) to force real regeneration.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-20T19:22:02.942Z",
-      "commit_sha": "c544738b50ad6f265b5852cd5255bd35756576f7"
+      "commit_sha": "c544738b50ad6f265b5852cd5255bd35756576f7",
+      "same_signature_count": 0
     },
     {
       "id": "self-repair-era1-7",
@@ -1303,7 +1338,8 @@
       "mission_id": "PRODUCT-builderos",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-20T18:57:06.800Z",
-      "commit_sha": "33085e598109487be22dbaad12bf7206db9bd081"
+      "commit_sha": "33085e598109487be22dbaad12bf7206db9bd081",
+      "same_signature_count": 0
     },
     {
       "id": "self-repair-era1-8",
@@ -1336,7 +1372,8 @@
       "revive_note": "2026-07-20: independently executed the shipped canary against the real runSingleAssertion (not trusting exports_smoke/SENTRY-pass alone) and found it always reports canary_passed:false because the mock runner functions were passed bare instead of wrapped as { importModule: fn } -- the canary meant to catch SENTRY silently passing broken code was itself silently broken. Reset to pending with the exact required call shape spelled out plus a file_contains guard.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-20T19:15:51.158Z",
-      "commit_sha": "8037caf725ebaa941ed9aba596acf9cc6a1d15c0"
+      "commit_sha": "8037caf725ebaa941ed9aba596acf9cc6a1d15c0",
+      "same_signature_count": 0
     },
     {
       "id": "self-repair-tier1-1",
@@ -1375,7 +1412,8 @@
       "revive_note": "2026-07-20: reset a fourth time. Third attempt (commit deb85cde601df72e5cd500b30a67142e78b1e2b1) correctly fixed recentFailureCount but, in the same regeneration, dropped the table-bootstrap call from isTargetQuarantined and releaseQuarantine (only evaluateQuarantine still had it) -- a regression my own edited spec caused by dropping the prior CRITICAL bootstrap-every-function requirement while fixing the recentFailureCount issue. Both requirements now stated explicitly and simultaneously in one spec, not sequentially across edits.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-20T21:20:29.678Z",
-      "commit_sha": "283b95b419ef3132d4fabf2cce5483e422add570"
+      "commit_sha": "283b95b419ef3132d4fabf2cce5483e422add570",
+      "same_signature_count": 0
     },
     {
       "id": "self-repair-tier1-2",
@@ -1406,7 +1444,8 @@
       "revive_note": "2026-07-20: first reset caught the malformed CREATE TABLE bug, but I forgot to delete the stale broken file before resetting the queue status -- claimPreExistingSatisfiedSteps found the SAME unfixed file (empty file_contains meant nothing blocked the shortcut) and shipped it through again via pre_existing_artifact_proof without codegen ever running a second time. File deleted this round (commit companion to this one) to force real regeneration -- same lesson as Era 1's era1-1/4/6, now confirmed to apply just as much when reverting a step after its FIRST bad attempt, not just after multiple attempts.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-20T21:11:17.310Z",
-      "commit_sha": "746a06646b36073bb0eec815f0297a7198c08ef4"
+      "commit_sha": "746a06646b36073bb0eec815f0297a7198c08ef4",
+      "same_signature_count": 0
     },
     {
       "id": "self-repair-tier1-3",
@@ -1442,7 +1481,8 @@
       "mission_id": "PRODUCT-builderos",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-20T20:34:04.827Z",
-      "commit_sha": "4961f3efd8ed91ef9735e0128df9307066eab631"
+      "commit_sha": "4961f3efd8ed91ef9735e0128df9307066eab631",
+      "same_signature_count": 0
     },
     {
       "id": "self-repair-tier2-1",
@@ -1507,7 +1547,8 @@
       "last_error": null,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "self-repair-tier2-2",
@@ -1543,7 +1584,8 @@
       "mission_id": "PRODUCT-builderos",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-20T20:38:18.249Z",
-      "commit_sha": "b460c4ac490e638167e08335d7387d0e8013bbde"
+      "commit_sha": "b460c4ac490e638167e08335d7387d0e8013bbde",
+      "same_signature_count": 0
     },
     {
       "id": "self-repair-tier3-1",
@@ -1579,7 +1621,8 @@
       "revive_note": "2026-07-20: independent re-read of the shipped file found a hallucinated, schema-incompatible CREATE TABLE for self_repair_target_reputation (missing models_tried, wrong types) instead of the real DDL from services/self-repair-target-reputation.js -- a cross-file consistency bug no single-file SENTRY check (exports_smoke, file_contains) could have caught alone, only found by reading both files together. Reset to pending with the exact DDL pasted verbatim into the spec plus a file_contains guard on the distinguishing models_tried column.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-20T21:05:32.286Z",
-      "commit_sha": "156bb267db5cedf3297e177abab6685e9e9230ef"
+      "commit_sha": "156bb267db5cedf3297e177abab6685e9e9230ef",
+      "same_signature_count": 0
     },
     {
       "id": "self-repair-tier3-2",
@@ -1617,7 +1660,8 @@
       "revive_note": "2026-07-20: independent re-read of the shipped file found a hallucinated, schema-incompatible CREATE TABLE for self_repair_provenance_ledger (missing commit_sha/epistemic_grade, phantom source_ids column) instead of the real DDL -- same bug class as tier3-1, cross-file consistency, not catchable by any single-file SENTRY check. Reset to pending with the exact DDL pasted verbatim plus a file_contains guard on the distinguishing epistemic_grade column; cleared the exact_inputs/exactness seal to force fresh regeneration rather than replay of the broken sealed content.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-20T21:05:51.035Z",
-      "commit_sha": "3bb6cf5e58d1d524a4f7ed77e003d1e58b0347b7"
+      "commit_sha": "3bb6cf5e58d1d524a4f7ed77e003d1e58b0347b7",
+      "same_signature_count": 0
     },
     {
       "id": "grail-phase05-1",
@@ -1658,7 +1702,8 @@
       "revive_note": "2026-07-21: reset to add a consent_scope column -- real gap found via independent critique (Chair live judgment + Opus review both independently converged on this before any real caller was wired to these functions, so zero data-loss risk from redefining the schema now). consent_scope is nullable TEXT, defaulting to 'internal_operational' when not specified, so existing callers (none yet) are not broken -- this is the minimum viable consent field per doctrine A-Z Section H, full retention/deletion/export mechanics remain a later, larger piece of work, not solved here.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-21T06:57:50.064Z",
-      "commit_sha": "f48c2c1f065d77db5837f86e8bbb2d06d225d6ea"
+      "commit_sha": "f48c2c1f065d77db5837f86e8bbb2d06d225d6ea",
+      "same_signature_count": 0
     },
     {
       "id": "grail-phase05-2",
@@ -1696,7 +1741,8 @@
       "revive_note": "2026-07-21: reset to add a consent_scope column -- real gap found via independent critique (Chair live judgment + Opus review both independently converged on this before any real caller was wired to these functions, so zero data-loss risk from redefining the schema now). consent_scope is nullable TEXT, defaulting to 'internal_operational' when not specified, so existing callers (none yet) are not broken -- this is the minimum viable consent field per doctrine A-Z Section H, full retention/deletion/export mechanics remain a later, larger piece of work, not solved here.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-21T06:58:08.425Z",
-      "commit_sha": "57239718adf8d7efaf2ce8a7e1416d747f72ae9a"
+      "commit_sha": "57239718adf8d7efaf2ce8a7e1416d747f72ae9a",
+      "same_signature_count": 0
     },
     {
       "id": "grail-phase05-3",
@@ -1734,7 +1780,8 @@
       "revive_note": "2026-07-21: reset to add a consent_scope column -- real gap found via independent critique (Chair live judgment + Opus review both independently converged on this before any real caller was wired to these functions, so zero data-loss risk from redefining the schema now). consent_scope is nullable TEXT, defaulting to 'internal_operational' when not specified, so existing callers (none yet) are not broken -- this is the minimum viable consent field per doctrine A-Z Section H, full retention/deletion/export mechanics remain a later, larger piece of work, not solved here.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-21T06:58:27.380Z",
-      "commit_sha": "281c9ddd14fef55052a5c0635747a761bfeeb2d4"
+      "commit_sha": "281c9ddd14fef55052a5c0635747a761bfeeb2d4",
+      "same_signature_count": 0
     },
     {
       "id": "grail-wave1-1",
@@ -1770,7 +1817,8 @@
       "revive_note": "2026-07-21: manually reset after NOT_ON_BLUEPRINT (same transient race pattern seen and self-resolved/manually-revived repeatedly tonight).",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-21T07:09:06.520Z",
-      "commit_sha": "08c79c2a3b0618c8783255309892f97381f36498"
+      "commit_sha": "08c79c2a3b0618c8783255309892f97381f36498",
+      "same_signature_count": 0
     },
     {
       "id": "grail-wave1-2",
@@ -1808,7 +1856,8 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-21T21:18:52.827Z",
       "commit_sha": "aed5a626f1f408ad15d3e6afbb90ea130aa2ec8e",
-      "revive_note": "REAL LIVE PRODUCTION BUG found via an actual end-to-end audit call (not a mock): POST /api/v1/lifere/voluntary-progress/goals/:id/alternatives failed with Postgres error \"invalid input syntax for type json\". Root cause: activateContextView inserts permitted_reads/forbidden_reads/permitted_proposals as RAW JS arrays into JSONB columns without JSON.stringify() -- node-postgres does not auto-serialize arrays/objects for jsonb columns; a raw array becomes an invalid non-JSON string and Postgres rejects it. This bug was NOT caught by mock-pool unit verification earlier tonight because the mock fake pool does not enforce real Postgres JSON type strictness -- a real, now-documented blind spot in that verification method, only caught by an actual live call."
+      "revive_note": "REAL LIVE PRODUCTION BUG found via an actual end-to-end audit call (not a mock): POST /api/v1/lifere/voluntary-progress/goals/:id/alternatives failed with Postgres error \"invalid input syntax for type json\". Root cause: activateContextView inserts permitted_reads/forbidden_reads/permitted_proposals as RAW JS arrays into JSONB columns without JSON.stringify() -- node-postgres does not auto-serialize arrays/objects for jsonb columns; a raw array becomes an invalid non-JSON string and Postgres rejects it. This bug was NOT caught by mock-pool unit verification earlier tonight because the mock fake pool does not enforce real Postgres JSON type strictness -- a real, now-documented blind spot in that verification method, only caught by an actual live call.",
+      "same_signature_count": 0
     },
     {
       "id": "grail-wave1-3",
@@ -1846,7 +1895,8 @@
       "mission_id": "PRODUCT-builderos",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-21T07:04:26.459Z",
-      "commit_sha": "9d5c19c009748a1a604800cb46b8fe35096d0ea8"
+      "commit_sha": "9d5c19c009748a1a604800cb46b8fe35096d0ea8",
+      "same_signature_count": 0
     },
     {
       "id": "grail-wave1-4",
@@ -1882,7 +1932,8 @@
       "mission_id": "PRODUCT-builderos",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-21T07:04:42.460Z",
-      "commit_sha": "2089c31392dc013fe16e8107b2e25cb1a35610d7"
+      "commit_sha": "2089c31392dc013fe16e8107b2e25cb1a35610d7",
+      "same_signature_count": 0
     },
     {
       "id": "grail-wave1-5",
@@ -1921,7 +1972,8 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-21T21:25:45.967Z",
       "commit_sha": "ce560359fdf14c6d6ecf1776e0dc52e9a8f915e3",
-      "revive_note": "REAL LIVE PRODUCTION BUG found via an actual end-to-end audit walkthrough (not a mock): POST .../decision with a chosen_path_label failed with Postgres error \"null value in column decision_id of relation judgment_predictions violates not-null constraint\". Root cause verified against the real migration db/migrations/20260719_cognitive_core_judgment.sql: judgment_decisions primary key column is decision_id (NOT id); judgment_predictions primary key is prediction_id (NOT id); judgment_outcomes primary key is outcome_id (NOT id). createGoalExperiment read decisionResult.id (undefined) instead of decisionResult.decision_id, and predictionResult.id (undefined) instead of predictionResult.prediction_id -- both silently stored undefined into voluntary_progress_goal_experiments.judgment_decision_id/judgment_prediction_id (which are untyped UUID columns, so undefined got coerced oddly) until the NOT NULL constraint on judgment_predictions.decision_id caught it. This bug was NOT caught by mock-pool unit verification because the mock fake pool returned whatever id shape the test happened to construct, not the real column names from the actual migration -- another confirmed blind spot in that verification method, only caught by a live call against the real schema."
+      "revive_note": "REAL LIVE PRODUCTION BUG found via an actual end-to-end audit walkthrough (not a mock): POST .../decision with a chosen_path_label failed with Postgres error \"null value in column decision_id of relation judgment_predictions violates not-null constraint\". Root cause verified against the real migration db/migrations/20260719_cognitive_core_judgment.sql: judgment_decisions primary key column is decision_id (NOT id); judgment_predictions primary key is prediction_id (NOT id); judgment_outcomes primary key is outcome_id (NOT id). createGoalExperiment read decisionResult.id (undefined) instead of decisionResult.decision_id, and predictionResult.id (undefined) instead of predictionResult.prediction_id -- both silently stored undefined into voluntary_progress_goal_experiments.judgment_decision_id/judgment_prediction_id (which are untyped UUID columns, so undefined got coerced oddly) until the NOT NULL constraint on judgment_predictions.decision_id caught it. This bug was NOT caught by mock-pool unit verification because the mock fake pool returned whatever id shape the test happened to construct, not the real column names from the actual migration -- another confirmed blind spot in that verification method, only caught by a live call against the real schema.",
+      "same_signature_count": 0
     },
     {
       "id": "grail-wave1-6",
@@ -2172,7 +2224,8 @@
       "mission_id": "PRODUCT-builderos",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-21T21:15:15.054Z",
-      "commit_sha": "8533d0af5a8cbdff3954bf338da7661716258f9d"
+      "commit_sha": "8533d0af5a8cbdff3954bf338da7661716258f9d",
+      "same_signature_count": 0
     },
     {
       "id": "grail-audit-telemetry-wire-1",
@@ -2392,7 +2445,8 @@
       },
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-25T17:45:35.519Z",
-      "commit_sha": "89dc50f44a9a8a592e20087583e3b23c26701ce5"
+      "commit_sha": "89dc50f44a9a8a592e20087583e3b23c26701ce5",
+      "same_signature_count": 0
     },
     {
       "id": "bo-patch-mode-codegen",
@@ -2435,7 +2489,8 @@
       },
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-26T18:48:56.985Z",
-      "commit_sha": "08cfe2efe15ded99140e8cf17181ca784deebf9e"
+      "commit_sha": "08cfe2efe15ded99140e8cf17181ca784deebf9e",
+      "same_signature_count": 0
     },
     {
       "id": "bo-forward-patch-mode-to-codegen-call",
@@ -2527,7 +2582,8 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-26T20:22:58.137Z",
-      "commit_sha": "f802d8bd789530dfbacad69c6096e4782d94039c"
+      "commit_sha": "f802d8bd789530dfbacad69c6096e4782d94039c",
+      "same_signature_count": 0
     },
     {
       "id": "bo-verify-ship-lands-on-main",
@@ -2563,7 +2619,8 @@
       ],
       "shipped_via": "cursor_conductor_glue",
       "shipped_at": "2026-07-30T03:22:23.123Z",
-      "last_error": null
+      "last_error": null,
+      "same_signature_count": 0
     },
     {
       "id": "bo-wire-security-review-into-commit-path",
@@ -2597,7 +2654,8 @@
           ],
           "assertion_id": "expected_exports:routes/lifeos-council-builder-routes.js"
         }
-      ]
+      ],
+      "same_signature_count": 0
     },
     {
       "id": "bo-runtime-fingerprint",
@@ -2659,7 +2717,8 @@
           "content_sha256": "1a9e03e30e76c25923a06b21a8823285581c7cc3d54835153b4c93b5c1f481e6"
         }
       },
-      "commit_sha": "7243a618586ffda19ceea59b9bc2e9544116ea84"
+      "commit_sha": "7243a618586ffda19ceea59b9bc2e9544116ea84",
+      "same_signature_count": 0
     },
     {
       "id": "bo-schedule-site-builder-sentry-gate",
@@ -2724,7 +2783,8 @@
       "built_sha": null,
       "proof": null,
       "last_attempt_at": "2026-07-31T04:59:39.479Z",
-      "last_error": "github_commit_failed_after_local_ship"
+      "last_error": "github_commit_failed_after_local_ship",
+      "same_signature_count": 0
     },
     {
       "id": "bo-security-review-real-diff-format",
@@ -2742,10 +2802,469 @@
       "last_attempt_at": "2026-07-31T23:44:58.152Z",
       "last_error": "route module not auto-registered — add {\"path\":\"routes/lifeos-council-builder-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
       "blocker_class": "BLOCKED_TOOLING",
-      "failure_signature": null,
-      "same_signature_count": 0,
+      "failure_signature": "functional_proof|BLOCKED_TOOLING|route module not auto-registered — add {\"path\":\"routes/lifeos-council-builder-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actual",
+      "same_signature_count": 1,
       "revive_count": 0,
-      "claim_level": "BUILT_NOT_LIVE"
+      "claim_level": "BUILT_NOT_LIVE",
+      "grounding_status": "INDETERMINATE",
+      "grounding_details": {
+        "filePath": "/home/ubuntu/repos/Lumin-LifeOS/routes/lifeos-council-builder-routes.js",
+        "hash": "8dde53ecd17e99fff61e601152ae50f37fe335414c1bc668843a288007ab0731",
+        "importChecks": [
+          {
+            "kind": "named",
+            "source": "fs/promises",
+            "names": [
+              "readdir",
+              "readFile",
+              "writeFile",
+              "unlink",
+              "mkdtemp",
+              "mkdir"
+            ],
+            "raw": "import { readdir, readFile, writeFile, unlink, mkdtemp, mkdir } from 'fs/promises'",
+            "status": "PASS",
+            "reason": "external_or_builtin_package"
+          },
+          {
+            "kind": "named",
+            "source": "fs",
+            "names": [
+              "readFileSync",
+              "existsSync",
+              "writeFileSync",
+              "mkdtempSync"
+            ],
+            "raw": "import { readFileSync, existsSync, writeFileSync, mkdtempSync } from 'fs'",
+            "status": "PASS",
+            "reason": "external_or_builtin_package"
+          },
+          {
+            "kind": "named",
+            "source": "path",
+            "names": [
+              "join",
+              "dirname",
+              "resolve",
+              "relative",
+              "extname"
+            ],
+            "raw": "import { join, dirname, resolve, relative, extname } from 'path'",
+            "status": "PASS",
+            "reason": "external_or_builtin_package"
+          },
+          {
+            "kind": "named",
+            "source": "url",
+            "names": [
+              "fileURLToPath"
+            ],
+            "raw": "import { fileURLToPath } from 'url'",
+            "status": "PASS",
+            "reason": "external_or_builtin_package"
+          },
+          {
+            "kind": "named",
+            "source": "crypto",
+            "names": [
+              "createHash"
+            ],
+            "raw": "import { createHash } from 'crypto'",
+            "status": "PASS",
+            "reason": "external_or_builtin_package"
+          },
+          {
+            "kind": "named",
+            "source": "child_process",
+            "names": [
+              "execSync",
+              "execFileSync"
+            ],
+            "raw": "import { execSync, execFileSync } from 'child_process'",
+            "status": "PASS",
+            "reason": "external_or_builtin_package"
+          },
+          {
+            "kind": "named",
+            "source": "os",
+            "names": [
+              "tmpdir"
+            ],
+            "raw": "import { tmpdir } from 'os'",
+            "status": "PASS",
+            "reason": "external_or_builtin_package"
+          },
+          {
+            "kind": "named",
+            "source": "../config/task-model-routing.js",
+            "names": [
+              "getModelForTask",
+              "getCandidateModelsForTask",
+              "TASK_MODEL_MAP"
+            ],
+            "raw": "import { getModelForTask, getCandidateModelsForTask, TASK_MODEL_MAP } from '../config/task-model-routing.js'",
+            "status": "PASS",
+            "reason": "named_exports_resolved"
+          },
+          {
+            "kind": "named",
+            "source": "../services/memory-intelligence-service.js",
+            "names": [
+              "createMemoryIntelligenceService"
+            ],
+            "raw": "import { createMemoryIntelligenceService } from '../services/memory-intelligence-service.js'",
+            "status": "PASS",
+            "reason": "named_exports_resolved"
+          },
+          {
+            "kind": "named",
+            "source": "../services/council-model-availability.js",
+            "names": [
+              "filterAvailableCouncilMembers"
+            ],
+            "raw": "import { filterAvailableCouncilMembers } from '../services/council-model-availability.js'",
+            "status": "PASS",
+            "reason": "named_exports_resolved"
+          },
+          {
+            "kind": "named",
+            "source": "../config/builder-release-modes.js",
+            "names": [
+              "BUILDER_MODE",
+              "BUILDER_MODE_RULES",
+              "DEFAULT_BUILDER_MODE"
+            ],
+            "raw": "import { BUILDER_MODE, BUILDER_MODE_RULES, DEFAULT_BUILDER_MODE } from '../config/builder-release-modes.js'",
+            "status": "PASS",
+            "reason": "named_exports_resolved"
+          },
+          {
+            "kind": "named",
+            "source": "../config/builder-safe-scope.js",
+            "names": [
+              "isSafeTarget"
+            ],
+            "raw": "import { isSafeTarget } from '../config/builder-safe-scope.js'",
+            "status": "PASS",
+            "reason": "named_exports_resolved"
+          },
+          {
+            "kind": "named",
+            "source": "../services/oil-security-receipts.js",
+            "names": [
+              "writeSecurityReceipt",
+              "SECURITY_RECEIPT_TYPES"
+            ],
+            "raw": "import { writeSecurityReceipt, SECURITY_RECEIPT_TYPES } from '../services/oil-security-receipts.js'",
+            "status": "PASS",
+            "reason": "named_exports_resolved"
+          },
+          {
+            "kind": "named",
+            "source": "../services/builderos-precommit-governance.js",
+            "names": [
+              "runPrecommitGovernance"
+            ],
+            "raw": "import { runPrecommitGovernance } from '../services/builderos-precommit-governance.js'",
+            "status": "PASS",
+            "reason": "named_exports_resolved"
+          },
+          {
+            "kind": "named",
+            "source": "../services/autonomous-telemetry-instrumentation.js",
+            "names": [
+              "emitBuilderTelemetry"
+            ],
+            "raw": "import { emitBuilderTelemetry } from '../services/autonomous-telemetry-instrumentation.js'",
+            "status": "PASS",
+            "reason": "named_exports_resolved"
+          },
+          {
+            "kind": "named",
+            "source": "../scripts/lib/security-invariants.mjs",
+            "names": [
+              "evaluateInvariants",
+              "formatFindings"
+            ],
+            "raw": "import { evaluateInvariants, formatFindings } from '../scripts/lib/security-invariants.mjs'",
+            "status": "PASS",
+            "reason": "named_exports_resolved"
+          },
+          {
+            "kind": "named",
+            "source": "../scripts/lib/doc-hygiene-gate.mjs",
+            "names": [
+              "evaluateDocHygiene",
+              "formatDocHygieneFindings"
+            ],
+            "raw": "import {\n  evaluateDocHygiene,\n  formatDocHygieneFindings,\n} from '../scripts/lib/doc-hygiene-gate.mjs'",
+            "status": "PASS",
+            "reason": "named_exports_resolved"
+          },
+          {
+            "kind": "named",
+            "source": "../scripts/lib/blueprint-authority-gate.mjs",
+            "names": [
+              "evaluateBlueprintAuthority",
+              "formatBlueprintFindings"
+            ],
+            "raw": "import {\n  evaluateBlueprintAuthority,\n  formatBlueprintFindings,\n} from '../scripts/lib/blueprint-authority-gate.mjs'",
+            "status": "PASS",
+            "reason": "named_exports_resolved"
+          },
+          {
+            "kind": "named",
+            "source": "../scripts/lib/file-placement-gate.mjs",
+            "names": [
+              "evaluateFilePlacement",
+              "formatFilePlacementFindings"
+            ],
+            "raw": "import {\n  evaluateFilePlacement,\n  formatFilePlacementFindings,\n} from '../scripts/lib/file-placement-gate.mjs'",
+            "status": "PASS",
+            "reason": "named_exports_resolved"
+          },
+          {
+            "kind": "named",
+            "source": "../scripts/lib/builder-js-sanitize.mjs",
+            "names": [
+              "finalizeExtractedJavaScript",
+              "fixAsteriskShorthandParams",
+              "isJavaScriptCodeStartLine"
+            ],
+            "raw": "import {\n  finalizeExtractedJavaScript,\n  fixAsteriskShorthandParams,\n  isJavaScriptCodeStartLine,\n} from '../scripts/lib/builder-js-sanitize.mjs'",
+            "status": "PASS",
+            "reason": "named_exports_resolved"
+          },
+          {
+            "kind": "named",
+            "source": "../scripts/lib/runtime-fingerprint.mjs",
+            "names": [
+              "buildRuntimeFingerprintReport",
+              "parseRuntimeFingerprintPaths"
+            ],
+            "raw": "import {\n  buildRuntimeFingerprintReport,\n  parseRuntimeFingerprintPaths,\n} from '../scripts/lib/runtime-fingerprint.mjs'",
+            "status": "PASS",
+            "reason": "named_exports_resolved"
+          },
+          {
+            "kind": "named",
+            "source": "../scripts/ai-security-review.mjs",
+            "names": [
+              "reviewDiffForSecurity"
+            ],
+            "raw": "import { reviewDiffForSecurity } from '../scripts/ai-security-review.mjs'",
+            "status": "PASS",
+            "reason": "named_exports_resolved"
+          },
+          {
+            "kind": "named",
+            "source": "../services/builderos-codegen-normalize.js",
+            "names": [
+              "normalizeBuilderCodegenOutput"
+            ],
+            "raw": "import { normalizeBuilderCodegenOutput } from '../services/builderos-codegen-normalize.js'",
+            "status": "PASS",
+            "reason": "named_exports_resolved"
+          },
+          {
+            "kind": "named",
+            "source": "../services/builderos-patch-mode-policy.js",
+            "names": [
+              "classifyBuildTarget",
+              "classifyPatchIntent"
+            ],
+            "raw": "import { classifyBuildTarget, classifyPatchIntent } from '../services/builderos-patch-mode-policy.js'",
+            "status": "PASS",
+            "reason": "named_exports_resolved"
+          },
+          {
+            "kind": "named",
+            "source": "../services/builderos-routing-policy.js",
+            "names": [
+              "applyBuilderRoutingPolicy"
+            ],
+            "raw": "import { applyBuilderRoutingPolicy } from '../services/builderos-routing-policy.js'",
+            "status": "PASS",
+            "reason": "named_exports_resolved"
+          },
+          {
+            "kind": "named",
+            "source": "../services/builder-instruction-target.js",
+            "names": [
+              "looksLikeBuilderProseRefusal"
+            ],
+            "raw": "import { looksLikeBuilderProseRefusal } from '../services/builder-instruction-target.js'",
+            "status": "PASS",
+            "reason": "named_exports_resolved"
+          },
+          {
+            "kind": "named",
+            "source": "../services/builder-blueprint-gate.js",
+            "names": [
+              "checkBuildBlueprintGate"
+            ],
+            "raw": "import { checkBuildBlueprintGate } from '../services/builder-blueprint-gate.js'",
+            "status": "PASS",
+            "reason": "named_exports_resolved"
+          },
+          {
+            "kind": "named",
+            "source": "../services/builderos-control-plane-service.js",
+            "names": [
+              "createBuilderOSControlPlaneService"
+            ],
+            "raw": "import { createBuilderOSControlPlaneService } from '../services/builderos-control-plane-service.js'",
+            "status": "PASS",
+            "reason": "named_exports_resolved"
+          },
+          {
+            "kind": "named",
+            "source": "../services/builderos-build-done-gate-helper.js",
+            "names": [
+              "evaluateBuildDoneGateAsync"
+            ],
+            "raw": "import { evaluateBuildDoneGateAsync } from '../services/builderos-build-done-gate-helper.js'",
+            "status": "PASS",
+            "reason": "named_exports_resolved"
+          },
+          {
+            "kind": "named",
+            "source": "../services/lifeos-execution-truth.js",
+            "names": [
+              "detectGeneratedLayerViolation"
+            ],
+            "raw": "import { detectGeneratedLayerViolation } from '../services/lifeos-execution-truth.js'",
+            "status": "PASS",
+            "reason": "named_exports_resolved"
+          },
+          {
+            "kind": "named",
+            "source": "../services/builderos-completion-authority.js",
+            "names": [
+              "grantBuildCompletion",
+              "isCompletionAuthorityEnabled",
+              "BUILDEROS_COMPLETION_AUTHORITY_FLAG"
+            ],
+            "raw": "import {\n  grantBuildCompletion,\n  isCompletionAuthorityEnabled,\n  BUILDEROS_COMPLETION_AUTHORITY_FLAG,\n} from '../services/builderos-completion-authority.js'",
+            "status": "PASS",
+            "reason": "named_exports_resolved"
+          },
+          {
+            "kind": "named",
+            "source": "../services/builderos-model-escalation-gate.js",
+            "names": [
+              "evaluateModelEscalationGate",
+              "writeModelEscalationReceipt",
+              "isCheaperModel"
+            ],
+            "raw": "import {\n  evaluateModelEscalationGate,\n  writeModelEscalationReceipt,\n  isCheaperModel,\n} from '../services/builderos-model-escalation-gate.js'",
+            "status": "PASS",
+            "reason": "named_exports_resolved"
+          },
+          {
+            "kind": "named",
+            "source": "../services/builderos-tsos-routing.js",
+            "names": [
+              "logShadowRoutingDecision"
+            ],
+            "raw": "import { logShadowRoutingDecision } from '../services/builderos-tsos-routing.js'",
+            "status": "PASS",
+            "reason": "named_exports_resolved"
+          },
+          {
+            "kind": "named",
+            "source": "../services/builder-deliberation-hook.js",
+            "names": [
+              "seedBuilderDeliberation",
+              "finalizeBuilderDeliberation"
+            ],
+            "raw": "import {\n  seedBuilderDeliberation,\n  finalizeBuilderDeliberation,\n} from '../services/builder-deliberation-hook.js'",
+            "status": "PASS",
+            "reason": "named_exports_resolved"
+          },
+          {
+            "kind": "named",
+            "source": "../services/founder-packet-v2-unified-gate.js",
+            "names": [
+              "enforceBeforeBuilderDispatch",
+              "formatUnifiedGateBlockSummary"
+            ],
+            "raw": "import {\n  enforceBeforeBuilderDispatch,\n  formatUnifiedGateBlockSummary,\n} from '../services/founder-packet-v2-unified-gate.js'",
+            "status": "PASS",
+            "reason": "named_exports_resolved"
+          },
+          {
+            "kind": "named",
+            "source": "../services/builderos-gap-classifier.js",
+            "names": [
+              "classifyBuilderGap",
+              "summarizeGapFamilies"
+            ],
+            "raw": "import { classifyBuilderGap, summarizeGapFamilies } from '../services/builderos-gap-classifier.js'",
+            "status": "PASS",
+            "reason": "named_exports_resolved"
+          },
+          {
+            "kind": "named",
+            "source": "../services/intake-blueprint-executor.js",
+            "names": [
+              "verifyIntakeSessionBuildClearance"
+            ],
+            "raw": "import { verifyIntakeSessionBuildClearance } from '../services/intake-blueprint-executor.js'",
+            "status": "PASS",
+            "reason": "named_exports_resolved"
+          },
+          {
+            "kind": "named",
+            "source": "../services/builderos-bp-priority-scheduler.js",
+            "names": [
+              "getBpPrioritySchedulerStatus"
+            ],
+            "raw": "import { getBpPrioritySchedulerStatus } from '../services/builderos-bp-priority-scheduler.js'",
+            "status": "PASS",
+            "reason": "named_exports_resolved"
+          },
+          {
+            "kind": "named",
+            "source": "../services/scheduler-registry.js",
+            "names": [
+              "getAllSchedulerStatuses"
+            ],
+            "raw": "import { getAllSchedulerStatuses } from '../services/scheduler-registry.js'",
+            "status": "PASS",
+            "reason": "named_exports_resolved"
+          }
+        ],
+        "sqlChecks": [
+          {
+            "text": "INSERT INTO conductor_builder_audit (domain, task_preview, model_used, output_chars, cache_hit, placement_json)\n        ",
+            "status": "PASS",
+            "reason": "all_referenced_tables_known",
+            "tables": [
+              "conductor_builder_audit",
+              "conductor_builder_audit"
+            ]
+          },
+          {
+            "text": "SELECT id FROM epistemic_facts WHERE text = $1",
+            "status": "PASS",
+            "reason": "all_referenced_tables_known",
+            "tables": [
+              "epistemic_facts"
+            ]
+          },
+          {
+            "text": "SELECT id, created_at, domain, task_preview, model_used, output_chars, cache_hit",
+            "status": "INDETERMINATE",
+            "reason": "sql_template_literal_with_interpolation"
+          },
+          {
+            "text": "SELECT id, created_at, domain, task_preview, model_used, placement_json\n        ",
+            "status": "INDETERMINATE",
+            "reason": "sql_template_literal_with_interpolation"
+          }
+        ]
+      }
     }
   ],
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",

@@ -3995,3 +3995,10 @@ async function fetchGitHubFileContent(filePath, { token, owner, repoName, branch
     log.info('✅ [LIFEOS-BUILDER] Council builder routes mounted at /api/v1/lifeos/builder (incl. /execute + /build + /history + /gaps + /runtime-fingerprint)');
   };
 }
+
+// Auto-register manifest no-op: this module is mounted by startup/register-runtime-routes.js
+// as legacy production spine. Exposing register() lets config/auto-registered-product-modules.json
+// record "mounted" for the functional-proof gate without double-mounting the routes.
+export function register(app, deps) {
+  // legacy spine already mounted; health gate only needs the manifest entry
+}
