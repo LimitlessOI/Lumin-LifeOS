@@ -23,7 +23,7 @@ ALTER TABLE coppa_compliance_reviews ADD CONSTRAINT fk_reviewer_id FOREIGN KEY (
 DO $$
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'users' AND column_name = 'is_coppa_age') THEN
-        ALTER TABLE users ADD COLUMN is_coppa_age BOOLEAN DEFAULT FALSE;
+        ALTER TABLE users ADD COLUMN IF NOT EXISTS is_coppa_age BOOLEAN DEFAULT FALSE;
     END IF;
 END
 $$;
@@ -32,7 +32,7 @@ $$;
 DO $$
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'users' AND column_name = 'coppa_consent_status') THEN
-        ALTER TABLE users ADD COLUMN coppa_consent_status VARCHAR(50) DEFAULT 'unknown'; -- 'unknown', 'pending', 'granted', 'denied'
+        ALTER TABLE users ADD COLUMN IF NOT EXISTS coppa_consent_status VARCHAR(50) DEFAULT 'unknown'; -- 'unknown', 'pending', 'granted', 'denied'
     END IF;
 END
 $$;
@@ -41,7 +41,7 @@ $$;
 DO $$
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'users' AND column_name = 'parent_email') THEN
-        ALTER TABLE users ADD COLUMN parent_email VARCHAR(255);
+        ALTER TABLE users ADD COLUMN IF NOT EXISTS parent_email VARCHAR(255);
     END IF;
 END
 $$;

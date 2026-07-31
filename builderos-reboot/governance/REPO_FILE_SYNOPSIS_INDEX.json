@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T10:55:12.420Z",
+  "generated_at": "2026-07-31T11:47:39.396Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12568,
   "files": [
@@ -31125,9 +31125,9 @@
     {
       "path": "config/migration-preflight-collision-allowlist.json",
       "synopsis": "Configuration — Migration Preflight Collision Allowlist.",
-      "bytes": 20931,
-      "mtime": "2026-07-28T17:47:22.476Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 24114,
+      "mtime": "2026-07-31T11:47:39.396Z",
+      "indexed_at": "2026-07-31T11:47:39.396Z",
       "synopsis_index_only": true
     },
     {
@@ -34417,9 +34417,9 @@
     {
       "path": "db/migrations/20231012_coppa_compliance.sql",
       "synopsis": "Database migration — 20231012_coppa_compliance.sql.",
-      "bytes": 2565,
-      "mtime": "2026-07-31T04:37:32.203Z",
-      "indexed_at": "2026-07-31T04:37:34.626Z"
+      "bytes": 2607,
+      "mtime": "2026-07-31T11:47:39.396Z",
+      "indexed_at": "2026-07-31T11:47:39.396Z"
     },
     {
       "path": "db/migrations/20231012_create_ci_guard.sql",
@@ -34473,9 +34473,9 @@
     {
       "path": "db/migrations/20231020_create_vapi_integration.sql",
       "synopsis": "Database migration — 20231020_create_vapi_integration.sql.",
-      "bytes": 1278,
-      "mtime": "2026-07-30T19:23:07.474Z",
-      "indexed_at": "2026-07-30T19:23:07.474Z"
+      "bytes": 1292,
+      "mtime": "2026-07-31T11:47:39.396Z",
+      "indexed_at": "2026-07-31T11:47:39.396Z"
     },
     {
       "path": "db/migrations/20231021_create_stripe_price_ids.sql",
@@ -34529,9 +34529,9 @@
     {
       "path": "db/migrations/202311_memory_category_taxonomy_update.sql",
       "synopsis": "Database migration — 202311_memory_category_taxonomy_update.sql.",
-      "bytes": 761,
-      "mtime": "2026-07-16T19:42:53.570Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 785,
+      "mtime": "2026-07-31T11:47:39.396Z",
+      "indexed_at": "2026-07-31T11:47:39.396Z"
     },
     {
       "path": "db/migrations/202311_memory_taxonomy_update.sql",
@@ -34550,9 +34550,9 @@
     {
       "path": "db/migrations/202311_vector_embedding_update.sql",
       "synopsis": "Database migration — 202311_vector_embedding_update.sql.",
-      "bytes": 493,
-      "mtime": "2026-07-16T19:42:53.571Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 517,
+      "mtime": "2026-07-31T11:47:39.396Z",
+      "indexed_at": "2026-07-31T11:47:39.396Z"
     },
     {
       "path": "db/migrations/20231105_create_bioprinting_tables.sql",
@@ -35712,9 +35712,9 @@
     {
       "path": "db/migrations/20260604_mission_runtime_commitments_patch.sql",
       "synopsis": "Database migration — 20260604_mission_runtime_commitments_patch.sql.",
-      "bytes": 3747,
-      "mtime": "2026-06-21T21:37:53.254Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 3775,
+      "mtime": "2026-07-31T11:47:39.396Z",
+      "indexed_at": "2026-07-31T11:47:39.396Z"
     },
     {
       "path": "db/migrations/20260604_mission_runtime_v1.sql",
@@ -36811,9 +36811,9 @@
     {
       "path": "db/migrations/20260715_lifeos_core_phase_1.sql",
       "synopsis": "Database migration — 20260715_lifeos_core_phase_1.sql.",
-      "bytes": 1297,
-      "mtime": "2026-07-30T19:27:12.782Z",
-      "indexed_at": "2026-07-30T19:27:12.782Z"
+      "bytes": 1311,
+      "mtime": "2026-07-31T11:47:39.396Z",
+      "indexed_at": "2026-07-31T11:47:39.396Z"
     },
     {
       "path": "db/migrations/20260715_lifeos_password_resets.sql",
@@ -36972,9 +36972,9 @@
     {
       "path": "db/migrations/20260719b_lifeos_lab_results_repair.sql",
       "synopsis": "Repair lab_results schema mismatch + create psychometric_results.",
-      "bytes": 2611,
-      "mtime": "2026-07-24T18:36:41.702Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 2625,
+      "mtime": "2026-07-31T11:47:39.396Z",
+      "indexed_at": "2026-07-31T11:47:39.396Z"
     },
     {
       "path": "db/migrations/20260720_judgment_outcome_history.sql",
@@ -38677,9 +38677,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 64685,
-      "mtime": "2026-07-31T09:50:02.400Z",
-      "indexed_at": "2026-07-31T09:51:46.501Z"
+      "bytes": 65312,
+      "mtime": "2026-07-31T11:47:39.396Z",
+      "indexed_at": "2026-07-31T11:47:39.396Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40890,9 +40890,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 344929,
-      "mtime": "2026-07-31T10:50:48.056Z",
-      "indexed_at": "2026-07-31T10:50:53.552Z"
+      "bytes": 345558,
+      "mtime": "2026-07-31T11:47:39.396Z",
+      "indexed_at": "2026-07-31T11:47:39.396Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",

@@ -579,6 +579,84 @@
       "table": "marketing_channel_profiles",
       "first_file": "20260707_marketing_phase1_schema.sql",
       "second_file": "20260708_marketing_phase1_schema_v2.sql"
+    },
+    {
+      "table": "provider_cooldowns",
+      "first_file": "20231005_add_provider_cooldowns.sql",
+      "second_file": "20231020_add_cooldown_persistence.sql",
+      "note": "2026-07-31: second file idempotently creates provider_cooldowns and adds an index; base schema in first file. Safe duplicate IF NOT EXISTS."
+    },
+    {
+      "table": "stripe_price_ids",
+      "first_file": "20231021_create_stripe_price_ids.sql",
+      "second_file": "20231029_create_stripe_price_ids_extended.sql",
+      "note": "2026-07-31: extended file idempotently creates table and adds columns if not present. Safe."
+    },
+    {
+      "table": "interactive_element_labels",
+      "first_file": "20241030_add_interactive_element_labels.sql",
+      "second_file": "20241030_add_interactive_element_labels_table.sql",
+      "note": "2026-07-31: two files with same intent; second uses IF NOT EXISTS. Safe."
+    },
+    {
+      "table": "epistemic_facts",
+      "first_file": "202604261.sql",
+      "second_file": "20260426_memory_intelligence.sql",
+      "note": "2026-07-31: rich schema in second file is the live one; first stub never applied. Safe."
+    },
+    {
+      "table": "lessons_learned",
+      "first_file": "20260426_memory_intelligence.sql",
+      "second_file": "202605141.sql",
+      "note": "2026-07-31: second file idempotently creates table. Safe."
+    },
+    {
+      "table": "epistemic_facts",
+      "first_file": "202604261.sql",
+      "second_file": "202606013.sql",
+      "note": "2026-07-31: second file idempotently creates table. Safe."
+    },
+    {
+      "table": "epistemic_facts",
+      "first_file": "202604261.sql",
+      "second_file": "20260704_create_epistemic_facts.sql",
+      "note": "2026-07-31: second file idempotently creates table with richer schema. Safe."
+    },
+    {
+      "table": "music_teachers",
+      "first_file": "001_create_music_teachers_table.sql",
+      "second_file": "20260704_create_music_teachers.sql",
+      "note": "2026-07-31: second file idempotently creates table. Safe."
+    },
+    {
+      "table": "students",
+      "first_file": "002_create_students_table.sql",
+      "second_file": "20260704_create_students.sql",
+      "note": "2026-07-31: second file idempotently creates table. Safe."
+    },
+    {
+      "table": "lifeos_users",
+      "first_file": "20260328_lifeos_core.sql",
+      "second_file": "20260723_lifeos_core_complete.sql",
+      "note": "2026-07-31: second file idempotently creates table with broader schema. Safe."
+    },
+    {
+      "table": "lifeos_notes",
+      "first_file": "20260421_lifeos_missing_tables.sql",
+      "second_file": "20260723_lifeos_core_complete.sql",
+      "note": "2026-07-31: second file idempotently creates table. Safe."
+    },
+    {
+      "table": "lifeos_events",
+      "first_file": "20260421_lifeos_missing_tables.sql",
+      "second_file": "20260723_lifeos_core_complete.sql",
+      "note": "2026-07-31: second file idempotently creates table. Safe."
+    },
+    {
+      "table": "videojobs",
+      "first_file": "20260704_create_video_jobs.sql",
+      "second_file": "add_video_jobs_table.sql",
+      "note": "2026-07-31: second file idempotently creates table. Safe."
     }
   ]
 }

@@ -27,7 +27,7 @@ BEGIN
 
   IF n = 0 THEN
     ALTER TABLE lab_results DROP COLUMN IF EXISTS user_id;
-    ALTER TABLE lab_results ADD COLUMN user_id BIGINT REFERENCES lifeos_users(id);
+    ALTER TABLE lab_results ADD COLUMN IF NOT EXISTS user_id BIGINT REFERENCES lifeos_users(id);
     -- Allow NULL briefly if table is empty with no inserts yet; app always supplies user_id.
     UPDATE lab_results SET user_id = 1 WHERE user_id IS NULL; -- no-op on empty
     ALTER TABLE lab_results ALTER COLUMN user_id SET NOT NULL;

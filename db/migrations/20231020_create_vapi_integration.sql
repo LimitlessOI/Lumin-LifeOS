@@ -31,7 +31,7 @@ EXECUTE FUNCTION update_updated_at_column();
 DO $$
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'vapi_integrations' AND column_name = 'vapi_phone_number') THEN
-        ALTER TABLE vapi_integrations ADD COLUMN vapi_phone_number TEXT;
+        ALTER TABLE vapi_integrations ADD COLUMN IF NOT EXISTS vapi_phone_number TEXT;
     END IF;
 END
 $$;

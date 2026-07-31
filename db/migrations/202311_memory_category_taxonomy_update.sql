@@ -12,8 +12,8 @@ CREATE TABLE IF NOT EXISTS memory_categories (
 CREATE INDEX IF NOT EXISTS idx_parent_id ON memory_categories(parent_id);
 
 -- Alter existing tables to include memory category references
-ALTER TABLE existing_table_name
-ADD COLUMN memory_category_id INT REFERENCES memory_categories(id);
+ALTER TABLE IF EXISTS existing_table_name
+ADD COLUMN IF NOT EXISTS memory_category_id INT REFERENCES memory_categories(id);
 
 -- Additional index or constraints for the new column if needed
 CREATE INDEX IF NOT EXISTS idx_memory_category_id ON existing_table_name(memory_category_id);

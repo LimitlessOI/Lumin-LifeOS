@@ -32,7 +32,7 @@ BEGIN
       SELECT 1 FROM information_schema.columns
       WHERE table_schema = 'public' AND table_name = 'commitments' AND column_name = 'mission_id'
     ) THEN
-      ALTER TABLE commitments ADD COLUMN mission_id UUID REFERENCES missions(id) ON DELETE SET NULL;
+      ALTER TABLE commitments ADD COLUMN IF NOT EXISTS mission_id UUID REFERENCES missions(id) ON DELETE SET NULL;
     END IF;
   ELSE
     -- missions table not yet created (v1 migration pending or failed);
@@ -42,7 +42,7 @@ BEGIN
       SELECT 1 FROM information_schema.columns
       WHERE table_schema = 'public' AND table_name = 'commitments' AND column_name = 'mission_id'
     ) THEN
-      ALTER TABLE commitments ADD COLUMN mission_id UUID;
+      ALTER TABLE commitments ADD COLUMN IF NOT EXISTS mission_id UUID;
       RAISE WARNING 'BPB-0001 patch: missions table not found — mission_id added without FK; re-apply constraint manually once 20260604_mission_runtime_v1.sql has run.';
     END IF;
   END IF;

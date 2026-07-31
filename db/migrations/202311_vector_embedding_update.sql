@@ -9,7 +9,7 @@ BEGIN
         AND column_name='vector_embedding'
     ) THEN
         -- Add the column if it does not exist
-        ALTER TABLE your_actual_table_name
-        ADD COLUMN vector_embedding VECTOR;
+        ALTER TABLE IF EXISTS your_actual_table_name
+        ADD COLUMN IF NOT EXISTS vector_embedding VECTOR;
     END IF;
 END $$;

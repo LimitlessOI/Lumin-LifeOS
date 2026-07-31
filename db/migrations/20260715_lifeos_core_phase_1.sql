@@ -12,7 +12,7 @@ CREATE INDEX IF NOT EXISTS idx_lifeos_core_phase_1_name ON lifeos_core_phase_1_t
 -- Add a column if it doesn't exist
 DO $$ BEGIN
     IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'lifeos_core_phase_1_table' AND column_name = 'status') THEN
-        ALTER TABLE lifeos_core_phase_1_table ADD COLUMN status VARCHAR(50) DEFAULT 'active';
+        ALTER TABLE lifeos_core_phase_1_table ADD COLUMN IF NOT EXISTS status VARCHAR(50) DEFAULT 'active';
     END IF;
 END $$;
 
