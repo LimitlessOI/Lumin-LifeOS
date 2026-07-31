@@ -1040,7 +1040,7 @@
     },
     {
       "id": "step9",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/extended-tables.js",
       "task": "extend tables",
       "spec": "Extend existing tables joy_checkins, integrity_score_log, wearable_data, emotional_patterns to ensure no schema conflicts before build.",
@@ -1048,7 +1048,7 @@
         "step8"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "extendJoyCheckins",
         "extendIntegrityScoreLog",
@@ -1068,9 +1068,9 @@
           "assertion_id": "expected_exports:services/extended-tables.js"
         }
       ],
-      "last_attempt_at": null,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:extendJoyCheckins,extendIntegrityScoreLog,extendWearableData,extendEmotionalPatterns; assertion_threw; assertion_threw; assertion_threw; assertion_threw",
-      "commit_sha": "8db36d10fa3ee402451ea56f0246a808e54f4409",
+      "last_attempt_at": "2026-07-31T00:59:20.579Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:extendJoyCheckins,extendIntegrityScoreLog,extendWearableData,extendEmotionalPatterns; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
