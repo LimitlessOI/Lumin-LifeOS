@@ -220,7 +220,7 @@
         "npm run memory:ci-evidence"
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-15T19:31:45.162Z",
+      "shipped_at": "2026-07-31T05:51:43.460Z",
       "commit_sha": null,
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "5",
@@ -230,7 +230,112 @@
       "reaudit_reset_at": "2026-07-30T18:55:06.671Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-07-31T05:40:32.775Z"
+      "last_attempt_at": "2026-07-31T05:40:32.775Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/memory-intelligence/twins/steps/5.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-31T05:51:43.460Z",
+        "shipped_at": "2026-07-31T05:51:43.460Z",
+        "commit_sha": null,
+        "content_sha256": "4c53c797d533c180e6e2885f21af0895ae5ad77335044999f5f6622fee63635b",
+        "target_file": "scripts/memory-ci-evidence.mjs",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "scripts/memory-ci-evidence.mjs",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "INDETERMINATE",
+          "reason": "indeterminate_sql: SQL template literal contains ${} interpolation",
+          "details": {
+            "filePath": "/usr/src/app/scripts/memory-ci-evidence.mjs",
+            "hash": "4c53c797d533c180e6e2885f21af0895ae5ad77335044999f5f6622fee63635b",
+            "importChecks": [
+              {
+                "kind": "named",
+                "source": "child_process",
+                "names": [
+                  "spawn"
+                ],
+                "raw": "import { spawn } from 'child_process'",
+                "status": "PASS",
+                "reason": "external_or_builtin_package"
+              }
+            ],
+            "sqlChecks": [
+              {
+                "text": "npm run memory:ci-evidence",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "npm run memory:ci-evidence exited with code ${code}",
+                "status": "INDETERMINATE",
+                "reason": "sql_template_literal_with_interpolation"
+              },
+              {
+                "text": "Command failed with code ${code}",
+                "status": "INDETERMINATE",
+                "reason": "sql_template_literal_with_interpolation"
+              },
+              {
+                "text": "child_process",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "npm",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "run",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "memory:ci-evidence",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "inherit",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "close",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "CI evidence recorded successfully.",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "error",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Failed to start npm run memory:ci-evidence process:",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              }
+            ]
+          }
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/memory-intelligence/twins/steps/5.exact",
+          "content_sha256": "4c53c797d533c180e6e2885f21af0895ae5ad77335044999f5f6622fee63635b"
+        }
+      }
     },
     {
       "id": "6",

@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T05:51:36.334Z",
+  "generated_at": "2026-07-31T05:51:45.752Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12486,
+  "file_count": 12487,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -72930,6 +72930,13 @@
       "ssot": [
         "docs/products/memory-intelligence/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "scripts/memory-ci-evidence.mjs",
+      "synopsis": "Records CI evidence by running `npm run memory:ci-evidence`.",
+      "bytes": 1067,
+      "mtime": "2026-07-31T05:51:45.752Z",
+      "indexed_at": "2026-07-31T05:51:45.752Z"
     },
     {
       "path": "scripts/memory-digest-update.mjs",
