@@ -964,13 +964,13 @@
           "assertion_id": "expected_exports:services/providerCooldownManager.js"
         }
       ],
-      "last_attempt_at": "2026-07-31T01:34:28.899Z",
+      "last_attempt_at": "2026-07-31T02:00:27.452Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getCooldowns; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-31T01:23:08.581Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-31T01:57:37.635Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
