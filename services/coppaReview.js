@@ -15,6 +15,22 @@ const getCoppaReview = () => {
   };
 };
 
+/**
+ * Summarizes the COPPA compliance review for the kids-os platform.
+ *
+ * @returns {object} An object containing the COPPA review summary.
+ */
+const summarizeCoppaReview = () => {
+  const review = getCoppaReview();
+  return {
+    platform: review.platform,
+    complianceStatus: review.complianceStatus,
+    summary: review.summary,
+    reviewDate: review.reviewDate
+  };
+};
+
 export {
-  getCoppaReview
+  getCoppaReview,
+  summarizeCoppaReview
 };

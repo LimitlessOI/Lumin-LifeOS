@@ -586,7 +586,7 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-31T01:17:10.921Z",
+      "shipped_at": "2026-07-31T01:51:26.435Z",
       "commit_sha": null,
       "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step8",
@@ -600,10 +600,10 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-07-31T01:17:10.921Z",
-        "shipped_at": "2026-07-31T01:17:10.921Z",
-        "commit_sha": "af0e282e81ad6540cdd99a2eddf28335f2e55d27",
-        "content_sha256": "1c081da98831ae3329a24c123ceb75e6ef118c7a1a36f420c512c9c8e0382d8a",
+        "sealed_at": "2026-07-31T01:51:26.435Z",
+        "shipped_at": "2026-07-31T01:51:26.435Z",
+        "commit_sha": null,
+        "content_sha256": "392cf2ec7256e14bc823154ff14baa00ba2c19cb7a3b44e0d4c5ae01d3cce0a6",
         "target_file": "services/coppaReview.js",
         "reverse": {
           "mode": "delete_file",
@@ -614,7 +614,7 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/kids-os/twins/steps/step8.exact",
-          "content_sha256": "1c081da98831ae3329a24c123ceb75e6ef118c7a1a36f420c512c9c8e0382d8a"
+          "content_sha256": "392cf2ec7256e14bc823154ff14baa00ba2c19cb7a3b44e0d4c5ae01d3cce0a6"
         }
       },
       "built_sha": null,

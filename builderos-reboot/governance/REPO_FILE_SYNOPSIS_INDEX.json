@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T01:50:52.808Z",
+  "generated_at": "2026-07-31T01:51:28.889Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12465,
   "files": [
@@ -87661,9 +87661,9 @@
     {
       "path": "services/coppaReview.js",
       "synopsis": "Service module — CoppaReview.",
-      "bytes": 1229,
-      "mtime": "2026-07-31T01:17:13.163Z",
-      "indexed_at": "2026-07-31T01:17:13.163Z"
+      "bytes": 1633,
+      "mtime": "2026-07-31T01:51:28.889Z",
+      "indexed_at": "2026-07-31T01:51:28.889Z"
     },
     {
       "path": "services/council-bypass-audit.js",
