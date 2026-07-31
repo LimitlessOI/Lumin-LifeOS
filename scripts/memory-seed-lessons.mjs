@@ -12,6 +12,7 @@ const ROOT = join(__dirname, '..');
 const MEMORY_DIR = join(ROOT, 'memory');
 const LESSONS_DIR = join(MEMORY_DIR, 'lessons');
 const LESSONS_FILE = join(MEMORY_DIR, 'lessons_learned.json');
+const CONTINUITY_LOG_DIR = join(ROOT, 'AM36', 'CONTINUITY_LOG');
 
 /**
  * Loads existing lessons_learned.json if present.
@@ -54,13 +55,39 @@ async function readLessonFiles() {
 }
 
 /**
+ * Reads all receipt markdown files from AM36/CONTINUITY_LOG directory.
+ * @returns {Promise<Array<{file: string, title: string, content: string}>>}
+ */
+async function readReceiptFiles() {
+  try {
+    const files = await readdir(CONTINUITY_LOG_DIR);
+    const mdFiles = files.filter((f) => f.endsWith('.md'));
+    const receipts = [];
+    for (const file of mdFiles) {
+      const fullPath = join(CONTINUITY_LOG_DIR, file);
+      const content = await readFile(fullPath, 'utf-8');
+      const titleMatch = content.match(/^#\s+(.+)$/m);
+      const title = titleMatch ? titleMatch[1].trim() : basename(file, '.md');
+      receipts.push({ file, title, content });
+    }
+    return receipts;
+  } catch (error) {
+    if (error.code === 'ENOENT') {
+      return [];
+    }
+    throw error;
+  }
+}
+
+/**
  * Seeds lessons_learned from lesson files and updates documents.
  * @returns {Promise<{lessonsSeeded: number, documentsUpdated: number}>}
  */
 export async function seedLessonsLearned() {
-  const [existingLessons, lessonFiles] = await Promise.all([
+  const [existingLessons, lessonFiles, receiptFiles] = await Promise.all([
     loadExistingLessons(),
     readLessonFiles(),
+    readReceiptFiles(),
   ]);
 
   const now = new Date().toISOString();
@@ -82,6 +109,23 @@ export async function seedLessonsLearned() {
     });
   }
 
+  // Add receipts as new lessons
+  for (const receipt of receiptFiles) {
+    const id = `receipt-${receipt.file.replace(/\.md$/, '')}`;
+    if (existingIds.has(id)) {
+      continue;
+    }
+    newLessons.push({
+      id,
+      title: `Receipt: ${receipt.title}`,
+      file: join('receipts', receipt.file).replace(/\\/g, '/'), // Store path relative to MEMORY_DIR
+      content: receipt.content,
+      createdAt: now,
+      updatedAt: now,
+      source: 'receipt',
+    });
+  }
+
   const mergedLessons = [...existingLessons, ...newLessons];
   await mkdir(dirname(LESSONS_FILE), { recursive: true });
   await writeFile(LESSONS_FILE, JSON.stringify(mergedLessons, null, 2), 'utf-8');
@@ -92,7 +136,10 @@ export async function seedLessonsLearned() {
   try {
     const indexContent = await readFile(indexFile, 'utf-8');
     const lessonSection = mergedLessons
-      .map((l) => `- [${l.title}](${join('lessons', l.file).replace(/\\/g, '/')})`)
+      .map((l) => {
+        const filePath = l.source === 'receipt' ? join('..', 'AM36', 'CONTINUITY_LOG', basename(l.file)).replace(/\\/g, '/') : join('lessons', l.file).replace(/\\/g, '/');
+        return `- [${l.title}](${filePath})`;
+      })
       .join('\n');
     const updatedIndex = indexContent.replace(
       /(## Lessons Learned\s*\n)([\s\S]*?)(?=\n## |$)/,
