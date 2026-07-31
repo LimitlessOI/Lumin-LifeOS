@@ -2243,13 +2243,13 @@
     },
     {
       "id": "faith-studio-step-1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/traditionProfileService.js",
       "task": "Add source labeling",
       "spec": "Integrate source labeling engine into the tradition profile model service.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "enhanceWithSourceLabels"
       ],
@@ -2274,7 +2274,7 @@
       "reaudit_reset_at": "2026-07-30T18:55:06.428Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-31T10:50:13.759Z",
       "last_attempt": null,
       "revive_count": 1,
       "revived_at": "2026-07-31T10:33:16.916Z",
