@@ -471,14 +471,119 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-15T19:39:48.232Z",
+      "shipped_at": "2026-07-31T07:35:41.470Z",
       "commit_sha": "8db9135246c9ada747e34d2423b5d574b6b24148",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step8",
       "mission_id": "PRODUCT-music-talent-studio",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerStudentsRoutes; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.680Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.680Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/music-talent-studio/twins/steps/step8.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-31T07:35:41.470Z",
+        "shipped_at": "2026-07-31T07:35:41.470Z",
+        "commit_sha": "8db9135246c9ada747e34d2423b5d574b6b24148",
+        "content_sha256": "4fe82bd2d3a4cfe159a01e1a3cc01d514d85a3af56b7099de08f2e92ca9193c2",
+        "target_file": "routes/studentsRoutes.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "routes/studentsRoutes.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "INDETERMINATE",
+          "reason": "indeterminate_sql: SQL template literal contains ${} interpolation",
+          "details": {
+            "filePath": "/usr/src/app/routes/studentsRoutes.js",
+            "hash": "4fe82bd2d3a4cfe159a01e1a3cc01d514d85a3af56b7099de08f2e92ca9193c2",
+            "importChecks": [
+              {
+                "kind": "default",
+                "source": "express",
+                "names": [
+                  "default"
+                ],
+                "raw": "import express from 'express'",
+                "status": "PASS",
+                "reason": "external_or_builtin_package"
+              }
+            ],
+            "sqlChecks": [
+              {
+                "text": "Get student with ID: ${req.params.id}",
+                "status": "INDETERMINATE",
+                "reason": "sql_template_literal_with_interpolation"
+              },
+              {
+                "text": "Update student with ID: ${req.params.id}",
+                "status": "INDETERMINATE",
+                "reason": "sql_template_literal_with_interpolation"
+              },
+              {
+                "text": "Delete student with ID: ${req.params.id}",
+                "status": "INDETERMINATE",
+                "reason": "sql_template_literal_with_interpolation"
+              },
+              {
+                "text": "express",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/api/students",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Create new student",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Get all students",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/:id",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/:id",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/:id",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              }
+            ]
+          }
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/music-talent-studio/twins/steps/step8.exact",
+          "content_sha256": "4fe82bd2d3a4cfe159a01e1a3cc01d514d85a3af56b7099de08f2e92ca9193c2"
+        }
+      }
     },
     {
       "id": "step9",
