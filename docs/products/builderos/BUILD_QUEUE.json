@@ -2728,19 +2728,19 @@
     },
     {
       "id": "bo-security-review-real-diff-format",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/lifeos-council-builder-routes.js",
       "task": "Feed the AI security review a real unified diff instead of full file content mislabeled as unchanged",
       "spec": "In routes/lifeos-council-builder-routes.js's runAiSecurityReviewOnDiff (added in commit 77f63ddfd0, ~line 1483), the diff payload sent to reviewDiffForSecurity (scripts/ai-security-review.mjs) is built by prefixing every line of the new file content with a single space -- the unified-diff 'unchanged context line' marker -- and never marks any line as added (+) or removed (-). The model therefore receives full file content labeled as an all-context, zero-change diff, which weakens its ability to focus scrutiny on what actually changed in the commit. Fix: compute a real unified diff against the file's prior committed content (already available via the same commit path -- e.g. git show HEAD:<path> or the pre-commit blob) and mark added/removed/context lines correctly, falling back to whole-file content only for genuinely new files (where everything really is additions). Found during a direct code audit of Mission 2B (commit 77f63ddfd0). Review remains fire-and-forget/non-blocking per the existing Chair ruling c646160f-... -- do not change that; this is a payload-quality fix only.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 3,
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "bo-security-review-real-diff-format",
       "mission_id": "PRODUCT-builderos",
       "commit_sha": "8a591722d4fa65892252882e8330cd184b109a7a",
-      "last_attempt_at": "2026-07-31T23:28:43.327Z",
-      "last_error": "grounding_failed: missing_sql_table: the, REPO_ROOT, a, established, createLifeOSCouncilBuilderRoutes, your, that, dropping, touching, HTML, JS, council, injected, it, CSS, existing, spec",
+      "last_attempt_at": "2026-07-31T23:30:18.142Z",
+      "last_error": "grounding_failed: missing_sql_table: the, touching",
       "blocker_class": "BLOCKED_TOOLING"
     }
   ],
