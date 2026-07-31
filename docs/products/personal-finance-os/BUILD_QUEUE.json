@@ -604,7 +604,7 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-31T01:08:35.673Z",
+      "shipped_at": "2026-07-31T01:35:09.281Z",
       "commit_sha": null,
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "personal-finance-os-4",
@@ -618,10 +618,10 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-07-31T01:08:35.673Z",
-        "shipped_at": "2026-07-31T01:08:35.673Z",
-        "commit_sha": "efc72243cbe58fe39d9865dcec1f0ab623404ba2",
-        "content_sha256": "645ced3db21190e03bbfc0212e16bbb1bb225bc45d32476adcb770dfd0cfbdad",
+        "sealed_at": "2026-07-31T01:35:09.281Z",
+        "shipped_at": "2026-07-31T01:35:09.281Z",
+        "commit_sha": null,
+        "content_sha256": "919c776ece1f31d61c6480452cc1e34195e77dede49e3316222217610cd1cbd5",
         "target_file": "services/mvpSourceDecision.js",
         "reverse": {
           "mode": "delete_file",
@@ -632,7 +632,7 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/personal-finance-os/twins/steps/personal-finance-os-4.exact",
-          "content_sha256": "645ced3db21190e03bbfc0212e16bbb1bb225bc45d32476adcb770dfd0cfbdad"
+          "content_sha256": "919c776ece1f31d61c6480452cc1e34195e77dede49e3316222217610cd1cbd5"
         }
       },
       "built_sha": null,

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T01:34:56.557Z",
+  "generated_at": "2026-07-31T01:35:11.698Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12463,
   "files": [
@@ -91793,8 +91793,8 @@
       "path": "services/mvpSourceDecision.js",
       "synopsis": "Service module — MvpSourceDecision.",
       "bytes": 888,
-      "mtime": "2026-07-31T01:08:38.042Z",
-      "indexed_at": "2026-07-31T01:08:38.042Z"
+      "mtime": "2026-07-31T01:35:11.698Z",
+      "indexed_at": "2026-07-31T01:35:11.698Z"
     },
     {
       "path": "services/never-stop-product-factory-scheduler.js",
