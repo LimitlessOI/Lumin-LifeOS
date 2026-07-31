@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T18:43:21.917Z",
+  "generated_at": "2026-07-31T18:49:30.401Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12593,
+  "file_count": 12594,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -23459,9 +23459,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/BLUEPRINT.json",
       "synopsis": "Receipt Auditor\"],",
-      "bytes": 17459,
-      "mtime": "2026-07-31T18:43:21.917Z",
-      "indexed_at": "2026-07-31T18:43:21.917Z",
+      "bytes": 17541,
+      "mtime": "2026-07-31T18:49:30.401Z",
+      "indexed_at": "2026-07-31T18:49:30.401Z",
       "synopsis_index_only": true
     },
     {
@@ -38723,9 +38723,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 70225,
-      "mtime": "2026-07-31T18:43:21.917Z",
-      "indexed_at": "2026-07-31T18:43:21.917Z"
+      "bytes": 70944,
+      "mtime": "2026-07-31T18:49:30.401Z",
+      "indexed_at": "2026-07-31T18:49:30.401Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40936,9 +40936,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 352950,
-      "mtime": "2026-07-31T18:43:21.917Z",
-      "indexed_at": "2026-07-31T18:43:21.917Z"
+      "bytes": 354316,
+      "mtime": "2026-07-31T18:49:30.401Z",
+      "indexed_at": "2026-07-31T18:49:30.401Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -62535,6 +62535,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "factory-staging/factory-core/builder/cognitive-step-runner.mjs",
+      "synopsis": "Cognitive Step Runner — Chair/Lens/Model/Execution pipeline.",
+      "bytes": 6392,
+      "mtime": "2026-07-31T18:49:30.401Z",
+      "indexed_at": "2026-07-31T18:49:30.401Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "factory-staging/factory-core/builder/execute-step.js",
       "synopsis": "Exports executeStep — builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/builder/execute-step.js.",
       "bytes": 605,
@@ -73948,9 +73958,9 @@
     {
       "path": "scripts/run-cognitive-mission.mjs",
       "synopsis": "CLI runner for the BuilderOS Cognitive Chair.",
-      "bytes": 5162,
-      "mtime": "2026-07-31T09:44:50.560Z",
-      "indexed_at": "2026-07-31T09:51:46.501Z",
+      "bytes": 6274,
+      "mtime": "2026-07-31T18:49:30.401Z",
+      "indexed_at": "2026-07-31T18:49:30.401Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

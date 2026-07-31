@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-31 — M2PT-008 Chair/Lens/Model/Execution pipeline wired
+
+Created `factory-staging/factory-core/builder/cognitive-step-runner.mjs` and updated `scripts/run-cognitive-mission.mjs` with `--build-mode` / `--dry-run`. `runCognitiveStep` composes responsibilities + lenses, selects the cheapest capable model per lens (cost + capability + tier floor from `config/council-members.js`), preserves disagreements, stores a Chair synthesis, and emits an `executionSpec`. Reuses `cognitive-core-oracle.js#decideGate` for Chair-confidence gating. Dry-run mode works without tokens. Hand-authored phase-4 factory-core module; SO-001 drift recorded. Next: M2PT-009 model-cost ROI ledger + M2PT-010 Wisdom learning loop.
+
 ## 2026-07-31 — M2PT-007 SENTRY Reality Station operational and fail-closed
 
 Created `services/sentry-reality-station.mjs` (pure Node ES module, no DB, no hidden AI calls, `@ssot docs/products/builderos/PRODUCT_HOME.md`), `tests/sentry-reality-station.test.js` (7/7 PASS), and `scripts/sentry-smoke.mjs` plus `npm run sentry:smoke` in `package.json`. `runLayerA` drives the existing `factory-staging/factory-core/sentry/behavior-assertions.js` for structural HTTP/file/export/function assertions. `runLayerB` drives `services/browser-agent.js` (Puppeteer) for real-browser human-sim walkthroughs. `runSentryRealityStation` emits a signed receipt (`verified_by: 'sentry-reality-station'`, `builder_actor: null`) and is fail-closed. Smoke against production `/api/v1/lifeos/builder/ready` passes. Hand-authored under phase-3 budget constraint; SO-001 drift recorded. Next: M2PT-008 Chair/Lens pipeline wiring.

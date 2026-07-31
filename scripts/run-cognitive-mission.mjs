@@ -8,6 +8,7 @@ import {
   loadLensRegistry,
   listLenses,
 } from '../services/cognitive-chair.mjs';
+import { runCognitiveStep, formatBuildPlan } from '../factory-staging/factory-core/builder/cognitive-step-runner.mjs';
 import { createCouncilService } from '../services/council-service.js';
 import { createCouncilMembers, COUNCIL_ALIAS_MAP } from '../config/council-members.js';
 import { createDbPool } from '../services/db.js';
@@ -78,7 +79,7 @@ async function main() {
   const args = parseArgs(process.argv);
 
   if (args.help) {
-    console.log(`Usage: node scripts/run-cognitive-mission.mjs --mission "..." [--responsibilities chair,architect,cfo] [--lenses steve-jobs,cfo-roi] [--execute] [--output path] [--list-lenses]`);
+    console.log(`Usage: node scripts/run-cognitive-mission.mjs --mission "..." [--responsibilities chair,architect,cfo] [--lenses steve-jobs,cfo-roi] [--execute] [--dry-run] [--build-mode] [--output path] [--list-lenses]`);
     process.exit(0);
   }
 
@@ -105,6 +106,8 @@ async function main() {
     .filter(Boolean);
 
   const execute = args.execute === true || args.execute === 'true';
+  const dryRun = args['dry-run'] === true || !execute;
+  const buildMode = args['build-mode'] === true || args['build-mode'] === 'true';
 
   let callModel = null;
   let pool = null;
@@ -118,12 +121,28 @@ async function main() {
     console.log('🧠 Cognitive Chair running in DRY-RUN mode (no models called; prompts and structure generated).');
   }
 
-  const transcript = await composeReasoning({
-    mission,
-    responsibilities,
-    lenses,
-    callModel,
-  });
+  let transcript = null;
+  let buildResult = null;
+  const root = process.cwd();
+
+  if (buildMode) {
+    buildResult = await runCognitiveStep({
+      mission,
+      responsibilities,
+      lenses,
+      root,
+      callModel,
+      dryRun,
+    });
+    transcript = buildResult.transcript;
+  } else {
+    transcript = await composeReasoning({
+      mission,
+      responsibilities,
+      lenses,
+      callModel,
+    });
+  }
 
   if (pool) {
     await pool.end().catch(() => {});
@@ -132,22 +151,27 @@ async function main() {
   const outputPath = args.output || args.o;
   if (outputPath) {
     fs.mkdirSync(path.dirname(outputPath), { recursive: true });
-    fs.writeFileSync(outputPath, JSON.stringify(transcript, null, 2), 'utf8');
-    console.log(`Wrote JSON transcript to ${outputPath}`);
+    fs.writeFileSync(outputPath, JSON.stringify(buildMode ? buildResult : transcript, null, 2), 'utf8');
+    console.log(`Wrote JSON ${buildMode ? 'build plan' : 'transcript'} to ${outputPath}`);
   } else {
     const defaultDir = 'products/receipts';
     fs.mkdirSync(defaultDir, { recursive: true });
     const stamp = new Date().toISOString().replace(/[:.]/g, '-');
-    const defaultPath = path.join(defaultDir, `COGNITIVE_TRANSCRIPT_${stamp}.json`);
-    fs.writeFileSync(defaultPath, JSON.stringify(transcript, null, 2), 'utf8');
-    console.log(`Wrote JSON transcript to ${defaultPath}`);
+    const defaultPath = path.join(defaultDir, `${buildMode ? 'COGNITIVE_BUILD_PLAN' : 'COGNITIVE_TRANSCRIPT'}_${stamp}.json`);
+    fs.writeFileSync(defaultPath, JSON.stringify(buildMode ? buildResult : transcript, null, 2), 'utf8');
+    console.log(`Wrote JSON ${buildMode ? 'build plan' : 'transcript'} to ${defaultPath}`);
   }
 
-  const markdown = formatTranscript(transcript);
-  const mdPath = (outputPath || `products/receipts/COGNITIVE_TRANSCRIPT_${new Date().toISOString().replace(/[:.]/g, '-')}.md`)
+  let markdown;
+  if (buildMode) {
+    markdown = formatBuildPlan(buildResult);
+  } else {
+    markdown = formatTranscript(transcript);
+  }
+  const mdPath = (outputPath || `products/receipts/${buildMode ? 'COGNITIVE_BUILD_PLAN' : 'COGNITIVE_TRANSCRIPT'}_${new Date().toISOString().replace(/[:.]/g, '-')}.md`)
     .replace(/\.json$/, '.md');
   fs.writeFileSync(mdPath, markdown, 'utf8');
-  console.log(`Wrote Markdown transcript to ${mdPath}`);
+  console.log(`Wrote Markdown ${buildMode ? 'build plan' : 'transcript'} to ${mdPath}`);
 
   console.log('\n--- CHAIR SYNTHESIS PREVIEW ---\n');
   if (transcript.chair?.parsed) {
@@ -155,6 +179,9 @@ async function main() {
     console.log(`Next action: ${transcript.chair.parsed.next_action || ''}`);
   } else if (transcript.chair?.prompt) {
     console.log('(Dry-run: synthesis prompt generated but not sent.)');
+  }
+  if (buildMode && buildResult.gate) {
+    console.log(`Gate: ${buildResult.gate.verdict} (p_hat=${buildResult.gate.p_hat?.toFixed(2)}, threshold=${buildResult.gate.threshold?.toFixed(2)})`);
   }
 }
 

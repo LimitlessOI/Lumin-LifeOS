@@ -201,11 +201,13 @@
       "id": "M2PT-008",
       "name": "Wire existing Chair/Lens/Model/Execution stack into build pipeline",
       "phase": "4",
-      "status": "pending",
+      "status": "done",
       "artifact": "factory-staging/factory-core/builder/cognitive-step-runner.mjs + scripts/run-cognitive-mission.mjs --build-mode",
       "acceptance": "Every execute-step first composes responsibilities + lenses, selects the cheapest capable model per lens, collects independent outputs with disagreement preserved, stores a Chair synthesis, and only then writes code; dry-run mode works without tokens; BuilderOS reuses the generic cognitive-core-oracle math for trust scoring, not the user-specific judgment tables.",
       "verify_command": "node --test tests/cognitive-chair.test.mjs && node scripts/run-cognitive-mission.mjs --mission \"sample build decision\" --dry-run --build-mode",
-      "depends_on": ["M2PT-005", "M2PT-001"]
+      "depends_on": ["M2PT-005", "M2PT-001"],
+      "completed_at": "2026-07-31T22:00:00.000Z",
+      "git_sha": "TBD_COMMIT_SHA"
     },
     {
       "id": "M2PT-009",
