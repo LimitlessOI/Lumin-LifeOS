@@ -510,7 +510,7 @@
     },
     {
       "id": "white-label-3",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/partner-config-creation.js",
       "task": "specify partner onboarding flow",
       "spec": "Create an endpoint to handle new partner config creation for onboarding.",
@@ -536,12 +536,12 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-31T10:15:52.006Z",
-      "commit_sha": "6a72794484b93a5a789f3a576b26dc058ba5538c",
+      "commit_sha": "f9182b4ea3b108f5dc38d12cedc6ba85df7a461c",
       "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "white-label-3",
       "mission_id": "PRODUCT-white-label",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerPartnerConfigRoutes; assertion_threw",
+      "last_error": null,
       "reaudit_reset_at": "2026-07-30T18:55:06.853Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
