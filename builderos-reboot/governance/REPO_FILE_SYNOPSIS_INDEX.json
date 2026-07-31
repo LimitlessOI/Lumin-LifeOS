@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T07:46:52.869Z",
+  "generated_at": "2026-07-31T07:47:14.137Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12519,
+  "file_count": 12520,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -92108,6 +92108,13 @@
       "bytes": 681,
       "mtime": "2026-07-16T19:42:53.614Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "services/musicIndustryConsult.js",
+      "synopsis": "Exports consultMusicIndustry — services/musicIndustryConsult.js.",
+      "bytes": 543,
+      "mtime": "2026-07-31T07:47:14.137Z",
+      "indexed_at": "2026-07-31T07:47:14.137Z"
     },
     {
       "path": "services/musicIndustryConsultation.js",
