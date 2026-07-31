@@ -2563,7 +2563,7 @@
     },
     {
       "id": "bo-wire-security-review-into-commit-path",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/lifeos-council-builder-routes.js",
       "priority": "high",
       "task": "scripts/ai-security-review.mjs's reviewDiffForSecurity() (the real AI-powered adversarial security layer, model role 'security_review' in the model-capability-ledger) is built, unit-tested (11/11 pass), and live-verified end-to-end via POST /factory/security-review -- but nothing calls it automatically. It only fires when a human or agent manually POSTs to that endpoint. This is the same 'built but dead' gap already fixed once tonight for other model roles: a real, working capability that never actually runs in production traffic delivers zero value until it's wired into a real call path.",
@@ -2593,9 +2593,7 @@
           ],
           "assertion_id": "expected_exports:routes/lifeos-council-builder-routes.js"
         }
-      ],
-      "shipped_via": "devin_mission_2b",
-      "note_on_completion": "Already satisfied by Devin Mission 2B (commit 77f63ddfd00d755a362e98f42581fdc02cde16cd): reviewDiffForSecurity is imported and called fire-and-forget/non-blocking from commitOrMirrorFiles in routes/lifeos-council-builder-routes.js (verified directly, line ~1497), matching this spec's functional requirement and the same Gate Charter c646160f posture. Marked done manually because this step's file_contains check requires the literal string 'security_review finding', but the actual shipped log messages are '[AI-SECURITY-REVIEW] model findings on commit diff (non-blocking)' and '[AI-SECURITY-REVIEW] skipped or failed (non-blocking)' -- different text, same behavior. Without this manual close, the pre-existing-artifact detector would not recognize the work as done and the factory would likely dispatch a duplicate/conflicting build for an already-solved problem."
+      ]
     },
     {
       "id": "bo-runtime-fingerprint",
@@ -2629,11 +2627,34 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-30T03:22:23.123Z",
+      "shipped_at": "2026-07-31T02:01:49.831Z",
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:createBuilderRuntimeFingerprintRoutes; assertion_threw; assertion_threw; assertion_threw",
       "finding_note": " | Closed 2026-07-30: judgment in scripts/lib; wired into existing control-plane route / shipping loop (not a new SO-001 module).",
       "pre_existing": false,
-      "reaudit_reset_at": "2026-07-30T18:55:06.356Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.356Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/builderos/twins/steps/bo-runtime-fingerprint.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-31T02:01:49.831Z",
+        "shipped_at": "2026-07-31T02:01:49.831Z",
+        "commit_sha": null,
+        "content_sha256": "1a9e03e30e76c25923a06b21a8823285581c7cc3d54835153b4c93b5c1f481e6",
+        "target_file": "routes/builderos-runtime-fingerprint-routes.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "routes/builderos-runtime-fingerprint-routes.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/builderos/twins/steps/bo-runtime-fingerprint.exact",
+          "content_sha256": "1a9e03e30e76c25923a06b21a8823285581c7cc3d54835153b4c93b5c1f481e6"
+        }
+      }
     },
     {
       "id": "bo-schedule-site-builder-sentry-gate",

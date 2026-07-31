@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T02:01:22.244Z",
+  "generated_at": "2026-07-31T02:01:52.881Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12367,
+  "file_count": 12368,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -67733,6 +67733,13 @@
       "bytes": 3846,
       "mtime": "2026-07-05T19:10:02.190Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "routes/builderos-runtime-fingerprint-routes.js",
+      "synopsis": "Exports createBuilderRuntimeFingerprintRoutes — routes/builderos-runtime-fingerprint-routes.js.",
+      "bytes": 3161,
+      "mtime": "2026-07-31T02:01:52.881Z",
+      "indexed_at": "2026-07-31T02:01:52.881Z"
     },
     {
       "path": "routes/builderOSTokenReceipt.js",
