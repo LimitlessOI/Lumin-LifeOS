@@ -199,7 +199,7 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-31T06:51:35.498Z",
+      "shipped_at": "2026-07-31T07:18:29.455Z",
       "commit_sha": null,
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step4",
@@ -213,10 +213,10 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-07-31T06:51:35.498Z",
-        "shipped_at": "2026-07-31T06:51:35.498Z",
-        "commit_sha": "b63fe4b98ce98f0e11a52804d85574678cc39818",
-        "content_sha256": "de41194a58371ab86898aac7815f9539b4e5f3da5fe2f2ba329477bed6c96378",
+        "sealed_at": "2026-07-31T07:18:29.455Z",
+        "shipped_at": "2026-07-31T07:18:29.455Z",
+        "commit_sha": null,
+        "content_sha256": "d672f4053c9aac36167f855571949bcf61cca9f83e0d8937bcc680291ad75ea0",
         "target_file": "services/envDiffService.js",
         "reverse": {
           "mode": "delete_file",
@@ -230,7 +230,7 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/oil-security-divisions/twins/steps/step4.exact",
-          "content_sha256": "de41194a58371ab86898aac7815f9539b4e5f3da5fe2f2ba329477bed6c96378"
+          "content_sha256": "d672f4053c9aac36167f855571949bcf61cca9f83e0d8937bcc680291ad75ea0"
         }
       },
       "built_sha": null,
