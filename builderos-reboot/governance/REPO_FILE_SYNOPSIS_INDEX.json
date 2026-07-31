@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T09:04:08.101Z",
+  "generated_at": "2026-07-31T09:04:31.565Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12529,
+  "file_count": 12530,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -73374,6 +73374,13 @@
       "bytes": 620,
       "mtime": "2026-06-21T21:39:08.104Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "scripts/preCommitScannerService.js",
+      "synopsis": "Exports scanSecrets — scripts/preCommitScannerService.js.",
+      "bytes": 1947,
+      "mtime": "2026-07-31T09:04:31.565Z",
+      "indexed_at": "2026-07-31T09:04:31.565Z"
     },
     {
       "path": "scripts/probe-founder-social-secrets.mjs",
