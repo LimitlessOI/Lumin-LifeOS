@@ -766,13 +766,13 @@
     },
     {
       "id": "business-tools-3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/realEstateCurriculumStructure.js",
       "task": "specify curriculum structure",
       "spec": "Outline modules and DB schema per student for virtual real estate class.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "getCurriculumModules",
         "getStudentSchema"
@@ -794,12 +794,12 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-31T07:17:57.282Z",
-      "commit_sha": "e12e1e73609f82a344d313a0cabf4b49ee61cb22",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "business-tools-3",
       "mission_id": "PRODUCT-business-tools",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:getCurriculumModules,getStudentSchema; assertion_threw; assertion_threw; assertion_threw; assertion_threw",
+      "last_error": "artifact_missing_after_ship: artifact_proof_failed: modules; DB schema",
       "reaudit_reset_at": "2026-07-30T18:55:06.365Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
@@ -826,7 +826,10 @@
           "content_source_path": "docs/products/business-tools/twins/steps/business-tools-3.exact",
           "content_sha256": "3f65bd4612d84821e045c97ea9a85ddf33d0688e4d91b0964c644c7ebf927376"
         }
-      }
+      },
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-31T07:18:03.706Z"
     },
     {
       "id": "business-tools-4",
