@@ -244,7 +244,7 @@
     },
     {
       "id": "step1",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/config-endpoints.js",
       "task": "migrate config endpoints",
       "spec": "Extract config endpoints from server.js lines 10171-10198 and place here.",
@@ -269,12 +269,12 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-31T09:04:58.960Z",
-      "commit_sha": "1445332e43033e8f18073530086f7dd6634bf42d",
+      "commit_sha": "b8886122540adb3c9dcd452bed17507c75b3d9b9",
       "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step1",
       "mission_id": "PRODUCT-white-label",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerConfigEndpoints; assertion_threw",
+      "last_error": null,
       "reaudit_reset_at": "2026-07-30T18:55:06.853Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
