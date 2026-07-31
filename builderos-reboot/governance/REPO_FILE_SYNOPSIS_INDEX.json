@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T12:30:15.449Z",
+  "generated_at": "2026-07-31T12:30:31.167Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12585,
   "files": [
@@ -23460,8 +23460,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 0,
-      "mtime": "2026-07-31T12:30:15.449Z",
-      "indexed_at": "2026-07-31T12:30:15.449Z",
+      "mtime": "2026-07-31T12:30:31.167Z",
+      "indexed_at": "2026-07-31T12:30:31.167Z",
       "synopsis_index_only": true
     },
     {

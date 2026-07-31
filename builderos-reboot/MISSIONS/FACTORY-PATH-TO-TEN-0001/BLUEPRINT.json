@@ -168,7 +168,7 @@
       "verify_command": "node --test tests/receipt-auditor.test.js && node scripts/replay-receipt.mjs --sample",
       "depends_on": ["M2PT-001"],
       "completed_at": "2026-07-31T12:30:00.000Z",
-      "git_sha": "PENDING_SHA_UPDATE",
+      "git_sha": "56cb4a370b417080d837d2a2dd8cd7bb7ea9de80",
       "receipt_path": "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/OBJECTIVE_VERDICT.json"
     },
     {
