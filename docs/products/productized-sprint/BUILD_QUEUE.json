@@ -703,14 +703,194 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-15T23:46:29.243Z",
+      "shipped_at": "2026-07-31T09:38:43.977Z",
       "commit_sha": "79f30f18cb64eab0d4c55d9842df42ed39cbbed3",
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "create-stripe-links",
       "mission_id": "PRODUCT-productized-sprint",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerStripePaymentRoutes; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.702Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.702Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/productized-sprint/twins/steps/create-stripe-links.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-31T09:38:43.977Z",
+        "shipped_at": "2026-07-31T09:38:43.977Z",
+        "commit_sha": "79f30f18cb64eab0d4c55d9842df42ed39cbbed3",
+        "content_sha256": "11be3dbcd2909f68012883c6ce719c60c7d3c3b7076896f693c28e25269fd16d",
+        "target_file": "routes/stripePaymentRoute.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "routes/stripePaymentRoute.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "INDETERMINATE",
+          "reason": "indeterminate_sql: SQL template literal contains ${} interpolation",
+          "details": {
+            "filePath": "/usr/src/app/routes/stripePaymentRoute.js",
+            "hash": "11be3dbcd2909f68012883c6ce719c60c7d3c3b7076896f693c28e25269fd16d",
+            "importChecks": [
+              {
+                "kind": "named",
+                "source": "express",
+                "names": [
+                  "Router"
+                ],
+                "raw": "import { Router } from 'express'",
+                "status": "PASS",
+                "reason": "external_or_builtin_package"
+              },
+              {
+                "kind": "default",
+                "source": "stripe",
+                "names": [
+                  "default"
+                ],
+                "raw": "import Stripe from 'stripe'",
+                "status": "PASS",
+                "reason": "external_or_builtin_package"
+              }
+            ],
+            "sqlChecks": [
+              {
+                "text": "Invalid tier. Must be one of: ${Object.keys(PRICE_IDS).join(', ')}",
+                "status": "INDETERMINATE",
+                "reason": "sql_template_literal_with_interpolation"
+              },
+              {
+                "text": "express",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "stripe",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "price_basic_default",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "price_pro_default",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "price_enterprise_default",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "basic",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "pro",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "enterprise",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/payment-links",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": ", ",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "redirect",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "https://example.com/success",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Error creating Stripe payment link:",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Failed to create payment link",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/payment-links/:id",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Error retrieving Stripe payment link:",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Failed to retrieve payment link",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/payment-links",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Error listing Stripe payment links:",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Failed to list payment links",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/payment-links/:id/deactivate",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Error deactivating Stripe payment link:",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Failed to deactivate payment link",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/api/stripe",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              }
+            ]
+          }
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/productized-sprint/twins/steps/create-stripe-links.exact",
+          "content_sha256": "11be3dbcd2909f68012883c6ce719c60c7d3c3b7076896f693c28e25269fd16d"
+        }
+      }
     },
     {
       "id": "create-delivery-email-template",
