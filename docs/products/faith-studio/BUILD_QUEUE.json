@@ -2117,13 +2117,13 @@
     },
     {
       "id": "09",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/advisoryCouncilProcess.js",
       "task": "define advisory council process",
       "spec": "Define the advisory council process for reviewing sacred content for accuracy and sensitivity.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "councilReview"
       ],
@@ -2180,7 +2180,7 @@
       },
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-31T10:17:10.098Z",
       "last_attempt": null,
       "revive_count": 1,
       "revived_at": "2026-07-31T10:16:04.570Z",
