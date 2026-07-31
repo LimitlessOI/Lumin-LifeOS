@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T22:30:38.143Z",
+  "generated_at": "2026-07-31T22:38:21.624Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12615,
   "files": [
@@ -41019,9 +41019,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 357599,
-      "mtime": "2026-07-31T22:30:38.143Z",
-      "indexed_at": "2026-07-31T22:30:38.143Z"
+      "bytes": 359149,
+      "mtime": "2026-07-31T22:38:10.389Z",
+      "indexed_at": "2026-07-31T22:38:21.624Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -73513,9 +73513,9 @@
     {
       "path": "scripts/master-a-to-z-acceptance.mjs",
       "synopsis": "FACTORY-MASTER-A-TO-Z-0001 acceptance smoke test.",
-      "bytes": 3610,
-      "mtime": "2026-07-31T22:30:38.143Z",
-      "indexed_at": "2026-07-31T22:30:38.143Z",
+      "bytes": 6032,
+      "mtime": "2026-07-31T22:34:48.946Z",
+      "indexed_at": "2026-07-31T22:38:21.624Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
