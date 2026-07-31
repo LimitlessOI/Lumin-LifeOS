@@ -602,13 +602,13 @@
     },
     {
       "id": "3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/honeypotProbeService.js",
       "task": "implement honeypot probe route",
       "spec": "Provide functions to create and manage honeypot probe routes and write receipt of probes.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "createProbeRoute",
         "writeProbeReceipt"
@@ -635,7 +635,7 @@
       "reaudit_reset_at": "2026-07-30T18:55:06.687Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-31T10:32:43.180Z",
       "last_attempt": null,
       "revive_count": 2,
       "revived_at": "2026-07-31T10:16:04.571Z",
