@@ -1,0 +1,28 @@
+{
+  "tests_passed": [
+    "mission_pack_exists",
+    "bp_sync_mandatory"
+  ],
+  "tests_failed": [],
+  "test_output": "cat builderos-reboot/MISSIONS/FACTORY-MASTER-A-TO-Z-0001/BLUEPRINT.json",
+  "completed_at": "2026-07-31T22:58:10.798Z",
+  "production_base": "https://lumin-web-production-e3a9.up.railway.app",
+  "mission_progress": "all_steps_done",
+  "steps_done": 21,
+  "steps_total": 21,
+  "founder_usability_pass": false,
+  "git_sha": "2d6080252e0b524e2c73eab878343e85779d5c06",
+  "verdict": "PASS",
+  "bp_sync": {
+    "updated": [
+      "builderos-reboot/BP_PRIORITY.json",
+      "builderos-reboot/MISSIONS/FACTORY-MASTER-A-TO-Z-0001/BLUEPRINT.json"
+    ],
+    "skipped": []
+  },
+  "artifact_sync": {
+    "mode": "technical_acceptance",
+    "readiness_report": "builderos-reboot/PRODUCT_READINESS_REPORT.json",
+    "freshness_status": "CURRENT"
+  }
+}

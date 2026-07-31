@@ -8,6 +8,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { loadLensRegistry } from '../../../services/cognitive-chair.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REASONING_PLANS_DIR = path.resolve(__dirname, '..', '..', '..', 'data', 'reasoning-plans');
@@ -85,16 +86,52 @@ function deriveResponsibilities(classification) {
   return Array.from(responsibilities);
 }
 
-function deriveLenses(responsibilities) {
-  const map = {
-    chair: ['chair_synthesis'],
-    security: ['security_lens'],
-    cfo: ['cfo_lens'],
-    privacy: ['privacy_lens'],
-    governance: ['governance_lens'],
-    architect: ['architect_lens'],
+function deriveLenses(responsibilities, classification, systemFacts = {}, chairContext = {}) {
+  const registry = loadLensRegistry();
+  const preferred = {
+    chair: ['founder-philosophy', 'steve-jobs'],
+    security: ['red-team'],
+    cfo: ['cfo-roi'],
+    privacy: ['red-team', 'customer-ease'],
+    governance: ['wisdom-memory'],
+    architect: ['steve-jobs', 'toyota-lean'],
+    builder: ['toyota-lean'],
+    creative: ['steve-jobs'],
   };
-  return responsibilities.flatMap((r) => map[r] || [`${r}_lens`]).filter((v, i, a) => a.indexOf(v) === i);
+
+  const selected = new Set();
+  for (const r of responsibilities) {
+    const ids = preferred[r] || [r];
+    for (const id of ids) {
+      const lens = registry.lenses.find((l) => l.lens_id === id);
+      if (lens) selected.add(id);
+    }
+  }
+
+  // Fallback: if no preferred lens resolved, pick the highest-trust lens for any responsibility.
+  if (selected.size === 0) {
+    const top = registry.lenses
+      .filter((l) => responsibilities.some((r) => l.responsibilities.includes(r)))
+      .sort((a, b) => (b.trust_score || 0) - (a.trust_score || 0))[0];
+    if (top) selected.add(top.lens_id);
+  }
+
+  // Adversarial augmentation for high-stakes missions.
+  const highStakes = classification.type === 'C' || classification.affects_security || classification.affects_money || classification.affects_customer_data || classification.scope === 'system-wide';
+  if (highStakes) {
+    selected.add('skeptic');
+    selected.add('devils-advocate');
+  }
+  if (classification.affects_security || classification.affects_customer_data) {
+    selected.add('red-team');
+  }
+
+  // Founder-philosophy lens joins when founder identity is available.
+  if (systemFacts.userId || chairContext.userId) {
+    selected.add('founder-philosophy');
+  }
+
+  return Array.from(selected);
 }
 
 function deriveGates(classification) {
@@ -151,7 +188,7 @@ export function createReasoningPlan({
   const classification = classifyMission({ mission, systemFacts });
   const budget = deriveBudget(classification);
   const responsibilities = deriveResponsibilities(classification);
-  const lenses = deriveLenses(responsibilities);
+  const lenses = deriveLenses(responsibilities, classification, systemFacts, chairContext);
   const gates = deriveGates(classification);
   const questions = deriveQuestions(mission, classification);
   const evidence = deriveEvidence(systemFacts);

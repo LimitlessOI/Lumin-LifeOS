@@ -1,0 +1,29 @@
+{
+  "schema": "master_a_to_z_demo_receipt_v1",
+  "mission": "FACTORY-MASTER-A-TO-Z-0001",
+  "run_at": "2026-07-31T22:57:48.036Z",
+  "cognitive_plan_id": "1785538668029-6crxvru3",
+  "blueprint_id": "BP-1785538668029-vb0eretn",
+  "blueprint_review": {
+    "ok": true,
+    "reasons": []
+  },
+  "execution": {
+    "ok": true,
+    "mission_id": "FACTORY-DEMO-SAMPLE-0001",
+    "blueprint_id": "FACTORY-DEMO-SAMPLE-0001",
+    "dry_run": false,
+    "steps_total": 1,
+    "results": [
+      {
+        "step_id": "demo-write-widget",
+        "httpStatus": 200,
+        "status": "DONE"
+      }
+    ]
+  },
+  "verdict": "DEMO_PASS",
+  "verified_by": "run-master-a-to-z-demo.mjs",
+  "verify_command": "node scripts/verify-master-a-to-z-demo.mjs",
+  "skip_git_checkout": true
+}

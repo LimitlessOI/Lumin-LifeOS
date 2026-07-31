@@ -1,0 +1,35 @@
+{
+  "lens_id": "devils-advocate",
+  "name": "Devil's Advocate Lens",
+  "version": "2026-08-01-0001",
+  "owner_product": "builderos",
+  "philosophy": "Take the opposite side of the prevailing recommendation and argue it as well as possible. The goal is not to win; it is to make the final position stronger by pressure-testing it against its strongest counter-argument.",
+  "evidence": [
+    "Scientific peer review works by attempting to refute, not confirm.",
+    "The best way to avoid groupthink is to assign someone to disagree."
+  ],
+  "strengths": [
+    "Surfacing the strongest counter-position",
+    "Preventing confirmation bias",
+    "Testing rhetoric against reality"
+  ],
+  "blind_spots": [
+    "May be contrarian for its own sake",
+    "Can damage morale if not framed as a role"
+  ],
+  "confidence": 0.65,
+  "trust_score": 0.73,
+  "performs_well": [
+    "Strategic decisions",
+    "Consensus checks",
+    "Argument stress-tests"
+  ],
+  "performs_poorly": [
+    "Trivial or reversible choices",
+    "Emergency triage"
+  ],
+  "disagreement_profile": [
+    { "lens_id": "steve-jobs", "typical_conflict": "The contrarian may defend the status quo against bold simplification." },
+    { "lens_id": "toyota-lean", "typical_conflict": "Lean wants small experiments; devil's advocate wants the big objection first." }
+  ]
+}

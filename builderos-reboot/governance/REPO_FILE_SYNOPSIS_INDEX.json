@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T22:48:28.407Z",
+  "generated_at": "2026-07-31T22:59:43.732Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12620,
+  "file_count": 12615,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21308,8 +21308,8 @@
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
       "bytes": 27779,
-      "mtime": "2026-07-31T22:30:38.143Z",
-      "indexed_at": "2026-07-31T22:30:38.143Z",
+      "mtime": "2026-07-31T22:30:06.922Z",
+      "indexed_at": "2026-07-31T22:57:53.422Z",
       "synopsis_index_only": true
     },
     {
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3788593,
-      "mtime": "2026-07-31T10:55:10.008Z",
-      "indexed_at": "2026-07-31T10:55:12.420Z"
+      "bytes": 3803770,
+      "mtime": "2026-07-31T20:39:33.142Z",
+      "indexed_at": "2026-07-31T22:57:53.422Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -23491,46 +23491,32 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-MASTER-A-TO-Z-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 14835,
-      "mtime": "2026-07-31T22:48:28.407Z",
-      "indexed_at": "2026-07-31T22:48:28.407Z",
+      "bytes": 12464,
+      "mtime": "2026-07-31T22:57:19.510Z",
+      "indexed_at": "2026-07-31T22:57:53.422Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-MASTER-A-TO-Z-0001/FOUNDER_PACKET.md",
       "synopsis": "Founder packet for FACTORY-MASTER-A-TO-Z-0001",
       "bytes": 2260,
-      "mtime": "2026-07-31T22:30:38.143Z",
-      "indexed_at": "2026-07-31T22:30:38.143Z"
+      "mtime": "2026-07-31T22:27:21.826Z",
+      "indexed_at": "2026-07-31T22:57:53.422Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-MASTER-A-TO-Z-0001/OBJECTIVE_VERDICT.json",
       "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
-      "bytes": 1376,
-      "mtime": "2026-07-31T22:48:28.407Z",
-      "indexed_at": "2026-07-31T22:48:28.407Z",
+      "bytes": 1072,
+      "mtime": "2026-07-31T22:47:10.050Z",
+      "indexed_at": "2026-07-31T22:57:53.422Z",
       "synopsis_index_only": true
-    },
-    {
-      "path": "builderos-reboot/MISSIONS/FACTORY-MASTER-A-TO-Z-0001/PHASE_0_AUDIT.md",
-      "synopsis": "Phase 0 audit of existing cognitive-spine components and naming/authority collisions.",
-      "bytes": 7229,
-      "mtime": "2026-07-31T22:48:28.407Z",
-      "indexed_at": "2026-07-31T22:48:28.407Z"
-    },
-    {
-      "path": "builderos-reboot/MISSIONS/FACTORY-MASTER-A-TO-Z-0001/PHASE_1_TRIGGER_SPEC.md",
-      "synopsis": "Phase 1 Trigger Spec — Chair Reasoning in Live Conversation",
-      "bytes": 1942,
-      "mtime": "2026-07-31T22:48:28.407Z",
-      "indexed_at": "2026-07-31T22:48:28.407Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-MASTER-A-TO-Z-0001/TEN_OUT_OF_TEN_DEFINITION.md",
       "synopsis": "10/10 definition for BuilderOS + LifeOS Cognitive Spine, benchmarked against every comparable autonomous system.",
-      "bytes": 12060,
-      "mtime": "2026-07-31T22:48:28.407Z",
-      "indexed_at": "2026-07-31T22:48:28.407Z"
+      "bytes": 9771,
+      "mtime": "2026-07-31T22:41:42.130Z",
+      "indexed_at": "2026-07-31T22:57:53.422Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/BLUEPRINT.json",
@@ -38820,9 +38806,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 76466,
-      "mtime": "2026-07-31T22:48:28.407Z",
-      "indexed_at": "2026-07-31T22:48:28.407Z"
+      "bytes": 74424,
+      "mtime": "2026-07-31T22:48:05.226Z",
+      "indexed_at": "2026-07-31T22:57:53.422Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41033,9 +41019,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 360061,
-      "mtime": "2026-07-31T22:48:28.407Z",
-      "indexed_at": "2026-07-31T22:48:28.407Z"
+      "bytes": 357599,
+      "mtime": "2026-07-31T22:47:57.858Z",
+      "indexed_at": "2026-07-31T22:57:53.422Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -41785,9 +41771,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 643458,
-      "mtime": "2026-07-31T22:48:28.407Z",
-      "indexed_at": "2026-07-31T22:48:28.407Z"
+      "bytes": 641814,
+      "mtime": "2026-07-31T12:04:04.906Z",
+      "indexed_at": "2026-07-31T12:04:04.906Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -62649,16 +62635,6 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
-      "path": "factory-staging/factory-core/builder/reasoning-plan.mjs",
-      "synopsis": "Reasoning Plan — Constitutional Decision Engine gate before lens selection.",
-      "bytes": 10855,
-      "mtime": "2026-07-31T22:48:28.407Z",
-      "indexed_at": "2026-07-31T22:48:28.407Z",
-      "ssot": [
-        "docs/products/builderos/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "factory-staging/factory-core/builder/run-mission.js",
       "synopsis": "Exports loadBlueprintFromRepo — builderos-reboot/MISSIONS/FACTORY-REBOOT-0006/CONTENT/run-mission.js.",
       "bytes": 3020,
@@ -64926,8 +64902,8 @@
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
       "bytes": 36111,
-      "mtime": "2026-07-31T22:30:38.143Z",
-      "indexed_at": "2026-07-31T22:30:38.143Z",
+      "mtime": "2026-07-31T22:30:03.362Z",
+      "indexed_at": "2026-07-31T22:57:53.422Z",
       "synopsis_index_only": true
     },
     {
@@ -65916,8 +65892,8 @@
       "path": "products/receipts/POINT_B_DNA_VERIFY.json",
       "synopsis": "Product receipt — POINT B DNA VERIFY.",
       "bytes": 318,
-      "mtime": "2026-07-31T22:30:38.143Z",
-      "indexed_at": "2026-07-31T22:30:38.143Z",
+      "mtime": "2026-07-31T12:13:02.420Z",
+      "indexed_at": "2026-07-31T12:13:02.420Z",
       "synopsis_index_only": true
     },
     {
@@ -65932,8 +65908,8 @@
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
       "bytes": 24616,
-      "mtime": "2026-07-31T22:30:38.143Z",
-      "indexed_at": "2026-07-31T22:30:38.143Z",
+      "mtime": "2026-07-31T22:57:22.426Z",
+      "indexed_at": "2026-07-31T22:57:53.422Z",
       "synopsis_index_only": true
     },
     {
@@ -66100,16 +66076,16 @@
       "path": "products/receipts/TRUTH_ENFORCEMENT_AUDIT.json",
       "synopsis": "Product receipt — TRUTH ENFORCEMENT AUDIT.",
       "bytes": 833,
-      "mtime": "2026-07-31T22:30:38.143Z",
-      "indexed_at": "2026-07-31T22:30:38.143Z",
+      "mtime": "2026-07-31T12:13:02.420Z",
+      "indexed_at": "2026-07-31T12:13:02.420Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/TRUTH_LOCKDOWN_VERIFY.json",
       "synopsis": "Product receipt — TRUTH LOCKDOWN VERIFY.",
       "bytes": 1318,
-      "mtime": "2026-07-31T22:30:38.143Z",
-      "indexed_at": "2026-07-31T22:30:38.143Z",
+      "mtime": "2026-07-31T12:13:02.420Z",
+      "indexed_at": "2026-07-31T12:13:02.420Z",
       "synopsis_index_only": true
     },
     {
@@ -66140,8 +66116,8 @@
       "path": "products/receipts/WISDOM_TRUTH_AUDIT.json",
       "synopsis": "Product receipt — WISDOM TRUTH AUDIT.",
       "bytes": 1001,
-      "mtime": "2026-07-31T22:30:38.143Z",
-      "indexed_at": "2026-07-31T22:30:38.143Z",
+      "mtime": "2026-07-31T12:13:02.420Z",
+      "indexed_at": "2026-07-31T12:13:02.420Z",
       "synopsis_index_only": true
     },
     {
@@ -73537,9 +73513,9 @@
     {
       "path": "scripts/master-a-to-z-acceptance.mjs",
       "synopsis": "FACTORY-MASTER-A-TO-Z-0001 acceptance smoke test.",
-      "bytes": 6032,
-      "mtime": "2026-07-31T22:34:48.946Z",
-      "indexed_at": "2026-07-31T22:38:21.624Z",
+      "bytes": 3610,
+      "mtime": "2026-07-31T22:30:00.074Z",
+      "indexed_at": "2026-07-31T22:57:53.422Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -87887,9 +87863,9 @@
     {
       "path": "services/chair-lumin-unified.js",
       "synopsis": "Chair native turn — Lumin IS the Chair; personality translates real facts only.",
-      "bytes": 12472,
-      "mtime": "2026-07-31T22:48:28.407Z",
-      "indexed_at": "2026-07-31T22:48:28.407Z",
+      "bytes": 5150,
+      "mtime": "2026-07-23T13:25:51.199Z",
+      "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -88181,9 +88157,9 @@
     {
       "path": "services/cognitive-chair.mjs",
       "synopsis": "Cognitive Chair — composes responsibilities, lenses (cognitive assets), and model selection",
-      "bytes": 15354,
-      "mtime": "2026-07-31T22:48:28.407Z",
-      "indexed_at": "2026-07-31T22:48:28.407Z",
+      "bytes": 13215,
+      "mtime": "2026-07-31T09:45:19.292Z",
+      "indexed_at": "2026-07-31T09:51:46.501Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -97153,13 +97129,6 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
-      "path": "tests/chair-lumin-unified-cognitive.test.mjs",
-      "synopsis": "mjs — tests/chair-lumin-unified-cognitive.test.mjs.",
-      "bytes": 5453,
-      "mtime": "2026-07-31T22:48:28.407Z",
-      "indexed_at": "2026-07-31T22:48:28.407Z"
-    },
-    {
       "path": "tests/chair-lumin-unified-so003.test.js",
       "synopsis": "SO-003 regression — the Chair must route every reply through a real",
       "bytes": 3036,
@@ -97230,9 +97199,9 @@
     {
       "path": "tests/cognitive-chair.test.mjs",
       "synopsis": "Tests for the BuilderOS Cognitive Chair.",
-      "bytes": 6638,
-      "mtime": "2026-07-31T22:48:28.407Z",
-      "indexed_at": "2026-07-31T22:48:28.407Z",
+      "bytes": 5112,
+      "mtime": "2026-07-31T09:45:00.544Z",
+      "indexed_at": "2026-07-31T09:51:46.501Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -98249,13 +98218,6 @@
       "bytes": 1291,
       "mtime": "2026-06-28T18:19:01.837Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
-    },
-    {
-      "path": "tests/reasoning-plan.test.mjs",
-      "synopsis": "mjs — tests/reasoning-plan.test.mjs.",
-      "bytes": 2904,
-      "mtime": "2026-07-31T22:48:28.407Z",
-      "indexed_at": "2026-07-31T22:48:28.407Z"
     },
     {
       "path": "tests/receipt-auditor.test.js",

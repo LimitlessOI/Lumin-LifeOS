@@ -1,8 +1,8 @@
 {
   "schema": "receipt_truth_validation_v1",
-  "at": "2026-07-31T22:25:55.634Z",
+  "at": "2026-07-31T22:59:47.303Z",
   "ok": true,
-  "checked": 132,
+  "checked": 135,
   "failures": [],
   "known_debt": [
     "MACHINE_ALPHA_WALKTHROUGH.json:ACCEPTANCE_PASS_WITHOUT_SHA_OR_BASE",
@@ -23,6 +23,7 @@
     "LIFERE_SALES_COACHING_V1_ACCEPTANCE.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
     "LUMIN_CHAIR_DIRECT_CONNECTION_PARITY.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
     "MACHINE_ALPHA_WALKTHROUGH.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
+    "MASTER_A_TO_Z_ACCEPTANCE.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
     "PATH_TO_10_T05_FOUNDER_MEMORY.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
     "PATH_TO_TEN_ACCEPTANCE.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
     "SOCIALMEDIAOS_SESSION_MVP_ACCEPTANCE.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
@@ -730,6 +731,20 @@
       "proposed_solutions": []
     },
     {
+      "file": "MASTER_A_TO_Z_ACCEPTANCE.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": true,
+      "proposed_solutions": []
+    },
+    {
+      "file": "MASTER_A_TO_Z_DEMO_RECEIPT.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
       "file": "OVERLAY_ALPHA_BATTERY.json",
       "ok": true,
       "violations": [],
@@ -822,6 +837,13 @@
     },
     {
       "file": "SENTRY_MARKETINGOS_LAYER_B.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "SENTRY_PASS_demo-write-widget_FACTORY-DEMO-SAMPLE-0001-demo-write-widget-1785538668035.json",
       "ok": true,
       "violations": [],
       "claims_pass": false,

@@ -1,0 +1,35 @@
+{
+  "lens_id": "red-team",
+  "name": "Red Team Lens",
+  "version": "2026-08-01-0001",
+  "owner_product": "builderos",
+  "philosophy": "Act as an adversary: how could this mission be attacked, misused, misunderstood, or made to fail? Security, safety, and abuse are not afterthoughts; they are first-class constraints on any design.",
+  "evidence": [
+    "OWASP top 10 and supply-chain attacks are predictable failure modes, not surprises.",
+    "Every interface that accepts user input is an attack surface."
+  ],
+  "strengths": [
+    "Finding security and abuse vectors",
+    "Spotting hidden assumptions about trust",
+    "Stress-testing failure modes"
+  ],
+  "blind_spots": [
+    "May over-weight risk and slow shipping",
+    "Can miss business-value urgency"
+  ],
+  "confidence": 0.75,
+  "trust_score": 0.78,
+  "performs_well": [
+    "Security review",
+    "Abuse-scenario analysis",
+    "Failure-mode discovery"
+  ],
+  "performs_poorly": [
+    "Pure UX copy decisions",
+    "Low-stakes reversible changes"
+  ],
+  "disagreement_profile": [
+    { "lens_id": "steve-jobs", "typical_conflict": "UX simplification may remove controls that contain risk." },
+    { "lens_id": "cfo-roi", "typical_conflict": "Security investment can look like cost until a breach occurs." }
+  ]
+}

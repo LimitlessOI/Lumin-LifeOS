@@ -1,0 +1,35 @@
+{
+  "lens_id": "skeptic",
+  "name": "Skeptic Lens",
+  "version": "2026-08-01-0001",
+  "owner_product": "builderos",
+  "philosophy": "Assume the plan is wrong until proven otherwise. Demand evidence, identify hidden assumptions, and expose overconfidence. The best decision is the one that survives aggressive doubt.",
+  "evidence": [
+    "Nullius in verba — take nobody's word for it.",
+    "Every optimistic forecast deserves a pre-mortem."
+  ],
+  "strengths": [
+    "Spotting hidden assumptions",
+    "Reducing overconfidence",
+    "Finding failure modes early"
+  ],
+  "blind_spots": [
+    "Can stall decisions with infinite doubt",
+    "May undervalue founder intuition when data is thin"
+  ],
+  "confidence": 0.7,
+  "trust_score": 0.75,
+  "performs_well": [
+    "Risk assessment",
+    "Premortems",
+    "Validation of claims"
+  ],
+  "performs_poorly": [
+    "Fast reversible decisions",
+    "Creative ideation"
+  ],
+  "disagreement_profile": [
+    { "lens_id": "steve-jobs", "typical_conflict": "Vision can outrun evidence." },
+    { "lens_id": "cfo-roi", "typical_conflict": "ROI models assume too much certainty." }
+  ]
+}

@@ -14,7 +14,8 @@ import { appendStepMetrics } from '../tsos/record-step-metrics.js';
 import { evaluateEfficiency } from '../tsos/evaluate-efficiency.js';
 import { appendStepExecutionRecord } from '../historian/append-record.js';
 import { runBpbIntakeGate } from '../bpb/intake-gate.js';
-import { runBehaviorAssertions } from '../sentry/behavior-assertions.js';
+import { runBehaviorAssertions, stepRequiresBehaviorProof } from '../sentry/behavior-assertions.js';
+import { runSentryRealityStation, assertSentryPassForStep } from '../../../services/sentry-reality-station.mjs';
 import { stepRequiresAuthoring, runAuthoring } from './authoring.js';
 import { REPO_ROOT, FACTORY_ROOT, resolveRepoPath } from '../repo-paths.js';
 
@@ -150,6 +151,7 @@ export async function dispatchExecuteStep(body, options = {}) {
   const skipIntake = body?.skip_intake_gate === true;
   const assertionRunner = options?.assertionRunner || null;
   const codegenRunner = options?.codegenRunner || null;
+  const sentryBaseUrl = options?.publicBaseUrl || process.env.PUBLIC_BASE_URL || 'https://lumin-web-production-e3a9.up.railway.app';
 
   if (!step?.step_id || !step?.sandbox_boundary) {
     return {
@@ -291,6 +293,43 @@ export async function dispatchExecuteStep(body, options = {}) {
   }
 
   appendSentryReview(sentryReview);
+
+  // Layer A/B reality station: produce an independent SENTRY receipt and
+  // fail-closed on assertSentryPassForStep for any step that declares proof.
+  if (stepRequiresBehaviorProof(step) || step.require_layer_b || step.run_sentry_reality_station) {
+    const realityReceipt = await runSentryRealityStation({
+      step,
+      baseUrl: sentryBaseUrl,
+      layerA: { assertions: declaredAssertions, runner: assertionRunner },
+      layerB: { scenario: step.layer_b_scenario || [] },
+      requireLayerB: step.require_layer_b === true,
+      runId: `${mission_id}-${step.step_id}-${Date.now()}`,
+    });
+    try {
+      assertSentryPassForStep(step, realityReceipt?.receipt);
+    } catch (err) {
+      appendSentryReview({ ...realityReceipt, error: err.message });
+      return {
+        httpStatus: 409,
+        body: {
+          ok: false,
+          status: 'SENTRY_REALITY_STATION_FAILED',
+          error: err.message,
+          receipt: realityReceipt,
+          builder: builderResult,
+          sentry: {
+            implementation_status: 'FAIL',
+            step_id: step.step_id,
+            contract: sentryContract,
+            verify: sentryVerify,
+            review: sentryReview,
+            reality_receipt: realityReceipt,
+          },
+        },
+      };
+    }
+    appendSentryReview({ ...realityReceipt, kind: 'sentry_reality_station_pass' });
+  }
 
   const tsosResult = appendStepMetrics({
     mission_id,

@@ -5,8 +5,14 @@
     "role": "Catalog of reusable cognitive assets (lenses).",
     "spec": "docs/products/builderos/specs/COGNITIVE_ASSET_ARCHITECTURE.md"
   },
-  "version": "2026-07-23-0001",
-  "updated_at": "2026-07-23T21:00:00.000Z",
+  "version": "2026-08-01-0002",
+  "updated_at": "2026-08-01T23:00:00.000Z",
+  "retirement_criteria": {
+    "trust_score_floor": 0.3,
+    "min_evidence_count": 3,
+    "consecutive_fails_threshold": 5,
+    "max_age_days": 365
+  },
   "lenses": [
     {
       "lens_id": "steve-jobs",
@@ -14,7 +20,11 @@
       "path": "data/lenses/steve-jobs.json",
       "responsibilities": ["chair", "architect", "creative"],
       "default_model_member": "claude_sonnet",
-      "summary": "Focus on user experience, simplicity, and saying no to a thousand good ideas so the essential few shine."
+      "summary": "Focus on user experience, simplicity, and saying no to a thousand good ideas so the essential few shine.",
+      "version": "2026-07-23-0001",
+      "evidence_count": 2,
+      "trust_score": 0.82,
+      "retirement_criteria": "Removed if trust_score < 0.3 for 5 consecutive missions or no evidence for 365 days."
     },
     {
       "lens_id": "toyota-lean",
@@ -22,7 +32,11 @@
       "path": "data/lenses/toyota-lean.json",
       "responsibilities": ["builder", "cfo"],
       "default_model_member": "openai_builder_standard",
-      "summary": "Eliminate waste, make work visible, pull value through the system, and improve continuously from reality."
+      "summary": "Eliminate waste, make work visible, pull value through the system, and improve continuously from reality.",
+      "version": "2026-07-23-0001",
+      "evidence_count": 2,
+      "trust_score": 0.80,
+      "retirement_criteria": "Removed if trust_score < 0.3 for 5 consecutive missions or no evidence for 365 days."
     },
     {
       "lens_id": "cfo-roi",
@@ -30,7 +44,11 @@
       "path": "data/lenses/cfo-roi.json",
       "responsibilities": ["cfo"],
       "default_model_member": "openai_gpt",
-      "summary": "Measure cost, expected return, risk, and opportunity cost; challenge anything that does not produce measurable leverage."
+      "summary": "Measure cost, expected return, risk, and opportunity cost; challenge anything that does not produce measurable leverage.",
+      "version": "2026-07-23-0001",
+      "evidence_count": 2,
+      "trust_score": 0.79,
+      "retirement_criteria": "Removed if trust_score < 0.3 for 5 consecutive missions or no evidence for 365 days."
     },
     {
       "lens_id": "customer-ease",
@@ -38,7 +56,11 @@
       "path": "data/lenses/customer-ease.json",
       "responsibilities": ["sentry", "architect"],
       "default_model_member": "gemini_flash",
-      "summary": "Judge every step from the customer's first confusion to their first success. Friction is failure."
+      "summary": "Judge every step from the customer's first confusion to their first success. Friction is failure.",
+      "version": "2026-07-23-0001",
+      "evidence_count": 2,
+      "trust_score": 0.81,
+      "retirement_criteria": "Removed if trust_score < 0.3 for 5 consecutive missions or no evidence for 365 days."
     },
     {
       "lens_id": "competition",
@@ -46,7 +68,11 @@
       "path": "data/lenses/competition.json",
       "responsibilities": ["chair", "wisdom"],
       "default_model_member": "openai_gpt",
-      "summary": "Map the competitive landscape, anticipate counter-moves, and avoid building what is already commoditized."
+      "summary": "Map the competitive landscape, anticipate counter-moves, and avoid building what is already commoditized.",
+      "version": "2026-07-23-0001",
+      "evidence_count": 2,
+      "trust_score": 0.74,
+      "retirement_criteria": "Removed if trust_score < 0.3 for 5 consecutive missions or no evidence for 365 days."
     },
     {
       "lens_id": "wisdom-memory",
@@ -54,7 +80,59 @@
       "path": "data/lenses/wisdom-memory.json",
       "responsibilities": ["wisdom"],
       "default_model_member": "century",
-      "summary": "Before deciding, look at what we already proved, disproved, or assumed. The past is the cheapest consultant."
+      "summary": "Before deciding, look at what we already proved, disproved, or assumed. The past is the cheapest consultant.",
+      "version": "2026-07-23-0001",
+      "evidence_count": 2,
+      "trust_score": 0.77,
+      "retirement_criteria": "Removed if trust_score < 0.3 for 5 consecutive missions or no evidence for 365 days."
+    },
+    {
+      "lens_id": "skeptic",
+      "name": "Skeptic Lens",
+      "path": "data/lenses/skeptic.json",
+      "responsibilities": ["chair", "security"],
+      "default_model_member": "openai_gpt",
+      "summary": "Assume the plan is wrong until proven otherwise. Demand evidence, identify hidden assumptions, and expose overconfidence.",
+      "version": "2026-08-01-0001",
+      "evidence_count": 2,
+      "trust_score": 0.75,
+      "retirement_criteria": "Removed if trust_score < 0.3 for 5 consecutive missions or no evidence for 365 days."
+    },
+    {
+      "lens_id": "devils-advocate",
+      "name": "Devil's Advocate Lens",
+      "path": "data/lenses/devils-advocate.json",
+      "responsibilities": ["chair"],
+      "default_model_member": "openai_gpt",
+      "summary": "Take the opposite side of the prevailing recommendation and argue it as well as possible to pressure-test consensus.",
+      "version": "2026-08-01-0001",
+      "evidence_count": 2,
+      "trust_score": 0.73,
+      "retirement_criteria": "Removed if trust_score < 0.3 for 5 consecutive missions or no evidence for 365 days."
+    },
+    {
+      "lens_id": "red-team",
+      "name": "Red Team Lens",
+      "path": "data/lenses/red-team.json",
+      "responsibilities": ["security"],
+      "default_model_member": "claude_sonnet",
+      "summary": "Act as an adversary: how could this mission be attacked, misused, misunderstood, or made to fail?",
+      "version": "2026-08-01-0001",
+      "evidence_count": 2,
+      "trust_score": 0.78,
+      "retirement_criteria": "Removed if trust_score < 0.3 for 5 consecutive missions or no evidence for 365 days."
+    },
+    {
+      "lens_id": "founder-philosophy",
+      "name": "Founder Philosophy Lens",
+      "path": "data/lenses/founder-philosophy.json",
+      "responsibilities": ["chair"],
+      "default_model_member": "claude_sonnet",
+      "summary": "Adam's intent is the North Star. Autonomy is a means to reduce his cognitive load, not the end itself.",
+      "version": "2026-08-01-0001",
+      "evidence_count": 2,
+      "trust_score": 0.85,
+      "retirement_criteria": "Removed if trust_score < 0.3 for 5 consecutive missions or no evidence for 365 days."
     }
   ]
 }

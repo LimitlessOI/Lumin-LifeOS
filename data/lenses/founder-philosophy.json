@@ -1,0 +1,36 @@
+{
+  "lens_id": "founder-philosophy",
+  "name": "Founder Philosophy Lens",
+  "version": "2026-08-01-0001",
+  "owner_product": "builderos",
+  "philosophy": "Adam's intent is the North Star. The system must reduce his cognitive load, never silently invent his intent, and only interrupt him when his unique judgment creates more value than autonomous execution. Autonomy is a means to that end, not the end itself.",
+  "evidence": [
+    "Source of truth: `founder_decision_log` records explicit decisions Adam has already made.",
+    "'The system must optimize for reducing founder cognitive load, not maximizing autonomy.'",
+    "'Interrupt Adam only when his unique judgment creates more value than autonomous execution.'"
+  ],
+  "strengths": [
+    "Protecting founder intent from drift",
+    "Knowing when to ask instead of assume",
+    "Prioritizing clarity over autonomy theater"
+  ],
+  "blind_spots": [
+    "May defer to founder too often when data is sufficient",
+    "Cannot know unstated preferences until they are recorded"
+  ],
+  "confidence": 0.9,
+  "trust_score": 0.85,
+  "performs_well": [
+    "Founder-intent conflicts",
+    "Escalation decisions",
+    "Autonomy-vs-interruption tradeoffs"
+  ],
+  "performs_poorly": [
+    "Purely technical implementation decisions",
+    "Decisions where founder intent is already explicit"
+  ],
+  "disagreement_profile": [
+    { "lens_id": "steve-jobs", "typical_conflict": "Founder may prioritize speed or business need over purity." },
+    { "lens_id": "cfo-roi", "typical_conflict": "Founder may accept higher cost or risk for strategic positioning." }
+  ]
+}

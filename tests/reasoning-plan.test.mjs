@@ -60,3 +60,25 @@ test('reasoningPlanGate rejects invalid plan', () => {
   assert.strictEqual(reasoningPlanGate({}).ok, false);
   assert.strictEqual(reasoningPlanGate({ intent: 'x' }).ok, false);
 });
+
+test('dynamic lens selection picks real lenses and augments high-stakes missions with adversarial lenses', () => {
+  const plan = createReasoningPlan({
+    mission: 'Should we change the constitution and deploy billing that handles customer payment data across all products?',
+    chairContext: { domain: 'build' },
+    systemFacts: { userId: 'adam' },
+  });
+  const ids = new Set(plan.lenses);
+  assert.ok(ids.has('steve-jobs') || ids.has('founder-philosophy'), 'chair lens present');
+  assert.ok(ids.has('skeptic'), 'skeptic added for Type C');
+  assert.ok(ids.has('devils-advocate'), "devil's advocate added for Type C");
+  assert.ok(ids.has('red-team'), 'red-team added for security/customer data');
+});
+
+test('Type A missions keep a small lens set and budget', () => {
+  const plan = createReasoningPlan({
+    mission: 'Update the button label color and help text on the onboarding screen.',
+    chairContext: { domain: 'build' },
+  });
+  assert.strictEqual(plan.budget.max_model_calls <= 4, true);
+  assert.strictEqual(plan.classification.type, 'A');
+});

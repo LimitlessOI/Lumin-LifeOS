@@ -44,6 +44,10 @@ audit/reports/fsar_proposal_*.md
 # Local quarantine + generated proof
 .quarantine/
 docs/THREAD_REALITY/outputs/**
+# Runtime cognitive-spine persistence (regenerated on every run)
+data/reasoning-plans/
+data/blueprints/
+data/model-roi-ledger.jsonl
 
 # Machine-generated builder preflight audit (may contain deploy hostname; never secrets)
 data/builder-preflight-log.jsonl

@@ -9,6 +9,8 @@ import { composeReasoning, loadLensRegistry } from '../../../services/cognitive-
 import { createCouncilMembers } from '../../../config/council-members.js';
 import { decideGate } from '../../../services/cognitive-core-oracle.js';
 import { logModelCall } from '../../../services/model-roi-ledger.mjs';
+import { createReasoningPlan, propagateOverallConfidence } from './reasoning-plan.mjs';
+import { generateBlueprint, reviewBlueprint } from './blueprint-generator.mjs';
 
 const RESPONSIBILITY_CAPABILITY_MAP = {
   chair: ['reasoning', 'architecture', 'planning', 'governance'],
@@ -142,6 +144,14 @@ export async function runCognitiveStep({
     gate = decideGate({ p: chair.confidence, stake: 1, verifyCost: 0.2 });
   }
 
+  const propagated = propagateOverallConfidence(transcript.outputs);
+
+  const chairSynthesis = {
+    ...chair,
+    propagated_confidence: propagated.overall,
+    limiting_factor: propagated.limiting_factor,
+  };
+
   const executionSpec = {
     mission,
     dry_run: dryRun,
@@ -150,12 +160,26 @@ export async function runCognitiveStep({
     named_disagreements: chair?.named_disagreements || [],
     why_this_wins: chair?.why_this_wins || '',
     risks: chair?.risks || [],
+    unknowns: chair?.unknowns || [],
+    assumptions: chair?.assumptions || [],
+    evidence_needed: chair?.evidence_needed || [],
     next_action: chair?.next_action || '',
+    propagated_confidence: propagated.overall,
+    limiting_factor: propagated.limiting_factor,
     gate,
     plan: buildPlan,
   };
 
-  return { transcript, buildPlan, chair, gate, executionSpec, dryRun };
+  let blueprint = null;
+  let blueprintReview = null;
+  let reasoningPlan = null;
+  if (!dryRun) {
+    reasoningPlan = createReasoningPlan({ mission });
+    blueprint = generateBlueprint({ reasoningPlan, chairSynthesis });
+    blueprintReview = reviewBlueprint(blueprint);
+  }
+
+  return { transcript, buildPlan, chair, gate, executionSpec, dryRun, blueprint, blueprintReview, reasoningPlan };
 }
 
 export function formatBuildPlan(result) {
