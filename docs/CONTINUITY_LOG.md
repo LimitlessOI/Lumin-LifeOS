@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-31 — M2PT-009 model-cost ROI ledger + M2PT-010 Wisdom learning loop operational
+
+Created `services/model-roi-ledger.mjs` (JSONL ledger, per-model/per-lens/per-lens-model ROI, `trust_score_delta` from pass rate), `scripts/model-roi-report.mjs`, `services/wisdom-reality-update.mjs` (updates `LENS_REGISTRY.json` trust scores, confidence, performs_well/poorly, disagreement_profile from ledger + SENTRY + Receipt Auditor), and `scripts/wisdom-update-lens-trust.mjs --dry-run`. Wired `logModelCall` into `cognitive-step-runner.mjs` so executed Chair/Lens model calls are logged. Next: M2PT-011 SMOS revenue reality loop.
+
 ## 2026-07-31 — M2PT-008 Chair/Lens/Model/Execution pipeline wired
 
 Created `factory-staging/factory-core/builder/cognitive-step-runner.mjs` and updated `scripts/run-cognitive-mission.mjs` with `--build-mode` / `--dry-run`. `runCognitiveStep` composes responsibilities + lenses, selects the cheapest capable model per lens (cost + capability + tier floor from `config/council-members.js`), preserves disagreements, stores a Chair synthesis, and emits an `executionSpec`. Reuses `cognitive-core-oracle.js#decideGate` for Chair-confidence gating. Dry-run mode works without tokens. Hand-authored phase-4 factory-core module; SO-001 drift recorded. Next: M2PT-009 model-cost ROI ledger + M2PT-010 Wisdom learning loop.

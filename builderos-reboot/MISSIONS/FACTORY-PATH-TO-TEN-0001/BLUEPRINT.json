@@ -213,21 +213,25 @@
       "id": "M2PT-009",
       "name": "Implement model-cost routing and ROI ledger",
       "phase": "5",
-      "status": "pending",
-      "artifact": "services/model-roi-ledger.mjs + data/model-roi-ledger.jsonl",
+      "status": "done",
+      "artifact": "services/model-roi-ledger.mjs + data/model-roi-ledger.jsonl + scripts/model-roi-report.mjs",
       "acceptance": "Each model call logs cost, lens, mission, and outcome; the ledger can report per-lens and per-model ROI and trust-score deltas.",
       "verify_command": "node --test tests/model-roi-ledger.test.js && node scripts/model-roi-report.mjs",
-      "depends_on": ["M2PT-008"]
+      "depends_on": ["M2PT-008"],
+      "completed_at": "2026-07-31T22:00:00.000Z",
+      "git_sha": "TBD_COMMIT_SHA"
     },
     {
       "id": "M2PT-010",
       "name": "Build Wisdom learning loop from reality",
       "phase": "5",
-      "status": "pending",
-      "artifact": "services/wisdom-reality-update.mjs",
+      "status": "done",
+      "artifact": "services/wisdom-reality-update.mjs + scripts/wisdom-update-lens-trust.mjs",
       "acceptance": "Wisdom reads SENTRY + Receipt Auditor outcomes and updates trust_score, performs_well, performs_poorly, and disagreement_profile in the Lens Registry and product BUILD_QUEUEs.",
       "verify_command": "node --test tests/wisdom-reality-update.test.js && node scripts/wisdom-update-lens-trust.mjs --dry-run",
-      "depends_on": ["M2PT-007", "M2PT-009"]
+      "depends_on": ["M2PT-007", "M2PT-009"],
+      "completed_at": "2026-07-31T22:00:00.000Z",
+      "git_sha": "TBD_COMMIT_SHA"
     },
     {
       "id": "M2PT-011",

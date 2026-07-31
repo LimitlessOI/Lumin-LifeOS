@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T18:49:30.401Z",
+  "generated_at": "2026-07-31T18:52:44.547Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12594,
+  "file_count": 12600,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -23459,9 +23459,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/BLUEPRINT.json",
       "synopsis": "Receipt Auditor\"],",
-      "bytes": 17541,
-      "mtime": "2026-07-31T18:49:30.401Z",
-      "indexed_at": "2026-07-31T18:49:30.401Z",
+      "bytes": 17775,
+      "mtime": "2026-07-31T18:52:44.547Z",
+      "indexed_at": "2026-07-31T18:52:44.547Z",
       "synopsis_index_only": true
     },
     {
@@ -38723,9 +38723,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 70944,
-      "mtime": "2026-07-31T18:49:30.401Z",
-      "indexed_at": "2026-07-31T18:49:30.401Z"
+      "bytes": 71576,
+      "mtime": "2026-07-31T18:52:44.547Z",
+      "indexed_at": "2026-07-31T18:52:44.547Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40936,9 +40936,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 354316,
-      "mtime": "2026-07-31T18:49:30.401Z",
-      "indexed_at": "2026-07-31T18:49:30.401Z"
+      "bytes": 355390,
+      "mtime": "2026-07-31T18:52:44.547Z",
+      "indexed_at": "2026-07-31T18:52:44.547Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -62537,9 +62537,9 @@
     {
       "path": "factory-staging/factory-core/builder/cognitive-step-runner.mjs",
       "synopsis": "Cognitive Step Runner — Chair/Lens/Model/Execution pipeline.",
-      "bytes": 6392,
-      "mtime": "2026-07-31T18:49:30.401Z",
-      "indexed_at": "2026-07-31T18:49:30.401Z",
+      "bytes": 7809,
+      "mtime": "2026-07-31T18:52:44.547Z",
+      "indexed_at": "2026-07-31T18:52:44.547Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -73529,6 +73529,16 @@
       "bytes": 643,
       "mtime": "2026-06-21T21:39:07.836Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "scripts/model-roi-report.mjs",
+      "synopsis": "CLI report generator for the model-cost ROI ledger.",
+      "bytes": 838,
+      "mtime": "2026-07-31T18:52:44.547Z",
+      "indexed_at": "2026-07-31T18:52:44.547Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/mvpDataSourceDecision.mjs",
@@ -86414,6 +86424,16 @@
       ]
     },
     {
+      "path": "scripts/wisdom-update-lens-trust.mjs",
+      "synopsis": "CLI to update Lens Registry trust scores from reality outcomes.",
+      "bytes": 1202,
+      "mtime": "2026-07-31T18:52:44.547Z",
+      "indexed_at": "2026-07-31T18:52:44.547Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "scripts/write-phase14-ledger.mjs",
       "synopsis": "Script — Write Phase14 Ledger.",
       "bytes": 1793,
@@ -92596,6 +92616,16 @@
       ]
     },
     {
+      "path": "services/model-roi-ledger.mjs",
+      "synopsis": "Model-cost ROI ledger — logs every model call (cost, lens, mission,",
+      "bytes": 4428,
+      "mtime": "2026-07-31T18:52:44.547Z",
+      "indexed_at": "2026-07-31T18:52:44.547Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/monetization-map.js",
       "synopsis": "services/monetization-map.js",
       "bytes": 13381,
@@ -95852,6 +95882,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "services/wisdom-reality-update.mjs",
+      "synopsis": "Wisdom reality update — adjusts Lens Registry trust scores and",
+      "bytes": 4917,
+      "mtime": "2026-07-31T18:52:44.547Z",
+      "indexed_at": "2026-07-31T18:52:44.547Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/wisdom-truth-auditor.js",
       "synopsis": "Wisdom truth auditor — red-team truth gates, scan enforcement gaps, challenge assumptions.",
       "bytes": 12191,
@@ -97839,6 +97879,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "tests/model-roi-ledger.test.js",
+      "synopsis": "Model-cost ROI ledger tests.",
+      "bytes": 2855,
+      "mtime": "2026-07-31T18:52:44.547Z",
+      "indexed_at": "2026-07-31T18:52:44.547Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "tests/never-stop-gate.test.js",
       "synopsis": "Regression tests for the never-stop file-placement + blueprint-priority",
       "bytes": 3341,
@@ -98452,6 +98502,16 @@
       "bytes": 2704,
       "mtime": "2026-07-29T05:17:13.713Z",
       "indexed_at": "2026-07-29T05:18:22.632Z"
+    },
+    {
+      "path": "tests/wisdom-reality-update.test.js",
+      "synopsis": "Wisdom reality update tests.",
+      "bytes": 2607,
+      "mtime": "2026-07-31T18:52:44.547Z",
+      "indexed_at": "2026-07-31T18:52:44.547Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "tests/wisdom-truth-auditor.test.js",

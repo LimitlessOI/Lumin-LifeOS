@@ -8,6 +8,7 @@
 import { composeReasoning, loadLensRegistry } from '../../../services/cognitive-chair.mjs';
 import { createCouncilMembers } from '../../../config/council-members.js';
 import { decideGate } from '../../../services/cognitive-core-oracle.js';
+import { logModelCall } from '../../../services/model-roi-ledger.mjs';
 
 const RESPONSIBILITY_CAPABILITY_MAP = {
   chair: ['reasoning', 'architecture', 'planning', 'governance'],
@@ -69,12 +70,45 @@ export async function runCognitiveStep({
   root,
   callModel = null,
   dryRun = false,
+  logCalls = true,
 } = {}) {
   if (!mission && step?.task) ({ mission } = { mission: step.task });
   if (!mission) throw new Error('runCognitiveStep requires mission or step.task');
 
   const members = createCouncilMembers({ DEEPSEEK_BRIDGE_ENABLED: process.env.DEEPSEEK_BRIDGE_ENABLED });
   const transcript = await composeReasoning({ mission, responsibilities, lenses, root, callModel });
+
+  // Log every model call to the ROI ledger (cost, lens, mission). Outcome is
+  // unknown until SENTRY verifies the result; Wisdom updates the ledger later.
+  if (logCalls && callModel && !dryRun) {
+    for (const o of transcript.outputs) {
+      const usage = o.usage || {};
+      logModelCall({
+        model: o.model_member,
+        lensId: o.lens_id,
+        responsibility: o.responsibility,
+        mission,
+        promptTokens: usage.prompt_tokens,
+        completionTokens: usage.completion_tokens,
+        estimatedUsd: usage.estimated_usd,
+        outcome: 'unknown',
+      });
+    }
+    if (transcript.chair?.usage) {
+      const usage = transcript.chair.usage;
+      logModelCall({
+        model: 'claude_sonnet',
+        lensId: 'chair-synthesis',
+        responsibility: 'chair',
+        mission,
+        promptTokens: usage.prompt_tokens,
+        completionTokens: usage.completion_tokens,
+        estimatedUsd: usage.estimated_usd,
+        outcome: 'unknown',
+      });
+    }
+  }
+
   const registry = loadLensRegistry(root);
 
   const buildPlan = transcript.outputs.map((o) => {
@@ -94,6 +128,11 @@ export async function runCognitiveStep({
       recommended_action: o.parsed?.recommended_action || '',
     };
   });
+
+  // Also surface the latest trust scores from Wisdom so model selection can
+  // react to reality. For now the selection below uses cost+capability floor;
+  // trust scores are available for future tie-breaking.
+  const trustByLens = Object.fromEntries((registry.lenses || []).map((l) => [l.lens_id, l.trust_score ?? 0.5]));
 
   const chair = transcript.chair?.parsed || null;
   let gate = null;
