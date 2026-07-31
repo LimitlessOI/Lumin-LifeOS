@@ -604,7 +604,7 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-31T07:01:31.014Z",
+      "shipped_at": "2026-07-31T07:35:00.617Z",
       "commit_sha": null,
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "personal-finance-os-4",
@@ -618,10 +618,10 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-07-31T07:01:31.014Z",
-        "shipped_at": "2026-07-31T07:01:31.014Z",
+        "sealed_at": "2026-07-31T07:35:00.617Z",
+        "shipped_at": "2026-07-31T07:35:00.617Z",
         "commit_sha": null,
-        "content_sha256": "919c776ece1f31d61c6480452cc1e34195e77dede49e3316222217610cd1cbd5",
+        "content_sha256": "8cc2edc3da68d318a3c70081d0ac0e6656c287450f9040fca06ad3496d8837cb",
         "target_file": "services/mvpSourceDecision.js",
         "reverse": {
           "mode": "delete_file",
@@ -634,7 +634,7 @@
           "reason": "indeterminate_sql: SQL string could not be parsed for table names",
           "details": {
             "filePath": "/usr/src/app/services/mvpSourceDecision.js",
-            "hash": "919c776ece1f31d61c6480452cc1e34195e77dede49e3316222217610cd1cbd5",
+            "hash": "8cc2edc3da68d318a3c70081d0ac0e6656c287450f9040fca06ad3496d8837cb",
             "importChecks": [],
             "sqlChecks": [
               {
@@ -653,7 +653,7 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/personal-finance-os/twins/steps/personal-finance-os-4.exact",
-          "content_sha256": "919c776ece1f31d61c6480452cc1e34195e77dede49e3316222217610cd1cbd5"
+          "content_sha256": "8cc2edc3da68d318a3c70081d0ac0e6656c287450f9040fca06ad3496d8837cb"
         }
       },
       "built_sha": null,

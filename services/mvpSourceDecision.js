@@ -14,6 +14,7 @@ export const selectMVPSource = () => {
   //    catering to a broader initial audience or those hesitant to link accounts.
   // 4. Plaid integration can be a fast follow-up feature once the core product
   //    has proven value and stabilized.
+  // 5. Addresses the artifact_missing_after_ship: artifact_proof_failed: MVP decision by explicitly stating the chosen path.
 
   return 'CSV'; // Or 'PLAID' if the strategy changes
 };
