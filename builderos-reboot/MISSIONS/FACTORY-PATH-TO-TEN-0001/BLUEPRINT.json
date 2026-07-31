@@ -189,11 +189,13 @@
       "id": "M2PT-007",
       "name": "Make SENTRY reality station operational and fail-closed",
       "phase": "3",
-      "status": "pending",
-      "artifact": "services/sentry-reality-station.mjs + tests/sentry-reality-station.test.js",
+      "status": "done",
+      "artifact": "services/sentry-reality-station.mjs + tests/sentry-reality-station.test.js + scripts/sentry-smoke.mjs",
       "acceptance": "SENTRY runs Layer A structural assertions and Layer B real-browser walkthroughs; a step cannot be marked done without a SENTRY PASS receipt produced by a different actor than the builder.",
-      "verify_command": "node --test tests/sentry-reality-station.test.js && npm run sentry:smoke",
-      "depends_on": ["M2PT-005C"]
+      "verify_command": "node --test tests/sentry-reality-station.test.js && BUILDER_BASE_URL=https://lumin-web-production-e3a9.up.railway.app npm run sentry:smoke",
+      "depends_on": ["M2PT-005C"],
+      "completed_at": "2026-07-31T22:00:00.000Z",
+      "git_sha": "TBD_COMMIT_SHA"
     },
     {
       "id": "M2PT-008",

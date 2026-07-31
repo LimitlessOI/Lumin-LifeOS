@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-31 — M2PT-007 SENTRY Reality Station operational and fail-closed
+
+Created `services/sentry-reality-station.mjs` (pure Node ES module, no DB, no hidden AI calls, `@ssot docs/products/builderos/PRODUCT_HOME.md`), `tests/sentry-reality-station.test.js` (7/7 PASS), and `scripts/sentry-smoke.mjs` plus `npm run sentry:smoke` in `package.json`. `runLayerA` drives the existing `factory-staging/factory-core/sentry/behavior-assertions.js` for structural HTTP/file/export/function assertions. `runLayerB` drives `services/browser-agent.js` (Puppeteer) for real-browser human-sim walkthroughs. `runSentryRealityStation` emits a signed receipt (`verified_by: 'sentry-reality-station'`, `builder_actor: null`) and is fail-closed. Smoke against production `/api/v1/lifeos/builder/ready` passes. Hand-authored under phase-3 budget constraint; SO-001 drift recorded. Next: M2PT-008 Chair/Lens pipeline wiring.
+
 ## 2026-07-31 — M2PT-005B Revive-thrash + same_signature_count escalation bug fixed
 
 Patched `services/product-build-orchestrator.js#failStep` to compute a stable `failure_signature`, increment `same_signature_count` on identical repeats, reset it when the signature changes, and force `escalation_required` + `BLOCKED` on the third identical failure before `maxAttempts` is reached. `STEP_STATUS_FORBIDDEN` signatures strip the variable `twin_source`/`twin_path`/`mtime` diagnostic noise added in the earlier diagnostic pass. Added `tests/revive-thrash.test.js` (4/4 PASS). `node --test tests/product-build-orchestrator.test.js` PASS; `npm run builder:preflight` PASS; `npm run lifeos:bp-priority:verify` PASS.
