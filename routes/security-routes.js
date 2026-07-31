@@ -161,7 +161,7 @@ function scanFile(file) {
 }
 
 // Named export for malware scanning functionality
-export const scanUploadedFile = (file) => {
+export const malwareScanner = (file) => {
   return scanFile(file);
 };
 
@@ -190,7 +190,7 @@ export function registerSecurityRoutes(app) {
     }
     
     try {
-      const result = scanFile(req.file);
+      const result = malwareScanner(req.file);
       
       if (result.clean) {
         return res.status(200).json({
@@ -223,7 +223,7 @@ export function registerSecurityRoutes(app) {
     }
     
     try {
-      const results = req.files.map(file => scanFile(file));
+      const results = req.files.map(file => malwareScanner(file));
       const allClean = results.every(r => r.clean);
       
       return res.status(allClean ? 200 : 422).json({
@@ -260,7 +260,7 @@ export function registerSecurityRoutes(app) {
         size: buffer.length
       };
       
-      const result = scanFile(file);
+      const result = malwareScanner(file);
       
       return res.status(result.clean ? 200 : 422).json({
         status: result.clean ? 'clean' : 'infected',
