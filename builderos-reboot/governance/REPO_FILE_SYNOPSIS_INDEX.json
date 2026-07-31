@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T09:13:20.824Z",
+  "generated_at": "2026-07-31T09:15:12.293Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12535,
   "files": [
@@ -38562,9 +38562,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 62160,
-      "mtime": "2026-07-31T08:43:37.408Z",
-      "indexed_at": "2026-07-31T08:43:52.812Z"
+      "bytes": 63397,
+      "mtime": "2026-07-31T09:15:10.244Z",
+      "indexed_at": "2026-07-31T09:15:12.293Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40760,9 +40760,9 @@
     {
       "path": "docs/products/builderos/GAP_FILL_LEDGER.json",
       "synopsis": "Documentation — GAP FILL LEDGER.",
-      "bytes": 34832,
-      "mtime": "2026-07-31T08:33:29.067Z",
-      "indexed_at": "2026-07-31T08:33:58.806Z",
+      "bytes": 37657,
+      "mtime": "2026-07-31T09:13:21.156Z",
+      "indexed_at": "2026-07-31T09:15:12.293Z",
       "synopsis_index_only": true
     },
     {

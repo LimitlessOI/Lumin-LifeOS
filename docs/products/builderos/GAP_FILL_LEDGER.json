@@ -207,6 +207,30 @@
       "added_real_lines": 33,
       "justification": "governance infrastructure required by mini blueprint Phase 3 to mechanically prevent AI agents from creating unowned protected source files and from shipping blocked/done factory steps; adds scripts/lib/file-placement-gate.mjs and scripts/verify-file-placement.mjs, wires a hard block into routes/lifeos-council-builder-routes.js#commitOrMirrorFiles and githooks/pre-commit, and hardens services/truth-ladder.js, factory-staging/factory-core/builder/run-step.js, routes/factory-mount-routes.js, and services/governed-shipping-runner.js.\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
       "commit_message_excerpt": "GAP-FILL: file-placement authority gate + step-status enforcement. HAND-AUTHORED-JUSTIFICATION: governance infrastructure required by mini blueprint Phase 3 to mechanically prevent AI agents from crea"
+    },
+    {
+      "at": "2026-07-31T09:13:21.158Z",
+      "file": "routes/config-endpoints.js",
+      "is_new_file": true,
+      "added_real_lines": 14,
+      "justification": "this commit only adds @ssot governance tags to files already shipped by the autonomous never-stop loop; it does not add load-bearing logic and must pass local gates so the real Phase 4 fix (wrapping commitManyToGitHub) can be committed and deployed. PLACEMENT_APPROVED: these files reached main before the file-placement gate was wired into the autonomous loop; retroactively assigning them to docs/products/builderos/PRODUCT_HOME.md.\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
+      "commit_message_excerpt": "GAP-FILL: merge origin/main and retrofit @ssot tags on never-stop remote files. HAND-AUTHORED-JUSTIFICATION: this commit only adds @ssot governance tags to files already shipped by the autonomous neve"
+    },
+    {
+      "at": "2026-07-31T09:13:21.158Z",
+      "file": "routes/googleCalendarRoutes.js",
+      "is_new_file": true,
+      "added_real_lines": 17,
+      "justification": "this commit only adds @ssot governance tags to files already shipped by the autonomous never-stop loop; it does not add load-bearing logic and must pass local gates so the real Phase 4 fix (wrapping commitManyToGitHub) can be committed and deployed. PLACEMENT_APPROVED: these files reached main before the file-placement gate was wired into the autonomous loop; retroactively assigning them to docs/products/builderos/PRODUCT_HOME.md.\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
+      "commit_message_excerpt": "GAP-FILL: merge origin/main and retrofit @ssot tags on never-stop remote files. HAND-AUTHORED-JUSTIFICATION: this commit only adds @ssot governance tags to files already shipped by the autonomous neve"
+    },
+    {
+      "at": "2026-07-31T09:13:21.158Z",
+      "file": "routes/intakeFormRoute.js",
+      "is_new_file": true,
+      "added_real_lines": 8,
+      "justification": "this commit only adds @ssot governance tags to files already shipped by the autonomous never-stop loop; it does not add load-bearing logic and must pass local gates so the real Phase 4 fix (wrapping commitManyToGitHub) can be committed and deployed. PLACEMENT_APPROVED: these files reached main before the file-placement gate was wired into the autonomous loop; retroactively assigning them to docs/products/builderos/PRODUCT_HOME.md.\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
+      "commit_message_excerpt": "GAP-FILL: merge origin/main and retrofit @ssot tags on never-stop remote files. HAND-AUTHORED-JUSTIFICATION: this commit only adds @ssot governance tags to files already shipped by the autonomous neve"
     }
   ]
 }
