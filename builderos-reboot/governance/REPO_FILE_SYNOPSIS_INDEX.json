@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T12:49:58.647Z",
+  "generated_at": "2026-07-31T12:51:20.015Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12588,
   "files": [
@@ -23459,9 +23459,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/BLUEPRINT.json",
       "synopsis": "Receipt Auditor\"],",
-      "bytes": 17176,
-      "mtime": "2026-07-31T12:49:58.647Z",
-      "indexed_at": "2026-07-31T12:49:58.647Z",
+      "bytes": 17202,
+      "mtime": "2026-07-31T12:51:20.015Z",
+      "indexed_at": "2026-07-31T12:51:20.015Z",
       "synopsis_index_only": true
     },
     {
@@ -38723,9 +38723,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 67255,
-      "mtime": "2026-07-31T12:49:58.647Z",
-      "indexed_at": "2026-07-31T12:49:58.647Z"
+      "bytes": 68599,
+      "mtime": "2026-07-31T12:51:20.015Z",
+      "indexed_at": "2026-07-31T12:51:20.015Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
