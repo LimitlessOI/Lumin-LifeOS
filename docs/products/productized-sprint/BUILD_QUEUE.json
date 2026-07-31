@@ -1390,14 +1390,40 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-15T23:51:47.467Z",
+      "shipped_at": "2026-07-31T10:48:59.898Z",
       "commit_sha": "8e429c46e90ed17bd19f5843dcc889da3df2cb8f",
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "update-linkedin-profile",
       "mission_id": "PRODUCT-productized-sprint",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerLinkedinProfileRoutes; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.702Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.702Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/productized-sprint/twins/steps/update-linkedin-profile.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-31T10:48:59.898Z",
+        "shipped_at": "2026-07-31T10:48:59.898Z",
+        "commit_sha": "8e429c46e90ed17bd19f5843dcc889da3df2cb8f",
+        "content_sha256": "8c7a8c44de94421818928e5ca0f2d556e9c20750f042d746d3f8ff18c21d9b6a",
+        "target_file": "routes/linkedinProfileRoute.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "routes/linkedinProfileRoute.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/productized-sprint/twins/steps/update-linkedin-profile.exact",
+          "content_sha256": "8c7a8c44de94421818928e5ca0f2d556e9c20750f042d746d3f8ff18c21d9b6a"
+        }
+      }
     },
     {
       "id": "identify-first-5-customers",
