@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T06:19:41.160Z",
+  "generated_at": "2026-07-31T06:22:29.192Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12504,
   "files": [
@@ -41586,9 +41586,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 132311,
-      "mtime": "2026-07-31T06:16:23.763Z",
-      "indexed_at": "2026-07-31T06:18:39.006Z"
+      "bytes": 133814,
+      "mtime": "2026-07-31T06:22:00.100Z",
+      "indexed_at": "2026-07-31T06:22:29.192Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -65484,9 +65484,9 @@
     {
       "path": "products/receipts/MARKETING_PHASE1_VERIFY.json",
       "synopsis": "Product receipt — MARKETING PHASE1 VERIFY.",
-      "bytes": 2690,
-      "mtime": "2026-07-17T21:42:16.023Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 2248,
+      "mtime": "2026-07-31T06:21:12.569Z",
+      "indexed_at": "2026-07-31T06:22:29.192Z",
       "synopsis_index_only": true
     },
     {
@@ -65676,9 +65676,9 @@
     {
       "path": "products/receipts/SOCIALMEDIAOS_BLOCKERS.json",
       "synopsis": "Product receipt — SOCIALMEDIAOS BLOCKERS.",
-      "bytes": 1048,
-      "mtime": "2026-07-17T21:42:16.023Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 605,
+      "mtime": "2026-07-31T06:21:12.569Z",
+      "indexed_at": "2026-07-31T06:22:29.192Z",
       "synopsis_index_only": true
     },
     {
@@ -75428,9 +75428,9 @@
     {
       "path": "scripts/verify-marketing-phase1-live.mjs",
       "synopsis": "LIVE §6 MarketingOS Phase 1 verifier — runnable tests PASS or named blockers.",
-      "bytes": 8751,
-      "mtime": "2026-07-13T20:29:53.084Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 10366,
+      "mtime": "2026-07-31T06:20:51.238Z",
+      "indexed_at": "2026-07-31T06:22:29.192Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
