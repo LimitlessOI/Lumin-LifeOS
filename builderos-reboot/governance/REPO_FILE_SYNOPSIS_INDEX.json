@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T18:36:31.304Z",
+  "generated_at": "2026-07-31T18:41:57.952Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12589,
+  "file_count": 12590,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -40936,9 +40936,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 351453,
-      "mtime": "2026-07-31T18:36:31.304Z",
-      "indexed_at": "2026-07-31T18:36:31.304Z"
+      "bytes": 353134,
+      "mtime": "2026-07-31T18:41:39.793Z",
+      "indexed_at": "2026-07-31T18:41:57.952Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -73662,6 +73662,16 @@
       ]
     },
     {
+      "path": "scripts/path-to-ten-retriage-stuck-steps.mjs",
+      "synopsis": "M2PT-005B follow-through — one-time re-triage of steps already stuck in the",
+      "bytes": 3012,
+      "mtime": "2026-07-31T18:40:08.108Z",
+      "indexed_at": "2026-07-31T18:41:57.952Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "scripts/phase7_deploy.js",
       "synopsis": "Exports deployToRailway — scripts/phase7_deploy.js.",
       "bytes": 732,
@@ -88429,9 +88439,9 @@
     {
       "path": "services/continuous-verification.mjs",
       "synopsis": "Continuous Verification Heartbeat — re-run governance checks and pause autonomy on failure.",
-      "bytes": 6176,
-      "mtime": "2026-07-31T12:49:58.647Z",
-      "indexed_at": "2026-07-31T12:49:58.647Z",
+      "bytes": 6178,
+      "mtime": "2026-07-31T18:40:55.324Z",
+      "indexed_at": "2026-07-31T18:41:57.952Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

@@ -1091,7 +1091,11 @@
       "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step9",
       "mission_id": "PRODUCT-wellness-studio",
-      "reaudit_reset_at": "2026-07-30T18:55:06.847Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.847Z",
+      "escalation_required": true,
+      "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
+      "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
+      "escalated_at": "2026-07-31T18:40:13.632Z"
     },
     {
       "id": "step10",
@@ -1215,7 +1219,11 @@
           "content_source_path": "docs/products/wellness-studio/twins/steps/wellness-studio-1.exact",
           "content_sha256": "d046dbebaecf379ce7d1604657fdf2da798349f59d73bdd00e470bcdf68dd07e"
         }
-      }
+      },
+      "escalation_required": true,
+      "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
+      "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
+      "escalated_at": "2026-07-31T18:40:13.632Z"
     },
     {
       "id": "wellness-studio-2",
@@ -1718,7 +1726,11 @@
       "same_signature_count": 7,
       "escalation_class": "evidence_gap",
       "model_rotation": 3,
-      "force_model_rotation": true
+      "force_model_rotation": true,
+      "escalation_required": true,
+      "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
+      "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
+      "escalated_at": "2026-07-31T18:40:13.632Z"
     },
     {
       "id": "wellness-studio-step11",

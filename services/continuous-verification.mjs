@@ -22,7 +22,7 @@ const DEFAULT_CHECKS = [
   },
   {
     name: 'ssot_baseline',
-    command: ['node', 'scripts/ssot-check.js', '--all'],
+    command: ['node', 'scripts/verify-ssot-baseline.mjs'],
     timeout: 120_000,
     reason: 'SSOT debt must not regress beyond the approved baseline.',
   },
