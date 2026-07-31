@@ -827,13 +827,13 @@
     },
     {
       "id": "8",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/privateModeExtension.js",
       "task": "Extend private witness mode",
       "spec": "Enhance private mode to influence the public publishing guard completely via safe defaults.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerPrivateModeExtensions"
       ],
@@ -849,13 +849,16 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-16T02:18:59.038Z",
-      "commit_sha": "a88940daa5efc88dee311dda3c09cd7dc7381ccc",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "8",
       "mission_id": "PRODUCT-faith-studio",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerPrivateModeExtensions; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.428Z"
+      "last_error": "codegen_authoring_failed: codegen_empty: openai_builder_mini: HTTP 429: {\n    \"error\": {\n        \"message\": \"You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organiza",
+      "reaudit_reset_at": "2026-07-30T18:55:06.428Z",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-31T01:42:48.731Z"
     },
     {
       "id": "9",
