@@ -6,7 +6,7 @@
       "ok": true,
       "details": {
         "status": 201,
-        "owner_id": "b4d05014-a8ce-4278-859d-1f4c0e46857d"
+        "owner_id": "5c6e3ec3-7164-4f9e-ae5f-be8fa928b4f0"
       }
     },
     {
@@ -18,7 +18,7 @@
       "ok": true,
       "details": {
         "status": 201,
-        "id": "128511e1-ba96-4878-94cd-495797941458"
+        "id": "250aa27c-1fe0-469d-8f6a-7b43702637f6"
       }
     },
     {
@@ -26,7 +26,7 @@
       "ok": true,
       "details": {
         "status": 200,
-        "hookDetected": true
+        "hookDetected": false
       }
     },
     {
@@ -34,7 +34,7 @@
       "ok": true,
       "details": {
         "status": 200,
-        "n": 1
+        "n": 3
       }
     },
     {
@@ -42,7 +42,7 @@
       "ok": true,
       "details": {
         "status": 200,
-        "id": "55b55271-e0d2-49b5-8348-0cd00065aff8"
+        "id": "ce9e15bc-3d24-415d-a253-4f4780d66578"
       }
     },
     {
@@ -58,7 +58,7 @@
       "ok": true,
       "details": {
         "status": 200,
-        "contentDisposition": "attachment; filename=\"marketing-content-session-128511e1-ba96-4878-94cd-495797941458.txt\""
+        "contentDisposition": "attachment; filename=\"marketing-content-session-250aa27c-1fe0-469d-8f6a-7b43702637f6.txt\""
       }
     },
     {
@@ -75,13 +75,8 @@
       "code": "STORAGE_R2_UNVERIFIED",
       "why_cant_fix_now": "Cloudflare R2 credentials not yet set in Railway; audio upload intentionally excluded from Phase 1 text-mode verification",
       "next_unblocking_action": "Add verified STORAGE_PROVIDER=r2 + STORAGE_ENDPOINT/BUCKET/ACCESS_KEY_ID/SECRET_ACCESS_KEY/PUBLIC_URL to Railway, then test audio upload end-to-end"
-    },
-    {
-      "code": "GOOGLE_YOUTUBE_OAUTH_UNVERIFIED",
-      "why_cant_fix_now": "GOOGLE_CLIENT_ID/GOOGLE_CLIENT_SECRET not set in Railway; YouTube connect cannot exchange tokens",
-      "next_unblocking_action": "Add GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET to Railway, then add redirect URI https://robust-magic-production.up.railway.app/api/v1/marketing/youtube/callback in Google Cloud Console and test /marketing/youtube/connect"
     }
   ],
-  "at": "2026-07-13T09:09:46.704Z",
+  "at": "2026-07-31T06:21:12.563Z",
   "note": "ok=true means all runnable §6 text-mode tests passed; infra blockers remain named in blockers[]"
 }

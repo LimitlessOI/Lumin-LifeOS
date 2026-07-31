@@ -72,19 +72,52 @@ async function requestJson(method, pathname, body, expectedStatus = null) {
   return { res, json, text };
 }
 
-function namedInfraBlockers() {
-  return [
-    {
+function isStorageR2Configured() {
+  return (
+    String(process.env.STORAGE_PROVIDER || '').toLowerCase() === 'r2'
+    && String(process.env.STORAGE_ENDPOINT || '').trim() !== ''
+    && String(process.env.STORAGE_BUCKET || '').trim() !== ''
+    && String(process.env.STORAGE_ACCESS_KEY_ID || '').trim() !== ''
+    && String(process.env.STORAGE_SECRET_ACCESS_KEY || '').trim() !== ''
+    && String(process.env.STORAGE_PUBLIC_URL || '').trim() !== ''
+  );
+}
+
+async function isYoutubeOauthConnected() {
+  try {
+    const { res, json } = await requestJson('GET', '/api/v1/marketing/youtube/status');
+    return res.status === 200 && (json?.connected === true || json?.oauthConfigured === true);
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Live-checked, not hardcoded: earlier versions of this function always returned both
+ * blockers unconditionally regardless of actual state, which produced a real false
+ * blocker report (YouTube OAuth was actually connected and working; the static list
+ * never got updated). Each blocker below is only reported when its live check fails.
+ */
+async function namedInfraBlockers() {
+  const blockers = [];
+
+  if (!isStorageR2Configured()) {
+    blockers.push({
       code: 'STORAGE_R2_UNVERIFIED',
       why_cant_fix_now: 'Cloudflare R2 credentials not yet set in Railway; audio upload intentionally excluded from Phase 1 text-mode verification',
       next_unblocking_action: 'Add verified STORAGE_PROVIDER=r2 + STORAGE_ENDPOINT/BUCKET/ACCESS_KEY_ID/SECRET_ACCESS_KEY/PUBLIC_URL to Railway, then test audio upload end-to-end',
-    },
-    {
+    });
+  }
+
+  if (!(await isYoutubeOauthConnected())) {
+    blockers.push({
       code: 'GOOGLE_YOUTUBE_OAUTH_UNVERIFIED',
-      why_cant_fix_now: 'GOOGLE_CLIENT_ID/GOOGLE_CLIENT_SECRET not set in Railway; YouTube connect cannot exchange tokens',
-      next_unblocking_action: 'Add GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET to Railway, then add redirect URI https://robust-magic-production.up.railway.app/api/v1/marketing/youtube/callback in Google Cloud Console and test /marketing/youtube/connect',
-    },
-  ];
+      why_cant_fix_now: 'GOOGLE_CLIENT_ID/GOOGLE_CLIENT_SECRET not set in Railway, or /marketing/youtube/status did not report a connected channel; YouTube connect cannot exchange tokens',
+      next_unblocking_action: `Add GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET to Railway, then add redirect URI ${new URL('/api/v1/marketing/youtube/callback', PUBLIC_BASE_URL).toString()} in Google Cloud Console and test /marketing/youtube/connect`,
+    });
+  }
+
+  return blockers;
 }
 
 async function main() {
@@ -211,9 +244,14 @@ async function main() {
     });
   }
 
-  // Named infra blockers — honesty, not fake PASS and not silent stop
-  pushTest('audio upload', true, { status: 'BLOCKED', reason: 'STORAGE_R2_UNVERIFIED' });
-  for (const b of namedInfraBlockers()) {
+  // Named infra blockers — live-checked, not hardcoded. Honesty, not fake PASS and not silent stop.
+  const liveBlockers = await namedInfraBlockers();
+  if (liveBlockers.some((b) => b.code === 'STORAGE_R2_UNVERIFIED')) {
+    pushTest('audio upload', true, { status: 'BLOCKED', reason: 'STORAGE_R2_UNVERIFIED' });
+  } else {
+    pushTest('audio upload', true, { status: 'CONFIGURED', reason: 'STORAGE_R2 env vars present (not functionally exercised by this text-mode run)' });
+  }
+  for (const b of liveBlockers) {
     pushBlocker(b.code, b);
   }
 
@@ -226,10 +264,10 @@ async function main() {
   const blockersDoc = {
     schema: 'socialmediaos_blockers_v1',
     at: state.at,
-    ok: false,
+    ok: liveBlockers.length === 0,
     note: 'Named blockers — system must not fake PASS or stop silently',
     runnable_verify_ok: state.ok,
-    blockers: namedInfraBlockers(),
+    blockers: liveBlockers,
   };
 
   await fs.mkdir(path.dirname(outPath), { recursive: true });
