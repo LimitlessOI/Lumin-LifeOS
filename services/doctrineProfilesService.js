@@ -35,6 +35,19 @@ export async function getDoctrineDetails(doctrineName) {
         "complianceReportingFrequency": "quarterly"
       }
     },
+    "security": {
+      id: "security-doctrine-v1",
+      name: "Information Security Doctrine v1",
+      description: "Policies and procedures for protecting information assets.",
+      rules: [
+        { id: "rule-301", name: "Access Control Policy", content: "Least privilege principle must be applied to all system access." },
+        { id: "rule-302", name: "Incident Response Plan", content: "Follow documented steps for security incident detection and response." }
+      ],
+      configurations: {
+        "passwordComplexity": "strong",
+        "mfaRequired": true
+      }
+    }
     // Add more doctrines as needed
   };
 
@@ -46,4 +59,27 @@ export async function getDoctrineDetails(doctrineName) {
   }
 
   return details;
+}
+
+/**
+ * Fetches specific profile data for a given doctrine and profile type.
+ * This function is an extension to provide more granular profile access.
+ *
+ * @param {string} doctrineName - The name of the doctrine (e.g., "healthcare", "finance").
+ * @param {string} profileType - The type of profile data to fetch (e.g., "rules", "configurations").
+ * @returns {Promise<object|null>} The requested profile data or null if not found.
+ */
+export async function fetchProfileData(doctrineName, profileType) {
+  const doctrineDetails = await getDoctrineDetails(doctrineName);
+
+  if (!doctrineDetails) {
+    return null;
+  }
+
+  if (profileType in doctrineDetails) {
+    return doctrineDetails[profileType];
+  } else {
+    console.warn(`Profile type "${profileType}" not found for doctrine "${doctrineName}".`);
+    return null;
+  }
 }
