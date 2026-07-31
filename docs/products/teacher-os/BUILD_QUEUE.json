@@ -362,7 +362,7 @@
     },
     {
       "id": "teacher-os-3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/ferpaTemplateEnhancement.js",
       "task": "create enhanceFERPATemplate service",
       "spec": "Enhance ferpaTemplate to source new templates.",
@@ -384,12 +384,12 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-31T07:47:34.832Z",
-      "commit_sha": "6528ef07821d75764aecc815f577cfbf975f9db2",
+      "commit_sha": "ffee9dc1a99cc93384c40642eff0a7a490aaa56f",
       "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "teacher-os-3",
       "mission_id": "PRODUCT-teacher-os",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:enhanceFERPATemplate; assertion_threw",
+      "last_error": null,
       "reaudit_reset_at": "2026-07-30T18:55:06.746Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
