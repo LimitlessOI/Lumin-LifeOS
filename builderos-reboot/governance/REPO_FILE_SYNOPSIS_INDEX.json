@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T07:47:37.475Z",
+  "generated_at": "2026-07-31T07:58:23.468Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12522,
   "files": [
@@ -88917,9 +88917,9 @@
     {
       "path": "services/familySafetyService.js",
       "synopsis": "Exports applyFamilySafetyFilters — services/familySafetyService.js.",
-      "bytes": 1840,
-      "mtime": "2026-07-31T07:29:23.809Z",
-      "indexed_at": "2026-07-31T07:29:23.809Z"
+      "bytes": 2567,
+      "mtime": "2026-07-31T07:58:23.468Z",
+      "indexed_at": "2026-07-31T07:58:23.468Z"
     },
     {
       "path": "services/ferpaDpaTemplate.js",
