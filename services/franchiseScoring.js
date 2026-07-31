@@ -8,6 +8,7 @@ const franchiseRatingHistory = new Map(); // Map<franchiseId, Array<{userId: str
 const userFranchiseSpecificAverage = new Map(); // Map<userId_franchiseId, {sum: number, count: number}>
 const franchiseOverallAverage = new Map(); // Map<franchiseId, {sum: number, count: number}>
 const employerScoreHistory = new Map(); // Map<franchiseId, Array<{timestamp: number, score: number}>>
+const userOverallAverageRating = new Map(); // Map<userId, {sum: number, count: number}>
 
 // Configuration for anti-abuse thresholds
 const ANTI_ABUSE_CONFIG = {
@@ -33,10 +34,7 @@ const ANTI_ABUSE_CONFIG = {
   EMPLOYER_SCORE_FLUCTUATION_THRESHOLD: 15, // Max points fluctuation in a short period to be suspicious
   EMPLOYER_SCORE_FLUCTUATION_WINDOW_MS: 86400000 * 7, // 7 days for employer score fluctuation detection
   EMPLOYER_SCORE_MIN_DATA_POINTS: 3, // Minimum data points to detect fluctuations
-  // New: Community scoring specific thresholds
-  COMMUNITY_SCORING_ANOMALY_THRESHOLD: 0.75, // Deviation from expected community score to be flagged
-  COMMUNITY_SCORING_NEGATIVE_TREND_THRESHOLD: 0.2, // Percentage drop in average score to be flagged
-  COMMUNITY_SCORING_TREND_WINDOW_MS: 86400000 * 14, // 14 days for trend detection
+  USER_OVERALL_RATING_CONSISTENCY_THRESHOLD: 1.5, // How much a user's current rating deviates from their overall average rating
 };
 
 const calculateFranchiseScore = (franchiseId, employerData, feedbackData) => {
@@ -101,66 +99,30 @@ const calculateFranchiseScore = (franchiseId, employerData, feedbackData) => {
 
 
   // Community Feedback Integration with Anti-Fraud
-  let totalFeedbackScore = 0;
-  let feedbackCount = 0;
-  let rawFeedbackSum = 0; // For community scoring abuse model
-
-  feedbackData.forEach((feedback) => {
+  const feedbackScore = feedbackData.reduce((acc, feedback) => {
     // Basic anti-fraud: only consider feedback from verified users
     if (feedback.isVerified) {
       const isSus = isSuspiciousFeedback(feedback.userId, feedback.franchiseId, feedback.timestamp, feedback.rating);
       if (!isSus) {
         if (feedback.rating >= ANTI_ABUSE_CONFIG.HIGH_RATING_THRESHOLD) {
-          totalFeedbackScore += 5;
+          acc += 5;
         } else if (feedback.rating <= ANTI_ABUSE_CONFIG.LOW_RATING_THRESHOLD) {
-          totalFeedbackScore -= 10;
+          acc -= 10;
         }
-        rawFeedbackSum += feedback.rating;
-        feedbackCount++;
       } else {
         console.warn(`Suspicious feedback detected from user ${feedback.userId} for franchise ${feedback.franchiseId} (rating: ${feedback.rating}). Applying reduced weight.`);
         // Apply reduced weight for suspicious feedback
         if (feedback.rating >= ANTI_ABUSE_CONFIG.HIGH_RATING_THRESHOLD) {
-          totalFeedbackScore += (5 * ANTI_ABUSE_CONFIG.SUSPICIOUS_RATING_WEIGHT_REDUCTION);
+          acc += (5 * ANTI_ABUSE_CONFIG.SUSPICIOUS_RATING_WEIGHT_REDUCTION);
         } else if (feedback.rating <= ANTI_ABUSE_CONFIG.LOW_RATING_THRESHOLD) {
-          totalFeedbackScore -= (10 * ANTI_ABUSE_CONFIG.SUSPICIOUS_RATING_WEIGHT_REDUCTION);
+          acc -= (10 * ANTI_ABUSE_CONFIG.SUSPICIOUS_RATING_WEIGHT_REDUCTION);
         }
-        rawFeedbackSum += feedback.rating * ANTI_ABUSE_CONFIG.SUSPICIOUS_RATING_WEIGHT_REDUCTION;
-        feedbackCount += ANTI_ABUSE_CONFIG.SUSPICIOUS_RATING_WEIGHT_REDUCTION; // Count as a fraction
       }
     }
-  });
+    return acc;
+  }, 0);
 
-  score += totalFeedbackScore;
-
-  // New: Community Scoring Abuse Model
-  if (feedbackCount > 0) {
-    const currentCommunityAverage = rawFeedbackSum / feedbackCount;
-    const franchiseActivity = franchiseRatingHistory.get(franchiseId) || [];
-
-    const recentRatingsForCommunityScore = franchiseActivity.filter(
-      (activity) => currentTime - activity.timestamp < ANTI_ABUSE_CONFIG.COMMUNITY_SCORING_TREND_WINDOW_MS
-    );
-
-    if (recentRatingsForCommunityScore.length >= ANTI_ABUSE_CONFIG.MIN_REVIEWS_FOR_AVERAGE_CALC) {
-      const pastCommunityAverageSum = recentRatingsForCommunityScore.reduce((sum, entry) => sum + entry.rating, 0);
-      const pastCommunityAverage = pastCommunityAverageSum / recentRatingsForCommunityScore.length;
-
-      // Check for sudden, anomalous changes in community score
-      if (Math.abs(currentCommunityAverage - pastCommunityAverage) > ANTI_ABUSE_CONFIG.COMMUNITY_SCORING_ANOMALY_THRESHOLD) {
-        console.warn(`[Anti-Abuse] Community score for franchise ${franchiseId} flagged: Anomalous change detected. Current Avg: ${currentCommunityAverage.toFixed(2)}, Past Avg: ${pastCommunityAverage.toFixed(2)}`);
-        score *= 0.85; // Apply penalty
-      }
-
-      // Check for significant negative trends
-      if (currentCommunityAverage < pastCommunityAverage &&
-          (pastCommunityAverage - currentCommunityAverage) / pastCommunityAverage > ANTI_ABUSE_CONFIG.COMMUNITY_SCORING_NEGATIVE_TREND_THRESHOLD) {
-        console.warn(`[Anti-Abuse] Community score for franchise ${franchiseId} flagged: Significant negative trend detected. Current Avg: ${currentCommunityAverage.toFixed(2)}, Past Avg: ${pastCommunityAverage.toFixed(2)}`);
-        score *= 0.9; // Apply penalty
-      }
-    }
-  }
-
+  score += feedbackScore;
 
   // Apply a cap or floor to the score
   return Math.max(0, Math.min(100, score));
@@ -192,6 +154,10 @@ const getCommunityFeedback = (franchiseId) => {
     { id: 'fb14', userId: 'userJ', franchiseId: franchiseId, rating: 1, comment: 'Terrible management.', isVerified: true, timestamp: Date.now() - 86400000 * 0.7 },
     { id: 'fb15', userId: 'userK', franchiseId: franchiseId, rating: 1, comment: 'Unfair practices.', isVerified: true, timestamp: Date.now() - 86400000 * 0.8 },
     { id: 'fb16', userId: 'userL', franchiseId: franchiseId, rating: 1, comment: 'Absolutely awful.', isVerified: true, timestamp: Date.now() - 86400000 * 0.9 },
+    // Example for user with generally high ratings suddenly giving a low one
+    { id: 'fb17', userId: 'userM', franchiseId: 'franchiseN', rating: 5, comment: 'Great!', isVerified: true, timestamp: Date.now() - 86400000 * 10 },
+    { id: 'fb18', userId: 'userM', franchiseId: 'franchiseO', rating: 5, comment: 'Awesome!', isVerified: true, timestamp: Date.now() - 86400000 * 9 },
+    { id: 'fb19', userId: 'userM', franchiseId: franchiseId, rating: 1, comment: 'Bad!', isVerified: true, timestamp: Date.now() - 86400000 * 0.1 }, // Potentially suspicious
   ];
 };
 
@@ -206,6 +172,7 @@ const getCommunityFeedback = (franchiseId) => {
  * 3. Rapid succession of low ratings for the same franchise by different users (potential coordinated attack).
  * 4. Anomalous ratings (e.g., a user's rating is significantly different from their past ratings for the same franchise, or from the overall franchise average).
  * 5. Coordinated attack detection: multiple new users leaving low ratings for the same franchise in a short window.
+ * 6. User rating consistency: a rating significantly deviates from the user's overall average rating across all franchises.
  *
  * @param {string} userId - The ID of the user leaving feedback.
  * @param {string} franchiseId - The ID of the franchise being reviewed.
@@ -256,9 +223,19 @@ const isSuspiciousFeedback = (userId, franchiseId, timestamp, rating) => {
   if (userFranchiseAvgData.count >= ANTI_ABUSE_CONFIG.MIN_REVIEWS_FOR_AVERAGE_CALC) {
     const averageRating = userFranchiseAvgData.sum / userFranchiseAvgData.count;
     if (Math.abs(rating - averageRating) > ANTI_ABUSE_CONFIG.USER_AVERAGE_RATING_DEVIATION_THRESHOLD) {
-      console.log(`[Anti-Abuse] User ${userId} flagged: Anomalous rating for franchise ${franchiseId} compared to user's past ratings. Current: ${rating}, Avg: ${averageRating.toFixed(2)}`);
+      console.log(`[Anti-Abuse] User ${userId} flagged: Anomalous rating for franchise ${franchiseId} compared to user's past ratings for this franchise. Current: ${rating}, Avg: ${averageRating.toFixed(2)}`);
       // This could be a legitimate change of opinion, so maybe a soft flag or higher threshold needed
       // For now, we'll make it suspicious
+      return true;
+    }
+  }
+
+  // New Check 6: User rating consistency (compared to their overall average rating across all franchises)
+  const userOverallAvgData = userOverallAverageRating.get(userId) || { sum: 0, count: 0 };
+  if (userOverallAvgData.count >= ANTI_ABUSE_CONFIG.MIN_REVIEWS_FOR_AVERAGE_CALC) {
+    const overallUserAverage = userOverallAvgData.sum / userOverallAvgData.count;
+    if (Math.abs(rating - overallUserAverage) > ANTI_ABUSE_CONFIG.USER_OVERALL_RATING_CONSISTENCY_THRESHOLD) {
+      console.log(`[Anti-Abuse] User ${userId} flagged: Rating ${rating} for franchise ${franchiseId} is inconsistent with user's overall average rating (${overallUserAverage.toFixed(2)}).`);
       return true;
     }
   }
@@ -267,6 +244,11 @@ const isSuspiciousFeedback = (userId, franchiseId, timestamp, rating) => {
   userFranchiseAvgData.sum += rating;
   userFranchiseAvgData.count += 1;
   userFranchiseSpecificAverage.set(userFranchiseKey, userFranchiseAvgData);
+
+  // Update user overall average
+  userOverallAvgData.sum += rating;
+  userOverallAvgData.count += 1;
+  userOverallAverageRating.set(userId, userOverallAvgData);
 
   // Record the current feedback for future user-centric checks
   userActivity.push({ franchiseId, timestamp, rating });
