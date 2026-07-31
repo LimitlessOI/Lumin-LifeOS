@@ -1036,14 +1036,219 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-15T23:47:41.508Z",
+      "shipped_at": "2026-07-31T10:15:38.801Z",
       "commit_sha": "27ff50e037d144455a0355fad035eacee953e7a3",
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "create-ai-pre-analysis-prompt",
       "mission_id": "PRODUCT-productized-sprint",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerAIPreAnalysisRoutes; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.702Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.702Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/productized-sprint/twins/steps/create-ai-pre-analysis-prompt.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-31T10:15:38.801Z",
+        "shipped_at": "2026-07-31T10:15:38.801Z",
+        "commit_sha": "27ff50e037d144455a0355fad035eacee953e7a3",
+        "content_sha256": "d05d805c5421fa87f86e650ebf660a465df8afbf905a6052546dea7852c30055",
+        "target_file": "routes/aiPreAnalysisRoute.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "routes/aiPreAnalysisRoute.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "INDETERMINATE",
+          "reason": "indeterminate_sql: SQL string could not be parsed for table names",
+          "details": {
+            "filePath": "/usr/src/app/routes/aiPreAnalysisRoute.js",
+            "hash": "d05d805c5421fa87f86e650ebf660a465df8afbf905a6052546dea7852c30055",
+            "importChecks": [
+              {
+                "kind": "default",
+                "source": "express",
+                "names": [
+                  "default"
+                ],
+                "raw": "import express from 'express'",
+                "status": "PASS",
+                "reason": "external_or_builtin_package"
+              }
+            ],
+            "sqlChecks": [
+              {
+                "text": "Checking status for job ID: ${jobId}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Retrieving results for job ID: ${jobId}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "express",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/start-pre-analysis",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "AI Pre-analysis initiated with data:",
+                "status": "INDETERMINATE",
+                "reason": "sql_keywords_present_but_no_table_extracted"
+              },
+              {
+                "text": "AI pre-analysis request accepted",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "pre_analysis_12345",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/pre-analysis-status/:jobId",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "pre_analysis_12345",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "processing",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "pre_analysis_67890",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "completed",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "pre_analysis_error",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "failed",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "unknown",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "processing",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "50%",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "100%",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/pre-analysis-results/:jobId",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "pre_analysis_67890",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "completed",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Initial analysis suggests potential areas for optimization in data processing an",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Review data serialization formats for efficiency.",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Evaluate client-side rendering performance.",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Consider caching strategies for frequently accessed data.",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "high",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "pre_analysis_error",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "failed",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "An error occurred during AI processing.",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "not_found",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Pre-analysis results not found or not yet available.",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/api/ai-pre-analysis",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              }
+            ]
+          }
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/productized-sprint/twins/steps/create-ai-pre-analysis-prompt.exact",
+          "content_sha256": "d05d805c5421fa87f86e650ebf660a465df8afbf905a6052546dea7852c30055"
+        }
+      }
     },
     {
       "id": "create-sprint-queue-panel",
