@@ -118,7 +118,7 @@
     },
     {
       "id": "4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/memory-seed-lessons.mjs",
       "task": "implement lessons seeding",
       "spec": "Implements npm run memory:seed-lessons to seed lessons_learned and update documents.",
@@ -126,16 +126,16 @@
         "2"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "seedLessonsLearned"
       ],
       "file_contains": [
         "npm run memory:seed-lessons"
       ],
-      "last_attempt_at": null,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:seedLessonsLearned; assertion_threw; assertion_threw",
-      "commit_sha": "6199bb71b8f7196314456f48de80da9e3fa328a1",
+      "last_attempt_at": "2026-07-31T00:05:22.607Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:npm run memory:seed-lessons; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
