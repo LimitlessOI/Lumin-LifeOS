@@ -766,13 +766,13 @@
     },
     {
       "id": "7",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/reviewModerationFlow.js",
       "task": "Define review/moderation flow",
       "spec": "Service for moderation flow detail used in sacred-content review.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "getModerationRules"
       ],
@@ -791,12 +791,12 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-31T02:00:33.705Z",
-      "commit_sha": null,
+      "commit_sha": "48e79f297d6f2c8d9d3962bdf0cee17ee8375856",
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "7",
       "mission_id": "PRODUCT-faith-studio",
-      "pre_existing": false,
-      "last_error": "artifact_missing_after_ship: artifact_proof_failed: moderateWithCouncil",
+      "pre_existing": null,
+      "last_error": null,
       "reaudit_reset_at": "2026-07-30T18:55:06.428Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
@@ -823,7 +823,19 @@
       },
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-07-31T01:34:41.367Z"
+      "last_attempt_at": null,
+      "last_attempt": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-31T01:57:37.636Z",
+      "no_op": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "8",
