@@ -1373,7 +1373,7 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-31T06:19:38.241Z",
+      "shipped_at": "2026-07-31T06:50:53.833Z",
       "commit_sha": null,
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "01",
@@ -1387,10 +1387,10 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-07-31T06:19:38.241Z",
-        "shipped_at": "2026-07-31T06:19:38.241Z",
+        "sealed_at": "2026-07-31T06:50:53.833Z",
+        "shipped_at": "2026-07-31T06:50:53.833Z",
         "commit_sha": null,
-        "content_sha256": "bc6bccd117b99289780ecd9dceffeff97823ba9af2844d099c00fe0c7094a9ce",
+        "content_sha256": "bc07b3339bf025e948a73974f61e4e4599980de5f6f3647fc59bb9d59907fed9",
         "target_file": "services/privateWitnessService.js",
         "reverse": {
           "mode": "delete_file",
@@ -1399,12 +1399,108 @@
           "prior_content_sha256": null
         },
         "grounding": {
-          "status": "PASS"
+          "status": "INDETERMINATE",
+          "reason": "indeterminate_sql: SQL string could not be parsed for table names",
+          "details": {
+            "filePath": "/usr/src/app/services/privateWitnessService.js",
+            "hash": "bc07b3339bf025e948a73974f61e4e4599980de5f6f3647fc59bb9d59907fed9",
+            "importChecks": [],
+            "sqlChecks": [
+              {
+                "text": "private_witness_${Date.now()}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "proof_${processedDetails.witnessId}_${Date.now()}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "proof_hash_for_${processedDetails.dataHash}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "log_${Date.now()}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "data",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "s assume it processes and returns a result\n  // without any external, public-fac",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": " contains sensitive information, this might\n  // transform it, encrypt it, or store it in a private log.\n  console.log(\"",
+                "status": "PASS",
+                "reason": "all_referenced_tables_known",
+                "tables": [
+                  "this"
+                ]
+              },
+              {
+                "text": " itself might be transformed or encrypted here.\n    // For this example, we",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "some_secure_hash_of_data_content",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "s meant for internal consumption.\n  return { \n    status: ",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": ", \n    originalData: data, // Keeping originalData for internal debug/trace, but",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "\n  };\n  return proof;\n}\n\nexport function logPrivateWitnessActivity(activityDetai",
+                "status": "INDETERMINATE",
+                "reason": "sql_keywords_present_but_no_table_extracted"
+              },
+              {
+                "text": ",\n    details: activityDetails.details || {}\n  };\n  // Simulate storing the log ",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "permissible but avoid public exposure",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Processing data in private witness mode (no public exposure):",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Generating private witness proof for:",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Logging private witness activity securely:",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              }
+            ]
+          }
         },
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/faith-studio/twins/steps/01.exact",
-          "content_sha256": "bc6bccd117b99289780ecd9dceffeff97823ba9af2844d099c00fe0c7094a9ce"
+          "content_sha256": "bc07b3339bf025e948a73974f61e4e4599980de5f6f3647fc59bb9d59907fed9"
         }
       },
       "built_sha": null,
