@@ -651,13 +651,13 @@
     },
     {
       "id": "4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/securityAuditService.js",
       "task": "create security audit service",
       "spec": "Implement the OIL preset `security-audit` to output structured findings.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "performSecurityAudit"
       ],
@@ -671,7 +671,7 @@
           "assertion_id": "expected_exports:services/securityAuditService.js"
         }
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-31T10:48:55.500Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:performSecurityAudit; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
