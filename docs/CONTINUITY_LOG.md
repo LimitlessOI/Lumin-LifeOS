@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-31 — Mission 2 — BuilderOS Convergence P3: mechanical blueprint-authority gate shipped
+
+Created `scripts/lib/blueprint-authority-gate.mjs` and `tests/blueprint-authority-gate.test.js` (6/6 PASS). The gate compares the files in a proposed commit to `builderos-reboot/MISSIONS/FACTORY-BUILDEROS-CONVERGENCE-0001/BLUEPRINT.json`, detects uncovered files, changes to DONE steps, and DONE steps missing evidence, and is wired as detect-and-route warnings into `routes/lifeos-council-builder-routes.js#commitOrMirrorFiles` alongside security invariants and doc-hygiene. `node --check routes/lifeos-council-builder-routes.js` clean; `npm run builder:preflight` PASS.
+
 ## 2026-07-31 — Mission 2 — BuilderOS Convergence P2: Collaboration Spine and decision records shipped
 
 Created the BuilderOS Collaboration Spine: `DECISION_RECORD_TEMPLATE.md`, `DECISION-0002.md`, `scripts/verify-decision-record.mjs`, `scripts/collaboration-spine-assemble.mjs`, and `tests/decision-record.test.js`. Normalized `DECISION-0001.md` to the new template. The assembler produces `COLLABORATION_SPINE.md` and `COLLABORATION_SPINE.json` from every `DECISION-XXXX.md` in `builderos-reboot/DECISIONS/` with a validity check. `services/self-repair-decision-log.js` already supports the hybrid schema. `node --test tests/decision-record.test.js` passes; `npm run builder:preflight` PASS.

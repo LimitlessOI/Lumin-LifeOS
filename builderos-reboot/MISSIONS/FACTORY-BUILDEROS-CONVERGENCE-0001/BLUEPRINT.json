@@ -471,11 +471,11 @@
       "step_id": "M2C-010",
       "phase_id": "P3",
       "title": "Mechanical blueprint authority gate",
-      "status": "IN_PROGRESS",
+      "status": "DONE",
       "started_at": "2026-07-31T06:15:00Z",
-      "completed_at": null,
-      "git_sha": null,
-      "evidence": null,
+      "completed_at": "2026-07-31T06:25:00Z",
+      "git_sha": "a2cb3a095125",
+      "evidence": "scripts/lib/blueprint-authority-gate.mjs and tests/blueprint-authority-gate.test.js created (6/6 pass); wired into routes/lifeos-council-builder-routes.js#commitOrMirrorFiles as detect-and-route warning; npm run builder:preflight PASS.",
       "target_files": [
         "scripts/lib/blueprint-authority-gate.mjs",
         "tests/blueprint-authority-gate.test.js",
@@ -502,6 +502,43 @@
       "acceptance_test_ids": ["AT-M2C-103-1"],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_CHAIR",
       "sandbox_boundary": "scripts/lib/",
+      "authority_owner": "Chair",
+      "on_block": "BLOCKED_RETURN_TO_CHAIR"
+    },
+    {
+      "step_id": "M2C-011",
+      "phase_id": "P4",
+      "title": "Runtime convergence: scheduler control-plane endpoint and BP_PRIORITY scheduler wiring",
+      "status": "IN_PROGRESS",
+      "started_at": "2026-07-31T06:25:00Z",
+      "completed_at": null,
+      "git_sha": null,
+      "evidence": null,
+      "target_files": [
+        "docs/products/builderos/SCHEDULER_AUDIT.md",
+        "server-founder-runtime.js",
+        "routes/lifeos-council-builder-routes.js"
+      ],
+      "action_type": "modify_file",
+      "required_edits": [
+        "Add GET /api/v1/lifeos/builder/control-plane/schedulers endpoint listing active schedulers, status, interval, and BUILDEROS_AUTOPILOT gating.",
+        "Wire startBpPriorityScheduler into server-founder-runtime.js under BUILDEROS_AUTOPILOT gating (off by default until enabled).",
+        "Verify npm run builder:preflight and control-plane endpoint return 200 after deploy."
+      ],
+      "exact_output_contract": {
+        "type": "sentry_pass",
+        "must_prove": [
+          "GET /api/v1/lifeos/builder/control-plane/schedulers returns 200 with a scheduler list.",
+          "startBpPriorityScheduler is wired into server-founder-runtime.js under BUILDEROS_AUTOPILOT gating.",
+          "npm run builder:preflight exits 0."
+        ]
+      },
+      "allowed_context_files": [],
+      "forbidden_context_files": [],
+      "dependencies": ["M2C-010"],
+      "acceptance_test_ids": ["AT-M2C-104-1"],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_CHAIR",
+      "sandbox_boundary": "server-founder-runtime.js",
       "authority_owner": "Chair",
       "on_block": "BLOCKED_RETURN_TO_CHAIR"
     }

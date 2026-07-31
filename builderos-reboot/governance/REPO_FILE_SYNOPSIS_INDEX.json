@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T06:00:22.262Z",
+  "generated_at": "2026-07-31T06:03:45.115Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12498,
+  "file_count": 12500,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -22312,17 +22312,17 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-CONVERGENCE-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 26718,
-      "mtime": "2026-07-31T05:59:24.399Z",
-      "indexed_at": "2026-07-31T06:00:22.262Z",
+      "bytes": 28642,
+      "mtime": "2026-07-31T06:03:17.803Z",
+      "indexed_at": "2026-07-31T06:03:45.115Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-CONVERGENCE-0001/FOUNDER_PACKET.md",
       "synopsis": "Mission 2 — BuilderOS Convergence founder packet.",
-      "bytes": 5277,
-      "mtime": "2026-07-31T06:00:00.507Z",
-      "indexed_at": "2026-07-31T06:00:22.262Z"
+      "bytes": 5300,
+      "mtime": "2026-07-31T06:03:36.135Z",
+      "indexed_at": "2026-07-31T06:03:45.115Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-CONVERGENCE-0001/OBJECTIVE_VERDICT.json",
@@ -38490,9 +38490,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 57177,
-      "mtime": "2026-07-31T05:59:50.467Z",
-      "indexed_at": "2026-07-31T06:00:22.262Z"
+      "bytes": 57853,
+      "mtime": "2026-07-31T06:03:34.351Z",
+      "indexed_at": "2026-07-31T06:03:45.115Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40703,9 +40703,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 337046,
-      "mtime": "2026-07-31T05:59:47.243Z",
-      "indexed_at": "2026-07-31T06:00:22.262Z"
+      "bytes": 337918,
+      "mtime": "2026-07-31T06:03:32.287Z",
+      "indexed_at": "2026-07-31T06:03:45.115Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -69143,9 +69143,9 @@
     {
       "path": "routes/lifeos-council-builder-routes.js",
       "synopsis": "routes/lifeos-council-builder-routes.js",
-      "bytes": 168822,
-      "mtime": "2026-07-30T22:40:32.853Z",
-      "indexed_at": "2026-07-30T22:44:20.932Z",
+      "bytes": 169815,
+      "mtime": "2026-07-31T06:03:00.003Z",
+      "indexed_at": "2026-07-31T06:03:45.115Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -72198,6 +72198,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/lib/blueprint-authority-gate.mjs",
+      "synopsis": "Mechanical blueprint-authority gate — detect-and-route only.",
+      "bytes": 6042,
+      "mtime": "2026-07-31T06:02:38.475Z",
+      "indexed_at": "2026-07-31T06:03:45.115Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
@@ -95818,6 +95828,16 @@
       "bytes": 3826,
       "mtime": "2026-07-07T21:41:40.947Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "tests/blueprint-authority-gate.test.js",
+      "synopsis": "Tests for scripts/lib/blueprint-authority-gate.mjs",
+      "bytes": 3907,
+      "mtime": "2026-07-31T06:02:44.659Z",
+      "indexed_at": "2026-07-31T06:03:45.115Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

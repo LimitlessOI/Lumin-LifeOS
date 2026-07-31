@@ -4,7 +4,7 @@
 
 ## Status
 
-In progress — Phase 3: Mechanical blueprint authority gate (P0–P2 complete; P2 Collaboration Spine shipped).
+In progress — Phase 4: Runtime convergence / scheduler control-plane (P0–P3 complete; mechanical blueprint-authority gate shipped).
 
 ## One-line mission
 

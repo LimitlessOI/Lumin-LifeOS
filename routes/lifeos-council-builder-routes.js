@@ -52,6 +52,10 @@ import {
   formatDocHygieneFindings,
 } from '../scripts/lib/doc-hygiene-gate.mjs';
 import {
+  evaluateBlueprintAuthority,
+  formatBlueprintFindings,
+} from '../scripts/lib/blueprint-authority-gate.mjs';
+import {
   finalizeExtractedJavaScript,
   fixAsteriskShorthandParams,
   isJavaScriptCodeStartLine,
@@ -1459,6 +1463,23 @@ export function createLifeOSCouncilBuilderRoutes({
       log.warn(
         { findings: hygieneVerdict.routed, summary: formatDocHygieneFindings(hygieneVerdict.routed) },
         '[BUILDER] doc-hygiene detect-and-route (not blocking) — caller should co-commit SSOT / SYNOPSIS',
+      );
+    }
+
+    // M2C-010: blueprint-authority gate — detect-and-route only. Compares the
+    // proposed commit to the active mission BLUEPRINT.json. Warns on files not
+    // covered by any step, changes to DONE steps, and DONE steps missing evidence.
+    // Does not block; the warning feed is the fuel for the next improvement cycle.
+    const blueprintAuthorityVerdict = evaluateBlueprintAuthority(
+      fileEntries.map((entry) => ({
+        path: entry.path,
+        content: entry.encoding === 'base64' ? null : entry.content,
+      })),
+    );
+    if (blueprintAuthorityVerdict.findings.length) {
+      log.warn(
+        { findings: blueprintAuthorityVerdict.findings, summary: formatBlueprintFindings(blueprintAuthorityVerdict.findings) },
+        '[BUILDER] blueprint-authority detect-and-route (not blocking) — verify coverage against BLUEPRINT.json',
       );
     }
 
