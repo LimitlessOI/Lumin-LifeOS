@@ -1334,13 +1334,13 @@
     },
     {
       "id": "01",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/privateWitnessService.js",
       "task": "implement private witness mode",
       "spec": "Implement the private witness mode functionality, ensuring that outputs are permissible as specified, but avoid public exposure.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "handlePrivateWitnessMode"
       ],
@@ -1362,12 +1362,12 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-31T05:50:55.373Z",
-      "commit_sha": "dad6a4bca865f4aef6cd6d4a269dd56c54928545",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "01",
       "mission_id": "PRODUCT-faith-studio",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:handlePrivateWitnessMode; assertion_threw; assertion_threw",
+      "last_error": "artifact_missing_after_ship: artifact_proof_failed: Private witness mode",
       "reaudit_reset_at": "2026-07-30T18:55:06.428Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
@@ -1394,7 +1394,10 @@
           "content_source_path": "docs/products/faith-studio/twins/steps/01.exact",
           "content_sha256": "3c515b03fc8a1ece9d4f535b9daddcef246182053ce2685561e65c4ec0b01ef5"
         }
-      }
+      },
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-31T05:51:01.783Z"
     },
     {
       "id": "02",
