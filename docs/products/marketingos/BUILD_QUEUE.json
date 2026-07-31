@@ -760,10 +760,14 @@
       "spec": "In routes/marketing-session-ui-routes.js's Buy Content Pack handler (~line 1055, added in commit f7db5b53b5), the button calls GET /api/v1/marketing/sessions?limit=1 and always checkouts against whichever session is most recently created/completed for the owner. If the owner has more than one session, clicking Buy from an older session's page can silently create a checkout against a different, newer session -- the customer pays expecting to unlock the session they were viewing and gets a different one. Fix: pass the specific sessionId the page is already rendering (it is available in the page context / URL param) into the checkout POST body instead of re-deriving 'most recent' server-side. Keep the existing /marketing/session/new fallback behavior for the case where no session exists yet. Found during a direct code audit of Mission 2A; the underlying GET /sessions query is correctly owner-scoped, so this is a correctness/support-burden issue, not a cross-customer data leak.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "smos-buy-button-session-scope-fix",
-      "mission_id": "PRODUCT-marketingos"
+      "mission_id": "PRODUCT-marketingos",
+      "commit_sha": "f7db5b53b5dfcd233a096287446d8a36e550c5ee",
+      "last_attempt_at": "2026-07-31T23:35:14.786Z",
+      "last_error": "grounding_failed: missing_sql_table: past, older",
+      "blocker_class": "BLOCKED_TOOLING"
     }
   ],
   "backlog_signature": "marketingos-money-2026071219",
