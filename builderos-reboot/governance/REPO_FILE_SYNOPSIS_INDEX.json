@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T09:05:02.042Z",
+  "generated_at": "2026-07-31T09:05:12.136Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12533,
+  "file_count": 12534,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -68915,6 +68915,13 @@
       "ssot": [
         "docs/products/word-keeper/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "routes/googleCalendarRoutes.js",
+      "synopsis": "HTTP route module — GoogleCalendarRoutes.",
+      "bytes": 1463,
+      "mtime": "2026-07-31T09:05:12.136Z",
+      "indexed_at": "2026-07-31T09:05:12.136Z"
     },
     {
       "path": "routes/governed-fence-routes.js",
