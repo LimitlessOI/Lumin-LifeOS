@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T05:16:59.888Z",
+  "generated_at": "2026-07-31T05:18:43.233Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12483,
   "files": [
@@ -21641,9 +21641,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3762832,
-      "mtime": "2026-07-31T05:04:10.319Z",
-      "indexed_at": "2026-07-31T05:04:10.354Z"
+      "bytes": 3763397,
+      "mtime": "2026-07-31T05:18:43.195Z",
+      "indexed_at": "2026-07-31T05:18:43.233Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -38019,9 +38019,9 @@
     {
       "path": "docs/audits/builderos-mission-2/MISSION_2_CONVERGENCE_HANDOFF.md",
       "synopsis": "BuilderOS Mission 2 — Convergence Phase 0 handoff artifact",
-      "bytes": 5522,
-      "mtime": "2026-07-31T05:15:12.711Z",
-      "indexed_at": "2026-07-31T05:15:25.090Z"
+      "bytes": 5525,
+      "mtime": "2026-07-31T05:18:11.207Z",
+      "indexed_at": "2026-07-31T05:18:27.338Z"
     },
     {
       "path": "docs/audits/builderos-mission-2/OVERWRITE_PATH_TRACE.md",
@@ -38432,9 +38432,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 55663,
-      "mtime": "2026-07-31T05:14:29.407Z",
-      "indexed_at": "2026-07-31T05:15:25.090Z"
+      "bytes": 55666,
+      "mtime": "2026-07-31T05:18:20.771Z",
+      "indexed_at": "2026-07-31T05:18:27.338Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40645,9 +40645,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 334994,
-      "mtime": "2026-07-31T05:14:25.859Z",
-      "indexed_at": "2026-07-31T05:15:25.090Z"
+      "bytes": 334997,
+      "mtime": "2026-07-31T05:18:13.615Z",
+      "indexed_at": "2026-07-31T05:18:27.338Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -41522,8 +41522,8 @@
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
       "bytes": 132758,
-      "mtime": "2026-07-31T05:16:46.790Z",
-      "indexed_at": "2026-07-31T05:16:59.888Z"
+      "mtime": "2026-07-31T05:18:38.047Z",
+      "indexed_at": "2026-07-31T05:18:43.233Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -65451,9 +65451,9 @@
     {
       "path": "products/receipts/PHASE_0_STOP_GATE.json",
       "synopsis": "Product receipt — PHASE 0 STOP GATE.",
-      "bytes": 4165,
-      "mtime": "2026-07-31T05:14:34.039Z",
-      "indexed_at": "2026-07-31T05:15:25.090Z",
+      "bytes": 4171,
+      "mtime": "2026-07-31T05:18:07.355Z",
+      "indexed_at": "2026-07-31T05:18:27.338Z",
       "synopsis_index_only": true
     },
     {
@@ -91387,8 +91387,8 @@
       "path": "services/marketing-session-export.js",
       "synopsis": "Exports buildSessionExport — services/marketing-session-export.js.",
       "bytes": 3274,
-      "mtime": "2026-07-31T05:16:14.921Z",
-      "indexed_at": "2026-07-31T05:16:59.888Z"
+      "mtime": "2026-07-31T05:18:38.047Z",
+      "indexed_at": "2026-07-31T05:18:43.233Z"
     },
     {
       "path": "services/marketing-social-connect-session.js",

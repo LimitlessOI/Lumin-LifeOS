@@ -7,8 +7,8 @@
 **Phase 0 status:** DONE
 
 **Phase code commit:** `c6f6d6c574f8f9a09f5e59f032438534e65785f2`
-**Handoff/receipt commit:** `ce55b89b018c96c4f0513eea0c4b900a5a816039`
-**Production deploy commit:** `ce55b89b018c96c4f0513eea0c4b900a5a816039` (verified via `GET /api/v1/lifeos/builder/ready`)
+**Handoff/receipt commit:** `9024d76bdf19a75d080f113612ae327a6473d06a`
+**Production deploy commit:** `9024d76bdf19a75d080f113612ae327a6473d06a` (verified via `GET /api/v1/lifeos/builder/ready`)
 
 **Last updated:** 2026-07-23
 
@@ -23,7 +23,7 @@
 | WP0.3 — Sticky escalation | **PASS** | `escalateBlockedStep` + `POST /factory/escalate-step`; `tests/product-build-orchestrator.test.js` 21/21 PASS. |
 | WP0.4 — Overwrite-path trace + fix | **PASS** | `docs/audits/builderos-mission-2/OVERWRITE_PATH_TRACE.md`; `run-step.js` blocks rejected content before `fs.writeFileSync`; `tests/run-step-overwrite-guard.test.js` 2/2 PASS. |
 | WP0.5 — Hybrid decision-log schema | **PASS** | `services/self-repair-decision-log.js` extended with explicit columns + JSONB `metadata`; `tests/self-repair-decision-log.test.js` 3/3 PASS. |
-| **Phase 0 stop-gate / deploy parity** | **PASS** | `npm run builder:preflight` PASS (416/416); production `GET /api/v1/lifeos/builder/ready` reports `deploy_commit_sha: ce55b89b0…` matching `origin/main`. |
+| **Phase 0 stop-gate / deploy parity** | **PASS** | `npm run builder:preflight` PASS (416/416); production `GET /api/v1/lifeos/builder/ready` reports `deploy_commit_sha: 9024d76bdf19…` matching `origin/main`. |
 
 **Stop-gate receipt:** `products/receipts/PHASE_0_STOP_GATE.json`
 
