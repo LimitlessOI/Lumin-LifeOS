@@ -348,7 +348,7 @@
     },
     {
       "id": "3",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "templates/deliveryEmailTemplate.js",
       "task": "write delivery email template",
       "spec": "JavaScript module exporting an email template string for customer delivery notifications.",
@@ -370,9 +370,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-31T09:54:30.992Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:STEP_STATUS_FORBIDDEN",
+      "demoted_at": "2026-07-31T09:58:35.936Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -489,7 +489,10 @@
           "content_source_path": "docs/products/productized-sprint/twins/steps/4.exact",
           "content_sha256": "f4bb0fca84d7ec06a1e5e84530141d2b5a5473c4ef7d3ddf9d8996ae5cda8730"
         }
-      }
+      },
+      "failure_signature": "STEP_STATUS_FORBIDDEN",
+      "same_signature_count": 1,
+      "escalation_class": "same_signature_repeat"
     },
     {
       "id": "5",
@@ -971,14 +974,40 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-16T02:14:18.759Z",
+      "shipped_at": "2026-07-31T09:59:38.952Z",
       "commit_sha": "a95f295ac4c388f627f2bf53dd4dad1c49899caa",
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "create-delivery-email-template",
       "mission_id": "PRODUCT-productized-sprint",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerDeliveryEmailRoutes; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.702Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.702Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/productized-sprint/twins/steps/create-delivery-email-template.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-31T09:59:38.952Z",
+        "shipped_at": "2026-07-31T09:59:38.952Z",
+        "commit_sha": "a95f295ac4c388f627f2bf53dd4dad1c49899caa",
+        "content_sha256": "65f59f3b9429ea9cd03f342628cad6cb55a529bffdffef15ed1ffdc516942629",
+        "target_file": "routes/deliveryEmailRoute.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "routes/deliveryEmailRoute.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/productized-sprint/twins/steps/create-delivery-email-template.exact",
+          "content_sha256": "65f59f3b9429ea9cd03f342628cad6cb55a529bffdffef15ed1ffdc516942629"
+        }
+      }
     },
     {
       "id": "create-ai-pre-analysis-prompt",
