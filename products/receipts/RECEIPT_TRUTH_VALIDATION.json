@@ -1,8 +1,8 @@
 {
   "schema": "receipt_truth_validation_v1",
-  "at": "2026-07-30T22:50:06.441Z",
+  "at": "2026-07-31T05:13:40.241Z",
   "ok": true,
-  "checked": 128,
+  "checked": 129,
   "failures": [],
   "known_debt": [
     "MACHINE_ALPHA_WALKTHROUGH.json:ACCEPTANCE_PASS_WITHOUT_SHA_OR_BASE",
@@ -733,6 +733,13 @@
       "ok": true,
       "violations": [],
       "claims_pass": true,
+      "proposed_solutions": []
+    },
+    {
+      "file": "PHASE_0_STOP_GATE.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
       "proposed_solutions": []
     },
     {

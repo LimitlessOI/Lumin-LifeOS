@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T05:12:14.152Z",
+  "generated_at": "2026-07-31T05:15:25.090Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12483,
   "files": [
@@ -38019,9 +38019,9 @@
     {
       "path": "docs/audits/builderos-mission-2/MISSION_2_CONVERGENCE_HANDOFF.md",
       "synopsis": "BuilderOS Mission 2 — Convergence Phase 0 handoff artifact",
-      "bytes": 5144,
-      "mtime": "2026-07-31T05:10:14.783Z",
-      "indexed_at": "2026-07-31T05:12:14.152Z"
+      "bytes": 5522,
+      "mtime": "2026-07-31T05:15:12.711Z",
+      "indexed_at": "2026-07-31T05:15:25.090Z"
     },
     {
       "path": "docs/audits/builderos-mission-2/OVERWRITE_PATH_TRACE.md",
@@ -38432,9 +38432,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 55734,
-      "mtime": "2026-07-31T05:11:45.115Z",
-      "indexed_at": "2026-07-31T05:12:14.152Z"
+      "bytes": 55663,
+      "mtime": "2026-07-31T05:14:29.407Z",
+      "indexed_at": "2026-07-31T05:15:25.090Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40645,9 +40645,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 334576,
-      "mtime": "2026-07-31T05:04:01.423Z",
-      "indexed_at": "2026-07-31T05:04:10.354Z"
+      "bytes": 334994,
+      "mtime": "2026-07-31T05:14:25.859Z",
+      "indexed_at": "2026-07-31T05:15:25.090Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -65451,9 +65451,9 @@
     {
       "path": "products/receipts/PHASE_0_STOP_GATE.json",
       "synopsis": "Product receipt — PHASE 0 STOP GATE.",
-      "bytes": 3913,
-      "mtime": "2026-07-31T05:09:59.043Z",
-      "indexed_at": "2026-07-31T05:12:14.152Z",
+      "bytes": 4165,
+      "mtime": "2026-07-31T05:14:34.039Z",
+      "indexed_at": "2026-07-31T05:15:25.090Z",
       "synopsis_index_only": true
     },
     {
@@ -65475,9 +65475,9 @@
     {
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
-      "bytes": 23873,
-      "mtime": "2026-07-30T22:30:54.529Z",
-      "indexed_at": "2026-07-30T22:31:11.508Z",
+      "bytes": 24027,
+      "mtime": "2026-07-31T05:13:40.239Z",
+      "indexed_at": "2026-07-31T05:15:25.090Z",
       "synopsis_index_only": true
     },
     {
