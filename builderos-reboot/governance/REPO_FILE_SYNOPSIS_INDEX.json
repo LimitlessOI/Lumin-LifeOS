@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T07:35:44.024Z",
+  "generated_at": "2026-07-31T07:46:41.843Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12519,
   "files": [
@@ -92587,9 +92587,9 @@
     {
       "path": "services/privateWitnessService.js",
       "synopsis": "Exports handlePrivateWitnessMode — services/privateWitnessService.js.",
-      "bytes": 3910,
-      "mtime": "2026-07-31T07:17:47.558Z",
-      "indexed_at": "2026-07-31T07:17:47.558Z"
+      "bytes": 7780,
+      "mtime": "2026-07-31T07:46:41.843Z",
+      "indexed_at": "2026-07-31T07:46:41.843Z"
     },
     {
       "path": "services/proactiveToastSystem.js",
