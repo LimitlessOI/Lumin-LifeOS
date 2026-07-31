@@ -127,6 +127,7 @@ export function normalizeQueue(raw, sourcePath = null) {
     if (!s.task && !terminal) throw new Error(`step ${s.id} needs a task`);
     if (!s.status) s.status = STEP_STATUS.PENDING;
     if (typeof s.attempts !== 'number') s.attempts = 0;
+    if (typeof s.same_signature_count !== 'number') s.same_signature_count = 0;
   }
   return { ...raw, steps, _sourcePath: sourcePath };
 }
@@ -416,6 +417,8 @@ export async function claimPreExistingSatisfiedSteps(queue, {
     step.demote_reason = null;
     step.demoted_at = null;
     step.attempts = 0;
+    step.failure_signature = null;
+    step.same_signature_count = 0;
     claimed.push(step.id);
   }
   return claimed;
@@ -708,6 +711,8 @@ export async function runNextStep(queue, { buildFn, verifyFn, deployProofFn, mod
   step.status = STEP_STATUS.DONE;
   step.completed_at = new Date().toISOString();
   step.deploy_proven = true;
+  step.failure_signature = null;
+  step.same_signature_count = 0;
   if (functionalProven !== null) step.functional_proven = functionalProven;
   logger?.info?.({ step: step.id, commit_sha: sha, deploy_proven: true, functional_proven: functionalProven }, '[PRODUCT-BUILD] step done');
   return { ok: true, step_id: step.id, commit_sha: sha, verified: true, deploy_proven: true, functional_proven: functionalProven, summary: queueSummary(queue) };
@@ -748,16 +753,50 @@ export function evaluateModuleHealthForStep(healthBody, targetFile) {
   return { ok: true, applicable: true, reason: 'module_mounted' };
 }
 
+function normalizeFailureSignature(reason, stage, blockerClass) {
+  const r = String(reason || '');
+  // Stable signature for STEP_STATUS_FORBIDDEN independent of twin diagnostic noise.
+  const forbiddenMatch = r.match(/status is ["']([^"']+)["']/) || r.match(/\bis DONE\b/);
+  if (forbiddenMatch) {
+    const status = forbiddenMatch[1] ? forbiddenMatch[1].toLowerCase() : 'done';
+    return `STEP_STATUS_FORBIDDEN:${status}`;
+  }
+  // Strip variable diagnostic tails, hex SHAs, ISO timestamps, and collapse whitespace.
+  const stripped = r
+    .replace(/\[[^\]]*twin[^\]]*\]/gi, '')
+    .replace(/[a-f0-9]{32,}/gi, 'SHA')
+    .replace(/\d{4}-\d{2}-\d{2}T[^Z\s]+Z?/g, 'TS')
+    .replace(/\b[0-9a-f]{7,16}\b/gi, 'HASH')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 200);
+  return `${stage || 'unknown'}|${blockerClass || 'unknown'}|${stripped}`;
+}
+
 function failStep(step, queue, maxAttempts, info, logger) {
   step.last_error = info.reason;
   const blockerClass = resolveTypedBlockerClass({ stage: info.stage, reason: info.reason });
   step.blocker_class = blockerClass;
   if (info.claim_level) step.claim_level = info.claim_level;
-  const exhausted = step.attempts >= maxAttempts;
+
+  const newSig = normalizeFailureSignature(info.reason, info.stage, blockerClass);
+  if (step.failure_signature && step.failure_signature === newSig) {
+    step.same_signature_count = (typeof step.same_signature_count === 'number' ? step.same_signature_count : 0) + 1;
+  } else {
+    step.failure_signature = newSig;
+    step.same_signature_count = 1;
+  }
+
+  let exhausted = step.attempts >= maxAttempts;
+  if (step.same_signature_count >= 3) {
+    exhausted = true;
+    step.escalation_required = true;
+    step.escalation_note = `HARD GATE: 3+ identical failures (${step.failure_signature}). Automatic revival is disabled for this step until escalation_required is explicitly cleared by a real escalation action.`;
+  }
   step.status = exhausted ? STEP_STATUS.BLOCKED : STEP_STATUS.PENDING;
   let parked = null;
   if (exhausted) parked = parkBlockedStep(step, queue, info, blockerClass);
-  logger?.warn?.({ step: step.id, stage: info.stage, attempts: step.attempts, exhausted, blocker_class: blockerClass }, `[PRODUCT-BUILD] step ${info.stage} failed`);
+  logger?.warn?.({ step: step.id, stage: info.stage, attempts: step.attempts, exhausted, blocker_class: blockerClass, same_signature_count: step.same_signature_count }, `[PRODUCT-BUILD] step ${info.stage} failed`);
   return {
     ok: false,
     step_id: step.id,

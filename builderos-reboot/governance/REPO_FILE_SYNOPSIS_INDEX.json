@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T12:51:20.015Z",
+  "generated_at": "2026-07-31T18:36:31.304Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12588,
+  "file_count": 12589,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -23459,9 +23459,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/BLUEPRINT.json",
       "synopsis": "Receipt Auditor\"],",
-      "bytes": 17202,
-      "mtime": "2026-07-31T12:51:20.015Z",
-      "indexed_at": "2026-07-31T12:51:20.015Z",
+      "bytes": 17284,
+      "mtime": "2026-07-31T18:36:31.304Z",
+      "indexed_at": "2026-07-31T18:36:31.304Z",
       "synopsis_index_only": true
     },
     {
@@ -38723,9 +38723,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 68599,
-      "mtime": "2026-07-31T12:51:20.015Z",
-      "indexed_at": "2026-07-31T12:51:20.015Z"
+      "bytes": 69314,
+      "mtime": "2026-07-31T18:36:31.304Z",
+      "indexed_at": "2026-07-31T18:36:31.304Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40936,9 +40936,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 350411,
-      "mtime": "2026-07-31T12:49:58.647Z",
-      "indexed_at": "2026-07-31T12:49:58.647Z"
+      "bytes": 351453,
+      "mtime": "2026-07-31T18:36:31.304Z",
+      "indexed_at": "2026-07-31T18:36:31.304Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -93098,9 +93098,9 @@
     {
       "path": "services/product-build-orchestrator.js",
       "synopsis": "General product-build orchestrator — turns a product's structured",
-      "bytes": 33164,
-      "mtime": "2026-07-31T04:57:19.603Z",
-      "indexed_at": "2026-07-31T05:01:14.830Z",
+      "bytes": 34956,
+      "mtime": "2026-07-31T18:36:31.304Z",
+      "indexed_at": "2026-07-31T18:36:31.304Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -98026,6 +98026,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "tests/revive-thrash.test.js",
+      "synopsis": "Revive-thrash and same_signature_count escalation tests.",
+      "bytes": 3819,
+      "mtime": "2026-07-31T18:36:31.304Z",
+      "indexed_at": "2026-07-31T18:36:31.304Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {

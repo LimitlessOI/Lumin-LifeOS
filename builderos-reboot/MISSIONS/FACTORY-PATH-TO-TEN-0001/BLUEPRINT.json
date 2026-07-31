@@ -133,11 +133,13 @@
       "id": "M2PT-005B",
       "name": "Fix revive-thrash loop and same_signature_count escalation bug",
       "phase": "2",
-      "status": "pending",
+      "status": "done",
       "artifact": "services/product-build-orchestrator.js (revive logic) + tests/revive-thrash.test.js",
       "acceptance": "Identical STEP_STATUS_FORBIDDEN failures increment same_signature_count and trigger the 3-strike escalation instead of burning the full 6-revive budget.",
       "verify_command": "node --test tests/revive-thrash.test.js",
-      "depends_on": ["M2PT-005"]
+      "depends_on": ["M2PT-005"],
+      "completed_at": "2026-07-31T22:00:00.000Z",
+      "git_sha": "TBD_COMMIT_SHA"
     },
     {
       "id": "M2PT-006",
