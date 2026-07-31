@@ -576,6 +576,7 @@ ${text.slice(0, 24000)}`;
         blueprint_id,
         blueprint_step_id: stepKey,
         claim_following_blueprint: claim_following_blueprint !== false,
+        allow_terminal_steps: false,
       });
       if (!exactProbe.ok) {
         return res.status(422).json({
@@ -734,6 +735,7 @@ ${text.slice(0, 24000)}`;
         blueprint_id,
         blueprint_step_id,
         claim_following_blueprint: true,
+        allow_terminal_steps: true,
       });
       if (!exact.ok && exact.status === 'NOT_ON_BLUEPRINT') {
         return res.status(422).json({ ok: false, status: exact.status, error: exact.error });

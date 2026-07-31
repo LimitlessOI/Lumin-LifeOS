@@ -58,6 +58,17 @@ else
   exit 1
 fi
 
+# ── 2b+. File-placement authority (HARD — new protected source files) ──────────
+if node "$ROOT/scripts/verify-file-placement.mjs" --staged 2>&1; then
+  echo "✅ File-placement authority"
+else
+  echo ""
+  echo "❌ FILE-PLACEMENT VIOLATION: a new protected source file has no @ssot or points to an unregistered/amendment authority."
+  echo "   Fix: add @ssot docs/products/<product>/PRODUCT_HOME.md and co-commit the product home."
+  echo ""
+  exit 1
+fi
+
 # ── 2c. Security invariants (HARD — no bypass) ────────────────────────────────
 # Small, explicit, growable list of security-critical substrings (e.g. an
 # auth-gating middleware) that a named sensitive file must retain a minimum

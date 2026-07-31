@@ -167,6 +167,27 @@ export async function dispatchExecuteStep(body, options = {}) {
     };
   }
 
+  // STEP-STATUS GATE: a terminal or blocked step is not actionable. This guards
+  // direct POST /factory/execute-step against callers that bypass the ship-queue
+  // exactChangeClaim check. runGovernedShippingQueue also checks before dispatch.
+  const stepStatus = String(step.status || 'pending').toLowerCase();
+  const nonActionable = new Set(['blocked', 'skipped', 'cancelled', 'done']);
+  if (nonActionable.has(stepStatus) || step.human_hold === true || step.pause_for_founder === true) {
+    return {
+      httpStatus: 422,
+      body: buildBlockedReturn({
+        mission_id,
+        blueprint_id,
+        step_id: step.step_id,
+        gap_type: 'authority_violation',
+        summary: `execute-step cannot run a step with status "${stepStatus}"${step.human_hold ? ' + human_hold' : ''}${step.pause_for_founder ? ' + pause_for_founder' : ''}`,
+        attempted_action: 'POST /factory/execute-step',
+        missing_information: ['amend the blueprint to reset status or remove human_hold'],
+        evidence: { status: stepStatus, human_hold: step.human_hold, pause_for_founder: step.pause_for_founder },
+      }),
+    };
+  }
+
   if (!skipIntake) {
     const intake = runBpbIntakeGate(mission_id, { strict_pd: body?.strict_upstream_gates === true });
     if (!intake.ok) {

@@ -56,6 +56,10 @@ import {
   formatBlueprintFindings,
 } from '../scripts/lib/blueprint-authority-gate.mjs';
 import {
+  evaluateFilePlacement,
+  formatFilePlacementFindings,
+} from '../scripts/lib/file-placement-gate.mjs';
+import {
   finalizeExtractedJavaScript,
   fixAsteriskShorthandParams,
   isJavaScriptCodeStartLine,
@@ -1485,6 +1489,37 @@ export function createLifeOSCouncilBuilderRoutes({
       );
     }
 
+    // FILE-PLACEMENT AUTHORITY GATE (hard): new protected source files must carry
+    // a valid @ssot tag to a registered product home or approved shared authority.
+    // Prevents AI agents from dropping files in arbitrary directories outside the
+    // ownership model documented in docs/products/AUTHORITY_BOUNDARIES.md.
+    const placementVerdict = evaluateFilePlacement(
+      fileEntries.map((entry) => ({
+        path: entry.path,
+        content: entry.encoding === 'base64' ? null : entry.content,
+      })),
+      process.cwd(),
+      { commitMessage },
+    );
+    if (placementVerdict.findings.length) {
+      log.warn(
+        { findings: placementVerdict.findings, summary: formatFilePlacementFindings(placementVerdict.findings) },
+        '[BUILDER] file-placement authority findings',
+      );
+    }
+    if (!placementVerdict.ok) {
+      log.error(
+        { findings: placementVerdict.findings },
+        '[BUILDER] FILE PLACEMENT VIOLATION — commit refused',
+      );
+      const err = new Error(
+        `FILE_PLACEMENT_VIOLATION — commit refused.\n${formatFilePlacementFindings(placementVerdict.findings)}`,
+      );
+      err.code = 'FILE_PLACEMENT_VIOLATION';
+      err.findings = placementVerdict.findings;
+      throw err;
+    }
+
     // SO-002 / security posture: fire-and-forget adversarial review of the
     // commit diff. This is ROUTE, not BLOCK (Chair ruling c646160f-...); the
     // model is unproven, so findings are logged and recorded in the capability
@@ -2652,6 +2687,16 @@ export function createLifeOSCouncilBuilderRoutes({
           error: err.message,
           code: err.code,
           security_invariant_findings: err.findings,
+        });
+      }
+      if (err?.code === 'FILE_PLACEMENT_VIOLATION') {
+        log.error({ findings: err.findings }, '[BUILDER] /execute-batch refused by file-placement authority');
+        return res.status(422).json({
+          ok: false,
+          committed: false,
+          error: err.message,
+          code: err.code,
+          file_placement_findings: err.findings,
         });
       }
       log.error({ err: err.message }, '[BUILDER] /execute-batch commit failed');
