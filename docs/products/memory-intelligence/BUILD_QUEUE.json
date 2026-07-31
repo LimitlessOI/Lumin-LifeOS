@@ -631,7 +631,7 @@
     },
     {
       "id": "memory-intelligence-3",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/memory-seed-lessons.mjs",
       "task": "seed lessons learned",
       "spec": "Seed lessons_learned using receipts from AM36/CONTINUITY_LOG.",
@@ -643,12 +643,12 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-31T07:02:05.383Z",
-      "commit_sha": "8284a460cb61063b6ef9b9baf7ab0d8cbff776a1",
+      "commit_sha": "3c785bccaf86b5022ccc14176ad9b76533e99a99",
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-intelligence-3",
       "mission_id": "PRODUCT-memory-intelligence",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:seedLessonsLearned; assertion_threw",
+      "last_error": null,
       "reaudit_reset_at": "2026-07-30T18:55:06.671Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
