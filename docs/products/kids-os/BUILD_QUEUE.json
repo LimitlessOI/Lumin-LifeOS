@@ -562,13 +562,13 @@
     },
     {
       "id": "step8",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/coppaReview.js",
       "task": "Summarize COPPA review",
       "spec": "Document results of the COPPA compliance review for the kids-os platform.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "getCoppaReview"
       ],
@@ -619,7 +619,7 @@
       },
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-31T01:51:32.400Z",
       "last_attempt": null,
       "revive_count": 1,
       "revived_at": "2026-07-31T01:40:05.216Z",
