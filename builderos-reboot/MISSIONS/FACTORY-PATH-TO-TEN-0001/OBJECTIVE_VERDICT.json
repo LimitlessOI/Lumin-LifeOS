@@ -1,28 +1,23 @@
 {
   "mission_id": "FACTORY-PATH-TO-TEN-0001",
-  "version": "2026-07-31-0005",
+  "version": "2026-07-31-0006",
   "verdict": "IN_PROGRESS",
-  "verdict_note": "v4 blueprint ratified; migration preflight now green; M2PT-006 Receipt Auditor shipped; M2PT-005C continuous verification heartbeat shipped; remaining blockers: SENTRY reality station, Chair/Lens pipeline wiring, ROI/Wisdom, and SMOS revenue proof.",
-  "rating_current": 5,
+  "verdict_note": "M2PT-005C/006/007/008/009/010 shipped; SENTRY, Receipt Auditor, Continuous Verification, Chair/Lens/Model/Execution cognitive step runner, model-cost ROI ledger, and Wisdom learning loop are operational. Remaining hard blocker: real SMOS revenue requires Stripe keys (STRIPE_SECRET_KEY, STRIPE_PUBLISHABLE_KEY) and email sender (EMAIL_FROM + provider key).",
+  "rating_current": 7,
   "rating_target": 10,
   "ratings": {
     "governance_intent": 8,
-    "mechanical_enforcement": 5,
-    "receipt_truth": 6,
+    "mechanical_enforcement": 7,
+    "receipt_truth": 8,
     "revenue_reality": 1,
-    "cognitive_architecture": 5,
-    "self_learning": 2,
-    "autonomous_completion": 3
+    "cognitive_architecture": 8,
+    "self_learning": 7,
+    "autonomous_completion": 5
   },
   "blockers": [
-    "589 source files missing @ssot",
-    "119 false-done content-drift findings",
-    "no SENTRY reality station receipts",
-    "Chair/Lens stack not wired into build pipeline",
-    "no model-cost ROI ledger",
-    "SMOS revenue loop blocked on credentials"
+    "SMOS revenue loop blocked on missing Stripe credentials (STRIPE_SECRET_KEY, STRIPE_PUBLISHABLE_KEY) and email sender (EMAIL_FROM + provider key)"
   ],
   "acceptance_command": "node scripts/verify-path-to-ten-acceptance.mjs",
   "receipt_path": null,
-  "updated_at": "2026-07-31T12:47:48.000Z"
+  "updated_at": "2026-07-31T22:00:00.000Z"
 }

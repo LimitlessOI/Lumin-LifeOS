@@ -28,7 +28,7 @@
 ---
 **Status:** ACTIVE (execution ladder locked; full end-to-end autonomy still requires runtime proof)
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-07-31 — M2PT-010 Wisdom learning loop + M2PT-009 model-cost ROI ledger operational; M2PT-008 Chair/Lens/Model/Execution pipeline wired; M2PT-007 SENTRY reality station operational; M2PT-005B revive-thrash + same_signature_count escalation bug fixed; M2PT-005C continuous verification heartbeat shipped; M2PT-006 Receipt Auditor / Reality Replay Agent shipped and verified; see Change Receipts below.
+**Last Updated:** 2026-07-31 — PATH-TO-TEN at 7/10; all non-credential steps through M2PT-010 shipped. Remaining hard blocker: SMOS revenue requires Stripe keys and email sender config. M2PT-009/010 ROI ledger + Wisdom learning loop; M2PT-008 Chair/Lens pipeline; M2PT-007 SENTRY; M2PT-005C/006; see Change Receipts below.
 
 ---
 

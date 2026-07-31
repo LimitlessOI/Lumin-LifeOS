@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-31 — PATH-TO-TEN at 7/10; SMOS revenue is the remaining hard blocker
+
+All non-credential PATH-TO-TEN steps through M2PT-010 are shipped and deployed. The system now has: fail-closed never-stop gate (M2PT-005), continuous verification heartbeat (M2PT-005C), Receipt Auditor (M2PT-006), revive-thrash fix (M2PT-005B), SENTRY reality station (M2PT-007), Chair/Lens/Model/Execution cognitive step runner (M2PT-008), model-cost ROI ledger (M2PT-009), and Wisdom learning loop (M2PT-010). The only remaining hard gate is real revenue: Railway has no `STRIPE_SECRET_KEY` / `STRIPE_PUBLISHABLE_KEY` and no `EMAIL_FROM` / email provider sender configured. Until those are set, `scripts/verify-smos-live-charge.mjs` and `scripts/verify-smos-email-provider.mjs` cannot report READY and M2PT-012 cannot process a real transaction. Next action is founder provides Stripe + email sender credentials or sets them in Railway.
+
 ## 2026-07-31 — M2PT-009 model-cost ROI ledger + M2PT-010 Wisdom learning loop operational
 
 Created `services/model-roi-ledger.mjs` (JSONL ledger, per-model/per-lens/per-lens-model ROI, `trust_score_delta` from pass rate), `scripts/model-roi-report.mjs`, `services/wisdom-reality-update.mjs` (updates `LENS_REGISTRY.json` trust scores, confidence, performs_well/poorly, disagreement_profile from ledger + SENTRY + Receipt Auditor), and `scripts/wisdom-update-lens-trust.mjs --dry-run`. Wired `logModelCall` into `cognitive-step-runner.mjs` so executed Chair/Lens model calls are logged. Next: M2PT-011 SMOS revenue reality loop.
