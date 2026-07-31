@@ -809,7 +809,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "failure_signature": "STEP_STATUS_FORBIDDEN",
+      "same_signature_count": 1,
+      "escalation_class": "same_signature_repeat"
     },
     {
       "id": "4",
@@ -837,7 +840,7 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-31T08:10:23.909Z",
+      "shipped_at": "2026-07-31T09:39:46.461Z",
       "commit_sha": null,
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "4",
@@ -851,10 +854,10 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-07-31T08:10:23.909Z",
-        "shipped_at": "2026-07-31T08:10:23.909Z",
-        "commit_sha": "7f1428c86134c60155384e4f1104073ccd121698",
-        "content_sha256": "7e53a9f691bff53d474d3d7f96cb181d099004ba83c41d494589f5693ce26b1c",
+        "sealed_at": "2026-07-31T09:39:46.461Z",
+        "shipped_at": "2026-07-31T09:39:46.461Z",
+        "commit_sha": null,
+        "content_sha256": "ccf0d188cf9f1678e367f4e93479fe2c8b45e2b2fdd6c53153caab586acc591d",
         "target_file": "services/studentsInterview.js",
         "reverse": {
           "mode": "delete_file",
@@ -867,13 +870,23 @@
           "reason": "indeterminate_sql: SQL template literal contains ${} interpolation",
           "details": {
             "filePath": "/usr/src/app/services/studentsInterview.js",
-            "hash": "7e53a9f691bff53d474d3d7f96cb181d099004ba83c41d494589f5693ce26b1c",
+            "hash": "ccf0d188cf9f1678e367f4e93479fe2c8b45e2b2fdd6c53153caab586acc591d",
             "importChecks": [],
             "sqlChecks": [
               {
-                "text": "Feedback item ${i + 1} from student/parent.",
+                "text": "Feedback from ${intervieweeType} ${i + 1}: This is simulated feedback.",
                 "status": "INDETERMINATE",
                 "reason": "sql_template_literal_with_interpolation"
+              },
+              {
+                "text": "ll simulate unique feedback for each interview.\n    const intervieweeType = Math",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": " : ",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
               }
             ]
           }
@@ -881,7 +894,7 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/music-talent-studio/twins/steps/4.exact",
-          "content_sha256": "7e53a9f691bff53d474d3d7f96cb181d099004ba83c41d494589f5693ce26b1c"
+          "content_sha256": "ccf0d188cf9f1678e367f4e93479fe2c8b45e2b2fdd6c53153caab586acc591d"
         }
       },
       "built_sha": null,
