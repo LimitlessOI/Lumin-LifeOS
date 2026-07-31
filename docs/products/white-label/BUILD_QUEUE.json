@@ -367,13 +367,13 @@
     },
     {
       "id": "step4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/partner-key-scheme.js",
       "task": "design partner API key generation schema",
       "spec": "Define schema for partner keys versus platform keys.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "generatePartnerKeys",
         "generatePlatformKeys"
@@ -400,7 +400,7 @@
       "reaudit_reset_at": "2026-07-30T18:55:06.853Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-31T10:49:13.191Z",
       "last_attempt": null,
       "revive_count": 2,
       "revived_at": "2026-07-31T10:33:16.917Z",
