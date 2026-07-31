@@ -426,11 +426,11 @@
       "step_id": "M2C-009",
       "phase_id": "P2",
       "title": "Collaboration Spine and decision records",
-      "status": "IN_PROGRESS",
+      "status": "DONE",
       "started_at": "2026-07-31T05:55:00Z",
-      "completed_at": null,
-      "git_sha": null,
-      "evidence": null,
+      "completed_at": "2026-07-31T06:15:00Z",
+      "git_sha": "662cecfb3147",
+      "evidence": "DECISION_RECORD_TEMPLATE.md, DECISION-0002.md, verify-decision-record.mjs, collaboration-spine-assemble.mjs, tests/decision-record.test.js all created; DECISION-0001.md normalized to template; COLLABORATION_SPINE.md/json assembled with 2 valid records; npm run builder:preflight PASS.",
       "target_files": [
         "builderos-reboot/DECISIONS/DECISION_RECORD_TEMPLATE.md",
         "builderos-reboot/DECISIONS/DECISION-0002.md",
@@ -464,6 +464,44 @@
       "acceptance_test_ids": ["AT-M2C-100-1", "AT-M2C-101-1", "AT-M2C-102-1"],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_CHAIR",
       "sandbox_boundary": "builderos-reboot/DECISIONS/",
+      "authority_owner": "Chair",
+      "on_block": "BLOCKED_RETURN_TO_CHAIR"
+    },
+    {
+      "step_id": "M2C-010",
+      "phase_id": "P3",
+      "title": "Mechanical blueprint authority gate",
+      "status": "IN_PROGRESS",
+      "started_at": "2026-07-31T06:15:00Z",
+      "completed_at": null,
+      "git_sha": null,
+      "evidence": null,
+      "target_files": [
+        "scripts/lib/blueprint-authority-gate.mjs",
+        "tests/blueprint-authority-gate.test.js",
+        "routes/lifeos-council-builder-routes.js"
+      ],
+      "action_type": "modify_file",
+      "required_edits": [
+        "Create scripts/lib/blueprint-authority-gate.mjs that compares the current repo state to BLUEPRINT.json and detects drift / unauthorized work.",
+        "Create tests/blueprint-authority-gate.test.js covering pass/false-done/missing-blueprint cases.",
+        "Wire the gate as detect-and-route into routes/lifeos-council-builder-routes.js#commitOrMirrorFiles, adding governance warnings but not blocking yet.",
+        "Run npm run builder:preflight and record the result."
+      ],
+      "exact_output_contract": {
+        "type": "sentry_pass",
+        "must_prove": [
+          "scripts/lib/blueprint-authority-gate.mjs exists and has passing tests.",
+          "routes/lifeos-council-builder-routes.js#commitOrMirrorFiles calls blueprintAuthorityGate and records warnings.",
+          "npm run builder:preflight exits 0."
+        ]
+      },
+      "allowed_context_files": [],
+      "forbidden_context_files": [],
+      "dependencies": ["M2C-009"],
+      "acceptance_test_ids": ["AT-M2C-103-1"],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_CHAIR",
+      "sandbox_boundary": "scripts/lib/",
       "authority_owner": "Chair",
       "on_block": "BLOCKED_RETURN_TO_CHAIR"
     }

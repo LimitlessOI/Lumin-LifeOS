@@ -1,0 +1,17 @@
+{
+  "schema": "collaboration_spine_v1",
+  "assembled_at": "2026-07-31T05:59:14.177Z",
+  "decisions": [
+    {
+      "decision_id": "DECISION-0001",
+      "file": "builderos-reboot/DECISIONS/DECISION-0001.md",
+      "summary": "Stop false seals and repeated rejected generation by adding deterministic grounding gates, an auditable unseal path, rej"
+    },
+    {
+      "decision_id": "DECISION-0002",
+      "file": "builderos-reboot/DECISIONS/DECISION-0002.md",
+      "summary": "Build a minimal, artifact-driven Collaboration Spine so every AI and human reads and writes the same decision chain inst"
+    }
+  ],
+  "invalid": []
+}

@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T05:52:29.738Z",
+  "generated_at": "2026-07-31T06:00:22.262Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12491,
+  "file_count": 12498,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21382,11 +21382,40 @@
       "synopsis_index_only": true
     },
     {
+      "path": "builderos-reboot/DECISIONS/COLLABORATION_SPINE.json",
+      "synopsis": "BuilderOS artifact — COLLABORATION SPINE.",
+      "bytes": 628,
+      "mtime": "2026-07-31T05:59:14.171Z",
+      "indexed_at": "2026-07-31T06:00:22.262Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/DECISIONS/COLLABORATION_SPINE.md",
+      "synopsis": "Assembled Collaboration Spine for Mission 2 — BuilderOS Convergence",
+      "bytes": 845,
+      "mtime": "2026-07-31T05:59:14.171Z",
+      "indexed_at": "2026-07-31T06:00:22.262Z"
+    },
+    {
+      "path": "builderos-reboot/DECISIONS/DECISION_RECORD_TEMPLATE.md",
+      "synopsis": "Decision record template — BuilderOS Collaboration Spine artifact",
+      "bytes": 1895,
+      "mtime": "2026-07-31T05:57:56.791Z",
+      "indexed_at": "2026-07-31T06:00:22.262Z"
+    },
+    {
       "path": "builderos-reboot/DECISIONS/DECISION-0001.md",
       "synopsis": "Phase 0 consensus decision for Mission 2 — BuilderOS Convergence.",
-      "bytes": 7901,
-      "mtime": "2026-07-31T04:50:20.691Z",
-      "indexed_at": "2026-07-31T05:01:14.830Z"
+      "bytes": 8807,
+      "mtime": "2026-07-31T05:59:12.819Z",
+      "indexed_at": "2026-07-31T06:00:22.262Z"
+    },
+    {
+      "path": "builderos-reboot/DECISIONS/DECISION-0002.md",
+      "synopsis": "Decision record — Build the BuilderOS Collaboration Spine",
+      "bytes": 5037,
+      "mtime": "2026-07-31T05:58:10.475Z",
+      "indexed_at": "2026-07-31T06:00:22.262Z"
     },
     {
       "path": "builderos-reboot/DETERMINISM_CODER_PROMPT.md",
@@ -22283,17 +22312,17 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-CONVERGENCE-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 24704,
-      "mtime": "2026-07-31T05:52:15.707Z",
-      "indexed_at": "2026-07-31T05:52:22.489Z",
+      "bytes": 26718,
+      "mtime": "2026-07-31T05:59:24.399Z",
+      "indexed_at": "2026-07-31T06:00:22.262Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-CONVERGENCE-0001/FOUNDER_PACKET.md",
       "synopsis": "Mission 2 — BuilderOS Convergence founder packet.",
-      "bytes": 5297,
-      "mtime": "2026-07-31T05:51:37.995Z",
-      "indexed_at": "2026-07-31T05:52:22.489Z"
+      "bytes": 5277,
+      "mtime": "2026-07-31T06:00:00.507Z",
+      "indexed_at": "2026-07-31T06:00:22.262Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-CONVERGENCE-0001/OBJECTIVE_VERDICT.json",
@@ -38461,9 +38490,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 56478,
-      "mtime": "2026-07-31T05:51:36.019Z",
-      "indexed_at": "2026-07-31T05:52:22.489Z"
+      "bytes": 57177,
+      "mtime": "2026-07-31T05:59:50.467Z",
+      "indexed_at": "2026-07-31T06:00:22.262Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40674,9 +40703,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 336093,
-      "mtime": "2026-07-31T05:51:31.239Z",
-      "indexed_at": "2026-07-31T05:52:22.489Z"
+      "bytes": 337046,
+      "mtime": "2026-07-31T05:59:47.243Z",
+      "indexed_at": "2026-07-31T06:00:22.262Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -71584,6 +71613,16 @@
       ]
     },
     {
+      "path": "scripts/collaboration-spine-assemble.mjs",
+      "synopsis": "Assemble the Collaboration Spine from all DECISION-XXXX.md files.",
+      "bytes": 3178,
+      "mtime": "2026-07-31T05:58:22.635Z",
+      "indexed_at": "2026-07-31T06:00:22.262Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "scripts/council-builder-preflight.mjs",
       "synopsis": "Proves the Council Builder is reachable and reports why POST /api/v1/lifeos/builder/build",
       "bytes": 14804,
@@ -74864,6 +74903,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/verify-decision-record.mjs",
+      "synopsis": "Verify a DECISION-XXXX.md file against the Collaboration Spine template.",
+      "bytes": 2823,
+      "mtime": "2026-07-31T05:58:16.515Z",
+      "indexed_at": "2026-07-31T06:00:22.262Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
@@ -96368,6 +96417,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/creative-engine/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "tests/decision-record.test.js",
+      "synopsis": "Tests for decision-record verifier and Collaboration Spine assembler.",
+      "bytes": 3699,
+      "mtime": "2026-07-31T05:58:28.547Z",
+      "indexed_at": "2026-07-31T06:00:22.262Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {

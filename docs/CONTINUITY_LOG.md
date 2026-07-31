@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-31 — Mission 2 — BuilderOS Convergence P2: Collaboration Spine and decision records shipped
+
+Created the BuilderOS Collaboration Spine: `DECISION_RECORD_TEMPLATE.md`, `DECISION-0002.md`, `scripts/verify-decision-record.mjs`, `scripts/collaboration-spine-assemble.mjs`, and `tests/decision-record.test.js`. Normalized `DECISION-0001.md` to the new template. The assembler produces `COLLABORATION_SPINE.md` and `COLLABORATION_SPINE.json` from every `DECISION-XXXX.md` in `builderos-reboot/DECISIONS/` with a validity check. `services/self-repair-decision-log.js` already supports the hybrid schema. `node --test tests/decision-record.test.js` passes; `npm run builder:preflight` PASS.
+
 ## 2026-07-31 — Mission 2 — BuilderOS Convergence P1/P2: Builder Readiness Audit and constitutional amendment
 
 Ran `scripts/builder-readiness-audit.mjs` to produce `docs/audits/builderos-mission-2/BUILDER_READINESS_AUDIT.md` and `.json`. Verdict: `NOT READY TO MANUFACTURE`. P0 stop false completion is closed; P1 constitutional lock completed with `docs/constitution/AMENDMENT_BUILDEROS_CONVERGENCE.md` ratified and containing the six BuilderOS Design Principles and Mission 2 Success Test. Ambiguity register and manufacturing plan identify P2–P6 gaps: decision-record template + Collaboration Spine assembler, mechanical blueprint-authority gate, runtime scheduler control-plane endpoint, revenue credentials, and wisdom/scorecard/handoff. `npm run builder:preflight` PASS.

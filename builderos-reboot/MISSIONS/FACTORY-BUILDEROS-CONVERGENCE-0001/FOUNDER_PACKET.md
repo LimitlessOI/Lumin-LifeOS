@@ -4,7 +4,7 @@
 
 ## Status
 
-In progress — Phase 2: Collaboration Spine + decision records (P1 Builder Readiness Audit and constitutional amendment completed).
+In progress — Phase 3: Mechanical blueprint authority gate (P0–P2 complete; P2 Collaboration Spine shipped).
 
 ## One-line mission
 

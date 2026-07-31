@@ -2,6 +2,16 @@
 
 # DECISION-0001 — Phase 0 Consensus: Stop False Seals and Repeated Rejected Generation
 
+**Decision ID:** DECISION-0001  
+**Mission / Blueprint:** Mission 2 — BuilderOS Convergence / `FACTORY-BUILDEROS-CONVERGENCE-0001`  
+**Blueprint version:** `FACTORY-BUILDEROS-CONVERGENCE-0001-v2`  
+**Decided at:** 2026-07-31T00:00:00Z  
+**Authority:** `builderos-reboot/DECISIONS/DECISION-0001.md`
+
+## Decision
+
+Stop false seals and repeated rejected generation by adding deterministic grounding gates, an auditable unseal path, rejected-hash anti-reseal, sticky escalation, and overwrite-path control.
+
 ## Decision ID
 
 DECISION-0001
@@ -12,11 +22,11 @@ DECISION-0001
 - Product: builderos
 - Blueprint: builderos-reboot/MISSIONS/FACTORY-BUILDEROS-CONVERGENCE-0001/BLUEPRINT.json
 
-## Founder Intent
+## Founder intent
 
 BuilderOS must not certify structurally present but semantically false work as complete. A step may only be treated as done when the claim being made about it is semantically true. The immediate priority is to stop the seal path from certifying broken generated work, to provide an auditable unseal path, and to prevent the same rejected content from regenerating and overwriting verified repairs.
 
-## Problem Being Solved
+## Problem being solved
 
 Direct evidence from 2026-07-31 showed that BuilderOS could:
 1. Seal a generated file that imports a named export that does not exist.
@@ -25,14 +35,14 @@ Direct evidence from 2026-07-31 showed that BuilderOS could:
 4. Overwrite a human-confirmed repair with the same broken generated content on the next autonomous cycle.
 5. Revive a manually `blocked` step because `escalation_required` was not explicitly set.
 
-## Alternatives Considered
+## Alternatives considered
 
 1. **Detect-and-route (warning-only) first.** Rejected because the directly evidenced checks are high-confidence and the system is already burning tokens on broken work. Warnings would allow false completion to continue during a calibration period.
 2. **Rewrite the entire seal/rebuild machinery.** Rejected because the existing structural replay is still useful; the correct fix is additive correctness gates in front of it.
 3. **Build a parallel decision table.** Rejected because `services/self-repair-decision-log.js` already provides a working primitive that should be extended.
 4. **Place the grounding helper in `scripts/lib/`.** Rejected because `services/truth-ladder.js` owns the seal path; placing the helper elsewhere would create a less coherent design. The helper is classified as GAP-FILL governance infrastructure.
 
-## Per-Role Reasoning
+## Per-role reasoning
 
 - **Chair:** The founder's intent is preserved: no false completion, no human message bus, mechanical enforcement. The helper stays in `services/` because that is where the seal path lives.
 - **Architect:** The smallest additive gate is a deterministic grounding check inside `sealExactChangeIntoTwin` and before `status: DONE` in `runNextStep` / `claimPreExistingSatisfiedSteps`. The unseal path is a new function on `truth-ladder.js` that records rejected hashes. Sticky escalation is a new function on `product-build-orchestrator.js` that sets the existing `escalation_required` fields.
@@ -55,7 +65,7 @@ Direct evidence from 2026-07-31 showed that BuilderOS could:
 4. After WP0.4, the exact path that overwrites repairs will be traced and controlled.
 5. After WP0.5, the extended decision log will round-trip without breaking existing readers.
 
-## Success Criteria
+## Success criteria
 
 - `npm run builder:preflight` passes after all WP0 changes.
 - Behavioral tests prove each gate catches its targeted defect and passes a known-good file.
@@ -63,7 +73,7 @@ Direct evidence from 2026-07-31 showed that BuilderOS could:
 - `services/product-build-orchestrator.js` does not mark a grounded-fail artifact as `DONE`.
 - The decision log migration is additive and backward-compatible.
 
-## Failure Criteria
+## Failure criteria
 
 - A known-broken generated artifact can still seal or be marked DONE.
 - Existing valid seals break due to false positives.
@@ -79,18 +89,17 @@ The five consensus points from the founder, ChatGPT, and Claude Code are adopted
 4. **Decision-log schema:** HYBRID SCHEMA. Explicit columns for stable lifecycle fields, JSONB `metadata` for structured per-role/alternatives/evidence fields.
 5. **Revenue-loop ordering:** Defer SMOS revenue execution until the blueprint-authority spine is proven. Revenue remains a protected, mandatory Mission 2 lane.
 
-## Why This Decision
+## Why this decision
 
 It stops the directly evidenced bleeding first without rebuilding the factory from scratch. It uses existing primitives (`truth-ladder.js`, `product-build-orchestrator.js`, `self-repair-decision-log.js`) and adds deterministic, testable gates. It keeps the factory moving on unrelated work while preventing false completion.
 
-## How Reality Will Judge This
+## Reality judgment
 
-- No false seals of missing-export or missing-table artifacts after this decision is implemented.
-- No regenerated rejected content overwrites a verified repair.
-- Decision-log extension does not break existing readers or writers.
-- Phase 0 can be called closed only after the WP0.1–WP0.5 behavioral evidence is recorded.
+- **Status:** CONFIRMED
+- **Evidence:** `services/blueprint-grounding-check.js` and `services/truth-ladder.js` prevent missing-export/missing-table seals; `product-build-orchestrator.js` sticky escalation keeps blocked steps from auto-reviving; `tests/blueprint-grounding-check.test.js` (7/7), `tests/truth-ladder.test.js` (23/23), `tests/product-build-orchestrator.test.js` (21/21), `tests/run-step-overwrite-guard.test.js` (2/2), `tests/self-repair-decision-log.test.js` (3/3) all pass; `npm run builder:preflight` PASS 416/416; `products/receipts/PHASE_0_STOP_GATE.json` and `docs/audits/builderos-mission-2/MISSION_2_CONVERGENCE_HANDOFF.md` produced.
+- **Next action:** Phase 0 closed; proceed with Mission 2 convergence work.
 
-## Implementation Trace
+## Implementation trace
 
 - `services/blueprint-grounding-check.js` — new helper.
 - `services/truth-ladder.js` — call grounding check inside `sealExactChangeIntoTwin`.
@@ -101,19 +110,19 @@ It stops the directly evidenced bleeding first without rebuilding the factory fr
 - `tests/truth-ladder.test.js` — extend for grounding failures.
 - `tests/product-build-orchestrator.test.js` — extend for escalation and grounding.
 
-## Sentry Verification
+## Sentry verification
 
 To be filled after implementation.
 
-## Actual Real-World Outcome
+## Actual real-world outcome
 
 Pending Phase 0 stop-gate evidence.
 
-## Prediction-vs-Reality Comparison
+## Prediction-versus-reality comparison
 
 Pending.
 
-## Resulting Lessons / Wisdom Update
+## Resulting lessons / wisdom update
 
 Pending.
 
