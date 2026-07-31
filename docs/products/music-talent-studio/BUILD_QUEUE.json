@@ -905,13 +905,13 @@
     },
     {
       "id": "1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/apiSpecification.js",
       "task": "verify API specification",
       "spec": "Ensure detailed API specification is complete and accurate.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "validateApiSpecification"
       ],
@@ -1257,7 +1257,7 @@
       },
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-31T09:38:31.402Z",
       "last_attempt": null,
       "revive_count": 1,
       "revived_at": "2026-07-31T09:16:59.359Z",
