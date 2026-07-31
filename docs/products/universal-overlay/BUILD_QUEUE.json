@@ -324,26 +324,29 @@
     },
     {
       "id": "7",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "public/overlay/adaptiveLayout.js",
       "task": "adapt layout preferences",
       "spec": "Save user layout preferences to `flourishing_prefs`.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "adaptLayoutPreferences"
       ],
       "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": null,
       "shipped_at": "2026-07-15T22:17:14.890Z",
-      "commit_sha": "414cbd0e2809e51e88efe93321c6180bb142c4a9",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "7",
       "mission_id": "PRODUCT-universal-overlay",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:adaptLayoutPreferences; adaptLayoutPreferences",
-      "reaudit_reset_at": "2026-07-30T18:55:06.758Z"
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:adaptLayoutPreferences; behavior_assertion_failed; behavior_proof",
+      "reaudit_reset_at": "2026-07-30T18:55:06.758Z",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-31T09:59:48.965Z"
     },
     {
       "id": "8",
