@@ -691,7 +691,7 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-31T07:46:50.254Z",
+      "shipped_at": "2026-07-31T08:10:01.545Z",
       "commit_sha": null,
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "business-tools-1",
@@ -705,10 +705,10 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-07-31T07:46:50.254Z",
-        "shipped_at": "2026-07-31T07:46:50.254Z",
+        "sealed_at": "2026-07-31T08:10:01.545Z",
+        "shipped_at": "2026-07-31T08:10:01.545Z",
         "commit_sha": null,
-        "content_sha256": "31818b05fe46a8e100d9e3a800a725e3c52f6e6e360cfc981b00a68d3c0e4d04",
+        "content_sha256": "62580dc97c27484dd97c2781d7fcf36ca0994cced6296a4b0624dbef654ff830",
         "target_file": "services/extractSubFeatures.js",
         "reverse": {
           "mode": "delete_file",
@@ -722,7 +722,7 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/business-tools/twins/steps/business-tools-1.exact",
-          "content_sha256": "31818b05fe46a8e100d9e3a800a725e3c52f6e6e360cfc981b00a68d3c0e4d04"
+          "content_sha256": "62580dc97c27484dd97c2781d7fcf36ca0994cced6296a4b0624dbef654ff830"
         }
       },
       "built_sha": null,

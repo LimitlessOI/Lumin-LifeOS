@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T08:09:47.956Z",
+  "generated_at": "2026-07-31T08:10:04.748Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12523,
   "files": [
@@ -88880,9 +88880,9 @@
     {
       "path": "services/extractSubFeatures.js",
       "synopsis": "Exports extractSubFeatures — services/extractSubFeatures.js.",
-      "bytes": 1474,
-      "mtime": "2026-07-31T07:46:52.869Z",
-      "indexed_at": "2026-07-31T07:46:52.869Z"
+      "bytes": 1475,
+      "mtime": "2026-07-31T08:10:04.748Z",
+      "indexed_at": "2026-07-31T08:10:04.748Z"
     },
     {
       "path": "services/factory-arc-loader.js",
