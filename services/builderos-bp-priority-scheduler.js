@@ -17,6 +17,7 @@ import {
   hasTokenCapacity,
   runProductExpansionCycle,
 } from './never-stop-product-factory.js';
+import { registerScheduler, updateScheduler } from './scheduler-registry.js';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BP_PATH = path.join(REPO_ROOT, 'builderos-reboot/BP_PRIORITY.json');
@@ -259,28 +260,46 @@ const guardedBpPriorityTick = createUsefulWorkGuard({
  * Start the scheduler. Requires BUILDEROS_AUTOPILOT=1 on Railway (explicit opt-in).
  */
 export function startBpPriorityScheduler({ logger } = {}) {
-  if (process.env.BUILDEROS_AUTOPILOT !== '1') {
+  const enabled = process.env.BUILDEROS_AUTOPILOT === '1';
+  const intervalMs = Number(process.env.BUILDEROS_AUTOPILOT_INTERVAL_MS || 30 * 60 * 1000);
+  const bootDelayMs = Number(process.env.BUILDEROS_AUTOPILOT_BOOT_DELAY_MS || 2 * 60 * 1000);
+
+  registerScheduler('bp_priority', {
+    type: 'env_gated',
+    env_gate: 'BUILDEROS_AUTOPILOT',
+    enabled,
+    interval_ms: intervalMs,
+    boot_delay_ms: bootDelayMs,
+    started_at: new Date().toISOString(),
+  });
+
+  if (!enabled) {
     logger?.info?.('[BP-PRIORITY-SCHEDULER] disabled (set BUILDEROS_AUTOPILOT=1 on Railway to enable)');
     return null;
   }
 
-  const intervalMs = Number(process.env.BUILDEROS_AUTOPILOT_INTERVAL_MS || 30 * 60 * 1000);
-  const bootDelayMs = Number(process.env.BUILDEROS_AUTOPILOT_BOOT_DELAY_MS || 2 * 60 * 1000);
-
   logger?.info?.({ intervalMs, bootDelayMs }, '[BP-PRIORITY-SCHEDULER] starting — autonomous mission queue active');
 
   const tick = async () => {
+    updateScheduler('bp_priority', { last_tick_started_at: new Date().toISOString() });
     const outcome = await guardedBpPriorityTick({ logger });
     if (outcome?.skipped) {
       recordGuardedOutcome(outcome, { logger });
     }
+    updateScheduler('bp_priority', {
+      last_tick_completed_at: new Date().toISOString(),
+      last_outcome: outcome || null,
+    });
   };
 
   setTimeout(() => {
     tick().catch((err) => logger?.warn?.({ err: err.message }, '[BP-PRIORITY-SCHEDULER] boot tick failed'));
   }, bootDelayMs);
 
-  return setInterval(() => {
+  const timer = setInterval(() => {
     tick().catch((err) => logger?.warn?.({ err: err.message }, '[BP-PRIORITY-SCHEDULER] interval tick failed'));
   }, intervalMs);
+
+  updateScheduler('bp_priority', { timer_set: true });
+  return timer;
 }

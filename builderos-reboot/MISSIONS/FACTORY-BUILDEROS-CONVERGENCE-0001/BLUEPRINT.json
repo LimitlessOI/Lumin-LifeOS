@@ -509,11 +509,11 @@
       "step_id": "M2C-011",
       "phase_id": "P4",
       "title": "Runtime convergence: scheduler control-plane endpoint and BP_PRIORITY scheduler wiring",
-      "status": "IN_PROGRESS",
+      "status": "DONE",
       "started_at": "2026-07-31T06:25:00Z",
-      "completed_at": null,
-      "git_sha": null,
-      "evidence": null,
+      "completed_at": "2026-07-31T06:35:00Z",
+      "git_sha": "e826c5b0d234",
+      "evidence": "BP_PRIORITY scheduler now starts in server-founder-runtime.js; GET /api/v1/lifeos/builder/control-plane/schedulers endpoint added to routes/lifeos-council-builder-routes.js; services/scheduler-registry.js tracks scheduler registration; services/builderos-bp-priority-scheduler.js registers itself. BUILDEROS_AUTOPILOT gating preserved (disabled by default). npm run builder:preflight PASS; /control-plane/schedulers not yet live-tested on deployed Railway, will be SENTRY-probed after deploy.",
       "target_files": [
         "docs/products/builderos/SCHEDULER_AUDIT.md",
         "server-founder-runtime.js",
@@ -540,6 +540,48 @@
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_CHAIR",
       "sandbox_boundary": "server-founder-runtime.js",
       "authority_owner": "Chair",
+      "on_block": "BLOCKED_RETURN_TO_CHAIR"
+    },
+    {
+      "step_id": "M2C-012",
+      "phase_id": "P5",
+      "title": "Revenue loop closure: prepare SMOS email/charge verification and halt for founder credentials",
+      "status": "IN_PROGRESS",
+      "started_at": "2026-07-31T06:35:00Z",
+      "completed_at": null,
+      "git_sha": null,
+      "evidence": null,
+      "target_files": [
+        "scripts/verify-smos-email-provider.mjs",
+        "scripts/verify-smos-live-charge.mjs",
+        "docs/products/financial-revenue/SMOS_REVENUE_READINESS.md"
+      ],
+      "action_type": "create_file",
+      "required_edits": [
+        "Create scripts/verify-smos-email-provider.mjs that checks EMAIL_PROVIDER, RESEND_API_KEY/SMTP, and EMAIL_FROM env/config and reports readiness without sending.",
+        "Create scripts/verify-smos-live-charge.mjs that validates a live $49 charge capability and entitlement/delivery wiring, but halts before executing real charge until founder credentials provided.",
+        "Create docs/products/financial-revenue/SMOS_REVENUE_READINESS.md documenting required founder credentials, fallback options, and pass/fail criteria.",
+        "Run npm run builder:preflight and update the revenue readiness verdict in the product home."
+      ],
+      "exact_output_contract": {
+        "type": "sentry_pass",
+        "must_prove": [
+          "Email-provider verification script runs deterministically and reports missing credentials clearly.",
+          "Live-charge verification script exists and fails safe (does not charge) when credentials are absent.",
+          "npm run builder:preflight exits 0."
+        ]
+      },
+      "allowed_context_files": [
+        "config/smos-pricing.js",
+        "routes/revenue*.js",
+        "services/billing*.js"
+      ],
+      "forbidden_context_files": [],
+      "dependencies": ["M2C-011"],
+      "acceptance_test_ids": ["AT-M2C-105-1"],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_CHAIR",
+      "sandbox_boundary": "scripts/",
+      "authority_owner": "CFO / TSOS",
       "on_block": "BLOCKED_RETURN_TO_CHAIR"
     }
   ]

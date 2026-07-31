@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-31 — Mission 2 — BuilderOS Convergence P4: runtime convergence / scheduler control-plane endpoint shipped
+
+Wired `startBpPriorityScheduler` into `server-founder-runtime.js` (gated on `BUILDEROS_AUTOPILOT=1`, off by default). Added `GET /api/v1/lifeos/builder/control-plane/schedulers` in `routes/lifeos-council-builder-routes.js`, backed by `services/scheduler-registry.js` and `services/builderos-bp-priority-scheduler.js` self-registration. `docs/products/builderos/SCHEDULER_AUDIT.md` updated to reflect `bp_priority` is now reachable in the founder runtime. `node --check` clean on touched files; `npm run builder:preflight` PASS.
+
 ## 2026-07-31 — Mission 2 — BuilderOS Convergence P3: mechanical blueprint-authority gate shipped
 
 Created `scripts/lib/blueprint-authority-gate.mjs` and `tests/blueprint-authority-gate.test.js` (6/6 PASS). The gate compares the files in a proposed commit to `builderos-reboot/MISSIONS/FACTORY-BUILDEROS-CONVERGENCE-0001/BLUEPRINT.json`, detects uncovered files, changes to DONE steps, and DONE steps missing evidence, and is wired as detect-and-route warnings into `routes/lifeos-council-builder-routes.js#commitOrMirrorFiles` alongside security invariants and doc-hygiene. `node --check routes/lifeos-council-builder-routes.js` clean; `npm run builder:preflight` PASS.

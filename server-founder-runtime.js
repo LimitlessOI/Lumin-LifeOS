@@ -58,6 +58,7 @@ import { startProdHealthWatchdogScheduler } from "./scripts/prod-health-watchdog
 import { startSentryChairGovernanceScheduler, startCompetitiveResearchScheduler } from "./scripts/sentry-chair-governance-audit.mjs";
 import { startMemoryEmbeddingsBackfillScheduler } from "./scripts/memory-embeddings-backfill.mjs";
 import { registerGovernanceReviewScheduler } from "./services/governance-review-scheduler.js";
+import { startBpPriorityScheduler } from "./services/builderos-bp-priority-scheduler.js";
 import { initDatabase } from "./startup/database.js";
 import { requireKey } from "./src/server/auth/requireKey.js";
 import { NotificationService } from "./core/notification-service.js";
@@ -477,6 +478,15 @@ async function bootFounderRuntime() {
         startGovernedAutonomousShippingLoop({ logger, pool });
       } catch (govErr) {
         logger.warn("[GOVERNED-AUTONOMOUS-SHIP] failed to start in founder runtime", { error: govErr.message });
+      }
+      // BP_PRIORITY autonomous mission queue. Explicitly gated on
+      // BUILDEROS_AUTOPILOT=1, so in production it starts only after the founder
+      // opts in. It runs the canonical `scripts/bp-priority-never-stop.mjs --once`
+      // on a fixed cadence, guarded by useful-work prerequisites.
+      try {
+        startBpPriorityScheduler({ logger });
+      } catch (bpPriorityErr) {
+        logger.warn("[BP-PRIORITY-SCHEDULER] failed to start in founder runtime", { error: bpPriorityErr.message });
       }
       // CI health watchdog: nothing in the system previously watched GitHub
       // Actions/CI status at all (confirmed by repo-wide audit, 2026-07-19) —

@@ -94,6 +94,8 @@ import {
 } from '../services/founder-packet-v2-unified-gate.js';
 import { classifyBuilderGap, summarizeGapFamilies } from '../services/builderos-gap-classifier.js';
 import { verifyIntakeSessionBuildClearance } from '../services/intake-blueprint-executor.js';
+import { getBpPrioritySchedulerStatus } from '../services/builderos-bp-priority-scheduler.js';
+import { getAllSchedulerStatuses } from '../services/scheduler-registry.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROMPTS_DIR = join(__dirname, '..', 'prompts');
@@ -3863,6 +3865,29 @@ async function fetchGitHubFileContent(filePath, { token, owner, repoName, branch
     }
   }
 
+  function getControlPlaneSchedulers(req, res) {
+    try {
+      const bp = getBpPrioritySchedulerStatus();
+      const registry = getAllSchedulerStatuses();
+      res.status(200).json({
+        ok: true,
+        autopilot_env: process.env.BUILDEROS_AUTOPILOT || null,
+        schedulers: [
+          {
+            name: 'bp_priority',
+            classification: 'env_gated',
+            env_gate: 'BUILDEROS_AUTOPILOT=1',
+            status: bp.scheduler,
+          },
+          ...registry,
+        ],
+      });
+    } catch (err) {
+      log.error({ err: err.message }, '[BUILDER] /control-plane/schedulers failed');
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  }
+
   return function mount(app) {
     const base = '/api/v1/lifeos/builder';
     app.get(`${base}/ready`, requireKey, getBuilderReady);
@@ -3876,6 +3901,7 @@ async function fetchGitHubFileContent(filePath, { token, owner, repoName, branch
     app.get(`${base}/history`, requireKey, getBuilderHistory);
     app.get(`${base}/gaps`, requireKey, getBuilderGaps);
     app.get(`${base}/runtime-fingerprint`, requireKey, getRuntimeFingerprint);
+    app.get(`${base}/control-plane/schedulers`, requireKey, getControlPlaneSchedulers);
     // §2.11 execution endpoints — the system writes and commits code
     app.post(`${base}/execute`, requireKey, executeOutput);
     app.post(`${base}/execute-batch`, requireKey, executeBatch);

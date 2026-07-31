@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-23 — LifeOS paid tier checkout scaffold added (`/api/v1/lifeos/billing`, `public/overlay/lifeos-billing.html`, `lifeos_checkout_sessions`); Chair twin hard-gate closed and SENTRY `lifeos-founder-ui` passes 0 findings on live tip. |
+| **Last Updated** | 2026-07-31 — BuilderOS convergence: `routes/lifeos-council-builder-routes.js` gained `GET /api/v1/lifeos/builder/control-plane/schedulers` and `blueprint-authority-gate` detect-and-route warnings; no LifeOS behavior change. |
 ---
 
 ## Founder conversations (2026-06-29)
@@ -181,6 +181,9 @@ This contract tightens the **human–agent truth channel**; it does not relax No
 **Last Updated:** 2026-06-30 — Founder-route fail-fast hardening: `routes/lifeos-auth-routes.js`, `routes/lifeos-founder-runtime-routes.js`, and `routes/lifeos-builderos-command-control-routes.js` now time out slow authenticated founder queries and return truthful degraded responses instead of hanging the shell; local founder-path proof now passes on `/api/v1/lifeos/auth/me`, `/api/v1/lifeos/builderos/command-control/point-b/status`, and `/api/v1/lifeos/lumin/moments`.
 **Last Updated:** 2026-06-30 — Founder-only route composition extracted: `server.js` now lazy-loads `startup/register-founder-runtime-routes.js` for founder-builder boots instead of eagerly loading the giant full-runtime route composer; founder-builder boot also defers admin/council/tools/knowledge/self-programming module registration so Railway only loads the shell/builder-critical route surface by default.
 **Last Updated:** 2026-06-30 — Founder-only server surface extracted: `server.js` now lazy-loads `startup/routes/founder-server-routes.js` for founder-builder boots instead of eagerly mounting the broader `startup/routes/server-routes.js` surface; founder mode keeps only health/liveness routes outside the shell/builder path so Railway boot no longer drags memory/stripe/flags/admin server helpers into the builder entry runtime.
+
+**Last Updated:** 2026-07-31 — BuilderOS convergence touches: added `GET /api/v1/lifeos/builder/control-plane/schedulers` route and `blueprint-authority-gate` warning injection to `routes/lifeos-council-builder-routes.js`; no LifeOS user-facing change.
+
 
 ---
 

@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T06:03:45.115Z",
+  "generated_at": "2026-07-31T06:10:33.095Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12500,
+  "file_count": 12501,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21670,9 +21670,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3764627,
-      "mtime": "2026-07-31T05:52:29.703Z",
-      "indexed_at": "2026-07-31T05:52:29.738Z"
+      "bytes": 3768854,
+      "mtime": "2026-07-31T06:09:02.187Z",
+      "indexed_at": "2026-07-31T06:09:15.527Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -22312,17 +22312,17 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-CONVERGENCE-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 28642,
-      "mtime": "2026-07-31T06:03:17.803Z",
-      "indexed_at": "2026-07-31T06:03:45.115Z",
+      "bytes": 31212,
+      "mtime": "2026-07-31T06:07:21.979Z",
+      "indexed_at": "2026-07-31T06:09:02.116Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-CONVERGENCE-0001/FOUNDER_PACKET.md",
       "synopsis": "Mission 2 — BuilderOS Convergence founder packet.",
-      "bytes": 5300,
-      "mtime": "2026-07-31T06:03:36.135Z",
-      "indexed_at": "2026-07-31T06:03:45.115Z"
+      "bytes": 5294,
+      "mtime": "2026-07-31T06:07:42.611Z",
+      "indexed_at": "2026-07-31T06:09:02.116Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-CONVERGENCE-0001/OBJECTIVE_VERDICT.json",
@@ -38490,9 +38490,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 57853,
-      "mtime": "2026-07-31T06:03:34.351Z",
-      "indexed_at": "2026-07-31T06:03:45.115Z"
+      "bytes": 58504,
+      "mtime": "2026-07-31T06:07:38.723Z",
+      "indexed_at": "2026-07-31T06:09:02.116Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41441,9 +41441,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 639589,
-      "mtime": "2026-07-30T22:43:17.277Z",
-      "indexed_at": "2026-07-30T22:44:20.932Z"
+      "bytes": 639832,
+      "mtime": "2026-07-31T06:08:52.359Z",
+      "indexed_at": "2026-07-31T06:09:02.116Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -69143,9 +69143,9 @@
     {
       "path": "routes/lifeos-council-builder-routes.js",
       "synopsis": "routes/lifeos-council-builder-routes.js",
-      "bytes": 169815,
-      "mtime": "2026-07-31T06:03:00.003Z",
-      "indexed_at": "2026-07-31T06:03:45.115Z",
+      "bytes": 170769,
+      "mtime": "2026-07-31T06:06:55.011Z",
+      "indexed_at": "2026-07-31T06:09:02.116Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -85887,9 +85887,9 @@
     {
       "path": "server-founder-runtime.js",
       "synopsis": "Founder-builder minimal runtime entrypoint.",
-      "bytes": 23469,
-      "mtime": "2026-07-30T01:11:44.436Z",
-      "indexed_at": "2026-07-30T01:12:34.786Z",
+      "bytes": 24074,
+      "mtime": "2026-07-31T06:06:46.391Z",
+      "indexed_at": "2026-07-31T06:09:02.116Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -86654,9 +86654,9 @@
     {
       "path": "services/builderos-bp-priority-scheduler.js",
       "synopsis": "BP_PRIORITY autonomous queue scheduler — useful-work-guard wrapped.",
-      "bytes": 9705,
-      "mtime": "2026-06-29T08:53:21.896Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 10336,
+      "mtime": "2026-07-31T06:06:37.207Z",
+      "indexed_at": "2026-07-31T06:09:02.116Z",
       "ssot": [
         "builderos-reboot/BP_PRIORITY.json",
         "docs/products/AUTHORITY_BOUNDARIES.md"
@@ -92874,6 +92874,16 @@
       "bytes": 1916,
       "mtime": "2026-07-30T22:32:04.401Z",
       "indexed_at": "2026-07-30T22:32:11.913Z"
+    },
+    {
+      "path": "services/scheduler-registry.js",
+      "synopsis": "Central registry for background scheduler status in the founder runtime.",
+      "bytes": 823,
+      "mtime": "2026-07-31T06:06:28.511Z",
+      "indexed_at": "2026-07-31T06:09:02.116Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/scriptEngine.js",

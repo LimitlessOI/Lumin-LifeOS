@@ -4,7 +4,7 @@
 
 ## Status
 
-In progress — Phase 4: Runtime convergence / scheduler control-plane (P0–P3 complete; mechanical blueprint-authority gate shipped).
+In progress — Phase 5: Revenue loop closure — SMOS email/charge verification (P0–P4 complete; runtime convergence shipped).
 
 ## One-line mission
 
