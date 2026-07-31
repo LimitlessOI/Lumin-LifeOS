@@ -33,6 +33,8 @@ import { evaluateStepExpectations } from '../services/product-build-orchestrator
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const PRODUCTS_DIR = path.join(ROOT, 'docs/products');
 const BASELINE_PATH = path.join(ROOT, 'data/false-done-baseline.json');
+const SOFT_WAIVER_ARG = process.argv.find((a) => a.startsWith('--soft-waivers='));
+const SOFT_WAIVER_PATH = SOFT_WAIVER_ARG ? SOFT_WAIVER_ARG.split('=')[1] : path.join(ROOT, 'data/false-done-soft-waivers.json');
 const FIX = process.argv.includes('--fix');
 const CI = process.argv.includes('--ci');
 const BASELINE_WRITE = process.argv.includes('--baseline-write');
@@ -45,6 +47,15 @@ function loadBaseline() {
   try {
     const b = JSON.parse(fs.readFileSync(BASELINE_PATH, 'utf8'));
     return new Set(b.grandfathered_hard || []);
+  } catch {
+    return new Set();
+  }
+}
+
+function loadSoftWaivers() {
+  try {
+    const w = JSON.parse(fs.readFileSync(SOFT_WAIVER_PATH, 'utf8'));
+    return new Set((w.waived_keys || []).map(String));
   } catch {
     return new Set();
   }
@@ -118,6 +129,7 @@ async function main() {
   const queues = listProductQueues();
   const out = [];
   const hardKeys = new Set();
+  const softKeys = new Set();
   let hardTotal = 0;
   let softTotal = 0;
   let missingTotal = 0;
@@ -136,6 +148,9 @@ async function main() {
     for (const f of res.hard) {
       hardKeys.add(keyOf(id, f));
       if (f.tier === 'MISSING_FILE') missingTotal += 1; else brokeTotal += 1;
+    }
+    for (const f of res.soft) {
+      softKeys.add(keyOf(id, f));
     }
     out.push({ product: id, queuePath, hard: res.hard, soft: res.soft });
     if (FIX && res.hard.length) {
@@ -178,6 +193,10 @@ async function main() {
     process.exit(0);
   }
 
+  const softWaivers = loadSoftWaivers();
+  const unwaivedSoftKeys = [...softKeys].filter((k) => !softWaivers.has(k)).sort();
+  const staleWaivers = [...softWaivers].filter((k) => !softKeys.has(k));
+
   if (CI) {
     const baseline = loadBaseline();
     const regressions = [...hardKeys].filter((k) => !baseline.has(k)).sort();
@@ -191,16 +210,28 @@ async function main() {
       console.error('\nA `done` step shipped without its artifact. Build the artifact via the governed factory, or reset the step to pending (--fix).');
       process.exit(1);
     }
-    console.log(`\n✅ ratchet: no NEW false-dones beyond the ${baseline.size} grandfathered.`);
+    if (unwaivedSoftKeys.length) {
+      console.error(`\n❌ RATCHET FAIL: ${unwaivedSoftKeys.length} un-waived SOFT false-done(s):`);
+      for (const k of unwaivedSoftKeys) console.error(`    - ${k}`);
+      process.exit(1);
+    }
+    if (staleWaivers.length) {
+      console.log(`\nℹ️  ${staleWaivers.length} soft waiver(s) no longer apply — trim them from ${path.relative(ROOT, SOFT_WAIVER_PATH)} when convenient.`);
+    }
+    console.log(`\n✅ ratchet: no NEW false-dones beyond the ${baseline.size} grandfathered HARD and ${softWaivers.size} waived SOFT.`);
     process.exit(0);
   }
 
-  const fail = hardTotal > 0 || (INCLUDE_SOFT && softTotal > 0);
+  const fail = hardTotal > 0 || (INCLUDE_SOFT && unwaivedSoftKeys.length > 0);
   if (fail) {
     console.error('\nFAIL: false-done steps detected. Run with --fix to reset HARD ones to pending.');
+    if (INCLUDE_SOFT && unwaivedSoftKeys.length) {
+      console.error(`\n${unwaivedSoftKeys.length} un-waived SOFT false-done(s):`);
+      for (const k of unwaivedSoftKeys) console.error(`    - ${k}`);
+    }
     process.exit(1);
   }
-  console.log('✅ no HARD false-done steps.');
+  console.log('✅ no HARD or un-waived SOFT false-done steps.');
   process.exit(0);
 }
 

@@ -1,0 +1,14 @@
+{
+  "schema": "ssot_soft_debt_baseline_v1",
+  "generated_at": "2026-07-23T22:20:00.000Z",
+  "note": "Grandfathered @ssot debt for top-level routes/services/core/startup files. The baseline is a ratchet: the missing-tag count must not increase, and all new protected source files must carry a valid @ssot tag via the file-placement gate. Files are triaged and remediated incrementally; this baseline captures the debt at the start of PATH-TO-TEN M2PT-003.",
+  "missing_tag_count": 589,
+  "tagged_count": 781,
+  "protected_prefixes": [
+    "routes/",
+    "services/",
+    "core/",
+    "startup/"
+  ],
+  "triage_policy": "New files in protected prefixes must have @ssot. Legacy missing tags are product-home debt to be closed as each product is touched; do not bulk-tag without reading the owning product home."
+}

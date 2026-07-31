@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T12:04:04.906Z",
+  "generated_at": "2026-07-31T12:13:02.420Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12576,
+  "file_count": 12582,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -23459,10 +23459,17 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 14500,
-      "mtime": "2026-07-31T12:04:04.906Z",
-      "indexed_at": "2026-07-31T12:04:04.906Z",
+      "bytes": 14936,
+      "mtime": "2026-07-31T12:13:02.420Z",
+      "indexed_at": "2026-07-31T12:13:02.420Z",
       "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/BUILDER_READINESS_AUDIT.md",
+      "synopsis": "BuilderOS readiness audit for FACTORY-PATH-TO-TEN-0001",
+      "bytes": 3061,
+      "mtime": "2026-07-31T12:13:02.420Z",
+      "indexed_at": "2026-07-31T12:13:02.420Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/FOUNDER_PACKET.md",
@@ -32631,6 +32638,14 @@
       "synopsis_index_only": true
     },
     {
+      "path": "data/false-done-soft-waivers.json",
+      "synopsis": "JSON data/config — data/false-done-soft-waivers.json.",
+      "bytes": 66340,
+      "mtime": "2026-07-31T12:13:02.420Z",
+      "indexed_at": "2026-07-31T12:13:02.420Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "data/go-vegas-daily-packs/2026-07-23.json",
       "synopsis": "JSON data/config — data/go-vegas-daily-packs/2026-07-23.json.",
       "bytes": 14253,
@@ -32987,6 +33002,14 @@
       "bytes": 1528,
       "mtime": "2026-07-28T17:54:31.952Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/ssot-soft-debt-baseline.json",
+      "synopsis": "JSON data/config — data/ssot-soft-debt-baseline.json.",
+      "bytes": 811,
+      "mtime": "2026-07-31T12:13:02.420Z",
+      "indexed_at": "2026-07-31T12:13:02.420Z",
       "synopsis_index_only": true
     },
     {
@@ -40913,9 +40936,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 347166,
-      "mtime": "2026-07-31T12:04:04.906Z",
-      "indexed_at": "2026-07-31T12:04:04.906Z"
+      "bytes": 348352,
+      "mtime": "2026-07-31T12:13:02.420Z",
+      "indexed_at": "2026-07-31T12:13:02.420Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -65765,8 +65788,8 @@
       "path": "products/receipts/POINT_B_DNA_VERIFY.json",
       "synopsis": "Product receipt — POINT B DNA VERIFY.",
       "bytes": 318,
-      "mtime": "2026-07-31T12:04:04.906Z",
-      "indexed_at": "2026-07-31T12:04:04.906Z",
+      "mtime": "2026-07-31T12:13:02.420Z",
+      "indexed_at": "2026-07-31T12:13:02.420Z",
       "synopsis_index_only": true
     },
     {
@@ -65781,8 +65804,8 @@
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
       "bytes": 24381,
-      "mtime": "2026-07-31T12:04:04.906Z",
-      "indexed_at": "2026-07-31T12:04:04.906Z",
+      "mtime": "2026-07-31T12:13:02.420Z",
+      "indexed_at": "2026-07-31T12:13:02.420Z",
       "synopsis_index_only": true
     },
     {
@@ -65949,16 +65972,16 @@
       "path": "products/receipts/TRUTH_ENFORCEMENT_AUDIT.json",
       "synopsis": "Product receipt — TRUTH ENFORCEMENT AUDIT.",
       "bytes": 833,
-      "mtime": "2026-07-31T12:04:04.906Z",
-      "indexed_at": "2026-07-31T12:04:04.906Z",
+      "mtime": "2026-07-31T12:13:02.420Z",
+      "indexed_at": "2026-07-31T12:13:02.420Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/TRUTH_LOCKDOWN_VERIFY.json",
       "synopsis": "Product receipt — TRUTH LOCKDOWN VERIFY.",
       "bytes": 1318,
-      "mtime": "2026-07-31T12:04:04.906Z",
-      "indexed_at": "2026-07-31T12:04:04.906Z",
+      "mtime": "2026-07-31T12:13:02.420Z",
+      "indexed_at": "2026-07-31T12:13:02.420Z",
       "synopsis_index_only": true
     },
     {
@@ -65989,8 +66012,8 @@
       "path": "products/receipts/WISDOM_TRUTH_AUDIT.json",
       "synopsis": "Product receipt — WISDOM TRUTH AUDIT.",
       "bytes": 1001,
-      "mtime": "2026-07-31T12:04:04.906Z",
-      "indexed_at": "2026-07-31T12:04:04.906Z",
+      "mtime": "2026-07-31T12:13:02.420Z",
+      "indexed_at": "2026-07-31T12:13:02.420Z",
       "synopsis_index_only": true
     },
     {
@@ -71343,9 +71366,9 @@
     {
       "path": "scripts/audit-false-done-steps.mjs",
       "synopsis": "Detective for false-DONE BUILD_QUEUE steps — re-audits every `done`",
-      "bytes": 8759,
-      "mtime": "2026-07-18T18:46:59.247Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 10190,
+      "mtime": "2026-07-31T12:13:02.420Z",
+      "indexed_at": "2026-07-31T12:13:02.420Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -72332,6 +72355,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/generate-false-done-soft-waivers.mjs",
+      "synopsis": "Generate a soft-waiver file for the current false-done audit state.",
+      "bytes": 3388,
+      "mtime": "2026-07-31T12:13:02.420Z",
+      "indexed_at": "2026-07-31T12:13:02.420Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
@@ -74683,6 +74716,17 @@
       "mtime": "2026-07-30T03:57:08.487Z",
       "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/ssot-auto-triage.mjs",
+      "synopsis": "Triages missing @ssot tags by protected prefix and suggests product-home buckets.",
+      "bytes": 1444,
+      "mtime": "2026-07-31T12:13:02.420Z",
+      "indexed_at": "2026-07-31T12:13:02.420Z",
+      "ssot": [
+        "tags by protected prefix and suggests product-home buckets.",
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
@@ -86094,6 +86138,17 @@
       "mtime": "2026-07-09T02:31:31.812Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/verify-ssot-baseline.mjs",
+      "synopsis": "Verify @ssot missing-tag count stays within the approved baseline.",
+      "bytes": 1480,
+      "mtime": "2026-07-31T12:13:02.420Z",
+      "indexed_at": "2026-07-31T12:13:02.420Z",
+      "ssot": [
+        "missing-tag count stays within the approved baseline.",
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },

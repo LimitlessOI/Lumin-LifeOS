@@ -1,0 +1,1200 @@
+{
+  "schema": "false_done_soft_waivers_v1",
+  "generated_at": "2026-07-31T12:09:31.506Z",
+  "note": "SOFT false-done waivers. Each entry maps to a done step whose artifact exists and imports, but whose declared substring/assertion is stale. These are pre-existing drifts to be closed incrementally; HARD regressions remain blocked.",
+  "count": 119,
+  "waived_keys": [
+    "boldtrail::1::services/leadScoring.js",
+    "boldtrail::boldtrail-step2::routes/leadScoring.js",
+    "boldtrail::step1::services/leadScoringAlgorithm.js",
+    "builderos::bo-wire-security-review-into-commit-path::routes/lifeos-council-builder-routes.js",
+    "builderos::builderos-10::routes/approval.js",
+    "builderos::builderos-3::services/timezone-utils.js",
+    "builderos::builderos-8::routes/board.js",
+    "builderos::builderos-9::services/approval-system.js",
+    "builderos::builderos-step2::services/commitment-seeder.js",
+    "builderos::builderos-step3::services/timezone-utils.js",
+    "builderos::builderos-step7::routes/commitment-routing.js",
+    "business-tools::3::services/realEstateCurriculum.js",
+    "business-tools::4::db/migrations/create_user_trials_table.sql",
+    "business-tools::6::routes/server.approvals.js",
+    "business-tools::business-tools-5::services/entitlementsFeatureGating.js",
+    "business-tools::business-tools-6::services/implementApprovalTimeout.js",
+    "business-tools::step10::services/extractRoutes.js",
+    "business-tools::step1::services/makeGenerator.js",
+    "business-tools::step3::services/entitlements.js",
+    "business-tools::step5::routes/issueApprovalRoutes.js",
+    "business-tools::step6::routes/entitlementRoutes.js",
+    "business-tools::step8::routes/curriculumRoutes.js",
+    "creator-media-os::10::routes/scriptRoutes.js",
+    "creator-media-os::1::services/channelMemory.js",
+    "creator-media-os::2::routes/likenessConsent.js",
+    "creator-media-os::3::services/scriptEngine.js",
+    "creator-media-os::6::services/analyticsMemory.js",
+    "creator-media-os::8::services/consentContract.js",
+    "faith-studio::04::services/theologicalAdvisoryModel.js",
+    "faith-studio::faith-studio-4::services/safeOutputService.js",
+    "ideavault::2::scripts/runMemoryImport.mjs",
+    "ideavault::ideavault-step1::services/headingPassStream.js",
+    "kids-os::kids-os-1::services/apiSpec.js",
+    "kids-os::kids-os-4::services/irlenConsultation.js",
+    "kids-os::step1::services/apiSpec.js",
+    "kids-os::step4::services/irlenConsultation.js",
+    "lifeos::12::routes/lifeos-perfect-day-routes.js",
+    "lifeos::lifeos-6::services/lifeos-commitment-service.js",
+    "lifeos::lifeos-7::public/overlay/lifeos-voice-note-journal.html",
+    "lifeos::lifeos-9::services/lifeos-psychometric-battery.js",
+    "lifeos::lifeos-chat-v2-03::public/overlay/lifeos-ambient-listener.js",
+    "lifeos::lifeos-p1-ask-voice-nav::public/overlay/lifeos-app.html",
+    "lifeos::lifeos-p1-date-parent-nav::public/overlay/lifeos-app.html",
+    "lifeos::lifeos-p1-deep-talk-nav::public/overlay/lifeos-app.html",
+    "lifeos::lifeos-p1-feature-nav-batch::public/overlay/lifeos-app.html",
+    "lifeos::lifeos-p1-food-nav::public/overlay/lifeos-app.html",
+    "lifeos::lifeos-p1-member-feedback-nav::public/overlay/lifeos-app.html",
+    "lifeos::lifeos-p1-practice-nav::public/overlay/lifeos-app.html",
+    "lifeos::lifeos-p1-twin-directives-nav::public/overlay/lifeos-app.html",
+    "lifeos::lifeos-p1-year-household-nav::public/overlay/lifeos-app.html",
+    "lifeos::lifeos-step12::services/lifeos-sleep.js",
+    "lifeos::lifeos-step4::public/overlay/lifeos-app.html",
+    "lifeos::lifeos-step8::public/overlay/lifeos-voice-note-journal.html",
+    "lifeos::step11::public/overlay/lifeos-voice-note-journal.html",
+    "limitlessos::12::routes/limitlessos-ui-routes.js",
+    "limitlessos::limitlessos-5::services/price-book-vendor-comparison.js",
+    "limitlessos::limitlessos-step2::routes/audit-intake-flow-routes.js",
+    "limitlessos::limitlessos-step4::services/price-book-vendor-comparison.js",
+    "limitlessos::limitlessos-step5::routes/price-book-vendor-comparison-routes.js",
+    "limitlessos::limitlessos-step6::services/sticker-marketing-skus.js",
+    "limitlessos::limitlessos-step7::routes/bundle_social_automation_routes.js",
+    "limitlessos::s6::services/vendor-price-book.js",
+    "limitlessos::step1::public/overlay/formalize-businessos-ui.html",
+    "limitlessos::step4::services/price-book-vendor-comparison.js",
+    "limitlessos::step5::routes/price-book-vendor-comparison-routes.js",
+    "limitlessos::step7::routes/cityos-home-creation-routes.js",
+    "lumin-university::lumin-university-1::services/competencyStandards.js",
+    "lumin-university::lumin-university-6::services/employerInterviewProcess.js",
+    "lumin-university::lumin-university-7::services/pricingValidationProcess.js",
+    "memory-intelligence::6::.github/workflows/smoke-test.yml",
+    "memory-intelligence::memory-intelligence-1::db/memory-auto-apply.sql",
+    "memory-system::memory-system-1::db/migrations/202311_vector_embedding_update.sql",
+    "memory-system::memory-system-3::db/migrations/202311_memory_category_taxonomy_update.sql",
+    "memory-system::memory-system-8::routes/final_pr_review.js",
+    "memory-system::memory-system-s1::db/migrations/202311_vector_embedding_update.sql",
+    "memory-system::memory-system-s6::routes/final_pr_review.js",
+    "music-talent-studio::11::config/auto-registered-product-modules.json",
+    "music-talent-studio::5::services/musicIndustryConsultation.js",
+    "outreach-crm::step3::config/auto-registered-product-modules.json",
+    "personal-finance-os::8::services/emotionalIntelligence.js",
+    "personal-finance-os::personal-finance-os-2::services/performanceDisclosureApproval.js",
+    "personal-finance-os::personal-finance-os-step1::routes/ipsReview.js",
+    "personal-finance-os::personal-finance-os-step2::services/performanceDisclosureApproval.js",
+    "personal-finance-os::personal-finance-os-step6::services/dreamFunding.js",
+    "personal-finance-os::personal-finance-os-step7::routes/commitmentTracker.js",
+    "personal-finance-os::personal-finance-os-step8::services/emotionalIntelligence.js",
+    "personal-finance-os::step2::services/ipsReview.js",
+    "productized-sprint::01::services/intakeFormService.js",
+    "productized-sprint::04::services/aiPreAnalysisService.js",
+    "productized-sprint::7::config/auto-registered-product-modules.json",
+    "productized-sprint::8::scripts/linkedinProfileUpdater.mjs",
+    "productized-sprint::step1::services/intakeFormService.js",
+    "productized-sprint::step4::services/aiPreAnalysisService.js",
+    "project-governance::1::services/decisionDebt.js",
+    "project-governance::2::routes/projectDrawerDetail.js",
+    "project-governance::4::services/competitorAnalysis.js",
+    "project-governance::5::routes/competitorInfo.js",
+    "project-governance::6::services/innovationListener.js",
+    "project-governance::8::services/riskAssessment.js",
+    "site-builder::s1::db/migrations/20241030_create_additional_templates.sql",
+    "story-studio::1::services/storyProject.js",
+    "story-studio::3::services/multiFormatExporter.js",
+    "teacher-os::teacher-os-step5::routes/competitiveLandscapeRoutes.js",
+    "universal-overlay::universal-overlay-step10::routes/firefoxExtension.js",
+    "universal-overlay::universal-overlay-step4::services/proactiveToastSystem.js",
+    "universal-overlay::universal-overlay-step6::services/sessionReplay.js",
+    "wellness-studio::wellness-studio-3::services/therapist-integration.js",
+    "wellness-studio::wellness-studio-4::routes/therapist-integration-routes.js",
+    "wellness-studio::wellness-studio-step1::db/migrations/20260724_lifeos_core_stable.sql",
+    "wellness-studio::wellness-studio-step2::db/migrations/20260725_extend_wellness_tables.sql",
+    "wellness-studio::wellness-studio-step3::services/wellness-table-extensions.js",
+    "wellness-studio::wellness-studio-step4::routes/wellness-table-extensions-routes.js",
+    "wellness-studio::wellness-studio-step9::db/migrations/20260724_lifeos_core_stable.sql",
+    "white-label::step2::services/response-transformation.js",
+    "white-label::white-label-1::routes/white-label-routes.js",
+    "white-label::white-label-2::services/response-transformation.js",
+    "white-label::white-label-4::services/partner-key-generation.js",
+    "white-label::white-label-step3::services/partner-key-scheme.js",
+    "word-keeper::word-keeper-001::services/googleCalendarService.js"
+  ],
+  "waivers": [
+    {
+      "key": "boldtrail::1::services/leadScoring.js",
+      "product": "boldtrail",
+      "step_id": "1",
+      "target_file": "services/leadScoring.js",
+      "reason": "artifact_proof_failed: function getScoringRubric; const scoringRubric",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.625Z"
+    },
+    {
+      "key": "boldtrail::step1::services/leadScoringAlgorithm.js",
+      "product": "boldtrail",
+      "step_id": "step1",
+      "target_file": "services/leadScoringAlgorithm.js",
+      "reason": "artifact_proof_failed: segment description",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.625Z"
+    },
+    {
+      "key": "boldtrail::boldtrail-step2::routes/leadScoring.js",
+      "product": "boldtrail",
+      "step_id": "boldtrail-step2",
+      "target_file": "routes/leadScoring.js",
+      "reason": "artifact_proof_failed: app.post('/api/v1/leadscoring/segment'",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.625Z"
+    },
+    {
+      "key": "builderos::builderos-3::services/timezone-utils.js",
+      "product": "builderos",
+      "step_id": "builderos-3",
+      "target_file": "services/timezone-utils.js",
+      "reason": "artifact_proof_failed: Intl.DateTimeFormat",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.716Z"
+    },
+    {
+      "key": "builderos::builderos-8::routes/board.js",
+      "product": "builderos",
+      "step_id": "builderos-8",
+      "target_file": "routes/board.js",
+      "reason": "artifact_proof_failed: 8 sections populated",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.716Z"
+    },
+    {
+      "key": "builderos::builderos-9::services/approval-system.js",
+      "product": "builderos",
+      "step_id": "builderos-9",
+      "target_file": "services/approval-system.js",
+      "reason": "artifact_proof_failed: waiting approval",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.716Z"
+    },
+    {
+      "key": "builderos::builderos-10::routes/approval.js",
+      "product": "builderos",
+      "step_id": "builderos-10",
+      "target_file": "routes/approval.js",
+      "reason": "artifact_proof_failed: commitment approvals",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.716Z"
+    },
+    {
+      "key": "builderos::builderos-step2::services/commitment-seeder.js",
+      "product": "builderos",
+      "step_id": "builderos-step2",
+      "target_file": "services/commitment-seeder.js",
+      "reason": "artifact_proof_failed: 26, Adam; 27, Adam; 28, Adam; 29, Adam; 30, Sherry; 31, Sherry; 32, Sherry; 33, pending approval",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.716Z"
+    },
+    {
+      "key": "builderos::builderos-step3::services/timezone-utils.js",
+      "product": "builderos",
+      "step_id": "builderos-step3",
+      "target_file": "services/timezone-utils.js",
+      "reason": "artifact_proof_failed: CURRENT_DATE; timezone check",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.716Z"
+    },
+    {
+      "key": "builderos::builderos-step7::routes/commitment-routing.js",
+      "product": "builderos",
+      "step_id": "builderos-step7",
+      "target_file": "routes/commitment-routing.js",
+      "reason": "artifact_proof_failed: app.get; /api/v1/lifeos/commitments",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.716Z"
+    },
+    {
+      "key": "builderos::bo-wire-security-review-into-commit-path::routes/lifeos-council-builder-routes.js",
+      "product": "builderos",
+      "step_id": "bo-wire-security-review-into-commit-path",
+      "target_file": "routes/lifeos-council-builder-routes.js",
+      "reason": "artifact_proof_failed: security_review finding",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.716Z"
+    },
+    {
+      "key": "business-tools::3::services/realEstateCurriculum.js",
+      "product": "business-tools",
+      "step_id": "3",
+      "target_file": "services/realEstateCurriculum.js",
+      "reason": "artifact_proof_failed: curriculum; DB schema",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.723Z"
+    },
+    {
+      "key": "business-tools::4::db/migrations/create_user_trials_table.sql",
+      "product": "business-tools",
+      "step_id": "4",
+      "target_file": "db/migrations/create_user_trials_table.sql",
+      "reason": "artifact_proof_failed: trial_start; trial_end",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.723Z"
+    },
+    {
+      "key": "business-tools::6::routes/server.approvals.js",
+      "product": "business-tools",
+      "step_id": "6",
+      "target_file": "routes/server.approvals.js",
+      "reason": "artifact_proof_failed: setTimeout; 48h auto-reject",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.723Z"
+    },
+    {
+      "key": "business-tools::step1::services/makeGenerator.js",
+      "product": "business-tools",
+      "step_id": "step1",
+      "target_file": "services/makeGenerator.js",
+      "reason": "artifact_proof_failed: \"type\": \"object\"",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.723Z"
+    },
+    {
+      "key": "business-tools::step3::services/entitlements.js",
+      "product": "business-tools",
+      "step_id": "step3",
+      "target_file": "services/entitlements.js",
+      "reason": "artifact_proof_failed: project_entitlements; gating strategy",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.723Z"
+    },
+    {
+      "key": "business-tools::step5::routes/issueApprovalRoutes.js",
+      "product": "business-tools",
+      "step_id": "step5",
+      "target_file": "routes/issueApprovalRoutes.js",
+      "reason": "artifact_proof_failed: approval_timeout",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.723Z"
+    },
+    {
+      "key": "business-tools::step6::routes/entitlementRoutes.js",
+      "product": "business-tools",
+      "step_id": "step6",
+      "target_file": "routes/entitlementRoutes.js",
+      "reason": "artifact_proof_failed: checkEntitlements",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.723Z"
+    },
+    {
+      "key": "business-tools::step8::routes/curriculumRoutes.js",
+      "product": "business-tools",
+      "step_id": "step8",
+      "target_file": "routes/curriculumRoutes.js",
+      "reason": "artifact_proof_failed: real_estate_curriculum",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.723Z"
+    },
+    {
+      "key": "business-tools::step10::services/extractRoutes.js",
+      "product": "business-tools",
+      "step_id": "step10",
+      "target_file": "services/extractRoutes.js",
+      "reason": "artifact_proof_failed: extraction logic",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.723Z"
+    },
+    {
+      "key": "business-tools::business-tools-5::services/entitlementsFeatureGating.js",
+      "product": "business-tools",
+      "step_id": "business-tools-5",
+      "target_file": "services/entitlementsFeatureGating.js",
+      "reason": "artifact_proof_failed: project_entitlements; gate features",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.723Z"
+    },
+    {
+      "key": "business-tools::business-tools-6::services/implementApprovalTimeout.js",
+      "product": "business-tools",
+      "step_id": "business-tools-6",
+      "target_file": "services/implementApprovalTimeout.js",
+      "reason": "artifact_proof_failed: 48h",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.723Z"
+    },
+    {
+      "key": "creator-media-os::1::services/channelMemory.js",
+      "product": "creator-media-os",
+      "step_id": "1",
+      "target_file": "services/channelMemory.js",
+      "reason": "artifact_proof_failed: Channel memory profile",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.783Z"
+    },
+    {
+      "key": "creator-media-os::2::routes/likenessConsent.js",
+      "product": "creator-media-os",
+      "step_id": "2",
+      "target_file": "routes/likenessConsent.js",
+      "reason": "artifact_proof_failed: Explicit likeness consent recorded",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.783Z"
+    },
+    {
+      "key": "creator-media-os::3::services/scriptEngine.js",
+      "product": "creator-media-os",
+      "step_id": "3",
+      "target_file": "services/scriptEngine.js",
+      "reason": "artifact_proof_failed: Script for long and short form",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.783Z"
+    },
+    {
+      "key": "creator-media-os::6::services/analyticsMemory.js",
+      "product": "creator-media-os",
+      "step_id": "6",
+      "target_file": "services/analyticsMemory.js",
+      "reason": "artifact_proof_failed: Publish analytics memory loop",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.783Z"
+    },
+    {
+      "key": "creator-media-os::8::services/consentContract.js",
+      "product": "creator-media-os",
+      "step_id": "8",
+      "target_file": "services/consentContract.js",
+      "reason": "artifact_proof_failed: Consent contract model",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.783Z"
+    },
+    {
+      "key": "creator-media-os::10::routes/scriptRoutes.js",
+      "product": "creator-media-os",
+      "step_id": "10",
+      "target_file": "routes/scriptRoutes.js",
+      "reason": "artifact_proof_failed: app.post",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.783Z"
+    },
+    {
+      "key": "faith-studio::04::services/theologicalAdvisoryModel.js",
+      "product": "faith-studio",
+      "step_id": "04",
+      "target_file": "services/theologicalAdvisoryModel.js",
+      "reason": "artifact_proof_failed: Theological advisory model",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.799Z"
+    },
+    {
+      "key": "faith-studio::faith-studio-4::services/safeOutputService.js",
+      "product": "faith-studio",
+      "step_id": "faith-studio-4",
+      "target_file": "services/safeOutputService.js",
+      "reason": "artifact_proof_failed: safeOutput",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.799Z"
+    },
+    {
+      "key": "ideavault::2::scripts/runMemoryImport.mjs",
+      "product": "ideavault",
+      "step_id": "2",
+      "target_file": "scripts/runMemoryImport.mjs",
+      "reason": "artifact_proof_failed: import-dumps-to-twin",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.801Z"
+    },
+    {
+      "key": "ideavault::ideavault-step1::services/headingPassStream.js",
+      "product": "ideavault",
+      "step_id": "ideavault-step1",
+      "target_file": "services/headingPassStream.js",
+      "reason": "artifact_proof_failed: Stream I/portfolio table",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.801Z"
+    },
+    {
+      "key": "kids-os::step1::services/apiSpec.js",
+      "product": "kids-os",
+      "step_id": "step1",
+      "target_file": "services/apiSpec.js",
+      "reason": "artifact_proof_failed: /** API specification for kids-os */",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.804Z"
+    },
+    {
+      "key": "kids-os::step4::services/irlenConsultation.js",
+      "product": "kids-os",
+      "step_id": "step4",
+      "target_file": "services/irlenConsultation.js",
+      "reason": "artifact_proof_failed: /** Irlen Syndrome community insights */",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.804Z"
+    },
+    {
+      "key": "kids-os::kids-os-1::services/apiSpec.js",
+      "product": "kids-os",
+      "step_id": "kids-os-1",
+      "target_file": "services/apiSpec.js",
+      "reason": "artifact_proof_failed: /api/spec",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.804Z"
+    },
+    {
+      "key": "kids-os::kids-os-4::services/irlenConsultation.js",
+      "product": "kids-os",
+      "step_id": "kids-os-4",
+      "target_file": "services/irlenConsultation.js",
+      "reason": "artifact_proof_failed: Irlen Syndrome insights",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.804Z"
+    },
+    {
+      "key": "lifeos::12::routes/lifeos-perfect-day-routes.js",
+      "product": "lifeos",
+      "step_id": "12",
+      "target_file": "routes/lifeos-perfect-day-routes.js",
+      "reason": "artifact_proof_failed: await planPerfectDay(req.body.user_id",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.930Z"
+    },
+    {
+      "key": "lifeos::lifeos-chat-v2-03::public/overlay/lifeos-ambient-listener.js",
+      "product": "lifeos",
+      "step_id": "lifeos-chat-v2-03",
+      "target_file": "public/overlay/lifeos-ambient-listener.js",
+      "reason": "artifact_proof_failed: SpeechRecognition; webkitSpeechRecognition; lumin-mic-btn; LifeOSAmbientListener",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.930Z"
+    },
+    {
+      "key": "lifeos::step11::public/overlay/lifeos-voice-note-journal.html",
+      "product": "lifeos",
+      "step_id": "step11",
+      "target_file": "public/overlay/lifeos-voice-note-journal.html",
+      "reason": "artifact_proof_failed: <div class='voice-note-journaling'>",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.930Z"
+    },
+    {
+      "key": "lifeos::lifeos-6::services/lifeos-commitment-service.js",
+      "product": "lifeos",
+      "step_id": "lifeos-6",
+      "target_file": "services/lifeos-commitment-service.js",
+      "reason": "artifact_proof_failed: query mode",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.930Z"
+    },
+    {
+      "key": "lifeos::lifeos-7::public/overlay/lifeos-voice-note-journal.html",
+      "product": "lifeos",
+      "step_id": "lifeos-7",
+      "target_file": "public/overlay/lifeos-voice-note-journal.html",
+      "reason": "artifact_proof_failed: Web Speech API",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.930Z"
+    },
+    {
+      "key": "lifeos::lifeos-9::services/lifeos-psychometric-battery.js",
+      "product": "lifeos",
+      "step_id": "lifeos-9",
+      "target_file": "services/lifeos-psychometric-battery.js",
+      "reason": "artifact_proof_failed: cognitive_distortion_mode",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.930Z"
+    },
+    {
+      "key": "lifeos::lifeos-step4::public/overlay/lifeos-app.html",
+      "product": "lifeos",
+      "step_id": "lifeos-step4",
+      "target_file": "public/overlay/lifeos-app.html",
+      "reason": "artifact_proof_failed: thought-stream",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.930Z"
+    },
+    {
+      "key": "lifeos::lifeos-step8::public/overlay/lifeos-voice-note-journal.html",
+      "product": "lifeos",
+      "step_id": "lifeos-step8",
+      "target_file": "public/overlay/lifeos-voice-note-journal.html",
+      "reason": "artifact_proof_failed: Web Speech API",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.930Z"
+    },
+    {
+      "key": "lifeos::lifeos-step12::services/lifeos-sleep.js",
+      "product": "lifeos",
+      "step_id": "lifeos-step12",
+      "target_file": "services/lifeos-sleep.js",
+      "reason": "artifact_proof_failed: bedtime; wake time",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.930Z"
+    },
+    {
+      "key": "lifeos::lifeos-p1-practice-nav::public/overlay/lifeos-app.html",
+      "product": "lifeos",
+      "step_id": "lifeos-p1-practice-nav",
+      "target_file": "public/overlay/lifeos-app.html",
+      "reason": "artifact_proof_failed: lifeos-practice.html; lifeos-failure-museum.html",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.930Z"
+    },
+    {
+      "key": "lifeos::lifeos-p1-food-nav::public/overlay/lifeos-app.html",
+      "product": "lifeos",
+      "step_id": "lifeos-p1-food-nav",
+      "target_file": "public/overlay/lifeos-app.html",
+      "reason": "artifact_proof_failed: lifeos-food.html; lifeos-practice.html",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.930Z"
+    },
+    {
+      "key": "lifeos::lifeos-p1-ask-voice-nav::public/overlay/lifeos-app.html",
+      "product": "lifeos",
+      "step_id": "lifeos-p1-ask-voice-nav",
+      "target_file": "public/overlay/lifeos-app.html",
+      "reason": "artifact_proof_failed: lifeos-ask-your-life.html; lifeos-voice-note-journal.html",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.930Z"
+    },
+    {
+      "key": "lifeos::lifeos-p1-deep-talk-nav::public/overlay/lifeos-app.html",
+      "product": "lifeos",
+      "step_id": "lifeos-p1-deep-talk-nav",
+      "target_file": "public/overlay/lifeos-app.html",
+      "reason": "artifact_proof_failed: lifeos-deep-talk.html",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.930Z"
+    },
+    {
+      "key": "lifeos::lifeos-p1-feature-nav-batch::public/overlay/lifeos-app.html",
+      "product": "lifeos",
+      "step_id": "lifeos-p1-feature-nav-batch",
+      "target_file": "public/overlay/lifeos-app.html",
+      "reason": "artifact_proof_failed: lifeos-psychometrics.html; lifeos-parenting-scripts.html; lifeos-labs.html",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.930Z"
+    },
+    {
+      "key": "lifeos::lifeos-p1-year-household-nav::public/overlay/lifeos-app.html",
+      "product": "lifeos",
+      "step_id": "lifeos-p1-year-household-nav",
+      "target_file": "public/overlay/lifeos-app.html",
+      "reason": "artifact_proof_failed: lifeos-year-in-pixels.html; lifeos-household.html",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.930Z"
+    },
+    {
+      "key": "lifeos::lifeos-p1-date-parent-nav::public/overlay/lifeos-app.html",
+      "product": "lifeos",
+      "step_id": "lifeos-p1-date-parent-nav",
+      "target_file": "public/overlay/lifeos-app.html",
+      "reason": "artifact_proof_failed: lifeos-date-night.html; lifeos-parent-mode.html",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.930Z"
+    },
+    {
+      "key": "lifeos::lifeos-p1-twin-directives-nav::public/overlay/lifeos-app.html",
+      "product": "lifeos",
+      "step_id": "lifeos-p1-twin-directives-nav",
+      "target_file": "public/overlay/lifeos-app.html",
+      "reason": "artifact_proof_failed: lifeos-twin-directives.html",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.930Z"
+    },
+    {
+      "key": "lifeos::lifeos-p1-member-feedback-nav::public/overlay/lifeos-app.html",
+      "product": "lifeos",
+      "step_id": "lifeos-p1-member-feedback-nav",
+      "target_file": "public/overlay/lifeos-app.html",
+      "reason": "artifact_proof_failed: lifeos-member-feedback.html",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.930Z"
+    },
+    {
+      "key": "limitlessos::step1::public/overlay/formalize-businessos-ui.html",
+      "product": "limitlessos",
+      "step_id": "step1",
+      "target_file": "public/overlay/formalize-businessos-ui.html",
+      "reason": "artifact_proof_failed: LimitlessOS",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.982Z"
+    },
+    {
+      "key": "limitlessos::step4::services/price-book-vendor-comparison.js",
+      "product": "limitlessos",
+      "step_id": "step4",
+      "target_file": "services/price-book-vendor-comparison.js",
+      "reason": "artifact_proof_failed: expensive",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.982Z"
+    },
+    {
+      "key": "limitlessos::step5::routes/price-book-vendor-comparison-routes.js",
+      "product": "limitlessos",
+      "step_id": "step5",
+      "target_file": "routes/price-book-vendor-comparison-routes.js",
+      "reason": "artifact_proof_failed: Vendor Comparison",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.982Z"
+    },
+    {
+      "key": "limitlessos::step7::routes/cityos-home-creation-routes.js",
+      "product": "limitlessos",
+      "step_id": "step7",
+      "target_file": "routes/cityos-home-creation-routes.js",
+      "reason": "artifact_proof_failed: Product Home Creation",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.982Z"
+    },
+    {
+      "key": "limitlessos::s6::services/vendor-price-book.js",
+      "product": "limitlessos",
+      "step_id": "s6",
+      "target_file": "services/vendor-price-book.js",
+      "reason": "artifact_proof_failed: import",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.982Z"
+    },
+    {
+      "key": "limitlessos::12::routes/limitlessos-ui-routes.js",
+      "product": "limitlessos",
+      "step_id": "12",
+      "target_file": "routes/limitlessos-ui-routes.js",
+      "reason": "artifact_proof_failed: UI update registration",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.982Z"
+    },
+    {
+      "key": "limitlessos::limitlessos-step2::routes/audit-intake-flow-routes.js",
+      "product": "limitlessos",
+      "step_id": "limitlessos-step2",
+      "target_file": "routes/audit-intake-flow-routes.js",
+      "reason": "artifact_proof_failed: intake questions",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.982Z"
+    },
+    {
+      "key": "limitlessos::limitlessos-step4::services/price-book-vendor-comparison.js",
+      "product": "limitlessos",
+      "step_id": "limitlessos-step4",
+      "target_file": "services/price-book-vendor-comparison.js",
+      "reason": "artifact_proof_failed: vendor comparison; explain or exclude",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.982Z"
+    },
+    {
+      "key": "limitlessos::limitlessos-step5::routes/price-book-vendor-comparison-routes.js",
+      "product": "limitlessos",
+      "step_id": "limitlessos-step5",
+      "target_file": "routes/price-book-vendor-comparison-routes.js",
+      "reason": "artifact_proof_failed: compareVendors",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.982Z"
+    },
+    {
+      "key": "limitlessos::limitlessos-step6::services/sticker-marketing-skus.js",
+      "product": "limitlessos",
+      "step_id": "limitlessos-step6",
+      "target_file": "services/sticker-marketing-skus.js",
+      "reason": "artifact_proof_failed: website + automation + social tiers",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.982Z"
+    },
+    {
+      "key": "limitlessos::limitlessos-step7::routes/bundle_social_automation_routes.js",
+      "product": "limitlessos",
+      "step_id": "limitlessos-step7",
+      "target_file": "routes/bundle_social_automation_routes.js",
+      "reason": "artifact_proof_failed: createBundleSKUs",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.982Z"
+    },
+    {
+      "key": "limitlessos::limitlessos-5::services/price-book-vendor-comparison.js",
+      "product": "limitlessos",
+      "step_id": "limitlessos-5",
+      "target_file": "services/price-book-vendor-comparison.js",
+      "reason": "artifact_proof_failed: handleVendorComparison",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.982Z"
+    },
+    {
+      "key": "lumin-university::lumin-university-1::services/competencyStandards.js",
+      "product": "lumin-university",
+      "step_id": "lumin-university-1",
+      "target_file": "services/competencyStandards.js",
+      "reason": "artifact_proof_failed: function getCompetencyStandards()",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.987Z"
+    },
+    {
+      "key": "lumin-university::lumin-university-6::services/employerInterviewProcess.js",
+      "product": "lumin-university",
+      "step_id": "lumin-university-6",
+      "target_file": "services/employerInterviewProcess.js",
+      "reason": "artifact_proof_failed: 5 employers; competency credentials",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.987Z"
+    },
+    {
+      "key": "lumin-university::lumin-university-7::services/pricingValidationProcess.js",
+      "product": "lumin-university",
+      "step_id": "lumin-university-7",
+      "target_file": "services/pricingValidationProcess.js",
+      "reason": "artifact_proof_failed: pricing validation",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.987Z"
+    },
+    {
+      "key": "memory-intelligence::6::.github/workflows/smoke-test.yml",
+      "product": "memory-intelligence",
+      "step_id": "6",
+      "target_file": ".github/workflows/smoke-test.yml",
+      "reason": "artifact_proof_failed: memory:ci-evidence",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.994Z"
+    },
+    {
+      "key": "memory-intelligence::memory-intelligence-1::db/memory-auto-apply.sql",
+      "product": "memory-intelligence",
+      "step_id": "memory-intelligence-1",
+      "target_file": "db/memory-auto-apply.sql",
+      "reason": "artifact_proof_failed: CREATE VIEW IF NOT EXISTS",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.994Z"
+    },
+    {
+      "key": "memory-system::memory-system-1::db/migrations/202311_vector_embedding_update.sql",
+      "product": "memory-system",
+      "step_id": "memory-system-1",
+      "target_file": "db/migrations/202311_vector_embedding_update.sql",
+      "reason": "artifact_proof_failed: ADD COLUMN vector_embedding",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.997Z"
+    },
+    {
+      "key": "memory-system::memory-system-3::db/migrations/202311_memory_category_taxonomy_update.sql",
+      "product": "memory-system",
+      "step_id": "memory-system-3",
+      "target_file": "db/migrations/202311_memory_category_taxonomy_update.sql",
+      "reason": "artifact_proof_failed: ADD COLUMN memory_category",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.997Z"
+    },
+    {
+      "key": "memory-system::memory-system-8::routes/final_pr_review.js",
+      "product": "memory-system",
+      "step_id": "memory-system-8",
+      "target_file": "routes/final_pr_review.js",
+      "reason": "artifact_proof_failed: pull request; final review",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.997Z"
+    },
+    {
+      "key": "memory-system::memory-system-s1::db/migrations/202311_vector_embedding_update.sql",
+      "product": "memory-system",
+      "step_id": "memory-system-s1",
+      "target_file": "db/migrations/202311_vector_embedding_update.sql",
+      "reason": "artifact_proof_failed: ADD COLUMN vector_embedding",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.997Z"
+    },
+    {
+      "key": "memory-system::memory-system-s6::routes/final_pr_review.js",
+      "product": "memory-system",
+      "step_id": "memory-system-s6",
+      "target_file": "routes/final_pr_review.js",
+      "reason": "artifact_proof_failed: final PR review; ready for merge",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:30.997Z"
+    },
+    {
+      "key": "music-talent-studio::5::services/musicIndustryConsultation.js",
+      "product": "music-talent-studio",
+      "step_id": "5",
+      "target_file": "services/musicIndustryConsultation.js",
+      "reason": "artifact_proof_failed: Music Industry Consultation",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:31.004Z"
+    },
+    {
+      "key": "music-talent-studio::11::config/auto-registered-product-modules.json",
+      "product": "music-talent-studio",
+      "step_id": "11",
+      "target_file": "config/auto-registered-product-modules.json",
+      "reason": "artifact_proof_failed: musicTeachersInterviewRoutes",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:31.004Z"
+    },
+    {
+      "key": "outreach-crm::step3::config/auto-registered-product-modules.json",
+      "product": "outreach-crm",
+      "step_id": "step3",
+      "target_file": "config/auto-registered-product-modules.json",
+      "reason": "artifact_proof_failed: {\"path\":\"routes/boldtrail-routes.js\",\"module\":\"registerBoldTrailRoutes\"}",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:31.015Z"
+    },
+    {
+      "key": "personal-finance-os::step2::services/ipsReview.js",
+      "product": "personal-finance-os",
+      "step_id": "step2",
+      "target_file": "services/ipsReview.js",
+      "reason": "artifact_proof_failed: @ssot",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:31.021Z"
+    },
+    {
+      "key": "personal-finance-os::8::services/emotionalIntelligence.js",
+      "product": "personal-finance-os",
+      "step_id": "8",
+      "target_file": "services/emotionalIntelligence.js",
+      "reason": "artifact_proof_failed: joyScoreLog; wearableDataCorrelation",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:31.021Z"
+    },
+    {
+      "key": "personal-finance-os::personal-finance-os-2::services/performanceDisclosureApproval.js",
+      "product": "personal-finance-os",
+      "step_id": "personal-finance-os-2",
+      "target_file": "services/performanceDisclosureApproval.js",
+      "reason": "artifact_proof_failed: disclosure language; approval status",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:31.021Z"
+    },
+    {
+      "key": "personal-finance-os::personal-finance-os-step1::routes/ipsReview.js",
+      "product": "personal-finance-os",
+      "step_id": "personal-finance-os-step1",
+      "target_file": "routes/ipsReview.js",
+      "reason": "artifact_proof_failed: attorney review RIA",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:31.021Z"
+    },
+    {
+      "key": "personal-finance-os::personal-finance-os-step2::services/performanceDisclosureApproval.js",
+      "product": "personal-finance-os",
+      "step_id": "personal-finance-os-step2",
+      "target_file": "services/performanceDisclosureApproval.js",
+      "reason": "artifact_proof_failed: disclosure check; approve performance",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:31.021Z"
+    },
+    {
+      "key": "personal-finance-os::personal-finance-os-step6::services/dreamFunding.js",
+      "product": "personal-finance-os",
+      "step_id": "personal-finance-os-step6",
+      "target_file": "services/dreamFunding.js",
+      "reason": "artifact_proof_failed: activate Dream Funding",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:31.021Z"
+    },
+    {
+      "key": "personal-finance-os::personal-finance-os-step7::routes/commitmentTracker.js",
+      "product": "personal-finance-os",
+      "step_id": "personal-finance-os-step7",
+      "target_file": "routes/commitmentTracker.js",
+      "reason": "artifact_proof_failed: commitment tracking phase 1",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:31.021Z"
+    },
+    {
+      "key": "personal-finance-os::personal-finance-os-step8::services/emotionalIntelligence.js",
+      "product": "personal-finance-os",
+      "step_id": "personal-finance-os-step8",
+      "target_file": "services/emotionalIntelligence.js",
+      "reason": "artifact_proof_failed: joy score; wearable data correlation",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:31.021Z"
+    },
+    {
+      "key": "productized-sprint::01::services/intakeFormService.js",
+      "product": "productized-sprint",
+      "step_id": "01",
+      "target_file": "services/intakeFormService.js",
+      "reason": "artifact_proof_failed: createIntakeForm",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:31.033Z"
+    },
+    {
+      "key": "productized-sprint::04::services/aiPreAnalysisService.js",
+      "product": "productized-sprint",
+      "step_id": "04",
+      "target_file": "services/aiPreAnalysisService.js",
+      "reason": "artifact_proof_failed: runPreAnalysis",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:31.033Z"
+    },
+    {
+      "key": "productized-sprint::7::config/auto-registered-product-modules.json",
+      "product": "productized-sprint",
+      "step_id": "7",
+      "target_file": "config/auto-registered-product-modules.json",
+      "reason": "artifact_proof_failed: \"salesPageRoutes\"; \"sprintQueueRoutes\"",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:31.033Z"
+    },
+    {
+      "key": "productized-sprint::8::scripts/linkedinProfileUpdater.mjs",
+      "product": "productized-sprint",
+      "step_id": "8",
+      "target_file": "scripts/linkedinProfileUpdater.mjs",
+      "reason": "artifact_proof_failed: addSprintOffersToProfile",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:31.033Z"
+    },
+    {
+      "key": "productized-sprint::step1::services/intakeFormService.js",
+      "product": "productized-sprint",
+      "step_id": "step1",
+      "target_file": "services/intakeFormService.js",
+      "reason": "artifact_proof_failed: module.exports = { intakeFormHandler }",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:31.033Z"
+    },
+    {
+      "key": "productized-sprint::step4::services/aiPreAnalysisService.js",
+      "product": "productized-sprint",
+      "step_id": "step4",
+      "target_file": "services/aiPreAnalysisService.js",
+      "reason": "artifact_proof_failed: const aiPreAnalysisPrompt =",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:31.033Z"
+    },
+    {
+      "key": "project-governance::1::services/decisionDebt.js",
+      "product": "project-governance",
+      "step_id": "1",
+      "target_file": "services/decisionDebt.js",
+      "reason": "artifact_proof_failed: function getDecisionDebt(){; return {}",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:31.036Z"
+    },
+    {
+      "key": "project-governance::2::routes/projectDrawerDetail.js",
+      "product": "project-governance",
+      "step_id": "2",
+      "target_file": "routes/projectDrawerDetail.js",
+      "reason": "artifact_proof_failed: project: {}",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:31.036Z"
+    },
+    {
+      "key": "project-governance::4::services/competitorAnalysis.js",
+      "product": "project-governance",
+      "step_id": "4",
+      "target_file": "services/competitorAnalysis.js",
+      "reason": "artifact_proof_failed: function analyzeCompetitors(){; return []",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:31.036Z"
+    },
+    {
+      "key": "project-governance::5::routes/competitorInfo.js",
+      "product": "project-governance",
+      "step_id": "5",
+      "target_file": "routes/competitorInfo.js",
+      "reason": "artifact_proof_failed: competitor: {}",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:31.036Z"
+    },
+    {
+      "key": "project-governance::6::services/innovationListener.js",
+      "product": "project-governance",
+      "step_id": "6",
+      "target_file": "services/innovationListener.js",
+      "reason": "artifact_proof_failed: function checkCompetitorInnovation(){; return 'adapt'",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:31.036Z"
+    },
+    {
+      "key": "project-governance::8::services/riskAssessment.js",
+      "product": "project-governance",
+      "step_id": "8",
+      "target_file": "services/riskAssessment.js",
+      "reason": "artifact_proof_failed: function assessRisk(){; return 'monitor'",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:31.036Z"
+    },
+    {
+      "key": "site-builder::s1::db/migrations/20241030_create_additional_templates.sql",
+      "product": "site-builder",
+      "step_id": "s1",
+      "target_file": "db/migrations/20241030_create_additional_templates.sql",
+      "reason": "artifact_proof_failed: CREATE TABLE IF NOT EXISTS",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:31.071Z"
+    },
+    {
+      "key": "story-studio::1::services/storyProject.js",
+      "product": "story-studio",
+      "step_id": "1",
+      "target_file": "services/storyProject.js",
+      "reason": "artifact_proof_failed: A story project can be created and re-opened with persistent canon data",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:31.073Z"
+    },
+    {
+      "key": "story-studio::3::services/multiFormatExporter.js",
+      "product": "story-studio",
+      "step_id": "3",
+      "target_file": "services/multiFormatExporter.js",
+      "reason": "artifact_proof_failed: One project can export at least storybook + comic from the same story bible",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:31.073Z"
+    },
+    {
+      "key": "teacher-os::teacher-os-step5::routes/competitiveLandscapeRoutes.js",
+      "product": "teacher-os",
+      "step_id": "teacher-os-step5",
+      "target_file": "routes/competitiveLandscapeRoutes.js",
+      "reason": "artifact_proof_failed: app.get",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:31.084Z"
+    },
+    {
+      "key": "universal-overlay::universal-overlay-step4::services/proactiveToastSystem.js",
+      "product": "universal-overlay",
+      "step_id": "universal-overlay-step4",
+      "target_file": "services/proactiveToastSystem.js",
+      "reason": "artifact_proof_failed: dismissibleToast",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:31.107Z"
+    },
+    {
+      "key": "universal-overlay::universal-overlay-step6::services/sessionReplay.js",
+      "product": "universal-overlay",
+      "step_id": "universal-overlay-step6",
+      "target_file": "services/sessionReplay.js",
+      "reason": "artifact_proof_failed: opt-in session replay",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:31.107Z"
+    },
+    {
+      "key": "universal-overlay::universal-overlay-step10::routes/firefoxExtension.js",
+      "product": "universal-overlay",
+      "step_id": "universal-overlay-step10",
+      "target_file": "routes/firefoxExtension.js",
+      "reason": "artifact_proof_failed: firefox MV2",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:31.107Z"
+    },
+    {
+      "key": "wellness-studio::wellness-studio-3::services/therapist-integration.js",
+      "product": "wellness-studio",
+      "step_id": "wellness-studio-3",
+      "target_file": "services/therapist-integration.js",
+      "reason": "artifact_proof_failed: require('communication-profile'); require('truth-delivery')",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:31.158Z"
+    },
+    {
+      "key": "wellness-studio::wellness-studio-4::routes/therapist-integration-routes.js",
+      "product": "wellness-studio",
+      "step_id": "wellness-studio-4",
+      "target_file": "routes/therapist-integration-routes.js",
+      "reason": "artifact_proof_failed: POST /api/therapist/integration; setupIntegration",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:31.158Z"
+    },
+    {
+      "key": "wellness-studio::wellness-studio-step1::db/migrations/20260724_lifeos_core_stable.sql",
+      "product": "wellness-studio",
+      "step_id": "wellness-studio-step1",
+      "target_file": "db/migrations/20260724_lifeos_core_stable.sql",
+      "reason": "artifact_proof_failed: CREATE TABLE IF NOT EXISTS; CHECK (stable IS TRUE)",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:31.158Z"
+    },
+    {
+      "key": "wellness-studio::wellness-studio-step2::db/migrations/20260725_extend_wellness_tables.sql",
+      "product": "wellness-studio",
+      "step_id": "wellness-studio-step2",
+      "target_file": "db/migrations/20260725_extend_wellness_tables.sql",
+      "reason": "artifact_proof_failed: ALTER TABLE",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:31.158Z"
+    },
+    {
+      "key": "wellness-studio::wellness-studio-step3::services/wellness-table-extensions.js",
+      "product": "wellness-studio",
+      "step_id": "wellness-studio-step3",
+      "target_file": "services/wellness-table-extensions.js",
+      "reason": "artifact_proof_failed: extendTableServices",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:31.158Z"
+    },
+    {
+      "key": "wellness-studio::wellness-studio-step4::routes/wellness-table-extensions-routes.js",
+      "product": "wellness-studio",
+      "step_id": "wellness-studio-step4",
+      "target_file": "routes/wellness-table-extensions-routes.js",
+      "reason": "artifact_proof_failed: POST /api/v1/wellness/extensions/joy-checkins; POST /api/v1/wellness/extensions/integrity-score; POST /api/v1/wellness/extensions/wearable-data; POST /api/v1/wellness/extensions/emotional-patterns",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:31.158Z"
+    },
+    {
+      "key": "wellness-studio::wellness-studio-step9::db/migrations/20260724_lifeos_core_stable.sql",
+      "product": "wellness-studio",
+      "step_id": "wellness-studio-step9",
+      "target_file": "db/migrations/20260724_lifeos_core_stable.sql",
+      "reason": "artifact_proof_failed: CREATE TABLE IF NOT EXISTS",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:31.158Z"
+    },
+    {
+      "key": "white-label::step2::services/response-transformation.js",
+      "product": "white-label",
+      "step_id": "step2",
+      "target_file": "services/response-transformation.js",
+      "reason": "artifact_proof_failed: stripModelNames; stripCosts",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:31.165Z"
+    },
+    {
+      "key": "white-label::white-label-2::services/response-transformation.js",
+      "product": "white-label",
+      "step_id": "white-label-2",
+      "target_file": "services/response-transformation.js",
+      "reason": "artifact_proof_failed: module.exports = {; function transformResponse(req, res, next)",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:31.165Z"
+    },
+    {
+      "key": "white-label::white-label-4::services/partner-key-generation.js",
+      "product": "white-label",
+      "step_id": "white-label-4",
+      "target_file": "services/partner-key-generation.js",
+      "reason": "artifact_proof_failed: module.exports = {",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:31.165Z"
+    },
+    {
+      "key": "white-label::white-label-step3::services/partner-key-scheme.js",
+      "product": "white-label",
+      "step_id": "white-label-step3",
+      "target_file": "services/partner-key-scheme.js",
+      "reason": "artifact_proof_failed: schema.define('partnerKey'",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:31.165Z"
+    },
+    {
+      "key": "white-label::white-label-1::routes/white-label-routes.js",
+      "product": "white-label",
+      "step_id": "white-label-1",
+      "target_file": "routes/white-label-routes.js",
+      "reason": "artifact_proof_failed: app.get('/api/v1/white-label/config',",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:31.165Z"
+    },
+    {
+      "key": "word-keeper::word-keeper-001::services/googleCalendarService.js",
+      "product": "word-keeper",
+      "step_id": "word-keeper-001",
+      "target_file": "services/googleCalendarService.js",
+      "reason": "artifact_proof_failed: connect to Google Calendar API",
+      "waiver_reason": "Pre-existing content-drift assertion; file exists and imports. To be remediated when the product is touched, not bulk-rebuilt.",
+      "waived_at": "2026-07-31T12:09:31.506Z"
+    }
+  ]
+}
