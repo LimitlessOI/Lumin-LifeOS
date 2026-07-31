@@ -42,3 +42,19 @@ export const getScoringRubric = (segmentName) => {
   };
   return rubrics[segmentName] || null;
 };
+
+/**
+ * SYNOPSIS: Defines a scoring rubric for lead segments.
+ * This function encapsulates the structure of a scoring rubric.
+ * @param {string} name - The name of the rubric.
+ * @param {object} criteria - An object defining the scoring criteria (e.g., demographics, behavior).
+ * @returns {object} A structured scoring rubric object.
+ */
+export const defineScoringRubric = (name, criteria) => {
+  return {
+    name,
+    criteria,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+};
