@@ -542,7 +542,7 @@
       "reaudit_reset_at": "2026-07-30T18:55:06.428Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-07-31T01:26:16.232Z",
+      "last_attempt_at": "2026-07-31T01:50:56.309Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
         "content_source_path": "docs/products/faith-studio/twins/steps/3.exact"
@@ -567,8 +567,8 @@
         }
       },
       "last_attempt": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-31T01:23:08.581Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-31T01:48:00.193Z",
       "no_op": null,
       "demoted": false,
       "demote_reason": null,
@@ -827,13 +827,13 @@
     },
     {
       "id": "8",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "routes/privateModeExtension.js",
       "task": "Extend private witness mode",
       "spec": "Enhance private mode to influence the public publishing guard completely via safe defaults.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerPrivateModeExtensions"
       ],
@@ -853,12 +853,24 @@
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "8",
       "mission_id": "PRODUCT-faith-studio",
-      "pre_existing": false,
+      "pre_existing": null,
       "last_error": "codegen_authoring_failed: codegen_empty: openai_builder_mini: HTTP 429: {\n    \"error\": {\n        \"message\": \"You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organiza",
       "reaudit_reset_at": "2026-07-30T18:55:06.428Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-07-31T01:42:48.731Z"
+      "last_attempt_at": null,
+      "last_attempt": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-31T01:48:00.193Z",
+      "no_op": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "9",
