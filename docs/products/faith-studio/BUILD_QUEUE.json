@@ -2219,13 +2219,13 @@
     },
     {
       "id": "faith-studio-step-1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/traditionProfileService.js",
       "task": "Add source labeling",
       "spec": "Integrate source labeling engine into the tradition profile model service.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "enhanceWithSourceLabels"
       ],
@@ -2241,13 +2241,16 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-16T04:22:12.252Z",
-      "commit_sha": "2dc991e54e861c4691c7a45e990b5d9a105b1eaa",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "faith-studio-step-1",
       "mission_id": "PRODUCT-faith-studio",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:enhanceWithSourceLabels; enhanceWithSourceLabels",
-      "reaudit_reset_at": "2026-07-30T18:55:06.428Z"
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:enhanceWithSourceLabels; behavior_assertion_failed; behavior_proof",
+      "reaudit_reset_at": "2026-07-30T18:55:06.428Z",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-31T10:15:25.401Z"
     },
     {
       "id": "faith-studio-step-2",
