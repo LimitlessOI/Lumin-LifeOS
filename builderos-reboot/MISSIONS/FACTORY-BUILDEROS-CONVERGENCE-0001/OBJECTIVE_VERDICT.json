@@ -1,7 +1,7 @@
 {
   "mission_id": "FACTORY-BUILDEROS-CONVERGENCE-0001",
   "verdict": "CONVERGED",
-  "updated_at": "2026-07-31T06:22:52.366Z",
+  "updated_at": "2026-07-31T06:31:31.633Z",
   "metrics": {
     "founder_interventions": 1,
     "manual_agent_handoffs": 0,
@@ -38,6 +38,11 @@
       "type": "reality_scorecard",
       "path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-CONVERGENCE-0001/REALITY_SCORECARD.json",
       "generated_at": "2026-07-31T06:22:52.366Z"
+    },
+    {
+      "type": "reality_scorecard",
+      "path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-CONVERGENCE-0001/REALITY_SCORECARD.json",
+      "generated_at": "2026-07-31T06:31:31.633Z"
     }
   ],
   "notes": "Mission 2 convergence complete through P7 handoff. Revenue loop remains prepared but not executed pending founder credentials."

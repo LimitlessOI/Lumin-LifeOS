@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T06:29:39.107Z",
+  "generated_at": "2026-07-31T06:31:42.746Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12510,
   "files": [
@@ -22342,9 +22342,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-CONVERGENCE-0001/OBJECTIVE_VERDICT.json",
       "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
-      "bytes": 1878,
-      "mtime": "2026-07-31T06:22:52.363Z",
-      "indexed_at": "2026-07-31T06:26:08.755Z",
+      "bytes": 2076,
+      "mtime": "2026-07-31T06:31:31.631Z",
+      "indexed_at": "2026-07-31T06:31:42.746Z",
       "synopsis_index_only": true
     },
     {
