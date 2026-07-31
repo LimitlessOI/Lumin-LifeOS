@@ -131,7 +131,7 @@
     },
     {
       "id": "05",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "routes/sprintQueuePanel.js",
       "task": "create Sprint Queue panel",
       "spec": "Provide a panel for sprint queue within Command Center.",
@@ -172,9 +172,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-31T08:04:32.731Z",
       "no_op": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerSprintQueuePanel; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-31T09:39:17.739Z",
       "park_until": null,
       "blocker_class": null,
       "claim_level": null,
@@ -385,7 +385,10 @@
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "3",
       "mission_id": "PRODUCT-productized-sprint",
-      "reaudit_reset_at": "2026-07-30T18:55:06.702Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.702Z",
+      "failure_signature": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:template; behavior_assertion_failed; behavior_proof",
+      "same_signature_count": 1,
+      "escalation_class": "evidence_gap"
     },
     {
       "id": "4",
@@ -415,7 +418,7 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-15T21:20:26.369Z",
+      "shipped_at": "2026-07-31T09:39:57.172Z",
       "commit_sha": null,
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "4",
@@ -437,7 +440,56 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/productized-sprint/twins/steps/4.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-31T09:39:57.172Z",
+        "shipped_at": "2026-07-31T09:39:57.172Z",
+        "commit_sha": null,
+        "content_sha256": "f4bb0fca84d7ec06a1e5e84530141d2b5a5473c4ef7d3ddf9d8996ae5cda8730",
+        "target_file": "services/sprintQueueService.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/sprintQueueService.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "INDETERMINATE",
+          "reason": "indeterminate_sql: SQL template literal contains ${} interpolation",
+          "details": {
+            "filePath": "/usr/src/app/services/sprintQueueService.js",
+            "hash": "f4bb0fca84d7ec06a1e5e84530141d2b5a5473c4ef7d3ddf9d8996ae5cda8730",
+            "importChecks": [],
+            "sqlChecks": [
+              {
+                "text": "Sprint ${sprint.id} added to queue.",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Sprint ${sprintId} removed from queue.",
+                "status": "INDETERMINATE",
+                "reason": "sql_template_literal_with_interpolation"
+              },
+              {
+                "text": "Sprint ${sprintId} not found in queue.",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              }
+            ]
+          }
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/productized-sprint/twins/steps/4.exact",
+          "content_sha256": "f4bb0fca84d7ec06a1e5e84530141d2b5a5473c4ef7d3ddf9d8996ae5cda8730"
+        }
+      }
     },
     {
       "id": "5",
