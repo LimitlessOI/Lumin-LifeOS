@@ -704,7 +704,7 @@
     },
     {
       "id": "step11",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/pricingValidation.js",
       "task": "expose pricing validation route",
       "spec": "Expose an API endpoint for the pricing validation with users.",
@@ -732,12 +732,12 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-31T07:02:15.813Z",
-      "commit_sha": "18912d725978c9e9bb8963b7ca901997099ba953",
+      "commit_sha": "9d1442497c3c46a0e6fb842f5a0c398dfcf53615",
       "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step11",
       "mission_id": "PRODUCT-kids-os",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerPricingValidationRoutes; assertion_threw",
+      "last_error": null,
       "reaudit_reset_at": "2026-07-30T18:55:06.433Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
