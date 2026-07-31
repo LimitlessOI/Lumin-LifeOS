@@ -362,17 +362,17 @@
     },
     {
       "id": "8",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/addAdaptiveLayoutColumn.sql",
       "task": "add adaptive layout column",
       "spec": "Add column for adaptive layout preferences in `flourishing_prefs`.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS flourishing_prefs"
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-31T10:50:05.681Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS flourishing_prefs; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
