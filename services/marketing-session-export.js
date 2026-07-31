@@ -92,7 +92,7 @@ export async function buildSessionExport(sessionId, format, db, callCouncilMembe
     `Write a concise but complete export summary that can be saved for the session export record.`,
   ].join('\n');
 
-  const exportText = await strategist('strategist', prompt);
+  const exportText = await strategist('gemini_flash', prompt);
 
   const insertResult = await pool.query(
     `insert into marketing_session_exports (session_id, export_format, export_url)
