@@ -2695,10 +2695,10 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-07-31T02:07:15.194Z",
-        "shipped_at": "2026-07-31T02:07:15.194Z",
+        "sealed_at": "2026-07-31T02:09:02.749Z",
+        "shipped_at": "2026-07-31T02:09:02.749Z",
         "commit_sha": null,
-        "content_sha256": "1da75398c501099718a419b06ad55ca285f2ae8bbddc130067ad415d57a9689e",
+        "content_sha256": "ba02a185f7197dae3b9eba8ac62fea007116835b86876e7f2e035d910a123ec2",
         "target_file": "scripts/sentry-site-builder-schedule.mjs",
         "reverse": {
           "mode": "delete_file",
@@ -2709,10 +2709,10 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/builderos/twins/steps/bo-schedule-site-builder-sentry-gate.exact",
-          "content_sha256": "1da75398c501099718a419b06ad55ca285f2ae8bbddc130067ad415d57a9689e"
+          "content_sha256": "ba02a185f7197dae3b9eba8ac62fea007116835b86876e7f2e035d910a123ec2"
         }
       },
-      "shipped_at": "2026-07-31T02:07:15.194Z"
+      "shipped_at": "2026-07-31T02:09:02.749Z"
     },
     {
       "id": "bo-security-review-real-diff-format",
