@@ -389,13 +389,13 @@
     },
     {
       "id": "4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/sprintQueueService.js",
       "task": "create sprint queue service",
       "spec": "Service managing sprint queue logic for scheduling and managing sprints.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "addSprintToQueue",
         "removeSprintFromQueue"
@@ -416,13 +416,16 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-15T21:20:26.369Z",
-      "commit_sha": "4f2991bfe2320721c1f69e4ea1984aba958deb2a",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "4",
       "mission_id": "PRODUCT-productized-sprint",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:addSprintToQueue,removeSprintFromQueue; assertion_threw; assertion_threw; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.702Z"
+      "last_error": "governed_ship_failed",
+      "reaudit_reset_at": "2026-07-30T18:55:06.702Z",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-31T08:36:20.832Z"
     },
     {
       "id": "5",
