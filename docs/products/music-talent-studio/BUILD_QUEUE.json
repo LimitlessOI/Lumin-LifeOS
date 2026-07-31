@@ -825,14 +825,53 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-15T21:23:32.268Z",
+      "shipped_at": "2026-07-31T08:10:23.909Z",
       "commit_sha": "7f1428c86134c60155384e4f1104073ccd121698",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "4",
       "mission_id": "PRODUCT-music-talent-studio",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:getStudentFeedback; assertion_threw; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.680Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.680Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/music-talent-studio/twins/steps/4.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-31T08:10:23.909Z",
+        "shipped_at": "2026-07-31T08:10:23.909Z",
+        "commit_sha": "7f1428c86134c60155384e4f1104073ccd121698",
+        "content_sha256": "7e53a9f691bff53d474d3d7f96cb181d099004ba83c41d494589f5693ce26b1c",
+        "target_file": "services/studentsInterview.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/studentsInterview.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "INDETERMINATE",
+          "reason": "indeterminate_sql: SQL template literal contains ${} interpolation",
+          "details": {
+            "filePath": "/usr/src/app/services/studentsInterview.js",
+            "hash": "7e53a9f691bff53d474d3d7f96cb181d099004ba83c41d494589f5693ce26b1c",
+            "importChecks": [],
+            "sqlChecks": [
+              {
+                "text": "Feedback item ${i + 1} from student/parent.",
+                "status": "INDETERMINATE",
+                "reason": "sql_template_literal_with_interpolation"
+              }
+            ]
+          }
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/music-talent-studio/twins/steps/4.exact",
+          "content_sha256": "7e53a9f691bff53d474d3d7f96cb181d099004ba83c41d494589f5693ce26b1c"
+        }
+      }
     },
     {
       "id": "1",

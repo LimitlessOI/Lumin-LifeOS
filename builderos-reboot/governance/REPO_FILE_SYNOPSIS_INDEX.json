@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T08:10:04.748Z",
+  "generated_at": "2026-07-31T08:10:26.863Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12523,
+  "file_count": 12524,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -94057,6 +94057,13 @@
       "bytes": 230,
       "mtime": "2026-07-31T07:18:20.725Z",
       "indexed_at": "2026-07-31T07:18:20.725Z"
+    },
+    {
+      "path": "services/studentsInterview.js",
+      "synopsis": "Exports getStudentFeedback — services/studentsInterview.js.",
+      "bytes": 414,
+      "mtime": "2026-07-31T08:10:26.863Z",
+      "indexed_at": "2026-07-31T08:10:26.863Z"
     },
     {
       "path": "services/supervised-autonomy-readiness.js",
