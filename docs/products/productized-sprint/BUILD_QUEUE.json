@@ -678,7 +678,7 @@
     },
     {
       "id": "create-stripe-links",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/stripePaymentRoute.js",
       "task": "create stripe payment links route",
       "spec": "Route to create and manage Stripe payment links for all three tiers.",
@@ -704,12 +704,12 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-31T09:38:43.977Z",
-      "commit_sha": "79f30f18cb64eab0d4c55d9842df42ed39cbbed3",
+      "commit_sha": "88eca936e58a7b8928783bdbe104c23f8ef582cd",
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "create-stripe-links",
       "mission_id": "PRODUCT-productized-sprint",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerStripePaymentRoutes; assertion_threw",
+      "last_error": null,
       "reaudit_reset_at": "2026-07-30T18:55:06.702Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
