@@ -167,7 +167,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "failure_signature": "STEP_STATUS_FORBIDDEN",
+      "same_signature_count": 1,
+      "escalation_class": "same_signature_repeat"
     },
     {
       "id": "4",
@@ -256,11 +259,37 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": null,
-      "shipped_at": "2026-07-16T04:24:05.568Z",
+      "shipped_at": "2026-07-31T09:24:38.263Z",
       "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "2",
       "mission_id": "PRODUCT-word-keeper",
-      "reaudit_reset_at": "2026-07-30T18:55:07.447Z"
+      "reaudit_reset_at": "2026-07-30T18:55:07.447Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/word-keeper/twins/steps/2.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-31T09:24:38.263Z",
+        "shipped_at": "2026-07-31T09:24:38.263Z",
+        "commit_sha": null,
+        "content_sha256": "2e33e4e57d976000aae03108d4ceff1791c9735880a91b88a7fd0789b81a47b5",
+        "target_file": "db/migrations/003_confirm_transcript_purge.sql",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "db/migrations/003_confirm_transcript_purge.sql",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/word-keeper/twins/steps/2.exact",
+          "content_sha256": "2e33e4e57d976000aae03108d4ceff1791c9735880a91b88a7fd0789b81a47b5"
+        }
+      }
     },
     {
       "id": "word-keeper-step1",
@@ -586,7 +615,7 @@
     },
     {
       "id": "word-keeper-5",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/cronVerificationService.js",
       "task": "verify transcript purge cron",
       "spec": "Service to verify the transcript purge cron job runs correctly.",
@@ -622,9 +651,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-18T12:09:44.944Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:artifact_missing_after_ship: artifact_proof_failed: function verifyTranscriptPurge",
+      "demoted_at": "2026-07-31T09:16:59.359Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
