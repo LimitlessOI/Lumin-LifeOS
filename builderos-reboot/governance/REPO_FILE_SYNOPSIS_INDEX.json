@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T23:09:09.278Z",
+  "generated_at": "2026-07-31T23:39:02.734Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12637,
   "files": [
@@ -21478,9 +21478,9 @@
     {
       "path": "builderos-reboot/FOUNDER_STOP.json",
       "synopsis": "BuilderOS artifact — FOUNDER STOP.",
-      "bytes": 1523,
-      "mtime": "2026-07-31T19:03:00.862Z",
-      "indexed_at": "2026-07-31T19:03:14.912Z",
+      "bytes": 223,
+      "mtime": "2026-07-31T23:39:02.734Z",
+      "indexed_at": "2026-07-31T23:39:02.734Z",
       "synopsis_index_only": true
     },
     {
@@ -38860,9 +38860,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 77583,
-      "mtime": "2026-07-31T23:01:00.554Z",
-      "indexed_at": "2026-07-31T23:01:43.086Z"
+      "bytes": 78861,
+      "mtime": "2026-07-31T23:39:02.734Z",
+      "indexed_at": "2026-07-31T23:39:02.734Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41073,9 +41073,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 361259,
-      "mtime": "2026-07-31T23:01:00.554Z",
-      "indexed_at": "2026-07-31T23:01:43.086Z"
+      "bytes": 362620,
+      "mtime": "2026-07-31T23:39:02.734Z",
+      "indexed_at": "2026-07-31T23:39:02.734Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -41825,9 +41825,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 643458,
-      "mtime": "2026-07-31T23:01:00.558Z",
-      "indexed_at": "2026-07-31T23:01:43.086Z"
+      "bytes": 644632,
+      "mtime": "2026-07-31T23:39:02.734Z",
+      "indexed_at": "2026-07-31T23:39:02.734Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -69712,9 +69712,9 @@
     {
       "path": "routes/lifeos-council-builder-routes.js",
       "synopsis": "routes/lifeos-council-builder-routes.js",
-      "bytes": 172519,
-      "mtime": "2026-07-31T08:30:21.667Z",
-      "indexed_at": "2026-07-31T08:33:28.712Z",
+      "bytes": 174091,
+      "mtime": "2026-07-31T23:39:02.734Z",
+      "indexed_at": "2026-07-31T23:39:02.734Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -87237,9 +87237,9 @@
     {
       "path": "services/blueprint-grounding-check.js",
       "synopsis": "Deterministic static grounding check for generated artifacts before",
-      "bytes": 18007,
-      "mtime": "2026-07-31T04:54:51.743Z",
-      "indexed_at": "2026-07-31T05:01:14.830Z",
+      "bytes": 23555,
+      "mtime": "2026-07-31T23:39:02.734Z",
+      "indexed_at": "2026-07-31T23:39:02.734Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

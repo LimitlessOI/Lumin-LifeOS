@@ -33,11 +33,11 @@
  */
 
 import { readdir, readFile, writeFile, unlink, mkdtemp, mkdir } from 'fs/promises';
-import { readFileSync, existsSync } from 'fs';
+import { readFileSync, existsSync, writeFileSync, mkdtempSync } from 'fs';
 import { join, dirname, resolve, relative, extname } from 'path';
 import { fileURLToPath } from 'url';
 import { createHash } from 'crypto';
-import { execSync } from 'child_process';
+import { execSync, execFileSync } from 'child_process';
 import { tmpdir } from 'os';
 import { getModelForTask, getCandidateModelsForTask, TASK_MODEL_MAP } from '../config/task-model-routing.js';
 import { createMemoryIntelligenceService } from '../services/memory-intelligence-service.js';
@@ -46,6 +46,7 @@ import { BUILDER_MODE, BUILDER_MODE_RULES, DEFAULT_BUILDER_MODE } from '../confi
 import { isSafeTarget } from '../config/builder-safe-scope.js';
 import { writeSecurityReceipt, SECURITY_RECEIPT_TYPES } from '../services/oil-security-receipts.js';
 import { runPrecommitGovernance } from '../services/builderos-precommit-governance.js';
+import { emitBuilderTelemetry } from '../services/autonomous-telemetry-instrumentation.js';
 import { evaluateInvariants, formatFindings } from '../scripts/lib/security-invariants.mjs';
 import {
   evaluateDocHygiene,
@@ -1353,21 +1354,17 @@ export function createLifeOSCouncilBuilderRoutes({
         ]
       )
       .catch(() => {});
-    await import('../services/autonomous-telemetry-instrumentation.js')
-      .then(({ emitBuilderTelemetry }) =>
-        emitBuilderTelemetry(pool, {
-          domain,
-          task,
-          model_used,
-          rawOutput,
-          placement,
-          status,
-          failureStage,
-          failureReason,
-          committed,
-        })
-      )
-      .catch(() => {});
+    emitBuilderTelemetry(pool, {
+      domain,
+      task,
+      model_used,
+      rawOutput,
+      placement,
+      status,
+      failureStage,
+      failureReason,
+      committed,
+    }).catch(() => {});
   }
 
   /** GitHub commits do not update the Railway container FS — files[] injection reads disk. Mirror so chained /build steps see newest content without redeploy between tasks. */
@@ -1532,19 +1529,58 @@ export function createLifeOSCouncilBuilderRoutes({
         return;
       }
       const changedFiles = entries.map((entry) => entry.path);
+
+      function buildUnifiedDiffForEntry(relPath, newContent, maxChars) {
+        let oldContent = null;
+        try {
+          oldContent = execFileSync('git', ['show', `HEAD:${relPath}`], { cwd: process.cwd(), encoding: 'utf8', maxBuffer: 10_000_000 });
+        } catch (err) {
+          oldContent = null;
+        }
+
+        if (oldContent === null) {
+          const lines = String(newContent || '').split('\n');
+          const body = lines.map((line) => (line.startsWith('+') ? line : `+${line}`)).join('\n');
+          return (`--- /dev/null\n+++ b/${relPath}\n@@ -0,0 +1,${lines.length} @@\n${body}`).slice(0, maxChars);
+        }
+
+        const dir = mkdtempSync(join(tmpdir(), 'aidiff-'));
+        const oldFile = join(dir, 'a');
+        const newFile = join(dir, 'b');
+        writeFileSync(oldFile, oldContent, 'utf8');
+        writeFileSync(newFile, String(newContent || ''), 'utf8');
+        let diffText = '';
+        try {
+          diffText = execFileSync('git', ['diff', '--no-index', '--unified=3', '--', oldFile, newFile], { cwd: process.cwd(), encoding: 'utf8' });
+        } catch (err) {
+          diffText = err?.stdout || '';
+        }
+        if (!diffText) return '';
+        const escapedOld = oldFile.replace(/[.*+?^${}()|[\]\\\\]/g, '\\\\$&');
+        const escapedNew = newFile.replace(/[.*+?^${}()|[\]\\\\]/g, '\\\\$&');
+        const canon = diffText
+          .split('\n')
+          .filter((line) => !line.startsWith('diff --git ') && !line.startsWith('index '))
+          .join('\n')
+          .replace(new RegExp(`--- ${escapedOld}`, 'g'), `--- a/${relPath}`)
+          .replace(new RegExp(`\\+\\+\\+ ${escapedNew}`, 'g'), `+++ b/${relPath}`);
+        return canon.slice(0, maxChars);
+      }
+
       let totalChars = 0;
       const MAX_DIFF_CHARS = 12000;
-      const textEntries = entries
-        .filter((entry) => entry.encoding !== 'base64')
-        .map((entry) => {
-          const content = String(entry.content || '').slice(0, Math.max(0, MAX_DIFF_CHARS - totalChars));
-          totalChars += content.length;
-          const lines = content.split('\n');
-          const hunkHeader = `@@ -1,${lines.length} @@`;
-          const body = lines.map((line) => (line.startsWith(' ') ? line : ' ' + line)).join('\n');
-          return `--- a/${entry.path}\n+++ b/${entry.path}\n${hunkHeader}\n${body}`;
-        })
-        .join('\n');
+      const fileDiffs = [];
+      for (const entry of entries) {
+        if (entry.encoding === 'base64') continue;
+        const remaining = Math.max(0, MAX_DIFF_CHARS - totalChars);
+        if (remaining === 0) break;
+        const diff = buildUnifiedDiffForEntry(entry.path, entry.content, remaining);
+        if (diff) {
+          fileDiffs.push(diff);
+          totalChars += diff.length;
+        }
+      }
+      const textEntries = fileDiffs.join('\n');
       const callModel = async (_model, prompt, options) => {
         try {
           return await callCouncilMember('security_review', prompt, options);

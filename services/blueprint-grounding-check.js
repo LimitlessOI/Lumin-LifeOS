@@ -8,15 +8,56 @@
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
+import { parse } from 'acorn';
 
 const MAX_CONTENT_LENGTH = 2 * 1024 * 1024;
 const SQL_KEYWORDS = /\b(?:select|insert|update|delete|create\s+table|drop\s+table|alter\s+table|from|join|into|where|with)\b/i;
+const SQL_PRIMARY_VERBS = /\b(?:select|insert|update|delete|create\s+table|drop\s+table|alter\s+table)\b/i;
 const SYSTEM_SCHEMAS = new Set(['information_schema', 'pg_catalog', 'pg_toast']);
 const JS_KEYWORDS = new Set([
   'break', 'case', 'catch', 'class', 'const', 'continue', 'debugger', 'default',
   'delete', 'do', 'else', 'export', 'extends', 'finally', 'for', 'function',
   'if', 'import', 'in', 'instanceof', 'let', 'new', 'return', 'super', 'switch',
   'this', 'throw', 'try', 'typeof', 'var', 'void', 'while', 'with', 'yield',
+]);
+
+// Tokens that regex-based extraction can mistake for SQL table names in
+// natural-language strings/prompts. Real SQL table names are extremely unlikely
+// to be reserved words or common English stop words.
+const NON_TABLE_TOKENS = new Set([
+  'the', 'and', 'or', 'if', 'not', 'exists', 'a', 'an', 'to', 'of', 'in', 'on',
+  'at', 'by', 'for', 'with', 'as', 'is', 'it', 'that', 'this', 'from', 'into',
+  'where', 'select', 'insert', 'update', 'delete', 'create', 'drop', 'alter',
+  'table', 'index', 'join', 'values', 'set', 'null', 'true', 'false', 'then',
+  'else', 'end', 'case', 'when', 'between', 'like', 'ilike', 'limit', 'offset',
+  'order', 'group', 'having', 'union', 'all', 'distinct', 'by', 'asc', 'desc',
+  'left', 'right', 'inner', 'outer', 'full', 'natural', 'cross', 'using', 'on',
+  'do', 'does', 'did', 'done', 'will', 'would', 'should', 'could', 'can', 'may',
+  'might', 'must', 'shall', 'about', 'above', 'across', 'after', 'against',
+  'along', 'among', 'around', 'before', 'behind', 'below', 'beneath', 'beside',
+  'between', 'beyond', 'during', 'except', 'inside', 'outside', 'until', 'upon',
+  'within', 'without', 'over', 'under', 'again', 'further', 'once', 'here',
+  'there', 'when', 'where', 'why', 'how', 'what', 'which', 'who', 'whom',
+  'whose', 'such', 'these', 'those', 'they', 'them', 'their', 'themselves',
+  'ours', 'yours', 'his', 'hers', 'its', 'our', 'your', 'my', 'mine', 'her',
+  'him', 'his', 'me', 'us', 'you', 'i', 'am', 'are', 'was', 'were', 'be', 'been',
+  'being', 'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would', 'shall',
+  'should', 'may', 'might', 'can', 'could', 'must', 'ought', 'need', 'dare',
+  'used', 'rarely', 'seldom', 'often', 'always', 'never', 'sometimes', 'usually',
+  'already', 'also', 'just', 'only', 'even', 'still', 'yet', 'already', 'soon',
+  'now', 'then', 'here', 'there', 'everywhere', 'anywhere', 'somewhere', 'nowhere',
+  'else', 'otherwise', 'however', 'therefore', 'moreover', 'furthermore', 'nevertheless',
+  'nonetheless', 'instead', 'meanwhile', 'otherwise', 'though', 'although', 'because',
+  'since', 'while', 'whereas', 'unless', 'whether', 'either', 'neither', 'both',
+  'each', 'every', 'all', 'any', 'some', 'many', 'much', 'few', 'little', 'more',
+  'most', 'other', 'another', 'several', 'various', 'certain', 'such', 'no', 'not',
+  'only', 'own', 'same', 'so', 'than', 'too', 'very', 'just', 'but', 'if', 'or',
+  'because', 'as', 'until', 'while', 'of', 'at', 'by', 'for', 'with', 'about',
+  'into', 'through', 'during', 'before', 'after', 'above', 'below', 'from', 'up',
+  'down', 'off', 'over', 'under', 'again', 'further', 'then', 'once', 'here',
+  'there', 'when', 'where', 'why', 'how', 'all', 'each', 'both', 'few', 'more',
+  'most', 'other', 'some', 'such', 'no', 'nor', 'not', 'only', 'own', 'same',
+  'so', 'than', 'too', 'very', 'can', 'will', 'just', 'should', 'now',
 ]);
 
 function sha256(text) {
@@ -288,36 +329,98 @@ function checkImports(content, filePath, repoRoot, logger) {
   return { status: overallStatus, reason, details };
 }
 
-function extractSqlStrings(content) {
+function regexExtractSqlStrings(content) {
   const strings = [];
-  if (!content) return strings;
-
-  // template literals (backticks) — may contain ${} interpolation
-  const templateRe = /`([^`\\]*(?:\\.[^`\\]*)*)`/g;
   let m;
+  const templateRe = /`([^`\\]*(?:\\.[^`\\]*)*)`/g;
   while ((m = templateRe.exec(content)) !== null) {
     strings.push({ text: m[1], raw: m[0], kind: 'template', dynamic: m[1].includes('${') });
   }
-
-  // single-quoted strings
   const singleRe = /'([^'\\]*(?:\\.[^'\\]*)*)'/g;
   while ((m = singleRe.exec(content)) !== null) {
     strings.push({ text: m[1], raw: m[0], kind: 'single', dynamic: false });
   }
-
-  // double-quoted strings
   const doubleRe = /"([^"\\]*(?:\\.[^"\\]*)*)"/g;
   while ((m = doubleRe.exec(content)) !== null) {
     strings.push({ text: m[1], raw: m[0], kind: 'double', dynamic: false });
   }
-
   return strings;
+}
+
+function isQueryCallExpression(node) {
+  if (node?.type !== 'CallExpression') return false;
+  const { callee } = node;
+  if (callee?.type === 'MemberExpression' && callee.property?.type === 'Identifier' && callee.property.name === 'query') {
+    return true;
+  }
+  if (callee?.type === 'Identifier' && /^(query|execute|exec)$/i.test(callee.name)) {
+    return true;
+  }
+  return false;
+}
+
+function extractSqlStrings(content) {
+  const strings = [];
+  if (!content) return strings;
+
+  // Use acorn to pull SQL strings from actual query calls (pool.query, db.query, etc.).
+  // This avoids treating natural-language HTML/prompt strings as SQL.
+  try {
+    const ast = parse(content, {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      allowReturnOutsideFunction: true,
+      allowImportExportEverywhere: true,
+    });
+    const varMap = new Map();
+    function addStringNode(node) {
+      if (node.type === 'Literal' && typeof node.value === 'string') {
+        const raw = node.raw || '';
+        const kind = raw[0] === '"' ? 'double' : 'single';
+        strings.push({ text: node.value, raw, kind, dynamic: false });
+      } else if (node.type === 'TemplateLiteral') {
+        const raw = content.slice(node.start, node.end);
+        const text = content.slice(node.start + 1, node.end - 1);
+        strings.push({ text, raw, kind: 'template', dynamic: text.includes('${') });
+      }
+    }
+    function walk(node) {
+      if (!node || typeof node !== 'object') return;
+      if (node.type === 'VariableDeclarator' && node.id?.type === 'Identifier' && node.init) {
+        if (
+          (node.init.type === 'Literal' && typeof node.init.value === 'string')
+          || node.init.type === 'TemplateLiteral'
+        ) {
+          varMap.set(node.id.name, node.init);
+        }
+      }
+      if (isQueryCallExpression(node)) {
+        const first = node.arguments?.[0];
+        if (first) {
+          if (first.type === 'Identifier' && varMap.has(first.name)) {
+            addStringNode(varMap.get(first.name));
+          } else {
+            addStringNode(first);
+          }
+        }
+      }
+      for (const key of Object.keys(node)) {
+        if (['type', 'loc', 'range', 'start', 'end'].includes(key)) continue;
+        const child = node[key];
+        if (Array.isArray(child)) child.forEach(walk);
+        else if (child && typeof child === 'object' && child.type) walk(child);
+      }
+    }
+    walk(ast);
+    return strings;
+  } catch (err) {
+    return regexExtractSqlStrings(content);
+  }
 }
 
 function extractSqlTables(sql) {
   const tables = [];
-  const upper = sql.toUpperCase();
-  if (!SQL_KEYWORDS.test(sql)) return tables;
+  if (!SQL_KEYWORDS.test(sql) || !SQL_PRIMARY_VERBS.test(sql)) return tables;
 
   const patterns = [
     { re: /\bFROM\s+([A-Za-z_][\w.]*)/gi, type: 'from' },
@@ -334,7 +437,11 @@ function extractSqlTables(sql) {
   for (const { re } of patterns) {
     let m;
     while ((m = re.exec(sql)) !== null) {
-      tables.push(m[1]);
+      const name = m[1];
+      if (!name) continue;
+      const lower = name.toLowerCase();
+      if (JS_KEYWORDS.has(lower) || NON_TABLE_TOKENS.has(lower)) continue;
+      tables.push(name);
     }
   }
   return tables;
