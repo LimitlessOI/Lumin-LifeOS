@@ -805,7 +805,7 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-31T07:17:57.282Z",
+      "shipped_at": "2026-07-31T07:58:37.898Z",
       "commit_sha": null,
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "business-tools-3",
@@ -819,10 +819,10 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-07-31T07:17:57.282Z",
-        "shipped_at": "2026-07-31T07:17:57.282Z",
-        "commit_sha": "e12e1e73609f82a344d313a0cabf4b49ee61cb22",
-        "content_sha256": "3f65bd4612d84821e045c97ea9a85ddf33d0688e4d91b0964c644c7ebf927376",
+        "sealed_at": "2026-07-31T07:58:37.898Z",
+        "shipped_at": "2026-07-31T07:58:37.898Z",
+        "commit_sha": null,
+        "content_sha256": "ba54aa469687432f1c1df59db200d15d80de58da44298445a58fa0fd8096ce42",
         "target_file": "services/realEstateCurriculumStructure.js",
         "reverse": {
           "mode": "delete_file",
@@ -836,7 +836,7 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/business-tools/twins/steps/business-tools-3.exact",
-          "content_sha256": "3f65bd4612d84821e045c97ea9a85ddf33d0688e4d91b0964c644c7ebf927376"
+          "content_sha256": "ba54aa469687432f1c1df59db200d15d80de58da44298445a58fa0fd8096ce42"
         }
       },
       "built_sha": null,
