@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T18:54:51.650Z",
+  "generated_at": "2026-07-31T18:55:12.780Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12600,
   "files": [
@@ -23459,9 +23459,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/BLUEPRINT.json",
       "synopsis": "Receipt Auditor\"],",
-      "bytes": 17775,
-      "mtime": "2026-07-31T18:54:51.650Z",
-      "indexed_at": "2026-07-31T18:54:51.650Z",
+      "bytes": 17853,
+      "mtime": "2026-07-31T18:55:12.780Z",
+      "indexed_at": "2026-07-31T18:55:12.780Z",
       "synopsis_index_only": true
     },
     {
@@ -23482,8 +23482,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/OBJECTIVE_VERDICT.json",
       "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
       "bytes": 1064,
-      "mtime": "2026-07-31T18:54:51.650Z",
-      "indexed_at": "2026-07-31T18:54:51.650Z",
+      "mtime": "2026-07-31T18:55:12.780Z",
+      "indexed_at": "2026-07-31T18:55:12.780Z",
       "synopsis_index_only": true
     },
     {
@@ -38724,8 +38724,8 @@
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
       "bytes": 72500,
-      "mtime": "2026-07-31T18:54:51.650Z",
-      "indexed_at": "2026-07-31T18:54:51.650Z"
+      "mtime": "2026-07-31T18:55:12.780Z",
+      "indexed_at": "2026-07-31T18:55:12.780Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40937,8 +40937,8 @@
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
       "bytes": 355290,
-      "mtime": "2026-07-31T18:54:51.650Z",
-      "indexed_at": "2026-07-31T18:54:51.650Z"
+      "mtime": "2026-07-31T18:55:12.780Z",
+      "indexed_at": "2026-07-31T18:55:12.780Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",

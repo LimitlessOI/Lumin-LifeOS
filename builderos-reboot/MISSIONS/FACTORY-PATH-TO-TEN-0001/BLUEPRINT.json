@@ -207,7 +207,7 @@
       "verify_command": "node --test tests/cognitive-chair.test.mjs && node scripts/run-cognitive-mission.mjs --mission \"sample build decision\" --dry-run --build-mode",
       "depends_on": ["M2PT-005", "M2PT-001"],
       "completed_at": "2026-07-31T22:00:00.000Z",
-      "git_sha": "TBD_COMMIT_SHA"
+      "git_sha": "b0c780158cc5d96d0c61148af9f0885be01c100f"
     },
     {
       "id": "M2PT-009",
@@ -219,7 +219,7 @@
       "verify_command": "node --test tests/model-roi-ledger.test.js && node scripts/model-roi-report.mjs",
       "depends_on": ["M2PT-008"],
       "completed_at": "2026-07-31T22:00:00.000Z",
-      "git_sha": "TBD_COMMIT_SHA"
+      "git_sha": "baef2de7864aa122a61afa86a3d5bc82158a22da"
     },
     {
       "id": "M2PT-010",
@@ -231,7 +231,7 @@
       "verify_command": "node --test tests/wisdom-reality-update.test.js && node scripts/wisdom-update-lens-trust.mjs --dry-run",
       "depends_on": ["M2PT-007", "M2PT-009"],
       "completed_at": "2026-07-31T22:00:00.000Z",
-      "git_sha": "TBD_COMMIT_SHA"
+      "git_sha": "baef2de7864aa122a61afa86a3d5bc82158a22da"
     },
     {
       "id": "M2PT-011",
