@@ -778,13 +778,13 @@
     },
     {
       "id": "business-tools-3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/realEstateCurriculumStructure.js",
       "task": "specify curriculum structure",
       "spec": "Outline modules and DB schema per student for virtual real estate class.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "getCurriculumModules",
         "getStudentSchema"
@@ -841,7 +841,7 @@
       },
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-31T07:58:44.426Z",
       "last_attempt": null,
       "revive_count": 1,
       "revived_at": "2026-07-31T07:41:38.793Z",
