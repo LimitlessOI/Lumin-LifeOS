@@ -305,7 +305,7 @@
     },
     {
       "id": "step3",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/partner-config-creation.js",
       "task": "create partner config endpoint",
       "spec": "Implement POST /partner-config to create new partner configurations.",
@@ -331,12 +331,12 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-31T09:38:55.983Z",
-      "commit_sha": "515f1956c48596f7c53b502984bb1739ef48f412",
+      "commit_sha": "bec0ffdee77247d82f8ea4b88eb084d00141a402",
       "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step3",
       "mission_id": "PRODUCT-white-label",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerPartnerConfigRoutes; assertion_threw",
+      "last_error": null,
       "reaudit_reset_at": "2026-07-30T18:55:06.853Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
