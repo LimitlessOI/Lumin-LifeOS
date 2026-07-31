@@ -535,14 +535,40 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-16T04:23:56.895Z",
+      "shipped_at": "2026-07-31T10:15:52.006Z",
       "commit_sha": "6a72794484b93a5a789f3a576b26dc058ba5538c",
       "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "white-label-3",
       "mission_id": "PRODUCT-white-label",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerPartnerConfigRoutes; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.853Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.853Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/white-label/twins/steps/white-label-3.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-31T10:15:52.006Z",
+        "shipped_at": "2026-07-31T10:15:52.006Z",
+        "commit_sha": "6a72794484b93a5a789f3a576b26dc058ba5538c",
+        "content_sha256": "40a1711a8f3806d9715bd264d0c6b24fb8290bf8b9138d88a34d2301c31eeef6",
+        "target_file": "routes/partner-config-creation.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "routes/partner-config-creation.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/white-label/twins/steps/white-label-3.exact",
+          "content_sha256": "40a1711a8f3806d9715bd264d0c6b24fb8290bf8b9138d88a34d2301c31eeef6"
+        }
+      }
     },
     {
       "id": "white-label-5",

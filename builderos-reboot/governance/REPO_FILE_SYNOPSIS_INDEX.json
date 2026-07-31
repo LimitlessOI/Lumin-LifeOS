@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T10:15:41.373Z",
+  "generated_at": "2026-07-31T10:15:54.580Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12563,
   "files": [
@@ -70154,9 +70154,9 @@
     {
       "path": "routes/partner-config-creation.js",
       "synopsis": "HTTP route module — Partner Config Creation.",
-      "bytes": 1131,
-      "mtime": "2026-07-31T09:38:58.110Z",
-      "indexed_at": "2026-07-31T09:38:58.110Z"
+      "bytes": 2141,
+      "mtime": "2026-07-31T10:15:54.580Z",
+      "indexed_at": "2026-07-31T10:15:54.580Z"
     },
     {
       "path": "routes/partner-onboarding.js",

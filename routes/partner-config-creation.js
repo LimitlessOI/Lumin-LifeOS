@@ -34,4 +34,30 @@ export const registerPartnerConfigRoutes = (app) => {
       config: newConfig,
     });
   });
+
+  // New endpoint for partner onboarding flow config creation
+  app.post('/partner-onboarding-config', (req, res) => {
+    const { partnerId, onboardingFlowName, onboardingSteps } = req.body;
+
+    if (!partnerId || !onboardingFlowName || !onboardingSteps || !Array.isArray(onboardingSteps) || onboardingSteps.length === 0) {
+      return res.status(400).json({ message: 'Missing or invalid fields: partnerId, onboardingFlowName, onboardingSteps (must be a non-empty array)' });
+    }
+
+    // Simulate successful creation of onboarding flow configuration
+    const newOnboardingConfig = {
+      id: `poc-${Date.now()}`,
+      partnerId,
+      onboardingFlowName,
+      onboardingSteps,
+      status: 'active',
+      createdAt: new Date().toISOString(),
+    };
+
+    console.log('New Partner Onboarding Flow Config Created:', newOnboardingConfig);
+
+    res.status(201).json({
+      message: 'Partner onboarding flow configuration created successfully',
+      onboardingConfig: newOnboardingConfig,
+    });
+  });
 };
