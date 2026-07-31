@@ -324,13 +324,13 @@
     },
     {
       "id": "7",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "public/overlay/adaptiveLayout.js",
       "task": "adapt layout preferences",
       "spec": "Save user layout preferences to `flourishing_prefs`.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "adaptLayoutPreferences"
       ],
@@ -346,7 +346,7 @@
       "reaudit_reset_at": "2026-07-30T18:55:06.758Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-31T10:16:49.163Z",
       "last_attempt": null,
       "revive_count": 1,
       "revived_at": "2026-07-31T10:16:04.571Z",
