@@ -1,0 +1,120 @@
+{
+  "schema": "builderos_blocked_return_v2",
+  "mission_id": "FACTORY-BUILDEROS-CONVERGENCE-0001",
+  "status": "BLOCKED_RETURN_TO_CHAIR",
+  "purpose": "Canonical blocked return for BuilderOS Mission 2 Convergence when execution would require unauthorized judgment, missing proof, stale authority, unresolved promotion, or founder-blocked credentials.",
+  "required_fields": [
+    "schema",
+    "blocked",
+    "status",
+    "block_code",
+    "severity",
+    "mission_id",
+    "blueprint_id",
+    "step_id",
+    "actor_role",
+    "authority_chain_checked",
+    "what_was_attempted",
+    "why_blocked",
+    "evidence",
+    "required_owner",
+    "minimum_unblock_action",
+    "safe_next_action",
+    "receipts_read",
+    "state_artifacts_checked",
+    "prior_attempts_consulted",
+    "lessons_loaded",
+    "research_completed",
+    "why_builder_would_decide",
+    "created_at"
+  ],
+  "optional_fields": [
+    "decision_type",
+    "transport_proof",
+    "deploy_truth",
+    "founder_surface_case",
+    "repair_attempt",
+    "prior_lessons",
+    "research_required",
+    "consensus_required",
+    "stale_artifacts",
+    "candidate_patch_for_arc",
+    "do_not_retry_until",
+    "exact_artifact_to_update",
+    "exact_receipt_to_rerun",
+    "freeze_owner"
+  ],
+  "allowed_gap_type_values": [
+    "ambiguous_spec",
+    "missing_requirement",
+    "conflicting_instruction",
+    "hidden_dependency",
+    "out_of_scope_request",
+    "authority_violation",
+    "step_not_deterministic",
+    "external_failure",
+    "live_proof_mismatch",
+    "stale_receipt_conflict",
+    "promotion_missing",
+    "soft_acceptance_language",
+    "founder_surface_regression"
+  ],
+  "block_codes": [
+    {
+      "code": "BLOCKED_UNAUTHORIZED_DECISION",
+      "severity": "P0",
+      "when": "Builder would have to decide product, UX, architecture, scope, priority, acceptance, release, or founder success semantics.",
+      "required_owner": "Chair or IDC",
+      "minimum_unblock_action": "Produce or update a DECISION-XXXX.md and, if needed, amend the blueprint."
+    },
+    {
+      "code": "BLOCKED_INTENT_AMBIGUITY",
+      "severity": "P0",
+      "when": "Mission intent cannot be resolved from the founder packet, product home, BP_PRIORITY, Point B, receipts, or wisdom.",
+      "required_owner": "Chair",
+      "minimum_unblock_action": "Return the smallest unresolved intent question and the exact files that must be read."
+    },
+    {
+      "code": "BLOCKED_MISSING_PROOF",
+      "severity": "P0",
+      "when": "A claim requires live production proof, SENTRY pass, real transaction, or telemetry that is not available.",
+      "required_owner": "Sentry or Adam",
+      "minimum_unblock_action": "Run the named verification command or record the missing evidence in the open-questions section."
+    },
+    {
+      "code": "BLOCKED_FOUNDER_ACTION_REQUIRED",
+      "severity": "P0",
+      "when": "A step requires a credential, payment instrument, sending-domain verification, or business decision only the founder can provide.",
+      "required_owner": "Adam",
+      "minimum_unblock_action": "Provide the exact founder-action list and the verification command to run after the action."
+    },
+    {
+      "code": "BLOCKED_BLUEPRINT_AUTHORITY",
+      "severity": "P0",
+      "when": "A changed file is not covered by the active mission blueprint, an approved DECISION-XXXX.md, or a documented GAP-FILL.",
+      "required_owner": "Chair or ARC",
+      "minimum_unblock_action": "Add the file to the active blueprint, create a DECISION-XXXX.md, or record a GAP-FILL with HAND-AUTHORED-JUSTIFICATION."
+    },
+    {
+      "code": "BLOCKED_SENTRY_FINDING",
+      "severity": "P1",
+      "when": "SENTRY Layer A or Layer B reports a finding without a proposed_solution.",
+      "required_owner": "Sentry",
+      "minimum_unblock_action": "Each finding must carry a concrete proposed_solution before the feature is declared done."
+    },
+    {
+      "code": "BLOCKED_RUNTIME_INVARIANT",
+      "severity": "P0",
+      "when": "A runtime change would activate a scheduler, route, or gate without proven env prerequisites or without observable status.",
+      "required_owner": "Sentry",
+      "minimum_unblock_action": "Add the env-gate observable status and a test proving the gate behavior."
+    },
+    {
+      "code": "BLOCKED_TO_WISDOM",
+      "severity": "P1",
+      "when": "A decision requires historical analogues or prediction-vs-reality comparison before proceeding.",
+      "required_owner": "Wisdom",
+      "minimum_unblock_action": "Run wisdom-decision-drift or search the prediction ledger and return the comparison."
+    }
+  ]
+}

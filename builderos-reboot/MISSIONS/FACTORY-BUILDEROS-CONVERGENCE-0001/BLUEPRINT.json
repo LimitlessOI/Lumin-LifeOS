@@ -1,0 +1,682 @@
+{
+  "mission_id": "FACTORY-BUILDEROS-CONVERGENCE-0001",
+  "blueprint_id": "FACTORY-BUILDEROS-CONVERGENCE-0001-v1",
+  "blueprint_status": "draft",
+  "completed_at": null,
+  "git_sha": null,
+  "receipt_verdict": "PENDING",
+  "scope": "builderos_convergence",
+  "summary": "Evolve BuilderOS into a self-improving decision-quality system by locking the six design principles and the Mission 2 success test into canonical SSOT, creating a minimal artifact-based Collaboration Spine, mechanically enforcing blueprint authority, converging runtime schedulers, closing the SMOS revenue loop, and making Wisdom decision-aware.",
+  "authority": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-CONVERGENCE-0001/FOUNDER_PACKET.md",
+  "acceptance_command": "npm run builderos:convergence:v1-acceptance",
+  "allowed_action_types": [
+    "create_file",
+    "edit_file",
+    "run_acceptance",
+    "update_receipt",
+    "create_decision_record"
+  ],
+  "comparison_hold": true,
+  "execution_gate": {
+    "status": "HOLD",
+    "blueprint_may_execute_now": false,
+    "hold_type": "comparison",
+    "blocking_reasons": [
+      "Await comparison with ChatGPT and CloudCode blueprints; merge into a single approved mission plan before execution."
+    ]
+  },
+  "simulation_only_notice": "",
+  "promotion_receipts": [
+    "CONSTITUTION_AMENDMENT_CONVERGENCE.md",
+    "DECISION-0001.md",
+    "scripts/verify-decision-record.mjs",
+    "scripts/lib/blueprint-authority-gate.mjs",
+    "scripts/collaboration-spine-assemble.mjs",
+    "tests/blueprint-authority-gate.test.js",
+    "products/receipts/SMOS_REAL_CUSTOMER_READINESS.json",
+    "products/receipts/DECISION_DRIFT_CONVERGENCE.json",
+    "docs/audits/builderos-mission-2/MISSION_2_CONVERGENCE_HANDOFF.md"
+  ],
+  "post_completion_followups": [
+    "Update docs/products/builderos/PRODUCT_HOME.md and docs/CONTINUITY_LOG.md with final Mission 2 Convergence receipts.",
+    "Add FACTORY-BUILDEROS-CONVERGENCE-0001 to builderos-reboot/BP_PRIORITY.json as a completed item or supersede with the next ranked mission.",
+    "Write the Mission 3 scoping note: what is now cheaper/faster because of this mission."
+  ],
+  "step_defaults": {
+    "coder_must_not_decide": [
+      "product behavior",
+      "UX or visual acceptance",
+      "scope expansion",
+      "priority order",
+      "release stage",
+      "what counts as founder success",
+      "what counts as proof if the blueprint did not define it",
+      "whether a semantic answer is good enough when acceptance is soft",
+      "whether stale authority can be reused",
+      "whether a lesson discovered by ARC or Sentry can remain unpromoted",
+      "whether a design principle can be weakened for convenience"
+    ],
+    "on_ambiguity": "BLOCKED_RETURN_TO_CHAIR_OR_CREATE_DECISION_RECORD"
+  },
+  "blocked_return_schema": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-CONVERGENCE-0001/BLOCKED_RETURN_SCHEMA.json",
+  "non_goals": [
+    "Do not build a real-time AI chat room.",
+    "Do not create a second active queue.",
+    "Do not redesign the Chair from scratch; preserve the SO-003 regression test.",
+    "Do not migrate email providers unless the chosen provider is configured and verified.",
+    "Do not manually patch around BuilderOS.",
+    "Do not produce another comprehensive audit; build only what enforces and verifies convergence.",
+    "Do not optimize for passing Mission 2; optimize for making Mission 3 easier."
+  ],
+  "intent_sources": [
+    "FOUNDER_PACKET.md",
+    "docs/constitution/NORTH_STAR_SSOT.md",
+    "docs/constitution/POINT_B_DNA.md",
+    "docs/audits/builderos-mission-2/MISSION_2_0_HANDOFF.md",
+    "docs/audits/builderos-mission-2/MISSION_2_0_PROMPT.md",
+    "docs/products/builderos/SCHEDULER_AUDIT.md",
+    "docs/products/builderos/PRODUCT_HOME.md",
+    "docs/products/lifeos/PRODUCT_HOME.md",
+    "builderos-reboot/BP_PRIORITY.json",
+    "builderos-reboot/POINT_B_TARGET.json",
+    "docs/products/PRODUCT_REGISTRY.json",
+    "builderos-reboot/governance/GATE_ENFORCEMENT_MATRIX.json"
+  ],
+  "phases": [
+    { "phase_id": "P0", "title": "Constitutional lock and product-home update" },
+    { "phase_id": "P1", "title": "Collaboration Spine and decision records" },
+    { "phase_id": "P2", "title": "Mechanical blueprint authority" },
+    { "phase_id": "P3", "title": "Runtime convergence and observability" },
+    { "phase_id": "P4", "title": "Revenue loop closure" },
+    { "phase_id": "P5", "title": "Wisdom becomes decision-aware" },
+    { "phase_id": "P6", "title": "Final convergence, handoff, and Mission 3 prep" }
+  ],
+  "steps": [
+    {
+      "step_id": "M2C-000",
+      "phase_id": "P0",
+      "title": "Lock the BuilderOS Convergence design principles into SSOT authority",
+      "target_files": [
+        "docs/constitution/AMENDMENT_BUILDEROS_CONVERGENCE.md",
+        "docs/constitution/CONSTITUTION_INVENTORY.md"
+      ],
+      "action_type": "create_file",
+      "required_edits": [
+        "Create docs/constitution/AMENDMENT_BUILDEROS_CONVERGENCE.md containing: the six BuilderOS Design Principles, the Independent Reasoning Before Consensus principle, the Decision Record schema, the Collaboration Spine pipeline, and the Mission 2 Success Test.",
+        "Add AMENDMENT_BUILDEROS_CONVERGENCE.md to docs/constitution/CONSTITUTION_INVENTORY.md (or the canonical amendment registry) so the constitution points to it.",
+        "Do not edit NORTH_STAR_SSOT.md directly unless it is read in full first; prefer an amendment file and a reference."
+      ],
+      "exact_output_contract": {
+        "type": "file_exists_and_valid",
+        "must_prove": [
+          "AMENDMENT_BUILDEROS_CONVERGENCE.md exists and contains all six design principles verbatim.",
+          "AMENDMENT_BUILDEROS_CONVERGENCE.md defines the Decision Record required sections.",
+          "The canonical constitution inventory references the amendment."
+        ]
+      },
+      "allowed_context_files": [
+        "FOUNDER_PACKET.md",
+        "docs/constitution/NORTH_STAR_SSOT.md",
+        "docs/constitution/POINT_B_DNA.md"
+      ],
+      "forbidden_context_files": [],
+      "dependencies": [],
+      "acceptance_test_ids": ["AT-M2C-000-1"],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_CHAIR",
+      "sandbox_boundary": "docs/constitution/",
+      "authority_owner": "Chair",
+      "on_block": "Create a DECISION-XXXX.md if there is any constitutional conflict before editing NORTH_STAR_SSOT.md."
+    },
+    {
+      "step_id": "M2C-001",
+      "phase_id": "P0",
+      "title": "Record Mission 2 Convergence start in product homes and continuity log",
+      "target_files": [
+        "docs/products/builderos/PRODUCT_HOME.md",
+        "docs/CONTINUITY_LOG.md"
+      ],
+      "action_type": "edit_file",
+      "required_edits": [
+        "Update docs/products/builderos/PRODUCT_HOME.md Last Updated and add a Change Receipts row: date, what changed (new mission pack created), why (founder convergence directive), and the current git SHA.",
+        "Append a one-paragraph summary to docs/CONTINUITY_LOG.md with the mission ID, base commit, and open blockers."
+      ],
+      "exact_output_contract": {
+        "type": "product_home_sync",
+        "must_prove": [
+          "Last Updated is the current date.",
+          "Change Receipts table contains the new mission pack reference.",
+          "CONTINUITY_LOG contains a dated entry for FACTORY-BUILDEROS-CONVERGENCE-0001."
+        ]
+      },
+      "allowed_context_files": ["docs/products/builderos/PRODUCT_HOME.md"],
+      "forbidden_context_files": [],
+      "dependencies": ["M2C-000"],
+      "acceptance_test_ids": ["AT-M2C-001-1"],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_PRODUCT_HOME",
+      "sandbox_boundary": "docs/products/builderos/",
+      "authority_owner": "builderos",
+      "on_block": "BLOCKED_RETURN_TO_PRODUCT_HOME"
+    },
+    {
+      "step_id": "M2C-100",
+      "phase_id": "P1",
+      "title": "Create the Decision Record template and the Collaboration Spine artifact schema",
+      "target_files": [
+        "builderos-reboot/DECISIONS/DECISION_RECORD_TEMPLATE.md",
+        "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-CONVERGENCE-0001/DECISION-0001.md",
+        "docs/audits/builderos-mission-2/COLLABORATION_SPINE.md"
+      ],
+      "action_type": "create_file",
+      "required_edits": [
+        "Create builderos-reboot/DECISIONS/DECISION_RECORD_TEMPLATE.md with the canonical sections: Decision ID, Founder Intent, Alternatives Considered, Per-Role Reasoning (Chair, Architect, Sentry, Wisdom, CFO), Assumptions, Predictions, Success Criteria, Consensus, Why, How Reality Will Judge This, and Reality Judgment (updated after implementation).",
+        "Create a sample DECISION-0001.md for the Mission 2 Convergence mission itself, recording the decision to adopt the six design principles and the Collaboration Spine.",
+        "Create docs/audits/builderos-mission-2/COLLABORATION_SPINE.md documenting the pipeline: Mission -> Evidence -> Reviewer Comments -> Challenges -> Consensus -> Decision -> Receipt -> Next Mission."
+      ],
+      "exact_output_contract": {
+        "type": "file_exists_and_valid",
+        "must_prove": [
+          "DECISION_RECORD_TEMPLATE.md contains all required sections.",
+          "DECISION-0001.md exists and is a valid decision record.",
+          "COLLABORATION_SPINE.md explains the pipeline and names the canonical artifact locations."
+        ]
+      },
+      "allowed_context_files": [
+        "FOUNDER_PACKET.md",
+        "docs/constitution/AMENDMENT_BUILDEROS_CONVERGENCE.md"
+      ],
+      "forbidden_context_files": [],
+      "dependencies": ["M2C-000"],
+      "acceptance_test_ids": ["AT-M2C-100-1"],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_CHAIR",
+      "sandbox_boundary": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-CONVERGENCE-0001/",
+      "authority_owner": "Chair",
+      "on_block": "BLOCKED_RETURN_TO_CHAIR"
+    },
+    {
+      "step_id": "M2C-101",
+      "phase_id": "P1",
+      "title": "Implement decision-record verifier",
+      "target_files": [
+        "scripts/verify-decision-record.mjs",
+        "tests/verify-decision-record.test.js"
+      ],
+      "action_type": "create_file",
+      "required_edits": [
+        "scripts/verify-decision-record.mjs must accept a path, read a decision record .md, and validate that all required sections are present and non-empty.",
+        "Exit 0 with JSON { ok: true, missing: [] } if valid; exit 1 with JSON { ok: false, missing: [...] } if invalid.",
+        "tests/verify-decision-record.test.js must cover: a valid record, a record missing the Consensus section, and a record with empty Why section."
+      ],
+      "exact_output_contract": {
+        "type": "behavioral_contract",
+        "must_prove": [
+          "node scripts/verify-decision-record.mjs builderos-reboot/MISSIONS/FACTORY-BUILDEROS-CONVERGENCE-0001/DECISION-0001.md exits 0.",
+          "node --test tests/verify-decision-record.test.js exits 0."
+        ]
+      },
+      "allowed_context_files": [
+        "builderos-reboot/DECISIONS/DECISION_RECORD_TEMPLATE.md"
+      ],
+      "forbidden_context_files": [],
+      "dependencies": ["M2C-100"],
+      "acceptance_test_ids": ["AT-M2C-101-1", "AT-M2C-101-2"],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_CHAIR",
+      "sandbox_boundary": "scripts/",
+      "authority_owner": "builderos",
+      "on_block": "BLOCKED_RETURN_TO_CHAIR"
+    },
+    {
+      "step_id": "M2C-102",
+      "phase_id": "P1",
+      "title": "Implement the Collaboration Spine assembler",
+      "target_files": [
+        "scripts/collaboration-spine-assemble.mjs",
+        "builderos-reboot/DECISIONS/CONVERGENCE-0001.md"
+      ],
+      "action_type": "create_file",
+      "required_edits": [
+        "scripts/collaboration-spine-assemble.mjs takes a JSON input { mission, evidence[], reviewer_comments[], challenges[], consensus, decision, receipt, next_mission } and writes a DECISION-XXXX.md file using DECISION_RECORD_TEMPLATE.md.",
+        "Run it once to produce builderos-reboot/DECISIONS/CONVERGENCE-0001.md as the canonical decision record for this mission."
+      ],
+      "exact_output_contract": {
+        "type": "behavioral_contract",
+        "must_prove": [
+          "node scripts/collaboration-spine-assemble.mjs with a test fixture produces a valid DECISION-XXXX.md that passes scripts/verify-decision-record.mjs.",
+          "CONVERGENCE-0001.md is created and valid."
+        ]
+      },
+      "allowed_context_files": [
+        "builderos-reboot/DECISIONS/DECISION_RECORD_TEMPLATE.md",
+        "scripts/verify-decision-record.mjs"
+      ],
+      "forbidden_context_files": [],
+      "dependencies": ["M2C-100", "M2C-101"],
+      "acceptance_test_ids": ["AT-M2C-102-1"],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_CHAIR",
+      "sandbox_boundary": "scripts/",
+      "authority_owner": "builderos",
+      "on_block": "BLOCKED_RETURN_TO_CHAIR"
+    },
+    {
+      "step_id": "M2C-200",
+      "phase_id": "P2",
+      "title": "Create the blueprint-authority gate library",
+      "target_files": [
+        "scripts/lib/blueprint-authority-gate.mjs",
+        "tests/blueprint-authority-gate.test.js"
+      ],
+      "action_type": "create_file",
+      "required_edits": [
+        "scripts/lib/blueprint-authority-gate.mjs exposes evaluateBlueprintAuthority({ changedFiles, bpPriorityJson, decisionsDir, gapFillLedgerPath, logger }).",
+        "For each changed file in services/, routes/, middleware/, or factory-core/, the gate must determine whether the change is authorized by one of: (a) the active BP_PRIORITY mission blueprint, (b) an approved DECISION-XXXX.md whose target_files includes the path, (c) a GAP_FILL_LEDGER.json entry with a HAND-AUTHORED-JUSTIFICATION that covers the file and is under the line-count threshold, or (d) a HIST-owned file (e.g., legacy boot-domains paths) marked with _authority.hist in the file or product home.",
+        "Return { ok: true } if authorized; { ok: false, unauthorized: [...], warnings: [...] } if not. Do not throw."
+      ],
+      "exact_output_contract": {
+        "type": "behavioral_contract",
+        "must_prove": [
+          "A changed route file listed in the active mission blueprint returns ok: true.",
+          "A changed service file with no matching blueprint, decision, or GAP-FILL returns ok: false with the path in unauthorized.",
+          "A changed file covered by a valid GAP-FILL entry returns ok: true.",
+          "node --test tests/blueprint-authority-gate.test.js exits 0."
+        ]
+      },
+      "allowed_context_files": [
+        "builderos-reboot/BP_PRIORITY.json",
+        "docs/products/builderos/GAP_FILL_LEDGER.json",
+        "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-CONVERGENCE-0001/DECISION-0001.md"
+      ],
+      "forbidden_context_files": [],
+      "dependencies": ["M2C-100"],
+      "acceptance_test_ids": ["AT-M2C-200-1", "AT-M2C-200-2", "AT-M2C-200-3"],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_CHAIR",
+      "sandbox_boundary": "scripts/lib/",
+      "authority_owner": "Sentry",
+      "on_block": "BLOCKED_RETURN_TO_CHAIR"
+    },
+    {
+      "step_id": "M2C-201",
+      "phase_id": "P2",
+      "title": "Wire blueprint-authority gate into the commit path as detect-and-route",
+      "target_files": [
+        "routes/lifeos-council-builder-routes.js"
+      ],
+      "action_type": "edit_file",
+      "required_edits": [
+        "Inside commitOrMirrorFiles, after the existing security-invariants check and the new ai-security-review call, call evaluateBlueprintAuthority({ changedFiles: fileEntries.map(e => e.path), bpPriorityJson, decisionsDir: 'builderos-reboot/DECISIONS', gapFillLedgerPath: 'docs/products/builderos/GAP_FILL_LEDGER.json', logger: log }).",
+        "If unauthorized files are found, log a warning with the list and add a governance_warning to the response. Do NOT block the commit on this gate for Mission 2; promotion to BLOCK requires a true/false-positive track record.",
+        "Record the gate result in the capability ledger / model capability table."
+      ],
+      "exact_output_contract": {
+        "type": "behavioral_contract",
+        "must_prove": [
+          "A commit with only blueprint-authorized files produces no blueprint-authority warnings.",
+          "A commit with an unauthorized service file produces a governance_warning but the commit still succeeds.",
+          "node --check routes/lifeos-council-builder-routes.js passes."
+        ]
+      },
+      "allowed_context_files": [
+        "scripts/lib/blueprint-authority-gate.mjs",
+        "scripts/lib/security-invariants.mjs",
+        "scripts/ai-security-review.mjs"
+      ],
+      "forbidden_context_files": [],
+      "dependencies": ["M2C-200"],
+      "acceptance_test_ids": ["AT-M2C-201-1"],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_CHAIR",
+      "sandbox_boundary": "routes/",
+      "authority_owner": "builderos",
+      "on_block": "BLOCKED_RETURN_TO_CHAIR"
+    },
+    {
+      "step_id": "M2C-202",
+      "phase_id": "P2",
+      "title": "Wire blueprint-authority gate into the preflight path",
+      "target_files": [
+        "package.json",
+        "scripts/council-builder-preflight.mjs",
+        "scripts/verify-bp-priority-guardrails.mjs"
+      ],
+      "action_type": "edit_file",
+      "required_edits": [
+        "Add a non-blocking blueprint-authority check to builder:preflight that runs scripts/lib/blueprint-authority-gate.mjs against the working tree and prints unauthorized files as warnings.",
+        "The preflight must still exit 0 for warnings; only exit 1 if the gate itself crashes or an existing check fails."
+      ],
+      "exact_output_contract": {
+        "type": "behavioral_contract",
+        "must_prove": [
+          "npm run builder:preflight still exits 0 on the current repo state.",
+          "If a test service file is added without authority, the preflight output contains a clear warning naming the file and the required authority (BP, DECISION, or GAP-FILL)."
+        ]
+      },
+      "allowed_context_files": [
+        "scripts/council-builder-preflight.mjs",
+        "scripts/lib/blueprint-authority-gate.mjs"
+      ],
+      "forbidden_context_files": [],
+      "dependencies": ["M2C-201"],
+      "acceptance_test_ids": ["AT-M2C-202-1"],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_CHAIR",
+      "sandbox_boundary": "scripts/",
+      "authority_owner": "builderos",
+      "on_block": "BLOCKED_RETURN_TO_CHAIR"
+    },
+    {
+      "step_id": "M2C-300",
+      "phase_id": "P3",
+      "title": "Finalize the scheduler audit and ensure it is consistent with runtime",
+      "target_files": [
+        "docs/products/builderos/SCHEDULER_AUDIT.md"
+      ],
+      "action_type": "edit_file",
+      "required_edits": [
+        "Verify every start*/register* scheduler call in server-founder-runtime.js and startup/boot-domains.js is listed.",
+        "Ensure each row has Classification (founder_runtime / env_gated / full_runtime_only), Prerequisite/Env Gate, Recommendation, and Evidence.",
+        "Mark startBpPriorityScheduler as env_gated but not wired into founder runtime; flag this as a known gap unless P3 rewire is approved."
+      ],
+      "exact_output_contract": {
+        "type": "file_exists_and_valid",
+        "must_prove": [
+          "SCHEDULER_AUDIT.md contains at least one row for each unique scheduler start function in server-founder-runtime.js and boot-domains.js.",
+          "A programmatic check (e.g., a grep-based test) confirms the audit covers all start* functions."
+        ]
+      },
+      "allowed_context_files": [
+        "server-founder-runtime.js",
+        "startup/boot-domains.js",
+        "services/runtime-modes.js"
+      ],
+      "forbidden_context_files": [],
+      "dependencies": [],
+      "acceptance_test_ids": ["AT-M2C-300-1"],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_CHAIR",
+      "sandbox_boundary": "docs/products/builderos/",
+      "authority_owner": "Sentry",
+      "on_block": "BLOCKED_RETURN_TO_CHAIR"
+    },
+    {
+      "step_id": "M2C-301",
+      "phase_id": "P3",
+      "title": "Expose scheduler armed/disarmed status in the builder control-plane",
+      "target_files": [
+        "routes/lifeos-council-builder-routes.js",
+        "services/builderos-control-plane.js",
+        "tests/builderos-control-plane-schedulers.test.js"
+      ],
+      "action_type": "edit_file",
+      "required_edits": [
+        "Add a GET /api/v1/lifeos/builder/control-plane/schedulers endpoint (or extend /ready) that returns a JSON object of env-gated schedulers: { neverStopProductFactory: { armed: <bool>, env: 'BUILDEROS_NEVER_STOP' }, governedAutonomousShip: { armed: <bool>, env: 'GOVERNED_AUTONOMOUS_SHIP' }, memoryEmbeddingsBackfill: { armed: <bool>, env: 'OPENAI_API_KEY' }, bpPriority: { armed: <bool>, env: 'BUILDEROS_AUTOPILOT' } }.",
+        "'armed' means the env var is set and non-placeholder and the scheduler is registered in server-founder-runtime.js.",
+        "Add a test verifying the endpoint returns the expected shape and that missing keys report armed: false."
+      ],
+      "exact_output_contract": {
+        "type": "behavioral_contract",
+        "must_prove": [
+          "GET /api/v1/lifeos/builder/control-plane/schedulers returns 200 with the scheduler armed object.",
+          "node --test tests/builderos-control-plane-schedulers.test.js exits 0."
+        ]
+      },
+      "allowed_context_files": [
+        "server-founder-runtime.js",
+        "services/runtime-modes.js",
+        "docs/products/builderos/SCHEDULER_AUDIT.md"
+      ],
+      "forbidden_context_files": [],
+      "dependencies": ["M2C-300"],
+      "acceptance_test_ids": ["AT-M2C-301-1"],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_CHAIR",
+      "sandbox_boundary": "routes/",
+      "authority_owner": "builderos",
+      "on_block": "BLOCKED_RETURN_TO_CHAIR"
+    },
+    {
+      "step_id": "M2C-302",
+      "phase_id": "P3",
+      "title": "Rewire BP priority scheduler into founder runtime if approved",
+      "target_files": [
+        "server-founder-runtime.js",
+        "services/bp-priority-scheduler.js",
+        "docs/products/builderos/SCHEDULER_AUDIT.md"
+      ],
+      "action_type": "edit_file",
+      "required_edits": [
+        "If the Decision Record for this step approves, import and call startBpPriorityScheduler in server-founder-runtime.js in the same try/catch pattern as startNeverStopProductFactoryScheduler.",
+        "Ensure it is gated by BUILDEROS_AUTOPILOT (or equivalent) and reports armed/disarmed in the new control-plane endpoint.",
+        "If not approved, update SCHEDULER_AUDIT.md with the explicit decision that BP priority scheduler remains full_runtime_only and why."
+      ],
+      "exact_output_contract": {
+        "type": "behavioral_contract",
+        "must_prove": [
+          "After approval, server-founder-runtime.js calls startBpPriorityScheduler and the scheduler status endpoint reflects it.",
+          "node --check server-founder-runtime.js passes."
+        ]
+      },
+      "allowed_context_files": [
+        "server-founder-runtime.js",
+        "services/bp-priority-scheduler.js",
+        "builderos-reboot/BP_PRIORITY.json"
+      ],
+      "forbidden_context_files": [],
+      "dependencies": ["M2C-301"],
+      "acceptance_test_ids": ["AT-M2C-302-1"],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_CHAIR",
+      "sandbox_boundary": "services/",
+      "authority_owner": "Chair",
+      "on_block": "BLOCKED_RETURN_TO_CHAIR"
+    },
+    {
+      "step_id": "M2C-400",
+      "phase_id": "P4",
+      "title": "Configure and verify a real email provider for SMOS",
+      "target_files": [
+        "services/env-registry-map.js",
+        "core/notification-service.js",
+        "products/receipts/SMOS_REAL_CUSTOMER_READINESS.json"
+      ],
+      "action_type": "update_receipt",
+      "required_edits": [
+        "Founder action: set EMAIL_PROVIDER and the corresponding key (e.g., RESEND_API_KEY for Resend, or SMTP_* for SMTP) plus EMAIL_FROM in Railway via POST /api/v1/railway/env/bulk or the Railway dashboard.",
+        "After the key is set, send a test email from the production container using core/notification-service.js and confirm delivery to a real inbox.",
+        "Update services/env-registry-map.js to mark the chosen provider key as SET and the others as not needed.",
+        "Update products/receipts/SMOS_REAL_CUSTOMER_READINESS.json with email_provider_verified: true, the provider name, the verified sending domain, and the test email timestamp."
+      ],
+      "exact_output_contract": {
+        "type": "founder_blocked_until_credentials",
+        "must_prove": [
+          "A real test email is delivered from the production container.",
+          "SMOS_REAL_CUSTOMER_READINESS.json reflects the verified provider."
+        ]
+      },
+      "allowed_context_files": [
+        "services/env-registry-map.js",
+        "core/notification-service.js",
+        "public/overlay/marketing/*.html"
+      ],
+      "forbidden_context_files": [],
+      "dependencies": [],
+      "acceptance_test_ids": ["AT-M2C-400-1"],
+      "blocked_return_type_on_failure": "FOUNDER_ACTION_REQUIRED",
+      "sandbox_boundary": "Railway env",
+      "authority_owner": "Adam",
+      "on_block": "Record exact missing env vars and provider setup steps in the open-questions section of the handoff."
+    },
+    {
+      "step_id": "M2C-401",
+      "phase_id": "P4",
+      "title": "Complete one real SMOS $49 charge end-to-end",
+      "target_files": [
+        "products/receipts/SMOS_REAL_CUSTOMER_READINESS.json",
+        "routes/marketing-session-export-routes.js",
+        "routes/marketing-session-routes.js"
+      ],
+      "action_type": "run_acceptance",
+      "required_edits": [
+        "Founder action: use a real debit/credit card to complete the Stripe Checkout session created by POST /api/v1/marketing/pack/checkout.",
+        "After payment, call GET /api/v1/marketing/sessions/:id/export and confirm it returns the paid content pack (not 402 payment_required).",
+        "Confirm the marketing_pack_checkouts row for the session has status paid and the Stripe payment_intent is captured.",
+        "Update products/receipts/SMOS_REAL_CUSTOMER_READINESS.json with live_charge_completed: true, charge_id, and timestamp."
+      ],
+      "exact_output_contract": {
+        "type": "founder_blocked_until_card",
+        "must_prove": [
+          "A real $49 charge succeeds in Stripe live mode.",
+          "GET /api/v1/marketing/sessions/:id/export returns the content pack after payment.",
+          "SMOS_REAL_CUSTOMER_READINESS.json reflects live_charge_completed: true."
+        ]
+      },
+      "allowed_context_files": [
+        "services/smos-pack-checkout.js",
+        "routes/smos-pack-checkout-routes.js",
+        "routes/marketing-session-export-routes.js"
+      ],
+      "forbidden_context_files": [],
+      "dependencies": ["M2C-400"],
+      "acceptance_test_ids": ["AT-M2C-401-1"],
+      "blocked_return_type_on_failure": "FOUNDER_ACTION_REQUIRED",
+      "sandbox_boundary": "Stripe live / real card",
+      "authority_owner": "Adam",
+      "on_block": "Record the exact blocker (card, Stripe live mode, export entitlement bug) in the open-questions section."
+    },
+    {
+      "step_id": "M2C-402",
+      "phase_id": "P4",
+      "title": "Run SENTRY Layer A + B for the SMOS revenue loop",
+      "target_files": [
+        "scripts/sentry-prealpha-gate.mjs",
+        "products/receipts/SENTRY_MARKETINGOS_LAYER_A.json",
+        "products/receipts/SENTRY_MARKETINGOS_LAYER_B.json"
+      ],
+      "action_type": "run_acceptance",
+      "required_edits": [
+        "Run node scripts/sentry-prealpha-gate.mjs marketingos (Layer A) and confirm 0 findings.",
+        "Run the Layer B browser walkthrough: /marketing -> signup -> create session -> coach -> export -> payment prompt -> complete payment -> content delivered. Screenshot each step.",
+        "If findings exist, each must carry a proposed_solution before the mission claims the revenue loop closed."
+      ],
+      "exact_output_contract": {
+        "type": "sentry_pass",
+        "must_prove": [
+          "Layer A receipts pass 0 findings.",
+          "Layer B walkthrough screenshots and UX critique are recorded in products/receipts/SENTRY_MARKETINGOS_LAYER_B.json.",
+          "No Layer B finding lacks a proposed_solution."
+        ]
+      },
+      "allowed_context_files": [
+        "public/overlay/lifeos-app.html",
+        "public/overlay/marketing/*.html",
+        "routes/marketing-session-ui-routes.js"
+      ],
+      "forbidden_context_files": [],
+      "dependencies": ["M2C-401"],
+      "acceptance_test_ids": ["AT-M2C-402-1"],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_SENTRY",
+      "sandbox_boundary": "SENTRY",
+      "authority_owner": "Sentry",
+      "on_block": "BLOCKED_RETURN_TO_SENTRY"
+    },
+    {
+      "step_id": "M2C-500",
+      "phase_id": "P5",
+      "title": "Implement decision-aware wisdom drift check",
+      "target_files": [
+        "scripts/wisdom-decision-drift.mjs",
+        "tests/wisdom-decision-drift.test.js",
+        "products/receipts/DECISION_DRIFT_CONVERGENCE.json"
+      ],
+      "action_type": "create_file",
+      "required_edits": [
+        "scripts/wisdom-decision-drift.mjs reads all builderos-reboot/DECISIONS/DECISION-*.md files, extracts the Predictions and Success Criteria sections, and compares them to the corresponding OBJECTIVE_VERDICT.json or products/receipts/* ACCEPTANCE receipt.",
+        "For each decision, produce a DECISION_DRIFT_<id>.json receipt with { decision_id, prediction_status, assumptions_proved_true[], assumptions_proved_false[], recommendations_for_future_blueprints[] }.",
+        "If reality contradicts a prediction, the script writes a governance warning and proposes a blueprint update.",
+        "tests/wisdom-decision-drift.test.js uses a fixture decision and receipt to verify the comparison logic."
+      ],
+      "exact_output_contract": {
+        "type": "behavioral_contract",
+        "must_prove": [
+          "node scripts/wisdom-decision-drift.mjs runs against the sample DECISION-0001.md and produces products/receipts/DECISION_DRIFT_CONVERGENCE.json.",
+          "node --test tests/wisdom-decision-drift.test.js exits 0."
+        ]
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-CONVERGENCE-0001/OBJECTIVE_VERDICT.json",
+        "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-CONVERGENCE-0001/DECISION-0001.md",
+        "docs/ADF_PREDICTION_LEDGER_V1.md"
+      ],
+      "forbidden_context_files": [],
+      "dependencies": ["M2C-100"],
+      "acceptance_test_ids": ["AT-M2C-500-1"],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_WISDOM",
+      "sandbox_boundary": "scripts/",
+      "authority_owner": "Wisdom",
+      "on_block": "BLOCKED_RETURN_TO_WISDOM"
+    },
+    {
+      "step_id": "M2C-600",
+      "phase_id": "P6",
+      "title": "Produce final Mission 2 Convergence handoff artifact",
+      "target_files": [
+        "docs/audits/builderos-mission-2/MISSION_2_CONVERGENCE_HANDOFF.md",
+        "scripts/verify-mission-2-convergence-handoff.mjs",
+        "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-CONVERGENCE-0001/OBJECTIVE_VERDICT.json"
+      ],
+      "action_type": "create_file",
+      "required_edits": [
+        "Create docs/audits/builderos-mission-2/MISSION_2_CONVERGENCE_HANDOFF.md with: Package Status table, What Was True at Base Commit, Decisions Made, Unresolved Questions, Authority State, How the Next Agent Should Continue, Verification Commands, and Mission 3 Prep (what is now easier).",
+        "Create scripts/verify-mission-2-convergence-handoff.mjs that checks the handoff base commit against origin/main and required sections.",
+        "Create OBJECTIVE_VERDICT.json with the final verdict and metrics: number of founder interventions required, number of manual agent handoffs eliminated, time to verified implementation, preflight pass/fail counts, and a Mission 3 scoping note."
+      ],
+      "exact_output_contract": {
+        "type": "file_exists_and_valid",
+        "must_prove": [
+          "HANDOFF.md contains all required sections.",
+          "verify-mission-2-convergence-handoff.mjs runs and exits 0 when origin/main matches the base commit.",
+          "OBJECTIVE_VERDICT.json contains quantitative Mission 2 success metrics and a Mission 3 prep note."
+        ]
+      },
+      "allowed_context_files": [
+        "docs/audits/builderos-mission-2/MISSION_2_0_HANDOFF.md",
+        "scripts/verify-mission-2-handoff.mjs"
+      ],
+      "forbidden_context_files": [],
+      "dependencies": [
+        "M2C-000", "M2C-100", "M2C-200", "M2C-300", "M2C-400", "M2C-500"
+      ],
+      "acceptance_test_ids": ["AT-M2C-600-1"],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_CHAIR",
+      "sandbox_boundary": "docs/audits/builderos-mission-2/",
+      "authority_owner": "Chair",
+      "on_block": "BLOCKED_RETURN_TO_CHAIR"
+    },
+    {
+      "step_id": "M2C-601",
+      "phase_id": "P6",
+      "title": "Register the completed mission in BP_PRIORITY and prepare Mission 3 note",
+      "target_files": [
+        "builderos-reboot/BP_PRIORITY.json",
+        "docs/products/builderos/PRODUCT_HOME.md",
+        "docs/CONTINUITY_LOG.md"
+      ],
+      "action_type": "edit_file",
+      "required_edits": [
+        "Add FACTORY-BUILDEROS-CONVERGENCE-0001 to builderos-reboot/BP_PRIORITY.json as a completed item with receipt_verdict PASS, technical_pass_at, git_sha, and production_base.",
+        "Update docs/products/builderos/PRODUCT_HOME.md Change Receipts with the mission completion summary and the acceptance command used.",
+        "Append to docs/CONTINUITY_LOG.md the final one-paragraph summary and the Mission 3 scoping note."
+      ],
+      "exact_output_contract": {
+        "type": "bp_priority_sync",
+        "must_prove": [
+          "BP_PRIORITY.json contains the new item with correct product_id, blueprint_path, receipt_path, and PASS verdict.",
+          "npm run lifeos:bp-priority:verify exits 0."
+        ]
+      },
+      "allowed_context_files": [
+        "builderos-reboot/BP_PRIORITY.json",
+        "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-CONVERGENCE-0001/OBJECTIVE_VERDICT.json"
+      ],
+      "forbidden_context_files": [],
+      "dependencies": ["M2C-600"],
+      "acceptance_test_ids": ["AT-M2C-601-1"],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BP_PRIORITY",
+      "sandbox_boundary": "builderos-reboot/",
+      "authority_owner": "Machine",
+      "on_block": "BLOCKED_RETURN_TO_BP_PRIORITY"
+    }
+  ]
+}

@@ -1,0 +1,107 @@
+{
+  "mission_id": "FACTORY-BUILDEROS-CONVERGENCE-0001",
+  "tests": [
+    {
+      "id": "AT-M2C-000-1",
+      "name": "Constitutional amendment exists and contains design principles",
+      "command": "node scripts/verify-amendment-convergence.mjs || node --check docs/constitution/AMENDMENT_BUILDEROS_CONVERGENCE.md",
+      "phase": "P0"
+    },
+    {
+      "id": "AT-M2C-001-1",
+      "name": "Product home and continuity log updated",
+      "command": "node scripts/verify-product-home-sync.mjs docs/products/builderos/PRODUCT_HOME.md",
+      "phase": "P0"
+    },
+    {
+      "id": "AT-M2C-100-1",
+      "name": "Decision record template and sample are valid",
+      "command": "node scripts/verify-decision-record.mjs builderos-reboot/MISSIONS/FACTORY-BUILDEROS-CONVERGENCE-0001/DECISION-0001.md",
+      "phase": "P1"
+    },
+    {
+      "id": "AT-M2C-101-1",
+      "name": "Decision record verifier test suite passes",
+      "command": "node --test tests/verify-decision-record.test.js",
+      "phase": "P1"
+    },
+    {
+      "id": "AT-M2C-102-1",
+      "name": "Collaboration spine assembler produces valid decision record",
+      "command": "node scripts/verify-decision-record.mjs builderos-reboot/DECISIONS/CONVERGENCE-0001.md",
+      "phase": "P1"
+    },
+    {
+      "id": "AT-M2C-200-1",
+      "name": "Blueprint authority gate authorizes approved files",
+      "command": "node --test tests/blueprint-authority-gate.test.js",
+      "phase": "P2"
+    },
+    {
+      "id": "AT-M2C-201-1",
+      "name": "Commit path calls blueprint authority gate and logs warnings",
+      "command": "node --check routes/lifeos-council-builder-routes.js && npm run builder:preflight",
+      "phase": "P2"
+    },
+    {
+      "id": "AT-M2C-202-1",
+      "name": "Preflight runs blueprint authority check as non-blocking warning",
+      "command": "npm run builder:preflight",
+      "phase": "P2"
+    },
+    {
+      "id": "AT-M2C-300-1",
+      "name": "Scheduler audit covers all start functions",
+      "command": "node --test tests/scheduler-audit-coverage.test.js",
+      "phase": "P3"
+    },
+    {
+      "id": "AT-M2C-301-1",
+      "name": "Control-plane schedulers endpoint returns armed status",
+      "command": "node --test tests/builderos-control-plane-schedulers.test.js",
+      "phase": "P3"
+    },
+    {
+      "id": "AT-M2C-302-1",
+      "name": "BP priority scheduler wired into founder runtime if approved",
+      "command": "node --check server-founder-runtime.js",
+      "phase": "P3"
+    },
+    {
+      "id": "AT-M2C-400-1",
+      "name": "Email provider verified in production",
+      "command": "node scripts/verify-smos-email-provider.mjs",
+      "phase": "P4"
+    },
+    {
+      "id": "AT-M2C-401-1",
+      "name": "Real SMOS $49 charge completes and entitlement works",
+      "command": "node scripts/verify-smos-live-charge.mjs",
+      "phase": "P4"
+    },
+    {
+      "id": "AT-M2C-402-1",
+      "name": "SENTRY MarketingOS Layer A + B pass 0 findings",
+      "command": "node scripts/sentry-prealpha-gate.mjs marketingos",
+      "phase": "P4"
+    },
+    {
+      "id": "AT-M2C-500-1",
+      "name": "Wisdom decision drift produces receipt",
+      "command": "node scripts/wisdom-decision-drift.mjs && node --test tests/wisdom-decision-drift.test.js",
+      "phase": "P5"
+    },
+    {
+      "id": "AT-M2C-600-1",
+      "name": "Mission 2 Convergence handoff is valid and complete",
+      "command": "node scripts/verify-mission-2-convergence-handoff.mjs",
+      "phase": "P6"
+    },
+    {
+      "id": "AT-M2C-601-1",
+      "name": "BP_PRIORITY.json is consistent",
+      "command": "npm run lifeos:bp-priority:verify",
+      "phase": "P6"
+    }
+  ]
+}
