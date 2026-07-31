@@ -160,6 +160,7 @@
     "sentry:smoke": "node scripts/sentry-smoke.mjs",
     "path-to-10:status": "node scripts/path-to-10-status.mjs",
     "path-to-ten:acceptance": "node scripts/verify-path-to-ten-acceptance.mjs",
+    "master-a-to-z:acceptance": "node scripts/master-a-to-z-acceptance.mjs",
     "lifeos:user-auth:v1-acceptance": "node scripts/run-lifeos-user-auth-v1-acceptance.mjs",
     "smos:session:acceptance": "node scripts/run-socialmediaos-session-acceptance.mjs",
     "lifere:sales-coaching:v1-acceptance": "node scripts/run-lifere-sales-coaching-acceptance.mjs",

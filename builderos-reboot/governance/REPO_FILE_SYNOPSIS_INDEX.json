@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T20:39:25.128Z",
+  "generated_at": "2026-07-31T22:30:38.143Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12610,
+  "file_count": 12615,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21307,9 +21307,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 26369,
-      "mtime": "2026-07-31T20:39:25.128Z",
-      "indexed_at": "2026-07-31T20:39:25.128Z",
+      "bytes": 27779,
+      "mtime": "2026-07-31T22:30:38.143Z",
+      "indexed_at": "2026-07-31T22:30:38.143Z",
       "synopsis_index_only": true
     },
     {
@@ -23487,6 +23487,36 @@
       "mtime": "2026-07-03T00:18:28.978Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-MASTER-A-TO-Z-0001/BLUEPRINT.json",
+      "synopsis": "BuilderOS artifact — BLUEPRINT.",
+      "bytes": 12464,
+      "mtime": "2026-07-31T22:30:38.143Z",
+      "indexed_at": "2026-07-31T22:30:38.143Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-MASTER-A-TO-Z-0001/FOUNDER_PACKET.md",
+      "synopsis": "Founder packet for FACTORY-MASTER-A-TO-Z-0001",
+      "bytes": 2260,
+      "mtime": "2026-07-31T22:30:38.143Z",
+      "indexed_at": "2026-07-31T22:30:38.143Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-MASTER-A-TO-Z-0001/OBJECTIVE_VERDICT.json",
+      "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
+      "bytes": 1072,
+      "mtime": "2026-07-31T22:30:38.143Z",
+      "indexed_at": "2026-07-31T22:30:38.143Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-MASTER-A-TO-Z-0001/TEN_OUT_OF_TEN_DEFINITION.md",
+      "synopsis": "10/10 definition for BuilderOS + LifeOS Cognitive Spine, benchmarked against every comparable autonomous system.",
+      "bytes": 9771,
+      "mtime": "2026-07-31T22:30:38.143Z",
+      "indexed_at": "2026-07-31T22:30:38.143Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/BLUEPRINT.json",
@@ -38776,9 +38806,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 73603,
-      "mtime": "2026-07-31T20:38:47.164Z",
-      "indexed_at": "2026-07-31T20:38:47.164Z"
+      "bytes": 74424,
+      "mtime": "2026-07-31T22:30:38.143Z",
+      "indexed_at": "2026-07-31T22:30:38.143Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40989,9 +41019,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 356754,
-      "mtime": "2026-07-31T20:38:47.164Z",
-      "indexed_at": "2026-07-31T20:38:47.164Z"
+      "bytes": 357599,
+      "mtime": "2026-07-31T22:30:38.143Z",
+      "indexed_at": "2026-07-31T22:30:38.143Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -64871,9 +64901,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 36034,
-      "mtime": "2026-07-31T18:43:21.917Z",
-      "indexed_at": "2026-07-31T18:43:21.917Z",
+      "bytes": 36111,
+      "mtime": "2026-07-31T22:30:38.143Z",
+      "indexed_at": "2026-07-31T22:30:38.143Z",
       "synopsis_index_only": true
     },
     {
@@ -65862,8 +65892,8 @@
       "path": "products/receipts/POINT_B_DNA_VERIFY.json",
       "synopsis": "Product receipt — POINT B DNA VERIFY.",
       "bytes": 318,
-      "mtime": "2026-07-31T12:13:02.420Z",
-      "indexed_at": "2026-07-31T12:13:02.420Z",
+      "mtime": "2026-07-31T22:30:38.143Z",
+      "indexed_at": "2026-07-31T22:30:38.143Z",
       "synopsis_index_only": true
     },
     {
@@ -65877,9 +65907,9 @@
     {
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
-      "bytes": 24381,
-      "mtime": "2026-07-31T12:13:02.420Z",
-      "indexed_at": "2026-07-31T12:13:02.420Z",
+      "bytes": 24616,
+      "mtime": "2026-07-31T22:30:38.143Z",
+      "indexed_at": "2026-07-31T22:30:38.143Z",
       "synopsis_index_only": true
     },
     {
@@ -66046,16 +66076,16 @@
       "path": "products/receipts/TRUTH_ENFORCEMENT_AUDIT.json",
       "synopsis": "Product receipt — TRUTH ENFORCEMENT AUDIT.",
       "bytes": 833,
-      "mtime": "2026-07-31T12:13:02.420Z",
-      "indexed_at": "2026-07-31T12:13:02.420Z",
+      "mtime": "2026-07-31T22:30:38.143Z",
+      "indexed_at": "2026-07-31T22:30:38.143Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/TRUTH_LOCKDOWN_VERIFY.json",
       "synopsis": "Product receipt — TRUTH LOCKDOWN VERIFY.",
       "bytes": 1318,
-      "mtime": "2026-07-31T12:13:02.420Z",
-      "indexed_at": "2026-07-31T12:13:02.420Z",
+      "mtime": "2026-07-31T22:30:38.143Z",
+      "indexed_at": "2026-07-31T22:30:38.143Z",
       "synopsis_index_only": true
     },
     {
@@ -66086,8 +66116,8 @@
       "path": "products/receipts/WISDOM_TRUTH_AUDIT.json",
       "synopsis": "Product receipt — WISDOM TRUTH AUDIT.",
       "bytes": 1001,
-      "mtime": "2026-07-31T12:13:02.420Z",
-      "indexed_at": "2026-07-31T12:13:02.420Z",
+      "mtime": "2026-07-31T22:30:38.143Z",
+      "indexed_at": "2026-07-31T22:30:38.143Z",
       "synopsis_index_only": true
     },
     {
@@ -73476,6 +73506,16 @@
       "bytes": 4377,
       "mtime": "2026-07-19T17:42:53.575Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/master-a-to-z-acceptance.mjs",
+      "synopsis": "FACTORY-MASTER-A-TO-Z-0001 acceptance smoke test.",
+      "bytes": 3610,
+      "mtime": "2026-07-31T22:30:38.143Z",
+      "indexed_at": "2026-07-31T22:30:38.143Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

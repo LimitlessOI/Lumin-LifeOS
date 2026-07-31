@@ -1,8 +1,8 @@
 {
   "schema": "receipt_truth_validation_v1",
-  "at": "2026-07-31T12:12:26.123Z",
+  "at": "2026-07-31T22:25:55.634Z",
   "ok": true,
-  "checked": 131,
+  "checked": 132,
   "failures": [],
   "known_debt": [
     "MACHINE_ALPHA_WALKTHROUGH.json:ACCEPTANCE_PASS_WITHOUT_SHA_OR_BASE",
@@ -24,6 +24,7 @@
     "LUMIN_CHAIR_DIRECT_CONNECTION_PARITY.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
     "MACHINE_ALPHA_WALKTHROUGH.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
     "PATH_TO_10_T05_FOUNDER_MEMORY.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
+    "PATH_TO_TEN_ACCEPTANCE.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
     "SOCIALMEDIAOS_SESSION_MVP_ACCEPTANCE.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
     "VOICE_RAIL_V1_ACCEPTANCE.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER"
   ],
@@ -744,6 +745,13 @@
     },
     {
       "file": "PATH_TO_10_T05_FOUNDER_MEMORY.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": true,
+      "proposed_solutions": []
+    },
+    {
+      "file": "PATH_TO_TEN_ACCEPTANCE.json",
       "ok": true,
       "violations": [],
       "claims_pass": true,
