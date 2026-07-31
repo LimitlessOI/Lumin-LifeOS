@@ -206,13 +206,13 @@
     },
     {
       "id": "5",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/memory-ci-evidence.mjs",
       "task": "record CI evidence",
       "spec": "Runs npm run memory:ci-evidence to record node --check results as fact_evidence.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "recordCiEvidence"
       ],
@@ -221,13 +221,16 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-15T19:31:45.162Z",
-      "commit_sha": "61ce02864291ec9ad0314794b7edb11f6fad8abe",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "5",
       "mission_id": "PRODUCT-memory-intelligence",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:recordCiEvidence; assertion_threw; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.671Z"
+      "last_error": "codegen_authoring_failed: codegen_empty: openai_builder_mini: HTTP 429: {\n    \"error\": {\n        \"message\": \"You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organiza",
+      "reaudit_reset_at": "2026-07-30T18:55:06.671Z",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-31T05:40:32.775Z"
     },
     {
       "id": "6",
