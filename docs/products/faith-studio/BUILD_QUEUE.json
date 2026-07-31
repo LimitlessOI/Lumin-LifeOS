@@ -1967,7 +1967,7 @@
         }
       },
       "failure_signature": "STEP_STATUS_FORBIDDEN",
-      "same_signature_count": 1,
+      "same_signature_count": 2,
       "escalation_class": "same_signature_repeat"
     },
     {
@@ -2062,7 +2062,7 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-31T09:39:37.498Z",
+      "shipped_at": "2026-07-31T10:16:24.996Z",
       "commit_sha": null,
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "08",
@@ -2091,10 +2091,10 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-07-31T09:39:37.498Z",
-        "shipped_at": "2026-07-31T09:39:37.498Z",
+        "sealed_at": "2026-07-31T10:16:24.996Z",
+        "shipped_at": "2026-07-31T10:16:24.996Z",
         "commit_sha": null,
-        "content_sha256": "87ce4d890647dd24cadd89e25aedcb229dd6e31516d2cc2cb80cbf4502f5a3bc",
+        "content_sha256": "e1ed46e93e6caf1f761f6e560e2ed81e3cc15173fa4c72ad9be33ed2285c3d25",
         "target_file": "services/reviewModerationFlowDetail.js",
         "reverse": {
           "mode": "delete_file",
@@ -2108,7 +2108,7 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/faith-studio/twins/steps/08.exact",
-          "content_sha256": "87ce4d890647dd24cadd89e25aedcb229dd6e31516d2cc2cb80cbf4502f5a3bc"
+          "content_sha256": "e1ed46e93e6caf1f761f6e560e2ed81e3cc15173fa4c72ad9be33ed2285c3d25"
         }
       },
       "failure_signature": "STEP_STATUS_FORBIDDEN",
@@ -2181,14 +2181,14 @@
       "built_sha": null,
       "proof": null,
       "last_attempt_at": null,
-      "last_attempt": null,
       "revive_count": 1,
       "revived_at": "2026-07-31T10:16:04.570Z",
-      "no_op": null,
+      "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
+      "no_op": null,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
@@ -2228,14 +2228,14 @@
       "built_sha": null,
       "proof": null,
       "last_attempt_at": null,
-      "last_attempt": null,
       "revive_count": 1,
       "revived_at": "2026-07-31T10:16:04.570Z",
-      "no_op": null,
+      "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
+      "no_op": null,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
