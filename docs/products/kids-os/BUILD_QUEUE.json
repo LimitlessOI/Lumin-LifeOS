@@ -527,13 +527,13 @@
     },
     {
       "id": "step8",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/coppaReview.js",
       "task": "Summarize COPPA review",
       "spec": "Document results of the COPPA compliance review for the kids-os platform.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "getCoppaReview"
       ],
@@ -552,12 +552,12 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-31T01:17:10.921Z",
-      "commit_sha": "af0e282e81ad6540cdd99a2eddf28335f2e55d27",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step8",
       "mission_id": "PRODUCT-kids-os",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:getCoppaReview; assertion_threw; assertion_threw",
+      "last_error": "artifact_missing_after_ship: artifact_proof_failed: /** COPPA compliance review results */",
       "reaudit_reset_at": "2026-07-30T18:55:06.433Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
@@ -581,7 +581,10 @@
           "content_source_path": "docs/products/kids-os/twins/steps/step8.exact",
           "content_sha256": "1c081da98831ae3329a24c123ceb75e6ef118c7a1a36f420c512c9c8e0382d8a"
         }
-      }
+      },
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-31T01:17:16.730Z"
     },
     {
       "id": "step9",
