@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T02:43:47.388Z",
+  "generated_at": "2026-07-31T02:48:22.946Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12371,
+  "file_count": 12372,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -69397,6 +69397,13 @@
       "ssot": [
         "docs/products/limitlessos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "routes/privateModeExtension.js",
+      "synopsis": "Private mode extension router.",
+      "bytes": 2106,
+      "mtime": "2026-07-31T02:48:22.946Z",
+      "indexed_at": "2026-07-31T02:48:22.946Z"
     },
     {
       "path": "routes/progress-report-routes.js",

@@ -860,7 +860,7 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-16T02:18:59.038Z",
+      "shipped_at": "2026-07-31T02:48:20.590Z",
       "commit_sha": null,
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "8",
@@ -882,7 +882,30 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/faith-studio/twins/steps/8.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-31T02:48:20.590Z",
+        "shipped_at": "2026-07-31T02:48:20.590Z",
+        "commit_sha": null,
+        "content_sha256": "5c87509f4eedc8e1c2c6015fb561865992b21f20f54e1e69e2aad65cf12a2a4b",
+        "target_file": "routes/privateModeExtension.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "routes/privateModeExtension.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/faith-studio/twins/steps/8.exact",
+          "content_sha256": "5c87509f4eedc8e1c2c6015fb561865992b21f20f54e1e69e2aad65cf12a2a4b"
+        }
+      }
     },
     {
       "id": "9",
