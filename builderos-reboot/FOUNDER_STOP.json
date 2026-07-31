@@ -1,6 +1,6 @@
 {
   "stop": true,
-  "reason": "PATH-TO-TEN audit and enforcement-spine blueprint: the never-stop autonomous loop is shipping ungated services/ and routes/ files that bypass the file-placement and blueprint-authority gates. Halt all autonomous construction until the A-to-Z blueprint is approved and the enforcement spine is complete.",
-  "created_at": "2026-07-31T10:55:00.000Z",
-  "expects_resume_when": "FACTORY-PATH-TO-TEN-0001 blueprint approved, never-stop hard-wired through fail-closed file-placement + blueprint-authority gates, and migration preflight green."
+  "reason": "PATH-TO-TEN is at 7/10. All non-credential steps through M2PT-010 are shipped and deployed. The remaining M2PT-011/012/013/014 steps require real SMOS revenue, which is blocked on missing Railway env vars: STRIPE_SECRET_KEY, STRIPE_PUBLISHABLE_KEY, and EMAIL_FROM (with a valid sender for the configured POSTMARK_SERVER_TOKEN). The never-stop loop is paused so it does not burn tokens retrying an impossible revenue step.",
+  "updated_at": "2026-07-31T22:00:00.000Z",
+  "expects_resume_when": "STRIPE_SECRET_KEY, STRIPE_PUBLISHABLE_KEY, and EMAIL_FROM are set in Railway and scripts/verify-smos-live-charge.mjs + scripts/verify-smos-email-provider.mjs both report READY."
 }
