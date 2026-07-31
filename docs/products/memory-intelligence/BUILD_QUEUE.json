@@ -606,25 +606,28 @@
     },
     {
       "id": "memory-intelligence-2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/memory-seed-epistemic.mjs",
       "task": "seed epistemic facts",
       "spec": "Run the SSH command to seed epistemic_facts with data from SSOT.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "seedEpistemicFacts"
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-16T04:22:49.564Z",
-      "commit_sha": "7f05db9017cff9bc25bf8f443df25f771511cd88",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-intelligence-2",
       "mission_id": "PRODUCT-memory-intelligence",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:seedEpistemicFacts; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.671Z"
+      "last_error": "governed_ship_failed",
+      "reaudit_reset_at": "2026-07-30T18:55:06.671Z",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-31T06:51:16.864Z"
     },
     {
       "id": "memory-intelligence-3",
