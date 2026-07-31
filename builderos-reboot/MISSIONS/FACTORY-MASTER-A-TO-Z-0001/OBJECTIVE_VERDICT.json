@@ -6,7 +6,7 @@
   "verdict": "TECHNICAL_PASS",
   "receipt": "products/receipts/MASTER_A_TO_Z_ACCEPTANCE.json",
   "production_base": "https://lumin-web-production-e3a9.up.railway.app",
-  "git_sha": "2d6080252e0b524e2c73eab878343e85779d5c06",
+  "git_sha": "4b645d9f9cd36aabaa3030202973b50baaad0dea",
   "tests_passed": [
     "mission_pack_exists",
     "bp_sync_mandatory"

@@ -13,7 +13,7 @@
       "phase": "0",
       "status": "complete",
       "completed_at": "2026-07-31T22:58:10.798Z",
-      "git_sha": "2d6080252e0b524e2c73eab878343e85779d5c06",
+      "git_sha": "4b645d9f9cd36aabaa3030202973b50baaad0dea",
       "artifact": "builderos-reboot/MISSIONS/FACTORY-MASTER-A-TO-Z-0001/TEN_OUT_OF_TEN_DEFINITION.md",
       "acceptance": "Document exists, cites real comparable systems and benchmarks, and defines measurable 10/10 ratification gate.",
       "verify_command": "test -f builderos-reboot/MISSIONS/FACTORY-MASTER-A-TO-Z-0001/TEN_OUT_OF_TEN_DEFINITION.md && grep -q 'SWE-bench Verified' builderos-reboot/MISSIONS/FACTORY-MASTER-A-TO-Z-0001/TEN_OUT_OF_TEN_DEFINITION.md",
@@ -25,7 +25,7 @@
       "phase": "0",
       "status": "complete",
       "completed_at": "2026-07-31T22:58:10.798Z",
-      "git_sha": "2d6080252e0b524e2c73eab878343e85779d5c06",
+      "git_sha": "4b645d9f9cd36aabaa3030202973b50baaad0dea",
       "artifact": "builderos-reboot/MISSIONS/FACTORY-MASTER-A-TO-Z-0001/PHASE_0_AUDIT.md",
       "acceptance": "Audit classifies every component as EXISTS / EXISTS BUT UNWIRED / PARTIAL / DUPLICATE / OBSOLETE / MISSING and identifies naming/authority collisions.",
       "depends_on": [
@@ -40,7 +40,7 @@
       "phase": "0",
       "status": "complete",
       "completed_at": "2026-07-31T22:58:10.798Z",
-      "git_sha": "2d6080252e0b524e2c73eab878343e85779d5c06",
+      "git_sha": "4b645d9f9cd36aabaa3030202973b50baaad0dea",
       "artifact": "builderos-reboot/MISSIONS/FACTORY-MASTER-A-TO-Z-0001/PHASE_0_AUDIT.md",
       "acceptance": "Keep 'responsibility' as the backend/constitutional term; 'office' is UI copy only. Do not create a separate 'Efficiency Office'; extend the existing 'cfo' responsibility. Do not merge Cognitive Core with Lens Registry.",
       "depends_on": [
@@ -55,7 +55,7 @@
       "phase": "1",
       "status": "complete",
       "completed_at": "2026-07-31T22:58:10.798Z",
-      "git_sha": "2d6080252e0b524e2c73eab878343e85779d5c06",
+      "git_sha": "4b645d9f9cd36aabaa3030202973b50baaad0dea",
       "artifact": "builderos-reboot/MISSIONS/FACTORY-MASTER-A-TO-Z-0001/PHASE_1_TRIGGER_SPEC.md",
       "acceptance": "Precise condition that classifies a turn as a real founder decision or explicit 'think this through' request; no cheap-tier model on classification.",
       "depends_on": [
@@ -70,7 +70,7 @@
       "phase": "1",
       "status": "complete",
       "completed_at": "2026-07-31T22:58:10.798Z",
-      "git_sha": "2d6080252e0b524e2c73eab878343e85779d5c06",
+      "git_sha": "4b645d9f9cd36aabaa3030202973b50baaad0dea",
       "artifact": "services/chair-lumin-unified.js",
       "acceptance": "A grep-able caller outside `cognitive-chair.mjs` and its own tests invokes `composeReasoning` from `runChairNativeTurn` when the trigger fires.",
       "depends_on": [
@@ -85,7 +85,7 @@
       "phase": "1",
       "status": "complete",
       "completed_at": "2026-07-31T22:58:10.798Z",
-      "git_sha": "2d6080252e0b524e2c73eab878343e85779d5c06",
+      "git_sha": "4b645d9f9cd36aabaa3030202973b50baaad0dea",
       "artifact": "services/chair-lumin-unified.js",
       "acceptance": "On a positive trigger, `recordFounderDecision` is called with `source: 'live_conversation'` and enough context to be legible later.",
       "depends_on": [
@@ -100,7 +100,7 @@
       "phase": "1",
       "status": "complete",
       "completed_at": "2026-07-31T22:58:10.798Z",
-      "git_sha": "2d6080252e0b524e2c73eab878343e85779d5c06",
+      "git_sha": "4b645d9f9cd36aabaa3030202973b50baaad0dea",
       "artifact": "services/chair-lumin-unified.js",
       "acceptance": "The model call that answers the decision-bearing turn is wrapped with `recordModelOutcome` under role `founder_intent_modeling`.",
       "depends_on": [
@@ -115,7 +115,7 @@
       "phase": "1",
       "status": "complete",
       "completed_at": "2026-07-31T22:58:10.798Z",
-      "git_sha": "2d6080252e0b524e2c73eab878343e85779d5c06",
+      "git_sha": "4b645d9f9cd36aabaa3030202973b50baaad0dea",
       "artifact": "services/cognitive-chair.mjs",
       "acceptance": "Chair synthesis output includes a `named_disagreements` field and downstream consumers store it, not narrate it away.",
       "depends_on": [
@@ -130,7 +130,7 @@
       "phase": "2",
       "status": "complete",
       "completed_at": "2026-07-31T22:58:10.798Z",
-      "git_sha": "2d6080252e0b524e2c73eab878343e85779d5c06",
+      "git_sha": "4b645d9f9cd36aabaa3030202973b50baaad0dea",
       "artifact": "factory-staging/factory-core/builder/reasoning-plan.mjs",
       "acceptance": "No mission proceeds to lens selection without a persisted Reasoning Plan artifact; schema covers intent, questions, evidence, responsibilities, lenses, budget, and reality measure. The Reasoning Plan begins with a Constitutional Decision Engine classification: reversibility, cost-of-error, security, money, customer data, constitutional behavior, and local vs system-wide scope. Those answers automatically determine reasoning budget, number of responsibilities, SENTRY mandate, founder-approval requirement, Blueprint Authority gate, and external-research requirement.",
       "depends_on": [
@@ -145,7 +145,7 @@
       "phase": "2",
       "status": "complete",
       "completed_at": "2026-07-31T22:58:10.798Z",
-      "git_sha": "2d6080252e0b524e2c73eab878343e85779d5c06",
+      "git_sha": "4b645d9f9cd36aabaa3030202973b50baaad0dea",
       "artifact": "services/cognitive-chair.mjs",
       "acceptance": "No lens prompt is constructed with another lens's conclusion until that lens has returned its own output; unit tests confirm isolation. Knowledge (what we know / retrieval / evidence) is structurally separated from Judgment (what we should do / decision / recommendation) in the Reasoning Plan, lens prompts, and Chair synthesis.",
       "depends_on": [
@@ -161,7 +161,7 @@
       "phase": "2",
       "status": "complete",
       "completed_at": "2026-07-31T22:58:10.798Z",
-      "git_sha": "2d6080252e0b524e2c73eab878343e85779d5c06",
+      "git_sha": "4b645d9f9cd36aabaa3030202973b50baaad0dea",
       "artifact": "services/cognitive-chair.mjs",
       "acceptance": "Multi-lens synthesis returns positions, named disagreements, per-lens/per-responsibility confidence scores, and either a reasoned decision or an explicit unresolved-disagreement escalation; no averaged answer. The Chair reports propagated overall confidence and the primary limiting factor (e.g. 'Overall recommendation confidence: 71%, limited by Competition at 42%'). An explicit `unknowns`, `assumptions`, `risks`, and `evidence_needed` list is produced and must shrink before the mission reaches DONE.",
       "depends_on": [
@@ -177,7 +177,7 @@
       "phase": "3",
       "status": "complete",
       "completed_at": "2026-07-31T22:58:10.798Z",
-      "git_sha": "2d6080252e0b524e2c73eab878343e85779d5c06",
+      "git_sha": "4b645d9f9cd36aabaa3030202973b50baaad0dea",
       "artifact": "factory-staging/factory-core/builder/blueprint-generator.mjs",
       "acceptance": "Blueprint contains purpose, users, business, competition, UX, architecture, acceptance criteria, failure modes, implementation order, SENTRY plan, and reality metrics. Every mission carries a Decision Reversibility classification (Type A fast, Type B moderate, Type C founder/Blueprint Authority/SENTRY). Goals are decomposed Goal → Objectives → Missions → Tasks → Steps → Evidence → Receipts. Health-metric hooks (blueprint drift, constitution drift, truth accuracy, confidence calibration, consensus time, mission completion time, founder interruptions, human overrides, asset trust, model ROI, reasoning cost) are defined even if the dashboard is not yet live.",
       "depends_on": [
@@ -192,7 +192,7 @@
       "phase": "3",
       "status": "complete",
       "completed_at": "2026-07-31T22:58:10.798Z",
-      "git_sha": "2d6080252e0b524e2c73eab878343e85779d5c06",
+      "git_sha": "4b645d9f9cd36aabaa3030202973b50baaad0dea",
       "artifact": "factory-staging/factory-core/builder/blueprint-readiness-review.mjs",
       "acceptance": "A real check rejects blueprints with missing requirements, ambiguous acceptance, or undefined edge cases and routes them back for revision.",
       "depends_on": [
@@ -207,7 +207,7 @@
       "phase": "4",
       "status": "complete",
       "completed_at": "2026-07-31T22:58:10.798Z",
-      "git_sha": "2d6080252e0b524e2c73eab878343e85779d5c06",
+      "git_sha": "4b645d9f9cd36aabaa3030202973b50baaad0dea",
       "artifact": "data/lenses/LENS_REGISTRY.json",
       "acceptance": "Each lens has `version`, `evidence_count`, `retirement_criteria`, and a `trust_score` backed by real outcome data; Wisdom can flag lenses for retirement.",
       "depends_on": [
@@ -222,7 +222,7 @@
       "phase": "4",
       "status": "complete",
       "completed_at": "2026-07-31T22:58:10.798Z",
-      "git_sha": "2d6080252e0b524e2c73eab878343e85779d5c06",
+      "git_sha": "4b645d9f9cd36aabaa3030202973b50baaad0dea",
       "artifact": "data/lenses/",
       "acceptance": "New lens files define operations, not personality, and are exercised in at least one real mission's reasoning plan.",
       "depends_on": [
@@ -237,7 +237,7 @@
       "phase": "5",
       "status": "complete",
       "completed_at": "2026-07-31T22:58:10.798Z",
-      "git_sha": "2d6080252e0b524e2c73eab878343e85779d5c06",
+      "git_sha": "4b645d9f9cd36aabaa3030202973b50baaad0dea",
       "artifact": "factory-staging/factory-core/builder/cognitive-step-runner.mjs",
       "acceptance": "Chair selects lenses based on mission content; each run declares a budget (small/medium/high/constitutional) and enforces a cap on model calls.",
       "depends_on": [
@@ -252,7 +252,7 @@
       "phase": "5",
       "status": "complete",
       "completed_at": "2026-07-31T22:58:10.798Z",
-      "git_sha": "2d6080252e0b524e2c73eab878343e85779d5c06",
+      "git_sha": "4b645d9f9cd36aabaa3030202973b50baaad0dea",
       "artifact": "data/lenses/founder-philosophy.json",
       "acceptance": "Lens evidence source is `founder_decision_log`; it answers 'would Adam likely push back' and never auto-approves.",
       "depends_on": [
@@ -268,7 +268,7 @@
       "phase": "6",
       "status": "complete",
       "completed_at": "2026-07-31T22:58:10.798Z",
-      "git_sha": "2d6080252e0b524e2c73eab878343e85779d5c06",
+      "git_sha": "4b645d9f9cd36aabaa3030202973b50baaad0dea",
       "artifact": "factory-staging/factory-core/builder/run-step.js",
       "acceptance": "Factory execute-step calls `runSentryRealityStation` / `assertSentryPassForStep` from the dispatch path; a step cannot reach DONE without a SENTRY PASS receipt.",
       "depends_on": [
@@ -283,7 +283,7 @@
       "phase": "6",
       "status": "complete",
       "completed_at": "2026-07-31T22:58:10.798Z",
-      "git_sha": "2d6080252e0b524e2c73eab878343e85779d5c06",
+      "git_sha": "4b645d9f9cd36aabaa3030202973b50baaad0dea",
       "artifact": "services/receipt-auditor.mjs",
       "acceptance": "When `auditReceipt` returns FAIL for a done step, the step status is reset to `pending` or `blocked` and a receipt is written.",
       "depends_on": [
@@ -298,7 +298,7 @@
       "phase": "7",
       "status": "complete",
       "completed_at": "2026-07-31T22:58:10.798Z",
-      "git_sha": "2d6080252e0b524e2c73eab878343e85779d5c06",
+      "git_sha": "4b645d9f9cd36aabaa3030202973b50baaad0dea",
       "artifact": "products/receipts/MASTER_A_TO_Z_DEMO_RECEIPT.json",
       "acceptance": "A real product mission produces founder intent → reasoning plan → blueprint → deployed code → SENTRY PASS → Wisdom update, with receipts at each stage.",
       "depends_on": [
@@ -315,7 +315,7 @@
       "phase": "7",
       "status": "complete",
       "completed_at": "2026-07-31T22:58:10.798Z",
-      "git_sha": "2d6080252e0b524e2c73eab878343e85779d5c06",
+      "git_sha": "4b645d9f9cd36aabaa3030202973b50baaad0dea",
       "artifact": "builderos-reboot/MISSIONS/FACTORY-MASTER-A-TO-Z-0001/OBJECTIVE_VERDICT.json",
       "acceptance": "`builder:preflight` passes, `lifeos:bp-priority:verify` passes, all phase gates pass, demo receipt exists, and `OBJECTIVE_VERDICT` shows `rating_current: 10`.",
       "depends_on": [
@@ -326,7 +326,7 @@
     }
   ],
   "completed_at": "2026-07-31T22:58:10.798Z",
-  "git_sha": "2d6080252e0b524e2c73eab878343e85779d5c06",
+  "git_sha": "4b645d9f9cd36aabaa3030202973b50baaad0dea",
   "receipt_path": "products/receipts/MASTER_A_TO_Z_ACCEPTANCE.json",
   "receipt_verdict": "PASS",
   "build_method": "system-build",
