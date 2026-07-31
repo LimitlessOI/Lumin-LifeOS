@@ -23,6 +23,7 @@ import {
   exactChangeClaim,
   sealExactChangeIntoTwin,
   reverseExactChange,
+  unsealExactChangeInTwin,
 } from '../services/truth-ladder.js';
 
 test('normalizeGrade accepts canonical + synonyms, rejects junk', () => {
@@ -288,4 +289,94 @@ test('sealExactChangeIntoTwin + reverseExactChange plan pinpoint one aspect', ()
   assert.equal(plan.target_file, targetRel);
   assert.ok(plan.pinpoint.commit_sha === 'abc123deadbeef');
   assert.ok(plan.pinpoint.shipped_at);
+});
+
+test('sealExactChangeIntoTwin fails GROUNDING_FAIL on missing named export', () => {
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'ground-seal-'));
+  const prod = path.join(tmp, 'docs', 'products', 'groundseal');
+  fs.mkdirSync(prod, { recursive: true });
+  fs.mkdirSync(path.join(tmp, 'services'), { recursive: true });
+  const targetRel = 'services/ground-seal-bad.js';
+  fs.writeFileSync(path.join(tmp, targetRel), 'import { missing } from "./helper.js";\n', 'utf8');
+  fs.writeFileSync(path.join(tmp, 'services/helper.js'), 'export const real = 1;\n', 'utf8');
+  const queue = {
+    schema: 'product_build_queue_v1',
+    blueprint_id: 'PRODUCT-GROUNDSEAL-BUILD-QUEUE-TWIN-V1',
+    mission_id: 'PRODUCT-groundseal',
+    twin_kind: 'product_build_queue_registered',
+    steps: [{
+      id: 'gs-1',
+      blueprint_step_id: 'gs-1',
+      blueprint_id: 'PRODUCT-GROUNDSEAL-BUILD-QUEUE-TWIN-V1',
+      status: 'pending',
+      target_file: targetRel,
+      task: 'write bad module',
+      spec: 'write module with a missing import',
+    }],
+  };
+  fs.writeFileSync(path.join(prod, 'BUILD_QUEUE.json'), `${JSON.stringify(queue, null, 2)}\n`);
+  const sealed = sealExactChangeIntoTwin({
+    blueprint_id: 'PRODUCT-GROUNDSEAL-BUILD-QUEUE-TWIN-V1',
+    blueprint_step_id: 'gs-1',
+    commit_sha: 'badsha',
+    repoRoot: tmp,
+  });
+  assert.equal(sealed.ok, false, 'should fail due to grounding');
+  assert.equal(sealed.status, 'GROUNDING_FAIL');
+  assert.ok(sealed.reason.includes('missing_named_export'));
+});
+
+test('unsealExactChangeInTwin revokes a seal, records rejected hash, and prevents reseal', () => {
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'unseal-'));
+  const prod = path.join(tmp, 'docs', 'products', 'unseal');
+  fs.mkdirSync(prod, { recursive: true });
+  fs.mkdirSync(path.join(tmp, 'services'), { recursive: true });
+  const targetRel = 'services/unseal-demo.js';
+  fs.writeFileSync(path.join(tmp, targetRel), 'export const stable = 1;\n', 'utf8');
+  const queue = {
+    schema: 'product_build_queue_v1',
+    blueprint_id: 'PRODUCT-UNSEAL-BUILD-QUEUE-TWIN-V1',
+    mission_id: 'PRODUCT-unseal',
+    twin_kind: 'product_build_queue_registered',
+    steps: [{
+      id: 'us-1',
+      blueprint_step_id: 'us-1',
+      blueprint_id: 'PRODUCT-UNSEAL-BUILD-QUEUE-TWIN-V1',
+      status: 'pending',
+      target_file: targetRel,
+      task: 'demo',
+      spec: 'demo',
+    }],
+  };
+  fs.writeFileSync(path.join(prod, 'BUILD_QUEUE.json'), `${JSON.stringify(queue, null, 2)}\n`);
+
+  const sealed = sealExactChangeIntoTwin({
+    blueprint_id: 'PRODUCT-UNSEAL-BUILD-QUEUE-TWIN-V1',
+    blueprint_step_id: 'us-1',
+    commit_sha: 'sealsha',
+    repoRoot: tmp,
+  });
+  assert.equal(sealed.ok, true);
+  const firstSha = sealed.content_sha256;
+
+  const unsealed = unsealExactChangeInTwin({
+    blueprint_id: 'PRODUCT-UNSEAL-BUILD-QUEUE-TWIN-V1',
+    blueprint_step_id: 'us-1',
+    unsealed_by: 'test',
+    unseal_reason: 'proven wrong',
+    repoRoot: tmp,
+  });
+  assert.equal(unsealed.ok, true, unsealed.error);
+  assert.equal(unsealed.status, 'UNSEALED');
+  assert.ok(unsealed.rejected_content_hashes.includes(firstSha));
+
+  const reseal = sealExactChangeIntoTwin({
+    blueprint_id: 'PRODUCT-UNSEAL-BUILD-QUEUE-TWIN-V1',
+    blueprint_step_id: 'us-1',
+    commit_sha: 'sealsha',
+    repoRoot: tmp,
+  });
+  assert.equal(reseal.ok, false, 'same broken content must not reseal');
+  assert.equal(reseal.status, 'GROUNDING_FAIL');
+  assert.ok(reseal.reason.includes('rejected_content_hash'));
 });

@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Pure: should the codegen prompt inline this file's existing content?
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import express from 'express';
 import fs from 'node:fs';
@@ -30,7 +31,13 @@ import {
   getTwinStep,
   reverseExactChange,
   sealExactChangeIntoTwin,
+  unsealExactChangeInTwin,
 } from '../services/truth-ladder.js';
+import {
+  loadBuildQueue,
+  persistQueue,
+  escalateBlockedStep,
+} from '../services/product-build-orchestrator.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -656,6 +663,7 @@ ${text.slice(0, 24000)}`;
         claim_following_blueprint: claim_following_blueprint !== false,
       });
       const seals = [];
+      const groundingFailures = [];
       if (Array.isArray(outcome.shipped)) {
         for (const shipped of outcome.shipped) {
           const sid = shipped.blueprint_step_id || shipped.step_id;
@@ -668,6 +676,20 @@ ${text.slice(0, 24000)}`;
             commit_sha,
             prior_commit_sha,
           });
+          if (!seal.ok && seal.status === 'GROUNDING_FAIL') {
+            groundingFailures.push({ step_id: sid, ...seal });
+            appendHistorianRecord({
+              type: 'exact_change_grounding_failed',
+              mission_id: mission_id || twinProbe.mission_id,
+              blueprint_id: blueprint_id || twinProbe.blueprint_id,
+              step_id: sid,
+              ...seal,
+              trust_level: 'outcome-linked',
+            });
+            // Do not seal; do not claim shipped; fail-closed for this step.
+            outcome.ok = false;
+            continue;
+          }
           seals.push(seal);
           appendHistorianRecord({
             type: 'exact_change_sealed',
@@ -679,10 +701,11 @@ ${text.slice(0, 24000)}`;
           });
         }
       }
-      res.status(outcome.ok ? 200 : 422).json({
+      res.status(outcome.ok && groundingFailures.length === 0 ? 200 : 422).json({
         ...outcome,
         model_escalation: escalationRequested,
         model_escalation_tiers: escalationTiers,
+        grounding_failures: groundingFailures,
         exact_probe: {
           status: exactProbe.status,
           target_file: exactProbe.target_file,
@@ -730,6 +753,44 @@ ${text.slice(0, 24000)}`;
       res.status(result.ok ? 200 : 422).json(result);
     } catch (err) {
       res.status(500).json({ ok: false, status: 'FACTORY_REVERSE_STEP_ERROR', error: err?.message || String(err) });
+    }
+  });
+
+  router.post('/factory/unseal-step', guard, async (req, res) => {
+    try {
+      const { blueprint_id, blueprint_step_id, unsealed_by, unseal_reason, evidence } = req.body || {};
+      const result = unsealExactChangeInTwin({
+        blueprint_id,
+        blueprint_step_id,
+        unsealed_by,
+        unseal_reason,
+        evidence,
+      });
+      appendHistorianRecord({
+        type: 'exact_change_unsealed',
+        blueprint_id,
+        step_id: blueprint_step_id,
+        ...result,
+        trust_level: 'outcome-linked',
+      });
+      res.status(result.ok ? 200 : 422).json(result);
+    } catch (err) {
+      res.status(500).json({ ok: false, status: 'FACTORY_UNSEAL_STEP_ERROR', error: err?.message || String(err) });
+    }
+  });
+
+  router.post('/factory/escalate-step', guard, async (req, res) => {
+    try {
+      const { product_id, step_id, escalation_note, escalated_by } = req.body || {};
+      if (!product_id || !step_id) {
+        return res.status(400).json({ ok: false, error: 'product_id and step_id required' });
+      }
+      const queue = loadBuildQueue(product_id);
+      const result = escalateBlockedStep(queue, step_id, { escalation_note, escalated_by });
+      if (result.ok) persistQueue(queue);
+      res.status(result.ok ? 200 : 422).json(result);
+    } catch (err) {
+      res.status(500).json({ ok: false, status: 'FACTORY_ESCALATE_STEP_ERROR', error: err?.message || String(err) });
     }
   });
 

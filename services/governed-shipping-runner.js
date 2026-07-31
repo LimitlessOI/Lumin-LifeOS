@@ -127,7 +127,11 @@ export async function runGovernedShippingQueue({
       return { ok: false, halted: true, reason: authored.reason, step_id, index: i, ...summary, shipped };
     }
 
-    const step = { ...authored.step, action_type: authored.step.action_type || 'author_then_write' };
+    const step = {
+      ...authored.step,
+      rejected_content_hashes: exact.step?.rejected_content_hashes || authored.step?.rejected_content_hashes || [],
+      action_type: authored.step.action_type || 'author_then_write',
+    };
     await checkpoint({ index: i, step_id, phase: 'dispatching', assertion_provenance: authored.provenance });
 
     let result;

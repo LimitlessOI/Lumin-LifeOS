@@ -127,6 +127,46 @@
       "added_real_lines": 23,
       "justification": "emergency re-fix of a production-breaking regression on\nthe active revenue path, discovered live within minutes via the queue-status monitor.\nScoped to the same function already fixed once; the queue-status edit is metadata,\nnot code (SO-001).\n\nCo-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>",
       "commit_message_excerpt": "GAP-FILL: re-fix owner resolution after auto-ship regressed it a second time; close the queue item this time"
+    },
+    {
+      "at": "2026-07-31T05:01:15.176Z",
+      "file": "routes/factory-mount-routes.js",
+      "is_new_file": false,
+      "added_real_lines": 58,
+      "justification": "These are governance/infrastructure GAP-FILL gates mandated by DECISION-0001.md consensus and explicitly authorized as GAP-FILL to protect the seal path from certifying structurally present but semantically false work. New services/blueprint-grounding-check.js is additive truth enforcement only. All changes are mechanically tested and preflight green.\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
+      "commit_message_excerpt": "GAP-FILL: Phase 0 stop false completion — semantic grounding gate, unseal/anti-reseal, sticky escalation, overwrite-path block, hybrid decision-log schema"
+    },
+    {
+      "at": "2026-07-31T05:01:15.176Z",
+      "file": "services/blueprint-grounding-check.js",
+      "is_new_file": true,
+      "added_real_lines": 398,
+      "justification": "These are governance/infrastructure GAP-FILL gates mandated by DECISION-0001.md consensus and explicitly authorized as GAP-FILL to protect the seal path from certifying structurally present but semantically false work. New services/blueprint-grounding-check.js is additive truth enforcement only. All changes are mechanically tested and preflight green.\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
+      "commit_message_excerpt": "GAP-FILL: Phase 0 stop false completion — semantic grounding gate, unseal/anti-reseal, sticky escalation, overwrite-path block, hybrid decision-log schema"
+    },
+    {
+      "at": "2026-07-31T05:01:15.176Z",
+      "file": "services/product-build-orchestrator.js",
+      "is_new_file": false,
+      "added_real_lines": 47,
+      "justification": "These are governance/infrastructure GAP-FILL gates mandated by DECISION-0001.md consensus and explicitly authorized as GAP-FILL to protect the seal path from certifying structurally present but semantically false work. New services/blueprint-grounding-check.js is additive truth enforcement only. All changes are mechanically tested and preflight green.\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
+      "commit_message_excerpt": "GAP-FILL: Phase 0 stop false completion — semantic grounding gate, unseal/anti-reseal, sticky escalation, overwrite-path block, hybrid decision-log schema"
+    },
+    {
+      "at": "2026-07-31T05:01:15.176Z",
+      "file": "services/self-repair-decision-log.js",
+      "is_new_file": false,
+      "added_real_lines": 157,
+      "justification": "These are governance/infrastructure GAP-FILL gates mandated by DECISION-0001.md consensus and explicitly authorized as GAP-FILL to protect the seal path from certifying structurally present but semantically false work. New services/blueprint-grounding-check.js is additive truth enforcement only. All changes are mechanically tested and preflight green.\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
+      "commit_message_excerpt": "GAP-FILL: Phase 0 stop false completion — semantic grounding gate, unseal/anti-reseal, sticky escalation, overwrite-path block, hybrid decision-log schema"
+    },
+    {
+      "at": "2026-07-31T05:01:15.176Z",
+      "file": "services/truth-ladder.js",
+      "is_new_file": false,
+      "added_real_lines": 61,
+      "justification": "These are governance/infrastructure GAP-FILL gates mandated by DECISION-0001.md consensus and explicitly authorized as GAP-FILL to protect the seal path from certifying structurally present but semantically false work. New services/blueprint-grounding-check.js is additive truth enforcement only. All changes are mechanically tested and preflight green.\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
+      "commit_message_excerpt": "GAP-FILL: Phase 0 stop false completion — semantic grounding gate, unseal/anti-reseal, sticky escalation, overwrite-path block, hybrid decision-log schema"
     }
   ]
 }

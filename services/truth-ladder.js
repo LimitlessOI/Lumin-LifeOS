@@ -14,6 +14,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
+import { verifyGeneratedContentGrounding } from './blueprint-grounding-check.js';
 
 const _TRUTH_DIR = path.dirname(fileURLToPath(import.meta.url));
 const _REPO_ROOT = path.resolve(_TRUTH_DIR, '..');
@@ -566,6 +567,23 @@ export function sealExactChangeIntoTwin({
   }
   const text = String(bytes);
   const content_sha256 = sha256Text(text);
+
+  const grounding = verifyGeneratedContentGrounding({
+    filePath: target_file,
+    content: text,
+    repoRoot,
+    rejectedHashes: step?.rejected_content_hashes || [],
+  });
+  if (grounding.status === 'FAIL') {
+    return {
+      ok: false,
+      status: 'GROUNDING_FAIL',
+      reason: grounding.reason,
+      details: grounding.details,
+      target_file,
+    };
+  }
+
   const productId = productIdFromTwinPath(loaded.twin_path);
   const artifactRel = productId
     ? path.join('docs', 'products', productId, 'twins', 'steps', `${blueprint_step_id}.exact`)
@@ -608,6 +626,7 @@ export function sealExactChangeIntoTwin({
     content_sha256,
     target_file,
     reverse,
+    grounding: grounding.status === 'PASS' ? { status: 'PASS' } : grounding,
     rebuild: {
       action_type: 'write_file_exact',
       content_source_path: artifactRel.replace(/\\/g, '/'),
@@ -709,5 +728,58 @@ export function reverseExactChange({
     status: 'NOT_EXACT_BLUEPRINT_STEP',
     error: `unsupported_reverse_mode:${reverse.mode}`,
     target_file,
+  };
+}
+
+/**
+ * Revoke a proven-wrong seal: clear exactness, preserve the rejected content
+ * hash, and record why/who/when. The same content may not be resealed.
+ */
+export function unsealExactChangeInTwin({
+  blueprint_id,
+  blueprint_step_id,
+  unsealed_by,
+  unseal_reason,
+  evidence = null,
+  repoRoot = _REPO_ROOT,
+} = {}) {
+  const loaded = getTwinStep(blueprint_id, blueprint_step_id, { repoRoot });
+  if (!loaded.ok) {
+    return { ok: false, status: loaded.status, error: loaded.error };
+  }
+  const step = loaded.step;
+  const now = new Date().toISOString();
+  const rejectedHash = step?.exactness?.content_sha256 || null;
+
+  step.unsealed_at = now;
+  step.unsealed_by = unsealed_by || null;
+  step.unseal_reason = unseal_reason || null;
+  step.unseal_evidence = evidence;
+  if (rejectedHash) {
+    step.rejected_content_hashes = Array.isArray(step.rejected_content_hashes)
+      ? step.rejected_content_hashes
+      : [];
+    if (!step.rejected_content_hashes.includes(rejectedHash)) {
+      step.rejected_content_hashes.push(rejectedHash);
+    }
+  }
+
+  delete step.exactness;
+  delete step.exact_inputs;
+
+  const twinPath = loaded.twin_path;
+  const bp = loaded.blueprint;
+  const idx = (bp.steps || []).findIndex((s) => stepIdentity(s) === String(blueprint_step_id).trim());
+  if (idx >= 0) bp.steps[idx] = step;
+  fs.writeFileSync(twinPath, `${JSON.stringify(bp, null, 2)}\n`, 'utf8');
+
+  return {
+    ok: true,
+    status: 'UNSEALED',
+    blueprint_id,
+    blueprint_step_id,
+    rejected_hash: rejectedHash,
+    rejected_content_hashes: step.rejected_content_hashes,
+    twin_path: twinPath,
   };
 }

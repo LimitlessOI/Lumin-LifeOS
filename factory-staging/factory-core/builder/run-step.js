@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Exports resolveRepoPath — factory-staging/factory-core/builder/run-step.js.
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -97,9 +98,22 @@ export function runWriteFileExact({ mission_id, blueprint_id, step }) {
   }
 
   const target = resolveRepoPath(step.target_file);
+  const gotSha = sha256Buffer(resolved.content);
+  const rejectedHashes = Array.isArray(step?.rejected_content_hashes) ? step.rejected_content_hashes : [];
+  if (rejectedHashes.length && rejectedHashes.includes(gotSha)) {
+    return buildBlockedReturn({
+      mission_id,
+      blueprint_id,
+      step_id: step.step_id,
+      gap_type: 'content_rejected',
+      summary: `Generated content sha256 ${gotSha} is in the twin's rejected_content_hashes list — the identical broken content was previously unsealed and must not overwrite an approved correction`,
+      attempted_action: 'runWriteFileExact',
+      missing_information: [],
+      evidence: { rejected_content_hashes: rejectedHashes, got_sha256: gotSha },
+    });
+  }
   fs.mkdirSync(path.dirname(target), { recursive: true });
   fs.writeFileSync(target, resolved.content);
-  const gotSha = sha256Buffer(resolved.content);
 
   const contract = step.exact_output_contract || {};
   if (contract.type === 'byte_exact_copy' && contract.sha256 && gotSha !== contract.sha256) {

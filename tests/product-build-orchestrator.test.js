@@ -11,6 +11,7 @@ import {
   queueSummary,
   reviveStaleBlockedSteps,
   evaluateStepExpectations,
+  escalateBlockedStep,
   STEP_STATUS,
 } from '../services/product-build-orchestrator.js';
 
@@ -320,4 +321,25 @@ test('evaluateStepExpectations skips when step declares nothing', async () => {
   const proof = await evaluateStepExpectations({ id: 'a', target_file: 'docs/x.md' });
   assert.equal(proof.ok, true);
   assert.equal(proof.applicable, false);
+});
+
+test('escalateBlockedStep makes a blocked step sticky and prevents auto-revive', async () => {
+  const q = makeQueue([{ id: 'a', target_file: 'f', task: 't', status: STEP_STATUS.BLOCKED, attempts: 3, last_attempt_at: new Date(Date.now() - 60 * 60 * 1000).toISOString() }]);
+  const r = escalateBlockedStep(q, 'a', { escalation_note: 'manual investigation', escalated_by: 'test' });
+  assert.equal(r.ok, true);
+  assert.equal(r.status, 'ESCALATED');
+  const step = q.steps.find((s) => s.id === 'a');
+  assert.equal(step.escalation_required, true);
+  assert.equal(step.escalated_by, 'test');
+  assert.equal(step.escalation_note, 'manual investigation');
+  const revived = reviveStaleBlockedSteps(q, { now: Date.now() + 120 * 60 * 1000 });
+  assert.equal(revived.length, 0, 'escalated step must not auto-revive');
+  assert.equal(step.status, STEP_STATUS.BLOCKED);
+});
+
+test('escalateBlockedStep fails for non-blocked steps', () => {
+  const q = makeQueue([{ id: 'a', target_file: 'f', task: 't', status: STEP_STATUS.PENDING }]);
+  const r = escalateBlockedStep(q, 'a', { escalation_note: 'x' });
+  assert.equal(r.ok, false);
+  assert.equal(r.status, 'NOT_BLOCKED');
 });

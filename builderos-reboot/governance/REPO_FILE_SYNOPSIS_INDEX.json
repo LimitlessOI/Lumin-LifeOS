@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T04:59:20.819Z",
+  "generated_at": "2026-07-31T05:04:10.354Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12475,
+  "file_count": 12481,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21382,6 +21382,13 @@
       "synopsis_index_only": true
     },
     {
+      "path": "builderos-reboot/DECISIONS/DECISION-0001.md",
+      "synopsis": "Phase 0 consensus decision for Mission 2 — BuilderOS Convergence.",
+      "bytes": 7901,
+      "mtime": "2026-07-31T04:50:20.691Z",
+      "indexed_at": "2026-07-31T05:01:14.830Z"
+    },
+    {
       "path": "builderos-reboot/DETERMINISM_CODER_PROMPT.md",
       "synopsis": "Determinism Coder Prompt (copy into 3 fresh sessions)",
       "bytes": 905,
@@ -21634,9 +21641,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3760796,
-      "mtime": "2026-07-31T04:37:34.999Z",
-      "indexed_at": "2026-07-31T04:38:11.932Z"
+      "bytes": 3762832,
+      "mtime": "2026-07-31T05:04:10.319Z",
+      "indexed_at": "2026-07-31T05:04:10.354Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -22276,17 +22283,17 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-CONVERGENCE-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 34656,
-      "mtime": "2026-07-31T04:30:08.219Z",
-      "indexed_at": "2026-07-31T04:36:42.694Z",
+      "bytes": 16315,
+      "mtime": "2026-07-31T04:50:42.671Z",
+      "indexed_at": "2026-07-31T05:01:14.830Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-CONVERGENCE-0001/FOUNDER_PACKET.md",
-      "synopsis": "Founder packet for BuilderOS Mission 2 — Convergence: evolve BuilderOS into a self-improving decision-quality system.",
-      "bytes": 7226,
-      "mtime": "2026-07-31T04:29:11.235Z",
-      "indexed_at": "2026-07-31T04:36:42.694Z"
+      "synopsis": "Mission 2 — BuilderOS Convergence founder packet.",
+      "bytes": 5212,
+      "mtime": "2026-07-31T04:51:00.859Z",
+      "indexed_at": "2026-07-31T05:01:14.830Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-CONVERGENCE-0001/OBJECTIVE_VERDICT.json",
@@ -38010,6 +38017,13 @@
       "indexed_at": "2026-07-30T22:31:11.508Z"
     },
     {
+      "path": "docs/audits/builderos-mission-2/OVERWRITE_PATH_TRACE.md",
+      "synopsis": "OVERWRITE PATH TRACE — Mission 2 Phase 0 WP0.4",
+      "bytes": 2614,
+      "mtime": "2026-07-31T05:01:10.851Z",
+      "indexed_at": "2026-07-31T05:01:14.830Z"
+    },
+    {
       "path": "docs/AUTHORITY_CONSOLIDATION_MASTER_AUDIT_V1.md",
       "synopsis": "AUTHORITY CONSOLIDATION MASTER AUDIT V1",
       "bytes": 27067,
@@ -40609,9 +40623,9 @@
     {
       "path": "docs/products/builderos/GAP_FILL_LEDGER.json",
       "synopsis": "Documentation — GAP FILL LEDGER.",
-      "bytes": 26336,
-      "mtime": "2026-07-31T04:37:32.207Z",
-      "indexed_at": "2026-07-31T04:37:34.626Z",
+      "bytes": 30447,
+      "mtime": "2026-07-31T05:01:15.171Z",
+      "indexed_at": "2026-07-31T05:01:45.873Z",
       "synopsis_index_only": true
     },
     {
@@ -40624,9 +40638,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 333212,
-      "mtime": "2026-07-31T04:59:06.439Z",
-      "indexed_at": "2026-07-31T04:59:20.819Z"
+      "bytes": 334576,
+      "mtime": "2026-07-31T05:04:01.423Z",
+      "indexed_at": "2026-07-31T05:04:10.354Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -62225,9 +62239,12 @@
     {
       "path": "factory-staging/factory-core/builder/run-step.js",
       "synopsis": "Exports resolveRepoPath — factory-staging/factory-core/builder/run-step.js.",
-      "bytes": 11174,
-      "mtime": "2026-07-28T17:47:22.516Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 11902,
+      "mtime": "2026-07-31T05:00:24.043Z",
+      "indexed_at": "2026-07-31T05:01:14.830Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "factory-staging/factory-core/builder/sandbox.js",
@@ -68580,9 +68597,12 @@
     {
       "path": "routes/factory-mount-routes.js",
       "synopsis": "Pure: should the codegen prompt inline this file's existing content?",
-      "bytes": 36606,
-      "mtime": "2026-07-29T05:36:17.371Z",
-      "indexed_at": "2026-07-29T05:37:13.833Z"
+      "bytes": 38954,
+      "mtime": "2026-07-31T05:00:06.459Z",
+      "indexed_at": "2026-07-31T05:01:14.830Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/faith-studio-routes.js",
@@ -74000,8 +74020,8 @@
       "path": "scripts/sentry-site-builder-schedule.mjs",
       "synopsis": "Exports registerSiteBuilderSentryGateScheduler — scripts/sentry-site-builder-schedule.mjs.",
       "bytes": 2076,
-      "mtime": "2026-07-31T04:57:39.011Z",
-      "indexed_at": "2026-07-31T04:57:39.011Z"
+      "mtime": "2026-07-31T04:48:17.631Z",
+      "indexed_at": "2026-07-31T04:48:17.631Z"
     },
     {
       "path": "scripts/setup-cloudflare-railway.mjs",
@@ -86216,6 +86236,16 @@
       ]
     },
     {
+      "path": "services/blueprint-grounding-check.js",
+      "synopsis": "Deterministic static grounding check for generated artifacts before",
+      "bytes": 18007,
+      "mtime": "2026-07-31T04:54:51.743Z",
+      "indexed_at": "2026-07-31T05:01:14.830Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/blueprint-intake.js",
       "synopsis": "Blueprint Intake Service — three flows: backfill existing amendment, greenfield",
       "bytes": 58721,
@@ -89295,9 +89325,9 @@
     {
       "path": "services/governed-shipping-runner.js",
       "synopsis": "STEP 5b — the governed shipping runner. Walks a build queue and ships",
-      "bytes": 8456,
-      "mtime": "2026-07-24T18:36:41.703Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 8589,
+      "mtime": "2026-07-31T04:58:34.175Z",
+      "indexed_at": "2026-07-31T05:01:14.830Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -92325,9 +92355,9 @@
     {
       "path": "services/product-build-orchestrator.js",
       "synopsis": "General product-build orchestrator — turns a product's structured",
-      "bytes": 30760,
-      "mtime": "2026-07-28T17:47:22.565Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 33164,
+      "mtime": "2026-07-31T04:57:19.603Z",
+      "indexed_at": "2026-07-31T05:01:14.830Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -92830,10 +92860,13 @@
     },
     {
       "path": "services/self-repair-decision-log.js",
-      "synopsis": "Exports recordFactoryDecision — services/self-repair-decision-log.js.",
-      "bytes": 1166,
-      "mtime": "2026-07-28T17:47:22.568Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "synopsis": "Exports recordFactoryDecision / getDecisionLog — extended with a",
+      "bytes": 5413,
+      "mtime": "2026-07-31T04:57:40.603Z",
+      "indexed_at": "2026-07-31T05:01:14.830Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/self-repair-deploy-scheduler.js",
@@ -94463,9 +94496,9 @@
     {
       "path": "services/truth-ladder.js",
       "synopsis": "Truth-ladder enforcement — grades load-bearing CLAIMS (not code",
-      "bytes": 25115,
-      "mtime": "2026-07-24T18:36:41.574Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 27257,
+      "mtime": "2026-07-31T04:55:08.347Z",
+      "indexed_at": "2026-07-31T05:01:14.830Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -95661,6 +95694,16 @@
       "bytes": 3826,
       "mtime": "2026-07-07T21:41:40.947Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "tests/blueprint-grounding-check.test.js",
+      "synopsis": "Behavioral tests for services/blueprint-grounding-check.js.",
+      "bytes": 4753,
+      "mtime": "2026-07-31T04:56:10.207Z",
+      "indexed_at": "2026-07-31T05:01:14.830Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -97036,9 +97079,9 @@
     {
       "path": "tests/product-build-orchestrator.test.js",
       "synopsis": "js — tests/product-build-orchestrator.test.js.",
-      "bytes": 13587,
-      "mtime": "2026-07-24T18:36:41.702Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 14778,
+      "mtime": "2026-07-31T04:57:13.763Z",
+      "indexed_at": "2026-07-31T05:01:14.830Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -97106,6 +97149,16 @@
       ]
     },
     {
+      "path": "tests/run-step-overwrite-guard.test.js",
+      "synopsis": "Tests that run-step refuses to write content whose sha256 is in the",
+      "bytes": 2294,
+      "mtime": "2026-07-31T04:59:35.307Z",
+      "indexed_at": "2026-07-31T05:01:14.830Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "tests/runtime-env-builderos-refresh.test.js",
       "synopsis": "js — tests/runtime-env-builderos-refresh.test.js.",
       "bytes": 2622,
@@ -97152,6 +97205,16 @@
       "bytes": 1674,
       "mtime": "2026-06-28T01:39:37.920Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "tests/self-repair-decision-log.test.js",
+      "synopsis": "Tests for the hybrid-schema decision log.",
+      "bytes": 3458,
+      "mtime": "2026-07-31T04:57:56.707Z",
+      "indexed_at": "2026-07-31T05:01:14.830Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "tests/self-repair-escalation-policy.test.js",
@@ -97364,9 +97427,9 @@
     {
       "path": "tests/truth-ladder.test.js",
       "synopsis": "js — tests/truth-ladder.test.js.",
-      "bytes": 11184,
-      "mtime": "2026-07-24T18:36:41.702Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 14722,
+      "mtime": "2026-07-31T04:56:23.107Z",
+      "indexed_at": "2026-07-31T05:01:14.830Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

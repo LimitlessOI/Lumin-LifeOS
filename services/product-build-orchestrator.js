@@ -12,6 +12,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { authorAssertionsFromSpec } from '../factory-staging/factory-core/bpb/author-assertions.js';
 import { runBehaviorAssertions } from '../factory-staging/factory-core/sentry/behavior-assertions.js';
 import { execFileSync } from 'node:child_process';
+import { verifyGeneratedContentGrounding } from './blueprint-grounding-check.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const TYPED_BLOCKERS_PATH = path.join(ROOT, 'builderos-reboot/governance/TYPED_BLOCKER_SSOT.json');
@@ -390,6 +391,22 @@ export async function claimPreExistingSatisfiedSteps(queue, {
       continue; // File is either untracked or has no commits; do not mark as done
     }
 
+    // GROUNDING CHECK: structurally present is not semantically correct.
+    const grounding = verifyGeneratedContentGrounding({
+      filePath: step.target_file,
+      repoRoot: root,
+      rejectedHashes: step?.rejected_content_hashes || [],
+    });
+    if (grounding.status === 'FAIL') {
+      step.status = STEP_STATUS.BLOCKED;
+      step.last_error = `grounding_failed: ${grounding.reason}`;
+      step.grounding_status = 'FAIL';
+      step.grounding_details = grounding.details;
+      continue;
+    }
+    step.grounding_status = grounding.status;
+    if (grounding.status === 'INDETERMINATE') step.grounding_details = grounding.details;
+
     step.status = STEP_STATUS.DONE;
     step.pre_existing = true;
     step.shipped_via = 'pre_existing_artifact_proof';
@@ -497,6 +514,29 @@ export function reviveStaleBlockedSteps(queue, {
   return revived;
 }
 
+/**
+ * Explicitly mark a blocked step as requiring investigation. Sticky: prevents
+ * automatic revival across cooldown cycles while preserving normal blocked-step
+ * behavior for all other steps.
+ */
+export function escalateBlockedStep(queue, stepId, { escalation_note, escalated_by }) {
+  if (!queue || !Array.isArray(queue.steps)) {
+    return { ok: false, status: 'INVALID_QUEUE', error: 'queue_or_steps_missing' };
+  }
+  const step = queue.steps.find((s) => s.id === stepId || s.step_id === stepId);
+  if (!step) {
+    return { ok: false, status: 'STEP_NOT_FOUND', error: `step_not_found:${stepId}` };
+  }
+  if (step.status !== STEP_STATUS.BLOCKED) {
+    return { ok: false, status: 'NOT_BLOCKED', error: `step_status_is_${step.status}` };
+  }
+  step.escalation_required = true;
+  step.escalation_note = escalation_note || null;
+  step.escalated_by = escalated_by || null;
+  step.escalated_at = new Date().toISOString();
+  return { ok: true, status: 'ESCALATED', step_id: stepId };
+}
+
 export function queueSummary(queue) {
   const by = {
     pending: 0,
@@ -601,6 +641,24 @@ export async function runNextStep(queue, { buildFn, verifyFn, deployProofFn, mod
     }, logger);
   }
   if (artifact.applicable) step.artifact_proven = true;
+
+  // GROUNDING CHECK: the built file must not import missing exports or reference
+  // nonexistent tables before being marked done.
+  const grounding = verifyGeneratedContentGrounding({
+    filePath: step.target_file,
+    repoRoot: ROOT,
+    rejectedHashes: step?.rejected_content_hashes || [],
+  });
+  if (grounding.status === 'FAIL') {
+    return failStep(step, queue, maxAttempts, {
+      stage: 'grounding',
+      reason: `grounding_failed: ${grounding.reason}`,
+      commit_sha: sha,
+      grounding_details: grounding.details,
+    }, logger);
+  }
+  step.grounding_status = grounding.status;
+  if (grounding.status === 'INDETERMINATE') step.grounding_details = grounding.details;
 
   let verify = { ok: true, detail: 'no_verify_defined' };
   if (typeof verifyFn === 'function' && (queue.verify_script || step.verify_script)) {
