@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T07:47:25.125Z",
+  "generated_at": "2026-07-31T07:47:37.475Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12521,
+  "file_count": 12522,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -88937,6 +88937,13 @@
       "bytes": 7766,
       "mtime": "2026-07-31T04:37:32.211Z",
       "indexed_at": "2026-07-31T04:37:34.626Z"
+    },
+    {
+      "path": "services/ferpaTemplateEnhancement.js",
+      "synopsis": "Exports enhanceFERPATemplate — services/ferpaTemplateEnhancement.js.",
+      "bytes": 568,
+      "mtime": "2026-07-31T07:47:37.475Z",
+      "indexed_at": "2026-07-31T07:47:37.475Z"
     },
     {
       "path": "services/ffmpeg-check.js",

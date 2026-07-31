@@ -383,14 +383,40 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-16T04:36:49.482Z",
+      "shipped_at": "2026-07-31T07:47:34.832Z",
       "commit_sha": "6528ef07821d75764aecc815f577cfbf975f9db2",
       "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "teacher-os-3",
       "mission_id": "PRODUCT-teacher-os",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:enhanceFERPATemplate; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.746Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.746Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/teacher-os/twins/steps/teacher-os-3.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-31T07:47:34.832Z",
+        "shipped_at": "2026-07-31T07:47:34.832Z",
+        "commit_sha": "6528ef07821d75764aecc815f577cfbf975f9db2",
+        "content_sha256": "8671bc1cda76550cd5a46997d2663a6e2993436d813f083b69dddd7b71436c3e",
+        "target_file": "services/ferpaTemplateEnhancement.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/ferpaTemplateEnhancement.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/teacher-os/twins/steps/teacher-os-3.exact",
+          "content_sha256": "8671bc1cda76550cd5a46997d2663a6e2993436d813f083b69dddd7b71436c3e"
+        }
+      }
     },
     {
       "id": "teacher-os-4",
