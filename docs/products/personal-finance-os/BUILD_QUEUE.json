@@ -604,7 +604,7 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-31T01:35:09.281Z",
+      "shipped_at": "2026-07-31T05:30:41.221Z",
       "commit_sha": null,
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "personal-finance-os-4",
@@ -618,8 +618,8 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-07-31T01:35:09.281Z",
-        "shipped_at": "2026-07-31T01:35:09.281Z",
+        "sealed_at": "2026-07-31T05:30:41.221Z",
+        "shipped_at": "2026-07-31T05:30:41.221Z",
         "commit_sha": null,
         "content_sha256": "919c776ece1f31d61c6480452cc1e34195e77dede49e3316222217610cd1cbd5",
         "target_file": "services/mvpSourceDecision.js",
@@ -628,6 +628,27 @@
           "target_file": "services/mvpSourceDecision.js",
           "prior_commit_sha": null,
           "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "INDETERMINATE",
+          "reason": "indeterminate_sql: SQL string could not be parsed for table names",
+          "details": {
+            "filePath": "/usr/src/app/services/mvpSourceDecision.js",
+            "hash": "919c776ece1f31d61c6480452cc1e34195e77dede49e3316222217610cd1cbd5",
+            "importChecks": [],
+            "sqlChecks": [
+              {
+                "text": "ll decide between Plaid and CSV-only.\n  // This decision is primarily based on d",
+                "status": "INDETERMINATE",
+                "reason": "sql_keywords_present_but_no_table_extracted"
+              },
+              {
+                "text": "; // Or ",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              }
+            ]
+          }
         },
         "rebuild": {
           "action_type": "write_file_exact",
