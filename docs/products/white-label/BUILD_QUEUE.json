@@ -416,13 +416,13 @@
     },
     {
       "id": "step5",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/stripe-billing-separation.js",
       "task": "separate Stripe billing flow",
       "spec": "Create separate billing flow for partners and direct clients using Stripe.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "setupPartnerBillingFlow",
         "setupClientBillingFlow"
@@ -449,7 +449,7 @@
       "reaudit_reset_at": "2026-07-30T18:55:06.853Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-31T10:33:11.059Z",
       "last_attempt": null,
       "revive_count": 1,
       "revived_at": "2026-07-31T10:16:04.571Z",
