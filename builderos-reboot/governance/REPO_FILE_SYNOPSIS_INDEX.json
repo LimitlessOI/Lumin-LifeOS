@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T20:38:47.164Z",
+  "generated_at": "2026-07-31T20:39:25.128Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12610,
   "files": [
@@ -21308,8 +21308,8 @@
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
       "bytes": 26369,
-      "mtime": "2026-07-31T20:38:47.164Z",
-      "indexed_at": "2026-07-31T20:38:47.164Z",
+      "mtime": "2026-07-31T20:39:25.128Z",
+      "indexed_at": "2026-07-31T20:39:25.128Z",
       "synopsis_index_only": true
     },
     {
@@ -23492,8 +23492,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/BLUEPRINT.json",
       "synopsis": "Receipt Auditor\"",
       "bytes": 19552,
-      "mtime": "2026-07-31T20:38:47.164Z",
-      "indexed_at": "2026-07-31T20:38:47.164Z",
+      "mtime": "2026-07-31T20:39:25.128Z",
+      "indexed_at": "2026-07-31T20:39:25.128Z",
       "synopsis_index_only": true
     },
     {
@@ -23534,9 +23534,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/OBJECTIVE_VERDICT.json",
       "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
-      "bytes": 1577,
-      "mtime": "2026-07-31T20:38:47.164Z",
-      "indexed_at": "2026-07-31T20:38:47.164Z",
+      "bytes": 1510,
+      "mtime": "2026-07-31T20:39:25.128Z",
+      "indexed_at": "2026-07-31T20:39:25.128Z",
       "synopsis_index_only": true
     },
     {
@@ -29756,9 +29756,9 @@
     {
       "path": "builderos-reboot/PRODUCT_READINESS_REPORT.json",
       "synopsis": "BuilderOS artifact — PRODUCT READINESS REPORT.",
-      "bytes": 43810,
-      "mtime": "2026-07-31T09:49:31.984Z",
-      "indexed_at": "2026-07-31T09:51:46.501Z",
+      "bytes": 44233,
+      "mtime": "2026-07-31T20:39:25.128Z",
+      "indexed_at": "2026-07-31T20:39:25.128Z",
       "synopsis_index_only": true
     },
     {
@@ -65845,9 +65845,9 @@
     {
       "path": "products/receipts/PATH_TO_TEN_ACCEPTANCE.json",
       "synopsis": "Product receipt — PATH TO TEN ACCEPTANCE.",
-      "bytes": 751,
-      "mtime": "2026-07-31T20:38:47.164Z",
-      "indexed_at": "2026-07-31T20:38:47.164Z",
+      "bytes": 2804,
+      "mtime": "2026-07-31T20:39:25.128Z",
+      "indexed_at": "2026-07-31T20:39:25.128Z",
       "synopsis_index_only": true
     },
     {

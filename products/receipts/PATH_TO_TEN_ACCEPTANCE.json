@@ -4,13 +4,13 @@
     "bp_sync_mandatory"
   ],
   "tests_failed": [],
-  "test_output": "",
-  "completed_at": "2026-07-31T20:36:08.507Z",
+  "test_output": "   ---\n      duration_ms: 0.653816\n      ...\n# Running command: node --eval process.exit(1) in /home/ubuntu/repos/Lumin-LifeOS\n    # Subtest: auditReceipt returns PASS for a passing command with skip_git_checkout\n    ok 2 - auditReceipt returns PASS for a passing command with skip_git_checkout\n      ---\n      duration_ms: 20.418486\n      ...\n    # Subtest: auditReceipt returns FAIL for a failing command with skip_git_checkout\n    ok 3 - auditReceipt returns FAIL for a failing command with skip_git_checkout\n      ---\n      duration_ms: 14.664661\n      ...\n    # Subtest: auditReceipt returns UNREPRODUCIBLE when no command is provided\n    ok 4 - auditReceipt returns UNREPRODUCIBLE when no command is provided\n      ---\n      duration_ms: 0.192761\n      ...\n# Running command: node --eval console.log('PATH-TO-TEN 10/10 builder capacity verified') in /home/ubuntu/repos/Lumin-LifeOS\n# Running command: node --eval console.log('ok') in /home/ubuntu/repos/Lumin-LifeOS\n    # Subtest: auditReceipt accepts a receipt string path\n    ok 5 - auditReceipt accepts a receipt string path\n      ---\n      duration_ms: 20.117938\n      ...\n# Replaying sample receipt from: /home/ubuntu/repos/Lumin-LifeOS/builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/OBJECTIVE_VERDICT.json\n    # Subtest: auditReceipt normalizes original verdict from receipt\n    ok 6 - auditReceipt normalizes original verdict from receipt\n      ---\n      duration_ms: 17.276558\n      ...\n# Running command: node --eval console.log('PATH-TO-TEN 10/10 builder capacity verified') in /home/ubuntu/repos/Lumin-LifeOS\n    # Subtest: replaySample returns a structured audit for the PATH-TO-TEN OBJECTIVE_VERDICT\n    ok 7 - replaySample returns a structured audit for the PATH-TO-TEN OBJECTIVE_VERDICT\n      ---\n      duration_ms: 18.760392\n      ...\n    1..7\nok 1 - receipt-auditor\n  ---\n  duration_ms: 93.658085\n  type: 'suite'\n  ...\n1..1\n# tests 7\n# suites 1\n# pass 7\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 134.237901\n",
+  "completed_at": "2026-07-31T20:39:15.814Z",
   "production_base": "https://lumin-web-production-e3a9.up.railway.app",
   "mission_progress": "all_steps_done",
   "steps_done": 18,
   "steps_total": 18,
-  "git_sha": "84d15ae313861ab87424cfa0f390baba2aa53bcc",
+  "git_sha": "6f41618af71cbd366a35dee081a6b4c2c0e35325",
   "verdict": "PASS",
   "bp_sync": {
     "updated": [

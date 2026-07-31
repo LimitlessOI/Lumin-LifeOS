@@ -437,11 +437,11 @@
       "founder_usability_pass": false,
       "note": "BuilderOS Path to 10 ratified at 10/10 autonomous builder capacity. FACTORY-DEMO-SAMPLE-0001 proved idea → founder packet → blueprint → deployed code → SENTRY PASS. SMOS revenue is a product-stage credential blocker, not a builder-stage failure.",
       "objective_verdict": "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/OBJECTIVE_VERDICT.json",
-      "technical_pass_at": "2026-07-31T20:36:08.507Z",
-      "git_sha": "84d15ae313861ab87424cfa0f390baba2aa53bcc",
+      "technical_pass_at": "2026-07-31T20:39:15.814Z",
+      "git_sha": "6f41618af71cbd366a35dee081a6b4c2c0e35325",
       "production_base": "https://lumin-web-production-e3a9.up.railway.app",
       "artifact_sync": {
-        "at": "2026-07-31T20:36:08.507Z",
+        "at": "2026-07-31T20:39:15.814Z",
         "mode": "technical_acceptance",
         "status": "CURRENT"
       }
