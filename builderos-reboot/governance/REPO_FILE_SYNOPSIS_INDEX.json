@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T01:08:11.565Z",
+  "generated_at": "2026-07-31T01:08:28.808Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12455,
+  "file_count": 12456,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -89611,6 +89611,13 @@
       "bytes": 814,
       "mtime": "2026-07-15T08:53:26.098Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "services/leadScoringSegment.js",
+      "synopsis": "Attaches a scoring rubric to a lead segment description.",
+      "bytes": 486,
+      "mtime": "2026-07-31T01:08:28.808Z",
+      "indexed_at": "2026-07-31T01:08:28.808Z"
     },
     {
       "path": "services/learning-analytics/ml-models/learningStyleDetector.js",
