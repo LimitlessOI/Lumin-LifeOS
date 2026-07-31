@@ -602,14 +602,79 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-16T02:10:39.399Z",
+      "shipped_at": "2026-07-31T09:04:38.355Z",
       "commit_sha": "bf61f06c0a99b54baecb367eabab0f9a587b0de4",
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "create-intake-form",
       "mission_id": "PRODUCT-productized-sprint",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerIntakeFormRoutes; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.702Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.702Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/productized-sprint/twins/steps/create-intake-form.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-31T09:04:38.355Z",
+        "shipped_at": "2026-07-31T09:04:38.355Z",
+        "commit_sha": "bf61f06c0a99b54baecb367eabab0f9a587b0de4",
+        "content_sha256": "2fdf9429481b29ca95475e3ec5cb072a9e69f7c58756a355ec8bf52d3e1ca5e8",
+        "target_file": "routes/intakeFormRoute.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "routes/intakeFormRoute.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "INDETERMINATE",
+          "reason": "indeterminate_sql: SQL string could not be parsed for table names",
+          "details": {
+            "filePath": "/usr/src/app/routes/intakeFormRoute.js",
+            "hash": "2fdf9429481b29ca95475e3ec5cb072a9e69f7c58756a355ec8bf52d3e1ca5e8",
+            "importChecks": [
+              {
+                "kind": "default",
+                "source": "express",
+                "names": [
+                  "default"
+                ],
+                "raw": "import express from 'express'",
+                "status": "PASS",
+                "reason": "external_or_builtin_package"
+              }
+            ],
+            "sqlChecks": [
+              {
+                "text": "express",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/intake",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "<h1>Intake Form Page</h1><p>This is where the intake form will be displayed.</p>",
+                "status": "INDETERMINATE",
+                "reason": "sql_keywords_present_but_no_table_extracted"
+              },
+              {
+                "text": "/",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              }
+            ]
+          }
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/productized-sprint/twins/steps/create-intake-form.exact",
+          "content_sha256": "2fdf9429481b29ca95475e3ec5cb072a9e69f7c58756a355ec8bf52d3e1ca5e8"
+        }
+      }
     },
     {
       "id": "create-stripe-links",
