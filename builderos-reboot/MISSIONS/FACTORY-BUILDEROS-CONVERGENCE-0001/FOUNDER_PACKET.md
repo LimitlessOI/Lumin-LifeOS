@@ -4,7 +4,7 @@
 
 ## Status
 
-In progress — Phase 0: Stop false completion.
+In progress — Phase 2: Collaboration Spine + decision records (P1 Builder Readiness Audit and constitutional amendment completed).
 
 ## One-line mission
 

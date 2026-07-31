@@ -1,0 +1,291 @@
+{
+  "schema": "builder_readiness_audit_v1",
+  "at": "2026-07-31T05:50:09.571Z",
+  "verdict": "NOT READY TO MANUFACTURE",
+  "preflight_ok": true,
+  "phase_readiness": [
+    {
+      "phase": "P0 — Stop false completion",
+      "checks": [
+        {
+          "description": "Semantic grounding gate exists",
+          "ok": true,
+          "detail": "present"
+        },
+        {
+          "description": "Grounding gate tests exist",
+          "ok": true,
+          "detail": "present"
+        },
+        {
+          "description": "Truth-ladder tests exist",
+          "ok": true,
+          "detail": "present"
+        },
+        {
+          "description": "Orchestrator tests exist",
+          "ok": true,
+          "detail": "present"
+        },
+        {
+          "description": "Overwrite guard tests exist",
+          "ok": true,
+          "detail": "present"
+        },
+        {
+          "description": "Decision-log tests exist",
+          "ok": true,
+          "detail": "present"
+        },
+        {
+          "description": "Phase 0 stop-gate receipt exists",
+          "ok": true,
+          "detail": "present"
+        },
+        {
+          "description": "Phase 0 handoff exists",
+          "ok": true,
+          "detail": "present"
+        },
+        {
+          "description": "Phase 0 package test suites pass (sample)",
+          "ok": true,
+          "detail": "exit 0"
+        }
+      ],
+      "all": true
+    },
+    {
+      "phase": "P1 — Constitutional / product-home lock",
+      "checks": [
+        {
+          "description": "Constitutional amendment for BuilderOS Convergence exists",
+          "ok": false,
+          "detail": "missing"
+        },
+        {
+          "description": "Amendment contains design principles and success test",
+          "ok": false,
+          "detail": "missing: BuilderOS Design Principles, Mission 2 Success Test, blueprint authority"
+        },
+        {
+          "description": "BuilderOS product home exists",
+          "ok": true,
+          "detail": "present"
+        },
+        {
+          "description": "Product home references Mission 2 Convergence",
+          "ok": true,
+          "detail": "all markers found"
+        }
+      ],
+      "all": false
+    },
+    {
+      "phase": "P2 — Collaboration Spine + decision records",
+      "checks": [
+        {
+          "description": "Decision record template exists",
+          "ok": false,
+          "detail": "missing"
+        },
+        {
+          "description": "Sample decision record (0001) exists",
+          "ok": true,
+          "detail": "present"
+        },
+        {
+          "description": "Decision-record verifier exists",
+          "ok": false,
+          "detail": "missing"
+        },
+        {
+          "description": "Collaboration-spine assembler exists",
+          "ok": false,
+          "detail": "missing"
+        },
+        {
+          "description": "Decision-log schema supports collaboration-spine fields",
+          "ok": true,
+          "detail": "all markers found"
+        }
+      ],
+      "all": false
+    },
+    {
+      "phase": "P3 — Mechanical blueprint authority",
+      "checks": [
+        {
+          "description": "Blueprint-authority gate exists",
+          "ok": false,
+          "detail": "missing"
+        },
+        {
+          "description": "Authority gate tests exist",
+          "ok": false,
+          "detail": "missing"
+        },
+        {
+          "description": "Commit path calls blueprint authority gate",
+          "ok": false,
+          "detail": "missing: blueprintAuthorityGate"
+        }
+      ],
+      "all": false
+    },
+    {
+      "phase": "P4 — Runtime convergence",
+      "checks": [
+        {
+          "description": "Scheduler audit document exists",
+          "ok": true,
+          "detail": "present"
+        },
+        {
+          "description": "BP priority scheduler wired into founder runtime",
+          "ok": false,
+          "detail": "missing: startBpPriorityScheduler, control-plane/schedulers"
+        },
+        {
+          "description": "Control-plane schedulers endpoint returns 200",
+          "ok": false,
+          "detail": "HTTP 404"
+        }
+      ],
+      "all": false
+    },
+    {
+      "phase": "P5 — Revenue loop closure",
+      "checks": [
+        {
+          "description": "Email provider configured",
+          "ok": false,
+          "detail": "missing: EMAIL_PROVIDER, EMAIL_FROM"
+        },
+        {
+          "description": "Resend API key or SMTP credentials configured",
+          "ok": false,
+          "detail": "missing: RESEND_API_KEY"
+        },
+        {
+          "description": "SMOS email provider verifier exists",
+          "ok": false,
+          "detail": "missing"
+        },
+        {
+          "description": "SMOS live charge verifier exists",
+          "ok": false,
+          "detail": "missing"
+        }
+      ],
+      "all": false
+    },
+    {
+      "phase": "P6 — Wisdom, scorecard, and Mission 2 handoff",
+      "checks": [
+        {
+          "description": "Wisdom decision-drift script exists",
+          "ok": false,
+          "detail": "missing"
+        },
+        {
+          "description": "Wisdom decision-drift tests exist",
+          "ok": false,
+          "detail": "missing"
+        },
+        {
+          "description": "Mission 2 handoff verifier exists",
+          "ok": false,
+          "detail": "missing"
+        },
+        {
+          "description": "Objective verdict artifact exists",
+          "ok": true,
+          "detail": "present"
+        }
+      ],
+      "all": false
+    }
+  ],
+  "ambiguity_register": [
+    {
+      "id": "AMB-001",
+      "item": "Constitutional amendment `AMENDMENT_BUILDEROS_CONVERGENCE.md` is missing.",
+      "impact": "No canonical SSOT for the six design principles and Mission 2 success test.",
+      "decision": "Create the amendment; Chair/Architect approve language."
+    },
+    {
+      "id": "AMB-002",
+      "item": "Decision record template and collaboration-spine assembler are missing.",
+      "impact": "Cannot preserve per-role reasoning or run the Collaboration Spine.",
+      "decision": "Build `DECISION_RECORD_TEMPLATE.md`, `scripts/verify-decision-record.mjs`, `scripts/collaboration-spine-assemble.mjs`."
+    },
+    {
+      "id": "AMB-003",
+      "item": "Mechanical blueprint-authority gate is missing.",
+      "impact": "Implementation can still diverge from the approved digital twin without detection.",
+      "decision": "Implement `scripts/lib/blueprint-authority-gate.mjs` and wire it into commit/deploy paths as detect-and-route."
+    },
+    {
+      "id": "AMB-004",
+      "item": "Control-plane schedulers endpoint and `BP_PRIORITY` scheduler wiring are missing.",
+      "impact": "Cannot observe or armed/disarm the never-stop factory schedulers.",
+      "decision": "Add `GET /api/v1/lifeos/builder/control-plane/schedulers` and wire `startBpPriorityScheduler` into `server-founder-runtime.js` under `BUILDEROS_AUTOPILOT` gating."
+    },
+    {
+      "id": "AMB-005",
+      "item": "Email provider and SMOS revenue credentials are not configured.",
+      "impact": "Protected revenue lane cannot execute without founder credentials.",
+      "decision": "Founder sets EMAIL_PROVIDER, RESEND_API_KEY/SMTP_*, EMAIL_FROM and verifies a test email."
+    },
+    {
+      "id": "AMB-006",
+      "item": "Wisdom decision-drift, reality scorecard, and Mission 2 handoff verifiers are missing.",
+      "impact": "No closed loop between predictions and reality; no Mission 3 handoff artifact.",
+      "decision": "Build `scripts/wisdom-decision-drift.mjs`, scorecard, and handoff verifier."
+    }
+  ],
+  "manufacturing_plan": [
+    {
+      "order": 1,
+      "phase": "P2",
+      "task": "Create constitutional amendment and update product home.",
+      "blocked_by": "AMB-001"
+    },
+    {
+      "order": 2,
+      "phase": "P2",
+      "task": "Build decision-record template, verifier, and collaboration-spine assembler.",
+      "blocked_by": "AMB-002"
+    },
+    {
+      "order": 3,
+      "phase": "P3",
+      "task": "Implement blueprint-authority gate and wire as detect-and-route into commit path.",
+      "blocked_by": "AMB-003"
+    },
+    {
+      "order": 4,
+      "phase": "P4",
+      "task": "Add control-plane schedulers endpoint and wire BP_PRIORITY scheduler.",
+      "blocked_by": "AMB-004"
+    },
+    {
+      "order": 5,
+      "phase": "P5",
+      "task": "Run revenue loop only after authority spine proven and founder credentials supplied.",
+      "blocked_by": "AMB-005"
+    },
+    {
+      "order": 6,
+      "phase": "P6",
+      "task": "Build wisdom decision-drift, reality scorecard, and handoff verifier.",
+      "blocked_by": "AMB-006"
+    }
+  ],
+  "authority": {
+    "blueprint": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-CONVERGENCE-0001/BLUEPRINT.json",
+    "founder_packet": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-CONVERGENCE-0001/FOUNDER_PACKET.md",
+    "decision_record": "builderos-reboot/DECISIONS/DECISION-0001.md"
+  }
+}

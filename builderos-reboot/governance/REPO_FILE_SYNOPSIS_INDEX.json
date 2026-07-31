@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T05:51:45.752Z",
+  "generated_at": "2026-07-31T05:52:29.738Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12487,
+  "file_count": 12491,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21641,9 +21641,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3763397,
-      "mtime": "2026-07-31T05:18:43.195Z",
-      "indexed_at": "2026-07-31T05:18:43.233Z"
+      "bytes": 3764627,
+      "mtime": "2026-07-31T05:52:29.703Z",
+      "indexed_at": "2026-07-31T05:52:29.738Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -22283,17 +22283,17 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-CONVERGENCE-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 18663,
-      "mtime": "2026-07-31T05:09:10.879Z",
-      "indexed_at": "2026-07-31T05:12:14.152Z",
+      "bytes": 24704,
+      "mtime": "2026-07-31T05:52:15.707Z",
+      "indexed_at": "2026-07-31T05:52:22.489Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-CONVERGENCE-0001/FOUNDER_PACKET.md",
       "synopsis": "Mission 2 — BuilderOS Convergence founder packet.",
-      "bytes": 5212,
-      "mtime": "2026-07-31T04:51:00.859Z",
-      "indexed_at": "2026-07-31T05:01:14.830Z"
+      "bytes": 5297,
+      "mtime": "2026-07-31T05:51:37.995Z",
+      "indexed_at": "2026-07-31T05:52:22.489Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-CONVERGENCE-0001/OBJECTIVE_VERDICT.json",
@@ -34083,8 +34083,8 @@
       "path": "db/migrations/004_create_vector_embedding_strategy.sql",
       "synopsis": "Database migration — 004_create_vector_embedding_strategy.sql.",
       "bytes": 539,
-      "mtime": "2026-07-31T05:51:36.334Z",
-      "indexed_at": "2026-07-31T05:51:36.334Z"
+      "mtime": "2026-07-31T05:52:28.043Z",
+      "indexed_at": "2026-07-31T05:52:29.738Z"
     },
     {
       "path": "db/migrations/004_verify_transcript_purge.sql",
@@ -38010,6 +38010,21 @@
       "synopsis_index_only": true
     },
     {
+      "path": "docs/audits/builderos-mission-2/BUILDER_READINESS_AUDIT.json",
+      "synopsis": "Documentation — BUILDER READINESS AUDIT.",
+      "bytes": 8991,
+      "mtime": "2026-07-31T05:50:09.567Z",
+      "indexed_at": "2026-07-31T05:52:22.489Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/audits/builderos-mission-2/BUILDER_READINESS_AUDIT.md",
+      "synopsis": "BuilderOS Mission 2 — P1 Builder Readiness Audit",
+      "bytes": 6557,
+      "mtime": "2026-07-31T05:50:09.567Z",
+      "indexed_at": "2026-07-31T05:52:22.489Z"
+    },
+    {
       "path": "docs/audits/builderos-mission-2/MISSION_2_0_HANDOFF.md",
       "synopsis": "BuilderOS Mission 2.0 canonical handoff artifact",
       "bytes": 6284,
@@ -38269,6 +38284,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "docs/constitution/AMENDMENT_BUILDEROS_CONVERGENCE.md",
+      "synopsis": "Constitutional amendment — Mission 2 — BuilderOS Convergence — subordinate to NORTH_STAR_SSOT.md",
+      "bytes": 4416,
+      "mtime": "2026-07-31T05:51:06.795Z",
+      "indexed_at": "2026-07-31T05:52:22.489Z"
+    },
+    {
       "path": "docs/constitution/COGNITIVE_CORE_LAWS.md",
       "synopsis": "Cognitive Core laws — judgment compiler constitution (subordinate to North Star SSOT)",
       "bytes": 6415,
@@ -38439,9 +38461,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 55694,
-      "mtime": "2026-07-31T05:23:18.495Z",
-      "indexed_at": "2026-07-31T05:23:39.185Z"
+      "bytes": 56478,
+      "mtime": "2026-07-31T05:51:36.019Z",
+      "indexed_at": "2026-07-31T05:52:22.489Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40652,9 +40674,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 335025,
-      "mtime": "2026-07-31T05:23:14.731Z",
-      "indexed_at": "2026-07-31T05:23:39.185Z"
+      "bytes": 336093,
+      "mtime": "2026-07-31T05:51:31.239Z",
+      "indexed_at": "2026-07-31T05:52:22.489Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -69805,8 +69827,8 @@
       "path": "routes/musicTeachersRoutes.js",
       "synopsis": "HTTP route module — MusicTeachersRoutes.",
       "bytes": 1065,
-      "mtime": "2026-07-31T05:40:43.764Z",
-      "indexed_at": "2026-07-31T05:40:43.764Z"
+      "mtime": "2026-07-31T04:37:32.211Z",
+      "indexed_at": "2026-07-31T04:37:34.626Z"
     },
     {
       "path": "routes/oil-security-receipt-routes.js",
@@ -70099,8 +70121,8 @@
       "path": "routes/security-routes.js",
       "synopsis": "Registers SecurityRoutes routes/handlers (routes/security-routes.js).",
       "bytes": 8255,
-      "mtime": "2026-07-31T05:40:17.515Z",
-      "indexed_at": "2026-07-31T05:40:17.515Z"
+      "mtime": "2026-07-31T05:52:28.047Z",
+      "indexed_at": "2026-07-31T05:52:29.738Z"
     },
     {
       "path": "routes/self-repair-executor-routes.js",
@@ -71158,6 +71180,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/builder-readiness-audit.mjs",
+      "synopsis": "Builder Readiness Audit — Mission 2 — BuilderOS Convergence.",
+      "bytes": 13997,
+      "mtime": "2026-07-31T05:50:02.787Z",
+      "indexed_at": "2026-07-31T05:52:22.489Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
@@ -72935,8 +72967,8 @@
       "path": "scripts/memory-ci-evidence.mjs",
       "synopsis": "Records CI evidence by running `npm run memory:ci-evidence`.",
       "bytes": 1067,
-      "mtime": "2026-07-31T05:51:45.752Z",
-      "indexed_at": "2026-07-31T05:51:45.752Z"
+      "mtime": "2026-07-31T05:52:28.047Z",
+      "indexed_at": "2026-07-31T05:52:29.738Z"
     },
     {
       "path": "scripts/memory-digest-update.mjs",
@@ -88298,8 +88330,8 @@
       "path": "services/doctrineProfilesService.js",
       "synopsis": "Exports getDoctrineDetails — services/doctrineProfilesService.js.",
       "bytes": 1882,
-      "mtime": "2026-07-31T05:39:45.931Z",
-      "indexed_at": "2026-07-31T05:39:45.931Z"
+      "mtime": "2026-07-31T05:52:28.047Z",
+      "indexed_at": "2026-07-31T05:52:29.738Z"
     },
     {
       "path": "services/document-qa.js",
@@ -89798,8 +89830,8 @@
       "path": "services/leadScoringSegment.js",
       "synopsis": "Attaches a scoring rubric to a lead segment description.",
       "bytes": 2477,
-      "mtime": "2026-07-31T05:51:18.566Z",
-      "indexed_at": "2026-07-31T05:51:18.566Z"
+      "mtime": "2026-07-31T05:52:28.047Z",
+      "indexed_at": "2026-07-31T05:52:29.738Z"
     },
     {
       "path": "services/learning-analytics/ml-models/learningStyleDetector.js",
@@ -91947,8 +91979,8 @@
       "path": "services/mvpSourceDecision.js",
       "synopsis": "Service module — MvpSourceDecision.",
       "bytes": 888,
-      "mtime": "2026-07-31T05:51:27.786Z",
-      "indexed_at": "2026-07-31T05:51:27.786Z"
+      "mtime": "2026-07-31T04:37:32.211Z",
+      "indexed_at": "2026-07-31T04:37:34.626Z"
     },
     {
       "path": "services/never-stop-product-factory-scheduler.js",
@@ -92385,8 +92417,8 @@
       "path": "services/privateWitnessService.js",
       "synopsis": "Exports handlePrivateWitnessMode — services/privateWitnessService.js.",
       "bytes": 939,
-      "mtime": "2026-07-31T05:50:58.095Z",
-      "indexed_at": "2026-07-31T05:50:58.095Z"
+      "mtime": "2026-07-31T05:52:28.047Z",
+      "indexed_at": "2026-07-31T05:52:29.738Z"
     },
     {
       "path": "services/proactiveToastSystem.js",
@@ -92747,8 +92779,8 @@
       "path": "services/sacredContentReviewService.js",
       "synopsis": "Exports sacredContentRevise, sacredContentValidate, sacredContentAssessImpact, sacredContentAuditTrail, sacredContentEscalate, sacredContentPreserveIntent, sacredContentMonitorTrends — services/sacredContentReviewService.js.",
       "bytes": 8137,
-      "mtime": "2026-07-31T05:30:11.134Z",
-      "indexed_at": "2026-07-31T05:30:11.134Z"
+      "mtime": "2026-07-31T05:52:28.047Z",
+      "indexed_at": "2026-07-31T05:52:29.738Z"
     },
     {
       "path": "services/safeOutputService.js",

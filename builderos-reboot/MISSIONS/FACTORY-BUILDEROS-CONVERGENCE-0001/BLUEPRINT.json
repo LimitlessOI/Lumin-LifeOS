@@ -348,6 +348,124 @@
       "sandbox_boundary": "docs/audits/builderos-mission-2/",
       "authority_owner": "Chair",
       "on_block": "BLOCKED_RETURN_TO_CHAIR"
+    },
+    {
+      "step_id": "M2C-007",
+      "phase_id": "P1",
+      "title": "Builder Readiness Audit",
+      "status": "DONE",
+      "started_at": "2026-07-31T05:35:00Z",
+      "completed_at": "2026-07-31T05:50:00Z",
+      "git_sha": "069ee486cea915209fb8fe44346cca0c5a087c0d",
+      "evidence": "docs/audits/builderos-mission-2/BUILDER_READINESS_AUDIT.md and BUILDER_READINESS_AUDIT.json produced; npm run builder:preflight PASS; verdict NOT READY TO MANUFACTURE with ambiguity register and manufacturing plan.",
+      "target_files": [
+        "docs/audits/builderos-mission-2/BUILDER_READINESS_AUDIT.md"
+      ],
+      "action_type": "create_file",
+      "required_edits": [
+        "Inspect origin/main, the constitution, blueprints, product homes, queues, role implementations, preflight, hooks, CI, runtime paths, receipts, and enforcement gates.",
+        "Produce BUILDER_READINESS_AUDIT.md with: Blueprint Readiness Verdict, Ambiguity and Decision Register, Current-State Enforcement Map, Proposed Manufacturing Plan, Founder Decisions Required, Recommended Blueprint Amendments.",
+        "Run npm run builder:preflight and record the result."
+      ],
+      "exact_output_contract": {
+        "type": "audit_report",
+        "must_prove": [
+          "Audit report exists and is readable.",
+          "Verdict is either READY TO MANUFACTURE or NOT READY TO MANUFACTURE with explicit rationale.",
+          "Ambiguity register lists every unclear/missing requirement that would require a decision before implementation.",
+          "Manufacturing plan includes only unambiguous requirements in dependency order.",
+          "npm run builder:preflight exits 0 at the time of the report."
+        ]
+      },
+      "allowed_context_files": [],
+      "forbidden_context_files": [],
+      "dependencies": ["M2C-006"],
+      "acceptance_test_ids": ["AT-M2C-007-1"],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_CHAIR",
+      "sandbox_boundary": "docs/audits/builderos-mission-2/",
+      "authority_owner": "Chair",
+      "on_block": "BLOCKED_RETURN_TO_CHAIR"
+    },
+    {
+      "step_id": "M2C-008",
+      "phase_id": "P2",
+      "title": "Constitutional lock and product-home sync",
+      "status": "DONE",
+      "started_at": "2026-07-31T05:50:00Z",
+      "completed_at": "2026-07-31T05:55:00Z",
+      "git_sha": "069ee486cea915209fb8fe44346cca0c5a087c0d",
+      "evidence": "docs/constitution/AMENDMENT_BUILDEROS_CONVERGENCE.md ratified; docs/products/builderos/PRODUCT_HOME.md and docs/CONTINUITY_LOG.md updated; npm run builder:preflight PASS.",
+      "target_files": [
+        "docs/constitution/AMENDMENT_BUILDEROS_CONVERGENCE.md",
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ],
+      "action_type": "create_file",
+      "required_edits": [
+        "Create docs/constitution/AMENDMENT_BUILDEROS_CONVERGENCE.md containing the six BuilderOS Design Principles, the Mission 2 Success Test, and the blueprint-authority principle.",
+        "Update docs/products/builderos/PRODUCT_HOME.md change-receipts table to reference the amendment and the audit.",
+        "Run npm run builder:preflight and record the result."
+      ],
+      "exact_output_contract": {
+        "type": "sentry_pass",
+        "must_prove": [
+          "AMENDMENT_BUILDEROS_CONVERGENCE.md exists and contains the six design principles and Mission 2 Success Test.",
+          "PRODUCT_HOME.md change-receipts table includes the amendment and audit.",
+          "npm run builder:preflight exits 0."
+        ]
+      },
+      "allowed_context_files": [],
+      "forbidden_context_files": [],
+      "dependencies": ["M2C-007"],
+      "acceptance_test_ids": ["AT-M2C-000-1"],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_CHAIR",
+      "sandbox_boundary": "docs/constitution/",
+      "authority_owner": "Chair",
+      "on_block": "BLOCKED_RETURN_TO_CHAIR"
+    },
+    {
+      "step_id": "M2C-009",
+      "phase_id": "P2",
+      "title": "Collaboration Spine and decision records",
+      "status": "IN_PROGRESS",
+      "started_at": "2026-07-31T05:55:00Z",
+      "completed_at": null,
+      "git_sha": null,
+      "evidence": null,
+      "target_files": [
+        "builderos-reboot/DECISIONS/DECISION_RECORD_TEMPLATE.md",
+        "builderos-reboot/DECISIONS/DECISION-0002.md",
+        "scripts/verify-decision-record.mjs",
+        "scripts/collaboration-spine-assemble.mjs",
+        "tests/decision-record.test.js",
+        "services/self-repair-decision-log.js"
+      ],
+      "action_type": "create_file",
+      "required_edits": [
+        "Create DECISION_RECORD_TEMPLATE.md with all Collaboration Spine fields.",
+        "Create DECISION-0002.md for the Collaboration Spine / decision-record system itself.",
+        "Create scripts/verify-decision-record.mjs to validate any DECISION-XXXX.md against the template.",
+        "Create scripts/collaboration-spine-assemble.mjs to assemble the chain of decision records for a mission.",
+        "Add tests for the verifier and assembler.",
+        "Ensure services/self-repair-decision-log.js reads/writes the hybrid schema including alternatives, per-role reasoning, predictions, and reality outcome.",
+        "Run npm run builder:preflight and record the result."
+      ],
+      "exact_output_contract": {
+        "type": "sentry_pass",
+        "must_prove": [
+          "DECISION_RECORD_TEMPLATE.md exists and defines all required fields.",
+          "DECISION-0002.md is valid per the verifier.",
+          "scripts/verify-decision-record.mjs and scripts/collaboration-spine-assemble.mjs exist and have passing tests.",
+          "npm run builder:preflight exits 0."
+        ]
+      },
+      "allowed_context_files": [],
+      "forbidden_context_files": [],
+      "dependencies": ["M2C-008"],
+      "acceptance_test_ids": ["AT-M2C-100-1", "AT-M2C-101-1", "AT-M2C-102-1"],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_CHAIR",
+      "sandbox_boundary": "builderos-reboot/DECISIONS/",
+      "authority_owner": "Chair",
+      "on_block": "BLOCKED_RETURN_TO_CHAIR"
     }
   ]
 }
