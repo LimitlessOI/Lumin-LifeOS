@@ -805,7 +805,7 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-31T07:58:37.898Z",
+      "shipped_at": "2026-07-31T08:21:53.322Z",
       "commit_sha": null,
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "business-tools-3",
@@ -819,8 +819,8 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-07-31T07:58:37.898Z",
-        "shipped_at": "2026-07-31T07:58:37.898Z",
+        "sealed_at": "2026-07-31T08:21:53.322Z",
+        "shipped_at": "2026-07-31T08:21:53.322Z",
         "commit_sha": null,
         "content_sha256": "ba54aa469687432f1c1df59db200d15d80de58da44298445a58fa0fd8096ce42",
         "target_file": "services/realEstateCurriculumStructure.js",
