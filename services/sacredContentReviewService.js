@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: Exports sacredContentRevise, sacredContentValidate, sacredContentAssessImpact, sacredContentAuditTrail, sacredContentEscalate — services/sacredContentReviewService.js.
+ * SYNOPSIS: Exports sacredContentRevise, sacredContentValidate, sacredContentAssessImpact, sacredContentAuditTrail, sacredContentEscalate, sacredContentPreserveIntent, sacredContentMonitorTrends — services/sacredContentReviewService.js.
  */
 export function sacredContentRevise(content, reviewContext) {
   // Placeholder for logic to revise content while preserving sacred intent.
@@ -124,4 +124,84 @@ export function sacredContentEscalate(content, reason, escalationLevel, metadata
   console.log('Escalation Report Generated:', escalationReport);
   // In a real system, this would trigger notifications, create tickets, etc.
   return escalationReport;
+}
+
+export function sacredContentPreserveIntent(originalContent, revisedContent, intentGuidelines) {
+  console.log('Sacred Content Review Service: Preserving sacred intent during content transformation.');
+  console.log('Original Content:', originalContent);
+  console.log('Revised Content:', revisedContent);
+  console.log('Intent Guidelines:', intentGuidelines);
+
+  let intentPreserved = true;
+  let preservationIssues = [];
+
+  // Simulate checks to ensure the revised content still aligns with original sacred intent.
+  // This could involve NLP to compare semantic meaning, keyword analysis, etc.
+  if (intentGuidelines.includes('core_message_intact') && !revisedContent.includes('core_sacred_message')) {
+    intentPreserved = false;
+    preservationIssues.push('Core sacred message appears to be altered or lost.');
+  }
+  if (intentGuidelines.includes('tone_of_reverence') && !/reverent|respectful/i.test(revisedContent)) {
+    intentPreserved = false;
+    preservationIssues.push('Revised content lacks the required tone of reverence.');
+  }
+
+  console.log('Intent Preservation Result:', intentPreserved ? 'Preserved' : 'Compromised');
+  if (!intentPreserved) {
+    console.log('Preservation Issues:', preservationIssues);
+  }
+  return { intentPreserved, preservationIssues };
+}
+
+export function sacredContentMonitorTrends(reviewHistory, timePeriod) {
+  console.log('Sacred Content Review Service: Monitoring content review trends.');
+  console.log('Review History (sample):', reviewHistory.slice(0, 5)); // Log a sample
+  console.log('Time Period:', timePeriod);
+
+  let trends = {
+    flaggedContentCount: 0,
+    escalationRate: 0,
+    commonIssues: {},
+    reviewerPerformance: {}
+  };
+
+  const relevantReviews = reviewHistory.filter(entry => {
+    const entryDate = new Date(entry.timestamp);
+    const startDate = new Date();
+    startDate.setHours(0, 0, 0, 0); // Start of today
+    if (timePeriod === 'daily') return entryDate >= startDate;
+    if (timePeriod === 'weekly') {
+      startDate.setDate(startDate.getDate() - 7);
+      return entryDate >= startDate;
+    }
+    if (timePeriod === 'monthly') {
+      startDate.setMonth(startDate.getMonth() - 1);
+      return entryDate >= startDate;
+    }
+    return true; // All history if no specific period
+  });
+
+  trends.flaggedContentCount = relevantReviews.length;
+
+  let escalatedCount = 0;
+  relevantReviews.forEach(entry => {
+    if (entry.action === 'escalate') {
+      escalatedCount++;
+    }
+    if (entry.details && entry.details.validationIssues) {
+      entry.details.validationIssues.forEach(issue => {
+        trends.commonIssues[issue] = (trends.commonIssues[issue] || 0) + 1;
+      });
+    }
+    if (entry.actor) {
+      trends.reviewerPerformance[entry.actor] = (trends.reviewerPerformance[entry.actor] || 0) + 1;
+    }
+  });
+
+  if (relevantReviews.length > 0) {
+    trends.escalationRate = (escalatedCount / relevantReviews.length) * 100;
+  }
+
+  console.log('Content Review Trends:', trends);
+  return trends;
 }
