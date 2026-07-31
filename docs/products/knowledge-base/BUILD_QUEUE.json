@@ -424,7 +424,7 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-31T01:43:13.377Z",
+      "shipped_at": "2026-07-31T02:48:48.943Z",
       "commit_sha": null,
       "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step3",
@@ -441,10 +441,10 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-07-31T01:43:13.377Z",
-        "shipped_at": "2026-07-31T01:43:13.377Z",
+        "sealed_at": "2026-07-31T02:48:48.943Z",
+        "shipped_at": "2026-07-31T02:48:48.943Z",
         "commit_sha": null,
-        "content_sha256": "3e0d218f94d17592bf882af0297325eea49554f2a7f0d4e33c06ea65711aa72d",
+        "content_sha256": "48af8c3dd35358ca551ac99ff8e7e2f30b39a34acbdaea61e82e59ca98cbbcd2",
         "target_file": "routes/security-routes.js",
         "reverse": {
           "mode": "delete_file",
@@ -455,7 +455,7 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/knowledge-base/twins/steps/step3.exact",
-          "content_sha256": "3e0d218f94d17592bf882af0297325eea49554f2a7f0d4e33c06ea65711aa72d"
+          "content_sha256": "48af8c3dd35358ca551ac99ff8e7e2f30b39a34acbdaea61e82e59ca98cbbcd2"
         }
       },
       "last_attempt": null,

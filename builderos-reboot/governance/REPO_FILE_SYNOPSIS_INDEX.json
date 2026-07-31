@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T02:48:22.946Z",
+  "generated_at": "2026-07-31T02:48:51.521Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12372,
+  "file_count": 12373,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -69561,6 +69561,13 @@
       "bytes": 2071,
       "mtime": "2026-07-05T19:10:02.193Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "routes/security-routes.js",
+      "synopsis": "Registers SecurityRoutes routes/handlers (routes/security-routes.js).",
+      "bytes": 8239,
+      "mtime": "2026-07-31T02:48:51.521Z",
+      "indexed_at": "2026-07-31T02:48:51.521Z"
     },
     {
       "path": "routes/self-repair-executor-routes.js",

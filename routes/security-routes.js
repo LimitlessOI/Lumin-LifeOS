@@ -160,6 +160,11 @@ function scanFile(file) {
   };
 }
 
+// Named export for malware scanning functionality
+export const scanUploadedFile = (file) => {
+  return scanFile(file);
+};
+
 export function registerSecurityRoutes(app) {
   const router = Router();
   
@@ -280,7 +285,6 @@ export function registerSecurityRoutes(app) {
   });
   
   // Log scans after each scan
-  const originalScanFile = scanFile;
   // Override to add history logging
   app.use('/security', (req, res, next) => {
     const originalJson = res.json;
