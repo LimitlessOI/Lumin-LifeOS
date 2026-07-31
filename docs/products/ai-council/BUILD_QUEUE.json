@@ -934,7 +934,7 @@
     },
     {
       "id": "ai-council-4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/providerCooldownManager.js",
       "task": "manage provider cooldowns",
       "spec": "Implement logic to manage and persist provider cooldowns using the database.",
@@ -942,7 +942,7 @@
         "ai-council-3"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "persistCooldowns",
         "getCooldowns"
@@ -964,7 +964,7 @@
           "assertion_id": "expected_exports:services/providerCooldownManager.js"
         }
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-31T01:34:28.899Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getCooldowns; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
@@ -991,13 +991,13 @@
     },
     {
       "id": "ai-council-2",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/ollamaInvestigation.js",
       "task": "investigate system prompt bloat",
       "spec": "Investigate and document the cause of the high average token usage in Ollama due to potential bloated system prompts.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "investigateOllamaPrompts"
       ],
@@ -1020,12 +1020,24 @@
       "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "ai-council-2",
       "mission_id": "PRODUCT-ai-council",
-      "pre_existing": false,
+      "pre_existing": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:investigateOllamaPrompts; behavior_assertion_failed; behavior_proof",
       "reaudit_reset_at": "2026-07-30T18:55:06.242Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-07-31T01:16:21.778Z"
+      "last_attempt_at": null,
+      "last_attempt": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-31T01:32:13.289Z",
+      "no_op": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "ai-council-5",
