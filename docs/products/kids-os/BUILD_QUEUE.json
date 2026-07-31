@@ -513,7 +513,7 @@
         "CREATE TABLE IF NOT EXISTS coppa_compliance"
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-16T00:52:59.948Z",
+      "shipped_at": "2026-07-31T01:43:41.385Z",
       "commit_sha": null,
       "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step7",
@@ -523,7 +523,30 @@
       "reaudit_reset_at": "2026-07-30T18:55:06.433Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-07-31T01:00:19.053Z"
+      "last_attempt_at": "2026-07-31T01:00:19.053Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/kids-os/twins/steps/step7.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-31T01:43:41.385Z",
+        "shipped_at": "2026-07-31T01:43:41.385Z",
+        "commit_sha": null,
+        "content_sha256": "52dc45e73d8d6082f40b635a95953adf1c7c3d4ae24a5308ff4d1892965cd7bf",
+        "target_file": "db/migrations/20231012_coppa_compliance.sql",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "db/migrations/20231012_coppa_compliance.sql",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/kids-os/twins/steps/step7.exact",
+          "content_sha256": "52dc45e73d8d6082f40b635a95953adf1c7c3d4ae24a5308ff4d1892965cd7bf"
+        }
+      }
     },
     {
       "id": "step8",

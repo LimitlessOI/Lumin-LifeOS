@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T01:43:15.714Z",
+  "generated_at": "2026-07-31T01:43:43.916Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12464,
+  "file_count": 12465,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -34165,6 +34165,13 @@
       "bytes": 303,
       "mtime": "2026-07-30T23:53:05.585Z",
       "indexed_at": "2026-07-30T23:53:05.585Z"
+    },
+    {
+      "path": "db/migrations/20231012_coppa_compliance.sql",
+      "synopsis": "Database migration — 20231012_coppa_compliance.sql.",
+      "bytes": 2565,
+      "mtime": "2026-07-31T01:43:43.916Z",
+      "indexed_at": "2026-07-31T01:43:43.916Z"
     },
     {
       "path": "db/migrations/20231012_create_ci_guard.sql",
