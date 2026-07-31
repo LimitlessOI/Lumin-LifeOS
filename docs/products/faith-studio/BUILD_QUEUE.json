@@ -505,7 +505,7 @@
     },
     {
       "id": "3",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/sacredContentReviewService.js",
       "task": "Design sacred-content review service",
       "spec": "Service to handle preservation of sacred intent in content review workflows.",
@@ -931,9 +931,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-31T05:25:51.330Z",
       "no_op": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:artifact_missing_after_ship: artifact_proof_failed: @ssot; callCouncilMember",
+      "demoted_at": "2026-07-31T09:16:59.359Z",
       "park_until": null,
       "blocker_class": null,
       "claim_level": null,
@@ -1346,7 +1346,7 @@
     },
     {
       "id": "01",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/privateWitnessService.js",
       "task": "implement private witness mode",
       "spec": "Implement the private witness mode functionality, ensuring that outputs are permissible as specified, but avoid public exposure.",
@@ -1615,9 +1615,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-31T08:28:40.272Z",
       "no_op": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:artifact_missing_after_ship: artifact_proof_failed: Private witness mode",
+      "demoted_at": "2026-07-31T09:16:59.359Z",
       "park_until": null,
       "blocker_class": null,
       "claim_level": null,
@@ -1701,7 +1701,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "failure_signature": "STEP_STATUS_FORBIDDEN",
+      "same_signature_count": 1,
+      "escalation_class": "same_signature_repeat"
     },
     {
       "id": "04",
@@ -1767,7 +1770,7 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-16T02:52:22.362Z",
+      "shipped_at": "2026-07-31T09:23:25.706Z",
       "commit_sha": null,
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "05",
@@ -1789,7 +1792,180 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/faith-studio/twins/steps/05.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-31T09:23:25.706Z",
+        "shipped_at": "2026-07-31T09:23:25.706Z",
+        "commit_sha": null,
+        "content_sha256": "16f36bd91ddfc07e43d168d01de0eba1fa358ebe3fe1562380c4c3ebd601c3e0",
+        "target_file": "services/traditionProfilesUpdate.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/traditionProfilesUpdate.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "INDETERMINATE",
+          "reason": "indeterminate_sql: SQL template literal contains ${} interpolation",
+          "details": {
+            "filePath": "/usr/src/app/services/traditionProfilesUpdate.js",
+            "hash": "16f36bd91ddfc07e43d168d01de0eba1fa358ebe3fe1562380c4c3ebd601c3e0",
+            "importChecks": [
+              {
+                "kind": "named",
+                "source": "node:fs/promises",
+                "names": [
+                  "readFile",
+                  "writeFile",
+                  "mkdir"
+                ],
+                "raw": "import { readFile, writeFile, mkdir } from 'node:fs/promises'",
+                "status": "PASS",
+                "reason": "external_or_builtin_package"
+              },
+              {
+                "kind": "named",
+                "source": "node:path",
+                "names": [
+                  "dirname",
+                  "join"
+                ],
+                "raw": "import { dirname, join } from 'node:path'",
+                "status": "PASS",
+                "reason": "external_or_builtin_package"
+              }
+            ],
+            "sqlChecks": [
+              {
+                "text": "Tradition ${index + 1}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "tradition-${index + 1}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "[Visual Framing: ${profile.visualFraming.title}]",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Key points: ${profile.visualFraming.keyPoints.join('; ')}",
+                "status": "INDETERMINATE",
+                "reason": "sql_template_literal_with_interpolation"
+              },
+              {
+                "text": "Word count: ${profile.visualFraming.wordCount}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${section}\\n${framingBlock}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Enhanced ${profiles.length} tradition profile(s).",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${s.slice(0, 80)}…",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "enhanced-${inputPath.split(/[\\\\/]/).pop()}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "node:fs/promises",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "node:path",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "string",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Content must be a non-empty string.",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "No sections found in content.",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "; ",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Source text preserved below.",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "(Source text omitted per options)",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "\\n",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "\\n\\n",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "utf-8",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "utf-8",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              }
+            ]
+          }
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/faith-studio/twins/steps/05.exact",
+          "content_sha256": "16f36bd91ddfc07e43d168d01de0eba1fa358ebe3fe1562380c4c3ebd601c3e0"
+        }
+      }
     },
     {
       "id": "06",
@@ -2274,7 +2450,7 @@
     },
     {
       "id": "faith-studio-5",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "routes/publicPublishingReview.js",
       "task": "implement public publishing review workflow",
       "spec": "Implement a workflow for reviewing and approving public publishing of content.",
@@ -2314,9 +2490,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-18T03:11:40.131Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerPublishingReviewRoutes; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-31T09:16:59.359Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
