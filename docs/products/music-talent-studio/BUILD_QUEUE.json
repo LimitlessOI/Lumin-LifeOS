@@ -763,13 +763,13 @@
     },
     {
       "id": "3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/musicTeachersInterview.js",
       "task": "interview 5 music teachers",
       "spec": "Conduct and store interviews with 5 music teachers to gather insights.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "getTeacherInsights"
       ],
@@ -788,13 +788,16 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-15T21:21:34.124Z",
-      "commit_sha": "4fb1105d1f9c977eacb9540ca451ca3573b6f9a5",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "3",
       "mission_id": "PRODUCT-music-talent-studio",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:getTeacherInsights; getTeacherInsights; INTERVIEW_TEACHERS",
-      "reaudit_reset_at": "2026-07-30T18:55:06.680Z"
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getTeacherInsights; behavior_assertion_failed; behavior_proof",
+      "reaudit_reset_at": "2026-07-30T18:55:06.680Z",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-31T07:58:59.150Z"
     },
     {
       "id": "4",
