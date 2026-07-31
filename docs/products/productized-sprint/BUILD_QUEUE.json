@@ -1316,14 +1316,40 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-16T02:27:25.989Z",
+      "shipped_at": "2026-07-31T10:32:45.869Z",
       "commit_sha": "07f8bf759114a7bd9b20946f5037dc3c2188e8b2",
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "create-sales-page",
       "mission_id": "PRODUCT-productized-sprint",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerSalesPageRoutes; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.702Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.702Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/productized-sprint/twins/steps/create-sales-page.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-31T10:32:45.869Z",
+        "shipped_at": "2026-07-31T10:32:45.869Z",
+        "commit_sha": "07f8bf759114a7bd9b20946f5037dc3c2188e8b2",
+        "content_sha256": "3a9fbc994f99323b3b194db7fa17c6944be9843cd7b7a4ae11597c5278f508e9",
+        "target_file": "routes/salesPageRoute.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "routes/salesPageRoute.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/productized-sprint/twins/steps/create-sales-page.exact",
+          "content_sha256": "3a9fbc994f99323b3b194db7fa17c6944be9843cd7b7a4ae11597c5278f508e9"
+        }
+      }
     },
     {
       "id": "update-linkedin-profile",
