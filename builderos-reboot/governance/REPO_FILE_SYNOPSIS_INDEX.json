@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T01:07:59.573Z",
+  "generated_at": "2026-07-31T01:08:11.565Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12455,
   "files": [
@@ -89500,9 +89500,9 @@
     {
       "path": "services/interpretiveAdaptation.js",
       "synopsis": "Exports ensureInterpretiveAdaptation — services/interpretiveAdaptation.js.",
-      "bytes": 281,
-      "mtime": "2026-07-30T23:52:12.377Z",
-      "indexed_at": "2026-07-30T23:52:12.377Z"
+      "bytes": 492,
+      "mtime": "2026-07-31T01:08:11.565Z",
+      "indexed_at": "2026-07-31T01:08:11.565Z"
     },
     {
       "path": "services/ipsReview.js",
