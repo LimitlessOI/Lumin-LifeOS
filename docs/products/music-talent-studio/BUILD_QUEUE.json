@@ -905,13 +905,13 @@
     },
     {
       "id": "1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/apiSpecification.js",
       "task": "verify API specification",
       "spec": "Ensure detailed API specification is complete and accurate.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "validateApiSpecification"
       ],
@@ -934,12 +934,12 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-31T08:53:21.033Z",
-      "commit_sha": "3012578e8d5f9dea42dd0a8c8b0d80d0f50e66d0",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "1",
       "mission_id": "PRODUCT-music-talent-studio",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:validateApiSpecification; assertion_threw; assertion_threw; assertion_threw",
+      "last_error": "artifact_missing_after_ship: artifact_proof_failed: API Specification; @ssot",
       "reaudit_reset_at": "2026-07-30T18:55:06.680Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
@@ -966,7 +966,10 @@
           "content_source_path": "docs/products/music-talent-studio/twins/steps/1.exact",
           "content_sha256": "74592ed273edf2cb204b3835d00333ca01752adf625c4d11a9d077287cf16cf3"
         }
-      }
+      },
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-31T08:53:26.886Z"
     },
     {
       "id": "5",
