@@ -84,6 +84,28 @@ describe('cognitive-chair', () => {
     assert.ok(prompt.includes('cfo-roi'));
   });
 
+  it('enforces Knowledge and Judgment separation in lens prompts', () => {
+    const lens = loadLens('customer-ease');
+    const prompt = buildLensPrompt({ lens, responsibility: 'chair', mission: 'Should we simplify onboarding?' });
+    assert.ok(prompt.includes('Keep Knowledge and Judgment separate'), 'prompt names the separation');
+    assert.ok(prompt.includes('"knowledge"'), 'prompt asks for knowledge list');
+    assert.ok(prompt.includes('"judgment"'), 'prompt asks for judgment paragraph');
+    assert.ok(prompt.includes('Prior lens judgments (NOT facts)'), 'prior outputs are labeled as other-judgments');
+  });
+
+  it('requires propagated confidence, unknowns, assumptions, and evidence_needed in chair synthesis', () => {
+    const outputs = [
+      { responsibility: 'cfo', lens_id: 'cfo-roi', summary: 'Too expensive', position: 'Cut costs', evidence: ['burn'], disagreements: ['steve-jobs'], confidence: 0.9, recommended_action: 'Defer' },
+      { responsibility: 'chair', lens_id: 'steve-jobs', summary: 'Simplify', position: 'Remove features', evidence: ['clarity'], disagreements: ['cfo-roi'], confidence: 0.85, recommended_action: 'Ship' },
+    ];
+    const prompt = buildChairSynthesisPrompt({ mission: 'Should we simplify onboarding?', outputs });
+    assert.ok(prompt.includes('propagated_confidence'));
+    assert.ok(prompt.includes('limiting_factor'));
+    assert.ok(prompt.includes('unknowns'));
+    assert.ok(prompt.includes('assumptions'));
+    assert.ok(prompt.includes('evidence_needed'));
+  });
+
   it('composes a dry-run reasoning transcript', async () => {
     const transcript = await composeReasoning({
       mission: 'Should we remove half the onboarding steps?',

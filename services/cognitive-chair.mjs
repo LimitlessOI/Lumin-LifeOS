@@ -125,7 +125,13 @@ Your purpose in this role: ${respDefaults.purpose}
 MISSION:
 """${mission}"""
 
-Context from other lenses so far:
+IMPORTANT: Keep Knowledge and Judgment separate.
+- KNOWLEDGE = what you know: facts, evidence, references, constraints, things that are verifiable.
+- JUDGMENT = what you conclude this lens recommends doing, based on that knowledge.
+
+Do not let the following prior-lens judgments become your knowledge; they are other lenses' conclusions, included only so you can explicitly disagree with them if needed. Form your own answer from the mission and the lens profile first.
+
+Prior lens judgments (NOT facts):
 ${priorNotes}
 
 Known disagreements this lens typically has with other lenses:
@@ -138,8 +144,10 @@ Output JSON exactly with these keys:
 - "responsibility": "${responsibility}"
 - "summary": one-sentence position
 - "position": a short paragraph (2-4 sentences)
+- "knowledge": a list of 1-3 concrete facts or evidence items this lens is drawing on
+- "judgment": a short paragraph (2-4 sentences) stating what this lens recommends doing
 - "confidence": a number 0.0-1.0 representing how strongly this lens applies here
-- "evidence": a list of 1-3 concrete reasons or references
+- "evidence": a list of 1-3 concrete reasons or references (may be the same as knowledge)
 - "disagreements": a list of other lenses or responsibilities this lens would push back against and why
 - "recommended_action": the single next thing to do from this perspective`;
 
@@ -169,10 +177,16 @@ ${details}
 Produce a synthesis JSON with exactly these keys:
 - "chair_position": the Chair's recommended decision or next action
 - "tradeoffs": a list of key trade-offs named explicitly
-- "named_disagreements": a list of specific disagreements between lenses that remain unresolved
+- "named_disagreements": a list of specific disagreements between lenses that remain unresolved. Each item should include the two conflicting lens/responsibility ids and the issue.
 - "why_this_wins": why the Chair's recommendation best serves the mission
+- "confidence_by_lens": an object mapping "responsibility/lens_id" to the confidence number reported by that lens
+- "propagated_confidence": a single number 0.0-1.0 for the Chair's overall confidence, reflecting the average minus a penalty for high spread or unresolved disagreement
+- "limiting_factor": a one-sentence explanation of what most limits the Chair's confidence (e.g. "Security lens at 0.42 because auth scope is undefined")
+- "unknowns": a list of things the Chair still does not know and must resolve before acting
+- "assumptions": a list of assumptions the Chair is making to reach this recommendation
 - "risks": what could go wrong
-- "next_action": the single concrete next step`;
+- "evidence_needed": a list of specific evidence needed to reduce unknowns
+- "next_action": the single concrete next step`
 }
 
 export async function composeReasoning({
@@ -327,6 +341,8 @@ export function formatTranscript(transcript) {
     if (o.parsed) {
       lines.push(`Summary: ${o.parsed.summary || ''}`);
       lines.push(`Position: ${o.parsed.position || ''}`);
+      lines.push(`Knowledge: ${(o.parsed.knowledge || []).join('; ')}`);
+      lines.push(`Judgment: ${o.parsed.judgment || ''}`);
       lines.push(`Confidence: ${o.parsed.confidence ?? ''}`);
       lines.push(`Evidence: ${(o.parsed.evidence || []).join('; ')}`);
       lines.push(`Disagreements: ${(o.parsed.disagreements || []).join('; ')}`);
@@ -347,6 +363,11 @@ export function formatTranscript(transcript) {
       lines.push(`Tradeoffs: ${(transcript.chair.parsed.tradeoffs || []).join('; ')}`);
       lines.push(`Named disagreements: ${(transcript.chair.parsed.named_disagreements || []).join('; ')}`);
       lines.push(`Why this wins: ${transcript.chair.parsed.why_this_wins || ''}`);
+      lines.push(`Propagated confidence: ${transcript.chair.parsed.propagated_confidence ?? ''}`);
+      lines.push(`Limiting factor: ${transcript.chair.parsed.limiting_factor || ''}`);
+      lines.push(`Unknowns: ${(transcript.chair.parsed.unknowns || []).join('; ')}`);
+      lines.push(`Assumptions: ${(transcript.chair.parsed.assumptions || []).join('; ')}`);
+      lines.push(`Evidence needed: ${(transcript.chair.parsed.evidence_needed || []).join('; ')}`);
       lines.push(`Risks: ${(transcript.chair.parsed.risks || []).join('; ')}`);
       lines.push(`Next action: ${transcript.chair.parsed.next_action || ''}`);
     } else if (transcript.chair.response) {

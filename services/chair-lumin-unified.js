@@ -14,6 +14,7 @@ import { formatThreadForPrompt } from './lumin-thread-context.js';
 import { shouldUseDirectProgramAnswer, formatDirectProgramAnswer, shouldUseDirectFactualAnswer, formatDirectFactualAnswer } from './chair-program-direct-answer.js';
 import { needsSystemKnowledge } from './chair-system-knowledge.js';
 import { composeReasoning } from './cognitive-chair.mjs';
+import { createReasoningPlan, reasoningPlanGate, propagateOverallConfidence } from '../factory-staging/factory-core/builder/reasoning-plan.mjs';
 import { recordFounderDecision } from './founder-intent-model.js';
 import { recordModelOutcome } from './model-capability-ledger.js';
 import { logModelCall } from './model-roi-ledger.mjs';
@@ -123,8 +124,13 @@ function appendReasoningLog(entry) {
 
 async function runCognitiveReasoning({ cleanedInput, systemFacts, chairContext, callAI, pool, userId }) {
   const mission = `User turn (${chairContext.domain || 'conversation'}): ${cleanedInput.trim()}`;
-  const responsibilities = ['chair'];
-  const reasoningId = `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+
+  // MMAZ-008: Constitutional Decision Engine gate before lens selection.
+  const plan = createReasoningPlan({ mission, chairContext, systemFacts });
+  const gate = reasoningPlanGate(plan);
+  if (!gate.ok) {
+    throw new Error(`Reasoning plan gate failed: ${gate.reason}`);
+  }
 
   const loggedCallAI = createLoggedCallAI({
     callAI,
@@ -144,27 +150,35 @@ async function runCognitiveReasoning({ cleanedInput, systemFacts, chairContext, 
 
   const transcript = await composeReasoning({
     mission,
-    responsibilities,
+    responsibilities: plan.responsibilities,
+    lenses: plan.lenses,
     callModel,
-    maxModelCalls: 4,
+    maxModelCalls: plan.budget.max_model_calls,
   });
 
+  const propagated = propagateOverallConfidence(transcript.outputs);
   const context = {
-    chair_reasoning_id: reasoningId,
+    reasoning_plan_id: plan.id,
+    chair_reasoning_id: plan.id,
     chair_position: transcript.chair?.parsed?.chair_position || null,
     named_disagreements: transcript.chair?.parsed?.named_disagreements || [],
     tradeoffs: transcript.chair?.parsed?.tradeoffs || [],
-    risks: transcript.chair?.parsed?.risks || [],
+    risks: (transcript.chair?.parsed?.risks || []).concat(plan.risks || []),
     next_action: transcript.chair?.parsed?.next_action || null,
     lenses_used: (transcript.outputs || []).map((o) => ({ lens_id: o.lens_id, responsibility: o.responsibility, model: o.model_member })),
+    propagated_confidence: propagated,
+    classification: plan.classification,
+    budget: plan.budget,
+    gates: plan.gates,
   };
 
   appendReasoningLog({
-    id: reasoningId,
+    id: plan.id,
     ts: new Date().toISOString(),
     user_id: userId || null,
     mission,
     domain: chairContext.domain || 'conversation',
+    plan,
     transcript,
   });
 
@@ -177,7 +191,7 @@ async function runCognitiveReasoning({ cleanedInput, systemFacts, chairContext, 
     }).catch(() => {});
   }
 
-  return transcript;
+  return { transcript, plan, propagated };
 }
 
 export async function runChairNativeTurn(cleanedInput, deps = {}, chairContext = {}) {
@@ -241,14 +255,16 @@ export async function runChairNativeTurn(cleanedInput, deps = {}, chairContext =
         userId: deps.userId || null,
       });
       if (reasoning) {
-        systemFacts.chair_reasoning = reasoning;
+        systemFacts.chair_reasoning = reasoning.transcript;
+        systemFacts.chair_reasoning_plan = reasoning.plan;
+        systemFacts.chair_reasoning_propagated_confidence = reasoning.propagated;
       }
     } catch (err) {
       systemFacts.chair_reasoning_error = err.message;
     }
   }
 
-  const mission = reasoning?.mission || `User turn (${chairContext.domain || 'conversation'}): ${cleanedInput.trim()}`;
+  const mission = reasoning?.transcript?.mission || `User turn (${chairContext.domain || 'conversation'}): ${cleanedInput.trim()}`;
   const loggedCallAI = createLoggedCallAI({
     callAI,
     pool,

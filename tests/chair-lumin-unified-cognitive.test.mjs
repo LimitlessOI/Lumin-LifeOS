@@ -89,6 +89,9 @@ test('runChairNativeTurn triggers cognitive reasoning, records decision, scores 
   assert.ok(result.chair_native_facts.chair_reasoning, 'chair_reasoning should be attached to systemFacts');
   assert.ok(Array.isArray(result.chair_native_facts.chair_reasoning.outputs), 'reasoning should have lens outputs');
   assert.ok(result.chair_native_facts.chair_reasoning.chair, 'reasoning should have chair synthesis');
+  assert.ok(result.chair_native_facts.chair_reasoning_plan, 'chair_reasoning_plan should be attached');
+  assert.ok(result.chair_native_facts.chair_reasoning_plan.classification, 'plan has CDE classification');
+  assert.ok(result.chair_native_facts.chair_reasoning_propagated_confidence, 'propagated confidence should be attached');
 
   const decisionInserts = pool._queries.filter((q) => /INSERT INTO founder_decision_log/i.test(q.sql));
   assert.ok(decisionInserts.length >= 1, 'founder decision should be recorded');

@@ -7,20 +7,20 @@
   "receipt": null,
   "production_base": "https://lumin-web-production-e3a9.up.railway.app",
   "git_sha": null,
-  "tests_passed": ["node --test tests/chair-lumin-unified-cognitive.test.mjs", "node --test tests/cognitive-chair.test.mjs", "npm run builder:preflight"],
+  "tests_passed": ["node --test tests/chair-lumin-unified-cognitive.test.mjs", "node --test tests/cognitive-chair.test.mjs", "node --test tests/reasoning-plan.test.mjs", "npm run builder:preflight"],
   "tests_failed": [],
   "founder_usability_pass": false,
-  "rating_current": 4,
+  "rating_current": 5,
   "rating_target": 10,
   "ratings": {
     "governance_intent": 7,
     "mechanical_enforcement": 6,
     "receipt_truth": 5,
     "revenue_reality": 2,
-    "cognitive_architecture": 7,
+    "cognitive_architecture": 8,
     "self_learning": 4,
     "autonomous_completion": 7
   },
-  "verdict_note": "Phase 1 vertical slice shipped: composeReasoning wired into runChairNativeTurn; live founder decisions captured; model calls scored; lens disagreement persisted. Phase 2–7 remain to reach 10/10.",
+  "verdict_note": "Phase 1 + Phase 2 (Reasoning Plan with Constitutional Decision Engine, Knowledge/Judgment separation, confidence propagation, unknowns) shipped. SENTRY factory wiring and end-to-end demo remain to reach 10/10.",
   "verify_command": "test -f builderos-reboot/MISSIONS/FACTORY-MASTER-A-TO-Z-0001/TEN_OUT_OF_TEN_DEFINITION.md && test -f builderos-reboot/MISSIONS/FACTORY-MASTER-A-TO-Z-0001/FOUNDER_PACKET.md && test -f builderos-reboot/MISSIONS/FACTORY-MASTER-A-TO-Z-0001/BLUEPRINT.json"
 }
