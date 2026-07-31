@@ -20,8 +20,9 @@
  */
 
 import path from 'path';
-import { execFile as execFileCb } from 'node:child_process';
+import { execFile as execFileCb, execSync } from 'node:child_process';
 import { promisify } from 'node:util';
+import { readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { promises as fsPromises } from 'fs';
@@ -34,6 +35,11 @@ import {
   INDEX_REL,
 } from '../scripts/lib/file-synopsis.mjs';
 import { evaluateInvariants, formatFindings } from '../scripts/lib/security-invariants.mjs';
+import {
+  evaluateFilePlacement,
+  formatFilePlacementFindings,
+} from '../scripts/lib/file-placement-gate.mjs';
+import { extractSsotTag } from '../scripts/lib/product-home-enforce.mjs';
 import { BLOCKED_WRITE_PATHS, ROUTE_REGISTRATION_FILE } from '../config/builder-safe-scope.js';
 
 const execFile = promisify(execFileCb);
@@ -82,6 +88,110 @@ function assertSecurityInvariants(fileEntries, label = 'commitToGitHub') {
   throw new Error(
     `${label} BLOCKED: security invariant violation — refusing to push.\n${formatFindings(verdict.blocking)}`,
   );
+}
+
+function getGitTrackedFilesSet(repoRoot) {
+  try {
+    const out = execSync('git ls-tree -r --name-only HEAD', {
+      cwd: repoRoot,
+      encoding: 'utf8',
+      maxBuffer: 10 * 1024 * 1024,
+    });
+    const set = new Set();
+    for (const line of out.split('\n')) {
+      const trimmed = line.trim();
+      if (trimmed) set.add(trimmed);
+    }
+    return set;
+  } catch {
+    return new Set();
+  }
+}
+
+function normalizeRel(p) {
+  let s = String(p || '').split(path.sep).join('/');
+  if (s.startsWith('./')) s = s.slice(2);
+  while (s.startsWith('/')) s = s.slice(1);
+  return s;
+}
+
+function isProtectedSource(rel) {
+  const p = normalizeRel(rel);
+  if (!/\.(js|mjs|cjs|ts)$/i.test(p)) return false;
+  if (p.includes('docs/')) return false;
+  return [
+    'routes/',
+    'services/',
+    'core/',
+    'startup/',
+    'middleware/',
+    'config/',
+    'scripts/',
+    'factory-staging/factory-core/',
+  ].some((prefix) => p.startsWith(prefix));
+}
+
+function extractProductIdFromHome(ssotNorm) {
+  const m = String(ssotNorm).match(/^docs\/products\/([^/]+)\/PRODUCT_HOME\.md$/);
+  return m ? m[1] : null;
+}
+
+function loadBpPriorityProductIds(repoRoot) {
+  try {
+    const raw = readFileSync(path.join(repoRoot, 'builderos-reboot/BP_PRIORITY.json'), 'utf8');
+    const json = JSON.parse(raw);
+    const ids = new Set();
+    for (const item of json.items || []) {
+      if (item.product_id) ids.add(item.product_id);
+    }
+    return ids;
+  } catch {
+    return new Set();
+  }
+}
+
+/**
+ * STEP 5 file-placement + blueprint-authority chokepoint. Applied to every direct
+ * commitToGitHub / commitManyToGitHub call so the never-stop loop (and any future
+ * side-channel) cannot ship a new protected source file without @ssot to a
+ * registered product home or without that product having a sanctioned BP_PRIORITY
+ * mission. Existing files are governed by incremental SSOT co-commit.
+ */
+function assertFilePlacementAndBlueprintAuthority(fileEntries, message, label = 'commitToGitHub') {
+  const normalizedEntries = (fileEntries || []).map((entry) => {
+    const p = normalizeRel(entry?.path || entry?.target_file);
+    const isBase64 = String(entry?.encoding || '').toLowerCase() === 'base64';
+    return { path: p, content: isBase64 ? null : (entry?.content ?? entry?.output ?? '') };
+  });
+
+  const placement = evaluateFilePlacement(normalizedEntries, REPO_ROOT, { commitMessage: message });
+  if (!placement.ok) {
+    throw new Error(
+      `${label} BLOCKED: file-placement authority violation — refusing to push.\n${formatFilePlacementFindings(placement.findings)}`,
+    );
+  }
+
+  const tracked = getGitTrackedFilesSet(REPO_ROOT);
+  const bpProductIds = loadBpPriorityProductIds(REPO_ROOT);
+  const bpErrors = [];
+  for (const entry of normalizedEntries) {
+    if (!entry.path || !isProtectedSource(entry.path)) continue;
+    if (tracked.has(entry.path)) continue;
+    const ssot = extractSsotTag(String(entry.content || ''));
+    if (!ssot) continue;
+    let ssotNorm = String(ssot).split(path.sep).join('/');
+    while (ssotNorm.startsWith('/')) ssotNorm = ssotNorm.slice(1);
+    const productId = extractProductIdFromHome(ssotNorm);
+    if (!productId) continue;
+    if (!bpProductIds.has(productId)) {
+      bpErrors.push(`${entry.path}: product "${productId}" from @ssot is not in BP_PRIORITY.json — no sanctioned mission owns new code`);
+    }
+  }
+  if (bpErrors.length) {
+    throw new Error(
+      `${label} BLOCKED: blueprint-priority authority violation — refusing to push.\n${bpErrors.join('\n')}`,
+    );
+  }
 }
 
 function assertNotBuilderBlockedPath(normalizedPath, label = 'commitToGitHub', { allowRouteRegistration = false } = {}) {
@@ -190,6 +300,7 @@ export function createDeploymentService(deps) {
     if (!token) throw new Error('GITHUB_TOKEN not configured');
     if (!GITHUB_REPO) throw new Error('GITHUB_REPO not configured');
     assertSecurityInvariants([{ path: filePath, content }], 'commitToGitHub');
+    assertFilePlacementAndBlueprintAuthority([{ path: filePath, content }], message, 'commitToGitHub');
 
     const targetBranch = branch || GITHUB_DEPLOY_BRANCH || 'main';
     const [owner, repo] = GITHUB_REPO.split('/');
@@ -446,6 +557,7 @@ export function createDeploymentService(deps) {
       throw new Error('commitManyToGitHub requires at least one file');
     }
     assertSecurityInvariants(fileEntries, 'commitManyToGitHub');
+    assertFilePlacementAndBlueprintAuthority(fileEntries, message, 'commitManyToGitHub');
 
     const targetBranch = branch || GITHUB_DEPLOY_BRANCH || 'main';
     const [owner, repo] = GITHUB_REPO.split('/');

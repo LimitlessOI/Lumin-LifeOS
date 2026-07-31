@@ -119,7 +119,7 @@
       "artifact": "services/never-stop-product-factory.js + scripts/lib/never-stop-gate.mjs",
       "acceptance": "commitManyToGitHub and commitToGitHub in the never-stop path call verifyFilePlacement and BP-priority checks; a test commit containing a new services/ file without @ssot is rejected with a receipt.",
       "verify_command": "node --test tests/never-stop-gate.test.js && node scripts/verify-never-stop-gate.mjs --dry-run",
-      "depends_on": ["M2PT-002", "M2PT-003B"]
+      "depends_on": ["M2PT-001"]
     },
     {
       "id": "M2PT-005B",

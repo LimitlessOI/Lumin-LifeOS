@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T11:52:50.518Z",
+  "generated_at": "2026-07-31T12:04:04.906Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12572,
+  "file_count": 12576,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21308,8 +21308,8 @@
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
       "bytes": 25918,
-      "mtime": "2026-07-31T11:52:50.518Z",
-      "indexed_at": "2026-07-31T11:52:50.518Z",
+      "mtime": "2026-07-31T12:04:04.906Z",
+      "indexed_at": "2026-07-31T12:04:04.906Z",
       "synopsis_index_only": true
     },
     {
@@ -23459,24 +23459,24 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 14513,
-      "mtime": "2026-07-31T11:52:50.518Z",
-      "indexed_at": "2026-07-31T11:52:50.518Z",
+      "bytes": 14500,
+      "mtime": "2026-07-31T12:04:04.906Z",
+      "indexed_at": "2026-07-31T12:04:04.906Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/FOUNDER_PACKET.md",
       "synopsis": "Founder packet for FACTORY-PATH-TO-TEN-0001 — turn BuilderOS into a self-correcting, revenue-proving cognitive manufacturing system.",
       "bytes": 5816,
-      "mtime": "2026-07-31T11:52:50.518Z",
-      "indexed_at": "2026-07-31T11:52:50.518Z"
+      "mtime": "2026-07-31T12:04:04.906Z",
+      "indexed_at": "2026-07-31T12:04:04.906Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/OBJECTIVE_VERDICT.json",
       "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
       "bytes": 1091,
-      "mtime": "2026-07-31T11:52:50.518Z",
-      "indexed_at": "2026-07-31T11:52:50.518Z",
+      "mtime": "2026-07-31T12:04:04.906Z",
+      "indexed_at": "2026-07-31T12:04:04.906Z",
       "synopsis_index_only": true
     },
     {
@@ -31149,8 +31149,8 @@
       "path": "config/migration-preflight-collision-allowlist.json",
       "synopsis": "Configuration — Migration Preflight Collision Allowlist.",
       "bytes": 24114,
-      "mtime": "2026-07-31T11:47:39.396Z",
-      "indexed_at": "2026-07-31T11:47:39.396Z",
+      "mtime": "2026-07-31T12:04:04.906Z",
+      "indexed_at": "2026-07-31T12:04:04.906Z",
       "synopsis_index_only": true
     },
     {
@@ -34441,8 +34441,8 @@
       "path": "db/migrations/20231012_coppa_compliance.sql",
       "synopsis": "Database migration — 20231012_coppa_compliance.sql.",
       "bytes": 2607,
-      "mtime": "2026-07-31T11:47:39.396Z",
-      "indexed_at": "2026-07-31T11:47:39.396Z"
+      "mtime": "2026-07-31T12:04:04.906Z",
+      "indexed_at": "2026-07-31T12:04:04.906Z"
     },
     {
       "path": "db/migrations/20231012_create_ci_guard.sql",
@@ -34497,8 +34497,8 @@
       "path": "db/migrations/20231020_create_vapi_integration.sql",
       "synopsis": "Database migration — 20231020_create_vapi_integration.sql.",
       "bytes": 1292,
-      "mtime": "2026-07-31T11:47:39.396Z",
-      "indexed_at": "2026-07-31T11:47:39.396Z"
+      "mtime": "2026-07-31T12:04:04.906Z",
+      "indexed_at": "2026-07-31T12:04:04.906Z"
     },
     {
       "path": "db/migrations/20231021_create_stripe_price_ids.sql",
@@ -34553,8 +34553,8 @@
       "path": "db/migrations/202311_memory_category_taxonomy_update.sql",
       "synopsis": "Database migration — 202311_memory_category_taxonomy_update.sql.",
       "bytes": 785,
-      "mtime": "2026-07-31T11:47:39.396Z",
-      "indexed_at": "2026-07-31T11:47:39.396Z"
+      "mtime": "2026-07-31T12:04:04.906Z",
+      "indexed_at": "2026-07-31T12:04:04.906Z"
     },
     {
       "path": "db/migrations/202311_memory_taxonomy_update.sql",
@@ -34574,8 +34574,8 @@
       "path": "db/migrations/202311_vector_embedding_update.sql",
       "synopsis": "Database migration — 202311_vector_embedding_update.sql.",
       "bytes": 517,
-      "mtime": "2026-07-31T11:47:39.396Z",
-      "indexed_at": "2026-07-31T11:47:39.396Z"
+      "mtime": "2026-07-31T12:04:04.906Z",
+      "indexed_at": "2026-07-31T12:04:04.906Z"
     },
     {
       "path": "db/migrations/20231105_create_bioprinting_tables.sql",
@@ -35736,8 +35736,8 @@
       "path": "db/migrations/20260604_mission_runtime_commitments_patch.sql",
       "synopsis": "Database migration — 20260604_mission_runtime_commitments_patch.sql.",
       "bytes": 3775,
-      "mtime": "2026-07-31T11:47:39.396Z",
-      "indexed_at": "2026-07-31T11:47:39.396Z"
+      "mtime": "2026-07-31T12:04:04.906Z",
+      "indexed_at": "2026-07-31T12:04:04.906Z"
     },
     {
       "path": "db/migrations/20260604_mission_runtime_v1.sql",
@@ -36835,8 +36835,8 @@
       "path": "db/migrations/20260715_lifeos_core_phase_1.sql",
       "synopsis": "Database migration — 20260715_lifeos_core_phase_1.sql.",
       "bytes": 1311,
-      "mtime": "2026-07-31T11:47:39.396Z",
-      "indexed_at": "2026-07-31T11:47:39.396Z"
+      "mtime": "2026-07-31T12:04:04.906Z",
+      "indexed_at": "2026-07-31T12:04:04.906Z"
     },
     {
       "path": "db/migrations/20260715_lifeos_password_resets.sql",
@@ -36996,8 +36996,8 @@
       "path": "db/migrations/20260719b_lifeos_lab_results_repair.sql",
       "synopsis": "Repair lab_results schema mismatch + create psychometric_results.",
       "bytes": 2625,
-      "mtime": "2026-07-31T11:47:39.396Z",
-      "indexed_at": "2026-07-31T11:47:39.396Z"
+      "mtime": "2026-07-31T12:04:04.906Z",
+      "indexed_at": "2026-07-31T12:04:04.906Z"
     },
     {
       "path": "db/migrations/20260720_judgment_outcome_history.sql",
@@ -38701,8 +38701,8 @@
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
       "bytes": 66070,
-      "mtime": "2026-07-31T11:52:50.518Z",
-      "indexed_at": "2026-07-31T11:52:50.518Z"
+      "mtime": "2026-07-31T12:04:04.906Z",
+      "indexed_at": "2026-07-31T12:04:04.906Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40913,9 +40913,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 346333,
-      "mtime": "2026-07-31T11:52:50.518Z",
-      "indexed_at": "2026-07-31T11:52:50.518Z"
+      "bytes": 347166,
+      "mtime": "2026-07-31T12:04:04.906Z",
+      "indexed_at": "2026-07-31T12:04:04.906Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -41665,9 +41665,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 641092,
-      "mtime": "2026-07-31T08:31:17.991Z",
-      "indexed_at": "2026-07-31T08:33:28.712Z"
+      "bytes": 641814,
+      "mtime": "2026-07-31T12:04:04.906Z",
+      "indexed_at": "2026-07-31T12:04:04.906Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -64783,8 +64783,8 @@
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
       "bytes": 35981,
-      "mtime": "2026-07-31T11:52:50.518Z",
-      "indexed_at": "2026-07-31T11:52:50.518Z",
+      "mtime": "2026-07-31T12:04:04.906Z",
+      "indexed_at": "2026-07-31T12:04:04.906Z",
       "synopsis_index_only": true
     },
     {
@@ -65033,6 +65033,21 @@
       "mtime": "2026-07-24T18:36:41.703Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/COGNITIVE_TRANSCRIPT_2026-07-31T11-03-04-709Z.json",
+      "synopsis": "Product receipt — COGNITIVE TRANSCRIPT 2026 07 31T11 03 04 709Z.",
+      "bytes": 18264,
+      "mtime": "2026-07-31T12:04:04.906Z",
+      "indexed_at": "2026-07-31T12:04:04.906Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/COGNITIVE_TRANSCRIPT_2026-07-31T11-03-04-709Z.md",
+      "synopsis": "Cognitive Chair Transcript",
+      "bytes": 1387,
+      "mtime": "2026-07-31T12:04:04.906Z",
+      "indexed_at": "2026-07-31T12:04:04.906Z"
     },
     {
       "path": "products/receipts/COMMITMENT_ROUTE_V2_ACCEPTANCE.json",
@@ -65750,8 +65765,8 @@
       "path": "products/receipts/POINT_B_DNA_VERIFY.json",
       "synopsis": "Product receipt — POINT B DNA VERIFY.",
       "bytes": 318,
-      "mtime": "2026-07-28T22:31:46.482Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "mtime": "2026-07-31T12:04:04.906Z",
+      "indexed_at": "2026-07-31T12:04:04.906Z",
       "synopsis_index_only": true
     },
     {
@@ -65765,9 +65780,9 @@
     {
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
-      "bytes": 24199,
-      "mtime": "2026-07-31T10:48:55.768Z",
-      "indexed_at": "2026-07-31T10:55:09.665Z",
+      "bytes": 24381,
+      "mtime": "2026-07-31T12:04:04.906Z",
+      "indexed_at": "2026-07-31T12:04:04.906Z",
       "synopsis_index_only": true
     },
     {
@@ -65934,16 +65949,16 @@
       "path": "products/receipts/TRUTH_ENFORCEMENT_AUDIT.json",
       "synopsis": "Product receipt — TRUTH ENFORCEMENT AUDIT.",
       "bytes": 833,
-      "mtime": "2026-07-30T22:30:54.981Z",
-      "indexed_at": "2026-07-30T22:31:11.508Z",
+      "mtime": "2026-07-31T12:04:04.906Z",
+      "indexed_at": "2026-07-31T12:04:04.906Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/TRUTH_LOCKDOWN_VERIFY.json",
       "synopsis": "Product receipt — TRUTH LOCKDOWN VERIFY.",
       "bytes": 1318,
-      "mtime": "2026-07-28T22:31:47.002Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "mtime": "2026-07-31T12:04:04.906Z",
+      "indexed_at": "2026-07-31T12:04:04.906Z",
       "synopsis_index_only": true
     },
     {
@@ -65974,8 +65989,8 @@
       "path": "products/receipts/WISDOM_TRUTH_AUDIT.json",
       "synopsis": "Product receipt — WISDOM TRUTH AUDIT.",
       "bytes": 1001,
-      "mtime": "2026-07-28T20:19:15.159Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "mtime": "2026-07-31T12:04:04.906Z",
+      "indexed_at": "2026-07-31T12:04:04.906Z",
       "synopsis_index_only": true
     },
     {
@@ -75919,6 +75934,16 @@
       ]
     },
     {
+      "path": "scripts/verify-never-stop-gate.mjs",
+      "synopsis": "Verify the never-stop / governed-autonomous-shipping commit path is",
+      "bytes": 2015,
+      "mtime": "2026-07-31T12:04:04.906Z",
+      "indexed_at": "2026-07-31T12:04:04.906Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "scripts/verify-oc-001-status.mjs",
       "synopsis": "Fetches JSON data from a given URL path with a command key header.",
       "bytes": 2008,
@@ -76066,8 +76091,8 @@
       "path": "scripts/verify-path-to-ten-acceptance.mjs",
       "synopsis": "Final acceptance script for FACTORY-PATH-TO-TEN-0001.",
       "bytes": 3720,
-      "mtime": "2026-07-31T11:52:50.518Z",
-      "indexed_at": "2026-07-31T11:52:50.518Z",
+      "mtime": "2026-07-31T12:04:04.906Z",
+      "indexed_at": "2026-07-31T12:04:04.906Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -88811,9 +88836,9 @@
     {
       "path": "services/deployment-service.js",
       "synopsis": "deployment-service.js",
-      "bytes": 46488,
-      "mtime": "2026-07-28T22:46:46.480Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 50450,
+      "mtime": "2026-07-31T12:04:04.906Z",
+      "indexed_at": "2026-07-31T12:04:04.906Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -97667,6 +97692,17 @@
       "bytes": 592,
       "mtime": "2026-06-21T21:39:28.474Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "tests/never-stop-gate.test.js",
+      "synopsis": "Regression tests for the never-stop file-placement + blueprint-priority",
+      "bytes": 3341,
+      "mtime": "2026-07-31T12:04:04.906Z",
+      "indexed_at": "2026-07-31T12:04:04.906Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md",
+        "is blocked', async () => {"
+      ]
     },
     {
       "path": "tests/never-stop-idempotent-complete.test.js",

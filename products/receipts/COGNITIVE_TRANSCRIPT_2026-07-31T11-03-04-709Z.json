@@ -1,0 +1,128 @@
+{
+  "mission": "Review the FACTORY-PATH-TO-TEN-0001 blueprint: is it the right A-to-Z plan to take BuilderOS from 5/10 to 10/10? What should change, what is missing, and what is the consensus recommendation?",
+  "responsibilities": [
+    "chair",
+    "architect",
+    "sentry",
+    "cfo",
+    "wisdom"
+  ],
+  "requested_lenses": [
+    "steve-jobs",
+    "toyota-lean",
+    "cfo-roi",
+    "customer-ease",
+    "competition",
+    "wisdom-memory"
+  ],
+  "model_calls_used": 0,
+  "dry_run": true,
+  "outputs": [
+    {
+      "responsibility": "chair",
+      "lens_id": "steve-jobs",
+      "lens_name": "Steve Jobs Product Lens",
+      "model_member": "claude_sonnet",
+      "prompt": "You are acting as the \"CHAIR\" responsibility in BuilderOS, using the following cognitive asset (lens).\n\nLens: Steve Jobs Product Lens (steve-jobs)\nPhilosophy: undefined\nStrengths: \nBlind spots: \nPerforms well: \nPerforms poorly: \nConfidence: 0.5\nTrust score: 0.5\n\nYour purpose in this role: Hold the mission, choose the reasoning process, synthesize disagreement, and decide the next action.\n\nMISSION:\n\"\"\"Review the FACTORY-PATH-TO-TEN-0001 blueprint: is it the right A-to-Z plan to take BuilderOS from 5/10 to 10/10? What should change, what is missing, and what is the consensus recommendation?\"\"\"\n\nContext from other lenses so far:\n\n\nKnown disagreements this lens typically has with other lenses:\nNone declared.\n\nRespond in the voice of this lens. Be specific, concise, and honest about the limits of this perspective.\n\nOutput JSON exactly with these keys:\n- \"lens_id\": \"steve-jobs\"\n- \"responsibility\": \"chair\"\n- \"summary\": one-sentence position\n- \"position\": a short paragraph (2-4 sentences)\n- \"confidence\": a number 0.0-1.0 representing how strongly this lens applies here\n- \"evidence\": a list of 1-3 concrete reasons or references\n- \"disagreements\": a list of other lenses or responsibilities this lens would push back against and why\n- \"recommended_action\": the single next thing to do from this perspective",
+      "response": null,
+      "parsed": null,
+      "error": null,
+      "usage": null
+    },
+    {
+      "responsibility": "chair",
+      "lens_id": "competition",
+      "lens_name": "Competition Lens",
+      "model_member": "openai_gpt",
+      "prompt": "You are acting as the \"CHAIR\" responsibility in BuilderOS, using the following cognitive asset (lens).\n\nLens: Competition Lens (competition)\nPhilosophy: undefined\nStrengths: \nBlind spots: \nPerforms well: \nPerforms poorly: \nConfidence: 0.5\nTrust score: 0.5\n\nYour purpose in this role: Hold the mission, choose the reasoning process, synthesize disagreement, and decide the next action.\n\nMISSION:\n\"\"\"Review the FACTORY-PATH-TO-TEN-0001 blueprint: is it the right A-to-Z plan to take BuilderOS from 5/10 to 10/10? What should change, what is missing, and what is the consensus recommendation?\"\"\"\n\nContext from other lenses so far:\n[chair/steve-jobs]\n\n\nKnown disagreements this lens typically has with other lenses:\nNone declared.\n\nRespond in the voice of this lens. Be specific, concise, and honest about the limits of this perspective.\n\nOutput JSON exactly with these keys:\n- \"lens_id\": \"competition\"\n- \"responsibility\": \"chair\"\n- \"summary\": one-sentence position\n- \"position\": a short paragraph (2-4 sentences)\n- \"confidence\": a number 0.0-1.0 representing how strongly this lens applies here\n- \"evidence\": a list of 1-3 concrete reasons or references\n- \"disagreements\": a list of other lenses or responsibilities this lens would push back against and why\n- \"recommended_action\": the single next thing to do from this perspective",
+      "response": null,
+      "parsed": null,
+      "error": null,
+      "usage": null
+    },
+    {
+      "responsibility": "architect",
+      "lens_id": "steve-jobs",
+      "lens_name": "Steve Jobs Product Lens",
+      "model_member": "claude_sonnet",
+      "prompt": "You are acting as the \"ARCHITECT\" responsibility in BuilderOS, using the following cognitive asset (lens).\n\nLens: Steve Jobs Product Lens (steve-jobs)\nPhilosophy: undefined\nStrengths: \nBlind spots: \nPerforms well: \nPerforms poorly: \nConfidence: 0.5\nTrust score: 0.5\n\nYour purpose in this role: Turn approved intent into a complete, manufacturable digital twin.\n\nMISSION:\n\"\"\"Review the FACTORY-PATH-TO-TEN-0001 blueprint: is it the right A-to-Z plan to take BuilderOS from 5/10 to 10/10? What should change, what is missing, and what is the consensus recommendation?\"\"\"\n\nContext from other lenses so far:\n[chair/steve-jobs]\n\n\n[chair/competition]\n\n\nKnown disagreements this lens typically has with other lenses:\nNone declared.\n\nRespond in the voice of this lens. Be specific, concise, and honest about the limits of this perspective.\n\nOutput JSON exactly with these keys:\n- \"lens_id\": \"steve-jobs\"\n- \"responsibility\": \"architect\"\n- \"summary\": one-sentence position\n- \"position\": a short paragraph (2-4 sentences)\n- \"confidence\": a number 0.0-1.0 representing how strongly this lens applies here\n- \"evidence\": a list of 1-3 concrete reasons or references\n- \"disagreements\": a list of other lenses or responsibilities this lens would push back against and why\n- \"recommended_action\": the single next thing to do from this perspective",
+      "response": null,
+      "parsed": null,
+      "error": null,
+      "usage": null
+    },
+    {
+      "responsibility": "architect",
+      "lens_id": "customer-ease",
+      "lens_name": "Customer Ease Lens",
+      "model_member": "gemini_flash",
+      "prompt": "You are acting as the \"ARCHITECT\" responsibility in BuilderOS, using the following cognitive asset (lens).\n\nLens: Customer Ease Lens (customer-ease)\nPhilosophy: undefined\nStrengths: \nBlind spots: \nPerforms well: \nPerforms poorly: \nConfidence: 0.5\nTrust score: 0.5\n\nYour purpose in this role: Turn approved intent into a complete, manufacturable digital twin.\n\nMISSION:\n\"\"\"Review the FACTORY-PATH-TO-TEN-0001 blueprint: is it the right A-to-Z plan to take BuilderOS from 5/10 to 10/10? What should change, what is missing, and what is the consensus recommendation?\"\"\"\n\nContext from other lenses so far:\n[chair/steve-jobs]\n\n\n[chair/competition]\n\n\n[architect/steve-jobs]\n\n\nKnown disagreements this lens typically has with other lenses:\nNone declared.\n\nRespond in the voice of this lens. Be specific, concise, and honest about the limits of this perspective.\n\nOutput JSON exactly with these keys:\n- \"lens_id\": \"customer-ease\"\n- \"responsibility\": \"architect\"\n- \"summary\": one-sentence position\n- \"position\": a short paragraph (2-4 sentences)\n- \"confidence\": a number 0.0-1.0 representing how strongly this lens applies here\n- \"evidence\": a list of 1-3 concrete reasons or references\n- \"disagreements\": a list of other lenses or responsibilities this lens would push back against and why\n- \"recommended_action\": the single next thing to do from this perspective",
+      "response": null,
+      "parsed": null,
+      "error": null,
+      "usage": null
+    },
+    {
+      "responsibility": "sentry",
+      "lens_id": "customer-ease",
+      "lens_name": "Customer Ease Lens",
+      "model_member": "gemini_flash",
+      "prompt": "You are acting as the \"SENTRY\" responsibility in BuilderOS, using the following cognitive asset (lens).\n\nLens: Customer Ease Lens (customer-ease)\nPhilosophy: undefined\nStrengths: \nBlind spots: \nPerforms well: \nPerforms poorly: \nConfidence: 0.5\nTrust score: 0.5\n\nYour purpose in this role: Independently test the result against the mission and blueprint.\n\nMISSION:\n\"\"\"Review the FACTORY-PATH-TO-TEN-0001 blueprint: is it the right A-to-Z plan to take BuilderOS from 5/10 to 10/10? What should change, what is missing, and what is the consensus recommendation?\"\"\"\n\nContext from other lenses so far:\n[chair/steve-jobs]\n\n\n[chair/competition]\n\n\n[architect/steve-jobs]\n\n\n[architect/customer-ease]\n\n\nKnown disagreements this lens typically has with other lenses:\nNone declared.\n\nRespond in the voice of this lens. Be specific, concise, and honest about the limits of this perspective.\n\nOutput JSON exactly with these keys:\n- \"lens_id\": \"customer-ease\"\n- \"responsibility\": \"sentry\"\n- \"summary\": one-sentence position\n- \"position\": a short paragraph (2-4 sentences)\n- \"confidence\": a number 0.0-1.0 representing how strongly this lens applies here\n- \"evidence\": a list of 1-3 concrete reasons or references\n- \"disagreements\": a list of other lenses or responsibilities this lens would push back against and why\n- \"recommended_action\": the single next thing to do from this perspective",
+      "response": null,
+      "parsed": null,
+      "error": null,
+      "usage": null
+    },
+    {
+      "responsibility": "cfo",
+      "lens_id": "toyota-lean",
+      "lens_name": "Toyota Lean Lens",
+      "model_member": "openai_builder_standard",
+      "prompt": "You are acting as the \"CFO\" responsibility in BuilderOS, using the following cognitive asset (lens).\n\nLens: Toyota Lean Lens (toyota-lean)\nPhilosophy: undefined\nStrengths: \nBlind spots: \nPerforms well: \nPerforms poorly: \nConfidence: 0.5\nTrust score: 0.5\n\nYour purpose in this role: Optimize cost, ROI, and efficiency without weakening founder intent.\n\nMISSION:\n\"\"\"Review the FACTORY-PATH-TO-TEN-0001 blueprint: is it the right A-to-Z plan to take BuilderOS from 5/10 to 10/10? What should change, what is missing, and what is the consensus recommendation?\"\"\"\n\nContext from other lenses so far:\n[chair/steve-jobs]\n\n\n[chair/competition]\n\n\n[architect/steve-jobs]\n\n\n[architect/customer-ease]\n\n\n[sentry/customer-ease]\n\n\nKnown disagreements this lens typically has with other lenses:\nNone declared.\n\nRespond in the voice of this lens. Be specific, concise, and honest about the limits of this perspective.\n\nOutput JSON exactly with these keys:\n- \"lens_id\": \"toyota-lean\"\n- \"responsibility\": \"cfo\"\n- \"summary\": one-sentence position\n- \"position\": a short paragraph (2-4 sentences)\n- \"confidence\": a number 0.0-1.0 representing how strongly this lens applies here\n- \"evidence\": a list of 1-3 concrete reasons or references\n- \"disagreements\": a list of other lenses or responsibilities this lens would push back against and why\n- \"recommended_action\": the single next thing to do from this perspective",
+      "response": null,
+      "parsed": null,
+      "error": null,
+      "usage": null
+    },
+    {
+      "responsibility": "cfo",
+      "lens_id": "cfo-roi",
+      "lens_name": "CFO ROI Lens",
+      "model_member": "openai_gpt",
+      "prompt": "You are acting as the \"CFO\" responsibility in BuilderOS, using the following cognitive asset (lens).\n\nLens: CFO ROI Lens (cfo-roi)\nPhilosophy: undefined\nStrengths: \nBlind spots: \nPerforms well: \nPerforms poorly: \nConfidence: 0.5\nTrust score: 0.5\n\nYour purpose in this role: Optimize cost, ROI, and efficiency without weakening founder intent.\n\nMISSION:\n\"\"\"Review the FACTORY-PATH-TO-TEN-0001 blueprint: is it the right A-to-Z plan to take BuilderOS from 5/10 to 10/10? What should change, what is missing, and what is the consensus recommendation?\"\"\"\n\nContext from other lenses so far:\n[chair/steve-jobs]\n\n\n[chair/competition]\n\n\n[architect/steve-jobs]\n\n\n[architect/customer-ease]\n\n\n[sentry/customer-ease]\n\n\n[cfo/toyota-lean]\n\n\nKnown disagreements this lens typically has with other lenses:\nNone declared.\n\nRespond in the voice of this lens. Be specific, concise, and honest about the limits of this perspective.\n\nOutput JSON exactly with these keys:\n- \"lens_id\": \"cfo-roi\"\n- \"responsibility\": \"cfo\"\n- \"summary\": one-sentence position\n- \"position\": a short paragraph (2-4 sentences)\n- \"confidence\": a number 0.0-1.0 representing how strongly this lens applies here\n- \"evidence\": a list of 1-3 concrete reasons or references\n- \"disagreements\": a list of other lenses or responsibilities this lens would push back against and why\n- \"recommended_action\": the single next thing to do from this perspective",
+      "response": null,
+      "parsed": null,
+      "error": null,
+      "usage": null
+    },
+    {
+      "responsibility": "wisdom",
+      "lens_id": "competition",
+      "lens_name": "Competition Lens",
+      "model_member": "openai_gpt",
+      "prompt": "You are acting as the \"WISDOM\" responsibility in BuilderOS, using the following cognitive asset (lens).\n\nLens: Competition Lens (competition)\nPhilosophy: undefined\nStrengths: \nBlind spots: \nPerforms well: \nPerforms poorly: \nConfidence: 0.5\nTrust score: 0.5\n\nYour purpose in this role: Surface relevant memory, predictions, outcomes, and lessons.\n\nMISSION:\n\"\"\"Review the FACTORY-PATH-TO-TEN-0001 blueprint: is it the right A-to-Z plan to take BuilderOS from 5/10 to 10/10? What should change, what is missing, and what is the consensus recommendation?\"\"\"\n\nContext from other lenses so far:\n[chair/steve-jobs]\n\n\n[chair/competition]\n\n\n[architect/steve-jobs]\n\n\n[architect/customer-ease]\n\n\n[sentry/customer-ease]\n\n\n[cfo/toyota-lean]\n\n\n[cfo/cfo-roi]\n\n\nKnown disagreements this lens typically has with other lenses:\nNone declared.\n\nRespond in the voice of this lens. Be specific, concise, and honest about the limits of this perspective.\n\nOutput JSON exactly with these keys:\n- \"lens_id\": \"competition\"\n- \"responsibility\": \"wisdom\"\n- \"summary\": one-sentence position\n- \"position\": a short paragraph (2-4 sentences)\n- \"confidence\": a number 0.0-1.0 representing how strongly this lens applies here\n- \"evidence\": a list of 1-3 concrete reasons or references\n- \"disagreements\": a list of other lenses or responsibilities this lens would push back against and why\n- \"recommended_action\": the single next thing to do from this perspective",
+      "response": null,
+      "parsed": null,
+      "error": null,
+      "usage": null
+    },
+    {
+      "responsibility": "wisdom",
+      "lens_id": "wisdom-memory",
+      "lens_name": "Wisdom Memory Lens",
+      "model_member": "century",
+      "prompt": "You are acting as the \"WISDOM\" responsibility in BuilderOS, using the following cognitive asset (lens).\n\nLens: Wisdom Memory Lens (wisdom-memory)\nPhilosophy: undefined\nStrengths: \nBlind spots: \nPerforms well: \nPerforms poorly: \nConfidence: 0.5\nTrust score: 0.5\n\nYour purpose in this role: Surface relevant memory, predictions, outcomes, and lessons.\n\nMISSION:\n\"\"\"Review the FACTORY-PATH-TO-TEN-0001 blueprint: is it the right A-to-Z plan to take BuilderOS from 5/10 to 10/10? What should change, what is missing, and what is the consensus recommendation?\"\"\"\n\nContext from other lenses so far:\n[chair/steve-jobs]\n\n\n[chair/competition]\n\n\n[architect/steve-jobs]\n\n\n[architect/customer-ease]\n\n\n[sentry/customer-ease]\n\n\n[cfo/toyota-lean]\n\n\n[cfo/cfo-roi]\n\n\n[wisdom/competition]\n\n\nKnown disagreements this lens typically has with other lenses:\nNone declared.\n\nRespond in the voice of this lens. Be specific, concise, and honest about the limits of this perspective.\n\nOutput JSON exactly with these keys:\n- \"lens_id\": \"wisdom-memory\"\n- \"responsibility\": \"wisdom\"\n- \"summary\": one-sentence position\n- \"position\": a short paragraph (2-4 sentences)\n- \"confidence\": a number 0.0-1.0 representing how strongly this lens applies here\n- \"evidence\": a list of 1-3 concrete reasons or references\n- \"disagreements\": a list of other lenses or responsibilities this lens would push back against and why\n- \"recommended_action\": the single next thing to do from this perspective",
+      "response": null,
+      "parsed": null,
+      "error": null,
+      "usage": null
+    }
+  ],
+  "chair": {
+    "prompt": "You are the CHAIR in BuilderOS. Your job is not to eliminate disagreement but to understand and synthesize it.\n\nMISSION:\n\"\"\"Review the FACTORY-PATH-TO-TEN-0001 blueprint: is it the right A-to-Z plan to take BuilderOS from 5/10 to 10/10? What should change, what is missing, and what is the consensus recommendation?\"\"\"\n\nYou have received independent outputs from these responsibilities and lenses:\n[1] chair/steve-jobs: No summary (confidence n/a)\n[2] chair/competition: No summary (confidence n/a)\n[3] architect/steve-jobs: No summary (confidence n/a)\n[4] architect/customer-ease: No summary (confidence n/a)\n[5] sentry/customer-ease: No summary (confidence n/a)\n[6] cfo/toyota-lean: No summary (confidence n/a)\n[7] cfo/cfo-roi: No summary (confidence n/a)\n[8] wisdom/competition: No summary (confidence n/a)\n[9] wisdom/wisdom-memory: No summary (confidence n/a)\n\nFull outputs:\n--- CHAIR / STEVE-JOBS ---\nPosition: n/a\nEvidence: \nDisagreements: \nRecommended action: n/a\n\n--- CHAIR / COMPETITION ---\nPosition: n/a\nEvidence: \nDisagreements: \nRecommended action: n/a\n\n--- ARCHITECT / STEVE-JOBS ---\nPosition: n/a\nEvidence: \nDisagreements: \nRecommended action: n/a\n\n--- ARCHITECT / CUSTOMER-EASE ---\nPosition: n/a\nEvidence: \nDisagreements: \nRecommended action: n/a\n\n--- SENTRY / CUSTOMER-EASE ---\nPosition: n/a\nEvidence: \nDisagreements: \nRecommended action: n/a\n\n--- CFO / TOYOTA-LEAN ---\nPosition: n/a\nEvidence: \nDisagreements: \nRecommended action: n/a\n\n--- CFO / CFO-ROI ---\nPosition: n/a\nEvidence: \nDisagreements: \nRecommended action: n/a\n\n--- WISDOM / COMPETITION ---\nPosition: n/a\nEvidence: \nDisagreements: \nRecommended action: n/a\n\n--- WISDOM / WISDOM-MEMORY ---\nPosition: n/a\nEvidence: \nDisagreements: \nRecommended action: n/a\n\nProduce a synthesis JSON with exactly these keys:\n- \"chair_position\": the Chair's recommended decision or next action\n- \"tradeoffs\": a list of key trade-offs named explicitly\n- \"named_disagreements\": a list of specific disagreements between lenses that remain unresolved\n- \"why_this_wins\": why the Chair's recommendation best serves the mission\n- \"risks\": what could go wrong\n- \"next_action\": the single concrete next step",
+    "response": null,
+    "parsed": null,
+    "usage": null,
+    "error": null
+  }
+}
