@@ -691,25 +691,28 @@
     },
     {
       "id": "memory-intelligence-4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/memory-ci-evidence.mjs",
       "task": "generate memory CI evidence",
       "spec": "Record the node --check results as fact_evidence in the database.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "createFactEvidence"
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-16T04:40:42.832Z",
-      "commit_sha": "f49bd0c101c2ab1f2799af7be31108c024d56202",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-intelligence-4",
       "mission_id": "PRODUCT-memory-intelligence",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:createFactEvidence; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.671Z"
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 0b is < 30% of existing 1067b. underlying: openai_builder_mini: HTTP 429: {\n    \"error\": {\n        \"message\": \"You have no credits remaining. Add credits to continue u",
+      "reaudit_reset_at": "2026-07-30T18:55:06.671Z",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-31T07:35:36.304Z"
     },
     {
       "id": "memory-intelligence-5",
