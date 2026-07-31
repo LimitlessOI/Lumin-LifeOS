@@ -1,8 +1,8 @@
 {
   "schema": "receipt_truth_validation_v1",
-  "at": "2026-07-31T22:59:47.303Z",
+  "at": "2026-07-31T23:08:11.453Z",
   "ok": true,
-  "checked": 135,
+  "checked": 134,
   "failures": [],
   "known_debt": [
     "MACHINE_ALPHA_WALKTHROUGH.json:ACCEPTANCE_PASS_WITHOUT_SHA_OR_BASE",
@@ -837,13 +837,6 @@
     },
     {
       "file": "SENTRY_MARKETINGOS_LAYER_B.json",
-      "ok": true,
-      "violations": [],
-      "claims_pass": false,
-      "proposed_solutions": []
-    },
-    {
-      "file": "SENTRY_PASS_demo-write-widget_FACTORY-DEMO-SAMPLE-0001-demo-write-widget-1785538668035.json",
       "ok": true,
       "violations": [],
       "claims_pass": false,

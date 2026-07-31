@@ -1,0 +1,67 @@
+{
+  "schema": "sentry_reality_station_receipt_v1",
+  "kind": "sentry_reality_station_pass",
+  "run_id": "FACTORY-DEMO-SAMPLE-0001-demo-write-widget-1785539312770",
+  "run_at": "2026-07-31T23:08:32.770Z",
+  "base_url": " https://robust-magic-production.up.railway.app",
+  "step_id": "demo-write-widget",
+  "verified_by": "sentry-reality-station",
+  "builder_actor": null,
+  "passed": true,
+  "layer_a": {
+    "ok": true,
+    "findings": [],
+    "results": [
+      {
+        "assertion": {
+          "type": "file_contains",
+          "target": "public/factory-demo-widget.mjs",
+          "substring": "export function greet"
+        },
+        "checked_at": "2026-07-31T23:08:32.770Z",
+        "ok": true,
+        "substring": "export function greet"
+      },
+      {
+        "assertion": {
+          "type": "exports_smoke",
+          "target": "public/factory-demo-widget.mjs",
+          "exports": [
+            "greet"
+          ]
+        },
+        "checked_at": "2026-07-31T23:08:32.770Z",
+        "ok": true,
+        "exports": [
+          "greet"
+        ],
+        "missing": []
+      },
+      {
+        "assertion": {
+          "type": "function_behavior_test",
+          "target": "public/factory-demo-widget.mjs",
+          "export": "greet",
+          "args": "Factory",
+          "expect": {
+            "message": "Hello Factory",
+            "ok": true
+          }
+        },
+        "checked_at": "2026-07-31T23:08:32.770Z",
+        "ok": true,
+        "result": {
+          "message": "Hello Factory",
+          "ok": true
+        }
+      }
+    ]
+  },
+  "layer_b": {
+    "ok": true,
+    "skipped": true,
+    "findings": [],
+    "screenshots": []
+  },
+  "findings": []
+}

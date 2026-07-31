@@ -1,9 +1,9 @@
 {
   "schema": "master_a_to_z_demo_receipt_v1",
   "mission": "FACTORY-MASTER-A-TO-Z-0001",
-  "run_at": "2026-07-31T22:57:48.036Z",
-  "cognitive_plan_id": "1785538668029-6crxvru3",
-  "blueprint_id": "BP-1785538668029-vb0eretn",
+  "run_at": "2026-07-31T23:08:53.073Z",
+  "cognitive_plan_id": "1785539333068-qiwwi652",
+  "blueprint_id": "BP-1785539333068-csosknh2",
   "blueprint_review": {
     "ok": true,
     "reasons": []
