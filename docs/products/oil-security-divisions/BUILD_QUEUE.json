@@ -366,7 +366,7 @@
     },
     {
       "id": "step8",
-      "status": "blocked",
+      "status": "done",
       "target_file": "routes/registerSecurityRoutes.js",
       "task": "register security-related routes",
       "spec": "Setup routes for security modules",
@@ -376,7 +376,7 @@
         "step4"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerSecurityRoutes"
       ],
@@ -395,12 +395,12 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-31T08:36:10.799Z",
-      "commit_sha": null,
+      "commit_sha": "42290cef20b54cc2198d9c117de9711543bf6400",
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step8",
       "mission_id": "PRODUCT-oil-security-divisions",
       "pre_existing": null,
-      "last_error": "governed_ship_failed",
+      "last_error": null,
       "reaudit_reset_at": "2026-07-30T18:55:06.687Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
@@ -430,10 +430,10 @@
       },
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-07-31T08:10:35.077Z",
+      "last_attempt_at": null,
       "last_attempt": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-31T08:04:32.731Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-31T08:28:40.272Z",
       "no_op": null,
       "demoted": false,
       "demote_reason": null,
