@@ -399,8 +399,8 @@
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step8",
       "mission_id": "PRODUCT-oil-security-divisions",
-      "pre_existing": false,
-      "last_error": "ship_commit_not_on_main: compare status ahead",
+      "pre_existing": null,
+      "last_error": "governed_ship_failed",
       "reaudit_reset_at": "2026-07-30T18:55:06.687Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
@@ -430,7 +430,19 @@
       },
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-07-31T07:47:29.814Z"
+      "last_attempt_at": "2026-07-31T08:10:35.077Z",
+      "last_attempt": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-31T08:04:32.731Z",
+      "no_op": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "step9",
