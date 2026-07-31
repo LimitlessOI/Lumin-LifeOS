@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T09:39:07.530Z",
+  "generated_at": "2026-07-31T09:39:39.686Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12540,
+  "file_count": 12541,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -93071,6 +93071,13 @@
       "bytes": 4386,
       "mtime": "2026-07-31T04:37:32.211Z",
       "indexed_at": "2026-07-31T04:37:34.626Z"
+    },
+    {
+      "path": "services/reviewModerationFlowDetail.js",
+      "synopsis": "Exports moderateSubmissions — services/reviewModerationFlowDetail.js.",
+      "bytes": 794,
+      "mtime": "2026-07-31T09:39:39.686Z",
+      "indexed_at": "2026-07-31T09:39:39.686Z"
     },
     {
       "path": "services/risk-scorer.js",

@@ -1626,7 +1626,7 @@
     },
     {
       "id": "02",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/familySafetyService.js",
       "task": "enforce family safety modes",
       "spec": "Service should enforce family/church/classroom-safe output options with stricter defaults for sensitive content.",
@@ -1694,9 +1694,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-31T09:16:59.359Z",
       "no_op": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:STEP_STATUS_FORBIDDEN",
+      "demoted_at": "2026-07-31T09:39:17.738Z",
       "park_until": null,
       "blocker_class": null,
       "claim_level": null,
@@ -1965,7 +1965,10 @@
           "content_source_path": "docs/products/faith-studio/twins/steps/05.exact",
           "content_sha256": "16f36bd91ddfc07e43d168d01de0eba1fa358ebe3fe1562380c4c3ebd601c3e0"
         }
-      }
+      },
+      "failure_signature": "STEP_STATUS_FORBIDDEN",
+      "same_signature_count": 1,
+      "escalation_class": "same_signature_repeat"
     },
     {
       "id": "06",
@@ -2059,7 +2062,7 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-16T02:57:00.157Z",
+      "shipped_at": "2026-07-31T09:39:37.498Z",
       "commit_sha": null,
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "08",
@@ -2081,7 +2084,33 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/faith-studio/twins/steps/08.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-31T09:39:37.498Z",
+        "shipped_at": "2026-07-31T09:39:37.498Z",
+        "commit_sha": null,
+        "content_sha256": "87ce4d890647dd24cadd89e25aedcb229dd6e31516d2cc2cb80cbf4502f5a3bc",
+        "target_file": "services/reviewModerationFlowDetail.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/reviewModerationFlowDetail.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/faith-studio/twins/steps/08.exact",
+          "content_sha256": "87ce4d890647dd24cadd89e25aedcb229dd6e31516d2cc2cb80cbf4502f5a3bc"
+        }
+      }
     },
     {
       "id": "09",
