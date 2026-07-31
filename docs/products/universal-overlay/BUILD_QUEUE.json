@@ -206,26 +206,29 @@
     },
     {
       "id": "5",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "public/overlay/moduleRouter.js",
       "task": "build fluid UI context router",
       "spec": "Route UI context based on URL patterns for assembled view logic.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "routeUIContext"
       ],
       "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": null,
       "shipped_at": "2026-07-15T22:13:12.909Z",
-      "commit_sha": "608fbbcaf99ae3346c33853b18618d86aae56691",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "5",
       "mission_id": "PRODUCT-universal-overlay",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:routeUIContext; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.758Z"
+      "last_error": "codegen_authoring_failed: codegen_empty: openai_builder_mini: HTTP 429: {\n    \"error\": {\n        \"message\": \"You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organiza",
+      "reaudit_reset_at": "2026-07-30T18:55:06.758Z",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-31T09:24:33.572Z"
     },
     {
       "id": "6",
