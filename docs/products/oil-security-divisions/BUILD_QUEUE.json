@@ -178,13 +178,13 @@
     },
     {
       "id": "step4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/envDiffService.js",
       "task": "build env diff receipt generator",
       "spec": "Generate a receipt for env diffs, tracking only name changes",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "generateEnvDiffReceipt"
       ],
@@ -200,12 +200,12 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-31T06:51:35.498Z",
-      "commit_sha": "b63fe4b98ce98f0e11a52804d85574678cc39818",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step4",
       "mission_id": "PRODUCT-oil-security-divisions",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:generateEnvDiffReceipt; assertion_threw",
+      "last_error": "ship_commit_not_on_main: compare status ahead",
       "reaudit_reset_at": "2026-07-30T18:55:06.687Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
@@ -232,7 +232,10 @@
           "content_source_path": "docs/products/oil-security-divisions/twins/steps/step4.exact",
           "content_sha256": "de41194a58371ab86898aac7815f9539b4e5f3da5fe2f2ba329477bed6c96378"
         }
-      }
+      },
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-31T06:51:42.479Z"
     },
     {
       "id": "step5",
