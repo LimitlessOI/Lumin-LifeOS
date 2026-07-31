@@ -731,10 +731,10 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-07-31T02:00:17.593Z",
-        "shipped_at": "2026-07-31T02:00:17.593Z",
+        "sealed_at": "2026-07-31T02:07:28.411Z",
+        "shipped_at": "2026-07-31T02:07:28.411Z",
         "commit_sha": null,
-        "content_sha256": "a48846467f8ab5192df7d0d4bd424ac84f880cda87199fa4ac6284226c3eb105",
+        "content_sha256": "0b49e244bca27d75afe355847ddb39d462e33feeda0d8237c084c4e40f67f3fe",
         "target_file": "routes/marketing-session-export-routes.js",
         "reverse": {
           "mode": "delete_file",
@@ -745,10 +745,10 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/marketingos/twins/steps/smos-export-owner-scope-fix.exact",
-          "content_sha256": "a48846467f8ab5192df7d0d4bd424ac84f880cda87199fa4ac6284226c3eb105"
+          "content_sha256": "0b49e244bca27d75afe355847ddb39d462e33feeda0d8237c084c4e40f67f3fe"
         }
       },
-      "shipped_at": "2026-07-31T02:00:17.593Z"
+      "shipped_at": "2026-07-31T02:07:28.411Z"
     },
     {
       "id": "smos-buy-button-session-scope-fix",

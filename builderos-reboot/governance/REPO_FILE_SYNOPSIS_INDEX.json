@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T02:07:18.055Z",
+  "generated_at": "2026-07-31T02:07:30.959Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12369,
   "files": [
@@ -69140,9 +69140,9 @@
     {
       "path": "routes/marketing-session-export-routes.js",
       "synopsis": "Exports registerMarketingSessionExportRoutes — routes/marketing-session-export-routes.js.",
-      "bytes": 3735,
-      "mtime": "2026-07-13T08:19:56.689Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 4978,
+      "mtime": "2026-07-31T02:07:30.959Z",
+      "indexed_at": "2026-07-31T02:07:30.959Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]

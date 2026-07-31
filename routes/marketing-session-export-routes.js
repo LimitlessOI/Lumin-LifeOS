@@ -81,12 +81,13 @@ export async function registerMarketingSessionExportRoutes(app, deps) {
       const ownerId = await getOwnerId(req, db);
 
       if (!isFounderBypass(req)) {
-        const session = await db.query(
+        const sessionResult = await db.query(
           `SELECT owner_id
            FROM marketing_sessions
            WHERE id = $1`,
           [sessionId]
-        ).then(rows => rows[0]);
+        );
+        const session = sessionResult.rows[0];
 
         if (!session) {
           throw { statusCode: 404, message: 'Session not found' };
