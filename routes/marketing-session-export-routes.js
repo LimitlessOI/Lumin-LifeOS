@@ -3,6 +3,7 @@
  * @ssot docs/products/marketingos/PRODUCT_HOME.md
  */
 import busboy from 'busboy';
+import { createHash } from 'crypto';
 import { buildSessionExport } from '../services/marketing-session-export.js';
 import { uploadAudioToR2 } from '../services/marketing-r2-upload.js';
 import { assertSessionPaid } from '../services/smos-pack-checkout.js';
@@ -54,18 +55,33 @@ function parseMultipartAudio(req) {
   });
 }
 
-async function getOwnerId(req, db) {
-  const userId = req.lifeosUser?.id;
-  if (!userId) return null;
+// Mirrors the proven owner-resolution pattern already live in
+// routes/marketing-session-routes.js's own getOwnerId/toOwnerUuid -- marketing_sessions.owner_id
+// is a deterministic UUID derived from the JWT handle/sub, not a row in a separate
+// "marketing_users" table (that table does not exist anywhere in this codebase; a prior
+// version of this function queried it and 500'd or 403'd every real customer -- do not
+// reintroduce req.lifeosUser?.id or a marketing_users query here, see PRODUCT_HOME.md
+// Change Receipts 2026-07-31 for the incident).
+function toOwnerUuid(raw) {
+  const s = String(raw || '').trim();
+  if (!s) return null;
+  if (/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(s)) {
+    return s.toLowerCase();
+  }
+  const hex = createHash('sha256').update(`marketing-owner:${s}`).digest('hex');
+  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-5${hex.slice(13, 16)}-a${hex.slice(17, 20)}-${hex.slice(20, 32)}`;
+}
 
-  const result = await db.query(
-    `SELECT owner_id
-     FROM marketing_users
-     WHERE user_id = $1`,
-    [userId]
-  );
-
-  return result.rows[0]?.owner_id || null;
+function getOwnerId(req) {
+  const handle = req.lifeosUser?.handle || null;
+  const sub = req.lifeosUser?.sub || null;
+  const jwtPresent = Boolean(handle || sub);
+  if (jwtPresent) {
+    const raw = handle || (sub && !/^\d+$/.test(String(sub)) ? String(sub) : null) || sub;
+    return toOwnerUuid(raw);
+  }
+  const bodyOwner = req.body?.owner_id || req.query?.owner_id || null;
+  return toOwnerUuid(bodyOwner || 'adam');
 }
 
 export async function registerMarketingSessionExportRoutes(app, deps) {
@@ -78,7 +94,7 @@ export async function registerMarketingSessionExportRoutes(app, deps) {
   app.post('/marketing/session/:id/export', requireKey, async (req, res) => {
     try {
       const sessionId = req.params.id;
-      const ownerId = await getOwnerId(req, db);
+      const ownerId = getOwnerId(req);
 
       if (!isFounderBypass(req)) {
         const sessionResult = await db.query(
@@ -113,7 +129,7 @@ export async function registerMarketingSessionExportRoutes(app, deps) {
     try {
       const sessionId = req.params.id;
       // Ownership check for audio upload, similar to export
-      const ownerId = await getOwnerId(req, db);
+      const ownerId = getOwnerId(req);
       if (!isFounderBypass(req)) {
         const sessionResult = await db.query(
           `SELECT owner_id
@@ -152,7 +168,7 @@ export async function registerMarketingSessionExportRoutes(app, deps) {
   app.get('/marketing/session/:id/export/status', requireKey, async (req, res) => {
     try {
       const sessionId = req.params.id;
-      const ownerId = await getOwnerId(req, db);
+      const ownerId = getOwnerId(req);
 
       if (!isFounderBypass(req)) {
         const sessionResult = await db.query(
