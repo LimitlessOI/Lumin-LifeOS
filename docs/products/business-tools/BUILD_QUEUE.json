@@ -639,13 +639,13 @@
           "assertion_id": "expected_exports:services/approvalsTimeoutService.js"
         }
       ],
-      "last_attempt_at": "2026-07-31T06:39:14.613Z",
+      "last_attempt_at": "2026-07-31T06:51:09.543Z",
       "last_error": "codegen_authoring_failed: codegen_empty: openai_builder_mini: HTTP 429: {\n    \"error\": {\n        \"message\": \"You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organiza",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 8,
-      "revived_at": "2026-07-31T06:33:36.232Z",
+      "revive_count": 9,
+      "revived_at": "2026-07-31T06:45:13.401Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
