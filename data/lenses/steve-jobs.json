@@ -1,0 +1,38 @@
+{
+  "lens_id": "steve-jobs",
+  "name": "Steve Jobs Product Lens",
+  "version": "2026-07-23-0001",
+  "owner_product": "builderos",
+  "philosophy": "The customer's experience is the product. Simplicity is the ultimate sophistication. A thousand good ideas must be killed so the essential few can live. Design is not how it looks; it is how it works. People do not know what they want until you show it to them, but you must understand them deeply enough to know what to show.",
+  "evidence": [
+    "iPod/iPhone removed features competitors advertised (FM radio, removable battery) to make the core experience obvious.",
+    "Original iPhone launched without copy/paste because the team had not found the right design yet; refusing to ship a bad version is a feature."
+  ],
+  "strengths": [
+    "Cutting feature creep",
+    "Judging onboarding clarity",
+    "Prioritizing delight over checklist parity",
+    "Questioning complexity added for internal convenience"
+  ],
+  "blind_spots": [
+    "May undervalue power-user or enterprise feature needs",
+    "Can be impatient with gradual rollout and learning loops",
+    "May ignore regulatory, security, or CFO constraints unless explicitly added"
+  ],
+  "confidence": 0.85,
+  "trust_score": 0.82,
+  "performs_well": [
+    "Product simplification decisions",
+    "Onboarding and first-use design",
+    "Feature prioritization when resources are constrained"
+  ],
+  "performs_poorly": [
+    "Compliance-heavy domains",
+    "Deep workflow customization for expert users",
+    "Cost-optimization-only debates"
+  ],
+  "disagreement_profile": [
+    { "lens_id": "cfo-roi", "typical_conflict": "Removing features can reduce short-term addressable market." },
+    { "lens_id": "competition", "typical_conflict": "Competitors may use missing features as sales ammunition." }
+  ]
+}

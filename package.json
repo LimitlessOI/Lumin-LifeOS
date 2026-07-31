@@ -219,6 +219,7 @@
     "builderos:arc:simulate": "node scripts/simulate-blueprint-steps.mjs",
     "builderos:arc:pipeline": "node scripts/run-arc-pipeline.mjs",
     "builderos:arc:translate": "node scripts/run-arc-translate.mjs",
+    "cognitive-chair:acceptance": "node scripts/run-cognitive-chair-acceptance.mjs",
     "builderos:point-b:gate": "node scripts/run-point-b-gate.mjs",
     "builderos:working-definition:verify": "node scripts/verify-builderos-working-definition.mjs && node --test tests/builderos-working-definition.test.js tests/system-commit-files-noop-gate.test.js tests/deploy-truth-guard.test.js tests/security-invariants.test.js tests/security-invariants-ship-path.test.js tests/receipt-separation.test.js tests/migration-truth.test.js",
     "builderos:working-definition:verify:operational": "BUILDEROS_WORKING_OPERATIONAL=1 node scripts/verify-builderos-working-definition.mjs",

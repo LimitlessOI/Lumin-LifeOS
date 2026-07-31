@@ -1,0 +1,60 @@
+{
+  "_authority": {
+    "domain": "Machine",
+    "status": "CANONICAL",
+    "role": "Catalog of reusable cognitive assets (lenses).",
+    "spec": "docs/products/builderos/specs/COGNITIVE_ASSET_ARCHITECTURE.md"
+  },
+  "version": "2026-07-23-0001",
+  "updated_at": "2026-07-23T21:00:00.000Z",
+  "lenses": [
+    {
+      "lens_id": "steve-jobs",
+      "name": "Steve Jobs Product Lens",
+      "path": "data/lenses/steve-jobs.json",
+      "responsibilities": ["chair", "architect", "creative"],
+      "default_model_member": "claude_sonnet",
+      "summary": "Focus on user experience, simplicity, and saying no to a thousand good ideas so the essential few shine."
+    },
+    {
+      "lens_id": "toyota-lean",
+      "name": "Toyota Lean Lens",
+      "path": "data/lenses/toyota-lean.json",
+      "responsibilities": ["builder", "cfo"],
+      "default_model_member": "openai_builder_standard",
+      "summary": "Eliminate waste, make work visible, pull value through the system, and improve continuously from reality."
+    },
+    {
+      "lens_id": "cfo-roi",
+      "name": "CFO ROI Lens",
+      "path": "data/lenses/cfo-roi.json",
+      "responsibilities": ["cfo"],
+      "default_model_member": "openai_gpt",
+      "summary": "Measure cost, expected return, risk, and opportunity cost; challenge anything that does not produce measurable leverage."
+    },
+    {
+      "lens_id": "customer-ease",
+      "name": "Customer Ease Lens",
+      "path": "data/lenses/customer-ease.json",
+      "responsibilities": ["sentry", "architect"],
+      "default_model_member": "gemini_flash",
+      "summary": "Judge every step from the customer's first confusion to their first success. Friction is failure."
+    },
+    {
+      "lens_id": "competition",
+      "name": "Competition Lens",
+      "path": "data/lenses/competition.json",
+      "responsibilities": ["chair", "wisdom"],
+      "default_model_member": "openai_gpt",
+      "summary": "Map the competitive landscape, anticipate counter-moves, and avoid building what is already commoditized."
+    },
+    {
+      "lens_id": "wisdom-memory",
+      "name": "Wisdom Memory Lens",
+      "path": "data/lenses/wisdom-memory.json",
+      "responsibilities": ["wisdom"],
+      "default_model_member": "century",
+      "summary": "Before deciding, look at what we already proved, disproved, or assumed. The past is the cheapest consultant."
+    }
+  ]
+}

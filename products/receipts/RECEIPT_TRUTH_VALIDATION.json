@@ -1,8 +1,8 @@
 {
   "schema": "receipt_truth_validation_v1",
-  "at": "2026-07-31T08:31:23.482Z",
+  "at": "2026-07-31T09:48:04.320Z",
   "ok": true,
-  "checked": 129,
+  "checked": 130,
   "failures": [],
   "known_debt": [
     "MACHINE_ALPHA_WALKTHROUGH.json:ACCEPTANCE_PASS_WITHOUT_SHA_OR_BASE",
@@ -110,6 +110,13 @@
       "ok": true,
       "violations": [],
       "claims_pass": true,
+      "proposed_solutions": []
+    },
+    {
+      "file": "COGNITIVE_TRANSCRIPT_2026-07-31T09-45-27-144Z.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
       "proposed_solutions": []
     },
     {

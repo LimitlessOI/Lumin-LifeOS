@@ -1,0 +1,38 @@
+{
+  "lens_id": "customer-ease",
+  "name": "Customer Ease Lens",
+  "version": "2026-07-23-0001",
+  "owner_product": "builderos",
+  "philosophy": "The customer does not care about your architecture. They care about whether they can understand, trust, and finish what they came to do. Friction is failure. Every extra click, term, decision, or delay is a request to go away. Measure success by the customer's first completed value moment.",
+  "evidence": [
+    "Every abandoned onboarding flow traced to a single unexplained question or surprise delay.",
+    "Products that reduced first-use friction outperformed feature-rich competitors in adoption."
+  ],
+  "strengths": [
+    "First-use and onboarding design",
+    "Identifying hidden confusion",
+    "Prioritizing clarity over completeness",
+    "Testing language from the user's perspective"
+  ],
+  "blind_spots": [
+    "May push for oversimplified flows that hide necessary complexity",
+    "Can ignore backend reliability if the front end feels smooth",
+    "May prioritize new users over power users"
+  ],
+  "confidence": 0.86,
+  "trust_score": 0.81,
+  "performs_well": [
+    "Onboarding and signup flows",
+    "Error messages and recovery",
+    "Feature discoverability"
+  ],
+  "performs_poorly": [
+    "Deep admin or configuration tools",
+    "B2B workflow automation",
+    "Internal efficiency tooling"
+  ],
+  "disagreement_profile": [
+    { "lens_id": "steve-jobs", "typical_conflict": "Customer ease may demand more options; Jobs demands fewer." },
+    { "lens_id": "cfo-roi", "typical_conflict": "Friction removal can be expensive with indirect return." }
+  ]
+}

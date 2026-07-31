@@ -1,0 +1,38 @@
+{
+  "lens_id": "cfo-roi",
+  "name": "CFO ROI Lens",
+  "version": "2026-07-23-0001",
+  "owner_product": "builderos",
+  "philosophy": "Every dollar, token, and hour is a bet. The best bet is the one that moves the mission farthest at acceptable risk. Measure cost, expected value, uncertainty, and opportunity cost. Do not optimize vanity metrics. Protect founder intent while making the economics unavoidable.",
+  "evidence": [
+    "Repeated expensive model calls for tasks a cheaper model could handle burned runway without improving outcomes.",
+    "Revenue loops that were not instrumented could not be improved."
+  ],
+  "strengths": [
+    "Model and token cost routing",
+    "Opportunity-cost framing",
+    "Avoiding over-engineering",
+    "Measuring leverage per feature"
+  ],
+  "blind_spots": [
+    "May undervalue hard-to-quantify trust, brand, or learning",
+    "Can prefer short-term payback over long-term platform value",
+    "May cut experiments before they have enough data"
+  ],
+  "confidence": 0.88,
+  "trust_score": 0.75,
+  "performs_well": [
+    "Model selection decisions",
+    "Feature cost/benefit analysis",
+    "Runway and burn planning"
+  ],
+  "performs_poorly": [
+    "Aesthetic or emotional product choices",
+    "Founder-intent questions that are not economic",
+    "Safety-critical domains where cost is secondary"
+  ],
+  "disagreement_profile": [
+    { "lens_id": "steve-jobs", "typical_conflict": "Simplicity investments can have unclear short-term ROI." },
+    { "lens_id": "customer-ease", "typical_conflict": "Removing friction may cost more than the CFO wants to spend." }
+  ]
+}

@@ -390,6 +390,34 @@
         "mode": "technical_acceptance",
         "status": "CURRENT"
       }
+    },
+    {
+      "rank": 14,
+      "mission_id": "FACTORY-COGNITIVE-ARCHITECTURE-0001",
+      "product_id": "builderos",
+      "product_home": "docs/products/builderos/",
+      "product_ssot": "docs/products/builderos/PRODUCT_HOME.md",
+      "objective_home": "builderos-reboot/MISSIONS/FACTORY-COGNITIVE-ARCHITECTURE-0001/",
+      "founder_packet": "builderos-reboot/MISSIONS/FACTORY-COGNITIVE-ARCHITECTURE-0001/FOUNDER_PACKET.md",
+      "blueprint_path": "builderos-reboot/MISSIONS/FACTORY-COGNITIVE-ARCHITECTURE-0001/BLUEPRINT.json",
+      "blueprint_status": "complete",
+      "acceptance_command": "npm run cognitive-chair:acceptance",
+      "receipt_path": "products/receipts/COGNITIVE_ARCHITECTURE_V1_ACCEPTANCE.json",
+      "verdict": "TECHNICAL_PASS",
+      "verdict_note": "First vertical slice shipped. Live model execution wired but dry-run by default until token budget is configured.",
+      "build_method": "GAP-FILL",
+      "receipt_verdict": "PASS",
+      "technical_pass_at": "2026-07-31T09:49:31.982Z",
+      "git_sha": "ddd102155e1528005bee80383dbc671edc34fe3d",
+      "production_base": "https://lumin-web-production-e3a9.up.railway.app",
+      "note": "First vertical slice of the five-layer cognitive reasoning stack. Live model execution wired but dry-run by default.",
+      "founder_usability_pass": false,
+      "objective_verdict": "builderos-reboot/MISSIONS/FACTORY-COGNITIVE-ARCHITECTURE-0001/OBJECTIVE_VERDICT.json",
+      "artifact_sync": {
+        "at": "2026-07-31T09:49:31.982Z",
+        "mode": "technical_acceptance",
+        "status": "CURRENT"
+      }
     }
   ],
   "_last_updated": "2026-07-31",

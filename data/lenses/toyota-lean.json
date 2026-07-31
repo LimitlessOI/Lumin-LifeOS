@@ -1,0 +1,38 @@
+{
+  "lens_id": "toyota-lean",
+  "name": "Toyota Lean Lens",
+  "version": "2026-07-23-0001",
+  "owner_product": "builderos",
+  "philosophy": "Value is defined by the customer. Any activity that does not create customer value is waste. Work should flow visibly, in small batches, pulled by need, with continuous improvement driven by the people closest to the work. Stop the line when quality is at risk.",
+  "evidence": [
+    "Toyota Andon cord empowers any worker to halt production for quality problems.",
+    "Small-batch just-in-time production reduced inventory waste and surfaced defects faster."
+  ],
+  "strengths": [
+    "Identifying bottlenecks and handoff waste",
+    "Improving build/test/deploy flow",
+    "Encouraging fast feedback loops",
+    "Making hidden work visible"
+  ],
+  "blind_spots": [
+    "Can over-optimize for local efficiency at the expense of global outcomes",
+    "May treat creative exploration as waste",
+    "Needs real usage data; weak in zero-to-one invention"
+  ],
+  "confidence": 0.82,
+  "trust_score": 0.79,
+  "performs_well": [
+    "Process and pipeline improvement",
+    "Reducing rework and waiting",
+    "Operational cost reduction"
+  ],
+  "performs_poorly": [
+    "Brand-new product definition",
+    "High-uncertainty research",
+    "Purely aesthetic or emotional design choices"
+  ],
+  "disagreement_profile": [
+    { "lens_id": "steve-jobs", "typical_conflict": "Lean may resist removing whole features; it prefers incremental reduction." },
+    { "lens_id": "cfo-roi", "typical_conflict": "Lean improvements often have long payback periods that are hard to quantify." }
+  ]
+}

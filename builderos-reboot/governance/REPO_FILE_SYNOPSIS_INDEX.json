@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T09:39:59.399Z",
+  "generated_at": "2026-07-31T09:51:46.501Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12542,
+  "file_count": 12559,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21307,9 +21307,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 23253,
-      "mtime": "2026-07-31T06:24:46.671Z",
-      "indexed_at": "2026-07-31T06:26:08.755Z",
+      "bytes": 24847,
+      "mtime": "2026-07-31T09:49:31.980Z",
+      "indexed_at": "2026-07-31T09:51:46.501Z",
       "synopsis_index_only": true
     },
     {
@@ -22382,6 +22382,29 @@
       "bytes": 977,
       "mtime": "2026-07-31T06:22:52.363Z",
       "indexed_at": "2026-07-31T06:26:08.755Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-COGNITIVE-ARCHITECTURE-0001/BLUEPRINT.json",
+      "synopsis": "BuilderOS artifact — BLUEPRINT.",
+      "bytes": 5081,
+      "mtime": "2026-07-31T09:49:31.980Z",
+      "indexed_at": "2026-07-31T09:51:46.501Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-COGNITIVE-ARCHITECTURE-0001/FOUNDER_PACKET.md",
+      "synopsis": "Founder packet for the BuilderOS Cognitive Architecture mission.",
+      "bytes": 2352,
+      "mtime": "2026-07-31T09:45:39.176Z",
+      "indexed_at": "2026-07-31T09:51:46.501Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-COGNITIVE-ARCHITECTURE-0001/OBJECTIVE_VERDICT.json",
+      "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
+      "bytes": 717,
+      "mtime": "2026-07-31T09:49:31.984Z",
+      "indexed_at": "2026-07-31T09:51:46.501Z",
+      "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/ACCEPTANCE_TESTS.json",
@@ -29642,9 +29665,9 @@
     {
       "path": "builderos-reboot/PRODUCT_READINESS_REPORT.json",
       "synopsis": "BuilderOS artifact — PRODUCT READINESS REPORT.",
-      "bytes": 43376,
-      "mtime": "2026-07-28T22:32:15.911Z",
-      "indexed_at": "2026-07-28T23:44:15.529Z",
+      "bytes": 43810,
+      "mtime": "2026-07-31T09:49:31.984Z",
+      "indexed_at": "2026-07-31T09:51:46.501Z",
       "synopsis_index_only": true
     },
     {
@@ -32621,6 +32644,62 @@
       "bytes": 22,
       "mtime": "2026-07-28T18:06:19.632Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/lenses/cfo-roi.json",
+      "synopsis": "JSON data/config — data/lenses/cfo-roi.json.",
+      "bytes": 1611,
+      "mtime": "2026-07-31T09:43:43.068Z",
+      "indexed_at": "2026-07-31T09:51:46.501Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/lenses/competition.json",
+      "synopsis": "JSON data/config — data/lenses/competition.json.",
+      "bytes": 1661,
+      "mtime": "2026-07-31T09:43:51.596Z",
+      "indexed_at": "2026-07-31T09:51:46.501Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/lenses/customer-ease.json",
+      "synopsis": "JSON data/config — data/lenses/customer-ease.json.",
+      "bytes": 1623,
+      "mtime": "2026-07-31T09:43:46.692Z",
+      "indexed_at": "2026-07-31T09:51:46.501Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/lenses/LENS_REGISTRY.json",
+      "synopsis": "JSON data/config — data/lenses/LENS_REGISTRY.json.",
+      "bytes": 2382,
+      "mtime": "2026-07-31T09:43:29.832Z",
+      "indexed_at": "2026-07-31T09:51:46.501Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/lenses/steve-jobs.json",
+      "synopsis": "JSON data/config — data/lenses/steve-jobs.json.",
+      "bytes": 1817,
+      "mtime": "2026-07-31T09:43:34.516Z",
+      "indexed_at": "2026-07-31T09:51:46.501Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/lenses/toyota-lean.json",
+      "synopsis": "JSON data/config — data/lenses/toyota-lean.json.",
+      "bytes": 1621,
+      "mtime": "2026-07-31T09:43:38.456Z",
+      "indexed_at": "2026-07-31T09:51:46.501Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/lenses/wisdom-memory.json",
+      "synopsis": "JSON data/config — data/lenses/wisdom-memory.json.",
+      "bytes": 1715,
+      "mtime": "2026-07-31T09:43:55.504Z",
+      "indexed_at": "2026-07-31T09:51:46.501Z",
       "synopsis_index_only": true
     },
     {
@@ -38406,6 +38485,13 @@
       "indexed_at": "2026-07-31T05:52:22.489Z"
     },
     {
+      "path": "docs/constitution/AMENDMENT_COGNITIVE_LAYERS.md",
+      "synopsis": "Constitutional amendment ratifying the five-layer cognitive reasoning stack and cognitive assets.",
+      "bytes": 2284,
+      "mtime": "2026-07-31T09:43:25.444Z",
+      "indexed_at": "2026-07-31T09:51:46.501Z"
+    },
+    {
       "path": "docs/constitution/COGNITIVE_CORE_LAWS.md",
       "synopsis": "Cognitive Core laws — judgment compiler constitution (subordinate to North Star SSOT)",
       "bytes": 6415,
@@ -38576,9 +38662,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 63397,
-      "mtime": "2026-07-31T09:15:10.244Z",
-      "indexed_at": "2026-07-31T09:15:12.293Z"
+      "bytes": 64685,
+      "mtime": "2026-07-31T09:50:02.400Z",
+      "indexed_at": "2026-07-31T09:51:46.501Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40789,9 +40875,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 342134,
-      "mtime": "2026-07-31T09:12:54.208Z",
-      "indexed_at": "2026-07-31T09:13:02.062Z"
+      "bytes": 343267,
+      "mtime": "2026-07-31T09:47:31.192Z",
+      "indexed_at": "2026-07-31T09:51:46.501Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -40806,6 +40892,13 @@
       "bytes": 23871,
       "mtime": "2026-07-30T18:25:48.697Z",
       "indexed_at": "2026-07-30T22:32:11.913Z"
+    },
+    {
+      "path": "docs/products/builderos/specs/COGNITIVE_ASSET_ARCHITECTURE.md",
+      "synopsis": "BuilderOS Cognitive Asset Architecture — five-layer reasoning stack.",
+      "bytes": 5335,
+      "mtime": "2026-07-31T09:43:21.308Z",
+      "indexed_at": "2026-07-31T09:51:46.501Z"
     },
     {
       "path": "docs/products/builderos/specs/FOUNDER_VIRTUAL_TWIN.md",
@@ -64651,9 +64744,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 35816,
-      "mtime": "2026-07-30T19:13:34.001Z",
-      "indexed_at": "2026-07-30T19:14:49.820Z",
+      "bytes": 35901,
+      "mtime": "2026-07-31T09:49:29.004Z",
+      "indexed_at": "2026-07-31T09:51:46.501Z",
       "synopsis_index_only": true
     },
     {
@@ -64885,6 +64978,14 @@
       "bytes": 6702,
       "mtime": "2026-07-09T19:38:08.236Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/COGNITIVE_ARCHITECTURE_V1_ACCEPTANCE.json",
+      "synopsis": "Product receipt — COGNITIVE ARCHITECTURE V1 ACCEPTANCE.",
+      "bytes": 2942,
+      "mtime": "2026-07-31T09:49:31.984Z",
+      "indexed_at": "2026-07-31T09:51:46.501Z",
       "synopsis_index_only": true
     },
     {
@@ -65626,9 +65727,9 @@
     {
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
-      "bytes": 24027,
-      "mtime": "2026-07-31T05:13:40.239Z",
-      "indexed_at": "2026-07-31T05:15:25.090Z",
+      "bytes": 24209,
+      "mtime": "2026-07-31T09:48:04.316Z",
+      "indexed_at": "2026-07-31T09:51:46.501Z",
       "synopsis_index_only": true
     },
     {
@@ -73678,6 +73779,26 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/run-cognitive-chair-acceptance.mjs",
+      "synopsis": "Acceptance script for FACTORY-COGNITIVE-ARCHITECTURE-0001.",
+      "bytes": 2530,
+      "mtime": "2026-07-31T09:49:27.568Z",
+      "indexed_at": "2026-07-31T09:51:46.501Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/run-cognitive-mission.mjs",
+      "synopsis": "CLI runner for the BuilderOS Cognitive Chair.",
+      "bytes": 5162,
+      "mtime": "2026-07-31T09:44:50.560Z",
+      "indexed_at": "2026-07-31T09:51:46.501Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
@@ -87660,6 +87781,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "services/cognitive-chair.mjs",
+      "synopsis": "Cognitive Chair — composes responsibilities, lenses (cognitive assets), and model selection",
+      "bytes": 13215,
+      "mtime": "2026-07-31T09:45:19.292Z",
+      "indexed_at": "2026-07-31T09:51:46.501Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/cognitive-core-calibrate.js",
       "synopsis": "Cognitive Core Era-7 \"Calibrate Me\" — heuristics, calibration, trust transfer, rituals.",
       "bytes": 13075,
@@ -96639,6 +96770,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "tests/cognitive-chair.test.mjs",
+      "synopsis": "Tests for the BuilderOS Cognitive Chair.",
+      "bytes": 5112,
+      "mtime": "2026-07-31T09:45:00.544Z",
+      "indexed_at": "2026-07-31T09:51:46.501Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {

@@ -1,0 +1,120 @@
+{
+  "mission_id": "FACTORY-COGNITIVE-ARCHITECTURE-0001",
+  "product_id": "builderos",
+  "version": "2026-07-23-0001",
+  "blueprint_status": "complete",
+  "execution_gate": "READY",
+  "steps": [
+    {
+      "id": "M2CA-000",
+      "name": "Ratify cognitive architecture amendment",
+      "status": "complete",
+      "artifact": "docs/constitution/AMENDMENT_COGNITIVE_LAYERS.md",
+      "acceptance": "File exists, contains the five layers, and defines cognitive assets.",
+      "completed_at": "2026-07-31T09:49:31.982Z",
+      "git_sha": "ddd102155e1528005bee80383dbc671edc34fe3d"
+    },
+    {
+      "id": "M2CA-001",
+      "name": "Author canonical cognitive architecture spec",
+      "status": "complete",
+      "artifact": "docs/products/builderos/specs/COGNITIVE_ASSET_ARCHITECTURE.md",
+      "acceptance": "Spec describes Mission, Responsibility, Lens, Model, Execution layers and the Lens Marketplace.",
+      "completed_at": "2026-07-31T09:49:31.982Z",
+      "git_sha": "ddd102155e1528005bee80383dbc671edc34fe3d"
+    },
+    {
+      "id": "M2CA-002",
+      "name": "Create canonical Lens Registry",
+      "status": "complete",
+      "artifact": "data/lenses/LENS_REGISTRY.json",
+      "acceptance": "Registry contains at least six lenses with lens_id, name, responsibilities, and model mapping.",
+      "completed_at": "2026-07-31T09:49:31.982Z",
+      "git_sha": "ddd102155e1528005bee80383dbc671edc34fe3d"
+    },
+    {
+      "id": "M2CA-003",
+      "name": "Create sample cognitive asset files",
+      "status": "complete",
+      "artifacts": [
+        "data/lenses/steve-jobs.json",
+        "data/lenses/toyota-lean.json",
+        "data/lenses/cfo-roi.json",
+        "data/lenses/customer-ease.json",
+        "data/lenses/competition.json",
+        "data/lenses/wisdom-memory.json"
+      ],
+      "acceptance": "Each lens contains philosophy, evidence, strengths, blind spots, confidence, trust_score, performs_well, performs_poorly, and disagreement_profile.",
+      "completed_at": "2026-07-31T09:49:31.982Z",
+      "git_sha": "ddd102155e1528005bee80383dbc671edc34fe3d"
+    },
+    {
+      "id": "M2CA-004",
+      "name": "Implement cognitive chair composer",
+      "status": "complete",
+      "artifact": "services/cognitive-chair.mjs",
+      "acceptance": "Exports composeReasoning, buildLensPrompt, buildChairSynthesisPrompt, formatTranscript, and supports dry-run and live model-call modes.",
+      "completed_at": "2026-07-31T09:49:31.982Z",
+      "git_sha": "ddd102155e1528005bee80383dbc671edc34fe3d"
+    },
+    {
+      "id": "M2CA-005",
+      "name": "Implement run-cognitive-mission CLI",
+      "status": "complete",
+      "artifact": "scripts/run-cognitive-mission.mjs",
+      "acceptance": "CLI accepts --mission, --responsibilities, --lenses, --execute, --output, and --list-lenses; produces JSON and Markdown transcripts.",
+      "completed_at": "2026-07-31T09:49:31.982Z",
+      "git_sha": "ddd102155e1528005bee80383dbc671edc34fe3d"
+    },
+    {
+      "id": "M2CA-006",
+      "name": "Add cognitive chair tests",
+      "status": "complete",
+      "artifact": "tests/cognitive-chair.test.mjs",
+      "acceptance": "All tests pass with `node --test tests/cognitive-chair.test.mjs`.",
+      "completed_at": "2026-07-31T09:49:31.982Z",
+      "git_sha": "ddd102155e1528005bee80383dbc671edc34fe3d"
+    },
+    {
+      "id": "M2CA-007",
+      "name": "Update BuilderOS product home",
+      "status": "complete",
+      "artifact": "docs/products/builderos/PRODUCT_HOME.md",
+      "acceptance": "Change Receipts row added for cognitive architecture.",
+      "completed_at": "2026-07-31T09:49:31.982Z",
+      "git_sha": "ddd102155e1528005bee80383dbc671edc34fe3d"
+    },
+    {
+      "id": "M2CA-008",
+      "name": "Add mission to BP_PRIORITY queue",
+      "status": "complete",
+      "artifact": "builderos-reboot/BP_PRIORITY.json",
+      "acceptance": "FACTORY-COGNITIVE-ARCHITECTURE-0001 appears in items with receipt paths.",
+      "completed_at": "2026-07-31T09:49:31.982Z",
+      "git_sha": "ddd102155e1528005bee80383dbc671edc34fe3d"
+    },
+    {
+      "id": "M2CA-009",
+      "name": "Create OBJECTIVE_VERDICT",
+      "status": "complete",
+      "artifact": "builderos-reboot/MISSIONS/FACTORY-COGNITIVE-ARCHITECTURE-0001/OBJECTIVE_VERDICT.json",
+      "acceptance": "Verdict reflects dry-run and test pass; notes live execution as future phase.",
+      "completed_at": "2026-07-31T09:49:31.982Z",
+      "git_sha": "ddd102155e1528005bee80383dbc671edc34fe3d"
+    },
+    {
+      "id": "M2CA-010",
+      "name": "Commit, push, and redeploy",
+      "status": "complete",
+      "artifact": "git main + Railway deploy parity",
+      "acceptance": "`builder:preflight` passes, deploy SHA parity confirmed.",
+      "completed_at": "2026-07-31T09:49:31.982Z",
+      "git_sha": "ddd102155e1528005bee80383dbc671edc34fe3d"
+    }
+  ],
+  "completed_at": "2026-07-31T09:49:31.982Z",
+  "git_sha": "ddd102155e1528005bee80383dbc671edc34fe3d",
+  "receipt_path": "products/receipts/COGNITIVE_ARCHITECTURE_V1_ACCEPTANCE.json",
+  "receipt_verdict": "PASS",
+  "build_method": "GAP-FILL"
+}

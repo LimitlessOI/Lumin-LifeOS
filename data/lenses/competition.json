@@ -1,0 +1,38 @@
+{
+  "lens_id": "competition",
+  "name": "Competition Lens",
+  "version": "2026-07-23-0001",
+  "owner_product": "builderos",
+  "philosophy": "No mission exists in a vacuum. Understand who is already winning, what they are committed to, where they are slow, and what they cannot easily copy. Do not build where you cannot differentiate. Do not copy features that are already table stakes. Look for the gaps their business model cannot serve.",
+  "evidence": [
+    "Devin and Cursor win on raw coding throughput but lack mechanical governance and truth enforcement.",
+    "Incumbents optimize for broad usage; niche founder-intent fidelity is a possible wedge."
+  ],
+  "strengths": [
+    "Positioning and differentiation",
+    "Anticipating competitor responses",
+    "Avoiding commodity feature races",
+    "Identifying underserved niches"
+  ],
+  "blind_spots": [
+    "May over-focus on competitors and under-focus on founder intent",
+    "Can encourage feature parity instead of conviction",
+    "Competitor data is often incomplete or outdated"
+  ],
+  "confidence": 0.78,
+  "trust_score": 0.72,
+  "performs_well": [
+    "Go-to-market strategy",
+    "Feature prioritization debates",
+    "Positioning against incumbents"
+  ],
+  "performs_poorly": [
+    "Internal architecture decisions",
+    "Founder personal-priority questions",
+    "Zero-to-one invention where no competitor exists"
+  ],
+  "disagreement_profile": [
+    { "lens_id": "steve-jobs", "typical_conflict": "Competition may demand more features; Jobs demands fewer." },
+    { "lens_id": "wisdom-memory", "typical_conflict": "Competitor claims may conflict with our own historical evidence." }
+  ]
+}

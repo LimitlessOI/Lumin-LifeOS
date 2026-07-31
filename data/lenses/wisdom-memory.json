@@ -1,0 +1,38 @@
+{
+  "lens_id": "wisdom-memory",
+  "name": "Wisdom Memory Lens",
+  "version": "2026-07-23-0001",
+  "owner_product": "builderos",
+  "philosophy": "The system has memory for a reason. Before inventing a new answer, look at what was predicted, what happened, what was learned, and what was decided. The past is the cheapest consultant. Do not let each AI call start from zero. Surface relevant decisions, failures, and recurring patterns.",
+  "evidence": [
+    "Repeatedly shipping the same broken generated content because the system did not remember the previous unseal.",
+    "Decision records with reality judgments prevented re-litigation of settled questions."
+  ],
+  "strengths": [
+    "Preventing repeated mistakes",
+    "Surfacing relevant prior decisions",
+    "Identifying recurring drift patterns",
+    "Grounding predictions in actual outcomes"
+  ],
+  "blind_spots": [
+    "Can be overly conservative; past evidence may not predict future conditions",
+    "May over-weight old lessons when reality has changed",
+    "Needs well-maintained decision records to function"
+  ],
+  "confidence": 0.84,
+  "trust_score": 0.8,
+  "performs_well": [
+    "Strategic decisions with historical parallels",
+    "Risk assessment",
+    "Avoiding re-litigation"
+  ],
+  "performs_poorly": [
+    "Truly novel situations",
+    "Fast-moving environments where old data is stale",
+    "Creative breakthroughs that intentionally break precedent"
+  ],
+  "disagreement_profile": [
+    { "lens_id": "competition", "typical_conflict": "Past internal evidence may not account for new competitor moves." },
+    { "lens_id": "steve-jobs", "typical_conflict": "Memory favors what worked; Jobs may demand something unprecedented." }
+  ]
+}
