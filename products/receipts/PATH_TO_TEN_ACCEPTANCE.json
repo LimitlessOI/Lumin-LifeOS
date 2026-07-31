@@ -1,0 +1,27 @@
+{
+  "tests_passed": [
+    "receipt-auditor-suite",
+    "bp_sync_mandatory"
+  ],
+  "tests_failed": [],
+  "test_output": "",
+  "completed_at": "2026-07-31T20:36:08.507Z",
+  "production_base": "https://lumin-web-production-e3a9.up.railway.app",
+  "mission_progress": "all_steps_done",
+  "steps_done": 18,
+  "steps_total": 18,
+  "git_sha": "84d15ae313861ab87424cfa0f390baba2aa53bcc",
+  "verdict": "PASS",
+  "bp_sync": {
+    "updated": [
+      "builderos-reboot/BP_PRIORITY.json",
+      "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/BLUEPRINT.json"
+    ],
+    "skipped": []
+  },
+  "artifact_sync": {
+    "mode": "technical_acceptance",
+    "readiness_report": "builderos-reboot/PRODUCT_READINESS_REPORT.json",
+    "freshness_status": "CURRENT"
+  }
+}

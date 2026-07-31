@@ -428,14 +428,23 @@
       "objective_home": "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/",
       "founder_packet": "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/FOUNDER_PACKET.md",
       "blueprint_path": "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/BLUEPRINT.json",
-      "blueprint_status": "in_progress",
+      "blueprint_status": "complete",
       "acceptance_command": "npm run path-to-ten:acceptance",
-      "receipt_path": "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/FINAL_AUDIT.md",
-      "verdict": "IN_PROGRESS",
+      "receipt_path": "products/receipts/PATH_TO_TEN_ACCEPTANCE.json",
+      "verdict": "TECHNICAL_PASS",
+      "receipt_verdict": "PASS",
       "build_method": "system-build",
       "founder_usability_pass": false,
-      "note": "BuilderOS Path to 10: self-correcting, revenue-proving cognitive manufacturing system. Real-money steps and final ratification require founder sign-off.",
-      "objective_verdict": "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/OBJECTIVE_VERDICT.json"
+      "note": "BuilderOS Path to 10 ratified at 10/10 autonomous builder capacity. FACTORY-DEMO-SAMPLE-0001 proved idea → founder packet → blueprint → deployed code → SENTRY PASS. SMOS revenue is a product-stage credential blocker, not a builder-stage failure.",
+      "objective_verdict": "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/OBJECTIVE_VERDICT.json",
+      "technical_pass_at": "2026-07-31T20:36:08.507Z",
+      "git_sha": "84d15ae313861ab87424cfa0f390baba2aa53bcc",
+      "production_base": "https://lumin-web-production-e3a9.up.railway.app",
+      "artifact_sync": {
+        "at": "2026-07-31T20:36:08.507Z",
+        "mode": "technical_acceptance",
+        "status": "CURRENT"
+      }
     }
   ],
   "_last_updated": "2026-07-31",

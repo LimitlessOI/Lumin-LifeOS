@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T20:28:20.228Z",
+  "generated_at": "2026-07-31T20:38:47.164Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12606,
+  "file_count": 12610,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21307,9 +21307,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 25918,
-      "mtime": "2026-07-31T12:04:04.906Z",
-      "indexed_at": "2026-07-31T12:04:04.906Z",
+      "bytes": 26369,
+      "mtime": "2026-07-31T20:38:47.164Z",
+      "indexed_at": "2026-07-31T20:38:47.164Z",
       "synopsis_index_only": true
     },
     {
@@ -23490,10 +23490,10 @@
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/BLUEPRINT.json",
-      "synopsis": "Receipt Auditor\"],",
-      "bytes": 17853,
-      "mtime": "2026-07-31T18:55:12.780Z",
-      "indexed_at": "2026-07-31T18:55:12.780Z",
+      "synopsis": "Receipt Auditor\"",
+      "bytes": 19552,
+      "mtime": "2026-07-31T20:38:47.164Z",
+      "indexed_at": "2026-07-31T20:38:47.164Z",
       "synopsis_index_only": true
     },
     {
@@ -23504,6 +23504,20 @@
       "indexed_at": "2026-07-31T12:13:02.420Z"
     },
     {
+      "path": "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/END-TO-END-DEMO.md",
+      "synopsis": "FACTORY-DEMO-SAMPLE-0001 — End-to-End BuilderOS Demo",
+      "bytes": 1486,
+      "mtime": "2026-07-31T20:38:47.164Z",
+      "indexed_at": "2026-07-31T20:38:47.164Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/FINAL_AUDIT.md",
+      "synopsis": "FACTORY-PATH-TO-TEN-0001 — Final Audit",
+      "bytes": 2589,
+      "mtime": "2026-07-31T20:38:47.164Z",
+      "indexed_at": "2026-07-31T20:38:47.164Z"
+    },
+    {
       "path": "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/FOUNDER_PACKET.md",
       "synopsis": "Founder packet for FACTORY-PATH-TO-TEN-0001 — turn BuilderOS into a self-correcting, revenue-proving cognitive manufacturing system.",
       "bytes": 5816,
@@ -23511,11 +23525,18 @@
       "indexed_at": "2026-07-31T12:04:04.906Z"
     },
     {
+      "path": "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/NEVER_STOP_RETRIAGE.md",
+      "synopsis": "NEVER_STOP_RETRIAGE.md",
+      "bytes": 481,
+      "mtime": "2026-07-31T20:38:47.164Z",
+      "indexed_at": "2026-07-31T20:38:47.164Z"
+    },
+    {
       "path": "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/OBJECTIVE_VERDICT.json",
       "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
-      "bytes": 1064,
-      "mtime": "2026-07-31T18:55:12.780Z",
-      "indexed_at": "2026-07-31T18:55:12.780Z",
+      "bytes": 1577,
+      "mtime": "2026-07-31T20:38:47.164Z",
+      "indexed_at": "2026-07-31T20:38:47.164Z",
       "synopsis_index_only": true
     },
     {
@@ -38755,9 +38776,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 72500,
-      "mtime": "2026-07-31T18:55:12.780Z",
-      "indexed_at": "2026-07-31T18:55:12.780Z"
+      "bytes": 73603,
+      "mtime": "2026-07-31T20:38:47.164Z",
+      "indexed_at": "2026-07-31T20:38:47.164Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40968,9 +40989,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 355290,
-      "mtime": "2026-07-31T18:55:12.780Z",
-      "indexed_at": "2026-07-31T18:55:12.780Z"
+      "bytes": 356754,
+      "mtime": "2026-07-31T20:38:47.164Z",
+      "indexed_at": "2026-07-31T20:38:47.164Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -65822,6 +65843,14 @@
       "synopsis_index_only": true
     },
     {
+      "path": "products/receipts/PATH_TO_TEN_ACCEPTANCE.json",
+      "synopsis": "Product receipt — PATH TO TEN ACCEPTANCE.",
+      "bytes": 751,
+      "mtime": "2026-07-31T20:38:47.164Z",
+      "indexed_at": "2026-07-31T20:38:47.164Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "products/receipts/PHASE_0_STOP_GATE.json",
       "synopsis": "Product receipt — PHASE 0 STOP GATE.",
       "bytes": 4227,
@@ -66523,8 +66552,8 @@
       "path": "public/factory-demo-widget.mjs",
       "synopsis": "Exports greet — public/factory-demo-widget.mjs.",
       "bytes": 162,
-      "mtime": "2026-07-31T20:28:20.228Z",
-      "indexed_at": "2026-07-31T20:28:20.228Z"
+      "mtime": "2026-07-31T20:38:47.164Z",
+      "indexed_at": "2026-07-31T20:38:47.164Z"
     },
     {
       "path": "public/health/dashboard.js",
@@ -76246,9 +76275,9 @@
     {
       "path": "scripts/verify-path-to-ten-acceptance.mjs",
       "synopsis": "PATH-TO-TEN mission acceptance smoke test.",
-      "bytes": 3167,
-      "mtime": "2026-07-31T12:49:58.647Z",
-      "indexed_at": "2026-07-31T12:49:58.647Z",
+      "bytes": 4230,
+      "mtime": "2026-07-31T20:38:47.164Z",
+      "indexed_at": "2026-07-31T20:38:47.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
