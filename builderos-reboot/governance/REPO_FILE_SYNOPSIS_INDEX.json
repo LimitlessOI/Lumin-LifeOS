@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T12:13:02.420Z",
+  "generated_at": "2026-07-31T12:30:15.449Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12582,
+  "file_count": 12585,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -23459,9 +23459,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 14936,
-      "mtime": "2026-07-31T12:13:02.420Z",
-      "indexed_at": "2026-07-31T12:13:02.420Z",
+      "bytes": 0,
+      "mtime": "2026-07-31T12:30:15.449Z",
+      "indexed_at": "2026-07-31T12:30:15.449Z",
       "synopsis_index_only": true
     },
     {
@@ -40935,10 +40935,10 @@
     },
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
-      "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 348352,
-      "mtime": "2026-07-31T12:13:02.420Z",
-      "indexed_at": "2026-07-31T12:13:02.420Z"
+      "synopsis": "Documentation — PRODUCT HOME.",
+      "bytes": 0,
+      "mtime": "2026-07-31T12:30:15.449Z",
+      "indexed_at": "2026-07-31T12:30:15.449Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -73771,6 +73771,13 @@
       ]
     },
     {
+      "path": "scripts/replay-receipt.mjs",
+      "synopsis": "Script — Replay Receipt.",
+      "bytes": 0,
+      "mtime": "2026-07-31T12:30:15.449Z",
+      "indexed_at": "2026-07-31T12:30:15.449Z"
+    },
+    {
       "path": "scripts/repo-sync-check.mjs",
       "synopsis": "Fails closed when local `main` is behind `origin/main` (fragmented operational reality).",
       "bytes": 1757,
@@ -76133,13 +76140,10 @@
     },
     {
       "path": "scripts/verify-path-to-ten-acceptance.mjs",
-      "synopsis": "Final acceptance script for FACTORY-PATH-TO-TEN-0001.",
-      "bytes": 3720,
-      "mtime": "2026-07-31T12:04:04.906Z",
-      "indexed_at": "2026-07-31T12:04:04.906Z",
-      "ssot": [
-        "docs/products/builderos/PRODUCT_HOME.md"
-      ]
+      "synopsis": "Script — Verify Path To Ten Acceptance.",
+      "bytes": 0,
+      "mtime": "2026-07-31T12:30:15.449Z",
+      "indexed_at": "2026-07-31T12:30:15.449Z"
     },
     {
       "path": "scripts/verify-personalfinanceos.mjs",
@@ -93242,6 +93246,13 @@
       ]
     },
     {
+      "path": "services/receipt-auditor.mjs",
+      "synopsis": "Service module — Receipt Auditor.",
+      "bytes": 0,
+      "mtime": "2026-07-31T12:30:15.449Z",
+      "indexed_at": "2026-07-31T12:30:15.449Z"
+    },
+    {
       "path": "services/receipt-truth-validator.js",
       "synopsis": "Receipt truth validator — PASS claims must carry proof, not theater.",
       "bytes": 8233,
@@ -97957,6 +97968,13 @@
       "bytes": 1291,
       "mtime": "2026-06-28T18:19:01.837Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "tests/receipt-auditor.test.js",
+      "synopsis": "js — tests/receipt-auditor.test.js.",
+      "bytes": 0,
+      "mtime": "2026-07-31T12:30:15.449Z",
+      "indexed_at": "2026-07-31T12:30:15.449Z"
     },
     {
       "path": "tests/receipt-separation.test.js",

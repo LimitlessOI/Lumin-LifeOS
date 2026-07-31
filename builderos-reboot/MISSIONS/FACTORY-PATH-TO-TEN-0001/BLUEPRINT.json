@@ -143,11 +143,33 @@
       "id": "M2PT-006",
       "name": "Build Receipt Auditor / Reality Replay Agent",
       "phase": "3",
-      "status": "pending",
+      "status": "done",
+      "target_file": "services/receipt-auditor.mjs",
+      "sandbox_boundary": "services/**",
+      "action_type": "author_then_write",
       "artifact": "services/receipt-auditor.mjs + scripts/replay-receipt.mjs",
+      "authoring": {
+        "task": "Author a pure Node.js ES module service called services/receipt-auditor.mjs that replays OBJECTIVE_VERDICT and PASS receipts against reality. It must expose createReceiptAuditor, auditReceipt, and replaySample. auditReceipt receives a receipt (object or path), reads git_sha or commit_sha, attempts to check out that commit into a temporary git worktree or clone, re-runs the acceptance command / verify_command, captures exit code and stdout/stderr, and returns a REPLAY_VERDICT of PASS/FAIL/UNREPRODUCIBLE with separation-of-duties metadata. If git or the checkout is unavailable it must fall back to UNREPRODUCIBLE, never fabricate PASS. replaySample discovers the latest PATH-TO-TEN OBJECTIVE_VERDICT and audits it. Reuse verdictFromReceipt from services/cognitive-core-oracle.js to normalize raw receipt verdicts. Do not use a database. Include @ssot docs/products/builderos/PRODUCT_HOME.md and a SYNOPSIS comment.",
+        "spec": "The module must be runnable without DB or network secrets. Functions must be async and return plain objects. Use child_process (execFile/spawn) and fs/promises. Keep temp directories under os.tmpdir(). Support skip_git_checkout option for tests.",
+        "max_output_tokens": 8000
+      },
+      "expected_exports": ["createReceiptAuditor", "auditReceipt", "replaySample"],
+      "file_contains": ["@ssot docs/products/builderos/PRODUCT_HOME.md", "SYNOPSIS: Receipt Auditor"],
+      "assertion_spec": {
+        "function_behavior_tests": [
+          {
+            "export": "auditReceipt",
+            "args": { "receipt": { "git_sha": "HEAD", "verify_command": "node --eval \"console.log('ok')\"" }, "skip_git_checkout": true },
+            "expect": { "replay_verdict": "PASS", "audit_completed": true }
+          }
+        ]
+      },
       "acceptance": "For any OBJECTIVE_VERDICT or PASS receipt, the auditor can check out the git SHA, re-run the acceptance command, and produce a REPLAY_VERDICT (PASS / FAIL / UNREPRODUCIBLE) with separation of duties.",
       "verify_command": "node --test tests/receipt-auditor.test.js && node scripts/replay-receipt.mjs --sample",
-      "depends_on": ["M2PT-001"]
+      "depends_on": ["M2PT-001"],
+      "completed_at": "2026-07-31T12:30:00.000Z",
+      "git_sha": "PENDING_SHA_UPDATE",
+      "receipt_path": "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/OBJECTIVE_VERDICT.json"
     },
     {
       "id": "M2PT-005C",
