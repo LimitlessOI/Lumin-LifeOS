@@ -1009,13 +1009,13 @@
     },
     {
       "id": "6",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/pricingValidationVerification.js",
       "task": "validate pricing strategy",
       "spec": "Verify pricing is validated as per business requirements.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "confirmPricingValidation"
       ],
@@ -1038,13 +1038,16 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-15T21:48:18.738Z",
-      "commit_sha": "35017eef76067c422e511369014e90fc00d58962",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "6",
       "mission_id": "PRODUCT-music-talent-studio",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:confirmPricingValidation; confirmPricingValidation; Pricing Validation",
-      "reaudit_reset_at": "2026-07-30T18:55:06.680Z"
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:confirmPricingValidation; behavior_assertion_failed; behavior_proof",
+      "reaudit_reset_at": "2026-07-30T18:55:06.680Z",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-31T09:04:23.072Z"
     },
     {
       "id": "7",

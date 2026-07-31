@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T09:11:19.166Z",
+  "generated_at": "2026-07-31T09:13:20.824Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12530,
+  "file_count": 12535,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21670,9 +21670,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3776709,
-      "mtime": "2026-07-31T08:36:45.835Z",
-      "indexed_at": "2026-07-31T08:36:45.872Z"
+      "bytes": 3779179,
+      "mtime": "2026-07-31T09:13:02.128Z",
+      "indexed_at": "2026-07-31T09:13:12.982Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -21947,7 +21947,7 @@
       "synopsis": "Prioritized task list to take FACTORY-BLUEPRINT-AUTHORITY-0001 from audit state to READY TO MANUFACTURE.",
       "bytes": 5950,
       "mtime": "2026-07-31T09:11:16.156Z",
-      "indexed_at": "2026-07-31T09:11:19.166Z"
+      "indexed_at": "2026-07-31T09:11:42.838Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/ACCEPTANCE_TESTS.json",
@@ -36988,6 +36988,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "db/migrations/addInsuranceProfilesTable.sql",
+      "synopsis": "Database migration — addInsuranceProfilesTable.sql.",
+      "bytes": 564,
+      "mtime": "2026-07-31T09:04:49.102Z",
+      "indexed_at": "2026-07-31T09:04:49.102Z"
+    },
+    {
       "path": "db/migrations/addPwaInstallTrackingTable.sql",
       "synopsis": "Database migration — addPwaInstallTrackingTable.sql.",
       "bytes": 257,
@@ -40768,9 +40775,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 341502,
-      "mtime": "2026-07-31T08:31:12.927Z",
-      "indexed_at": "2026-07-31T08:33:28.712Z"
+      "bytes": 342134,
+      "mtime": "2026-07-31T09:12:54.208Z",
+      "indexed_at": "2026-07-31T09:13:02.062Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -68563,6 +68570,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "routes/config-endpoints.js",
+      "synopsis": "Registers ConfigEndpoints routes/handlers (routes/config-endpoints.js).",
+      "bytes": 541,
+      "mtime": "2026-07-31T09:12:44.076Z",
+      "indexed_at": "2026-07-31T09:13:02.062Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "routes/confirmApiAccessRoute.js",
       "synopsis": "HTTP route module — ConfirmApiAccessRoute.",
       "bytes": 553,
@@ -68910,6 +68927,16 @@
       ]
     },
     {
+      "path": "routes/googleCalendarRoutes.js",
+      "synopsis": "HTTP route module — GoogleCalendarRoutes.",
+      "bytes": 1512,
+      "mtime": "2026-07-31T09:12:46.004Z",
+      "indexed_at": "2026-07-31T09:13:02.062Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "routes/governed-fence-routes.js",
       "synopsis": "CONDUCTOR-GLUE founder-lane route for the governed-factory fence",
       "bytes": 4820,
@@ -68932,6 +68959,16 @@
       "bytes": 13264,
       "mtime": "2026-06-21T21:39:03.593Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "routes/intakeFormRoute.js",
+      "synopsis": "HTTP route module — IntakeFormRoute.",
+      "bytes": 464,
+      "mtime": "2026-07-31T09:12:48.564Z",
+      "indexed_at": "2026-07-31T09:13:02.062Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/ipsModule.js",
@@ -73381,6 +73418,16 @@
       "bytes": 620,
       "mtime": "2026-06-21T21:39:08.104Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "scripts/preCommitScannerService.js",
+      "synopsis": "Exports scanSecrets — scripts/preCommitScannerService.js.",
+      "bytes": 1996,
+      "mtime": "2026-07-31T09:12:50.048Z",
+      "indexed_at": "2026-07-31T09:13:02.062Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/probe-founder-social-secrets.mjs",

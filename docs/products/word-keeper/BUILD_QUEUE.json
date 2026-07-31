@@ -264,13 +264,13 @@
     },
     {
       "id": "word-keeper-step1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/googleCalendarRoutes.js",
       "task": "add Google Calendar integration route",
       "spec": "Create a route to integrate Google Calendar. This route should handle incoming requests to connect to the user's Google Calendar without utilizing OAuth, as per the documented requirement.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerGoogleCalendarRoutes"
       ],
@@ -292,14 +292,43 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-16T04:18:45.174Z",
-      "commit_sha": "fa20e493ca0b1ca8dca76b6fc38a68712728147a",
+      "shipped_at": "2026-07-31T09:05:10.002Z",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "word-keeper-step1",
       "mission_id": "PRODUCT-word-keeper",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerGoogleCalendarRoutes; assertion_threw; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:07.447Z"
+      "last_error": "artifact_missing_after_ship: artifact_proof_failed: googleCalendarService",
+      "reaudit_reset_at": "2026-07-30T18:55:07.447Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/word-keeper/twins/steps/word-keeper-step1.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-31T09:05:10.002Z",
+        "shipped_at": "2026-07-31T09:05:10.002Z",
+        "commit_sha": "fa20e493ca0b1ca8dca76b6fc38a68712728147a",
+        "content_sha256": "398560222cb42ea645c2ca62b28fc8e5c51d0047aa55c480d75847c59d6f9115",
+        "target_file": "routes/googleCalendarRoutes.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "routes/googleCalendarRoutes.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/word-keeper/twins/steps/word-keeper-step1.exact",
+          "content_sha256": "398560222cb42ea645c2ca62b28fc8e5c51d0047aa55c480d75847c59d6f9115"
+        }
+      },
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-31T09:05:15.936Z"
     },
     {
       "id": "word-keeper-step2",

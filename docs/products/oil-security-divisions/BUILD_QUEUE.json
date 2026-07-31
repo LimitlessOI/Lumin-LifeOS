@@ -523,7 +523,7 @@
     },
     {
       "id": "1",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/preCommitScannerService.js",
       "task": "implement secret scanner",
       "spec": "Create a secret scanner service to scan for known secret patterns, ensuring no false blocks on placeholders.",
@@ -534,14 +534,40 @@
         "scanSecrets"
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-15T21:46:10.581Z",
-      "commit_sha": "989af633d2c960a794c65547f900c784290f1c63",
+      "shipped_at": "2026-07-31T09:04:28.399Z",
+      "commit_sha": "705dd34cc03dcac9aac8c86b8ed2d7087f9fdc4c",
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "1",
       "mission_id": "PRODUCT-oil-security-divisions",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:scanSecrets; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.687Z"
+      "last_error": null,
+      "reaudit_reset_at": "2026-07-30T18:55:06.687Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/oil-security-divisions/twins/steps/1.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-31T09:04:28.399Z",
+        "shipped_at": "2026-07-31T09:04:28.399Z",
+        "commit_sha": "989af633d2c960a794c65547f900c784290f1c63",
+        "content_sha256": "f65dae5a7f60b44127733894ddf98b84a9b39e08d34647cb736efd0b52ac055e",
+        "target_file": "scripts/preCommitScannerService.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "scripts/preCommitScannerService.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/oil-security-divisions/twins/steps/1.exact",
+          "content_sha256": "f65dae5a7f60b44127733894ddf98b84a9b39e08d34647cb736efd0b52ac055e"
+        }
+      }
     },
     {
       "id": "2",
