@@ -42,5 +42,29 @@ export function registerSecurityRoutes() {
     res.status(200).send('User profile endpoint');
   });
 
+  // Route for refreshing authentication tokens
+  router.post('/token-refresh', (req, res) => {
+    // Placeholder for token refresh logic
+    res.status(200).send('Token refresh endpoint');
+  });
+
+  // Route for email verification
+  router.get('/verify-email', (req, res) => {
+    // Placeholder for email verification logic
+    res.status(200).send('Email verification endpoint');
+  });
+
+  // Route for changing password (when logged in)
+  router.post('/change-password', (req, res) => {
+    // Placeholder for change password logic
+    res.status(200).send('Change password endpoint');
+  });
+
+  // Route for account deactivation/deletion
+  router.delete('/deactivate-account', (req, res) => {
+    // Placeholder for account deactivation logic
+    res.status(200).send('Account deactivation endpoint');
+  });
+
   return router;
 }

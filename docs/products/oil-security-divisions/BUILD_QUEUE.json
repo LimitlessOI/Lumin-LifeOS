@@ -394,7 +394,7 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-31T07:47:22.294Z",
+      "shipped_at": "2026-07-31T08:36:10.799Z",
       "commit_sha": null,
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step8",
@@ -408,10 +408,10 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-07-31T07:47:22.294Z",
-        "shipped_at": "2026-07-31T07:47:22.294Z",
-        "commit_sha": "318df63595b06f24072b41b4d07656609793b4b8",
-        "content_sha256": "741fa0f1e7e6a536e3136c77a7ddd1da2eb3a3bf0d7b2db184771f8d7a6f38cd",
+        "sealed_at": "2026-07-31T08:36:10.799Z",
+        "shipped_at": "2026-07-31T08:36:10.799Z",
+        "commit_sha": null,
+        "content_sha256": "eba0514c99fd0db952930eda5ff2850f49a2e3bac34b0c5d7d87d08b6916eb7b",
         "target_file": "routes/registerSecurityRoutes.js",
         "reverse": {
           "mode": "delete_file",
@@ -425,7 +425,7 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/oil-security-divisions/twins/steps/step8.exact",
-          "content_sha256": "741fa0f1e7e6a536e3136c77a7ddd1da2eb3a3bf0d7b2db184771f8d7a6f38cd"
+          "content_sha256": "eba0514c99fd0db952930eda5ff2850f49a2e3bac34b0c5d7d87d08b6916eb7b"
         }
       },
       "built_sha": null,
