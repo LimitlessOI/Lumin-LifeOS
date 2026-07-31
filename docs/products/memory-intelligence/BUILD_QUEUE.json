@@ -206,13 +206,13 @@
     },
     {
       "id": "5",
-      "status": "blocked",
+      "status": "done",
       "target_file": "scripts/memory-ci-evidence.mjs",
       "task": "record CI evidence",
       "spec": "Runs npm run memory:ci-evidence to record node --check results as fact_evidence.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "recordCiEvidence"
       ],
@@ -221,16 +221,16 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-31T05:51:43.460Z",
-      "commit_sha": null,
+      "commit_sha": "eaabe6d8495990d280709939cbef6a1a02f573ab",
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "5",
       "mission_id": "PRODUCT-memory-intelligence",
-      "pre_existing": false,
-      "last_error": "codegen_authoring_failed: codegen_empty: openai_builder_mini: HTTP 429: {\n    \"error\": {\n        \"message\": \"You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organiza",
+      "pre_existing": null,
+      "last_error": null,
       "reaudit_reset_at": "2026-07-30T18:55:06.671Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-07-31T05:40:32.775Z",
+      "last_attempt_at": null,
       "action_type": "write_file_exact",
       "exact_inputs": {
         "content_source_path": "docs/products/memory-intelligence/twins/steps/5.exact"
@@ -335,7 +335,19 @@
           "content_source_path": "docs/products/memory-intelligence/twins/steps/5.exact",
           "content_sha256": "4c53c797d533c180e6e2885f21af0895ae5ad77335044999f5f6622fee63635b"
         }
-      }
+      },
+      "last_attempt": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-31T05:45:52.799Z",
+      "no_op": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "6",
