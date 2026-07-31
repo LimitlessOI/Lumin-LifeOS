@@ -1562,13 +1562,13 @@
     },
     {
       "id": "6",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/pricingValidationVerification.js",
       "task": "validate pricing strategy",
       "spec": "Verify pricing is validated as per business requirements.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "confirmPricingValidation"
       ],
@@ -1600,7 +1600,7 @@
       "reaudit_reset_at": "2026-07-30T18:55:06.680Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-31T10:15:30.531Z",
       "last_attempt": null,
       "revive_count": 1,
       "revived_at": "2026-07-31T09:23:11.654Z",
