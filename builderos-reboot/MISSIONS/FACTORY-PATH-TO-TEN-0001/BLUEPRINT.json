@@ -175,11 +175,13 @@
       "id": "M2PT-005C",
       "name": "Install continuous verification heartbeat",
       "phase": "2",
-      "status": "pending",
+      "status": "done",
       "artifact": "services/continuous-verification.mjs + scripts/verify-continuous-checks.mjs",
       "acceptance": "A scheduled heartbeat re-runs builder:preflight, lifeos:bp-priority:verify, ssot-check, and false-done audit; on any failure it sets PAUSE_AUTONOMY and emits an alert with receipt path.",
       "verify_command": "node --test tests/continuous-verification.test.js && node scripts/verify-continuous-checks.mjs",
-      "depends_on": ["M2PT-006"]
+      "depends_on": ["M2PT-006"],
+      "completed_at": "2026-07-31T12:47:48.000Z",
+      "git_sha": "TBD_COMMIT_SHA"
     },
     {
       "id": "M2PT-007",

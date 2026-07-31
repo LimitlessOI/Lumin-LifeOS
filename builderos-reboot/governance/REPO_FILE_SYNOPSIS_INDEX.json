@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T12:40:54.470Z",
+  "generated_at": "2026-07-31T12:49:58.647Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12585,
+  "file_count": 12588,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -23458,10 +23458,10 @@
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/BLUEPRINT.json",
-      "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 0,
-      "mtime": "2026-07-31T12:30:31.167Z",
-      "indexed_at": "2026-07-31T12:30:31.167Z",
+      "synopsis": "Receipt Auditor\"],",
+      "bytes": 17176,
+      "mtime": "2026-07-31T12:49:58.647Z",
+      "indexed_at": "2026-07-31T12:49:58.647Z",
       "synopsis_index_only": true
     },
     {
@@ -23481,9 +23481,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/OBJECTIVE_VERDICT.json",
       "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
-      "bytes": 0,
-      "mtime": "2026-07-31T12:33:31.039Z",
-      "indexed_at": "2026-07-31T12:33:31.039Z",
+      "bytes": 1063,
+      "mtime": "2026-07-31T12:49:58.647Z",
+      "indexed_at": "2026-07-31T12:49:58.647Z",
       "synopsis_index_only": true
     },
     {
@@ -38722,10 +38722,10 @@
     },
     {
       "path": "docs/CONTINUITY_LOG.md",
-      "synopsis": "Documentation — CONTINUITY LOG.",
-      "bytes": 0,
-      "mtime": "2026-07-31T12:40:54.470Z",
-      "indexed_at": "2026-07-31T12:40:54.470Z"
+      "synopsis": "Continuity Log — chronological session handoff and key decisions.",
+      "bytes": 67255,
+      "mtime": "2026-07-31T12:49:58.647Z",
+      "indexed_at": "2026-07-31T12:49:58.647Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40935,10 +40935,10 @@
     },
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
-      "synopsis": "Documentation — PRODUCT HOME.",
-      "bytes": 0,
-      "mtime": "2026-07-31T12:30:15.449Z",
-      "indexed_at": "2026-07-31T12:30:15.449Z"
+      "synopsis": "Canonical product home — BuilderOS",
+      "bytes": 350411,
+      "mtime": "2026-07-31T12:49:58.647Z",
+      "indexed_at": "2026-07-31T12:49:58.647Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -65195,9 +65195,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 3850,
-      "mtime": "2026-07-30T22:51:37.633Z",
-      "indexed_at": "2026-07-30T22:52:12.797Z",
+      "bytes": 3677,
+      "mtime": "2026-07-31T12:49:58.647Z",
+      "indexed_at": "2026-07-31T12:49:58.647Z",
       "synopsis_index_only": true
     },
     {
@@ -73772,10 +73772,13 @@
     },
     {
       "path": "scripts/replay-receipt.mjs",
-      "synopsis": "Script — Replay Receipt.",
-      "bytes": 0,
-      "mtime": "2026-07-31T12:30:15.449Z",
-      "indexed_at": "2026-07-31T12:30:15.449Z"
+      "synopsis": "CLI to replay a receipt against reality with the Receipt Auditor.",
+      "bytes": 1105,
+      "mtime": "2026-07-31T12:49:58.647Z",
+      "indexed_at": "2026-07-31T12:49:58.647Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/repo-sync-check.mjs",
@@ -75331,6 +75334,16 @@
       ]
     },
     {
+      "path": "scripts/verify-continuous-checks.mjs",
+      "synopsis": "CLI to run the continuous verification heartbeat once.",
+      "bytes": 491,
+      "mtime": "2026-07-31T12:49:58.647Z",
+      "indexed_at": "2026-07-31T12:49:58.647Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "scripts/verify-council-bypass-audit.mjs",
       "synopsis": "Audit module for verifying council bypasses in the LifeOS platform.",
       "bytes": 3215,
@@ -76140,10 +76153,13 @@
     },
     {
       "path": "scripts/verify-path-to-ten-acceptance.mjs",
-      "synopsis": "Script — Verify Path To Ten Acceptance.",
-      "bytes": 0,
-      "mtime": "2026-07-31T12:30:15.449Z",
-      "indexed_at": "2026-07-31T12:30:15.449Z"
+      "synopsis": "PATH-TO-TEN mission acceptance smoke test.",
+      "bytes": 3167,
+      "mtime": "2026-07-31T12:49:58.647Z",
+      "indexed_at": "2026-07-31T12:49:58.647Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/verify-personalfinanceos.mjs",
@@ -88411,6 +88427,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "services/continuous-verification.mjs",
+      "synopsis": "Continuous Verification Heartbeat — re-run governance checks and pause autonomy on failure.",
+      "bytes": 6176,
+      "mtime": "2026-07-31T12:49:58.647Z",
+      "indexed_at": "2026-07-31T12:49:58.647Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/contradiction-engine.js",
       "synopsis": "services/contradiction-engine.js",
       "bytes": 23832,
@@ -93247,10 +93273,13 @@
     },
     {
       "path": "services/receipt-auditor.mjs",
-      "synopsis": "Service module — Receipt Auditor.",
-      "bytes": 0,
-      "mtime": "2026-07-31T12:30:15.449Z",
-      "indexed_at": "2026-07-31T12:30:15.449Z"
+      "synopsis": "Receipt Auditor — replay OBJECTIVE_VERDICT and PASS receipts against reality.",
+      "bytes": 9344,
+      "mtime": "2026-07-31T12:49:58.647Z",
+      "indexed_at": "2026-07-31T12:49:58.647Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/receipt-truth-validator.js",
@@ -97089,6 +97118,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "tests/continuous-verification.test.js",
+      "synopsis": "Continuous Verification Heartbeat unit tests.",
+      "bytes": 2969,
+      "mtime": "2026-07-31T12:49:58.647Z",
+      "indexed_at": "2026-07-31T12:49:58.647Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "tests/council-model-availability.test.js",
       "synopsis": "js — tests/council-model-availability.test.js.",
       "bytes": 744,
@@ -97971,10 +98010,13 @@
     },
     {
       "path": "tests/receipt-auditor.test.js",
-      "synopsis": "js — tests/receipt-auditor.test.js.",
-      "bytes": 0,
-      "mtime": "2026-07-31T12:30:15.449Z",
-      "indexed_at": "2026-07-31T12:30:15.449Z"
+      "synopsis": "Receipt Auditor unit tests.",
+      "bytes": 3072,
+      "mtime": "2026-07-31T12:49:58.647Z",
+      "indexed_at": "2026-07-31T12:49:58.647Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "tests/receipt-separation.test.js",
