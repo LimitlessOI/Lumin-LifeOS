@@ -1740,13 +1740,13 @@
     },
     {
       "id": "05",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/traditionProfilesUpdate.js",
       "task": "enhance tradition profiles",
       "spec": "Update tradition profiles to provide detailed explanations and visual framings without omitting source text.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "updateTraditionProfiles"
       ],
@@ -1777,7 +1777,7 @@
       "reaudit_reset_at": "2026-07-30T18:55:06.428Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-31T08:52:42.645Z",
       "last_attempt": null,
       "revive_count": 1,
       "revived_at": "2026-07-31T07:53:30.265Z",
