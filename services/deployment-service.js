@@ -144,6 +144,20 @@ function loadBpPriorityProductIds(repoRoot) {
     for (const item of json.items || []) {
       if (item.product_id) ids.add(item.product_id);
     }
+    // Also recognize canonical active products from PRODUCT_REGISTRY so platform-wide
+    // services (e.g., ai-council) can be repaired between scheduled BP missions without
+    // a sanctioned mission needing to exist in the scheduler queue first.
+    try {
+      const regRaw = readFileSync(path.join(repoRoot, 'docs/products/PRODUCT_REGISTRY.json'), 'utf8');
+      const reg = JSON.parse(regRaw);
+      for (const p of reg.products || []) {
+        if (p.product_id && p.status && !/DEPRECATED|ARCHIVED|SCRAPPED/i.test(String(p.status))) {
+          ids.add(p.product_id);
+        }
+      }
+    } catch {
+      // registry optional for commit authority
+    }
     return ids;
   } catch {
     return new Set();
