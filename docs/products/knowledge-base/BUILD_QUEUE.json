@@ -424,7 +424,7 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-31T07:01:50.049Z",
+      "shipped_at": "2026-07-31T07:35:19.628Z",
       "commit_sha": null,
       "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step3",
@@ -441,8 +441,8 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-07-31T07:01:50.049Z",
-        "shipped_at": "2026-07-31T07:01:50.049Z",
+        "sealed_at": "2026-07-31T07:35:19.628Z",
+        "shipped_at": "2026-07-31T07:35:19.628Z",
         "commit_sha": null,
         "content_sha256": "6e7559dd9115cb3e61ed7226aa36b774d99d62497a9e56d711e3e7f94497a02f",
         "target_file": "routes/security-routes.js",
