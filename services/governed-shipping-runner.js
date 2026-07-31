@@ -90,6 +90,7 @@ export async function runGovernedShippingQueue({
       blueprint_id: twin.blueprint_id,
       blueprint_step_id: twin.blueprint_step_id,
       claim_following_blueprint: claim_following_blueprint !== false,
+      allow_terminal_steps: false,
     });
     if (!exact.ok) {
       await signal({

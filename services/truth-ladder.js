@@ -450,6 +450,11 @@ export function exactChangeClaim({
   claim_following_blueprint = true,
   require_sealed = false,
   repoRoot = _REPO_ROOT,
+  // Shipping paths (runGovernedShippingQueue, POST /factory/ship-queue) must
+  // explicitly pass allow_terminal_steps:false to block blocked/skipped/done
+  // steps. General exact-change checks (authorability, reverse, audit) default
+  // to allowing terminal states.
+  allow_terminal_steps = true,
 } = {}) {
   const follow = blueprintFollowClaim({
     blueprint_id,
@@ -475,6 +480,45 @@ export function exactChangeClaim({
     };
   }
   const step = loaded.step;
+
+  // STEP-STATUS GATE: shipping may only proceed from steps that are still
+  // actionable. Blocked, skipped, cancelled, or human-hold steps are explicitly
+  // not ready for construction. DONE steps may only be reused by reverse/audit
+  // paths (allow_terminal_steps=true) because shipping into a DONE step would
+  // overwrite completed work without a new blueprint amendment.
+  const stepStatus = String(step.status || '').toLowerCase();
+  const nonActionable = new Set(['blocked', 'skipped', 'cancelled']);
+  if (nonActionable.has(stepStatus)) {
+    return {
+      ok: false,
+      status: 'STEP_STATUS_FORBIDDEN',
+      error: `Step ${blueprint_step_id} status is "${stepStatus}" — cannot construct from a terminal/blocked step without a blueprint amendment`,
+      trust_earned: false,
+      twin: follow,
+      target_file: String(step.target_file || ''),
+    };
+  }
+  if (!allow_terminal_steps && stepStatus === 'done') {
+    return {
+      ok: false,
+      status: 'STEP_STATUS_FORBIDDEN',
+      error: `Step ${blueprint_step_id} is DONE — shipping would overwrite a completed step; use reverse-step or amend the blueprint`,
+      trust_earned: false,
+      twin: follow,
+      target_file: String(step.target_file || ''),
+    };
+  }
+  if (step.human_hold === true || step.pause_for_founder === true) {
+    return {
+      ok: false,
+      status: 'STEP_HUMAN_HOLD',
+      error: `Step ${blueprint_step_id} is marked human_hold/pause_for_founder — construction blocked until founder/Chair clears it`,
+      trust_earned: false,
+      twin: follow,
+      target_file: String(step.target_file || ''),
+    };
+  }
+
   const target_file = String(step.target_file || '').trim();
   if (!target_file) {
     return {

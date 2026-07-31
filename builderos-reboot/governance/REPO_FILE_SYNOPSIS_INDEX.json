@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T08:36:13.932Z",
+  "generated_at": "2026-07-31T08:36:38.419Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12524,
+  "file_count": 12527,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21670,9 +21670,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3771973,
-      "mtime": "2026-07-31T06:26:09.099Z",
-      "indexed_at": "2026-07-31T06:26:11.523Z"
+      "bytes": 3776709,
+      "mtime": "2026-07-31T08:36:38.379Z",
+      "indexed_at": "2026-07-31T08:36:38.419Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -21927,6 +21927,13 @@
       "bytes": 5649,
       "mtime": "2026-06-29T17:35:42.534Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-BLUEPRINT-AUTHORITY-0001/BUILDER_READINESS_AUDIT.md",
+      "synopsis": "Phase 1 Builder Readiness Audit for FACTORY-BLUEPRINT-AUTHORITY-0001",
+      "bytes": 23567,
+      "mtime": "2026-07-31T08:21:25.587Z",
+      "indexed_at": "2026-07-31T08:33:28.712Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/ACCEPTANCE_TESTS.json",
@@ -40747,9 +40754,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 340378,
-      "mtime": "2026-07-31T06:25:43.191Z",
-      "indexed_at": "2026-07-31T06:26:08.755Z"
+      "bytes": 341502,
+      "mtime": "2026-07-31T08:31:12.927Z",
+      "indexed_at": "2026-07-31T08:33:28.712Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -41492,9 +41499,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 639832,
-      "mtime": "2026-07-31T06:08:52.359Z",
-      "indexed_at": "2026-07-31T06:09:02.116Z"
+      "bytes": 641092,
+      "mtime": "2026-07-31T08:31:17.991Z",
+      "indexed_at": "2026-07-31T08:33:28.712Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -62355,9 +62362,9 @@
     {
       "path": "factory-staging/factory-core/builder/run-step.js",
       "synopsis": "Exports resolveRepoPath — factory-staging/factory-core/builder/run-step.js.",
-      "bytes": 11902,
-      "mtime": "2026-07-31T05:00:24.043Z",
-      "indexed_at": "2026-07-31T05:01:14.830Z",
+      "bytes": 13038,
+      "mtime": "2026-07-31T08:27:13.091Z",
+      "indexed_at": "2026-07-31T08:33:28.712Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -68721,9 +68728,9 @@
     {
       "path": "routes/factory-mount-routes.js",
       "synopsis": "Pure: should the codegen prompt inline this file's existing content?",
-      "bytes": 38954,
-      "mtime": "2026-07-31T05:00:06.459Z",
-      "indexed_at": "2026-07-31T05:01:14.830Z",
+      "bytes": 39027,
+      "mtime": "2026-07-31T08:26:41.095Z",
+      "indexed_at": "2026-07-31T08:33:28.712Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -69194,9 +69201,9 @@
     {
       "path": "routes/lifeos-council-builder-routes.js",
       "synopsis": "routes/lifeos-council-builder-routes.js",
-      "bytes": 170769,
-      "mtime": "2026-07-31T06:06:55.011Z",
-      "indexed_at": "2026-07-31T06:09:02.116Z",
+      "bytes": 172519,
+      "mtime": "2026-07-31T08:30:21.667Z",
+      "indexed_at": "2026-07-31T08:33:28.712Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -70170,8 +70177,8 @@
       "path": "routes/registerSecurityRoutes.js",
       "synopsis": "Registers SecurityRoutes routes/handlers (routes/registerSecurityRoutes.js).",
       "bytes": 2181,
-      "mtime": "2026-07-31T08:36:13.932Z",
-      "indexed_at": "2026-07-31T08:36:13.932Z"
+      "mtime": "2026-07-31T08:36:36.811Z",
+      "indexed_at": "2026-07-31T08:36:38.419Z"
     },
     {
       "path": "routes/replacement-plan-routes.js",
@@ -72344,6 +72351,17 @@
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md",
         "/ co-commit."
+      ]
+    },
+    {
+      "path": "scripts/lib/file-placement-gate.mjs",
+      "synopsis": "File-placement authority gate — blocks new protected source files",
+      "bytes": 8169,
+      "mtime": "2026-07-31T08:29:51.991Z",
+      "indexed_at": "2026-07-31T08:33:28.712Z",
+      "ssot": [
+        "tag pointing to a registered product home or approved",
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
@@ -75025,6 +75043,17 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/unknown/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/verify-file-placement.mjs",
+      "synopsis": "Pre-commit / CI verifier for file-placement authority.",
+      "bytes": 2844,
+      "mtime": "2026-07-31T08:32:53.383Z",
+      "indexed_at": "2026-07-31T08:33:28.712Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md",
+        "tag pointing to a registered product home or approved shared authority.');"
       ]
     },
     {
@@ -88925,8 +88954,8 @@
       "path": "services/familySafetyService.js",
       "synopsis": "Exports applyFamilySafetyFilters — services/familySafetyService.js.",
       "bytes": 3307,
-      "mtime": "2026-07-31T08:21:38.913Z",
-      "indexed_at": "2026-07-31T08:21:38.913Z"
+      "mtime": "2026-07-31T08:34:54.759Z",
+      "indexed_at": "2026-07-31T08:36:38.419Z"
     },
     {
       "path": "services/ferpaDpaTemplate.js",
@@ -89585,9 +89614,9 @@
     {
       "path": "services/governed-shipping-runner.js",
       "synopsis": "STEP 5b — the governed shipping runner. Walks a build queue and ships",
-      "bytes": 8589,
-      "mtime": "2026-07-31T04:58:34.175Z",
-      "indexed_at": "2026-07-31T05:01:14.830Z",
+      "bytes": 8624,
+      "mtime": "2026-07-31T08:26:46.047Z",
+      "indexed_at": "2026-07-31T08:33:28.712Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -92616,8 +92645,8 @@
       "path": "services/privateWitnessService.js",
       "synopsis": "Exports handlePrivateWitnessMode — services/privateWitnessService.js.",
       "bytes": 7780,
-      "mtime": "2026-07-31T08:35:27.191Z",
-      "indexed_at": "2026-07-31T08:35:27.191Z"
+      "mtime": "2026-07-31T08:09:47.956Z",
+      "indexed_at": "2026-07-31T08:09:47.956Z"
     },
     {
       "path": "services/proactiveToastSystem.js",
@@ -92789,8 +92818,8 @@
       "path": "services/realEstateCurriculumStructure.js",
       "synopsis": "Exports getCurriculumModules, getStudentSchema — services/realEstateCurriculumStructure.js.",
       "bytes": 7159,
-      "mtime": "2026-07-31T08:21:55.888Z",
-      "indexed_at": "2026-07-31T08:21:55.888Z"
+      "mtime": "2026-07-31T07:58:40.769Z",
+      "indexed_at": "2026-07-31T07:58:40.769Z"
     },
     {
       "path": "services/reality-ledger.js",
@@ -94801,9 +94830,9 @@
     {
       "path": "services/truth-ladder.js",
       "synopsis": "Truth-ladder enforcement — grades load-bearing CLAIMS (not code",
-      "bytes": 27257,
-      "mtime": "2026-07-31T04:55:08.347Z",
-      "indexed_at": "2026-07-31T05:01:14.830Z",
+      "bytes": 29185,
+      "mtime": "2026-07-31T08:26:37.859Z",
+      "indexed_at": "2026-07-31T08:33:28.712Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
