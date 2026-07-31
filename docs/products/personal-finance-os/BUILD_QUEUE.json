@@ -578,13 +578,13 @@
     },
     {
       "id": "personal-finance-os-4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/mvpSourceDecision.js",
       "task": "decide Plaid vs CSV",
       "spec": "Determine the data source strategy as Plaid or CSV-only for MVP.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "selectMVPSource"
       ],
@@ -605,12 +605,12 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-31T01:08:35.673Z",
-      "commit_sha": "efc72243cbe58fe39d9865dcec1f0ab623404ba2",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "personal-finance-os-4",
       "mission_id": "PRODUCT-personal-finance-os",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:selectMVPSource; assertion_threw; assertion_threw; assertion_threw; assertion_threw",
+      "last_error": "artifact_missing_after_ship: artifact_proof_failed: MVP decision",
       "reaudit_reset_at": "2026-07-30T18:55:06.693Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
@@ -634,7 +634,10 @@
           "content_source_path": "docs/products/personal-finance-os/twins/steps/personal-finance-os-4.exact",
           "content_sha256": "645ced3db21190e03bbfc0212e16bbb1bb225bc45d32476adcb770dfd0cfbdad"
         }
-      }
+      },
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-31T01:08:42.979Z"
     },
     {
       "id": "personal-finance-os-5",
