@@ -345,14 +345,40 @@
         "CREATE TABLE IF NOT EXISTS students"
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-15T19:25:04.489Z",
+      "shipped_at": "2026-07-31T06:51:25.251Z",
       "commit_sha": "a93e4ad7d3963d9fdf096d3105d6b04b564c22e7",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step6",
       "mission_id": "PRODUCT-music-talent-studio",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.680Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.680Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/music-talent-studio/twins/steps/step6.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-31T06:51:25.251Z",
+        "shipped_at": "2026-07-31T06:51:25.251Z",
+        "commit_sha": "a93e4ad7d3963d9fdf096d3105d6b04b564c22e7",
+        "content_sha256": "cb3637fff1f0908282563737c96667c3152f2e729d61a3db1357d7e5e4099a28",
+        "target_file": "db/migrations/002_create_students_table.sql",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "db/migrations/002_create_students_table.sql",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/music-talent-studio/twins/steps/step6.exact",
+          "content_sha256": "cb3637fff1f0908282563737c96667c3152f2e729d61a3db1357d7e5e4099a28"
+        }
+      }
     },
     {
       "id": "step7",
