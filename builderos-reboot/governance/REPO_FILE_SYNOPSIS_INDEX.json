@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T07:01:33.476Z",
+  "generated_at": "2026-07-31T07:01:52.483Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12515,
   "files": [
@@ -70194,8 +70194,8 @@
       "path": "routes/security-routes.js",
       "synopsis": "Registers SecurityRoutes routes/handlers (routes/security-routes.js).",
       "bytes": 8255,
-      "mtime": "2026-07-31T06:39:48.762Z",
-      "indexed_at": "2026-07-31T06:39:48.762Z"
+      "mtime": "2026-07-31T07:01:52.483Z",
+      "indexed_at": "2026-07-31T07:01:52.483Z"
     },
     {
       "path": "routes/self-repair-executor-routes.js",
