@@ -437,5 +437,87 @@ export function extendTables(knex, existingTables) {
       }
       return null;
     }),
+    knex.schema.hasTable('cache_management').then((exists) => {
+      if (!exists) {
+        return knex.schema.createTable('cache_management', (table) => {
+          table.increments('id').primary();
+          table.string('cache_key').unique();
+          table.jsonb('cached_value');
+          table.timestamp('created_at').defaultTo(knex.fn.now());
+          table.timestamp('expires_at');
+          table.timestamp('last_accessed_at').defaultTo(knex.fn.now());
+        });
+      }
+      return null;
+    }),
+    knex.schema.hasTable('system_events').then((exists) => {
+      if (!exists) {
+        return knex.schema.createTable('system_events', (table) => {
+          table.increments('id').primary();
+          table.string('event_type');
+          table.string('source_module');
+          table.jsonb('event_data');
+          table.timestamp('occurred_at').defaultTo(knex.fn.now());
+        });
+      }
+      return null;
+    }),
+    knex.schema.hasTable('user_onboarding').then((exists) => {
+      if (!exists) {
+        return knex.schema.createTable('user_onboarding', (table) => {
+          table.increments('id').primary();
+          if (existingTables.includes('users')) {
+            table.integer('user_id').unsigned().references('id').inTable('users').onDelete('CASCADE').unique();
+          } else {
+            table.integer('user_id').unsigned().unique();
+          }
+          table.string('onboarding_status').defaultTo('started'); // e.g., 'started', 'step_1_completed', 'completed'
+          table.jsonb('onboarding_data');
+          table.timestamp('started_at').defaultTo(knex.fn.now());
+          table.timestamp('completed_at');
+        });
+      }
+      return null;
+    }),
+    knex.schema.hasTable('feedback_submissions').then((exists) => {
+      if (!exists) {
+        return knex.schema.createTable('feedback_submissions', (table) => {
+          table.increments('id').primary();
+          if (existingTables.includes('users')) {
+            table.integer('user_id').unsigned().references('id').inTable('users').onDelete('SET NULL');
+          } else {
+            table.integer('user_id').unsigned();
+          }
+          table.string('feedback_type'); // e.g., 'bug_report', 'feature_request', 'general_feedback'
+          table.text('message');
+          table.string('status').defaultTo('new'); // e.g., 'new', 'reviewed', 'resolved'
+          table.jsonb('metadata');
+          table.timestamp('submitted_at').defaultTo(knex.fn.now());
+        });
+      }
+      return null;
+    }),
+    knex.schema.hasTable('content_management').then((exists) => {
+      if (!exists) {
+        return knex.schema.createTable('content_management', (table) => {
+          table.increments('id').primary();
+          table.string('content_type'); // e.g., 'article', 'page', 'blog_post'
+          table.string('slug').unique();
+          table.text('title');
+          table.text('body');
+          table.jsonb('metadata');
+          if (existingTables.includes('users')) {
+            table.integer('author_user_id').unsigned().references('id').inTable('users').onDelete('SET NULL');
+          } else {
+            table.integer('author_user_id').unsigned();
+          }
+          table.string('status').defaultTo('draft'); // e.g., 'draft', 'published', 'archived'
+          table.timestamp('created_at').defaultTo(knex.fn.now());
+          table.timestamp('updated_at').defaultTo(knex.fn.now());
+          table.timestamp('published_at');
+        });
+      }
+      return null;
+    }),
   ]);
 }
