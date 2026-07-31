@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T01:08:48.128Z",
+  "generated_at": "2026-07-31T01:16:30.013Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12458,
   "files": [
@@ -85802,9 +85802,9 @@
     {
       "path": "services/advisoryCouncilService.js",
       "synopsis": "Exports adviseOnSacredAccuracy — services/advisoryCouncilService.js.",
-      "bytes": 1413,
-      "mtime": "2026-07-31T00:04:49.237Z",
-      "indexed_at": "2026-07-31T00:04:49.237Z"
+      "bytes": 3306,
+      "mtime": "2026-07-31T01:16:30.013Z",
+      "indexed_at": "2026-07-31T01:16:30.013Z"
     },
     {
       "path": "services/AGENTS.md",
