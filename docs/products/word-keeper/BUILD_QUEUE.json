@@ -293,13 +293,13 @@
     },
     {
       "id": "word-keeper-step1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/googleCalendarRoutes.js",
       "task": "add Google Calendar integration route",
       "spec": "Create a route to integrate Google Calendar. This route should handle incoming requests to connect to the user's Google Calendar without utilizing OAuth, as per the documented requirement.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerGoogleCalendarRoutes"
       ],
@@ -357,7 +357,7 @@
       },
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-31T09:39:12.576Z",
       "last_attempt": null,
       "revive_count": 1,
       "revived_at": "2026-07-31T09:23:11.654Z",
