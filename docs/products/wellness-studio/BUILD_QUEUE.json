@@ -1068,13 +1068,13 @@
           "assertion_id": "expected_exports:services/extended-tables.js"
         }
       ],
-      "last_attempt_at": "2026-07-31T02:08:02.865Z",
+      "last_attempt_at": "2026-07-31T02:33:14.095Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:extendJoyCheckins,extendIntegrityScoreLog,extendWearableData,extendEmotionalPatterns; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-31T02:07:08.159Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-31T02:30:20.626Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
