@@ -325,14 +325,40 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-16T04:23:43.373Z",
+      "shipped_at": "2026-07-31T07:18:41.059Z",
       "commit_sha": "4d48705ea4e624eea5bbbeb21e50cbd5257fa935",
       "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "teacher-os-2",
       "mission_id": "PRODUCT-teacher-os",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:addInterview; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.746Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.746Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/teacher-os/twins/steps/teacher-os-2.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-31T07:18:41.059Z",
+        "shipped_at": "2026-07-31T07:18:41.059Z",
+        "commit_sha": "4d48705ea4e624eea5bbbeb21e50cbd5257fa935",
+        "content_sha256": "eaef6c509b7f2107f133441e1040b718dd6869fc5ec1c6133d3e45dc9965a174",
+        "target_file": "services/userInterviewEnhancement.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/userInterviewEnhancement.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/teacher-os/twins/steps/teacher-os-2.exact",
+          "content_sha256": "eaef6c509b7f2107f133441e1040b718dd6869fc5ec1c6133d3e45dc9965a174"
+        }
+      }
     },
     {
       "id": "teacher-os-3",

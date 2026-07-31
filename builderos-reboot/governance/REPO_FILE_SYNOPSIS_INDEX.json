@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T07:18:31.974Z",
+  "generated_at": "2026-07-31T07:18:43.471Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12517,
+  "file_count": 12518,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -94843,6 +94843,13 @@
       "bytes": 2378,
       "mtime": "2026-07-05T19:10:02.205Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "services/userInterviewEnhancement.js",
+      "synopsis": "Exports addInterview — services/userInterviewEnhancement.js.",
+      "bytes": 461,
+      "mtime": "2026-07-31T07:18:43.471Z",
+      "indexed_at": "2026-07-31T07:18:43.471Z"
     },
     {
       "path": "services/userInterviews.js",
