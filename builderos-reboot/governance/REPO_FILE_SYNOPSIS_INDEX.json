@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T08:52:55.699Z",
+  "generated_at": "2026-07-31T08:53:23.211Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12527,
+  "file_count": 12528,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -86295,6 +86295,13 @@
       "ssot": [
         "docs/products/kids-os/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/apiSpecification.js",
+      "synopsis": "Exports validateApiSpecification — services/apiSpecification.js.",
+      "bytes": 931,
+      "mtime": "2026-07-31T08:53:23.211Z",
+      "indexed_at": "2026-07-31T08:53:23.211Z"
     },
     {
       "path": "services/approval-system.js",

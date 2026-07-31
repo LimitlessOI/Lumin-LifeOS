@@ -898,7 +898,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "failure_signature": "STEP_STATUS_FORBIDDEN",
+      "same_signature_count": 1,
+      "escalation_class": "same_signature_repeat"
     },
     {
       "id": "1",
@@ -930,14 +933,40 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-15T21:45:58.495Z",
+      "shipped_at": "2026-07-31T08:53:21.033Z",
       "commit_sha": "3012578e8d5f9dea42dd0a8c8b0d80d0f50e66d0",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "1",
       "mission_id": "PRODUCT-music-talent-studio",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:validateApiSpecification; assertion_threw; assertion_threw; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.680Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.680Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/music-talent-studio/twins/steps/1.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-31T08:53:21.033Z",
+        "shipped_at": "2026-07-31T08:53:21.033Z",
+        "commit_sha": "3012578e8d5f9dea42dd0a8c8b0d80d0f50e66d0",
+        "content_sha256": "74592ed273edf2cb204b3835d00333ca01752adf625c4d11a9d077287cf16cf3",
+        "target_file": "services/apiSpecification.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/apiSpecification.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/music-talent-studio/twins/steps/1.exact",
+          "content_sha256": "74592ed273edf2cb204b3835d00333ca01752adf625c4d11a9d077287cf16cf3"
+        }
+      }
     },
     {
       "id": "5",
