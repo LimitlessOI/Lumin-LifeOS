@@ -793,14 +793,40 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-16T04:26:58.499Z",
+      "shipped_at": "2026-07-31T07:17:57.282Z",
       "commit_sha": "e12e1e73609f82a344d313a0cabf4b49ee61cb22",
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "business-tools-3",
       "mission_id": "PRODUCT-business-tools",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:getCurriculumModules,getStudentSchema; assertion_threw; assertion_threw; assertion_threw; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.365Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.365Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/business-tools/twins/steps/business-tools-3.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-31T07:17:57.282Z",
+        "shipped_at": "2026-07-31T07:17:57.282Z",
+        "commit_sha": "e12e1e73609f82a344d313a0cabf4b49ee61cb22",
+        "content_sha256": "3f65bd4612d84821e045c97ea9a85ddf33d0688e4d91b0964c644c7ebf927376",
+        "target_file": "services/realEstateCurriculumStructure.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/realEstateCurriculumStructure.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/business-tools/twins/steps/business-tools-3.exact",
+          "content_sha256": "3f65bd4612d84821e045c97ea9a85ddf33d0688e4d91b0964c644c7ebf927376"
+        }
+      }
     },
     {
       "id": "business-tools-4",
