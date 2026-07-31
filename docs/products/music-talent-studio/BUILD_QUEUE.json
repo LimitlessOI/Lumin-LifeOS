@@ -813,13 +813,13 @@
     },
     {
       "id": "4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/studentsInterview.js",
       "task": "interview students or parents",
       "spec": "Interview 5 students or parents and store feedback.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "getStudentFeedback"
       ],
@@ -843,7 +843,7 @@
       "blueprint_step_id": "4",
       "mission_id": "PRODUCT-music-talent-studio",
       "pre_existing": null,
-      "last_error": "STEP_STATUS_FORBIDDEN",
+      "last_error": "governed_ship_failed",
       "reaudit_reset_at": "2026-07-30T18:55:06.680Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
@@ -886,7 +886,7 @@
       },
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-31T09:24:09.495Z",
       "last_attempt": null,
       "revive_count": 3,
       "revived_at": "2026-07-31T09:16:59.359Z",
@@ -1021,13 +1021,13 @@
     },
     {
       "id": "6",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/pricingValidationVerification.js",
       "task": "validate pricing strategy",
       "spec": "Verify pricing is validated as per business requirements.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "confirmPricingValidation"
       ],
@@ -1054,12 +1054,24 @@
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "6",
       "mission_id": "PRODUCT-music-talent-studio",
-      "pre_existing": false,
+      "pre_existing": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:confirmPricingValidation; behavior_assertion_failed; behavior_proof",
       "reaudit_reset_at": "2026-07-30T18:55:06.680Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-07-31T09:04:23.072Z"
+      "last_attempt_at": null,
+      "last_attempt": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-31T09:23:11.654Z",
+      "no_op": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "7",
