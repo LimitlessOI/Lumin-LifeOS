@@ -434,7 +434,7 @@
       "reaudit_reset_at": "2026-07-30T18:55:06.480Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-07-31T07:01:56.431Z",
+      "last_attempt_at": "2026-07-31T07:35:26.730Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
         "content_source_path": "docs/products/knowledge-base/twins/steps/step3.exact"
@@ -462,8 +462,8 @@
         }
       },
       "last_attempt": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-31T06:57:08.304Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-31T07:31:11.460Z",
       "no_op": null,
       "demoted": false,
       "demote_reason": null,
