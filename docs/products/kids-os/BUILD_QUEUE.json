@@ -731,14 +731,40 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-16T04:40:53.281Z",
+      "shipped_at": "2026-07-31T07:02:15.813Z",
       "commit_sha": "18912d725978c9e9bb8963b7ca901997099ba953",
       "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step11",
       "mission_id": "PRODUCT-kids-os",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerPricingValidationRoutes; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.433Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.433Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/kids-os/twins/steps/step11.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-31T07:02:15.813Z",
+        "shipped_at": "2026-07-31T07:02:15.813Z",
+        "commit_sha": "18912d725978c9e9bb8963b7ca901997099ba953",
+        "content_sha256": "91279b4b906d4793ccf9e4305fe7a1b8d6b14064c69ea43f630e63b6986c9892",
+        "target_file": "routes/pricingValidation.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "routes/pricingValidation.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/kids-os/twins/steps/step11.exact",
+          "content_sha256": "91279b4b906d4793ccf9e4305fe7a1b8d6b14064c69ea43f630e63b6986c9892"
+        }
+      }
     },
     {
       "id": "step12",
