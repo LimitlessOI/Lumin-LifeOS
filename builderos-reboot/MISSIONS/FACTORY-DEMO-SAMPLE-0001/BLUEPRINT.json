@@ -1,0 +1,44 @@
+{
+  "mission_id": "FACTORY-DEMO-SAMPLE-0001",
+  "blueprint_id": "FACTORY-DEMO-SAMPLE-0001",
+  "version": "2026-07-31-0001",
+  "title": "Factory end-to-end demo: write a verified public widget",
+  "description": "A minimal sample product that proves BuilderOS can take a blueprint, write a file, and pass independent SENTRY behavior assertions.",
+  "product_home": "docs/products/builderos/PRODUCT_HOME.md",
+  "execution_gate": "READY",
+  "steps": [
+    {
+      "step_id": "demo-write-widget",
+      "name": "Write a verified public demo widget",
+      "action_type": "write_file_exact",
+      "target_file": "public/factory-demo-widget.mjs",
+      "sandbox_boundary": "public",
+      "authority_owner": "builderos-factory",
+      "on_block": "SENTRY_FAIL",
+      "task": "Create a tiny, pure ES module widget that greets a name and returns an object with a message.",
+      "exact_inputs": {
+        "exact_content": "export function greet(name = 'world') {\n  return { message: `Hello ${name}`, ok: true };\n}\n"
+      },
+      "declares_behavioral_effect": true,
+      "behavior_assertions": [
+        {
+          "type": "file_contains",
+          "target": "public/factory-demo-widget.mjs",
+          "substring": "export function greet"
+        },
+        {
+          "type": "exports_smoke",
+          "target": "public/factory-demo-widget.mjs",
+          "exports": ["greet"]
+        },
+        {
+          "type": "function_behavior_test",
+          "target": "public/factory-demo-widget.mjs",
+          "export": "greet",
+          "args": "Factory",
+          "expect": { "message": "Hello Factory", "ok": true }
+        }
+      ]
+    }
+  ]
+}

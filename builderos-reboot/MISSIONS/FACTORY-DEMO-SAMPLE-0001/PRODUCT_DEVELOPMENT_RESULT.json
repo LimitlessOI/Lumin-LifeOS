@@ -1,0 +1,9 @@
+{
+  "mission_id": "FACTORY-DEMO-SAMPLE-0001",
+  "status": "PASS",
+  "phase_boundary": "builder-capacity-proof",
+  "resolved_questions": ["Can the factory write and verify a file without human handoff?"],
+  "unresolved_questions": [],
+  "founder_decisions": ["Use a public/ artifact so no protected-prefix SSOT gate is needed."],
+  "risk_register": []
+}

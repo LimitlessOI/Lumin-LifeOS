@@ -1,0 +1,15 @@
+{
+  "mission_id": "FACTORY-DEMO-SAMPLE-0001",
+  "scope": "Prove BuilderOS can execute a complete blueprint-to-shipped-file cycle with independent SENTRY verification.",
+  "non_goals": [
+    "No product revenue",
+    "No human design decisions",
+    "No persistent customer data"
+  ],
+  "success_criteria": [
+    "Factory writes public/factory-demo-widget.mjs",
+    "Behavior assertions pass",
+    "SENTRY receipt emitted"
+  ],
+  "founder_attention_budget": "none"
+}

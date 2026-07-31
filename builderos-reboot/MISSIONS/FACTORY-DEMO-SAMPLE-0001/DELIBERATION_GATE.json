@@ -1,0 +1,15 @@
+{
+  "session_id": "mission:FACTORY-DEMO-SAMPLE-0001",
+  "hist_case": {
+    "type": "hist_case",
+    "summary": "No historical collision; this is a net-new builder capability proof.",
+    "resolved": true
+  },
+  "cfo_receipt": {
+    "type": "cfo_receipt",
+    "expected_cost_usd": 0,
+    "actual_cost_usd": 0,
+    "roi_note": "Uses existing free-tier/cache runners; no new spend."
+  },
+  "load_bearing": false
+}

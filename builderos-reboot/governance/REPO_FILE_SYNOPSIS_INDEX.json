@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T19:03:14.912Z",
+  "generated_at": "2026-07-31T20:28:20.228Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12600,
+  "file_count": 12606,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -23031,6 +23031,38 @@
       "bytes": 1807,
       "mtime": "2026-06-10T19:12:21.169Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-DEMO-SAMPLE-0001/BLUEPRINT.json",
+      "synopsis": "Exports greet — builderos-reboot/MISSIONS/FACTORY-DEMO-SAMPLE-0001/BLUEPRINT.json.",
+      "bytes": 1653,
+      "mtime": "2026-07-31T20:28:20.228Z",
+      "indexed_at": "2026-07-31T20:28:20.228Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-DEMO-SAMPLE-0001/DELIBERATION_GATE.json",
+      "synopsis": "BuilderOS artifact — DELIBERATION GATE.",
+      "bytes": 411,
+      "mtime": "2026-07-31T20:28:20.228Z",
+      "indexed_at": "2026-07-31T20:28:20.228Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-DEMO-SAMPLE-0001/FOUNDER_PACKET.json",
+      "synopsis": "BuilderOS artifact — FOUNDER PACKET.",
+      "bytes": 466,
+      "mtime": "2026-07-31T20:28:20.228Z",
+      "indexed_at": "2026-07-31T20:28:20.228Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-DEMO-SAMPLE-0001/PRODUCT_DEVELOPMENT_RESULT.json",
+      "synopsis": "BuilderOS artifact — PRODUCT DEVELOPMENT RESULT.",
+      "bytes": 353,
+      "mtime": "2026-07-31T20:28:20.228Z",
+      "indexed_at": "2026-07-31T20:28:20.228Z",
       "synopsis_index_only": true
     },
     {
@@ -62554,9 +62586,12 @@
     {
       "path": "factory-staging/factory-core/builder/run-mission.js",
       "synopsis": "Exports loadBlueprintFromRepo — builderos-reboot/MISSIONS/FACTORY-REBOOT-0006/CONTENT/run-mission.js.",
-      "bytes": 2936,
-      "mtime": "2026-07-18T22:36:35.701Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 3020,
+      "mtime": "2026-07-31T20:28:20.228Z",
+      "indexed_at": "2026-07-31T20:28:20.228Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "factory-staging/factory-core/builder/run-step.js",
@@ -66483,6 +66518,13 @@
       "mtime": "2026-04-25T03:53:03.008Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "synopsis_index_only": true
+    },
+    {
+      "path": "public/factory-demo-widget.mjs",
+      "synopsis": "Exports greet — public/factory-demo-widget.mjs.",
+      "bytes": 162,
+      "mtime": "2026-07-31T20:28:20.228Z",
+      "indexed_at": "2026-07-31T20:28:20.228Z"
     },
     {
       "path": "public/health/dashboard.js",
@@ -74003,6 +74045,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/run-factory-demo-sample.mjs",
+      "synopsis": "End-to-end factory demo for FACTORY-DEMO-SAMPLE-0001.",
+      "bytes": 1435,
+      "mtime": "2026-07-31T20:28:20.228Z",
+      "indexed_at": "2026-07-31T20:28:20.228Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
