@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T08:43:52.812Z",
+  "generated_at": "2026-07-31T08:52:55.699Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12527,
   "files": [
@@ -92818,8 +92818,8 @@
       "path": "services/realEstateCurriculumStructure.js",
       "synopsis": "Exports getCurriculumModules, getStudentSchema — services/realEstateCurriculumStructure.js.",
       "bytes": 7159,
-      "mtime": "2026-07-31T07:58:40.769Z",
-      "indexed_at": "2026-07-31T07:58:40.769Z"
+      "mtime": "2026-07-31T08:52:55.699Z",
+      "indexed_at": "2026-07-31T08:52:55.699Z"
     },
     {
       "path": "services/reality-ledger.js",
