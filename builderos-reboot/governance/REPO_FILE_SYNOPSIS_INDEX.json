@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T01:26:12.873Z",
+  "generated_at": "2026-07-31T01:26:37.433Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12461,
+  "file_count": 12462,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -67157,6 +67157,13 @@
       "bytes": 18347,
       "mtime": "2026-07-05T19:10:02.188Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "public/overlay/security-policy.html",
+      "synopsis": "HTML page: Security Policy - Malware Scanning",
+      "bytes": 3433,
+      "mtime": "2026-07-31T01:26:37.433Z",
+      "indexed_at": "2026-07-31T01:26:37.433Z"
     },
     {
       "path": "public/overlay/site-builder-additional-templates.html",

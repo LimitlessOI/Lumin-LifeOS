@@ -293,11 +293,34 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": null,
-      "shipped_at": "2026-07-15T22:25:40.797Z",
+      "shipped_at": "2026-07-31T01:26:34.493Z",
       "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "8",
       "mission_id": "PRODUCT-knowledge-base",
-      "reaudit_reset_at": "2026-07-30T18:55:06.480Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.480Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/knowledge-base/twins/steps/8.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-31T01:26:34.493Z",
+        "shipped_at": "2026-07-31T01:26:34.493Z",
+        "commit_sha": null,
+        "content_sha256": "9479d4f6696fe21474bd997721cbab66a75c7188d59333efd2ee2bee34f272b3",
+        "target_file": "public/overlay/security-policy.html",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "public/overlay/security-policy.html",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/knowledge-base/twins/steps/8.exact",
+          "content_sha256": "9479d4f6696fe21474bd997721cbab66a75c7188d59333efd2ee2bee34f272b3"
+        }
+      }
     },
     {
       "id": "step1",
