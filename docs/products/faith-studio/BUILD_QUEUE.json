@@ -1294,14 +1294,40 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-16T00:00:46.477Z",
+      "shipped_at": "2026-07-31T05:39:43.206Z",
       "commit_sha": "93387f7ddbdcaefbf94ae4cc9a953118d4f330eb",
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "9",
       "mission_id": "PRODUCT-faith-studio",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:getDoctrineDetails; assertion_threw; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.428Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.428Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/faith-studio/twins/steps/9.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-31T05:39:43.206Z",
+        "shipped_at": "2026-07-31T05:39:43.206Z",
+        "commit_sha": "93387f7ddbdcaefbf94ae4cc9a953118d4f330eb",
+        "content_sha256": "abb0821b2289b962efd83ed3a74df21de955081fce45a969d2de7c693fad5717",
+        "target_file": "services/doctrineProfilesService.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/doctrineProfilesService.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/faith-studio/twins/steps/9.exact",
+          "content_sha256": "abb0821b2289b962efd83ed3a74df21de955081fce45a969d2de7c693fad5717"
+        }
+      }
     },
     {
       "id": "01",
