@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T07:58:40.769Z",
+  "generated_at": "2026-07-31T07:59:05.724Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12522,
+  "file_count": 12523,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -34200,6 +34200,13 @@
       "bytes": 1123,
       "mtime": "2026-07-31T04:37:32.203Z",
       "indexed_at": "2026-07-31T04:37:34.626Z"
+    },
+    {
+      "path": "db/migrations/2023-10-02-env-registry-metadata.sql",
+      "synopsis": "Database migration — 2023-10-02-env-registry-metadata.sql.",
+      "bytes": 1556,
+      "mtime": "2026-07-31T07:59:05.724Z",
+      "indexed_at": "2026-07-31T07:59:05.724Z"
     },
     {
       "path": "db/migrations/2023-10-20-honeypot-probe-service.sql",

@@ -283,11 +283,37 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": null,
-      "shipped_at": "2026-07-15T19:46:35.044Z",
+      "shipped_at": "2026-07-31T07:59:03.059Z",
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step5",
       "mission_id": "PRODUCT-oil-security-divisions",
-      "reaudit_reset_at": "2026-07-30T18:55:06.687Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.687Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/oil-security-divisions/twins/steps/step5.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-31T07:59:03.059Z",
+        "shipped_at": "2026-07-31T07:59:03.059Z",
+        "commit_sha": null,
+        "content_sha256": "2a1cea391cd16b46c4fe2615ae274275989300229322b4e416af2084bb5d4d6e",
+        "target_file": "db/migrations/2023-10-02-env-registry-metadata.sql",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "db/migrations/2023-10-02-env-registry-metadata.sql",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/oil-security-divisions/twins/steps/step5.exact",
+          "content_sha256": "2a1cea391cd16b46c4fe2615ae274275989300229322b4e416af2084bb5d4d6e"
+        }
+      }
     },
     {
       "id": "step6",
