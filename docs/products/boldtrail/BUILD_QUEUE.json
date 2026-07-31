@@ -206,7 +206,7 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-31T05:30:31.303Z",
+      "shipped_at": "2026-07-31T05:51:16.314Z",
       "commit_sha": null,
       "blueprint_id": "PRODUCT-BOLDTRAIL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "boldtrail-step1",
@@ -220,8 +220,8 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-07-31T05:30:31.303Z",
-        "shipped_at": "2026-07-31T05:30:31.303Z",
+        "sealed_at": "2026-07-31T05:51:16.314Z",
+        "shipped_at": "2026-07-31T05:51:16.314Z",
         "commit_sha": null,
         "content_sha256": "c97e437c3cb75041ed701b771b7f9e5ecde5f16807774a9bd05020e6eb73727b",
         "target_file": "services/leadScoringSegment.js",
