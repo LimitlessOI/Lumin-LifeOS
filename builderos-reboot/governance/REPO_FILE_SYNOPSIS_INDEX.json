@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T10:49:55.089Z",
+  "generated_at": "2026-07-31T10:51:38.171Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12566,
+  "file_count": 12567,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21476,14 +21476,6 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
-      "path": "builderos-reboot/FOUNDER_STOP.json",
-      "synopsis": "BuilderOS artifact — FOUNDER STOP.",
-      "bytes": 571,
-      "mtime": "2026-07-31T10:49:09.184Z",
-      "indexed_at": "2026-07-31T10:49:35.205Z",
-      "synopsis_index_only": true
-    },
-    {
       "path": "builderos-reboot/FULL_LOOP_PROOF_RECEIPT.json",
       "synopsis": "BuilderOS artifact — FULL LOOP PROOF RECEIPT.",
       "bytes": 3893,
@@ -21678,9 +21670,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3787955,
-      "mtime": "2026-07-31T10:49:35.272Z",
-      "indexed_at": "2026-07-31T10:49:55.089Z"
+      "bytes": 3788305,
+      "mtime": "2026-07-31T10:50:53.616Z",
+      "indexed_at": "2026-07-31T10:51:00.676Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -40890,9 +40882,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 344861,
-      "mtime": "2026-07-31T10:49:32.608Z",
-      "indexed_at": "2026-07-31T10:49:35.205Z"
+      "bytes": 344929,
+      "mtime": "2026-07-31T10:50:48.056Z",
+      "indexed_at": "2026-07-31T10:50:53.552Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -64998,9 +64990,9 @@
     {
       "path": "products/receipts/COGNITIVE_ARCHITECTURE_V1_ACCEPTANCE.json",
       "synopsis": "Product receipt — COGNITIVE ARCHITECTURE V1 ACCEPTANCE.",
-      "bytes": 3354,
-      "mtime": "2026-07-31T10:48:52.964Z",
-      "indexed_at": "2026-07-31T10:49:35.205Z",
+      "bytes": 2942,
+      "mtime": "2026-07-31T09:49:31.984Z",
+      "indexed_at": "2026-07-31T09:51:46.501Z",
       "synopsis_index_only": true
     },
     {
@@ -65742,9 +65734,9 @@
     {
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
-      "bytes": 24199,
-      "mtime": "2026-07-31T10:48:55.768Z",
-      "indexed_at": "2026-07-31T10:49:35.205Z",
+      "bytes": 24209,
+      "mtime": "2026-07-31T09:48:04.316Z",
+      "indexed_at": "2026-07-31T09:51:46.501Z",
       "synopsis_index_only": true
     },
     {
@@ -69105,6 +69097,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "routes/identifyCustomersRoute.js",
+      "synopsis": "HTTP route module — IdentifyCustomersRoute.",
+      "bytes": 1192,
+      "mtime": "2026-07-31T10:50:40.196Z",
+      "indexed_at": "2026-07-31T10:50:53.552Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "routes/intakeFormRoute.js",
       "synopsis": "HTTP route module — IntakeFormRoute.",
       "bytes": 464,
@@ -69878,6 +69880,16 @@
       "bytes": 553,
       "mtime": "2026-07-17T22:00:13.234Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "routes/linkedinProfileRoute.js",
+      "synopsis": "Registers LinkedIn profile routes.",
+      "bytes": 677,
+      "mtime": "2026-07-31T10:50:41.976Z",
+      "indexed_at": "2026-07-31T10:50:53.552Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/marketing-calendar-routes.js",
@@ -73827,9 +73839,9 @@
     {
       "path": "scripts/run-cognitive-chair-acceptance.mjs",
       "synopsis": "Acceptance script for FACTORY-COGNITIVE-ARCHITECTURE-0001.",
-      "bytes": 2939,
-      "mtime": "2026-07-31T10:48:51.100Z",
-      "indexed_at": "2026-07-31T10:49:35.205Z",
+      "bytes": 2530,
+      "mtime": "2026-07-31T09:49:27.568Z",
+      "indexed_at": "2026-07-31T09:51:46.501Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

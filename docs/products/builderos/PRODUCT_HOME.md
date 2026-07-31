@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/builderos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-31 — see [Change Receipts](#change-receipts) below. Updated for acceptance-receipt separation-of-duties fix and PATH-TO-TEN founder stop. Older history (pre-2026-07-19) archived verbatim at `docs/history/builderos/LAST_UPDATED_ARCHIVE_2026-07-19.md`. |
+| **Last Updated** | 2026-07-31 — see [Change Receipts](#change-receipts) below. Updated for acceptance-receipt separation-of-duties fix, PATH-TO-TEN founder stop, and merge-time @ssot cleanup of two autonomous never-stop route files. Older history (pre-2026-07-19) archived verbatim at `docs/history/builderos/LAST_UPDATED_ARCHIVE_2026-07-19.md`. |
 ### Related docs (this product)
 
 | Doc | Path |

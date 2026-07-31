@@ -392,7 +392,7 @@
     },
     {
       "id": "4",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/sprintQueueService.js",
       "task": "create sprint queue service",
       "spec": "Service managing sprint queue logic for scheduling and managing sprints.",
@@ -433,9 +433,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-31T10:33:16.917Z",
       "no_op": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:STEP_STATUS_FORBIDDEN",
+      "demoted_at": "2026-07-31T10:49:18.403Z",
       "park_until": null,
       "blocker_class": null,
       "claim_level": null,
@@ -1283,14 +1283,14 @@
       "blueprint_step_id": "create-sprint-queue-panel",
       "mission_id": "PRODUCT-productized-sprint",
       "pre_existing": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerSprintQueuePanelRoutes; behavior_assertion_failed; behavior_proof",
+      "last_error": "STEP_STATUS_FORBIDDEN",
       "reaudit_reset_at": "2026-07-30T18:55:06.702Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-07-31T10:33:56.521Z",
+      "last_attempt_at": "2026-07-31T10:49:23.304Z",
       "last_attempt": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-31T10:33:16.917Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-31T10:49:18.403Z",
       "no_op": null,
       "demoted": false,
       "demote_reason": null,
@@ -1299,7 +1299,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "failure_signature": "STEP_STATUS_FORBIDDEN",
+      "same_signature_count": 1,
+      "escalation_class": "same_signature_repeat"
     },
     {
       "id": "create-sales-page",
@@ -1365,7 +1368,7 @@
     },
     {
       "id": "update-linkedin-profile",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/linkedinProfileRoute.js",
       "task": "update LinkedIn profile route",
       "spec": "Route for updating the LinkedIn profile to reference sprint offers.",
@@ -1390,14 +1393,40 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-15T23:51:47.467Z",
-      "commit_sha": "8e429c46e90ed17bd19f5843dcc889da3df2cb8f",
+      "shipped_at": "2026-07-31T10:48:59.898Z",
+      "commit_sha": "a21e83ec9d0db47f0446e4366069fb4476e93310",
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "update-linkedin-profile",
       "mission_id": "PRODUCT-productized-sprint",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerLinkedinProfileRoutes; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.702Z"
+      "last_error": null,
+      "reaudit_reset_at": "2026-07-30T18:55:06.702Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/productized-sprint/twins/steps/update-linkedin-profile.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-31T10:48:59.898Z",
+        "shipped_at": "2026-07-31T10:48:59.898Z",
+        "commit_sha": "8e429c46e90ed17bd19f5843dcc889da3df2cb8f",
+        "content_sha256": "8c7a8c44de94421818928e5ca0f2d556e9c20750f042d746d3f8ff18c21d9b6a",
+        "target_file": "routes/linkedinProfileRoute.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "routes/linkedinProfileRoute.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/productized-sprint/twins/steps/update-linkedin-profile.exact",
+          "content_sha256": "8c7a8c44de94421818928e5ca0f2d556e9c20750f042d746d3f8ff18c21d9b6a"
+        }
+      }
     },
     {
       "id": "identify-first-5-customers",
@@ -1426,14 +1455,40 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-16T00:10:37.743Z",
+      "shipped_at": "2026-07-31T10:49:57.088Z",
       "commit_sha": "1ceb9c64aa967cf7f44000b2b1ebed08121e9e88",
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "identify-first-5-customers",
       "mission_id": "PRODUCT-productized-sprint",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerIdentifyCustomersRoutes; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.702Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.702Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/productized-sprint/twins/steps/identify-first-5-customers.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-31T10:49:57.088Z",
+        "shipped_at": "2026-07-31T10:49:57.088Z",
+        "commit_sha": "1ceb9c64aa967cf7f44000b2b1ebed08121e9e88",
+        "content_sha256": "f811560f1e1585c227c9d7f4153fa3a66d9a6233ae3de0f115c00532e581349c",
+        "target_file": "routes/identifyCustomersRoute.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "routes/identifyCustomersRoute.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/productized-sprint/twins/steps/identify-first-5-customers.exact",
+          "content_sha256": "f811560f1e1585c227c9d7f4153fa3a66d9a6233ae3de0f115c00532e581349c"
+        }
+      }
     },
     {
       "id": "step1",
