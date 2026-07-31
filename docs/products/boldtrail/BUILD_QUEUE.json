@@ -182,13 +182,13 @@
     },
     {
       "id": "boldtrail-step1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/leadScoringSegment.js",
       "task": "add scoring rubric support",
       "spec": "Implement a method to attach an explicit scoring rubric to each lead segment description.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "applyScoringRubric"
       ],
@@ -207,12 +207,12 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-31T01:08:26.440Z",
-      "commit_sha": "fca960661a34c31bc7fe9c48e58718c475ddc769",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-BOLDTRAIL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "boldtrail-step1",
       "mission_id": "PRODUCT-boldtrail",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:applyScoringRubric; assertion_threw; assertion_threw",
+      "last_error": "artifact_missing_after_ship: artifact_proof_failed: function applyScoringRubric(segmentDescription)",
       "reaudit_reset_at": "2026-07-30T18:55:06.301Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
@@ -236,7 +236,10 @@
           "content_source_path": "docs/products/boldtrail/twins/steps/boldtrail-step1.exact",
           "content_sha256": "476251a7a1c4ae79995e62e0b2865de4018ecae860097087730a5ac2c71698cf"
         }
-      }
+      },
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-31T01:08:32.749Z"
     },
     {
       "id": "boldtrail-step2",
