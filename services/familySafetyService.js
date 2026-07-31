@@ -19,6 +19,9 @@ export function applyFamilySafetyFilters(content, safetyMode = 'family') {
       // Additional terms for church mode
       filteredContent = filteredContent.replace(/blasphemy|heresy|apostasy|sacrilege/gi, '[theological term]');
       filteredContent = filteredContent.replace(/cult|sect|pagan|witchcraft|occult/gi, '[religious term]');
+      filteredContent = filteredContent.replace(/gambling|betting|wager|lottery/gi, '[restricted activity]');
+      filteredContent = filteredContent.replace(/suicide|self-harm|self-mutilation/gi, '[sensitive topic]');
+      filteredContent = filteredContent.replace(/lgbt|gay|lesbian|bisexual|transgender|queer|homosexual/gi, '[sensitive topic]');
       break;
     case 'classroom':
       // Moderate filtering for classroom mode
@@ -29,6 +32,8 @@ export function applyFamilySafetyFilters(content, safetyMode = 'family') {
       // Additional terms for classroom mode
       filteredContent = filteredContent.replace(/suicide|self-harm/gi, '[sensitive topic]');
       filteredContent = filteredContent.replace(/gambling|betting/gi, '[restricted activity]');
+      filteredContent = filteredContent.replace(/violence|gore|blood|weapon/gi, '[graphic content]');
+      filteredContent = filteredContent.replace(/profanity|cursing|swear/gi, '[inappropriate language]');
       break;
     case 'family':
     default:
@@ -39,6 +44,8 @@ export function applyFamilySafetyFilters(content, safetyMode = 'family') {
       // Additional terms for family mode
       filteredContent = filteredContent.replace(/violence|gore/gi, '[graphic content]');
       filteredContent = filteredContent.replace(/profanity|cursing/gi, '[inappropriate language]');
+      filteredContent = filteredContent.replace(/sex|erotic|masturbate/gi, '[sensitive topic]');
+      filteredContent = filteredContent.replace(/alcohol|beer|wine/gi, '[beverage]');
       break;
   }
 
