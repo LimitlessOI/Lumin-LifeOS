@@ -2695,8 +2695,8 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-07-31T02:22:40.883Z",
-        "shipped_at": "2026-07-31T02:22:40.883Z",
+        "sealed_at": "2026-07-31T02:24:51.423Z",
+        "shipped_at": "2026-07-31T02:24:51.423Z",
         "commit_sha": null,
         "content_sha256": "ba02a185f7197dae3b9eba8ac62fea007116835b86876e7f2e035d910a123ec2",
         "target_file": "scripts/sentry-site-builder-schedule.mjs",
@@ -2712,7 +2712,7 @@
           "content_sha256": "ba02a185f7197dae3b9eba8ac62fea007116835b86876e7f2e035d910a123ec2"
         }
       },
-      "shipped_at": "2026-07-31T02:22:40.883Z"
+      "shipped_at": "2026-07-31T02:24:51.423Z"
     },
     {
       "id": "bo-security-review-real-diff-format",

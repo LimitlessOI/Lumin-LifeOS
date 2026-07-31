@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T02:22:43.233Z",
+  "generated_at": "2026-07-31T02:24:54.318Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12370,
   "files": [
@@ -73474,8 +73474,8 @@
       "path": "scripts/sentry-site-builder-schedule.mjs",
       "synopsis": "Exports registerSiteBuilderSentryGateScheduler — scripts/sentry-site-builder-schedule.mjs.",
       "bytes": 2076,
-      "mtime": "2026-07-31T02:22:43.233Z",
-      "indexed_at": "2026-07-31T02:22:43.233Z"
+      "mtime": "2026-07-31T02:24:54.318Z",
+      "indexed_at": "2026-07-31T02:24:54.318Z"
     },
     {
       "path": "scripts/setup-cloudflare-railway.mjs",
