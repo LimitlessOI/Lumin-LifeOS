@@ -183,6 +183,43 @@ Do not implement until Phase 2 consensus. Proposed exact language for review:
 
 ---
 
+## 8. Phase 1 Audit Update — 2026-07-23
+
+This update reflects the state after the first implementation pass and deployment.
+
+### What was completed
+
+| Mini-blueprint phase | Status | Evidence |
+| --- | --- | --- |
+| P1 — Builder Readiness Audit | DONE | Original audit above + this update. |
+| P3/4 — File-placement authority gate | DONE and deployed | `scripts/lib/file-placement-gate.mjs`, `scripts/verify-file-placement.mjs`, hard block in `routes/lifeos-council-builder-routes.js#commitOrMirrorFiles`, and `githooks/pre-commit`. Verified by `runtime-fingerprint` at `https://lumin-web-production-e3a9.up.railway.app/api/v1/lifeos/builder/runtime-fingerprint?paths=routes/lifeos-council-builder-routes.js` returning deploy SHA `84f8a6440…` with the gate source. |
+| P3/4 — Step-status enforcement | DONE and deployed | `services/truth-ladder.js#exactChangeClaim` (`allow_terminal_steps`), `services/governed-shipping-runner.js`, `routes/factory-mount-routes.js` `/factory/ship-queue` and `/factory/reverse-step`, `factory-staging/factory-core/builder/run-step.js#dispatchExecuteStep`. |
+| `builder:preflight` green-light gate | PASS | 418/418 PASS. |
+
+### What was NOT completed — new evidence
+
+| Item | Evidence | Implication |
+| --- | --- | --- |
+| `never-stop` autonomous loop still bypasses the new gate | `services/apiSpecification.js` was created by `GOVERNED-AUTONOMOUS-SHIP` at `f7eaae308` after the gate deployed. It has no `@ssot` and the gate did not run. | The gate is enforced on the `execute-batch` path, but the autonomous loop uses `commitManyToGitHub` / `commitToGitHub` directly. Phase 4 is incomplete until all construction paths call the gate. |
+| `lifeos:bp-priority:verify` still FAIL | 13 `CREATE_TABLE_COLLISION_RISK`, 10 `ALTER_ADD_COLUMN_MISSING_IF_NOT_EXISTS` warnings. | Two green-light authorities still disagree. |
+| SSOT / product-home debt grew | `ssot-check --all`: 1346 files, 776 tagged, **579 missing `@ssot`** (was 570). | Legacy grandfathering is still in effect; the gate blocks new files, but old files are not yet owned. |
+| False-done content drift | `audit-false-done-steps.mjs --ci`: SOFT=116, 209 grandfathered. | `DONE` claims still lack artifact proof in many cases. |
+| SMOS revenue loop | No `EMAIL_FROM` / `RESEND_API_KEY` / `STRIPE_*` keys in env. | Phase 5 cannot run. |
+
+### Updated verdict
+
+**Still NOT READY TO MANUFACTURE.** The file-placement gate and step-status enforcement are real and live, but they do not yet cover the `never-stop` autonomous path, `lifeos:bp-priority:verify` is still red, SSOT debt has increased, and the revenue loop remains credential-blocked.
+
+### Recommended next actions
+
+1. **Phase 4 completion:** wrap `commitManyToGitHub` / `commitToGitHub` (used by the autonomous shipping loop) with the same `evaluateFilePlacement` + `evaluateBlueprintAuthority` hard-gate used by `execute-batch`.
+2. **Migration preflight resolution:** decide whether duplicate `CREATE TABLE` files should be moved to `_deprecated/` or merged.
+3. **SSOT debt cleanup:** assign product homes to the 579 missing-`@ssot` files or mark them as grandfathered.
+4. **Receipt Auditor / Reality Replay Agent:** build the independent verifier that re-runs receipted commands to prove pass/fail claims.
+5. **SMOS revenue loop:** run once founder credentials are supplied.
+
+---
+
 ## 7. Evidence Log
 
 All evidence was gathered from the current `origin/main` (`a9d02c944`) after `git pull --ff-only origin main` during this audit.

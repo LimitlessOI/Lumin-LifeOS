@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T08:53:23.211Z",
+  "generated_at": "2026-07-31T09:04:08.101Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12528,
+  "file_count": 12529,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21931,9 +21931,16 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-BLUEPRINT-AUTHORITY-0001/BUILDER_READINESS_AUDIT.md",
       "synopsis": "Phase 1 Builder Readiness Audit for FACTORY-BLUEPRINT-AUTHORITY-0001",
-      "bytes": 23567,
-      "mtime": "2026-07-31T08:21:25.587Z",
-      "indexed_at": "2026-07-31T08:33:28.712Z"
+      "bytes": 26909,
+      "mtime": "2026-07-31T09:03:50.120Z",
+      "indexed_at": "2026-07-31T09:04:08.101Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-BLUEPRINT-AUTHORITY-0001/STATUS_REPORT.md",
+      "synopsis": "FACTORY-BLUEPRINT-AUTHORITY-0001 status report — what is done, what is live, and what remains.",
+      "bytes": 4937,
+      "mtime": "2026-07-31T09:01:00.152Z",
+      "indexed_at": "2026-07-31T09:04:08.101Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/ACCEPTANCE_TESTS.json",
