@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T10:55:00.467Z",
+  "generated_at": "2026-07-31T10:55:12.420Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12567,
+  "file_count": 12568,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21476,6 +21476,14 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "builderos-reboot/FOUNDER_STOP.json",
+      "synopsis": "BuilderOS artifact — FOUNDER STOP.",
+      "bytes": 571,
+      "mtime": "2026-07-31T10:49:09.184Z",
+      "indexed_at": "2026-07-31T10:55:09.665Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "builderos-reboot/FULL_LOOP_PROOF_RECEIPT.json",
       "synopsis": "BuilderOS artifact — FULL LOOP PROOF RECEIPT.",
       "bytes": 3893,
@@ -21670,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3788305,
-      "mtime": "2026-07-31T10:50:53.616Z",
-      "indexed_at": "2026-07-31T10:51:00.676Z"
+      "bytes": 3788593,
+      "mtime": "2026-07-31T10:55:10.008Z",
+      "indexed_at": "2026-07-31T10:55:12.420Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -64990,9 +64998,9 @@
     {
       "path": "products/receipts/COGNITIVE_ARCHITECTURE_V1_ACCEPTANCE.json",
       "synopsis": "Product receipt — COGNITIVE ARCHITECTURE V1 ACCEPTANCE.",
-      "bytes": 2942,
-      "mtime": "2026-07-31T09:49:31.984Z",
-      "indexed_at": "2026-07-31T09:51:46.501Z",
+      "bytes": 3354,
+      "mtime": "2026-07-31T10:48:52.964Z",
+      "indexed_at": "2026-07-31T10:55:09.665Z",
       "synopsis_index_only": true
     },
     {
@@ -65734,9 +65742,9 @@
     {
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
-      "bytes": 24209,
-      "mtime": "2026-07-31T09:48:04.316Z",
-      "indexed_at": "2026-07-31T09:51:46.501Z",
+      "bytes": 24199,
+      "mtime": "2026-07-31T10:48:55.768Z",
+      "indexed_at": "2026-07-31T10:55:09.665Z",
       "synopsis_index_only": true
     },
     {
@@ -70181,9 +70189,9 @@
     {
       "path": "routes/partner-config-creation.js",
       "synopsis": "HTTP route module — Partner Config Creation.",
-      "bytes": 1131,
-      "mtime": "2026-07-31T09:38:58.110Z",
-      "indexed_at": "2026-07-31T09:38:58.110Z"
+      "bytes": 2141,
+      "mtime": "2026-07-31T10:47:25.684Z",
+      "indexed_at": "2026-07-31T10:55:09.665Z"
     },
     {
       "path": "routes/partner-onboarding.js",
@@ -73839,9 +73847,9 @@
     {
       "path": "scripts/run-cognitive-chair-acceptance.mjs",
       "synopsis": "Acceptance script for FACTORY-COGNITIVE-ARCHITECTURE-0001.",
-      "bytes": 2530,
-      "mtime": "2026-07-31T09:49:27.568Z",
-      "indexed_at": "2026-07-31T09:51:46.501Z",
+      "bytes": 2939,
+      "mtime": "2026-07-31T10:48:51.100Z",
+      "indexed_at": "2026-07-31T10:55:09.665Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -86443,9 +86451,9 @@
     {
       "path": "services/advisoryCouncilProcess.js",
       "synopsis": "Exports councilReview — services/advisoryCouncilProcess.js.",
-      "bytes": 1177,
-      "mtime": "2026-07-31T09:59:06.638Z",
-      "indexed_at": "2026-07-31T09:59:06.638Z"
+      "bytes": 3852,
+      "mtime": "2026-07-31T10:47:25.684Z",
+      "indexed_at": "2026-07-31T10:55:09.665Z"
     },
     {
       "path": "services/advisoryCouncilService.js",
@@ -93267,10 +93275,10 @@
     },
     {
       "path": "services/reviewModerationFlowDetail.js",
-      "synopsis": "Exports moderateSubmissions — services/reviewModerationFlowDetail.js.",
-      "bytes": 794,
-      "mtime": "2026-07-31T09:39:39.686Z",
-      "indexed_at": "2026-07-31T09:39:39.686Z"
+      "synopsis": "Exports moderateSubmissions and reviewSubmission - services/reviewModerationFlowDetail.js.",
+      "bytes": 3418,
+      "mtime": "2026-07-31T10:47:25.684Z",
+      "indexed_at": "2026-07-31T10:55:09.665Z"
     },
     {
       "path": "services/risk-scorer.js",
