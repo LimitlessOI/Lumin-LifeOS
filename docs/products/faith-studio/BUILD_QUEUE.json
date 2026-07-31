@@ -1998,11 +1998,37 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": null,
-      "shipped_at": "2026-07-16T03:09:09.548Z",
+      "shipped_at": "2026-07-31T09:38:07.007Z",
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "06",
       "mission_id": "PRODUCT-faith-studio",
-      "reaudit_reset_at": "2026-07-30T18:55:06.428Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.428Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/faith-studio/twins/steps/06.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-31T09:38:07.007Z",
+        "shipped_at": "2026-07-31T09:38:07.007Z",
+        "commit_sha": null,
+        "content_sha256": "2d65e8a3324fe4611130dcfc47e9f406a6c8930199f50302aa3786f4659663e4",
+        "target_file": "db/migrations/add_doctrine_profiles.sql",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "db/migrations/add_doctrine_profiles.sql",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/faith-studio/twins/steps/06.exact",
+          "content_sha256": "2d65e8a3324fe4611130dcfc47e9f406a6c8930199f50302aa3786f4659663e4"
+        }
+      }
     },
     {
       "id": "08",
