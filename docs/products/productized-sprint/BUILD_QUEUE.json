@@ -577,7 +577,7 @@
     },
     {
       "id": "create-intake-form",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/intakeFormRoute.js",
       "task": "create intake form route",
       "spec": "Route to render the intake form page to users.",
@@ -603,12 +603,12 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-31T09:04:38.355Z",
-      "commit_sha": "bf61f06c0a99b54baecb367eabab0f9a587b0de4",
+      "commit_sha": "f91c02d96ec59ac52f9f8e7c664958fb9426da21",
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "create-intake-form",
       "mission_id": "PRODUCT-productized-sprint",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerIntakeFormRoutes; assertion_threw",
+      "last_error": null,
       "reaudit_reset_at": "2026-07-30T18:55:06.702Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
