@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T06:51:27.820Z",
+  "generated_at": "2026-07-31T06:51:38.149Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12512,
+  "file_count": 12513,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -88804,6 +88804,13 @@
       "bytes": 3370,
       "mtime": "2026-07-14T06:49:49.054Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "services/envDiffService.js",
+      "synopsis": "Exports generateEnvDiffReceipt — services/envDiffService.js.",
+      "bytes": 1299,
+      "mtime": "2026-07-31T06:51:38.149Z",
+      "indexed_at": "2026-07-31T06:51:38.149Z"
     },
     {
       "path": "services/evaluatorMentorQualification.js",
