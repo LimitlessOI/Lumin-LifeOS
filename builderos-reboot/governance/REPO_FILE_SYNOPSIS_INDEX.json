@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T07:18:00.019Z",
+  "generated_at": "2026-07-31T07:18:20.725Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12516,
+  "file_count": 12517,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -94015,6 +94015,13 @@
       "ssot": [
         "docs/products/lumin-university/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/students.js",
+      "synopsis": "Exports addStudent — services/students.js.",
+      "bytes": 230,
+      "mtime": "2026-07-31T07:18:20.725Z",
+      "indexed_at": "2026-07-31T07:18:20.725Z"
     },
     {
       "path": "services/supervised-autonomy-readiness.js",

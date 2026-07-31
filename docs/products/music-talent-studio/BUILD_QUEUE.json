@@ -407,14 +407,40 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-15T19:32:28.089Z",
+      "shipped_at": "2026-07-31T07:18:18.205Z",
       "commit_sha": "b8d5aa5b0118c5bb3894a946f50f5733da9fcebf",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step7",
       "mission_id": "PRODUCT-music-talent-studio",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:addStudent,getStudents; assertion_threw; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.680Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.680Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/music-talent-studio/twins/steps/step7.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-31T07:18:18.205Z",
+        "shipped_at": "2026-07-31T07:18:18.205Z",
+        "commit_sha": "b8d5aa5b0118c5bb3894a946f50f5733da9fcebf",
+        "content_sha256": "1e53c143b18905be5d8ba76ebfa3c47d05584664716d8126247afe1e4124f8d3",
+        "target_file": "services/students.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/students.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/music-talent-studio/twins/steps/step7.exact",
+          "content_sha256": "1e53c143b18905be5d8ba76ebfa3c47d05584664716d8126247afe1e4124f8d3"
+        }
+      }
     },
     {
       "id": "step8",
