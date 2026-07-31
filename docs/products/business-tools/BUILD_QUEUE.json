@@ -619,13 +619,13 @@
     },
     {
       "id": "8",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/approvalsTimeoutService.js",
       "task": "implement 48h approval timeout",
       "spec": "Add logic to automatically reject controversial approvals after 48h timeout.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "applyApprovalTimeout"
       ],
@@ -639,9 +639,9 @@
           "assertion_id": "expected_exports:services/approvalsTimeoutService.js"
         }
       ],
-      "last_attempt_at": null,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:applyApprovalTimeout; assertion_threw",
-      "commit_sha": "12ca5d0975400a74cb765c8218557d4b4a07f12a",
+      "last_attempt_at": "2026-07-31T01:42:57.141Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: openai_builder_mini: HTTP 429: {\n    \"error\": {\n        \"message\": \"You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organiza",
+      "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
