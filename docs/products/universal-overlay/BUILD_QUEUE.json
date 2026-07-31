@@ -431,13 +431,13 @@
     },
     {
       "id": "10",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/pageSummarization.js",
       "task": "create page summarization feature",
       "spec": "Provide a summary of the page content via AI assistance.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerPageSummarizationRoutes"
       ],
@@ -456,9 +456,9 @@
           "assertion_id": "expected_exports:routes/pageSummarization.js"
         }
       ],
-      "last_attempt_at": null,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerPageSummarizationRoutes; assertion_threw",
-      "commit_sha": "d1cd2ca334a12482cc6ad4460666c2772a2ff071",
+      "last_attempt_at": "2026-07-31T10:33:05.650Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: openai_builder_mini: HTTP 429: {\n    \"error\": {\n        \"message\": \"You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organiza",
+      "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
