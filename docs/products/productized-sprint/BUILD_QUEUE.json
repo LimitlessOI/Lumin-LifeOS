@@ -1365,7 +1365,7 @@
     },
     {
       "id": "update-linkedin-profile",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/linkedinProfileRoute.js",
       "task": "update LinkedIn profile route",
       "spec": "Route for updating the LinkedIn profile to reference sprint offers.",
@@ -1391,12 +1391,12 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-31T10:48:59.898Z",
-      "commit_sha": "8e429c46e90ed17bd19f5843dcc889da3df2cb8f",
+      "commit_sha": "a21e83ec9d0db47f0446e4366069fb4476e93310",
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "update-linkedin-profile",
       "mission_id": "PRODUCT-productized-sprint",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerLinkedinProfileRoutes; assertion_threw",
+      "last_error": null,
       "reaudit_reset_at": "2026-07-30T18:55:06.702Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
