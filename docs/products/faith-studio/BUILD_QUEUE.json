@@ -1270,13 +1270,13 @@
     },
     {
       "id": "9",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/doctrineProfilesService.js",
       "task": "Prepare doctrine-specific profiles",
       "spec": "Service to prepare ready-under-test doctrine-specific profiles.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "getDoctrineDetails"
       ],
@@ -1295,12 +1295,12 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-31T06:11:36.760Z",
-      "commit_sha": null,
+      "commit_sha": "8e7681ddc2403675936df78507dc97cc7b59920d",
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "9",
       "mission_id": "PRODUCT-faith-studio",
-      "pre_existing": false,
-      "last_error": "artifact_missing_after_ship: artifact_proof_failed: fetchProfileData",
+      "pre_existing": null,
+      "last_error": null,
       "reaudit_reset_at": "2026-07-30T18:55:06.428Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
@@ -1330,7 +1330,19 @@
       },
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-07-31T05:39:49.656Z"
+      "last_attempt_at": null,
+      "last_attempt": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-31T06:05:30.481Z",
+      "no_op": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "01",
