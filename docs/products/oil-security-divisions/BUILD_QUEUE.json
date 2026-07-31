@@ -368,14 +368,40 @@
         }
       ],
       "shipped_via": null,
-      "shipped_at": "2026-07-15T20:01:25.604Z",
+      "shipped_at": "2026-07-31T07:47:22.294Z",
       "commit_sha": "318df63595b06f24072b41b4d07656609793b4b8",
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step8",
       "mission_id": "PRODUCT-oil-security-divisions",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerSecurityRoutes; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.687Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.687Z",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/oil-security-divisions/twins/steps/step8.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-31T07:47:22.294Z",
+        "shipped_at": "2026-07-31T07:47:22.294Z",
+        "commit_sha": "318df63595b06f24072b41b4d07656609793b4b8",
+        "content_sha256": "741fa0f1e7e6a536e3136c77a7ddd1da2eb3a3bf0d7b2db184771f8d7a6f38cd",
+        "target_file": "routes/registerSecurityRoutes.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "routes/registerSecurityRoutes.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/oil-security-divisions/twins/steps/step8.exact",
+          "content_sha256": "741fa0f1e7e6a536e3136c77a7ddd1da2eb3a3bf0d7b2db184771f8d7a6f38cd"
+        }
+      }
     },
     {
       "id": "step9",

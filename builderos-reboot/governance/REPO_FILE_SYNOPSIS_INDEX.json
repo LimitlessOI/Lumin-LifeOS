@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T07:47:14.137Z",
+  "generated_at": "2026-07-31T07:47:25.125Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12520,
+  "file_count": 12521,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -70158,6 +70158,13 @@
       "ssot": [
         "docs/products/oil-security-divisions/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "routes/registerSecurityRoutes.js",
+      "synopsis": "Registers SecurityRoutes routes/handlers (routes/registerSecurityRoutes.js).",
+      "bytes": 1369,
+      "mtime": "2026-07-31T07:47:25.125Z",
+      "indexed_at": "2026-07-31T07:47:25.125Z"
     },
     {
       "path": "routes/replacement-plan-routes.js",
