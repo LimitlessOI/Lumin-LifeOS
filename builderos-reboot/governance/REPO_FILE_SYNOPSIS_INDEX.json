@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T01:51:40.526Z",
+  "generated_at": "2026-07-31T01:50:13.423Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12466,
+  "file_count": 12465,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -40585,9 +40585,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 327862,
-      "mtime": "2026-07-30T22:43:44.313Z",
-      "indexed_at": "2026-07-30T22:44:20.932Z"
+      "bytes": 329164,
+      "mtime": "2026-07-31T01:48:44.609Z",
+      "indexed_at": "2026-07-31T01:50:13.423Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -41461,9 +41461,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 128213,
-      "mtime": "2026-07-30T22:26:14.273Z",
-      "indexed_at": "2026-07-30T22:31:11.508Z"
+      "bytes": 129114,
+      "mtime": "2026-07-31T01:49:53.679Z",
+      "indexed_at": "2026-07-31T01:50:13.423Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -69714,13 +69714,6 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
-      "path": "routes/musicTeachersRoutes.js",
-      "synopsis": "HTTP route module — MusicTeachersRoutes.",
-      "bytes": 1065,
-      "mtime": "2026-07-31T01:51:40.526Z",
-      "indexed_at": "2026-07-31T01:51:40.526Z"
-    },
-    {
       "path": "routes/oil-security-receipt-routes.js",
       "synopsis": "routes/oil-security-receipt-routes.js",
       "bytes": 2174,
@@ -87668,9 +87661,9 @@
     {
       "path": "services/coppaReview.js",
       "synopsis": "Service module — CoppaReview.",
-      "bytes": 1633,
-      "mtime": "2026-07-31T01:51:28.889Z",
-      "indexed_at": "2026-07-31T01:51:28.889Z"
+      "bytes": 1229,
+      "mtime": "2026-07-31T01:17:13.163Z",
+      "indexed_at": "2026-07-31T01:17:13.163Z"
     },
     {
       "path": "services/council-bypass-audit.js",
@@ -92605,10 +92598,10 @@
     },
     {
       "path": "services/sacredContentReviewService.js",
-      "synopsis": "Exports sacredContentRevise, sacredContentValidate, sacredContentAssessImpact, sacredContentAuditTrail, sacredContentEscalate, sacredContentPreserveIntent, sacredContentMonitorTrends — services/sacredContentReviewService.js.",
-      "bytes": 8137,
-      "mtime": "2026-07-31T01:50:52.808Z",
-      "indexed_at": "2026-07-31T01:50:52.808Z"
+      "synopsis": "Exports sacredContentRevise, sacredContentValidate, sacredContentAssessImpact, sacredContentAuditTrail, sacredContentEscalate — services/sacredContentReviewService.js.",
+      "bytes": 5092,
+      "mtime": "2026-07-31T01:26:12.873Z",
+      "indexed_at": "2026-07-31T01:26:12.873Z"
     },
     {
       "path": "services/safeOutputService.js",
