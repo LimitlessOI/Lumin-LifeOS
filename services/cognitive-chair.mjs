@@ -222,7 +222,7 @@ export async function composeReasoning({
           continue;
         }
         try {
-          const result = await callModel({ member, prompt, options: { taskType: 'cognitive_chair.lens', returnObject: true } });
+          const result = await callModel({ member, prompt, options: { taskType: 'cognitive_chair.lens', returnObject: true, lens_id: lens.lens_id, responsibility } });
           base.response = result?.content ?? result?.text ?? null;
           base.usage = result?.usage ?? null;
           base.parsed = parseLensOutput(base.response);
@@ -255,7 +255,7 @@ export async function composeReasoning({
         const result = await callModel({
           member: 'claude_sonnet',
           prompt: synthesisPrompt,
-          options: { taskType: 'cognitive_chair.synthesis', returnObject: true },
+          options: { taskType: 'cognitive_chair.synthesis', returnObject: true, lens_id: 'chair_synthesis', responsibility: 'chair' },
         });
         callCount += 1;
         chair = {

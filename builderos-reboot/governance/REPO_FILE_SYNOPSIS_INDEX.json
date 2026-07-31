@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T22:38:21.624Z",
+  "generated_at": "2026-07-31T22:43:12.651Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12615,
+  "file_count": 12618,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -23491,9 +23491,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-MASTER-A-TO-Z-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 12464,
-      "mtime": "2026-07-31T22:30:38.143Z",
-      "indexed_at": "2026-07-31T22:30:38.143Z",
+      "bytes": 14610,
+      "mtime": "2026-07-31T22:43:12.651Z",
+      "indexed_at": "2026-07-31T22:43:12.651Z",
       "synopsis_index_only": true
     },
     {
@@ -23506,17 +23506,31 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-MASTER-A-TO-Z-0001/OBJECTIVE_VERDICT.json",
       "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
-      "bytes": 1072,
-      "mtime": "2026-07-31T22:30:38.143Z",
-      "indexed_at": "2026-07-31T22:30:38.143Z",
+      "bytes": 1318,
+      "mtime": "2026-07-31T22:43:12.651Z",
+      "indexed_at": "2026-07-31T22:43:12.651Z",
       "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-MASTER-A-TO-Z-0001/PHASE_0_AUDIT.md",
+      "synopsis": "Phase 0 audit of existing cognitive-spine components and naming/authority collisions.",
+      "bytes": 7229,
+      "mtime": "2026-07-31T22:43:12.651Z",
+      "indexed_at": "2026-07-31T22:43:12.651Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-MASTER-A-TO-Z-0001/PHASE_1_TRIGGER_SPEC.md",
+      "synopsis": "Phase 1 Trigger Spec — Chair Reasoning in Live Conversation",
+      "bytes": 1942,
+      "mtime": "2026-07-31T22:43:12.651Z",
+      "indexed_at": "2026-07-31T22:43:12.651Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-MASTER-A-TO-Z-0001/TEN_OUT_OF_TEN_DEFINITION.md",
       "synopsis": "10/10 definition for BuilderOS + LifeOS Cognitive Spine, benchmarked against every comparable autonomous system.",
-      "bytes": 9771,
-      "mtime": "2026-07-31T22:30:38.143Z",
-      "indexed_at": "2026-07-31T22:30:38.143Z"
+      "bytes": 12060,
+      "mtime": "2026-07-31T22:43:12.651Z",
+      "indexed_at": "2026-07-31T22:43:12.651Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/BLUEPRINT.json",
@@ -38806,9 +38820,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 74424,
-      "mtime": "2026-07-31T22:30:38.143Z",
-      "indexed_at": "2026-07-31T22:30:38.143Z"
+      "bytes": 75260,
+      "mtime": "2026-07-31T22:43:12.651Z",
+      "indexed_at": "2026-07-31T22:43:12.651Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41019,9 +41033,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 359149,
-      "mtime": "2026-07-31T22:38:10.389Z",
-      "indexed_at": "2026-07-31T22:38:21.624Z"
+      "bytes": 358611,
+      "mtime": "2026-07-31T22:43:12.651Z",
+      "indexed_at": "2026-07-31T22:43:12.651Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -41771,9 +41785,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 641814,
-      "mtime": "2026-07-31T12:04:04.906Z",
-      "indexed_at": "2026-07-31T12:04:04.906Z"
+      "bytes": 642629,
+      "mtime": "2026-07-31T22:43:12.651Z",
+      "indexed_at": "2026-07-31T22:43:12.651Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -87863,9 +87877,9 @@
     {
       "path": "services/chair-lumin-unified.js",
       "synopsis": "Chair native turn — Lumin IS the Chair; personality translates real facts only.",
-      "bytes": 5150,
-      "mtime": "2026-07-23T13:25:51.199Z",
-      "indexed_at": "2026-07-30T22:32:11.913Z",
+      "bytes": 11649,
+      "mtime": "2026-07-31T22:43:12.651Z",
+      "indexed_at": "2026-07-31T22:43:12.651Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -88157,9 +88171,9 @@
     {
       "path": "services/cognitive-chair.mjs",
       "synopsis": "Cognitive Chair — composes responsibilities, lenses (cognitive assets), and model selection",
-      "bytes": 13215,
-      "mtime": "2026-07-31T09:45:19.292Z",
-      "indexed_at": "2026-07-31T09:51:46.501Z",
+      "bytes": 13307,
+      "mtime": "2026-07-31T22:43:12.651Z",
+      "indexed_at": "2026-07-31T22:43:12.651Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -97127,6 +97141,13 @@
       "bytes": 1543,
       "mtime": "2026-06-23T01:48:54.588Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "tests/chair-lumin-unified-cognitive.test.mjs",
+      "synopsis": "mjs — tests/chair-lumin-unified-cognitive.test.mjs.",
+      "bytes": 5120,
+      "mtime": "2026-07-31T22:43:12.651Z",
+      "indexed_at": "2026-07-31T22:43:12.651Z"
     },
     {
       "path": "tests/chair-lumin-unified-so003.test.js",

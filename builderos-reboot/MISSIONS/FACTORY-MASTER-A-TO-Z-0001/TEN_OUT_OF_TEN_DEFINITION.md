@@ -15,11 +15,17 @@ A 10/10 BuilderOS / LifeOS is the best autonomous, constitutionally-governed cog
 
 1. Constitutional governance with fail-closed enforcement.
 2. Separation of Mission, Responsibility, Lens/Cognitive Asset, Model, and Execution.
-3. Receipt-first truth: every DONE/PASS claim is backed by a reproducible artifact.
-4. Independent verification (SENTRY) with Layer A structural + Layer B real-browser walkthrough.
-5. Continuous learning from reality (Wisdom) that updates model trust, lens trust, and founder intent predictions.
-6. End-to-end autonomous build: intent → reasoning plan → blueprint → deployed code → verified behavior.
-7. Founder-bus elimination: the founder talks to the Chair; the system talks to itself.
+3. A Constitutional Decision Engine that adapts process depth to reversibility, cost-of-error, security, money, customer data, constitutional behavior, and local vs system-wide scope.
+4. Explicit Knowledge / Judgment separation: Knowledge answers "what do we know?"; Judgment answers "what should we do?".
+5. Confidence Propagation as a first-class runtime value across every lens and responsibility.
+6. Explicit Knowns / Unknowns / Assumptions / Risks / Evidence-Needed tracking that shrinks over a mission.
+7. Decision Reversibility classification (A/B/C) that governs reasoning budget, SENTRY mandate, founder approval, and Blueprint Authority gate.
+8. Receipt-first truth: every DONE/PASS claim is backed by a reproducible artifact.
+9. Independent verification (SENTRY) with Layer A structural + Layer B real-browser walkthrough.
+10. Continuous learning from reality (Wisdom) that updates model trust, lens trust, and founder intent predictions.
+11. End-to-end autonomous build: intent → reasoning plan → blueprint → deployed code → verified behavior.
+12. Founder-bus elimination: the founder talks to the Chair; the system talks to itself.
+13. Founder Cognitive Load optimization: the system interrupts the founder only when his unique judgment creates more value than autonomous execution.
 
 ## Comparable systems benchmark
 
@@ -51,20 +57,23 @@ Therefore, 10/10 for BuilderOS / LifeOS is not "score higher on SWE-bench." It i
 | **Governance intent** | 15% | The Constitution is mechanically enforced; no claim passes without proof; no self-certification. | 9/10 (strong docs, some wiring gaps) | `lifeos:bp-priority:verify`, `audit-false-done-steps.mjs --ci`, receipt-truth audit |
 | **Mechanical enforcement** | 15% | File-placement gates, step-status gates, never-stop loop, SENTRY all run on every path. | 8/10 (gated commit paths exist; some components unwired) | `builder:preflight`, `verify-never-stop-gate.mjs`, SENTRY smoke |
 | **Receipt truth** | 15% | Every DONE/PASS has a replayable receipt; FAILs auto-reopen steps; no `verify_command` theater. | 8/10 (Receipt Auditor exists, auto-reopen not wired) | `receipt-auditor.test.js`, `replay-receipt.mjs --sample` |
-| **Cognitive architecture** | 20% | Chair/Lens/Model/Execution separation is the live path for every mission; lenses are measurable cognitive assets. | 6/10 (modules exist, not wired into `runChairNativeTurn`) | `cognitive-chair.test.mjs`, real `founder_decision_log` + `model_capability_ledger` rows |
+| **Cognitive architecture** | 20% | Chair/Lens/Model/Execution separation is the live path for every mission; lenses are measurable cognitive assets; Constitutional Decision Engine, Knowledge/Judgment split, confidence propagation, unknowns, reversibility, and goal hierarchy are enforced. | 7/10 (live in `runChairNativeTurn`; CDE and propagation not yet runtime) | `cognitive-chair.test.mjs`, `chair-lumin-unified-cognitive.test.mjs`, real `founder_decision_log` + `model_capability_ledger` rows |
 | **Self-learning** | 15% | Wisdom updates lens trust, model trust, and founder-intent predictions from real outcomes. | 6/10 (loop exists, starved for live data) | `wisdom-update-lens-trust.mjs --dry-run`, `model-roi-report.mjs` |
 | **Autonomous completion** | 15% | Idea → founder packet → blueprint → deployed code → SENTRY PASS with no human design decisions. | 8/10 (FACTORY-DEMO-SAMPLE-0001 proved it) | `run-factory-demo-sample.mjs`, deploy SHA parity, SENTRY PASS receipt |
-| **Revenue reality** | 5% | Real product money moves through the system and is verified by SENTRY. | 2/10 (blocked on Stripe/email credentials) | `verify-smos-live-charge.mjs` READY, first $49 transaction receipt |
+| **Revenue reality** | 5% | Real product money moves through the system and is verified by SENTRY; Reality Hierarchy (technical, behavioral, business, financial, customer, founder, long-term) is independently measured. | 2/10 (blocked on Stripe/email credentials; hierarchy partially wired) | `verify-smos-live-charge.mjs` READY, first $49 transaction receipt |
 
 **Target composite:** 10/10 when the weighted score is ≥ 9.5 and **no dimension is below 7/10**.
 
 ## What blocks 10/10 today
 
-1. **Cognitive spine is not wired into the live conversation.** `services/cognitive-chair.mjs` and `cognitive-step-runner.mjs` are real, tested, and disconnected from `services/chair-lumin-unified.js#runChairNativeTurn`.
-2. **Founder decisions are not captured live.** `services/founder-intent-model.js#recordFounderDecision` is only reachable by manual backfill.
-3. **Model calls are not scored.** `services/model-capability-ledger.js` has 7 of 9 roles unwired.
+1. **Cognitive spine is not wired into the live conversation.** `services/cognitive-chair.mjs` and `cognitive-step-runner.mjs` are real, tested, and disconnected from `services/chair-lumin-unified.js#runChairNativeTurn`. *(Partially resolved by MMAZ-004; remaining: Constitutional Decision Engine, confidence propagation, unknowns, reversibility classification.)*
+2. **Founder decisions are not captured live.** `services/founder-intent-model.js#recordFounderDecision` is only reachable by manual backfill. *(Resolved by MMAZ-005 in live conversation path.)*
+3. **Model calls are not scored.** `services/model-capability-ledger.js` has 7 of 9 roles unwired. *(Resolved by MMAZ-006 for Chair/translation calls; remaining roles wired as other call sites are touched.)*
 4. **SENTRY and Receipt Auditor auto-reopen are not in the dispatch path.** They exist as standalone tools.
 5. **SMOS revenue loop awaits external credentials.** This is correctly scoped as a product-stage blocker, not a builder-stage failure.
+6. **Constitutional Decision Engine is documented but not runtime.** Mission classification (reversible, cost-of-error, security/money/data/constitutional scope) does not yet automatically set reasoning budget, responsibilities, SENTRY mandate, founder approval, or Blueprint Authority gate.
+7. **Confidence Propagation and Unknowns ledger are not yet first-class runtime outputs.** Chair synthesis does not yet produce propagated confidence across lenses or an explicit `unknowns`/`evidence_needed` list.
+8. **Cognitive Spine Health Metrics and Asset Evolution Governance are not yet measured or enforced.** There is no runtime dashboard for blueprint drift, constitution drift, truth accuracy, calibration, consensus time, mission completion time, founder interruptions, human overrides, asset trust, model ROI, and reasoning cost.
 
 ## 10/10 ratification gate
 

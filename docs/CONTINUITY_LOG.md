@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-08-01 — Phase 1 vertical slice live: composeReasoning wired into runChairNativeTurn
+
+MMAZ-004/005/006/007 shipped in `services/chair-lumin-unified.js`: `runChairNativeTurn()` now triggers `composeReasoning()` on decision-bearing turns, records the founder decision to `founder_decision_log` (`source='live_conversation'`), scores every model call into `model_capability_ledger` and `model-roi-ledger`, and persists the full Chair transcript plus `named_disagreements` to `data/chair-reasoning-log.jsonl`. `services/cognitive-chair.mjs` passes `lens_id` and `responsibility` through `callModel` options. `tests/chair-lumin-unified-cognitive.test.mjs` (2/2 PASS). `npm run builder:preflight` PASS (429/429). Next: Phase 2 Reasoning Plan and structural lens independence (MMAZ-008–010), then SENTRY factory wiring (MMAZ-017).
+
 ## 2026-08-01 — FACTORY-MASTER-A-TO-Z-0001 mission pack and 10/10 definition
 
 Created `builderos-reboot/MISSIONS/FACTORY-MASTER-A-TO-Z-0001/` with `TEN_OUT_OF_TEN_DEFINITION.md` (benchmarked against Devin, Codex, Claude Code, Copilot Workspace, SWE-Agent/OpenHands, Lovable/Emergent/v0, multi-agent frameworks, and aegntic/cognitive-os), `FOUNDER_PACKET.md`, `BLUEPRINT.json` (20 steps, Phase 0–7), and initial `OBJECTIVE_VERDICT.json`. Registered the mission at rank 16 in `BP_PRIORITY.json` with `acceptance_command` `npm run master-a-to-z:acceptance`. Updated `docs/products/builderos/PRODUCT_HOME.md` status, Last Updated, and Change Receipts. `npm run builder:preflight` PASS (429/429). Next: run `lifeos:bp-priority:verify`, commit/push the mission pack, then execute Phase 0 audit and Phase 1 vertical slice.
