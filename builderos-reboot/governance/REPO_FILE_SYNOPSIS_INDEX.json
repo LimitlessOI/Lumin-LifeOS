@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T09:51:46.501Z",
+  "generated_at": "2026-07-31T09:58:47.911Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12559,
+  "file_count": 12560,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -70955,6 +70955,13 @@
       "bytes": 26730,
       "mtime": "2026-06-21T21:39:05.164Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "routes/voiceDictation.js",
+      "synopsis": "Registers VoiceDictationRoutes routes/handlers (routes/voiceDictation.js).",
+      "bytes": 1488,
+      "mtime": "2026-07-31T09:58:47.911Z",
+      "indexed_at": "2026-07-31T09:58:47.911Z"
     },
     {
       "path": "routes/voluntary-progress-routes.js",
