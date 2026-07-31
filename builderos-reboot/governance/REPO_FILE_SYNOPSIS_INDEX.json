@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T09:04:40.563Z",
+  "generated_at": "2026-07-31T09:04:49.102Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12531,
+  "file_count": 12532,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -36979,6 +36979,13 @@
       "bytes": 1949,
       "mtime": "2026-07-16T19:42:53.572Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "db/migrations/addInsuranceProfilesTable.sql",
+      "synopsis": "Database migration — addInsuranceProfilesTable.sql.",
+      "bytes": 564,
+      "mtime": "2026-07-31T09:04:49.102Z",
+      "indexed_at": "2026-07-31T09:04:49.102Z"
     },
     {
       "path": "db/migrations/addPwaInstallTrackingTable.sql",
