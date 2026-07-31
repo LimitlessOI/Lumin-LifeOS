@@ -991,13 +991,13 @@
     },
     {
       "id": "ai-council-2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/ollamaInvestigation.js",
       "task": "investigate system prompt bloat",
       "spec": "Investigate and document the cause of the high average token usage in Ollama due to potential bloated system prompts.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "investigateOllamaPrompts"
       ],
@@ -1016,13 +1016,16 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-16T04:34:44.533Z",
-      "commit_sha": "f6ff47cd4401f006abca617421569e5757c05fc6",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "ai-council-2",
       "mission_id": "PRODUCT-ai-council",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:investigateOllamaPrompts; investigateOllamaPrompts; investigateOllamaPrompts",
-      "reaudit_reset_at": "2026-07-30T18:55:06.242Z"
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:investigateOllamaPrompts; behavior_assertion_failed; behavior_proof",
+      "reaudit_reset_at": "2026-07-30T18:55:06.242Z",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-07-31T01:16:21.778Z"
     },
     {
       "id": "ai-council-5",
