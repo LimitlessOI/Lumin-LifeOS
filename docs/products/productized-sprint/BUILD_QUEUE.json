@@ -1291,7 +1291,7 @@
     },
     {
       "id": "create-sales-page",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/salesPageRoute.js",
       "task": "create sales page route",
       "spec": "Route to display the one-page sales page for all offers.",
@@ -1317,12 +1317,12 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-31T10:32:45.869Z",
-      "commit_sha": "07f8bf759114a7bd9b20946f5037dc3c2188e8b2",
+      "commit_sha": "ad4970580f1f40f39ce4959e2c9310bbaffdd1ea",
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "create-sales-page",
       "mission_id": "PRODUCT-productized-sprint",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerSalesPageRoutes; assertion_threw",
+      "last_error": null,
       "reaudit_reset_at": "2026-07-30T18:55:06.702Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
