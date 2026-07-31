@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T09:04:08.101Z",
+  "generated_at": "2026-07-31T09:11:19.166Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12529,
+  "file_count": 12530,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21941,6 +21941,13 @@
       "bytes": 4937,
       "mtime": "2026-07-31T09:01:00.152Z",
       "indexed_at": "2026-07-31T09:04:08.101Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-BLUEPRINT-AUTHORITY-0001/TASK_LIST.md",
+      "synopsis": "Prioritized task list to take FACTORY-BLUEPRINT-AUTHORITY-0001 from audit state to READY TO MANUFACTURE.",
+      "bytes": 5950,
+      "mtime": "2026-07-31T09:11:16.156Z",
+      "indexed_at": "2026-07-31T09:11:19.166Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/ACCEPTANCE_TESTS.json",
