@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T05:40:17.515Z",
+  "generated_at": "2026-07-31T05:40:43.764Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12484,
   "files": [
@@ -69798,8 +69798,8 @@
       "path": "routes/musicTeachersRoutes.js",
       "synopsis": "HTTP route module — MusicTeachersRoutes.",
       "bytes": 1065,
-      "mtime": "2026-07-31T04:37:32.211Z",
-      "indexed_at": "2026-07-31T04:37:34.626Z"
+      "mtime": "2026-07-31T05:40:43.764Z",
+      "indexed_at": "2026-07-31T05:40:43.764Z"
     },
     {
       "path": "routes/oil-security-receipt-routes.js",
