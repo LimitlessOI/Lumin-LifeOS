@@ -167,6 +167,30 @@
       "added_real_lines": 61,
       "justification": "These are governance/infrastructure GAP-FILL gates mandated by DECISION-0001.md consensus and explicitly authorized as GAP-FILL to protect the seal path from certifying structurally present but semantically false work. New services/blueprint-grounding-check.js is additive truth enforcement only. All changes are mechanically tested and preflight green.\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
       "commit_message_excerpt": "GAP-FILL: Phase 0 stop false completion — semantic grounding gate, unseal/anti-reseal, sticky escalation, overwrite-path block, hybrid decision-log schema"
+    },
+    {
+      "at": "2026-07-31T06:10:33.433Z",
+      "file": "routes/lifeos-council-builder-routes.js",
+      "is_new_file": false,
+      "added_real_lines": 25,
+      "justification": "this is orchestration/glue wiring and an observability endpoint, not new product business logic. The factory could not build this because it required moving an existing, already-SENTRY-gated scheduler from the unreachable full-runtime path into the founder-runtime path and surfacing its status; that is a runtime topology decision, not a feature module.\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
+      "commit_message_excerpt": "P4 — runtime convergence: BP_PRIORITY scheduler wiring + control-plane endpoint (M2C-011)"
+    },
+    {
+      "at": "2026-07-31T06:10:33.433Z",
+      "file": "services/builderos-bp-priority-scheduler.js",
+      "is_new_file": false,
+      "added_real_lines": 21,
+      "justification": "this is orchestration/glue wiring and an observability endpoint, not new product business logic. The factory could not build this because it required moving an existing, already-SENTRY-gated scheduler from the unreachable full-runtime path into the founder-runtime path and surfacing its status; that is a runtime topology decision, not a feature module.\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
+      "commit_message_excerpt": "P4 — runtime convergence: BP_PRIORITY scheduler wiring + control-plane endpoint (M2C-011)"
+    },
+    {
+      "at": "2026-07-31T06:10:33.433Z",
+      "file": "services/scheduler-registry.js",
+      "is_new_file": true,
+      "added_real_lines": 22,
+      "justification": "this is orchestration/glue wiring and an observability endpoint, not new product business logic. The factory could not build this because it required moving an existing, already-SENTRY-gated scheduler from the unreachable full-runtime path into the founder-runtime path and surfacing its status; that is a runtime topology decision, not a feature module.\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
+      "commit_message_excerpt": "P4 — runtime convergence: BP_PRIORITY scheduler wiring + control-plane endpoint (M2C-011)"
     }
   ]
 }

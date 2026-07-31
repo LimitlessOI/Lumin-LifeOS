@@ -38,7 +38,7 @@ Master verbatim: `docs/conversation_dumps/2026-06-29-limitlessos-ecosystem-found
 | **Lifecycle** | `planning` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `draft` |
-| **Last Updated** | 2026-07-30 — **SMOS checkout route reconciled and SENTRY re-proven.** `/marketing` dashboard "Buy Content Pack" button now calls `/api/v1/marketing/pack/checkout` backed by `marketing_sessions` + `marketing_pack_checkouts`; legacy `/api/v1/socialmediaos/content-pack/checkout` returns `410 Gone`. Shared entitlement check (`isSessionPaid`/`assertSessionPaid`) added to `services/smos-pack-checkout.js` and wired into `GET /api/v1/marketing/sessions/:id/export` and `POST /marketing/session/:id/export`. `scripts/run-marketingos-layer-a.mjs` and `run-marketingos-layer-b.mjs` now resolve `PUBLIC_BASE_URL` through `config/public-origin.js`, fixing the stale `robust-magic` base. SENTRY `marketingos` Layer A + Layer B re-pass 0 findings. Email provider remains deferred (Postmark canceled; `RESEND_API_KEY` NEEDED). A live card payment has not been completed. |
+| **Last Updated** | 2026-07-31 — Revenue-loop readiness verifier added: `scripts/verify-smos-email-provider.mjs` and `scripts/verify-smos-live-charge.mjs` probe email-provider and Stripe configs without sending email or charging cards; `docs/products/financial-revenue/SMOS_REVENUE_READINESS.md` auto-generated. Live card payment still not executed; `RESEND_API_KEY` or SMTP credentials + `EMAIL_FROM` remain NEEDED in Railway env. |
 | **Owner** | adam |
 | **Parent System** | [LimitlessOS](../limitlessos/PRODUCT_HOME.md) |
 | **First Module** | SocialMediaOS |

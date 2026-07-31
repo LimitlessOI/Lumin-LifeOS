@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-31 — Mission 2 — BuilderOS Convergence P5: SMOS revenue readiness verifier
+
+Created `scripts/verify-smos-email-provider.mjs` and `scripts/verify-smos-live-charge.mjs`. The email script reads `EMAIL_PROVIDER` and probes Postmark/Resend/SMTP config and API keys without sending a real email. The charge script reads `STRIPE_SECRET_KEY`, `STRIPE_PUBLISHABLE_KEY`, and `SMOS_PRICING.pack.oneTimeCents`, proves the Stripe API is reachable, and verifies `services/smos-pack-checkout.js` can be imported, all without creating a real charge or checkout session. Both write `docs/products/financial-revenue/SMOS_REVENUE_READINESS.md`. Local run halted on missing `EMAIL_FROM` and Stripe keys; Railway env expected to provide them. No founder money is spent and no credential is required to run the verifier. `node --check` clean; `npm run builder:preflight` PASS.
+
 ## 2026-07-31 — Mission 2 — BuilderOS Convergence P4: runtime convergence / scheduler control-plane endpoint shipped
 
 Wired `startBpPriorityScheduler` into `server-founder-runtime.js` (gated on `BUILDEROS_AUTOPILOT=1`, off by default). Added `GET /api/v1/lifeos/builder/control-plane/schedulers` in `routes/lifeos-council-builder-routes.js`, backed by `services/scheduler-registry.js` and `services/builderos-bp-priority-scheduler.js` self-registration. `docs/products/builderos/SCHEDULER_AUDIT.md` updated to reflect `bp_priority` is now reachable in the founder runtime. `node --check` clean on touched files; `npm run builder:preflight` PASS.

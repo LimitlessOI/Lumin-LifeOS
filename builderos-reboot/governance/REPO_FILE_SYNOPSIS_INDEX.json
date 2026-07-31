@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T06:11:39.369Z",
+  "generated_at": "2026-07-31T06:18:39.006Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12501,
+  "file_count": 12504,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -22312,9 +22312,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-CONVERGENCE-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 31212,
-      "mtime": "2026-07-31T06:07:21.979Z",
-      "indexed_at": "2026-07-31T06:09:02.116Z",
+      "bytes": 31606,
+      "mtime": "2026-07-31T06:18:28.487Z",
+      "indexed_at": "2026-07-31T06:18:39.006Z",
       "synopsis_index_only": true
     },
     {
@@ -38490,9 +38490,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 58504,
-      "mtime": "2026-07-31T06:07:38.723Z",
-      "indexed_at": "2026-07-31T06:09:02.116Z"
+      "bytes": 59375,
+      "mtime": "2026-07-31T06:18:20.739Z",
+      "indexed_at": "2026-07-31T06:18:39.006Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40688,9 +40688,9 @@
     {
       "path": "docs/products/builderos/GAP_FILL_LEDGER.json",
       "synopsis": "Documentation — GAP FILL LEDGER.",
-      "bytes": 30447,
-      "mtime": "2026-07-31T05:01:15.171Z",
-      "indexed_at": "2026-07-31T05:01:45.873Z",
+      "bytes": 32733,
+      "mtime": "2026-07-31T06:10:33.431Z",
+      "indexed_at": "2026-07-31T06:18:39.006Z",
       "synopsis_index_only": true
     },
     {
@@ -40703,9 +40703,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 337918,
-      "mtime": "2026-07-31T06:03:32.287Z",
-      "indexed_at": "2026-07-31T06:03:45.115Z"
+      "bytes": 339569,
+      "mtime": "2026-07-31T06:17:25.839Z",
+      "indexed_at": "2026-07-31T06:18:39.006Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -41175,9 +41175,16 @@
     {
       "path": "docs/products/financial-revenue/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Financial Revenue",
-      "bytes": 17258,
-      "mtime": "2026-07-28T23:28:26.337Z",
-      "indexed_at": "2026-07-28T23:28:39.318Z"
+      "bytes": 17731,
+      "mtime": "2026-07-31T06:16:11.823Z",
+      "indexed_at": "2026-07-31T06:18:39.006Z"
+    },
+    {
+      "path": "docs/products/financial-revenue/SMOS_REVENUE_READINESS.md",
+      "synopsis": "SMOS revenue readiness snapshot -- automatically updated by scripts/verify-smos-email-provider.mjs and scripts/verify-smos-live-charge.mjs",
+      "bytes": 1670,
+      "mtime": "2026-07-31T06:13:42.639Z",
+      "indexed_at": "2026-07-31T06:18:39.006Z"
     },
     {
       "path": "docs/products/FINANCIALREVENUE.md",
@@ -41579,9 +41586,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 132758,
-      "mtime": "2026-07-31T05:18:38.047Z",
-      "indexed_at": "2026-07-31T05:18:43.233Z"
+      "bytes": 132311,
+      "mtime": "2026-07-31T06:16:23.763Z",
+      "indexed_at": "2026-07-31T06:18:39.006Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -85620,6 +85627,26 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/unknown/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/verify-smos-email-provider.mjs",
+      "synopsis": "Verify the SMOS email-provider configuration without sending email.",
+      "bytes": 7079,
+      "mtime": "2026-07-31T06:13:30.751Z",
+      "indexed_at": "2026-07-31T06:18:39.006Z",
+      "ssot": [
+        "docs/products/financial-revenue/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/verify-smos-live-charge.mjs",
+      "synopsis": "Verify SMOS $49 pack live charge capability without executing a real charge.",
+      "bytes": 5717,
+      "mtime": "2026-07-31T06:13:40.991Z",
+      "indexed_at": "2026-07-31T06:18:39.006Z",
+      "ssot": [
+        "docs/products/financial-revenue/PRODUCT_HOME.md"
       ]
     },
     {
