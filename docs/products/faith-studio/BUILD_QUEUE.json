@@ -542,7 +542,7 @@
       "reaudit_reset_at": "2026-07-30T18:55:06.428Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-07-31T00:59:35.451Z",
+      "last_attempt_at": "2026-07-31T01:26:16.232Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
         "content_source_path": "docs/products/faith-studio/twins/steps/3.exact"
@@ -567,8 +567,8 @@
         }
       },
       "last_attempt": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-31T00:56:51.427Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-31T01:23:08.581Z",
       "no_op": null,
       "demoted": false,
       "demote_reason": null,
