@@ -17,7 +17,7 @@
       "spec": "This service provides an API to surface decision debt details for projects.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "getDecisionDebt"
       ],
@@ -37,14 +37,16 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T07:31:21.494Z",
-      "commit_sha": "770d6a59dc4eb69c01a7aeefd42e127d0fddcd16",
+      "commit_sha": "e5b67ff1de19e2233208d8d27024173f954d071e",
       "blueprint_id": "PRODUCT-PROJECT-GOVERNANCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "1",
       "mission_id": "PRODUCT-project-governance",
       "same_signature_count": 0,
       "demoted": false,
       "last_error": "artifact_proof_failed: function getDecisionDebt(){; return {}",
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T10:43:22.211Z",
+      "blocker_class": "BLOCKED_TOOLING"
     },
     {
       "id": "2",
@@ -339,6 +341,6 @@
   "blueprint_id": "PRODUCT-PROJECT-GOVERNANCE-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-project-governance",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:30:49.444Z",
+  "updated_at": "2026-08-01T10:43:34.976Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/project-governance/BUILD_QUEUE.json"
 }
