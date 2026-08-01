@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T10:34:28.256Z",
+  "generated_at": "2026-08-01T10:36:30.341Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -69696,9 +69696,9 @@
     {
       "path": "routes/final_pr_review.js",
       "synopsis": "HTTP route module — Final PR Review.",
-      "bytes": 601,
-      "mtime": "2026-08-01T10:34:06.256Z",
-      "indexed_at": "2026-08-01T10:34:28.256Z",
+      "bytes": 809,
+      "mtime": "2026-08-01T10:36:30.341Z",
+      "indexed_at": "2026-08-01T10:36:30.341Z",
       "ssot": [
         "docs/products/memory-system/PRODUCT_HOME.md"
       ]
