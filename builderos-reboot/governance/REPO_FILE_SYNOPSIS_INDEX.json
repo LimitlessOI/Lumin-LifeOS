@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T11:15:32.847Z",
+  "generated_at": "2026-08-01T11:16:11.044Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3840221,
-      "mtime": "2026-08-01T11:12:13.682Z",
-      "indexed_at": "2026-08-01T11:12:36.856Z"
+      "bytes": 3840324,
+      "mtime": "2026-08-01T11:16:06.936Z",
+      "indexed_at": "2026-08-01T11:16:11.044Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -41634,9 +41634,9 @@
     {
       "path": "docs/products/creator-media-os/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Creator Media OS",
-      "bytes": 27092,
-      "mtime": "2026-08-01T11:15:22.808Z",
-      "indexed_at": "2026-08-01T11:15:32.847Z"
+      "bytes": 27409,
+      "mtime": "2026-08-01T11:16:04.008Z",
+      "indexed_at": "2026-08-01T11:16:06.874Z"
     },
     {
       "path": "docs/products/CREATORMEDIAOS.md",
@@ -94612,10 +94612,10 @@
     },
     {
       "path": "services/scriptEngine.js",
-      "synopsis": "Existing code in services/scriptEngine.js",
-      "bytes": 956,
-      "mtime": "2026-08-01T11:15:18.716Z",
-      "indexed_at": "2026-08-01T11:15:32.847Z",
+      "synopsis": "Engine generates scripts with titles/hooks for media content.",
+      "bytes": 2471,
+      "mtime": "2026-08-01T11:15:54.320Z",
+      "indexed_at": "2026-08-01T11:16:06.874Z",
       "ssot": [
         "docs/products/creator-media-os/PRODUCT_HOME.md"
       ]
