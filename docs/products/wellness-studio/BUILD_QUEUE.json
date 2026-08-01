@@ -4,7 +4,7 @@
   "verify_script": null,
   "planned_at": "2026-07-12T03:40:00.000Z",
   "notes": "Module 4 Therapist Integration beachhead — Clinical Partnership. Consent-gated briefs; therapist account lists linked clients who granted therapist_share. LifeOS consent foundation is a dependency.",
-  "updated_at": "2026-08-01T10:09:58.048Z",
+  "updated_at": "2026-08-01T10:13:05.537Z",
   "steps": [
     {
       "id": "ws-therapist-schema",
@@ -1305,7 +1305,7 @@
     },
     {
       "id": "wellness-studio-3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/therapist-integration.js",
       "task": "setupTherapistIntegration",
       "spec": "Wire communication-profile.js and truth-delivery.js for therapist integration.",
@@ -1313,7 +1313,7 @@
         "wellness-studio-2"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "expected_exports": [
         "setupIntegration"
       ],
@@ -1331,9 +1331,9 @@
           "assertion_id": "expected_exports:services/therapist-integration.js"
         }
       ],
-      "last_attempt_at": "2026-08-01T10:09:35.343Z",
+      "last_attempt_at": "2026-08-01T10:13:05.493Z",
       "last_error": "artifact_proof_failed: missing_exports:setupIntegration; require('communication-profile'); require('truth-delivery')",
-      "commit_sha": "4f4e4d0d601cb7244dbc851c824b058231e98ba4",
+      "commit_sha": "87da749be76051111eccacabedd94891b803c913",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -1356,7 +1356,8 @@
       "mission_id": "PRODUCT-wellness-studio",
       "same_signature_count": 1,
       "heal_unblocked": true,
-      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: missing_exports:setupIntegration; require('communication-profile'); require('truth-delivery')"
+      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: missing_exports:setupIntegration; require('communication-profile'); require('truth-delivery')",
+      "completed_at": "2026-08-01T10:13:05.537Z"
     },
     {
       "id": "wellness-studio-4",
