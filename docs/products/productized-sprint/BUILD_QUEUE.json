@@ -620,22 +620,22 @@
     },
     {
       "id": "8",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/linkedinProfileUpdater.mjs",
       "task": "update LinkedIn profile script",
       "spec": "Script to update LinkedIn profile with sprint offers information.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "updateLinkedInProfile"
       ],
       "file_contains": [
         "addSprintOffersToProfile"
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-01T14:01:07.047Z",
       "last_error": "artifact_proof_failed: addSprintOffersToProfile",
-      "commit_sha": "b90e8c78b81c0cca4bf0a203de22668dde199103",
+      "commit_sha": "21a8b7bdf3b4d270847249bfedf2562c65a3c891",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -657,7 +657,8 @@
       "blueprint_step_id": "8",
       "mission_id": "PRODUCT-productized-sprint",
       "same_signature_count": 0,
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "completed_at": "2026-08-01T14:01:21.532Z"
     },
     {
       "id": "create-intake-form",
@@ -2188,6 +2189,6 @@
   "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-productized-sprint",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T14:00:52.870Z",
+  "updated_at": "2026-08-01T14:01:21.532Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/productized-sprint/BUILD_QUEUE.json"
 }
