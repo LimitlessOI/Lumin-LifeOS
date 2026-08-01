@@ -3,7 +3,7 @@
   "product_id": "site-builder",
   "verify_script": "scripts/sentry-site-builder-prealpha-gate.mjs",
   "notes": "Structured, ordered build steps the autonomous product-build orchestrator executes one at a time via the /build primitive. Each step is a single-file, well-specified task with a concrete acceptance. Free-form prose build plans live in PRODUCT_HOME; THIS file is the machine-executable queue. COMPLETION GATE (SO-002): verify_script runs the SENTRY two-layer pre-alpha gate — Layer A (structural HTTP) always, Layer B (human-sim real browser + UX critique) whenever prod creds are present — and fails closed. No step is 'done' until SENTRY passes as a real client. Prior lane check (scripts/verify-site-builder-lane.mjs) still runnable via `npm run verify:site-builder`.",
-  "updated_at": "2026-08-01T06:00:01.728Z",
+  "updated_at": "2026-08-01T06:12:34.823Z",
   "steps": [
     {
       "id": "sb-deliverability-gate",
@@ -644,7 +644,7 @@
     },
     {
       "id": "step-12",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "public/overlay/site-builder-editor-hints-overlay.html",
       "task": "Build founder-gated editor hints overlay embedding onboarding banner, chat hints, control tooltips, and device preview diff UI",
       "spec": "Self-contained HTML page. On load fetches GET /api/site-builder/ux-hints and renders: (1) onboarding banner at top with step-by-step copy, (2) chat placeholder hint displayed above a mock chat input, (3) tooltip labels for chat/save/deviceToggle controls shown as styled badges, (4) a before/after device preview diff section that lets user paste two HTML snippets and click Compare to POST /api/site-builder/device-preview-diff and display the summary. All controls have visible labels. No server-side code.",
@@ -655,7 +655,8 @@
       "attempts": 0,
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step-12",
-      "mission_id": "PRODUCT-site-builder"
+      "mission_id": "PRODUCT-site-builder",
+      "completed_at": "2026-08-01T06:12:34.779Z"
     },
     {
       "id": "step-09",
