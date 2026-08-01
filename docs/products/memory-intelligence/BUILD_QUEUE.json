@@ -389,7 +389,7 @@
     },
     {
       "id": "7",
-      "status": "skipped",
+      "status": "done",
       "target_file": "docs/AI_COLD_START.md",
       "task": "add Institutional Memory section",
       "spec": "Includes an 'Institutional Memory' section with top lessons into AI_COLD_START.md.",
@@ -422,7 +422,8 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "7",
-      "mission_id": "PRODUCT-memory-intelligence"
+      "mission_id": "PRODUCT-memory-intelligence",
+      "completed_at": "2026-08-01T05:59:51.044Z"
     },
     {
       "id": "8",
@@ -1275,5 +1276,5 @@
   "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-memory-intelligence",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T03:27:38.337Z"
+  "updated_at": "2026-08-01T05:59:51.056Z"
 }
