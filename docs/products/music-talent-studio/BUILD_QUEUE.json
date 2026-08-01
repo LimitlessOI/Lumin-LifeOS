@@ -2073,7 +2073,7 @@
         "7"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerStudentsInterviewRoutes"
       ],
@@ -2092,13 +2092,15 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-16T04:23:19.932Z",
-      "commit_sha": "67f55c2d10aa9cc5567a7f484c9f52c6f3a3f278",
+      "commit_sha": "25630b6fcecc0af2e61d4b418edd1c153240b43f",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "8",
       "mission_id": "PRODUCT-music-talent-studio",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerStudentsInterviewRoutes; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.680Z"
+      "last_error": "artifact_proof_failed: missing_exports:registerStudentsInterviewRoutes",
+      "reaudit_reset_at": "2026-07-30T18:55:06.680Z",
+      "last_attempt_at": "2026-08-01T05:40:34.741Z",
+      "blocker_class": "BLOCKED_TOOLING"
     },
     {
       "id": "9",
@@ -2608,5 +2610,5 @@
   "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-music-talent-studio",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T05:40:21.078Z"
+  "updated_at": "2026-08-01T05:40:46.114Z"
 }
