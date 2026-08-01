@@ -19,7 +19,7 @@
       "step_id": "wellness-studio-4",
       "stage": "artifact_proof",
       "reason": "artifact_proof_failed: missing_exports:registerTherapistRoutes; registerTherapistRoutes; POST /api/therapist/integration",
-      "attempts": 1,
+      "attempts": 2,
       "blocked": false,
       "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
@@ -65,5 +65,5 @@
     }
   },
   "cycles": 1,
-  "updated_at": "2026-08-01T10:13:35.044Z"
+  "updated_at": "2026-08-01T10:16:32.409Z"
 }

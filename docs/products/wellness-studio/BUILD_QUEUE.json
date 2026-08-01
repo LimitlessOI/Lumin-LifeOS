@@ -4,7 +4,7 @@
   "verify_script": null,
   "planned_at": "2026-07-12T03:40:00.000Z",
   "notes": "Module 4 Therapist Integration beachhead — Clinical Partnership. Consent-gated briefs; therapist account lists linked clients who granted therapist_share. LifeOS consent foundation is a dependency.",
-  "updated_at": "2026-08-01T10:13:33.811Z",
+  "updated_at": "2026-08-01T10:16:30.960Z",
   "steps": [
     {
       "id": "ws-therapist-schema",
@@ -1369,7 +1369,7 @@
         "wellness-studio-3"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "expected_exports": [
         "registerTherapistRoutes"
       ],
@@ -1391,9 +1391,9 @@
           "assertion_id": "expected_exports:routes/therapist-integration-routes.js"
         }
       ],
-      "last_attempt_at": "2026-08-01T10:13:22.052Z",
+      "last_attempt_at": "2026-08-01T10:16:19.756Z",
       "last_error": "artifact_proof_failed: missing_exports:registerTherapistRoutes; registerTherapistRoutes; POST /api/therapist/integration",
-      "commit_sha": "9e13878a6f6685a2fd3a68fdad8383c51d16118d",
+      "commit_sha": "65347b73ba5cf4743d8f1b1c84a4da38ec3ac566",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -1414,7 +1414,7 @@
       "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "wellness-studio-4",
       "mission_id": "PRODUCT-wellness-studio",
-      "same_signature_count": 1,
+      "same_signature_count": 2,
       "heal_unblocked": true,
       "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: missing_exports:registerTherapistRoutes; registerTherapistRoutes; POST /api/therapist/integration"
     },
