@@ -950,11 +950,8 @@
       "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "white-label-1",
       "mission_id": "PRODUCT-white-label",
-      "same_signature_count": 1,
-      "heal_unblocked": true,
-      "artifact_proven": true,
-      "grounding_status": "PASS",
-      "failure_signature": "functional_proof|BLOCKED_TOOLING|route module not auto-registered — add {\"path\":\"routes/white-label-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts L"
+      "same_signature_count": 0,
+      "heal_unblocked": true
     },
     {
       "id": "white-label-step1",
@@ -1032,5 +1029,6 @@
   "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-white-label",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T14:44:14.832Z"
+  "updated_at": "2026-08-01T14:44:14.832Z",
+  "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/white-label/BUILD_QUEUE.json"
 }
