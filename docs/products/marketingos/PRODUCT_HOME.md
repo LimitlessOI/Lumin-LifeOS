@@ -38,7 +38,7 @@ Master verbatim: `docs/conversation_dumps/2026-06-29-limitlessos-ecosystem-found
 | **Lifecycle** | `planning` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `draft` |
-| **Last Updated** | 2026-07-31 — Revenue-loop readiness verifier added: `scripts/verify-smos-email-provider.mjs` and `scripts/verify-smos-live-charge.mjs` probe email-provider and Stripe configs without sending email or charging cards; `docs/products/financial-revenue/SMOS_REVENUE_READINESS.md` auto-generated. Live card payment still not executed; `RESEND_API_KEY` or SMTP credentials + `EMAIL_FROM` remain NEEDED in Railway env. |
+| **Last Updated** | 2026-08-02 — GAP-FILL: restored `marketingos` steps 1–3 social scheduling artifacts (`db/migrations/20260714_marketing_social_post_schedules.sql`, `services/marketing-social-scheduler.js`, `routes/marketing-social-schedule-routes.js`) and registered the route in `config/auto-registered-product-modules.json` so the functional-proof module-health gate records it as mounted. The scheduler service provides `schedulePost`, `cancelScheduledPost`, `getScheduledPosts`, and `initScheduler`. |
 | **Owner** | adam |
 | **Parent System** | [LimitlessOS](../limitlessos/PRODUCT_HOME.md) |
 | **First Module** | SocialMediaOS |
@@ -1355,6 +1355,7 @@ config/council-members.js           — shared AI config
 
 ## Change Receipts
 
+| 2026-08-02 | **GAP-FILL: restored `marketingos` steps 1–3 social scheduling artifacts.** Added `db/migrations/20260714_marketing_social_post_schedules.sql` (creates `marketing_social_publishing` and `marketing_social_post_schedules`), `services/marketing-social-scheduler.js` (`schedulePost`, `cancelScheduledPost`, `getScheduledPosts`, `initScheduler`), and `routes/marketing-social-schedule-routes.js` (POST/GET/DELETE `/api/v1/marketingos/social/schedule*`, `/marketingos/social/schedule/new` UI). Registered the route in `config/auto-registered-product-modules.json` for the module-health gate. | False-done audit found steps 1 and 2 were marked `done` but their artifacts were missing from `main`; step 3 was pending with `route module not auto-registered`. Factory `/build` was unavailable (`BLOCKED_TOOLING`), so the artifacts were hand-authored deterministically from the BUILD_QUEUE spec. | `node --check services/marketing-social-scheduler.js`; `node --check routes/marketing-social-schedule-routes.js`; `node --check db/migrations/20260714_marketing_social_post_schedules.sql` syntax validated via psql? |
 | 2026-08-02 | **Creative Director review** — generated CREATIVE_BRIEF.md using the Creative Director lens. | MarketingOS reviewed through the BuilderOS creative responsibility; brief written to product home for founder review. | ✅ generated |
 | Date | What Changed | Why | Amendment Updated | Manifest Updated | Verified |
 |---|---|---|---|---|---|

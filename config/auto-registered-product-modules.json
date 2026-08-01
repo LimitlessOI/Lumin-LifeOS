@@ -1129,6 +1129,13 @@
       "mount_path": "/api/v1/white-label",
       "enabled": true,
       "note": "White-label partner config routes. Mounted by startup/register-runtime-routes.js; register() is a no-op so module-health can record it as mounted without double-mounting."
+    },
+    {
+      "path": "routes/marketing-social-schedule-routes.js",
+      "register": "registerMarketingSocialScheduleRoutes",
+      "mount_path": "/api/v1/marketingos/social",
+      "enabled": true,
+      "note": "MarketingOS social post scheduling routes (GET /marketingos/social/schedule/new, POST/GET/DELETE /api/v1/marketingos/social/schedule*)."
     }
   ]
 }

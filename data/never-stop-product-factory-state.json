@@ -1,47 +1,46 @@
 {
   "status": "idle",
   "last_task": {
-    "id": "product_build_white-label_white-label-1",
+    "id": "product_build_marketingos_3",
     "kind": "product_build_step",
-    "priority": 2.5,
-    "product": "white-label",
-    "product_id": "white-label",
-    "step_id": "white-label-1",
-    "target_file": "routes/white-label-routes.js",
-    "detail": "next buildable step: white-label-1"
+    "priority": 2.0003,
+    "product": "marketingos",
+    "product_id": "marketingos",
+    "step_id": "3",
+    "target_file": "routes/marketing-social-schedule-routes.js",
+    "detail": "next buildable step: 3"
   },
   "last_result": {
     "ok": false,
-    "task_id": "product_build_white-label_white-label-1",
+    "task_id": "product_build_marketingos_3",
     "detail": "product_build_step",
     "outcome": {
       "ok": false,
-      "step_id": "white-label-1",
+      "step_id": "3",
       "stage": "functional_proof",
-      "reason": "route module not auto-registered — add {\"path\":\"routes/white-label-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
-      "attempts": 2,
+      "reason": "route module not auto-registered — add {\"path\":\"routes/marketing-social-schedule-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
+      "attempts": 1,
       "blocked": false,
       "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "parked": false,
       "summary": {
-        "product_id": "white-label",
-        "total": 24,
-        "pending": 1,
+        "product_id": "marketingos",
+        "total": 41,
+        "pending": 0,
         "building": 0,
-        "done": 20,
-        "blocked": 2,
+        "done": 40,
+        "blocked": 0,
         "founder_gated": 0,
-        "design_review_flagged": 0,
+        "design_review_flagged": 1,
         "human_hold": 0,
-        "skipped": 1,
         "complete": false
       }
     },
     "claim": {
-      "id": "white-label:white-label-1",
+      "id": "marketingos:3",
       "kind": "execution",
-      "text": "product step white-label-1 built + verified + served live",
+      "text": "product step 3 built + verified + served live",
       "grade": "GUESS",
       "proof": null,
       "original_grade": "KNOW",
@@ -51,19 +50,18 @@
       ]
     },
     "summary": {
-      "product_id": "white-label",
-      "total": 24,
-      "pending": 1,
+      "product_id": "marketingos",
+      "total": 41,
+      "pending": 0,
       "building": 0,
-      "done": 20,
-      "blocked": 2,
+      "done": 40,
+      "blocked": 0,
       "founder_gated": 0,
-      "design_review_flagged": 0,
+      "design_review_flagged": 1,
       "human_hold": 0,
-      "skipped": 1,
       "complete": false
     }
   },
   "cycles": 1,
-  "updated_at": "2026-08-01T14:44:15.881Z"
+  "updated_at": "2026-08-01T14:57:44.879Z"
 }
