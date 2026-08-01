@@ -3594,21 +3594,26 @@
       "spec": "UI for voice journaling with a record button using Web Speech API. Transcribed text posted to /api/v1/lifeos/journal/voice and processed for AI extraction.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "Web Speech API",
         "/api/v1/lifeos/journal/voice"
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T21:20:20.595Z",
-      "commit_sha": "3afef6b726a37c8b32dd978c63bb2b5c0d2ecb0c",
+      "commit_sha": "c17ffd0d472f57b5a236492c223356a66675a468",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-step8",
       "mission_id": "PRODUCT-lifeos",
-      "same_signature_count": 0,
+      "same_signature_count": 1,
       "demoted": false,
-      "last_error": "artifact_proof_failed: Web Speech API",
-      "heal_unblocked": true
+      "last_error": "verify_exit_1",
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T07:15:24.638Z",
+      "artifact_proven": true,
+      "grounding_status": "PASS",
+      "blocker_class": "BLOCKED_TOOLING",
+      "failure_signature": "verify|BLOCKED_TOOLING|verify_exit_1"
     },
     {
       "id": "lifeos-step9",
@@ -6039,6 +6044,5 @@
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-lifeos",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T07:12:48.897Z",
-  "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/lifeos/BUILD_QUEUE.json"
+  "updated_at": "2026-08-01T07:15:48.043Z"
 }

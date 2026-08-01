@@ -1,11 +1,10 @@
 {
   "schema": "real_app_e2e_v1",
-  "at": "2026-08-01T06:51:53.510Z",
+  "at": "2026-08-01T07:16:41.910Z",
   "base": "https://lumin-web-production-e3a9.up.railway.app",
   "ok": false,
   "passed": [
     "app_loads",
-    "no_js_errors",
     "lumin_fab_visible",
     "lumin_drawer_opens",
     "chat_response",
@@ -21,6 +20,7 @@
     "logged_out_overlay_redirect_shape"
   ],
   "failed": [
+    "no_js_errors",
     "drawer_direct_build"
   ],
   "results": {
@@ -29,8 +29,8 @@
       "detail": "HTTP 200, title=\"LifeOS\""
     },
     "no_js_errors": {
-      "ok": true,
-      "detail": "no unallowlisted pageerror/console.error signals"
+      "ok": false,
+      "detail": "window.LifeOSAmbientListener.init is not a function"
     },
     "lumin_fab_visible": {
       "ok": true,
@@ -42,7 +42,7 @@
     },
     "chat_response": {
       "ok": true,
-      "detail": "84 chars: \"I don't have a specific wake-up time goal for you in my current data, Adam.\n06:3…\""
+      "detail": "74 chars: \"Point B: LifeOS Consumer Alpha (PRODUCT-LIFEOS-USER-AUTH-V1-0001)\n07:16 AM…\""
     },
     "smos_question": {
       "ok": true,
@@ -54,7 +54,7 @@
     },
     "drawer_direct_build": {
       "ok": false,
-      "detail": "missing terminal PASS + transport/commit proof: \"The build failed. It was refused due to a `FILE_PLACEMENT_VIOLATION`. The system found that `scripts/lifeos-direct-build-smoke-test.mjs` is a protected source file and is missing the required `@ssot` JSDoc tag pointing t\""
+      "detail": "missing terminal PASS + transport/commit proof: \"The build failed again. It was refused due to a `FILE_PLACEMENT_VIOLATION`. The system found that `scripts/lifeos-direct-build-smoke-test.mjs` is a protected source file and is missing the required `@ssot` JSDoc tag poin\""
     },
     "navigate_lifere": {
       "ok": true,
@@ -70,7 +70,7 @@
     },
     "dashboard_loads": {
       "ok": true,
-      "detail": "2699 chars visible"
+      "detail": "2704 chars visible"
     },
     "page_nav": {
       "ok": true,

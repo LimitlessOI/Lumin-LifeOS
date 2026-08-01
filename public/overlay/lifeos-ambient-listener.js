@@ -178,6 +178,13 @@
     });
   }
 
+  function init() {
+    initAmbientListener();
+    return true;
+  }
+
+  LifeOSAmbientListener.init = init;
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initAmbientListener);
   } else {

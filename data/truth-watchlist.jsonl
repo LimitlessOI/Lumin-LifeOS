@@ -43,3 +43,4 @@
 {"id":"lifeos:lifeos-6","text":"product step lifeos-6 built + verified + served live","grade":"GUESS","kind":"execution","needs":"confirm against real-world outcome/evidence","urgent":false,"added_at":"2026-08-01T07:00:25.640Z"}
 {"id":"lifeos:lifeos-7","text":"product step lifeos-7 built + verified + served live","grade":"GUESS","kind":"execution","needs":"confirm against real-world outcome/evidence","urgent":false,"added_at":"2026-08-01T07:04:12.752Z"}
 {"id":"lifeos:lifeos-step4","text":"product step lifeos-step4 built + verified + served live","grade":"GUESS","kind":"execution","needs":"confirm against real-world outcome/evidence","urgent":false,"added_at":"2026-08-01T07:12:05.921Z"}
+{"id":"lifeos:lifeos-step8","text":"product step lifeos-step8 built + verified + served live","grade":"GUESS","kind":"execution","needs":"confirm against real-world outcome/evidence","urgent":false,"added_at":"2026-08-01T07:15:49.506Z"}

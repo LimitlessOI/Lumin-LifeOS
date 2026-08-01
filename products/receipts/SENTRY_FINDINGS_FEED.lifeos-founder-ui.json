@@ -1,14 +1,23 @@
 {
   "schema": "sentry_findings_feed_v1",
   "product": "lifeos-founder-ui",
-  "generated_at": "2026-08-01T06:52:16.973Z",
-  "findings_count": 1,
+  "generated_at": "2026-08-01T07:17:05.328Z",
+  "findings_count": 2,
   "without_solution": 0,
   "unclassified_error_findings": 0,
   "findings": [
     {
+      "code": "no_js_errors",
+      "detail": "window.LifeOSAmbientListener.init is not a function",
+      "proposed_solution": "Reproduce \"no_js_errors\" in the layer-b-command-key walkthrough, read the failing assertion's output, and fix the first failing behavior in the module that produces it: window.LifeOSAmbientListener.init is not a function",
+      "proposed_solution_source": "synthesized",
+      "severity": "error",
+      "source": "layer-b-command-key",
+      "root_cause_class": "code_defect"
+    },
+    {
       "code": "drawer_direct_build",
-      "detail": "missing terminal PASS + transport/commit proof: \"The build failed. It was refused due to a `FILE_PLACEMENT_VIOLATION`. The system found that `scripts/lifeos-direct-build-smoke-test.mjs` is a protected source file and is missing the required `@ssot` JSDoc tag pointing t\"",
+      "detail": "missing terminal PASS + transport/commit proof: \"The build failed again. It was refused due to a `FILE_PLACEMENT_VIOLATION`. The system found that `scripts/lifeos-direct-build-smoke-test.mjs` is a protected source file and is missing the required `@ssot` JSDoc tag poin\"",
       "proposed_solution": "The founder chat returned counsel/essay text instead of the required response for \"drawer_direct_build\". Fix intent routing in routes/lifeos-builderos-command-control-routes.js (POST /founder-interface/message) and the intent services (services/founder-chair-intent.js, services/founder-intent-clarify.js, services/chair-intent-signals.js): classify this prompt into the correct lane (workflow-content / direct-build / counsel) and compose the lane's real response — for build intents emit the build + terminal PASS + commit-proof receipt, not a description of the mechanics.",
       "proposed_solution_source": "synthesized",
       "severity": "error",
@@ -19,8 +28,13 @@
   "readiness": {
     "blockers": [
       {
+        "code": "no_js_errors",
+        "detail": "window.LifeOSAmbientListener.init is not a function",
+        "root_cause_class": "code_defect"
+      },
+      {
         "code": "drawer_direct_build",
-        "detail": "missing terminal PASS + transport/commit proof: \"The build failed. It was refused due to a `FILE_PLACEMENT_VIOLATION`. The system found that `scripts/lifeos-direct-build-smoke-test.mjs` is a protected source file and is missing the required `@ssot` JSDoc tag pointing t\"",
+        "detail": "missing terminal PASS + transport/commit proof: \"The build failed again. It was refused due to a `FILE_PLACEMENT_VIOLATION`. The system found that `scripts/lifeos-direct-build-smoke-test.mjs` is a protected source file and is missing the required `@ssot` JSDoc tag poin\"",
         "root_cause_class": "code_defect"
       }
     ],
