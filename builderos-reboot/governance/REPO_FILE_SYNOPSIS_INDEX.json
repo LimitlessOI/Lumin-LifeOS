@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T12:02:34.329Z",
+  "generated_at": "2026-08-01T12:02:50.401Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -65772,9 +65772,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 5258,
-      "mtime": "2026-08-01T11:46:29.460Z",
-      "indexed_at": "2026-08-01T11:48:04.919Z",
+      "bytes": 3850,
+      "mtime": "2026-08-01T11:50:38.024Z",
+      "indexed_at": "2026-08-01T12:02:49.631Z",
       "synopsis_index_only": true
     },
     {
