@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T12:39:40.092Z",
+  "generated_at": "2026-08-01T12:40:10.499Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -42391,9 +42391,9 @@
     {
       "path": "docs/products/personal-finance-os/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Personal Finance OS",
-      "bytes": 15605,
-      "mtime": "2026-08-01T12:39:27.476Z",
-      "indexed_at": "2026-08-01T12:39:40.092Z"
+      "bytes": 15343,
+      "mtime": "2026-08-01T12:40:05.196Z",
+      "indexed_at": "2026-08-01T12:40:10.499Z"
     },
     {
       "path": "docs/products/PERSONALFINANCEOS.md",
@@ -69896,9 +69896,9 @@
     {
       "path": "routes/ipsReview.js",
       "synopsis": "HTTP route module — IPS Review.",
-      "bytes": 1303,
-      "mtime": "2026-08-01T12:39:06.588Z",
-      "indexed_at": "2026-08-01T12:39:40.092Z",
+      "bytes": 1330,
+      "mtime": "2026-08-01T12:39:47.840Z",
+      "indexed_at": "2026-08-01T12:40:10.499Z",
       "ssot": [
         "docs/products/personal-finance-os/PRODUCT_HOME.md"
       ]

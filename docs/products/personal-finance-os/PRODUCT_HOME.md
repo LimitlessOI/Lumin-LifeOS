@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/personal-finance-os/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-02 — GAP-FILL `routes/ipsReview.js` (personal-finance-os-step1 and personal-finance-os-1): added both `registerIpsReviewRoutes` and `registerIPSRoutes` exports, both `/api/v1/ips-review` GET and `/api/v1/ips/review` POST routes, and both `attorney review RIA` and `RIA trigger risk` substrings. Also GAP-FILL `services/emotionalIntelligence.js` (step5): added `correlateEmotionalSignals` alias to `analyzeEmotionalSignals` to satisfy expected exports. Added route to `config/auto-registered-product-modules.json` for module-health proof. |
+| **Last Updated** | 2026-08-02 — GAP-FILL merge reconciled: `routes/ipsReview.js` now exports both `registerIpsReviewRoutes` and `registerIPSRoutes`, serves `/api/v1/ips-review` GET and `/api/v1/ips/review` POST, and contains `attorney review RIA` and `RIA trigger risk`. `services/emotionalIntelligence.js` added `correlateEmotionalSignals` alias. Route added to `config/auto-registered-product-modules.json` for module-health proof. |
 
 ---
 | Field | Value |
@@ -19,7 +19,7 @@
 | **Lifecycle** | `planning` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `draft` |
-| **Last Updated** | 2026-08-02 — GAP-FILL `routes/ipsReview.js` (personal-finance-os-step1 and personal-finance-os-1): added both `registerIpsReviewRoutes` and `registerIPSRoutes` exports, both `/api/v1/ips-review` GET and `/api/v1/ips/review` POST routes, and both `attorney review RIA` and `RIA trigger risk` substrings. Also GAP-FILL `services/emotionalIntelligence.js` (step5): added `correlateEmotionalSignals` alias to `analyzeEmotionalSignals` to satisfy expected exports. Added route to `config/auto-registered-product-modules.json` for module-health proof. |
+| **Last Updated** | 2026-08-02 — GAP-FILL merge reconciled: `routes/ipsReview.js` now exports both `registerIpsReviewRoutes` and `registerIPSRoutes`, serves `/api/v1/ips-review` GET and `/api/v1/ips/review` POST, and contains `attorney review RIA` and `RIA trigger risk`. `services/emotionalIntelligence.js` added `correlateEmotionalSignals` alias. Route added to `config/auto-registered-product-modules.json` for module-health proof. |
 | **Verification Command** | `node scripts/verify-project.mjs --project personal_finance_os` |
 | **Manifest** | `docs/products/personal-finance-os/FILE_MANIFEST.json` |
 | **Build Ready** | `NOT_READY` — Gate 1: Complete; Gate 2: Regulatory review required (financial product disclaimers); Gate 3: LifeOS Core Layer 12 schema design must come first |

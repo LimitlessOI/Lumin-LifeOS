@@ -2,7 +2,7 @@
  * SYNOPSIS: HTTP route module — IPS Review.
  * @ssot docs/products/personal-finance-os/PRODUCT_HOME.md
  */
-import express from 'express';
+import { reviewIPSRisk } from '../services/ipsReview.js';
 
 const router = express.Router();
 
