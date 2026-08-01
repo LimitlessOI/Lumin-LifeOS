@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T10:36:30.341Z",
+  "generated_at": "2026-08-01T10:37:57.695Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3839233,
-      "mtime": "2026-08-01T10:17:26.284Z",
-      "indexed_at": "2026-08-01T10:17:53.478Z"
+      "bytes": 3839304,
+      "mtime": "2026-08-01T10:37:44.806Z",
+      "indexed_at": "2026-08-01T10:37:57.695Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -90426,9 +90426,9 @@
     {
       "path": "services/final_pr_review.js",
       "synopsis": "Exports reviewBranch — services/final_pr_review.js.",
-      "bytes": 1510,
-      "mtime": "2026-07-18T18:46:59.257Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 1568,
+      "mtime": "2026-08-01T10:37:27.470Z",
+      "indexed_at": "2026-08-01T10:37:44.733Z"
     },
     {
       "path": "services/findingLifecycleService.js",
