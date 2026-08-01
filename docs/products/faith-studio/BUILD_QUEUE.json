@@ -2211,7 +2211,7 @@
       "spec": "Detail the review and moderation flow ensuring effective handling of high-risk outputs.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "processReviewModeration"
       ],
@@ -2227,16 +2227,16 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-16T04:16:14.874Z",
-      "commit_sha": null,
+      "commit_sha": "bc0af771977baa5fcf99435175e351b738d3efd7",
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "10",
       "mission_id": "PRODUCT-faith-studio",
       "pre_existing": null,
-      "last_error": null,
+      "last_error": "artifact_proof_failed: missing_exports:processReviewModeration",
       "reaudit_reset_at": "2026-07-30T18:55:06.428Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-01T05:10:19.884Z",
       "last_attempt": null,
       "revive_count": 3,
       "revived_at": "2026-08-01T04:34:49.348Z",
@@ -2245,7 +2245,7 @@
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
-      "blocker_class": null,
+      "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
@@ -2655,5 +2655,5 @@
   "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-faith-studio",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T05:10:04.507Z"
+  "updated_at": "2026-08-01T05:10:48.865Z"
 }
