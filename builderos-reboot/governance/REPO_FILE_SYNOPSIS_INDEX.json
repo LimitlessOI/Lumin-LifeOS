@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T13:33:52.982Z",
+  "generated_at": "2026-08-01T13:37:32.775Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12726,
   "files": [
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3842767,
-      "mtime": "2026-08-01T13:28:00.012Z",
-      "indexed_at": "2026-08-01T13:28:33.334Z"
+      "bytes": 3842847,
+      "mtime": "2026-08-01T13:34:14.452Z",
+      "indexed_at": "2026-08-01T13:37:32.775Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1867,
-      "mtime": "2026-08-01T13:33:13.308Z",
-      "indexed_at": "2026-08-01T13:33:52.982Z",
+      "bytes": 1647,
+      "mtime": "2026-08-01T13:25:45.776Z",
+      "indexed_at": "2026-08-01T13:28:44.334Z",
       "synopsis_index_only": true
     },
     {
@@ -41843,9 +41843,9 @@
     {
       "path": "docs/products/kids-os/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Kids OS",
-      "bytes": 32199,
-      "mtime": "2026-08-01T13:28:18.360Z",
-      "indexed_at": "2026-08-01T13:28:33.334Z"
+      "bytes": 33901,
+      "mtime": "2026-08-01T13:37:11.352Z",
+      "indexed_at": "2026-08-01T13:37:32.775Z"
     },
     {
       "path": "docs/products/KIDSOS.md",
@@ -42152,9 +42152,9 @@
     {
       "path": "docs/products/lumin-university/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Lumin University",
-      "bytes": 23260,
-      "mtime": "2026-08-01T13:33:41.484Z",
-      "indexed_at": "2026-08-01T13:33:52.982Z"
+      "bytes": 23075,
+      "mtime": "2026-08-01T13:37:17.736Z",
+      "indexed_at": "2026-08-01T13:37:32.775Z"
     },
     {
       "path": "docs/products/LUMINUNIVERSITY.md",
@@ -65772,9 +65772,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 3856,
-      "mtime": "2026-08-01T13:30:27.276Z",
-      "indexed_at": "2026-08-01T13:33:52.982Z",
+      "bytes": 3954,
+      "mtime": "2026-08-01T13:04:39.688Z",
+      "indexed_at": "2026-08-01T13:09:39.778Z",
       "synopsis_index_only": true
     },
     {
@@ -87694,10 +87694,10 @@
     },
     {
       "path": "services/apiSpec.js",
-      "synopsis": "Service module — ApiSpec.",
-      "bytes": 3859,
-      "mtime": "2026-08-01T13:27:06.088Z",
-      "indexed_at": "2026-08-01T13:28:44.334Z",
+      "synopsis": "Provides API specification for the kids-os platform.",
+      "bytes": 28990,
+      "mtime": "2026-08-01T13:36:45.240Z",
+      "indexed_at": "2026-08-01T13:37:32.775Z",
       "ssot": [
         "docs/products/kids-os/PRODUCT_HOME.md"
       ]
@@ -89259,10 +89259,10 @@
     },
     {
       "path": "services/competencyStandards.js",
-      "synopsis": "Existing code",
-      "bytes": 959,
-      "mtime": "2026-08-01T13:33:25.444Z",
-      "indexed_at": "2026-08-01T13:33:52.982Z",
+      "synopsis": "Retrieves competency standards from the database.",
+      "bytes": 1700,
+      "mtime": "2026-08-01T13:36:34.344Z",
+      "indexed_at": "2026-08-01T13:37:32.775Z",
       "ssot": [
         "docs/products/lumin-university/PRODUCT_HOME.md"
       ]
@@ -91469,10 +91469,10 @@
     },
     {
       "path": "services/irlenConsultation.js",
-      "synopsis": "Existing code in services/irlenConsultation.js",
-      "bytes": 1062,
-      "mtime": "2026-07-16T19:42:53.611Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis": "Document insights from the Irlen Syndrome community consultation.",
+      "bytes": 746,
+      "mtime": "2026-08-01T13:36:21.272Z",
+      "indexed_at": "2026-08-01T13:37:32.775Z",
       "ssot": [
         "docs/products/kids-os/PRODUCT_HOME.md"
       ]
