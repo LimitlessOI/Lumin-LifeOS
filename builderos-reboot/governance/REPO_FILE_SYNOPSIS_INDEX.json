@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T10:14:06.630Z",
+  "generated_at": "2026-08-01T10:16:24.818Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -71663,9 +71663,9 @@
     {
       "path": "routes/therapist-integration-routes.js",
       "synopsis": "HTTP route module — Therapist Integration Routes.",
-      "bytes": 470,
-      "mtime": "2026-08-01T10:13:50.756Z",
-      "indexed_at": "2026-08-01T10:14:06.630Z",
+      "bytes": 677,
+      "mtime": "2026-08-01T10:16:24.818Z",
+      "indexed_at": "2026-08-01T10:16:24.818Z",
       "ssot": [
         "docs/products/wellness-studio/PRODUCT_HOME.md"
       ]
