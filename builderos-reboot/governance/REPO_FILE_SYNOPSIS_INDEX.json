@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T12:48:11.351Z",
+  "generated_at": "2026-08-01T12:51:11.182Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -30844,9 +30844,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 39359,
-      "mtime": "2026-08-01T12:37:56.496Z",
-      "indexed_at": "2026-08-01T12:39:40.092Z",
+      "bytes": 39626,
+      "mtime": "2026-08-01T12:50:05.844Z",
+      "indexed_at": "2026-08-01T12:51:11.182Z",
       "synopsis_index_only": true
     },
     {
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1917,
-      "mtime": "2026-08-01T12:42:20.732Z",
-      "indexed_at": "2026-08-01T12:45:30.130Z",
+      "bytes": 1941,
+      "mtime": "2026-08-01T12:48:48.400Z",
+      "indexed_at": "2026-08-01T12:51:11.182Z",
       "synopsis_index_only": true
     },
     {
@@ -42391,9 +42391,9 @@
     {
       "path": "docs/products/personal-finance-os/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Personal Finance OS",
-      "bytes": 15624,
-      "mtime": "2026-08-01T12:44:35.404Z",
-      "indexed_at": "2026-08-01T12:45:30.130Z"
+      "bytes": 16948,
+      "mtime": "2026-08-01T12:50:58.632Z",
+      "indexed_at": "2026-08-01T12:51:11.182Z"
     },
     {
       "path": "docs/products/PERSONALFINANCEOS.md",
@@ -69413,10 +69413,10 @@
     },
     {
       "path": "routes/commitmentTracker.js",
-      "synopsis": "Function to register Commitment Tracker routes",
-      "bytes": 719,
-      "mtime": "2026-07-16T19:42:53.595Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis": "HTTP route module — Commitment Tracker (commitment tracking phase 1).",
+      "bytes": 980,
+      "mtime": "2026-08-01T12:50:03.836Z",
+      "indexed_at": "2026-08-01T12:51:11.182Z",
       "ssot": [
         "docs/products/personal-finance-os/PRODUCT_HOME.md"
       ]
@@ -89997,10 +89997,10 @@
     },
     {
       "path": "services/dreamFunding.js",
-      "synopsis": "Initiates the funding process for a dream.",
-      "bytes": 1813,
-      "mtime": "2026-08-01T12:48:11.351Z",
-      "indexed_at": "2026-08-01T12:48:11.351Z",
+      "synopsis": "Initiates the funding process for a dream and commitment tracking phase 1.",
+      "bytes": 2480,
+      "mtime": "2026-08-01T12:50:52.492Z",
+      "indexed_at": "2026-08-01T12:51:11.182Z",
       "ssot": [
         "docs/products/personal-finance-os/PRODUCT_HOME.md"
       ]

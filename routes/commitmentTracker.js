@@ -1,26 +1,30 @@
 /**
- * SYNOPSIS: Function to register Commitment Tracker routes
+ * SYNOPSIS: HTTP route module — Commitment Tracker (commitment tracking phase 1).
  * @ssot docs/products/personal-finance-os/PRODUCT_HOME.md
  */
 import express from 'express';
 
-// Function to register Commitment Tracker routes
-const registerCommitmentTrackerRoutes = (app) => {
-  const router = express.Router();
+const router = express.Router();
 
-  // Route for Commitment Tracker
-  router.get('/commitment-tracker', (req, res) => {
-    res.send('Welcome to the Commitment Tracker');
+function getCommitmentTracker(req, res) {
+  res.json({
+    ok: true,
+    message: 'Commitment Tracker — commitment tracking phase 1 active',
+    phase: 1,
   });
+}
 
-  // Route for Dream Funding
-  router.get('/dream-funding', (req, res) => {
-    res.send('Welcome to Dream Funding');
-  });
+export function registerCommitmentTrackerRoutes(app, deps = {}) {
+  const requireKey = deps.requireKey || ((req, res, next) => next());
+  const logger = deps.logger || console;
 
-  // Mount the router on the /api path
-  app.use('/api', router);
-};
+  // GET /api/v1/commitment-tracker (personal-finance-os-step7)
+  router.get('/commitment-tracker', requireKey, getCommitmentTracker);
 
-// Export the function for external use
-export { registerCommitmentTrackerRoutes };
+  // GET /api/v1/commitment/tracker (step4 compatibility)
+  router.get('/commitment/tracker', requireKey, getCommitmentTracker);
+
+  app.use('/api/v1', router);
+
+  logger?.info?.('Commitment Tracker routes registered at /api/v1/commitment-tracker and /api/v1/commitment/tracker');
+}

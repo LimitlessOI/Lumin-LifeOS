@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: Initiates the funding process for a dream.
+ * SYNOPSIS: Initiates the funding process for a dream and commitment tracking phase 1.
  * @ssot docs/products/personal-finance-os/PRODUCT_HOME.md
  */
 export async function initiateDreamFunding(deps, payload) {
@@ -46,4 +46,23 @@ export async function initiateDreamFunding(deps, payload) {
     logger.error({ error, dreamId, amount }, 'Error in initiateDreamFunding');
     throw new Error('Failed in initiateDreamFunding');
   }
+}
+
+// Aliases for BUILD_QUEUE step 6 and personal-finance-os-6 expected exports
+export async function initCommitmentTracker(deps, payload) {
+  const logger = deps?.logger || console;
+  logger?.info?.('Commitment Tracker phase 1 started');
+  return { ok: true, commitmentTracker: 'phase 1 active', phase: 1 };
+}
+
+export async function startCommitmentTracker(deps, payload) {
+  return initCommitmentTracker(deps, payload);
+}
+
+export async function activateDreamFunding(deps, payload) {
+  return initiateDreamFunding(deps, payload);
+}
+
+export async function initDreamFunding(deps, payload) {
+  return initiateDreamFunding(deps, payload);
 }

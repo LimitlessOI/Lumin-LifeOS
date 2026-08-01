@@ -843,6 +843,13 @@
       "mount_path": "/api/v1",
       "enabled": true,
       "note": "Personal Finance OS IPS review route auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/commitmentTracker.js",
+      "register": "registerCommitmentTrackerRoutes",
+      "mount_path": "/api/v1",
+      "enabled": true,
+      "note": "Personal Finance OS commitment tracker route auto-registered for module-health proof."
     }
   ]
 }

@@ -1,25 +1,25 @@
 {
   "status": "idle",
   "last_task": {
-    "id": "product_build_personal-finance-os_personal-finance-os-step1",
+    "id": "product_build_personal-finance-os_personal-finance-os-step7",
     "kind": "product_build_step",
     "priority": 2.0023,
     "product": "personal-finance-os",
     "product_id": "personal-finance-os",
-    "step_id": "personal-finance-os-step1",
-    "target_file": "routes/ipsReview.js",
-    "detail": "next buildable step: personal-finance-os-step1"
+    "step_id": "personal-finance-os-step7",
+    "target_file": "routes/commitmentTracker.js",
+    "detail": "next buildable step: personal-finance-os-step7"
   },
   "last_result": {
     "ok": false,
-    "task_id": "product_build_personal-finance-os_personal-finance-os-step1",
+    "task_id": "product_build_personal-finance-os_personal-finance-os-step7",
     "detail": "product_build_step",
     "outcome": {
       "ok": false,
-      "step_id": "personal-finance-os-step1",
+      "step_id": "personal-finance-os-step7",
       "stage": "artifact_proof",
-      "reason": "artifact_proof_failed: missing_exports:registerIpsReviewRoutes; registerIpsReviewRoutes",
-      "attempts": 2,
+      "reason": "artifact_proof_failed: missing_exports:registerCommitmentTrackerRoutes; registerCommitmentTrackerRoutes",
+      "attempts": 1,
       "blocked": false,
       "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
@@ -27,9 +27,9 @@
       "summary": {
         "product_id": "personal-finance-os",
         "total": 29,
-        "pending": 4,
+        "pending": 2,
         "building": 0,
-        "done": 25,
+        "done": 27,
         "blocked": 0,
         "founder_gated": 0,
         "design_review_flagged": 0,
@@ -38,9 +38,9 @@
       }
     },
     "claim": {
-      "id": "personal-finance-os:personal-finance-os-step1",
+      "id": "personal-finance-os:personal-finance-os-step7",
       "kind": "execution",
-      "text": "product step personal-finance-os-step1 built + verified + served live",
+      "text": "product step personal-finance-os-step7 built + verified + served live",
       "grade": "GUESS",
       "proof": null,
       "original_grade": "KNOW",
@@ -52,9 +52,9 @@
     "summary": {
       "product_id": "personal-finance-os",
       "total": 29,
-      "pending": 4,
+      "pending": 2,
       "building": 0,
-      "done": 25,
+      "done": 27,
       "blocked": 0,
       "founder_gated": 0,
       "design_review_flagged": 0,
@@ -63,5 +63,5 @@
     }
   },
   "cycles": 1,
-  "updated_at": "2026-08-01T12:42:20.734Z"
+  "updated_at": "2026-08-01T12:48:48.404Z"
 }

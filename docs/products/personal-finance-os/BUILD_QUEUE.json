@@ -999,7 +999,7 @@
       "spec": "Set up Commitment Tracker Phase 1 route handlers to become functional.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerCommitmentTrackerRoutes"
       ],
@@ -1020,9 +1020,9 @@
           "assertion_id": "expected_exports:routes/commitmentTracker.js"
         }
       ],
-      "last_attempt_at": null,
-      "last_error": "artifact_proof_failed: commitment tracking phase 1",
-      "commit_sha": "2f70d64845605515c1246fd9527d454b06923d2e",
+      "last_attempt_at": "2026-08-01T12:48:35.439Z",
+      "last_error": "artifact_proof_failed: missing_exports:registerCommitmentTrackerRoutes; registerCommitmentTrackerRoutes",
+      "commit_sha": "b7f12ec518ba1717ecdb1f5cd7638cd724e03ab9",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -1034,7 +1034,7 @@
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
-      "blocker_class": null,
+      "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
@@ -1043,8 +1043,9 @@
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "personal-finance-os-step7",
       "mission_id": "PRODUCT-personal-finance-os",
-      "same_signature_count": 0,
-      "heal_unblocked": true
+      "same_signature_count": 1,
+      "heal_unblocked": true,
+      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: missing_exports:registerCommitmentTrackerRoutes; registerCommitmentTrackerRoutes"
     },
     {
       "id": "personal-finance-os-step8",
@@ -1122,5 +1123,5 @@
   "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-personal-finance-os",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T12:48:17.440Z"
+  "updated_at": "2026-08-01T12:48:47.193Z"
 }
