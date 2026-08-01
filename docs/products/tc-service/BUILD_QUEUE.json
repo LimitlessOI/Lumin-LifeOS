@@ -182,7 +182,7 @@
     },
     {
       "id": "s10",
-      "status": "done",
+      "status": "pending",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "Register all three new route modules so they mount at boot without editing server.js",
       "spec": "Add entries for 'routes/tc-intake-routes.js' with registerFn 'registerTcIntakeRoutes', 'routes/tc-billing-routes.js' with registerFn 'registerTcBillingRoutes', and 'routes/tc-imap-routes.js' with registerFn 'registerTcImapRoutes' to the existing JSON array. Preserve all pre-existing entries exactly.",
@@ -192,7 +192,7 @@
         "s9"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "commit_sha": "07c9d93c648210ef6c6312e15aa0e05a9e9ed1ee",
       "last_attempt_at": "2026-07-10T08:45:32.776Z",
       "completed_at": "2026-07-10T08:53:56.704Z",
@@ -206,7 +206,10 @@
       ],
       "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "s10",
-      "mission_id": "PRODUCT-tc-service"
+      "mission_id": "PRODUCT-tc-service",
+      "last_error": "artifact_proof_failed: routes/tc-intake-routes.js; registerTcIntakeRoutes; routes/tc-billing-routes.js; registerTcBillingRoutes; routes/tc-imap-routes.js; registerTcImapRoutes",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "s11",
@@ -483,5 +486,5 @@
   "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-tc-service",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T15:53:41.628Z"
+  "updated_at": "2026-08-01T18:55:06.002Z"
 }
