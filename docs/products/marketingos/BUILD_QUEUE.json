@@ -1130,6 +1130,129 @@
       "design_review_flagged": true,
       "last_error": null,
       "blocker_class": null
+    },
+    {
+      "id": "4",
+      "status": "pending",
+      "target_file": "public/overlay/marketing-performance-insights.html",
+      "task": "Create UI to display performance learning insights",
+      "spec": "HTML overlay to present insights from the Performance Learning Engine. This UI will dynamically display data, such as 'Your 'specific number' hooks get 3× more engagement than 'vague benefit' hooks' and audience-specific platform responses, fetched from the existing '/api/v1/marketingos/performance/intel' API endpoint.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "<div id=\"performance-insights\">",
+        "<script>fetch('/api/v1/marketingos/performance/intel')"
+      ],
+      "design_review_flagged": true
+    },
+    {
+      "id": "5",
+      "status": "pending",
+      "target_file": "routes/marketing-performance-insights-ui-routes.js",
+      "task": "Implement UI route for performance insights overlay",
+      "spec": "An Express router module that provides a GET endpoint to serve the 'marketing-performance-insights.html' file. The route should be '/overlay/marketingos/performance/insights'. The module must export a 'registerMarketingPerformanceInsightsUiRoutes' function.",
+      "depends_on": [
+        "4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerMarketingPerformanceInsightsUiRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/overlay/marketingos/performance/insights"
+      },
+      "file_contains": [
+        "app.get('/overlay/marketingos/performance/insights'",
+        "res.sendFile(__dirname + '/../../public/overlay/marketing-performance-insights.html')"
+      ],
+      "design_review_flagged": true
+    },
+    {
+      "id": "7",
+      "status": "pending",
+      "target_file": "public/overlay/marketing-campaign-package.html",
+      "task": "Create UI to display generated campaign packages",
+      "spec": "HTML overlay to present the complete campaign package. This includes displaying generated copy for landing pages, email sequences, ad creatives (e.g., Facebook ads), and outlines for lead magnets, sourced from the existing '/api/v1/marketingos/campaign' API endpoint.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "<div id=\"campaign-package\">",
+        "<h2>Landing Page Copy</h2>",
+        "<h3>Email Nurture Sequence</h3>",
+        "<h4>Ad Copy</h4>",
+        "<h5>Lead Magnet Outline</h5>",
+        "<script>fetch('/api/v1/marketingos/campaign')"
+      ],
+      "design_review_flagged": true
+    },
+    {
+      "id": "8",
+      "status": "pending",
+      "target_file": "routes/marketing-campaign-package-ui-routes.js",
+      "task": "Implement UI route for campaign package overlay",
+      "spec": "An Express router module that provides a GET endpoint to serve the 'marketing-campaign-package.html' file. The route should be '/overlay/marketingos/campaign/package'. The module must export a 'registerMarketingCampaignPackageUiRoutes' function.",
+      "depends_on": [
+        "7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerMarketingCampaignPackageUiRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/overlay/marketingos/campaign/package"
+      },
+      "file_contains": [
+        "app.get('/overlay/marketingos/campaign/package'",
+        "res.sendFile(__dirname + '/../../public/overlay/marketing-campaign-package.html')"
+      ],
+      "design_review_flagged": true
+    },
+    {
+      "id": "10",
+      "status": "pending",
+      "target_file": "public/overlay/marketing-intel-director-dashboard.html",
+      "task": "Create UI for the AI marketing director dashboard",
+      "spec": "HTML overlay serving as a dashboard for the MarketingOS Intelligence Layer. It will display cross-channel strategy recommendations, budget allocation insights, and autonomous recommendations (e.g., 'Your LinkedIn is up 40%'), fetched from the existing '/api/v1/marketingos/director' API endpoint.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "<div id=\"intel-director-dashboard\">",
+        "<h2>Strategic Recommendations</h2>",
+        "<h3>Performance Overview</h3>",
+        "<script>fetch('/api/v1/marketingos/director')"
+      ],
+      "design_review_flagged": true
+    },
+    {
+      "id": "11",
+      "status": "pending",
+      "target_file": "routes/marketing-intel-director-ui-routes.js",
+      "task": "Implement UI route for marketing intelligence dashboard",
+      "spec": "An Express router module that provides a GET endpoint to serve the 'marketing-intel-director-dashboard.html' file. The route should be '/overlay/marketingos/director/dashboard'. The module must export a 'registerMarketingIntelDirectorUiRoutes' function.",
+      "depends_on": [
+        "10"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerMarketingIntelDirectorUiRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/overlay/marketingos/director/dashboard"
+      },
+      "file_contains": [
+        "app.get('/overlay/marketingos/director/dashboard'",
+        "res.sendFile(__dirname + '/../../public/overlay/marketing-intel-director-dashboard.html')"
+      ],
+      "design_review_flagged": true
     }
   ],
   "backlog_signature": "marketingos-money-2026071219",
