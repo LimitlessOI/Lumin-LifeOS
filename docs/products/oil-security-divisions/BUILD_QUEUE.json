@@ -1199,26 +1199,28 @@
     },
     {
       "id": "sec-f04",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/2023-10-02-env-registry-metadata.sql",
       "task": "add crypto tier labels",
       "spec": "Update the ENV_REGISTRY with a new section for crypto tier labels and rotation metadata.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS"
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-16T04:36:34.612Z",
-      "commit_sha": "6778cbea07c4397bf310721f0e412d34315a4dd0",
+      "commit_sha": "fbae525413a5221f1f38c3251981b8491d1de56b",
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "sec-f04",
       "mission_id": "PRODUCT-oil-security-divisions",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
       "reaudit_reset_at": "2026-07-30T18:55:06.687Z",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "last_attempt_at": "2026-08-01T02:17:38.517Z",
+      "completed_at": "2026-08-01T02:17:38.573Z"
     },
     {
       "id": "sec-f05",
@@ -1885,5 +1887,5 @@
   "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-oil-security-divisions",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T02:17:24.775Z"
+  "updated_at": "2026-08-01T02:17:38.573Z"
 }
