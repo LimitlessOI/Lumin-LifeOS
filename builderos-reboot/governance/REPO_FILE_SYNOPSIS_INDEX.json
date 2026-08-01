@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T13:37:32.775Z",
+  "generated_at": "2026-08-01T13:37:39.243Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12726,
   "files": [
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3842847,
-      "mtime": "2026-08-01T13:34:14.452Z",
-      "indexed_at": "2026-08-01T13:37:32.775Z"
+      "bytes": 3842848,
+      "mtime": "2026-08-01T13:37:32.840Z",
+      "indexed_at": "2026-08-01T13:37:38.470Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1647,
-      "mtime": "2026-08-01T13:25:45.776Z",
-      "indexed_at": "2026-08-01T13:28:44.334Z",
+      "bytes": 1867,
+      "mtime": "2026-08-01T13:33:13.308Z",
+      "indexed_at": "2026-08-01T13:37:38.470Z",
       "synopsis_index_only": true
     },
     {
@@ -41164,9 +41164,9 @@
     {
       "path": "docs/products/builderos/GAP_FILL_LEDGER.json",
       "synopsis": "Documentation — GAP FILL LEDGER.",
-      "bytes": 52777,
-      "mtime": "2026-08-01T12:51:36.476Z",
-      "indexed_at": "2026-08-01T12:51:41.009Z",
+      "bytes": 53914,
+      "mtime": "2026-08-01T13:37:33.096Z",
+      "indexed_at": "2026-08-01T13:37:38.470Z",
       "synopsis_index_only": true
     },
     {
@@ -65772,9 +65772,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 3954,
-      "mtime": "2026-08-01T13:04:39.688Z",
-      "indexed_at": "2026-08-01T13:09:39.778Z",
+      "bytes": 3856,
+      "mtime": "2026-08-01T13:30:27.276Z",
+      "indexed_at": "2026-08-01T13:37:38.470Z",
       "synopsis_index_only": true
     },
     {
