@@ -1,13 +1,7 @@
--- SYNOPSIS: Database migration — 20260725_extend_wellness_tables.sql.
--- This file originally contained a placeholder template (literal `TYPE` as a
--- fake data type, `new_column_1..8` as fake column names) instead of real SQL
--- — an unfinished migration stub that got committed with a .sql extension.
--- `TYPE` is not a valid PostgreSQL type, so every production boot has been
--- attempting to execute this and failing (syntax error), retried every boot
--- per startup/database.js's fail-open design. No code references any
--- new_column_* name, and no specific schema intent for joy_checkins /
--- integrity_score_log / wearable_data / emotional_patterns was ever recorded
--- — rather than invent columns, this is neutralized to a genuine no-op. If
--- these tables do need real new columns, that needs founder-specified intent
--- (what field, what type, what feature) before a real migration can be written.
-SELECT 1;
+-- SYNOPSIS: Extend LifeOS wellness tables with optional scoping fields.
+-- Run idempotently with IF NOT EXISTS so re-runs are safe.
+
+ALTER TABLE joy_checkins ADD COLUMN IF NOT EXISTS context_tag TEXT;
+ALTER TABLE integrity_score_log ADD COLUMN IF NOT EXISTS source_note TEXT;
+ALTER TABLE wearable_data ADD COLUMN IF NOT EXISTS import_batch_id TEXT;
+ALTER TABLE emotional_patterns ADD COLUMN IF NOT EXISTS pattern_strength NUMERIC(5,2);

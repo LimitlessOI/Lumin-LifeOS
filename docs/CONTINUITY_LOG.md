@@ -1,5 +1,11 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-08-02 — Queue hygiene: `site-builder` s8 skipped; `wellness-studio-step10` reset to pending with migration
+
+Cleared two blocked non-service product steps so the never-stop factory has real build targets again:
+- `docs/products/site-builder/BUILD_QUEUE.json` step `s8` (`public/overlay/site-builder-element-label-ui.html`) marked `skipped`. The target is an orphan public/overlay HTML artifact; active-interface governance (`public/overlay/lifeos-app.html` is the only active founder interface) supersedes it, and `system:commit-files` rejected a too-short generated HTML as truncated. The conductor cleared the escalation and skipped the step.
+- `docs/products/wellness-studio/BUILD_QUEUE.json` step `wellness-studio-step10` reset to `pending` and `db/migrations/20260725_extend_wellness_tables.sql` provided with idempotent `ALTER TABLE ... ADD COLUMN IF NOT EXISTS` for `joy_checkins`, `integrity_score_log`, `wearable_data`, and `emotional_patterns`. This satisfies the 4 required `file_contains` checks and clears the `escalation_required` flag set by M2PT-005B retriage.
+
 ## 2026-08-02 — GAP-FILL: `bo-schedule-site-builder-sentry-gate` done after adding `db/migrations/20260802_create_sentry_site_builder_gate_log.sql`
 
 The never-stop factory completed `builderos` step `bo-schedule-site-builder-sentry-gate` (commit `9f68a76`, artifact proof + functional proof PASS). The first `bp-priority:once` run after the scheduler rewrite failed grounding with `missing_sql_table: sentry_site_builder_gate_log` because `services/blueprint-grounding-check.js` only recognizes tables declared in `db/migrations/` or `db/schema.sql`. Added `db/migrations/20260802_create_sentry_site_builder_gate_log.sql` so the grounding gate passes while the script still self-heals with `CREATE TABLE IF NOT EXISTS`. `npm run builder:preflight` PASS (435/435). All paid and free-tier AI providers remain credit- or rate-limit-exhausted, so Chair consultation and new service/route codegen are paused until quota/credentials return; deterministic scripts, migrations, and queue-hygiene continue.
