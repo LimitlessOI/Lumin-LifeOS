@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T13:32:37.040Z",
+  "generated_at": "2026-08-01T13:33:05.844Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12726,
   "files": [
@@ -89259,10 +89259,10 @@
     },
     {
       "path": "services/competencyStandards.js",
-      "synopsis": "Existing code",
-      "bytes": 922,
-      "mtime": "2026-07-16T19:42:53.608Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis": "Retrieves competency standards from the database.",
+      "bytes": 739,
+      "mtime": "2026-08-01T13:33:05.844Z",
+      "indexed_at": "2026-08-01T13:33:05.844Z",
       "ssot": [
         "docs/products/lumin-university/PRODUCT_HOME.md"
       ]
