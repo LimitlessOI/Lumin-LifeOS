@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T15:20:32.679Z",
+  "generated_at": "2026-08-01T15:21:16.585Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12737,
+  "file_count": 12738,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -93235,6 +93235,17 @@
       "mtime": "2026-07-13T20:29:53.086Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
+        "docs/products/marketingos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/marketing-intelligence-director.js",
+      "synopsis": "Provides strategic marketing recommendations and budget allocation advice.",
+      "bytes": 5545,
+      "mtime": "2026-08-01T15:21:16.585Z",
+      "indexed_at": "2026-08-01T15:21:16.585Z",
+      "ssot": [
+        "docs/products/marketingos/PRODUCT_HOME.md",
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
     },
