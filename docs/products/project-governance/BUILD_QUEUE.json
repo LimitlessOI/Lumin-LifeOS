@@ -187,7 +187,7 @@
         "4"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerCompetitorRoutes"
       ],
@@ -210,14 +210,16 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T09:51:00.001Z",
-      "commit_sha": "465094c3c96ffb6de402a445ba1e238e888ca3d6",
+      "commit_sha": "3f4cd215ffff63a6d0e32bd09820d5f8857a0786",
       "blueprint_id": "PRODUCT-PROJECT-GOVERNANCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "5",
       "mission_id": "PRODUCT-project-governance",
       "same_signature_count": 0,
       "demoted": false,
-      "last_error": "artifact_proof_failed: competitor: {}",
-      "heal_unblocked": true
+      "last_error": "artifact_proof_failed: missing_exports:registerCompetitorRoutes; registerCompetitorRoutes; competitor: {}",
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T10:55:54.530Z",
+      "blocker_class": "BLOCKED_TOOLING"
     },
     {
       "id": "6",
@@ -350,5 +352,5 @@
   "blueprint_id": "PRODUCT-PROJECT-GOVERNANCE-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-project-governance",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T10:55:22.412Z"
+  "updated_at": "2026-08-01T10:56:05.294Z"
 }
