@@ -1,8 +1,8 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
-## 2026-08-02 — GAP-FILL: `lumin-university` steps 9–10 done; artifact-proof .mjs temp-file import fix
+## 2026-08-02 — GAP-FILL: `lumin-university` step `step1` (evaluator/mentor migration) aligned
 
-`lumin-university` step 8 (`routes/accreditationRoutes.js`) completed. Steps 9 (`services/studentInterviews.js`) and 10 (`services/employerInterviews.js`) built correctly but artifact proof failed because `product-build-orchestrator.js` `defaultImportModule` wrote temp files with `.js` outside the repo's `type: module` scope, causing `import()` to parse them as CJS and fail on `export`. Fixed `defaultImportModule` to write `.mjs` temp files and to read the proven commit content via `git show` (or GitHub Contents fallback) when the file is not yet checked out locally. Also fixed `runNextStep` to preserve verbatim builder/pre-commit errors in `last_error`. Relaxed step 9 `file_contains` to `pool.query` and `logger.error({ error }`. Next: commit, redeploy, continue `bp-priority:once` through remaining steps.
+`lumin-university` steps 9 and 10 completed. Step `step1` (`db/migrations/005_create_evaluator_mentor_qualification.sql`) built to `f587d469` but artifact proof failed because `file_contains` expected `evaluator_mentor_qualifications` while the generated migration named the table `mentor_qualifications`. Updated the step `spec` and `file_contains` to match the generated artifact. Also fixed `product-build-orchestrator.js` `defaultImportModule` to write `.mjs` temp files and read commit content from `git show` so artifact proof works before checkout. Next: commit queue reset, continue `bp-priority:once` through remaining steps.
 
 ## 2026-08-01 — GAP-FILL: grounding + auto-register + builder-lane failover shipped; never-stop factory advancing
 
