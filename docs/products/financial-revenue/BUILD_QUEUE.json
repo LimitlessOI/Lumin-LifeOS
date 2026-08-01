@@ -149,13 +149,13 @@
     },
     {
       "id": "5",
-      "status": "done",
+      "status": "pending",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "auto-register new routes",
       "spec": "Add the newly created routes to the auto-registered modules",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "revenueGoalTracking"
       ],
@@ -165,11 +165,14 @@
       "resolution_note": "Removed dependency on skipped route step3; config entry added with enabled:false until route artifact exists.",
       "commit_sha": "369746afbf9e807ae311015f7375061997d913cf",
       "last_attempt_at": "2026-08-01T03:36:22.937Z",
-      "completed_at": "2026-08-01T03:36:22.957Z"
+      "completed_at": "2026-08-01T03:36:22.957Z",
+      "last_error": "artifact_proof_failed: revenueGoalTracking",
+      "demoted": false,
+      "heal_unblocked": true
     }
   ],
   "blueprint_id": "PRODUCT-FINANCIAL-REVENUE-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-financial-revenue",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T15:53:41.603Z"
+  "updated_at": "2026-08-01T18:54:52.038Z"
 }
