@@ -167,7 +167,7 @@
       "spec": "Add table for storing and querying project rights and privacy settings",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS",
         "Rights mode is visible and explicit per project",
@@ -181,7 +181,7 @@
       "revive_count": 6,
       "revived_at": "2026-07-15T19:15:11.050Z",
       "last_attempt": null,
-      "demoted": true,
+      "demoted": false,
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Rights mode is visible and explicit per project; behavior_assertion: missing_substring:Priv",
       "demoted_at": "2026-07-15T22:04:07.644Z",
       "park_until": null,
@@ -474,5 +474,5 @@
   "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-story-studio",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T05:01:17.413Z"
+  "updated_at": "2026-08-01T06:00:03.346Z"
 }
