@@ -955,13 +955,13 @@
     },
     {
       "id": "personal-finance-os-step6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/dreamFunding.js",
       "task": "Operationalize Dream Funding",
       "spec": "Ensure Dream Funding service logic supports all operational features.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "initiateDreamFunding"
       ],
@@ -980,14 +980,16 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:30:07.955Z",
-      "commit_sha": "ffadc6460ba976a2f0252a50ba3e50795c885645",
+      "commit_sha": "c8d4443836be6998c97819f41d9747e2dc20532d",
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "personal-finance-os-step6",
       "mission_id": "PRODUCT-personal-finance-os",
       "same_signature_count": 0,
       "demoted": false,
       "last_error": "artifact_proof_failed: activate Dream Funding",
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T12:48:04.727Z",
+      "completed_at": "2026-08-01T12:48:17.440Z"
     },
     {
       "id": "personal-finance-os-step7",
@@ -1120,5 +1122,5 @@
   "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-personal-finance-os",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T12:47:27.763Z"
+  "updated_at": "2026-08-01T12:48:17.440Z"
 }
