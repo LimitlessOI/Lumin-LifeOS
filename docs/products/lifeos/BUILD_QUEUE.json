@@ -3037,7 +3037,7 @@
       "spec": "Recognize phrases for query mode, call getCommitments and format results into a reply card.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "parseNaturalLanguage",
         "getCommitments"
@@ -3057,8 +3057,8 @@
           "assertion_id": "expected_exports:services/lifeos-commitment-service.js"
         }
       ],
-      "last_attempt_at": null,
-      "last_error": "artifact_proof_failed: query mode",
+      "last_attempt_at": "2026-08-01T07:00:00.344Z",
+      "last_error": "Zone 3 edit-patch failed — edit JSON parse failed (likely truncated): Unexpected non-whitespace character after JSON at position 3457",
       "commit_sha": "c4079b0d4ce59fac0a6026c34ee275dac9da0e7c",
       "built_sha": null,
       "proof": null,
@@ -3071,7 +3071,7 @@
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
-      "blocker_class": null,
+      "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
@@ -6027,6 +6027,6 @@
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-lifeos",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:57:06.976Z",
+  "updated_at": "2026-08-01T07:00:24.203Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/lifeos/BUILD_QUEUE.json"
 }
