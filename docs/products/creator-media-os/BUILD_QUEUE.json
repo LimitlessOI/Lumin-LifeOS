@@ -104,13 +104,13 @@
     },
     {
       "id": "3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/scriptEngine.js",
       "task": "implement script/title/hook engine",
       "spec": "Engine generates scripts with titles/hooks for media content.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "expected_exports": [
         "generateScriptHooks"
       ],
@@ -129,7 +129,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T08:53:56.792Z",
-      "commit_sha": "49253c3a1a112ca8b5d0f4aa4f67bf63299e3007",
+      "commit_sha": "232848d18d9a25a88d32b39e13db5f21afbc08cd",
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "3",
       "mission_id": "PRODUCT-creator-media-os",
@@ -137,9 +137,10 @@
       "demoted": false,
       "last_error": "artifact_proof_failed: Script for long and short form",
       "heal_unblocked": true,
-      "last_attempt_at": "2026-08-01T11:14:57.322Z",
+      "last_attempt_at": "2026-08-01T11:18:08.656Z",
       "blocker_class": "BLOCKED_TOOLING",
-      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: Script for long and short form"
+      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: Script for long and short form",
+      "completed_at": "2026-08-01T11:18:08.696Z"
     },
     {
       "id": "4",
@@ -1408,5 +1409,5 @@
   "corpus_sources": [
     "docs/products/creator-media-os/PRODUCT_HOME.md"
   ],
-  "updated_at": "2026-08-01T11:15:09.661Z"
+  "updated_at": "2026-08-01T11:18:08.696Z"
 }
