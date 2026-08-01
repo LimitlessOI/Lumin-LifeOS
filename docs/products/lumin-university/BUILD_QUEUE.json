@@ -916,13 +916,13 @@
     },
     {
       "id": "002",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/mentorQualification.js",
       "task": "implement evaluator/mentor qualification criteria",
       "spec": "Create a service for handling evaluator and mentor qualification criteria.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "getMentorQualificationCriteria",
         "updateMentorQualificationCriteria"
@@ -943,12 +943,12 @@
       ],
       "shipped_via": null,
       "shipped_at": null,
-      "commit_sha": null,
+      "commit_sha": "6473c483eaf457a29b602833ff79aabdc8b6047b",
       "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "002",
       "mission_id": "PRODUCT-lumin-university",
       "last_error": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-01T01:40:16.388Z",
       "blocker_class": null,
       "claim_level": null,
       "park_until": null,
@@ -960,7 +960,8 @@
         "claimed_shipped_at": "2026-07-16T04:07:59.491Z",
         "reason": "commit_sha exists in repo but is not an ancestor of origin/main -- ship landed on origin/builderos-autonomous or origin/builderos-shadow instead of main (GITHUB_DEPLOY_BRANCH mismatch), and the content itself was placeholder/stub code (verified by direct inspection), not a real implementation. Confirmed via: git merge-base --is-ancestor <sha> origin/main."
       },
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "completed_at": "2026-08-01T01:40:28.858Z"
     },
     {
       "id": "003",
@@ -1584,5 +1585,5 @@
   "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-lumin-university",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T01:40:01.099Z"
+  "updated_at": "2026-08-01T01:40:28.859Z"
 }
