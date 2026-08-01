@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T10:47:06.078Z",
+  "generated_at": "2026-08-01T10:47:19.494Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -41164,9 +41164,9 @@
     {
       "path": "docs/products/builderos/GAP_FILL_LEDGER.json",
       "synopsis": "Documentation — GAP FILL LEDGER.",
-      "bytes": 43303,
-      "mtime": "2026-08-01T10:38:23.084Z",
-      "indexed_at": "2026-08-01T10:38:37.854Z",
+      "bytes": 43788,
+      "mtime": "2026-08-01T10:47:06.816Z",
+      "indexed_at": "2026-08-01T10:47:19.494Z",
       "synopsis_index_only": true
     },
     {
