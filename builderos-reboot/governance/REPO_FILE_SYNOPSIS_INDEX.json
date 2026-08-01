@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T11:26:06.846Z",
+  "generated_at": "2026-08-01T11:29:28.842Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1722,
-      "mtime": "2026-08-01T11:25:34.408Z",
-      "indexed_at": "2026-08-01T11:26:06.846Z",
+      "bytes": 1789,
+      "mtime": "2026-08-01T11:29:00.908Z",
+      "indexed_at": "2026-08-01T11:29:28.842Z",
       "synopsis_index_only": true
     },
     {
@@ -41692,9 +41692,9 @@
     {
       "path": "docs/products/faith-studio/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Faith Studio",
-      "bytes": 13212,
-      "mtime": "2026-08-01T11:25:56.164Z",
-      "indexed_at": "2026-08-01T11:26:06.846Z"
+      "bytes": 13995,
+      "mtime": "2026-08-01T11:29:17.716Z",
+      "indexed_at": "2026-08-01T11:29:28.842Z"
     },
     {
       "path": "docs/products/FAITHSTUDIO.md",
@@ -94571,10 +94571,10 @@
     },
     {
       "path": "services/safeOutputService.js",
-      "synopsis": "Existing code",
-      "bytes": 1142,
-      "mtime": "2026-07-18T01:15:48.159Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis": "safeOutput filter helpers for family/church/classroom-safe content.",
+      "bytes": 821,
+      "mtime": "2026-08-01T11:29:12.144Z",
+      "indexed_at": "2026-08-01T11:29:28.842Z",
       "ssot": [
         "docs/products/faith-studio/PRODUCT_HOME.md"
       ]

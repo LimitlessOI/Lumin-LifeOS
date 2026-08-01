@@ -1,41 +1,31 @@
 /**
- * SYNOPSIS: Existing code
+ * SYNOPSIS: safeOutput filter helpers for family/church/classroom-safe content.
  * @ssot docs/products/faith-studio/PRODUCT_HOME.md
  */
 
-// Existing code
-const defaultSafetyLevel = 'medium';
+// safeOutput filter helpers
+let defaultSafetyLevel = 'medium';
 
-function ensureSafeOutput(content, safetyLevel = defaultSafetyLevel) {
-  // Safety checks implementation
+export function ensureSafeOutput(content, safetyLevel = defaultSafetyLevel) {
   return filterContent(content, safetyLevel);
 }
 
-// New function to generate family/church/classroom-safe outputs
-function generateSafeOutput(content, safetyLevel = defaultSafetyLevel) {
-  // Implement logic based on safetyLevel
+export function generateSafeOutput(content, safetyLevel = defaultSafetyLevel) {
   return filterContent(content, safetyLevel);
 }
 
 function filterContent(content, safetyLevel) {
-  // Logic to filter content based on safetyLevel
   switch (safetyLevel) {
     case 'high':
-      // Implement high-level filtering
       return content.replace(/inappropriate|offensive/gi, '***');
     case 'medium':
-      // Implement medium-level filtering
       return content.replace(/offensive/gi, '***');
     case 'low':
     default:
-      // Minimal filtering
       return content;
   }
 }
 
-function setDefaultSafety(level) {
-  // Logic to set default safety level
+export function setDefaultSafety(level) {
   defaultSafetyLevel = level;
 }
-
-export { ensureSafeOutput, setDefaultSafety, generateSafeOutput };
