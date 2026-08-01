@@ -159,7 +159,7 @@
         "3"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "verifyCredential"
       ],
@@ -175,13 +175,13 @@
       ],
       "shipped_via": null,
       "shipped_at": null,
-      "commit_sha": null,
+      "commit_sha": "6e49f41cb3c0a58a591ad433a042cb0489e33c29",
       "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "4",
       "mission_id": "PRODUCT-lumin-university",
-      "last_error": null,
-      "last_attempt_at": null,
-      "blocker_class": null,
+      "last_error": "artifact_proof_failed: missing_exports:verifyCredential",
+      "last_attempt_at": "2026-08-01T00:24:41.392Z",
+      "blocker_class": "BLOCKED_SECRET",
       "claim_level": null,
       "park_until": null,
       "revive_count": 0,
