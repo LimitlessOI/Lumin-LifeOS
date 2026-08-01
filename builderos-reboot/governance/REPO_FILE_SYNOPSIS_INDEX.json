@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T12:26:15.615Z",
+  "generated_at": "2026-08-01T12:29:06.528Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -91516,10 +91516,13 @@
     },
     {
       "path": "services/leadScoring.js",
-      "synopsis": "Service module — LeadScoring.",
-      "bytes": 3660,
-      "mtime": "2026-07-15T08:53:26.098Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "synopsis": "Provides a detailed scoring rubric for lead scoring.",
+      "bytes": 5937,
+      "mtime": "2026-08-01T12:29:06.528Z",
+      "indexed_at": "2026-08-01T12:29:06.528Z",
+      "ssot": [
+        "docs/products/boldtrail/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/leadScoringAlgorithm.js",
