@@ -1972,13 +1972,12 @@
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "5",
       "mission_id": "PRODUCT-music-talent-studio",
-      "same_signature_count": 1,
+      "same_signature_count": 0,
       "demoted": false,
       "last_error": "artifact_proof_failed: Music Industry Consultation",
       "heal_unblocked": true,
       "last_attempt_at": "2026-08-01T13:41:15.437Z",
-      "blocker_class": "BLOCKED_TOOLING",
-      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: Music Industry Consultation"
+      "blocker_class": "BLOCKED_TOOLING"
     },
     {
       "id": "6",
@@ -2652,5 +2651,6 @@
   "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-music-talent-studio",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T13:41:35.756Z"
+  "updated_at": "2026-08-01T13:41:35.756Z",
+  "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/music-talent-studio/BUILD_QUEUE.json"
 }

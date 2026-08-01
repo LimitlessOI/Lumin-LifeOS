@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T13:42:28.006Z",
+  "generated_at": "2026-08-01T13:45:12.395Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12726,
   "files": [
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3842848,
-      "mtime": "2026-08-01T13:37:32.840Z",
-      "indexed_at": "2026-08-01T13:37:38.470Z"
+      "bytes": 3842965,
+      "mtime": "2026-08-01T13:42:53.660Z",
+      "indexed_at": "2026-08-01T13:45:12.395Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1769,
-      "mtime": "2026-08-01T13:41:36.928Z",
-      "indexed_at": "2026-08-01T13:42:28.006Z",
+      "bytes": 1867,
+      "mtime": "2026-08-01T13:33:13.308Z",
+      "indexed_at": "2026-08-01T13:37:38.470Z",
       "synopsis_index_only": true
     },
     {
@@ -42152,9 +42152,9 @@
     {
       "path": "docs/products/lumin-university/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Lumin University",
-      "bytes": 23075,
-      "mtime": "2026-08-01T13:37:17.736Z",
-      "indexed_at": "2026-08-01T13:37:32.775Z"
+      "bytes": 25092,
+      "mtime": "2026-08-01T13:44:55.356Z",
+      "indexed_at": "2026-08-01T13:45:12.395Z"
     },
     {
       "path": "docs/products/LUMINUNIVERSITY.md",
@@ -42304,9 +42304,9 @@
     {
       "path": "docs/products/music-talent-studio/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Music Talent Studio",
-      "bytes": 23470,
-      "mtime": "2026-08-01T13:42:17.520Z",
-      "indexed_at": "2026-08-01T13:42:28.006Z"
+      "bytes": 24192,
+      "mtime": "2026-08-01T13:45:02.832Z",
+      "indexed_at": "2026-08-01T13:45:12.395Z"
     },
     {
       "path": "docs/products/MUSICTALENTSTUDIO.md",
@@ -90221,10 +90221,10 @@
     },
     {
       "path": "services/employerInterviewProcess.js",
-      "synopsis": "Existing code and imports",
-      "bytes": 1401,
-      "mtime": "2026-07-16T19:42:53.609Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis": "Conducts interviews with a specified number of employers to understand recognized competency credentials.",
+      "bytes": 3157,
+      "mtime": "2026-08-01T13:44:09.736Z",
+      "indexed_at": "2026-08-01T13:45:12.395Z",
       "ssot": [
         "docs/products/lumin-university/PRODUCT_HOME.md"
       ]
@@ -93742,10 +93742,10 @@
     },
     {
       "path": "services/musicIndustryConsultation.js",
-      "synopsis": "Exports checkMusicIndustryConsultations — services/musicIndustryConsultation.js.",
-      "bytes": 711,
-      "mtime": "2026-08-01T13:41:46.880Z",
-      "indexed_at": "2026-08-01T13:42:28.006Z",
+      "synopsis": "Verifies if music industry professionals have been consulted by querying the database.",
+      "bytes": 1442,
+      "mtime": "2026-08-01T13:44:14.204Z",
+      "indexed_at": "2026-08-01T13:45:12.395Z",
       "ssot": [
         "docs/products/music-talent-studio/PRODUCT_HOME.md"
       ]
@@ -94193,10 +94193,10 @@
     },
     {
       "path": "services/pricingValidationProcess.js",
-      "synopsis": "services/pricingValidationProcess.js",
-      "bytes": 1473,
-      "mtime": "2026-07-16T19:42:53.615Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis": "Validates pricing based on database configuration and user feedback.",
+      "bytes": 3057,
+      "mtime": "2026-08-01T13:44:11.844Z",
+      "indexed_at": "2026-08-01T13:45:12.395Z",
       "ssot": [
         "docs/products/lumin-university/PRODUCT_HOME.md"
       ]
