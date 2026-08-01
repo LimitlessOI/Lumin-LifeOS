@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T11:22:54.579Z",
+  "generated_at": "2026-08-01T11:25:26.708Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -96271,10 +96271,13 @@
     },
     {
       "path": "services/theologicalAdvisoryModel.js",
-      "synopsis": "Assuming there is existing logic or imports needed for this service",
-      "bytes": 1098,
-      "mtime": "2026-07-17T22:18:24.328Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "synopsis": "Provides theological advisory for content adaptation based on denominational concerns.",
+      "bytes": 2425,
+      "mtime": "2026-08-01T11:25:26.708Z",
+      "indexed_at": "2026-08-01T11:25:26.708Z",
+      "ssot": [
+        "docs/products/faith-studio/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/therapist-integration.js",
