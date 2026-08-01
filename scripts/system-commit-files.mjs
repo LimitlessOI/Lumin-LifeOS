@@ -13,6 +13,7 @@ import * as dotenv from 'dotenv';
 dotenv.config({ override: true });
 import fs from 'node:fs';
 import path from 'node:path';
+import { verifyBranchDivergence } from './verify-branch-divergence.mjs';
 
 const base = (
   process.env.BUILDER_BASE_URL ||
@@ -96,6 +97,12 @@ async function main() {
     process.exit(1);
   }
   if (!message || paths.length === 0) usage(1);
+
+  const branchCheck = verifyBranchDivergence({ cwd: process.cwd() });
+  if (!branchCheck.ok) {
+    console.error(branchCheck.error);
+    process.exit(1);
+  }
 
   const BINARY_EXT = /\.(png|jpe?g|gif|webp|ico|woff2?|ttf|eot|pdf|mp4|mov|zip|wasm)$/i;
   const files = [];

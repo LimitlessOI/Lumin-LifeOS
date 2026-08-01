@@ -14,6 +14,7 @@ import { appendStepMetrics } from '../tsos/record-step-metrics.js';
 import { evaluateEfficiency } from '../tsos/evaluate-efficiency.js';
 import { appendStepExecutionRecord } from '../historian/append-record.js';
 import { runBpbIntakeGate } from '../bpb/intake-gate.js';
+import { runChairConsensusGate } from './chair-consensus-gate.mjs';
 import { runBehaviorAssertions, stepRequiresBehaviorProof } from '../sentry/behavior-assertions.js';
 import { runSentryRealityStation, assertSentryPassForStep } from '../../../services/sentry-reality-station.mjs';
 import { stepRequiresAuthoring, runAuthoring } from './authoring.js';
@@ -203,6 +204,30 @@ export async function dispatchExecuteStep(body, options = {}) {
         },
       };
     }
+  }
+
+  const chairGate = runChairConsensusGate({
+    mission_id,
+    blueprint_id,
+    step,
+    reasoning_plan: body?.reasoning_plan,
+    reasoning_plan_id: body?.reasoning_plan_id,
+    autoGenerate: body?.auto_generate_reasoning_plan === true,
+  });
+  if (!chairGate.approved) {
+    return {
+      httpStatus: 422,
+      body: buildBlockedReturn({
+        mission_id,
+        blueprint_id,
+        step_id: step.step_id,
+        gap_type: 'chair_consensus_gate_failure',
+        summary: `Chair consensus gate failed: ${chairGate.reason}`,
+        attempted_action: 'runChairConsensusGate',
+        missing_information: chairGate.missing || [],
+        evidence: { chair_gate_required: chairGate.chair_gate_required },
+      }),
+    };
   }
 
   const t0 = Date.now();

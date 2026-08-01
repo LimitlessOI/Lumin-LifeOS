@@ -109,3 +109,119 @@ export async function findFounderDecisions(pool, { query, limit = 20 } = {}) {
   );
   return { ok: true, count: rows.length, decisions: rows };
 }
+
+async function ensurePredictionTables(pool) {
+  await ensureTable(pool);
+  await pool.query(
+    `CREATE TABLE IF NOT EXISTS decision_predictions (
+      id SERIAL PRIMARY KEY,
+      decision_id INTEGER REFERENCES founder_decision_log(id) ON DELETE SET NULL,
+      decision_ref TEXT,
+      predicted_outcome TEXT NOT NULL,
+      why TEXT,
+      confidence NUMERIC(3,2) CHECK (confidence BETWEEN 0 AND 1),
+      predicted_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    )`
+  );
+  await pool.query(
+    `CREATE TABLE IF NOT EXISTS decision_reality (
+      id SERIAL PRIMARY KEY,
+      prediction_id INTEGER REFERENCES decision_predictions(id) ON DELETE CASCADE,
+      actual_outcome TEXT NOT NULL,
+      evidence JSONB,
+      reality_score NUMERIC(3,2) CHECK (reality_score BETWEEN -1 AND 1),
+      recorded_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    )`
+  );
+  await pool.query(
+    `CREATE TABLE IF NOT EXISTS decision_calibration (
+      id SERIAL PRIMARY KEY,
+      prediction_id INTEGER REFERENCES decision_predictions(id) ON DELETE CASCADE,
+      delta TEXT,
+      lesson TEXT,
+      updated_confidence NUMERIC(3,2) CHECK (updated_confidence BETWEEN 0 AND 1),
+      action_taken TEXT,
+      calibrated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    )`
+  );
+}
+
+export async function predictDecisionOutcome(pool, {
+  decision_id,
+  decision_ref,
+  predicted_outcome,
+  why,
+  confidence = 0.5,
+} = {}) {
+  if (!pool) return { ok: false, reason: 'no_pool' };
+  if (!predicted_outcome) return { ok: false, reason: 'predicted_outcome required' };
+  await ensurePredictionTables(pool);
+  const { rows } = await pool.query(
+    `INSERT INTO decision_predictions (decision_id, decision_ref, predicted_outcome, why, confidence)
+     VALUES ($1, $2, $3, $4, $5)
+     RETURNING id`,
+    [decision_id || null, decision_ref || null, predicted_outcome, why || null, Math.min(1, Math.max(0, Number(confidence) || 0.5))]
+  );
+  return { ok: true, prediction_id: rows[0].id };
+}
+
+export async function recordDecisionReality(pool, {
+  prediction_id,
+  actual_outcome,
+  evidence = {},
+  reality_score = 0,
+} = {}) {
+  if (!pool || !prediction_id) return { ok: false, reason: 'prediction_id required' };
+  if (!actual_outcome) return { ok: false, reason: 'actual_outcome required' };
+  await ensurePredictionTables(pool);
+  const { rows } = await pool.query(
+    `INSERT INTO decision_reality (prediction_id, actual_outcome, evidence, reality_score)
+     VALUES ($1, $2, $3, $4)
+     RETURNING id`,
+    [prediction_id, actual_outcome, JSON.stringify(evidence || {}), Math.min(1, Math.max(-1, Number(reality_score) || 0))]
+  );
+  return { ok: true, reality_id: rows[0].id };
+}
+
+export async function calibrateDecision(pool, {
+  prediction_id,
+  delta,
+  lesson,
+  updated_confidence,
+  action_taken,
+} = {}) {
+  if (!pool || !prediction_id) return { ok: false, reason: 'prediction_id required' };
+  await ensurePredictionTables(pool);
+  const { rows } = await pool.query(
+    `INSERT INTO decision_calibration (prediction_id, delta, lesson, updated_confidence, action_taken)
+     VALUES ($1, $2, $3, $4, $5)
+     RETURNING id`,
+    [prediction_id, delta || null, lesson || null, updated_confidence == null ? null : Math.min(1, Math.max(0, Number(updated_confidence))), action_taken || null]
+  );
+  return { ok: true, calibration_id: rows[0].id };
+}
+
+export async function getDecisionCalibrationSummary(pool, { decision_ref, limit = 20 } = {}) {
+  if (!pool || !decision_ref) return { ok: false, reason: 'decision_ref required' };
+  await ensurePredictionTables(pool);
+  const { rows } = await pool.query(
+    `SELECT
+       p.id AS prediction_id,
+       p.predicted_outcome,
+       p.confidence AS predicted_confidence,
+       r.actual_outcome,
+       r.reality_score,
+       c.delta,
+       c.lesson,
+       c.updated_confidence,
+       c.action_taken
+     FROM decision_predictions p
+     LEFT JOIN decision_reality r ON r.prediction_id = p.id
+     LEFT JOIN decision_calibration c ON c.prediction_id = p.id
+     WHERE p.decision_ref = $1
+     ORDER BY p.predicted_at DESC
+     LIMIT $2`,
+    [decision_ref, Math.min(100, Math.max(1, Number(limit) || 20))]
+  );
+  return { ok: true, count: rows.length, summary: rows };
+}

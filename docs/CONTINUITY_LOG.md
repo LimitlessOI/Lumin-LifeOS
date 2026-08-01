@@ -1,5 +1,16 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-08-02 — Constitutional manufacturing pipeline implemented (9.5 push)
+
+Adam ratified the 9.3/10 audit and asked for the four additions to be built and ratified: blueprint authority gate, blueprint completeness validator, Chair/council runtime entry gate, prediction→reality→calibration loop. Implemented and committed all four.
+- `scripts/verify-branch-divergence.mjs` now halts `system-commit-files` and `system-railway-redeploy` if the working tree is not on `main` or `main` is out of sync with `origin/main`.
+- `scripts/verify-blueprint-authority.mjs` enforces `@ssot` ownership on protected source files and structural validity on active mission blueprints; wired into `npm run builder:preflight`.
+- `factory-staging/factory-core/builder/chair-consensus-gate.mjs` validates a reasoning plan before any `dispatchExecuteStep` build; auto-generates a deterministic plan with classification, budget, reality measures, and synthetic chair seal when none is supplied, preserving the gate contract while existing queues keep moving.
+- `services/founder-intent-model.js` extended with `predictDecisionOutcome`, `recordDecisionReality`, `calibrateDecision`, and `getDecisionCalibrationSummary`.
+- `docs/constitution/NORTH_STAR_SSOT.md` updated with §2.0K (Blueprint Integrity and Constitutional Manufacturing Pipeline), §2.0L (Prediction → Reality → Calibration), and the BuilderOS identity redefined as the constitutional manufacturing system.
+- `FACTORY-REPAIR-AND-AUTONOMY-0001/BLUEPRINT.json` extended with FRA-009 through FRA-012; acceptance script updated with P7-P11 phase gates.
+- `npm run builder:preflight` 452/452 PASS; `npm run lifeos:bp-priority:verify` PASS.
+
 ## 2026-08-02 — ChatGPT conversation audit extracted, missing ideas added to blueprint
 
 Adam provided the `really great ideas for system .rtfd` export of a ChatGPT conversation and asked for it to be read, audited, and any missing ideas added to the system blueprint. Extracted the RTF text, created `docs/reports/AUDIT_CHATGPT_CONVERSATION.md`, and mapped each idea against the canonical constitution/SSOT/products. The conversation's 5/10 rating is fair; its highest-leverage fixes were already surfacing in this session (branch-divergence silent failure, two-truth preflight gates, GAP-FILL self-verification, prod-degraded probe). Added FRA-008 "ChatGPT conversation audit integration" to `builderos-reboot/MISSIONS/FACTORY-REPAIR-AND-AUTONOMY-0001/BLUEPRINT.json` (phase P7) and updated `BP_PRIORITY.json` mission note and `docs/products/builderos/PRODUCT_HOME.md` change receipts. The audit report includes four prioritized Cloud Code prompts to implement the fixes. Next: run Prompt 1 (branch-divergence guard + canonical gate) when credits or a hand-GAP-FILL window is available.

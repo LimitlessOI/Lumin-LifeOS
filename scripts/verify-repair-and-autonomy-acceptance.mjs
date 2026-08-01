@@ -113,6 +113,53 @@ const PHASE_TESTS = [
       return true;
     },
   },
+  {
+    id: 'P7_chatgpt_audit_artifact',
+    run: () => {
+      const p = path.join(ROOT, 'docs/reports/AUDIT_CHATGPT_CONVERSATION.md');
+      if (!fs.existsSync(p)) throw new Error('ChatGPT audit report missing');
+      const blueprint = JSON.parse(fs.readFileSync(path.join(ROOT, 'builderos-reboot/MISSIONS/FACTORY-REPAIR-AND-AUTONOMY-0001/BLUEPRINT.json'), 'utf8'));
+      const step = blueprint.steps?.find((s) => s.step_id === 'FRA-008');
+      if (!step) throw new Error('FRA-008 not in blueprint');
+      return true;
+    },
+  },
+  {
+    id: 'P8_blueprint_authority_validator',
+    run: () => {
+      const p = path.join(ROOT, 'scripts/verify-blueprint-authority.mjs');
+      if (!fs.existsSync(p)) throw new Error('blueprint authority validator missing');
+      execSync('node --check scripts/verify-blueprint-authority.mjs', { cwd: ROOT, stdio: 'pipe' });
+      return true;
+    },
+  },
+  {
+    id: 'P9_chair_consensus_gate',
+    run: () => {
+      const p = path.join(ROOT, 'factory-staging/factory-core/builder/chair-consensus-gate.mjs');
+      if (!fs.existsSync(p)) throw new Error('chair consensus gate missing');
+      execSync('node --check factory-staging/factory-core/builder/chair-consensus-gate.mjs', { cwd: ROOT, stdio: 'pipe' });
+      return true;
+    },
+  },
+  {
+    id: 'P10_prediction_reality_calibration',
+    run: () => {
+      execSync('node --check scripts/verify-prediction-reality-loop.mjs', { cwd: ROOT, stdio: 'pipe' });
+      execSync('node --check services/founder-intent-model.js', { cwd: ROOT, stdio: 'pipe' });
+      return true;
+    },
+  },
+  {
+    id: 'P11_constitutional_pipeline_ratified',
+    run: () => {
+      const ssot = fs.readFileSync(path.join(ROOT, 'docs/constitution/NORTH_STAR_SSOT.md'), 'utf8');
+      if (!ssot.includes('Constitutional Manufacturing Pipeline')) throw new Error('§2.0K missing');
+      if (!ssot.includes('Prediction → Reality → Calibration')) throw new Error('§2.0L missing');
+      if (!ssot.includes('constitutional manufacturing system')) throw new Error('BuilderOS identity not updated');
+      return true;
+    },
+  },
 ];
 
 function runTests() {

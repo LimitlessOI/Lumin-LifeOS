@@ -36,6 +36,7 @@ import { execFile, spawnSync } from 'node:child_process';
 import { promisify } from 'node:util';
 
 import { assessParityStability, isDeploymentInFlight } from './lib/deploy-truth-guard.mjs';
+import { verifyMainBranchSync } from './verify-branch-divergence.mjs';
 
 const execFileAsync = promisify(execFile);
 
@@ -277,6 +278,12 @@ async function main() {
   const targetSha = originMainSha();
   if (targetSha) {
     console.log(`Target origin/main SHA: ${targetSha.slice(0, 12)}`);
+  }
+
+  const mainSync = verifyMainBranchSync({ cwd: process.cwd() });
+  if (!mainSync.ok) {
+    console.error(mainSync.error);
+    process.exit(1);
   }
 
   const headers = key ? { 'x-command-key': key } : {};
