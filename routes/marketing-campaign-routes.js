@@ -15,13 +15,13 @@ export function registerMarketingCampaignRoutes(app, deps) {
       const result = await generateCampaignAssets(deps, payload);
       res.json(result);
     } catch (error) {
-      deps.logger.error({ error }, 'Error in marketing-campaign-routes /generate route');
+      deps.logger.error({ error }, 'Error in POST /api/v1/marketingos/campaign/generate route');
       next(error);
     }
   });
 
   /**
-   * SYNOPSIS: Retrieves marketing campaign assets for a given session ID.
+   * SYNOPSIS: Retrieves marketing campaign assets by session ID.
    * @ssot docs/products/marketingos/PRODUCT_HOME.md
    */
   app.get('/api/v1/marketingos/campaign/assets/:sessionId', deps.requireKey, async (req, res, next) => {
@@ -34,7 +34,7 @@ export function registerMarketingCampaignRoutes(app, deps) {
         res.status(404).json({ message: 'Campaign assets not found for the given session ID.' });
       }
     } catch (error) {
-      deps.logger.error({ error }, 'Error in marketing-campaign-routes /assets/:sessionId route');
+      deps.logger.error({ error }, 'Error in GET /api/v1/marketingos/campaign/assets/:sessionId route');
       next(error);
     }
   });
