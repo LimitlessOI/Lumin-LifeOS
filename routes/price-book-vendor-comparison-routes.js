@@ -4,12 +4,9 @@
 /**
  * SYNOPSIS: Registers PriceBookVendorComparisonRoutes routes/handlers (routes/price-book-vendor-comparison-routes.js).
  */
-import express from 'express';
-
 export function registerPriceBookVendorComparisonRoutes(app) {
-  const router = express.Router();
-
-  router.get('/vendor-comparison', (req, res) => {
+  // Vendor Comparison route: expose price-book vendor comparison data.
+  app.get('/api/v1/price-book/vendor-comparison', (req, res) => {
     const { includeExplanations, excludeCriteria } = req.query;
 
     // Fetch vendor comparison data from a data source
@@ -32,8 +29,6 @@ export function registerPriceBookVendorComparisonRoutes(app) {
 
     res.json(filteredData);
   });
-
-  app.use('/api/price-book-vendor-comparison', router);
 }
 
 function getVendorComparisonData() {

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T09:25:31.121Z",
+  "generated_at": "2026-08-01T09:29:37.473Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1736,
-      "mtime": "2026-08-01T09:20:58.564Z",
-      "indexed_at": "2026-08-01T09:21:45.378Z",
+      "bytes": 1801,
+      "mtime": "2026-08-01T09:28:24.412Z",
+      "indexed_at": "2026-08-01T09:29:37.473Z",
       "synopsis_index_only": true
     },
     {
@@ -42115,9 +42115,9 @@
     {
       "path": "docs/products/limitlessos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LimitlessOS business stack",
-      "bytes": 13547,
-      "mtime": "2026-08-01T09:23:26.616Z",
-      "indexed_at": "2026-08-01T09:23:35.311Z"
+      "bytes": 14328,
+      "mtime": "2026-08-01T09:29:19.932Z",
+      "indexed_at": "2026-08-01T09:29:37.473Z"
     },
     {
       "path": "docs/products/lip/FILE_MANIFEST.json",
@@ -71003,9 +71003,9 @@
     {
       "path": "routes/price-book-vendor-comparison-routes.js",
       "synopsis": "Registers PriceBookVendorComparisonRoutes routes/handlers (routes/price-book-vendor-comparison-routes.js).",
-      "bytes": 1562,
-      "mtime": "2026-07-16T19:42:53.601Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 1524,
+      "mtime": "2026-08-01T09:28:55.024Z",
+      "indexed_at": "2026-08-01T09:29:37.473Z",
       "ssot": [
         "docs/products/limitlessos/PRODUCT_HOME.md"
       ]
