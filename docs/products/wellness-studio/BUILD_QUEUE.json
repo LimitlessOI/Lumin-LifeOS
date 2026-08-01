@@ -4,7 +4,7 @@
   "verify_script": null,
   "planned_at": "2026-07-12T03:40:00.000Z",
   "notes": "Module 4 Therapist Integration beachhead — Clinical Partnership. Consent-gated briefs; therapist account lists linked clients who granted therapist_share. LifeOS consent foundation is a dependency.",
-  "updated_at": "2026-08-01T06:22:16.930Z",
+  "updated_at": "2026-08-01T06:30:57.165Z",
   "steps": [
     {
       "id": "ws-therapist-schema",
@@ -1269,7 +1269,7 @@
     },
     {
       "id": "wellness-studio-3",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/therapist-integration.js",
       "task": "setupTherapistIntegration",
       "spec": "Wire communication-profile.js and truth-delivery.js for therapist integration.",
@@ -1296,7 +1296,7 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "artifact_proof_failed: require('communication-profile'); require('truth-delivery')",
       "commit_sha": "485bd8a5043aba9caa4c738eb967d9e2dddaefdd",
       "built_sha": null,
       "proof": null,
@@ -1317,11 +1317,12 @@
       "shipped_at": "2026-07-16T05:35:42.565Z",
       "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "wellness-studio-3",
-      "mission_id": "PRODUCT-wellness-studio"
+      "mission_id": "PRODUCT-wellness-studio",
+      "heal_unblocked": true
     },
     {
       "id": "wellness-studio-4",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/therapist-integration-routes.js",
       "task": "addTherapistIntegrationRoutes",
       "spec": "Add HTTP routes for therapist integration using communication-profile.js and truth-delivery.js.",
@@ -1352,7 +1353,7 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "artifact_proof_failed: POST /api/therapist/integration; setupIntegration",
       "commit_sha": "632dc2648a7d16a46fe594cd3cc235788f06743c",
       "built_sha": null,
       "proof": null,
@@ -1373,7 +1374,8 @@
       "shipped_at": "2026-07-16T06:17:30.899Z",
       "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "wellness-studio-4",
-      "mission_id": "PRODUCT-wellness-studio"
+      "mission_id": "PRODUCT-wellness-studio",
+      "heal_unblocked": true
     },
     {
       "id": "wellness-studio-5",
@@ -1398,7 +1400,7 @@
     },
     {
       "id": "wellness-studio-step1",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/migrations/20260724_lifeos_core_stable.sql",
       "task": "ensure stability of LifeOS Core",
       "spec": "Ensure all phases of LifeOS Core are deployed and stable by performing final migrations and checks.",
@@ -1410,7 +1412,7 @@
         "CHECK (stable IS TRUE)"
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "artifact_proof_failed: CREATE TABLE IF NOT EXISTS; CHECK (stable IS TRUE)",
       "commit_sha": "47a248087a230d5357181d589d1a1aa38ce3ff3e",
       "built_sha": null,
       "proof": null,
@@ -1431,7 +1433,8 @@
       "shipped_at": "2026-07-16T06:41:17.988Z",
       "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "wellness-studio-step1",
-      "mission_id": "PRODUCT-wellness-studio"
+      "mission_id": "PRODUCT-wellness-studio",
+      "heal_unblocked": true
     },
     {
       "id": "wellness-studio-step2",
@@ -1460,7 +1463,7 @@
     },
     {
       "id": "wellness-studio-step3",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/wellness-table-extensions.js",
       "task": "provide extended table services",
       "spec": "Implement services for managing the extended table data without conflicts.",
@@ -1496,11 +1499,14 @@
       "commit_sha": "959a480548734f24b4c1a6bb1f040a8636a2bfa8",
       "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "wellness-studio-step3",
-      "mission_id": "PRODUCT-wellness-studio"
+      "mission_id": "PRODUCT-wellness-studio",
+      "last_error": "artifact_proof_failed: extendTableServices",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "wellness-studio-step4",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/wellness-table-extensions-routes.js",
       "task": "create routes for extended table services",
       "spec": "Expose routes to interact with the extended table services.",
@@ -1536,7 +1542,10 @@
       "commit_sha": "ecc351e98f6bcb9072bea7a59d5743aabda4ea1f",
       "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "wellness-studio-step4",
-      "mission_id": "PRODUCT-wellness-studio"
+      "mission_id": "PRODUCT-wellness-studio",
+      "last_error": "artifact_proof_failed: POST /api/v1/wellness/extensions/joy-checkins; POST /api/v1/wellness/extensions/integrity-score; POST /api/v1/wellness/extensions/wearable-data; POST /api/v1/wellness/extensions/emotional-patterns",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "wellness-studio-step5",
@@ -1665,7 +1674,7 @@
     },
     {
       "id": "wellness-studio-step9",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/migrations/20260724_lifeos_core_stable.sql",
       "task": "verify_stability",
       "spec": "Verify LifeOS Core deployment is stable after all phases",
@@ -1686,10 +1695,11 @@
       "pre_existing": true,
       "shipped_via": "pre_existing_artifact_proof",
       "shipped_at": "2026-07-18T01:10:20.242Z",
-      "last_error": null,
+      "last_error": "artifact_proof_failed: CREATE TABLE IF NOT EXISTS",
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "heal_unblocked": true
     },
     {
       "id": "wellness-studio-step10",
