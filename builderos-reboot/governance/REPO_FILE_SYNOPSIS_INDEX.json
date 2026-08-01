@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T13:19:40.461Z",
+  "generated_at": "2026-08-01T13:27:46.630Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12723,
   "files": [
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1673,
-      "mtime": "2026-08-01T13:14:35.132Z",
-      "indexed_at": "2026-08-01T13:19:39.684Z",
+      "bytes": 1647,
+      "mtime": "2026-08-01T13:25:45.776Z",
+      "indexed_at": "2026-08-01T13:27:46.630Z",
       "synopsis_index_only": true
     },
     {
@@ -41843,9 +41843,9 @@
     {
       "path": "docs/products/kids-os/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Kids OS",
-      "bytes": 30341,
-      "mtime": "2026-08-01T08:48:17.387Z",
-      "indexed_at": "2026-08-01T08:48:17.387Z"
+      "bytes": 31511,
+      "mtime": "2026-08-01T13:27:35.656Z",
+      "indexed_at": "2026-08-01T13:27:46.630Z"
     },
     {
       "path": "docs/products/KIDSOS.md",
@@ -87665,9 +87665,9 @@
     {
       "path": "services/apiSpec.js",
       "synopsis": "Service module — ApiSpec.",
-      "bytes": 3821,
-      "mtime": "2026-07-16T19:42:53.605Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 3859,
+      "mtime": "2026-08-01T13:27:06.088Z",
+      "indexed_at": "2026-08-01T13:27:46.630Z",
       "ssot": [
         "docs/products/kids-os/PRODUCT_HOME.md"
       ]

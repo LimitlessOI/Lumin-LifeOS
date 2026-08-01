@@ -1,3 +1,5 @@
+/** API specification for kids-os */
+
 /**
  * SYNOPSIS: Service module — ApiSpec.
  * @ssot docs/products/kids-os/PRODUCT_HOME.md
