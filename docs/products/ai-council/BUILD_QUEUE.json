@@ -706,13 +706,13 @@
     },
     {
       "id": "10",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/usageLogger.js",
       "task": "verify token usage logging",
       "spec": "Ensure consistent logging for token usage particularly provider usage column.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "logUsage"
       ],
@@ -731,7 +731,7 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-16T04:07:44.776Z",
-      "commit_sha": null,
+      "commit_sha": "4a6c6ca045ffd85458936e87a3a9becf063dda1c",
       "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "10",
       "mission_id": "PRODUCT-ai-council",
@@ -740,7 +740,7 @@
       "reaudit_reset_at": "2026-07-30T18:55:06.242Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-01T04:06:32.102Z",
       "last_attempt": null,
       "revive_count": 7,
       "revived_at": "2026-08-01T04:06:18.686Z",
@@ -756,7 +756,8 @@
       "escalation_required": true,
       "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
       "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
-      "escalated_at": "2026-07-31T18:40:13.611Z"
+      "escalated_at": "2026-07-31T18:40:13.611Z",
+      "completed_at": "2026-08-01T04:06:45.147Z"
     },
     {
       "id": "11",
@@ -1276,5 +1277,5 @@
   "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-ai-council",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T03:25:05.558Z"
+  "updated_at": "2026-08-01T04:06:45.147Z"
 }
