@@ -238,6 +238,7 @@ No production runbook yet. This project is concept-stage only.
 | Date | What Changed | Why | Amendment Updated | Manifest Updated | Verified |
 |---|---|---|---|---|---|
 | 2026-03-29 | Created Story Studio amendment and manifest from conversation history | Promote the story/comic/cartoon/musical/cinematic/IP-franchise concept into proper SSOT ownership | ✅ | ✅ | pending |
+| 2026-08-02 | **BUILD_QUEUE cleanup: step 6 `file_contains` from stub phrase to anti-abuse anchor.** Changed `docs/products/story-studio/BUILD_QUEUE.json` step 6 `file_contains` from `Community scoring abuse model not yet designed` to `ANTI_ABUSE_CONFIG` because the exact twin file is missing and the existing `services/franchiseScoring.js` already implements employer score + anti-abuse logic. | `bp-priority:once` was stuck trying to write a missing exact twin with a pre-commit-blocked stub phrase. | ✅ | ✅ | `npm run builder:preflight` PASS |
 
 ---
 
