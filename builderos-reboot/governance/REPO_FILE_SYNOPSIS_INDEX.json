@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T02:47:33.587Z",
+  "generated_at": "2026-08-01T02:49:19.921Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12660,
   "files": [
@@ -32698,8 +32698,8 @@
       "path": "data/builderos-intake-regression-last-run.json",
       "synopsis": "JSON data/config — data/builderos-intake-regression-last-run.json.",
       "bytes": 920,
-      "mtime": "2026-08-01T02:47:33.587Z",
-      "indexed_at": "2026-08-01T02:47:33.587Z",
+      "mtime": "2026-08-01T02:49:19.921Z",
+      "indexed_at": "2026-08-01T02:49:19.921Z",
       "synopsis_index_only": true
     },
     {
@@ -33104,9 +33104,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 868,
-      "mtime": "2026-08-01T02:47:33.587Z",
-      "indexed_at": "2026-08-01T02:47:33.587Z",
+      "bytes": 773,
+      "mtime": "2026-08-01T02:49:19.921Z",
+      "indexed_at": "2026-08-01T02:49:19.921Z",
       "synopsis_index_only": true
     },
     {
@@ -41903,9 +41903,9 @@
     {
       "path": "docs/products/lifere/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeRE",
-      "bytes": 48149,
-      "mtime": "2026-08-01T02:46:58.108Z",
-      "indexed_at": "2026-08-01T02:46:58.108Z"
+      "bytes": 48153,
+      "mtime": "2026-08-01T02:49:19.921Z",
+      "indexed_at": "2026-08-01T02:49:19.921Z"
     },
     {
       "path": "docs/products/limitlessos/conversations/2026-06-29-founder-ecosystem-session.md",
@@ -66052,8 +66052,8 @@
       "path": "products/receipts/POINT_B_DNA_VERIFY.json",
       "synopsis": "Product receipt — POINT B DNA VERIFY.",
       "bytes": 280,
-      "mtime": "2026-08-01T02:47:33.587Z",
-      "indexed_at": "2026-08-01T02:47:33.587Z",
+      "mtime": "2026-08-01T02:49:19.921Z",
+      "indexed_at": "2026-08-01T02:49:19.921Z",
       "synopsis_index_only": true
     },
     {
@@ -66068,8 +66068,8 @@
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
       "bytes": 18509,
-      "mtime": "2026-08-01T02:47:33.587Z",
-      "indexed_at": "2026-08-01T02:47:33.587Z",
+      "mtime": "2026-08-01T02:49:19.921Z",
+      "indexed_at": "2026-08-01T02:49:19.921Z",
       "synopsis_index_only": true
     },
     {
@@ -66260,16 +66260,16 @@
       "path": "products/receipts/TRUTH_ENFORCEMENT_AUDIT.json",
       "synopsis": "Product receipt — TRUTH ENFORCEMENT AUDIT.",
       "bytes": 701,
-      "mtime": "2026-08-01T02:47:33.587Z",
-      "indexed_at": "2026-08-01T02:47:33.587Z",
+      "mtime": "2026-08-01T02:49:19.921Z",
+      "indexed_at": "2026-08-01T02:49:19.921Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/TRUTH_LOCKDOWN_VERIFY.json",
       "synopsis": "Product receipt — TRUTH LOCKDOWN VERIFY.",
       "bytes": 1141,
-      "mtime": "2026-08-01T02:47:33.587Z",
-      "indexed_at": "2026-08-01T02:47:33.587Z",
+      "mtime": "2026-08-01T02:49:19.921Z",
+      "indexed_at": "2026-08-01T02:49:19.921Z",
       "synopsis_index_only": true
     },
     {
@@ -66300,8 +66300,8 @@
       "path": "products/receipts/WISDOM_TRUTH_AUDIT.json",
       "synopsis": "Product receipt — WISDOM TRUTH AUDIT.",
       "bytes": 735,
-      "mtime": "2026-08-01T02:47:33.587Z",
-      "indexed_at": "2026-08-01T02:47:33.587Z",
+      "mtime": "2026-08-01T02:49:19.921Z",
+      "indexed_at": "2026-08-01T02:49:19.921Z",
       "synopsis_index_only": true
     },
     {
