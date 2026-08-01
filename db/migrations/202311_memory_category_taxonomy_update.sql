@@ -1,5 +1,5 @@
 -- SYNOPSIS: Database migration — 202311_memory_category_taxonomy_update.sql.
-
+-- @ssot docs/products/memory-system/PRODUCT_HOME.md
 -- Create categories table
 CREATE TABLE IF NOT EXISTS memory_categories (
     id SERIAL PRIMARY KEY,
@@ -12,8 +12,16 @@ CREATE TABLE IF NOT EXISTS memory_categories (
 CREATE INDEX IF NOT EXISTS idx_parent_id ON memory_categories(parent_id);
 
 -- Alter existing tables to include memory category references
-ALTER TABLE IF EXISTS existing_table_name
+ALTER TABLE conversation_memory
+ADD COLUMN IF NOT EXISTS memory_category_id INT REFERENCES memory_categories(id);
+
+ALTER TABLE memory_palace
+ADD COLUMN IF NOT EXISTS memory_category_id INT REFERENCES memory_categories(id);
+
+ALTER TABLE memory_capsules
 ADD COLUMN IF NOT EXISTS memory_category_id INT REFERENCES memory_categories(id);
 
 -- Additional index or constraints for the new column if needed
-CREATE INDEX IF NOT EXISTS idx_memory_category_id ON existing_table_name(memory_category_id);
+CREATE INDEX IF NOT EXISTS idx_conversation_memory_category_id ON conversation_memory(memory_category_id);
+CREATE INDEX IF NOT EXISTS idx_memory_palace_category_id ON memory_palace(memory_category_id);
+CREATE INDEX IF NOT EXISTS idx_memory_capsules_category_id ON memory_capsules(memory_category_id);
