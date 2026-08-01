@@ -1852,3 +1852,8 @@ HOW TO RESPOND:
 
   return router;
 }
+
+export async function executeChatIntent(intent, payload) {
+  // Bridge from intent classification to the existing chair turn orchestrator.
+  return runLuminChairTurn(payload?.userMessage, payload?.ctx);
+}
