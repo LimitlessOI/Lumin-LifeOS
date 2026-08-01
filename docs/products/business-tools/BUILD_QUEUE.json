@@ -451,13 +451,13 @@
     },
     {
       "id": "step6",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/entitlementRoutes.js",
       "task": "Create entitlement routes",
       "spec": "Expose entitlements via endpoint to validate feature accesses.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerEntitlementRoutes"
       ],
@@ -480,14 +480,16 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:50:30.222Z",
-      "commit_sha": "c98db53b16bb3cc48bf49dec3dff2bc23d8ab9e3",
+      "commit_sha": "855e584d5fc9c79ddf8b8d79f1aefac0a22f0f33",
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step6",
       "mission_id": "PRODUCT-business-tools",
       "same_signature_count": 0,
       "demoted": false,
       "last_error": "artifact_proof_failed: checkEntitlements",
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T12:13:43.710Z",
+      "completed_at": "2026-08-01T12:15:37.634Z"
     },
     {
       "id": "step7",
@@ -1261,5 +1263,5 @@
   "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-business-tools",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T12:12:44.645Z"
+  "updated_at": "2026-08-01T12:15:37.634Z"
 }
