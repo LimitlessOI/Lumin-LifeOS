@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T15:33:40.769Z",
+  "generated_at": "2026-08-01T15:33:47.850Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12738,
   "files": [
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3847238,
-      "mtime": "2026-08-01T15:32:39.157Z",
-      "indexed_at": "2026-08-01T15:33:35.946Z"
+      "bytes": 3847221,
+      "mtime": "2026-08-01T15:33:45.993Z",
+      "indexed_at": "2026-08-01T15:33:47.850Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -30844,9 +30844,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 50892,
-      "mtime": "2026-08-01T15:00:30.081Z",
-      "indexed_at": "2026-08-01T15:07:45.577Z",
+      "bytes": 51410,
+      "mtime": "2026-08-01T15:29:26.257Z",
+      "indexed_at": "2026-08-01T15:33:45.656Z",
       "synopsis_index_only": true
     },
     {
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1908,
-      "mtime": "2026-08-01T14:57:44.877Z",
-      "indexed_at": "2026-08-01T15:07:45.577Z",
+      "bytes": 617,
+      "mtime": "2026-08-01T15:25:40.509Z",
+      "indexed_at": "2026-08-01T15:33:45.656Z",
       "synopsis_index_only": true
     },
     {
@@ -41192,9 +41192,9 @@
     {
       "path": "docs/products/builderos/GAP_FILL_LEDGER.json",
       "synopsis": "Documentation — GAP FILL LEDGER.",
-      "bytes": 60366,
-      "mtime": "2026-08-01T14:41:47.021Z",
-      "indexed_at": "2026-08-01T14:41:55.606Z",
+      "bytes": 64206,
+      "mtime": "2026-08-01T15:31:29.213Z",
+      "indexed_at": "2026-08-01T15:33:45.656Z",
       "synopsis_index_only": true
     },
     {
@@ -70725,9 +70725,9 @@
     {
       "path": "routes/marketing-campaign-routes.js",
       "synopsis": "API routes for generating and retrieving marketing campaign assets.",
-      "bytes": 1229,
-      "mtime": "2026-08-01T15:20:32.679Z",
-      "indexed_at": "2026-08-01T15:20:32.679Z",
+      "bytes": 1231,
+      "mtime": "2026-08-01T15:32:39.137Z",
+      "indexed_at": "2026-08-01T15:33:45.656Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -70755,9 +70755,9 @@
     {
       "path": "routes/marketing-performance-intel-routes.js",
       "synopsis": "Exposes API routes for marketing performance learning insights.",
-      "bytes": 1177,
-      "mtime": "2026-08-01T15:17:27.277Z",
-      "indexed_at": "2026-08-01T15:17:27.277Z",
+      "bytes": 1179,
+      "mtime": "2026-08-01T15:32:39.137Z",
+      "indexed_at": "2026-08-01T15:33:45.656Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -93200,10 +93200,10 @@
     },
     {
       "path": "services/marketing-campaign-generator.js",
-      "synopsis": "Generates campaign assets for various marketing channels using AI.",
-      "bytes": 2833,
-      "mtime": "2026-08-01T15:19:01.968Z",
-      "indexed_at": "2026-08-01T15:19:01.968Z",
+      "synopsis": "Generates and retrieves marketing campaign assets.",
+      "bytes": 3163,
+      "mtime": "2026-08-01T15:32:39.137Z",
+      "indexed_at": "2026-08-01T15:33:45.656Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
