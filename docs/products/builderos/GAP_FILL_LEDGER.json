@@ -543,6 +543,14 @@
       "added_real_lines": 65,
       "justification": "all AI providers are rate-limit/credit exhausted (BLOCKED_TOOLING / HTTP 502) and false-done audit showed these done steps were missing from main or failed spine import resolution. Deterministic repairs only: filename/imports and a DB query helper.\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
       "commit_message_excerpt": "GAP-FILL: restore marketingos phase 5-7 analytics/campaign intelligence artifacts. Recovered db/migrations/20260715_marketing_performance_analytics.sql, services/marketing-analytics-ingest.js, service"
+    },
+    {
+      "at": "2026-08-01T15:42:56.392Z",
+      "file": "routes/marketing-director-routes.js",
+      "is_new_file": true,
+      "added_real_lines": 25,
+      "justification": "bp-priority:once selected s11 (routes/marketing-director-routes.js) but the file did not exist on main; all AI providers are rate-limit/credit exhausted, so deterministic route wiring was hand-authored from the BUILD_QUEUE spec.\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
+      "commit_message_excerpt": "GAP-FILL: add routes/marketing-director-routes.js (s11) and auto-register for marketingos director routes. HAND-AUTHORED-JUSTIFICATION: bp-priority:once selected s11 (routes/marketing-director-routes."
     }
   ]
 }
