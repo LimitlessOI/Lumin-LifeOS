@@ -17,9 +17,9 @@
     "outcome": {
       "ok": false,
       "step_id": "builderos-step7",
-      "stage": "artifact_proof",
-      "reason": "artifact_proof_failed: missing_exports:registerCommitmentRoutes; registerCommitmentRoutes",
-      "attempts": 1,
+      "stage": "functional_proof",
+      "reason": "route module not auto-registered — add {\"path\":\"routes/commitment-routing.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
+      "attempts": 2,
       "blocked": false,
       "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
@@ -65,5 +65,5 @@
     }
   },
   "cycles": 1,
-  "updated_at": "2026-08-01T08:24:51.288Z"
+  "updated_at": "2026-08-01T08:27:55.400Z"
 }

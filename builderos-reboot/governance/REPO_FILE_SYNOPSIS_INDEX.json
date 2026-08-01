@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T08:25:32.540Z",
+  "generated_at": "2026-08-01T08:28:29.236Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12677,
   "files": [
@@ -30844,9 +30844,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 30397,
-      "mtime": "2026-08-01T05:46:54.296Z",
-      "indexed_at": "2026-08-01T05:46:54.296Z",
+      "bytes": 35929,
+      "mtime": "2026-08-01T08:28:05.916Z",
+      "indexed_at": "2026-08-01T08:28:29.236Z",
       "synopsis_index_only": true
     },
     {
@@ -33104,9 +33104,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1830,
-      "mtime": "2026-08-01T08:24:51.284Z",
-      "indexed_at": "2026-08-01T08:25:32.540Z",
+      "bytes": 2006,
+      "mtime": "2026-08-01T08:27:55.396Z",
+      "indexed_at": "2026-08-01T08:28:29.236Z",
       "synopsis_index_only": true
     },
     {
@@ -41136,9 +41136,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 380304,
-      "mtime": "2026-08-01T08:25:21.368Z",
-      "indexed_at": "2026-08-01T08:25:32.540Z"
+      "bytes": 380960,
+      "mtime": "2026-08-01T08:28:20.752Z",
+      "indexed_at": "2026-08-01T08:28:29.236Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -65463,9 +65463,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 3992,
-      "mtime": "2026-08-01T08:18:53.864Z",
-      "indexed_at": "2026-08-01T08:20:19.843Z",
+      "bytes": 3578,
+      "mtime": "2026-08-01T08:27:27.632Z",
+      "indexed_at": "2026-08-01T08:28:29.236Z",
       "synopsis_index_only": true
     },
     {
