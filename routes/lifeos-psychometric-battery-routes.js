@@ -2,19 +2,27 @@
  * SYNOPSIS: Psychometric battery HTTP routes for purpose-discovery priors.
  * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
+import express from 'express';
+import { requireLifeOSUser } from '../middleware/lifeos-auth-middleware.js';
 import {
   createPsychometricBatteryService,
   listPsychometricInstruments,
 } from '../services/lifeos-psychometric-battery.js';
 
-export function registerLifeosPsychometricBatteryRoutes(app, deps) {
-  const svc = createPsychometricBatteryService({ pool: deps.pool });
+// /psychometric-battery route registration alias for BUILD_QUEUE step5 compatibility
+export function registerPsychometricRoutes(app, { pool } = {}) {
+  app.use('/psychometric-battery', createPsychometricBatteryRoutes({ pool }));
+}
 
-  app.get('/api/v1/lifeos/psychometric-battery/instruments', deps.requireKey, (_req, res) => {
+export function createPsychometricBatteryRoutes({ pool } = {}) {
+  const router = express.Router();
+  const svc = createPsychometricBatteryService({ pool });
+
+  router.get('/instruments', (_req, res) => {
     res.json({ ok: true, instruments: listPsychometricInstruments() });
   });
 
-  app.get('/api/v1/lifeos/psychometric-battery/me', deps.requireKey, async (req, res, next) => {
+  router.get('/me', requireLifeOSUser, async (req, res, next) => {
     try {
       res.json({ ok: true, profile: await svc.getProfile(req.lifeosUser.sub) });
     } catch (err) {
@@ -22,7 +30,7 @@ export function registerLifeosPsychometricBatteryRoutes(app, deps) {
     }
   });
 
-  app.post('/api/v1/lifeos/psychometric-battery/me', deps.requireKey, async (req, res, next) => {
+  router.post('/me', requireLifeOSUser, async (req, res, next) => {
     try {
       const { instrument, answers, result_label: resultLabel } = req.body || {};
       const saved = await svc.saveResponse(req.lifeosUser.sub, instrument, answers || {}, resultLabel);
@@ -32,11 +40,17 @@ export function registerLifeosPsychometricBatteryRoutes(app, deps) {
     }
   });
 
-  app.get('/api/v1/lifeos/psychometric-battery/purpose-priors', deps.requireKey, async (req, res, next) => {
+  router.get('/purpose-priors', requireLifeOSUser, async (req, res, next) => {
     try {
       res.json(await svc.purposePriors(req.lifeosUser.sub));
     } catch (err) {
       next(err);
     }
   });
+
+  return router;
+}
+
+export function registerLifeosPsychometricBatteryRoutes(app, deps = {}) {
+  app.use('/api/v1/lifeos/psychometrics', createPsychometricBatteryRoutes(deps));
 }
