@@ -172,7 +172,7 @@
     },
     {
       "id": "step2",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/video-routes.js",
       "task": "extract video endpoints",
       "spec": "Endpoints related to video pipeline are extracted from server.js and moved here.",
@@ -180,7 +180,7 @@
         "step1"
       ],
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 3,
       "expected_exports": [
         "registerVideoRoutes"
       ],
@@ -201,12 +201,13 @@
       "blueprint_step_id": "step2",
       "mission_id": "PRODUCT-video-pipeline",
       "same_signature_count": 1,
-      "last_attempt_at": "2026-08-01T11:37:07.328Z",
+      "last_attempt_at": "2026-08-01T11:41:08.969Z",
       "last_error": "grounding_failed: import_source_missing: ./core/video-generator.js; import_source_missing: ./core/video-editing-council.js; import_source_missing: ./core/video-editing-council.js",
       "blocker_class": "BLOCKED_TOOLING",
       "failure_signature": "grounding|BLOCKED_TOOLING|grounding_failed: import_source_missing: ./core/video-generator.js; import_source_missing: ./core/video-editing-council.js; import_source_missing: ./core/video-editing-council.js",
-      "commit_sha": "07f2d0326ac3e625446acee9605bc393e3e6aaab",
-      "artifact_proven": true
+      "commit_sha": "3b2529c66427108189cd5ed14a9aa57272dab25a",
+      "artifact_proven": true,
+      "completed_at": "2026-08-01T11:41:09.519Z"
     },
     {
       "id": "step3",
@@ -318,5 +319,5 @@
   "blueprint_id": "PRODUCT-VIDEO-PIPELINE-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-video-pipeline",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T11:37:07.386Z"
+  "updated_at": "2026-08-01T11:41:09.520Z"
 }
