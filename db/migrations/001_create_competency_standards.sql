@@ -28,3 +28,5 @@ CREATE TRIGGER trg_lumin_competency_standards_updated_at
 BEFORE UPDATE ON lumin_competency_standards
 FOR EACH ROW
 EXECUTE FUNCTION update_updated_at_column();
+
+--

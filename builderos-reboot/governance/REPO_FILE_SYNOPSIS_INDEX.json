@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T00:04:45.685Z",
+  "generated_at": "2026-08-01T00:07:04.603Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12638,
   "files": [
@@ -34341,9 +34341,9 @@
     {
       "path": "db/migrations/001_create_competency_standards.sql",
       "synopsis": "Database migration — 001_create_competency_standards.sql.",
-      "bytes": 1197,
-      "mtime": "2026-08-01T00:04:45.685Z",
-      "indexed_at": "2026-08-01T00:04:45.685Z"
+      "bytes": 1201,
+      "mtime": "2026-08-01T00:07:04.603Z",
+      "indexed_at": "2026-08-01T00:07:04.603Z"
     },
     {
       "path": "db/migrations/001_create_energy_tables.sql",
