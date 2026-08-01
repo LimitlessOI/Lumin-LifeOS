@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T10:02:10.848Z",
+  "generated_at": "2026-08-01T10:04:56.769Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -95469,10 +95469,10 @@
     },
     {
       "path": "services/sticker-marketing-skus.js",
-      "synopsis": "New function to enhance SKUs with tier-based bundles",
-      "bytes": 934,
-      "mtime": "2026-07-16T19:42:53.616Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis": "Create new SKUs bundling website, automation, and social features.",
+      "bytes": 1901,
+      "mtime": "2026-08-01T10:04:56.769Z",
+      "indexed_at": "2026-08-01T10:04:56.769Z",
       "ssot": [
         "docs/products/limitlessos/PRODUCT_HOME.md"
       ]
