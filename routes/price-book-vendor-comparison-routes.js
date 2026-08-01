@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Provides an endpoint for accessing vendor comparison data.
  * @ssot docs/products/limitlessos/PRODUCT_HOME.md
  */
 /**
@@ -21,13 +22,6 @@ export function registerPriceBookVendorComparisonRoutes(app) {
         explanation: getExplanationForItem(item),
       }));
     }
-
-    if (excludeCriteria) {
-      // Exclude data based on specified criteria
-      filteredData = filteredData.filter(item => !matchesCriteria(item, excludeCriteria));
-    }
-
-    res.json(filteredData);
   });
 }
 
