@@ -146,26 +146,28 @@
     },
     {
       "id": "6",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/interview-summary.mjs",
       "task": "Summarize parent interviews",
       "spec": "Compile and summarize insights from interviews with 10 parents (homeschool and traditional).",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "route": {
         "path": "/"
       },
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T17:49:58.501Z",
-      "commit_sha": "2d40f2402fe544b0a22589d6b0ffae1dc903fc84",
+      "commit_sha": "6a5e6ecfe9b25a7c709c8a52329b6b85ee77f1f1",
       "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "6",
       "mission_id": "PRODUCT-kids-os",
       "same_signature_count": 0,
       "demoted": false,
       "last_error": "no_proof_required_non_server_code",
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T13:22:47.750Z",
+      "completed_at": "2026-08-01T13:23:08.730Z"
     },
     {
       "id": "7",
@@ -1032,6 +1034,6 @@
   "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-kids-os",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T13:14:33.979Z",
+  "updated_at": "2026-08-01T13:23:08.731Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/kids-os/BUILD_QUEUE.json"
 }
