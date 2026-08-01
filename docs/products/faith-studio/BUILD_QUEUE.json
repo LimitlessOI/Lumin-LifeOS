@@ -2125,7 +2125,7 @@
     },
     {
       "id": "09",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/advisoryCouncilProcess.js",
       "task": "define advisory council process",
       "spec": "Define the advisory council process for reviewing sacred content for accuracy and sensitivity.",
@@ -2153,7 +2153,7 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-31T10:17:02.934Z",
-      "commit_sha": null,
+      "commit_sha": "19132690a313d0d079f7c5b830f4b28746040ff9",
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "09",
       "mission_id": "PRODUCT-faith-studio",
@@ -2188,10 +2188,10 @@
       },
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-07-31T10:48:49.819Z",
+      "last_attempt_at": "2026-08-01T05:09:48.204Z",
       "last_attempt": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-31T10:33:16.916Z",
+      "revive_count": 3,
+      "revived_at": "2026-08-01T05:09:48.203Z",
       "no_op": null,
       "demoted": false,
       "demote_reason": null,
@@ -2200,7 +2200,8 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "completed_at": "2026-08-01T05:10:04.507Z"
     },
     {
       "id": "10",
@@ -2653,5 +2654,6 @@
   ],
   "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-faith-studio",
-  "twin_kind": "product_build_queue_registered"
+  "twin_kind": "product_build_queue_registered",
+  "updated_at": "2026-08-01T05:10:04.507Z"
 }
