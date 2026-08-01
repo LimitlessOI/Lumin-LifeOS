@@ -278,7 +278,7 @@
     },
     {
       "id": "boldtrail-step2",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/leadScoring.js",
       "task": "expose segment scoring route",
       "spec": "Create a route to apply and return the scored segment description based on the new scoring rubric method.",
@@ -286,7 +286,7 @@
         "boldtrail-step1"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "expected_exports": [
         "registerLeadScoringRoutes"
       ],
@@ -310,7 +310,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:46:40.352Z",
-      "commit_sha": "4ada3383d7e14bc3246ec477b338a9dd0c51dab5",
+      "commit_sha": "dbf606d9f712de4cf214160cf189825c081df1ab",
       "blueprint_id": "PRODUCT-BOLDTRAIL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "boldtrail-step2",
       "mission_id": "PRODUCT-boldtrail",
@@ -318,13 +318,14 @@
       "demoted": false,
       "last_error": "artifact_proof_failed: missing_exports:registerLeadScoringRoutes; registerLeadScoringRoutes",
       "heal_unblocked": true,
-      "last_attempt_at": "2026-08-01T12:29:27.779Z",
+      "last_attempt_at": "2026-08-01T12:33:36.963Z",
       "blocker_class": "BLOCKED_TOOLING",
-      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: missing_exports:registerLeadScoringRoutes; registerLeadScoringRoutes"
+      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: missing_exports:registerLeadScoringRoutes; registerLeadScoringRoutes",
+      "completed_at": "2026-08-01T12:33:37.230Z"
     }
   ],
   "blueprint_id": "PRODUCT-BOLDTRAIL-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-boldtrail",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T12:29:42.326Z"
+  "updated_at": "2026-08-01T12:33:37.230Z"
 }
