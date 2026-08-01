@@ -7,7 +7,6 @@
  * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import fs from 'node:fs';
-import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { authorAssertionsFromSpec } from '../factory-staging/factory-core/bpb/author-assertions.js';
@@ -241,7 +240,10 @@ export async function evaluateStepExpectations(step, {
     try {
       const content = await defaultRead(relPath);
       if (typeof content !== 'string') return undefined;
-      const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'lumin-import-'));
+      // Create the temp file inside the repo so relative `../services/...` imports
+      // resolve to real repo files instead of the OS temp directory (where the
+      // import would look for `/tmp/services/...` and fail).
+      const tmpDir = fs.mkdtempSync(path.join(root, '.lumin-import-'));
       const tmpFile = path.join(tmpDir, `${path.basename(relPath, path.extname(relPath))}.mjs`);
       fs.writeFileSync(tmpFile, content, 'utf8');
       try {

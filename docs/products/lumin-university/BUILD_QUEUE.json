@@ -629,12 +629,12 @@
       "status": "pending",
       "target_file": "routes/evaluatorMentorRoutes.js",
       "task": "create route module",
-      "spec": "Routes for evaluator and mentor qualifications management.",
+      "spec": "Routes for evaluator and mentor qualifications management. The upstream service `services/evaluatorMentorQualification.js` exports `getEvaluatorMentorCriteria`, `getQualifications`, and `setQualification`.",
       "depends_on": [
         "step2"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerEvaluatorMentorRoutes"
       ],
@@ -657,9 +657,9 @@
       "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step3",
       "mission_id": "PRODUCT-lumin-university",
-      "last_error": "artifact_proof_failed: missing_exports:registerEvaluatorMentorRoutes",
-      "last_attempt_at": "2026-08-01T01:14:40.263Z",
-      "blocker_class": "BLOCKED_TOOLING",
+      "last_error": null,
+      "last_attempt_at": null,
+      "blocker_class": null,
       "claim_level": null,
       "park_until": null,
       "revive_count": 0,
@@ -670,7 +670,8 @@
         "claimed_shipped_at": "2026-07-16T03:53:45.057Z",
         "reason": "commit_sha exists in repo but is not an ancestor of origin/main -- ship landed on origin/builderos-autonomous or origin/builderos-shadow instead of main (GITHUB_DEPLOY_BRANCH mismatch), and the content itself was placeholder/stub code (verified by direct inspection), not a real implementation. Confirmed via: git merge-base --is-ancestor <sha> origin/main."
       },
-      "same_signature_count": 0
+      "same_signature_count": 1,
+      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: missing_exports:registerEvaluatorMentorRoutes"
     },
     {
       "id": "step4",

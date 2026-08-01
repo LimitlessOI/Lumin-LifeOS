@@ -32,6 +32,7 @@ archive/
 # Self-programming artifacts
 new_feature.js*
 generated_*.js
+.lumin-import-*/
 
 # Legacy cleanup (can be removed after verification)
 file_9.js

@@ -27,6 +27,12 @@
       "note": "Lumin University accreditation structure route (GET /api/v1/accreditation/structure). Built by governed factory; auto-registered so module-health can prove it mounts LIVE."
     },
     {
+      "path": "routes/evaluatorMentorRoutes.js",
+      "register": "registerEvaluatorMentorRoutes",
+      "enabled": true,
+      "note": "Lumin University evaluator/mentor qualification routes. Built by governed factory; auto-registered so module-health can prove it mounts LIVE."
+    },
+    {
       "path": "routes/lifeos-food-logger-routes.js",
       "register": "registerLifeosFoodLoggerRoutes",
       "mount_path": "/api/v1/lifeos/food",

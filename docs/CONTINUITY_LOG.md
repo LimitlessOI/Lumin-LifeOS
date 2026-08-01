@@ -1,8 +1,8 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
-## 2026-08-02 — GAP-FILL: `lumin-university` step `step1` (evaluator/mentor migration) aligned
+## 2026-08-02 — GAP-FILL: `lumin-university` steps `step1`–`step3` artifact-proof + auto-register fixes
 
-`lumin-university` steps 9 and 10 completed. Step `step1` (`db/migrations/005_create_evaluator_mentor_qualification.sql`) built to `f587d469` but artifact proof failed because `file_contains` expected `evaluator_mentor_qualifications` while the generated migration named the table `mentor_qualifications`. Updated the step `spec` and `file_contains` to match the generated artifact. Also fixed `product-build-orchestrator.js` `defaultImportModule` to write `.mjs` temp files and read commit content from `git show` so artifact proof works before checkout. Next: commit queue reset, continue `bp-priority:once` through remaining steps.
+`lumin-university` step `step1` (migration `005`) completed after aligning `file_contains` to the generated `mentor_qualifications` table. Step `step3` (`routes/evaluatorMentorRoutes.js`) artifact proof failed because `defaultImportModule` created temp files in `/tmp` and relative `../services/...` imports resolved to `/tmp/services/...` (missing). Fixed `product-build-orchestrator.js` to create `.mjs` temp files inside the repo root so relative imports resolve to real repo files, and added `.lumin-import-*` to `.gitignore`. Also added `routes/evaluatorMentorRoutes.js` to `config/auto-registered-product-modules.json` so the module-health gate can prove it mounts. Next: commit, redeploy, continue `bp-priority:once` through remaining steps.
 
 ## 2026-08-01 — GAP-FILL: grounding + auto-register + builder-lane failover shipped; never-stop factory advancing
 
