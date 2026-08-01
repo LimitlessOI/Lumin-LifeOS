@@ -3,7 +3,7 @@
   "product_id": "limitlessos",
   "verify_script": "scripts/verify-go-vegas-scheduler.mjs",
   "notes": "Go Vegas revenue slice — outreach pipeline v1 already shipped as code; this queue closes the last mile to live revenue: scheduler tick (daily discover/invite/follow-up under caps), dry-run proof script, and SENTRY-facing status receipt. No founder UI in this slice.",
-  "updated_at": "2026-08-01T10:05:02.645Z",
+  "updated_at": "2026-08-01T10:06:12.573Z",
   "steps": [
     {
       "id": "gv-scheduler",
@@ -1335,7 +1335,7 @@
         "limitlessos-step6"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerBundleSocialAutomationRoutes"
       ],
@@ -1364,8 +1364,10 @@
       "mission_id": "PRODUCT-limitlessos",
       "same_signature_count": 0,
       "demoted": false,
-      "last_error": "artifact_proof_failed: createBundleSKUs",
-      "heal_unblocked": true
+      "last_error": "Pre-commit syntax check failed — commit blocked",
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T10:05:22.372Z",
+      "blocker_class": "BLOCKED_TOOLING"
     },
     {
       "id": "limitlessos-1",
