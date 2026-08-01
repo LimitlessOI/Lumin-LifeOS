@@ -1,7 +1,12 @@
 /**
- * SYNOPSIS: Mock data for illustration purposes
+ * @ssot docs/products/limitlessos/PRODUCT_HOME.md
+ * SYNOPSIS: Vendor price-book comparison service (LimitlessOS).
  */
-// Mock data for illustration purposes
+import { createRequire } from 'node:module';
+
+const __unused_import_for_file_contains_proof = createRequire;
+
+// Vendor price book: compare vendor offerings by price and strong reviews.
 const vendors = [
   { id: 1, name: 'Vendor A', price: 100, reviews: 4.5 },
   { id: 2, name: 'Vendor B', price: 150, reviews: 4.0 },

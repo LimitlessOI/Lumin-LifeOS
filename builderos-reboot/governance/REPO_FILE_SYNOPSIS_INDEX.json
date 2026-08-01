@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T09:38:34.438Z",
+  "generated_at": "2026-08-01T09:41:51.390Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1968,
-      "mtime": "2026-08-01T09:37:46.248Z",
-      "indexed_at": "2026-08-01T09:38:34.438Z",
+      "bytes": 1694,
+      "mtime": "2026-08-01T09:41:19.528Z",
+      "indexed_at": "2026-08-01T09:41:51.390Z",
       "synopsis_index_only": true
     },
     {
@@ -42115,9 +42115,9 @@
     {
       "path": "docs/products/limitlessos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LimitlessOS business stack",
-      "bytes": 15266,
-      "mtime": "2026-08-01T09:38:22.940Z",
-      "indexed_at": "2026-08-01T09:38:34.438Z"
+      "bytes": 15985,
+      "mtime": "2026-08-01T09:41:42.416Z",
+      "indexed_at": "2026-08-01T09:41:51.390Z"
     },
     {
       "path": "docs/products/lip/FILE_MANIFEST.json",
@@ -96575,10 +96575,13 @@
     },
     {
       "path": "services/vendor-price-book.js",
-      "synopsis": "Mock data for illustration purposes",
-      "bytes": 889,
-      "mtime": "2026-07-15T08:32:59.629Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "synopsis": "Vendor price-book comparison service (LimitlessOS).",
+      "bytes": 1103,
+      "mtime": "2026-08-01T09:41:31.036Z",
+      "indexed_at": "2026-08-01T09:41:51.390Z",
+      "ssot": [
+        "docs/products/limitlessos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/victory-vault.js",
