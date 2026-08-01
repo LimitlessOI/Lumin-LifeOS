@@ -21,6 +21,12 @@
       "note": "Lumin University credential verification route (POST /api/v1/credentials/verify). Built by governed factory; auto-registered so module-health can prove it mounts LIVE."
     },
     {
+      "path": "routes/accreditationRoutes.js",
+      "register": "registerAccreditationRoutes",
+      "enabled": true,
+      "note": "Lumin University accreditation structure route (GET /api/v1/accreditation/structure). Built by governed factory; auto-registered so module-health can prove it mounts LIVE."
+    },
+    {
       "path": "routes/lifeos-food-logger-routes.js",
       "register": "registerLifeosFoodLoggerRoutes",
       "mount_path": "/api/v1/lifeos/food",

@@ -331,7 +331,7 @@
       "status": "pending",
       "target_file": "routes/accreditationRoutes.js",
       "task": "add accreditation route",
-      "spec": "Route for accreditation structure API.",
+      "spec": "Add an Express route module for the accreditation structure API. The file must start with a JSDoc block containing `@ssot docs/products/lumin-university/PRODUCT_HOME.md`. Export a named function `registerAccreditationRoutes(app, deps)` that mounts a GET `/api/v1/accreditation/structure` route. Use `deps.requireKey` on the route. Read `institutionId` from `req.query`. Import `getAccreditationStructure` from `../services/accreditationService.js` and call `await getAccreditationStructure(deps, { institutionId })`. Respond with the result JSON. On error, call `deps.logger.error({ error }, 'Error fetching accreditation structure')` and `next(error)`. Output plain ESM JavaScript only. Do NOT define service functions inside the route file.",
       "depends_on": [
         "7"
       ],
@@ -339,6 +339,12 @@
       "attempts": 1,
       "expected_exports": [
         "registerAccreditationRoutes"
+      ],
+      "file_contains": [
+        "import { getAccreditationStructure } from '../services/accreditationService.js'",
+        "req.query",
+        "getAccreditationStructure(deps",
+        "deps.logger.error({ error }"
       ],
       "route": {
         "method": "GET",

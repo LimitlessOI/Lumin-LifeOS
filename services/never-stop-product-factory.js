@@ -1301,9 +1301,20 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
         ...(/^(services|routes|middleware|factory-staging)\//.test(target_file) ? { model: 'openai_builder_standard' } : {}),
       };
       // Inject the upstream service implementation so route modules call real deps
-      // instead of hallucinating sibling imports.
-      if (/^routes\//.test(target_file) && fs.existsSync(path.join(ROOT, 'services/credentialVerification.js'))) {
-        buildBody.files = ['services/credentialVerification.js'];
+      // instead of hallucinating sibling imports. Pick the service whose basename
+      // matches the route base (e.g. credentialVerificationRoutes -> credentialVerification.js,
+      // accreditationRoutes -> accreditationService.js).
+      if (/^routes\//.test(target_file)) {
+        const routeBaseName = path.basename(target_file).replace(/Routes\.js$/i, '');
+        try {
+          const serviceDir = path.join(ROOT, 'services');
+          const candidates = fs.readdirSync(serviceDir)
+            .filter((f) => /\.m?js$/.test(f) && f.toLowerCase().startsWith(routeBaseName.toLowerCase()))
+            .map((f) => `services/${f}`);
+          if (candidates.length) {
+            buildBody.files = candidates.slice(0, 2);
+          }
+        } catch { /* no service dir */ }
       }
       const build = await postBuilderBuild(baseUrl, commandKey, buildBody);
       const b = build.body || {};
