@@ -3,7 +3,7 @@
   "product_id": "site-builder",
   "verify_script": "scripts/sentry-site-builder-prealpha-gate.mjs",
   "notes": "Structured, ordered build steps the autonomous product-build orchestrator executes one at a time via the /build primitive. Each step is a single-file, well-specified task with a concrete acceptance. Free-form prose build plans live in PRODUCT_HOME; THIS file is the machine-executable queue. COMPLETION GATE (SO-002): verify_script runs the SENTRY two-layer pre-alpha gate — Layer A (structural HTTP) always, Layer B (human-sim real browser + UX critique) whenever prod creds are present — and fails closed. No step is 'done' until SENTRY passes as a real client. Prior lane check (scripts/verify-site-builder-lane.mjs) still runnable via `npm run verify:site-builder`.",
-  "updated_at": "2026-08-01T06:30:50.966Z",
+  "updated_at": "2026-08-01T09:13:52.513Z",
   "steps": [
     {
       "id": "sb-deliverability-gate",
@@ -1928,14 +1928,14 @@
       "spec": "Adds new template options for site-builder to increase design choices.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS"
       ],
       "design_review_flagged": true,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-01T09:13:41.670Z",
       "last_error": "artifact_proof_failed: CREATE TABLE IF NOT EXISTS",
-      "commit_sha": "9ff91877d4467e209822115ce0773cf478054211",
+      "commit_sha": "0c12dcc572a49a9b8d76eee4babdd6b63f13e955",
       "built_sha": null,
       "proof": null,
       "failure_signature": "NOT_ON_BLUEPRINT",
@@ -1950,7 +1950,7 @@
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
-      "blocker_class": null,
+      "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
