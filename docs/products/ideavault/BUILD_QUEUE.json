@@ -65,7 +65,7 @@
       "spec": "Run memory import script for large exports, interfacing with import-dumps-to-twin.js.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "import-dumps-to-twin"
       ],
@@ -75,10 +75,13 @@
       "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "2",
       "mission_id": "PRODUCT-ideavault",
-      "same_signature_count": 0,
+      "same_signature_count": 1,
       "demoted": false,
-      "last_error": "artifact_proof_failed: import-dumps-to-twin",
-      "heal_unblocked": true
+      "last_error": "Pre-commit governance blocked — anti-pattern, stub, or verifier failure",
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T10:59:48.343Z",
+      "blocker_class": "BLOCKED_TOOLING",
+      "failure_signature": "build|BLOCKED_TOOLING|Pre-commit governance blocked — anti-pattern, stub, or verifier failure"
     },
     {
       "id": "3",
@@ -712,6 +715,5 @@
   "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-ideavault",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:30:32.012Z",
-  "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/ideavault/BUILD_QUEUE.json"
+  "updated_at": "2026-08-01T11:00:07.887Z"
 }

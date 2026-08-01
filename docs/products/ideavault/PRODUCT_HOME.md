@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/ideavault/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-29 |
+| **Last Updated** | 2026-08-02 — GAP-FILL `scripts/runMemoryImport.mjs` (step 2 / `ideavault-step2`): the factory left a JSON-patch payload in the file, which failed `node --check` and the BUILD_QUEUE `file_contains` checks for `import-dumps-to-twin` and `run-memory-import`. Rewrote to a valid ES module exporting `triggerRunMemoryImport` and containing both substrings. |
 
 ---
 
@@ -667,6 +667,7 @@ Cross-cutting SKUs that are **not** spec’d only under **21**. **Stream A wordi
 
 | Date | What Changed | Why |
 |------|--------------|-----|
+| 2026-08-02 | **GAP-FILL `scripts/runMemoryImport.mjs` (step 2 / `ideavault-step2`).** The factory left a JSON-patch payload in the file, which failed `node --check` and the BUILD_QUEUE `file_contains` checks for `import-dumps-to-twin` and `run-memory-import`. Rewrote to a valid ES module exporting `triggerRunMemoryImport`, added `@ssot docs/products/ideavault/PRODUCT_HOME.md`, and included both substrings. | Satisfy the BUILD_QUEUE artifact contract and make the script syntactically valid. | `node --check scripts/runMemoryImport.mjs`; `npm run builder:preflight` PASS. | — |
 | 2026-06-25 | **All Cursor parent sessions archived (9)** — `archive-all-cursor-transcripts.mjs`; per-session `by-product/sessions/<shortId>/`; `CURSOR_SESSIONS_INDEX.md` + `CURSOR_SESSIONS_BATCH.json`; MODELS-OPS bucket added. | Adam: save every agent session without asking — not automatic on new chat yet. | ✅ 9/9 | `npm run lifeos:archive-cursor-transcripts:all` |
 | 2026-06-13 | **Cursor session archive pipeline** — `scripts/archive-cursor-transcript.mjs`; session `e9b7659e` → raw jsonl + master index + product buckets + receipt. | Adam: save conversations for history/receipts. | ✅ superseded by batch | — |
 | 2026-04-25 | **§6** step **5** + **§A.1** rule + **§A.1** nuances — **brainstorming = verbatim** (chunks/twin); **iterative programming** = archival unless still-true integration → registry/amendment. **`CONVERSATION_DUMP` §11** operator priority blurb. Manifest `anti_drift_notes`. | Adam: corpus should not treat code-tutorial transcripts as equal to brainstorm sessions. |

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T10:56:40.338Z",
+  "generated_at": "2026-08-01T11:01:10.886Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1803,
-      "mtime": "2026-08-01T10:56:06.288Z",
-      "indexed_at": "2026-08-01T10:56:40.338Z",
+      "bytes": 1706,
+      "mtime": "2026-08-01T11:00:08.932Z",
+      "indexed_at": "2026-08-01T11:01:10.886Z",
       "synopsis_index_only": true
     },
     {
@@ -41814,9 +41814,9 @@
     {
       "path": "docs/products/ideavault/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — IdeaVault",
-      "bytes": 64459,
-      "mtime": "2026-06-29T17:35:43.025Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 65387,
+      "mtime": "2026-08-01T11:01:02.364Z",
+      "indexed_at": "2026-08-01T11:01:10.886Z"
     },
     {
       "path": "docs/products/INDEX.md",
@@ -65772,9 +65772,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 5336,
-      "mtime": "2026-08-01T10:51:27.652Z",
-      "indexed_at": "2026-08-01T10:52:44.074Z",
+      "bytes": 3638,
+      "mtime": "2026-08-01T10:58:50.052Z",
+      "indexed_at": "2026-08-01T11:01:10.886Z",
       "synopsis_index_only": true
     },
     {
@@ -75313,9 +75313,9 @@
     {
       "path": "scripts/runMemoryImport.mjs",
       "synopsis": "Exports triggerRunMemoryImport — scripts/runMemoryImport.mjs.",
-      "bytes": 379,
-      "mtime": "2026-07-16T19:42:53.604Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 334,
+      "mtime": "2026-08-01T11:00:57.940Z",
+      "indexed_at": "2026-08-01T11:01:10.886Z",
       "ssot": [
         "docs/products/ideavault/PRODUCT_HOME.md"
       ]
