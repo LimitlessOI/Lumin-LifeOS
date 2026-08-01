@@ -11,13 +11,13 @@
   "steps": [
     {
       "id": "1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/decisionDebt.js",
       "task": "implement decision debt surface",
       "spec": "This service provides an API to surface decision debt details for projects.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "expected_exports": [
         "getDecisionDebt"
       ],
@@ -37,7 +37,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T07:31:21.494Z",
-      "commit_sha": "e5b67ff1de19e2233208d8d27024173f954d071e",
+      "commit_sha": "b619d18e6fd1af05f1f9bed4d7e8895a6b3fdd5d",
       "blueprint_id": "PRODUCT-PROJECT-GOVERNANCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "1",
       "mission_id": "PRODUCT-project-governance",
@@ -45,9 +45,10 @@
       "demoted": false,
       "last_error": "artifact_proof_failed: function getDecisionDebt(){; return {}",
       "heal_unblocked": true,
-      "last_attempt_at": "2026-08-01T10:43:22.211Z",
+      "last_attempt_at": "2026-08-01T10:47:12.314Z",
       "blocker_class": "BLOCKED_TOOLING",
-      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: function getDecisionDebt(){; return {}"
+      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: function getDecisionDebt(){; return {}",
+      "completed_at": "2026-08-01T10:47:12.356Z"
     },
     {
       "id": "2",
@@ -342,5 +343,5 @@
   "blueprint_id": "PRODUCT-PROJECT-GOVERNANCE-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-project-governance",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T10:43:34.976Z"
+  "updated_at": "2026-08-01T10:47:12.356Z"
 }
