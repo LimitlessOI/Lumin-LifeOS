@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T10:17:20.063Z",
+  "generated_at": "2026-08-01T10:17:58.607Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3839149,
-      "mtime": "2026-08-01T09:58:35.868Z",
-      "indexed_at": "2026-08-01T09:58:47.020Z"
+      "bytes": 3839233,
+      "mtime": "2026-08-01T10:17:26.284Z",
+      "indexed_at": "2026-08-01T10:17:53.478Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -41164,9 +41164,9 @@
     {
       "path": "docs/products/builderos/GAP_FILL_LEDGER.json",
       "synopsis": "Documentation — GAP FILL LEDGER.",
-      "bytes": 40858,
-      "mtime": "2026-08-01T09:42:29.660Z",
-      "indexed_at": "2026-08-01T09:42:45.871Z",
+      "bytes": 41677,
+      "mtime": "2026-08-01T10:16:05.161Z",
+      "indexed_at": "2026-08-01T10:16:17.330Z",
       "synopsis_index_only": true
     },
     {
@@ -42823,9 +42823,9 @@
     {
       "path": "docs/products/wellness-studio/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Wellness Studio",
-      "bytes": 18185,
-      "mtime": "2026-08-01T10:17:15.096Z",
-      "indexed_at": "2026-08-01T10:17:20.063Z"
+      "bytes": 19370,
+      "mtime": "2026-08-01T10:17:41.832Z",
+      "indexed_at": "2026-08-01T10:17:53.478Z"
     },
     {
       "path": "docs/products/WELLNESSSTUDIO.md",
@@ -96241,10 +96241,10 @@
     },
     {
       "path": "services/therapist-integration.js",
-      "synopsis": "Therapist integration setup wiring communication-profile and truth-delivery.",
-      "bytes": 795,
-      "mtime": "2026-08-01T10:10:43.828Z",
-      "indexed_at": "2026-08-01T10:10:46.087Z",
+      "synopsis": "Sets up the therapist integration, wiring communication and truth delivery profiles.",
+      "bytes": 3463,
+      "mtime": "2026-08-01T10:14:44.697Z",
+      "indexed_at": "2026-08-01T10:16:04.486Z",
       "ssot": [
         "docs/products/wellness-studio/PRODUCT_HOME.md"
       ]
