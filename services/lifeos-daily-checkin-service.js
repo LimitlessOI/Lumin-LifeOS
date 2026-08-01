@@ -14,11 +14,12 @@ export async function startCheckin(deps, userId) {
 }
 
 export async function addCheckinEntry(deps, userId, text, { minutesAgo } = {}) {
-  const { pool, logger } = deps;
+  const db = deps.pool;
+  const logger = deps.logger;
   try {
     // Assuming a 'checkins' table exists with columns: user_id, entry_text, occurred_at
     const occurredAt = minutesAgo ? new Date(Date.now() - minutesAgo * 60 * 1000) : new Date();
-    const { rows } = await pool.query(
+    const { rows } = await db.query(
       'INSERT INTO checkins (user_id, entry_text, occurred_at) VALUES ($1, $2, $3) RETURNING *',
       [userId, text, occurredAt]
     );
@@ -30,11 +31,13 @@ export async function addCheckinEntry(deps, userId, text, { minutesAgo } = {}) {
 }
 
 export async function getTodaySummary(deps, userId) {
-  const { pool, logger, callCouncilMember } = deps;
+  const db = deps.pool;
+  const logger = deps.logger;
+  const callCouncilMember = deps.callCouncilMember;
   try {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    const { rows: entries } = await pool.query(
+    const { rows: entries } = await db.query(
       'SELECT entry_text FROM checkins WHERE user_id = $1 AND occurred_at >= $2 ORDER BY occurred_at ASC',
       [userId, today]
     );
@@ -53,16 +56,17 @@ export async function getTodaySummary(deps, userId) {
 }
 
 export async function getPromptForUser(deps, userId) {
-  const { pool, logger } = deps;
+  const db = deps.pool;
+  const logger = deps.logger;
   try {
     // Assuming a 'users' table exists with a 'name' column
-    const { rows } = await pool.query('SELECT name FROM users WHERE id = $1', [userId]);
+    const { rows } = await db.query('SELECT name FROM users WHERE id = $1', [userId]);
     const userName = rows.length > 0 ? rows[0].name : 'User';
 
     // Fetch recent entries for context if needed
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    const { rows: recentEntries } = await pool.query(
+    const { rows: recentEntries } = await db.query(
       'SELECT entry_text FROM checkins WHERE user_id = $1 AND occurred_at >= $2 ORDER BY occurred_at DESC LIMIT 3',
       [userId, today]
     );
