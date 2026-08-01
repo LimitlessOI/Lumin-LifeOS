@@ -780,6 +780,13 @@
       "mount_path": "/api/v1/competitors",
       "enabled": true,
       "note": "Project Governance competitor info route auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/likenessConsent.js",
+      "register": "registerLikenessConsentRoutes",
+      "mount_path": "/api/v1/likeness/consent",
+      "enabled": true,
+      "note": "Creator Media OS likeness consent route auto-registered for module-health proof."
     }
   ]
 }
