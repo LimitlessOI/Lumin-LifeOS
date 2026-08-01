@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T09:46:11.633Z",
+  "generated_at": "2026-08-01T09:48:19.376Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -70644,9 +70644,9 @@
     {
       "path": "routes/limitlessos-ui-routes.js",
       "synopsis": "UI update registration",
-      "bytes": 611,
-      "mtime": "2026-08-01T09:45:59.860Z",
-      "indexed_at": "2026-08-01T09:46:11.633Z",
+      "bytes": 952,
+      "mtime": "2026-08-01T09:48:19.376Z",
+      "indexed_at": "2026-08-01T09:48:19.376Z",
       "ssot": [
         "docs/products/limitlessos/PRODUCT_HOME.md"
       ]
