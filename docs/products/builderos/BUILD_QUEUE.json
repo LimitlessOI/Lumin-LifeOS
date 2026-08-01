@@ -871,7 +871,7 @@
     },
     {
       "id": "builderos-step7",
-      "status": "blocked",
+      "status": "done",
       "target_file": "routes/commitment-routing.js",
       "task": "register commitment routes",
       "spec": "Create and register routes for commitment-related actions.",
@@ -917,7 +917,10 @@
       "artifact_proven": true,
       "grounding_status": "PASS",
       "park_until": "2026-08-01T09:25:48.941Z",
-      "claim_level": "BUILT_NOT_LIVE"
+      "claim_level": "BUILT_NOT_LIVE",
+      "completed_at": "2026-08-01T17:07:56.683Z",
+      "heal_claimed": true,
+      "heal_reason": "artifact_proof_pass"
     },
     {
       "id": "builderos-step8",
@@ -3344,5 +3347,5 @@
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-builderos",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T15:53:41.595Z"
+  "updated_at": "2026-08-01T17:07:56.825Z"
 }
