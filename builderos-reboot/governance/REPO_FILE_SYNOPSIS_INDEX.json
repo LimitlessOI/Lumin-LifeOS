@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T14:23:35.323Z",
+  "generated_at": "2026-08-01T14:24:44.270Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12726,
   "files": [
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3843134,
-      "mtime": "2026-08-01T14:13:31.861Z",
-      "indexed_at": "2026-08-01T14:13:46.547Z"
+      "bytes": 3843165,
+      "mtime": "2026-08-01T14:23:53.777Z",
+      "indexed_at": "2026-08-01T14:24:44.270Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -30844,9 +30844,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 50193,
-      "mtime": "2026-08-01T14:23:02.001Z",
-      "indexed_at": "2026-08-01T14:23:35.323Z",
+      "bytes": 49923,
+      "mtime": "2026-08-01T13:51:10.101Z",
+      "indexed_at": "2026-08-01T13:58:01.639Z",
       "synopsis_index_only": true
     },
     {
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 2118,
-      "mtime": "2026-08-01T14:21:58.685Z",
-      "indexed_at": "2026-08-01T14:23:35.323Z",
+      "bytes": 1732,
+      "mtime": "2026-08-01T14:02:01.665Z",
+      "indexed_at": "2026-08-01T14:07:12.378Z",
       "synopsis_index_only": true
     },
     {
@@ -41164,9 +41164,9 @@
     {
       "path": "docs/products/builderos/GAP_FILL_LEDGER.json",
       "synopsis": "Documentation — GAP FILL LEDGER.",
-      "bytes": 57342,
-      "mtime": "2026-08-01T14:13:46.845Z",
-      "indexed_at": "2026-08-01T14:23:35.323Z",
+      "bytes": 56749,
+      "mtime": "2026-08-01T13:57:57.353Z",
+      "indexed_at": "2026-08-01T13:58:01.639Z",
       "synopsis_index_only": true
     },
     {
@@ -42707,9 +42707,9 @@
     {
       "path": "docs/products/teacher-os/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Teacher OS",
-      "bytes": 23835,
-      "mtime": "2026-08-01T08:48:17.387Z",
-      "indexed_at": "2026-08-01T08:48:17.387Z"
+      "bytes": 24422,
+      "mtime": "2026-08-01T14:24:23.837Z",
+      "indexed_at": "2026-08-01T14:24:44.270Z"
     },
     {
       "path": "docs/products/TEACHEROS.md",
@@ -42765,9 +42765,9 @@
     {
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Universal Overlay",
-      "bytes": 21469,
-      "mtime": "2026-08-01T14:23:17.357Z",
-      "indexed_at": "2026-08-01T14:23:35.323Z"
+      "bytes": 21996,
+      "mtime": "2026-08-01T14:24:32.053Z",
+      "indexed_at": "2026-08-01T14:24:44.270Z"
     },
     {
       "path": "docs/products/UNIVERSALOVERLAY.md",
@@ -69430,10 +69430,10 @@
     },
     {
       "path": "routes/competitiveLandscapeRoutes.js",
-      "synopsis": "routes/competitiveLandscapeRoutes.js",
-      "bytes": 737,
-      "mtime": "2026-07-16T19:42:53.595Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis": "Add competitive landscape route for Teacher-OS.",
+      "bytes": 675,
+      "mtime": "2026-08-01T14:17:00.244Z",
+      "indexed_at": "2026-08-01T14:17:00.244Z",
       "ssot": [
         "docs/products/teacher-os/PRODUCT_HOME.md"
       ]
@@ -69729,10 +69729,10 @@
     },
     {
       "path": "routes/firefoxExtension.js",
-      "synopsis": "routes/firefoxExtension.js",
-      "bytes": 995,
-      "mtime": "2026-08-01T14:22:58.637Z",
-      "indexed_at": "2026-08-01T14:23:35.323Z",
+      "synopsis": "Registers a route for handling Firefox MV2 extension variants.",
+      "bytes": 1760,
+      "mtime": "2026-08-01T14:23:52.177Z",
+      "indexed_at": "2026-08-01T14:24:44.270Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
@@ -95053,10 +95053,10 @@
     },
     {
       "path": "services/sessionReplay.js",
-      "synopsis": "Exports captureSessionReplay — services/sessionReplay.js.",
-      "bytes": 1026,
-      "mtime": "2026-07-16T19:42:53.616Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis": "Implements opt-in session replay functionality, recording user consent in the database.",
+      "bytes": 1997,
+      "mtime": "2026-08-01T14:19:27.490Z",
+      "indexed_at": "2026-08-01T14:19:27.490Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]

@@ -1313,15 +1313,12 @@
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "universal-overlay-step10",
       "mission_id": "PRODUCT-universal-overlay",
-      "same_signature_count": 1,
+      "same_signature_count": 0,
       "demoted": false,
       "last_error": "route module not auto-registered — add {\"path\":\"routes/firefoxExtension.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
       "heal_unblocked": true,
       "last_attempt_at": "2026-08-01T14:19:47.749Z",
-      "artifact_proven": true,
-      "grounding_status": "PASS",
-      "blocker_class": "BLOCKED_TOOLING",
-      "failure_signature": "functional_proof|BLOCKED_TOOLING|route module not auto-registered — add {\"path\":\"routes/firefoxExtension.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIV"
+      "blocker_class": "BLOCKED_TOOLING"
     },
     {
       "id": "universal-overlay-step11",
@@ -2412,5 +2409,6 @@
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-universal-overlay",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T14:21:57.365Z"
+  "updated_at": "2026-08-01T14:21:57.365Z",
+  "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/universal-overlay/BUILD_QUEUE.json"
 }

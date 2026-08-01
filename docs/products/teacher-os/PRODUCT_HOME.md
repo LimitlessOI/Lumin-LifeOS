@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/teacher-os/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-29 — see 2026-07-20 entry below for the most recent change (`teacher-os-9` registration-step fixes). |
+| **Last Updated** | 2026-08-02 — `routes/competitiveLandscapeRoutes.js` step5 merged: now mounts `GET /api/v1/teacher-os/competitive-landscape` and calls `mapCompetitiveLandscape` from `services/competitiveLandscape.js`.
 
 ---
 **Status:** In Progress — Foundation Built
@@ -23,6 +23,7 @@
 
 ## Change Receipts
 
+| 2026-08-02 | **MERGE: `routes/competitiveLandscapeRoutes.js` step5.** Accepted the factory-generated rewrite: `registerCompetitiveLandscapeRoutes(app, deps)` mounts `GET /api/v1/teacher-os/competitive-landscape` and calls `mapCompetitiveLandscape(deps, {})` from `services/competitiveLandscape.js`. | The never-stop factory generated this route while resolving `teacher-os_5`; the local branch needed to fast-forward and update SSOT. | `node --check routes/competitiveLandscapeRoutes.js` PASS |
 | 2026-08-02 | **Creative Director review** — generated CREATIVE_BRIEF.md using the Creative Director lens. | Teacher Os reviewed through the BuilderOS creative responsibility; brief written to product home for founder review. | ✅ generated |
 | Date | Change | Why | Proof |
 |---|---|---|---|
