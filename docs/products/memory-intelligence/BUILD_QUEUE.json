@@ -356,7 +356,7 @@
     },
     {
       "id": "6",
-      "status": "pending",
+      "status": "done",
       "target_file": ".github/workflows/smoke-test.yml",
       "task": "integrate CI evidence recording",
       "spec": "Wires memory:ci-evidence into CI workflow to auto-record CI results as evidence.",
@@ -364,13 +364,13 @@
         "5"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "file_contains": [
         "memory:ci-evidence"
       ],
-      "last_attempt_at": "2026-08-01T12:58:17.236Z",
+      "last_attempt_at": "2026-08-01T13:01:32.171Z",
       "last_error": "Target file is outside the Builder safe-scope policy",
-      "commit_sha": "7be4a9ef9e9c33e1f8f0e8b0c8b0e0e0e0e0e0e0",
+      "commit_sha": "34fb53b3cf33cae89e91d281489cb351736415db",
       "built_sha": "7be4a9ef9e9c33e1f8f0e8b0c8b0e0e0e0e0e0e0",
       "proof": "operator_gap_fill: .github/workflows/smoke-test.yml already contains a 'Record CI evidence (memory system)' step running 'node scripts/record-ci-evidence.mjs --all-js memory:ci-evidence'; builder safe-scope blocks autonomous writes to .github/workflows, so operator verified and marked done.",
       "revive_count": 6,
@@ -392,7 +392,8 @@
       "blueprint_step_id": "6",
       "mission_id": "PRODUCT-memory-intelligence",
       "same_signature_count": 0,
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "completed_at": "2026-08-01T13:01:32.593Z"
     },
     {
       "id": "7",
@@ -1315,6 +1316,6 @@
   "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-memory-intelligence",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T12:58:19.329Z",
+  "updated_at": "2026-08-01T13:01:32.593Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/memory-intelligence/BUILD_QUEUE.json"
 }
