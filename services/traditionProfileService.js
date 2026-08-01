@@ -1,5 +1,6 @@
 /**
- * SYNOPSIS: Existing imports and other module code if any
+ * SYNOPSIS: Enhances a tradition profile with associated source labels.
+ * @ssot docs/products/faith-studio/PRODUCT_HOME.md
  */
 // Existing imports and other module code if any
 
@@ -34,3 +35,37 @@ export const labelSource = (source) => {
 };
 
 // Add any additional needed exports here
+
+/**
+ * SYNOPSIS: Retrieves source labels for a given project's faith sources.
+ * @ssot docs/products/faith-studio/PRODUCT_HOME.md
+ */
+export async function enhanceWithSourceLabels(deps, payload) {
+  const { pool, logger } = deps;
+  const { projectId } = payload || {};
+
+  if (!projectId) {
+    logger.warn('enhanceWithSourceLabels called without projectId');
+    return null;
+  }
+
+  try {
+    const { rows: faithSources } = await pool.query(
+      'SELECT id, source_ref, source_text FROM faith_sources WHERE project_id = $1',
+      [projectId]
+    );
+
+    const sourcesWithLabels = faithSources.map(source => {
+      const labels = labelSource(source.source_text || source.source_ref || '');
+      return {
+        ...source,
+        labels,
+      };
+    });
+
+    return sourcesWithLabels;
+  } catch (error) {
+    logger.error({ error, projectId }, 'Error in enhanceWithSourceLabels');
+    throw new Error('Failed to enhance with source labels');
+  }
+}
