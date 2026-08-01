@@ -1101,6 +1101,36 @@
       "commit_sha": "369746afbf9e807ae311015f7375061997d913cf",
       "last_attempt_at": "2026-08-01T03:36:10.627Z",
       "completed_at": "2026-08-01T03:36:10.675Z"
+    },
+    {
+      "id": "document-phase7-merge",
+      "status": "pending",
+      "target_file": "docs/final_pr_merge_phase7.md",
+      "task": "Create a formal PR note and documentation for the phase7-railway-probe branch merge.",
+      "spec": "The file `docs/final_pr_merge_phase7.md` exists and contains a markdown document summarizing the readiness and scope of the `phase7-railway-probe` merge to main, serving as the recommended formal PR note.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "# Phase 7 Railway Probe Merge Confirmation",
+        "memory-system product",
+        "final PR merge"
+      ]
+    },
+    {
+      "id": "orchestrate-and-verify-railway-deploy",
+      "status": "pending",
+      "target_file": "scripts/orchestrate_phase7_railway_probe_verification.mjs",
+      "task": "Create an orchestration script to deploy the `phase7-railway-probe` branch to Railway and verify the `memory-pressure-test.mjs` results.",
+      "spec": "The script `scripts/orchestrate_phase7_railway_probe_verification.mjs` exists, imports and utilizes existing deployment and testing utilities, performs a deployment of the `phase7-railway-probe` branch to Railway, executes `scripts/memory-pressure-test.mjs` against the live deployment, and verifies that the output matches the expected '20/20' result against real Neon state and mounted routes.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "await deployRailway('phase7-railway-probe')",
+        "await runMemoryPressureTest()",
+        "Expected 20/20"
+      ]
     }
   ],
   "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
