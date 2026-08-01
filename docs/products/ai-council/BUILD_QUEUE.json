@@ -838,13 +838,13 @@
     },
     {
       "id": "ai-council-1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/generalTaskOptimizer.js",
       "task": "improve task savings",
       "spec": "Enhance the general task optimizer to increase savings from 4% to at least 15%.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "optimizeGeneralTask"
       ],
@@ -866,7 +866,7 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-16T04:21:50.524Z",
-      "commit_sha": null,
+      "commit_sha": "0d33153018b94d7d89b320e83532799a9dd9e846",
       "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "ai-council-1",
       "mission_id": "PRODUCT-ai-council",
@@ -875,7 +875,7 @@
       "reaudit_reset_at": "2026-07-30T18:55:06.242Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-01T04:56:08.389Z",
       "last_attempt": null,
       "revive_count": 7,
       "revived_at": "2026-08-01T04:34:42.643Z",
@@ -891,7 +891,8 @@
       "escalation_required": true,
       "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
       "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
-      "escalated_at": "2026-07-31T18:40:13.612Z"
+      "escalated_at": "2026-07-31T18:40:13.612Z",
+      "completed_at": "2026-08-01T04:56:22.260Z"
     },
     {
       "id": "ai-council-3",
@@ -1277,5 +1278,5 @@
   "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-ai-council",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T04:06:45.147Z"
+  "updated_at": "2026-08-01T04:56:22.261Z"
 }
