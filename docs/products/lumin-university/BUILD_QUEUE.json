@@ -1388,13 +1388,13 @@
     },
     {
       "id": "lumin-university-7",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/pricingValidationProcess.js",
       "task": "validate pricing",
       "spec": "Validate pricing model with the target users.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "validatePricing"
       ],
@@ -1416,14 +1416,16 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:37:40.037Z",
-      "commit_sha": "1a90dad61f57469743fc9054ecef7de46ce3bb97",
+      "commit_sha": "1b9c2f73da43fc164863ec0e40552731f9199a8f",
       "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lumin-university-7",
       "mission_id": "PRODUCT-lumin-university",
       "same_signature_count": 0,
       "demoted": false,
       "last_error": "artifact_proof_failed: pricing validation",
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T13:40:20.505Z",
+      "completed_at": "2026-08-01T13:40:59.839Z"
     },
     {
       "id": "lumin-university-8",
@@ -1601,6 +1603,6 @@
   "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-lumin-university",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T13:40:00.442Z",
+  "updated_at": "2026-08-01T13:40:59.839Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/lumin-university/BUILD_QUEUE.json"
 }
