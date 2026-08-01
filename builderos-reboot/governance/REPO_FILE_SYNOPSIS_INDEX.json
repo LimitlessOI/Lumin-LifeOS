@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T05:21:07.629Z",
+  "generated_at": "2026-08-01T05:22:29.569Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12671,
   "files": [
@@ -41078,9 +41078,9 @@
     {
       "path": "docs/products/boldtrail/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BoldTrail",
-      "bytes": 13695,
-      "mtime": "2026-07-24T18:36:41.703Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 14293,
+      "mtime": "2026-08-01T05:22:29.569Z",
+      "indexed_at": "2026-08-01T05:22:29.569Z"
     },
     {
       "path": "docs/products/BUILDEROS.md",
@@ -91114,10 +91114,10 @@
     },
     {
       "path": "services/leadScoringSegment.js",
-      "synopsis": "Attaches a scoring rubric to a lead segment description, persisting it to the database.",
-      "bytes": 5338,
-      "mtime": "2026-08-01T05:21:07.629Z",
-      "indexed_at": "2026-08-01T05:21:07.629Z",
+      "synopsis": "Attaches a scoring rubric to a lead segment description.",
+      "bytes": 2237,
+      "mtime": "2026-08-01T05:22:29.569Z",
+      "indexed_at": "2026-08-01T05:22:29.569Z",
       "ssot": [
         "docs/products/boldtrail/PRODUCT_HOME.md"
       ]
