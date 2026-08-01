@@ -71,7 +71,7 @@
     },
     {
       "id": "3",
-      "status": "pending",
+      "status": "skipped",
       "target_file": "public/overlay/age-appropriate-ux-8-12.html",
       "task": "Set up age-appropriate UX 8-12",
       "spec": "Implement UX flows specifically for children ages 8-12.",
@@ -90,8 +90,9 @@
       "mission_id": "PRODUCT-kids-os",
       "same_signature_count": 0,
       "demoted": false,
-      "last_error": "no_proof_required_non_server_code",
-      "heal_unblocked": true
+      "last_error": null,
+      "heal_unblocked": true,
+      "blocker_class": null
     },
     {
       "id": "4",
