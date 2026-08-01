@@ -1784,7 +1784,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
         await trackAIPerformance(member, "chat", duration, 0, 0, false);
       }
 
-      // ── 429 / credit-exhausted = provider ran dry → cascade to next free (SO-003) ──
+      // ── 429 / credit-exhausted = provider ran dry → cascade through every free provider (SO-003) ──
       const is429 = error.message?.includes('429') ||
                     error.message?.toLowerCase().includes('rate limit') ||
                     error.message?.toLowerCase().includes('quota');
@@ -1794,18 +1794,14 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
                             error.message?.toLowerCase().includes('payment') ||
                             error.message?.toLowerCase().includes('insufficient_quota');
       if ((is429 || isCreditError) && !founderComms) {
-        await freeTierGovernor.on429(member);
+        const reasonLabel = isCreditError ? 'credit exhausted' : 'rate limited';
         const exhaustedProvider = freeTierGovernor.resolveProvider(member);
         _markProviderExhausted(exhaustedProvider); // keep selectOptimalModel from re-picking it
-        const nextProvider = await freeTierGovernor.getNextAvailable([exhaustedProvider]);
-        if (!nextProvider) throw error;
-        const fallbackMembers = freeTierGovernor.PROVIDER_LIMITS[nextProvider]?.councilMembers || ['cerebras_llama'];
-        for (const fallbackMember of fallbackMembers) {
-          if (COUNCIL_MEMBERS[fallbackMember]) {
-            const reasonLabel = isCreditError ? 'credit exhausted' : 'rate limited';
-            console.log(`🔄 [FREE-TIER] ${member} ${reasonLabel} → cascading to ${fallbackMember} (${nextProvider})`);
-            return await callCouncilMember(fallbackMember, prompt, options);
-          }
+        await freeTierGovernor.on429(member);
+        try {
+          return await cascadeToFreeTier(member, reasonLabel);
+        } catch (cascadeErr) {
+          throw new Error(`${error.message} (free-tier cascade also failed: ${cascadeErr.message})`);
         }
       }
 

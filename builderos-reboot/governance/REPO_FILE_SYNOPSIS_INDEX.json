@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T00:07:46.111Z",
+  "generated_at": "2026-08-01T00:11:50.262Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12638,
   "files": [
@@ -38867,9 +38867,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 78861,
-      "mtime": "2026-07-31T23:39:02.734Z",
-      "indexed_at": "2026-07-31T23:39:02.734Z"
+      "bytes": 80394,
+      "mtime": "2026-08-01T00:11:50.262Z",
+      "indexed_at": "2026-08-01T00:11:50.262Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40928,9 +40928,9 @@
     {
       "path": "docs/products/ai-council/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — AI Council",
-      "bytes": 73601,
-      "mtime": "2026-07-28T23:43:28.198Z",
-      "indexed_at": "2026-07-28T23:44:15.529Z"
+      "bytes": 74907,
+      "mtime": "2026-08-01T00:11:50.262Z",
+      "indexed_at": "2026-08-01T00:11:50.262Z"
     },
     {
       "path": "docs/products/ai-receptionist/FILE_MANIFEST.json",
@@ -88828,9 +88828,9 @@
     {
       "path": "services/council-service.js",
       "synopsis": "Council routing, token/LCL/savings, and model failover for platform AI calls.",
-      "bytes": 81601,
-      "mtime": "2026-07-28T17:47:22.556Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 81780,
+      "mtime": "2026-08-01T00:11:50.262Z",
+      "indexed_at": "2026-08-01T00:11:50.262Z",
       "ssot": [
         "docs/products/ai-council/PRODUCT_HOME.md"
       ]

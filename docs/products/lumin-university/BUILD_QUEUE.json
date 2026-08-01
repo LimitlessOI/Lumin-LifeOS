@@ -9,21 +9,21 @@
   "steps": [
     {
       "id": "1",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "db/migrations/001_create_competency_standards.sql",
       "task": "create competency standards table",
       "spec": "Table for storing detailed competency standards.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 3,
+      "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS competency_standards",
         "domain TEXT",
         "standards TEXT"
       ],
-      "last_attempt_at": "2026-08-01T00:06:55.956Z",
-      "last_error": "artifact_proof_failed: CREATE TABLE IF NOT EXISTS competency_standards; domain TEXT; standards TEXT",
-      "commit_sha": "61fba2530b7f6f5a267eb8fccd8dc800441c2b9b",
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -35,7 +35,7 @@
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
-      "blocker_class": "BLOCKED_TOOLING",
+      "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
@@ -51,8 +51,8 @@
         "claimed_shipped_at": "2026-07-15T18:11:43.230Z",
         "reason": "commit_sha exists in repo but is not an ancestor of origin/main -- ship landed on origin/builderos-autonomous or origin/builderos-shadow instead of main (GITHUB_DEPLOY_BRANCH mismatch), and the content itself was placeholder/stub code (verified by direct inspection), not a real implementation. Confirmed via: git merge-base --is-ancestor <sha> origin/main."
       },
-      "same_signature_count": 1,
-      "failure_signature": "build|BLOCKED_TOOLING|no_commit_sha (claimed pass without proof — treated as failure)"
+      "same_signature_count": 0,
+      "failure_signature": null
     },
     {
       "id": "2",
