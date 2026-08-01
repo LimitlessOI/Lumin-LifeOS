@@ -905,7 +905,7 @@
     },
     {
       "id": "s4",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "routes/marketing-performance-intel-routes.js",
       "task": "Create API routes to expose performance learning insights.",
       "spec": "Node.js module exporting `registerPerformanceIntelRoutes(app, deps)` function, exposing a GET endpoint to retrieve learnings for a given founder or post.",
@@ -913,7 +913,7 @@
         "s3"
       ],
       "founder_gated": false,
-      "attempts": 3,
+      "attempts": 0,
       "expected_exports": [
         "registerPerformanceIntelRoutes"
       ],
@@ -927,8 +927,11 @@
       ],
       "commit_sha": "008acb9e4977cb1a1de7c07364b83e8ac4e8f2d6",
       "last_attempt_at": "2026-08-01T15:17:21.181Z",
-      "last_error": "artifact_proof_failed: missing_exports:registerPerformanceIntelRoutes; registerPerformanceIntelRoutes; deps.marketingMessageLearning.learnFromPerformance",
-      "blocker_class": "BLOCKED_TOOLING"
+      "last_error": null,
+      "blocker_class": null,
+      "same_signature_count": 0,
+      "claim_level": null,
+      "revived_at": "2026-08-01T15:36:15.029Z"
     },
     {
       "id": "s5",
@@ -976,7 +979,7 @@
     },
     {
       "id": "s7",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "routes/marketing-campaign-routes.js",
       "task": "Create API routes for generating and retrieving campaign assets.",
       "spec": "Node.js module exporting `registerCampaignRoutes(app, deps)` function, exposing a POST endpoint to trigger campaign generation and a GET endpoint to retrieve campaign assets by session ID.",
@@ -984,7 +987,7 @@
         "s6"
       ],
       "founder_gated": false,
-      "attempts": 3,
+      "attempts": 0,
       "expected_exports": [
         "registerCampaignRoutes"
       ],
@@ -998,8 +1001,11 @@
       ],
       "commit_sha": "dfe9ef95d3c93c3c3c32e2f8d489b5573c6a9a88",
       "last_attempt_at": "2026-08-01T15:20:26.720Z",
-      "last_error": "artifact_proof_failed: missing_exports:registerCampaignRoutes; registerCampaignRoutes; deps.marketingCampaignGenerator.generateCampaignAssets",
-      "blocker_class": "BLOCKED_TOOLING"
+      "last_error": null,
+      "blocker_class": null,
+      "same_signature_count": 0,
+      "claim_level": null,
+      "revived_at": "2026-08-01T15:36:15.029Z"
     },
     {
       "id": "s8",
@@ -1041,7 +1047,7 @@
     },
     {
       "id": "s10",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/marketing-intelligence-director.js",
       "task": "Implement a service acting as an AI marketing director for strategic recommendations and budget allocation.",
       "spec": "Node.js module exporting `getStrategicRecommendations(founderId)` and `allocateBudget(founderId, budgetDetails)` functions. These functions will leverage `marketing-message-learning` and `callCouncilMember` to provide high-level strategy and budget advice.",
@@ -1049,7 +1055,7 @@
         "s3"
       ],
       "founder_gated": false,
-      "attempts": 3,
+      "attempts": 0,
       "expected_exports": [
         "getStrategicRecommendations",
         "allocateBudget"
@@ -1061,8 +1067,11 @@
         "callCouncilMember"
       ],
       "last_attempt_at": "2026-08-01T15:22:57.841Z",
-      "last_error": "Pre-commit governance blocked — anti-pattern, stub, or verifier failure",
-      "blocker_class": "BLOCKED_TOOLING"
+      "last_error": null,
+      "blocker_class": null,
+      "same_signature_count": 0,
+      "claim_level": null,
+      "revived_at": "2026-08-01T15:36:15.029Z"
     },
     {
       "id": "s11",

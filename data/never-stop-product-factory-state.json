@@ -1,6 +1,6 @@
 {
-  "status": "running",
-  "current_task": {
+  "status": "idle",
+  "last_task": {
     "id": "extend_build_queue_memory-system",
     "kind": "plan_build_queue",
     "priority": 6.0009,
@@ -14,5 +14,17 @@
     ],
     "detail": "queue stuck (39 steps, none pending) + 1 documented item(s) — re-plan next phase"
   },
-  "updated_at": "2026-08-01T15:25:40.511Z"
+  "last_result": {
+    "ok": false,
+    "task_id": "extend_build_queue_memory-system",
+    "detail": "plan_produced_no_queue",
+    "reason": {
+      "level": "warn",
+      "msg": "[BUILD-QUEUE-PLANNER] model returned no parseable steps — fail closed",
+      "productId": "memory-system",
+      "rawLen": 12
+    }
+  },
+  "cycles": 1,
+  "updated_at": "2026-08-01T15:35:44.436Z"
 }
