@@ -232,9 +232,7 @@ All 5 capsule endpoints verified live on Railway (health, signal, retrieve, caps
 1. `authMiddleware.js` → `auth.js` import (empty stub had no default export → Railway boot crash)
 2. `20260523_memory_capsule_constraint_repair.sql` (source_type CHECK missing user_input → PG 23514)
 
-**Next:** This branch (`phase7-railway-probe`) is ready for final PR merge to main — the fast-forward to main used for Railway deploy testing does NOT constitute a reviewed merge. A formal review and PR note is recommended before considering this "merged."
-
-**Next priority:** deploy `phase7-railway-probe` branch to Railway for live mode of `scripts/memory-pressure-test.mjs` and verify the same 20/20 result against real Neon state and mounted routes.
+**Next:** Deterministic artifacts for the phase7-railway-probe handoff are now in place: `docs/final_pr_merge_phase7.md` (formal PR note), `scripts/deploy_railway.js`, `scripts/verify_railway_deploy.js`, and `scripts/orchestrate_phase7_railway_probe_verification.mjs` (orchestration/verification script). Real execution still requires `RAILWAY_TOKEN` and a Railway project; the builder cannot fake a real deploy. No further autonomous build steps are queued for this branch.
 
 **Open BLUEPRINT.md §42 questions still needing founder confirmation:**
 - Q2: Capsule ID format — UUID v4 is default; schema migration not yet run
