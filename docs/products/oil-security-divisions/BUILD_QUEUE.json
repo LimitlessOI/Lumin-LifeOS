@@ -923,13 +923,13 @@
       "spec": "Create and solidify SECURITY_ALPHA_SCOPE as a JSON file for audit purposes.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "freeze",
         "AUDIT_QUEUE"
       ],
-      "last_attempt_at": null,
-      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw; assertion_threw",
+      "last_attempt_at": "2026-08-01T01:53:55.621Z",
+      "last_error": "Target file is outside the Builder safe-scope policy",
       "commit_sha": "1441db98655d8b17419e890a8ecdfb8f05068dba",
       "built_sha": null,
       "proof": null,
@@ -942,7 +942,7 @@
       "park_until": null,
       "no_op": null,
       "pre_existing": false,
-      "blocker_class": null,
+      "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
@@ -1824,5 +1824,5 @@
   "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-oil-security-divisions",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T01:53:37.622Z"
+  "updated_at": "2026-08-01T01:53:57.502Z"
 }
