@@ -522,13 +522,13 @@
     },
     {
       "id": "step2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/response-transformation.js",
       "task": "build-response-transformation-middleware",
       "spec": "Create middleware to transform responses by stripping model names and costs.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "responseTransformationMiddleware"
       ],
@@ -548,14 +548,16 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:18:35.617Z",
-      "commit_sha": "b80bf5636ff33cd4c9100c5e456bc61fa42c335e",
+      "commit_sha": "b6947a7d7d04a1c76df09d81cbb85f515ea543dc",
       "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step2",
       "mission_id": "PRODUCT-white-label",
       "same_signature_count": 0,
       "demoted": false,
       "last_error": "artifact_proof_failed: stripModelNames; stripCosts",
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T14:27:07.341Z",
+      "completed_at": "2026-08-01T14:27:20.558Z"
     },
     {
       "id": "white-label-3",
@@ -1021,6 +1023,6 @@
   "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-white-label",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:41:19.522Z",
+  "updated_at": "2026-08-01T14:27:20.559Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/white-label/BUILD_QUEUE.json"
 }
