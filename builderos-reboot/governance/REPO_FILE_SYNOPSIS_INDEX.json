@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T04:36:08.958Z",
+  "generated_at": "2026-08-01T04:37:38.743Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12670,
   "files": [
@@ -41946,9 +41946,9 @@
     {
       "path": "docs/products/limitlessos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LimitlessOS business stack",
-      "bytes": 12063,
-      "mtime": "2026-08-01T03:41:21.131Z",
-      "indexed_at": "2026-08-01T03:41:21.131Z"
+      "bytes": 12500,
+      "mtime": "2026-08-01T04:37:38.743Z",
+      "indexed_at": "2026-08-01T04:37:38.743Z"
     },
     {
       "path": "docs/products/lip/FILE_MANIFEST.json",
@@ -70314,10 +70314,10 @@
     },
     {
       "path": "routes/limitlessos-ui-routes.js",
-      "synopsis": "Creates a route for configuring and displaying a canonical product id for LimitlessOS in the customer-facing UI.",
-      "bytes": 1123,
-      "mtime": "2026-08-01T04:36:08.958Z",
-      "indexed_at": "2026-08-01T04:36:08.958Z",
+      "synopsis": "HTTP route module — Limitlessos Ui Routes.",
+      "bytes": 739,
+      "mtime": "2026-08-01T04:37:38.743Z",
+      "indexed_at": "2026-08-01T04:37:38.743Z",
       "ssot": [
         "docs/products/limitlessos/PRODUCT_HOME.md"
       ]
