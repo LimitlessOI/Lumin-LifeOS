@@ -22,6 +22,11 @@ function createBundleSKU(req, res) {
   res.status(201).json({ ok: true, sku: req.body });
 }
 
+// createBundleSKUs alias for plural naming used by the BUILD_QUEUE contract.
+function createBundleSKUs(req, res) {
+  return createBundleSKU(req, res);
+}
+
 function updateBundle(req, res) {
   res.json({ ok: true, id: req.params.id });
 }

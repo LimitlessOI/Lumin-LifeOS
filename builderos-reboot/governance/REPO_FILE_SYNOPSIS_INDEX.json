@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T10:04:56.769Z",
+  "generated_at": "2026-08-01T10:06:56.178Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1864,
-      "mtime": "2026-08-01T10:01:22.816Z",
-      "indexed_at": "2026-08-01T10:01:59.869Z",
+      "bytes": 1822,
+      "mtime": "2026-08-01T10:06:13.736Z",
+      "indexed_at": "2026-08-01T10:06:56.178Z",
       "synopsis_index_only": true
     },
     {
@@ -42115,9 +42115,9 @@
     {
       "path": "docs/products/limitlessos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LimitlessOS business stack",
-      "bytes": 17575,
-      "mtime": "2026-08-01T10:01:47.424Z",
-      "indexed_at": "2026-08-01T10:01:59.869Z"
+      "bytes": 17489,
+      "mtime": "2026-08-01T10:06:50.808Z",
+      "indexed_at": "2026-08-01T10:06:56.178Z"
     },
     {
       "path": "docs/products/lip/FILE_MANIFEST.json",
@@ -65772,9 +65772,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 4072,
-      "mtime": "2026-08-01T10:00:41.628Z",
-      "indexed_at": "2026-08-01T10:01:59.869Z",
+      "bytes": 4214,
+      "mtime": "2026-08-01T10:04:17.264Z",
+      "indexed_at": "2026-08-01T10:06:56.178Z",
       "synopsis_index_only": true
     },
     {
@@ -69221,9 +69221,9 @@
     {
       "path": "routes/bundle_social_automation_routes.js",
       "synopsis": "Registers BundleSocialAutomationRoutes routes/handlers (routes/bundle_social_automation_routes.js).",
-      "bytes": 3182,
-      "mtime": "2026-08-01T04:46:56.089Z",
-      "indexed_at": "2026-08-01T04:46:56.089Z",
+      "bytes": 3337,
+      "mtime": "2026-08-01T10:06:30.748Z",
+      "indexed_at": "2026-08-01T10:06:56.178Z",
       "ssot": [
         "docs/products/limitlessos/PRODUCT_HOME.md"
       ]
