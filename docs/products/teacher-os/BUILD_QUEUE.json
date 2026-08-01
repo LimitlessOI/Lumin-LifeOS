@@ -188,7 +188,7 @@
     },
     {
       "id": "5",
-      "status": "pending",
+      "status": "skipped",
       "target_file": "public/overlay/uxDesign.html",
       "task": "design UX wireframes",
       "spec": "Create wireframes and user flow diagrams for the teacher-os interface.",
@@ -207,8 +207,9 @@
       "mission_id": "PRODUCT-teacher-os",
       "same_signature_count": 0,
       "demoted": false,
-      "last_error": "no_proof_required_non_server_code",
-      "heal_unblocked": true
+      "last_error": null,
+      "heal_unblocked": true,
+      "blocker_class": null
     },
     {
       "id": "6",
