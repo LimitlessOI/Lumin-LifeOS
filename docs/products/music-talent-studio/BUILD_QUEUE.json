@@ -1925,7 +1925,7 @@
     },
     {
       "id": "5",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/musicIndustryConsultation.js",
       "task": "verify music industry consultation",
       "spec": "Ensure that 2 music industry professionals have been consulted.",
@@ -1957,7 +1957,10 @@
       "commit_sha": "1a3380e65822276864d6c10d7f6461ef5470b6cc",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "5",
-      "mission_id": "PRODUCT-music-talent-studio"
+      "mission_id": "PRODUCT-music-talent-studio",
+      "last_error": "artifact_proof_failed: Music Industry Consultation",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "6",
@@ -2189,7 +2192,7 @@
     },
     {
       "id": "11",
-      "status": "done",
+      "status": "pending",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register new routes",
       "spec": "Add new routes to the auto-registration config.",
@@ -2208,7 +2211,10 @@
       "commit_sha": "94c24bb21f303b0b4f5a377b2d454e06246af325",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "11",
-      "mission_id": "PRODUCT-music-talent-studio"
+      "mission_id": "PRODUCT-music-talent-studio",
+      "last_error": "artifact_proof_failed: musicTeachersInterviewRoutes",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "12",
@@ -2611,5 +2617,5 @@
   "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-music-talent-studio",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:22:04.128Z"
+  "updated_at": "2026-08-01T06:30:43.989Z"
 }
