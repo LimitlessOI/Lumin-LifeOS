@@ -137,7 +137,7 @@
     },
     {
       "id": "4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/competitorAnalysis.js",
       "task": "implement competitor analysis service",
       "spec": "This service handles analysis of competitors' data and provides insights.",
@@ -145,7 +145,7 @@
         "3"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "expected_exports": [
         "analyzeCompetitors"
       ],
@@ -164,7 +164,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T09:46:13.059Z",
-      "commit_sha": "bb28db69c814a8a2b9beb63595ab3b6c738a3195",
+      "commit_sha": "487500e143788dcc995aca3c26c708e9edd0e6d3",
       "blueprint_id": "PRODUCT-PROJECT-GOVERNANCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "4",
       "mission_id": "PRODUCT-project-governance",
@@ -172,9 +172,10 @@
       "demoted": false,
       "last_error": "artifact_proof_failed: function analyzeCompetitors(){",
       "heal_unblocked": true,
-      "last_attempt_at": "2026-08-01T10:51:56.322Z",
+      "last_attempt_at": "2026-08-01T10:55:22.375Z",
       "blocker_class": "BLOCKED_TOOLING",
-      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: function analyzeCompetitors(){"
+      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: function analyzeCompetitors(){",
+      "completed_at": "2026-08-01T10:55:22.412Z"
     },
     {
       "id": "5",
@@ -349,5 +350,5 @@
   "blueprint_id": "PRODUCT-PROJECT-GOVERNANCE-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-project-governance",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T10:52:13.930Z"
+  "updated_at": "2026-08-01T10:55:22.412Z"
 }
