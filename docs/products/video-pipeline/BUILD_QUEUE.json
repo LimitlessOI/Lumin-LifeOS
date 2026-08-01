@@ -79,7 +79,7 @@
     },
     {
       "id": "3",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/video-routes.js",
       "task": "Extract video routes",
       "spec": "Move video-related endpoints from server.js to dedicated routes file.",
@@ -110,7 +110,10 @@
       "blueprint_id": "PRODUCT-VIDEO-PIPELINE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "3",
       "mission_id": "PRODUCT-video-pipeline",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "completed_at": "2026-08-01T17:08:15.427Z",
+      "heal_claimed": true,
+      "heal_reason": "artifact_proof_pass"
     },
     {
       "id": "4",
@@ -319,5 +322,5 @@
   "blueprint_id": "PRODUCT-VIDEO-PIPELINE-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-video-pipeline",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T11:41:09.520Z"
+  "updated_at": "2026-08-01T17:08:15.469Z"
 }
