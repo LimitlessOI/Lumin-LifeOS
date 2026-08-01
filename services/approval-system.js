@@ -1,34 +1,33 @@
 /**
- * SYNOPSIS: Service module — Approval System.
+ * SYNOPSIS: Manages the approval process for commitments, including pending and approved states.
  * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
-const commitments = new Map();
-
-function addCommitment(id) {
-  commitments.set(id, { status: 'pending' });
-}
-
-function approveCommitment(id) {
-  if (commitments.has(id)) {
-    commitments.set(id, { status: 'approved' });
-    return true;
+export async function approveCommitment(deps, payload) {
+  const { pool, logger } = deps;
+  const { id } = payload || {};
+  try {
+    const { rows } = await pool.query(
+      `UPDATE commitments SET status = 'approved', approved_at = NOW() WHERE id = $1 AND status = 'waiting approval' RETURNING *`,
+      [id]
+    );
+    return rows[0] || null;
+  } catch (error) {
+    logger.error({ error, id }, 'Error in approveCommitment');
+    throw new Error('Failed to approve commitment');
   }
-  return false;
 }
 
-function rejectCommitment(id) {
-  if (commitments.has(id)) {
-    commitments.set(id, { status: 'rejected' });
-    return true;
+export async function rejectCommitment(deps, payload) {
+  const { pool, logger } = deps;
+  const { id, approval_notes } = payload || {};
+  try {
+    const { rows } = await pool.query(
+      `UPDATE commitments SET status = 'rejected', approved_at = NOW(), approval_notes = $2 WHERE id = $1 AND status = 'waiting approval' RETURNING *`,
+      [id, approval_notes]
+    );
+    return rows[0] || null;
+  } catch (error) {
+    logger.error({ error, id }, 'Error in rejectCommitment');
+    throw new Error('Failed to reject commitment');
   }
-  return false;
 }
-
-function getCommitmentStatus(id) {
-  if (commitments.has(id)) {
-    return commitments.get(id).status;
-  }
-  return null;
-}
-
-export { approveCommitment, rejectCommitment, addCommitment, getCommitmentStatus };
