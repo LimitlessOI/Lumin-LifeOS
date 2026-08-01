@@ -525,7 +525,7 @@
     },
     {
       "id": "teacher-os-7",
-      "status": "done",
+      "status": "pending",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register new modules",
       "spec": "Register new route modules in config.",
@@ -545,7 +545,10 @@
       "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "teacher-os-7",
       "mission_id": "PRODUCT-teacher-os",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "last_error": "artifact_proof_failed: routes/userInterviewRoutes.js; routes/uxRoutes.js",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "teacher-os-step1",
@@ -899,7 +902,7 @@
     },
     {
       "id": "teacher-os-step9",
-      "status": "done",
+      "status": "pending",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register all new routes",
       "spec": "Add newly created route modules to the auto-registered product modules configuration.",
@@ -921,7 +924,10 @@
       "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "teacher-os-step9",
       "mission_id": "PRODUCT-teacher-os",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "last_error": "artifact_proof_failed: wireframesRoutes; competitiveLandscapeRoutes; ferpaRoutes",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "teacher-os-8",
@@ -976,7 +982,7 @@
     },
     {
       "id": "teacher-os-9",
-      "status": "done",
+      "status": "pending",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "Register new build modules",
       "spec": "Update the configuration to auto-register new modules created during this build process.",
@@ -1000,7 +1006,7 @@
       "blueprint_step_id": "teacher-os-9",
       "mission_id": "PRODUCT-teacher-os",
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "artifact_proof_failed: routes/userInterviewRoutes.js; routes/competitiveLandscapeRoutes.js; routes/ferpaRoutes.js; routes/uxRoutes.js",
       "commit_sha": "42e80766d16505a997b31a01279e283ab629d2fd",
       "built_sha": null,
       "proof": null,
@@ -1021,12 +1027,13 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-25T02:53:15.102Z"
+      "shipped_at": "2026-07-25T02:53:15.102Z",
+      "heal_unblocked": true
     }
   ],
   "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-teacher-os",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T17:08:13.445Z",
+  "updated_at": "2026-08-01T18:55:07.206Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/teacher-os/BUILD_QUEUE.json"
 }
