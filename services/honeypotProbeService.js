@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: A map to store probe routes and their handlers
+ * SYNOPSIS: Provides functions to create and manage honeypot probe routes and write receipt of probes.
  * @ssot docs/products/oil-security-divisions/PRODUCT_HOME.md
  */
 import express from 'express';
@@ -7,25 +7,49 @@ import express from 'express';
 // A map to store probe routes and their handlers
 const probeRoutes = new Map();
 
-// Dummy database function to simulate inserting into honeypot_probe_routes table
-function insertProbeReceipt(routePath, probeData) {
-  // Simulate database insertion logic
-  console.log(`Inserting probe data for ${routePath}:`, probeData);
+/**
+ * SYNOPSIS: Creates a honeypot probe route entry in the database.
+ * @ssot docs/products/oil-security-divisions/PRODUCT_HOME.md
+ */
+export async function createProbeRoute(deps, payload) {
+  const { pool, logger } = deps;
+  const { route_path, service_id } = payload;
+  try {
+    const { rows } = await pool.query(
+      'INSERT INTO honeypot_probe_routes(route_path, service_id) VALUES ($1, $2) RETURNING id, route_path, service_id',
+      [route_path, service_id]
+    );
+    return rows[0] || null;
+  } catch (error) {
+    logger.error({ error }, 'Error in createProbeRoute');
+    throw new Error('Failed to create probe route');
+  }
+}
+
+/**
+ * SYNOPSIS: Writes a probe receipt into the security_receipts table.
+ * @ssot docs/products/oil-security-divisions/PRODUCT_HOME.md
+ */
+export async function writeProbeReceipt(deps, payload) {
+  const { pool, logger } = deps;
+  const { receipt_type, payload: receiptPayload, owner_id, security_finding_receipt, severity, repro_steps, exact_fix_target, proof_limits } = payload;
+  try {
+    const { rows } = await pool.query(
+      `INSERT INTO security_receipts(receipt_type, payload, owner_id, security_finding_receipt, severity, repro_steps, exact_fix_target, proof_limits)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id, created_at`,
+      [receipt_type, receiptPayload, owner_id, security_finding_receipt, severity, repro_steps, exact_fix_target, proof_limits]
+    );
+    return rows[0] || null;
+  } catch (error) {
+    logger.error({ error }, 'Error in writeProbeReceipt');
+    throw new Error('Failed to write probe receipt');
+  }
 }
 
 // Add a honeypot probe route and its corresponding handler
 export function addHoneypotProbeRoute(routePath, handler) {
   if (!probeRoutes.has(routePath)) {
     probeRoutes.set(routePath, handler);
-  }
-}
-
-// Write the probe receipt into the honeypot_probe_routes table
-export function writeProbeReceipt(routePath, probeData) {
-  if (probeRoutes.has(routePath)) {
-    insertProbeReceipt(routePath, probeData);
-    const handler = probeRoutes.get(routePath);
-    handler(probeData);
   }
 }
 
