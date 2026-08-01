@@ -46,7 +46,7 @@
     },
     {
       "id": "2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/characterProfile.js",
       "task": "Develop character/world/story bible editor",
       "spec": "Implement service for character/world/story bible editing and self-profile insertion",
@@ -54,7 +54,7 @@
         "1"
       ],
       "founder_gated": true,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "editCharacterProfile",
         "addSelfInsertProfile"
@@ -65,7 +65,7 @@
       "file_contains": [
         "A user can add themselves as a character with opt-in likeness controls"
       ],
-      "commit_sha": null,
+      "commit_sha": "d490fd0b7afbf7cc064a2849ff8eaf70b6003935",
       "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "2",
       "mission_id": "PRODUCT-story-studio",
@@ -99,7 +99,7 @@
       "shipped_at": "2026-07-30T22:24:41.886Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-01T04:58:10.448Z",
       "last_attempt": null,
       "revive_count": 7,
       "revived_at": "2026-08-01T04:35:00.755Z",
@@ -115,7 +115,8 @@
       "escalation_required": true,
       "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
       "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
-      "escalated_at": "2026-07-31T18:40:13.630Z"
+      "escalated_at": "2026-07-31T18:40:13.630Z",
+      "completed_at": "2026-08-01T04:58:47.205Z"
     },
     {
       "id": "3",
@@ -471,5 +472,6 @@
   ],
   "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-story-studio",
-  "twin_kind": "product_build_queue_registered"
+  "twin_kind": "product_build_queue_registered",
+  "updated_at": "2026-08-01T04:58:47.205Z"
 }
