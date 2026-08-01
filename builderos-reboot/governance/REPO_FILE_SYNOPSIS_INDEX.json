@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T01:41:57.291Z",
+  "generated_at": "2026-08-01T01:47:21.199Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12653,
+  "file_count": 12654,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -72378,6 +72378,17 @@
       "bytes": 216,
       "mtime": "2026-06-21T21:39:06.272Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "scripts/credentialVerificationScoping.mjs",
+      "synopsis": "Scopes credential verification technologies like blockchain and cryptographic hash.",
+      "bytes": 2538,
+      "mtime": "2026-08-01T01:47:21.199Z",
+      "indexed_at": "2026-08-01T01:47:21.199Z",
+      "ssot": [
+        "docs/products/lumin-university/PRODUCT_HOME.md",
+        "docs/products/lumin-university/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/crm-alpha-test.mjs",
