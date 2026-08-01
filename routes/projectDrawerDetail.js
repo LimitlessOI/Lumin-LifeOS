@@ -1,25 +1,16 @@
 /**
- * SYNOPSIS: HTTP route module — ProjectDrawerDetail.
+ * SYNOPSIS: HTTP route module — Project Drawer Detail.
+ * @ssot docs/products/project-governance/PRODUCT_HOME.md
  */
 import express from 'express';
 
-function registerProjectDrawerRoutes(app) {
-  const router = express.Router();
+const router = express.Router();
 
-  router.get('/projectDrawerDetail', (req, res) => {
-    const project = {
-      id: 1,
-      name: 'Sample Project',
-      details: {
-        description: 'A detailed description of the sample project.',
-        owner: 'Owner Name',
-      },
-    };
+// GET /api/v1/project/drawer
+router.get('/drawer', (req, res) => {
+  res.json({ project: {} });
+});
 
-    res.json({ project });
-  });
-
-  app.use('/api', router);
+export function registerProjectDrawerRoutes(app) {
+  app.use('/api/v1/project', router);
 }
-
-export { registerProjectDrawerRoutes };

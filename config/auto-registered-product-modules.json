@@ -766,6 +766,13 @@
       "mount_path": "/api/v1/pr",
       "enabled": true,
       "note": "Memory-system final PR review route auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/projectDrawerDetail.js",
+      "register": "registerProjectDrawerRoutes",
+      "mount_path": "/api/v1/project",
+      "enabled": true,
+      "note": "Project Governance drawer detail route auto-registered for module-health proof."
     }
   ]
 }

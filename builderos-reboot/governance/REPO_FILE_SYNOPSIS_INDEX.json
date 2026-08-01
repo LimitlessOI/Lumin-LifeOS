@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T10:45:00.003Z",
+  "generated_at": "2026-08-01T10:49:00.602Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -30844,9 +30844,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 36535,
-      "mtime": "2026-08-01T10:33:33.968Z",
-      "indexed_at": "2026-08-01T10:33:59.853Z",
+      "bytes": 36802,
+      "mtime": "2026-08-01T10:48:26.136Z",
+      "indexed_at": "2026-08-01T10:49:00.602Z",
       "synopsis_index_only": true
     },
     {
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1759,
-      "mtime": "2026-08-01T10:43:35.900Z",
-      "indexed_at": "2026-08-01T10:45:00.003Z",
+      "bytes": 1811,
+      "mtime": "2026-08-01T10:48:03.120Z",
+      "indexed_at": "2026-08-01T10:49:00.602Z",
       "synopsis_index_only": true
     },
     {
@@ -42535,9 +42535,9 @@
     {
       "path": "docs/products/project-governance/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Project Governance",
-      "bytes": 67658,
-      "mtime": "2026-08-01T10:44:36.480Z",
-      "indexed_at": "2026-08-01T10:45:00.003Z"
+      "bytes": 68510,
+      "mtime": "2026-08-01T10:48:43.732Z",
+      "indexed_at": "2026-08-01T10:49:00.602Z"
     },
     {
       "path": "docs/products/project-governance/READINESS_CHECKLIST.md",
@@ -71060,10 +71060,13 @@
     },
     {
       "path": "routes/projectDrawerDetail.js",
-      "synopsis": "HTTP route module — ProjectDrawerDetail.",
-      "bytes": 530,
-      "mtime": "2026-07-15T08:32:59.621Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "synopsis": "HTTP route module — Project Drawer Detail.",
+      "bytes": 383,
+      "mtime": "2026-08-01T10:48:29.560Z",
+      "indexed_at": "2026-08-01T10:49:00.602Z",
+      "ssot": [
+        "docs/products/project-governance/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/prospectiveStudentInterviewRoutes.js",

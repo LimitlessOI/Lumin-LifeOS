@@ -60,7 +60,7 @@
         "1"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerProjectDrawerRoutes"
       ],
@@ -83,14 +83,17 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T07:32:12.120Z",
-      "commit_sha": "7327899f11ec9689d49af1df270bd5b8619fa54f",
+      "commit_sha": "e5273cb2c75fac392aaa14a373d7f6d597563c81",
       "blueprint_id": "PRODUCT-PROJECT-GOVERNANCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "2",
       "mission_id": "PRODUCT-project-governance",
-      "same_signature_count": 0,
+      "same_signature_count": 1,
       "demoted": false,
-      "last_error": "artifact_proof_failed: project: {}",
-      "heal_unblocked": true
+      "last_error": "artifact_proof_failed: missing_exports:registerProjectDrawerRoutes; registerProjectDrawerRoutes; project: {}",
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T10:47:40.823Z",
+      "blocker_class": "BLOCKED_TOOLING",
+      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: missing_exports:registerProjectDrawerRoutes; registerProjectDrawerRoutes; project: {}"
     },
     {
       "id": "3",
@@ -343,5 +346,5 @@
   "blueprint_id": "PRODUCT-PROJECT-GOVERNANCE-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-project-governance",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T10:47:12.356Z"
+  "updated_at": "2026-08-01T10:48:02.054Z"
 }
