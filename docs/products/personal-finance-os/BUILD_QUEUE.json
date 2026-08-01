@@ -805,7 +805,7 @@
       "spec": "Enhance IPS review route to support attorney RIA trigger risk evaluation.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "expected_exports": [
         "registerIpsReviewRoutes"
       ],
@@ -828,17 +828,17 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:50:39.782Z",
-      "commit_sha": "91d9e4dfae3c1981f858f3a674e962e8345dfdf3",
+      "commit_sha": "8f46d5767d0587218f040c727480b1e4233d8782",
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "personal-finance-os-step1",
       "mission_id": "PRODUCT-personal-finance-os",
       "same_signature_count": 1,
       "demoted": false,
-      "last_error": "artifact_proof_failed: missing_exports:registerIpsReviewRoutes; registerIpsReviewRoutes; attorney review RIA",
+      "last_error": "artifact_proof_failed: missing_exports:registerIpsReviewRoutes; registerIpsReviewRoutes",
       "heal_unblocked": true,
-      "last_attempt_at": "2026-08-01T12:36:58.583Z",
+      "last_attempt_at": "2026-08-01T12:42:07.906Z",
       "blocker_class": "BLOCKED_TOOLING",
-      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: missing_exports:registerIpsReviewRoutes; registerIpsReviewRoutes; attorney review RIA"
+      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: missing_exports:registerIpsReviewRoutes; registerIpsReviewRoutes"
     },
     {
       "id": "personal-finance-os-step2",
@@ -1119,5 +1119,5 @@
   "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-personal-finance-os",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T12:37:10.075Z"
+  "updated_at": "2026-08-01T12:42:19.516Z"
 }
