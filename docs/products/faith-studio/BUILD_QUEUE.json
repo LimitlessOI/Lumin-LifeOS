@@ -2612,7 +2612,7 @@
     },
     {
       "id": "faith-studio-4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/safeOutputService.js",
       "task": "implement family/church/classroom-safe outputs",
       "spec": "Develop outputs that ensure content is safe for family/church/classroom environments.",
@@ -2620,7 +2620,7 @@
         "faith-studio-3"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "expected_exports": [
         "generateSafeOutput"
       ],
@@ -2642,14 +2642,15 @@
       "mission_id": "PRODUCT-faith-studio",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-18T01:14:39.335Z",
-      "commit_sha": "1aed6cdd60f4a3f06277f5ae35056b12db994d3d",
+      "commit_sha": "a49ad313fee92ddc6976e60e9107023b2b8c043e",
       "same_signature_count": 1,
       "demoted": false,
       "last_error": "artifact_proof_failed: safeOutput",
       "heal_unblocked": true,
-      "last_attempt_at": "2026-08-01T11:28:44.416Z",
+      "last_attempt_at": "2026-08-01T11:31:50.252Z",
       "blocker_class": "BLOCKED_TOOLING",
-      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: safeOutput"
+      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: safeOutput",
+      "completed_at": "2026-08-01T11:31:50.291Z"
     },
     {
       "id": "faith-studio-5",
@@ -2709,5 +2710,5 @@
   "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-faith-studio",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T11:28:59.670Z"
+  "updated_at": "2026-08-01T11:31:50.291Z"
 }
