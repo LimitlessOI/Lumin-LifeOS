@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Struggle Detection Analytics -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Struggle Detection Analytics</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f7f6;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .card {
+            background-color: #f9fbfb;
+            border: 1px solid #e0e6e8;
+            border-radius: 6px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .card h2 {
+            margin-top: 0;
+            color: #34495e;
+            font-size: 1.2em;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        .card p {
+            margin: 5px 0;
+            color: #555;
+            font-size: 0.95em;
+        }
+        .card .metric-value {
+            font-size: 2.2em;
+            font-weight: bold;
+            color: #2980b9;
+            margin-bottom: 10px;
+        }
+        .card .metric-label {
+            font-size: 0.9em;
+            color: #7f8c8d;
+            text-transform: uppercase;
+        }
+        .chart-container {
+            position: relative;
+            height: 250px;
+            width: 100%;
+            margin-top: 15px;
+        }
+        canvas {
+            max-width: 100%;
+            height: auto;
+        }
+        .filter-section {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+        }
+        .filter-section label {
+            font-weight: bold;
+            color: #555;
+            margin-right: 5px;
+        }
+        .filter-section select,
+        .filter-section input[type="date"] {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 0.95em;
+            background-color: #fff;
+            min-width: 150px;
+        }
+        .filter-section button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.95em;
+            transition: background-color 0.2s ease;
+        }
+        .filter-section button:hover {
+            background-color: #2980b9;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+        }
+        .data-table th, .data-table td {
+            border: 1px solid #e0e6e8;
+            padding: 12px 15px;
+            text-align: left;
+        }
+        .data-table th {
+            background-color: #f2f4f5;
+            color: #34495e;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85em;
+        }
+        .data-table tr:nth-child(even) {
+            background-color: #f9fbfb;
+        }
+        .data-table tr:hover {
+            background-color: #f0f4f5;
+        }
+        .summary-text {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #eaf4f7;
+            border-left: 5px solid #3498db;
+            border-radius: 4px;
+            font-size: 1.1em;
+            line-height: 1.6;
+            color: #2c3e50;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Struggle Detection Analytics Dashboard</h1>
+
+        <div class="filter-section">
+            <label for="formNameFilter">Form Name:</label>
+            <select id="formNameFilter">
+                <option value="">All Forms</option>
+                <!-- Options populated by JS -->
+            </select>
+
+            <label for="dateFrom">From:</label>
+            <input type="date" id="dateFrom">
+
+            <label for="dateTo">To:</label>
+            <input type="date" id="dateTo">
+
+            <button onclick="applyFilters()">Apply Filters</button>
+        </div>
+
+        <div class="summary-text" id="summaryText">
+            Loading insights...
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="card">
+                <h2>Total Struggles Detected</h2>
+                <p class="metric-value" id="totalStruggles">0</p>
+                <p class="metric-label">Across all forms and fields</p>
+            </div>
+            <div class="card">
+                <h2>Unique Users with Struggles</h2>
+                <p class="metric-value" id="uniqueUsers">0</p>
+                <p class="metric-label">Users who experienced struggle</p>
+            </div>
+            <div class="card">
+                <h2>Top Struggled Form</h2>
+                <p class="metric-value" id="topForm">N/A</p>
+                <p class="metric-label">Form with most struggle detections</p>
+            </div>
+            <div class="card">
+                <h2>Top Struggled Field</h2>
+                <p class="metric-value" id="topField">N/A</p>
+                <p class="metric-label">Field with most struggle detections</p>
+            </div>
+            <div class="card">
+                <h2>Struggles Over Time</h2>
+                <div class="chart-container">
+                    <canvas id="strugglesOverTimeChart"></canvas>
+                </div>
+            </div>
+            <div class="card">
+                <h2>Struggles by Form</h2>
+                <div class="chart-container">
+                    <canvas id="strugglesByFormChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <h2>Recent Struggle Detections</h2>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>User ID</th>
+                    <th>Form Name</th>
+                    <th>Field Name</th>
+                    <th>Struggle Detected</th>
+                </tr>
+            </thead>
+            <tbody id="struggleDataTableBody">
+                <tr><td colspan="5" style="text-align: center;">No data available.</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        let strugglesOverTimeChart;
+        let strugglesByFormChart;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchAndRenderData();
+        });
+
+        async function fetchAndRenderData() {
+            const formName = document.getElementById('formNameFilter').value;
+            const dateFrom = document.getElementById('dateFrom').value;
+            const dateTo = document.getElementById('dateTo').value;
+
+            // In a real application, this would be an API call to a backend endpoint
+            // For this exercise, we'll simulate data or assume an in-page data source.
+            // Since there's no backend endpoint provided in the context, we'll use dummy data.
+            const rawData = generateDummyStruggleData(formName, dateFrom, dateTo);
+            const processedData = processStruggleData(rawData);
+
+            updateFilterOptions(rawData);
+            updateMetrics(processedData);
+            renderCharts(processedData);
+            renderTable(processedData);
+            updateSummary(processedData);
+        }
+
+        function generateDummyStruggleData(formNameFilter, dateFromFilter, dateToFilter) {
+            const data = [];
+            const forms = ['RegistrationForm', 'CheckoutForm', 'ProfileUpdateForm', 'ContactForm'];
+            const fields = {
+                'RegistrationForm': ['email', 'password', 'username'],
+                'CheckoutForm': ['shippingAddress', 'paymentMethod', 'cardNumber'],
+                'ProfileUpdateForm': ['fullName', 'phoneNumber', 'address'],
+                'ContactForm': ['subject', 'message']
+            };
+            const now = new Date();
+
+            for (let i = 0; i < 100; i++) {
+                const form = forms[Math.floor(Math.random() * forms.length)];
+                const field = fields[form][Math.floor(Math.random() * fields[form].length)];
+                const struggle = Math.random() > 0.3; // 70% chance of struggle
+                const timestamp = new Date(now.getTime() - Math.floor(Math.random() * 30 * 24 * 60 * 60 * 1000)); // Last 30 days
+                const userId = `user_${Math.floor(Math.random() * 20) + 1}`;
+
+                data.push({
+                    timestamp: timestamp.toISOString(),
+                    user_id: userId,
+                    form_name: form,
+                    field_name: field,
+                    struggle_detected: struggle
+                });
+            }
+
+            // Apply filters
+            return data.filter(item => {
+                const itemDate = new Date(item.timestamp);
+                const matchesForm = !formNameFilter || item.form_name === formNameFilter;
+                const matchesDateFrom = !dateFromFilter || itemDate >= new Date(dateFromFilter);
+                const matchesDateTo = !dateToFilter || itemDate <= new Date(dateToFilter + 'T23:59:59.999Z'); // Include whole day
+
+                return matchesForm && matchesDateFrom && matchesDateTo;
+            });
+        }
+
+        function processStruggleData(rawData) {
+            const struggles = rawData.filter(d => d.struggle_detected);
+
+            const totalStruggles = struggles.length;
+            const uniqueUsers = new Set(struggles.map(d => d.user_id)).size;
+
+            const formStruggleCounts = struggles.reduce((acc, d) => {
+                acc[d.form_name] = (acc[d.form_name] || 0) + 1;
+                return acc;
+            }, {});
+            const topForm = Object.keys(formStruggleCounts).length > 0
+                ? Object.entries(formStruggleCounts).sort(([, a], [, b]) => b - a)[0][0]
+                : 'N/A';
+
+            const fieldStruggleCounts = struggles.reduce((acc, d) => {
+                acc[d.field_name] = (acc[d.field_name] || 0) + 1;
+                return acc;
+            }, {});
+            const topField = Object.keys(fieldStruggleCounts).length > 0
+                ? Object.entries(fieldStruggleCounts).sort(([, a], [, b]) => b - a)[0][0]
+                : 'N/A';
+
+            // Data for charts
+            const strugglesByDay = struggles.reduce((acc, d) => {
+                const date = new Date(d.timestamp).toISOString().split('T')[0];
+                acc[date] = (acc[date] || 0) + 1;
+                return acc;
+            }, {});
+
+            const sortedDates = Object.keys(strugglesByDay).sort();
+            const strugglesOverTimeLabels = sortedDates;
+            const strugglesOverTimeData = sortedDates.map(date => strugglesByDay[date]);
+
+            const strugglesByFormLabels = Object.keys(formStruggleCounts).sort();
+            const strugglesByFormData = strugglesByFormLabels.map(form => formStruggleCounts[form]);
+
+            return {
+                totalStruggles,
+                uniqueUsers,
+                topForm,
+                topField,
+                strugglesOverTimeLabels,
+                strugglesOverTimeData,
+                strugglesByFormLabels,
+                strugglesByFormData,
+                recentStruggles: struggles.slice(0, 10).sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp))
+            };
+        }
+
+        function updateFilterOptions(rawData) {
+            const formNames = [...new Set(rawData.map(d => d.form_name))].sort();
+            const formNameFilter = document.getElementById('formNameFilter');
+            const currentSelectedForm = formNameFilter.value; // Preserve selection if it still exists
+
+            formNameFilter.innerHTML = '<option value="">All Forms</option>';
+            formNames.forEach(form => {
+                const option = document.createElement('option');
+                option.value = form;
+                option.textContent = form;
+                formNameFilter.appendChild(option);
+            });
+
+            if (formNames.includes(currentSelectedForm)) {
+                formNameFilter.value = currentSelectedForm;
+            }
+        }
+
+        function updateMetrics(data) {
+            document.getElementById('totalStruggles').textContent = data.totalStruggles;
+            document.getElementById('uniqueUsers').textContent = data.uniqueUsers;
+            document.getElementById('topForm').textContent = data.topForm;
+            document.getElementById('topField').textContent = data.topField;
+        }
+
+        function renderCharts(data) {
+            const ctx1 = document.getElementById('strugglesOverTimeChart').getContext('2d');
+            if (strugglesOverTimeChart) strugglesOverTimeChart.destroy();
+            strugglesOverTimeChart = new Chart(ctx1, {
+                type: 'line',
+                data: {
+                    labels: data.strugglesOverTimeLabels,
+                    datasets: [{
+                        label: 'Struggles Detected',
+                        data: data.strugglesOverTimeData,
+                        borderColor: 'rgb(54, 162, 235)',
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        tension: 0.1,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+            const ctx2 = document.getElementById('strugglesByFormChart').getContext('2d');
+            if (strugglesByFormChart) strugglesByFormChart.destroy();
+            strugglesByFormChart = new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: data.strugglesByFormLabels,
+                    datasets: [{
+                        label: 'Struggles by Form',
+                        data: data.strugglesByFormData,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.6)',
+                            'rgba(54, 162, 235, 0.6)',
+                            'rgba(255, 206, 86, 0.6)',
+                            'rgba(75, 192, 192, 0.6)',
+                            'rgba(153, 102, 255, 0.6)',
+                            'rgba(255, 159, 64, 0.6)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderTable(data) {
+            const tbody = document.getElementById('struggleDataTableBody');
+            tbody.innerHTML = ''; // Clear existing rows
+
+            if (data.recentStruggles.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">No struggle detections found for the selected filters.</td></tr>';
+                return;
+            }
+
+            data.recentStruggles.forEach(item => {
+                const row = tbody.insertRow();
+                row.insertCell().textContent = new Date(item.timestamp).toLocaleString();
+                row.insertCell().textContent = item.user_id;
+                row.insertCell().textContent = item.form_name;
+                row.insertCell().textContent = item.field_name;
+                row.insertCell().textContent = item.struggle_detected ? 'Yes' : 'No';
+            });
+        }
+
+        function updateSummary(data) {
+            const summaryElement = document.getElementById('summaryText');
+            if (data.totalStruggles === 0) {
+                summaryElement.textContent = "No struggles detected for the current filters. This could indicate smooth user experience or a need to review detection parameters.";
+            } else {
+                summaryElement.innerHTML = `Over the selected period, we detected <strong>${data.totalStruggles} struggles</strong> affecting <strong>${data.uniqueUsers} unique users</strong>.
+                The most challenging form appears to be <strong>${data.topForm}</strong>, with the field <strong>${data.topField}</strong> causing the most friction.
+                Review the charts below for trends and specific form/field performance.`;
+            }
+        }
+
+        function applyFilters() {
+            fetchAndRenderData();
+        }
+    </script>
+</body>
+</html>

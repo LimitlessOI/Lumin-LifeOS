@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T05:47:32.074Z",
+  "generated_at": "2026-08-01T05:50:10.080Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12674,
+  "file_count": 12675,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -68057,6 +68057,13 @@
       "bytes": 2666,
       "mtime": "2026-07-17T21:42:16.098Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "public/overlay/struggleDetectionFormFillUI.html",
+      "synopsis": "HTML page: Struggle Detection Analytics",
+      "bytes": 18233,
+      "mtime": "2026-08-01T05:50:10.080Z",
+      "indexed_at": "2026-08-01T05:50:10.080Z"
     },
     {
       "path": "public/overlay/struggleDetectionUI.html",
