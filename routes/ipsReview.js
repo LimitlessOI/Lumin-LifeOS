@@ -1,25 +1,21 @@
 /**
- * SYNOPSIS: Existing routes and handlers go here
+ * SYNOPSIS: Attorney review process for IPS modules.
  * @ssot docs/products/personal-finance-os/PRODUCT_HOME.md
  */
-import express from 'express';
+import { reviewIPSRisk } from '../services/ipsReview.js';
 
-const router = express.Router();
-
-// Existing routes and handlers go here
-
-// New route for attorney review of IPS module to evaluate RIA trigger risk
-router.get('/ips/review', (req, res) => {
-  // Logic for reviewing IPS module
-  // Evaluate RIA trigger risk
-  res.send('IPS module review for RIA trigger risk');
-});
-
-export function registerIPSRoutes(app) {
-  app.use('/api', router);
-}
-
-export { router };
-export function registerIpsReviewRoutes(app) {
-  app.use('/api', router);
+export function registerIpsReview(app, deps) {
+  app.get('/api/v1/ips-review', deps.requireKey, async (req, res, next) => {
+    try {
+      const { id } = req.query; // Use req.query for GET parameters
+      if (!id) {
+        return res.status(400).json({ error: 'Missing IPS module ID in query parameters.' });
+      }
+      const result = await reviewIPSRisk(deps, { id });
+      res.json(result);
+    } catch (error) {
+      deps.logger.error({ error }, 'Error in ipsReview route');
+      next(error);
+    }
+  });
 }
