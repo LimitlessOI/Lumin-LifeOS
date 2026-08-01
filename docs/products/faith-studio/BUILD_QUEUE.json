@@ -2620,7 +2620,7 @@
         "faith-studio-3"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "generateSafeOutput"
       ],
@@ -2642,11 +2642,13 @@
       "mission_id": "PRODUCT-faith-studio",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-18T01:14:39.335Z",
-      "commit_sha": "388d716a6fa116472179484e5eecda28527705b7",
+      "commit_sha": "1aed6cdd60f4a3f06277f5ae35056b12db994d3d",
       "same_signature_count": 0,
       "demoted": false,
       "last_error": "artifact_proof_failed: safeOutput",
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T11:28:44.416Z",
+      "blocker_class": "BLOCKED_TOOLING"
     },
     {
       "id": "faith-studio-5",
@@ -2706,5 +2708,5 @@
   "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-faith-studio",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T11:28:29.809Z"
+  "updated_at": "2026-08-01T11:28:59.670Z"
 }
