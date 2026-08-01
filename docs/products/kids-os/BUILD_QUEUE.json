@@ -935,13 +935,13 @@
     },
     {
       "id": "kids-os-4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/irlenConsultation.js",
       "task": "update Irlen consultation",
       "spec": "Incorporate insights from the Irlen Syndrome community consultation into the service.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "getIrlenConsultations"
       ],
@@ -963,14 +963,16 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:02:30.329Z",
-      "commit_sha": "dfc05fe980248c7447f836c27efdc8d38a02c5f1",
+      "commit_sha": "14fd9a4093d09a366aff0d356651cc7060be0e13",
       "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "kids-os-4",
       "mission_id": "PRODUCT-kids-os",
       "same_signature_count": 0,
       "demoted": false,
       "last_error": "artifact_proof_failed: Irlen Syndrome insights",
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T13:32:31.615Z",
+      "completed_at": "2026-08-01T13:32:43.419Z"
     },
     {
       "id": "kids-os-5",
@@ -1045,6 +1047,6 @@
   "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-kids-os",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T13:32:12.468Z",
+  "updated_at": "2026-08-01T13:32:43.419Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/kids-os/BUILD_QUEUE.json"
 }
