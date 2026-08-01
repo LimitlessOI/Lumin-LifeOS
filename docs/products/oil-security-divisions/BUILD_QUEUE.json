@@ -1133,7 +1133,7 @@
       "spec": "Add pre-commit and preflight scanning without blocking placeholders.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "scanSecretsPreCommit",
         "scanSecretsPreflight"
@@ -1156,9 +1156,11 @@
       "blueprint_step_id": "sec-f02",
       "mission_id": "PRODUCT-oil-security-divisions",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:scanSecretsPreCommit,scanSecretsPreflight; assertion_threw; assertion_threw",
+      "last_error": "Pre-commit governance blocked — anti-pattern, stub, or verifier failure",
       "reaudit_reset_at": "2026-07-30T18:55:06.687Z",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "last_attempt_at": "2026-08-01T02:12:32.916Z",
+      "blocker_class": "BLOCKED_TOOLING"
     },
     {
       "id": "sec-f03",
@@ -1881,5 +1883,5 @@
   "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-oil-security-divisions",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T02:12:18.624Z"
+  "updated_at": "2026-08-01T02:13:24.749Z"
 }
