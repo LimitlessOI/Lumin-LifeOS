@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T19:10:35.273Z",
+  "generated_at": "2026-08-01T19:22:34.764Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12790,
+  "file_count": 12791,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21307,9 +21307,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 25212,
-      "mtime": "2026-08-01T19:07:38.787Z",
-      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "bytes": 25498,
+      "mtime": "2026-08-01T19:22:34.764Z",
+      "indexed_at": "2026-08-01T19:22:34.764Z",
       "synopsis_index_only": true
     },
     {
@@ -26354,9 +26354,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REPAIR-AND-AUTONOMY-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 9376,
-      "mtime": "2026-08-01T18:42:13.961Z",
-      "indexed_at": "2026-08-01T18:43:00.323Z",
+      "bytes": 8842,
+      "mtime": "2026-08-01T19:22:34.764Z",
+      "indexed_at": "2026-08-01T19:22:34.764Z",
       "synopsis_index_only": true
     },
     {
@@ -26369,9 +26369,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REPAIR-AND-AUTONOMY-0001/FOUNDER_PACKET.md",
       "synopsis": "Founder packet for FACTORY-REPAIR-AND-AUTONOMY-0001 — make BuilderOS fix itself and learn from every failure.",
-      "bytes": 3024,
-      "mtime": "2026-08-01T18:41:44.149Z",
-      "indexed_at": "2026-08-01T18:43:00.323Z"
+      "bytes": 3345,
+      "mtime": "2026-08-01T19:22:34.764Z",
+      "indexed_at": "2026-08-01T19:22:34.764Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REPAIR-AND-AUTONOMY-0001/TASK_LIST.md",
@@ -39045,9 +39045,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 100105,
-      "mtime": "2026-08-01T17:27:32.413Z",
-      "indexed_at": "2026-08-01T17:27:38.373Z"
+      "bytes": 101196,
+      "mtime": "2026-08-01T19:22:34.764Z",
+      "indexed_at": "2026-08-01T19:22:34.764Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41300,9 +41300,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 391681,
-      "mtime": "2026-08-01T19:10:20.186Z",
-      "indexed_at": "2026-08-01T19:10:35.273Z"
+      "bytes": 390489,
+      "mtime": "2026-08-01T19:22:34.764Z",
+      "indexed_at": "2026-08-01T19:22:34.764Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -62271,6 +62271,13 @@
       "bytes": 2661,
       "mtime": "2026-06-21T21:37:56.029Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "docs/reports/AUDIT_CHATGPT_CONVERSATION.md",
+      "synopsis": "ChatGPT Conversation Audit — BuilderOS 5/10 Review",
+      "bytes": 9639,
+      "mtime": "2026-08-01T19:22:34.764Z",
+      "indexed_at": "2026-08-01T19:22:34.764Z"
     },
     {
       "path": "docs/reports/AUDIT_REPAIR_AND_PROTOCOLS.md",

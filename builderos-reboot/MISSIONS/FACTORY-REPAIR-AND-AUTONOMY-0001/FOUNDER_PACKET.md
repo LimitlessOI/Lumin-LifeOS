@@ -18,6 +18,7 @@ Fix the repair system. Make BuilderOS able to detect its own drift, generate the
 3. **Overnight autonomy** — the system must not stop when the conductor sleeps. A scheduler (cron, `setInterval`, or Railway scheduled job) must wake the factory, run artifact proof, attempt deterministic repair, and re-run `bp-priority:once`.
 4. **Runtime constitutional protocols** — the ten protocols from 2026-08-01 must be more than documented. CDE, reversibility, confidence propagation, unknowns, and reality measures are already runtime; the remaining (Knowledge/Judgment split, goal decomposition, cognitive-spine health metrics, asset-evolution governance, reality hierarchy, founder cognitive-load optimization) must become services/tests wired into the Chair/Builder/Sentry loop.
 5. **Competitive gap closure** — empirical benchmark harness, IDE bridge, and model-routing ROI ledger so BuilderOS can demonstrate win vs Devin/Cursor/Codex.
+6. **ChatGPT conversation audit integration** — branch-divergence guard, canonical single-truth preflight gate, independent GAP-FILL verification, scheduled prod-degraded probe, full model-capability-ledger role coverage, Founder Intent Model predict/compare accuracy. See `docs/reports/AUDIT_CHATGPT_CONVERSATION.md`.
 
 ## Non-goals
 

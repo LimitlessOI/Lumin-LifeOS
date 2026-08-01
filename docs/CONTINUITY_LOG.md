@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-08-02 — ChatGPT conversation audit extracted, missing ideas added to blueprint
+
+Adam provided the `really great ideas for system .rtfd` export of a ChatGPT conversation and asked for it to be read, audited, and any missing ideas added to the system blueprint. Extracted the RTF text, created `docs/reports/AUDIT_CHATGPT_CONVERSATION.md`, and mapped each idea against the canonical constitution/SSOT/products. The conversation's 5/10 rating is fair; its highest-leverage fixes were already surfacing in this session (branch-divergence silent failure, two-truth preflight gates, GAP-FILL self-verification, prod-degraded probe). Added FRA-008 "ChatGPT conversation audit integration" to `builderos-reboot/MISSIONS/FACTORY-REPAIR-AND-AUTONOMY-0001/BLUEPRINT.json` (phase P7) and updated `BP_PRIORITY.json` mission note and `docs/products/builderos/PRODUCT_HOME.md` change receipts. The audit report includes four prioritized Cloud Code prompts to implement the fixes. Next: run Prompt 1 (branch-divergence guard + canonical gate) when credits or a hand-GAP-FILL window is available.
+
 ## 2026-08-02 — Audit of repair system + constitutional protocols; cleared `limitlessos` and `word-keeper` false-done steps
 
 Adam asked for an audit of the repair system and verification that the protocols from the previous night's conversation were installed. Produced `docs/reports/AUDIT_REPAIR_AND_PROTOCOLS.md` and committed it.
