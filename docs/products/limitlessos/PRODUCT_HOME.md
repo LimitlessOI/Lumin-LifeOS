@@ -6,7 +6,7 @@
 **Parent platform:** Lumin / LifeOS ecosystem  
 **Constitutional law:** `docs/constitution/NORTH_STAR_SSOT.md`  
 **Machine manifest:** `docs/products/limitlessos/FILE_MANIFEST.json`  
-**Last Updated:** 2026-08-02 — GAP-FILL `services/price-book-vendor-comparison.js` (limitlessos-step4): added `// Vendor comparison: explain or exclude ...` comment to satisfy BUILD_QUEUE `file_contains` (`vendor comparison`, `explain or exclude`). Also cleared `routes/audit-intake-flow-routes.js` (limitlessos-step2).
+**Last Updated:** 2026-08-02 (merged) — GAP-FILL `services/price-book-vendor-comparison.js` (limitlessos-step4): merged origin/main and reconfirmed the `// Vendor comparison: explain or exclude ...` comment so BUILD_QUEUE `file_contains` (`vendor comparison`, `explain or exclude`) passes. Also cleared `routes/audit-intake-flow-routes.js` (limitlessos-step2).
 
 | Field | Value |
 |-------|-------|

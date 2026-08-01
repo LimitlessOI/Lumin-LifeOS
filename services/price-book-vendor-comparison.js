@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: Compares vendors based on pricing and reviews, using database data.
+ * SYNOPSIS: Compares vendors based on pricing and reviews, with explanations or exclusions based on criteria.
  * @ssot docs/products/limitlessos/PRODUCT_HOME.md
  */
 // Vendor comparison: explain or exclude vendors based on reviews and pricing criteria.
@@ -87,7 +87,7 @@ export async function compareVendors(deps, payload) {
           )
         );
         if (!hasRequiredReviewKeywords) {
-          explanation.push(`Excluded: missing required review keywords in product names or descriptions.`);
+          explanation.push(`Excluded: missing required keywords in product names or descriptions.`);
           isIncluded = false;
         }
       }
@@ -101,7 +101,7 @@ export async function compareVendors(deps, payload) {
           )
         );
         if (hasExcludedReviewKeywords) {
-          explanation.push(`Excluded: contains prohibited review keywords in product names or descriptions.`);
+          explanation.push(`Excluded: contains prohibited keywords in product names or descriptions.`);
           isIncluded = false;
         }
       }
