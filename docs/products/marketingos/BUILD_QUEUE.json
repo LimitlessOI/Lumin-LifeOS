@@ -835,6 +835,246 @@
       "blocker_class": "BLOCKED_EXTERNAL",
       "claim_level": "BUILT_NOT_LIVE",
       "completed_at": "2026-08-01T15:13:05.877Z"
+    },
+    {
+      "id": "s1",
+      "status": "pending",
+      "target_file": "db/migrations/20260715_marketing_performance_analytics.sql",
+      "task": "Create table for storing post performance analytics",
+      "spec": "SQL migration to create `marketing_performance_analytics` table with columns `id`, `created_at`, `updated_at`, `post_id` (UUID, NOT NULL), `platform` (TEXT, NOT NULL), `engagement_type` (TEXT, NOT NULL, e.g., 'like', 'comment', 'share', 'click'), `engagement_value` (NUMERIC), `learning_tags` (JSONB for hooks, CTAs, stories), `timestamp` (TIMESTAMPTZ, NOT NULL).",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS marketing_performance_analytics",
+        "post_id UUID NOT NULL",
+        "platform TEXT NOT NULL",
+        "engagement_type TEXT NOT NULL",
+        "engagement_value NUMERIC",
+        "learning_tags JSONB",
+        "timestamp TIMESTAMPTZ NOT NULL"
+      ]
+    },
+    {
+      "id": "s2",
+      "status": "pending",
+      "target_file": "services/marketing-analytics-ingest.js",
+      "task": "Develop service for ingesting social post performance data.",
+      "spec": "Node.js module exporting `ingestPerformanceData(data)` function that validates and saves analytics data to the `marketing_performance_analytics` table.",
+      "depends_on": [
+        "s1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "ingestPerformanceData"
+      ],
+      "file_contains": [
+        "async function ingestPerformanceData",
+        "marketing_performance_analytics"
+      ]
+    },
+    {
+      "id": "s3",
+      "status": "pending",
+      "target_file": "services/marketing-message-learning.js",
+      "task": "Implement service to analyze performance data and extract content learnings.",
+      "spec": "Node.js module exporting `learnFromPerformance(postId)` function that queries `marketing_performance_analytics`, analyzes data (potentially via `callCouncilMember`), and returns actionable insights about content elements.",
+      "depends_on": [
+        "s2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "learnFromPerformance"
+      ],
+      "file_contains": [
+        "async function learnFromPerformance",
+        "callCouncilMember",
+        "marketing_performance_analytics"
+      ]
+    },
+    {
+      "id": "s4",
+      "status": "pending",
+      "target_file": "routes/marketing-performance-intel-routes.js",
+      "task": "Create API routes to expose performance learning insights.",
+      "spec": "Node.js module exporting `registerPerformanceIntelRoutes(app, deps)` function, exposing a GET endpoint to retrieve learnings for a given founder or post.",
+      "depends_on": [
+        "s3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPerformanceIntelRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/marketingos/performance/learnings"
+      },
+      "file_contains": [
+        "app.get('/api/v1/marketingos/performance/learnings'",
+        "deps.marketingMessageLearning.learnFromPerformance"
+      ]
+    },
+    {
+      "id": "s5",
+      "status": "pending",
+      "target_file": "db/migrations/20260716_marketing_campaign_assets.sql",
+      "task": "Create table to store generated campaign assets (landing pages, emails, ads, lead magnets).",
+      "spec": "SQL migration to create `marketing_campaign_assets` table with `id`, `created_at`, `updated_at`, `session_id` (UUID, NOT NULL), `asset_type` (TEXT, NOT NULL, e.g., 'landing_page', 'email_sequence', 'ad_copy', 'lead_magnet'), `asset_content` (TEXT, NOT NULL), `status` (TEXT, e.g., 'generated', 'reviewed', 'published').",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS marketing_campaign_assets",
+        "session_id UUID NOT NULL",
+        "asset_type TEXT NOT NULL",
+        "asset_content TEXT NOT NULL"
+      ]
+    },
+    {
+      "id": "s6",
+      "status": "pending",
+      "target_file": "services/marketing-campaign-generator.js",
+      "task": "Develop service to generate campaign assets for landing pages, emails, ads, and lead magnets using AI.",
+      "spec": "Node.js module exporting `generateCampaignAssets(sessionId, campaignDetails)` function that calls `callCouncilMember` to generate various asset types and saves them to `marketing_campaign_assets`.",
+      "depends_on": [
+        "s5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generateCampaignAssets"
+      ],
+      "file_contains": [
+        "async function generateCampaignAssets",
+        "callCouncilMember",
+        "marketing_campaign_assets"
+      ]
+    },
+    {
+      "id": "s7",
+      "status": "pending",
+      "target_file": "routes/marketing-campaign-routes.js",
+      "task": "Create API routes for generating and retrieving campaign assets.",
+      "spec": "Node.js module exporting `registerCampaignRoutes(app, deps)` function, exposing a POST endpoint to trigger campaign generation and a GET endpoint to retrieve campaign assets by session ID.",
+      "depends_on": [
+        "s6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCampaignRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/marketingos/campaign/generate"
+      },
+      "file_contains": [
+        "app.post('/api/v1/marketingos/campaign/generate'",
+        "deps.marketingCampaignGenerator.generateCampaignAssets"
+      ]
+    },
+    {
+      "id": "s8",
+      "status": "pending",
+      "target_file": "public/overlay/marketing-campaign-review.html",
+      "task": "Create a UI overlay to review generated campaign assets.",
+      "spec": "HTML file containing client-side JS to fetch campaign assets from `/api/v1/marketingos/campaign` (e.g., `/api/v1/marketingos/campaign/assets?sessionId=...`) and display them for review and potential editing.",
+      "depends_on": [
+        "s7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "<div id=\"campaign-review-container\">",
+        "<script>",
+        "fetch('/api/v1/marketingos/campaign/assets?sessionId='"
+      ],
+      "design_review_flagged": true
+    },
+    {
+      "id": "s9",
+      "status": "pending",
+      "target_file": "public/overlay/marketing-social-schedule.html",
+      "task": "Develop a UI overlay for scheduling approved social posts to specific platforms and dates.",
+      "spec": "HTML file with client-side JS to present options for platforms (Instagram, LinkedIn, X, Facebook) and a date/time picker, then submit the scheduling request to the existing `/api/v1/marketingos/social/schedule` route.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "<form id=\"social-schedule-form\">",
+        "<select name=\"platform\">",
+        "<input type=\"datetime-local\"",
+        "fetch('/api/v1/marketingos/social/schedule'",
+        "<div id=\"social-schedule-overlay\">"
+      ],
+      "design_review_flagged": true
+    },
+    {
+      "id": "s10",
+      "status": "pending",
+      "target_file": "services/marketing-intelligence-director.js",
+      "task": "Implement a service acting as an AI marketing director for strategic recommendations and budget allocation.",
+      "spec": "Node.js module exporting `getStrategicRecommendations(founderId)` and `allocateBudget(founderId, budgetDetails)` functions. These functions will leverage `marketing-message-learning` and `callCouncilMember` to provide high-level strategy and budget advice.",
+      "depends_on": [
+        "s3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getStrategicRecommendations",
+        "allocateBudget"
+      ],
+      "file_contains": [
+        "async function getStrategicRecommendations",
+        "async function allocateBudget",
+        "deps.marketingMessageLearning.learnFromPerformance",
+        "callCouncilMember"
+      ]
+    },
+    {
+      "id": "s11",
+      "status": "pending",
+      "target_file": "routes/marketing-director-routes.js",
+      "task": "Create API routes to expose the AI Marketing Director's recommendations and budget allocations.",
+      "spec": "Node.js module exporting `registerIntelligenceRoutes(app, deps)` function, exposing GET endpoints for recommendations and POST for budget allocation advice.",
+      "depends_on": [
+        "s10"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerIntelligenceRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/marketingos/director/recommendations"
+      },
+      "file_contains": [
+        "app.get('/api/v1/marketingos/director/recommendations'",
+        "app.post('/api/v1/marketingos/director/budget/allocate'",
+        "deps.marketingIntelligenceDirector.getStrategicRecommendations"
+      ]
+    },
+    {
+      "id": "s12",
+      "status": "pending",
+      "target_file": "public/overlay/marketing-director-dashboard.html",
+      "task": "Develop a UI dashboard to display strategic insights and recommendations from the AI Marketing Director.",
+      "spec": "HTML file with client-side JS to fetch and display data from `/api/v1/marketingos/director/recommendations`, presenting overall performance summaries, strategic advice, and budget insights.",
+      "depends_on": [
+        "s11"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "<div id=\"director-dashboard\">",
+        "<script>",
+        "fetch('/api/v1/marketingos/director/recommendations')"
+      ],
+      "design_review_flagged": true
     }
   ],
   "backlog_signature": "marketingos-money-2026071219",
