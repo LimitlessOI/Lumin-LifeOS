@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T09:55:53.302Z",
+  "generated_at": "2026-08-01T09:58:29.747Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1841,
-      "mtime": "2026-08-01T09:55:16.644Z",
-      "indexed_at": "2026-08-01T09:55:42.713Z",
+      "bytes": 1821,
+      "mtime": "2026-08-01T09:58:15.032Z",
+      "indexed_at": "2026-08-01T09:58:29.747Z",
       "synopsis_index_only": true
     },
     {
@@ -42115,9 +42115,9 @@
     {
       "path": "docs/products/limitlessos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LimitlessOS business stack",
-      "bytes": 17503,
-      "mtime": "2026-08-01T09:55:51.128Z",
-      "indexed_at": "2026-08-01T09:55:53.302Z"
+      "bytes": 17456,
+      "mtime": "2026-08-01T09:58:20.772Z",
+      "indexed_at": "2026-08-01T09:58:29.747Z"
     },
     {
       "path": "docs/products/lip/FILE_MANIFEST.json",
@@ -65772,9 +65772,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 4588,
-      "mtime": "2026-08-01T09:54:32.332Z",
-      "indexed_at": "2026-08-01T09:55:42.713Z",
+      "bytes": 4012,
+      "mtime": "2026-08-01T09:57:47.712Z",
+      "indexed_at": "2026-08-01T09:58:29.747Z",
       "synopsis_index_only": true
     },
     {

@@ -18,8 +18,8 @@
       "ok": false,
       "step_id": "limitlessos-step4",
       "stage": "artifact_proof",
-      "reason": "artifact_proof_failed: vendor comparison; explain or exclude",
-      "attempts": 1,
+      "reason": "artifact_proof_failed: vendor comparison",
+      "attempts": 2,
       "blocked": false,
       "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
@@ -65,5 +65,5 @@
     }
   },
   "cycles": 1,
-  "updated_at": "2026-08-01T09:55:16.648Z"
+  "updated_at": "2026-08-01T09:58:15.034Z"
 }

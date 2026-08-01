@@ -2,7 +2,7 @@
  * SYNOPSIS: Compares vendors based on pricing and reviews, with explanations or exclusions based on criteria.
  * @ssot docs/products/limitlessos/PRODUCT_HOME.md
  */
-// Vendor comparison: explain or exclude vendors based on reviews and pricing criteria.
+// vendor comparison: explain or exclude vendors based on reviews and pricing criteria.
 export async function compareVendors(deps, payload) {
   const { pool, logger } = deps;
   const { vendorIds, criteria = {} } = payload || {};
