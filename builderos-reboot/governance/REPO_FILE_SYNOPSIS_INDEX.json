@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T10:10:46.087Z",
+  "generated_at": "2026-08-01T10:14:06.630Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1920,
-      "mtime": "2026-08-01T10:09:59.400Z",
-      "indexed_at": "2026-08-01T10:10:38.031Z",
+      "bytes": 1929,
+      "mtime": "2026-08-01T10:13:35.040Z",
+      "indexed_at": "2026-08-01T10:14:06.630Z",
       "synopsis_index_only": true
     },
     {
@@ -42823,9 +42823,9 @@
     {
       "path": "docs/products/wellness-studio/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Wellness Studio",
-      "bytes": 18026,
-      "mtime": "2026-08-01T10:10:29.060Z",
-      "indexed_at": "2026-08-01T10:10:38.031Z"
+      "bytes": 18084,
+      "mtime": "2026-08-01T10:13:53.988Z",
+      "indexed_at": "2026-08-01T10:14:06.630Z"
     },
     {
       "path": "docs/products/WELLNESSSTUDIO.md",
@@ -65772,9 +65772,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 4214,
-      "mtime": "2026-08-01T10:04:17.264Z",
-      "indexed_at": "2026-08-01T10:06:56.178Z",
+      "bytes": 3940,
+      "mtime": "2026-08-01T10:12:52.200Z",
+      "indexed_at": "2026-08-01T10:14:06.630Z",
       "synopsis_index_only": true
     },
     {
@@ -71663,9 +71663,9 @@
     {
       "path": "routes/therapist-integration-routes.js",
       "synopsis": "HTTP route module — Therapist Integration Routes.",
-      "bytes": 222,
-      "mtime": "2026-07-16T19:42:53.602Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 470,
+      "mtime": "2026-08-01T10:13:50.756Z",
+      "indexed_at": "2026-08-01T10:14:06.630Z",
       "ssot": [
         "docs/products/wellness-studio/PRODUCT_HOME.md"
       ]

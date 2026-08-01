@@ -1,24 +1,24 @@
 {
   "status": "idle",
   "last_task": {
-    "id": "product_build_wellness-studio_wellness-studio-3",
+    "id": "product_build_wellness-studio_wellness-studio-4",
     "kind": "product_build_step",
     "priority": 2.0006,
     "product": "wellness-studio",
     "product_id": "wellness-studio",
-    "step_id": "wellness-studio-3",
-    "target_file": "services/therapist-integration.js",
-    "detail": "next buildable step: wellness-studio-3"
+    "step_id": "wellness-studio-4",
+    "target_file": "routes/therapist-integration-routes.js",
+    "detail": "next buildable step: wellness-studio-4"
   },
   "last_result": {
     "ok": false,
-    "task_id": "product_build_wellness-studio_wellness-studio-3",
+    "task_id": "product_build_wellness-studio_wellness-studio-4",
     "detail": "product_build_step",
     "outcome": {
       "ok": false,
-      "step_id": "wellness-studio-3",
+      "step_id": "wellness-studio-4",
       "stage": "artifact_proof",
-      "reason": "artifact_proof_failed: missing_exports:setupIntegration; require('communication-profile'); require('truth-delivery')",
+      "reason": "artifact_proof_failed: missing_exports:registerTherapistRoutes; registerTherapistRoutes; POST /api/therapist/integration",
       "attempts": 1,
       "blocked": false,
       "blocker_class": "BLOCKED_TOOLING",
@@ -27,9 +27,9 @@
       "summary": {
         "product_id": "wellness-studio",
         "total": 51,
-        "pending": 8,
+        "pending": 7,
         "building": 0,
-        "done": 30,
+        "done": 31,
         "blocked": 0,
         "founder_gated": 0,
         "design_review_flagged": 0,
@@ -39,9 +39,9 @@
       }
     },
     "claim": {
-      "id": "wellness-studio:wellness-studio-3",
+      "id": "wellness-studio:wellness-studio-4",
       "kind": "execution",
-      "text": "product step wellness-studio-3 built + verified + served live",
+      "text": "product step wellness-studio-4 built + verified + served live",
       "grade": "GUESS",
       "proof": null,
       "original_grade": "KNOW",
@@ -53,9 +53,9 @@
     "summary": {
       "product_id": "wellness-studio",
       "total": 51,
-      "pending": 8,
+      "pending": 7,
       "building": 0,
-      "done": 30,
+      "done": 31,
       "blocked": 0,
       "founder_gated": 0,
       "design_review_flagged": 0,
@@ -65,5 +65,5 @@
     }
   },
   "cycles": 1,
-  "updated_at": "2026-08-01T10:09:59.404Z"
+  "updated_at": "2026-08-01T10:13:35.044Z"
 }
