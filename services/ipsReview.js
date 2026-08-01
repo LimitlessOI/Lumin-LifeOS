@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: IPS review service — attorney review RIA trigger risk assessment.
+ * SYNOPSIS: IPS review service — attorney review RIA trigger risk assessment (reviewIPSRisk / reviewIpsRisk).
  * @ssot docs/products/personal-finance-os/PRODUCT_HOME.md
  */
 

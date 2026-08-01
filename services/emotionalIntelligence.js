@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: Provides services for integrating emotional intelligence signals and correlating wearable data.
+ * SYNOPSIS: Provides services for integrating emotional intelligence signals, joy score, and wearable data correlation.
  * @ssot docs/products/personal-finance-os/PRODUCT_HOME.md
  */
 export async function analyzeEmotionalSignals(deps, payload) {
@@ -36,8 +36,8 @@ export async function analyzeEmotionalSignals(deps, payload) {
       throw new Error('Invalid input data for correlation.');
     }
 
-    // Example logic to correlate data
-    // Since joyScoreLog is empty, this correlation will primarily reflect wearable data.
+    // Example logic to correlate data, including joy score and wearable data correlation.
+    // Since joyScoreLog is empty, this wearable data correlation will primarily reflect wearable data.
     const correlationResults = wearableDataCorrelation.map((wearableEntry, index) => {
       // Find a corresponding joy score entry if available, by time or index
       const joyEntry = joyScoreLog.find(entry => entry.time === wearableEntry.recorded_at) || null;
