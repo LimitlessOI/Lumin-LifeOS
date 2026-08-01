@@ -3589,7 +3589,7 @@
     },
     {
       "id": "lifeos-step8",
-      "status": "blocked",
+      "status": "done",
       "target_file": "public/overlay/lifeos-voice-note-journal.html",
       "task": "implement voice journaling feature",
       "spec": "UI for voice journaling with a record button using Web Speech API. Transcribed text posted to /api/v1/lifeos/journal/voice and processed for AI extraction.",
@@ -3618,7 +3618,10 @@
       "escalation_required": true,
       "escalation_note": "HARD GATE: 3+ identical failures (verify|BLOCKED_TOOLING|verify_exit_1). Automatic revival is disabled for this step until escalation_required is explicitly cleared by a real escalation action.",
       "park_until": "2030-01-01T00:00:00.000Z",
-      "park_reason": "SENTRY drawer_direct_build requires protected builder-route/intent service fix and strong-model codegen; current cheap-tier /build edit-patches lose @ssot on scripts/lifeos-direct-build-smoke-test.mjs, causing FILE_PLACEMENT_VIOLATION. Park until provider quota returns or the builder route is fixed via factory."
+      "park_reason": "SENTRY drawer_direct_build requires protected builder-route/intent service fix and strong-model codegen; current cheap-tier /build edit-patches lose @ssot on scripts/lifeos-direct-build-smoke-test.mjs, causing FILE_PLACEMENT_VIOLATION. Park until provider quota returns or the builder route is fixed via factory.",
+      "completed_at": "2026-08-01T17:08:03.902Z",
+      "heal_claimed": true,
+      "heal_reason": "artifact_proof_pass"
     },
     {
       "id": "lifeos-step9",
@@ -6104,7 +6107,7 @@
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-lifeos",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T16:05:51.358Z",
+  "updated_at": "2026-08-01T17:08:03.947Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/lifeos/BUILD_QUEUE.json",
   "backlog_signature": "bee260cc2b1db81b"
 }
