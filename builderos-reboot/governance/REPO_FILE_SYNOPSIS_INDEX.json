@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T05:08:38.137Z",
+  "generated_at": "2026-08-01T05:09:27.610Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12670,
+  "file_count": 12671,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -89255,6 +89255,16 @@
       "bytes": 428,
       "mtime": "2026-07-18T18:46:59.255Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "services/creatorClipRemix.js",
+      "synopsis": "Searches the back-catalog for clips and compiles them into a new video remix.",
+      "bytes": 4704,
+      "mtime": "2026-08-01T05:09:27.610Z",
+      "indexed_at": "2026-08-01T05:09:27.610Z",
+      "ssot": [
+        "docs/products/creator-media-os/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/creatorDubbing.js",
