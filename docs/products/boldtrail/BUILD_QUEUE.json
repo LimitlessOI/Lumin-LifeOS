@@ -193,7 +193,7 @@
       "spec": "Implement a method to attach an explicit scoring rubric to each lead segment description.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "applyScoringRubric"
       ],
@@ -212,12 +212,12 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-31T06:39:18.932Z",
-      "commit_sha": null,
+      "commit_sha": "75138d43bdbe361718003eecb48c529bf0ba81c8",
       "blueprint_id": "PRODUCT-BOLDTRAIL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "boldtrail-step1",
       "mission_id": "PRODUCT-boldtrail",
       "pre_existing": null,
-      "last_error": null,
+      "last_error": "artifact_proof_failed: function applyScoringRubric(segmentDescription)",
       "reaudit_reset_at": "2026-07-30T18:55:06.301Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
@@ -247,7 +247,7 @@
       },
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-01T05:20:47.056Z",
       "last_attempt": null,
       "revive_count": 7,
       "revived_at": "2026-08-01T04:34:45.136Z",
@@ -256,7 +256,7 @@
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
-      "blocker_class": null,
+      "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
@@ -308,5 +308,5 @@
   "blueprint_id": "PRODUCT-BOLDTRAIL-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-boldtrail",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T05:20:33.951Z"
+  "updated_at": "2026-08-01T05:21:14.201Z"
 }
