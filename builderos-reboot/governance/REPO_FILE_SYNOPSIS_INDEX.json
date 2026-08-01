@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T16:09:16.342Z",
+  "generated_at": "2026-08-01T16:12:31.513Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12739,
   "files": [
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3847539,
-      "mtime": "2026-08-01T16:05:56.905Z",
-      "indexed_at": "2026-08-01T16:09:14.592Z"
+      "bytes": 3847540,
+      "mtime": "2026-08-01T16:09:16.433Z",
+      "indexed_at": "2026-08-01T16:12:27.420Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -30844,9 +30844,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 51695,
-      "mtime": "2026-08-01T15:42:17.773Z",
-      "indexed_at": "2026-08-01T15:44:25.624Z",
+      "bytes": 51749,
+      "mtime": "2026-08-01T16:11:53.141Z",
+      "indexed_at": "2026-08-01T16:12:31.513Z",
       "synopsis_index_only": true
     },
     {
@@ -42851,9 +42851,9 @@
     {
       "path": "docs/products/wellness-studio/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Wellness Studio",
-      "bytes": 19330,
-      "mtime": "2026-08-01T16:09:12.057Z",
-      "indexed_at": "2026-08-01T16:09:16.342Z"
+      "bytes": 20330,
+      "mtime": "2026-08-01T16:12:25.105Z",
+      "indexed_at": "2026-08-01T16:12:31.513Z"
     },
     {
       "path": "docs/products/WELLNESSSTUDIO.md",
@@ -65800,9 +65800,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 4206,
-      "mtime": "2026-08-01T15:46:17.793Z",
-      "indexed_at": "2026-08-01T15:50:45.242Z",
+      "bytes": 4582,
+      "mtime": "2026-08-01T16:11:06.537Z",
+      "indexed_at": "2026-08-01T16:12:31.513Z",
       "synopsis_index_only": true
     },
     {
@@ -71954,9 +71954,9 @@
     {
       "path": "routes/wellness-table-extensions-routes.js",
       "synopsis": "HTTP routes for wellness table extensions.",
-      "bytes": 1077,
-      "mtime": "2026-08-01T10:21:41.004Z",
-      "indexed_at": "2026-08-01T10:21:56.388Z",
+      "bytes": 1389,
+      "mtime": "2026-08-01T16:11:45.617Z",
+      "indexed_at": "2026-08-01T16:12:31.513Z",
       "ssot": [
         "docs/products/wellness-studio/PRODUCT_HOME.md"
       ]

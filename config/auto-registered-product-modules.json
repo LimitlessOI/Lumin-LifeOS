@@ -603,9 +603,9 @@
     },
     {
       "path": "routes/wellness-table-extensions-routes.js",
-      "register": "registerWellnessTableExtensionsRoutes",
+      "register": "registerWellnessExtensionsRoutes",
       "enabled": true,
-      "note": "Auto-registered for wellness-studio-step4"
+      "note": "Auto-registered for wellness-studio-step4 and step12; exports registerWellnessExtensionsRoutes alias"
     },
     {
       "path": "routes/wireframesRoutes.js",

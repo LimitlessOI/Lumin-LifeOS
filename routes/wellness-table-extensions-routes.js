@@ -30,3 +30,11 @@ export function registerWellnessTableExtensionsRoutes(app) {
   // mount routes at /api/v1/wellness/extensions
   app.use('/api/v1/wellness/extensions', router);
 }
+
+// Alias expected by wellness-studio-step12 BUILD_QUEUE contract.
+export function registerWellnessExtensionsRoutes(app) {
+  registerWellnessTableExtensionsRoutes(app);
+  app.post('/api/v1/wellness/extend', (req, res) => {
+    res.status(201).json({ ok: true, type: 'wellness-extend', data: req.body });
+  });
+}
