@@ -402,7 +402,7 @@
         "step1"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerSecurityRoutes"
       ],
@@ -430,11 +430,11 @@
       "blueprint_step_id": "step3",
       "mission_id": "PRODUCT-knowledge-base",
       "pre_existing": null,
-      "last_error": null,
+      "last_error": "HTTP 502",
       "reaudit_reset_at": "2026-07-30T18:55:06.480Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-01T05:34:15.559Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
         "content_source_path": "docs/products/knowledge-base/twins/steps/step3.exact"
@@ -469,7 +469,7 @@
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
-      "blocker_class": null,
+      "blocker_class": "BLOCKED_EXTERNAL",
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
@@ -938,5 +938,6 @@
   ],
   "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-knowledge-base",
-  "twin_kind": "product_build_queue_registered"
+  "twin_kind": "product_build_queue_registered",
+  "updated_at": "2026-08-01T05:34:58.937Z"
 }
