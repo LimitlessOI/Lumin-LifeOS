@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T09:17:53.658Z",
+  "generated_at": "2026-08-01T09:20:24.553Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1746,
-      "mtime": "2026-08-01T09:13:53.748Z",
-      "indexed_at": "2026-08-01T09:17:36.218Z",
+      "bytes": 1707,
+      "mtime": "2026-08-01T09:20:19.356Z",
+      "indexed_at": "2026-08-01T09:20:24.553Z",
       "synopsis_index_only": true
     },
     {

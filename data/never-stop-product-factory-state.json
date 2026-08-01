@@ -11,28 +11,25 @@
     "detail": "next buildable step: s1"
   },
   "last_result": {
-    "ok": false,
+    "ok": true,
     "task_id": "product_build_site-builder_s1",
     "detail": "product_build_step",
     "outcome": {
-      "ok": false,
+      "ok": true,
       "step_id": "s1",
-      "stage": "artifact_proof",
-      "reason": "artifact_proof_failed: CREATE TABLE IF NOT EXISTS",
-      "attempts": 1,
-      "blocked": false,
-      "blocker_class": "BLOCKED_TOOLING",
-      "claim_level": null,
-      "parked": false,
+      "commit_sha": "ef22baa8407e0b317798eb5b7fd29b5e46bbaa64",
+      "verified": true,
+      "deploy_proven": true,
+      "functional_proven": true,
       "summary": {
         "product_id": "site-builder",
         "total": 93,
         "pending": 0,
         "building": 0,
-        "done": 88,
+        "done": 89,
         "blocked": 0,
         "founder_gated": 1,
-        "design_review_flagged": 2,
+        "design_review_flagged": 1,
         "human_hold": 0,
         "skipped": 2,
         "complete": false
@@ -42,28 +39,29 @@
       "id": "site-builder:s1",
       "kind": "execution",
       "text": "product step s1 built + verified + served live",
-      "grade": "GUESS",
-      "proof": null,
+      "grade": "KNOW",
+      "proof": {
+        "deploy_verified": true,
+        "commit_sha": "ef22baa8407e0b317798eb5b7fd29b5e46bbaa64"
+      },
       "original_grade": "KNOW",
-      "enforced": true,
-      "flags": [
-        "claimed_KNOW_or_LAW_without_proof"
-      ]
+      "enforced": false,
+      "flags": []
     },
     "summary": {
       "product_id": "site-builder",
       "total": 93,
       "pending": 0,
       "building": 0,
-      "done": 88,
+      "done": 89,
       "blocked": 0,
       "founder_gated": 1,
-      "design_review_flagged": 2,
+      "design_review_flagged": 1,
       "human_hold": 0,
       "skipped": 2,
       "complete": false
     }
   },
   "cycles": 1,
-  "updated_at": "2026-08-01T09:13:53.750Z"
+  "updated_at": "2026-08-01T09:19:56.602Z"
 }

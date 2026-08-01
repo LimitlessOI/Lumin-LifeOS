@@ -1938,8 +1938,8 @@
       "commit_sha": "ef22baa8407e0b317798eb5b7fd29b5e46bbaa64",
       "built_sha": null,
       "proof": null,
-      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: CREATE TABLE IF NOT EXISTS",
-      "same_signature_count": 1,
+      "failure_signature": null,
+      "same_signature_count": 0,
       "escalation_class": "governance_block",
       "revive_count": 0,
       "revived_at": "2026-07-25T02:36:33.917Z",
@@ -1957,7 +1957,11 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-25T02:37:07.913Z",
       "heal_unblocked": true,
-      "completed_at": "2026-08-01T09:19:55.158Z"
+      "artifact_proven": true,
+      "grounding_status": "PASS",
+      "completed_at": "2026-08-01T09:19:55.158Z",
+      "deploy_proven": true,
+      "functional_proven": true
     },
     {
       "id": "s2",
