@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T14:55:17.610Z",
+  "generated_at": "2026-08-01T14:56:27.179Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12730,
   "files": [
@@ -37016,9 +37016,9 @@
     {
       "path": "db/migrations/20260714_marketing_social_post_schedules.sql",
       "synopsis": "Database migration — 20260714_marketing_social_post_schedules.sql.",
-      "bytes": 907,
-      "mtime": "2026-08-01T14:53:55.780Z",
-      "indexed_at": "2026-08-01T14:53:55.780Z"
+      "bytes": 1355,
+      "mtime": "2026-08-01T14:55:45.324Z",
+      "indexed_at": "2026-08-01T14:56:27.179Z"
     },
     {
       "path": "db/migrations/20260714_tc_browser_jobs.sql",
@@ -42216,9 +42216,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 134062,
-      "mtime": "2026-08-01T08:48:17.387Z",
-      "indexed_at": "2026-08-01T08:48:17.387Z"
+      "bytes": 135207,
+      "mtime": "2026-08-01T14:56:14.402Z",
+      "indexed_at": "2026-08-01T14:56:27.179Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",

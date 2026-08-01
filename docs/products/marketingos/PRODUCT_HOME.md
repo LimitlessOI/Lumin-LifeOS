@@ -1355,6 +1355,7 @@ config/council-members.js           — shared AI config
 
 ## Change Receipts
 
+| 2026-08-02 | **GAP-FILL: fixed a broken foreign key in `db/migrations/20260714_marketing_social_post_schedules.sql` that referenced a nonexistent table.** `post_id UUID REFERENCES marketing_social_publishing(id)` would fail at execution — no table literally named `marketing_social_publishing` exists; that string is only the topic of a sibling migration's filename (`20260710_marketing_social_publishing.sql`), which actually creates `marketing_social_connections`, `marketing_social_posting_templates`, and `marketing_publish_records`. Corrected the FK to `marketing_publish_records(id)` — the semantically correct parent (individual per-platform publish attempts, matching `post_schedules`' own `scheduled_at`/`status`/`platform` columns). Confirmed no code references `marketing_social_post_schedules` yet, so this is a pure correction, not a live schema change. | Found during real-time monitoring — the migration would have failed the moment it actually ran. | Confirmed `marketing_publish_records` is real via `db/migrations/20260710_marketing_social_publishing.sql`; confirmed zero current code references to the broken table. |
 | 2026-08-02 | **Creative Director review** — generated CREATIVE_BRIEF.md using the Creative Director lens. | MarketingOS reviewed through the BuilderOS creative responsibility; brief written to product home for founder review. | ✅ generated |
 | Date | What Changed | Why | Amendment Updated | Manifest Updated | Verified |
 |---|---|---|---|---|---|
