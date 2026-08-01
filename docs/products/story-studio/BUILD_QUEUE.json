@@ -127,7 +127,7 @@
     },
     {
       "id": "3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/multiFormatExporter.js",
       "task": "Add multi-format ladder for export",
       "spec": "Enable project export to storybook, comic, motion comic formats",
@@ -135,7 +135,7 @@
         "2"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "exportToStorybook",
         "exportToComic",
@@ -161,14 +161,16 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T23:20:55.525Z",
-      "commit_sha": "daa5f701b0cf35ccaa3c21af223548f0af07741a",
+      "commit_sha": "a6a045a2cf3b84dab0b3ef8d751fb75ae3089773",
       "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "3",
       "mission_id": "PRODUCT-story-studio",
       "same_signature_count": 0,
       "demoted": false,
       "last_error": "artifact_proof_failed: One project can export at least storybook + comic from the same story bible",
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T11:04:48.242Z",
+      "completed_at": "2026-08-01T11:05:01.713Z"
     },
     {
       "id": "4",
@@ -494,6 +496,6 @@
   "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-story-studio",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T11:04:29.738Z",
+  "updated_at": "2026-08-01T11:05:01.714Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/story-studio/BUILD_QUEUE.json"
 }
