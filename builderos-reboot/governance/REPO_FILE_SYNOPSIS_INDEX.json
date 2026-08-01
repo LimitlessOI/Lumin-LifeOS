@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T12:20:32.939Z",
+  "generated_at": "2026-08-01T12:21:56.017Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -91290,10 +91290,10 @@
     },
     {
       "path": "services/implementApprovalTimeout.js",
-      "synopsis": "services/implementApprovalTimeout.js",
-      "bytes": 524,
-      "mtime": "2026-07-16T19:42:53.610Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis": "Implements a 48-hour auto-reject timeout for approval requests.",
+      "bytes": 2116,
+      "mtime": "2026-08-01T12:21:56.017Z",
+      "indexed_at": "2026-08-01T12:21:56.017Z",
       "ssot": [
         "docs/products/business-tools/PRODUCT_HOME.md"
       ]
