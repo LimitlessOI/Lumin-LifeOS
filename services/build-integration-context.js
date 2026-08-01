@@ -173,7 +173,23 @@ export function buildIntegrationContext({
     lines.push('- The boot module-health gate verifies the module actually imports + mounts LIVE; a broken import or missing registration will fail the step (not a false done).');
     if (route && route.method && route.path) {
       lines.push(`- REQUIRED ROUTE: mount ${route.method.toUpperCase()} \`${route.path}\` inside the register function. Use the exact method and path.`);
+      lines.push('- Use the exact pattern below (method and path from REQUIRED ROUTE). Replace `verifyCredential` with the actual service function if different, and use the real column names from LIVE DB SCHEMA:');
+      lines.push(`\`\`\`js`);
+      lines.push(`export function ${fnName}(app, deps) {`);
+      lines.push(`  app.${route.method.toLowerCase()}('${route.path}', deps.requireKey, async (req, res, next) => {`);
+      lines.push(`    try {`);
+      lines.push(`      const { credentialId } = req.body;`);
+      lines.push(`      const result = await verifyCredential(deps, { credentialId });`);
+      lines.push(`      res.json(result);`);
+      lines.push(`    } catch (error) {`);
+      lines.push(`      deps.logger.error({ error }, 'Error in credential verification route');`);
+      lines.push(`      next(error);`);
+      lines.push(`    }`);
+      lines.push(`  });`);
+      lines.push(`}`);
+      lines.push(`\`\`\``);
     }
+    lines.push('- ROUTE-SPECIFIC FILE RULES: Do NOT use `express.Router()` or `app.use()` for a single route. Do NOT import `Request`, `Response`, or `NextFunction` from `express` (those are TypeScript types, not JS values). Do NOT import `requireKey`, `logger`, or `callCouncilMember` from sibling files; they come from `deps`. You MAY import an existing sibling service function you have confirmed exists (e.g. `import { verifyCredential } from \'../services/credentialVerification.js\';`).');
   }
 
   lines.push('');

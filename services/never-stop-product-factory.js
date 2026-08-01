@@ -1285,7 +1285,7 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
       const repairBlock = priorError
         ? `\n\nREPAIR REQUIRED — your previous attempt was REJECTED by the pre-commit runtime gate with this VERBATIM error. Fix the ROOT CAUSE (do not suppress or swallow it), then output the full corrected file:\n${priorError}`
         : '';
-      const build = await postBuilderBuild(baseUrl, commandKey, {
+      const buildBody = {
         domain: 'lifeos',
         mode: 'code',
         target_file,
@@ -1299,7 +1299,13 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
         // Protected source modules should be authored by a stronger model; the routing policy
         // still filters and falls back if the requested model is unavailable.
         ...(/^(services|routes|middleware|factory-staging)\//.test(target_file) ? { model: 'openai_builder_standard' } : {}),
-      });
+      };
+      // Inject the upstream service implementation so route modules call real deps
+      // instead of hallucinating sibling imports.
+      if (/^routes\//.test(target_file) && fs.existsSync(path.join(ROOT, 'services/credentialVerification.js'))) {
+        buildBody.files = ['services/credentialVerification.js'];
+      }
+      const build = await postBuilderBuild(baseUrl, commandKey, buildBody);
       const b = build.body || {};
       const commit_sha = b.commit_sha || b.sha || b.commit || (b.result && b.result.commit_sha) || null;
       if (build.ok && commit_sha) {
