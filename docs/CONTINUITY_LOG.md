@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-08-02 — Reset `memory-intelligence-2` and `memory-intelligence-4`; added `createFactEvidence` alias
+
+Reset `docs/products/memory-intelligence/BUILD_QUEUE.json` steps `memory-intelligence-2` (`scripts/memory-seed-epistemic.mjs`) and `memory-intelligence-4` (`scripts/memory-ci-evidence.mjs`) from `blocked`/`escalation_required` to `pending`. Both scripts already existed; `scripts/memory-ci-evidence.mjs` exported `recordCiEvidence` but the step expected `createFactEvidence`, so a deterministic alias was added. `scripts/memory-seed-epistemic.mjs` already exported `seedEpistemicFacts`. These are pure script artifacts with no service/route codegen, so they can be claimed by the never-stop factory without AI providers.
+
 ## 2026-08-02 — Parked wellness service/route steps; reset `ai-council` step 8 (`scripts/habLimiter.mjs`)
 
 Parked `wellness-studio-step11` (`services/extended-tables.js`) and `wellness-studio-step12` (`routes/wellness-table-extensions-routes.js`) with `park_until` far-future because both require codegen for service/route modules and all model providers are currently rate-limit or credit exhausted. The pre-existing `services/extended-tables.js` artifact exports `extendTables` but the step expects `extendWellnessTables`, and a `/build` repair returns `HTTP 404` (no available codegen path). Parking prevents revive-thrash while preserving the real work for when providers return.

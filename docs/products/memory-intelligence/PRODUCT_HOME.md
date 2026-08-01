@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/memory-intelligence/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-27 — Brainstorm vault: Jul 27 continuity dump indexed; Phase 1 status corrected (C21–S5 largely shipped); next = friction meter / DNA population — not Phase 1 rebuild |
+| **Last Updated** | 2026-08-02 — `memory-intelligence-2` and `memory-intelligence-4` reset from `blocked`/`escalation_required` to `pending`. `scripts/memory-ci-evidence.mjs` gained a `createFactEvidence` alias to match the BUILD_QUEUE expected export; `scripts/memory-seed-epistemic.mjs` already exports `seedEpistemicFacts`. Both are deterministic script artifacts cleared by the conductor. |
 
 ---
 **Status:** Active — Phase 1 Complete + Governance Hardening + Builder Integration  

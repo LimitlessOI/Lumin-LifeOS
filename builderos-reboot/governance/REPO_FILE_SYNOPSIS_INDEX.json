@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T03:24:46.597Z",
+  "generated_at": "2026-08-01T03:26:51.120Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12663,
   "files": [
@@ -32698,8 +32698,8 @@
       "path": "data/builderos-intake-regression-last-run.json",
       "synopsis": "JSON data/config — data/builderos-intake-regression-last-run.json.",
       "bytes": 920,
-      "mtime": "2026-08-01T03:15:28.141Z",
-      "indexed_at": "2026-08-01T03:15:28.141Z",
+      "mtime": "2026-08-01T03:26:51.120Z",
+      "indexed_at": "2026-08-01T03:26:51.120Z",
       "synopsis_index_only": true
     },
     {
@@ -33105,8 +33105,8 @@
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
       "bytes": 483,
-      "mtime": "2026-08-01T03:15:28.141Z",
-      "indexed_at": "2026-08-01T03:15:28.141Z",
+      "mtime": "2026-08-01T03:26:51.120Z",
+      "indexed_at": "2026-08-01T03:26:51.120Z",
       "synopsis_index_only": true
     },
     {
@@ -38909,9 +38909,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 91548,
-      "mtime": "2026-08-01T03:24:46.597Z",
-      "indexed_at": "2026-08-01T03:24:46.597Z"
+      "bytes": 92281,
+      "mtime": "2026-08-01T03:26:51.120Z",
+      "indexed_at": "2026-08-01T03:26:51.120Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40971,8 +40971,8 @@
       "path": "docs/products/ai-council/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — AI Council",
       "bytes": 74387,
-      "mtime": "2026-08-01T03:24:46.597Z",
-      "indexed_at": "2026-08-01T03:24:46.597Z"
+      "mtime": "2026-08-01T03:26:51.120Z",
+      "indexed_at": "2026-08-01T03:26:51.120Z"
     },
     {
       "path": "docs/products/ai-receptionist/FILE_MANIFEST.json",
@@ -42049,9 +42049,9 @@
     {
       "path": "docs/products/memory-intelligence/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Memory Intelligence",
-      "bytes": 48583,
-      "mtime": "2026-07-28T18:01:25.489Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 48777,
+      "mtime": "2026-08-01T03:26:51.120Z",
+      "indexed_at": "2026-08-01T03:26:51.120Z"
     },
     {
       "path": "docs/products/memory-system/FILE_MANIFEST.json",
@@ -42522,8 +42522,8 @@
       "path": "docs/products/wellness-studio/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Wellness Studio",
       "bytes": 16670,
-      "mtime": "2026-08-01T03:24:46.597Z",
-      "indexed_at": "2026-08-01T03:24:46.597Z"
+      "mtime": "2026-08-01T03:26:51.120Z",
+      "indexed_at": "2026-08-01T03:26:51.120Z"
     },
     {
       "path": "docs/products/WELLNESSSTUDIO.md",
@@ -61832,8 +61832,8 @@
       "path": "docs/reports/BUILD_STATUS_2026-08-02.md",
       "synopsis": "Build Queue Status Report — 2026-08-02",
       "bytes": 3385,
-      "mtime": "2026-08-01T03:24:46.597Z",
-      "indexed_at": "2026-08-01T03:24:46.597Z"
+      "mtime": "2026-08-01T03:26:51.120Z",
+      "indexed_at": "2026-08-01T03:26:51.120Z"
     },
     {
       "path": "docs/reports/landing-page-status.md",
@@ -66066,8 +66066,8 @@
       "path": "products/receipts/POINT_B_DNA_VERIFY.json",
       "synopsis": "Product receipt — POINT B DNA VERIFY.",
       "bytes": 280,
-      "mtime": "2026-08-01T03:24:46.597Z",
-      "indexed_at": "2026-08-01T03:24:46.597Z",
+      "mtime": "2026-08-01T03:26:51.120Z",
+      "indexed_at": "2026-08-01T03:26:51.120Z",
       "synopsis_index_only": true
     },
     {
@@ -66082,8 +66082,8 @@
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
       "bytes": 18509,
-      "mtime": "2026-08-01T03:24:46.597Z",
-      "indexed_at": "2026-08-01T03:24:46.597Z",
+      "mtime": "2026-08-01T03:26:51.120Z",
+      "indexed_at": "2026-08-01T03:26:51.120Z",
       "synopsis_index_only": true
     },
     {
@@ -66274,16 +66274,16 @@
       "path": "products/receipts/TRUTH_ENFORCEMENT_AUDIT.json",
       "synopsis": "Product receipt — TRUTH ENFORCEMENT AUDIT.",
       "bytes": 701,
-      "mtime": "2026-08-01T03:24:46.597Z",
-      "indexed_at": "2026-08-01T03:24:46.597Z",
+      "mtime": "2026-08-01T03:26:51.120Z",
+      "indexed_at": "2026-08-01T03:26:51.120Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/TRUTH_LOCKDOWN_VERIFY.json",
       "synopsis": "Product receipt — TRUTH LOCKDOWN VERIFY.",
       "bytes": 1141,
-      "mtime": "2026-08-01T03:24:46.597Z",
-      "indexed_at": "2026-08-01T03:24:46.597Z",
+      "mtime": "2026-08-01T03:26:51.120Z",
+      "indexed_at": "2026-08-01T03:26:51.120Z",
       "synopsis_index_only": true
     },
     {
@@ -66314,8 +66314,8 @@
       "path": "products/receipts/WISDOM_TRUTH_AUDIT.json",
       "synopsis": "Product receipt — WISDOM TRUTH AUDIT.",
       "bytes": 735,
-      "mtime": "2026-08-01T03:24:46.597Z",
-      "indexed_at": "2026-08-01T03:24:46.597Z",
+      "mtime": "2026-08-01T03:26:51.120Z",
+      "indexed_at": "2026-08-01T03:26:51.120Z",
       "synopsis_index_only": true
     },
     {
@@ -72874,8 +72874,8 @@
       "path": "scripts/habLimiter.mjs",
       "synopsis": "HAB (Human/AI Budget) limiter — enforce a daily call cap per key.",
       "bytes": 985,
-      "mtime": "2026-08-01T03:24:46.597Z",
-      "indexed_at": "2026-08-01T03:24:46.597Z",
+      "mtime": "2026-08-01T03:26:51.120Z",
+      "indexed_at": "2026-08-01T03:26:51.120Z",
       "ssot": [
         "docs/products/ai-council/PRODUCT_HOME.md"
       ]
@@ -73828,9 +73828,12 @@
     {
       "path": "scripts/memory-ci-evidence.mjs",
       "synopsis": "Records CI evidence by running `npm run memory:ci-evidence`.",
-      "bytes": 1067,
-      "mtime": "2026-07-31T05:52:28.047Z",
-      "indexed_at": "2026-07-31T05:52:29.738Z"
+      "bytes": 1268,
+      "mtime": "2026-08-01T03:26:51.120Z",
+      "indexed_at": "2026-08-01T03:26:51.120Z",
+      "ssot": [
+        "docs/products/memory-intelligence/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/memory-digest-update.mjs",

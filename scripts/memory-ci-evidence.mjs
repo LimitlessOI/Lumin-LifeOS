@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Records CI evidence by running `npm run memory:ci-evidence`.
+ * @ssot docs/products/memory-intelligence/PRODUCT_HOME.md
  */
 import { spawn } from 'child_process';
 
@@ -29,4 +30,9 @@ export async function recordCiEvidence() {
       reject(err);
     });
   });
+}
+
+// Alias for the BUILD_QUEUE expected export name.
+export async function createFactEvidence(...args) {
+  return recordCiEvidence(...args);
 }
