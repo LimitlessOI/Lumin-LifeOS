@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T00:45:26.638Z",
+  "generated_at": "2026-08-01T00:47:46.687Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12643,
   "files": [
@@ -38888,9 +38888,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 83893,
-      "mtime": "2026-08-01T00:43:18.946Z",
-      "indexed_at": "2026-08-01T00:43:18.946Z"
+      "bytes": 83914,
+      "mtime": "2026-08-01T00:47:46.687Z",
+      "indexed_at": "2026-08-01T00:47:46.687Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41948,9 +41948,9 @@
     {
       "path": "docs/products/lumin-university/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Lumin University",
-      "bytes": 21170,
-      "mtime": "2026-08-01T00:43:18.946Z",
-      "indexed_at": "2026-08-01T00:43:18.946Z"
+      "bytes": 21224,
+      "mtime": "2026-08-01T00:47:46.687Z",
+      "indexed_at": "2026-08-01T00:47:46.687Z"
     },
     {
       "path": "docs/products/LUMINUNIVERSITY.md",
