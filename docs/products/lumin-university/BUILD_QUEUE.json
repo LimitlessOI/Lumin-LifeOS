@@ -198,7 +198,7 @@
     },
     {
       "id": "5",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/credentialVerificationRoutes.js",
       "task": "add credential verification route",
       "spec": "Add an Express route module for credential verification. The file must start with a JSDoc block containing `@ssot docs/products/lumin-university/PRODUCT_HOME.md`. Export a named function `registerCredentialVerificationRoutes(app, deps)` that mounts a POST `/api/v1/credentials/verify` route. Use deps.requireKey on protected routes, deps.pool for DB, and deps.logger for logging. Call services/credentialVerification.js `verifyCredential(deps, payload)`. Output plain ESM JavaScript only.",
@@ -206,7 +206,7 @@
         "4"
       ],
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 3,
       "expected_exports": [
         "registerCredentialVerificationRoutes"
       ],
@@ -230,8 +230,8 @@
       "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "5",
       "mission_id": "PRODUCT-lumin-university",
-      "last_error": "artifact_proof_failed: assertion_threw",
-      "last_attempt_at": "2026-08-01T00:38:10.431Z",
+      "last_error": "route module not auto-registered — add {\"path\":\"routes/credentialVerificationRoutes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
+      "last_attempt_at": "2026-08-01T00:41:27.121Z",
       "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "park_until": null,
