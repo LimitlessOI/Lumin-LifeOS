@@ -463,6 +463,21 @@ function loadKnownTables(repoRoot) {
   const schemaPath = path.join(repoRoot, 'db', 'schema.sql');
   if (fs.existsSync(schemaPath)) files.push(schemaPath);
 
+  // Root db/ auto-apply SQL files (e.g. db/memory-auto-apply.sql) also declare tables.
+  const dbDir = path.join(repoRoot, 'db');
+  try {
+    if (fs.existsSync(dbDir)) {
+      for (const f of fs.readdirSync(dbDir)) {
+        if (f.endsWith('.sql')) {
+          const p = path.join(dbDir, f);
+          if (!files.includes(p)) files.push(p);
+        }
+      }
+    }
+  } catch {
+    // best effort
+  }
+
   for (const file of files) {
     try {
       const text = fs.readFileSync(file, 'utf8');

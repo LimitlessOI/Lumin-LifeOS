@@ -1,7 +1,7 @@
 -- SYNOPSIS: SQL — memory-auto-apply.sql.
 -- Ensure memory system integrity by auto-applying necessary changes
 
--- Create memory_system table if it doesn't exist
+-- Create memory_system table if it does not exist
 CREATE TABLE IF NOT EXISTS memory_system (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS memory_system (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Add a new column if it doesn't exist
+-- Add a new column if it does not exist
 DO $$
 BEGIN
     IF NOT EXISTS (
@@ -31,12 +31,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Create trigger if it doesn't exist
+-- Create trigger if it does not exist
 DO $$
 BEGIN
     IF NOT EXISTS (
         SELECT 1 
-        FROM pg_trigger 
+        FROM pg_catalog.pg_trigger 
         WHERE tgname = 'set_last_updated'
     ) THEN
         CREATE TRIGGER set_last_updated
@@ -46,7 +46,7 @@ BEGIN
     END IF;
 END $$;
 
--- Create a summary view if it doesn't exist
+-- Create a summary view if it does not exist
 CREATE VIEW IF NOT EXISTS memory_system_summary AS
 SELECT id, name, description, created_at, last_updated
 FROM memory_system;

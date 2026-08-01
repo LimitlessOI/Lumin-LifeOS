@@ -1,11 +1,11 @@
 {
   "schema": "deploy_truth_verify_v1",
-  "at": "2026-08-01T11:50:38.028Z",
+  "at": "2026-08-01T13:04:39.692Z",
   "command": "drift-audit",
   "production_base": "https://lumin-web-production-e3a9.up.railway.app",
   "deploy_branch": "main",
-  "commit_sha": "b21123988fcb93e2f076532cf6455e4eb0e405d9",
-  "served_sha": "b21123988fcb93e2f076532cf6455e4eb0e405d9",
+  "commit_sha": "87ad6c09bef666382caba3def329acc852d40b35",
+  "served_sha": "87ad6c09bef666382caba3def329acc852d40b35",
   "verdict": "PROVEN",
   "ok": true,
   "passed": [
@@ -21,11 +21,11 @@
   "skipped": [],
   "files": [],
   "deployment": {
-    "id": "89eefe34-3f4f-4834-acff-f35bc928ac27",
+    "id": "48a5a56f-86b4-442b-9e0e-fbf1991f5335",
     "status": "SUCCESS",
-    "created_at": "2026-08-01T11:49:10.241Z",
-    "commit_sha": "b21123988fcb93e2f076532cf6455e4eb0e405d9",
-    "commit_message": "chore: update REPO_FILE_SYNOPSIS_INDEX after makeGenerator.js gap-fill\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
+    "created_at": "2026-08-01T13:02:46.398Z",
+    "commit_sha": "87ad6c09bef666382caba3def329acc852d40b35",
+    "commit_message": "GAP-FILL: merge origin/main keeping db/memory-auto-apply.sql CREATE VIEW IF NOT EXISTS gap-fill for memory-intelligence-1.\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
     "url": null
   },
   "runtime_identity": {
@@ -46,15 +46,15 @@
     {
       "id": "git.fetch",
       "status": "pass",
-      "detail": "origin/main is b21123988fcb"
+      "detail": "origin/main is 87ad6c09bef6"
     },
     {
       "id": "local.divergence",
       "status": "pass",
       "detail": "local main is aligned with origin/main",
       "local_branch": "main",
-      "local_head": "b21123988fcb93e2f076532cf6455e4eb0e405d9",
-      "remote_head": "b21123988fcb93e2f076532cf6455e4eb0e405d9",
+      "local_head": "87ad6c09bef666382caba3def329acc852d40b35",
+      "remote_head": "87ad6c09bef666382caba3def329acc852d40b35",
       "ahead": 0,
       "behind": 0,
       "uncommitted": 0
@@ -81,20 +81,20 @@
     {
       "id": "runtime.version",
       "status": "pass",
-      "detail": "production serves b21123988fcb, which contains origin/main (b21123988fcb)",
-      "served_sha": "b21123988fcb93e2f076532cf6455e4eb0e405d9",
-      "remote_head": "b21123988fcb93e2f076532cf6455e4eb0e405d9"
+      "detail": "production serves 87ad6c09bef6, which contains origin/main (87ad6c09bef6)",
+      "served_sha": "87ad6c09bef666382caba3def329acc852d40b35",
+      "remote_head": "87ad6c09bef666382caba3def329acc852d40b35"
     },
     {
       "id": "deployment.state",
       "status": "pass",
-      "detail": "latest deployment SUCCESS on b21123988fcb, nothing in flight",
+      "detail": "latest deployment SUCCESS on 87ad6c09bef6, nothing in flight",
       "deployment": {
-        "id": "89eefe34-3f4f-4834-acff-f35bc928ac27",
+        "id": "48a5a56f-86b4-442b-9e0e-fbf1991f5335",
         "status": "SUCCESS",
-        "created_at": "2026-08-01T11:49:10.241Z",
-        "commit_sha": "b21123988fcb93e2f076532cf6455e4eb0e405d9",
-        "commit_message": "chore: update REPO_FILE_SYNOPSIS_INDEX after makeGenerator.js gap-fill\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
+        "created_at": "2026-08-01T13:02:46.398Z",
+        "commit_sha": "87ad6c09bef666382caba3def329acc852d40b35",
+        "commit_message": "GAP-FILL: merge origin/main keeping db/memory-auto-apply.sql CREATE VIEW IF NOT EXISTS gap-fill for memory-intelligence-1.\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
         "url": null
       }
     }
@@ -102,9 +102,9 @@
   "produced_by": "cursor-agent",
   "verified_by": "git+railway-api+production-http-probe",
   "verification_kind": "deterministic+external",
-  "local_head": "b21123988fcb93e2f076532cf6455e4eb0e405d9",
+  "local_head": "87ad6c09bef666382caba3def329acc852d40b35",
   "local_branch": "main",
   "ahead": 0,
   "behind": 0,
-  "human_summary": "PROVEN — production serves b21123988fcb, which contains origin/main; no runtime drift found."
+  "human_summary": "PROVEN — production serves 87ad6c09bef6, which contains origin/main; no runtime drift found."
 }
