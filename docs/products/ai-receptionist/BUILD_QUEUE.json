@@ -625,7 +625,7 @@
         "ai-receptionist-2"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "createVapiAccount"
       ],
@@ -637,7 +637,7 @@
       "revive_count": 6,
       "revived_at": "2026-07-16T06:06:39.594Z",
       "last_attempt": null,
-      "demoted": true,
+      "demoted": false,
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:createVapiAccount; behavior_assertion_failed; behavior_proof",
       "demoted_at": "2026-07-17T21:23:51.221Z",
       "park_until": null,
@@ -838,5 +838,5 @@
   "blueprint_id": "PRODUCT-AI-RECEPTIONIST-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-ai-receptionist",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T04:55:54.227Z"
+  "updated_at": "2026-08-01T05:59:29.862Z"
 }
