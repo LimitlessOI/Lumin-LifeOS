@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T11:04:23.044Z",
+  "generated_at": "2026-08-01T11:04:55.246Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -93658,10 +93658,13 @@
     },
     {
       "path": "services/multiFormatExporter.js",
-      "synopsis": "Service module — MultiFormatExporter.",
-      "bytes": 681,
-      "mtime": "2026-07-16T19:42:53.614Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "synopsis": "Provides multi-format export capabilities for story projects.",
+      "bytes": 2134,
+      "mtime": "2026-08-01T11:04:55.246Z",
+      "indexed_at": "2026-08-01T11:04:55.246Z",
+      "ssot": [
+        "docs/products/story-studio/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/musicIndustryConsult.js",
