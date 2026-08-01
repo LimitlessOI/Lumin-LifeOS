@@ -1,36 +1,36 @@
 /**
- * SYNOPSIS: Registers ApprovalRoutes routes/handlers (routes/approval.js).
+ * SYNOPSIS: Registers routes for commitment approvals.
  * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
-import express from 'express';
+export function registerApproval(app, deps) {
+  app.post('/api/v1/approval/commitment', deps.requireKey, async (req, res, next) => {
+    try {
+      // For now, directly insert into lifere_approval_queue.
+      // In a more complex scenario, this would call a dedicated service function
+      // that orchestrates the approval process, potentially interacting with
+      // other tables or AI services.
+      const { tenant_id, user_id, action_type, payload, draft_text, autonomy_level_required } = req.body;
 
-const router = express.Router();
+      if (!tenant_id || !user_id || !action_type || !payload) {
+        return res.status(400).json({ error: 'Missing required fields for commitment approvals.' });
+      }
 
-function handleGetApprovals(req, res) {
-  // Logic to get approvals
-  res.send('Get approvals');
-}
+      const sql = `
+        INSERT INTO lifere_approval_queue (tenant_id, user_id, action_type, payload, draft_text, status, autonomy_level_required)
+        VALUES ($1, $2, $3, $4, $5, 'pending', $6)
+        RETURNING id, created_at;
+      `;
+      const values = [tenant_id, user_id, action_type, payload, draft_text, autonomy_level_required || 0];
+      const result = await deps.pool.query(sql, values);
 
-function handleCreateApproval(req, res) {
-  // Logic to create a new approval
-  res.send('Create approval');
-}
-
-function handleUpdateApproval(req, res) {
-  // Logic to update an existing approval
-  res.send('Update approval');
-}
-
-function handleDeleteApproval(req, res) {
-  // Logic to delete an approval
-  res.send('Delete approval');
-}
-
-export function registerApprovalRoutes(app) {
-  router.get('/approvals', handleGetApprovals);
-  router.post('/approvals', handleCreateApproval);
-  router.put('/approvals/:id', handleUpdateApproval);
-  router.delete('/approvals/:id', handleDeleteApproval);
-
-  app.use(router);
+      res.status(201).json({
+        message: 'Commitment approval request submitted successfully.',
+        approvalId: result.rows[0].id,
+        createdAt: result.rows[0].created_at,
+      });
+    } catch (error) {
+      deps.logger.error({ error }, 'Error in commitment approvals route');
+      next(error);
+    }
+  });
 }
