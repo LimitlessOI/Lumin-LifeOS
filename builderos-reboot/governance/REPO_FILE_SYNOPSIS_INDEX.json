@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T03:26:51.120Z",
+  "generated_at": "2026-08-01T03:30:03.869Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12663,
   "files": [
@@ -38797,9 +38797,9 @@
     {
       "path": "docs/constitution/NORTH_STAR_SSOT.md",
       "synopsis": "North Star Constitution SSOT — Force of Truth — supreme constitutional law (ONE file)",
-      "bytes": 68050,
-      "mtime": "2026-07-03T21:46:43.736Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 70290,
+      "mtime": "2026-08-01T03:28:51.559Z",
+      "indexed_at": "2026-08-01T03:30:03.869Z"
     },
     {
       "path": "docs/constitution/NORTH_STAR.md",
@@ -38909,9 +38909,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 92281,
-      "mtime": "2026-08-01T03:26:51.120Z",
-      "indexed_at": "2026-08-01T03:26:51.120Z"
+      "bytes": 92910,
+      "mtime": "2026-08-01T03:29:04.863Z",
+      "indexed_at": "2026-08-01T03:30:03.869Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",

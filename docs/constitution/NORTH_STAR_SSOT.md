@@ -57,7 +57,7 @@
 
 # FULL CONSTITUTIONAL TEXT
 
-**Version:** 2026-06-12 (CANONICAL) — **Article II §2.18:** compound drift law — zero tolerated angular error; uncorrected false assumptions/work compound; mandatory course correction before build-on-error. Prior: 2026-06-11 **§2.17** operator mandate completion bar. Prior: 2026-05-27 **BuilderOS identity correction:** the autonomous machine is **BuilderOS**; **TSOS** remains the external efficiency/routing product and the retained machine-channel lexicon name in `docs/TSOS_SYSTEM_LANGUAGE.md`. Prior: 2026-04-25 **Article II §2.11c:** Conductor = **supervisor** — system codes amendment/product at scale; **audit**, **council-debate** quality, **report** gaps/bugs on **platform**; **forbidden** default IDE hand-authorship of product when **`POST /api/v1/lifeos/builder/build`** is the path. Prior: 2026-04-22 **§2.15** operator instruction + anti-steering. Prior: 2026-04-26 **§2.3** env diagnosis; 2026-04-25 **§2.11a**/**§2.11b**; 2026-04-22 **§2.12**; 2026-04-21 **§2.11**; **§2.10**; **§2.6** + **¶8** + **¶9** Quick Launch / NSSOT.
+**Version:** 2026-08-02 (CANONICAL) — **Article II §2.12a:** consensus quality and reality-alignment law — consensus is not achieved until every unresolved objection is answered, accepted as unknown, deferred with justification, or withdrawn; consensus must survive contact with SENTRY/receipts/production reality. Prior: 2026-06-12 **§2.18** compound drift law. Prior: 2026-06-11 **§2.17** operator mandate completion bar. Prior: 2026-05-27 **BuilderOS identity correction:** the autonomous machine is **BuilderOS**; **TSOS** remains the external efficiency/routing product and the retained machine-channel lexicon name in `docs/TSOS_SYSTEM_LANGUAGE.md`. Prior: 2026-04-25 **Article II §2.11c:** Conductor = **supervisor** — system codes amendment/product at scale; **audit**, **council-debate** quality, **report** gaps/bugs on **platform**; **forbidden** default IDE hand-authorship of product when **`POST /api/v1/lifeos/builder/build`** is the path. Prior: 2026-04-22 **§2.15** operator instruction + anti-steering. Prior: 2026-04-26 **§2.3** env diagnosis; 2026-04-25 **§2.11a**/**§2.11b**; 2026-04-22 **§2.12**; 2026-04-21 **§2.11**; **§2.10**; **§2.6** + **¶8** + **¶9** Quick Launch / NSSOT.
 **Status:** SUPREME AUTHORITY (wins all conflicts)
 **Purpose:** Constitutional foundation - mission, values, non-negotiables
 
@@ -449,6 +449,23 @@ Metrics include:
    - **End of every shipped slice:** update **Change Receipts**, **Agent Handoff**, and **`docs/QUICK_LAUNCH.md`** as required by **§2.6 ¶9** and Companion hygiene — so the **next** supervisor does not inherit silent drift.
 
 5. **No bypass.** **Chat agreement**, “team consensus” in a single thread without recorded council output, or **implied** approval **do not** satisfy §2.12 for load-bearing technical forks. **”Ship now, debate later”** for such forks is **forbidden** unless Human Guardian has explicitly accepted the risk under Article III.
+
+### 2.12a Consensus Quality and Reality-Alignment (Constitutional — Non-Derogable)
+
+**Consensus is not achieved until every unresolved objection is either:**
+
+1. **Answered with evidence** — the objecting responsibility can point to a verifier, receipt, measurement, or authoritative external source that resolves the objection;
+2. **Accepted as an unknown** — recorded in the mission's `unknowns` ledger with a plan to reduce the unknown, and the remaining uncertainty is proportionally reflected in the propagated confidence score;
+3. **Intentionally deferred with justification** — the council records *why* it is safe to defer, the conditions under which the objection will be revisited, and the risk boundary; or
+4. **Withdrawn by the responsibility that raised it** — the objector explicitly states the objection is resolved, with the reason preserved in the record.
+
+**Objections may not fade away because participants are tired of arguing, because a majority voted, or because the Chair is impatient.** A recorded objection that is ignored is a **§2.6** violation (misleading representation of the council's actual state).
+
+**Consensus must be with reality, not merely with each other.** If every responsibility and the Chair agree, but SENTRY, receipts, production behavior, customer data, or another measurable outcome disagree, the consensus is **provisionally wrong** until reality is reconciled. The final judge of a technical or product claim is **verified reality**, not the agreement of the models. A council recommendation that contradicts a failing SENTRY gate, a missing receipt, or a production regression is **not a valid consensus**; it is a hypothesis that must be revised or downgraded to `UNSOLVED` with a named reconciliation plan.
+
+**Implementation:** This standard is enforced by the council protocol itself (recorded objections, unknowns ledger, confidence propagation, and SENTRY-first final verification) and by the truth-enforcement spine that rejects PASS receipts without matching reality evidence.
+
+**Only Article VII amends §2.12a.**
 
 ### 2.13 System Must Always Improve — No Regression (Non-Derogable)
 

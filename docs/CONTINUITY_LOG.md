@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-08-02 — Constitutional amendment: §2.12a Consensus Quality and Reality-Alignment
+
+Added `§2.12a Consensus Quality and Reality-Alignment` to `docs/constitution/NORTH_STAR_SSOT.md` per Adam's directive. The new law states that consensus is not achieved until every unresolved objection is answered with evidence, accepted as an unknown, intentionally deferred with justification, or withdrawn by the objector; and that consensus must survive contact with SENTRY, receipts, production behavior, and customer data. Version bumped to 2026-08-02. This is supreme constitutional law and can only be amended by Article VII.
+
 ## 2026-08-02 — Reset `memory-intelligence-2` and `memory-intelligence-4`; added `createFactEvidence` alias
 
 Reset `docs/products/memory-intelligence/BUILD_QUEUE.json` steps `memory-intelligence-2` (`scripts/memory-seed-epistemic.mjs`) and `memory-intelligence-4` (`scripts/memory-ci-evidence.mjs`) from `blocked`/`escalation_required` to `pending`. Both scripts already existed; `scripts/memory-ci-evidence.mjs` exported `recordCiEvidence` but the step expected `createFactEvidence`, so a deterministic alias was added. `scripts/memory-seed-epistemic.mjs` already exported `seedEpistemicFacts`. These are pure script artifacts with no service/route codegen, so they can be claimed by the never-stop factory without AI providers.
