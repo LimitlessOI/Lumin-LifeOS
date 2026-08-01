@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T20:04:05.828Z",
+  "generated_at": "2026-08-01T20:04:47.539Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12814,
+  "file_count": 12815,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -41308,9 +41308,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 393249,
-      "mtime": "2026-08-01T20:04:05.828Z",
-      "indexed_at": "2026-08-01T20:04:05.828Z"
+      "bytes": 393393,
+      "mtime": "2026-08-01T20:04:45.370Z",
+      "indexed_at": "2026-08-01T20:04:47.539Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -98298,6 +98298,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "startup/register-schedulers.js",
+      "synopsis": "Register autonomous background schedulers at boot time.",
+      "bytes": 1192,
+      "mtime": "2026-08-01T19:52:02.586Z",
+      "indexed_at": "2026-08-01T20:04:47.539Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
