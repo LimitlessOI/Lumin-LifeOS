@@ -509,7 +509,7 @@ May S2 seed + Jul Cognitive Core oracle/capture remain the living memory path. J
 
 ## Change Receipts
 
-| 2026-08-02 | **Creative Director review** — generated CREATIVE_BRIEF.md using the Creative Director lens. | Memory Intelligence reviewed through the BuilderOS creative responsibility; brief written to product home for founder review. | ✅ generated |
+| 2026-08-02 | **GAP-FILL: fixed invalid `CREATE VIEW IF NOT EXISTS` syntax in `db/memory-auto-apply.sql` (memory-intelligence-1).** PostgreSQL has no `CREATE VIEW IF NOT EXISTS` (that's MySQL syntax) — the correct, idempotent equivalent is `CREATE OR REPLACE VIEW`. Confirmed this file is not currently invoked by any script/CI (only referenced in governance metadata), so this was dead code today, not a live outage — fixed proactively so it doesn't fail silently the first time it's wired up. Also corrected the BUILD_QUEUE `file_contains` requirement that literally demanded the broken `"CREATE VIEW IF NOT EXISTS"` substring, so future regeneration isn't rewarded for reintroducing invalid syntax. | Found during real-time monitoring of a `[GAP-FILL]` commit adding this exact broken statement. | `memory_system` table confirmed real (created earlier in the same script); `CREATE OR REPLACE VIEW` is standard, idempotent PostgreSQL. |
 | Date | File | What | Why |
 |---|---|---|---|
 | 2026-07-27 | `docs/projects/BRAINSTORM_SESSIONS/tsos-platform/2026-07-27_memory-governance-continuity/*` + conversation dumps | Preserved Adam mega-thread (philosophy + A/C/N/G/O + rankings); categorized index; when-to-build plan; drift assessment correcting “Phase 1 missing” narrative — Phase 1 largely ✅; restored `OPERATOR_BRAINSTORM_SESSION_ENTRY.md` | Adam: mandatory preserve + plan; chat continuity failure mode |

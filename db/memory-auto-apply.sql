@@ -46,8 +46,10 @@ BEGIN
     END IF;
 END $$;
 
--- Create a summary view if it doesn't exist
-CREATE VIEW IF NOT EXISTS memory_system_summary AS
+-- Create/refresh the summary view. PostgreSQL has no CREATE VIEW IF NOT
+-- EXISTS (that is MySQL syntax) — CREATE OR REPLACE VIEW is the correct,
+-- idempotent equivalent and is safe to re-run.
+CREATE OR REPLACE VIEW memory_system_summary AS
 SELECT id, name, description, created_at, last_updated
 FROM memory_system;
 

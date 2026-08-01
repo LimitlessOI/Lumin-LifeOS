@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T13:02:30.790Z",
+  "generated_at": "2026-08-01T13:04:46.649Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -34328,9 +34328,9 @@
     {
       "path": "db/memory-auto-apply.sql",
       "synopsis": "SQL — memory-auto-apply.sql.",
-      "bytes": 1550,
-      "mtime": "2026-08-01T13:02:12.924Z",
-      "indexed_at": "2026-08-01T13:02:22.638Z"
+      "bytes": 1699,
+      "mtime": "2026-08-01T13:03:46.830Z",
+      "indexed_at": "2026-08-01T13:04:46.649Z"
     },
     {
       "path": "db/memory-contract-closure.sql",
@@ -42246,9 +42246,9 @@
     {
       "path": "docs/products/memory-intelligence/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Memory Intelligence",
-      "bytes": 49653,
-      "mtime": "2026-08-01T13:02:10.580Z",
-      "indexed_at": "2026-08-01T13:02:22.638Z"
+      "bytes": 50341,
+      "mtime": "2026-08-01T13:04:32.390Z",
+      "indexed_at": "2026-08-01T13:04:46.649Z"
     },
     {
       "path": "docs/products/memory-system/CREATIVE_BRIEF.md",

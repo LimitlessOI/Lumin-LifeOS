@@ -409,7 +409,7 @@
       "file_contains": [
         "Institutional Memory"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
       "last_attempt_at": "2026-07-15T22:41:50.435Z",
       "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 1861b is < 30% of existing 23475b",
       "commit_sha": null,
@@ -551,7 +551,7 @@
       "file_contains": [
         "lesson"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:39:44.640Z",
       "commit_sha": "f96618bdd81e97d6ab4baedc321a2edc368471e3",
@@ -610,7 +610,7 @@
       "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS",
-        "CREATE VIEW IF NOT EXISTS"
+        "CREATE OR REPLACE VIEW"
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:17:10.298Z",
