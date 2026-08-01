@@ -418,7 +418,7 @@
     },
     {
       "id": "10",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/scriptRoutes.js",
       "task": "Add script routes",
       "spec": "Expose script generation operations via HTTP API.",
@@ -426,7 +426,7 @@
         "9"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "expected_exports": [
         "registerScriptRoutes"
       ],
@@ -449,7 +449,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:46:10.695Z",
-      "commit_sha": "41bf1b90e3d649ce5293cfabda3e2cc072cd2c13",
+      "commit_sha": "21d41a9f60f0aa254affa9d340a4e84316f1b5cf",
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "10",
       "mission_id": "PRODUCT-creator-media-os",
@@ -457,11 +457,12 @@
       "demoted": false,
       "last_error": "route module not auto-registered — add {\"path\":\"routes/scriptRoutes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
       "heal_unblocked": true,
-      "last_attempt_at": "2026-08-01T11:19:23.761Z",
+      "last_attempt_at": "2026-08-01T11:25:04.458Z",
       "artifact_proven": true,
       "grounding_status": "PASS",
       "blocker_class": "BLOCKED_TOOLING",
-      "failure_signature": "functional_proof|BLOCKED_TOOLING|route module not auto-registered — add {\"path\":\"routes/scriptRoutes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (b"
+      "failure_signature": "functional_proof|BLOCKED_TOOLING|route module not auto-registered — add {\"path\":\"routes/scriptRoutes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (b",
+      "completed_at": "2026-08-01T11:25:04.902Z"
     },
     {
       "id": "11",
@@ -1418,5 +1419,5 @@
   "corpus_sources": [
     "docs/products/creator-media-os/PRODUCT_HOME.md"
   ],
-  "updated_at": "2026-08-01T11:22:25.614Z"
+  "updated_at": "2026-08-01T11:25:04.903Z"
 }
