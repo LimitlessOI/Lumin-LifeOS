@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T15:17:52.483Z",
+  "generated_at": "2026-08-01T15:19:01.968Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12735,
+  "file_count": 12736,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -93184,6 +93184,16 @@
       "bytes": 11092,
       "mtime": "2026-07-13T03:41:54.529Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "ssot": [
+        "docs/products/marketingos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/marketing-campaign-generator.js",
+      "synopsis": "Generates campaign assets for various marketing channels using AI.",
+      "bytes": 2833,
+      "mtime": "2026-08-01T15:19:01.968Z",
+      "indexed_at": "2026-08-01T15:19:01.968Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
