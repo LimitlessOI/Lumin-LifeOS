@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T14:24:49.467Z",
+  "generated_at": "2026-08-01T14:28:54.178Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12726,
   "files": [
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 2118,
-      "mtime": "2026-08-01T14:21:58.685Z",
-      "indexed_at": "2026-08-01T14:24:48.683Z",
+      "bytes": 1830,
+      "mtime": "2026-08-01T14:27:47.377Z",
+      "indexed_at": "2026-08-01T14:28:54.178Z",
       "synopsis_index_only": true
     },
     {
@@ -42852,9 +42852,9 @@
     {
       "path": "docs/products/white-label/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — White Label",
-      "bytes": 9664,
-      "mtime": "2026-08-01T08:48:17.387Z",
-      "indexed_at": "2026-08-01T08:48:17.387Z"
+      "bytes": 10909,
+      "mtime": "2026-08-01T14:28:43.365Z",
+      "indexed_at": "2026-08-01T14:28:54.178Z"
     },
     {
       "path": "docs/products/WHITELABEL.md",
@@ -94527,10 +94527,10 @@
     },
     {
       "path": "services/response-transformation.js",
-      "synopsis": "Exports transformResponse — services/response-transformation.js.",
-      "bytes": 672,
-      "mtime": "2026-07-16T19:42:53.615Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis": "Response transformation middleware that strips model names and costs from outgoing responses.",
+      "bytes": 1511,
+      "mtime": "2026-08-01T14:28:22.069Z",
+      "indexed_at": "2026-08-01T14:28:54.178Z",
       "ssot": [
         "docs/products/white-label/PRODUCT_HOME.md"
       ]

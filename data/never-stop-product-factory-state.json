@@ -1,47 +1,47 @@
 {
   "status": "idle",
   "last_task": {
-    "id": "product_build_universal-overlay_universal-overlay-step10",
+    "id": "product_build_white-label_white-label-2",
     "kind": "product_build_step",
     "priority": 2.5,
-    "product": "universal-overlay",
-    "product_id": "universal-overlay",
-    "step_id": "universal-overlay-step10",
-    "target_file": "routes/firefoxExtension.js",
-    "detail": "next buildable step: universal-overlay-step10"
+    "product": "white-label",
+    "product_id": "white-label",
+    "step_id": "white-label-2",
+    "target_file": "services/response-transformation.js",
+    "detail": "next buildable step: white-label-2"
   },
   "last_result": {
     "ok": false,
-    "task_id": "product_build_universal-overlay_universal-overlay-step10",
+    "task_id": "product_build_white-label_white-label-2",
     "detail": "product_build_step",
     "outcome": {
       "ok": false,
-      "step_id": "universal-overlay-step10",
-      "stage": "functional_proof",
-      "reason": "route module not auto-registered — add {\"path\":\"routes/firefoxExtension.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
+      "step_id": "white-label-2",
+      "stage": "artifact_proof",
+      "reason": "artifact_proof_failed: module.exports = {; function transformResponse(req, res, next)",
       "attempts": 1,
       "blocked": false,
       "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "parked": false,
       "summary": {
-        "product_id": "universal-overlay",
-        "total": 64,
-        "pending": 1,
+        "product_id": "white-label",
+        "total": 24,
+        "pending": 3,
         "building": 0,
-        "done": 54,
-        "blocked": 1,
+        "done": 18,
+        "blocked": 2,
         "founder_gated": 0,
         "design_review_flagged": 0,
         "human_hold": 0,
-        "skipped": 8,
+        "skipped": 1,
         "complete": false
       }
     },
     "claim": {
-      "id": "universal-overlay:universal-overlay-step10",
+      "id": "white-label:white-label-2",
       "kind": "execution",
-      "text": "product step universal-overlay-step10 built + verified + served live",
+      "text": "product step white-label-2 built + verified + served live",
       "grade": "GUESS",
       "proof": null,
       "original_grade": "KNOW",
@@ -51,19 +51,19 @@
       ]
     },
     "summary": {
-      "product_id": "universal-overlay",
-      "total": 64,
-      "pending": 1,
+      "product_id": "white-label",
+      "total": 24,
+      "pending": 3,
       "building": 0,
-      "done": 54,
-      "blocked": 1,
+      "done": 18,
+      "blocked": 2,
       "founder_gated": 0,
       "design_review_flagged": 0,
       "human_hold": 0,
-      "skipped": 8,
+      "skipped": 1,
       "complete": false
     }
   },
   "cycles": 1,
-  "updated_at": "2026-08-01T14:21:58.686Z"
+  "updated_at": "2026-08-01T14:27:47.378Z"
 }
