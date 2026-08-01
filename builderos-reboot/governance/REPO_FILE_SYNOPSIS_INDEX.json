@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T12:56:24.098Z",
+  "generated_at": "2026-08-01T12:59:17.623Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -105,9 +105,9 @@
     {
       "path": ".github/workflows/smoke-test.yml",
       "synopsis": "yml — .github/workflows/smoke-test.yml.",
-      "bytes": 1936,
-      "mtime": "2026-07-09T01:03:41.472Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 1918,
+      "mtime": "2026-08-01T12:58:51.672Z",
+      "indexed_at": "2026-08-01T12:59:17.623Z"
     },
     {
       "path": ".github/workflows/ssot-compliance.yml",
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1852,
-      "mtime": "2026-08-01T12:54:38.188Z",
-      "indexed_at": "2026-08-01T12:56:23.325Z",
+      "bytes": 1760,
+      "mtime": "2026-08-01T12:58:20.524Z",
+      "indexed_at": "2026-08-01T12:59:17.623Z",
       "synopsis_index_only": true
     },
     {

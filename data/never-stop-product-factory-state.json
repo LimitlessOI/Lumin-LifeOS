@@ -1,65 +1,69 @@
 {
   "status": "idle",
   "last_task": {
-    "id": "product_build_personal-finance-os_personal-finance-os-step8",
+    "id": "product_build_memory-intelligence_6",
     "kind": "product_build_step",
-    "priority": 2.0023,
-    "product": "personal-finance-os",
-    "product_id": "personal-finance-os",
-    "step_id": "personal-finance-os-step8",
-    "target_file": "services/emotionalIntelligence.js",
-    "detail": "next buildable step: personal-finance-os-step8"
+    "priority": 2.0027,
+    "product": "memory-intelligence",
+    "product_id": "memory-intelligence",
+    "step_id": "6",
+    "target_file": ".github/workflows/smoke-test.yml",
+    "detail": "next buildable step: 6"
   },
   "last_result": {
-    "ok": true,
-    "task_id": "product_build_personal-finance-os_personal-finance-os-step8",
+    "ok": false,
+    "task_id": "product_build_memory-intelligence_6",
     "detail": "product_build_step",
     "outcome": {
-      "ok": true,
-      "step_id": "personal-finance-os-step8",
-      "commit_sha": "48ecef62a64ac101de2f1b7bb6ac18b19d484ee1",
-      "verified": true,
-      "deploy_proven": true,
-      "functional_proven": true,
+      "ok": false,
+      "step_id": "6",
+      "stage": "build",
+      "reason": "Target file is outside the Builder safe-scope policy",
+      "attempts": 1,
+      "blocked": false,
+      "blocker_class": "BLOCKED_TOOLING",
+      "claim_level": null,
+      "parked": false,
       "summary": {
-        "product_id": "personal-finance-os",
-        "total": 29,
-        "pending": 0,
+        "product_id": "memory-intelligence",
+        "total": 35,
+        "pending": 2,
         "building": 0,
         "done": 29,
         "blocked": 0,
         "founder_gated": 0,
         "design_review_flagged": 0,
         "human_hold": 0,
-        "complete": true
+        "skipped": 4,
+        "complete": false
       }
     },
     "claim": {
-      "id": "personal-finance-os:personal-finance-os-step8",
+      "id": "memory-intelligence:6",
       "kind": "execution",
-      "text": "product step personal-finance-os-step8 built + verified + served live",
-      "grade": "KNOW",
-      "proof": {
-        "deploy_verified": true,
-        "commit_sha": "48ecef62a64ac101de2f1b7bb6ac18b19d484ee1"
-      },
+      "text": "product step 6 built + verified + served live",
+      "grade": "GUESS",
+      "proof": null,
       "original_grade": "KNOW",
-      "enforced": false,
-      "flags": []
+      "enforced": true,
+      "flags": [
+        "claimed_KNOW_or_LAW_without_proof"
+      ]
     },
     "summary": {
-      "product_id": "personal-finance-os",
-      "total": 29,
-      "pending": 0,
+      "product_id": "memory-intelligence",
+      "total": 35,
+      "pending": 2,
       "building": 0,
       "done": 29,
       "blocked": 0,
       "founder_gated": 0,
       "design_review_flagged": 0,
       "human_hold": 0,
-      "complete": true
+      "skipped": 4,
+      "complete": false
     }
   },
   "cycles": 1,
-  "updated_at": "2026-08-01T12:54:38.192Z"
+  "updated_at": "2026-08-01T12:58:20.526Z"
 }
