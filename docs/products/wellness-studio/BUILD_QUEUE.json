@@ -4,7 +4,7 @@
   "verify_script": null,
   "planned_at": "2026-07-12T03:40:00.000Z",
   "notes": "Module 4 Therapist Integration beachhead — Clinical Partnership. Consent-gated briefs; therapist account lists linked clients who granted therapist_share. LifeOS consent foundation is a dependency.",
-  "updated_at": "2026-08-01T16:14:45.635Z",
+  "updated_at": "2026-08-01T18:55:11.877Z",
   "steps": [
     {
       "id": "ws-therapist-schema",
@@ -71,7 +71,7 @@
     },
     {
       "id": "ws-therapist-auto-register",
-      "status": "done",
+      "status": "pending",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "Auto-register wellness therapist routes at boot without editing server.js.",
       "spec": "Add {\"path\":\"routes/wellness-therapist-routes.js\",\"register\":\"registerWellnessTherapistRoutes\",\"enabled\":true} to modules[]. Preserve all existing entries. File must remain valid JSON.",
@@ -79,7 +79,7 @@
         "ws-therapist-routes"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "wellness-therapist-routes.js",
         "registerWellnessTherapistRoutes"
@@ -90,7 +90,10 @@
       "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "ws-therapist-auto-register",
       "mission_id": "PRODUCT-wellness-studio",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "last_error": "artifact_proof_failed: wellness-therapist-routes.js; registerWellnessTherapistRoutes",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "step-01",
@@ -1422,7 +1425,7 @@
     },
     {
       "id": "wellness-studio-5",
-      "status": "done",
+      "status": "pending",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "registerTherapistRoutes",
       "spec": "Add therapist-integration-routes.js to auto-registered product modules.",
@@ -1440,7 +1443,10 @@
       "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "wellness-studio-5",
       "mission_id": "PRODUCT-wellness-studio",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "last_error": "artifact_proof_failed: therapist-integration-routes.js",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "wellness-studio-step1",
@@ -1604,7 +1610,7 @@
     },
     {
       "id": "wellness-studio-step5",
-      "status": "done",
+      "status": "pending",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register wellness table extensions routes",
       "spec": "Ensure wellness table extensions routes are auto-registered in the product modules configuration.",
@@ -1622,7 +1628,10 @@
       "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "wellness-studio-step5",
       "mission_id": "PRODUCT-wellness-studio",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "last_error": "artifact_proof_failed: wellness-table-extensions-routes",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "wellness-studio-step6",
