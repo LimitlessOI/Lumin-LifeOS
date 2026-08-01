@@ -136,13 +136,12 @@
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "04",
       "mission_id": "PRODUCT-productized-sprint",
-      "same_signature_count": 1,
+      "same_signature_count": 0,
       "demoted": false,
       "last_error": "artifact_proof_failed: runPreAnalysis",
       "heal_unblocked": true,
       "last_attempt_at": "2026-08-01T13:55:48.438Z",
-      "blocker_class": "BLOCKED_TOOLING",
-      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: runPreAnalysis"
+      "blocker_class": "BLOCKED_TOOLING"
     },
     {
       "id": "05",
@@ -2188,5 +2187,6 @@
   "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-productized-sprint",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T13:56:02.247Z"
+  "updated_at": "2026-08-01T13:56:02.247Z",
+  "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/productized-sprint/BUILD_QUEUE.json"
 }

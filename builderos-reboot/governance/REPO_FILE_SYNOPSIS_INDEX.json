@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T13:56:45.490Z",
+  "generated_at": "2026-08-01T13:57:57.051Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12726,
   "files": [
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3842965,
-      "mtime": "2026-08-01T13:42:53.660Z",
-      "indexed_at": "2026-08-01T13:45:12.395Z"
+      "bytes": 3843065,
+      "mtime": "2026-08-01T13:57:13.253Z",
+      "indexed_at": "2026-08-01T13:57:57.051Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1751,
-      "mtime": "2026-08-01T13:56:03.305Z",
-      "indexed_at": "2026-08-01T13:56:45.490Z",
+      "bytes": 1867,
+      "mtime": "2026-08-01T13:33:13.308Z",
+      "indexed_at": "2026-08-01T13:37:38.470Z",
       "synopsis_index_only": true
     },
     {
@@ -42499,9 +42499,9 @@
     {
       "path": "docs/products/productized-sprint/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Productized Sprint",
-      "bytes": 12437,
-      "mtime": "2026-08-01T13:56:35.633Z",
-      "indexed_at": "2026-08-01T13:56:45.490Z"
+      "bytes": 12635,
+      "mtime": "2026-08-01T13:57:45.813Z",
+      "indexed_at": "2026-08-01T13:57:57.051Z"
     },
     {
       "path": "docs/products/PRODUCTIZEDSPRINT.md",
@@ -65772,9 +65772,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 7362,
-      "mtime": "2026-08-01T13:54:42.697Z",
-      "indexed_at": "2026-08-01T13:56:45.490Z",
+      "bytes": 3856,
+      "mtime": "2026-08-01T13:30:27.276Z",
+      "indexed_at": "2026-08-01T13:37:38.470Z",
       "synopsis_index_only": true
     },
     {
@@ -87667,11 +87667,12 @@
     },
     {
       "path": "services/aiPreAnalysisService.js",
-      "synopsis": "services/aiPreAnalysisService.js",
-      "bytes": 1275,
-      "mtime": "2026-08-01T13:56:26.417Z",
-      "indexed_at": "2026-08-01T13:56:45.490Z",
+      "synopsis": "Provides AI pre-analysis prompt writing and execution services.",
+      "bytes": 3747,
+      "mtime": "2026-08-01T13:57:07.737Z",
+      "indexed_at": "2026-08-01T13:57:57.051Z",
       "ssot": [
+        "docs/products/productized-sprint/PRODUCT_HOME.md",
         "docs/products/productized-sprint/PRODUCT_HOME.md"
       ]
     },
@@ -91425,10 +91426,10 @@
     },
     {
       "path": "services/intakeFormService.js",
-      "synopsis": "Registers IntakeFormService routes/handlers (services/intakeFormService.js).",
-      "bytes": 1179,
-      "mtime": "2026-07-16T19:42:53.611Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis": "Handles the creation and processing of intake forms, including database interactions.",
+      "bytes": 2287,
+      "mtime": "2026-08-01T13:57:29.441Z",
+      "indexed_at": "2026-08-01T13:57:57.051Z",
       "ssot": [
         "docs/products/productized-sprint/PRODUCT_HOME.md"
       ]
