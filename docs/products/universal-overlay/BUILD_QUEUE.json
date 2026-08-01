@@ -452,7 +452,7 @@
       "spec": "Provide a summary of the page content via AI assistance.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerPageSummarizationRoutes"
       ],
@@ -471,9 +471,9 @@
           "assertion_id": "expected_exports:routes/pageSummarization.js"
         }
       ],
-      "last_attempt_at": null,
-      "last_error": "codegen_authoring_failed: codegen_empty: openai_builder_mini: HTTP 429: {\n    \"error\": {\n        \"message\": \"You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organiza",
-      "commit_sha": null,
+      "last_attempt_at": "2026-08-01T02:36:29.494Z",
+      "last_error": "artifact_proof_failed: missing_exports:registerPageSummarizationRoutes; registerPageSummarizationRoutes",
+      "commit_sha": "ee59dc8f1a3ca5e643f68552d0e41420a297bfb6",
       "built_sha": null,
       "proof": null,
       "revive_count": 1,
@@ -485,7 +485,7 @@
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
-      "blocker_class": null,
+      "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
@@ -2391,5 +2391,5 @@
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-universal-overlay",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T02:36:13.159Z"
+  "updated_at": "2026-08-01T02:36:40.776Z"
 }
