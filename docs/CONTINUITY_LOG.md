@@ -1,5 +1,14 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-08-02 — Deterministic gap-fill never-stop cycles: memory-system, limitlessos, financial-revenue, ai-receptionist
+
+The never-stop factory ran consecutive BUILDEROS_NEVER_STOP=1 npm run builderos:bp-priority:once successes after unblocking deterministic queue steps:
+- limitlessos-step9 (config/auto-registered-product-modules.json) done — registered routes/audit-intake-flow-routes.js, routes/price-book-vendor-comparison-routes.js, routes/dialogue-bundle-skus-routes.js; removed dependency on the skipped overlay step3.
+- memory-system steps 02 (scripts/deploy_railway.js), 03 (scripts/verify_railway_deploy.js), document-phase7-merge (docs/final_pr_merge_phase7.md), and orchestrate-and-verify-railway-deploy (scripts/orchestrate_phase7_railway_probe_verification.mjs) done. Skipped unsafe step 01 (pull_requests/final_pr_review.js) because it requires human GitHub PR workflow and is outside builder safe-scope.
+- financial-revenue step 5 (config/auto-registered-product-modules.json) done — added disabled revenueGoalTracking placeholder.
+- ai-receptionist-6 (scripts/setRailwayEnvVars.mjs) done.
+Skipped wellness-studio-step6/7/8 (fake sequential deploy Phase N steps with unpassable route assertions on SQL migration targets). video-pipeline step 4 parked pending route codegen. npm run builder:preflight PASS (435/435). All paid/free AI providers remain exhausted, so Chair/model codegen is still paused.
+
 ## 2026-08-02 — Constitutional amendment: §2.12a Consensus Quality and Reality-Alignment
 
 Added `§2.12a Consensus Quality and Reality-Alignment` to `docs/constitution/NORTH_STAR_SSOT.md` per Adam's directive. The new law states that consensus is not achieved until every unresolved objection is answered with evidence, accepted as an unknown, intentionally deferred with justification, or withdrawn by the objector; and that consensus must survive contact with SENTRY, receipts, production behavior, and customer data. Version bumped to 2026-08-02. This is supreme constitutional law and can only be amended by Article VII.

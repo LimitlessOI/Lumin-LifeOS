@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/ai-receptionist/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — `services/stripePricingService.js` and `routes/environmentRoutes.js` shipped autonomously; added `@ssot` tags and corrected `routes/environmentRoutes.js` to mount at `/api/v1/env` per the blueprint. |
+| **Last Updated** | 2026-08-02 — Never-stop factory completed ai-receptionist-6: added scripts/setRailwayEnvVars.mjs exporting a guarded setRailwayEnvVar helper for VAPI_API_KEY. |
 
 ---
 | Field | Value |

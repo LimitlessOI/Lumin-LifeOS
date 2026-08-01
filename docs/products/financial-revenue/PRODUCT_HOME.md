@@ -11,12 +11,12 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/financial-revenue/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-31 — SMOS revenue readiness verifier added: `scripts/verify-smos-email-provider.mjs` and `scripts/verify-smos-live-charge.mjs` probe email-provider and Stripe configs without sending email or charging cards; `docs/products/financial-revenue/SMOS_REVENUE_READINESS.md` auto-generated. Halted on missing `EMAIL_FROM` (local) and Stripe keys (local); Railway env expected to provide them. |
+| **Last Updated** | 2026-08-02 — Never-stop factory completed step 5: added disabled revenueGoalTracking placeholder to config/auto-registered-product-modules.json (route artifact pending). |
 
 ---
 **Status:** LIVE (partial)
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-07-28 — migrations can now prove their end state (opt-in `-- @assert` directives), content checksums detect edited-after-applied drift, and the `/already exists/` forgiveness is conditional on the declared objects actually existing. Detect-and-route only; boot is never blocked.
+**Last Updated:** 2026-08-02 — Never-stop factory completed step 5: added disabled revenueGoalTracking placeholder to config/auto-registered-product-modules.json (route artifact pending).
 
 ---
 

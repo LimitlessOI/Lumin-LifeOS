@@ -6,7 +6,7 @@
 **Parent platform:** Lumin / LifeOS ecosystem  
 **Constitutional law:** `docs/constitution/NORTH_STAR_SSOT.md`  
 **Machine manifest:** `docs/products/limitlessos/FILE_MANIFEST.json`  
-**Last Updated:** 2026-07-23 — Go Vegas flagship site `/go-vegas` + recognition flywheel playbook (Best Of → join network).
+**Last Updated:** 2026-08-02 — Never-stop factory completed limitlessos-step9: registered routes/audit-intake-flow-routes.js, routes/price-book-vendor-comparison-routes.js, and routes/dialogue-bundle-skus-routes.js in config/auto-registered-product-modules.json; removed dependency on skipped overlay step3.
 
 | Field | Value |
 |-------|-------|
