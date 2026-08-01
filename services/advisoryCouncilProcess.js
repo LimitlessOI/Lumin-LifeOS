@@ -1,69 +1,76 @@
 /**
- * SYNOPSIS: Exports councilReview — services/advisoryCouncilProcess.js.
+ * SYNOPSIS: Define the Advisory council process for reviewing sacred content for accuracy and sensitivity.
+ * @ssot docs/products/faith-studio/PRODUCT_HOME.md
  */
-export function councilReview(content) {
-  // Placeholder for the advisory council review process
-  // In a real application, this would involve:
-  // 1. Logging the content for review.
-  // 2. Potentially assigning it to specific council members or a review queue.
-  // 3. Tracking the review status (e.g., pending, in review, approved, revisions required).
-  // 4. Storing review comments and decisions.
-  // 5. Implementing a mechanism for council members to access and provide feedback on the content.
+export async function councilReview(deps, payload) {
+  const { pool, logger, callCouncilMember } = deps;
+  const { project_id, content_id, content_text, segment_id, persona_used } = payload || {};
 
-  console.log(`Submitting content for advisory council review: ${content.id}`);
+  if (!project_id || !content_id || !content_text) {
+    throw new Error('Missing required payload fields: project_id, content_id, content_text');
+  }
 
-  // Simulate an asynchronous review process
-  return new Promise(resolve => {
-    setTimeout(() => {
-      const reviewResult = {
-        contentId: content.id,
-        status: 'pending_review',
-        timestamp: new Date().toISOString(),
-        notes: 'Content submitted for accuracy and sensitivity review by the advisory council.'
-      };
-      console.log(`Content ${content.id} review initiated.`);
-      resolve(reviewResult);
-    }, 100); // Simulate a short delay for process initiation
-  });
+  logger.info({ project_id, content_id, segment_id }, 'Initiating advisory council review for sacred content.');
+
+  try {
+    // Step 1: Record the submission of the review request
+    const { rows: sessionRows } = await pool.query(
+      `INSERT INTO advisor_council_sessions (user_id, question, advisor_ids, positions, confidence)
+       VALUES ($1, $2, '{}', '{}', 0)
+       RETURNING session_id`,
+      [project_id, `Review content_id: ${content_id} for project_id: ${project_id}`]
+    );
+    const session_id = sessionRows[0].session_id;
+
+    // Step 2: Call an AI council member for initial assessment (simulating 'assignment' and 'initial review')
+    const prompt = `Review the following sacred content for accuracy and sensitivity. Provide a verdict (e.g., "approved", "revisions_required", "rejected") and specific guidance for the content creator.
+Content: "${content_text}"
+Consider the persona used: "${persona_used || 'general'}"`;
+
+    const aiResponse = await callCouncilMember('faith_reviewer', prompt, {
+      temperature: 0.3,
+      max_tokens: 500
+    });
+
+    // Attempt to parse the AI response for verdict and guidance
+    let verdict = 'pending';
+    let guidance = 'No specific guidance received from AI review.';
+    let debate_ran = false; // Default to false, can be set if a multi-advisor debate is implemented
+
+    try {
+      const parsedAiResponse = JSON.parse(aiResponse);
+      if (parsedAiResponse.verdict) {
+        verdict = parsedAiResponse.verdict;
+      }
+      if (parsedAiResponse.guidance) {
+        guidance = parsedAiResponse.guidance;
+      }
+    } catch (parseError) {
+      logger.warn({ parseError, aiResponse }, 'Failed to parse AI council member response. Using raw response as guidance.');
+      guidance = aiResponse; // Use raw response if parsing fails
+      verdict = 'revisions_required'; // Default to revisions if AI response is unparsable
+    }
+
+    // Step 3: Record the review outcome in builder_council_reviews
+    const { rows: reviewRows } = await pool.query(
+      `INSERT INTO builder_council_reviews (segment_id, verdict, guidance, debate_ran, persona_used)
+       VALUES ($1, $2, $3, $4, $5)
+       RETURNING id, created_at`,
+      [segment_id || null, verdict, guidance, debate_ran, persona_used || 'general']
+    );
+
+    logger.info({ project_id, content_id, session_id, review_id: reviewRows[0].id, verdict }, 'Advisory council process completed.');
+
+    return {
+      council_session_id: session_id,
+      review_id: reviewRows[0].id,
+      verdict: verdict,
+      guidance: guidance,
+      status: 'completed',
+      message: 'Advisory council process for sacred content defined and initiated successfully.'
+    };
+  } catch (error) {
+    logger.error({ error, project_id, content_id }, 'Error in Advisory council process for sacred content.');
+    throw new Error('Failed to complete Advisory council process for sacred content.');
+  }
 }
-
-/**
- * Defines the comprehensive advisory council process for reviewing sacred content.
- * This process ensures accuracy, cultural sensitivity, and adherence to established guidelines.
- *
- * The process typically involves:
- * 1.  **Submission:** Content is formally submitted to the advisory council for review.
- * 2.  **Assignment:** Content is assigned to relevant council members based on their expertise (e.g., specific cultural knowledge, theological understanding).
- * 3.  **Initial Review:** Assigned members conduct an initial review for factual accuracy, grammatical correctness, and obvious sensitivities.
- * 4.  **In-depth Analysis:** For complex or potentially sensitive content, a deeper analysis is performed, potentially involving cross-referencing with sacred texts, consulting with community elders, or group discussions among council members.
- * 5.  **Feedback Compilation:** Reviewers provide detailed feedback, including suggested edits, clarifications, and flags for potential issues.
- * 6.  **Consensus/Decision:** The council convenes (virtually or physically) to discuss feedback, reach a consensus, and make a final decision regarding the content's approval, required revisions, or rejection.
- * 7.  **Recommendation/Action:** A formal recommendation is issued to the content creator.
- * 8.  **Tracking:** All stages of the review, including comments and decisions, are meticulously documented and tracked.
- * 9.  **Re-review (if necessary):** If revisions are required, the updated content goes through a re-review process.
- *
- * This function `defineAdvisoryCouncilProcess` would typically set up the framework or configuration
- * for how this process is managed within the system, rather than executing a single review.
- * For example, it might configure workflows, notification systems, or access controls.
- *
- * @returns {object} An object describing the defined process.
- */
-export const defineAdvisoryCouncilProcess = () => {
-  console.log("Defining the advisory council review process for sacred content.");
-  return {
-    processName: "Sacred Content Advisory Council Review",
-    stages: [
-      "Submission",
-      "Assignment to Reviewers",
-      "Initial Accuracy and Sensitivity Review",
-      "In-depth Cultural and Theological Analysis",
-      "Feedback Compilation",
-      "Council Decision/Consensus",
-      "Recommendation and Action",
-      "Documentation and Tracking",
-      "Re-review (if applicable)"
-    ],
-    purpose: "Ensure accuracy, cultural sensitivity, and ethical representation of sacred content.",
-    governance: "Managed by the Advisory Council, adhering to established guidelines and community values."
-  };
-};

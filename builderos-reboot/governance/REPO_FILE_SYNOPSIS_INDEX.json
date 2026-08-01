@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T05:09:27.610Z",
+  "generated_at": "2026-08-01T05:09:57.272Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12671,
   "files": [
@@ -87146,10 +87146,13 @@
     },
     {
       "path": "services/advisoryCouncilProcess.js",
-      "synopsis": "Exports councilReview — services/advisoryCouncilProcess.js.",
-      "bytes": 3852,
-      "mtime": "2026-07-31T10:47:25.684Z",
-      "indexed_at": "2026-07-31T10:55:09.665Z"
+      "synopsis": "Define the Advisory council process for reviewing sacred content for accuracy and sensitivity.",
+      "bytes": 3431,
+      "mtime": "2026-08-01T05:09:57.272Z",
+      "indexed_at": "2026-08-01T05:09:57.272Z",
+      "ssot": [
+        "docs/products/faith-studio/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/advisoryCouncilService.js",
