@@ -6,7 +6,7 @@
 **Parent platform:** Lumin / LifeOS ecosystem  
 **Constitutional law:** `docs/constitution/NORTH_STAR_SSOT.md`  
 **Machine manifest:** `docs/products/limitlessos/FILE_MANIFEST.json`  
-**Last Updated:** 2026-08-02 — GAP-FILL `routes/audit-intake-flow-routes.js` (limitlessos-step2): added explicit `intake questions` substring and changed the audit-intake route to `POST /api/v1/intake/flow/audit` to match the BUILD_QUEUE route assertion. Also cleared `routes/limitlessos-ui-routes.js` (step 12).
+**Last Updated:** 2026-08-02 — GAP-FILL `routes/audit-intake-flow-routes.js` (limitlessos-step2): merged origin/main builder commit that added `POST /api/v1/intake/flow/audit` and removed a broken `import` from non-existent `../services/auditIntakeService.js` so the module loads and exports `registerAuditIntakeFlowRoutes`.
 
 | Field | Value |
 |-------|-------|

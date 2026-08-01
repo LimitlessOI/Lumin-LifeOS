@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T09:52:31.363Z",
+  "generated_at": "2026-08-01T09:52:58.723Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -42115,9 +42115,9 @@
     {
       "path": "docs/products/limitlessos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LimitlessOS business stack",
-      "bytes": 17455,
-      "mtime": "2026-08-01T09:52:19.652Z",
-      "indexed_at": "2026-08-01T09:52:31.363Z"
+      "bytes": 17467,
+      "mtime": "2026-08-01T09:52:46.980Z",
+      "indexed_at": "2026-08-01T09:52:58.723Z"
     },
     {
       "path": "docs/products/lip/FILE_MANIFEST.json",
@@ -69047,10 +69047,10 @@
     },
     {
       "path": "routes/audit-intake-flow-routes.js",
-      "synopsis": "Hypothetical functions for demonstration purposes",
-      "bytes": 1942,
-      "mtime": "2026-08-01T09:52:15.168Z",
-      "indexed_at": "2026-08-01T09:52:31.363Z",
+      "synopsis": "Handles audit intake flow submissions.",
+      "bytes": 1931,
+      "mtime": "2026-08-01T09:52:43.216Z",
+      "indexed_at": "2026-08-01T09:52:58.723Z",
       "ssot": [
         "docs/products/limitlessos/PRODUCT_HOME.md"
       ]

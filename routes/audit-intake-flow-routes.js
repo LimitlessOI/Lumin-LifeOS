@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: Hypothetical functions for demonstration purposes
+ * SYNOPSIS: Handles audit intake flow submissions.
  * @ssot docs/products/limitlessos/PRODUCT_HOME.md
  */
 export function registerAuditIntakeFlowRoutes(app, deps) {
