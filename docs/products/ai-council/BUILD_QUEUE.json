@@ -944,7 +944,7 @@
     },
     {
       "id": "ai-council-4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/providerCooldownManager.js",
       "task": "manage provider cooldowns",
       "spec": "Implement logic to manage and persist provider cooldowns using the database.",
@@ -952,7 +952,7 @@
         "ai-council-3"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "persistCooldowns",
         "getCooldowns"
@@ -974,9 +974,9 @@
           "assertion_id": "expected_exports:services/providerCooldownManager.js"
         }
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-01T04:56:35.341Z",
       "last_error": null,
-      "commit_sha": null,
+      "commit_sha": "e3b55f1dec723a77282d45b8d084fedd2a137ed4",
       "built_sha": null,
       "proof": null,
       "revive_count": 7,
@@ -1001,7 +1001,8 @@
       "escalation_required": true,
       "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
       "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
-      "escalated_at": "2026-07-31T18:40:13.612Z"
+      "escalated_at": "2026-07-31T18:40:13.612Z",
+      "completed_at": "2026-08-01T04:56:55.579Z"
     },
     {
       "id": "ai-council-2",
@@ -1278,5 +1279,5 @@
   "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-ai-council",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T04:56:22.261Z"
+  "updated_at": "2026-08-01T04:56:55.580Z"
 }
