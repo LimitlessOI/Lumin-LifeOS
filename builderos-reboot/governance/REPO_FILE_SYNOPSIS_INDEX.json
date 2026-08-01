@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T02:09:17.043Z",
+  "generated_at": "2026-08-01T02:11:22.160Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12655,
+  "file_count": 12656,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -89761,6 +89761,16 @@
       "bytes": 2167,
       "mtime": "2026-07-31T07:18:31.974Z",
       "indexed_at": "2026-07-31T07:18:31.974Z"
+    },
+    {
+      "path": "services/envRegistryService.js",
+      "synopsis": "Handles rotation metadata for environment registry, including crypto tier labels.",
+      "bytes": 1142,
+      "mtime": "2026-08-01T02:11:22.160Z",
+      "indexed_at": "2026-08-01T02:11:22.160Z",
+      "ssot": [
+        "docs/products/oil-security-divisions/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/evaluatorMentorQualification.js",
