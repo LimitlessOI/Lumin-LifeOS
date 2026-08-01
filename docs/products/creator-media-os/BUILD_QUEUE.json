@@ -124,13 +124,13 @@
     },
     {
       "id": "4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/sceneEngine.js",
       "task": "assemble scenes",
       "spec": "Scene engine and edit assembly workflow.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "assembleScenes"
       ],
@@ -147,9 +147,9 @@
           "assertion_id": "expected_exports:services/sceneEngine.js"
         }
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-01T05:01:50.705Z",
       "last_error": null,
-      "commit_sha": null,
+      "commit_sha": "8d19c0febc2ff0a61f36cfbce4a421587ca45837",
       "built_sha": null,
       "proof": null,
       "revive_count": 7,
@@ -197,7 +197,8 @@
       "escalation_required": true,
       "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
       "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
-      "escalated_at": "2026-07-31T18:40:13.619Z"
+      "escalated_at": "2026-07-31T18:40:13.619Z",
+      "completed_at": "2026-08-01T05:02:06.908Z"
     },
     {
       "id": "5",
@@ -1347,5 +1348,6 @@
   "twin_kind": "product_build_queue_registered",
   "corpus_sources": [
     "docs/products/creator-media-os/PRODUCT_HOME.md"
-  ]
+  ],
+  "updated_at": "2026-08-01T05:02:06.908Z"
 }
