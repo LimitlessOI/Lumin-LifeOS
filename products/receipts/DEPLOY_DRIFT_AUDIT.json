@@ -1,11 +1,11 @@
 {
   "schema": "deploy_truth_verify_v1",
-  "at": "2026-08-01T10:16:06.269Z",
+  "at": "2026-08-01T10:32:31.846Z",
   "command": "drift-audit",
   "production_base": "https://lumin-web-production-e3a9.up.railway.app",
   "deploy_branch": "main",
-  "commit_sha": "ea32217ff57d78c0f29afea49f04337012740ccf",
-  "served_sha": "ea32217ff57d78c0f29afea49f04337012740ccf",
+  "commit_sha": "6abd7a82652f2f50b6d23205dcc5087a5579fa8d",
+  "served_sha": "6abd7a82652f2f50b6d23205dcc5087a5579fa8d",
   "verdict": "PROVEN",
   "ok": true,
   "passed": [
@@ -21,11 +21,11 @@
   "skipped": [],
   "files": [],
   "deployment": {
-    "id": "2226f165-c9c5-49f4-b84c-4a71e0ea7b30",
+    "id": "18ce15a2-cf06-4c38-a0a6-78e27641e1e4",
     "status": "SUCCESS",
-    "created_at": "2026-08-01T10:14:17.810Z",
-    "commit_sha": "ea32217ff57d78c0f29afea49f04337012740ccf",
-    "commit_message": "Merge origin/main keeping therapist-integration routes gap-fill",
+    "created_at": "2026-08-01T10:30:39.795Z",
+    "commit_sha": "6abd7a82652f2f50b6d23205dcc5087a5579fa8d",
+    "commit_message": "Merge origin/main keeping memory category taxonomy migration gap-fill",
     "url": null
   },
   "runtime_identity": {
@@ -46,15 +46,15 @@
     {
       "id": "git.fetch",
       "status": "pass",
-      "detail": "origin/main is ea32217ff57d"
+      "detail": "origin/main is 6abd7a82652f"
     },
     {
       "id": "local.divergence",
       "status": "pass",
       "detail": "local main is aligned with origin/main",
       "local_branch": "main",
-      "local_head": "ea32217ff57d78c0f29afea49f04337012740ccf",
-      "remote_head": "ea32217ff57d78c0f29afea49f04337012740ccf",
+      "local_head": "6abd7a82652f2f50b6d23205dcc5087a5579fa8d",
+      "remote_head": "6abd7a82652f2f50b6d23205dcc5087a5579fa8d",
       "ahead": 0,
       "behind": 0,
       "uncommitted": 0
@@ -81,20 +81,20 @@
     {
       "id": "runtime.version",
       "status": "pass",
-      "detail": "production serves ea32217ff57d, which contains origin/main (ea32217ff57d)",
-      "served_sha": "ea32217ff57d78c0f29afea49f04337012740ccf",
-      "remote_head": "ea32217ff57d78c0f29afea49f04337012740ccf"
+      "detail": "production serves 6abd7a82652f, which contains origin/main (6abd7a82652f)",
+      "served_sha": "6abd7a82652f2f50b6d23205dcc5087a5579fa8d",
+      "remote_head": "6abd7a82652f2f50b6d23205dcc5087a5579fa8d"
     },
     {
       "id": "deployment.state",
       "status": "pass",
-      "detail": "latest deployment SUCCESS on ea32217ff57d, nothing in flight",
+      "detail": "latest deployment SUCCESS on 6abd7a82652f, nothing in flight",
       "deployment": {
-        "id": "2226f165-c9c5-49f4-b84c-4a71e0ea7b30",
+        "id": "18ce15a2-cf06-4c38-a0a6-78e27641e1e4",
         "status": "SUCCESS",
-        "created_at": "2026-08-01T10:14:17.810Z",
-        "commit_sha": "ea32217ff57d78c0f29afea49f04337012740ccf",
-        "commit_message": "Merge origin/main keeping therapist-integration routes gap-fill",
+        "created_at": "2026-08-01T10:30:39.795Z",
+        "commit_sha": "6abd7a82652f2f50b6d23205dcc5087a5579fa8d",
+        "commit_message": "Merge origin/main keeping memory category taxonomy migration gap-fill",
         "url": null
       }
     }
@@ -102,9 +102,9 @@
   "produced_by": "cursor-agent",
   "verified_by": "git+railway-api+production-http-probe",
   "verification_kind": "deterministic+external",
-  "local_head": "ea32217ff57d78c0f29afea49f04337012740ccf",
+  "local_head": "6abd7a82652f2f50b6d23205dcc5087a5579fa8d",
   "local_branch": "main",
   "ahead": 0,
   "behind": 0,
-  "human_summary": "PROVEN — production serves ea32217ff57d, which contains origin/main; no runtime drift found."
+  "human_summary": "PROVEN — production serves 6abd7a82652f, which contains origin/main; no runtime drift found."
 }

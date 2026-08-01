@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T10:30:27.934Z",
+  "generated_at": "2026-08-01T10:33:59.853Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -30844,9 +30844,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 36280,
-      "mtime": "2026-08-01T09:38:19.128Z",
-      "indexed_at": "2026-08-01T09:38:34.438Z",
+      "bytes": 36535,
+      "mtime": "2026-08-01T10:33:33.968Z",
+      "indexed_at": "2026-08-01T10:33:59.853Z",
       "synopsis_index_only": true
     },
     {
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1846,
-      "mtime": "2026-08-01T10:29:52.664Z",
-      "indexed_at": "2026-08-01T10:30:27.934Z",
+      "bytes": 1861,
+      "mtime": "2026-08-01T10:33:14.736Z",
+      "indexed_at": "2026-08-01T10:33:59.853Z",
       "synopsis_index_only": true
     },
     {
@@ -42268,9 +42268,9 @@
     {
       "path": "docs/products/memory-system/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Memory System",
-      "bytes": 23131,
-      "mtime": "2026-08-01T10:30:18.676Z",
-      "indexed_at": "2026-08-01T10:30:27.934Z"
+      "bytes": 23726,
+      "mtime": "2026-08-01T10:33:46.644Z",
+      "indexed_at": "2026-08-01T10:33:59.853Z"
     },
     {
       "path": "docs/products/MEMORYINTELLIGENCE.md",
@@ -65772,9 +65772,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 3654,
-      "mtime": "2026-08-01T10:16:06.268Z",
-      "indexed_at": "2026-08-01T10:17:06.025Z",
+      "bytes": 3666,
+      "mtime": "2026-08-01T10:32:31.844Z",
+      "indexed_at": "2026-08-01T10:33:59.853Z",
       "synopsis_index_only": true
     },
     {
@@ -69695,10 +69695,10 @@
     },
     {
       "path": "routes/final_pr_review.js",
-      "synopsis": "HTTP route module — Final Pr Review.",
-      "bytes": 584,
-      "mtime": "2026-07-17T19:19:29.719Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis": "HTTP route module — Final PR Review.",
+      "bytes": 569,
+      "mtime": "2026-08-01T10:33:37.644Z",
+      "indexed_at": "2026-08-01T10:33:59.853Z",
       "ssot": [
         "docs/products/memory-system/PRODUCT_HOME.md"
       ]

@@ -759,6 +759,13 @@
       "mount_path": "/api/v1/lifeos/commitments",
       "enabled": true,
       "note": "BuilderOS commitment routes auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/final_pr_review.js",
+      "register": "registerFinalPrReviewRoutes",
+      "mount_path": "/api/v1/pr",
+      "enabled": true,
+      "note": "Memory-system final PR review route auto-registered for module-health proof."
     }
   ]
 }
