@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T04:55:48.459Z",
+  "generated_at": "2026-08-01T04:56:15.410Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12670,
   "files": [
@@ -90518,10 +90518,13 @@
     },
     {
       "path": "services/generalTaskOptimizer.js",
-      "synopsis": "Exports optimizeGeneralTaskSavings — services/generalTaskOptimizer.js.",
-      "bytes": 577,
-      "mtime": "2026-07-15T08:32:59.624Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "synopsis": "Improve task savings by increasing the base savings and ensuring database integration.",
+      "bytes": 2007,
+      "mtime": "2026-08-01T04:56:15.410Z",
+      "indexed_at": "2026-08-01T04:56:15.410Z",
+      "ssot": [
+        "docs/products/ai-council/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/glvar-monitor.js",
