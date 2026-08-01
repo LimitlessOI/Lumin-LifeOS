@@ -229,7 +229,7 @@
       "spec": "Add non-negotiable 48-hour approval system timeout and auto-reject for controversies.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerApprovalRoutes"
       ],
@@ -249,14 +249,16 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T09:12:43.608Z",
-      "commit_sha": "294657cf37b69eb7b48e55e19ad97fb4dbf77f43",
+      "commit_sha": "369b8439cc54eef5ccbbe34399ebaf90abb0ab1b",
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "6",
       "mission_id": "PRODUCT-business-tools",
       "same_signature_count": 0,
       "demoted": false,
-      "last_error": "artifact_proof_failed: setTimeout; 48h auto-reject",
-      "heal_unblocked": true
+      "last_error": "artifact_proof_failed: missing_exports:registerApprovalRoutes; registerApprovalRoutes",
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T11:42:21.455Z",
+      "blocker_class": "BLOCKED_TOOLING"
     },
     {
       "id": "step1",
@@ -1247,6 +1249,6 @@
   "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-business-tools",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T11:42:06.521Z",
+  "updated_at": "2026-08-01T11:42:36.457Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/business-tools/BUILD_QUEUE.json"
 }
