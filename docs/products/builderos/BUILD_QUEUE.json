@@ -871,7 +871,7 @@
     },
     {
       "id": "builderos-step7",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/commitment-routing.js",
       "task": "register commitment routes",
       "spec": "Create and register routes for commitment-related actions.",
@@ -879,7 +879,7 @@
         "builderos-step2"
       ],
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 3,
       "expected_exports": [
         "registerCommitmentRoutes"
       ],
@@ -909,13 +909,15 @@
       "mission_id": "PRODUCT-builderos",
       "same_signature_count": 1,
       "demoted": false,
-      "last_error": "route module not auto-registered — add {\"path\":\"routes/commitment-routing.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
+      "last_error": "ready_http_404",
       "heal_unblocked": true,
-      "last_attempt_at": "2026-08-01T08:27:53.529Z",
-      "blocker_class": "BLOCKED_TOOLING",
+      "last_attempt_at": "2026-08-01T08:54:04.231Z",
+      "blocker_class": "BLOCKED_EXTERNAL",
       "failure_signature": "functional_proof|BLOCKED_TOOLING|route module not auto-registered — add {\"path\":\"routes/commitment-routing.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts L",
       "artifact_proven": true,
-      "grounding_status": "PASS"
+      "grounding_status": "PASS",
+      "park_until": "2026-08-01T09:25:48.941Z",
+      "claim_level": "BUILT_NOT_LIVE"
     },
     {
       "id": "builderos-step8",
@@ -3337,5 +3339,5 @@
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-builderos",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T08:27:54.011Z"
+  "updated_at": "2026-08-01T08:55:48.942Z"
 }
