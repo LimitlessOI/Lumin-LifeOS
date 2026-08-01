@@ -598,13 +598,13 @@
     },
     {
       "id": "step10",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/extractRoutes.js",
       "task": "Extract sub-features from server.js",
       "spec": "Sub-features must be extracted from server.js to individual route files.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "extractSubRoutes"
       ],
@@ -626,14 +626,16 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:23:01.128Z",
-      "commit_sha": "96d41e8c394ce7c85b887e93df7c229c067aeddc",
+      "commit_sha": "4595c91e8a3355d3fcbc33fb71cd8a7ed08e34ff",
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step10",
       "mission_id": "PRODUCT-business-tools",
       "same_signature_count": 0,
       "demoted": false,
       "last_error": "artifact_proof_failed: extraction logic",
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T12:19:43.224Z",
+      "completed_at": "2026-08-01T12:19:55.220Z"
     },
     {
       "id": "7",
@@ -1267,5 +1269,5 @@
   "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-business-tools",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T12:19:19.110Z"
+  "updated_at": "2026-08-01T12:19:55.220Z"
 }
