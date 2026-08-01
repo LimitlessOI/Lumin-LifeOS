@@ -401,7 +401,7 @@
       "spec": "Build an API service that supports upserting free-tier user data. The service should handle necessary validations and perform the required database operations.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "upsertFreeTierUser"
       ],
@@ -423,7 +423,7 @@
       "revive_count": 9,
       "revived_at": "2026-07-17T18:45:49.207Z",
       "last_attempt": null,
-      "demoted": true,
+      "demoted": false,
       "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:/",
       "demoted_at": "2026-07-18T01:14:09.209Z",
       "park_until": null,
@@ -608,5 +608,5 @@
   "blueprint_id": "PRODUCT-TOKEN-ACCOUNTING-OS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-token-accounting-os",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T05:33:51.204Z"
+  "updated_at": "2026-08-01T06:00:06.352Z"
 }
