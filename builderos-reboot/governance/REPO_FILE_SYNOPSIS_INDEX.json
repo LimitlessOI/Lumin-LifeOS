@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T13:24:10.247Z",
+  "generated_at": "2026-08-01T13:24:31.689Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12726,
   "files": [
@@ -72769,10 +72769,10 @@
     },
     {
       "path": "scripts/coppa-compliance-review.mjs",
-      "synopsis": "Conduct and document the COPPA compliance review.",
-      "bytes": 1528,
-      "mtime": "2026-08-01T13:24:10.247Z",
-      "indexed_at": "2026-08-01T13:24:10.247Z",
+      "synopsis": "Conducts and documents COPPA compliance reviews for KidsOS children.",
+      "bytes": 5258,
+      "mtime": "2026-08-01T13:24:31.689Z",
+      "indexed_at": "2026-08-01T13:24:31.689Z",
       "ssot": [
         "docs/products/kids-os/PRODUCT_HOME.md"
       ]
