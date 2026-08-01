@@ -495,7 +495,7 @@
     },
     {
       "id": "builderos-10",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/approval.js",
       "task": "create approval route",
       "spec": "Define route for managing commitment approvals, ensuring proper workflow integration.",
@@ -503,7 +503,7 @@
         "builderos-9"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerApprovalRoutes"
       ],
@@ -532,10 +532,13 @@
       "mission_id": "PRODUCT-builderos",
       "same_signature_count": 0,
       "demoted": false,
-      "last_error": "artifact_proof_failed: missing_exports:registerApprovalRoutes; registerApprovalRoutes",
+      "last_error": null,
       "heal_unblocked": true,
       "last_attempt_at": "2026-08-01T08:07:57.953Z",
-      "blocker_class": "BLOCKED_TOOLING"
+      "blocker_class": null,
+      "completed_at": "2026-08-01T08:08:44.160Z",
+      "heal_claimed": true,
+      "heal_reason": "artifact_proof_pass"
     },
     {
       "id": "builderos-11",
@@ -3316,6 +3319,6 @@
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-builderos",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T08:08:10.065Z",
+  "updated_at": "2026-08-01T08:08:44.160Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/builderos/BUILD_QUEUE.json"
 }
