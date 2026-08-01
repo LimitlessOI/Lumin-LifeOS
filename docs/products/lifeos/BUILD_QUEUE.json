@@ -3466,14 +3466,14 @@
       "spec": "Replace /shared/lifeos-ambient-listener.js with /overlay/lifeos-ambient-listener.js and ensure thought-stream container creation and renderThoughtStream is called when necessary.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "lifeos-ambient-listener.js",
         "thought-stream"
       ],
-      "last_attempt_at": "2026-07-17T21:04:55.735Z",
-      "last_error": "artifact_proof_failed: thought-stream",
-      "commit_sha": "pre-existing-claim",
+      "last_attempt_at": "2026-08-01T07:07:54.314Z",
+      "last_error": "grounding_failed: missing_sql_table: system., iframe.",
+      "commit_sha": "7132e555a69de3b02effd744aa9add2d6a2f2c9a",
       "built_sha": null,
       "proof": null,
       "revive_count": 9,
@@ -3485,7 +3485,7 @@
       "park_until": null,
       "no_op": null,
       "pre_existing": true,
-      "blocker_class": null,
+      "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
@@ -6034,6 +6034,6 @@
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-lifeos",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T07:07:36.527Z",
+  "updated_at": "2026-08-01T07:12:04.347Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/lifeos/BUILD_QUEUE.json"
 }
