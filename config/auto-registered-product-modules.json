@@ -815,6 +815,13 @@
       "mount_path": "/api/v1/approvals",
       "enabled": true,
       "note": "Business Tools issue approval routes auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/curriculumRoutes.js",
+      "register": "registerCurriculumRoutes",
+      "mount_path": "/api/v1",
+      "enabled": true,
+      "note": "Business Tools curriculum routes auto-registered for module-health proof."
     }
   ]
 }

@@ -1,8 +1,6 @@
 /**
+ * SYNOPSIS: HTTP route module — Curriculum Routes.
  * @ssot docs/products/business-tools/PRODUCT_HOME.md
- */
-/**
- * SYNOPSIS: Handler to get all curriculum
  */
 import express from 'express';
 
@@ -24,7 +22,7 @@ function createCurriculum(req, res) {
   res.send('Create a new curriculum');
 }
 
-// Handler to access virtual real estate curriculum
+// Handler to access virtual real_estate_curriculum
 function getVirtualRealEstateCurriculum(req, res) {
   res.send('Access virtual real estate curriculum');
 }
@@ -42,15 +40,16 @@ function deleteCurriculum(req, res) {
 }
 
 // Register all curriculum routes
-function registerCurriculumRoutes(app) {
-  router.get('/curriculum/virtual-real-estate', getVirtualRealEstateCurriculum);
-  router.get('/curriculum', getAllCurriculum);
-  router.get('/curriculum/:id', getCurriculumById);
-  router.post('/curriculum', createCurriculum);
-  router.put('/curriculum/:id', updateCurriculum);
-  router.delete('/curriculum/:id', deleteCurriculum);
+export function registerCurriculumRoutes(app, deps = {}) {
+  const requireKey = deps.requireKey || ((req, res, next) => next());
+  const logger = deps.logger || console;
 
-  app.use('/api', router);
+  router.get('/curriculum/virtual-real-estate', requireKey, getVirtualRealEstateCurriculum);
+  router.get('/curriculum', requireKey, getAllCurriculum);
+  router.get('/curriculum/:id', requireKey, getCurriculumById);
+  router.post('/curriculum', requireKey, createCurriculum);
+  router.put('/curriculum/:id', requireKey, updateCurriculum);
+  router.delete('/curriculum/:id', requireKey, deleteCurriculum);
+
+  app.use('/api/v1', router);
 }
-
-export { registerCurriculumRoutes };

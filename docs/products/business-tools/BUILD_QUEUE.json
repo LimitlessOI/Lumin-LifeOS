@@ -538,7 +538,7 @@
       "spec": "Create endpoints for virtual real estate curriculum access.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerCurriculumRoutes"
       ],
@@ -561,14 +561,17 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:02:43.766Z",
-      "commit_sha": "5b06728a74ad3f83f1a8593b4c0482b14f6a46cd",
+      "commit_sha": "47c0d496da87d8f7f0e0382fdccbbab6fb496532",
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step8",
       "mission_id": "PRODUCT-business-tools",
-      "same_signature_count": 0,
+      "same_signature_count": 1,
       "demoted": false,
-      "last_error": "artifact_proof_failed: real_estate_curriculum",
-      "heal_unblocked": true
+      "last_error": "artifact_proof_failed: missing_exports:registerCurriculumRoutes; real_estate_curriculum",
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T12:16:06.948Z",
+      "blocker_class": "BLOCKED_TOOLING",
+      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: missing_exports:registerCurriculumRoutes; real_estate_curriculum"
     },
     {
       "id": "step9",
@@ -1263,5 +1266,5 @@
   "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-business-tools",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T12:15:37.634Z"
+  "updated_at": "2026-08-01T12:16:18.075Z"
 }
