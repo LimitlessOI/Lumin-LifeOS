@@ -3,7 +3,7 @@
   "product_id": "limitlessos",
   "verify_script": "scripts/verify-go-vegas-scheduler.mjs",
   "notes": "Go Vegas revenue slice — outreach pipeline v1 already shipped as code; this queue closes the last mile to live revenue: scheduler tick (daily discover/invite/follow-up under caps), dry-run proof script, and SENTRY-facing status receipt. No founder UI in this slice.",
-  "updated_at": "2026-08-01T09:55:15.590Z",
+  "updated_at": "2026-08-01T09:58:13.785Z",
   "steps": [
     {
       "id": "gv-scheduler",
@@ -1195,7 +1195,7 @@
       "spec": "Extend price book service to compare vendors with explanations or exclusions based on reviews and pricing.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "expected_exports": [
         "compareVendors"
       ],
@@ -1213,9 +1213,9 @@
           "assertion_id": "expected_exports:services/price-book-vendor-comparison.js"
         }
       ],
-      "last_attempt_at": "2026-08-01T09:55:00.930Z",
-      "last_error": "artifact_proof_failed: vendor comparison; explain or exclude",
-      "commit_sha": "7cfebba88c295344b3980a4a6f6d0043d27e3f9f",
+      "last_attempt_at": "2026-08-01T09:57:59.817Z",
+      "last_error": "artifact_proof_failed: vendor comparison",
+      "commit_sha": "45329f48dbb6f1c48917cdf8f2113878f7646d98",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
