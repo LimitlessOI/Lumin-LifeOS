@@ -110,7 +110,7 @@
       "spec": "Implement AI pre-analysis prompt writing and testing.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerAIPreAnalysisService"
       ],
@@ -132,14 +132,16 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T18:03:51.171Z",
-      "commit_sha": "4470d758e4ad6f735912804218fe05184776f41b",
+      "commit_sha": "0ca2070dd2514bec4612b33ea322b2bbcf9de9d3",
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "04",
       "mission_id": "PRODUCT-productized-sprint",
       "same_signature_count": 0,
       "demoted": false,
       "last_error": "artifact_proof_failed: runPreAnalysis",
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T13:55:48.438Z",
+      "blocker_class": "BLOCKED_TOOLING"
     },
     {
       "id": "05",
@@ -2185,6 +2187,6 @@
   "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-productized-sprint",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T13:55:31.173Z",
+  "updated_at": "2026-08-01T13:56:02.247Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/productized-sprint/BUILD_QUEUE.json"
 }
