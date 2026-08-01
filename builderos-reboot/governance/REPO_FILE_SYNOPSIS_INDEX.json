@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T11:03:21.131Z",
+  "generated_at": "2026-08-01T11:04:23.044Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -95522,10 +95522,14 @@
     },
     {
       "path": "services/storyProject.js",
-      "synopsis": "Service module — StoryProject.",
-      "bytes": 506,
-      "mtime": "2026-07-15T08:53:26.098Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "synopsis": "A story project can be created and re-opened with persistent canon data.",
+      "bytes": 1484,
+      "mtime": "2026-08-01T11:04:23.044Z",
+      "indexed_at": "2026-08-01T11:04:23.044Z",
+      "ssot": [
+        "docs/products/story-studio/PRODUCT_HOME.md",
+        "docs/products/story-studio/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/stripe-billing-separation.js",
