@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T11:26:06.846Z",
+  "generated_at": "2026-08-01T11:28:53.487Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -94571,10 +94571,10 @@
     },
     {
       "path": "services/safeOutputService.js",
-      "synopsis": "Existing code",
-      "bytes": 1142,
-      "mtime": "2026-07-18T01:15:48.159Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis": "Implements family/church/classroom-safe outputs by filtering content based on safety levels.",
+      "bytes": 4106,
+      "mtime": "2026-08-01T11:28:53.487Z",
+      "indexed_at": "2026-08-01T11:28:53.487Z",
       "ssot": [
         "docs/products/faith-studio/PRODUCT_HOME.md"
       ]
