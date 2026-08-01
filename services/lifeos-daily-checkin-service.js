@@ -1,28 +1,88 @@
 /**
- * SYNOPSIS: Add a new function to log gratitude entries
+ * SYNOPSIS: Daily activity check-in service for recording and summarizing work.
  * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
-// Add a new function to log gratitude entries
-export async function addGratitudeEntry(db, userId, gratitudeText) {
-  const result = await db.query(
-    'INSERT INTO gratitude_logs (user_id, gratitude_text, created_at) VALUES ($1, $2, NOW()) RETURNING *',
-    [userId, gratitudeText]
-  );
-  return result.rows[0];
+export async function startCheckin(deps, userId) {
+  const { logger } = deps;
+  try {
+    const prompt = await getPromptForUser(deps, userId);
+    return prompt;
+  } catch (error) {
+    logger.error({ error, userId }, 'Error in startCheckin');
+    throw new Error('Failed to start checkin');
+  }
 }
 
-// Function to analyze gratitude patterns and influence on joy scores
-export async function analyzeGratitudeInfluence(db, userId) {
-  // This function would include logic to analyze patterns
-  // E.g., calculate a correlation between gratitude logs and joy scores
-  const result = await db.query(
-    'SELECT * FROM gratitude_logs WHERE user_id = $1 ORDER BY created_at DESC',
-    [userId]
-  );
+export async function addCheckinEntry(deps, userId, text, { minutesAgo } = {}) {
+  const { pool, logger } = deps;
+  try {
+    // Assuming a 'checkins' table exists with columns: user_id, entry_text, occurred_at
+    const occurredAt = minutesAgo ? new Date(Date.now() - minutesAgo * 60 * 1000) : new Date();
+    const { rows } = await pool.query(
+      'INSERT INTO checkins (user_id, entry_text, occurred_at) VALUES ($1, $2, $3) RETURNING *',
+      [userId, text, occurredAt]
+    );
+    return rows[0];
+  } catch (error) {
+    logger.error({ error, userId, text }, 'Error in addCheckinEntry');
+    throw new Error('Failed to add checkin entry');
+  }
+}
 
-  // Placeholder for analysis logic
-  const gratitudeEntries = result.rows;
-  // Analyze influence on joy scores here
-  // Return analysis result
-  return { influence: 'Placeholder for calculated influence' };
+export async function getTodaySummary(deps, userId) {
+  const { pool, logger, callCouncilMember } = deps;
+  try {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const { rows: entries } = await pool.query(
+      'SELECT entry_text FROM checkins WHERE user_id = $1 AND occurred_at >= $2 ORDER BY occurred_at ASC',
+      [userId, today]
+    );
+
+    const entryTexts = entries.map(entry => entry.entry_text);
+    const summary = await callCouncilMember(
+      'summarizer',
+      `Summarize the following daily activity entries concisely:\n\n${entryTexts.join('\n')}`
+    );
+
+    return { entries: entryTexts, summary };
+  } catch (error) {
+    logger.error({ error, userId }, 'Error in getTodaySummary');
+    throw new Error('Failed to get today\'s summary');
+  }
+}
+
+export async function getPromptForUser(deps, userId) {
+  const { pool, logger } = deps;
+  try {
+    // Assuming a 'users' table exists with a 'name' column
+    const { rows } = await pool.query('SELECT name FROM users WHERE id = $1', [userId]);
+    const userName = rows.length > 0 ? rows[0].name : 'User';
+
+    // Fetch recent entries for context if needed
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const { rows: recentEntries } = await pool.query(
+      'SELECT entry_text FROM checkins WHERE user_id = $1 AND occurred_at >= $2 ORDER BY occurred_at DESC LIMIT 3',
+      [userId, today]
+    );
+
+    let context = '';
+    if (recentEntries.length > 0) {
+      context = '\n\nRecent activities:\n' + recentEntries.map(e => `- ${e.entry_text}`).join('\n');
+    }
+
+    return `${userName}, what have you worked on for the last 15 minutes?${context}`;
+  } catch (error) {
+    logger.error({ error, userId }, 'Error in getPromptForUser');
+    throw new Error('Failed to get prompt for user');
+  }
+}
+
+export async function buildReplyFromEntries(entries) {
+  // This function assumes 'entries' is an array of strings
+  if (!Array.isArray(entries) || entries.length === 0) {
+    return 'No activities recorded today.';
+  }
+  return entries.map(entry => `- ${entry}`).join('\n');
 }
