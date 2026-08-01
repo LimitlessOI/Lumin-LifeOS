@@ -1158,13 +1158,13 @@
     },
     {
       "id": "lumin-university-1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/competencyStandards.js",
       "task": "implement competency standards service",
       "spec": "Implement service logic to handle detailed competency standards per domain.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "expected_exports": [
         "getCompetencyStandards"
       ],
@@ -1186,7 +1186,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:58:42.947Z",
-      "commit_sha": "d11ae735bfadf045f59f4f470030eedd17cb4b57",
+      "commit_sha": "b8da6a7b62c94c8981182a1da6510334a66bfd86",
       "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lumin-university-1",
       "mission_id": "PRODUCT-lumin-university",
@@ -1194,8 +1194,9 @@
       "demoted": false,
       "last_error": "artifact_proof_failed: function getCompetencyStandards()",
       "heal_unblocked": true,
-      "last_attempt_at": "2026-08-01T13:32:59.958Z",
-      "blocker_class": "BLOCKED_TOOLING"
+      "last_attempt_at": "2026-08-01T13:39:33.740Z",
+      "blocker_class": "BLOCKED_TOOLING",
+      "completed_at": "2026-08-01T13:39:33.782Z"
     },
     {
       "id": "lumin-university-2",
@@ -1598,6 +1599,6 @@
   "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-lumin-university",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T13:33:12.199Z",
+  "updated_at": "2026-08-01T13:39:33.782Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/lumin-university/BUILD_QUEUE.json"
 }
