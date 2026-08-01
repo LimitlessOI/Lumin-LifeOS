@@ -746,25 +746,27 @@
     },
     {
       "id": "6",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/securityPreflightChecks.mjs",
       "task": "implement preflight security checks",
       "spec": "Script to conduct preflight security checks focusing on P0 items only.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "runPreflightChecks"
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-15T21:56:13.008Z",
-      "commit_sha": "52a89a0079f7d32c868dcd7a8070410d67238097",
+      "commit_sha": "6fb82c40820bbc8267adb5595b267735e33ba98f",
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "6",
       "mission_id": "PRODUCT-oil-security-divisions",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:runPreflightChecks; runPreflightChecks",
-      "reaudit_reset_at": "2026-07-30T18:55:06.687Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.687Z",
+      "last_attempt_at": "2026-08-01T01:53:08.255Z",
+      "completed_at": "2026-08-01T01:53:37.622Z"
     },
     {
       "id": "7",
@@ -1822,5 +1824,5 @@
   "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-oil-security-divisions",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T01:47:57.644Z"
+  "updated_at": "2026-08-01T01:53:37.622Z"
 }
