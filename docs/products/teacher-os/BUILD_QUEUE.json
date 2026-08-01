@@ -184,7 +184,7 @@
     },
     {
       "id": "5",
-      "status": "done",
+      "status": "pending",
       "target_file": "public/overlay/uxDesign.html",
       "task": "design UX wireframes",
       "spec": "Create wireframes and user flow diagrams for the teacher-os interface.",
@@ -200,7 +200,10 @@
       "commit_sha": "a8822f1bd90f3379c10b03289e4c416580e85dc6",
       "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "5",
-      "mission_id": "PRODUCT-teacher-os"
+      "mission_id": "PRODUCT-teacher-os",
+      "last_error": "no_proof_required_non_server_code",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "6",
@@ -706,7 +709,7 @@
     },
     {
       "id": "teacher-os-step5",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/competitiveLandscapeRoutes.js",
       "task": "add competitive landscape route",
       "spec": "Expose an HTTP route to retrieve the competitive landscape analysis.",
@@ -736,7 +739,7 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "artifact_proof_failed: app.get",
       "commit_sha": "5cc4d8bf3ce7618ede69efbd17f7be65a2a62a69",
       "built_sha": null,
       "proof": null,
@@ -757,7 +760,8 @@
       "shipped_at": "2026-07-16T07:10:32.135Z",
       "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "teacher-os-step5",
-      "mission_id": "PRODUCT-teacher-os"
+      "mission_id": "PRODUCT-teacher-os",
+      "heal_unblocked": true
     },
     {
       "id": "teacher-os-step6",
@@ -995,5 +999,5 @@
   "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-teacher-os",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:22:13.755Z"
+  "updated_at": "2026-08-01T06:30:54.126Z"
 }
