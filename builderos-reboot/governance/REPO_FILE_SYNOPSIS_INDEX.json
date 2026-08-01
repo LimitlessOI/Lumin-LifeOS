@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T02:17:07.267Z",
+  "generated_at": "2026-08-01T02:17:56.483Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12657,
   "files": [
@@ -71078,10 +71078,13 @@
     },
     {
       "path": "routes/sprintQueuePanelRoute.js",
-      "synopsis": "HTTP route module — SprintQueuePanelRoute.",
-      "bytes": 544,
-      "mtime": "2026-07-18T00:18:17.683Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "synopsis": "Route for displaying the Sprint Queue panel or temporary Notion board.",
+      "bytes": 605,
+      "mtime": "2026-08-01T02:17:56.483Z",
+      "indexed_at": "2026-08-01T02:17:56.483Z",
+      "ssot": [
+        "docs/products/productized-sprint/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/stripe-routes.js",

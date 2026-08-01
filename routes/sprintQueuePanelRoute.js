@@ -1,19 +1,16 @@
 /**
- * SYNOPSIS: HTTP route module — SprintQueuePanelRoute.
+ * SYNOPSIS: Route for displaying the Sprint Queue panel or temporary Notion board.
+ * @ssot docs/products/productized-sprint/PRODUCT_HOME.md
  */
-import express from 'express';
-
-const router = express.Router();
-
-function getSprintQueuePanel(req, res) {
-  // For now, redirecting to an interim Notion board URL
-  const notionBoardURL = 'https://www.notion.so/interim-sprint-queue-panel';
-  res.redirect(notionBoardURL);
+export function registerSprintQueuePanelRoute(app, deps) {
+  app.get('/sprint-queue-panel', deps.requireKey, async (req, res, next) => {
+    try {
+      // For now, redirecting to an interim Notion board URL
+      const notionBoardURL = 'https://www.notion.so/interim-sprint-queue-panel';
+      res.redirect(notionBoardURL);
+    } catch (error) {
+      deps.logger.error({ error }, 'Error in sprintQueuePanelRoute route');
+      next(error);
+    }
+  });
 }
-
-function registerSprintQueuePanelRoutes(app) {
-  router.get('/sprint-queue-panel', getSprintQueuePanel);
-  app.use(router);
-}
-
-export { registerSprintQueuePanelRoutes as registerSprintQueuePanelRoute };
