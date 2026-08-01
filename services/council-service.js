@@ -1784,11 +1784,16 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
         await trackAIPerformance(member, "chat", duration, 0, 0, false);
       }
 
-      // ── 429 = rate limit hit → mark provider exhausted, cascade to next free ──
+      // ── 429 / credit-exhausted = provider ran dry → cascade to next free (SO-003) ──
       const is429 = error.message?.includes('429') ||
                     error.message?.toLowerCase().includes('rate limit') ||
                     error.message?.toLowerCase().includes('quota');
-      if (is429 && !founderComms && !builderLane) {
+      const isCreditError = error.message?.toLowerCase().includes('credit balance') ||
+                            error.message?.toLowerCase().includes('no credits remaining') ||
+                            error.message?.toLowerCase().includes('billing') ||
+                            error.message?.toLowerCase().includes('payment') ||
+                            error.message?.toLowerCase().includes('insufficient_quota');
+      if ((is429 || isCreditError) && !founderComms) {
         await freeTierGovernor.on429(member);
         const exhaustedProvider = freeTierGovernor.resolveProvider(member);
         _markProviderExhausted(exhaustedProvider); // keep selectOptimalModel from re-picking it
@@ -1797,7 +1802,8 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
         const fallbackMembers = freeTierGovernor.PROVIDER_LIMITS[nextProvider]?.councilMembers || ['cerebras_llama'];
         for (const fallbackMember of fallbackMembers) {
           if (COUNCIL_MEMBERS[fallbackMember]) {
-            console.log(`🔄 [FREE-TIER] ${member} rate limited → cascading to ${fallbackMember} (${nextProvider})`);
+            const reasonLabel = isCreditError ? 'credit exhausted' : 'rate limited';
+            console.log(`🔄 [FREE-TIER] ${member} ${reasonLabel} → cascading to ${fallbackMember} (${nextProvider})`);
             return await callCouncilMember(fallbackMember, prompt, options);
           }
         }

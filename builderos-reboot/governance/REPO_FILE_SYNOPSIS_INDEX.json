@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-31T23:59:30.156Z",
+  "generated_at": "2026-07-31T23:39:02.734Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12637,
   "files": [
@@ -30844,9 +30844,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 30277,
-      "mtime": "2026-07-31T23:48:56.917Z",
-      "indexed_at": "2026-07-31T23:48:56.917Z",
+      "bytes": 29883,
+      "mtime": "2026-07-28T17:50:51.061Z",
+      "indexed_at": "2026-07-28T22:54:46.666Z",
       "synopsis_index_only": true
     },
     {
@@ -38860,9 +38860,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 79804,
-      "mtime": "2026-07-31T23:59:30.156Z",
-      "indexed_at": "2026-07-31T23:59:30.156Z"
+      "bytes": 78861,
+      "mtime": "2026-07-31T23:39:02.734Z",
+      "indexed_at": "2026-07-31T23:39:02.734Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41073,9 +41073,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 363730,
-      "mtime": "2026-07-31T23:48:56.917Z",
-      "indexed_at": "2026-07-31T23:48:56.917Z"
+      "bytes": 362620,
+      "mtime": "2026-07-31T23:39:02.734Z",
+      "indexed_at": "2026-07-31T23:39:02.734Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -41825,9 +41825,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 646970,
-      "mtime": "2026-07-31T23:59:30.156Z",
-      "indexed_at": "2026-07-31T23:59:30.156Z"
+      "bytes": 644632,
+      "mtime": "2026-07-31T23:39:02.734Z",
+      "indexed_at": "2026-07-31T23:39:02.734Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -69712,9 +69712,9 @@
     {
       "path": "routes/lifeos-council-builder-routes.js",
       "synopsis": "routes/lifeos-council-builder-routes.js",
-      "bytes": 174489,
-      "mtime": "2026-07-31T23:48:56.917Z",
-      "indexed_at": "2026-07-31T23:48:56.917Z",
+      "bytes": 174091,
+      "mtime": "2026-07-31T23:39:02.734Z",
+      "indexed_at": "2026-07-31T23:39:02.734Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -89246,9 +89246,9 @@
     {
       "path": "services/deployment-service.js",
       "synopsis": "deployment-service.js",
-      "bytes": 51114,
-      "mtime": "2026-07-31T23:59:30.156Z",
-      "indexed_at": "2026-07-31T23:59:30.156Z",
+      "bytes": 50450,
+      "mtime": "2026-07-31T12:04:04.906Z",
+      "indexed_at": "2026-07-31T12:04:04.906Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
