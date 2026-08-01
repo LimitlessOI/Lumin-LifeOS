@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T15:19:40.834Z",
+  "generated_at": "2026-08-01T15:20:07.127Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12737,
   "files": [
@@ -70725,9 +70725,9 @@
     {
       "path": "routes/marketing-campaign-routes.js",
       "synopsis": "API routes for generating and retrieving marketing campaign assets.",
-      "bytes": 1529,
-      "mtime": "2026-08-01T15:19:40.834Z",
-      "indexed_at": "2026-08-01T15:19:40.834Z",
+      "bytes": 1593,
+      "mtime": "2026-08-01T15:20:07.127Z",
+      "indexed_at": "2026-08-01T15:20:07.127Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md",
         "docs/products/marketingos/PRODUCT_HOME.md"

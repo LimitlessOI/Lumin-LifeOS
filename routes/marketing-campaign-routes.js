@@ -12,7 +12,7 @@ export function registerMarketingCampaignRoutes(app, deps) {
   app.post('/api/v1/marketingos/campaign/generate', deps.requireKey, async (req, res, next) => {
     try {
       const payload = req.body;
-      const result = await generateCampaignAssets(deps, payload);
+      const result = await deps.marketingCampaignGenerator.generateCampaignAssets(deps, payload);
       res.json(result);
     } catch (error) {
       deps.logger.error({ error }, 'Error in POST /api/v1/marketingos/campaign/generate route');
@@ -27,7 +27,7 @@ export function registerMarketingCampaignRoutes(app, deps) {
   app.get('/api/v1/marketingos/campaign/assets/:sessionId', deps.requireKey, async (req, res, next) => {
     try {
       const { sessionId } = req.params;
-      const result = await getCampaignAssetsBySessionId(deps, sessionId);
+      const result = await deps.marketingCampaignGenerator.getCampaignAssetsBySessionId(deps, sessionId);
       if (result) {
         res.json(result);
       } else {
