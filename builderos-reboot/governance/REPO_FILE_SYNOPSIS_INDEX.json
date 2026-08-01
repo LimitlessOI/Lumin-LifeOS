@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T13:40:53.103Z",
+  "generated_at": "2026-08-01T13:41:19.894Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12726,
   "files": [
@@ -93742,10 +93742,10 @@
     },
     {
       "path": "services/musicIndustryConsultation.js",
-      "synopsis": "Exports checkMusicIndustryConsultations — services/musicIndustryConsultation.js.",
-      "bytes": 677,
-      "mtime": "2026-07-16T19:42:53.614Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis": "Verifies that a minimum number of music industry professionals have been consulted by querying the database.",
+      "bytes": 655,
+      "mtime": "2026-08-01T13:41:19.894Z",
+      "indexed_at": "2026-08-01T13:41:19.894Z",
       "ssot": [
         "docs/products/music-talent-studio/PRODUCT_HOME.md"
       ]

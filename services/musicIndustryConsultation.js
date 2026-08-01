@@ -1,28 +1,15 @@
 /**
+ * SYNOPSIS: Verifies that a minimum number of music industry professionals have been consulted by querying the database.
  * @ssot docs/products/music-talent-studio/PRODUCT_HOME.md
  */
-/**
- * SYNOPSIS: Exports checkMusicIndustryConsultations — services/musicIndustryConsultation.js.
- */
-const consultedProfessionals = [
-  { name: 'Alice', role: 'Producer' },
-  { name: 'Bob', role: 'Manager' }
-];
-
-export function checkMusicIndustryConsultations() {
-  return consultedProfessionals.length >= 2;
-}
-
-export { consultedProfessionals };
-
-export function addIndustryConsult(name, role) {
-  consultedProfessionals.push({ name, role });
-}
-
-export function getIndustryConsult() {
-  return consultedProfessionals;
-}
-
-export function getMusicIndustryConsultations() {
-  return consultedProfessionals;
+export async function checkMusicIndustryConsultations(deps, payload) {
+  const { pool, logger } = deps;
+  try {
+    const { rows } = await pool.query('SELECT COUNT(*) FROM music_industry_consults');
+    const consultationCount = parseInt(rows[0].count, 10);
+    return consultationCount >= 2;
+  } catch (error) {
+    logger.error({ error }, 'Error in checkMusicIndustryConsultations');
+    throw new Error('Failed to verify Music Industry Consultation count');
+  }
 }
