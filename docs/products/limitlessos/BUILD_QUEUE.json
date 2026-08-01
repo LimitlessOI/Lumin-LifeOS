@@ -3,7 +3,7 @@
   "product_id": "limitlessos",
   "verify_script": "scripts/verify-go-vegas-scheduler.mjs",
   "notes": "Go Vegas revenue slice — outreach pipeline v1 already shipped as code; this queue closes the last mile to live revenue: scheduler tick (daily discover/invite/follow-up under caps), dry-run proof script, and SENTRY-facing status receipt. No founder UI in this slice.",
-  "updated_at": "2026-08-01T04:45:02.115Z",
+  "updated_at": "2026-08-01T04:45:54.888Z",
   "steps": [
     {
       "id": "gv-scheduler",
@@ -824,7 +824,7 @@
         "10"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerBundleRoutes"
       ],
@@ -844,16 +844,16 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-15T22:36:29.807Z",
-      "commit_sha": null,
+      "commit_sha": "bc583577f2c07feccb2107477d78e6c33aebb262",
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "11",
       "mission_id": "PRODUCT-limitlessos",
       "pre_existing": null,
-      "last_error": null,
+      "last_error": "artifact_proof_failed: missing_exports:registerBundleRoutes; registerBundleRoutes",
       "reaudit_reset_at": "2026-07-30T18:55:06.661Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-01T04:45:15.721Z",
       "last_attempt": null,
       "revive_count": 7,
       "revived_at": "2026-08-01T04:34:54.069Z",
@@ -862,7 +862,7 @@
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
-      "blocker_class": null,
+      "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
