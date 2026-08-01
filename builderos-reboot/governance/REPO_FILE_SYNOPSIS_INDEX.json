@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T14:46:28.319Z",
+  "generated_at": "2026-08-01T14:49:23.253Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12727,
   "files": [
@@ -91074,11 +91074,12 @@
     },
     {
       "path": "services/googleCalendarService.js",
-      "synopsis": "Exports createCalendarEvent — services/googleCalendarService.js.",
-      "bytes": 2104,
-      "mtime": "2026-07-16T19:42:53.610Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis": "Implement calendar integration and event syncing.",
+      "bytes": 7196,
+      "mtime": "2026-08-01T14:49:23.253Z",
+      "indexed_at": "2026-08-01T14:49:23.253Z",
       "ssot": [
+        "docs/products/word-keeper/PRODUCT_HOME.md",
         "docs/products/word-keeper/PRODUCT_HOME.md"
       ]
     },
