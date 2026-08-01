@@ -8,8 +8,12 @@ let canonicalProductId = 'LimitlessOS';
 const router = express.Router();
 
 function registerLimitlessOSUIRoutes(app) {
-  // Existing routes
+  // UI update registration: expose the LimitlessOS UI route and brand/experience pages.
   app.use('/existing-path', router);
+
+  app.get('/ui/limitlessos', (req, res) => {
+    res.send('LimitlessOS UI update registration');
+  });
 
   // New brand enhancement routes
   app.use('/new-brand', (req, res) => {

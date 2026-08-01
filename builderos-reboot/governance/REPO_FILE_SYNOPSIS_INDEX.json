@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T09:42:45.871Z",
+  "generated_at": "2026-08-01T09:45:54.967Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1694,
-      "mtime": "2026-08-01T09:41:19.528Z",
-      "indexed_at": "2026-08-01T09:41:51.390Z",
+      "bytes": 1762,
+      "mtime": "2026-08-01T09:45:30.572Z",
+      "indexed_at": "2026-08-01T09:45:54.967Z",
       "synopsis_index_only": true
     },
     {
@@ -42115,9 +42115,9 @@
     {
       "path": "docs/products/limitlessos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LimitlessOS business stack",
-      "bytes": 16019,
-      "mtime": "2026-08-01T09:42:10.824Z",
-      "indexed_at": "2026-08-01T09:42:19.616Z"
+      "bytes": 16718,
+      "mtime": "2026-08-01T09:45:43.648Z",
+      "indexed_at": "2026-08-01T09:45:54.967Z"
     },
     {
       "path": "docs/products/lip/FILE_MANIFEST.json",
@@ -70644,9 +70644,9 @@
     {
       "path": "routes/limitlessos-ui-routes.js",
       "synopsis": "HTTP route module — Limitlessos Ui Routes.",
-      "bytes": 739,
-      "mtime": "2026-08-01T04:37:38.743Z",
-      "indexed_at": "2026-08-01T04:37:38.743Z",
+      "bytes": 911,
+      "mtime": "2026-08-01T09:45:39.808Z",
+      "indexed_at": "2026-08-01T09:45:54.967Z",
       "ssot": [
         "docs/products/limitlessos/PRODUCT_HOME.md"
       ]
