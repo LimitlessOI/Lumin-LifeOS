@@ -1,27 +1,18 @@
 /**
- * SYNOPSIS: routes/competitiveLandscapeRoutes.js
+ * SYNOPSIS: Add competitive landscape route for Teacher-OS.
  * @ssot docs/products/teacher-os/PRODUCT_HOME.md
  */
-// routes/competitiveLandscapeRoutes.js
+import { mapCompetitiveLandscape } from '../services/competitiveLandscape.js';
 
-import express from 'express';
-
-const router = express.Router();
-
-// Route handler function
-const getCompetitiveLandscape = (req, res) => {
-  // Assume fetchCompetitiveLandscapeData is a function that retrieves the needed data
-  const data = fetchCompetitiveLandscapeData();
-  res.json(data);
-};
-
-// Register the route
-router.get('/api/competitive-landscape', getCompetitiveLandscape);
-
-// Function to register the routes
-export function registerCompetitiveLandscapeRoutes(app) {
-  app.use(router);
+export function registerCompetitiveLandscapeRoutes(app, deps) {
+  app.get('/api/v1/teacher-os/competitive-landscape', deps.requireKey, async (req, res, next) => {
+    try {
+      // The service function mapCompetitiveLandscape does not require parameters
+      const result = await mapCompetitiveLandscape(deps, {});
+      res.json(result);
+    } catch (error) {
+      deps.logger.error({ error }, 'Error in competitiveLandscapeRoutes route');
+      next(error);
+    }
+  });
 }
-
-// Ensure the function is exported
-export default registerCompetitiveLandscapeRoutes;

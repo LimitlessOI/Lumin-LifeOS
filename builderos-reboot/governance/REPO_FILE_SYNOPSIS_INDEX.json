@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T14:13:46.547Z",
+  "generated_at": "2026-08-01T14:17:00.244Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12726,
   "files": [
@@ -69430,10 +69430,10 @@
     },
     {
       "path": "routes/competitiveLandscapeRoutes.js",
-      "synopsis": "routes/competitiveLandscapeRoutes.js",
-      "bytes": 737,
-      "mtime": "2026-07-16T19:42:53.595Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis": "Add competitive landscape route for Teacher-OS.",
+      "bytes": 675,
+      "mtime": "2026-08-01T14:17:00.244Z",
+      "indexed_at": "2026-08-01T14:17:00.244Z",
       "ssot": [
         "docs/products/teacher-os/PRODUCT_HOME.md"
       ]
