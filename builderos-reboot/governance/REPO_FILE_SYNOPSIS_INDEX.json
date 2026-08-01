@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T14:30:19.840Z",
+  "generated_at": "2026-08-01T14:33:29.496Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12726,
   "files": [
@@ -94002,10 +94002,13 @@
     },
     {
       "path": "services/partner-key-generation.js",
-      "synopsis": "Exports generatePartnerKey — services/partner-key-generation.js.",
-      "bytes": 268,
-      "mtime": "2026-07-17T22:53:42.195Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "synopsis": "Generates a unique API key for a partner, differentiating it from platform keys.",
+      "bytes": 1624,
+      "mtime": "2026-08-01T14:33:29.496Z",
+      "indexed_at": "2026-08-01T14:33:29.496Z",
+      "ssot": [
+        "docs/products/white-label/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/partner-key-scheme.js",
