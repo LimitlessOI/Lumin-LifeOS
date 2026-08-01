@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T15:36:25.966Z",
+  "generated_at": "2026-08-01T15:38:06.897Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12738,
   "files": [
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 946,
-      "mtime": "2026-08-01T15:35:44.433Z",
-      "indexed_at": "2026-08-01T15:36:25.966Z",
+      "bytes": 1791,
+      "mtime": "2026-08-01T15:36:49.273Z",
+      "indexed_at": "2026-08-01T15:38:06.897Z",
       "synopsis_index_only": true
     },
     {
@@ -42230,9 +42230,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 137695,
-      "mtime": "2026-08-01T15:33:33.469Z",
-      "indexed_at": "2026-08-01T15:33:35.946Z"
+      "bytes": 138202,
+      "mtime": "2026-08-01T15:37:57.777Z",
+      "indexed_at": "2026-08-01T15:38:06.897Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -70725,9 +70725,9 @@
     {
       "path": "routes/marketing-campaign-routes.js",
       "synopsis": "API routes for generating and retrieving marketing campaign assets.",
-      "bytes": 1231,
-      "mtime": "2026-08-01T15:32:39.137Z",
-      "indexed_at": "2026-08-01T15:33:45.656Z",
+      "bytes": 1563,
+      "mtime": "2026-08-01T15:37:36.821Z",
+      "indexed_at": "2026-08-01T15:38:06.897Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -70755,9 +70755,9 @@
     {
       "path": "routes/marketing-performance-intel-routes.js",
       "synopsis": "Exposes API routes for marketing performance learning insights.",
-      "bytes": 1179,
-      "mtime": "2026-08-01T15:32:39.137Z",
-      "indexed_at": "2026-08-01T15:33:45.656Z",
+      "bytes": 900,
+      "mtime": "2026-08-01T15:37:40.381Z",
+      "indexed_at": "2026-08-01T15:38:06.897Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
