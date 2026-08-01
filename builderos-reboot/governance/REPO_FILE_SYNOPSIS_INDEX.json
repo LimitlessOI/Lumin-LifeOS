@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T05:19:30.427Z",
+  "generated_at": "2026-08-01T05:19:57.790Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12671,
   "files": [
@@ -94205,10 +94205,14 @@
     },
     {
       "path": "services/scriptureSceneBuilder.js",
-      "synopsis": "Exports buildScriptureScene — services/scriptureSceneBuilder.js.",
-      "bytes": 662,
-      "mtime": "2026-07-15T09:37:08.941Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "synopsis": "Supports building scripture scenes, including with private witness mode.",
+      "bytes": 1788,
+      "mtime": "2026-08-01T05:19:57.790Z",
+      "indexed_at": "2026-08-01T05:19:57.790Z",
+      "ssot": [
+        "docs/products/faith-studio/PRODUCT_HOME.md",
+        "docs/products/faith-studio/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/search-provider-config.js",
