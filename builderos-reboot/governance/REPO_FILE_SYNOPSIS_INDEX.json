@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T11:04:55.246Z",
+  "generated_at": "2026-08-01T11:05:26.156Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -88725,10 +88725,13 @@
     },
     {
       "path": "services/channelMemory.js",
-      "synopsis": "Exports initializeChannelMemory — services/channelMemory.js.",
-      "bytes": 350,
-      "mtime": "2026-07-15T08:53:26.097Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "synopsis": "Implements channel memory profile initialization and retrieval.",
+      "bytes": 1884,
+      "mtime": "2026-08-01T11:05:26.156Z",
+      "indexed_at": "2026-08-01T11:05:26.156Z",
+      "ssot": [
+        "docs/products/creator-media-os/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/character-builder.js",
