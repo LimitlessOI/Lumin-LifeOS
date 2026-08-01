@@ -694,19 +694,19 @@
     },
     {
       "id": "memory-intelligence-4",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/memory-ci-evidence.mjs",
       "task": "generate memory CI evidence",
       "spec": "Record the node --check results as fact_evidence in the database.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "createFactEvidence"
       ],
       "shipped_via": null,
       "shipped_at": null,
-      "commit_sha": null,
+      "commit_sha": "05732b6450d63072eb5e04ca1db4569a51cc1a11",
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-intelligence-4",
       "mission_id": "PRODUCT-memory-intelligence",
@@ -715,7 +715,7 @@
       "reaudit_reset_at": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-01T03:27:38.303Z",
       "last_attempt": null,
       "revive_count": 0,
       "revived_at": null,
@@ -729,7 +729,8 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "escalation_required": false,
-      "escalation_note": "Cleared by conductor: added `createFactEvidence` alias to `scripts/memory-ci-evidence.mjs`; step reset to pending."
+      "escalation_note": "Cleared by conductor: added `createFactEvidence` alias to `scripts/memory-ci-evidence.mjs`; step reset to pending.",
+      "completed_at": "2026-08-01T03:27:38.337Z"
     },
     {
       "id": "memory-intelligence-5",
@@ -1274,5 +1275,5 @@
   "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-memory-intelligence",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T03:27:23.786Z"
+  "updated_at": "2026-08-01T03:27:38.337Z"
 }
