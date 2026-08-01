@@ -384,13 +384,13 @@
     },
     {
       "id": "9",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/studentInterviews.js",
       "task": "implement student interview recording",
       "spec": "Implement a service that records interviews with prospective students. The file must start with a JSDoc block containing `@ssot docs/products/lumin-university/PRODUCT_HOME.md`. Export a named async function `recordStudentInterview(deps, payload)`. You may destructure `const { pool, logger } = deps;` and then use `pool.query` and `logger.error`. Do NOT create `new Pool()`, do NOT import `pg`, and do NOT import a logger from a repo path. Read `studentId` and `interviewNotes` from `payload`. Insert into a table from the LIVE DB SCHEMA if one exists; otherwise log and return a simple record object. Use a parameterised query with RETURNING. Catch errors, log the error, and throw a plain Error. Output plain ESM JavaScript only.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "recordStudentInterview"
       ],
@@ -417,7 +417,7 @@
       "blueprint_step_id": "9",
       "mission_id": "PRODUCT-lumin-university",
       "last_error": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-01T01:07:56.852Z",
       "blocker_class": null,
       "claim_level": null,
       "park_until": null,
@@ -429,7 +429,8 @@
         "claimed_shipped_at": "2026-07-15T19:39:36.002Z",
         "reason": "commit_sha exists in repo but is not an ancestor of origin/main -- ship landed on origin/builderos-autonomous or origin/builderos-shadow instead of main (GITHUB_DEPLOY_BRANCH mismatch), and the content itself was placeholder/stub code (verified by direct inspection), not a real implementation. Confirmed via: git merge-base --is-ancestor <sha> origin/main."
       },
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "completed_at": "2026-08-01T01:07:56.901Z"
     },
     {
       "id": "10",
