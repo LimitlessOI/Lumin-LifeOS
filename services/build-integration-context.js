@@ -190,6 +190,38 @@ export function buildIntegrationContext({
       lines.push(`\`\`\``);
     }
     lines.push('- ROUTE-SPECIFIC FILE RULES: Do NOT use `express.Router()` or `app.use()` for a single route. Do NOT import `Request`, `Response`, or `NextFunction` from `express` (those are TypeScript types, not JS values). Do NOT import `requireKey`, `logger`, or `callCouncilMember` from sibling files; they come from `deps`. You MAY import an existing sibling service function you have confirmed exists (e.g. `import { verifyCredential } from \'../services/credentialVerification.js\';`).');
+  } else if (moduleStep && /^services\/.+\.js$/i.test(targetFile)) {
+    const base = path.basename(targetFile).replace(/\.js$/, '');
+    const fnName = expectedExports[0] || base;
+    lines.push('');
+    lines.push('SERVICE-SPECIFIC FILE RULES (do NOT make this a route or CLI script — it is imported by routes as a service function):');
+    lines.push(`- The file MUST start with exactly this JSDoc block (no other comment or text before it):`);
+    lines.push(`\`\`\`js`);
+    lines.push(`/**`);
+    lines.push(` * SYNOPSIS: <one-line description>`);
+    lines.push(` * @ssot ${productId ? `docs/products/${productId}/PRODUCT_HOME.md` : 'docs/products/<product>/PRODUCT_HOME.md'}`);
+    lines.push(` */`);
+    lines.push(`\`\`\``);
+    lines.push(`- Export a named function like \`export async function ${fnName}(deps, payload) { ... }\`. deps has \`pool\` and \`logger\`.`);
+    lines.push('- Use the exact pattern below. Replace the SQL and column names with values from LIVE DB SCHEMA, and replace the function name if the required export differs:');
+    lines.push(`\`\`\`js`);
+    lines.push(`/**`);
+    lines.push(` * SYNOPSIS: <one-line description>`);
+    lines.push(` * @ssot ${productId ? `docs/products/${productId}/PRODUCT_HOME.md` : 'docs/products/<product>/PRODUCT_HOME.md'}`);
+    lines.push(` */`);
+    lines.push(`export async function ${fnName}(deps, payload) {`);
+    lines.push(`  const { pool, logger } = deps;`);
+    lines.push(`  const { id } = payload || {};`);
+    lines.push(`  try {`);
+    lines.push(`    const { rows } = await pool.query('SELECT * FROM <table_name> WHERE id = $1', [id]);`);
+    lines.push(`    return rows[0] || null;`);
+    lines.push(`  } catch (error) {`);
+    lines.push(`    logger.error({ error }, 'Error in ${fnName}');`);
+    lines.push(`    throw new Error('Failed in ${fnName}');`);
+    lines.push(`  }`);
+    lines.push(`}`);
+    lines.push(`\`\`\``);
+    lines.push('- SERVICE RULES: Do NOT create `new Pool()`. Do NOT import `pg`. Do NOT import a logger from a repo path. Do NOT import sibling files you have not confirmed exist. Do NOT include example usage or `if (require.main === module)` guards.');
   }
 
   lines.push('');

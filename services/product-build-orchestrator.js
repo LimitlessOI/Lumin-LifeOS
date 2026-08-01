@@ -624,10 +624,10 @@ export async function runNextStep(queue, { buildFn, verifyFn, deployProofFn, mod
 
   const sha = build && (build.commit_sha || build.sha);
   if (!build || !build.ok || !sha) {
-    return failStep(step, queue, maxAttempts, {
-      stage: 'build',
-      reason: !sha ? 'no_commit_sha (claimed pass without proof — treated as failure)' : (build && build.error) || 'build_failed',
-    }, logger);
+    const reason = (build && build.error)
+      ? String(build.error).slice(0, 600)
+      : (!sha ? 'no_commit_sha (claimed pass without proof — treated as failure)' : 'build_failed');
+    return failStep(step, queue, maxAttempts, { stage: 'build', reason }, logger);
   }
   step.commit_sha = sha;
 
