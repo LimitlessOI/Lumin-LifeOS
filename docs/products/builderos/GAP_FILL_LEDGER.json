@@ -463,6 +463,22 @@
       "added_real_lines": 27,
       "justification": "merge resolution and deterministic export form alignment; no new product logic.\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
       "commit_message_excerpt": "GAP-FILL: merge origin/main and unify services/aiPreAnalysisService.js for productized-sprint steps 04 and step4. Kept factory-generated DB-backed aiPreAnalysisPrompt(deps, payload) and registerAIPreA"
+    },
+    {
+      "at": "2026-08-01T14:24:44.580Z",
+      "file": "routes/firefoxExtension.js",
+      "is_new_file": false,
+      "added_real_lines": 34,
+      "justification": "merge resolution and deterministic gap-fill; factory /build returned HTTP 502 for step10.\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
+      "commit_message_excerpt": "GAP-FILL: merge origin/main for teacher-os-step5 and universal-overlay-step6/step10. Accepted factory-generated routes/competitiveLandscapeRoutes.js and services/sessionReplay.js. Unified routes/firef"
+    },
+    {
+      "at": "2026-08-01T14:24:44.580Z",
+      "file": "services/sessionReplay.js",
+      "is_new_file": false,
+      "added_real_lines": 20,
+      "justification": "merge resolution and deterministic gap-fill; factory /build returned HTTP 502 for step10.\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
+      "commit_message_excerpt": "GAP-FILL: merge origin/main for teacher-os-step5 and universal-overlay-step6/step10. Accepted factory-generated routes/competitiveLandscapeRoutes.js and services/sessionReplay.js. Unified routes/firef"
     }
   ]
 }
