@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T11:52:25.247Z",
+  "generated_at": "2026-08-01T11:58:24.385Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -41236,9 +41236,9 @@
     {
       "path": "docs/products/business-tools/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Business Tools",
-      "bytes": 11738,
-      "mtime": "2026-08-01T11:52:12.128Z",
-      "indexed_at": "2026-08-01T11:52:25.247Z"
+      "bytes": 12159,
+      "mtime": "2026-08-01T11:57:40.268Z",
+      "indexed_at": "2026-08-01T11:57:40.268Z"
     },
     {
       "path": "docs/products/BUSINESSTOOLS.md",
@@ -65772,9 +65772,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 3850,
-      "mtime": "2026-08-01T11:50:38.024Z",
-      "indexed_at": "2026-08-01T11:52:25.247Z",
+      "bytes": 5258,
+      "mtime": "2026-08-01T11:46:29.460Z",
+      "indexed_at": "2026-08-01T11:48:04.919Z",
       "synopsis_index_only": true
     },
     {
@@ -93033,9 +93033,9 @@
     {
       "path": "services/makeGenerator.js",
       "synopsis": "Generates a JSON schema for Make.com scenario import.",
-      "bytes": 1925,
-      "mtime": "2026-08-01T11:51:36.776Z",
-      "indexed_at": "2026-08-01T11:52:25.247Z",
+      "bytes": 3211,
+      "mtime": "2026-08-01T11:58:12.492Z",
+      "indexed_at": "2026-08-01T11:58:16.939Z",
       "ssot": [
         "docs/products/business-tools/PRODUCT_HOME.md"
       ]
