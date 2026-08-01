@@ -166,7 +166,7 @@
       "spec": "Specify how entitlements gate features per-request using project_entitlements table.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "checkEntitlement"
       ],
@@ -192,7 +192,7 @@
       "revive_count": 9,
       "revived_at": "2026-07-15T16:29:35.931Z",
       "last_attempt": null,
-      "demoted": true,
+      "demoted": false,
       "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_stub_detected: generated 0b is < 30% of existing 923b",
       "demoted_at": "2026-07-15T16:34:36.019Z",
       "park_until": null,
@@ -340,7 +340,7 @@
       "spec": "Adds a 48h auto-reject timeout mechanism to controversial approval system.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "ALTER SYSTEM SET approval_timeout = INTERVAL '48 hours'"
       ],
@@ -354,7 +354,7 @@
       "revived_at": "2026-07-15T23:04:25.844Z",
       "no_op": null,
       "pre_existing": null,
-      "demoted": true,
+      "demoted": false,
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER SYSTEM SET approval_timeout = INTERVAL '48 hours'; behavior_assertion_failed; behavio",
       "demoted_at": "2026-07-16T03:06:09.386Z",
       "park_until": null,
@@ -578,7 +578,7 @@
         "6"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "checkEntitlements"
       ],
@@ -608,7 +608,7 @@
       "revive_count": 9,
       "revived_at": "2026-07-31T01:32:13.289Z",
       "no_op": null,
-      "demoted": true,
+      "demoted": false,
       "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: openai_builder_mini: HTTP 429: {\n    \"error\": {\n        \"message\": \"You have no credits remaining. Add credits to conti",
       "demoted_at": "2026-07-31T08:52:35.959Z",
       "park_until": null,
@@ -625,7 +625,7 @@
       "spec": "Add logic to automatically reject controversial approvals after 48h timeout.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "applyApprovalTimeout"
       ],
@@ -647,7 +647,7 @@
       "revive_count": 9,
       "revived_at": "2026-07-31T06:45:13.401Z",
       "last_attempt": null,
-      "demoted": true,
+      "demoted": false,
       "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: openai_builder_mini: HTTP 429: {\n    \"error\": {\n        \"message\": \"You have no credits remaining. Add credits to conti",
       "demoted_at": "2026-07-31T08:52:35.959Z",
       "park_until": null,
@@ -756,7 +756,7 @@
       "spec": "Document the JSON schema necessary for Make.com scenario import for clear understanding and usage.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "JSON schema",
         "Make.com"
@@ -769,7 +769,7 @@
       "revive_count": 6,
       "revived_at": "2026-07-16T06:44:24.529Z",
       "last_attempt": null,
-      "demoted": true,
+      "demoted": false,
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:JSON schema; behavior_assertion_failed; behavior_proof",
       "demoted_at": "2026-07-16T06:48:24.591Z",
       "park_until": null,
@@ -1179,5 +1179,6 @@
   ],
   "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-business-tools",
-  "twin_kind": "product_build_queue_registered"
+  "twin_kind": "product_build_queue_registered",
+  "updated_at": "2026-08-01T05:59:34.565Z"
 }
