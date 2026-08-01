@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T11:12:43.604Z",
+  "generated_at": "2026-08-01T11:15:32.847Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1951,
-      "mtime": "2026-08-01T11:11:54.848Z",
-      "indexed_at": "2026-08-01T11:12:36.856Z",
+      "bytes": 1741,
+      "mtime": "2026-08-01T11:15:10.828Z",
+      "indexed_at": "2026-08-01T11:15:32.847Z",
       "synopsis_index_only": true
     },
     {
@@ -41634,9 +41634,9 @@
     {
       "path": "docs/products/creator-media-os/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Creator Media OS",
-      "bytes": 26548,
-      "mtime": "2026-08-01T11:11:55.006Z",
-      "indexed_at": "2026-08-01T11:12:36.856Z"
+      "bytes": 27092,
+      "mtime": "2026-08-01T11:15:22.808Z",
+      "indexed_at": "2026-08-01T11:15:32.847Z"
     },
     {
       "path": "docs/products/CREATORMEDIAOS.md",
@@ -65772,9 +65772,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 3836,
-      "mtime": "2026-08-01T11:11:54.851Z",
-      "indexed_at": "2026-08-01T11:12:36.856Z",
+      "bytes": 3686,
+      "mtime": "2026-08-01T11:14:28.864Z",
+      "indexed_at": "2026-08-01T11:15:32.847Z",
       "synopsis_index_only": true
     },
     {
@@ -94613,9 +94613,12 @@
     {
       "path": "services/scriptEngine.js",
       "synopsis": "Existing code in services/scriptEngine.js",
-      "bytes": 853,
-      "mtime": "2026-07-15T09:02:54.326Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 956,
+      "mtime": "2026-08-01T11:15:18.716Z",
+      "indexed_at": "2026-08-01T11:15:32.847Z",
+      "ssot": [
+        "docs/products/creator-media-os/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/scripture-scene-engine.js",

@@ -1,7 +1,10 @@
 /**
  * SYNOPSIS: Existing code in services/scriptEngine.js
+ * @ssot docs/products/creator-media-os/PRODUCT_HOME.md
  */
 // Existing code in services/scriptEngine.js
+
+// Script for long and short form generation.
 
 // Function to generate script hooks for media content
 export function generateScriptHooks(content) {
