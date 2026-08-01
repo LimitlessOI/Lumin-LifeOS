@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T09:41:51.390Z",
+  "generated_at": "2026-08-01T09:42:29.370Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3838947,
-      "mtime": "2026-08-01T09:17:36.564Z",
-      "indexed_at": "2026-08-01T09:17:53.658Z"
+      "bytes": 3839152,
+      "mtime": "2026-08-01T09:42:19.680Z",
+      "indexed_at": "2026-08-01T09:42:26.498Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -42115,9 +42115,9 @@
     {
       "path": "docs/products/limitlessos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LimitlessOS business stack",
-      "bytes": 15985,
-      "mtime": "2026-08-01T09:41:42.416Z",
-      "indexed_at": "2026-08-01T09:41:51.390Z"
+      "bytes": 16019,
+      "mtime": "2026-08-01T09:42:10.824Z",
+      "indexed_at": "2026-08-01T09:42:19.616Z"
     },
     {
       "path": "docs/products/lip/FILE_MANIFEST.json",
@@ -96575,10 +96575,10 @@
     },
     {
       "path": "services/vendor-price-book.js",
-      "synopsis": "Vendor price-book comparison service (LimitlessOS).",
-      "bytes": 1103,
-      "mtime": "2026-08-01T09:41:31.036Z",
-      "indexed_at": "2026-08-01T09:41:51.390Z",
+      "synopsis": "Provides services that compare vendor offerings based on price book data, explaining/including only those with strong reviews.",
+      "bytes": 1996,
+      "mtime": "2026-08-01T09:42:05.036Z",
+      "indexed_at": "2026-08-01T09:42:19.616Z",
       "ssot": [
         "docs/products/limitlessos/PRODUCT_HOME.md"
       ]
