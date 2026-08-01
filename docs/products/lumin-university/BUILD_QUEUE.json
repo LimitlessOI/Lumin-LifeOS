@@ -1158,13 +1158,13 @@
     },
     {
       "id": "lumin-university-1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/competencyStandards.js",
       "task": "implement competency standards service",
       "spec": "Implement service logic to handle detailed competency standards per domain.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "expected_exports": [
         "getCompetencyStandards"
       ],
@@ -1186,7 +1186,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:58:42.947Z",
-      "commit_sha": "d11ae735bfadf045f59f4f470030eedd17cb4b57",
+      "commit_sha": "b8da6a7b62c94c8981182a1da6510334a66bfd86",
       "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lumin-university-1",
       "mission_id": "PRODUCT-lumin-university",
@@ -1194,8 +1194,9 @@
       "demoted": false,
       "last_error": "artifact_proof_failed: function getCompetencyStandards()",
       "heal_unblocked": true,
-      "last_attempt_at": "2026-08-01T13:32:59.958Z",
-      "blocker_class": "BLOCKED_TOOLING"
+      "last_attempt_at": "2026-08-01T13:39:33.740Z",
+      "blocker_class": "BLOCKED_TOOLING",
+      "completed_at": "2026-08-01T13:39:33.782Z"
     },
     {
       "id": "lumin-university-2",
@@ -1345,13 +1346,13 @@
     },
     {
       "id": "lumin-university-6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/employerInterviewProcess.js",
       "task": "conduct employer interviews",
       "spec": "Conduct interviews with 5 employers to understand recognized competency credentials.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "interviewEmployers"
       ],
@@ -1374,24 +1375,26 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:32:57.270Z",
-      "commit_sha": "67b886f82800f770bd18ad782de9042d7137294d",
+      "commit_sha": "67fcd2740480961950f947d67ef25de64c639831",
       "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lumin-university-6",
       "mission_id": "PRODUCT-lumin-university",
       "same_signature_count": 0,
       "demoted": false,
       "last_error": "artifact_proof_failed: 5 employers; competency credentials",
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T13:39:46.949Z",
+      "completed_at": "2026-08-01T13:40:00.441Z"
     },
     {
       "id": "lumin-university-7",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/pricingValidationProcess.js",
       "task": "validate pricing",
       "spec": "Validate pricing model with the target users.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "validatePricing"
       ],
@@ -1413,14 +1416,16 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:37:40.037Z",
-      "commit_sha": "1a90dad61f57469743fc9054ecef7de46ce3bb97",
+      "commit_sha": "1b9c2f73da43fc164863ec0e40552731f9199a8f",
       "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lumin-university-7",
       "mission_id": "PRODUCT-lumin-university",
       "same_signature_count": 0,
       "demoted": false,
       "last_error": "artifact_proof_failed: pricing validation",
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T13:40:20.505Z",
+      "completed_at": "2026-08-01T13:40:59.839Z"
     },
     {
       "id": "lumin-university-8",
@@ -1598,6 +1603,6 @@
   "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-lumin-university",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T13:33:12.199Z",
+  "updated_at": "2026-08-01T13:40:59.839Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/lumin-university/BUILD_QUEUE.json"
 }

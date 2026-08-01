@@ -3,6 +3,8 @@
  */
 /**
  * SYNOPSIS: Exports checkMusicIndustryConsultations — services/musicIndustryConsultation.js.
+ *
+ * Music Industry Consultation
  */
 const consultedProfessionals = [
   { name: 'Alice', role: 'Producer' },

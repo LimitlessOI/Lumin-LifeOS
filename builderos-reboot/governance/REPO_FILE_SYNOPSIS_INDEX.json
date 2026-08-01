@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T13:37:39.243Z",
+  "generated_at": "2026-08-01T13:42:28.006Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12726,
   "files": [
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1867,
-      "mtime": "2026-08-01T13:33:13.308Z",
-      "indexed_at": "2026-08-01T13:37:38.470Z",
+      "bytes": 1769,
+      "mtime": "2026-08-01T13:41:36.928Z",
+      "indexed_at": "2026-08-01T13:42:28.006Z",
       "synopsis_index_only": true
     },
     {
@@ -42304,9 +42304,9 @@
     {
       "path": "docs/products/music-talent-studio/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Music Talent Studio",
-      "bytes": 22289,
-      "mtime": "2026-08-01T08:48:17.387Z",
-      "indexed_at": "2026-08-01T08:48:17.387Z"
+      "bytes": 23470,
+      "mtime": "2026-08-01T13:42:17.520Z",
+      "indexed_at": "2026-08-01T13:42:28.006Z"
     },
     {
       "path": "docs/products/MUSICTALENTSTUDIO.md",
@@ -93743,9 +93743,9 @@
     {
       "path": "services/musicIndustryConsultation.js",
       "synopsis": "Exports checkMusicIndustryConsultations — services/musicIndustryConsultation.js.",
-      "bytes": 677,
-      "mtime": "2026-07-16T19:42:53.614Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 711,
+      "mtime": "2026-08-01T13:41:46.880Z",
+      "indexed_at": "2026-08-01T13:42:28.006Z",
       "ssot": [
         "docs/products/music-talent-studio/PRODUCT_HOME.md"
       ]
