@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T02:32:46.445Z",
+  "generated_at": "2026-08-01T02:34:26.223Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12658,
   "files": [
@@ -37315,10 +37315,10 @@
     },
     {
       "path": "db/migrations/addAdaptiveLayoutColumn.sql",
-      "synopsis": "Database migration — addAdaptiveLayoutColumn.sql.",
-      "bytes": 148,
-      "mtime": "2026-08-01T02:32:46.445Z",
-      "indexed_at": "2026-08-01T02:32:46.445Z"
+      "synopsis": "Add adaptive layout preferences column to flourishing_prefs table.",
+      "bytes": 472,
+      "mtime": "2026-08-01T02:34:26.223Z",
+      "indexed_at": "2026-08-01T02:34:26.223Z"
     },
     {
       "path": "db/migrations/addInsuranceProfilesTable.sql",
@@ -38902,9 +38902,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 85471,
-      "mtime": "2026-08-01T02:29:25.277Z",
-      "indexed_at": "2026-08-01T02:29:25.277Z"
+      "bytes": 85875,
+      "mtime": "2026-08-01T02:34:26.223Z",
+      "indexed_at": "2026-08-01T02:34:26.223Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -42470,9 +42470,9 @@
     {
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Universal Overlay",
-      "bytes": 18169,
-      "mtime": "2026-07-03T19:24:18.938Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 18728,
+      "mtime": "2026-08-01T02:34:26.223Z",
+      "indexed_at": "2026-08-01T02:34:26.223Z"
     },
     {
       "path": "docs/products/UNIVERSALOVERLAY.md",
