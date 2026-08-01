@@ -15,6 +15,12 @@
       "note": "Legacy production spine council builder route. Mounted by startup/register-runtime-routes.js; register() is a no-op so the functional-proof module-health gate can record it as mounted without double-mounting."
     },
     {
+      "path": "routes/credentialVerificationRoutes.js",
+      "register": "registerCredentialVerificationRoutes",
+      "enabled": true,
+      "note": "Lumin University credential verification route (POST /api/v1/credentials/verify). Built by governed factory; auto-registered so module-health can prove it mounts LIVE."
+    },
+    {
       "path": "routes/lifeos-food-logger-routes.js",
       "register": "registerLifeosFoodLoggerRoutes",
       "mount_path": "/api/v1/lifeos/food",

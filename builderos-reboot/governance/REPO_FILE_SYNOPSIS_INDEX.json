@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T00:41:07.136Z",
+  "generated_at": "2026-08-01T00:43:18.946Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12642,
   "files": [
@@ -30844,9 +30844,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 29883,
-      "mtime": "2026-07-28T17:50:51.061Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 30611,
+      "mtime": "2026-08-01T00:43:18.946Z",
+      "indexed_at": "2026-08-01T00:43:18.946Z",
       "synopsis_index_only": true
     },
     {
@@ -38881,9 +38881,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 83769,
-      "mtime": "2026-08-01T00:41:07.136Z",
-      "indexed_at": "2026-08-01T00:41:07.136Z"
+      "bytes": 83893,
+      "mtime": "2026-08-01T00:43:18.946Z",
+      "indexed_at": "2026-08-01T00:43:18.946Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41094,9 +41094,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 367640,
-      "mtime": "2026-08-01T00:41:07.136Z",
-      "indexed_at": "2026-08-01T00:41:07.136Z"
+      "bytes": 368560,
+      "mtime": "2026-08-01T00:43:18.946Z",
+      "indexed_at": "2026-08-01T00:43:18.946Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -41941,9 +41941,9 @@
     {
       "path": "docs/products/lumin-university/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Lumin University",
-      "bytes": 20510,
-      "mtime": "2026-08-01T00:31:35.157Z",
-      "indexed_at": "2026-08-01T00:31:35.157Z"
+      "bytes": 21170,
+      "mtime": "2026-08-01T00:43:18.946Z",
+      "indexed_at": "2026-08-01T00:43:18.946Z"
     },
     {
       "path": "docs/products/LUMINUNIVERSITY.md",
