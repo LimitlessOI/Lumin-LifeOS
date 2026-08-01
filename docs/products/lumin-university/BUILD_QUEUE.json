@@ -15,15 +15,15 @@
       "spec": "Table for storing detailed competency standards.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS competency_standards",
         "domain TEXT",
         "standards TEXT"
       ],
-      "last_attempt_at": "2026-08-01T00:13:45.879Z",
+      "last_attempt_at": "2026-08-01T00:14:29.236Z",
       "last_error": "artifact_proof_failed: standards TEXT",
-      "commit_sha": "0536515abfb67b66f7c876657209b755f07e5172",
+      "commit_sha": "ba2ed069df0ee489ba08d2564f4150df45ff1096",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
