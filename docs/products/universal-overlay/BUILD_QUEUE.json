@@ -2329,7 +2329,7 @@
         "06"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerStruggleDetectionFormFillDataRoutes"
       ],
@@ -2347,9 +2347,9 @@
           "assertion_id": "expected_exports:routes/struggleDetectionFormFillData.js"
         }
       ],
-      "last_attempt_at": null,
-      "last_error": null,
-      "commit_sha": null,
+      "last_attempt_at": "2026-08-01T05:45:25.600Z",
+      "last_error": "artifact_proof_failed: missing_exports:registerStruggleDetectionFormFillDataRoutes; registerStruggleDetectionFormFillDataRoutes",
+      "commit_sha": "3a02356d8b6c9897d351e21f72b129d55394c005",
       "built_sha": null,
       "proof": null,
       "failure_signature": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/routes",
@@ -2364,7 +2364,7 @@
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
-      "blocker_class": null,
+      "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
@@ -2394,5 +2394,5 @@
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-universal-overlay",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T02:43:27.308Z"
+  "updated_at": "2026-08-01T05:45:36.666Z"
 }
