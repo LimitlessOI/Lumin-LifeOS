@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T05:19:04.799Z",
+  "generated_at": "2026-08-01T05:19:30.427Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12671,
   "files": [
@@ -94076,10 +94076,13 @@
     },
     {
       "path": "services/reverenceGuardService.js",
-      "synopsis": "Exports checkReverence — services/reverenceGuardService.js.",
-      "bytes": 521,
-      "mtime": "2026-07-15T09:37:08.941Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "synopsis": "Integrate labels with reverence guard.",
+      "bytes": 827,
+      "mtime": "2026-08-01T05:19:30.427Z",
+      "indexed_at": "2026-08-01T05:19:30.427Z",
+      "ssot": [
+        "docs/products/faith-studio/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/reviewModerationFlow.js",
