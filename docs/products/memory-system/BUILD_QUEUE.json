@@ -1110,12 +1110,15 @@
       "spec": "The file `docs/final_pr_merge_phase7.md` exists and contains a markdown document summarizing the readiness and scope of the `phase7-railway-probe` merge to main, serving as the recommended formal PR note.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "# Phase 7 Railway Probe Merge Confirmation",
         "memory-system product",
         "final PR merge"
-      ]
+      ],
+      "last_attempt_at": "2026-08-01T03:37:20.679Z",
+      "last_error": "HTTP 404",
+      "blocker_class": "BLOCKED_TOOLING"
     },
     {
       "id": "orchestrate-and-verify-railway-deploy",
@@ -1136,5 +1139,5 @@
   "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-memory-system",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T03:36:10.676Z"
+  "updated_at": "2026-08-01T03:37:20.969Z"
 }
