@@ -1,21 +1,19 @@
 /**
- * SYNOPSIS: services/entitlementsFeatureGating.js
+ * SYNOPSIS: Define how project entitlements gate features per request.
  * @ssot docs/products/business-tools/PRODUCT_HOME.md
  */
-// services/entitlementsFeatureGating.js
-
-/**
- * Determines if a feature is accessible based on project entitlements.
- * @param {string} feature - The feature to check access for.
- * @param {object} entitlements - The user's entitlements.
- * @returns {boolean} - True if the feature is accessible, false otherwise.
- */
-export function checkFeatureAccess(feature, entitlements) {
-  // Logic to determine access based on entitlements
-  if (!entitlements || !feature) return false;
-
-  // Example logic (customize as needed)
-  return entitlements.features && entitlements.features.includes(feature);
+export async function checkFeatureAccess(deps, payload) {
+  const { pool, logger } = deps;
+  const { projectId, featureName } = payload || {}; // Expect projectId and featureName in payload
+  try {
+    // gate features by checking project_entitlements
+    const { rows } = await pool.query(
+      'SELECT enabled FROM project_entitlements WHERE project_id = $1 AND entitlement = $2 AND enabled = TRUE',
+      [projectId, featureName]
+    );
+    return rows.length > 0; // If any row is found, the feature is enabled for the project
+  } catch (error) {
+    logger.error({ error, projectId, featureName }, 'Error in checkFeatureAccess for feature gating');
+    throw new Error('Failed in checkFeatureAccess for feature gating');
+  }
 }
-
-// Ensure no other exports for checkFeatureAccess to avoid duplication
