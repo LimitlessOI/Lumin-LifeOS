@@ -719,7 +719,7 @@
         "builderos-step3"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "testTimezoneCheck"
       ],
@@ -735,7 +735,7 @@
       "revive_count": 9,
       "revived_at": "2026-07-17T18:27:19.036Z",
       "last_attempt": null,
-      "demoted": true,
+      "demoted": false,
       "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: ENOENT: no such file or directory, open '/usr/src/app/tests/.factory-impo",
       "demoted_at": "2026-07-17T18:36:31.839Z",
       "park_until": null,
@@ -929,7 +929,7 @@
       "spec": "Add income_priority column to tasks for financial impact assessments.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "ALTER TABLE tasks ADD COLUMN income_priority"
       ],
@@ -941,7 +941,7 @@
       "revive_count": 6,
       "revived_at": "2026-07-17T22:40:15.391Z",
       "last_attempt": null,
-      "demoted": true,
+      "demoted": false,
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER TABLE tasks ADD COLUMN income_priority; behavior_assertion_failed; behavior_proof",
       "demoted_at": "2026-07-17T22:51:11.718Z",
       "park_until": null,
@@ -3279,5 +3279,5 @@
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-builderos",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T04:04:31.852Z"
+  "updated_at": "2026-08-01T05:59:32.701Z"
 }
