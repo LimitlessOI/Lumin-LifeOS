@@ -9,13 +9,13 @@
   "steps": [
     {
       "id": "1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/storyProject.js",
       "task": "Implement story project and canon data model",
       "spec": "Create a service that handles story project creation and canon data model persistence",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "createStoryProject",
         "getStoryProject"
@@ -39,14 +39,16 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T08:33:05.024Z",
-      "commit_sha": "cf5e9120d33a6f92942aeb7370a86596e04ac11a",
+      "commit_sha": "ad04678b5c5e85d52f227ed9f6acd63a21846b25",
       "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "1",
       "mission_id": "PRODUCT-story-studio",
       "same_signature_count": 0,
       "demoted": false,
       "last_error": "artifact_proof_failed: A story project can be created and re-opened with persistent canon data",
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T11:04:16.235Z",
+      "completed_at": "2026-08-01T11:04:29.738Z"
     },
     {
       "id": "2",
@@ -492,6 +494,6 @@
   "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-story-studio",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:30:52.651Z",
+  "updated_at": "2026-08-01T11:04:29.738Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/story-studio/BUILD_QUEUE.json"
 }
