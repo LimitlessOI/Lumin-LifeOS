@@ -907,7 +907,7 @@
       "spec": "Extract config endpoints from server.js into this dedicated route file.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "expected_exports": [
         "registerWhiteLabelRoutes"
       ],
@@ -927,9 +927,9 @@
           "assertion_id": "expected_exports:routes/white-label-routes.js"
         }
       ],
-      "last_attempt_at": "2026-08-01T14:37:39.113Z",
-      "last_error": "grounding_failed: missing_sql_table: partner_configurations",
-      "commit_sha": "2cba0ece95b9f5c9bf6c09d8309117c4a12d8722",
+      "last_attempt_at": "2026-08-01T14:44:14.241Z",
+      "last_error": "route module not auto-registered — add {\"path\":\"routes/white-label-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
+      "commit_sha": "01678ca388b73a580472c37a2932918ee8cf17e4",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -1029,6 +1029,6 @@
   "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-white-label",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T14:37:57.169Z",
+  "updated_at": "2026-08-01T14:44:14.832Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/white-label/BUILD_QUEUE.json"
 }
