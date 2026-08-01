@@ -146,7 +146,7 @@
     },
     {
       "id": "05",
-      "status": "skipped",
+      "status": "done",
       "target_file": "routes/sprintQueuePanel.js",
       "task": "create Sprint Queue panel",
       "spec": "Provide a panel for sprint queue within Command Center.",
@@ -195,7 +195,10 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "completed_at": "2026-08-01T18:55:03.911Z",
+      "heal_claimed": true,
+      "heal_reason": "artifact_proof_pass"
     },
     {
       "id": "06",
@@ -369,7 +372,7 @@
     },
     {
       "id": "3",
-      "status": "skipped",
+      "status": "done",
       "target_file": "templates/deliveryEmailTemplate.js",
       "task": "write delivery email template",
       "spec": "JavaScript module exporting an email template string for customer delivery notifications.",
@@ -409,11 +412,14 @@
       "reaudit_reset_at": "2026-07-30T18:55:06.702Z",
       "failure_signature": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:template; behavior_assertion_failed; behavior_proof",
       "same_signature_count": 1,
-      "escalation_class": "evidence_gap"
+      "escalation_class": "evidence_gap",
+      "completed_at": "2026-08-01T18:55:03.912Z",
+      "heal_claimed": true,
+      "heal_reason": "artifact_proof_pass"
     },
     {
       "id": "4",
-      "status": "skipped",
+      "status": "done",
       "target_file": "services/sprintQueueService.js",
       "task": "create sprint queue service",
       "spec": "Service managing sprint queue logic for scheduling and managing sprints.",
@@ -513,7 +519,10 @@
       },
       "failure_signature": "STEP_STATUS_FORBIDDEN",
       "same_signature_count": 1,
-      "escalation_class": "same_signature_repeat"
+      "escalation_class": "same_signature_repeat",
+      "completed_at": "2026-08-01T18:55:03.913Z",
+      "heal_claimed": true,
+      "heal_reason": "artifact_proof_pass"
     },
     {
       "id": "5",
@@ -1569,7 +1578,7 @@
     },
     {
       "id": "step3",
-      "status": "skipped",
+      "status": "done",
       "target_file": "templates/deliveryEmailTemplate.js",
       "task": "create delivery email template",
       "spec": "Provide a template for the completion delivery email customers receive.",
@@ -1603,7 +1612,10 @@
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step3",
       "mission_id": "PRODUCT-productized-sprint",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "completed_at": "2026-08-01T18:55:03.920Z",
+      "heal_claimed": true,
+      "heal_reason": "artifact_proof_pass"
     },
     {
       "id": "step4",
@@ -2195,6 +2207,6 @@
   "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-productized-sprint",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T14:15:56.485Z",
+  "updated_at": "2026-08-01T18:55:03.924Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/productized-sprint/BUILD_QUEUE.json"
 }
