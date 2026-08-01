@@ -3093,14 +3093,14 @@
       "spec": "Add interface for voice recording, transcription via Web Speech API, and submission to the designated endpoint for AI processing.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "Web Speech API",
         "/api/v1/lifeos/journal/voice"
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-01T07:03:55.991Z",
       "last_error": "artifact_proof_failed: Web Speech API",
-      "commit_sha": "aa91f93141e6db9eec47d00deabb3c744903cf7d",
+      "commit_sha": "aec68fe670201ddf57cea9e0e9f8dcfeae70731b",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -3112,7 +3112,7 @@
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
-      "blocker_class": null,
+      "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
@@ -6029,5 +6029,5 @@
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-lifeos",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T07:01:02.682Z"
+  "updated_at": "2026-08-01T07:04:11.221Z"
 }
