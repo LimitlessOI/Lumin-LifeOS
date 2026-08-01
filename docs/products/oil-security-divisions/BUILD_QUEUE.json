@@ -1092,13 +1092,13 @@
     },
     {
       "id": "sec-f01",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/securityReceiptService.js",
       "task": "implement security receipt spine",
       "spec": "Extend the security receipt service to process new receipt types using either tables or JSONL as backend.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "securityReceiptSpine"
       ],
@@ -1114,14 +1114,16 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-16T04:08:11.872Z",
-      "commit_sha": "19eeb22963f0309f6c98acfaf1ba0fb5ceb31218",
+      "commit_sha": "f8790644b2fdb55597cfc47a1da67234ca44b9c2",
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "sec-f01",
       "mission_id": "PRODUCT-oil-security-divisions",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:securityReceiptSpine; assertion_threw",
       "reaudit_reset_at": "2026-07-30T18:55:06.687Z",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "last_attempt_at": "2026-08-01T02:12:06.202Z",
+      "completed_at": "2026-08-01T02:12:18.624Z"
     },
     {
       "id": "sec-f02",
@@ -1879,5 +1881,5 @@
   "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-oil-security-divisions",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T02:11:51.880Z"
+  "updated_at": "2026-08-01T02:12:18.624Z"
 }
