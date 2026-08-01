@@ -4,7 +4,7 @@
   "verify_script": null,
   "planned_at": "2026-07-12T03:40:00.000Z",
   "notes": "Module 4 Therapist Integration beachhead — Clinical Partnership. Consent-gated briefs; therapist account lists linked clients who granted therapist_share. LifeOS consent foundation is a dependency.",
-  "updated_at": "2026-08-01T10:20:01.873Z",
+  "updated_at": "2026-08-01T10:20:27.873Z",
   "steps": [
     {
       "id": "ws-therapist-schema",
@@ -1444,20 +1444,20 @@
     },
     {
       "id": "wellness-studio-step1",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20260724_lifeos_core_stable.sql",
       "task": "ensure stability of LifeOS Core",
       "spec": "Ensure all phases of LifeOS Core are deployed and stable by performing final migrations and checks.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS",
         "CHECK (stable IS TRUE)"
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-01T10:20:17.870Z",
       "last_error": "artifact_proof_failed: CREATE TABLE IF NOT EXISTS; CHECK (stable IS TRUE)",
-      "commit_sha": "47a248087a230d5357181d589d1a1aa38ce3ff3e",
+      "commit_sha": "204951356c10c15b8f054973b06fd7f8e930a110",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -1479,7 +1479,8 @@
       "blueprint_step_id": "wellness-studio-step1",
       "mission_id": "PRODUCT-wellness-studio",
       "same_signature_count": 0,
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "completed_at": "2026-08-01T10:20:27.873Z"
     },
     {
       "id": "wellness-studio-step2",
