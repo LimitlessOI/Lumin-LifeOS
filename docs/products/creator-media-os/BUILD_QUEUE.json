@@ -110,7 +110,7 @@
       "spec": "Engine generates scripts with titles/hooks for media content.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "generateScriptHooks"
       ],
@@ -129,14 +129,16 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T08:53:56.792Z",
-      "commit_sha": "df2269a4199dcea132a62c31b806c7db1dccc5ff",
+      "commit_sha": "49253c3a1a112ca8b5d0f4aa4f67bf63299e3007",
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "3",
       "mission_id": "PRODUCT-creator-media-os",
       "same_signature_count": 0,
       "demoted": false,
       "last_error": "artifact_proof_failed: Script for long and short form",
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T11:14:57.322Z",
+      "blocker_class": "BLOCKED_TOOLING"
     },
     {
       "id": "4",
@@ -1405,5 +1407,5 @@
   "corpus_sources": [
     "docs/products/creator-media-os/PRODUCT_HOME.md"
   ],
-  "updated_at": "2026-08-01T11:14:42.075Z"
+  "updated_at": "2026-08-01T11:15:09.661Z"
 }
