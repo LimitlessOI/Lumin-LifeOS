@@ -4,42 +4,18 @@
  */
 import { reviewIPSRisk } from '../services/ipsReview.js';
 
-const router = express.Router();
-
-// GET /api/v1/ips-review — attorney review RIA trigger risk for the IPS module
-function reviewIpsAttorney(req, res) {
-  res.json({
-    ok: true,
-    attorneyReview: 'IPS module reviewed for RIA trigger risk',
-    riaTriggers: [],
-    riskLevel: 'low',
+export function registerIpsReview(app, deps) {
+  app.get('/api/v1/ips-review', deps.requireKey, async (req, res, next) => {
+    try {
+      const { id } = req.query; // Assuming ID comes from query parameters for a GET request
+      if (!id) {
+        return res.status(400).json({ error: 'Missing IPS module ID in query parameters.' });
+      }
+      const result = await reviewIPSRisk(deps, { id });
+      res.json(result);
+    } catch (error) {
+      deps.logger.error({ error }, 'Error in ipsReview route for attorney review RIA trigger risk');
+      next(error);
+    }
   });
-}
-
-// POST /api/v1/ips/review — evaluate RIA trigger risk
-function reviewIpsRisk(req, res) {
-  const { ips } = req.body || {};
-  res.json({
-    ok: true,
-    attorneyReview: 'attorney review RIA trigger risk completed',
-    riaTriggers: [],
-    riskLevel: 'low',
-    ips: ips || null,
-  });
-}
-
-export function registerIpsReviewRoutes(app, deps = {}) {
-  const requireKey = deps.requireKey || ((req, res, next) => next());
-  const logger = deps.logger || console;
-
-  router.get('/ips-review', requireKey, reviewIpsAttorney);
-  router.post('/ips/review', requireKey, reviewIpsRisk);
-  app.use('/api/v1', router);
-
-  logger?.info?.('IPS review routes registered at /api/v1/ips-review and /api/v1/ips/review');
-}
-
-// Alias for personal-finance-os-1 expected export
-export function registerIPSRoutes(app, deps = {}) {
-  return registerIpsReviewRoutes(app, deps);
 }
