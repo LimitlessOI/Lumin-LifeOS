@@ -1,5 +1,16 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-08-02 — Creative Director lens and project review runner: 43 CREATIVE_BRIEF.md files generated
+
+Adam: "our projects need to run through the creative engine. I don't think it was ever properly designed." Responded by establishing the Creative Director as a first-class cognitive responsibility.
+- Added `data/lenses/creative-director.json` and registered it in `data/lenses/LENS_REGISTRY.json`.
+- Registered `creative-engine` in `docs/products/PRODUCT_REGISTRY.json` as `SHARED_PLATFORM_MODULE` / `LIVE_SHARED_INFRA`.
+- Created `scripts/creative-engine-project-review.mjs`: reads `PRODUCT_REGISTRY.json`, selects every active product, reads its `PRODUCT_HOME.md`, invokes the BuilderOS council (`creative` responsibility, `creative-director` lens, strong model via existing council-service) and emits a `CREATIVE_BRIEF.md` in the product folder.
+- Ran the script in execute mode against all 43 active products; each brief now contains one-sentence promise, tagline options, key messages, visual direction, content formats, launch narrative arc, creative asset backlog, and confidence/unknowns.
+- Product homes updated with a Change Receipts row; `docs/products/creative-engine/PRODUCT_HOME.md` receipt updated.
+- Committed via `npm run system:commit-files` and redeployed to production; `npm run builder:preflight` PASS (438/438), `npm run deploy:truth:audit` PASS, production SHA parity at `e353b77538aa`.
+- Note: `npm run system:commit-files` initially refused the new script due to `creative-engine` not yet being in `PRODUCT_REGISTRY.json`; a preceding `git commit/push` for the registry + lens registry + redeploy resolved the stale file-placement gate.
+
 ## 2026-08-02 — Deterministic gap-fill never-stop cycles: memory-system, limitlessos, financial-revenue, ai-receptionist
 
 The never-stop factory ran consecutive BUILDEROS_NEVER_STOP=1 npm run builderos:bp-priority:once successes after unblocking deterministic queue steps:
