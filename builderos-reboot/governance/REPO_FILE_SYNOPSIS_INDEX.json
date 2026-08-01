@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T14:28:54.178Z",
+  "generated_at": "2026-08-01T14:30:19.840Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12726,
   "files": [
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3843165,
-      "mtime": "2026-08-01T14:23:53.777Z",
-      "indexed_at": "2026-08-01T14:24:44.270Z"
+      "bytes": 3843209,
+      "mtime": "2026-08-01T14:29:49.349Z",
+      "indexed_at": "2026-08-01T14:30:19.840Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1830,
-      "mtime": "2026-08-01T14:27:47.377Z",
-      "indexed_at": "2026-08-01T14:28:54.178Z",
+      "bytes": 2118,
+      "mtime": "2026-08-01T14:21:58.685Z",
+      "indexed_at": "2026-08-01T14:24:48.683Z",
       "synopsis_index_only": true
     },
     {
@@ -42852,9 +42852,9 @@
     {
       "path": "docs/products/white-label/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — White Label",
-      "bytes": 10909,
-      "mtime": "2026-08-01T14:28:43.365Z",
-      "indexed_at": "2026-08-01T14:28:54.178Z"
+      "bytes": 10863,
+      "mtime": "2026-08-01T14:29:59.873Z",
+      "indexed_at": "2026-08-01T14:30:19.840Z"
     },
     {
       "path": "docs/products/WHITELABEL.md",
@@ -94528,9 +94528,9 @@
     {
       "path": "services/response-transformation.js",
       "synopsis": "Response transformation middleware that strips model names and costs from outgoing responses.",
-      "bytes": 1511,
-      "mtime": "2026-08-01T14:28:22.069Z",
-      "indexed_at": "2026-08-01T14:28:54.178Z",
+      "bytes": 2797,
+      "mtime": "2026-08-01T14:29:37.889Z",
+      "indexed_at": "2026-08-01T14:30:19.840Z",
       "ssot": [
         "docs/products/white-label/PRODUCT_HOME.md"
       ]
