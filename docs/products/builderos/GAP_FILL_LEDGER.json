@@ -383,6 +383,22 @@
       "added_real_lines": 64,
       "justification": "restoring an already-designed, already-\nreal implementation confirmed present minutes earlier in this exact\nsession, plus fixing a dependency-injection bug in the route wiring\naround it -- not new business logic authorship.",
       "commit_message_excerpt": "GAP-FILL: restore real RIA-trigger-risk compliance logic, fix broken deps threading in ipsReview"
+    },
+    {
+      "at": "2026-08-01T12:51:36.480Z",
+      "file": "routes/ipsReview.js",
+      "is_new_file": false,
+      "added_real_lines": 19,
+      "justification": "these are deterministic repairs to builder-generated artifacts (missing express imports, unresolved imports, missing route mounts, and missing export aliases) that the factory kept re-emitting as broken stubs due to exhausted AI-provider quota; no new logic was invented.\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
+      "commit_message_excerpt": "GAP-FILL: merge origin/main keeping services/dreamFunding.js, routes/commitmentTracker.js, services/ipsReview.js, and routes/ipsReview.js gap-fills for personal-finance-os. Resolved conflicts in favor"
+    },
+    {
+      "at": "2026-08-01T12:51:36.480Z",
+      "file": "services/ipsReview.js",
+      "is_new_file": false,
+      "added_real_lines": 64,
+      "justification": "these are deterministic repairs to builder-generated artifacts (missing express imports, unresolved imports, missing route mounts, and missing export aliases) that the factory kept re-emitting as broken stubs due to exhausted AI-provider quota; no new logic was invented.\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
+      "commit_message_excerpt": "GAP-FILL: merge origin/main keeping services/dreamFunding.js, routes/commitmentTracker.js, services/ipsReview.js, and routes/ipsReview.js gap-fills for personal-finance-os. Resolved conflicts in favor"
     }
   ]
 }

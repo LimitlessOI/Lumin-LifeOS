@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T12:51:36.175Z",
+  "generated_at": "2026-08-01T12:51:41.797Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3841430,
-      "mtime": "2026-08-01T12:51:21.404Z",
-      "indexed_at": "2026-08-01T12:51:24.985Z"
+      "bytes": 3841496,
+      "mtime": "2026-08-01T12:51:41.352Z",
+      "indexed_at": "2026-08-01T12:51:41.797Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -30844,9 +30844,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 39359,
-      "mtime": "2026-08-01T12:37:56.496Z",
-      "indexed_at": "2026-08-01T12:39:40.092Z",
+      "bytes": 39626,
+      "mtime": "2026-08-01T12:50:05.844Z",
+      "indexed_at": "2026-08-01T12:51:41.009Z",
       "synopsis_index_only": true
     },
     {
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1917,
-      "mtime": "2026-08-01T12:42:20.732Z",
-      "indexed_at": "2026-08-01T12:45:30.130Z",
+      "bytes": 1941,
+      "mtime": "2026-08-01T12:48:48.400Z",
+      "indexed_at": "2026-08-01T12:51:41.009Z",
       "synopsis_index_only": true
     },
     {
@@ -41164,9 +41164,9 @@
     {
       "path": "docs/products/builderos/GAP_FILL_LEDGER.json",
       "synopsis": "Documentation — GAP FILL LEDGER.",
-      "bytes": 51231,
-      "mtime": "2026-08-01T12:48:19.048Z",
-      "indexed_at": "2026-08-01T12:48:30.831Z",
+      "bytes": 52777,
+      "mtime": "2026-08-01T12:51:36.476Z",
+      "indexed_at": "2026-08-01T12:51:41.009Z",
       "synopsis_index_only": true
     },
     {
@@ -69413,10 +69413,10 @@
     },
     {
       "path": "routes/commitmentTracker.js",
-      "synopsis": "Function to register Commitment Tracker routes",
-      "bytes": 719,
-      "mtime": "2026-07-16T19:42:53.595Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis": "HTTP route module — Commitment Tracker (commitment tracking phase 1).",
+      "bytes": 980,
+      "mtime": "2026-08-01T12:51:21.384Z",
+      "indexed_at": "2026-08-01T12:51:41.009Z",
       "ssot": [
         "docs/products/personal-finance-os/PRODUCT_HOME.md"
       ]
@@ -89997,10 +89997,10 @@
     },
     {
       "path": "services/dreamFunding.js",
-      "synopsis": "Existing functionality and imports",
-      "bytes": 995,
-      "mtime": "2026-07-16T19:42:53.609Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis": "Initiates the funding process for a dream and commitment tracking phase 1.",
+      "bytes": 2480,
+      "mtime": "2026-08-01T12:50:52.492Z",
+      "indexed_at": "2026-08-01T12:51:41.009Z",
       "ssot": [
         "docs/products/personal-finance-os/PRODUCT_HOME.md"
       ]
