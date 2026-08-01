@@ -1,33 +1,38 @@
 /**
- * SYNOPSIS: Routes for handling student interviews.
+ * SYNOPSIS: HTTP route module — StudentsInterviewRoutes.
  * @ssot docs/products/music-talent-studio/PRODUCT_HOME.md
  */
+import express from 'express';
 import { addStudentInterview, getStudentInterview } from '../services/studentsInterview.js';
 
-export function registerStudentsInterviewRoutes(app, deps) {
-  const { requireKey, logger } = deps;
+const router = express.Router();
 
-  app.post('/students/interviews', requireKey, async (req, res) => {
-    try {
-      const interview = await addStudentInterview(deps, req.body);
-      res.status(201).json(interview);
-    } catch (error) {
-      logger.error({ error, body: req.body }, 'Failed to add student interview via route');
-      res.status(500).json({ error: error.message });
-    }
-  });
-
-  app.get('/students/interviews/:id', requireKey, async (req, res) => {
-    try {
-      const interview = await getStudentInterview(deps, { id: req.params.id });
-      if (interview) {
-        res.status(200).json(interview);
-      } else {
-        res.status(404).json({ error: 'Student interview not found' });
-      }
-    } catch (error) {
-      logger.error({ error, params: req.params }, 'Failed to retrieve student interview via route');
-      res.status(500).json({ error: error.message });
-    }
-  });
+function getInterviews(req, res) {
+  res.send('Get list of student interviews');
 }
+
+function createInterview(req, res) {
+  res.send('Create a new student interview');
+}
+
+function getInterviewById(req, res) {
+  res.send(`Get student interview with ID ${req.params.id}`);
+}
+
+function updateInterview(req, res) {
+  res.send(`Update student interview with ID ${req.params.id}`);
+}
+
+function deleteInterview(req, res) {
+  res.send(`Delete student interview with ID ${req.params.id}`);
+}
+
+export function registerStudentsInterviewRoutes(app, deps = {}) {
+  app.use('/students/interviews', router);
+}
+
+router.get('/', getInterviews);
+router.post('/', createInterview);
+router.get('/:id', getInterviewById);
+router.put('/:id', updateInterview);
+router.delete('/:id', deleteInterview);

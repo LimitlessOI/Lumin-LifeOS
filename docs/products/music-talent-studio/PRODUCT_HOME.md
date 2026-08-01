@@ -374,5 +374,6 @@ The platform tracks:
 
 | Date | Change |
 |---|---|
+| 2026-08-02 | **GAP-FILL: `services/studentsInterview.js` and `routes/studentsInterviewRoutes.js` landed from golden tags + route wired.** Checked out `services/studentsInterview.js` from tag `autonomy/golden-4472ca141` (exports `addStudentInterview` and `getStudentInterview`) and `routes/studentsInterviewRoutes.js` from `autonomy/golden-962588cd2`; rewrote route to named export `registerStudentsInterviewRoutes(app, deps = {})`, mounted `/students/interviews`, imported service functions, and enabled the auto-register entry. | `bp-priority:once` step 8 failed because the route file was missing and the service file on `main` was a stale `getStudentFeedback` stub. |
 | 2026-04-04 | Amendment created from user-described concept (not found in conversation dumps — original idea) |
 | 2026-04-04 | Added: Music as the Soul's Language framing (vision expanded), Song-First Learning clarified (3 songs, backward curriculum), Real-Time AI Session Loop (in-session, not post-session), Composer/Songwriter Track, GarageBand Creation Marketplace, Teacher Business Infrastructure, Teacher Self-Care (music studio context), Pre-Build Readiness gates added |
