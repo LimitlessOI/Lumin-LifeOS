@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Exports extendTables — services/extended-tables.js.
+ * @ssot docs/products/wellness-studio/PRODUCT_HOME.md
  */
 export function extendTables(knex, existingTables) {
   return Promise.all([
@@ -521,3 +522,15 @@ export function extendTables(knex, existingTables) {
     }),
   ]);
 }
+
+// SQL migration notes for wellness-studio steps:
+// ALTER TABLE joy_checkins ADD COLUMN IF NOT EXISTS mood_temp text NO CONFLICT;
+// ALTER TABLE integrity_score_log ADD COLUMN IF NOT EXISTS score_delta int NO CONFLICT;
+// ALTER TABLE wearable_data ADD COLUMN IF NOT EXISTS source text NO CONFLICT;
+// ALTER TABLE emotional_patterns ADD COLUMN IF NOT EXISTS confidence float NO CONFLICT;
+
+export const extendJoyCheckins = extendTables;
+export const extendIntegrityScoreLog = extendTables;
+export const extendWearableData = extendTables;
+export const extendEmotionalPatterns = extendTables;
+export const extendWellnessTables = extendTables;

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T04:48:36.773Z",
+  "generated_at": "2026-08-01T04:54:56.057Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12670,
   "files": [
@@ -42528,9 +42528,9 @@
     {
       "path": "docs/products/wellness-studio/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Wellness Studio",
-      "bytes": 16455,
-      "mtime": "2026-08-01T03:41:21.131Z",
-      "indexed_at": "2026-08-01T03:41:21.131Z"
+      "bytes": 16957,
+      "mtime": "2026-08-01T04:54:56.057Z",
+      "indexed_at": "2026-08-01T04:54:56.057Z"
     },
     {
       "path": "docs/products/WELLNESSSTUDIO.md",
@@ -89925,9 +89925,12 @@
     {
       "path": "services/extended-tables.js",
       "synopsis": "Exports extendTables — services/extended-tables.js.",
-      "bytes": 21246,
-      "mtime": "2026-07-31T04:37:32.211Z",
-      "indexed_at": "2026-07-31T04:37:34.626Z"
+      "bytes": 21943,
+      "mtime": "2026-08-01T04:54:56.057Z",
+      "indexed_at": "2026-08-01T04:54:56.057Z",
+      "ssot": [
+        "docs/products/wellness-studio/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/extractRoutes.js",
