@@ -15,7 +15,7 @@
       "spec": "Add a migration to create the ROI tracker table in the database",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 3,
+      "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS roi_tracker"
       ],
@@ -28,7 +28,7 @@
       "revive_count": 6,
       "revived_at": "2026-07-14T23:07:20.377Z",
       "last_attempt": null,
-      "demoted": true,
+      "demoted": false,
       "demote_reason": "revive_exhausted:no_commit_sha (claimed pass without proof — treated as failure)",
       "demoted_at": "2026-07-15T01:37:04.897Z",
       "park_until": null,
@@ -49,7 +49,7 @@
       "spec": "Implement and export the income drone scheduler logic from the service",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 3,
+      "attempts": 0,
       "expected_exports": [
         "scheduleIncomeDrones"
       ],
@@ -61,7 +61,7 @@
       "revive_count": 6,
       "revived_at": "2026-07-15T00:09:56.165Z",
       "last_attempt": null,
-      "demoted": true,
+      "demoted": false,
       "demote_reason": "revive_exhausted:governed_ship_failed",
       "demoted_at": "2026-07-15T01:45:28.720Z",
       "park_until": null,
@@ -83,7 +83,7 @@
       "spec": "Define the revenue goal tracking endpoint with a $500/day target constraint",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerRevenueGoalTrackingRoutes"
       ],
@@ -100,7 +100,7 @@
       "revive_count": 6,
       "revived_at": "2026-07-15T02:58:08.491Z",
       "last_attempt": null,
-      "demoted": true,
+      "demoted": false,
       "demote_reason": "revive_exhausted:SENTRY_FAILED",
       "demoted_at": "2026-07-15T02:58:38.095Z",
       "park_until": null,
@@ -121,7 +121,7 @@
       "spec": "Implement the daily revenue report service to send SMS/email",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "sendDailyRevenueReport"
       ],
@@ -134,7 +134,7 @@
       "revive_count": 6,
       "revived_at": "2026-07-15T04:00:14.755Z",
       "last_attempt": null,
-      "demoted": true,
+      "demoted": false,
       "demote_reason": "revive_exhausted:SENTRY_FAILED",
       "demoted_at": "2026-07-18T01:14:09.208Z",
       "park_until": null,
@@ -171,5 +171,5 @@
   "blueprint_id": "PRODUCT-FINANCIAL-REVENUE-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-financial-revenue",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T03:36:22.958Z"
+  "updated_at": "2026-08-01T05:59:39.572Z"
 }
