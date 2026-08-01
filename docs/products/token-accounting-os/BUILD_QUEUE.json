@@ -349,7 +349,7 @@
         "step1"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerBuilderOSTokenReceiptRoutes"
       ],
@@ -367,9 +367,9 @@
           "assertion_id": "expected_exports:routes/builderOSTokenReceipt.js"
         }
       ],
-      "last_attempt_at": null,
-      "last_error": "false_done_reaudit: artifact never landed (services/builderOSTokenReceipt.js missing; premature route removed) — rebuild service then route",
-      "commit_sha": "50c4c7b7e6dc4a3cf6c634a71828b277e06c7caf",
+      "last_attempt_at": "2026-08-01T05:29:45.443Z",
+      "last_error": "artifact_proof_failed: missing_exports:registerBuilderOSTokenReceiptRoutes; registerBuilderOSTokenReceiptRoutes",
+      "commit_sha": "8666874f795c114f245f99a291328954976eb8df",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -381,7 +381,7 @@
       "park_until": null,
       "no_op": null,
       "pre_existing": false,
-      "blocker_class": null,
+      "blocker_class": "BLOCKED_SECRET",
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
@@ -607,5 +607,5 @@
   "blueprint_id": "PRODUCT-TOKEN-ACCOUNTING-OS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-token-accounting-os",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T05:29:07.946Z"
+  "updated_at": "2026-08-01T05:29:56.464Z"
 }
