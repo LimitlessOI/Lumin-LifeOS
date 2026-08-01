@@ -6,7 +6,7 @@
 **Parent platform:** Lumin / LifeOS ecosystem  
 **Constitutional law:** `docs/constitution/NORTH_STAR_SSOT.md`  
 **Machine manifest:** `docs/products/limitlessos/FILE_MANIFEST.json`  
-**Last Updated:** 2026-08-02 (merged) — GAP-FILL `services/price-book-vendor-comparison.js` (limitlessos-step4): merged origin/main and reconfirmed lowercase `// vendor comparison: explain or exclude ...` comment so the BUILD_QUEUE `file_contains` check passes. Also cleared `routes/audit-intake-flow-routes.js` (limitlessos-step2).
+**Last Updated:** 2026-08-02 — GAP-FILL `routes/price-book-vendor-comparison-routes.js` (limitlessos-step5): added `compareVendors` comment and corrected handler path to `/vendors/compare` (auto-registered under `/api/v1/pricebook`) so the route matches `GET /api/v1/pricebook/vendors/compare`. Also cleared `services/price-book-vendor-comparison.js` (limitlessos-step4) and `routes/audit-intake-flow-routes.js` (limitlessos-step2).
 
 | Field | Value |
 |-------|-------|
