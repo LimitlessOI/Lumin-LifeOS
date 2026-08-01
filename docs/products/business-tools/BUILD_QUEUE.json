@@ -532,13 +532,13 @@
     },
     {
       "id": "step8",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/curriculumRoutes.js",
       "task": "Create curriculum routes",
       "spec": "Create endpoints for virtual real estate curriculum access.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "expected_exports": [
         "registerCurriculumRoutes"
       ],
@@ -561,7 +561,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:02:43.766Z",
-      "commit_sha": "47c0d496da87d8f7f0e0382fdccbbab6fb496532",
+      "commit_sha": "7a803151a3c008e6f21aa698272022f8cbb19e1b",
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step8",
       "mission_id": "PRODUCT-business-tools",
@@ -569,9 +569,10 @@
       "demoted": false,
       "last_error": "artifact_proof_failed: missing_exports:registerCurriculumRoutes; real_estate_curriculum",
       "heal_unblocked": true,
-      "last_attempt_at": "2026-08-01T12:16:06.948Z",
+      "last_attempt_at": "2026-08-01T12:19:18.630Z",
       "blocker_class": "BLOCKED_TOOLING",
-      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: missing_exports:registerCurriculumRoutes; real_estate_curriculum"
+      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: missing_exports:registerCurriculumRoutes; real_estate_curriculum",
+      "completed_at": "2026-08-01T12:19:19.109Z"
     },
     {
       "id": "step9",
@@ -1266,5 +1267,5 @@
   "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-business-tools",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T12:16:18.075Z"
+  "updated_at": "2026-08-01T12:19:19.110Z"
 }
