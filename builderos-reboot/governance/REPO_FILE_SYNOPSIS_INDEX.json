@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T10:49:42.788Z",
+  "generated_at": "2026-08-01T10:52:44.074Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1811,
-      "mtime": "2026-08-01T10:48:03.120Z",
-      "indexed_at": "2026-08-01T10:49:00.602Z",
+      "bytes": 1757,
+      "mtime": "2026-08-01T10:52:15.048Z",
+      "indexed_at": "2026-08-01T10:52:44.074Z",
       "synopsis_index_only": true
     },
     {
@@ -41164,9 +41164,9 @@
     {
       "path": "docs/products/builderos/GAP_FILL_LEDGER.json",
       "synopsis": "Documentation — GAP FILL LEDGER.",
-      "bytes": 43788,
-      "mtime": "2026-08-01T10:47:06.816Z",
-      "indexed_at": "2026-08-01T10:47:19.494Z",
+      "bytes": 44607,
+      "mtime": "2026-08-01T10:49:43.084Z",
+      "indexed_at": "2026-08-01T10:52:44.074Z",
       "synopsis_index_only": true
     },
     {
@@ -42535,9 +42535,9 @@
     {
       "path": "docs/products/project-governance/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Project Governance",
-      "bytes": 68901,
-      "mtime": "2026-08-01T10:49:29.748Z",
-      "indexed_at": "2026-08-01T10:49:39.055Z"
+      "bytes": 69755,
+      "mtime": "2026-08-01T10:52:34.852Z",
+      "indexed_at": "2026-08-01T10:52:44.074Z"
     },
     {
       "path": "docs/products/project-governance/READINESS_CHECKLIST.md",
@@ -65772,9 +65772,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 4900,
-      "mtime": "2026-08-01T10:42:22.488Z",
-      "indexed_at": "2026-08-01T10:45:00.003Z",
+      "bytes": 5336,
+      "mtime": "2026-08-01T10:51:27.652Z",
+      "indexed_at": "2026-08-01T10:52:44.074Z",
       "synopsis_index_only": true
     },
     {
@@ -89241,10 +89241,13 @@
     },
     {
       "path": "services/competitorAnalysis.js",
-      "synopsis": "Existing imports and code",
-      "bytes": 842,
-      "mtime": "2026-07-15T10:11:45.117Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "synopsis": "Exports analyzeCompetitors — services/competitorAnalysis.js.",
+      "bytes": 334,
+      "mtime": "2026-08-01T10:52:27.564Z",
+      "indexed_at": "2026-08-01T10:52:44.074Z",
+      "ssot": [
+        "docs/products/project-governance/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/completion-overclaim-guard.js",

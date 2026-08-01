@@ -1,24 +1,24 @@
 {
   "status": "idle",
   "last_task": {
-    "id": "product_build_project-governance_2",
+    "id": "product_build_project-governance_4",
     "kind": "product_build_step",
     "priority": 2.0014,
     "product": "project-governance",
     "product_id": "project-governance",
-    "step_id": "2",
-    "target_file": "routes/projectDrawerDetail.js",
-    "detail": "next buildable step: 2"
+    "step_id": "4",
+    "target_file": "services/competitorAnalysis.js",
+    "detail": "next buildable step: 4"
   },
   "last_result": {
     "ok": false,
-    "task_id": "product_build_project-governance_2",
+    "task_id": "product_build_project-governance_4",
     "detail": "product_build_step",
     "outcome": {
       "ok": false,
-      "step_id": "2",
+      "step_id": "4",
       "stage": "artifact_proof",
-      "reason": "artifact_proof_failed: missing_exports:registerProjectDrawerRoutes; registerProjectDrawerRoutes; project: {}",
+      "reason": "artifact_proof_failed: function analyzeCompetitors(){",
       "attempts": 1,
       "blocked": false,
       "blocker_class": "BLOCKED_TOOLING",
@@ -27,9 +27,9 @@
       "summary": {
         "product_id": "project-governance",
         "total": 8,
-        "pending": 5,
+        "pending": 4,
         "building": 0,
-        "done": 2,
+        "done": 3,
         "blocked": 0,
         "founder_gated": 0,
         "design_review_flagged": 0,
@@ -39,9 +39,9 @@
       }
     },
     "claim": {
-      "id": "project-governance:2",
+      "id": "project-governance:4",
       "kind": "execution",
-      "text": "product step 2 built + verified + served live",
+      "text": "product step 4 built + verified + served live",
       "grade": "GUESS",
       "proof": null,
       "original_grade": "KNOW",
@@ -53,9 +53,9 @@
     "summary": {
       "product_id": "project-governance",
       "total": 8,
-      "pending": 5,
+      "pending": 4,
       "building": 0,
-      "done": 2,
+      "done": 3,
       "blocked": 0,
       "founder_gated": 0,
       "design_review_flagged": 0,
@@ -65,5 +65,5 @@
     }
   },
   "cycles": 1,
-  "updated_at": "2026-08-01T10:48:03.124Z"
+  "updated_at": "2026-08-01T10:52:15.052Z"
 }

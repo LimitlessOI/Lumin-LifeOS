@@ -145,7 +145,7 @@
         "3"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "analyzeCompetitors"
       ],
@@ -165,14 +165,17 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T09:46:13.059Z",
-      "commit_sha": "e08a218d4631f94a70040a24fd540a410749945a",
+      "commit_sha": "bb28db69c814a8a2b9beb63595ab3b6c738a3195",
       "blueprint_id": "PRODUCT-PROJECT-GOVERNANCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "4",
       "mission_id": "PRODUCT-project-governance",
-      "same_signature_count": 0,
+      "same_signature_count": 1,
       "demoted": false,
-      "last_error": "artifact_proof_failed: function analyzeCompetitors(){; return []",
-      "heal_unblocked": true
+      "last_error": "artifact_proof_failed: function analyzeCompetitors(){",
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T10:51:56.322Z",
+      "blocker_class": "BLOCKED_TOOLING",
+      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: function analyzeCompetitors(){"
     },
     {
       "id": "5",
@@ -348,5 +351,5 @@
   "blueprint_id": "PRODUCT-PROJECT-GOVERNANCE-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-project-governance",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T10:51:41.083Z"
+  "updated_at": "2026-08-01T10:52:13.930Z"
 }
