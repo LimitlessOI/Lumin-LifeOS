@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T13:19:34.136Z",
+  "generated_at": "2026-08-01T13:19:40.461Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12723,
   "files": [
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1891,
-      "mtime": "2026-08-01T13:11:41.452Z",
-      "indexed_at": "2026-08-01T13:12:12.250Z",
+      "bytes": 1673,
+      "mtime": "2026-08-01T13:14:35.132Z",
+      "indexed_at": "2026-08-01T13:19:39.684Z",
       "synopsis_index_only": true
     },
     {
@@ -41179,9 +41179,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 384612,
-      "mtime": "2026-08-01T13:08:46.504Z",
-      "indexed_at": "2026-08-01T13:09:39.778Z"
+      "bytes": 386494,
+      "mtime": "2026-08-01T13:18:47.464Z",
+      "indexed_at": "2026-08-01T13:19:39.684Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -93767,9 +93767,9 @@
     {
       "path": "services/never-stop-product-factory.js",
       "synopsis": "Permanent product expansion lane — work exists even when BP_PRIORITY queue reads complete.",
-      "bytes": 87764,
-      "mtime": "2026-08-01T09:01:12.284Z",
-      "indexed_at": "2026-08-01T09:02:31.345Z",
+      "bytes": 89377,
+      "mtime": "2026-08-01T13:17:14.532Z",
+      "indexed_at": "2026-08-01T13:19:39.684Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -94212,9 +94212,9 @@
     {
       "path": "services/product-build-orchestrator.js",
       "synopsis": "General product-build orchestrator — turns a product's structured",
-      "bytes": 36435,
-      "mtime": "2026-08-01T09:01:04.364Z",
-      "indexed_at": "2026-08-01T09:02:31.345Z",
+      "bytes": 36694,
+      "mtime": "2026-08-01T13:16:58.364Z",
+      "indexed_at": "2026-08-01T13:19:39.684Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
