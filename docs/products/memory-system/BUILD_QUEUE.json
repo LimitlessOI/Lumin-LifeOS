@@ -338,14 +338,14 @@
         "memory-system-1"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "ALTER TABLE",
         "ADD COLUMN memory_category"
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-01T10:29:37.448Z",
       "last_error": "artifact_proof_failed: ADD COLUMN memory_category",
-      "commit_sha": "13c22a5cc266d41e6349d2b1414008b3fa8e3d67",
+      "commit_sha": "4e540190ebb51ac975c8257c784920060821d58a",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -357,7 +357,7 @@
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
-      "blocker_class": null,
+      "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
@@ -366,8 +366,9 @@
       "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-system-3",
       "mission_id": "PRODUCT-memory-system",
-      "same_signature_count": 0,
-      "heal_unblocked": true
+      "same_signature_count": 1,
+      "heal_unblocked": true,
+      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: ADD COLUMN memory_category"
     },
     {
       "id": "memory-system-4",
@@ -1201,6 +1202,6 @@
   "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-memory-system",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T10:29:21.051Z",
+  "updated_at": "2026-08-01T10:29:51.375Z",
   "backlog_signature_at": "2026-08-01T03:49:41.584Z"
 }

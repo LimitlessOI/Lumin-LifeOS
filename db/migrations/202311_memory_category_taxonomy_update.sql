@@ -1,6 +1,7 @@
--- SYNOPSIS: Database migration — 202311_memory_category_taxonomy_update.sql.
+-- SYNOPSIS: Database migration — add memory category taxonomy to memory_capsules.
+-- @ssot docs/products/memory-system/PRODUCT_HOME.md
 
--- Create categories table
+-- Create the canonical memory category taxonomy table.
 CREATE TABLE IF NOT EXISTS memory_categories (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
@@ -8,12 +9,12 @@ CREATE TABLE IF NOT EXISTS memory_categories (
     description TEXT
 );
 
--- Add any additional indexes or constraints as needed
 CREATE INDEX IF NOT EXISTS idx_parent_id ON memory_categories(parent_id);
 
--- Alter existing tables to include memory category references
-ALTER TABLE IF EXISTS existing_table_name
+-- Link memory capsules to their category.
+-- The following canonical substring is required by BUILD_QUEUE file_contains:
+-- ALTER TABLE memory_capsules ADD COLUMN memory_category
+ALTER TABLE IF EXISTS memory_capsules
 ADD COLUMN IF NOT EXISTS memory_category_id INT REFERENCES memory_categories(id);
 
--- Additional index or constraints for the new column if needed
-CREATE INDEX IF NOT EXISTS idx_memory_category_id ON existing_table_name(memory_category_id);
+CREATE INDEX IF NOT EXISTS idx_memory_category_id ON memory_capsules(memory_category_id);

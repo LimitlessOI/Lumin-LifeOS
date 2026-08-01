@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T10:27:01.370Z",
+  "generated_at": "2026-08-01T10:30:27.934Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1839,
-      "mtime": "2026-08-01T10:26:10.380Z",
-      "indexed_at": "2026-08-01T10:27:01.370Z",
+      "bytes": 1846,
+      "mtime": "2026-08-01T10:29:52.664Z",
+      "indexed_at": "2026-08-01T10:30:27.934Z",
       "synopsis_index_only": true
     },
     {
@@ -34754,10 +34754,10 @@
     },
     {
       "path": "db/migrations/202311_memory_category_taxonomy_update.sql",
-      "synopsis": "Database migration — 202311_memory_category_taxonomy_update.sql.",
-      "bytes": 785,
-      "mtime": "2026-07-31T12:04:04.906Z",
-      "indexed_at": "2026-07-31T12:04:04.906Z"
+      "synopsis": "Database migration — add memory category taxonomy to memory_capsules.",
+      "bytes": 862,
+      "mtime": "2026-08-01T10:30:05.104Z",
+      "indexed_at": "2026-08-01T10:30:27.934Z"
     },
     {
       "path": "db/migrations/202311_memory_taxonomy_update.sql",
@@ -42268,9 +42268,9 @@
     {
       "path": "docs/products/memory-system/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Memory System",
-      "bytes": 22424,
-      "mtime": "2026-08-01T10:26:49.920Z",
-      "indexed_at": "2026-08-01T10:27:01.370Z"
+      "bytes": 23131,
+      "mtime": "2026-08-01T10:30:18.676Z",
+      "indexed_at": "2026-08-01T10:30:27.934Z"
     },
     {
       "path": "docs/products/MEMORYINTELLIGENCE.md",
