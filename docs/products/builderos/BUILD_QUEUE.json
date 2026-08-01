@@ -348,13 +348,13 @@
     },
     {
       "id": "builderos-7",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/income-priority.js",
       "task": "calculate income priorities",
       "spec": "Implement service to compute tasks with significant financial impact.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "calculateIncomePriorities"
       ],
@@ -373,7 +373,7 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-16T04:39:39.143Z",
-      "commit_sha": null,
+      "commit_sha": "a4b09557ac4ac263d4eee55fa080f74fe64a092a",
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-7",
       "mission_id": "PRODUCT-builderos",
@@ -382,7 +382,7 @@
       "reaudit_reset_at": "2026-07-30T18:55:06.356Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-01T04:04:18.825Z",
       "last_attempt": null,
       "revive_count": 7,
       "revived_at": "2026-08-01T04:04:03.615Z",
@@ -399,7 +399,8 @@
       "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
       "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
       "escalated_at": "2026-07-31T18:40:13.616Z",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "completed_at": "2026-08-01T04:04:31.852Z"
     },
     {
       "id": "builderos-8",
@@ -3278,5 +3279,5 @@
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-builderos",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T03:05:25.025Z"
+  "updated_at": "2026-08-01T04:04:31.852Z"
 }
