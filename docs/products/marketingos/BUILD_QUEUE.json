@@ -1133,7 +1133,7 @@
     },
     {
       "id": "4",
-      "status": "pending",
+      "status": "skipped",
       "target_file": "public/overlay/marketing-performance-insights.html",
       "task": "Create UI to display performance learning insights",
       "spec": "HTML overlay to present insights from the Performance Learning Engine. This UI will dynamically display data, such as 'Your 'specific number' hooks get 3× more engagement than 'vague benefit' hooks' and audience-specific platform responses, fetched from the existing '/api/v1/marketingos/performance/intel' API endpoint.",
@@ -1144,7 +1144,9 @@
         "<div id=\"performance-insights\">",
         "<script>fetch('/api/v1/marketingos/performance/intel')"
       ],
-      "design_review_flagged": true
+      "design_review_flagged": true,
+      "last_error": null,
+      "blocker_class": null
     },
     {
       "id": "5",
