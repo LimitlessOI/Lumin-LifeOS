@@ -41,6 +41,18 @@ export function isNonUiBuildQueueTarget(targetFile) {
   return false;
 }
 
+/**
+ * LEGACY INTERFACE GUARD (legacy-interfaces-forbidden.mdc): only public/overlay/lifeos-app.html
+ * is the active founder interface. Any BUILD_QUEUE step targeting a different public/overlay/*.html
+ * file is a dead legacy surface and must not be built or rebuilt by the never-stop factory.
+ */
+export function isForbiddenLegacyOverlay(targetFile) {
+  const target = String(targetFile || '').replace(/\\/g, '/');
+  if (!/^public\/overlay\//.test(target)) return false;
+  const basename = target.split('/').pop();
+  return basename !== 'lifeos-app.html';
+}
+
 function isHumanHoldStep(step) {
   if (!step || typeof step !== 'object') return false;
   return step.human_hold === true
@@ -1294,6 +1306,31 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
         deploy_proven: true,
         functional_proven: true,
         no_op: true,
+      },
+      summary: queueSummary(queue),
+    };
+  }
+
+  // Legacy overlay guard: only public/overlay/lifeos-app.html is the active founder interface.
+  if (isForbiddenLegacyOverlay(task.target_file)) {
+    if (already && already.status !== STEP_STATUS.SKIPPED) {
+      already.status = STEP_STATUS.SKIPPED;
+      already.skip_reason = 'legacy-interfaces-forbidden: only public/overlay/lifeos-app.html is active';
+      already.last_error = null;
+      already.blocker_class = null;
+    }
+    const committed = await commitQueueStatusToRepo(queue, task.step_id);
+    if (!committed.ok && committed.error !== 'no_change') {
+      logger?.warn?.({ product_id: task.product_id, step_id: task.step_id, error: committed.error }, '[never-stop] queue-status commit failed for legacy overlay skip');
+    }
+    return {
+      ok: true,
+      detail: 'legacy_overlay_skipped',
+      outcome: {
+        ok: true,
+        step_id: task.step_id,
+        skipped: true,
+        reason: 'legacy-interfaces-forbidden: only public/overlay/lifeos-app.html is active',
       },
       summary: queueSummary(queue),
     };

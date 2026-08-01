@@ -169,7 +169,13 @@ export async function evaluateStepExpectations(step, {
   }
 
   const authored = authorAssertionsFromSpec(step);
-  if (!authored.ok || !authored.assertions.length) {
+  if (!authored.ok) {
+    return { ok: false, applicable: true, reason: authored.reason || 'declared_expectations_unusable' };
+  }
+  if (!authored.assertions.length) {
+    if (authored.reason === 'no_proof_required_non_server_code') {
+      return { ok: true, applicable: false, reason: authored.reason };
+    }
     return { ok: false, applicable: true, reason: authored.reason || 'declared_expectations_unusable' };
   }
 

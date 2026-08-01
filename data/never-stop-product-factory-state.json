@@ -1,47 +1,47 @@
 {
   "status": "idle",
   "last_task": {
-    "id": "product_build_memory-intelligence_memory-intelligence-1",
+    "id": "product_build_kids-os_2",
     "kind": "product_build_step",
-    "priority": 2.0027,
-    "product": "memory-intelligence",
-    "product_id": "memory-intelligence",
-    "step_id": "memory-intelligence-1",
-    "target_file": "db/memory-auto-apply.sql",
-    "detail": "next buildable step: memory-intelligence-1"
+    "priority": 2.5,
+    "product": "kids-os",
+    "product_id": "kids-os",
+    "step_id": "2",
+    "target_file": "public/overlay/age-appropriate-ux-4-7.html",
+    "detail": "next buildable step: 2"
   },
   "last_result": {
     "ok": false,
-    "task_id": "product_build_memory-intelligence_memory-intelligence-1",
+    "task_id": "product_build_kids-os_2",
     "detail": "product_build_step",
     "outcome": {
       "ok": false,
-      "step_id": "memory-intelligence-1",
-      "stage": "build",
-      "reason": "Target file is outside the Builder safe-scope policy",
-      "attempts": 3,
-      "blocked": true,
+      "step_id": "2",
+      "stage": "artifact_proof",
+      "reason": "no_proof_required_non_server_code",
+      "attempts": 1,
+      "blocked": false,
       "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "parked": false,
       "summary": {
-        "product_id": "memory-intelligence",
-        "total": 35,
-        "pending": 0,
+        "product_id": "kids-os",
+        "total": 26,
+        "pending": 12,
         "building": 0,
-        "done": 30,
+        "done": 7,
         "blocked": 1,
         "founder_gated": 0,
         "design_review_flagged": 0,
         "human_hold": 0,
-        "skipped": 4,
+        "skipped": 6,
         "complete": false
       }
     },
     "claim": {
-      "id": "memory-intelligence:memory-intelligence-1",
+      "id": "kids-os:2",
       "kind": "execution",
-      "text": "product step memory-intelligence-1 built + verified + served live",
+      "text": "product step 2 built + verified + served live",
       "grade": "GUESS",
       "proof": null,
       "original_grade": "KNOW",
@@ -51,19 +51,19 @@
       ]
     },
     "summary": {
-      "product_id": "memory-intelligence",
-      "total": 35,
-      "pending": 0,
+      "product_id": "kids-os",
+      "total": 26,
+      "pending": 12,
       "building": 0,
-      "done": 30,
+      "done": 7,
       "blocked": 1,
       "founder_gated": 0,
       "design_review_flagged": 0,
       "human_hold": 0,
-      "skipped": 4,
+      "skipped": 6,
       "complete": false
     }
   },
   "cycles": 1,
-  "updated_at": "2026-08-01T13:11:41.454Z"
+  "updated_at": "2026-08-01T13:14:35.134Z"
 }
