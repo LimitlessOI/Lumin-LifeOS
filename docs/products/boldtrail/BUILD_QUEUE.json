@@ -10,7 +10,7 @@
   "steps": [
     {
       "id": "1",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/leadScoring.js",
       "task": "add explicit scoring rubric",
       "spec": "Include a detailed scoring rubric in the segment description that defines clear rules for lead scoring, adhering to the documented segment description.",
@@ -42,7 +42,11 @@
       "commit_sha": "8a013e4efaeea645d6e0ebb3ae355ad703277562",
       "blueprint_id": "PRODUCT-BOLDTRAIL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "1",
-      "mission_id": "PRODUCT-boldtrail"
+      "mission_id": "PRODUCT-boldtrail",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: function getScoringRubric; const scoringRubric",
+      "heal_unblocked": true
     },
     {
       "id": "step1",
@@ -92,7 +96,8 @@
       "shipped_at": "2026-07-15T08:41:36.566Z",
       "blueprint_id": "PRODUCT-BOLDTRAIL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step1",
-      "mission_id": "PRODUCT-boldtrail"
+      "mission_id": "PRODUCT-boldtrail",
+      "same_signature_count": 0
     },
     {
       "id": "boldtrail-1",
@@ -147,7 +152,8 @@
       "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
       "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
       "escalated_at": "2026-07-31T18:40:13.614Z",
-      "completed_at": "2026-08-01T05:20:33.951Z"
+      "completed_at": "2026-08-01T05:20:33.951Z",
+      "same_signature_count": 0
     },
     {
       "id": "boldtrail-2",
@@ -183,7 +189,8 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-BOLDTRAIL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "boldtrail-2",
-      "mission_id": "PRODUCT-boldtrail"
+      "mission_id": "PRODUCT-boldtrail",
+      "same_signature_count": 0
     },
     {
       "id": "boldtrail-step1",
@@ -264,11 +271,12 @@
       "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
       "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
       "escalated_at": "2026-07-31T18:40:13.614Z",
-      "completed_at": "2026-08-01T05:27:46.183Z"
+      "completed_at": "2026-08-01T05:27:46.183Z",
+      "same_signature_count": 0
     },
     {
       "id": "boldtrail-step2",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/leadScoring.js",
       "task": "expose segment scoring route",
       "spec": "Create a route to apply and return the scored segment description based on the new scoring rubric method.",
@@ -303,11 +311,16 @@
       "commit_sha": "0683ff2529afa9460e93f0a6f3e103e1534b2e15",
       "blueprint_id": "PRODUCT-BOLDTRAIL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "boldtrail-step2",
-      "mission_id": "PRODUCT-boldtrail"
+      "mission_id": "PRODUCT-boldtrail",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: app.post('/api/v1/leadscoring/segment'",
+      "heal_unblocked": true
     }
   ],
   "blueprint_id": "PRODUCT-BOLDTRAIL-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-boldtrail",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:12:05.526Z"
+  "updated_at": "2026-08-01T06:30:22.608Z",
+  "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/boldtrail/BUILD_QUEUE.json"
 }

@@ -9,7 +9,7 @@
   "steps": [
     {
       "id": "1",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/storyProject.js",
       "task": "Implement story project and canon data model",
       "spec": "Create a service that handles story project creation and canon data model persistence",
@@ -42,7 +42,11 @@
       "commit_sha": "cf5e9120d33a6f92942aeb7370a86596e04ac11a",
       "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "1",
-      "mission_id": "PRODUCT-story-studio"
+      "mission_id": "PRODUCT-story-studio",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: A story project can be created and re-opened with persistent canon data",
+      "heal_unblocked": true
     },
     {
       "id": "2",
@@ -116,11 +120,12 @@
       "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
       "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
       "escalated_at": "2026-07-31T18:40:13.630Z",
-      "completed_at": "2026-08-01T04:58:47.205Z"
+      "completed_at": "2026-08-01T04:58:47.205Z",
+      "same_signature_count": 0
     },
     {
       "id": "3",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/multiFormatExporter.js",
       "task": "Add multi-format ladder for export",
       "spec": "Enable project export to storybook, comic, motion comic formats",
@@ -157,7 +162,11 @@
       "commit_sha": "daa5f701b0cf35ccaa3c21af223548f0af07741a",
       "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "3",
-      "mission_id": "PRODUCT-story-studio"
+      "mission_id": "PRODUCT-story-studio",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: One project can export at least storybook + comic from the same story bible",
+      "heal_unblocked": true
     },
     {
       "id": "4",
@@ -193,7 +202,8 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "4",
-      "mission_id": "PRODUCT-story-studio"
+      "mission_id": "PRODUCT-story-studio",
+      "same_signature_count": 0
     },
     {
       "id": "5",
@@ -229,7 +239,8 @@
       ],
       "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "5",
-      "mission_id": "PRODUCT-story-studio"
+      "mission_id": "PRODUCT-story-studio",
+      "same_signature_count": 0
     },
     {
       "id": "6",
@@ -301,7 +312,8 @@
       "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
       "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
       "escalated_at": "2026-07-31T18:40:13.630Z",
-      "completed_at": "2026-08-01T05:01:17.413Z"
+      "completed_at": "2026-08-01T05:01:17.413Z",
+      "same_signature_count": 0
     },
     {
       "id": "7",
@@ -335,7 +347,8 @@
           ],
           "assertion_id": "expected_exports:services/cartoonGeneration.js"
         }
-      ]
+      ],
+      "same_signature_count": 0
     },
     {
       "id": "8",
@@ -366,7 +379,8 @@
       ],
       "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "8",
-      "mission_id": "PRODUCT-story-studio"
+      "mission_id": "PRODUCT-story-studio",
+      "same_signature_count": 0
     },
     {
       "id": "9",
@@ -385,7 +399,8 @@
       "commit_sha": "7741b9b9db984b1e0907d34d524fcd303325950b",
       "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "9",
-      "mission_id": "PRODUCT-story-studio"
+      "mission_id": "PRODUCT-story-studio",
+      "same_signature_count": 0
     },
     {
       "id": "10",
@@ -418,7 +433,8 @@
       "commit_sha": "b72e82d2a906962906ba26d1cf00a4f1c5a5a53b",
       "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "10",
-      "mission_id": "PRODUCT-story-studio"
+      "mission_id": "PRODUCT-story-studio",
+      "same_signature_count": 0
     },
     {
       "id": "11",
@@ -452,7 +468,8 @@
       "commit_sha": "a151aa03dede1a6a96f418805e1a2c71c1ec95bc",
       "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "11",
-      "mission_id": "PRODUCT-story-studio"
+      "mission_id": "PRODUCT-story-studio",
+      "same_signature_count": 0
     },
     {
       "id": "12",
@@ -468,11 +485,13 @@
       "commit_sha": "cad377bc765d8154e7fdfd49cf7164c204a8f0af",
       "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "12",
-      "mission_id": "PRODUCT-story-studio"
+      "mission_id": "PRODUCT-story-studio",
+      "same_signature_count": 0
     }
   ],
   "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-story-studio",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:12:36.228Z"
+  "updated_at": "2026-08-01T06:30:52.651Z",
+  "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/story-studio/BUILD_QUEUE.json"
 }

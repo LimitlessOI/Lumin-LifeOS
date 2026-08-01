@@ -36,7 +36,8 @@
       "commit_sha": "f2ae442bce62e48c15a36ee677eeca8baa147572",
       "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step1",
-      "mission_id": "PRODUCT-word-keeper"
+      "mission_id": "PRODUCT-word-keeper",
+      "same_signature_count": 0
     },
     {
       "id": "step2",
@@ -73,7 +74,8 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step2",
-      "mission_id": "PRODUCT-word-keeper"
+      "mission_id": "PRODUCT-word-keeper",
+      "same_signature_count": 0
     },
     {
       "id": "1",
@@ -118,7 +120,8 @@
           "content_source_path": "docs/products/word-keeper/twins/steps/1.exact",
           "content_sha256": "945a6df9167fc2c53304699d1c27b7bd78d5e91818e959fdd587047d315e05df"
         }
-      }
+      },
+      "same_signature_count": 0
     },
     {
       "id": "3",
@@ -212,7 +215,8 @@
       "mission_id": "PRODUCT-word-keeper",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerTranscriptPurgeRoutes; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:07.447Z"
+      "reaudit_reset_at": "2026-07-30T18:55:07.447Z",
+      "same_signature_count": 0
     },
     {
       "id": "5",
@@ -230,7 +234,8 @@
       "commit_sha": "f3fe4715251dbe51e0b7717f89630068d7a00881",
       "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "5",
-      "mission_id": "PRODUCT-word-keeper"
+      "mission_id": "PRODUCT-word-keeper",
+      "same_signature_count": 0
     },
     {
       "id": "2",
@@ -293,7 +298,8 @@
           "content_source_path": "docs/products/word-keeper/twins/steps/2.exact",
           "content_sha256": "2e33e4e57d976000aae03108d4ceff1791c9735880a91b88a7fd0789b81a47b5"
         }
-      }
+      },
+      "same_signature_count": 0
     },
     {
       "id": "word-keeper-step1",
@@ -377,7 +383,8 @@
       "escalation_required": true,
       "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
       "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
-      "escalated_at": "2026-07-31T18:40:13.633Z"
+      "escalated_at": "2026-07-31T18:40:13.633Z",
+      "same_signature_count": 0
     },
     {
       "id": "word-keeper-step2",
@@ -398,7 +405,8 @@
       "commit_sha": "d6bc7fa33dbe5f4aba122646d8e29ae2df4b2214",
       "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "word-keeper-step2",
-      "mission_id": "PRODUCT-word-keeper"
+      "mission_id": "PRODUCT-word-keeper",
+      "same_signature_count": 0
     },
     {
       "id": "word-keeper-step3",
@@ -449,7 +457,8 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "same_signature_count": 0
     },
     {
       "id": "word-keeper-step4",
@@ -490,7 +499,8 @@
       "mission_id": "PRODUCT-word-keeper",
       "pre_existing": false,
       "last_error": "false_done_reaudit: botched auto-authored artifact (route imported verifyTranscriptPurgeCron; service exported verifyTranscriptPurge + placeholder existingFunction). Dead/unmounted files removed; rebuild service then route.",
-      "reaudit_reset_at": "2026-07-18T04:29:52.120Z"
+      "reaudit_reset_at": "2026-07-18T04:29:52.120Z",
+      "same_signature_count": 0
     },
     {
       "id": "word-keeper-step5",
@@ -511,7 +521,8 @@
       "commit_sha": "79114c8a11ff39fac3915fa6fcd150f617c18583",
       "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "word-keeper-step5",
-      "mission_id": "PRODUCT-word-keeper"
+      "mission_id": "PRODUCT-word-keeper",
+      "same_signature_count": 0
     },
     {
       "id": "word-keeper-1",
@@ -540,7 +551,8 @@
       "commit_sha": "89ba8412088b6b350f7379422ab0b81a920c464e",
       "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "word-keeper-1",
-      "mission_id": "PRODUCT-word-keeper"
+      "mission_id": "PRODUCT-word-keeper",
+      "same_signature_count": 0
     },
     {
       "id": "word-keeper-2",
@@ -574,7 +586,8 @@
       "commit_sha": "0aa5b3e7ee506e053b231556cc55b914ec8569d8",
       "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "word-keeper-2",
-      "mission_id": "PRODUCT-word-keeper"
+      "mission_id": "PRODUCT-word-keeper",
+      "same_signature_count": 0
     },
     {
       "id": "word-keeper-3",
@@ -595,7 +608,8 @@
       "commit_sha": "68d14ace96cb636ebeed1853bbe6dabe35d09cf1",
       "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "word-keeper-3",
-      "mission_id": "PRODUCT-word-keeper"
+      "mission_id": "PRODUCT-word-keeper",
+      "same_signature_count": 0
     },
     {
       "id": "word-keeper-4",
@@ -631,7 +645,8 @@
       "shipped_at": "2026-07-16T06:42:46.090Z",
       "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "word-keeper-4",
-      "mission_id": "PRODUCT-word-keeper"
+      "mission_id": "PRODUCT-word-keeper",
+      "same_signature_count": 0
     },
     {
       "id": "word-keeper-5",
@@ -686,11 +701,12 @@
       "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "word-keeper-5",
       "mission_id": "PRODUCT-word-keeper",
-      "reaudit_reset_at": "2026-07-18T04:29:52.120Z"
+      "reaudit_reset_at": "2026-07-18T04:29:52.120Z",
+      "same_signature_count": 0
     },
     {
       "id": "word-keeper-001",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/googleCalendarService.js",
       "task": "implement calendar integration",
       "spec": "Integrate Google Calendar using default settings, ensuring basic operations without OAuth authentication flow.",
@@ -723,7 +739,11 @@
       "commit_sha": "131b132dfee35f69b1ad4f40785a0c70d5cd9d43",
       "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "word-keeper-001",
-      "mission_id": "PRODUCT-word-keeper"
+      "mission_id": "PRODUCT-word-keeper",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: connect to Google Calendar API",
+      "heal_unblocked": true
     },
     {
       "id": "word-keeper-002",
@@ -760,7 +780,8 @@
       "shipped_at": "2026-07-16T07:30:22.301Z",
       "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "word-keeper-002",
-      "mission_id": "PRODUCT-word-keeper"
+      "mission_id": "PRODUCT-word-keeper",
+      "same_signature_count": 0
     },
     {
       "id": "word-keeper-6",
@@ -794,7 +815,8 @@
       "commit_sha": "cfea0589c5a913e25b42733b451793fc06d9de12",
       "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "word-keeper-6",
-      "mission_id": "PRODUCT-word-keeper"
+      "mission_id": "PRODUCT-word-keeper",
+      "same_signature_count": 0
     },
     {
       "id": "word-keeper-7",
@@ -815,11 +837,13 @@
       "commit_sha": "4af539f6d12d2c73e103bffc044bce57737bbae8",
       "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "word-keeper-7",
-      "mission_id": "PRODUCT-word-keeper"
+      "mission_id": "PRODUCT-word-keeper",
+      "same_signature_count": 0
     }
   ],
   "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-word-keeper",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:12:43.645Z"
+  "updated_at": "2026-08-01T06:31:00.270Z",
+  "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/word-keeper/BUILD_QUEUE.json"
 }

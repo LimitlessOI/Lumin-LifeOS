@@ -7,7 +7,7 @@
   "steps": [
     {
       "id": "1",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/channelMemory.js",
       "task": "implement channel memory model",
       "spec": "Model stores channel memory, brand profile, SEO.",
@@ -35,11 +35,15 @@
       "commit_sha": "7cd3acc2e1afc20d412a20d9b127631a03d57ca6",
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "1",
-      "mission_id": "PRODUCT-creator-media-os"
+      "mission_id": "PRODUCT-creator-media-os",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: Channel memory profile",
+      "heal_unblocked": true
     },
     {
       "id": "2",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/likenessConsent.js",
       "task": "manage likeness consent",
       "spec": "Capture and revocation of likeness consent.",
@@ -67,7 +71,7 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "artifact_proof_failed: Explicit likeness consent recorded",
       "commit_sha": "4c7c860fa3d7d7fb8bb5c9eea91dcbb6ed177fec",
       "built_sha": null,
       "proof": null,
@@ -88,11 +92,13 @@
       "shipped_at": "2026-07-15T08:40:54.575Z",
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "2",
-      "mission_id": "PRODUCT-creator-media-os"
+      "mission_id": "PRODUCT-creator-media-os",
+      "same_signature_count": 0,
+      "heal_unblocked": true
     },
     {
       "id": "3",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/scriptEngine.js",
       "task": "implement script/title/hook engine",
       "spec": "Engine generates scripts with titles/hooks for media content.",
@@ -120,7 +126,11 @@
       "commit_sha": "df2269a4199dcea132a62c31b806c7db1dccc5ff",
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "3",
-      "mission_id": "PRODUCT-creator-media-os"
+      "mission_id": "PRODUCT-creator-media-os",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: Script for long and short form",
+      "heal_unblocked": true
     },
     {
       "id": "4",
@@ -198,7 +208,8 @@
       "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
       "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
       "escalated_at": "2026-07-31T18:40:13.619Z",
-      "completed_at": "2026-08-01T05:02:06.908Z"
+      "completed_at": "2026-08-01T05:02:06.908Z",
+      "same_signature_count": 0
     },
     {
       "id": "5",
@@ -276,11 +287,12 @@
       "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
       "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
       "escalated_at": "2026-07-31T18:40:13.619Z",
-      "completed_at": "2026-08-01T05:09:02.799Z"
+      "completed_at": "2026-08-01T05:09:02.799Z",
+      "same_signature_count": 0
     },
     {
       "id": "6",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/analyticsMemory.js",
       "task": "establish analytics memory loop",
       "spec": "Memory loop incorporates publish analytics.",
@@ -308,7 +320,11 @@
       "commit_sha": "d645fdd625afe20603113fb489c9351d85eb508f",
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "6",
-      "mission_id": "PRODUCT-creator-media-os"
+      "mission_id": "PRODUCT-creator-media-os",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: Publish analytics memory loop",
+      "heal_unblocked": true
     },
     {
       "id": "7",
@@ -327,11 +343,12 @@
       "commit_sha": "ed75909c87840ff7786d18f288a17b0e2067a6ec",
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "7",
-      "mission_id": "PRODUCT-creator-media-os"
+      "mission_id": "PRODUCT-creator-media-os",
+      "same_signature_count": 0
     },
     {
       "id": "8",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/consentContract.js",
       "task": "formalize consent contract",
       "spec": "Formalizes consent and likeness contract model.",
@@ -359,7 +376,11 @@
       "commit_sha": "e318b97ace6f3404822c546e53c19fc79fedbf3f",
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "8",
-      "mission_id": "PRODUCT-creator-media-os"
+      "mission_id": "PRODUCT-creator-media-os",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: Consent contract model",
+      "heal_unblocked": true
     },
     {
       "id": "9",
@@ -378,11 +399,12 @@
       "commit_sha": "028533d21c37d787d4ab45a6a8eb550a12524295",
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "9",
-      "mission_id": "PRODUCT-creator-media-os"
+      "mission_id": "PRODUCT-creator-media-os",
+      "same_signature_count": 0
     },
     {
       "id": "10",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/scriptRoutes.js",
       "task": "Add script routes",
       "spec": "Expose script generation operations via HTTP API.",
@@ -416,7 +438,11 @@
       "commit_sha": "d9438de6ee9a8bc75056de5e61d361ecd61d79c4",
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "10",
-      "mission_id": "PRODUCT-creator-media-os"
+      "mission_id": "PRODUCT-creator-media-os",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: app.post",
+      "heal_unblocked": true
     },
     {
       "id": "11",
@@ -463,7 +489,8 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "11",
-      "mission_id": "PRODUCT-creator-media-os"
+      "mission_id": "PRODUCT-creator-media-os",
+      "same_signature_count": 0
     },
     {
       "id": "12",
@@ -498,7 +525,8 @@
       ],
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "12",
-      "mission_id": "PRODUCT-creator-media-os"
+      "mission_id": "PRODUCT-creator-media-os",
+      "same_signature_count": 0
     },
     {
       "id": "back-catalog-ingestion-ingest-a-creator-s-existi",
@@ -542,7 +570,8 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "same_signature_count": 0
     },
     {
       "id": "persona-twin-train-a-style-voice-of-writing-mode",
@@ -598,7 +627,8 @@
       "last_error": null,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "smart-jump-cut-mistake-removal-engine-detect-sil",
@@ -654,7 +684,8 @@
       "last_error": null,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "text-based-overdub-editor-edit-the-transcript-to",
@@ -687,7 +718,8 @@
       "last_error": null,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "voice-clone-service-train-a-revocable-voice-prof",
@@ -743,7 +775,8 @@
       "last_error": null,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "avatar-talking-head-clone-generate-on-camera-vid",
@@ -772,7 +805,8 @@
       "mission_id": "PRODUCT-creator-media-os",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-18T11:07:25.699Z",
-      "commit_sha": "74bd8022af131ea06610c06c2ef17418bc91aea5"
+      "commit_sha": "74bd8022af131ea06610c06c2ef17418bc91aea5",
+      "same_signature_count": 0
     },
     {
       "id": "lip-sync-patcher-re-sync-mouth-to-replaced-words",
@@ -828,7 +862,8 @@
       "last_error": null,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "text-to-video-generation-enable-real-motion-b-ro",
@@ -857,7 +892,8 @@
       "mission_id": "PRODUCT-creator-media-os",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-18T11:10:32.999Z",
-      "commit_sha": "de82f18c612342e40823f4256a472f89e9a561f9"
+      "commit_sha": "de82f18c612342e40823f4256a472f89e9a561f9",
+      "same_signature_count": 0
     },
     {
       "id": "multi-language-dubbing-translate-and-dub-audio-i",
@@ -886,7 +922,8 @@
       "mission_id": "PRODUCT-creator-media-os",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-18T11:13:16.499Z",
-      "commit_sha": "da6e775699e7c3892b2303729b4ec1ca40a287b5"
+      "commit_sha": "da6e775699e7c3892b2303729b4ec1ca40a287b5",
+      "same_signature_count": 0
     },
     {
       "id": "long-form-to-shorts-auto-clipper-detect-high-ret",
@@ -932,7 +969,8 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-18T11:24:12.495Z"
+      "shipped_at": "2026-07-18T11:24:12.495Z",
+      "same_signature_count": 0
     },
     {
       "id": "keyword-matched-b-roll-inserter-insert-b-roll-ma",
@@ -961,7 +999,8 @@
       "mission_id": "PRODUCT-creator-media-os",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-18T11:17:51.084Z",
-      "commit_sha": "dbecce88fd5109321afe2438842200f75527cd58"
+      "commit_sha": "dbecce88fd5109321afe2438842200f75527cd58",
+      "same_signature_count": 0
     },
     {
       "id": "brand-kit-auto-apply-fonts-colors-logo-lower-thi",
@@ -992,7 +1031,8 @@
       "mission_id": "PRODUCT-creator-media-os",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-18T11:26:56.531Z",
-      "commit_sha": "a06a85665658d2200f5c55df7fdd3b8f93e824e2"
+      "commit_sha": "a06a85665658d2200f5c55df7fdd3b8f93e824e2",
+      "same_signature_count": 0
     },
     {
       "id": "media-vault-searchable-tagged-versioned-asset-st",
@@ -1038,7 +1078,8 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-18T11:36:46.558Z"
+      "shipped_at": "2026-07-18T11:36:46.558Z",
+      "same_signature_count": 0
     },
     {
       "id": "repurpose-fan-out-turn-one-source-video-into-n-p",
@@ -1094,7 +1135,8 @@
       "last_error": null,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "creator-partner-program-rev-share-ledger-exp-sty",
@@ -1123,7 +1165,8 @@
       "mission_id": "PRODUCT-creator-media-os",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-18T11:39:20.634Z",
-      "commit_sha": "9cbc1c424858b6f0ccbe291ac7cd185ba2cd9275"
+      "commit_sha": "9cbc1c424858b6f0ccbe291ac7cd185ba2cd9275",
+      "same_signature_count": 0
     },
     {
       "id": "partner-dashboard-api-downline-tree-active-seats",
@@ -1156,7 +1199,8 @@
       "mission_id": "PRODUCT-creator-media-os",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-18T11:42:03.180Z",
-      "commit_sha": "12e73db8f793fc3a21f6b9533d961865fd0da2d2"
+      "commit_sha": "12e73db8f793fc3a21f6b9533d961865fd0da2d2",
+      "same_signature_count": 0
     },
     {
       "id": "performance-analytics-learning-loop-ingest-per-p",
@@ -1212,7 +1256,8 @@
       "last_error": null,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "team-seats-roles-editor-manager-va-access-on-a-c",
@@ -1264,7 +1309,8 @@
       },
       "shipped_at": "2026-07-18T11:47:37.512Z",
       "shipped_via": "governed_ship_queue",
-      "commit_sha": "7d471bab9bd93cd1bca01ecb8769e79e82d70c9e"
+      "commit_sha": "7d471bab9bd93cd1bca01ecb8769e79e82d70c9e",
+      "same_signature_count": 0
     },
     {
       "id": "video-templates-with-swappable-segments-build-a",
@@ -1293,7 +1339,8 @@
       "mission_id": "PRODUCT-creator-media-os",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-18T11:48:29.306Z",
-      "commit_sha": "557738dad73c35ea1273f6f0881d28bdc683806f"
+      "commit_sha": "557738dad73c35ea1273f6f0881d28bdc683806f",
+      "same_signature_count": 0
     },
     {
       "id": "catalog-clip-search-remix-compiler-search-the-in",
@@ -1342,7 +1389,8 @@
       "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
       "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
       "escalated_at": "2026-07-31T18:40:13.619Z",
-      "completed_at": "2026-08-01T05:09:34.339Z"
+      "completed_at": "2026-08-01T05:09:34.339Z",
+      "same_signature_count": 0
     }
   ],
   "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
@@ -1351,5 +1399,6 @@
   "corpus_sources": [
     "docs/products/creator-media-os/PRODUCT_HOME.md"
   ],
-  "updated_at": "2026-08-01T06:12:11.246Z"
+  "updated_at": "2026-08-01T06:30:28.673Z",
+  "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/creator-media-os/BUILD_QUEUE.json"
 }

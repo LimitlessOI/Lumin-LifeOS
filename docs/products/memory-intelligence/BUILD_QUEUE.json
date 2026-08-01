@@ -27,7 +27,8 @@
       "mission_id": "PRODUCT-memory-intelligence",
       "pre_existing": false,
       "last_error": null,
-      "reaudit_reset_at": "2026-07-30T18:55:06.671Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.671Z",
+      "same_signature_count": 0
     },
     {
       "id": "2",
@@ -72,7 +73,8 @@
           "content_source_path": "docs/products/memory-intelligence/twins/steps/2.exact",
           "content_sha256": "466768d1a7a2314bcc72e9bc1b289eaa42202e4e3377b41cb47ef76213c40888"
         }
-      }
+      },
+      "same_signature_count": 0
     },
     {
       "id": "3",
@@ -137,7 +139,8 @@
           "content_source_path": "docs/products/memory-intelligence/twins/steps/3.exact",
           "content_sha256": "4e9b65d745678b583a48ae7bbf46c8cb8add6cfb14e2db8a12b8851e601a5e4d"
         }
-      }
+      },
+      "same_signature_count": 0
     },
     {
       "id": "4",
@@ -202,7 +205,8 @@
           "content_source_path": "docs/products/memory-intelligence/twins/steps/4.exact",
           "content_sha256": "7be8d178876537efb1ef361f6bab9070590818287cde3c4558b8c70213b12e16"
         }
-      }
+      },
+      "same_signature_count": 0
     },
     {
       "id": "5",
@@ -347,11 +351,12 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "same_signature_count": 0
     },
     {
       "id": "6",
-      "status": "done",
+      "status": "pending",
       "target_file": ".github/workflows/smoke-test.yml",
       "task": "integrate CI evidence recording",
       "spec": "Wires memory:ci-evidence into CI workflow to auto-record CI results as evidence.",
@@ -359,12 +364,12 @@
         "5"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "memory:ci-evidence"
       ],
       "last_attempt_at": "2026-07-15T21:10:48.696Z",
-      "last_error": null,
+      "last_error": "artifact_proof_failed: memory:ci-evidence",
       "commit_sha": "7be4a9ef9e9c33e1f8f0e8b0c8b0e0e0e0e0e0e0",
       "built_sha": "7be4a9ef9e9c33e1f8f0e8b0c8b0e0e0e0e0e0e0",
       "proof": "operator_gap_fill: .github/workflows/smoke-test.yml already contains a 'Record CI evidence (memory system)' step running 'node scripts/record-ci-evidence.mjs --all-js memory:ci-evidence'; builder safe-scope blocks autonomous writes to .github/workflows, so operator verified and marked done.",
@@ -385,7 +390,9 @@
       "shipped_at": "2026-07-15T21:15:00.000Z",
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "6",
-      "mission_id": "PRODUCT-memory-intelligence"
+      "mission_id": "PRODUCT-memory-intelligence",
+      "same_signature_count": 0,
+      "heal_unblocked": true
     },
     {
       "id": "7",
@@ -423,7 +430,8 @@
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "7",
       "mission_id": "PRODUCT-memory-intelligence",
-      "completed_at": "2026-08-01T05:59:51.044Z"
+      "completed_at": "2026-08-01T05:59:51.044Z",
+      "same_signature_count": 0
     },
     {
       "id": "8",
@@ -463,7 +471,8 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "8",
-      "mission_id": "PRODUCT-memory-intelligence"
+      "mission_id": "PRODUCT-memory-intelligence",
+      "same_signature_count": 0
     },
     {
       "id": "9",
@@ -487,7 +496,8 @@
       "commit_sha": "baba94bf14e52a58f093905536401e86620f6d4a",
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "9",
-      "mission_id": "PRODUCT-memory-intelligence"
+      "mission_id": "PRODUCT-memory-intelligence",
+      "same_signature_count": 0
     },
     {
       "id": "10",
@@ -523,7 +533,8 @@
       "shipped_at": "2026-07-15T20:13:29.785Z",
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "10",
-      "mission_id": "PRODUCT-memory-intelligence"
+      "mission_id": "PRODUCT-memory-intelligence",
+      "same_signature_count": 0
     },
     {
       "id": "11",
@@ -545,7 +556,8 @@
       "commit_sha": "f96618bdd81e97d6ab4baedc321a2edc368471e3",
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "11",
-      "mission_id": "PRODUCT-memory-intelligence"
+      "mission_id": "PRODUCT-memory-intelligence",
+      "same_signature_count": 0
     },
     {
       "id": "12",
@@ -583,11 +595,12 @@
       "shipped_at": "2026-07-15T21:52:25.585Z",
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "12",
-      "mission_id": "PRODUCT-memory-intelligence"
+      "mission_id": "PRODUCT-memory-intelligence",
+      "same_signature_count": 0
     },
     {
       "id": "memory-intelligence-1",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/memory-auto-apply.sql",
       "task": "auto-apply tables and views on deploy",
       "spec": "Ensure that all tables and views are applied automatically during deployment.",
@@ -603,7 +616,11 @@
       "commit_sha": "a74883418feccb48127466c7951d4e385801b74f",
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-intelligence-1",
-      "mission_id": "PRODUCT-memory-intelligence"
+      "mission_id": "PRODUCT-memory-intelligence",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: CREATE VIEW IF NOT EXISTS",
+      "heal_unblocked": true
     },
     {
       "id": "memory-intelligence-2",
@@ -643,7 +660,8 @@
       "blocker_resolution": null,
       "escalation_required": false,
       "escalation_note": "Cleared by conductor: pre-existing script artifact `scripts/memory-seed-epistemic.mjs` exports `seedEpistemicFacts`; step reset to pending.",
-      "completed_at": "2026-08-01T03:27:23.785Z"
+      "completed_at": "2026-08-01T03:27:23.785Z",
+      "same_signature_count": 0
     },
     {
       "id": "memory-intelligence-3",
@@ -691,7 +709,8 @@
           "content_source_path": "docs/products/memory-intelligence/twins/steps/memory-intelligence-3.exact",
           "content_sha256": "c1896364df305d675c22c23bdecfc60015df4952ed9ed4529ab0a08d282aaf0b"
         }
-      }
+      },
+      "same_signature_count": 0
     },
     {
       "id": "memory-intelligence-4",
@@ -731,7 +750,8 @@
       "blocker_resolution": null,
       "escalation_required": false,
       "escalation_note": "Cleared by conductor: added `createFactEvidence` alias to `scripts/memory-ci-evidence.mjs`; step reset to pending.",
-      "completed_at": "2026-08-01T03:27:38.337Z"
+      "completed_at": "2026-08-01T03:27:38.337Z",
+      "same_signature_count": 0
     },
     {
       "id": "memory-intelligence-5",
@@ -750,7 +770,8 @@
       "mission_id": "PRODUCT-memory-intelligence",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T22:09:40.316Z",
-      "commit_sha": "db28413e8c4c4397ff00d52042c281e975b8f94a"
+      "commit_sha": "db28413e8c4c4397ff00d52042c281e975b8f94a",
+      "same_signature_count": 0
     },
     {
       "id": "memory-intelligence-6",
@@ -771,7 +792,8 @@
       "commit_sha": "a59786be9497febe94e47a035855c2b9f9627638",
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-intelligence-6",
-      "mission_id": "PRODUCT-memory-intelligence"
+      "mission_id": "PRODUCT-memory-intelligence",
+      "same_signature_count": 0
     },
     {
       "id": "memory-intelligence-8",
@@ -800,7 +822,8 @@
       "commit_sha": "1a2cbc260579a4cadb77f757475eb4537d2a7d28",
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-intelligence-8",
-      "mission_id": "PRODUCT-memory-intelligence"
+      "mission_id": "PRODUCT-memory-intelligence",
+      "same_signature_count": 0
     },
     {
       "id": "memory-intelligence-9",
@@ -819,7 +842,8 @@
       "commit_sha": "743f5fe69b2acfa06b8113e57c1d0b801bce46b3",
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-intelligence-9",
-      "mission_id": "PRODUCT-memory-intelligence"
+      "mission_id": "PRODUCT-memory-intelligence",
+      "same_signature_count": 0
     },
     {
       "id": "memory-intelligence-10",
@@ -838,7 +862,8 @@
       "commit_sha": "e08e13529845dcfbc60588cd58c0a589a59db0df",
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-intelligence-10",
-      "mission_id": "PRODUCT-memory-intelligence"
+      "mission_id": "PRODUCT-memory-intelligence",
+      "same_signature_count": 0
     },
     {
       "id": "memory-intelligence-11",
@@ -871,7 +896,8 @@
       "commit_sha": "bb8927582797dac480180300750dbc6d4d3a591a",
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-intelligence-11",
-      "mission_id": "PRODUCT-memory-intelligence"
+      "mission_id": "PRODUCT-memory-intelligence",
+      "same_signature_count": 0
     },
     {
       "id": "memory-intelligence-12",
@@ -909,7 +935,8 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-intelligence-12",
-      "mission_id": "PRODUCT-memory-intelligence"
+      "mission_id": "PRODUCT-memory-intelligence",
+      "same_signature_count": 0
     },
     {
       "id": "memory-intelligence-7",
@@ -945,7 +972,8 @@
       "shipped_at": "2026-07-16T05:51:35.226Z",
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-intelligence-7",
-      "mission_id": "PRODUCT-memory-intelligence"
+      "mission_id": "PRODUCT-memory-intelligence",
+      "same_signature_count": 0
     },
     {
       "id": "memory-intelligence-step1",
@@ -965,7 +993,8 @@
       "commit_sha": "9f1a30cd40229b8198236b912ec23fb6c24a9004",
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-intelligence-step1",
-      "mission_id": "PRODUCT-memory-intelligence"
+      "mission_id": "PRODUCT-memory-intelligence",
+      "same_signature_count": 0
     },
     {
       "id": "memory-intelligence-step2",
@@ -985,7 +1014,8 @@
       "commit_sha": "baa128e38c4cfcee70a5e19b9a752b6861537727",
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-intelligence-step2",
-      "mission_id": "PRODUCT-memory-intelligence"
+      "mission_id": "PRODUCT-memory-intelligence",
+      "same_signature_count": 0
     },
     {
       "id": "memory-intelligence-step3",
@@ -1022,7 +1052,8 @@
       "shipped_at": "2026-07-16T07:21:59.563Z",
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-intelligence-step3",
-      "mission_id": "PRODUCT-memory-intelligence"
+      "mission_id": "PRODUCT-memory-intelligence",
+      "same_signature_count": 0
     },
     {
       "id": "memory-intelligence-step4",
@@ -1041,7 +1072,8 @@
       "commit_sha": "e16d21cccbcb064cdc790dd167d9bc3071bb8841",
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-intelligence-step4",
-      "mission_id": "PRODUCT-memory-intelligence"
+      "mission_id": "PRODUCT-memory-intelligence",
+      "same_signature_count": 0
     },
     {
       "id": "memory-intelligence-step5",
@@ -1078,7 +1110,8 @@
       "shipped_at": "2026-07-17T18:56:33.077Z",
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-intelligence-step5",
-      "mission_id": "PRODUCT-memory-intelligence"
+      "mission_id": "PRODUCT-memory-intelligence",
+      "same_signature_count": 0
     },
     {
       "id": "memory-intelligence-step6",
@@ -1124,7 +1157,8 @@
       "shipped_at": "2026-07-17T18:46:54.125Z",
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-intelligence-step6",
-      "mission_id": "PRODUCT-memory-intelligence"
+      "mission_id": "PRODUCT-memory-intelligence",
+      "same_signature_count": 0
     },
     {
       "id": "memory-intelligence-step7",
@@ -1158,7 +1192,8 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "same_signature_count": 0
     },
     {
       "id": "memory-intelligence-step8",
@@ -1177,7 +1212,8 @@
       "commit_sha": "a1dacdbded9990c59681712f04dae22fa16d086d",
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-intelligence-step8",
-      "mission_id": "PRODUCT-memory-intelligence"
+      "mission_id": "PRODUCT-memory-intelligence",
+      "same_signature_count": 0
     },
     {
       "id": "memory-intelligence-step9",
@@ -1212,7 +1248,8 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-intelligence-step9",
-      "mission_id": "PRODUCT-memory-intelligence"
+      "mission_id": "PRODUCT-memory-intelligence",
+      "same_signature_count": 0
     },
     {
       "id": "memory-intelligence-step10",
@@ -1241,7 +1278,8 @@
       "commit_sha": "2726ae59d3c7b0a38891565388af0b3fae94c32b",
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-intelligence-step10",
-      "mission_id": "PRODUCT-memory-intelligence"
+      "mission_id": "PRODUCT-memory-intelligence",
+      "same_signature_count": 0
     },
     {
       "id": "memory-intelligence-step11",
@@ -1270,11 +1308,13 @@
       "commit_sha": "af0c01708b4a0df5d282621affcb162d6b89f6fa",
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-intelligence-step11",
-      "mission_id": "PRODUCT-memory-intelligence"
+      "mission_id": "PRODUCT-memory-intelligence",
+      "same_signature_count": 0
     }
   ],
   "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-memory-intelligence",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:12:24.196Z"
+  "updated_at": "2026-08-01T06:30:41.002Z",
+  "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/memory-intelligence/BUILD_QUEUE.json"
 }

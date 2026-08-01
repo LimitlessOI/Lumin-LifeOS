@@ -90,6 +90,10 @@ export async function setupClientBillingFlow(deps, payload) {
   }
 }
 
+// Backward-compatible aliases for queued blueprint expectations (white-label-5, white-label-step4).
+export const setupPartnerBilling = setupPartnerBillingFlow;
+export const createPartnerBillingSession = setupPartnerBillingFlow;
+
 // The previous file had `createPartnerBillingSession`.
 // The task requires `setupPartnerBillingFlow` and `setupClientBillingFlow`.
 // The `createPartnerBillingSession` is not explicitly requested in the final exports,

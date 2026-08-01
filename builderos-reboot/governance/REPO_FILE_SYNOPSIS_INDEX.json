@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T06:03:16.312Z",
+  "generated_at": "2026-08-01T06:36:53.017Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12676,
+  "file_count": 12677,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -37440,6 +37440,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "db/migrations/persist_provider_cooldowns.sql",
+      "synopsis": "Database migration — persist_provider_cooldowns.sql.",
+      "bytes": 864,
+      "mtime": "2026-08-01T06:21:27.515Z",
+      "indexed_at": "2026-08-01T06:36:53.017Z"
+    },
+    {
       "path": "db/migrations/update_user_trials_table.sql",
       "synopsis": "Ensure user_trials columns/indexes exist, idempotently.",
       "bytes": 500,
@@ -40977,9 +40984,9 @@
     {
       "path": "docs/products/ai-council/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — AI Council",
-      "bytes": 75189,
-      "mtime": "2026-08-01T05:06:09.469Z",
-      "indexed_at": "2026-08-01T05:06:09.469Z"
+      "bytes": 76065,
+      "mtime": "2026-08-01T06:21:27.515Z",
+      "indexed_at": "2026-08-01T06:36:53.017Z"
     },
     {
       "path": "docs/products/ai-receptionist/FILE_MANIFEST.json",
@@ -41129,9 +41136,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 374241,
-      "mtime": "2026-08-01T06:03:16.312Z",
-      "indexed_at": "2026-08-01T06:03:16.312Z"
+      "bytes": 374758,
+      "mtime": "2026-08-01T06:36:34.295Z",
+      "indexed_at": "2026-08-01T06:36:53.017Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -42550,9 +42557,9 @@
     {
       "path": "docs/products/white-label/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — White Label",
-      "bytes": 8572,
-      "mtime": "2026-07-05T19:15:02.713Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 9416,
+      "mtime": "2026-08-01T06:21:27.515Z",
+      "indexed_at": "2026-08-01T06:36:53.017Z"
     },
     {
       "path": "docs/products/WHITELABEL.md",
@@ -66072,9 +66079,9 @@
     {
       "path": "products/receipts/POINT_B_DNA_VERIFY.json",
       "synopsis": "Product receipt — POINT B DNA VERIFY.",
-      "bytes": 280,
-      "mtime": "2026-08-01T03:43:51.755Z",
-      "indexed_at": "2026-08-01T03:43:51.755Z",
+      "bytes": 318,
+      "mtime": "2026-08-01T06:35:35.531Z",
+      "indexed_at": "2026-08-01T06:36:53.017Z",
       "synopsis_index_only": true
     },
     {
@@ -66088,9 +66095,9 @@
     {
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
-      "bytes": 18509,
-      "mtime": "2026-08-01T03:43:51.755Z",
-      "indexed_at": "2026-08-01T03:43:51.755Z",
+      "bytes": 25687,
+      "mtime": "2026-08-01T06:35:35.139Z",
+      "indexed_at": "2026-08-01T06:36:53.017Z",
       "synopsis_index_only": true
     },
     {
@@ -66280,17 +66287,17 @@
     {
       "path": "products/receipts/TRUTH_ENFORCEMENT_AUDIT.json",
       "synopsis": "Product receipt — TRUTH ENFORCEMENT AUDIT.",
-      "bytes": 701,
-      "mtime": "2026-08-01T03:43:51.755Z",
-      "indexed_at": "2026-08-01T03:43:51.755Z",
+      "bytes": 833,
+      "mtime": "2026-08-01T06:35:35.671Z",
+      "indexed_at": "2026-08-01T06:36:53.017Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/TRUTH_LOCKDOWN_VERIFY.json",
       "synopsis": "Product receipt — TRUTH LOCKDOWN VERIFY.",
-      "bytes": 1141,
-      "mtime": "2026-08-01T03:43:51.755Z",
-      "indexed_at": "2026-08-01T03:43:51.755Z",
+      "bytes": 1318,
+      "mtime": "2026-08-01T06:35:35.447Z",
+      "indexed_at": "2026-08-01T06:36:53.017Z",
       "synopsis_index_only": true
     },
     {
@@ -66320,9 +66327,9 @@
     {
       "path": "products/receipts/WISDOM_TRUTH_AUDIT.json",
       "synopsis": "Product receipt — WISDOM TRUTH AUDIT.",
-      "bytes": 735,
-      "mtime": "2026-08-01T03:43:51.755Z",
-      "indexed_at": "2026-08-01T03:43:51.755Z",
+      "bytes": 1001,
+      "mtime": "2026-08-01T06:35:35.771Z",
+      "indexed_at": "2026-08-01T06:36:53.017Z",
       "synopsis_index_only": true
     },
     {
@@ -75054,10 +75061,10 @@
     },
     {
       "path": "scripts/self-heal-build-queue.mjs",
-      "synopsis": "Deterministic BUILD_QUEUE self-healer. Re-evaluates every non-done step",
-      "bytes": 4572,
-      "mtime": "2026-08-01T06:03:16.312Z",
-      "indexed_at": "2026-08-01T06:03:16.312Z",
+      "synopsis": "Deterministic BUILD_QUEUE self-healer. Re-evaluates every step with",
+      "bytes": 3404,
+      "mtime": "2026-08-01T06:21:27.515Z",
+      "indexed_at": "2026-08-01T06:36:53.017Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -87636,9 +87643,9 @@
     {
       "path": "services/build-integration-context.js",
       "synopsis": "Real integration context for the autonomous /build call — live DB",
-      "bytes": 17924,
-      "mtime": "2026-08-01T01:41:57.291Z",
-      "indexed_at": "2026-08-01T01:41:57.291Z",
+      "bytes": 19970,
+      "mtime": "2026-08-01T06:21:27.515Z",
+      "indexed_at": "2026-08-01T06:36:53.017Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -93376,9 +93383,9 @@
     {
       "path": "services/never-stop-product-factory.js",
       "synopsis": "Permanent product expansion lane — work exists even when BP_PRIORITY queue reads complete.",
-      "bytes": 82393,
-      "mtime": "2026-08-01T01:21:50.595Z",
-      "indexed_at": "2026-08-01T01:21:50.595Z",
+      "bytes": 82651,
+      "mtime": "2026-08-01T06:30:15.443Z",
+      "indexed_at": "2026-08-01T06:36:53.017Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -93586,9 +93593,9 @@
     {
       "path": "services/partner-key-scheme.js",
       "synopsis": "Generates API keys for partners and the platform.",
-      "bytes": 2215,
-      "mtime": "2026-08-01T05:52:13.481Z",
-      "indexed_at": "2026-08-01T05:52:13.481Z",
+      "bytes": 2354,
+      "mtime": "2026-08-01T06:21:27.515Z",
+      "indexed_at": "2026-08-01T06:36:53.017Z",
       "ssot": [
         "docs/products/white-label/PRODUCT_HOME.md"
       ]
@@ -95179,9 +95186,9 @@
     {
       "path": "services/stripe-billing-separation.js",
       "synopsis": "Separate Stripe billing flow for partners and direct clients.",
-      "bytes": 4304,
-      "mtime": "2026-08-01T05:52:47.557Z",
-      "indexed_at": "2026-08-01T05:52:47.557Z",
+      "bytes": 4534,
+      "mtime": "2026-08-01T06:21:27.515Z",
+      "indexed_at": "2026-08-01T06:36:53.017Z",
       "ssot": [
         "docs/products/white-label/PRODUCT_HOME.md",
         "docs/products/white-label/PRODUCT_HOME.md"

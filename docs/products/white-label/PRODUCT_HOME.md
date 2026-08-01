@@ -11,12 +11,12 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/white-label/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-05 |
+| **Last Updated** | 2026-08-02 |
 
 ---
 **Status:** BUILDING
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-07-05 — route import/registration crash repaired.
+**Last Updated:** 2026-08-02 — false-done export aliases fixed; BUILD_QUEUE expectations aligned with built artifacts.
 
 ---
 
@@ -140,4 +140,5 @@ GoHighLevel sells agencies a white-label CRM; LifeOS sells agencies a white-labe
 
 | Date | What Changed | Why | Verified |
 |---|---|---|---|
+| 2026-08-02 | `services/stripe-billing-separation.js` and `services/partner-key-scheme.js` now export backward-compatible aliases (`setupPartnerBilling`, `createPartnerBillingSession`, `generatePartnerKey`) and `docs/products/white-label/BUILD_QUEUE.json` `white-label-step3` expectations were aligned with the actual crypto-based key implementation. | The never-stop factory `audit-false-done-steps` found HARD false-dones: the built artifacts existed but the queued expected exports were singular/legacy names, and `partner-key-scheme.js` was expected to contain `schema.define('partnerKey'` while the artifact uses `crypto.randomBytes`. | `node --check services/stripe-billing-separation.js`; `node --check services/partner-key-scheme.js`; `node --test tests/spine-import-resolution.test.js` |
 | 2026-07-05 | `routes/white-label-routes.js` removed the dead `services/council-member.js` import, added its `@ssot` tag, reads `pool`/`requireKey`/`callCouncilMember` from context, and `startup/register-runtime-routes.js` now passes `callCouncilMember` into the route factory. | The route-surface import guard caught a boot-crash risk, and full-runtime registration would also throw because the factory read dependencies from the Express app object. | `node --test tests/spine-import-resolution.test.js`; `node --check routes/white-label-routes.js startup/register-runtime-routes.js` |

@@ -273,6 +273,34 @@ export function buildIntegrationContext({
     lines.push(`}`);
     lines.push(`\`\`\``);
     lines.push('- SERVICE RULES: Do NOT create `new Pool()`. Do NOT import `pg`. Do NOT import a logger from a repo path. Do NOT import sibling files you have not confirmed exist. Do NOT include example usage or `if (require.main === module)` guards.');
+  } else if (/^db\/migrations\/.+\.sql$/i.test(targetFile)) {
+    const base = path.basename(targetFile).replace(/\.sql$/i, '');
+    const ssotHome = productId ? `docs/products/${productId}/PRODUCT_HOME.md` : 'docs/products/<product>/PRODUCT_HOME.md';
+    lines.push('');
+    lines.push('MIGRATION-SPECIFIC FILE RULES (this is a plain PostgreSQL DDL migration file, NOT JavaScript):');
+    lines.push('- The file MUST start with exactly this SQL comment (no other text before it):');
+    lines.push('```sql');
+    lines.push(`-- SYNOPSIS: Database migration — ${base}.sql.`);
+    lines.push('```');
+    lines.push('- Output plain PostgreSQL DDL only. Use `CREATE TABLE IF NOT EXISTS`, `CREATE INDEX IF NOT EXISTS`, `ALTER TABLE ... ADD COLUMN IF NOT EXISTS`. No JS `import`/`export`/`async`/`function`/`pool.query`/`client.query`. No triple-backtick fences. No JSON manifest.');
+    lines.push('- SQL comments must use `--` only. Do NOT use JavaScript `//` or `/* */` style comments.');
+    lines.push('- If the step declares `file_contains`, each listed substring MUST appear verbatim in the generated SQL.');
+    if (fileContains.length) {
+      lines.push(`- REQUIRED SUBSTRINGS: ${fileContains.map((s) => `\`${s}\``).join(', ')}`);
+    }
+    lines.push('- Use the exact pattern below. Replace table/column names with values from LIVE DB SCHEMA where known:');
+    lines.push('```sql');
+    lines.push(`-- SYNOPSIS: Database migration — ${base}.sql.`);
+    lines.push(`-- @ssot ${ssotHome}`);
+    lines.push('CREATE TABLE IF NOT EXISTS example_table (');
+    lines.push('    id SERIAL PRIMARY KEY,');
+    lines.push('    key_col TEXT NOT NULL,');
+    lines.push('    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP');
+    lines.push(');');
+    lines.push('');
+    lines.push('CREATE INDEX IF NOT EXISTS idx_example_key_col ON example_table(key_col);');
+    lines.push('```');
+    lines.push('- MIGRATION RULES: Do NOT wrap SQL in a JS function. Do NOT emit `module.exports` or `export`. Do NOT use template-literal backticks around SQL.');
   }
 
   lines.push('');

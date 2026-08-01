@@ -51,7 +51,8 @@
       "shipped_at": "2026-07-15T09:26:02.183Z",
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "1",
-      "mission_id": "PRODUCT-business-tools"
+      "mission_id": "PRODUCT-business-tools",
+      "same_signature_count": 0
     },
     {
       "id": "2",
@@ -101,11 +102,12 @@
       "shipped_at": "2026-07-15T08:41:15.857Z",
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "2",
-      "mission_id": "PRODUCT-business-tools"
+      "mission_id": "PRODUCT-business-tools",
+      "same_signature_count": 0
     },
     {
       "id": "3",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/realEstateCurriculum.js",
       "task": "define virtual real estate curriculum",
       "spec": "Create structure for virtual real estate class curriculum; define module structure and student DB schema.",
@@ -134,11 +136,15 @@
       "commit_sha": "057f8f1950a637cdb67a901220be34cb7abf20d4",
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "3",
-      "mission_id": "PRODUCT-business-tools"
+      "mission_id": "PRODUCT-business-tools",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: curriculum; DB schema",
+      "heal_unblocked": true
     },
     {
       "id": "4",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/migrations/create_user_trials_table.sql",
       "task": "create user_trials table schema",
       "spec": "Define schema for user_trials table; includes user_id, trial_start and trial_end timestamps.",
@@ -156,7 +162,11 @@
       "commit_sha": "140ae4e01e639060c249be22a658b4a61517595d",
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "4",
-      "mission_id": "PRODUCT-business-tools"
+      "mission_id": "PRODUCT-business-tools",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: trial_start; trial_end",
+      "heal_unblocked": true
     },
     {
       "id": "5",
@@ -204,11 +214,12 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "5",
-      "mission_id": "PRODUCT-business-tools"
+      "mission_id": "PRODUCT-business-tools",
+      "same_signature_count": 0
     },
     {
       "id": "6",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/server.approvals.js",
       "task": "implement approvals timeout",
       "spec": "Add non-negotiable 48-hour approval system timeout and auto-reject for controversies.",
@@ -237,11 +248,15 @@
       "commit_sha": "294657cf37b69eb7b48e55e19ad97fb4dbf77f43",
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "6",
-      "mission_id": "PRODUCT-business-tools"
+      "mission_id": "PRODUCT-business-tools",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: setTimeout; 48h auto-reject",
+      "heal_unblocked": true
     },
     {
       "id": "step1",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/makeGenerator.js",
       "task": "Document Make.com JSON schema",
       "spec": "Generator must output valid and documented Make.com JSON schema for scenario import.",
@@ -272,7 +287,11 @@
       "commit_sha": "9aa0a0ed51de931ebdec9d7e3733df4f89451fea",
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step1",
-      "mission_id": "PRODUCT-business-tools"
+      "mission_id": "PRODUCT-business-tools",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: \"type\": \"object\"",
+      "heal_unblocked": true
     },
     {
       "id": "step2",
@@ -294,11 +313,12 @@
       "commit_sha": "7065e62b8281574de07df008cdb08a76c3857ecf",
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step2",
-      "mission_id": "PRODUCT-business-tools"
+      "mission_id": "PRODUCT-business-tools",
+      "same_signature_count": 0
     },
     {
       "id": "step3",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/entitlements.js",
       "task": "Specify entitlements gating",
       "spec": "Describe how project_entitlements controls feature access per request.",
@@ -330,7 +350,11 @@
       "commit_sha": "ddcc76d677fda07be390bfc79df89cb87e2e0f3d",
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step3",
-      "mission_id": "PRODUCT-business-tools"
+      "mission_id": "PRODUCT-business-tools",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: project_entitlements; gating strategy",
+      "heal_unblocked": true
     },
     {
       "id": "step4",
@@ -364,11 +388,12 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step4",
-      "mission_id": "PRODUCT-business-tools"
+      "mission_id": "PRODUCT-business-tools",
+      "same_signature_count": 0
     },
     {
       "id": "step5",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/issueApprovalRoutes.js",
       "task": "Create approval routes",
       "spec": "Implement routes for approval system, including auto-reject functionality.",
@@ -400,11 +425,15 @@
       "commit_sha": "2a6b2fb831e098816994c4e2fcf200399aaca145",
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step5",
-      "mission_id": "PRODUCT-business-tools"
+      "mission_id": "PRODUCT-business-tools",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: approval_timeout",
+      "heal_unblocked": true
     },
     {
       "id": "step6",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/entitlementRoutes.js",
       "task": "Create entitlement routes",
       "spec": "Expose entitlements via endpoint to validate feature accesses.",
@@ -436,7 +465,11 @@
       "commit_sha": "c98db53b16bb3cc48bf49dec3dff2bc23d8ab9e3",
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step6",
-      "mission_id": "PRODUCT-business-tools"
+      "mission_id": "PRODUCT-business-tools",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: checkEntitlements",
+      "heal_unblocked": true
     },
     {
       "id": "step7",
@@ -474,11 +507,12 @@
       "shipped_at": "2026-07-16T05:19:28.591Z",
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step7",
-      "mission_id": "PRODUCT-business-tools"
+      "mission_id": "PRODUCT-business-tools",
+      "same_signature_count": 0
     },
     {
       "id": "step8",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/curriculumRoutes.js",
       "task": "Create curriculum routes",
       "spec": "Create endpoints for virtual real estate curriculum access.",
@@ -510,7 +544,11 @@
       "commit_sha": "5b06728a74ad3f83f1a8593b4c0482b14f6a46cd",
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step8",
-      "mission_id": "PRODUCT-business-tools"
+      "mission_id": "PRODUCT-business-tools",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: real_estate_curriculum",
+      "heal_unblocked": true
     },
     {
       "id": "step9",
@@ -531,11 +569,12 @@
       "commit_sha": "cccd34bfbed76bbd6b974fb5dd2ac7ad6e36c4ba",
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step9",
-      "mission_id": "PRODUCT-business-tools"
+      "mission_id": "PRODUCT-business-tools",
+      "same_signature_count": 0
     },
     {
       "id": "step10",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/extractRoutes.js",
       "task": "Extract sub-features from server.js",
       "spec": "Sub-features must be extracted from server.js to individual route files.",
@@ -566,7 +605,11 @@
       "commit_sha": "96d41e8c394ce7c85b887e93df7c229c067aeddc",
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step10",
-      "mission_id": "PRODUCT-business-tools"
+      "mission_id": "PRODUCT-business-tools",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: extraction logic",
+      "heal_unblocked": true
     },
     {
       "id": "7",
@@ -615,7 +658,8 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "same_signature_count": 0
     },
     {
       "id": "8",
@@ -662,7 +706,8 @@
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "8",
       "mission_id": "PRODUCT-business-tools",
-      "reaudit_reset_at": "2026-07-30T18:55:06.365Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.365Z",
+      "same_signature_count": 0
     },
     {
       "id": "business-tools-1",
@@ -781,7 +826,8 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "business-tools-2",
-      "mission_id": "PRODUCT-business-tools"
+      "mission_id": "PRODUCT-business-tools",
+      "same_signature_count": 0
     },
     {
       "id": "business-tools-3",
@@ -864,7 +910,8 @@
       "escalation_required": true,
       "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
       "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
-      "escalated_at": "2026-07-31T18:40:13.618Z"
+      "escalated_at": "2026-07-31T18:40:13.618Z",
+      "same_signature_count": 0
     },
     {
       "id": "business-tools-4",
@@ -901,11 +948,12 @@
       "shipped_at": "2026-07-16T05:31:53.453Z",
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "business-tools-4",
-      "mission_id": "PRODUCT-business-tools"
+      "mission_id": "PRODUCT-business-tools",
+      "same_signature_count": 0
     },
     {
       "id": "business-tools-5",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/entitlementsFeatureGating.js",
       "task": "specify feature gating",
       "spec": "Define how project entitlements gate features per request.",
@@ -934,11 +982,15 @@
       "commit_sha": "de5e6791ab043f5ee6fb781c6fddb08d41c3c49b",
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "business-tools-5",
-      "mission_id": "PRODUCT-business-tools"
+      "mission_id": "PRODUCT-business-tools",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: project_entitlements; gate features",
+      "heal_unblocked": true
     },
     {
       "id": "business-tools-6",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/implementApprovalTimeout.js",
       "task": "implement approval timeout",
       "spec": "Add functionality for 48h auto-reject in the approval system.",
@@ -967,7 +1019,11 @@
       "commit_sha": "e067d20134b534581588c4df49b7aa2afaa17230",
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "business-tools-6",
-      "mission_id": "PRODUCT-business-tools"
+      "mission_id": "PRODUCT-business-tools",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: 48h",
+      "heal_unblocked": true
     },
     {
       "id": "business-tools-7",
@@ -1005,7 +1061,8 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "business-tools-7",
-      "mission_id": "PRODUCT-business-tools"
+      "mission_id": "PRODUCT-business-tools",
+      "same_signature_count": 0
     },
     {
       "id": "business-tools-step1",
@@ -1041,7 +1098,8 @@
       "shipped_at": "2026-07-16T07:01:58.571Z",
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "business-tools-step1",
-      "mission_id": "PRODUCT-business-tools"
+      "mission_id": "PRODUCT-business-tools",
+      "same_signature_count": 0
     },
     {
       "id": "business-tools-step2",
@@ -1057,7 +1115,8 @@
       "commit_sha": "0f78df5ffeb9ce30f138a7ba6298919c17c6bc01",
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "business-tools-step2",
-      "mission_id": "PRODUCT-business-tools"
+      "mission_id": "PRODUCT-business-tools",
+      "same_signature_count": 0
     },
     {
       "id": "business-tools-step3",
@@ -1093,7 +1152,8 @@
       "shipped_at": "2026-07-16T07:28:50.333Z",
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "business-tools-step3",
-      "mission_id": "PRODUCT-business-tools"
+      "mission_id": "PRODUCT-business-tools",
+      "same_signature_count": 0
     },
     {
       "id": "business-tools-step4",
@@ -1129,7 +1189,8 @@
       "shipped_at": "2026-07-17T17:53:36.503Z",
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "business-tools-step4",
-      "mission_id": "PRODUCT-business-tools"
+      "mission_id": "PRODUCT-business-tools",
+      "same_signature_count": 0
     },
     {
       "id": "business-tools-step5",
@@ -1145,7 +1206,8 @@
       "commit_sha": "d55080b7022ca6925d8b12a56d38a045ebf8e185",
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "business-tools-step5",
-      "mission_id": "PRODUCT-business-tools"
+      "mission_id": "PRODUCT-business-tools",
+      "same_signature_count": 0
     },
     {
       "id": "business-tools-step6",
@@ -1174,11 +1236,13 @@
       "commit_sha": "3ac4bdf3166befb55f89ffc9ec60434fcfdb654a",
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "business-tools-step6",
-      "mission_id": "PRODUCT-business-tools"
+      "mission_id": "PRODUCT-business-tools",
+      "same_signature_count": 0
     }
   ],
   "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-business-tools",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:12:08.714Z"
+  "updated_at": "2026-08-01T06:30:26.228Z",
+  "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/business-tools/BUILD_QUEUE.json"
 }

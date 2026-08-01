@@ -3,7 +3,7 @@
   "product_id": "site-builder",
   "verify_script": "scripts/sentry-site-builder-prealpha-gate.mjs",
   "notes": "Structured, ordered build steps the autonomous product-build orchestrator executes one at a time via the /build primitive. Each step is a single-file, well-specified task with a concrete acceptance. Free-form prose build plans live in PRODUCT_HOME; THIS file is the machine-executable queue. COMPLETION GATE (SO-002): verify_script runs the SENTRY two-layer pre-alpha gate — Layer A (structural HTTP) always, Layer B (human-sim real browser + UX critique) whenever prod creds are present — and fails closed. No step is 'done' until SENTRY passes as a real client. Prior lane check (scripts/verify-site-builder-lane.mjs) still runnable via `npm run verify:site-builder`.",
-  "updated_at": "2026-08-01T06:12:34.823Z",
+  "updated_at": "2026-08-01T06:30:50.966Z",
   "steps": [
     {
       "id": "sb-deliverability-gate",
@@ -74,7 +74,8 @@
       "proof": "Built autonomously via /build primitive; verified deterministic FNV-1a assignment, near-uniform distribution (996/995/1009 across 3000 ids), input validation, custom-variant support.",
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "sb-ab-subject-testing",
-      "mission_id": "PRODUCT-site-builder"
+      "mission_id": "PRODUCT-site-builder",
+      "same_signature_count": 0
     },
     {
       "id": "sb-preview-expiry-sweep",
@@ -89,7 +90,8 @@
       "proof": "Built autonomously by the never-stop loop after activation on prod (lumin-web service). 227-line dry-run-safe script: TTL validation/defaults, SWEEP_APPLY gate, path-traversal guard, JSON summary. node --check passes.",
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "sb-preview-expiry-sweep",
-      "mission_id": "PRODUCT-site-builder"
+      "mission_id": "PRODUCT-site-builder",
+      "same_signature_count": 0
     },
     {
       "id": "sb-editor-sidebar",
@@ -106,7 +108,8 @@
       "proof": "Built by Cursor agent session 2026-07-07; services/site-builder-editor-sidebar.js committed in repo.",
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "sb-editor-sidebar",
-      "mission_id": "PRODUCT-site-builder"
+      "mission_id": "PRODUCT-site-builder",
+      "same_signature_count": 0
     },
     {
       "id": "sb-editor-canvas",
@@ -123,7 +126,8 @@
       "proof": "Built by Cursor agent session 2026-07-07; services/site-builder-editor-canvas.js committed in repo.",
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "sb-editor-canvas",
-      "mission_id": "PRODUCT-site-builder"
+      "mission_id": "PRODUCT-site-builder",
+      "same_signature_count": 0
     },
     {
       "id": "sb-editor-chat",
@@ -140,7 +144,8 @@
       "proof": "Built by Cursor agent session 2026-07-07; services/site-builder-editor-chat.js committed in repo.",
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "sb-editor-chat",
-      "mission_id": "PRODUCT-site-builder"
+      "mission_id": "PRODUCT-site-builder",
+      "same_signature_count": 0
     },
     {
       "id": "sb-editor-strategy",
@@ -157,7 +162,8 @@
       "proof": "Built by Cursor agent session 2026-07-07; services/site-builder-editor-strategy.js committed in repo.",
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "sb-editor-strategy",
-      "mission_id": "PRODUCT-site-builder"
+      "mission_id": "PRODUCT-site-builder",
+      "same_signature_count": 0
     },
     {
       "id": "sb-editor-shell",
@@ -177,7 +183,8 @@
       "proof": "Built by Cursor agent session 2026-07-07; services/site-builder-editor.js",
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "sb-editor-shell",
-      "mission_id": "PRODUCT-site-builder"
+      "mission_id": "PRODUCT-site-builder",
+      "same_signature_count": 0
     },
     {
       "id": "sb-editor-endpoints",
@@ -193,7 +200,8 @@
       "proof": "Built by Cursor agent session 2026-07-07; routes/site-builder-editor-routes.js",
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "sb-editor-endpoints",
-      "mission_id": "PRODUCT-site-builder"
+      "mission_id": "PRODUCT-site-builder",
+      "same_signature_count": 0
     },
     {
       "id": "sb-competitor-categories",
@@ -208,7 +216,8 @@
       "proof": "Built autonomously by the never-stop loop once the prod GitHub token was restored; committed as services/site-builder-competitor-categories.js. node --check passes.",
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "sb-competitor-categories",
-      "mission_id": "PRODUCT-site-builder"
+      "mission_id": "PRODUCT-site-builder",
+      "same_signature_count": 0
     },
     {
       "id": "sb-social-discovery",
@@ -224,7 +233,8 @@
       "completed_at": "2026-07-07T21:48:09.306Z",
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "sb-social-discovery",
-      "mission_id": "PRODUCT-site-builder"
+      "mission_id": "PRODUCT-site-builder",
+      "same_signature_count": 0
     },
     {
       "id": "sb-service-catalog",
@@ -238,7 +248,8 @@
       "proof": "Built by Cursor agent session 2026-07-07; services/site-builder-service-catalog.js prices wired from config/site-builder-pricing.js",
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "sb-service-catalog",
-      "mission_id": "PRODUCT-site-builder"
+      "mission_id": "PRODUCT-site-builder",
+      "same_signature_count": 0
     },
     {
       "id": "sb-editor-onboarding-copy",
@@ -257,7 +268,8 @@
       "completed_at": "2026-07-08T06:07:18.318Z",
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "sb-editor-onboarding-copy",
-      "mission_id": "PRODUCT-site-builder"
+      "mission_id": "PRODUCT-site-builder",
+      "same_signature_count": 0
     },
     {
       "id": "step-1",
@@ -273,7 +285,8 @@
       "completed_at": "2026-07-10T21:08:56.342Z",
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step-1",
-      "mission_id": "PRODUCT-site-builder"
+      "mission_id": "PRODUCT-site-builder",
+      "same_signature_count": 0
     },
     {
       "id": "step-2",
@@ -291,7 +304,8 @@
       "completed_at": "2026-07-10T21:12:15.674Z",
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step-2",
-      "mission_id": "PRODUCT-site-builder"
+      "mission_id": "PRODUCT-site-builder",
+      "same_signature_count": 0
     },
     {
       "id": "step-3",
@@ -307,7 +321,8 @@
       "completed_at": "2026-07-10T21:14:59.670Z",
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step-3",
-      "mission_id": "PRODUCT-site-builder"
+      "mission_id": "PRODUCT-site-builder",
+      "same_signature_count": 0
     },
     {
       "id": "step-4",
@@ -327,7 +342,8 @@
       "last_error": null,
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step-4",
-      "mission_id": "PRODUCT-site-builder"
+      "mission_id": "PRODUCT-site-builder",
+      "same_signature_count": 0
     },
     {
       "id": "step-5",
@@ -344,7 +360,8 @@
       "completed_at": "2026-07-11T08:55:00.000Z",
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step-5",
-      "mission_id": "PRODUCT-site-builder"
+      "mission_id": "PRODUCT-site-builder",
+      "same_signature_count": 0
     },
     {
       "id": "step-6",
@@ -360,7 +377,8 @@
       "commit_sha": "948f412500d3e58c0194226e00eac2058347c41d",
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step-6",
-      "mission_id": "PRODUCT-site-builder"
+      "mission_id": "PRODUCT-site-builder",
+      "same_signature_count": 0
     },
     {
       "id": "step-7",
@@ -378,7 +396,8 @@
       "commit_sha": "6a6b83bf2d598b9b1709e8634b35d5f84b71c9f8",
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step-7",
-      "mission_id": "PRODUCT-site-builder"
+      "mission_id": "PRODUCT-site-builder",
+      "same_signature_count": 0
     },
     {
       "id": "step-8",
@@ -394,7 +413,8 @@
       "commit_sha": "652f0c09d1c6abdd2c959bbb7e15077add2fb347",
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step-8",
-      "mission_id": "PRODUCT-site-builder"
+      "mission_id": "PRODUCT-site-builder",
+      "same_signature_count": 0
     },
     {
       "id": "step-9",
@@ -412,7 +432,8 @@
       "commit_sha": "e054c4d1f5e510a08cf6d54fb6031437a7dc6c0d",
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step-9",
-      "mission_id": "PRODUCT-site-builder"
+      "mission_id": "PRODUCT-site-builder",
+      "same_signature_count": 0
     },
     {
       "id": "step-10",
@@ -428,7 +449,8 @@
       "commit_sha": "aba09128e4a4ba2da57e7d1987969e23d6d054e2",
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step-10",
-      "mission_id": "PRODUCT-site-builder"
+      "mission_id": "PRODUCT-site-builder",
+      "same_signature_count": 0
     },
     {
       "id": "step-01",
@@ -444,7 +466,8 @@
       "completed_at": "2026-07-11T09:05:19.931Z",
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step-01",
-      "mission_id": "PRODUCT-site-builder"
+      "mission_id": "PRODUCT-site-builder",
+      "same_signature_count": 0
     },
     {
       "id": "step-02",
@@ -462,7 +485,8 @@
       "completed_at": "2026-07-11T09:07:16.932Z",
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step-02",
-      "mission_id": "PRODUCT-site-builder"
+      "mission_id": "PRODUCT-site-builder",
+      "same_signature_count": 0
     },
     {
       "id": "step-03",
@@ -479,7 +503,8 @@
       "completed_at": "2026-07-11T12:55:00.000Z",
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step-03",
-      "mission_id": "PRODUCT-site-builder"
+      "mission_id": "PRODUCT-site-builder",
+      "same_signature_count": 0
     },
     {
       "id": "step-05",
@@ -494,7 +519,8 @@
       "completed_at": "2026-07-11T12:55:00.000Z",
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step-05",
-      "mission_id": "PRODUCT-site-builder"
+      "mission_id": "PRODUCT-site-builder",
+      "same_signature_count": 0
     },
     {
       "id": "step-06",
@@ -525,7 +551,8 @@
       "commit_sha": "855533e53f1ec5870fe2dc540905afc38d410b6e",
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step-06",
-      "mission_id": "PRODUCT-site-builder"
+      "mission_id": "PRODUCT-site-builder",
+      "same_signature_count": 0
     },
     {
       "id": "step-07",
@@ -556,7 +583,8 @@
       "commit_sha": "b819a9beb7f4ab7448cc4ab51cd75f86e3f0f769",
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step-07",
-      "mission_id": "PRODUCT-site-builder"
+      "mission_id": "PRODUCT-site-builder",
+      "same_signature_count": 0
     },
     {
       "id": "step-08",
@@ -609,7 +637,8 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step-08",
-      "mission_id": "PRODUCT-site-builder"
+      "mission_id": "PRODUCT-site-builder",
+      "same_signature_count": 0
     },
     {
       "id": "step-11",
@@ -640,7 +669,8 @@
       "mission_id": "PRODUCT-site-builder",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T21:51:24.371Z",
-      "commit_sha": "04ce418418c7469d46b4f10a3752820317cae9c4"
+      "commit_sha": "04ce418418c7469d46b4f10a3752820317cae9c4",
+      "same_signature_count": 0
     },
     {
       "id": "step-12",
@@ -656,7 +686,8 @@
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step-12",
       "mission_id": "PRODUCT-site-builder",
-      "completed_at": "2026-08-01T06:12:34.779Z"
+      "completed_at": "2026-08-01T06:12:34.779Z",
+      "same_signature_count": 0
     },
     {
       "id": "step-09",
@@ -690,7 +721,8 @@
       },
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step-09",
-      "mission_id": "PRODUCT-site-builder"
+      "mission_id": "PRODUCT-site-builder",
+      "same_signature_count": 0
     },
     {
       "id": "step-04",
@@ -732,7 +764,8 @@
       "blueprint_step_id": "step-04",
       "mission_id": "PRODUCT-site-builder",
       "shipped_via": "pre_existing_artifact_proof",
-      "shipped_at": "2026-07-20T04:44:07.255Z"
+      "shipped_at": "2026-07-20T04:44:07.255Z",
+      "same_signature_count": 0
     },
     {
       "id": "step-04-register",
@@ -749,7 +782,8 @@
       "shipped_at": "2026-07-14T17:41:46.350Z",
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step-04-register",
-      "mission_id": "PRODUCT-site-builder"
+      "mission_id": "PRODUCT-site-builder",
+      "same_signature_count": 0
     },
     {
       "id": "sb-deliverability-gate-v2",
@@ -864,7 +898,8 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-22T23:40:00.206Z",
-      "commit_sha": "d9a599518bcbe2c2b852079aaaad62d3f30e8731"
+      "commit_sha": "d9a599518bcbe2c2b852079aaaad62d3f30e8731",
+      "same_signature_count": 0
     },
     {
       "id": "step3",
@@ -895,7 +930,8 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-22T23:40:20.456Z",
-      "commit_sha": "349526d41794df79d93df961c102db2a21388406"
+      "commit_sha": "349526d41794df79d93df961c102db2a21388406",
+      "same_signature_count": 0
     },
     {
       "id": "step4",
@@ -911,7 +947,8 @@
       "design_review_flagged": true,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-22T23:40:37.147Z",
-      "commit_sha": "2341c2fedb5af1d99699dd6c3f1dd63f34d8e4ed"
+      "commit_sha": "2341c2fedb5af1d99699dd6c3f1dd63f34d8e4ed",
+      "same_signature_count": 0
     },
     {
       "id": "step5",
@@ -939,7 +976,8 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-22T23:06:19.750Z",
-      "commit_sha": "39e0dba60215dee5e88a9b2657191150a028f750"
+      "commit_sha": "39e0dba60215dee5e88a9b2657191150a028f750",
+      "same_signature_count": 0
     },
     {
       "id": "step6",
@@ -970,7 +1008,8 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-22T23:06:37.024Z",
-      "commit_sha": "71c2299793300af754a4c74ccca8fc752dc44203"
+      "commit_sha": "71c2299793300af754a4c74ccca8fc752dc44203",
+      "same_signature_count": 0
     },
     {
       "id": "step7",
@@ -986,7 +1025,8 @@
       "design_review_flagged": true,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-22T23:06:52.903Z",
-      "commit_sha": "4ae016eb64c7d1084450bcb13f0dd0b44239bd28"
+      "commit_sha": "4ae016eb64c7d1084450bcb13f0dd0b44239bd28",
+      "same_signature_count": 0
     },
     {
       "id": "1",
@@ -1052,7 +1092,8 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-22T23:23:17.449Z",
-      "commit_sha": "8045cca4523052d8742d3f871d22b1fd1f159a33"
+      "commit_sha": "8045cca4523052d8742d3f871d22b1fd1f159a33",
+      "same_signature_count": 0
     },
     {
       "id": "3",
@@ -1083,7 +1124,8 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-22T23:23:30.889Z",
-      "commit_sha": "7c168a0f1fb85810c4f57f6e3a07e65a5f0dbf01"
+      "commit_sha": "7c168a0f1fb85810c4f57f6e3a07e65a5f0dbf01",
+      "same_signature_count": 0
     },
     {
       "id": "4",
@@ -1176,7 +1218,8 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-22T23:14:27.238Z",
-      "commit_sha": "466a6e83baed11aa71246765dd3ac72e9210c05b"
+      "commit_sha": "466a6e83baed11aa71246765dd3ac72e9210c05b",
+      "same_signature_count": 0
     },
     {
       "id": "6",
@@ -1193,7 +1236,8 @@
       "design_review_flagged": true,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-22T23:23:49.191Z",
-      "commit_sha": "b881c9cc7595721beebd2e55ae9a542f2366d033"
+      "commit_sha": "b881c9cc7595721beebd2e55ae9a542f2366d033",
+      "same_signature_count": 0
     },
     {
       "id": "7",
@@ -1210,7 +1254,8 @@
       "design_review_flagged": true,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-22T23:14:43.295Z",
-      "commit_sha": "adbbd2f24ef81c307e8383fad9b57bbdad8e6a77"
+      "commit_sha": "adbbd2f24ef81c307e8383fad9b57bbdad8e6a77",
+      "same_signature_count": 0
     },
     {
       "id": "8",
@@ -1363,7 +1408,8 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-24T13:11:31.916Z",
-      "commit_sha": "75fae2cded57d11cf6031e69a11ea3cd23cd78a1"
+      "commit_sha": "75fae2cded57d11cf6031e69a11ea3cd23cd78a1",
+      "same_signature_count": 0
     },
     {
       "id": "11",
@@ -1377,7 +1423,8 @@
       "design_review_flagged": true,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-24T12:55:58.985Z",
-      "commit_sha": "72a13cd0e59362bbf28622dd7b8f2ff0a69c5e1f"
+      "commit_sha": "72a13cd0e59362bbf28622dd7b8f2ff0a69c5e1f",
+      "same_signature_count": 0
     },
     {
       "id": "001",
@@ -1449,7 +1496,8 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-24T21:25:17.687Z",
-      "commit_sha": "c59f38e850740e659125f940cb868c394e2e9248"
+      "commit_sha": "c59f38e850740e659125f940cb868c394e2e9248",
+      "same_signature_count": 0
     },
     {
       "id": "003",
@@ -1480,7 +1528,8 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-24T21:25:32.954Z",
-      "commit_sha": "0b4c49f81f5c3538c8cd780da0c015ceccbe3767"
+      "commit_sha": "0b4c49f81f5c3538c8cd780da0c015ceccbe3767",
+      "same_signature_count": 0
     },
     {
       "id": "004",
@@ -1496,7 +1545,8 @@
       "design_review_flagged": true,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-24T21:25:50.229Z",
-      "commit_sha": "8173249a028f1c1dee38f6ac7932a273f39f4598"
+      "commit_sha": "8173249a028f1c1dee38f6ac7932a273f39f4598",
+      "same_signature_count": 0
     },
     {
       "id": "005",
@@ -1604,7 +1654,8 @@
       "last_error": null,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "007",
@@ -1620,7 +1671,8 @@
       "design_review_flagged": true,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-24T20:30:53.048Z",
-      "commit_sha": "715f5cfcc7016d70623077c33e79bcaba1c462ba"
+      "commit_sha": "715f5cfcc7016d70623077c33e79bcaba1c462ba",
+      "same_signature_count": 0
     },
     {
       "id": "sb-current-site-baseline",
@@ -1707,7 +1759,8 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-25T02:25:23.816Z",
-      "commit_sha": "215d9d41e1db69e732d8945758384b13dc8f6a4f"
+      "commit_sha": "215d9d41e1db69e732d8945758384b13dc8f6a4f",
+      "same_signature_count": 0
     },
     {
       "id": "cg-ux-heuristic-gate",
@@ -1739,7 +1792,8 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-25T02:17:14.467Z",
-      "commit_sha": "ba9354c8ca4d12bbd77799c8d316ef591dcb6130"
+      "commit_sha": "ba9354c8ca4d12bbd77799c8d316ef591dcb6130",
+      "same_signature_count": 0
     },
     {
       "id": "cg-site-design-mode",
@@ -1773,7 +1827,8 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-25T02:25:40.643Z",
-      "commit_sha": "ba543317569d1dd23ca6b11e41e7a406177c6416"
+      "commit_sha": "ba543317569d1dd23ca6b11e41e7a406177c6416",
+      "same_signature_count": 0
     },
     {
       "id": "sb-variant-gate-cull",
@@ -1809,7 +1864,8 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-25T02:25:55.062Z",
-      "commit_sha": "46bca74b67f5762895bbb1b0ce51ef56c41ca1a1"
+      "commit_sha": "46bca74b67f5762895bbb1b0ce51ef56c41ca1a1",
+      "same_signature_count": 0
     },
     {
       "id": "sb-variant-wire-buildvariants",
@@ -1866,7 +1922,7 @@
     },
     {
       "id": "s1",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/migrations/20241030_create_additional_templates.sql",
       "task": "create migration for additional templates",
       "spec": "Adds new template options for site-builder to increase design choices.",
@@ -1878,7 +1934,7 @@
       ],
       "design_review_flagged": true,
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "artifact_proof_failed: CREATE TABLE IF NOT EXISTS",
       "commit_sha": "9ff91877d4467e209822115ce0773cf478054211",
       "built_sha": null,
       "proof": null,
@@ -1899,7 +1955,8 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-25T02:37:07.913Z"
+      "shipped_at": "2026-07-25T02:37:07.913Z",
+      "heal_unblocked": true
     },
     {
       "id": "s2",
@@ -1927,7 +1984,8 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-25T02:37:21.604Z",
-      "commit_sha": "a32016677f9f34e1177653c03c973716a6723430"
+      "commit_sha": "a32016677f9f34e1177653c03c973716a6723430",
+      "same_signature_count": 0
     },
     {
       "id": "s3",
@@ -1987,7 +2045,8 @@
       "last_error": null,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "s4",
@@ -2003,7 +2062,8 @@
       "design_review_flagged": true,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-25T02:42:27.878Z",
-      "commit_sha": "042c5196fd3eb36a004de5d3b6d81b883b0dcf49"
+      "commit_sha": "042c5196fd3eb36a004de5d3b6d81b883b0dcf49",
+      "same_signature_count": 0
     },
     {
       "id": "s5",
@@ -2019,7 +2079,8 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-25T02:20:23.496Z",
-      "commit_sha": "a756edb0e3737aec51057622e92727c8cd1b4559"
+      "commit_sha": "a756edb0e3737aec51057622e92727c8cd1b4559",
+      "same_signature_count": 0
     },
     {
       "id": "s6",
@@ -2047,7 +2108,8 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-25T02:20:36.787Z",
-      "commit_sha": "8fa2e9e5643df9712f72d7c2eafe0eb2062e8065"
+      "commit_sha": "8fa2e9e5643df9712f72d7c2eafe0eb2062e8065",
+      "same_signature_count": 0
     },
     {
       "id": "01",
@@ -2129,7 +2191,8 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-25T03:09:59.298Z",
-      "commit_sha": "b7a8387d82cbe7737af2281558fe61d2d6c617d3"
+      "commit_sha": "b7a8387d82cbe7737af2281558fe61d2d6c617d3",
+      "same_signature_count": 0
     },
     {
       "id": "03",
@@ -2145,7 +2208,8 @@
       "design_review_flagged": true,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-25T03:10:14.331Z",
-      "commit_sha": "ab2048c69d989612d1fec25a375c279b2db047d2"
+      "commit_sha": "ab2048c69d989612d1fec25a375c279b2db047d2",
+      "same_signature_count": 0
     },
     {
       "id": "04",
@@ -2189,7 +2253,8 @@
         }
       },
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
-      "blueprint_step_id": "04"
+      "blueprint_step_id": "04",
+      "same_signature_count": 0
     },
     {
       "id": "05",
@@ -2222,7 +2287,8 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-25T02:53:59.673Z",
-      "commit_sha": "2358688b77eea555465c84d924b89caa3fc93945"
+      "commit_sha": "2358688b77eea555465c84d924b89caa3fc93945",
+      "same_signature_count": 0
     },
     {
       "id": "sb-surface-scrape-failure-reason",
@@ -2347,7 +2413,8 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-26T19:49:08.038Z",
-      "commit_sha": "ca6689e760987e5c23182ca5fb8f2874c862e083"
+      "commit_sha": "ca6689e760987e5c23182ca5fb8f2874c862e083",
+      "same_signature_count": 0
     },
     {
       "id": "sb-wire-architect-brief-and-site-design",
@@ -2746,7 +2813,8 @@
       },
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-27T01:35:31.558Z",
-      "commit_sha": "ce9b86f71ce87b18bc5c2f82df75f54aa0f36445"
+      "commit_sha": "ce9b86f71ce87b18bc5c2f82df75f54aa0f36445",
+      "same_signature_count": 0
     },
     {
       "id": "sb-lead-capture-service",
@@ -2810,7 +2878,8 @@
           "content_source_path": "docs/products/site-builder/twins/steps/sb-lead-capture-service.exact",
           "content_sha256": "cea0c2df5ce26bd6b3aa4b49e1e918030fdb25d3ea14d71b5e0e91a6591a1069"
         }
-      }
+      },
+      "same_signature_count": 0
     },
     {
       "id": "sb-lead-capture-false-negative-fix",
@@ -2915,7 +2984,8 @@
       },
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "sb-lead-capture-route",
-      "mission_id": "PRODUCT-site-builder"
+      "mission_id": "PRODUCT-site-builder",
+      "same_signature_count": 0
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",
@@ -2923,5 +2993,6 @@
   "sentry_unplannable_reason": "planner filtered all steps (already-done); spin-break so LifeOS can build",
   "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-site-builder",
-  "twin_kind": "product_build_queue_registered"
+  "twin_kind": "product_build_queue_registered",
+  "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/site-builder/BUILD_QUEUE.json"
 }

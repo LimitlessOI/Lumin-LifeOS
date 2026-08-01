@@ -1002,6 +1002,7 @@ const QUEUE_RUNTIME_STEP_FIELDS = [
   'completed_at', 'no_op', 'pre_existing',
   'demoted', 'demote_reason', 'demoted_at', 'park_until',
   'blocker_class', 'claim_level', 'blocker_type', 'blocker_resolution',
+  'heal_unblocked', 'heal_claimed', 'heal_reason', 'un_demoted',
 ];
 
 const STATUS_RANK = Object.freeze({
@@ -1047,8 +1048,10 @@ export function mergeQueueRuntimeStatus(repoQueue, memQueue) {
     // when the repo step is itself blocked; a repo done or building step must not
     // be downgraded by a stale in-memory pending snapshot.
     const memRevived = (memStep.revive_count || 0) > (repoStep.revive_count || 0);
-    // Stale mem pending/building must not clobber a more-advanced repo status.
-    if (repoRank > memRank && !(memRevived && repoStep.status === STEP_STATUS.BLOCKED)) {
+    const healDowngrade = memStep.heal_unblocked === true && memStep.status === STEP_STATUS.PENDING;
+    // Stale mem pending/building must not clobber a more-advanced repo status,
+    // unless the self-healer has proven the repo status is a false-done.
+    if (repoRank > memRank && !(memRevived && repoStep.status === STEP_STATUS.BLOCKED) && !healDowngrade) {
       return out;
     }
     for (const f of QUEUE_RUNTIME_STEP_FIELDS) {

@@ -37,7 +37,8 @@
       "commit_sha": "99c45c87b34538ebf7844e2405cbab5f8dd2f3dd",
       "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "1",
-      "mission_id": "PRODUCT-white-label"
+      "mission_id": "PRODUCT-white-label",
+      "same_signature_count": 0
     },
     {
       "id": "2",
@@ -66,7 +67,8 @@
       "commit_sha": "19ee8a1138ec1e958b7dd63a7c9dd919cbe952eb",
       "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "2",
-      "mission_id": "PRODUCT-white-label"
+      "mission_id": "PRODUCT-white-label",
+      "same_signature_count": 0
     },
     {
       "id": "3",
@@ -125,7 +127,8 @@
           "content_source_path": "docs/products/white-label/twins/steps/3.exact",
           "content_sha256": "aacefbc56d40ef0b4f88d929b504253e22b7872f976a2580378d9a8e95313e96"
         }
-      }
+      },
+      "same_signature_count": 0
     },
     {
       "id": "4",
@@ -155,7 +158,8 @@
       "commit_sha": "9652946abedb8b06658c4d38cbf2a149604e4893",
       "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "4",
-      "mission_id": "PRODUCT-white-label"
+      "mission_id": "PRODUCT-white-label",
+      "same_signature_count": 0
     },
     {
       "id": "5",
@@ -207,7 +211,8 @@
       "escalation_required": true,
       "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
       "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
-      "escalated_at": "2026-07-31T18:40:13.633Z"
+      "escalated_at": "2026-07-31T18:40:13.633Z",
+      "same_signature_count": 0
     },
     {
       "id": "6",
@@ -248,7 +253,8 @@
       "escalation_required": true,
       "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
       "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
-      "escalated_at": "2026-07-31T18:40:13.633Z"
+      "escalated_at": "2026-07-31T18:40:13.633Z",
+      "same_signature_count": 0
     },
     {
       "id": "step1",
@@ -309,7 +315,8 @@
           "content_source_path": "docs/products/white-label/twins/steps/step1.exact",
           "content_sha256": "c7ee135cef4c5d9a03a3a8619bbbc08a234cba49f534fd397af9daa37cd352ac"
         }
-      }
+      },
+      "same_signature_count": 0
     },
     {
       "id": "step3",
@@ -371,7 +378,8 @@
           "content_source_path": "docs/products/white-label/twins/steps/step3.exact",
           "content_sha256": "a141de29f5d412fc2bb0d11a4a0eb4e7bdbb640ae521aa5a85d61e38ef2d73b6"
         }
-      }
+      },
+      "same_signature_count": 0
     },
     {
       "id": "step4",
@@ -421,7 +429,8 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "completed_at": "2026-08-01T05:52:19.465Z"
+      "completed_at": "2026-08-01T05:52:19.465Z",
+      "same_signature_count": 0
     },
     {
       "id": "step5",
@@ -471,7 +480,8 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "completed_at": "2026-08-01T05:52:53.365Z"
+      "completed_at": "2026-08-01T05:52:53.365Z",
+      "same_signature_count": 0
     },
     {
       "id": "step6",
@@ -507,11 +517,12 @@
       "shipped_at": "2026-07-16T00:08:44.390Z",
       "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step6",
-      "mission_id": "PRODUCT-white-label"
+      "mission_id": "PRODUCT-white-label",
+      "same_signature_count": 0
     },
     {
       "id": "step2",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/response-transformation.js",
       "task": "build-response-transformation-middleware",
       "spec": "Create middleware to transform responses by stripping model names and costs.",
@@ -540,7 +551,11 @@
       "commit_sha": "b80bf5636ff33cd4c9100c5e456bc61fa42c335e",
       "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step2",
-      "mission_id": "PRODUCT-white-label"
+      "mission_id": "PRODUCT-white-label",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: stripModelNames; stripCosts",
+      "heal_unblocked": true
     },
     {
       "id": "white-label-3",
@@ -602,7 +617,8 @@
           "content_source_path": "docs/products/white-label/twins/steps/white-label-3.exact",
           "content_sha256": "40a1711a8f3806d9715bd264d0c6b24fb8290bf8b9138d88a34d2301c31eeef6"
         }
-      }
+      },
+      "same_signature_count": 0
     },
     {
       "id": "white-label-5",
@@ -631,7 +647,8 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T22:28:27.434Z",
-      "commit_sha": "5f0423f1edd2eab3a59b8101089287979c63aa12"
+      "commit_sha": "5f0423f1edd2eab3a59b8101089287979c63aa12",
+      "same_signature_count": 0
     },
     {
       "id": "white-label-6",
@@ -668,11 +685,12 @@
       "shipped_at": "2026-07-16T04:59:29.386Z",
       "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "white-label-6",
-      "mission_id": "PRODUCT-white-label"
+      "mission_id": "PRODUCT-white-label",
+      "same_signature_count": 0
     },
     {
       "id": "white-label-2",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/response-transformation.js",
       "task": "develop response transformation middleware",
       "spec": "Create middleware to strip model names and costs from responses.",
@@ -701,11 +719,15 @@
       "commit_sha": "3b23fc8748718ee404cc72c8d1e6879725aeb92a",
       "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "white-label-2",
-      "mission_id": "PRODUCT-white-label"
+      "mission_id": "PRODUCT-white-label",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: module.exports = {; function transformResponse(req, res, next)",
+      "heal_unblocked": true
     },
     {
       "id": "white-label-4",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/partner-key-generation.js",
       "task": "define partner API key schema",
       "spec": "Design key generation differentiating partner keys from platform keys.",
@@ -734,7 +756,11 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T22:53:15.944Z",
-      "commit_sha": "96341445d386aabb8a8b62eab31d810a08659012"
+      "commit_sha": "96341445d386aabb8a8b62eab31d810a08659012",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: module.exports = {",
+      "heal_unblocked": true
     },
     {
       "id": "white-label-step2",
@@ -766,11 +792,12 @@
       "commit_sha": "9cd7235bffd5ca5e8264e9fe3511768dd530c9fc",
       "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "white-label-step2",
-      "mission_id": "PRODUCT-white-label"
+      "mission_id": "PRODUCT-white-label",
+      "same_signature_count": 0
     },
     {
       "id": "white-label-step3",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/partner-key-scheme.js",
       "task": "design partner API key schema",
       "spec": "Design and build schema for generating partner API keys distinct from platform keys.",
@@ -781,7 +808,11 @@
         "generatePartnerKey"
       ],
       "file_contains": [
-        "schema.define('partnerKey'"
+        "apiKey",
+        "apiSecret",
+        "partnerId",
+        "clientId",
+        "generatePartnerKey"
       ],
       "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "white-label-step3",
@@ -798,7 +829,11 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T23:12:46.340Z",
-      "commit_sha": "0fdc5ada66ff9ad24f29db8774d344ff9289b884"
+      "commit_sha": "0fdc5ada66ff9ad24f29db8774d344ff9289b884",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: schema.define('partnerKey'",
+      "heal_unblocked": true
     },
     {
       "id": "white-label-step4",
@@ -830,7 +865,8 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T23:22:32.977Z",
-      "commit_sha": "a2a829e04f90302450192964f9e717a8781f569a"
+      "commit_sha": "a2a829e04f90302450192964f9e717a8781f569a",
+      "same_signature_count": 0
     },
     {
       "id": "white-label-step5",
@@ -849,11 +885,12 @@
       "commit_sha": "d6f52c34db9b62b751f50b650fc57aae2ecfa391",
       "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "white-label-step5",
-      "mission_id": "PRODUCT-white-label"
+      "mission_id": "PRODUCT-white-label",
+      "same_signature_count": 0
     },
     {
       "id": "white-label-1",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/white-label-routes.js",
       "task": "refactor endpoints",
       "spec": "Extract config endpoints from server.js into this dedicated route file.",
@@ -880,7 +917,7 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "artifact_proof_failed: app.get('/api/v1/white-label/config',",
       "commit_sha": "cef9ce4936d36d810967e0f75d609d7dd810764d",
       "built_sha": null,
       "proof": null,
@@ -901,7 +938,9 @@
       "shipped_at": "2026-07-16T06:03:44.355Z",
       "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "white-label-1",
-      "mission_id": "PRODUCT-white-label"
+      "mission_id": "PRODUCT-white-label",
+      "same_signature_count": 0,
+      "heal_unblocked": true
     },
     {
       "id": "white-label-step1",
@@ -936,7 +975,8 @@
       "commit_sha": "271eca977452fccb5a1722ce57f0ad3066355d7b",
       "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "white-label-step1",
-      "mission_id": "PRODUCT-white-label"
+      "mission_id": "PRODUCT-white-label",
+      "same_signature_count": 0
     },
     {
       "id": "white-label-step6",
@@ -971,11 +1011,13 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "white-label-step6",
-      "mission_id": "PRODUCT-white-label"
+      "mission_id": "PRODUCT-white-label",
+      "same_signature_count": 0
     }
   ],
   "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-white-label",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:12:42.092Z"
+  "updated_at": "2026-08-01T06:30:58.697Z",
+  "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/white-label/BUILD_QUEUE.json"
 }

@@ -19,7 +19,8 @@
       "commit_sha": "pending_this_commit",
       "last_attempt_at": null,
       "completed_at": "2026-07-20T00:50:08.133Z",
-      "note": "GAP-FILL: migration authored + shipped by Cursor after Claude audit filed founder_gated step (permission block on write)."
+      "note": "GAP-FILL: migration authored + shipped by Cursor after Claude audit filed founder_gated step (permission block on write).",
+      "same_signature_count": 0
     },
     {
       "id": "s01",
@@ -35,7 +36,8 @@
       "completed_at": "2026-07-08T21:26:24.472Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "s01",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "s02",
@@ -53,7 +55,8 @@
       "completed_at": "2026-07-08T21:32:32.128Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "s02",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "s03",
@@ -71,7 +74,8 @@
       "completed_at": "2026-07-08T21:40:22.914Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "s03",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "s04",
@@ -89,7 +93,8 @@
       "completed_at": "2026-07-08T21:48:00.804Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "s04",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "s05",
@@ -107,7 +112,8 @@
       "completed_at": "2026-07-08T21:55:39.430Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "s05",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "s07",
@@ -127,7 +133,8 @@
       "detail": "GAP-FILL: conductor added auto-register entry — s06 was blocked forever because s07 depended on s06 while s06 failed module-health for missing auto-register",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "s07",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "s06",
@@ -154,7 +161,8 @@
       "completed_at": "2026-07-09T03:17:50.318Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "s06",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "s08",
@@ -173,7 +181,8 @@
       "completed_at": "2026-07-08T22:15:09.969Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "s08",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "s09",
@@ -191,7 +200,8 @@
       "commit_sha": "pending_push",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "s09",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "s10",
@@ -209,7 +219,8 @@
       "commit_sha": "pending_push",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "s10",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "s11",
@@ -227,7 +238,8 @@
       "commit_sha": "pending_push",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "s11",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "s12",
@@ -245,7 +257,8 @@
       "commit_sha": "pending_push",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "s12",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "s1",
@@ -264,7 +277,8 @@
       "revive_count": 1,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "s1",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "s2",
@@ -285,7 +299,8 @@
       "completed_at": "2026-07-09T12:34:39.523Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "s2",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "s3",
@@ -305,7 +320,8 @@
       "completed_at": "2026-07-09T13:04:04.317Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "s3",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "s4",
@@ -324,7 +340,8 @@
       "completed_at": "2026-07-09T13:33:43.989Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "s4",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "s5",
@@ -343,7 +360,8 @@
       "completed_at": "2026-07-09T14:40:21.701Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "s5",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "s6",
@@ -362,7 +380,8 @@
       "completed_at": "2026-07-09T14:41:44.120Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "s6",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "s7",
@@ -386,7 +405,8 @@
       "completed_at": "2026-07-09T15:02:12.597Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "s7",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "s9",
@@ -403,7 +423,8 @@
       "completed_at": "2026-07-10T00:09:58.164Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "s9",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "s8",
@@ -421,7 +442,8 @@
       "commit_sha": "pending_push",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "s8",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "lo-therapist-role",
@@ -441,7 +463,8 @@
       "completed_at": "2026-07-12T03:39:44.600Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lo-therapist-role",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "lo-consent-therapist-share",
@@ -463,7 +486,8 @@
       "completed_at": "2026-07-12T16:22:27.190Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lo-consent-therapist-share",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "lo-consent-api",
@@ -485,7 +509,8 @@
       "completed_at": "2026-07-12T16:38:49.506Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lo-consent-api",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "lo-consent-auto-register",
@@ -507,7 +532,8 @@
       "note": "GAP-FILL: auto-register entry + quality rewrite of consent routes using services/consent-registry.js",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lo-consent-auto-register",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "lo-ui-directives-service",
@@ -528,7 +554,8 @@
       "completed_at": "2026-07-12T18:07:06.533Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lo-ui-directives-service",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "lo-twin-reaction-simulator",
@@ -549,7 +576,8 @@
       "completed_at": "2026-07-12T18:09:21.103Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lo-twin-reaction-simulator",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "lo-ui-directives-routes",
@@ -571,7 +599,8 @@
       "completed_at": "2026-07-12T18:43:34.000Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lo-ui-directives-routes",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "lo-ui-directives-auto-register",
@@ -594,7 +623,8 @@
       "note": "Marked done 2026-07-13 — entry already live in config; verify_exit_1 was product UI SENTRY thrash on config JSON (token waste). Never-stop must not revive this.",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lo-ui-directives-auto-register",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "1",
@@ -610,7 +640,8 @@
       "completed_at": "2026-07-13T10:43:53.691Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "1",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "2",
@@ -628,7 +659,8 @@
       "completed_at": "2026-07-13T23:30:51.153Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "2",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "3",
@@ -645,7 +677,8 @@
       "shipped_at": "2026-07-13T23:34:40.333Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "3",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "5",
@@ -661,7 +694,8 @@
       "completed_at": "2026-07-13T10:58:32.129Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "5",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "6",
@@ -680,7 +714,8 @@
       "shipped_at": "2026-07-13T23:41:51.329Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "6",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "7",
@@ -697,7 +732,8 @@
       "shipped_at": "2026-07-14T00:00:57.056Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "7",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "9",
@@ -714,7 +750,8 @@
       "shipped_at": "2026-07-14T00:36:50.199Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "9",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "10",
@@ -733,7 +770,8 @@
       "shipped_at": "2026-07-14T01:52:57.235Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "10",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "11",
@@ -762,11 +800,12 @@
       "commit_sha": "af9fceacc9442f8ea7fd171a42d6cb0e7b45618a",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "11",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "12",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/lifeos-perfect-day-routes.js",
       "task": "Implement LifeOS Perfect Day REST routes with auth and health endpoint",
       "spec": "This is an ES module route file. Export function registerLifeosPerfectDayRoutes(app, deps). Inside the function, create an express.Router and mount it with app.use('/api/v1/lifeos/perfect-day', router). Use deps.requireKey as auth middleware on every endpoint except /health. Endpoints:\n- GET /health returns { ok: true } and does NOT require auth.\n- POST /plan requires auth, calls planPerfectDay(req.body.user_id, req.body), and returns res.json(result).\n- GET /plan requires auth, calls getPerfectDay(req.body.user_id), and returns res.json(result).\n- POST /check-in requires auth, calls checkIn(req.body.user_id, req.body), and returns res.json(result).\n- GET /reminders requires auth, calls getDailyReminders(req.body.user_id), and returns res.json(result).\n- POST /rate requires auth, calls rateDay(req.body.user_id, req.body), and returns res.json(result).\nUse import { planPerfectDay, getPerfectDay, checkIn, getDailyReminders, rateDay } from '../services/lifeos-perfect-day.js';. Handle errors with res.status(500).json({ error: error.message }).",
@@ -787,7 +826,7 @@
       ],
       "attempts": 0,
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "artifact_proof_failed: await planPerfectDay(req.body.user_id",
       "blocker_class": null,
       "claim_level": null,
       "park_until": null,
@@ -804,7 +843,10 @@
       "commit_sha": "25d21fc21673c807426c98a92d7f716758810234",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "12",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0,
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "13",
@@ -836,7 +878,8 @@
       "commit_sha": "fba2d238473d1b32ba38e1aeec14e5a18a1a2320",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "13",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "4",
@@ -874,7 +917,8 @@
       "shipped_at": "2026-07-15T02:07:19.009Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "4",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "8",
@@ -908,7 +952,8 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "8",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-admin-1",
@@ -924,7 +969,8 @@
       "completed_at": "2026-07-10T19:23:59.761Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-admin-1",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-admin-1b",
@@ -956,7 +1002,8 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-admin-1b",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-admin-2",
@@ -974,7 +1021,8 @@
       "completed_at": "2026-07-10T19:27:33.229Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-admin-2",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-admin-3",
@@ -1022,7 +1070,8 @@
       "shipped_at": "2026-07-15T01:10:00.000Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-admin-3",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-admin-4",
@@ -1038,7 +1087,8 @@
       "completed_at": "2026-07-12T03:03:09.140Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-admin-4",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-admin-5",
@@ -1081,7 +1131,8 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-admin-5",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-admin-6",
@@ -1097,7 +1148,8 @@
       "completed_at": "2026-07-12T03:25:45.503Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-admin-6",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-admin-7",
@@ -1119,7 +1171,8 @@
       "revived_at": null,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-admin-7",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-admin-8",
@@ -1138,7 +1191,8 @@
       "commit_sha": "42efdc538a0a2fd8bfbf62e0d643ab99606c9818",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-admin-8",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-admin-9",
@@ -1160,7 +1214,8 @@
       "revived_at": null,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-admin-9",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-admin-10",
@@ -1180,7 +1235,8 @@
       "revived_at": null,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-admin-10",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-admin-11",
@@ -1202,7 +1258,8 @@
       "revived_at": null,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-admin-11",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-admin-12",
@@ -1219,7 +1276,8 @@
       "shipped_at": "2026-07-13T23:45:24.687Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-admin-12",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-chat-v2-01",
@@ -1307,7 +1365,8 @@
           "content_sha256": "ffbee7c29e034b5c183e34379882c3844d5a2491e68e2fa072474aa4059c405e"
         }
       },
-      "shipped_at": "2026-07-30T19:22:14.027Z"
+      "shipped_at": "2026-07-30T19:22:14.027Z",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-chat-v2-02",
@@ -1395,11 +1454,12 @@
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-chat-v2-02",
       "mission_id": "PRODUCT-lifeos",
-      "reaudit_reset_at": "2026-07-30T18:55:06.601Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.601Z",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-chat-v2-03",
-      "status": "done",
+      "status": "pending",
       "target_file": "public/overlay/lifeos-ambient-listener.js",
       "task": "Build the ambient listening overlay for lifeos-app.html",
       "spec": "Classic browser script (NOT an ES module; no top-level import/export/require/module.exports; no top-level return). Self-initializing on DOMContentLoaded. Locates the Lumin input area. Adds a microphone toggle button near #lumin-mic-btn. Uses the Web Speech API (SpeechRecognition or webkitSpeechRecognition) with continuous listening when toggled on. On a recognized final transcript, appends it to the Lumin chat input and optionally submits if the user pauses for 2 seconds. Sends interim transcripts to a future POST /api/v1/lifeos/ambient/capture endpoint only if it exists (degrade silently if 404). Displays a visual indicator when listening. Attach public API to window.LifeOSAmbientListener. Do not interfere with normal send. Use existing CSS custom properties.",
@@ -1437,7 +1497,7 @@
       "founder_gated": false,
       "attempts": 0,
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "artifact_proof_failed: SpeechRecognition; webkitSpeechRecognition; lumin-mic-btn; LifeOSAmbientListener",
       "commit_sha": "3d2df8dc204baaf158d44fc433ed0ed51113deb1",
       "built_sha": null,
       "proof": null,
@@ -1458,7 +1518,9 @@
       "shipped_at": "2026-07-16T00:08:14.935Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-chat-v2-03",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0,
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-chat-v2-04",
@@ -1545,7 +1607,8 @@
       ],
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-chat-v2-04",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-chat-v2-05",
@@ -1654,7 +1717,8 @@
           "content_source_path": "docs/products/lifeos/twins/steps/lifeos-chat-v2-05.exact",
           "content_sha256": "7c1ca553ab31c751c32bc7e5ecceee82e479a1f8872850cbba3e27ee45448f42"
         }
-      }
+      },
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-chat-v2-06",
@@ -1754,7 +1818,8 @@
       "escalation_required": true,
       "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
       "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
-      "escalated_at": "2026-07-31T18:40:13.622Z"
+      "escalated_at": "2026-07-31T18:40:13.622Z",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-chat-v2-07",
@@ -1863,7 +1928,8 @@
           "content_source_path": "docs/products/lifeos/twins/steps/lifeos-chat-v2-07.exact",
           "content_sha256": "1b66b0ee77fb15308b93645ffd1731dc640d57c536ab258e20bad7d31f21726d"
         }
-      }
+      },
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-chat-v2-08",
@@ -1946,7 +2012,8 @@
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-chat-v2-08",
       "mission_id": "PRODUCT-lifeos",
-      "reaudit_reset_at": "2026-07-30T18:55:06.601Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.601Z",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-chat-v2-09",
@@ -2042,7 +2109,8 @@
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-chat-v2-09",
       "mission_id": "PRODUCT-lifeos",
-      "reaudit_reset_at": "2026-07-30T18:55:06.601Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.601Z",
+      "same_signature_count": 0
     },
     {
       "id": "step1",
@@ -2106,7 +2174,8 @@
           "content_source_path": "docs/products/lifeos/twins/steps/step1.exact",
           "content_sha256": "1e7d0523b39309ac0f6b9f7f14d204dc4ed4425e542ccb6a8fcfc561f2abb0a8"
         }
-      }
+      },
+      "same_signature_count": 0
     },
     {
       "id": "step2",
@@ -2170,7 +2239,8 @@
           "content_source_path": "docs/products/lifeos/twins/steps/step2.exact",
           "content_sha256": "6a13300079f99fa4355efc333b59838ec94eb63b43abedad5ce2e0d94606accd"
         }
-      }
+      },
+      "same_signature_count": 0
     },
     {
       "id": "step3",
@@ -2233,7 +2303,8 @@
       "escalation_required": true,
       "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
       "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
-      "escalated_at": "2026-07-31T18:40:13.622Z"
+      "escalated_at": "2026-07-31T18:40:13.622Z",
+      "same_signature_count": 0
     },
     {
       "id": "step4",
@@ -2286,7 +2357,8 @@
       "blueprint_step_id": "step4",
       "mission_id": "PRODUCT-lifeos",
       "shipped_via": "intervention_after_revive_exhausted",
-      "shipped_at": "2026-07-18T01:08:11.621Z"
+      "shipped_at": "2026-07-18T01:08:11.621Z",
+      "same_signature_count": 0
     },
     {
       "id": "step5",
@@ -2333,7 +2405,8 @@
       "proof": {
         "status": "PASS",
         "reason": "artifact_proof_pass"
-      }
+      },
+      "same_signature_count": 0
     },
     {
       "id": "step6",
@@ -2397,7 +2470,8 @@
           "content_source_path": "docs/products/lifeos/twins/steps/step6.exact",
           "content_sha256": "27bd913de10b2527b3e5337a7e45b6bc285062c56eea7c36bf8ce1a10d58c851"
         }
-      }
+      },
+      "same_signature_count": 0
     },
     {
       "id": "step7",
@@ -2457,7 +2531,8 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "same_signature_count": 0
     },
     {
       "id": "step8",
@@ -2520,7 +2595,8 @@
           "content_source_path": "docs/products/lifeos/twins/steps/step8.exact",
           "content_sha256": "5f5cd84c593fefc5a8ddaee585cfcae6d5dee3fb06922f88cbdeda0a09b3421a"
         }
-      }
+      },
+      "same_signature_count": 0
     },
     {
       "id": "step9",
@@ -2555,7 +2631,8 @@
       "commit_sha": "77ad612efab6146e91c8de1e1cd86018c2aa3e09",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step9",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "step10",
@@ -2592,11 +2669,12 @@
       "commit_sha": "47ed1094dccc0b2968bb96b90afb6210afd25a36",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step10",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "step11",
-      "status": "done",
+      "status": "pending",
       "target_file": "public/overlay/lifeos-voice-note-journal.html",
       "task": "create voice-note journaling UI",
       "spec": "Design the UI for mobile-first voice-note journaling with local transcription.",
@@ -2607,7 +2685,7 @@
         "<div class='voice-note-journaling'>"
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "artifact_proof_failed: <div class='voice-note-journaling'>",
       "commit_sha": "d6bc1443c80b726c1e177228ecd979f6c8e685d0",
       "built_sha": null,
       "proof": null,
@@ -2628,7 +2706,9 @@
       "shipped_at": "2026-07-16T02:47:19.892Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step11",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0,
+      "heal_unblocked": true
     },
     {
       "id": "step12",
@@ -2692,7 +2772,8 @@
           "content_source_path": "docs/products/lifeos/twins/steps/step12.exact",
           "content_sha256": "40874c2b0666709dddcb2d582788a5bd831c9de9d8e0b4ca3cfc59597f19fdeb"
         }
-      }
+      },
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-1",
@@ -2754,7 +2835,8 @@
       "escalation_required": true,
       "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
       "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
-      "escalated_at": "2026-07-31T18:40:13.622Z"
+      "escalated_at": "2026-07-31T18:40:13.622Z",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-2",
@@ -2788,7 +2870,8 @@
       "commit_sha": "37746bf2f792a94a598127a9dd835cf6f34dfd26",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-2",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-3",
@@ -2851,7 +2934,8 @@
           "content_source_path": "docs/products/lifeos/twins/steps/lifeos-3.exact",
           "content_sha256": "184d222e009006a421151d80c3771687a46fbe7652b77ae1bbdc33d686da888a"
         }
-      }
+      },
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-4",
@@ -2887,7 +2971,8 @@
       "blueprint_step_id": "lifeos-4",
       "mission_id": "PRODUCT-lifeos",
       "shipped_via": "pre_existing_ambient_listener",
-      "shipped_at": "2026-07-18T01:07:59.873Z"
+      "shipped_at": "2026-07-18T01:07:59.873Z",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-5",
@@ -2923,11 +3008,12 @@
       "shipped_at": "2026-07-17T21:12:13.568Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-5",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-6",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/lifeos-commitment-service.js",
       "task": "Extend parseNaturalLanguage",
       "spec": "Recognize phrases for query mode, call getCommitments and format results into a reply card.",
@@ -2954,7 +3040,7 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "artifact_proof_failed: query mode",
       "commit_sha": "c4079b0d4ce59fac0a6026c34ee275dac9da0e7c",
       "built_sha": null,
       "proof": null,
@@ -2975,11 +3061,13 @@
       "shipped_at": "2026-07-16T04:56:45.117Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-6",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0,
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-7",
-      "status": "done",
+      "status": "pending",
       "target_file": "public/overlay/lifeos-voice-note-journal.html",
       "task": "Implement UI for voice journaling",
       "spec": "Add interface for voice recording, transcription via Web Speech API, and submission to the designated endpoint for AI processing.",
@@ -2991,7 +3079,7 @@
         "/api/v1/lifeos/journal/voice"
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "artifact_proof_failed: Web Speech API",
       "commit_sha": "aa91f93141e6db9eec47d00deabb3c744903cf7d",
       "built_sha": null,
       "proof": null,
@@ -3012,7 +3100,9 @@
       "shipped_at": "2026-07-17T21:31:26.324Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-7",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0,
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-8",
@@ -3049,11 +3139,12 @@
       "shipped_at": "2026-07-16T05:01:54.414Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-8",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-9",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/lifeos-psychometric-battery.js",
       "task": "Add distortion spotting in journaling",
       "spec": "Spot cognitive distortions in journal entries or messages when opted-in, using AI for analysis.",
@@ -3064,7 +3155,7 @@
         "cognitive_distortion_mode"
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "artifact_proof_failed: cognitive_distortion_mode",
       "commit_sha": "8fb0fe336bfbf49c9592710d4c99e08e6ab96cdc",
       "built_sha": null,
       "proof": null,
@@ -3085,7 +3176,9 @@
       "shipped_at": "2026-07-16T06:37:07.366Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-9",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0,
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-10",
@@ -3145,7 +3238,8 @@
       "escalation_required": true,
       "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
       "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
-      "escalated_at": "2026-07-31T18:40:13.622Z"
+      "escalated_at": "2026-07-31T18:40:13.622Z",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-11",
@@ -3179,7 +3273,8 @@
       "commit_sha": "012c59812923e1a0997b08c710956c4770474212",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-11",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-12",
@@ -3216,7 +3311,8 @@
       "blueprint_step_id": "lifeos-12",
       "mission_id": "PRODUCT-lifeos",
       "shipped_via": "pre_existing_energy_logs_phase2",
-      "shipped_at": "2026-07-18T01:07:59.873Z"
+      "shipped_at": "2026-07-18T01:07:59.873Z",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-step1",
@@ -3294,7 +3390,8 @@
           "content_source_path": "docs/products/lifeos/twins/steps/lifeos-step1.exact",
           "content_sha256": "184d222e009006a421151d80c3771687a46fbe7652b77ae1bbdc33d686da888a"
         }
-      }
+      },
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-step3",
@@ -3333,11 +3430,12 @@
       "shipped_at": "2026-07-16T07:12:03.702Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-step3",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-step4",
-      "status": "done",
+      "status": "pending",
       "target_file": "public/overlay/lifeos-app.html",
       "task": "replace legacy ambient listener script",
       "spec": "Replace /shared/lifeos-ambient-listener.js with /overlay/lifeos-ambient-listener.js and ensure thought-stream container creation and renderThoughtStream is called when necessary.",
@@ -3349,7 +3447,7 @@
         "thought-stream"
       ],
       "last_attempt_at": "2026-07-17T21:04:55.735Z",
-      "last_error": null,
+      "last_error": "artifact_proof_failed: thought-stream",
       "commit_sha": "pre-existing-claim",
       "built_sha": null,
       "proof": null,
@@ -3370,7 +3468,9 @@
       "blueprint_step_id": "lifeos-step4",
       "mission_id": "PRODUCT-lifeos",
       "shipped_via": "pre_existing_ambient_thought_stream",
-      "shipped_at": "2026-07-18T01:07:59.873Z"
+      "shipped_at": "2026-07-18T01:07:59.873Z",
+      "same_signature_count": 0,
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-step5",
@@ -3394,7 +3494,8 @@
       "shipped_at": "2026-07-17T21:15:59.923Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-step5",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-step6",
@@ -3414,7 +3515,8 @@
       "commit_sha": "18f5c0aafca7b4a801bf705d99dc76b9b3cbc3ba",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-step6",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-step7",
@@ -3451,11 +3553,12 @@
       "shipped_at": "2026-07-17T21:36:04.456Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-step7",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-step8",
-      "status": "done",
+      "status": "pending",
       "target_file": "public/overlay/lifeos-voice-note-journal.html",
       "task": "implement voice journaling feature",
       "spec": "UI for voice journaling with a record button using Web Speech API. Transcribed text posted to /api/v1/lifeos/journal/voice and processed for AI extraction.",
@@ -3471,7 +3574,11 @@
       "commit_sha": "3afef6b726a37c8b32dd978c63bb2b5c0d2ecb0c",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-step8",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: Web Speech API",
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-step9",
@@ -3508,7 +3615,8 @@
       "blueprint_step_id": "lifeos-step9",
       "mission_id": "PRODUCT-lifeos",
       "shipped_via": "intervention_after_revive_exhausted",
-      "shipped_at": "2026-07-18T01:08:11.621Z"
+      "shipped_at": "2026-07-18T01:08:11.621Z",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-step10",
@@ -3530,7 +3638,8 @@
       "commit_sha": "c13577f20ca8b59ab72b6825a49513be6b3923cb",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-step10",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-step11",
@@ -3566,11 +3675,12 @@
       "shipped_at": "2026-07-17T17:34:51.711Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-step11",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-step12",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/lifeos-sleep.js",
       "task": "implement sleep tracking module",
       "spec": "Extend health-intelligence.js with functionality for bedtime, wake time, quality, dreams, and HRV correlation. Connect sleep data to daily scorecard.",
@@ -3602,7 +3712,11 @@
       "commit_sha": "d93cea4b96b39cc44d83654f39e04d569bb43323",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-step12",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: bedtime; wake time",
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-p1-failure-museum-ui",
@@ -3630,7 +3744,8 @@
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-practice-library-ui",
@@ -3659,7 +3774,8 @@
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-practice-nav",
@@ -3670,7 +3786,7 @@
         "lifeos-practice.html",
         "lifeos-failure-museum.html"
       ],
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -3679,7 +3795,7 @@
       "blueprint_step_id": "lifeos-p1-practice-nav",
       "mission_id": "PRODUCT-lifeos",
       "last_attempt_at": "2026-07-18T01:36:40.881Z",
-      "last_error": null,
+      "last_error": "artifact_proof_failed: lifeos-practice.html; lifeos-failure-museum.html",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
@@ -3697,7 +3813,9 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "pre_existing_artifact_proof",
-      "shipped_at": "2026-07-18T01:47:20.914Z"
+      "shipped_at": "2026-07-18T01:47:20.914Z",
+      "same_signature_count": 0,
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-p1-assessment-battery-service",
@@ -3751,7 +3869,8 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "pre_existing_artifact_proof",
-      "shipped_at": "2026-07-18T01:47:20.914Z"
+      "shipped_at": "2026-07-18T01:47:20.914Z",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-assessment-routes",
@@ -3791,7 +3910,8 @@
       "proof": null,
       "pre_existing": true,
       "shipped_via": "pre_existing_artifact_proof",
-      "shipped_at": "2026-07-18T01:47:20.914Z"
+      "shipped_at": "2026-07-18T01:47:20.914Z",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-assessment-autoreg",
@@ -3817,7 +3937,8 @@
       "proof": null,
       "pre_existing": true,
       "shipped_via": "pre_existing_artifact_proof",
-      "shipped_at": "2026-07-18T01:47:20.914Z"
+      "shipped_at": "2026-07-18T01:47:20.914Z",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-chronotype-winddown",
@@ -3845,7 +3966,8 @@
       "proof": null,
       "pre_existing": true,
       "shipped_via": "pre_existing_artifact_proof",
-      "shipped_at": "2026-07-18T01:47:20.914Z"
+      "shipped_at": "2026-07-18T01:47:20.914Z",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-therapy-today-card",
@@ -3872,7 +3994,8 @@
       "proof": null,
       "pre_existing": true,
       "shipped_via": "pre_existing_artifact_proof",
-      "shipped_at": "2026-07-18T01:47:20.914Z"
+      "shipped_at": "2026-07-18T01:47:20.914Z",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-food-logger-routes",
@@ -3914,7 +4037,8 @@
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-food-logger-autoreg",
@@ -3941,7 +4065,8 @@
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-food-logger-ui",
@@ -3965,7 +4090,8 @@
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-food-nav",
@@ -3976,7 +4102,7 @@
         "lifeos-food.html",
         "lifeos-practice.html"
       ],
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -3984,11 +4110,13 @@
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-food-nav",
       "mission_id": "PRODUCT-lifeos",
-      "last_error": null,
+      "last_error": "artifact_proof_failed: lifeos-food.html; lifeos-practice.html",
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0,
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-p1-sleep-insights-routes",
@@ -4029,7 +4157,8 @@
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-sleep-insights-autoreg",
@@ -4052,7 +4181,8 @@
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-ask-your-life-service",
@@ -4094,7 +4224,8 @@
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-ask-your-life-routes",
@@ -4138,7 +4269,8 @@
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-ask-your-life-autoreg",
@@ -4165,7 +4297,8 @@
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-ask-your-life-ui",
@@ -4189,7 +4322,8 @@
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-decision-review-routes",
@@ -4225,7 +4359,8 @@
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-decision-review-autoreg",
@@ -4248,7 +4383,8 @@
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-voice-journal-ui-proof",
@@ -4272,7 +4408,8 @@
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-ask-voice-nav",
@@ -4283,7 +4420,7 @@
         "lifeos-ask-your-life.html",
         "lifeos-voice-note-journal.html"
       ],
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -4291,11 +4428,13 @@
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-ask-voice-nav",
       "mission_id": "PRODUCT-lifeos",
-      "last_error": null,
+      "last_error": "artifact_proof_failed: lifeos-ask-your-life.html; lifeos-voice-note-journal.html",
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0,
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-p1-cycle-autoreg",
@@ -4322,7 +4461,8 @@
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-cycle-register-export",
@@ -4360,7 +4500,8 @@
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-deep-talk-service",
@@ -4397,7 +4538,8 @@
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-deep-talk-routes",
@@ -4437,7 +4579,8 @@
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-deep-talk-autoreg",
@@ -4460,7 +4603,8 @@
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-deep-talk-ui",
@@ -4484,7 +4628,8 @@
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-deep-talk-nav",
@@ -4494,7 +4639,7 @@
       "file_contains": [
         "lifeos-deep-talk.html"
       ],
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -4502,11 +4647,13 @@
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-deep-talk-nav",
       "mission_id": "PRODUCT-lifeos",
-      "last_error": null,
+      "last_error": "artifact_proof_failed: lifeos-deep-talk.html",
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0,
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-p1-emotional-daily-alias",
@@ -4550,7 +4697,8 @@
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-legacy-register",
@@ -4592,7 +4740,8 @@
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-legacy-autoreg",
@@ -4615,7 +4764,8 @@
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-psychometric-service",
@@ -4654,7 +4804,8 @@
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-psychometric-routes",
@@ -4690,7 +4841,8 @@
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-psychometric-autoreg",
@@ -4713,7 +4865,8 @@
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-psychometric-ui",
@@ -4737,7 +4890,8 @@
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-parenting-scripts-service",
@@ -4774,7 +4928,8 @@
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-parenting-scripts-routes",
@@ -4810,7 +4965,8 @@
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-parenting-scripts-autoreg",
@@ -4833,7 +4989,8 @@
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-parenting-scripts-ui",
@@ -4857,7 +5014,8 @@
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-labs-service",
@@ -4896,7 +5054,8 @@
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-labs-routes",
@@ -4932,7 +5091,8 @@
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-labs-autoreg",
@@ -4955,7 +5115,8 @@
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-labs-ui",
@@ -4979,7 +5140,8 @@
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-labs-psychometrics-migration",
@@ -5002,7 +5164,8 @@
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-feature-nav-batch",
@@ -5014,7 +5177,7 @@
         "lifeos-parenting-scripts.html",
         "lifeos-labs.html"
       ],
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -5022,11 +5185,13 @@
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-feature-nav-batch",
       "mission_id": "PRODUCT-lifeos",
-      "last_error": null,
+      "last_error": "artifact_proof_failed: lifeos-psychometrics.html; lifeos-parenting-scripts.html; lifeos-labs.html",
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0,
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-p1-auth-register-export",
@@ -5070,7 +5235,8 @@
       "last_error": null,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-auth-autoreg",
@@ -5095,7 +5261,8 @@
       "last_error": null,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-household-board",
@@ -5138,7 +5305,8 @@
       "last_error": null,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-household-autoreg",
@@ -5163,7 +5331,8 @@
       "last_error": null,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-family-register",
@@ -5206,7 +5375,8 @@
       "last_error": null,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-family-autoreg",
@@ -5231,7 +5401,8 @@
       "last_error": null,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-parent-mode-endpoint",
@@ -5277,7 +5448,8 @@
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-year-household-nav",
@@ -5288,7 +5460,7 @@
         "lifeos-year-in-pixels.html",
         "lifeos-household.html"
       ],
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -5299,10 +5471,12 @@
       "pre_existing": true,
       "shipped_via": "pre_existing_artifact_proof",
       "shipped_at": "2026-07-18T02:16:19.466Z",
-      "last_error": null,
+      "last_error": "artifact_proof_failed: lifeos-year-in-pixels.html; lifeos-household.html",
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "same_signature_count": 0,
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-p1-victory-register",
@@ -5328,7 +5502,8 @@
       "pre_existing": true,
       "shipped_via": "pre_existing_artifact_proof",
       "shipped_at": "2026-07-18T02:43:04.941Z",
-      "last_error": null
+      "last_error": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-victory-autoreg",
@@ -5350,7 +5525,8 @@
       "pre_existing": true,
       "shipped_via": "pre_existing_artifact_proof",
       "shipped_at": "2026-07-18T02:43:04.941Z",
-      "last_error": null
+      "last_error": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-purpose-register",
@@ -5376,7 +5552,8 @@
       "pre_existing": true,
       "shipped_via": "pre_existing_artifact_proof",
       "shipped_at": "2026-07-18T02:43:04.941Z",
-      "last_error": null
+      "last_error": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-purpose-autoreg",
@@ -5398,7 +5575,8 @@
       "pre_existing": true,
       "shipped_via": "pre_existing_artifact_proof",
       "shipped_at": "2026-07-18T02:43:04.941Z",
-      "last_error": null
+      "last_error": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-market-demand-signal",
@@ -5424,7 +5602,8 @@
       "pre_existing": true,
       "shipped_via": "pre_existing_artifact_proof",
       "shipped_at": "2026-07-18T02:43:04.941Z",
-      "last_error": null
+      "last_error": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-date-night-service",
@@ -5449,7 +5628,8 @@
       "pre_existing": true,
       "shipped_via": "pre_existing_artifact_proof",
       "shipped_at": "2026-07-18T02:43:04.941Z",
-      "last_error": null
+      "last_error": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-date-night-routes",
@@ -5474,7 +5654,8 @@
       "pre_existing": true,
       "shipped_via": "pre_existing_artifact_proof",
       "shipped_at": "2026-07-18T02:43:04.941Z",
-      "last_error": null
+      "last_error": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-date-night-autoreg",
@@ -5496,7 +5677,8 @@
       "pre_existing": true,
       "shipped_via": "pre_existing_artifact_proof",
       "shipped_at": "2026-07-18T02:43:04.941Z",
-      "last_error": null
+      "last_error": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-date-night-ui",
@@ -5519,7 +5701,8 @@
       "pre_existing": true,
       "shipped_via": "pre_existing_artifact_proof",
       "shipped_at": "2026-07-18T02:43:04.941Z",
-      "last_error": null
+      "last_error": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-parent-mode-ui",
@@ -5542,7 +5725,8 @@
       "pre_existing": true,
       "shipped_via": "pre_existing_artifact_proof",
       "shipped_at": "2026-07-18T02:43:04.941Z",
-      "last_error": null
+      "last_error": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-date-parent-nav",
@@ -5553,7 +5737,7 @@
         "lifeos-date-night.html",
         "lifeos-parent-mode.html"
       ],
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -5564,7 +5748,10 @@
       "pre_existing": true,
       "shipped_via": "pre_existing_artifact_proof",
       "shipped_at": "2026-07-18T02:43:04.941Z",
-      "last_error": null
+      "last_error": "artifact_proof_failed: lifeos-date-night.html; lifeos-parent-mode.html",
+      "same_signature_count": 0,
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-p1-ui-directives-rewire",
@@ -5590,7 +5777,8 @@
       "pre_existing": true,
       "shipped_via": "pre_existing_artifact_proof",
       "shipped_at": "2026-07-18T02:43:04.941Z",
-      "last_error": null
+      "last_error": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-twin-reaction-rewire",
@@ -5615,7 +5803,8 @@
       "pre_existing": true,
       "shipped_via": "pre_existing_artifact_proof",
       "shipped_at": "2026-07-18T02:43:04.941Z",
-      "last_error": null
+      "last_error": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-twin-directives-ui",
@@ -5639,7 +5828,8 @@
       "pre_existing": true,
       "shipped_via": "pre_existing_artifact_proof",
       "shipped_at": "2026-07-18T02:43:04.941Z",
-      "last_error": null
+      "last_error": null,
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-twin-directives-nav",
@@ -5649,7 +5839,7 @@
       "file_contains": [
         "lifeos-twin-directives.html"
       ],
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -5660,7 +5850,10 @@
       "pre_existing": true,
       "shipped_via": "pre_existing_artifact_proof",
       "shipped_at": "2026-07-18T02:43:04.941Z",
-      "last_error": null
+      "last_error": "artifact_proof_failed: lifeos-twin-directives.html",
+      "same_signature_count": 0,
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-p1-member-feedback-migration",
@@ -5680,7 +5873,8 @@
       "shipped_at": "2026-07-18T02:45:15.086Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-member-feedback-migration",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-member-feedback-service",
@@ -5700,7 +5894,8 @@
       "shipped_at": "2026-07-18T02:45:15.086Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-member-feedback-service",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-member-feedback-routes",
@@ -5720,7 +5915,8 @@
       "shipped_at": "2026-07-18T02:45:15.086Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-member-feedback-routes",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-member-feedback-ui",
@@ -5740,7 +5936,8 @@
       "shipped_at": "2026-07-18T02:45:15.086Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-member-feedback-ui",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-ethics-register",
@@ -5760,7 +5957,8 @@
       "shipped_at": "2026-07-18T02:45:15.086Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-ethics-register",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-ethics-autoreg",
@@ -5780,7 +5978,8 @@
       "shipped_at": "2026-07-18T02:45:15.086Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-ethics-autoreg",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-p1-member-feedback-nav",
@@ -5790,7 +5989,7 @@
       "file_contains": [
         "lifeos-member-feedback.html"
       ],
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -5800,11 +5999,16 @@
       "shipped_at": "2026-07-18T02:45:15.086Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-member-feedback-nav",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: lifeos-member-feedback.html",
+      "heal_unblocked": true
     }
   ],
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-lifeos",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:12:17.911Z"
+  "updated_at": "2026-08-01T06:30:35.552Z",
+  "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/lifeos/BUILD_QUEUE.json"
 }

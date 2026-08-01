@@ -34,7 +34,8 @@
       "commit_sha": "ad606c84834ae14155b4d71598e758dea3920cf0",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step1",
-      "mission_id": "PRODUCT-music-talent-studio"
+      "mission_id": "PRODUCT-music-talent-studio",
+      "same_signature_count": 0
     },
     {
       "id": "step2",
@@ -83,7 +84,8 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "same_signature_count": 0
     },
     {
       "id": "step3",
@@ -128,7 +130,8 @@
           "content_source_path": "docs/products/music-talent-studio/twins/steps/step3.exact",
           "content_sha256": "bdd372c84b1dff94f803e8fd2f38cb1cde244c454078409d585c6d14843c4a24"
         }
-      }
+      },
+      "same_signature_count": 0
     },
     {
       "id": "step4",
@@ -187,7 +190,8 @@
           "content_source_path": "docs/products/music-talent-studio/twins/steps/step4.exact",
           "content_sha256": "6d377345cef5c735b36b1d735b14464bf07e559e35ef61b69b4380b5c4497570"
         }
-      }
+      },
+      "same_signature_count": 0
     },
     {
       "id": "step5",
@@ -330,7 +334,8 @@
           "content_source_path": "docs/products/music-talent-studio/twins/steps/step5.exact",
           "content_sha256": "a6c17e8f213201540eb1fa12469e964cb2949faad44e6326713a49812ffba967"
         }
-      }
+      },
+      "same_signature_count": 0
     },
     {
       "id": "step6",
@@ -378,7 +383,8 @@
           "content_source_path": "docs/products/music-talent-studio/twins/steps/step6.exact",
           "content_sha256": "cb3637fff1f0908282563737c96667c3152f2e729d61a3db1357d7e5e4099a28"
         }
-      }
+      },
+      "same_signature_count": 0
     },
     {
       "id": "step7",
@@ -440,7 +446,8 @@
           "content_source_path": "docs/products/music-talent-studio/twins/steps/step7.exact",
           "content_sha256": "1e53c143b18905be5d8ba76ebfa3c47d05584664716d8126247afe1e4124f8d3"
         }
-      }
+      },
+      "same_signature_count": 0
     },
     {
       "id": "step8",
@@ -583,7 +590,8 @@
           "content_source_path": "docs/products/music-talent-studio/twins/steps/step8.exact",
           "content_sha256": "4fe82bd2d3a4cfe159a01e1a3cc01d514d85a3af56b7099de08f2e92ca9193c2"
         }
-      }
+      },
+      "same_signature_count": 0
     },
     {
       "id": "step9",
@@ -659,7 +667,8 @@
           "content_source_path": "docs/products/music-talent-studio/twins/steps/step9.exact",
           "content_sha256": "c97258931dd77f58e53739b6cb1c135fe274c5bdaf28551afdbbd48cb9d2b12f"
         }
-      }
+      },
+      "same_signature_count": 0
     },
     {
       "id": "step10",
@@ -688,7 +697,8 @@
       "commit_sha": "bcac21f571e78d0dcfda6158bbdd891650434336",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step10",
-      "mission_id": "PRODUCT-music-talent-studio"
+      "mission_id": "PRODUCT-music-talent-studio",
+      "same_signature_count": 0
     },
     {
       "id": "step11",
@@ -708,7 +718,8 @@
       "commit_sha": "c670126815fc688ce082d6b08f753cd2abec3b3f",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step11",
-      "mission_id": "PRODUCT-music-talent-studio"
+      "mission_id": "PRODUCT-music-talent-studio",
+      "same_signature_count": 0
     },
     {
       "id": "step12",
@@ -727,7 +738,8 @@
       "commit_sha": "b83677aa2fc7a9c04c7c3abdf1ef4a28e30cd7e4",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step12",
-      "mission_id": "PRODUCT-music-talent-studio"
+      "mission_id": "PRODUCT-music-talent-studio",
+      "same_signature_count": 0
     },
     {
       "id": "2",
@@ -759,7 +771,8 @@
       "commit_sha": "c1aa52a7b5c3c5b4b97cf6f14b8b5c8e80707380",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "2",
-      "mission_id": "PRODUCT-music-talent-studio"
+      "mission_id": "PRODUCT-music-talent-studio",
+      "same_signature_count": 0
     },
     {
       "id": "3",
@@ -1921,11 +1934,12 @@
       "escalation_required": true,
       "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
       "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
-      "escalated_at": "2026-07-31T18:40:13.627Z"
+      "escalated_at": "2026-07-31T18:40:13.627Z",
+      "same_signature_count": 0
     },
     {
       "id": "5",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/musicIndustryConsultation.js",
       "task": "verify music industry consultation",
       "spec": "Ensure that 2 music industry professionals have been consulted.",
@@ -1957,7 +1971,11 @@
       "commit_sha": "1a3380e65822276864d6c10d7f6461ef5470b6cc",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "5",
-      "mission_id": "PRODUCT-music-talent-studio"
+      "mission_id": "PRODUCT-music-talent-studio",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: Music Industry Consultation",
+      "heal_unblocked": true
     },
     {
       "id": "6",
@@ -2060,7 +2078,8 @@
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:addStudentInterview,getStudentInterview; assertion_threw; assertion_threw; assertion_threw",
       "reaudit_reset_at": "2026-07-30T18:55:06.680Z",
       "last_attempt_at": "2026-08-01T05:40:08.396Z",
-      "completed_at": "2026-08-01T05:40:21.077Z"
+      "completed_at": "2026-08-01T05:40:21.077Z",
+      "same_signature_count": 0
     },
     {
       "id": "8",
@@ -2101,7 +2120,8 @@
       "reaudit_reset_at": "2026-07-30T18:55:06.680Z",
       "last_attempt_at": "2026-08-01T05:44:43.830Z",
       "blocker_class": "BLOCKED_TOOLING",
-      "completed_at": "2026-08-01T05:44:44.088Z"
+      "completed_at": "2026-08-01T05:44:44.088Z",
+      "same_signature_count": 0
     },
     {
       "id": "9",
@@ -2149,7 +2169,8 @@
           "content_source_path": "docs/products/music-talent-studio/twins/steps/9.exact",
           "content_sha256": "047c421e88ca7a1925c981c5dc8e80af74be394ab00e9c8baa9e3917515cf894"
         }
-      }
+      },
+      "same_signature_count": 0
     },
     {
       "id": "10",
@@ -2185,11 +2206,12 @@
       "commit_sha": "b31eeaf227ddfb4dc865d0d6cfcd7dc79ac19bf0",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "10",
-      "mission_id": "PRODUCT-music-talent-studio"
+      "mission_id": "PRODUCT-music-talent-studio",
+      "same_signature_count": 0
     },
     {
       "id": "11",
-      "status": "done",
+      "status": "pending",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register new routes",
       "spec": "Add new routes to the auto-registration config.",
@@ -2208,7 +2230,11 @@
       "commit_sha": "94c24bb21f303b0b4f5a377b2d454e06246af325",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "11",
-      "mission_id": "PRODUCT-music-talent-studio"
+      "mission_id": "PRODUCT-music-talent-studio",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: musicTeachersInterviewRoutes",
+      "heal_unblocked": true
     },
     {
       "id": "12",
@@ -2240,7 +2266,8 @@
       "commit_sha": "d74248bf452940817013a2abd8092ed1ab852608",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "12",
-      "mission_id": "PRODUCT-music-talent-studio"
+      "mission_id": "PRODUCT-music-talent-studio",
+      "same_signature_count": 0
     },
     {
       "id": "music-talent-studio-1",
@@ -2269,7 +2296,8 @@
       "commit_sha": "a3cb1975c7f6a95b1726349334cf24dd71bebce5",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "music-talent-studio-1",
-      "mission_id": "PRODUCT-music-talent-studio"
+      "mission_id": "PRODUCT-music-talent-studio",
+      "same_signature_count": 0
     },
     {
       "id": "music-talent-studio-2",
@@ -2298,7 +2326,8 @@
       "commit_sha": "c5c021ef6f3edffe49fcaef3be5ae73315d47485",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "music-talent-studio-2",
-      "mission_id": "PRODUCT-music-talent-studio"
+      "mission_id": "PRODUCT-music-talent-studio",
+      "same_signature_count": 0
     },
     {
       "id": "music-talent-studio-3",
@@ -2327,7 +2356,8 @@
       "commit_sha": "333e75ed5545233daaaf245d58c01ca69031c8cf",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "music-talent-studio-3",
-      "mission_id": "PRODUCT-music-talent-studio"
+      "mission_id": "PRODUCT-music-talent-studio",
+      "same_signature_count": 0
     },
     {
       "id": "music-talent-studio-4",
@@ -2371,7 +2401,8 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "music-talent-studio-4",
-      "mission_id": "PRODUCT-music-talent-studio"
+      "mission_id": "PRODUCT-music-talent-studio",
+      "same_signature_count": 0
     },
     {
       "id": "music-talent-studio-5",
@@ -2400,7 +2431,8 @@
       "commit_sha": "f15ade3ca601f3758c87dd22128dd36bd763ed21",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "music-talent-studio-5",
-      "mission_id": "PRODUCT-music-talent-studio"
+      "mission_id": "PRODUCT-music-talent-studio",
+      "same_signature_count": 0
     },
     {
       "id": "music-talent-studio-6",
@@ -2429,7 +2461,8 @@
       "commit_sha": "26786640932f50909207078f7faca2f8cb034888",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "music-talent-studio-6",
-      "mission_id": "PRODUCT-music-talent-studio"
+      "mission_id": "PRODUCT-music-talent-studio",
+      "same_signature_count": 0
     },
     {
       "id": "music-talent-studio-7",
@@ -2464,7 +2497,8 @@
       "commit_sha": "956fd21bd1ce5f22647259ca34156ceb990f73bf",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "music-talent-studio-7",
-      "mission_id": "PRODUCT-music-talent-studio"
+      "mission_id": "PRODUCT-music-talent-studio",
+      "same_signature_count": 0
     },
     {
       "id": "music-talent-studio-8",
@@ -2500,7 +2534,8 @@
       "shipped_at": "2026-07-16T06:22:53.970Z",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "music-talent-studio-8",
-      "mission_id": "PRODUCT-music-talent-studio"
+      "mission_id": "PRODUCT-music-talent-studio",
+      "same_signature_count": 0
     },
     {
       "id": "music-talent-studio-9",
@@ -2533,7 +2568,8 @@
       "commit_sha": "ad6631c2c319778dc6e83482aae27f3eaa831215",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "music-talent-studio-9",
-      "mission_id": "PRODUCT-music-talent-studio"
+      "mission_id": "PRODUCT-music-talent-studio",
+      "same_signature_count": 0
     },
     {
       "id": "music-talent-studio-10",
@@ -2585,7 +2621,8 @@
       "shipped_at": "2026-07-17T18:38:51.914Z",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "music-talent-studio-10",
-      "mission_id": "PRODUCT-music-talent-studio"
+      "mission_id": "PRODUCT-music-talent-studio",
+      "same_signature_count": 0
     },
     {
       "id": "music-talent-studio-11",
@@ -2605,11 +2642,13 @@
       "commit_sha": "b0e67ac139b5d65a31a3321d5d3078fcab53e808",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "music-talent-studio-11",
-      "mission_id": "PRODUCT-music-talent-studio"
+      "mission_id": "PRODUCT-music-talent-studio",
+      "same_signature_count": 0
     }
   ],
   "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-music-talent-studio",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:12:27.068Z"
+  "updated_at": "2026-08-01T06:30:43.989Z",
+  "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/music-talent-studio/BUILD_QUEUE.json"
 }

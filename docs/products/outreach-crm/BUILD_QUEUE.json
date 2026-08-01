@@ -37,7 +37,8 @@
       "commit_sha": "7d406247c237eaea40ef0f1277131e9bb5b5e3c1",
       "blueprint_id": "PRODUCT-OUTREACH-CRM-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step1",
-      "mission_id": "PRODUCT-outreach-crm"
+      "mission_id": "PRODUCT-outreach-crm",
+      "same_signature_count": 0
     },
     {
       "id": "step2",
@@ -86,11 +87,12 @@
       "shipped_at": "2026-07-15T08:41:24.945Z",
       "blueprint_id": "PRODUCT-OUTREACH-CRM-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step2",
-      "mission_id": "PRODUCT-outreach-crm"
+      "mission_id": "PRODUCT-outreach-crm",
+      "same_signature_count": 0
     },
     {
       "id": "step3",
-      "status": "done",
+      "status": "pending",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "Add BoldTrail routes to auto-register config",
       "spec": "Ensure the BoldTrail routes are included for auto-registration within the server context by adding an entry for the newly created route module.",
@@ -107,7 +109,11 @@
       "commit_sha": "4fa2ee7610d13cfd54f0a01de6174e057334e814",
       "blueprint_id": "PRODUCT-OUTREACH-CRM-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step3",
-      "mission_id": "PRODUCT-outreach-crm"
+      "mission_id": "PRODUCT-outreach-crm",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: {\"path\":\"routes/boldtrail-routes.js\",\"module\":\"registerBoldTrailRoutes\"}",
+      "heal_unblocked": true
     },
     {
       "id": "step4",
@@ -142,11 +148,13 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-OUTREACH-CRM-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step4",
-      "mission_id": "PRODUCT-outreach-crm"
+      "mission_id": "PRODUCT-outreach-crm",
+      "same_signature_count": 0
     }
   ],
   "blueprint_id": "PRODUCT-OUTREACH-CRM-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-outreach-crm",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:12:29.717Z"
+  "updated_at": "2026-08-01T06:30:45.598Z",
+  "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/outreach-crm/BUILD_QUEUE.json"
 }

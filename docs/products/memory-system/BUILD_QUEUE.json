@@ -21,7 +21,8 @@
       "completed_at": "2026-07-13T14:21:36.717Z",
       "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "1",
-      "mission_id": "PRODUCT-memory-system"
+      "mission_id": "PRODUCT-memory-system",
+      "same_signature_count": 0
     },
     {
       "id": "2",
@@ -38,7 +39,8 @@
       "shipped_at": "2026-07-13T23:45:16.525Z",
       "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "2",
-      "mission_id": "PRODUCT-memory-system"
+      "mission_id": "PRODUCT-memory-system",
+      "same_signature_count": 0
     },
     {
       "id": "3",
@@ -56,7 +58,8 @@
       "completed_at": "2026-07-13T14:31:01.029Z",
       "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "3",
-      "mission_id": "PRODUCT-memory-system"
+      "mission_id": "PRODUCT-memory-system",
+      "same_signature_count": 0
     },
     {
       "id": "4",
@@ -72,7 +75,8 @@
       "completed_at": "2026-07-13T14:32:57.068Z",
       "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "4",
-      "mission_id": "PRODUCT-memory-system"
+      "mission_id": "PRODUCT-memory-system",
+      "same_signature_count": 0
     },
     {
       "id": "5",
@@ -88,7 +92,8 @@
       "completed_at": "2026-07-13T14:35:44.617Z",
       "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "5",
-      "mission_id": "PRODUCT-memory-system"
+      "mission_id": "PRODUCT-memory-system",
+      "same_signature_count": 0
     },
     {
       "id": "6",
@@ -105,7 +110,8 @@
       "shipped_at": "2026-07-14T00:13:49.374Z",
       "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "6",
-      "mission_id": "PRODUCT-memory-system"
+      "mission_id": "PRODUCT-memory-system",
+      "same_signature_count": 0
     },
     {
       "id": "7",
@@ -120,7 +126,8 @@
       "shipped_at": "2026-07-14T01:10:05.382Z",
       "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "7",
-      "mission_id": "PRODUCT-memory-system"
+      "mission_id": "PRODUCT-memory-system",
+      "same_signature_count": 0
     },
     {
       "id": "8",
@@ -147,7 +154,8 @@
       "completed_at": "2026-07-14T17:48:41.486Z",
       "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "8",
-      "mission_id": "PRODUCT-memory-system"
+      "mission_id": "PRODUCT-memory-system",
+      "same_signature_count": 0
     },
     {
       "id": "9",
@@ -165,7 +173,8 @@
       "commit_sha": "c9cd07ad5de8af995e37837e3e7237639a481df6",
       "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "9",
-      "mission_id": "PRODUCT-memory-system"
+      "mission_id": "PRODUCT-memory-system",
+      "same_signature_count": 0
     },
     {
       "id": "10",
@@ -183,7 +192,8 @@
       "commit_sha": "d5775f7b757f21fe52b0d5d942cbd7a6c1e474e7",
       "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "10",
-      "mission_id": "PRODUCT-memory-system"
+      "mission_id": "PRODUCT-memory-system",
+      "same_signature_count": 0
     },
     {
       "id": "11",
@@ -215,7 +225,8 @@
       "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "11",
       "mission_id": "PRODUCT-memory-system",
-      "completed_at": "2026-08-01T06:12:25.656Z"
+      "completed_at": "2026-08-01T06:12:25.656Z",
+      "same_signature_count": 0
     },
     {
       "id": "12",
@@ -235,11 +246,12 @@
       "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "12",
       "mission_id": "PRODUCT-memory-system",
-      "completed_at": "2026-08-01T06:12:25.656Z"
+      "completed_at": "2026-08-01T06:12:25.656Z",
+      "same_signature_count": 0
     },
     {
       "id": "memory-system-1",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/migrations/202311_vector_embedding_update.sql",
       "task": "define vector embedding column",
       "spec": "Add vector embedding column to DB schema as per documented requirements.",
@@ -251,7 +263,7 @@
         "ADD COLUMN vector_embedding"
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "artifact_proof_failed: ADD COLUMN vector_embedding",
       "commit_sha": "b6f7a08afd0e0f7073a7ad1249e991f7de1972af",
       "built_sha": null,
       "proof": null,
@@ -272,7 +284,9 @@
       "shipped_at": "2026-07-16T05:50:05.496Z",
       "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-system-1",
-      "mission_id": "PRODUCT-memory-system"
+      "mission_id": "PRODUCT-memory-system",
+      "same_signature_count": 0,
+      "heal_unblocked": true
     },
     {
       "id": "memory-system-2",
@@ -309,11 +323,12 @@
       "shipped_at": "2026-07-16T05:35:55.521Z",
       "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-system-2",
-      "mission_id": "PRODUCT-memory-system"
+      "mission_id": "PRODUCT-memory-system",
+      "same_signature_count": 0
     },
     {
       "id": "memory-system-3",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/migrations/202311_memory_category_taxonomy_update.sql",
       "task": "update schema for category taxonomy",
       "spec": "Implement memory category taxonomy in the schema.",
@@ -327,7 +342,7 @@
         "ADD COLUMN memory_category"
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "artifact_proof_failed: ADD COLUMN memory_category",
       "commit_sha": "13c22a5cc266d41e6349d2b1414008b3fa8e3d67",
       "built_sha": null,
       "proof": null,
@@ -348,7 +363,9 @@
       "shipped_at": "2026-07-16T06:13:47.544Z",
       "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-system-3",
-      "mission_id": "PRODUCT-memory-system"
+      "mission_id": "PRODUCT-memory-system",
+      "same_signature_count": 0,
+      "heal_unblocked": true
     },
     {
       "id": "memory-system-4",
@@ -380,7 +397,8 @@
       "commit_sha": "e60d74a04a6bfbc123912f05140435e6554c871b",
       "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-system-4",
-      "mission_id": "PRODUCT-memory-system"
+      "mission_id": "PRODUCT-memory-system",
+      "same_signature_count": 0
     },
     {
       "id": "memory-system-5",
@@ -400,7 +418,8 @@
       "commit_sha": "e48ceabb07492148b2b73d755006b0d79d6748dc",
       "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-system-5",
-      "mission_id": "PRODUCT-memory-system"
+      "mission_id": "PRODUCT-memory-system",
+      "same_signature_count": 0
     },
     {
       "id": "memory-system-6",
@@ -420,7 +439,8 @@
       "commit_sha": "47b43005149681075b812606ecb5a252ab2a0aa8",
       "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-system-6",
-      "mission_id": "PRODUCT-memory-system"
+      "mission_id": "PRODUCT-memory-system",
+      "same_signature_count": 0
     },
     {
       "id": "memory-system-7",
@@ -457,11 +477,12 @@
       "shipped_at": "2026-07-16T05:31:35.551Z",
       "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-system-7",
-      "mission_id": "PRODUCT-memory-system"
+      "mission_id": "PRODUCT-memory-system",
+      "same_signature_count": 0
     },
     {
       "id": "memory-system-8",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/final_pr_review.js",
       "task": "create PR review route",
       "spec": "Add route for branch phase7-railway-probe final PR review and merge.",
@@ -494,7 +515,11 @@
       "commit_sha": "5ffba05566c59202806795eaaf5c1b496edd22ab",
       "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-system-8",
-      "mission_id": "PRODUCT-memory-system"
+      "mission_id": "PRODUCT-memory-system",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: pull request; final review",
+      "heal_unblocked": true
     },
     {
       "id": "memory-system-9",
@@ -533,11 +558,12 @@
       "shipped_at": "2026-07-16T06:37:31.957Z",
       "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-system-9",
-      "mission_id": "PRODUCT-memory-system"
+      "mission_id": "PRODUCT-memory-system",
+      "same_signature_count": 0
     },
     {
       "id": "memory-system-s1",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/migrations/202311_vector_embedding_update.sql",
       "task": "add vector embedding column",
       "spec": "Add a 'vector_embedding' column to existing tables for memory data storage.",
@@ -549,7 +575,7 @@
         "ADD COLUMN vector_embedding"
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "artifact_proof_failed: ADD COLUMN vector_embedding",
       "commit_sha": "cc705c58105d893a24471b1d4ebc7621342c86a6",
       "built_sha": null,
       "proof": null,
@@ -570,7 +596,9 @@
       "shipped_at": "2026-07-16T06:25:56.757Z",
       "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-system-s1",
-      "mission_id": "PRODUCT-memory-system"
+      "mission_id": "PRODUCT-memory-system",
+      "same_signature_count": 0,
+      "heal_unblocked": true
     },
     {
       "id": "memory-system-s2",
@@ -607,7 +635,8 @@
       "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-system-s2",
       "mission_id": "PRODUCT-memory-system",
-      "completed_at": "2026-08-01T05:59:52.224Z"
+      "completed_at": "2026-08-01T05:59:52.224Z",
+      "same_signature_count": 0
     },
     {
       "id": "memory-system-s3",
@@ -629,7 +658,8 @@
       "commit_sha": "3c7995184fbadde5f415435e5d46790fa733e801",
       "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-system-s3",
-      "mission_id": "PRODUCT-memory-system"
+      "mission_id": "PRODUCT-memory-system",
+      "same_signature_count": 0
     },
     {
       "id": "memory-system-s4",
@@ -661,11 +691,12 @@
       "commit_sha": "86933622be6bce4f7362e13011b8924336dd401f",
       "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-system-s4",
-      "mission_id": "PRODUCT-memory-system"
+      "mission_id": "PRODUCT-memory-system",
+      "same_signature_count": 0
     },
     {
       "id": "memory-system-s6",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/final_pr_review.js",
       "task": "conduct final PR review before merge",
       "spec": "Perform a formal review and add a PR note before merging to main branch.",
@@ -694,7 +725,7 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "artifact_proof_failed: final PR review; ready for merge",
       "commit_sha": "558f4cd3f2ce39a118bbb5eefe4abb4cf983ff85",
       "built_sha": null,
       "proof": null,
@@ -715,7 +746,9 @@
       "shipped_at": "2026-07-17T17:45:18.394Z",
       "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-system-s6",
-      "mission_id": "PRODUCT-memory-system"
+      "mission_id": "PRODUCT-memory-system",
+      "same_signature_count": 0,
+      "heal_unblocked": true
     },
     {
       "id": "memory-system-s7",
@@ -752,7 +785,8 @@
       "shipped_at": "2026-07-16T07:13:38.730Z",
       "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-system-s7",
-      "mission_id": "PRODUCT-memory-system"
+      "mission_id": "PRODUCT-memory-system",
+      "same_signature_count": 0
     },
     {
       "id": "memory-system-s8",
@@ -789,7 +823,8 @@
       "shipped_at": "2026-07-17T18:48:20.166Z",
       "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-system-s8",
-      "mission_id": "PRODUCT-memory-system"
+      "mission_id": "PRODUCT-memory-system",
+      "same_signature_count": 0
     },
     {
       "id": "memory-system-10",
@@ -826,7 +861,8 @@
       "shipped_at": "2026-07-17T18:06:22.698Z",
       "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-system-10",
-      "mission_id": "PRODUCT-memory-system"
+      "mission_id": "PRODUCT-memory-system",
+      "same_signature_count": 0
     },
     {
       "id": "step1",
@@ -876,7 +912,8 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-18T03:21:27.577Z"
+      "shipped_at": "2026-07-18T03:21:27.577Z",
+      "same_signature_count": 0
     },
     {
       "id": "step2",
@@ -913,7 +950,8 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-18T03:32:16.814Z"
+      "shipped_at": "2026-07-18T03:32:16.814Z",
+      "same_signature_count": 0
     },
     {
       "id": "step4",
@@ -947,7 +985,8 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-18T04:21:04.006Z"
+      "shipped_at": "2026-07-18T04:21:04.006Z",
+      "same_signature_count": 0
     },
     {
       "id": "step5",
@@ -983,7 +1022,8 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-18T04:39:13.274Z"
+      "shipped_at": "2026-07-18T04:39:13.274Z",
+      "same_signature_count": 0
     },
     {
       "id": "step3",
@@ -1018,7 +1058,8 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "same_signature_count": 0
     },
     {
       "id": "01",
@@ -1058,7 +1099,8 @@
       "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
       "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
       "escalated_at": "2026-07-31T18:40:13.626Z",
-      "skip_reason": "Target pull_requests/final_pr_review.js is outside builder safe-scope and requires human GitHub PR workflow; skipped to unblock downstream scripts."
+      "skip_reason": "Target pull_requests/final_pr_review.js is outside builder safe-scope and requires human GitHub PR workflow; skipped to unblock downstream scripts.",
+      "same_signature_count": 0
     },
     {
       "id": "02",
@@ -1079,7 +1121,8 @@
       "resolution_note": "Removed dependency on unsafe blocked step 01 (pull_requests/final_pr_review.js outside builder safe-scope); scripts/deploy_railway.js is independent.",
       "commit_sha": "369746afbf9e807ae311015f7375061997d913cf",
       "last_attempt_at": "2026-08-01T03:35:56.845Z",
-      "completed_at": "2026-08-01T03:35:56.888Z"
+      "completed_at": "2026-08-01T03:35:56.888Z",
+      "same_signature_count": 0
     },
     {
       "id": "03",
@@ -1103,7 +1146,8 @@
       "resolution_note": "Depends on 02 only.",
       "commit_sha": "369746afbf9e807ae311015f7375061997d913cf",
       "last_attempt_at": "2026-08-01T03:36:10.627Z",
-      "completed_at": "2026-08-01T03:36:10.675Z"
+      "completed_at": "2026-08-01T03:36:10.675Z",
+      "same_signature_count": 0
     },
     {
       "id": "document-phase7-merge",
@@ -1126,7 +1170,8 @@
       "shipped_via": "pre_existing_artifact_proof",
       "shipped_at": "2026-08-01T03:40:37.153Z",
       "resolution_note": "Provided deterministic artifact by conductor while AI providers are unavailable.",
-      "completed_at": "2026-08-01T03:40:37.153Z"
+      "completed_at": "2026-08-01T03:40:37.153Z",
+      "same_signature_count": 0
     },
     {
       "id": "orchestrate-and-verify-railway-deploy",
@@ -1147,12 +1192,14 @@
       "shipped_at": "2026-08-01T03:40:37.153Z",
       "last_error": null,
       "resolution_note": "Provided deterministic artifact by conductor while AI providers are unavailable.",
-      "completed_at": "2026-08-01T03:40:37.153Z"
+      "completed_at": "2026-08-01T03:40:37.153Z",
+      "same_signature_count": 0
     }
   ],
   "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-memory-system",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:12:25.661Z",
-  "backlog_signature_at": "2026-08-01T03:49:41.584Z"
+  "updated_at": "2026-08-01T06:30:42.443Z",
+  "backlog_signature_at": "2026-08-01T03:49:41.584Z",
+  "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/memory-system/BUILD_QUEUE.json"
 }

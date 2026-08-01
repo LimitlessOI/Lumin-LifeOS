@@ -54,11 +54,12 @@
       "shipped_at": "2026-07-15T08:40:39.013Z",
       "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "1",
-      "mission_id": "PRODUCT-ideavault"
+      "mission_id": "PRODUCT-ideavault",
+      "same_signature_count": 0
     },
     {
       "id": "2",
-      "status": "done",
+      "status": "pending",
       "target_file": "scripts/runMemoryImport.mjs",
       "task": "execute run-memory-import",
       "spec": "Run memory import script for large exports, interfacing with import-dumps-to-twin.js.",
@@ -73,7 +74,11 @@
       "commit_sha": "46160e5050642ef0e72a4e47b8d9be1162e1d050",
       "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "2",
-      "mission_id": "PRODUCT-ideavault"
+      "mission_id": "PRODUCT-ideavault",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: import-dumps-to-twin",
+      "heal_unblocked": true
     },
     {
       "id": "3",
@@ -109,7 +114,8 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "3",
-      "mission_id": "PRODUCT-ideavault"
+      "mission_id": "PRODUCT-ideavault",
+      "same_signature_count": 0
     },
     {
       "id": "4",
@@ -130,7 +136,8 @@
       "commit_sha": "a2dbd7adca32f8037e0c4b53fca9cc9a6136ade7",
       "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "4",
-      "mission_id": "PRODUCT-ideavault"
+      "mission_id": "PRODUCT-ideavault",
+      "same_signature_count": 0
     },
     {
       "id": "5",
@@ -146,7 +153,8 @@
       "commit_sha": "0cbb9ec60bb205631867eba0ca62678be1fd4a92",
       "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "5",
-      "mission_id": "PRODUCT-ideavault"
+      "mission_id": "PRODUCT-ideavault",
+      "same_signature_count": 0
     },
     {
       "id": "step4",
@@ -183,7 +191,8 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step4",
-      "mission_id": "PRODUCT-ideavault"
+      "mission_id": "PRODUCT-ideavault",
+      "same_signature_count": 0
     },
     {
       "id": "step1",
@@ -242,7 +251,8 @@
       "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
       "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
       "escalated_at": "2026-07-31T18:40:13.620Z",
-      "completed_at": "2026-08-01T04:57:56.241Z"
+      "completed_at": "2026-08-01T04:57:56.241Z",
+      "same_signature_count": 0
     },
     {
       "id": "step2",
@@ -282,7 +292,8 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step2",
-      "mission_id": "PRODUCT-ideavault"
+      "mission_id": "PRODUCT-ideavault",
+      "same_signature_count": 0
     },
     {
       "id": "step3",
@@ -324,7 +335,8 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step3",
-      "mission_id": "PRODUCT-ideavault"
+      "mission_id": "PRODUCT-ideavault",
+      "same_signature_count": 0
     },
     {
       "id": "ideavault-1",
@@ -377,7 +389,8 @@
       "shipped_at": "2026-07-16T05:55:58.308Z",
       "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "ideavault-1",
-      "mission_id": "PRODUCT-ideavault"
+      "mission_id": "PRODUCT-ideavault",
+      "same_signature_count": 0
     },
     {
       "id": "ideavault-2",
@@ -418,7 +431,8 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "ideavault-2",
-      "mission_id": "PRODUCT-ideavault"
+      "mission_id": "PRODUCT-ideavault",
+      "same_signature_count": 0
     },
     {
       "id": "ideavault-3",
@@ -458,7 +472,8 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "ideavault-3",
-      "mission_id": "PRODUCT-ideavault"
+      "mission_id": "PRODUCT-ideavault",
+      "same_signature_count": 0
     },
     {
       "id": "ideavault-4",
@@ -499,7 +514,8 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "ideavault-4",
-      "mission_id": "PRODUCT-ideavault"
+      "mission_id": "PRODUCT-ideavault",
+      "same_signature_count": 0
     },
     {
       "id": "ideavault-5",
@@ -521,11 +537,12 @@
       "commit_sha": "0d59d5fea7218c15dedbd7f394a0d31d7a26d5cc",
       "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "ideavault-5",
-      "mission_id": "PRODUCT-ideavault"
+      "mission_id": "PRODUCT-ideavault",
+      "same_signature_count": 0
     },
     {
       "id": "ideavault-step1",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/headingPassStream.js",
       "task": "extend heading pass stream",
       "spec": "Extend the existing heading pass stream to handle any new export over 500KB, appending to the Stream subsection or extending Stream I/portfolio table.",
@@ -551,7 +568,7 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "artifact_proof_failed: Stream I/portfolio table",
       "commit_sha": "4b73fbeca406d8162f12e1d954c97b1feb5371ed",
       "built_sha": null,
       "proof": null,
@@ -572,7 +589,9 @@
       "shipped_at": "2026-07-16T07:09:44.476Z",
       "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "ideavault-step1",
-      "mission_id": "PRODUCT-ideavault"
+      "mission_id": "PRODUCT-ideavault",
+      "same_signature_count": 0,
+      "heal_unblocked": true
     },
     {
       "id": "ideavault-step2",
@@ -591,7 +610,8 @@
       "commit_sha": "6e2fcad745b80adbb2ab090559df963ed779679f",
       "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "ideavault-step2",
-      "mission_id": "PRODUCT-ideavault"
+      "mission_id": "PRODUCT-ideavault",
+      "same_signature_count": 0
     },
     {
       "id": "ideavault-step3",
@@ -627,7 +647,8 @@
       "shipped_at": "2026-07-17T19:11:03.984Z",
       "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "ideavault-step3",
-      "mission_id": "PRODUCT-ideavault"
+      "mission_id": "PRODUCT-ideavault",
+      "same_signature_count": 0
     },
     {
       "id": "ideavault-step4",
@@ -648,7 +669,8 @@
       "commit_sha": "f65203ad524bbdd5f7eda62f4174cc6e299129cb",
       "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "ideavault-step4",
-      "mission_id": "PRODUCT-ideavault"
+      "mission_id": "PRODUCT-ideavault",
+      "same_signature_count": 0
     },
     {
       "id": "ideavault-step5",
@@ -683,11 +705,13 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "ideavault-step5",
-      "mission_id": "PRODUCT-ideavault"
+      "mission_id": "PRODUCT-ideavault",
+      "same_signature_count": 0
     }
   ],
   "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-ideavault",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:12:14.589Z"
+  "updated_at": "2026-08-01T06:30:32.012Z",
+  "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/ideavault/BUILD_QUEUE.json"
 }

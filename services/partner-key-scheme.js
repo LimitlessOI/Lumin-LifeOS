@@ -50,3 +50,6 @@ export async function generatePlatformKeys(deps, payload) {
     throw new Error('Failed to generate platform keys.');
   }
 }
+
+// Backward-compatible alias for queued blueprint expectation (white-label-step3).
+export const generatePartnerKey = generatePartnerKeys;

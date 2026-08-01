@@ -40,11 +40,12 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "1",
-      "mission_id": "PRODUCT-kids-os"
+      "mission_id": "PRODUCT-kids-os",
+      "same_signature_count": 0
     },
     {
       "id": "2",
-      "status": "done",
+      "status": "pending",
       "target_file": "public/overlay/age-appropriate-ux-4-7.html",
       "task": "Set up age-appropriate UX 4-7",
       "spec": "Implement UX flows specifically for children ages 4-7.",
@@ -60,11 +61,15 @@
       "commit_sha": "dbfa9c07032d20c96dd97fb75b8c6c3db22db600",
       "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "2",
-      "mission_id": "PRODUCT-kids-os"
+      "mission_id": "PRODUCT-kids-os",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "no_proof_required_non_server_code",
+      "heal_unblocked": true
     },
     {
       "id": "3",
-      "status": "done",
+      "status": "pending",
       "target_file": "public/overlay/age-appropriate-ux-8-12.html",
       "task": "Set up age-appropriate UX 8-12",
       "spec": "Implement UX flows specifically for children ages 8-12.",
@@ -80,11 +85,15 @@
       "commit_sha": "c27cc2e3ea5c9d444075f89168001c2902faa797",
       "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "3",
-      "mission_id": "PRODUCT-kids-os"
+      "mission_id": "PRODUCT-kids-os",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "no_proof_required_non_server_code",
+      "heal_unblocked": true
     },
     {
       "id": "4",
-      "status": "done",
+      "status": "pending",
       "target_file": "public/overlay/age-appropriate-ux-13-17.html",
       "task": "Set up age-appropriate UX 13-17",
       "spec": "Implement UX flows specifically for children ages 13-17.",
@@ -100,11 +109,15 @@
       "commit_sha": "8dd80381711333b787e50e2524223c271de3444e",
       "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "4",
-      "mission_id": "PRODUCT-kids-os"
+      "mission_id": "PRODUCT-kids-os",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "no_proof_required_non_server_code",
+      "heal_unblocked": true
     },
     {
       "id": "5",
-      "status": "done",
+      "status": "pending",
       "target_file": "public/overlay/irlen-screening-tool-ux.html",
       "task": "Specify UX for Irlen screening tool",
       "spec": "Design UX for Irlen Syndrome screening tool.",
@@ -120,11 +133,15 @@
       "commit_sha": "6b72957a174b17149fd9c935b391d768b8057fca",
       "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "5",
-      "mission_id": "PRODUCT-kids-os"
+      "mission_id": "PRODUCT-kids-os",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "no_proof_required_non_server_code",
+      "heal_unblocked": true
     },
     {
       "id": "6",
-      "status": "done",
+      "status": "pending",
       "target_file": "scripts/interview-summary.mjs",
       "task": "Summarize parent interviews",
       "spec": "Compile and summarize insights from interviews with 10 parents (homeschool and traditional).",
@@ -139,11 +156,15 @@
       "commit_sha": "2d40f2402fe544b0a22589d6b0ffae1dc903fc84",
       "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "6",
-      "mission_id": "PRODUCT-kids-os"
+      "mission_id": "PRODUCT-kids-os",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "no_proof_required_non_server_code",
+      "heal_unblocked": true
     },
     {
       "id": "7",
-      "status": "done",
+      "status": "pending",
       "target_file": "scripts/teacher-insights.mjs",
       "task": "Summarize teacher interviews",
       "spec": "Compile and summarize insights from interviews with 5 teachers regarding student-facing platforms.",
@@ -158,7 +179,11 @@
       "commit_sha": "a3927889f01ffc595bf09c9b413ea877181fbf28",
       "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "7",
-      "mission_id": "PRODUCT-kids-os"
+      "mission_id": "PRODUCT-kids-os",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "no_proof_required_non_server_code",
+      "heal_unblocked": true
     },
     {
       "id": "8",
@@ -221,11 +246,12 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "same_signature_count": 0
     },
     {
       "id": "9",
-      "status": "done",
+      "status": "pending",
       "target_file": "public/overlay/pricing-validation.html",
       "task": "Validate pricing UI",
       "spec": "Create UI to validate and collect feedback on product pricing with target users.",
@@ -241,11 +267,15 @@
       "commit_sha": "13507656cb16ab3d93d8c7c28bfce5e440014c8b",
       "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "9",
-      "mission_id": "PRODUCT-kids-os"
+      "mission_id": "PRODUCT-kids-os",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "no_proof_required_non_server_code",
+      "heal_unblocked": true
     },
     {
       "id": "10",
-      "status": "done",
+      "status": "pending",
       "target_file": "scripts/coppa-compliance-review.mjs",
       "task": "Conduct COPPA compliance review",
       "spec": "Conduct and document the COPPA compliance review.",
@@ -260,11 +290,15 @@
       "commit_sha": "8c58fe143547aa612970083d8a303f30bbf6a2ba",
       "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "10",
-      "mission_id": "PRODUCT-kids-os"
+      "mission_id": "PRODUCT-kids-os",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "no_proof_required_non_server_code",
+      "heal_unblocked": true
     },
     {
       "id": "step1",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/apiSpec.js",
       "task": "Create API specification",
       "spec": "Implement a detailed API specification module for kids-os.",
@@ -295,7 +329,11 @@
       "commit_sha": "4404620258bcb028d7e5899286506c08cfbe2bc0",
       "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step1",
-      "mission_id": "PRODUCT-kids-os"
+      "mission_id": "PRODUCT-kids-os",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: /** API specification for kids-os */",
+      "heal_unblocked": true
     },
     {
       "id": "step2",
@@ -332,7 +370,8 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step2",
-      "mission_id": "PRODUCT-kids-os"
+      "mission_id": "PRODUCT-kids-os",
+      "same_signature_count": 0
     },
     {
       "id": "step3",
@@ -369,11 +408,12 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step3",
-      "mission_id": "PRODUCT-kids-os"
+      "mission_id": "PRODUCT-kids-os",
+      "same_signature_count": 0
     },
     {
       "id": "step4",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/irlenConsultation.js",
       "task": "Document Irlen consultation insights",
       "spec": "Create a module to document insights from the Irlen Syndrome community consultation.",
@@ -401,7 +441,11 @@
       "commit_sha": "607e2d6b4edbd6ed738d07a9b5d849ea3b436021",
       "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step4",
-      "mission_id": "PRODUCT-kids-os"
+      "mission_id": "PRODUCT-kids-os",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: /** Irlen Syndrome community insights */",
+      "heal_unblocked": true
     },
     {
       "id": "step5",
@@ -439,7 +483,8 @@
       "mission_id": "PRODUCT-kids-os",
       "pre_existing": false,
       "last_error": null,
-      "reaudit_reset_at": "2026-07-30T18:55:06.433Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.433Z",
+      "same_signature_count": 0
     },
     {
       "id": "step6",
@@ -498,7 +543,8 @@
           "content_source_path": "docs/products/kids-os/twins/steps/step6.exact",
           "content_sha256": "25fb7ddf0cb30af9776c61e9ecff19f9685a8a6f542a8ac26fc1f381cb65f727"
         }
-      }
+      },
+      "same_signature_count": 0
     },
     {
       "id": "step7",
@@ -558,7 +604,8 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "same_signature_count": 0
     },
     {
       "id": "step8",
@@ -635,7 +682,8 @@
       "escalation_required": true,
       "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
       "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
-      "escalated_at": "2026-07-31T18:40:13.620Z"
+      "escalated_at": "2026-07-31T18:40:13.620Z",
+      "same_signature_count": 0
     },
     {
       "id": "step9",
@@ -672,7 +720,8 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step9",
-      "mission_id": "PRODUCT-kids-os"
+      "mission_id": "PRODUCT-kids-os",
+      "same_signature_count": 0
     },
     {
       "id": "step10",
@@ -704,7 +753,8 @@
       "commit_sha": "654b4285157c12731f0e12afd4d9614ec9b18a12",
       "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step10",
-      "mission_id": "PRODUCT-kids-os"
+      "mission_id": "PRODUCT-kids-os",
+      "same_signature_count": 0
     },
     {
       "id": "step11",
@@ -768,7 +818,8 @@
           "content_source_path": "docs/products/kids-os/twins/steps/step11.exact",
           "content_sha256": "91279b4b906d4793ccf9e4305fe7a1b8d6b14064c69ea43f630e63b6986c9892"
         }
-      }
+      },
+      "same_signature_count": 0
     },
     {
       "id": "step12",
@@ -807,11 +858,12 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step12",
-      "mission_id": "PRODUCT-kids-os"
+      "mission_id": "PRODUCT-kids-os",
+      "same_signature_count": 0
     },
     {
       "id": "kids-os-1",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/apiSpec.js",
       "task": "complete API specification",
       "spec": "Add detailed API specification relevant to the 'kids-os' requirements, ensuring all endpoints are defined.",
@@ -838,7 +890,7 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "artifact_proof_failed: /api/spec",
       "commit_sha": "de44af2737d40cb5ef83450d41115c072b7d31ae",
       "built_sha": null,
       "proof": null,
@@ -859,11 +911,13 @@
       "shipped_at": "2026-07-16T05:37:27.468Z",
       "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "kids-os-1",
-      "mission_id": "PRODUCT-kids-os"
+      "mission_id": "PRODUCT-kids-os",
+      "same_signature_count": 0,
+      "heal_unblocked": true
     },
     {
       "id": "kids-os-4",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/irlenConsultation.js",
       "task": "update Irlen consultation",
       "spec": "Incorporate insights from the Irlen Syndrome community consultation into the service.",
@@ -894,7 +948,11 @@
       "commit_sha": "dfc05fe980248c7447f836c27efdc8d38a02c5f1",
       "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "kids-os-4",
-      "mission_id": "PRODUCT-kids-os"
+      "mission_id": "PRODUCT-kids-os",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: Irlen Syndrome insights",
+      "heal_unblocked": true
     },
     {
       "id": "kids-os-5",
@@ -928,7 +986,8 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "same_signature_count": 0
     },
     {
       "id": "kids-os-6",
@@ -961,11 +1020,13 @@
       "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "kids-os-6",
       "mission_id": "PRODUCT-kids-os",
-      "completed_at": "2026-08-01T05:59:41.855Z"
+      "completed_at": "2026-08-01T05:59:41.855Z",
+      "same_signature_count": 0
     }
   ],
   "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-kids-os",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:12:15.791Z"
+  "updated_at": "2026-08-01T06:30:33.167Z",
+  "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/kids-os/BUILD_QUEUE.json"
 }

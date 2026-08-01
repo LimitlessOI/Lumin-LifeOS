@@ -51,7 +51,8 @@
           "content_source_path": "docs/products/personal-finance-os/twins/steps/1.exact",
           "content_sha256": "e13b154f021915705aa28c6744dc81b650c37d43cc473b50e969f56751052bf5"
         }
-      }
+      },
+      "same_signature_count": 0
     },
     {
       "id": "2",
@@ -80,7 +81,8 @@
       "commit_sha": "7fe2cce6ec7506850abefb753d1f8193474736f7",
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "2",
-      "mission_id": "PRODUCT-personal-finance-os"
+      "mission_id": "PRODUCT-personal-finance-os",
+      "same_signature_count": 0
     },
     {
       "id": "3",
@@ -130,7 +132,8 @@
       "shipped_at": "2026-07-15T08:41:45.802Z",
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "3",
-      "mission_id": "PRODUCT-personal-finance-os"
+      "mission_id": "PRODUCT-personal-finance-os",
+      "same_signature_count": 0
     },
     {
       "id": "4",
@@ -159,7 +162,8 @@
       "commit_sha": "a30acc5a8d1121fbdef8575606d5b03463b2d0e1",
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "4",
-      "mission_id": "PRODUCT-personal-finance-os"
+      "mission_id": "PRODUCT-personal-finance-os",
+      "same_signature_count": 0
     },
     {
       "id": "5",
@@ -188,7 +192,8 @@
       "commit_sha": "98c943023b2c6e30615df7b9924b91d62671c5dd",
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "5",
-      "mission_id": "PRODUCT-personal-finance-os"
+      "mission_id": "PRODUCT-personal-finance-os",
+      "same_signature_count": 0
     },
     {
       "id": "6",
@@ -219,7 +224,8 @@
       "commit_sha": "872c69d9d7b81034e4f3d98908f595297e900c90",
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "6",
-      "mission_id": "PRODUCT-personal-finance-os"
+      "mission_id": "PRODUCT-personal-finance-os",
+      "same_signature_count": 0
     },
     {
       "id": "7",
@@ -248,7 +254,8 @@
       "commit_sha": "6caf85c96c8e2a42981b4b7ed4e61250b73b3d97",
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "7",
-      "mission_id": "PRODUCT-personal-finance-os"
+      "mission_id": "PRODUCT-personal-finance-os",
+      "same_signature_count": 0
     },
     {
       "id": "step1",
@@ -268,11 +275,12 @@
       "commit_sha": "1309b3082c818c795dc7a303d9b9edc127caab99",
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step1",
-      "mission_id": "PRODUCT-personal-finance-os"
+      "mission_id": "PRODUCT-personal-finance-os",
+      "same_signature_count": 0
     },
     {
       "id": "step2",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/ipsReview.js",
       "task": "implement attorney review for IPS module",
       "spec": "Check IPS module for RIA trigger risk and implement review service.",
@@ -300,7 +308,11 @@
       "commit_sha": "f98351a45e5bb3384189f24c5b14dae53929a09d",
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step2",
-      "mission_id": "PRODUCT-personal-finance-os"
+      "mission_id": "PRODUCT-personal-finance-os",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: @ssot",
+      "heal_unblocked": true
     },
     {
       "id": "step3",
@@ -355,7 +367,8 @@
       "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
       "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
       "escalated_at": "2026-07-31T18:40:13.629Z",
-      "completed_at": "2026-08-01T05:28:34.287Z"
+      "completed_at": "2026-08-01T05:28:34.287Z",
+      "same_signature_count": 0
     },
     {
       "id": "step4",
@@ -387,7 +400,8 @@
       "commit_sha": "9c9417fd84da7838af1ba4204c9cd9e90b580a72",
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step4",
-      "mission_id": "PRODUCT-personal-finance-os"
+      "mission_id": "PRODUCT-personal-finance-os",
+      "same_signature_count": 0
     },
     {
       "id": "step5",
@@ -420,7 +434,8 @@
       "commit_sha": "9421b730fcf3c167ff49867b4725edc9375947ca",
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step5",
-      "mission_id": "PRODUCT-personal-finance-os"
+      "mission_id": "PRODUCT-personal-finance-os",
+      "same_signature_count": 0
     },
     {
       "id": "step6",
@@ -436,7 +451,8 @@
       "commit_sha": "ec1baf8291a0f31f8507c5211cffd4ea704eec43",
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step6",
-      "mission_id": "PRODUCT-personal-finance-os"
+      "mission_id": "PRODUCT-personal-finance-os",
+      "same_signature_count": 0
     },
     {
       "id": "step7",
@@ -453,11 +469,12 @@
       "commit_sha": "e6f4d32641bbd99dc1323c1c1fc0c3c63b3256aa",
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step7",
-      "mission_id": "PRODUCT-personal-finance-os"
+      "mission_id": "PRODUCT-personal-finance-os",
+      "same_signature_count": 0
     },
     {
       "id": "8",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/emotionalIntelligence.js",
       "task": "integrate-joy-and-wearable-data",
       "spec": "Provide services for integrating emotional intelligence signals (joy_score_log, wearable_data), enabling correlation analyses.",
@@ -491,7 +508,11 @@
       "commit_sha": "f9236de35a6b25eaaba81827a3dd9e25628a1236",
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "8",
-      "mission_id": "PRODUCT-personal-finance-os"
+      "mission_id": "PRODUCT-personal-finance-os",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: joyScoreLog; wearableDataCorrelation",
+      "heal_unblocked": true
     },
     {
       "id": "personal-finance-os-1",
@@ -527,7 +548,8 @@
       "commit_sha": "a1866ae248d34848b3eeffac69edb68ac1e46fab",
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "personal-finance-os-1",
-      "mission_id": "PRODUCT-personal-finance-os"
+      "mission_id": "PRODUCT-personal-finance-os",
+      "same_signature_count": 0
     },
     {
       "id": "personal-finance-os-2",
@@ -579,7 +601,8 @@
       "shipped_at": "2026-07-16T05:19:47.643Z",
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "personal-finance-os-2",
-      "mission_id": "PRODUCT-personal-finance-os"
+      "mission_id": "PRODUCT-personal-finance-os",
+      "same_signature_count": 0
     },
     {
       "id": "personal-finance-os-4",
@@ -675,7 +698,8 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "same_signature_count": 0
     },
     {
       "id": "personal-finance-os-5",
@@ -694,7 +718,8 @@
       "mission_id": "PRODUCT-personal-finance-os",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T22:09:28.849Z",
-      "commit_sha": "b5674bdd9626c5e2881d2ea91b3b2e294463da58"
+      "commit_sha": "b5674bdd9626c5e2881d2ea91b3b2e294463da58",
+      "same_signature_count": 0
     },
     {
       "id": "personal-finance-os-6",
@@ -729,7 +754,8 @@
       "commit_sha": "0a2f202da0b43546de4370dd208623af5d57d4dc",
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "personal-finance-os-6",
-      "mission_id": "PRODUCT-personal-finance-os"
+      "mission_id": "PRODUCT-personal-finance-os",
+      "same_signature_count": 0
     },
     {
       "id": "personal-finance-os-7",
@@ -764,11 +790,12 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T22:19:53.270Z",
-      "commit_sha": "3209424cea2645f500386b4a0aea0dd6c1cdc653"
+      "commit_sha": "3209424cea2645f500386b4a0aea0dd6c1cdc653",
+      "same_signature_count": 0
     },
     {
       "id": "personal-finance-os-step1",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/ipsReview.js",
       "task": "Add attorney review process",
       "spec": "Enhance IPS review route to support attorney RIA trigger risk evaluation.",
@@ -800,7 +827,11 @@
       "commit_sha": "ba9f97713c86957c604734270c880fcfbbcaf0d0",
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "personal-finance-os-step1",
-      "mission_id": "PRODUCT-personal-finance-os"
+      "mission_id": "PRODUCT-personal-finance-os",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: attorney review RIA",
+      "heal_unblocked": true
     },
     {
       "id": "personal-finance-os-step2",
@@ -850,7 +881,8 @@
       "shipped_at": "2026-07-16T05:23:17.176Z",
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "personal-finance-os-step2",
-      "mission_id": "PRODUCT-personal-finance-os"
+      "mission_id": "PRODUCT-personal-finance-os",
+      "same_signature_count": 0
     },
     {
       "id": "personal-finance-os-step4",
@@ -890,7 +922,8 @@
       "shipped_at": "2026-07-16T05:51:12.023Z",
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "personal-finance-os-step4",
-      "mission_id": "PRODUCT-personal-finance-os"
+      "mission_id": "PRODUCT-personal-finance-os",
+      "same_signature_count": 0
     },
     {
       "id": "personal-finance-os-step5",
@@ -909,11 +942,12 @@
       "mission_id": "PRODUCT-personal-finance-os",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T22:27:14.812Z",
-      "commit_sha": "ab36d85e2a157aaf9462c302d7d4e7203a4eb2f2"
+      "commit_sha": "ab36d85e2a157aaf9462c302d7d4e7203a4eb2f2",
+      "same_signature_count": 0
     },
     {
       "id": "personal-finance-os-step6",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/dreamFunding.js",
       "task": "Operationalize Dream Funding",
       "spec": "Ensure Dream Funding service logic supports all operational features.",
@@ -941,11 +975,15 @@
       "commit_sha": "ffadc6460ba976a2f0252a50ba3e50795c885645",
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "personal-finance-os-step6",
-      "mission_id": "PRODUCT-personal-finance-os"
+      "mission_id": "PRODUCT-personal-finance-os",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: activate Dream Funding",
+      "heal_unblocked": true
     },
     {
       "id": "personal-finance-os-step7",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/commitmentTracker.js",
       "task": "Make Commitment Tracker operational",
       "spec": "Set up Commitment Tracker Phase 1 route handlers to become functional.",
@@ -973,7 +1011,7 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "artifact_proof_failed: commitment tracking phase 1",
       "commit_sha": "2f70d64845605515c1246fd9527d454b06923d2e",
       "built_sha": null,
       "proof": null,
@@ -994,11 +1032,13 @@
       "shipped_at": "2026-07-16T06:02:06.573Z",
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "personal-finance-os-step7",
-      "mission_id": "PRODUCT-personal-finance-os"
+      "mission_id": "PRODUCT-personal-finance-os",
+      "same_signature_count": 0,
+      "heal_unblocked": true
     },
     {
       "id": "personal-finance-os-step8",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/emotionalIntelligence.js",
       "task": "Enable emotional signal correlation",
       "spec": "Update emotional intelligence service to correlate joy score with wearable data.",
@@ -1027,7 +1067,11 @@
       "commit_sha": "6813049cb0c3bac5d1e773cb71f5479aaa7ebcc6",
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "personal-finance-os-step8",
-      "mission_id": "PRODUCT-personal-finance-os"
+      "mission_id": "PRODUCT-personal-finance-os",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: joy score; wearable data correlation",
+      "heal_unblocked": true
     },
     {
       "id": "personal-finance-os-8",
@@ -1061,11 +1105,13 @@
       "mission_id": "PRODUCT-personal-finance-os",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T22:42:00.219Z",
-      "commit_sha": "f54d7c3df3caa7bfa9e0ce62d22d5086b8ddade4"
+      "commit_sha": "f54d7c3df3caa7bfa9e0ce62d22d5086b8ddade4",
+      "same_signature_count": 0
     }
   ],
   "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-personal-finance-os",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:12:30.758Z"
+  "updated_at": "2026-08-01T06:30:46.897Z",
+  "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/personal-finance-os/BUILD_QUEUE.json"
 }

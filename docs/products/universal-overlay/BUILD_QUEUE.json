@@ -1118,7 +1118,7 @@
     },
     {
       "id": "universal-overlay-step6",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/sessionReplay.js",
       "task": "implement session replay opt-in",
       "spec": "Create a session replay feature for opt-in user flow tracking.",
@@ -1150,7 +1150,10 @@
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "universal-overlay-step6",
       "mission_id": "PRODUCT-universal-overlay",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: opt-in session replay",
+      "heal_unblocked": true
     },
     {
       "id": "universal-overlay-step7",
@@ -1275,7 +1278,7 @@
     },
     {
       "id": "universal-overlay-step10",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/firefoxExtension.js",
       "task": "support Firefox MV2 manifest",
       "spec": "Register a route for handling Firefox MV2 extension variants.",
@@ -1308,7 +1311,10 @@
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "universal-overlay-step10",
       "mission_id": "PRODUCT-universal-overlay",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: firefox MV2",
+      "heal_unblocked": true
     },
     {
       "id": "universal-overlay-step11",
@@ -2399,5 +2405,6 @@
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-universal-overlay",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:12:38.981Z"
+  "updated_at": "2026-08-01T06:30:55.624Z",
+  "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/universal-overlay/BUILD_QUEUE.json"
 }

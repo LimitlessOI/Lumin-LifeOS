@@ -3,7 +3,7 @@
   "product_id": "limitlessos",
   "verify_script": "scripts/verify-go-vegas-scheduler.mjs",
   "notes": "Go Vegas revenue slice — outreach pipeline v1 already shipped as code; this queue closes the last mile to live revenue: scheduler tick (daily discover/invite/follow-up under caps), dry-run proof script, and SENTRY-facing status receipt. No founder UI in this slice.",
-  "updated_at": "2026-08-01T06:12:20.007Z",
+  "updated_at": "2026-08-01T06:30:37.635Z",
   "steps": [
     {
       "id": "gv-scheduler",
@@ -25,7 +25,8 @@
       "note": "GAP-FILL: never-stop authored broken createUsefulWorkGuard usage (invented shouldRun / export-before-import); conductor rewrote to real guard contract.",
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "gv-scheduler",
-      "mission_id": "PRODUCT-limitlessos"
+      "mission_id": "PRODUCT-limitlessos",
+      "same_signature_count": 0
     },
     {
       "id": "gv-boot-wire",
@@ -48,7 +49,8 @@
       "commit_sha": "b6ec13c8e9fd187b77c5daec9c79f87a916547c3",
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "gv-boot-wire",
-      "mission_id": "PRODUCT-limitlessos"
+      "mission_id": "PRODUCT-limitlessos",
+      "same_signature_count": 0
     },
     {
       "id": "gv-status-route",
@@ -69,7 +71,8 @@
       "commit_sha": "6cf61119d6c569695a05525b8a1b920c671314fc",
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "gv-status-route",
-      "mission_id": "PRODUCT-limitlessos"
+      "mission_id": "PRODUCT-limitlessos",
+      "same_signature_count": 0
     },
     {
       "id": "1",
@@ -85,7 +88,8 @@
       "completed_at": "2026-07-13T12:50:54.388Z",
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "1",
-      "mission_id": "PRODUCT-limitlessos"
+      "mission_id": "PRODUCT-limitlessos",
+      "same_signature_count": 0
     },
     {
       "id": "2",
@@ -101,7 +105,8 @@
       "completed_at": "2026-07-13T12:52:56.268Z",
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "2",
-      "mission_id": "PRODUCT-limitlessos"
+      "mission_id": "PRODUCT-limitlessos",
+      "same_signature_count": 0
     },
     {
       "id": "3",
@@ -143,7 +148,8 @@
       "shipped_at": "2026-07-14T20:41:37.208Z",
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "3",
-      "mission_id": "PRODUCT-limitlessos"
+      "mission_id": "PRODUCT-limitlessos",
+      "same_signature_count": 0
     },
     {
       "id": "4",
@@ -159,7 +165,8 @@
       "completed_at": "2026-07-13T13:16:06.179Z",
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "4",
-      "mission_id": "PRODUCT-limitlessos"
+      "mission_id": "PRODUCT-limitlessos",
+      "same_signature_count": 0
     },
     {
       "id": "5",
@@ -177,7 +184,8 @@
       "completed_at": "2026-07-13T13:17:02.904Z",
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "5",
-      "mission_id": "PRODUCT-limitlessos"
+      "mission_id": "PRODUCT-limitlessos",
+      "same_signature_count": 0
     },
     {
       "id": "6",
@@ -215,7 +223,8 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "6",
-      "mission_id": "PRODUCT-limitlessos"
+      "mission_id": "PRODUCT-limitlessos",
+      "same_signature_count": 0
     },
     {
       "id": "7",
@@ -231,7 +240,8 @@
       "completed_at": "2026-07-13T13:38:04.900Z",
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "7",
-      "mission_id": "PRODUCT-limitlessos"
+      "mission_id": "PRODUCT-limitlessos",
+      "same_signature_count": 0
     },
     {
       "id": "8",
@@ -245,7 +255,8 @@
       "commit_sha": "3e0e921f3402266f5f4adae8fc310a7d7b314ef6",
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "8",
-      "mission_id": "PRODUCT-limitlessos"
+      "mission_id": "PRODUCT-limitlessos",
+      "same_signature_count": 0
     },
     {
       "id": "9",
@@ -261,7 +272,8 @@
       "commit_sha": "daeb05acc3eb2686ea672ca37bcf679a982e9681",
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "9",
-      "mission_id": "PRODUCT-limitlessos"
+      "mission_id": "PRODUCT-limitlessos",
+      "same_signature_count": 0
     },
     {
       "id": "10",
@@ -277,7 +289,8 @@
       "commit_sha": "5e35957542709743e898c2804205bb1269e770e1",
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "10",
-      "mission_id": "PRODUCT-limitlessos"
+      "mission_id": "PRODUCT-limitlessos",
+      "same_signature_count": 0
     },
     {
       "id": "auto-reg",
@@ -296,11 +309,12 @@
       "commit_sha": "61c11d658fd223e53f948ff9644f834a82958e53",
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "auto-reg",
-      "mission_id": "PRODUCT-limitlessos"
+      "mission_id": "PRODUCT-limitlessos",
+      "same_signature_count": 0
     },
     {
       "id": "step1",
-      "status": "done",
+      "status": "pending",
       "target_file": "public/overlay/formalize-businessos-ui.html",
       "task": "implement UI naming distinctions",
       "spec": "Display distinct naming for 'BusinessOS' vs. 'LimitlessOS' in the UI.",
@@ -314,7 +328,11 @@
       "commit_sha": "d3c5e88c4551a37e0b5162d5afffb66faaa713e4",
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step1",
-      "mission_id": "PRODUCT-limitlessos"
+      "mission_id": "PRODUCT-limitlessos",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: LimitlessOS",
+      "heal_unblocked": true
     },
     {
       "id": "step2",
@@ -375,7 +393,8 @@
           "content_sha256": "83947eb785e7ca4714d8324e7784a85210d2fa8e2b7aa674c8da01756c2bd149"
         }
       },
-      "shipped_at": "2026-07-30T19:07:06.375Z"
+      "shipped_at": "2026-07-30T19:07:06.375Z",
+      "same_signature_count": 0
     },
     {
       "id": "step3",
@@ -412,11 +431,12 @@
       "commit_sha": "445c138b28daa1eea85e50a6925b198308306c11",
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step3",
-      "mission_id": "PRODUCT-limitlessos"
+      "mission_id": "PRODUCT-limitlessos",
+      "same_signature_count": 0
     },
     {
       "id": "step4",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/price-book-vendor-comparison.js",
       "task": "develop vendor comparison logic",
       "spec": "Implement logic to compare vendors based on pricing and reviews, allowing inclusion or exclusion based on criteria.",
@@ -442,7 +462,7 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "artifact_proof_failed: expensive",
       "commit_sha": "0ee3e8f9214e35fa97c84f97fd88cd635edbc47f",
       "built_sha": null,
       "proof": null,
@@ -463,11 +483,13 @@
       "shipped_at": "2026-07-15T07:55:45.913Z",
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step4",
-      "mission_id": "PRODUCT-limitlessos"
+      "mission_id": "PRODUCT-limitlessos",
+      "same_signature_count": 0,
+      "heal_unblocked": true
     },
     {
       "id": "step5",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/price-book-vendor-comparison-routes.js",
       "task": "create vendor comparison endpoint",
       "spec": "Provide an endpoint for accessing vendor comparison data with explanations or exclusion based on criteria.",
@@ -501,7 +523,11 @@
       "commit_sha": "e23e576a09d02566c0841bb8622316d0bf072dbb",
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step5",
-      "mission_id": "PRODUCT-limitlessos"
+      "mission_id": "PRODUCT-limitlessos",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: Vendor Comparison",
+      "heal_unblocked": true
     },
     {
       "id": "step6",
@@ -533,11 +559,12 @@
       "commit_sha": "3116901d30fdb0becb6bfa6554c8290d4aa29c5c",
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step6",
-      "mission_id": "PRODUCT-limitlessos"
+      "mission_id": "PRODUCT-limitlessos",
+      "same_signature_count": 0
     },
     {
       "id": "step7",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/cityos-home-creation-routes.js",
       "task": "route for CityOS/Go Vegas homes",
       "spec": "Expose an endpoint for the creation of CityOS/Go Vegas product homes.",
@@ -571,7 +598,11 @@
       "commit_sha": "abda21aaa692c48f8fe9707a32a41387e3ffc581",
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step7",
-      "mission_id": "PRODUCT-limitlessos"
+      "mission_id": "PRODUCT-limitlessos",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: Product Home Creation",
+      "heal_unblocked": true
     },
     {
       "id": "step8",
@@ -632,7 +663,8 @@
           "content_sha256": "d530a48d8152a654c946ffbe376c69562b6a26c5d0510d23e57dcffcce7cf375"
         }
       },
-      "shipped_at": "2026-07-30T19:43:57.536Z"
+      "shipped_at": "2026-07-30T19:43:57.536Z",
+      "same_signature_count": 0
     },
     {
       "id": "s1",
@@ -680,7 +712,8 @@
       "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
       "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
       "escalated_at": "2026-07-31T18:40:13.624Z",
-      "completed_at": "2026-08-01T04:45:02.115Z"
+      "completed_at": "2026-08-01T04:45:02.115Z",
+      "same_signature_count": 0
     },
     {
       "id": "s2",
@@ -719,7 +752,8 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "s2",
-      "mission_id": "PRODUCT-limitlessos"
+      "mission_id": "PRODUCT-limitlessos",
+      "same_signature_count": 0
     },
     {
       "id": "s3",
@@ -756,7 +790,8 @@
       "commit_sha": "37a2cbca755086aa317e33bb4bc780fdfd36007d",
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "s3",
-      "mission_id": "PRODUCT-limitlessos"
+      "mission_id": "PRODUCT-limitlessos",
+      "same_signature_count": 0
     },
     {
       "id": "s5",
@@ -775,11 +810,12 @@
       "commit_sha": "3a6b42192fe6f119a38512bf5447a23cab0a1a75",
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "s5",
-      "mission_id": "PRODUCT-limitlessos"
+      "mission_id": "PRODUCT-limitlessos",
+      "same_signature_count": 0
     },
     {
       "id": "s6",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/vendor-price-book.js",
       "task": "create vendor comparison service",
       "spec": "Provides services that compare vendor offerings based on price book data, explaining/including only those with strong reviews.",
@@ -812,7 +848,11 @@
       "commit_sha": "0999896af9f6069e3217d95d0c9856ab02e548c9",
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "s6",
-      "mission_id": "PRODUCT-limitlessos"
+      "mission_id": "PRODUCT-limitlessos",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: import",
+      "heal_unblocked": true
     },
     {
       "id": "11",
@@ -870,7 +910,8 @@
       "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
       "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
       "escalated_at": "2026-07-31T18:40:13.624Z",
-      "completed_at": "2026-08-01T04:51:28.170Z"
+      "completed_at": "2026-08-01T04:51:28.170Z",
+      "same_signature_count": 0
     },
     {
       "id": "step9",
@@ -888,7 +929,8 @@
       "commit_sha": "2468ae19610ef2f59c18e253895d4d248b15ade0",
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step9",
-      "mission_id": "PRODUCT-limitlessos"
+      "mission_id": "PRODUCT-limitlessos",
+      "same_signature_count": 0
     },
     {
       "id": "step10",
@@ -920,7 +962,8 @@
       "mission_id": "PRODUCT-limitlessos",
       "pre_existing": false,
       "last_error": null,
-      "reaudit_reset_at": "2026-07-30T18:55:06.661Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.661Z",
+      "same_signature_count": 0
     },
     {
       "id": "step11",
@@ -955,7 +998,8 @@
       "mission_id": "PRODUCT-limitlessos",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-20T16:34:15.869Z",
-      "commit_sha": "8017535eef5a4dc33802cb297688f0db25e78d51"
+      "commit_sha": "8017535eef5a4dc33802cb297688f0db25e78d51",
+      "same_signature_count": 0
     },
     {
       "id": "step12",
@@ -973,11 +1017,12 @@
       "commit_sha": "b404f2894a83c10d0f1757e812926feb3b4327e5",
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step12",
-      "mission_id": "PRODUCT-limitlessos"
+      "mission_id": "PRODUCT-limitlessos",
+      "same_signature_count": 0
     },
     {
       "id": "12",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/limitlessos-ui-routes.js",
       "task": "register UI updates",
       "spec": "Register the updated UI routes for new brand and experience enhancements, ensuring paths are exposed appropriately.",
@@ -1011,7 +1056,11 @@
       "mission_id": "PRODUCT-limitlessos",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T21:52:33.220Z",
-      "commit_sha": "cc7b3965e2bd69d74e981afee29062903508f548"
+      "commit_sha": "cc7b3965e2bd69d74e981afee29062903508f548",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: UI update registration",
+      "heal_unblocked": true
     },
     {
       "id": "limitlessos-step1",
@@ -1030,11 +1079,12 @@
       "mission_id": "PRODUCT-limitlessos",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T21:54:30.285Z",
-      "commit_sha": "4b25f2d382d51a230527dc166475276f8cf0e9fe"
+      "commit_sha": "4b25f2d382d51a230527dc166475276f8cf0e9fe",
+      "same_signature_count": 0
     },
     {
       "id": "limitlessos-step2",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/audit-intake-flow-routes.js",
       "task": "audit intake flow",
       "spec": "Add new audit intake flow route.",
@@ -1067,7 +1117,11 @@
       "commit_sha": "ae1a82fd8b09da027627ce01eea8dd98c9e5276e",
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "limitlessos-step2",
-      "mission_id": "PRODUCT-limitlessos"
+      "mission_id": "PRODUCT-limitlessos",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: intake questions",
+      "heal_unblocked": true
     },
     {
       "id": "limitlessos-step3",
@@ -1104,11 +1158,12 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "same_signature_count": 0
     },
     {
       "id": "limitlessos-step4",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/price-book-vendor-comparison.js",
       "task": "compare vendors",
       "spec": "Extend price book service to compare vendors with explanations or exclusions based on reviews and pricing.",
@@ -1133,7 +1188,7 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "artifact_proof_failed: vendor comparison; explain or exclude",
       "commit_sha": "11c3291832ba7ca6a34647d8d4b3099224f9bc14",
       "built_sha": null,
       "proof": null,
@@ -1154,11 +1209,13 @@
       "shipped_at": "2026-07-16T05:12:48.255Z",
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "limitlessos-step4",
-      "mission_id": "PRODUCT-limitlessos"
+      "mission_id": "PRODUCT-limitlessos",
+      "same_signature_count": 0,
+      "heal_unblocked": true
     },
     {
       "id": "limitlessos-step5",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/price-book-vendor-comparison-routes.js",
       "task": "expose vendor comparisons",
       "spec": "Add routes for accessing price book vendor comparisons.",
@@ -1192,11 +1249,15 @@
       "commit_sha": "4116c86c1d3d7fdbcc41680cb6f6fbedea9a2474",
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "limitlessos-step5",
-      "mission_id": "PRODUCT-limitlessos"
+      "mission_id": "PRODUCT-limitlessos",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: compareVendors",
+      "heal_unblocked": true
     },
     {
       "id": "limitlessos-step6",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/sticker-marketing-skus.js",
       "task": "bundle SKUs",
       "spec": "Create new SKUs bundling website, automation, and social features.",
@@ -1224,11 +1285,15 @@
       "commit_sha": "518c1eb4c642b55e8aaf352e712471a83dbce537",
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "limitlessos-step6",
-      "mission_id": "PRODUCT-limitlessos"
+      "mission_id": "PRODUCT-limitlessos",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: website + automation + social tiers",
+      "heal_unblocked": true
     },
     {
       "id": "limitlessos-step7",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/bundle_social_automation_routes.js",
       "task": "route bundle SKUs",
       "spec": "Add routes for accessing and managing new bundled SKUs.",
@@ -1262,7 +1327,11 @@
       "commit_sha": "2fceaffff0f95b373b0a5cbc54fdd52a921f54f3",
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "limitlessos-step7",
-      "mission_id": "PRODUCT-limitlessos"
+      "mission_id": "PRODUCT-limitlessos",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: createBundleSKUs",
+      "heal_unblocked": true
     },
     {
       "id": "limitlessos-1",
@@ -1291,7 +1360,8 @@
       "mission_id": "PRODUCT-limitlessos",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T22:27:03.450Z",
-      "commit_sha": "11c20447fab2a41f01512fa63bd5df03b8082490"
+      "commit_sha": "11c20447fab2a41f01512fa63bd5df03b8082490",
+      "same_signature_count": 0
     },
     {
       "id": "limitlessos-3",
@@ -1320,7 +1390,8 @@
       "commit_sha": "c995f99175a5004f3d6f67f846c765a084e45360",
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "limitlessos-3",
-      "mission_id": "PRODUCT-limitlessos"
+      "mission_id": "PRODUCT-limitlessos",
+      "same_signature_count": 0
     },
     {
       "id": "limitlessos-4",
@@ -1354,11 +1425,12 @@
       "commit_sha": "32abb2402754e9e36e9fea9a6e6eebd43cd9bc2c",
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "limitlessos-4",
-      "mission_id": "PRODUCT-limitlessos"
+      "mission_id": "PRODUCT-limitlessos",
+      "same_signature_count": 0
     },
     {
       "id": "limitlessos-5",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/price-book-vendor-comparison.js",
       "task": "enhance price book comparison",
       "spec": "Enhance service to handle complex vendor comparisons with explanations or exclusions.",
@@ -1386,7 +1458,11 @@
       "commit_sha": "e97d98db023d5f1cacbf44f55973b0ebe5e958b8",
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "limitlessos-5",
-      "mission_id": "PRODUCT-limitlessos"
+      "mission_id": "PRODUCT-limitlessos",
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: handleVendorComparison",
+      "heal_unblocked": true
     },
     {
       "id": "limitlessos-6",
@@ -1437,7 +1513,8 @@
       "blueprint_step_id": "limitlessos-6",
       "mission_id": "PRODUCT-limitlessos",
       "shipped_via": "pre_existing_artifact_proof",
-      "shipped_at": "2026-07-18T01:14:09.174Z"
+      "shipped_at": "2026-07-18T01:14:09.174Z",
+      "same_signature_count": 0
     },
     {
       "id": "limitlessos-7",
@@ -1466,7 +1543,8 @@
       "commit_sha": "735f97baf015bc67cc6a64e3b502fe7f9a31fd6f",
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "limitlessos-7",
-      "mission_id": "PRODUCT-limitlessos"
+      "mission_id": "PRODUCT-limitlessos",
+      "same_signature_count": 0
     },
     {
       "id": "limitlessos-8",
@@ -1517,7 +1595,8 @@
       "shipped_at": "2026-07-16T06:13:25.674Z",
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "limitlessos-8",
-      "mission_id": "PRODUCT-limitlessos"
+      "mission_id": "PRODUCT-limitlessos",
+      "same_signature_count": 0
     },
     {
       "id": "limitlessos-step8",
@@ -1565,7 +1644,8 @@
       "shipped_at": "2026-07-16T06:37:19.991Z",
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "limitlessos-step8",
-      "mission_id": "PRODUCT-limitlessos"
+      "mission_id": "PRODUCT-limitlessos",
+      "same_signature_count": 0
     },
     {
       "id": "limitlessos-step9",
@@ -1590,10 +1670,12 @@
       "resolution_note": "Removed dependency on skipped founder-gated overlay step3; auto-register config is independent.",
       "commit_sha": "369746afbf9e807ae311015f7375061997d913cf",
       "last_attempt_at": "2026-08-01T03:35:40.883Z",
-      "completed_at": "2026-08-01T03:35:40.916Z"
+      "completed_at": "2026-08-01T03:35:40.916Z",
+      "same_signature_count": 0
     }
   ],
   "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-limitlessos",
-  "twin_kind": "product_build_queue_registered"
+  "twin_kind": "product_build_queue_registered",
+  "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/limitlessos/BUILD_QUEUE.json"
 }

@@ -180,7 +180,7 @@
     },
     {
       "id": "builderos-3",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/timezone-utils.js",
       "task": "adjust commitment timezone checks",
       "spec": "Add function to check commitment due dates against Adam's timezone instead of UTC.",
@@ -209,7 +209,10 @@
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-3",
       "mission_id": "PRODUCT-builderos",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: Intl.DateTimeFormat",
+      "heal_unblocked": true
     },
     {
       "id": "builderos-4",
@@ -404,7 +407,7 @@
     },
     {
       "id": "builderos-8",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/board.js",
       "task": "route for populated sections",
       "spec": "Ensure route returns all 8 populated sections of the household board.",
@@ -437,11 +440,14 @@
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-8",
       "mission_id": "PRODUCT-builderos",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: 8 sections populated",
+      "heal_unblocked": true
     },
     {
       "id": "builderos-9",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/approval-system.js",
       "task": "create approval system for commitments",
       "spec": "Implement logic to manage approval process for commitments, such as pending and approved states.",
@@ -472,11 +478,14 @@
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-9",
       "mission_id": "PRODUCT-builderos",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: waiting approval",
+      "heal_unblocked": true
     },
     {
       "id": "builderos-10",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/approval.js",
       "task": "create approval route",
       "spec": "Define route for managing commitment approvals, ensuring proper workflow integration.",
@@ -511,7 +520,10 @@
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-10",
       "mission_id": "PRODUCT-builderos",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: commitment approvals",
+      "heal_unblocked": true
     },
     {
       "id": "builderos-11",
@@ -637,7 +649,7 @@
     },
     {
       "id": "builderos-step2",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/commitment-seeder.js",
       "task": "seed commitments",
       "spec": "Seed 8 realistic commitments for MISSION-0001 with IDs 26–33: 4 for Adam, 3 for Sherry, 1 pending Sherry approval.",
@@ -673,11 +685,14 @@
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-step2",
       "mission_id": "PRODUCT-builderos",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: 26, Adam; 27, Adam; 28, Adam; 29, Adam; 30, Sherry; 31, Sherry; 32, Sherry; 33, pending approval",
+      "heal_unblocked": true
     },
     {
       "id": "builderos-step3",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/timezone-utils.js",
       "task": "implement today_commitments timezone check",
       "spec": "Timezone checker for today's commitments comparing due_date to CURRENT_DATE against Railway UTC.",
@@ -707,7 +722,10 @@
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-step3",
       "mission_id": "PRODUCT-builderos",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: CURRENT_DATE; timezone check",
+      "heal_unblocked": true
     },
     {
       "id": "builderos-step4",
@@ -825,7 +843,7 @@
     },
     {
       "id": "builderos-step7",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/commitment-routing.js",
       "task": "register commitment routes",
       "spec": "Create and register routes for commitment-related actions.",
@@ -861,7 +879,10 @@
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-step7",
       "mission_id": "PRODUCT-builderos",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: app.get; /api/v1/lifeos/commitments",
+      "heal_unblocked": true
     },
     {
       "id": "builderos-step8",
@@ -2626,7 +2647,7 @@
     },
     {
       "id": "bo-wire-security-review-into-commit-path",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/lifeos-council-builder-routes.js",
       "priority": "high",
       "task": "scripts/ai-security-review.mjs's reviewDiffForSecurity() (the real AI-powered adversarial security layer, model role 'security_review' in the model-capability-ledger) is built, unit-tested (11/11 pass), and live-verified end-to-end via POST /factory/security-review -- but nothing calls it automatically. It only fires when a human or agent manually POSTs to that endpoint. This is the same 'built but dead' gap already fixed once tonight for other model roles: a real, working capability that never actually runs in production traffic delivers zero value until it's wired into a real call path.",
@@ -2657,7 +2678,10 @@
           "assertion_id": "expected_exports:routes/lifeos-council-builder-routes.js"
         }
       ],
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: security_review finding",
+      "heal_unblocked": true
     },
     {
       "id": "bo-runtime-fingerprint",
@@ -3280,5 +3304,6 @@
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-builderos",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:12:06.872Z"
+  "updated_at": "2026-08-01T06:30:24.349Z",
+  "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/builderos/BUILD_QUEUE.json"
 }
