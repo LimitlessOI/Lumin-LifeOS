@@ -46,7 +46,7 @@
       "spec": "Ensures 24-hour transcript auto-purge cron job is implemented.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "purgeOldTranscripts"
       ],
@@ -61,7 +61,7 @@
       "revive_count": 9,
       "revived_at": "2026-07-15T19:59:50.966Z",
       "last_attempt": null,
-      "demoted": true,
+      "demoted": false,
       "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home",
       "demoted_at": "2026-07-16T02:42:28.746Z",
       "park_until": null,
@@ -408,7 +408,7 @@
       "spec": "Implement a service to verify if the 24-hour transcript auto-purge cron is set up correctly.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "verifyTranscriptPurgeCron"
       ],
@@ -441,7 +441,7 @@
       "revive_count": 6,
       "revived_at": "2026-07-18T12:03:56.690Z",
       "last_attempt": null,
-      "demoted": true,
+      "demoted": false,
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:verifyTranscriptPurgeCron; behavior_assertion_failed; behavior_proof",
       "demoted_at": "2026-07-18T12:09:44.944Z",
       "park_until": null,
@@ -643,7 +643,7 @@
         "word-keeper-4"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "verifyTranscriptPurge"
       ],
@@ -671,7 +671,7 @@
       "revive_count": 6,
       "revived_at": "2026-07-18T12:09:44.944Z",
       "last_attempt": null,
-      "demoted": true,
+      "demoted": false,
       "demote_reason": "revive_exhausted:artifact_missing_after_ship: artifact_proof_failed: function verifyTranscriptPurge",
       "demoted_at": "2026-07-31T09:23:11.654Z",
       "park_until": null,
@@ -820,5 +820,6 @@
   ],
   "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-word-keeper",
-  "twin_kind": "product_build_queue_registered"
+  "twin_kind": "product_build_queue_registered",
+  "updated_at": "2026-08-01T06:00:13.635Z"
 }
