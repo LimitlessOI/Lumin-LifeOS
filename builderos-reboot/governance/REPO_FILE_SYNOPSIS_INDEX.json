@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T14:49:23.253Z",
+  "generated_at": "2026-08-01T14:53:55.780Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12727,
+  "file_count": 12728,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -37012,6 +37012,13 @@
       "bytes": 794,
       "mtime": "2026-07-14T09:22:00.724Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "db/migrations/20260714_marketing_social_post_schedules.sql",
+      "synopsis": "Database migration — 20260714_marketing_social_post_schedules.sql.",
+      "bytes": 907,
+      "mtime": "2026-08-01T14:53:55.780Z",
+      "indexed_at": "2026-08-01T14:53:55.780Z"
     },
     {
       "path": "db/migrations/20260714_tc_browser_jobs.sql",
