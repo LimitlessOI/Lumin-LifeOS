@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T12:05:40.639Z",
+  "generated_at": "2026-08-01T12:08:32.114Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -30844,9 +30844,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 38073,
-      "mtime": "2026-08-01T11:42:49.548Z",
-      "indexed_at": "2026-08-01T11:43:12.654Z",
+      "bytes": 38335,
+      "mtime": "2026-08-01T12:07:42.264Z",
+      "indexed_at": "2026-08-01T12:08:32.114Z",
       "synopsis_index_only": true
     },
     {
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1745,
-      "mtime": "2026-08-01T11:47:28.980Z",
-      "indexed_at": "2026-08-01T11:48:04.919Z",
+      "bytes": 1791,
+      "mtime": "2026-08-01T12:06:59.724Z",
+      "indexed_at": "2026-08-01T12:08:32.114Z",
       "synopsis_index_only": true
     },
     {
@@ -41236,9 +41236,9 @@
     {
       "path": "docs/products/business-tools/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Business Tools",
-      "bytes": 12451,
-      "mtime": "2026-08-01T12:02:26.816Z",
-      "indexed_at": "2026-08-01T12:02:34.329Z"
+      "bytes": 13390,
+      "mtime": "2026-08-01T12:08:03.772Z",
+      "indexed_at": "2026-08-01T12:08:32.114Z"
     },
     {
       "path": "docs/products/BUSINESSTOOLS.md",
@@ -69912,10 +69912,10 @@
     },
     {
       "path": "routes/issueApprovalRoutes.js",
-      "synopsis": "HTTP route module — IssueApprovalRoutes.",
-      "bytes": 779,
-      "mtime": "2026-07-16T19:42:53.598Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis": "HTTP route module — Issue Approval Routes.",
+      "bytes": 991,
+      "mtime": "2026-08-01T12:07:39.044Z",
+      "indexed_at": "2026-08-01T12:08:32.114Z",
       "ssot": [
         "docs/products/business-tools/PRODUCT_HOME.md"
       ]

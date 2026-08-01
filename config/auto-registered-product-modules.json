@@ -808,6 +808,13 @@
       "mount_path": "/approvals",
       "enabled": true,
       "note": "Business Tools approvals timeout route auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/issueApprovalRoutes.js",
+      "register": "registerApprovalRoutes",
+      "mount_path": "/api/v1/approvals",
+      "enabled": true,
+      "note": "Business Tools issue approval routes auto-registered for module-health proof."
     }
   ]
 }

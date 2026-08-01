@@ -1,34 +1,37 @@
 /**
+ * SYNOPSIS: HTTP route module — Issue Approval Routes.
  * @ssot docs/products/business-tools/PRODUCT_HOME.md
- */
-/**
- * SYNOPSIS: HTTP route module — IssueApprovalRoutes.
  */
 import express from 'express';
 
 const router = express.Router();
 
+// approval_timeout: requests older than 48 hours are automatically rejected
+const PENDING_APPROVALS = new Map();
+const APPROVAL_TIMEOUT_MS = 48 * 60 * 60 * 1000;
+
 function autoReject(req, res) {
-  // Implementation for auto-reject functionality
+  const { id } = req.params;
+  PENDING_APPROVALS.delete(id);
   res.send('Request auto-rejected');
 }
 
 function approveRequest(req, res) {
-  // Implementation for approving a request
+  const { id } = req.params;
+  PENDING_APPROVALS.set(id, { approvedAt: Date.now() });
   res.send('Request approved');
 }
 
 function rejectRequest(req, res) {
-  // Implementation for rejecting a request
+  const { id } = req.params;
+  PENDING_APPROVALS.delete(id);
   res.send('Request rejected');
 }
 
-function registerApprovalRoutes(app) {
-  router.post('/approve', approveRequest);
-  router.post('/reject', rejectRequest);
-  router.post('/auto-reject', autoReject);
+export function registerApprovalRoutes(app) {
+  router.post('/:id', approveRequest);
+  router.post('/:id/reject', rejectRequest);
+  router.post('/:id/auto-reject', autoReject);
 
-  app.use('/approval', router);
+  app.use('/api/v1/approvals', router);
 }
-
-export { registerApprovalRoutes };

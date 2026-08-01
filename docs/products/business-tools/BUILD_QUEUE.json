@@ -413,7 +413,7 @@
       "spec": "Implement routes for approval system, including auto-reject functionality.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerApprovalRoutes"
       ],
@@ -436,14 +436,17 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:46:29.578Z",
-      "commit_sha": "2a6b2fb831e098816994c4e2fcf200399aaca145",
+      "commit_sha": "05a06d34bd0db5418069774c7ed76c67f63ca410",
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step5",
       "mission_id": "PRODUCT-business-tools",
-      "same_signature_count": 0,
+      "same_signature_count": 1,
       "demoted": false,
-      "last_error": "artifact_proof_failed: approval_timeout",
-      "heal_unblocked": true
+      "last_error": "artifact_proof_failed: missing_exports:registerApprovalRoutes; registerApprovalRoutes",
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T12:06:45.812Z",
+      "blocker_class": "BLOCKED_TOOLING",
+      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: missing_exports:registerApprovalRoutes; registerApprovalRoutes"
     },
     {
       "id": "step6",
@@ -1257,5 +1260,5 @@
   "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-business-tools",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T12:05:46.576Z"
+  "updated_at": "2026-08-01T12:06:58.181Z"
 }

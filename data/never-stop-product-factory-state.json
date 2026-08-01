@@ -1,25 +1,25 @@
 {
   "status": "idle",
   "last_task": {
-    "id": "product_build_business-tools_step1",
+    "id": "product_build_business-tools_step5",
     "kind": "product_build_step",
     "priority": 2.002,
     "product": "business-tools",
     "product_id": "business-tools",
-    "step_id": "step1",
-    "target_file": "services/makeGenerator.js",
-    "detail": "next buildable step: step1"
+    "step_id": "step5",
+    "target_file": "routes/issueApprovalRoutes.js",
+    "detail": "next buildable step: step5"
   },
   "last_result": {
     "ok": false,
-    "task_id": "product_build_business-tools_step1",
+    "task_id": "product_build_business-tools_step5",
     "detail": "product_build_step",
     "outcome": {
       "ok": false,
-      "step_id": "step1",
+      "step_id": "step5",
       "stage": "artifact_proof",
-      "reason": "artifact_proof_failed: \"type\": \"object\"",
-      "attempts": 2,
+      "reason": "artifact_proof_failed: missing_exports:registerApprovalRoutes; registerApprovalRoutes",
+      "attempts": 1,
       "blocked": false,
       "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
@@ -27,9 +27,9 @@
       "summary": {
         "product_id": "business-tools",
         "total": 31,
-        "pending": 8,
+        "pending": 6,
         "building": 0,
-        "done": 15,
+        "done": 17,
         "blocked": 2,
         "founder_gated": 0,
         "design_review_flagged": 0,
@@ -39,9 +39,9 @@
       }
     },
     "claim": {
-      "id": "business-tools:step1",
+      "id": "business-tools:step5",
       "kind": "execution",
-      "text": "product step step1 built + verified + served live",
+      "text": "product step step5 built + verified + served live",
       "grade": "GUESS",
       "proof": null,
       "original_grade": "KNOW",
@@ -53,9 +53,9 @@
     "summary": {
       "product_id": "business-tools",
       "total": 31,
-      "pending": 8,
+      "pending": 6,
       "building": 0,
-      "done": 15,
+      "done": 17,
       "blocked": 2,
       "founder_gated": 0,
       "design_review_flagged": 0,
@@ -65,5 +65,5 @@
     }
   },
   "cycles": 1,
-  "updated_at": "2026-08-01T11:51:05.718Z"
+  "updated_at": "2026-08-01T12:06:59.729Z"
 }
