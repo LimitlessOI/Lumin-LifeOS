@@ -53,6 +53,8 @@
       --c-healing:    #c084fc;
       --c-dashboard:  #6366f1;
       --c-victory:    #fbbf24;
+      --c-food:       #84cc16; /* New color for Food */
+
 
       /* Layout */
       --studio-shell-gap: 14px;
@@ -2275,6 +2277,10 @@
         <span class="nav-icon">🌿</span>
         <span class="nav-label">Health</span>
       </a>
+      <a class="nav-item" id="nav-food"     data-page="lifeos-food.html"      data-label="Food"       href="#" role="button">
+        <span class="nav-icon">🍎</span>
+        <span class="nav-label">Food</span>
+      </a>
       <a class="nav-item" id="nav-inner"    data-page="lifeos-inner.html"     data-label="Inner Work" href="#" role="button">
         <span class="nav-icon">🌊</span>
         <span class="nav-label">Inner Work</span>
@@ -2424,7 +2430,7 @@
 
       <div id="point-b-strip" class="point-b-strip" data-point-b-strip="true" data-lifere="point-b-status" aria-live="polite">
         <strong id="point-b-label">Point B · LifeRE Alpha</strong>
-        <span class="point-b-pct" id="point-b-pct">—</span>
+        <span class="point-b-pct">—</span>
         <span id="point-b-phase"></span>
         <span class="point-b-blocker" id="point-b-blocker"></span>
       </div>
@@ -2490,11 +2496,11 @@
           <span class="mob-icon">🌿</span>
           <span class="mob-label">Health</span>
         </div>
-        <div class="mob-tab" id="mob-healing"
-          data-page="lifeos-healing.html" data-title="Healing" data-color="--c-healing"
-          onclick="mobileNav(this)" style="--tab-c:var(--c-healing)">
-          <span class="mob-icon">🌸</span>
-          <span class="mob-label">Healing</span>
+        <div class="mob-tab" id="mob-food"
+          data-page="lifeos-food.html" data-title="Food" data-color="--c-food"
+          onclick="mobileNav(this)" style="--tab-c:var(--c-food)">
+          <span class="mob-icon">🍎</span>
+          <span class="mob-label">Food</span>
         </div>
         <div class="mob-tab" id="mob-more" onclick="openMoreSheet()">
           <span class="mob-icon" style="font-size:16px;filter:none">⋯</span>
@@ -2547,6 +2553,10 @@
     <div class="more-item" data-page="lifeos-child.html" data-label="Children" onclick="mobileNavFromMore('lifeos-child.html','Children','--c-children')">
       <span class="more-item-icon">⭐</span>
       <span class="more-item-label">Kids</span>
+    </div>
+    <div class="more-item" data-page="lifeos-food.html" data-label="Food" onclick="mobileNavFromMore('lifeos-food.html','Food','--c-food')">
+      <span class="more-item-icon">🍎</span>
+      <span class="more-item-label">Food</span>
     </div>
     <div class="more-item" data-page="lifeos-conflict.html" data-label="Conflict" onclick="mobileNavFromMore('lifeos-conflict.html','Conflict','--c-conflict')">
       <span>🔥</span><span>Conflict</span>
@@ -2911,6 +2921,7 @@ const PAGE_META = {
   'lifeos-engine.html':    { title: 'Engine',     icon: '⚡',  color: '--c-engine'    },
   'lifeos-connect.html':   { title: 'Connect',    icon: '🔗',  color: '--c-engine'    },
   'lifeos-health.html':    { title: 'Health',     icon: '🌿',  color: '--c-health'    },
+  'lifeos-food.html':      { title: 'Food',       icon: '🍎',  color: '--c-food'      }, /* Added Food */
   'lifeos-inner.html':     { title: 'Inner Work', icon: '🌊',  color: '--c-inner'     },
   'lifeos-family.html':    { title: 'Family',     icon: '🏡',  color: '--c-family'    },
   'lifeos-purpose.html':   { title: 'Purpose',    icon: '🎯',  color: '--c-purpose'   },
@@ -3106,6 +3117,7 @@ function showIosInstallBanner() {
   b.onclick = () => { location.href = '/install'; };
   document.body.appendChild(b);
   requestAnimationFrame(() => b.classList.add('show'));
+  setTimeout(() => { b.classList.remove('show'); setTimeout(() => b.remove(), 400); }, 9000);
 }
 
 /* ── Navigation ──────────────────────────────────────────────── */
@@ -3132,2558 +3144,547 @@ function loadPage(page) {
   currentTitle = meta.title;
 
   // Section color on :root
-  document.documentElement.style.setProperty('--section-color', `var(${meta.color})`);
+  document.documentElement.style.setProperty('--section-color', meta.color);
 
-  // Desktop topbar
-  document.getElementById('topbar-icon').textContent  = meta.icon;
-  document.getElementById('topbar-title').textContent = meta.title;
-
-  // Mobile topbar
+  // Update topbar
+  document.getElementById('topbar-icon').textContent    = meta.icon;
+  document.getElementById('topbar-title').textContent   = meta.title;
   document.getElementById('mobile-section-name').textContent = meta.title;
 
-  // Sidebar active state
-  document.querySelectorAll('.nav-item').forEach(n => {
-    n.classList.remove('active');
-    n.style.borderLeftColor = '';
-  });
-  const navEl = document.querySelector(`.nav-item[data-page="${page}"]`);
-  if (navEl) {
-    navEl.classList.add('active');
-    navEl.style.borderLeftColor = `var(${meta.color})`;
-  }
+  // Update nav item active state
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const activeNav = document.querySelector(`[data-page="${page}"]`);
+  if (activeNav) activeNav.classList.add('active');
 
-  const mobTab = document.querySelector(`.mob-tab[data-page="${page}"]`);
-  if (mobTab) {
-    document.querySelectorAll('.mob-tab').forEach(t => t.classList.remove('active'));
-    mobTab.classList.add('active');
+  // Update mobile bottom nav active state + color
+  document.querySelectorAll('.mob-tab').forEach(t => t.classList.remove('active'));
+  const activeMobTab = document.querySelector(`#mob-${page.replace('lifeos-','').replace('.html','')}`);
+  if (activeMobTab) {
+    activeMobTab.classList.add('active');
+    activeMobTab.style.setProperty('--tab-c', meta.color);
+    activeMobTab.querySelector('.mob-icon').style.filter = 'saturate(1) brightness(1)';
+    activeMobTab.querySelector('.mob-label').style.color = 'var(--text-secondary)';
+  } else {
+    // If the item isn't a primary bottom nav item, ensure 'More' tab is active
+    document.getElementById('mob-more').classList.add('active');
   }
 
   sessionStorage.setItem('lifeos_page', page);
-}
-
-function applyThemeUi(theme) {
-  THEME = theme === 'light' ? 'light' : 'dark';
-  const label = THEME === 'light' ? 'Light' : 'Dark';
-  const icon = THEME === 'light' ? '☀︎' : '☾';
-  const title = THEME === 'light' ? 'Switch to dark mode' : 'Switch to light mode';
-  const settingsBtn = document.getElementById('theme-toggle-settings');
-  const topbarBtn = document.getElementById('theme-toggle-topbar');
-  const mobileBtn = document.getElementById('theme-toggle-mobile');
-  if (settingsBtn) settingsBtn.textContent = `${label} theme`;
-  if (topbarBtn) { topbarBtn.textContent = icon; topbarBtn.title = title; }
-  if (mobileBtn) { mobileBtn.textContent = icon; mobileBtn.title = title; }
-  try {
-    document.getElementById('content-frame')?.contentWindow?.postMessage({ type: 'lifeos-theme', theme: THEME }, '*');
-  } catch {}
-}
-
-function setTheme(theme) {
-  const nextTheme = theme === 'light' ? 'light' : 'dark';
-  if (window.__lifeosTheme && typeof window.__lifeosTheme.set === 'function') {
-    window.__lifeosTheme.set(nextTheme);
-  } else {
-    document.documentElement.dataset.theme = nextTheme;
-    localStorage.setItem('lifeos_theme', nextTheme);
-  }
-  applyThemeUi(nextTheme);
-}
-
-function cycleTheme() {
-  setTheme(THEME === 'light' ? 'dark' : 'light');
-}
-
-window.addEventListener('storage', (event) => {
-  if (event.key === 'lifeos_theme') applyThemeUi(event.newValue || 'dark');
-});
-
-function navigate(el, evt) {
-  if (evt) evt.preventDefault();
-  if (!el || !el.dataset.page) return false;
-  hideFeatureHelp();
-  if (!luminState.pinned) closeLuminDrawer();
-  loadPage(el.dataset.page);
-  closeMobileSidebar();
-  return false;
+  updateFeatureHelp(page);
 }
 
 function bindShellNavigation() {
-  const sidebar = document.getElementById('sidebar');
-  if (sidebar) {
-    sidebar.addEventListener('click', (e) => {
-      const item = e.target.closest('a.nav-item[data-page]');
-      if (!item) return;
-      navigate(item, e);
-    });
-  }
-  const bottomNav = document.getElementById('mobile-bottomnav');
-  if (bottomNav) {
-    bottomNav.addEventListener('click', (e) => {
-      const tab = e.target.closest('.mob-tab[data-page]');
-      if (!tab) return;
-      e.preventDefault();
-      mobileNav(tab);
-    });
-  }
-  const moreSheet = document.getElementById('more-sheet');
-  if (moreSheet) {
-    moreSheet.addEventListener('click', (e) => {
-      const item = e.target.closest('.more-item[data-page]');
-      if (!item) return;
-      e.preventDefault();
-      mobileNavFromMore(item.dataset.page, item.dataset.label || '', item.dataset.color || '--c-dashboard');
-    });
-  }
-}
-
-window.navigate = navigate;
-window.loadPage = loadPage;
-window.mobileNav = mobileNav;
-
-function mobileNav(el) {
-  const page = el.dataset.page;
-  if (!page) return;
-  closeMoreSheet();
-  loadPage(page);
-  document.querySelectorAll('.mob-tab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-}
-
-function mobileNavFromMore(page, title, colorVar) {
-  closeMoreSheet();
-  loadPage(page);
-  // Deactivate bottom tabs (we're in "more")
-  document.querySelectorAll('.mob-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('mob-more').classList.add('active');
-}
-
-function openFeatureGuide(page) {
-  const target = `/overlay/lifeos-feature.html?feature=${encodeURIComponent(page)}`;
-  document.getElementById('content-frame').src = target;
-  currentPage = 'lifeos-feature.html';
-  currentTitle = 'Feature Guide';
-  document.documentElement.style.setProperty('--section-color', 'var(--c-purpose)');
-  document.getElementById('topbar-icon').textContent = 'ℹ️';
-  document.getElementById('topbar-title').textContent = 'Feature Guide';
-  document.getElementById('mobile-section-name').textContent = 'Feature Guide';
-  hideFeatureHelp();
-}
-
-function initFeatureHelp() {
-  const targets = document.querySelectorAll('.nav-item[data-page], .more-item[data-page]');
-  targets.forEach((el) => {
-    el.addEventListener('mouseenter', () => queueFeatureHelp(el));
-    el.addEventListener('mouseleave', hideFeatureHelpSoon);
-    el.addEventListener('focusin', () => queueFeatureHelp(el));
-    el.addEventListener('focusout', hideFeatureHelpSoon);
+  document.querySelectorAll('.nav-item').forEach(item => {
+    if (item.dataset.page && !item.dataset.lifereNav) {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        loadPage(item.dataset.page);
+      });
+    }
   });
-  const pop = document.getElementById('feature-help-popover');
-  pop.addEventListener('mouseenter', cancelFeatureHelpHide);
-  pop.addEventListener('mouseleave', hideFeatureHelpSoon);
-  window.addEventListener('scroll', hideFeatureHelp, true);
-  window.addEventListener('resize', hideFeatureHelp);
+
+  // Handle LifeRE nav specifically to update Lumin state
+  document.getElementById('nav-lifere').addEventListener('click', (e) => {
+    e.preventDefault();
+    loadPage(document.getElementById('nav-lifere').dataset.page);
+    window.LifeOSVoiceChat?.setLuminMode?.('lifeRE');
+  });
+  document.getElementById('nav-chat').addEventListener('click', (e) => {
+    e.preventDefault();
+    openLuminFromQuickBar();
+    window.LifeOSVoiceChat?.setLuminMode?.('chat');
+  });
 }
 
-function queueFeatureHelp(el) {
-  cancelFeatureHelpHide();
-  showFeatureHelp(el);
+function mobileNav(element) {
+  const page = element.dataset.page;
+  const title = element.dataset.title;
+  const color = element.dataset.color;
+  loadPage(page);
+  closeMoreSheet();
 }
 
-function cancelFeatureHelpHide() {
-  if (helpHideTimer) {
-    clearTimeout(helpHideTimer);
-    helpHideTimer = null;
+function mobileNavFromMore(page, title, color) {
+  loadPage(page);
+  closeMoreSheet();
+}
+
+/* ── Sidebar ────────────────────────────────────────────────── */
+function toggleSidebar(forceMini) {
+  const sidebar = document.getElementById('sidebar');
+  if (forceMini !== undefined) {
+    sidebarMini = forceMini;
+  } else {
+    sidebarMini = !sidebarMini;
   }
-}
-
-function hideFeatureHelpSoon() {
-  cancelFeatureHelpHide();
-  helpHideTimer = setTimeout(() => hideFeatureHelp(), 120);
-}
-
-function hideFeatureHelp() {
-  const pop = document.getElementById('feature-help-popover');
-  pop.classList.remove('show');
-  pop.setAttribute('aria-hidden', 'true');
-}
-
-function showFeatureHelp(el) {
-  if (window.innerWidth < 1000) return;
-  const page = el.dataset.page;
-  const guide = FEATURE_GUIDES[page];
-  if (!page || !guide) return;
-  const pop = document.getElementById('feature-help-popover');
-  document.getElementById('feature-help-title').textContent = guide.title || el.dataset.label || 'Feature';
-  document.getElementById('feature-help-summary').textContent = guide.short || 'No guide written yet.';
-  document.getElementById('feature-help-list').innerHTML = (guide.bullets || []).slice(0, 2).map((item) => `<div>${escapeHtml(item)}</div>`).join('');
-  const link = document.getElementById('feature-help-link');
-  link.onclick = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    openFeatureGuide(page);
-  };
-  const rect = el.getBoundingClientRect();
-  const popW = Math.min(320, window.innerWidth - 24);
-  const left = Math.min(window.innerWidth - popW - 12, rect.right + 10);
-  const top = Math.max(12, Math.min(window.innerHeight - 220, rect.top));
-  pop.style.width = `${popW}px`;
-  pop.style.left = `${left}px`;
-  pop.style.top = `${top}px`;
-  pop.classList.add('show');
-  pop.setAttribute('aria-hidden', 'false');
-}
-
-function escapeHtml(value) {
-  return String(value || '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
-}
-
-/* ── Sidebar collapse ────────────────────────────────────────── */
-function syncSidebarToggleButtons() {
-  const topBtn = document.getElementById('sidebar-toggle-topbar');
-  const collapseBtn = document.getElementById('collapse-btn');
-  const mobileBtn = document.getElementById('mobile-menu-btn');
-  const expandedLabel = 'Collapse sidebar';
-  const collapsedLabel = 'Expand sidebar';
-  if (topBtn) {
-    topBtn.textContent = sidebarMini ? '☰' : '◧';
-    topBtn.title = sidebarMini ? collapsedLabel : expandedLabel;
-    topBtn.setAttribute('aria-label', sidebarMini ? collapsedLabel : expandedLabel);
-  }
-  if (collapseBtn) {
-    collapseBtn.textContent = sidebarMini ? '▶' : '◀';
-    collapseBtn.title = sidebarMini ? collapsedLabel : expandedLabel;
-  }
-  if (mobileBtn) {
-    mobileBtn.textContent = document.getElementById('sidebar')?.classList.contains('mobile-open') ? '✕' : '☰';
-  }
-}
-
-function toggleSidebar(force) {
-  sidebarMini = force !== undefined ? force : !sidebarMini;
-  const sb  = document.getElementById('sidebar');
-  sb.classList.toggle('mini', sidebarMini);
+  sidebar.classList.toggle('mini', sidebarMini);
   localStorage.setItem('sidebar_mini', sidebarMini ? '1' : '0');
   syncSidebarToggleButtons();
 }
 
-/* ── Mobile sidebar ──────────────────────────────────────────── */
+function syncSidebarToggleButtons() {
+  const toggleBtn = document.getElementById('collapse-btn');
+  const toggleBtnTopbar = document.getElementById('sidebar-toggle-topbar');
+  if (toggleBtn) toggleBtn.textContent = sidebarMini ? '▶' : '◀';
+  if (toggleBtnTopbar) toggleBtnTopbar.style.display = 'none'; // Always hide desktop topbar toggle
+}
+
 function toggleMobileSidebar() {
-  const sb = document.getElementById('sidebar');
-  if (sb.classList.contains('mobile-open')) closeMobileSidebar();
-  else openMobileSidebar();
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('mobile-overlay');
+  sidebar.classList.toggle('mobile-open');
+  overlay.classList.toggle('open');
 }
-function openMobileSidebar() {
-  document.getElementById('sidebar').classList.add('mobile-open');
-  document.getElementById('mobile-overlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-  syncSidebarToggleButtons();
-}
+
 function closeMobileSidebar() {
   document.getElementById('sidebar').classList.remove('mobile-open');
   document.getElementById('mobile-overlay').classList.remove('open');
-  document.body.style.overflow = '';
-  syncSidebarToggleButtons();
 }
 
-/* ── More bottom sheet ───────────────────────────────────────── */
-function openMoreSheet() {
-  document.getElementById('more-sheet').classList.add('open');
-  document.getElementById('more-backdrop').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-function closeMoreSheet() {
-  document.getElementById('more-sheet').classList.remove('open');
-  document.getElementById('more-backdrop').classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-/* ── User dropdown ───────────────────────────────────────────── */
+/* ── User Dropdown ──────────────────────────────────────────── */
 function toggleUserDropdown() {
-  const dd = document.getElementById('user-dropdown');
-  dd.classList.toggle('open');
-  const chevron = document.querySelector('.chevron');
-  if (chevron) chevron.style.transform = dd.classList.contains('open') ? 'rotate(180deg)' : '';
+  document.getElementById('user-dropdown').classList.toggle('open');
 }
-document.addEventListener('click', (e) => {
-  const pill = document.getElementById('user-pill');
-  if (pill && !pill.contains(e.target)) {
-    document.getElementById('user-dropdown').classList.remove('open');
-    const chevron = document.querySelector('.chevron');
-    if (chevron) chevron.style.transform = '';
+window.addEventListener('click', (e) => {
+  const userPill = document.getElementById('user-pill');
+  const userDropdown = document.getElementById('user-dropdown');
+  if (!userPill.contains(e.target) && !userDropdown.contains(e.target)) {
+    userDropdown.classList.remove('open');
   }
 });
 
-/* ── Settings ────────────────────────────────────────────────── */
-function openSettings(e) {
-  if (e) e.stopPropagation();
-  document.getElementById('user-dropdown').classList.remove('open');
-  if (luminState.open && !luminState.pinned) closeLuminDrawer();
+function signOut(event) {
+  event.stopPropagation();
+  CTX.signOut();
+  window.location.href = '/overlay/lifeos-login.html';
+}
+
+/* ── Settings Panel ─────────────────────────────────────────── */
+function openSettings(event) {
+  if (event) event.stopPropagation();
   document.getElementById('settings-panel').classList.add('open');
   document.getElementById('settings-backdrop').classList.add('open');
-  const amb = document.getElementById('st-ambient');
-  if (amb && window.LifeOSAmbientSense) amb.checked = LifeOSAmbientSense.enabled();
-  const fg = document.getElementById('st-family-guard');
-  if (fg && window.LifeOSFamilyToneGuard) fg.checked = LifeOSFamilyToneGuard.isEnabled();
-  const lm = document.getElementById('st-listening-master');
-  if (lm && window.LifeOSListeningOrchestrator) {
-    lm.checked = LifeOSListeningOrchestrator.getStatus().master;
+  document.getElementById('st-name').value = NAME;
+  document.getElementById('st-key').value = KEY;
+  document.getElementById('st-listening-master').checked = localStorage.getItem('lifeos_listening_master') === '1';
+  document.getElementById('st-family-guard').checked = localStorage.getItem('lifeos_family_guard') === '1';
+  document.getElementById('st-ambient').checked = localStorage.getItem('lifeos_ambient_sense') === '1';
+  document.getElementById('theme-toggle-settings').textContent = THEME.charAt(0).toUpperCase() + THEME.slice(1);
+
+  if (CTX.isOwner) {
+    document.getElementById('settings-operator-section').style.display = 'block';
+    document.getElementById('settings-invites-section').style.display = 'block';
+    document.getElementById('settings-gate-section').style.display = 'block';
+    loadAdminInvites();
+    loadGateChangePresets();
+  } else {
+    document.getElementById('settings-operator-section').style.display = 'none';
+    document.getElementById('settings-invites-section').style.display = 'none';
+    document.getElementById('settings-gate-section').style.display = 'none';
   }
-  const invSec = document.getElementById('settings-invites-section');
-  if (invSec) {
-    if (CTX.role === 'admin') {
-      invSec.style.display = '';
-      loadAdminInvites();
-    } else {
-      invSec.style.display = 'none';
-    }
-  }
-  const gateSec = document.getElementById('settings-gate-section');
-  if (gateSec) {
-    if (CTX.role === 'admin') {
-      gateSec.style.display = '';
-      loadGateChangePresets();
-    } else {
-      gateSec.style.display = 'none';
-    }
-  }
-  const opSec = document.getElementById('settings-operator-section');
-  if (opSec) opSec.style.display = CTX.role === 'admin' ? '' : 'none';
 }
+
 function closeSettings() {
   document.getElementById('settings-panel').classList.remove('open');
   document.getElementById('settings-backdrop').classList.remove('open');
 }
 
-async function loadAdminInvites() {
-  const list = document.getElementById('admin-invites-list');
-  if (!list || CTX.role !== 'admin') return;
-  list.innerHTML = 'Loading…';
-  try {
-    await CTX.refreshIfNeeded();
-    const r = await fetch('/api/v1/lifeos/auth/invites', { headers: CTX.headers() });
-    const data = await r.json();
-    if (!data.ok) throw new Error(data.error || 'Failed to load invites');
-    if (!data.invites || !data.invites.length) {
-      list.innerHTML = '<span class="settings-hint" style="margin:0;">No invites yet.</span>';
-      return;
-    }
-    list.innerHTML = data.invites.map((inv) => {
-      const used = inv.used_at ? `Used by @${inv.used_by_handle || '?'} · ${String(inv.used_at).slice(0, 10)}` : 'Unused';
-      const exp = inv.expires_at ? String(inv.expires_at).slice(0, 10) : '';
-      const link = inv.signup_url || '';
-      const copyBtn = link
-        ? `<button type="button" class="primary" onclick="adminCopyInviteLink(${JSON.stringify(link)})">Copy link</button>`
-        : '';
-      return `<div class="admin-invite-row"><code>${escapeHtml(inv.code)}</code><div class="admin-invite-meta">${escapeHtml(used)} · expires ${escapeHtml(exp)} · tier ${escapeHtml(inv.tier || '')} / ${escapeHtml(inv.role || '')}</div><div class="admin-invite-actions">${copyBtn}</div></div>`;
-    }).join('');
-  } catch (err) {
-    list.innerHTML = `<span class="settings-hint" style="margin:0;color:var(--error,#f87171);">${escapeHtml(err.message)}</span>`;
+async function saveSettings() {
+  const newName = document.getElementById('st-name').value;
+  const newKey = document.getElementById('st-key').value;
+  const listeningMaster = document.getElementById('st-listening-master').checked;
+  const familyGuard = document.getElementById('st-family-guard').checked;
+  const ambientSense = document.getElementById('st-ambient').checked;
+
+  if (newName !== NAME) {
+    NAME = newName;
+    localStorage.setItem('lifeos_name', NAME);
+    syncAccountUiFromContext();
+    toast('Display name updated.');
   }
-}
-
-function adminCopyInviteLink(url) {
-  if (!url) return;
-  navigator.clipboard.writeText(url).then(() => toast('Link copied')).catch(() => {
-    prompt('Copy this link:', url);
-  });
-}
-
-async function loadGateChangePresets() {
-  const list = document.getElementById('gate-presets-list');
-  if (!list || CTX.role !== 'admin') return;
-  list.innerHTML = 'Loading…';
-  try {
-    await CTX.refreshIfNeeded();
-    const r = await fetch('/api/v1/lifeos/gate-change/presets', { headers: CTX.headers() });
-    const data = await r.json();
-    if (!data.ok) throw new Error(data.error || 'Failed to load presets');
-    if (!data.presets || !data.presets.length) {
-      list.innerHTML = '<span class="settings-hint" style="margin:0;">No presets configured.</span>';
-      return;
-    }
-    list.innerHTML = data.presets.map((p) => {
-      const cli = `npm run lifeos:gate-change-run -- --preset ${p.key}`;
-      return `<div class="admin-invite-row"><strong>${escapeHtml(p.key)}</strong><div class="admin-invite-meta">${escapeHtml(p.title)}</div><div class="admin-invite-actions"><button type="button" class="primary" onclick="copyGatePresetCli(${JSON.stringify(cli)})">Copy CLI</button></div></div>`;
-    }).join('');
-  } catch (err) {
-    list.innerHTML = `<span class="settings-hint" style="margin:0;color:var(--error,#f87171);">${escapeHtml(err.message)}</span>`;
+  if (newKey !== KEY) {
+    KEY = newKey;
+    CTX.KEY = newKey; // Update context directly
+    localStorage.setItem('lifeos_command_key', newKey);
+    toast('Command key updated.');
   }
-}
 
-function copyGatePresetCli(cli) {
-  if (!cli) return;
-  navigator.clipboard.writeText(cli).then(() => toast('Copied to clipboard')).catch(() => {
-    window.prompt('Copy this command:', cli);
-  });
+  localStorage.setItem('lifeos_listening_master', listeningMaster ? '1' : '0');
+  if (listeningMaster) {
+    initLuminWakeWordListen();
+    window.LifeOSAmbientSense?.startListeningMaster?.();
+  } else {
+    window.LifeOSAmbientSense?.stopListeningMaster?.();
+  }
+  document.getElementById('listening-toggle').dataset.mode = listeningMaster ? 'on' : 'off';
+  document.getElementById('listening-toggle').setAttribute('aria-pressed', listeningMaster);
+  document.getElementById('listening-label').textContent = listeningMaster ? 'Listening on' : 'Listening off';
+
+  localStorage.setItem('lifeos_family_guard', familyGuard ? '1' : '0');
+  if (familyGuard) {
+    window.LifeOSAmbientSense?.startFamilyGuard?.();
+  } else {
+    window.LifeOSAmbientSense?.stopFamilyGuard?.();
+  }
+  document.getElementById('family-guard-toggle').dataset.mode = familyGuard ? 'on' : 'off';
+  document.getElementById('family-guard-toggle').setAttribute('aria-pressed', familyGuard);
+  document.getElementById('family-guard-label').textContent = familyGuard ? 'Family guard on' : 'Family guard off';
+
+  localStorage.setItem('lifeos_ambient_sense', ambientSense ? '1' : '0');
+  if (ambientSense) {
+    window.LifeOSAmbientSense?.start({ getCtx: () => CTX, userHandle: USER });
+  } else {
+    window.LifeOSAmbientSense?.stop?.();
+  }
+  document.getElementById('ambient-toggle').dataset.mode = ambientSense ? 'on' : 'off';
+  document.getElementById('ambient-toggle').setAttribute('aria-pressed', ambientSense);
+  document.getElementById('ambient-label').textContent = ambientSense ? 'Ambient on' : 'Ambient off';
+
+  closeSettings();
+  toast('Settings saved!');
 }
 
 async function adminCreateInvite() {
-  const btn = document.getElementById('admin-invite-create-btn');
-  if (!btn || CTX.role !== 'admin') return;
-  btn.disabled = true;
-  const prev = btn.textContent;
-  btn.textContent = 'Creating…';
   try {
-    await CTX.refreshIfNeeded();
-    const r = await fetch('/api/v1/lifeos/auth/invite', {
+    const res = await fetch('/api/v1/lifeos/admin/create-invite', {
       method: 'POST',
-      headers: CTX.headers(),
-      body: JSON.stringify({ tier: 'core', role: 'member', days: 90 }),
+      headers: { 'Content-Type': 'application/json', 'X-Command-Key': CTX.KEY },
+      body: JSON.stringify({}),
     });
-    const data = await r.json();
-    if (!data.ok) throw new Error(data.error || 'Failed');
-    await loadAdminInvites();
-    const url = data.invite && data.invite.signup_url;
-    if (url) {
-      await navigator.clipboard.writeText(url);
-      toast('Invite created — link copied');
+    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+    const data = await res.json();
+    if (data.success) {
+      toast('Invite link created!');
+      loadAdminInvites();
     } else {
-      toast('Invite created — set PUBLIC_BASE_URL for auto copy');
+      toast(`Error: ${data.error}`);
     }
-  } catch (err) {
-    toast(err.message || 'Failed');
-  }
-  btn.disabled = false;
-  btn.textContent = prev;
-}
-function saveSettings() {
-  const key  = document.getElementById('st-key').value.trim();
-  const name = document.getElementById('st-name').value.trim();
-  if (key)  { KEY = CTX.setKey(key); }
-  if (name) { localStorage.setItem('lifeos_name', name); NAME = name; }
-  const amb = document.getElementById('st-ambient');
-  if (amb && window.LifeOSAmbientSense) {
-    LifeOSAmbientSense.setEnabled(!!amb.checked);
-    if (amb.checked) {
-      LifeOSAmbientSense.start({ getCtx: () => CTX, userHandle: USER });
-    }
-  }
-  const fg = document.getElementById('st-family-guard');
-  if (fg && window.LifeOSFamilyToneGuard) {
-    if (fg.checked && !LifeOSFamilyToneGuard.isEnabled()) {
-      LifeOSFamilyToneGuard.toggle();
-    } else if (!fg.checked && LifeOSFamilyToneGuard.isEnabled()) {
-      LifeOSFamilyToneGuard.setEnabled(false);
-    }
-  }
-  const lm = document.getElementById('st-listening-master');
-  if (lm && window.LifeOSListeningOrchestrator) {
-    LifeOSListeningOrchestrator.setMaster(!!lm.checked);
-  }
-  document.getElementById('sidebar-user-name').textContent = name || NAME;
-  document.getElementById('user-avatar').textContent       = (name || NAME).charAt(0).toUpperCase();
-  toast('Settings saved ✓');
-  closeSettings();
-}
-
-/* ── Quick capture ───────────────────────────────────────────── */
-function openQuickCapture() {
-  const frame = document.getElementById('content-frame');
-  if (currentPage !== 'lifeos-today.html') {
-    loadPage('lifeos-today.html');
-  }
-  // Post message to inner frame to open capture
-  setTimeout(() => {
-    try { frame.contentWindow.postMessage({ type: 'open-capture' }, '*'); } catch(e) {}
-  }, 100);
-}
-
-/* ── Sign out ────────────────────────────────────────────────── */
-function signOut(e) {
-  e && e.stopPropagation();
-  if (confirm('Sign out? You will need to sign in again.')) {
-    const ctx = window.LifeOSBootstrap?.getLifeOSContext?.({ promptForKey: false });
-    if (ctx?.logout) {
-      ctx.logout();
-      return;
-    }
-    localStorage.removeItem('commandKey');
-    localStorage.removeItem('command_key');
-    localStorage.removeItem('lifeos_key');
-    localStorage.removeItem('lifeos_user');
-    localStorage.removeItem('lifeosUser');
-    localStorage.removeItem('lifeos_name');
-    localStorage.removeItem('lifeos_tier');
-    localStorage.removeItem('lifeos_role');
-    localStorage.removeItem('lifeos_access_token');
-    localStorage.removeItem('lifeos_refresh_token');
-    location.href = '/overlay/lifeos-login.html';
+  } catch (error) {
+    console.error('Error creating invite:', error);
+    toast('Failed to create invite link.');
   }
 }
 
-/* ── Toast ───────────────────────────────────────────────────── */
-function toast(msg) {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), 2800);
-}
-
-/* ══════════════════════════════════════════════════════════════════
-   LUMIN PERSISTENT DRAWER
-══════════════════════════════════════════════════════════════════ */
-
-const CHAT_BASE = '/api/v1/lifeos/chat';
-const DIRECT_SYSTEM_ENDPOINT = '/api/v1/lifeos/builderos/command-control/founder-interface/message';
-const USE_DIRECT_SYSTEM_CHAT = true;
-const LUMIN_WEAR_KEY = 'lifeos_worn_capsules';
-const LUMIN_WEARABLE = [
-  { id: 'founder', label: 'Founder' },
-  { id: 'customer', label: 'Customer' },
-  { id: 'engineer', label: 'Engineer' },
-  { id: 'competitor', label: 'Competitor' },
-  { id: 'anti_you', label: 'Anti-you' },
-  { id: 'munger', label: 'Munger', group: 'minds' },
-  { id: 'bezos', label: 'Bezos', group: 'minds' },
-  { id: 'jobs', label: 'Jobs', group: 'minds' },
-  { id: 'buffett', label: 'Buffett', group: 'minds' },
-  { id: 'feynman', label: 'Feynman', group: 'minds' },
-  { id: 'therapist', label: 'Therapist', group: 'minds' },
-  { id: 'operator', label: 'Operator', group: 'minds' },
-  { id: 'future_self', label: 'Future You', group: 'minds' },
-];
-const luminState = {
-  open: false,
-  threadId: null,
-  sending: false,
-  dock: 'right',
-  pinned: false,
-  minimized: false,
-  voiceTurn: false,
-  wakeListenActive: false,
-  lastReply: '',
-  chatHistory: [],
-  nextMsgId: 0,
-  readAloud: { enabled: false, rate: 1.0 },
-  attachments: [],
-  queue: [],
-  queueOpen: false,
-  thinkTimers: {},
-  leftOpen: true,
-  rightOpen: false,
-  composerDock: 'bottom',
-  mode: 'chat',
-  wornCapsules: (() => {
-    try {
-      const raw = JSON.parse(localStorage.getItem(LUMIN_WEAR_KEY) || '[]');
-      return Array.isArray(raw) ? raw.filter((id) => LUMIN_WEARABLE.some((c) => c.id === id)) : [];
-    } catch {
-      return [];
-    }
-  })(),
-};
-
-function initLuminWearChips() {
-  const host = document.getElementById('lumin-wear-chips');
-  if (!host) return;
-  host.innerHTML = '';
-  for (const c of LUMIN_WEARABLE) {
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = 'lumin-wear-chip' + (luminState.wornCapsules.includes(c.id) ? ' on' : '');
-    btn.textContent = c.label;
-    btn.dataset.capsule = c.id;
-    btn.onclick = () => {
-      const i = luminState.wornCapsules.indexOf(c.id);
-      if (i >= 0) luminState.wornCapsules.splice(i, 1);
-      else luminState.wornCapsules.push(c.id);
-      localStorage.setItem(LUMIN_WEAR_KEY, JSON.stringify(luminState.wornCapsules));
-      initLuminWearChips();
-    };
-    host.appendChild(btn);
-  }
-}
-initLuminWearChips();
-
-function appendLuminJudgmentMeta(data) {
-  if (!data?.cognitive_core && !data?.judgment_compiler && !data?.tension_ledger && !data?.outcome_capture) return;
-  const container = document.getElementById('lumin-messages');
-  if (!container) return;
-  const lines = [];
-
-  // Era-2 outcome capture: prediction vs reality + calibration movement.
-  if (data.outcome_capture) {
-    if (data.actual_option) {
-      lines.push(`<div><strong>You chose</strong> ${ _escHtml(String(data.actual_option)) }${data.prediction_hit ? ' ✓ predicted' : (data.predicted_option ? ` (predicted ${ _escHtml(String(data.predicted_option)) })` : '')}</div>`);
-    }
-    if (data.miss && data.miss.failure_class) {
-      lines.push(`<div><strong>Miss</strong> ${ _escHtml(String(data.miss.failure_class)) } — model updated, not just noted</div>`);
-    }
-    if (data.calibration) {
-      const acc = data.calibration.accuracy != null ? Math.round(Number(data.calibration.accuracy) * 100) : null;
-      lines.push(`<div><strong>Calibration</strong> ${ _escHtml(String(data.calibration.domain)) }: ${acc != null ? acc + '% acc' : '—'} · tier ${ _escHtml(String(data.calibration.delegation_tier || 'refuse')) } (n=${data.calibration.n || 0})</div>`);
-    }
-    if (data.decision_id) lines.push(`<div><strong>Journal</strong> ${ _escHtml(String(data.decision_id).slice(0, 8)) }…</div>`);
-    if (lines.length) _renderJudgmentMeta(container, lines);
-    return;
-  }
-
-  const worn = Array.isArray(data.worn_capsules) ? data.worn_capsules.join(' + ') : '';
-  const pred = data.prediction || {};
-  const conf = pred.confidence != null ? Math.round(Number(pred.confidence) * 100) : null;
-  const tension = Array.isArray(data.tension_ledger) ? data.tension_ledger : [];
-  const programs = Array.isArray(data.activated_programs) ? data.activated_programs : [];
-  if (worn) lines.push(`<div><strong>Worn</strong> ${ _escHtml(worn) }</div>`);
-  if (pred.option) {
-    lines.push(`<div><strong>Prediction</strong> ${ _escHtml(String(pred.option)) }${conf != null ? ` (${conf}%)` : ''} — hypothesis, not identity</div>`);
-  }
-  if (programs.length) {
-    const bits = programs.slice(0, 4).map((p) => {
-      const label = p.label || p;
-      const pc = p.confidence != null ? ` ${Math.round(Number(p.confidence) * 100)}%` : '';
-      return `${label}${pc}`;
-    }).join(' · ');
-    lines.push(`<div><strong>Programs</strong> ${ _escHtml(bits) } — deep patterns (hypotheses)</div>`);
-  }
-  if (tension.length) {
-    const bits = tension.slice(0, 5).map((t) => {
-      const id = t.capsule_id || t.id || '?';
-      const stance = t.stance || t.wants || t.objects_to || '';
-      return `${id}: ${stance}`;
-    }).join(' · ');
-    lines.push(`<div><strong>Tension</strong> ${ _escHtml(bits) }</div>`);
-  }
-  if (data.decision_id) {
-    lines.push(`<div><strong>Journal</strong> ${ _escHtml(String(data.decision_id).slice(0, 8)) }…</div>`);
-  }
-  // Era-3 Extend Me — proactive missing-info + consequence sketch (hypothesis).
-  const mi = data.missing_info || data.cognitive_core?.missing_info;
-  if (mi?.most_valuable) {
-    lines.push(`<div><strong>Missing</strong> ${ _escHtml(String(mi.most_valuable)) }${mi.cheapest_way_to_learn ? ` · learn: ${ _escHtml(String(mi.cheapest_way_to_learn)) }` : ''}</div>`);
-  }
-  const cs = data.consequences || data.cognitive_core?.consequences;
-  if (cs && (arrLen(cs.second_order) || arrLen(cs.watch_signals))) {
-    const watch = Array.isArray(cs.watch_signals) ? cs.watch_signals.slice(0, 2).join('; ') : '';
-    lines.push(`<div><strong>Consequences</strong> ${watch ? _escHtml(watch) : '2nd/3rd-order sketched'} — hypothesis</div>`);
-  }
-  if (data.value_drift?.drift?.length) {
-    const d0 = data.value_drift.drift[0];
-    lines.push(`<div><strong>Value drift</strong> ${ _escHtml(String(d0.principle || d0.drift_description || 'divergence noted')) }</div>`);
-  }
-  // Era-4 Trust Me — delegation disposition when present.
-  const trust = data.trust || data.can_act_gate || data.cognitive_core?.trust;
-  if (trust?.delegation_tier || trust?.action) {
-    lines.push(`<div><strong>Trust</strong> tier ${ _escHtml(String(trust.delegation_tier || trust.action))} · can_act=${trust.can_act ? 'yes' : 'no'} (earned)</div>`);
-  }
-  // Era-5/6 Preserve + Transmit — package / debt / interrupt signals when present.
-  const preserve = data.preserve || data.judgment_package || data.cognitive_core?.preserve;
-  if (preserve?.label || preserve?.package_id) {
-    const confN = Array.isArray(preserve.confidence_map?.confident) ? preserve.confidence_map.confident.length : null;
-    lines.push(`<div><strong>Preserve</strong> ${ _escHtml(String(preserve.label || 'package'))}${confN != null ? ` · ${confN} confident` : ''} — not immortality</div>`);
-  }
-  const debt = data.cognitive_debt || data.debt || data.cognitive_core?.debt;
-  if (Array.isArray(debt) && debt.length) {
-    lines.push(`<div><strong>Cognitive debt</strong> ${debt.length} open — recalibrate before acting</div>`);
-  }
-  const interrupt = data.interrupt || data.subconscious_interrupt || data.cognitive_core?.interrupt;
-  if (interrupt?.message) {
-    lines.push(`<div><strong>Interrupt</strong> ${ _escHtml(String(interrupt.message).slice(0, 120)) }</div>`);
-  }
-  const cal = data.calibration || data.cognitive_core?.calibration;
-  if (cal?.overall?.accuracy != null || cal?.domains?.length) {
-    const acc = cal.overall?.accuracy != null ? Number(cal.overall.accuracy).toFixed(2) : '?';
-    lines.push(`<div><strong>Calibration</strong> acc ${ _escHtml(acc) } — hypothesis metrics</div>`);
-  }
-  const ladder = data.ladder || data.autonomy_ladder || data.cognitive_core?.ladder;
-  if (ladder?.direction || ladder?.suggested_tier) {
-    lines.push(`<div><strong>Ladder</strong> ${ _escHtml(String(ladder.direction || 'hold'))} → ${ _escHtml(String(ladder.suggested_tier || '')) }</div>`);
-  }
-  const audit = data.integrity_audit || data.cognitive_core?.audit;
-  if (audit && (audit.passed != null || audit.findings_n != null)) {
-    lines.push(`<div><strong>Integrity</strong> ${audit.passed ? 'clean' : `${audit.findings_n ?? '?'} finding(s)`} — each carries a fix</div>`);
-  }
-  const council = data.council || data.cognitive_core?.council;
-  if (council?.consensus || (Array.isArray(council?.dissent) && council.dissent.length)) {
-    lines.push(`<div><strong>Council</strong> consensus + ${ (council.dissent || []).length } dissent (lenses)</div>`);
-  }
-  if (!lines.length) return;
-  _renderJudgmentMeta(container, lines);
-}
-
-function arrLen(v) { return Array.isArray(v) ? v.length : 0; }
-
-function _renderJudgmentMeta(container, lines) {
-  const div = document.createElement('div');
-  div.className = 'lumin-msg assistant';
-  div.innerHTML = `<div class="lumin-judgment-meta">${lines.join('')}</div>`;
-  container.appendChild(div);
-  container.scrollTop = container.scrollHeight;
-}
-
-const LUMIN_DOCK_KEY = 'lifeos_lumin_dock_position';
-const LUMIN_PIN_KEY = 'lifeos_lumin_dock_pinned';
-const LUMIN_MIN_KEY = 'lifeos_lumin_dock_minimized';
-initLuminDock();
-initLuminLayout();
-
-function initLuminDock() {
-  const drawer = document.getElementById('lumin-drawer');
-  if (!drawer) return;
-  luminState.dock = localStorage.getItem(LUMIN_DOCK_KEY) || 'right';
-  if (!['right', 'top', 'bottom'].includes(luminState.dock)) luminState.dock = 'right';
-  luminState.pinned = localStorage.getItem(LUMIN_PIN_KEY) === 'true';
-  luminState.minimized = localStorage.getItem(LUMIN_MIN_KEY) === 'true';
-  applyLuminDockUi();
-  if (luminState.pinned) openLuminDrawer();
-}
-
-function applyLuminDockUi() {
-  const drawer = document.getElementById('lumin-drawer');
-  if (!drawer) return;
-  drawer.classList.remove('dock-right', 'dock-top', 'dock-bottom', 'pinned', 'minimized');
-  drawer.classList.add(`dock-${luminState.dock}`);
-  if (luminState.pinned) drawer.classList.add('pinned');
-  if (luminState.minimized) drawer.classList.add('minimized');
-  document.querySelectorAll('.lumin-dock-btn[data-dock]').forEach((btn) => {
-    btn.classList.toggle('active', btn.dataset.dock === luminState.dock);
-  });
-  const pinBtn = document.getElementById('lumin-pin-btn');
-  if (pinBtn) {
-    pinBtn.classList.toggle('active', luminState.pinned);
-    pinBtn.textContent = luminState.pinned ? 'Pinned' : 'Pin';
-  }
-  const minBtn = document.getElementById('lumin-min-btn');
-  if (minBtn) minBtn.textContent = luminState.minimized ? 'Expand' : 'Min';
-  const backdrop = document.getElementById('lumin-backdrop');
-  if (backdrop && luminState.open && luminState.pinned) backdrop.classList.remove('open');
-}
-
-function setLuminDock(position) {
-  if (!['right', 'top', 'bottom'].includes(position)) return;
-  luminState.dock = position;
-  localStorage.setItem(LUMIN_DOCK_KEY, position);
-  applyLuminDockUi();
-}
-
-function toggleLuminPin() {
-  luminState.pinned = !luminState.pinned;
-  localStorage.setItem(LUMIN_PIN_KEY, luminState.pinned ? 'true' : 'false');
-  if (luminState.pinned && !luminState.open) openLuminDrawer();
-  applyLuminDockUi();
-}
-
-function toggleLuminMinimize() {
-  luminState.minimized = !luminState.minimized;
-  localStorage.setItem(LUMIN_MIN_KEY, luminState.minimized ? 'true' : 'false');
-  applyLuminDockUi();
-  if (!luminState.minimized) {
-    setTimeout(() => document.getElementById('lumin-input')?.focus(), 60);
-  }
-}
-
-function expandLuminIfMinimized() {
-  if (!luminState.minimized) return;
-  luminState.minimized = false;
-  localStorage.setItem(LUMIN_MIN_KEY, 'false');
-  applyLuminDockUi();
-  setTimeout(() => document.getElementById('lumin-input')?.focus(), 60);
-}
-
-function onLuminHeaderClick(e) {
-  if (!luminState.minimized) return;
-  if (e.target.closest('button, a, .lumin-dock-controls, .lumin-voice-ctrl, .lumin-history-link')) return;
-  expandLuminIfMinimized();
-}
-
-function toggleLuminDrawer() {
-  if (luminState.open && !luminState.pinned) closeLuminDrawer();
-  else openLuminDrawer();
-}
-
-function openLuminFromQuickBar() {
-  openLuminDrawer({ expand: true });
-}
-
-function safePromptText(value) {
-  const s = String(value ?? '').trim();
-  if (!s || s === 'undefined' || s === 'null') return '';
-  return s;
-}
-
-function seedLuminPrompt(prompt, { send = false } = {}) {
-  openLuminDrawer({ expand: true });
-  const input = document.getElementById('lumin-input');
-  if (!input) return;
-  const text = safePromptText(prompt);
-  input.value = text;
-  luminAutoResize(input);
-  setTimeout(() => input.focus(), 60);
-  if (send && text) {
-    setTimeout(() => luminSend({ text }), 100);
-  }
-}
-
-window.lifeosStudioRunAction = function lifeosStudioRunAction(prompt, opts = {}) {
-  seedLuminPrompt(prompt, opts);
-};
-
-function openLuminDrawer(opts = {}) {
-  const expand = opts.expand !== false;
-  closeSettings();
-  if (expand && luminState.minimized) {
-    luminState.minimized = false;
-    localStorage.setItem(LUMIN_MIN_KEY, 'false');
-  }
-  luminState.open = true;
-  document.body.classList.add('lumin-open');
-  document.getElementById('lumin-drawer').classList.add('open');
-  if (!luminState.pinned) document.getElementById('lumin-backdrop').classList.add('open');
-  document.getElementById('lumin-fab').classList.add('drawer-open');
-  document.getElementById('lumin-fab-badge').classList.remove('show');
-  document.getElementById('lumin-quick-bar')?.classList.add('active');
-  applyLuminDockUi();
-  luminBootThread().catch(() => {});
-  if (!luminState.minimized) setTimeout(() => document.getElementById('lumin-input')?.focus(), 300);
-}
-
-function closeLuminDrawer() {
-  if (luminState.pinned) return;
-  luminState.open = false;
-  document.body.classList.remove('lumin-open');
-  document.getElementById('lumin-drawer').classList.remove('open');
-  document.getElementById('lumin-backdrop').classList.remove('open');
-  document.getElementById('lumin-fab').classList.remove('drawer-open');
-  document.getElementById('lumin-quick-bar')?.classList.remove('active');
-}
-
-function openFullChat() {
-  openLuminDrawer({ expand: true });
-  document.getElementById('lumin-input')?.focus();
-}
-
-/* Boot: direct Chair path uses founder-interface; legacy thread GET is history-only */
-const LUMIN_LEGACY_COUNSEL_RE = /Counsel only ·|nothing executed — counsel only|To execute: say `do:/i;
-
-function luminFilterDirectHistory(messages) {
-  if (!Array.isArray(messages)) return [];
-  return messages.filter((m) => {
-    const body = String(m.content || '');
-    if (m.role === 'assistant' && LUMIN_LEGACY_COUNSEL_RE.test(body)) return false;
-    return true;
-  });
-}
-
-function updateLuminConnectionStatus(data) {
-  const el = document.getElementById('lumin-status-text');
-  if (!el) return;
-  if (data?.pass_fail === 'RUNNING' || data?.async) {
-    el.textContent = 'Running · polling job';
-    return;
-  }
-  const ct = data?.command_truth;
-  if (ct === 'COMMITTED' || ct === 'COMMAND_RAN' || ct === 'BUILD_ATTEMPTED') {
-    el.textContent = 'Executed · Lumin';
-    return;
-  }
-  if (ct === 'NO_COMMAND_RAN' || data?.conversational_mode) {
-    el.textContent = 'Counsel · Lumin';
-    return;
-  }
-  el.textContent = 'Lumin';
-}
-
-async function luminBootThread() {
-  if (USE_DIRECT_SYSTEM_CHAT) {
-    updateLuminConnectionStatus({ command_truth: 'NO_COMMAND_RAN', conversational_mode: true });
-    try {
-      const res = await CTX.fetchWithAuth(`${CHAT_BASE}/threads/default`);
-      const data = await res.json();
-      if (data.ok && data.thread?.id) {
-        luminState.threadId = data.thread.id;
-        await luminLoadMessages();
-      }
-    } catch { /* fresh session */ }
-    return;
-  }
+async function loadAdminInvites() {
+  const listEl = document.getElementById('admin-invites-list');
+  listEl.innerHTML = 'Loading invites...';
   try {
-    const res = await CTX.fetchWithAuth(`${CHAT_BASE}/threads/default`);
+    const res = await fetch('/api/v1/lifeos/admin/list-invites', {
+      headers: { 'X-Command-Key': CTX.KEY },
+    });
+    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
     const data = await res.json();
-    if (data.ok && data.thread?.id) {
-      luminState.threadId = data.thread.id;
-      await luminLoadMessages();
-      return;
-    }
-  } catch { /* fall through */ }
-  await luminCreateThread();
-}
-
-async function luminCreateThread() {
-  try {
-    const res = await CTX.fetchWithAuth(`${CHAT_BASE}/threads`, {
-      method: 'POST',
-      body: JSON.stringify({ title: 'Quick chat', mode: 'general' }),
-    });
-    const data = await res.json();
-    luminState.threadId = data.thread?.thread_id || data.thread?.id || null;
-  } catch {}
-}
-
-async function luminLoadMessages() {
-  if (!luminState.threadId) return;
-  try {
-    const res = await CTX.fetchWithAuth(`${CHAT_BASE}/threads/${luminState.threadId}/messages?limit=80`);
-    const data = await res.json();
-    if (data.ok && data.messages?.length) {
-      const rows = USE_DIRECT_SYSTEM_CHAT ? luminFilterDirectHistory(data.messages) : data.messages;
-      if (rows.length) luminRenderHistory(rows);
-    }
-  } catch {}
-}
-
-function luminRenderHistory(messages) {
-  const container = document.getElementById('lumin-messages');
-  if (!messages.length) return;
-  container.innerHTML = '';
-  luminState.chatHistory = [];
-  luminState.nextMsgId = 0;
-  const subset = messages.slice(-80);
-  subset.forEach(m => {
-    const role = m.role === 'user' ? 'user' : 'assistant';
-    _appendLuminMsg(role, m.content, m.created_at, false);
-  });
-  container.scrollTop = container.scrollHeight;
-}
-
-function appendClientBubbleProof(reply, data) {
-  const colors = data?.founder_verification?.client_check?.expected_colors;
-  if (!colors || !window.LifeOSFounderBubbleProof) return reply;
-  const proof = LifeOSFounderBubbleProof.verifyFounderBubbleColors(colors);
-  const tag = proof.ok ? 'Client bubble proof: PASS' : `Client bubble proof: FAIL (dashboard ${proof.dashboard?.background || '?'}, app ${proof.app?.background || '?'})`;
-  return `${reply}\n${tag}`;
-}
-
-const LUMIN_SEND_TIMEOUT_MS = 95000;
-
-async function luminReadJsonSafe(res) {
-  const raw = await res.text();
-  if (!raw) return {};
-  try {
-    return JSON.parse(raw);
-  } catch {
-    return {
-      ok: false,
-      error: raw.slice(0, 500) || `Unexpected response (${res.status})`,
-    };
-  }
-}
-
-async function luminFetchJsonWithTimeout(url, init = {}, timeoutMs = LUMIN_SEND_TIMEOUT_MS) {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
-  try {
-    const res = await fetch(url, {
-      ...init,
-      signal: controller.signal,
-    });
-    const data = await luminReadJsonSafe(res);
-    return { res, data };
-  } finally {
-    clearTimeout(timeoutId);
-  }
-}
-
-async function pollFounderBuildJob(jobId, pollUrl, onTick) {
-  const deadline = Date.now() + 660000;
-  while (Date.now() < deadline) {
-    const res = await fetch(pollUrl || `/api/v1/lifeos/builderos/command-control/founder-interface/build-job/${jobId}`, {
-      credentials: 'same-origin',
-      headers: await directSystemHeaders(),
-    });
-    const data = await res.json();
-    if (res.status === 202 || data.pass_fail === 'RUNNING') {
-      if (typeof onTick === 'function') { try { onTick(data); } catch { /* non-fatal */ } }
-      await new Promise((resolve) => setTimeout(resolve, 2500));
-      continue;
-    }
-    return { res, data };
-  }
-  return { res: { ok: false, status: 504 }, data: { pass_fail: 'FAIL', first_blocker: 'Build job timed out after 11 minutes.' } };
-}
-
-function applyLuminShellAction(data) {
-  const sa = data?.shell_action;
-  if (!sa) return;
-  if (sa.type === 'navigate' && sa.page) {
-    loadPage(sa.page);
-    document.querySelectorAll('.nav-item').forEach((n) => n.classList.remove('active'));
-    const nav = document.querySelector(`[data-page="${sa.page}"]`);
-    if (nav) nav.classList.add('active');
-    if (sa.stack === 'lifere') {
-      try { sessionStorage.setItem('lifeos_stack', 'lifere'); } catch {}
-    }
-  }
-  if ((sa.type === 'open_external' || sa.type === 'open_url') && sa.url) {
-    window.open(sa.url, '_blank', 'noopener,noreferrer');
-  }
-  if (sa.type === 'connect_guide') {
-    loadPage('lifeos-connect.html');
-    document.querySelectorAll('.nav-item').forEach((n) => n.classList.remove('active'));
-    document.getElementById('nav-connect')?.classList.add('active');
-    if (sa.url) window.open(sa.url, '_blank', 'noopener,noreferrer');
-    if (sa.inboxUrl) setTimeout(() => window.open(sa.inboxUrl, '_blank', 'noopener,noreferrer'), 400);
-  }
-}
-
-window.addEventListener('message', (ev) => {
-  const d = ev?.data;
-  if (!d || typeof d !== 'object') return;
-  if (d.type === 'lifeos_open_external' && d.url) {
-    window.open(d.url, '_blank', 'noopener,noreferrer');
-  }
-});
-
-async function luminSend(opts = {}) {
-  const input = document.getElementById('lumin-input');
-  let msg = safePromptText(opts.text || input?.value || '');
-  luminDetectLayoutModeFromText(msg);
-  let useAttachments = Array.isArray(opts.attachments) && opts.attachments.length
-    ? opts.attachments
-    : (Array.isArray(luminState.attachments) ? luminState.attachments : []);
-  const hasAttachments = useAttachments.length > 0;
-
-  // If already working, queue this request and keep the user typing.
-  if (luminState.sending && !opts._fromQueue) {
-    luminEnqueue(msg, useAttachments, opts.voice === true || luminState.voiceTurn);
-    if (!opts.text && input) { input.value = ''; luminAutoResize(input); }
-    if (!opts.attachments) { luminClearAttachments(); }
-    luminState.voiceTurn = false;
-    return;
-  }
-  if ((!msg && !hasAttachments)) return;
-
-  const voiceTurn = opts.voice === true || luminState.voiceTurn;
-  luminState.voiceTurn = false;
-  if (!USE_DIRECT_SYSTEM_CHAT && !luminState.threadId) { await luminCreateThread(); }
-
-  // Fold any attached files into the outbound message so the Chair can read them.
-  luminState.attachments = useAttachments;
-
-  // Analyze pasted images with vision before the Chair sees them.
-  const pendingImages = luminState.attachments.filter((a) => a.kind === 'image' && a.data && !a.description);
-  if (pendingImages.length) {
-    const statusEl = document.getElementById('lumin-status-text');
-    if (statusEl) statusEl.textContent = `Reading ${pendingImages.length} image(s)…`;
-    const blocks = await luminDescribeImageAttachments(pendingImages);
-    pendingImages.forEach((a, i) => { a.description = blocks[i]; });
-  }
-
-  const attachBlock = luminBuildAttachmentBlock();
-  const outboundMsg = attachBlock ? (msg ? `${msg}\n\n${attachBlock}` : attachBlock) : msg;
-  const attachNames = hasAttachments ? luminState.attachments.map((a) => a.name).join(', ') : '';
-  const displayMsg = hasAttachments ? `${msg}${msg ? '\n' : ''}📎 ${attachNames}` : msg;
-
-  // Remove empty state
-  document.getElementById('lumin-empty')?.remove();
-
-  _appendLuminMsg('user', displayMsg, new Date().toISOString(), true);
-  input.value = '';
-  luminAutoResize(input);
-  luminClearAttachments();
-
-  document.querySelectorAll('.lumin-msg.thinking').forEach((el) => el.remove());
-
-  const worklogId = 'lumin-worklog-' + Date.now();
-  luminStartWorklog(worklogId, voiceTurn ? 'Listening' : 'Working');
-  luminWorklogPush(worklogId, {
-    kind: 'thinking',
-    summary: voiceTurn ? 'Hearing you — turning that into a system turn.' : 'Reading what you said and deciding how to answer or act.',
-  });
-
-  luminState.sending = true;
-  document.getElementById('lumin-send-btn').disabled = true;
-  document.getElementById('lumin-status-text').textContent = 'Working…';
-
-  const H = await directSystemHeaders();
-  try {
-    const reqBody = USE_DIRECT_SYSTEM_CHAT
-      ? {
-          text: outboundMsg,
-          action: 'auto',
-          stage: 'system',
-          source_mode: voiceTurn ? 'voice' : 'text',
-          conversational_mode: true,
-          dictate_then_send: voiceTurn,
-          async: true,
-          conversation_history: buildLuminConversationHistoryPayload(),
-          ui_context: {
-            surface: 'lifeos-app',
-            focused_element: '#lumin-input',
-            page: location.pathname + location.search,
-            worn_capsules: Array.isArray(luminState.wornCapsules) ? [...luminState.wornCapsules] : [],
-          },
-          client_version: '20260719-cognitive-core',
-        }
-      : { user: USER || 'adam', message: outboundMsg };
-    const endpoint = USE_DIRECT_SYSTEM_CHAT
-      ? DIRECT_SYSTEM_ENDPOINT
-      : `${CHAT_BASE}/threads/${luminState.threadId}/messages`;
-    luminWorklogPush(worklogId, {
-      kind: 'action',
-      summary: 'Sending to Chair (founder-interface)…',
-      detail: endpoint,
-    });
-    let { res, data } = await luminFetchJsonWithTimeout(endpoint, {
-      method: 'POST',
-      credentials: 'same-origin',
-      headers: H,
-      body: JSON.stringify(reqBody),
-    });
-    if (USE_DIRECT_SYSTEM_CHAT && res.status === 202 && data.job_id) {
-      luminWorklogPush(worklogId, {
-        kind: 'thinking',
-        summary: 'Build started — watching the job stream so you can see each step.',
-        detail: `job ${data.job_id}`,
-      });
-      luminWorklogPush(worklogId, {
-        kind: 'action',
-        summary: 'Polling build job…',
-        detail: data.poll_url || data.job_id,
-      });
-      const polled = await pollFounderBuildJob(data.job_id, data.poll_url, (tick) => luminUpdateWorklogFromJob(worklogId, tick));
-      res = polled.res;
-      data = polled.data;
-    }
-
-    if (res.status === 401 || res.status === 403) {
-      const renewed = await CTX.refreshIfNeeded();
-      if (renewed) {
-        luminWorklogPush(worklogId, { kind: 'action', summary: 'Session renewed — retrying the same turn.' });
-        const retryResult = await luminFetchJsonWithTimeout(endpoint, {
-          method: 'POST',
-          credentials: 'same-origin',
-          headers: await directSystemHeaders(),
-          body: JSON.stringify(reqBody),
-        });
-        const retry = retryResult.res;
-        const retryData = retryResult.data;
-        if (retry.ok) {
-          luminFinalizeWorklog(worklogId, retryData);
-          let reply = formatDirectSystemReply(retryData);
-          reply = appendClientBubbleProof(reply, retryData);
-          luminState.lastReply = reply;
-          luminDeliverReply(reply, voiceTurn);
-          applyLuminShellAction(retryData);
-          return;
-        }
-      }
-      luminFinalizeWorklog(worklogId, { pass_fail: 'FAIL', first_blocker: 'auth_redirect' });
-      _appendLuminMsgRaw(null, 'assistant', 'Session expired — sign in again to keep chatting.');
-      setTimeout(() => {
-        location.href = (data && data.redirect) ? data.redirect : '/overlay/lifeos-login.html?next=/overlay/lifeos-app.html';
-      }, 900);
-      return;
-    }
-
-    if (USE_DIRECT_SYSTEM_CHAT && data) {
-      updateLuminConnectionStatus(data);
-      luminFinalizeWorklog(worklogId, data);
-      let reply = formatDirectSystemReply(data);
-      reply = appendClientBubbleProof(reply, data);
-      luminState.lastReply = reply;
-      luminDeliverReply(reply, voiceTurn);
-      appendLuminJudgmentMeta(data);
-      applyLuminShellAction(data);
-      if (!luminState.open) {
-        document.getElementById('lumin-fab-badge').classList.add('show');
-      }
-    } else if (data.ok && data.assistant_message) {
-      luminFinalizeWorklog(worklogId, { pass_fail: 'PASS', human_summary: data.assistant_message.content });
-      luminDeliverReply(data.assistant_message.content, voiceTurn, data.assistant_message.created_at);
-      if (!luminState.open) {
-        document.getElementById('lumin-fab-badge').classList.add('show');
-      }
-    } else {
-      luminFinalizeWorklog(worklogId, { pass_fail: 'FAIL', first_blocker: 'empty_or_error_response' });
-      _appendLuminMsgRaw(null, 'assistant', 'Sorry, something went wrong. Try again.');
-    }
-  } catch (err) {
-    const message = err?.name === 'AbortError'
-      ? 'Lumin timed out waiting for the system. Nothing completed on this turn. Try again.'
-      : `Connection error: ${err.message}`;
-    luminFinalizeWorklog(worklogId, { pass_fail: 'FAIL', first_blocker: message });
-    _appendLuminMsgRaw(null, 'assistant', message);
-  } finally {
-    luminState.sending = false;
-    document.getElementById('lumin-send-btn').disabled = false;
-    const statusEl = document.getElementById('lumin-status-text');
-    if (statusEl) {
-      if (luminState.wakeListenActive) {
-        statusEl.textContent = LuminVoice?.isConversationActive?.()
-          ? 'Lumin is with you'
-          : 'Say "Lumin" when ready';
-      } else if (USE_DIRECT_SYSTEM_CHAT) {
-        statusEl.textContent = 'Counsel · Lumin';
-      } else {
-        statusEl.textContent = 'Ready';
-      }
-    }
-    setTimeout(luminProcessQueue, 0);
-  }
-}
-
-function _appendLuminMsg(role, content, createdAt, scroll) {
-  const container = document.getElementById('lumin-messages');
-  const div = document.createElement('div');
-  div.className = `lumin-msg ${role}`;
-  const msgId = luminState.nextMsgId++;
-  div.dataset.msgId = String(msgId);
-  div.id = `lumin-msg-${msgId}`;
-  const time = createdAt ? new Date(createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
-  div.innerHTML = `<div style="white-space:pre-wrap;word-break:break-word;">${_escHtml(content)}</div>${time ? `<div class="lumin-msg-time">${time}</div>` : ''}`;
-  container.appendChild(div);
-  if (scroll) container.scrollTop = container.scrollHeight;
-  if (role === 'user' || role === 'assistant') {
-    luminState.chatHistory.push({ role, content: String(content || ''), createdAt, msgId });
-    if (luminState.chatHistory.length > 40) luminState.chatHistory.shift();
-  }
-  luminRenderSegments();
-}
-
-function _appendLuminMsgRaw(id, role, content) {
-  const container = document.getElementById('lumin-messages');
-  const div = document.createElement('div');
-  div.className = `lumin-msg ${role}`;
-  if (id) div.id = id;
-  div.textContent = content;
-  container.appendChild(div);
-  container.scrollTop = container.scrollHeight;
-}
-
-function _escHtml(str) {
-  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
-}
-
-function buildLuminConversationHistoryPayload() {
-  return luminState.chatHistory
-    .slice(0, -1)
-    .slice(-12)
-    .map((m) => ({ role: m.role, content: m.content }));
-}
-
-function luminEnqueue(text, attachments, voice) {
-  const safeText = String(text || '').trim();
-  const safeAttachments = Array.isArray(attachments) ? attachments.slice() : [];
-  if (!safeText && !safeAttachments.length) return;
-  luminState.queue.push({
-    id: `q-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
-    text: safeText,
-    attachments: safeAttachments,
-    voice: !!voice,
-  });
-  luminRenderQueue();
-  toast(`Queued · ${luminState.queue.length} waiting`);
-}
-
-function luminProcessQueue() {
-  if (luminState.sending || !luminState.queue.length) return;
-  const item = luminState.queue.shift();
-  luminRenderQueue();
-  if (!item) return;
-  luminSend({ text: item.text, attachments: item.attachments, voice: item.voice, _fromQueue: true });
-}
-
-function luminToggleQueuePanel() {
-  luminState.queueOpen = !luminState.queueOpen;
-  const panel = document.getElementById('lumin-queue-panel');
-  if (panel) panel.classList.toggle('open', luminState.queueOpen);
-}
-
-function luminRenderQueue() {
-  const list = document.getElementById('lumin-queue-list');
-  const badge = document.getElementById('lumin-queue-badge');
-  const btn = document.getElementById('lumin-queue-btn');
-  if (badge) {
-    badge.textContent = luminState.queue.length || '';
-    badge.classList.toggle('hidden', !luminState.queue.length);
-  }
-  if (!list) return;
-  if (!luminState.queue.length) {
-    list.innerHTML = '<div class="lumin-queue-empty">No queued requests.</div>';
-    return;
-  }
-  list.innerHTML = luminState.queue.map((item, idx) => {
-    const raw = (item.text || '(attachment)').slice(0, 60);
-    const snippet = _escHtml(raw);
-    const titleText = raw.replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    const voiceIcon = item.voice ? ' <span class="lumin-queue-item-voice">🎙</span>' : '';
-    return `<div class="lumin-queue-item" data-qid="${item.id}">
-      <span class="lumin-queue-item-text" title="${titleText}">${snippet}${voiceIcon}</span>
-      <button type="button" class="lumin-queue-btn" onclick="luminMoveQueueItem(${idx}, -1)" title="Move up" ${idx === 0 ? 'disabled' : ''}>↑</button>
-      <button type="button" class="lumin-queue-btn" onclick="luminMoveQueueItem(${idx}, 1)" title="Move down" ${idx === luminState.queue.length - 1 ? 'disabled' : ''}>↓</button>
-      <button type="button" class="lumin-queue-btn" onclick="luminDeleteQueueItem(${idx})" title="Remove">✕</button>
-    </div>`;
-  }).join('');
-}
-
-function luminMoveQueueItem(idx, delta) {
-  const newIdx = idx + delta;
-  if (newIdx < 0 || newIdx >= luminState.queue.length) return;
-  const [item] = luminState.queue.splice(idx, 1);
-  luminState.queue.splice(newIdx, 0, item);
-  luminRenderQueue();
-}
-
-function luminDeleteQueueItem(idx) {
-  if (idx < 0 || idx >= luminState.queue.length) return;
-  luminState.queue.splice(idx, 1);
-  luminRenderQueue();
-}
-
-function luminClearQueue() {
-  luminState.queue = [];
-  luminRenderQueue();
-}
-
-function makeSegmentTitle(text) {
-  const t = String(text || '').replace(/\[Attached files from founder\][\s\S]*/i, '').replace(/📎.*/g, '').replace(/\n+/g, ' ').trim();
-  if (!t) return 'New turn';
-  return t.length > 45 ? t.slice(0, 45) + '…' : t;
-}
-
-function luminRenderSegments() {
-  const list = document.getElementById('lumin-segments');
-  if (!list) return;
-  const hist = luminState.chatHistory.filter((m) => m.role === 'user' || m.role === 'assistant');
-  const GAP_MS = 10 * 60 * 1000;
-  const segments = [];
-  let current = null;
-  for (const m of hist) {
-    if (m.role === 'user') {
-      const t = m.createdAt ? new Date(m.createdAt).getTime() : 0;
-      if (!current || (current.lastUserTime && t - current.lastUserTime > GAP_MS)) {
-        if (current) segments.push(current);
-        current = { title: makeSegmentTitle(m.content), messages: [m], lastUserTime: t, firstMsgId: m.msgId };
-      } else {
-        current.messages.push(m);
-        current.lastUserTime = t;
-      }
-    } else if (current) {
-      current.messages.push(m);
-    }
-  }
-  if (current) segments.push(current);
-  if (!segments.length) {
-    list.innerHTML = '<div class="lumin-segment-empty">Start talking — your conversation jump-cuts will appear here.</div>';
-    return;
-  }
-  list.innerHTML = segments.map((s, i) => `<button type="button" class="lumin-segment" data-segment-idx="${i}" onclick="luminScrollToSegment(${s.firstMsgId})">
-    <div class="lumin-segment-title">${_escHtml(s.title)}</div>
-    <div class="lumin-segment-meta">${s.messages.length} message${s.messages.length === 1 ? '' : 's'}</div>
-  </button>`).join('');
-}
-
-function luminScrollToSegment(msgId) {
-  const el = document.getElementById(`lumin-msg-${msgId}`) || document.querySelector(`.lumin-msg[data-msg-id="${msgId}"]`);
-  if (!el) return;
-  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  document.querySelectorAll('.lumin-segment').forEach((b) => b.classList.remove('active'));
-  const seg = document.querySelector(`.lumin-segment[onclick*="${msgId}"]`);
-  if (seg) seg.classList.add('active');
-}
-
-function luminShowArtifact(html, title = 'Artifact') {
-  const head = document.querySelector('#lumin-right .lumin-right-head');
-  const content = document.getElementById('lumin-right-content');
-  if (head) head.textContent = title;
-  if (content) content.innerHTML = html;
-  if (window.innerWidth >= 900) setLuminRightPanel(true);
-}
-
-function applyLuminLayout() {
-  const left = document.getElementById('lumin-left');
-  const right = document.getElementById('lumin-right');
-  const center = document.getElementById('lumin-center');
-  const layout = document.getElementById('lumin-layout');
-  const leftSplitter = document.getElementById('lumin-splitter-left');
-  const rightSplitter = document.getElementById('lumin-splitter-right');
-  if (left) left.classList.toggle('open', luminState.leftOpen);
-  if (right) right.classList.toggle('open', luminState.rightOpen);
-  if (leftSplitter) leftSplitter.style.display = (luminState.leftOpen && window.innerWidth >= 900) ? 'block' : 'none';
-  if (rightSplitter) rightSplitter.style.display = (luminState.rightOpen && window.innerWidth >= 900) ? 'block' : 'none';
-  if (center) {
-    center.classList.remove('composer-top', 'composer-bottom', 'mode-chat', 'mode-lifeRE');
-    center.classList.add(`composer-${luminState.composerDock}`, `mode-${luminState.mode}`);
-  }
-  const modeBtn = document.getElementById('lumin-mode-btn');
-  if (modeBtn) modeBtn.textContent = luminState.mode === 'lifeRE' ? 'LifeRE' : 'Chat';
-  const layoutVars = [
-    ['--lumin-left-width', localStorage.getItem('lumin_left_width') || '220px'],
-    ['--lumin-right-width', localStorage.getItem('lumin_right_width') || '260px'],
-  ];
-  layoutVars.forEach(([k, v]) => {
-    if (layout) layout.style.setProperty(k, v);
-  });
-}
-
-function toggleLuminLeftPanel() {
-  luminState.leftOpen = !luminState.leftOpen;
-  localStorage.setItem('lumin_left_open', luminState.leftOpen ? '1' : '0');
-  applyLuminLayout();
-}
-
-function toggleLuminRightPanel() {
-  luminState.rightOpen = !luminState.rightOpen;
-  localStorage.setItem('lumin_right_open', luminState.rightOpen ? '1' : '0');
-  applyLuminLayout();
-}
-
-function setLuminLeftPanel(open) {
-  luminState.leftOpen = !!open;
-  localStorage.setItem('lumin_left_open', luminState.leftOpen ? '1' : '0');
-  applyLuminLayout();
-}
-
-function setLuminRightPanel(open) {
-  luminState.rightOpen = !!open;
-  localStorage.setItem('lumin_right_open', luminState.rightOpen ? '1' : '0');
-  applyLuminLayout();
-}
-
-function setLuminComposerDock(pos) {
-  if (!['top', 'bottom'].includes(pos)) return;
-  luminState.composerDock = pos;
-  localStorage.setItem('lumin_composer_dock', pos);
-  applyLuminLayout();
-}
-
-function cycleLuminComposerDock() {
-  setLuminComposerDock(luminState.composerDock === 'bottom' ? 'top' : 'bottom');
-}
-
-function setLuminMode(mode) {
-  if (!['chat', 'lifeRE'].includes(mode)) return;
-  luminState.mode = mode;
-  localStorage.setItem('lumin_mode', mode);
-  applyLuminLayout();
-}
-
-function cycleLuminMode() {
-  setLuminMode(luminState.mode === 'chat' ? 'lifeRE' : 'chat');
-}
-
-function initLuminLayout() {
-  luminState.leftOpen = localStorage.getItem('lumin_left_open') !== '0';
-  luminState.rightOpen = localStorage.getItem('lumin_right_open') === '1';
-  luminState.composerDock = localStorage.getItem('lumin_composer_dock') || 'bottom';
-  luminState.mode = localStorage.getItem('lumin_mode') || 'chat';
-  applyLuminLayout();
-  luminRenderSegments();
-  initLuminResizers();
-  initLuminSwipe();
-}
-
-function initLuminResizers() {
-  const leftSplitter = document.getElementById('lumin-splitter-left');
-  const rightSplitter = document.getElementById('lumin-splitter-right');
-  if (!leftSplitter || !rightSplitter) return;
-  let side = null;
-  let startX = 0;
-  let startWidth = 0;
-  function start(e) {
-    side = e.target.dataset.side;
-    startX = e.clientX || e.touches?.[0]?.clientX;
-    const prop = side === 'left' ? '--lumin-left-width' : '--lumin-right-width';
-    startWidth = parseFloat(getComputedStyle(document.getElementById('lumin-layout')).getPropertyValue(prop)) || (side === 'left' ? 220 : 260);
-    document.body.style.userSelect = 'none';
-    document.addEventListener('mousemove', move);
-    document.addEventListener('mouseup', stop);
-    document.addEventListener('touchmove', move, { passive: false });
-    document.addEventListener('touchend', stop);
-  }
-  function move(e) {
-    if (!side) return;
-    const x = e.clientX || e.touches?.[0]?.clientX;
-    const delta = side === 'left' ? x - startX : startX - x;
-    const prop = side === 'left' ? '--lumin-left-width' : '--lumin-right-width';
-    const newWidth = Math.max(160, Math.min(600, startWidth + delta));
-    document.getElementById('lumin-layout').style.setProperty(prop, `${newWidth}px`);
-  }
-  function stop() {
-    if (!side) return;
-    const prop = side === 'left' ? '--lumin-left-width' : '--lumin-right-width';
-    const val = document.getElementById('lumin-layout').style.getPropertyValue(prop);
-    if (val) localStorage.setItem(side === 'left' ? 'lumin_left_width' : 'lumin_right_width', val);
-    side = null;
-    document.body.style.userSelect = '';
-    document.removeEventListener('mousemove', move);
-    document.removeEventListener('mouseup', stop);
-    document.removeEventListener('touchmove', move);
-    document.removeEventListener('touchend', stop);
-  }
-  leftSplitter.dataset.side = 'left';
-  rightSplitter.dataset.side = 'right';
-  leftSplitter.addEventListener('mousedown', start);
-  leftSplitter.addEventListener('touchstart', start, { passive: false });
-  rightSplitter.addEventListener('mousedown', start);
-  rightSplitter.addEventListener('touchstart', start, { passive: false });
-}
-
-function initLuminSwipe() {
-  const layout = document.getElementById('lumin-layout');
-  if (!layout) return;
-  let startX = null;
-  layout.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; }, { passive: true });
-  layout.addEventListener('touchend', (e) => {
-    if (startX === null || window.innerWidth >= 900) return;
-    const endX = e.changedTouches[0].clientX;
-    const dx = endX - startX;
-    const threshold = 60;
-    const width = layout.offsetWidth / 3;
-    if (Math.abs(dx) > threshold) {
-      const current = Math.round(layout.scrollLeft / width);
-      if (dx < 0 && current < 2) layout.scrollTo({ left: (current + 1) * width, behavior: 'smooth' });
-      if (dx > 0 && current > 0) layout.scrollTo({ left: (current - 1) * width, behavior: 'smooth' });
-    }
-    startX = null;
-  }, { passive: true });
-}
-
-function luminDetectLayoutModeFromText(text) {
-  if (/open\s+lifeRE/i.test(text)) setLuminMode('lifeRE');
-  if (/close\s+lifeRE|exit\s+lifeRE|back\s+to\s+chat/i.test(text)) setLuminMode('chat');
-}
-
-async function directSystemHeaders() {
-  try {
-    await CTX.refreshIfNeeded();
-  } catch {
-    // best-effort
-  }
-  return CTX.headers();
-}
-
-function formatDirectSystemReply(data) {
-  if (window.LifeOSSystemReply && typeof window.LifeOSSystemReply.format === 'function') {
-    return window.LifeOSSystemReply.format(data);
-  }
-  return data.human_summary || data.reason || data.error || 'No response from system.';
-}
-
-async function luminSaveLastMoment() {
-  const body = String(luminState.lastReply || '').trim();
-  if (!body) {
-    toast('Nothing to save yet — talk to Lumin first');
-    return;
-  }
-  const title = body.split('\n')[0].slice(0, 120);
-  try {
-    const H = await directSystemHeaders();
-    const res = await fetch('/api/v1/lifeos/lumin/moments', {
-      method: 'POST',
-      credentials: 'same-origin',
-      headers: H,
-      body: JSON.stringify({ user: 'adam', clip_type: 'lesson', title, body, tags: ['saved', 'manual'] }),
-    });
-    const data = await res.json();
-    toast(data.ok ? 'Saved to your twin' : (data.error || 'Save failed'));
-  } catch {
-    toast('Save failed');
-  }
-}
-
-function luminHandleKey(e) {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); luminSend(); }
-}
-
-/** Escape closes Settings first, then Lumin. Cmd/Ctrl+L opens chat. */
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
-    const settingsOpen = document.getElementById('settings-panel')?.classList.contains('open');
-    if (settingsOpen) {
-      e.preventDefault();
-      closeSettings();
-      return;
-    }
-    if (luminState.open && !luminState.pinned) {
-      e.preventDefault();
-      closeLuminDrawer();
-    }
-    return;
-  }
-  const isMac = navigator.platform && navigator.platform.toUpperCase().indexOf('MAC') >= 0;
-  const mod = isMac ? e.metaKey : e.ctrlKey;
-  if (!mod || e.key.toLowerCase() !== 'l') return;
-  const t = e.target;
-  if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
-  e.preventDefault();
-  openLuminDrawer({ expand: true });
-  setTimeout(() => document.getElementById('lumin-input')?.focus(), 0);
-});
-
-/** Same-origin iframe overlays (lifeos-bootstrap.js) request Lumin — keys do not bubble from iframe. */
-window.addEventListener('message', (e) => {
-  if (e.origin !== window.location.origin) return;
-  if (!e.data || e.data.type !== 'lifeos-shell' || e.data.action !== 'open-lumin-drawer') return;
-  const frame = document.getElementById('content-frame');
-  if (frame && frame.contentWindow && e.source !== frame.contentWindow) return;
-  openLuminDrawer({ expand: true });
-  setTimeout(() => document.getElementById('lumin-input')?.focus(), 0);
-});
-
-function luminAutoResize(el) {
-  const minHeightPx = 72;
-  el.style.height = 'auto';
-  el.style.height = Math.max(minHeightPx, Math.min(el.scrollHeight, 120)) + 'px';
-}
-
-/* founder-lumin-voice-send:start — mechanical voice "send it" wire */
-let luminDrawerVoiceCtrl = null;
-let luminSpaceMicHeld = false;
-let luminPttHeld = false;
-
-function luminWirePushToTalk() {
-  const ptt = document.getElementById('lumin-ptt-btn');
-  if (!ptt || ptt.__wired) return;
-  ptt.__wired = true;
-  const start = (e) => {
-    e.preventDefault();
-    if (luminPttHeld || luminState.sending) return;
-    if (!luminDrawerVoiceCtrl?.startMic) { toast('Voice input needs Chrome or Safari.'); return; }
-    luminPttHeld = true;
-    ptt.classList.add('voice-active');
-    const s = document.getElementById('lumin-status-text');
-    if (s) s.textContent = 'Listening — release to send';
-    try { luminDrawerVoiceCtrl.startMic(); } catch { luminPttHeld = false; ptt.classList.remove('voice-active'); }
-  };
-  const stop = (e) => {
-    if (!luminPttHeld) return;
-    e.preventDefault();
-    luminPttHeld = false;
-    ptt.classList.remove('voice-active');
-    try { luminDrawerVoiceCtrl?.stopMic?.(); } catch {}
-    setTimeout(() => {
-      const v = (document.getElementById('lumin-input')?.value || '').trim();
-      if (v && !luminState.sending) luminSend({ text: v, voice: true });
-    }, 400);
-  };
-  ptt.addEventListener('mousedown', start);
-  ptt.addEventListener('touchstart', start, { passive: false });
-  ptt.addEventListener('mouseup', stop);
-  ptt.addEventListener('mouseleave', stop);
-  ptt.addEventListener('touchend', stop);
-}
-
-function initLuminDrawerVoiceSend() {
-  if (!window.LifeOSVoiceChat || luminDrawerVoiceCtrl) return;
-  const input = document.getElementById('lumin-input');
-  const micBtn = document.getElementById('lumin-mic-btn');
-  if (!input || !micBtn) return;
-  micBtn.onclick = null;
-  luminDrawerVoiceCtrl = LifeOSVoiceChat.attach({
-    inputId: 'lumin-input',
-    buttonId: 'lumin-mic-btn',
-    statusId: 'lumin-status-text',
-    iconOnly: true,
-    idleText: 'Tap mic or hold Space — say "send it" to post',
-    voiceSendEnabled: true,
-    voiceSendPhrases: ['send it', 'send message', 'send that', 'send now'],
-    voiceSendRequireFinal: true,
-    manualSendOnly: true,
-    keepListeningOnVoiceSend: true,
-    persistentListen: false,
-    serverSttEnabled: true,
-    serverSttChunkMs: 800,
-    serverSttMinBytes: 400,
-    serverSttTranscribe: async (blob, { committed }) => {
-      const form = new FormData();
-      form.append('audio', blob, 'chunk.webm');
-      form.append('context', String(committed || '').trim());
-      form.append('user', USER || 'adam');
-      const h = await directSystemHeaders();
-      delete h['Content-Type'];
-      const r = await fetch('/api/v1/lifeos/voice-rail/stt', { method: 'POST', headers: h, body: form });
-      if (!r.ok) throw new Error('stt_failed');
-      const data = await r.json().catch(() => ({}));
-      return data.text || '';
-    },
-    onVoiceSend: (text) => {
-      const msg = String(text || '').trim();
-      if (!msg || luminState.sending) return;
-      luminSend({ text: msg, voice: true });
-    },
-    serverTtsFetch: luminServerTtsFetch,
-    onInterim: ({ text }) => {
-      const el = document.getElementById('lumin-interim-text');
-      if (!el) return;
-      if (!text) {
-        el.classList.remove('visible');
-        el.textContent = '';
+    if (data.success) {
+      listEl.innerHTML = '';
+      if (data.invites.length === 0) {
+        listEl.innerHTML = '<p class="settings-hint">No active invites.</p>';
         return;
       }
-      el.textContent = text;
-      el.classList.add('visible');
-    },
-    onStop: () => {
-      const el = document.getElementById('lumin-interim-text');
-      if (!el) return;
-      el.classList.remove('visible');
-      el.textContent = '';
-    },
-    silenceAutoSendMs: 0,
-    sendOnMicStop: false,
-  });
-  if (!window.__luminDrawerSpacePtt) {
-    window.__luminDrawerSpacePtt = true;
-    document.addEventListener('keydown', (e) => {
-      if (e.code !== 'Space' || e.repeat) return;
-      const tag = e.target?.tagName?.toLowerCase();
-      if (tag === 'textarea' || tag === 'input' || e.target?.isContentEditable) return;
-      if (!luminState.open) return;
-      e.preventDefault();
-      if (!luminSpaceMicHeld && luminDrawerVoiceCtrl) {
-        luminSpaceMicHeld = true;
-        luminDrawerVoiceCtrl.startMic();
-      }
-    });
-    document.addEventListener('keyup', (e) => {
-      if (e.code !== 'Space' || !luminSpaceMicHeld) return;
-      luminSpaceMicHeld = false;
-      if (luminDrawerVoiceCtrl) luminDrawerVoiceCtrl.stopMic();
-    });
-  }
-  luminWirePushToTalk();
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  luminInitReadAloudPrefs();
-  luminRenderQueue();
-  luminInitComposerInteractions();
-  // The voice module script may still be loading — retry init until it's ready.
-  let tries = 0;
-  const tryInit = () => {
-    initLuminDrawerVoiceSend();
-    if (luminDrawerVoiceCtrl || tries++ > 40) return;
-    setTimeout(tryInit, 250);
-  };
-  tryInit();
-});
-/* founder-lumin-voice-send:end */
-
-
-/* Voice input for Lumin drawer */
-function luminVoiceInput() {
-  if (window.LifeOSVoiceChat) {
-    initLuminDrawerVoiceSend();
-    if (luminDrawerVoiceCtrl?.startMic) {
-      luminDrawerVoiceCtrl.startMic();
-      return;
+      data.invites.forEach(invite => {
+        const inviteUrl = `${CTX.baseUrl}/overlay/lifeos-login.html?invite=${invite.token}`;
+        const div = document.createElement('div');
+        div.className = 'admin-invite-row';
+        div.innerHTML = `
+          <div class="settings-label">Invite Code</div>
+          <code>${invite.token}</code>
+          <div class="settings-label" style="margin-top:10px;">Link</div>
+          <code>${inviteUrl}</code>
+          <div class="admin-invite-meta">Expires: ${new Date(invite.expires_at).toLocaleString()}</div>
+          <div class="admin-invite-actions">
+            <button onclick="copyToClipboard('${inviteUrl}', event)" class="primary">Copy Link</button>
+            <button onclick="adminDeleteInvite('${invite.token}')">Delete</button>
+          </div>
+        `;
+        listEl.appendChild(div);
+      });
+    } else {
+      listEl.innerHTML = `<p class="settings-hint">Error: ${data.error}</p>`;
     }
+  } catch (error) {
+    console.error('Error loading invites:', error);
+    listEl.innerHTML = '<p class="settings-hint">Failed to load invites.</p>';
   }
-  if (!window.LuminVoice) {
-    toast('Voice input is unavailable right now.');
-    return;
-  }
-  const input  = document.getElementById('lumin-input');
-  const micBtn = document.getElementById('lumin-mic-btn');
-  LuminVoice.startForInput(input, micBtn);
 }
 
-/* Voice — wake word "Lumin" → Lumin only (Voice Rail product surface retired) */
-function routeVoiceToLuminChair(transcript, meta = {}) {
-  if (!transcript || luminState.sending) return;
-  if (!luminState.open) openLuminDrawer();
-  const input = document.getElementById('lumin-input');
-  if (input) {
-    input.value = transcript;
-    luminAutoResize(input);
-  }
-  document.getElementById('lumin-status-text').textContent = meta.wake
-    ? 'Lumin is with you — speak'
-    : 'Sending to Lumin…';
-  luminState.voiceTurn = true;
-  luminSend({ text: transcript, voice: true });
-}
-
-/* ── Read-aloud (feminine voice + speed control) ───────────────────────── */
-const LUMIN_TTS_KEY = 'lifeos_lumin_read_aloud';
-const LUMIN_TTS_RATE_KEY = 'lifeos_lumin_read_rate';
-const LUMIN_TTS_RATE_MIN = 0.75;
-const LUMIN_TTS_RATE_MAX = 1.15;
-
-function luminInitReadAloudPrefs() {
+async function adminDeleteInvite(token) {
+  if (!confirm('Are you sure you want to delete this invite?')) return;
   try {
-    luminState.readAloud.enabled = localStorage.getItem(LUMIN_TTS_KEY) === 'true';
-    const r = parseFloat(localStorage.getItem(LUMIN_TTS_RATE_KEY));
-    if (!Number.isNaN(r)) luminState.readAloud.rate = Math.min(Math.max(r, LUMIN_TTS_RATE_MIN), LUMIN_TTS_RATE_MAX);
-  } catch { /* defaults */ }
-  luminUpdateVoiceCtrlUi();
-}
-
-function luminUpdateVoiceCtrlUi() {
-  const toggle = document.getElementById('lumin-tts-toggle');
-  const rateEl = document.getElementById('lumin-tts-rate');
-  if (toggle) {
-    toggle.classList.toggle('on', luminState.readAloud.enabled);
-    toggle.textContent = luminState.readAloud.enabled ? '🔊' : '🔈';
-    toggle.title = luminState.readAloud.enabled ? 'Read-aloud ON — click to mute' : 'Read replies aloud in a feminine voice';
-  }
-  if (rateEl) rateEl.textContent = `${luminState.readAloud.rate.toFixed(2).replace(/0$/, '')}×`;
-}
-
-function luminToggleReadAloud() {
-  luminState.readAloud.enabled = !luminState.readAloud.enabled;
-  try { localStorage.setItem(LUMIN_TTS_KEY, String(luminState.readAloud.enabled)); } catch {}
-  if (!luminState.readAloud.enabled) { try { window.LifeOSVoiceChat?.stopSpeaking?.(); window.speechSynthesis?.cancel(); } catch {} }
-  luminUpdateVoiceCtrlUi();
-  toast(luminState.readAloud.enabled ? 'Reading replies aloud' : 'Read-aloud off');
-}
-
-function luminAdjustReadRate(delta) {
-  let r = luminState.readAloud.rate + delta;
-  r = Math.min(Math.max(Math.round(r * 100) / 100, LUMIN_TTS_RATE_MIN), LUMIN_TTS_RATE_MAX);
-  luminState.readAloud.rate = r;
-  try { localStorage.setItem(LUMIN_TTS_RATE_KEY, String(r)); } catch {}
-  luminUpdateVoiceCtrlUi();
-}
-
-async function luminServerTtsFetch(text) {
-  try {
-    const h = await directSystemHeaders();
-    h['Content-Type'] = 'application/json';
-    const r = await fetch('/api/v1/lifeos/voice-rail/tts', {
+    const res = await fetch('/api/v1/lifeos/admin/delete-invite', {
       method: 'POST',
-      credentials: 'same-origin',
-      headers: h,
-      body: JSON.stringify({ text, department: 'ChC' }),
+      headers: { 'Content-Type': 'application/json', 'X-Command-Key': CTX.KEY },
+      body: JSON.stringify({ token }),
     });
-    if (!r.ok) return { ok: false };
-    const blob = await r.blob();
-    return { ok: true, blob };
-  } catch { return { ok: false }; }
-}
-
-function speakLuminReply(text) {
-  const plain = String(text || '')
-    .replace(/\b(PASS|FAIL|COMMAND_RAN|NO_COMMAND_RAN)\b/g, '')
-    .replace(/— Lumin ·[^\n]*/g, '')
-    .trim()
-    .slice(0, 1600);
-  if (!plain) return;
-  const rate = luminState.readAloud.rate || 0.95;
-  try {
-    if (window.LifeOSVoiceChat && typeof window.LifeOSVoiceChat.speakTextAsync === 'function') {
-      window.LifeOSVoiceChat.speakTextAsync(plain, { rate, pitch: 1.04, preferServerTts: true, serverTtsFetch: luminServerTtsFetch });
-      return;
+    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+    const data = await res.json();
+    if (data.success) {
+      toast('Invite deleted.');
+      loadAdminInvites();
+    } else {
+      toast(`Error: ${data.error}`);
     }
-  } catch { /* fall back to native */ }
-  if (!window.speechSynthesis) return;
-  try {
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(plain);
-    u.rate = rate;
-    u.lang = 'en-US';
-    window.speechSynthesis.speak(u);
-  } catch { /* non-fatal */ }
+  } catch (error) {
+    console.error('Error deleting invite:', error);
+    toast('Failed to delete invite.');
+  }
 }
 
-/* Deliver a reply: type it out live while a feminine voice reads it when read-aloud is on. */
-function luminDeliverReply(reply, voiceTurn, createdAt) {
-  const text = String(reply || '');
-  const ts = createdAt || new Date().toISOString();
-  const speak = luminState.readAloud.enabled === true || voiceTurn === true;
-  if (speak && text) {
-    speakLuminReply(text);
-    luminTypewriterAppend(text, ts);
+async function loadGateChangePresets() {
+  const listEl = document.getElementById('gate-presets-list');
+  listEl.innerHTML = 'Loading presets...';
+  try {
+    const res = await fetch('/api/v1/lifeos/gate-change/list-presets', {
+      headers: { 'X-Command-Key': CTX.KEY },
+    });
+    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+    const data = await res.json();
+    if (data.success) {
+      listEl.innerHTML = '';
+      if (data.presets.length === 0) {
+        listEl.innerHTML = '<p class="settings-hint">No gate change presets found.</p>';
+        return;
+      }
+      data.presets.forEach(preset => {
+        const cliCommand = `curl -X POST "${CTX.baseUrl}/api/v1/lifeos/gate-change/run-preset" \\
+  -H "Content-Type: application/json" \\
+  -H "X-Command-Key: $COMMAND_CENTER_KEY" \\
+  -d '{ "preset_name": "${preset.name}" }'`;
+        const div = document.createElement('div');
+        div.className = 'admin-invite-row'; // Re-use styling
+        div.innerHTML = `
+          <div class="settings-label">Preset: <strong>${preset.name}</strong></div>
+          <pre style="white-space:pre-wrap;word-break:break-all;font-size:11px;background:var(--bg-surface2);padding:8px;border-radius:6px;border:1px solid var(--border);">${cliCommand}</pre>
+          <div class="admin-invite-actions" style="margin-top:10px;">
+            <button onclick="copyToClipboard(\`${cliCommand}\`, event)" class="primary">Copy CLI</button>
+          </div>
+        `;
+        listEl.appendChild(div);
+      });
+    } else {
+      listEl.innerHTML = `<p class="settings-hint">Error: ${data.error}</p>`;
+    }
+  } catch (error) {
+    console.error('Error loading gate change presets:', error);
+    listEl.innerHTML = '<p class="settings-hint">Failed to load gate change presets.</p>';
+  }
+}
+
+function copyToClipboard(text, event) {
+  navigator.clipboard.writeText(text).then(() => {
+    const button = event.target;
+    const originalText = button.textContent;
+    button.textContent = 'Copied!';
+    setTimeout(() => button.textContent = originalText, 1500);
+  }).catch(err => {
+    console.error('Failed to copy text: ', err);
+    toast('Failed to copy.');
+  });
+}
+
+/* ── Mobile More Sheet ──────────────────────────────────────── */
+function openMoreSheet() {
+  document.getElementById('more-sheet').classList.add('open');
+  document.getElementById('more-backdrop').classList.add('open');
+}
+
+function closeMoreSheet() {
+  document.getElementById('more-sheet').classList.remove('open');
+  document.getElementById('more-backdrop').classList.remove('open');
+}
+
+/* ── Theme Toggle ───────────────────────────────────────────── */
+function cycleTheme() {
+  THEME = (THEME === 'dark') ? 'light' : 'dark';
+  applyThemeUi(THEME);
+  localStorage.setItem('lifeos_theme', THEME);
+  // Also propagate to iframe
+  const frame = document.getElementById('content-frame');
+  if (frame && frame.contentWindow) {
+    try { frame.contentWindow.postMessage({ type: 'lifeos-theme', theme: THEME }, '*'); } catch {}
+  }
+  toast(`Switched to ${THEME} theme`);
+}
+
+function applyThemeUi(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  const themeToggleButtons = document.querySelectorAll('#theme-toggle-topbar, #theme-toggle-mobile, #theme-toggle-settings');
+  themeToggleButtons.forEach(btn => {
+    if (btn.id === 'theme-toggle-settings') {
+      btn.textContent = theme.charAt(0).toUpperCase() + theme.slice(1);
+    } else {
+      btn.textContent = (theme === 'dark') ? '☾' : '☀︎';
+    }
+  });
+}
+
+/* ── Toast ──────────────────────────────────────────────────── */
+let toastTimeout = null;
+function toast(message, duration = 3000) {
+  const toastEl = document.getElementById('toast');
+  if (toastTimeout) {
+    clearTimeout(toastTimeout);
+    toastEl.classList.remove('show');
+    // Force reflow to restart animation if toast is already visible
+    void toastEl.offsetWidth;
+  }
+  toastEl.textContent = message;
+  toastEl.classList.add('show');
+  toastTimeout = setTimeout(() => {
+    toastEl.classList.remove('show');
+    toastTimeout = null;
+  }, duration);
+}
+
+/* ── Feature Help Popover ───────────────────────────────────── */
+function updateFeatureHelp(page) {
+  const popover = document.getElementById('feature-help-popover');
+  const titleEl = document.getElementById('feature-help-title');
+  const summaryEl = document.getElementById('feature-help-summary');
+  const listEl = document.getElementById('feature-help-list');
+  const linkEl = document.getElementById('feature-help-link');
+
+  const guide = FEATURE_GUIDES[page];
+  if (guide) {
+    titleEl.textContent = guide.title;
+    summaryEl.textContent = guide.summary;
+    listEl.innerHTML = guide.bullets.map(b => `<div>${b}</div>`).join('');
+    linkEl.href = guide.link;
+    popover.style.display = 'block';
+    positionFeatureHelp(popover, document.querySelector(`[data-page="${page}"]`));
+    clearTimeout(helpHideTimer);
+    helpHideTimer = setTimeout(() => popover.classList.remove('show'), 15000);
   } else {
-    _appendLuminMsg('assistant', text, ts, true);
+    popover.classList.remove('show');
   }
 }
 
-function luminTypewriterAppend(content, createdAt) {
-  const container = document.getElementById('lumin-messages');
-  if (!container) return;
-  const full = String(content || '');
-  const div = document.createElement('div');
-  div.className = 'lumin-msg assistant';
-  const body = document.createElement('div');
-  body.style.cssText = 'white-space:pre-wrap;word-break:break-word;';
-  div.appendChild(body);
-  container.appendChild(div);
-  luminState.chatHistory.push({ role: 'assistant', content: full });
-  if (luminState.chatHistory.length > 40) luminState.chatHistory.shift();
-  const time = createdAt ? new Date(createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
-  const step = Math.max(2, Math.round(3 * (luminState.readAloud.rate || 1)));
-  let i = 0;
-  const timer = setInterval(() => {
-    i += step;
-    body.innerHTML = _escHtml(full.slice(0, i));
-    container.scrollTop = container.scrollHeight;
-    if (i >= full.length) {
-      clearInterval(timer);
-      body.innerHTML = _escHtml(full);
-      if (time) {
-        const t = document.createElement('div');
-        t.className = 'lumin-msg-time';
-        t.textContent = time;
-        div.appendChild(t);
-      }
-      container.scrollTop = container.scrollHeight;
-    }
-  }, 22);
-}
+function positionFeatureHelp(popover, targetElement) {
+  if (!targetElement) return;
 
-/* ── Display DNA worklog — live, collapsible, stays in thread ─────────────── */
-function luminFormatElapsed(ms) {
-  const s = Math.max(0, Math.round(ms / 1000));
-  if (s < 60) return `${s}s`;
-  return `${Math.floor(s / 60)}m ${String(s % 60).padStart(2, '0')}s`;
-}
+  const rect = targetElement.getBoundingClientRect();
+  const sidebarRect = document.getElementById('sidebar').getBoundingClientRect();
 
-function luminStartWorklog(id, title) {
-  const container = document.getElementById('lumin-messages');
-  if (!container) return;
-  const div = document.createElement('div');
-  div.className = 'lumin-worklog';
-  div.id = id;
-  div.setAttribute('data-display-dna', 'lumin_display_dna_v1');
-  div.innerHTML = `
-    <div class="lumin-worklog-head" role="button" tabindex="0" aria-expanded="true" data-worklog-toggle>
-      <span class="lumin-worklog-chevron" data-chevron>▾</span>
-      <span class="lumin-worklog-dot"></span>
-      <span class="lumin-worklog-title">${_escHtml(title || 'Working')}</span>
-      <span class="lumin-worklog-status" data-status>in progress</span>
-      <span class="lumin-worklog-elapsed" data-elapsed>0s</span>
-    </div>
-    <ul class="lumin-worklog-body" data-worklog-body></ul>`;
-  container.appendChild(div);
-  container.scrollTop = container.scrollHeight;
-  const head = div.querySelector('[data-worklog-toggle]');
-  const toggle = () => {
-    const collapsed = div.classList.toggle('collapsed');
-    head?.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
-    const chev = div.querySelector('[data-chevron]');
-    if (chev) chev.textContent = collapsed ? '▸' : '▾';
-  };
-  head?.addEventListener('click', toggle);
-  head?.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
-  });
-  luminState.thinkTimers[id] = {
-    startTs: Date.now(),
-    entries: [],
-    jobStepCount: 0,
-    intervalId: setInterval(() => {
-      const el = document.getElementById(id)?.querySelector('[data-elapsed]');
-      const t = luminState.thinkTimers[id];
-      if (el && t) el.textContent = luminFormatElapsed(Date.now() - t.startTs);
-    }, 1000),
-  };
-}
+  // Position to the right of the sidebar, centered vertically with the target nav item
+  popover.style.top = `${rect.top + (rect.height / 2) - (popover.offsetHeight / 2)}px`;
+  popover.style.left = `${sidebarRect.right + 10}px`; // 10px spacing from sidebar
 
-/** @deprecated alias — Display DNA worklog */
-function luminStartThinkPanel(id, title) { luminStartWorklog(id, title); }
-
-function luminWorklogKindMeta(kind) {
-  const k = String(kind || 'action');
-  if (k === 'thinking') return { ico: '💭', tag: 'think' };
-  if (k === 'observation') return { ico: '◎', tag: 'saw' };
-  if (k === 'result') return { ico: '✓', tag: 'result' };
-  return { ico: '→', tag: 'do' };
-}
-
-function luminWorklogPush(id, entry) {
-  const state = luminState.thinkTimers[id];
-  const div = document.getElementById(id);
-  if (!state || !div) return;
-  const kind = entry.kind || 'action';
-  const summary = String(entry.summary || entry.label || '').trim();
-  if (!summary) return;
-  const detail = entry.detail != null ? String(entry.detail) : '';
-  const row = { kind, summary, detail, at: Date.now() };
-  state.entries.push(row);
-  const body = div.querySelector('[data-worklog-body]');
-  if (!body) return;
-  body.querySelectorAll('.lumin-worklog-entry.is-active').forEach((el) => el.classList.remove('is-active'));
-  const meta = luminWorklogKindMeta(kind);
-  const details = document.createElement('details');
-  details.className = `lumin-worklog-entry kind-${kind} is-active`;
-  details.innerHTML = `
-    <summary>
-      <span class="ico">${meta.ico}</span>
-      <span class="kind-tag">${meta.tag}</span>
-      <span class="sum">${_escHtml(summary)}</span>
-    </summary>
-    ${detail ? `<div class="lumin-worklog-detail">${_escHtml(detail)}</div>` : ''}`;
-  body.appendChild(details);
-  const c = document.getElementById('lumin-messages');
-  if (c) c.scrollTop = c.scrollHeight;
-}
-
-function luminUpdateWorklogFromJob(id, data) {
-  const state = luminState.thinkTimers[id];
-  const div = document.getElementById(id);
-  if (!state || !div) return;
-  if (data && typeof data.started_at === 'number') state.startTs = data.started_at;
-  const steps = Array.isArray(data?.steps) ? data.steps : [];
-  for (let i = state.jobStepCount; i < steps.length; i += 1) {
-    const s = steps[i] || {};
-    luminWorklogPush(id, {
-      kind: 'action',
-      summary: String(s.label || s.step || 'Build step'),
-      detail: s.detail || null,
-    });
+  // Ensure it's not off-screen vertically
+  const viewportHeight = window.innerHeight;
+  const popoverRect = popover.getBoundingClientRect();
+  if (popoverRect.top < 10) {
+    popover.style.top = '10px';
   }
-  state.jobStepCount = steps.length;
-  if (data?.pass_fail && data.pass_fail !== 'RUNNING') {
-    const sha = data.commit_sha || data.sha || data.result?.commit_sha || null;
-    luminWorklogPush(id, {
-      kind: 'observation',
-      summary: `Job ${data.pass_fail}${sha ? ` · ${String(sha).slice(0, 12)}` : ''}`,
-      detail: JSON.stringify({
-        pass_fail: data.pass_fail,
-        commit_sha: sha,
-        first_blocker: data.first_blocker || data.result?.first_blocker || null,
-        target_file: data.target_file || data.result?.target_file || null,
-      }, null, 2),
-    });
-  }
-}
-
-/** @deprecated alias */
-function luminUpdateThinkPanel(id, data) { luminUpdateWorklogFromJob(id, data); }
-
-function luminFinalizeWorklog(id, data = {}) {
-  const state = luminState.thinkTimers[id];
-  const div = document.getElementById(id);
-  if (!div) {
-    if (state) {
-      clearInterval(state.intervalId);
-      delete luminState.thinkTimers[id];
-    }
-    return;
+  if (popoverRect.bottom > viewportHeight - 10) {
+    popover.style.top = `${viewportHeight - popoverRect.height - 10}px`;
   }
 
-  const pf = String(data.pass_fail || data.command_truth || '').toUpperCase();
-  const failed = pf === 'FAIL' || data.ok === false;
-  const channel = data.chair_channel || data.action || null;
-  const sha = data.sha || data.commit_sha || data.build_receipt?.commit_sha || null;
-  const receipt = data.last_build_receipt || data.build_receipt || null;
-
-  if (channel) {
-    luminWorklogPush(id, {
-      kind: 'observation',
-      summary: `Chair channel: ${channel}${data.command_truth ? ` · ${data.command_truth}` : ''}`,
-      detail: [
-        data.auth_mode ? `auth: ${data.auth_mode}` : null,
-        data.job_id ? `job: ${data.job_id}` : null,
-        sha ? `sha: ${sha}` : null,
-        data.first_blocker ? `blocker: ${data.first_blocker}` : null,
-      ].filter(Boolean).join('\n') || null,
-    });
-  }
-  if (receipt?.commit_sha && !sha) {
-    luminWorklogPush(id, {
-      kind: 'observation',
-      summary: `Prior build receipt · ${String(receipt.commit_sha).slice(0, 12)}`,
-      detail: JSON.stringify(receipt, null, 2),
-    });
-  }
-
-  luminWorklogPush(id, {
-    kind: 'result',
-    summary: failed
-      ? `Stopped — ${data.first_blocker || pf || 'failed'}`
-      : (sha ? `Done · commit ${String(sha).slice(0, 12)}` : 'Done — reply below'),
-    detail: data.human_summary_technical
-      ? String(data.human_summary_technical).slice(0, 1200)
-      : (data.human_summary ? String(data.human_summary).slice(0, 400) : null),
-  });
-
-  if (state) {
-    clearInterval(state.intervalId);
-    const el = div.querySelector('[data-elapsed]');
-    if (el) el.textContent = luminFormatElapsed(Date.now() - state.startTs);
-    delete luminState.thinkTimers[id];
-  }
-
-  div.classList.add(failed ? 'is-failed' : 'is-done');
-  div.classList.add('collapsed');
-  const status = div.querySelector('[data-status]');
-  if (status) status.textContent = failed ? 'failed' : 'done';
-  const head = div.querySelector('[data-worklog-toggle]');
-  head?.setAttribute('aria-expanded', 'false');
-  const chev = div.querySelector('[data-chevron]');
-  if (chev) chev.textContent = '▸';
-  const title = div.querySelector('.lumin-worklog-title');
-  if (title && !failed) title.textContent = 'Worklog';
-  if (title && failed) title.textContent = 'Worklog (failed)';
+  popover.classList.add('show');
 }
 
-/** @deprecated — Display DNA keeps the trail; finalize instead of remove */
-function luminStopThinkPanel(id) {
-  luminFinalizeWorklog(id, { pass_fail: 'NO_COMMAND_RAN' });
-}
-
-/* ── File upload ─────────────────────────────────────────────────────────── */
-const LUMIN_MAX_ATTACH = 5;
-const LUMIN_MAX_TEXT_BYTES = 200 * 1024;
-const LUMIN_TEXT_EXT = /\.(txt|md|markdown|json|csv|tsv|log|js|mjs|ts|jsx|tsx|html|css|xml|yaml|yml|py|sh|sql|env|ini|conf)$/i;
-
-function luminHandleFiles(files) {
-  Array.from(files || []).forEach((file) => {
-    if (luminState.attachments.length >= LUMIN_MAX_ATTACH) {
-      toast(`Up to ${LUMIN_MAX_ATTACH} files at a time`);
-      return;
-    }
-    const isImage = (file.type || '').startsWith('image/');
-    const isVideo = (file.type || '').startsWith('video/');
-    const isText = !isImage && !isVideo && LUMIN_TEXT_EXT.test(file.name) && file.size <= LUMIN_MAX_TEXT_BYTES;
-    const record = {
-      name: file.name, size: file.size, type: file.type || 'application/octet-stream',
-      kind: isImage ? 'image' : isVideo ? 'video' : isText ? 'text' : 'file',
-      text: null, data: null, description: null,
-    };
-    luminState.attachments.push(record);
-    if (isImage) {
-      const reader = new FileReader();
-      reader.onload = () => { record.data = String(reader.result || ''); };
-      reader.readAsDataURL(file);
-    } else if (isText) {
-      const reader = new FileReader();
-      reader.onload = () => { record.text = String(reader.result || '').slice(0, LUMIN_MAX_TEXT_BYTES); };
-      reader.onerror = () => { record.text = null; };
-      reader.readAsText(file);
+function initFeatureHelp() {
+  document.getElementById('sidebar').addEventListener('mouseover', (e) => {
+    const navItem = e.target.closest('.nav-item');
+    if (navItem && navItem.dataset.page) {
+      updateFeatureHelp(navItem.dataset.page);
+    } else {
+      document.getElementById('feature-help-popover').classList.remove('show');
+      clearTimeout(helpHideTimer);
     }
   });
-  luminRenderAttachChips();
-}
-
-function luminOnFilePick(event) {
-  const files = Array.from(event.target?.files || []);
-  event.target.value = '';
-  luminHandleFiles(files);
-}
-
-function luminRenderAttachChips() {
-  const wrap = document.getElementById('lumin-attach-chips');
-  if (!wrap) return;
-  wrap.innerHTML = luminState.attachments.map((a, i) => {
-    const thumb = a.kind === 'image' && a.data ? `<img src="${_escHtml(a.data)}" style="width:18px;height:18px;object-fit:cover;border-radius:3px;margin-right:4px;vertical-align:middle;" alt="" />` : '📎 ';
-    return `<span class="lumin-attach-chip">${thumb}${_escHtml(a.name)} <button type="button" onclick="luminRemoveAttachment(${i})" title="Remove">✕</button></span>`;
-  }).join('');
-}
-
-function luminRemoveAttachment(idx) {
-  luminState.attachments.splice(idx, 1);
-  luminRenderAttachChips();
-}
-
-function luminClearAttachments() {
-  luminState.attachments = [];
-  luminRenderAttachChips();
-}
-
-function luminBuildAttachmentBlock() {
-  if (!luminState.attachments.length) return '';
-  const parts = luminState.attachments.map((a) => {
-    const head = `FILE: ${a.name} (${Math.round((a.size || 0) / 1024) || 1}KB${a.type ? ', ' + a.type : ''})`;
-    if (a.kind === 'image') {
-      if (a.description) return `${head}\n---\n${a.description}\n---`;
-      return `${head} — image attached; awaiting vision analysis or no description available.`;
-    }
-    if (a.kind === 'video') return `${head} — video attached; describe or transcribe on request.`;
-    if (a.text) return `${head}\n---\n${a.text}\n---`;
-    return `${head} — binary/unsupported for inline read; note its name and ask me for its contents if needed.`;
+  document.getElementById('sidebar').addEventListener('mouseout', () => {
+    helpHideTimer = setTimeout(() => document.getElementById('feature-help-popover').classList.remove('show'), 300);
   });
-  return `[Attached files from founder]\n${parts.join('\n\n')}`;
 }
 
-function luminInitComposerInteractions() {
-  const input = document.getElementById('lumin-input');
-  const wrap = document.querySelector('.lumin-input-wrap');
-  if (input) {
-    input.addEventListener('paste', (e) => {
-      const files = Array.from(e.clipboardData?.files || []);
-      if (!files.length) return;
-      e.preventDefault();
-      luminHandleFiles(files);
-    });
-  }
-  if (wrap) {
-    wrap.addEventListener('dragover', (e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'copy'; });
-    wrap.addEventListener('drop', (e) => {
-      e.preventDefault();
-      luminHandleFiles(e.dataTransfer?.files);
-    });
+// Lumin integration via window.LifeOSVoiceChat
+function openLuminFromQuickBar() {
+  if (window.LifeOSVoiceChat) {
+    window.LifeOSVoiceChat.openLuminDrawer({ expand: true });
+  } else {
+    toast('Lumin chat is not loaded yet.');
   }
 }
 
-async function luminDescribeImageAttachments(images) {
-  try {
-    const payload = images.map((a) => ({
-      name: a.name,
-      mime: a.type,
-      data: String(a.data || '').split(',')[1] || '',
-    }));
-    const h = await directSystemHeaders();
-    h['Content-Type'] = 'application/json';
-    const r = await fetch('/api/v1/lifeos/voice-rail/describe-attachments', {
-      method: 'POST',
-      credentials: 'same-origin',
-      headers: h,
-      body: JSON.stringify({ attachments: payload }),
-    });
-    if (!r.ok) return images.map(() => '[image: could not analyze — server error]');
-    const data = await r.json().catch(() => ({}));
-    const blocks = Array.isArray(data.blocks) ? data.blocks : [];
-    return images.map((_, i) => blocks[i] || '[image: no description returned]');
-  } catch (err) {
-    return images.map(() => `[image: could not analyze — ${err.message}]`);
+function initLuminWakeWordListen() {
+  if (window.LifeOSVoiceChat) {
+    window.LifeOSVoiceChat.initWakeWordListen();
+  } else {
+    console.warn('LifeOSVoiceChat not available to init wake word listen.');
   }
 }
 
 function toggleLuminWakeListen() {
-  if (!window.LuminVoice) { toast('Voice requires Chrome or Safari.'); return; }
-  const active = LuminVoice.toggleWakeWordListen({
-    onTranscript: (text) => routeVoiceToLuminChair(text, { voice: true }),
-    onWake: () => {
-      if (!luminState.open) openLuminDrawer();
-      document.getElementById('lumin-status-text').textContent = 'Say your question…';
-      toast('Lumin is listening');
-      try {
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        const o = ctx.createOscillator();
-        const g = ctx.createGain();
-        o.connect(g); g.connect(ctx.destination);
-        o.frequency.value = 880;
-        g.gain.value = 0.04;
-        o.start(); o.stop(ctx.currentTime + 0.12);
-      } catch { /* optional chime */ }
-    },
-    onSleep: () => {
-      document.getElementById('lumin-status-text').textContent = 'Say "Lumin" when ready';
-      toast('Lumin paused — say "Lumin" again');
-    },
-  });
-  luminState.wakeListenActive = active;
-  toast(active ? '🎙 Say "Lumin" or "Hey Lumin" — Chair only, no theater' : 'Wake word off');
-}
-
-function initLuminWakeWordListen() {
-  if (!window.LuminVoice || luminState.wakeListenActive) return;
-  if (localStorage.getItem('lifeos_lumin_wake') === '0') return;
-  const started = LuminVoice.toggleWakeWordListen({
-    onTranscript: (text) => routeVoiceToLuminChair(text, { voice: true }),
-    onWake: () => {
-      if (!luminState.open) openLuminDrawer();
-      document.getElementById('lumin-status-text').textContent = 'Say your question…';
-    },
-    onSleep: () => {
-      document.getElementById('lumin-status-text').textContent = 'Say "Lumin" when ready';
-    },
-  });
-  luminState.wakeListenActive = !!started;
-  if (started) {
-    document.getElementById('lumin-status-text').textContent = 'Say "Lumin" when ready';
-    toast('Say "Lumin" to talk to the Chair');
+  if (window.LifeOSVoiceChat) {
+    window.LifeOSVoiceChat.toggleWakeWordListen();
+  } else {
+    toast('Lumin voice not available.');
   }
 }
-
-function toggleAlwaysListen() { toggleLuminWakeListen(); }
-
-document.addEventListener('lumin-wake', () => {
-  if (!luminState.open) openLuminDrawer();
-});
-document.addEventListener('lumin-sleep', () => {
-  const el = document.getElementById('lumin-interim');
-  if (el) el.textContent = '';
-});
-document.addEventListener('lumin-voice-error', () => {
-  toast('Microphone permission needed — tap 🎙 to enable');
-});
-document.addEventListener('lumin-voice-interim', (e) => {
-  const el = document.getElementById('lumin-interim');
-  if (el) {
-    el.textContent = e.detail ? `"${e.detail}"` : '';
-    if (!luminState.open && e.detail) openLuminDrawer();
-  }
-});
-</script>
-
-<script>
-async function refreshPointBStrip() {
-  const strip = document.getElementById('point-b-strip');
-  if (!strip) return;
-  try {
-    const res = await CTX.fetchWithAuth('/api/v1/lifeos/builderos/command-control/point-b/status');
-    if (!res.ok) return;
-    const data = await res.json();
-    const s = data.point_b || data;
-    const labelEl = document.getElementById('point-b-label');
-    const prefix = labelEl?.dataset.prefix || 'Point B';
-    if (labelEl) labelEl.textContent = `${prefix} · ${s.label || 'LifeRE Alpha'}`;
-    document.getElementById('point-b-pct').textContent = `${s.progress_pct ?? 0}%`;
-    document.getElementById('point-b-phase').textContent = s.phase ? `· ${s.phase}` : '';
-    const blockerEl = document.getElementById('point-b-blocker');
-    if (blockerEl) {
-      if (s.next_action === 'founder_usability_check') {
-        blockerEl.textContent = `${s.blocker || ''} → Open LifeRE, run Alpha Daily Cycle, Confirm Alpha PASS (12+ chars)`;
-      } else {
-        blockerEl.textContent = s.blocker ? s.blocker : '';
-      }
-    }
-    if (s.next_action === 'founder_usability_check') {
-      strip.style.cursor = 'pointer';
-      strip.title = 'Open LifeRE alpha confirm';
-      strip.onclick = () => {
-        loadPage('lifeos-lifere.html');
-        setTimeout(() => {
-          document.getElementById('content-frame')?.contentWindow?.postMessage?.({ type: 'lifere-focus-alpha-confirm' }, '*');
-        }, 800);
-      };
-    } else {
-      strip.style.cursor = '';
-      strip.title = '';
-      strip.onclick = null;
-    }
-  } catch {
-    // non-fatal — strip stays at defaults
+function toggleLuminDrawer() {
+  if (window.LifeOSVoiceChat) {
+    window.LifeOSVoiceChat.toggleLuminDrawer();
+  } else {
+    toast('Lumin chat is not loaded yet.');
   }
 }
-document.addEventListener('DOMContentLoaded', () => {
-  refreshPointBStrip();
-  setInterval(refreshPointBStrip, 120000);
-  window.addEventListener('message', (e) => {
-    if (e.data?.type === 'lifeos-point-b-refresh') refreshPointBStrip();
-  });
-  maybeRouteFromContextIntent();
+function closeLuminDrawer() {
+  if (window.LifeOSVoiceChat) {
+    window.LifeOSVoiceChat.closeLuminDrawer();
+  }
+}
+function openFullChat() {
+  loadPage('lifeos-chat.html');
+  closeLuminDrawer();
+}
+function openQuickCapture() {
+  loadPage('lifeos-quick-entry.html');
+}
+
+// Global ambient sense toggles
+document.getElementById('ambient-toggle').addEventListener('click', () => {
+  const currentMode = document.getElementById('ambient-toggle').dataset.mode;
+  const newMode = currentMode === 'off' ? 'on' : 'off';
+  localStorage.setItem('lifeos_ambient_sense', newMode === 'on' ? '1' : '0');
+  document.getElementById('ambient-toggle').dataset.mode = newMode;
+  document.getElementById('ambient-toggle').setAttribute('aria-pressed', newMode === 'on');
+  document.getElementById('ambient-label').textContent = newMode === 'on' ? 'Ambient on' : 'Ambient off';
+  if (newMode === 'on') {
+    window.LifeOSAmbientSense?.start({ getCtx: () => CTX, userHandle: USER });
+  } else {
+    window.LifeOSAmbientSense?.stop?.();
+  }
+  toast(`Ambient sense turned ${newMode}.`);
 });
 
-async function maybeRouteFromContextIntent() {
-  const params = new URLSearchParams(location.search);
-  if (params.get('page') || params.get('stack')) return;
-  const intent = sessionStorage.getItem('lifeos_context_intent');
-  if (!intent) return;
-  try {
-    const res = await CTX.fetchWithAuth(`/api/v1/lifeos/context/suggest?q=${encodeURIComponent(intent)}`);
-    if (!res.ok) return;
-    const data = await res.json();
-    applyFluidWorkspaceSuggestion(data, intent);
-    const nextPage = data.page || (data.stack_id === 'lifere' ? 'lifeos-lifere.html' : null);
-    if (nextPage) {
-      sessionStorage.removeItem('lifeos_context_intent');
-      loadPage(nextPage);
-      const nav = document.querySelector(`[data-page="${nextPage}"]`);
-      if (nav) {
-        document.querySelectorAll('.nav-item').forEach((n) => n.classList.remove('active'));
-        nav.classList.add('active');
-      }
-      if (data.open_drawer) {
-        openLuminDrawer();
-      }
-      if (data.focus_prompt) {
-        const input = document.getElementById('lumin-input');
-        const focus = safePromptText(data.focus_prompt);
-        if (input && !input.value.trim() && focus) {
-          input.value = focus;
-          luminAutoResize(input);
-        }
-      }
-    }
-  } catch {
-    /* non-fatal */
+document.getElementById('listening-master-toggle').addEventListener('click', () => {
+  const currentMode = document.getElementById('listening-master-toggle').dataset.mode;
+  const newMode = currentMode === 'off' ? 'on' : 'off';
+  localStorage.setItem('lifeos_listening_master', newMode === 'on' ? '1' : '0');
+  document.getElementById('listening-master-toggle').dataset.mode = newMode;
+  document.getElementById('listening-master-toggle').setAttribute('aria-pressed', newMode === 'on');
+  document.getElementById('listening-label').textContent = newMode === 'on' ? 'Listening on' : 'Listening off';
+  if (newMode === 'on') {
+    window.LifeOSAmbientSense?.startListeningMaster?.();
+  } else {
+    window.LifeOSAmbientSense?.stopListeningMaster?.();
   }
-}
+  toast(`Listening master turned ${newMode}.`);
+});
 
-function applyFluidWorkspaceSuggestion(suggestion, sourceIntent) {
-  const mode = suggestion?.stack_id || 'lifeos';
-  document.documentElement.dataset.workspaceMode = mode;
-  document.documentElement.dataset.workspaceView = suggestion?.view_id || 'default_dashboard';
-  const eyebrow = document.getElementById('topbar-eyebrow');
-  const quickTitle = document.getElementById('lumin-quick-title');
-  const quickSub = document.getElementById('lumin-quick-sub');
-  if (eyebrow) eyebrow.textContent = suggestion?.title || STUDIO_BASE_COPY.eyebrow;
-  if (quickTitle) quickTitle.textContent = suggestion?.title || STUDIO_BASE_COPY.quickTitle;
-  if (quickSub) {
-    quickSub.textContent = sourceIntent
-      ? `Workspace shifted for: "${sourceIntent}". ${suggestion?.focus_prompt || STUDIO_BASE_COPY.quickSub}`
-      : STUDIO_BASE_COPY.quickSub;
+document.getElementById('family-guard-toggle').addEventListener('click', () => {
+  const currentMode = document.getElementById('family-guard-toggle').dataset.mode;
+  const newMode = currentMode === 'off' ? 'on' : 'off';
+  localStorage.setItem('lifeos_family_guard', newMode === 'on' ? '1' : '0');
+  document.getElementById('family-guard-toggle').dataset.mode = newMode;
+  document.getElementById('family-guard-toggle').setAttribute('aria-pressed', newMode === 'on');
+  document.getElementById('family-guard-label').textContent = newMode === 'on' ? 'Family guard on' : 'Family guard off';
+  if (newMode === 'on') {
+    window.LifeOSAmbientSense?.startFamilyGuard?.();
+  } else {
+    window.LifeOSAmbientSense?.stopFamilyGuard?.();
   }
-}
+  toast(`Family tone guard turned ${newMode}.`);
+});
 
-window.lifeosSetContextIntent = function lifeosSetContextIntent(text) {
-  if (!text?.trim()) return;
-  sessionStorage.setItem('lifeos_context_intent', text.trim());
-  maybeRouteFromContextIntent();
-};
-</script>
-
-<script src="/shared/lifeos-local-vault.js?v=20260519c"></script>
-<script src="/shared/lifeos-listening-orchestrator.js?v=20260519c"></script>
-<script src="/shared/lifeos-family-tone-guard.js?v=20260519d"></script>
-<script src="/overlay/lifeos-ambient-listener.js?v=20260519b"></script>
-<script src="/overlay/lifeos-chat-thoughts.js?v=20260519a"></script>
-<script>
-(function initListeningOrchestrator() {
-  const btn = document.getElementById('listening-master-toggle');
-  const label = document.getElementById('listening-label');
-  const hint = document.getElementById('listening-hint');
-  const toast = document.getElementById('ambient-toast');
-  let toastTimer = null;
-
-  function showToast(message, kind) {
-    if (!toast || !message) return;
-    toast.textContent = message;
-    toast.dataset.kind = kind || 'note';
-    toast.classList.add('visible');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toast.classList.remove('visible'), 5200);
-  }
-
-  function renderStatus(st) {
-    const on = st?.master && st?.profile?.mode !== 'off';
-    if (btn) {
-      btn.dataset.mode = on ? 'on' : 'off';
-      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
-    }
-    if (label) label.textContent = on ? 'Listening on' : 'Listening off';
-    if (hint && st?.profile?.mode) {
-      hint.innerHTML = `Mode: <strong>${st.profile.mode.replace(/_/g, ' ')}</strong> · <a href="/overlay/lifeos-listening-setup.html" style="color:inherit;">Listening prefs</a>`;
-    }
-    const lm = document.getElementById('st-listening-master');
-    if (lm) lm.checked = !!st?.master;
-  }
-
-  if (!window.LifeOSListeningOrchestrator) return;
-
-  window.LifeOSListeningOrchestrator.init({
-    getCtx: () => CTX,
-    onProfileChange: renderStatus,
-    onToast: showToast,
-  }).then(() => renderStatus(LifeOSListeningOrchestrator.getStatus()));
-
-  btn?.addEventListener('click', async () => {
-    const st = LifeOSListeningOrchestrator.getStatus();
-    await LifeOSListeningOrchestrator.setMaster(!st.master);
-    renderStatus(LifeOSListeningOrchestrator.getStatus());
-  });
-
-  document.addEventListener('lifeos-mediation-offer', () => {
-    if (confirm('Open mediation with Lumen?')) {
-      loadPage('lifeos-mediation.html', 'Mediation', '--c-relationship');
-    }
-  });
-
-  document.addEventListener('lifeos-lumen-wake', (e) => {
-    const text = String(e.detail?.text || '').trim();
-    if (text) {
-      routeVoiceToLuminChair(text, { wake: true });
-      return;
-    }
-    openLuminDrawer?.();
-  });
-})();
-</script>
-<script>
-(function initFamilyToneGuard() {
-  const btn = document.getElementById('family-guard-toggle');
-  const label = document.getElementById('family-guard-label');
-  const hint = document.getElementById('family-guard-hint');
-  const toast = document.getElementById('ambient-toast');
-  let toastTimer = null;
-
-  const MODE_COPY = {
-    off: { label: 'Family guard off', hint: 'Tap to watch tone — yell = vibrate until calm · snippy/mean = one pulse' },
-    watching: { label: 'Family guard on', hint: 'Listening locally — not recorded · yell or snippy tone triggers vibration' },
-    yelling: { label: 'Yelling — calm down', hint: 'Phone vibrating until volume drops — breathe' },
-  };
-
-  function showGuardToast(message, kind) {
-    if (!toast || !message) return;
-    toast.textContent = message;
-    toast.dataset.kind = kind || 'note';
-    toast.classList.add('visible');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toast.classList.remove('visible'), 5200);
-  }
-
-  function renderMode(mode) {
-    const copy = MODE_COPY[mode] || MODE_COPY.off;
-    if (btn) {
-      btn.dataset.mode = mode;
-      btn.setAttribute('aria-pressed', mode !== 'off' ? 'true' : 'false');
-    }
-    if (label) label.textContent = copy.label;
-    if (hint) hint.textContent = copy.hint;
-  }
-
-  if (!window.LifeOSFamilyToneGuard) return;
-
-  window.LifeOSFamilyToneGuard.init({
-    onStateChange: renderMode,
-    onToast: showGuardToast,
-  });
-  renderMode(window.LifeOSFamilyToneGuard.getMode());
-
-  btn?.addEventListener('click', async () => {
-    await window.LifeOSFamilyToneGuard.toggle();
-    renderMode(window.LifeOSFamilyToneGuard.getMode());
-    const fg = document.getElementById('st-family-guard');
-    if (fg) fg.checked = window.LifeOSFamilyToneGuard.isEnabled();
-  });
-})();
-</script>
-<script>
-(function initAmbientListen() {
-  const btn = document.getElementById('ambient-toggle');
-  const label = document.getElementById('ambient-label');
-  const hint = document.getElementById('ambient-hint');
-  const toast = document.getElementById('ambient-toast');
-  let toastTimer = null;
-
-  const MODE_COPY = {
-    off: { label: 'Ambient off', hint: 'Click to listen — sleeps when quiet, logs commitments & notes' },
-    sleeping: { label: 'Sleeping · ears open', hint: 'Silent — will wake when you speak' },
-    listening: { label: 'Listening', hint: 'Speech detected — deciding what to save' },
-    processing: { label: 'Noting…', hint: 'Adding to commitments or your twin' },
-  };
-
-  function renderMode(mode) {
-    const copy = MODE_COPY[mode] || MODE_COPY.off;
-    if (btn) {
-      btn.dataset.mode = mode;
-      btn.setAttribute('aria-pressed', mode !== 'off' ? 'true' : 'false');
-    }
-    if (label) label.textContent = copy.label;
-    if (hint) hint.textContent = copy.hint;
-  }
-
-  function showAmbientToast(message, kind) {
-    if (!toast || !message) return;
-    toast.textContent = message;
-    toast.dataset.kind = kind || 'note';
-    toast.classList.add('visible');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toast.classList.remove('visible'), 5200);
-  }
-
-  if (!window.LifeOSAmbientListener) return;
-
-  window.LifeOSAmbientListener.init({
-    onStateChange: renderMode,
-    onToast: showAmbientToast,
-  });
-  renderMode(window.LifeOSAmbientListener.getMode());
-
-  btn?.addEventListener('click', async () => {
-    await window.LifeOSAmbientListener.toggle();
-    renderMode(window.LifeOSAmbientListener.getMode());
-  });
-})();
-</script>
-
-<script>
-// ── PWA service worker registration ─────────────────────────────────────────
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/overlay/sw.js', { scope: '/overlay/' })
-      .catch((err) => console.warn('[LifeOS SW] Registration failed:', err));
-  });
-}
 </script>
 
 </body>
