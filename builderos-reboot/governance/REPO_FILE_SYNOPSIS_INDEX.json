@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T15:53:52.087Z",
+  "generated_at": "2026-08-01T15:59:15.107Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12739,
   "files": [
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3847539,
-      "mtime": "2026-08-01T15:50:45.313Z",
-      "indexed_at": "2026-08-01T15:53:47.888Z"
+      "bytes": 3847540,
+      "mtime": "2026-08-01T15:53:52.153Z",
+      "indexed_at": "2026-08-01T15:59:13.614Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1488,
-      "mtime": "2026-08-01T15:53:01.373Z",
-      "indexed_at": "2026-08-01T15:53:52.087Z",
+      "bytes": 3326,
+      "mtime": "2026-08-01T15:56:33.021Z",
+      "indexed_at": "2026-08-01T15:59:15.107Z",
       "synopsis_index_only": true
     },
     {
@@ -33136,9 +33136,9 @@
     {
       "path": "data/sentry-unplannable-stamps.json",
       "synopsis": "JSON data/config — data/sentry-unplannable-stamps.json.",
-      "bytes": 169,
-      "mtime": "2026-07-12T18:05:35.443Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 390,
+      "mtime": "2026-08-01T15:56:05.909Z",
+      "indexed_at": "2026-08-01T15:59:15.107Z",
       "synopsis_index_only": true
     },
     {
@@ -42064,9 +42064,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 662324,
-      "mtime": "2026-08-01T08:48:17.387Z",
-      "indexed_at": "2026-08-01T08:48:17.387Z"
+      "bytes": 663469,
+      "mtime": "2026-08-01T15:59:09.617Z",
+      "indexed_at": "2026-08-01T15:59:15.107Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -91882,9 +91882,9 @@
     {
       "path": "services/lifeos-commitment-service.js",
       "synopsis": "Exports captureCommitment, getCommitments, resolveCommitment, proposeCalendarEvent —",
-      "bytes": 8238,
-      "mtime": "2026-07-16T19:42:53.612Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 8217,
+      "mtime": "2026-08-01T15:58:38.797Z",
+      "indexed_at": "2026-08-01T15:59:15.107Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

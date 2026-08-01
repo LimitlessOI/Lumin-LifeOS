@@ -30,9 +30,20 @@ function titleFromText(text, removals) {
     .trim();
 }
 
-export async function parseNaturalLanguage(text, { timezone: tz }) {
+export async function parseNaturalLanguage(text, { timezone: tz, db, userId }) {
   const input = String(text || '').trim();
   if (!input) return null;
+
+  // query mode: user asks to list or show commitments.
+  const queryMode = /\b(show|list|what are|query)\b.*\bcommitments?\b|\bcommitments?\b.*\b(show|list|query)\b/i;
+  if (queryMode.test(input)) {
+    if (!db || !userId) {
+      return { replyType: 'query_mode', note: 'db and userId are required to fetch commitments' };
+    }
+    const commitments = await getCommitments(db, userId);
+    const replyCard = commitments.map(c => ({ title: c.title, datetime: c.datetime })).filter(Boolean);
+    return { replyType: 'query_mode', items: replyCard };
+  }
 
   const tzStr = tz || 'America/New_York';
   const now = dayjs().tz(tzStr);
@@ -123,11 +134,6 @@ export async function parseNaturalLanguage(text, { timezone: tz }) {
 
   // If nothing was found at all, we cannot build a commitment.
   if (hour === null && !dateMatch) {
-    if (input.toLowerCase().includes('show commitments') || input.toLowerCase().includes('list commitments')) {
-      const commitments = await getCommitments(/* pass necessary parameters */);
-      const replyCard = commitments.map(c => ({ title: c.title, datetime: c.datetime })).filter(Boolean);
-      return replyCard;
-    }
     return null;
   }
 
@@ -150,11 +156,6 @@ export async function parseNaturalLanguage(text, { timezone: tz }) {
 
   const title = titleFromText(input, [timeMatch ? timeMatch[0] : '', matchedDatePhrase]);
 
-  if (input.toLowerCase().includes('show commitments') || input.toLowerCase().includes('list commitments')) {
-    const commitments = await getCommitments(/* pass necessary parameters */);
-    const replyCard = commitments.map(c => ({ title: c.title, datetime: c.datetime })).filter(Boolean);
-    return replyCard;
-  }
   return {
     title: title || 'commitment',
     datetime: final.toISOString(),
@@ -165,9 +166,9 @@ export async function parseNaturalLanguage(text, { timezone: tz }) {
 }
 
 export async function captureCommitment(db, text, { userId, timezone }) {
-  const commitment = parseNaturalLanguage(text, { timezone });
+  const commitment = await parseNaturalLanguage(text, { timezone, db, userId });
 
-  if (!commitment) {
+  if (!commitment || commitment.replyType === 'query_mode') {
     throw new Error('Unable to parse commitment');
   }
 
