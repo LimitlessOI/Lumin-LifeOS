@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T13:40:26.396Z",
+  "generated_at": "2026-08-01T13:40:53.103Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12726,
   "files": [
@@ -94193,10 +94193,10 @@
     },
     {
       "path": "services/pricingValidationProcess.js",
-      "synopsis": "Validate pricing tiers against the database.",
-      "bytes": 1865,
-      "mtime": "2026-08-01T13:40:26.396Z",
-      "indexed_at": "2026-08-01T13:40:26.396Z",
+      "synopsis": "Validates pricing based on database configuration and user feedback.",
+      "bytes": 2958,
+      "mtime": "2026-08-01T13:40:53.103Z",
+      "indexed_at": "2026-08-01T13:40:53.103Z",
       "ssot": [
         "docs/products/lumin-university/PRODUCT_HOME.md"
       ]
