@@ -618,13 +618,12 @@
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-intelligence-1",
       "mission_id": "PRODUCT-memory-intelligence",
-      "same_signature_count": 1,
+      "same_signature_count": 0,
       "demoted": false,
       "last_error": "Target file is outside the Builder safe-scope policy",
       "heal_unblocked": true,
       "last_attempt_at": "2026-08-01T13:11:38.172Z",
-      "blocker_class": "BLOCKED_TOOLING",
-      "failure_signature": "build|BLOCKED_TOOLING|Target file is outside the Builder safe-scope policy"
+      "blocker_class": "BLOCKED_TOOLING"
     },
     {
       "id": "memory-intelligence-2",
@@ -1319,5 +1318,6 @@
   "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-memory-intelligence",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T13:11:40.210Z"
+  "updated_at": "2026-08-01T13:11:40.210Z",
+  "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/memory-intelligence/BUILD_QUEUE.json"
 }
