@@ -9,21 +9,21 @@
   "steps": [
     {
       "id": "1",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/001_create_competency_standards.sql",
       "task": "create competency standards table",
       "spec": "Table for storing detailed competency standards. Columns: id (UUID primary key), domain (TEXT NOT NULL), standard (TEXT NOT NULL).",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 3,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS competency_standards",
         "domain TEXT",
         "standard TEXT"
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-01T00:16:56.703Z",
       "last_error": null,
-      "commit_sha": "ba2ed069df0ee489ba08d2564f4150df45ff1096",
+      "commit_sha": "0536515abfb67b66f7c876657209b755f07e5172",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -52,7 +52,8 @@
         "reason": "commit_sha exists in repo but is not an ancestor of origin/main -- ship landed on origin/builderos-autonomous or origin/builderos-shadow instead of main (GITHUB_DEPLOY_BRANCH mismatch), and the content itself was placeholder/stub code (verified by direct inspection), not a real implementation. Confirmed via: git merge-base --is-ancestor <sha> origin/main."
       },
       "same_signature_count": 0,
-      "failure_signature": null
+      "failure_signature": null,
+      "completed_at": "2026-08-01T00:16:56.734Z"
     },
     {
       "id": "2",
