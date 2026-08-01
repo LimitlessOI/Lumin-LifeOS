@@ -3158,7 +3158,11 @@ async function fetchGitHubFileContent(filePath, { token, owner, repoName, branch
     // replace / rename / remove) can't be served by additive mode (which is
     // forbidden from touching existing content) — route it to surgical
     // edit-patch instead. Pure "add new code" requests stay on additive.
-    const editPatchActive = isZone3ExistingJs && classifyPatchIntent(taskBody.task) === 'edit';
+    // A caller may explicitly request edit-patch via `edit_patch: true` or
+    // `patch_mode: true` (e.g. a BUILD_QUEUE step that modifies an existing
+    // function); otherwise fall back to the task-text heuristic.
+    const explicitEditPatch = taskBody.edit_patch === true || taskBody.patch_mode === true;
+    const editPatchActive = isZone3ExistingJs && (explicitEditPatch || classifyPatchIntent(taskBody.task) === 'edit');
     const additivePatchActive = isZone3ExistingJs && !editPatchActive;
     if (editPatchActive) {
       log.info({ target_file, lineCount: zoneEarly.lineCount }, '[BUILDER] Zone 3 target — using edit-patch mode (surgical find-and-replace, preserve rest of file)');
@@ -3509,8 +3513,9 @@ async function fetchGitHubFileContent(filePath, { token, owner, repoName, branch
         originalLines: zoneMeta.lineCount > 0 ? zoneMeta.lineCount : null,
         intakeBlueprintStep: Boolean(taskBody.blueprint_intake_session_id),
         additivePatch: additivePatchActive,
+        editPatch: editPatchActive,
         taskBody,
-        retryFn: additivePatchActive ? null : async (retryBody) => {
+        retryFn: (additivePatchActive || editPatchActive) ? null : async (retryBody) => {
           let retryCapture = null;
           const mockRetryRes = {
             status(c) { return { json(d) { retryCapture = { code: c, data: d }; } }; },

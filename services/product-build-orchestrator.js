@@ -644,6 +644,7 @@ export async function runNextStep(queue, { buildFn, verifyFn, deployProofFn, mod
     file_contains: step.file_contains || [],
     behavior_assertions: step.behavior_assertions || [],
     route: step.route || null,
+    patch_mode: step.patch_mode === true,
   });
 
   const sha = build && (build.commit_sha || build.sha);

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T08:51:44.750Z",
+  "generated_at": "2026-08-01T09:02:46.877Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3822553,
-      "mtime": "2026-08-01T04:18:40.361Z",
-      "indexed_at": "2026-08-01T04:19:11.616Z"
+      "bytes": 3838918,
+      "mtime": "2026-08-01T09:02:31.416Z",
+      "indexed_at": "2026-08-01T09:02:46.877Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 2006,
-      "mtime": "2026-08-01T08:27:55.396Z",
-      "indexed_at": "2026-08-01T08:28:29.236Z",
+      "bytes": 1991,
+      "mtime": "2026-08-01T08:58:06.520Z",
+      "indexed_at": "2026-08-01T09:02:31.345Z",
       "synopsis_index_only": true
     },
     {
@@ -41179,9 +41179,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 381206,
-      "mtime": "2026-08-01T08:48:17.387Z",
-      "indexed_at": "2026-08-01T08:48:17.387Z"
+      "bytes": 382511,
+      "mtime": "2026-08-01T09:02:10.716Z",
+      "indexed_at": "2026-08-01T09:02:31.345Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -65772,9 +65772,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 3803,
-      "mtime": "2026-08-01T08:51:39.036Z",
-      "indexed_at": "2026-08-01T08:51:44.750Z",
+      "bytes": 3892,
+      "mtime": "2026-08-01T08:53:35.992Z",
+      "indexed_at": "2026-08-01T09:02:31.345Z",
       "synopsis_index_only": true
     },
     {
@@ -70162,9 +70162,9 @@
     {
       "path": "routes/lifeos-council-builder-routes.js",
       "synopsis": "routes/lifeos-council-builder-routes.js",
-      "bytes": 178938,
-      "mtime": "2026-08-01T02:03:42.742Z",
-      "indexed_at": "2026-08-01T02:03:42.742Z",
+      "bytes": 179329,
+      "mtime": "2026-08-01T09:01:17.420Z",
+      "indexed_at": "2026-08-01T09:02:31.345Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -88164,9 +88164,9 @@
     {
       "path": "services/builderos-build-pipeline.js",
       "synopsis": "@ssot docs/products/builderos/PRODUCT_HOME.md",
-      "bytes": 6484,
-      "mtime": "2026-07-03T16:30:52.644Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 6611,
+      "mtime": "2026-08-01T08:59:59.012Z",
+      "indexed_at": "2026-08-01T09:02:31.345Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md",
         "docs/products/builderos/PRODUCT_HOME.md"
@@ -93709,9 +93709,9 @@
     {
       "path": "services/never-stop-product-factory.js",
       "synopsis": "Permanent product expansion lane — work exists even when BP_PRIORITY queue reads complete.",
-      "bytes": 87691,
-      "mtime": "2026-08-01T08:22:12.008Z",
-      "indexed_at": "2026-08-01T08:22:37.661Z",
+      "bytes": 87764,
+      "mtime": "2026-08-01T09:01:12.284Z",
+      "indexed_at": "2026-08-01T09:02:31.345Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -94154,9 +94154,9 @@
     {
       "path": "services/product-build-orchestrator.js",
       "synopsis": "General product-build orchestrator — turns a product's structured",
-      "bytes": 36393,
-      "mtime": "2026-08-01T01:51:14.197Z",
-      "indexed_at": "2026-08-01T01:51:14.197Z",
+      "bytes": 36435,
+      "mtime": "2026-08-01T09:01:04.364Z",
+      "indexed_at": "2026-08-01T09:02:31.345Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

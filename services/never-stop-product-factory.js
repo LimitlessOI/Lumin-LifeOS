@@ -1308,7 +1308,7 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
     log({ event: 'blocked_steps_revived', product_id: task.product_id, revived });
   }
 
-  const buildFn = async ({ target_file, task: stepTask, spec, last_error, max_output_tokens, expected_exports = [], file_contains = [], route = null }) => {
+  const buildFn = async ({ target_file, task: stepTask, spec, last_error, max_output_tokens, expected_exports = [], file_contains = [], route = null, patch_mode = false }) => {
     if (!baseUrl || !commandKey) return { ok: false, error: 'missing PUBLIC_BASE_URL / COMMAND_CENTER_KEY' };
     const stepTokenBudget = Number.isFinite(Number(max_output_tokens)) && Number(max_output_tokens) > 0
       ? Number(max_output_tokens)
@@ -1398,6 +1398,7 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
         ...(expected_exports.length ? { expected_exports } : {}),
         ...(file_contains.length ? { file_contains } : {}),
         ...(stepTokenBudget ? { max_output_tokens: stepTokenBudget } : {}),
+        ...(patch_mode ? { edit_patch: true } : {}),
         // Protected source modules should be authored by a stronger model; the routing policy
         // still filters and falls back if the requested model is unavailable.
         ...(/^(services|routes|middleware|factory-staging)\//.test(target_file) ? { model: 'openai_builder_standard' } : {}),
