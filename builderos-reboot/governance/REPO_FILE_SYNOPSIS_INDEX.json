@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T13:23:30.227Z",
+  "generated_at": "2026-08-01T13:24:10.247Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12725,
+  "file_count": 12726,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -72765,6 +72765,16 @@
       "indexed_at": "2026-07-31T06:00:22.262Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/coppa-compliance-review.mjs",
+      "synopsis": "Conduct and document the COPPA compliance review.",
+      "bytes": 1528,
+      "mtime": "2026-08-01T13:24:10.247Z",
+      "indexed_at": "2026-08-01T13:24:10.247Z",
+      "ssot": [
+        "docs/products/kids-os/PRODUCT_HOME.md"
       ]
     },
     {
