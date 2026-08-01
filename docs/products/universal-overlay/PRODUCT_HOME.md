@@ -335,6 +335,7 @@ User on insurance portal
 
 | 2026-05-24 | Batch push: factory runtime separation, AUTONOMOUS-RECOVERY-0001, regression harness, lumin-factory bundle — founder-requested Railway test deploy | routes/services/startup + factory-staging + builderos-reboot | Adam audit+push directive |
 
+| 2026-08-02 | **GAP-FILL: `routes/struggleDetectionFormFillData.js` + auto-register entry.** Created route module `registerStruggleDetectionFormFillDataRoutes` mounting `POST /api/v1/struggle/form-fill-data` and using `executeStruggleFormFill` from `services/struggleFormFill.js`; added to `config/auto-registered-product-modules.json`. | `bp-priority:once` step 07 failed `artifact_proof` because the route file did not exist and the factory could not self-repair (`BLOCKED_TOOLING`). | node --check PASS | `bp-priority:once` re-verify |
 | Date | What Changed | Why | Verified | Status |
 |---|---|---|---|---|
 | 2026-07-03 | **Public-origin hardening for native shell + OTA:** `mobile/www/index.html` no longer silently boots the retired robust-magic host when packaged locally; it now requires an explicit `LIFEOS_PUBLIC_BASE_URL` / packaged public origin and fails closed if unset. `mobile/ios/ota/manifest.plist.template` now uses a `PUBLIC_BASE_URL_PLACEHOLDER` token, and `scripts/build-lifeos-ios-adhoc.mjs` injects the real base URL at build time. | Native shell and direct-install artifacts must not ship an invisible stale-host dependency; wrong-origin boot is worse than an explicit configuration blocker. | ✅ local syntax | next mobile package/export |
