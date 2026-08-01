@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T06:49:25.847Z",
+  "generated_at": "2026-08-01T06:51:46.957Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12677,
   "files": [
@@ -67226,10 +67226,13 @@
     },
     {
       "path": "public/overlay/lifeos-ambient-listener.js",
-      "synopsis": "Existing code for public/overlay/lifeos-ambient-listener.js",
-      "bytes": 1114,
-      "mtime": "2026-07-17T21:42:16.095Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "synopsis": "LifeOS overlay UI — Lifeos Ambient Listener.",
+      "bytes": 7879,
+      "mtime": "2026-08-01T06:51:46.957Z",
+      "indexed_at": "2026-08-01T06:51:46.957Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "public/overlay/lifeos-ambient-sense.js",
