@@ -1734,7 +1734,7 @@
       "spec": "Develop an advisory model to account for theological and denominational concerns in content adaptation.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "adviseTheologicalContent"
       ],
@@ -1759,11 +1759,13 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T22:09:19.320Z",
-      "commit_sha": "6fabca418554b88f516676361f733d3884fc18d1",
+      "commit_sha": "7090296ca7f7600c5545ddfbb96af733c450ca8e",
       "same_signature_count": 0,
       "demoted": false,
-      "last_error": "artifact_proof_failed: Theological advisory model",
-      "heal_unblocked": true
+      "last_error": "grounding_failed: import_source_missing: ./utils",
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T11:25:19.864Z",
+      "blocker_class": "BLOCKED_TOOLING"
     },
     {
       "id": "05",
@@ -2701,6 +2703,6 @@
   "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-faith-studio",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:30:30.300Z",
+  "updated_at": "2026-08-01T11:25:32.940Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/faith-studio/BUILD_QUEUE.json"
 }
