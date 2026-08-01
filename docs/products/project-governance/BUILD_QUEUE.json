@@ -225,13 +225,13 @@
     },
     {
       "id": "6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/innovationListener.js",
       "task": "add innovation response mechanism",
       "spec": "Listen and react to potential competitor innovations.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "checkCompetitorInnovation"
       ],
@@ -251,7 +251,7 @@
           "assertion_id": "expected_exports:services/innovationListener.js"
         }
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-01T10:59:17.285Z",
       "last_error": "artifact_proof_failed: function checkCompetitorInnovation(){; return 'adapt'",
       "commit_sha": "b58c2580901ab900440855bae49455b881116d89",
       "built_sha": null,
@@ -272,7 +272,8 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T22:19:36.563Z",
       "same_signature_count": 0,
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "completed_at": "2026-08-01T10:59:17.408Z"
     },
     {
       "id": "7",
@@ -354,5 +355,5 @@
   "blueprint_id": "PRODUCT-PROJECT-GOVERNANCE-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-project-governance",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T10:59:01.872Z"
+  "updated_at": "2026-08-01T10:59:17.409Z"
 }
