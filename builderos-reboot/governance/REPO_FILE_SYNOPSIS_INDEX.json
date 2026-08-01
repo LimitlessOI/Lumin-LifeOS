@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T12:51:41.797Z",
+  "generated_at": "2026-08-01T12:54:31.099Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -90168,9 +90168,9 @@
     {
       "path": "services/emotionalIntelligence.js",
       "synopsis": "Provides services for integrating emotional intelligence signals and correlating wearable data.",
-      "bytes": 2966,
-      "mtime": "2026-08-01T12:39:17.440Z",
-      "indexed_at": "2026-08-01T12:39:40.092Z",
+      "bytes": 2995,
+      "mtime": "2026-08-01T12:54:31.099Z",
+      "indexed_at": "2026-08-01T12:54:31.099Z",
       "ssot": [
         "docs/products/personal-finance-os/PRODUCT_HOME.md"
       ]
