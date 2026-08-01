@@ -1,66 +1,90 @@
 /**
- * SYNOPSIS: Service module — RealEstateCurriculum.
+ * SYNOPSIS: Defines the structure for a virtual real estate class curriculum and student enrollment.
+ * @ssot docs/products/business-tools/PRODUCT_HOME.md
  */
-export const defineCurriculum = () => {
-  return {
-    courseTitle: "Virtual Real Estate Class",
-    modules: [
-      {
-        title: "Introduction to Real Estate",
-        description: "Overview of the real estate industry and its virtual landscape.",
-        lessons: [
-          "History of Real Estate",
-          "Real Estate Principles",
-          "Virtual Real Estate Platforms"
-        ]
-      },
-      {
-        title: "Property Analysis",
-        description: "Methods and tools for analyzing virtual properties.",
-        lessons: [
-          "Market Analysis",
-          "Property Valuation",
-          "Virtual Property Tours"
-        ]
-      },
-      {
-        title: "Real Estate Marketing",
-        description: "Strategies for marketing properties in a virtual environment.",
-        lessons: [
-          "Digital Marketing Strategies",
-          "Social Media in Real Estate",
-          "Virtual Open Houses"
-        ]
-      },
-      {
-        title: "Legal and Ethical Considerations",
-        description: "Understanding the legal and ethical issues in virtual real estate.",
-        lessons: [
-          "Real Estate Law Basics",
-          "Ethical Practices",
-          "Virtual Transactions"
-        ]
-      },
-      {
-        title: "Advanced Virtual Tools",
-        description: "Exploring advanced tools and technologies in virtual real estate.",
-        lessons: [
-          "Augmented Reality in Real Estate",
-          "Blockchain and Property Registries",
-          "AI in Market Predictions"
-        ]
-      }
-    ]
-  };
-};
+export async function defineCurriculum(deps, payload) {
+  const { pool, logger } = deps;
+  const { curriculum_id, student_email, student_name, module_id } = payload || {};
 
-export const studentSchema = {
-  name: String,
-  email: String,
-  enrolledModules: Array,
-  progress: {
-    type: Map,
-    of: String
-  },
-  completionStatus: Boolean
-};
+  try {
+    // This function is intended to define curriculum, not retrieve a single item by ID.
+    // The previous implementation returned a hardcoded curriculum structure.
+    // Given the DB schema, we should interact with `real_estate_curriculum`, `curriculum_modules`,
+    // and `virtual_class_enrollments` / `virtual_class_modules`.
+
+    // If a curriculum_id is provided, retrieve that specific curriculum with its modules.
+    if (curriculum_id) {
+      const curriculumResult = await pool.query(
+        'SELECT id, course_name, description, duration_weeks, instructor_name, prerequisites FROM real_estate_curriculum WHERE id = $1',
+        [curriculum_id]
+      );
+
+      if (curriculumResult.rows.length === 0) {
+        return null; // Curriculum not found
+      }
+
+      const curriculum = curriculumResult.rows[0];
+
+      const modulesResult = await pool.query(
+        'SELECT id, module_name, module_description, module_duration_weeks FROM curriculum_modules WHERE curriculum_id = $1 ORDER BY created_at',
+        [curriculum_id]
+      );
+
+      return {
+        ...curriculum,
+        modules: modulesResult.rows,
+      };
+    }
+
+    // If payload contains student_email and student_name, it implies an enrollment or update.
+    if (student_email && student_name) {
+      // Check if the student is already enrolled.
+      const existingEnrollment = await pool.query(
+        'SELECT id, progress, current_module, completed_modules FROM virtual_class_enrollments WHERE student_email = $1',
+        [student_email]
+      );
+
+      let enrollment;
+      if (existingEnrollment.rows.length > 0) {
+        enrollment = existingEnrollment.rows[0];
+        // Potentially update existing enrollment (e.g., current_module, progress)
+        // This part of the spec is vague, so we'll just return the existing enrollment for now.
+        // A more complete spec would define update logic.
+        return { status: 'Student already enrolled', enrollment };
+      } else {
+        // Enroll new student
+        const newEnrollment = await pool.query(
+          'INSERT INTO virtual_class_enrollments (student_email, student_name, progress, current_module, completed_modules, enrolled_in_express) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, student_email, student_name, progress, current_module, completed_modules',
+          [student_email, student_name, '{}', null, [], false] // Default values for new enrollment
+        );
+        return { status: 'Student enrolled successfully', enrollment: newEnrollment.rows[0] };
+      }
+    }
+
+    // If no specific curriculum_id or student enrollment details,
+    // return a default or all available curricula (if the intent is to list).
+    // Given the prompt "define virtual real estate curriculum", it suggests creating or retrieving a structure.
+    // Listing all curricula seems a reasonable default if no specific ID is given.
+    const allCurriculaResult = await pool.query(
+      'SELECT id, course_name, description, duration_weeks, instructor_name, prerequisites FROM real_estate_curriculum ORDER BY created_at'
+    );
+
+    // For each curriculum, fetch its modules
+    const curriculaWithModules = await Promise.all(allCurriculaResult.rows.map(async (curriculum) => {
+      const modulesResult = await pool.query(
+        'SELECT id, module_name, module_description, module_duration_weeks FROM curriculum_modules WHERE curriculum_id = $1 ORDER BY created_at',
+        [curriculum.id]
+      );
+      return {
+        ...curriculum,
+        modules: modulesResult.rows,
+      };
+    }));
+
+    return curriculaWithModules;
+
+  } catch (error) {
+    logger.error({ error }, 'Error in defineCurriculum');
+    throw new Error('Failed to define or retrieve curriculum from DB schema');
+  }
+}
