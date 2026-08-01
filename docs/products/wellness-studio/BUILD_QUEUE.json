@@ -4,7 +4,7 @@
   "verify_script": null,
   "planned_at": "2026-07-12T03:40:00.000Z",
   "notes": "Module 4 Therapist Integration beachhead — Clinical Partnership. Consent-gated briefs; therapist account lists linked clients who granted therapist_share. LifeOS consent foundation is a dependency.",
-  "updated_at": "2026-08-01T04:52:59.651Z",
+  "updated_at": "2026-08-01T04:55:14.175Z",
   "steps": [
     {
       "id": "ws-therapist-schema",
@@ -1040,7 +1040,7 @@
     },
     {
       "id": "step9",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/extended-tables.js",
       "task": "extend tables",
       "spec": "Extend existing tables joy_checkins, integrity_score_log, wearable_data, emotional_patterns to ensure no schema conflicts before build.",
@@ -1048,7 +1048,7 @@
         "step8"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "expected_exports": [
         "extendJoyCheckins",
         "extendIntegrityScoreLog",
@@ -1068,9 +1068,9 @@
           "assertion_id": "expected_exports:services/extended-tables.js"
         }
       ],
-      "last_attempt_at": "2026-08-01T04:52:10.269Z",
+      "last_attempt_at": "2026-08-01T04:55:14.115Z",
       "last_error": "Zone 3 edit-patch failed — edit old_string not found in file — the model must copy it verbatim: \"/**\\n * SYNOPSIS: Exports extendTables — services/extended-tables.js.\\n */\\nexport \"",
-      "commit_sha": null,
+      "commit_sha": "08d51608754a35b8f6fa3b9ac7a09adb38e43f74",
       "built_sha": null,
       "proof": null,
       "revive_count": 7,
@@ -1095,7 +1095,8 @@
       "escalation_required": true,
       "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
       "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
-      "escalated_at": "2026-07-31T18:40:13.632Z"
+      "escalated_at": "2026-07-31T18:40:13.632Z",
+      "completed_at": "2026-08-01T04:55:14.175Z"
     },
     {
       "id": "step10",
