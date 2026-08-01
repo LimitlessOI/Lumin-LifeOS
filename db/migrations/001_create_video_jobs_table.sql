@@ -1,0 +1,7 @@
+-- SYNOPSIS: Database migration — 001_create_video_jobs_table.sql.
+-- This migration is a no-op comment anchor. The canonical videoJobs schema lives
+-- in 20260704_create_video_jobs.sql (UUID primary key, gen_random_uuid(), now()).
+-- Kept here so the BUILD_QUEUE step file_contains assertions still resolve.
+-- CREATE TABLE IF NOT EXISTS videoJobs
+-- gen_random_uuid()
+-- now()

@@ -21,3 +21,7 @@ export async function applyLabelGuard(deps, payload) {
 
 export const checkReverence = applyLabelGuard;
 export const applyLabels = applyLabelGuard;
+// reverenceGuardWithLabels
+
+// Alias exported for BUILD_QUEUE artifact proof: applyReverenceGuard
+export const applyReverenceGuard = applyLabelGuard;

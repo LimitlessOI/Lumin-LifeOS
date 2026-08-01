@@ -1,4 +1,5 @@
 /**
+ * @ssot docs/products/faith-studio/PRODUCT_HOME.md
  * SYNOPSIS: Exports handlePrivateWitnessMode — services/privateWitnessService.js.
  */
 export function handlePrivateWitnessMode(data) {
@@ -161,3 +162,4 @@ export function isOperationPermissibleInPrivateWitnessMode(operationType, operat
   console.log(`Operation '${operationType}' is permissible under private witness mode constraints.`);
   return true;
 }
+// Private witness mode

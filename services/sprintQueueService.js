@@ -1,4 +1,5 @@
 /**
+ * @ssot docs/products/productized-sprint/PRODUCT_HOME.md
  * SYNOPSIS: Exports addSprintToQueue — services/sprintQueueService.js.
  */
 let sprintQueue = [];
@@ -18,3 +19,4 @@ export function removeSprintFromQueue(sprintId) {
     return { success: false, message: `Sprint ${sprintId} not found in queue.` };
   }
 }
+// class SprintQueue

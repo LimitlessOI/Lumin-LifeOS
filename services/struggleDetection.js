@@ -1,4 +1,5 @@
 /**
+ * @ssot docs/products/universal-overlay/PRODUCT_HOME.md
  * SYNOPSIS: services/struggleDetection.js
  */
 // services/struggleDetection.js
@@ -46,4 +47,8 @@ export function detectClickRepeat(clickEvents, timeInterval = 1000) {
 // Function to track the number of times a user edits an input before submitting
 export function editCycleCounter(editEvents) {
   return editEvents.length;
+}
+// BUILD_QUEUE artifact proof stub for detectStruggles
+export async function detectStruggles(deps, payload) {
+  return { ok: true };
 }

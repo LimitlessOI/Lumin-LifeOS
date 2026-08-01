@@ -47,3 +47,6 @@ export async function generateIdeaVaultHeadingsAppendix() {
 }
 
 export { generateIdeaVaultHeadingsAppendix as extractHeadingsAppendix };
+
+// emit `docs/IDEA_VAULT_HEADINGS_APPENDIX.md`
+// propose via builder

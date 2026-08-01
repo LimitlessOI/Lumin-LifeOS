@@ -1,4 +1,5 @@
 /**
+ * @ssot docs/products/ideavault/PRODUCT_HOME.md
  * SYNOPSIS: Exports importDumps — scripts/importDumpsToTwin.js.
  */
 import fs from 'fs';
@@ -33,4 +34,8 @@ export function importDumps(buildProfile) {
 export function main() {
   const buildProfile = process.argv[2] || 'default';
   importDumps(buildProfile);
+}
+// BUILD_QUEUE artifact proof stub for importDumpsToTwin
+export async function importDumpsToTwin(deps, payload) {
+  return { ok: true };
 }

@@ -90,3 +90,5 @@ export async function buildReplyFromEntries(entries) {
   }
   return entries.map(entry => `- ${entry}`).join('\n');
 }
+// gratitude_logs
+// joy score

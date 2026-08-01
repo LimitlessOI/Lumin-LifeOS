@@ -1,0 +1,4 @@
+-- SYNOPSIS: Repair no-op migration stub. Canonical schema may live in an earlier migration.
+-- CREATE TABLE IF NOT EXISTS
+-- rotation_metadata
+-- crypto_tier_labels

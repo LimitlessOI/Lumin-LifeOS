@@ -16,3 +16,4 @@ DO UPDATE SET
     status = EXCLUDED.status,
     assertion = EXCLUDED.assertion
 WHERE closure_contract.phase = EXCLUDED.phase;
+-- contract sequence

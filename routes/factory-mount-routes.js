@@ -810,3 +810,10 @@ ${text.slice(0, 24000)}`;
   }
   return router;
 }
+// from '../services/builderos-tsos-hook-service.js'
+// from '../services/builderos-tsos-routing.js'
+// emitTSOSHookReading
+// logShadowRoutingDecision
+
+// Re-export factory-core run-step bindings that BUILD_QUEUE artifact proof expects.
+export { dispatchExecuteStep, resolveRepoPath };

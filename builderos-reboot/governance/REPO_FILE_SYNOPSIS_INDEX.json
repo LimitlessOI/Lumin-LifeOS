@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T18:43:00.323Z",
+  "generated_at": "2026-08-01T19:07:38.787Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12745,
+  "file_count": 12790,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21307,9 +21307,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 27867,
-      "mtime": "2026-07-31T23:09:09.278Z",
-      "indexed_at": "2026-07-31T23:09:09.278Z",
+      "bytes": 25212,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
       "synopsis_index_only": true
     },
     {
@@ -30881,9 +30881,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 51768,
-      "mtime": "2026-08-01T17:17:43.281Z",
-      "indexed_at": "2026-08-01T17:19:22.152Z",
+      "bytes": 206,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
       "synopsis_index_only": true
     },
     {
@@ -34372,9 +34372,9 @@
     {
       "path": "db/memory-contract-closure.sql",
       "synopsis": "SQL — memory-contract-closure.sql.",
-      "bytes": 523,
-      "mtime": "2026-07-16T19:42:53.569Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 545,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z"
     },
     {
       "path": "db/migrations/[date]_marketing_schema.sql",
@@ -34433,11 +34433,25 @@
       "indexed_at": "2026-07-31T04:37:34.626Z"
     },
     {
+      "path": "db/migrations/001_create_video_jobs_table.sql",
+      "synopsis": "Database migration — 001_create_video_jobs_table.sql.",
+      "bytes": 381,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z"
+    },
+    {
       "path": "db/migrations/001_orch_notify.sql",
       "synopsis": "Database migration — 001_orch_notify.sql.",
       "bytes": 750,
       "mtime": "2026-06-21T21:37:50.705Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "db/migrations/0010-addPrivacyRightsControl.sql",
+      "synopsis": "Database migration — 0010-addPrivacyRightsControl.sql.",
+      "bytes": 434,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z"
     },
     {
       "path": "db/migrations/002_add_transcript_purge_cron.sql",
@@ -34594,6 +34608,13 @@
       "indexed_at": "2026-07-31T07:59:05.724Z"
     },
     {
+      "path": "db/migrations/2023-10-15-env-registry-metadata-update.sql",
+      "synopsis": "Repair no-op migration stub. Canonical schema may live in an earlier migration.",
+      "bytes": 166,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z"
+    },
+    {
       "path": "db/migrations/2023-10-20-honeypot-probe-service.sql",
       "synopsis": "Database migration — 2023-10-20-honeypot-probe-service.sql.",
       "bytes": 226,
@@ -34676,6 +34697,13 @@
       "bytes": 303,
       "mtime": "2026-07-31T04:37:32.203Z",
       "indexed_at": "2026-07-31T04:37:34.626Z"
+    },
+    {
+      "path": "db/migrations/20231012_add_provider_cooldowns.sql",
+      "synopsis": "Repair no-op migration stub. Canonical schema may live in an earlier migration.",
+      "bytes": 139,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z"
     },
     {
       "path": "db/migrations/20231012_coppa_compliance.sql",
@@ -34897,9 +34925,9 @@
     {
       "path": "db/migrations/20241030_create_additional_templates.sql",
       "synopsis": "Database migration — 20241030_create_additional_templates.sql.",
-      "bytes": 538,
-      "mtime": "2026-08-01T09:17:14.572Z",
-      "indexed_at": "2026-08-01T09:17:36.218Z"
+      "bytes": 431,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z"
     },
     {
       "path": "db/migrations/20260313_core_schema.sql",
@@ -35985,6 +36013,13 @@
       "bytes": 4812,
       "mtime": "2026-06-21T21:37:53.271Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "db/migrations/20260605_add_income_priority_to_tasks.sql",
+      "synopsis": "Repair no-op migration stub. Canonical schema may live in an earlier migration.",
+      "bytes": 365,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z"
     },
     {
       "path": "db/migrations/20260605_mission_runtime_commitments_missing_columns.sql",
@@ -37268,6 +37303,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "db/migrations/20260720_lifeos_core_phase_1.sql",
+      "synopsis": "Repair no-op migration stub. Canonical schema may live in an earlier migration.",
+      "bytes": 123,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z"
+    },
+    {
       "path": "db/migrations/20260720_lifeos_core_phase_6.sql",
       "synopsis": "Database migration — 20260720_lifeos_core_phase_6.sql.",
       "bytes": 262,
@@ -37366,6 +37408,13 @@
       "indexed_at": "2026-07-30T22:32:11.913Z"
     },
     {
+      "path": "db/migrations/add_cont_approval_timeout.sql",
+      "synopsis": "Repair no-op migration stub. Canonical schema may live in an earlier migration.",
+      "bytes": 373,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z"
+    },
+    {
       "path": "db/migrations/add_doctrine_profiles.sql",
       "synopsis": "Database migration — add_doctrine_profiles.sql.",
       "bytes": 513,
@@ -37382,9 +37431,9 @@
     {
       "path": "db/migrations/add_video_jobs_table.sql",
       "synopsis": "Database migration — add_video_jobs_table.sql.",
-      "bytes": 918,
-      "mtime": "2026-07-30T22:32:04.393Z",
-      "indexed_at": "2026-07-30T22:32:11.913Z"
+      "bytes": 339,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z"
     },
     {
       "path": "db/migrations/add_virtual_real_estate_curriculum.sql",
@@ -37478,6 +37527,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "db/migrations/create_roi_tracker_persistence.sql",
+      "synopsis": "Repair no-op migration stub. Canonical schema may live in an earlier migration.",
+      "bytes": 135,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z"
+    },
+    {
       "path": "db/migrations/create_tables.sql",
       "synopsis": "Database migration — create_tables.sql.",
       "bytes": 131,
@@ -37515,9 +37571,9 @@
     {
       "path": "db/migrations/persist_provider_cooldowns.sql",
       "synopsis": "Database migration — persist_provider_cooldowns.sql.",
-      "bytes": 864,
-      "mtime": "2026-08-01T06:21:27.515Z",
-      "indexed_at": "2026-08-01T06:36:53.017Z"
+      "bytes": 354,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z"
     },
     {
       "path": "db/migrations/update_user_trials_table.sql",
@@ -41244,9 +41300,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 389215,
-      "mtime": "2026-08-01T18:42:49.989Z",
-      "indexed_at": "2026-08-01T18:43:00.323Z"
+      "bytes": 389850,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -42478,9 +42534,9 @@
     {
       "path": "docs/products/PRODUCT_REGISTRY.json",
       "synopsis": "Documentation — PRODUCT REGISTRY.",
-      "bytes": 30085,
-      "mtime": "2026-08-01T08:45:36.060Z",
-      "indexed_at": "2026-08-01T08:45:45.618Z",
+      "bytes": 24796,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
       "synopsis_index_only": true
     },
     {
@@ -42600,9 +42656,9 @@
     {
       "path": "docs/products/project-governance/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Project Governance",
-      "bytes": 71925,
-      "mtime": "2026-08-01T10:56:27.396Z",
-      "indexed_at": "2026-08-01T10:56:40.338Z"
+      "bytes": 71953,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z"
     },
     {
       "path": "docs/products/project-governance/READINESS_CHECKLIST.md",
@@ -65453,10 +65509,10 @@
     },
     {
       "path": "package.json",
-      "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 36111,
-      "mtime": "2026-07-31T22:30:03.362Z",
-      "indexed_at": "2026-07-31T22:57:53.422Z",
+      "synopsis": "enforce\":\"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",\"lifeos:file-synopsis:backfill\":\"node scripts/file-synopsis-enforce.mjs --all --auto-fix && node scripts/generate-file-synopsis-index.mjs\",\"lifeos:file-synopsis:index\":\"n",
+      "bytes": 33800,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
       "synopsis_index_only": true
     },
     {
@@ -66460,9 +66516,9 @@
     {
       "path": "products/receipts/POINT_B_DNA_VERIFY.json",
       "synopsis": "Product receipt — POINT B DNA VERIFY.",
-      "bytes": 318,
-      "mtime": "2026-08-01T08:51:39.036Z",
-      "indexed_at": "2026-08-01T08:51:44.750Z",
+      "bytes": 280,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
       "synopsis_index_only": true
     },
     {
@@ -66476,9 +66532,9 @@
     {
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
-      "bytes": 25687,
-      "mtime": "2026-08-01T08:51:39.036Z",
-      "indexed_at": "2026-08-01T08:51:44.750Z",
+      "bytes": 18509,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
       "synopsis_index_only": true
     },
     {
@@ -66668,17 +66724,17 @@
     {
       "path": "products/receipts/TRUTH_ENFORCEMENT_AUDIT.json",
       "synopsis": "Product receipt — TRUTH ENFORCEMENT AUDIT.",
-      "bytes": 833,
-      "mtime": "2026-08-01T08:51:39.036Z",
-      "indexed_at": "2026-08-01T08:51:44.750Z",
+      "bytes": 701,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/TRUTH_LOCKDOWN_VERIFY.json",
       "synopsis": "Product receipt — TRUTH LOCKDOWN VERIFY.",
-      "bytes": 1318,
-      "mtime": "2026-08-01T08:51:39.036Z",
-      "indexed_at": "2026-08-01T08:51:44.750Z",
+      "bytes": 1141,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
       "synopsis_index_only": true
     },
     {
@@ -66708,9 +66764,9 @@
     {
       "path": "products/receipts/WISDOM_TRUTH_AUDIT.json",
       "synopsis": "Product receipt — WISDOM TRUTH AUDIT.",
-      "bytes": 1001,
-      "mtime": "2026-08-01T08:51:39.036Z",
-      "indexed_at": "2026-08-01T08:51:44.750Z",
+      "bytes": 735,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
       "synopsis_index_only": true
     },
     {
@@ -66969,9 +67025,9 @@
     {
       "path": "prompts/lifeos-platform.md",
       "synopsis": "Domain: Platform Core (Cross-Cutting Infrastructure)",
-      "bytes": 5484,
-      "mtime": "2026-06-21T21:39:00.296Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 5508,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z"
     },
     {
       "path": "prompts/lifeos-scorecard.md",
@@ -68550,9 +68606,9 @@
     {
       "path": "public/overlay/uiExtensions.js",
       "synopsis": "LifeOS overlay UI — UiExtensions.",
-      "bytes": 2486,
-      "mtime": "2026-08-01T02:40:53.042Z",
-      "indexed_at": "2026-08-01T02:40:53.042Z",
+      "bytes": 2659,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
@@ -69084,6 +69140,16 @@
       ]
     },
     {
+      "path": "routes/api/chatRoutes.js",
+      "synopsis": "ai-council BUILD_QUEUE artifact repair stub.",
+      "bytes": 259,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/ai-council/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "routes/api/cooldownRoutes.js",
       "synopsis": "HTTP route module — CooldownRoutes.",
       "bytes": 901,
@@ -69396,6 +69462,16 @@
       ]
     },
     {
+      "path": "routes/chat.js",
+      "synopsis": "ai-council BUILD_QUEUE artifact repair stub.",
+      "bytes": 275,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/ai-council/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "routes/ciGuard.js",
       "synopsis": "HTTP route module — CiGuard.",
       "bytes": 403,
@@ -69638,10 +69714,10 @@
     },
     {
       "path": "routes/cronVerificationRoutes.js",
-      "synopsis": "Registers CronVerificationRoutes routes/handlers (routes/cronVerificationRoutes.js).",
-      "bytes": 698,
-      "mtime": "2026-07-16T19:42:53.597Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z",
+      "synopsis": "word-keeper BUILD_QUEUE artifact repair stub.",
+      "bytes": 292,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
       "ssot": [
         "docs/products/word-keeper/PRODUCT_HOME.md"
       ]
@@ -69744,9 +69820,9 @@
     {
       "path": "routes/factory-mount-routes.js",
       "synopsis": "Pure: should the codegen prompt inline this file's existing content?",
-      "bytes": 39027,
-      "mtime": "2026-07-31T08:26:41.095Z",
-      "indexed_at": "2026-07-31T08:33:28.712Z",
+      "bytes": 39315,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -69834,6 +69910,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "routes/freeTierAPI.js",
+      "synopsis": "token-accounting-os BUILD_QUEUE artifact repair stub.",
+      "bytes": 273,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/token-accounting-os/PRODUCT_HOME.md"
       ]
     },
     {
@@ -70889,9 +70975,12 @@
     {
       "path": "routes/marketingos-sku-routes.js",
       "synopsis": "Exports registerMarketingosSkuRoutes — routes/marketingos-sku-routes.js.",
-      "bytes": 8102,
-      "mtime": "2026-07-13T20:29:53.081Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 8315,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/limitlessos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/memory_routes.js",
@@ -71045,6 +71134,16 @@
       "bytes": 2393,
       "mtime": "2026-07-05T19:10:02.192Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "routes/opsTcBlockerCardsRoutes.js",
+      "synopsis": "lifere BUILD_QUEUE artifact repair stub.",
+      "bytes": 264,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/lifere/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/optionalBoldTrailContactCleanupRoutes.js",
@@ -71216,9 +71315,9 @@
     {
       "path": "routes/publicPublishingReview.js",
       "synopsis": "Mock database",
-      "bytes": 2063,
-      "mtime": "2026-07-16T19:42:53.602Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 2256,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
       "ssot": [
         "docs/products/faith-studio/PRODUCT_HOME.md"
       ]
@@ -71310,6 +71409,26 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "routes/revenueGoalTracking.js",
+      "synopsis": "financial-revenue BUILD_QUEUE artifact repair stub.",
+      "bytes": 292,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/financial-revenue/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "routes/sacredContentReview.js",
+      "synopsis": "faith-studio BUILD_QUEUE artifact repair stub.",
+      "bytes": 273,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/faith-studio/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "routes/salesPageRoute.js",
       "synopsis": "HTTP route module — SalesPageRoute.",
       "bytes": 350,
@@ -71322,6 +71441,16 @@
       "bytes": 771,
       "mtime": "2026-07-31T04:37:32.211Z",
       "indexed_at": "2026-07-31T04:37:34.626Z"
+    },
+    {
+      "path": "routes/sceneRoutes.js",
+      "synopsis": "creator-media-os BUILD_QUEUE artifact repair stub.",
+      "bytes": 263,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/creator-media-os/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/scriptRoutes.js",
@@ -71421,6 +71550,16 @@
       "bytes": 3043,
       "mtime": "2026-07-17T21:42:16.100Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "ssot": [
+        "docs/products/site-builder/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "routes/site-builder-customization-routes.js",
+      "synopsis": "site-builder BUILD_QUEUE artifact repair stub.",
+      "bytes": 400,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -71588,10 +71727,13 @@
     },
     {
       "path": "routes/sprintQueuePanel.js",
-      "synopsis": "HTTP route module — SprintQueuePanel.",
-      "bytes": 396,
-      "mtime": "2026-07-17T23:06:21.277Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "synopsis": "Provide a panel for sprint queue within Command Center.",
+      "bytes": 668,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/productized-sprint/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/sprintQueuePanelRoute.js",
@@ -71599,6 +71741,16 @@
       "bytes": 605,
       "mtime": "2026-08-01T02:26:36.495Z",
       "indexed_at": "2026-08-01T02:26:36.495Z",
+      "ssot": [
+        "docs/products/productized-sprint/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "routes/sprintQueueRoutes.js",
+      "synopsis": "productized-sprint BUILD_QUEUE artifact repair stub.",
+      "bytes": 279,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
       "ssot": [
         "docs/products/productized-sprint/PRODUCT_HOME.md"
       ]
@@ -71829,6 +71981,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "routes/transcriptPurgeRoutes.js",
+      "synopsis": "word-keeper BUILD_QUEUE artifact repair stub.",
+      "bytes": 282,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/word-keeper/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "routes/transcriptVerificationRoutes.js",
       "synopsis": "Define the verification function",
       "bytes": 690,
@@ -71858,9 +72020,9 @@
     {
       "path": "routes/tsos-efficiency-routes.js",
       "synopsis": "Exports createTsosEfficiencyRoutes — routes/tsos-efficiency-routes.js.",
-      "bytes": 3043,
-      "mtime": "2026-06-29T17:44:54.592Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 3247,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -72415,6 +72577,17 @@
       ]
     },
     {
+      "path": "scripts/build-queue-drift-repair.mjs",
+      "synopsis": "Deterministic BUILD_QUEUE drift repair executor. Scans product queues,",
+      "bytes": 22794,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md",
+        "${productHomePath(product)}\\n`;"
+      ]
+    },
+    {
       "path": "scripts/build-task.js",
       "synopsis": "build-task.js — CLI to submit a single build task to the self-programming pipeline.",
       "bytes": 5172,
@@ -72941,6 +73114,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "scripts/createVapiAccount.mjs",
+      "synopsis": "ai-receptionist BUILD_QUEUE artifact repair stub.",
+      "bytes": 215,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/ai-receptionist/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "scripts/creative-engine-project-review.mjs",
       "synopsis": "Run every active product through the Creative Director lens and emit a CREATIVE_BRIEF.md.",
       "bytes": 8803,
@@ -72969,6 +73152,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/cron/day-3-7-followup.mjs",
+      "synopsis": "outreach-crm BUILD_QUEUE artifact repair stub.",
+      "bytes": 291,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/outreach-crm/PRODUCT_HOME.md"
       ]
     },
     {
@@ -73073,6 +73266,16 @@
       ]
     },
     {
+      "path": "scripts/deploy_phase7_railway_probe.mjs",
+      "synopsis": "memory-system BUILD_QUEUE artifact repair stub.",
+      "bytes": 257,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/memory-system/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "scripts/deploy_railway.js",
       "synopsis": "Deploy a branch to Railway for live-mode probe.",
       "bytes": 513,
@@ -73122,6 +73325,16 @@
       "indexed_at": "2026-07-30T22:32:11.913Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/emitHeadingsAppendix.js",
+      "synopsis": "ideavault BUILD_QUEUE artifact repair stub.",
+      "bytes": 236,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/ideavault/PRODUCT_HOME.md"
       ]
     },
     {
@@ -73195,9 +73408,19 @@
     {
       "path": "scripts/extract-dump-headings.mjs",
       "synopsis": "Extract markdown headings from founder conversation dump files.",
-      "bytes": 1718,
-      "mtime": "2026-07-17T21:42:16.101Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 1789,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/ideavault/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/extractDumpHeadings.mjs",
+      "synopsis": "ideavault BUILD_QUEUE artifact repair stub.",
+      "bytes": 194,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
       "ssot": [
         "docs/products/ideavault/PRODUCT_HOME.md"
       ]
@@ -73225,9 +73448,22 @@
     {
       "path": "scripts/folderCleanup.mjs",
       "synopsis": "Exports consolidateLuminMemoryVariants — scripts/folderCleanup.mjs.",
-      "bytes": 1723,
-      "mtime": "2026-07-17T19:19:29.719Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 1925,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/ideavault/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/folderCleanupMemory.js",
+      "synopsis": "ideavault BUILD_QUEUE artifact repair stub.",
+      "bytes": 221,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/ideavault/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/founder-decision-backfill.mjs",
@@ -73456,9 +73692,12 @@
     {
       "path": "scripts/importDumpsToTwin.js",
       "synopsis": "Exports importDumps — scripts/importDumpsToTwin.js.",
-      "bytes": 1014,
-      "mtime": "2026-07-17T19:19:29.720Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 1203,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/ideavault/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/index-feature-catalog.mjs",
@@ -73495,11 +73734,31 @@
       ]
     },
     {
+      "path": "scripts/iosAppBuild.mjs",
+      "synopsis": "universal-overlay BUILD_QUEUE artifact repair stub.",
+      "bytes": 225,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "scripts/iosBuildWorkflow.mjs",
       "synopsis": "Import necessary modules",
       "bytes": 1318,
       "mtime": "2026-07-18T18:46:59.248Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "scripts/irlenSyndromeConsultation.js",
+      "synopsis": "kids-os BUILD_QUEUE artifact repair stub.",
+      "bytes": 200,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/kids-os/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/kernel-health.mjs",
@@ -74620,6 +74879,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/parent-interviews.js",
+      "synopsis": "kids-os BUILD_QUEUE artifact repair stub.",
+      "bytes": 234,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/kids-os/PRODUCT_HOME.md"
       ]
     },
     {
@@ -75959,6 +76228,16 @@
       ]
     },
     {
+      "path": "scripts/teacher-interviews.js",
+      "synopsis": "kids-os BUILD_QUEUE artifact repair stub.",
+      "bytes": 236,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/kids-os/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "scripts/test-bp-hello2.mjs",
       "synopsis": "Exports hello — scripts/test-bp-hello2.mjs.",
       "bytes": 164,
@@ -76007,6 +76286,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/token-accounting-os/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/transcriptPurgeCron.mjs",
+      "synopsis": "word-keeper BUILD_QUEUE artifact repair stub.",
+      "bytes": 248,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/word-keeper/PRODUCT_HOME.md"
       ]
     },
     {
@@ -76071,6 +76360,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/updateDumpIndexPaths.js",
+      "synopsis": "ideavault BUILD_QUEUE artifact repair stub.",
+      "bytes": 228,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/ideavault/PRODUCT_HOME.md"
       ]
     },
     {
@@ -77318,6 +77617,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/verify-repair-and-autonomy-acceptance.mjs",
+      "synopsis": "Acceptance script for FACTORY-REPAIR-AND-AUTONOMY-0001.",
+      "bytes": 6758,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
@@ -87820,9 +88129,12 @@
     {
       "path": "services/apiSpecification.js",
       "synopsis": "Exports validateApiSpecification — services/apiSpecification.js.",
-      "bytes": 11577,
-      "mtime": "2026-07-31T10:32:35.508Z",
-      "indexed_at": "2026-07-31T10:32:35.508Z"
+      "bytes": 11658,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/music-talent-studio/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/approval-system.js",
@@ -87832,6 +88144,16 @@
       "indexed_at": "2026-08-01T08:16:57.099Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/approvalsTimeoutService.js",
+      "synopsis": "business-tools BUILD_QUEUE artifact repair stub.",
+      "bytes": 265,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/business-tools/PRODUCT_HOME.md"
       ]
     },
     {
@@ -87991,6 +88313,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/billingEntitlements.js",
+      "synopsis": "business-tools BUILD_QUEUE artifact repair stub.",
+      "bytes": 291,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/business-tools/PRODUCT_HOME.md"
       ]
     },
     {
@@ -89590,9 +89922,12 @@
     {
       "path": "services/coppaReview.js",
       "synopsis": "Service module — CoppaReview.",
-      "bytes": 1633,
-      "mtime": "2026-07-31T04:37:32.211Z",
-      "indexed_at": "2026-07-31T04:37:34.626Z"
+      "bytes": 1723,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/kids-os/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/council-bypass-audit.js",
@@ -89807,6 +90142,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "services/creatorBackCatalogIngest.js",
+      "synopsis": "creator-media-os BUILD_QUEUE artifact repair stub.",
+      "bytes": 263,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/creator-media-os/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/creatorBrandKit.js",
       "synopsis": "Existing code in services/creatorBrandKit.js",
       "bytes": 834,
@@ -89973,12 +90318,22 @@
     },
     {
       "path": "services/cronVerificationService.js",
-      "synopsis": "services/cronVerificationService.js",
-      "bytes": 1231,
-      "mtime": "2026-07-18T12:09:49.113Z",
-      "indexed_at": "2026-07-18T12:09:49.113Z",
+      "synopsis": "word-keeper BUILD_QUEUE artifact repair stub.",
+      "bytes": 481,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
       "ssot": [
         "docs/products/word-keeper/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/dailyRevenueReport.js",
+      "synopsis": "financial-revenue BUILD_QUEUE artifact repair stub.",
+      "bytes": 275,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/financial-revenue/PRODUCT_HOME.md"
       ]
     },
     {
@@ -90438,6 +90793,16 @@
       ]
     },
     {
+      "path": "services/entitlementsGatewayService.js",
+      "synopsis": "business-tools BUILD_QUEUE artifact repair stub.",
+      "bytes": 259,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/business-tools/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/env-registry-map.js",
       "synopsis": "env-registry-map.js",
       "bytes": 29372,
@@ -90529,9 +90894,12 @@
     {
       "path": "services/extractSubFeatures.js",
       "synopsis": "Exports extractSubFeatures — services/extractSubFeatures.js.",
-      "bytes": 1475,
-      "mtime": "2026-07-31T08:10:04.748Z",
-      "indexed_at": "2026-07-31T08:10:04.748Z"
+      "bytes": 1545,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/business-tools/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/factory-arc-loader.js",
@@ -90573,9 +90941,12 @@
     {
       "path": "services/familySafetyService.js",
       "synopsis": "Exports applyFamilySafetyFilters — services/familySafetyService.js.",
-      "bytes": 3307,
-      "mtime": "2026-07-31T08:34:54.759Z",
-      "indexed_at": "2026-07-31T08:36:45.872Z"
+      "bytes": 3383,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/faith-studio/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/ferpaDpaTemplate.js",
@@ -90645,9 +91016,9 @@
     {
       "path": "services/formFieldInference.js",
       "synopsis": "Exports inferFormSchema — services/formFieldInference.js.",
-      "bytes": 990,
-      "mtime": "2026-07-16T19:42:53.610Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 1126,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
@@ -91027,6 +91398,16 @@
       "bytes": 706,
       "mtime": "2026-07-15T09:37:08.940Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "services/freeTierAPI.js",
+      "synopsis": "token-accounting-os BUILD_QUEUE artifact repair stub.",
+      "bytes": 271,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/token-accounting-os/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/fulfillment-engine.js",
@@ -91485,6 +91866,16 @@
       ]
     },
     {
+      "path": "services/incomeDroneScheduler.js",
+      "synopsis": "financial-revenue BUILD_QUEUE artifact repair stub.",
+      "bytes": 271,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/financial-revenue/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/ingestClaims.js",
       "synopsis": "Exports ingestClaims — services/ingestClaims.js.",
       "bytes": 880,
@@ -91524,6 +91915,16 @@
       "bytes": 874,
       "mtime": "2026-07-16T19:42:53.611Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/insuranceFormMapping.js",
+      "synopsis": "universal-overlay BUILD_QUEUE artifact repair stub.",
+      "bytes": 275,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
@@ -92023,9 +92424,9 @@
     {
       "path": "services/lifeos-daily-checkin-service.js",
       "synopsis": "Daily activity check-in service for recording and summarizing work.",
-      "bytes": 3254,
-      "mtime": "2026-08-01T04:10:00.650Z",
-      "indexed_at": "2026-08-01T04:10:00.650Z",
+      "bytes": 3286,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -93805,9 +94206,9 @@
     {
       "path": "services/mission-ledger.js",
       "synopsis": "services/mission-ledger.js",
-      "bytes": 12219,
-      "mtime": "2026-06-30T16:04:04.739Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 12255,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -93936,9 +94337,9 @@
     {
       "path": "services/musicTeachersInterview.js",
       "synopsis": "services/musicTeachersInterview.js",
-      "bytes": 1105,
-      "mtime": "2026-07-16T19:42:53.614Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 1270,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
       "ssot": [
         "docs/products/music-talent-studio/PRODUCT_HOME.md"
       ]
@@ -94394,9 +94795,12 @@
     {
       "path": "services/privateWitnessService.js",
       "synopsis": "Exports handlePrivateWitnessMode — services/privateWitnessService.js.",
-      "bytes": 7780,
-      "mtime": "2026-07-31T08:09:47.956Z",
-      "indexed_at": "2026-07-31T08:09:47.956Z"
+      "bytes": 7857,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/faith-studio/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/proactiveToastSystem.js",
@@ -94573,9 +94977,12 @@
     {
       "path": "services/realEstateCurriculumStructure.js",
       "synopsis": "Exports getCurriculumModules, getStudentSchema — services/realEstateCurriculumStructure.js.",
-      "bytes": 7159,
-      "mtime": "2026-07-31T09:23:46.444Z",
-      "indexed_at": "2026-07-31T09:23:46.444Z"
+      "bytes": 7238,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/business-tools/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/reality-ledger.js",
@@ -94731,9 +95138,9 @@
     {
       "path": "services/reverenceGuardService.js",
       "synopsis": "Integrate labels with reverence guard.",
-      "bytes": 919,
-      "mtime": "2026-08-01T05:24:59.999Z",
-      "indexed_at": "2026-08-01T05:24:59.999Z",
+      "bytes": 1071,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
       "ssot": [
         "docs/products/faith-studio/PRODUCT_HOME.md"
       ]
@@ -94751,9 +95158,22 @@
     {
       "path": "services/reviewModerationFlowDetail.js",
       "synopsis": "Exports moderateSubmissions and reviewSubmission - services/reviewModerationFlowDetail.js.",
-      "bytes": 3418,
-      "mtime": "2026-07-31T10:47:25.684Z",
-      "indexed_at": "2026-07-31T10:55:09.665Z"
+      "bytes": 3506,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/faith-studio/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/rightsControl.js",
+      "synopsis": "story-studio BUILD_QUEUE artifact repair stub.",
+      "bytes": 463,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/story-studio/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/risk-scorer.js",
@@ -94792,9 +95212,12 @@
     {
       "path": "services/sacredContentReviewService.js",
       "synopsis": "Exports sacredContentRevise, sacredContentValidate, sacredContentAssessImpact, sacredContentAuditTrail, sacredContentEscalate, sacredContentPreserveIntent, sacredContentMonitorTrends — services/sacredContentReviewService.js.",
-      "bytes": 8137,
-      "mtime": "2026-07-31T05:52:28.047Z",
-      "indexed_at": "2026-07-31T05:52:29.738Z"
+      "bytes": 8211,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/faith-studio/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/safeOutputService.js",
@@ -94826,9 +95249,9 @@
     {
       "path": "services/sceneEngine.js",
       "synopsis": "Service module — SceneEngine.",
-      "bytes": 1993,
-      "mtime": "2026-08-01T05:06:09.469Z",
-      "indexed_at": "2026-08-01T05:06:09.469Z",
+      "bytes": 2167,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
       "ssot": [
         "docs/products/creator-media-os/PRODUCT_HOME.md"
       ]
@@ -95514,9 +95937,9 @@
     {
       "path": "services/site-builder-prospect-runner.js",
       "synopsis": "Async Site Builder prospect jobs — accept fast, build+email in background.",
-      "bytes": 23676,
-      "mtime": "2026-07-28T17:47:22.573Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 23838,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -95680,9 +96103,9 @@
     {
       "path": "services/sourceLabelService.js",
       "synopsis": "Exports labelOutput — services/sourceLabelService.js.",
-      "bytes": 489,
-      "mtime": "2026-07-16T19:42:53.616Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 618,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
       "ssot": [
         "docs/products/faith-studio/PRODUCT_HOME.md"
       ]
@@ -95715,9 +96138,12 @@
     {
       "path": "services/sprintQueueService.js",
       "synopsis": "Exports addSprintToQueue — services/sprintQueueService.js.",
-      "bytes": 709,
-      "mtime": "2026-07-31T09:39:59.399Z",
-      "indexed_at": "2026-07-31T09:39:59.399Z"
+      "bytes": 789,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/productized-sprint/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/sql-review/best-practices.json",
@@ -95882,9 +96308,12 @@
     {
       "path": "services/struggleDetection.js",
       "synopsis": "services/struggleDetection.js",
-      "bytes": 1166,
-      "mtime": "2026-07-17T19:49:34.949Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 1359,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/struggleDetectionLogger.js",
@@ -95940,9 +96369,9 @@
     {
       "path": "services/studentsInterview.js",
       "synopsis": "Provides services for managing student interview records.",
-      "bytes": 1132,
-      "mtime": "2026-08-01T05:42:00.244Z",
-      "indexed_at": "2026-08-01T05:42:00.244Z",
+      "bytes": 1445,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
       "ssot": [
         "docs/products/music-talent-studio/PRODUCT_HOME.md"
       ]
@@ -96507,6 +96936,16 @@
       ]
     },
     {
+      "path": "services/therapist-communication.js",
+      "synopsis": "wellness-studio BUILD_QUEUE artifact repair stub.",
+      "bytes": 275,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/wellness-studio/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/therapist-integration.js",
       "synopsis": "Sets up the therapist integration, wiring communication and truth delivery profiles.",
       "bytes": 3463,
@@ -96649,9 +97088,22 @@
     {
       "path": "services/traditionProfilesUpdate.js",
       "synopsis": "Updates tradition profiles in the given content to include detailed",
-      "bytes": 3998,
-      "mtime": "2026-07-31T09:23:29.444Z",
-      "indexed_at": "2026-07-31T09:23:29.444Z"
+      "bytes": 4082,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/faith-studio/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/transcriptPurgeService.js",
+      "synopsis": "word-keeper BUILD_QUEUE artifact repair stub.",
+      "bytes": 257,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/word-keeper/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/travel/itineraryGenerator.js",
@@ -96866,6 +97318,16 @@
       "bytes": 868,
       "mtime": "2026-07-05T19:10:02.205Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "services/video-job-service.js",
+      "synopsis": "video-pipeline BUILD_QUEUE artifact repair stub.",
+      "bytes": 295,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/video-pipeline/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/video-pipeline.js",
@@ -97808,6 +98270,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "templates/deliveryEmailTemplate.js",
+      "synopsis": "productized-sprint BUILD_QUEUE artifact repair stub.",
+      "bytes": 400,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "ssot": [
+        "docs/products/productized-sprint/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "templates/github-actions/node-railway.yml",
       "synopsis": "yml — templates/github-actions/node-railway.yml.",
       "bytes": 540,
@@ -97925,9 +98397,9 @@
     {
       "path": "tests/auto-register-product-modules.test.js",
       "synopsis": "Auto-registration + module-health manifest guard.",
-      "bytes": 3826,
-      "mtime": "2026-07-07T21:41:40.947Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 3837,
+      "mtime": "2026-08-01T19:07:38.787Z",
+      "indexed_at": "2026-08-01T19:07:38.787Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

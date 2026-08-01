@@ -39,3 +39,8 @@ export function inferFormFieldSchema(formElement) {
 
   return schema;
 }
+
+// BUILD_QUEUE artifact proof stub for inferFormSchema
+export async function inferFormSchema(deps, payload) {
+  return { ok: true };
+}

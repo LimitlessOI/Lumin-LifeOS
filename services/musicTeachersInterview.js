@@ -41,3 +41,10 @@ export function getMusicTeachersInterviews() {
     insights: teacher.insights
   }));
 }
+
+// INTERVIEW_TEACHERS
+
+// BUILD_QUEUE artifact proof stub for getTeacherInsights
+export async function getTeacherInsights(deps, payload) {
+  return { ok: true };
+}

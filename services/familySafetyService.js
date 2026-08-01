@@ -1,4 +1,5 @@
 /**
+ * @ssot docs/products/faith-studio/PRODUCT_HOME.md
  * SYNOPSIS: Exports applyFamilySafetyFilters — services/familySafetyService.js.
  */
 export function applyFamilySafetyFilters(content, safetyMode = 'family') {
@@ -51,3 +52,4 @@ export function applyFamilySafetyFilters(content, safetyMode = 'family') {
 
   return filteredContent;
 }
+// Family safety modes

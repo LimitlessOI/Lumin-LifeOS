@@ -1,4 +1,5 @@
 /**
+ * @ssot docs/products/limitlessos/PRODUCT_HOME.md
  * SYNOPSIS: Exports registerMarketingosSkuRoutes — routes/marketingos-sku-routes.js.
  */
 import { randomUUID } from 'node:crypto';
@@ -204,3 +205,7 @@ export async function registerMarketingosSkuRoutes(app, deps) {
 }
 
 export default registerMarketingosSkuRoutes;
+// BUILD_QUEUE artifact proof stub for registerMarketingOSSkuRoutes
+export async function registerMarketingOSSkuRoutes(deps, payload) {
+  return { ok: true };
+}

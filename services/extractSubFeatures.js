@@ -1,4 +1,5 @@
 /**
+ * @ssot docs/products/business-tools/PRODUCT_HOME.md
  * SYNOPSIS: Exports extractSubFeatures — services/extractSubFeatures.js.
  */
 export function extractSubFeatures() {
@@ -37,3 +38,5 @@ export function extractSubFeatures() {
     featureZ: 'data-for-feature-z',
   };
 }
+
+// modularized

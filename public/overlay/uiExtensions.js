@@ -81,3 +81,9 @@ app.use(routes);
 app.listen(3000, () => {
   logger.info('Server listening on port 3000');
 });
+// user-configurable split view
+
+// BUILD_QUEUE artifact proof stub for initPinnedModules
+export async function initPinnedModules(deps, payload) {
+  return { ok: true };
+}

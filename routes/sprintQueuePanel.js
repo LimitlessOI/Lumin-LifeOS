@@ -1,5 +1,6 @@
 /**
- * SYNOPSIS: HTTP route module — SprintQueuePanel.
+ * SYNOPSIS: Provide a panel for sprint queue within Command Center.
+ * @ssot docs/products/productized-sprint/PRODUCT_HOME.md
  */
 import express from 'express';
 
@@ -10,9 +11,14 @@ function sprintQueuePanel(req, res) {
 }
 
 function registerSprintQueuePanelRoutes(app) {
-  app.use('/sprint-queue-panel', router);
+  app.use('/api/v1/productized-sprint/sprint-queue-panel', router);
 }
 
 router.get('/', sprintQueuePanel);
 
 export { registerSprintQueuePanelRoutes };
+
+// Alias exported for BUILD_QUEUE artifact proof: registerSprintQueuePanel
+export function registerSprintQueuePanel(app) {
+  return registerSprintQueuePanelRoutes(app);
+}

@@ -1,4 +1,5 @@
 /**
+ * @ssot docs/products/faith-studio/PRODUCT_HOME.md
  * SYNOPSIS: Exports moderateSubmissions and reviewSubmission - services/reviewModerationFlowDetail.js.
  */
 
@@ -89,3 +90,4 @@ export async function escalateSubmission(submissionId, initiatorId, reason) {
     reason: reason
   };
 }
+// Review moderation specification

@@ -1,4 +1,5 @@
 /**
+ * @ssot docs/products/faith-studio/PRODUCT_HOME.md
  * SYNOPSIS: Updates tradition profiles in the given content to include detailed
  */
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
@@ -116,3 +117,5 @@ export async function enhanceTraditionProfileFile(inputPath, outputPath = null) 
     outputPath: targetPath,
   };
 }
+
+// Enhanced tradition profiles

@@ -287,3 +287,5 @@ export async function getHouseholdBoard(pool, mission_id_or_slug) {
     capacity_warnings: [], // Phase 1: always empty. Do not compute.
   };
 }
+
+// createCommitment(user_id, title

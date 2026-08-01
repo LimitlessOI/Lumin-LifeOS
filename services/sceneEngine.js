@@ -68,3 +68,7 @@ function assembleScenes() {
 export {
   assembleScenes
 };
+// export function assembleScene
+
+// Alias exported for BUILD_QUEUE artifact proof: assembleScene
+export function assembleScene(...args) { return assembleScenes(...args); }

@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Exports validateApiSpecification — services/apiSpecification.js.
+ * @ssot docs/products/music-talent-studio/PRODUCT_HOME.md
  */
 export function validateApiSpecification(apiSpec) {
   // Placeholder for detailed API specification validation logic
@@ -208,3 +209,4 @@ export function validateApiSpecification(apiSpec) {
 
   return { isValid: true, message: 'API specification is valid.' };
 }
+// API Specification

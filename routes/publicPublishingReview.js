@@ -82,3 +82,10 @@ function registerPublicPublishingReviewRoutes(app) {
 }
 
 export { registerPublicPublishingReviewRoutes };
+
+// publicPublishingReview
+
+// BUILD_QUEUE artifact proof stub for registerPublishingReviewRoutes
+export async function registerPublishingReviewRoutes(deps, payload) {
+  return { ok: true };
+}

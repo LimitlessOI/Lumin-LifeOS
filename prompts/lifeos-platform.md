@@ -93,3 +93,5 @@ This is NOT a feature domain. It is the operating system that features run on.
 2. Add SQL validation gate for `.sql` files before builder commits them
 3. Add HTML validation (basic structure check) for `.html` files
 4. Wire `npm run memory:ci-evidence` into `.github/workflows/smoke-test.yml`
+
+// memory-intelligence

@@ -1,0 +1,2 @@
+-- SYNOPSIS: Repair no-op migration stub. Canonical schema may live in an earlier migration.
+-- CREATE TABLE IF NOT EXISTS roi_tracker

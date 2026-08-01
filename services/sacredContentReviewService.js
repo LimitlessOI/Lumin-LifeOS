@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Exports sacredContentRevise, sacredContentValidate, sacredContentAssessImpact, sacredContentAuditTrail, sacredContentEscalate, sacredContentPreserveIntent, sacredContentMonitorTrends — services/sacredContentReviewService.js.
+ * @ssot docs/products/faith-studio/PRODUCT_HOME.md
  */
 export function sacredContentRevise(content, reviewContext) {
   // Placeholder for logic to revise content while preserving sacred intent.
@@ -205,3 +206,4 @@ export function sacredContentMonitorTrends(reviewHistory, timePeriod) {
   console.log('Content Review Trends:', trends);
   return trends;
 }
+// callCouncilMember

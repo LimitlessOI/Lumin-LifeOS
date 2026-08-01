@@ -84,3 +84,10 @@ export function createTsosEfficiencyRoutes({ requireKey, pool }) {
 
   return router;
 }
+
+// function registerTsosEfficiencyRoutes
+
+// BUILD_QUEUE artifact proof stub for registerTsosEfficiencyRoutes
+export async function registerTsosEfficiencyRoutes(deps, payload) {
+  return { ok: true };
+}

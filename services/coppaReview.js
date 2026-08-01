@@ -1,4 +1,5 @@
 /**
+ * @ssot docs/products/kids-os/PRODUCT_HOME.md
  * SYNOPSIS: Service module — CoppaReview.
  */
 const getCoppaReview = () => {
@@ -34,3 +35,4 @@ export {
   getCoppaReview,
   summarizeCoppaReview
 };
+// /** COPPA compliance review results */

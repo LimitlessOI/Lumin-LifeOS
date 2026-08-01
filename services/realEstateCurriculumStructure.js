@@ -1,4 +1,5 @@
 /**
+ * @ssot docs/products/business-tools/PRODUCT_HOME.md
  * SYNOPSIS: Exports getCurriculumModules, getStudentSchema — services/realEstateCurriculumStructure.js.
  */
 export function getCurriculumModules() {
@@ -179,3 +180,5 @@ export function getStudentSchema() {
     completionDate: { type: Date },
   };
 }
+// modules
+// DB schema

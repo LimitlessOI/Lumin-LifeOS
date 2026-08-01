@@ -97,3 +97,5 @@ test('getModuleHealth returns a serializable manifest', async () => {
   assert.ok(typeof health.generated_at === 'string');
   assert.doesNotThrow(() => JSON.stringify(health));
 });
+
+// TMPDIR

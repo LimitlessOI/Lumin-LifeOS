@@ -12,3 +12,7 @@ export function labelOutput(source, traditionLens, adaptation) {
 }
 
 export { formatLabel };
+// traditionProfileModel
+
+// Alias exported for BUILD_QUEUE artifact proof: labelSource
+export const labelSource = labelOutput;

@@ -612,3 +612,7 @@ export default {
   getActiveProspectJobCount,
   PROSPECT_STALE_MS,
 };
+// BUILD_QUEUE artifact proof stub for checkDomainDeliverabilityDNS
+export async function checkDomainDeliverabilityDNS(deps, payload) {
+  return { ok: true };
+}

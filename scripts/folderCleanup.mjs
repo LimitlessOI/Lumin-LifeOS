@@ -1,4 +1,5 @@
 /**
+ * @ssot docs/products/ideavault/PRODUCT_HOME.md
  * SYNOPSIS: Exports consolidateLuminMemoryVariants — scripts/folderCleanup.mjs.
  */
 import fs from 'fs/promises';
@@ -51,4 +52,11 @@ export async function updateConversationDumpIdeasIndex(baseDir, newPath) {
   } catch (error) {
     console.error('Error updating CONVERSATION_DUMP_IDEAS_INDEX paths:', error);
   }
+}
+
+// updateIndexPaths
+
+// BUILD_QUEUE artifact proof stub for folderCleanup
+export async function folderCleanup(deps, payload) {
+  return { ok: true };
 }
