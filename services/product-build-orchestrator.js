@@ -227,12 +227,12 @@ export async function evaluateStepExpectations(step, {
 
   const defaultImportModule = async (rel) => {
     const relPath = String(rel || target).replace(/\\/g, '/');
+    // When a commit_sha is being proven, do NOT trust the local checkout: the
+    // container may lag origin/main by many queue-status commits and hold a stale
+    // or unrelated version of the file. Always read from the proven commit and
+    // import a temp file so artifact proof evaluates the built artifact, not disk.
     const abs = path.join(root, relPath);
-    // If the commit is on disk, import directly. Otherwise read the file content
-    // from the proven commit (or GitHub Contents fallback) into a temp file and
-    // import from there — without this, artifact proof fails for freshly-built
-    // commits that have not yet been checked out/merged into the local workspace.
-    if (fs.existsSync(abs)) {
+    if (!commitSha && fs.existsSync(abs)) {
       try {
         return await import(pathToFileURL(abs).href);
       } catch { /* fall through to temp-file import */ }

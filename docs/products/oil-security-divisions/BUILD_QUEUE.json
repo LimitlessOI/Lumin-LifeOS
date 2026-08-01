@@ -663,13 +663,14 @@
     },
     {
       "id": "4",
-      "status": "pending",
+      "status": "skipped",
       "target_file": "services/securityAuditService.js",
       "task": "create security audit service",
       "spec": "Implement the OIL preset `security-audit` to output structured findings.",
+      "skip_reason": "superseded by sec-f07; same target_file ships as `performSecurityAudit` via commit 5d4514356",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "performSecurityAudit"
       ],
@@ -683,13 +684,13 @@
           "assertion_id": "expected_exports:services/securityAuditService.js"
         }
       ],
-      "last_attempt_at": "2026-08-01T01:47:41.221Z",
-      "last_error": "artifact_proof_failed: missing_exports:performSecurityAudit",
+      "last_attempt_at": null,
+      "last_error": null,
       "commit_sha": "5d4514356fb99781da6e620d9fd65df41a9f2016",
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-08-01T01:47:41.221Z",
+      "revive_count": 0,
+      "revived_at": null,
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1242,28 +1243,26 @@
       "status": "done",
       "target_file": "services/securityAuditService.js",
       "task": "implement security audit preset",
-      "spec": "Add OIL preset for security audits with structured output for findings.",
+      "spec": "Add OIL preset for security audits with structured output for findings; current canonical artifact exports `performSecurityAudit`.",
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
-        "runSecurityAudit",
-        "getStructuredFindings"
+        "performSecurityAudit"
       ],
       "behavior_assertions": [
         {
           "type": "exports_smoke",
           "path": "services/securityAuditService.js",
           "exports": [
-            "runSecurityAudit",
-            "getStructuredFindings"
+            "performSecurityAudit"
           ],
           "assertion_id": "expected_exports:services/securityAuditService.js"
         }
       ],
       "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": "393c3224530fe77fc2f4060870386859ad19a0b4",
+      "commit_sha": "5d4514356fb99781da6e620d9fd65df41a9f2016",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,

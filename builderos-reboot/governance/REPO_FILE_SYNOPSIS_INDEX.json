@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T01:47:51.625Z",
+  "generated_at": "2026-08-01T01:51:14.197Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12654,
   "files": [
@@ -38895,9 +38895,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 82888,
-      "mtime": "2026-08-01T01:41:57.291Z",
-      "indexed_at": "2026-08-01T01:41:57.291Z"
+      "bytes": 83278,
+      "mtime": "2026-08-01T01:51:14.197Z",
+      "indexed_at": "2026-08-01T01:51:14.197Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41108,9 +41108,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 368560,
-      "mtime": "2026-08-01T00:43:18.946Z",
-      "indexed_at": "2026-08-01T00:43:18.946Z"
+      "bytes": 369602,
+      "mtime": "2026-08-01T01:51:14.197Z",
+      "indexed_at": "2026-08-01T01:51:14.197Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -93571,9 +93571,9 @@
     {
       "path": "services/product-build-orchestrator.js",
       "synopsis": "General product-build orchestrator — turns a product's structured",
-      "bytes": 36381,
-      "mtime": "2026-08-01T01:21:50.595Z",
-      "indexed_at": "2026-08-01T01:21:50.595Z",
+      "bytes": 36393,
+      "mtime": "2026-08-01T01:51:14.197Z",
+      "indexed_at": "2026-08-01T01:51:14.197Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
