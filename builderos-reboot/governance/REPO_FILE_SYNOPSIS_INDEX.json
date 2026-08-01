@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T10:54:52.477Z",
+  "generated_at": "2026-08-01T10:56:40.338Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -30844,9 +30844,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 36802,
-      "mtime": "2026-08-01T10:48:26.136Z",
-      "indexed_at": "2026-08-01T10:49:00.602Z",
+      "bytes": 37067,
+      "mtime": "2026-08-01T10:56:20.772Z",
+      "indexed_at": "2026-08-01T10:56:40.338Z",
       "synopsis_index_only": true
     },
     {
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1757,
-      "mtime": "2026-08-01T10:52:15.048Z",
-      "indexed_at": "2026-08-01T10:52:44.074Z",
+      "bytes": 1803,
+      "mtime": "2026-08-01T10:56:06.288Z",
+      "indexed_at": "2026-08-01T10:56:40.338Z",
       "synopsis_index_only": true
     },
     {
@@ -42535,9 +42535,9 @@
     {
       "path": "docs/products/project-governance/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Project Governance",
-      "bytes": 71090,
-      "mtime": "2026-08-01T10:54:38.216Z",
-      "indexed_at": "2026-08-01T10:54:52.477Z"
+      "bytes": 71925,
+      "mtime": "2026-08-01T10:56:27.396Z",
+      "indexed_at": "2026-08-01T10:56:40.338Z"
     },
     {
       "path": "docs/products/project-governance/READINESS_CHECKLIST.md",
@@ -69433,10 +69433,13 @@
     },
     {
       "path": "routes/competitorInfo.js",
-      "synopsis": "Registers CompetitorRoutes routes/handlers (routes/competitorInfo.js).",
-      "bytes": 467,
-      "mtime": "2026-07-15T10:11:45.116Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "synopsis": "HTTP route module — Competitor Info.",
+      "bytes": 372,
+      "mtime": "2026-08-01T10:56:15.172Z",
+      "indexed_at": "2026-08-01T10:56:40.338Z",
+      "ssot": [
+        "docs/products/project-governance/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/confidence-architecture-routes.js",

@@ -773,6 +773,13 @@
       "mount_path": "/api/v1/project",
       "enabled": true,
       "note": "Project Governance drawer detail route auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/competitorInfo.js",
+      "register": "registerCompetitorRoutes",
+      "mount_path": "/api/v1/competitors",
+      "enabled": true,
+      "note": "Project Governance competitor info route auto-registered for module-health proof."
     }
   ]
 }
