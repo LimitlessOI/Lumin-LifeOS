@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T11:34:33.135Z",
+  "generated_at": "2026-08-01T11:34:49.770Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3840324,
-      "mtime": "2026-08-01T11:16:06.936Z",
-      "indexed_at": "2026-08-01T11:16:11.044Z"
+      "bytes": 3840699,
+      "mtime": "2026-08-01T11:34:38.880Z",
+      "indexed_at": "2026-08-01T11:34:49.770Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -41164,9 +41164,9 @@
     {
       "path": "docs/products/builderos/GAP_FILL_LEDGER.json",
       "synopsis": "Documentation — GAP FILL LEDGER.",
-      "bytes": 46828,
-      "mtime": "2026-08-01T11:16:11.340Z",
-      "indexed_at": "2026-08-01T11:22:54.579Z",
+      "bytes": 47290,
+      "mtime": "2026-08-01T11:31:35.691Z",
+      "indexed_at": "2026-08-01T11:31:55.059Z",
       "synopsis_index_only": true
     },
     {
@@ -41692,9 +41692,9 @@
     {
       "path": "docs/products/faith-studio/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Faith Studio",
-      "bytes": 13995,
-      "mtime": "2026-08-01T11:29:17.716Z",
-      "indexed_at": "2026-08-01T11:29:28.842Z"
+      "bytes": 15144,
+      "mtime": "2026-08-01T11:31:21.647Z",
+      "indexed_at": "2026-08-01T11:31:35.012Z"
     },
     {
       "path": "docs/products/FAITHSTUDIO.md",
@@ -94574,10 +94574,10 @@
     },
     {
       "path": "services/safeOutputService.js",
-      "synopsis": "safeOutput filter helpers for family/church/classroom-safe content.",
-      "bytes": 821,
-      "mtime": "2026-08-01T11:29:12.144Z",
-      "indexed_at": "2026-08-01T11:29:28.842Z",
+      "synopsis": "safeOutput filter helpers — implements family/church/classroom-safe",
+      "bytes": 2370,
+      "mtime": "2026-08-01T11:31:00.435Z",
+      "indexed_at": "2026-08-01T11:31:35.012Z",
       "ssot": [
         "docs/products/faith-studio/PRODUCT_HOME.md"
       ]
