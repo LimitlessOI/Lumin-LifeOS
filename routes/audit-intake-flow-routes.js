@@ -3,9 +3,9 @@
  * @ssot docs/products/limitlessos/PRODUCT_HOME.md
  */
 export function registerAuditIntakeFlowRoutes(app, deps) {
-    app.get('/audit-intake-flow/questions', (req, res) => {
-        // Logic to retrieve and send audit intake flow questions
-        const questions = getAuditIntakeFlowQuestions(); // hypothetical function
+    // intake questions endpoint
+    app.post('/api/v1/intake/flow/audit', (req, res) => {
+        const questions = getAuditIntakeFlowQuestions();
         res.json(questions);
     });
 
