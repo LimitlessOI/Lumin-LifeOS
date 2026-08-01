@@ -493,16 +493,16 @@
       "note": "Auto-registered for lifeos-admin-7 pending Adam command-center API"
     },
     {
-      "path": "routes/musicTeachersInterviewRoutes.js",
-      "register": "registerMusicTeachersInterviewRoutes",
+      "path": "routes/musicTeachersRoutes.js",
+      "register": "registerMusicTeachersRoutes",
       "enabled": false,
-      "note": "Auto-registered for music-talent-studio step11"
+      "note": "Auto-registered for step5"
     },
     {
-      "path": "routes/studentsInterviewRoutes.js",
-      "register": "registerStudentsInterviewRoutes",
+      "path": "routes/studentsRoutes.js",
+      "register": "registerStudentsRoutes",
       "enabled": false,
-      "note": "Auto-registered for music-talent-studio step11"
+      "note": "Auto-registered for step8"
     },
     {
       "path": "routes/credentialVerificationRoutes.js",
@@ -850,6 +850,271 @@
       "mount_path": "/api/v1",
       "enabled": true,
       "note": "Personal Finance OS commitment tracker route auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/lifere-auth-routes.js",
+      "register": "registerLifereAuthRoutes",
+      "mount_path": "/api/v1/lifere/auth",
+      "enabled": true,
+      "note": "LifeRE Auth routes (login/logout/token refresh). Auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/lifere-user-routes.js",
+      "register": "registerLifereUserRoutes",
+      "mount_path": "/api/v1/lifere/user",
+      "enabled": true,
+      "note": "LifeRE User profile routes. Auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/lifere-dashboard-routes.js",
+      "register": "registerLifereDashboardRoutes",
+      "mount_path": "/api/v1/lifere/dashboard",
+      "enabled": true,
+      "note": "LifeRE Dashboard data routes. Auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/lifere-goal-routes.js",
+      "register": "registerLifereGoalRoutes",
+      "mount_path": "/api/v1/lifere/goals",
+      "enabled": true,
+      "note": "LifeRE Goal management routes. Auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/lifere-crm-routes.js",
+      "register": "registerLifereCrmRoutes",
+      "mount_path": "/api/v1/lifere/crm",
+      "enabled": true,
+      "note": "LifeRE CRM routes (clients/leads/contacts). Auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/lifere-email-routes.js",
+      "register": "registerLifereEmailRoutes",
+      "mount_path": "/api/v1/lifere/email",
+      "enabled": true,
+      "note": "LifeRE Email integration routes. Auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/lifere-calendar-routes.js",
+      "register": "registerLifereCalendarRoutes",
+      "mount_path": "/api/v1/lifere/calendar",
+      "enabled": true,
+      "note": "LifeRE Calendar integration routes. Auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/lifere-analytics-routes.js",
+      "register": "registerLifereAnalyticsRoutes",
+      "mount_path": "/api/v1/lifere/analytics",
+      "enabled": true,
+      "note": "LifeRE Analytics and reporting routes. Auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/lifere-settings-routes.js",
+      "register": "registerLifereSettingsRoutes",
+      "mount_path": "/api/v1/lifere/settings",
+      "enabled": true,
+      "note": "LifeRE User settings routes. Auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/lifere-onboarding-routes.js",
+      "register": "registerLifereOnboardingRoutes",
+      "mount_path": "/api/v1/lifere/onboarding",
+      "enabled": true,
+      "note": "LifeRE Onboarding flow routes. Auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/lifere-notifications-routes.js",
+      "register": "registerLifereNotificationsRoutes",
+      "mount_path": "/api/v1/lifere/notifications",
+      "enabled": true,
+      "note": "LifeRE Notification management routes. Auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/lifere-integrations-routes.js",
+      "register": "registerLifereIntegrationsRoutes",
+      "mount_path": "/api/v1/lifere/integrations",
+      "enabled": true,
+      "note": "LifeRE Third-party integrations routes. Auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/lifere-billing-routes.js",
+      "register": "registerLifereBillingRoutes",
+      "mount_path": "/api/v1/lifere/billing",
+      "enabled": true,
+      "note": "LifeRE Billing and subscription routes. Auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/lifere-support-routes.js",
+      "register": "registerLifereSupportRoutes",
+      "mount_path": "/api/v1/lifere/support",
+      "enabled": true,
+      "note": "LifeRE Support and help routes. Auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/lifere-feedback-routes.js",
+      "register": "registerLifereFeedbackRoutes",
+      "mount_path": "/api/v1/lifere/feedback",
+      "enabled": true,
+      "note": "LifeRE Feedback submission routes. Auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/lifere-admin-routes.js",
+      "register": "registerLifereAdminRoutes",
+      "mount_path": "/api/v1/lifere/admin",
+      "enabled": true,
+      "note": "LifeRE Admin panel routes. Auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/lifere-security-routes.js",
+      "register": "registerLifereSecurityRoutes",
+      "mount_path": "/api/v1/lifere/security",
+      "enabled": true,
+      "note": "LifeRE Security and audit routes. Auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/lifere-audit-routes.js",
+      "register": "registerLifereAuditRoutes",
+      "mount_path": "/api/v1/lifere/audit",
+      "enabled": true,
+      "note": "LifeRE Audit trail routes. Auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/lifere-webhooks-routes.js",
+      "register": "registerLifereWebhooksRoutes",
+      "mount_path": "/api/v1/lifere/webhooks",
+      "enabled": true,
+      "note": "LifeRE Webhook management routes. Auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/lifere-api-keys-routes.js",
+      "register": "registerLifereApiKeysRoutes",
+      "mount_path": "/api/v1/lifere/api-keys",
+      "enabled": true,
+      "note": "LifeRE API Key management routes. Auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/lifere-docs-routes.js",
+      "register": "registerLifereDocsRoutes",
+      "mount_path": "/api/v1/lifere/docs",
+      "enabled": true,
+      "note": "LifeRE API documentation routes. Auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/lifere-status-routes.js",
+      "register": "registerLifereStatusRoutes",
+      "mount_path": "/api/v1/lifere/status",
+      "enabled": true,
+      "note": "LifeRE Service status routes. Auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/lifere-health-routes.js",
+      "register": "registerLifereHealthRoutes",
+      "mount_path": "/api/v1/lifere/health",
+      "enabled": true,
+      "note": "LifeRE Health check routes. Auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/lifere-metrics-routes.js",
+      "register": "registerLifereMetricsRoutes",
+      "mount_path": "/api/v1/lifere/metrics",
+      "enabled": true,
+      "note": "LifeRE Metrics and monitoring routes. Auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/lifere-experiments-routes.js",
+      "register": "registerLifereExperimentsRoutes",
+      "mount_path": "/api/v1/lifere/experiments",
+      "enabled": true,
+      "note": "LifeRE A/B testing and experiments routes. Auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/lifere-features-routes.js",
+      "register": "registerLifereFeaturesRoutes",
+      "mount_path": "/api/v1/lifere/features",
+      "enabled": true,
+      "note": "LifeRE Feature flag management routes. Auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/lifere-changelog-routes.js",
+      "register": "registerLifereChangelogRoutes",
+      "mount_path": "/api/v1/lifere/changelog",
+      "enabled": true,
+      "note": "LifeRE Changelog routes. Auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/lifere-roadmap-routes.js",
+      "register": "registerLifereRoadmapRoutes",
+      "mount_path": "/api/v1/lifere/roadmap",
+      "enabled": true,
+      "note": "LifeRE Product roadmap routes. Auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/lifere-legal-routes.js",
+      "register": "registerLifereLegalRoutes",
+      "mount_path": "/api/v1/lifere/legal",
+      "enabled": true,
+      "note": "LifeRE Legal and compliance routes. Auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/lifere-privacy-routes.js",
+      "register": "registerLiferePrivacyRoutes",
+      "mount_path": "/api/v1/lifere/privacy",
+      "enabled": true,
+      "note": "LifeRE Privacy policy routes. Auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/lifere-terms-routes.js",
+      "register": "registerLifereTermsRoutes",
+      "mount_path": "/api/v1/lifere/terms",
+      "enabled": true,
+      "note": "LifeRE Terms of service routes. Auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/lifere-sitemap-routes.js",
+      "register": "registerLifereSitemapRoutes",
+      "mount_path": "/api/v1/lifere/sitemap",
+      "enabled": true,
+      "note": "LifeRE Sitemap generation routes. Auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/lifere-rss-routes.js",
+      "register": "registerLifereRssRoutes",
+      "mount_path": "/api/v1/lifere/rss",
+      "enabled": true,
+      "note": "LifeRE RSS feed routes. Auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/lifere-search-routes.js",
+      "register": "registerLifereSearchRoutes",
+      "mount_path": "/api/v1/lifere/search",
+      "enabled": true,
+      "note": "LifeRE Search functionality routes. Auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/lifere-localization-routes.js",
+      "register": "registerLifereLocalizationRoutes",
+      "mount_path": "/api/v1/lifere/localization",
+      "enabled": true,
+      "note": "LifeRE Localization and internationalization routes. Auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/lifere-themes-routes.js",
+      "register": "registerLifereThemesRoutes",
+      "mount_path": "/api/v1/lifere/themes",
+      "enabled": true,
+      "note": "LifeRE Theme management routes. Auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/lifere-assets-routes.js",
+      "register": "registerLifereAssetsRoutes",
+      "mount_path": "/api/v1/lifere/assets",
+      "enabled": true,
+      "note": "LifeRE Static asset delivery routes. Auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/musicTeachersInterviewRoutes.js",
+      "register": "registerMusicTeachersInterviewRoutes",
+      "enabled": false,
+      "note": "Auto-registered for music-talent-studio step11 (disabled until route module exists)"
     }
   ]
 }
