@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T10:40:30.035Z",
+  "generated_at": "2026-08-01T10:43:29.210Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -89851,10 +89851,13 @@
     },
     {
       "path": "services/decisionDebt.js",
-      "synopsis": "Exports getDecisionDebt — services/decisionDebt.js.",
-      "bytes": 638,
-      "mtime": "2026-07-15T08:32:59.623Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "synopsis": "Provides decision debt details for projects.",
+      "bytes": 2418,
+      "mtime": "2026-08-01T10:43:29.210Z",
+      "indexed_at": "2026-08-01T10:43:29.210Z",
+      "ssot": [
+        "docs/products/project-governance/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/defi/lending-service/db/schema.sql",
