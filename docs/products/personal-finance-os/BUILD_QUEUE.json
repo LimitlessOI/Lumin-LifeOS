@@ -272,7 +272,7 @@
     },
     {
       "id": "step2",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/ipsReview.js",
       "task": "implement attorney review for IPS module",
       "spec": "Check IPS module for RIA trigger risk and implement review service.",
@@ -300,7 +300,10 @@
       "commit_sha": "f98351a45e5bb3384189f24c5b14dae53929a09d",
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step2",
-      "mission_id": "PRODUCT-personal-finance-os"
+      "mission_id": "PRODUCT-personal-finance-os",
+      "last_error": "artifact_proof_failed: @ssot",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "step3",
@@ -457,7 +460,7 @@
     },
     {
       "id": "8",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/emotionalIntelligence.js",
       "task": "integrate-joy-and-wearable-data",
       "spec": "Provide services for integrating emotional intelligence signals (joy_score_log, wearable_data), enabling correlation analyses.",
@@ -491,7 +494,10 @@
       "commit_sha": "f9236de35a6b25eaaba81827a3dd9e25628a1236",
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "8",
-      "mission_id": "PRODUCT-personal-finance-os"
+      "mission_id": "PRODUCT-personal-finance-os",
+      "last_error": "artifact_proof_failed: joyScoreLog; wearableDataCorrelation",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "personal-finance-os-1",
@@ -768,7 +774,7 @@
     },
     {
       "id": "personal-finance-os-step1",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/ipsReview.js",
       "task": "Add attorney review process",
       "spec": "Enhance IPS review route to support attorney RIA trigger risk evaluation.",
@@ -800,7 +806,10 @@
       "commit_sha": "ba9f97713c86957c604734270c880fcfbbcaf0d0",
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "personal-finance-os-step1",
-      "mission_id": "PRODUCT-personal-finance-os"
+      "mission_id": "PRODUCT-personal-finance-os",
+      "last_error": "artifact_proof_failed: attorney review RIA",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "personal-finance-os-step2",
@@ -913,7 +922,7 @@
     },
     {
       "id": "personal-finance-os-step6",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/dreamFunding.js",
       "task": "Operationalize Dream Funding",
       "spec": "Ensure Dream Funding service logic supports all operational features.",
@@ -941,11 +950,14 @@
       "commit_sha": "ffadc6460ba976a2f0252a50ba3e50795c885645",
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "personal-finance-os-step6",
-      "mission_id": "PRODUCT-personal-finance-os"
+      "mission_id": "PRODUCT-personal-finance-os",
+      "last_error": "artifact_proof_failed: activate Dream Funding",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "personal-finance-os-step7",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/commitmentTracker.js",
       "task": "Make Commitment Tracker operational",
       "spec": "Set up Commitment Tracker Phase 1 route handlers to become functional.",
@@ -973,7 +985,7 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "artifact_proof_failed: commitment tracking phase 1",
       "commit_sha": "2f70d64845605515c1246fd9527d454b06923d2e",
       "built_sha": null,
       "proof": null,
@@ -994,11 +1006,12 @@
       "shipped_at": "2026-07-16T06:02:06.573Z",
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "personal-finance-os-step7",
-      "mission_id": "PRODUCT-personal-finance-os"
+      "mission_id": "PRODUCT-personal-finance-os",
+      "heal_unblocked": true
     },
     {
       "id": "personal-finance-os-step8",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/emotionalIntelligence.js",
       "task": "Enable emotional signal correlation",
       "spec": "Update emotional intelligence service to correlate joy score with wearable data.",
@@ -1027,7 +1040,10 @@
       "commit_sha": "6813049cb0c3bac5d1e773cb71f5479aaa7ebcc6",
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "personal-finance-os-step8",
-      "mission_id": "PRODUCT-personal-finance-os"
+      "mission_id": "PRODUCT-personal-finance-os",
+      "last_error": "artifact_proof_failed: joy score; wearable data correlation",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "personal-finance-os-8",
@@ -1067,5 +1083,5 @@
   "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-personal-finance-os",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:22:06.789Z"
+  "updated_at": "2026-08-01T06:30:46.897Z"
 }
