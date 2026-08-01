@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/command-center/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-14 — Deprecated as a standalone product; its admin controls (runtime mode, phase14 cert, pending Adam) are now `lifeos-admin-*` steps in `docs/products/lifeos/BUILD_QUEUE.json`. `docs/products/command-center/BUILD_QUEUE.json` is empty. `docs/products/PRODUCT_BUILD_PRIORITY.json` no longer lists `command-center`. |
+| **Last Updated** | 2026-08-01 — CRITICAL: `src/server/auth/requireKey.js` JWT fallback restricted to operator-grade roles (`founder_admin`/`operator`/`admin`); member JWT must not unlock operator routes. |
 
 ---
 > **PLATFORM SPEC:** `docs/products/PLATFORM.md §C2` — current state, files, endpoints, traps (built for AI readers).
@@ -28,7 +28,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-07-14 — Deprecated as a standalone product; its admin controls (runtime mode, phase14 cert, pending Adam) are now `lifeos-admin-*` steps in `docs/products/lifeos/BUILD_QUEUE.json`. `docs/products/command-center/BUILD_QUEUE.json` is empty. `docs/products/PRODUCT_BUILD_PRIORITY.json` no longer lists `command-center`. |
+| **Last Updated** | 2026-08-01 — CRITICAL: `requireKey` JWT role gate restored (member JWT → 403 on operator routes). |
 | **Verification Command** | `node scripts/verify-project.mjs --project command_center` |
 | **Manifest** | `docs/products/command-center/FILE_MANIFEST.json` |
 
@@ -309,6 +309,7 @@ node --check public/overlay/command-center.js
 
 ## Change Receipts
 
+| 2026-08-01 | **CRITICAL SECURITY: restore `requireKey` operator JWT role gate.** `src/server/auth/requireKey.js` now rejects non-operator LifeOS account JWTs with 403 (`Operator access required`) while still accepting command keys and `founder_admin`/`operator`/`admin` JWTs. Regression: `tests/require-key-operator-jwt.test.js` wired into `npm test`. | Tip still allowed any valid member JWT through `requireKey`, elevating ordinary logins onto builder/Railway/operator routes. Prior fixes in #367/#370/#371/#372/#373/#374 never merged. | `node --test tests/require-key-operator-jwt.test.js` PASS |
 | 2026-08-02 | **Creative Director review** — generated CREATIVE_BRIEF.md using the Creative Director lens. | Command Center reviewed through the BuilderOS creative responsibility; brief written to product home for founder review. | ✅ generated |
 | 2026-07-14 | **Deprecated as a standalone product.** Adam: LifeOS is the command center. Admin controls (runtime mode, phase14 cert, pending Adam) are folded into `docs/products/lifeos/BUILD_QUEUE.json` as `lifeos-admin-*` steps. `docs/products/command-center/BUILD_QUEUE.json` is emptied and `status` set to `deprecated`; `docs/products/PRODUCT_BUILD_PRIORITY.json` no longer lists `command-center`. | Adam: Command Center is not a separate product; it is the LifeOS admin command surface. | `node --check` changed JS files, `npm run builder:preflight`, `npm run verify:ci`, `npm run lifeos:bp-priority:verify`, `npm run factory:ci`. | redeploy + force BuilderOS tick + verify `GET /api/v1/lifeos/never-stop/status` `governed_status` increments and `GET /api/v1/lifeos/command-center/mode` returns 200. |
 | 2026-07-12 | **`BUILD_QUEUE.json` `s3` migration & parking fix + `s5` shipped.** `db/migrations/20260601_builder_runtime_config.sql` now enables `pgcrypto`, uses `id text PRIMARY KEY` (was `uuid` causing the string sentinel `builder_runtime_config_singleton` to fail), and seeds a default row; `s3` is parked until 2026-07-15; `services/governed-autonomous-shipping-loop.js` now records SENTRY/governed failures back to `BUILD_QUEUE` and uses `x-command-key` for `factory/ship-queue` (was `x-api-key` causing `401`). `s5` (`routes/phase14-cert-routes.js`) is now `done` and `GET /api/v1/builder/cert/phase14` returns 200. `services/never-stop-product-factory.js` `mergeQueueRuntimeStatus` preserves repo `done` steps from stale in-memory `pending` snapshots. The `s3` `last_error` was stale `route module not auto-registered` while the route was already registered and the actual failure was `GET /api/v1/lifeos/command-center/mode` returning 500. | Adam: the builder must follow the blueprint and never stop; the factory must expose real failure reasons, not `codegen_empty`/`autoReg` theatre, must not downgrade shipped `done` steps, and must not burn tokens re-attempting a DB-root or auth failure. | `node --check` changed JS files, `npm run builder:preflight`, `npm run verify:ci`, `npm run lifeos:bp-priority:verify`, `npm run factory:ci` | push + redeploy + force BuilderOS tick |

@@ -11,11 +11,11 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lumin-university/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-29 |
+| **Last Updated** | 2026-08-01 — CRITICAL: gate `GET /student-interview-analytics/:id` with `requireKey` (was unauthenticated IDOR over `lumin_programming_jobs`). |
 
 ---
 **Status:** Candidate — Long-Range Specification Phase
-**Last Updated:** 2026-07-29
+**Last Updated:** 2026-08-01
 **Priority:** High (long-arc mission capstone, builds on Kids OS foundation)
 **Category:** Education / Accredited Institution / Constitutional Mission
 **Parent Documents:**
@@ -329,6 +329,7 @@ CREATE TABLE lumin_university_mentors (
 
 ## Change Receipts
 
+| 2026-08-01 | **CRITICAL SECURITY: require auth on student interview analytics.** `routes/studentInterviewAnalyticsRoutes.js` now requires `deps.requireKey` and mounts `GET /student-interview-analytics/:id` behind it. | Auto-registered route returned full `lumin_programming_jobs` rows by enumerable id with no auth. | `node --check routes/studentInterviewAnalyticsRoutes.js` PASS |
 | 2026-08-02 | **Creative Director review** — generated CREATIVE_BRIEF.md using the Creative Director lens. | Lumin University reviewed through the BuilderOS creative responsibility; brief written to product home for founder review. | ✅ generated |
 | Date | Change |
 |---|---|
