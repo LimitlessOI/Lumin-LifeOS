@@ -4,7 +4,7 @@
   "verify_script": null,
   "planned_at": "2026-07-12T03:40:00.000Z",
   "notes": "Module 4 Therapist Integration beachhead — Clinical Partnership. Consent-gated briefs; therapist account lists linked clients who granted therapist_share. LifeOS consent foundation is a dependency.",
-  "updated_at": "2026-08-01T10:25:24.412Z",
+  "updated_at": "2026-08-01T10:25:40.885Z",
   "steps": [
     {
       "id": "ws-therapist-schema",
@@ -1733,7 +1733,7 @@
     },
     {
       "id": "wellness-studio-step9",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20260724_lifeos_core_stable.sql",
       "task": "verify_stability",
       "spec": "Verify LifeOS Core deployment is stable after all phases",
@@ -1741,7 +1741,7 @@
         "wellness-studio-step8"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "route": {
         "path": "/lifeos/core/verify"
       },
@@ -1759,7 +1759,10 @@
       "demote_reason": null,
       "demoted_at": null,
       "same_signature_count": 0,
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "commit_sha": "204951356c10c15b8f054973b06fd7f8e930a110",
+      "last_attempt_at": "2026-08-01T10:25:40.863Z",
+      "completed_at": "2026-08-01T10:25:40.885Z"
     },
     {
       "id": "wellness-studio-step10",
