@@ -1,11 +1,11 @@
 {
   "schema": "deploy_truth_verify_v1",
-  "at": "2026-08-01T09:12:47.706Z",
+  "at": "2026-08-01T09:32:45.612Z",
   "command": "drift-audit",
   "production_base": "https://lumin-web-production-e3a9.up.railway.app",
   "deploy_branch": "main",
-  "commit_sha": "d00205efe8ca7e3d82b9fe3c0be2b70cd32f0e71",
-  "served_sha": "d00205efe8ca7e3d82b9fe3c0be2b70cd32f0e71",
+  "commit_sha": "b96cfb39f4b6828cb20148fb167f894e6499bccd",
+  "served_sha": "b96cfb39f4b6828cb20148fb167f894e6499bccd",
   "verdict": "PROVEN",
   "ok": true,
   "passed": [
@@ -21,11 +21,11 @@
   "skipped": [],
   "files": [],
   "deployment": {
-    "id": "ff98bf76-2d50-4530-a397-8d449336048f",
+    "id": "f769dc92-6760-4385-8b87-5b6bb6afc0b5",
     "status": "SUCCESS",
-    "created_at": "2026-08-01T09:11:40.681Z",
-    "commit_sha": "d00205efe8ca7e3d82b9fe3c0be2b70cd32f0e71",
-    "commit_message": "[never-stop] queue status: builderos (bo-wire-security-review-into-commit-path)",
+    "created_at": "2026-08-01T09:31:06.737Z",
+    "commit_sha": "b96cfb39f4b6828cb20148fb167f894e6499bccd",
+    "commit_message": "GAP-FILL: merge origin/main for price-book-vendor-comparison route and reset step5. Kept self-contained local route (GET /api/v1/price-book/vendor-comparison, Vendor Comparison substring) because remote system-build imported non-existent services/priceBookVendorComparisonService.js and failed missing_exports. Updated product home and reset BUILD_QUEUE step5 to pending so artifact proof can pass.\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
     "url": null
   },
   "runtime_identity": {
@@ -46,18 +46,18 @@
     {
       "id": "git.fetch",
       "status": "pass",
-      "detail": "origin/main is d00205efe8ca"
+      "detail": "origin/main is b96cfb39f4b6"
     },
     {
       "id": "local.divergence",
       "status": "pass",
-      "detail": "local main is 0 ahead / 1 behind origin/main — local state is not what production deploys from",
+      "detail": "local main is aligned with origin/main",
       "local_branch": "main",
-      "local_head": "36eb5864d9784832f4765b73e7e3cbb1da814426",
-      "remote_head": "d00205efe8ca7e3d82b9fe3c0be2b70cd32f0e71",
+      "local_head": "b96cfb39f4b6828cb20148fb167f894e6499bccd",
+      "remote_head": "b96cfb39f4b6828cb20148fb167f894e6499bccd",
       "ahead": 0,
-      "behind": 1,
-      "uncommitted": 11
+      "behind": 0,
+      "uncommitted": 0
     },
     {
       "id": "runtime.identity",
@@ -81,20 +81,20 @@
     {
       "id": "runtime.version",
       "status": "pass",
-      "detail": "production serves d00205efe8ca, which contains origin/main (d00205efe8ca)",
-      "served_sha": "d00205efe8ca7e3d82b9fe3c0be2b70cd32f0e71",
-      "remote_head": "d00205efe8ca7e3d82b9fe3c0be2b70cd32f0e71"
+      "detail": "production serves b96cfb39f4b6, which contains origin/main (b96cfb39f4b6)",
+      "served_sha": "b96cfb39f4b6828cb20148fb167f894e6499bccd",
+      "remote_head": "b96cfb39f4b6828cb20148fb167f894e6499bccd"
     },
     {
       "id": "deployment.state",
       "status": "pass",
-      "detail": "latest deployment SUCCESS on d00205efe8ca, nothing in flight",
+      "detail": "latest deployment SUCCESS on b96cfb39f4b6, nothing in flight",
       "deployment": {
-        "id": "ff98bf76-2d50-4530-a397-8d449336048f",
+        "id": "f769dc92-6760-4385-8b87-5b6bb6afc0b5",
         "status": "SUCCESS",
-        "created_at": "2026-08-01T09:11:40.681Z",
-        "commit_sha": "d00205efe8ca7e3d82b9fe3c0be2b70cd32f0e71",
-        "commit_message": "[never-stop] queue status: builderos (bo-wire-security-review-into-commit-path)",
+        "created_at": "2026-08-01T09:31:06.737Z",
+        "commit_sha": "b96cfb39f4b6828cb20148fb167f894e6499bccd",
+        "commit_message": "GAP-FILL: merge origin/main for price-book-vendor-comparison route and reset step5. Kept self-contained local route (GET /api/v1/price-book/vendor-comparison, Vendor Comparison substring) because remote system-build imported non-existent services/priceBookVendorComparisonService.js and failed missing_exports. Updated product home and reset BUILD_QUEUE step5 to pending so artifact proof can pass.\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
         "url": null
       }
     }
@@ -102,9 +102,9 @@
   "produced_by": "cursor-agent",
   "verified_by": "git+railway-api+production-http-probe",
   "verification_kind": "deterministic+external",
-  "local_head": "36eb5864d9784832f4765b73e7e3cbb1da814426",
+  "local_head": "b96cfb39f4b6828cb20148fb167f894e6499bccd",
   "local_branch": "main",
   "ahead": 0,
-  "behind": 1,
-  "human_summary": "PROVEN — production serves d00205efe8ca, which contains origin/main; no runtime drift found."
+  "behind": 0,
+  "human_summary": "PROVEN — production serves b96cfb39f4b6, which contains origin/main; no runtime drift found."
 }

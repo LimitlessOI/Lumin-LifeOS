@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T09:30:58.187Z",
+  "generated_at": "2026-08-01T09:35:04.399Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1801,
-      "mtime": "2026-08-01T09:28:24.412Z",
-      "indexed_at": "2026-08-01T09:29:37.473Z",
+      "bytes": 1765,
+      "mtime": "2026-08-01T09:33:41.572Z",
+      "indexed_at": "2026-08-01T09:35:04.399Z",
       "synopsis_index_only": true
     },
     {
@@ -42115,9 +42115,9 @@
     {
       "path": "docs/products/limitlessos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LimitlessOS business stack",
-      "bytes": 14403,
-      "mtime": "2026-08-01T09:30:41.012Z",
-      "indexed_at": "2026-08-01T09:30:58.187Z"
+      "bytes": 15049,
+      "mtime": "2026-08-01T09:34:52.476Z",
+      "indexed_at": "2026-08-01T09:35:04.399Z"
     },
     {
       "path": "docs/products/lip/FILE_MANIFEST.json",
@@ -65772,9 +65772,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 3745,
-      "mtime": "2026-08-01T09:12:47.704Z",
-      "indexed_at": "2026-08-01T09:17:36.218Z",
+      "bytes": 4506,
+      "mtime": "2026-08-01T09:32:45.608Z",
+      "indexed_at": "2026-08-01T09:35:04.399Z",
       "synopsis_index_only": true
     },
     {
@@ -69332,10 +69332,13 @@
     },
     {
       "path": "routes/cityos-home-creation-routes.js",
-      "synopsis": "HTTP route module — Cityos Home Creation Routes.",
-      "bytes": 550,
-      "mtime": "2026-07-15T08:32:59.621Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "synopsis": "HTTP route module — CityOS Product Home Creation Routes.",
+      "bytes": 493,
+      "mtime": "2026-08-01T09:34:18.836Z",
+      "indexed_at": "2026-08-01T09:35:04.399Z",
+      "ssot": [
+        "docs/products/limitlessos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/clientcare-billing-recovery-routes.js",
