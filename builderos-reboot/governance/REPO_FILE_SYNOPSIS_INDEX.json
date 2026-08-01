@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T02:28:38.980Z",
+  "generated_at": "2026-08-01T02:29:25.277Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12657,
   "files": [
@@ -38895,9 +38895,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 85175,
-      "mtime": "2026-08-01T02:26:36.495Z",
-      "indexed_at": "2026-08-01T02:26:36.495Z"
+      "bytes": 85471,
+      "mtime": "2026-08-01T02:29:25.277Z",
+      "indexed_at": "2026-08-01T02:29:25.277Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -42246,9 +42246,9 @@
     {
       "path": "docs/products/productized-sprint/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Productized Sprint",
-      "bytes": 11261,
-      "mtime": "2026-08-01T02:26:36.495Z",
-      "indexed_at": "2026-08-01T02:26:36.495Z"
+      "bytes": 11530,
+      "mtime": "2026-08-01T02:29:25.277Z",
+      "indexed_at": "2026-08-01T02:29:25.277Z"
     },
     {
       "path": "docs/products/PRODUCTIZEDSPRINT.md",
@@ -72845,10 +72845,10 @@
     },
     {
       "path": "scripts/identifyTargetCustomers.mjs",
-      "synopsis": "Identify initial customers for outreach based on existing network data.",
-      "bytes": 3711,
-      "mtime": "2026-08-01T02:28:38.980Z",
-      "indexed_at": "2026-08-01T02:28:38.980Z",
+      "synopsis": "Exports identifyTargetCustomers — scripts/identifyTargetCustomers.mjs.",
+      "bytes": 1330,
+      "mtime": "2026-08-01T02:29:25.277Z",
+      "indexed_at": "2026-08-01T02:29:25.277Z",
       "ssot": [
         "docs/products/productized-sprint/PRODUCT_HOME.md"
       ]
