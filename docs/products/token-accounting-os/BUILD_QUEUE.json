@@ -289,13 +289,13 @@
     },
     {
       "id": "step1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/builderOSTokenReceipt.js",
       "task": "implement builderOS token receipt service",
       "spec": "The service handles token receipt generation upon build completion. It shall interface with the database to store token information generated on a build complete event.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "generateTokenReceipt"
       ],
@@ -309,9 +309,9 @@
           "assertion_id": "expected_exports:services/builderOSTokenReceipt.js"
         }
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-01T05:28:54.863Z",
       "last_error": null,
-      "commit_sha": null,
+      "commit_sha": "27f654dcc1e2c35ae4c3b3cc77fe89ac843e48e1",
       "built_sha": null,
       "proof": null,
       "revive_count": 10,
@@ -336,7 +336,8 @@
       "escalation_required": true,
       "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
       "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
-      "escalated_at": "2026-07-31T18:40:13.631Z"
+      "escalated_at": "2026-07-31T18:40:13.631Z",
+      "completed_at": "2026-08-01T05:29:07.945Z"
     },
     {
       "id": "step2",
@@ -605,5 +606,6 @@
   ],
   "blueprint_id": "PRODUCT-TOKEN-ACCOUNTING-OS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-token-accounting-os",
-  "twin_kind": "product_build_queue_registered"
+  "twin_kind": "product_build_queue_registered",
+  "updated_at": "2026-08-01T05:29:07.946Z"
 }
