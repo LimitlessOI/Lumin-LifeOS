@@ -13,6 +13,7 @@ import { authorAssertionsFromSpec } from '../factory-staging/factory-core/bpb/au
 import { runBehaviorAssertions } from '../factory-staging/factory-core/sentry/behavior-assertions.js';
 import { execFileSync } from 'node:child_process';
 import { verifyGeneratedContentGrounding } from './blueprint-grounding-check.js';
+import { repairStep } from '../scripts/build-queue-drift-repair.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const TYPED_BLOCKERS_PATH = path.join(ROOT, 'builderos-reboot/governance/TYPED_BLOCKER_SSOT.json');
@@ -672,11 +673,22 @@ export async function runNextStep(queue, { buildFn, verifyFn, deployProofFn, mod
     artifact = await evaluateStepExpectations(step, { commitSha: sha });
   }
   if (!artifact.ok) {
-    return failStep(step, queue, maxAttempts, {
-      stage: 'artifact_proof',
-      reason: artifact.reason || 'artifact_proof_failed (commit exists but step expectations not met — no false done)',
-      commit_sha: sha,
-    }, logger);
+    // FRA-002: attempt deterministic drift repair once before failing the step.
+    try {
+      await repairStep({ product: queue.product_id, stepId: step.id, allowStubs: false, force: false });
+      artifact = typeof artifactProofFn === 'function'
+        ? await artifactProofFn({ commit_sha: sha, product_id: queue.product_id, step })
+        : await evaluateStepExpectations(step, { commitSha: sha });
+    } catch (repairErr) {
+      logger?.warn?.(`[drift-repair] repair attempt failed for ${step.id}: ${repairErr.message}`);
+    }
+    if (!artifact.ok) {
+      return failStep(step, queue, maxAttempts, {
+        stage: 'artifact_proof',
+        reason: artifact.reason || 'artifact_proof_failed (commit exists but step expectations not met — no false done)',
+        commit_sha: sha,
+      }, logger);
+    }
   }
   if (artifact.applicable) step.artifact_proven = true;
 

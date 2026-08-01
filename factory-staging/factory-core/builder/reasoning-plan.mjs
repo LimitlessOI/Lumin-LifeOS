@@ -9,6 +9,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadLensRegistry } from '../../../services/cognitive-chair.mjs';
+import { decomposeGoal } from '../../../services/goal-decomposition.js';
+import { computeCognitiveSpineHealth } from '../../../services/cognitive-spine-health.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REASONING_PLANS_DIR = path.resolve(__dirname, '..', '..', '..', 'data', 'reasoning-plans');
@@ -194,6 +196,18 @@ export function createReasoningPlan({
   const evidence = deriveEvidence(systemFacts);
   const reality_measures = deriveRealityMeasures(classification);
   const planId = `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+  const subGoals = decomposeGoal({
+    id: planId,
+    title: mission.trim().slice(0, 120),
+    description: mission.trim().slice(0, 2000),
+    steps: reality_measures.map((m) => ({ title: `verify ${m}`, description: `reality measure: ${m}` })),
+    dependencies: classification.type === 'C' ? ['chair_seal'] : [],
+  });
+  const cognitiveHealth = computeCognitiveSpineHealth({
+    reasoningSteps: [{ consensus: classification.type !== 'C', propagated_confidence: 0.75 }],
+    modelCalls: [],
+    confidenceHistory: [0.75],
+  });
 
   const plan = {
     id: planId,
@@ -208,6 +222,8 @@ export function createReasoningPlan({
     evidence,
     prior_knowledge: priorKnowledge || [],
     reality_measures,
+    sub_goals: subGoals.sub_goals,
+    cognitive_health: cognitiveHealth,
     unknowns: [],
     assumptions: [],
     risks: [],

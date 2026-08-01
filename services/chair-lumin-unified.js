@@ -18,6 +18,9 @@ import { createReasoningPlan, reasoningPlanGate, propagateOverallConfidence } fr
 import { recordFounderDecision } from './founder-intent-model.js';
 import { recordModelOutcome } from './model-capability-ledger.js';
 import { logModelCall } from './model-roi-ledger.mjs';
+import { tagOutput } from './knowledge-judgment-split.js';
+import { reconcileRealitySources } from './reality-hierarchy-reconciler.js';
+import { decideInteraction } from './founder-cognitive-load-optimizer.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REASONING_LOG = path.resolve(__dirname, '..', 'data', 'chair-reasoning-log.jsonl');
@@ -299,6 +302,20 @@ export async function runChairNativeTurn(cleanedInput, deps = {}, chairContext =
     })
     : voice;
 
+  const knowledgeJudgment = tagOutput(safeReply);
+  const realityCheck = reconcileRealitySources({
+    production: { sha: priorReceipt?.git_sha },
+    receipts: { git_sha: priorReceipt?.git_sha },
+    chairConsensus: { sha: reasoning?.plan?.commit_target },
+    sentry: systemFacts.sentry_status || {},
+  });
+  const cognitiveLoad = decideInteraction({
+    reversibility: chairContext.reversibility || 'reversible_without_data_loss',
+    cost_of_error: chairContext.cost_of_error || 0,
+    confidence: reasoning?.propagated || 0.75,
+    can_auto_revert: chairContext.can_auto_revert !== false,
+  });
+
   return {
     ok: true,
     action: 'chair',
@@ -317,6 +334,9 @@ export async function runChairNativeTurn(cleanedInput, deps = {}, chairContext =
     next_synopsis: null,
     strategic_brief: systemFacts.strategic_brief || null,
     errand_search_block: systemFacts.verified_search || null,
+    knowledge_judgment: knowledgeJudgment,
+    reality_check: realityCheck,
+    cognitive_load: cognitiveLoad,
   };
 }
 

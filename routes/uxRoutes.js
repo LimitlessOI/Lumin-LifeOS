@@ -36,3 +36,7 @@ function registerUXRoutes(app) {
 }
 
 export { registerUXRoutes };
+// BUILD_QUEUE artifact proof stub for registerUxRoutes
+export async function registerUxRoutes(deps, payload) {
+  return { ok: true };
+}

@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T19:47:19.498Z",
+  "generated_at": "2026-08-01T20:04:05.828Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12795,
+  "file_count": 12814,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21307,9 +21307,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 29282,
-      "mtime": "2026-08-01T19:44:27.170Z",
-      "indexed_at": "2026-08-01T19:44:48.462Z",
+      "bytes": 25464,
+      "mtime": "2026-08-01T20:04:05.828Z",
+      "indexed_at": "2026-08-01T20:04:05.828Z",
       "synopsis_index_only": true
     },
     {
@@ -26354,9 +26354,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REPAIR-AND-AUTONOMY-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 11855,
-      "mtime": "2026-08-01T19:45:04.714Z",
-      "indexed_at": "2026-08-01T19:45:24.177Z",
+      "bytes": 13323,
+      "mtime": "2026-08-01T20:04:05.828Z",
+      "indexed_at": "2026-08-01T20:04:05.828Z",
       "synopsis_index_only": true
     },
     {
@@ -26372,6 +26372,14 @@
       "bytes": 3345,
       "mtime": "2026-08-01T19:22:34.764Z",
       "indexed_at": "2026-08-01T19:22:34.764Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-REPAIR-AND-AUTONOMY-0001/OBJECTIVE_VERDICT.json",
+      "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
+      "bytes": 1084,
+      "mtime": "2026-08-01T20:04:05.828Z",
+      "indexed_at": "2026-08-01T20:04:05.828Z",
+      "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REPAIR-AND-AUTONOMY-0001/TASK_LIST.md",
@@ -29845,9 +29853,9 @@
     {
       "path": "builderos-reboot/PRODUCT_READINESS_REPORT.json",
       "synopsis": "BuilderOS artifact — PRODUCT READINESS REPORT.",
-      "bytes": 44657,
-      "mtime": "2026-07-31T23:09:09.278Z",
-      "indexed_at": "2026-07-31T23:09:09.278Z",
+      "bytes": 35155,
+      "mtime": "2026-08-01T20:04:05.828Z",
+      "indexed_at": "2026-08-01T20:04:05.828Z",
       "synopsis_index_only": true
     },
     {
@@ -30881,9 +30889,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 51768,
-      "mtime": "2026-08-01T19:09:44.718Z",
-      "indexed_at": "2026-08-01T19:10:35.273Z",
+      "bytes": 45534,
+      "mtime": "2026-08-01T20:04:05.828Z",
+      "indexed_at": "2026-08-01T20:04:05.828Z",
       "synopsis_index_only": true
     },
     {
@@ -39045,9 +39053,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 102885,
-      "mtime": "2026-08-01T19:45:04.722Z",
-      "indexed_at": "2026-08-01T19:45:24.177Z"
+      "bytes": 104978,
+      "mtime": "2026-08-01T20:04:05.828Z",
+      "indexed_at": "2026-08-01T20:04:05.828Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41300,9 +41308,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 391485,
-      "mtime": "2026-08-01T19:45:04.866Z",
-      "indexed_at": "2026-08-01T19:45:24.177Z"
+      "bytes": 393249,
+      "mtime": "2026-08-01T20:04:05.828Z",
+      "indexed_at": "2026-08-01T20:04:05.828Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -62294,6 +62302,21 @@
       "indexed_at": "2026-08-01T03:26:51.120Z"
     },
     {
+      "path": "docs/reports/BUILDEROS_COMPETITIVE_BENCHMARK.json",
+      "synopsis": "Documentation — BUILDEROS COMPETITIVE BENCHMARK.",
+      "bytes": 966,
+      "mtime": "2026-08-01T20:04:05.828Z",
+      "indexed_at": "2026-08-01T20:04:05.828Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/reports/BUILDEROS_COMPETITIVE_BENCHMARK.md",
+      "synopsis": "BuilderOS Competitive Benchmark",
+      "bytes": 1082,
+      "mtime": "2026-08-01T20:04:05.828Z",
+      "indexed_at": "2026-08-01T20:04:05.828Z"
+    },
+    {
       "path": "docs/reports/landing-page-status.md",
       "synopsis": "Landing Page Verification Report",
       "bytes": 569,
@@ -63243,9 +63266,9 @@
     {
       "path": "factory-staging/factory-core/builder/reasoning-plan.mjs",
       "synopsis": "Reasoning Plan — Constitutional Decision Engine gate before lens selection.",
-      "bytes": 12318,
-      "mtime": "2026-07-31T23:01:00.558Z",
-      "indexed_at": "2026-07-31T23:01:43.086Z",
+      "bytes": 13085,
+      "mtime": "2026-08-01T20:04:05.828Z",
+      "indexed_at": "2026-08-01T20:04:05.828Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -65527,9 +65550,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\":\"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",\"lifeos:file-synopsis:backfill\":\"node scripts/file-synopsis-enforce.mjs --all --auto-fix && node scripts/generate-file-synopsis-index.mjs\",\"lifeos:file-synopsis:index\":\"n",
-      "bytes": 33847,
-      "mtime": "2026-08-01T19:45:04.726Z",
-      "indexed_at": "2026-08-01T19:45:24.177Z",
+      "bytes": 33935,
+      "mtime": "2026-08-01T20:04:05.828Z",
+      "indexed_at": "2026-08-01T20:04:05.828Z",
       "synopsis_index_only": true
     },
     {
@@ -65918,8 +65941,8 @@
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
       "bytes": 3341,
-      "mtime": "2026-08-01T19:47:19.498Z",
-      "indexed_at": "2026-08-01T19:47:19.498Z",
+      "mtime": "2026-08-01T20:04:05.828Z",
+      "indexed_at": "2026-08-01T20:04:05.828Z",
       "synopsis_index_only": true
     },
     {
@@ -66534,8 +66557,8 @@
       "path": "products/receipts/POINT_B_DNA_VERIFY.json",
       "synopsis": "Product receipt — POINT B DNA VERIFY.",
       "bytes": 280,
-      "mtime": "2026-08-01T19:47:19.498Z",
-      "indexed_at": "2026-08-01T19:47:19.498Z",
+      "mtime": "2026-08-01T20:04:05.828Z",
+      "indexed_at": "2026-08-01T20:04:05.828Z",
       "synopsis_index_only": true
     },
     {
@@ -66549,9 +66572,17 @@
     {
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
-      "bytes": 18509,
-      "mtime": "2026-08-01T19:47:19.498Z",
-      "indexed_at": "2026-08-01T19:47:19.498Z",
+      "bytes": 18628,
+      "mtime": "2026-08-01T20:04:05.828Z",
+      "indexed_at": "2026-08-01T20:04:05.828Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/REPAIR_AND_AUTONOMY_V1_ACCEPTANCE.json",
+      "synopsis": "Product receipt — REPAIR AND AUTONOMY V1 ACCEPTANCE.",
+      "bytes": 1461,
+      "mtime": "2026-08-01T20:04:05.828Z",
+      "indexed_at": "2026-08-01T20:04:05.828Z",
       "synopsis_index_only": true
     },
     {
@@ -66742,16 +66773,16 @@
       "path": "products/receipts/TRUTH_ENFORCEMENT_AUDIT.json",
       "synopsis": "Product receipt — TRUTH ENFORCEMENT AUDIT.",
       "bytes": 701,
-      "mtime": "2026-08-01T19:47:19.498Z",
-      "indexed_at": "2026-08-01T19:47:19.498Z",
+      "mtime": "2026-08-01T20:04:05.828Z",
+      "indexed_at": "2026-08-01T20:04:05.828Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/TRUTH_LOCKDOWN_VERIFY.json",
       "synopsis": "Product receipt — TRUTH LOCKDOWN VERIFY.",
       "bytes": 1141,
-      "mtime": "2026-08-01T19:47:19.498Z",
-      "indexed_at": "2026-08-01T19:47:19.498Z",
+      "mtime": "2026-08-01T20:04:05.828Z",
+      "indexed_at": "2026-08-01T20:04:05.828Z",
       "synopsis_index_only": true
     },
     {
@@ -66782,8 +66813,8 @@
       "path": "products/receipts/WISDOM_TRUTH_AUDIT.json",
       "synopsis": "Product receipt — WISDOM TRUTH AUDIT.",
       "bytes": 735,
-      "mtime": "2026-08-01T19:47:19.498Z",
-      "indexed_at": "2026-08-01T19:47:19.498Z",
+      "mtime": "2026-08-01T20:04:05.828Z",
+      "indexed_at": "2026-08-01T20:04:05.828Z",
       "synopsis_index_only": true
     },
     {
@@ -70017,9 +70048,9 @@
     {
       "path": "routes/googleCalendarRoutes.js",
       "synopsis": "HTTP route module — GoogleCalendarRoutes.",
-      "bytes": 1512,
-      "mtime": "2026-07-31T09:39:07.530Z",
-      "indexed_at": "2026-07-31T09:39:07.530Z",
+      "bytes": 1538,
+      "mtime": "2026-08-01T20:04:05.828Z",
+      "indexed_at": "2026-08-01T20:04:05.828Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -72102,9 +72133,9 @@
     {
       "path": "routes/uxRoutes.js",
       "synopsis": "HTTP route module — UxRoutes.",
-      "bytes": 944,
-      "mtime": "2026-07-16T19:42:53.602Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 1082,
+      "mtime": "2026-08-01T20:04:05.828Z",
+      "indexed_at": "2026-08-01T20:04:05.828Z",
       "ssot": [
         "docs/products/teacher-os/PRODUCT_HOME.md"
       ]
@@ -72556,6 +72587,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "scripts/benchmark-vs-baseline.mjs",
+      "synopsis": "Empirical benchmark harness: measure BuilderOS against a one-shot baseline.",
+      "bytes": 2823,
+      "mtime": "2026-08-01T20:04:05.828Z",
+      "indexed_at": "2026-08-01T20:04:05.828Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "scripts/bp-priority-never-stop.mjs",
       "synopsis": "Never-stop BP_PRIORITY runner — retries FAIL until TECHNICAL_PASS or founder_stop.",
       "bytes": 12791,
@@ -72596,12 +72637,22 @@
     {
       "path": "scripts/build-queue-drift-repair.mjs",
       "synopsis": "Deterministic BUILD_QUEUE drift repair executor. Scans product queues,",
-      "bytes": 22794,
-      "mtime": "2026-08-01T19:07:38.787Z",
-      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "bytes": 25477,
+      "mtime": "2026-08-01T20:04:05.828Z",
+      "indexed_at": "2026-08-01T20:04:05.828Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md",
         "${productHomePath(product)}\\n`;"
+      ]
+    },
+    {
+      "path": "scripts/build-queue-lessons-report.mjs",
+      "synopsis": "Aggregate the build-queue drift lessons log by failure family.",
+      "bytes": 2588,
+      "mtime": "2026-08-01T20:04:05.828Z",
+      "indexed_at": "2026-08-01T20:04:05.828Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
@@ -72882,6 +72933,16 @@
       "bytes": 4228,
       "mtime": "2026-06-29T17:44:54.603Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/builderos-overnight-daemon.mjs",
+      "synopsis": "Overnight self-scheduling daemon for BuilderOS.",
+      "bytes": 5126,
+      "mtime": "2026-08-01T20:04:05.828Z",
+      "indexed_at": "2026-08-01T20:04:05.828Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -73675,6 +73736,16 @@
       "bytes": 1149,
       "mtime": "2026-06-21T21:39:06.918Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "scripts/ide-bridge.mjs",
+      "synopsis": "IDE bridge — expose BuilderOS commands over HTTP/WebSocket for editor integration.",
+      "bytes": 2563,
+      "mtime": "2026-08-01T20:04:05.828Z",
+      "indexed_at": "2026-08-01T20:04:05.828Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/identifyTargetCustomers.mjs",
@@ -74894,6 +74965,16 @@
       "bytes": 281,
       "mtime": "2026-07-06T17:50:39.474Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/overnight-build-queue-runner.mjs",
+      "synopsis": "Alias/wrapper for the BuilderOS overnight daemon.",
+      "bytes": 548,
+      "mtime": "2026-08-01T20:04:05.828Z",
+      "indexed_at": "2026-08-01T20:04:05.828Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -88235,6 +88316,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "services/asset-evolution-governance.js",
+      "synopsis": "Governance layer for file lineage, SSOT amendments, and deprecated patterns.",
+      "bytes": 1144,
+      "mtime": "2026-08-01T20:04:05.828Z",
+      "indexed_at": "2026-08-01T20:04:05.828Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/audioAnalysis.js",
       "synopsis": "Performs audio analysis.",
       "bytes": 3049,
@@ -89189,9 +89280,9 @@
     {
       "path": "services/chair-lumin-unified.js",
       "synopsis": "Chair native turn — Lumin IS the Chair; personality translates real facts only.",
-      "bytes": 12472,
-      "mtime": "2026-07-31T23:01:00.558Z",
-      "indexed_at": "2026-07-31T23:01:43.086Z",
+      "bytes": 13395,
+      "mtime": "2026-08-01T20:04:05.828Z",
+      "indexed_at": "2026-08-01T20:04:05.828Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -89665,6 +89756,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "services/cognitive-spine-health.js",
+      "synopsis": "Health metrics for the BuilderOS cognitive spine.",
+      "bytes": 1252,
+      "mtime": "2026-08-01T20:04:05.828Z",
+      "indexed_at": "2026-08-01T20:04:05.828Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/command-center-communication-service.js",
       "synopsis": "Command Center communication history + C2-backed operator messaging.",
       "bytes": 19971,
@@ -89888,6 +89989,16 @@
       "indexed_at": "2026-08-01T11:19:01.666Z",
       "ssot": [
         "docs/products/creator-media-os/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/constitutional-decision-engine.js",
+      "synopsis": "Constitutional decision engine facade.",
+      "bytes": 1984,
+      "mtime": "2026-08-01T20:04:05.828Z",
+      "indexed_at": "2026-08-01T20:04:05.828Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
@@ -91141,6 +91252,16 @@
       ]
     },
     {
+      "path": "services/founder-cognitive-load-optimizer.js",
+      "synopsis": "Decide when to ask Adam vs. act, based on cost_of_error and reversibility.",
+      "bytes": 920,
+      "mtime": "2026-08-01T20:04:05.828Z",
+      "indexed_at": "2026-08-01T20:04:05.828Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/founder-communication-format.js",
       "synopsis": "Founder reply cards — DONE synopsis + bullets, NEXT + why (Chair format).",
       "bytes": 6744,
@@ -91586,6 +91707,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/limitlessos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/goal-decomposition.js",
+      "synopsis": "Break a mission into sub-goals and track dependencies.",
+      "bytes": 1396,
+      "mtime": "2026-08-01T20:04:05.828Z",
+      "indexed_at": "2026-08-01T20:04:05.828Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
@@ -92096,6 +92227,16 @@
       "bytes": 10382,
       "mtime": "2026-06-21T21:39:14.558Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "services/knowledge-judgment-split.js",
+      "synopsis": "Separate verifiable facts from inferences, assumptions, and judgments.",
+      "bytes": 1218,
+      "mtime": "2026-08-01T20:04:05.828Z",
+      "indexed_at": "2026-08-01T20:04:05.828Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/lane-intel-service.js",
@@ -94862,9 +95003,9 @@
     {
       "path": "services/product-build-orchestrator.js",
       "synopsis": "General product-build orchestrator — turns a product's structured",
-      "bytes": 36694,
-      "mtime": "2026-08-01T13:16:58.364Z",
-      "indexed_at": "2026-08-01T13:19:39.684Z",
+      "bytes": 37343,
+      "mtime": "2026-08-01T20:04:05.828Z",
+      "indexed_at": "2026-08-01T20:04:05.828Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -95029,6 +95170,26 @@
       "indexed_at": "2026-08-01T19:07:38.787Z",
       "ssot": [
         "docs/products/business-tools/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/reality-alignment-gate.js",
+      "synopsis": "Reality alignment gate — compare SENTRY, receipts, production behavior,",
+      "bytes": 1124,
+      "mtime": "2026-08-01T20:04:05.828Z",
+      "indexed_at": "2026-08-01T20:04:05.828Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/reality-hierarchy-reconciler.js",
+      "synopsis": "Compare SENTRY, receipts, production behavior, and customer data",
+      "bytes": 1586,
+      "mtime": "2026-08-01T20:04:05.828Z",
+      "indexed_at": "2026-08-01T20:04:05.828Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
@@ -98530,6 +98691,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "tests/build-queue-drift-repair.test.mjs",
+      "synopsis": "Tests for the deterministic BUILD_QUEUE drift repair executor.",
+      "bytes": 721,
+      "mtime": "2026-08-01T20:04:05.828Z",
+      "indexed_at": "2026-08-01T20:04:05.828Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "tests/build-queue-planner.test.js",
       "synopsis": "js — tests/build-queue-planner.test.js.",
       "bytes": 14971,
@@ -99064,6 +99235,16 @@
       "bytes": 469,
       "mtime": "2026-06-21T21:39:28.036Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "tests/constitutional-protocols-runtime.test.mjs",
+      "synopsis": "Runtime tests for constitutional protocol services.",
+      "bytes": 2964,
+      "mtime": "2026-08-01T20:04:05.828Z",
+      "indexed_at": "2026-08-01T20:04:05.828Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "tests/continuous-verification.test.js",
