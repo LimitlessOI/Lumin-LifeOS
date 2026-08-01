@@ -247,6 +247,14 @@
       "added_real_lines": 8,
       "justification": "this commit does not author logic; it only adds @ssot governance tags to files already shipped by the autonomous never-stop loop so the merge can pass the file-placement gate. BP_PRIORITY bp_sync. FOUNDER_STOP.json active.\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
       "commit_message_excerpt": "GAP-FILL: merge origin/main and retrofit @ssot on two autonomous never-stop routes (identifyCustomersRoute.js, linkedinProfileRoute.js). PLACEMENT_APPROVED: these routes were shipped by the never-stop"
+    },
+    {
+      "at": "2026-08-01T04:19:12.094Z",
+      "file": "services/lifeos-chat-intent-router.js",
+      "is_new_file": false,
+      "added_real_lines": 39,
+      "justification": "pure orchestration/glue — reconnecting two\nalready-built, already-tested sibling modules to each other via their\nexisting exported function signatures. No new business logic, no new\nschema, no new external call added; every function called already exists\nand was independently spec'd/shipped as its own BUILD_QUEUE step. The\nfactory would be asked to regenerate a full-file rewrite of an existing\n120-line file to add four import lines and swap four return statements —\nthe exact narrow case prior sessions' orchestration-glue fixes (e.g.\nbuild-integration-context.js, product-build-orchestrator.js wiring) used\nthis same hand-authored path for.",
+      "commit_message_excerpt": "GAP-FILL: wire lifeos-chat-intent-router.js routeByIntent to real chat v2 executors"
     }
   ]
 }
