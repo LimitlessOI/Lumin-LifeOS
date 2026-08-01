@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T15:44:26.407Z",
+  "generated_at": "2026-08-01T15:50:45.242Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12739,
   "files": [
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1795,
-      "mtime": "2026-08-01T15:41:45.169Z",
-      "indexed_at": "2026-08-01T15:44:25.624Z",
+      "bytes": 946,
+      "mtime": "2026-08-01T15:49:58.473Z",
+      "indexed_at": "2026-08-01T15:50:45.242Z",
       "synopsis_index_only": true
     },
     {
@@ -65800,9 +65800,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 3782,
-      "mtime": "2026-08-01T15:35:24.545Z",
-      "indexed_at": "2026-08-01T15:36:25.966Z",
+      "bytes": 4206,
+      "mtime": "2026-08-01T15:46:17.793Z",
+      "indexed_at": "2026-08-01T15:50:45.242Z",
       "synopsis_index_only": true
     },
     {

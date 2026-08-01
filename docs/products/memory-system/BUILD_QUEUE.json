@@ -2,7 +2,7 @@
   "schema": "product_build_queue_v1",
   "product_id": "memory-system",
   "planned_at": "2026-07-13T14:17:02.954Z",
-  "backlog_signature": "5a340c093e0686ab",
+  "backlog_signature": "70c01756d11298e0",
   "corpus_sources": [
     "docs/products/memory-system/PRODUCT_HOME.md"
   ],
@@ -1213,6 +1213,6 @@
   "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-memory-system",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T10:43:04.975Z",
+  "updated_at": "2026-08-01T15:50:40.109Z",
   "backlog_signature_at": "2026-08-01T03:49:41.584Z"
 }
