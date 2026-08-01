@@ -198,7 +198,7 @@
     },
     {
       "id": "5",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/credentialVerificationRoutes.js",
       "task": "add credential verification route",
       "spec": "Add an Express route module for credential verification. The file must start with a JSDoc block containing `@ssot docs/products/lumin-university/PRODUCT_HOME.md`. Export a named function `registerCredentialVerificationRoutes(app, deps)` that mounts a POST `/api/v1/credentials/verify` route. Use deps.requireKey on protected routes, deps.pool for DB, and deps.logger for logging. Call services/credentialVerification.js `verifyCredential(deps, payload)`. Output plain ESM JavaScript only.",
@@ -206,7 +206,7 @@
         "4"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerCredentialVerificationRoutes"
       ],
@@ -231,7 +231,7 @@
       "blueprint_step_id": "5",
       "mission_id": "PRODUCT-lumin-university",
       "last_error": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-01T00:48:08.956Z",
       "blocker_class": null,
       "claim_level": null,
       "park_until": null,
@@ -244,7 +244,8 @@
         "reason": "commit_sha exists in repo but is not an ancestor of origin/main -- ship landed on origin/builderos-autonomous or origin/builderos-shadow instead of main (GITHUB_DEPLOY_BRANCH mismatch), and the content itself was placeholder/stub code (verified by direct inspection), not a real implementation. Confirmed via: git merge-base --is-ancestor <sha> origin/main."
       },
       "same_signature_count": 0,
-      "failure_signature": null
+      "failure_signature": null,
+      "completed_at": "2026-08-01T00:48:09.494Z"
     },
     {
       "id": "6",
