@@ -1,4 +1,43 @@
 /**
+ * SYNOPSIS: Performs AI pre-analysis with a provided prompt.
+ * @ssot docs/products/productized-sprint/PRODUCT_HOME.md
+ */
+export async function aiPreAnalysisPrompt(deps, payload) {
+  const { pool, logger, callCouncilMember } = deps;
+  const { prompt: analysisPrompt, taskType = 'general' } = payload || {}; // Renamed 'data' to 'prompt' for clarity
+
+  if (!analysisPrompt) {
+    logger.warn({ payload }, 'Missing prompt for AI pre-analysis.');
+    throw new Error('Analysis prompt is required for AI pre-analysis.');
+  }
+
+  try {
+    logger.info({ taskType, promptSnippet: analysisPrompt.substring(0, 100) }, 'Initiating AI pre-analysis with provided prompt.');
+
+    // Assuming 'Founder' is the relevant AI Council member for pre-analysis
+    const aiResponse = await callCouncilMember('Founder', analysisPrompt, { taskType: `pre-analysis-${taskType}` });
+
+    // Log the AI interaction for performance tracking
+    // The aiResponse object from callCouncilMember is assumed to have a 'tokensUsed' property
+    // and the actual response in a 'response' property.
+    const tokensUsed = aiResponse.tokensUsed || 0;
+    const aiMember = 'Founder'; // Assuming 'Founder' is the AI member performing the task
+    const success = true; // Assuming success if no error was thrown
+
+    await pool.query(
+      `INSERT INTO ai_performance (ai_member, task_id, task_type, tokens_used, success)
+       VALUES ($1, $2, $3, $4, $5) RETURNING id`,
+      [aiMember, null, `pre-analysis-${taskType}`, tokensUsed, success]
+    );
+
+    return { success: true, analysisResult: aiResponse.response };
+  } catch (error) {
+    logger.error({ error, payload }, 'Error in aiPreAnalysisPrompt during AI pre-analysis execution.');
+    throw new Error('Failed to perform AI pre-analysis with provided prompt.');
+  }
+}
+
+/**
  * SYNOPSIS: Provides AI pre-analysis prompt writing and execution services.
  * @ssot docs/products/productized-sprint/PRODUCT_HOME.md
  */
@@ -71,17 +110,6 @@ export function testAIPreAnalysisPrompt() {
   const testData = { key: 'value' };
   const prompt = writeAIPreAnalysisPrompt(testData);
   console.log('Generated Prompt:', prompt);
-}
-
-/**
- * SYNOPSIS: Performs AI pre-analysis with a provided prompt.
- * @ssot docs/products/productized-sprint/PRODUCT_HOME.md
- */
-export function aiPreAnalysisPrompt(data) {
-  // Function to perform AI pre-analysis with a provided prompt
-  const prompt = writeAIPreAnalysisPrompt(data);
-  // Assume there's a function to send the prompt to an AI service
-  return `AI pre-analysis result for: ${prompt}`;
 }
 
 export function runPreAnalysis(taskType, inputData) {
