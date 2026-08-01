@@ -2,7 +2,7 @@
   "schema": "product_build_queue_v1",
   "product_id": "limitlessos",
   "verify_script": "scripts/verify-go-vegas-scheduler.mjs",
-  "notes": "Go Vegas revenue slice \u2014 outreach pipeline v1 already shipped as code; this queue closes the last mile to live revenue: scheduler tick (daily discover/invite/follow-up under caps), dry-run proof script, and SENTRY-facing status receipt. No founder UI in this slice.",
+  "notes": "Go Vegas revenue slice — outreach pipeline v1 already shipped as code; this queue closes the last mile to live revenue: scheduler tick (daily discover/invite/follow-up under caps), dry-run proof script, and SENTRY-facing status receipt. No founder UI in this slice.",
   "updated_at": "2026-08-01T09:20:57.295Z",
   "steps": [
     {
@@ -329,16 +329,12 @@
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step1",
       "mission_id": "PRODUCT-limitlessos",
-      "same_signature_count": 1,
-      "demoted": true,
-      "last_error": null,
+      "same_signature_count": 0,
+      "demoted": false,
+      "last_error": "artifact_proof_failed: LimitlessOS",
       "heal_unblocked": true,
       "last_attempt_at": "2026-08-01T09:20:46.618Z",
-      "blocker_class": null,
-      "failure_signature": null,
-      "skip_reason": "orphan_overlay: public/overlay/formalize-businessos-ui.html is not the active founder interface; active-interface governance designates public/overlay/lifeos-app.html as the only live overlay. The naming distinction work should surface in lifeos-app.html, not a standalone dead page.",
-      "demote_reason": "orphan_overlay: target is a legacy/standalone public/overlay HTML artifact outside the active lifeos-app.html interface.",
-      "demoted_at": "2026-08-02T21:30:00Z"
+      "blocker_class": "BLOCKED_TOOLING"
     },
     {
       "id": "step2",

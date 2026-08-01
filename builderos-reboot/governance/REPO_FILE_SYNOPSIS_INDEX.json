@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T09:21:45.378Z",
+  "generated_at": "2026-08-01T09:23:35.311Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -42115,9 +42115,9 @@
     {
       "path": "docs/products/limitlessos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LimitlessOS business stack",
-      "bytes": 13345,
-      "mtime": "2026-08-01T09:21:35.568Z",
-      "indexed_at": "2026-08-01T09:21:45.378Z"
+      "bytes": 13547,
+      "mtime": "2026-08-01T09:23:26.616Z",
+      "indexed_at": "2026-08-01T09:23:35.311Z"
     },
     {
       "path": "docs/products/lip/FILE_MANIFEST.json",
@@ -67466,9 +67466,9 @@
     {
       "path": "public/overlay/formalize-businessos-ui.html",
       "synopsis": "HTML page: BusinessOS Interface",
-      "bytes": 1084,
-      "mtime": "2026-07-17T22:00:13.233Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 1197,
+      "mtime": "2026-08-01T09:23:13.316Z",
+      "indexed_at": "2026-08-01T09:23:35.311Z"
     },
     {
       "path": "public/overlay/future-self-simulator.html",
