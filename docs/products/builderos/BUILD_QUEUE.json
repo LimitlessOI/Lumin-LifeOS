@@ -180,13 +180,13 @@
     },
     {
       "id": "builderos-3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/timezone-utils.js",
       "task": "adjust commitment timezone checks",
       "spec": "Add function to check commitment due dates against Adam's timezone instead of UTC.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "adjustCommitmentDueDates"
       ],
@@ -205,14 +205,16 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:26:12.285Z",
-      "commit_sha": "c4a3ec2e3195c69f190417889facb2db7531f65c",
+      "commit_sha": "dea1a1ab1de126945d3b7f25efa8bbec4b5cd418",
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-3",
       "mission_id": "PRODUCT-builderos",
       "same_signature_count": 0,
       "demoted": false,
       "last_error": "artifact_proof_failed: Intl.DateTimeFormat",
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T08:02:50.861Z",
+      "completed_at": "2026-08-01T08:03:04.196Z"
     },
     {
       "id": "builderos-4",
@@ -407,7 +409,7 @@
     },
     {
       "id": "builderos-8",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/board.js",
       "task": "route for populated sections",
       "spec": "Ensure route returns all 8 populated sections of the household board.",
@@ -436,14 +438,20 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:44:01.869Z",
-      "commit_sha": "54f3154becae458c3e4ca924c1ab53e9466cded6",
+      "commit_sha": "576a6ad73a2c78ed500342324528988a1b313e2f",
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-8",
       "mission_id": "PRODUCT-builderos",
-      "same_signature_count": 0,
+      "same_signature_count": 1,
       "demoted": false,
-      "last_error": "artifact_proof_failed: 8 sections populated",
-      "heal_unblocked": true
+      "last_error": null,
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T08:03:19.760Z",
+      "blocker_class": null,
+      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: missing_exports:registerBoardRoutes; registerBoardRoutes",
+      "completed_at": "2026-08-01T08:04:03.423Z",
+      "heal_claimed": true,
+      "heal_reason": "artifact_proof_pass"
     },
     {
       "id": "builderos-9",
@@ -3304,6 +3312,6 @@
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-builderos",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:30:24.349Z",
+  "updated_at": "2026-08-01T08:04:03.423Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/builderos/BUILD_QUEUE.json"
 }

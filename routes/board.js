@@ -6,7 +6,7 @@ import express from 'express';
 
 const router = express.Router();
 
-// Mock data for populated sections
+// Mock data for 8 sections populated
 const populatedSections = [
   { id: 1, name: 'Living Room', items: ['Sofa', 'TV', 'Coffee Table'] },
   { id: 2, name: 'Kitchen', items: ['Refrigerator', 'Oven', 'Microwave'] },

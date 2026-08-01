@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T08:00:27.137Z",
+  "generated_at": "2026-08-01T08:04:27.510Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12677,
   "files": [
@@ -33104,9 +33104,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1825,
-      "mtime": "2026-08-01T07:50:36.987Z",
-      "indexed_at": "2026-08-01T07:51:38.634Z",
+      "bytes": 1779,
+      "mtime": "2026-08-01T08:03:34.084Z",
+      "indexed_at": "2026-08-01T08:04:27.510Z",
       "synopsis_index_only": true
     },
     {
@@ -41136,9 +41136,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 374758,
-      "mtime": "2026-08-01T06:36:34.295Z",
-      "indexed_at": "2026-08-01T06:36:53.017Z"
+      "bytes": 375462,
+      "mtime": "2026-08-01T08:04:12.660Z",
+      "indexed_at": "2026-08-01T08:04:27.510Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -68814,9 +68814,9 @@
     {
       "path": "routes/board.js",
       "synopsis": "Mock data for populated sections",
-      "bytes": 982,
-      "mtime": "2026-07-16T19:42:53.595Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 984,
+      "mtime": "2026-08-01T08:03:54.916Z",
+      "indexed_at": "2026-08-01T08:04:27.510Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
