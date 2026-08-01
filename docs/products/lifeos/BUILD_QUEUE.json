@@ -3089,7 +3089,7 @@
     },
     {
       "id": "lifeos-10",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/lifeos-finance.js",
       "task": "Implement net worth tracking",
       "spec": "Add logic for calculating and storing net worth snapshots from total assets and liabilities.",
@@ -3116,10 +3116,13 @@
         }
       ],
       "last_attempt_at": "2026-08-01T04:24:53.021Z",
-      "last_error": "Zone 3 edit-patch failed — edit old_string is ambiguous (matches more than once) — add surrounding context to make it unique: \"    return rows[0];\\n  }\"",
-      "commit_sha": null,
-      "built_sha": null,
-      "proof": null,
+      "last_error": null,
+      "commit_sha": "eabe86baafc6c36013e8042a186de796274fb949",
+      "built_sha": "eabe86baafc6c36013e8042a186de796274fb949",
+      "proof": {
+        "status": "PASS",
+        "reason": "artifact_proof_pass"
+      },
       "revive_count": 10,
       "revived_at": "2026-08-01T04:08:04.507Z",
       "last_attempt": null,
