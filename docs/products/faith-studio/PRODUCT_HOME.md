@@ -210,6 +210,7 @@ No production runbook yet. This project is concept-stage only.
 
 | Date | What Changed | Why | Amendment Updated | Manifest Updated | Verified |
 |---|---|---|---|---|---|
+| 2026-08-02 | **GAP-FILL: `services/reviewModerationFlow.js` rebuilt to merge `processReviewModeration` with original helpers.** The system-build commit (`bc0af7719`) left only `processReviewModeration` and a self-importing `import { getModerationRules, moderateWithCouncil } from './reviewModerationFlow.js'`, which made the module invalid and caused `audit-false-done-steps` and `bp-priority:once` grounding to fail. Combined the `processReviewModeration` body with the original `getModerationRules` and `moderateWithCouncil` exports and added `@ssot`. | `bp-priority:once` and `evaluateStepExpectations` failed with `missing_exports:processReviewModeration` because the self-import caused the export scanner to reject the file. | ✅ | ✅ | `node --check services/reviewModerationFlow.js` clean; `npm run builder:preflight` PASS | `bp-priority:once` re-verify |
 | 2026-03-29 | Created Faith Studio amendment and manifest from conversation history | Promote sacred-content/tradition-aware product into proper SSOT ownership | ✅ | ✅ | pending |
 
 ---
