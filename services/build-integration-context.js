@@ -199,12 +199,15 @@ export function buildIntegrationContext({
     lines.push('FILE RULES — violating any of these blocks commit (the pre-commit gate will reject the file):');
     const ssotHome = productId ? `docs/products/${productId}/PRODUCT_HOME.md` : 'docs/products/<product>/PRODUCT_HOME.md';
     lines.push(`- The FIRST comment in the file must be a JSDoc block containing \`@ssot ${ssotHome}\` (this is the canonical product home for ${productId || 'this product'}). No markdown fence, no plain comment, no "// services/..." line before it.`);
+    lines.push('- Output plain ES module JavaScript (ESM) only. NO TypeScript type annotations, NO type imports, NO \`: Type\` syntax, and NO \`const x: Type\`. The file extension is .js and it runs directly with Node 20.');
+    lines.push('- Use ONLY the injected deps object. Do NOT \`import pg\` or \`new Pool()\`. Do NOT import a logger from any repo path. Do NOT import sibling files you have not confirmed exist. Database access is \`await deps.pool.query(sql, params)\`; logging is \`deps.logger.info/warn/error\`.');
     if (expectedExports.length) {
       lines.push(`- You MUST export exactly these named exports: ${expectedExports.map((n) => `\`${n}\``).join(', ')}. Do not rename them.`);
     }
     if (fileContains.length) {
       lines.push(`- The source code must contain these literal substrings (they will be checked after commit): ${fileContains.map((s) => JSON.stringify(s)).join(', ')}.`);
     }
+    lines.push('- Do not include example usage, test code, or \`if (require.main === module)\` guards at the bottom of the file.');
   }
 
   return { context: lines.join('\n'), tables, packages, schemaTableCount: Object.keys(schema).length };

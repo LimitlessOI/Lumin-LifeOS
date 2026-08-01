@@ -1295,6 +1295,9 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
         ...(expected_exports.length ? { expected_exports } : {}),
         ...(file_contains.length ? { file_contains } : {}),
         ...(stepTokenBudget ? { max_output_tokens: stepTokenBudget } : {}),
+        // Protected source modules should be authored by a stronger model; the routing policy
+        // still filters and falls back if the requested model is unavailable.
+        ...(/^services\//.test(target_file) ? { model: 'openai_builder_standard' } : {}),
       });
       const b = build.body || {};
       const commit_sha = b.commit_sha || b.sha || b.commit || (b.result && b.result.commit_sha) || null;
