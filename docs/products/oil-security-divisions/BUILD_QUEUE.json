@@ -677,7 +677,7 @@
     },
     {
       "id": "4",
-      "status": "skipped",
+      "status": "done",
       "target_file": "services/securityAuditService.js",
       "task": "create security audit service",
       "spec": "Implement the OIL preset `security-audit` to output structured findings.",
@@ -722,7 +722,8 @@
       "blueprint_step_id": "4",
       "mission_id": "PRODUCT-oil-security-divisions",
       "reaudit_reset_at": "2026-07-30T18:55:06.687Z",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "completed_at": "2026-08-01T05:59:55.000Z"
     },
     {
       "id": "5",
@@ -981,7 +982,7 @@
     },
     {
       "id": "docs-env-registry",
-      "status": "skipped",
+      "status": "done",
       "target_file": "docs/ENV_REGISTRY.md",
       "task": "document ENV_REGISTRY rotation metadata",
       "spec": "Document metadata section for ENV_REGISTRY rotation including crypto tier labels.",
@@ -1013,7 +1014,8 @@
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "docs-env-registry",
       "mission_id": "PRODUCT-oil-security-divisions",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "completed_at": "2026-08-01T05:59:55.000Z"
     },
     {
       "id": "build-sec-f04",
@@ -1128,7 +1130,7 @@
     },
     {
       "id": "sec-f02",
-      "status": "skipped",
+      "status": "done",
       "target_file": "services/secretScannerService.js",
       "task": "extend secret scanner",
       "spec": "Add pre-commit and preflight scanning without blocking placeholders.",
@@ -1161,7 +1163,8 @@
       "same_signature_count": 0,
       "last_attempt_at": null,
       "blocker_class": null,
-      "failure_signature": null
+      "failure_signature": null,
+      "completed_at": "2026-08-01T05:59:55.001Z"
     },
     {
       "id": "sec-f03",
@@ -1672,7 +1675,7 @@
       "spec": "Freeze the SECURITY_ALPHA_SCOPE document to capture the current state of definitions and necessary security guidelines for alpha release.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "Freeze Security Alpha Scope"
       ],
@@ -1684,7 +1687,7 @@
       "revive_count": 9,
       "revived_at": "2026-07-17T19:41:44.822Z",
       "last_attempt": null,
-      "demoted": true,
+      "demoted": false,
       "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: ENOENT: no such file or directory, open '/usr/src/app/drafts/.factory-imp",
       "demoted_at": "2026-07-17T19:46:58.048Z",
       "park_until": null,
@@ -1888,5 +1891,5 @@
   "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-oil-security-divisions",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T05:45:11.185Z"
+  "updated_at": "2026-08-01T05:59:55.018Z"
 }
