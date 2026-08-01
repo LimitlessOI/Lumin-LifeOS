@@ -889,7 +889,7 @@
     },
     {
       "id": "11",
-      "status": "skipped",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register honeypot probe service",
       "spec": "Auto-register honeypot probe routes upon startup for integration.",
@@ -922,7 +922,10 @@
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "11",
       "mission_id": "PRODUCT-oil-security-divisions",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "completed_at": "2026-08-01T17:08:10.345Z",
+      "heal_claimed": true,
+      "heal_reason": "no_proof_required_non_server_code"
     },
     {
       "id": "12",
@@ -1893,5 +1896,5 @@
   "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-oil-security-divisions",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T15:53:41.619Z"
+  "updated_at": "2026-08-01T17:08:10.351Z"
 }
