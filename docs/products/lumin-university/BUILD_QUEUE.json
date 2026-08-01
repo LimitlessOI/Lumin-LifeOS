@@ -965,25 +965,25 @@
     },
     {
       "id": "003",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/credentialVerificationScoping.mjs",
       "task": "scope credential verification technology",
       "spec": "Outline the credential verification technology, assessing options like blockchain and cryptographic hash. Export `evaluateBlockchainSolution` and `evaluateHashSolution` as pure analysis functions returning a structured comparison with `approach`, `pros`, `cons`, `recommendation`.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "expected_exports": [
         "evaluateBlockchainSolution",
         "evaluateHashSolution"
       ],
       "shipped_via": null,
       "shipped_at": null,
-      "commit_sha": null,
+      "commit_sha": "901d30a191f71a762ec10fe476c73659f0a3a308",
       "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "003",
       "mission_id": "PRODUCT-lumin-university",
       "last_error": "Commit failed: FILE_PLACEMENT_VIOLATION — commit refused.\n- [ERROR][missing_ssot] scripts/credentialVerificationScoping.mjs: New protected source file has no @ssot JSDoc tag pointing to its product home",
-      "last_attempt_at": "2026-08-01T01:43:53.146Z",
+      "last_attempt_at": "2026-08-01T01:47:14.504Z",
       "blocker_class": "BLOCKED_SECRET",
       "claim_level": null,
       "park_until": null,
@@ -996,7 +996,8 @@
         "reason": "commit_sha exists in repo but is not an ancestor of origin/main -- ship landed on origin/builderos-autonomous or origin/builderos-shadow instead of main (GITHUB_DEPLOY_BRANCH mismatch), and the content itself was placeholder/stub code (verified by direct inspection), not a real implementation. Confirmed via: git merge-base --is-ancestor <sha> origin/main."
       },
       "same_signature_count": 1,
-      "failure_signature": "build|BLOCKED_SECRET|Commit failed: FILE_PLACEMENT_VIOLATION — commit refused. - [ERROR][missing_ssot] scripts/credentialVerificationScoping.mjs: New protected source file has no @ssot JSDoc tag pointing to its product ho"
+      "failure_signature": "build|BLOCKED_SECRET|Commit failed: FILE_PLACEMENT_VIOLATION — commit refused. - [ERROR][missing_ssot] scripts/credentialVerificationScoping.mjs: New protected source file has no @ssot JSDoc tag pointing to its product ho",
+      "completed_at": "2026-08-01T01:47:27.461Z"
     },
     {
       "id": "004",
@@ -1586,5 +1587,5 @@
   "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-lumin-university",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T01:44:09.788Z"
+  "updated_at": "2026-08-01T01:47:27.462Z"
 }
