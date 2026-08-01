@@ -514,7 +514,7 @@
     },
     {
       "id": "lo-consent-auto-register",
-      "status": "done",
+      "status": "pending",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "Register lifeos-consent-routes so therapist consent API mounts at boot without editing server.js.",
       "spec": "Ensure modules[] contains {\"path\":\"routes/lifeos-consent-routes.js\",\"register\":\"registerLifeosConsentRoutes\",\"enabled\":true}. Preserve all existing entries. Valid JSON only.",
@@ -522,18 +522,20 @@
         "lo-consent-api"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "lifeos-consent-routes.js",
         "registerLifeosConsentRoutes"
       ],
       "completed_at": "2026-07-12T16:34:23.506Z",
-      "last_error": null,
+      "last_error": "artifact_proof_failed: lifeos-consent-routes.js; registerLifeosConsentRoutes",
       "note": "GAP-FILL: auto-register entry + quality rewrite of consent routes using services/consent-registry.js",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lo-consent-auto-register",
       "mission_id": "PRODUCT-lifeos",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "lo-ui-directives-service",
@@ -604,7 +606,7 @@
     },
     {
       "id": "lo-ui-directives-auto-register",
-      "status": "done",
+      "status": "pending",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "Auto-register lifeos-ui-directives-routes so twin UI directive APIs mount at boot.",
       "spec": "Ensure modules[] contains {\"path\":\"routes/lifeos-ui-directives-routes.js\",\"register\":\"registerLifeosUiDirectivesRoutes\",\"enabled\":true}. Preserve all existing entries. Valid JSON only.",
@@ -612,7 +614,7 @@
         "lo-ui-directives-routes"
       ],
       "founder_gated": false,
-      "attempts": 3,
+      "attempts": 0,
       "file_contains": [
         "lifeos-ui-directives-routes.js",
         "registerLifeosUiDirectivesRoutes"
@@ -624,7 +626,10 @@
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lo-ui-directives-auto-register",
       "mission_id": "PRODUCT-lifeos",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "last_error": "artifact_proof_failed: lifeos-ui-directives-routes.js; registerLifeosUiDirectivesRoutes",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "1",
@@ -858,7 +863,7 @@
     },
     {
       "id": "13",
-      "status": "done",
+      "status": "pending",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "Register LifeOS Perfect Day route in the auto-register module registry",
       "spec": "Write the exact auto-register module registry JSON. Preserve every existing module entry and ensure the LifeOS Perfect Day route entry is present.",
@@ -872,7 +877,7 @@
       ],
       "attempts": 0,
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "artifact_proof_failed: routes/lifeos-perfect-day-routes.js; registerLifeosPerfectDayRoutes",
       "blocker_class": null,
       "claim_level": null,
       "park_until": null,
@@ -887,7 +892,9 @@
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "13",
       "mission_id": "PRODUCT-lifeos",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "4",
@@ -3976,7 +3983,7 @@
         "lifeos-assessment-battery-routes.js",
         "registerLifeosAssessmentBatteryRoutes"
       ],
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -3985,14 +3992,16 @@
       "blueprint_step_id": "lifeos-p1-assessment-autoreg",
       "mission_id": "PRODUCT-lifeos",
       "last_attempt_at": "2026-07-18T01:34:56.025Z",
-      "last_error": null,
+      "last_error": "artifact_proof_failed: lifeos-assessment-battery-routes.js; registerLifeosAssessmentBatteryRoutes",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "pre_existing": true,
       "shipped_via": "pre_existing_artifact_proof",
       "shipped_at": "2026-07-18T01:47:20.914Z",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-p1-chronotype-winddown",
@@ -4103,7 +4112,7 @@
         "lifeos-food-logger-routes.js",
         "registerLifeosFoodLoggerRoutes"
       ],
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -4112,7 +4121,7 @@
       "blueprint_step_id": "lifeos-p1-food-logger-autoreg",
       "mission_id": "PRODUCT-lifeos",
       "last_attempt_at": "2026-07-18T01:50:56.953Z",
-      "last_error": null,
+      "last_error": "artifact_proof_failed: lifeos-food-logger-routes.js; registerLifeosFoodLoggerRoutes",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
@@ -4120,7 +4129,8 @@
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-p1-food-logger-ui",
@@ -4231,7 +4241,7 @@
         "lifeos-sleep-chronotype-routes.js",
         "registerLifeosSleepChronotypeRoutes"
       ],
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -4239,12 +4249,13 @@
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-sleep-insights-autoreg",
       "mission_id": "PRODUCT-lifeos",
-      "last_error": null,
+      "last_error": "artifact_proof_failed: lifeos-sleep-chronotype-routes.js; registerLifeosSleepChronotypeRoutes",
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-p1-ask-your-life-service",
@@ -4343,7 +4354,7 @@
         "lifeos-ask-your-life-routes.js",
         "registerAskYourLifeRoutes"
       ],
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -4352,7 +4363,7 @@
       "blueprint_step_id": "lifeos-p1-ask-your-life-autoreg",
       "mission_id": "PRODUCT-lifeos",
       "last_attempt_at": "2026-07-18T01:57:54.643Z",
-      "last_error": null,
+      "last_error": "artifact_proof_failed: lifeos-ask-your-life-routes.js; registerAskYourLifeRoutes",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
@@ -4360,7 +4371,8 @@
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-p1-ask-your-life-ui",
@@ -4433,7 +4445,7 @@
         "lifeos-decision-review-routes.js",
         "registerLifeosDecisionReviewRoutes"
       ],
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -4441,12 +4453,13 @@
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-decision-review-autoreg",
       "mission_id": "PRODUCT-lifeos",
-      "last_error": null,
+      "last_error": "artifact_proof_failed: lifeos-decision-review-routes.js; registerLifeosDecisionReviewRoutes",
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-p1-voice-journal-ui-proof",
@@ -4515,7 +4528,7 @@
         "lifeos-cycle-routes.js",
         "registerLifeOSCycleRoutes"
       ],
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -4524,7 +4537,7 @@
       "blueprint_step_id": "lifeos-p1-cycle-autoreg",
       "mission_id": "PRODUCT-lifeos",
       "last_attempt_at": "2026-07-18T02:03:09.600Z",
-      "last_error": null,
+      "last_error": "artifact_proof_failed: lifeos-cycle-routes.js; registerLifeOSCycleRoutes",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
@@ -4532,7 +4545,8 @@
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-p1-cycle-register-export",
@@ -4661,7 +4675,7 @@
         "lifeos-deep-talk-decks-routes.js",
         "registerLifeosDeepTalkDeckRoutes"
       ],
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -4669,12 +4683,13 @@
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-deep-talk-autoreg",
       "mission_id": "PRODUCT-lifeos",
-      "last_error": null,
+      "last_error": "artifact_proof_failed: lifeos-deep-talk-decks-routes.js; registerLifeosDeepTalkDeckRoutes",
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-p1-deep-talk-ui",
@@ -4830,7 +4845,7 @@
         "lifeos-legacy-routes.js",
         "registerLifeOSLegacyRoutes"
       ],
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -4838,12 +4853,13 @@
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-legacy-autoreg",
       "mission_id": "PRODUCT-lifeos",
-      "last_error": null,
+      "last_error": "artifact_proof_failed: lifeos-legacy-routes.js; registerLifeOSLegacyRoutes",
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-p1-psychometric-service",
@@ -4931,7 +4947,7 @@
         "lifeos-psychometric-battery-routes.js",
         "registerLifeosPsychometricBatteryRoutes"
       ],
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -4939,12 +4955,13 @@
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-psychometric-autoreg",
       "mission_id": "PRODUCT-lifeos",
-      "last_error": null,
+      "last_error": "artifact_proof_failed: lifeos-psychometric-battery-routes.js; registerLifeosPsychometricBatteryRoutes",
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-p1-psychometric-ui",
@@ -5055,7 +5072,7 @@
         "lifeos-parenting-scripts-routes.js",
         "registerLifeosParentingScriptRoutes"
       ],
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -5063,12 +5080,13 @@
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-parenting-scripts-autoreg",
       "mission_id": "PRODUCT-lifeos",
-      "last_error": null,
+      "last_error": "artifact_proof_failed: lifeos-parenting-scripts-routes.js; registerLifeosParentingScriptRoutes",
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-p1-parenting-scripts-ui",
@@ -5181,7 +5199,7 @@
         "lifeos-labs-longevity-routes.js",
         "registerLifeosLabsLongevityRoutes"
       ],
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -5189,12 +5207,13 @@
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-labs-autoreg",
       "mission_id": "PRODUCT-lifeos",
-      "last_error": null,
+      "last_error": "artifact_proof_failed: lifeos-labs-longevity-routes.js; registerLifeosLabsLongevityRoutes",
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-p1-labs-ui",
@@ -5329,7 +5348,7 @@
         "lifeos-auth-routes.js",
         "registerLifeOSAuthRoutes"
       ],
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -5340,11 +5359,12 @@
       "pre_existing": true,
       "shipped_via": "pre_existing_artifact_proof",
       "shipped_at": "2026-07-18T02:16:19.464Z",
-      "last_error": null,
+      "last_error": "artifact_proof_failed: lifeos-auth-routes.js; registerLifeOSAuthRoutes",
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-p1-household-board",
@@ -5399,7 +5419,7 @@
         "lifeos-household-board-routes.js",
         "registerLifeosHouseholdBoardRoutes"
       ],
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -5410,11 +5430,12 @@
       "pre_existing": true,
       "shipped_via": "pre_existing_artifact_proof",
       "shipped_at": "2026-07-18T02:16:19.464Z",
-      "last_error": null,
+      "last_error": "artifact_proof_failed: lifeos-household-board-routes.js; registerLifeosHouseholdBoardRoutes",
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-p1-family-register",
@@ -5469,7 +5490,7 @@
         "lifeos-family-routes.js",
         "registerLifeOSFamilyRoutes"
       ],
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -5480,11 +5501,12 @@
       "pre_existing": true,
       "shipped_via": "pre_existing_artifact_proof",
       "shipped_at": "2026-07-18T02:16:19.465Z",
-      "last_error": null,
+      "last_error": "artifact_proof_failed: lifeos-family-routes.js; registerLifeOSFamilyRoutes",
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-p1-parent-mode-endpoint",
@@ -5600,7 +5622,7 @@
         "lifeos-victory-vault-routes.js",
         "registerLifeOSVictoryVaultRoutes"
       ],
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -5611,8 +5633,10 @@
       "pre_existing": true,
       "shipped_via": "pre_existing_artifact_proof",
       "shipped_at": "2026-07-18T02:43:04.941Z",
-      "last_error": null,
-      "same_signature_count": 0
+      "last_error": "artifact_proof_failed: lifeos-victory-vault-routes.js; registerLifeOSVictoryVaultRoutes",
+      "same_signature_count": 0,
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-p1-purpose-register",
@@ -5650,7 +5674,7 @@
         "lifeos-purpose-routes.js",
         "registerLifeOSPurposeRoutes"
       ],
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -5661,8 +5685,10 @@
       "pre_existing": true,
       "shipped_via": "pre_existing_artifact_proof",
       "shipped_at": "2026-07-18T02:43:04.941Z",
-      "last_error": null,
-      "same_signature_count": 0
+      "last_error": "artifact_proof_failed: lifeos-purpose-routes.js; registerLifeOSPurposeRoutes",
+      "same_signature_count": 0,
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-p1-market-demand-signal",
@@ -5752,7 +5778,7 @@
         "lifeos-date-night-routes.js",
         "registerLifeosDateNightRoutes"
       ],
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -5763,8 +5789,10 @@
       "pre_existing": true,
       "shipped_via": "pre_existing_artifact_proof",
       "shipped_at": "2026-07-18T02:43:04.941Z",
-      "last_error": null,
-      "same_signature_count": 0
+      "last_error": "artifact_proof_failed: lifeos-date-night-routes.js; registerLifeosDateNightRoutes",
+      "same_signature_count": 0,
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-p1-date-night-ui",
@@ -6062,7 +6090,7 @@
       "file_contains": [
         "registerLifeOSEthicsRoutes"
       ],
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -6073,7 +6101,10 @@
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-ethics-autoreg",
       "mission_id": "PRODUCT-lifeos",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "last_error": "artifact_proof_failed: registerLifeOSEthicsRoutes",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-p1-member-feedback-nav",
@@ -6107,7 +6138,7 @@
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-lifeos",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T17:08:03.947Z",
+  "updated_at": "2026-08-01T18:54:54.404Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/lifeos/BUILD_QUEUE.json",
   "backlog_signature": "bee260cc2b1db81b"
 }
