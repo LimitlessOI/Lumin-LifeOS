@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T14:35:30.902Z",
+  "generated_at": "2026-08-01T14:40:44.526Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12726,
+  "file_count": 12727,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1785,
-      "mtime": "2026-08-01T14:33:36.629Z",
-      "indexed_at": "2026-08-01T14:35:30.115Z",
+      "bytes": 1792,
+      "mtime": "2026-08-01T14:37:58.261Z",
+      "indexed_at": "2026-08-01T14:40:44.526Z",
       "synopsis_index_only": true
     },
     {
@@ -37285,6 +37285,13 @@
       "bytes": 457,
       "mtime": "2026-07-30T03:57:08.479Z",
       "indexed_at": "2026-07-30T22:32:11.913Z"
+    },
+    {
+      "path": "db/migrations/20260802_create_partner_configurations.sql",
+      "synopsis": "Database migration — 20260802_create_partner_configurations.sql.",
+      "bytes": 659,
+      "mtime": "2026-08-01T14:40:41.061Z",
+      "indexed_at": "2026-08-01T14:40:44.526Z"
     },
     {
       "path": "db/migrations/20260802_create_sentry_site_builder_gate_log.sql",
@@ -42852,9 +42859,9 @@
     {
       "path": "docs/products/white-label/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — White Label",
-      "bytes": 11303,
-      "mtime": "2026-08-01T14:35:05.741Z",
-      "indexed_at": "2026-08-01T14:35:15.003Z"
+      "bytes": 12222,
+      "mtime": "2026-08-01T14:40:32.793Z",
+      "indexed_at": "2026-08-01T14:40:44.526Z"
     },
     {
       "path": "docs/products/WHITELABEL.md",
@@ -71902,10 +71909,10 @@
     },
     {
       "path": "routes/white-label-routes.js",
-      "synopsis": "Exports createWhiteLabelRoutes — routes/white-label-routes.js.",
-      "bytes": 5578,
-      "mtime": "2026-07-16T19:42:53.603Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis": "White-label partner configuration routes.",
+      "bytes": 7335,
+      "mtime": "2026-08-01T14:39:27.305Z",
+      "indexed_at": "2026-08-01T14:40:44.526Z",
       "ssot": [
         "docs/products/white-label/PRODUCT_HOME.md"
       ]

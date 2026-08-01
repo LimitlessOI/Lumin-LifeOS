@@ -1,9 +1,36 @@
 import express from 'express';
 
 /**
- * SYNOPSIS: Exports createWhiteLabelRoutes — routes/white-label-routes.js.
+ * SYNOPSIS: White-label partner configuration routes.
  * @ssot docs/products/white-label/PRODUCT_HOME.md
  */
+
+function asTrimmedString(value) {
+  if (value === undefined || value === null) return '';
+  return String(value).trim();
+}
+
+function isUuid(value) {
+  if (!value || typeof value !== 'string') return false;
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value);
+}
+
+function normalizeBooleanField(body, key) {
+  const value = body?.[key];
+  if (typeof value === 'boolean') return value;
+  if (typeof value === 'string') return value.toLowerCase() === 'true' || value === '1';
+  if (typeof value === 'number') return value === 1;
+  return false;
+}
+
+function sanitizeCouncilResponse(result) {
+  if (result && typeof result === 'object' && typeof result.response === 'string') {
+    return result.response;
+  }
+  if (typeof result === 'string') return result;
+  return JSON.stringify(result);
+}
+
 export function createWhiteLabelRoutes(app, ctx = {}) {
   const { pool, logger } = ctx;
   const requireKey = ctx.requireKey || ctx.rk || ((_req, res) => {
@@ -62,7 +89,7 @@ export function createWhiteLabelRoutes(app, ctx = {}) {
       const aiSummary = await invokeCouncil(
         [ 'Summarize this white-label partner configuration for internal storage and response shaping.',
           ...Object.entries(configPayload).map(([key, value]) => `${key}: ${value}`),
-          'Return a concise normalized summary without internal reasoning.'
+          'Return a concise normalized summary without internal reasoning or model details.'
         ].join('\n'),
         'general',
       );
@@ -126,6 +153,29 @@ export function createWhiteLabelRoutes(app, ctx = {}) {
       return res.json({ ok: true, data: rows[0] });
     } catch (err) {
       if (logger?.error) logger.error({ err }, 'white-label get config route failed');
+      next(err);
+    }
+  });
+
+  // Exposed GET config endpoint expected by white-label-1 BP step
+  app.get('/api/v1/white-label/config', requireKey, async (req, res, next) => {
+    try {
+      const ownerId = req.lifeosUser?.sub || null;
+      if (!ownerId) return res.status(401).json({ error: 'jwt_required' });
+
+      const clientId = asTrimmedString(req.query.client_id);
+      if (!clientId || !isUuid(clientId)) return res.status(400).json({ ok: false, error: 'invalid_client_id' });
+
+      const { rows } = await pool.query(
+        `SELECT * FROM partner_configurations WHERE owner_id = $1 AND client_id = $2`,
+        [ownerId, clientId],
+      );
+
+      if (rows.length === 0) return res.status(404).json({ ok: false, error: 'config_not_found' });
+
+      return res.json({ ok: true, data: rows[0] });
+    } catch (err) {
+      if (logger?.error) logger.error({ err }, 'white-label get /api/v1/white-label/config route failed');
       next(err);
     }
   });

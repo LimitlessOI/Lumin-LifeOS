@@ -732,13 +732,13 @@
     },
     {
       "id": "white-label-4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/partner-key-generation.js",
       "task": "define partner API key schema",
       "spec": "Design key generation differentiating partner keys from platform keys.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 1,
+      "attempts": 2,
       "expected_exports": [
         "generatePartnerKey"
       ],
@@ -761,13 +761,14 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T22:53:15.944Z",
-      "commit_sha": "a17cee8ffc330e8378078b1fae641a9383e085b7",
+      "commit_sha": "48c940e7746f05322e413d1b6ed08da23ad34a26",
       "same_signature_count": 0,
       "demoted": false,
       "last_error": "artifact_proof_failed: module.exports = {",
       "heal_unblocked": true,
-      "last_attempt_at": "2026-08-01T14:33:23.176Z",
-      "blocker_class": "BLOCKED_TOOLING"
+      "last_attempt_at": "2026-08-01T14:37:26.055Z",
+      "blocker_class": "BLOCKED_TOOLING",
+      "completed_at": "2026-08-01T14:37:26.101Z"
     },
     {
       "id": "white-label-step2",
@@ -906,7 +907,7 @@
       "spec": "Extract config endpoints from server.js into this dedicated route file.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerWhiteLabelRoutes"
       ],
@@ -926,9 +927,9 @@
           "assertion_id": "expected_exports:routes/white-label-routes.js"
         }
       ],
-      "last_attempt_at": null,
-      "last_error": "artifact_proof_failed: app.get('/api/v1/white-label/config',",
-      "commit_sha": "cef9ce4936d36d810967e0f75d609d7dd810764d",
+      "last_attempt_at": "2026-08-01T14:37:39.113Z",
+      "last_error": "grounding_failed: missing_sql_table: partner_configurations",
+      "commit_sha": "2cba0ece95b9f5c9bf6c09d8309117c4a12d8722",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -940,7 +941,7 @@
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
-      "blocker_class": null,
+      "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
@@ -949,8 +950,10 @@
       "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "white-label-1",
       "mission_id": "PRODUCT-white-label",
-      "same_signature_count": 0,
-      "heal_unblocked": true
+      "same_signature_count": 1,
+      "heal_unblocked": true,
+      "artifact_proven": true,
+      "failure_signature": "grounding|BLOCKED_TOOLING|grounding_failed: missing_sql_table: partner_configurations"
     },
     {
       "id": "white-label-step1",
@@ -1028,6 +1031,5 @@
   "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-white-label",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T14:33:35.476Z",
-  "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/white-label/BUILD_QUEUE.json"
+  "updated_at": "2026-08-01T14:37:57.169Z"
 }
