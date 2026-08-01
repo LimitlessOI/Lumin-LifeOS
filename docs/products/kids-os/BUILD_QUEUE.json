@@ -305,7 +305,7 @@
       "spec": "Compile insights from 10 parent interviews into structured data.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "getParentInsights"
       ],
@@ -320,7 +320,7 @@
       "revive_count": 6,
       "revived_at": "2026-07-16T01:53:22.090Z",
       "last_attempt": null,
-      "demoted": true,
+      "demoted": false,
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:/** Insights from parent interviews */; behavior_assertion_failed; behavior_proof",
       "demoted_at": "2026-07-16T02:04:58.027Z",
       "park_until": null,
@@ -342,7 +342,7 @@
       "spec": "Compile insights from 5 teacher interviews focusing on student-facing platform needs.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "getTeacherInsights"
       ],
@@ -357,7 +357,7 @@
       "revive_count": 6,
       "revived_at": "2026-07-16T02:04:58.027Z",
       "last_attempt": null,
-      "demoted": true,
+      "demoted": false,
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:/** Insights from teacher interviews */; behavior_assertion_failed; behavior_proof",
       "demoted_at": "2026-07-16T04:13:11.740Z",
       "park_until": null,
@@ -645,7 +645,7 @@
       "spec": "Automate the documentation of consultation with the Irlen Syndrome community.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "documentIrlenConsultation"
       ],
@@ -660,7 +660,7 @@
       "revive_count": 6,
       "revived_at": "2026-07-17T19:44:11.567Z",
       "last_attempt": null,
-      "demoted": true,
+      "demoted": false,
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "demoted_at": "2026-07-17T22:07:10.574Z",
       "park_until": null,
@@ -780,7 +780,7 @@
         "step8"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "auditCoppaCompliance"
       ],
@@ -795,7 +795,7 @@
       "revive_count": 6,
       "revived_at": "2026-07-16T06:54:38.671Z",
       "last_attempt": null,
-      "demoted": true,
+      "demoted": false,
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "demoted_at": "2026-07-16T07:27:16.259Z",
       "park_until": null,
@@ -904,7 +904,7 @@
       "spec": "Ensure the pricing validation process is documented and analyzed with target users.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "target user feedback"
       ],
@@ -919,7 +919,7 @@
       "revive_count": 6,
       "revived_at": "2026-07-18T00:08:13.921Z",
       "last_attempt": null,
-      "demoted": true,
+      "demoted": false,
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:target user feedback; behavior_assertion_failed; behavior_proof",
       "demoted_at": "2026-07-18T01:24:28.689Z",
       "park_until": null,
@@ -932,7 +932,7 @@
     },
     {
       "id": "kids-os-6",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/pricingValidation.js",
       "task": "add pricing consultation route",
       "spec": "Implement route to handle pricing validation feedback.",
@@ -960,10 +960,12 @@
       ],
       "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "kids-os-6",
-      "mission_id": "PRODUCT-kids-os"
+      "mission_id": "PRODUCT-kids-os",
+      "completed_at": "2026-08-01T05:59:41.855Z"
     }
   ],
   "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-kids-os",
-  "twin_kind": "product_build_queue_registered"
+  "twin_kind": "product_build_queue_registered",
+  "updated_at": "2026-08-01T05:59:41.859Z"
 }
