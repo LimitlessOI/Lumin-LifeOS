@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T11:12:43.604Z",
+  "generated_at": "2026-08-01T11:15:03.782Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -94612,10 +94612,13 @@
     },
     {
       "path": "services/scriptEngine.js",
-      "synopsis": "Existing code in services/scriptEngine.js",
-      "bytes": 853,
-      "mtime": "2026-07-15T09:02:54.326Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "synopsis": "Engine generates scripts with titles/hooks for media content.",
+      "bytes": 2422,
+      "mtime": "2026-08-01T11:15:03.782Z",
+      "indexed_at": "2026-08-01T11:15:03.782Z",
+      "ssot": [
+        "docs/products/creator-media-os/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/scripture-scene-engine.js",
