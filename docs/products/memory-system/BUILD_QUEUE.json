@@ -575,20 +575,20 @@
     },
     {
       "id": "memory-system-s1",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/202311_vector_embedding_update.sql",
       "task": "add vector embedding column",
       "spec": "Add a 'vector_embedding' column to existing tables for memory data storage.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "ALTER TABLE",
         "ADD COLUMN vector_embedding"
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-01T10:42:40.634Z",
       "last_error": "artifact_proof_failed: ADD COLUMN vector_embedding",
-      "commit_sha": "cc705c58105d893a24471b1d4ebc7621342c86a6",
+      "commit_sha": "c73cf8340ce8f23cb9b51c346597dd9430cb741c",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -610,7 +610,8 @@
       "blueprint_step_id": "memory-system-s1",
       "mission_id": "PRODUCT-memory-system",
       "same_signature_count": 0,
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "completed_at": "2026-08-01T10:42:40.662Z"
     },
     {
       "id": "memory-system-s2",
@@ -1211,6 +1212,6 @@
   "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-memory-system",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T10:38:12.540Z",
+  "updated_at": "2026-08-01T10:42:40.662Z",
   "backlog_signature_at": "2026-08-01T03:49:41.584Z"
 }
