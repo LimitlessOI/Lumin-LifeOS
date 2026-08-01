@@ -503,7 +503,7 @@
         "builderos-9"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerApprovalRoutes"
       ],
@@ -526,14 +526,16 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:57:15.720Z",
-      "commit_sha": "3bf717040fc0d1acdc9432c3bcae7dc29b6cb2a3",
+      "commit_sha": "700d823e8b158b32a4e0617122c22bff8733d0bd",
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-10",
       "mission_id": "PRODUCT-builderos",
       "same_signature_count": 0,
       "demoted": false,
-      "last_error": "artifact_proof_failed: commitment approvals",
-      "heal_unblocked": true
+      "last_error": "artifact_proof_failed: missing_exports:registerApprovalRoutes; registerApprovalRoutes",
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T08:07:57.953Z",
+      "blocker_class": "BLOCKED_TOOLING"
     },
     {
       "id": "builderos-11",
@@ -3314,6 +3316,6 @@
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-builderos",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T08:07:33.898Z",
+  "updated_at": "2026-08-01T08:08:10.065Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/builderos/BUILD_QUEUE.json"
 }
