@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T12:35:10.175Z",
+  "generated_at": "2026-08-01T12:39:40.092Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -30844,9 +30844,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 39116,
-      "mtime": "2026-08-01T12:29:59.608Z",
-      "indexed_at": "2026-08-01T12:30:21.142Z",
+      "bytes": 39359,
+      "mtime": "2026-08-01T12:37:56.496Z",
+      "indexed_at": "2026-08-01T12:39:40.092Z",
       "synopsis_index_only": true
     },
     {
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1821,
-      "mtime": "2026-08-01T12:29:43.444Z",
-      "indexed_at": "2026-08-01T12:30:21.142Z",
+      "bytes": 1938,
+      "mtime": "2026-08-01T12:37:11.432Z",
+      "indexed_at": "2026-08-01T12:39:40.092Z",
       "synopsis_index_only": true
     },
     {
@@ -42391,9 +42391,9 @@
     {
       "path": "docs/products/personal-finance-os/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Personal Finance OS",
-      "bytes": 13735,
-      "mtime": "2026-08-01T08:48:17.387Z",
-      "indexed_at": "2026-08-01T08:48:17.387Z"
+      "bytes": 15605,
+      "mtime": "2026-08-01T12:39:27.476Z",
+      "indexed_at": "2026-08-01T12:39:40.092Z"
     },
     {
       "path": "docs/products/PERSONALFINANCEOS.md",
@@ -69895,10 +69895,10 @@
     },
     {
       "path": "routes/ipsReview.js",
-      "synopsis": "Existing routes and handlers go here",
-      "bytes": 633,
-      "mtime": "2026-07-16T19:42:53.598Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis": "HTTP route module — IPS Review.",
+      "bytes": 1303,
+      "mtime": "2026-08-01T12:39:06.588Z",
+      "indexed_at": "2026-08-01T12:39:40.092Z",
       "ssot": [
         "docs/products/personal-finance-os/PRODUCT_HOME.md"
       ]
@@ -90168,9 +90168,9 @@
     {
       "path": "services/emotionalIntelligence.js",
       "synopsis": "Provides services for integrating emotional intelligence signals and correlating wearable data.",
-      "bytes": 2802,
-      "mtime": "2026-08-01T12:35:10.175Z",
-      "indexed_at": "2026-08-01T12:35:10.175Z",
+      "bytes": 2966,
+      "mtime": "2026-08-01T12:39:17.440Z",
+      "indexed_at": "2026-08-01T12:39:40.092Z",
       "ssot": [
         "docs/products/personal-finance-os/PRODUCT_HOME.md"
       ]

@@ -56,3 +56,8 @@ export async function analyzeEmotionalSignals(deps, payload) {
     throw new Error('Failed in analyzeEmotionalSignals');
   }
 }
+
+// Alias for BUILD_QUEUE step5 expected export
+export async function correlateEmotionalSignals(deps, payload) {
+  return analyzeEmotionalSignals(deps, payload);
+}

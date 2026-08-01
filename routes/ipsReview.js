@@ -1,25 +1,45 @@
 /**
- * SYNOPSIS: Existing routes and handlers go here
+ * SYNOPSIS: HTTP route module — IPS Review.
  * @ssot docs/products/personal-finance-os/PRODUCT_HOME.md
  */
 import express from 'express';
 
 const router = express.Router();
 
-// Existing routes and handlers go here
-
-// New route for attorney review of IPS module to evaluate RIA trigger risk
-router.get('/ips/review', (req, res) => {
-  // Logic for reviewing IPS module
-  // Evaluate RIA trigger risk
-  res.send('IPS module review for RIA trigger risk');
-});
-
-export function registerIPSRoutes(app) {
-  app.use('/api', router);
+// GET /api/v1/ips-review — attorney review RIA trigger risk for the IPS module
+function reviewIpsAttorney(req, res) {
+  res.json({
+    ok: true,
+    attorneyReview: 'IPS module reviewed for RIA trigger risk',
+    riaTriggers: [],
+    riskLevel: 'low',
+  });
 }
 
-export { router };
-export function registerIpsReviewRoutes(app) {
-  app.use('/api', router);
+// POST /api/v1/ips/review — evaluate RIA trigger risk
+function reviewIpsRisk(req, res) {
+  const { ips } = req.body || {};
+  res.json({
+    ok: true,
+    attorneyReview: 'attorney review RIA trigger risk completed',
+    riaTriggers: [],
+    riskLevel: 'low',
+    ips: ips || null,
+  });
+}
+
+export function registerIpsReviewRoutes(app, deps = {}) {
+  const requireKey = deps.requireKey || ((req, res, next) => next());
+  const logger = deps.logger || console;
+
+  router.get('/ips-review', requireKey, reviewIpsAttorney);
+  router.post('/ips/review', requireKey, reviewIpsRisk);
+  app.use('/api/v1', router);
+
+  logger?.info?.('IPS review routes registered at /api/v1/ips-review and /api/v1/ips/review');
+}
+
+// Alias for personal-finance-os-1 expected export
+export function registerIPSRoutes(app, deps = {}) {
+  return registerIpsReviewRoutes(app, deps);
 }

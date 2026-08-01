@@ -836,6 +836,13 @@
       "mount_path": "/api/v1/leadscoring",
       "enabled": true,
       "note": "BoldTrail lead scoring route auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/ipsReview.js",
+      "register": "registerIpsReviewRoutes",
+      "mount_path": "/api/v1",
+      "enabled": true,
+      "note": "Personal Finance OS IPS review route auto-registered for module-health proof."
     }
   ]
 }

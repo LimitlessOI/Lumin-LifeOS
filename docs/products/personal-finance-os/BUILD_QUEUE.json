@@ -805,7 +805,7 @@
       "spec": "Enhance IPS review route to support attorney RIA trigger risk evaluation.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerIpsReviewRoutes"
       ],
@@ -828,14 +828,17 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:50:39.782Z",
-      "commit_sha": "ba9f97713c86957c604734270c880fcfbbcaf0d0",
+      "commit_sha": "91d9e4dfae3c1981f858f3a674e962e8345dfdf3",
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "personal-finance-os-step1",
       "mission_id": "PRODUCT-personal-finance-os",
-      "same_signature_count": 0,
+      "same_signature_count": 1,
       "demoted": false,
-      "last_error": "artifact_proof_failed: attorney review RIA",
-      "heal_unblocked": true
+      "last_error": "artifact_proof_failed: missing_exports:registerIpsReviewRoutes; registerIpsReviewRoutes; attorney review RIA",
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T12:36:58.583Z",
+      "blocker_class": "BLOCKED_TOOLING",
+      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: missing_exports:registerIpsReviewRoutes; registerIpsReviewRoutes; attorney review RIA"
     },
     {
       "id": "personal-finance-os-step2",
@@ -1116,6 +1119,5 @@
   "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-personal-finance-os",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T12:35:15.922Z",
-  "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/personal-finance-os/BUILD_QUEUE.json"
+  "updated_at": "2026-08-01T12:37:10.075Z"
 }
