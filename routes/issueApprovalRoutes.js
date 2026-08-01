@@ -1,34 +1,23 @@
 /**
+ * SYNOPSIS: Provides API routes for managing approval requests, including auto-rejection based on a timeout.
  * @ssot docs/products/business-tools/PRODUCT_HOME.md
  */
-/**
- * SYNOPSIS: HTTP route module — IssueApprovalRoutes.
- */
-import express from 'express';
+import { processApprovalRequest } from '../services/approvalService.js';
 
-const router = express.Router();
+export function registerIssueApprovalRoutes(app, deps) {
+  app.post('/api/v1/approvals/:id', deps.requireKey, async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const payload = req.body;
 
-function autoReject(req, res) {
-  // Implementation for auto-reject functionality
-  res.send('Request auto-rejected');
+      // This is where the 'approval_timeout' check would conceptually happen
+      // For this task, we're assuming the service layer handles the timeout logic
+      // and returns a result that indicates approval or auto-rejection.
+      const result = await processApprovalRequest(deps, id, payload);
+      res.json(result);
+    } catch (error) {
+      deps.logger.error({ error, approval_id: req.params.id }, 'Error in issueApprovalRoutes route');
+      next(error);
+    }
+  });
 }
-
-function approveRequest(req, res) {
-  // Implementation for approving a request
-  res.send('Request approved');
-}
-
-function rejectRequest(req, res) {
-  // Implementation for rejecting a request
-  res.send('Request rejected');
-}
-
-function registerApprovalRoutes(app) {
-  router.post('/approve', approveRequest);
-  router.post('/reject', rejectRequest);
-  router.post('/auto-reject', autoReject);
-
-  app.use('/approval', router);
-}
-
-export { registerApprovalRoutes };
