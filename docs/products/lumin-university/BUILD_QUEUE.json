@@ -57,18 +57,18 @@
     },
     {
       "id": "2",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/002_create_mentor_criteria.sql",
       "task": "create mentor qualification criteria table",
       "spec": "Table to store evaluator/mentor qualification criteria. Columns: id (UUID primary key), role (TEXT NOT NULL), criteria_name (TEXT NOT NULL), criteria_description (TEXT), min_value (NUMERIC), max_value (NUMERIC), unit (TEXT).",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS mentor_qualification_criteria",
         "criteria_name TEXT"
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-01T00:19:02.210Z",
       "last_error": null,
       "commit_sha": "474a76c8ddeb4012f8c9ec08908f8f87bcdb833e",
       "built_sha": null,
@@ -98,7 +98,8 @@
         "claimed_shipped_at": "2026-07-15T19:49:48.674Z",
         "reason": "commit_sha exists in repo but is not an ancestor of origin/main -- ship landed on origin/builderos-autonomous or origin/builderos-shadow instead of main (GITHUB_DEPLOY_BRANCH mismatch), and the content itself was placeholder/stub code (verified by direct inspection), not a real implementation. Confirmed via: git merge-base --is-ancestor <sha> origin/main."
       },
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "completed_at": "2026-08-01T00:19:02.237Z"
     },
     {
       "id": "3",
