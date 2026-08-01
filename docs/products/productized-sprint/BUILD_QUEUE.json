@@ -364,7 +364,7 @@
       "spec": "JavaScript module exporting an email template string for customer delivery notifications.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "getDeliveryEmailTemplate"
       ],
@@ -380,7 +380,7 @@
       "revive_count": 6,
       "revived_at": "2026-07-31T09:54:30.992Z",
       "last_attempt": null,
-      "demoted": true,
+      "demoted": false,
       "demote_reason": "revive_exhausted:STEP_STATUS_FORBIDDEN",
       "demoted_at": "2026-07-31T09:59:01.004Z",
       "park_until": null,
@@ -552,7 +552,7 @@
         "5"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "<div id='sprint-queue-panel'>"
       ],
@@ -565,7 +565,7 @@
       "revive_count": 6,
       "revived_at": "2026-07-16T01:31:40.887Z",
       "last_attempt": null,
-      "demoted": true,
+      "demoted": false,
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:<div id='sprint-queue-panel'>; behavior_assertion_failed; behavior_proof",
       "demoted_at": "2026-07-16T02:09:50.338Z",
       "park_until": null,
@@ -1553,7 +1553,7 @@
       "spec": "Provide a template for the completion delivery email customers receive.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "deliveryEmailTemplate"
       ],
@@ -1568,7 +1568,7 @@
       "revive_count": 6,
       "revived_at": "2026-07-17T22:25:41.255Z",
       "last_attempt": null,
-      "demoted": true,
+      "demoted": false,
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:module.exports = { deliveryEmailTemplate }; behavior_assertion_failed; behavior_proof",
       "demoted_at": "2026-07-17T22:40:15.391Z",
       "park_until": null,
@@ -1618,7 +1618,7 @@
     },
     {
       "id": "step5",
-      "status": "skipped",
+      "status": "done",
       "target_file": "routes/sprintQueuePanelRoute.js",
       "task": "develop sprint queue panel",
       "spec": "Implement Sprint Queue panel viewing by users; start with interim Notion board if necessary.",
@@ -1658,7 +1658,8 @@
       "same_signature_count": 0,
       "last_attempt_at": null,
       "blocker_class": null,
-      "failure_signature": null
+      "failure_signature": null,
+      "completed_at": "2026-08-01T05:59:58.771Z"
     },
     {
       "id": "step6",
@@ -2166,5 +2167,5 @@
   "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-productized-sprint",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T02:29:43.824Z"
+  "updated_at": "2026-08-01T05:59:58.786Z"
 }
