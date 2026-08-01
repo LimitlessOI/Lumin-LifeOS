@@ -41,7 +41,7 @@
     },
     {
       "id": "step2",
-      "status": "skipped",
+      "status": "done",
       "target_file": "scripts/transcriptPurgeCron.mjs",
       "task": "confirm transcript auto-purge",
       "spec": "Ensures 24-hour transcript auto-purge cron job is implemented.",
@@ -75,7 +75,10 @@
       "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step2",
       "mission_id": "PRODUCT-word-keeper",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "completed_at": "2026-08-01T18:55:13.776Z",
+      "heal_claimed": true,
+      "heal_reason": "artifact_proof_pass"
     },
     {
       "id": "1",
@@ -125,7 +128,7 @@
     },
     {
       "id": "3",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/transcriptPurgeService.js",
       "task": "Implement transcript purge logic",
       "spec": "Implement a service to handle purging transcripts older than 24 hours.",
@@ -177,7 +180,10 @@
       "escalation_required": true,
       "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
       "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
-      "escalated_at": "2026-07-31T18:40:13.633Z"
+      "escalated_at": "2026-07-31T18:40:13.633Z",
+      "completed_at": "2026-08-01T18:55:13.777Z",
+      "heal_claimed": true,
+      "heal_reason": "artifact_proof_pass"
     },
     {
       "id": "4",
@@ -388,7 +394,7 @@
     },
     {
       "id": "word-keeper-step2",
-      "status": "done",
+      "status": "pending",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register Google Calendar route",
       "spec": "Add the Google Calendar route to the auto-registration file to ensure that it is loaded at startup.",
@@ -406,11 +412,14 @@
       "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "word-keeper-step2",
       "mission_id": "PRODUCT-word-keeper",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "last_error": "artifact_proof_failed: googleCalendarRoutes",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "word-keeper-step3",
-      "status": "skipped",
+      "status": "done",
       "target_file": "services/cronVerificationService.js",
       "task": "verify 24h transcript auto-purge cron",
       "spec": "Implement a service to verify if the 24-hour transcript auto-purge cron is set up correctly.",
@@ -458,7 +467,10 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "completed_at": "2026-08-01T18:55:13.778Z",
+      "heal_claimed": true,
+      "heal_reason": "artifact_proof_pass"
     },
     {
       "id": "word-keeper-step4",
@@ -504,7 +516,7 @@
     },
     {
       "id": "word-keeper-step5",
-      "status": "done",
+      "status": "pending",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register cron verification route",
       "spec": "Add the cron verification route to the auto-registration file to ensure that it is loaded at startup.",
@@ -522,7 +534,10 @@
       "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "word-keeper-step5",
       "mission_id": "PRODUCT-word-keeper",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "last_error": "artifact_proof_failed: cronVerificationRoutes",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "word-keeper-1",
@@ -591,7 +606,7 @@
     },
     {
       "id": "word-keeper-3",
-      "status": "done",
+      "status": "pending",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register new modules",
       "spec": "Add the new Google Calendar route module to the auto-registration configuration.",
@@ -609,7 +624,10 @@
       "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "word-keeper-3",
       "mission_id": "PRODUCT-word-keeper",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "last_error": "artifact_proof_failed: routes/googleCalendarIntegrationRoutes",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "word-keeper-4",
@@ -650,7 +668,7 @@
     },
     {
       "id": "word-keeper-5",
-      "status": "skipped",
+      "status": "done",
       "target_file": "services/cronVerificationService.js",
       "task": "verify transcript purge cron",
       "spec": "Service to verify the transcript purge cron job runs correctly.",
@@ -702,7 +720,10 @@
       "blueprint_step_id": "word-keeper-5",
       "mission_id": "PRODUCT-word-keeper",
       "reaudit_reset_at": "2026-07-18T04:29:52.120Z",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "completed_at": "2026-08-01T18:55:13.781Z",
+      "heal_claimed": true,
+      "heal_reason": "artifact_proof_pass"
     },
     {
       "id": "word-keeper-001",
@@ -822,7 +843,7 @@
     },
     {
       "id": "word-keeper-7",
-      "status": "done",
+      "status": "pending",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "update config for verification routes",
       "spec": "Add transcript verification routes to auto-registered modules",
@@ -840,12 +861,15 @@
       "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "word-keeper-7",
       "mission_id": "PRODUCT-word-keeper",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "last_error": "artifact_proof_failed: transcriptVerificationRoutes",
+      "demoted": false,
+      "heal_unblocked": true
     }
   ],
   "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-word-keeper",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T17:22:01.457Z",
+  "updated_at": "2026-08-01T18:55:13.781Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/word-keeper/BUILD_QUEUE.json"
 }
