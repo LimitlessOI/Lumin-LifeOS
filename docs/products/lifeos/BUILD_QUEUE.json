@@ -2290,7 +2290,7 @@
     },
     {
       "id": "step5",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/lifeos-psychometric-battery-routes.js",
       "task": "route psychometric battery",
       "spec": "Expose psychometric battery API through dedicated routes.",
@@ -2320,15 +2320,20 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-15T23:58:41.324Z",
-      "commit_sha": "ef15d032ac2b428b6408e9feac88e1b3dcb2a46a",
+      "commit_sha": "43fd1f77665983c7547aeb25b0b687d4d0efa2e9",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step5",
       "mission_id": "PRODUCT-lifeos",
       "pre_existing": false,
-      "last_error": "artifact_proof_failed: missing_exports:registerPsychometricRoutes; registerPsychometricRoutes",
+      "last_error": null,
       "reaudit_reset_at": "2026-07-30T18:55:06.601Z",
       "last_attempt_at": "2026-08-01T04:15:58.530Z",
-      "blocker_class": "BLOCKED_TOOLING"
+      "blocker_class": "BLOCKED_TOOLING",
+      "built_sha": "43fd1f77665983c7547aeb25b0b687d4d0efa2e9",
+      "proof": {
+        "status": "PASS",
+        "reason": "artifact_proof_pass"
+      }
     },
     {
       "id": "step6",
