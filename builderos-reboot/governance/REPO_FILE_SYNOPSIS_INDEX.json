@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T13:28:45.107Z",
+  "generated_at": "2026-08-01T13:33:52.982Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12726,
   "files": [
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1647,
-      "mtime": "2026-08-01T13:25:45.776Z",
-      "indexed_at": "2026-08-01T13:28:44.334Z",
+      "bytes": 1867,
+      "mtime": "2026-08-01T13:33:13.308Z",
+      "indexed_at": "2026-08-01T13:33:52.982Z",
       "synopsis_index_only": true
     },
     {
@@ -42152,9 +42152,9 @@
     {
       "path": "docs/products/lumin-university/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Lumin University",
-      "bytes": 21980,
-      "mtime": "2026-08-01T08:48:17.387Z",
-      "indexed_at": "2026-08-01T08:48:17.387Z"
+      "bytes": 23260,
+      "mtime": "2026-08-01T13:33:41.484Z",
+      "indexed_at": "2026-08-01T13:33:52.982Z"
     },
     {
       "path": "docs/products/LUMINUNIVERSITY.md",
@@ -65772,9 +65772,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 3954,
-      "mtime": "2026-08-01T13:04:39.688Z",
-      "indexed_at": "2026-08-01T13:09:39.778Z",
+      "bytes": 3856,
+      "mtime": "2026-08-01T13:30:27.276Z",
+      "indexed_at": "2026-08-01T13:33:52.982Z",
       "synopsis_index_only": true
     },
     {
@@ -89260,9 +89260,9 @@
     {
       "path": "services/competencyStandards.js",
       "synopsis": "Existing code",
-      "bytes": 922,
-      "mtime": "2026-07-16T19:42:53.608Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 959,
+      "mtime": "2026-08-01T13:33:25.444Z",
+      "indexed_at": "2026-08-01T13:33:52.982Z",
       "ssot": [
         "docs/products/lumin-university/PRODUCT_HOME.md"
       ]

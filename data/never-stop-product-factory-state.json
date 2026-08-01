@@ -1,47 +1,47 @@
 {
   "status": "idle",
   "last_task": {
-    "id": "product_build_kids-os_step1",
+    "id": "product_build_lumin-university_lumin-university-1",
     "kind": "product_build_step",
     "priority": 2.5,
-    "product": "kids-os",
-    "product_id": "kids-os",
-    "step_id": "step1",
-    "target_file": "services/apiSpec.js",
-    "detail": "next buildable step: step1"
+    "product": "lumin-university",
+    "product_id": "lumin-university",
+    "step_id": "lumin-university-1",
+    "target_file": "services/competencyStandards.js",
+    "detail": "next buildable step: lumin-university-1"
   },
   "last_result": {
     "ok": false,
-    "task_id": "product_build_kids-os_step1",
+    "task_id": "product_build_lumin-university_lumin-university-1",
     "detail": "product_build_step",
     "outcome": {
       "ok": false,
-      "step_id": "step1",
-      "stage": "build",
-      "reason": "HTTP 502",
+      "step_id": "lumin-university-1",
+      "stage": "artifact_proof",
+      "reason": "artifact_proof_failed: function getCompetencyStandards()",
       "attempts": 1,
       "blocked": false,
-      "blocker_class": "BLOCKED_EXTERNAL",
+      "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "parked": false,
       "summary": {
-        "product_id": "kids-os",
-        "total": 26,
-        "pending": 4,
+        "product_id": "lumin-university",
+        "total": 40,
+        "pending": 3,
         "building": 0,
-        "done": 10,
-        "blocked": 1,
+        "done": 36,
+        "blocked": 0,
         "founder_gated": 0,
         "design_review_flagged": 0,
         "human_hold": 0,
-        "skipped": 11,
+        "skipped": 1,
         "complete": false
       }
     },
     "claim": {
-      "id": "kids-os:step1",
+      "id": "lumin-university:lumin-university-1",
       "kind": "execution",
-      "text": "product step step1 built + verified + served live",
+      "text": "product step lumin-university-1 built + verified + served live",
       "grade": "GUESS",
       "proof": null,
       "original_grade": "KNOW",
@@ -51,19 +51,19 @@
       ]
     },
     "summary": {
-      "product_id": "kids-os",
-      "total": 26,
-      "pending": 4,
+      "product_id": "lumin-university",
+      "total": 40,
+      "pending": 3,
       "building": 0,
-      "done": 10,
-      "blocked": 1,
+      "done": 36,
+      "blocked": 0,
       "founder_gated": 0,
       "design_review_flagged": 0,
       "human_hold": 0,
-      "skipped": 11,
+      "skipped": 1,
       "complete": false
     }
   },
   "cycles": 1,
-  "updated_at": "2026-08-01T13:25:45.778Z"
+  "updated_at": "2026-08-01T13:33:13.310Z"
 }

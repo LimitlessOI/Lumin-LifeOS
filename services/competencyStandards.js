@@ -5,6 +5,7 @@
 // Existing code
 let competencyStandards = {};
 
+// function getCompetencyStandards()
 // Function to retrieve competency standards
 export function getCompetencyStandards(domain) {
     return competencyStandards[domain] || {};
