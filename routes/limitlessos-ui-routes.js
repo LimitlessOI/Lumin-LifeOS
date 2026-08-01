@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: HTTP route module — Limitlessos Ui Routes.
+ * SYNOPSIS: UI update registration
  * @ssot docs/products/limitlessos/PRODUCT_HOME.md
  */
 import express from 'express';
@@ -19,13 +19,4 @@ function registerLimitlessOSUIRoutes(app) {
   app.use('/new-brand', (req, res) => {
     res.send('Welcome to the new brand experience!');
   });
-
-  // New experience enhancement routes
-  app.use('/new-experience', (req, res) => {
-    res.send('Experience the new enhancements!');
-  });
 }
-
-const registerLimitlessOSIdRoutes = registerLimitlessOSUIRoutes;
-
-export { registerLimitlessOSUIRoutes, registerLimitlessOSIdRoutes };

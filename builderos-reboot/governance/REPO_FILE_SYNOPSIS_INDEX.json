@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T09:45:54.967Z",
+  "generated_at": "2026-08-01T09:46:11.633Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -42115,9 +42115,9 @@
     {
       "path": "docs/products/limitlessos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LimitlessOS business stack",
-      "bytes": 16718,
-      "mtime": "2026-08-01T09:45:43.648Z",
-      "indexed_at": "2026-08-01T09:45:54.967Z"
+      "bytes": 16659,
+      "mtime": "2026-08-01T09:46:06.392Z",
+      "indexed_at": "2026-08-01T09:46:11.633Z"
     },
     {
       "path": "docs/products/lip/FILE_MANIFEST.json",
@@ -70643,10 +70643,10 @@
     },
     {
       "path": "routes/limitlessos-ui-routes.js",
-      "synopsis": "HTTP route module — Limitlessos Ui Routes.",
-      "bytes": 911,
-      "mtime": "2026-08-01T09:45:39.808Z",
-      "indexed_at": "2026-08-01T09:45:54.967Z",
+      "synopsis": "UI update registration",
+      "bytes": 611,
+      "mtime": "2026-08-01T09:45:59.860Z",
+      "indexed_at": "2026-08-01T09:46:11.633Z",
       "ssot": [
         "docs/products/limitlessos/PRODUCT_HOME.md"
       ]
