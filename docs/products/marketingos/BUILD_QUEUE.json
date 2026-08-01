@@ -1150,7 +1150,7 @@
     },
     {
       "id": "5",
-      "status": "pending",
+      "status": "skipped",
       "target_file": "routes/marketing-performance-insights-ui-routes.js",
       "task": "Implement UI route for performance insights overlay",
       "spec": "An Express router module that provides a GET endpoint to serve the 'marketing-performance-insights.html' file. The route should be '/overlay/marketingos/performance/insights'. The module must export a 'registerMarketingPerformanceInsightsUiRoutes' function.",
@@ -1170,7 +1170,9 @@
         "app.get('/overlay/marketingos/performance/insights'",
         "res.sendFile(__dirname + '/../../public/overlay/marketing-performance-insights.html')"
       ],
-      "design_review_flagged": true
+      "design_review_flagged": true,
+      "skip_reason": "legacy overlay UI route blocked by skipped public/overlay HTML step; active founder interface is lifeos-app.html only",
+      "skipped_at": "2026-08-01T16:02:25.791Z"
     },
     {
       "id": "7",
@@ -1195,7 +1197,7 @@
     },
     {
       "id": "8",
-      "status": "pending",
+      "status": "skipped",
       "target_file": "routes/marketing-campaign-package-ui-routes.js",
       "task": "Implement UI route for campaign package overlay",
       "spec": "An Express router module that provides a GET endpoint to serve the 'marketing-campaign-package.html' file. The route should be '/overlay/marketingos/campaign/package'. The module must export a 'registerMarketingCampaignPackageUiRoutes' function.",
@@ -1215,7 +1217,9 @@
         "app.get('/overlay/marketingos/campaign/package'",
         "res.sendFile(__dirname + '/../../public/overlay/marketing-campaign-package.html')"
       ],
-      "design_review_flagged": true
+      "design_review_flagged": true,
+      "skip_reason": "legacy overlay UI route blocked by skipped public/overlay HTML step; active founder interface is lifeos-app.html only",
+      "skipped_at": "2026-08-01T16:02:25.794Z"
     },
     {
       "id": "10",
@@ -1238,7 +1242,7 @@
     },
     {
       "id": "11",
-      "status": "pending",
+      "status": "skipped",
       "target_file": "routes/marketing-intel-director-ui-routes.js",
       "task": "Implement UI route for marketing intelligence dashboard",
       "spec": "An Express router module that provides a GET endpoint to serve the 'marketing-intel-director-dashboard.html' file. The route should be '/overlay/marketingos/director/dashboard'. The module must export a 'registerMarketingIntelDirectorUiRoutes' function.",
@@ -1258,7 +1262,9 @@
         "app.get('/overlay/marketingos/director/dashboard'",
         "res.sendFile(__dirname + '/../../public/overlay/marketing-intel-director-dashboard.html')"
       ],
-      "design_review_flagged": true
+      "design_review_flagged": true,
+      "skip_reason": "legacy overlay UI route blocked by skipped public/overlay HTML step; active founder interface is lifeos-app.html only",
+      "skipped_at": "2026-08-01T16:02:25.795Z"
     }
   ],
   "backlog_signature": "marketingos-money-2026071219",
