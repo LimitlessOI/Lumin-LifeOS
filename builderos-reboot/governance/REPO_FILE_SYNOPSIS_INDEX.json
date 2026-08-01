@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T04:04:25.825Z",
+  "generated_at": "2026-08-01T04:06:38.822Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12669,
   "files": [
@@ -96024,10 +96024,13 @@
     },
     {
       "path": "services/usageLogger.js",
-      "synopsis": "Service module — UsageLogger.",
-      "bytes": 485,
-      "mtime": "2026-07-15T08:32:59.629Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "synopsis": "Logs token usage for AI council interactions, including provider and cost details.",
+      "bytes": 1739,
+      "mtime": "2026-08-01T04:06:38.822Z",
+      "indexed_at": "2026-08-01T04:06:38.822Z",
+      "ssot": [
+        "docs/products/ai-council/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/useful-work-guard.js",
