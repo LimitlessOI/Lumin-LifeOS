@@ -1467,7 +1467,7 @@
     },
     {
       "id": "lifeos-chat-v2-03",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/lifeos-ambient-listener.js",
       "task": "Build the ambient listening overlay for lifeos-app.html",
       "spec": "Classic browser script (NOT an ES module; no top-level import/export/require/module.exports; no top-level return). Self-initializing on DOMContentLoaded. Locates the Lumin input area. Adds a microphone toggle button near #lumin-mic-btn. Uses the Web Speech API (SpeechRecognition or webkitSpeechRecognition) with continuous listening when toggled on. On a recognized final transcript, appends it to the Lumin chat input and optionally submits if the user pauses for 2 seconds. Sends interim transcripts to a future POST /api/v1/lifeos/ambient/capture endpoint only if it exists (degrade silently if 404). Displays a visual indicator when listening. Attach public API to window.LifeOSAmbientListener. Do not interfere with normal send. Use existing CSS custom properties.",
@@ -1503,9 +1503,9 @@
         "lifeos-chat-v2-01"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "last_attempt_at": "2026-08-01T06:51:32.952Z",
-      "last_error": "verify_exit_1",
+      "last_error": null,
       "commit_sha": "d69409dc1851f9ef8333a043a7f84c7a49634481",
       "built_sha": null,
       "proof": null,
@@ -1518,7 +1518,7 @@
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
-      "blocker_class": "BLOCKED_TOOLING",
+      "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
@@ -1528,7 +1528,10 @@
       "blueprint_step_id": "lifeos-chat-v2-03",
       "mission_id": "PRODUCT-lifeos",
       "same_signature_count": 0,
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "completed_at": "2026-08-01T06:53:38.751Z",
+      "heal_claimed": true,
+      "heal_reason": "artifact_proof_pass"
     },
     {
       "id": "lifeos-chat-v2-04",
@@ -6017,6 +6020,6 @@
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-lifeos",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:52:16.979Z",
+  "updated_at": "2026-08-01T06:53:38.751Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/lifeos/BUILD_QUEUE.json"
 }
