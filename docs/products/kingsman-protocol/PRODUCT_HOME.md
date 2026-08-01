@@ -209,6 +209,7 @@ The coexistence framework:
 
 ## Change Receipts
 
+| 2026-08-02 | **Creative Director review** — generated CREATIVE_BRIEF.md using the Creative Director lens. | Kingsman Protocol reviewed through the BuilderOS creative responsibility; brief written to product home for founder review. | ✅ generated |
 | Date | Change |
 |---|---|
 | 2026-04-19 | Phase-1 runtime hook: `kingsmanAudit()` inserts heuristic-scored rows into `kingsman_audit_log` on every `callCouncilMember` (non-blocking). |

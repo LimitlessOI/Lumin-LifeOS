@@ -344,6 +344,7 @@ Founder directive: review every revenue blueprint for gaps against real competit
 
 ## Change Receipts
 
+| 2026-08-02 | **Creative Director review** — generated CREATIVE_BRIEF.md using the Creative Director lens. | Site Builder reviewed through the BuilderOS creative responsibility; brief written to product home for founder review. | ✅ generated |
 | Date | What Changed | Why | Verified | Next |
 |---|---|---|---|---|
 | 2026-08-02 | **`docs/products/site-builder/BUILD_QUEUE.json` step `s8` (`public/overlay/site-builder-element-label-ui.html`) marked `skipped`.** The target is an orphan public/overlay HTML artifact; active-interface governance designates `public/overlay/lifeos-app.html` as the only active founder interface, so the step was cleared without extending a dead overlay. The step had 3 identical SENTRY `missing_substring` failures and `escalation_required=true`; the conductor removed the escalation and skipped it so the never-stop factory can move to real Site Builder work. | Unblocks the never-stop factory for the next Site Builder build step without consuming model calls. | `npm run builder:preflight` PASS. | — |

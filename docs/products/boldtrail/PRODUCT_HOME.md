@@ -146,6 +146,7 @@ Deep integration with BoldTrail (real estate CRM platform). Automates lead follo
 
 ## Change Receipts
 
+| 2026-08-02 | **Creative Director review** — generated CREATIVE_BRIEF.md using the Creative Director lens. | BoldTrail reviewed through the BuilderOS creative responsibility; brief written to product home for founder review. | ✅ generated |
 | Date | Change | Why | State | Next |
 |------|--------|-----|-------|------|
 | 2026-08-02 | **GAP-FILL: `services/leadScoringSegment.js` function declaration + `@ssot`.** Rewrote `applyScoringRubric` from `export const applyScoringRubric = (segmentDescription, rubric) =>` to `export function applyScoringRubric(segmentDescription, rubric)` to satisfy `boldtrail` BUILD_QUEUE `boldtrail-step1` `file_contains: ['function applyScoringRubric(segmentDescription)']`; added `@ssot docs/products/boldtrail/PRODUCT_HOME.md`. | `bp-priority:once` artifact proof failed because the substring did not match the arrow-function form. | ✅ node --check | `bp-priority:once` re-verify |

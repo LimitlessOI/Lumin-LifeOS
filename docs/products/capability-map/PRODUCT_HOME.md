@@ -132,6 +132,7 @@ Competitors absorb ideas ad-hoc. We map every idea to a specific amendment + fil
 
 ## Change Receipts
 
+| 2026-08-02 | **Creative Director review** — generated CREATIVE_BRIEF.md using the Creative Director lens. | Capability Map reviewed through the BuilderOS creative responsibility; brief written to product home for founder review. | ✅ generated |
 | Date | What Changed | Why | Amendment | Verified |
 |---|---|---|---|---|
 | 2026-03-27 | Created Capability Map service, routes, DB migration, mounted in runtime | Govern inbound capability absorption against architecture | ✅ | pending |

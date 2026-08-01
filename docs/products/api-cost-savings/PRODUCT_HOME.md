@@ -331,6 +331,7 @@ Every competitor either shows you your AI costs (observability) or routes to che
 
 ## Change Receipts
 
+| 2026-08-02 | **Creative Director review** — generated CREATIVE_BRIEF.md using the Creative Director lens. | API Cost Savings reviewed through the BuilderOS creative responsibility; brief written to product home for founder review. | ✅ generated |
 | Date | What | Why | Who |
 |---|---|---|---|
 | 2026-04-30 | **`docs/projects/TCO_TSOS_75_PERCENT_SAVINGS_BRAINSTORM.md`** — Per-idea **Brief**, **Priority rank (1–50)**, **Moves up if**; sorted **Master list** (foundation: **#11** attribution, **#27** cached tokens, **#26** static-prefix, **#34** output budgets). | Adam: rankings + short explanations + what would raise priority. | Editorial |

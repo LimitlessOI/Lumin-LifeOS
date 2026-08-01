@@ -189,6 +189,7 @@ Founder directive: every blueprint reviewed against real competitors. Real web r
 
 ## Change Receipts
 
+| 2026-08-02 | **Creative Director review** — generated CREATIVE_BRIEF.md using the Creative Director lens. | Wellness Studio reviewed through the BuilderOS creative responsibility; brief written to product home for founder review. | ✅ generated |
 | Date | Change | Author |
 |---|---|---|
 | 2026-07-30 | Fixed `services/trigger-mapper.js`'s `@ssot` tag — pointed at `docs/products/WELLNESS_STUDIO/WELLNESS_STUDIO_HOME.md`, which doesn't exist. Corrected to this file. Found by `node scripts/ssot-check.js --all`, part of a wider drift audit. | Claude |

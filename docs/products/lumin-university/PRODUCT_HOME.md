@@ -329,6 +329,7 @@ CREATE TABLE lumin_university_mentors (
 
 ## Change Receipts
 
+| 2026-08-02 | **Creative Director review** — generated CREATIVE_BRIEF.md using the Creative Director lens. | Lumin University reviewed through the BuilderOS creative responsibility; brief written to product home for founder review. | ✅ generated |
 | Date | Change |
 |---|---|
 | 2026-08-02 | **Factory advance: steps `step1`–`step8` and `002` done.** Step `003` (`scripts/credentialVerificationScoping.mjs`) build failed because `services/build-integration-context.js` had no script-specific `@ssot` template. Added a `scripts/*.mjs` prompt block with required JSDoc, pure-function export pattern, and scoping return shape (`approach`, `pros`, `cons`, `recommendation`). Step 8 (`routes/accreditationRoutes.js`) completed after a factory repair rebuilt it to import `getAccreditationStructure` from `services/accreditationService.js`, read `req.query.institutionId`, and log with `deps.logger.error({ error }`. Added `services/build-integration-context.js` service-specific template and `FILE RULES` so new `services/*.js` files begin with the required `@ssot` JSDoc block and follow the `deps.pool`/`deps.logger` pattern. Fixed `services/product-build-orchestrator.js` to preserve the verbatim builder/pre-commit error in `last_error` instead of overwriting it with the generic `no_commit_sha` message, so the repair prompt carries the real failure forward. Hardened step 9 (`services/studentInterviews.js`) `spec` and `file_contains` to require the same SSOT/service-pattern constraints. |

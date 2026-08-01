@@ -333,6 +333,7 @@ User on insurance portal
 
 ## Change Receipts
 
+| 2026-08-02 | **Creative Director review** — generated CREATIVE_BRIEF.md using the Creative Director lens. | Universal Overlay reviewed through the BuilderOS creative responsibility; brief written to product home for founder review. | ✅ generated |
 | 2026-05-24 | Batch push: factory runtime separation, AUTONOMOUS-RECOVERY-0001, regression harness, lumin-factory bundle — founder-requested Railway test deploy | routes/services/startup + factory-staging + builderos-reboot | Adam audit+push directive |
 
 | 2026-08-02 | **GAP-FILL: `routes/struggleDetectionFormFillData.js` + auto-register entry.** Created route module `registerStruggleDetectionFormFillDataRoutes` mounting `POST /api/v1/struggle/form-fill-data` and using `executeStruggleFormFill` from `services/struggleFormFill.js`; added to `config/auto-registered-product-modules.json`. | `bp-priority:once` step 07 failed `artifact_proof` because the route file did not exist and the factory could not self-repair (`BLOCKED_TOOLING`). | node --check PASS | `bp-priority:once` re-verify |

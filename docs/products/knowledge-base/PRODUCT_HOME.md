@@ -100,6 +100,7 @@ Two capabilities bundled together: (1) A user-uploadable knowledge base that inj
 
 ## Change Receipts
 
+| 2026-08-02 | **Creative Director review** — generated CREATIVE_BRIEF.md using the Creative Director lens. | Knowledge Base reviewed through the BuilderOS creative responsibility; brief written to product home for founder review. | ✅ generated |
 | Date | Change | Why | Verified |
 |---|---|---|---|
 | 2026-08-02 | **GAP-FILL: `routes/security-routes.js` `registerSecurityRoutes` signature, `scanUploadedFile` alias, `callCouncilMember` wrapper, `@ssot`, and auto-register entry.** Updated `registerSecurityRoutes` to accept `(app, deps = {})` for module-health; added `const scanUploadedFile = (file) => malwareScanner(file);` and `callCouncilMember('malwareScanner', file)` to satisfy `knowledge-base` step3 `file_contains`; added `@ssot` pointing to this file; added route to `config/auto-registered-product-modules.json`. | `bp-priority:once` artifact proof failed with `const scanUploadedFile =; callCouncilMember('malwareScanner',` and `/build` repairs were blocked by pre-commit governance and HTTP 502. | node --check PASS |

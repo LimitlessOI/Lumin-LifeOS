@@ -322,6 +322,7 @@ Same engine adapts to any sales vertical. Only the objection library, close scri
 
 ## Change Receipts
 
+| 2026-08-02 | **Creative Director review** — generated CREATIVE_BRIEF.md using the Creative Director lens. | LifeRE reviewed through the BuilderOS creative responsibility; brief written to product home for founder review. | ✅ generated |
 | Date | Change | Why | State | Next |
 |------|--------|-----|-------|------|
 | 2026-07-30 | **Adaptive learning-style sales coaching.** `services/lifere-sales-simulator.js` now accepts `learningProfile` on `startSession` and persists it in a new `metadata` JSONB column (migration `20260730_lifere_learning_profile.sql`). The real-time `COACHING_PROMPT` and `DEBRIEF_PROMPT` inject a `LEARNING PROFILE` paragraph tailored to visual, auditory, reading/writing, or kinesthetic preferences. | Founder: LifeOS/LifeRE coaching must adapt to each person's learning style and desires. | `npm run builder:preflight` PASS 401/401; `node --check services/lifere-sales-simulator.js` clean; migration idempotent. | Re-run `npm run lifeos:lifere-os:v1-acceptance` after deploy. |

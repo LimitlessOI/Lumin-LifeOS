@@ -138,6 +138,7 @@ GoHighLevel sells agencies a white-label CRM; LifeOS sells agencies a white-labe
 
 ## Change Receipts
 
+| 2026-08-02 | **Creative Director review** — generated CREATIVE_BRIEF.md using the Creative Director lens. | White Label reviewed through the BuilderOS creative responsibility; brief written to product home for founder review. | ✅ generated |
 | Date | What Changed | Why | Verified |
 |---|---|---|---|
 | 2026-08-02 | `services/stripe-billing-separation.js` and `services/partner-key-scheme.js` now export backward-compatible aliases (`setupPartnerBilling`, `createPartnerBillingSession`, `generatePartnerKey`) and `docs/products/white-label/BUILD_QUEUE.json` `white-label-step3` expectations were aligned with the actual crypto-based key implementation. | The never-stop factory `audit-false-done-steps` found HARD false-dones: the built artifacts existed but the queued expected exports were singular/legacy names, and `partner-key-scheme.js` was expected to contain `schema.define('partnerKey'` while the artifact uses `crypto.randomBytes`. | `node --check services/stripe-billing-separation.js`; `node --check services/partner-key-scheme.js`; `node --test tests/spine-import-resolution.test.js` |

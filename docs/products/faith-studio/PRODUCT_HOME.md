@@ -208,6 +208,7 @@ No production runbook yet. This project is concept-stage only.
 
 ## Change Receipts
 
+| 2026-08-02 | **Creative Director review** — generated CREATIVE_BRIEF.md using the Creative Director lens. | Faith Studio reviewed through the BuilderOS creative responsibility; brief written to product home for founder review. | ✅ generated |
 | Date | What Changed | Why | Amendment Updated | Manifest Updated | Verified |
 |---|---|---|---|---|---|
 | 2026-08-02 | **GAP-FILL: `services/reviewModerationFlow.js` rebuilt to merge `processReviewModeration` with original helpers.** The system-build commit (`bc0af7719`) left only `processReviewModeration` and a self-importing `import { getModerationRules, moderateWithCouncil } from './reviewModerationFlow.js'`, which made the module invalid and caused `audit-false-done-steps` and `bp-priority:once` grounding to fail. Combined the `processReviewModeration` body with the original `getModerationRules` and `moderateWithCouncil` exports and added `@ssot`. | `bp-priority:once` and `evaluateStepExpectations` failed with `missing_exports:processReviewModeration` because the self-import caused the export scanner to reject the file. | ✅ | ✅ | `node --check services/reviewModerationFlow.js` clean; `npm run builder:preflight` PASS | `bp-priority:once` re-verify |

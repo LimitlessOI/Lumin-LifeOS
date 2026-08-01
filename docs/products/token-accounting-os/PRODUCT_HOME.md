@@ -157,6 +157,7 @@ Infrastructure on disk. Council uses `recordMetered`. Deploy migrations then `np
 
 ## Change Receipts
 
+| 2026-08-02 | **Creative Director review** — generated CREATIVE_BRIEF.md using the Creative Director lens. | Token Accounting Os reviewed through the BuilderOS creative responsibility; brief written to product home for founder review. | ✅ generated |
 | Date | Change | Why |
 |------|--------|-----|
 | 2026-08-02 | **GAP-FILL: `services/builderOSTokenReceipt.js` landed from golden tag `autonomy/golden-27f654dcc` + `routes/builderOSTokenReceipt.js` hand-written.** The builder generated the service on a golden tag that never merged into `main`, causing `token-accounting-os` step2 `routes/builderOSTokenReceipt.js` to be missing and `audit-false-done-steps` to flag the step HARD. Checked out the service from the golden tag and created the route module with `registerBuilderOSTokenReceiptRoutes` mounting `POST /api/v1/builderOS/token-receipt`. Added route to `config/auto-registered-product-modules.json`. | `bp-priority:once` failed step2 with `BLOCKED_SECRET` because the route artifact did not exist and the factory could not self-repair. |

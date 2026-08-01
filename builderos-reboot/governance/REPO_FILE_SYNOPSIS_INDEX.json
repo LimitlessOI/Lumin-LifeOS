@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T08:47:43.524Z",
+  "generated_at": "2026-08-01T08:48:17.387Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12678,
+  "file_count": 12722,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -32816,9 +32816,9 @@
     {
       "path": "data/lenses/creative-director.json",
       "synopsis": "JSON data/config — data/lenses/creative-director.json.",
-      "bytes": 2454,
-      "mtime": "2026-08-01T08:47:22.730Z",
-      "indexed_at": "2026-08-01T08:47:43.524Z",
+      "bytes": 1917,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z",
       "synopsis_index_only": true
     },
     {
@@ -40982,6 +40982,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "docs/products/ai-council/CREATIVE_BRIEF.md",
+      "synopsis": "Creative Brief — Ai Council (ai-council)",
+      "bytes": 2693,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
+    },
+    {
       "path": "docs/products/ai-council/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 3767,
@@ -40992,9 +40999,16 @@
     {
       "path": "docs/products/ai-council/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — AI Council",
-      "bytes": 76065,
-      "mtime": "2026-08-01T06:21:27.515Z",
-      "indexed_at": "2026-08-01T06:36:53.017Z"
+      "bytes": 76312,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
+    },
+    {
+      "path": "docs/products/ai-receptionist/CREATIVE_BRIEF.md",
+      "synopsis": "Creative Brief — Ai Receptionist (ai-receptionist)",
+      "bytes": 2739,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/ai-receptionist/FILE_MANIFEST.json",
@@ -41007,9 +41021,9 @@
     {
       "path": "docs/products/ai-receptionist/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — AI Receptionist",
-      "bytes": 13405,
-      "mtime": "2026-08-01T03:41:21.131Z",
-      "indexed_at": "2026-08-01T03:41:21.131Z"
+      "bytes": 13657,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/AICOUNCIL.md",
@@ -41033,6 +41047,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "docs/products/api-cost-savings/CREATIVE_BRIEF.md",
+      "synopsis": "Creative Brief — API Cost Savings (api-cost-savings)",
+      "bytes": 4121,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
+    },
+    {
       "path": "docs/products/api-cost-savings/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 3768,
@@ -41043,9 +41064,9 @@
     {
       "path": "docs/products/api-cost-savings/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — API Cost Savings",
-      "bytes": 28360,
-      "mtime": "2026-06-29T17:35:43.015Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 28613,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/APICOSTSAVINGS.md",
@@ -41083,6 +41104,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "docs/products/boldtrail/CREATIVE_BRIEF.md",
+      "synopsis": "Creative Brief — BoldTrail (boldtrail)",
+      "bytes": 2540,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
+    },
+    {
       "path": "docs/products/boldtrail/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 1389,
@@ -41093,9 +41121,9 @@
     {
       "path": "docs/products/boldtrail/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BoldTrail",
-      "bytes": 14293,
-      "mtime": "2026-08-01T05:24:59.999Z",
-      "indexed_at": "2026-08-01T05:24:59.999Z"
+      "bytes": 14539,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/BUILDEROS.md",
@@ -41110,6 +41138,13 @@
       "bytes": 17024,
       "mtime": "2026-07-30T18:16:49.613Z",
       "indexed_at": "2026-07-30T22:32:11.913Z"
+    },
+    {
+      "path": "docs/products/builderos/CREATIVE_BRIEF.md",
+      "synopsis": "Creative Brief — Builderos (builderos)",
+      "bytes": 2491,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/builderos/DEVIN_HANDOFF.md",
@@ -41144,9 +41179,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 380960,
-      "mtime": "2026-08-01T08:28:20.752Z",
-      "indexed_at": "2026-08-01T08:28:29.236Z"
+      "bytes": 381206,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -41184,6 +41219,13 @@
       "indexed_at": "2026-07-30T22:32:11.913Z"
     },
     {
+      "path": "docs/products/business-tools/CREATIVE_BRIEF.md",
+      "synopsis": "Creative Brief — Business Tools (business-tools)",
+      "bytes": 2838,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
+    },
+    {
       "path": "docs/products/business-tools/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 538,
@@ -41194,9 +41236,9 @@
     {
       "path": "docs/products/business-tools/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Business Tools",
-      "bytes": 9331,
-      "mtime": "2026-07-30T19:19:18.790Z",
-      "indexed_at": "2026-07-30T19:20:09.298Z"
+      "bytes": 9582,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/BUSINESSTOOLS.md",
@@ -41213,6 +41255,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "docs/products/capability-map/CREATIVE_BRIEF.md",
+      "synopsis": "Creative Brief — Capability Map (capability-map)",
+      "bytes": 3972,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
+    },
+    {
       "path": "docs/products/capability-map/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 538,
@@ -41223,9 +41272,9 @@
     {
       "path": "docs/products/capability-map/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Capability Map",
-      "bytes": 5480,
-      "mtime": "2026-06-30T17:17:10.925Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 5731,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/CAPABILITYMAP.md",
@@ -41368,6 +41417,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "docs/products/clientcare-billing-recovery/CREATIVE_BRIEF.md",
+      "synopsis": "Creative Brief — ClientCare Billing Recovery (clientcare-billing-recovery)",
+      "bytes": 4221,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
+    },
+    {
       "path": "docs/products/clientcare-billing-recovery/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 14213,
@@ -41455,9 +41511,9 @@
     {
       "path": "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — ClientCare Billing Recovery",
-      "bytes": 130196,
-      "mtime": "2026-07-28T17:51:50.148Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 130460,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/clientcare-billing-recovery/STAGE_CLOCKS.md",
@@ -41474,6 +41530,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "docs/products/command-center/CREATIVE_BRIEF.md",
+      "synopsis": "Creative Brief — Command Center (command-center)",
+      "bytes": 3825,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
+    },
+    {
       "path": "docs/products/command-center/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 4770,
@@ -41484,9 +41547,9 @@
     {
       "path": "docs/products/command-center/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Command Center",
-      "bytes": 109472,
-      "mtime": "2026-07-28T17:47:22.499Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 109723,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/COMMANDCENTER.md",
@@ -41503,6 +41566,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "docs/products/conflict-arbitrator/CREATIVE_BRIEF.md",
+      "synopsis": "Creative Brief — Conflict Arbitrator (conflict-arbitrator)",
+      "bytes": 2541,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
+    },
+    {
       "path": "docs/products/conflict-arbitrator/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 1237,
@@ -41513,9 +41583,9 @@
     {
       "path": "docs/products/conflict-arbitrator/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Conflict Arbitrator",
-      "bytes": 11287,
-      "mtime": "2026-06-29T17:35:43.021Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 11543,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/CONFLICTARBITRATOR.md",
@@ -41535,9 +41605,9 @@
     {
       "path": "docs/products/creative-engine/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Creative Engine",
-      "bytes": 11025,
-      "mtime": "2026-07-30T03:57:08.479Z",
-      "indexed_at": "2026-07-30T22:32:11.913Z"
+      "bytes": 11530,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/CREATIVEENGINE.md",
@@ -41545,6 +41615,13 @@
       "bytes": 226,
       "mtime": "2026-07-10T21:33:45.134Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "docs/products/creator-media-os/CREATIVE_BRIEF.md",
+      "synopsis": "Creative Brief — Creator Media Os (creator-media-os)",
+      "bytes": 4365,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/creator-media-os/FILE_MANIFEST.json",
@@ -41557,9 +41634,9 @@
     {
       "path": "docs/products/creator-media-os/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Creator Media OS",
-      "bytes": 23396,
-      "mtime": "2026-08-01T05:08:38.137Z",
-      "indexed_at": "2026-08-01T05:08:38.137Z"
+      "bytes": 23649,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/CREATORMEDIAOS.md",
@@ -41567,6 +41644,13 @@
       "bytes": 461,
       "mtime": "2026-06-29T17:21:02.564Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "docs/products/enterprise-ai-governance/CREATIVE_BRIEF.md",
+      "synopsis": "Creative Brief — Enterprise Ai Governance (enterprise-ai-governance)",
+      "bytes": 3942,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/enterprise-ai-governance/FILE_MANIFEST.json",
@@ -41579,9 +41663,9 @@
     {
       "path": "docs/products/enterprise-ai-governance/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Enterprise AI Governance",
-      "bytes": 9106,
-      "mtime": "2026-06-29T17:35:43.022Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 9367,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/ENTERPRISEAIGOVERNANCE.md",
@@ -41589,6 +41673,13 @@
       "bytes": 501,
       "mtime": "2026-06-29T17:21:02.576Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "docs/products/faith-studio/CREATIVE_BRIEF.md",
+      "synopsis": "Creative Brief — Faith Studio (faith-studio)",
+      "bytes": 4124,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/faith-studio/FILE_MANIFEST.json",
@@ -41601,9 +41692,9 @@
     {
       "path": "docs/products/faith-studio/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Faith Studio",
-      "bytes": 11869,
-      "mtime": "2026-08-01T05:24:59.999Z",
-      "indexed_at": "2026-08-01T05:24:59.999Z"
+      "bytes": 12118,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/FAITHSTUDIO.md",
@@ -41611,6 +41702,13 @@
       "bytes": 441,
       "mtime": "2026-06-29T17:21:02.566Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "docs/products/financial-revenue/CREATIVE_BRIEF.md",
+      "synopsis": "Creative Brief — Financial Revenue (financial-revenue)",
+      "bytes": 3277,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/financial-revenue/FILE_MANIFEST.json",
@@ -41623,9 +41721,9 @@
     {
       "path": "docs/products/financial-revenue/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Financial Revenue",
-      "bytes": 17393,
-      "mtime": "2026-08-01T03:41:21.131Z",
-      "indexed_at": "2026-08-01T03:41:21.131Z"
+      "bytes": 17647,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/financial-revenue/SMOS_REVENUE_READINESS.md",
@@ -41640,6 +41738,13 @@
       "bytes": 466,
       "mtime": "2026-06-29T17:21:02.514Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "docs/products/game-publisher/CREATIVE_BRIEF.md",
+      "synopsis": "Creative Brief — Game Publisher (game-publisher)",
+      "bytes": 3328,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/game-publisher/FILE_MANIFEST.json",
@@ -41721,6 +41826,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "docs/products/kids-os/CREATIVE_BRIEF.md",
+      "synopsis": "Creative Brief — Kids Os (kids-os)",
+      "bytes": 4320,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
+    },
+    {
       "path": "docs/products/kids-os/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 1996,
@@ -41731,9 +41843,9 @@
     {
       "path": "docs/products/kids-os/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Kids OS",
-      "bytes": 30097,
-      "mtime": "2026-06-29T17:35:43.025Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 30341,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/KIDSOS.md",
@@ -41741,6 +41853,13 @@
       "bytes": 416,
       "mtime": "2026-06-29T17:21:02.581Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "docs/products/kingsman-protocol/CREATIVE_BRIEF.md",
+      "synopsis": "Creative Brief — Kingsman Protocol (kingsman-protocol)",
+      "bytes": 4017,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/kingsman-protocol/FILE_MANIFEST.json",
@@ -41753,9 +41872,9 @@
     {
       "path": "docs/products/kingsman-protocol/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Kingsman Protocol",
-      "bytes": 15782,
-      "mtime": "2026-06-29T17:35:43.026Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 16036,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/KINGSMANPROTOCOL.md",
@@ -41763,6 +41882,13 @@
       "bytes": 466,
       "mtime": "2026-06-29T17:21:02.580Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "docs/products/knowledge-base/CREATIVE_BRIEF.md",
+      "synopsis": "Creative Brief — Knowledge Base (knowledge-base)",
+      "bytes": 2498,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/knowledge-base/FILE_MANIFEST.json",
@@ -41775,9 +41901,9 @@
     {
       "path": "docs/products/knowledge-base/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Knowledge Base",
-      "bytes": 9329,
-      "mtime": "2026-08-01T05:37:29.899Z",
-      "indexed_at": "2026-08-01T05:37:29.899Z"
+      "bytes": 9580,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/KNOWLEDGEBASE.md",
@@ -41792,6 +41918,13 @@
       "bytes": 6443,
       "mtime": "2026-06-30T00:08:38.324Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "docs/products/life-coaching/CREATIVE_BRIEF.md",
+      "synopsis": "Creative Brief — Life Coaching (life-coaching)",
+      "bytes": 3502,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/life-coaching/FILE_MANIFEST.json",
@@ -41886,6 +42019,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "docs/products/lifeos/CREATIVE_BRIEF.md",
+      "synopsis": "Creative Brief — LifeOS (lifeos)",
+      "bytes": 4211,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
+    },
+    {
       "path": "docs/products/lifeos/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 30729,
@@ -41896,9 +42036,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 662081,
-      "mtime": "2026-08-01T08:16:47.804Z",
-      "indexed_at": "2026-08-01T08:16:57.099Z"
+      "bytes": 662324,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -41913,6 +42053,13 @@
       "bytes": 847,
       "mtime": "2026-06-29T17:21:08.001Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "docs/products/lifere/CREATIVE_BRIEF.md",
+      "synopsis": "Creative Brief — LifeRE (lifere)",
+      "bytes": 4245,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/lifere/FILE_MANIFEST.json",
@@ -41932,9 +42079,9 @@
     {
       "path": "docs/products/lifere/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeRE",
-      "bytes": 48153,
-      "mtime": "2026-08-01T02:49:19.921Z",
-      "indexed_at": "2026-08-01T02:49:19.921Z"
+      "bytes": 48396,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/limitlessos/conversations/2026-06-29-founder-ecosystem-session.md",
@@ -41942,6 +42089,13 @@
       "bytes": 2301,
       "mtime": "2026-06-30T00:08:38.325Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "docs/products/limitlessos/CREATIVE_BRIEF.md",
+      "synopsis": "Creative Brief — LimitlessOS (limitlessos)",
+      "bytes": 4331,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/limitlessos/FILE_MANIFEST.json",
@@ -41961,9 +42115,9 @@
     {
       "path": "docs/products/limitlessos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LimitlessOS business stack",
-      "bytes": 12500,
-      "mtime": "2026-08-01T04:43:08.313Z",
-      "indexed_at": "2026-08-01T04:43:08.313Z"
+      "bytes": 12748,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/lip/FILE_MANIFEST.json",
@@ -41981,6 +42135,13 @@
       "indexed_at": "2026-07-28T23:06:09.687Z"
     },
     {
+      "path": "docs/products/lumin-university/CREATIVE_BRIEF.md",
+      "synopsis": "Creative Brief — Lumin University (lumin-university)",
+      "bytes": 4813,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
+    },
+    {
       "path": "docs/products/lumin-university/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 2084,
@@ -41991,9 +42152,9 @@
     {
       "path": "docs/products/lumin-university/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Lumin University",
-      "bytes": 21727,
-      "mtime": "2026-08-01T01:41:57.291Z",
-      "indexed_at": "2026-08-01T01:41:57.291Z"
+      "bytes": 21980,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/LUMINUNIVERSITY.md",
@@ -42024,6 +42185,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "docs/products/marketingos/CREATIVE_BRIEF.md",
+      "synopsis": "Creative Brief — MarketingOS (marketingos)",
+      "bytes": 3847,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
+    },
+    {
       "path": "docs/products/marketingos/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 8605,
@@ -42034,9 +42202,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 133814,
-      "mtime": "2026-07-31T06:22:00.100Z",
-      "indexed_at": "2026-07-31T06:22:29.192Z"
+      "bytes": 134062,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -42061,6 +42229,13 @@
       "indexed_at": "2026-07-30T22:31:11.508Z"
     },
     {
+      "path": "docs/products/memory-intelligence/CREATIVE_BRIEF.md",
+      "synopsis": "Creative Brief — Memory Intelligence (memory-intelligence)",
+      "bytes": 4569,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
+    },
+    {
       "path": "docs/products/memory-intelligence/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 3313,
@@ -42071,9 +42246,16 @@
     {
       "path": "docs/products/memory-intelligence/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Memory Intelligence",
-      "bytes": 48777,
-      "mtime": "2026-08-01T03:26:51.120Z",
-      "indexed_at": "2026-08-01T03:26:51.120Z"
+      "bytes": 49033,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
+    },
+    {
+      "path": "docs/products/memory-system/CREATIVE_BRIEF.md",
+      "synopsis": "Creative Brief — Memory System (memory-system)",
+      "bytes": 3685,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/memory-system/FILE_MANIFEST.json",
@@ -42086,9 +42268,9 @@
     {
       "path": "docs/products/memory-system/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Memory System",
-      "bytes": 21769,
-      "mtime": "2026-08-01T03:43:51.755Z",
-      "indexed_at": "2026-08-01T03:43:51.755Z"
+      "bytes": 22019,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/MEMORYINTELLIGENCE.md",
@@ -42105,6 +42287,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "docs/products/music-talent-studio/CREATIVE_BRIEF.md",
+      "synopsis": "Creative Brief — Music Talent Studio (music-talent-studio)",
+      "bytes": 4461,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
+    },
+    {
       "path": "docs/products/music-talent-studio/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 1907,
@@ -42115,9 +42304,9 @@
     {
       "path": "docs/products/music-talent-studio/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Music Talent Studio",
-      "bytes": 22033,
-      "mtime": "2026-08-01T05:42:00.244Z",
-      "indexed_at": "2026-08-01T05:42:00.244Z"
+      "bytes": 22289,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/MUSICTALENTSTUDIO.md",
@@ -42125,6 +42314,13 @@
       "bytes": 476,
       "mtime": "2026-06-29T17:21:02.579Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "docs/products/oil-security-divisions/CREATIVE_BRIEF.md",
+      "synopsis": "Creative Brief — Oil Security Divisions (oil-security-divisions)",
+      "bytes": 3411,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/oil-security-divisions/FILE_MANIFEST.json",
@@ -42137,9 +42333,9 @@
     {
       "path": "docs/products/oil-security-divisions/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — OIL Security Divisions",
-      "bytes": 20526,
-      "mtime": "2026-08-01T04:33:19.481Z",
-      "indexed_at": "2026-08-01T04:33:19.481Z"
+      "bytes": 20785,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/OILSECURITYDIVISIONS.md",
@@ -42147,6 +42343,13 @@
       "bytes": 491,
       "mtime": "2026-06-29T17:21:02.591Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "docs/products/outreach-crm/CREATIVE_BRIEF.md",
+      "synopsis": "Creative Brief — Outreach Crm (outreach-crm)",
+      "bytes": 3596,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/outreach-crm/FILE_MANIFEST.json",
@@ -42171,6 +42374,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "docs/products/personal-finance-os/CREATIVE_BRIEF.md",
+      "synopsis": "Creative Brief — Personal Finance Os (personal-finance-os)",
+      "bytes": 4221,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
+    },
+    {
       "path": "docs/products/personal-finance-os/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 1338,
@@ -42181,9 +42391,9 @@
     {
       "path": "docs/products/personal-finance-os/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Personal Finance OS",
-      "bytes": 13479,
-      "mtime": "2026-08-01T05:37:29.899Z",
-      "indexed_at": "2026-08-01T05:37:29.899Z"
+      "bytes": 13735,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/PERSONALFINANCEOS.md",
@@ -42214,6 +42424,13 @@
       "bytes": 2666,
       "mtime": "2026-06-29T08:19:45.854Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "docs/products/productized-sprint/CREATIVE_BRIEF.md",
+      "synopsis": "Creative Brief — Productized Sprint (productized-sprint)",
+      "bytes": 3682,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/productized-sprint/FILE_MANIFEST.json",
@@ -42282,9 +42499,9 @@
     {
       "path": "docs/products/productized-sprint/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Productized Sprint",
-      "bytes": 11530,
-      "mtime": "2026-08-01T02:29:25.277Z",
-      "indexed_at": "2026-08-01T02:29:25.277Z"
+      "bytes": 11785,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/PRODUCTIZEDSPRINT.md",
@@ -42292,6 +42509,13 @@
       "bytes": 471,
       "mtime": "2026-06-29T17:21:02.572Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "docs/products/project-governance/CREATIVE_BRIEF.md",
+      "synopsis": "Creative Brief — Project Governance (project-governance)",
+      "bytes": 3501,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/project-governance/FILE_MANIFEST.json",
@@ -42311,9 +42535,9 @@
     {
       "path": "docs/products/project-governance/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Project Governance",
-      "bytes": 66516,
-      "mtime": "2026-08-01T01:55:11.590Z",
-      "indexed_at": "2026-08-01T01:55:11.590Z"
+      "bytes": 66771,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/project-governance/READINESS_CHECKLIST.md",
@@ -42344,6 +42568,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "docs/products/site-builder/CREATIVE_BRIEF.md",
+      "synopsis": "Creative Brief — Site Builder (site-builder)",
+      "bytes": 4464,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
+    },
+    {
       "path": "docs/products/site-builder/DISTRIBUTION_PLAYBOOK.md",
       "synopsis": "Autonomous Site Builder distribution playbook (channels, caps, experience gates).",
       "bytes": 4658,
@@ -42368,9 +42599,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 215377,
-      "mtime": "2026-08-01T03:15:28.141Z",
-      "indexed_at": "2026-08-01T03:15:28.141Z"
+      "bytes": 215626,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/site-builder/SITE_TEMPLATE_CATALOG.md",
@@ -42394,6 +42625,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "docs/products/story-studio/CREATIVE_BRIEF.md",
+      "synopsis": "Creative Brief — Story Studio (story-studio)",
+      "bytes": 4533,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
+    },
+    {
       "path": "docs/products/story-studio/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 1011,
@@ -42404,9 +42642,9 @@
     {
       "path": "docs/products/story-studio/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Story Studio",
-      "bytes": 13566,
-      "mtime": "2026-08-01T05:00:48.485Z",
-      "indexed_at": "2026-08-01T05:00:48.485Z"
+      "bytes": 13815,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/STORYSTUDIO.md",
@@ -42423,6 +42661,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "docs/products/tc-service/CREATIVE_BRIEF.md",
+      "synopsis": "Creative Brief — TC Service (tc-service)",
+      "bytes": 4117,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
+    },
+    {
       "path": "docs/products/tc-service/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 9308,
@@ -42433,9 +42678,9 @@
     {
       "path": "docs/products/tc-service/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — TC Service",
-      "bytes": 128279,
-      "mtime": "2026-07-28T22:44:07.243Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 128526,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/TCSERVICE.md",
@@ -42443,6 +42688,13 @@
       "bytes": 431,
       "mtime": "2026-06-29T17:21:02.545Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "docs/products/teacher-os/CREATIVE_BRIEF.md",
+      "synopsis": "Creative Brief — Teacher Os (teacher-os)",
+      "bytes": 2781,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/teacher-os/FILE_MANIFEST.json",
@@ -42455,9 +42707,9 @@
     {
       "path": "docs/products/teacher-os/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Teacher OS",
-      "bytes": 23588,
-      "mtime": "2026-07-28T17:47:22.511Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 23835,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/TEACHEROS.md",
@@ -42465,6 +42717,13 @@
       "bytes": 431,
       "mtime": "2026-06-29T17:21:02.577Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "docs/products/token-accounting-os/CREATIVE_BRIEF.md",
+      "synopsis": "Creative Brief — Token Accounting Os (token-accounting-os)",
+      "bytes": 2748,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/token-accounting-os/FILE_MANIFEST.json",
@@ -42477,9 +42736,9 @@
     {
       "path": "docs/products/token-accounting-os/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Token Accounting OS",
-      "bytes": 8447,
-      "mtime": "2026-08-01T05:32:37.769Z",
-      "indexed_at": "2026-08-01T05:32:37.769Z"
+      "bytes": 8703,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/TOKENACCOUNTINGOS.md",
@@ -42487,6 +42746,13 @@
       "bytes": 476,
       "mtime": "2026-06-29T17:21:02.593Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "docs/products/universal-overlay/CREATIVE_BRIEF.md",
+      "synopsis": "Creative Brief — Universal Overlay (universal-overlay)",
+      "bytes": 3769,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/universal-overlay/FILE_MANIFEST.json",
@@ -42499,9 +42765,9 @@
     {
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Universal Overlay",
-      "bytes": 20332,
-      "mtime": "2026-08-01T05:47:32.074Z",
-      "indexed_at": "2026-08-01T05:47:32.074Z"
+      "bytes": 20586,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/UNIVERSALOVERLAY.md",
@@ -42509,6 +42775,13 @@
       "bytes": 466,
       "mtime": "2026-06-29T17:21:02.585Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "docs/products/video-pipeline/CREATIVE_BRIEF.md",
+      "synopsis": "Creative Brief — Video Pipeline (video-pipeline)",
+      "bytes": 3639,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/video-pipeline/FILE_MANIFEST.json",
@@ -42533,6 +42806,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "docs/products/wellness-studio/CREATIVE_BRIEF.md",
+      "synopsis": "Creative Brief — Wellness Studio (wellness-studio)",
+      "bytes": 5243,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
+    },
+    {
       "path": "docs/products/wellness-studio/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 1455,
@@ -42543,9 +42823,9 @@
     {
       "path": "docs/products/wellness-studio/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Wellness Studio",
-      "bytes": 16957,
-      "mtime": "2026-08-01T05:06:09.469Z",
-      "indexed_at": "2026-08-01T05:06:09.469Z"
+      "bytes": 17209,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/WELLNESSSTUDIO.md",
@@ -42553,6 +42833,13 @@
       "bytes": 456,
       "mtime": "2026-06-29T17:21:02.573Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "docs/products/white-label/CREATIVE_BRIEF.md",
+      "synopsis": "Creative Brief — White Label (white-label)",
+      "bytes": 3881,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/white-label/FILE_MANIFEST.json",
@@ -42565,9 +42852,9 @@
     {
       "path": "docs/products/white-label/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — White Label",
-      "bytes": 9416,
-      "mtime": "2026-08-01T06:21:27.515Z",
-      "indexed_at": "2026-08-01T06:36:53.017Z"
+      "bytes": 9664,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/WHITELABEL.md",
@@ -42575,6 +42862,13 @@
       "bytes": 436,
       "mtime": "2026-06-29T17:21:02.541Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "docs/products/word-keeper/CREATIVE_BRIEF.md",
+      "synopsis": "Creative Brief — Word Keeper (word-keeper)",
+      "bytes": 3152,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/word-keeper/FILE_MANIFEST.json",
@@ -42606,6 +42900,13 @@
       "indexed_at": "2026-07-30T01:21:52.231Z"
     },
     {
+      "path": "docs/products/zero-drift-handoff-protocol/CREATIVE_BRIEF.md",
+      "synopsis": "Creative Brief — Zero Drift Handoff Protocol (zero-drift-handoff-protocol)",
+      "bytes": 4122,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
+    },
+    {
       "path": "docs/products/zero-drift-handoff-protocol/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 1809,
@@ -42616,9 +42917,9 @@
     {
       "path": "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — ZERO DRIFT HANDOFF PROTOCOL",
-      "bytes": 109777,
-      "mtime": "2026-07-28T23:08:28.062Z",
-      "indexed_at": "2026-07-28T23:09:03.191Z"
+      "bytes": 110041,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/ZERODRIFTHANDOFFPROTOCOL.md",
@@ -65471,9 +65772,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 3578,
-      "mtime": "2026-08-01T08:27:27.632Z",
-      "indexed_at": "2026-08-01T08:28:29.236Z",
+      "bytes": 2905,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z",
       "synopsis_index_only": true
     },
     {
@@ -66087,9 +66388,9 @@
     {
       "path": "products/receipts/POINT_B_DNA_VERIFY.json",
       "synopsis": "Product receipt — POINT B DNA VERIFY.",
-      "bytes": 318,
-      "mtime": "2026-08-01T06:35:35.531Z",
-      "indexed_at": "2026-08-01T06:36:53.017Z",
+      "bytes": 280,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z",
       "synopsis_index_only": true
     },
     {
@@ -66103,9 +66404,9 @@
     {
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
-      "bytes": 25687,
-      "mtime": "2026-08-01T06:35:35.139Z",
-      "indexed_at": "2026-08-01T06:36:53.017Z",
+      "bytes": 18509,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z",
       "synopsis_index_only": true
     },
     {
@@ -66295,17 +66596,17 @@
     {
       "path": "products/receipts/TRUTH_ENFORCEMENT_AUDIT.json",
       "synopsis": "Product receipt — TRUTH ENFORCEMENT AUDIT.",
-      "bytes": 833,
-      "mtime": "2026-08-01T06:35:35.671Z",
-      "indexed_at": "2026-08-01T06:36:53.017Z",
+      "bytes": 701,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/TRUTH_LOCKDOWN_VERIFY.json",
       "synopsis": "Product receipt — TRUTH LOCKDOWN VERIFY.",
-      "bytes": 1318,
-      "mtime": "2026-08-01T06:35:35.447Z",
-      "indexed_at": "2026-08-01T06:36:53.017Z",
+      "bytes": 1141,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z",
       "synopsis_index_only": true
     },
     {
@@ -66335,9 +66636,9 @@
     {
       "path": "products/receipts/WISDOM_TRUTH_AUDIT.json",
       "synopsis": "Product receipt — WISDOM TRUTH AUDIT.",
-      "bytes": 1001,
-      "mtime": "2026-08-01T06:35:35.771Z",
-      "indexed_at": "2026-08-01T06:36:53.017Z",
+      "bytes": 735,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z",
       "synopsis_index_only": true
     },
     {
@@ -72491,6 +72792,16 @@
       "bytes": 216,
       "mtime": "2026-06-21T21:39:06.272Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "scripts/creative-engine-project-review.mjs",
+      "synopsis": "Run every active product through the Creative Director lens and emit a CREATIVE_BRIEF.md.",
+      "bytes": 8803,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z",
+      "ssot": [
+        "docs/products/creative-engine/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/credentialVerificationScoping.mjs",

@@ -192,6 +192,7 @@ While competitors store memories as passive retrievable notes, LifeOS memory is 
 
 ## Change Receipts
 
+| 2026-08-02 | **Creative Director review** — generated CREATIVE_BRIEF.md using the Creative Director lens. | Memory System reviewed through the BuilderOS creative responsibility; brief written to product home for founder review. | ✅ generated |
 | 2026-07-10 | **GAP-FILL T05 direct-agent inject** — front-door `runChairDirectAgent` skipped `loadChairMemoryContext`; counsel path had inject but conversational turns use direct agent. | Live Chair: memory_context null in SYSTEM_FACTS. | ✅ | tip + Chair re-probe |
 | 2026-07-10 | **Chair every-turn founder memory inject** — `loadLuminMemory` in command-control calls `injectProductMemoryIntoContext` (product inferred from message); chair orchestrator passes `messageText` into `loadChairMemoryContext`. Closes scorecard Memory gap (write-live / read-missing on normal turns). | Path-to-10 T05 — memory LIVE every Chair turn | `node --test tests/founder-memory.test.js` |
 
