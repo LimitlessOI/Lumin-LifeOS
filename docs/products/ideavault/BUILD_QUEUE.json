@@ -58,7 +58,7 @@
     },
     {
       "id": "2",
-      "status": "done",
+      "status": "pending",
       "target_file": "scripts/runMemoryImport.mjs",
       "task": "execute run-memory-import",
       "spec": "Run memory import script for large exports, interfacing with import-dumps-to-twin.js.",
@@ -73,7 +73,10 @@
       "commit_sha": "46160e5050642ef0e72a4e47b8d9be1162e1d050",
       "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "2",
-      "mission_id": "PRODUCT-ideavault"
+      "mission_id": "PRODUCT-ideavault",
+      "last_error": "artifact_proof_failed: import-dumps-to-twin",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "3",
@@ -525,7 +528,7 @@
     },
     {
       "id": "ideavault-step1",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/headingPassStream.js",
       "task": "extend heading pass stream",
       "spec": "Extend the existing heading pass stream to handle any new export over 500KB, appending to the Stream subsection or extending Stream I/portfolio table.",
@@ -551,7 +554,7 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "artifact_proof_failed: Stream I/portfolio table",
       "commit_sha": "4b73fbeca406d8162f12e1d954c97b1feb5371ed",
       "built_sha": null,
       "proof": null,
@@ -572,7 +575,8 @@
       "shipped_at": "2026-07-16T07:09:44.476Z",
       "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "ideavault-step1",
-      "mission_id": "PRODUCT-ideavault"
+      "mission_id": "PRODUCT-ideavault",
+      "heal_unblocked": true
     },
     {
       "id": "ideavault-step2",
@@ -689,5 +693,5 @@
   "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-ideavault",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:21:52.629Z"
+  "updated_at": "2026-08-01T06:30:32.012Z"
 }
