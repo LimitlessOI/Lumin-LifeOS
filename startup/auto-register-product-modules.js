@@ -66,7 +66,28 @@ function resolveRegisterFn(mod, registerName) {
  * Fail-open per module: one broken module never aborts the others or boot.
  */
 export async function autoRegisterProductModules(app, deps = {}, { logger = console, modules: injectedModules, root } = {}) {
-  const modules = Array.isArray(injectedModules) ? injectedModules : loadAutoRegisterRegistry();
+  const rawModules = Array.isArray(injectedModules) ? injectedModules : loadAutoRegisterRegistry();
+  // Dedupe by path: independent BUILD_QUEUE steps repeatedly add a second
+  // registry entry for a file that's already registered (confirmed live —
+  // routes/boldtrail-routes.js, routes/curriculumRoutes.js, routes/issueApprovalRoutes.js
+  // all shipped with two enabled:true entries in the same commit). A file whose
+  // register function mounts routes via app.post/app.get directly (not a scoped
+  // sub-router) gets double-mounted, and every matching request runs the handler
+  // twice. Keep the LAST enabled entry per path (later entries have consistently
+  // been the more complete one — mount_path set, fuller note — in every case
+  // observed); only fall back to a disabled entry if every entry for that path
+  // is disabled, so this never flips an already-working registration off.
+  const byPath = new Map();
+  for (const spec of rawModules) {
+    if (!spec || !spec.path) continue;
+    const key = String(spec.path).split(path.sep).join('/');
+    const isEnabled = spec.enabled !== false;
+    const existing = byPath.get(key);
+    if (!existing || isEnabled || existing.enabled === false) {
+      byPath.set(key, spec);
+    }
+  }
+  const modules = Array.from(byPath.values());
   const baseDir = root || ROOT;
   const results = [];
   for (const spec of modules) {
