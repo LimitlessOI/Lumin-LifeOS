@@ -455,13 +455,13 @@
     },
     {
       "id": "builderos-9",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/approval-system.js",
       "task": "create approval system for commitments",
       "spec": "Implement logic to manage approval process for commitments, such as pending and approved states.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "approveCommitment",
         "rejectCommitment"
@@ -482,14 +482,16 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:45:43.085Z",
-      "commit_sha": "4c1bff68ffb56d5880eafc2b9258635035f1a86d",
+      "commit_sha": "6cb11c6088a373f356015c3697b51eecf0c3424a",
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-9",
       "mission_id": "PRODUCT-builderos",
       "same_signature_count": 0,
       "demoted": false,
       "last_error": "artifact_proof_failed: waiting approval",
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T08:07:21.822Z",
+      "completed_at": "2026-08-01T08:07:33.898Z"
     },
     {
       "id": "builderos-10",
@@ -3312,6 +3314,6 @@
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-builderos",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T08:04:03.423Z",
+  "updated_at": "2026-08-01T08:07:33.898Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/builderos/BUILD_QUEUE.json"
 }
