@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T15:43:25.803Z",
+  "generated_at": "2026-08-01T15:44:26.407Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12739,
   "files": [
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3847221,
-      "mtime": "2026-08-01T15:33:45.993Z",
-      "indexed_at": "2026-08-01T15:33:47.850Z"
+      "bytes": 3847540,
+      "mtime": "2026-08-01T15:44:25.977Z",
+      "indexed_at": "2026-08-01T15:44:26.407Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -30846,7 +30846,7 @@
       "synopsis": "Configuration — Auto Registered Product Modules.",
       "bytes": 51695,
       "mtime": "2026-08-01T15:42:17.773Z",
-      "indexed_at": "2026-08-01T15:42:56.077Z",
+      "indexed_at": "2026-08-01T15:44:25.624Z",
       "synopsis_index_only": true
     },
     {
@@ -33114,7 +33114,7 @@
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
       "bytes": 1795,
       "mtime": "2026-08-01T15:41:45.169Z",
-      "indexed_at": "2026-08-01T15:42:56.077Z",
+      "indexed_at": "2026-08-01T15:44:25.624Z",
       "synopsis_index_only": true
     },
     {
@@ -41194,7 +41194,7 @@
       "synopsis": "Documentation — GAP FILL LEDGER.",
       "bytes": 64950,
       "mtime": "2026-08-01T15:42:56.389Z",
-      "indexed_at": "2026-08-01T15:43:25.803Z",
+      "indexed_at": "2026-08-01T15:44:25.624Z",
       "synopsis_index_only": true
     },
     {
@@ -42232,7 +42232,7 @@
       "synopsis": "Canonical product home — MarketingOS",
       "bytes": 139125,
       "mtime": "2026-08-01T15:42:44.253Z",
-      "indexed_at": "2026-08-01T15:42:56.077Z"
+      "indexed_at": "2026-08-01T15:44:25.624Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -70746,8 +70746,8 @@
       "path": "routes/marketing-director-routes.js",
       "synopsis": "Marketing intelligence director API routes.",
       "bytes": 1318,
-      "mtime": "2026-08-01T15:42:01.101Z",
-      "indexed_at": "2026-08-01T15:42:56.077Z",
+      "mtime": "2026-08-01T15:44:11.717Z",
+      "indexed_at": "2026-08-01T15:44:25.624Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
