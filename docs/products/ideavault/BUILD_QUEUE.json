@@ -187,13 +187,13 @@
     },
     {
       "id": "step1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/headingPass.js",
       "task": "append Stream subsection or extend Stream I/portfolio table",
       "spec": "Ensure heading pass processes new exports over 500KB, appending to Stream subsection or extending Stream I/portfolio table.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "processHeading"
       ],
@@ -214,9 +214,9 @@
           "assertion_id": "expected_exports:services/headingPass.js"
         }
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-01T04:57:37.948Z",
       "last_error": null,
-      "commit_sha": null,
+      "commit_sha": "325df89e7716dac334192cb23f5e0cfc0a2a1579",
       "built_sha": null,
       "proof": null,
       "revive_count": 7,
@@ -241,7 +241,8 @@
       "escalation_required": true,
       "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
       "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
-      "escalated_at": "2026-07-31T18:40:13.620Z"
+      "escalated_at": "2026-07-31T18:40:13.620Z",
+      "completed_at": "2026-08-01T04:57:56.241Z"
     },
     {
       "id": "step2",
@@ -687,5 +688,6 @@
   ],
   "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-ideavault",
-  "twin_kind": "product_build_queue_registered"
+  "twin_kind": "product_build_queue_registered",
+  "updated_at": "2026-08-01T04:57:56.241Z"
 }
