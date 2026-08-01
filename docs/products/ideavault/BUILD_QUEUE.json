@@ -156,7 +156,7 @@
       "spec": "Emit docs/IDEA_VAULT_HEADINGS_APPENDIX.md for machine TOC proposal.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "extractHeadings"
       ],
@@ -171,7 +171,7 @@
       "revive_count": 6,
       "revived_at": "2026-07-16T04:56:33.651Z",
       "last_attempt": null,
-      "demoted": true,
+      "demoted": false,
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "demoted_at": "2026-07-16T05:01:18.637Z",
       "park_until": null,
@@ -387,7 +387,7 @@
       "spec": "Consolidate Lumin-Memory variants and delete 404 stubs.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "cleanupMemory"
       ],
@@ -406,7 +406,7 @@
       "revive_count": 6,
       "revived_at": "2026-07-17T18:05:33.773Z",
       "last_attempt": null,
-      "demoted": true,
+      "demoted": false,
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "demoted_at": "2026-07-17T18:13:50.203Z",
       "park_until": null,
@@ -428,7 +428,7 @@
       "spec": "Update the paths for CONVERSATION_DUMP_IDEAS_INDEX in the existing system.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "updateIndexPaths"
       ],
@@ -446,7 +446,7 @@
       "revive_count": 6,
       "revived_at": "2026-07-17T18:36:31.840Z",
       "last_attempt": null,
-      "demoted": true,
+      "demoted": false,
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "demoted_at": "2026-07-17T18:45:49.206Z",
       "park_until": null,
@@ -468,7 +468,7 @@
       "spec": "Emit a TOC to docs/IDEA_VAULT_HEADINGS_APPENDIX.md via `extract-dump-headings.mjs`. Proposed if the TOC is non-trivial.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "emitHeadingsTOC"
       ],
@@ -487,7 +487,7 @@
       "revive_count": 6,
       "revived_at": "2026-07-17T18:45:49.206Z",
       "last_attempt": null,
-      "demoted": true,
+      "demoted": false,
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "demoted_at": "2026-07-17T18:55:35.029Z",
       "park_until": null,
@@ -689,5 +689,5 @@
   "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-ideavault",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T04:57:56.241Z"
+  "updated_at": "2026-08-01T05:59:40.764Z"
 }
