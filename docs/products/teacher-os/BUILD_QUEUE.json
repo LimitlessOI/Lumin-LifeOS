@@ -2,7 +2,7 @@
   "schema": "product_build_queue_v1",
   "product_id": "teacher-os",
   "planned_at": "2026-07-15T17:44:27.460Z",
-  "backlog_signature": "89eaf27cc2574260",
+  "backlog_signature": "769413494a8ba103",
   "corpus_sources": [
     "docs/products/teacher-os/PRODUCT_HOME.md"
   ],
@@ -1024,6 +1024,6 @@
   "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-teacher-os",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T14:18:43.046Z",
+  "updated_at": "2026-08-01T15:53:41.629Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/teacher-os/BUILD_QUEUE.json"
 }

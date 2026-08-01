@@ -2,7 +2,7 @@
   "schema": "product_build_queue_v1",
   "product_id": "lumin-university",
   "planned_at": "2026-07-15T17:43:55.508Z",
-  "backlog_signature": "4afe5fa73d5c46eb",
+  "backlog_signature": "f239ef2d6cd03ec1",
   "corpus_sources": [
     "docs/products/lumin-university/PRODUCT_HOME.md"
   ],
@@ -1603,6 +1603,6 @@
   "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-lumin-university",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T13:40:59.839Z",
+  "updated_at": "2026-08-01T15:53:41.613Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/lumin-university/BUILD_QUEUE.json"
 }

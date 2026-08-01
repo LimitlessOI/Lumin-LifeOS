@@ -2,7 +2,7 @@
   "schema": "product_build_queue_v1",
   "product_id": "music-talent-studio",
   "planned_at": "2026-07-15T17:44:17.284Z",
-  "backlog_signature": "76592d227b9e1cf0",
+  "backlog_signature": "730ae730dd568272",
   "corpus_sources": [
     "docs/products/music-talent-studio/PRODUCT_HOME.md"
   ],
@@ -2655,6 +2655,6 @@
   "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-music-talent-studio",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T13:54:55.130Z",
+  "updated_at": "2026-08-01T15:53:41.617Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/music-talent-studio/BUILD_QUEUE.json"
 }

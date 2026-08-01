@@ -2,7 +2,7 @@
   "schema": "product_build_queue_v1",
   "product_id": "project-governance",
   "planned_at": "2026-07-15T07:24:26.657Z",
-  "backlog_signature": "88efaf48f08d206a",
+  "backlog_signature": "acb05c51e292825a",
   "corpus_sources": [
     "docs/products/project-governance/PRODUCT_HOME.md",
     "docs/products/project-governance/PRODUCT_HOME_TEMPLATE.md",
@@ -357,5 +357,5 @@
   "blueprint_id": "PRODUCT-PROJECT-GOVERNANCE-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-project-governance",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T10:59:32.515Z"
+  "updated_at": "2026-08-01T15:53:41.622Z"
 }

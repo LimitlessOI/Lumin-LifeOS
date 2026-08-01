@@ -2,7 +2,7 @@
   "schema": "product_build_queue_v1",
   "product_id": "knowledge-base",
   "planned_at": "2026-07-16T04:42:37.682Z",
-  "backlog_signature": "d6f04d28e6622899",
+  "backlog_signature": "f13358ba43ec234e",
   "corpus_sources": [
     "docs/products/knowledge-base/PRODUCT_HOME.md"
   ],
@@ -941,5 +941,5 @@
   "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-knowledge-base",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T05:59:43.311Z"
+  "updated_at": "2026-08-01T15:53:41.607Z"
 }

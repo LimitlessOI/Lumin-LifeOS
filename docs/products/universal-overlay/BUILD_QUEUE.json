@@ -2,7 +2,7 @@
   "schema": "product_build_queue_v1",
   "product_id": "universal-overlay",
   "planned_at": "2026-07-15T17:43:24.594Z",
-  "backlog_signature": "a09c507a37163e86",
+  "backlog_signature": "4497c928abe4dc7d",
   "corpus_sources": [
     "docs/products/universal-overlay/PRODUCT_HOME.md"
   ],
@@ -2410,6 +2410,6 @@
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-universal-overlay",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T14:26:55.022Z",
+  "updated_at": "2026-08-01T15:53:29.798Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/universal-overlay/BUILD_QUEUE.json"
 }

@@ -2,7 +2,7 @@
   "schema": "product_build_queue_v1",
   "product_id": "lifere",
   "planned_at": "2026-08-02T02:45:00.000Z",
-  "backlog_signature": "00ddff0d7bd58f2a",
+  "backlog_signature": "f13358ba43ec234e",
   "corpus_sources": [
     "docs/products/lifere/PRODUCT_HOME.md",
     "docs/products/lifere/AGENTS.md",
@@ -891,5 +891,5 @@
   "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-lifere",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T05:59:46.372Z"
+  "updated_at": "2026-08-01T15:53:41.610Z"
 }

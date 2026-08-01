@@ -2,7 +2,7 @@
   "schema": "product_build_queue_v1",
   "product_id": "clientcare-billing-recovery",
   "planned_at": "2026-07-15T07:23:33.787Z",
-  "backlog_signature": "2dd8e6068b3d1535",
+  "backlog_signature": "3f4a8d9daf316b38",
   "corpus_sources": [
     "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md",
     "docs/products/clientcare-billing-recovery/AGENTS.md",
@@ -334,5 +334,6 @@
   ],
   "blueprint_id": "PRODUCT-CLIENTCARE-BILLING-RECOVERY-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-clientcare-billing-recovery",
-  "twin_kind": "product_build_queue_registered"
+  "twin_kind": "product_build_queue_registered",
+  "updated_at": "2026-08-01T15:53:41.600Z"
 }

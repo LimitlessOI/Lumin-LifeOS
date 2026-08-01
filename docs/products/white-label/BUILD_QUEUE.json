@@ -2,7 +2,7 @@
   "schema": "product_build_queue_v1",
   "product_id": "white-label",
   "planned_at": "2026-07-16T05:31:10.401Z",
-  "backlog_signature": "03f5887d58b2737b",
+  "backlog_signature": "769413494a8ba103",
   "corpus_sources": [
     "docs/products/white-label/PRODUCT_HOME.md"
   ],
@@ -1030,6 +1030,6 @@
   "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-white-label",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T14:48:56.035Z",
+  "updated_at": "2026-08-01T15:53:41.631Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/white-label/BUILD_QUEUE.json"
 }

@@ -2,7 +2,7 @@
   "schema": "product_build_queue_v1",
   "product_id": "financial-revenue",
   "planned_at": "2026-07-14T21:19:35.513Z",
-  "backlog_signature": "033bbde43664afb9",
+  "backlog_signature": "bb41ddb2e22e7843",
   "corpus_sources": [
     "docs/products/financial-revenue/PRODUCT_HOME.md"
   ],
@@ -171,5 +171,5 @@
   "blueprint_id": "PRODUCT-FINANCIAL-REVENUE-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-financial-revenue",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T05:59:39.572Z"
+  "updated_at": "2026-08-01T15:53:41.603Z"
 }

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T15:50:45.242Z",
+  "generated_at": "2026-08-01T15:53:52.087Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12739,
   "files": [
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3847540,
-      "mtime": "2026-08-01T15:44:25.977Z",
-      "indexed_at": "2026-08-01T15:44:26.407Z"
+      "bytes": 3847539,
+      "mtime": "2026-08-01T15:50:45.313Z",
+      "indexed_at": "2026-08-01T15:53:47.888Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 946,
-      "mtime": "2026-08-01T15:49:58.473Z",
-      "indexed_at": "2026-08-01T15:50:45.242Z",
+      "bytes": 1488,
+      "mtime": "2026-08-01T15:53:01.373Z",
+      "indexed_at": "2026-08-01T15:53:52.087Z",
       "synopsis_index_only": true
     },
     {

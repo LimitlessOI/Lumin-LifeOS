@@ -2,7 +2,7 @@
   "schema": "product_build_queue_v1",
   "product_id": "ai-receptionist",
   "planned_at": "2026-07-15T06:38:25.785901+00:00",
-  "backlog_signature": "84116af9d8e09bdcc",
+  "backlog_signature": "f13358ba43ec234e",
   "corpus_sources": [
     "docs/products/ai-receptionist/PRODUCT_HOME.md"
   ],
@@ -838,5 +838,5 @@
   "blueprint_id": "PRODUCT-AI-RECEPTIONIST-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-ai-receptionist",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T05:59:29.862Z"
+  "updated_at": "2026-08-01T15:53:41.591Z"
 }

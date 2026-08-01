@@ -2,7 +2,7 @@
   "schema": "product_build_queue_v1",
   "product_id": "kids-os",
   "planned_at": "2026-07-15T17:43:47.479Z",
-  "backlog_signature": "fc60b0e466680887",
+  "backlog_signature": "3fdb8cfb5e7f32df",
   "corpus_sources": [
     "docs/products/kids-os/PRODUCT_HOME.md"
   ],
@@ -1047,6 +1047,6 @@
   "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-kids-os",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T13:32:43.419Z",
+  "updated_at": "2026-08-01T15:53:41.606Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/kids-os/BUILD_QUEUE.json"
 }

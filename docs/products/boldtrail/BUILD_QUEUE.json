@@ -2,7 +2,7 @@
   "schema": "product_build_queue_v1",
   "product_id": "boldtrail",
   "planned_at": "2026-07-15T07:37:33.656Z",
-  "backlog_signature": "0a88003e283d0379",
+  "backlog_signature": "cad8461fc733fe38",
   "corpus_sources": [
     "docs/products/boldtrail/PRODUCT_HOME.md",
     "docs/products/boldtrail/AGENTS.md"
@@ -327,5 +327,5 @@
   "blueprint_id": "PRODUCT-BOLDTRAIL-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-boldtrail",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T12:33:37.230Z"
+  "updated_at": "2026-08-01T15:53:41.592Z"
 }

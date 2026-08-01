@@ -2,7 +2,7 @@
   "schema": "product_build_queue_v1",
   "product_id": "builderos",
   "planned_at": "2026-07-10T10:41:30.712Z",
-  "backlog_signature": "adcfe9ca06669d33",
+  "backlog_signature": "5deea3e6b436f3f2",
   "steps": [
     {
       "id": "step-01",
@@ -3344,5 +3344,5 @@
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-builderos",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T09:11:06.393Z"
+  "updated_at": "2026-08-01T15:53:41.595Z"
 }

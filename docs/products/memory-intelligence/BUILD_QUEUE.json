@@ -2,7 +2,7 @@
   "schema": "product_build_queue_v1",
   "product_id": "memory-intelligence",
   "planned_at": "2026-07-15T17:42:48.295Z",
-  "backlog_signature": "8a14200ec6137c0d",
+  "backlog_signature": "2ead437ebe04d7b7",
   "corpus_sources": [
     "docs/products/memory-intelligence/PRODUCT_HOME.md"
   ],
@@ -1318,6 +1318,6 @@
   "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-memory-intelligence",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T13:11:40.210Z",
+  "updated_at": "2026-08-01T15:53:41.615Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/memory-intelligence/BUILD_QUEUE.json"
 }

@@ -2,7 +2,7 @@
   "schema": "product_build_queue_v1",
   "product_id": "tc-service",
   "planned_at": "2026-07-10T03:29:12.026Z",
-  "backlog_signature": "c21c6c94ac1b59b4",
+  "backlog_signature": "d50fe7b01fa8d2c1",
   "steps": [
     {
       "id": "s1",
@@ -482,5 +482,6 @@
   ],
   "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-tc-service",
-  "twin_kind": "product_build_queue_registered"
+  "twin_kind": "product_build_queue_registered",
+  "updated_at": "2026-08-01T15:53:41.628Z"
 }

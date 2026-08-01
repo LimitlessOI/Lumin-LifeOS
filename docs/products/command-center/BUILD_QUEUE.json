@@ -2,12 +2,13 @@
   "schema": "product_build_queue_v1",
   "product_id": "command-center",
   "planned_at": "2026-07-10T19:17:55.754Z",
-  "backlog_signature": "5e2b8eafbb35b293",
+  "backlog_signature": "91311869215c53ae",
   "steps": [],
   "status": "deprecated",
   "deprecated_at": "2026-07-14T22:46:14.798629+00:00",
   "deprecation_reason": "Adam 2026-07-14: Command Center is not a separate product; admin controls live inside LifeOS (see docs/products/lifeos/BUILD_QUEUE.json lifeos-admin-* steps).",
   "blueprint_id": "PRODUCT-COMMAND-CENTER-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-command-center",
-  "twin_kind": "product_build_queue_registered"
+  "twin_kind": "product_build_queue_registered",
+  "updated_at": "2026-08-01T15:53:41.601Z"
 }

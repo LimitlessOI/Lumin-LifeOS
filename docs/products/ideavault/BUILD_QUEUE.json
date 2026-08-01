@@ -2,7 +2,7 @@
   "schema": "product_build_queue_v1",
   "product_id": "ideavault",
   "planned_at": "2026-07-15T07:36:53.661Z",
-  "backlog_signature": "9dc8948712e877d9",
+  "backlog_signature": "bf0de9dd98bcbbd2",
   "corpus_sources": [
     "docs/products/ideavault/PRODUCT_HOME.md",
     "docs/products/ideavault/conversations/2026-06-29-ecosystem-routing-catalog.md",
@@ -717,5 +717,5 @@
   "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-ideavault",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T11:03:27.471Z"
+  "updated_at": "2026-08-01T15:53:41.605Z"
 }

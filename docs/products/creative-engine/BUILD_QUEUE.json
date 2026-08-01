@@ -1,7 +1,7 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "creative-engine",
-  "updated_at": "2026-07-10",
+  "updated_at": "2026-08-01T15:53:41.601Z",
   "notes": "Conductor shipped Creative Engine v1 in one pass (Adam: do them all). footage_edit + photo_polish live; script_compose Replicate-gated; generative_broll scaffold.",
   "steps": [
     {
@@ -99,5 +99,6 @@
   ],
   "blueprint_id": "PRODUCT-CREATIVE-ENGINE-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-creative-engine",
-  "twin_kind": "product_build_queue_registered"
+  "twin_kind": "product_build_queue_registered",
+  "backlog_signature": "3f4a8d9daf316b38"
 }

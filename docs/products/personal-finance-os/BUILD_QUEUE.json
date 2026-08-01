@@ -2,7 +2,7 @@
   "schema": "product_build_queue_v1",
   "product_id": "personal-finance-os",
   "planned_at": "2026-07-15T07:37:39.498Z",
-  "backlog_signature": "c6e19d57336224c4",
+  "backlog_signature": "a4b74d5a40c0e937",
   "corpus_sources": [
     "docs/products/personal-finance-os/PRODUCT_HOME.md"
   ],
@@ -1126,5 +1126,5 @@
   "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-personal-finance-os",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T12:54:36.975Z"
+  "updated_at": "2026-08-01T15:53:41.620Z"
 }

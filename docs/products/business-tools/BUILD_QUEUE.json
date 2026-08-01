@@ -2,7 +2,7 @@
   "schema": "product_build_queue_v1",
   "product_id": "business-tools",
   "planned_at": "2026-07-15T07:37:25.768Z",
-  "backlog_signature": "86e0e97c71d7ec1c",
+  "backlog_signature": "00ddff0d7bd58f2a",
   "corpus_sources": [
     "docs/products/business-tools/PRODUCT_HOME.md"
   ],
@@ -1273,5 +1273,5 @@
   "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-business-tools",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T12:22:02.088Z"
+  "updated_at": "2026-08-01T15:53:41.598Z"
 }

@@ -2,7 +2,7 @@
   "schema": "product_build_queue_v1",
   "product_id": "outreach-crm",
   "planned_at": "2026-07-15T07:37:30.438Z",
-  "backlog_signature": "6ca2a4bac23adfa8",
+  "backlog_signature": "8cb166229da05209",
   "corpus_sources": [
     "docs/products/outreach-crm/PRODUCT_HOME.md"
   ],
@@ -160,5 +160,5 @@
   "blueprint_id": "PRODUCT-OUTREACH-CRM-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-outreach-crm",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T12:28:39.937Z"
+  "updated_at": "2026-08-01T15:53:41.619Z"
 }
