@@ -27,6 +27,7 @@ function handleDeleteApproval(req, res) {
 }
 
 export function registerApprovalRoutes(app) {
+  // commitment approvals
   router.get('/approvals', handleGetApprovals);
   router.post('/approvals', handleCreateApproval);
   router.put('/approvals/:id', handleUpdateApproval);
