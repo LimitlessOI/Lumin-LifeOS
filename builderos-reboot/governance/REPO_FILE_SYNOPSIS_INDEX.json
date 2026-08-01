@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T02:34:26.223Z",
+  "generated_at": "2026-08-01T02:36:34.761Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12658,
+  "file_count": 12659,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -70584,6 +70584,16 @@
       "bytes": 10459,
       "mtime": "2026-06-21T21:39:04.772Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "routes/pageSummarization.js",
+      "synopsis": "Provides a summary of page content using AI.",
+      "bytes": 905,
+      "mtime": "2026-08-01T02:36:34.761Z",
+      "indexed_at": "2026-08-01T02:36:34.761Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/partner-config-creation.js",
