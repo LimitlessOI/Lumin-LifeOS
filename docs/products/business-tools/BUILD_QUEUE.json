@@ -107,13 +107,13 @@
     },
     {
       "id": "3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/realEstateCurriculum.js",
       "task": "define virtual real estate curriculum",
       "spec": "Create structure for virtual real estate class curriculum; define module structure and student DB schema.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "defineCurriculum"
       ],
@@ -133,14 +133,16 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T08:54:19.101Z",
-      "commit_sha": "057f8f1950a637cdb67a901220be34cb7abf20d4",
+      "commit_sha": "1bc89b6e9934f78e3f740bf9facb17e40f05c985",
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "3",
       "mission_id": "PRODUCT-business-tools",
       "same_signature_count": 0,
       "demoted": false,
       "last_error": "artifact_proof_failed: curriculum; DB schema",
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T11:41:25.980Z",
+      "completed_at": "2026-08-01T11:41:40.076Z"
     },
     {
       "id": "4",
@@ -1243,6 +1245,6 @@
   "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-business-tools",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:30:26.228Z",
+  "updated_at": "2026-08-01T11:41:40.077Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/business-tools/BUILD_QUEUE.json"
 }
