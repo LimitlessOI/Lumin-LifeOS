@@ -1,42 +1,39 @@
 /**
- * SYNOPSIS: New function to check commitment due dates against Adam's timezone
+ * SYNOPSIS: Implements today_commitments timezone check against Railway UTC.
  * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
-export function getCurrentTimeInUTC() {
-    return new Date().toISOString();
-}
+import { convertToTimezone } from './timezone-utils.js';
 
-export function convertToTimezone(date, timezone) {
-    // Use Intl.DateTimeFormat for robust timezone conversion without changing the underlying UTC time
-    // This creates a date object that represents* the time in the target timezone
-    const options = {
-        year: 'numeric',
-        month: 'numeric',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-        second: 'numeric',
-        hour12: false,
-        timeZone: timezone,
-    };
-    const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
-    return new Date(formattedDate);
-}
+export async function checkTodayCommitmentsTimezone(deps, payload) {
+  const { pool, logger } = deps;
+  const { userId } = payload || {}; // Assuming payload contains userId
+  try {
+    // Get all commitments for the user that are still active (not kept, broken, declined, or honourable_exit)
+    // and have a due_date.
+    const { rows: commitments } = await pool.query(
+      `SELECT id, due_date, reminder_at, title FROM commitments WHERE user_id = $1 AND status NOT IN ('kept', 'broken', 'declined', 'honourable_exit') AND due_date IS NOT NULL`,
+      [userId]
+    );
 
-export function isPastDue(date, timezone = 'UTC') {
-    const now = convertToTimezone(new Date(), timezone);
-    return convertToTimezone(date, timezone) < now;
-}
+    const todayCommitments = [];
+    const currentDateUTC = new Date().toISOString().split('T')[0]; // Get only the date part in Railway's UTC
 
-// New function to check commitment due dates against Adam's timezone
-export function adjustCommitmentDueDates(date) {
-    const adamsTimezone = 'America/New_York'; // Assuming Adam is in New York
-    return isPastDue(date, adamsTimezone);
-}
+    for (const commitment of commitments) {
+      if (commitment.due_date) {
+        // Ensure due_date is a Date object for convertToTimezone
+        const dueDateObj = new Date(commitment.due_date);
+        const dueDateUTC = convertToTimezone(dueDateObj, 'UTC').toISOString().split('T')[0];
 
-// Function to check if the due date falls on the current date in Railway's UTC timezone
-export function checkTodayCommitmentsTimezone(dueDate) {
-    const currentDateUTC = new Date().toISOString().split('T')[0]; // Get only the date part
-    const dueDateUTC = convertToTimezone(dueDate, 'UTC').toISOString().split('T')[0];
-    return currentDateUTC === dueDateUTC;
+        // Perform the timezone check against CURRENT_DATE in Railway's UTC
+        if (currentDateUTC === dueDateUTC) {
+          todayCommitments.push(commitment);
+        }
+      }
+    }
+
+    return todayCommitments;
+  } catch (error) {
+    logger.error({ error, userId }, 'Error in checkTodayCommitmentsTimezone during timezone check');
+    throw new Error('Failed in checkTodayCommitmentsTimezone due to database or processing error');
+  }
 }
