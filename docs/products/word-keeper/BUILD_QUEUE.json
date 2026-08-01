@@ -690,7 +690,7 @@
     },
     {
       "id": "word-keeper-001",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/googleCalendarService.js",
       "task": "implement calendar integration",
       "spec": "Integrate Google Calendar using default settings, ensuring basic operations without OAuth authentication flow.",
@@ -723,7 +723,10 @@
       "commit_sha": "131b132dfee35f69b1ad4f40785a0c70d5cd9d43",
       "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "word-keeper-001",
-      "mission_id": "PRODUCT-word-keeper"
+      "mission_id": "PRODUCT-word-keeper",
+      "last_error": "artifact_proof_failed: connect to Google Calendar API",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "word-keeper-002",
@@ -821,5 +824,5 @@
   "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-word-keeper",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:22:19.869Z"
+  "updated_at": "2026-08-01T06:31:00.270Z"
 }
