@@ -3,7 +3,7 @@
   "product_id": "limitlessos",
   "verify_script": "scripts/verify-go-vegas-scheduler.mjs",
   "notes": "Go Vegas revenue slice — outreach pipeline v1 already shipped as code; this queue closes the last mile to live revenue: scheduler tick (daily discover/invite/follow-up under caps), dry-run proof script, and SENTRY-facing status receipt. No founder UI in this slice.",
-  "updated_at": "2026-08-01T09:44:54.740Z",
+  "updated_at": "2026-08-01T09:45:29.423Z",
   "steps": [
     {
       "id": "gv-scheduler",
@@ -1048,7 +1048,7 @@
         "1"
       ],
       "founder_gated": true,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerLimitlessOSUIRoutes"
       ],
@@ -1074,11 +1074,13 @@
       "mission_id": "PRODUCT-limitlessos",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T21:52:33.220Z",
-      "commit_sha": "cc7b3965e2bd69d74e981afee29062903508f548",
+      "commit_sha": "7e8e1ee22981219f152bd5573698dfd30f7be224",
       "same_signature_count": 0,
       "demoted": false,
-      "last_error": "artifact_proof_failed: UI update registration",
-      "heal_unblocked": true
+      "last_error": "artifact_proof_failed: missing_exports:registerLimitlessOSUIRoutes; registerLimitlessOSUIRoutes",
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T09:45:12.233Z",
+      "blocker_class": "BLOCKED_TOOLING"
     },
     {
       "id": "limitlessos-step1",
