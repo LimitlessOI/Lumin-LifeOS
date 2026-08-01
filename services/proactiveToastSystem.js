@@ -1,58 +1,51 @@
 /**
- * SYNOPSIS: Service module — ProactiveToastSystem.
+ * SYNOPSIS: Registers a proactive toast based on user context and preferences.
+ * @ssot docs/products/universal-overlay/PRODUCT_HOME.md
  */
-let userPreferences = {};
+export async function registerProactiveToast(deps, payload) {
+  const { pool, logger } = deps;
+  const { owner_id, message, options } = payload || {};
 
-class Toast {
-  constructor(message, options = {}) {
-    this.message = message;
-    this.dismissible = options.dismissible || true;
-    this.autoDismiss = options.autoDismiss || false;
-    this.duration = options.duration || 5000;
-    this.id = options.id || new Date().getTime();
+  if (!owner_id || !message) {
+    logger.warn({ payload }, 'Missing owner_id or message in registerProactiveToast payload');
+    throw new Error('Missing required payload fields');
+  }
+
+  try {
+    // Fetch user context and preferences
+    const { rows: contextRows } = await pool.query(
+      'SELECT context FROM overlay_user_context WHERE owner_id = $1',
+      [owner_id]
+    );
+    const userContext = contextRows[0]?.context || {};
+
+    // For simplicity, we'll store toast interaction data in overlay_interactions
+    // This allows for learning dismissal preferences over time.
+    // The actual "displaying" of the toast happens on the client side,
+    // this service merely records the intent and relevant data.
+    const interactionData = {
+      type: 'proactive_toast_registration',
+      message: message,
+      options: options,
+      user_context: userContext,
+      status: 'pending_display', // Indicates the toast is ready to be displayed by the client
+    };
+
+    const { rows: insertRows } = await pool.query(
+      `INSERT INTO overlay_interactions (owner_id, interaction_data) VALUES ($1, $2) RETURNING id, created_at`,
+      [owner_id, interactionData]
+    );
+
+    return {
+      id: insertRows[0].id,
+      owner_id: owner_id,
+      message: message,
+      options: options,
+      status: 'registered',
+      created_at: insertRows[0].created_at,
+    };
+  } catch (error) {
+    logger.error({ error, payload }, 'Error in registerProactiveToast');
+    throw new Error('Failed to register proactive toast');
   }
 }
-
-class ProactiveToastSystem {
-  constructor() {
-    this.toasts = [];
-  }
-
-  showToast(message, options) {
-    const toast = new Toast(message, options);
-    this.toasts.push(toast);
-    this.renderToast(toast);
-    if (toast.autoDismiss) {
-      setTimeout(() => this.dismissToast(toast.id), toast.duration);
-    }
-  }
-
-  dismissToast(id) {
-    this.toasts = this.toasts.filter(toast => toast.id !== id);
-    this.removeToastFromUI(id);
-  }
-
-  renderToast(toast) {
-    console.log(`Displaying toast: ${toast.message}`);
-    // Add code to display toast in UI
-    if (toast.dismissible) {
-      console.log(`Toast is dismissible`);
-      // Add dismiss button to UI
-    }
-  }
-
-  removeToastFromUI(id) {
-    console.log(`Removing toast with id: ${id}`);
-    // Add code to remove toast from UI
-  }
-
-  saveUserPreference(key, value) {
-    userPreferences[key] = value;
-  }
-
-  getUserPreference(key) {
-    return userPreferences[key];
-  }
-}
-
-export { ProactiveToastSystem };

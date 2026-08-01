@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T02:40:53.042Z",
+  "generated_at": "2026-08-01T02:43:21.091Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12660,
   "files": [
@@ -93614,10 +93614,13 @@
     },
     {
       "path": "services/proactiveToastSystem.js",
-      "synopsis": "Service module — ProactiveToastSystem.",
-      "bytes": 1349,
-      "mtime": "2026-07-18T00:18:17.684Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "synopsis": "Registers a proactive toast based on user context and preferences.",
+      "bytes": 1834,
+      "mtime": "2026-08-01T02:43:21.091Z",
+      "indexed_at": "2026-08-01T02:43:21.091Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/product-build-orchestrator.js",
