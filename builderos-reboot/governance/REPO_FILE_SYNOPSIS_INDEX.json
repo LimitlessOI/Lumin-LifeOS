@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T04:56:49.265Z",
+  "generated_at": "2026-08-01T04:57:17.498Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12670,
   "files": [
@@ -93395,10 +93395,13 @@
     },
     {
       "path": "services/ollamaInvestigation.js",
-      "synopsis": "Exports investigateTokenUsage — services/ollamaInvestigation.js.",
-      "bytes": 1020,
-      "mtime": "2026-07-15T08:32:59.627Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "synopsis": "Investigates system prompt bloat in Ollama usage.",
+      "bytes": 1658,
+      "mtime": "2026-08-01T04:57:17.498Z",
+      "indexed_at": "2026-08-01T04:57:17.498Z",
+      "ssot": [
+        "docs/products/ai-council/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/ollamaInvestigator.js",
