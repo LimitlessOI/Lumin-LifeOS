@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T02:11:22.160Z",
+  "generated_at": "2026-08-01T02:11:45.906Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12656,
+  "file_count": 12657,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -94077,6 +94077,16 @@
       "bytes": 3867,
       "mtime": "2026-08-01T01:47:51.625Z",
       "indexed_at": "2026-08-01T01:47:51.625Z",
+      "ssot": [
+        "docs/products/oil-security-divisions/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/securityPreflightService.js",
+      "synopsis": "Performs P0 security checks for builder preflight.",
+      "bytes": 880,
+      "mtime": "2026-08-01T02:11:45.906Z",
+      "indexed_at": "2026-08-01T02:11:45.906Z",
       "ssot": [
         "docs/products/oil-security-divisions/PRODUCT_HOME.md"
       ]
