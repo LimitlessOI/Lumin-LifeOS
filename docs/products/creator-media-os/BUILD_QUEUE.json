@@ -7,7 +7,7 @@
   "steps": [
     {
       "id": "1",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/channelMemory.js",
       "task": "implement channel memory model",
       "spec": "Model stores channel memory, brand profile, SEO.",
@@ -35,11 +35,14 @@
       "commit_sha": "7cd3acc2e1afc20d412a20d9b127631a03d57ca6",
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "1",
-      "mission_id": "PRODUCT-creator-media-os"
+      "mission_id": "PRODUCT-creator-media-os",
+      "last_error": "artifact_proof_failed: Channel memory profile",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "2",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/likenessConsent.js",
       "task": "manage likeness consent",
       "spec": "Capture and revocation of likeness consent.",
@@ -67,7 +70,7 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "artifact_proof_failed: Explicit likeness consent recorded",
       "commit_sha": "4c7c860fa3d7d7fb8bb5c9eea91dcbb6ed177fec",
       "built_sha": null,
       "proof": null,
@@ -88,11 +91,12 @@
       "shipped_at": "2026-07-15T08:40:54.575Z",
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "2",
-      "mission_id": "PRODUCT-creator-media-os"
+      "mission_id": "PRODUCT-creator-media-os",
+      "heal_unblocked": true
     },
     {
       "id": "3",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/scriptEngine.js",
       "task": "implement script/title/hook engine",
       "spec": "Engine generates scripts with titles/hooks for media content.",
@@ -120,7 +124,10 @@
       "commit_sha": "df2269a4199dcea132a62c31b806c7db1dccc5ff",
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "3",
-      "mission_id": "PRODUCT-creator-media-os"
+      "mission_id": "PRODUCT-creator-media-os",
+      "last_error": "artifact_proof_failed: Script for long and short form",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "4",
@@ -280,7 +287,7 @@
     },
     {
       "id": "6",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/analyticsMemory.js",
       "task": "establish analytics memory loop",
       "spec": "Memory loop incorporates publish analytics.",
@@ -308,7 +315,10 @@
       "commit_sha": "d645fdd625afe20603113fb489c9351d85eb508f",
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "6",
-      "mission_id": "PRODUCT-creator-media-os"
+      "mission_id": "PRODUCT-creator-media-os",
+      "last_error": "artifact_proof_failed: Publish analytics memory loop",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "7",
@@ -331,7 +341,7 @@
     },
     {
       "id": "8",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/consentContract.js",
       "task": "formalize consent contract",
       "spec": "Formalizes consent and likeness contract model.",
@@ -359,7 +369,10 @@
       "commit_sha": "e318b97ace6f3404822c546e53c19fc79fedbf3f",
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "8",
-      "mission_id": "PRODUCT-creator-media-os"
+      "mission_id": "PRODUCT-creator-media-os",
+      "last_error": "artifact_proof_failed: Consent contract model",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "9",
@@ -382,7 +395,7 @@
     },
     {
       "id": "10",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/scriptRoutes.js",
       "task": "Add script routes",
       "spec": "Expose script generation operations via HTTP API.",
@@ -416,7 +429,10 @@
       "commit_sha": "d9438de6ee9a8bc75056de5e61d361ecd61d79c4",
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "10",
-      "mission_id": "PRODUCT-creator-media-os"
+      "mission_id": "PRODUCT-creator-media-os",
+      "last_error": "artifact_proof_failed: app.post",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "11",
@@ -1351,5 +1367,5 @@
   "corpus_sources": [
     "docs/products/creator-media-os/PRODUCT_HOME.md"
   ],
-  "updated_at": "2026-08-01T06:21:49.325Z"
+  "updated_at": "2026-08-01T06:30:28.673Z"
 }
