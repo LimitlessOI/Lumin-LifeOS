@@ -117,7 +117,7 @@
       "spec": "Script must handle scheduling and execution of follow-up tasks on day 3 and day 7 for the Site Builder feature.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "scheduleDay3FollowUp",
         "scheduleDay7FollowUp"
@@ -130,7 +130,7 @@
       "revive_count": 9,
       "revived_at": "2026-07-17T18:13:50.204Z",
       "last_attempt": null,
-      "demoted": true,
+      "demoted": false,
       "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: ENOENT: no such file or directory, open '/usr/src/app/scripts/cron/.facto",
       "demoted_at": "2026-07-18T01:14:09.209Z",
       "park_until": null,
@@ -147,5 +147,6 @@
   ],
   "blueprint_id": "PRODUCT-OUTREACH-CRM-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-outreach-crm",
-  "twin_kind": "product_build_queue_registered"
+  "twin_kind": "product_build_queue_registered",
+  "updated_at": "2026-08-01T05:59:56.297Z"
 }
