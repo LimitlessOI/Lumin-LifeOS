@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T15:15:24.815Z",
+  "generated_at": "2026-08-01T15:16:08.151Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12732,
+  "file_count": 12733,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -93197,6 +93197,16 @@
       "bytes": 3087,
       "mtime": "2026-07-13T20:29:53.086Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "ssot": [
+        "docs/products/marketingos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/marketing-message-learning.js",
+      "synopsis": "Analyzes performance data from marketing_performance_analytics and extracts content learnings.",
+      "bytes": 5143,
+      "mtime": "2026-08-01T15:16:08.151Z",
+      "indexed_at": "2026-08-01T15:16:08.151Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
