@@ -4,7 +4,7 @@
   "verify_script": null,
   "planned_at": "2026-07-12T03:40:00.000Z",
   "notes": "Module 4 Therapist Integration beachhead — Clinical Partnership. Consent-gated briefs; therapist account lists linked clients who granted therapist_share. LifeOS consent foundation is a dependency.",
-  "updated_at": "2026-08-01T10:20:56.115Z",
+  "updated_at": "2026-08-01T10:21:28.551Z",
   "steps": [
     {
       "id": "ws-therapist-schema",
@@ -1564,7 +1564,7 @@
         "wellness-studio-step3"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerWellnessTableExtensionsRoutes"
       ],
@@ -1589,14 +1589,17 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:53:26.802Z",
-      "commit_sha": "ecc351e98f6bcb9072bea7a59d5743aabda4ea1f",
+      "commit_sha": "0b0970513771bc43a20dcc4d00a666eba2946acb",
       "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "wellness-studio-step4",
       "mission_id": "PRODUCT-wellness-studio",
-      "same_signature_count": 0,
+      "same_signature_count": 1,
       "demoted": false,
       "last_error": "artifact_proof_failed: POST /api/v1/wellness/extensions/joy-checkins; POST /api/v1/wellness/extensions/integrity-score; POST /api/v1/wellness/extensions/wearable-data; POST /api/v1/wellness/extensions/emotional-patterns",
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T10:21:12.471Z",
+      "blocker_class": "BLOCKED_TOOLING",
+      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: POST /api/v1/wellness/extensions/joy-checkins; POST /api/v1/wellness/extensions/integrity-score; POST /api/v1/wellness/extensions/wearable-data; POST /api/v1/wellness/extensions"
     },
     {
       "id": "wellness-studio-step5",

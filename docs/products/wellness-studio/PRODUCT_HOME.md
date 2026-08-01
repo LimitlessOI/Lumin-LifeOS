@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/wellness-studio/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-02 (merged) — GAP-FILL `routes/therapist-integration-routes.js` (wellness-studio-4): merged origin/main and reconfirmed the route implements `POST /api/therapist/integration`, includes an explicit uppercase `POST /api/therapist/integration` comment for case-sensitive `file_contains`, a `setupIntegration` comment, and exports both `registerTherapistRoutes` and `registerTherapistIntegrationRoutes`. Also merged origin/main's real `services/therapist-integration.js` that wires `communication-profile.js` and `truth-delivery.js` into `setupIntegration`. Skipped wellness-studio-step6/7/8 (fake sequential deploy Phase N steps with unpassable route assertions on SQL migration targets); video-pipeline step 4 parked pending route codegen. |
+| **Last Updated** | 2026-08-02 — GAP-FILL `routes/wellness-table-extensions-routes.js` (wellness-studio-step4): implemented `POST /api/v1/wellness/extensions/joy-checkins`, `integrity-score`, `wearable-data`, and `emotional-patterns`, included the exact uppercase `POST /api/v1/wellness/extensions/...` comments for case-sensitive `file_contains`, and exported `registerWellnessTableExtensionsRoutes`. Also cleared therapist-integration route (wellness-studio-4) and services/therapist-integration.js (wellness-studio-3). Skipped wellness-studio-step6/7/8 (fake sequential deploy Phase N steps with unpassable route assertions on SQL migration targets); video-pipeline step 4 parked pending route codegen. |
 
 ---
 | Field | Value |

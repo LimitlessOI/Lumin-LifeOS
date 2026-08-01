@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T10:20:49.888Z",
+  "generated_at": "2026-08-01T10:21:56.388Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1929,
-      "mtime": "2026-08-01T10:13:35.040Z",
-      "indexed_at": "2026-08-01T10:14:06.630Z",
+      "bytes": 2060,
+      "mtime": "2026-08-01T10:21:29.732Z",
+      "indexed_at": "2026-08-01T10:21:56.388Z",
       "synopsis_index_only": true
     },
     {
@@ -41164,9 +41164,9 @@
     {
       "path": "docs/products/builderos/GAP_FILL_LEDGER.json",
       "synopsis": "Documentation — GAP FILL LEDGER.",
-      "bytes": 41677,
-      "mtime": "2026-08-01T10:16:05.161Z",
-      "indexed_at": "2026-08-01T10:16:17.330Z",
+      "bytes": 42469,
+      "mtime": "2026-08-01T10:17:58.908Z",
+      "indexed_at": "2026-08-01T10:21:56.388Z",
       "synopsis_index_only": true
     },
     {
@@ -42823,9 +42823,9 @@
     {
       "path": "docs/products/wellness-studio/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Wellness Studio",
-      "bytes": 19370,
-      "mtime": "2026-08-01T10:17:41.832Z",
-      "indexed_at": "2026-08-01T10:17:53.478Z"
+      "bytes": 19310,
+      "mtime": "2026-08-01T10:21:43.588Z",
+      "indexed_at": "2026-08-01T10:21:56.388Z"
     },
     {
       "path": "docs/products/WELLNESSSTUDIO.md",
@@ -71863,10 +71863,10 @@
     },
     {
       "path": "routes/wellness-table-extensions-routes.js",
-      "synopsis": "routes/wellness-table-extensions-routes.js",
-      "bytes": 655,
-      "mtime": "2026-07-16T19:42:53.603Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis": "HTTP routes for wellness table extensions.",
+      "bytes": 1077,
+      "mtime": "2026-08-01T10:21:41.004Z",
+      "indexed_at": "2026-08-01T10:21:56.388Z",
       "ssot": [
         "docs/products/wellness-studio/PRODUCT_HOME.md"
       ]
