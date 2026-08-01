@@ -4,20 +4,21 @@
  */
 import express from 'express';
 
-const router = express.Router();
-
-// pull request final review endpoint
-function finalReviewHandler(req, res) {
-  res.status(200).json({
-    ok: true,
-    message: 'Final PR review and merge for branch phase7-railway-probe',
-    pullRequest: req.body || {},
+export function registerFinalPrReviewRoutes(app, deps) {
+  app.post('/api/v1/pr/review', deps.requireKey, async (req, res, next) => {
+    try {
+      const payload = req.body;
+      // Assuming payload contains a 'branchName' property for the service function
+      const result = await reviewBranch(payload.branchName);
+      res.json({
+        ok: true,
+        message: 'Final PR review and merge initiated.',
+        details: result,
+        pullRequest: payload,
+      });
+    } catch (error) {
+      deps.logger.error({ error }, 'Error in final_pr_review route for pull request final review');
+      next(error);
+    }
   });
-}
-
-// POST /api/v1/pr/review
-router.post('/review', finalReviewHandler);
-
-export function registerFinalPrReviewRoutes(app) {
-  app.use('/api/v1/pr', router);
 }

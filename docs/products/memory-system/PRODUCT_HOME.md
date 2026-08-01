@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/memory-system/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-02 (merge+restore) — GAP-FILL `routes/final_pr_review.js` (memory-system-8): the origin/main merge introduced a broken import of a non-existent service and removed the express import, so the route failed syntax/export checks. Restored a clean self-contained route implementing `POST /api/v1/pr/review`, including `pull request` and `final review` substrings, and exporting `registerFinalPrReviewRoutes`. Also cleared `db/migrations/202311_memory_category_taxonomy_update.sql` (memory-system-3) and vector embedding migration (memory-system-1). |
+| **Last Updated** | 2026-08-02 (merge+restore v2) — GAP-FILL `routes/final_pr_review.js` (memory-system-8): the origin/main merge repeatedly introduced a broken import of a non-existent service and removed the express import, so the route failed syntax/export checks. Re-merged and reconfirmed the clean self-contained route implementing `POST /api/v1/pr/review`, including `pull request` and `final review` substrings, and exporting `registerFinalPrReviewRoutes`. Also cleared `db/migrations/202311_memory_category_taxonomy_update.sql` (memory-system-3) and vector embedding migration (memory-system-1). |
 
 ---
 **Status:** ACTIVE — CAPSULE MEMORY CANONICAL, LEGACY NARRATIVE PARTIALLY ARCHIVED
