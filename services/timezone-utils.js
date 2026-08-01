@@ -7,7 +7,20 @@ export function getCurrentTimeInUTC() {
 }
 
 export function convertToTimezone(date, timezone) {
-    return new Date(date.toLocaleString('en-US', { timeZone: timezone }));
+    // Use Intl.DateTimeFormat for robust timezone conversion without changing the underlying UTC time
+    // This creates a date object that represents* the time in the target timezone
+    const options = {
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric',
+        hour12: false,
+        timeZone: timezone,
+    };
+    const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
+    return new Date(formattedDate);
 }
 
 export function isPastDue(date, timezone = 'UTC') {
