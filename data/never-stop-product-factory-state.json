@@ -17,8 +17,8 @@
     "outcome": {
       "ok": false,
       "step_id": "step7",
-      "stage": "artifact_proof",
-      "reason": "artifact_proof_failed: missing_exports:registerCityOSHomeCreationRoutes",
+      "stage": "functional_proof",
+      "reason": "route module not auto-registered — add {\"path\":\"routes/cityos-home-creation-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
       "attempts": 1,
       "blocked": false,
       "blocker_class": "BLOCKED_TOOLING",
@@ -65,5 +65,5 @@
     }
   },
   "cycles": 1,
-  "updated_at": "2026-08-01T09:33:41.575Z"
+  "updated_at": "2026-08-01T09:37:46.249Z"
 }

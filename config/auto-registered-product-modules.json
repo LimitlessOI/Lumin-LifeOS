@@ -693,6 +693,13 @@
       "note": "LimitlessOS price book vendor comparison routes."
     },
     {
+      "path": "routes/cityos-home-creation-routes.js",
+      "register": "registerCityOSHomeCreationRoutes",
+      "mount_path": "/api/v1/cityos",
+      "enabled": true,
+      "note": "LimitlessOS CityOS / Go Vegas product home creation route (POST /api/v1/cityos/home/create). Auto-registered so module-health can prove it mounts LIVE."
+    },
+    {
       "path": "routes/dialogue-bundle-skus-routes.js",
       "register": "registerDialogueBundleSKUsRoutes",
       "mount_path": "/api/v1/bundle-skus",
