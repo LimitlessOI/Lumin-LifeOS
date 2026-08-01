@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T11:48:57.821Z",
+  "generated_at": "2026-08-01T11:49:04.688Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3840699,
-      "mtime": "2026-08-01T11:34:38.880Z",
-      "indexed_at": "2026-08-01T11:34:49.770Z"
+      "bytes": 3840989,
+      "mtime": "2026-08-01T11:48:57.888Z",
+      "indexed_at": "2026-08-01T11:49:03.914Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -41164,9 +41164,9 @@
     {
       "path": "docs/products/builderos/GAP_FILL_LEDGER.json",
       "synopsis": "Documentation — GAP FILL LEDGER.",
-      "bytes": 48030,
-      "mtime": "2026-08-01T11:44:00.152Z",
-      "indexed_at": "2026-08-01T11:48:04.919Z",
+      "bytes": 48733,
+      "mtime": "2026-08-01T11:48:58.120Z",
+      "indexed_at": "2026-08-01T11:49:03.914Z",
       "synopsis_index_only": true
     },
     {

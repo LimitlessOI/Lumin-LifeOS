@@ -343,6 +343,14 @@
       "added_real_lines": 16,
       "justification": "deterministic merge-conflict gap-fill on an existing builder-generated route; factory /build attempts failed with BLOCKED_TOOLING due to exhausted AI provider quota, and only the function signature and fallback wiring were adjusted.\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
       "commit_message_excerpt": "GAP-FILL: reconcile routes/server.approvals.js after origin/main merge for business-tools step 6. An origin/main merge introduced deps.requireKey and deps.logger usage inside the route but left the si"
+    },
+    {
+      "at": "2026-08-01T11:48:58.124Z",
+      "file": "services/makeGenerator.js",
+      "is_new_file": false,
+      "added_real_lines": 45,
+      "justification": "deterministic merge-conflict resolution; factory /build attempts failed with BLOCKED_TOOLING due to exhausted AI provider quota, and the remote artifact already satisfies the BUILD_QUEUE contract.\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
+      "commit_message_excerpt": "GAP-FILL: adopt origin/main makeGenerator.js and update business-tools product home SSOT. An origin/main merge for services/makeGenerator.js introduced a richer async generateMakeSchema(deps, payload)"
     }
   ]
 }
