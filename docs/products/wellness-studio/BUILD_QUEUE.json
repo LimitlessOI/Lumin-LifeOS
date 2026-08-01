@@ -4,7 +4,7 @@
   "verify_script": null,
   "planned_at": "2026-07-12T03:40:00.000Z",
   "notes": "Module 4 Therapist Integration beachhead — Clinical Partnership. Consent-gated briefs; therapist account lists linked clients who granted therapist_share. LifeOS consent foundation is a dependency.",
-  "updated_at": "2026-08-01T10:21:28.551Z",
+  "updated_at": "2026-08-01T10:25:24.412Z",
   "steps": [
     {
       "id": "ws-therapist-schema",
@@ -1556,7 +1556,7 @@
     },
     {
       "id": "wellness-studio-step4",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/wellness-table-extensions-routes.js",
       "task": "create routes for extended table services",
       "spec": "Expose routes to interact with the extended table services.",
@@ -1564,7 +1564,7 @@
         "wellness-studio-step3"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "expected_exports": [
         "registerWellnessTableExtensionsRoutes"
       ],
@@ -1589,7 +1589,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:53:26.802Z",
-      "commit_sha": "0b0970513771bc43a20dcc4d00a666eba2946acb",
+      "commit_sha": "865f5107ed2b2c12e575b86a97c2ef3421e529b5",
       "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "wellness-studio-step4",
       "mission_id": "PRODUCT-wellness-studio",
@@ -1597,9 +1597,10 @@
       "demoted": false,
       "last_error": "artifact_proof_failed: POST /api/v1/wellness/extensions/joy-checkins; POST /api/v1/wellness/extensions/integrity-score; POST /api/v1/wellness/extensions/wearable-data; POST /api/v1/wellness/extensions/emotional-patterns",
       "heal_unblocked": true,
-      "last_attempt_at": "2026-08-01T10:21:12.471Z",
+      "last_attempt_at": "2026-08-01T10:25:23.838Z",
       "blocker_class": "BLOCKED_TOOLING",
-      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: POST /api/v1/wellness/extensions/joy-checkins; POST /api/v1/wellness/extensions/integrity-score; POST /api/v1/wellness/extensions/wearable-data; POST /api/v1/wellness/extensions"
+      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: POST /api/v1/wellness/extensions/joy-checkins; POST /api/v1/wellness/extensions/integrity-score; POST /api/v1/wellness/extensions/wearable-data; POST /api/v1/wellness/extensions",
+      "completed_at": "2026-08-01T10:25:24.412Z"
     },
     {
       "id": "wellness-studio-step5",
