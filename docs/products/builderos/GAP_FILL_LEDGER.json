@@ -287,6 +287,14 @@
       "added_real_lines": 16,
       "justification": "this is a deterministic gap-fill on an existing builder-generated route file that an origin/main merge corrupted; all AI providers are exhausted so the factory cannot rebuild it, and we are restoring the previously-generated self-contained version, not authoring new load-bearing logic. Updated memory-system product home SSOT.\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
       "commit_message_excerpt": "GAP-FILL: merge origin/main and reconfirm routes/final_pr_review.js restore for memory-system-8. The origin/main merge repeatedly reintroduced a broken import of a non-existent service and removed the"
+    },
+    {
+      "at": "2026-08-01T10:47:06.812Z",
+      "file": "services/decisionDebt.js",
+      "is_new_file": false,
+      "added_real_lines": 51,
+      "justification": "restoring an already-designed, already-\nreal implementation that existed one commit prior, plus a BUILD_QUEUE\nspec data correction -- not new business logic authorship.",
+      "commit_message_excerpt": "GAP-FILL: restore real getDecisionDebt logic, fix broken BUILD_QUEUE spec that caused the regression"
     }
   ]
 }
