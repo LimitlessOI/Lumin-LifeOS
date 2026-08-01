@@ -9,7 +9,7 @@
   "steps": [
     {
       "id": "01",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/intakeFormService.js",
       "task": "build intake form",
       "spec": "Create and expose an intake form handling service.",
@@ -41,7 +41,10 @@
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "01",
       "mission_id": "PRODUCT-productized-sprint",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "last_error": "artifact_proof_failed: createIntakeForm",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "02",
@@ -99,7 +102,7 @@
     },
     {
       "id": "04",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/aiPreAnalysisService.js",
       "task": "write AI pre-analysis prompt",
       "spec": "Implement AI pre-analysis prompt writing and testing.",
@@ -131,7 +134,10 @@
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "04",
       "mission_id": "PRODUCT-productized-sprint",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "last_error": "artifact_proof_failed: runPreAnalysis",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "05",
@@ -582,7 +588,7 @@
     },
     {
       "id": "7",
-      "status": "done",
+      "status": "pending",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register modules",
       "spec": "Add newly created route modules to auto-registration config.",
@@ -602,11 +608,14 @@
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "7",
       "mission_id": "PRODUCT-productized-sprint",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "last_error": "artifact_proof_failed: \"salesPageRoutes\"; \"sprintQueueRoutes\"",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "8",
-      "status": "done",
+      "status": "pending",
       "target_file": "scripts/linkedinProfileUpdater.mjs",
       "task": "update LinkedIn profile script",
       "spec": "Script to update LinkedIn profile with sprint offers information.",
@@ -620,7 +629,7 @@
         "addSprintOffersToProfile"
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "artifact_proof_failed: addSprintOffersToProfile",
       "commit_sha": "b90e8c78b81c0cca4bf0a203de22668dde199103",
       "built_sha": null,
       "proof": null,
@@ -642,7 +651,8 @@
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "8",
       "mission_id": "PRODUCT-productized-sprint",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": true
     },
     {
       "id": "create-intake-form",
@@ -1514,7 +1524,7 @@
     },
     {
       "id": "step1",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/intakeFormService.js",
       "task": "create or update intake form",
       "spec": "Ensure intake form supports both Typeform and custom mode.",
@@ -1543,7 +1553,10 @@
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step1",
       "mission_id": "PRODUCT-productized-sprint",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "last_error": "artifact_proof_failed: module.exports = { intakeFormHandler }",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "step3",
@@ -1585,7 +1598,7 @@
     },
     {
       "id": "step4",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/aiPreAnalysisService.js",
       "task": "write and test AI pre-analysis prompt",
       "spec": "Include a function that uses the AI to perform pre-analysis with a provided prompt.",
@@ -1614,7 +1627,10 @@
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step4",
       "mission_id": "PRODUCT-productized-sprint",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "last_error": "artifact_proof_failed: const aiPreAnalysisPrompt =",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "step5",
@@ -2167,5 +2183,5 @@
   "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-productized-sprint",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:22:08.176Z"
+  "updated_at": "2026-08-01T06:30:48.102Z"
 }
