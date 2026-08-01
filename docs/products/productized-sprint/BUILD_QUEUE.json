@@ -9,13 +9,13 @@
   "steps": [
     {
       "id": "01",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/intakeFormService.js",
       "task": "build intake form",
       "spec": "Create and expose an intake form handling service.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerIntakeFormService"
       ],
@@ -37,14 +37,16 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T17:50:33.690Z",
-      "commit_sha": "e9ec440db337f2ce478d2ba0a77db3a613f50e2b",
+      "commit_sha": "d4c959c2c71716a7418e9a61b5e8097a191ce5c8",
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "01",
       "mission_id": "PRODUCT-productized-sprint",
       "same_signature_count": 0,
       "demoted": false,
       "last_error": "artifact_proof_failed: createIntakeForm",
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T13:55:18.766Z",
+      "completed_at": "2026-08-01T13:55:31.173Z"
     },
     {
       "id": "02",
@@ -108,7 +110,7 @@
       "spec": "Implement AI pre-analysis prompt writing and testing.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerAIPreAnalysisService"
       ],
@@ -130,14 +132,17 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T18:03:51.171Z",
-      "commit_sha": "4470d758e4ad6f735912804218fe05184776f41b",
+      "commit_sha": "0ca2070dd2514bec4612b33ea322b2bbcf9de9d3",
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "04",
       "mission_id": "PRODUCT-productized-sprint",
-      "same_signature_count": 0,
+      "same_signature_count": 1,
       "demoted": false,
       "last_error": "artifact_proof_failed: runPreAnalysis",
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T13:55:48.438Z",
+      "blocker_class": "BLOCKED_TOOLING",
+      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: runPreAnalysis"
     },
     {
       "id": "05",
@@ -2183,6 +2188,5 @@
   "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-productized-sprint",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:30:48.102Z",
-  "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/productized-sprint/BUILD_QUEUE.json"
+  "updated_at": "2026-08-01T13:56:02.247Z"
 }

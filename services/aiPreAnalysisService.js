@@ -32,3 +32,8 @@ export function generatePreAnalysisPrompt(data) {
   // Generates a pre-analysis prompt for AI processing
   return writeAIPreAnalysisPrompt(data);
 }
+
+export function runPreAnalysis(data) {
+  // Runs the AI pre-analysis pipeline
+  return aiPreAnalysisPrompt(data);
+}

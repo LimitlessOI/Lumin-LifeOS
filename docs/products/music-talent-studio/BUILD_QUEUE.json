@@ -2214,7 +2214,7 @@
     },
     {
       "id": "11",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register new routes",
       "spec": "Add new routes to the auto-registration config.",
@@ -2223,14 +2223,14 @@
         "8"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "file_contains": [
         "musicTeachersInterviewRoutes",
         "studentsInterviewRoutes"
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:51:42.217Z",
-      "commit_sha": "a4897b35ae8ad6ba7873d3b18262a10594c4e659",
+      "commit_sha": "b8f225955ad9c833c4f86597c3c1e68b89c22713",
       "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "11",
       "mission_id": "PRODUCT-music-talent-studio",
@@ -2238,8 +2238,9 @@
       "demoted": false,
       "last_error": "artifact_proof_failed: musicTeachersInterviewRoutes",
       "heal_unblocked": true,
-      "last_attempt_at": "2026-08-01T13:47:48.608Z",
-      "blocker_class": "BLOCKED_TOOLING"
+      "last_attempt_at": "2026-08-01T13:54:55.100Z",
+      "blocker_class": "BLOCKED_TOOLING",
+      "completed_at": "2026-08-01T13:54:55.130Z"
     },
     {
       "id": "12",
@@ -2654,6 +2655,6 @@
   "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-music-talent-studio",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T13:49:16.082Z",
+  "updated_at": "2026-08-01T13:54:55.130Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/music-talent-studio/BUILD_QUEUE.json"
 }

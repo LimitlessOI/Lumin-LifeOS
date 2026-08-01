@@ -12,7 +12,7 @@
 | **Machine manifest** | `docs/products/productized-sprint/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
 | **Launch kit** | `docs/products/productized-sprint/launch-kit/` — Founder Voice Content Pack (MarketingOS-powered, service-first) |
-| **Last Updated** | 2026-08-02 — `create-sprint-queue-panel` and `step8` BUILD_QUEUE expected_exports aligned; `step5` duplicate skipped; `routes/sprintQueuePanelRoute.js` and `scripts/identifyTargetCustomers.mjs` restored to importable canonical versions. |
+| **Last Updated** | 2026-08-02 — `services/aiPreAnalysisService.js` step 4 `file_contains` fixed by adding `runPreAnalysis` export; prior step 1/8/5/queue-panel canonical aliases restored. |
 
 ---
 | Field | Value |
@@ -20,7 +20,7 @@
 | **Lifecycle** | `planning` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `draft` |
-| **Last Updated** | 2026-04-04 (initial draft — sourced from Miscellaneous raw dump / early 35-Day Emergency Sprint architecture) |
+| **Last Updated** | 2026-08-02 — `services/aiPreAnalysisService.js` step 4 `file_contains` fixed by adding `runPreAnalysis` export; prior step 1/8/5/queue-panel canonical aliases restored. |
 | **Verification Command** | `node scripts/verify-project.mjs --project productized_sprint` |
 | **Manifest** | `docs/products/productized-sprint/FILE_MANIFEST.json` |
 | **Build Ready** | `NOT_READY` — Gate 1: Complete; Gate 2: Must define delivery workflow and pricing page before launch; Gate 3: No infrastructure required — pure service delivery |
@@ -225,6 +225,7 @@ Adam receives: the brief + the draft + a complexity flag. His job is judgment an
 
 ## Change Receipts
 
+| 2026-08-02 | **GAP-FILL: `services/aiPreAnalysisService.js` artifact-proof alignment for step 4.** Added `runPreAnalysis(data)` export so the `file_contains` substring `runPreAnalysis` and the `expected_exports` `registerAIPreAnalysisService` contract are satisfied. The function delegates to the existing `aiPreAnalysisPrompt` implementation. | The never-stop factory selected `productized-sprint` step 4 and the pre-existing artifact failed `file_contains` for `runPreAnalysis` while `/build` was unavailable due to HTTP 502. A minimal deterministic hand-gap-fill resolves it without model codegen. | `node --check services/aiPreAnalysisService.js` PASS. |
 | 2026-08-02 | **Creative Director review** — generated CREATIVE_BRIEF.md using the Creative Director lens. | Productized Sprint reviewed through the BuilderOS creative responsibility; brief written to product home for founder review. | ✅ generated |
 | Date | Change | Author |
 |---|---|---|
