@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T11:42:00.644Z",
+  "generated_at": "2026-08-01T11:42:30.189Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -71245,9 +71245,12 @@
     {
       "path": "routes/server.approvals.js",
       "synopsis": "HTTP route module — Server.Approvals.",
-      "bytes": 1157,
-      "mtime": "2026-07-15T09:37:08.939Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 3519,
+      "mtime": "2026-08-01T11:42:30.189Z",
+      "indexed_at": "2026-08-01T11:42:30.189Z",
+      "ssot": [
+        "docs/products/business-tools/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/server.features.js",
