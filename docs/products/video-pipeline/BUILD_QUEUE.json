@@ -175,7 +175,7 @@
         "step1"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerVideoRoutes"
       ],
@@ -194,7 +194,10 @@
       ],
       "blueprint_id": "PRODUCT-VIDEO-PIPELINE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step2",
-      "mission_id": "PRODUCT-video-pipeline"
+      "mission_id": "PRODUCT-video-pipeline",
+      "last_attempt_at": "2026-08-01T11:32:06.779Z",
+      "last_error": "HTTP 502",
+      "blocker_class": "BLOCKED_EXTERNAL"
     },
     {
       "id": "step3",
@@ -303,5 +306,5 @@
   "blueprint_id": "PRODUCT-VIDEO-PIPELINE-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-video-pipeline",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:00:09.225Z"
+  "updated_at": "2026-08-01T11:33:34.890Z"
 }
