@@ -2,12 +2,12 @@
  * SYNOPSIS: Middleware to transform API responses by stripping model names and costs based on white-label configurations.
  * @ssot docs/products/white-label/PRODUCT_HOME.md
  */
-export async function responseTransformationMiddleware(deps, payload) {
+export async function transformResponse(deps, payload) {
   const { pool, logger } = deps;
   const { clientId, response } = payload; // Assuming payload contains clientId and the response object
   
   if (!clientId || !response || typeof response !== 'object') {
-    logger.warn('responseTransformationMiddleware received invalid payload: %j', payload);
+    logger.warn('transformResponse received invalid payload: %j', payload);
     return response; // Return original response if payload is invalid
   }
 
@@ -37,7 +37,7 @@ export async function responseTransformationMiddleware(deps, payload) {
     return transformedResponse;
 
   } catch (error) {
-    logger.error({ error, clientId }, 'Error in responseTransformationMiddleware');
+    logger.error({ error, clientId }, 'Error in transformResponse');
     // Depending on desired behavior, either rethrow or return original response on error
     throw new Error('Failed to apply response transformation due to a configuration lookup error.');
   }
