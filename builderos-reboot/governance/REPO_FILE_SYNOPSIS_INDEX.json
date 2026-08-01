@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T08:02:58.178Z",
+  "generated_at": "2026-08-01T08:03:26.533Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12677,
   "files": [
@@ -68813,10 +68813,10 @@
     },
     {
       "path": "routes/board.js",
-      "synopsis": "Mock data for populated sections",
-      "bytes": 982,
-      "mtime": "2026-07-16T19:42:53.595Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis": "Route for all 8 populated sections of the household board.",
+      "bytes": 1243,
+      "mtime": "2026-08-01T08:03:26.533Z",
+      "indexed_at": "2026-08-01T08:03:26.533Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
