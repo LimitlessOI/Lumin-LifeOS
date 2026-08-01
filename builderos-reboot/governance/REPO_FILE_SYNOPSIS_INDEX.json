@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T09:17:18.994Z",
+  "generated_at": "2026-08-01T09:17:53.658Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3838918,
-      "mtime": "2026-08-01T09:02:31.416Z",
-      "indexed_at": "2026-08-01T09:02:46.877Z"
+      "bytes": 3838947,
+      "mtime": "2026-08-01T09:17:36.564Z",
+      "indexed_at": "2026-08-01T09:17:53.658Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 2106,
-      "mtime": "2026-08-01T09:07:24.876Z",
-      "indexed_at": "2026-08-01T09:08:37.658Z",
+      "bytes": 1746,
+      "mtime": "2026-08-01T09:13:53.748Z",
+      "indexed_at": "2026-08-01T09:17:36.218Z",
       "synopsis_index_only": true
     },
     {
@@ -34860,9 +34860,9 @@
     {
       "path": "db/migrations/20241030_create_additional_templates.sql",
       "synopsis": "Database migration — 20241030_create_additional_templates.sql.",
-      "bytes": 765,
-      "mtime": "2026-08-01T09:13:46.760Z",
-      "indexed_at": "2026-08-01T09:13:46.760Z"
+      "bytes": 538,
+      "mtime": "2026-08-01T09:17:14.572Z",
+      "indexed_at": "2026-08-01T09:17:36.218Z"
     },
     {
       "path": "db/migrations/20260313_core_schema.sql",
@@ -42599,9 +42599,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 215626,
-      "mtime": "2026-08-01T08:48:17.387Z",
-      "indexed_at": "2026-08-01T08:48:17.387Z"
+      "bytes": 216468,
+      "mtime": "2026-08-01T09:15:41.968Z",
+      "indexed_at": "2026-08-01T09:17:36.218Z"
     },
     {
       "path": "docs/products/site-builder/SITE_TEMPLATE_CATALOG.md",
@@ -65772,9 +65772,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 3950,
-      "mtime": "2026-08-01T09:06:33.892Z",
-      "indexed_at": "2026-08-01T09:08:37.658Z",
+      "bytes": 3745,
+      "mtime": "2026-08-01T09:12:47.704Z",
+      "indexed_at": "2026-08-01T09:17:36.218Z",
       "synopsis_index_only": true
     },
     {
@@ -70479,9 +70479,9 @@
     {
       "path": "routes/lifeos-psychometric-battery-routes.js",
       "synopsis": "Psychometric battery HTTP routes for purpose-discovery priors.",
-      "bytes": 1433,
-      "mtime": "2026-08-01T04:16:12.991Z",
-      "indexed_at": "2026-08-01T04:16:12.991Z",
+      "bytes": 1832,
+      "mtime": "2026-08-01T04:19:22.727Z",
+      "indexed_at": "2026-08-01T09:17:36.218Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -94480,10 +94480,10 @@
     },
     {
       "path": "services/reviewModerationFlow.js",
-      "synopsis": "Implements the review moderation flow, including processing and decision logging.",
-      "bytes": 4990,
-      "mtime": "2026-08-01T05:10:42.899Z",
-      "indexed_at": "2026-08-01T05:10:42.899Z",
+      "synopsis": "Exports getModerationRules, moderateWithCouncil, processReviewModeration — services/reviewModerationFlow.js.",
+      "bytes": 9154,
+      "mtime": "2026-08-01T05:16:43.035Z",
+      "indexed_at": "2026-08-01T09:17:36.218Z",
       "ssot": [
         "docs/products/faith-studio/PRODUCT_HOME.md"
       ]
