@@ -351,6 +351,14 @@
       "added_real_lines": 45,
       "justification": "deterministic merge-conflict resolution; factory /build attempts failed with BLOCKED_TOOLING due to exhausted AI provider quota, and the remote artifact already satisfies the BUILD_QUEUE contract.\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
       "commit_message_excerpt": "GAP-FILL: adopt origin/main makeGenerator.js and update business-tools product home SSOT. An origin/main merge for services/makeGenerator.js introduced a richer async generateMakeSchema(deps, payload)"
+    },
+    {
+      "at": "2026-08-01T11:58:24.683Z",
+      "file": "services/makeGenerator.js",
+      "is_new_file": false,
+      "added_real_lines": 51,
+      "justification": "deterministic merge-resolution; factory /build attempts for makeGenerator step 1 repeatedly failed with artifact_proof_failed BLOCKED_TOOLING due to a blueprint- artifact mismatch, resolved by aligning the blueprint spec.\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
+      "commit_message_excerpt": "GAP-FILL: merge origin/main after system:commit-files BUILD_QUEUE fix. Resolved conflicts by accepting remote versions of builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json, docs/products/busin"
     }
   ]
 }
