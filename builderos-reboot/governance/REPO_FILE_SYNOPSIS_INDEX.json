@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T12:44:59.726Z",
+  "generated_at": "2026-08-01T12:45:24.945Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3841181,
-      "mtime": "2026-08-01T12:30:26.096Z",
-      "indexed_at": "2026-08-01T12:31:43.348Z"
+      "bytes": 3841324,
+      "mtime": "2026-08-01T12:45:12.564Z",
+      "indexed_at": "2026-08-01T12:45:24.945Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1917,
-      "mtime": "2026-08-01T12:42:20.732Z",
-      "indexed_at": "2026-08-01T12:44:59.726Z",
+      "bytes": 1938,
+      "mtime": "2026-08-01T12:37:11.432Z",
+      "indexed_at": "2026-08-01T12:39:40.092Z",
       "synopsis_index_only": true
     },
     {
@@ -41164,9 +41164,9 @@
     {
       "path": "docs/products/builderos/GAP_FILL_LEDGER.json",
       "synopsis": "Documentation — GAP FILL LEDGER.",
-      "bytes": 49461,
-      "mtime": "2026-08-01T11:58:24.680Z",
-      "indexed_at": "2026-08-01T12:02:34.329Z",
+      "bytes": 50165,
+      "mtime": "2026-08-01T12:45:14.200Z",
+      "indexed_at": "2026-08-01T12:45:24.945Z",
       "synopsis_index_only": true
     },
     {
@@ -42391,9 +42391,9 @@
     {
       "path": "docs/products/personal-finance-os/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Personal Finance OS",
-      "bytes": 15624,
-      "mtime": "2026-08-01T12:44:35.404Z",
-      "indexed_at": "2026-08-01T12:44:59.726Z"
+      "bytes": 15343,
+      "mtime": "2026-08-01T12:40:05.196Z",
+      "indexed_at": "2026-08-01T12:40:10.499Z"
     },
     {
       "path": "docs/products/PERSONALFINANCEOS.md",
@@ -69896,9 +69896,9 @@
     {
       "path": "routes/ipsReview.js",
       "synopsis": "HTTP route module — IPS Review.",
-      "bytes": 1591,
-      "mtime": "2026-08-01T12:44:28.632Z",
-      "indexed_at": "2026-08-01T12:44:59.726Z",
+      "bytes": 754,
+      "mtime": "2026-08-01T12:42:13.237Z",
+      "indexed_at": "2026-08-01T12:42:13.237Z",
       "ssot": [
         "docs/products/personal-finance-os/PRODUCT_HOME.md"
       ]
@@ -91422,10 +91422,10 @@
     },
     {
       "path": "services/ipsReview.js",
-      "synopsis": "IPS review service — evaluates RIA trigger risk.",
-      "bytes": 587,
-      "mtime": "2026-08-01T12:44:24.480Z",
-      "indexed_at": "2026-08-01T12:44:59.726Z",
+      "synopsis": "Implements attorney review for IPS module risk assessment.",
+      "bytes": 3228,
+      "mtime": "2026-08-01T12:34:24.185Z",
+      "indexed_at": "2026-08-01T12:34:24.185Z",
       "ssot": [
         "docs/products/personal-finance-os/PRODUCT_HOME.md"
       ]

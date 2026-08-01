@@ -359,6 +359,14 @@
       "added_real_lines": 51,
       "justification": "deterministic merge-resolution; factory /build attempts for makeGenerator step 1 repeatedly failed with artifact_proof_failed BLOCKED_TOOLING due to a blueprint- artifact mismatch, resolved by aligning the blueprint spec.\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
       "commit_message_excerpt": "GAP-FILL: merge origin/main after system:commit-files BUILD_QUEUE fix. Resolved conflicts by accepting remote versions of builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json, docs/products/busin"
+    },
+    {
+      "at": "2026-08-01T12:45:00.044Z",
+      "file": "routes/ipsReview.js",
+      "is_new_file": false,
+      "added_real_lines": 21,
+      "justification": "deterministic gap-fill on builder-generated artifacts; factory /build attempts are producing broken stubs due to exhausted AI provider quota, so the route was made self-contained and backward-compatible.\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
+      "commit_message_excerpt": "GAP-FILL: harden routes/ipsReview.js against builder overwrite and add services/ipsReview.js for personal-finance-os. The builder-generated route shipped without an express import and with an unresolv"
     }
   ]
 }
