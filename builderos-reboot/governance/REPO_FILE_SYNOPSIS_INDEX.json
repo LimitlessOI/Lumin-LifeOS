@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T13:45:12.395Z",
+  "generated_at": "2026-08-01T13:50:45.910Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12726,
   "files": [
@@ -30844,9 +30844,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 39626,
-      "mtime": "2026-08-01T12:50:05.844Z",
-      "indexed_at": "2026-08-01T12:51:41.009Z",
+      "bytes": 39704,
+      "mtime": "2026-08-01T13:50:26.005Z",
+      "indexed_at": "2026-08-01T13:50:45.910Z",
       "synopsis_index_only": true
     },
     {
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1867,
-      "mtime": "2026-08-01T13:33:13.308Z",
-      "indexed_at": "2026-08-01T13:37:38.470Z",
+      "bytes": 1783,
+      "mtime": "2026-08-01T13:49:17.668Z",
+      "indexed_at": "2026-08-01T13:50:45.910Z",
       "synopsis_index_only": true
     },
     {
@@ -41164,9 +41164,9 @@
     {
       "path": "docs/products/builderos/GAP_FILL_LEDGER.json",
       "synopsis": "Documentation — GAP FILL LEDGER.",
-      "bytes": 53914,
-      "mtime": "2026-08-01T13:37:33.096Z",
-      "indexed_at": "2026-08-01T13:37:38.470Z",
+      "bytes": 55622,
+      "mtime": "2026-08-01T13:45:12.716Z",
+      "indexed_at": "2026-08-01T13:50:45.910Z",
       "synopsis_index_only": true
     },
     {
@@ -42304,9 +42304,9 @@
     {
       "path": "docs/products/music-talent-studio/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Music Talent Studio",
-      "bytes": 24192,
-      "mtime": "2026-08-01T13:45:02.832Z",
-      "indexed_at": "2026-08-01T13:45:12.395Z"
+      "bytes": 25003,
+      "mtime": "2026-08-01T13:50:37.185Z",
+      "indexed_at": "2026-08-01T13:50:45.910Z"
     },
     {
       "path": "docs/products/MUSICTALENTSTUDIO.md",
@@ -65772,9 +65772,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 3856,
-      "mtime": "2026-08-01T13:30:27.276Z",
-      "indexed_at": "2026-08-01T13:37:38.470Z",
+      "bytes": 4992,
+      "mtime": "2026-08-01T13:46:55.556Z",
+      "indexed_at": "2026-08-01T13:50:45.910Z",
       "synopsis_index_only": true
     },
     {

@@ -1,11 +1,11 @@
 {
   "schema": "deploy_truth_verify_v1",
-  "at": "2026-08-01T13:30:27.279Z",
+  "at": "2026-08-01T13:46:55.557Z",
   "command": "drift-audit",
   "production_base": "https://lumin-web-production-e3a9.up.railway.app",
   "deploy_branch": "main",
-  "commit_sha": "9855d6c23dfe68678a3f29213526dff04f2dc563",
-  "served_sha": "9855d6c23dfe68678a3f29213526dff04f2dc563",
+  "commit_sha": "9570c1c14d335c05e2d885cd2f68471264ef6a33",
+  "served_sha": "9570c1c14d335c05e2d885cd2f68471264ef6a33",
   "verdict": "PROVEN",
   "ok": true,
   "passed": [
@@ -21,11 +21,11 @@
   "skipped": [],
   "files": [],
   "deployment": {
-    "id": "324afbc9-8559-4105-9201-69cdf6cab97f",
+    "id": "eca445a7-b646-423b-b36a-991059158a6d",
     "status": "SUCCESS",
-    "created_at": "2026-08-01T13:28:58.998Z",
-    "commit_sha": "9855d6c23dfe68678a3f29213526dff04f2dc563",
-    "commit_message": "chore: update REPO_FILE_SYNOPSIS_INDEX for apiSpec.js and kids-os scripts\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
+    "created_at": "2026-08-01T13:45:18.856Z",
+    "commit_sha": "9570c1c14d335c05e2d885cd2f68471264ef6a33",
+    "commit_message": "GAP-FILL: false-done audit alias fixes. Added backward-compatible wrapper exports to satisfy BUILD_QUEUE contracts after factory rebuilds renamed primary functions: services/employerInterviewProcess.js exports conductEmployerInterview and getEmployerFeedback; services/pricingValidationProcess.js exports updatePricingStrategy; services/musicIndustryConsultation.js exports getMusicIndustryConsultations, addIndustryConsult, and getIndustryConsult. Clears the 4 remaining HARD false-dones. Updated lumin-university and music-talent-studio PRODUCT_HOME.md SSOT. HAND-AUTHORED-JUSTIFICATION: deterministic export aliases; no new product logic.\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
     "url": null
   },
   "runtime_identity": {
@@ -46,18 +46,18 @@
     {
       "id": "git.fetch",
       "status": "pass",
-      "detail": "origin/main is 9855d6c23dfe"
+      "detail": "origin/main is 9570c1c14d33"
     },
     {
       "id": "local.divergence",
       "status": "pass",
       "detail": "local main is aligned with origin/main",
       "local_branch": "main",
-      "local_head": "9855d6c23dfe68678a3f29213526dff04f2dc563",
-      "remote_head": "9855d6c23dfe68678a3f29213526dff04f2dc563",
+      "local_head": "9570c1c14d335c05e2d885cd2f68471264ef6a33",
+      "remote_head": "9570c1c14d335c05e2d885cd2f68471264ef6a33",
       "ahead": 0,
       "behind": 0,
-      "uncommitted": 0
+      "uncommitted": 1
     },
     {
       "id": "runtime.identity",
@@ -81,20 +81,20 @@
     {
       "id": "runtime.version",
       "status": "pass",
-      "detail": "production serves 9855d6c23dfe, which contains origin/main (9855d6c23dfe)",
-      "served_sha": "9855d6c23dfe68678a3f29213526dff04f2dc563",
-      "remote_head": "9855d6c23dfe68678a3f29213526dff04f2dc563"
+      "detail": "production serves 9570c1c14d33, which contains origin/main (9570c1c14d33)",
+      "served_sha": "9570c1c14d335c05e2d885cd2f68471264ef6a33",
+      "remote_head": "9570c1c14d335c05e2d885cd2f68471264ef6a33"
     },
     {
       "id": "deployment.state",
       "status": "pass",
-      "detail": "latest deployment SUCCESS on 9855d6c23dfe, nothing in flight",
+      "detail": "latest deployment SUCCESS on 9570c1c14d33, nothing in flight",
       "deployment": {
-        "id": "324afbc9-8559-4105-9201-69cdf6cab97f",
+        "id": "eca445a7-b646-423b-b36a-991059158a6d",
         "status": "SUCCESS",
-        "created_at": "2026-08-01T13:28:58.998Z",
-        "commit_sha": "9855d6c23dfe68678a3f29213526dff04f2dc563",
-        "commit_message": "chore: update REPO_FILE_SYNOPSIS_INDEX for apiSpec.js and kids-os scripts\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
+        "created_at": "2026-08-01T13:45:18.856Z",
+        "commit_sha": "9570c1c14d335c05e2d885cd2f68471264ef6a33",
+        "commit_message": "GAP-FILL: false-done audit alias fixes. Added backward-compatible wrapper exports to satisfy BUILD_QUEUE contracts after factory rebuilds renamed primary functions: services/employerInterviewProcess.js exports conductEmployerInterview and getEmployerFeedback; services/pricingValidationProcess.js exports updatePricingStrategy; services/musicIndustryConsultation.js exports getMusicIndustryConsultations, addIndustryConsult, and getIndustryConsult. Clears the 4 remaining HARD false-dones. Updated lumin-university and music-talent-studio PRODUCT_HOME.md SSOT. HAND-AUTHORED-JUSTIFICATION: deterministic export aliases; no new product logic.\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
         "url": null
       }
     }
@@ -102,9 +102,9 @@
   "produced_by": "cursor-agent",
   "verified_by": "git+railway-api+production-http-probe",
   "verification_kind": "deterministic+external",
-  "local_head": "9855d6c23dfe68678a3f29213526dff04f2dc563",
+  "local_head": "9570c1c14d335c05e2d885cd2f68471264ef6a33",
   "local_branch": "main",
   "ahead": 0,
   "behind": 0,
-  "human_summary": "PROVEN — production serves 9855d6c23dfe, which contains origin/main; no runtime drift found."
+  "human_summary": "PROVEN — production serves 9570c1c14d33, which contains origin/main; no runtime drift found."
 }

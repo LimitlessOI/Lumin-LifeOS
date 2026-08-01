@@ -493,16 +493,16 @@
       "note": "Auto-registered for lifeos-admin-7 pending Adam command-center API"
     },
     {
-      "path": "routes/musicTeachersRoutes.js",
-      "register": "registerMusicTeachersRoutes",
+      "path": "routes/musicTeachersInterviewRoutes.js",
+      "register": "registerMusicTeachersInterviewRoutes",
       "enabled": false,
-      "note": "Auto-registered for step5"
+      "note": "Auto-registered for music-talent-studio step11"
     },
     {
-      "path": "routes/studentsRoutes.js",
-      "register": "registerStudentsRoutes",
+      "path": "routes/studentsInterviewRoutes.js",
+      "register": "registerStudentsInterviewRoutes",
       "enabled": false,
-      "note": "Auto-registered for step8"
+      "note": "Auto-registered for music-talent-studio step11"
     },
     {
       "path": "routes/credentialVerificationRoutes.js",
