@@ -945,14 +945,14 @@
       "spec": "Create and solidify SECURITY_ALPHA_SCOPE as a JSON file for audit purposes.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "file_contains": [
         "freeze",
         "AUDIT_QUEUE"
       ],
-      "last_attempt_at": "2026-08-01T01:57:27.940Z",
-      "last_error": "generated JSON is invalid (likely truncated): Unexpected token '/', \"// This fi\"... is not valid JSON",
-      "commit_sha": null,
+      "last_attempt_at": "2026-08-01T02:02:43.220Z",
+      "last_error": "artifact_proof_failed: AUDIT_QUEUE",
+      "commit_sha": "22669e4dc1a4c089484f2466b88ed571afce9799",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -1874,5 +1874,5 @@
   "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-oil-security-divisions",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T01:57:38.229Z"
+  "updated_at": "2026-08-01T02:02:58.737Z"
 }
