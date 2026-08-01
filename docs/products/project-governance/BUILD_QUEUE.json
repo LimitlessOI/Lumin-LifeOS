@@ -150,8 +150,7 @@
         "analyzeCompetitors"
       ],
       "file_contains": [
-        "function analyzeCompetitors(){",
-        "return []"
+        "export function analyzeCompetitors"
       ],
       "behavior_assertions": [
         {
@@ -232,8 +231,7 @@
         "checkCompetitorInnovation"
       ],
       "file_contains": [
-        "function checkCompetitorInnovation(){",
-        "return 'adapt'"
+        "export function checkCompetitorInnovation"
       ],
       "blueprint_id": "PRODUCT-PROJECT-GOVERNANCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "6",
@@ -323,8 +321,8 @@
         "assessRisk"
       ],
       "file_contains": [
-        "function assessRisk(){",
-        "return 'monitor'"
+        "export function assessRisk",
+        "riskLevel"
       ],
       "behavior_assertions": [
         {
