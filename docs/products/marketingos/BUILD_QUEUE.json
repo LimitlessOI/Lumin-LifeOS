@@ -771,6 +771,58 @@
       "last_error": "grounding_failed: missing_sql_table: past, older",
       "blocker_class": "BLOCKED_TOOLING",
       "completed_at": "2026-07-31T23:51:21.995Z"
+    },
+    {
+      "id": "1",
+      "status": "pending",
+      "target_file": "db/migrations/20260714_marketing_social_post_schedules.sql",
+      "task": "Create table for scheduled social posts",
+      "spec": "Defines a 'marketing_social_post_schedules' table to store details for social posts awaiting publication. This table includes columns for 'id', 'created_at', 'updated_at', 'post_id' (foreign key referencing an existing marketing_social_publishing post), 'scheduled_at' (timestamp for publication), 'status' (e.g., 'pending', 'published', 'failed'), and 'platform' (e.g., 'Instagram', 'LinkedIn').",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS marketing_social_post_schedules",
+        "post_id UUID REFERENCES marketing_social_publishing(id)",
+        "scheduled_at TIMESTAMP WITH TIME ZONE NOT NULL",
+        "status TEXT NOT NULL",
+        "gen_random_uuid()",
+        "now()"
+      ]
+    },
+    {
+      "id": "2",
+      "status": "pending",
+      "target_file": "services/marketing-social-scheduler.js",
+      "task": "Implement service to manage and execute scheduled social posts",
+      "spec": "Provides functions to 'schedulePost(postId, platform, scheduledAt, metadata)', 'cancelScheduledPost(scheduleId)', and 'getScheduledPosts(status)'. This service internally uses 'marketing-publisher.js' (already built) to execute publishing at the designated 'scheduled_at' time. It must periodically check for due posts and trigger their publication, potentially using a 'callCouncilMember' for periodic task management.",
+      "depends_on": [
+        "1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "schedulePost",
+        "cancelScheduledPost",
+        "getScheduledPosts",
+        "initScheduler"
+      ]
+    },
+    {
+      "id": "3",
+      "status": "pending",
+      "target_file": "routes/marketing-social-schedule-routes.js",
+      "task": "Create API endpoints for social post scheduling and serve the scheduling UI",
+      "spec": "Exposes API endpoints: 'POST /api/v1/marketingos/social/schedule' to create a new post schedule, 'GET /api/v1/marketingos/social/schedules' to retrieve a list of scheduled posts, and 'DELETE /api/v1/marketingos/social/schedule/:id' to cancel a scheduled post. It also serves the HTML overlay for social post scheduling at '/marketingos/social/schedule/new'. This module must export a 'registerMarketingSocialScheduleRoutes' function for auto-registration.",
+      "depends_on": [
+        "2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerMarketingSocialScheduleRoutes"
+      ],
+      "design_review_flagged": true
     }
   ],
   "backlog_signature": "marketingos-money-2026071219",
