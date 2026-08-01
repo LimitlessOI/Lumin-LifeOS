@@ -576,7 +576,7 @@
     },
     {
       "id": "step9",
-      "status": "done",
+      "status": "pending",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "Register all new routes",
       "spec": "Add all newly created routes to the auto-registration config.",
@@ -594,7 +594,10 @@
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step9",
       "mission_id": "PRODUCT-business-tools",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "last_error": "artifact_proof_failed: issueApprovalRoutes; entitlementRoutes; curriculumRoutes",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "step10",
@@ -1273,5 +1276,5 @@
   "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-business-tools",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T15:53:41.598Z"
+  "updated_at": "2026-08-01T18:54:46.928Z"
 }
