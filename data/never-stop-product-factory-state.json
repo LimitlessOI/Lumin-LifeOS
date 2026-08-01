@@ -17,11 +17,11 @@
     "outcome": {
       "ok": false,
       "step_id": "step2",
-      "stage": "build",
-      "reason": "HTTP 502",
-      "attempts": 1,
+      "stage": "grounding",
+      "reason": "grounding_failed: import_source_missing: ./core/video-generator.js; import_source_missing: ./core/video-editing-council.js; import_source_missing: ./core/video-editing-council.js",
+      "attempts": 2,
       "blocked": false,
-      "blocker_class": "BLOCKED_EXTERNAL",
+      "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "parked": false,
       "summary": {
@@ -65,5 +65,5 @@
     }
   },
   "cycles": 1,
-  "updated_at": "2026-08-01T11:33:35.945Z"
+  "updated_at": "2026-08-01T11:37:08.275Z"
 }

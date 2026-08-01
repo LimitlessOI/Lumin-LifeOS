@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/video-pipeline/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-02 — GAP-FILL `routes/video-routes.js` (step 2): the builder-generated route exported `createVideoRoutes` but step 2 expected `registerVideoRoutes`, the file lacked `@ssot docs/products/video-pipeline/PRODUCT_HOME.md`, and the route was not auto-registered. Added a `registerVideoRoutes` function that delegates to `createVideoRoutes`, added `@ssot`, and added the route to `config/auto-registered-product-modules.json` so the functional-proof gate sees it as mounted. |
+| **Last Updated** | 2026-08-02 — GAP-FILL `routes/video-routes.js` (step 2): the builder-generated route exported `createVideoRoutes` but step 2 expected `registerVideoRoutes`, the file lacked `@ssot docs/products/video-pipeline/PRODUCT_HOME.md`, and the route was not auto-registered. Added a `registerVideoRoutes` function that delegates to `createVideoRoutes`, added `@ssot`, and added the route to `config/auto-registered-product-modules.json`. Also fixed relative paths in dynamic `import()` calls (`./core/...` → `../core/...`) so the grounding check can resolve `video-generator.js` and `video-editing-council.js`. |
 
 ---
 **Status:** BUILDING

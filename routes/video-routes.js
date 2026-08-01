@@ -158,7 +158,7 @@ app.post("/api/v1/youtube/generate-video", requireKey, async (req, res) => {
     }
 
     // Initialize video generator
-    const { VideoGenerator } = await import("./core/video-generator.js");
+    const { VideoGenerator } = await import("../core/video-generator.js");
     const videoGenerator = new VideoGenerator(pool, callCouncilMember);
 
     // Generate video (this runs async, so we'll update status)
@@ -228,7 +228,7 @@ let VideoEditingCouncil, videoEditingCouncil;
 app.post("/api/v1/video/process", requireKey, async (req, res) => {
   try {
     if (!videoEditingCouncil) {
-      const { VideoEditingCouncil: VEC } = await import("./core/video-editing-council.js");
+      const { VideoEditingCouncil: VEC } = await import("../core/video-editing-council.js");
       videoEditingCouncil = new VEC(pool, callCouncilMember);
     }
 
@@ -301,7 +301,7 @@ app.get("/api/v1/video/estimate", requireKey, (req, res) => {
 app.get("/api/v1/video/council/status", requireKey, async (req, res) => {
   try {
     if (!videoEditingCouncil) {
-      const { VideoEditingCouncil: VEC } = await import("./core/video-editing-council.js");
+      const { VideoEditingCouncil: VEC } = await import("../core/video-editing-council.js");
       videoEditingCouncil = new VEC(pool, callCouncilMember);
     }
 
