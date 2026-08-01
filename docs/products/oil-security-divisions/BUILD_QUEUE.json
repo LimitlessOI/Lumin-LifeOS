@@ -622,13 +622,13 @@
     },
     {
       "id": "3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/honeypotProbeService.js",
       "task": "implement honeypot probe route",
       "spec": "Provide functions to create and manage honeypot probe routes and write receipt of probes.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "createProbeRoute",
         "writeProbeReceipt"
@@ -646,7 +646,7 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-15T21:48:29.354Z",
-      "commit_sha": null,
+      "commit_sha": "de233756b7e72209486b85e598f9771639611138",
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "3",
       "mission_id": "PRODUCT-oil-security-divisions",
@@ -655,7 +655,7 @@
       "reaudit_reset_at": "2026-07-30T18:55:06.687Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-01T05:44:57.045Z",
       "last_attempt": null,
       "revive_count": 4,
       "revived_at": "2026-08-01T04:34:57.481Z",
@@ -672,7 +672,8 @@
       "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
       "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
       "escalated_at": "2026-07-31T18:40:13.628Z",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "completed_at": "2026-08-01T05:45:11.184Z"
     },
     {
       "id": "4",
@@ -1887,5 +1888,5 @@
   "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-oil-security-divisions",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T02:17:38.573Z"
+  "updated_at": "2026-08-01T05:45:11.185Z"
 }
