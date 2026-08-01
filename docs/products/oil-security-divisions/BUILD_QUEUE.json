@@ -1016,13 +1016,13 @@
     },
     {
       "id": "build-sec-f04",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/envRegistryService.js",
       "task": "develop rotation metadata and crypto tier functions",
       "spec": "Add metadata section and crypto tier label handling for environment registry rotations.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "handleRotationMetadata"
       ],
@@ -1041,14 +1041,16 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-16T02:43:04.303Z",
-      "commit_sha": "1714079b90efa80fac8e463534fc66bfff4e8ea7",
+      "commit_sha": "4fc3e88a1eb62de90fc53d49c37d14fc6aff4b1a",
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "build-sec-f04",
       "mission_id": "PRODUCT-oil-security-divisions",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:handleRotationMetadata; assertion_threw; assertion_threw",
       "reaudit_reset_at": "2026-07-30T18:55:06.687Z",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "last_attempt_at": "2026-08-01T02:11:17.004Z",
+      "completed_at": "2026-08-01T02:11:27.879Z"
     },
     {
       "id": "build-sec-f08",
@@ -1875,5 +1877,5 @@
   "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-oil-security-divisions",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T02:11:00.157Z"
+  "updated_at": "2026-08-01T02:11:27.880Z"
 }
