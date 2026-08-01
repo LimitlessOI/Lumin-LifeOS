@@ -168,7 +168,7 @@
         "3"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "mapInsuranceFormFields"
       ],
@@ -193,7 +193,7 @@
       "revive_count": 9,
       "revived_at": "2026-07-15T20:17:27.131Z",
       "last_attempt": null,
-      "demoted": true,
+      "demoted": false,
       "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home",
       "demoted_at": "2026-07-15T20:19:17.007Z",
       "park_until": null,
@@ -800,7 +800,7 @@
       "spec": "Document PWA installation process on iPhone. Signed IPA involves Apple Dev secrets.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "/install",
         "Add to Home Screen"
@@ -816,7 +816,7 @@
       "revive_count": 6,
       "revived_at": "2026-07-18T01:34:44.924Z",
       "last_attempt": null,
-      "demoted": true,
+      "demoted": false,
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:/install; behavior_assertion_failed; behavior_proof",
       "demoted_at": "2026-07-18T01:44:17.297Z",
       "park_until": null,
@@ -1045,7 +1045,7 @@
     },
     {
       "id": "universal-overlay-step4",
-      "status": "skipped",
+      "status": "done",
       "skip_reason": "superseded by universal-overlay-1; canonical services/proactiveToastSystem.js exports registerProactiveToast (commit 0288b02c0) and does not contain ProactiveToastSystem/dismissibleToast.",
       "target_file": "services/proactiveToastSystem.js",
       "task": "enhance toast system",
@@ -1075,7 +1075,8 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T23:58:24.943Z",
       "commit_sha": "0288b02c0286bbca143ae4962e4680eafc00d7d9",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "completed_at": "2026-08-01T06:00:07.775Z"
     },
     {
       "id": "universal-overlay-step5",
@@ -1159,7 +1160,7 @@
       "spec": "Route based on URL patterns to assemble and display view logic.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "fluidRouter"
       ],
@@ -1180,7 +1181,7 @@
       "revive_count": 6,
       "revived_at": "2026-07-18T01:44:17.297Z",
       "last_attempt": null,
-      "demoted": true,
+      "demoted": false,
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:URL pattern; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "demoted_at": "2026-07-18T01:53:53.754Z",
       "park_until": null,
@@ -1337,7 +1338,7 @@
       "spec": "Finalize the PWA and IPA package for iOS, integrating struggle detection and form fill.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "iOS IPA",
         "PWA /install"
@@ -1353,7 +1354,7 @@
       "revive_count": 7,
       "revived_at": "2026-07-18T01:34:44.924Z",
       "last_attempt": null,
-      "demoted": true,
+      "demoted": false,
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:URL pattern; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "demoted_at": "2026-07-18T01:53:53.754Z",
       "park_until": null,
@@ -2398,5 +2399,5 @@
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-universal-overlay",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T05:51:51.999Z"
+  "updated_at": "2026-08-01T06:00:07.802Z"
 }
