@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T13:37:39.243Z",
+  "generated_at": "2026-08-01T13:39:54.502Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12726,
   "files": [
@@ -90221,10 +90221,10 @@
     },
     {
       "path": "services/employerInterviewProcess.js",
-      "synopsis": "Existing code and imports",
-      "bytes": 1401,
-      "mtime": "2026-07-16T19:42:53.609Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis": "Conducts interviews with a specified number of employers to understand recognized competency credentials.",
+      "bytes": 2952,
+      "mtime": "2026-08-01T13:39:54.502Z",
+      "indexed_at": "2026-08-01T13:39:54.502Z",
       "ssot": [
         "docs/products/lumin-university/PRODUCT_HOME.md"
       ]
