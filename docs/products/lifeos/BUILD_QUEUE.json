@@ -2298,7 +2298,7 @@
         "step3"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerPsychometricRoutes"
       ],
@@ -2320,13 +2320,15 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-15T23:58:41.324Z",
-      "commit_sha": "59f66a1d1a8da6e5454143f9d5761e96abce1607",
+      "commit_sha": "ef15d032ac2b428b6408e9feac88e1b3dcb2a46a",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step5",
       "mission_id": "PRODUCT-lifeos",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerPsychometricRoutes; registerPsychometricRoutes; /psychometric-battery",
-      "reaudit_reset_at": "2026-07-30T18:55:06.601Z"
+      "last_error": "artifact_proof_failed: missing_exports:registerPsychometricRoutes; registerPsychometricRoutes",
+      "reaudit_reset_at": "2026-07-30T18:55:06.601Z",
+      "last_attempt_at": "2026-08-01T04:15:58.530Z",
+      "blocker_class": "BLOCKED_TOOLING"
     },
     {
       "id": "step6",
@@ -5791,5 +5793,5 @@
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-lifeos",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T04:14:36.506Z"
+  "updated_at": "2026-08-01T04:16:19.709Z"
 }
