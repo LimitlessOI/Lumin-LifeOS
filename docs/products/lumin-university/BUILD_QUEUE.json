@@ -440,7 +440,7 @@
       "spec": "Service records interviews with employers regarding credentials.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "recordEmployerInterview"
       ],
@@ -460,9 +460,9 @@
       "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "10",
       "mission_id": "PRODUCT-lumin-university",
-      "last_error": "artifact_proof_failed: missing_exports:recordEmployerInterview",
-      "last_attempt_at": "2026-08-01T01:08:11.607Z",
-      "blocker_class": "BLOCKED_TOOLING",
+      "last_error": null,
+      "last_attempt_at": null,
+      "blocker_class": null,
       "claim_level": null,
       "park_until": null,
       "revive_count": 0,

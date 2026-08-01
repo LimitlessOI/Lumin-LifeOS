@@ -242,7 +242,7 @@ export async function evaluateStepExpectations(step, {
       const content = await defaultRead(relPath);
       if (typeof content !== 'string') return undefined;
       const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'lumin-import-'));
-      const tmpFile = path.join(tmpDir, path.basename(relPath));
+      const tmpFile = path.join(tmpDir, `${path.basename(relPath, path.extname(relPath))}.mjs`);
       fs.writeFileSync(tmpFile, content, 'utf8');
       try {
         return await import(pathToFileURL(tmpFile).href);
