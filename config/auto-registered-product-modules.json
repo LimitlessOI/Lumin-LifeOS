@@ -801,6 +801,13 @@
       "mount_path": "/api/v1/video",
       "enabled": true,
       "note": "Video Pipeline routes auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/server.approvals.js",
+      "register": "registerApprovalRoutes",
+      "mount_path": "/approvals",
+      "enabled": true,
+      "note": "Business Tools approvals timeout route auto-registered for module-health proof."
     }
   ]
 }

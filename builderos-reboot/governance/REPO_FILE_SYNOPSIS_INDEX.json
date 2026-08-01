@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T11:42:00.644Z",
+  "generated_at": "2026-08-01T11:43:12.654Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -30844,9 +30844,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 37819,
-      "mtime": "2026-08-01T11:34:13.372Z",
-      "indexed_at": "2026-08-01T11:34:33.135Z",
+      "bytes": 38073,
+      "mtime": "2026-08-01T11:42:49.548Z",
+      "indexed_at": "2026-08-01T11:43:12.654Z",
       "synopsis_index_only": true
     },
     {
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1869,
-      "mtime": "2026-08-01T11:37:08.272Z",
-      "indexed_at": "2026-08-01T11:39:05.242Z",
+      "bytes": 1760,
+      "mtime": "2026-08-01T11:42:37.528Z",
+      "indexed_at": "2026-08-01T11:43:12.654Z",
       "synopsis_index_only": true
     },
     {
@@ -41236,9 +41236,9 @@
     {
       "path": "docs/products/business-tools/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Business Tools",
-      "bytes": 9582,
-      "mtime": "2026-08-01T08:48:17.387Z",
-      "indexed_at": "2026-08-01T08:48:17.387Z"
+      "bytes": 11026,
+      "mtime": "2026-08-01T11:42:59.984Z",
+      "indexed_at": "2026-08-01T11:43:12.654Z"
     },
     {
       "path": "docs/products/BUSINESSTOOLS.md",
@@ -65772,9 +65772,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 3632,
-      "mtime": "2026-08-01T11:31:38.264Z",
-      "indexed_at": "2026-08-01T11:34:33.135Z",
+      "bytes": 3646,
+      "mtime": "2026-08-01T11:40:54.288Z",
+      "indexed_at": "2026-08-01T11:43:12.654Z",
       "synopsis_index_only": true
     },
     {
@@ -71244,10 +71244,13 @@
     },
     {
       "path": "routes/server.approvals.js",
-      "synopsis": "HTTP route module — Server.Approvals.",
-      "bytes": 1157,
-      "mtime": "2026-07-15T09:37:08.939Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "synopsis": "HTTP route module — Server Approvals.",
+      "bytes": 1631,
+      "mtime": "2026-08-01T11:42:47.300Z",
+      "indexed_at": "2026-08-01T11:43:12.654Z",
+      "ssot": [
+        "docs/products/business-tools/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/server.features.js",

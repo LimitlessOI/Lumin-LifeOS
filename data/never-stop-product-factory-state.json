@@ -1,47 +1,47 @@
 {
   "status": "idle",
   "last_task": {
-    "id": "product_build_video-pipeline_step2",
+    "id": "product_build_business-tools_6",
     "kind": "product_build_step",
-    "priority": 2.0019,
-    "product": "video-pipeline",
-    "product_id": "video-pipeline",
-    "step_id": "step2",
-    "target_file": "routes/video-routes.js",
-    "detail": "next buildable step: step2"
+    "priority": 2.002,
+    "product": "business-tools",
+    "product_id": "business-tools",
+    "step_id": "6",
+    "target_file": "routes/server.approvals.js",
+    "detail": "next buildable step: 6"
   },
   "last_result": {
     "ok": false,
-    "task_id": "product_build_video-pipeline_step2",
+    "task_id": "product_build_business-tools_6",
     "detail": "product_build_step",
     "outcome": {
       "ok": false,
-      "step_id": "step2",
-      "stage": "grounding",
-      "reason": "grounding_failed: import_source_missing: ./core/video-generator.js; import_source_missing: ./core/video-editing-council.js; import_source_missing: ./core/video-editing-council.js",
-      "attempts": 2,
+      "step_id": "6",
+      "stage": "artifact_proof",
+      "reason": "artifact_proof_failed: missing_exports:registerApprovalRoutes; registerApprovalRoutes",
+      "attempts": 1,
       "blocked": false,
       "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "parked": false,
       "summary": {
-        "product_id": "video-pipeline",
-        "total": 9,
-        "pending": 3,
+        "product_id": "business-tools",
+        "total": 31,
+        "pending": 9,
         "building": 0,
-        "done": 5,
-        "blocked": 0,
+        "done": 14,
+        "blocked": 2,
         "founder_gated": 0,
         "design_review_flagged": 0,
         "human_hold": 0,
-        "skipped": 1,
+        "skipped": 6,
         "complete": false
       }
     },
     "claim": {
-      "id": "video-pipeline:step2",
+      "id": "business-tools:6",
       "kind": "execution",
-      "text": "product step step2 built + verified + served live",
+      "text": "product step 6 built + verified + served live",
       "grade": "GUESS",
       "proof": null,
       "original_grade": "KNOW",
@@ -51,19 +51,19 @@
       ]
     },
     "summary": {
-      "product_id": "video-pipeline",
-      "total": 9,
-      "pending": 3,
+      "product_id": "business-tools",
+      "total": 31,
+      "pending": 9,
       "building": 0,
-      "done": 5,
-      "blocked": 0,
+      "done": 14,
+      "blocked": 2,
       "founder_gated": 0,
       "design_review_flagged": 0,
       "human_hold": 0,
-      "skipped": 1,
+      "skipped": 6,
       "complete": false
     }
   },
   "cycles": 1,
-  "updated_at": "2026-08-01T11:37:08.275Z"
+  "updated_at": "2026-08-01T11:42:37.533Z"
 }

@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/business-tools/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-29 |
+| **Last Updated** | 2026-08-02 — GAP-FILL `routes/server.approvals.js` (step 6): the builder-generated route exported `registerApprovalRoutes` via a destructuring `export { ... }` that `exports_smoke` did not detect, lacked the BUILD_QUEUE `file_contains` substrings `setTimeout` and `48h auto-reject`, and had no `@ssot`. Rewrote to export `registerApprovalRoutes` as a function, added an explicit `setTimeout`-based scheduler and a `48h auto-reject` comment, added `@ssot docs/products/business-tools/PRODUCT_HOME.md`, and added the route to `config/auto-registered-product-modules.json` for module-health proof. |
 
 ---
 **Status:** LIVE (various stages)
@@ -158,3 +158,4 @@ While Make.com requires hours of manual scenario building, LifeOS generates a co
 | Date | Change | Author |
 |---|---|---|
 | 2026-07-30 | Fixed `services/virtual-real-estate-class.js`'s `@ssot` tag — pointed at `docs/products/BUSINESS_TOOLS_PRODUCT_HOME/BUSINESS_TOOLS_PRODUCT_HOME.md`, which doesn't exist. Corrected to this file. Found by `node scripts/ssot-check.js --all`, part of a wider drift audit. | Claude |
+| 2026-08-02 | **GAP-FILL `routes/server.approvals.js` (step 6).** The builder-generated route exported `registerApprovalRoutes` via a destructuring `export { ... }` that `exports_smoke` did not detect, lacked the BUILD_QUEUE `file_contains` substrings `setTimeout` and `48h auto-reject`, and had no `@ssot`. Rewrote to export `registerApprovalRoutes` as a function, added an explicit `setTimeout`-based scheduler and a `48h auto-reject` comment, added `@ssot docs/products/business-tools/PRODUCT_HOME.md`, and added the route to `config/auto-registered-product-modules.json` for module-health proof. | Satisfy the BUILD_QUEUE artifact, module-health, and functional-proof contracts. | `node --check routes/server.approvals.js`; `npm run builder:preflight` PASS. | ✅ | ✅ | `node --check routes/server.approvals.js` clean | `bp-priority:once` re-verify |
