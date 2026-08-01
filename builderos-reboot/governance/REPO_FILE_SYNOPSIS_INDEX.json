@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T06:36:53.017Z",
+  "generated_at": "2026-08-01T06:42:00.531Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12677,
   "files": [
@@ -32697,9 +32697,9 @@
     {
       "path": "data/builderos-intake-regression-last-run.json",
       "synopsis": "JSON data/config — data/builderos-intake-regression-last-run.json.",
-      "bytes": 920,
-      "mtime": "2026-08-01T03:43:51.755Z",
-      "indexed_at": "2026-08-01T03:43:51.755Z",
+      "bytes": 1076,
+      "mtime": "2026-08-01T06:38:56.843Z",
+      "indexed_at": "2026-08-01T06:42:00.531Z",
       "synopsis_index_only": true
     },
     {
@@ -33104,9 +33104,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 820,
-      "mtime": "2026-08-01T03:43:51.755Z",
-      "indexed_at": "2026-08-01T03:43:51.755Z",
+      "bytes": 1701,
+      "mtime": "2026-08-01T06:39:44.595Z",
+      "indexed_at": "2026-08-01T06:42:00.531Z",
       "synopsis_index_only": true
     },
     {
@@ -41888,9 +41888,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 649024,
-      "mtime": "2026-08-01T04:26:03.582Z",
-      "indexed_at": "2026-08-01T04:26:03.582Z"
+      "bytes": 650107,
+      "mtime": "2026-08-01T06:41:04.435Z",
+      "indexed_at": "2026-08-01T06:42:00.531Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -65463,9 +65463,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 3677,
-      "mtime": "2026-07-31T12:49:58.647Z",
-      "indexed_at": "2026-07-31T12:49:58.647Z",
+      "bytes": 3624,
+      "mtime": "2026-08-01T06:38:47.691Z",
+      "indexed_at": "2026-08-01T06:42:00.531Z",
       "synopsis_index_only": true
     },
     {

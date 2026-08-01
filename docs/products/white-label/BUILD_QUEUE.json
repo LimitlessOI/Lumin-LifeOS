@@ -797,7 +797,7 @@
     },
     {
       "id": "white-label-step3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/partner-key-scheme.js",
       "task": "design partner API key schema",
       "spec": "Design and build schema for generating partner API keys distinct from platform keys.",
@@ -833,7 +833,10 @@
       "same_signature_count": 0,
       "demoted": false,
       "last_error": "artifact_proof_failed: schema.define('partnerKey'",
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "completed_at": "2026-08-01T06:41:19.522Z",
+      "heal_claimed": true,
+      "heal_reason": "artifact_proof_pass"
     },
     {
       "id": "white-label-step4",
@@ -1018,6 +1021,6 @@
   "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-white-label",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:30:58.697Z",
+  "updated_at": "2026-08-01T06:41:19.522Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/white-label/BUILD_QUEUE.json"
 }
