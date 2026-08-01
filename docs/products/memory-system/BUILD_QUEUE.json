@@ -330,7 +330,7 @@
     },
     {
       "id": "memory-system-3",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/202311_memory_category_taxonomy_update.sql",
       "task": "update schema for category taxonomy",
       "spec": "Implement memory category taxonomy in the schema.",
@@ -338,14 +338,14 @@
         "memory-system-1"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "file_contains": [
         "ALTER TABLE",
         "ADD COLUMN memory_category"
       ],
-      "last_attempt_at": "2026-08-01T10:29:37.448Z",
+      "last_attempt_at": "2026-08-01T10:32:45.168Z",
       "last_error": "artifact_proof_failed: ADD COLUMN memory_category",
-      "commit_sha": "4e540190ebb51ac975c8257c784920060821d58a",
+      "commit_sha": "ff45636afef1107ff7c2dfb84bd43d33de7af135",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -368,7 +368,8 @@
       "mission_id": "PRODUCT-memory-system",
       "same_signature_count": 1,
       "heal_unblocked": true,
-      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: ADD COLUMN memory_category"
+      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: ADD COLUMN memory_category",
+      "completed_at": "2026-08-01T10:32:45.194Z"
     },
     {
       "id": "memory-system-4",
@@ -1202,6 +1203,6 @@
   "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-memory-system",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T10:29:51.375Z",
+  "updated_at": "2026-08-01T10:32:45.195Z",
   "backlog_signature_at": "2026-08-01T03:49:41.584Z"
 }
