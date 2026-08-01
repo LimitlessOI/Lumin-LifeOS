@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T15:16:08.151Z",
+  "generated_at": "2026-08-01T15:16:33.716Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12733,
+  "file_count": 12734,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -70731,6 +70731,16 @@
       "bytes": 4590,
       "mtime": "2026-07-14T09:09:21.199Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "ssot": [
+        "docs/products/marketingos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "routes/marketing-performance-intel-routes.js",
+      "synopsis": "Exposes API routes for marketing performance learning insights.",
+      "bytes": 754,
+      "mtime": "2026-08-01T15:16:33.716Z",
+      "indexed_at": "2026-08-01T15:16:33.716Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
