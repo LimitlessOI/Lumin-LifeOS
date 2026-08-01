@@ -546,13 +546,13 @@
     },
     {
       "id": "ideavault-step1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/headingPassStream.js",
       "task": "extend heading pass stream",
       "spec": "Extend the existing heading pass stream to handle any new export over 500KB, appending to the Stream subsection or extending Stream I/portfolio table.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "handleLargeExports"
       ],
@@ -571,9 +571,9 @@
           "assertion_id": "expected_exports:services/headingPassStream.js"
         }
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-01T11:03:13.660Z",
       "last_error": "artifact_proof_failed: Stream I/portfolio table",
-      "commit_sha": "4b73fbeca406d8162f12e1d954c97b1feb5371ed",
+      "commit_sha": "9c62f8ea9f94bb873e2c59fa931cbe2a25fcf7ba",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -595,7 +595,8 @@
       "blueprint_step_id": "ideavault-step1",
       "mission_id": "PRODUCT-ideavault",
       "same_signature_count": 0,
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "completed_at": "2026-08-01T11:03:27.471Z"
     },
     {
       "id": "ideavault-step2",
@@ -716,5 +717,5 @@
   "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-ideavault",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T11:02:57.584Z"
+  "updated_at": "2026-08-01T11:03:27.471Z"
 }
