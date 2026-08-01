@@ -747,7 +747,7 @@
         "step5"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerAccreditationConsultationRoutes"
       ],
@@ -766,13 +766,13 @@
       ],
       "shipped_via": null,
       "shipped_at": null,
-      "commit_sha": null,
+      "commit_sha": "798eec0d9aae9be363ea352ad0e7158f3c3e451f",
       "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step6",
       "mission_id": "PRODUCT-lumin-university",
-      "last_error": null,
-      "last_attempt_at": null,
-      "blocker_class": null,
+      "last_error": "route module not auto-registered — add {\"path\":\"routes/accreditationConsultationRoutes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
+      "last_attempt_at": "2026-08-01T01:23:58.093Z",
+      "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "park_until": null,
       "revive_count": 0,
@@ -1581,5 +1581,5 @@
   "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-lumin-university",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T01:23:43.695Z"
+  "updated_at": "2026-08-01T01:26:09.136Z"
 }
