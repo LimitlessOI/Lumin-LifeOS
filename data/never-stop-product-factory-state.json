@@ -1,6 +1,6 @@
 {
-  "status": "idle",
-  "last_task": {
+  "status": "running",
+  "current_task": {
     "id": "product_build_memory-system_memory-system-8",
     "kind": "product_build_step",
     "priority": 2.0009,
@@ -10,60 +10,5 @@
     "target_file": "routes/final_pr_review.js",
     "detail": "next buildable step: memory-system-8"
   },
-  "last_result": {
-    "ok": false,
-    "task_id": "product_build_memory-system_memory-system-8",
-    "detail": "product_build_step",
-    "outcome": {
-      "ok": false,
-      "step_id": "memory-system-8",
-      "stage": "artifact_proof",
-      "reason": "artifact_proof_failed: missing_exports:registerFinalPrReviewRoutes; registerFinalPrReviewRoutes",
-      "attempts": 1,
-      "blocked": false,
-      "blocker_class": "BLOCKED_TOOLING",
-      "claim_level": null,
-      "parked": false,
-      "summary": {
-        "product_id": "memory-system",
-        "total": 39,
-        "pending": 3,
-        "building": 0,
-        "done": 34,
-        "blocked": 0,
-        "founder_gated": 0,
-        "design_review_flagged": 0,
-        "human_hold": 0,
-        "skipped": 2,
-        "complete": false
-      }
-    },
-    "claim": {
-      "id": "memory-system:memory-system-8",
-      "kind": "execution",
-      "text": "product step memory-system-8 built + verified + served live",
-      "grade": "GUESS",
-      "proof": null,
-      "original_grade": "KNOW",
-      "enforced": true,
-      "flags": [
-        "claimed_KNOW_or_LAW_without_proof"
-      ]
-    },
-    "summary": {
-      "product_id": "memory-system",
-      "total": 39,
-      "pending": 3,
-      "building": 0,
-      "done": 34,
-      "blocked": 0,
-      "founder_gated": 0,
-      "design_review_flagged": 0,
-      "human_hold": 0,
-      "skipped": 2,
-      "complete": false
-    }
-  },
-  "cycles": 1,
-  "updated_at": "2026-08-01T10:33:14.741Z"
+  "updated_at": "2026-08-01T10:36:25.293Z"
 }

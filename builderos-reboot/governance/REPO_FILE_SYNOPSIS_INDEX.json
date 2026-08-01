@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T10:34:28.256Z",
+  "generated_at": "2026-08-01T10:37:51.073Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1861,
-      "mtime": "2026-08-01T10:33:14.736Z",
-      "indexed_at": "2026-08-01T10:33:59.853Z",
+      "bytes": 412,
+      "mtime": "2026-08-01T10:36:25.292Z",
+      "indexed_at": "2026-08-01T10:37:51.073Z",
       "synopsis_index_only": true
     },
     {
@@ -42268,9 +42268,9 @@
     {
       "path": "docs/products/memory-system/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Memory System",
-      "bytes": 23771,
-      "mtime": "2026-08-01T10:34:21.704Z",
-      "indexed_at": "2026-08-01T10:34:28.256Z"
+      "bytes": 24038,
+      "mtime": "2026-08-01T10:37:37.092Z",
+      "indexed_at": "2026-08-01T10:37:51.073Z"
     },
     {
       "path": "docs/products/MEMORYINTELLIGENCE.md",
@@ -69696,9 +69696,9 @@
     {
       "path": "routes/final_pr_review.js",
       "synopsis": "HTTP route module — Final PR Review.",
-      "bytes": 601,
-      "mtime": "2026-08-01T10:34:06.256Z",
-      "indexed_at": "2026-08-01T10:34:28.256Z",
+      "bytes": 569,
+      "mtime": "2026-08-01T10:37:20.456Z",
+      "indexed_at": "2026-08-01T10:37:51.073Z",
       "ssot": [
         "docs/products/memory-system/PRODUCT_HOME.md"
       ]

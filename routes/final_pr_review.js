@@ -2,7 +2,7 @@
  * SYNOPSIS: HTTP route module — Final PR Review.
  * @ssot docs/products/memory-system/PRODUCT_HOME.md
  */
-import { reviewBranch } from '../services/final_pr_review.js';
+import express from 'express';
 
 const router = express.Router();
 
