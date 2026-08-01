@@ -257,14 +257,14 @@
       "spec": "Add vector embedding column to DB schema as per documented requirements.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "ALTER TABLE",
         "ADD COLUMN vector_embedding"
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-01T10:25:59.177Z",
       "last_error": "artifact_proof_failed: ADD COLUMN vector_embedding",
-      "commit_sha": "b6f7a08afd0e0f7073a7ad1249e991f7de1972af",
+      "commit_sha": "58386fbbff3876fc81f15d459bfacdf12e970607",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -276,7 +276,7 @@
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
-      "blocker_class": null,
+      "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
@@ -285,8 +285,9 @@
       "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-system-1",
       "mission_id": "PRODUCT-memory-system",
-      "same_signature_count": 0,
-      "heal_unblocked": true
+      "same_signature_count": 1,
+      "heal_unblocked": true,
+      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: ADD COLUMN vector_embedding"
     },
     {
       "id": "memory-system-2",
@@ -1199,7 +1200,6 @@
   "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-memory-system",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:30:42.443Z",
-  "backlog_signature_at": "2026-08-01T03:49:41.584Z",
-  "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/memory-system/BUILD_QUEUE.json"
+  "updated_at": "2026-08-01T10:26:09.241Z",
+  "backlog_signature_at": "2026-08-01T03:49:41.584Z"
 }

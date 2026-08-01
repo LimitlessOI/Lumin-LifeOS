@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T10:22:17.218Z",
+  "generated_at": "2026-08-01T10:27:01.370Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 2060,
-      "mtime": "2026-08-01T10:21:29.732Z",
-      "indexed_at": "2026-08-01T10:21:56.388Z",
+      "bytes": 1839,
+      "mtime": "2026-08-01T10:26:10.380Z",
+      "indexed_at": "2026-08-01T10:27:01.370Z",
       "synopsis_index_only": true
     },
     {
@@ -34775,10 +34775,10 @@
     },
     {
       "path": "db/migrations/202311_vector_embedding_update.sql",
-      "synopsis": "Database migration — 202311_vector_embedding_update.sql.",
-      "bytes": 517,
-      "mtime": "2026-07-31T12:04:04.906Z",
-      "indexed_at": "2026-07-31T12:04:04.906Z"
+      "synopsis": "Database migration — add vector_embedding column to memory_capsules.",
+      "bytes": 491,
+      "mtime": "2026-08-01T10:26:52.200Z",
+      "indexed_at": "2026-08-01T10:27:01.370Z"
     },
     {
       "path": "db/migrations/20231105_create_bioprinting_tables.sql",
@@ -42268,9 +42268,9 @@
     {
       "path": "docs/products/memory-system/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Memory System",
-      "bytes": 22019,
-      "mtime": "2026-08-01T08:48:17.387Z",
-      "indexed_at": "2026-08-01T08:48:17.387Z"
+      "bytes": 22424,
+      "mtime": "2026-08-01T10:26:49.920Z",
+      "indexed_at": "2026-08-01T10:27:01.370Z"
     },
     {
       "path": "docs/products/MEMORYINTELLIGENCE.md",
