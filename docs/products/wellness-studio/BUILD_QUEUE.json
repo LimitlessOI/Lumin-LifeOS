@@ -4,7 +4,7 @@
   "verify_script": null,
   "planned_at": "2026-07-12T03:40:00.000Z",
   "notes": "Module 4 Therapist Integration beachhead — Clinical Partnership. Consent-gated briefs; therapist account lists linked clients who granted therapist_share. LifeOS consent foundation is a dependency.",
-  "updated_at": "2026-08-01T10:20:27.873Z",
+  "updated_at": "2026-08-01T10:20:56.115Z",
   "steps": [
     {
       "id": "ws-therapist-schema",
@@ -1510,7 +1510,7 @@
     },
     {
       "id": "wellness-studio-step3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/wellness-table-extensions.js",
       "task": "provide extended table services",
       "spec": "Implement services for managing the extended table data without conflicts.",
@@ -1518,7 +1518,7 @@
         "wellness-studio-step2"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "manageJoyCheckins",
         "manageIntegrityScore",
@@ -1543,14 +1543,16 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:49:02.108Z",
-      "commit_sha": "959a480548734f24b4c1a6bb1f040a8636a2bfa8",
+      "commit_sha": "972ac8215189f56e14f03d583c0eed37c937980f",
       "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "wellness-studio-step3",
       "mission_id": "PRODUCT-wellness-studio",
       "same_signature_count": 0,
       "demoted": false,
       "last_error": "artifact_proof_failed: extendTableServices",
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T10:20:44.184Z",
+      "completed_at": "2026-08-01T10:20:56.115Z"
     },
     {
       "id": "wellness-studio-step4",
