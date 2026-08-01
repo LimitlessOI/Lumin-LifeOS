@@ -208,6 +208,39 @@ export function buildIntegrationContext({
       lines.push(`\`\`\``);
     }
     lines.push('- ROUTE-SPECIFIC FILE RULES: Do NOT use `express.Router()` or `app.use()` for a single route. Do NOT import `Request`, `Response`, or `NextFunction` from `express` (those are TypeScript types, not JS values). Do NOT import `requireKey`, `logger`, or `callCouncilMember` from sibling files; they come from `deps`. You MAY import an existing sibling service function you have confirmed exists (e.g. `import { verifyCredential } from \'../services/credentialVerification.js\';`).');
+  } else if (moduleStep && /^scripts\/.+\.(js|mjs)$/i.test(targetFile)) {
+    const base = path.basename(targetFile).replace(/\.(js|mjs)$/, '');
+    const ssotHome = productId ? `docs/products/${productId}/PRODUCT_HOME.md` : 'docs/products/<product>/PRODUCT_HOME.md';
+    lines.push('');
+    lines.push('SCRIPT-SPECIFIC FILE RULES (this is a standalone analysis/utility script, not a route or service):');
+    lines.push(`- The file MUST start with exactly this JSDoc block (no other comment or text before it):`);
+    lines.push(`\`\`\`js`);
+    lines.push(`/**`);
+    lines.push(` * SYNOPSIS: <one-line description>`);
+    lines.push(` * @ssot ${ssotHome}`);
+    lines.push(` */`);
+    lines.push(`\`\`\``);
+    if (expectedExports.length) {
+      lines.push(`- Export these named async functions: ${expectedExports.map((n) => `\`${n}\``).join(', ')}. They should be pure-analysis functions taking an options object and returning a structured comparison/result.`);
+      const ex = expectedExports[0];
+      lines.push('- Use the exact pattern below. Replace the function name(s) and analysis logic with the real subject of the script; do NOT import an AI SDK, DB client, or logger from a repo path:');
+      lines.push(`\`\`\`js`);
+      lines.push(`/**`);
+      lines.push(` * SYNOPSIS: One-line description.`);
+      lines.push(` * @ssot ${ssotHome}`);
+      lines.push(` */`);
+      lines.push(`export async function ${ex}(options = {}) {`);
+      lines.push(`  // Pure analysis / scoping logic. No DB, no AI client, no side effects.`);
+      lines.push(`  return {`);
+      lines.push(`    approach: '...',`);
+      lines.push(`    pros: ['...'],`);
+      lines.push(`    cons: ['...'],`);
+      lines.push(`    recommendation: '...',`);
+      lines.push(`  };`);
+      lines.push(`}`);
+      lines.push(`\`\`\``);
+    }
+    lines.push('- SCRIPT RULES: Do NOT import `pg`, `openai`, `dotenv`, or sibling files. Do NOT call `process.exit()`. Do NOT include a shebang. Do NOT include `if (import.meta.main)` or CLI argument parsing. The script is imported by tests/builder, so it must be pure ES module functions.');
   } else if (moduleStep && /^services\/.+\.js$/i.test(targetFile)) {
     const base = path.basename(targetFile).replace(/\.js$/, '');
     const fnName = expectedExports[0] || base;

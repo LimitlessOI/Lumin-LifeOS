@@ -968,10 +968,10 @@
       "status": "pending",
       "target_file": "scripts/credentialVerificationScoping.mjs",
       "task": "scope credential verification technology",
-      "spec": "Outline the credential verification technology, assessing options like blockchain and cryptographic hash.",
+      "spec": "Outline the credential verification technology, assessing options like blockchain and cryptographic hash. Export `evaluateBlockchainSolution` and `evaluateHashSolution` as pure analysis functions returning a structured comparison with `approach`, `pros`, `cons`, `recommendation`.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "evaluateBlockchainSolution",
         "evaluateHashSolution"
@@ -982,9 +982,9 @@
       "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "003",
       "mission_id": "PRODUCT-lumin-university",
-      "last_error": "Commit failed: FILE_PLACEMENT_VIOLATION — commit refused.\n- [ERROR][missing_ssot] scripts/credentialVerificationScoping.mjs: New protected source file has no @ssot JSDoc tag pointing to its product home",
-      "last_attempt_at": "2026-08-01T01:40:47.976Z",
-      "blocker_class": "BLOCKED_SECRET",
+      "last_error": null,
+      "last_attempt_at": null,
+      "blocker_class": null,
       "claim_level": null,
       "park_until": null,
       "revive_count": 0,
@@ -995,7 +995,8 @@
         "claimed_shipped_at": "2026-07-16T04:17:36.048Z",
         "reason": "commit_sha exists in repo but is not an ancestor of origin/main -- ship landed on origin/builderos-autonomous or origin/builderos-shadow instead of main (GITHUB_DEPLOY_BRANCH mismatch), and the content itself was placeholder/stub code (verified by direct inspection), not a real implementation. Confirmed via: git merge-base --is-ancestor <sha> origin/main."
       },
-      "same_signature_count": 0
+      "same_signature_count": 1,
+      "failure_signature": "build|BLOCKED_SECRET|Commit failed: FILE_PLACEMENT_VIOLATION — commit refused. - [ERROR][missing_ssot] scripts/credentialVerificationScoping.mjs: New protected source file has no @ssot JSDoc tag pointing to its product ho"
     },
     {
       "id": "004",
