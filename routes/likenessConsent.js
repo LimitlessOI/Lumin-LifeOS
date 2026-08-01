@@ -1,42 +1,30 @@
 /**
- * SYNOPSIS: HTTP route module — LikenessConsent.
+ * SYNOPSIS: Manages explicit likeness consent for users.
+ * @ssot docs/products/creator-media-os/PRODUCT_HOME.md
  */
-import express from 'express';
+export function registerLikenessConsent(app, deps) {
+  app.post('/api/v1/likeness/consent', deps.requireKey, async (req, res, next) => {
+    try {
+      const { userId, consentGiven } = req.body;
 
-const likenessConsents = new Map();
+      if (!userId || typeof consentGiven !== 'boolean') {
+        return res.status(400).json({ error: 'User ID and consentGiven (boolean) are required.' });
+      }
 
-function captureLikenessConsent(userId) {
-  likenessConsents.set(userId, true);
-  return { userId, consentGiven: true };
-}
+      const sql = `
+        INSERT INTO likeness_consent (user_id, consent_given, consent_date)
+        VALUES ($1, $2, NOW())
+        ON CONFLICT (user_id) DO UPDATE
+        SET consent_given = $2, consent_date = NOW()
+        RETURNING id, user_id, consent_given, consent_date;
+      `;
+      const result = await deps.pool.query(sql, [userId, consentGiven]);
 
-function revokeLikenessConsent(userId) {
-  likenessConsents.delete(userId);
-  return { userId, consentGiven: false };
-}
-
-function registerLikenessConsentRoutes(app) {
-  const router = express.Router();
-
-  router.post('/consent/capture', (req, res) => {
-    const { userId } = req.body;
-    if (!userId) {
-      return res.status(400).json({ error: 'User ID is required' });
+      deps.logger.info({ userId, consentGiven }, 'Explicit likeness consent recorded');
+      res.json(result.rows[0]);
+    } catch (error) {
+      deps.logger.error({ error }, 'Error in likenessConsent route');
+      next(error);
     }
-    const result = captureLikenessConsent(userId);
-    res.json(result);
   });
-
-  router.post('/consent/revoke', (req, res) => {
-    const { userId } = req.body;
-    if (!userId) {
-      return res.status(400).json({ error: 'User ID is required' });
-    }
-    const result = revokeLikenessConsent(userId);
-    res.json(result);
-  });
-
-  app.use('/likeness', router);
 }
-
-export { registerLikenessConsentRoutes };
