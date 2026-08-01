@@ -3,7 +3,7 @@
   "product_id": "limitlessos",
   "verify_script": "scripts/verify-go-vegas-scheduler.mjs",
   "notes": "Go Vegas revenue slice — outreach pipeline v1 already shipped as code; this queue closes the last mile to live revenue: scheduler tick (daily discover/invite/follow-up under caps), dry-run proof script, and SENTRY-facing status receipt. No founder UI in this slice.",
-  "updated_at": "2026-08-01T09:25:37.680Z",
+  "updated_at": "2026-08-01T09:28:23.324Z",
   "steps": [
     {
       "id": "gv-scheduler",
@@ -500,7 +500,7 @@
         "step4"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerPriceBookVendorComparisonRoutes"
       ],
@@ -523,14 +523,16 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T07:56:32.026Z",
-      "commit_sha": "e23e576a09d02566c0841bb8622316d0bf072dbb",
+      "commit_sha": "3a81babf2723e05048fb082a49303079aa4d5cb2",
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step5",
       "mission_id": "PRODUCT-limitlessos",
       "same_signature_count": 0,
       "demoted": false,
-      "last_error": "artifact_proof_failed: Vendor Comparison",
-      "heal_unblocked": true
+      "last_error": "artifact_proof_failed: missing_exports:registerPriceBookVendorComparisonRoutes; Vendor Comparison",
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T09:28:11.990Z",
+      "blocker_class": "BLOCKED_TOOLING"
     },
     {
       "id": "step6",
