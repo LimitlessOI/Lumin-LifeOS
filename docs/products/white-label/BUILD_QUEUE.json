@@ -425,13 +425,13 @@
     },
     {
       "id": "step5",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/stripe-billing-separation.js",
       "task": "separate Stripe billing flow",
       "spec": "Create separate billing flow for partners and direct clients using Stripe.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "setupPartnerBillingFlow",
         "setupClientBillingFlow"
@@ -449,7 +449,7 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-15T23:50:32.333Z",
-      "commit_sha": null,
+      "commit_sha": "2d3d360f4bde32348c0277896c6dc0a67a5b02f4",
       "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step5",
       "mission_id": "PRODUCT-white-label",
@@ -458,7 +458,7 @@
       "reaudit_reset_at": "2026-07-30T18:55:06.853Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-01T05:52:38.466Z",
       "last_attempt": null,
       "revive_count": 3,
       "revived_at": "2026-08-01T05:52:06.087Z",
@@ -470,7 +470,8 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "completed_at": "2026-08-01T05:52:53.365Z"
     },
     {
       "id": "step6",
@@ -976,5 +977,5 @@
   "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-white-label",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T05:52:19.465Z"
+  "updated_at": "2026-08-01T05:52:53.366Z"
 }
