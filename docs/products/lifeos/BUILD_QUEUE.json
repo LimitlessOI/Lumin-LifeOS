@@ -2704,7 +2704,7 @@
         "lifeos-3"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "executeChatIntent"
       ],
@@ -2725,8 +2725,8 @@
         "method": "POST",
         "path": "/jobs"
       },
-      "last_attempt_at": null,
-      "last_error": null,
+      "last_attempt_at": "2026-08-01T04:19:38.447Z",
+      "last_error": "Zone 3 edit-patch failed — edit old_string not found in file — the model must copy it verbatim: \"  async function luminConverse(userMessage) {\\n    if (typeof callCouncilMember !\"",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
@@ -2744,7 +2744,7 @@
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
-      "blocker_class": null,
+      "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
@@ -5798,5 +5798,5 @@
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-lifeos",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T04:16:19.709Z"
+  "updated_at": "2026-08-01T04:21:15.534Z"
 }
