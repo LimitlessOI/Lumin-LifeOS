@@ -19,4 +19,13 @@ function registerLimitlessOSUIRoutes(app) {
   app.use('/new-brand', (req, res) => {
     res.send('Welcome to the new brand experience!');
   });
+
+  // New experience enhancement routes
+  app.use('/new-experience', (req, res) => {
+    res.send('Experience the new enhancements!');
+  });
 }
+
+const registerLimitlessOSIdRoutes = registerLimitlessOSUIRoutes;
+
+export { registerLimitlessOSUIRoutes, registerLimitlessOSIdRoutes };

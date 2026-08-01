@@ -3,7 +3,7 @@
   "product_id": "limitlessos",
   "verify_script": "scripts/verify-go-vegas-scheduler.mjs",
   "notes": "Go Vegas revenue slice — outreach pipeline v1 already shipped as code; this queue closes the last mile to live revenue: scheduler tick (daily discover/invite/follow-up under caps), dry-run proof script, and SENTRY-facing status receipt. No founder UI in this slice.",
-  "updated_at": "2026-08-01T09:45:29.423Z",
+  "updated_at": "2026-08-01T09:48:25.636Z",
   "steps": [
     {
       "id": "gv-scheduler",
@@ -1048,7 +1048,7 @@
         "1"
       ],
       "founder_gated": true,
-      "attempts": 1,
+      "attempts": 2,
       "expected_exports": [
         "registerLimitlessOSUIRoutes"
       ],
@@ -1074,14 +1074,14 @@
       "mission_id": "PRODUCT-limitlessos",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T21:52:33.220Z",
-      "commit_sha": "7e8e1ee22981219f152bd5573698dfd30f7be224",
+      "commit_sha": "dc055b576c099c52891684e99827d9fe6de364a0",
       "same_signature_count": 1,
       "demoted": false,
-      "last_error": "artifact_proof_failed: missing_exports:registerLimitlessOSUIRoutes; registerLimitlessOSUIRoutes",
+      "last_error": "artifact_proof_failed: missing_exports:registerLimitlessOSUIRoutes",
       "heal_unblocked": true,
-      "last_attempt_at": "2026-08-01T09:45:12.233Z",
+      "last_attempt_at": "2026-08-01T09:48:09.684Z",
       "blocker_class": "BLOCKED_TOOLING",
-      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: missing_exports:registerLimitlessOSUIRoutes; registerLimitlessOSUIRoutes"
+      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: missing_exports:registerLimitlessOSUIRoutes"
     },
     {
       "id": "limitlessos-step1",
