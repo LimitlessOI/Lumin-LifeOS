@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T08:16:57.099Z",
+  "generated_at": "2026-08-01T08:20:19.843Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12677,
   "files": [
@@ -33104,9 +33104,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1861,
-      "mtime": "2026-08-01T08:12:01.764Z",
-      "indexed_at": "2026-08-01T08:12:40.075Z",
+      "bytes": 1807,
+      "mtime": "2026-08-01T08:19:42.872Z",
+      "indexed_at": "2026-08-01T08:20:19.843Z",
       "synopsis_index_only": true
     },
     {
@@ -41136,9 +41136,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 377726,
-      "mtime": "2026-08-01T08:16:47.800Z",
-      "indexed_at": "2026-08-01T08:16:57.099Z"
+      "bytes": 378499,
+      "mtime": "2026-08-01T08:20:03.984Z",
+      "indexed_at": "2026-08-01T08:20:19.843Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -65463,9 +65463,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 3578,
-      "mtime": "2026-08-01T07:03:36.911Z",
-      "indexed_at": "2026-08-01T07:05:20.240Z",
+      "bytes": 3992,
+      "mtime": "2026-08-01T08:18:53.864Z",
+      "indexed_at": "2026-08-01T08:20:19.843Z",
       "synopsis_index_only": true
     },
     {
@@ -95937,9 +95937,9 @@
     {
       "path": "services/timezone-utils.js",
       "synopsis": "New function to check commitment due dates against Adam's timezone",
-      "bytes": 1586,
-      "mtime": "2026-08-01T08:16:26.460Z",
-      "indexed_at": "2026-08-01T08:16:57.099Z",
+      "bytes": 1566,
+      "mtime": "2026-08-01T08:19:53.344Z",
+      "indexed_at": "2026-08-01T08:20:19.843Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

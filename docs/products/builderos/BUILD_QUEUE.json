@@ -714,7 +714,7 @@
     },
     {
       "id": "builderos-step3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/timezone-utils.js",
       "task": "implement today_commitments timezone check",
       "spec": "Timezone checker for today's commitments comparing due_date to CURRENT_DATE against Railway UTC.",
@@ -740,14 +740,20 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:49:36.823Z",
-      "commit_sha": "25203ac49119e1daaf351f75d5c08e62985442cc",
+      "commit_sha": "53d81bf0b08f16dc919a14e0d7337044e5a43e73",
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-step3",
       "mission_id": "PRODUCT-builderos",
-      "same_signature_count": 0,
+      "same_signature_count": 1,
       "demoted": false,
-      "last_error": "artifact_proof_failed: CURRENT_DATE; timezone check",
-      "heal_unblocked": true
+      "last_error": null,
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T08:19:29.321Z",
+      "blocker_class": null,
+      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: missing_exports:checkTodayCommitmentsTimezone",
+      "completed_at": "2026-08-01T08:19:58.323Z",
+      "heal_claimed": true,
+      "heal_reason": "artifact_proof_pass"
     },
     {
       "id": "builderos-step4",
@@ -3326,6 +3332,6 @@
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-builderos",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T08:12:22.503Z",
+  "updated_at": "2026-08-01T08:19:58.323Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/builderos/BUILD_QUEUE.json"
 }
