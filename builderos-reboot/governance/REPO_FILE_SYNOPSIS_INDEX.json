@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T09:52:58.723Z",
+  "generated_at": "2026-08-01T09:55:42.713Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1843,
-      "mtime": "2026-08-01T09:52:00.760Z",
-      "indexed_at": "2026-08-01T09:52:31.363Z",
+      "bytes": 1841,
+      "mtime": "2026-08-01T09:55:16.644Z",
+      "indexed_at": "2026-08-01T09:55:42.713Z",
       "synopsis_index_only": true
     },
     {
@@ -42115,9 +42115,9 @@
     {
       "path": "docs/products/limitlessos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LimitlessOS business stack",
-      "bytes": 17467,
-      "mtime": "2026-08-01T09:52:46.980Z",
-      "indexed_at": "2026-08-01T09:52:58.723Z"
+      "bytes": 17462,
+      "mtime": "2026-08-01T09:55:31.388Z",
+      "indexed_at": "2026-08-01T09:55:42.713Z"
     },
     {
       "path": "docs/products/lip/FILE_MANIFEST.json",
@@ -65772,9 +65772,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 4280,
-      "mtime": "2026-08-01T09:47:57.352Z",
-      "indexed_at": "2026-08-01T09:48:54.543Z",
+      "bytes": 4588,
+      "mtime": "2026-08-01T09:54:32.332Z",
+      "indexed_at": "2026-08-01T09:55:42.713Z",
       "synopsis_index_only": true
     },
     {
@@ -94072,9 +94072,9 @@
     {
       "path": "services/price-book-vendor-comparison.js",
       "synopsis": "Compares vendors based on pricing and reviews, using database data.",
-      "bytes": 4609,
-      "mtime": "2026-08-01T09:25:31.121Z",
-      "indexed_at": "2026-08-01T09:25:31.121Z",
+      "bytes": 4697,
+      "mtime": "2026-08-01T09:55:28.788Z",
+      "indexed_at": "2026-08-01T09:55:42.713Z",
       "ssot": [
         "docs/products/limitlessos/PRODUCT_HOME.md"
       ]

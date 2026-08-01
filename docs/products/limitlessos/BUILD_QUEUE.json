@@ -3,7 +3,7 @@
   "product_id": "limitlessos",
   "verify_script": "scripts/verify-go-vegas-scheduler.mjs",
   "notes": "Go Vegas revenue slice — outreach pipeline v1 already shipped as code; this queue closes the last mile to live revenue: scheduler tick (daily discover/invite/follow-up under caps), dry-run proof script, and SENTRY-facing status receipt. No founder UI in this slice.",
-  "updated_at": "2026-08-01T09:54:44.142Z",
+  "updated_at": "2026-08-01T09:55:15.590Z",
   "steps": [
     {
       "id": "gv-scheduler",
@@ -1195,7 +1195,7 @@
       "spec": "Extend price book service to compare vendors with explanations or exclusions based on reviews and pricing.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "compareVendors"
       ],
@@ -1213,9 +1213,9 @@
           "assertion_id": "expected_exports:services/price-book-vendor-comparison.js"
         }
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-01T09:55:00.930Z",
       "last_error": "artifact_proof_failed: vendor comparison; explain or exclude",
-      "commit_sha": "11c3291832ba7ca6a34647d8d4b3099224f9bc14",
+      "commit_sha": "7cfebba88c295344b3980a4a6f6d0043d27e3f9f",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -1227,7 +1227,7 @@
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
-      "blocker_class": null,
+      "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
@@ -1236,8 +1236,9 @@
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "limitlessos-step4",
       "mission_id": "PRODUCT-limitlessos",
-      "same_signature_count": 0,
-      "heal_unblocked": true
+      "same_signature_count": 1,
+      "heal_unblocked": true,
+      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: vendor comparison; explain or exclude"
     },
     {
       "id": "limitlessos-step5",

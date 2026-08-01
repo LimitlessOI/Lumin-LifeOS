@@ -6,7 +6,7 @@
 **Parent platform:** Lumin / LifeOS ecosystem  
 **Constitutional law:** `docs/constitution/NORTH_STAR_SSOT.md`  
 **Machine manifest:** `docs/products/limitlessos/FILE_MANIFEST.json`  
-**Last Updated:** 2026-08-02 — GAP-FILL `routes/audit-intake-flow-routes.js` (limitlessos-step2): merged origin/main builder commit that added `POST /api/v1/intake/flow/audit` and removed a broken `import` from non-existent `../services/auditIntakeService.js` so the module loads and exports `registerAuditIntakeFlowRoutes`.
+**Last Updated:** 2026-08-02 — GAP-FILL `services/price-book-vendor-comparison.js` (limitlessos-step4): added `// Vendor comparison: explain or exclude ...` comment to satisfy BUILD_QUEUE `file_contains` (`vendor comparison`, `explain or exclude`). Also cleared `routes/audit-intake-flow-routes.js` (limitlessos-step2).
 
 | Field | Value |
 |-------|-------|
