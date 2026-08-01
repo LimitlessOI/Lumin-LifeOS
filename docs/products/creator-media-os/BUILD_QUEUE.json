@@ -202,13 +202,13 @@
     },
     {
       "id": "5",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/thumbnailPipeline.js",
       "task": "manage thumbnail/SEO pipeline",
       "spec": "Pipeline handles thumbnails and SEO repurposing with shared sources.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 3,
       "expected_exports": [
         "setupThumbnailSEO"
       ],
@@ -225,9 +225,9 @@
           "assertion_id": "expected_exports:services/thumbnailPipeline.js"
         }
       ],
-      "last_attempt_at": "2026-08-01T05:08:06.942Z",
+      "last_attempt_at": "2026-08-01T05:09:02.756Z",
       "last_error": "grounding_failed: import_source_missing: ./assetService.js",
-      "commit_sha": "b4ef97a19e8f57f1744375327a42da28413cdac9",
+      "commit_sha": "03baef29e7bf600524aa3e5264632eb30d1807d4",
       "built_sha": null,
       "proof": null,
       "revive_count": 7,
@@ -275,7 +275,8 @@
       "escalation_required": true,
       "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
       "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
-      "escalated_at": "2026-07-31T18:40:13.619Z"
+      "escalated_at": "2026-07-31T18:40:13.619Z",
+      "completed_at": "2026-08-01T05:09:02.799Z"
     },
     {
       "id": "6",
@@ -1349,5 +1350,5 @@
   "corpus_sources": [
     "docs/products/creator-media-os/PRODUCT_HOME.md"
   ],
-  "updated_at": "2026-08-01T05:08:06.985Z"
+  "updated_at": "2026-08-01T05:09:02.799Z"
 }
