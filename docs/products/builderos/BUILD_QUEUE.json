@@ -2715,11 +2715,10 @@
       ],
       "same_signature_count": 1,
       "demoted": false,
-      "last_error": "Pre-commit governance blocked — anti-pattern, stub, or verifier failure",
-      "heal_unblocked": true,
-      "last_attempt_at": "2026-08-01T08:57:41.578Z",
-      "blocker_class": "BLOCKED_TOOLING",
-      "failure_signature": "build|BLOCKED_TOOLING|Pre-commit governance blocked — anti-pattern, stub, or verifier failure"
+      "attempts": 0,
+      "last_error": null,
+      "heal_unblocked": false,
+      "same_signature_count": 0
     },
     {
       "id": "bo-runtime-fingerprint",
