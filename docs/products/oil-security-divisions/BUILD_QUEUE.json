@@ -68,7 +68,8 @@
           "content_source_path": "docs/products/oil-security-divisions/twins/steps/step1.exact",
           "content_sha256": "6af6ea80adbe48d86d48a750746acd486e008204fe75f5c1b9678a8c32d6574a"
         }
-      }
+      },
+      "same_signature_count": 0
     },
     {
       "id": "step2",
@@ -119,7 +120,8 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "same_signature_count": 0
     },
     {
       "id": "step3",
@@ -174,7 +176,8 @@
           "content_source_path": "docs/products/oil-security-divisions/twins/steps/step3.exact",
           "content_sha256": "a47a3188415e7065a0f1cec083a6806d4973284df500484377e8bb3523b30ddb"
         }
-      }
+      },
+      "same_signature_count": 0
     },
     {
       "id": "step4",
@@ -247,7 +250,8 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "same_signature_count": 0
     },
     {
       "id": "step5",
@@ -313,7 +317,8 @@
           "content_source_path": "docs/products/oil-security-divisions/twins/steps/step5.exact",
           "content_sha256": "2a1cea391cd16b46c4fe2615ae274275989300229322b4e416af2084bb5d4d6e"
         }
-      }
+      },
+      "same_signature_count": 0
     },
     {
       "id": "step6",
@@ -346,7 +351,8 @@
       "shipped_at": "2026-07-15T19:39:57.706Z",
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step6",
-      "mission_id": "PRODUCT-oil-security-divisions"
+      "mission_id": "PRODUCT-oil-security-divisions",
+      "same_signature_count": 0
     },
     {
       "id": "step7",
@@ -362,7 +368,8 @@
       "commit_sha": "d6fe8e40502701bbb29e9398f1470d0c0e7c7bca",
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step7",
-      "mission_id": "PRODUCT-oil-security-divisions"
+      "mission_id": "PRODUCT-oil-security-divisions",
+      "same_signature_count": 0
     },
     {
       "id": "step8",
@@ -442,7 +449,8 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "same_signature_count": 0
     },
     {
       "id": "step9",
@@ -484,7 +492,8 @@
       "escalation_required": true,
       "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
       "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
-      "escalated_at": "2026-07-31T18:40:13.628Z"
+      "escalated_at": "2026-07-31T18:40:13.628Z",
+      "same_signature_count": 0
     },
     {
       "id": "step10",
@@ -527,7 +536,8 @@
       "escalation_required": true,
       "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
       "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
-      "escalated_at": "2026-07-31T18:40:13.628Z"
+      "escalated_at": "2026-07-31T18:40:13.628Z",
+      "same_signature_count": 0
     },
     {
       "id": "1",
@@ -575,7 +585,8 @@
           "content_source_path": "docs/products/oil-security-divisions/twins/steps/1.exact",
           "content_sha256": "f65dae5a7f60b44127733894ddf98b84a9b39e08d34647cb736efd0b52ac055e"
         }
-      }
+      },
+      "same_signature_count": 0
     },
     {
       "id": "2",
@@ -606,7 +617,8 @@
       "commit_sha": "6da1a3b05bdcd40e4d47af6024277519fd6d998e",
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "2",
-      "mission_id": "PRODUCT-oil-security-divisions"
+      "mission_id": "PRODUCT-oil-security-divisions",
+      "same_signature_count": 0
     },
     {
       "id": "3",
@@ -659,7 +671,8 @@
       "escalation_required": true,
       "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
       "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
-      "escalated_at": "2026-07-31T18:40:13.628Z"
+      "escalated_at": "2026-07-31T18:40:13.628Z",
+      "same_signature_count": 0
     },
     {
       "id": "4",
@@ -707,7 +720,8 @@
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "4",
       "mission_id": "PRODUCT-oil-security-divisions",
-      "reaudit_reset_at": "2026-07-30T18:55:06.687Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.687Z",
+      "same_signature_count": 0
     },
     {
       "id": "5",
@@ -742,7 +756,8 @@
       "commit_sha": "99863a5ed3e93a6e6656622fa09377d67ccb2be5",
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "5",
-      "mission_id": "PRODUCT-oil-security-divisions"
+      "mission_id": "PRODUCT-oil-security-divisions",
+      "same_signature_count": 0
     },
     {
       "id": "6",
@@ -766,7 +781,8 @@
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:runPreflightChecks; runPreflightChecks",
       "reaudit_reset_at": "2026-07-30T18:55:06.687Z",
       "last_attempt_at": "2026-08-01T01:53:08.255Z",
-      "completed_at": "2026-08-01T01:53:37.622Z"
+      "completed_at": "2026-08-01T01:53:37.622Z",
+      "same_signature_count": 0
     },
     {
       "id": "7",
@@ -782,7 +798,8 @@
       "commit_sha": "7bbf08747e559f409af71f9e9f5e103b6a37e187",
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "7",
-      "mission_id": "PRODUCT-oil-security-divisions"
+      "mission_id": "PRODUCT-oil-security-divisions",
+      "same_signature_count": 0
     },
     {
       "id": "8",
@@ -799,7 +816,8 @@
       "commit_sha": "98fdc45ce712083cf2155b84cccfeceb21d257f2",
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "8",
-      "mission_id": "PRODUCT-oil-security-divisions"
+      "mission_id": "PRODUCT-oil-security-divisions",
+      "same_signature_count": 0
     },
     {
       "id": "9",
@@ -830,7 +848,8 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "9",
-      "mission_id": "PRODUCT-oil-security-divisions"
+      "mission_id": "PRODUCT-oil-security-divisions",
+      "same_signature_count": 0
     },
     {
       "id": "10",
@@ -861,7 +880,8 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "10",
-      "mission_id": "PRODUCT-oil-security-divisions"
+      "mission_id": "PRODUCT-oil-security-divisions",
+      "same_signature_count": 0
     },
     {
       "id": "11",
@@ -897,7 +917,8 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "11",
-      "mission_id": "PRODUCT-oil-security-divisions"
+      "mission_id": "PRODUCT-oil-security-divisions",
+      "same_signature_count": 0
     },
     {
       "id": "12",
@@ -913,7 +934,8 @@
       "commit_sha": "56018ac87ca9f378b8ecf1d74b1d2ad14ee6962a",
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "12",
-      "mission_id": "PRODUCT-oil-security-divisions"
+      "mission_id": "PRODUCT-oil-security-divisions",
+      "same_signature_count": 0
     },
     {
       "id": "docs-security-alpha-scope",
@@ -923,14 +945,14 @@
       "spec": "Create and solidify SECURITY_ALPHA_SCOPE as a JSON file for audit purposes.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "freeze",
         "AUDIT_QUEUE"
       ],
-      "last_attempt_at": "2026-08-01T01:53:55.621Z",
-      "last_error": "Target file is outside the Builder safe-scope policy",
-      "commit_sha": "1441db98655d8b17419e890a8ecdfb8f05068dba",
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -951,7 +973,9 @@
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "docs-security-alpha-scope",
       "mission_id": "PRODUCT-oil-security-divisions",
-      "reaudit_reset_at": "2026-07-30T18:55:06.687Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.687Z",
+      "same_signature_count": 1,
+      "failure_signature": "build|BLOCKED_TOOLING|Target file is outside the Builder safe-scope policy"
     },
     {
       "id": "docs-env-registry",
@@ -986,7 +1010,8 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "docs-env-registry",
-      "mission_id": "PRODUCT-oil-security-divisions"
+      "mission_id": "PRODUCT-oil-security-divisions",
+      "same_signature_count": 0
     },
     {
       "id": "build-sec-f04",
@@ -1021,7 +1046,8 @@
       "mission_id": "PRODUCT-oil-security-divisions",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:handleRotationMetadata; assertion_threw; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.687Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.687Z",
+      "same_signature_count": 0
     },
     {
       "id": "build-sec-f08",
@@ -1056,7 +1082,8 @@
       "mission_id": "PRODUCT-oil-security-divisions",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:performPreflightSecurityChecks; assertion_threw; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.687Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.687Z",
+      "same_signature_count": 0
     },
     {
       "id": "sec-f01",
@@ -1088,7 +1115,8 @@
       "mission_id": "PRODUCT-oil-security-divisions",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:securityReceiptSpine; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.687Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.687Z",
+      "same_signature_count": 0
     },
     {
       "id": "sec-f02",
@@ -1122,7 +1150,8 @@
       "mission_id": "PRODUCT-oil-security-divisions",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:scanSecretsPreCommit,scanSecretsPreflight; assertion_threw; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.687Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.687Z",
+      "same_signature_count": 0
     },
     {
       "id": "sec-f03",
@@ -1154,7 +1183,8 @@
       "mission_id": "PRODUCT-oil-security-divisions",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:generateEnvDiffReceipt; assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.687Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.687Z",
+      "same_signature_count": 0
     },
     {
       "id": "sec-f04",
@@ -1176,7 +1206,8 @@
       "mission_id": "PRODUCT-oil-security-divisions",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
-      "reaudit_reset_at": "2026-07-30T18:55:06.687Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.687Z",
+      "same_signature_count": 0
     },
     {
       "id": "sec-f05",
@@ -1207,7 +1238,8 @@
       "commit_sha": "77cb0ee01f65b9d30363dc6b036ce43ac816db8b",
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "sec-f05",
-      "mission_id": "PRODUCT-oil-security-divisions"
+      "mission_id": "PRODUCT-oil-security-divisions",
+      "same_signature_count": 0
     },
     {
       "id": "sec-f06",
@@ -1238,7 +1270,8 @@
       "commit_sha": "2f26a7e33c4658461792938b1cb3e316e4c51501",
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "sec-f06",
-      "mission_id": "PRODUCT-oil-security-divisions"
+      "mission_id": "PRODUCT-oil-security-divisions",
+      "same_signature_count": 0
     },
     {
       "id": "sec-f07",
@@ -1284,7 +1317,8 @@
       "shipped_at": "2026-07-16T05:24:09.096Z",
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "sec-f07",
-      "mission_id": "PRODUCT-oil-security-divisions"
+      "mission_id": "PRODUCT-oil-security-divisions",
+      "same_signature_count": 0
     },
     {
       "id": "sec-f08",
@@ -1300,7 +1334,8 @@
       "commit_sha": "cfc3b9ec8a2d70aa3d530fe38835f3d8864615fa",
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "sec-f08",
-      "mission_id": "PRODUCT-oil-security-divisions"
+      "mission_id": "PRODUCT-oil-security-divisions",
+      "same_signature_count": 0
     },
     {
       "id": "sec-f09",
@@ -1354,7 +1389,8 @@
       "shipped_at": "2026-07-16T05:46:05.769Z",
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "sec-f09",
-      "mission_id": "PRODUCT-oil-security-divisions"
+      "mission_id": "PRODUCT-oil-security-divisions",
+      "same_signature_count": 0
     },
     {
       "id": "sec-f12",
@@ -1387,7 +1423,8 @@
       "shipped_at": "2026-07-16T06:27:10.409Z",
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "sec-f12",
-      "mission_id": "PRODUCT-oil-security-divisions"
+      "mission_id": "PRODUCT-oil-security-divisions",
+      "same_signature_count": 0
     },
     {
       "id": "sec-f19",
@@ -1403,7 +1440,8 @@
       "commit_sha": "b6b7215d6a8553773c8cacfeb70bca4a3794773a",
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "sec-f19",
-      "mission_id": "PRODUCT-oil-security-divisions"
+      "mission_id": "PRODUCT-oil-security-divisions",
+      "same_signature_count": 0
     },
     {
       "id": "oil-security-divisions-1",
@@ -1439,7 +1477,8 @@
       "shipped_at": "2026-07-16T06:15:24.660Z",
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "oil-security-divisions-1",
-      "mission_id": "PRODUCT-oil-security-divisions"
+      "mission_id": "PRODUCT-oil-security-divisions",
+      "same_signature_count": 0
     },
     {
       "id": "oil-security-divisions-2",
@@ -1472,7 +1511,8 @@
       "commit_sha": "5a997251d28590728c2c7a07cab508af77f1ed87",
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "oil-security-divisions-2",
-      "mission_id": "PRODUCT-oil-security-divisions"
+      "mission_id": "PRODUCT-oil-security-divisions",
+      "same_signature_count": 0
     },
     {
       "id": "oil-security-divisions-3",
@@ -1507,7 +1547,8 @@
       "commit_sha": "115291890ed0015cd766baefbb010e78c5936bcd",
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "oil-security-divisions-3",
-      "mission_id": "PRODUCT-oil-security-divisions"
+      "mission_id": "PRODUCT-oil-security-divisions",
+      "same_signature_count": 0
     },
     {
       "id": "oil-security-divisions-4",
@@ -1538,7 +1579,8 @@
       "commit_sha": "014537e09f10fdb9a8a35158d9866704800b0300",
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "oil-security-divisions-4",
-      "mission_id": "PRODUCT-oil-security-divisions"
+      "mission_id": "PRODUCT-oil-security-divisions",
+      "same_signature_count": 0
     },
     {
       "id": "oil-security-divisions-5",
@@ -1569,7 +1611,8 @@
       "commit_sha": "00003d772d9da96b900d01131d70302e5a8485f1",
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "oil-security-divisions-5",
-      "mission_id": "PRODUCT-oil-security-divisions"
+      "mission_id": "PRODUCT-oil-security-divisions",
+      "same_signature_count": 0
     },
     {
       "id": "oil-security-divisions-6",
@@ -1604,7 +1647,8 @@
       "commit_sha": "68d43e4741b73b7366154b430d7b4f4ef79be397",
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "oil-security-divisions-6",
-      "mission_id": "PRODUCT-oil-security-divisions"
+      "mission_id": "PRODUCT-oil-security-divisions",
+      "same_signature_count": 0
     },
     {
       "id": "oil-security-divisions-7",
@@ -1638,7 +1682,8 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "oil-security-divisions-7",
-      "mission_id": "PRODUCT-oil-security-divisions"
+      "mission_id": "PRODUCT-oil-security-divisions",
+      "same_signature_count": 0
     },
     {
       "id": "oil-security-divisions-8",
@@ -1675,7 +1720,8 @@
       "shipped_at": "2026-07-17T19:47:13.103Z",
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "oil-security-divisions-8",
-      "mission_id": "PRODUCT-oil-security-divisions"
+      "mission_id": "PRODUCT-oil-security-divisions",
+      "same_signature_count": 0
     },
     {
       "id": "oil-security-divisions-9",
@@ -1710,7 +1756,8 @@
       "commit_sha": "3d49f741b8d10b6f513a2142c3121de2a0436c82",
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "oil-security-divisions-9",
-      "mission_id": "PRODUCT-oil-security-divisions"
+      "mission_id": "PRODUCT-oil-security-divisions",
+      "same_signature_count": 0
     },
     {
       "id": "oil-security-divisions-10",
@@ -1744,7 +1791,8 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "same_signature_count": 0
     },
     {
       "id": "oil-security-divisions-11",
@@ -1782,7 +1830,8 @@
       "shipped_at": "2026-07-17T19:54:28.983Z",
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "oil-security-divisions-11",
-      "mission_id": "PRODUCT-oil-security-divisions"
+      "mission_id": "PRODUCT-oil-security-divisions",
+      "same_signature_count": 0
     },
     {
       "id": "oil-security-divisions-12",
@@ -1818,7 +1867,8 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-18T00:13:50.730Z"
+      "shipped_at": "2026-07-18T00:13:50.730Z",
+      "same_signature_count": 0
     }
   ],
   "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",

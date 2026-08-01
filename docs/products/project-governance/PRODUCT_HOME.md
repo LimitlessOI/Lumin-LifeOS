@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/project-governance/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-03 |
+| **Last Updated** | 2026-08-02 — SAFE_WRITE_PATHS expanded to include `docs/projects/` so governed product BUILD_QUEUE steps can write project docs owned by product FILE_MANIFESTs. |
 
 ---
 _(formerly AMENDMENT_19_PROJECT_GOVERNANCE.md)_
@@ -237,6 +237,7 @@ Required runtime truths:
 
 ## Change Receipts
 
+| 2026-08-02 | **SAFE_WRITE_PATHS expanded to include `docs/projects/`.** `config/builder-safe-scope.js` now allows the supervised Builder to write product-specific project documentation under `docs/projects/` (e.g. `docs/projects/oil/security/AUDIT_QUEUE.json`) when it is the declared target of a governed BUILD_QUEUE step and owned by the product FILE_MANIFEST. | `bp-priority:once` for `oil-security-divisions` `docs-security-alpha-scope` was blocked with `Target file is outside the Builder safe-scope policy`; the product home explicitly lists `docs/projects/oil/security/AUDIT_QUEUE.json` as an owned artifact. | AM19 | `node --check config/builder-safe-scope.js`; `npm run builder:preflight` PASS. |
 | 2026-07-08 | **Efficiency triad on economics estimates.** `estimateSegments` now returns `estimatedTokens` from measured `build_economics.total_tokens` averages (alongside USD + minutes). Duration-truth gate surfaces the triad; cold-start still rejected for founder claims. | Adam: efficiency = time + tokens + money. | AM19 | `node --test tests/build-economics.test.js tests/duration-truth.test.js` PASS |
 | 2026-07-08 | **Duration-truth hard gate on economics surfaces.** `routes/builder-supervisor-routes.js` + `services/build-economics.js`: founder-facing `/economics/estimate` and queue `projected` ETAs now pass `enforceMeasuredEconomicsEstimate` — cold-start/seed minutes rejected (422 / stripped). New `GET /api/v1/builder/duration-truth` returns host clock + measured blueprint/install averages. Companion module `services/duration-truth.js` (BuilderOS SSOT). | Adam: time answers must be measured system facts, not AI guesses. | AM19 | `node --test tests/duration-truth.test.js` + `tests/build-economics.test.js` PASS |
 | 2026-07-05 | **`scripts/autonomy/builder-runlock.mjs`** (new) + **`scripts/autonomy/builder-supervisor.js`** — stability: single-run lock via an atomic exclusive-create lockfile (`.supervisor.lock`, gitignored). A second supervisor invocation exits cleanly instead of running concurrently (which would prune the other's worktrees / race on branch names); a lock older than `BUILDER_LOCK_TTL_MS` (def 30m) is reclaimed as stale. Released in `finally`. | Adam: BuilderOS at 100% + scalable — must be safe to invoke repeatedly (cron/API) without two runs colliding. | AM19 | `node --check` + `node --test tests/builder-runlock.test.js` (5) — 25 total PASS |

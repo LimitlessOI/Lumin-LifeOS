@@ -1,8 +1,7 @@
 /**
  * SYNOPSIS: config/builder-safe-scope.js
+ * @ssot docs/products/project-governance/PRODUCT_HOME.md
  */
-// config/builder-safe-scope.js
-/** @ssot docs/products/project-governance/PRODUCT_HOME.md */
 
 function normalizeTargetPath(targetFile) {
   if (!targetFile || typeof targetFile !== 'string') return null;
@@ -24,6 +23,7 @@ export const SAFE_WRITE_PATHS = Object.freeze([
   'prompts/',
   'public/overlay/',
   'scripts/',
+  'docs/projects/',
   'docs/projects/builderos-remediation/',
   'factory-v1/',
   'docs/architecture/factory-v1-blueprint-pack/',
