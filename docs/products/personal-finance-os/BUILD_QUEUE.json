@@ -1050,13 +1050,13 @@
     },
     {
       "id": "personal-finance-os-step8",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/emotionalIntelligence.js",
       "task": "Enable emotional signal correlation",
       "spec": "Update emotional intelligence service to correlate joy score with wearable data.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "correlateEmotionalSignals"
       ],
@@ -1076,14 +1076,16 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:09:06.104Z",
-      "commit_sha": "6813049cb0c3bac5d1e773cb71f5479aaa7ebcc6",
+      "commit_sha": "48ecef62a64ac101de2f1b7bb6ac18b19d484ee1",
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "personal-finance-os-step8",
       "mission_id": "PRODUCT-personal-finance-os",
       "same_signature_count": 0,
       "demoted": false,
       "last_error": "artifact_proof_failed: joy score; wearable data correlation",
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T12:54:09.341Z",
+      "completed_at": "2026-08-01T12:54:36.975Z"
     },
     {
       "id": "personal-finance-os-8",
@@ -1124,5 +1126,5 @@
   "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-personal-finance-os",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T12:53:36.830Z"
+  "updated_at": "2026-08-01T12:54:36.975Z"
 }
