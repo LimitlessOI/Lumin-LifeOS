@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T04:26:03.582Z",
+  "generated_at": "2026-08-01T04:33:19.481Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12670,
   "files": [
@@ -42122,9 +42122,9 @@
     {
       "path": "docs/products/oil-security-divisions/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — OIL Security Divisions",
-      "bytes": 19722,
-      "mtime": "2026-08-01T02:17:07.267Z",
-      "indexed_at": "2026-08-01T02:17:07.267Z"
+      "bytes": 20526,
+      "mtime": "2026-08-01T04:33:19.481Z",
+      "indexed_at": "2026-08-01T04:33:19.481Z"
     },
     {
       "path": "docs/products/OILSECURITYDIVISIONS.md",
@@ -94233,9 +94233,9 @@
     {
       "path": "services/securityReceiptService.js",
       "synopsis": "Extend the security receipt service to process new receipt types using either tables or JSONL as backend.",
-      "bytes": 1521,
-      "mtime": "2026-08-01T02:12:11.410Z",
-      "indexed_at": "2026-08-01T02:12:11.410Z",
+      "bytes": 2918,
+      "mtime": "2026-08-01T04:33:19.481Z",
+      "indexed_at": "2026-08-01T04:33:19.481Z",
       "ssot": [
         "docs/products/oil-security-divisions/PRODUCT_HOME.md"
       ]
@@ -96038,9 +96038,9 @@
     {
       "path": "services/usageLogger.js",
       "synopsis": "Logs token usage for AI council interactions, including provider and cost details.",
-      "bytes": 1739,
-      "mtime": "2026-08-01T04:06:38.822Z",
-      "indexed_at": "2026-08-01T04:06:38.822Z",
+      "bytes": 1835,
+      "mtime": "2026-08-01T04:33:19.481Z",
+      "indexed_at": "2026-08-01T04:33:19.481Z",
       "ssot": [
         "docs/products/ai-council/PRODUCT_HOME.md"
       ]

@@ -2,6 +2,10 @@
  * SYNOPSIS: Logs token usage for AI council interactions, including provider and cost details.
  * @ssot docs/products/ai-council/PRODUCT_HOME.md
  */
+export async function logUsageWithSavings(deps, payload) {
+  return logUsage(deps, payload);
+}
+
 export async function logUsage(deps, payload) {
   const { pool, logger } = deps;
   const {
