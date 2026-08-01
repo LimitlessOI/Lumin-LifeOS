@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T07:29:00.887Z",
+  "generated_at": "2026-08-01T07:32:58.122Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12677,
   "files": [
@@ -33104,9 +33104,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1721,
-      "mtime": "2026-08-01T07:25:52.991Z",
-      "indexed_at": "2026-08-01T07:29:00.887Z",
+      "bytes": 1743,
+      "mtime": "2026-08-01T07:31:18.391Z",
+      "indexed_at": "2026-08-01T07:32:58.122Z",
       "synopsis_index_only": true
     },
     {
@@ -41888,9 +41888,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 657015,
-      "mtime": "2026-08-01T07:28:52.439Z",
-      "indexed_at": "2026-08-01T07:29:00.887Z"
+      "bytes": 657934,
+      "mtime": "2026-08-01T07:32:49.467Z",
+      "indexed_at": "2026-08-01T07:32:58.122Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -91943,10 +91943,13 @@
     },
     {
       "path": "services/lifeos-sleep.js",
-      "synopsis": "Registers SleepTracking routes/handlers (services/lifeos-sleep.js).",
-      "bytes": 4454,
-      "mtime": "2026-07-17T19:19:29.721Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "synopsis": "LifeOS sleep tracking service — logs and reads from the sleep_logs table.",
+      "bytes": 5625,
+      "mtime": "2026-08-01T07:32:37.471Z",
+      "indexed_at": "2026-08-01T07:32:58.122Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/lifeos-system-agent.js",

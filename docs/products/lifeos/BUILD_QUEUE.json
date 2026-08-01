@@ -3719,7 +3719,7 @@
     },
     {
       "id": "lifeos-step12",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/lifeos-sleep.js",
       "task": "implement sleep tracking module",
       "spec": "Extend health-intelligence.js with functionality for bedtime, wake time, quality, dreams, and HRV correlation. Connect sleep data to daily scorecard.",
@@ -3752,10 +3752,16 @@
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-step12",
       "mission_id": "PRODUCT-lifeos",
-      "same_signature_count": 0,
+      "same_signature_count": 1,
       "demoted": false,
-      "last_error": "artifact_proof_failed: bedtime; wake time",
-      "heal_unblocked": true
+      "last_error": null,
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T07:30:53.577Z",
+      "blocker_class": null,
+      "failure_signature": "build|BLOCKED_TOOLING|Pre-commit syntax check failed — commit blocked",
+      "completed_at": "2026-08-01T07:32:43.636Z",
+      "heal_claimed": true,
+      "heal_reason": "artifact_proof_pass"
     },
     {
       "id": "lifeos-p1-failure-museum-ui",
@@ -6048,6 +6054,6 @@
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-lifeos",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T07:28:47.476Z",
-  "_sourcePath": "docs/products/lifeos/BUILD_QUEUE.json"
+  "updated_at": "2026-08-01T07:32:43.636Z",
+  "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/lifeos/BUILD_QUEUE.json"
 }
