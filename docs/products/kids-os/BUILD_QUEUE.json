@@ -260,7 +260,7 @@
     },
     {
       "id": "9",
-      "status": "pending",
+      "status": "skipped",
       "target_file": "public/overlay/pricing-validation.html",
       "task": "Validate pricing UI",
       "spec": "Create UI to validate and collect feedback on product pricing with target users.",
@@ -279,8 +279,9 @@
       "mission_id": "PRODUCT-kids-os",
       "same_signature_count": 0,
       "demoted": false,
-      "last_error": "no_proof_required_non_server_code",
-      "heal_unblocked": true
+      "last_error": null,
+      "heal_unblocked": true,
+      "blocker_class": null
     },
     {
       "id": "10",
