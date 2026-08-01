@@ -3,7 +3,7 @@
   "product_id": "limitlessos",
   "verify_script": "scripts/verify-go-vegas-scheduler.mjs",
   "notes": "Go Vegas revenue slice — outreach pipeline v1 already shipped as code; this queue closes the last mile to live revenue: scheduler tick (daily discover/invite/follow-up under caps), dry-run proof script, and SENTRY-facing status receipt. No founder UI in this slice.",
-  "updated_at": "2026-08-01T09:37:45.250Z",
+  "updated_at": "2026-08-01T09:40:40.803Z",
   "steps": [
     {
       "id": "gv-scheduler",
@@ -571,7 +571,7 @@
     },
     {
       "id": "step7",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/cityos-home-creation-routes.js",
       "task": "route for CityOS/Go Vegas homes",
       "spec": "Expose an endpoint for the creation of CityOS/Go Vegas product homes.",
@@ -579,7 +579,7 @@
         "step6"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "expected_exports": [
         "registerCityOSHomeCreationRoutes"
       ],
@@ -610,12 +610,13 @@
       "demoted": false,
       "last_error": "route module not auto-registered — add {\"path\":\"routes/cityos-home-creation-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
       "heal_unblocked": false,
-      "last_attempt_at": "2026-08-01T09:37:44.666Z",
+      "last_attempt_at": "2026-08-01T09:40:40.220Z",
       "blocker_class": "BLOCKED_TOOLING",
       "failure_signature": "functional_proof|BLOCKED_TOOLING|route module not auto-registered — add {\"path\":\"routes/cityos-home-creation-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually",
       "built_sha": null,
       "artifact_proven": true,
-      "grounding_status": "PASS"
+      "grounding_status": "PASS",
+      "completed_at": "2026-08-01T09:40:40.803Z"
     },
     {
       "id": "step8",
