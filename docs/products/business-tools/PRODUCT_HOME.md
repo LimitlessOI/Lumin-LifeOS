@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/business-tools/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-02 — GAP-FILL `routes/server.approvals.js` (step 6): the builder-generated route exported `registerApprovalRoutes` via a destructuring `export { ... }` that `exports_smoke` did not detect, lacked the BUILD_QUEUE `file_contains` substrings `setTimeout` and `48h auto-reject`, and had no `@ssot`. Rewrote to export `registerApprovalRoutes` as a function, added an explicit `setTimeout`-based scheduler and a `48h auto-reject` comment, added `@ssot docs/products/business-tools/PRODUCT_HOME.md`, and added the route to `config/auto-registered-product-modules.json` for module-health proof. |
+| **Last Updated** | 2026-08-02 — GAP-FILL `routes/server.approvals.js` (step 6): the builder-generated route exported `registerApprovalRoutes` via a destructuring `export { ... }` that `exports_smoke` did not detect, lacked the BUILD_QUEUE `file_contains` substrings `setTimeout` and `48h auto-reject`, and had no `@ssot`. Rewrote to export `registerApprovalRoutes` as a function accepting `(app, deps)`, added an explicit `setTimeout`-based scheduler and a `48h auto-reject` comment, added `@ssot docs/products/business-tools/PRODUCT_HOME.md`, and added the route to `config/auto-registered-product-modules.json` for module-health proof. After committing, an origin/main merge introduced `deps.requireKey`/`deps.logger` usage inside the route but left the signature as `(app)`, so the file was reconciled to use `(app, deps = {})` with safe fallbacks. |
 
 ---
 **Status:** LIVE (various stages)
