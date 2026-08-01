@@ -979,13 +979,13 @@
     },
     {
       "id": "business-tools-5",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/entitlementsFeatureGating.js",
       "task": "specify feature gating",
       "spec": "Define how project entitlements gate features per request.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "checkFeatureAccess"
       ],
@@ -1005,14 +1005,16 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:36:40.986Z",
-      "commit_sha": "de5e6791ab043f5ee6fb781c6fddb08d41c3c49b",
+      "commit_sha": "57fe3ea595c3183387e80462b450692de0a9103c",
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "business-tools-5",
       "mission_id": "PRODUCT-business-tools",
       "same_signature_count": 0,
       "demoted": false,
       "last_error": "artifact_proof_failed: project_entitlements; gate features",
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T12:20:27.515Z",
+      "completed_at": "2026-08-01T12:20:39.628Z"
     },
     {
       "id": "business-tools-6",
@@ -1269,5 +1271,5 @@
   "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-business-tools",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T12:19:55.220Z"
+  "updated_at": "2026-08-01T12:20:39.629Z"
 }
