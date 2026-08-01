@@ -208,7 +208,7 @@
       "spec": "Pipeline handles thumbnails and SEO repurposing with shared sources.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "setupThumbnailSEO"
       ],
@@ -225,8 +225,8 @@
           "assertion_id": "expected_exports:services/thumbnailPipeline.js"
         }
       ],
-      "last_attempt_at": null,
-      "last_error": null,
+      "last_attempt_at": "2026-08-01T05:02:21.247Z",
+      "last_error": "HTTP 502",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
@@ -239,7 +239,7 @@
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
-      "blocker_class": null,
+      "blocker_class": "BLOCKED_EXTERNAL",
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
@@ -1349,5 +1349,5 @@
   "corpus_sources": [
     "docs/products/creator-media-os/PRODUCT_HOME.md"
   ],
-  "updated_at": "2026-08-01T05:02:06.908Z"
+  "updated_at": "2026-08-01T05:03:09.823Z"
 }
