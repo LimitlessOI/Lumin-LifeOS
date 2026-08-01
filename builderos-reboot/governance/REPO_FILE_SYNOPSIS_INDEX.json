@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T05:22:29.569Z",
+  "generated_at": "2026-08-01T05:22:58.061Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12671,
   "files": [
@@ -91115,9 +91115,9 @@
     {
       "path": "services/leadScoringSegment.js",
       "synopsis": "Attaches a scoring rubric to a lead segment description.",
-      "bytes": 2237,
-      "mtime": "2026-08-01T05:22:29.569Z",
-      "indexed_at": "2026-08-01T05:22:29.569Z",
+      "bytes": 3866,
+      "mtime": "2026-08-01T05:22:58.061Z",
+      "indexed_at": "2026-08-01T05:22:58.061Z",
       "ssot": [
         "docs/products/boldtrail/PRODUCT_HOME.md"
       ]
