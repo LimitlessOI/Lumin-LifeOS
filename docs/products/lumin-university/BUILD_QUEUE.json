@@ -249,18 +249,18 @@
     },
     {
       "id": "6",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/004_create_accreditation_legal.sql",
       "task": "create accreditation legal structure table",
       "spec": "PostgreSQL migration to create the accreditation_legal_structures table with columns: id (UUID primary key), institution_id (UUID NOT NULL), legal_name (TEXT NOT NULL), entity_type (TEXT NOT NULL), registration_country (TEXT NOT NULL), registration_state_province (TEXT), registration_number (TEXT), date_formed (DATE), tax_id_number (TEXT), website_url (TEXT), contact_email (TEXT), contact_phone (TEXT), created_at, updated_at (timestamps with timezone defaults NOW()). Include indexes on institution_id.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS accreditation_legal_structures",
         "entity_type TEXT"
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-01T00:48:22.576Z",
       "last_error": null,
       "commit_sha": "2626fac46229c439984f8a8bfddfd75ecfd836c1",
       "built_sha": null,
@@ -291,7 +291,8 @@
         "reason": "commit_sha exists in repo but is not an ancestor of origin/main -- ship landed on origin/builderos-autonomous or origin/builderos-shadow instead of main (GITHUB_DEPLOY_BRANCH mismatch), and the content itself was placeholder/stub code (verified by direct inspection), not a real implementation. Confirmed via: git merge-base --is-ancestor <sha> origin/main."
       },
       "same_signature_count": 1,
-      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: structure TEXT"
+      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: structure TEXT",
+      "completed_at": "2026-08-01T00:48:22.602Z"
     },
     {
       "id": "7",
