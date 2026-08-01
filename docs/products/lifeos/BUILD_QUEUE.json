@@ -824,10 +824,10 @@
         "await planPerfectDay(req.body.user_id",
         "deps.requireKey"
       ],
-      "attempts": 0,
-      "last_attempt_at": null,
-      "last_error": "artifact_proof_failed: await planPerfectDay(req.body.user_id",
-      "blocker_class": null,
+      "attempts": 1,
+      "last_attempt_at": "2026-08-01T06:39:06.189Z",
+      "last_error": "Pre-commit governance blocked — anti-pattern, stub, or verifier failure",
+      "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "park_until": null,
       "revive_count": 0,
@@ -6009,6 +6009,6 @@
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-lifeos",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:30:35.552Z",
+  "updated_at": "2026-08-01T06:39:43.214Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/lifeos/BUILD_QUEUE.json"
 }
