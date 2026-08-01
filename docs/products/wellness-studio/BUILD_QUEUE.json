@@ -4,7 +4,7 @@
   "verify_script": null,
   "planned_at": "2026-07-12T03:40:00.000Z",
   "notes": "Module 4 Therapist Integration beachhead — Clinical Partnership. Consent-gated briefs; therapist account lists linked clients who granted therapist_share. LifeOS consent foundation is a dependency.",
-  "updated_at": "2026-08-01T10:16:30.960Z",
+  "updated_at": "2026-08-01T10:20:01.873Z",
   "steps": [
     {
       "id": "ws-therapist-schema",
@@ -28,7 +28,7 @@
       "status": "done",
       "target_file": "services/wellness-therapist.js",
       "task": "Therapist integration service: upsertTherapistProfile, linkClient, listLinkedClients, createSessionBrief, markBriefReviewed, shareBriefIfConsented.",
-      "spec": "ESM. Export createWellnessTherapistService({ pool, consentRegistry }). shareBriefIfConsented MUST call consentRegistry.hasConsent(clientUserId, 'therapist_share') and refuse without grant. Never return raw chat transcripts \u2014 only brief_json. Parameterised SQL only. No browser globals. @ssot docs/products/wellness-studio/PRODUCT_HOME.md",
+      "spec": "ESM. Export createWellnessTherapistService({ pool, consentRegistry }). shareBriefIfConsented MUST call consentRegistry.hasConsent(clientUserId, 'therapist_share') and refuse without grant. Never return raw chat transcripts — only brief_json. Parameterised SQL only. No browser globals. @ssot docs/products/wellness-studio/PRODUCT_HOME.md",
       "depends_on": [
         "ws-therapist-schema"
       ],
@@ -61,7 +61,7 @@
       ],
       "commit_sha": "870b5a88199b10bf3e2e828f4b31a14605f3ec19",
       "last_attempt_at": "2026-07-12T04:23:09.094Z",
-      "last_error": "route module not auto-registered \u2014 add {\"path\":\"routes/wellness-therapist-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
+      "last_error": "route module not auto-registered — add {\"path\":\"routes/wellness-therapist-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
       "revive_count": 1,
       "completed_at": "2026-07-12T04:23:10.430Z",
       "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
@@ -258,7 +258,7 @@
       "founder_gated": false,
       "attempts": 3,
       "last_attempt_at": "2026-07-13T03:51:29.925Z",
-      "last_error": "no_commit_sha (claimed pass without proof \u2014 treated as failure)",
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-13T23:36:22.238Z",
       "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
@@ -1101,7 +1101,7 @@
         }
       ],
       "last_attempt_at": "2026-08-01T04:55:14.115Z",
-      "last_error": "Zone 3 edit-patch failed \u2014 edit old_string not found in file \u2014 the model must copy it verbatim: \"/**\\n * SYNOPSIS: Exports extendTables \u2014 services/extended-tables.js.\\n */\\nexport \"",
+      "last_error": "Zone 3 edit-patch failed — edit old_string not found in file — the model must copy it verbatim: \"/**\\n * SYNOPSIS: Exports extendTables — services/extended-tables.js.\\n */\\nexport \"",
       "commit_sha": "08d51608754a35b8f6fa3b9ac7a09adb38e43f74",
       "built_sha": null,
       "proof": null,
@@ -1362,7 +1362,7 @@
     },
     {
       "id": "wellness-studio-4",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/therapist-integration-routes.js",
       "task": "addTherapistIntegrationRoutes",
       "spec": "Add HTTP routes for therapist integration using communication-profile.js and truth-delivery.js.",
@@ -1370,7 +1370,7 @@
         "wellness-studio-3"
       ],
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 3,
       "expected_exports": [
         "registerTherapistRoutes"
       ],
@@ -1392,9 +1392,9 @@
           "assertion_id": "expected_exports:routes/therapist-integration-routes.js"
         }
       ],
-      "last_attempt_at": "2026-08-01T10:16:19.756Z",
+      "last_attempt_at": "2026-08-01T10:20:01.314Z",
       "last_error": "artifact_proof_failed: missing_exports:registerTherapistRoutes; registerTherapistRoutes; POST /api/therapist/integration",
-      "commit_sha": "65347b73ba5cf4743d8f1b1c84a4da38ec3ac566",
+      "commit_sha": "e723c0699d2dfb38f2c1ff68670c100504109dd9",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -1417,7 +1417,8 @@
       "mission_id": "PRODUCT-wellness-studio",
       "same_signature_count": 2,
       "heal_unblocked": true,
-      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: missing_exports:registerTherapistRoutes; registerTherapistRoutes; POST /api/therapist/integration"
+      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: missing_exports:registerTherapistRoutes; registerTherapistRoutes; POST /api/therapist/integration",
+      "completed_at": "2026-08-01T10:20:01.873Z"
     },
     {
       "id": "wellness-studio-5",
@@ -1837,7 +1838,7 @@
       "blueprint_step_id": "wellness-studio-step11",
       "mission_id": "PRODUCT-wellness-studio",
       "last_attempt_at": "2026-08-01T03:19:18.289Z",
-      "last_error": "HTTP 404 \u2014 parked by conductor: AI providers exhausted; service codegen cannot complete until model quota/credentials return",
+      "last_error": "HTTP 404 — parked by conductor: AI providers exhausted; service codegen cannot complete until model quota/credentials return",
       "blocker_class": "BLOCKED_TOOLING",
       "failure_signature": "build|BLOCKED_TOOLING|HTTP 404",
       "park_until": "2099-12-31T23:59:59.000Z",
