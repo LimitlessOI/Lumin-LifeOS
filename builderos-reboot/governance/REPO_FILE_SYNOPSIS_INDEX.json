@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T14:11:19.905Z",
+  "generated_at": "2026-08-01T14:13:46.547Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12726,
   "files": [
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3843149,
-      "mtime": "2026-08-01T14:03:35.801Z",
-      "indexed_at": "2026-08-01T14:06:55.608Z"
+      "bytes": 3843134,
+      "mtime": "2026-08-01T14:13:31.861Z",
+      "indexed_at": "2026-08-01T14:13:46.547Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1785,
-      "mtime": "2026-08-01T14:09:53.621Z",
-      "indexed_at": "2026-08-01T14:11:19.905Z",
+      "bytes": 1732,
+      "mtime": "2026-08-01T14:02:01.665Z",
+      "indexed_at": "2026-08-01T14:07:12.378Z",
       "synopsis_index_only": true
     },
     {
@@ -42499,9 +42499,9 @@
     {
       "path": "docs/products/productized-sprint/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Productized Sprint",
-      "bytes": 14956,
-      "mtime": "2026-08-01T14:10:52.789Z",
-      "indexed_at": "2026-08-01T14:11:19.905Z"
+      "bytes": 15836,
+      "mtime": "2026-08-01T14:13:29.845Z",
+      "indexed_at": "2026-08-01T14:13:46.547Z"
     },
     {
       "path": "docs/products/PRODUCTIZEDSPRINT.md",
@@ -87671,11 +87671,10 @@
     {
       "path": "services/aiPreAnalysisService.js",
       "synopsis": "Provides AI pre-analysis prompt writing and execution services.",
-      "bytes": 3751,
-      "mtime": "2026-08-01T14:10:26.769Z",
-      "indexed_at": "2026-08-01T14:11:19.905Z",
+      "bytes": 4407,
+      "mtime": "2026-08-01T14:13:09.273Z",
+      "indexed_at": "2026-08-01T14:13:46.547Z",
       "ssot": [
-        "docs/products/productized-sprint/PRODUCT_HOME.md",
         "docs/products/productized-sprint/PRODUCT_HOME.md"
       ]
     },
