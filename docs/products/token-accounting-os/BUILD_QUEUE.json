@@ -289,13 +289,13 @@
     },
     {
       "id": "step1",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/builderOSTokenReceipt.js",
       "task": "implement builderOS token receipt service",
       "spec": "The service handles token receipt generation upon build completion. It shall interface with the database to store token information generated on a build complete event.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "generateTokenReceipt"
       ],
@@ -309,13 +309,13 @@
           "assertion_id": "expected_exports:services/builderOSTokenReceipt.js"
         }
       ],
-      "last_attempt_at": "2026-07-18T11:01:29.201Z",
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/services/.factory-import-check-1784372489154-1.mjs\";",
+      "last_attempt_at": null,
+      "last_error": null,
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 9,
-      "revived_at": "2026-07-18T11:00:55.467Z",
+      "revive_count": 10,
+      "revived_at": "2026-08-01T04:35:02.484Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
