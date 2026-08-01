@@ -2205,13 +2205,13 @@
     },
     {
       "id": "10",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/reviewModerationFlow.js",
       "task": "implement review moderation flow",
       "spec": "Detail the review and moderation flow ensuring effective handling of high-risk outputs.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 3,
       "expected_exports": [
         "processReviewModeration"
       ],
@@ -2227,7 +2227,7 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-16T04:16:14.874Z",
-      "commit_sha": "0eb29395141c9c87f07365c36543f76d2653cdf9",
+      "commit_sha": "b07694af9fb301906482d51a9dc1ad90a5a5c895",
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "10",
       "mission_id": "PRODUCT-faith-studio",
@@ -2236,7 +2236,7 @@
       "reaudit_reset_at": "2026-07-30T18:55:06.428Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-01T05:14:26.899Z",
+      "last_attempt_at": "2026-08-01T05:18:31.438Z",
       "last_attempt": null,
       "revive_count": 3,
       "revived_at": "2026-08-01T04:34:49.348Z",
@@ -2248,7 +2248,8 @@
       "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "completed_at": "2026-08-01T05:18:31.477Z"
     },
     {
       "id": "faith-studio-step-1",
@@ -2655,5 +2656,5 @@
   "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-faith-studio",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T05:14:54.200Z"
+  "updated_at": "2026-08-01T05:18:31.477Z"
 }
