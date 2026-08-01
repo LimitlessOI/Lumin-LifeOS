@@ -19,6 +19,53 @@ export function listPsychometricInstruments() {
   return PSYCHOMETRIC_INSTRUMENTS.slice();
 }
 
+/**
+ * SYNOPSIS: Analyzes text for cognitive distortions.
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
+ */
+export async function spotCognitiveDistortions(deps, payload) {
+  const { callCouncilMember, logger } = deps;
+  const { text, userId } = payload || {};
+
+  if (!text) {
+    logger.warn({ userId }, 'spotCognitiveDistortions called with empty text');
+    return { distortions: [], cognitive_distortion_mode: false };
+  }
+
+  try {
+    const prompt = `Analyze the following journal entry or message for common cognitive distortions (e.g., all-or-nothing thinking, overgeneralization, mental filter, disqualifying the positive, jumping to conclusions, magnification/minimization, emotional reasoning, "should" statements, labeling, personalization). Identify any distortions present and provide a brief explanation for each. If no distortions are found, state that clearly.
+    
+    Text: "${text}"
+    
+    Respond in a JSON array format, where each object has 'type' (the name of the distortion) and 'explanation' (why it's present in the text). If no distortions, return an empty array.`;
+
+    const response = await callCouncilMember('psychometrics', prompt, {
+      temperature: 0.3,
+      max_tokens: 500,
+    });
+
+    let distortions = [];
+    try {
+      distortions = JSON.parse(response);
+      if (!Array.isArray(distortions)) {
+        distortions = []; // Ensure it's an array even if parsing yields something else
+      }
+    } catch (parseError) {
+      logger.error({ parseError, response }, 'Failed to parse AI response for cognitive distortions');
+      // Fallback if AI doesn't return perfect JSON
+      distortions = [{ type: 'AI_PARSE_ERROR', explanation: 'Could not parse AI response.' }];
+    }
+
+    // Log the analysis result
+    logger.info({ userId, text_length: text.length, distortions_found: distortions.length, cognitive_distortion_mode: true }, 'Cognitive distortion analysis complete');
+
+    return { distortions, cognitive_distortion_mode: true };
+  } catch (error) {
+    logger.error({ error, userId }, 'Error in spotCognitiveDistortions');
+    throw new Error('Failed to analyze cognitive distortions');
+  }
+}
+
 export function createPsychometricBatteryService({ pool } = {}) {
   return {
     listInstruments: listPsychometricInstruments,

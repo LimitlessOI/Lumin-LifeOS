@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T07:05:20.240Z",
+  "generated_at": "2026-08-01T07:07:30.621Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12677,
   "files": [
@@ -91877,10 +91877,11 @@
     {
       "path": "services/lifeos-psychometric-battery.js",
       "synopsis": "Psychometric battery (Big Five + VIA strengths + values/interests/skills) for purpose priors.",
-      "bytes": 4043,
-      "mtime": "2026-07-24T18:36:41.702Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 6192,
+      "mtime": "2026-08-01T07:07:30.621Z",
+      "indexed_at": "2026-08-01T07:07:30.621Z",
       "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md",
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
     },
