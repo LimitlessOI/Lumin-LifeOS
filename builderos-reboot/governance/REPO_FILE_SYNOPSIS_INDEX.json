@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T00:19:51.373Z",
+  "generated_at": "2026-08-01T00:24:07.166Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12640,
   "files": [
@@ -38882,8 +38882,8 @@
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
       "bytes": 80844,
-      "mtime": "2026-08-01T00:19:51.373Z",
-      "indexed_at": "2026-08-01T00:19:51.373Z"
+      "mtime": "2026-08-01T00:24:07.166Z",
+      "indexed_at": "2026-08-01T00:24:07.166Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41094,9 +41094,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 362620,
-      "mtime": "2026-07-31T23:39:02.734Z",
-      "indexed_at": "2026-07-31T23:39:02.734Z"
+      "bytes": 364898,
+      "mtime": "2026-08-01T00:24:07.166Z",
+      "indexed_at": "2026-08-01T00:24:07.166Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -87376,9 +87376,9 @@
     {
       "path": "services/build-integration-context.js",
       "synopsis": "Real integration context for the autonomous /build call — live DB",
-      "bytes": 9348,
-      "mtime": "2026-07-07T21:41:40.939Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 10345,
+      "mtime": "2026-08-01T00:24:07.166Z",
+      "indexed_at": "2026-08-01T00:24:07.166Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -93019,9 +93019,9 @@
     {
       "path": "services/never-stop-product-factory.js",
       "synopsis": "Permanent product expansion lane — work exists even when BP_PRIORITY queue reads complete.",
-      "bytes": 81195,
-      "mtime": "2026-07-30T03:57:08.487Z",
-      "indexed_at": "2026-07-30T22:32:11.913Z",
+      "bytes": 81483,
+      "mtime": "2026-08-01T00:24:07.166Z",
+      "indexed_at": "2026-08-01T00:24:07.166Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -93454,9 +93454,9 @@
     {
       "path": "services/product-build-orchestrator.js",
       "synopsis": "General product-build orchestrator — turns a product's structured",
-      "bytes": 34956,
-      "mtime": "2026-07-31T18:36:31.304Z",
-      "indexed_at": "2026-07-31T18:36:31.304Z",
+      "bytes": 35109,
+      "mtime": "2026-08-01T00:24:07.166Z",
+      "indexed_at": "2026-08-01T00:24:07.166Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

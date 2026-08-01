@@ -154,12 +154,12 @@
       "status": "pending",
       "target_file": "services/credentialVerification.js",
       "task": "implement credential verification service",
-      "spec": "Service implements credential verification methods.",
+      "spec": "Implement a service that verifies credentials. The file must start with a JSDoc block containing `@ssot docs/products/lumin-university/PRODUCT_HOME.md`. Export a named function `verifyCredential` that accepts `deps` (with deps.pool) and a payload, queries the `credential_verification_results` table, and returns a verification result object. Do not import non-existent modules.",
       "depends_on": [
         "3"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "verifyCredential"
       ],
@@ -179,9 +179,9 @@
       "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "4",
       "mission_id": "PRODUCT-lumin-university",
-      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
-      "last_attempt_at": "2026-08-01T00:20:26.554Z",
-      "blocker_class": "BLOCKED_TOOLING",
+      "last_error": null,
+      "last_attempt_at": null,
+      "blocker_class": null,
       "claim_level": null,
       "park_until": null,
       "revive_count": 0,
@@ -192,7 +192,8 @@
         "claimed_shipped_at": "2026-07-15T19:21:13.877Z",
         "reason": "commit_sha exists in repo but is not an ancestor of origin/main -- ship landed on origin/builderos-autonomous or origin/builderos-shadow instead of main (GITHUB_DEPLOY_BRANCH mismatch), and the content itself was placeholder/stub code (verified by direct inspection), not a real implementation. Confirmed via: git merge-base --is-ancestor <sha> origin/main."
       },
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "failure_signature": null
     },
     {
       "id": "5",

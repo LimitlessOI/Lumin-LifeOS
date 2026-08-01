@@ -616,6 +616,9 @@ export async function runNextStep(queue, { buildFn, verifyFn, deployProofFn, mod
     last_error: step.last_error || null,
     attempt: step.attempts,
     max_output_tokens: step.max_output_tokens || null,
+    expected_exports: step.expected_exports || [],
+    file_contains: step.file_contains || [],
+    behavior_assertions: step.behavior_assertions || [],
   });
 
   const sha = build && (build.commit_sha || build.sha);

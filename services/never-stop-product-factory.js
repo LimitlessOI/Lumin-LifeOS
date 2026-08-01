@@ -1206,7 +1206,7 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
     log({ event: 'blocked_steps_revived', product_id: task.product_id, revived });
   }
 
-  const buildFn = async ({ target_file, task: stepTask, spec, last_error, max_output_tokens }) => {
+  const buildFn = async ({ target_file, task: stepTask, spec, last_error, max_output_tokens, expected_exports = [], file_contains = [] }) => {
     if (!baseUrl || !commandKey) return { ok: false, error: 'missing PUBLIC_BASE_URL / COMMAND_CENTER_KEY' };
     const stepTokenBudget = Number.isFinite(Number(max_output_tokens)) && Number(max_output_tokens) > 0
       ? Number(max_output_tokens)
@@ -1267,7 +1267,14 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
     // importing modules/exports/tables that do not exist (the false-done class).
     let integrationBlock = '';
     try {
-      const ctx = buildIntegrationContext({ root: ROOT, targetFile: target_file, productId: task.product_id, task: stepTask });
+      const ctx = buildIntegrationContext({
+        root: ROOT,
+        targetFile: target_file,
+        productId: task.product_id,
+        task: stepTask,
+        expectedExports: expected_exports,
+        fileContains: file_contains,
+      });
       integrationBlock = `\n\n${ctx.context}`;
     } catch (ctxErr) {
       logger?.warn?.({ target_file, error: ctxErr.message }, '[never-stop] integration-context build failed (continuing without it)');
@@ -1285,6 +1292,8 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
         spec,
         platform_gap_fill: true,
         platform_gap_fill_reason: `Autonomous product-build orchestrator executing queued BUILD_QUEUE.json step for product ${task.product_id} (${task.step_id}): ${stepTask}`.slice(0, 480),
+        ...(expected_exports.length ? { expected_exports } : {}),
+        ...(file_contains.length ? { file_contains } : {}),
         ...(stepTokenBudget ? { max_output_tokens: stepTokenBudget } : {}),
       });
       const b = build.body || {};

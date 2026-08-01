@@ -152,6 +152,8 @@ export function buildIntegrationContext({
   task = '',
   moduleStep = true,
   tableLimit = 12,
+  expectedExports = [],
+  fileContains = [],
 } = {}) {
   const migrationsDir = path.join(root, 'db', 'migrations');
   const schema = parseSchemaFromMigrations(migrationsDir);
@@ -191,6 +193,19 @@ export function buildIntegrationContext({
 
   lines.push('');
   lines.push('RULES: import only packages in the AVAILABLE list above and repo files you have confirmed exist; never import a sibling service export you have not confirmed exists. Prefer deps over new imports. Unreachable/broken code will fail the functional-proof gate.');
+
+  if (/\.(js|mjs|cjs)$/i.test(targetFile)) {
+    lines.push('');
+    lines.push('FILE RULES — violating any of these blocks commit (the pre-commit gate will reject the file):');
+    const ssotHome = productId ? `docs/products/${productId}/PRODUCT_HOME.md` : 'docs/products/<product>/PRODUCT_HOME.md';
+    lines.push(`- The FIRST comment in the file must be a JSDoc block containing \`@ssot ${ssotHome}\` (this is the canonical product home for ${productId || 'this product'}). No markdown fence, no plain comment, no "// services/..." line before it.`);
+    if (expectedExports.length) {
+      lines.push(`- You MUST export exactly these named exports: ${expectedExports.map((n) => `\`${n}\``).join(', ')}. Do not rename them.`);
+    }
+    if (fileContains.length) {
+      lines.push(`- The source code must contain these literal substrings (they will be checked after commit): ${fileContains.map((s) => JSON.stringify(s)).join(', ')}.`);
+    }
+  }
 
   return { context: lines.join('\n'), tables, packages, schemaTableCount: Object.keys(schema).length };
 }
