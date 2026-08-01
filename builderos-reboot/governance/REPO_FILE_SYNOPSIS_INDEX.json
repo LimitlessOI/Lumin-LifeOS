@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T00:31:35.157Z",
+  "generated_at": "2026-08-01T00:32:07.739Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12642,
   "files": [
@@ -69125,9 +69125,9 @@
     {
       "path": "routes/credentialVerificationRoutes.js",
       "synopsis": "Registers CredentialVerificationRoutes routes/handlers (routes/credentialVerificationRoutes.js).",
-      "bytes": 1254,
-      "mtime": "2026-08-01T00:29:01.924Z",
-      "indexed_at": "2026-08-01T00:29:01.924Z",
+      "bytes": 1696,
+      "mtime": "2026-08-01T00:32:07.739Z",
+      "indexed_at": "2026-08-01T00:32:07.739Z",
       "ssot": [
         "docs/products/lumin-university/PRODUCT_HOME.md"
       ]

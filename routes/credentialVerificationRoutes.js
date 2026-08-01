@@ -13,23 +13,36 @@ export function registerCredentialVerificationRoutes(app, deps) {
   const pool = deps.pool;
   const router = Router();
 
-  router.post('/verify-credential', requireKey, async (req, res, next) => {
+  router.post('/api/v1/credentials/verify', requireKey, async (req, res, next) => {
     try {
-      const { credentialId, provider, verificationStatus, verificationDetails } = req.body;
+      const { credentialId, provider } = req.body;
       const result = await pool.query(
         `
           INSERT INTO credential_verification_results (credential_id, provider, verification_status, verification_details, last_verified_at)
-          VALUES ($1, $2, $3, $4, NOW())
+          VALUES ($1, $2, 'pending', 'pending', NOW())
           RETURNING *
         `,
-        [credentialId, provider, verificationStatus, verificationDetails]
+        [credentialId, provider]
       );
-      res.json(result.rows[0]);
+
+      const verificationDetails = await callCouncilMember('credentialVerification', `Verify credential ${credentialId} from ${provider}`);
+      const updatedResult = await pool.query(
+        `
+          UPDATE credential_verification_results
+          SET verification_status = 'verified',
+              verification_details = $1,
+              last_verified_at = NOW()
+          WHERE id = $2
+        `,
+        [verificationDetails, result.rows[0].id]
+      );
+
+      res.json({ ...result.rows[0], ...updatedResult.rows[0] });
     } catch (error) {
       logger.error({ error }, 'Error verifying credential');
       next(error);
     }
   });
 
-  app.use('/credential-verification', router);
+  app.use('/api/v1/credentials/verify', router);
 }
