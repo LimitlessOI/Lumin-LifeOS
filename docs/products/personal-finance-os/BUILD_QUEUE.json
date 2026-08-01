@@ -280,13 +280,13 @@
     },
     {
       "id": "step2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/ipsReview.js",
       "task": "implement attorney review for IPS module",
       "spec": "Check IPS module for RIA trigger risk and implement review service.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "reviewIPSRisk"
       ],
@@ -305,14 +305,16 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T09:12:57.998Z",
-      "commit_sha": "f98351a45e5bb3384189f24c5b14dae53929a09d",
+      "commit_sha": "72c1f8a8826b87f8ec592ad4000f7f0619feb25e",
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step2",
       "mission_id": "PRODUCT-personal-finance-os",
       "same_signature_count": 0,
       "demoted": false,
       "last_error": "artifact_proof_failed: @ssot",
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T12:34:10.474Z",
+      "completed_at": "2026-08-01T12:34:30.997Z"
     },
     {
       "id": "step3",
@@ -1112,6 +1114,6 @@
   "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-personal-finance-os",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:30:46.897Z",
+  "updated_at": "2026-08-01T12:34:30.997Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/personal-finance-os/BUILD_QUEUE.json"
 }
