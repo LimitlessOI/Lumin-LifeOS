@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T04:56:15.410Z",
+  "generated_at": "2026-08-01T04:56:49.265Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12670,
   "files": [
@@ -93822,10 +93822,10 @@
     },
     {
       "path": "services/providerCooldownManager.js",
-      "synopsis": "Simulated in-memory database for cooldowns",
-      "bytes": 870,
-      "mtime": "2026-07-16T19:42:53.615Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis": "Manage provider cooldowns by persisting them to the database.",
+      "bytes": 3084,
+      "mtime": "2026-08-01T04:56:49.265Z",
+      "indexed_at": "2026-08-01T04:56:49.265Z",
       "ssot": [
         "docs/products/ai-council/PRODUCT_HOME.md"
       ]
