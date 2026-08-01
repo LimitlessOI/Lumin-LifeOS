@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T01:19:59.863Z",
+  "generated_at": "2026-08-01T01:21:50.595Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12649,
   "files": [
@@ -38895,9 +38895,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 82372,
-      "mtime": "2026-08-01T01:17:30.045Z",
-      "indexed_at": "2026-08-01T01:17:30.045Z"
+      "bytes": 82692,
+      "mtime": "2026-08-01T01:21:50.595Z",
+      "indexed_at": "2026-08-01T01:21:50.595Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41955,9 +41955,9 @@
     {
       "path": "docs/products/lumin-university/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Lumin University",
-      "bytes": 21726,
-      "mtime": "2026-08-01T01:17:30.045Z",
-      "indexed_at": "2026-08-01T01:17:30.045Z"
+      "bytes": 21684,
+      "mtime": "2026-08-01T01:21:50.595Z",
+      "indexed_at": "2026-08-01T01:21:50.595Z"
     },
     {
       "path": "docs/products/LUMINUNIVERSITY.md",
@@ -93094,9 +93094,9 @@
     {
       "path": "services/never-stop-product-factory.js",
       "synopsis": "Permanent product expansion lane — work exists even when BP_PRIORITY queue reads complete.",
-      "bytes": 82994,
-      "mtime": "2026-08-01T00:51:44.355Z",
-      "indexed_at": "2026-08-01T00:51:44.355Z",
+      "bytes": 82393,
+      "mtime": "2026-08-01T01:21:50.595Z",
+      "indexed_at": "2026-08-01T01:21:50.595Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -93530,8 +93530,8 @@
       "path": "services/product-build-orchestrator.js",
       "synopsis": "General product-build orchestrator — turns a product's structured",
       "bytes": 36381,
-      "mtime": "2026-08-01T01:17:30.045Z",
-      "indexed_at": "2026-08-01T01:17:30.045Z",
+      "mtime": "2026-08-01T01:21:50.595Z",
+      "indexed_at": "2026-08-01T01:21:50.595Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
