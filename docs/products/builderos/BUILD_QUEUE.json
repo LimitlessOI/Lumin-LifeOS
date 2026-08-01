@@ -84,7 +84,7 @@
     },
     {
       "id": "step-05",
-      "status": "done",
+      "status": "pending",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "Register mission-routes module for auto-mount",
       "spec": "Ensure entry {\"path\":\"routes/mission-routes.js\",\"register\":\"registerMissionRoutes\",\"enabled\":true} exists in modules[]. Preserve all existing entries. File must remain valid JSON.",
@@ -92,7 +92,7 @@
         "step-04"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "commit_sha": "94af63276bce",
       "last_attempt_at": "2026-07-10T19:12:10.614Z",
       "completed_at": "2026-07-10T19:12:15.000Z",
@@ -104,7 +104,10 @@
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step-05",
       "mission_id": "PRODUCT-builderos",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "last_error": "artifact_proof_failed: routes/mission-routes.js; registerMissionRoutes",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "step-06",
@@ -3347,5 +3350,5 @@
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-builderos",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T17:07:56.825Z"
+  "updated_at": "2026-08-01T18:54:45.326Z"
 }
