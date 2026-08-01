@@ -168,3 +168,15 @@ export function createAssessmentBatteryService({ pool }) {
     },
   };
 }
+
+export async function getAssessments(deps, userId) {
+  const { pool } = deps || {};
+  const svc = createAssessmentBatteryService({ pool });
+  return svc.getAllResults(userId);
+}
+
+export async function compareAssessments(deps, userIdA, userIdB) {
+  const { pool } = deps || {};
+  const svc = createAssessmentBatteryService({ pool });
+  return svc.comparePair(userIdA, userIdB);
+}

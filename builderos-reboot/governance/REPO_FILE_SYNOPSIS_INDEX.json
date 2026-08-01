@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T04:13:17.616Z",
+  "generated_at": "2026-08-01T04:15:31.235Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12670,
   "files": [
@@ -91210,9 +91210,9 @@
     {
       "path": "services/lifeos-assessment-battery.js",
       "synopsis": "Manages storage and retrieval of user assessment results including",
-      "bytes": 5336,
-      "mtime": "2026-07-24T18:36:41.703Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 5716,
+      "mtime": "2026-08-01T04:15:31.235Z",
+      "indexed_at": "2026-08-01T04:15:31.235Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
