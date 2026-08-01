@@ -1,35 +1,35 @@
 {
   "status": "idle",
   "last_task": {
-    "id": "product_build_productized-sprint_04",
+    "id": "product_build_productized-sprint_step1",
     "kind": "product_build_step",
     "priority": 2.5,
     "product": "productized-sprint",
     "product_id": "productized-sprint",
-    "step_id": "04",
-    "target_file": "services/aiPreAnalysisService.js",
-    "detail": "next buildable step: 04"
+    "step_id": "step1",
+    "target_file": "services/intakeFormService.js",
+    "detail": "next buildable step: step1"
   },
   "last_result": {
     "ok": false,
-    "task_id": "product_build_productized-sprint_04",
+    "task_id": "product_build_productized-sprint_step1",
     "detail": "product_build_step",
     "outcome": {
       "ok": false,
-      "step_id": "04",
-      "stage": "artifact_proof",
-      "reason": "artifact_proof_failed: runPreAnalysis",
+      "step_id": "step1",
+      "stage": "build",
+      "reason": "HTTP 502",
       "attempts": 1,
       "blocked": false,
-      "blocker_class": "BLOCKED_TOOLING",
+      "blocker_class": "BLOCKED_EXTERNAL",
       "claim_level": null,
       "parked": false,
       "summary": {
         "product_id": "productized-sprint",
         "total": 43,
-        "pending": 6,
+        "pending": 4,
         "building": 0,
-        "done": 30,
+        "done": 32,
         "blocked": 0,
         "founder_gated": 0,
         "design_review_flagged": 0,
@@ -39,9 +39,9 @@
       }
     },
     "claim": {
-      "id": "productized-sprint:04",
+      "id": "productized-sprint:step1",
       "kind": "execution",
-      "text": "product step 04 built + verified + served live",
+      "text": "product step step1 built + verified + served live",
       "grade": "GUESS",
       "proof": null,
       "original_grade": "KNOW",
@@ -53,9 +53,9 @@
     "summary": {
       "product_id": "productized-sprint",
       "total": 43,
-      "pending": 6,
+      "pending": 4,
       "building": 0,
-      "done": 30,
+      "done": 32,
       "blocked": 0,
       "founder_gated": 0,
       "design_review_flagged": 0,
@@ -65,5 +65,5 @@
     }
   },
   "cycles": 1,
-  "updated_at": "2026-08-01T13:56:03.306Z"
+  "updated_at": "2026-08-01T14:02:01.668Z"
 }

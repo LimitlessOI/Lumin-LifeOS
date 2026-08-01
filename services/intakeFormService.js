@@ -24,6 +24,7 @@ export async function registerIntakeFormService(deps, payload) {
 
 // The existing functions below are not directly used by the new service function
 // but are kept as per the "extend what is there" rule.
+// module.exports = { intakeFormHandler }
 export function intakeFormHandler(mode, data) {
   if (mode === 'typeform') {
     return handleTypeform(data);

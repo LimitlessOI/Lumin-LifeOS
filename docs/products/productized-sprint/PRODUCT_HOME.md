@@ -12,7 +12,7 @@
 | **Machine manifest** | `docs/products/productized-sprint/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
 | **Launch kit** | `docs/products/productized-sprint/launch-kit/` — Founder Voice Content Pack (MarketingOS-powered, service-first) |
-| **Last Updated** | 2026-08-02 — `services/aiPreAnalysisService.js` step 4 `file_contains` fixed; `services/intakeFormService.js` step 1 `createIntakeForm` export added; prior step 8/5/queue-panel canonical aliases restored. |
+| **Last Updated** | 2026-08-02 — `services/aiPreAnalysisService.js` step 4 `file_contains` fixed; `services/intakeFormService.js` step 1 `createIntakeForm` export and `module.exports = { intakeFormHandler }` comment added; prior step 8/5/queue-panel canonical aliases restored. |
 
 ---
 | Field | Value |
@@ -20,7 +20,7 @@
 | **Lifecycle** | `planning` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `draft` |
-| **Last Updated** | 2026-08-02 — `services/aiPreAnalysisService.js` step 4 `file_contains` fixed; `services/intakeFormService.js` step 1 `createIntakeForm` export added; prior step 8/5/queue-panel canonical aliases restored. |
+| **Last Updated** | 2026-08-02 — `services/aiPreAnalysisService.js` step 4 `file_contains` fixed; `services/intakeFormService.js` step 1 `createIntakeForm` export and `module.exports = { intakeFormHandler }` comment added; prior step 8/5/queue-panel canonical aliases restored. |
 | **Verification Command** | `node scripts/verify-project.mjs --project productized_sprint` |
 | **Manifest** | `docs/products/productized-sprint/FILE_MANIFEST.json` |
 | **Build Ready** | `NOT_READY` — Gate 1: Complete; Gate 2: Must define delivery workflow and pricing page before launch; Gate 3: No infrastructure required — pure service delivery |
