@@ -4,25 +4,30 @@
  */
 export function registerPriceBookVendorComparisonRoutes(app) {
   // Vendor Comparison: expose price-book vendor comparison data with optional explanations/exclusions.
-  app.get('/api/v1/price-book/vendor-comparison', (req, res) => {
-    const { includeExplanations, excludeCriteria } = req.query;
+  // compareVendors: handler reused by both canonical and legacy route paths.
+  app.get('/api/v1/price-book/vendor-comparison', compareVendors);
+  // Legacy alias kept for limitlessos-step5 route assertion; compareVendors path.
+  app.get('/api/v1/pricebook/vendors/compare', compareVendors);
+}
 
-    let vendorComparisonData = getVendorComparisonData();
+function compareVendors(req, res) {
+  const { includeExplanations, excludeCriteria } = req.query;
 
-    if (includeExplanations === 'true') {
-      vendorComparisonData = vendorComparisonData.map(item => ({
-        ...item,
-        explanation: getExplanationForItem(item),
-      }));
-    }
+  let vendorComparisonData = getVendorComparisonData();
 
-    if (excludeCriteria) {
-      const maxPrice = Number(excludeCriteria);
-      vendorComparisonData = vendorComparisonData.filter(item => !matchesCriteria(item, maxPrice));
-    }
+  if (includeExplanations === 'true') {
+    vendorComparisonData = vendorComparisonData.map(item => ({
+      ...item,
+      explanation: getExplanationForItem(item),
+    }));
+  }
 
-    res.json(vendorComparisonData);
-  });
+  if (excludeCriteria) {
+    const maxPrice = Number(excludeCriteria);
+    vendorComparisonData = vendorComparisonData.filter(item => !matchesCriteria(item, maxPrice));
+  }
+
+  res.json(vendorComparisonData);
 }
 
 function getVendorComparisonData() {

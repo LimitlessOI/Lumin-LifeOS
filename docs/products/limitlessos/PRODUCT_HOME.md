@@ -6,7 +6,7 @@
 **Parent platform:** Lumin / LifeOS ecosystem  
 **Constitutional law:** `docs/constitution/NORTH_STAR_SSOT.md`  
 **Machine manifest:** `docs/products/limitlessos/FILE_MANIFEST.json`  
-|**Last Updated:**| 2026-08-02 — GAP-FILL `services/price-book-vendor-comparison.js` and `routes/price-book-vendor-comparison-routes.js` for `limitlessos` step4/step5: added "expensive" comment anchor, corrected route to `/api/v1/price-book/vendor-comparison`, updated auto-register `mount_path`, added "Vendor Comparison" comment. |
+|| **Last Updated** | 2026-08-02 — GAP-FILL `routes/price-book-vendor-comparison-routes.js` for `limitlessos-step5` legacy route assertion: added `compareVendors` handler and `/api/v1/pricebook/vendors/compare` alias alongside canonical `/api/v1/price-book/vendor-comparison`. |
 
 | Field | Value |
 |-------|-------|

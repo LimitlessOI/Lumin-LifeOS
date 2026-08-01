@@ -706,13 +706,13 @@
     },
     {
       "id": "word-keeper-001",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/googleCalendarService.js",
       "task": "implement calendar integration",
       "spec": "Integrate Google Calendar using default settings, ensuring basic operations without OAuth authentication flow.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "integrateCalendar",
         "syncEvents"
@@ -736,7 +736,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:58:32.589Z",
-      "commit_sha": "3eb0ee9ab8c994004bfc264d86ef77edfd881cd5",
+      "commit_sha": "e6194e5627c1e28603068537247a2543fb1c4f92",
       "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "word-keeper-001",
       "mission_id": "PRODUCT-word-keeper",
@@ -744,8 +744,8 @@
       "demoted": false,
       "last_error": "artifact_proof_failed: connect to Google Calendar API",
       "heal_unblocked": true,
-      "last_attempt_at": "2026-08-01T14:49:10.379Z",
-      "completed_at": "2026-08-01T14:49:30.869Z"
+      "last_attempt_at": "2026-08-01T17:22:01.040Z",
+      "completed_at": "2026-08-01T17:22:01.456Z"
     },
     {
       "id": "word-keeper-002",
@@ -846,6 +846,6 @@
   "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-word-keeper",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T17:08:17.370Z",
+  "updated_at": "2026-08-01T17:22:01.457Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/word-keeper/BUILD_QUEUE.json"
 }

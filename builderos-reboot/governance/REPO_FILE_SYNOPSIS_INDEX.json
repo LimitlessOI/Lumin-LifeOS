@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T17:19:22.152Z",
+  "generated_at": "2026-08-01T17:24:12.455Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12740,
   "files": [
@@ -42143,9 +42143,9 @@
     {
       "path": "docs/products/limitlessos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LimitlessOS business stack",
-      "bytes": 18166,
-      "mtime": "2026-08-01T17:18:42.921Z",
-      "indexed_at": "2026-08-01T17:19:22.152Z"
+      "bytes": 18111,
+      "mtime": "2026-08-01T17:23:51.089Z",
+      "indexed_at": "2026-08-01T17:24:12.455Z"
     },
     {
       "path": "docs/products/lip/FILE_MANIFEST.json",
@@ -71094,9 +71094,9 @@
     {
       "path": "routes/price-book-vendor-comparison-routes.js",
       "synopsis": "Exposes an endpoint for comparing vendor offerings from the price book (Vendor Comparison).",
-      "bytes": 1290,
-      "mtime": "2026-08-01T17:17:39.477Z",
-      "indexed_at": "2026-08-01T17:19:22.152Z",
+      "bytes": 1523,
+      "mtime": "2026-08-01T17:23:10.377Z",
+      "indexed_at": "2026-08-01T17:24:12.455Z",
       "ssot": [
         "docs/products/limitlessos/PRODUCT_HOME.md"
       ]
