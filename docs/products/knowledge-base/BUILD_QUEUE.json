@@ -746,7 +746,7 @@
     },
     {
       "id": "knowledge-base-step1",
-      "status": "skipped",
+      "status": "done",
       "target_file": "routes/web-intelligence-routes.js",
       "task": "add unextracted endpoints",
       "spec": "Extract and register missing web scraper and marketing research endpoints from server.js.",
@@ -789,7 +789,8 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "knowledge-base-step1",
-      "mission_id": "PRODUCT-knowledge-base"
+      "mission_id": "PRODUCT-knowledge-base",
+      "completed_at": "2026-08-01T05:59:43.299Z"
     },
     {
       "id": "knowledge-base-step2",
@@ -940,5 +941,5 @@
   "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-knowledge-base",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T05:39:09.787Z"
+  "updated_at": "2026-08-01T05:59:43.311Z"
 }
