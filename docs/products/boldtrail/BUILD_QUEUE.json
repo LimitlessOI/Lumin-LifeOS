@@ -187,13 +187,13 @@
     },
     {
       "id": "boldtrail-step1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/leadScoringSegment.js",
       "task": "add scoring rubric support",
       "spec": "Implement a method to attach an explicit scoring rubric to each lead segment description.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 3,
       "expected_exports": [
         "applyScoringRubric"
       ],
@@ -212,7 +212,7 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-31T06:39:18.932Z",
-      "commit_sha": "d138545df4e16848c6bf4130cc4f0e92815fb76e",
+      "commit_sha": "92928daaf1fddea0b72189daee94c38634f4b0b3",
       "blueprint_id": "PRODUCT-BOLDTRAIL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "boldtrail-step1",
       "mission_id": "PRODUCT-boldtrail",
@@ -247,7 +247,7 @@
       },
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-01T05:22:47.668Z",
+      "last_attempt_at": "2026-08-01T05:27:46.143Z",
       "last_attempt": null,
       "revive_count": 7,
       "revived_at": "2026-08-01T04:34:45.136Z",
@@ -263,7 +263,8 @@
       "escalation_required": true,
       "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
       "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
-      "escalated_at": "2026-07-31T18:40:13.614Z"
+      "escalated_at": "2026-07-31T18:40:13.614Z",
+      "completed_at": "2026-08-01T05:27:46.183Z"
     },
     {
       "id": "boldtrail-step2",
@@ -308,5 +309,5 @@
   "blueprint_id": "PRODUCT-BOLDTRAIL-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-boldtrail",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T05:23:05.294Z"
+  "updated_at": "2026-08-01T05:27:46.183Z"
 }
