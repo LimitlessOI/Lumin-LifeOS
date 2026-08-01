@@ -3,14 +3,14 @@
   "product_id": "limitlessos",
   "verify_script": "scripts/verify-go-vegas-scheduler.mjs",
   "notes": "Go Vegas revenue slice — outreach pipeline v1 already shipped as code; this queue closes the last mile to live revenue: scheduler tick (daily discover/invite/follow-up under caps), dry-run proof script, and SENTRY-facing status receipt. No founder UI in this slice.",
-  "updated_at": "2026-08-01T09:20:57.295Z",
+  "updated_at": "2026-08-01T09:25:37.680Z",
   "steps": [
     {
       "id": "gv-scheduler",
       "status": "done",
       "target_file": "services/go-vegas-outreach-scheduler.js",
-      "task": "Add a useful-work-guarded Go Vegas outreach scheduler that runs discover\u2192enrich\u2192invite\u2192follow-up under daily caps without burning tokens when there is no work.",
-      "spec": "ESM module @ssot docs/products/limitlessos/PRODUCT_HOME.md. Export startGoVegasOutreachScheduler({ pool, notificationService, logger }) and getGoVegasOutreachSchedulerStatus(). Use createUsefulWorkGuard from services/useful-work-guard.js (and requireEnvVars/requireTableRows helpers if present). Prerequisites: pool present; skip hard if neither COMMAND_CENTER_KEY nor notification path can send (do not invent secrets). workCheck: COUNT go_vegas_prospects needing invite (status discovered/enriched with contact_email) OR follow-up eligible \u2014 if 0, still allow one discover tick when GO_VEGAS_ALLOW_DISCOVER_IDLE=1 else skip. execute: const outreach = createGoVegasOutreach({ pool, sendEmail, logger }); then in order outreach.discoverBusinesses({ count: 5 }), outreach.enrichProspects({ limit: 10 }), outreach.inviteBatch({ limit: 5 }), outreach.runFollowUpCron({}). Use EXACT method names inviteBatch + runFollowUpCron (not sendInvites). Honor getSendQuota / daily caps inside those methods. Interval from GO_VEGAS_SCHEDULER_MS default 21600000 (6h); boot delay 120000. Never log emails or secrets. Named exports only; no browser globals.",
+      "task": "Add a useful-work-guarded Go Vegas outreach scheduler that runs discover→enrich→invite→follow-up under daily caps without burning tokens when there is no work.",
+      "spec": "ESM module @ssot docs/products/limitlessos/PRODUCT_HOME.md. Export startGoVegasOutreachScheduler({ pool, notificationService, logger }) and getGoVegasOutreachSchedulerStatus(). Use createUsefulWorkGuard from services/useful-work-guard.js (and requireEnvVars/requireTableRows helpers if present). Prerequisites: pool present; skip hard if neither COMMAND_CENTER_KEY nor notification path can send (do not invent secrets). workCheck: COUNT go_vegas_prospects needing invite (status discovered/enriched with contact_email) OR follow-up eligible — if 0, still allow one discover tick when GO_VEGAS_ALLOW_DISCOVER_IDLE=1 else skip. execute: const outreach = createGoVegasOutreach({ pool, sendEmail, logger }); then in order outreach.discoverBusinesses({ count: 5 }), outreach.enrichProspects({ limit: 10 }), outreach.inviteBatch({ limit: 5 }), outreach.runFollowUpCron({}). Use EXACT method names inviteBatch + runFollowUpCron (not sendInvites). Honor getSendQuota / daily caps inside those methods. Interval from GO_VEGAS_SCHEDULER_MS default 21600000 (6h); boot delay 120000. Never log emails or secrets. Named exports only; no browser globals.",
       "depends_on": [],
       "founder_gated": false,
       "attempts": 1,
@@ -438,13 +438,13 @@
     },
     {
       "id": "step4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/price-book-vendor-comparison.js",
       "task": "develop vendor comparison logic",
       "spec": "Implement logic to compare vendors based on pricing and reviews, allowing inclusion or exclusion based on criteria.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "compareVendors"
       ],
@@ -463,9 +463,9 @@
           "assertion_id": "expected_exports:services/price-book-vendor-comparison.js"
         }
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-01T09:25:21.189Z",
       "last_error": "artifact_proof_failed: expensive",
-      "commit_sha": "0ee3e8f9214e35fa97c84f97fd88cd635edbc47f",
+      "commit_sha": "45ee938921dd00bd5e0ac78707644add34b54986",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -487,7 +487,8 @@
       "blueprint_step_id": "step4",
       "mission_id": "PRODUCT-limitlessos",
       "same_signature_count": 0,
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "completed_at": "2026-08-01T09:25:37.680Z"
     },
     {
       "id": "step5",
@@ -693,7 +694,7 @@
       "mission_id": "PRODUCT-limitlessos",
       "shipped_via": null,
       "pre_existing": null,
-      "last_error": "route module not auto-registered \u2014 add {\"path\":\"routes/limitlessos-ui-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
+      "last_error": "route module not auto-registered — add {\"path\":\"routes/limitlessos-ui-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
       "reaudit_reset_at": "2026-07-30T18:55:06.661Z",
       "built_sha": null,
       "proof": null,
