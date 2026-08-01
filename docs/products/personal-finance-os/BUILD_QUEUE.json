@@ -476,7 +476,7 @@
     },
     {
       "id": "8",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/emotionalIntelligence.js",
       "task": "integrate-joy-and-wearable-data",
       "spec": "Provide services for integrating emotional intelligence signals (joy_score_log, wearable_data), enabling correlation analyses.",
@@ -484,7 +484,7 @@
         "7"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "analyzeEmotionalSignals"
       ],
@@ -507,14 +507,16 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:04:25.929Z",
-      "commit_sha": "f9236de35a6b25eaaba81827a3dd9e25628a1236",
+      "commit_sha": "42a7d1232e70ff4648b13395394a961c6c55b95a",
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "8",
       "mission_id": "PRODUCT-personal-finance-os",
       "same_signature_count": 0,
       "demoted": false,
       "last_error": "artifact_proof_failed: joyScoreLog; wearableDataCorrelation",
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T12:35:03.413Z",
+      "completed_at": "2026-08-01T12:35:15.921Z"
     },
     {
       "id": "personal-finance-os-1",
@@ -1114,6 +1116,6 @@
   "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-personal-finance-os",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T12:34:30.997Z",
+  "updated_at": "2026-08-01T12:35:15.922Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/personal-finance-os/BUILD_QUEUE.json"
 }
