@@ -601,13 +601,13 @@
     },
     {
       "id": "memory-intelligence-1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/memory-auto-apply.sql",
       "task": "auto-apply tables and views on deploy",
       "spec": "Ensure that all tables and views are applied automatically during deployment.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 3,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS",
         "CREATE OR REPLACE VIEW"
@@ -620,9 +620,9 @@
       "mission_id": "PRODUCT-memory-intelligence",
       "same_signature_count": 0,
       "demoted": false,
-      "last_error": "grounding_failed: missing_sql_table: memory_system, pg_trigger",
+      "last_error": "Target file is outside the Builder safe-scope policy",
       "heal_unblocked": true,
-      "last_attempt_at": "2026-08-01T13:05:02.576Z",
+      "last_attempt_at": "2026-08-01T13:11:38.172Z",
       "blocker_class": "BLOCKED_TOOLING"
     },
     {
@@ -1318,6 +1318,6 @@
   "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-memory-intelligence",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T13:05:02.603Z",
+  "updated_at": "2026-08-01T13:11:40.210Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/memory-intelligence/BUILD_QUEUE.json"
 }
