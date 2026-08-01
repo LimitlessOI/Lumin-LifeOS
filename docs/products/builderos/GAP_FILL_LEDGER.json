@@ -311,6 +311,14 @@
       "added_real_lines": 23,
       "justification": "deterministic artifact-proof gap-fill on an existing builder-generated route; factory /build attempts failed with BLOCKED_TOOLING due to exhausted AI provider quota, and only the export style, route mount, and consent substring were adjusted. Updated creator-media-os product home SSOT.\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
       "commit_message_excerpt": "GAP-FILL: rewrite routes/likenessConsent.js for creator-media-os step 2. The builder-generated route exported registerLikenessConsentRoutes via a destructuring export { ... } that exports_smoke did no"
+    },
+    {
+      "at": "2026-08-01T11:11:30.139Z",
+      "file": "routes/likenessConsent.js",
+      "is_new_file": false,
+      "added_real_lines": 23,
+      "justification": "restoring an already-designed, already-\nreal implementation that existed in a real prior commit, plus an\nexport-name alias -- not new business logic authorship. Matches the\nestablished pattern for reverting confirmed regressions this session\n(routes/pageSummarization.js, services/therapist-integration.js,\nservices/decisionDebt.js).",
+      "commit_message_excerpt": "GAP-FILL: restore authenticated, DB-persisted likenessConsent.js lost in a parallel-commit race"
     }
   ]
 }
