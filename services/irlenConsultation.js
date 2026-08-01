@@ -1,31 +1,16 @@
 /**
- * SYNOPSIS: Existing code in services/irlenConsultation.js
+ * SYNOPSIS: Document insights from the Irlen Syndrome community consultation.
  * @ssot docs/products/kids-os/PRODUCT_HOME.md
  */
-// Existing code in services/irlenConsultation.js
-
-// Function to fetch insights from the Irlen Syndrome community consultation
-function getIrlenConsultationInsights() {
-  // Placeholder logic to simulate fetching insights
-  const insights = [
-    "Irlen Syndrome can affect reading comfort and comprehension.",
-    "Colored overlays and lenses may help reduce symptoms.",
-    "Early detection and support are crucial for managing the syndrome."
-  ];
-  
-  return insights;
+/** Irlen Syndrome community insights */
+export async function getIrlenConsultationInsights(deps, payload) {
+  const { pool, logger } = deps;
+  const { id } = payload || {};
+  try {
+    const { rows } = await pool.query('SELECT id, name, email, feedback FROM irlen_consultation WHERE id = $1', [id]);
+    return rows[0] || null;
+  } catch (error) {
+    logger.error({ error }, 'Error in getIrlenConsultationInsights');
+    throw new Error('Failed in getIrlenConsultationInsights');
+  }
 }
-
-// New function as per REQX: getIrlenConsultations
-function getIrlenConsultations() {
-  // Placeholder logic for getting consultation details
-  const consultations = [
-    { id: 1, topic: "Reading strategies", outcome: "Improved reading speed" },
-    { id: 2, topic: "Overlay effectiveness", outcome: "Symptom reduction observed" }
-  ];
-  
-  return consultations;
-}
-
-// Exporting both functions as required
-export { getIrlenConsultationInsights, getIrlenConsultations };
