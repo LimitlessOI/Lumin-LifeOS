@@ -1708,7 +1708,7 @@
     },
     {
       "id": "04",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/theologicalAdvisoryModel.js",
       "task": "design theological advisory model",
       "spec": "Develop an advisory model to account for theological and denominational concerns in content adaptation.",
@@ -1739,7 +1739,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T22:09:19.320Z",
-      "commit_sha": "6fabca418554b88f516676361f733d3884fc18d1"
+      "commit_sha": "6fabca418554b88f516676361f733d3884fc18d1",
+      "last_error": "artifact_proof_failed: Theological advisory model",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "05",
@@ -2572,7 +2575,7 @@
     },
     {
       "id": "faith-studio-4",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/safeOutputService.js",
       "task": "implement family/church/classroom-safe outputs",
       "spec": "Develop outputs that ensure content is safe for family/church/classroom environments.",
@@ -2602,7 +2605,10 @@
       "mission_id": "PRODUCT-faith-studio",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-18T01:14:39.335Z",
-      "commit_sha": "388d716a6fa116472179484e5eecda28527705b7"
+      "commit_sha": "388d716a6fa116472179484e5eecda28527705b7",
+      "last_error": "artifact_proof_failed: safeOutput",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "faith-studio-5",
@@ -2661,5 +2667,5 @@
   "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-faith-studio",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:21:50.801Z"
+  "updated_at": "2026-08-01T06:30:30.300Z"
 }
