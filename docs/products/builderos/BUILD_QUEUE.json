@@ -665,7 +665,7 @@
     },
     {
       "id": "builderos-step2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/commitment-seeder.js",
       "task": "seed commitments",
       "spec": "Seed 8 realistic commitments for MISSION-0001 with IDs 26–33: 4 for Adam, 3 for Sherry, 1 pending Sherry approval.",
@@ -697,14 +697,20 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:46:14.442Z",
-      "commit_sha": "2dbf6991617d80fccf613da4552e2c33143404f0",
+      "commit_sha": "4b770436ebb1937becd180bab4f2e40f6b1e1c36",
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-step2",
       "mission_id": "PRODUCT-builderos",
-      "same_signature_count": 0,
+      "same_signature_count": 1,
       "demoted": false,
-      "last_error": "artifact_proof_failed: 26, Adam; 27, Adam; 28, Adam; 29, Adam; 30, Sherry; 31, Sherry; 32, Sherry; 33, pending approval",
-      "heal_unblocked": true
+      "last_error": null,
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T08:11:43.639Z",
+      "blocker_class": null,
+      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: 26, Adam; 27, Adam; 28, Adam; 29, Adam; 30, Sherry; 31, Sherry; 32, Sherry; 33, pending approval",
+      "completed_at": "2026-08-01T08:12:22.503Z",
+      "heal_claimed": true,
+      "heal_reason": "artifact_proof_pass"
     },
     {
       "id": "builderos-step3",
@@ -3320,6 +3326,6 @@
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-builderos",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T08:08:44.160Z",
+  "updated_at": "2026-08-01T08:12:22.503Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/builderos/BUILD_QUEUE.json"
 }

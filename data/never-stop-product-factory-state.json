@@ -1,24 +1,24 @@
 {
   "status": "idle",
   "last_task": {
-    "id": "product_build_builderos_builderos-10",
+    "id": "product_build_builderos_builderos-step2",
     "kind": "product_build_step",
     "priority": 2.0001,
     "product": "builderos",
     "product_id": "builderos",
-    "step_id": "builderos-10",
-    "target_file": "routes/approval.js",
-    "detail": "next buildable step: builderos-10"
+    "step_id": "builderos-step2",
+    "target_file": "services/commitment-seeder.js",
+    "detail": "next buildable step: builderos-step2"
   },
   "last_result": {
     "ok": false,
-    "task_id": "product_build_builderos_builderos-10",
+    "task_id": "product_build_builderos_builderos-step2",
     "detail": "product_build_step",
     "outcome": {
       "ok": false,
-      "step_id": "builderos-10",
+      "step_id": "builderos-step2",
       "stage": "artifact_proof",
-      "reason": "artifact_proof_failed: missing_exports:registerApprovalRoutes; registerApprovalRoutes",
+      "reason": "artifact_proof_failed: 26, Adam; 27, Adam; 28, Adam; 29, Adam; 30, Sherry; 31, Sherry; 32, Sherry; 33, pending approval",
       "attempts": 1,
       "blocked": false,
       "blocker_class": "BLOCKED_TOOLING",
@@ -27,9 +27,9 @@
       "summary": {
         "product_id": "builderos",
         "total": 71,
-        "pending": 5,
+        "pending": 4,
         "building": 0,
-        "done": 58,
+        "done": 59,
         "blocked": 0,
         "founder_gated": 0,
         "design_review_flagged": 0,
@@ -39,9 +39,9 @@
       }
     },
     "claim": {
-      "id": "builderos:builderos-10",
+      "id": "builderos:builderos-step2",
       "kind": "execution",
-      "text": "product step builderos-10 built + verified + served live",
+      "text": "product step builderos-step2 built + verified + served live",
       "grade": "GUESS",
       "proof": null,
       "original_grade": "KNOW",
@@ -53,9 +53,9 @@
     "summary": {
       "product_id": "builderos",
       "total": 71,
-      "pending": 5,
+      "pending": 4,
       "building": 0,
-      "done": 58,
+      "done": 59,
       "blocked": 0,
       "founder_gated": 0,
       "design_review_flagged": 0,
@@ -65,5 +65,5 @@
     }
   },
   "cycles": 1,
-  "updated_at": "2026-08-01T08:08:11.565Z"
+  "updated_at": "2026-08-01T08:12:01.765Z"
 }

@@ -1,11 +1,11 @@
 {
   "schema": "deploy_truth_verify_v1",
-  "at": "2026-08-01T08:06:58.111Z",
+  "at": "2026-08-01T08:11:30.364Z",
   "command": "drift-audit",
   "production_base": "https://lumin-web-production-e3a9.up.railway.app",
   "deploy_branch": "main",
-  "commit_sha": "07c926461cf4c3d114c41dec7c1a80b16458bfc0",
-  "served_sha": "07c926461cf4c3d114c41dec7c1a80b16458bfc0",
+  "commit_sha": "4abb576b49d858a438351e01887f7bb3c167e9f4",
+  "served_sha": "4abb576b49d858a438351e01887f7bb3c167e9f4",
   "verdict": "PROVEN",
   "ok": true,
   "passed": [
@@ -21,10 +21,10 @@
   "skipped": [],
   "files": [],
   "deployment": {
-    "id": "df5fa41d-6ae7-428d-9a03-4cb9d086b208",
+    "id": "dd86880d-9037-44f0-908b-6a581a20ad5e",
     "status": "SUCCESS",
-    "created_at": "2026-08-01T08:04:56.316Z",
-    "commit_sha": "07c926461cf4c3d114c41dec7c1a80b16458bfc0",
+    "created_at": "2026-08-01T08:09:30.553Z",
+    "commit_sha": "4abb576b49d858a438351e01887f7bb3c167e9f4",
     "commit_message": "Merge remote queue status",
     "url": null
   },
@@ -46,15 +46,15 @@
     {
       "id": "git.fetch",
       "status": "pass",
-      "detail": "origin/main is 07c926461cf4"
+      "detail": "origin/main is 4abb576b49d8"
     },
     {
       "id": "local.divergence",
       "status": "pass",
       "detail": "local main is aligned with origin/main",
       "local_branch": "main",
-      "local_head": "07c926461cf4c3d114c41dec7c1a80b16458bfc0",
-      "remote_head": "07c926461cf4c3d114c41dec7c1a80b16458bfc0",
+      "local_head": "4abb576b49d858a438351e01887f7bb3c167e9f4",
+      "remote_head": "4abb576b49d858a438351e01887f7bb3c167e9f4",
       "ahead": 0,
       "behind": 0,
       "uncommitted": 0
@@ -81,19 +81,19 @@
     {
       "id": "runtime.version",
       "status": "pass",
-      "detail": "production serves 07c926461cf4, which contains origin/main (07c926461cf4)",
-      "served_sha": "07c926461cf4c3d114c41dec7c1a80b16458bfc0",
-      "remote_head": "07c926461cf4c3d114c41dec7c1a80b16458bfc0"
+      "detail": "production serves 4abb576b49d8, which contains origin/main (4abb576b49d8)",
+      "served_sha": "4abb576b49d858a438351e01887f7bb3c167e9f4",
+      "remote_head": "4abb576b49d858a438351e01887f7bb3c167e9f4"
     },
     {
       "id": "deployment.state",
       "status": "pass",
-      "detail": "latest deployment SUCCESS on 07c926461cf4, nothing in flight",
+      "detail": "latest deployment SUCCESS on 4abb576b49d8, nothing in flight",
       "deployment": {
-        "id": "df5fa41d-6ae7-428d-9a03-4cb9d086b208",
+        "id": "dd86880d-9037-44f0-908b-6a581a20ad5e",
         "status": "SUCCESS",
-        "created_at": "2026-08-01T08:04:56.316Z",
-        "commit_sha": "07c926461cf4c3d114c41dec7c1a80b16458bfc0",
+        "created_at": "2026-08-01T08:09:30.553Z",
+        "commit_sha": "4abb576b49d858a438351e01887f7bb3c167e9f4",
         "commit_message": "Merge remote queue status",
         "url": null
       }
@@ -102,9 +102,9 @@
   "produced_by": "cursor-agent",
   "verified_by": "git+railway-api+production-http-probe",
   "verification_kind": "deterministic+external",
-  "local_head": "07c926461cf4c3d114c41dec7c1a80b16458bfc0",
+  "local_head": "4abb576b49d858a438351e01887f7bb3c167e9f4",
   "local_branch": "main",
   "ahead": 0,
   "behind": 0,
-  "human_summary": "PROVEN — production serves 07c926461cf4, which contains origin/main; no runtime drift found."
+  "human_summary": "PROVEN — production serves 4abb576b49d8, which contains origin/main; no runtime drift found."
 }
