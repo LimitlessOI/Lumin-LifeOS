@@ -426,7 +426,7 @@
         "9"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerScriptRoutes"
       ],
@@ -449,14 +449,16 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:46:10.695Z",
-      "commit_sha": "d9438de6ee9a8bc75056de5e61d361ecd61d79c4",
+      "commit_sha": "41bf1b90e3d649ce5293cfabda3e2cc072cd2c13",
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "10",
       "mission_id": "PRODUCT-creator-media-os",
       "same_signature_count": 0,
       "demoted": false,
-      "last_error": "artifact_proof_failed: app.post",
-      "heal_unblocked": true
+      "last_error": "route module not auto-registered — add {\"path\":\"routes/scriptRoutes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T11:19:23.761Z",
+      "blocker_class": "BLOCKED_TOOLING"
     },
     {
       "id": "11",
@@ -1413,5 +1415,5 @@
   "corpus_sources": [
     "docs/products/creator-media-os/PRODUCT_HOME.md"
   ],
-  "updated_at": "2026-08-01T11:19:07.898Z"
+  "updated_at": "2026-08-01T11:22:25.614Z"
 }
