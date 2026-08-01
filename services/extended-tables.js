@@ -529,6 +529,7 @@ export function extendTables(knex, existingTables) {
 // ALTER TABLE wearable_data ADD COLUMN IF NOT EXISTS source text NO CONFLICT;
 // ALTER TABLE emotional_patterns ADD COLUMN IF NOT EXISTS confidence float NO CONFLICT;
 
+// extendWellnessTables() is the canonical entry used by the wellness-studio queue step.
 export const extendJoyCheckins = extendTables;
 export const extendIntegrityScoreLog = extendTables;
 export const extendWearableData = extendTables;

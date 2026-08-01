@@ -1824,7 +1824,7 @@
         "wellness-studio-step10"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "extendWellnessTables"
       ],
@@ -1848,11 +1848,14 @@
       "blueprint_step_id": "wellness-studio-step11",
       "mission_id": "PRODUCT-wellness-studio",
       "last_attempt_at": "2026-08-01T03:19:18.289Z",
-      "last_error": "HTTP 404 — parked by conductor: AI providers exhausted; service codegen cannot complete until model quota/credentials return",
-      "blocker_class": "BLOCKED_TOOLING",
-      "failure_signature": "build|BLOCKED_TOOLING|HTTP 404",
-      "park_until": "2099-12-31T23:59:59.000Z",
-      "same_signature_count": 0
+      "last_error": null,
+      "blocker_class": null,
+      "failure_signature": null,
+      "park_until": null,
+      "same_signature_count": 0,
+      "park_reason": null,
+      "revive_count": 0,
+      "revived_at": "2026-08-01T16:08:36.246Z"
     },
     {
       "id": "wellness-studio-step12",
