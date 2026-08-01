@@ -85,15 +85,15 @@
       "spec": "Persist provider cooldowns to the database to survive restarts.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "route": {
         "path": "/"
       },
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS free_tier_usage"
       ],
-      "last_attempt_at": "2026-07-15T07:26:25.419Z",
-      "last_error": "false_done_reaudit: artifact_proof_failed: assertion_threw",
+      "last_attempt_at": "2026-08-01T06:06:16.899Z",
+      "last_error": "SQL validation failed — JavaScript // comments are invalid in SQL migrations — use -- comments only",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
@@ -106,7 +106,7 @@
       "park_until": null,
       "no_op": true,
       "pre_existing": false,
-      "blocker_class": null,
+      "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": "manually_verified_duplicate_and_precondition_true",
@@ -1280,5 +1280,5 @@
   "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-ai-council",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T05:59:28.203Z"
+  "updated_at": "2026-08-01T06:06:30.442Z"
 }
