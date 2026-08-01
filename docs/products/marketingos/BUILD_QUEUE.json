@@ -1021,7 +1021,7 @@
     },
     {
       "id": "s9",
-      "status": "pending",
+      "status": "skipped",
       "target_file": "public/overlay/marketing-social-schedule.html",
       "task": "Develop a UI overlay for scheduling approved social posts to specific platforms and dates.",
       "spec": "HTML file with client-side JS to present options for platforms (Instagram, LinkedIn, X, Facebook) and a date/time picker, then submit the scheduling request to the existing `/api/v1/marketingos/social/schedule` route.",
@@ -1035,7 +1035,9 @@
         "fetch('/api/v1/marketingos/social/schedule'",
         "<div id=\"social-schedule-overlay\">"
       ],
-      "design_review_flagged": true
+      "design_review_flagged": true,
+      "last_error": null,
+      "blocker_class": null
     },
     {
       "id": "s10",
