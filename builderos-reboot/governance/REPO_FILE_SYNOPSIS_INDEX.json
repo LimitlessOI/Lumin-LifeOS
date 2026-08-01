@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T09:16:11.766Z",
+  "generated_at": "2026-08-01T09:17:18.994Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1746,
-      "mtime": "2026-08-01T09:13:53.748Z",
-      "indexed_at": "2026-08-01T09:16:11.766Z",
+      "bytes": 2106,
+      "mtime": "2026-08-01T09:07:24.876Z",
+      "indexed_at": "2026-08-01T09:08:37.658Z",
       "synopsis_index_only": true
     },
     {
@@ -34860,9 +34860,9 @@
     {
       "path": "db/migrations/20241030_create_additional_templates.sql",
       "synopsis": "Database migration — 20241030_create_additional_templates.sql.",
-      "bytes": 538,
-      "mtime": "2026-08-01T09:15:13.024Z",
-      "indexed_at": "2026-08-01T09:16:11.766Z"
+      "bytes": 765,
+      "mtime": "2026-08-01T09:13:46.760Z",
+      "indexed_at": "2026-08-01T09:13:46.760Z"
     },
     {
       "path": "db/migrations/20260313_core_schema.sql",
@@ -42599,9 +42599,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 216468,
-      "mtime": "2026-08-01T09:15:41.968Z",
-      "indexed_at": "2026-08-01T09:16:11.766Z"
+      "bytes": 215626,
+      "mtime": "2026-08-01T08:48:17.387Z",
+      "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
       "path": "docs/products/site-builder/SITE_TEMPLATE_CATALOG.md",
@@ -65772,9 +65772,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 3745,
-      "mtime": "2026-08-01T09:12:47.704Z",
-      "indexed_at": "2026-08-01T09:16:11.766Z",
+      "bytes": 3950,
+      "mtime": "2026-08-01T09:06:33.892Z",
+      "indexed_at": "2026-08-01T09:08:37.658Z",
       "synopsis_index_only": true
     },
     {
