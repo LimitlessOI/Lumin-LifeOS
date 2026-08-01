@@ -1,32 +1,103 @@
 /**
- * SYNOPSIS: HTTP route module — LeadScoring.
+ * SYNOPSIS: Exposes a route to apply and return the scored segment description.
  * @ssot docs/products/boldtrail/PRODUCT_HOME.md
  */
-import express from 'express';
+import { getScoringRubric } from '../services/leadScoring.js';
 
-const router = express.Router();
+// The applyScoringRubric function needs to be updated to use the actual rubric
+// and perform the scoring logic based on the provided segment data.
+// This function is moved here from the previous routes/leadScoring.js to be a
+// local helper function for the new route.
+function applyScoringRubric(rubric, segmentPayload) {
+  let score = rubric.rubric.initialScore;
+  const { scoringRules, thresholds } = rubric.rubric;
 
-function applyScoringRubric(segment) {
-  // This function applies the new scoring rubric to the given segment
-  // Dummy implementation, replace with actual logic
+  // Helper to safely get a value from segmentPayload, defaulting to 0 or empty string
+  const getSegmentValue = (attribute) => segmentPayload[attribute] !== undefined ? segmentPayload[attribute] : null;
+
+  for (const rule of scoringRules) {
+    const segmentValue = getSegmentValue(rule.attribute);
+
+    if (segmentValue === null) {
+      continue; // Skip if the attribute is not present in the payload
+    }
+
+    if (rule.values) {
+      // Rule based on exact value matching (e.g., companySize, industry)
+      if (rule.values[segmentValue] !== undefined) {
+        score += rule.values[segmentValue];
+      }
+    } else if (rule.keywords) {
+      // Rule based on keyword matching in a string (e.g., jobTitleKeywords)
+      if (typeof segmentValue === 'string') {
+        for (const keyword in rule.keywords) {
+          if (segmentValue.toLowerCase().includes(keyword.toLowerCase())) {
+            score += rule.keywords[keyword];
+            break; // Apply only the first matching keyword score
+          }
+        }
+      }
+    } else if (rule.thresholds) {
+      // Rule based on numerical thresholds (e.g., websiteVisits, formSubmissions, timeSinceLastActivityDays)
+      for (const threshold of rule.thresholds) {
+        if (rule.attribute === 'timeSinceLastActivityDays') {
+          // Special handling for scoreModifier
+          if ((threshold.max === undefined || segmentValue <= threshold.max) &&
+              (threshold.min === undefined || segmentValue >= threshold.min)) {
+            score += threshold.scoreModifier;
+            break;
+          }
+        } else {
+          // Standard score application for thresholds
+          if ((threshold.max === undefined || segmentValue <= threshold.max) &&
+              (threshold.min === undefined || segmentValue >= threshold.min)) {
+            score += threshold.score;
+            break;
+          }
+        }
+      }
+    } else if (rule.value !== undefined && rule.score !== undefined) {
+      // Rule based on a boolean value (e.g., demoRequest, contactedSales)
+      if (segmentValue === rule.value) {
+        score += rule.score;
+      }
+    }
+  }
+
+  let segmentClassification = 'unknown';
+  if (score >= thresholds.hotLead.minScore) {
+    segmentClassification = 'hotLead';
+  } else if (score >= thresholds.warmLead.minScore && score <= thresholds.warmLead.maxScore) {
+    segmentClassification = 'warmLead';
+  } else if (score >= thresholds.coldLead.minScore && score <= thresholds.coldLead.maxScore) {
+    segmentClassification = 'coldLead';
+  }
+
   return {
-    description: `Scored segment: ${segment}`,
-    score: Math.random() * 100
+    score,
+    classification: segmentClassification,
+    description: thresholds[segmentClassification]?.description || rubric.segmentDescription,
   };
 }
 
-function scoreSegment(req, res) {
-  const { segment } = req.body;
-  if (!segment) {
-    return res.status(400).send('Segment is required');
-  }
-  const scoredSegment = applyScoringRubric(segment);
-  res.json(scoredSegment);
-}
 
-function registerLeadScoringRoutes(app) {
-  router.post('/score-segment', scoreSegment);
-  app.use('/api', router);
-}
+export function registerLeadScoring(app, deps) {
+  app.post('/api/v1/leadscoring/segment', deps.requireKey, async (req, res, next) => {
+    try {
+      const payload = req.body;
+      if (!payload || Object.keys(payload).length === 0) {
+        return res.status(400).json({ message: 'Request body cannot be empty.' });
+      }
 
-export { registerLeadScoringRoutes };
+      // Fetch the latest scoring rubric
+      const scoringRubric = await getScoringRubric(deps);
+
+      // Apply the scoring rubric to the provided segment payload
+      const result = applyScoringRubric(scoringRubric, payload);
+      res.json(result);
+    } catch (error) {
+      deps.logger.error({ error }, 'Error in leadScoring route');
+      next(error);
+    }
+  });
+}
