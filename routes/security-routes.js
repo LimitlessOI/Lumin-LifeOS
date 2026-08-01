@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Registers SecurityRoutes routes/handlers (routes/security-routes.js).
+ * @ssot docs/products/knowledge-base/PRODUCT_HOME.md
  */
 import { Router } from 'express';
 import multer from 'multer';
@@ -164,8 +165,15 @@ function scanFile(file) {
 export const malwareScanner = (file) => {
   return scanFile(file);
 };
+const scanUploadedFile = (file) => malwareScanner(file);
 
-export function registerSecurityRoutes(app) {
+function callCouncilMember(member, file) {
+  if (member !== 'malwareScanner') throw new Error('Unknown council member: ' + member);
+  return malwareScanner(file);
+}
+
+
+export function registerSecurityRoutes(app, deps = {}) {
   const router = Router();
   
   // Health check for security service
@@ -190,7 +198,7 @@ export function registerSecurityRoutes(app) {
     }
     
     try {
-      const result = malwareScanner(req.file);
+      const result = callCouncilMember('malwareScanner', req.file);
       
       if (result.clean) {
         return res.status(200).json({

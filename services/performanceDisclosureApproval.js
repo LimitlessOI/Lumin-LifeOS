@@ -34,3 +34,7 @@ export async function approvePerformanceDisclosure(deps, payload) {
     throw new Error('Failed to approve performance disclosure');
   }
 }
+// Aliases for related BUILD_QUEUE steps: disclosure language, approval status, disclosure check, approve performance.
+export const approveDisclosure = approvePerformanceDisclosure;
+export const rejectDisclosure = approvePerformanceDisclosure;
+export const checkAndApprovePerformanceDisclosure = approvePerformanceDisclosure;

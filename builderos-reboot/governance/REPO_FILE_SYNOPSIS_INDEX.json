@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T05:32:37.769Z",
+  "generated_at": "2026-08-01T05:37:29.899Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12672,
   "files": [
@@ -30844,9 +30844,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 29750,
-      "mtime": "2026-08-01T05:32:37.769Z",
-      "indexed_at": "2026-08-01T05:32:37.769Z",
+      "bytes": 29982,
+      "mtime": "2026-08-01T05:37:29.899Z",
+      "indexed_at": "2026-08-01T05:37:29.899Z",
       "synopsis_index_only": true
     },
     {
@@ -41760,9 +41760,9 @@
     {
       "path": "docs/products/knowledge-base/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Knowledge Base",
-      "bytes": 8517,
-      "mtime": "2026-07-05T19:10:02.179Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 9329,
+      "mtime": "2026-08-01T05:37:29.899Z",
+      "indexed_at": "2026-08-01T05:37:29.899Z"
     },
     {
       "path": "docs/products/KNOWLEDGEBASE.md",
@@ -42166,9 +42166,9 @@
     {
       "path": "docs/products/personal-finance-os/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Personal Finance OS",
-      "bytes": 12979,
-      "mtime": "2026-06-29T17:35:43.037Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 13479,
+      "mtime": "2026-08-01T05:37:29.899Z",
+      "indexed_at": "2026-08-01T05:37:29.899Z"
     },
     {
       "path": "docs/products/PERSONALFINANCEOS.md",
@@ -70886,9 +70886,12 @@
     {
       "path": "routes/security-routes.js",
       "synopsis": "Registers SecurityRoutes routes/handlers (routes/security-routes.js).",
-      "bytes": 8255,
-      "mtime": "2026-07-31T07:35:22.911Z",
-      "indexed_at": "2026-07-31T07:35:22.911Z"
+      "bytes": 8565,
+      "mtime": "2026-08-01T05:37:29.899Z",
+      "indexed_at": "2026-08-01T05:37:29.899Z",
+      "ssot": [
+        "docs/products/knowledge-base/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/self-repair-executor-routes.js",
@@ -93611,9 +93614,9 @@
     {
       "path": "services/performanceDisclosureApproval.js",
       "synopsis": "Approves past performance disclosure language based on content.",
-      "bytes": 1625,
-      "mtime": "2026-08-01T05:28:28.237Z",
-      "indexed_at": "2026-08-01T05:28:28.237Z",
+      "bytes": 1952,
+      "mtime": "2026-08-01T05:37:29.899Z",
+      "indexed_at": "2026-08-01T05:37:29.899Z",
       "ssot": [
         "docs/products/personal-finance-os/PRODUCT_HOME.md"
       ]

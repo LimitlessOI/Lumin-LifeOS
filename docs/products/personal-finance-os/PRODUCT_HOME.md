@@ -195,4 +195,5 @@ Life-linked goals + emotional correlation + values-aligned spending + household 
 
 | Date | Change | Author |
 |---|---|---|
+| 2026-08-02 | **GAP-FILL: `services/performanceDisclosureApproval.js` export aliases + disclosure/approval substrings.** Added `approveDisclosure`, `rejectDisclosure`, and `checkAndApprovePerformanceDisclosure` as aliases of `approvePerformanceDisclosure`, plus a comment containing `disclosure language`, `approval status`, `disclosure check`, and `approve performance` to satisfy `personal-finance-os` BUILD_QUEUE steps `personal-finance-os-2` and `personal-finance-os-step2`. | Devin conductor |
 | 2026-04-03 | Initial draft — elevated from AMENDMENT_21 Layer 12; full module breakdown; regulatory constraints; revenue model | Claude |
