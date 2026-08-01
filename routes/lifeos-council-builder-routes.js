@@ -1687,7 +1687,7 @@ export function createLifeOSCouncilBuilderRoutes({
           if (Array.isArray(result.findings) && result.findings.length) {
             log.warn(
               { findings: result.findings, clean: result.clean },
-              '[AI-SECURITY-REVIEW] model findings on commit diff (non-blocking)',
+              '[AI-SECURITY-REVIEW] security_review finding(s) on commit diff (non-blocking)',
             );
           } else {
             log.info('[AI-SECURITY-REVIEW] clean or no findings');

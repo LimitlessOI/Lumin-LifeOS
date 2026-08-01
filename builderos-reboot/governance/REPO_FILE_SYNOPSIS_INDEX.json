@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T09:04:41.387Z",
+  "generated_at": "2026-08-01T09:08:37.658Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1991,
-      "mtime": "2026-08-01T08:58:06.520Z",
-      "indexed_at": "2026-08-01T09:02:31.345Z",
+      "bytes": 2106,
+      "mtime": "2026-08-01T09:07:24.876Z",
+      "indexed_at": "2026-08-01T09:08:37.658Z",
       "synopsis_index_only": true
     },
     {
@@ -41179,9 +41179,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 382511,
-      "mtime": "2026-08-01T09:02:10.716Z",
-      "indexed_at": "2026-08-01T09:02:31.345Z"
+      "bytes": 383544,
+      "mtime": "2026-08-01T09:08:24.700Z",
+      "indexed_at": "2026-08-01T09:08:37.658Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -65772,9 +65772,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 3892,
-      "mtime": "2026-08-01T08:53:35.992Z",
-      "indexed_at": "2026-08-01T09:02:31.345Z",
+      "bytes": 3950,
+      "mtime": "2026-08-01T09:06:33.892Z",
+      "indexed_at": "2026-08-01T09:08:37.658Z",
       "synopsis_index_only": true
     },
     {
@@ -70162,9 +70162,9 @@
     {
       "path": "routes/lifeos-council-builder-routes.js",
       "synopsis": "routes/lifeos-council-builder-routes.js",
-      "bytes": 179329,
-      "mtime": "2026-08-01T09:01:17.420Z",
-      "indexed_at": "2026-08-01T09:02:31.345Z",
+      "bytes": 179341,
+      "mtime": "2026-08-01T09:08:09.888Z",
+      "indexed_at": "2026-08-01T09:08:37.658Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

@@ -1,11 +1,11 @@
 {
   "schema": "deploy_truth_verify_v1",
-  "at": "2026-08-01T08:53:35.996Z",
+  "at": "2026-08-01T09:06:33.895Z",
   "command": "drift-audit",
   "production_base": "https://lumin-web-production-e3a9.up.railway.app",
   "deploy_branch": "main",
-  "commit_sha": "c5e980aca51488819db1fba0b2317bc5a0be2f5e",
-  "served_sha": "c5e980aca51488819db1fba0b2317bc5a0be2f5e",
+  "commit_sha": "5b915954060575a5c080723f51c338ad0009eafb",
+  "served_sha": "5b915954060575a5c080723f51c338ad0009eafb",
   "verdict": "PROVEN",
   "ok": true,
   "passed": [
@@ -21,11 +21,11 @@
   "skipped": [],
   "files": [],
   "deployment": {
-    "id": "c3caff95-40fd-4b57-a6ba-2b1862ac0323",
+    "id": "8aa0ffa8-1d11-4520-8eb5-01f28423588d",
     "status": "SUCCESS",
-    "created_at": "2026-08-01T08:51:53.580Z",
-    "commit_sha": "c5e980aca51488819db1fba0b2317bc5a0be2f5e",
-    "commit_message": "[creative-director] add continuity log entry for Creative Director lens + 43 product briefs\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
+    "created_at": "2026-08-01T09:04:50.279Z",
+    "commit_sha": "5b915954060575a5c080723f51c338ad0009eafb",
+    "commit_message": "Merge remote queue-status commits; reset bo-wire-security-review-into-commit-path attempts after platform edit-patch fix\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
     "url": null
   },
   "runtime_identity": {
@@ -46,15 +46,15 @@
     {
       "id": "git.fetch",
       "status": "pass",
-      "detail": "origin/main is c5e980aca514"
+      "detail": "origin/main is 5b9159540605"
     },
     {
       "id": "local.divergence",
       "status": "pass",
       "detail": "local main is aligned with origin/main",
       "local_branch": "main",
-      "local_head": "c5e980aca51488819db1fba0b2317bc5a0be2f5e",
-      "remote_head": "c5e980aca51488819db1fba0b2317bc5a0be2f5e",
+      "local_head": "5b915954060575a5c080723f51c338ad0009eafb",
+      "remote_head": "5b915954060575a5c080723f51c338ad0009eafb",
       "ahead": 0,
       "behind": 0,
       "uncommitted": 5
@@ -81,20 +81,20 @@
     {
       "id": "runtime.version",
       "status": "pass",
-      "detail": "production serves c5e980aca514, which contains origin/main (c5e980aca514)",
-      "served_sha": "c5e980aca51488819db1fba0b2317bc5a0be2f5e",
-      "remote_head": "c5e980aca51488819db1fba0b2317bc5a0be2f5e"
+      "detail": "production serves 5b9159540605, which contains origin/main (5b9159540605)",
+      "served_sha": "5b915954060575a5c080723f51c338ad0009eafb",
+      "remote_head": "5b915954060575a5c080723f51c338ad0009eafb"
     },
     {
       "id": "deployment.state",
       "status": "pass",
-      "detail": "latest deployment SUCCESS on c5e980aca514, nothing in flight",
+      "detail": "latest deployment SUCCESS on 5b9159540605, nothing in flight",
       "deployment": {
-        "id": "c3caff95-40fd-4b57-a6ba-2b1862ac0323",
+        "id": "8aa0ffa8-1d11-4520-8eb5-01f28423588d",
         "status": "SUCCESS",
-        "created_at": "2026-08-01T08:51:53.580Z",
-        "commit_sha": "c5e980aca51488819db1fba0b2317bc5a0be2f5e",
-        "commit_message": "[creative-director] add continuity log entry for Creative Director lens + 43 product briefs\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
+        "created_at": "2026-08-01T09:04:50.279Z",
+        "commit_sha": "5b915954060575a5c080723f51c338ad0009eafb",
+        "commit_message": "Merge remote queue-status commits; reset bo-wire-security-review-into-commit-path attempts after platform edit-patch fix\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
         "url": null
       }
     }
@@ -102,9 +102,9 @@
   "produced_by": "cursor-agent",
   "verified_by": "git+railway-api+production-http-probe",
   "verification_kind": "deterministic+external",
-  "local_head": "c5e980aca51488819db1fba0b2317bc5a0be2f5e",
+  "local_head": "5b915954060575a5c080723f51c338ad0009eafb",
   "local_branch": "main",
   "ahead": 0,
   "behind": 0,
-  "human_summary": "PROVEN — production serves c5e980aca514, which contains origin/main; no runtime drift found."
+  "human_summary": "PROVEN — production serves 5b9159540605, which contains origin/main; no runtime drift found."
 }

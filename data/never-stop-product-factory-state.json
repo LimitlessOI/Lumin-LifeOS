@@ -18,8 +18,8 @@
       "ok": false,
       "step_id": "bo-wire-security-review-into-commit-path",
       "stage": "build",
-      "reason": "Pre-commit governance blocked — anti-pattern, stub, or verifier failure",
-      "attempts": 2,
+      "reason": "Zone 3 edit-patch failed — edit old_string not found in file — the model must copy it verbatim: \"    // exists.\\n    function runAiSecurityReviewOnDiff(entries) {\\n      if (typeo\"",
+      "attempts": 1,
       "blocked": false,
       "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
@@ -65,5 +65,5 @@
     }
   },
   "cycles": 1,
-  "updated_at": "2026-08-01T08:58:06.525Z"
+  "updated_at": "2026-08-01T09:07:24.878Z"
 }
