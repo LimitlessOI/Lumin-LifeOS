@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T02:43:21.091Z",
+  "generated_at": "2026-08-01T02:44:58.800Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12660,
   "files": [
@@ -30844,9 +30844,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 27643,
-      "mtime": "2026-08-01T02:38:36.403Z",
-      "indexed_at": "2026-08-01T02:38:36.403Z",
+      "bytes": 28927,
+      "mtime": "2026-08-01T02:44:10.553Z",
+      "indexed_at": "2026-08-01T02:44:58.800Z",
       "synopsis_index_only": true
     },
     {
@@ -41115,9 +41115,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 369602,
-      "mtime": "2026-08-01T01:51:14.197Z",
-      "indexed_at": "2026-08-01T01:51:14.197Z"
+      "bytes": 370908,
+      "mtime": "2026-08-01T02:44:42.088Z",
+      "indexed_at": "2026-08-01T02:44:58.800Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -70597,10 +70597,10 @@
     },
     {
       "path": "routes/pageSummarization.js",
-      "synopsis": "Function to summarize page content",
-      "bytes": 1154,
-      "mtime": "2026-08-01T02:38:36.403Z",
-      "indexed_at": "2026-08-01T02:38:36.403Z",
+      "synopsis": "Provides a summary of page content using AI.",
+      "bytes": 772,
+      "mtime": "2026-08-01T02:43:49.310Z",
+      "indexed_at": "2026-08-01T02:44:58.800Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]

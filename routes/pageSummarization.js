@@ -1,39 +1,23 @@
 /**
+ * SYNOPSIS: Provides a summary of page content using AI.
  * @ssot docs/products/universal-overlay/PRODUCT_HOME.md
  */
-/**
- * SYNOPSIS: Function to summarize page content
- */
-import express from 'express';
+export function registerPageSummarizationRoutes(app, deps) {
+  app.post('/api/v1/lifeos/page-summarization', deps.requireKey, async (req, res, next) => {
+    try {
+      const { pageContent } = req.body;
 
-const router = express.Router();
+      if (!pageContent) {
+        return res.status(400).json({ error: 'Missing pageContent in request body.' });
+      }
 
-// Function to summarize page content
-async function summarizePageContent(pageContent) {
-  // Placeholder for AI-assisted page summarization logic
-  // Replace this with actual API call or logic to summarize the content
-  const summary = `Summary of the page content: ${pageContent.slice(0, 100)}...`;
-  return summary;
-}
+      const prompt = `Summarize the following page content concisely:\n\n${pageContent}`;
+      const summary = await deps.callCouncilMember('summarizer', prompt);
 
-// Route to handle page summarization requests
-router.post('/summarize', async (req, res) => {
-  try {
-    const { pageContent } = req.body;
-    if (!pageContent) {
-      return res.status(400).json({ error: 'Page content is required for summarization.' });
+      res.json({ summary });
+    } catch (error) {
+      deps.logger.error({ error }, 'Error in pageSummarization route');
+      next(error);
     }
-
-    const summary = await summarizePageContent(pageContent);
-    res.json({ summary });
-  } catch (error) {
-    res.status(500).json({ error: 'An error occurred while summarizing the page content.' });
-  }
-});
-
-// Function to register routes for page summarization
-export function registerPageSummarizationRoutes(app) {
-  app.use('/api/pages', router);
+  });
 }
-
-export default router;
