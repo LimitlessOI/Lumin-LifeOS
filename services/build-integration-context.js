@@ -154,6 +154,7 @@ export function buildIntegrationContext({
   tableLimit = 12,
   expectedExports = [],
   fileContains = [],
+  route = null,
 } = {}) {
   const migrationsDir = path.join(root, 'db', 'migrations');
   const schema = parseSchemaFromMigrations(migrationsDir);
@@ -170,6 +171,9 @@ export function buildIntegrationContext({
     lines.push(`- Export a register function: \`export function ${fnName}(app, deps) { /* app.get/post(...); */ }\` (a default export also works).`);
     lines.push(`- Add this module to config/auto-registered-product-modules.json so the boot auto-mounts it: \`{ "path": "${targetFile}", "register": "${fnName}", "enabled": true }\`.`);
     lines.push('- The boot module-health gate verifies the module actually imports + mounts LIVE; a broken import or missing registration will fail the step (not a false done).');
+    if (route && route.method && route.path) {
+      lines.push(`- REQUIRED ROUTE: mount ${route.method.toUpperCase()} \`${route.path}\` inside the register function. Use the exact method and path.`);
+    }
   }
 
   lines.push('');

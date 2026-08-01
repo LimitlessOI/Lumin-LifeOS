@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T00:29:01.924Z",
+  "generated_at": "2026-08-01T00:31:35.157Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12642,
   "files": [
@@ -38881,9 +38881,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 81513,
-      "mtime": "2026-08-01T00:28:01.113Z",
-      "indexed_at": "2026-08-01T00:28:01.113Z"
+      "bytes": 83000,
+      "mtime": "2026-08-01T00:31:35.157Z",
+      "indexed_at": "2026-08-01T00:31:35.157Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41094,9 +41094,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 366028,
-      "mtime": "2026-08-01T00:28:01.113Z",
-      "indexed_at": "2026-08-01T00:28:01.113Z"
+      "bytes": 366429,
+      "mtime": "2026-08-01T00:31:35.157Z",
+      "indexed_at": "2026-08-01T00:31:35.157Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -41941,9 +41941,9 @@
     {
       "path": "docs/products/lumin-university/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Lumin University",
-      "bytes": 20104,
-      "mtime": "2026-08-01T00:28:01.113Z",
-      "indexed_at": "2026-08-01T00:28:01.113Z"
+      "bytes": 20510,
+      "mtime": "2026-08-01T00:31:35.157Z",
+      "indexed_at": "2026-08-01T00:31:35.157Z"
     },
     {
       "path": "docs/products/LUMINUNIVERSITY.md",
@@ -87386,9 +87386,9 @@
     {
       "path": "services/build-integration-context.js",
       "synopsis": "Real integration context for the autonomous /build call — live DB",
-      "bytes": 11002,
-      "mtime": "2026-08-01T00:28:01.113Z",
-      "indexed_at": "2026-08-01T00:28:01.113Z",
+      "bytes": 11225,
+      "mtime": "2026-08-01T00:31:35.157Z",
+      "indexed_at": "2026-08-01T00:31:35.157Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -93039,9 +93039,9 @@
     {
       "path": "services/never-stop-product-factory.js",
       "synopsis": "Permanent product expansion lane — work exists even when BP_PRIORITY queue reads complete.",
-      "bytes": 81747,
-      "mtime": "2026-08-01T00:28:01.113Z",
-      "indexed_at": "2026-08-01T00:28:01.113Z",
+      "bytes": 81812,
+      "mtime": "2026-08-01T00:31:35.157Z",
+      "indexed_at": "2026-08-01T00:31:35.157Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -93474,9 +93474,9 @@
     {
       "path": "services/product-build-orchestrator.js",
       "synopsis": "General product-build orchestrator — turns a product's structured",
-      "bytes": 35109,
-      "mtime": "2026-08-01T00:24:07.166Z",
-      "indexed_at": "2026-08-01T00:24:07.166Z",
+      "bytes": 35140,
+      "mtime": "2026-08-01T00:31:35.157Z",
+      "indexed_at": "2026-08-01T00:31:35.157Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

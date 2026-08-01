@@ -1206,7 +1206,7 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
     log({ event: 'blocked_steps_revived', product_id: task.product_id, revived });
   }
 
-  const buildFn = async ({ target_file, task: stepTask, spec, last_error, max_output_tokens, expected_exports = [], file_contains = [] }) => {
+  const buildFn = async ({ target_file, task: stepTask, spec, last_error, max_output_tokens, expected_exports = [], file_contains = [], route = null }) => {
     if (!baseUrl || !commandKey) return { ok: false, error: 'missing PUBLIC_BASE_URL / COMMAND_CENTER_KEY' };
     const stepTokenBudget = Number.isFinite(Number(max_output_tokens)) && Number(max_output_tokens) > 0
       ? Number(max_output_tokens)
@@ -1274,6 +1274,7 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
         task: stepTask,
         expectedExports: expected_exports,
         fileContains: file_contains,
+        route,
       });
       integrationBlock = `\n\n${ctx.context}`;
     } catch (ctxErr) {
@@ -1297,7 +1298,7 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
         ...(stepTokenBudget ? { max_output_tokens: stepTokenBudget } : {}),
         // Protected source modules should be authored by a stronger model; the routing policy
         // still filters and falls back if the requested model is unavailable.
-        ...(/^services\//.test(target_file) ? { model: 'openai_builder_standard' } : {}),
+        ...(/^(services|routes|middleware|factory-staging)\//.test(target_file) ? { model: 'openai_builder_standard' } : {}),
       });
       const b = build.body || {};
       const commit_sha = b.commit_sha || b.sha || b.commit || (b.result && b.result.commit_sha) || null;
