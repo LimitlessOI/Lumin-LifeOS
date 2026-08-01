@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T10:20:22.275Z",
+  "generated_at": "2026-08-01T10:20:49.888Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -96927,10 +96927,10 @@
     },
     {
       "path": "services/wellness-table-extensions.js",
-      "synopsis": "services/wellness-table-extensions.js",
-      "bytes": 714,
-      "mtime": "2026-07-16T19:42:53.617Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis": "extendTableServices - Provides service functions for managing wellness studio table data.",
+      "bytes": 1846,
+      "mtime": "2026-08-01T10:20:49.888Z",
+      "indexed_at": "2026-08-01T10:20:49.888Z",
       "ssot": [
         "docs/products/wellness-studio/PRODUCT_HOME.md"
       ]

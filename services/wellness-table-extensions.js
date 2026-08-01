@@ -1,25 +1,51 @@
 /**
- * SYNOPSIS: services/wellness-table-extensions.js
+ * SYNOPSIS: extendTableServices - Provides service functions for managing wellness studio table data.
  * @ssot docs/products/wellness-studio/PRODUCT_HOME.md
  */
-// services/wellness-table-extensions.js
-
-// Function to manage joy check-ins
-export function manageJoyCheckins(data) {
-  // Implement logic for managing joy check-ins
+export async function manageJoyCheckins(deps, payload) {
+  const { pool, logger } = deps;
+  const { id } = payload || {};
+  try {
+    const { rows } = await pool.query('SELECT * FROM wellness_studio_sessions WHERE joy_checkin_id = $1', [id]);
+    return rows[0] || null;
+  } catch (error) {
+    logger.error({ error }, 'Error in manageJoyCheckins');
+    throw new Error('Failed in manageJoyCheckins');
+  }
 }
 
-// Function to manage integrity score
-export function manageIntegrityScore(data) {
-  // Implement logic for calculating and updating integrity score
+export async function manageIntegrityScore(deps, payload) {
+  const { pool, logger } = deps;
+  const { id } = payload || {};
+  try {
+    const { rows } = await pool.query('SELECT * FROM wellness_studio_sessions WHERE integrity_score_log_id = $1', [id]);
+    return rows[0] || null;
+  } catch (error) {
+    logger.error({ error }, 'Error in manageIntegrityScore');
+    throw new Error('Failed in manageIntegrityScore');
+  }
 }
 
-// Function to manage wearable data
-export function manageWearableData(data) {
-  // Implement logic for processing wearable data
+export async function manageWearableData(deps, payload) {
+  const { pool, logger } = deps;
+  const { id } = payload || {};
+  try {
+    const { rows } = await pool.query('SELECT * FROM wellness_studio_sessions WHERE wearable_data_id = $1', [id]);
+    return rows[0] || null;
+  } catch (error) {
+    logger.error({ error }, 'Error in manageWearableData');
+    throw new Error('Failed in manageWearableData');
+  }
 }
 
-// Function to manage emotional patterns
-export function manageEmotionalPatterns(data) {
-  // Implement logic for analyzing emotional patterns
+export async function manageEmotionalPatterns(deps, payload) {
+  const { pool, logger } = deps;
+  const { id } = payload || {};
+  try {
+    const { rows } = await pool.query('SELECT * FROM wellness_studio_sessions WHERE emotional_pattern_id = $1', [id]);
+    return rows[0] || null;
+  } catch (error) {
+    logger.error({ error }, 'Error in manageEmotionalPatterns');
+    throw new Error('Failed in manageEmotionalPatterns');
+  }
 }
