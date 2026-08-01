@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T10:09:08.315Z",
+  "generated_at": "2026-08-01T10:10:38.031Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1822,
-      "mtime": "2026-08-01T10:06:13.736Z",
-      "indexed_at": "2026-08-01T10:06:56.178Z",
+      "bytes": 1920,
+      "mtime": "2026-08-01T10:09:59.400Z",
+      "indexed_at": "2026-08-01T10:10:38.031Z",
       "synopsis_index_only": true
     },
     {
@@ -42823,9 +42823,9 @@
     {
       "path": "docs/products/wellness-studio/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Wellness Studio",
-      "bytes": 17209,
-      "mtime": "2026-08-01T08:48:17.387Z",
-      "indexed_at": "2026-08-01T08:48:17.387Z"
+      "bytes": 18026,
+      "mtime": "2026-08-01T10:10:29.060Z",
+      "indexed_at": "2026-08-01T10:10:38.031Z"
     },
     {
       "path": "docs/products/WELLNESSSTUDIO.md",
@@ -96241,10 +96241,10 @@
     },
     {
       "path": "services/therapist-integration.js",
-      "synopsis": "Import necessary dependencies",
-      "bytes": 482,
-      "mtime": "2026-07-16T19:42:53.616Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis": "Therapist integration setup wiring communication-profile and truth-delivery.",
+      "bytes": 609,
+      "mtime": "2026-08-01T10:10:13.012Z",
+      "indexed_at": "2026-08-01T10:10:38.031Z",
       "ssot": [
         "docs/products/wellness-studio/PRODUCT_HOME.md"
       ]

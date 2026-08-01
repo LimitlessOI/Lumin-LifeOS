@@ -1,47 +1,47 @@
 {
   "status": "idle",
   "last_task": {
-    "id": "product_build_limitlessos_limitlessos-step7",
+    "id": "product_build_wellness-studio_wellness-studio-3",
     "kind": "product_build_step",
-    "priority": 2.0004,
-    "product": "limitlessos",
-    "product_id": "limitlessos",
-    "step_id": "limitlessos-step7",
-    "target_file": "routes/bundle_social_automation_routes.js",
-    "detail": "next buildable step: limitlessos-step7"
+    "priority": 2.0006,
+    "product": "wellness-studio",
+    "product_id": "wellness-studio",
+    "step_id": "wellness-studio-3",
+    "target_file": "services/therapist-integration.js",
+    "detail": "next buildable step: wellness-studio-3"
   },
   "last_result": {
     "ok": false,
-    "task_id": "product_build_limitlessos_limitlessos-step7",
+    "task_id": "product_build_wellness-studio_wellness-studio-3",
     "detail": "product_build_step",
     "outcome": {
       "ok": false,
-      "step_id": "limitlessos-step7",
-      "stage": "build",
-      "reason": "Pre-commit syntax check failed — commit blocked",
+      "step_id": "wellness-studio-3",
+      "stage": "artifact_proof",
+      "reason": "artifact_proof_failed: missing_exports:setupIntegration; require('communication-profile'); require('truth-delivery')",
       "attempts": 1,
       "blocked": false,
       "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "parked": false,
       "summary": {
-        "product_id": "limitlessos",
-        "total": 49,
-        "pending": 2,
+        "product_id": "wellness-studio",
+        "total": 51,
+        "pending": 8,
         "building": 0,
-        "done": 43,
+        "done": 30,
         "blocked": 0,
         "founder_gated": 0,
         "design_review_flagged": 0,
         "human_hold": 0,
-        "skipped": 4,
+        "skipped": 13,
         "complete": false
       }
     },
     "claim": {
-      "id": "limitlessos:limitlessos-step7",
+      "id": "wellness-studio:wellness-studio-3",
       "kind": "execution",
-      "text": "product step limitlessos-step7 built + verified + served live",
+      "text": "product step wellness-studio-3 built + verified + served live",
       "grade": "GUESS",
       "proof": null,
       "original_grade": "KNOW",
@@ -51,19 +51,19 @@
       ]
     },
     "summary": {
-      "product_id": "limitlessos",
-      "total": 49,
-      "pending": 2,
+      "product_id": "wellness-studio",
+      "total": 51,
+      "pending": 8,
       "building": 0,
-      "done": 43,
+      "done": 30,
       "blocked": 0,
       "founder_gated": 0,
       "design_review_flagged": 0,
       "human_hold": 0,
-      "skipped": 4,
+      "skipped": 13,
       "complete": false
     }
   },
   "cycles": 1,
-  "updated_at": "2026-08-01T10:06:13.738Z"
+  "updated_at": "2026-08-01T10:09:59.404Z"
 }

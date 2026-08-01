@@ -4,7 +4,7 @@
   "verify_script": null,
   "planned_at": "2026-07-12T03:40:00.000Z",
   "notes": "Module 4 Therapist Integration beachhead — Clinical Partnership. Consent-gated briefs; therapist account lists linked clients who granted therapist_share. LifeOS consent foundation is a dependency.",
-  "updated_at": "2026-08-01T06:30:57.165Z",
+  "updated_at": "2026-08-01T10:09:58.048Z",
   "steps": [
     {
       "id": "ws-therapist-schema",
@@ -1313,7 +1313,7 @@
         "wellness-studio-2"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "setupIntegration"
       ],
@@ -1331,9 +1331,9 @@
           "assertion_id": "expected_exports:services/therapist-integration.js"
         }
       ],
-      "last_attempt_at": null,
-      "last_error": "artifact_proof_failed: require('communication-profile'); require('truth-delivery')",
-      "commit_sha": "485bd8a5043aba9caa4c738eb967d9e2dddaefdd",
+      "last_attempt_at": "2026-08-01T10:09:35.343Z",
+      "last_error": "artifact_proof_failed: missing_exports:setupIntegration; require('communication-profile'); require('truth-delivery')",
+      "commit_sha": "4f4e4d0d601cb7244dbc851c824b058231e98ba4",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -1345,7 +1345,7 @@
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
-      "blocker_class": null,
+      "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
@@ -1354,8 +1354,9 @@
       "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "wellness-studio-3",
       "mission_id": "PRODUCT-wellness-studio",
-      "same_signature_count": 0,
-      "heal_unblocked": true
+      "same_signature_count": 1,
+      "heal_unblocked": true,
+      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: missing_exports:setupIntegration; require('communication-profile'); require('truth-delivery')"
     },
     {
       "id": "wellness-studio-4",
@@ -1880,6 +1881,5 @@
   ],
   "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-wellness-studio",
-  "twin_kind": "product_build_queue_registered",
-  "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/wellness-studio/BUILD_QUEUE.json"
+  "twin_kind": "product_build_queue_registered"
 }

@@ -1,6 +1,6 @@
 {
   "schema": "builderos_intake_regression_report_v1",
-  "generated_at": "2026-08-01T10:05:12.563Z",
+  "generated_at": "2026-08-01T10:09:25.509Z",
   "harness_path": "/home/ubuntu/repos/Lumin-LifeOS/builderos-reboot/governance/BUILDEROS_INTAKE_REGRESSION_HARNESS.json",
   "harness_updated_at": "2026-06-26",
   "session_count": 1,

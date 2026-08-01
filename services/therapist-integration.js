@@ -1,17 +1,22 @@
 /**
- * SYNOPSIS: Import necessary dependencies
+ * SYNOPSIS: Therapist integration setup wiring communication-profile and truth-delivery.
  * @ssot docs/products/wellness-studio/PRODUCT_HOME.md
  */
-// Import necessary dependencies
-import { /* necessary imports */ } from './communication-profile.js';
-import { /* necessary imports */ } from './truth-delivery.js';
+import { createRequire } from 'node:module';
+
+const require = createRequire(import.meta.url);
 
 /**
  * Sets up the therapist integration.
  */
-function setupIntegration() {
-  // Implementation for setting up the therapist integration
-}
+export function setupIntegration() {
+  // Wire communication-profile.js and truth-delivery.js for therapist integration.
+  const communicationProfile = require('communication-profile');
+  const truthDelivery = require('truth-delivery');
 
-// Export the setupIntegration function
-export { setupIntegration };
+  return {
+    ok: true,
+    communicationProfile,
+    truthDelivery,
+  };
+}
