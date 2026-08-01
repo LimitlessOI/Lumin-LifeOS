@@ -971,7 +971,7 @@
       "spec": "Outline the credential verification technology, assessing options like blockchain and cryptographic hash. Export `evaluateBlockchainSolution` and `evaluateHashSolution` as pure analysis functions returning a structured comparison with `approach`, `pros`, `cons`, `recommendation`.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "evaluateBlockchainSolution",
         "evaluateHashSolution"
@@ -982,9 +982,9 @@
       "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "003",
       "mission_id": "PRODUCT-lumin-university",
-      "last_error": null,
-      "last_attempt_at": null,
-      "blocker_class": null,
+      "last_error": "Commit failed: FILE_PLACEMENT_VIOLATION — commit refused.\n- [ERROR][missing_ssot] scripts/credentialVerificationScoping.mjs: New protected source file has no @ssot JSDoc tag pointing to its product home",
+      "last_attempt_at": "2026-08-01T01:43:53.146Z",
+      "blocker_class": "BLOCKED_SECRET",
       "claim_level": null,
       "park_until": null,
       "revive_count": 0,
@@ -1586,5 +1586,5 @@
   "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-lumin-university",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T01:41:06.054Z"
+  "updated_at": "2026-08-01T01:44:09.788Z"
 }
