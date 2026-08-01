@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T01:54:54.627Z",
+  "generated_at": "2026-08-01T01:55:11.590Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12654,
   "files": [
@@ -30870,8 +30870,8 @@
       "path": "config/builder-safe-scope.js",
       "synopsis": "config/builder-safe-scope.js",
       "bytes": 2286,
-      "mtime": "2026-08-01T01:54:54.627Z",
-      "indexed_at": "2026-08-01T01:54:54.627Z",
+      "mtime": "2026-08-01T01:55:11.590Z",
+      "indexed_at": "2026-08-01T01:55:11.590Z",
       "ssot": [
         "docs/products/project-governance/PRODUCT_HOME.md"
       ]
@@ -38895,9 +38895,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 83278,
-      "mtime": "2026-08-01T01:54:54.627Z",
-      "indexed_at": "2026-08-01T01:54:54.627Z"
+      "bytes": 83051,
+      "mtime": "2026-08-01T01:55:11.590Z",
+      "indexed_at": "2026-08-01T01:55:11.590Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -42276,8 +42276,8 @@
       "path": "docs/products/project-governance/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Project Governance",
       "bytes": 66516,
-      "mtime": "2026-08-01T01:54:54.627Z",
-      "indexed_at": "2026-08-01T01:54:54.627Z"
+      "mtime": "2026-08-01T01:55:11.590Z",
+      "indexed_at": "2026-08-01T01:55:11.590Z"
     },
     {
       "path": "docs/products/project-governance/READINESS_CHECKLIST.md",
