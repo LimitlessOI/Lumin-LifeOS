@@ -547,13 +547,13 @@
     },
     {
       "id": "universal-overlay-1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/proactiveToastSystem.js",
       "task": "implement proactive toast system",
       "spec": "Create a proactive toast system with dismissible, preference-learned features.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerProactiveToast"
       ],
@@ -569,14 +569,16 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-16T04:18:26.201Z",
-      "commit_sha": "f3dbf1798e4598ee6fb397f3253387d9eeac399a",
+      "commit_sha": "0288b02c0286bbca143ae4962e4680eafc00d7d9",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "universal-overlay-1",
       "mission_id": "PRODUCT-universal-overlay",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerProactiveToast; registerProactiveToast",
       "reaudit_reset_at": "2026-07-30T18:55:06.758Z",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "last_attempt_at": "2026-08-01T02:43:10.315Z",
+      "completed_at": "2026-08-01T02:43:27.308Z"
     },
     {
       "id": "universal-overlay-2",
@@ -2394,5 +2396,5 @@
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-universal-overlay",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T02:42:56.124Z"
+  "updated_at": "2026-08-01T02:43:27.308Z"
 }
