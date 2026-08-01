@@ -880,13 +880,13 @@
     },
     {
       "id": "kids-os-1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/apiSpec.js",
       "task": "complete API specification",
       "spec": "Add detailed API specification relevant to the 'kids-os' requirements, ensuring all endpoints are defined.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "getAPIEndpoints"
       ],
@@ -906,9 +906,9 @@
           "assertion_id": "expected_exports:services/apiSpec.js"
         }
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-01T13:31:23.786Z",
       "last_error": "artifact_proof_failed: /api/spec",
-      "commit_sha": "de44af2737d40cb5ef83450d41115c072b7d31ae",
+      "commit_sha": "74efe9b9dea6aadd0d61c2145b03a795110ac0b3",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -930,7 +930,8 @@
       "blueprint_step_id": "kids-os-1",
       "mission_id": "PRODUCT-kids-os",
       "same_signature_count": 0,
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "completed_at": "2026-08-01T13:32:12.468Z"
     },
     {
       "id": "kids-os-4",
@@ -1044,6 +1045,6 @@
   "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-kids-os",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T13:31:07.317Z",
+  "updated_at": "2026-08-01T13:32:12.468Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/kids-os/BUILD_QUEUE.json"
 }
