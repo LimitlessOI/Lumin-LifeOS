@@ -1118,13 +1118,13 @@
     },
     {
       "id": "universal-overlay-step6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/sessionReplay.js",
       "task": "implement session replay opt-in",
       "spec": "Create a session replay feature for opt-in user flow tracking.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "startSessionReplay"
       ],
@@ -1146,14 +1146,16 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:38:32.888Z",
-      "commit_sha": "cf1943fd81a677852d52a42657b71926941afeed",
+      "commit_sha": "8e8dfd5d77f6e744628472a2a07bed06601fe0b1",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "universal-overlay-step6",
       "mission_id": "PRODUCT-universal-overlay",
       "same_signature_count": 0,
       "demoted": false,
       "last_error": "artifact_proof_failed: opt-in session replay",
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T14:19:20.750Z",
+      "completed_at": "2026-08-01T14:19:33.643Z"
     },
     {
       "id": "universal-overlay-step7",
@@ -2405,6 +2407,6 @@
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-universal-overlay",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:30:55.624Z",
+  "updated_at": "2026-08-01T14:19:33.643Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/universal-overlay/BUILD_QUEUE.json"
 }
