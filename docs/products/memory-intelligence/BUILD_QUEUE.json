@@ -409,7 +409,7 @@
       "file_contains": [
         "Institutional Memory"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "last_attempt_at": "2026-07-15T22:41:50.435Z",
       "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 1861b is < 30% of existing 23475b",
       "commit_sha": null,
@@ -551,7 +551,7 @@
       "file_contains": [
         "lesson"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:39:44.640Z",
       "commit_sha": "f96618bdd81e97d6ab4baedc321a2edc368471e3",
@@ -607,22 +607,22 @@
       "spec": "Ensure that all tables and views are applied automatically during deployment.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS",
         "CREATE OR REPLACE VIEW"
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:17:10.298Z",
-      "commit_sha": "a74883418feccb48127466c7951d4e385801b74f",
+      "commit_sha": "ceab311da5a792fea1ecef1fb86f77b115cd5ff6",
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-intelligence-1",
       "mission_id": "PRODUCT-memory-intelligence",
       "same_signature_count": 0,
       "demoted": false,
-      "last_error": "Target file is outside the Builder safe-scope policy",
+      "last_error": "grounding_failed: missing_sql_table: memory_system, pg_trigger",
       "heal_unblocked": true,
-      "last_attempt_at": "2026-08-01T13:01:47.290Z",
+      "last_attempt_at": "2026-08-01T13:05:02.576Z",
       "blocker_class": "BLOCKED_TOOLING"
     },
     {
@@ -1318,6 +1318,6 @@
   "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-memory-intelligence",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T13:01:49.389Z",
+  "updated_at": "2026-08-01T13:05:02.603Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/memory-intelligence/BUILD_QUEUE.json"
 }
