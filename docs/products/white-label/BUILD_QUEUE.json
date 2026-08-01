@@ -762,13 +762,12 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T22:53:15.944Z",
       "commit_sha": "a17cee8ffc330e8378078b1fae641a9383e085b7",
-      "same_signature_count": 1,
+      "same_signature_count": 0,
       "demoted": false,
       "last_error": "artifact_proof_failed: module.exports = {",
       "heal_unblocked": true,
       "last_attempt_at": "2026-08-01T14:33:23.176Z",
-      "blocker_class": "BLOCKED_TOOLING",
-      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: module.exports = {"
+      "blocker_class": "BLOCKED_TOOLING"
     },
     {
       "id": "white-label-step2",
@@ -1029,5 +1028,6 @@
   "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-white-label",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T14:33:35.476Z"
+  "updated_at": "2026-08-01T14:33:35.476Z",
+  "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/white-label/BUILD_QUEUE.json"
 }
