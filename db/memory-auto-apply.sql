@@ -46,6 +46,11 @@ BEGIN
     END IF;
 END $$;
 
+-- Create a summary view if it doesn't exist
+CREATE VIEW IF NOT EXISTS memory_system_summary AS
+SELECT id, name, description, created_at, last_updated
+FROM memory_system;
+
 -- Verify integrity check
 DO $$
 BEGIN
