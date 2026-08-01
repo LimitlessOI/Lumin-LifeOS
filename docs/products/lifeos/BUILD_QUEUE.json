@@ -2694,13 +2694,13 @@
       "spec": "Design the UI for mobile-first voice-note journaling with local transcription.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "<div class='voice-note-journaling'>"
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-01T06:56:15.644Z",
       "last_error": "artifact_proof_failed: <div class='voice-note-journaling'>",
-      "commit_sha": "d6bc1443c80b726c1e177228ecd979f6c8e685d0",
+      "commit_sha": "a4221354ab03f8db94e69ae741c06f75513dc2be",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -2712,7 +2712,7 @@
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
-      "blocker_class": null,
+      "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
@@ -6023,6 +6023,6 @@
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-lifeos",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:53:38.751Z",
+  "updated_at": "2026-08-01T06:56:32.551Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/lifeos/BUILD_QUEUE.json"
 }
