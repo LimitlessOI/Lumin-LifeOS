@@ -90,7 +90,7 @@
     },
     {
       "id": "step3",
-      "status": "done",
+      "status": "pending",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "Add BoldTrail routes to auto-register config",
       "spec": "Ensure the BoldTrail routes are included for auto-registration within the server context by adding an entry for the newly created route module.",
@@ -107,7 +107,10 @@
       "commit_sha": "4fa2ee7610d13cfd54f0a01de6174e057334e814",
       "blueprint_id": "PRODUCT-OUTREACH-CRM-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step3",
-      "mission_id": "PRODUCT-outreach-crm"
+      "mission_id": "PRODUCT-outreach-crm",
+      "last_error": "artifact_proof_failed: {\"path\":\"routes/boldtrail-routes.js\",\"module\":\"registerBoldTrailRoutes\"}",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "step4",
@@ -148,5 +151,5 @@
   "blueprint_id": "PRODUCT-OUTREACH-CRM-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-outreach-crm",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:22:05.664Z"
+  "updated_at": "2026-08-01T06:30:45.598Z"
 }
