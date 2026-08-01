@@ -634,7 +634,7 @@
         "step2"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerEvaluatorMentorRoutes"
       ],
@@ -653,13 +653,13 @@
       ],
       "shipped_via": null,
       "shipped_at": null,
-      "commit_sha": null,
+      "commit_sha": "f645e512bc52edb24d5d512a38d1c0dd5a16cd2e",
       "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step3",
       "mission_id": "PRODUCT-lumin-university",
-      "last_error": null,
-      "last_attempt_at": null,
-      "blocker_class": null,
+      "last_error": "artifact_proof_failed: missing_exports:registerEvaluatorMentorRoutes",
+      "last_attempt_at": "2026-08-01T01:14:40.263Z",
+      "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "park_until": null,
       "revive_count": 0,
