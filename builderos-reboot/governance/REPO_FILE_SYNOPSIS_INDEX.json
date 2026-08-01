@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T02:29:25.277Z",
+  "generated_at": "2026-08-01T02:30:07.708Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12657,
   "files": [
@@ -66835,10 +66835,13 @@
     },
     {
       "path": "public/overlay/adaptiveLayout.js",
-      "synopsis": "Exports getAdaptiveLayoutSettings — public/overlay/adaptiveLayout.js.",
-      "bytes": 326,
-      "mtime": "2026-07-18T00:18:17.682Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "synopsis": "This object will be replaced by database persistence for production,",
+      "bytes": 3223,
+      "mtime": "2026-08-01T02:30:07.708Z",
+      "indexed_at": "2026-08-01T02:30:07.708Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "public/overlay/addToHomeScreen.html",
