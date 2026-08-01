@@ -5251,7 +5251,7 @@
         "lifeos-parenting-scripts.html",
         "lifeos-labs.html"
       ],
-      "status": "pending",
+      "status": "done",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -5259,13 +5259,17 @@
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-feature-nav-batch",
       "mission_id": "PRODUCT-lifeos",
-      "last_error": "artifact_proof_failed: lifeos-psychometrics.html; lifeos-parenting-scripts.html; lifeos-labs.html",
+      "last_error": null,
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
       "same_signature_count": 0,
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "completed_at": "2026-08-01T08:00:12.169Z",
+      "blocker_class": null,
+      "heal_claimed": true,
+      "heal_reason": "artifact_proof_pass"
     },
     {
       "id": "lifeos-p1-auth-register-export",
@@ -5534,7 +5538,7 @@
         "lifeos-year-in-pixels.html",
         "lifeos-household.html"
       ],
-      "status": "pending",
+      "status": "done",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -5545,12 +5549,16 @@
       "pre_existing": true,
       "shipped_via": "pre_existing_artifact_proof",
       "shipped_at": "2026-07-18T02:16:19.466Z",
-      "last_error": "artifact_proof_failed: lifeos-year-in-pixels.html; lifeos-household.html",
+      "last_error": null,
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
       "same_signature_count": 0,
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "completed_at": "2026-08-01T08:00:12.170Z",
+      "blocker_class": null,
+      "heal_claimed": true,
+      "heal_reason": "artifact_proof_pass"
     },
     {
       "id": "lifeos-p1-victory-register",
@@ -5811,7 +5819,7 @@
         "lifeos-date-night.html",
         "lifeos-parent-mode.html"
       ],
-      "status": "pending",
+      "status": "done",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -5822,10 +5830,14 @@
       "pre_existing": true,
       "shipped_via": "pre_existing_artifact_proof",
       "shipped_at": "2026-07-18T02:43:04.941Z",
-      "last_error": "artifact_proof_failed: lifeos-date-night.html; lifeos-parent-mode.html",
+      "last_error": null,
       "same_signature_count": 0,
       "demoted": false,
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "completed_at": "2026-08-01T08:00:12.173Z",
+      "blocker_class": null,
+      "heal_claimed": true,
+      "heal_reason": "artifact_proof_pass"
     },
     {
       "id": "lifeos-p1-ui-directives-rewire",
@@ -5913,7 +5925,7 @@
       "file_contains": [
         "lifeos-twin-directives.html"
       ],
-      "status": "pending",
+      "status": "done",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -5924,10 +5936,14 @@
       "pre_existing": true,
       "shipped_via": "pre_existing_artifact_proof",
       "shipped_at": "2026-07-18T02:43:04.941Z",
-      "last_error": "artifact_proof_failed: lifeos-twin-directives.html",
+      "last_error": null,
       "same_signature_count": 0,
       "demoted": false,
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "completed_at": "2026-08-01T08:00:12.174Z",
+      "blocker_class": null,
+      "heal_claimed": true,
+      "heal_reason": "artifact_proof_pass"
     },
     {
       "id": "lifeos-p1-member-feedback-migration",
@@ -6063,7 +6079,7 @@
       "file_contains": [
         "lifeos-member-feedback.html"
       ],
-      "status": "pending",
+      "status": "done",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -6076,13 +6092,17 @@
       "mission_id": "PRODUCT-lifeos",
       "same_signature_count": 0,
       "demoted": false,
-      "last_error": "artifact_proof_failed: lifeos-member-feedback.html",
-      "heal_unblocked": true
+      "last_error": null,
+      "heal_unblocked": true,
+      "completed_at": "2026-08-01T08:00:12.175Z",
+      "blocker_class": null,
+      "heal_claimed": true,
+      "heal_reason": "artifact_proof_pass"
     }
   ],
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-lifeos",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T07:56:42.220Z",
+  "updated_at": "2026-08-01T08:00:12.175Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/lifeos/BUILD_QUEUE.json"
 }
