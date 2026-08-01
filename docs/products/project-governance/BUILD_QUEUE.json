@@ -179,7 +179,7 @@
     },
     {
       "id": "5",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/competitorInfo.js",
       "task": "create competitor info route",
       "spec": "API endpoint to fetch and display competitor information.",
@@ -187,7 +187,7 @@
         "4"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "expected_exports": [
         "registerCompetitorRoutes"
       ],
@@ -210,7 +210,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T09:51:00.001Z",
-      "commit_sha": "3f4cd215ffff63a6d0e32bd09820d5f8857a0786",
+      "commit_sha": "0dc117a4aae9a832c2329cce8a71d3406225b682",
       "blueprint_id": "PRODUCT-PROJECT-GOVERNANCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "5",
       "mission_id": "PRODUCT-project-governance",
@@ -218,9 +218,10 @@
       "demoted": false,
       "last_error": "artifact_proof_failed: missing_exports:registerCompetitorRoutes; registerCompetitorRoutes; competitor: {}",
       "heal_unblocked": true,
-      "last_attempt_at": "2026-08-01T10:55:54.530Z",
+      "last_attempt_at": "2026-08-01T10:59:01.394Z",
       "blocker_class": "BLOCKED_TOOLING",
-      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: missing_exports:registerCompetitorRoutes; registerCompetitorRoutes; competitor: {}"
+      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: missing_exports:registerCompetitorRoutes; registerCompetitorRoutes; competitor: {}",
+      "completed_at": "2026-08-01T10:59:01.871Z"
     },
     {
       "id": "6",
@@ -353,5 +354,5 @@
   "blueprint_id": "PRODUCT-PROJECT-GOVERNANCE-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-project-governance",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T10:56:05.294Z"
+  "updated_at": "2026-08-01T10:59:01.872Z"
 }
