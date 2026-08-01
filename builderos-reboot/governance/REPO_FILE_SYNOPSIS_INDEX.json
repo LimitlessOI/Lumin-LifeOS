@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T04:22:38.615Z",
+  "generated_at": "2026-08-01T04:26:03.582Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12670,
   "files": [
@@ -41881,9 +41881,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 648949,
-      "mtime": "2026-08-01T04:22:38.615Z",
-      "indexed_at": "2026-08-01T04:22:38.615Z"
+      "bytes": 649024,
+      "mtime": "2026-08-01T04:26:03.582Z",
+      "indexed_at": "2026-08-01T04:26:03.582Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -91515,9 +91515,9 @@
     {
       "path": "services/lifeos-finance.js",
       "synopsis": "LifeOS Personal Finance — budgets, categories, goals, IPS text (non-advisory mirror layer).",
-      "bytes": 13214,
-      "mtime": "2026-07-10T00:07:04.664Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 13745,
+      "mtime": "2026-08-01T04:26:03.582Z",
+      "indexed_at": "2026-08-01T04:26:03.582Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

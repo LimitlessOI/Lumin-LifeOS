@@ -343,3 +343,21 @@ export function createLifeOSFinance({ pool }) {
     revokeShareScope,
   };
 }
+
+export async function calculateNetWorth({ pool }, userId) {
+  const { rows } = await pool.query(
+    `SELECT
+      COALESCE(assets_cents, 0) AS assets_cents,
+      COALESCE(liabilities_cents, 0) AS liabilities_cents,
+      COALESCE(assets_cents, 0) - COALESCE(liabilities_cents, 0) AS net_cents
+     FROM net_worth_snapshots
+     WHERE user_id = $1
+     ORDER BY snapshot_date DESC
+     LIMIT 1`,
+    [userId],
+  );
+  if (!rows.length) {
+    return { assets_cents: 0, liabilities_cents: 0, net_cents: 0 };
+  }
+  return rows[0];
+}
