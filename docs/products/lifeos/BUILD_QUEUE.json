@@ -2180,7 +2180,7 @@
       "spec": "Implement user assessments for emotional patterns.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "getAssessments",
         "compareAssessments"
@@ -2210,11 +2210,11 @@
       "blueprint_step_id": "step3",
       "mission_id": "PRODUCT-lifeos",
       "pre_existing": null,
-      "last_error": null,
+      "last_error": "Pre-commit governance blocked — anti-pattern, stub, or verifier failure",
       "reaudit_reset_at": "2026-07-30T18:55:06.601Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-01T04:14:08.428Z",
       "last_attempt": null,
       "revive_count": 7,
       "revived_at": "2026-08-01T04:08:04.507Z",
@@ -2223,7 +2223,7 @@
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
-      "blocker_class": null,
+      "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
@@ -5788,5 +5788,5 @@
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-lifeos",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T04:11:06.412Z"
+  "updated_at": "2026-08-01T04:14:36.506Z"
 }
