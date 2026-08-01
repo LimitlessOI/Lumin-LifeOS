@@ -85,7 +85,7 @@
       "spec": "Persist provider cooldowns to the database to survive restarts.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "route": {
         "path": "/"
       },
@@ -100,7 +100,7 @@
       "revive_count": 6,
       "revived_at": "2026-07-15T07:47:50.472Z",
       "last_attempt": null,
-      "demoted": true,
+      "demoted": false,
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "demoted_at": "2026-07-15T07:49:40.395Z",
       "park_until": null,
@@ -125,7 +125,7 @@
       "spec": "Ensure /api/v1/chat route uses Groq by default and falls back to Gemini when exhausted.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerChatRoutes"
       ],
@@ -154,7 +154,7 @@
       "revive_count": 6,
       "revived_at": "2026-07-15T07:50:10.907Z",
       "last_attempt": null,
-      "demoted": true,
+      "demoted": false,
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: assertion_threw; behavior_assertion_failed; behavior_proof",
       "demoted_at": "2026-07-15T07:50:37.036Z",
       "park_until": null,
@@ -426,7 +426,7 @@
       "spec": "Persist provider cooldowns to `free_tier_usage` table in the database to survive restarts.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS free_tier_usage"
       ],
@@ -438,7 +438,7 @@
       "revive_count": 6,
       "revived_at": "2026-07-15T09:25:20.511Z",
       "last_attempt": null,
-      "demoted": true,
+      "demoted": false,
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS free_tier_usage; behavior_assertion_failed; behavior_proof",
       "demoted_at": "2026-07-15T09:35:05.345Z",
       "park_until": null,
@@ -460,7 +460,7 @@
       "spec": "Update `/api/v1/chat` to use Groq first and fall back to Gemini automatically when Groq is exhausted.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerChatRoutes"
       ],
@@ -490,7 +490,7 @@
       "revive_count": 9,
       "revived_at": "2026-07-15T09:50:32.790Z",
       "last_attempt": null,
-      "demoted": true,
+      "demoted": false,
       "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home",
       "demoted_at": "2026-07-16T04:03:51.409Z",
       "park_until": null,
@@ -1280,5 +1280,5 @@
   "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-ai-council",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T04:57:24.242Z"
+  "updated_at": "2026-08-01T05:59:28.203Z"
 }
