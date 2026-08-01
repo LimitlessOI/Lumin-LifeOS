@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T06:54:09.277Z",
+  "generated_at": "2026-08-01T06:57:58.021Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12677,
   "files": [
@@ -33104,9 +33104,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1753,
-      "mtime": "2026-08-01T06:52:18.559Z",
-      "indexed_at": "2026-08-01T06:54:09.277Z",
+      "bytes": 1733,
+      "mtime": "2026-08-01T06:56:34.271Z",
+      "indexed_at": "2026-08-01T06:57:58.021Z",
       "synopsis_index_only": true
     },
     {
@@ -41888,9 +41888,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 651291,
-      "mtime": "2026-08-01T06:53:56.571Z",
-      "indexed_at": "2026-08-01T06:54:09.277Z"
+      "bytes": 652088,
+      "mtime": "2026-08-01T06:57:47.795Z",
+      "indexed_at": "2026-08-01T06:57:58.021Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -65463,9 +65463,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 3624,
-      "mtime": "2026-08-01T06:38:47.691Z",
-      "indexed_at": "2026-08-01T06:42:00.531Z",
+      "bytes": 3594,
+      "mtime": "2026-08-01T06:55:59.695Z",
+      "indexed_at": "2026-08-01T06:57:58.021Z",
       "synopsis_index_only": true
     },
     {
