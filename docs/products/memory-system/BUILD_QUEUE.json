@@ -486,13 +486,13 @@
     },
     {
       "id": "memory-system-8",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/final_pr_review.js",
       "task": "create PR review route",
       "spec": "Add route for branch phase7-railway-probe final PR review and merge.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "expected_exports": [
         "registerFinalPrReviewRoutes"
       ],
@@ -516,17 +516,22 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:44:52.057Z",
-      "commit_sha": "dd134a80ac233a329df0fa2952ba4c36678abe1d",
+      "commit_sha": "f82501b572ae58f3ce396c84e5ed43219270a626",
       "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-system-8",
       "mission_id": "PRODUCT-memory-system",
-      "same_signature_count": 1,
+      "same_signature_count": 0,
       "demoted": false,
       "last_error": "artifact_proof_failed: missing_exports:registerFinalPrReviewRoutes; registerFinalPrReviewRoutes",
       "heal_unblocked": true,
-      "last_attempt_at": "2026-08-01T10:33:02.281Z",
+      "last_attempt_at": "2026-08-01T10:36:25.458Z",
       "blocker_class": "BLOCKED_TOOLING",
-      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: missing_exports:registerFinalPrReviewRoutes; registerFinalPrReviewRoutes"
+      "failure_signature": null,
+      "artifact_proven": true,
+      "grounding_status": "PASS",
+      "completed_at": "2026-08-01T10:38:12.540Z",
+      "deploy_proven": true,
+      "functional_proven": true
     },
     {
       "id": "memory-system-9",
@@ -1206,6 +1211,6 @@
   "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-memory-system",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T10:33:13.374Z",
+  "updated_at": "2026-08-01T10:38:12.540Z",
   "backlog_signature_at": "2026-08-01T03:49:41.584Z"
 }

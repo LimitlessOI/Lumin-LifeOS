@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T10:38:22.779Z",
+  "generated_at": "2026-08-01T10:38:37.854Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 412,
-      "mtime": "2026-08-01T10:36:25.292Z",
-      "indexed_at": "2026-08-01T10:37:51.073Z",
+      "bytes": 1776,
+      "mtime": "2026-08-01T10:38:13.964Z",
+      "indexed_at": "2026-08-01T10:38:37.854Z",
       "synopsis_index_only": true
     },
     {
@@ -41164,9 +41164,9 @@
     {
       "path": "docs/products/builderos/GAP_FILL_LEDGER.json",
       "synopsis": "Documentation — GAP FILL LEDGER.",
-      "bytes": 42469,
-      "mtime": "2026-08-01T10:17:58.908Z",
-      "indexed_at": "2026-08-01T10:21:56.388Z",
+      "bytes": 43303,
+      "mtime": "2026-08-01T10:38:23.084Z",
+      "indexed_at": "2026-08-01T10:38:37.854Z",
       "synopsis_index_only": true
     },
     {

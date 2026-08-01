@@ -1,6 +1,6 @@
 {
-  "status": "running",
-  "current_task": {
+  "status": "idle",
+  "last_task": {
     "id": "product_build_memory-system_memory-system-8",
     "kind": "product_build_step",
     "priority": 2.0009,
@@ -10,5 +10,58 @@
     "target_file": "routes/final_pr_review.js",
     "detail": "next buildable step: memory-system-8"
   },
-  "updated_at": "2026-08-01T10:36:25.293Z"
+  "last_result": {
+    "ok": true,
+    "task_id": "product_build_memory-system_memory-system-8",
+    "detail": "product_build_step",
+    "outcome": {
+      "ok": true,
+      "step_id": "memory-system-8",
+      "commit_sha": "f82501b572ae58f3ce396c84e5ed43219270a626",
+      "verified": true,
+      "deploy_proven": true,
+      "functional_proven": true,
+      "summary": {
+        "product_id": "memory-system",
+        "total": 39,
+        "pending": 2,
+        "building": 0,
+        "done": 35,
+        "blocked": 0,
+        "founder_gated": 0,
+        "design_review_flagged": 0,
+        "human_hold": 0,
+        "skipped": 2,
+        "complete": false
+      }
+    },
+    "claim": {
+      "id": "memory-system:memory-system-8",
+      "kind": "execution",
+      "text": "product step memory-system-8 built + verified + served live",
+      "grade": "KNOW",
+      "proof": {
+        "deploy_verified": true,
+        "commit_sha": "f82501b572ae58f3ce396c84e5ed43219270a626"
+      },
+      "original_grade": "KNOW",
+      "enforced": false,
+      "flags": []
+    },
+    "summary": {
+      "product_id": "memory-system",
+      "total": 39,
+      "pending": 2,
+      "building": 0,
+      "done": 35,
+      "blocked": 0,
+      "founder_gated": 0,
+      "design_review_flagged": 0,
+      "human_hold": 0,
+      "skipped": 2,
+      "complete": false
+    }
+  },
+  "cycles": 1,
+  "updated_at": "2026-08-01T10:38:13.969Z"
 }
