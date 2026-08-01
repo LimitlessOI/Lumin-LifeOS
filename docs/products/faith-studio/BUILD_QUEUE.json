@@ -2337,7 +2337,7 @@
     },
     {
       "id": "faith-studio-step-3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/scriptureSceneBuilder.js",
       "task": "Add private witness mode",
       "spec": "Enable scripture scene builder to support private witness mode capability.",
@@ -2345,7 +2345,7 @@
         "faith-studio-step-2"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "buildSceneWithPrivateMode"
       ],
@@ -2361,13 +2361,15 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-16T04:35:04.004Z",
-      "commit_sha": "9df5d254088cd978014cd3bbc032e2f584bc9d50",
+      "commit_sha": "a9474932383b3f8228f2eca1812a38a5648264ea",
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "faith-studio-step-3",
       "mission_id": "PRODUCT-faith-studio",
       "pre_existing": false,
       "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:buildSceneWithPrivateMode; buildSceneWithPrivateMode",
-      "reaudit_reset_at": "2026-07-30T18:55:06.428Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.428Z",
+      "last_attempt_at": "2026-08-01T05:19:50.966Z",
+      "completed_at": "2026-08-01T05:20:04.075Z"
     },
     {
       "id": "faith-studio-step-4",
@@ -2659,5 +2661,5 @@
   "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-faith-studio",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T05:19:37.274Z"
+  "updated_at": "2026-08-01T05:20:04.075Z"
 }
