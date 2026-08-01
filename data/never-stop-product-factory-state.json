@@ -1,47 +1,47 @@
 {
   "status": "idle",
   "last_task": {
-    "id": "product_build_builderos_bo-wire-security-review-into-commit-path",
+    "id": "product_build_site-builder_s1",
     "kind": "product_build_step",
-    "priority": 2.0001,
-    "product": "builderos",
-    "product_id": "builderos",
-    "step_id": "bo-wire-security-review-into-commit-path",
-    "target_file": "routes/lifeos-council-builder-routes.js",
-    "detail": "next buildable step: bo-wire-security-review-into-commit-path"
+    "priority": 2.0002,
+    "product": "site-builder",
+    "product_id": "site-builder",
+    "step_id": "s1",
+    "target_file": "db/migrations/20241030_create_additional_templates.sql",
+    "detail": "next buildable step: s1"
   },
   "last_result": {
     "ok": false,
-    "task_id": "product_build_builderos_bo-wire-security-review-into-commit-path",
+    "task_id": "product_build_site-builder_s1",
     "detail": "product_build_step",
     "outcome": {
       "ok": false,
-      "step_id": "bo-wire-security-review-into-commit-path",
-      "stage": "build",
-      "reason": "Zone 3 edit-patch failed — edit old_string not found in file — the model must copy it verbatim: \"    // exists.\\n    function runAiSecurityReviewOnDiff(entries) {\\n      if (typeo\"",
+      "step_id": "s1",
+      "stage": "artifact_proof",
+      "reason": "artifact_proof_failed: CREATE TABLE IF NOT EXISTS",
       "attempts": 1,
       "blocked": false,
       "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "parked": false,
       "summary": {
-        "product_id": "builderos",
-        "total": 71,
-        "pending": 1,
+        "product_id": "site-builder",
+        "total": 93,
+        "pending": 0,
         "building": 0,
-        "done": 61,
-        "blocked": 1,
-        "founder_gated": 0,
-        "design_review_flagged": 0,
+        "done": 88,
+        "blocked": 0,
+        "founder_gated": 1,
+        "design_review_flagged": 2,
         "human_hold": 0,
-        "skipped": 8,
+        "skipped": 2,
         "complete": false
       }
     },
     "claim": {
-      "id": "builderos:bo-wire-security-review-into-commit-path",
+      "id": "site-builder:s1",
       "kind": "execution",
-      "text": "product step bo-wire-security-review-into-commit-path built + verified + served live",
+      "text": "product step s1 built + verified + served live",
       "grade": "GUESS",
       "proof": null,
       "original_grade": "KNOW",
@@ -51,19 +51,19 @@
       ]
     },
     "summary": {
-      "product_id": "builderos",
-      "total": 71,
-      "pending": 1,
+      "product_id": "site-builder",
+      "total": 93,
+      "pending": 0,
       "building": 0,
-      "done": 61,
-      "blocked": 1,
-      "founder_gated": 0,
-      "design_review_flagged": 0,
+      "done": 88,
+      "blocked": 0,
+      "founder_gated": 1,
+      "design_review_flagged": 2,
       "human_hold": 0,
-      "skipped": 8,
+      "skipped": 2,
       "complete": false
     }
   },
   "cycles": 1,
-  "updated_at": "2026-08-01T09:07:24.878Z"
+  "updated_at": "2026-08-01T09:13:53.750Z"
 }
