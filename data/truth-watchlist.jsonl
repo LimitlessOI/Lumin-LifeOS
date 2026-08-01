@@ -100,3 +100,4 @@
 {"id":"business-tools:step5","text":"product step step5 built + verified + served live","grade":"GUESS","kind":"execution","needs":"confirm against real-world outcome/evidence","urgent":false,"added_at":"2026-08-01T12:06:59.729Z"}
 {"id":"business-tools:step8","text":"product step step8 built + verified + served live","grade":"GUESS","kind":"execution","needs":"confirm against real-world outcome/evidence","urgent":false,"added_at":"2026-08-01T12:16:19.255Z"}
 {"id":"outreach-crm:step3","text":"product step step3 built + verified + served live","grade":"GUESS","kind":"execution","needs":"confirm against real-world outcome/evidence","urgent":false,"added_at":"2026-08-01T12:24:44.748Z"}
+{"id":"boldtrail:boldtrail-step2","text":"product step boldtrail-step2 built + verified + served live","grade":"GUESS","kind":"execution","needs":"confirm against real-world outcome/evidence","urgent":false,"added_at":"2026-08-01T12:29:43.447Z"}

@@ -286,7 +286,7 @@
         "boldtrail-step1"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerLeadScoringRoutes"
       ],
@@ -310,19 +310,21 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:46:40.352Z",
-      "commit_sha": "0683ff2529afa9460e93f0a6f3e103e1534b2e15",
+      "commit_sha": "4ada3383d7e14bc3246ec477b338a9dd0c51dab5",
       "blueprint_id": "PRODUCT-BOLDTRAIL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "boldtrail-step2",
       "mission_id": "PRODUCT-boldtrail",
-      "same_signature_count": 0,
+      "same_signature_count": 1,
       "demoted": false,
-      "last_error": "artifact_proof_failed: app.post('/api/v1/leadscoring/segment'",
-      "heal_unblocked": true
+      "last_error": "artifact_proof_failed: missing_exports:registerLeadScoringRoutes; registerLeadScoringRoutes",
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T12:29:27.779Z",
+      "blocker_class": "BLOCKED_TOOLING",
+      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: missing_exports:registerLeadScoringRoutes; registerLeadScoringRoutes"
     }
   ],
   "blueprint_id": "PRODUCT-BOLDTRAIL-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-boldtrail",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T12:29:12.274Z",
-  "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/boldtrail/BUILD_QUEUE.json"
+  "updated_at": "2026-08-01T12:29:42.326Z"
 }

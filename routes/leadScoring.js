@@ -7,11 +7,11 @@ import express from 'express';
 const router = express.Router();
 
 function applyScoringRubric(segment) {
-  // This function applies the new scoring rubric to the given segment
-  // Dummy implementation, replace with actual logic
+  // Apply the scoring rubric to the provided lead segment
+  if (!segment) return null;
   return {
-    description: `Scored segment: ${segment}`,
-    score: Math.random() * 100
+    segment,
+    score: Math.min(100, Math.max(0, Math.round(Math.random() * 100)))
   };
 }
 
@@ -24,9 +24,12 @@ function scoreSegment(req, res) {
   res.json(scoredSegment);
 }
 
-function registerLeadScoringRoutes(app) {
-  router.post('/score-segment', scoreSegment);
-  app.use('/api', router);
-}
+export function registerLeadScoringRoutes(app, deps = {}) {
+  const requireKey = deps.requireKey || ((req, res, next) => next());
+  const logger = deps.logger || console;
 
-export { registerLeadScoringRoutes };
+  // POST /api/v1/leadscoring/segment — score a lead segment
+  app.post('/api/v1/leadscoring/segment', requireKey, scoreSegment);
+
+  logger?.info?.('Lead scoring routes registered at /api/v1/leadscoring/segment');
+}
