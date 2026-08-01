@@ -401,6 +401,13 @@ function builderTargetsJavaScript(files, targetFile) {
   return false;
 }
 
+function builderTargetsJson(files, targetFile) {
+  const paths = Array.isArray(files) ? files : [];
+  if (paths.some(p => String(p).toLowerCase().endsWith('.json'))) return true;
+  if (String(targetFile || '').toLowerCase().endsWith('.json')) return true;
+  return false;
+}
+
 function parseMissingEvidence({ doneGateReason, doneGateEvidence } = {}) {
   if (Array.isArray(doneGateEvidence?.missing_evidence) && doneGateEvidence.missing_evidence.length) {
     return doneGateEvidence.missing_evidence;
@@ -598,6 +605,18 @@ function jsFullFileCodegenHints() {
     '6. Violating this contract makes the output unusable — the build system will syntax-check and reject it.',
     '7. SERVER MODULE — NO TOP-LEVEL BROWSER GLOBALS: files under routes/, services/, middleware/, startup/ are imported by Node on the server. They MUST NOT reference document, window, localStorage, navigator, or other browser globals at the top level or in any code that runs at import time — that throws "document is not defined" and fails the Railway deploy healthcheck. The pre-commit gate rejects this.',
     '8. CLIENT-SIDE JS GOES INSIDE RETURNED HTML: if the module renders a page, emit any browser-side JavaScript (event listeners, document/window access) ONLY as string content inside the HTML you return — e.g. within a <script>…</script> tag in a template literal — never as executable module code. Server modules build HTML strings; the browser runs the script, not Node.',
+  ].join('\n');
+}
+
+function jsonFullFileCodegenHints() {
+  return [
+    'JSON FULL FILE — STRICT OUTPUT CONTRACT:',
+    '1. Your ENTIRE response must be a single, valid, parseable JSON value (object or array). No prose, no analysis, no markdown.',
+    '2. Do NOT wrap the JSON in markdown fences (no ```json).',
+    '3. Do NOT emit JavaScript/ESM code, imports, `//` comments, or trailing commas. Raw JSON only.',
+    '4. Start with { or [ and end with } or ].',
+    '5. If you need metadata or assumptions, put them inside the JSON under a top-level "metadata" or "notes" string field.',
+    '6. Violating this contract makes the output unusable — the build system will JSON.parse and reject anything else.',
   ].join('\n');
 }
 
@@ -922,6 +941,30 @@ function extractCssFromOutput(rawText) {
   });
   if (cssStart > 0) return lines.slice(cssStart).join('\n').trim();
   return s.trim();
+}
+
+function extractJsonFromOutput(rawText) {
+  let s = String(rawText || '').trim();
+  // Strip whole ```json ... ``` fence
+  const wholeFence = /^```(?:json)?\s*\r?\n([\s\S]*?)\r?\n```\s*$/im;
+  const wf = s.match(wholeFence);
+  if (wf && wf[1].trim().length > 2) return wf[1].trim();
+  // Strip opening fence if no closing fence (truncated)
+  if (s.startsWith('```')) {
+    const firstNl = s.indexOf('\n');
+    if (firstNl !== -1) {
+      let inner = s.slice(firstNl + 1);
+      const closeIdx = inner.lastIndexOf('\n```');
+      if (closeIdx !== -1) inner = inner.slice(0, closeIdx);
+      inner = inner.trim();
+      if (inner.length > 2) return inner;
+    }
+  }
+  // Strip prose preamble lines before the first JSON start token
+  const lines = s.split(/\r?\n/);
+  const jsonStart = lines.findIndex((l) => /^\s*[\{\[]/.test(l.trim()));
+  if (jsonStart > 0) return lines.slice(jsonStart).join('\n').trim();
+  return s;
 }
 
 function extractHtmlFromOutput(text) {
@@ -2088,6 +2131,10 @@ export function createLifeOSCouncilBuilderRoutes({
       mode === 'code' && !additivePatch && !editPatch && !builderTargetsHtml(contextFiles, bodyTargetFile) && builderTargetsJavaScript(contextFiles, bodyTargetFile)
         ? `\n${jsFullFileCodegenHints()}`
         : '';
+    const jsonCodegenExtra =
+      mode === 'code' && !additivePatch && !editPatch && !builderTargetsHtml(contextFiles, bodyTargetFile) && !builderTargetsJavaScript(contextFiles, bodyTargetFile) && builderTargetsJson(contextFiles, bodyTargetFile)
+        ? `\n${jsonFullFileCodegenHints()}`
+        : '';
 
     const executionModeBlock =
       mode === 'code' && executionOnly
@@ -2103,6 +2150,7 @@ export function createLifeOSCouncilBuilderRoutes({
         : '',
       htmlCodegenExtra,
       jsCodegenExtra,
+      jsonCodegenExtra,
       executionModeBlock,
       `\nINSTRUCTION: ${effectiveModeInstructions}`,
       autonomyInstructions ? `\nAUTONOMY: ${autonomyInstructions}` : '',
@@ -2428,6 +2476,13 @@ export function createLifeOSCouncilBuilderRoutes({
         log.info({ target_file, stripped: output.length - stripped.length }, '[BUILDER] /execute: Stripped markdown fence from CSS output');
         cleanedOutput = stripped;
       }
+    } else if (/\.json$/i.test(target_file)) {
+      // Strip markdown fences and prose preamble — models wrap JSON in ```json blocks
+      const stripped = extractJsonFromOutput(output);
+      if (stripped !== output) {
+        log.info({ target_file, stripped: output.length - stripped.length }, '[BUILDER] /execute: Stripped markdown fence/preamble from JSON output');
+        cleanedOutput = stripped;
+      }
     }
     // Zone 3 additive-patch: the caller (e.g. the founder chat build loop) asked
     // /task for an additive-only snippet; splice it into the existing large file
@@ -2617,6 +2672,8 @@ export function createLifeOSCouncilBuilderRoutes({
           output = fixAsteriskShorthandParams(extractJavaScriptFromOutput(output));
         } else if (/\.(css|scss|sass|less)$/i.test(target_file)) {
           output = extractCssFromOutput(output);
+        } else if (/\.json$/i.test(target_file)) {
+          output = extractJsonFromOutput(output);
         }
 
         const validationError = validateGeneratedOutputForTarget(target_file, output);
@@ -3218,6 +3275,13 @@ async function fetchGitHubFileContent(filePath, { token, owner, repoName, branch
       if (extractedCss !== generatedOutput) {
         log.info({ resolvedTarget, stripped: generatedOutput.length - extractedCss.length }, '[BUILDER] Stripped markdown fence from CSS output before commit');
         generatedOutput = extractedCss;
+      }
+    }
+    if (/\.json$/i.test(resolvedTarget)) {
+      const extractedJson = extractJsonFromOutput(generatedOutput);
+      if (extractedJson !== generatedOutput) {
+        log.info({ resolvedTarget, stripped: generatedOutput.length - extractedJson.length }, '[BUILDER] Stripped markdown fence/preamble from JSON output before commit');
+        generatedOutput = extractedJson;
       }
     }
     // Zone 3 edit-patch: apply the model's surgical find-and-replace edits to the
