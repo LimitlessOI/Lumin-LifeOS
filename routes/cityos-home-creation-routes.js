@@ -1,19 +1,17 @@
 /**
- * SYNOPSIS: HTTP route module — Cityos Home Creation Routes.
+ * SYNOPSIS: Product Home Creation
+ * @ssot docs/products/limitlessos/PRODUCT_HOME.md
  */
-import express from 'express';
-
-const registerCityOSHomeCreationRoutes = (app) => {
-  const router = express.Router();
-
-  router.post('/cityos/go-vegas/homes', (req, res) => {
-    // Logic for creating a CityOS/Go Vegas home
-    const homeData = req.body;
-    // Assume some business logic to handle home creation
-    res.status(201).json({ message: 'CityOS/Go Vegas home created', homeData });
+import { createCityosHome } from '../services/cityosHomeService.js';
+export function registerCityOSHomeCreationRoutes(app, deps) {
+  app.post('/api/v1/cityos/home/create', deps.requireKey, async (req, res, next) => {
+    try {
+      const payload = req.body;
+      const result = await createCityosHome(deps, payload);
+      res.json(result);
+    } catch (error) {
+      deps.logger.error({ error }, 'Error in cityos-home-creation-routes route');
+      next(error);
+    }
   });
-
-  app.use('/api', router);
-};
-
-export { registerCityOSHomeCreationRoutes };
+}

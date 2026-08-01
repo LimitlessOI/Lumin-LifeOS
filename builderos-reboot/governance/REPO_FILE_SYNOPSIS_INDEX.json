@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T09:30:58.187Z",
+  "generated_at": "2026-08-01T09:33:31.925Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -69332,10 +69332,13 @@
     },
     {
       "path": "routes/cityos-home-creation-routes.js",
-      "synopsis": "HTTP route module — Cityos Home Creation Routes.",
-      "bytes": 550,
-      "mtime": "2026-07-15T08:32:59.621Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "synopsis": "Product Home Creation",
+      "bytes": 573,
+      "mtime": "2026-08-01T09:33:31.925Z",
+      "indexed_at": "2026-08-01T09:33:31.925Z",
+      "ssot": [
+        "docs/products/limitlessos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/clientcare-billing-recovery-routes.js",
