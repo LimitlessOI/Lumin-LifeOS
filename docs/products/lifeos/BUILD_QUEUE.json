@@ -766,7 +766,7 @@
     },
     {
       "id": "12",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/lifeos-perfect-day-routes.js",
       "task": "Implement LifeOS Perfect Day REST routes with auth and health endpoint",
       "spec": "This is an ES module route file. Export function registerLifeosPerfectDayRoutes(app, deps). Inside the function, create an express.Router and mount it with app.use('/api/v1/lifeos/perfect-day', router). Use deps.requireKey as auth middleware on every endpoint except /health. Endpoints:\n- GET /health returns { ok: true } and does NOT require auth.\n- POST /plan requires auth, calls planPerfectDay(req.body.user_id, req.body), and returns res.json(result).\n- GET /plan requires auth, calls getPerfectDay(req.body.user_id), and returns res.json(result).\n- POST /check-in requires auth, calls checkIn(req.body.user_id, req.body), and returns res.json(result).\n- GET /reminders requires auth, calls getDailyReminders(req.body.user_id), and returns res.json(result).\n- POST /rate requires auth, calls rateDay(req.body.user_id, req.body), and returns res.json(result).\nUse import { planPerfectDay, getPerfectDay, checkIn, getDailyReminders, rateDay } from '../services/lifeos-perfect-day.js';. Handle errors with res.status(500).json({ error: error.message }).",
@@ -787,7 +787,7 @@
       ],
       "attempts": 0,
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "artifact_proof_failed: await planPerfectDay(req.body.user_id",
       "blocker_class": null,
       "claim_level": null,
       "park_until": null,
@@ -804,7 +804,9 @@
       "commit_sha": "25d21fc21673c807426c98a92d7f716758810234",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "12",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "13",
@@ -1399,7 +1401,7 @@
     },
     {
       "id": "lifeos-chat-v2-03",
-      "status": "done",
+      "status": "pending",
       "target_file": "public/overlay/lifeos-ambient-listener.js",
       "task": "Build the ambient listening overlay for lifeos-app.html",
       "spec": "Classic browser script (NOT an ES module; no top-level import/export/require/module.exports; no top-level return). Self-initializing on DOMContentLoaded. Locates the Lumin input area. Adds a microphone toggle button near #lumin-mic-btn. Uses the Web Speech API (SpeechRecognition or webkitSpeechRecognition) with continuous listening when toggled on. On a recognized final transcript, appends it to the Lumin chat input and optionally submits if the user pauses for 2 seconds. Sends interim transcripts to a future POST /api/v1/lifeos/ambient/capture endpoint only if it exists (degrade silently if 404). Displays a visual indicator when listening. Attach public API to window.LifeOSAmbientListener. Do not interfere with normal send. Use existing CSS custom properties.",
@@ -1437,7 +1439,7 @@
       "founder_gated": false,
       "attempts": 0,
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "artifact_proof_failed: SpeechRecognition; webkitSpeechRecognition; lumin-mic-btn; LifeOSAmbientListener",
       "commit_sha": "3d2df8dc204baaf158d44fc433ed0ed51113deb1",
       "built_sha": null,
       "proof": null,
@@ -1458,7 +1460,8 @@
       "shipped_at": "2026-07-16T00:08:14.935Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-chat-v2-03",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-chat-v2-04",
@@ -2596,7 +2599,7 @@
     },
     {
       "id": "step11",
-      "status": "done",
+      "status": "pending",
       "target_file": "public/overlay/lifeos-voice-note-journal.html",
       "task": "create voice-note journaling UI",
       "spec": "Design the UI for mobile-first voice-note journaling with local transcription.",
@@ -2607,7 +2610,7 @@
         "<div class='voice-note-journaling'>"
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "artifact_proof_failed: <div class='voice-note-journaling'>",
       "commit_sha": "d6bc1443c80b726c1e177228ecd979f6c8e685d0",
       "built_sha": null,
       "proof": null,
@@ -2628,7 +2631,8 @@
       "shipped_at": "2026-07-16T02:47:19.892Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step11",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "heal_unblocked": true
     },
     {
       "id": "step12",
@@ -2927,7 +2931,7 @@
     },
     {
       "id": "lifeos-6",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/lifeos-commitment-service.js",
       "task": "Extend parseNaturalLanguage",
       "spec": "Recognize phrases for query mode, call getCommitments and format results into a reply card.",
@@ -2954,7 +2958,7 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "artifact_proof_failed: query mode",
       "commit_sha": "c4079b0d4ce59fac0a6026c34ee275dac9da0e7c",
       "built_sha": null,
       "proof": null,
@@ -2975,11 +2979,12 @@
       "shipped_at": "2026-07-16T04:56:45.117Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-6",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-7",
-      "status": "done",
+      "status": "pending",
       "target_file": "public/overlay/lifeos-voice-note-journal.html",
       "task": "Implement UI for voice journaling",
       "spec": "Add interface for voice recording, transcription via Web Speech API, and submission to the designated endpoint for AI processing.",
@@ -2991,7 +2996,7 @@
         "/api/v1/lifeos/journal/voice"
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "artifact_proof_failed: Web Speech API",
       "commit_sha": "aa91f93141e6db9eec47d00deabb3c744903cf7d",
       "built_sha": null,
       "proof": null,
@@ -3012,7 +3017,8 @@
       "shipped_at": "2026-07-17T21:31:26.324Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-7",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-8",
@@ -3053,7 +3059,7 @@
     },
     {
       "id": "lifeos-9",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/lifeos-psychometric-battery.js",
       "task": "Add distortion spotting in journaling",
       "spec": "Spot cognitive distortions in journal entries or messages when opted-in, using AI for analysis.",
@@ -3064,7 +3070,7 @@
         "cognitive_distortion_mode"
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "artifact_proof_failed: cognitive_distortion_mode",
       "commit_sha": "8fb0fe336bfbf49c9592710d4c99e08e6ab96cdc",
       "built_sha": null,
       "proof": null,
@@ -3085,7 +3091,8 @@
       "shipped_at": "2026-07-16T06:37:07.366Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-9",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-10",
@@ -3337,7 +3344,7 @@
     },
     {
       "id": "lifeos-step4",
-      "status": "done",
+      "status": "pending",
       "target_file": "public/overlay/lifeos-app.html",
       "task": "replace legacy ambient listener script",
       "spec": "Replace /shared/lifeos-ambient-listener.js with /overlay/lifeos-ambient-listener.js and ensure thought-stream container creation and renderThoughtStream is called when necessary.",
@@ -3349,7 +3356,7 @@
         "thought-stream"
       ],
       "last_attempt_at": "2026-07-17T21:04:55.735Z",
-      "last_error": null,
+      "last_error": "artifact_proof_failed: thought-stream",
       "commit_sha": "pre-existing-claim",
       "built_sha": null,
       "proof": null,
@@ -3370,7 +3377,8 @@
       "blueprint_step_id": "lifeos-step4",
       "mission_id": "PRODUCT-lifeos",
       "shipped_via": "pre_existing_ambient_thought_stream",
-      "shipped_at": "2026-07-18T01:07:59.873Z"
+      "shipped_at": "2026-07-18T01:07:59.873Z",
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-step5",
@@ -3455,7 +3463,7 @@
     },
     {
       "id": "lifeos-step8",
-      "status": "done",
+      "status": "pending",
       "target_file": "public/overlay/lifeos-voice-note-journal.html",
       "task": "implement voice journaling feature",
       "spec": "UI for voice journaling with a record button using Web Speech API. Transcribed text posted to /api/v1/lifeos/journal/voice and processed for AI extraction.",
@@ -3471,7 +3479,10 @@
       "commit_sha": "3afef6b726a37c8b32dd978c63bb2b5c0d2ecb0c",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-step8",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "last_error": "artifact_proof_failed: Web Speech API",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-step9",
@@ -3570,7 +3581,7 @@
     },
     {
       "id": "lifeos-step12",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/lifeos-sleep.js",
       "task": "implement sleep tracking module",
       "spec": "Extend health-intelligence.js with functionality for bedtime, wake time, quality, dreams, and HRV correlation. Connect sleep data to daily scorecard.",
@@ -3602,7 +3613,10 @@
       "commit_sha": "d93cea4b96b39cc44d83654f39e04d569bb43323",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-step12",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "last_error": "artifact_proof_failed: bedtime; wake time",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-p1-failure-museum-ui",
@@ -3670,7 +3684,7 @@
         "lifeos-practice.html",
         "lifeos-failure-museum.html"
       ],
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -3679,7 +3693,7 @@
       "blueprint_step_id": "lifeos-p1-practice-nav",
       "mission_id": "PRODUCT-lifeos",
       "last_attempt_at": "2026-07-18T01:36:40.881Z",
-      "last_error": null,
+      "last_error": "artifact_proof_failed: lifeos-practice.html; lifeos-failure-museum.html",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
@@ -3697,7 +3711,8 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "pre_existing_artifact_proof",
-      "shipped_at": "2026-07-18T01:47:20.914Z"
+      "shipped_at": "2026-07-18T01:47:20.914Z",
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-p1-assessment-battery-service",
@@ -3976,7 +3991,7 @@
         "lifeos-food.html",
         "lifeos-practice.html"
       ],
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -3984,11 +3999,12 @@
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-food-nav",
       "mission_id": "PRODUCT-lifeos",
-      "last_error": null,
+      "last_error": "artifact_proof_failed: lifeos-food.html; lifeos-practice.html",
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-p1-sleep-insights-routes",
@@ -4283,7 +4299,7 @@
         "lifeos-ask-your-life.html",
         "lifeos-voice-note-journal.html"
       ],
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -4291,11 +4307,12 @@
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-ask-voice-nav",
       "mission_id": "PRODUCT-lifeos",
-      "last_error": null,
+      "last_error": "artifact_proof_failed: lifeos-ask-your-life.html; lifeos-voice-note-journal.html",
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-p1-cycle-autoreg",
@@ -4494,7 +4511,7 @@
       "file_contains": [
         "lifeos-deep-talk.html"
       ],
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -4502,11 +4519,12 @@
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-deep-talk-nav",
       "mission_id": "PRODUCT-lifeos",
-      "last_error": null,
+      "last_error": "artifact_proof_failed: lifeos-deep-talk.html",
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-p1-emotional-daily-alias",
@@ -5014,7 +5032,7 @@
         "lifeos-parenting-scripts.html",
         "lifeos-labs.html"
       ],
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -5022,11 +5040,12 @@
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-feature-nav-batch",
       "mission_id": "PRODUCT-lifeos",
-      "last_error": null,
+      "last_error": "artifact_proof_failed: lifeos-psychometrics.html; lifeos-parenting-scripts.html; lifeos-labs.html",
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-p1-auth-register-export",
@@ -5288,7 +5307,7 @@
         "lifeos-year-in-pixels.html",
         "lifeos-household.html"
       ],
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -5299,10 +5318,11 @@
       "pre_existing": true,
       "shipped_via": "pre_existing_artifact_proof",
       "shipped_at": "2026-07-18T02:16:19.466Z",
-      "last_error": null,
+      "last_error": "artifact_proof_failed: lifeos-year-in-pixels.html; lifeos-household.html",
       "demoted": false,
       "demote_reason": null,
-      "demoted_at": null
+      "demoted_at": null,
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-p1-victory-register",
@@ -5553,7 +5573,7 @@
         "lifeos-date-night.html",
         "lifeos-parent-mode.html"
       ],
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -5564,7 +5584,9 @@
       "pre_existing": true,
       "shipped_via": "pre_existing_artifact_proof",
       "shipped_at": "2026-07-18T02:43:04.941Z",
-      "last_error": null
+      "last_error": "artifact_proof_failed: lifeos-date-night.html; lifeos-parent-mode.html",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-p1-ui-directives-rewire",
@@ -5649,7 +5671,7 @@
       "file_contains": [
         "lifeos-twin-directives.html"
       ],
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -5660,7 +5682,9 @@
       "pre_existing": true,
       "shipped_via": "pre_existing_artifact_proof",
       "shipped_at": "2026-07-18T02:43:04.941Z",
-      "last_error": null
+      "last_error": "artifact_proof_failed: lifeos-twin-directives.html",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "lifeos-p1-member-feedback-migration",
@@ -5790,7 +5814,7 @@
       "file_contains": [
         "lifeos-member-feedback.html"
       ],
-      "status": "done",
+      "status": "pending",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -5800,11 +5824,14 @@
       "shipped_at": "2026-07-18T02:45:15.086Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-member-feedback-nav",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "last_error": "artifact_proof_failed: lifeos-member-feedback.html",
+      "demoted": false,
+      "heal_unblocked": true
     }
   ],
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-lifeos",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:21:56.144Z"
+  "updated_at": "2026-08-01T06:30:35.552Z"
 }
