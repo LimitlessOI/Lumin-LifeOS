@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: Provides an endpoint for accessing vendor comparison data.
+ * SYNOPSIS: Exposes an endpoint for comparing vendor offerings from the price book.
  * @ssot docs/products/limitlessos/PRODUCT_HOME.md
  */
 export function registerPriceBookVendorComparisonRoutes(app) {
