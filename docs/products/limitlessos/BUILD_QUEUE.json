@@ -3,7 +3,7 @@
   "product_id": "limitlessos",
   "verify_script": "scripts/verify-go-vegas-scheduler.mjs",
   "notes": "Go Vegas revenue slice — outreach pipeline v1 already shipped as code; this queue closes the last mile to live revenue: scheduler tick (daily discover/invite/follow-up under caps), dry-run proof script, and SENTRY-facing status receipt. No founder UI in this slice.",
-  "updated_at": "2026-08-01T09:51:24.633Z",
+  "updated_at": "2026-08-01T09:51:59.441Z",
   "steps": [
     {
       "id": "gv-scheduler",
@@ -1112,7 +1112,7 @@
       "spec": "Add new audit intake flow route.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerAuditIntakeFlowRoutes"
       ],
@@ -1136,14 +1136,16 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:15:03.193Z",
-      "commit_sha": "ae1a82fd8b09da027627ce01eea8dd98c9e5276e",
+      "commit_sha": "00afb6f441a17f80b0f002179bc455e77f87e025",
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "limitlessos-step2",
       "mission_id": "PRODUCT-limitlessos",
       "same_signature_count": 0,
       "demoted": false,
-      "last_error": "artifact_proof_failed: intake questions",
-      "heal_unblocked": true
+      "last_error": "artifact_proof_failed: missing_exports:registerAuditIntakeFlowRoutes",
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T09:51:40.884Z",
+      "blocker_class": "BLOCKED_TOOLING"
     },
     {
       "id": "limitlessos-step3",
