@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T04:15:31.235Z",
+  "generated_at": "2026-08-01T04:16:12.991Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12670,
   "files": [
@@ -70153,9 +70153,9 @@
     {
       "path": "routes/lifeos-psychometric-battery-routes.js",
       "synopsis": "Psychometric battery HTTP routes for purpose-discovery priors.",
-      "bytes": 1607,
-      "mtime": "2026-07-18T18:46:59.246Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 1433,
+      "mtime": "2026-08-01T04:16:12.991Z",
+      "indexed_at": "2026-08-01T04:16:12.991Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
