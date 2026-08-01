@@ -1,24 +1,24 @@
 {
   "status": "idle",
   "last_task": {
-    "id": "product_build_lifeos_lifeos-7",
+    "id": "product_build_lifeos_lifeos-step4",
     "kind": "product_build_step",
     "priority": 2,
     "product": "lifeos",
     "product_id": "lifeos",
-    "step_id": "lifeos-7",
-    "target_file": "public/overlay/lifeos-voice-note-journal.html",
-    "detail": "next buildable step: lifeos-7"
+    "step_id": "lifeos-step4",
+    "target_file": "public/overlay/lifeos-app.html",
+    "detail": "next buildable step: lifeos-step4"
   },
   "last_result": {
     "ok": false,
-    "task_id": "product_build_lifeos_lifeos-7",
+    "task_id": "product_build_lifeos_lifeos-step4",
     "detail": "product_build_step",
     "outcome": {
       "ok": false,
-      "step_id": "lifeos-7",
-      "stage": "artifact_proof",
-      "reason": "artifact_proof_failed: Web Speech API",
+      "step_id": "lifeos-step4",
+      "stage": "grounding",
+      "reason": "grounding_failed: missing_sql_table: system., iframe.",
       "attempts": 1,
       "blocked": false,
       "blocker_class": "BLOCKED_TOOLING",
@@ -27,9 +27,9 @@
       "summary": {
         "product_id": "lifeos",
         "total": 176,
-        "pending": 15,
+        "pending": 13,
         "building": 0,
-        "done": 160,
+        "done": 162,
         "blocked": 0,
         "founder_gated": 0,
         "design_review_flagged": 0,
@@ -39,9 +39,9 @@
       }
     },
     "claim": {
-      "id": "lifeos:lifeos-7",
+      "id": "lifeos:lifeos-step4",
       "kind": "execution",
-      "text": "product step lifeos-7 built + verified + served live",
+      "text": "product step lifeos-step4 built + verified + served live",
       "grade": "GUESS",
       "proof": null,
       "original_grade": "KNOW",
@@ -53,9 +53,9 @@
     "summary": {
       "product_id": "lifeos",
       "total": 176,
-      "pending": 15,
+      "pending": 13,
       "building": 0,
-      "done": 160,
+      "done": 162,
       "blocked": 0,
       "founder_gated": 0,
       "design_review_flagged": 0,
@@ -65,5 +65,5 @@
     }
   },
   "cycles": 1,
-  "updated_at": "2026-08-01T07:04:12.753Z"
+  "updated_at": "2026-08-01T07:12:05.922Z"
 }
