@@ -1,30 +1,20 @@
 /**
+ * SYNOPSIS: HTTP route module — Script Routes.
  * @ssot docs/products/creator-media-os/PRODUCT_HOME.md
  */
-/**
- * SYNOPSIS: HTTP route module — ScriptRoutes.
- */
-import express from 'express';
 
-const registerScriptRoutes = (app) => {
-  const router = express.Router();
+// app.post route registration for script generation.
 
-  // Route to generate a script
-  router.post('/generate', (req, res) => {
-    const { scriptData } = req.body;
-    // Logic to generate script
+export function registerScriptRoutes(app) {
+  // POST /api/v1/script — generate a script
+  app.post('/api/v1/script', (req, res) => {
+    const { scriptData } = req.body || {};
     res.status(200).json({ message: 'Script generated successfully', data: scriptData });
   });
 
-  // Route to get a script by ID
-  router.get('/:id', (req, res) => {
+  // GET /api/v1/script/:id — retrieve a script by ID
+  app.get('/api/v1/script/:id', (req, res) => {
     const { id } = req.params;
-    // Logic to retrieve script by ID
     res.status(200).json({ message: `Script with ID: ${id} retrieved successfully` });
   });
-
-  // Register the routes
-  app.use('/scripts', router);
-};
-
-export { registerScriptRoutes };
+}

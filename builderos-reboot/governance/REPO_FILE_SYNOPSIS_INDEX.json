@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T11:19:01.666Z",
+  "generated_at": "2026-08-01T11:22:54.579Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -30844,9 +30844,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 37342,
-      "mtime": "2026-08-01T11:11:54.838Z",
-      "indexed_at": "2026-08-01T11:12:36.856Z",
+      "bytes": 37586,
+      "mtime": "2026-08-01T11:22:36.740Z",
+      "indexed_at": "2026-08-01T11:22:54.579Z",
       "synopsis_index_only": true
     },
     {
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1741,
-      "mtime": "2026-08-01T11:15:10.828Z",
-      "indexed_at": "2026-08-01T11:15:32.847Z",
+      "bytes": 1952,
+      "mtime": "2026-08-01T11:22:26.764Z",
+      "indexed_at": "2026-08-01T11:22:54.579Z",
       "synopsis_index_only": true
     },
     {
@@ -41164,9 +41164,9 @@
     {
       "path": "docs/products/builderos/GAP_FILL_LEDGER.json",
       "synopsis": "Documentation — GAP FILL LEDGER.",
-      "bytes": 46049,
-      "mtime": "2026-08-01T11:11:30.141Z",
-      "indexed_at": "2026-08-01T11:11:40.991Z",
+      "bytes": 46828,
+      "mtime": "2026-08-01T11:16:11.340Z",
+      "indexed_at": "2026-08-01T11:22:54.579Z",
       "synopsis_index_only": true
     },
     {
@@ -41634,9 +41634,9 @@
     {
       "path": "docs/products/creator-media-os/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Creator Media OS",
-      "bytes": 27409,
-      "mtime": "2026-08-01T11:16:04.008Z",
-      "indexed_at": "2026-08-01T11:16:06.874Z"
+      "bytes": 28427,
+      "mtime": "2026-08-01T11:22:42.560Z",
+      "indexed_at": "2026-08-01T11:22:54.579Z"
     },
     {
       "path": "docs/products/CREATORMEDIAOS.md",
@@ -65772,9 +65772,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 3686,
-      "mtime": "2026-08-01T11:14:28.864Z",
-      "indexed_at": "2026-08-01T11:15:32.847Z",
+      "bytes": 5230,
+      "mtime": "2026-08-01T11:17:56.032Z",
+      "indexed_at": "2026-08-01T11:22:54.579Z",
       "synopsis_index_only": true
     },
     {
@@ -71206,10 +71206,10 @@
     },
     {
       "path": "routes/scriptRoutes.js",
-      "synopsis": "HTTP route module — ScriptRoutes.",
-      "bytes": 795,
-      "mtime": "2026-07-16T19:42:53.602Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis": "HTTP route module — Script Routes.",
+      "bytes": 676,
+      "mtime": "2026-08-01T11:22:34.520Z",
+      "indexed_at": "2026-08-01T11:22:54.579Z",
       "ssot": [
         "docs/products/creator-media-os/PRODUCT_HOME.md"
       ]

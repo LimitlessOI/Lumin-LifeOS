@@ -1,24 +1,24 @@
 {
   "status": "idle",
   "last_task": {
-    "id": "product_build_creator-media-os_3",
+    "id": "product_build_creator-media-os_10",
     "kind": "product_build_step",
     "priority": 2.0017,
     "product": "creator-media-os",
     "product_id": "creator-media-os",
-    "step_id": "3",
-    "target_file": "services/scriptEngine.js",
-    "detail": "next buildable step: 3"
+    "step_id": "10",
+    "target_file": "routes/scriptRoutes.js",
+    "detail": "next buildable step: 10"
   },
   "last_result": {
     "ok": false,
-    "task_id": "product_build_creator-media-os_3",
+    "task_id": "product_build_creator-media-os_10",
     "detail": "product_build_step",
     "outcome": {
       "ok": false,
-      "step_id": "3",
-      "stage": "artifact_proof",
-      "reason": "artifact_proof_failed: Script for long and short form",
+      "step_id": "10",
+      "stage": "functional_proof",
+      "reason": "route module not auto-registered — add {\"path\":\"routes/scriptRoutes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
       "attempts": 1,
       "blocked": false,
       "blocker_class": "BLOCKED_TOOLING",
@@ -27,9 +27,9 @@
       "summary": {
         "product_id": "creator-media-os",
         "total": 32,
-        "pending": 5,
+        "pending": 2,
         "building": 0,
-        "done": 25,
+        "done": 28,
         "blocked": 0,
         "founder_gated": 0,
         "design_review_flagged": 0,
@@ -39,9 +39,9 @@
       }
     },
     "claim": {
-      "id": "creator-media-os:3",
+      "id": "creator-media-os:10",
       "kind": "execution",
-      "text": "product step 3 built + verified + served live",
+      "text": "product step 10 built + verified + served live",
       "grade": "GUESS",
       "proof": null,
       "original_grade": "KNOW",
@@ -53,9 +53,9 @@
     "summary": {
       "product_id": "creator-media-os",
       "total": 32,
-      "pending": 5,
+      "pending": 2,
       "building": 0,
-      "done": 25,
+      "done": 28,
       "blocked": 0,
       "founder_gated": 0,
       "design_review_flagged": 0,
@@ -65,5 +65,5 @@
     }
   },
   "cycles": 1,
-  "updated_at": "2026-08-01T11:15:10.831Z"
+  "updated_at": "2026-08-01T11:22:26.766Z"
 }
