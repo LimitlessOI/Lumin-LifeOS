@@ -171,26 +171,28 @@
     },
     {
       "id": "7",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/teacher-insights.mjs",
       "task": "Summarize teacher interviews",
       "spec": "Compile and summarize insights from interviews with 5 teachers regarding student-facing platforms.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "route": {
         "path": "/"
       },
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T17:56:32.182Z",
-      "commit_sha": "a3927889f01ffc595bf09c9b413ea877181fbf28",
+      "commit_sha": "a2c6967580771f7ac7d0b85b8dcef654bf09632e",
       "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "7",
       "mission_id": "PRODUCT-kids-os",
       "same_signature_count": 0,
       "demoted": false,
       "last_error": "no_proof_required_non_server_code",
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T13:23:22.934Z",
+      "completed_at": "2026-08-01T13:23:36.780Z"
     },
     {
       "id": "8",
@@ -1034,6 +1036,6 @@
   "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-kids-os",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T13:23:08.731Z",
+  "updated_at": "2026-08-01T13:23:36.781Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/kids-os/BUILD_QUEUE.json"
 }
