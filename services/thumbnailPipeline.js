@@ -7,10 +7,7 @@
  */
 
 // Thumbnail/SEO from source assets pipeline.
-// In a real application, you would import necessary modules here,
-// such as image processing libraries (e.g., sharp, jimp) or database connectors.
-// import sharp from 'sharp';
-// import { getAssetById } from './assetService.js'; // Assuming an asset service exists
+// Uses shared source assets to generate thumbnails and SEO-optimized images.
 
 /**
  * Configures the Express application with routes and handlers for

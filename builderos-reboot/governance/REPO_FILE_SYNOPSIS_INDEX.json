@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T05:06:09.469Z",
+  "generated_at": "2026-08-01T05:08:38.137Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12670,
   "files": [
@@ -41542,9 +41542,9 @@
     {
       "path": "docs/products/creator-media-os/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Creator Media OS",
-      "bytes": 23294,
-      "mtime": "2026-08-01T05:06:09.469Z",
-      "indexed_at": "2026-08-01T05:06:09.469Z"
+      "bytes": 23396,
+      "mtime": "2026-08-01T05:08:38.137Z",
+      "indexed_at": "2026-08-01T05:08:38.137Z"
     },
     {
       "path": "docs/products/CREATORMEDIAOS.md",
@@ -95825,9 +95825,9 @@
     {
       "path": "services/thumbnailPipeline.js",
       "synopsis": "Exports setupThumbnailSEO — services/thumbnailPipeline.js.",
-      "bytes": 9919,
-      "mtime": "2026-08-01T05:06:09.469Z",
-      "indexed_at": "2026-08-01T05:06:09.469Z",
+      "bytes": 9729,
+      "mtime": "2026-08-01T05:08:38.137Z",
+      "indexed_at": "2026-08-01T05:08:38.137Z",
       "ssot": [
         "docs/products/creator-media-os/PRODUCT_HOME.md"
       ]
