@@ -285,26 +285,28 @@
     },
     {
       "id": "10",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/coppa-compliance-review.mjs",
       "task": "Conduct COPPA compliance review",
       "spec": "Conduct and document the COPPA compliance review.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "route": {
         "path": "/"
       },
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T18:11:27.229Z",
-      "commit_sha": "8c58fe143547aa612970083d8a303f30bbf6a2ba",
+      "commit_sha": "319ad3d07818a013f72eada8fbf87c4faa586a6d",
       "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "10",
       "mission_id": "PRODUCT-kids-os",
       "same_signature_count": 0,
       "demoted": false,
       "last_error": "no_proof_required_non_server_code",
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T13:24:04.015Z",
+      "completed_at": "2026-08-01T13:24:37.694Z"
     },
     {
       "id": "step1",
@@ -1037,6 +1039,6 @@
   "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-kids-os",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T13:23:36.781Z",
+  "updated_at": "2026-08-01T13:24:37.694Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/kids-os/BUILD_QUEUE.json"
 }
