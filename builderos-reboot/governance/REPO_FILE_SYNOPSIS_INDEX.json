@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T17:24:12.455Z",
+  "generated_at": "2026-08-01T17:27:38.373Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12740,
   "files": [
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3847540,
-      "mtime": "2026-08-01T16:09:16.433Z",
-      "indexed_at": "2026-08-01T16:12:27.420Z"
+      "bytes": 3847978,
+      "mtime": "2026-08-01T17:24:12.521Z",
+      "indexed_at": "2026-08-01T17:27:37.565Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -38952,9 +38952,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 98152,
-      "mtime": "2026-08-01T16:16:26.085Z",
-      "indexed_at": "2026-08-01T16:16:28.889Z"
+      "bytes": 100105,
+      "mtime": "2026-08-01T17:27:32.413Z",
+      "indexed_at": "2026-08-01T17:27:38.373Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
