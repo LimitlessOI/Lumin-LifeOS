@@ -495,6 +495,14 @@
       "added_real_lines": 20,
       "justification": "merge resolution and deterministic comment alignment; factory /build returned BLOCKED_TOOLING.\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
       "commit_message_excerpt": "GAP-FILL: merge origin/main and align services/partner-key-generation.js for white-label-4. Accepted builder-generated async DB-backed generatePartnerKey(deps, payload); added module.exports = { gener"
+    },
+    {
+      "at": "2026-08-01T14:41:47.024Z",
+      "file": "routes/white-label-routes.js",
+      "is_new_file": false,
+      "added_real_lines": 39,
+      "justification": "merge resolution and deterministic route/schema gap-fill; factory /build returned BLOCKED_TOOLING.\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
+      "commit_message_excerpt": "GAP-FILL: merge origin/main and unify routes/white-label-routes.js for white-label-1. Merged builder refactor (createWhiteLabelService import, POST/GET /api/v1/white-label/config routes) with local de"
     }
   ]
 }
