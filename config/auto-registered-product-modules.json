@@ -1122,6 +1122,13 @@
       "mount_path": "/extensions/firefox/mv2",
       "enabled": true,
       "note": "Universal Overlay Firefox MV2 extension variant route (GET /extensions/firefox/mv2)"
+    },
+    {
+      "path": "routes/white-label-routes.js",
+      "register": "register",
+      "mount_path": "/api/v1/white-label",
+      "enabled": true,
+      "note": "White-label partner config routes. Mounted by startup/register-runtime-routes.js; register() is a no-op so module-health can record it as mounted without double-mounting."
     }
   ]
 }

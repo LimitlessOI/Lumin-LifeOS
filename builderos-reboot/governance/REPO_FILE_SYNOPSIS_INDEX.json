@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T14:41:56.372Z",
+  "generated_at": "2026-08-01T14:46:17.509Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12727,
   "files": [
@@ -30844,9 +30844,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 50193,
-      "mtime": "2026-08-01T14:23:02.001Z",
-      "indexed_at": "2026-08-01T14:24:48.683Z",
+      "bytes": 50535,
+      "mtime": "2026-08-01T14:45:51.709Z",
+      "indexed_at": "2026-08-01T14:46:17.509Z",
       "synopsis_index_only": true
     },
     {
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1792,
-      "mtime": "2026-08-01T14:37:58.261Z",
-      "indexed_at": "2026-08-01T14:41:55.606Z",
+      "bytes": 2003,
+      "mtime": "2026-08-01T14:44:15.877Z",
+      "indexed_at": "2026-08-01T14:46:17.509Z",
       "synopsis_index_only": true
     },
     {
@@ -42859,9 +42859,9 @@
     {
       "path": "docs/products/white-label/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — White Label",
-      "bytes": 12272,
-      "mtime": "2026-08-01T14:41:34.761Z",
-      "indexed_at": "2026-08-01T14:41:46.721Z"
+      "bytes": 12319,
+      "mtime": "2026-08-01T14:46:05.901Z",
+      "indexed_at": "2026-08-01T14:46:17.509Z"
     },
     {
       "path": "docs/products/WHITELABEL.md",
@@ -65779,9 +65779,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 4858,
-      "mtime": "2026-08-01T14:32:42.001Z",
-      "indexed_at": "2026-08-01T14:35:30.115Z",
+      "bytes": 3856,
+      "mtime": "2026-08-01T14:44:03.101Z",
+      "indexed_at": "2026-08-01T14:46:17.509Z",
       "synopsis_index_only": true
     },
     {
@@ -71910,9 +71910,9 @@
     {
       "path": "routes/white-label-routes.js",
       "synopsis": "White-label partner configuration routes.",
-      "bytes": 3150,
-      "mtime": "2026-08-01T14:41:18.825Z",
-      "indexed_at": "2026-08-01T14:41:46.721Z",
+      "bytes": 3579,
+      "mtime": "2026-08-01T14:45:54.729Z",
+      "indexed_at": "2026-08-01T14:46:17.509Z",
       "ssot": [
         "docs/products/white-label/PRODUCT_HOME.md"
       ]
