@@ -146,13 +146,13 @@
     },
     {
       "id": "4",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/create_user_trials_table.sql",
       "task": "create user_trials table schema",
       "spec": "Define schema for user_trials table; includes user_id, trial_start and trial_end timestamps.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS user_trials",
         "user_id",
@@ -161,14 +161,16 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T08:59:10.767Z",
-      "commit_sha": "140ae4e01e639060c249be22a658b4a61517595d",
+      "commit_sha": "4c4ce9364e119c7eb4131ac20d6ace71f5254fe3",
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "4",
       "mission_id": "PRODUCT-business-tools",
       "same_signature_count": 0,
       "demoted": false,
       "last_error": "artifact_proof_failed: trial_start; trial_end",
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T11:41:56.566Z",
+      "completed_at": "2026-08-01T11:42:06.521Z"
     },
     {
       "id": "5",
@@ -1245,6 +1247,6 @@
   "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-business-tools",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T11:41:40.077Z",
+  "updated_at": "2026-08-01T11:42:06.521Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/business-tools/BUILD_QUEUE.json"
 }
