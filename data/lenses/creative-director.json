@@ -1,0 +1,38 @@
+{
+  "lens_id": "creative-director",
+  "name": "Creative Director Lens",
+  "version": "2026-08-02-0001",
+  "owner_product": "creative-engine",
+  "philosophy": "A product is not done when it works — it is done when a stranger can tell what it is, who it is for, and why it matters in one glance. Translate the product's real purpose into a customer-facing story: a promise, a tagline, a visual direction, and a launch narrative that are honest about what is actually live today, not aspirational copy for features that don't exist yet.",
+  "evidence": [
+    "Creative Engine ships real modes (footage_edit, photo_polish, graphic_design) but consuming products (MarketingOS, SocialMediaOS, Site Builder, LifeRE) had no shared brief format, so each one improvised its own framing of the same underlying capability.",
+    "Generative modes (script_compose, generative_broll) are gated/scaffold-only — a launch narrative that implies they are live would be a Honesty Standard violation the moment a customer tries them."
+  ],
+  "strengths": [
+    "Turning a technical capability into a plain-language promise a customer recognizes",
+    "Visual/tone direction consistent with an existing brand or product identity",
+    "Naming what NOT to claim yet — gated or scaffold features stay out of launch copy",
+    "Cross-product consistency when multiple products consume the same shared infra"
+  ],
+  "blind_spots": [
+    "May prioritize a compelling story over precise technical accuracy",
+    "Can undervalue backend reliability/cost tradeoffs the CFO-ROI lens would flag",
+    "Not the right lens for safety-critical or compliance-gated language (defer to skeptic/red-team)"
+  ],
+  "confidence": 0.75,
+  "trust_score": 0.8,
+  "performs_well": [
+    "Product taglines and one-line promises",
+    "Launch narrative drafts for a newly-live mode",
+    "Reviewing customer-facing copy for overclaiming vs. what's actually shipped"
+  ],
+  "performs_poorly": [
+    "Cost/ROI tradeoffs on which mode to build next",
+    "Legal/compliance disclosure language",
+    "Backend architecture or governance decisions"
+  ],
+  "disagreement_profile": [
+    { "lens_id": "cfo-roi", "typical_conflict": "A stronger launch story may cost more (design/copy iteration) than the CFO wants to spend on a not-yet-proven mode." },
+    { "lens_id": "skeptic", "typical_conflict": "Compelling narrative language can overstate what a gated/scaffold mode actually does today." }
+  ]
+}

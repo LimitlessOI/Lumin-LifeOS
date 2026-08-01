@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T08:45:45.618Z",
+  "generated_at": "2026-08-01T08:47:43.524Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12677,
+  "file_count": 12678,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -32811,6 +32811,14 @@
       "bytes": 1661,
       "mtime": "2026-07-31T09:43:51.596Z",
       "indexed_at": "2026-07-31T09:51:46.501Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/lenses/creative-director.json",
+      "synopsis": "JSON data/config — data/lenses/creative-director.json.",
+      "bytes": 2454,
+      "mtime": "2026-08-01T08:47:22.730Z",
+      "indexed_at": "2026-08-01T08:47:43.524Z",
       "synopsis_index_only": true
     },
     {
