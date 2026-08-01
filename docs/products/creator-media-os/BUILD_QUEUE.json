@@ -45,13 +45,13 @@
     },
     {
       "id": "2",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/likenessConsent.js",
       "task": "manage likeness consent",
       "spec": "Capture and revocation of likeness consent.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 3,
       "expected_exports": [
         "registerLikenessConsentRoutes"
       ],
@@ -72,9 +72,9 @@
           "assertion_id": "expected_exports:routes/likenessConsent.js"
         }
       ],
-      "last_attempt_at": "2026-08-01T11:10:47.489Z",
+      "last_attempt_at": "2026-08-01T11:14:41.504Z",
       "last_error": "route module not auto-registered — add {\"path\":\"routes/likenessConsent.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
-      "commit_sha": "90dc7aedc24ebff9136be4d17194f186e34572c6",
+      "commit_sha": "2aedbc4a1c5dd0798969f49d01b608291adf7393",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -99,7 +99,8 @@
       "heal_unblocked": true,
       "failure_signature": "functional_proof|BLOCKED_TOOLING|route module not auto-registered — add {\"path\":\"routes/likenessConsent.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE",
       "artifact_proven": true,
-      "grounding_status": "PASS"
+      "grounding_status": "PASS",
+      "completed_at": "2026-08-01T11:14:42.075Z"
     },
     {
       "id": "3",
@@ -1404,5 +1405,5 @@
   "corpus_sources": [
     "docs/products/creator-media-os/PRODUCT_HOME.md"
   ],
-  "updated_at": "2026-08-01T11:10:48.093Z"
+  "updated_at": "2026-08-01T11:14:42.075Z"
 }
