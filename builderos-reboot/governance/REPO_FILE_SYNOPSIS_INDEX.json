@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T06:49:25.847Z",
+  "generated_at": "2026-08-01T06:54:09.277Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12677,
   "files": [
@@ -33104,9 +33104,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1701,
-      "mtime": "2026-08-01T06:39:44.595Z",
-      "indexed_at": "2026-08-01T06:42:00.531Z",
+      "bytes": 1753,
+      "mtime": "2026-08-01T06:52:18.559Z",
+      "indexed_at": "2026-08-01T06:54:09.277Z",
       "synopsis_index_only": true
     },
     {
@@ -41888,9 +41888,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 650107,
-      "mtime": "2026-08-01T06:41:04.435Z",
-      "indexed_at": "2026-08-01T06:42:00.531Z"
+      "bytes": 651291,
+      "mtime": "2026-08-01T06:53:56.571Z",
+      "indexed_at": "2026-08-01T06:54:09.277Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -66087,9 +66087,9 @@
     {
       "path": "products/receipts/REAL_APP_E2E.json",
       "synopsis": "Product receipt — REAL APP E2E.",
-      "bytes": 2426,
-      "mtime": "2026-07-30T02:27:48.226Z",
-      "indexed_at": "2026-07-30T22:32:11.913Z",
+      "bytes": 2559,
+      "mtime": "2026-08-01T06:52:10.151Z",
+      "indexed_at": "2026-08-01T06:54:09.277Z",
       "synopsis_index_only": true
     },
     {
@@ -66119,9 +66119,9 @@
     {
       "path": "products/receipts/SENTRY_FINDINGS_FEED.lifeos-founder-ui.json",
       "synopsis": "Product receipt — SENTRY FINDINGS FEED.Lifeos Founder Ui.",
-      "bytes": 285,
-      "mtime": "2026-07-30T02:27:48.226Z",
-      "indexed_at": "2026-07-30T22:32:11.913Z",
+      "bytes": 1790,
+      "mtime": "2026-08-01T06:52:16.971Z",
+      "indexed_at": "2026-08-01T06:54:09.277Z",
       "synopsis_index_only": true
     },
     {
@@ -67226,10 +67226,10 @@
     },
     {
       "path": "public/overlay/lifeos-ambient-listener.js",
-      "synopsis": "Existing code for public/overlay/lifeos-ambient-listener.js",
-      "bytes": 1114,
-      "mtime": "2026-07-17T21:42:16.095Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "synopsis": "LifeOS ambient listening overlay — classic browser script for lifeos-app.html.",
+      "bytes": 5565,
+      "mtime": "2026-08-01T06:53:22.943Z",
+      "indexed_at": "2026-08-01T06:54:09.277Z"
     },
     {
       "path": "public/overlay/lifeos-ambient-sense.js",

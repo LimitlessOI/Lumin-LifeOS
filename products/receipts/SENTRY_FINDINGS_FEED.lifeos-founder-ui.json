@@ -1,13 +1,29 @@
 {
   "schema": "sentry_findings_feed_v1",
   "product": "lifeos-founder-ui",
-  "generated_at": "2026-07-30T02:17:55.236Z",
-  "findings_count": 0,
+  "generated_at": "2026-08-01T06:52:16.973Z",
+  "findings_count": 1,
   "without_solution": 0,
   "unclassified_error_findings": 0,
-  "findings": [],
+  "findings": [
+    {
+      "code": "drawer_direct_build",
+      "detail": "missing terminal PASS + transport/commit proof: \"The build failed. It was refused due to a `FILE_PLACEMENT_VIOLATION`. The system found that `scripts/lifeos-direct-build-smoke-test.mjs` is a protected source file and is missing the required `@ssot` JSDoc tag pointing t\"",
+      "proposed_solution": "The founder chat returned counsel/essay text instead of the required response for \"drawer_direct_build\". Fix intent routing in routes/lifeos-builderos-command-control-routes.js (POST /founder-interface/message) and the intent services (services/founder-chair-intent.js, services/founder-intent-clarify.js, services/chair-intent-signals.js): classify this prompt into the correct lane (workflow-content / direct-build / counsel) and compose the lane's real response — for build intents emit the build + terminal PASS + commit-proof receipt, not a description of the mechanics.",
+      "proposed_solution_source": "synthesized",
+      "severity": "error",
+      "source": "layer-b-command-key",
+      "root_cause_class": "code_defect"
+    }
+  ],
   "readiness": {
-    "blockers": [],
+    "blockers": [
+      {
+        "code": "drawer_direct_build",
+        "detail": "missing terminal PASS + transport/commit proof: \"The build failed. It was refused due to a `FILE_PLACEMENT_VIOLATION`. The system found that `scripts/lifeos-direct-build-smoke-test.mjs` is a protected source file and is missing the required `@ssot` JSDoc tag pointing t\"",
+        "root_cause_class": "code_defect"
+      }
+    ],
     "warnings": []
   }
 }
