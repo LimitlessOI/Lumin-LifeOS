@@ -10,7 +10,7 @@
     ]
   },
   "schema": "product_registry_v1",
-  "updated_at": "2026-07-13",
+  "updated_at": "2026-08-02",
   "registry_rules": {
     "canonical_folder_rule": "Each product has one canonical folder under docs/products/<product-id>/.",
     "completeness_gate_rule": "A product must not advance to founder-packet or blueprint generation until blocking gaps in vision, intent, tradeoffs, and scope are surfaced.",
@@ -209,6 +209,25 @@
       "status": "ACTIVE_PRODUCT_HOME",
       "notes": [
         "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "creative-engine",
+      "name": "Creative Engine",
+      "canonical_home": "docs/products/creative-engine/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/creative-engine/FILE_MANIFEST.json",
+      "law_path": "docs/products/creative-engine/PRODUCT_HOME.md",
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [],
+      "default_runtime_surface": "/api/v1/creative/*",
+      "status": "SHARED_PLATFORM_MODULE",
+      "readiness_state": "LIVE_SHARED_INFRA",
+      "blueprint_score": 7,
+      "notes": [
+        "Shared media rendering infrastructure for MarketingOS, SocialMediaOS, Site Builder, LifeRE, and any product needing footage edit, photo polish, graphic design, or social publish.",
+        "v1 footage_edit and photo_polish are live and tip-proven; script_compose, generative_broll, and live social publish are gated on API tokens / connected accounts.",
+        "CREATIVE_BRIEF.md generated for every active product via the Creative Director lens."
       ]
     },
     {

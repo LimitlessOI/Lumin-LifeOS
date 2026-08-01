@@ -5,8 +5,8 @@
     "role": "Catalog of reusable cognitive assets (lenses).",
     "spec": "docs/products/builderos/specs/COGNITIVE_ASSET_ARCHITECTURE.md"
   },
-  "version": "2026-08-01-0002",
-  "updated_at": "2026-08-01T23:00:00.000Z",
+  "version": "2026-08-02-0001",
+  "updated_at": "2026-08-02T00:00:00.000Z",
   "retirement_criteria": {
     "trust_score_floor": 0.3,
     "min_evidence_count": 3,
@@ -120,6 +120,18 @@
       "version": "2026-08-01-0001",
       "evidence_count": 2,
       "trust_score": 0.78,
+      "retirement_criteria": "Removed if trust_score < 0.3 for 5 consecutive missions or no evidence for 365 days."
+    },
+    {
+      "lens_id": "creative-director",
+      "name": "Creative Director Lens",
+      "path": "data/lenses/creative-director.json",
+      "responsibilities": ["creative"],
+      "default_model_member": "claude_sonnet",
+      "summary": "Translate product purpose into a customer-facing story: promise, tagline, visual direction, and launch narrative.",
+      "version": "2026-08-02-0001",
+      "evidence_count": 1,
+      "trust_score": 0.8,
       "retirement_criteria": "Removed if trust_score < 0.3 for 5 consecutive missions or no evidence for 365 days."
     },
     {

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T08:28:29.236Z",
+  "generated_at": "2026-08-01T08:45:45.618Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12677,
   "files": [
@@ -32840,9 +32840,9 @@
     {
       "path": "data/lenses/LENS_REGISTRY.json",
       "synopsis": "JSON data/config — data/lenses/LENS_REGISTRY.json.",
-      "bytes": 5979,
-      "mtime": "2026-07-31T23:01:00.554Z",
-      "indexed_at": "2026-07-31T23:01:43.086Z",
+      "bytes": 6548,
+      "mtime": "2026-08-01T08:32:19.404Z",
+      "indexed_at": "2026-08-01T08:45:45.618Z",
       "synopsis_index_only": true
     },
     {
@@ -42195,9 +42195,9 @@
     {
       "path": "docs/products/PRODUCT_REGISTRY.json",
       "synopsis": "Documentation — PRODUCT REGISTRY.",
-      "bytes": 29027,
-      "mtime": "2026-07-13T20:29:53.070Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 30085,
+      "mtime": "2026-08-01T08:45:36.060Z",
+      "indexed_at": "2026-08-01T08:45:45.618Z",
       "synopsis_index_only": true
     },
     {
