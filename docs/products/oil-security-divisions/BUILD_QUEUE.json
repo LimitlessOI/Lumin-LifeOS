@@ -823,7 +823,7 @@
     },
     {
       "id": "9",
-      "status": "skipped",
+      "status": "done",
       "target_file": "docs/ENV_REGISTRY.md",
       "task": "update ENV_REGISTRY documentation",
       "spec": "Include updates according to registry metadata changes and crypto tier labels.",
@@ -851,11 +851,12 @@
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "9",
       "mission_id": "PRODUCT-oil-security-divisions",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "completed_at": "2026-08-01T06:12:28.224Z"
     },
     {
       "id": "10",
-      "status": "skipped",
+      "status": "done",
       "target_file": "docs/products/project-governance/PRODUCT_HOME.md",
       "task": "add Phase 7 probe precedent",
       "spec": "Document the precedent set by the Phase 7 probe to help guide future governance decisions.",
@@ -883,7 +884,8 @@
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "10",
       "mission_id": "PRODUCT-oil-security-divisions",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "completed_at": "2026-08-01T06:12:28.224Z"
     },
     {
       "id": "11",
@@ -1891,5 +1893,5 @@
   "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-oil-security-divisions",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T05:59:55.018Z"
+  "updated_at": "2026-08-01T06:12:28.231Z"
 }
