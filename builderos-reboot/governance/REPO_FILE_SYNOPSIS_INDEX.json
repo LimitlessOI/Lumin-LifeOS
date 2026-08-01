@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T15:17:00.465Z",
+  "generated_at": "2026-08-01T15:17:27.277Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12734,
   "files": [
@@ -70738,9 +70738,9 @@
     {
       "path": "routes/marketing-performance-intel-routes.js",
       "synopsis": "Exposes API routes for marketing performance learning insights.",
-      "bytes": 1014,
-      "mtime": "2026-08-01T15:17:00.465Z",
-      "indexed_at": "2026-08-01T15:17:00.465Z",
+      "bytes": 1177,
+      "mtime": "2026-08-01T15:17:27.277Z",
+      "indexed_at": "2026-08-01T15:17:27.277Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
