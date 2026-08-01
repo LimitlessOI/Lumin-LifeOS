@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T08:22:37.661Z",
+  "generated_at": "2026-08-01T08:25:32.540Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12677,
   "files": [
@@ -33104,9 +33104,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1807,
-      "mtime": "2026-08-01T08:19:42.872Z",
-      "indexed_at": "2026-08-01T08:20:19.843Z",
+      "bytes": 1830,
+      "mtime": "2026-08-01T08:24:51.284Z",
+      "indexed_at": "2026-08-01T08:25:32.540Z",
       "synopsis_index_only": true
     },
     {
@@ -41136,9 +41136,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 379541,
-      "mtime": "2026-08-01T08:22:28.508Z",
-      "indexed_at": "2026-08-01T08:22:37.661Z"
+      "bytes": 380304,
+      "mtime": "2026-08-01T08:25:21.368Z",
+      "indexed_at": "2026-08-01T08:25:32.540Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -69091,10 +69091,13 @@
     },
     {
       "path": "routes/commitment-routing.js",
-      "synopsis": "EXISTING FILE CONTENT",
-      "bytes": 716,
-      "mtime": "2026-07-17T19:19:29.718Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "synopsis": "Registers commitment routes under /api/v1/lifeos/commitments.",
+      "bytes": 916,
+      "mtime": "2026-08-01T08:25:01.732Z",
+      "indexed_at": "2026-08-01T08:25:32.540Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/commitmentTracker.js",

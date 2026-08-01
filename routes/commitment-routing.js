@@ -1,5 +1,6 @@
 /**
- * SYNOPSIS: EXISTING FILE CONTENT
+ * SYNOPSIS: Registers commitment routes under /api/v1/lifeos/commitments.
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 // EXISTING FILE CONTENT
 
@@ -24,7 +25,9 @@ function deleteCommitment(req, res) {
 }
 
 function registerCommitmentRoutes(app) {
-  app.use('/commitments', router);
+  // app.get /api/v1/lifeos/commitments
+  app.get('/api/v1/lifeos/commitments', getCommitments);
+  app.use('/api/v1/lifeos/commitments', router);
 }
 
 router.get('/', getCommitments);
