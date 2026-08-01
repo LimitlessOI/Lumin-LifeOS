@@ -10,13 +10,13 @@
   "steps": [
     {
       "id": "1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/leadScoring.js",
       "task": "add explicit scoring rubric",
       "spec": "Include a detailed scoring rubric in the segment description that defines clear rules for lead scoring, adhering to the documented segment description.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "getScoringRubric"
       ],
@@ -39,14 +39,16 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T08:34:13.507Z",
-      "commit_sha": "8a013e4efaeea645d6e0ebb3ae355ad703277562",
+      "commit_sha": "0700b0a5e40907ab5db1d24171516797f531a74f",
       "blueprint_id": "PRODUCT-BOLDTRAIL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "1",
       "mission_id": "PRODUCT-boldtrail",
       "same_signature_count": 0,
       "demoted": false,
       "last_error": "artifact_proof_failed: function getScoringRubric; const scoringRubric",
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T12:28:56.226Z",
+      "completed_at": "2026-08-01T12:29:12.273Z"
     },
     {
       "id": "step1",
@@ -321,6 +323,6 @@
   "blueprint_id": "PRODUCT-BOLDTRAIL-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-boldtrail",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:30:22.608Z",
+  "updated_at": "2026-08-01T12:29:12.274Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/boldtrail/BUILD_QUEUE.json"
 }
