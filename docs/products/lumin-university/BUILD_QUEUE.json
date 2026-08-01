@@ -742,12 +742,12 @@
       "status": "pending",
       "target_file": "routes/accreditationConsultationRoutes.js",
       "task": "create route module",
-      "spec": "Routes for accreditation body consultation management.",
+      "spec": "Routes for accreditation body consultation management. Upstream service `services/accreditationConsultation.js` exports `scheduleConsultation` and `getConsultationDetails`.",
       "depends_on": [
         "step5"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerAccreditationConsultationRoutes"
       ],
@@ -770,9 +770,9 @@
       "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step6",
       "mission_id": "PRODUCT-lumin-university",
-      "last_error": "route module not auto-registered — add {\"path\":\"routes/accreditationConsultationRoutes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
-      "last_attempt_at": "2026-08-01T01:23:58.093Z",
-      "blocker_class": "BLOCKED_TOOLING",
+      "last_error": null,
+      "last_attempt_at": null,
+      "blocker_class": null,
       "claim_level": null,
       "park_until": null,
       "revive_count": 0,
