@@ -51,21 +51,23 @@
       "spec": "Implement UX flows specifically for children ages 4-7.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "route": {
         "path": "/"
       },
       "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:16:43.159Z",
-      "commit_sha": "dbfa9c07032d20c96dd97fb75b8c6c3db22db600",
+      "commit_sha": "15dc62a41fb1ff34c0fb6c88aa8e5665136397cd",
       "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "2",
       "mission_id": "PRODUCT-kids-os",
       "same_signature_count": 0,
       "demoted": false,
       "last_error": "no_proof_required_non_server_code",
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T13:14:05.172Z",
+      "blocker_class": "BLOCKED_TOOLING"
     },
     {
       "id": "3",
@@ -1027,6 +1029,6 @@
   "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-kids-os",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:30:33.167Z",
+  "updated_at": "2026-08-01T13:14:33.979Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/kids-os/BUILD_QUEUE.json"
 }
