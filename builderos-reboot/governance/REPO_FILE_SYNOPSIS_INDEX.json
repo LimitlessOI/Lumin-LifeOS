@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T12:21:56.017Z",
+  "generated_at": "2026-08-01T12:26:15.615Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1790,
-      "mtime": "2026-08-01T12:16:19.252Z",
-      "indexed_at": "2026-08-01T12:16:45.783Z",
+      "bytes": 1806,
+      "mtime": "2026-08-01T12:24:44.744Z",
+      "indexed_at": "2026-08-01T12:26:15.615Z",
       "synopsis_index_only": true
     },
     {
@@ -42362,9 +42362,9 @@
     {
       "path": "docs/products/outreach-crm/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Outreach CRM",
-      "bytes": 8515,
-      "mtime": "2026-06-29T17:35:43.037Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 9013,
+      "mtime": "2026-08-01T12:25:58.848Z",
+      "indexed_at": "2026-08-01T12:26:15.615Z"
     },
     {
       "path": "docs/products/OUTREACHCRM.md",

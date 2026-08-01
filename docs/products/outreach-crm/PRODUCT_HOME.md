@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/outreach-crm/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-29 |
+| **Last Updated** | 2026-08-02 — BUILD_QUEUE fix (step 3): corrected `file_contains` for `config/auto-registered-product-modules.json` from the stale exact JSON string `{"path":"routes/boldtrail-routes.js","module":"registerBoldTrailRoutes"}` to `routes/boldtrail-routes.js` + `registerBoldtrailRoutes`. The config already contained the correct entry using the `register` key and the `registerBoldtrailRoutes` export alias from `routes/boldtrail-routes.js`; the original spec drifted from the implemented auto-register schema. |
 
 ---
 **Status:** LIVE (partial)

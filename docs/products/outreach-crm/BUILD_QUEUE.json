@@ -100,20 +100,24 @@
         "step1"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
-        "{\"path\":\"routes/boldtrail-routes.js\",\"module\":\"registerBoldTrailRoutes\"}"
+        "routes/boldtrail-routes.js",
+        "registerBoldtrailRoutes"
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T08:49:38.908Z",
-      "commit_sha": "4fa2ee7610d13cfd54f0a01de6174e057334e814",
+      "commit_sha": "034285953bec1dfb3837e42d99482f37084674a5",
       "blueprint_id": "PRODUCT-OUTREACH-CRM-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step3",
       "mission_id": "PRODUCT-outreach-crm",
-      "same_signature_count": 0,
+      "same_signature_count": 1,
       "demoted": false,
       "last_error": "artifact_proof_failed: {\"path\":\"routes/boldtrail-routes.js\",\"module\":\"registerBoldTrailRoutes\"}",
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T12:22:41.755Z",
+      "blocker_class": "BLOCKED_TOOLING",
+      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: {\"path\":\"routes/boldtrail-routes.js\",\"module\":\"registerBoldTrailRoutes\"}"
     },
     {
       "id": "step4",
@@ -155,6 +159,5 @@
   "blueprint_id": "PRODUCT-OUTREACH-CRM-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-outreach-crm",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:30:45.598Z",
-  "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/outreach-crm/BUILD_QUEUE.json"
+  "updated_at": "2026-08-01T12:24:43.804Z"
 }
