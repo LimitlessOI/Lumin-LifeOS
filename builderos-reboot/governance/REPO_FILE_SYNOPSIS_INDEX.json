@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T13:09:33.670Z",
+  "generated_at": "2026-08-01T13:09:40.552Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1892,
-      "mtime": "2026-08-01T13:01:50.360Z",
-      "indexed_at": "2026-08-01T13:02:22.638Z",
+      "bytes": 1906,
+      "mtime": "2026-08-01T13:05:03.856Z",
+      "indexed_at": "2026-08-01T13:09:39.778Z",
       "synopsis_index_only": true
     },
     {
@@ -34328,9 +34328,9 @@
     {
       "path": "db/memory-auto-apply.sql",
       "synopsis": "SQL — memory-auto-apply.sql.",
-      "bytes": 1699,
-      "mtime": "2026-08-01T13:03:46.830Z",
-      "indexed_at": "2026-08-01T13:04:46.649Z"
+      "bytes": 1565,
+      "mtime": "2026-08-01T13:09:33.232Z",
+      "indexed_at": "2026-08-01T13:09:39.778Z"
     },
     {
       "path": "db/memory-contract-closure.sql",
@@ -41179,9 +41179,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 383544,
-      "mtime": "2026-08-01T09:08:24.700Z",
-      "indexed_at": "2026-08-01T09:08:37.658Z"
+      "bytes": 384612,
+      "mtime": "2026-08-01T13:08:46.504Z",
+      "indexed_at": "2026-08-01T13:09:39.778Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -65772,9 +65772,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 3850,
-      "mtime": "2026-08-01T11:50:38.024Z",
-      "indexed_at": "2026-08-01T12:02:49.631Z",
+      "bytes": 3954,
+      "mtime": "2026-08-01T13:04:39.688Z",
+      "indexed_at": "2026-08-01T13:09:39.778Z",
       "synopsis_index_only": true
     },
     {
@@ -87868,9 +87868,9 @@
     {
       "path": "services/blueprint-grounding-check.js",
       "synopsis": "Deterministic static grounding check for generated artifacts before",
-      "bytes": 23555,
-      "mtime": "2026-07-31T23:39:02.734Z",
-      "indexed_at": "2026-07-31T23:39:02.734Z",
+      "bytes": 23957,
+      "mtime": "2026-08-01T13:07:29.080Z",
+      "indexed_at": "2026-08-01T13:09:39.778Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
