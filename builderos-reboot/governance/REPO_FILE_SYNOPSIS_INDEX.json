@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T12:08:32.114Z",
+  "generated_at": "2026-08-01T12:10:42.939Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -41236,9 +41236,9 @@
     {
       "path": "docs/products/business-tools/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Business Tools",
-      "bytes": 13390,
-      "mtime": "2026-08-01T12:08:03.772Z",
-      "indexed_at": "2026-08-01T12:08:32.114Z"
+      "bytes": 13908,
+      "mtime": "2026-08-01T12:10:27.772Z",
+      "indexed_at": "2026-08-01T12:10:42.939Z"
     },
     {
       "path": "docs/products/BUSINESSTOOLS.md",
@@ -69913,9 +69913,9 @@
     {
       "path": "routes/issueApprovalRoutes.js",
       "synopsis": "HTTP route module — Issue Approval Routes.",
-      "bytes": 991,
-      "mtime": "2026-08-01T12:07:39.044Z",
-      "indexed_at": "2026-08-01T12:08:32.114Z",
+      "bytes": 2219,
+      "mtime": "2026-08-01T12:09:56.976Z",
+      "indexed_at": "2026-08-01T12:10:42.939Z",
       "ssot": [
         "docs/products/business-tools/PRODUCT_HOME.md"
       ]
