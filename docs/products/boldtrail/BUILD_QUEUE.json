@@ -10,7 +10,7 @@
   "steps": [
     {
       "id": "1",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/leadScoring.js",
       "task": "add explicit scoring rubric",
       "spec": "Include a detailed scoring rubric in the segment description that defines clear rules for lead scoring, adhering to the documented segment description.",
@@ -42,7 +42,10 @@
       "commit_sha": "8a013e4efaeea645d6e0ebb3ae355ad703277562",
       "blueprint_id": "PRODUCT-BOLDTRAIL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "1",
-      "mission_id": "PRODUCT-boldtrail"
+      "mission_id": "PRODUCT-boldtrail",
+      "last_error": "artifact_proof_failed: function getScoringRubric; const scoringRubric",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "step1",
@@ -268,7 +271,7 @@
     },
     {
       "id": "boldtrail-step2",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/leadScoring.js",
       "task": "expose segment scoring route",
       "spec": "Create a route to apply and return the scored segment description based on the new scoring rubric method.",
@@ -303,11 +306,14 @@
       "commit_sha": "0683ff2529afa9460e93f0a6f3e103e1534b2e15",
       "blueprint_id": "PRODUCT-BOLDTRAIL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "boldtrail-step2",
-      "mission_id": "PRODUCT-boldtrail"
+      "mission_id": "PRODUCT-boldtrail",
+      "last_error": "artifact_proof_failed: app.post('/api/v1/leadscoring/segment'",
+      "demoted": false,
+      "heal_unblocked": true
     }
   ],
   "blueprint_id": "PRODUCT-BOLDTRAIL-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-boldtrail",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:21:43.710Z"
+  "updated_at": "2026-08-01T06:30:22.608Z"
 }
