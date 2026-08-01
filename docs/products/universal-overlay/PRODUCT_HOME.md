@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/universal-overlay/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-02 — hand-authored `db/migrations/addAdaptiveLayoutColumn.sql` to unblock step 8; restored `routes/pageSummarization.js` and added auto-register entry to unblock step 10. |
+| **Last Updated** | 2026-08-02 — hand-authored `db/migrations/addAdaptiveLayoutColumn.sql` to unblock step 8; restored `routes/pageSummarization.js` and auto-register entry for step 10; skipped stale `universal-overlay-step4` duplicate to clear HARD false-done. |
 
 ---
 ---
@@ -345,4 +345,5 @@ User on insurance portal
 | 2026-04-20 | Founding document created; full architecture spec, feature spec, struggle detection design, form fill data flow, approved backlog | Adam: build web-first overlay above everything, real-time updates, proactive help, do-it-for-me form fill, fluid UI, universal platform | ✅ | complete |
 | 2026-08-02 | `db/migrations/addAdaptiveLayoutColumn.sql`: factory-generated SQL used JavaScript `//` comments and failed migration validation. Hand-authored valid SQL using `--` comments with `CREATE TABLE IF NOT EXISTS flourishing_prefs` and `ADD COLUMN IF NOT EXISTS adaptive_layout_preferences JSONB`. | Unblock `universal-overlay` step 8 and keep migrations importable/applied. | ✅ syntax | pending `bp-priority:once` |
 | 2026-08-02 | `routes/pageSummarization.js` step 10: factory builds were orphaned/non-existent in `origin/main`; restored the `143b6628d` canonical version exporting `registerPageSummarizationRoutes` and added `config/auto-registered-product-modules.json` entry so the route mounts live. | Unblock `universal-overlay` step 10 and fix missing route module. | ✅ syntax | pending `bp-priority:once` |
+| 2026-08-02 | `universal-overlay-step4` (`services/proactiveToastSystem.js`) was a stale duplicate of `universal-overlay-1`; the canonical file exports `registerProactiveToast` (commit `0288b02c0`) and does not contain `ProactiveToastSystem`/`dismissibleToast`. Skipped the duplicate and aligned expectations to `registerProactiveToast` to satisfy `audit-false-done-steps`. | Remove HARD false-done ratchet failure caused by duplicate step with conflicting expected exports. | ✅ `node --check services/proactiveToastSystem.js` | pending `bp-priority:once` |
 | 2026-04-20 | Extension scaffold shipped: `extension/manifest.json`, `extension/content.js`, `extension/background.js`, `extension/popup.html`, `extension/popup.js`; server overlay: `public/extension/frame.html`, `public/extension/frame.js`, `public/extension/version.json`; backend: `routes/lifeos-extension-routes.js` (status, context, fill-form, chat); mounted in `startup/register-runtime-routes.js`; registered in `docs/projects/INDEX.md` | Build the foundation that all overlay features sit on | ✅ node --check PASS | complete |

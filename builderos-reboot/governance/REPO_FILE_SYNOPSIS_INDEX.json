@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T02:44:58.800Z",
+  "generated_at": "2026-08-01T02:46:58.108Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12660,
   "files": [
@@ -38902,9 +38902,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 86223,
-      "mtime": "2026-08-01T02:38:36.403Z",
-      "indexed_at": "2026-08-01T02:38:36.403Z"
+      "bytes": 87241,
+      "mtime": "2026-08-01T02:46:58.108Z",
+      "indexed_at": "2026-08-01T02:46:58.108Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41903,9 +41903,9 @@
     {
       "path": "docs/products/lifere/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeRE",
-      "bytes": 47530,
-      "mtime": "2026-07-30T02:15:14.010Z",
-      "indexed_at": "2026-07-30T22:32:11.913Z"
+      "bytes": 48149,
+      "mtime": "2026-08-01T02:46:58.108Z",
+      "indexed_at": "2026-08-01T02:46:58.108Z"
     },
     {
       "path": "docs/products/limitlessos/conversations/2026-06-29-founder-ecosystem-session.md",
@@ -42470,9 +42470,9 @@
     {
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Universal Overlay",
-      "bytes": 19168,
-      "mtime": "2026-08-01T02:38:36.403Z",
-      "indexed_at": "2026-08-01T02:38:36.403Z"
+      "bytes": 19792,
+      "mtime": "2026-08-01T02:46:58.108Z",
+      "indexed_at": "2026-08-01T02:46:58.108Z"
     },
     {
       "path": "docs/products/UNIVERSALOVERLAY.md",

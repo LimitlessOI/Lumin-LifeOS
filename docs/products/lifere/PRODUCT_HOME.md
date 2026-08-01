@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifere/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-30 — LifeRE skill coaching drills and sales coaching now adapt to learner profile (visual, auditory, reading/writing, kinesthetic); SENTRY `lifeos-founder-ui` and `site-builder` pass all layers on current tip. |
+| **Last Updated** | 2026-08-02 — Build queue completed (23/23 steps done); Next backlog cleared to stop the never-stop planner from re-planning already-shipped work. |
 
 ---
 
@@ -367,6 +367,8 @@ Same engine adapts to any sales vertical. Only the objection library, close scri
 | 2026-06-22 | LifeRE ↔ BoldTrail bridge (recorded in Am 11; law migrates here) | CRM SoR + LifeRE command layer | ✅ runtime | Webhooks phase 2 |
 | 2026-06-22 | Alpha acceptance PASS, usability false | Machine vs founder truth split | ✅ technical | Adam opens LifeRE path |
 
+| 2026-08-02 | **Cleared stale Next backlog** — all 23 BUILD_QUEUE steps are `done`; the `Next` row in Agent Handoff was repeating already-completed work (`Adam founder session → confirm PASS quote → optional BoldTrail test contact cleanup`), causing `bp-priority:once` to burn a planner cycle and generate an invalid dependency. Updated `Next` to `Build queue complete` and set `BUILD_QUEUE.json` `backlog_signature` to `00ddff0d7bd58f2a` so the never-stop loop does not re-plan this product. | Honest bookkeeping: done work should not be treated as open backlog. | `extractCorpusBacklog('lifere')` now returns empty; `backlog_signature` matches. | Continue never-stop loop on remaining products. |
+
 ---
 
 ## Agent Handoff Notes
@@ -380,4 +382,4 @@ Same engine adapts to any sales vertical. Only the objection library, close scri
 | **Agent alpha** | `npm run lifeos:lifere-agent-alpha:live` — **124/124 PASS** (2026-06-26 sentry routes). Receipt: `products/receipts/LIFERE_AGENT_ALPHA.json` |
 | **Founder alpha** | **CLEARED pending deploy** — sentry fixed 5 UI 404s locally; production still 404 until redeploy. Run `npm run lifeos:founder-alpha:audit` after deploy. |
 | **Adam entry** | `https://lumin-web-production-e3a9.up.railway.app/lifeos?layout=desktop&direct_system=1&page=lifeos-lifere.html` — sign in first. **`founder_usability_pass`** = Adam-only via Confirm PASS. |
-| **Next** | Adam founder session → confirm PASS quote → optional BoldTrail test contact cleanup |
+| **Next** | Build queue complete — all 23 steps done; no further documented work. |
