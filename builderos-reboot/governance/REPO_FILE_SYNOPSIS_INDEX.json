@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T13:27:46.630Z",
+  "generated_at": "2026-08-01T13:28:33.334Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12723,
+  "file_count": 12726,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3841779,
-      "mtime": "2026-08-01T13:19:17.568Z",
-      "indexed_at": "2026-08-01T13:19:18.563Z"
+      "bytes": 3842767,
+      "mtime": "2026-08-01T13:28:00.012Z",
+      "indexed_at": "2026-08-01T13:28:33.334Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1647,
-      "mtime": "2026-08-01T13:25:45.776Z",
-      "indexed_at": "2026-08-01T13:27:46.630Z",
+      "bytes": 1673,
+      "mtime": "2026-08-01T13:14:35.132Z",
+      "indexed_at": "2026-08-01T13:19:39.684Z",
       "synopsis_index_only": true
     },
     {
@@ -41843,9 +41843,9 @@
     {
       "path": "docs/products/kids-os/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Kids OS",
-      "bytes": 31511,
-      "mtime": "2026-08-01T13:27:35.656Z",
-      "indexed_at": "2026-08-01T13:27:46.630Z"
+      "bytes": 32199,
+      "mtime": "2026-08-01T13:28:18.360Z",
+      "indexed_at": "2026-08-01T13:28:33.334Z"
     },
     {
       "path": "docs/products/KIDSOS.md",
@@ -72768,6 +72768,16 @@
       ]
     },
     {
+      "path": "scripts/coppa-compliance-review.mjs",
+      "synopsis": "Conducts and documents COPPA compliance reviews for KidsOS children.",
+      "bytes": 5258,
+      "mtime": "2026-08-01T13:24:31.689Z",
+      "indexed_at": "2026-08-01T13:24:31.689Z",
+      "ssot": [
+        "docs/products/kids-os/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "scripts/council-builder-preflight.mjs",
       "synopsis": "Proves the Council Builder is reachable and reports why POST /api/v1/lifeos/builder/build",
       "bytes": 14804,
@@ -73360,6 +73370,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/interview-summary.mjs",
+      "synopsis": "Summarize insights from parent interviews.",
+      "bytes": 3118,
+      "mtime": "2026-08-01T13:23:01.908Z",
+      "indexed_at": "2026-08-01T13:23:01.908Z",
+      "ssot": [
+        "docs/products/kids-os/PRODUCT_HOME.md"
       ]
     },
     {
@@ -75812,6 +75832,16 @@
       "bytes": 1679,
       "mtime": "2026-06-21T21:39:09.156Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "scripts/teacher-insights.mjs",
+      "synopsis": "Summarizes insights from teacher interviews about student-facing platforms.",
+      "bytes": 2995,
+      "mtime": "2026-08-01T13:23:30.227Z",
+      "indexed_at": "2026-08-01T13:23:30.227Z",
+      "ssot": [
+        "docs/products/kids-os/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/test-bp-hello2.mjs",
@@ -87665,9 +87695,9 @@
     {
       "path": "services/apiSpec.js",
       "synopsis": "Service module — ApiSpec.",
-      "bytes": 3859,
-      "mtime": "2026-08-01T13:27:06.088Z",
-      "indexed_at": "2026-08-01T13:27:46.630Z",
+      "bytes": 3821,
+      "mtime": "2026-07-16T19:42:53.605Z",
+      "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/kids-os/PRODUCT_HOME.md"
       ]

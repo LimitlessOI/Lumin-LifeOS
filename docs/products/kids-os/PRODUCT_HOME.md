@@ -15,7 +15,7 @@
 
 ---
 **Status:** In Progress — Foundation Build Complete
-**Last Updated:** 2026-08-02 — GAP-FILL `services/apiSpec.js` added the `/** API specification for kids-os */` header comment to satisfy the `kids-os-step1` BUILD_QUEUE `file_contains` contract; `getApiSpec` export already existed.
+**Last Updated:** 2026-08-02 — Factory built `scripts/coppa-compliance-review.mjs`, `scripts/interview-summary.mjs`, and `scripts/teacher-insights.mjs` for kids-os steps 6–8. GAP-FILL `services/apiSpec.js` added the `/** API specification for kids-os */` header comment to satisfy the `kids-os-step1` BUILD_QUEUE `file_contains` contract; `getApiSpec` export already existed.
 **Priority:** High (mission-foundational, long-arc subscription, graduates into adult LifeOS)
 **Category:** Education / Personal Development / Constitutional Mission
 **Parent Documents:**
@@ -521,6 +521,7 @@ CREATE TABLE kids_os_welfare_flags (
 
 ## Change Receipts
 
+| 2026-08-02 | **Factory built `scripts/coppa-compliance-review.mjs`, `scripts/interview-summary.mjs`, and `scripts/teacher-insights.mjs` for kids-os steps 6–8.** These scripts were generated through the governed factory and committed during the never-stop `bp-priority:once` cycle while the local branch was resolving the `services/apiSpec.js` gap-fill. | The never-stop factory advanced the Kids OS queue autonomously, producing COPPA review, parent interview summary, and teacher insight scripts. | `node --check` PASS on each script. |
 | 2026-08-02 | **GAP-FILL: `services/apiSpec.js` artifact-proof alignment for `kids-os-step1`.** Added the exact header comment `/** API specification for kids-os */` that the BUILD_QUEUE `file_contains` contract requires. The module already exported `getApiSpec` and contained the endpoint definitions; only the literal proof substring was missing. | The never-stop factory selected `kids-os-step1` and the pre-existing artifact failed `file_contains` for `/** API specification for kids-os */` while `/build` was unavailable due to HTTP 502 (model provider). Since the service is protected (`services/`) and the only mismatch is a comment, a minimal deterministic hand-gap-fill resolves it without model codegen. | `node --check services/apiSpec.js` PASS. |
 | 2026-08-02 | **Creative Director review** — generated CREATIVE_BRIEF.md using the Creative Director lens. | Kids Os reviewed through the BuilderOS creative responsibility; brief written to product home for founder review. | ✅ generated |
 | Date | Change |
