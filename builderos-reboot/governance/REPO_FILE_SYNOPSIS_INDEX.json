@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T13:19:40.461Z",
+  "generated_at": "2026-08-01T13:23:01.908Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12723,
+  "file_count": 12724,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -73360,6 +73360,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/interview-summary.mjs",
+      "synopsis": "Summarize insights from parent interviews.",
+      "bytes": 3118,
+      "mtime": "2026-08-01T13:23:01.908Z",
+      "indexed_at": "2026-08-01T13:23:01.908Z",
+      "ssot": [
+        "docs/products/kids-os/PRODUCT_HOME.md"
       ]
     },
     {
