@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T19:45:29.765Z",
+  "generated_at": "2026-08-01T19:47:19.498Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12795,
   "files": [
@@ -65917,9 +65917,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 3860,
-      "mtime": "2026-08-01T17:15:18.725Z",
-      "indexed_at": "2026-08-01T17:19:22.152Z",
+      "bytes": 3341,
+      "mtime": "2026-08-01T19:47:19.498Z",
+      "indexed_at": "2026-08-01T19:47:19.498Z",
       "synopsis_index_only": true
     },
     {
@@ -66534,8 +66534,8 @@
       "path": "products/receipts/POINT_B_DNA_VERIFY.json",
       "synopsis": "Product receipt — POINT B DNA VERIFY.",
       "bytes": 280,
-      "mtime": "2026-08-01T19:07:38.787Z",
-      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "mtime": "2026-08-01T19:47:19.498Z",
+      "indexed_at": "2026-08-01T19:47:19.498Z",
       "synopsis_index_only": true
     },
     {
@@ -66550,8 +66550,8 @@
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
       "bytes": 18509,
-      "mtime": "2026-08-01T19:07:38.787Z",
-      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "mtime": "2026-08-01T19:47:19.498Z",
+      "indexed_at": "2026-08-01T19:47:19.498Z",
       "synopsis_index_only": true
     },
     {
@@ -66742,16 +66742,16 @@
       "path": "products/receipts/TRUTH_ENFORCEMENT_AUDIT.json",
       "synopsis": "Product receipt — TRUTH ENFORCEMENT AUDIT.",
       "bytes": 701,
-      "mtime": "2026-08-01T19:07:38.787Z",
-      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "mtime": "2026-08-01T19:47:19.498Z",
+      "indexed_at": "2026-08-01T19:47:19.498Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/TRUTH_LOCKDOWN_VERIFY.json",
       "synopsis": "Product receipt — TRUTH LOCKDOWN VERIFY.",
       "bytes": 1141,
-      "mtime": "2026-08-01T19:07:38.787Z",
-      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "mtime": "2026-08-01T19:47:19.498Z",
+      "indexed_at": "2026-08-01T19:47:19.498Z",
       "synopsis_index_only": true
     },
     {
@@ -66782,8 +66782,8 @@
       "path": "products/receipts/WISDOM_TRUTH_AUDIT.json",
       "synopsis": "Product receipt — WISDOM TRUTH AUDIT.",
       "bytes": 735,
-      "mtime": "2026-08-01T19:07:38.787Z",
-      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "mtime": "2026-08-01T19:47:19.498Z",
+      "indexed_at": "2026-08-01T19:47:19.498Z",
       "synopsis_index_only": true
     },
     {
