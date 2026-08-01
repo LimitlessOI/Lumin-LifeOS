@@ -4152,15 +4152,15 @@
         "lifeos-food.html",
         "lifeos-practice.html"
       ],
-      "status": "pending",
+      "status": "done",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
-      "attempts": 1,
+      "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-food-nav",
       "mission_id": "PRODUCT-lifeos",
-      "last_error": "grounding_failed: missing_sql_table: system., iframe.",
+      "last_error": null,
       "pre_existing": true,
       "demoted": false,
       "demote_reason": null,
@@ -4169,7 +4169,10 @@
       "heal_unblocked": true,
       "commit_sha": "2e53df7900def2baa10f85a314e604acd003683d",
       "last_attempt_at": "2026-08-01T07:41:24.330Z",
-      "blocker_class": "BLOCKED_TOOLING"
+      "blocker_class": null,
+      "completed_at": "2026-08-01T07:44:59.304Z",
+      "heal_claimed": true,
+      "heal_reason": "artifact_proof_pass"
     },
     {
       "id": "lifeos-p1-sleep-insights-routes",
@@ -6062,6 +6065,6 @@
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-lifeos",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T07:44:30.512Z",
+  "updated_at": "2026-08-01T07:44:59.304Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/lifeos/BUILD_QUEUE.json"
 }
