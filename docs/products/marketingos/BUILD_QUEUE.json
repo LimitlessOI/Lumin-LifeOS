@@ -1113,7 +1113,7 @@
     },
     {
       "id": "s12",
-      "status": "pending",
+      "status": "skipped",
       "target_file": "public/overlay/marketing-director-dashboard.html",
       "task": "Develop a UI dashboard to display strategic insights and recommendations from the AI Marketing Director.",
       "spec": "HTML file with client-side JS to fetch and display data from `/api/v1/marketingos/director/recommendations`, presenting overall performance summaries, strategic advice, and budget insights.",
@@ -1127,7 +1127,9 @@
         "<script>",
         "fetch('/api/v1/marketingos/director/recommendations')"
       ],
-      "design_review_flagged": true
+      "design_review_flagged": true,
+      "last_error": null,
+      "blocker_class": null
     }
   ],
   "backlog_signature": "marketingos-money-2026071219",
