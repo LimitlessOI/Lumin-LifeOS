@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T11:48:04.919Z",
+  "generated_at": "2026-08-01T11:48:57.821Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -41236,9 +41236,9 @@
     {
       "path": "docs/products/business-tools/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Business Tools",
-      "bytes": 11298,
-      "mtime": "2026-08-01T11:47:53.796Z",
-      "indexed_at": "2026-08-01T11:48:04.919Z"
+      "bytes": 11671,
+      "mtime": "2026-08-01T11:48:47.092Z",
+      "indexed_at": "2026-08-01T11:48:57.821Z"
     },
     {
       "path": "docs/products/BUSINESSTOOLS.md",
@@ -93033,9 +93033,9 @@
     {
       "path": "services/makeGenerator.js",
       "synopsis": "Generates a JSON schema for Make.com scenario import.",
-      "bytes": 913,
-      "mtime": "2026-08-01T11:47:38.584Z",
-      "indexed_at": "2026-08-01T11:48:04.919Z",
+      "bytes": 1877,
+      "mtime": "2026-08-01T11:48:27.332Z",
+      "indexed_at": "2026-08-01T11:48:57.821Z",
       "ssot": [
         "docs/products/business-tools/PRODUCT_HOME.md"
       ]
