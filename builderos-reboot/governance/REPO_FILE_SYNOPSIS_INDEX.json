@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T10:40:30.035Z",
+  "generated_at": "2026-08-01T10:45:00.003Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1776,
-      "mtime": "2026-08-01T10:38:13.964Z",
-      "indexed_at": "2026-08-01T10:38:37.854Z",
+      "bytes": 1759,
+      "mtime": "2026-08-01T10:43:35.900Z",
+      "indexed_at": "2026-08-01T10:45:00.003Z",
       "synopsis_index_only": true
     },
     {
@@ -42535,9 +42535,9 @@
     {
       "path": "docs/products/project-governance/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Project Governance",
-      "bytes": 66771,
-      "mtime": "2026-08-01T08:48:17.387Z",
-      "indexed_at": "2026-08-01T08:48:17.387Z"
+      "bytes": 67658,
+      "mtime": "2026-08-01T10:44:36.480Z",
+      "indexed_at": "2026-08-01T10:45:00.003Z"
     },
     {
       "path": "docs/products/project-governance/READINESS_CHECKLIST.md",
@@ -65772,9 +65772,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 3666,
-      "mtime": "2026-08-01T10:32:31.844Z",
-      "indexed_at": "2026-08-01T10:33:59.853Z",
+      "bytes": 4900,
+      "mtime": "2026-08-01T10:42:22.488Z",
+      "indexed_at": "2026-08-01T10:45:00.003Z",
       "synopsis_index_only": true
     },
     {
@@ -89852,9 +89852,12 @@
     {
       "path": "services/decisionDebt.js",
       "synopsis": "Exports getDecisionDebt — services/decisionDebt.js.",
-      "bytes": 638,
-      "mtime": "2026-07-15T08:32:59.623Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 183,
+      "mtime": "2026-08-01T10:44:00.980Z",
+      "indexed_at": "2026-08-01T10:45:00.003Z",
+      "ssot": [
+        "docs/products/project-governance/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/defi/lending-service/db/schema.sql",

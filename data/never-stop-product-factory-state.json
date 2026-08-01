@@ -1,67 +1,69 @@
 {
   "status": "idle",
   "last_task": {
-    "id": "product_build_memory-system_memory-system-8",
+    "id": "product_build_project-governance_1",
     "kind": "product_build_step",
-    "priority": 2.0009,
-    "product": "memory-system",
-    "product_id": "memory-system",
-    "step_id": "memory-system-8",
-    "target_file": "routes/final_pr_review.js",
-    "detail": "next buildable step: memory-system-8"
+    "priority": 2.0014,
+    "product": "project-governance",
+    "product_id": "project-governance",
+    "step_id": "1",
+    "target_file": "services/decisionDebt.js",
+    "detail": "next buildable step: 1"
   },
   "last_result": {
-    "ok": true,
-    "task_id": "product_build_memory-system_memory-system-8",
+    "ok": false,
+    "task_id": "product_build_project-governance_1",
     "detail": "product_build_step",
     "outcome": {
-      "ok": true,
-      "step_id": "memory-system-8",
-      "commit_sha": "f82501b572ae58f3ce396c84e5ed43219270a626",
-      "verified": true,
-      "deploy_proven": true,
-      "functional_proven": true,
+      "ok": false,
+      "step_id": "1",
+      "stage": "artifact_proof",
+      "reason": "artifact_proof_failed: function getDecisionDebt(){; return {}",
+      "attempts": 1,
+      "blocked": false,
+      "blocker_class": "BLOCKED_TOOLING",
+      "claim_level": null,
+      "parked": false,
       "summary": {
-        "product_id": "memory-system",
-        "total": 39,
-        "pending": 2,
+        "product_id": "project-governance",
+        "total": 8,
+        "pending": 6,
         "building": 0,
-        "done": 35,
+        "done": 1,
         "blocked": 0,
         "founder_gated": 0,
         "design_review_flagged": 0,
         "human_hold": 0,
-        "skipped": 2,
+        "skipped": 1,
         "complete": false
       }
     },
     "claim": {
-      "id": "memory-system:memory-system-8",
+      "id": "project-governance:1",
       "kind": "execution",
-      "text": "product step memory-system-8 built + verified + served live",
-      "grade": "KNOW",
-      "proof": {
-        "deploy_verified": true,
-        "commit_sha": "f82501b572ae58f3ce396c84e5ed43219270a626"
-      },
+      "text": "product step 1 built + verified + served live",
+      "grade": "GUESS",
+      "proof": null,
       "original_grade": "KNOW",
-      "enforced": false,
-      "flags": []
+      "enforced": true,
+      "flags": [
+        "claimed_KNOW_or_LAW_without_proof"
+      ]
     },
     "summary": {
-      "product_id": "memory-system",
-      "total": 39,
-      "pending": 2,
+      "product_id": "project-governance",
+      "total": 8,
+      "pending": 6,
       "building": 0,
-      "done": 35,
+      "done": 1,
       "blocked": 0,
       "founder_gated": 0,
       "design_review_flagged": 0,
       "human_hold": 0,
-      "skipped": 2,
+      "skipped": 1,
       "complete": false
     }
   },
   "cycles": 1,
-  "updated_at": "2026-08-01T10:38:13.969Z"
+  "updated_at": "2026-08-01T10:43:35.902Z"
 }

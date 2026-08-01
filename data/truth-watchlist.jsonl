@@ -81,3 +81,4 @@
 {"id":"memory-system:memory-system-1","text":"product step memory-system-1 built + verified + served live","grade":"GUESS","kind":"execution","needs":"confirm against real-world outcome/evidence","urgent":false,"added_at":"2026-08-01T10:26:10.384Z"}
 {"id":"memory-system:memory-system-3","text":"product step memory-system-3 built + verified + served live","grade":"GUESS","kind":"execution","needs":"confirm against real-world outcome/evidence","urgent":false,"added_at":"2026-08-01T10:29:52.668Z"}
 {"id":"memory-system:memory-system-8","text":"product step memory-system-8 built + verified + served live","grade":"GUESS","kind":"execution","needs":"confirm against real-world outcome/evidence","urgent":false,"added_at":"2026-08-01T10:33:14.741Z"}
+{"id":"project-governance:1","text":"product step 1 built + verified + served live","grade":"GUESS","kind":"execution","needs":"confirm against real-world outcome/evidence","urgent":false,"added_at":"2026-08-01T10:43:35.902Z"}
