@@ -328,7 +328,7 @@
     },
     {
       "id": "8",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/accreditationRoutes.js",
       "task": "add accreditation route",
       "spec": "Add an Express route module for the accreditation structure API. The file must start with a JSDoc block containing `@ssot docs/products/lumin-university/PRODUCT_HOME.md`. Export a named function `registerAccreditationRoutes(app, deps)` that mounts a GET `/api/v1/accreditation/structure` route. Use `deps.requireKey` on the route. Read `institutionId` from `req.query`. Import `getAccreditationStructure` from `../services/accreditationService.js` and call `await getAccreditationStructure(deps, { institutionId })`. Respond with the result JSON. On error, call `deps.logger.error({ error }, 'Error fetching accreditation structure')` and `next(error)`. Output plain ESM JavaScript only. Do NOT define service functions inside the route file.",
@@ -336,7 +336,7 @@
         "7"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "expected_exports": [
         "registerAccreditationRoutes"
       ],
@@ -362,12 +362,12 @@
       ],
       "shipped_via": null,
       "shipped_at": null,
-      "commit_sha": "91052e2e8375a874d87028753962967320b3c2d0",
+      "commit_sha": "9be58e9ac22d31923c39d671167f656b4a46bf90",
       "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "8",
       "mission_id": "PRODUCT-lumin-university",
       "last_error": "artifact_proof_failed: missing_exports:registerAccreditationRoutes",
-      "last_attempt_at": "2026-08-01T00:48:36.017Z",
+      "last_attempt_at": "2026-08-01T00:53:42.608Z",
       "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "park_until": null,
@@ -379,7 +379,8 @@
         "claimed_shipped_at": "2026-07-15T20:14:31.474Z",
         "reason": "commit_sha exists in repo but is not an ancestor of origin/main -- ship landed on origin/builderos-autonomous or origin/builderos-shadow instead of main (GITHUB_DEPLOY_BRANCH mismatch), and the content itself was placeholder/stub code (verified by direct inspection), not a real implementation. Confirmed via: git merge-base --is-ancestor <sha> origin/main."
       },
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "completed_at": "2026-08-01T00:55:31.914Z"
     },
     {
       "id": "9",
