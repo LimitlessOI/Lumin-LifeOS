@@ -51,3 +51,5 @@ export async function optimizeGeneralTask(deps, payload) {
     throw new Error('Failed in optimizeGeneralTask');
   }
 }
+
+export const optimizeGeneralTaskSavings = optimizeGeneralTask;

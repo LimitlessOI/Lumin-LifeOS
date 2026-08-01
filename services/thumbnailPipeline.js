@@ -3,8 +3,10 @@
  *
  * This module manages the thumbnail and SEO repurposing pipeline,
  * utilizing shared source assets for both purposes.
+ * @ssot docs/products/creator-media-os/PRODUCT_HOME.md
  */
 
+// Thumbnail/SEO from source assets pipeline.
 // In a real application, you would import necessary modules here,
 // such as image processing libraries (e.g., sharp, jimp) or database connectors.
 // import sharp from 'sharp';

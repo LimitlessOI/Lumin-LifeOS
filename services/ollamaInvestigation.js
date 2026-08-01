@@ -57,3 +57,5 @@ export async function investigateOllamaPrompts(deps, payload) {
     throw new Error('Failed to investigate Ollama prompts');
   }
 }
+
+export const investigateTokenUsage = investigateOllamaPrompts;

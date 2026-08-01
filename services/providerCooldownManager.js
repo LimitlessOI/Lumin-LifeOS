@@ -77,3 +77,5 @@ export async function getCooldowns(deps, payload) {
     throw new Error('Failed to retrieve cooldowns');
   }
 }
+
+export const retrieveCooldowns = getCooldowns;
