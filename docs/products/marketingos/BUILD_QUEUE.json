@@ -1011,7 +1011,7 @@
     },
     {
       "id": "s8",
-      "status": "pending",
+      "status": "skipped",
       "target_file": "public/overlay/marketing-campaign-review.html",
       "task": "Create a UI overlay to review generated campaign assets.",
       "spec": "HTML file containing client-side JS to fetch campaign assets from `/api/v1/marketingos/campaign` (e.g., `/api/v1/marketingos/campaign/assets?sessionId=...`) and display them for review and potential editing.",
@@ -1025,7 +1025,9 @@
         "<script>",
         "fetch('/api/v1/marketingos/campaign/assets?sessionId='"
       ],
-      "design_review_flagged": true
+      "design_review_flagged": true,
+      "last_error": null,
+      "blocker_class": null
     },
     {
       "id": "s9",
