@@ -1107,17 +1107,125 @@ export async function loadBuildQueuePreferRemote(productId) {
   return loadBuildQueue(productId);
 }
 
+function contentSatisfiesStep(step, content) {
+  const s = String(content || '');
+  if (Array.isArray(step?.file_contains) && step.file_contains.length > 0) {
+    for (const needle of step.file_contains) {
+      if (!s.includes(String(needle))) return false;
+    }
+  }
+  if (Array.isArray(step?.expected_exports) && step.expected_exports.length > 0) {
+    for (const exp of step.expected_exports) {
+      // Loose export-name check: export ... name ... (function, const, class, async function)
+      const re = new RegExp(`\\bexport\\b[^;\\n]*\\b${exp}\\b`);
+      if (!re.test(s)) return false;
+    }
+  }
+  return true;
+}
+
+async function readGoldenArtifact(relPath, commitSha, token, owner, repoName) {
+  const { execFileSync } = await import('node:child_process');
+  try {
+    return execFileSync('git', ['show', `${commitSha}:${relPath}`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
+  } catch {
+    const res = await fetch(`https://api.github.com/repos/${owner}/${repoName}/contents/${relPath}?ref=${encodeURIComponent(commitSha)}`, {
+      headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.raw' },
+    });
+    if (res.ok) return await res.text();
+    return null;
+  }
+}
+
+async function readBranchArtifact(relPath, branch, token, owner, repoName) {
+  const res = await fetch(`https://api.github.com/repos/${owner}/${repoName}/contents/${relPath}?ref=${encodeURIComponent(branch)}`, {
+    headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' },
+  });
+  if (!res.ok) return null;
+  const data = await res.json().catch(() => ({}));
+  if (data.content) return Buffer.from(data.content, 'base64').toString('utf8');
+  return null;
+}
+
+async function writeBranchArtifact(relPath, content, branch, token, owner, repoName, message) {
+  const api = `https://api.github.com/repos/${owner}/${repoName}/contents/${relPath}`;
+  const headers = { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' };
+  let sha;
+  try {
+    const getRes = await fetch(`${api}?ref=${branch}`, { headers });
+    if (getRes.ok) {
+      const d = await getRes.json();
+      sha = d.sha;
+    }
+  } catch { /* new file */ }
+  const body = {
+    message,
+    content: Buffer.from(content, 'utf8').toString('base64'),
+    branch,
+    ...(sha ? { sha } : {}),
+  };
+  const putRes = await fetch(api, { method: 'PUT', headers, body: JSON.stringify(body) });
+  if (putRes.ok || putRes.status === 201) return { ok: true };
+  const err = await putRes.text().catch(() => '');
+  return { ok: false, error: err.slice(0, 200), status: putRes.status };
+}
+
+/**
+ * SELF-HEAL: if a step was completed against a golden commit but the artifact on
+ * `branch` has drifted (or was never merged), copy the golden artifact to the
+ * branch before the queue-status commit lands. This closes the false-done class
+ * where `commit_sha` passes artifact proof but `main` does not.
+ */
+async function syncArtifactFromCommitSha(queue, stepId, branch, token, owner, repoName) {
+  const step = (queue.steps || []).find((s) => s && s.id === stepId);
+  if (!step) return { skipped: true, reason: 'step_not_found' };
+  if (step.status !== STEP_STATUS.DONE && step.status !== STEP_STATUS.BUILDING) {
+    return { skipped: true, reason: 'step_not_done_or_building' };
+  }
+  const target = String(step.target_file || '').replace(/\\/g, '/');
+  const commitSha = step.commit_sha || step.built_sha;
+  if (!target || !commitSha) return { skipped: true, reason: 'no_target_or_commit' };
+
+  const hasDeclared =
+    (Array.isArray(step?.file_contains) && step.file_contains.length > 0)
+    || (Array.isArray(step?.expected_exports) && step.expected_exports.length > 0);
+  if (!hasDeclared) return { skipped: true, reason: 'no_artifact_assertions' };
+
+  const golden = await readGoldenArtifact(target, commitSha, token, owner, repoName);
+  if (golden === null) return { skipped: true, reason: 'golden_not_readable' };
+  if (!contentSatisfiesStep(step, golden)) return { skipped: true, reason: 'golden_does_not_satisfy' };
+
+  const current = await readBranchArtifact(target, branch, token, owner, repoName);
+  if (typeof current === 'string' && contentSatisfiesStep(step, current)) {
+    return { skipped: true, reason: 'branch_already_satisfies' };
+  }
+
+  return writeBranchArtifact(target, golden, branch, token, owner, repoName, `[never-stop] artifact sync: ${target} from ${commitSha.slice(0, 8)}`);
+}
+
 /** Persist BUILD_QUEUE status to GitHub so claims/done survive redeploy. */
 export async function commitQueueStatusToRepo(queue, stepId) {
   const token = (process.env.GITHUB_TOKEN || '').trim();
   const repo = (process.env.GITHUB_REPO || '').trim();
   const branch = process.env.GITHUB_DEPLOY_BRANCH || 'main';
   if (!token || !repo) return { ok: false, error: 'no_github_credentials' };
+
   const localPath = queue._sourcePath || queuePathForProduct(queue.product_id);
   const relPath = path.relative(ROOT, localPath).split(path.sep).join('/');
   const { _sourcePath, ...clean } = queue;
   const [owner, repoName] = repo.split('/');
   if (!owner || !repoName) return { ok: false, error: 'malformed_github_repo' };
+
+  // Self-heal: ensure the artifact that the queue claims is done actually lives on
+  // the branch. Fail-open; a sync failure must not block the queue-status commit.
+  try {
+    const sync = await syncArtifactFromCommitSha(queue, stepId, branch, token, owner, repoName);
+    if (!sync.skipped && !sync.ok) {
+      log({ event: 'artifact_sync_failed', product_id: queue.product_id, step_id: stepId, error: sync.error, status: sync.status });
+    }
+  } catch (e) {
+    log({ event: 'artifact_sync_threw', product_id: queue.product_id, step_id: stepId, error: e.message });
+  }
   const apiBase = `https://api.github.com/repos/${owner}/${repoName}/contents/${relPath}`;
   const headers = { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' };
 
