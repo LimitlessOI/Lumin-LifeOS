@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T20:04:47.539Z",
+  "generated_at": "2026-08-01T20:07:54.119Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12815,
   "files": [
@@ -41308,9 +41308,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 393393,
-      "mtime": "2026-08-01T20:04:45.370Z",
-      "indexed_at": "2026-08-01T20:04:47.539Z"
+      "bytes": 394965,
+      "mtime": "2026-08-01T20:07:38.581Z",
+      "indexed_at": "2026-08-01T20:07:54.119Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -87965,9 +87965,9 @@
     {
       "path": "server-full-runtime.js",
       "synopsis": "╔══════════════════════════════════════════════════════════════════════════════════╗",
-      "bytes": 75006,
-      "mtime": "2026-07-10T00:23:32.233Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 75591,
+      "mtime": "2026-08-01T20:06:47.480Z",
+      "indexed_at": "2026-08-01T20:07:54.119Z"
     },
     {
       "path": "server.js",

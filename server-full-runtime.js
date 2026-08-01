@@ -176,6 +176,7 @@ import { loadROIFromDatabase, updateROI } from "./startup/roi.js";
 import { createMemoryHandlers } from "./startup/memory.js";
 import { createLossTracker } from "./startup/loss.js";
 import { bootAllDomains } from "./startup/boot-domains.js";
+import { registerAllSchedulers } from "./startup/register-schedulers.js";
 import { resolvePublicBaseUrlOrLocalhost } from "./config/public-origin.js";
 const coachingStackRuntimeEnabled =
   process.env.LIFEOS_ENABLE_COACHING_STACK_RUNTIME === "true";
@@ -1132,6 +1133,16 @@ async function startDeferredRuntimeServices() {
       } catch { return ''; }
     },
   });
+
+  // Overnight autonomy daemon: without this call, startup/register-schedulers.js
+  // (ENABLE_OVERNIGHT_DAEMON persistent loop, or the one-off post-boot sweep
+  // fallback) is built but never invoked — the exact "system stops when nobody's
+  // driving it" gap the FACTORY-REPAIR-AND-AUTONOMY-0001 mission was built to close.
+  try {
+    registerAllSchedulers(logger);
+  } catch (error) {
+    logger.warn({ error: error.message }, '⚠️ [OVERNIGHT-DAEMON] registerAllSchedulers failed (non-fatal)');
+  }
 }
 
 // Self-register Twilio SMS webhook — no manual Twilio console action needed
