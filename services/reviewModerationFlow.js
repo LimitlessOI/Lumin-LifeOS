@@ -2,7 +2,73 @@
  * SYNOPSIS: Implements the review moderation flow, including processing and decision logging.
  * @ssot docs/products/faith-studio/PRODUCT_HOME.md
  */
-import { getModerationRules, moderateWithCouncil } from './reviewModerationFlow.js'; // Assuming these exist in the same file or a sibling file.
+
+// NOTE: The previous attempt included imports for getModerationRules and moderateWithCouncil from the same file.
+// As per the rules, we should not rebuild what already exists and extend what is there.
+// However, these functions were not provided in the REPO FILE CONTENTS, nor are they part of the injected dependencies.
+// To resolve this, these functions will be implemented as internal helpers within this file,
+// using the provided `deps.callCouncilMember` for AI moderation.
+
+/**
+ * Retrieves moderation rules. In a real system, this might come from a config service or DB.
+ * For now, it's hardcoded to simulate existing patterns.
+ */
+function getModerationRules() {
+  return {
+    sacredContent: {
+      rules: [
+        { id: 'hate speech', action: 'reject', description: 'Content contains hate speech.' },
+        { id: 'incitement to violence', action: 'reject', description: 'Content incites violence.' },
+        { id: 'self-harm', action: 'reject', description: 'Content promotes self-harm.' },
+        { id: 'misinformation', action: 'flag_for_human_review', description: 'Content contains potential misinformation.' },
+        { id: 'adult content', action: 'flag_for_human_review', description: 'Content may contain adult themes.' },
+      ],
+    },
+  };
+}
+
+/**
+ * Moderates text content using the AI Council.
+ * @param {object} deps - Injected dependencies: callCouncilMember.
+ * @param {object} options - Options for moderation.
+ * @param {string} options.text - The text content to moderate.
+ * @returns {Promise<object>} - Decision from the AI Council.
+ */
+async function moderateWithCouncil(deps, { text }) {
+  const { callCouncilMember, logger } = deps;
+  try {
+    const prompt = `Review the following content for compliance with LifeOS community guidelines, especially regarding hate speech, violence, self-harm, misinformation, and adult content. Provide a verdict (approved, rejected, pending_human_review) and a concise reason.
+    Content: "${text}"
+    Verdict and Reason:`;
+
+    const aiResponse = await callCouncilMember('moderator', prompt, {
+      temperature: 0.3,
+      max_tokens: 150,
+      response_format: { type: 'text' }
+    });
+
+    // Simple parsing of AI response. A more robust solution might use structured JSON output from AI.
+    let status = 'approved';
+    let reason = 'No issues detected by AI Council.';
+
+    if (aiResponse.toLowerCase().includes('rejected')) {
+      status = 'rejected';
+      reason = aiResponse.split('Reason:')[1]?.trim() || 'Rejected by AI Council.';
+    } else if (aiResponse.toLowerCase().includes('pending_human_review')) {
+      status = 'pending_human_review';
+      reason = aiResponse.split('Reason:')[1]?.trim() || 'Flagged for human review by AI Council.';
+    } else if (aiResponse.toLowerCase().includes('approved')) {
+      status = 'approved';
+      reason = aiResponse.split('Reason:')[1]?.trim() || 'Approved by AI Council.';
+    }
+
+    return { status, reason, councilMembersVoted: ['moderator_ai'] };
+
+  } catch (error) {
+    logger.error({ error }, 'Error calling AI Council for moderation.');
+    return { status: 'pending_human_review', reason: 'AI Council call failed, requiring human review.' };
+  }
+}
 
 /**
  * Processes a review for moderation, applies rules, and logs decisions.
@@ -34,30 +100,31 @@ export async function processReviewModeration(deps, payload) {
 
     logger.info({ id, status: reviewPackage.status }, 'Processing review moderation for package.');
 
-    // 2. Apply moderation rules (using existing logic)
-    const moderationRules = getModerationRules(); // Use the existing function
+    // 2. Apply moderation rules
+    const moderationRules = getModerationRules();
     const sacredContentRules = moderationRules.sacredContent.rules;
 
-    // Simulate initial automated scan/keyword detection
-    let initialDecision = { status: 'approved', reason: 'No immediate red flags.' };
+    let initialDecision = { status: 'approved', reason: 'No immediate red flags from automated scan.' };
     for (const rule of sacredContentRules) {
-      if (reviewContent.toLowerCase().includes(rule.id.toLowerCase())) { // Simple keyword match for demo
+      if (reviewContent.toLowerCase().includes(rule.id.toLowerCase())) {
         if (rule.action === 'reject') {
           initialDecision = { status: 'rejected', reason: `Automated rejection: ${rule.description}` };
           break;
         } else if (rule.action === 'flag_for_human_review') {
-          initialDecision = { status: 'pending_human_review', reason: `Automated flag: ${rule.description}` };
-          // Don't break, continue to find higher severity issues
+          // If already flagged for human review, keep that status unless a higher severity 'reject' is found.
+          if (initialDecision.status !== 'rejected') {
+            initialDecision = { status: 'pending_human_review', reason: `Automated flag: ${rule.description}` };
+          }
         }
       }
     }
 
-    // 3. If not immediately rejected, involve the AI Council (using existing logic)
+    // 3. If not immediately rejected, involve the AI Council
     let councilDecision;
-    if (initialDecision.status !== 'rejected') {
-      councilDecision = await moderateWithCouncil({ text: reviewContent }); // Use the existing function
-    } else {
+    if (initialDecision.status === 'rejected') {
       councilDecision = { status: initialDecision.status, reason: initialDecision.reason, councilMembersVoted: [] };
+    } else {
+      councilDecision = await moderateWithCouncil(deps, { text: reviewContent });
     }
 
     let finalStatus = reviewPackage.status;
@@ -85,7 +152,7 @@ export async function processReviewModeration(deps, payload) {
           `Content flagged by AI Council: ${councilDecision.reason}`
         ]
       );
-    } else {
+    } else { // councilDecision.status === 'approved'
       finalStatus = 'approved';
       reviewSummary.moderation = 'Approved by moderation.';
       validation.moderation = { passed: true };
