@@ -9,21 +9,21 @@
   "steps": [
     {
       "id": "1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/001_create_competency_standards.sql",
       "task": "create competency standards table",
       "spec": "Table for storing detailed competency standards.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 3,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS competency_standards",
         "domain TEXT",
         "standards TEXT"
       ],
-      "last_attempt_at": "2026-08-01T00:04:37.320Z",
+      "last_attempt_at": "2026-08-01T00:06:55.956Z",
       "last_error": "artifact_proof_failed: CREATE TABLE IF NOT EXISTS competency_standards; domain TEXT; standards TEXT",
-      "commit_sha": "76969b6d56ab2d9b3c2b59b601ee8af30c0fcdca",
+      "commit_sha": "61fba2530b7f6f5a267eb8fccd8dc800441c2b9b",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
