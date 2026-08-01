@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T13:32:06.149Z",
+  "generated_at": "2026-08-01T13:32:37.040Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12726,
   "files": [
@@ -91470,9 +91470,9 @@
     {
       "path": "services/irlenConsultation.js",
       "synopsis": "Document insights from the Irlen Syndrome community consultation.",
-      "bytes": 621,
-      "mtime": "2026-08-01T13:31:00.729Z",
-      "indexed_at": "2026-08-01T13:31:00.729Z",
+      "bytes": 590,
+      "mtime": "2026-08-01T13:32:37.040Z",
+      "indexed_at": "2026-08-01T13:32:37.040Z",
       "ssot": [
         "docs/products/kids-os/PRODUCT_HOME.md"
       ]
