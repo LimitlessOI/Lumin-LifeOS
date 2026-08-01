@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T00:38:15.244Z",
+  "generated_at": "2026-08-01T00:41:07.136Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12642,
   "files": [
@@ -38881,9 +38881,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 83676,
-      "mtime": "2026-08-01T00:37:47.422Z",
-      "indexed_at": "2026-08-01T00:37:47.422Z"
+      "bytes": 83769,
+      "mtime": "2026-08-01T00:41:07.136Z",
+      "indexed_at": "2026-08-01T00:41:07.136Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41094,9 +41094,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 366698,
-      "mtime": "2026-08-01T00:37:47.422Z",
-      "indexed_at": "2026-08-01T00:37:47.422Z"
+      "bytes": 367640,
+      "mtime": "2026-08-01T00:41:07.136Z",
+      "indexed_at": "2026-08-01T00:41:07.136Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -93039,9 +93039,9 @@
     {
       "path": "services/never-stop-product-factory.js",
       "synopsis": "Permanent product expansion lane — work exists even when BP_PRIORITY queue reads complete.",
-      "bytes": 82171,
-      "mtime": "2026-08-01T00:37:47.422Z",
-      "indexed_at": "2026-08-01T00:37:47.422Z",
+      "bytes": 82442,
+      "mtime": "2026-08-01T00:41:07.136Z",
+      "indexed_at": "2026-08-01T00:41:07.136Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

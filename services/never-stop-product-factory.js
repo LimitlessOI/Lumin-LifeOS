@@ -1309,6 +1309,9 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
       const b = build.body || {};
       const commit_sha = b.commit_sha || b.sha || b.commit || (b.result && b.result.commit_sha) || null;
       if (build.ok && commit_sha) {
+        // Shallow clones do not always have the freshly-committed object; without it
+        // artifact-proof's `git show <sha>:<file>` fails and falls back to stale disk.
+        await spawnAsync('git', ['fetch', 'origin', commit_sha], { cwd: ROOT, timeout: 20000 });
         return { ok: true, commit_sha, error: null, repair_attempts: attempt - 1 };
       }
       // Idempotent completion: the builder produced NO new commit because
