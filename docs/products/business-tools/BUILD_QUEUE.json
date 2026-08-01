@@ -223,13 +223,13 @@
     },
     {
       "id": "6",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/server.approvals.js",
       "task": "implement approvals timeout",
       "spec": "Add non-negotiable 48-hour approval system timeout and auto-reject for controversies.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "expected_exports": [
         "registerApprovalRoutes"
       ],
@@ -249,7 +249,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T09:12:43.608Z",
-      "commit_sha": "369b8439cc54eef5ccbbe34399ebaf90abb0ab1b",
+      "commit_sha": "5ef2e3f7d265c0ad209130f2860aa3a45b072cc6",
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "6",
       "mission_id": "PRODUCT-business-tools",
@@ -257,9 +257,10 @@
       "demoted": false,
       "last_error": "artifact_proof_failed: missing_exports:registerApprovalRoutes; registerApprovalRoutes",
       "heal_unblocked": true,
-      "last_attempt_at": "2026-08-01T11:42:21.455Z",
+      "last_attempt_at": "2026-08-01T11:46:46.698Z",
       "blocker_class": "BLOCKED_TOOLING",
-      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: missing_exports:registerApprovalRoutes; registerApprovalRoutes"
+      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: missing_exports:registerApprovalRoutes; registerApprovalRoutes",
+      "completed_at": "2026-08-01T11:46:46.992Z"
     },
     {
       "id": "step1",
@@ -1250,5 +1251,5 @@
   "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-business-tools",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T11:42:36.457Z"
+  "updated_at": "2026-08-01T11:46:46.992Z"
 }
