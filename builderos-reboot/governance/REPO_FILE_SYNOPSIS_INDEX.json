@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T11:41:34.161Z",
+  "generated_at": "2026-08-01T11:42:00.644Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -37429,9 +37429,9 @@
     {
       "path": "db/migrations/create_user_trials_table.sql",
       "synopsis": "Database migration — create_user_trials_table.sql.",
-      "bytes": 330,
-      "mtime": "2026-07-15T09:37:08.933Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 470,
+      "mtime": "2026-08-01T11:42:00.644Z",
+      "indexed_at": "2026-08-01T11:42:00.644Z"
     },
     {
       "path": "db/migrations/create-conversations-table.sql",
