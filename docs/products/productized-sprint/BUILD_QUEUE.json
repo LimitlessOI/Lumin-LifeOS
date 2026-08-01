@@ -1536,7 +1536,7 @@
       "spec": "Ensure intake form supports both Typeform and custom mode.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "intakeFormHandler"
       ],
@@ -1561,8 +1561,10 @@
       "mission_id": "PRODUCT-productized-sprint",
       "same_signature_count": 0,
       "demoted": false,
-      "last_error": "artifact_proof_failed: module.exports = { intakeFormHandler }",
-      "heal_unblocked": true
+      "last_error": "HTTP 502",
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T14:01:34.502Z",
+      "blocker_class": "BLOCKED_EXTERNAL"
     },
     {
       "id": "step3",
@@ -2189,6 +2191,6 @@
   "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-productized-sprint",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T14:01:21.532Z",
+  "updated_at": "2026-08-01T14:02:00.371Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/productized-sprint/BUILD_QUEUE.json"
 }
