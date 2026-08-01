@@ -6,7 +6,7 @@
 **Parent platform:** Lumin / LifeOS ecosystem  
 **Constitutional law:** `docs/constitution/NORTH_STAR_SSOT.md`  
 **Machine manifest:** `docs/products/limitlessos/FILE_MANIFEST.json`  
-**Last Updated:** 2026-08-02 — Never-stop factory completed limitlessos-step9: registered routes/audit-intake-flow-routes.js, routes/price-book-vendor-comparison-routes.js, and routes/dialogue-bundle-skus-routes.js in config/auto-registered-product-modules.json; removed dependency on skipped overlay step3.
+**Last Updated:** 2026-08-02 — Skipped `BUILD_QUEUE` step `step1` (`public/overlay/formalize-businessos-ui.html`) as an orphan overlay artifact; active-interface governance designates `public/overlay/lifeos-app.html` as the only live founder interface. Queue cleared to next actionable item.
 
 | Field | Value |
 |-------|-------|
@@ -198,6 +198,7 @@ Together: AI handles repetitive, disconnected, administrative work — humans fo
 | 2026-08-02 | **Creative Director review** — generated CREATIVE_BRIEF.md using the Creative Director lens. | LimitlessOS reviewed through the BuilderOS creative responsibility; brief written to product home for founder review. | ✅ generated |
 | Date | What | Why |
 |------|------|-----|
+| 2026-08-02 | **Skipped `step1` (`public/overlay/formalize-businessos-ui.html`).** Marked `status: skipped` and `demoted` with reason `orphan_overlay`: the target is a standalone `public/overlay/*.html` artifact outside the active `lifeos-app.html` founder interface. The naming distinction work should surface inside `public/overlay/lifeos-app.html` if still needed. | Active-interface governance (legacy-interfaces-forbidden rule) designates `public/overlay/lifeos-app.html` as the only active founder interface. Building another standalone overlay would create dead UI and violate the one-interface policy. |
 | 2026-07-23 | **Automate daily pack (approve→paste).** `services/go-vegas-daily-pack.js` + `npm run go-vegas:daily-pack` writes 31+ staggered posts (Adam / SiteBuilder / Taloa Social) to `data/go-vegas-daily-packs/`. FB send stays human; emails/spec builds stay system. | Adam: no time for manual — automate prep. |
 | 2026-07-23 | **FB growth deep dive + comment-weighted contest.** `docs/products/limitlessos/GO_VEGAS_FB_GROWTH_PLAYBOOK.md` — Meta ≥20 posts/day feed-ranking eligibility (Transparency), 31+ chip, MSI/comments≫likes, first-hour replies, native>links, quality score, badges, 14-day idle revival. Contest score `(comments×5)+(reactions×1)+(shares×3)` via `scoreBestPostContest`. | Adam: grow idle 16k group; winners by viral (comment-heavy) attention. |
 | 2026-07-23 | **31+ daily activity + rec-ask soft open.** Playbook floor `groupOwnedPostsFloor: 31` (Meta “31+” chip) + `memberPostsTarget: 20`. `RECOMMENDATION_ASK_BANK` (plumber/HVAC/etc.) → `buildRecommendationSoftOpenEmail` (warm “X from Go Vegas thought we could help” + free spec + score vs competitors + upgrade bullets + preview link). | Adam: group must show 31+ to stay recommended; rec threads create soft SiteBuilder opens. |

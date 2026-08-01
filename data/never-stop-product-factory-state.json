@@ -1,67 +1,69 @@
 {
   "status": "idle",
   "last_task": {
-    "id": "product_build_site-builder_s1",
+    "id": "product_build_limitlessos_step1",
     "kind": "product_build_step",
-    "priority": 2.0002,
-    "product": "site-builder",
-    "product_id": "site-builder",
-    "step_id": "s1",
-    "target_file": "db/migrations/20241030_create_additional_templates.sql",
-    "detail": "next buildable step: s1"
+    "priority": 2.0004,
+    "product": "limitlessos",
+    "product_id": "limitlessos",
+    "step_id": "step1",
+    "target_file": "public/overlay/formalize-businessos-ui.html",
+    "detail": "next buildable step: step1"
   },
   "last_result": {
-    "ok": true,
-    "task_id": "product_build_site-builder_s1",
+    "ok": false,
+    "task_id": "product_build_limitlessos_step1",
     "detail": "product_build_step",
     "outcome": {
-      "ok": true,
-      "step_id": "s1",
-      "commit_sha": "ef22baa8407e0b317798eb5b7fd29b5e46bbaa64",
-      "verified": true,
-      "deploy_proven": true,
-      "functional_proven": true,
+      "ok": false,
+      "step_id": "step1",
+      "stage": "artifact_proof",
+      "reason": "artifact_proof_failed: LimitlessOS",
+      "attempts": 1,
+      "blocked": false,
+      "blocker_class": "BLOCKED_TOOLING",
+      "claim_level": null,
+      "parked": false,
       "summary": {
-        "product_id": "site-builder",
-        "total": 93,
-        "pending": 0,
+        "product_id": "limitlessos",
+        "total": 49,
+        "pending": 12,
         "building": 0,
-        "done": 89,
+        "done": 34,
         "blocked": 0,
-        "founder_gated": 1,
-        "design_review_flagged": 1,
+        "founder_gated": 0,
+        "design_review_flagged": 0,
         "human_hold": 0,
-        "skipped": 2,
+        "skipped": 3,
         "complete": false
       }
     },
     "claim": {
-      "id": "site-builder:s1",
+      "id": "limitlessos:step1",
       "kind": "execution",
-      "text": "product step s1 built + verified + served live",
-      "grade": "KNOW",
-      "proof": {
-        "deploy_verified": true,
-        "commit_sha": "ef22baa8407e0b317798eb5b7fd29b5e46bbaa64"
-      },
+      "text": "product step step1 built + verified + served live",
+      "grade": "GUESS",
+      "proof": null,
       "original_grade": "KNOW",
-      "enforced": false,
-      "flags": []
+      "enforced": true,
+      "flags": [
+        "claimed_KNOW_or_LAW_without_proof"
+      ]
     },
     "summary": {
-      "product_id": "site-builder",
-      "total": 93,
-      "pending": 0,
+      "product_id": "limitlessos",
+      "total": 49,
+      "pending": 12,
       "building": 0,
-      "done": 89,
+      "done": 34,
       "blocked": 0,
-      "founder_gated": 1,
-      "design_review_flagged": 1,
+      "founder_gated": 0,
+      "design_review_flagged": 0,
       "human_hold": 0,
-      "skipped": 2,
+      "skipped": 3,
       "complete": false
     }
   },
   "cycles": 1,
-  "updated_at": "2026-08-01T09:19:56.602Z"
+  "updated_at": "2026-08-01T09:20:58.569Z"
 }
