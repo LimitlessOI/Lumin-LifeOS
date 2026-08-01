@@ -1,22 +1,22 @@
 {
   "status": "idle",
   "last_task": {
-    "id": "product_build_lifeos_lifeos-p1-practice-nav",
+    "id": "product_build_lifeos_lifeos-p1-food-nav",
     "kind": "product_build_step",
     "priority": 2,
     "product": "lifeos",
     "product_id": "lifeos",
-    "step_id": "lifeos-p1-practice-nav",
+    "step_id": "lifeos-p1-food-nav",
     "target_file": "public/overlay/lifeos-app.html",
-    "detail": "next buildable step: lifeos-p1-practice-nav"
+    "detail": "next buildable step: lifeos-p1-food-nav"
   },
   "last_result": {
     "ok": false,
-    "task_id": "product_build_lifeos_lifeos-p1-practice-nav",
+    "task_id": "product_build_lifeos_lifeos-p1-food-nav",
     "detail": "product_build_step",
     "outcome": {
       "ok": false,
-      "step_id": "lifeos-p1-practice-nav",
+      "step_id": "lifeos-p1-food-nav",
       "stage": "grounding",
       "reason": "grounding_failed: missing_sql_table: system., iframe.",
       "attempts": 1,
@@ -27,9 +27,9 @@
       "summary": {
         "product_id": "lifeos",
         "total": 176,
-        "pending": 10,
+        "pending": 9,
         "building": 0,
-        "done": 164,
+        "done": 165,
         "blocked": 1,
         "founder_gated": 0,
         "design_review_flagged": 0,
@@ -39,9 +39,9 @@
       }
     },
     "claim": {
-      "id": "lifeos:lifeos-p1-practice-nav",
+      "id": "lifeos:lifeos-p1-food-nav",
       "kind": "execution",
-      "text": "product step lifeos-p1-practice-nav built + verified + served live",
+      "text": "product step lifeos-p1-food-nav built + verified + served live",
       "grade": "GUESS",
       "proof": null,
       "original_grade": "KNOW",
@@ -53,9 +53,9 @@
     "summary": {
       "product_id": "lifeos",
       "total": 176,
-      "pending": 10,
+      "pending": 9,
       "building": 0,
-      "done": 164,
+      "done": 165,
       "blocked": 1,
       "founder_gated": 0,
       "design_review_flagged": 0,
@@ -65,5 +65,5 @@
     }
   },
   "cycles": 1,
-  "updated_at": "2026-08-01T07:38:07.321Z"
+  "updated_at": "2026-08-01T07:44:31.834Z"
 }
