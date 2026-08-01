@@ -3588,13 +3588,13 @@
     },
     {
       "id": "lifeos-step8",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "public/overlay/lifeos-voice-note-journal.html",
       "task": "implement voice journaling feature",
       "spec": "UI for voice journaling with a record button using Web Speech API. Transcribed text posted to /api/v1/lifeos/journal/voice and processed for AI extraction.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 2,
+      "attempts": 3,
       "file_contains": [
         "Web Speech API",
         "/api/v1/lifeos/journal/voice"
@@ -3609,7 +3609,7 @@
       "demoted": false,
       "last_error": "verify_exit_1",
       "heal_unblocked": true,
-      "last_attempt_at": "2026-08-01T07:21:13.257Z",
+      "last_attempt_at": "2026-08-01T07:25:29.547Z",
       "artifact_proven": true,
       "grounding_status": "PASS",
       "blocker_class": "BLOCKED_TOOLING",
@@ -6044,5 +6044,5 @@
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-lifeos",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T07:21:35.949Z"
+  "updated_at": "2026-08-01T07:25:51.483Z"
 }
