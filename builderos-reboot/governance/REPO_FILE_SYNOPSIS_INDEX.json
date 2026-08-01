@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T02:12:11.410Z",
+  "generated_at": "2026-08-01T02:17:07.267Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12657,
   "files": [
@@ -38895,9 +38895,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 83796,
-      "mtime": "2026-08-01T02:08:43.352Z",
-      "indexed_at": "2026-08-01T02:08:43.352Z"
+      "bytes": 84048,
+      "mtime": "2026-08-01T02:17:07.267Z",
+      "indexed_at": "2026-08-01T02:17:07.267Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -42101,9 +42101,9 @@
     {
       "path": "docs/products/oil-security-divisions/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — OIL Security Divisions",
-      "bytes": 19260,
-      "mtime": "2026-08-01T02:08:43.352Z",
-      "indexed_at": "2026-08-01T02:08:43.352Z"
+      "bytes": 19722,
+      "mtime": "2026-08-01T02:17:07.267Z",
+      "indexed_at": "2026-08-01T02:17:07.267Z"
     },
     {
       "path": "docs/products/OILSECURITYDIVISIONS.md",
