@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T15:07:36.307Z",
+  "generated_at": "2026-08-01T15:07:48.449Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12730,
   "files": [
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3844560,
-      "mtime": "2026-08-01T15:05:01.629Z",
-      "indexed_at": "2026-08-01T15:06:56.731Z"
+      "bytes": 3844486,
+      "mtime": "2026-08-01T15:07:45.913Z",
+      "indexed_at": "2026-08-01T15:07:48.449Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -30844,9 +30844,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 50535,
-      "mtime": "2026-08-01T14:45:51.709Z",
-      "indexed_at": "2026-08-01T14:46:17.509Z",
+      "bytes": 50892,
+      "mtime": "2026-08-01T15:00:30.081Z",
+      "indexed_at": "2026-08-01T15:07:45.577Z",
       "synopsis_index_only": true
     },
     {
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 2003,
-      "mtime": "2026-08-01T14:44:15.877Z",
-      "indexed_at": "2026-08-01T14:46:17.509Z",
+      "bytes": 1908,
+      "mtime": "2026-08-01T14:57:44.877Z",
+      "indexed_at": "2026-08-01T15:07:45.577Z",
       "synopsis_index_only": true
     },
     {
@@ -37015,10 +37015,10 @@
     },
     {
       "path": "db/migrations/20260714_marketing_social_post_schedules.sql",
-      "synopsis": "Database migration — 20260714_marketing_social_post_schedules.sql.",
-      "bytes": 1355,
-      "mtime": "2026-08-01T14:55:45.324Z",
-      "indexed_at": "2026-08-01T14:56:27.179Z"
+      "synopsis": "MarketingOS social publishing and scheduling tables.",
+      "bytes": 1396,
+      "mtime": "2026-08-01T15:04:54.909Z",
+      "indexed_at": "2026-08-01T15:07:45.577Z"
     },
     {
       "path": "db/migrations/20260714_tc_browser_jobs.sql",
@@ -42216,9 +42216,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 135207,
-      "mtime": "2026-08-01T14:56:14.402Z",
-      "indexed_at": "2026-08-01T14:56:27.179Z"
+      "bytes": 135260,
+      "mtime": "2026-08-01T15:04:54.909Z",
+      "indexed_at": "2026-08-01T15:07:45.577Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -65786,9 +65786,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 3856,
-      "mtime": "2026-08-01T14:44:03.101Z",
-      "indexed_at": "2026-08-01T14:46:17.509Z",
+      "bytes": 3820,
+      "mtime": "2026-08-01T14:48:42.845Z",
+      "indexed_at": "2026-08-01T15:07:45.577Z",
       "synopsis_index_only": true
     },
     {
@@ -70780,10 +70780,10 @@
     },
     {
       "path": "routes/marketing-social-schedule-routes.js",
-      "synopsis": "API endpoints for social post scheduling and serving the scheduling UI.",
-      "bytes": 9355,
-      "mtime": "2026-08-01T14:55:17.610Z",
-      "indexed_at": "2026-08-01T14:55:17.610Z",
+      "synopsis": "MarketingOS social post scheduling routes and scheduling UI.",
+      "bytes": 8604,
+      "mtime": "2026-08-01T15:04:54.909Z",
+      "indexed_at": "2026-08-01T15:07:45.577Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -91091,12 +91091,11 @@
     },
     {
       "path": "services/googleCalendarService.js",
-      "synopsis": "Implement calendar integration and event syncing.",
-      "bytes": 7196,
-      "mtime": "2026-08-01T14:49:23.253Z",
-      "indexed_at": "2026-08-01T14:49:23.253Z",
+      "synopsis": "Exports createCalendarEvent — services/googleCalendarService.js.",
+      "bytes": 2104,
+      "mtime": "2026-08-01T15:07:45.473Z",
+      "indexed_at": "2026-08-01T15:07:45.577Z",
       "ssot": [
-        "docs/products/word-keeper/PRODUCT_HOME.md",
         "docs/products/word-keeper/PRODUCT_HOME.md"
       ]
     },
@@ -93271,10 +93270,10 @@
     },
     {
       "path": "services/marketing-social-scheduler.js",
-      "synopsis": "Service to manage and execute scheduled social posts.",
-      "bytes": 6990,
-      "mtime": "2026-08-01T14:54:27.771Z",
-      "indexed_at": "2026-08-01T14:54:27.771Z",
+      "synopsis": "MarketingOS scheduled social post service.",
+      "bytes": 3368,
+      "mtime": "2026-08-01T15:04:54.909Z",
+      "indexed_at": "2026-08-01T15:07:45.577Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
