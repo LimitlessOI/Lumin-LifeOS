@@ -51,7 +51,7 @@
       "spec": "Capture and revocation of likeness consent.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "expected_exports": [
         "registerLikenessConsentRoutes"
       ],
@@ -72,9 +72,9 @@
           "assertion_id": "expected_exports:routes/likenessConsent.js"
         }
       ],
-      "last_attempt_at": "2026-08-01T11:05:51.141Z",
-      "last_error": "artifact_proof_failed: missing_exports:registerLikenessConsentRoutes; registerLikenessConsentRoutes",
-      "commit_sha": "046aed7d14f6bddf1b4be0d6bf94b5e52d62e389",
+      "last_attempt_at": "2026-08-01T11:10:47.489Z",
+      "last_error": "route module not auto-registered — add {\"path\":\"routes/likenessConsent.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
+      "commit_sha": "90dc7aedc24ebff9136be4d17194f186e34572c6",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -1402,5 +1402,5 @@
   "corpus_sources": [
     "docs/products/creator-media-os/PRODUCT_HOME.md"
   ],
-  "updated_at": "2026-08-01T11:06:03.406Z"
+  "updated_at": "2026-08-01T11:10:48.093Z"
 }
