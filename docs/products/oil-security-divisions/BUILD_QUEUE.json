@@ -663,7 +663,7 @@
     },
     {
       "id": "4",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/securityAuditService.js",
       "task": "create security audit service",
       "spec": "Implement the OIL preset `security-audit` to output structured findings.",
@@ -683,13 +683,13 @@
           "assertion_id": "expected_exports:services/securityAuditService.js"
         }
       ],
-      "last_attempt_at": "2026-07-31T10:48:55.500Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:performSecurityAudit; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": "2026-08-01T01:47:41.221Z",
+      "last_error": "artifact_proof_failed: missing_exports:performSecurityAudit",
+      "commit_sha": "5d4514356fb99781da6e620d9fd65df41a9f2016",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-31T10:33:16.917Z",
+      "revive_count": 2,
+      "revived_at": "2026-08-01T01:47:41.221Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -697,7 +697,7 @@
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
-      "blocker_class": null,
+      "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
@@ -1822,5 +1822,6 @@
   ],
   "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-oil-security-divisions",
-  "twin_kind": "product_build_queue_registered"
+  "twin_kind": "product_build_queue_registered",
+  "updated_at": "2026-08-01T01:47:57.644Z"
 }
