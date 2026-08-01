@@ -1219,7 +1219,7 @@
     },
     {
       "id": "10",
-      "status": "pending",
+      "status": "skipped",
       "target_file": "public/overlay/marketing-intel-director-dashboard.html",
       "task": "Create UI for the AI marketing director dashboard",
       "spec": "HTML overlay serving as a dashboard for the MarketingOS Intelligence Layer. It will display cross-channel strategy recommendations, budget allocation insights, and autonomous recommendations (e.g., 'Your LinkedIn is up 40%'), fetched from the existing '/api/v1/marketingos/director' API endpoint.",
@@ -1232,7 +1232,9 @@
         "<h3>Performance Overview</h3>",
         "<script>fetch('/api/v1/marketingos/director')"
       ],
-      "design_review_flagged": true
+      "design_review_flagged": true,
+      "last_error": null,
+      "blocker_class": null
     },
     {
       "id": "11",
