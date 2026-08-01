@@ -3,7 +3,7 @@
   "product_id": "limitlessos",
   "verify_script": "scripts/verify-go-vegas-scheduler.mjs",
   "notes": "Go Vegas revenue slice — outreach pipeline v1 already shipped as code; this queue closes the last mile to live revenue: scheduler tick (daily discover/invite/follow-up under caps), dry-run proof script, and SENTRY-facing status receipt. No founder UI in this slice.",
-  "updated_at": "2026-08-01T06:30:37.635Z",
+  "updated_at": "2026-08-01T09:20:57.295Z",
   "steps": [
     {
       "id": "gv-scheduler",
@@ -320,19 +320,21 @@
       "spec": "Display distinct naming for 'BusinessOS' vs. 'LimitlessOS' in the UI.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "BusinessOS",
         "LimitlessOS"
       ],
-      "commit_sha": "d3c5e88c4551a37e0b5162d5afffb66faaa713e4",
+      "commit_sha": "3fbe2f5242f1a17d250583e67f7f8245d83d4539",
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step1",
       "mission_id": "PRODUCT-limitlessos",
       "same_signature_count": 0,
       "demoted": false,
       "last_error": "artifact_proof_failed: LimitlessOS",
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T09:20:46.618Z",
+      "blocker_class": "BLOCKED_TOOLING"
     },
     {
       "id": "step2",
