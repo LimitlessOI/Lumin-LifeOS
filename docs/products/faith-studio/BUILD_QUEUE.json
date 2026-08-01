@@ -517,7 +517,7 @@
     },
     {
       "id": "3",
-      "status": "skipped",
+      "status": "done",
       "target_file": "services/sacredContentReviewService.js",
       "task": "Design sacred-content review service",
       "spec": "Service to handle preservation of sacred intent in content review workflows.",
@@ -951,7 +951,10 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "completed_at": "2026-08-01T18:54:50.775Z",
+      "heal_claimed": true,
+      "heal_reason": "artifact_proof_pass"
     },
     {
       "id": "4",
@@ -1365,7 +1368,7 @@
     },
     {
       "id": "01",
-      "status": "skipped",
+      "status": "done",
       "target_file": "services/privateWitnessService.js",
       "task": "implement private witness mode",
       "spec": "Implement the private witness mode functionality, ensuring that outputs are permissible as specified, but avoid public exposure.",
@@ -1642,11 +1645,14 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "completed_at": "2026-08-01T18:54:50.780Z",
+      "heal_claimed": true,
+      "heal_reason": "artifact_proof_pass"
     },
     {
       "id": "02",
-      "status": "skipped",
+      "status": "done",
       "target_file": "services/familySafetyService.js",
       "task": "enforce family safety modes",
       "spec": "Service should enforce family/church/classroom-safe output options with stricter defaults for sensitive content.",
@@ -1724,7 +1730,10 @@
       "blocker_resolution": null,
       "failure_signature": "STEP_STATUS_FORBIDDEN",
       "same_signature_count": 1,
-      "escalation_class": "same_signature_repeat"
+      "escalation_class": "same_signature_repeat",
+      "completed_at": "2026-08-01T18:54:50.780Z",
+      "heal_claimed": true,
+      "heal_reason": "artifact_proof_pass"
     },
     {
       "id": "04",
@@ -1772,7 +1781,7 @@
     },
     {
       "id": "05",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/traditionProfilesUpdate.js",
       "task": "enhance tradition profiles",
       "spec": "Update tradition profiles to provide detailed explanations and visual framings without omitting source text.",
@@ -2001,7 +2010,10 @@
       "escalation_required": true,
       "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
       "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
-      "escalated_at": "2026-07-31T18:40:13.619Z"
+      "escalated_at": "2026-07-31T18:40:13.619Z",
+      "completed_at": "2026-08-01T18:54:50.786Z",
+      "heal_claimed": true,
+      "heal_reason": "artifact_proof_pass"
     },
     {
       "id": "06",
@@ -2069,7 +2081,7 @@
     },
     {
       "id": "08",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/reviewModerationFlowDetail.js",
       "task": "specify review moderation flow",
       "spec": "Detail the review and moderation flow for public submissions, ensuring all critical paths are covered.",
@@ -2151,7 +2163,10 @@
       "escalation_required": true,
       "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
       "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
-      "escalated_at": "2026-07-31T18:40:13.619Z"
+      "escalated_at": "2026-07-31T18:40:13.619Z",
+      "completed_at": "2026-08-01T18:54:50.787Z",
+      "heal_claimed": true,
+      "heal_reason": "artifact_proof_pass"
     },
     {
       "id": "09",
@@ -2493,7 +2508,7 @@
     },
     {
       "id": "faith-studio-1",
-      "status": "skipped",
+      "status": "done",
       "target_file": "services/sourceLabelService.js",
       "task": "implement tradition/profile model + source labeling",
       "spec": "Enhance sourceLabelService to integrate tradition/profile modeling and source labeling engine.",
@@ -2537,7 +2552,10 @@
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "faith-studio-1",
       "mission_id": "PRODUCT-faith-studio",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "completed_at": "2026-08-01T18:54:50.789Z",
+      "heal_claimed": true,
+      "heal_reason": "artifact_proof_pass"
     },
     {
       "id": "faith-studio-2",
@@ -2654,7 +2672,7 @@
     },
     {
       "id": "faith-studio-5",
-      "status": "skipped",
+      "status": "done",
       "target_file": "routes/publicPublishingReview.js",
       "task": "implement public publishing review workflow",
       "spec": "Implement a workflow for reviewing and approving public publishing of content.",
@@ -2704,11 +2722,14 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "completed_at": "2026-08-01T18:54:50.789Z",
+      "heal_claimed": true,
+      "heal_reason": "artifact_proof_pass"
     }
   ],
   "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-faith-studio",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T11:31:50.291Z"
+  "updated_at": "2026-08-01T18:54:50.789Z"
 }
