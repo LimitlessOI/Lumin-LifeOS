@@ -3,7 +3,7 @@
   "product_id": "limitlessos",
   "verify_script": "scripts/verify-go-vegas-scheduler.mjs",
   "notes": "Go Vegas revenue slice — outreach pipeline v1 already shipped as code; this queue closes the last mile to live revenue: scheduler tick (daily discover/invite/follow-up under caps), dry-run proof script, and SENTRY-facing status receipt. No founder UI in this slice.",
-  "updated_at": "2026-08-01T03:35:40.916Z",
+  "updated_at": "2026-08-01T04:36:15.446Z",
   "steps": [
     {
       "id": "gv-scheduler",
@@ -642,7 +642,7 @@
       "spec": "Creates a route for configuring and displaying a canonical product id for LimitlessOS in the customer-facing UI.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerLimitlessOSIdRoutes"
       ],
@@ -653,17 +653,17 @@
       "file_contains": [
         "let canonicalProductId = 'LimitlessOS';"
       ],
-      "commit_sha": null,
+      "commit_sha": "cec36ec58284cf7f503b5095571e2c1f53fbb9cb",
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "s1",
       "mission_id": "PRODUCT-limitlessos",
       "shipped_via": null,
       "pre_existing": null,
-      "last_error": null,
+      "last_error": "artifact_proof_failed: missing_exports:registerLimitlessOSIdRoutes; registerLimitlessOSIdRoutes",
       "reaudit_reset_at": "2026-07-30T18:55:06.661Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-01T04:36:01.972Z",
       "last_attempt": null,
       "revive_count": 7,
       "revived_at": "2026-08-01T04:34:54.069Z",
@@ -672,7 +672,7 @@
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
-      "blocker_class": null,
+      "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
