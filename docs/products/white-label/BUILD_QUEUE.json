@@ -511,7 +511,7 @@
     },
     {
       "id": "step2",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/response-transformation.js",
       "task": "build-response-transformation-middleware",
       "spec": "Create middleware to transform responses by stripping model names and costs.",
@@ -540,7 +540,10 @@
       "commit_sha": "b80bf5636ff33cd4c9100c5e456bc61fa42c335e",
       "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step2",
-      "mission_id": "PRODUCT-white-label"
+      "mission_id": "PRODUCT-white-label",
+      "last_error": "artifact_proof_failed: stripModelNames; stripCosts",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "white-label-3",
@@ -672,7 +675,7 @@
     },
     {
       "id": "white-label-2",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/response-transformation.js",
       "task": "develop response transformation middleware",
       "spec": "Create middleware to strip model names and costs from responses.",
@@ -701,11 +704,14 @@
       "commit_sha": "3b23fc8748718ee404cc72c8d1e6879725aeb92a",
       "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "white-label-2",
-      "mission_id": "PRODUCT-white-label"
+      "mission_id": "PRODUCT-white-label",
+      "last_error": "artifact_proof_failed: module.exports = {; function transformResponse(req, res, next)",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "white-label-4",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/partner-key-generation.js",
       "task": "define partner API key schema",
       "spec": "Design key generation differentiating partner keys from platform keys.",
@@ -734,7 +740,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T22:53:15.944Z",
-      "commit_sha": "96341445d386aabb8a8b62eab31d810a08659012"
+      "commit_sha": "96341445d386aabb8a8b62eab31d810a08659012",
+      "last_error": "artifact_proof_failed: module.exports = {",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "white-label-step2",
@@ -770,7 +779,7 @@
     },
     {
       "id": "white-label-step3",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/partner-key-scheme.js",
       "task": "design partner API key schema",
       "spec": "Design and build schema for generating partner API keys distinct from platform keys.",
@@ -798,7 +807,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T23:12:46.340Z",
-      "commit_sha": "0fdc5ada66ff9ad24f29db8774d344ff9289b884"
+      "commit_sha": "0fdc5ada66ff9ad24f29db8774d344ff9289b884",
+      "last_error": "artifact_proof_failed: schema.define('partnerKey'",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "white-label-step4",
@@ -853,7 +865,7 @@
     },
     {
       "id": "white-label-1",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/white-label-routes.js",
       "task": "refactor endpoints",
       "spec": "Extract config endpoints from server.js into this dedicated route file.",
@@ -880,7 +892,7 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "artifact_proof_failed: app.get('/api/v1/white-label/config',",
       "commit_sha": "cef9ce4936d36d810967e0f75d609d7dd810764d",
       "built_sha": null,
       "proof": null,
@@ -901,7 +913,8 @@
       "shipped_at": "2026-07-16T06:03:44.355Z",
       "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "white-label-1",
-      "mission_id": "PRODUCT-white-label"
+      "mission_id": "PRODUCT-white-label",
+      "heal_unblocked": true
     },
     {
       "id": "white-label-step1",
@@ -977,5 +990,5 @@
   "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-white-label",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:22:18.277Z"
+  "updated_at": "2026-08-01T06:30:58.697Z"
 }
