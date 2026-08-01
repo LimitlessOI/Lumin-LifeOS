@@ -409,13 +409,13 @@
     },
     {
       "id": "builderos-8",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/board.js",
       "task": "route for populated sections",
       "spec": "Ensure route returns all 8 populated sections of the household board.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerBoardRoutes"
       ],
@@ -444,10 +444,13 @@
       "mission_id": "PRODUCT-builderos",
       "same_signature_count": 0,
       "demoted": false,
-      "last_error": "artifact_proof_failed: missing_exports:registerBoardRoutes; registerBoardRoutes",
+      "last_error": null,
       "heal_unblocked": true,
       "last_attempt_at": "2026-08-01T08:03:19.760Z",
-      "blocker_class": "BLOCKED_TOOLING"
+      "blocker_class": null,
+      "completed_at": "2026-08-01T08:04:03.423Z",
+      "heal_claimed": true,
+      "heal_reason": "artifact_proof_pass"
     },
     {
       "id": "builderos-9",
@@ -3308,6 +3311,6 @@
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-builderos",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T08:03:32.695Z",
+  "updated_at": "2026-08-01T08:04:03.423Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/builderos/BUILD_QUEUE.json"
 }
