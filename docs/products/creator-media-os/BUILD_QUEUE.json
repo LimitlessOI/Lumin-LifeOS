@@ -360,13 +360,13 @@
     },
     {
       "id": "8",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/consentContract.js",
       "task": "formalize consent contract",
       "spec": "Formalizes consent and likeness contract model.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "formalizeConsentContract"
       ],
@@ -385,14 +385,16 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T09:25:33.392Z",
-      "commit_sha": "e318b97ace6f3404822c546e53c19fc79fedbf3f",
+      "commit_sha": "c3c7ac251c59510022abee7fa5a755be5e0115b0",
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "8",
       "mission_id": "PRODUCT-creator-media-os",
       "same_signature_count": 0,
       "demoted": false,
       "last_error": "artifact_proof_failed: Consent contract model",
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T11:18:56.367Z",
+      "completed_at": "2026-08-01T11:19:07.898Z"
     },
     {
       "id": "9",
@@ -1411,5 +1413,5 @@
   "corpus_sources": [
     "docs/products/creator-media-os/PRODUCT_HOME.md"
   ],
-  "updated_at": "2026-08-01T11:18:40.548Z"
+  "updated_at": "2026-08-01T11:19:07.898Z"
 }
